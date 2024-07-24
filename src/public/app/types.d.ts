@@ -21,6 +21,9 @@ interface CustomGlobals {
     importMarkdownInline: () => Promise<unknown>;
     SEARCH_HELP_TEXT: string;
     activeDialog: JQuery<HTMLElement> | null;
+    componentId: string;
+    csrfToken: string;
+    baseApiUrl: string;
 }
 
 type RequireMethod = (moduleName: string) => any;
