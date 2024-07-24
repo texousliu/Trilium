@@ -1,5 +1,46 @@
+import { EntityChange } from "../../../services/entity_changes_interface.js";
+
+interface BranchRow {
+    branchId: string;
+    componentId: string;
+}
+
+interface AttributeRow {
+    attributeId: string;
+    componentId: string;
+}
+
+interface RevisionRow {
+    revisionId: string;
+    noteId: string;
+    componentId: string;
+}
+
+interface ContentNoteIdToComponentIdRow {
+    noteId: string;
+    componentId: string;
+}
+
+interface AttachmentRow {}
+
+interface ContentNoteIdToComponentIdRow {
+    noteId: string;
+    componentId: string;
+}
+
 export default class LoadResults {
-    constructor(entityChanges) {
+    private entities: Record<string, Record<string, unknown>>;
+    private noteIdToComponentId: Record<string, string[]>;
+    private componentIdToNoteIds: Record<string, string[]>;
+    private branchRows: BranchRow[];
+    private attributeRows: AttributeRow[];
+    private revisionRows: RevisionRow[];
+    private noteReorderings: string[];
+    private contentNoteIdToComponentId: ContentNoteIdToComponentIdRow[];
+    private optionNames: string[];
+    private attachmentRows: AttachmentRow[];
+
+    constructor(entityChanges: EntityChange[]) {
         this.entities = {};
 
         for (const {entityId, entityName, entity} of entityChanges) {
@@ -27,11 +68,11 @@ export default class LoadResults {
         this.attachmentRows = [];
     }
 
-    getEntityRow(entityName, entityId) {
+    getEntityRow(entityName: string, entityId: string) {
         return this.entities[entityName]?.[entityId];
     }
 
-    addNote(noteId, componentId) {
+    addNote(noteId: string, componentId: string) {
         this.noteIdToComponentId[noteId] = this.noteIdToComponentId[noteId] || [];
 
         if (!this.noteIdToComponentId[noteId].includes(componentId)) {
@@ -45,7 +86,7 @@ export default class LoadResults {
         }
     }
 
-    addBranch(branchId, componentId) {
+    addBranch(branchId: string, componentId: string) {
         this.branchRows.push({branchId, componentId});
     }
 
@@ -55,7 +96,7 @@ export default class LoadResults {
             .filter(branch => !!branch);
     }
 
-    addNoteReordering(parentNoteId, componentId) {
+    addNoteReordering(parentNoteId: string, componentId: string) {
         this.noteReorderings.push(parentNoteId);
     }
 
@@ -63,7 +104,7 @@ export default class LoadResults {
         return this.noteReorderings;
     }
 
-    addAttribute(attributeId, componentId) {
+    addAttribute(attributeId: string, componentId: string) {
         this.attributeRows.push({attributeId, componentId});
     }
 
@@ -74,11 +115,11 @@ export default class LoadResults {
             .filter(attr => !!attr);
     }
 
-    addRevision(revisionId, noteId, componentId) {
+    addRevision(revisionId: string, noteId: string, componentId: string) {
         this.revisionRows.push({revisionId, noteId, componentId});
     }
 
-    hasRevisionForNote(noteId) {
+    hasRevisionForNote(noteId: string) {
         return !!this.revisionRows.find(row => row.noteId === noteId);
     }
 
@@ -86,7 +127,7 @@ export default class LoadResults {
         return Object.keys(this.noteIdToComponentId);
     }
 
-    isNoteReloaded(noteId, componentId = null) {
+    isNoteReloaded(noteId: string, componentId = null) {
         if (!noteId) {
             return false;
         }
@@ -95,11 +136,11 @@ export default class LoadResults {
         return componentIds && componentIds.find(sId => sId !== componentId) !== undefined;
     }
 
-    addNoteContent(noteId, componentId) {
+    addNoteContent(noteId: string, componentId: string) {
         this.contentNoteIdToComponentId.push({noteId, componentId});
     }
 
-    isNoteContentReloaded(noteId, componentId) {
+    isNoteContentReloaded(noteId: string, componentId: string) {
         if (!noteId) {
             return false;
         }
@@ -107,11 +148,11 @@ export default class LoadResults {
         return this.contentNoteIdToComponentId.find(l => l.noteId === noteId && l.componentId !== componentId);
     }
 
-    addOption(name) {
+    addOption(name: string) {
         this.optionNames.push(name);
     }
 
-    isOptionReloaded(name) {
+    isOptionReloaded(name: string) {
         return this.optionNames.includes(name);
     }
 
@@ -119,7 +160,7 @@ export default class LoadResults {
         return this.optionNames;
     }
 
-    addAttachmentRow(attachment) {
+    addAttachmentRow(attachment: AttachmentRow) {
         this.attachmentRows.push(attachment);
     }
 
