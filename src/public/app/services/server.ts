@@ -58,7 +58,7 @@ async function get<T>(url: string, componentId?: string) {
     return await call<T>('GET', url, componentId);
 }
 
-async function post<T>(url: string, data: unknown, componentId?: string) {
+async function post<T>(url: string, data?: unknown, componentId?: string) {
     return await call<T>('POST', url, componentId, { data });
 }
 

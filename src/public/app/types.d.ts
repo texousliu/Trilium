@@ -24,6 +24,7 @@ interface CustomGlobals {
     componentId: string;
     csrfToken: string;
     baseApiUrl: string;
+    isProtectedSessionAvailable: boolean;
 }
 
 type RequireMethod = (moduleName: string) => any;
