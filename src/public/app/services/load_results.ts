@@ -12,8 +12,8 @@ interface AttributeRow {
 
 interface RevisionRow {
     revisionId: string;
-    noteId: string;
-    componentId: string;
+    noteId?: string;
+    componentId?: string | null;
 }
 
 interface ContentNoteIdToComponentIdRow {
@@ -72,17 +72,19 @@ export default class LoadResults {
         return this.entities[entityName]?.[entityId];
     }
 
-    addNote(noteId: string, componentId: string) {
+    addNote(noteId: string, componentId?: string | null) {
         this.noteIdToComponentId[noteId] = this.noteIdToComponentId[noteId] || [];
 
-        if (!this.noteIdToComponentId[noteId].includes(componentId)) {
-            this.noteIdToComponentId[noteId].push(componentId);
-        }
-
-        this.componentIdToNoteIds[componentId] = this.componentIdToNoteIds[componentId] || [];
-
-        if (!this.componentIdToNoteIds[componentId]) {
-            this.componentIdToNoteIds[componentId].push(noteId);
+        if (componentId) {
+            if (!this.noteIdToComponentId[noteId].includes(componentId)) {
+                this.noteIdToComponentId[noteId].push(componentId);
+            }
+    
+            this.componentIdToNoteIds[componentId] = this.componentIdToNoteIds[componentId] || [];
+    
+            if (!this.componentIdToNoteIds[componentId]) {
+                this.componentIdToNoteIds[componentId].push(noteId);
+            }
         }
     }
 
@@ -115,7 +117,7 @@ export default class LoadResults {
             .filter(attr => !!attr);
     }
 
-    addRevision(revisionId: string, noteId: string, componentId: string) {
+    addRevision(revisionId: string, noteId?: string, componentId?: string | null) {
         this.revisionRows.push({revisionId, noteId, componentId});
     }
 
