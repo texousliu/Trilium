@@ -1,10 +1,10 @@
 
 import server from "./server.js";
 
-type OptionValue = string;
+type OptionValue = string | number;
 
 class Options {
-    private initializedPromise: Promise<void>;
+    initializedPromise: Promise<void>;
     private arr!: Record<string, OptionValue>;
 
     constructor() {
