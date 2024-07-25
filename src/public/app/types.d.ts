@@ -26,6 +26,7 @@ interface CustomGlobals {
     baseApiUrl: string;
     isProtectedSessionAvailable: boolean;
     isDev: boolean;
+    isMainWindow: boolean;
     maxEntityChangeIdAtLoad: number;
     maxEntityChangeSyncIdAtLoad: number;
 }

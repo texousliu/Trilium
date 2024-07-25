@@ -31,7 +31,7 @@ interface SearchNoteResponse {
  * Backend has a similar cache called Becca
  */
 class FrocaImpl implements Froca {
-    private initializedPromise: Promise<void>;
+    initializedPromise: Promise<void>;
 
     notes!: Record<string, FNote>;
     branches!: Record<string, FBranch>;

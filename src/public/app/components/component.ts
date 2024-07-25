@@ -12,10 +12,10 @@ import utils from '../services/utils.js';
  *   event / command is executed in all components - by simply awaiting the `triggerEvent()`.
  */
 export default class Component {
-    private componentId: string;
-    private children: Component[];
-    private initialized: Promise<void> | null;
-    private parent?: Component;
+    componentId: string;
+    children: Component[];
+    initialized: Promise<void> | null;
+    parent?: Component;
 
     constructor() {
         this.componentId = `${this.sanitizedClassName}-${utils.randomString(8)}`;
@@ -64,7 +64,7 @@ export default class Component {
         }
     }
 
-    triggerEvent(name: string, data = {}): Promise<unknown> | undefined {
+    triggerEvent(name: string, data = {}): Promise<unknown> | undefined | null {
         return this.parent?.triggerEvent(name, data);
     }
 
@@ -83,7 +83,7 @@ export default class Component {
         return promises.length > 0 ? Promise.all(promises) : null;
     }
 
-    triggerCommand(name: string, data = {}): Promise<unknown> | undefined {
+    triggerCommand(name: string, data = {}): Promise<unknown> | undefined | null {
         const fun = (this as any)[`${name}Command`];
 
         if (fun) {

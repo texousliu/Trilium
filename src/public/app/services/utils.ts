@@ -100,10 +100,10 @@ function isCtrlKey(evt: KeyboardEvent) {
         || (isMac() && evt.metaKey);
 }
 
-function assertArguments() {
-    for (const i in arguments) {
-        if (!arguments[i]) {
-            console.trace(`Argument idx#${i} should not be falsy: ${arguments[i]}`);
+function assertArguments(...args: string[]) {
+    for (const i in args) {
+        if (!args[i]) {
+            console.trace(`Argument idx#${i} should not be falsy: ${args[i]}`);
         }
     }
 }
