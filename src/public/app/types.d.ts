@@ -25,6 +25,7 @@ interface CustomGlobals {
     csrfToken: string;
     baseApiUrl: string;
     isProtectedSessionAvailable: boolean;
+    isDev: boolean;
 }
 
 type RequireMethod = (moduleName: string) => any;
