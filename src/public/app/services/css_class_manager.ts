@@ -1,6 +1,6 @@
 const registeredClasses = new Set<string>();
 
-function createClassForColor(color: string) {
+function createClassForColor(color: string | null) {
     if (!color?.trim()) {
         return "";
     }
