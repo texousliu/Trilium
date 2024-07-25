@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-function reloadFrontendApp(reason: string) {
+function reloadFrontendApp(reason?: string) {
     if (reason) {
         logInfo(`Frontend app reload: ${reason}`);
     }
@@ -301,7 +301,7 @@ function dynamicRequire(moduleName: string) {
     }
 }
 
-function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage: string) {
+function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?: string) {
     if (!promise || !promise.then) { // it's not actually a promise
         return promise;
     }

@@ -26,6 +26,8 @@ interface CustomGlobals {
     baseApiUrl: string;
     isProtectedSessionAvailable: boolean;
     isDev: boolean;
+    maxEntityChangeIdAtLoad: number;
+    maxEntityChangeSyncIdAtLoad: number;
 }
 
 type RequireMethod = (moduleName: string) => any;
