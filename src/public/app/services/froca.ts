@@ -1,6 +1,6 @@
-import FBranch from "../entities/fbranch.js";
-import FNote from "../entities/fnote.js";
-import FAttribute from "../entities/fattribute.js";
+import FBranch, { FBranchRow } from "../entities/fbranch.js";
+import FNote, { FNoteRow } from "../entities/fnote.js";
+import FAttribute, { FAttributeRow } from "../entities/fattribute.js";
 import server from "./server.js";
 import appContext from "../components/app_context.js";
 import FBlob, { FBlobRow } from "../entities/fblob.js";
@@ -206,7 +206,7 @@ class FrocaImpl implements Froca {
             froca.notes[note.noteId].childToBranch = {};
         }
 
-        const branches = [...note.getParentBranches(), ...note.getChildBranches()];
+        const branches: FBranchRow[] = [...note.getParentBranches(), ...note.getChildBranches()];
 
         searchResultNoteIds.forEach((resultNoteId, index) => branches.push({
             // branchId should be repeatable since sometimes we reload some notes without rerendering the tree
