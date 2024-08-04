@@ -238,8 +238,10 @@ async function reportError(method: string, url: string, statusCode: number, resp
 
     const toastService = (await import("./toast.js")).default;
 
+    const messageStr = (typeof message === "string" ? message : JSON.stringify(message));
+
     if ([400, 404].includes(statusCode) && response && typeof response === 'object') {
-        toastService.showError(message);
+        toastService.showError(messageStr);
         throw new ValidationError({
             requestUrl: url,
             method,
@@ -248,7 +250,7 @@ async function reportError(method: string, url: string, statusCode: number, resp
         });
     } else {
         const title = `${statusCode} ${method} ${url}`;
-        toastService.showErrorTitleAndMessage(title, message);
+        toastService.showErrorTitleAndMessage(title, messageStr);
         toastService.throwError(`${title} - ${message}`);
     }
 }
