@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
 cd src/public
+echo Summary
+cloc HEAD \
+    --git --md \
+    --include-lang=javascript,typescript
+
+echo By file
 cloc HEAD \
     --git --md \
     --include-lang=javascript,typescript \
-    --found=filelist.txt
-
-grep -R \.js$ filelist.txt
-rm filelist.txt
+    --by-file
