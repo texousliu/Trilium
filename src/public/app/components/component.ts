@@ -19,7 +19,6 @@ export default class Component {
 
     constructor() {
         this.componentId = `${this.sanitizedClassName}-${utils.randomString(8)}`;
-        /** @type Component[] */
         this.children = [];
         this.initialized = null;
     }
