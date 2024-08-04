@@ -2,6 +2,7 @@ import FNote from "./entities/fnote";
 
 interface ElectronProcess {
     type: string;
+    platform: string;
 }
 
 interface CustomGlobals {
