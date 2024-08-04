@@ -8,4 +8,7 @@
     "i18n-ally.localesPaths": [
         "./src/public/translations"
     ],
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
 }

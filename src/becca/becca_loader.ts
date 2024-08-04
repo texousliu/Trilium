@@ -3,7 +3,6 @@
 import sql from "../services/sql.js";
 import eventService from "../services/events.js";
 import becca from "./becca.js";
-import sqlInit from "../services/sql_init.js";
 import log from "../services/log.js";
 import BNote from "./entities/bnote.js";
 import BBranch from "./entities/bbranch.js";
@@ -17,7 +16,8 @@ import AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
 import options_init from "../services/options_init.js";
 import ws from "../services/ws.js";
 
-const beccaLoaded = new Promise<void>((res, rej) => {
+const beccaLoaded = new Promise<void>(async (res, rej) => {
+    const sqlInit = (await import("../services/sql_init.js")).default;
     sqlInit.dbReady.then(() => {
         cls.init(() => {
             load();

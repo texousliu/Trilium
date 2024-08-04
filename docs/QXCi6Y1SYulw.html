@@ -86,7 +86,7 @@ node_modules/i18next
 +    I18NEXT
  }</code></pre><h3>Step 4. Using the library</h3><p>To import the library, simply use the following mechanism:</p><pre><code class="language-text-x-diff">import library_loader from "./library_loader.js";
 
-await library_loader.requireLibrary(library_loader.I18NEXT);</code></pre><p>Make sure to replace <code>I18NEXT</code> with the library that was created at the previous steps.</p><p>Note that because we are not using a module management mechanism such as ES Modules or Common.js modules, the <code>requireLibrary</code> method does not actually return anything.&nbsp;</p><p>To benefit from the library, it must export on its own an object in <code>window</code>.</p><p>In the case of <code>i18next</code>, it sets <code>window.i18next</code> and that can be used directly:</p><pre><code class="language-text-x-diff">i18next.init({});</code></pre>
+await library_loader.requireLibrary(library_loader.I18NEXT);</code></pre><p>Make sure to replace <code>I18NEXT</code> with the library that was created at the previous steps.</p><p>Note that because we are not using a module management mechanism such as ES Modules or Common.js modules, the <code>requireLibrary</code> method does not actually return anything.&nbsp;</p><p>To benefit from the library, it must export on its own an object in <code>window</code>.</p><p>In the case of <code>i18next</code>, it sets <code>window.i18next</code> and that can be used directly:</p><pre><code class="language-text-x-diff">i18next.init({});</code></pre><h3>Step 5. Adding Electron support</h3><p>For Electron, the <code>node_modules</code> are copied as a separate step by <code>bin/copy-dist.ts</code>.</p><p>Scroll all the way down to the <code>nodeModulesFolder</code> and append an entry for the newly added libraries.</p>
             </div>
         
 
@@ -115,20 +115,6 @@ await library_loader.requireLibrary(library_loader.I18NEXT);</code></pre><p>Make
     
 
     
-    <a class="type-text" href="hkrBX8KE1HQl.html">Internationalisation</a>
-    
-</p>
-
-
-
-        </li>
-    
-        <li>
-            
-<p>
-    
-
-    
     <a class="type-text" href="VS22Hq5PBFNf.html">Dependency Management</a>
     
 </p>
@@ -146,6 +132,736 @@ await library_loader.requireLibrary(library_loader.I18NEXT);</code></pre><p>Make
     
 </p>
 
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="C09Dou56ffMe.html">Having a simpler packaging system</a>
+    
+</p>
+
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="ZlxZh8NH5frM.html">Building and deployment</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="PHqgH8FCfcod.html">Documentation</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="btM6L9JtG301.html">Running a development build</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="UTB518X6X9Uh.html">Build deliveries locally</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="biDJ9KgbWLgt.html">Releasing a version</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="rU1hxvgqlA9x.html">CI</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="BhE2WFknKKHG.html">Main</a>
+    
+</p>
+
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="xtBYDVZPb0gr.html">Project maintenance</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="s5gsYTbPQr6c.html">Updating dependencies</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="X4N03xLYEWnN.html">bettersqlite binaries</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="GMta9hBHsXHQ.html">Node.js, Electron and `better-sqlite3`</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="jvdjFBOCCrOa.html">Testing compatibility</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="WKn3hLGmKmiH.html">CKEditor</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="MUGBo4n67kBI.html">Environment setup</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="icQBu8R1ij57.html">Building &amp; updating</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="zpR91YHYs6lL.html">Differences from upstream</a>
+    
+</p>
+
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="B8hxg4e66cVL.html">Development and architecture</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="hkrBX8KE1HQl.html">Internationalisation / Translations</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="Z9N9OKBXXLFW.html">Guidelines</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="KRC2O84LekPz.html">i18n-ally</a>
+    
+</p>
+
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="XxqZW6JjkW2g.html">Live reload</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="3jc1nUXyteo0.html">Themes</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="U5RtMeGPeZ29.html">Synchronisation</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="d3dnvVOhur16.html">Content hashing</a>
+    
+</p>
+
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="mPGbEmYGitWe.html">Build information</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="zCDxk5VFdsqg.html">Database</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="wCxCJB3hhojs.html">attachments</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="wxCwZ1P2SGCx.html">attributes</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="6x42mhlfLo0o.html">blobs</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="Vy1PbjSkUast.html">branches</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="inGKXCChkVYX.html">entity_changes</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="y2ido6E6tZ0V.html">etapi_tokens</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="kAfgZERKtVhU.html">notes</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="FSZoX3cJlJE7.html">options</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="bzQfhyzDo3Xz.html">recent_notes</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="QYMncZf5Bu3D.html">revisions</a>
+    
+</p>
+
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="KbwD5mDpD4CV.html">Protected entities</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="IuxV242YGaN5.html">Deleted notes</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="FJ4VR6G2M6VD.html">Special notes</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="1l1f6WZbaBEZ.html">Branch prefixes</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="QSkfVssHIngA.html">Revisions</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="cemIoFLfEGPO.html">Backlinks</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="VbDoDdiHEemi.html">Note types</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="UDBwK5Fhr2CT.html">Safe mode</a>
+    
+</p>
+
+
+
+        </li>
+    
+</ul>
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="3eTu21fjtZkj.html">Scripting</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="1pOWnHdGAuWR.html">Widgets</a>
+    
+</p>
+
+
+<ul>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="8jWguCtuKsAt.html">Right pane widget</a>
+    
+</p>
+
+
+
+        </li>
+    
+        <li>
+            
+<p>
+    
+
+    
+    <a class="type-text" href="4FXLAtcPhZFo.html">CSS</a>
+    
+</p>
+
+
+
+        </li>
+    
+</ul>
 
 
         </li>

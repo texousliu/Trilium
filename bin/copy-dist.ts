@@ -5,11 +5,19 @@ const DEST_DIR = "./dist";
 const DEST_DIR_SRC = path.join(DEST_DIR, "src");
 const DEST_DIR_NODE_MODULES = path.join(DEST_DIR, "node_modules");
 
+const VERBOSE = process.env.VERBOSE;
+
+function log(...args) {
+  if (VERBOSE) {
+    console.log(args);
+  }
+}
+
 async function copyNodeModuleFileOrFolder(source: string) {
   const adjustedSource = source.substring(13);
   const destination = path.join(DEST_DIR_NODE_MODULES, adjustedSource);
 
-  console.log(`Copying ${source} to ${destination}`);
+  log(`Copying ${source} to ${destination}`);
   await fs.ensureDir(path.dirname(destination));
   await fs.copy(source, destination);
 }
@@ -17,25 +25,25 @@ async function copyNodeModuleFileOrFolder(source: string) {
 const copy = async () => {
   for (const srcFile of fs.readdirSync("build")) {    
     const destFile = path.join(DEST_DIR, path.basename(srcFile));
-    console.log(`Copying source ${srcFile} -> ${destFile}.`);
+    log(`Copying source ${srcFile} -> ${destFile}.`);
     fs.copySync(path.join("build", srcFile), destFile, { recursive: true });
   }
 
   const filesToCopy = ["config-sample.ini"];
   for (const file of filesToCopy) {
-    console.log(`Copying ${file}`);
+    log(`Copying ${file}`);
     await fs.copy(file, path.join(DEST_DIR, file));
   }
 
   const dirsToCopy = ["images", "libraries", "db"];
   for (const dir of dirsToCopy) {
-    console.log(`Copying ${dir}`);
+    log(`Copying ${dir}`);
     await fs.copy(dir, path.join(DEST_DIR, dir));
   }
 
   const srcDirsToCopy = ["./src/public", "./src/views", "./build"];
   for (const dir of srcDirsToCopy) {
-    console.log(`Copying ${dir}`);
+    log(`Copying ${dir}`);
     await fs.copy(dir, path.join(DEST_DIR_SRC, path.basename(dir)));
   }  
 

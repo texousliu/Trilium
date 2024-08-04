@@ -55,4 +55,4 @@ pushd dist
     tar cJf "trilium-linux-x64-${VERSION}.tar.xz" trilium-linux-x64
 popd
 
-#bin/build-debian.sh
+bin/build-debian.sh

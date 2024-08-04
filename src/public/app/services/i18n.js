@@ -6,10 +6,11 @@ await i18next
     .use(i18nextHttpBackend)
     .init({
         lng: "en",
+        fallbackLng: "en",
         debug: true,
         backend: {
             loadPath: `/${window.glob.assetPath}/translations/{{lng}}/{{ns}}.json`
-        }
+        }        
     });
 
 export const t = i18next.t;

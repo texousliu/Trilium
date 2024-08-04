@@ -8,6 +8,9 @@ import appIconService from "./src/services/app_icon.js";
 import windowService from "./src/services/window.js";
 import tray from "./src/services/tray.js";
 
+import sourceMapSupport from "source-map-support";
+sourceMapSupport.install();
+
 // Prevent Trilium starting twice on first install and on uninstall for the Windows installer.
 if ((await import('electron-squirrel-startup')).default) {
   process.exit(0);

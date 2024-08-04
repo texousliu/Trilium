@@ -12,7 +12,7 @@ See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for q
 
 [The original Trilium project is in maintenance mode](https://github.com/zadam/trilium/issues/4620)
 
-## 🗭 Discuss with us
+## 💬 Discuss with us
 
 Feel free to join our official discussions and community. We are focused on the development on Trilium, and would love to hear what features, suggestions, or issues you may have!
 

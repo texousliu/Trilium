@@ -190,8 +190,9 @@ const ATTR_HELP = {
         "excludeFromExport": "notes (with their sub-tree) won't be included in any note export",
         "run": `defines on which events script should run. Possible values are:
                 <ul>
-                    <li>frontendStartup - when Trilium frontend starts up (or is refreshed).</li>
-                    <li>backendStartup - when Trilium backend starts up</li>
+                    <li>frontendStartup - when Trilium frontend starts up (or is refreshed), but not on mobile.</li>
+                    <li>mobileStartup - when Trilium frontend starts up (or is refreshed), on mobile.</li>
+                    <li>backendStartup - when Trilium backend starts up.</li>
                     <li>hourly - run once an hour. You can use additional label <code>runAtHour</code> to specify at which hour.</li>
                     <li>daily - run once a day</li>
                 </ul>`,
