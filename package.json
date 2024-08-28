@@ -1,7 +1,7 @@
 {
   "name": "@tomaitken/ckeditor5-footnotes",
   "version": "0.0.1",
-  "description": "A plugin for CKEditor 5.",
+  "description": "A plugin for CKEditor 5 to allow footnotes.",
   "keywords": [
     "ckeditor",
     "ckeditor5",
@@ -61,7 +61,6 @@
     "lint": "eslint \"**/*.{js,ts}\" --quiet",
     "start": "ckeditor5-package-tools start",
     "stylelint": "stylelint --quiet --allow-empty-input 'theme/**/*.css'",
-    "test": "ckeditor5-package-tools test",
     "prepare": "yarn run build:dist",
     "prepublishOnly": "yarn run ts:build && ckeditor5-package-tools export-package-as-javascript",
     "postpublish": "yarn run ts:clear && ckeditor5-package-tools export-package-as-typescript",

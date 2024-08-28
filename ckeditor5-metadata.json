@@ -7,9 +7,9 @@
       "path": "src/footnotes.ts",
       "uiComponents": [
         {
-          "name": "footnotesButton",
+          "name": "insertFootnote",
           "type": "Button",
-          "iconPath": "theme/icons/ckeditor.svg"
+          "iconPath": "theme/icons/insert-footnote.svg"
         }
       ]
     }

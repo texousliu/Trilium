@@ -65,7 +65,7 @@ ClassicEditor
 			'undo',
 			'redo',
 			'|',
-			'footnotesButton',
+			'footnote',
 			'|',
 			'heading',
 			'|',

@@ -1,7 +1,7 @@
 @tomaitken/ckeditor5-footnotes
 ==============================
 
-This package was created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package.
+This package was created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package. It is highly derivative of [ForumMagnum Footnote Plugin](https://github.com/ForumMagnum/ForumMagnum/tree/master/public/lesswrong-editor/src/ckeditor5-footnote/src). All intellectual credit should go to the developers of this plugin.
 
 ## Table of contents
 
@@ -51,24 +51,10 @@ yarn run start --no-open
 yarn run start --language=de
 ```
 
-### `test`
+### ~`test`~
 
-Allows executing unit tests for the package, specified in the `tests/` directory. The command accepts the following modifiers:
+There are no tests for this plugin! Too lazy!
 
-* `--coverage` &ndash; to create the code coverage report,
-* `--watch` &ndash; to observe the source files (the command does not end after executing tests),
-* `--source-map` &ndash; to generate source maps of sources,
-* `--verbose` &ndash; to print additional webpack logs.
-
-Examples:
-
-```bash
-# Execute tests.
-yarn run test
-
-# Generate code coverage report after each change in the sources.
-yarn run test --coverage --test
-```
 
 ### `lint`
 
@@ -153,6 +139,4 @@ These scripts compile TypeScript and remove the compiled files. They are used in
 
 ## License
 
-The `@tomaitken/ckeditor5-footnotes` package is available under [MIT license](https://opensource.org/licenses/MIT).
-
-However, it is the default license of packages created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package and can be changed.
+The `@tomaitken/ckeditor5-footnotes` package is available under [IST license](https://opensource.org/licenses/IST).
