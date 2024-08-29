@@ -1,6 +1,6 @@
 {
   "name": "@tomaitken/ckeditor5-footnotes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A plugin for CKEditor 5 to allow footnotes.",
   "keywords": [
     "ckeditor",
