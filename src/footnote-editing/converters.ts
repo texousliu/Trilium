@@ -7,7 +7,7 @@ import {
 	toWidgetEditable } from 'ckeditor5';
 
 import { ATTRIBUTES, CLASSES, ELEMENTS } from '../constants.js';
-import { viewQueryElement, viewQueryText } from '../utils.js';
+import { viewQueryElement } from '../utils.js';
 
 /**
  * Defines methods for converting between model, data view, and editing view representations of each element type.
@@ -107,7 +107,6 @@ export const defineConverters = ( editor: Editor ): void => {
 				[ ATTRIBUTES.footnoteContent ]: '',
 				class: CLASSES.footnoteContent
 			} );
-			console.log( 'section', section );
 
 			return toWidgetEditable( section, viewWriter );
 		}
@@ -163,6 +162,7 @@ export const defineConverters = ( editor: Editor ): void => {
 			const modelWriter = conversionApi.writer;
 			const index = viewElement.getAttribute( ATTRIBUTES.footnoteIndex );
 			const id = viewElement.getAttribute( ATTRIBUTES.footnoteId );
+
 			if ( index === undefined || id === undefined ) {
 				return null;
 			}
@@ -179,7 +179,6 @@ export const defineConverters = ( editor: Editor ): void => {
 		view: ( modelElement, conversionApi ) => {
 			const viewWriter = conversionApi.writer;
 			const footnoteReferenceViewElement = createFootnoteReferenceViewElement( modelElement, conversionApi );
-			console.log( 'footnoteReferenceViewElement', footnoteReferenceViewElement );
 			return toWidget( footnoteReferenceViewElement, viewWriter );
 		}
 	} );
@@ -193,13 +192,13 @@ export const defineConverters = ( editor: Editor ): void => {
    * When that event fires, the callback function below updates the displayed view of the footnote reference in the
    * editor to match the new index.
    */
-	// conversion.for( 'editingDowncast' ).add( dispatcher => {
-	// 	dispatcher.on(
-	// 		`attribute:${ ATTRIBUTES.footnoteIndex }:${ ELEMENTS.footnoteReference }`,
-	// 		( _, data, conversionApi ) => updateFootnoteReferenceView( data, conversionApi, editor ),
-	// 		{ priority: 'high' }
-	// 	);
-	// } );
+	conversion.for( 'editingDowncast' ).add( dispatcher => {
+		dispatcher.on(
+			`attribute:${ ATTRIBUTES.footnoteIndex }:${ ELEMENTS.footnoteReference }`,
+			( _, data, conversionApi ) => updateFootnoteReferenceView( data, conversionApi, editor ),
+			{ priority: 'high' }
+		);
+	} );
 
 	/** *********************************Footnote Back Link Conversion************************************/
 
@@ -274,7 +273,6 @@ function createFootnoteReferenceViewElement(
 	modelElement: Element,
 	conversionApi: DowncastConversionApi
 ): ViewContainerElement {
-	console.log( 'createFootnoteReferenceViewElement' );
 	const viewWriter = conversionApi.writer;
 	const index = `${ modelElement.getAttribute( ATTRIBUTES.footnoteIndex ) }`;
 	const id = `${ modelElement.getAttribute( ATTRIBUTES.footnoteId ) }`;
@@ -284,9 +282,6 @@ function createFootnoteReferenceViewElement(
 	if ( id === 'undefined' ) {
 		throw new Error( 'Footnote reference has no provided id.' );
 	}
-
-	console.log( 'index', index );
-	console.log( 'id', id );
 
 	const footnoteReferenceView = viewWriter.createContainerElement( 'span', {
 		class: CLASSES.footnoteReference,
@@ -364,15 +359,14 @@ function updateFootnoteReferenceView(
 
 	const viewWriter = conversionApi.writer;
 
-	const textNode = viewQueryText( editor, footnoteReferenceView, _ => true );
 	const anchor = viewQueryElement( editor, footnoteReferenceView, element => element.name === 'a' );
+	const textNode = anchor?.getChild( 0 );
 
 	if ( !textNode || !anchor ) {
 		viewWriter.remove( footnoteReferenceView );
 		return;
 	}
 
-	// @ts-expect-error TextNode not accepted
 	viewWriter.remove( textNode );
 	const innerText = viewWriter.createText( `[${ newIndex }]` );
 	viewWriter.insert( viewWriter.createPositionAt( anchor, 0 ), innerText );

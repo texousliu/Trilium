@@ -42,6 +42,7 @@ export default class FootnoteUI extends Plugin {
 			dropdownView.on(
 				'change:isOpen',
 				( evt, propertyName, newValue ) => {
+					dropdownView?.listView?.items.clear();
 					if ( newValue ) {
 						addListToDropdown(
 							dropdownView,
@@ -49,18 +50,19 @@ export default class FootnoteUI extends Plugin {
 						);
 					} else {
 						dropdownView?.listView?.items.clear();
+						const listElement = dropdownView?.listView?.element;
+						if ( listElement && listElement.parentNode ) {
+							listElement.parentNode.removeChild( listElement );
+						}
 					}
 				}
 			);
 			// Execute the command when the dropdown item is clicked (executed).
 			this.listenTo( dropdownView, 'execute', evt => {
-				console.log( 'commandParam', ( evt.source as any ).commandParam );
 				editor.execute( COMMANDS.insertFootnote, {
 					footnoteIndex: ( evt.source as any ).commandParam
 				} );
-				console.log( 'completed execution' );
 				editor.editing.view.focus();
-				console.log( 'post focus' );
 			} );
 
 			return dropdownView;

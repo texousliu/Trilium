@@ -53,7 +53,6 @@ export default class FootnoteEditing extends Plugin {
 			'change:data',
 			( eventInfo, batch ) => {
 				const eventSource: any = eventInfo.source;
-				console.log( eventSource.differ.getChanges() );
 				const diffItems = [ ...eventSource.differ.getChanges() ];
 				// If a footnote reference is inserted, ensure that footnote references remain ordered.
 				if ( diffItems.some( diffItem => diffItem.type === 'insert' && diffItem.name === ELEMENTS.footnoteReference ) ) {
@@ -71,7 +70,6 @@ export default class FootnoteEditing extends Plugin {
 						this._updateReferenceIndices( batch, `${ footnoteId }`, newFootnoteIndex );
 					}
 				} );
-				console.log( 'reached end of change:data' );
 			},
 			{ priority: 'high' }
 		);
@@ -302,17 +300,17 @@ export default class FootnoteEditing extends Plugin {
 			for ( const footnote of modelQueryElementsAll( this.editor, footnoteSection, e =>
 				e.is( 'element', ELEMENTS.footnoteItem )
 			) ) {
-				const index = `${ footnoteSection?.getChildIndex( footnote ) ?? -1 + 1 }`;
+				const index = `${ ( footnoteSection?.getChildIndex( footnote ) ?? -1 ) + 1 }`;
 				if ( footnote ) {
 					writer.setAttribute( ATTRIBUTES.footnoteIndex, index, footnote );
 				}
 				const id = footnote.getAttribute( ATTRIBUTES.footnoteId );
 
-				/**
-         * unfortunately the following line seems to be necessary, even though updateReferenceIndices
-         * should fire from the attribute change immediately above. It seems that events initiated by
-         * a `change:data` event do not themselves fire another `change:data` event.
-         */
+				// 		/**
+				//  * unfortunately the following line seems to be necessary, even though updateReferenceIndices
+				//  * should fire from the attribute change immediately above. It seems that events initiated by
+				//  * a `change:data` event do not themselves fire another `change:data` event.
+				//  */
 				if ( id ) {
 					this._updateReferenceIndices( batch, `${ id }`, `${ index }` );
 				}

@@ -1,4 +1,4 @@
-import { type Editor, Element, Text, TextProxy, ViewElement, ViewText } from 'ckeditor5';
+import { type Editor, Element, Text, TextProxy, ViewElement } from 'ckeditor5';
 
 // There's ample DRY violation in this file; type checking
 // polymorphism without full typescript is just incredibly finicky.
@@ -43,54 +43,6 @@ export const modelQueryTextAll = (
 
 	for ( const item of range.getItems() ) {
 		if ( !( item instanceof Text || item instanceof TextProxy ) ) {
-			continue;
-		}
-
-		if ( predicate( item ) ) {
-			output.push( item );
-		}
-	}
-	return output;
-};
-
-/**
- * Returns an array of all descendant elements of
- * the root for which the provided predicate returns true.
- */
-export const viewQueryElementsAll = (
-	editor: Editor,
-	rootElement: ViewElement,
-	predicate: ( item: ViewElement ) => boolean = _ => true
-): Array<ViewElement> => {
-	const range = editor.editing.view.createRangeIn( rootElement );
-	const output: Array<ViewElement> = [];
-
-	for ( const item of range.getItems() ) {
-		if ( !( item instanceof ViewElement ) ) {
-			continue;
-		}
-
-		if ( predicate( item ) ) {
-			output.push( item );
-		}
-	}
-	return output;
-};
-
-/**
- * Returns an array of all descendant text nodes and text proxies of
- * the root for which the provided predicate returns true.
- */
-export const viewQueryTextAll = (
-	editor: Editor,
-	rootElement: ViewElement,
-	predicate: ( item: ViewText | TextProxy ) => boolean = _ => true
-): Array<ViewText | TextProxy> => {
-	const range = editor.editing.view.createRangeIn( rootElement );
-	const output: Array<ViewText | TextProxy> = [];
-
-	for ( const item of range.getItems() ) {
-		if ( !( item instanceof ViewText || item instanceof TextProxy ) ) {
 			continue;
 		}
 
@@ -170,25 +122,3 @@ export const viewQueryElement = (
 	return null;
 };
 
-/**
- * Returns the first descendant text node or text proxy of the root for which the provided
- * predicate returns true, or null if no such element is found.
- */
-export const viewQueryText = (
-	editor: Editor,
-	rootElement: ViewElement,
-	predicate: ( item: ViewText | TextProxy ) => boolean = _ => true
-): ViewText | TextProxy | null => {
-	const range = editor.editing.view.createRangeIn( rootElement );
-
-	for ( const item of range.getItems() ) {
-		if ( !( item instanceof ViewText || item instanceof TextProxy ) ) {
-			continue;
-		}
-
-		if ( predicate( item ) ) {
-			return item;
-		}
-	}
-	return null;
-};

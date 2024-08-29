@@ -47,11 +47,9 @@ export default class InsertFootnoteCommand extends Command {
 			modelWriter.setSelection( footnoteReference, 'after' );
 			// if referencing an existing footnote
 			if ( footnoteIndex !== 0 ) {
-				console.log( 'erroneous footnoteIndex' );
 				return;
 			}
 
-			console.log( 'we made it here' );
 			const footnoteContent = modelWriter.createElement( ELEMENTS.footnoteContent );
 			const footnoteItem = modelWriter.createElement( ELEMENTS.footnoteItem, {
 				[ ATTRIBUTES.footnoteId ]: id,
@@ -62,13 +60,11 @@ export default class InsertFootnoteCommand extends Command {
 			modelWriter.append( p, footnoteContent );
 			modelWriter.append( footnoteContent, footnoteItem );
 			modelWriter.insert( footnoteBackLink, footnoteItem, 0 );
-			console.log( 'we made it here 1' );
 
 			this.editor.model.insertContent(
 				footnoteItem,
 				modelWriter.createPositionAt( footnoteSection, footnoteSection.maxOffset )
 			);
-			console.log( 'we made it here 2' );
 		} );
 	}
 
@@ -78,11 +74,9 @@ export default class InsertFootnoteCommand extends Command {
    */
 	public override refresh(): void {
 		const model = this.editor.model;
-		console.log( 'over here' );
 		const lastPosition = model.document.selection.getLastPosition();
 		const allowedIn = lastPosition && model.schema.findAllowedParent( lastPosition, ELEMENTS.footnoteSection );
 		this.isEnabled = allowedIn !== null;
-		console.log( 'now here' );
 	}
 
 	/**
