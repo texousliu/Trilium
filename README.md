@@ -3,8 +3,6 @@
 
 This package was created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package. It is highly derivative of [ForumMagnum Footnote Plugin](https://github.com/ForumMagnum/ForumMagnum/tree/master/public/lesswrong-editor/src/ckeditor5-footnote/src). All intellectual credit should go to the developers of this plugin.
 
-🚧🚧🚧 STILL UNDER DEVELOPMENT 🚧🚧🚧
-
 ## Table of contents
 
 * [Developing the package](#developing-the-package)

@@ -23,7 +23,7 @@
     "./browser/*": null,
     "./package.json": "./package.json"
   },
-  "license": "MIT",
+  "license": "ISC",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=5.7.1"
@@ -80,5 +80,14 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThomasAitken/ckeditor5-footnotes.git"
+  },
+  "author": "Thomas Aitken",
+  "bugs": {
+    "url": "https://github.com/ThomasAitken/ckeditor5-footnotes/issues"
+  },
+  "homepage": "https://github.com/ThomasAitken/ckeditor5-footnotes#readme"
 }
