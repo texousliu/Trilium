@@ -1,10 +1,11 @@
 @tomaitken/ckeditor5-footnotes
 ==============================
 
-This package was created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package. It is highly derivative of [ForumMagnum Footnote Plugin](https://github.com/ForumMagnum/ForumMagnum/tree/master/public/lesswrong-editor/src/ckeditor5-footnote/src). All intellectual credit should go to the developers of this plugin.
+This package was created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package. It is essentially lifted from the [ForumMagnum Footnote Plugin](https://github.com/ForumMagnum/ForumMagnum/tree/master/public/lesswrong-editor/src/ckeditor5-footnote/src) with only minor modifications. All intellectual credit should go to the developers of this plugin.
 
 ## Table of contents
 
+* [Usage](#usage)
 * [Developing the package](#developing-the-package)
 * [Available scripts](#available-scripts)
   * [`start`](#start)
@@ -17,6 +18,18 @@ This package was created by the [ckeditor5-package-generator](https://www.npmjs.
   * [`translations:upload`](#translationsupload)
   * [`ts:build` and `ts:clear`](#tsbuild-and-tsclear)
 * [License](#license)
+
+## Usage
+Install via NPM / yarn.
+
+Then import code and CSS:
+```
+import '@tomaitken/ckeditor5-footnotes/index.css';
+
+import { Footnotes } from '@tomaitken/ckeditor5-footnotes';
+```
+
+Then add this `Footnotes` import to the plugins list and the string `'footnote'` to the toolbar buttons.
 
 ## Developing the package
 
