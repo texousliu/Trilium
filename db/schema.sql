@@ -126,6 +126,17 @@ CREATE TABLE IF NOT EXISTS "attachments"
     utcDateScheduledForErasureSince TEXT DEFAULT NULL,
     isDeleted    INT  not null,
     deleteId    TEXT DEFAULT NULL);
+CREATE TABLE IF NOT EXISTS "user_data"
+(
+    tmpID INT,
+    userIDEcnryptedDataKey TEXT,
+    userIDVerificationHash TEXT,
+    salt TEXT,
+    derivedKey TEXT,
+    isSetup TEXT DEFAULT "false",
+    UNIQUE (tmpID),
+    PRIMARY KEY (tmpID)
+);
 CREATE INDEX IDX_attachments_ownerId_role
     on attachments (ownerId, role);
 

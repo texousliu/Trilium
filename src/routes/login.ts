@@ -10,16 +10,26 @@ import appPath from "../services/app_path.js";
 import ValidationError from "../errors/validation_error.js";
 import { Request, Response } from 'express';
 import { AppRequest } from './route-interface.js';
+import recoveryCodeService from '../services/encryption/recovery_codes.js';
+import openIDService from '../services/open_id.js';
+import openIDEncryption from '../services/encryption/open_id_encryption.js';
+import totp from '../services/totp.js';
+import open_id from '../services/open_id.js';
 
 function loginPage(req: Request, res: Response) {
-    res.render('login', {
+    if (open_id.isOpenIDEnabled()) {
+      res.redirect('/authenticate');
+    } else {
+      res.render('login', {
         failedAuth: false,
+        totpEnabled: optionService.getOptionBool('totpEnabled') && totp.checkForTotSecret(),
         assetPath: assetPath,
-        appPath: appPath
-    });
-}
+        appPath: appPath,
+      });
+    }
+  }
 
-function setPasswordPage(req: Request, res: Response) {
+ function setPasswordPage(req: Request, res: Response) {
     res.render('set_password', {
         error: false,
         assetPath: assetPath,
@@ -59,8 +69,19 @@ function setPassword(req: Request, res: Response) {
 
 function login(req: AppRequest, res: Response) {
     const guessedPassword = req.body.password;
+    const guessedTotp = req.body.token;
 
     if (verifyPassword(guessedPassword)) {
+        if (!verifyPassword(guessedPassword)) {
+            sendLoginError(req, res);
+            return;
+          }
+      
+          if (optionService.getOptionBool('totpEnabled') && totp.checkForTotSecret())
+            if (!verifyTOTP(guessedTotp)) {
+              sendLoginError(req, res);
+              return;
+            }
         const rememberMe = req.body.rememberMe;
 
         req.session.regenerate(() => {
@@ -85,6 +106,14 @@ function login(req: AppRequest, res: Response) {
     }
 }
 
+function verifyTOTP(guessedToken: string) {
+    if (totp.validateTOTP(guessedToken)) return true;
+  
+    const recoveryCodeValidates = recoveryCodeService.verifyRecoveryCode(guessedToken);
+  
+    return recoveryCodeValidates;
+}
+
 function verifyPassword(guessedPassword: string) {
     const hashed_password = utils.fromBase64(optionService.getOption('passwordVerificationHash'));
 
@@ -93,11 +122,23 @@ function verifyPassword(guessedPassword: string) {
     return guess_hashed.equals(hashed_password);
 }
 
+function sendLoginError(req: AppRequest, res: Response) {
+    // note that logged IP address is usually meaningless since the traffic should come from a reverse proxy
+    log.info(`WARNING: Wrong password or TOTP from ${req.ip}, rejecting.`);
+  
+    res.status(401).render('login', {
+      failedAuth: true,
+      totpEnabled: optionService.getOption('totpEnabled') && totp.checkForTotSecret(),
+      assetPath: assetPath,
+    });
+}
+
 function logout(req: AppRequest, res: Response) {
     req.session.regenerate(() => {
         req.session.loggedIn = false;
-
-        res.redirect('login');
+        if (openIDService.isOpenIDEnabled() && openIDEncryption.isSubjectIdentifierSaved()) {
+            res.oidc.logout({ returnTo: '/authenticate' });
+        } else res.redirect('login');
     });
 
 }
