@@ -1,4 +1,3 @@
-import options from '../../services/options.js';
 import {generateSecret} from 'time2fa';
 
 function generateTOTPSecret() {
@@ -17,24 +16,8 @@ function getTotpEnabled() {
 }
 
 function getTOTPStatus() {
-    // const totpEnabled = options.getOptionBool('totpEnabled');
     const totpEnabled = getTotpEnabled();
     return {success: true, message: totpEnabled, enabled: getTotpEnabled()};
-}
-
-function enableTOTP() {
-    if (!getTotpEnabled()) {
-        return {success: 'false'};
-    }
-
-    options.setOption('totpEnabled', true);
-    options.setOption('oAuthEnabled', false);
-    return {success: 'true'};
-}
-
-function disableTOTP() {
-    options.setOption('totpEnabled', false);
-    return {success: true};
 }
 
 function getSecret() {
@@ -44,7 +27,5 @@ function getSecret() {
 export default {
     generateSecret: generateTOTPSecret,
     getTOTPStatus,
-    enableTOTP,
-    disableTOTP,
     getSecret
 };

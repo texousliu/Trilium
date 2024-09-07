@@ -124,8 +124,6 @@ function register(app: express.Application) {
 
     apiRoute(GET, '/api/totp/generate', totp.generateSecret);
     apiRoute(GET, '/api/totp/status', totp.getTOTPStatus);
-    apiRoute(PST, '/api/totp/enable', totp.enableTOTP);
-    apiRoute(PST, '/api/totp/disable', totp.disableTOTP);
     apiRoute(GET, '/api/totp/get', totp.getSecret);
 
     apiRoute(GET, '/api/oauth/status', openID.getOAuthStatus);

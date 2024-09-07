@@ -2,7 +2,6 @@
 
 import optionService from "../options.js";
 import crypto from "crypto";
-import utils from "../utils.js";
 import sql from "../sql.js";
 
 function getVerificationHash(password: crypto.BinaryLike) {
@@ -56,11 +55,6 @@ function createSubjectIdentifierDerivedKey(
   subjectIdentifer: string | crypto.BinaryLike,
   salt: string | crypto.BinaryLike
 ) {
-  // const salt = optionService.getOption("subjectIdentifierDerivedKeySalt");
-
-  //   const salt = sql.getValue("SELECT salt FROM user_data");
-  //   if (salt === undefined || salt === null) return undefined;
-
   return getScryptHash(subjectIdentifer, salt);
 }
 

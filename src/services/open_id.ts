@@ -115,7 +115,6 @@ function generateOAuthConfig() {
   };
 
   const logoutParams = {
-    // end_session_endpoint: "/end-session/",
   };
 
   const authConfig = {

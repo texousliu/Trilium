@@ -10,7 +10,6 @@ import passwordService from "./encryption/password.js";
 import type { NextFunction, Request, Response } from 'express';
 import { AppRequest } from '../routes/route-interface.js';
 import openID from './open_id.js';
-import sql from './sql.js';
 import open_id_encryption from './encryption/open_id_encryption.js';
 
 const noAuthentication = config.General && config.General.noAuthentication === true;
