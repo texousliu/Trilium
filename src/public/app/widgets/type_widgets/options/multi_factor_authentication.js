@@ -166,8 +166,6 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
   }
 
   optionsLoaded(options) {
-    // TODO: Rework the logic since I've changed how OAuth works
-
     server.get("oauth/status").then((result) => {
       if (result.enabled) {
         this.$oAuthEnabledCheckbox.prop("checked", result.enabled);
