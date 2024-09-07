@@ -37,7 +37,7 @@ const TPL = `
         <label>
         <b>TOTP Enabled</b>
         </label>
-        <input type="checkbox" class="totp-enabled" /> 
+        <input type="checkbox" class="totp-enabled" disabled="true" /> 
         <span class="env-totp-enabled" "alert alert-warning" role="alert" style="font-weight: bold; color: red !important;" > </span>
     </div>
     <div>
