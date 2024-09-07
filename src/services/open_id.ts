@@ -35,10 +35,10 @@ function clearSavedUser() {
 }
 
 function checkOpenIDRequirements() {
-  if (process.env.OAUTH_ENABLED === undefined) {
+  if (process.env.SSO_ENABLED === undefined) {
     return false;
   }
-  if (process.env.OAUTH_ENABLED.toLocaleLowerCase() !== "true") {
+  if (process.env.SSO_ENABLED.toLocaleLowerCase() !== "true") {
     return false;
   }
 
@@ -48,14 +48,8 @@ function checkOpenIDRequirements() {
   if (process.env.CLIENT_ID === undefined) {
     throw new OpenIDError("CLIENT_ID is undefined in .env!");
   }
-  if (process.env.ISSUER_BASE_URL === undefined) {
-    throw new OpenIDError("ISSUER_BASE_URL is undefined in .env!");
-  }
   if (process.env.SECRET === undefined) {
     throw new OpenIDError("SECRET is undefined in .env!");
-  }
-  if (process.env.AUTH_0_LOGOUT === undefined) {
-    throw new OpenIDError("AUTH_0_LOGOUT is undefined in .env!");
   }
 
   return true;
@@ -100,12 +94,6 @@ function isTokenValid(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-function checkAuth0Logout() {
-  if (process.env.AUTH_0_LOGOUT === undefined) return false;
-  if (process.env.AUTH_0_LOGOUT.toLocaleLowerCase() === "true") return true;
-  return false;
-}
-
 function generateOAuthConfig() {
   const authRoutes = {
     callback: "/callback",
@@ -119,10 +107,10 @@ function generateOAuthConfig() {
 
   const authConfig = {
     authRequired: true,
-    auth0Logout: checkAuth0Logout(),
+    auth0Logout: false,
     baseURL: process.env.BASE_URL,
     clientID: process.env.CLIENT_ID,
-    issuerBaseURL: process.env.ISSUER_BASE_URL,
+    issuerBaseURL: "https://accounts.google.com/.well-known/openid-configuration",
     secret: process.env.SECRET,
     clientSecret: process.env.SECRET,
     authorizationParams: {

@@ -175,7 +175,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         this.$UserAccountEmail.text(result.email);
       }else
         this.$envEnabledOAuth.text(
-          "set OAUTH_ENABLED as environment variable to 'true' to enable (Requires restart)"
+          "set SSO_ENABLED as environment variable to 'true' to enable (Requires restart)"
       );
     });
 
