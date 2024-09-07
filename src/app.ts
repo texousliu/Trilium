@@ -16,6 +16,7 @@ import { startScheduledCleanup } from "./services/erase.js";
 import sql_init from "./services/sql_init.js";
 import oidc from "express-openid-connect";
 import openID from "./services/open_id.js";
+import * as dotenv from "dotenv";
 
 await import('./services/handlers.js');
 await import('./becca/becca_loader.js');
@@ -23,6 +24,9 @@ await import('./becca/becca_loader.js');
 const app = express();
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
+
+// Configure environment variables
+dotenv.config();
 
 // Initialize DB
 sql_init.initializeDb();

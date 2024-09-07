@@ -10,7 +10,7 @@ const TPL = `
             Multi-Factor Authentication (MFA) adds an extra layer of security to your account. Instead
              of just entering a password to log in, MFA requires you to provide one or more additional 
              pieces of evidence to verify your identity. This way, even if someone gets hold of your 
-             password, they still can't access your account without the second piece of information. 
+             password, they still ca TOTP_ENABLED is not set in environment variable. Requires restart.n't access your account without the second piece of information. 
              It's like adding an extra lock to your door, making it much harder for anyone else to 
              break in.</i>
     </div>
@@ -51,7 +51,7 @@ const TPL = `
     <div>
         <span class="totp-secret" > TOTP Secret Key </span>
         <br>
-        <button class="regenerate-totp" disabled="true"> Regenerate TOTP Secret </button>
+        <button class="regenerate-totp"> Regenerate TOTP Secret </button>
     </div>
     <br>
     <h4> Single Sign-on Recovery Keys </h4>
@@ -117,9 +117,10 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     for (let i = 0; i < 8; i++)
       this.$recoveryKeys.push(this.$widget.find(".key_" + i));
 
-    this.$totpEnabled.on("change", async () => {
-      this.updateSecret();
-    });
+    // Depricated. Will use .env to control.
+    // this.$totpEnabled.on("change", async () => {
+    //   this.updateSecret();
+    // });
 
     this.$oAuthEnabledCheckbox.on("change", async () => {
       this.updateOAuthStatus();
@@ -159,15 +160,16 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     this.displayRecoveryKeys();
   }
 
-  async updateSecret() {
-    if (this.$totpEnabled.prop("checked")) {
-      server.post("totp/enable");
+  // Depricated. Will use .env to control.
+  // async updateSecret() {
+  //   if (this.$totpEnabled.prop("checked")) {
+  //     server.post("totp/enable");
 
-    }
-    else {
-      server.post("totp/disable");
-    }
-  }
+  //   }
+  //   else {
+  //     server.post("totp/disable");
+  //   }
+  // }
 
   async updateOAuthStatus() {
     if (this.$oAuthEnabledCheckbox.prop("checked")){
@@ -248,12 +250,11 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     // });
 
     server.get("totp/status").then((result) => {
+      console.log(result);
       if (result.enabled)
         if (result.success) {
           this.$totpEnabled.prop("checked", result.message);
           this.$totpSecretInput.prop("disabled", !result.message);
-          this.$totpSecret.prop("disapbled", !result.message);
-          this.$regenerateTotpButton.prop("disabled", !result.message);
           this.$authenticatorCode.prop("disabled", !result.message);
           this.$generateRecoveryCodeButton.prop("disabled", !result.message);
         } else {
@@ -263,13 +264,11 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         this.$totpEnabled.prop("checked", false);
         this.$totpEnabled.prop("disabled", true);
         this.$totpSecretInput.prop("disabled", true);
-        this.$totpSecret.prop("disapbled", true);
-        this.$regenerateTotpButton.prop("disabled", true);
         this.$authenticatorCode.prop("disabled", true);
         this.$generateRecoveryCodeButton.prop("disabled", true);
 
         this.$envEnabledTOTP.text(
-          "TOTP_ENABLED is not set in environment variable. Requires restart."
+          "TOTP_ENABLED is set as environment variable to enable (Requires restart)"
         );
       }
     });

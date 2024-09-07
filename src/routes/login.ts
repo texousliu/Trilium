@@ -22,7 +22,7 @@ function loginPage(req: Request, res: Response) {
     } else {
       res.render('login', {
         failedAuth: false,
-        totpEnabled: optionService.getOptionBool('totpEnabled') && totp.checkForTotSecret(),
+        totpEnabled: totp.isTotpEnabled(),
         assetPath: assetPath,
         appPath: appPath,
       });
@@ -71,17 +71,19 @@ function login(req: AppRequest, res: Response) {
     const guessedPassword = req.body.password;
     const guessedTotp = req.body.token;
 
+    if (totp.isTotpEnabled()){
+        if (!verifyTOTP(guessedTotp)) {
+          sendLoginError(req, res);
+          return;
+        }
+    }
+
     if (verifyPassword(guessedPassword)) {
         if (!verifyPassword(guessedPassword)) {
             sendLoginError(req, res);
             return;
-          }
-      
-          if (optionService.getOptionBool('totpEnabled') && totp.checkForTotSecret())
-            if (!verifyTOTP(guessedTotp)) {
-              sendLoginError(req, res);
-              return;
-            }
+        }
+            
         const rememberMe = req.body.rememberMe;
 
         req.session.regenerate(() => {
@@ -96,13 +98,7 @@ function login(req: AppRequest, res: Response) {
         });
     }
     else {
-        // note that logged IP address is usually meaningless since the traffic should come from a reverse proxy
-        log.info(`WARNING: Wrong password from ${req.ip}, rejecting.`);
-
-        res.status(401).render('login', {
-            failedAuth: true,
-            assetPath: assetPath
-        });
+        sendLoginError(req, res);
     }
 }
 
@@ -124,7 +120,11 @@ function verifyPassword(guessedPassword: string) {
 
 function sendLoginError(req: AppRequest, res: Response) {
     // note that logged IP address is usually meaningless since the traffic should come from a reverse proxy
-    log.info(`WARNING: Wrong password or TOTP from ${req.ip}, rejecting.`);
+    if ( totp.isTotpEnabled( )){
+        log.info(`WARNING: Wrong password or TOTP from ${req.ip}, rejecting.`);
+    }else{
+        log.info(`WARNING: Wrong password from ${req.ip}, rejecting.`);
+    }
   
     res.status(401).render('login', {
       failedAuth: true,

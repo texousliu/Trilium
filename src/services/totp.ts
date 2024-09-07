@@ -2,6 +2,21 @@
 
 import {Totp} from 'time2fa';
 
+function isTotpEnabled() {
+    console.log("Reading ENV: " + process.env.TOTP_ENABLED );
+    if (process.env.TOTP_ENABLED === undefined) {
+        return false;
+    }
+    if (process.env.TOTP_SECRET === undefined) {
+        return false;
+    }
+    if (process.env.TOTP_ENABLED.toLocaleLowerCase() !== 'true') {
+        return false;
+    }
+
+    return true;
+}
+
 function getTotpSecret() {
     return process.env.TOTP_SECRET;
 }
@@ -26,6 +41,7 @@ function validateTOTP(guessedPasscode: string) {
 }
 
 export default {
+    isTotpEnabled,
     getTotpSecret, 
     checkForTotSecret, 
     validateTOTP

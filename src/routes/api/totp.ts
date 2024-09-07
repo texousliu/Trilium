@@ -17,8 +17,9 @@ function getTotpEnabled() {
 }
 
 function getTOTPStatus() {
-    const totpEnabled = options.getOptionBool('totpEnabled');
-    return {success: 'true', message: totpEnabled, enabled: getTotpEnabled()};
+    // const totpEnabled = options.getOptionBool('totpEnabled');
+    const totpEnabled = getTotpEnabled();
+    return {success: true, message: totpEnabled, enabled: getTotpEnabled()};
 }
 
 function enableTOTP() {

@@ -21,6 +21,7 @@
   "type": "module",
   "scripts": {
     "start-server": "cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 nodemon src/www.ts",
+    "start-server-mfa": "cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 nodemon --env-file=.env src/www.ts",
     "start-server-safe": "cross-env TRILIUM_SAFE_MODE=1 TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 nodemon src/www.ts",
     "start-server-no-dir": "cross-env TRILIUM_SAFE_MODE=1 TRILIUM_ENV=dev TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 nodemon src/www.ts",
     "start-test-server": "npm run switch-server; rimraf ./data-test; cross-env TRILIUM_SAFE_MODE=1 TRILIUM_DATA_DIR=./data-test TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 TRILIUM_ENV=dev TRILIUM_PORT=9999 ts-node src/www.ts",
@@ -69,6 +70,7 @@
     "dayjs": "^1.11.12",
     "dayjs-plugin-utc": "0.1.2",
     "debounce": "^2.1.0",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "electron-debug": "3.2.0",
     "electron-dl": "3.5.2",
