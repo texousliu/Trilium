@@ -3,7 +3,6 @@
 import {Totp} from 'time2fa';
 
 function isTotpEnabled() {
-    console.log("Reading ENV: " + process.env.TOTP_ENABLED );
     if (process.env.TOTP_ENABLED === undefined) {
         return false;
     }

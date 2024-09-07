@@ -13,10 +13,17 @@
         <h1>Trilium login</h1>
 
         <% if (failedAuth) { %>
-            <div class="alert alert-warning">
-                Password is incorrect. Please try again.
-            </div>
+            <% if( totpEnabled ) { %>
+                <div class="alert alert-warning">
+                    Password or TOTP is incorrect. Please try again.
+                </div>
+            <% }else{ %>
+                <div class="alert alert-warning">
+                    Password is incorrect. Please try again.
+                </div>
+            <% } %>
         <% } %>
+            
 
         <form action="login" method="POST">
             <div class="form-group">
