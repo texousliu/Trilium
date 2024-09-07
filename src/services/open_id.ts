@@ -11,8 +11,27 @@ function isOpenIDEnabled() {
 }
 
 function isUserSaved() {
-  const dbf = sql.getValue<string>("SELECT isSetup FROM user_data;");
-  return dbf === "true" ? true : false;
+  const data = sql.getValue<string>("SELECT isSetup FROM user_data;");
+  return data === "true" ? true : false;
+}
+
+function getUsername() {
+  const username = sql.getValue<string>("SELECT username FROM user_data;");
+  return username;
+}
+
+function getUserEmail() {
+  const email = sql.getValue<string>("SELECT email FROM user_data;");
+  return email;
+}
+
+function clearSavedUser() {
+  sql.execute("DELETE FROM user_data");
+  options.setOption("isUserSaved", false);
+  return {
+    success: true,
+    message: "Account data removed."
+  };
 }
 
 function checkOpenIDRequirements() {
@@ -45,7 +64,9 @@ function checkOpenIDRequirements() {
 function getOAuthStatus() {
   return {
     success: true,
-    message: checkOpenIDRequirements(),
+    name: getUsername(),
+    email: getUserEmail(),
+    enabled: isOpenIDEnabled(),
   };
 }
 
@@ -117,12 +138,17 @@ function generateOAuthConfig() {
 
       if (isUserSaved()) return session;
 
-      if (req.oidc.user === undefined) console.log("user invalid!");
-      else openIDEncryption.saveSubjectIdentifier(req.oidc.user.sub.toString());
-
+      if (req.oidc.user === undefined) {
+        console.log("user invalid!");
+      }else {
+         openIDEncryption.saveUser(
+          req.oidc.user.sub.toString(),
+          req.oidc.user.name.toString(),
+          req.oidc.user.email.toString());
+      }
       return session;
     },
-  };
+  }; 
   return authConfig;
 }
 
@@ -130,6 +156,7 @@ export default {
   generateOAuthConfig,
   getOAuthStatus,
   isOpenIDEnabled,
+  clearSavedUser,
   checkOpenIDRequirements,
   isTokenValid,
   isUserSaved,

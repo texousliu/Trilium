@@ -26,10 +26,9 @@ const TPL = `
             <span class="env-oauth-enabled" "alert alert-warning" role="alert" style="font-weight: bold; color: red !important;" > </span>
         </div>
         <div>
-            <span> <b>Token status: </b></span><span class="token-status"> Needs login! </span><span><b> User status: </b></span><span class="user-status"> No user saved!</span>
+            <span> <b>User Account: </b></span><span class="user-account-name"> Not logged in! </span><span><b> User Email: </b></span><span class="user-account-email"> Not logged in!</span>
             <br>
-            <button class="oauth-login-button" onclick="location.href='/authenticate'" > Login to configured OAuth/OpenID service </button>
-            <button class="save-user-button" > Save User </button>
+            <button class="clear-saved-user-button" > Clear Saved User </button>
         </div>
     </div>
     <br>
@@ -104,10 +103,10 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
       ".generate-recovery-code"
     );
     this.$oAuthEnabledCheckbox = this.$widget.find(".oauth-enabled-checkbox");
-    this.$saveUserButton = this.$widget.find(".save-user-button");
+    this.$clearSavedUserButton = this.$widget.find(".clear-saved-user-button");
     this.$oauthLoginButton = this.$widget.find(".oauth-login-button");
-    this.$tokenStatus = this.$widget.find(".token-status");
-    this.$userStatus = this.$widget.find(".user-status");
+    this.$UserAccountName = this.$widget.find(".user-account-name");
+    this.$UserAccountEmail = this.$widget.find(".user-account-email");
     this.$envEnabledTOTP = this.$widget.find(".env-totp-enabled");
     this.$envEnabledOAuth = this.$widget.find(".env-oauth-enabled");
 
@@ -122,9 +121,10 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     //   this.updateSecret();
     // });
 
-    this.$oAuthEnabledCheckbox.on("change", async () => {
-      this.updateOAuthStatus();
-    });
+    // Depricated. Will use .env to control.
+    // this.$oAuthEnabledCheckbox.on("change", async () => {
+    //   this.updateOAuthStatus();
+    // });
 
     this.$generateRecoveryCodeButton.on("click", async () => {
       this.setRecoveryKeys();
@@ -134,11 +134,10 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
       this.generateKey();
     });
 
-    this.$saveUserButton.on("click", (async) => {
+    this.$clearSavedUserButton.on("click", (async) => {
       server
-        .get("oauth/authenticate")
+        .get("oauth/clearUser")
         .then((result) => {
-          console.log(result.message);
           toastService.showMessage(result.message);
         })
         .catch((result) => {
@@ -213,10 +212,10 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
   optionsLoaded(options) {
     // TODO: Rework the logic since I've changed how OAuth works
 
-    // server.get("oauth/status").then((result) => {
-    //   if (result.enabled) {
+    server.get("oauth/status").then((result) => {
+      if (result.enabled) {
     //     if (result.success)
-    //       this.$oAuthEnabledCheckbox.prop("checked", result.message);
+        this.$oAuthEnabledCheckbox.prop("checked", result.enabled);
 
     //     this.$oauthLoginButton.prop("disabled", !result.message);
     //     this.$saveUserButton.prop("disabled", !result.message);
@@ -226,7 +225,8 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     //       this.$saveUserButton.prop("disabled", false);
     //       server.get("oauth/validate").then((result) => {
     //         if (result.success) {
-    //           this.$tokenStatus.text("Logged in!");
+              this.$UserAccountName.text(result.name);
+              this.$UserAccountEmail.text(result.email);
 
     //           if (result.user) {
     //             this.$userStatus.text("User saved!");
@@ -246,8 +246,8 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     //     this.$envEnabledOAuth.text(
     //       "OAuth can only be enabled with environment variables. REQUIRES RESTART"
     //     );
-    //   }
-    // });
+      }
+    });
 
     server.get("totp/status").then((result) => {
       console.log(result);

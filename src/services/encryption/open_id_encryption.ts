@@ -5,7 +5,7 @@ import dataEncryptionService from "./data_encryption.js";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
 
-function saveSubjectIdentifier(subjectIdentifier: string) {
+function saveUser(subjectIdentifier: string, name: string, email: string) {
   if (isUserSaved()) return false;
 
   // Allows setup with existing instances of trilium
@@ -13,6 +13,8 @@ function saveSubjectIdentifier(subjectIdentifier: string) {
     CREATE TABLE IF NOT EXISTS "user_data"
     (
         tmpID INT,
+        username TEXT,
+        email TEXT,
         userIDEcnryptedDataKey TEXT,
         userIDVerificationHash TEXT,
         salt TEXT,
@@ -52,9 +54,10 @@ function saveSubjectIdentifier(subjectIdentifier: string) {
     derivedKey: derivedKeySalt,
     userIDEcnryptedDataKey: userIDEncryptedDataKey,
     isSetup: "true",
+    username: name,
+    email: email
   };
 
-  console.log("Saved data: " + data);
   sql.upsert("user_data", "tmpID", data);
   return true;
 }
@@ -158,6 +161,6 @@ export default {
   verifyOpenIDSubjectIdentifier,
   getDataKey,
   setDataKey,
-  saveSubjectIdentifier,
+  saveUser,
   isSubjectIdentifierSaved,
 };

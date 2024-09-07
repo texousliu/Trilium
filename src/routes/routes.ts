@@ -129,6 +129,7 @@ function register(app: express.Application) {
     apiRoute(GET, '/api/totp/get', totp.getSecret);
 
     apiRoute(GET, '/api/oauth/status', openID.getOAuthStatus);
+    apiRoute(GET, '/api/oauth/clearUser', openID.clearSavedUser);
     apiRoute(GET, '/api/oauth/validate', openID.isTokenValid);
 
     apiRoute(PST, '/api/totp_recovery/set', recoveryCodes.setRecoveryCodes);

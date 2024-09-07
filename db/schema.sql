@@ -129,6 +129,8 @@ CREATE TABLE IF NOT EXISTS "attachments"
 CREATE TABLE IF NOT EXISTS "user_data"
 (
     tmpID INT,
+    username TEXT,
+    email TEXT,
     userIDEcnryptedDataKey TEXT,
     userIDVerificationHash TEXT,
     salt TEXT,
