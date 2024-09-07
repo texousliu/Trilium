@@ -20,22 +20,22 @@ const TPL = `
         <span><i>OpenID is a standardized way to let you log into websites using an account from another service, like Google, to verify your identity.</i></span>
         <div>
             <label>
-            <b>Enable OAuth/OpenID</b>
+            <b>OAuth/OpenID Enabled</b>
             </label>
             <input type="checkbox" class="oauth-enabled-checkbox" disabled="true" />
             <span class="env-oauth-enabled" "alert alert-warning" role="alert" style="font-weight: bold; color: red !important;" > </span>
         </div>
         <div>
-            <span> <b>User Account: </b></span><span class="user-account-name"> Not logged in! </span><span><b> User Email: </b></span><span class="user-account-email"> Not logged in!</span>
+            <span> <b>User Account: </b></span><span class="user-account-name"> Not logged in! </span>
             <br>
-            <button class="clear-saved-user-button" > Clear Saved User </button>
+            <span><b> User Email: </b></span><span class="user-account-email"> Not logged in!</span>
         </div>
     </div>
     <br>
     <h3><b>Time-based One-Time Password</b></h3>
     <div>
         <label>
-        <b>Enable TOTP</b>
+        <b>TOTP Enabled</b>
         </label>
         <input type="checkbox" class="totp-enabled" /> 
         <span class="env-totp-enabled" "alert alert-warning" role="alert" style="font-weight: bold; color: red !important;" > </span>
@@ -62,24 +62,24 @@ const TPL = `
         <table style="border: 0px solid white">
             <tbody>
                 <tr>
-                    <td class="key_0">Recover Key 1</td>
+                    <td class="key_0"></td>
                     <td style="width: 20px" />
-                    <td class="key_1">Recover Key 2</td>
+                    <td class="key_1"></td>
                 </tr>
                 <tr>
-                    <td class="key_2">Recover Key 3</td>
+                    <td class="key_2"></td>
                     <td />
-                    <td class="key_3">Recover Key 4</td>
+                    <td class="key_3"></td>
                 </tr>
                 <tr>
-                    <td class="key_4">Recover Key 5</td>
+                    <td class="key_4"></td>
                     <td />
-                    <td class="key_5">Recover Key 6</td>
+                    <td class="key_5"></td>
                 </tr>
                 <tr>
-                    <td class="key_6">Recover Key 7</td>
+                    <td class="key_6"></td>
                     <td />
-                    <td class="key_7">Recover Key 8</td>
+                    <td class="key_7"></td>
                 </tr>
             </tbody>
         </table>
@@ -94,7 +94,6 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     this.$widget = $(TPL);
 
     this.$regenerateTotpButton = this.$widget.find(".regenerate-totp");
-    this.$totpDetails = this.$widget.find(".totp-details");
     this.$totpEnabled = this.$widget.find(".totp-enabled");
     this.$totpSecret = this.$widget.find(".totp-secret");
     this.$totpSecretInput = this.$widget.find(".totp-secret-input");
@@ -103,7 +102,6 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
       ".generate-recovery-code"
     );
     this.$oAuthEnabledCheckbox = this.$widget.find(".oauth-enabled-checkbox");
-    this.$clearSavedUserButton = this.$widget.find(".clear-saved-user-button");
     this.$oauthLoginButton = this.$widget.find(".oauth-login-button");
     this.$UserAccountName = this.$widget.find(".user-account-name");
     this.$UserAccountEmail = this.$widget.find(".user-account-email");
@@ -114,17 +112,9 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     this.$recoveryKeys = [];
 
     for (let i = 0; i < 8; i++)
+    {
       this.$recoveryKeys.push(this.$widget.find(".key_" + i));
-
-    // Depricated. Will use .env to control.
-    // this.$totpEnabled.on("change", async () => {
-    //   this.updateSecret();
-    // });
-
-    // Depricated. Will use .env to control.
-    // this.$oAuthEnabledCheckbox.on("change", async () => {
-    //   this.updateOAuthStatus();
-    // });
+    }
 
     this.$generateRecoveryCodeButton.on("click", async () => {
       this.setRecoveryKeys();
@@ -132,18 +122,6 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
 
     this.$regenerateTotpButton.on("click", async () => {
       this.generateKey();
-    });
-
-    this.$clearSavedUserButton.on("click", (async) => {
-      server
-        .get("oauth/clearUser")
-        .then((result) => {
-          toastService.showMessage(result.message);
-        })
-        .catch((result) => {
-          console.error(result.message);
-          toastService.showError(result.message);
-        });
     });
 
     this.$protectedSessionTimeout = this.$widget.find(
@@ -155,28 +133,6 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         this.$protectedSessionTimeout.val()
       )
     );
-
-    this.displayRecoveryKeys();
-  }
-
-  // Depricated. Will use .env to control.
-  // async updateSecret() {
-  //   if (this.$totpEnabled.prop("checked")) {
-  //     server.post("totp/enable");
-
-  //   }
-  //   else {
-  //     server.post("totp/disable");
-  //   }
-  // }
-
-  async updateOAuthStatus() {
-    if (this.$oAuthEnabledCheckbox.prop("checked")){
-       server.post("oauth/enable");
-    }
-    else{ 
-      server.post("oauth/disable");
-    }
   }
 
   async setRecoveryKeys() {
@@ -214,61 +170,30 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
 
     server.get("oauth/status").then((result) => {
       if (result.enabled) {
-    //     if (result.success)
         this.$oAuthEnabledCheckbox.prop("checked", result.enabled);
-
-    //     this.$oauthLoginButton.prop("disabled", !result.message);
-    //     this.$saveUserButton.prop("disabled", !result.message);
-
-    //     if (result.message) {
-    //       this.$oauthLoginButton.prop("disabled", false);
-    //       this.$saveUserButton.prop("disabled", false);
-    //       server.get("oauth/validate").then((result) => {
-    //         if (result.success) {
-              this.$UserAccountName.text(result.name);
-              this.$UserAccountEmail.text(result.email);
-
-    //           if (result.user) {
-    //             this.$userStatus.text("User saved!");
-    //           } else {
-    //             this.$saveUserButton.prop("disabled", false);
-    //             this.$userStatus.text("User not saved");
-    //           }
-    //         } else this.$tokenStatus.text("Not logged in!");
-    //       });
-    //     }
-    //   } else {
-    //     this.$oAuthEnabledCheckbox.prop("checked", false);
-    //     this.$oauthLoginButton.prop("disabled", true);
-    //     this.$saveUserButton.prop("disabled", true);
-    //     this.$oAuthEnabledCheckbox.prop("disabled", true);
-
-    //     this.$envEnabledOAuth.text(
-    //       "OAuth can only be enabled with environment variables. REQUIRES RESTART"
-    //     );
-      }
+        this.$UserAccountName.text(result.name);
+        this.$UserAccountEmail.text(result.email);
+      }else
+        this.$envEnabledOAuth.text(
+          "set OAUTH_ENABLED as environment variable to 'true' to enable (Requires restart)"
+      );
     });
 
     server.get("totp/status").then((result) => {
-      console.log(result);
-      if (result.enabled)
-        if (result.success) {
+      if (result.enabled){
           this.$totpEnabled.prop("checked", result.message);
-          this.$totpSecretInput.prop("disabled", !result.message);
           this.$authenticatorCode.prop("disabled", !result.message);
           this.$generateRecoveryCodeButton.prop("disabled", !result.message);
-        } else {
-          toastService.showError(result.message);
-        }
+          this.displayRecoveryKeys();
+      }
       else {
         this.$totpEnabled.prop("checked", false);
         this.$totpEnabled.prop("disabled", true);
-        this.$totpSecretInput.prop("disabled", true);
         this.$authenticatorCode.prop("disabled", true);
         this.$generateRecoveryCodeButton.prop("disabled", true);
 
         this.$envEnabledTOTP.text(
-          "TOTP_ENABLED is set as environment variable to enable (Requires restart)"
+          "Set TOTP_ENABLED as environment variable to 'true' to enable (Requires restart)"
         );
       }
     });
