@@ -71,17 +71,12 @@ function login(req: AppRequest, res: Response) {
     const guessedPassword = req.body.password;
     const guessedTotp = req.body.token;
 
-    if (totp.isTotpEnabled()){
-        if (!verifyTOTP(guessedTotp)) {
-          sendLoginError(req, res);
-          return;
-        }
-    }
-
     if (verifyPassword(guessedPassword)) {
-        if (!verifyPassword(guessedPassword)) {
+        if (totp.isTotpEnabled()){
+            if (!verifyTOTP(guessedTotp)) {
             sendLoginError(req, res);
             return;
+            }
         }
             
         const rememberMe = req.body.rememberMe;
