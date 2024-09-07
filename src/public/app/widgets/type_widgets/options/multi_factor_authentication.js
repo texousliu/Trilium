@@ -133,6 +133,8 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         this.$protectedSessionTimeout.val()
       )
     );
+
+    this.displayRecoveryKeys();
   }
 
   async setRecoveryKeys() {
@@ -182,7 +184,6 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
           this.$totpEnabled.prop("checked", result.message);
           this.$authenticatorCode.prop("disabled", !result.message);
           this.$generateRecoveryCodeButton.prop("disabled", !result.message);
-          this.displayRecoveryKeys();
       }
       else {
         this.$totpEnabled.prop("checked", false);
