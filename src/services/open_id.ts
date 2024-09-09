@@ -42,6 +42,10 @@ function checkOpenIDRequirements() {
     return false;
   }
 
+  if (process.env.TOTP_ENABLED?.toLocaleLowerCase() === "true"){
+    throw new OpenIDError("Cannot enable both OpenID and TOTP!");
+  }
+
   if (process.env.BASE_URL === undefined) {
     throw new OpenIDError("BASE_URL is undefined in .env!");
   }
