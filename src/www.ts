@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import app from "./app.js";
 import sessionParser from "./routes/session_parser.js";
 import fs from "fs";
@@ -55,7 +56,7 @@ async function startTrilium() {
      */
     if (utils.isElectron()) {
         (await import('electron')).app.requestSingleInstanceLock();
-    }
+    }   
 
     log.info(JSON.stringify(appInfo, null, 2));
 

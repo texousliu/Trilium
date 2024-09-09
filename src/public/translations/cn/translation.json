@@ -1023,8 +1023,8 @@
     "title": "下拉菜单可用的MIME文件类型"
   },
   "vim_key_bindings": {
-    "use_vim_keybindings_in_code_notes": "在代码笔记中使用Vim键绑定（无ex模式）",
-    "enable_vim_keybindings": "启用Vim键绑定"
+    "use_vim_keybindings_in_code_notes": "",
+    "enable_vim_keybindings": ""
   },
   "wrap_lines": {
     "wrap_lines_in_code_notes": "代码笔记自动换行",

@@ -34,6 +34,12 @@ export default class MindMapWidget extends TypeWidget {
             if (e.key === "F1") {
                 e.stopPropagation();
             }
+
+            // Zoom controls
+            const isCtrl = e.ctrlKey && !e.altKey && !e.metaKey;
+            if (isCtrl && (e.key == "-" || e.key == "=" || e.key == "0")) {
+                e.stopPropagation();
+            }
         });
 
         super.doRender();        

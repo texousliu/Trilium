@@ -17,6 +17,7 @@ import sql_init from "./services/sql_init.js";
 import oidc from "express-openid-connect";
 import openID from "./services/open_id.js";
 import * as dotenv from "dotenv";
+import { t } from "i18next";
 
 await import('./services/handlers.js');
 await import('./becca/becca_loader.js');
@@ -34,6 +35,11 @@ sql_init.initializeDb();
 // view engine setup
 app.set('views', path.join(scriptDir, 'views'));
 app.set('view engine', 'ejs');
+
+app.use((req, res, next) => {
+    res.locals.t = t;
+    return next();
+});
 
 if (!utils.isElectron()) {
     app.use(compression()); // HTTP compression

@@ -17,7 +17,7 @@ const TPL = `
     }  
     
     .note-actions .dropdown-menu {
-        width: 15em;
+        min-width: 15em;
     }
     
     .note-actions .dropdown-item[disabled], .note-actions .dropdown-item[disabled]:hover {

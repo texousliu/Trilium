@@ -37,11 +37,11 @@ for f in 'package.json' 'package-lock.json' 'README.md' 'LICENSE' 'config-sample
 done
 
 # Patch package.json main
-sed -i 's/.\/dist\/electron.js/electron.js/g' "$DIR/package.json"
+sed -i 's/.\/dist\/electron-main.js/electron-main.js/g' "$DIR/package.json"
 
 script_dir=$(realpath $(dirname $0))
 cp -R "$script_dir/../build/src" "$DIR"
-cp "$script_dir/../build/electron.js" "$DIR"
+cp "$script_dir/../build/electron-main.js" "$DIR"
 
 # run in subshell (so we return to original dir)
 (cd $DIR && npm install --omit=dev)

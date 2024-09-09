@@ -1,14 +1,4 @@
 on:
-  push:
-    branches:
-      - "develop"
-      - "feature/update**"
-      - "feature/server_esm**"
-    paths-ignore:
-      - "docs/**"
-      - "bin/**"
-    tags:
-      - "v*"
   workflow_dispatch:  
 
 env:

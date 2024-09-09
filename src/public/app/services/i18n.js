@@ -12,7 +12,7 @@ export async function initLocale() {
             lng: locale,
             fallbackLng: "en",
             backend: {
-                loadPath: `/${window.glob.assetPath}/translations/{{lng}}/{{ns}}.json`
+                loadPath: `${window.glob.assetPath}/translations/{{lng}}/{{ns}}.json`
             }
         });
 }

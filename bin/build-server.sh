@@ -22,7 +22,7 @@ rm -r $PKG_DIR/node/lib/node_modules/npm
 rm -r $PKG_DIR/node/include/node
 
 rm -r $PKG_DIR/node_modules/electron*
-rm -r $PKG_DIR/electron.js
+rm -r $PKG_DIR/electron*.js
 
 printf "#!/bin/sh\n./node/bin/node src/www" > $PKG_DIR/trilium.sh
 chmod 755 $PKG_DIR/trilium.sh

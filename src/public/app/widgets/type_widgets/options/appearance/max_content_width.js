@@ -9,7 +9,7 @@ const TPL = `
     <p>${t("max_content_width.default_description")}</p>
     
     <div class="form-group row">
-        <div class="col-4">
+        <div class="col-6">
             <label>${t("max_content_width.max_width_label")}</label>
             <input type="number" min="200" step="10" class="max-content-width form-control options-number-input">
         </div>
