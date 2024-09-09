@@ -50,7 +50,7 @@ const TPL = `
     <div>
         <span class="totp-secret" > TOTP Secret Key </span>
         <br>
-        <button class="regenerate-totp"> Regenerate TOTP Secret </button>
+        <button class="regenerate-totp"> Generate TOTP Secret </button>
     </div>
     <br>
     <h4> Single Sign-on Recovery Keys </h4>
