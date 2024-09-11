@@ -1,6 +1,7 @@
 name: Release
 on:
     push:
+        tags: v*
 jobs:
     publish-github-registry:
         runs-on: ubuntu-latest
