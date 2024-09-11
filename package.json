@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/ckeditor5-math",
-  "version": "41.4.2",
+  "version": "41.4.2-hotfix1",
   "description": "Math feature for CKEditor 5.",
   "keywords": [
     "ckeditor",
