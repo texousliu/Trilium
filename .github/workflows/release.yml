@@ -12,5 +12,6 @@ jobs:
                 node-version: 20
                 cache: "npm"
             - run: yarn install
-            - run: yarn build
             - run: yarn publish
+              env:
+                NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
