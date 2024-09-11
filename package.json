@@ -1,5 +1,5 @@
 {
-  "name": "@isaul32/ckeditor5-math",
+  "name": "@triliumnext/ckeditor5-math",
   "version": "41.4.2",
   "description": "Math feature for CKEditor 5.",
   "keywords": [
@@ -58,10 +58,10 @@
   },
   "author": "Sauli Anto",
   "license": "ISC",
-  "bugs": "https://github.com/isaul32/ckeditor5-math/issues",
+  "bugs": "https://github.com/TriliumNext/ckeditor5-math/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/isaul32/ckeditor5-math.git"
+    "url": "https://github.com/TriliumNext/ckeditor5-math.git"
   },
   "files": [
     "lang",
