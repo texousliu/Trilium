@@ -129,7 +129,7 @@ export async function renderEquation(
 			);
 		}
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	} else if ( engine === 'katex' ) {
+	} else if ( engine === 'katex' && window.katex !== undefined ) {
 		selectRenderMode(
 			element,
 			preview,
