@@ -1,4 +1,3 @@
-import optionService from "../options.js";
 import myScryptService from "./my_scrypt.js";
 import utils from "../utils.js";
 import dataEncryptionService from "./data_encryption.js";
