@@ -4,25 +4,10 @@ import utils from "../utils.js";
 import dataEncryptionService from "./data_encryption.js";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
+import OpenIDError from "../../errors/open_id_error.js";
 
 function saveUser(subjectIdentifier: string, name: string, email: string) {
   if (isUserSaved()) return false;
-
-  // Allows setup with existing instances of trilium
-  sql.execute(`
-    CREATE TABLE IF NOT EXISTS "user_data"
-    (
-        tmpID INT,
-        username TEXT,
-        email TEXT,
-        userIDEcnryptedDataKey TEXT,
-        userIDVerificationHash TEXT,
-        salt TEXT,
-        derivedKey TEXT,
-        isSetup TEXT DEFAULT "false",
-        UNIQUE (tmpID),
-        PRIMARY KEY (tmpID)
-    );`);
 
   const verificationSalt = utils.randomSecureToken(32);
   const derivedKeySalt = utils.randomSecureToken(32);
@@ -32,8 +17,7 @@ function saveUser(subjectIdentifier: string, name: string, email: string) {
     verificationSalt
   );
   if (verificationHash === undefined) {
-    console.log("Verification hash undefined!");
-    return undefined;
+    throw new OpenIDError("Verification hash undefined!")
   }
 
   const userIDEncryptedDataKey = setDataKey(
@@ -75,13 +59,11 @@ function isUserSaved() {
  
 function verifyOpenIDSubjectIdentifier(subjectIdentifier: string) {
   if (!sqlInit.isDbInitialized()) {
-    console.log("Database not initialized!");
-    return undefined;
+    throw new OpenIDError("Database not initialized!");
   }
 
-  if (!isUserSaved()) {
-    console.log("DATABASE NOT SETUP");
-    return undefined;
+  if (isUserSaved()) {
+    return false;
   }
 
   const salt = sql.getValue("SELECT salt FROM user_data;");
@@ -115,7 +97,6 @@ function setDataKey(
   plainTextDataKey: string | Buffer,
   salt: string
 ) {
-  console.log("Subject Identifier: " + subjectIdentifier);
   const subjectIdentifierDerivedKey =
     myScryptService.getSubjectIdentifierDerivedKey(subjectIdentifier, salt);
 
@@ -132,7 +113,6 @@ function setDataKey(
 }
 
 function getDataKey(subjectIdentifier: string) {
-  console.log("Subject Identifier: " + subjectIdentifier);
   const subjectIdentifierDerivedKey =
     myScryptService.getSubjectIdentifierDerivedKey(subjectIdentifier);
 
