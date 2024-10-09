@@ -1369,5 +1369,27 @@
   },
   "title_bar_buttons": {
     "window-on-top": "Menține fereastra mereu vizibilă"
+  },
+  "note_detail": {
+    "could_not_find_typewidget": "Nu s-a putut găsi widget-ul corespunzător tipului „{{type}}”"
+  },
+  "note_title": {
+    "placeholder": "introduceți titlul notiței aici..."
+  },
+  "search_result": {
+    "no_notes_found": "Nu au fost găsite notițe pentru parametrii de căutare dați.",
+    "search_not_executed": "Căutarea n-a fost rulată încă. Clic pe butonul „Căutare” de deasupra pentru a vedea rezultatele."
+  },
+  "show_floating_buttons_button": {
+    "button_title": "Afișează butoanele"
+  },
+  "spacer": {
+    "configure_launchbar": "Configurează bara de lansare"
+  },
+  "sql_result": {
+    "no_rows": "Niciun rând nu a fost identificat pentru această interogare"
+  },
+  "sql_table_schemas": {
+    "tables": "Tabele"
   }
 }
