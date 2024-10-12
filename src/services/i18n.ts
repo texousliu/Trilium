@@ -18,7 +18,7 @@ export async function initializeTranslations() {
 function getCurrentLanguage() {
   let language;
   if (sql_init.isDbInitialized()) {
-    language = options.getOption("locale");  
+    language = options.getOptionOrNull("locale");  
   }
 
   if (!language) {
