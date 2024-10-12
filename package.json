@@ -182,17 +182,17 @@
     "electron-rebuild": "3.2.9",
     "esm": "3.2.25",
     "iconsur": "1.7.0",
-    "jasmine": "5.3.0",
+    "jasmine": "5.3.1",
     "jsdoc": "4.0.3",
     "lorem-ipsum": "2.0.8",
-    "nodemon": "3.1.4",
+    "nodemon": "3.1.7",
     "rcedit": "4.0.1",
     "rimraf": "6.0.1",
     "ts-node": "10.9.2",
     "tslib": "2.7.0",
     "tsx": "4.19.1",
-    "typescript": "5.6.2",
-    "webpack": "5.94.0",
+    "typescript": "5.6.3",
+    "webpack": "5.95.0",
     "webpack-cli": "5.1.4"
   }
 }
