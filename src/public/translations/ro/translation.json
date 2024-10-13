@@ -1291,7 +1291,7 @@
     "canvas": "Schiță",
     "code": "Cod sursă",
     "mermaid-diagram": "Diagramă Mermaid",
-    "mind-map": "Hartă mentală",
+    "mind-map": "Hartă mentală (beta)",
     "note-map": "Hartă notițe",
     "relation-map": "Hartă relații",
     "render-note": "Randare notiță",
@@ -1374,7 +1374,7 @@
     "window-on-top": "Menține fereastra mereu vizibilă"
   },
   "note_detail": {
-    "could_not_find_typewidget": "Nu s-a putut găsi typeWidget-ul pentru tipul „{{type}}”"
+    "could_not_find_typewidget": "Nu s-a putut găsi widget-ul corespunzător tipului „{{type}}”"
   },
   "note_title": {
     "placeholder": "introduceți titlul notiței aici..."
@@ -1387,8 +1387,8 @@
     "snapshot_number_limit_label": "Numărul maxim de revizii pentru notițe:"
   },
   "search_result": {
-    "no_notes_found": "Nu s-a găsit nicio notiță pentru parametrii de căutare dați.",
-    "search_not_executed": "Căutarea n-a fost încă executată. Clic pe butonul „Căutare” de deasupra pentru a vedea rezultatele."
+    "no_notes_found": "Nu au fost găsite notițe pentru parametrii de căutare dați.",
+    "search_not_executed": "Căutarea n-a fost rulată încă. Clic pe butonul „Căutare” de deasupra pentru a vedea rezultatele."
   },
   "show_floating_buttons_button": {
     "button_title": "Afișează butoanele"
