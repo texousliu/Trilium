@@ -6,7 +6,7 @@ import sql_init from "./sql_init.js";
 export async function initializeTranslations() {
   // Initialize translations
   await i18next.use(Backend).init({
-      lng: await getCurrentLanguage(),
+      lng: getCurrentLanguage(),
       fallbackLng: "en",
       ns: "server",
       backend: {
@@ -18,7 +18,7 @@ export async function initializeTranslations() {
 function getCurrentLanguage() {
   let language;
   if (sql_init.isDbInitialized()) {
-    language = options.getOption("locale");  
+    language = options.getOptionOrNull("locale");  
   }
 
   if (!language) {

@@ -1269,7 +1269,7 @@
     "note_is_read_only": "笔记为只读，但可以通过点击按钮进行编辑。",
     "note_is_always_editable": "无论笔记长度如何，始终可编辑。"
   },
-"note-map": {
+  "note-map": {
     "button-link-map": "链接地图",
     "button-tree-map": "树形地图"
   },

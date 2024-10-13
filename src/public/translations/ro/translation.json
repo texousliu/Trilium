@@ -998,7 +998,10 @@
     "revision_deleted": "Revizia notiței a fost ștearsă.",
     "revision_last_edited": "Revizia a fost ultima oară modificată pe {{date}}",
     "revision_restored": "Revizia notiței a fost restaurată.",
-    "revisions_deleted": "Notița reviziei a fost ștearsă."
+    "revisions_deleted": "Notița reviziei a fost ștearsă.",
+    "maximum_revisions": "Numărul maxim de revizii pentru notița curentă: {{number}}.",
+    "settings": "Setări revizii ale notițelor",
+    "snapshot_interval": "Intervalul de creare a reviziilor pentru notițe: {{seconds}}s."
   },
   "revisions_button": {
     "note_revisions": "Revizii ale notiței"
@@ -1376,6 +1379,13 @@
   "note_title": {
     "placeholder": "introduceți titlul notiței aici..."
   },
+  "revisions_snapshot_limit": {
+    "erase_excess_revision_snapshots": "Șterge acum reviziile excesive",
+    "erase_excess_revision_snapshots_prompt": "Reviziile excesive au fost șterse.",
+    "note_revisions_snapshot_limit_description": "Limita numărului de revizii se referă la numărul maxim de revizii pentru fiecare notiță. -1 reprezintă nicio limită, 0 înseamnă ștergerea tuturor reviziilor. Se poate seta valoarea individual pentru o notiță prin eticheta #versioningLimit.",
+    "note_revisions_snapshot_limit_title": "Limita de revizii a notițelor",
+    "snapshot_number_limit_label": "Numărul maxim de revizii pentru notițe:"
+  },
   "search_result": {
     "no_notes_found": "Nu au fost găsite notițe pentru parametrii de căutare dați.",
     "search_not_executed": "Căutarea n-a fost rulată încă. Clic pe butonul „Căutare” de deasupra pentru a vedea rezultatele."
@@ -1387,7 +1397,7 @@
     "configure_launchbar": "Configurează bara de lansare"
   },
   "sql_result": {
-    "no_rows": "Niciun rând nu a fost identificat pentru această interogare"
+    "no_rows": "Nu s-a găsit niciun rând pentru această interogare"
   },
   "sql_table_schemas": {
     "tables": "Tabele"

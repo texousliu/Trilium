@@ -247,6 +247,9 @@
     "revisions_deleted": "Note revisions has been deleted.",
     "revision_restored": "Note revision has been restored.",
     "revision_deleted": "Note revision has been deleted.",
+    "snapshot_interval": "Note Revisions Snapshot Interval: {{seconds}}s.",
+    "maximum_revisions": "Maximum revisions for current note: {{number}}.",
+    "settings": "Settings for Note revisions",
     "download_button": "Download",
     "mime": "MIME: ",
     "file_size": "File size:",
@@ -1088,7 +1091,14 @@
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "Note Revisions Snapshot Interval",
     "note_revisions_snapshot_description": "Note revision snapshot time interval is time in seconds after which a new note revision will be created for the note. See <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> for more info.",
-    "snapshot_time_interval_label": "Note revision snapshot time interval (in seconds)"
+    "snapshot_time_interval_label": "Note revision snapshot time interval (in seconds):"
+  },
+  "revisions_snapshot_limit": {
+    "note_revisions_snapshot_limit_title": "Note Revision Snapshots Limit",
+    "note_revisions_snapshot_limit_description": "The note revision snapshot number limit refers to the maximum number of revisions that can be saved for each note. Where -1 means no limit, 0 means delete all revisions. You can set the maximum revisions for a single note through the #versioningLimit label.",
+    "snapshot_number_limit_label": "Note revision snapshot number limit:",
+    "erase_excess_revision_snapshots": "Erase excess revision snapshots now",
+    "erase_excess_revision_snapshots_prompt": "Excess revision snapshots have been erased."
   },
   "search_engine": {
     "title": "Search Engine",

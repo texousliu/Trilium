@@ -2,8 +2,7 @@ const CKEDITOR = {"js": ["libraries/ckeditor/ckeditor.js"]};
 
 const CODE_MIRROR = {
     js: [
-        "libraries/codemirror/codemirror.js",
-        // "node_modules/codemirror/lib/codemirror.js",
+        "node_modules/codemirror/lib/codemirror.js",
         "node_modules/codemirror/addon/display/placeholder.js",
         "node_modules/codemirror/addon/edit/matchbrackets.js",
         "node_modules/codemirror/addon/edit/matchtags.js",

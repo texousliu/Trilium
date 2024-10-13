@@ -49,6 +49,7 @@ async function initNotSyncedOptions(initialized: boolean, theme: string, opts: N
 
 const defaultOptions: DefaultOption[] = [
     { name: 'revisionSnapshotTimeInterval', value: '600', isSynced: true },
+    { name: 'revisionSnapshotNumberLimit', value: '-1', isSynced: true },
     { name: 'protectedSessionTimeout', value: '600', isSynced: true },
     { name: 'zoomFactor', value: process.platform === "win32" ? '0.9' : '1.0', isSynced: false },
     { name: 'overrideThemeFonts', value: 'false', isSynced: false },
@@ -125,7 +126,7 @@ function initStartupOptions() {
 }
 
 function getKeyboardDefaultOptions() {
-    return (keyboardActions.DEFAULT_KEYBOARD_ACTIONS
+    return (keyboardActions.getDefaultKeyboardActions()
         .filter(ka => !!ka.actionName) as KeyboardShortcutWithRequiredActionName[])
         .map(ka => ({
             name: `keyboardShortcuts${ka.actionName.charAt(0).toUpperCase()}${ka.actionName.slice(1)}`,

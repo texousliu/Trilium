@@ -15,6 +15,10 @@
     src: url(../fonts/JetBrainsMono-Light.woff2) format('woff');
 }
 
+.table {
+    --bs-table-bg: transparent !important;
+}
+
 html {
     /* this fixes FF filter vs. position fixed bug: https://github.com/zadam/trilium/issues/233 */
     height: 100%;
@@ -460,6 +464,7 @@ table.promoted-attributes-in-tooltip td, table.promoted-attributes-in-tooltip th
 
 .tooltip {
     font-size: var(--main-font-size) !important;
+    z-index: calc(var(--ck-z-panel) - 1) !important;
 }
 
 .tooltip-trigger {
@@ -958,14 +963,6 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
 .ck.ck-mentions > .ck-list__item .ck-button {
     /* wrap text for very long note path title */
     white-space: normal !important;
-}
-
-/**
-    ckeditor's autocomplete
-    should be higher than 1070 of tooltip
-*/
-.ck.ck-balloon-panel {
-    z-index: 1101;
 }
 
 .area-expander {
