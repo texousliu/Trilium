@@ -15,7 +15,6 @@ export async function initializeTranslations() {
       lng: getCurrentLanguage(),
       fallbackLng: "en",
       ns: "server",
-      debug: true,
       backend: {
           loadPath: join(resourceDir, "translations/{{lng}}/{{ns}}.json")
       }
