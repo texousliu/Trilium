@@ -10,7 +10,13 @@ module.exports = {
     overwrite: true,
     asar: true,
     icon: "./images/app-icons/icon",
-    extraResource: getExtraResourcesForPlatform(),
+    extraResource: [
+      // Moved to root
+      ...getExtraResourcesForPlatform(),
+
+      // Moved to resources (TriliumNext Notes.app/Contents/Resources on macOS)
+      "translations/"
+    ],
     afterComplete: [(buildPath, _electronVersion, platform, _arch, callback) => {
       const extraResources = getExtraResourcesForPlatform();
       for (const resource of extraResources) {
@@ -77,8 +83,7 @@ module.exports = {
 function getExtraResourcesForPlatform() {
   let resources = [
     'dump-db/',
-    './bin/tpl/anonymize-database.sql',
-    'translations/'
+    './bin/tpl/anonymize-database.sql'
   ];
   const scripts = ['trilium-portable', 'trilium-safe-mode', 'trilium-no-cert-check']
   switch (process.platform) {
