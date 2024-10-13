@@ -1189,7 +1189,7 @@
   "password": {
     "heading": "Contraseña",
     "alert_message": "Tenga cuidado de recordar su nueva contraseña. La contraseña se utiliza para iniciar sesión en la interfaz web y cifrar las notas protegidas. Si olvida su contraseña, todas sus notas protegidas se perderán para siempre.",
-    "reset_link": "haga clic aquí para restablecerla.",
+    "reset_link": "Dé clic aquí para restablecerla.",
     "old_password": "Contraseña anterior",
     "new_password": "Nueva contraseña",
     "new_password_confirmation": "Confirmación de nueva contraseña",
