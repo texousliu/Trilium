@@ -15,6 +15,10 @@
     src: url(../fonts/JetBrainsMono-Light.woff2) format('woff');
 }
 
+.table {
+    --bs-table-bg: transparent !important;
+}
+
 html {
     /* this fixes FF filter vs. position fixed bug: https://github.com/zadam/trilium/issues/233 */
     height: 100%;
