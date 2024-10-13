@@ -77,8 +77,7 @@ module.exports = {
 function getExtraResourcesForPlatform() {
   let resources = [
     'dump-db/',
-    './bin/tpl/anonymize-database.sql',
-    'translations/'
+    './bin/tpl/anonymize-database.sql'
   ];
   const scripts = ['trilium-portable', 'trilium-safe-mode', 'trilium-no-cert-check']
   switch (process.platform) {

@@ -35,7 +35,7 @@ const copy = async () => {
     await fs.copy(file, path.join(DEST_DIR, file));
   }
 
-  const dirsToCopy = ["images", "libraries", "db"];
+  const dirsToCopy = ["images", "libraries", "translations", "db"];
   for (const dir of dirsToCopy) {
     log(`Copying ${dir}`);
     await fs.copy(dir, path.join(DEST_DIR, dir));
