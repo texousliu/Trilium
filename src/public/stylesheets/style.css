@@ -36,6 +36,10 @@ body {
     font-size: var(--main-font-size);
 }
 
+a {
+    text-decoration: none;
+}
+
 a, a:visited, a:hover {
     color: var(--link-color);
 }
