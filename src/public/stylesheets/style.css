@@ -736,6 +736,10 @@ div[data-notify="container"] {
     margin: 0 !important;
 }
 
+.ck-content a:hover {
+    text-decoration: underline;
+}
+
 #options-dialog input[type=number] {
     text-align: right;
 }
