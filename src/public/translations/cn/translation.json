@@ -1391,5 +1391,14 @@
   },
   "sql_table_schemas": {
     "tables": "表"
+  },
+  "tab_row": {
+    "close_tab": "关闭标签页",
+    "add_new_tab": "添加新标签页",
+    "close": "关闭",
+    "close_other_tabs": "关闭其他标签页",
+    "close_all_tabs": "关闭所有标签页",
+    "move_tab_to_new_window": "将此标签页移动到新窗口",
+    "new_tab": "新标签页"
   }
 }

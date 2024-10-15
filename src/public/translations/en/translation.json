@@ -1401,5 +1401,14 @@
   },
   "sql_table_schemas": {
     "tables": "Tables"
+  },
+  "tab_row": {
+    "close_tab": "Close tab",
+    "add_new_tab": "Add new tab",
+    "close": "Close",
+    "close_other_tabs": "Close other tabs",
+    "close_all_tabs": "Close all tabs",
+    "move_tab_to_new_window": "Move this tab to a new window",
+    "new_tab": "New tab"
   }
 }
