@@ -1414,5 +1414,10 @@
   "toc": {
     "table_of_contents": "目录",
     "options": "选项"
+  },
+  "watched_file_update_status": {
+    "file_last_modified": "文件 <code class=\"file-path\"></code> 最后修改时间为 <span class=\"file-last-modified\"></span>。",
+    "upload_modified_file": "上传修改的文件",
+    "ignore_this_change": "忽略此更改"
   }
 }
