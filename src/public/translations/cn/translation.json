@@ -1290,6 +1290,8 @@
     "insert-child-note": "插入子笔记",
     "delete": "删除",
     "search-in-subtree": "在子树中搜索",
+    "hoist-note": "提升笔记",
+    "unhoist-note": "取消提升笔记",
     "edit-branch-prefix": "编辑分支前缀",
     "advanced": "高级",
     "expand-subtree": "展开子树",

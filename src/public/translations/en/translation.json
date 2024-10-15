@@ -1290,6 +1290,8 @@
     "insert-child-note": "Insert child note",
     "delete": "Delete",
     "search-in-subtree": "Search in subtree",
+    "hoist-note": "Hoist note",
+    "unhoist-note": "Unhoist note",
     "edit-branch-prefix": "Edit branch prefix",
     "advanced": "Advanced",
     "expand-subtree": "Expand subtree",
