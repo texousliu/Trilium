@@ -1421,5 +1421,8 @@
     "file_last_modified": "File <code class=\"file-path\"></code> has been last modified on <span class=\"file-last-modified\"></span>.",
     "upload_modified_file": "Upload modified file",
     "ignore_this_change": "Ignore this change"
+  },
+  "app_context": {
+    "please_wait_for_save": "Please wait for a couple of seconds for the save to finish, then you can try again."
   }
 }
