@@ -247,6 +247,9 @@
     "revisions_deleted": "笔记历史版本已删除。",
     "revision_restored": "笔记历史版本已恢复。",
     "revision_deleted": "笔记历史版本已删除。",
+    "snapshot_interval": "笔记快照保存间隔: {{seconds}}秒。",
+    "maximum_revisions": "当前笔记的最历史数量: {{number}}。",
+    "settings": "笔记历史设置",
     "download_button": "下载",
     "mime": "MIME类型：",
     "file_size": "文件大小：",
@@ -1089,6 +1092,13 @@
     "note_revisions_snapshot_interval_title": "笔记修改快照间隔",
     "note_revisions_snapshot_description": "笔记修改快照时间间隔是指经过多少秒后会为笔记创建新的修改历史。更多信息请参见<a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a>。",
     "snapshot_time_interval_label": "笔记修改快照时间间隔（单位:秒）"
+  },
+  "revisions_snapshot_limit": {
+    "note_revisions_snapshot_limit_title": "笔记历史快照限制",
+    "note_revisions_snapshot_limit_description": "笔记历史快照数限制指的是每个笔记可以保存的最大历史记录数量。其中 -1 表示没有限制，0 表示删除所有历史记录。你可以通过 #versioningLimit 标签设置单个笔记的最大历史记录数量。",
+    "snapshot_number_limit_label": "笔记历史快照数量限制：",
+    "erase_excess_revision_snapshots": "立即删除多余的历史快照",
+    "erase_excess_revision_snapshots_prompt": "多余的历史快照已被删除。"
   },
   "search_engine": {
     "title": "搜索引擎",
