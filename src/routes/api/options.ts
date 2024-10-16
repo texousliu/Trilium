@@ -144,6 +144,10 @@ function getSupportedLocales() {
             "name": "Español"
         },
         {
+            "id": "fr",
+            "name": "French"
+        },
+        {
             "id": "cn",
             "name": "简体中文"
         },
