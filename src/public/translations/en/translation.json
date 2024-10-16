@@ -1290,6 +1290,8 @@
     "insert-child-note": "Insert child note",
     "delete": "Delete",
     "search-in-subtree": "Search in subtree",
+    "hoist-note": "Hoist note",
+    "unhoist-note": "Unhoist note",
     "edit-branch-prefix": "Edit branch prefix",
     "advanced": "Advanced",
     "expand-subtree": "Expand subtree",
@@ -1401,5 +1403,26 @@
   },
   "sql_table_schemas": {
     "tables": "Tables"
+  },
+  "tab_row": {
+    "close_tab": "Close tab",
+    "add_new_tab": "Add new tab",
+    "close": "Close",
+    "close_other_tabs": "Close other tabs",
+    "close_all_tabs": "Close all tabs",
+    "move_tab_to_new_window": "Move this tab to a new window",
+    "new_tab": "New tab"
+  },
+  "toc": {
+    "table_of_contents": "Table of Contents",
+    "options": "Options"
+  },
+  "watched_file_update_status": {
+    "file_last_modified": "File <code class=\"file-path\"></code> has been last modified on <span class=\"file-last-modified\"></span>.",
+    "upload_modified_file": "Upload modified file",
+    "ignore_this_change": "Ignore this change"
+  },
+  "app_context": {
+    "please_wait_for_save": "Please wait for a couple of seconds for the save to finish, then you can try again."
   }
 }
