@@ -64,7 +64,7 @@
     "confirmation": "Confirmation",
     "cancel": "Annuler",
     "ok": "OK",
-    "are_you_sure_remove_note": "Voulez-vous vraiment supprimer la note « {{title}} » de la carte des relations ?",
+    "are_you_sure_remove_note": "Voulez-vous vraiment supprimer la note « {{title}} » de la carte des relations ? ",
     "if_you_dont_check": "Si vous ne cochez pas cette case, la note sera seulement supprimée de la carte des relations.",
     "also_delete_note": "Supprimer également la note"
   },
@@ -108,7 +108,7 @@
     "showJumpToNoteDialog": "afficher la <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">boîte de dialogue \"Aller à la note\"</a>",
     "scrollToActiveNote": "faire défiler jusqu'à la note active",
     "jumpToParentNote": "aller à la note parent",
-    "collapseWholeTree": "réduire toute l'arborescence des notes",
+    "collapseWholeTree": "réduire tout l'arbre des notes",
     "collapseSubTree": "réduire le sous-arbre",
     "tabShortcuts": "Raccourcis des onglets",
     "newTabNoteLink": "(ou clic central de la souris) sur le lien de la note ouvre la note dans un nouvel onglet",
@@ -131,7 +131,7 @@
     "cutNotes": "couper la note actuelle (ou la sélection actuelle) dans le presse-papiers (utilisé pour déplacer les notes)",
     "pasteNotes": "coller la ou les notes en tant que sous-note dans la note active (qui est soit déplacée, soit clonée selon qu'elle a été copiée ou coupée dans le presse-papiers)",
     "deleteNotes": "supprimer une note / un sous-arbre",
-    "editingNotes": "Edition des notes",
+    "editingNotes": "Édition des notes",
     "editNoteTitle": "dans le volet de l'arborescence, basculera du volet au titre de la note. Presser Entrer à partir du titre de la note basculera vers l’éditeur de texte. <kbd>Ctrl+.</kbd> bascule de l'éditeur au volet arborescent.",
     "createEditLink": "créer/éditer un lien externe",
     "createInternalLink": "créer un lien interne",
@@ -139,7 +139,7 @@
     "insertDateTime": "insérer la date et l'heure courante à la position du curseur",
     "jumpToTreePane": "passer au volet de l'arborescence et aller jusqu'à la note active",
     "markdownAutoformat": "Formatage automatique (comme Markdown)",
-    "headings": "etc. suivi d'un espace pour les titres",
+    "headings": " etc. suivi d'un espace pour les titres",
     "bulletList": "<kbd>*</kbd> ou <kbd>-</kbd> suivi d'un espace pour la liste à puces",
     "numberedList": "<kbd>1.</kbd> ou <kbd>1)</kbd> suivi d'un espace pour la liste numérotée",
     "blockQuote": "commencez une ligne avec <kbd>></kbd> suivi d'un espace pour les guillemets",
@@ -189,7 +189,7 @@
   },
   "markdown_import": {
     "dialog_title": "Importation Markdown",
-    "modal_body_text": "En raison du bac à sable du navigateur, il n'est pas possible de lire directement le presse-papiers à partir de JavaScript. Veuillez coller le Markdown à importer dans la zone de texte ci-dessous et cliquez sur le bouton Importer.",
+    "modal_body_text": "En raison du bac à sable du navigateur, il n'est pas possible de lire directement le presse-papiers à partir de JavaScript. Veuillez coller le Markdown à importer dans la zone de texte ci-dessous et cliquez sur le bouton Importer",
     "import_button": "Importer Ctrl+Entrée",
     "import_success": "Le contenu Markdown a été importé dans le document."
   },
@@ -251,7 +251,7 @@
     "maximum_revisions": "Nombre maximal de versions pour la note actuelle : {{number}}.",
     "settings": "Paramètres pour les versions de notes",
     "download_button": "Télécharger",
-    "mime": "MIME:",
+    "mime": "MIME : ",
     "file_size": "Taille du fichier :",
     "preview": "Aperçu :",
     "preview_not_available": "L'aperçu n'est pas disponible pour ce type de note."
@@ -325,7 +325,7 @@
     "disable_versioning": "désactive la gestion automatique des versions. Utile pour les notes volumineuses mais sans importance - par ex. grandes bibliothèques JS utilisées pour les scripts",
     "calendar_root": "indique la note qui doit être utilisée comme racine pour les notes journalières. Une seule note doit être marquée comme telle.",
     "archived": "les notes portant ce label ne seront pas visibles par défaut dans les résultats de recherche (ou dans les boîtes de dialogue Aller à, Ajouter un lien, etc.).",
-    "exclude_from_export": "les notes (avec leur sous-arbres) ne seront incluses dans aucune exportation de notes",
+    "exclude_from_export": "les notes (avec leurs sous-arbres) ne seront incluses dans aucune exportation de notes",
     "run": "définit à quels événements le script doit s'exécuter. Les valeurs possibles sont :\n<ul>\n<li>frontendStartup : lorsque l'interface Trilium démarre (ou est actualisée), mais pas sur mobile.</li>\n<li>mobileStartup : lorsque l'interface Trilium démarre (ou est actualisée), sur mobile.</li>\n<li>backendStartup : lorsque le backend Trilium démarre</li>\n<li>toutes les heures : exécution une fois par heure. Vous pouvez utiliser le label supplémentaire <code>runAtHour</code> pour spécifier à quelle heure.</li>\n<li>quotidiennement – exécuter une fois par jour</li>\n</ul>",
     "run_on_instance": "Définissez quelle instance de Trilium doit exécuter cette note. Par défaut, toutes les instances.",
     "run_at_hour": "À quelle heure la note doit-elle s'exécuter. Doit être utilisé avec <code>#run=hourly</code>. Peut être défini plusieurs fois pour plus d'occurrences au cours de la journée.",
@@ -336,8 +336,8 @@
     "top": "conserver la note donnée en haut dans l'arbre de son parent (s'applique uniquement aux parents triés)",
     "hide_promoted_attributes": "Masquer les attributs promus sur cette note",
     "read_only": "l'éditeur est en mode lecture seule. Fonctionne uniquement pour les notes de texte et de code.",
-    "auto_read_only_disabled": "Les notes textuelles/de code peuvent être automatiquement mises en mode lecture lorsqu'elles sont trop volumineuses. Vous pouvez désactiver ce comportement note par note en ajoutant ce label à la note.",
-    "app_css": "marque les notes CSS qui sont chargées dans l'application Trilium et peuvent ainsi être utilisées pour modifier l'apparence de Trilium.\n",
+    "auto_read_only_disabled": "les notes textuelles/de code peuvent être automatiquement mises en mode lecture lorsqu'elles sont trop volumineuses. Vous pouvez désactiver ce comportement note par note en ajoutant ce label à la note",
+    "app_css": "marque les notes CSS qui sont chargées dans l'application Trilium et peuvent ainsi être utilisées pour modifier l'apparence de Trilium.",
     "app_theme": "marque les notes CSS qui sont des thèmes Trilium complets et sont donc disponibles dans les options Trilium.",
     "css_class": "la valeur de ce label est ensuite ajoutée en tant que classe CSS au nœud représentant la note donnée dans l'arborescence. Cela peut être utile pour les thèmes avancés. Peut être utilisé dans les notes modèle.",
     "icon_class": "la valeur de ce label est ajoutée en tant que classe CSS à l'icône dans l'arbre, ce qui peut aider à distinguer visuellement les notes dans l'arborescence. Un exemple pourrait être bx bx-home - les icônes sont extraites de boxicons. Peut être utilisé dans les notes modèle.",
@@ -372,7 +372,7 @@
     "template": "Cette note apparaîtra parmi les modèles disponibles lors de la création d'une nouvelle note",
     "toc": "<code>#toc</code> ou <code>#toc=show</code> forcera l'affichage de la table des matières, <code>#toc=hide</code> force qu'elle soit masquée. Si le label n'existe pas, le paramètre global est utilisé",
     "color": "définit la couleur de la note dans l'arborescence des notes, les liens, etc. Utilisez n'importe quelle valeur de couleur CSS valide comme « rouge » ou #a13d5f",
-    "keyboard_shortcut": "Définit un raccourci clavier qui ourvrira immédiatement cette note. Exemple : 'ctrl+alt+e'. Nécessite un rechargement du frontend pour que la modification prenne effet.",
+    "keyboard_shortcut": "Définit un raccourci clavier qui ouvrira immédiatement cette note. Exemple : 'ctrl+alt+e'. Nécessite un rechargement du frontend pour que la modification prenne effet.",
     "keep_current_hoisting": "L'ouverture de ce lien ne modifiera pas le focus même si la note n'est pas affichable dans le sous-arbre actuellement focus.",
     "execute_button": "Titre du bouton qui exécutera la note de code en cours",
     "execute_description": "Description plus longue de la note de code actuelle affichée avec le bouton d'exécution",
@@ -390,7 +390,7 @@
     "run_on_branch_deletion": "s'exécute lorsqu'une branche est supprimée La branche est un lien entre la note parent et la note enfant. Elle est supprimée, par exemple, lors du déplacement d'une note (l'ancienne branche/lien est supprimé).",
     "run_on_attribute_creation": "s'exécute lorsqu'un nouvel attribut pour la note qui définit cette relation est créé",
     "run_on_attribute_change": " s'exécute lorsque l'attribut est modifié d'une note qui définit cette relation. Ceci est également déclenché lorsque l'attribut est supprimé",
-    "relation_template": "les attributs de la note seront hérités même sans relation parent-enfant, le contenu de la note et son arbre seront transmis aux notes utilisant ce modèle si elles sont vides. Voir la documentation pour plus de détails.",
+    "relation_template": "les attributs de la note seront hérités même sans relation parent-enfant, le contenu de la note et son sous-arbre seront transmis aux notes utilisant ce modèle si elles sont vides. Voir la documentation pour plus de détails.",
     "inherit": "les attributs de la note seront hérités même sans relation parent-enfant. Voir la relation Modèle pour un comportement similaire. Voir l'héritage des attributs dans la documentation.",
     "render_note": "les notes de type \"Rendu HTML\" seront rendues à partir d'une note de code (HTML ou script). Utilisez cette relation pour pointer vers la note de code à afficher",
     "widget_relation": "la note cible de cette relation sera exécutée et rendue sous forme de widget dans la barre latérale",
@@ -472,7 +472,7 @@
     "to": "vers",
     "target_parent_note": "note parent cible",
     "on_all_matched_notes": "Pour toutes les notes correspondantes",
-    "move_note_new_parent": "déplacer la note vers le nouveau parent si la note n'a qu'un seul parent (i.e. l'ancienne branche est supprimée et une nouvelle branche est créée dans le nouveau parent)",
+    "move_note_new_parent": "déplacer la note vers le nouveau parent si la note n'a qu'un seul parent (c.-à-d. l'ancienne branche est supprimée et une nouvelle branche est créée dans le nouveau parent)",
     "clone_note_new_parent": "cloner la note vers le nouveau parent si la note a plusieurs clones/branches (il n'est pas clair quelle branche doit être supprimée)",
     "nothing_will_happen": "rien ne se passera si la note ne peut pas être déplacée vers la note cible (cela créerait une boucle dans l'arborescence)"
   },
@@ -484,7 +484,7 @@
     "evaluated_as_js_string": "La valeur donnée est évaluée comme une chaîne JavaScript et peut ainsi être enrichie de contenu dynamique via la variable <code>note</code> injectée (la note étant renommée). Exemples :",
     "example_note": "<code>Note</code> - toutes les notes correspondantes sont renommées « Note »",
     "example_new_title": "<code>NOUVEAU : ${note.title}</code> : les titres des notes correspondantes sont préfixés par \"NOUVEAU : \"",
-    "example_date_prefix": "<code>${note.dateCreatedObj.format('MM-DD:')} : ${note.title}</code> : les notes correspondantes sont précédées du mois et de la date de création de la note.",
+    "example_date_prefix": "<code>${note.dateCreatedObj.format('MM-DD:')} : ${note.title}</code> : les notes correspondantes sont précédées du mois et de la date de création de la note",
     "api_docs": "Consultez la documentation de l'API pour la <a href='https://zadam.github.io/trilium/backend_api/Note.html'>note</a> et ses <a href='https://day.js.org/docs/en/display/format'>propriétés dateCreatedObj / utcDateCreatedObj</a> pour plus de détails."
   },
   "add_relation": {
@@ -755,7 +755,7 @@
   "note_map": {
     "open_full": "Développer au maximum",
     "collapse": "Réduire à la taille normale",
-    "title": "Carte des Notes"
+    "title": "Carte de la Note"
   },
   "note_paths": {
     "title": "Chemins de la Note",
@@ -818,7 +818,7 @@
   },
   "abstract_search_option": {
     "remove_this_search_option": "Supprimer cette option de recherche",
-    "failed_rendering": "Le chargement de l'option de recherche: {{dto}} a échoué avec l'erreur : {{error}} {{stack}}"
+    "failed_rendering": "Le chargement de l'option de recherche : {{dto}} a échoué avec l'erreur : {{error}} {{stack}}"
   },
   "ancestor": {
     "label": "Ancêtre",
@@ -875,13 +875,13 @@
     "note": "Notez que le script de recherche et la l'expression à rechercher standard ne peuvent pas être combinés."
   },
   "search_string": {
-    "title_column": "Expression à rechercher:",
+    "title_column": "Expression à rechercher :",
     "placeholder": "mots-clés du texte, #tag = valeur...",
     "search_syntax": "Syntaxe de recherche",
     "also_see": "voir aussi",
     "complete_help": "aide complète sur la syntaxe de recherche",
     "full_text_search": "Entrez simplement n'importe quel texte pour rechercher dans le contenu des notes",
-    "label_abc": "renvoie les notes avec le label ABC",
+    "label_abc": "renvoie les notes avec le label abc",
     "label_year": "correspond aux notes possédant le label year ayant la valeur 2019",
     "label_rock_pop": "correspond aux notes qui ont à la fois les labels rock et pop",
     "label_rock_or_pop": "un seul des labels doit être présent",
@@ -891,14 +891,14 @@
   },
   "attachment_detail": {
     "open_help_page": "Ouvrir la page d'aide sur les pièces jointes",
-    "owning_note": "Note d'appartenance :",
+    "owning_note": "Note d'appartenance : ",
     "you_can_also_open": ", vous pouvez également ouvrir ",
     "list_of_all_attachments": "Liste de toutes les pièces jointes",
     "attachment_deleted": "Cette pièce jointe a été supprimée."
   },
   "attachment_list": {
     "open_help_page": "Ouvrir la page d'aide à propos des pièces jointes",
-    "owning_note": "Note d'appartenance :",
+    "owning_note": "Note d'appartenance : ",
     "upload_attachments": "Téléverser des pièces jointes",
     "no_attachments": "Cette note ne contient aucune pièce jointe."
   },
@@ -931,7 +931,7 @@
     "enter_new_title": "Saisissez le nouveau titre de la note :",
     "remove_relation": "Supprimer la relation",
     "confirm_remove_relation": "Êtes-vous sûr de vouloir supprimer la relation ?",
-    "specify_new_relation_name": "Spécifiez le nom de la nouvelle relation (caractères autorisés : alphanumérique, deux-points et tiret-bas. ) :",
+    "specify_new_relation_name": "Spécifiez le nom de la nouvelle relation (caractères autorisés : alphanumérique, deux-points et tiret-bas.) :",
     "connection_exists": "La connexion « {{name}} » entre ces notes existe déjà.",
     "start_dragging_relations": "Commencez à faire glisser les relations à partir d'ici et déposez-les sur une autre note.",
     "note_not_found": "Note {{noteId}} introuvable !",
@@ -1030,7 +1030,7 @@
   },
   "ribbon": {
     "widgets": "Ruban de widgets",
-    "promoted_attributes_message": "L'onglet du ruban Attributs promus s'ouvrira automatiquement si la note possède des attributs mis en avant.",
+    "promoted_attributes_message": "L'onglet du ruban Attributs promus s'ouvrira automatiquement si la note possède des attributs mis en avant",
     "edited_notes_message": "L'onglet du ruban Notes modifiées s'ouvrira automatiquement sur les notes journalières"
   },
   "theme": {
@@ -1096,7 +1096,7 @@
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "Limite des instantanés de version de note",
     "note_revisions_snapshot_limit_description": "La limite du nombre d’instantanés de version de note désigne le nombre maximum de versions pouvant être enregistrées pour chaque note. -1 signifie aucune limite, 0 signifie supprimer toutes les versions. Vous pouvez définir le nombre maximal de versions pour une seule note via le label #versioningLimit.",
-    "snapshot_number_limit_label": "Limite du nombre d'instantanés de version de la note :",
+    "snapshot_number_limit_label": "Nombre limite d'instantanés de version de la note :",
     "erase_excess_revision_snapshots": "Effacez maintenant les instantanés de version en excès",
     "erase_excess_revision_snapshots_prompt": "Les instantanés de version en excès ont été effacés."
   },
@@ -1260,7 +1260,7 @@
   },
   "attachment_detail_2": {
     "will_be_deleted_in": "Cette pièce jointe sera automatiquement supprimée dans {{time}}",
-    "will_be_deleted_soon": "Cette pièce jointe sera bientôt supprimée automatiquement ",
+    "will_be_deleted_soon": "Cette pièce jointe sera bientôt supprimée automatiquement",
     "deletion_reason": ", car la pièce jointe n'est pas liée dans le contenu de la note. Pour empêcher la suppression, ajoutez à nouveau le lien de la pièce jointe dans le contenu d'une note ou convertissez la pièce jointe en note.",
     "role_and_size": "Rôle : {{role}}, Taille : {{size}}",
     "link_copied": "Lien de pièce jointe copié dans le presse-papiers.",
@@ -1321,7 +1321,7 @@
     "code": "Code",
     "saved-search": "Recherche enregistrée",
     "relation-map": "Carte des relations",
-    "note-map": "Carte des notes",
+    "note-map": "Carte de notes",
     "render-note": "Rendu HTML",
     "book": "Livre",
     "mermaid-diagram": "Diagramme Mermaid",

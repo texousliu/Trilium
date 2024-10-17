@@ -14,14 +14,14 @@
     "move-note-up-in-hierarchy": "Déplacer la note vers le haut dans la hiérarchie",
     "move-note-down-in-hierarchy": "Déplacer la note vers le bas dans la hiérarchie",
     "edit-note-title": "Passer de l'arborescence aux détails d'une note et éditer le titre",
-    "edit-branch-prefix": "Afficher la fenétre Editer le préfixe de branche",
+    "edit-branch-prefix": "Afficher la fenêtre Éditer le préfixe de branche",
     "note-clipboard": "Note presse-papiers",
     "copy-notes-to-clipboard": "Copier les notes sélectionnées dans le presse-papiers",
     "paste-notes-from-clipboard": "Coller les notes depuis le presse-papiers dans la note active",
     "cut-notes-to-clipboard": "Couper les notes sélectionnées dans le presse-papiers",
     "select-all-notes-in-parent": "Sélectionner toutes les notes du niveau de la note active",
-    "add-note-above-to-the-selection": "Ajouter la note au-dessus de la selection",
-    "add-note-below-to-selection": "Ajouter la note en-dessous de la selection",
+    "add-note-above-to-the-selection": "Ajouter la note au-dessus de la sélection",
+    "add-note-below-to-selection": "Ajouter la note en dessous de la sélection",
     "duplicate-subtree": "Dupliquer le sous-arbre",
     "tabs-and-windows": "Onglets et fenêtres",
     "open-new-tab": "Ouvrir un nouvel onglet",
@@ -55,8 +55,8 @@
     "paste-markdown-into-text": "Coller du texte au format Markdown dans la note depuis le presse-papiers",
     "cut-into-note": "Couper la sélection depuis la note actuelle et créer une sous-note avec le texte sélectionné",
     "add-include-note-to-text": "Ouvrir la boîte de dialogue pour Inclure une note",
-    "edit-readonly-note": "Editer une note en lecture seule",
-    "attributes-labels-and-relations": "Attributs (labels & relations)",
+    "edit-readonly-note": "Éditer une note en lecture seule",
+    "attributes-labels-and-relations": "Attributs (labels et relations)",
     "add-new-label": "Créer un nouveau label",
     "create-new-relation": "Créer une nouvelle relation",
     "ribbon-tabs": "Onglets du ruban",
@@ -88,7 +88,7 @@
     "reset-zoom-level": "Réinitialiser le niveau de zoom",
     "copy-without-formatting": "Copier le texte sélectionné sans mise en forme",
     "force-save-revision": "Forcer la création / sauvegarde d'une nouvelle version de la note active",
-    "show-help": "Afficher l'aide intégrée / l'aide mémoire",
+    "show-help": "Afficher l'aide intégrée / l'aide-mémoire",
     "toggle-book-properties": "Afficher/masquer les Propriétés du Livre"
   },
   "login": {
@@ -123,14 +123,14 @@
     "step1": "Ouvrez l'application TriliumNext Notes.",
     "step2": "Dans le menu Trilium, cliquez sur Options.",
     "step3": "Cliquez sur la catégorie Synchroniser.",
-    "step4": "Remplacez l'adresse de l'instance de serveur par: {{- host}} et cliquez sur Enregistrer.",
+    "step4": "Remplacez l'adresse de l'instance de serveur par : {{- host}} et cliquez sur Enregistrer.",
     "step5": "Cliquez sur le bouton 'Tester la synchronisation' pour vérifier que la connexion fonctionne.",
     "step6": "Une fois que vous avez terminé ces étapes, cliquez sur {{- link}}.",
     "step6-here": "ici"
   },
   "setup_sync-from-server": {
     "heading": "Synchroniser depuis le serveur",
-    "instructions": "Veuillez saisir l'adresse  du serveur Trilium et les informations d'identification ci-dessous. Cela téléchargera l'intégralité du document Trilium à partir du serveur et configurera la synchronisation avec celui-ci. En fonction de la taille du document et de votre vitesse de connexion, cela peut prendre un plusieurs minutes.",
+    "instructions": "Veuillez saisir l'adresse du serveur Trilium et les informations d'identification ci-dessous. Cela téléchargera l'intégralité du document Trilium à partir du serveur et configurera la synchronisation avec celui-ci. En fonction de la taille du document et de votre vitesse de connexion, cela peut prendre un plusieurs minutes.",
     "server-host": "Adresse du serveur Trilium",
     "server-host-placeholder": "https://<nom d'hôte>:<port>",
     "proxy-server": "Serveur proxy (facultatif)",
@@ -145,7 +145,7 @@
   "setup_sync-in-progress": {
     "heading": "Synchronisation en cours",
     "successful": "La synchronisation a été correctement configurée. La synchronisation initiale prendra un certain temps. Une fois terminée, vous serez redirigé vers la page de connexion.",
-    "outstanding-items": "Eléments de synchronisation exceptionnels :",
+    "outstanding-items": "Éléments de synchronisation exceptionnels :",
     "outstanding-items-default": "N/A"
   },
   "share_404": {
@@ -155,7 +155,7 @@
   "share_page": {
     "parent": "parent :",
     "clipped-from": "Cette note a été initialement extraite de {{- url}}",
-    "child-notes": "Notes enfants:",
+    "child-notes": "Notes enfants :",
     "no-content": "Cette note n'a aucun contenu."
   }
 }
