@@ -1279,7 +1279,9 @@
     "recent-changes-in-subtree": "Schimbări recente în ierarhie",
     "search-in-subtree": "Caută în ierarhie",
     "sort-by": "Ordonare după...",
-    "unprotect-subtree": "Deprotejează ierarhia"
+    "unprotect-subtree": "Deprotejează ierarhia",
+    "hoist-note": "Focalizează notița",
+    "unhoist-note": "Defocalizează notița"
   },
   "shared_info": {
     "help_link": "Pentru informații vizitați <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki-ul</a>.",
@@ -1401,5 +1403,26 @@
   },
   "sql_table_schemas": {
     "tables": "Tabele"
+  },
+  "app_context": {
+    "please_wait_for_save": "Așteptați câteva secunde până se salvează toate datele și apoi reîncercați."
+  },
+  "tab_row": {
+    "add_new_tab": "Adaugă tab nou",
+    "close": "Închide",
+    "close_all_tabs": "Închide toate taburile",
+    "close_other_tabs": "Închide celelalte taburi",
+    "close_tab": "Închide tab",
+    "move_tab_to_new_window": "Mută acest tab în altă fereastră",
+    "new_tab": "Tab nou"
+  },
+  "toc": {
+    "options": "Setări",
+    "table_of_contents": "Cuprins"
+  },
+  "watched_file_update_status": {
+    "file_last_modified": "Fișierul <code class=\"file-path\"></code> a fost ultima oară modificat la data de <span class=\"file-last-modified\"></span>.",
+    "ignore_this_change": "Ignoră această schimbare",
+    "upload_modified_file": "Încarcă fișier modificat"
   }
 }
