@@ -145,7 +145,7 @@ function getSupportedLocales() {
         },
         {
             "id": "fr",
-            "name": "French"
+            "name": "Français"
         },
         {
             "id": "cn",
