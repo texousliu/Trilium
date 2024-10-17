@@ -242,6 +242,18 @@ jobs:
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             -t ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${REF_NAME} \
             $(printf '${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+
+          # If the ref is a tag, also tag the image as stable as this is part of a 'release'
+          # and only go in the `if` if there is NOT a `-` in the tag's name, due to tagging of `-alpha`, `-beta`, etc...
+          if [[ "${GITHUB_REF}" == refs/tags/* && ! "${REF_NAME}" =~ - ]]; then
+            docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+              -t ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:stable \
+              $(printf '${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+            
+            docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+              -t ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:stable \
+              $(printf '${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+          fi
       
       - name: Inspect image
         run: |
