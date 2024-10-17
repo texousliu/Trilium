@@ -2,9 +2,9 @@
   "keyboard_actions": {
     "open-jump-to-note-dialog": "Ouvrir la boîte de dialogue \"Aller à la note\"",
     "search-in-subtree": "Rechercher des notes dans les sous-arbres de la note active",
-    "expand-subtree": "Développer les sous-arbres de la note actuelle",
+    "expand-subtree": "Développer le sous-arbre de la note actuelle",
     "collapse-tree": "Réduire toute l'arborescence des notes",
-    "collapse-subtree": "Réduire les sous-arbres de la note actuelle",
+    "collapse-subtree": "Réduire le sous-arbre de la note actuelle",
     "sort-child-notes": "Trier les notes enfants",
     "creating-and-moving-notes": "Créer et déplacer des notes",
     "create-note-into-inbox": "Créer une note dans l'emplacement par défaut (si défini) ou une note journalière",
@@ -22,7 +22,7 @@
     "select-all-notes-in-parent": "Sélectionner toutes les notes du niveau de la note active",
     "add-note-above-to-the-selection": "Ajouter la note au-dessus de la selection",
     "add-note-below-to-selection": "Ajouter la note en-dessous de la selection",
-    "duplicate-subtree": "Dupliquer l'arborescence",
+    "duplicate-subtree": "Dupliquer le sous-arbre",
     "tabs-and-windows": "Onglets et fenêtres",
     "open-new-tab": "Ouvrir un nouvel onglet",
     "close-active-tab": "Fermer l'onglet actif",
@@ -66,18 +66,18 @@
     "toggle-owned-attributes": "Afficher/masquer les Attributs propres",
     "toggle-inherited-attributes": "Afficher/masquer les Attributs hérités",
     "toggle-promoted-attributes": "Afficher/masquer les Attributs promus",
-    "toggle-link-map": "Afficher/masquer la carte des liens",
+    "toggle-link-map": "Afficher/masquer la Carte des liens",
     "toggle-note-info": "Afficher/masquer les Informations de la note",
     "toggle-note-paths": "Afficher/masquer les Emplacements de la note",
-    "toggle-similar-notes": "Afficher/masquer les notes similaires",
+    "toggle-similar-notes": "Afficher/masquer les Notes similaires",
     "other": "Autre",
-    "toggle-right-pane": "Afficher/masquer le volet droit, qui inclut la table des matières et les éléments mis en valeur",
+    "toggle-right-pane": "Afficher/masquer le volet droit, qui inclut la Table des matières et les Accentuations",
     "print-active-note": "Imprimer la note active",
-    "open-note-externally": "Ouvrir la note hors de trilium avec l'application par défaut",
+    "open-note-externally": "Ouvrir la note comme fichier avec l'application par défaut",
     "render-active-note": "Rendre (ou re-rendre) la note active",
     "run-active-note": "Exécuter le code JavaScript (frontend/backend) de la note active",
     "toggle-note-hoisting": "Activer le focus sur la note active",
-    "unhoist": "Désactiver le focus",
+    "unhoist": "Désactiver tout focus",
     "reload-frontend-app": "Recharger l'application",
     "open-dev-tools": "Ouvrir les outils de développement",
     "toggle-left-note-tree-panel": "Basculer le panneau gauche (arborescence des notes)",
@@ -89,7 +89,7 @@
     "copy-without-formatting": "Copier le texte sélectionné sans mise en forme",
     "force-save-revision": "Forcer la création / sauvegarde d'une nouvelle version de la note active",
     "show-help": "Afficher l'aide intégrée / l'aide mémoire",
-    "toggle-book-properties": "Afficher/masquer les propriétés du Livre"
+    "toggle-book-properties": "Afficher/masquer les Propriétés du Livre"
   },
   "login": {
     "title": "Connexion",
@@ -111,7 +111,7 @@
     "heading": "Configuration de TriliumNext Notes",
     "new-document": "Je suis un nouvel utilisateur et je souhaite créer un nouveau document Trilium pour mes notes",
     "sync-from-desktop": "J'ai déjà l'application de bureau et je souhaite configurer la synchronisation avec celle-ci",
-    "sync-from-server": "J'ai déjà un serveur et je souhaite configurer la synchronisation avec celle-ci",
+    "sync-from-server": "J'ai déjà un serveur et je souhaite configurer la synchronisation avec celui-ci",
     "next": "Suivant",
     "init-in-progress": "Initialisation du document en cours",
     "redirecting": "Vous serez bientôt redirigé vers l'application.",
@@ -119,15 +119,15 @@
   },
   "setup_sync-from-desktop": {
     "heading": "Synchroniser depuis une application de bureau",
-    "description": "Cette procédure doit être réalisée depuis l'application déjà installée sur votre ordinateur:",
+    "description": "Cette procédure doit être réalisée depuis l'application de bureau installée sur votre ordinateur:",
     "step1": "Ouvrez l'application TriliumNext Notes.",
     "step2": "Dans le menu Trilium, cliquez sur Options.",
-    "step3": "Cliquez sur la catégorie.",
+    "step3": "Cliquez sur la catégorie Synchroniser.",
     "step4": "Remplacez l'adresse de l'instance de serveur par: {{- host}} et cliquez sur Enregistrer.",
-    "step5": "Cliquez sur le bouton 'Tester la synchronisation' pour vérifier que la connexion est réussie.",
+    "step5": "Cliquez sur le bouton 'Tester la synchronisation' pour vérifier que la connexion fonctionne.",
     "step6": "Une fois que vous avez terminé ces étapes, cliquez sur {{- link}}.",
     "step6-here": "ici"
-    },
+  },
   "setup_sync-from-server": {
     "heading": "Synchroniser depuis le serveur",
     "instructions": "Veuillez saisir l'adresse  du serveur Trilium et les informations d'identification ci-dessous. Cela téléchargera l'intégralité du document Trilium à partir du serveur et configurera la synchronisation avec celui-ci. En fonction de la taille du document et de votre vitesse de connexion, cela peut prendre un plusieurs minutes.",
@@ -135,25 +135,25 @@
     "server-host-placeholder": "https://<nom d'hôte>:<port>",
     "proxy-server": "Serveur proxy (facultatif)",
     "proxy-server-placeholder": "https://<nom d'hôte>:<port>",
-    "note": "Note:",
+    "note": "Note :",
     "proxy-instruction": "Si vous laissez le paramètre de proxy vide, le proxy du système sera utilisé (s'applique uniquement à l'application de bureau)",
     "password": "Mot de passe",
     "password-placeholder": "Mot de passe",
     "back": "Retour",
-    "finish-setup": "Terminer la configuration"
-    },
+    "finish-setup": "Terminer"
+  },
   "setup_sync-in-progress": {
     "heading": "Synchronisation en cours",
     "successful": "La synchronisation a été correctement configurée. La synchronisation initiale prendra un certain temps. Une fois terminée, vous serez redirigé vers la page de connexion.",
     "outstanding-items": "Eléments de synchronisation exceptionnels :",
     "outstanding-items-default": "N/A"
-    },
+  },
   "share_404": {
     "title": "Page non trouvée",
-    "heading": "Page non trouvée"         
-    },
+    "heading": "Page non trouvée"
+  },
   "share_page": {
-    "parent": "parent:",
+    "parent": "parent :",
     "clipped-from": "Cette note a été initialement extraite de {{- url}}",
     "child-notes": "Notes enfants:",
     "no-content": "Cette note n'a aucun contenu."
