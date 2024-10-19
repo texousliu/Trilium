@@ -70,30 +70,10 @@ textarea,
     background: var(--input-background-color) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23ffffff' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>") right .75rem center/15px 20px no-repeat;
 }
 
-/* Hide number input arrows */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/* Firefox browser */
-input[type="number"] {
-    -moz-appearance: textfield;
-}
-
-/* Show number input arrows when focus or hover */
-input[type="number"]:focus::-webkit-inner-spin-button,
-input[type="number"]:focus::-webkit-outer-spin-button,
-input[type="number"]:hover::-webkit-inner-spin-button,
-input[type="number"]:hover::-webkit-outer-spin-button {
-    -webkit-appearance: inner-spin-button;
-}
-
 /* Restore default apperance */
-input[type="number"]:focus,
-input[type="number"]:hover {
-    appearance: auto;
+input[type="number"],
+input[type="checkbox"] {
+    appearance: auto !important;
 }
 
 #left-pane input,
