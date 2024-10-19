@@ -18,32 +18,35 @@ const TPL = `
     }
     
     .promoted-attributes-container {
-        margin: auto;
-        display: flex;
-        flex-direction: row;
-        flex-shrink: 0;
-        flex-grow: 0;
-        justify-content: space-evenly;
+        margin: 0 1.5em;
         overflow: auto;
         max-height: 400px;
         flex-wrap: wrap;
+        display: table;
     }
-    
     .promoted-attribute-cell {
         display: flex;
         align-items: center;
         margin: 10px;
+        display: table-row;
+    }
+    .promoted-attribute-cell > * {
+        display: table-cell;
+        padding: 1px 0;
     }
     
     .promoted-attribute-cell div.input-group {
         margin-left: 10px;
+        display: flex;
     }
     .promoted-attribute-cell strong {
         word-break:keep-all;
         white-space: nowrap;
     }
     .promoted-attribute-cell input[type="checkbox"] {
-        height: 1.5em;
+        height: 1.5em;        
+        flex-grow: 0;
+        width: unset;
     }
     
     </style>
@@ -211,9 +214,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             }
             else if (definition.labelType === 'boolean') {
                 $input.prop("type", "checkbox");
-                // hack, without this the checkbox is invisible
-                // we should be using a different bootstrap structure for checkboxes
-                $input.css('width', '80px');
 
                 if (valueAttr.value === "true") {
                     $input.prop("checked", "checked");
