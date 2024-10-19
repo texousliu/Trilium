@@ -30,6 +30,10 @@ const TPL = `
         margin: 10px;
         display: table-row;
     }
+    .promoted-attribute-cell > label {
+        user-select: none;
+        font-weight: bold;
+    }
     .promoted-attribute-cell > * {
         display: table-cell;
         padding: 1px 0;
@@ -140,9 +144,11 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
     async createPromotedAttributeCell(definitionAttr, valueAttr, valueName) {
         const definition = definitionAttr.getDefinition();
+        const id = `value-${this.noteId}-${definitionAttr.position}`;
 
         const $input = $("<input>")
             .prop("tabindex", 200 + definitionAttr.position)
+            .prop("id", id)
             .attr("data-attribute-id", valueAttr.noteId === this.noteId ? valueAttr.attributeId : '') // if not owned, we'll force creation of a new attribute instead of updating the inherited one
             .attr("data-attribute-type", valueAttr.type)
             .attr("data-attribute-name", valueAttr.name)
@@ -157,7 +163,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             .attr("nowrap", true);
 
         const $wrapper = $('<div class="promoted-attribute-cell">')
-            .append($("<strong>").text(definition.promotedAlias ?? valueName))
+            .append($("<label>").prop("for", id).text(definition.promotedAlias ?? valueName))
             .append($("<div>").addClass("input-group").append($input))
             .append($actionCell)
             .append($multiplicityCell);
