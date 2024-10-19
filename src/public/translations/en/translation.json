@@ -926,7 +926,13 @@
     "enter_password_instruction": "Showing protected note requires entering your password:",
     "start_session_button": "Start protected session",
     "started": "Protected session has been started.",
-    "wrong_password": "Wrong password."
+    "wrong_password": "Wrong password.",
+    "protecting-finished-successfully": "Protecting finished successfully.",
+    "unprotecting-finished-successfully": "Unprotecting finished successfully.",
+    "protecting-in-progress": "Protecting in progress: {{count}}",
+    "unprotecting-in-progress-count": "Unprotecting in progress: {{count}}",
+    "protecting-title": "Protecting status",
+    "unprotecting-title": "Unprotecting status"
   },
   "relation_map": {
     "open_in_new_tab": "Open in new tab",

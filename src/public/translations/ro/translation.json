@@ -908,7 +908,13 @@
     "enter_password_instruction": "Afișarea notițelor protejate necesită introducerea parolei:",
     "start_session_button": "Deschide sesiunea protejată",
     "started": "Sesiunea protejată este activă.",
-    "wrong_password": "Parolă greșită."
+    "wrong_password": "Parolă greșită.",
+    "protecting-finished-successfully": "Protejarea a avut succes.",
+    "protecting-in-progress": "Protejare în curs: {{count}}",
+    "protecting-title": "Stare protejare",
+    "unprotecting-title": "Stare deprotejare",
+    "unprotecting-finished-successfully": "Deprotejarea a avut succes.",
+    "unprotecting-in-progress-count": "Deprotejare în curs: {{count}}"
   },
   "protected_session_password": {
     "close_label": "Închide",
