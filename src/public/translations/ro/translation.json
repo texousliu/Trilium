@@ -422,7 +422,7 @@
     "erase_notes_warning": "Șterge notițele permanent (nu se mai pot recupera), incluzând toate clonele. Va forța reîncărcarea aplicației.",
     "no_note_to_delete": "Nicio notiță nu va fi ștearsă (doar clonele).",
     "note": "Notiță",
-    "notes_to_be_deleted": "Următoarele notițe vor fi șterse (<span class=\"deleted-notes-count\"></span>)",
+    "notes_to_be_deleted": "Următoarele notițe vor fi șterse ({{- noteCount}})",
     "ok": "OK",
     "to_be_deleted": " (pentru ștergere) este referențiat(ă) de relația <code>{{attrName}}</code> originând de la "
   },

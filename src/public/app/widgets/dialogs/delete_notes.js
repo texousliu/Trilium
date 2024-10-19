@@ -25,7 +25,7 @@ const TPL = `
                 </div>
 
                 <div class="delete-notes-list-wrapper">
-                    <h4>${t('delete_notes.notes_to_be_deleted')} (<span class="deleted-notes-count"></span>)</h4>
+                    <h4>${t('delete_notes.notes_to_be_deleted', { noteCount: `<span class="deleted-notes-count"></span>` })}</h4>
 
                     <ul class="delete-notes-list" style="max-height: 200px; overflow: auto;"></ul>
                 </div>
