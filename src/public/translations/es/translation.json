@@ -976,7 +976,7 @@
     "error_creating_anonymized_database": "No se pudo crear una base de datos anónima; consulte los registros de backend para obtener más detalles",
     "successfully_created_fully_anonymized_database": "Se creó una base de datos completamente anónima en {{anonymizedFilePath}}",
     "successfully_created_lightly_anonymized_database": "Se creó una base de datos ligeramente anónima en {{anonymizedFilePath}}",
-    "no_anonymized_database_yet": "aún no hay base de datos anónima"
+    "no_anonymized_database_yet": "Aún no hay base de datos anónima."
   },
   "database_integrity_check": {
     "title": "Verificación de integridad de la base de datos",

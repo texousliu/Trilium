@@ -381,7 +381,7 @@
     "full_anonymization_description": "Această acțiune va crea o nouă copie a bazei de date și o va anonimiza (se șterge conținutul tuturor notițelor și se menține doar structura și câteva metainformații neconfidențiale) pentru a putea fi partajate online cu scopul de a depana anumite probleme fără a risca expunerea datelor personale.",
     "light_anonymization": "Anonimizare parțială",
     "light_anonymization_description": "Această acțiune va crea o copie a bazei de date și o va anonimiza parțial - mai exact se va șterge conținutul tuturor notițelor, dar titlurile și atributele vor rămâne. De asemenea, script-urile de front-end sau back-end și widget-urile personalizate vor rămâne și ele. Acest lucru oferă mai mult context pentru a depana probleme.",
-    "no_anonymized_database_yet": "încă nu există nicio bază de date anonimizată",
+    "no_anonymized_database_yet": "Încă nu există nicio bază de date anonimizată.",
     "save_fully_anonymized_database": "Salvează bază de date complet anonimizată",
     "save_lightly_anonymized_database": "Salvează bază de date parțial anonimizată",
     "successfully_created_fully_anonymized_database": "S-a creat cu succes o bază de date complet anonimizată în {{anonymizedFilePath}}",
