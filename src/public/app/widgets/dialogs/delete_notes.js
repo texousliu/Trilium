@@ -126,11 +126,11 @@ export default class DeleteNotesDialog extends BasicWidget {
 
         for (const attr of response.brokenRelations) {
             this.$brokenRelationsList.append(
-                $("<li>")
-                    .append(`${t('delete_notes.note')} `)
-                    .append(await linkService.createLink(attr.value))
-                    .append(` ${t('delete_notes.to_be_deleted', {attrName: attr.name})} `)
-                    .append(await linkService.createLink(attr.noteId))
+                $("<li>").html(t("delete_notes.deleted_relation_text", {
+                    note: (await linkService.createLink(attr.value)).html(),
+                    relation: `<code>${attr.name}</code>`,
+                    source: (await linkService.createLink(attr.noteId)).html()
+                }))
             );
         }
     }

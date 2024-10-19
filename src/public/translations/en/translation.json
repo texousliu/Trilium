@@ -70,7 +70,7 @@
   },
   "delete_notes": {
     "delete_notes_preview": "Delete notes preview",
-    "delete_all_clones_description": "delete also all clones (can be undone in recent changes)",
+    "delete_all_clones_description": "Delete also all clones (can be undone in recent changes)",
     "erase_notes_description": "Normal (soft) deletion only marks the notes as deleted and they can be undeleted (in recent changes dialog) within a period of time. Checking this option will erase the notes immediately and it won't be possible to undelete the notes.",
     "erase_notes_warning": "Erase notes permanently (can't be undone), including all clones. This will force application reload.",
     "notes_to_be_deleted": "Following notes will be deleted ({{- noteCount}})",
@@ -78,8 +78,7 @@
     "broken_relations_to_be_deleted": "Following relations will be broken and deleted ({{- relationCount}})",
     "cancel": "Cancel",
     "ok": "OK",
-    "note": "Note",
-    "to_be_deleted": " (to be deleted) is referenced by relation <code>{{attrName}}</code> originating from "
+    "deleted_relation_text": "Note {{- note}} (to be deleted) is referenced by relation {{- relation}} originating from {{- source}}."
   },
   "export": {
     "export_note_title": "Export note",
