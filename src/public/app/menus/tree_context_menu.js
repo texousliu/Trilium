@@ -154,7 +154,7 @@ export default class TreeContextMenu {
                 }
             }
 
-            toastService.showMessage(`${converted} notes have been converted to attachments.`);
+            toastService.showMessage(t("tree-context-menu.converted-to-attachments", { count: converted }));
         }
         else if (command === 'copyNotePathToClipboard') {
             navigator.clipboard.writeText('#' + notePath);

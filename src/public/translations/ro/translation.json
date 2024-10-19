@@ -785,7 +785,9 @@
     "print_note": "Imprimare notiță",
     "re_render_note": "Reinterpretare notiță",
     "save_revision": "Salvează o nouă revizie",
-    "search_in_note": "Caută în notiță"
+    "search_in_note": "Caută în notiță",
+    "convert_into_attachment_failed": "Nu s-a putut converti notița „{{title}}”.",
+    "convert_into_attachment_successful": "Notița „{{title}}” a fost convertită în atașament."
   },
   "note_erasure_timeout": {
     "deleted_notes_erased": "Notițele șterse au fost eliminate permanent.",
@@ -903,7 +905,8 @@
   },
   "protected_session": {
     "enter_password_instruction": "Afișarea notițelor protejate necesită introducerea parolei:",
-    "start_session_button": "Deschide sesiunea protejată"
+    "start_session_button": "Deschide sesiunea protejată",
+    "started": "Sesiunea protejată este activă."
   },
   "protected_session_password": {
     "close_label": "Închide",
@@ -1134,7 +1137,9 @@
     "force_full_sync_button": "Forțează sincronizare completă",
     "full_sync_triggered": "S-a activat o sincronizare completă",
     "sync_rows_filled_successfully": "Rândurile de sincronizare s-au completat cu succes",
-    "title": "Sincronizare"
+    "title": "Sincronizare",
+    "failed": "Eroare la sincronizare: {{message}}",
+    "finished-successfully": "Sincronizarea a avut succes."
   },
   "sync_2": {
     "config_title": "Configurația sincronizării",
@@ -1281,7 +1286,8 @@
     "sort-by": "Ordonare după...",
     "unprotect-subtree": "Deprotejează ierarhia",
     "hoist-note": "Focalizează notița",
-    "unhoist-note": "Defocalizează notița"
+    "unhoist-note": "Defocalizează notița",
+    "converted-to-attachments": "{{count}} notițe au fost convertite în atașamente."
   },
   "shared_info": {
     "help_link": "Pentru informații vizitați <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki-ul</a>.",
@@ -1370,7 +1376,9 @@
     "hide-archived-notes": "Ascunde notițele arhivate",
     "save-changes": "Salvează și aplică modificările",
     "scroll-active-title": "Mergi la notița activă",
-    "tree-settings-title": "Setări ale ierarhiei notițelor"
+    "tree-settings-title": "Setări ale ierarhiei notițelor",
+    "auto-collapsing-notes-after-inactivity": "Se minimizează notițele după inactivitate...",
+    "saved-search-note-refreshed": "Notița de căutare salvată a fost reîmprospătată."
   },
   "title_bar_buttons": {
     "window-on-top": "Menține fereastra mereu vizibilă"
@@ -1424,5 +1432,20 @@
     "file_last_modified": "Fișierul <code class=\"file-path\"></code> a fost ultima oară modificat la data de <span class=\"file-last-modified\"></span>.",
     "ignore_this_change": "Ignoră această schimbare",
     "upload_modified_file": "Încarcă fișier modificat"
+  },
+  "clipboard": {
+    "copied": "Notițele au fost copiate în clipboard.",
+    "cut": "Notițele au fost decupate în clipboard."
+  },
+  "entrypoints": {
+    "note-executed": "Notița a fost executată.",
+    "note-revision-created": "S-a creat o revizie a notiței."
+  },
+  "image": {
+    "cannot-copy": "Nu s-a putut copia în clipboard referința către imagine.",
+    "copied-to-clipboard": "S-a copiat o referință către imagine în clipboard. Aceasta se poate lipi în orice notiță text."
+  },
+  "note_create": {
+    "duplicated": "Notița „{{title}}” a fost dublificată."
   }
 }

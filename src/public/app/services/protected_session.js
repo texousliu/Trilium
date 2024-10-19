@@ -72,7 +72,7 @@ ws.subscribeToMessages(async message => {
             protectedSessionDeferred = null;
         }
 
-        toastService.showMessage("Protected session has been started.");
+        toastService.showMessage(t("protected_session.started"));
     }
     else if (message.type === 'protectedSessionLogout') {
         utils.reloadFrontendApp(`Protected session logout`);

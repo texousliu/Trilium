@@ -178,7 +178,7 @@ export default class Entrypoints extends Component {
             await appContext.triggerEvent('sqlQueryResults', {ntxId: ntxId, results: resp.results});
         }
 
-        toastService.showMessage("Note executed");
+        toastService.showMessage(t("entrypoints.note-executed"));
     }
 
     hideAllPopups() {
@@ -200,6 +200,6 @@ export default class Entrypoints extends Component {
 
         await server.post(`notes/${noteId}/revision`);
 
-        toastService.showMessage("Note revision has been created.");
+        toastService.showMessage(t("entrypoints.note-revision-created"));
     }
 }

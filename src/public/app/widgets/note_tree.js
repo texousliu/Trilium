@@ -1031,7 +1031,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         activeNode.load(true);
         activeNode.setExpanded(true, {noAnimation: true});
 
-        toastService.showMessage("Saved search note refreshed.");
+        toastService.showMessage(t("note_tree.saved-search-note-refreshed"));
     }
 
     async batchUpdate(cb) {
@@ -1075,7 +1075,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                     node.setExpanded(false);
 
                     if (noneCollapsedYet) {
-                        toastService.showMessage("Auto collapsing notes after inactivity...");
+                        toastService.showMessage(t("note_tree.auto-collapsing-notes-after-inactivity"));
                         noneCollapsedYet = false;
                     }
                 }

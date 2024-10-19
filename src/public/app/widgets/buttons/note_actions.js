@@ -134,11 +134,11 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         const {attachment: newAttachment} = await server.post(`notes/${this.noteId}/convert-to-attachment`);
 
         if (!newAttachment) {
-            toastService.showMessage(`Converting note '${this.note.title}' failed.`);
+            toastService.showMessage(t("note_actions.convert_into_attachment_failed", { title: this.note.title }));
             return;
         }
 
-        toastService.showMessage(`Note '${newAttachment.title}' has been converted to attachment.`);
+        toastService.showMessage(t("note_actions.convert_into_attachment_successful", { title: newAttachment.title }));
         await ws.waitForMaxKnownEntityChangeId();
         await appContext.tabManager.getActiveContext().setNote(newAttachment.ownerId, {
             viewScope: {
