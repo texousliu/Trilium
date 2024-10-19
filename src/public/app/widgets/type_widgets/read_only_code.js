@@ -1,4 +1,4 @@
-import AbstractCodeTypeWidget from "./code_widget_base.js";
+import AbstractCodeTypeWidget from "./abstract_code_type_widget.js";
 
 const TPL = `
 <div class="note-detail-readonly-code note-detail-printable">

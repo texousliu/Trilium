@@ -1,7 +1,7 @@
 import { t } from "../../services/i18n.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
 import options from "../../services/options.js";
-import AbstractCodeTypeWidget from "./code_widget_base.js";
+import AbstractCodeTypeWidget from "./abstract_code_type_widget.js";
 
 const TPL = `
 <div class="note-detail-code note-detail-printable">
