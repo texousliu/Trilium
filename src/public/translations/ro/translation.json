@@ -414,7 +414,7 @@
     "undelete_notes_instruction": "După ștergere, se pot recupera din ecranul Schimbări recente."
   },
   "delete_notes": {
-    "broken_relations_to_be_deleted": "Următoarele relații vor fi întrerupte și șterse (<span class=\"broke-relations-count\"></span>)",
+    "broken_relations_to_be_deleted": "Următoarele relații vor fi întrerupte și șterse ({{- relationCount}})",
     "cancel": "Anulează",
     "delete_all_clones_description": "Șterge și toate clonele (se pot recupera în ecranul Schimbări recente)",
     "delete_notes_preview": "Previzualizare ștergerea notițelor",

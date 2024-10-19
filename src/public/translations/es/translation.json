@@ -75,7 +75,7 @@
     "erase_notes_warning": "Eliminar notas permanentemente (no se puede deshacer), incluidos todos los clones. Esto forzará la recarga de la aplicación.",
     "notes_to_be_deleted": "Las siguientes notas serán eliminadas ({{- noteCount}})",
     "no_note_to_delete": "No se eliminará ninguna nota (solo clones).",
-    "broken_relations_to_be_deleted": "Las siguientes relaciones se romperán y serán eliminadas (<span class=\"broke-relations-count\"></span>)",
+    "broken_relations_to_be_deleted": "Las siguientes relaciones se romperán y serán eliminadas ({{- relationCount}})",
     "cancel": "Cancelar",
     "ok": "Aceptar",
     "note": "Nota",

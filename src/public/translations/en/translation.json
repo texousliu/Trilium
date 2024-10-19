@@ -75,7 +75,7 @@
     "erase_notes_warning": "Erase notes permanently (can't be undone), including all clones. This will force application reload.",
     "notes_to_be_deleted": "Following notes will be deleted ({{- noteCount}})",
     "no_note_to_delete": "No note will be deleted (only clones).",
-    "broken_relations_to_be_deleted": "Following relations will be broken and deleted (<span class=\"broke-relations-count\"></span>)",
+    "broken_relations_to_be_deleted": "Following relations will be broken and deleted ({{- relationCount}})",
     "cancel": "Cancel",
     "ok": "OK",
     "note": "Note",
