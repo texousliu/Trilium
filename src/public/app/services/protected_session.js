@@ -50,7 +50,7 @@ async function setupProtectedSession(password) {
     const response = await server.post('login/protected', { password: password });
 
     if (!response.success) {
-        toastService.showError("Wrong password.", 3000);
+        toastService.showError(t("protected_session.wrong_password"), 3000);
         return;
     }
 

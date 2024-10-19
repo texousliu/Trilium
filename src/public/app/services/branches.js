@@ -13,7 +13,7 @@ async function moveBeforeBranch(branchIdsToMove, beforeBranchId) {
     const beforeBranch = froca.getBranch(beforeBranchId);
 
     if (['root', '_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers'].includes(beforeBranch.noteId)) {
-        toastService.showError('Cannot move notes here.');
+        toastService.showError(t("branches.cannot-move-notes-here"));
         return;
     }
 
@@ -42,7 +42,7 @@ async function moveAfterBranch(branchIdsToMove, afterBranchId) {
     ];
 
     if (forbiddenNoteIds.includes(afterNote.noteId)) {
-        toastService.showError('Cannot move notes here.');
+        toastService.showError(t("branches.cannot-move-notes-here"));
         return;
     }
 
@@ -62,7 +62,7 @@ async function moveToParentNote(branchIdsToMove, newParentBranchId) {
     const newParentBranch = froca.getBranch(newParentBranchId);
 
     if (newParentBranch.noteId === '_lbRoot') {
-        toastService.showError('Cannot move notes here.');
+        toastService.showError(t("branches.cannot-move-notes-here"));
         return;
     }
 

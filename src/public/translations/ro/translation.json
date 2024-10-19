@@ -685,7 +685,8 @@
     "safeImportTooltip": "Fișierele de Trilium exportate în format <code>.zip</code> pot conține scripturi executabile ce pot avea un comportament malițios. Importarea sigură va dezactiva execuția automată a tuturor scripturilor importate. Debifați „Importare sigură” dacă arhiva importată conține scripturi executabile dorite și aveți încredere deplină în conținutul acestora.",
     "shrinkImages": "Micșorare imagini",
     "shrinkImagesTooltip": "<p>Dacă bifați această opțiune, Trilium va încerca să micșoreze imaginea importată prin scalarea și importarea ei, aspect ce poate afecta calitatea aparentă a imaginii. Dacă nu este bifat, imaginile vor fi importate fără nicio modificare.</p><p>Acest lucru nu se aplică la importuri de tip <code>.zip</code> cu metainformații deoarece se asumă că aceste fișiere sunt deja optimizate.</p>",
-    "textImportedAsText": "Importă HTML, Markdown și TXT ca notițe de tip text dacă este neclar din metainformații"
+    "textImportedAsText": "Importă HTML, Markdown și TXT ca notițe de tip text dacă este neclar din metainformații",
+    "failed": "Eroare la importare: {{message}}."
   },
   "include_archived_notes": {
     "include_archived_notes": "Include notițele arhivate"
@@ -906,7 +907,8 @@
   "protected_session": {
     "enter_password_instruction": "Afișarea notițelor protejate necesită introducerea parolei:",
     "start_session_button": "Deschide sesiunea protejată",
-    "started": "Sesiunea protejată este activă."
+    "started": "Sesiunea protejată este activă.",
+    "wrong_password": "Parolă greșită."
   },
   "protected_session_password": {
     "close_label": "Închide",
@@ -1439,7 +1441,8 @@
   },
   "entrypoints": {
     "note-executed": "Notița a fost executată.",
-    "note-revision-created": "S-a creat o revizie a notiței."
+    "note-revision-created": "S-a creat o revizie a notiței.",
+    "sql-error": "A apărut o eroare la executarea interogării SQL: {{message}}"
   },
   "image": {
     "cannot-copy": "Nu s-a putut copia în clipboard referința către imagine.",
@@ -1447,5 +1450,17 @@
   },
   "note_create": {
     "duplicated": "Notița „{{title}}” a fost dublificată."
+  },
+  "branches": {
+    "cannot-move-notes-here": "Nu se pot muta notițe aici."
+  },
+  "frontend_script_api": {
+    "async_warning": "Ați trimis o funcție asincronă metodei `api.runOnBackend()` și este posibil să nu se comporte așa cum vă așteptați.\\nFie faceți metoda sincronă (prin ștergerea cuvântului-cheie `async`), sau folosiți `api.runAsyncOnBackendWithManualTransactionHandling()`.",
+    "sync_warning": "Ați trimis o funcție sincronă funcției `api.runAsyncOnBackendWithManualTransactionHandling()`,\\ndar cel mai probabil trebuie folosit `api.runOnBackend()` în schimb."
+  },
+  "ws": {
+    "consistency-checks-failed": "Au fost identificate erori de consistență! Vedeți mai multe detalii în loguri.",
+    "encountered-error": "A fost întâmpinată o eroare: „{{message}}”. Vedeți în loguri pentru mai multe detalii.",
+    "sync-check-failed": "Verificările de sincronizare au eșuat!"
   }
 }

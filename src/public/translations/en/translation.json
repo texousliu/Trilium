@@ -166,7 +166,8 @@
     "textImportedAsText": "Import HTML, Markdown and TXT as text notes if it's unclear from metadata",
     "codeImportedAsCode": "Import recognized code files (e.g. <code>.json</code>) as code notes if it's unclear from metadata",
     "replaceUnderscoresWithSpaces": "Replace underscores with spaces in imported note names",
-    "import": "Import"
+    "import": "Import",
+    "failed": "Import failed: {{message}}."
   },
   "include_note": {
     "dialog_title": "Include note",
@@ -924,7 +925,8 @@
   "protected_session": {
     "enter_password_instruction": "Showing protected note requires entering your password:",
     "start_session_button": "Start protected session",
-    "started": "Protected session has been started."
+    "started": "Protected session has been started.",
+    "wrong_password": "Wrong password."
   },
   "relation_map": {
     "open_in_new_tab": "Open in new tab",
@@ -1446,6 +1448,19 @@
   },
   "entrypoints": {
     "note-revision-created": "Note revision has been created.",
-    "note-executed": "Note executed."
+    "note-executed": "Note executed.",
+    "sql-error": "Error occurred while executing SQL query: {{message}}"
+  },
+  "branches": {
+    "cannot-move-notes-here": "Cannot move notes here."
+  },
+  "frontend_script_api": {
+    "async_warning": "You're passing an async function to `api.runOnBackend()` which will likely not work as you intended.\\nEither make the function synchronous (by removing `async` keyword), or use `api.runAsyncOnBackendWithManualTransactionHandling()`.",
+    "sync_warning": "You're passing a synchronous function to `api.runAsyncOnBackendWithManualTransactionHandling()`,\\nwhile you should likely use `api.runOnBackend()` instead."
+  },
+  "ws": {
+    "sync-check-failed": "Sync check failed!",
+    "consistency-checks-failed": "Consistency checks failed! See logs for details.",
+    "encountered-error": "Encountered error \"{{message}}\", check out the console."
   }
 }
