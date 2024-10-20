@@ -788,7 +788,8 @@
     "save_revision": "Salvează o nouă revizie",
     "search_in_note": "Caută în notiță",
     "convert_into_attachment_failed": "Nu s-a putut converti notița „{{title}}”.",
-    "convert_into_attachment_successful": "Notița „{{title}}” a fost convertită în atașament."
+    "convert_into_attachment_successful": "Notița „{{title}}” a fost convertită în atașament.",
+    "convert_into_attachment_prompt": "Doriți convertirea notiței „{{title}}” într-un atașament al notiței părinte?"
   },
   "note_erasure_timeout": {
     "deleted_notes_erased": "Notițele șterse au fost eliminate permanent.",
@@ -1295,7 +1296,8 @@
     "unprotect-subtree": "Deprotejează ierarhia",
     "hoist-note": "Focalizează notița",
     "unhoist-note": "Defocalizează notița",
-    "converted-to-attachments": "{{count}} notițe au fost convertite în atașamente."
+    "converted-to-attachments": "{{count}} notițe au fost convertite în atașamente.",
+    "convert-to-attachment-confirm": "Doriți convertirea notițelor selectate în atașamente ale notiței părinte?"
   },
   "shared_info": {
     "help_link": "Pentru informații vizitați <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki-ul</a>.",
@@ -1318,7 +1320,8 @@
     "file": "Fișier",
     "image": "Imagine",
     "launcher": "Scurtătură",
-    "widget": "Widget"
+    "widget": "Widget",
+    "confirm-change": "Nu se recomandă schimbarea tipului notiței atunci când ea are un conținut. Procedați oricum?"
   },
   "protect_note": {
     "toggle-off": "Deprotejează notița",
@@ -1468,5 +1471,11 @@
     "consistency-checks-failed": "Au fost identificate erori de consistență! Vedeți mai multe detalii în loguri.",
     "encountered-error": "A fost întâmpinată o eroare: „{{message}}”. Vedeți în loguri pentru mai multe detalii.",
     "sync-check-failed": "Verificările de sincronizare au eșuat!"
+  },
+  "hoisted_note": {
+    "confirm_unhoisting": "Notița dorită „{{requestedNote}}” este în afara ierarhiei notiței focalizate „{{hoistedNote}}”. Doriți defocalizarea pentru a accesa notița?"
+  },
+  "launcher_context_menu": {
+    "reset_launcher_confirm": "Doriți resetarea lansatorului „{{title}}”? Toate datele și setările din această notiță (și subnotițele ei) vor fi pierdute, iar lansatorul va fi resetat în poziția lui originală."
   }
 }

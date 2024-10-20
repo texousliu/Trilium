@@ -3,6 +3,7 @@ import froca from "../services/froca.js";
 import contextMenu from "./context_menu.js";
 import dialogService from "../services/dialog.js";
 import server from "../services/server.js";
+import { t } from '../services/i18n.js';
 
 export default class LauncherContextMenu {
     /**
@@ -53,9 +54,7 @@ export default class LauncherContextMenu {
 
     async selectMenuItemHandler({command}) {
         if (command === 'resetLauncher') {
-            const confirmed = await dialogService.confirm(`Do you really want to reset "${this.node.title}"? 
-                       All data / settings in this note (and its children) will be lost 
-                       and the launcher will be returned to its original location.`);
+            const confirmed = await dialogService.confirm(t("launcher_context_menu.reset_launcher_confirm", { title: this.node.title }));
 
             if (confirmed) {
                 await server.post(`special-notes/launchers/${this.node.data.noteId}/reset`);

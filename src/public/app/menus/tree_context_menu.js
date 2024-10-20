@@ -136,7 +136,7 @@ export default class TreeContextMenu {
             this.treeWidget.triggerCommand("openNewNoteSplit", {ntxId, notePath});
         }
         else if (command === 'convertNoteToAttachment') {
-            if (!await dialogService.confirm(`Are you sure you want to convert note selected notes into attachments of their parent notes?`)) {
+            if (!await dialogService.confirm(t("tree-context-menu.convert-to-attachment-confirm"))) {
                 return;
             }
 

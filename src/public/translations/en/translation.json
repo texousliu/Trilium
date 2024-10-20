@@ -635,7 +635,8 @@
     "print_note": "Print note",
     "save_revision": "Save revision",
     "convert_into_attachment_failed": "Converting note '{{title}}' failed.",
-    "convert_into_attachment_successful": "Note '{{title}' has been converted to attachment."
+    "convert_into_attachment_successful": "Note '{{title}' has been converted to attachment.",
+    "convert_into_attachment_prompt": "Are you sure you want to convert note '{{title}}' into an attachment of the parent note?"
   },
   "onclick_button": {
     "no_click_handler": "Button widget '{{componentId}}' has no defined click handler"
@@ -1325,7 +1326,8 @@
     "export": "Export",
     "import-into-note": "Import into note",
     "apply-bulk-actions": "Apply bulk actions",
-    "converted-to-attachments": "{{count}} notes have been converted to attachments."
+    "converted-to-attachments": "{{count}} notes have been converted to attachments.",
+    "convert-to-attachment-confirm": "Are you sure you want to convert note selected notes into attachments of their parent notes?"
   },
   "shared_info": {
     "shared_publicly": "This note is shared publicly on",
@@ -1348,7 +1350,8 @@
     "image": "Image",
     "launcher": "Launcher",
     "doc": "Doc",
-    "widget": "Widget"
+    "widget": "Widget",
+    "confirm-change": "It is not recommended to change note type when note content is not empty. Do you want to continue anyway?"
   },
   "protect_note": {
     "toggle-on": "Protect the note",
@@ -1468,5 +1471,11 @@
     "sync-check-failed": "Sync check failed!",
     "consistency-checks-failed": "Consistency checks failed! See logs for details.",
     "encountered-error": "Encountered error \"{{message}}\", check out the console."
+  },
+  "hoisted_note": {
+    "confirm_unhoisting": "Requested note '{{requestedNote}}' is outside of hoisted note '{{hoistedNote}}' subtree and you must unhoist to access the note. Do you want to proceed with unhoisting?"
+  },
+  "launcher_context_menu": {
+    "reset_launcher_confirm": "Do you really want to reset \"{{title}}\"? All data / settings in this note (and its children) will be lost and the launcher will be returned to its original location."
   }
 }
