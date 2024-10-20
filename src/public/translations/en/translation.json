@@ -1476,6 +1476,15 @@
     "confirm_unhoisting": "Requested note '{{requestedNote}}' is outside of hoisted note '{{hoistedNote}}' subtree and you must unhoist to access the note. Do you want to proceed with unhoisting?"
   },
   "launcher_context_menu": {
-    "reset_launcher_confirm": "Do you really want to reset \"{{title}}\"? All data / settings in this note (and its children) will be lost and the launcher will be returned to its original location."
+    "reset_launcher_confirm": "Do you really want to reset \"{{title}}\"? All data / settings in this note (and its children) will be lost and the launcher will be returned to its original location.",
+    "add-note-launcher": "Add a note launcher",
+    "add-script-launcher": "Add a script launcher",
+    "add-custom-widget": "Add a custom widget",
+    "add-spacer": "Add spacer",
+    "delete": "Delete",
+    "reset": "Reset",
+    "move-to-visible-launchers": "Move to visible launchers",
+    "move-to-available-launchers": "Move to available launchers",
+    "duplicate-launcher": "Duplicate launcher"
   }
 }

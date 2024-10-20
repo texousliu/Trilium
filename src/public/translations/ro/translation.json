@@ -1476,6 +1476,15 @@
     "confirm_unhoisting": "Notița dorită „{{requestedNote}}” este în afara ierarhiei notiței focalizate „{{hoistedNote}}”. Doriți defocalizarea pentru a accesa notița?"
   },
   "launcher_context_menu": {
-    "reset_launcher_confirm": "Doriți resetarea lansatorului „{{title}}”? Toate datele și setările din această notiță (și subnotițele ei) vor fi pierdute, iar lansatorul va fi resetat în poziția lui originală."
+    "reset_launcher_confirm": "Doriți resetarea lansatorului „{{title}}”? Toate datele și setările din această notiță (și subnotițele ei) vor fi pierdute, iar lansatorul va fi resetat în poziția lui originală.",
+    "add-custom-widget": "Adaugă un widget personalizat",
+    "add-note-launcher": "Adaugă un lansator de notiță",
+    "add-script-launcher": "Adaugă un lansator de script",
+    "add-spacer": "Adaugă un separator",
+    "delete": "Șterge",
+    "duplicate-launcher": "Dublifică lansatorul",
+    "move-to-available-launchers": "Mută în Lansatoare disponibile",
+    "move-to-visible-launchers": "Mută în Lansatoare vizibile",
+    "reset": "Resetează"
   }
 }
