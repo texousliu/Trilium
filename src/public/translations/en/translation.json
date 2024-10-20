@@ -1461,7 +1461,12 @@
     "sql-error": "Error occurred while executing SQL query: {{message}}"
   },
   "branches": {
-    "cannot-move-notes-here": "Cannot move notes here."
+    "cannot-move-notes-here": "Cannot move notes here.",
+    "delete-status": "Delete status",
+    "delete-notes-in-progress": "Delete notes in progress: {{count}}",
+    "delete-finished-successfully": "Delete finished successfully.",
+    "undeleting-notes-in-progress": "Undeleting notes in progress: {{count}}",
+    "undeleting-notes-finished-successfully": "Undeleting notes finished successfully."
   },
   "frontend_script_api": {
     "async_warning": "You're passing an async function to `api.runOnBackend()` which will likely not work as you intended.\\nEither make the function synchronous (by removing `async` keyword), or use `api.runAsyncOnBackendWithManualTransactionHandling()`.",

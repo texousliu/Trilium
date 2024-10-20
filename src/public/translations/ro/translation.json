@@ -1461,7 +1461,12 @@
     "duplicated": "Notița „{{title}}” a fost dublificată."
   },
   "branches": {
-    "cannot-move-notes-here": "Nu se pot muta notițe aici."
+    "cannot-move-notes-here": "Nu se pot muta notițe aici.",
+    "delete-finished-successfully": "Ștergerea a avut succes.",
+    "delete-notes-in-progress": "Ștergere în curs: {{count}}",
+    "delete-status": "Starea ștergerii",
+    "undeleting-notes-finished-successfully": "Restaurarea notițelor a avut succes.",
+    "undeleting-notes-in-progress": "Restaurare notițe în curs: {{count}}"
   },
   "frontend_script_api": {
     "async_warning": "Ați trimis o funcție asincronă metodei `api.runOnBackend()` și este posibil să nu se comporte așa cum vă așteptați.\\nFie faceți metoda sincronă (prin ștergerea cuvântului-cheie `async`), sau folosiți `api.runAsyncOnBackendWithManualTransactionHandling()`.",
