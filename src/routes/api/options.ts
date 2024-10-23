@@ -5,6 +5,7 @@ import log from "../../services/log.js";
 import searchService from "../../services/search/services/search.js";
 import ValidationError from "../../errors/validation_error.js";
 import { Request } from 'express';
+import { changeLanguage } from "../../services/i18n.js";
 
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set([
@@ -107,6 +108,11 @@ function update(name: string, value: string) {
     }
 
     optionService.setOption(name, value);
+
+    if (name === "locale") {
+        // This runs asynchronously, so it's not perfect, but it does the trick for now.
+        changeLanguage(value);
+    }
 
     return true;
 }
