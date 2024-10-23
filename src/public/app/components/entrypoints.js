@@ -9,6 +9,7 @@ import ws from "../services/ws.js";
 import bundleService from "../services/bundle.js";
 import froca from "../services/froca.js";
 import linkService from "../services/link.js";
+import { t } from "../services/i18n.js";
 
 export default class Entrypoints extends Component {
     constructor() {
