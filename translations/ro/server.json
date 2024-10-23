@@ -157,5 +157,28 @@
     "clipped-from": "Această notiță a fost decupată inițial de pe {{- url}}",
     "no-content": "Această notiță nu are conținut.",
     "parent": "părinte:"
+  },
+  "weekdays": {
+    "monday": "Luni",
+    "tuesday": "Marți",
+    "wednesday": "Miercuri",
+    "thursday": "Joi",
+    "friday": "Vineri",
+    "saturday": "Sâmbătă",
+    "sunday": "Duminică"
+  },
+  "months": {
+    "january": "Ianuarie",
+    "february": "Februarie",
+    "march": "Martie",
+    "april": "Aprilie",
+    "may": "Mai",
+    "june": "Iunie",
+    "july": "Iulie",
+    "august": "August",
+    "september": "Septembrie",
+    "october": "Octombrie",
+    "november": "Noiembrie",
+    "december": "Decembrie"
   }
 }
