@@ -25,6 +25,7 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        this.contentSized();
         this.$editor = this.$widget.find('.note-detail-code-editor');
 
         keyboardActionService.setupActionsForElement('code-detail', this.$widget, this);

@@ -21,6 +21,7 @@ export default class ReadOnlyCodeTypeWidget extends AbstractCodeTypeWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        this.contentSized();
         this.$editor = this.$widget.find('.note-detail-readonly-code-content');
 
         super.doRender();
