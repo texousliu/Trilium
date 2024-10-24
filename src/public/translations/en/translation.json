@@ -18,6 +18,10 @@
       "title": "Failed to initialize a widget",
       "message-custom": "Custom widget from note with ID \"{{id}}\", titled \"{{title}}\" could not be initialized due to:\n\n{{message}}",
       "message-unknown": "Unknown widget could not be initialized due to:\n\n{{message}}"
+    },
+    "bundle-error": {
+      "title": "Failed to load a custom script",
+      "message": "Script from note with ID \"{{id}}\", titled \"{{title}}\" could not be executed due to:\n\n{{message}}"
     }
   },
   "add_link": {
