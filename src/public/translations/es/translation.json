@@ -15,8 +15,7 @@
       "message": "Ha ocurrido un error crítico que previene que el cliente de la aplicación inicie:\n\n{{message}}\n\nMuy probablemente es causado por un script que falla de forma inesperada. Intente iniciar la aplicación en modo seguro y atienda el error."
     },
     "widget-error": {
-      "title": "No se pudo inicializar un widget",
-      "message": "Widget con título \"{{title}}\" no pudo ser inicializado debido a:\n\n{{message}}"
+      "title": "No se pudo inicializar un widget"
     }
   },
   "add_link": {

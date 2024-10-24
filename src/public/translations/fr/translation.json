@@ -15,8 +15,7 @@
       "message": "Une erreur critique s'est produite qui empêche l'application client de démarrer :\n\n{{message}}\n\nCeci est probablement dû à un échec inattendu d'un script. Essayez de démarrer l'application en mode sans échec et de résoudre le problème."
     },
     "widget-error": {
-      "title": "Impossible d'initialiser un widget",
-      "message": "Le widget portant le titre \"{{title}}\" n'a pas pu être initialisé en raison de :\n\n{{message}}"
+      "title": "Impossible d'initialiser un widget"
     }
   },
   "add_link": {

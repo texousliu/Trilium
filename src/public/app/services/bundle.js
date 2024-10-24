@@ -75,6 +75,7 @@ async function getWidgetBundlesByParent() {
 
         try {
             widget = await executeBundle(bundle);
+            widget._noteId = bundle.noteId;
             widgetsByParent.add(widget);
         }
         catch (e) {
