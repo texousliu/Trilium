@@ -666,8 +666,9 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             }
 
             const node = this.prepareNode(branch);
-
-            noteList.push(node);
+            if (node) {
+                noteList.push(node);
+            }
         }
 
         return noteList;
@@ -709,7 +710,8 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const note = branch.getNoteFromCache();
 
         if (!note) {
-            throw new Error(`Branch '${branch.branchId}' has no child note '${branch.noteId}'`);
+            console.warn(`Branch '${branch.branchId}' has no child note '${branch.noteId}'`);
+            return null;
         }
 
         const title = `${branch.prefix ? (`${branch.prefix} - `) : ""}${note.title}`;
