@@ -25,12 +25,12 @@ module.exports = {
         if (platform === 'darwin') {
           sourcePath = path.join(buildPath, `${APP_NAME}.app`, 'Contents', 'Resources', baseName);
         } else {
-          sourcePath = path.join(buildPath, 'resources', path.basename(resource));
+          sourcePath = path.join(buildPath, 'resources', baseName);
         }
         let destPath;
         
         if (baseName !== "256x256.png") {
-          destPath = path.join(buildPath, path.basename(resource));
+          destPath = path.join(buildPath, baseName);
         } else {
           destPath = path.join(buildPath, "icon.png");
         }
