@@ -64,6 +64,28 @@ function setupGlobs() {
         return false;
     };
 
+    window.addEventListener("unhandledrejection", (e) => {
+        const string = e.reason.message.toLowerCase();
+
+        let message = "Uncaught error: ";
+
+        if (string.includes("script error")) {
+            message += 'No details available';
+        } else {
+            message += [
+                `Message: ${e.reason.message}`,
+                `Line: ${e.reason.lineNumber}`,
+                `Column: ${e.reason.columnNumber}`,
+                `Error object: ${JSON.stringify(e.reason)}`,
+                `Stack: ${e.reason && e.reason.stack}`
+            ].join(', ');
+        }
+
+        ws.logError(message);
+
+        return false;
+    });
+
     for (const appCssNoteId of glob.appCssNoteIds || []) {
         libraryLoader.requireCss(`api/notes/download/${appCssNoteId}`, false);
     }
