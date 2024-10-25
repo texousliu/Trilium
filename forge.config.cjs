@@ -20,13 +20,20 @@ module.exports = {
     afterComplete: [(buildPath, _electronVersion, platform, _arch, callback) => {
       const extraResources = getExtraResourcesForPlatform();
       for (const resource of extraResources) {
+        const baseName = path.basename(resource);
         let sourcePath;
         if (platform === 'darwin') {
-          sourcePath = path.join(buildPath, `${APP_NAME}.app`, 'Contents', 'Resources', path.basename(resource));
+          sourcePath = path.join(buildPath, `${APP_NAME}.app`, 'Contents', 'Resources', baseName);
         } else {
           sourcePath = path.join(buildPath, 'resources', path.basename(resource));
         }
-        const destPath = path.join(buildPath, path.basename(resource));
+        let destPath;
+        
+        if (baseName !== "256x256.png") {
+          destPath = path.join(buildPath, path.basename(resource));
+        } else {
+          destPath = path.join(buildPath, "icon.png");
+        }
 
         // Copy files from resources folder to root
         fs.move(sourcePath, destPath)
@@ -96,6 +103,7 @@ function getExtraResourcesForPlatform() {
     case 'darwin':
       break;
     case 'linux':
+      resources.push("images/app-icons/png/256x256.png")
       for (const script of scripts) {
         resources.push(`./bin/tpl/${script}.sh`)
       }
