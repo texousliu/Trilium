@@ -1191,7 +1191,12 @@
     },
     "widget-error": {
       "title": "Eroare la inițializarea unui widget",
-      "message-custom": "Widget-ul personalizat din notița cu ID-ul „{{id}}”, întitulată ”{{title}}” nu a putut fi inițializată din cauza:\n\n{{message}}"
+      "message-custom": "Widget-ul personalizat din notița cu ID-ul „{{id}}”, întitulată ”{{title}}” nu a putut fi inițializată din cauza:\n\n{{message}}",
+      "message-unknown": "Un widget necunoscut nu a putut fi inițializat din cauza:\n\n{{message}}"
+    },
+    "bundle-error": {
+      "title": "Eroare la încărcarea unui script personalizat",
+      "message": "Scriptul din notița cu ID-ul „{{id}}”, întitulată „{{title}}” nu a putut fi executată din cauza:\n\n{{message}}"
     }
   },
   "tray": {
