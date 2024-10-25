@@ -1189,7 +1189,6 @@
       "title": "Eroare critică"
     },
     "widget-error": {
-      "message": "Widget-ul intitulat „{{title}}” nu a putut fi inițializat din cauza:\n\n{{message}}",
       "title": "Eroare la inițializarea unui widget",
       "message-custom": "Widget-ul personalizat din notița cu ID-ul „{{id}}”, întitulată ”{{title}}” nu a putut fi inițializată din cauza:\n\n{{message}}"
     }

@@ -57,14 +57,7 @@ class RightPanelWidget extends NoteContextAwareWidget {
         }
 
         this.initialized = this.doRenderBody().catch(e => {
-            toastService.showPersistent({
-                title: t("toast.widget-error.title"),
-                icon: "alert",
-                message: t("toast.widget-error.message", {
-                    title: this.widgetTitle,
-                    message: e.message
-                })
-            });
+            this.logRenderingError(e);
         });
     }
 
