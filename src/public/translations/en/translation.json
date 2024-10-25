@@ -640,7 +640,7 @@
     "print_note": "Print note",
     "save_revision": "Save revision",
     "convert_into_attachment_failed": "Converting note '{{title}}' failed.",
-    "convert_into_attachment_successful": "Note '{{title}' has been converted to attachment.",
+    "convert_into_attachment_successful": "Note '{{title}}' has been converted to attachment.",
     "convert_into_attachment_prompt": "Are you sure you want to convert note '{{title}}' into an attachment of the parent note?"
   },
   "onclick_button": {
@@ -1218,7 +1218,7 @@
   "password": {
     "heading": "Password",
     "alert_message": "Please take care to remember your new password. Password is used for logging into the web interface and to encrypt protected notes. If you forget your password, then all your protected notes are forever lost.",
-    "reset_link": "click here to reset it.",
+    "reset_link": "Click here to reset it.",
     "old_password": "Old password",
     "new_password": "New password",
     "new_password_confirmation": "New password confirmation",
