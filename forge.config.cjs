@@ -44,6 +44,7 @@ module.exports = {
       config: {
         options: {
           icon: "./images/app-icons/png/128x128.png",
+          desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs")
         }
       }
     },
