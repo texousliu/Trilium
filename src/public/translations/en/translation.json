@@ -896,7 +896,8 @@
     "label_rock_or_pop": "only one of the labels must be present",
     "label_year_comparison": "numerical comparison (also >, >=, <).",
     "label_date_created": "notes created in the last month",
-    "error": "Search error: {{error}}"
+    "error": "Search error: {{error}}",
+    "search_prefix": "Search:"
   },
   "attachment_detail": {
     "open_help_page": "Open help page on attachments",

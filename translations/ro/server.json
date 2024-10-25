@@ -180,5 +180,8 @@
     "october": "Octombrie",
     "november": "Noiembrie",
     "december": "Decembrie"
+  },
+  "special_notes": {
+    "search_prefix": "Căutare:"
   }
 }

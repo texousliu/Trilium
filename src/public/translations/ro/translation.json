@@ -1094,7 +1094,8 @@
     "label_year_comparison": "comparații numerice (de asemenea >, >=, <).",
     "placeholder": "cuvinte cheie pentru căutarea în conținut, #etichetă = valoare...",
     "search_syntax": "Sintaxa de căutare",
-    "title_column": "Textul de căutat:"
+    "title_column": "Textul de căutat:",
+    "search_prefix": "Căutare:"
   },
   "shortcuts": {
     "action_name": "Denumirea acțiunii",

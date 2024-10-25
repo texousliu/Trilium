@@ -180,5 +180,8 @@
     "october": "October",
     "november": "November",
     "december": "December"
+  },
+  "special_notes": {
+    "search_prefix": "Search:"
   }
 }
