@@ -105,6 +105,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
+        await libraryLoader.requireLibrary(libraryLoader.HIGHLIGHT_JS);
 
         const codeBlockLanguages =
             (await mimeTypesService.getMimeTypes())

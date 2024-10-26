@@ -84,6 +84,11 @@ const MIND_ELIXIR = {
     ]
 };
 
+const HIGHLIGHT_JS = {
+    js: [ "node_modules/@highlightjs/cdn-assets/highlight.min.js" ],
+    css: [ "node_modules/@highlightjs/cdn-assets/styles/atom-one-dark.css" ]
+};
+
 async function requireLibrary(library) {
     if (library.css) {
         library.css.map(cssUrl => requireCss(cssUrl));
@@ -143,5 +148,6 @@ export default {
     EXCALIDRAW,
     MARKJS,
     I18NEXT,
-    MIND_ELIXIR
+    MIND_ELIXIR,
+    HIGHLIGHT_JS
 }
