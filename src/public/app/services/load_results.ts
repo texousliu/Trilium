@@ -82,7 +82,7 @@ export default class LoadResults {
     
             this.componentIdToNoteIds[componentId] = this.componentIdToNoteIds[componentId] || [];
     
-            if (!this.componentIdToNoteIds[componentId]) {
+            if (this.componentIdToNoteIds[componentId]) {
                 this.componentIdToNoteIds[componentId].push(noteId);
             }
         }

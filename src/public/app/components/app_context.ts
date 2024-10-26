@@ -28,7 +28,9 @@ interface BeforeUploadListener extends Component {
 }
 
 interface TriggerData {
+    noteId?: string;
     noteIds?: string[];
+    messages?: unknown[];
     callback?: () => void;
 }
 

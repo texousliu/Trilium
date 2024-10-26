@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import bootstrap from "bootstrap";
 
 function reloadFrontendApp(reason?: string) {
     if (reason) {
@@ -517,10 +518,10 @@ function createImageSrcUrl(note: { noteId: string; title: string }) {
 /**
  * Given a string representation of an SVG, triggers a download of the file on the client device.
  * 
- * @param {string} nameWithoutExtension the name of the file. The .svg suffix is automatically added to it.
- * @param {string} svgContent the content of the SVG file download.
+ * @param nameWithoutExtension the name of the file. The .svg suffix is automatically added to it.
+ * @param svgContent the content of the SVG file download.
  */
-function downloadSvg(nameWithoutExtension, svgContent) {
+function downloadSvg(nameWithoutExtension: string, svgContent: string) {
     const filename = `${nameWithoutExtension}.svg`;
     const element = document.createElement('a');
     element.setAttribute('href', `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgContent)}`);
