@@ -158,7 +158,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
             const editor = await BalloonEditor.create(elementOrData, editorConfig);
-            initSyntaxHighlighting();
+            initSyntaxHighlighting(editor);
 
             editor.model.document.on('change:data', () => this.spacedUpdate.scheduleUpdate());
 
