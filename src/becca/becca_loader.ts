@@ -13,11 +13,13 @@ import cls from "../services/cls.js";
 import entityConstructor from "../becca/entity_constructor.js";
 import { AttributeRow, BranchRow, EtapiTokenRow, NoteRow, OptionRow } from './entities/rows.js';
 import AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
-import options_init from "../services/options_init.js";
 import ws from "../services/ws.js";
 
 const beccaLoaded = new Promise<void>(async (res, rej) => {
     const sqlInit = (await import("../services/sql_init.js")).default;
+    // We have to import async since options init requires keyboard actions which require translations.
+    const options_init = (await import("../services/options_init.js")).default;
+
     sqlInit.dbReady.then(() => {
         cls.init(() => {
             load();

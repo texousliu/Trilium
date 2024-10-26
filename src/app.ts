@@ -14,6 +14,7 @@ import custom from "./routes/custom.js";
 import error_handlers from "./routes/error_handlers.js";
 import { startScheduledCleanup } from "./services/erase.js";
 import sql_init from "./services/sql_init.js";
+import { t } from "i18next";
 
 await import('./services/handlers.js');
 await import('./becca/becca_loader.js');
@@ -28,6 +29,11 @@ sql_init.initializeDb();
 // view engine setup
 app.set('views', path.join(scriptDir, 'views'));
 app.set('view engine', 'ejs');
+
+app.use((req, res, next) => {
+    res.locals.t = t;
+    return next();
+});
 
 if (!utils.isElectron()) {
     app.use(compression()); // HTTP compression
@@ -47,8 +53,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(scriptDir, 'public/root')));
 app.use(`/manifest.webmanifest`, express.static(path.join(scriptDir, 'public/manifest.webmanifest')));
 app.use(`/robots.txt`, express.static(path.join(scriptDir, 'public/robots.txt')));
+app.use(`/icon.png`, express.static(path.join(scriptDir, 'public/icon.png')));
 app.use(sessionParser);
-app.use(favicon(`${scriptDir}/../images/app-icons/win/icon.ico`));
+app.use(favicon(`${scriptDir}/../images/app-icons/icon.ico`));
 
 assets.register(app);
 routes.register(app);

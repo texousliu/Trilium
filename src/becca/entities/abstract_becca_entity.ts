@@ -34,7 +34,7 @@ abstract class AbstractBeccaEntity<T extends AbstractBeccaEntity<T>> {
     isSynced?: boolean;
     blobId?: string;
 
-    protected beforeSaving() {
+    protected beforeSaving(opts?: {}) {
         const constructorData = (this.constructor as unknown as ConstructorData<T>);
         if (!(this as any)[constructorData.primaryKeyName]) {
             (this as any)[constructorData.primaryKeyName] = utils.newEntityId();
@@ -101,7 +101,6 @@ abstract class AbstractBeccaEntity<T extends AbstractBeccaEntity<T>> {
     /**
      * Saves entity - executes SQL, but doesn't commit the transaction on its own
      */
-    // TODO: opts not used but called a few times, maybe should be used by derived classes or passed to beforeSaving.
     save(opts?: {}): this {
         const constructorData = (this.constructor as unknown as ConstructorData<T>);
         const entityName = constructorData.entityName;
@@ -109,7 +108,7 @@ abstract class AbstractBeccaEntity<T extends AbstractBeccaEntity<T>> {
 
         const isNewEntity = !(this as any)[primaryKeyName];
         
-        this.beforeSaving();
+        this.beforeSaving(opts);
 
         const pojo = this.getPojoToSave();
 

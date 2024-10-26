@@ -219,11 +219,14 @@ function formatDownloadTitle(fileName: string, type: string | null, mime: string
 function removeTextFileExtension(filePath: string) {
     const extension = path.extname(filePath).toLowerCase();
 
-    if (extension === '.md' || extension === '.markdown' || extension === '.html') {
-        return filePath.substr(0, filePath.length - extension.length);
-    }
-    else {
-        return filePath;
+    switch (extension) {
+        case ".md":
+        case ".markdown":
+        case ".html":
+        case ".htm":
+            return filePath.substr(0, filePath.length - extension.length);
+        default:
+            return filePath;
     }
 }
 

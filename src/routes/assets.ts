@@ -75,6 +75,33 @@ function register(app: express.Application) {
     app.use(`/${assetPath}/node_modules/i18next/`, persistentCacheStatic(path.join(srcRoot, "..", 'node_modules/i18next/')));
     app.use(`/${assetPath}/node_modules/i18next-http-backend/`, persistentCacheStatic(path.join(srcRoot, "..", 'node_modules/i18next-http-backend/')));
     app.use(`/${assetPath}/translations/`, persistentCacheStatic(path.join(srcRoot, "public", "translations/")));
+
+    app.use(`/${assetPath}/node_modules/eslint/bin/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/eslint/bin/')));
+
+    app.use(`/${assetPath}/node_modules/jsplumb/dist/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/jsplumb/dist/')));
+
+    app.use(`/${assetPath}/node_modules/vanilla-js-wheel-zoom/dist/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/vanilla-js-wheel-zoom/dist/')));
+    
+    app.use(`/${assetPath}/node_modules/mark.js/dist/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/mark.js/dist/')));
+    
+    // Deprecated, https://www.npmjs.com/package/autocomplete.js?activeTab=readme
+    app.use(`/${assetPath}/node_modules/autocomplete.js/dist/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/autocomplete.js/dist/')));
+
+    app.use(`/${assetPath}/node_modules/knockout/build/output/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/knockout/build/output/')));
+
+    app.use(`/${assetPath}/node_modules/normalize.css/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/normalize.css/')));
+
+    app.use(`/${assetPath}/node_modules/jquery.fancytree/dist/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/jquery.fancytree/dist/')));
+
+    app.use(`/${assetPath}/node_modules/bootstrap/dist/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/bootstrap/dist/')));
+
+    // CodeMirror
+    app.use(`/${assetPath}/node_modules/codemirror/lib/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/codemirror/lib/')));
+    app.use(`/${assetPath}/node_modules/codemirror/addon/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/codemirror/addon/')));
+    app.use(`/${assetPath}/node_modules/codemirror/mode/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/codemirror/mode/')));
+    app.use(`/${assetPath}/node_modules/codemirror/keymap/`, persistentCacheStatic(path.join(srcRoot, '..', 'node_modules/codemirror/keymap/')));
+
+    app.use(`/${assetPath}/node_modules/mind-elixir/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/mind-elixir/dist/")));
 }
 
 export default {

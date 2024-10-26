@@ -35,7 +35,7 @@ const copy = async () => {
     await fs.copy(file, path.join(DEST_DIR, file));
   }
 
-  const dirsToCopy = ["images", "libraries", "db"];
+  const dirsToCopy = ["images", "libraries", "translations", "db"];
   for (const dir of dirsToCopy) {
     log(`Copying ${dir}`);
     await fs.copy(dir, path.join(DEST_DIR, dir));
@@ -75,7 +75,21 @@ const copy = async () => {
     "node_modules/split.js/dist/",
     "node_modules/panzoom/dist/",
     "node_modules/i18next/",
-    "node_modules/i18next-http-backend/"
+    "node_modules/i18next-http-backend/",
+    "node_modules/eslint/bin/",
+    "node_modules/jsplumb/dist/",
+    "node_modules/vanilla-js-wheel-zoom/dist/",
+    "node_modules/mark.js/dist/",
+    "node_modules/knockout/build/output/",
+    "node_modules/normalize.css/",
+    "node_modules/jquery.fancytree/dist/",
+    "node_modules/bootstrap/dist/",
+    "node_modules/autocomplete.js/dist/",
+    "node_modules/codemirror/lib/",
+    "node_modules/codemirror/addon/",
+    "node_modules/codemirror/mode/",
+    "node_modules/codemirror/keymap/",
+    "node_modules/mind-elixir/dist/"
   ];
 
   for (const folder of nodeModulesFolder) {

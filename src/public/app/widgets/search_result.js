@@ -1,3 +1,4 @@
+import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import NoteListRenderer from "../services/note_list_renderer.js";
 
@@ -22,11 +23,11 @@ const TPL = `
     </style>
     
     <div class="search-no-results alert alert-info">
-        No notes have been found for given search parameters.
+        ${t('search_result.no_notes_found')}
     </div>
     
     <div class="search-not-executed-yet alert alert-info">
-        Search has not been executed yet. Click on "Search" button above to see the results.
+        ${t('search_result.search_not_executed')}
     </div>
     
     <div class="search-result-widget-content">

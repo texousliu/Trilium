@@ -1,7 +1,6 @@
 import utils from "./utils.js";
 import server from "./server.js";
 
-type OpenType = "notes" | "attachments";
 type ExecFunction = (command: string, cb: ((err: string, stdout: string, stderror: string) => void)) => void;
 
 interface TmpResponse {
@@ -79,9 +78,8 @@ async function openCustom(type: string, entityId: string, mime: string) {
             const terminal = terminals[index];
             if (!terminal) {
                 console.error('Open Note custom: No terminal found!');
-                // TODO: This appears to be broken, since getFileUrl expects two arguments, with the first one being the type.
-                // Also don't know why {url: true} is passed.
-                (open as any)(getFileUrl(entityId), {url: true});
+                // TODO: Remove {url: true} if not needed.
+                (open as any)(getFileUrl(type, entityId), {url: true});
                 return;
             }
             exec(`which ${terminal}`, (error, stdout, stderr) => {
@@ -183,6 +181,23 @@ function getHost() {
     return `${url.protocol}//${url.hostname}:${url.port}`;
 }
 
+async function openDirectory(directory: string) {
+    try {
+        if (utils.isElectron()) {
+            const electron = utils.dynamicRequire('electron');
+            const res = await electron.shell.openPath(directory);
+            if (res) {
+                console.error('Failed to open directory:', res);
+            }
+        } else {
+            console.error('Not running in an Electron environment.');
+        }
+    } catch (err: any) {
+        // Handle file system errors (e.g. path does not exist or is inaccessible)
+        console.error('Error:', err.message);
+    }
+}
+
 export default {
     download,
     downloadFileNote,
@@ -193,4 +208,5 @@ export default {
     openAttachmentExternally,
     openNoteCustom,
     openAttachmentCustom,
+    openDirectory
 }

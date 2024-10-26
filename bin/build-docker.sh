@@ -10,8 +10,8 @@ cat package.json | grep -v electron > server-package.json
 echo "Compiling typescript..."
 npx tsc
 
-sudo docker build -t zadam/trilium:$VERSION --network host -t zadam/trilium:$SERIES .
+sudo docker build -t triliumnext/notes:$VERSION --network host -t triliumnext/notes:$SERIES .
 
 if [[ $VERSION != *"beta"* ]]; then
-  sudo docker tag zadam/trilium:$VERSION zadam/trilium:latest
+  sudo docker tag triliumnext/notes:$VERSION triliumnext/notes:latest
 fi

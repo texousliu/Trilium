@@ -3,6 +3,7 @@
 languageIds:
   - javascript
   - typescript
+  - html
 
 # An array of RegExes to find the key usage. **The key should be captured in the first match group**.
 # You should unescape RegEx strings in order to fit in the YAML file
@@ -24,6 +25,8 @@ scopeRangeRegex: "useTranslation\\(\\s*\\[?\\s*['\"`](.*?)['\"`]"
 # The "$1" will be replaced by the keypath specified.
 refactorTemplates:
   - t("$1")
+  - ${t("$1")}
+  - <%= t("$1") %>
 
 
 # If set to true, only enables this custom framework (will disable all built-in frameworks)

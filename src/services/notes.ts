@@ -817,7 +817,6 @@ function undeleteBranch(branchId: string, deleteId: string, taskContext: TaskCon
 
         for (const attributeRow of attributeRows) {
             // relation might point to a note which hasn't been undeleted yet and would thus throw up
-            // TODO: skipValidation is not used.
             new BAttribute(attributeRow).save({skipValidation: true});
         }
 
@@ -997,8 +996,7 @@ function duplicateSubtreeInner(origNote: BNote, origBranch: BBranch, newParentNo
             }
 
             // the relation targets may not be created yet, the mapping is pre-generated
-            // TODO: This used to be `attr.save({skipValidation: true});`, but skipValidation is in beforeSaving.
-            attr.save();
+            attr.save({skipValidation: true});
         }
 
         for (const childBranch of origNote.getChildBranches()) {

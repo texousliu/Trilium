@@ -23,6 +23,7 @@ import SearchEngineOptions from "./options/other/search_engine.js";
 import TrayOptions from "./options/other/tray.js";
 import NoteErasureTimeoutOptions from "./options/other/note_erasure_timeout.js";
 import RevisionsSnapshotIntervalOptions from "./options/other/revisions_snapshot_interval.js";
+import RevisionSnapshotsLimitOptions from "./options/other/revision_snapshots_limit.js";
 import NetworkConnectionsOptions from "./options/other/network_connections.js";
 import AdvancedSyncOptions from "./options/advanced/sync.js";
 import DatabaseIntegrityCheckOptions from "./options/advanced/database_integrity_check.js";
@@ -32,6 +33,7 @@ import DatabaseAnonymizationOptions from "./options/advanced/database_anonymizat
 import BackendLogWidget from "./content/backend_log.js";
 import AttachmentErasureTimeoutOptions from "./options/other/attachment_erasure_timeout.js";
 import RibbonOptions from "./options/appearance/ribbon.js";
+import LocalizationOptions from "./options/appearance/i18n.js";
 
 const TPL = `<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -54,6 +56,7 @@ const TPL = `<div class="note-detail-content-widget note-detail-printable">
 
 const CONTENT_WIDGETS = {
     _optionsAppearance: [
+        LocalizationOptions,
         ThemeOptions,
         FontsOptions,
         ZoomFactorOptions,
@@ -86,6 +89,7 @@ const CONTENT_WIDGETS = {
         NoteErasureTimeoutOptions,
         AttachmentErasureTimeoutOptions,
         RevisionsSnapshotIntervalOptions,
+        RevisionSnapshotsLimitOptions,
         NetworkConnectionsOptions
     ],
     _optionsAdvanced: [

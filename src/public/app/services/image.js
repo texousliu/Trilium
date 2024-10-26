@@ -8,9 +8,9 @@ function copyImageReferenceToClipboard($imageWrapper) {
         const success = document.execCommand('copy');
 
         if (success) {
-            toastService.showMessage("Image copied to the clipboard");
+            toastService.showMessage(t("image.copied-to-clipboard"));
         } else {
-            toastService.showAndLogError("Could not copy the image to clipboard.");
+            toastService.showAndLogError(t("image.cannot-copy"));
         }
     }
     finally {

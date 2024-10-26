@@ -1,3 +1,4 @@
+import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 
 const TPL = `
@@ -9,7 +10,7 @@ const TPL = `
     </style>
    
     <div class="sql-query-no-rows alert alert-info" style="display: none;">
-        No rows have been returned for this query.
+        ${t('sql_result.no_rows')}
     </div>
    
     <div class="sql-console-result-container"></div>

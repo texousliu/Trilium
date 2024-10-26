@@ -16,6 +16,12 @@ interface NotSyncedOpts {
     syncProxy?: string;
 }
 
+interface DefaultOption {
+    name: string;
+    value: string;
+    isSynced: boolean;
+}
+
 async function initNotSyncedOptions(initialized: boolean, theme: string, opts: NotSyncedOpts = {}) {
     optionService.createOption('openNoteContexts', JSON.stringify([
         {
@@ -35,14 +41,15 @@ async function initNotSyncedOptions(initialized: boolean, theme: string, opts: N
     optionService.createOption('lastSyncedPush', '0', false);    
 
     optionService.createOption('theme', theme, false);
-
+    
     optionService.createOption('syncServerHost', opts.syncServerHost || '', false);
     optionService.createOption('syncServerTimeout', '120000', false);
     optionService.createOption('syncProxy', opts.syncProxy || '', false);
 }
 
-const defaultOptions = [
+const defaultOptions: DefaultOption[] = [
     { name: 'revisionSnapshotTimeInterval', value: '600', isSynced: true },
+    { name: 'revisionSnapshotNumberLimit', value: '-1', isSynced: true },
     { name: 'protectedSessionTimeout', value: '600', isSynced: true },
     { name: 'zoomFactor', value: process.platform === "win32" ? '0.9' : '1.0', isSynced: false },
     { name: 'overrideThemeFonts', value: 'false', isSynced: false },
@@ -88,7 +95,11 @@ const defaultOptions = [
     { name: 'customSearchEngineName', value: 'DuckDuckGo', isSynced: true },
     { name: 'customSearchEngineUrl', value: 'https://duckduckgo.com/?q={keyword}', isSynced: true },
     { name: 'promotedAttributesOpenInRibbon', value: 'true', isSynced: true },
-    { name: 'editedNotesOpenInRibbon', value: 'true', isSynced: true }
+    { name: 'editedNotesOpenInRibbon', value: 'true', isSynced: true },
+
+    // Internationalization
+    { name: 'locale', value: 'en', isSynced: true },
+    { name: 'firstDayOfWeek', value: '1', isSynced: true }
 ];
 
 function initStartupOptions() {
@@ -115,7 +126,7 @@ function initStartupOptions() {
 }
 
 function getKeyboardDefaultOptions() {
-    return (keyboardActions.DEFAULT_KEYBOARD_ACTIONS
+    return (keyboardActions.getDefaultKeyboardActions()
         .filter(ka => !!ka.actionName) as KeyboardShortcutWithRequiredActionName[])
         .map(ka => ({
             name: `keyboardShortcuts${ka.actionName.charAt(0).toUpperCase()}${ka.actionName.slice(1)}`,

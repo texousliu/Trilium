@@ -119,7 +119,7 @@ async function duplicateSubtree(noteId, parentNotePath) {
     activeNoteContext.setNote(`${parentNotePath}/${note.noteId}`);
 
     const origNote = await froca.getNote(noteId);
-    toastService.showMessage(`Note "${origNote.title}" has been duplicated`);
+    toastService.showMessage(t("note_create.duplicated", { title: origNote.title }));
 }
 
 export default {

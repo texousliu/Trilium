@@ -114,13 +114,13 @@ interface Api {
     
     /**
      * This is a powerful search method - you can search by attributes and their values, e.g.:
-     * "#dateModified =* MONTH AND #log". See {@link https://github.com/zadam/trilium/wiki/Search} for full documentation for all options
+     * "#dateModified =* MONTH AND #log". See {@link https://triliumnext.github.io/Docs/Wiki/search.html} for full documentation for all options
      */
     searchForNotes(query: string, searchParams: SearchParams): BNote[];
     
     /**
      * This is a powerful search method - you can search by attributes and their values, e.g.:
-     * "#dateModified =* MONTH AND #log". See {@link https://github.com/zadam/trilium/wiki/Search} for full documentation for all options
+     * "#dateModified =* MONTH AND #log". See {@link https://triliumnext.github.io/Docs/Wiki/search.html} for full documentation for all options
      */
     searchForNote(query: string, searchParams: SearchParams): BNote | null;
     
@@ -251,7 +251,7 @@ interface Api {
      */
     sortNotes(parentNoteId: string, sortConfig: {
         /** 'title', 'dateCreated', 'dateModified' or a label name
-          * See {@link https://github.com/zadam/trilium/wiki/Sorting} for details. */
+          * See {@link https://triliumnext.github.io/Docs/Wiki/sorting.html} for details. */
         sortBy?: string;
         reverse?: boolean;
         foldersFirst?: boolean;
@@ -371,7 +371,7 @@ interface Api {
      * This object contains "at your risk" and "no BC guarantees" objects for advanced use cases.
      */
     __private: {
-        /** provides access to the backend in-memory object graph, see {@link https://github.com/zadam/trilium/blob/master/src/becca/becca.js} */
+        /** provides access to the backend in-memory object graph, see {@link Becca} */
         becca: Becca;
     };
 }

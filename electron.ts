@@ -70,4 +70,4 @@ electron.app.on("will-quit", () => {
 // this is to disable electron warning spam in the dev console (local development only)
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-await import('./src/www.js');
+await import('./src/main.js');

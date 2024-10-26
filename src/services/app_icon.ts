@@ -11,6 +11,7 @@ import utils from "./utils.js";
 const template = `[Desktop Entry]
 Type=Application
 Name=TriliumNext Notes
+StartupWMClass=TriliumNext Notes
 Icon=#APP_ROOT_DIR#/icon.png
 Exec=#EXE_PATH#
 Categories=Office

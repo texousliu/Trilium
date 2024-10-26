@@ -7,7 +7,7 @@ import log from "./log.js";
 import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
-import remoteMain from "@electron/remote/main/index.js"
+import remoteMain from "@electron/remote/main/index.js";
 import { App, BrowserWindow, WebContents, ipcMain } from 'electron';
 
 import { fileURLToPath } from "url";
@@ -46,6 +46,19 @@ ipcMain.on('create-extra-window', (event, arg) => {
 });
 
 async function createMainWindow(app: App) {
+    if ("setUserTasks" in app) {
+        app.setUserTasks([
+            {
+                program: process.execPath,
+                arguments: '--new-window',
+                iconPath: process.execPath,
+                iconIndex: 0,
+                title: 'Open New Window',
+                description: 'Open new window'
+            }
+        ]);
+    }
+    
     const windowStateKeeper = (await import('electron-window-state')).default; // should not be statically imported
 
     const mainWindowState = windowStateKeeper({
@@ -82,10 +95,12 @@ async function createMainWindow(app: App) {
 
     configureWebContents(mainWindow.webContents, spellcheckEnabled);
 
-    app.on('second-instance', () => {
-        // Someone tried to run a second instance, we should focus our window.
-        // see www.ts "requestSingleInstanceLock" for the rest of this logic with explanation
-        if (mainWindow) {
+    app.on('second-instance', (event, commandLine) => {
+        if (commandLine.includes('--new-window')) {
+            createExtraWindow("");  
+        } else if (mainWindow) {
+            // Someone tried to run a second instance, we should focus our window.
+            // see www.ts "requestSingleInstanceLock" for the rest of this logic with explanation
             if (mainWindow.isMinimized()) {
                 mainWindow.restore();
             }

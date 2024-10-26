@@ -86,7 +86,7 @@ class NoteContentFulltextExp extends Expression {
             }
         }
 
-        if (!content || typeof content !== "string") {
+        if (!content) {
             return;
         }
 
@@ -123,7 +123,7 @@ class NoteContentFulltextExp extends Expression {
         return content;
     }
 
-    preprocessContent(content: string, type: string, mime: string) {
+    preprocessContent(content: string | Buffer, type: string, mime: string) {
         content = utils.normalize(content.toString());
 
         if (type === 'text' && mime === 'text/html') {

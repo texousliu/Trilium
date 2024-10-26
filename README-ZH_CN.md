@@ -1,6 +1,6 @@
 # TriliumNext Notes
 
-[English](https://github.com/TriliumNext/Notes/blob/master/README.md) | [Chinese](https://github.com/TriliumNext/Notes/blob/master/README-ZH_CN.md) | [Russian](https://github.com/TriliumNext/Notes/blob/master/README.ru.md) | [Japanese](https://github.com/TriliumNext/Notes/blob/master/README.ja.md) | [Italian](https://github.com/TriliumNext/Notes/blob/master/README.it.md)
+[English](./README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
 
 TriliumNext Notes 是一个层次化的笔记应用程序，专注于建立大型个人知识库。请参阅[屏幕截图](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)以快速了解：
 
@@ -76,7 +76,7 @@ Trilium 也提供 Flatpak：
 
 或者克隆本仓库到本地，并运行
 
-```
+```shell
 npm install
 npm run start-server
 ```

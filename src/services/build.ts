@@ -1,4 +1,4 @@
 export default {
-    buildDate: "2024-07-28T07:12:19Z",
-    buildRevision: "1d142b9e572bc5558997f0cf33523da3dbfce174"
+    buildDate: "2024-09-07T18:36:34Z",
+    buildRevision: "7c0d6930fa8f20d269dcfbcbc8f636a25f6bb9a7"
 };
