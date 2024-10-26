@@ -3,6 +3,8 @@ export function initSyntaxHighlighting(editor) {
     initTextEditor(editor);
 }
 
+const HIGHLIGHT_MAX_BLOCK_COUNT = 500;
+
 const tag = "SyntaxHighlightWidget";
 const debugLevels = ["error", "warn", "info", "log", "debug"];
 const debugLevel = "debug";
@@ -160,6 +162,11 @@ function highlightCodeBlock(codeBlock, writer) {
         //     highlight.js css applied, see
         //     https://github.com/highlightjs/highlight.js/issues/700
         log("not highlighting plaintext codeblock");
+        return;
+    }
+
+    // Don't highlight if the code is too big, as the typing performance will be highly degraded.
+    if (codeBlock.childCount >= HIGHLIGHT_MAX_BLOCK_COUNT) {
         return;
     }
         
