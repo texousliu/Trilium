@@ -1,5 +1,6 @@
 import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
 import libraryLoader from "../../services/library_loader.js";
+import mime_types from "../../services/mime_types.js";
 
 const TPL = `
 <div class="note-detail-readonly-text note-detail-printable">
@@ -68,6 +69,23 @@ const TPL = `
 </div>
 `;
 
+/**
+ * Given a HTML element, tries to extract the `language-` class name out of it.
+ * 
+ * @param {string} el the HTML element from which to extract the language tag.
+ * @returns the normalized MIME type (e.g. `text-css` instead of `language-text-css`).
+ */
+function extractLanguageFromClassList(el) {
+    const prefix = "language-";
+    for (const className of el.classList) {
+        if (className.startsWith(prefix)) {
+            return className.substr(prefix.length);
+        }
+    }
+
+    return null;
+}
+
 export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
     static getType() { return "readOnlyText"; }
 
@@ -112,12 +130,30 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
             renderMathInElement(this.$content[0], {trust: true});
         }
 
-        // Enable syntax highlight
+        this.#setupSyntaxHighlight();
+    }
+
+    #setupSyntaxHighlight() {
         const codeBlocks = this.$content.find("pre code");
         for (const codeBlock of codeBlocks) {
             const text = codeBlock.innerText;
-            const highlightedText = hljs.highlightAuto(text).value;
-            codeBlock.innerHTML = highlightedText;
+
+            const normalizedMimeType = extractLanguageFromClassList(codeBlock);
+            if (!normalizedMimeType) {
+                continue;
+            }
+
+            let highlightedText = null;
+            if (normalizedMimeType === mime_types.MIME_TYPE_AUTO) {
+                highlightedText = hljs.highlightAuto(text);
+            } else if (normalizedMimeType) {
+                const language = mime_types.getHighlightJsNameForMime(normalizedMimeType);
+                highlightedText = hljs.highlight(text, { language });
+            }
+            
+            if (highlightedText) {            
+                codeBlock.innerHTML = highlightedText.value;
+            }
         }
     }
 
