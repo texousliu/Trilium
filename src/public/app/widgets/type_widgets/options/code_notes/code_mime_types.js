@@ -20,7 +20,7 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
     async optionsLoaded(options) {
         this.$mimeTypes.empty();
 
-        for (const mimeType of await mimeTypesService.getMimeTypes()) {
+        for (const mimeType of mimeTypesService.getMimeTypes()) {
             const id = "code-mime-type-" + (idCtr++);
 
             this.$mimeTypes.append($("<li>")

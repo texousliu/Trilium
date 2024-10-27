@@ -1,3 +1,5 @@
+import mimeTypesService from "./mime_types.js";
+
 const CKEDITOR = {"js": ["libraries/ckeditor/ckeditor.js"]};
 
 const CODE_MIRROR = {
@@ -85,7 +87,16 @@ const MIND_ELIXIR = {
 };
 
 const HIGHLIGHT_JS = {
-    js: [ "node_modules/@highlightjs/cdn-assets/highlight.min.js" ],
+    js: () => {
+        const mimeTypes = mimeTypesService.getMimeTypes();
+        const scriptsToLoad = [ "node_modules/@highlightjs/cdn-assets/highlight.min.js" ];
+        for (const mimeType of mimeTypes) {
+            if (mimeType.enabled && mimeType.highlightJs) {
+                scriptsToLoad.push(`node_modules/@highlightjs/cdn-assets/languages/${mimeType.highlightJs}.min.js`);
+            }
+        }        
+        return scriptsToLoad;
+    },
     css: [ "node_modules/@highlightjs/cdn-assets/styles/atom-one-dark.css" ]
 };
 
@@ -95,10 +106,18 @@ async function requireLibrary(library) {
     }
 
     if (library.js) {
-        for (const scriptUrl of library.js) {
+        for (const scriptUrl of unwrapValue(library.js)) {
             await requireScript(scriptUrl);
         }
     }
+}
+
+function unwrapValue(value) {
+    if (typeof value === "function") {
+        return value();
+    }
+
+    return value;
 }
 
 // we save the promises in case of the same script being required concurrently multiple times

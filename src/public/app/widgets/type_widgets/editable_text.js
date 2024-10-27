@@ -109,7 +109,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         await libraryLoader.requireLibrary(libraryLoader.HIGHLIGHT_JS);
 
         const codeBlockLanguages =
-            (await mimeTypesService.getMimeTypes())
+            (mimeTypesService.getMimeTypes())
                 .filter(mt => mt.enabled)
                 .map(mt => ({
                         language: mt.mime.toLowerCase().replace(/[\W_]+/g,"-"),
