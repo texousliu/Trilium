@@ -90,6 +90,7 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         // we could load just ckeditor-content.css but that causes CSS conflicts when both build CSS and this content CSS is loaded at the same time
         // (see https://github.com/zadam/trilium/issues/1590 for example of such conflict)
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
+        await libraryLoader.requireLibrary(libraryLoader.HIGHLIGHT_JS);
 
         const blob = await note.getBlob();
 
@@ -109,6 +110,14 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
             await libraryLoader.requireLibrary(libraryLoader.KATEX);
 
             renderMathInElement(this.$content[0], {trust: true});
+        }
+
+        // Enable syntax highlight
+        const codeBlocks = this.$content.find("pre code");
+        for (const codeBlock of codeBlocks) {
+            const text = codeBlock.innerText;
+            const highlightedText = hljs.highlightAuto(text).value;
+            codeBlock.innerHTML = highlightedText;
         }
     }
 
