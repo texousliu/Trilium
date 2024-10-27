@@ -62,7 +62,7 @@ export default class HighlightingOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options) {
-        const themes = await server.get("options/highlighting-themes");
+        const themes = await server.get("options/codeblock-themes");
         this.$themeSelect.empty();
 
         for (const theme of themes) {
