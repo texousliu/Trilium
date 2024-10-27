@@ -1,3 +1,13 @@
+/*
+ * This code is an adaptation of https://github.com/antoniotejada/Trilium-SyntaxHighlightWidget with additional improvements, such as:
+ * 
+ *  - support for selecting the language manually;
+ *  - support for determining the language automatically, if a special language is selected ("Auto-detected");
+ *  - limit for highlighting.
+ * 
+ * TODO: Generally this class can be done directly in the CKEditor repository.
+ */
+
 import mime_types from "../../../services/mime_types.js";
 
 export function initSyntaxHighlighting(editor) {
