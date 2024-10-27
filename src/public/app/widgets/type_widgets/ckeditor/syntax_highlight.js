@@ -1,3 +1,5 @@
+import mime_types from "../../../services/mime_types.js";
+
 export function initSyntaxHighlighting(editor) {
     console.log("Init syntax highlight");
     initTextEditor(editor);
@@ -156,12 +158,21 @@ function highlightCodeBlock(codeBlock, writer) {
     // Don't highlight if plaintext (note this needs to remove the markers
     // above first, in case this was a switch from non plaintext to
     // plaintext)
-    if (codeBlock.getAttribute("language") == "text-plain") {
+    const mimeType = codeBlock.getAttribute("language");
+    if (mimeType == "text-plain") {
         // XXX There's actually a plaintext language that could be used
         //     if you wanted the non-highlight formatting of
         //     highlight.js css applied, see
         //     https://github.com/highlightjs/highlight.js/issues/700
         log("not highlighting plaintext codeblock");
+        return;
+    }
+
+    // Find the corresponding language for the given mimetype.
+    const highlightJsLanguage = mime_types.getHighlightJsNameForMime(mimeType);
+
+    if (!highlightJsLanguage) {
+        console.warn(`Unsupported highlight.js for mime type ${mimeType}.`);
         return;
     }
 
@@ -216,7 +227,7 @@ function highlightCodeBlock(codeBlock, writer) {
     //     If that is done, it would also be interesting to have an
     //     auto-detect option. See language mime types at
     //     https://github.com/zadam/trilium/blob/dbd312c88db2b000ec0ce18c95bc8a27c0e621a1/src/public/app/widgets/type_widgets/editable_text.js#L104    
-    let highlightRes = hljs.highlightAuto(text);
+    let highlightRes = hljs.highlight(text, { language: highlightJsLanguage });
     dbg("text\n" + text);
     dbg("html\n" + highlightRes.value);
 

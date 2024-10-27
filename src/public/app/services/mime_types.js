@@ -181,7 +181,25 @@ function getMimeTypes() {
     return mimeTypes;
 }
 
+let mimeToHighlightJsMapping = null;
+
+function getHighlightJsNameForMime(mimeType) {    
+    if (!mimeToHighlightJsMapping) {
+        const mimeTypes = getMimeTypes();
+        mimeToHighlightJsMapping = {};
+        for (const mimeType of mimeTypes) {
+            // The mime stored by CKEditor is text-x-csrc instead of text/x-csrc so we keep this format for faster lookup.
+            const normalizedMime = mimeType.mime.replace(/\//g, "-");
+            mimeToHighlightJsMapping[normalizedMime] = mimeType.highlightJs;
+        }
+    }
+
+    console.log("Mappings ", mimeToHighlightJsMapping);
+    return mimeToHighlightJsMapping[mimeType];
+}
+
 export default {
     getMimeTypes,
-    loadMimeTypes
+    loadMimeTypes,
+    getHighlightJsNameForMime
 }
