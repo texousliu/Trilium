@@ -1,3 +1,4 @@
+import { t } from "../../../../services/i18n.js";
 import library_loader from "../../../../services/library_loader.js";
 import server from "../../../../services/server.js";
 import OptionsWidget from "../options_widget.js";
@@ -13,13 +14,13 @@ function test(name) {
 
 const TPL = `
 <div class="options-section">
-    <h4>Code Syntax Highlighting for Text Notes</h4>
+    <h4>${t("highlighting.title")}</h4>
 
-    <p>Controls the syntax highlighting for code blocks inside text notes, code notes will not be affected.</p>
+    <p>${t("highlighting.description")}</p>
 
     <div class="form-group row">
         <div class="col-6">
-            <label>Color Scheme</label>
+            <label>${t("highlighting.color-scheme")}</label>
             <select class="theme-select form-select"></select>
         </div>
     </div>

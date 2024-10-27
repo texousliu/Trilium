@@ -1497,5 +1497,13 @@
     "move-to-available-launchers": "Mută în Lansatoare disponibile",
     "move-to-visible-launchers": "Mută în Lansatoare vizibile",
     "reset": "Resetează"
+  },
+  "editable-text": {
+    "auto-detect-language": "Automat"
+  },
+  "highlighting": {
+    "color-scheme": "Temă de culori",
+    "title": "Evidențiere de sintaxă pentru notițele de tip text",
+    "description": "Controlează evidențierea de sintaxă pentru blocurile de cod în interiorul notițelor text, notițele de tip cod nu vor fi afectate de aceste setări."
   }
 }
