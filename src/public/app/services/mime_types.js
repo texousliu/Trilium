@@ -189,17 +189,22 @@ function getHighlightJsNameForMime(mimeType) {
         mimeToHighlightJsMapping = {};
         for (const mimeType of mimeTypes) {
             // The mime stored by CKEditor is text-x-csrc instead of text/x-csrc so we keep this format for faster lookup.
-            const normalizedMime = mimeType.mime.replace(/\//g, "-");
+            const normalizedMime = normalizeMimeTypeForCKEditor(mimeType.mime);
             mimeToHighlightJsMapping[normalizedMime] = mimeType.highlightJs;
         }
     }
 
-    console.log("Mappings ", mimeToHighlightJsMapping);
     return mimeToHighlightJsMapping[mimeType];
+}
+
+function normalizeMimeTypeForCKEditor(mimeType) {
+    return mimeType.toLowerCase()
+        .replace(/[\W_]+/g,"-");
 }
 
 export default {
     getMimeTypes,
     loadMimeTypes,
-    getHighlightJsNameForMime
+    getHighlightJsNameForMime,
+    normalizeMimeTypeForCKEditor
 }

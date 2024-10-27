@@ -112,7 +112,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             (mimeTypesService.getMimeTypes())
                 .filter(mt => mt.enabled)
                 .map(mt => ({
-                        language: mt.mime.toLowerCase().replace(/[\W_]+/g,"-"),
+                        language: mimeTypesService.normalizeMimeTypeForCKEditor(mt.mime),
                         label: mt.title
                     }));
 
