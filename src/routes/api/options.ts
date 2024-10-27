@@ -150,7 +150,7 @@ function getSyntaxHighlightingThemes() {
             
             return {
                 val: `default:${nameWithoutExtension}`,
-                title: nameWithoutExtension
+                title: nameWithoutExtension.replace(/-/g, " ")
             };
         });
     return allThemes;
