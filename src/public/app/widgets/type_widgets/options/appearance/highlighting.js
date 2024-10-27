@@ -13,11 +13,13 @@ function test(name) {
 
 const TPL = `
 <div class="options-section">
-    <h4>Syntax highlighting</h4>
+    <h4>Code Syntax Highlighting for Text Notes</h4>
+
+    <p>Controls the syntax highlighting for code blocks inside text notes, code notes will not be affected.</p>
 
     <div class="form-group row">
         <div class="col-6">
-            <label>Theme</label>
+            <label>Color Scheme</label>
             <select class="theme-select form-select"></select>
         </div>
     </div>
