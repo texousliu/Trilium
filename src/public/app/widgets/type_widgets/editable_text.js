@@ -88,6 +88,23 @@ const TPL = `
 </div>
 `;
 
+function buildListOfLanguages() {
+    const userLanguages = (mimeTypesService.getMimeTypes())
+        .filter(mt => mt.enabled)
+        .map(mt => ({
+                language: mimeTypesService.normalizeMimeTypeForCKEditor(mt.mime),
+                label: mt.title
+            }));
+
+    return [
+        {
+            language: mimeTypesService.MIME_TYPE_AUTO,
+            label: "Auto"
+        },
+        ...userLanguages
+    ];
+}
+
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     static getType() { return "editableText"; }
 
@@ -108,13 +125,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
         await libraryLoader.requireLibrary(libraryLoader.HIGHLIGHT_JS);
 
-        const codeBlockLanguages =
-            (mimeTypesService.getMimeTypes())
-                .filter(mt => mt.enabled)
-                .map(mt => ({
-                        language: mimeTypesService.normalizeMimeTypeForCKEditor(mt.mime),
-                        label: mt.title
-                    }));
+        const codeBlockLanguages = buildListOfLanguages();
 
         // CKEditor since version 12 needs the element to be visible before initialization. At the same time,
         // we want to avoid flicker - i.e., show editor only once everything is ready. That's why we have separate

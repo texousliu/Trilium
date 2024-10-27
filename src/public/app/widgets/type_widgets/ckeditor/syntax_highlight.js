@@ -171,7 +171,7 @@ function highlightCodeBlock(codeBlock, writer) {
     // Find the corresponding language for the given mimetype.
     const highlightJsLanguage = mime_types.getHighlightJsNameForMime(mimeType);
 
-    if (!highlightJsLanguage) {
+    if (mimeType !== mime_types.MIME_TYPE_AUTO && !highlightJsLanguage) {
         console.warn(`Unsupported highlight.js for mime type ${mimeType}.`);
         return;
     }
@@ -221,13 +221,12 @@ function highlightCodeBlock(codeBlock, writer) {
         }
     }
 
-    // XXX This auto-detects the language, if we want to honor the language
-    //     attribute we can do
-    //     let html = hljs.highlight(text, {language: 'python'});
-    //     If that is done, it would also be interesting to have an
-    //     auto-detect option. See language mime types at
-    //     https://github.com/zadam/trilium/blob/dbd312c88db2b000ec0ce18c95bc8a27c0e621a1/src/public/app/widgets/type_widgets/editable_text.js#L104    
-    let highlightRes = hljs.highlight(text, { language: highlightJsLanguage });
+    let highlightRes;
+    if (mimeType === mime_types.MIME_TYPE_AUTO) {
+        highlightRes = hljs.highlightAuto(text);
+    } else {
+        highlightRes = hljs.highlight(text, { language: highlightJsLanguage });
+    }
     dbg("text\n" + text);
     dbg("html\n" + highlightRes.value);
 

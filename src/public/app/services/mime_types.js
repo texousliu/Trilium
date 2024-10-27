@@ -1,5 +1,10 @@
 import options from "./options.js";
 
+/**
+ * A pseudo-MIME type which is used in the editor to automatically determine the language used in code blocks via heuristics.
+ */
+const MIME_TYPE_AUTO = "text-x-trilium-auto";
+
 const MIME_TYPES_DICT = [
     { default: true, title: "Plain text", mime: "text/plain", highlightJs: "plaintext" },
     { title: "APL", mime: "text/apl" },
@@ -218,6 +223,7 @@ function normalizeMimeTypeForCKEditor(mimeType) {
 }
 
 export default {
+    MIME_TYPE_AUTO,
     getMimeTypes,
     loadMimeTypes,
     getHighlightJsNameForMime,
