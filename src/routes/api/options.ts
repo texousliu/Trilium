@@ -6,6 +6,7 @@ import searchService from "../../services/search/services/search.js";
 import ValidationError from "../../errors/validation_error.js";
 import { Request } from 'express';
 import { changeLanguage } from "../../services/i18n.js";
+import fs from "fs";
 
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set([
@@ -138,6 +139,22 @@ function getUserThemes() {
     return ret;
 }
 
+function getSyntaxHighlightingThemes() {
+    const path = "node_modules/@highlightjs/cdn-assets/styles";
+    const allThemes = fs
+        .readdirSync(path)
+        .filter((el) => el.endsWith(".min.css"))
+        .map((name) => {
+            const nameWithoutExtension = name.replace(".min.css", "");
+            
+            return {
+                val: `default:${nameWithoutExtension}`,
+                title: nameWithoutExtension
+            };
+        });
+    return allThemes;
+}
+
 function getSupportedLocales() {
     // TODO: Currently hardcoded, needs to read the list of available languages.
     return [
@@ -176,5 +193,6 @@ export default {
     updateOption,
     updateOptions,
     getUserThemes,
+    getSyntaxHighlightingThemes,
     getSupportedLocales
 };
