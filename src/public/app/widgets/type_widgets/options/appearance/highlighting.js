@@ -18,6 +18,10 @@ export default class HighlightingOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);        
         this.$themeSelect = this.$widget.find(".theme-select");
+        this.$themeSelect.on("change", async () => {
+            const newTheme = this.$themeSelect.val();
+            await server.put(`options/highlightingTheme/${newTheme}`);
+        });
     }
 
     async optionsLoaded(options) {
@@ -27,8 +31,8 @@ export default class HighlightingOptions extends OptionsWidget {
         for (const theme of themes) {
             this.$themeSelect.append($("<option>")
                 .attr("value", theme.val)
-                .text(theme.title)
-                );
+                .text(theme.title));
         }
+        this.$themeSelect.val(options.highlightingTheme);
     }
 }

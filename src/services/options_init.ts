@@ -41,6 +41,7 @@ async function initNotSyncedOptions(initialized: boolean, theme: string, opts: N
     optionService.createOption('lastSyncedPush', '0', false);    
 
     optionService.createOption('theme', theme, false);
+    optionService.createOption('highlightingTheme', "default:atom-one-dark", false);
     
     optionService.createOption('syncServerHost', opts.syncServerHost || '', false);
     optionService.createOption('syncServerTimeout', '120000', false);
@@ -99,7 +100,7 @@ const defaultOptions: DefaultOption[] = [
 
     // Internationalization
     { name: 'locale', value: 'en', isSynced: true },
-    { name: 'firstDayOfWeek', value: '1', isSynced: true }
+    { name: 'firstDayOfWeek', value: '1', isSynced: true }    
 ];
 
 function initStartupOptions() {
