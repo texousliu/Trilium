@@ -1505,5 +1505,8 @@
     "title": "Code Syntax Highlighting for Text Notes",
     "description": "Controls the syntax highlighting for code blocks inside text notes, code notes will not be affected.",
     "color-scheme": "Color Scheme"
+  },
+  "code_block": {
+    "word_wrapping": "Word wrapping"
   }
 }

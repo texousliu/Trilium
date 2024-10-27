@@ -25,7 +25,7 @@ const TPL = `
         </div>
 
         <div class="col-6">
-            <label>Word wrapping</label>
+            <label>${t("code_block.word_wrapping")}</label>
             <div class="form-check">
                 <input type="checkbox" class="word-wrap form-check-input" />
             </div>
