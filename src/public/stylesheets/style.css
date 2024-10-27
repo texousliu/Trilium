@@ -811,6 +811,17 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     border: 0;
     border-radius: 6px;
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.2);
+    padding: 0 !important;
+}
+
+.ck-content pre code {
+    display: block;
+    padding: 1em;
+}
+
+.note-detail-printable:not(.word-wrap) pre {
+    white-space: pre;
+    margin-right: 1em;
 }
 
 .ck-content .todo-list .todo-list__label > input:before {
