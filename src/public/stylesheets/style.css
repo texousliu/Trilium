@@ -382,7 +382,7 @@ button.btn, button.btn-sm {
     padding: 0;
 }
 
-pre:not(.CodeMirror-line) {
+pre:not(.CodeMirror-line):not(.hljs) {
     color: var(--main-text-color) !important;
     white-space: pre-wrap;
     font-size: 100%;

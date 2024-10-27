@@ -526,7 +526,6 @@
 /* @ckeditor/ckeditor5-code-block/theme/codeblock.css */
 .ck-content pre {
     padding: 1em;
-    color: hsl(0, 0%, 20.8%);    
     border: 1px solid hsl(0, 0%, 77%);
     border-radius: 2px;
     text-align: left;
@@ -537,6 +536,7 @@
     min-width: 200px;
 }
 .ck-content pre:not(.hljs) {
+    color: hsl(0, 0%, 20.8%);    
     background: hsla(0, 0%, 78%, 0.3);
 }
 /* @ckeditor/ckeditor5-code-block/theme/codeblock.css */
