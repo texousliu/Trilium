@@ -177,6 +177,7 @@ function loadHighlightingTheme(theme) {
 export default {
     requireCss,
     requireLibrary,
+    loadHighlightingTheme,
     CKEDITOR,
     CODE_MIRROR,
     ESLINT,

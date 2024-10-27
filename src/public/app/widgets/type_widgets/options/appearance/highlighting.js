@@ -1,3 +1,4 @@
+import library_loader from "../../../../services/library_loader.js";
 import server from "../../../../services/server.js";
 import OptionsWidget from "../options_widget.js";
 
@@ -20,6 +21,7 @@ export default class HighlightingOptions extends OptionsWidget {
         this.$themeSelect = this.$widget.find(".theme-select");
         this.$themeSelect.on("change", async () => {
             const newTheme = this.$themeSelect.val();
+            library_loader.loadHighlightingTheme(newTheme);
             await server.put(`options/highlightingTheme/${newTheme}`);
         });
     }
