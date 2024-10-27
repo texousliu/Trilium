@@ -39,7 +39,10 @@ const TPL = `
 </div>
 `;
 
-export default class HighlightingOptions extends OptionsWidget {
+/**
+ * Contains appearance settings for code blocks within text notes, such as the theme for the syntax highlighter.
+ */
+export default class CodeBlockOptions extends OptionsWidget {
     doRender() {        
         this.$widget = $(TPL);        
         this.$themeSelect = this.$widget.find(".theme-select");
