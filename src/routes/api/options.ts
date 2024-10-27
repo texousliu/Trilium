@@ -16,7 +16,7 @@ const ALLOWED_OPTIONS = new Set([
     'revisionSnapshotNumberLimit',
     'zoomFactor',
     'theme',
-    'highlightingTheme',
+    'codeBlockTheme',
     'syncServerHost',
     'syncServerTimeout',
     'syncProxy',

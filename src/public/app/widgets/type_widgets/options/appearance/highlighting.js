@@ -46,7 +46,7 @@ export default class HighlightingOptions extends OptionsWidget {
         this.$themeSelect.on("change", async () => {
             const newTheme = this.$themeSelect.val();
             library_loader.loadHighlightingTheme(newTheme);
-            await server.put(`options/highlightingTheme/${newTheme}`);
+            await server.put(`options/codeBlockTheme/${newTheme}`);
         });
 
         // Set up preview
@@ -70,6 +70,6 @@ export default class HighlightingOptions extends OptionsWidget {
                 .attr("value", theme.val)
                 .text(theme.title));
         }
-        this.$themeSelect.val(options.highlightingTheme);
+        this.$themeSelect.val(options.codeBlockTheme);
     }
 }

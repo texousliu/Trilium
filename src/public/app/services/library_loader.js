@@ -98,7 +98,7 @@ const HIGHLIGHT_JS = {
             }
         }
         
-        const currentTheme = optionsService.get("highlightingTheme");
+        const currentTheme = optionsService.get("codeBlockTheme");
         loadHighlightingTheme(currentTheme);
 
         return Array.from(scriptsToLoad);
@@ -158,6 +158,10 @@ async function requireCss(url, prependAssetPath = true) {
 
 let highlightingThemeEl = null;
 function loadHighlightingTheme(theme) {
+    if (!theme) {
+        return;
+    }
+    
     if (!highlightingThemeEl) {
         highlightingThemeEl = $(`<link rel="stylesheet" type="text/css" />`);
         $("head").append(highlightingThemeEl);
