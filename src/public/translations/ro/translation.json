@@ -1182,7 +1182,7 @@
     "light_theme": "Temă luminoasă",
     "override_theme_fonts_label": "Suprascrie fonturile temei",
     "theme_label": "Temă",
-    "title": "Temă"
+    "title": "Tema aplicației"
   },
   "toast": {
     "critical-error": {

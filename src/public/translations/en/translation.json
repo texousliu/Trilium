@@ -1054,7 +1054,7 @@
     "edited_notes_message": "Edited Notes ribbon tab will automatically open on day notes"
   },
   "theme": {
-    "title": "Theme",
+    "title": "Application Theme",
     "theme_label": "Theme",
     "override_theme_fonts_label": "Override theme fonts",
     "light_theme": "Light",
