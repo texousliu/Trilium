@@ -23,6 +23,13 @@ const TPL = `
             <label>${t("highlighting.color-scheme")}</label>
             <select class="theme-select form-select"></select>
         </div>
+
+        <div class="col-6">
+            <label>Word wrapping</label>
+            <div class="form-check">
+                <input type="checkbox" class="word-wrap form-check-input" />
+            </div>
+        </div>
     </div>
 
     <div class="form-group row">
@@ -51,6 +58,9 @@ export default class CodeBlockOptions extends OptionsWidget {
             library_loader.loadHighlightingTheme(newTheme);
             await server.put(`options/codeBlockTheme/${newTheme}`);
         });
+        
+        this.$wordWrap = this.$widget.find(".word-wrap");
+        this.$wordWrap.on("change", () => this.updateCheckboxOption("codeBlockWordWrap", this.$wordWrap));
 
         // Set up preview
         const sampleEl = this.$widget.find(".code-sample");
@@ -74,5 +84,6 @@ export default class CodeBlockOptions extends OptionsWidget {
                 .text(theme.title));
         }
         this.$themeSelect.val(options.codeBlockTheme);
+        this.setCheckboxState(this.$wordWrap, options.codeBlockWordWrap);
     }
 }

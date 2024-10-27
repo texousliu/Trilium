@@ -17,6 +17,7 @@ const ALLOWED_OPTIONS = new Set([
     'zoomFactor',
     'theme',
     'codeBlockTheme',
+    "codeBlockWordWrap",
     'syncServerHost',
     'syncServerTimeout',
     'syncProxy',
