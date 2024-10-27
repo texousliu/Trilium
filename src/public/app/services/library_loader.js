@@ -89,13 +89,14 @@ const MIND_ELIXIR = {
 const HIGHLIGHT_JS = {
     js: () => {
         const mimeTypes = mimeTypesService.getMimeTypes();
-        const scriptsToLoad = [ "node_modules/@highlightjs/cdn-assets/highlight.min.js" ];
+        const scriptsToLoad = new Set();
+        scriptsToLoad.add("node_modules/@highlightjs/cdn-assets/highlight.min.js");
         for (const mimeType of mimeTypes) {
             if (mimeType.enabled && mimeType.highlightJs) {
-                scriptsToLoad.push(`node_modules/@highlightjs/cdn-assets/languages/${mimeType.highlightJs}.min.js`);
+                scriptsToLoad.add(`node_modules/@highlightjs/cdn-assets/languages/${mimeType.highlightJs}.min.js`);
             }
         }        
-        return scriptsToLoad;
+        return Array.from(scriptsToLoad);
     },
     css: [ "node_modules/@highlightjs/cdn-assets/styles/atom-one-dark.css" ]
 };
