@@ -24,7 +24,7 @@ const TPL = `
 
     <div class="form-group row">
         <div class="note-detail-readonly-text-content ck-content code-sample-wrapper">
-            <pre><code class="code-sample"></code></pre>
+            <pre class="hljs"><code class="code-sample"></code></pre>
         </div>
     </div>
 
