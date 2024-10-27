@@ -1,4 +1,5 @@
 import mimeTypesService from "./mime_types.js";
+import optionsService from "./options.js";
 
 const CKEDITOR = {"js": ["libraries/ckeditor/ckeditor.js"]};
 
@@ -95,10 +96,13 @@ const HIGHLIGHT_JS = {
             if (mimeType.enabled && mimeType.highlightJs) {
                 scriptsToLoad.add(`node_modules/@highlightjs/cdn-assets/languages/${mimeType.highlightJs}.min.js`);
             }
-        }        
+        }
+        
+        const currentTheme = optionsService.get("highlightingTheme");
+        loadHighlightingTheme(currentTheme);
+
         return Array.from(scriptsToLoad);
-    },
-    css: [ "node_modules/@highlightjs/cdn-assets/styles/atom-one-dark.css" ]
+    }
 };
 
 async function requireLibrary(library) {
@@ -149,6 +153,24 @@ async function requireCss(url, prependAssetPath = true) {
         }
 
         $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', url));
+    }
+}
+
+let highlightingThemeEl = null;
+function loadHighlightingTheme(theme) {
+    if (!highlightingThemeEl) {
+        highlightingThemeEl = $(`<link rel="stylesheet" type="text/css" />`);
+        $("head").append(highlightingThemeEl);
+    }
+    
+    let url;
+    const defaultPrefix = "default:";
+    if (theme.startsWith(defaultPrefix)) {        
+        url = `${window.glob.assetPath}/node_modules/@highlightjs/cdn-assets/styles/${theme.substr(defaultPrefix.length)}.min.css`;
+    }
+
+    if (url) {
+        highlightingThemeEl.attr("href", url);
     }
 }
 
