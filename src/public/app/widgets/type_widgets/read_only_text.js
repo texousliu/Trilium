@@ -136,6 +136,8 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
     #setupSyntaxHighlight() {
         const codeBlocks = this.$content.find("pre code");
         for (const codeBlock of codeBlocks) {
+            $(codeBlock).parent().toggleClass("hljs");
+
             const text = codeBlock.innerText;
 
             const normalizedMimeType = extractLanguageFromClassList(codeBlock);
