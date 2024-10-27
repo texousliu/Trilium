@@ -183,6 +183,14 @@ function getMimeTypes() {
 
 let mimeToHighlightJsMapping = null;
 
+/**
+ * Obtains the corresponding language tag for highlight.js for a given MIME type.
+ * 
+ * The mapping is built the first time this method is built and then the results are cached for better performance.
+ * 
+ * @param {string} mimeType The MIME type of the code block, in the CKEditor-normalized format (e.g. `text-c-src` instead of `text/c-src`).
+ * @returns the corresponding highlight.js tag, for example `c` for `text-c-src`.
+ */
 function getHighlightJsNameForMime(mimeType) {    
     if (!mimeToHighlightJsMapping) {
         const mimeTypes = getMimeTypes();
@@ -197,6 +205,13 @@ function getHighlightJsNameForMime(mimeType) {
     return mimeToHighlightJsMapping[mimeType];
 }
 
+/**
+ * Given a MIME type in the usual format (e.g. `text/csrc`), it returns a MIME type that can be passed down to the CKEditor
+ * code plugin.
+ * 
+ * @param {string} mimeType The MIME type to normalize, in the usual format (e.g. `text/c-src`).
+ * @returns the normalized MIME type (e.g. `text-c-src`).
+ */
 function normalizeMimeTypeForCKEditor(mimeType) {
     return mimeType.toLowerCase()
         .replace(/[\W_]+/g,"-");
