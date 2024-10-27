@@ -59,8 +59,8 @@ const CONTENT_WIDGETS = {
     _optionsAppearance: [
         LocalizationOptions,
         ThemeOptions,
-        HighlightingOptions,
         FontsOptions,
+        HighlightingOptions,
         ZoomFactorOptions,
         NativeTitleBarOptions,
         MaxContentWidthOptions,
