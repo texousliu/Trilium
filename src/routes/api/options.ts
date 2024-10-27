@@ -6,7 +6,7 @@ import searchService from "../../services/search/services/search.js";
 import ValidationError from "../../errors/validation_error.js";
 import { Request } from 'express';
 import { changeLanguage } from "../../services/i18n.js";
-import fs from "fs";
+import { listSyntaxHighlightingThemes } from "../../services/code_block_theme.js";
 
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set([
@@ -142,19 +142,7 @@ function getUserThemes() {
 }
 
 function getSyntaxHighlightingThemes() {
-    const path = "node_modules/@highlightjs/cdn-assets/styles";
-    const allThemes = fs
-        .readdirSync(path)
-        .filter((el) => el.endsWith(".min.css"))
-        .map((name) => {
-            const nameWithoutExtension = name.replace(".min.css", "");
-            
-            return {
-                val: `default:${nameWithoutExtension}`,
-                title: nameWithoutExtension.replace(/-/g, " ")
-            };
-        });
-    return allThemes;
+    return listSyntaxHighlightingThemes();
 }
 
 function getSupportedLocales() {
