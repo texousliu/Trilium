@@ -813,6 +813,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
     padding: 0 !important;
     margin-top: 2px !important;
+    overflow: unset;
 }
 
 html .note-detail-editable-text :not(figure, .include-note):first-child {
@@ -828,10 +829,10 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     font-weight: bold;
 }
 
-
 .ck-content pre code {
     display: block;
     padding: 1em;
+    overflow: auto;
 }
 
 .note-detail-printable:not(.word-wrap) pre {
