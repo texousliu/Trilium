@@ -814,6 +814,15 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     padding: 0 !important;
 }
 
+.ck.ck-editor__editable pre[data-language]::after {
+    --ck-color-code-block-label-background: rgba(128, 128, 128, .5);
+    border-radius: 0 0 5px 5px;
+    padding: 2px 10px;
+    letter-spacing: .5px;
+    font-weight: bold;
+}
+
+
 .ck-content pre code {
     display: block;
     padding: 1em;
