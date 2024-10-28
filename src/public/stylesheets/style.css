@@ -824,7 +824,7 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 .ck.ck-editor__editable pre[data-language]::after {
     --ck-color-code-block-label-background: rgba(128, 128, 128, .5);
     border-radius: 0 0 5px 5px;
-    padding: 2px 10px;
+    padding: 0px 10px;
     letter-spacing: .5px;
     font-weight: bold;
 }
