@@ -5,10 +5,13 @@ import OptionsWidget from "../options_widget.js";
 
 const SAMPLE_LANGUAGE = "javascript";
 const SAMPLE_CODE = `\
-function test(name) {
-	console.log("Works");
-	console.info("Test");
-	// Hello world.
+const n = 10;
+greet(n); // Print "Hello World" for n times
+
+function greet(times) {
+  for (let i = 0; i++; i < times) {
+    console.log("Hello World!");
+  }
 }
 `
 
