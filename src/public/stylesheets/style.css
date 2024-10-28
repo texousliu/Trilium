@@ -835,6 +835,20 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     overflow: auto;
 }
 
+.ck-content pre code::-webkit-scrollbar {
+    height: 6px;
+}
+
+.ck-content pre code::-webkit-scrollbar-thumb {
+    height: 4px;
+    border: none !important;
+    background: gray !important;
+}
+
+.ck-content pre code::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {
+    cursor: default;
+}
+
 .note-detail-printable:not(.word-wrap) pre {
     white-space: pre;
     margin-right: 1em;
