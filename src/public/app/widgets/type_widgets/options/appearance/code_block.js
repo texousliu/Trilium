@@ -27,11 +27,11 @@ const TPL = `
             <select class="theme-select form-select"></select>
         </div>
 
-        <div class="col-6">
-            <label>${t("code_block.word_wrapping")}</label>
-            <div class="form-check">
+        <div class="col-6 side-checkbox">
+            <label class="form-check">
                 <input type="checkbox" class="word-wrap form-check-input" />
-            </div>
+                ${t("code_block.word_wrapping")}
+            </label>
         </div>
     </div>
 

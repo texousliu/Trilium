@@ -854,6 +854,14 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     margin-right: 1em;
 }
 
+.side-checkbox {
+    display: flex;
+    align-items: end;
+    padding-top: .375rem;
+    padding-bottom: .375rem;
+    line-height: 1.5;
+}
+
 .ck-content .todo-list .todo-list__label > input:before {
     border: 1px solid var(--muted-text-color) !important;
 }
