@@ -849,7 +849,7 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     cursor: default;
 }
 
-.note-detail-printable:not(.word-wrap) pre {
+.note-detail-printable:not(.word-wrap) pre code {
     white-space: pre;
     margin-right: 1em;
 }
