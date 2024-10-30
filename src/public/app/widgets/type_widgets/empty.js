@@ -84,6 +84,13 @@ export default class EmptyTypeWidget extends TypeWidget {
             );
         }
 
+        // Automatically trigger autocomplete on focus.
+        this.$autoComplete.on('focus', () => {
+            // simulate pressing down arrow to trigger autocomplete
+            this.$autoComplete.trigger($.Event('keydown', { which: 40 })); // arrow down
+            this.$autoComplete.trigger($.Event('keydown', { which: 38 })); // arrow up
+        });
+        
         this.$autoComplete
             .trigger('focus')
             .trigger('select');
