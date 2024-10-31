@@ -71,16 +71,23 @@ export default class CodeBlockOptions extends OptionsWidget {
         this.$wordWrap.on("change", () => this.updateCheckboxOption("codeBlockWordWrap", this.$wordWrap));
 
         // Set up preview
-        const sampleEl = this.$widget.find(".code-sample");
-        library_loader
-            .requireLibrary(library_loader.HIGHLIGHT_JS)
-            .then(() => {
-                const highlightedText = hljs.highlight(SAMPLE_CODE, {
-                    language: SAMPLE_LANGUAGE
+        this.$sampleEl = this.$widget.find(".code-sample");        
+    }
+
+    #setupPreview(shouldEnableSyntaxHighlight) {
+        const text = SAMPLE_CODE;
+        if (shouldEnableSyntaxHighlight) {
+            library_loader
+                .requireLibrary(library_loader.HIGHLIGHT_JS)
+                .then(() => {
+                    const highlightedText = hljs.highlight(text, {
+                        language: SAMPLE_LANGUAGE
+                    });
+                    this.$sampleEl.html(highlightedText.value);
                 });
-                sampleEl.html(highlightedText.value);
-            });
-        this.$sampleWrapper = this.$widget.find(".note-detail-readonly-text");
+        } else {
+            this.$sampleEl.text(text);
+        }
     }
 
     async optionsLoaded(options) {
@@ -106,5 +113,7 @@ export default class CodeBlockOptions extends OptionsWidget {
         this.$themeSelect.val(options.codeBlockTheme);
         this.setCheckboxState(this.$wordWrap, options.codeBlockWordWrap);
         this.$widget.closest(".note-detail-printable").toggleClass("word-wrap", options.codeBlockWordWrap === "true");
+
+        this.#setupPreview(options.codeBlockTheme !== "none");
     }
 }
