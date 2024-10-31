@@ -554,7 +554,7 @@
     "open_sql_console": "Deschide consola SQL",
     "open_sql_console_history": "Deschide istoricul consolei SQL",
     "options": "Opțiuni",
-    "reload_frontend": "Reîncarcă interfață",
+    "reload_frontend": "Reîncarcă interfața",
     "reload_hint": "Reîncărcarea poate ajuta atunci când există ceva probleme vizuale fără a trebui repornită întreaga aplicație.",
     "reset_zoom_level": "Resetează nivelul de zoom",
     "show_backend_log": "Afișează log-ul din backend",
