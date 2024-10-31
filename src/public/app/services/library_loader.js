@@ -158,7 +158,16 @@ async function requireCss(url, prependAssetPath = true) {
 
 let highlightingThemeEl = null;
 function loadHighlightingTheme(theme) {
-    if (!theme) {
+    if (!theme) {        
+        return;
+    }
+
+    if (theme === "none") {
+        // Deactivate the theme.
+        if (highlightingThemeEl) {
+            highlightingThemeEl.remove();
+            highlightingThemeEl = null;
+        }
         return;
     }
     
