@@ -84,13 +84,17 @@ export default class CodeBlockOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options) {
-        const themes = await server.get("options/codeblock-themes");
+        const themeGroups = await server.get("options/codeblock-themes");
         this.$themeSelect.empty();
 
-        for (const theme of themes) {
-            this.$themeSelect.append($("<option>")
-                .attr("value", theme.val)
-                .text(theme.title));
+        for (const [ key, themes ] of Object.entries(themeGroups)) {
+            const $group = $("<optgroup>").attr("label", key);
+            for (const theme of themes) {
+                $group.append($("<option>")
+                    .attr("value", theme.val)
+                    .text(theme.title));
+            }
+            this.$themeSelect.append($group);
         }
         this.$themeSelect.val(options.codeBlockTheme);
         this.setCheckboxState(this.$wordWrap, options.codeBlockWordWrap);
