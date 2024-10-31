@@ -8,6 +8,11 @@ const SAMPLE_CODE = `\
 const n = 10;
 greet(n); // Print "Hello World" for n times
 
+/**
+ * Displays a "Hello World!" message for a given amount of times, on the standard console. The "Hello World!" text will be displayed once per line.
+ * 
+ * @param {number} times    The number of times to print the \`Hello World!\` message.
+ */
 function greet(times) {
   for (let i = 0; i++; i < times) {
     console.log("Hello World!");
@@ -62,7 +67,7 @@ export default class CodeBlockOptions extends OptionsWidget {
             await server.put(`options/codeBlockTheme/${newTheme}`);
         });
         
-        this.$wordWrap = this.$widget.find(".word-wrap");
+        this.$wordWrap = this.$widget.find("input.word-wrap");
         this.$wordWrap.on("change", () => this.updateCheckboxOption("codeBlockWordWrap", this.$wordWrap));
 
         // Set up preview
@@ -75,6 +80,7 @@ export default class CodeBlockOptions extends OptionsWidget {
                 });
                 sampleEl.html(highlightedText.value);
             });
+        this.$sampleWrapper = this.$widget.find(".note-detail-readonly-text");
     }
 
     async optionsLoaded(options) {
@@ -88,5 +94,6 @@ export default class CodeBlockOptions extends OptionsWidget {
         }
         this.$themeSelect.val(options.codeBlockTheme);
         this.setCheckboxState(this.$wordWrap, options.codeBlockWordWrap);
+        this.$widget.closest(".note-detail-printable").toggleClass("word-wrap", options.codeBlockWordWrap);
     }
 }
