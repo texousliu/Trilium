@@ -1,9 +1,10 @@
 import fs from "fs";
 import themeNames from "./code_block_theme_names.json" assert { type: "json" }
+import { t } from "i18next";
 
 export function listSyntaxHighlightingThemes() {
     const path = "node_modules/@highlightjs/cdn-assets/styles";
-    const allThemes = fs
+    const systemThemes = fs
         .readdirSync(path)
         .filter((el) => el.endsWith(".min.css"))
         .map((name) => {
@@ -19,5 +20,11 @@ export function listSyntaxHighlightingThemes() {
                 title: title
             };
         });
-    return allThemes;
+    return [
+        {
+            val: "none",
+            title: t("code_block.theme_none")
+        },
+        ...systemThemes
+    ];
 }

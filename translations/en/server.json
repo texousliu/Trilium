@@ -183,5 +183,8 @@
   },
   "special_notes": {
     "search_prefix": "Search:"
+  },
+  "code_block": {
+    "theme_none": "None"
   }
 }

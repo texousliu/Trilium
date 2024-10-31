@@ -11,6 +11,7 @@ import link from "../../services/link.js";
 import appContext from "../../components/app_context.js";
 import dialogService from "../../services/dialog.js";
 import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
+import options from "../../services/options.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -169,7 +170,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
             const editor = await BalloonEditor.create(elementOrData, editorConfig);
-            initSyntaxHighlighting(editor);
+
+            if (options.get("codeBlockTheme") !== "none") {
+                initSyntaxHighlighting(editor);
+            }
 
             editor.model.document.on('change:data', () => this.spacedUpdate.scheduleUpdate());
 
