@@ -6,7 +6,7 @@ const TPL = `
 <div class="ribbon-container">
     <style>
     .ribbon-container {
-        margin-top: 5px;
+        margin-bottom: 5px;
     }
     
     .ribbon-top-row {
@@ -24,7 +24,7 @@ const TPL = `
     
     .ribbon-tab-title {
         color: var(--muted-text-color);
-        border-top: 1px solid var(--main-border-color); 
+        border-bottom: 1px solid var(--main-border-color); 
         min-width: 24px;
         flex-basis: 24px;
         max-width: max-content;
@@ -39,7 +39,7 @@ const TPL = `
     
     .ribbon-tab-title.active {
         color: var(--main-text-color);
-        border-top: 3px solid var(--main-text-color);
+        border-bottom: 3px solid var(--main-text-color);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -62,7 +62,7 @@ const TPL = `
         min-width: 0;
         max-width: 35px;
         flex-grow: 1;
-        border-top: 1px solid var(--main-border-color);
+        border-bottom: 1px solid var(--main-border-color);
     }
         
     .ribbon-tab-spacer:last-of-type {
@@ -74,7 +74,7 @@ const TPL = `
     
     .ribbon-button-container {
         display: flex;
-        border-top: 1px solid var(--main-border-color); 
+        border-bottom: 1px solid var(--main-border-color); 
         margin-right: 5px;
     }
     
@@ -86,9 +86,9 @@ const TPL = `
     
     .ribbon-body {
         display: none;
-        border-top: 1px solid var(--main-border-color);
+        border-bottom: 1px solid var(--main-border-color);
         margin-left: 10px;
-        margin-right: 5px; /* needs to have this value so that the top border is the same width as the top one */
+        margin-right: 5px; /* needs to have this value so that the bottom border is the same width as the top one */
     }
     
     .ribbon-body.active {

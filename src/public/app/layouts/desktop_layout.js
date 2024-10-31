@@ -121,7 +121,29 @@ export default class DesktopLayout {
                         .collapsible()
                         .id('center-pane')
                         .child(new SplitNoteContainer(() =>
-                                new NoteWrapperWidget()                                                                                                        
+                                new NoteWrapperWidget()                                    
+                                    .child(
+                                        new RibbonContainer()
+                                            // the order of the widgets matter. Some of these want to "activate" themselves
+                                            // when visible. When this happens to multiple of them, the first one "wins".
+                                            // promoted attributes should always win.
+                                            .ribbon(new ScriptExecutorWidget())
+                                            .ribbon(new SearchDefinitionWidget())
+                                            .ribbon(new EditedNotesWidget())
+                                            .ribbon(new BookPropertiesWidget())
+                                            .ribbon(new NotePropertiesWidget())
+                                            .ribbon(new FilePropertiesWidget())
+                                            .ribbon(new ImagePropertiesWidget())
+                                            .ribbon(new BasicPropertiesWidget())
+                                            .ribbon(new OwnedAttributeListWidget())
+                                            .ribbon(new InheritedAttributesWidget())
+                                            .ribbon(new NotePathsWidget())
+                                            .ribbon(new NoteMapRibbonWidget())
+                                            .ribbon(new SimilarNotesWidget())
+                                            .ribbon(new NoteInfoWidget())
+                                            .button(new RevisionsButton())
+                                            .button(new NoteActionsWidget())
+                                        )                                    
                                     .child(new SharedInfoWidget())
                                     .child(new WatchedFileUpdateStatusWidget())
                                     .child(new FloatingButtons()
@@ -166,28 +188,6 @@ export default class DesktopLayout {
                                         ...this.customWidgets.get('node-detail-pane'), // typo, let's keep it for a while as BC
                                         ...this.customWidgets.get('note-detail-pane')
                                     )
-                                    .child(
-                                        new RibbonContainer()
-                                            // the order of the widgets matter. Some of these want to "activate" themselves
-                                            // when visible. When this happens to multiple of them, the first one "wins".
-                                            // promoted attributes should always win.
-                                            .ribbon(new ScriptExecutorWidget())
-                                            .ribbon(new SearchDefinitionWidget())
-                                            .ribbon(new EditedNotesWidget())
-                                            .ribbon(new BookPropertiesWidget())
-                                            .ribbon(new NotePropertiesWidget())
-                                            .ribbon(new FilePropertiesWidget())
-                                            .ribbon(new ImagePropertiesWidget())
-                                            .ribbon(new BasicPropertiesWidget())
-                                            .ribbon(new OwnedAttributeListWidget())
-                                            .ribbon(new InheritedAttributesWidget())
-                                            .ribbon(new NotePathsWidget())
-                                            .ribbon(new NoteMapRibbonWidget())
-                                            .ribbon(new SimilarNotesWidget())
-                                            .ribbon(new NoteInfoWidget())
-                                            .button(new RevisionsButton())
-                                            .button(new NoteActionsWidget())
-                                        )    
                             )
                         )
                         .child(...this.customWidgets.get('center-pane'))
