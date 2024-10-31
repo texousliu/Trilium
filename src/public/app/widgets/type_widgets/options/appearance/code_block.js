@@ -88,11 +88,18 @@ export default class CodeBlockOptions extends OptionsWidget {
         this.$themeSelect.empty();
 
         for (const [ key, themes ] of Object.entries(themeGroups)) {
-            const $group = $("<optgroup>").attr("label", key);
+            const $group = (key ? $("<optgroup>").attr("label", key) : null);
+
             for (const theme of themes) {
-                $group.append($("<option>")
+                const option = $("<option>")
                     .attr("value", theme.val)
-                    .text(theme.title));
+                    .text(theme.title);
+
+                if ($group) {
+                    $group.append(option);
+                } else {
+                    this.$themeSelect.append(option);
+                }
             }
             this.$themeSelect.append($group);
         }

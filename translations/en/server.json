@@ -185,7 +185,7 @@
     "search_prefix": "Search:"
   },
   "code_block": {
-    "theme_none": "None",
+    "theme_none": "No syntax highlighting",
     "theme_group_light": "Light themes",
     "theme_group_dark": "Dark themes"
   }

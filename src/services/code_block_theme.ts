@@ -10,15 +10,16 @@ interface ColorTheme {
 export function listSyntaxHighlightingThemes() {
     const path = "node_modules/@highlightjs/cdn-assets/styles";
     const systemThemes = readThemesFromFileSystem(path);
-    const allThemes = [
-        {
-            val: "none",
-            title: t("code_block.theme_none")
-        },
-        ...systemThemes
-    ];
 
-    return groupThemesByLightOrDark(allThemes);
+    return {
+        "": [
+            {
+                val: "none",
+                title: t("code_block.theme_none")
+            }
+        ],
+        ...groupThemesByLightOrDark(systemThemes)
+    }
 }
 
 function readThemesFromFileSystem(path: string): ColorTheme[] {
