@@ -185,6 +185,8 @@
     "search_prefix": "Căutare:"
   },
   "code_block": {
-    "theme_none": "Niciuna"
+    "theme_none": "Niciuna",
+    "theme_group_dark": "Teme întunecate",
+    "theme_group_light": "Teme luminoase"
   }
 }

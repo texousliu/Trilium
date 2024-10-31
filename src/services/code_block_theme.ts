@@ -40,18 +40,19 @@ function readThemesFromFileSystem(path: string): ColorTheme[] {
 }
 
 function groupThemesByLightOrDark(listOfThemes: ColorTheme[]) {
-    const result: Record<string, ColorTheme[]> = {
-        light: [],
-        dark: []
-    };
+    const darkThemes = [];
+    const lightThemes = [];
 
     for (const theme of listOfThemes) {
         if (theme.title.includes("Dark")) {
-            result.dark.push(theme);
+            darkThemes.push(theme);
         } else {
-            result.light.push(theme);
+            lightThemes.push(theme);
         }
     }
 
-    return result;
+    const output: Record<string, ColorTheme[]> = {};
+    output[t("code_block.theme_group_light")] = lightThemes;
+    output[t("code_block.theme_group_dark")] = darkThemes;
+    return output;
 }
