@@ -105,6 +105,6 @@ export default class CodeBlockOptions extends OptionsWidget {
         }
         this.$themeSelect.val(options.codeBlockTheme);
         this.setCheckboxState(this.$wordWrap, options.codeBlockWordWrap);
-        this.$widget.closest(".note-detail-printable").toggleClass("word-wrap", options.codeBlockWordWrap);
+        this.$widget.closest(".note-detail-printable").toggleClass("word-wrap", options.codeBlockWordWrap === "true");
     }
 }
