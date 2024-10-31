@@ -8,10 +8,16 @@
  * TODO: Generally this class can be done directly in the CKEditor repository.
  */
 
+import library_loader from "../../../services/library_loader.js";
 import mime_types from "../../../services/mime_types.js";
+import { isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 
-export function initSyntaxHighlighting(editor) {
-    console.log("Init syntax highlight");
+export async function initSyntaxHighlighting(editor) {
+    if (!isSyntaxHighlightEnabled) {
+        return;
+    }
+
+    await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
     initTextEditor(editor);
 }
 

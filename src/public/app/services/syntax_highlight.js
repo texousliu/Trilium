@@ -1,11 +1,19 @@
+import library_loader from "./library_loader.js";
 import mime_types from "./mime_types.js";
+import options from "./options.js";
 
 /**
- * Identifies all the code blocks under the specified hierarchy and uses the highlight.js library to obtain the highlighted text which is then applied on to the code blocks.
+ * Identifies all the code blocks (as `pre code`) under the specified hierarchy and uses the highlight.js library to obtain the highlighted text which is then applied on to the code blocks.
  * 
  * @param $container the container under which to look for code blocks and to apply syntax highlighting to them.
  */
-export function applySyntaxHighlight($container) {
+export async function applySyntaxHighlight($container) {
+    if (!isSyntaxHighlightEnabled()) {
+        return;
+    }
+
+    await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
+
     const codeBlocks = $container.find("pre code");
     for (const codeBlock of codeBlocks) {
         $(codeBlock).parent().toggleClass("hljs");
@@ -29,6 +37,15 @@ export function applySyntaxHighlight($container) {
             codeBlock.innerHTML = highlightedText.value;
         }
     }
+}
+
+/**
+ * Indicates whether syntax highlighting should be enabled for code blocks, by querying the value of the `codeblockTheme` option.
+ * @returns whether syntax highlighting should be enabled for code blocks.
+ */
+export function isSyntaxHighlightEnabled() {
+    const theme = options.get("codeBlockTheme");
+    return theme && theme !== "none";
 }
 
 /**

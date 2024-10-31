@@ -107,7 +107,7 @@ async function renderText(note, $renderedContent) {
             await linkService.loadReferenceLinkTitle($(el));
         }
 
-        applySyntaxHighlight($renderedContent);
+        await applySyntaxHighlight($renderedContent);
     } else {
         await renderChildrenList($renderedContent, note);
     }
