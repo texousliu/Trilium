@@ -5,7 +5,6 @@ import attributeRenderer from "./attribute_renderer.js";
 import libraryLoader from "./library_loader.js";
 import treeService from "./tree.js";
 import utils from "./utils.js";
-import { applySyntaxHighlight } from "./syntax_highlight.js";
 
 const TPL = `
 <div class="note-list">
@@ -367,9 +366,7 @@ class NoteListRenderer {
                     separateWordSearch: false,
                     caseSensitive: false
                 });
-            }
-
-            applySyntaxHighlight($renderedContent);
+            }            
 
             $content.append($renderedContent);
             $content.addClass(`type-${type}`);
