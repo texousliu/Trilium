@@ -1,5 +1,10 @@
 import mime_types from "./mime_types.js";
 
+/**
+ * Identifies all the code blocks under the specified hierarchy and uses the highlight.js library to obtain the highlighted text which is then applied on to the code blocks.
+ * 
+ * @param $container the container under which to look for code blocks and to apply syntax highlighting to them.
+ */
 export function applySyntaxHighlight($container) {
     const codeBlocks = $container.find("pre code");
     for (const codeBlock of codeBlocks) {
