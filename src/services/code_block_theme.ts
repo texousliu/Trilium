@@ -1,12 +1,31 @@
+/**
+ * @module
+ * 
+ * Manages the server-side functionality of the code blocks feature, mostly for obtaining the available themes for syntax highlighting.
+ */
+
 import fs from "fs";
 import themeNames from "./code_block_theme_names.json" with { type: "json" }
 import { t } from "i18next";
 
+/**
+ * Represents a color scheme for the code block syntax highlight.
+ */
 interface ColorTheme {
+    /** The ID of the color scheme which should be stored in the options. */
     val: string;
+    /** A user-friendly name of the theme. The name is already localized. */
     title: string;
 }
 
+/**
+ * Returns all the supported syntax highlighting themes for code blocks, in groups.
+ * 
+ * The return value is an object where the keys represent groups in their human-readable name (e.g. "Light theme")
+ * and the values are an array containing the information about every theme.
+ * 
+ * @returns the supported themes, grouped.
+ */
 export function listSyntaxHighlightingThemes() {
     const path = "node_modules/@highlightjs/cdn-assets/styles";
     const systemThemes = readThemesFromFileSystem(path);
@@ -22,6 +41,14 @@ export function listSyntaxHighlightingThemes() {
     }
 }
 
+/**
+ * Reads all the predefined themes by listing all minified CSSes from a given directory.
+ * 
+ * The theme names are mapped against a known list in order to provide more descriptive names such as "Visual Studio 2015 (Dark)" instead of "vs2015".
+ * 
+ * @param path the path to read from. Usually this is the highlight.js `styles` directory.
+ * @returns the list of themes.
+ */
 function readThemesFromFileSystem(path: string): ColorTheme[] {
     return fs.readdirSync(path)
         .filter((el) => el.endsWith(".min.css"))
@@ -40,6 +67,13 @@ function readThemesFromFileSystem(path: string): ColorTheme[] {
         });
 }
 
+/**
+ * Groups a list of themes by dark or light themes. This is done simply by checking whether "Dark" is present in the given theme, otherwise it's considered a light theme.
+ * This generally only works if the theme has a known human-readable name (see {@link #readThemesFromFileSystem()})
+ * 
+ * @param listOfThemes the list of themes to be grouped.
+ * @returns the grouped themes by light or dark.
+ */
 function groupThemesByLightOrDark(listOfThemes: ColorTheme[]) {
     const darkThemes = [];
     const lightThemes = [];
