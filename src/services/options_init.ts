@@ -65,6 +65,9 @@ async function initNotSyncedOptions(initialized: boolean, theme: string, opts: N
     optionService.createOption('syncProxy', opts.syncProxy || '', false);
 }
 
+/**
+ * Contains all the default options that must be initialized on new and existing databases (at startup). The value can also be determined based on other options, provided they have already been initialized.
+ */
 const defaultOptions: DefaultOption[] = [
     { name: 'revisionSnapshotTimeInterval', value: '600', isSynced: true },
     { name: 'revisionSnapshotNumberLimit', value: '-1', isSynced: true },
@@ -119,6 +122,7 @@ const defaultOptions: DefaultOption[] = [
     { name: 'locale', value: 'en', isSynced: true },
     { name: 'firstDayOfWeek', value: '1', isSynced: true },
 
+    // Code block configuration
     { name: "codeBlockTheme", value: (optionsMap) => {
         if (optionsMap.theme === "light") {
             return "default:stackoverflow-light";
@@ -129,6 +133,11 @@ const defaultOptions: DefaultOption[] = [
     { name: "codeBlockWordWrap", value: "false", isSynced: true }
 ];
 
+/**
+ * Initializes the options, by checking which options from {@link #allDefaultOptions()} are missing and registering them. It will also check some environment variables such as safe mode, to make any necessary adjustments.
+ * 
+ * This method is called regardless of whether a new database is created, or an existing database is used.
+ */
 function initStartupOptions() {
     const optionsMap = optionService.getOptionMap();
 
