@@ -75,16 +75,15 @@
   },
   "delete_notes": {
     "delete_notes_preview": "Eliminar vista previa de notas",
-    "delete_all_clones_description": "eliminar también todos los clones (se puede deshacer en cambios recientes)",
+    "delete_all_clones_description": "Eliminar también todos los clones (se puede deshacer en cambios recientes)",
     "erase_notes_description": "La eliminación normal (suave) solo marca las notas como eliminadas y se pueden recuperar (en el cuadro de diálogo de cambios recientes) dentro de un periodo de tiempo. Al marcar esta opción se borrarán las notas inmediatamente y no será posible recuperarlas.",
-    "erase_notes_warning": "eliminar notas permanentemente (no se puede deshacer), incluidos todos los clones. Esto forzará la recarga de la aplicación.",
-    "notes_to_be_deleted": "Las siguientes notas serán eliminadas (<span class=\"deleted-notes-count\"></span>)",
+    "erase_notes_warning": "Eliminar notas permanentemente (no se puede deshacer), incluidos todos los clones. Esto forzará la recarga de la aplicación.",
+    "notes_to_be_deleted": "Las siguientes notas serán eliminadas ({{- noteCount}})",
     "no_note_to_delete": "No se eliminará ninguna nota (solo clones).",
-    "broken_relations_to_be_deleted": "Las siguientes relaciones se romperán y serán eliminadas (<span class=\"broke-relations-count\"></span>)",
+    "broken_relations_to_be_deleted": "Las siguientes relaciones se romperán y serán eliminadas ({{- relationCount}})",
     "cancel": "Cancelar",
     "ok": "Aceptar",
-    "note": "Nota",
-    "to_be_deleted": " (para ser eliminada) está referenciado por la relación <code>{{attrName}}</code> que se origina en "
+    "deleted_relation_text": "Nota {{- note}} (para ser eliminada) está referenciado por la relación {{- relation}} que se origina en {{- source}}."
   },
   "export": {
     "export_note_title": "Exportar nota",
