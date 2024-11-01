@@ -16,7 +16,12 @@
     },
     "widget-error": {
       "title": "No se pudo inicializar un widget",
-      "message": "Widget con título \"{{title}}\" no pudo ser inicializado debido a:\n\n{{message}}"
+      "message-custom": "El widget personalizado de la nota con ID \"{{id}}\", titulada \"{{title}}\" no pudo ser inicializado debido a:\n\n{{message}}",
+      "message-unknown": "Un widget no pudo ser inicializado debido a:\n\n{{message}}"
+    },
+    "bundle-error": {
+      "title": "Hubo un fallo al cargar un script personalizado",
+      "message": "El script de la nota con ID \"{{id}}\", titulado \"{{title}}\" no pudo ser ejecutado debido a:\n\n{{message}}"
     }
   },
   "add_link": {
@@ -165,7 +170,8 @@
     "textImportedAsText": "Importar HTML, Markdown y TXT como notas de texto si no está claro en los metadatos",
     "codeImportedAsCode": "Importar archivos de código reconocidos (por ejemplo, <code>.json</code>) como notas de código si no están claros en los metadatos",
     "replaceUnderscoresWithSpaces": "Reemplazar guiones bajos con espacios en nombres de notas importadas",
-    "import": "Importar"
+    "import": "Importar",
+    "failed": "La importación falló: {{message}}."
   },
   "include_note": {
     "dialog_title": "Incluir nota",
@@ -329,9 +335,9 @@
     "run_on_instance": "Definir en qué instancia de Trilium se debe ejecutar esto. Predeterminado para todas las instancias.",
     "run_at_hour": "¿A qué hora debería funcionar? Debe usarse junto con <code>#run=hourly</code>. Se puede definir varias veces para varias ejecuciones durante el día.",
     "disable_inclusion": "los scripts con esta etiqueta no se incluirán en la ejecución del script principal.",
-    "sorted": "mantiene las notas hijo ordenadas alfabéticamente por título",
+    "sorted": "mantiene las subnotas ordenadas alfabéticamente por título",
     "sort_direction": "ASC (el valor predeterminado) o DESC",
-    "sort_folders_first": "Las carpetas (notas con hijos) deben ordenarse en la parte superior",
+    "sort_folders_first": "Las carpetas (notas con subnotas) deben ordenarse en la parte superior",
     "top": "mantener la nota dada en la parte superior de su padre (se aplica solo en padres ordenados)",
     "hide_promoted_attributes": "Ocultar atributos promovidos en esta nota",
     "read_only": "el editor está en modo de sólo lectura. Funciona sólo para notas de texto y código.",
@@ -349,9 +355,9 @@
     "workspace_tab_background_color": "color CSS utilizado en la pestaña de nota cuando se ancla a esta nota",
     "workspace_calendar_root": "Define la raíz del calendario por cada espacio de trabajo",
     "workspace_template": "Esta nota aparecerá en la selección de plantillas disponibles al crear una nueva nota, pero solo cuando se levante a un espacio de trabajo que contenga esta plantilla",
-    "search_home": "se crearán nuevas notas de búsqueda como hijas de esta nota",
-    "workspace_search_home": "se crearán nuevas notas de búsqueda como hijo de esta nota cuando se anclan a algún antecesor de esta nota del espacio de trabajo",
-    "inbox": "ubicación predeterminada de la bandeja de entrada para nuevas notas - cuando crea una nota usando el botón \"nueva nota\" en la barra lateral, las notas serán creadas como notas hijo de la nota marcada con la etiqueta <code>#inbox</code>.",
+    "search_home": "se crearán nuevas notas de búsqueda como subnotas de esta nota",
+    "workspace_search_home": "se crearán nuevas notas de búsqueda como subnotas de esta nota cuando se anclan a algún antecesor de esta nota del espacio de trabajo",
+    "inbox": "ubicación predeterminada de la bandeja de entrada para nuevas notas - cuando crea una nota usando el botón \"nueva nota\" en la barra lateral, las notas serán creadas como subnotas de la nota marcada con la etiqueta <code>#inbox</code>.",
     "workspace_inbox": "ubicación predeterminada de la bandeja de entrada para nuevas notas cuando se anclan a algún antecesor de esta nota del espacio de trabajo",
     "sql_console_home": "ubicación predeterminada de las notas de la consola SQL",
     "bookmark_folder": "la nota con esta etiqueta aparecerá en los marcadores como carpeta (permitiendo el acceso a sus elementos hijos).",
@@ -367,7 +373,7 @@
     "share_index": "tenga en cuenta que con esto esta etiqueta enumerará todas las raíces de las notas compartidas",
     "display_relations": "nombres de relaciones delimitados por comas que deben mostrarse. Todos los demás estarán ocultos.",
     "hide_relations": "nombres de relaciones delimitados por comas que deben ocultarse. Se mostrarán todos los demás.",
-    "title_template": "título por defecto de notas creadas como hijo de esta nota. El valor es evaluado como una cadena de JavaScript \n                        y por lo tanto puede ser enriquecida con contenido dinámico vía las variables inyectadas <code>now</code> y <code>parentNote</code>. Ejemplos:\n                        \n                        <ul>\n                            <li><code>trabajos literarios de ${parentNote.getLabelValue('authorName')}</code></li>\n                            <li><code>Registro para ${now.format('YYYY-MM-DD HH:mm:ss')}</code></li>\n                        </ul>\n                        \n                        Consulte la <a href=\"https://triliumnext.github.io/Docs/Wiki/default-note-title.html\">wiki para obtener más detalles</a>, documentación de la API para <a href=\"https://zadam.github.io/trilium/backend_api/Note.html\">parentNote</a> y <a href=\"https://day.js.org/docs/en/display/format\">now</a> para más detalles.",
+    "title_template": "título por defecto de notas creadas como subnota de esta nota. El valor es evaluado como una cadena de JavaScript \n                        y por lo tanto puede ser enriquecida con contenido dinámico vía las variables inyectadas <code>now</code> y <code>parentNote</code>. Ejemplos:\n                        \n                        <ul>\n                            <li><code>trabajos literarios de ${parentNote.getLabelValue('authorName')}</code></li>\n                            <li><code>Registro para ${now.format('YYYY-MM-DD HH:mm:ss')}</code></li>\n                        </ul>\n                        \n                        Consulte la <a href=\"https://triliumnext.github.io/Docs/Wiki/default-note-title.html\">wiki para obtener más detalles</a>, documentación de la API para <a href=\"https://zadam.github.io/trilium/backend_api/Note.html\">parentNote</a> y <a href=\"https://day.js.org/docs/en/display/format\">now</a> para más detalles.",
     "template": "Esta nota aparecerá en la selección de plantillas disponibles al crear una nueva nota",
     "toc": "<code>#toc</code> o <code>#toc=show</code> forzará que se muestre la tabla de contenido, <code>#toc=hide</code> forzará a ocultarla. Si la etiqueta no existe, se observa la configuración global",
     "color": "define el color de la nota en el árbol de notas, enlaces, etc. Utilice cualquier valor de color CSS válido como 'red' o #a13d5f",
@@ -631,7 +637,10 @@
     "export_note": "Exportar nota",
     "delete_note": "Eliminar nota",
     "print_note": "Imprimir nota",
-    "save_revision": "Guardar revisión"
+    "save_revision": "Guardar revisión",
+    "convert_into_attachment_failed": "La conversión de nota '{{title}}' falló.",
+    "convert_into_attachment_successful": "La nota '{{title}}' ha sido convertida a un archivo adjunto.",
+    "convert_into_attachment_prompt": "¿Está seguro que desea convertir la nota '{{title}}' en un archivo adjunto de la nota padre?"
   },
   "onclick_button": {
     "no_click_handler": "El widget de botón '{{componentId}}' no tiene un controlador de clics definido"
@@ -669,7 +678,7 @@
     "button_title": "Exportar diagrama como SVG"
   },
   "relation_map_buttons": {
-    "create_child_note_title": "Crear una nueva nota hijo y agregarla a este mapa de relaciones",
+    "create_child_note_title": "Crear una nueva subnota y agregarla a este mapa de relaciones",
     "reset_pan_zoom_title": "Restablecer la panorámica y el zoom a las coordenadas y ampliación iniciales",
     "zoom_in_title": "Acercar",
     "zoom_out_title": "Alejar"
@@ -680,7 +689,7 @@
     "relation": "relación"
   },
   "mobile_detail_menu": {
-    "insert_child_note": "Insertar nota hijo",
+    "insert_child_note": "Insertar subnota",
     "delete_this_note": "Eliminar esta nota",
     "error_cannot_get_branch_id": "No se puede obtener el branchID del notePath '{{notePath}}'",
     "error_unrecognized_command": "Comando no reconocido {{command}}"
@@ -701,7 +710,7 @@
     "grid": "Cuadrícula",
     "list": "Lista",
     "collapse_all_notes": "Contraer todas las notas",
-    "expand_all_children": "Ampliar todos los hijos",
+    "expand_all_children": "Ampliar todas las subnotas",
     "collapse": "Colapsar",
     "expand": "Expandir",
     "book_properties": "Propiedades del libro",
@@ -855,7 +864,7 @@
     "content_and_attachments_size": "Tenga en cuenta el tamaño del contenido, incluidos los archivos adjuntos",
     "content_and_attachments_and_revisions_size": "Tenga en cuenta el tamaño del contenido, incluidos los archivos adjuntos y las revisiones",
     "revision_count": "Número de revisiones",
-    "children_count": "Notas sobre el número de hijos",
+    "children_count": "Número de subnotas",
     "parent_count": "Número de clones",
     "owned_label_count": "Número de etiquetas",
     "owned_relation_count": "Número de relaciones",
@@ -891,7 +900,7 @@
   "attachment_detail": {
     "open_help_page": "Abrir página de ayuda en archivos adjuntos",
     "owning_note": "Nota dueña: ",
-    "you_can_also_open": ", también puedes abri el ",
+    "you_can_also_open": ", también puede abrir el ",
     "list_of_all_attachments": "Lista de todos los archivos adjuntos",
     "attachment_deleted": "Este archivo adjunto ha sido eliminado."
   },
@@ -902,7 +911,7 @@
     "no_attachments": "Esta nota no tiene archivos adjuntos."
   },
   "book": {
-    "no_children_help": "Esta nota de tipo libro no tieneninguna nota hijo así que no hay nada que mostrar. Véa la <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> para más detalles."
+    "no_children_help": "Esta nota de tipo libro no tieneninguna subnota así que no hay nada que mostrar. Véa la <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> para más detalles."
   },
   "editable_code": {
     "placeholder": "Escriba el contenido de su nota de código aquí..."
@@ -920,7 +929,15 @@
   },
   "protected_session": {
     "enter_password_instruction": "Para mostrar una nota protegida es necesario ingresar su contraseña:",
-    "start_session_button": "Iniciar sesión protegida"
+    "start_session_button": "Iniciar sesión protegida",
+    "started": "La sesión protegida ha iniciado.",
+    "wrong_password": "Contraseña incorrecta.",
+    "protecting-finished-successfully": "La protección finalizó exitosamente.",
+    "unprotecting-finished-successfully": "La desprotección finalizó exitosamente.",
+    "protecting-in-progress": "Protección en progreso: {{count}}",
+    "unprotecting-in-progress-count": "Desprotección en progreso: {{count}}",
+    "protecting-title": "Estado de protección",
+    "unprotecting-title": "Estado de desprotección"
   },
   "relation_map": {
     "open_in_new_tab": "Abrir en nueva pestaña",
@@ -975,7 +992,7 @@
     "error_creating_anonymized_database": "No se pudo crear una base de datos anónima; consulte los registros de backend para obtener más detalles",
     "successfully_created_fully_anonymized_database": "Se creó una base de datos completamente anónima en {{anonymizedFilePath}}",
     "successfully_created_lightly_anonymized_database": "Se creó una base de datos ligeramente anónima en {{anonymizedFilePath}}",
-    "no_anonymized_database_yet": "aún no hay base de datos anónima"
+    "no_anonymized_database_yet": "Aún no hay base de datos anónima."
   },
   "database_integrity_check": {
     "title": "Verificación de integridad de la base de datos",
@@ -991,7 +1008,9 @@
     "fill_entity_changes_button": "Llenar registros de cambios de entidad",
     "full_sync_triggered": "Sincronización completa activada",
     "filling_entity_changes": "Rellenar filas de cambios de entidad...",
-    "sync_rows_filled_successfully": "Sincronizar filas completadas correctamente"
+    "sync_rows_filled_successfully": "Sincronizar filas completadas correctamente",
+    "finished-successfully": "La sincronización finalizó exitosamente.",
+    "failed": "La sincronización falló: {{message}}"
   },
   "vacuum_database": {
     "title": "Limpiar base de datos",
@@ -1137,7 +1156,7 @@
   },
   "table_of_contents": {
     "title": "Tabla de contenido",
-    "description": "La tabla de contenido aparecerá en las notas de texto cuando la nota tenga más de un número definido de títulos. Puedes personalizar este número:",
+    "description": "La tabla de contenido aparecerá en las notas de texto cuando la nota tenga más de un número definido de títulos. Puede personalizar este número:",
     "disable_info": "También puede utilizar esta opción para desactivar la TDC (TOC) de forma efectiva estableciendo un número muy alto.",
     "shortcut_info": "Puede configurar un atajo de teclado para alternar rápidamente el panel derecho (incluido el TDC) en Opciones -> Atajos (nombre 'toggleRightPane')."
   },
@@ -1286,7 +1305,7 @@
     "open-in-a-new-tab": "Abrir en nueva pestaña",
     "open-in-a-new-split": "Abrir en nueva división",
     "insert-note-after": "Insertar nota después de",
-    "insert-child-note": "Insertar nota hijo",
+    "insert-child-note": "Insertar subnota",
     "delete": "Eliminar",
     "search-in-subtree": "Buscar en subárbol",
     "hoist-note": "Anclar nota",
@@ -1310,7 +1329,9 @@
     "duplicate-subtree": "Duplicar subárbol",
     "export": "Exportar",
     "import-into-note": "Importar a nota",
-    "apply-bulk-actions": "Aplicar acciones en lote"
+    "apply-bulk-actions": "Aplicar acciones en lote",
+    "converted-to-attachments": "{{count}} notas han sido convertidas en archivos adjuntos.",
+    "convert-to-attachment-confirm": "¿Está seguro que desea convertir las notas seleccionadas en archivos adjuntos de sus notas padres?"
   },
   "shared_info": {
     "shared_publicly": "Esta nota está compartida públicamente en",
@@ -1333,7 +1354,8 @@
     "image": "Imagen",
     "launcher": "Lanzador",
     "doc": "Doc",
-    "widget": "Widget"
+    "widget": "Widget",
+    "confirm-change": "No es recomendado cambiar el tipo de nota cuando el contenido de la nota no está vacío. ¿Desea continuar de cualquier manera?"
   },
   "protect_note": {
     "toggle-on": "Proteger la nota",
@@ -1379,7 +1401,9 @@
     "hide-archived-notes": "Ocultar notas archivadas",
     "automatically-collapse-notes": "Colapsar notas automaticamente",
     "automatically-collapse-notes-title": "Las notas serán colapsadas después de un periodo de inactividad para despejar el árbol.",
-    "save-changes": "Guardar y aplicar cambios"
+    "save-changes": "Guardar y aplicar cambios",
+    "auto-collapsing-notes-after-inactivity": "Colapsando notas automáticamente después de inactividad...",
+    "saved-search-note-refreshed": "La nota de búsqueda guardada fue recargada."
   },
   "title_bar_buttons": {
     "window-on-top": "Mantener esta ventana en la parte superior."
@@ -1423,5 +1447,53 @@
   },
   "app_context": {
     "please_wait_for_save": "Por favor espere algunos segundos a que se termine de guardar, después intente de nuevo."
+  },
+  "note_create": {
+    "duplicated": "La nota \"{{title}}\" ha sido duplicada."
+  },
+  "image": {
+    "copied-to-clipboard": "Una referencia a la imagen ha sido copiada al portapapeles. Esta puede ser pegada en cualquier nota de texto.",
+    "cannot-copy": "No se pudo copiar la referencia de imagen al portapapeles."
+  },
+  "clipboard": {
+    "cut": "La(s) notas(s) han sido cortadas al portapapeles.",
+    "copied": "La(s) notas(s) han sido copiadas al portapapeles."
+  },
+  "entrypoints": {
+    "note-revision-created": "Una revisión de nota ha sido creada.",
+    "note-executed": "Nota ejecutada.",
+    "sql-error": "Ocurrió un error al ejecutar la consulta SQL: {{message}}"
+  },
+  "branches": {
+    "cannot-move-notes-here": "No se pueden mover notas aquí.",
+    "delete-status": "Estado de eliminación",
+    "delete-notes-in-progress": "Eliminación de notas en progreso: {{count}}",
+    "delete-finished-successfully": "La eliminación finalizó exitosamente.",
+    "undeleting-notes-in-progress": "Recuperación de notas en progreso: {{count}}",
+    "undeleting-notes-finished-successfully": "La recuperación de notas finalizó exitosamente."
+  },
+  "frontend_script_api": {
+    "async_warning": "Está pasando una función asíncrona a `api.runOnBackend ()` que probablemente no funcionará como pretendía.",
+    "sync_warning": "Estás pasando una función sincrónica a `api.runasynconbackendwithmanualTransactionHandling ()`, \\ n while debería usar `api.runonbackend ()` en su lugar."
+  },
+  "ws": {
+    "sync-check-failed": "¡La comprobación de sincronización falló!",
+    "consistency-checks-failed": "¡Las comprobaciones de consistencia fallaron! Vea los registros para más detalles.",
+    "encountered-error": "Error encontrado \"{{message}}\", compruebe la consola."
+  },
+  "hoisted_note": {
+    "confirm_unhoisting": "La nota requerida '{{requestedNote}}' está fuera del subárbol de la nota anclada '{{hoistedNote}}' y debe desanclarla para acceder a la nota. ¿Desea proceder con el desanclaje?"
+  },
+  "launcher_context_menu": {
+    "reset_launcher_confirm": "¿Realmente desea restaurar \"{{title}}\"? Todos los datos / ajustes en esta nota (y sus subnotas) se van a perder y el lanzador regresará a su ubicación original.",
+    "add-note-launcher": "Agregar un lanzador de nota",
+    "add-script-launcher": "Agregar un lanzador de script",
+    "add-custom-widget": "Agregar un widget personalizado",
+    "add-spacer": "Agregar espaciador",
+    "delete": "Eliminar",
+    "reset": "Restaurar",
+    "move-to-visible-launchers": "Mover a lanzadores visibles",
+    "move-to-available-launchers": "Mover a lanzadores disponibles",
+    "duplicate-launcher": "Duplicar lanzador"
   }
 }

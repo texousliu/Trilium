@@ -1,4 +1,5 @@
 import Component from "../components/component.js";
+import froca from "../services/froca.js";
 import { t } from "../services/i18n.js";
 import toastService from "../services/toast.js";
 
@@ -84,15 +85,8 @@ class BasicWidget extends Component {
     render() {
         try {
             this.doRender();
-        } catch (e) {
-            toastService.showPersistent({
-                title: t("toast.widget-error.title"),
-                icon: "alert",
-                message: t("toast.widget-error.message", {
-                    title: this.widgetTitle,
-                    message: e.message
-                })
-            });
+        } catch (e) {                        
+            this.logRenderingError(e);
         }
 
         this.$widget.attr('data-component-id', this.componentId);
@@ -129,6 +123,35 @@ class BasicWidget extends Component {
         }
 
         return this.$widget;
+    }
+
+    logRenderingError(e) {
+        console.log("Got issue in widget ", this);
+        console.error(e);
+
+        let noteId = this._noteId;
+        if (this._noteId) {
+            froca.getNote(noteId, true).then((note) => {
+                toastService.showPersistent({
+                    title: t("toast.widget-error.title"),
+                    icon: "alert",
+                    message: t("toast.widget-error.message-custom", {
+                        id: noteId,
+                        title: note.title,
+                        message: e.message
+                    })
+                });
+            });
+            return;
+        }
+
+        toastService.showPersistent({
+            title: t("toast.widget-error.title"),
+            icon: "alert",
+            message: t("toast.widget-error.message-unknown", {
+                message: e.message
+            })
+        });
     }
 
     /**

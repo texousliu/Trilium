@@ -42,3 +42,7 @@ function getCurrentLanguage() {
 
   return language;
 }
+
+export function changeLanguage(locale: string) {
+  return i18next.changeLanguage(locale);
+}

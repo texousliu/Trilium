@@ -136,7 +136,7 @@ export default class TreeContextMenu {
             this.treeWidget.triggerCommand("openNewNoteSplit", {ntxId, notePath});
         }
         else if (command === 'convertNoteToAttachment') {
-            if (!await dialogService.confirm(`Are you sure you want to convert note selected notes into attachments of their parent notes?`)) {
+            if (!await dialogService.confirm(t("tree-context-menu.convert-to-attachment-confirm"))) {
                 return;
             }
 
@@ -154,7 +154,7 @@ export default class TreeContextMenu {
                 }
             }
 
-            toastService.showMessage(`${converted} notes have been converted to attachments.`);
+            toastService.showMessage(t("tree-context-menu.converted-to-attachments", { count: converted }));
         }
         else if (command === 'copyNotePathToClipboard') {
             navigator.clipboard.writeText('#' + notePath);

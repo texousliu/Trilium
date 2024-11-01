@@ -78,7 +78,7 @@ async function copy(branchIds) {
         clipboard.writeHTML(links.join(', '));
     }
 
-    toastService.showMessage("Note(s) have been copied into clipboard.");
+    toastService.showMessage(t("clipboard.copied"));
 }
 
 function cut(branchIds) {
@@ -87,7 +87,7 @@ function cut(branchIds) {
     if (clipboardBranchIds.length > 0) {
         clipboardMode = 'cut';
 
-        toastService.showMessage("Note(s) have been cut into clipboard.");
+        toastService.showMessage(t("clipboard.cut"));
     }
 }
 

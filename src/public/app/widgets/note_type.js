@@ -159,7 +159,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
             return true;
         }
 
-        return await dialogService.confirm("It is not recommended to change note type when note content is not empty. Do you want to continue anyway?");
+        return await dialogService.confirm(t("note_types.confirm-change"));
     }
 
     async entitiesReloadedEvent({ loadResults }) {
