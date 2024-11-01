@@ -1053,7 +1053,7 @@
     "edited_notes_message": "Edited Notes ribbon tab will automatically open on day notes"
   },
   "theme": {
-    "title": "Theme",
+    "title": "Application Theme",
     "theme_label": "Theme",
     "override_theme_fonts_label": "Override theme fonts",
     "light_theme": "Light",
@@ -1497,5 +1497,16 @@
     "move-to-visible-launchers": "Move to visible launchers",
     "move-to-available-launchers": "Move to available launchers",
     "duplicate-launcher": "Duplicate launcher"
+  },
+  "editable-text": {
+    "auto-detect-language": "Auto-detected"
+  },
+  "highlighting": {
+    "title": "Code Syntax Highlighting for Text Notes",
+    "description": "Controls the syntax highlighting for code blocks inside text notes, code notes will not be affected.",
+    "color-scheme": "Color Scheme"
+  },
+  "code_block": {
+    "word_wrapping": "Word wrapping"
   }
 }

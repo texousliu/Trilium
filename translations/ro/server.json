@@ -183,5 +183,10 @@
   },
   "special_notes": {
     "search_prefix": "Căutare:"
+  },
+  "code_block": {
+    "theme_none": "Fără evidențiere de sintaxă",
+    "theme_group_dark": "Teme întunecate",
+    "theme_group_light": "Teme luminoase"
   }
 }
