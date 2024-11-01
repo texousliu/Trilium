@@ -67,6 +67,7 @@ export default class EmptyTypeWidget extends TypeWidget {
 
         this.$workspaceNotes = this.$widget.find('.workspace-notes');
 
+        noteAutocompleteService.showRecentNotes(this.$autoComplete);
         super.doRender();
     }
 
@@ -88,7 +89,5 @@ export default class EmptyTypeWidget extends TypeWidget {
         this.$autoComplete
             .trigger('focus')
             .trigger('select');
-
-        noteAutocompleteService.showRecentNotes(this.$autoComplete);
     }
 }
