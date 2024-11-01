@@ -26,7 +26,7 @@ const TPL = `
             border: 1px solid var(--main-border-color);
         }
 
-        .note-detail-empty-results {
+        .note-detail-empty-results .aa-dropdown-menu {
             max-height: 50vh;
             overflow: scroll;
             border: var(--bs-border-width) solid var(--bs-border-color);
