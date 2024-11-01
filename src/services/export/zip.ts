@@ -61,6 +61,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
 
         // Crop fileName to avoid its length exceeding 30 and prevent cutting into the extension.
         if (fileName.length > 30) {
+            // We use regex to match the extension to preserve multiple dots in extensions (e.g. .tar.gz).
             let match = fileName.match(/(\.[a-zA-Z0-9_.!#-]+)$/);
             let ext = match ? match[0] : ''; 
             // Crop the extension if extension length exceeds 30
