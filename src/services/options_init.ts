@@ -11,6 +11,9 @@ function initDocumentOptions() {
     optionService.createOption('documentSecret', utils.randomSecureToken(16), false);
 }
 
+/**
+ * Contains additional options to be initialized for a new database, containing the information entered by the user.
+ */
 interface NotSyncedOpts {
     syncServerHost?: string;
     syncProxy?: string;
@@ -22,6 +25,13 @@ interface DefaultOption {
     isSynced: boolean;
 }
 
+/**
+ * Initializes the default options for new databases only.
+ * 
+ * @param initialized `true` if the database has been fully initialized (i.e. a new database was created), or `false` if the database is created for sync.
+ * @param theme the theme to set as default, based on a user's system preference.
+ * @param opts additional options to be initialized, for example the sync configuration.
+ */
 async function initNotSyncedOptions(initialized: boolean, theme: string, opts: NotSyncedOpts = {}) {
     optionService.createOption('openNoteContexts', JSON.stringify([
         {
@@ -41,7 +51,6 @@ async function initNotSyncedOptions(initialized: boolean, theme: string, opts: N
     optionService.createOption('lastSyncedPush', '0', false);    
 
     optionService.createOption('theme', theme, false);
-    optionService.createOption('codeBlockTheme', "default:atom-one-dark", false);
     
     optionService.createOption('syncServerHost', opts.syncServerHost || '', false);
     optionService.createOption('syncServerTimeout', '120000', false);
@@ -102,6 +111,7 @@ const defaultOptions: DefaultOption[] = [
     { name: 'locale', value: 'en', isSynced: true },
     { name: 'firstDayOfWeek', value: '1', isSynced: true },
 
+    { name: "codeBlockTheme", value: "default:atom-one-dark", isSynced: false },
     { name: "codeBlockWordWrap", value: "false", isSynced: true }
 ];
 
