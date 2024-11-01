@@ -18,10 +18,9 @@ const TPL = `
             width: 130px;
             text-align: center;
             margin: 10px;
-            padding; 10px;
             border: 1px transparent solid;
         }
-        
+
         .workspace-notes .workspace-note:hover {
             cursor: pointer;
             border: 1px solid var(--main-border-color);
@@ -33,14 +32,14 @@ const TPL = `
         }
     </style>
 
+    <div class="workspace-notes"></div>
     <div class="form-group">
         <label>${t('empty.open_note_instruction')}</label>
-        <div class="input-group">
+        <div class="input-group mt-1">
             <input class="form-control note-autocomplete" placeholder="${t('empty.search_placeholder')}">
         </div>
     </div>
-    
-    <div class="workspace-notes"></div>
+    <div class="note-detail-empty-results"></div>
 </div>`;
 
 export default class EmptyTypeWidget extends TypeWidget {
@@ -51,10 +50,12 @@ export default class EmptyTypeWidget extends TypeWidget {
 
         this.$widget = $(TPL);
         this.$autoComplete = this.$widget.find(".note-autocomplete");
+        this.$results = this.$widget.find(".note-detail-empty-results");
 
         noteAutocompleteService.initNoteAutocomplete(this.$autoComplete, {
             hideGoToSelectedNoteButton: true,
-            allowCreatingNotes: true
+            allowCreatingNotes: true,
+            container: this.$results
         })
             .on('autocomplete:noteselected', function(event, suggestion, dataset) {
                 if (!suggestion.notePath) {
@@ -84,15 +85,10 @@ export default class EmptyTypeWidget extends TypeWidget {
             );
         }
 
-        // Automatically trigger autocomplete on focus.
-        this.$autoComplete.on('focus', () => {
-            // simulate pressing down arrow to trigger autocomplete
-            this.$autoComplete.trigger($.Event('keydown', { which: 40 })); // arrow down
-            this.$autoComplete.trigger($.Event('keydown', { which: 38 })); // arrow up
-        });
-        
         this.$autoComplete
             .trigger('focus')
             .trigger('select');
+
+        noteAutocompleteService.showRecentNotes(this.$autoComplete);
     }
 }
