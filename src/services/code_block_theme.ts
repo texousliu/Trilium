@@ -1,5 +1,5 @@
 import fs from "fs";
-import themeNames from "./code_block_theme_names.json" assert { type: "json" }
+import themeNames from "./code_block_theme_names.json" with { type: "json" }
 import { t } from "i18next";
 
 interface ColorTheme {
