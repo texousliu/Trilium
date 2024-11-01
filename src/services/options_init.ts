@@ -1,4 +1,5 @@
-import optionService, { OptionMap } from "./options.js";
+import optionService from "./options.js";
+import type { OptionMap } from "./options.js";
 import appInfo from "./app_info.js";
 import utils from "./utils.js";
 import log from "./log.js";

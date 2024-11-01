@@ -22,7 +22,8 @@ interface ColorTheme {
  * Returns all the supported syntax highlighting themes for code blocks, in groups.
  * 
  * The return value is an object where the keys represent groups in their human-readable name (e.g. "Light theme")
- * and the values are an array containing the information about every theme.
+ * and the values are an array containing the information about every theme. There is also a special group with no
+ * title (empty string) which should be displayed at the top of the listing pages, without a group.
  * 
  * @returns the supported themes, grouped.
  */
