@@ -1,4 +1,4 @@
-import optionService from "./options.js";
+import optionService, { OptionMap } from "./options.js";
 import appInfo from "./app_info.js";
 import utils from "./utils.js";
 import log from "./log.js";
@@ -19,9 +19,17 @@ interface NotSyncedOpts {
     syncProxy?: string;
 }
 
+/**
+ * Represents a correspondence between an option and its default value, to be initialized when the database is missing that particular option (after a migration from an older version, or when creating a new database).
+ */
 interface DefaultOption {
     name: string;
-    value: string;
+    /**
+     * The value to initialize the option with, if the option is not already present in the database.
+     * 
+     * If a function is passed in instead, the function is called if the option does not exist (with access to the current options) and the return value is used instead. Useful to migrate a new option with a value depending on some other option that might be initialized.
+     */
+    value: string | ((options: OptionMap) => string);
     isSynced: boolean;
 }
 
@@ -111,7 +119,13 @@ const defaultOptions: DefaultOption[] = [
     { name: 'locale', value: 'en', isSynced: true },
     { name: 'firstDayOfWeek', value: '1', isSynced: true },
 
-    { name: "codeBlockTheme", value: "default:atom-one-dark", isSynced: false },
+    { name: "codeBlockTheme", value: (optionsMap) => {
+        if (optionsMap.theme === "light") {
+            return "default:stackoverflow-light";
+        } else {
+            return "default:stackoverflow-dark";
+        }
+    }, isSynced: false },
     { name: "codeBlockWordWrap", value: "false", isSynced: true }
 ];
 
@@ -122,9 +136,15 @@ function initStartupOptions() {
 
     for (const {name, value, isSynced} of allDefaultOptions) {
         if (!(name in optionsMap)) {
-            optionService.createOption(name, value, isSynced);
+            let resolvedValue;
+            if (typeof value === "function") {
+                resolvedValue = value(optionsMap);
+            } else {
+                resolvedValue = value;
+            }
 
-            log.info(`Created option "${name}" with default value "${value}"`);
+            optionService.createOption(name, resolvedValue, isSynced);
+            log.info(`Created option "${name}" with default value "${resolvedValue}"`);
         }
     }
 

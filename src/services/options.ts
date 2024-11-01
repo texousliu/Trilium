@@ -3,6 +3,11 @@ import BOption from "../becca/entities/boption.js";
 import { OptionRow } from '../becca/entities/rows.js';
 import sql from "./sql.js";
 
+/**
+ * A dictionary where the keys are the option keys (e.g. `theme`) and their corresponding values.
+ */
+export type OptionMap = Record<string | number, string>;
+
 function getOptionOrNull(name: string): string | null {
     let option;
 
@@ -82,7 +87,7 @@ function getOptions() {
 }
 
 function getOptionMap() {
-    const map: Record<string | number, string> = {};
+    const map: OptionMap = {};
 
     for (const option of Object.values(becca.options)) {
         map[option.name] = option.value;
