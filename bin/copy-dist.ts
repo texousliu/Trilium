@@ -55,6 +55,7 @@ const copy = async () => {
     "node_modules/katex/dist/katex.min.js",
     "node_modules/katex/dist/contrib/mhchem.min.js",
     "node_modules/katex/dist/contrib/auto-render.min.js",
+    "node_modules/@highlightjs/cdn-assets/highlight.min.js"
   ];
 
   for (const file of nodeModulesFile) {
@@ -89,7 +90,9 @@ const copy = async () => {
     "node_modules/codemirror/addon/",
     "node_modules/codemirror/mode/",
     "node_modules/codemirror/keymap/",
-    "node_modules/mind-elixir/dist/"
+    "node_modules/mind-elixir/dist/",
+    "node_modules/@highlightjs/cdn-assets/languages",
+    "node_modules/@highlightjs/cdn-assets/styles"
   ];
 
   for (const folder of nodeModulesFolder) {
