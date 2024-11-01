@@ -25,6 +25,21 @@ const TPL = `
             cursor: pointer;
             border: 1px solid var(--main-border-color);
         }
+
+        .note-detail-empty-results {
+            max-height: 50vh;
+            overflow: scroll;
+            border: var(--bs-border-width) solid var(--bs-border-color);
+            border-top: 0;
+        }
+
+        .empty-tab-search .note-autocomplete-input {
+            border-bottom-left-radius: 0;
+        }
+
+        .empty-tab-search .input-clearer-button {
+            border-bottom-right-radius: 0;
+        }
         
         .workspace-icon {
             text-align: center;
@@ -33,7 +48,7 @@ const TPL = `
     </style>
 
     <div class="workspace-notes"></div>
-    <div class="form-group">
+    <div class="form-group empty-tab-search">
         <label>${t('empty.open_note_instruction')}</label>
         <div class="input-group mt-1">
             <input class="form-control note-autocomplete" placeholder="${t('empty.search_placeholder')}">
