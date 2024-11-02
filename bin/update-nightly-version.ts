@@ -7,7 +7,7 @@
  * user might run into module not found errors or styling errors caused by an old cache.
  * 
  * This script is supposed to be run in the CI, which will update locally the version field of
- * `package.json` to contain the date. For example, `0.90.9-beta` will become `0.90.9-nightly-20241102-092832`.
+ * `package.json` to contain the date. For example, `0.90.9-beta` will become `0.90.9-test-YYMMDD-HHMMSS`.
  * 
  */
 
@@ -22,10 +22,10 @@ function processVersion(version) {
     // Add the nightly suffix, plus the date.
     const referenceDate = new Date()
         .toISOString()
-        .substring(0, 19)
+        .substring(2, 19)
         .replace(/[-:]*/g, "")
         .replace("T", "-");
-    version = `${version}-nightly-${referenceDate}`;
+    version = `${version}-test-${referenceDate}`;
 
     return version;
 }
