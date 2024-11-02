@@ -47,6 +47,15 @@ const copy = async () => {
     await fs.copy(dir, path.join(DEST_DIR_SRC, path.basename(dir)));
   }  
 
+  /**
+   * Directories to be copied relative to the project root into <resource_dir>/src/public/app-dist.
+   */
+  const publicDirsToCopy = [ "./src/public/app/doc_notes" ];
+  const PUBLIC_DIR = path.join(DEST_DIR, "src", "public", "app-dist");
+  for (const dir of publicDirsToCopy) {
+    await fs.copy(dir, path.join(PUBLIC_DIR, path.basename(dir)));
+  }
+
   const nodeModulesFile = [
     "node_modules/react/umd/react.production.min.js",
     "node_modules/react/umd/react.development.js",
