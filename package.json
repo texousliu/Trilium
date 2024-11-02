@@ -46,7 +46,8 @@
     "integration-edit-db": "cross-env TRILIUM_INTEGRATION_TEST=edit TRILIUM_PORT=8081 TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
     "integration-mem-db": "cross-env TRILIUM_INTEGRATION_TEST=memory TRILIUM_PORT=8082 TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
     "integration-mem-db-dev": "cross-env TRILIUM_INTEGRATION_TEST=memory TRILIUM_PORT=8082 TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
-    "generate-document": "cross-env nodemon src/tools/generate_document.ts 1000"
+    "generate-document": "cross-env nodemon src/tools/generate_document.ts 1000",
+    "ci-update-nightly-version": "tsx ./bin/update-nightly-version.ts"
   },
   "dependencies": {
     "@braintree/sanitize-url": "7.1.0",
