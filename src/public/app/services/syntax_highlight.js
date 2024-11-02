@@ -2,6 +2,19 @@ import library_loader from "./library_loader.js";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 
+export function getStylesheetUrl(theme) {
+    if (!theme) {
+        return null;
+    }
+
+    const defaultPrefix = "default:";
+    if (theme.startsWith(defaultPrefix)) {        
+        return `${window.glob.assetPath}/node_modules/@highlightjs/cdn-assets/styles/${theme.substr(defaultPrefix.length)}.min.css`;
+    }
+
+    return null;
+}
+
 /**
  * Identifies all the code blocks (as `pre code`) under the specified hierarchy and uses the highlight.js library to obtain the highlighted text which is then applied on to the code blocks.
  * 

@@ -1,5 +1,6 @@
 import mimeTypesService from "./mime_types.js";
 import optionsService from "./options.js";
+import { getStylesheetUrl } from "./syntax_highlight.js";
 
 const CKEDITOR = {"js": ["libraries/ckeditor/ckeditor.js"]};
 
@@ -176,12 +177,7 @@ function loadHighlightingTheme(theme) {
         $("head").append(highlightingThemeEl);
     }
     
-    let url;
-    const defaultPrefix = "default:";
-    if (theme.startsWith(defaultPrefix)) {        
-        url = `${window.glob.assetPath}/node_modules/@highlightjs/cdn-assets/styles/${theme.substr(defaultPrefix.length)}.min.css`;
-    }
-
+    const url = getStylesheetUrl(theme);
     if (url) {
         highlightingThemeEl.attr("href", url);
     }
