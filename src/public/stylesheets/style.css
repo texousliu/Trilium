@@ -1199,6 +1199,10 @@ button.close:hover {
     flex-grow: 0 !important;
 }
 
+.options-mime-types {
+    column-width: 250px;
+}
+
 textarea {
     cursor: auto;
 }
@@ -1233,3 +1237,4 @@ textarea {
 .jump-to-note-results .aa-suggestions {
     padding: 1rem;
 }
+
