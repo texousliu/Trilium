@@ -157,5 +157,31 @@
     "clipped-from": "Cette note a été initialement extraite de {{- url}}",
     "child-notes": "Notes enfants :",
     "no-content": "Cette note n'a aucun contenu."
+  },
+  "weekdays": {
+    "monday": "Lundi",
+    "tuesday": "Mardi",
+    "wednesday": "Mercredi",
+    "thursday": "Jeudi",
+    "friday": "Vendredi",
+    "saturday": "Samedi",
+    "sunday": "Dimanche"
+  },
+  "months": {
+    "january": "Janvier",
+    "february": "Février",
+    "march": "Mars",
+    "april": "Avril",
+    "may": "Mai",
+    "june": "Juin",
+    "july": "Juillet",
+    "august": "Août",
+    "september": "Septembre",
+    "october": "Octobre",
+    "november": "Novembre",
+    "december": "Décembre"
+  },
+  "special_notes": {
+    "search_prefix": "Recherche :"
   }
 }
