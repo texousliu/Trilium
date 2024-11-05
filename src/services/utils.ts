@@ -364,5 +364,6 @@ export default {
     normalize,
     hashedBlobId,
     toMap,
-    isString
+    isString,
+    getResourceDir
 };
