@@ -81,7 +81,7 @@
     "express-partial-content": "1.0.2",
     "express-rate-limit": "7.4.1",
     "express-session": "1.18.1",
-    "force-graph": "1.45.0",
+    "force-graph": "1.46.0",
     "fs-extra": "11.2.0",
     "helmet": "7.1.0",
     "html": "1.0.0",
