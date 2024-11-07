@@ -10,7 +10,8 @@ import treeService from "./tree.js";
 import FNote from "../entities/fnote.js";
 import FAttachment from "../entities/fattachment.js";
 import imageContextMenuService from "../menus/image_context_menu.js";
-import { applySyntaxHighlight } from "./syntax_highlight.js";
+import { applySingleBlockSyntaxHighlight, applySyntaxHighlight } from "./syntax_highlight.js";
+import mime_types from "./mime_types.js";
 
 let idCounter = 1;
 
@@ -113,11 +114,18 @@ async function renderText(note, $renderedContent) {
     }
 }
 
-/** @param {FNote} note */
+/**
+ * Renders a code note, by displaying its content and applying syntax highlighting based on the selected MIME type.
+ * 
+ * @param {FNote} note
+ */
 async function renderCode(note, $renderedContent) {
     const blob = await note.getBlob();
 
-    $renderedContent.append($("<pre>").text(blob.content));
+    const $codeBlock = $("<pre>"); 
+    $codeBlock.text(blob.content);
+    applySingleBlockSyntaxHighlight($codeBlock, mime_types.normalizeMimeTypeForCKEditor(note.mime));
+    $renderedContent.append($codeBlock);
 }
 
 function renderImage(entity, $renderedContent, options = {}) {
