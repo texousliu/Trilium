@@ -20,6 +20,15 @@ const TPL = `\
     .classic-toolbar-widget .ck.ck-button.ck-disabled {
         opacity: 0.3;
     }
+
+    body.mobile .classic-toolbar-widget {
+        position: relative;
+        overflow-x: auto;
+    }
+
+    body.mobile .classic-toolbar-widget .ck.ck-toolbar {
+        position: absolute;
+    }
 </style>
 `;
 
