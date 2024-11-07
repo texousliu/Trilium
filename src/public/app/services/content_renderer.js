@@ -122,10 +122,10 @@ async function renderText(note, $renderedContent) {
 async function renderCode(note, $renderedContent) {
     const blob = await note.getBlob();
 
-    const $codeBlock = $("<pre>"); 
+    const $codeBlock = $("<code>");
     $codeBlock.text(blob.content);
-    applySingleBlockSyntaxHighlight($codeBlock, mime_types.normalizeMimeTypeForCKEditor(note.mime));
-    $renderedContent.append($codeBlock);
+    $renderedContent.append($("<pre>").append($codeBlock));
+    await applySingleBlockSyntaxHighlight($codeBlock, mime_types.normalizeMimeTypeForCKEditor(note.mime));
 }
 
 function renderImage(entity, $renderedContent, options = {}) {
