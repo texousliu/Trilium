@@ -23,6 +23,7 @@ import LauncherContainer from "../widgets/containers/launcher_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
+import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 
 const MOBILE_CSS = `
 <style>
@@ -167,6 +168,7 @@ export default class MobileLayout {
                             .child(new NoteListWidget())
                             .child(new FilePropertiesWidget().css('font-size','smaller'))
                     )
+                    .child(new ClassicEditorToolbar())
                 )
                 .child(new ProtectedSessionPasswordDialog())
                 .child(new ConfirmDialog())

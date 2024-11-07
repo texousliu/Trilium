@@ -181,8 +181,14 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             await initSyntaxHighlighting(editor);
 
             if (isClassicEditor) {
-                const $parentSplit = this.$widget.parents(".note-split.type-text");
-                const $classicToolbarWidget = $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
+                let $classicToolbarWidget;
+                if (!utils.isMobile()) {
+                    const $parentSplit = this.$widget.parents(".note-split.type-text");
+                    $classicToolbarWidget = $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
+                } else {
+                    $classicToolbarWidget = $("body").find(".classic-toolbar-widget");
+                }
+                
                 $classicToolbarWidget.empty();
                 $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
             }
