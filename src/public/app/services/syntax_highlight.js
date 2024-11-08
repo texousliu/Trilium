@@ -23,9 +23,7 @@ export function getStylesheetUrl(theme) {
 export async function applySyntaxHighlight($container) {
     if (!isSyntaxHighlightEnabled()) {
         return;
-    }
-
-    await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
+    }    
 
     const codeBlocks = $container.find("pre code");
     for (const codeBlock of codeBlocks) {
@@ -47,6 +45,10 @@ export async function applySyntaxHighlight($container) {
 export async function applySingleBlockSyntaxHighlight($codeBlock, normalizedMimeType) {
     $codeBlock.parent().toggleClass("hljs");
     const text = $codeBlock.text();
+
+    if (!window.hljs) {
+        await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
+    }
 
     let highlightedText = null;
     if (normalizedMimeType === mime_types.MIME_TYPE_AUTO) {
