@@ -1,14 +1,13 @@
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
 const TPL = `\
-<div class="classic-toolbar-widget">
-    Classic toolbar goes here.
-</div>
+<div class="classic-toolbar-widget"></div>
 
 <style>
     .classic-toolbar-widget {
         --ck-color-toolbar-background: transparent;
         --ck-color-button-default-background: transparent;
+        min-height: 39px;
     }
 
     .classic-toolbar-widget .ck.ck-toolbar {
