@@ -1,4 +1,5 @@
 import { t } from "../../services/i18n.js";
+import options from "../../services/options.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
 const TPL = `\
@@ -26,6 +27,9 @@ const TPL = `\
  * Handles the editing toolbar when the CKEditor is in decoupled mode.
  * 
  * <p>
+ * This toolbar is only enabled if the user has selected the classic CKEditor.
+ * 
+ * <p>
  * The ribbon item is active by default for text notes, as long as they are not in read-only mode.
  */
 export default class ClassicEditorToolbar extends NoteContextAwareWidget {
@@ -48,6 +52,10 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
     }
 
     async #shouldDisplay() {
+        if (options.get("textNoteEditorType") !== "ckeditor-classic") {
+            return false;
+        }
+
         if (this.note.type !== "text") {
             return false;
         }
