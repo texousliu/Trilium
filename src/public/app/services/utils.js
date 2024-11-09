@@ -569,6 +569,12 @@ function compareVersions(v1, v2) {
     return 0;
 }
 
+/**
+ * Compares two semantic version strings and returns `true` if the latest version is greater than the current version.
+ * @param {string} latestVersion
+ * @param {string} currentVersion
+ * @returns {boolean}
+ */
 function isUpdateAvailable(latestVersion, currentVersion) {
     return compareVersions(latestVersion, currentVersion) > 0;
 }
