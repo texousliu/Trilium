@@ -19,6 +19,7 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
     getTitle(note) {
         return {
             show: true,
+            activate: true,
             title: "Editor toolbar",
             icon: "bx bx-edit-alt"
         };
