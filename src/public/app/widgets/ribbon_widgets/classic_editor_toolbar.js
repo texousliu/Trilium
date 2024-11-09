@@ -4,6 +4,17 @@ const TPL = `\
 <div class="classic-toolbar-widget">
     Classic toolbar goes here.
 </div>
+
+<style>
+    .classic-toolbar-widget {
+        --ck-color-toolbar-background: transparent;
+        --ck-color-button-default-background: transparent;
+    }
+
+    .classic-toolbar-widget .ck.ck-toolbar {
+        border: none;
+    }
+</style>
 `;
 
 export default class ClassicEditorToolbar extends NoteContextAwareWidget {
