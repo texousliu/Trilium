@@ -16,6 +16,12 @@ const TPL = `\
 </style>
 `;
 
+/**
+ * Handles the editing toolbar when the CKEditor is in decoupled mode.
+ * 
+ * <p>
+ * The ribbon item is active by default for text notes, as long as they are not in read-only mode.
+ */
 export default class ClassicEditorToolbar extends NoteContextAwareWidget {
     get name() {
         return "classicToolbar";

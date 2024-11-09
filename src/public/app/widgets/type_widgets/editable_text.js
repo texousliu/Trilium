@@ -107,6 +107,12 @@ function buildListOfLanguages() {
     ];
 }
 
+/**
+ * The editor can operate into two distinct modes:
+ * 
+ * - Ballon block mode, in which there is a floating toolbar for the selected text, but another floating button for the entire block (i.e. paragraph).
+ * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
+ */
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     static getType() { return "editableText"; }
 
