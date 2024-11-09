@@ -229,7 +229,7 @@
     "erase_notes_button": "Jetzt gelöschte Notizen löschen",
     "deleted_notes_message": "Gelöschte Notizen wurden gelöscht.",
     "no_changes_message": "Noch keine Änderungen...",
-    "Wiederherstellen_link": "Wiederherstellen",
+    "undelete_link": "Wiederherstellen",
     "confirm_undelete": "Möchten Sie diese Notiz und ihre Unternotizen wiederherstellen?"
   },
   "revisions": {
@@ -256,12 +256,12 @@
   "sort_child_notes": {
     "sort_children_by": "Kinder sortieren nach...",
     "sorting_criteria": "Sortierkriterien",
-    "Titel": "Titel",
+    "title": "Titel",
     "date_created": "Datum der Erstellung",
     "date_modified": "Datum geändert",
     "sorting_direction": "Sortierrichtung",
-    "aufsteigend": "aufsteigend",
-    "absteigend": "absteigend",
+    "ascending": "aufsteigend",
+    "descending": "absteigend",
     "folders": "Ordner",
     "sort_folders_at_top": "Ordnen Sie die Ordner oben",
     "natural_sort": "Natürliche Sorte",
@@ -306,7 +306,7 @@
     "url": "URL",
     "precision_title": "Wie viele Stellen nach dem Gleitkommawert in der Werteinstellungsschnittstelle verfügbar sein sollen.",
     "precision": "Präzision",
-    "Ziffern": "Ziffern",
+    "digits": "Ziffern",
     "inverse_relation_title": "Optionale Einstellung, um zu definieren, zu welcher Beziehung diese entgegengesetzt ist. Beispiel: Vater – Sohn stehen in umgekehrter Beziehung zueinander.",
     "inverse_relation": "Inverse Beziehung",
     "inheritable_title": "Das vererbbare Attribut wird an alle Nachkommen unter diesem Baum vererbt.",
@@ -465,7 +465,7 @@
   },
   "move_note": {
     "move_note": "Notiz verschieben",
-    "Zu": "Zu",
+    "to": "Zu",
     "target_parent_note": "übergeordnete Zielnotiz",
     "on_all_matched_notes": "Auf allen übereinstimmenden Noten",
     "move_note_new_parent": "Verschieben Sie die Notiz in das neue übergeordnete Element, wenn die Notiz nur ein übergeordnetes Element hat (d. h. der alte Zweig wird entfernt und ein neuer Zweig in das neue übergeordnete Element erstellt).",
@@ -487,7 +487,7 @@
     "add_relation": "Beziehung hinzufügen",
     "relation_name": "Beziehungsname",
     "allowed_characters": "Erlaubte Zeichen sind alphanumerische Zeichen, Unterstrich und Doppelpunkt.",
-    "Zu": "Zu",
+    "to": "Zu",
     "target_note": "Zielnote",
     "create_relation_on_all_matched_notes": "Erstellen Sie für alle übereinstimmenden Noten eine bestimmte Beziehung."
   },
@@ -508,7 +508,7 @@
     "update_relation": "Beziehung aktualisieren",
     "relation_name": "Beziehungsname",
     "allowed_characters": "Erlaubte Zeichen sind alphanumerische Zeichen, Unterstrich und Doppelpunkt.",
-    "Zu": "Zu",
+    "to": "Zu",
     "target_note": "Zielnote",
     "on_all_matched_notes": "Auf allen übereinstimmenden Noten",
     "create_given_relation": "Erstellen Sie eine bestimmte Beziehung, wenn die Notiz noch keine hat",
@@ -657,7 +657,7 @@
   "zpetne_odkazy": {
     "backlink": "{{count}} Backlink",
     "backlinks": "{{count}} Backlinks",
-    "Beziehung": "Beziehung"
+    "relation": "Beziehung"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Untergeordnete Notiz einfügen",
@@ -721,7 +721,7 @@
     "type": "Typ",
     "note_size": "Notengröße",
     "note_size_info": "Die Notizgröße bietet eine grobe Schätzung des Speicherbedarfs für diese Notiz. Es berücksichtigt den Inhalt der Notiz und den Inhalt ihrer Notizrevisionen.",
-    "berechnen": "berechnen",
+    "calculate": "berechnen",
     "subtree_size": "(Teilbaumgröße: {{size}} in {{count}} Notizen)",
     "title": "Hinweisinfo"
   },
@@ -765,19 +765,19 @@
     "add_search_option": "Suchoption hinzufügen:",
     "search_string": "Suchzeichenfolge",
     "search_script": "Suchskript",
-    "Vorfahr": "Vorfahr",
+    "ancestor": "Vorfahr",
     "fast_search": "schnelle Suche",
     "fast_search_description": "Die Option „Schnellsuche“ deaktiviert die Volltextsuche von Notizinhalten, was die Suche in großen Datenbanken beschleunigen könnte.",
     "include_archived": "archiviert einschließen",
     "include_archived_notes_description": "Archivierte Notizen sind standardmäßig von den Suchergebnissen ausgeschlossen, mit dieser Option werden sie einbezogen.",
     "order_by": "Bestellen nach",
-    "Limit": "Limit",
+    "limit": "Limit",
     "limit_description": "Begrenzen Sie die Anzahl der Ergebnisse",
-    "debuggen": "debuggen",
+    "debug": "debuggen",
     "debug_description": "Debug gibt zusätzliche Debuginformationen in die Konsole aus, um das Debuggen komplexer Abfragen zu erleichtern",
-    "Aktion": "Aktion",
+    "action": "Aktion",
     "search": "Suchen",
-    "eingeben": "eingeben",
+    "enter": "eingeben",
     "search_execute": "Aktionen suchen und ausführen",
     "save_to_note": "Als Notiz speichern",
     "search_parameters": "Suchparameter",
@@ -796,7 +796,7 @@
   "ancestor": {
     "label": "Vorfahr",
     "placeholder": "Suchen Sie nach einer Notiz anhand ihres Namens",
-    "Tiefe_label": "Tiefe",
+    "depth_label": "Tiefe",
     "depth_doesnt_matter": "spielt keine Rolle",
     "depth_eq": "ist genau {{count}}",
     "direct_children": "direkte Kinder",
@@ -998,8 +998,8 @@
   },
   "native_title_bar": {
     "title": "Native Titelleiste (App-Neustart erforderlich)",
-    "ermöglicht": "ermöglicht",
-    "deaktiviert": "deaktiviert"
+    "enabled": "ermöglicht",
+    "disabled": "deaktiviert"
   },
   "ribbon": {
     "widgets": "Multifunktionsleisten-Widgets",
@@ -1134,11 +1134,10 @@
     "no_backup_yet": "noch kein Backup"
   },
   "etapi": {
-    "title": "BÜHNE",
+    "title": "ETAPI",
     "description": "ETAPI ist eine REST-API, die für den programmgesteuerten Zugriff auf die Trilium-Instanz ohne Benutzeroberfläche verwendet wird.",
     "see_more": "Weitere Details finden Sie unter",
-    "Woche": "Woche",
-    "Und": "Und",
+    "and": "Und",
     "openapi_spec": "ETAPI OpenAPI-Spezifikation",
     "create_token": "Erstellen Sie ein neues ETAPI-Token",
     "existing_tokens": "Vorhandene Token",
@@ -1172,7 +1171,6 @@
     "change_password": "Kennwort ändern",
     "protected_session_timeout": "Zeitüberschreitung der geschützten Sitzung",
     "protected_session_timeout_description": "Das Zeitlimit für geschützte Sitzungen ist ein Zeitraum, nach dem die geschützte Sitzung aus dem Speicher des Browsers gelöscht wird. Dies wird ab der letzten Interaktion mit geschützten Notizen gemessen. Sehen",
-    "Woche": "Woche",
     "for_more_info": "für weitere Informationen.",
     "protected_session_timeout_label": "Zeitüberschreitung der geschützten Sitzung (in Sekunden)",
     "reset_confirmation": "Durch das Zurücksetzen des Passworts verlieren Sie für immer den Zugriff auf alle Ihre bestehenden geschützten Notizen. Möchten Sie das Passwort wirklich zurücksetzen?",
