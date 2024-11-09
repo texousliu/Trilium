@@ -131,6 +131,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
+        const editorClass = CKEditor.DecoupledEditor;
 
         const codeBlockLanguages = buildListOfLanguages();
 
@@ -139,7 +140,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         // display of $widget in both branches.
         this.$widget.show();
 
-        this.watchdog = new EditorWatchdog(DecoupledEditor, {
+        this.watchdog = new EditorWatchdog(editorClass, {
             // An average number of milliseconds between the last editor errors (defaults to 5000).
             // When the period of time between errors is lower than that and the crashNumberLimit
             // is also reached, the watchdog changes its state to crashedPermanently, and it stops
@@ -175,7 +176,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
 
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
-            const editor = await DecoupledEditor.create(elementOrData, editorConfig);
+            const editor = await editorClass.create(elementOrData, editorConfig);
 
             await initSyntaxHighlighting(editor);
 
