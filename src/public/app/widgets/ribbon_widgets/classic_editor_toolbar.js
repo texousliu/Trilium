@@ -27,13 +27,25 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
         this.contentSized();
     }
 
-    getTitle(note) {
+    async getTitle() {
         return {
-            show: true,
+            show: await this.#shouldDisplay(),
             activate: true,
             title: "Editor toolbar",
             icon: "bx bx-edit-alt"
         };
+    }
+
+    async #shouldDisplay() {
+        if (this.note.type !== "text") {
+            return false;
+        }
+
+        if (await this.noteContext.isReadOnly()) {
+            return false;
+        }
+
+        return true;
     }
 
 }
