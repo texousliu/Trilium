@@ -34,7 +34,11 @@ const TPL = `\
  */
 export default class ClassicEditorToolbar extends NoteContextAwareWidget {
     get name() {
-        return "classicToolbar";
+        return "classicEditor";
+    }
+
+    get toggleCommand() {
+        return "toggleRibbonTabClassicEditor";
     }
 
     doRender() {
