@@ -12,7 +12,6 @@ import appContext from "../../components/app_context.js";
 import dialogService from "../../services/dialog.js";
 import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
-import { isSyntaxHighlightEnabled } from "../../services/syntax_highlight.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -131,7 +130,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
-        const editorClass = CKEditor.DecoupledEditor;
+        const isClassicEditor = (options.get("textNoteEditorType") === "ckeditor-classic")
+        const editorClass = (isClassicEditor ? CKEditor.DecoupledEditor : CKEditor.BalloonEditor);
 
         const codeBlockLanguages = buildListOfLanguages();
 
@@ -180,10 +180,12 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             await initSyntaxHighlighting(editor);
 
-            const $parentSplit = this.$widget.parents(".note-split.type-text");
-            const $classicToolbarWidget = $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
-            $classicToolbarWidget.empty();
-            $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
+            if (isClassicEditor) {
+                const $parentSplit = this.$widget.parents(".note-split.type-text");
+                const $classicToolbarWidget = $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
+                $classicToolbarWidget.empty();
+                $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
+            }
 
             editor.model.document.on('change:data', () => this.spacedUpdate.scheduleUpdate());
 

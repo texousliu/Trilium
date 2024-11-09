@@ -1,3 +1,4 @@
+import utils from "../../../../services/utils.js";
 import OptionsWidget from "../options_widget.js";
 
 const TPL = `
@@ -20,9 +21,10 @@ export default class EditorOptions extends OptionsWidget {
         this.$widget = $(TPL);
         this.$body = $("body");
         this.$editorType = this.$widget.find(".editor-type-select");
-        this.$editorType.on('change', () => {
+        this.$editorType.on('change', async () => {
             const newEditorType = this.$editorType.val();
-            this.updateOption('textNoteEditorType', newEditorType);
+            await this.updateOption('textNoteEditorType', newEditorType);
+            utils.reloadFrontendApp("editor type change");
         });
     }
 
