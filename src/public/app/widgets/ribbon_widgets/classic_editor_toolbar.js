@@ -7,12 +7,17 @@ const TPL = `\
 <style>
     .classic-toolbar-widget {
         --ck-color-toolbar-background: transparent;
-        --ck-color-button-default-background: transparent;
+        --ck-color-button-default-background: transparent;        
+        --ck-color-button-default-disabled-background: transparent;
         min-height: 39px;
     }
 
     .classic-toolbar-widget .ck.ck-toolbar {
         border: none;
+    }
+
+    .classic-toolbar-widget .ck.ck-button.ck-disabled {
+        opacity: 0.3;
     }
 </style>
 `;
