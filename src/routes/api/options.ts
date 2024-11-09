@@ -154,6 +154,10 @@ function getSupportedLocales() {
             "name": "English"
         },
         {
+            "id": "de",
+            "name": "Deutsch"
+        },
+        {
             "id": "es",
             "name": "Español"
         },
