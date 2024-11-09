@@ -1511,5 +1511,15 @@
   },
   "classic_editor_toolbar": {
     "title": "Formatting"
+  },
+  "editor": {
+    "title": "Editor"
+  },
+  "editing": {
+    "editor_type": {
+      "label": "Formatting toolbar",
+      "floating": "Floating (appears near the cursor)",
+      "fixed": "Fixed (appear in the \"Formatting\" ribbon tab)"
+    }
   }
 }
