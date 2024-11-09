@@ -67,6 +67,16 @@ To use TriliumNext on your desktop machine (Linux, MacOS, and Windows) you have 
     * Currently only the latest versions of Chrome & Firefox are supported (and tested).
 * (Coming Soon) TriliumNext will also be provided as a Flatpak
 
+#### MacOS
+Currently when running TriliumNext/Notes on MacOS, you may get the following error:
+> Apple could not verify "TriliumNext Notes" is free of malware and may harm your Mac or compromise your privacy.
+
+You will need to run the command on your shell to resolve the error (documented [here](https://github.com/TriliumNext/Notes/issues/329#issuecomment-2287164137)):
+
+```bash
+xattr -c "/path/to/Trilium Next.app"
+```
+
 ### Mobile
 
 To use TriliumNext on a mobile device:
