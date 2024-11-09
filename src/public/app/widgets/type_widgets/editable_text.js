@@ -133,7 +133,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         // display of $widget in both branches.
         this.$widget.show();
 
-        this.watchdog = new EditorWatchdog(ClassicEditor, {
+        this.watchdog = new EditorWatchdog(DecoupledEditor, {
             // An average number of milliseconds between the last editor errors (defaults to 5000).
             // When the period of time between errors is lower than that and the crashNumberLimit
             // is also reached, the watchdog changes its state to crashedPermanently, and it stops
@@ -169,9 +169,14 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
 
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
-            const editor = await ClassicEditor.create(elementOrData, editorConfig);
+            const editor = await DecoupledEditor.create(elementOrData, editorConfig);
 
             await initSyntaxHighlighting(editor);
+
+            const $parentSplit = this.$widget.parents(".note-split.type-text");
+            const $classicToolbarWidget = $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
+            $classicToolbarWidget.empty();
+            $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
 
             editor.model.document.on('change:data', () => this.spacedUpdate.scheduleUpdate());
 
