@@ -15,8 +15,7 @@
       "message": "Ein kritischer Fehler ist aufgetreten, der das Starten der Client-Anwendung verhindert:\n\n{{message}}\n\nDies wird höchstwahrscheinlich durch ein Skript verursacht, das auf unerwartete Weise fehlschlägt. Versuchen Sie, die Anwendung im abgesicherten Modus zu starten und das Problem zu beheben."
     },
     "widget-error": {
-      "title": "Ein Widget konnte nicht initialisiert werden",
-      "message": "Widget mit dem Titel \"{{title}}\" konnte aufgrund des folgenden Fehlers nicht initialisiert werden:\n\n{{message}}"
+      "title": "Ein Widget konnte nicht initialisiert werden"
     }
   },
   "add_link": {
@@ -77,9 +76,7 @@
     "no_note_to_delete": "Es werden keine Notizen gelöscht (nur Klone).",
     "broken_relations_to_be_deleted": "Folgende Beziehungen werden gelöst und gelöscht (<span class=\"broke-relations-count\"></span>)",
     "cancel": "Abbrechen",
-    "ok": "OK",
-    "note": "Notiz",
-    "to_be_deleted": "(zu löschen) wird durch die Beziehung <code>{{attrName}}</code> referenziert, die von folgendem stammt "
+    "ok": "OK"
   },
   "export": {
     "export_note_title": "Notiz exportieren",
