@@ -1508,5 +1508,8 @@
   },
   "code_block": {
     "word_wrapping": "Word wrapping"
+  },
+  "classic_editor_toolbar": {
+    "title": "Formatting"
   }
 }

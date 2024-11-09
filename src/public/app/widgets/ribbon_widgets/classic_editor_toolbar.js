@@ -1,3 +1,4 @@
+import { t } from "../../services/i18n.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
 const TPL = `\
@@ -36,7 +37,7 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
         return {
             show: await this.#shouldDisplay(),
             activate: true,
-            title: "Editor toolbar",
+            title: t("classic_editor_toolbar.title"),
             icon: "bx bx-edit-alt"
         };
     }
