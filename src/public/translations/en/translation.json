@@ -1518,8 +1518,8 @@
   "editing": {
     "editor_type": {
       "label": "Formatting toolbar",
-      "floating": "Floating (appears near the cursor)",
-      "fixed": "Fixed (appear in the \"Formatting\" ribbon tab)"
+      "floating": "Floating (editing tools appear near the cursor)",
+      "fixed": "Fixed (editing tools appear in the \"Formatting\" ribbon tab)"
     }
   }
 }
