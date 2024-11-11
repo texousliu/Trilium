@@ -1508,5 +1508,18 @@
   },
   "code_block": {
     "word_wrapping": "Încadrare text"
+  },
+  "classic_editor_toolbar": {
+    "title": "Formatare"
+  },
+  "editing": {
+    "editor_type": {
+      "fixed": "Editor cu bară fixă (uneltele de editare vor apărea în tab-ul „Formatare” din panglică)",
+      "floating": "Editor cu bară flotantă (uneltele de editare vor apărea lângă cursor)",
+      "label": "Bară de formatare"
+    }
+  },
+  "editor": {
+    "title": "Editor"
   }
 }
