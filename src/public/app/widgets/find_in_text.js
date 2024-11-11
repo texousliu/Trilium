@@ -105,14 +105,14 @@ export default class FindInText {
     }
 
     async replace(replaceText) {
-        if (this.editingState.highlightedResult !== null) {
+        if (this.editingState !== undefined && this.editingState.highlightedResult !== null) {
             const textEditor = await this.getTextEditor();
             textEditor.execute('replace', replaceText, this.editingState.highlightedResult);
         }
     }
 
     async replaceAll(replaceText) {
-        if (this.editingState.results.length > 0) {
+        if (this.editingState !== undefined  && this.editingState.results.length > 0) {
             const textEditor = await this.getTextEditor();
             textEditor.execute('replaceAll', replaceText, this.editingState.results);
         }
