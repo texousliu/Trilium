@@ -164,7 +164,7 @@ export default class FindWidget extends NoteContextAwareWidget {
         this.$widget.show();
         this.$input.focus();
         const isReadOnly = await this.noteContext.isReadOnly();
-        if (this.note.type === 'text' && !isReadOnly) {
+        if (['text', 'code'].includes(this.note.type) && !isReadOnly) {
             this.$replaceWidgetBox.show();
         }else{
             this.$replaceWidgetBox.hide();
