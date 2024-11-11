@@ -20,6 +20,7 @@ export default class FindInText {
         // Clear
         const findAndReplaceEditing = textEditor.plugins.get('FindAndReplaceEditing');
         findAndReplaceEditing.state.clear(model);
+        this.editingState = findAndReplaceEditing.state;
         findAndReplaceEditing.stop();
         if (searchTerm !== "") {
             // Parameters are callback/text, options.matchCase=false, options.wholeWords=false
@@ -29,7 +30,7 @@ export default class FindInText {
             // let re = new RegExp(searchTerm, 'gi');
             // let m = text.match(re);
             // totalFound = m ? m.length : 0;
-            const options = { "matchCase" : matchCase, "wholeWords" : wholeWord };
+            const options = { "matchCase": matchCase, "wholeWords": wholeWord };
             findResult = textEditor.execute('find', searchTerm, options);
             totalFound = findResult.results.length;
             // Find the result beyond the cursor
@@ -101,5 +102,19 @@ export default class FindInText {
         this.findResult = null;
 
         textEditor.focus();
+    }
+
+    async replace(replaceText) {
+        if (this.editingState.highlightedResult !== null) {
+            const textEditor = await this.getTextEditor();
+            textEditor.execute('replace', replaceText, this.editingState.highlightedResult);
+        }
+    }
+
+    async replaceAll(replaceText) {
+        if (this.editingState.results.length > 0) {
+            const textEditor = await this.getTextEditor();
+            textEditor.execute('replaceAll', replaceText, this.editingState.results);
+        }
     }
 }
