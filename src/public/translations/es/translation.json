@@ -1508,5 +1508,18 @@
   },
   "code_block": {
     "word_wrapping": "Ajuste de palabras"
+  },
+  "classic_editor_toolbar": {
+    "title": "Formato"
+  },
+  "editor": {
+    "title": "Editor"
+  },
+  "editing": {
+    "editor_type": {
+      "label": "Barra de herramientas de formato",
+      "floating": "Flotante (las herramientas de edición aparecen cerca del cursor)",
+      "fixed": "Fijo (las herramientas de edición aparecen en la pestaña de la cinta \"Formato\")"
+    }
   }
 }
