@@ -158,9 +158,11 @@ export default class FindWidget extends NoteContextAwareWidget {
         }
 
         this.handler = await this.getHandler();
+        
+        const isReadOnly = await this.noteContext.isReadOnly();
 
         let selectedText = '';
-        if (this.note.type === 'code'){
+        if (this.note.type === 'code' && !isReadOnly){
             const codeEditor = await this.noteContext.getCodeEditor();
             selectedText = codeEditor.getSelection();
         }else{
@@ -168,7 +170,6 @@ export default class FindWidget extends NoteContextAwareWidget {
         }
         this.$widget.show();
         this.$input.focus();
-        const isReadOnly = await this.noteContext.isReadOnly();
         if (['text', 'code'].includes(this.note.type) && !isReadOnly) {
             this.$replaceWidgetBox.show();
         }else{

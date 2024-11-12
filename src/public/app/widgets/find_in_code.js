@@ -171,6 +171,10 @@ export default class FindInCode {
         codeEditor.focus();
     }
     async replace(replaceText) {
+        // this.findResult may be undefined and null
+        if (!this.findResult || this.findResult.length===0){
+            return;
+        }
         let currentFound = -1;
         this.findResult.forEach((marker, index) => {
             const pos = marker.find();
@@ -202,6 +206,9 @@ export default class FindInCode {
         }
     }
     async replaceAll(replaceText) {
+        if (!this.findResult || this.findResult.length===0){
+            return;
+        }
         const codeEditor = await this.getCodeEditor();
         const doc = codeEditor.doc;
         codeEditor.operation(() => {
