@@ -82,6 +82,7 @@ import MovePaneButton from "../widgets/buttons/move_pane_button.js";
 import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import CopyImageReferenceButton from "../widgets/floating_buttons/copy_image_reference_button.js";
 import ScrollPaddingWidget from "../widgets/scroll_padding.js";
+import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 
 export default class DesktopLayout {
     constructor(customWidgets) {
@@ -127,6 +128,7 @@ export default class DesktopLayout {
                                             // the order of the widgets matter. Some of these want to "activate" themselves
                                             // when visible. When this happens to multiple of them, the first one "wins".
                                             // promoted attributes should always win.
+                                            .ribbon(new ClassicEditorToolbar())
                                             .ribbon(new ScriptExecutorWidget())
                                             .ribbon(new SearchDefinitionWidget())
                                             .ribbon(new EditedNotesWidget())
