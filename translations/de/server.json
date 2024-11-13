@@ -136,7 +136,7 @@
     "proxy-server": "Proxy-Server (optional)",
     "proxy-server-placeholder": "https://<hostname>:<port>",
     "note": "Hinweis:",
-    "proxy-instruction": "Wenn du die Proxy-Einstellung leer lässt, wird der System-Proxy verwendet (nur für die Desktop-Anwendung)",
+    "proxy-instruction": "Wenn du die Proxy-Einstellung leer lässt, wird der System-Proxy verwendet (gilt nur für die Desktop-Anwendung)",
     "password": "Passwort",
     "password-placeholder": "Passwort",
     "back": "Zurück",
@@ -153,7 +153,7 @@
     "heading": "Nicht gefunden"
   },
   "share_page": {
-    "parent": "Eltern:",
+    "parent": "Übergeordnete Notiz:",
     "clipped-from": "Diese Notiz wurde ursprünglich von {{- url}} ausgeschnitten",
     "child-notes": "Untergeordnete Notizen:",
     "no-content": "Diese Notiz hat keinen Inhalt."
