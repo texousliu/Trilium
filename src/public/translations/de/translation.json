@@ -5,14 +5,14 @@
     "app_version": "App-Version:",
     "db_version": "DB-Version:",
     "sync_version": "Synch-version:",
-    "build_date": "Build-datum:",
+    "build_date": "Build-Datum:",
     "build_revision": "Build-Revision:",
     "data_directory": "Datenverzeichnis:"
   },
   "toast": {
     "critical-error": {
       "title": "Kritischer Fehler",
-      "message": "Ein kritischer Fehler ist aufgetreten, der das Starten der Client-Anwendung verhindert:\n\n{{message}}\n\nDies wird höchstwahrscheinlich durch ein Skript verursacht, das auf unerwartete Weise fehlschlägt. Versuchen Sie, die Anwendung im abgesicherten Modus zu starten und das Problem zu beheben."
+      "message": "Ein kritischer Fehler ist aufgetreten, der das Starten der Client-Anwendung verhindert:\n\n{{message}}\n\nDies wird höchstwahrscheinlich durch ein Skript verursacht, das auf unerwartete Weise fehlschlägt. Versuchen Sie, die Anwendung im abgesicherten Modus zu starten und das Problem zu lokalisieren."
     },
     "widget-error": {
       "title": "Ein Widget konnte nicht initialisiert werden",
@@ -537,17 +537,17 @@
     "enter_new_name": "Bitte geben Sie den Namen des neuen Anhangs ein"
   },
   "calendar": {
-    "mon": "Mein",
+    "mon": "Mo",
     "tue": "Di",
-    "wed": "Heiraten",
-    "thu": "Sammeln",
+    "wed": "Mi",
+    "thu": "Do",
     "fri": "Fr",
     "sat": "Sa",
-    "sun": "Sonne",
+    "sun": "So",
     "cannot_find_day_note": "Tagesnotiz kann nicht gefunden werden",
     "january": "Januar",
     "febuary": "Februar",
-    "march": "Marsch",
+    "march": "März",
     "april": "April",
     "may": "Mai",
     "june": "Juni",
@@ -568,7 +568,7 @@
     "edit_this_note": "Bearbeiten Sie diese Notiz"
   },
   "global_menu": {
-    "menu": "Speisekarte",
+    "menu": "Menü",
     "options": "Optionen",
     "open_new_window": "Neues Fenster öffnen",
     "switch_to_mobile_version": "Wechseln Sie zur mobilen Version",
