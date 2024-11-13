@@ -16,7 +16,12 @@
     },
     "widget-error": {
       "title": "Ein Widget konnte nicht initialisiert werden",
-      "message": "Widget mit dem Titel \"{{title}}\" konnte aufgrund des folgenden Fehlers nicht initialisiert werden:\n\n{{message}}"
+      "message-custom": "Custom widget from note with ID \"{{id}}\", titled \"{{title}}\" could not be initialized due to:\n\n{{message}}",
+      "message-unknown": "Unknown widget could not be initialized due to:\n\n{{message}}"
+    },
+    "bundle-error": {
+      "title": "Failed to load a custom script",
+      "message": "Script from note with ID \"{{id}}\", titled \"{{title}}\" could not be executed due to:\n\n{{message}}"
     }
   },
   "add_link": {
@@ -166,7 +171,8 @@
     "textImportedAsText": "Importieren Sie HTML, Markdown und TXT als Textnotizen, wenn die Metadaten unklar sind",
     "codeImportedAsCode": "Importieren Sie erkannte Codedateien (z. B. <code>.json</code>) als Codenotizen, wenn die Metadaten unklar sind",
     "replaceUnderscoresWithSpaces": "Ersetzen Sie Unterstriche in importierten Notennamen durch Leerzeichen",
-    "import": "Import"
+    "import": "Import",
+    "failed": "Import fehlgeschlagen: {{message}}."
   },
   "include_note": {
     "dialog_title": "Notiz beifügen",
@@ -408,7 +414,8 @@
     "add_new_label": "Add new label <kbd data-command=\"addNewLabel\"></kbd>",
     "add_new_relation": "Add new relation <kbd data-command=\"addNewRelation\"></kbd>",
     "add_new_label_definition": "Neue Etikettendefinition hinzufügen",
-    "add_new_relation_definition": "Neue Beziehungsdefinition hinzufügen"
+    "add_new_relation_definition": "Neue Beziehungsdefinition hinzufügen",
+    "placeholder": "Type the labels and relations here"
   },
   "abstract_bulk_action": {
     "remove_this_search_action": "Entfernen Sie diese Suchaktion"
@@ -567,6 +574,12 @@
   "edit_button": {
     "edit_this_note": "Bearbeiten Sie diese Notiz"
   },
+  "show_toc_widget_button": {
+    "show_toc": "Inhaltsverzeichnis anzeigen"
+  },
+  "show_highlights_list_widget_button": {
+    "show_highlights_list": "Hervorhebungen anzeigen"
+  },
   "global_menu": {
     "menu": "Menü",
     "options": "Optionen",
@@ -593,6 +606,14 @@
     "about": "Über TriliumNext Notes",
     "logout": "Abmelden"
   },
+  "sync_status": {
+    "unknown": "<p>Sync status will be known once the next sync attempt starts.</p><p>Click to trigger sync now.</p>",
+    "connected_with_changes": "<p>Connected to the sync server. <br>There are some outstanding changes yet to be synced.</p><p>Click to trigger sync.</p>",
+    "connected_no_changes": "<p>Connected to the sync server.<br>All changes have been already synced.</p><p>Click to trigger sync.</p>",
+    "disconnected_with_changes": "<p>Establishing the connection to the sync server was unsuccessful.<br>There are some outstanding changes yet to be synced.</p><p>Click to trigger sync.</p>",
+    "disconnected_no_changes": "<p>Establishing the connection to the sync server was unsuccessful.<br>All known changes have been synced.</p><p>Click to trigger sync.</p>",
+    "in_progress": "Sync with the server is in progress."
+  },
   "left_pane_toggle": {
     "show_panel": "Panel anzeigen",
     "hide_panel": "Panel ausblenden"
@@ -614,7 +635,10 @@
     "export_note": "Notiz exportieren",
     "delete_note": "Notiz löschen",
     "print_note": "Notiz drucken",
-    "save_revision": "Revision speichern"
+    "save_revision": "Revision speichern",
+    "convert_into_attachment_failed": "Converting note '{{title}}' failed.",
+    "convert_into_attachment_successful": "Note '{{title}}' has been converted to attachment.",
+    "convert_into_attachment_prompt": "Are you sure you want to convert note '{{title}}' into an attachment of the parent note?"
   },
   "onclick_button": {
     "no_click_handler": "Das Schaltflächen-Widget „{{componentId}}“ hat keinen definierten Klick-Handler"
@@ -645,6 +669,9 @@
   "hide_floating_buttons_button": {
     "button_title": "Schaltflächen ausblenden"
   },
+  "show_floating_buttons_button": {
+    "button_title": "Schaltflächen einblenden"
+  },
   "svg_export_button": {
     "button_title": "Diagramm als SVG exportieren"
   },
@@ -664,6 +691,12 @@
     "delete_this_note": "Diese Notiz löschen",
     "error_cannot_get_branch_id": "BranchId für notePath „{{notePath}}“ kann nicht abgerufen werden.",
     "error_unrecognized_command": "Unbekannter Befehl {{command}}"
+  },
+  "note_icon": {
+    "change_note_icon": "Notiz-Icon ändern",
+    "category": "Kategorie:",
+    "search": "Suche:",
+    "reset-default": "Standard wiederherstellen"
   },
   "basic_properties": {
     "note_type": "Notiztyp",
@@ -748,7 +781,7 @@
   },
   "promoted_attributes": {
     "promoted_attributes": "Gesponserte Attribute",
-    "url_placeholder": "https://translate.google.com/translate?hl=de&sl=auto&tl=de&u=http://website...",
+    "url_placeholder": "http://website...",
     "open_external_link": "Externen Link öffnen",
     "unknown_label_type": "Unbekannter Labeltyp „{{type}}“",
     "unknown_attribute_type": "Unbekannter Attributtyp „{{type}}“",
@@ -894,7 +927,15 @@
   },
   "protected_session": {
     "enter_password_instruction": "Um die geschützte Notiz anzuzeigen, müssen Sie Ihr Passwort eingeben:",
-    "start_session_button": "Starten Sie eine geschützte Sitzung"
+    "start_session_button": "Starten Sie eine geschützte Sitzung",
+    "started": "Geschützte Sitzung gestartet.",
+    "wrong_password": "Passwort flasch.",
+    "protecting-finished-successfully": "Geschützt erfolgreich beendet.",
+    "unprotecting-finished-successfully": "Ungeschützt erfolgreich beendet.",
+    "protecting-in-progress": "Schützen läuft: {{count}}",
+    "unprotecting-in-progress-count": "Entschützen läuft: {{count}}",
+    "protecting-title": "Geschützt-Status",
+    "unprotecting-title": "Ungeschützt-Status"
   },
   "relation_map": {
     "open_in_new_tab": "In neuem Tab öffnen",
@@ -965,7 +1006,9 @@
     "fill_entity_changes_button": "Entitätsänderungsdatensätze füllen",
     "full_sync_triggered": "Vollständige Synchronisierung ausgelöst",
     "filling_entity_changes": "Entitätsänderungszeilen werden gefüllt...",
-    "sync_rows_filled_successfully": "Synchronisierungszeilen erfolgreich gefüllt"
+    "sync_rows_filled_successfully": "Synchronisierungszeilen erfolgreich gefüllt",
+    "finished-successfully": "Sync finished successfully.",
+    "failed": "Sync failed: {{message}}"
   },
   "vacuum_database": {
     "title": "Vakuumdatenbank",
@@ -1065,6 +1108,13 @@
     "note_revisions_snapshot_interval_title": "Snapshot-Intervall für Notizrevisionen",
     "note_revisions_snapshot_description": "Note revision snapshot time interval is time in seconds after which a new note revision will be created for the note. See <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> for more info.",
     "snapshot_time_interval_label": "Zeitintervall für Notizrevisions-Snapshot (in Sekunden)"
+  },
+  "revisions_snapshot_limit": {
+    "note_revisions_snapshot_limit_title": "Note Revision Snapshots Limit",
+    "note_revisions_snapshot_limit_description": "The note revision snapshot number limit refers to the maximum number of revisions that can be saved for each note. Where -1 means no limit, 0 means delete all revisions. You can set the maximum revisions for a single note through the #versioningLimit label.",
+    "snapshot_number_limit_label": "Note revision snapshot number limit:",
+    "erase_excess_revision_snapshots": "Erase excess revision snapshots now",
+    "erase_excess_revision_snapshots_prompt": "Excess revision snapshots have been erased."
   },
   "search_engine": {
     "title": "Suchmaschine",
@@ -1244,5 +1294,216 @@
     "note_is_editable": "Die Notiz kann bearbeitet werden, wenn sie nicht zu lang ist.",
     "note_is_read_only": "Die Notiz ist schreibgeschützt, kann aber per Knopfdruck bearbeitet werden.",
     "note_is_always_editable": "Die Notiz kann immer bearbeitet werden, unabhängig von ihrer Länge."
+  },
+  "note-map": {
+    "button-link-map": "Link Map",
+    "button-tree-map": "Tree map"
+  },
+  "tree-context-menu": {
+    "open-in-a-new-tab": "In neuem Tab öffnen",
+    "open-in-a-new-split": "In neuem Split öffnen",
+    "insert-note-after": "Notiz dahinter einfügen",
+    "insert-child-note": "Unternotiz einfügen",
+    "delete": "Löschen",
+    "search-in-subtree": "Im Notizbaum suchen",
+    "hoist-note": "Notiz-Fokus setzen",
+    "unhoist-note": "Notiz-Fokus aufheben",
+    "edit-branch-prefix": "Zweig-Präfix bearbeiten",
+    "advanced": "Erweitert",
+    "expand-subtree": "Notizbaum ausklappen",
+    "collapse-subtree": "Notizbaum einklappen",
+    "sort-by": "Sortieren nach...",
+    "recent-changes-in-subtree": "Kürzliche Änderungen im Notizbaum",
+    "convert-to-attachment": "Als Anhang konvertieren",
+    "copy-note-path-to-clipboard": "Notiz-Pfad in die Zwischenablage kopieren",
+    "protect-subtree": "Notizbaum schützen",
+    "unprotect-subtree": "Notizenbaum-Schutz aufheben",
+    "copy-clone": "Kopieren / Klonen",
+    "clone-to": "Klonen nach...",
+    "cut": "Ausschneiden",
+    "move-to": "Verschieben nach...",
+    "paste-into": "Als Unternotiz einfügen",
+    "paste-after": "Danach einfügen",
+    "duplicate-subtree": "Notizbaum duplizieren",
+    "export": "Exportieren",
+    "import-into-note": "In Notiz importieren",
+    "apply-bulk-actions": "Massenaktionen ausführen",
+    "converted-to-attachments": "{{count}} Notizen wurden als Anhang konvertiert.",
+    "convert-to-attachment-confirm": "Bist du sicher, dass du die ausgewählten Notizen in Anhänge ihrer übergeordneten Notizen umwandeln möchtest?"
+  },
+  "shared_info": {
+    "shared_publicly": "Diese Notiz ist öffentlich geteilt auf",
+    "shared_locally": "Diese Notiz ist lokal geteilt auf",
+    "help_link": "Für Hilfe besuche <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
+  },
+  "note_types": {
+    "text": "Text",
+    "code": "Code",
+    "saved-search": "Saved Search",
+    "relation-map": "Relation Map",
+    "note-map": "Note Map",
+    "render-note": "Render Note",
+    "book": "Book",
+    "mermaid-diagram": "Mermaid Diagram",
+    "canvas": "Canvas",
+    "web-view": "Web View",
+    "mind-map": "Mind Map (Beta)",
+    "file": "File",
+    "image": "Image",
+    "launcher": "Launcher",
+    "doc": "Doc",
+    "widget": "Widget",
+    "confirm-change": "It is not recommended to change note type when note content is not empty. Do you want to continue anyway?"
+  },
+  "protect_note": {
+    "toggle-on": "Notiz schützen",
+    "toggle-off": "Notizschutz aufheben",
+    "toggle-on-hint": "Notiz ist ungeschützt, klicken, um sie zu schützen",
+    "toggle-off-hint": "Notiz ist geschützt, klicken, um den Schutz aufzuheben"
+  },
+  "shared_switch": {
+    "shared": "Teilen",
+    "toggle-on-title": "Notiz teilen",
+    "toggle-off-title": "Notiz-Freigabe aufheben",
+    "shared-branch": "Diese Notiz existiert nur als geteilte Notiz, das Aufheben der Freigabe würde sie löschen. Möchtest du fortfahren und die Notiz damit löschen?",
+    "inherited": "Die Notiz kann hier nicht von der Freigabe entfernt werden, da sie über Vererbung von einer übergeordneten Notiz geteilt wird."
+  },
+  "template_switch": {
+    "template": "Vorlage",
+    "toggle-on-hint": "Notiz zu einer Vorlage machen",
+    "toggle-off-hint": "Entferne die Notiz als Vorlage"
+  },
+  "open-help-page": "Hilfeseite öffnen",
+  "find": {
+    "case_sensitive": "Groß-/Kleinschreibung beachten",
+    "match_words": "Wörter genau übereinstimmen"
+  },
+  "highlights_list_2": {
+    "title": "Hervorhebungs-Liste",
+    "options": "Optionen"
+  },
+  "mermaid": {
+    "diagram_error": "Das Diagramm konnte nicht angezeigt werden. Siehe <a href=\"https://mermaid-js.github.io/mermaid/#/flowchart?id=graph\">Hilfe und Beispiele</a>."
+  },
+  "quick-search": {
+    "placeholder": "Schnellsuche",
+    "searching": "Suche läuft…",
+    "no-results": "Keine Ergebnisse gefunden",
+    "more-results": "... und {{number}} weitere Ergebnisse.",
+    "show-in-full-search": "In der vollständigen Suche anzeigen"
+  },
+  "note_tree": {
+    "collapse-title": "Notizbaum zusammenklappen",
+    "scroll-active-title": "Zur aktiven Notiz scrollen",
+    "tree-settings-title": "Baum-Einstellungen",
+    "hide-archived-notes": "Archivierte Notizen ausblenden",
+    "automatically-collapse-notes": "Notizen automatisch zusammenklappen",
+    "automatically-collapse-notes-title": "Notizen werden nach einer Inaktivitätsperiode automatisch zusammengeklappt, um den Baum zu entlasten.",
+    "save-changes": "Änderungen speichern und anwenden",
+    "auto-collapsing-notes-after-inactivity": "Automatisches Zusammenklappen von Notizen nach Inaktivität…",
+    "saved-search-note-refreshed": "Gespeicherte Such-Notiz wurde aktualisiert."
+  },
+  "title_bar_buttons": {
+    "window-on-top": "Dieses Fenster immer oben halten."
+  },
+  "note_detail": {
+    "could_not_find_typewidget": "Konnte typeWidget für Typ ‚{{type}}‘ nicht finden"
+  },
+  "note_title": {
+    "placeholder": "Titel der Notiz hier eingeben…"
+  },
+  "search_result": {
+    "no_notes_found": "Es wurden keine Notizen mit den angegebenen Suchparametern gefunden.",
+    "search_not_executed": "Die Suche wurde noch nicht ausgeführt. Klicke oben auf „Suchen“, um die Ergebnisse anzuzeigen."
+  },
+  "spacer": {
+    "configure_launchbar": "Startleiste konfigurieren"
+  },
+  "sql_result": {
+    "no_rows": "Es wurden keine Zeilen für diese Abfrage zurückgegeben"
+  },
+  "sql_table_schemas": {
+    "tables": "Tabellen"
+  },
+  "tab_row": {
+    "close_tab": "Tab schließen",
+    "add_new_tab": "Neuen Tab hinzufügen",
+    "close": "Schließen",
+    "close_other_tabs": "Andere Tabs schließen",
+    "close_right_tabs": "Tabs rechts schließen",
+    "close_all_tabs": "Alle Tabs schließen",
+    "move_tab_to_new_window": "Tab in neues Fenster verschieben",
+    "new_tab": "Neuer Tab"
+  },
+  "toc": {
+    "table_of_contents": "Inhaltsverzeichnis",
+    "options": "Optionen"
+  },
+  "watched_file_update_status": {
+    "file_last_modified": "Datei <code class=\"file-path\"></code> wurde zuletzt geändert am <span class=\"file-last-modified\"></span>.",
+    "upload_modified_file": "Modifizierte Datei hochladen",
+    "ignore_this_change": "Diese Änderung ignorieren"
+  },
+  "app_context": {
+    "please_wait_for_save": "Bitte warte ein paar Sekunden, bis das Speichern abgeschlossen ist, und versuche es dann erneut."
+  },
+  "note_create": {
+    "duplicated": "Notiz ‚{{title}}‘ wurde dupliziert."
+  },
+  "image": {
+    "copied-to-clipboard": "Ein Verweis auf das Bild wurde in die Zwischenablage kopiert. Dieser kann in eine beliebige Textnotiz eingefügt werden.",
+    "cannot-copy": "Das Bild konnte nicht in die Zwischenablage kopiert werden."
+  },
+  "clipboard": {
+    "cut": "Notiz(en) wurden in die Zwischenablage ausgeschnitten.",
+    "copied": "Notiz(en) wurden in die Zwischenablage kopiert."
+  },
+  "entrypoints": {
+    "note-revision-created": "Notizrevision wurde erstellt.",
+    "note-executed": "Notiz wurde ausgeführt.",
+    "sql-error": "Fehler bei der Ausführung der SQL-Abfrage: {{message}}"
+  },
+  "branches": {
+    "cannot-move-notes-here": "Notizen können hier nicht verschoben werden.",
+    "delete-status": "Löschstatus",
+    "delete-notes-in-progress": "Löschen von Notizen in Bearbeitung: {{count}}",
+    "delete-finished-successfully": "Löschen erfolgreich abgeschlossen.",
+    "undeleting-notes-in-progress": "Wiederherstellen von Notizen in Bearbeitung: {{count}}",
+    "undeleting-notes-finished-successfully": "Wiederherstellen von Notizen erfolgreich abgeschlossen."
+  },
+  "frontend_script_api": {
+    "async_warning": "Du übergibst eine asynchrone Funktion an `api.runOnBackend()`, was wahrscheinlich nicht wie beabsichtigt funktioniert.\\nEntweder mach die Funktion synchron (indem du das `async`-Schlüsselwort entfernst) oder benutze `api.runAsyncOnBackendWithManualTransactionHandling()`.",
+    "sync_warning": "Du übergibst eine synchrone Funktion an `api.runAsyncOnBackendWithManualTransactionHandling()`,\\nobwohl du wahrscheinlich `api.runOnBackend()` verwenden solltest."
+  },
+  "ws": {
+    "sync-check-failed": "Synchronisationsprüfung fehlgeschlagen!",
+    "consistency-checks-failed": "Konsistenzprüfung fehlgeschlagen! Siehe Logs für Details.",
+    "encountered-error": "Fehler „{{message}}“ aufgetreten, siehe Konsole für Details."
+  },
+  "hoisted_note": {
+    "confirm_unhoisting": "Die angeforderte Notiz ‚{{requestedNote}}‘ befindet sich außerhalb des hoisted Bereichs der Notiz ‚{{hoistedNote}}‘. Du musst sie unhoisten, um auf die Notiz zuzugreifen. Möchtest du mit dem Unhoisting fortfahren?"
+  },
+  "launcher_context_menu": {
+    "reset_launcher_confirm": "Möchtest du „{{title}}“ wirklich zurücksetzen? Alle Daten / Einstellungen in dieser Notiz (und ihren Kindern) gehen verloren und der Launcher wird an seinen ursprünglichen Standort zurückgesetzt.",
+    "add-note-launcher": "Launcher für Notiz hinzufügen",
+    "add-script-launcher": "Launcher für Skript hinzufügen",
+    "add-custom-widget": "Benutzerdefiniertes Widget hinzufügen",
+    "add-spacer": "Spacer hinzufügen",
+    "delete": "Löschen",
+    "reset": "Zurücksetzen",
+    "move-to-visible-launchers": "Zu sichtbaren Launchern verschieben",
+    "move-to-available-launchers": "Zu verfügbaren Launchern verschieben",
+    "duplicate-launcher": "Launcher duplizieren"
+  },
+  "editable-text": {
+    "auto-detect-language": "Automatisch erkannt"
+  },
+  "highlighting": {
+    "title": "Code-Syntax-Hervorhebung für Textnotizen",
+    "description": "Steuert die Syntaxhervorhebung für Codeblöcke in Textnotizen, Code-Notizen sind nicht betroffen.",
+    "color-scheme": "Farbschema"
+  },
+  "code_block": {
+    "word_wrapping": "Wortumbruch"
   }
 }
