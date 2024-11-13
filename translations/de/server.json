@@ -108,7 +108,7 @@
   },
   "javascript-required": "Trilium erfordert, dass JavaScript aktiviert ist.",
   "setup": {
-    "heading": "TriliumNext Notizen Setup",
+    "heading": "TriliumNext Notes Setup",
     "new-document": "Ich bin ein neuer Benutzer und möchte ein neues Trilium-Dokument für meine Notizen erstellen",
     "sync-from-desktop": "Ich habe bereits eine Desktop-Instanz und möchte die Synchronisierung damit einrichten",
     "sync-from-server": "Ich habe bereits eine Server-Instanz und möchte die Synchronisierung damit einrichten",
