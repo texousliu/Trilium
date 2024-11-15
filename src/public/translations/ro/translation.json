@@ -1514,9 +1514,15 @@
   },
   "editing": {
     "editor_type": {
-      "fixed": "Editor cu bară fixă (uneltele de editare vor apărea în tab-ul „Formatare” din panglică)",
-      "floating": "Editor cu bară flotantă (uneltele de editare vor apărea lângă cursor)",
-      "label": "Bară de formatare"
+      "label": "Bară de formatare",
+      "floating": {
+        "title": "Editor cu bară flotantă",
+        "description": "uneltele de editare vor apărea lângă cursor."
+      },
+      "fixed": {
+        "title": "Editor cu bară fixă",
+        "description": "uneltele de editare vor apărea în tab-ul „Formatare” din panglică;"
+      }
     }
   },
   "editor": {
