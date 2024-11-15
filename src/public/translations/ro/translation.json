@@ -1349,7 +1349,11 @@
   "open-help-page": "Deschide pagina de informații",
   "find": {
     "match_words": "doar cuvinte întregi",
-    "case_sensitive": "ține cont de majuscule"
+    "case_sensitive": "ține cont de majuscule",
+    "replace_all": "Înlocuiește totul",
+    "replace_placeholder": "Înlocuiește cu...",
+    "replace": "Înlocuiește",
+    "find_placeholder": "Căutați în text..."
   },
   "highlights_list_2": {
     "options": "Setări",
