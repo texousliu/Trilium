@@ -1378,8 +1378,12 @@
   },
   "open-help-page": "Open help page",
   "find": {
-    "case_sensitive": "case sensitive",
-    "match_words": "match words"
+    "case_sensitive": "Case sensitive",
+    "match_words": "Match words",
+    "find_placeholder":"Find in text...",
+    "replace_placeholder":"Replace with...",
+    "replace": "Replace",
+    "replace_all": "Replace all"
   },
   "highlights_list_2": {
     "title": "Highlights List",
