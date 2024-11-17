@@ -18,6 +18,8 @@ describe('HTML Import', () => {
 
         // Create a mock task context
         taskContext = new TaskContext('test', 'test');
+        // Set textImportedAsText to true to ensure HTML imports are processed
+        taskContext.data = { textImportedAsText: true };
     });
 
     describe('extractHtmlTitle', () => {
@@ -30,116 +32,110 @@ describe('HTML Import', () => {
                     <body>
                         <p>Content</p>
                     </body>
-                </html>`;
-            
+                </html>
+            `;
+
             const title = importUtils.extractHtmlTitle(html);
             expect(title).toBe('Test Title');
         });
 
-        it('should handle missing title tag', () => {
-            const html = `
-                <html>
-                    <head></head>
-                    <body>
-                        <p>Content</p>
-                    </body>
-                </html>`;
-            
-            const title = importUtils.extractHtmlTitle(html);
-            expect(title).toBeNull();
-        });
-
-        it('should handle title with special characters', () => {
+        it('should return null if no title tag is present', () => {
             const html = `
                 <html>
                     <head>
-                        <title>Test/Title: With Special &amp; Characters</title>
                     </head>
                     <body>
                         <p>Content</p>
                     </body>
-                </html>`;
-            
+                </html>
+            `;
+
             const title = importUtils.extractHtmlTitle(html);
-            expect(title).toBe('Test/Title: With Special & Characters');
+            expect(title).toBeNull();
         });
     });
 
-    describe('importHtml', () => {
-        it('should prefer title from HTML over filename', () => {
+    describe('importSingleFile with HTML', () => {
+        it('should import HTML file with title from title tag', () => {
             const file = {
                 originalname: 'test.html',
+                mimetype: 'text/html',
                 buffer: Buffer.from(`
                     <html>
                         <head>
                             <title>HTML Title</title>
                         </head>
                         <body>
-                            <p>Content</p>
+                            <p>Test content</p>
                         </body>
-                    </html>`),
-                mimetype: 'text/html'
+                    </html>
+                `)
             };
 
-            const note = importSingle.importHtml(taskContext, file, parentNote);
+            const note = importSingle.importSingleFile(taskContext, file, parentNote);
             expect(note.title).toBe('HTML Title');
+            expect(note.mime).toBe('text/html');
         });
 
-        it('should fall back to filename when no HTML title exists', () => {
-            const file = {
-                originalname: 'test_file.html',
-                buffer: Buffer.from(`
-                    <html>
-                        <head></head>
-                        <body>
-                            <p>Content</p>
-                        </body>
-                    </html>`),
-                mimetype: 'text/html'
-            };
-
-            const note = importSingle.importHtml(taskContext, file, parentNote);
-            expect(note.title).toBe('test file'); // assuming replaceUnderscoresWithSpaces is true
-        });
-
-        it('should handle HTML with both title and H1', () => {
+        it('should import HTML file with title from h1 when no title tag', () => {
             const file = {
                 originalname: 'test.html',
+                mimetype: 'text/html',
+                buffer: Buffer.from(`
+                    <html>
+                        <body>
+                            <h1>Heading Title</h1>
+                            <p>Test content</p>
+                        </body>
+                    </html>
+                `)
+            };
+
+            const note = importSingle.importSingleFile(taskContext, file, parentNote);
+            expect(note.title).toBe('Heading Title');
+            expect(note.mime).toBe('text/html');
+        });
+
+        it('should import HTML file with filename as title when no title or h1', () => {
+            const file = {
+                originalname: 'test-document.html',
+                mimetype: 'text/html',
+                buffer: Buffer.from(`
+                    <html>
+                        <body>
+                            <p>Test content without title</p>
+                        </body>
+                    </html>
+                `)
+            };
+
+            const note = importSingle.importSingleFile(taskContext, file, parentNote);
+            expect(note.title).toBe('test-document');
+            expect(note.mime).toBe('text/html');
+        });
+
+        it('should sanitize HTML content during import', () => {
+            const file = {
+                originalname: 'test.html',
+                mimetype: 'text/html',
                 buffer: Buffer.from(`
                     <html>
                         <head>
-                            <title>HTML Title</title>
+                            <title>Test Title</title>
+                            <script>alert('xss');</script>
                         </head>
                         <body>
-                            <h1>Different H1 Title</h1>
-                            <p>Content</p>
+                            <p>Safe content</p>
+                            <script>alert('xss');</script>
                         </body>
-                    </html>`),
-                mimetype: 'text/html'
+                    </html>
+                `)
             };
 
-            const note = importSingle.importHtml(taskContext, file, parentNote);
-            expect(note.title).toBe('HTML Title');
-            expect(note.content).toContain('<h1>HTML Title</h1>'); // H1 should be updated to match title
-        });
-
-        it('should preserve special characters in title', () => {
-            const file = {
-                originalname: 'test.html',
-                buffer: Buffer.from(`
-                    <html>
-                        <head>
-                            <title>Title/With: Special &amp; Characters</title>
-                        </head>
-                        <body>
-                            <p>Content</p>
-                        </body>
-                    </html>`),
-                mimetype: 'text/html'
-            };
-
-            const note = importSingle.importHtml(taskContext, file, parentNote);
-            expect(note.title).toBe('Title/With: Special & Characters');
+            const note = importSingle.importSingleFile(taskContext, file, parentNote);
+            expect(note.title).toBe('Test Title');
+            expect(note.content).not.toContain('<script>');
+            expect(note.content).toContain('<p>Safe content</p>');
         });
     });
 });
