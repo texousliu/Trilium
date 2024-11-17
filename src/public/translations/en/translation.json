@@ -922,7 +922,7 @@
   },
   "empty": {
     "open_note_instruction": "Open a note by typing the note's title into the input below or choose a note in the tree.",
-    "search_placeholder": "search for a note by its name",
+    "search_placeholder": "search for a note by its name, Ctrl+Enter for full-text search.",
     "enter_workspace": "Enter workspace {{title}}"
   },
   "file": {
