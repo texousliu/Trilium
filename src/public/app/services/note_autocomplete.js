@@ -131,19 +131,6 @@ function initNoteAutocomplete($el, options) {
         // this is important because otherwise input will lose focus immediately and not show the results
         return false;
     });
-
-    // Triggers full text search when Ctrl + Enter is pressed.
-    $el.on('keydown',  (event) => {
-        if (event.key === 'Enter') {
-            if (event.ctrlKey) {
-                // Prevent Ctrl + Enter from triggering autoComplete.
-                event.preventDefault();  
-                event.stopImmediatePropagation(); 
-                const searchString = $el.val();
-                appContext.triggerCommand('searchNotes', { searchString });
-            } 
-        }
-    });
     
     let autocompleteOptions = {};
     if (options.container) {
