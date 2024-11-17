@@ -131,7 +131,7 @@ function initNoteAutocomplete($el, options) {
         // this is important because otherwise input will lose focus immediately and not show the results
         return false;
     });
-    
+
     let autocompleteOptions = {};
     if (options.container) {
         autocompleteOptions.dropdownMenuContainer = options.container;
