@@ -17,30 +17,64 @@ describe('HTML Import', () => {
 
     beforeEach(() => {
         return cls.init(() => {
-            // Create a mock parent note
-            parentNote = new BNote({
-                noteId: 'testParent',
-                title: 'Test Parent',
-                type: 'text',
-                mime: 'text/html'
-            });
-
-            // Create a mock task context
-            taskContext = new TaskContext('test', 'test');
-            // Set textImportedAsText to true to ensure HTML imports are processed
-            taskContext.data = { textImportedAsText: true };
-
-            // Wrap in transaction to handle database operations
             return sql.transactional(() => {
-                sql.execute('CREATE TABLE IF NOT EXISTS notes (noteId TEXT PRIMARY KEY, title TEXT, type TEXT, mime TEXT, isProtected INTEGER DEFAULT 0)');
-                sql.execute('CREATE TABLE IF NOT EXISTS note_contents (noteId TEXT PRIMARY KEY, content TEXT, hash TEXT, utcDateModified TEXT)');
+                // Create required tables
+                sql.execute(`
+                    CREATE TABLE IF NOT EXISTS notes (
+                        noteId TEXT PRIMARY KEY,
+                        title TEXT,
+                        type TEXT,
+                        mime TEXT,
+                        isProtected INTEGER DEFAULT 0,
+                        isDeleted INTEGER DEFAULT 0
+                    )
+                `);
+
+                sql.execute(`
+                    CREATE TABLE IF NOT EXISTS note_contents (
+                        noteId TEXT PRIMARY KEY,
+                        content TEXT,
+                        hash TEXT,
+                        utcDateModified TEXT
+                    )
+                `);
+
+                sql.execute(`
+                    CREATE TABLE IF NOT EXISTS entity_changes (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        entityName TEXT NOT NULL,
+                        entityId TEXT NOT NULL,
+                        hash TEXT NOT NULL,
+                        isErased INTEGER NOT NULL,
+                        isSynced INTEGER NOT NULL,
+                        utcDateChanged TEXT NOT NULL,
+                        changeId TEXT NOT NULL,
+                        componentId TEXT,
+                        instanceId TEXT
+                    )
+                `);
+
+                // Create a mock parent note
+                parentNote = new BNote({
+                    noteId: 'testParent',
+                    title: 'Test Parent',
+                    type: 'text',
+                    mime: 'text/html'
+                });
+
+                // Create a mock task context
+                taskContext = new TaskContext('test', 'test');
+                // Set textImportedAsText to true to ensure HTML imports are processed
+                taskContext.data = { textImportedAsText: true };
                 
                 // Insert parent note
                 sql.insert('notes', {
                     noteId: parentNote.noteId,
                     title: parentNote.title,
                     type: parentNote.type,
-                    mime: parentNote.mime
+                    mime: parentNote.mime,
+                    isProtected: 0,
+                    isDeleted: 0
                 });
             });
         });
