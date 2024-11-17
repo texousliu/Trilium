@@ -1378,8 +1378,12 @@
   },
   "open-help-page": "Abrir página de ayuda",
   "find": {
-    "case_sensitive": "distingue entre mayúsculas y minúsculas",
-    "match_words": "coincidir palabras"
+    "case_sensitive": "Distingue entre mayúsculas y minúsculas",
+    "match_words": "Coincidir palabras",
+    "find_placeholder": "Encontrar en texto...",
+    "replace_placeholder": "Reemplazar con...",
+    "replace": "Reemplazar",
+    "replace_all": "Reemplazar todo"
   },
   "highlights_list_2": {
     "title": "Lista de destacados",
@@ -1518,8 +1522,14 @@
   "editing": {
     "editor_type": {
       "label": "Barra de herramientas de formato",
-      "floating": "Flotante (las herramientas de edición aparecen cerca del cursor)",
-      "fixed": "Fijo (las herramientas de edición aparecen en la pestaña de la cinta \"Formato\")"
+      "floating": {
+        "title": "Flotante",
+        "description": "las herramientas de edición aparecen cerca del cursor;"
+      },
+      "fixed": {
+        "title": "Fijo",
+        "description": "las herramientas de edición aparecen en la pestaña de la cinta \"Formato\")."
+      }
     }
   }
 }
