@@ -32,7 +32,11 @@ function sanitize(dirtyHtml: string) {
             'figure', 'figcaption', 'span', 'label', 'input', 'details', 'summary', 'address', 'aside', 'footer',
             'header', 'hgroup', 'main', 'nav', 'dl', 'dt', 'menu', 'bdi', 'bdo', 'dfn', 'kbd', 'mark', 'q', 'time',
             'var', 'wbr', 'area', 'map', 'track', 'video', 'audio', 'picture', 'del', 'ins',
-            'en-media' // for ENEX import
+            'en-media', // for ENEX import
+            // Additional tags (https://github.com/TriliumNext/Notes/issues/567)
+            'acronym', 'article', 'big', 'button', 'cite', 'col', 'colgroup', 'data', 'dd',
+            'fieldset', 'form', 'legend', 'meter', 'noscript', 'option', 'progress', 'rp',
+            'samp', 'small', 'sub', 'sup', 'template', 'textarea', 'tt'
         ],
         allowedAttributes: {
             '*': [ 'class', 'style', 'title', 'src', 'href', 'hash', 'disabled', 'align', 'alt', 'center', 'data-*' ]
