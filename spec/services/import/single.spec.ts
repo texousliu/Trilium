@@ -134,8 +134,9 @@ describe('HTML Import', () => {
 
             const note = importSingle.importSingleFile(taskContext, file, parentNote);
             expect(note.title).toBe('Test Title');
-            expect(note.content).not.toContain('<script>');
-            expect(note.content).toContain('<p>Safe content</p>');
+            const content = note.getContent();
+            expect(content).not.toContain('<script>');
+            expect(content).toContain('<p>Safe content</p>');
         });
     });
 });
