@@ -5,16 +5,14 @@ const TPL = `
 <div class="options-section">
     <h4>${t("import.html_import_tags.title")}</h4>
     
-    <p class="form-text">${t("import.html_import_tags.description")}</p>
+    <p>${t("import.html_import_tags.description")}</p>
     
-    <div class="mb-3">
         <textarea class="allowed-html-tags form-control" style="height: 150px; font-family: monospace;" 
                   placeholder="${t("import.html_import_tags.placeholder")}"></textarea>
         
         <div class="form-text">
             ${t("import.html_import_tags.help")}
         </div>
-    </div>
     
     <div>
         <button class="btn btn-sm btn-secondary reset-to-default">
@@ -55,22 +53,22 @@ export default class HtmlImportTagsOptions extends OptionsWidget {
         try {
             if (options.allowedHtmlTags) {
                 const tags = JSON.parse(options.allowedHtmlTags);
-                this.$allowedTags.val(tags.join('\\n'));
+                this.$allowedTags.val(tags.join(' '));
             } else {
                 // If no tags are set, show the defaults
-                this.$allowedTags.val(defaultTags.join('\\n'));
+                this.$allowedTags.val(defaultTags.join(' '));
             }
         }
         catch (e) {
             console.error('Could not load HTML tags:', e);
             // On error, show the defaults
-            this.$allowedTags.val(defaultTags.join('\\n'));
+            this.$allowedTags.val(defaultTags.join(' '));
         }
     }
     
     async saveTags() {
         const tagsText = this.$allowedTags.val();
-        const tags = tagsText.split(/[,\\s]+/) // Split on commas, spaces, or newlines
+        const tags = tagsText.split(/[\n,\s]+/) // Split on newlines, commas, or spaces
             .map(tag => tag.trim())
             .filter(tag => tag.length > 0);
             
@@ -78,7 +76,7 @@ export default class HtmlImportTagsOptions extends OptionsWidget {
     }
     
     async resetToDefault() {
-        this.$allowedTags.val(defaultTags.join('\\n')); // Use actual newlines
+        this.$allowedTags.val(defaultTags.join('\n')); // Use actual newline
         await this.saveTags();
     }
 }
