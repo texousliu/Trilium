@@ -136,7 +136,7 @@ const defaultOptions: DefaultOption[] = [
     // Text note configuration
     { name: "textNoteEditorType", value: "ckeditor-balloon", isSynced: true },
 
-    // HTML sanitization configuration
+    // HTML import configuration
     { name: "allowedHtmlTags", value: JSON.stringify([
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'li', 'b', 'i', 'strong', 'em', 'strike', 's', 'del', 'abbr', 'code', 'hr', 'br', 'div',
@@ -148,7 +148,7 @@ const defaultOptions: DefaultOption[] = [
         'acronym', 'article', 'big', 'button', 'cite', 'col', 'colgroup', 'data', 'dd',
         'fieldset', 'form', 'legend', 'meter', 'noscript', 'option', 'progress', 'rp',
         'samp', 'small', 'sub', 'sup', 'template', 'textarea', 'tt'
-    ]), isSynced: true }
+    ]), isSynced: true },
 ];
 
 /**
