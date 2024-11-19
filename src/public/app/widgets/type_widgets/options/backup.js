@@ -95,7 +95,13 @@ export default class BackupOptions extends OptionsWidget {
             this.$existingBackupList.empty();
 
             if (!backupFiles.length) {
-                backupFiles = [{filePath: t('backup.no_backup_yet'), mtime: ''}];
+                this.$existingBackupList.append($(`
+                    <tr>
+                        <td colspan="2">${t('backup.no_backup_yet')}</td>
+                    </tr>
+                `));
+
+                return;
             }
 
             // Sort the backup files by modification date & time in a desceding order
