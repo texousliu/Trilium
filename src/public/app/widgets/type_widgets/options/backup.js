@@ -43,6 +43,10 @@ const TPL = `
     <h4>${t('backup.existing_backups')}</h4>
     
     <table class="table table-stripped">
+        <colgroup>
+            <col width="33%" />
+            <col />
+        </colgroup>
         <thead>
             <tr>
                 <th>${t("backup.date-and-time")}</th>
@@ -97,7 +101,7 @@ export default class BackupOptions extends OptionsWidget {
             if (!backupFiles.length) {
                 this.$existingBackupList.append($(`
                     <tr>
-                        <td colspan="2">${t('backup.no_backup_yet')}</td>
+                        <td class="empty-table-placeholder" colspan="2">${t('backup.no_backup_yet')}</td>
                     </tr>
                 `));
 
