@@ -55,7 +55,7 @@ const TPL = `
       <span class="bx bx-link-external"></span> ${t('note_actions.open_note_externally')}<kbd data-command="openNoteExternally"></kbd>
     </li>
     <li data-trigger-command="openNoteCustom" class="dropdown-item open-note-custom-button">
-      <span class="bx bxs-shapes"></span> ${t('note_actions.open_note_custom')}<kbd data-command="openNoteCustom"></kbd>
+      <span class="bx bx-customize"></span> ${t('note_actions.open_note_custom')}<kbd data-command="openNoteCustom"></kbd>
     </li>
     <li class="dropdown-item import-files-button"><span class="bx bx-import"></span> ${t('note_actions.import_files')}</li>
     <li class="dropdown-item export-note-button"><span class="bx bx-export"></span> ${t('note_actions.export_note')}</li>
