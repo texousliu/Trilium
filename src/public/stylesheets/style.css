@@ -1238,3 +1238,8 @@ textarea {
 .jump-to-note-results .aa-suggestions {
     padding: 1rem;
 }
+
+.empty-table-placeholder {
+    text-align: center;
+    color: var(--muted-text-color);
+}
