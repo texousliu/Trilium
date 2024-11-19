@@ -254,6 +254,8 @@
     "enable_monthly_backup": "Activează copia de siguranță lunară",
     "enable_weekly_backup": "Activează copia de siguranță săptămânală",
     "existing_backups": "Copii de siguranță existente",
+    "date-and-time": "Data și ora",
+    "path": "Calea fișierului",
     "no_backup_yet": "nu există încă nicio copie de siguranță"
   },
   "basic_properties": {
