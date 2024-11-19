@@ -229,7 +229,7 @@ div.ui-tooltip {
 }
 
 .dropdown-divider {
-    background-color: var(--menu-text-color);
+    border-color: var(--dropdown-border-color);
 }
 
 .dropdown-menu {
