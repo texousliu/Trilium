@@ -98,6 +98,13 @@ export default class BackupOptions extends OptionsWidget {
                 backupFiles = [{filePath: t('backup.no_backup_yet'), mtime: ''}];
             }
 
+            // Sort the backup files by modification date & time in a desceding order
+            backupFiles.sort((a, b) => {
+                if (a.mtime < b.mtime) return 1;
+                if (a.mtime > b.mtime) return -1;
+                return 0;
+            });
+
             const dateTimeFormatter = new Intl.DateTimeFormat(navigator.language, {
                 dateStyle: "medium",
                 timeStyle: "medium"
