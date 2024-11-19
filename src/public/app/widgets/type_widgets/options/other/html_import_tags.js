@@ -1,5 +1,6 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
+import { DEFAULT_ALLOWED_TAGS } from "../../../../services/html_sanitizer.js";
 
 const TPL = `
 <div class="options-section">
@@ -21,19 +22,6 @@ const TPL = `
     </div>
 </div>`;
 
-const defaultTags = [
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
-    'li', 'b', 'i', 'strong', 'em', 'strike', 's', 'del', 'abbr', 'code', 'hr', 'br', 'div',
-    'table', 'thead', 'caption', 'tbody', 'tfoot', 'tr', 'th', 'td', 'pre', 'section', 'img',
-    'figure', 'figcaption', 'span', 'label', 'input', 'details', 'summary', 'address', 'aside', 'footer',
-    'header', 'hgroup', 'main', 'nav', 'dl', 'dt', 'menu', 'bdi', 'bdo', 'dfn', 'kbd', 'mark', 'q', 'time',
-    'var', 'wbr', 'area', 'map', 'track', 'video', 'audio', 'picture', 'del', 'ins',
-    'en-media',
-    'acronym', 'article', 'big', 'button', 'cite', 'col', 'colgroup', 'data', 'dd',
-    'fieldset', 'form', 'legend', 'meter', 'noscript', 'option', 'progress', 'rp',
-    'samp', 'small', 'sub', 'sup', 'template', 'textarea', 'tt'
-];
-
 export default class HtmlImportTagsOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
@@ -48,7 +36,7 @@ export default class HtmlImportTagsOptions extends OptionsWidget {
         // Load initial tags
         this.refresh();
     }
-    
+
     async optionsLoaded(options) {
         try {
             if (options.allowedHtmlTags) {
@@ -56,16 +44,16 @@ export default class HtmlImportTagsOptions extends OptionsWidget {
                 this.$allowedTags.val(tags.join(' '));
             } else {
                 // If no tags are set, show the defaults
-                this.$allowedTags.val(defaultTags.join(' '));
+                this.$allowedTags.val(DEFAULT_ALLOWED_TAGS.join(' '));
             }
         }
         catch (e) {
             console.error('Could not load HTML tags:', e);
             // On error, show the defaults
-            this.$allowedTags.val(defaultTags.join(' '));
+            this.$allowedTags.val(DEFAULT_ALLOWED_TAGS.join(' '));
         }
     }
-    
+
     async saveTags() {
         const tagsText = this.$allowedTags.val();
         const tags = tagsText.split(/[\n,\s]+/) // Split on newlines, commas, or spaces
@@ -74,9 +62,9 @@ export default class HtmlImportTagsOptions extends OptionsWidget {
             
         await this.updateOption('allowedHtmlTags', JSON.stringify(tags));
     }
-    
+
     async resetToDefault() {
-        this.$allowedTags.val(defaultTags.join('\n')); // Use actual newline
+        this.$allowedTags.val(DEFAULT_ALLOWED_TAGS.join('\n')); // Use actual newline
         await this.saveTags();
     }
 }
