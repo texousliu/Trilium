@@ -51,7 +51,11 @@
     "chosen_actions": "Chosen actions",
     "execute_bulk_actions": "Execute bulk actions",
     "bulk_actions_executed": "Bulk actions have been executed successfully.",
-    "none_yet": "None yet... add an action by clicking one of the available ones above."
+    "none_yet": "None yet... add an action by clicking one of the available ones above.",
+    "labels": "Labels",
+    "relations": "Relations",
+    "notes": "Notes",
+    "other": "Other"
   },
   "clone_to": {
     "clone_notes_to": "Clone notes to...",
@@ -1382,8 +1386,8 @@
   "find": {
     "case_sensitive": "Case sensitive",
     "match_words": "Match words",
-    "find_placeholder":"Find in text...",
-    "replace_placeholder":"Replace with...",
+    "find_placeholder": "Find in text...",
+    "replace_placeholder": "Replace with...",
     "replace": "Replace",
     "replace_all": "Replace all"
   },
