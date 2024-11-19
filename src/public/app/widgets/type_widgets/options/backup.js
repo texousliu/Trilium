@@ -42,7 +42,17 @@ const TPL = `
 <div class="options-section">
     <h4>${t('backup.existing_backups')}</h4>
     
-    <ul class="existing-backup-list"></ul>
+    <table class="table table-stripped">
+        <thead>
+            <tr>
+                <th>Date and time</th>
+                <th>Path</th>
+            </tr>
+        </thead>
+        <tbody class="existing-backup-list-items">
+        </tbody>
+    </table>
+
 </div>
 `;
 
@@ -73,7 +83,7 @@ export default class BackupOptions extends OptionsWidget {
         this.$monthlyBackupEnabled.on('change', () =>
             this.updateCheckboxOption('monthlyBackupEnabled', this.$monthlyBackupEnabled));
 
-        this.$existingBackupList = this.$widget.find(".existing-backup-list");
+        this.$existingBackupList = this.$widget.find(".existing-backup-list-items");
     }
 
     optionsLoaded(options) {
@@ -89,7 +99,12 @@ export default class BackupOptions extends OptionsWidget {
             }
 
             for (const {filePath, mtime} of backupFiles) {
-                this.$existingBackupList.append($("<li>").text(`${filePath} ${mtime ? ` - ${mtime}` : ''}`));
+                this.$existingBackupList.append($(`
+                    <tr>
+                        <td>${(mtime) ? mtime : "-"}</td>
+                        <td>${filePath}</td>
+                    </tr>
+                `));
             }
         });
     }
