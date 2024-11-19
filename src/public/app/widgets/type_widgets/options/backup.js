@@ -98,10 +98,15 @@ export default class BackupOptions extends OptionsWidget {
                 backupFiles = [{filePath: t('backup.no_backup_yet'), mtime: ''}];
             }
 
+            const dateTimeFormatter = new Intl.DateTimeFormat(navigator.language, {
+                dateStyle: "medium",
+                timeStyle: "medium"
+            });
+
             for (const {filePath, mtime} of backupFiles) {
                 this.$existingBackupList.append($(`
                     <tr>
-                        <td>${(mtime) ? mtime : "-"}</td>
+                        <td>${(mtime) ? dateTimeFormatter.format(new Date(mtime)) : "-"}</td>
                         <td>${filePath}</td>
                     </tr>
                 `));
