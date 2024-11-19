@@ -289,6 +289,10 @@ div.ui-tooltip {
     outline: none;
 }
 
+.dropdown-item .destructive-action-icon {
+    color: var(--dropdown-item-icon-destructive-color);
+}
+
 .CodeMirror {
     height: 100%;
     background: inherit;
