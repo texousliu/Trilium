@@ -45,8 +45,8 @@ const TPL = `
     <table class="table table-stripped">
         <thead>
             <tr>
-                <th>Date and time</th>
-                <th>Path</th>
+                <th>${t("backup.date-and-time")}</th>
+                <th>${t("backup.path")}</th>
             </tr>
         </thead>
         <tbody class="existing-backup-list-items">
