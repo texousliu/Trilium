@@ -42,31 +42,59 @@ const TPL = `
         <li data-trigger-command="convertNoteIntoAttachment" class="dropdown-item">
             <span class="bx bx-paperclip"></span> ${t('note_actions.convert_into_attachment')}
         </li>
+        
         <li data-trigger-command="renderActiveNote" class="dropdown-item render-note-button">
             <span class="bx bx-extension"></span> ${t('note_actions.re_render_note')}<kbd data-command="renderActiveNote"></kbd>
         </li>
+
         <li data-trigger-command="findInText" class="dropdown-item find-in-text-button">
             <span class='bx bx-search'></span> ${t('note_actions.search_in_note')}<kbd data-command="findInText"></kbd>
         </li>
-        <li data-trigger-command="showNoteSource" class="dropdown-item show-source-button">
-            <span class="bx bx-code"></span> ${t('note_actions.note_source')}<kbd data-command="showNoteSource"></kbd>
-        </li>
-        <li data-trigger-command="showAttachments" class="dropdown-item show-attachments-button">
-            <span class="bx bx-paperclip"></span> ${t('note_actions.note_attachments')}<kbd data-command="showAttachments"></kbd>
-        </li>
+
+        <li data-trigger-command="printActiveNote" class="dropdown-item print-active-note-button">
+            <span class="bx bx-printer"></span> ${t('note_actions.print_note')}<kbd data-command="printActiveNote"></kbd></li>
+
+        
+        <div class="dropdown-divider"></div>
+
+        
+        <li class="dropdown-item import-files-button"><span class="bx bx-import"></span> ${t('note_actions.import_files')}</li>
+
+        <li class="dropdown-item export-note-button"><span class="bx bx-export"></span> ${t('note_actions.export_note')}</li>
+
+        
+        <div class="dropdown-divider"></div>
+
+
+
         <li data-trigger-command="openNoteExternally" class="dropdown-item open-note-externally-button" title="${t('note_actions.open_note_externally_title')}">
             <span class="bx bx-link-external"></span> ${t('note_actions.open_note_externally')}<kbd data-command="openNoteExternally"></kbd>
         </li>
+
         <li data-trigger-command="openNoteCustom" class="dropdown-item open-note-custom-button">
             <span class="bx bx-customize"></span> ${t('note_actions.open_note_custom')}<kbd data-command="openNoteCustom"></kbd>
         </li>
-        <li class="dropdown-item import-files-button"><span class="bx bx-import"></span> ${t('note_actions.import_files')}</li>
-        <li class="dropdown-item export-note-button"><span class="bx bx-export"></span> ${t('note_actions.export_note')}</li>
-        <li class="dropdown-item delete-note-button"><span class="bx bx-trash"></span> ${t('note_actions.delete_note')}</li>
-        <li data-trigger-command="printActiveNote" class="dropdown-item print-active-note-button">
-            <span class="bx bx-printer"></span> ${t('note_actions.print_note')}<kbd data-command="printActiveNote"></kbd></li>
+
+        <li data-trigger-command="showNoteSource" class="dropdown-item show-source-button">
+            <span class="bx bx-code"></span> ${t('note_actions.note_source')}<kbd data-command="showNoteSource"></kbd>
+        </li>
+
+        
+        <div class="dropdown-divider"></div>
+
+
         <li data-trigger-command="forceSaveRevision" class="dropdown-item save-revision-button">
             <span class="bx bx-save"></span> ${t('note_actions.save_revision')}<kbd data-command="forceSaveRevision"></kbd>
+        </li>
+
+        <li class="dropdown-item delete-note-button"><span class="bx bx-trash"></span> ${t('note_actions.delete_note')}</li>
+
+        
+        <div class="dropdown-divider"></div>
+
+        
+        <li data-trigger-command="showAttachments" class="dropdown-item show-attachments-button">
+            <span class="bx bx-paperclip"></span> ${t('note_actions.note_attachments')}<kbd data-command="showAttachments"></kbd>
         </li>
     </div>
 </div>`;
