@@ -1183,6 +1183,8 @@
     "backup_now": "Backup now",
     "backup_database_now": "Backup database now",
     "existing_backups": "Existing backups",
+    "date-and-time": "Date & time",
+    "path": "Path",
     "database_backed_up_to": "Database has been backed up to",
     "no_backup_yet": "no backup yet"
   },
