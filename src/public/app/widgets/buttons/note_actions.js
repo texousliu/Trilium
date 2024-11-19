@@ -87,7 +87,7 @@ const TPL = `
             <span class="bx bx-save"></span> ${t('note_actions.save_revision')}<kbd data-command="forceSaveRevision"></kbd>
         </li>
 
-        <li class="dropdown-item delete-note-button"><span class="bx bx-trash"></span> ${t('note_actions.delete_note')}</li>
+        <li class="dropdown-item delete-note-button"><span class="bx bx-trash destructive-action-icon"></span> ${t('note_actions.delete_note')}</li>
 
         
         <div class="dropdown-divider"></div>
