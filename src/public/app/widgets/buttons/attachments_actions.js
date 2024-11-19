@@ -39,22 +39,39 @@ const TPL = `
         style="position: relative; top: 3px;"></button>
 
     <div class="dropdown-menu dropdown-menu-right">
+
         <li data-trigger-command="openAttachment" class="dropdown-item"
             title="${t('attachments_actions.open_externally_title')}"><span class="bx bx-link-external"></span> ${t('attachments_actions.open_externally')}</li>
+        
         <li data-trigger-command="openAttachmentCustom" class="dropdown-item"
             title="${t('attachments_actions.open_custom_title')}"><span class="bx bx-customize"></span> ${t('attachments_actions.open_custom')}</li>
-        <li data-trigger-command="renameAttachment" class="dropdown-item">
-            <span class="bx bx-rename"></span> ${t('attachments_actions.rename_attachment')}</li>
-        <li data-trigger-command="copyAttachmentLinkToClipboard" class="dropdown-item"><span class="bx bx-copy">
-            </span> ${t('attachments_actions.copy_link_to_clipboard')}</li>
+        
         <li data-trigger-command="downloadAttachment" class="dropdown-item">
             <span class="bx bx-download"></span> ${t('attachments_actions.download')}</li>
+
+        <li data-trigger-command="copyAttachmentLinkToClipboard" class="dropdown-item"><span class="bx bx-link">
+            </span> ${t('attachments_actions.copy_link_to_clipboard')}</li>
+
+        
+        <div class="dropdown-divider"></div>
+
+
         <li data-trigger-command="uploadNewAttachmentRevision" class="dropdown-item"><span class="bx bx-upload">
             </span> ${t('attachments_actions.upload_new_revision')}</li>
+
+        <li data-trigger-command="renameAttachment" class="dropdown-item">
+            <span class="bx bx-rename"></span> ${t('attachments_actions.rename_attachment')}</li>
+
+        <li data-trigger-command="deleteAttachment" class="dropdown-item">
+            <span class="bx bx-trash destructive-action-icon"></span> ${t('attachments_actions.delete_attachment')}</li>
+
+
+        <div class="dropdown-divider"></div>
+            
+
         <li data-trigger-command="convertAttachmentIntoNote" class="dropdown-item"><span class="bx bx-note">
             </span> ${t('attachments_actions.convert_attachment_into_note')}</li>
-        <li data-trigger-command="deleteAttachment" class="dropdown-item">
-            <span class="bx bx-trash"></span> ${t('attachments_actions.delete_attachment')}</li>
+        
     </div>
     
     <input type="file" class="attachment-upload-new-revision-input" style="display: none">
