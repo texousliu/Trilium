@@ -87,7 +87,7 @@ export default class TreeContextMenu {
 
                 { title: `${t("tree-context-menu.edit-branch-prefix")} <kbd data-command="editBranchPrefix"></kbd>`, command: "editBranchPrefix", uiIcon: "bx bx-rename", enabled: isNotRoot && parentNotSearch && noSelectedNotes && notOptions },
                 { title: t("tree-context-menu.convert-to-attachment"), command: "convertNoteToAttachment", uiIcon: "bx bx-paperclip", enabled: isNotRoot && !isHoisted && notOptions },
-                { title: `${t("tree-context-menu.duplicate-subtree")} <kbd data-command="duplicateSubtree">`, command: "duplicateSubtree", uiIcon: "bx bx-duplicate", enabled: parentNotSearch && isNotRoot && !isHoisted && notOptions },
+                { title: `${t("tree-context-menu.duplicate-subtree")} <kbd data-command="duplicateSubtree">`, command: "duplicateSubtree", uiIcon: "bx bx-outline", enabled: parentNotSearch && isNotRoot && !isHoisted && notOptions },
 
                 { title: "----" },
 
@@ -97,7 +97,7 @@ export default class TreeContextMenu {
 
                 { title: "----" },
 
-                { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-current-location", enabled: true },
+                { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
                 { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: noSelectedNotes && notOptions },
             ] },
 
@@ -120,7 +120,7 @@ export default class TreeContextMenu {
             { title: `${t("tree-context-menu.move-to")} <kbd data-command="moveNotesTo"></kbd>`, command: "moveNotesTo", uiIcon: "bx bx-transfer",
                 enabled: isNotRoot && !isHoisted && parentNotSearch },
             
-            { title: `${t("tree-context-menu.clone-to")} <kbd data-command="cloneNotesTo"></kbd>`, command: "cloneNotesTo", uiIcon: "bx bx-copy-alt",
+            { title: `${t("tree-context-menu.clone-to")} <kbd data-command="cloneNotesTo"></kbd>`, command: "cloneNotesTo", uiIcon: "bx bx-duplicate",
                 enabled: isNotRoot && !isHoisted },
 
             { title: `${t("tree-context-menu.delete")} <kbd data-command="deleteNotes"></kbd>`, command: "deleteNotes", uiIcon: "bx bx-trash destructive-action-icon",
