@@ -82,8 +82,7 @@
     "no_note_to_delete": "Es werden keine Notizen gelöscht (nur Klone).",
     "broken_relations_to_be_deleted": "Folgende Beziehungen werden gelöst und gelöscht (<span class=\"broke-relations-count\"></span>)",
     "cancel": "Abbrechen",
-    "ok": "OK",
-    "to_be_deleted": "(zu löschen) wird durch die Beziehung <code>{{attrName}}</code> referenziert, die von folgendem stammt "
+    "ok": "OK"
   },
   "export": {
     "export_note_title": "Notiz exportieren",
@@ -234,8 +233,8 @@
     "erase_notes_button": "Jetzt gelöschte Notizen löschen",
     "deleted_notes_message": "Gelöschte Notizen wurden gelöscht.",
     "no_changes_message": "Noch keine Änderungen...",
-    "Wiederherstellen_link": "Wiederherstellen",
-    "confirm_undelete": "Möchtest du diese Notiz und ihre Unternotizen wiederherstellen?"
+    "undelete_link": "Wiederherstellen",
+    "confirm_undelete": "Möchten Sie diese Notiz und ihre Unternotizen wiederherstellen?"
   },
   "revisions": {
     "note_revisions": "Notizrevisionen",
@@ -264,12 +263,12 @@
   "sort_child_notes": {
     "sort_children_by": "Unternotizen sortieren nach...",
     "sorting_criteria": "Sortierkriterien",
-    "Titel": "Titel",
+    "title": "Titel",
     "date_created": "Erstellungsdatum",
     "date_modified": "Änderungsdatum",
     "sorting_direction": "Sortierrichtung",
-    "aufsteigend": "aufsteigend",
-    "absteigend": "absteigend",
+    "ascending": "aufsteigend",
+    "descending": "absteigend",
     "folders": "Ordner",
     "sort_folders_at_top": "Ordne die Ordner oben",
     "natural_sort": "Natürliche Sortierung",
@@ -756,7 +755,7 @@
     "type": "Typ",
     "note_size": "Notengröße",
     "note_size_info": "Die Notizgröße bietet eine grobe Schätzung des Speicherbedarfs für diese Notiz. Es berücksichtigt den Inhalt der Notiz und den Inhalt ihrer Notizrevisionen.",
-    "berechnen": "berechnen",
+    "calculate": "berechnen",
     "subtree_size": "(Teilbaumgröße: {{size}} in {{count}} Notizen)",
     "title": "Hinweisinfo"
   },
@@ -800,19 +799,19 @@
     "add_search_option": "Suchoption hinzufügen:",
     "search_string": "Suchzeichenfolge",
     "search_script": "Suchskript",
-    "Vorfahr": "Vorfahr",
+    "ancestor": "Vorfahr",
     "fast_search": "schnelle Suche",
     "fast_search_description": "Die Option „Schnellsuche“ deaktiviert die Volltextsuche von Notizinhalten, was die Suche in großen Datenbanken beschleunigen könnte.",
     "include_archived": "archiviert einschließen",
     "include_archived_notes_description": "Archivierte Notizen sind standardmäßig von den Suchergebnissen ausgeschlossen, mit dieser Option werden sie einbezogen.",
     "order_by": "Bestellen nach",
-    "Limit": "Limit",
+    "limit": "Limit",
     "limit_description": "Begrenze die Anzahl der Ergebnisse",
-    "debuggen": "debuggen",
+    "debug": "debuggen",
     "debug_description": "Debug gibt zusätzliche Debuginformationen in die Konsole aus, um das Debuggen komplexer Abfragen zu erleichtern",
-    "Aktion": "Aktion",
+    "action": "Aktion",
     "search": "Suchen",
-    "eingeben": "eingeben",
+    "enter": "eingeben",
     "search_execute": "Aktionen suchen und ausführen",
     "save_to_note": "Als Notiz speichern",
     "search_parameters": "Suchparameter",
@@ -831,7 +830,7 @@
   "ancestor": {
     "label": "Vorfahre",
     "placeholder": "Suche nach einer Notiz anhand ihres Namens",
-    "Tiefe_label": "Tiefe",
+    "depth_label": "Tiefe",
     "depth_doesnt_matter": "spielt keine Rolle",
     "depth_eq": "ist genau {{count}}",
     "direct_children": "direkte Kinder",
@@ -1044,8 +1043,8 @@
   },
   "native_title_bar": {
     "title": "Native Titelleiste (App-Neustart erforderlich)",
-    "ermöglicht": "ermöglicht",
-    "deaktiviert": "deaktiviert"
+    "enabled": "ermöglicht",
+    "disabled": "deaktiviert"
   },
   "ribbon": {
     "widgets": "Multifunktionsleisten-Widgets",
@@ -1187,7 +1186,7 @@
     "no_backup_yet": "noch kein Backup"
   },
   "etapi": {
-    "title": "BÜHNE",
+    "title": "ETAPI",
     "description": "ETAPI ist eine REST-API, die für den programmgesteuerten Zugriff auf die Trilium-Instanz ohne Benutzeroberfläche verwendet wird.",
     "see_more": "Weitere Details findest du unter",
     "wiki": "Woche",

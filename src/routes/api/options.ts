@@ -65,7 +65,8 @@ const ALLOWED_OPTIONS = new Set([
     'promotedAttributesOpenInRibbon',
     'editedNotesOpenInRibbon',
     'locale',
-    'firstDayOfWeek'
+    'firstDayOfWeek',
+    'textNoteEditorType'
 ]);
 
 function getOptions() {
