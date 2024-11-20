@@ -100,6 +100,8 @@ const TPL = `
         position: relative;
         left: 0;
         top: 5px;
+        --dropdown-shadow-opacity: 0;
+        --submenu-opening-delay: 0;
     }
     </style>    
 
