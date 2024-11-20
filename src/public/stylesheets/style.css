@@ -249,6 +249,15 @@ div.ui-tooltip {
     animation: dropdown-menu-opening 100ms ease-in;
 }
 
+@supports(animation-fill-mode: forwards) {
+    /* Delay the opening of submenus */
+    .dropdown-submenu .dropdown-menu {
+        opacity: 0;
+        animation-fill-mode: forwards;
+        animation-delay: 300ms;
+    }
+}
+
 .dropdown-menu.static {
     box-shadow: unset;
 }
