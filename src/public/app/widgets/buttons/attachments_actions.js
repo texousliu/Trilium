@@ -113,14 +113,14 @@ export default class AttachmentActionsWidget extends BasicWidget {
             const $openAttachmentButton = this.$widget.find("[data-trigger-command='openAttachment']");
             $openAttachmentButton
                 .addClass("disabled")
-                .append($('<span class="disabled-tooltip"> (?)</span>')
+                .append($('<span class="bx bx-info-circle disabled-tooltip" />')
                     .attr("title", t('attachments_actions.open_externally_detail_page'))
                 );
             if (isElectron) {
                 const $openAttachmentCustomButton = this.$widget.find("[data-trigger-command='openAttachmentCustom']");
                 $openAttachmentCustomButton
                     .addClass("disabled")
-                    .append($('<span class="disabled-tooltip"> (?)</span>')
+                    .append($('<span class="bx bx-info-circle disabled-tooltip" />')
                         .attr("title", t('attachments_actions.open_externally_detail_page'))
                     );
             }
@@ -129,7 +129,7 @@ export default class AttachmentActionsWidget extends BasicWidget {
             const $openAttachmentCustomButton = this.$widget.find("[data-trigger-command='openAttachmentCustom']");
             $openAttachmentCustomButton
                 .addClass("disabled")
-                .append($('<span class="disabled-tooltip"> (?)</span>')
+                .append($('<span class="bx bx-info-circle disabled-tooltip" />')
                     .attr("title", t('attachments_actions.open_custom_client_only'))
                 );
         }

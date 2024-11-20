@@ -278,8 +278,15 @@ div.ui-tooltip {
 
 .dropdown-menu .disabled .disabled-tooltip {
     pointer-events: all;
-    color: var(--menu-text-color);
+    margin-left: 8px;
+    font-size: .5em;
+    color: var(--disabled-tooltip-icon-color);
     cursor: help;
+    opacity: .75;
+}
+
+.dropdown-menu .disabled .disabled-tooltip:hover {
+    opacity: 1;
 }
 
 .dropdown-menu a:hover:not(.disabled), .dropdown-item:hover:not(.disabled) {
