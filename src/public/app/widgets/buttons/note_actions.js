@@ -68,7 +68,7 @@ const TPL = `
 
 
         <li data-trigger-command="openNoteExternally" class="dropdown-item open-note-externally-button" title="${t('note_actions.open_note_externally_title')}">
-            <span class="bx bx-link-external"></span> ${t('note_actions.open_note_externally')}<kbd data-command="openNoteExternally"></kbd>
+            <span class="bx bx-file-find"></span> ${t('note_actions.open_note_externally')}<kbd data-command="openNoteExternally"></kbd>
         </li>
 
         <li data-trigger-command="openNoteCustom" class="dropdown-item open-note-custom-button">

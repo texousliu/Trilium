@@ -41,7 +41,7 @@ const TPL = `
     <div class="dropdown-menu dropdown-menu-right">
 
         <li data-trigger-command="openAttachment" class="dropdown-item"
-            title="${t('attachments_actions.open_externally_title')}"><span class="bx bx-link-external"></span> ${t('attachments_actions.open_externally')}</li>
+            title="${t('attachments_actions.open_externally_title')}"><span class="bx bx-file-find"></span> ${t('attachments_actions.open_externally')}</li>
         
         <li data-trigger-command="openAttachmentCustom" class="dropdown-item"
             title="${t('attachments_actions.open_custom_title')}"><span class="bx bx-customize"></span> ${t('attachments_actions.open_custom')}</li>
