@@ -19,6 +19,10 @@
     --bs-table-bg: transparent !important;
 }
 
+:root {
+    --submenu-opening-delay: 300ms;
+}
+
 html {
     /* this fixes FF filter vs. position fixed bug: https://github.com/zadam/trilium/issues/233 */
     height: 100%;
@@ -254,7 +258,7 @@ div.ui-tooltip {
     .dropdown-submenu .dropdown-menu {
         opacity: 0;
         animation-fill-mode: forwards;
-        animation-delay: 300ms;
+        animation-delay: var(--submenu-opening-delay);
     }
 }
 
