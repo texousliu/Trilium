@@ -20,9 +20,13 @@ function setupContextMenu($image) {
                 {
                     title: "Copy reference to clipboard",
                     command: "copyImageReferenceToClipboard",
-                    uiIcon: "bx bx-empty"
+                    uiIcon: "bx bx-directions"
                 },
-                { title: "Copy image to clipboard", command: "copyImageToClipboard", uiIcon: "bx bx-empty" },
+                { 
+                    title: "Copy image to clipboard",
+                    command: "copyImageToClipboard",
+                    uiIcon: "bx bx-copy" 
+                },
             ],
             selectMenuItemHandler: async ({ command }) => {
                 if (command === 'copyImageReferenceToClipboard') {

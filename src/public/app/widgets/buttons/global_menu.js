@@ -100,6 +100,8 @@ const TPL = `
         position: relative;
         left: 0;
         top: 5px;
+        --dropdown-shadow-opacity: 0;
+        --submenu-opening-delay: 0;
     }
     </style>    
 
@@ -125,27 +127,17 @@ const TPL = `
     </button>
 
     <ul class="dropdown-menu dropdown-menu-right">
-        <li class="dropdown-item" data-trigger-command="showOptions">
-            <span class="bx bx-cog"></span>
-            ${t('global_menu.options')}
-        </li>
-
         <li class="dropdown-item" data-trigger-command="openNewWindow">
             <span class="bx bx-window-open"></span>
             ${t('global_menu.open_new_window')}
             <kbd data-command="openNewWindow"></kbd>
         </li>
 
-        <li class="dropdown-item switch-to-mobile-version-button" data-trigger-command="switchToMobileVersion">
-            <span class="bx bx-mobile"></span>
-            ${t('global_menu.switch_to_mobile_version')}
+        <li class="dropdown-item" data-trigger-command="showShareSubtree">
+            <span class="bx bx-share-alt"></span>
+            ${t('global_menu.show_shared_notes_subtree')}
         </li>
-        
-        <li class="dropdown-item switch-to-desktop-version-button" data-trigger-command="switchToDesktopVersion">
-            <span class="bx bx-desktop"></span>
-            ${t('global_menu.switch_to_desktop_version')}
-        </li>
-        
+
         <span class="zoom-container dropdown-item">
             <div>
                 <span class="bx bx-empty"></span>
@@ -165,14 +157,21 @@ const TPL = `
             </div>
         </span>
 
+        <div class="dropdown-divider"></div>
+
+        <li class="dropdown-item switch-to-mobile-version-button" data-trigger-command="switchToMobileVersion">
+            <span class="bx bx-mobile"></span>
+            ${t('global_menu.switch_to_mobile_version')}
+        </li>
+
+        <li class="dropdown-item switch-to-desktop-version-button" data-trigger-command="switchToDesktopVersion">
+            <span class="bx bx-desktop"></span>
+            ${t('global_menu.switch_to_desktop_version')}
+        </li>
+
         <li class="dropdown-item" data-trigger-command="showLaunchBarSubtree">
             <span class="bx bx-sidebar"></span>
             ${t('global_menu.configure_launchbar')}
-        </li>
-        
-        <li class="dropdown-item" data-trigger-command="showShareSubtree">
-            <span class="bx bx-share-alt"></span>
-            ${t('global_menu.show_shared_notes_subtree')}
         </li>
         
         <li class="dropdown-item dropdown-submenu">
@@ -182,10 +181,22 @@ const TPL = `
             </span>
             
             <ul class="dropdown-menu">
-                <li class="dropdown-item open-dev-tools-button" data-trigger-command="openDevTools">
-                    <span class="bx bx-bug-alt"></span>
-                    ${t('global_menu.open_dev_tools')}
-                    <kbd data-command="openDevTools"></kbd>
+                <li class="dropdown-item" data-trigger-command="showHiddenSubtree">
+                    <span class="bx bx-hide"></span>
+                    ${t('global_menu.show_hidden_subtree')}
+                </li>
+
+                <li class="dropdown-item" data-trigger-command="showSearchHistory">
+                    <span class="bx bx-search-alt"></span>
+                    ${t('global_menu.open_search_history')}
+                </li>
+
+                <div class="dropdown-divider"></div>
+
+                <li class="dropdown-item" data-trigger-command="showBackendLog">
+                    <span class="bx bx-detail"></span>
+                    ${t('global_menu.show_backend_log')}
+                    <kbd data-command="showBackendLog"></kbd>
                 </li>
         
                 <li class="dropdown-item" data-trigger-command="showSQLConsole">
@@ -198,16 +209,13 @@ const TPL = `
                     <span class="bx bx-data"></span>
                     ${t('global_menu.open_sql_console_history')}
                 </li>
-                
-                <li class="dropdown-item" data-trigger-command="showSearchHistory">
-                    <span class="bx bx-search-alt"></span>
-                    ${t('global_menu.open_search_history')}
-                </li>
-        
-                <li class="dropdown-item" data-trigger-command="showBackendLog">
-                    <span class="bx bx-detail"></span>
-                    ${t('global_menu.show_backend_log')}
-                    <kbd data-command="showBackendLog"></kbd>
+
+                <div class="dropdown-divider"></div>
+
+                <li class="dropdown-item open-dev-tools-button" data-trigger-command="openDevTools">
+                    <span class="bx bx-bug-alt"></span>
+                    ${t('global_menu.open_dev_tools')}
+                    <kbd data-command="openDevTools"></kbd>
                 </li>
                 
                 <li class="dropdown-item" data-trigger-command="reloadFrontendApp" 
@@ -217,12 +225,15 @@ const TPL = `
                     <kbd data-command="reloadFrontendApp"></kbd>
                 </li>
                 
-                <li class="dropdown-item" data-trigger-command="showHiddenSubtree">
-                    <span class="bx bx-hide"></span>
-                    ${t('global_menu.show_hidden_subtree')}
-                </li>
             </ul>
         </li>
+
+        <li class="dropdown-item" data-trigger-command="showOptions">
+            <span class="bx bx-cog"></span>
+            ${t('global_menu.options')}
+        </li>
+
+        <div class="dropdown-divider"></div>
 
         <li class="dropdown-item show-help-button" data-trigger-command="showHelp">
             <span class="bx bx-help-circle"></span>
@@ -240,6 +251,8 @@ const TPL = `
 
             <span class="version-text"></span>
         </li>
+
+        <div class="dropdown-divider"></div>
 
         <li class="dropdown-item logout-button" data-trigger-command="logout">
             <span class="bx bx-log-out"></span>
