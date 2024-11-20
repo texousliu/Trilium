@@ -3,6 +3,7 @@ import keyboardActionService from '../services/keyboard_actions.js';
 class ContextMenu {
     constructor() {
         this.$widget = $("#context-menu-container");
+        this.$widget.addClass("dropend");
         this.dateContextMenuOpenedMs = 0;
 
         $(document).on('click', () => this.hide());

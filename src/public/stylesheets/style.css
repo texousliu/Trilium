@@ -244,6 +244,11 @@ div.ui-tooltip {
     box-shadow: unset;
 }
 
+.dropend .dropdown-toggle::after {
+    margin-left: .5em;
+    color: var(--muted-text-color);
+}
+
 .dropdown-menu .disabled {
     color: #888 !important;
     pointer-events: none;
