@@ -38,16 +38,6 @@ export default class JumpToNoteDialog extends BasicWidget {
         this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
 
         this.$autoComplete = this.$widget.find(".jump-to-note-autocomplete");
-        this.$autoComplete.on('keydown',  (event) => {
-            if (event.ctrlKey && event.key === 'Enter') {
-                    // Prevent Ctrl + Enter from triggering autoComplete.                    
-                    event.stopImmediatePropagation(); 
-                    event.preventDefault();  
-                    const searchString = this.$autoComplete.val();
-                    appContext.triggerCommand('searchNotes', { searchString });
-                }
-            
-        });
         this.$results = this.$widget.find(".jump-to-note-results");
         this.$showInFullTextButton = this.$widget.find(".show-in-full-text-button");
         this.$showInFullTextButton.on('click', e => this.showInFullText(e));
@@ -68,6 +58,7 @@ export default class JumpToNoteDialog extends BasicWidget {
         noteAutocompleteService.initNoteAutocomplete(this.$autoComplete, {
             allowCreatingNotes: true,
             hideGoToSelectedNoteButton: true,
+            allowSearchNotes: true,
             container: this.$results
         })
             // clear any event listener added in previous invocation of this function

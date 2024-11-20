@@ -65,23 +65,12 @@ export default class EmptyTypeWidget extends TypeWidget {
 
         this.$widget = $(TPL);
         this.$autoComplete = this.$widget.find(".note-autocomplete");
-
-        this.$autoComplete.on('keydown',  (event) => {
-            if (event.ctrlKey && event.key === 'Enter') {
-                    // Prevent Ctrl + Enter from triggering autoComplete.
-                    event.stopImmediatePropagation(); 
-                    event.preventDefault();  
-                    const searchString = this.$autoComplete.val();
-                    appContext.triggerCommand('searchNotes', { searchString });
-                }
-            
-        });
-
         this.$results = this.$widget.find(".note-detail-empty-results");
 
         noteAutocompleteService.initNoteAutocomplete(this.$autoComplete, {
             hideGoToSelectedNoteButton: true,
             allowCreatingNotes: true,
+            allowSearchNotes: true,
             container: this.$results
         })
             .on('autocomplete:noteselected', function(event, suggestion, dataset) {
