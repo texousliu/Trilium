@@ -138,6 +138,8 @@ const TPL = `
             ${t('global_menu.show_shared_notes_subtree')}
         </li>
 
+        <div class="dropdown-divider"></div>
+
         <span class="zoom-container dropdown-item">
             <div>
                 <span class="bx bx-empty"></span>
@@ -157,7 +159,7 @@ const TPL = `
             </div>
         </span>
 
-        <div class="dropdown-divider"></div>
+        <div class="dropdown-divider zoom-container-separator"></div>
 
         <li class="dropdown-item switch-to-mobile-version-button" data-trigger-command="switchToMobileVersion">
             <span class="bx bx-mobile"></span>
@@ -308,6 +310,7 @@ export default class GlobalMenuWidget extends BasicWidget {
 
         if (!utils.isElectron()) {
             this.$widget.find(".zoom-container").hide();
+            this.$widget.find(".zoom-container-separator").hide();
         }
 
         this.$zoomState = this.$widget.find(".zoom-state");
