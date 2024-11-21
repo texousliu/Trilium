@@ -39,7 +39,8 @@ function setupContextMenu() {
         if (params.isEditable) {
             items.push({
                 enabled: editFlags.canCut && hasText,
-                title: `Cut <kbd>${platformModifier}+X`,
+                title: `Cut`,
+                shortcut: `${platformModifier}+X`,
                 uiIcon: "bx bx-cut",
                 handler: () => webContents.cut()
             });
@@ -48,7 +49,8 @@ function setupContextMenu() {
         if (params.isEditable || hasText) {
             items.push({
                 enabled: editFlags.canCopy && hasText,
-                title: `Copy <kbd>${platformModifier}+C`,
+                title: `Copy`,
+                shortcut: `${platformModifier}+C`,
                 uiIcon: "bx bx-copy",
                 handler: () => webContents.copy()
             });
@@ -70,7 +72,8 @@ function setupContextMenu() {
         if (params.isEditable) {
             items.push({
                 enabled: editFlags.canPaste,
-                title: `Paste <kbd>${platformModifier}+V`,
+                title: `Paste`,
+                shortcut: `${platformModifier}+V`,
                 uiIcon: "bx bx-paste",
                 handler: () => webContents.paste()
             });
@@ -79,7 +82,8 @@ function setupContextMenu() {
         if (params.isEditable) {
             items.push({
                 enabled: editFlags.canPaste,
-                title: `Paste as plain text <kbd>${platformModifier}+Shift+V`,
+                title: `Paste as plain text`,
+                shortcut: `${platformModifier}+Shift+V`,
                 uiIcon: "bx bx-paste",
                 handler: () => webContents.pasteAndMatchStyle()
             });
