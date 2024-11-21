@@ -35,7 +35,16 @@ interface Item {
     growthFactor?: string;
     targetNoteId?: "_backendLog" | "_globalNoteMap";
     builtinWidget?: "bookmarks" | "spacer" | "backInHistoryButton" | "forwardInHistoryButton" | "syncStatus" | "protectedSession" | "todayInJournal" | "calendar";
-    command?: "jumpToNote" | "searchNotes" | "createNoteIntoInbox" | "showRecentChanges";
+    command?: keyof typeof Command;
+}
+
+// TODO: Move this into a commons project once the client/server architecture is well split.
+enum Command {
+    jumpToNote,
+    searchNotes,
+    createNoteIntoInbox,
+    showRecentChanges,
+    showOptions
 }
 
 /*
@@ -232,7 +241,8 @@ const HIDDEN_SUBTREE_DEFINITION: Item = {
                         { id: '_lbToday', title: "Open Today's Journal Note", type: 'launcher', builtinWidget: 'todayInJournal', icon: 'bx bx-calendar-star' },
                         { id: '_lbSpacer2', title: 'Spacer', type: 'launcher', builtinWidget: 'spacer', baseSize: "0", growthFactor: "1" },
                         { id: '_lbProtectedSession', title: 'Protected Session', type: 'launcher', builtinWidget: 'protectedSession', icon: 'bx bx bx-shield-quarter' },
-                        { id: '_lbSyncStatus', title: 'Sync Status', type: 'launcher', builtinWidget: 'syncStatus', icon: 'bx bx-wifi' }
+                        { id: '_lbSyncStatus', title: 'Sync Status', type: 'launcher', builtinWidget: 'syncStatus', icon: 'bx bx-wifi' },
+                        { id: '_lbSettings', title: 'Settings', type: 'launcher', command: 'showOptions', icon: 'bx bx-cog' }
                     ]
                 }
             ]
