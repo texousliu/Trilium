@@ -72,7 +72,7 @@ jobs:
           echo "Container ID: $CONTAINER_ID"
       
       - name: Wait for the healthchecks to pass
-        uses: stringbean/docker-healthcheck-action@v1
+        uses: stringbean/docker-healthcheck-action@v3
         with:
           container: trilium_local
           wait-time: 50
