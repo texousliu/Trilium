@@ -106,6 +106,8 @@ function setupContextMenu() {
             // Replace the placeholder with the real search keyword.
             let searchUrl = searchEngineUrl.replace("{keyword}", encodeURIComponent(params.selectionText));
 
+            items.push({title: "----"});
+
             items.push({
                 enabled: editFlags.canPaste,
                 title: `Search for "${shortenedSelection}" with ${searchEngineName}`,
