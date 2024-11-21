@@ -140,7 +140,7 @@ const TPL = `
 
         <div class="dropdown-divider"></div>
 
-        <span class="zoom-container dropdown-item">
+        <span class="zoom-container dropdown-item dropdown-item-container">
             <div>
                 <span class="bx bx-empty"></span>
                 ${t('global_menu.zoom')}

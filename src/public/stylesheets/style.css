@@ -289,11 +289,16 @@ div.ui-tooltip {
     opacity: 1;
 }
 
-.dropdown-menu a:hover:not(.disabled), .dropdown-item:hover:not(.disabled) {
+.dropdown-menu a:hover:not(.disabled), .dropdown-item:hover:not(.disabled, .dropdown-item-container) {
     color: var(--hover-item-text-color) !important;
     background-color: var(--hover-item-background-color) !important;
     border-color: var(--hover-item-border-color) !important;
     cursor: pointer;
+}
+
+.dropdown-item-container, .dropdown-item-container:hover, .dropdown-item-container:active {
+    background: transparent;
+    cursor: default;
 }
 
 .dropdown-menu a:not(.selected) .check {
