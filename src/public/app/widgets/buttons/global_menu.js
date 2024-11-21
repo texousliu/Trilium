@@ -252,7 +252,7 @@ const TPL = `
             <span class="version-text"></span>
         </li>
 
-        <div class="dropdown-divider"></div>
+        <div class="dropdown-divider logout-button-separator"></div>
 
         <li class="dropdown-item logout-button" data-trigger-command="logout">
             <span class="bx bx-log-out"></span>
@@ -281,6 +281,8 @@ export default class GlobalMenuWidget extends BasicWidget {
         const isElectron = utils.isElectron();
 
         this.$widget.find(".logout-button").toggle(!isElectron);
+        this.$widget.find(".logout-button-separator").toggle(!isElectron);
+
         this.$widget.find(".open-dev-tools-button").toggle(isElectron);
         this.$widget.find(".switch-to-mobile-version-button").toggle(!isElectron && utils.isDesktop());
         this.$widget.find(".switch-to-desktop-version-button").toggle(!isElectron && utils.isMobile());
