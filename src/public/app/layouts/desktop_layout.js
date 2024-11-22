@@ -241,12 +241,12 @@ export default class DesktopLayout {
                 .class("horizontal")
                 .child(new LeftPaneToggleWidget())
                 .child(new LauncherContainer(isHorizontal))
-                .child(new GlobalMenuWidget())
+                .child(new GlobalMenuWidget(true))
         } else {
             launcherPane = new FlexContainer("column")
                 .css("width", "53px")
                 .class("vertical")
-                .child(new GlobalMenuWidget())
+                .child(new GlobalMenuWidget(false))
                 .child(new LauncherContainer(isHorizontal))
                 .child(new LeftPaneToggleWidget());
         }
