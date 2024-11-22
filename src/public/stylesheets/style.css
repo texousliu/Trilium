@@ -1123,10 +1123,19 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
     cursor: pointer;
     border: none;
     color: var(--launcher-pane-text-color);
-    background-color: var(--launcher-pane-background-color);
-    height: 53px;
-    width: 100%;
+    background-color: var(--launcher-pane-background-color);    
 }
+
+#launcher-pane.vertical .launcher-button {
+    width: 100%;
+    height: 53px;
+}
+
+#launcher-pane.horizontal .launcher-button {
+    width: 53px;
+    height: 100%;
+}
+
 
 #launcher-pane .icon-action:hover {
     background-color: var(--hover-item-background-color);
