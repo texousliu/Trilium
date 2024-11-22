@@ -92,15 +92,17 @@ export default class DesktopLayout {
     getRootWidget(appContext) {
         appContext.noteTreeWidget = new NoteTreeWidget();
 
+        const launcherPaneIsHorizontal = true;
+        const launcherPane = new FlexContainer("column")
+            .id("launcher-pane")
+            .css("width", "53px")
+            .child(new GlobalMenuWidget())
+            .child(new LauncherContainer())
+            .child(new LeftPaneToggleWidget());
+
         return new RootContainer()
             .setParent(appContext)
-            .child(new FlexContainer("column")
-                .id("launcher-pane")
-                .css("width", "53px")
-                .child(new GlobalMenuWidget())
-                .child(new LauncherContainer())
-                .child(new LeftPaneToggleWidget())
-            )
+            .optChild(!launcherPaneIsHorizontal, launcherPane)
             .child(new LeftPaneContainer()
                 .child(new QuickSearchWidget())
                 .child(appContext.noteTreeWidget)

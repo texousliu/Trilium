@@ -40,6 +40,21 @@ class BasicWidget extends Component {
         return this;
     }
 
+    /**
+     * Conditionally adds the given components as children to this component.
+     * 
+     * @param {boolean} condition whether to add the components.
+     * @param  {...any} components the components to be added as children to this component provided the condition is truthy. 
+     * @returns self for chaining.
+     */
+    optChild(condition, ...components) {
+        if (condition) {
+            return this.child(...components);
+        } else {
+            return this;
+        }
+    }
+
     id(id) {
         this.attrs.id = id;
         return this;
