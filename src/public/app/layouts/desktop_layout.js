@@ -99,7 +99,7 @@ export default class DesktopLayout {
         return new RootContainer()
             .setParent(appContext)
             .optChild(launcherPaneIsHorizontal, new FlexContainer('row')
-                .child(tabBar)
+                .child(tabBar.class("full-width"))
                 .css('height', '40px')
             )
             .optChild(launcherPaneIsHorizontal, launcherPane)
