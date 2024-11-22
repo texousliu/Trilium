@@ -259,14 +259,19 @@ export default class TabRowWidget extends BasicWidget {
                 x: e.pageX,
                 y: e.pageY,
                 items: [
-                    {title: t('tab_row.close'), command: "closeTab", uiIcon: "bx bxs-x-circle"},
+                    {title: t('tab_row.close'), command: "closeTab", uiIcon: "bx bx-x"},
                     {title: t('tab_row.close_other_tabs'), command: "closeOtherTabs", uiIcon: "bx bx-empty", enabled: appContext.tabManager.noteContexts.length !== 1},
                     {title: t('tab_row.close_right_tabs'), command: "closeRightTabs", uiIcon: "bx bx-empty", enabled: appContext.tabManager.noteContexts.at(-1).ntxId !== ntxId},
                     {title: t('tab_row.close_all_tabs'), command: "closeAllTabs", uiIcon: "bx bx-empty"},
 
                     {title: "----"},
+
+                    {title: t('tab_row.reopen_last_tab'), command: "reopenLastTab", uiIcon: "bx bx-undo", enabled: appContext.tabManager.recentlyClosedTabs.length !== 0},
+
+                    {title: "----"},
                     
                     {title: t('tab_row.move_tab_to_new_window'), command: "moveTabToNewWindow", uiIcon: "bx bx-window-open"},
+                    {title: t('tab_row.copy_tab_to_new_window'), command: "copyTabToNewWindow", uiIcon: "bx bx-empty"}
                 ],
                 selectMenuItemHandler: ({command}) => {
                     this.triggerCommand(command, {ntxId});
