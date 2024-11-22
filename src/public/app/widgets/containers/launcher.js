@@ -13,10 +13,11 @@ import HistoryNavigationButton from "../buttons/history_navigation.js";
 import QuickSearchWidget from "../quick_search.js";
 
 export default class LauncherWidget extends BasicWidget {
-    constructor() {
+    constructor(isHorizontalLayout) {
         super();
 
         this.innerWidget = null;
+        this.isHorizontalLayout = isHorizontalLayout;
     }
 
     isEnabled() {
@@ -64,6 +65,9 @@ export default class LauncherWidget extends BasicWidget {
         }
 
         this.child(this.innerWidget);
+        if (this.isHorizontalLayout && this.innerWidget.settings) {
+            this.innerWidget.settings.titlePlacement = "bottom";
+        }
 
         return true;
     }

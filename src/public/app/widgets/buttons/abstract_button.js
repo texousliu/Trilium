@@ -23,7 +23,10 @@ export default class AbstractButtonWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
         this.tooltip = new bootstrap.Tooltip(this.$widget, {
-            html: true, title: () => this.getTitle(), trigger: 'hover'
+            html: true,
+            title: () => this.getTitle(),
+            trigger: 'hover',
+            placement: this.settings.titlePlacement
         })
 
         if (this.settings.onContextMenu) {
@@ -35,8 +38,6 @@ export default class AbstractButtonWidget extends NoteContextAwareWidget {
                 return false; // blocks default browser right click menu
             });
         }
-
-        this.$widget.attr("data-placement", this.settings.titlePlacement);
 
         super.doRender();
     }
