@@ -5,7 +5,7 @@ import UpdateAvailableWidget from "./update_available.js";
 import options from "../../services/options.js";
 
 const TPL = `
-<div class="dropdown global-menu dropend">
+<div class="dropdown global-menu">
     <style>
     .global-menu {
         width: 53px;
@@ -253,11 +253,15 @@ export default class GlobalMenuWidget extends BasicWidget {
         super();
 
         this.updateAvailableWidget = new UpdateAvailableWidget();
-        this.isHorizontalLayout = isHorizontalLayout;
+        this.isHorizontalLayout = isHorizontalLayout;        
     }
 
     doRender() {
         this.$widget = $(TPL);
+
+        if (!this.isHorizontalLayout) {
+            this.$widget.addClass("dropend");
+        }
 
         const $globalMenuButton = this.$widget.find(".global-menu-button")
         if (!this.isHorizontalLayout) {
@@ -282,7 +286,9 @@ export default class GlobalMenuWidget extends BasicWidget {
             $globalMenuButton.toggleClass("bx bx-menu");
         }
 
-        this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
+        this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"), {
+            alignment: "bottom"
+        });
 
         this.$widget.find(".show-about-dialog-button").on('click', () => this.triggerCommand("openAboutDialog"));
 
