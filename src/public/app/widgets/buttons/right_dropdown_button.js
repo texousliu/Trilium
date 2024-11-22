@@ -2,12 +2,6 @@ import BasicWidget from "../basic_widget.js";
 
 const TPL = `
 <div class="dropdown right-dropdown-widget dropend">
-    <style>
-    .right-dropdown-widget {
-        height: 53px;
-    }
-    </style>
-
     <button type="button" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false" 
             class="bx right-dropdown-button launcher-button"></button>

@@ -24,7 +24,6 @@ export default class LeftPaneToggleWidget extends CommandButtonWidget {
         if (isHorizontalLayout) {
             this.settings.titlePlacement = "bottom";
         }
-        console.log(this.settings);
     }
 
     refreshIcon() {
