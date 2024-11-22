@@ -61,7 +61,12 @@ export default class LauncherWidget extends BasicWidget {
         }
 
         if (!this.innerWidget) {
-            throw new Error(`Unknown initialization error for note '${note.noteId}', title '${note.title}'`);
+            if (launcherType === "builtinWidget") {
+                // This allows filtering of builtin widgets based on the layout (horizontal / vertical)
+                return false;
+            } else {
+                throw new Error(`Unknown initialization error for note '${note.noteId}', title '${note.title}'`);
+            }
         }
 
         this.child(this.innerWidget);
@@ -113,7 +118,7 @@ export default class LauncherWidget extends BasicWidget {
             case "todayInJournal":
                 return new TodayLauncher(note);
             case "quickSearch":
-                return new QuickSearchWidget();
+                return this.isHorizontalLayout ? new QuickSearchWidget() : null;
             default:
                 throw new Error(`Unrecognized builtin widget ${builtinWidget} for launcher ${note.noteId} "${note.title}"`);
         }
