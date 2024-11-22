@@ -1061,7 +1061,8 @@
     "theme_label": "Theme",
     "override_theme_fonts_label": "Override theme fonts",
     "light_theme": "Light",
-    "dark_theme": "Dark"
+    "dark_theme": "Dark",
+    "triliumnext": "TriliumNext"
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",
