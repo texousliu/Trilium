@@ -94,16 +94,15 @@ export default class DesktopLayout {
 
         const launcherPaneIsHorizontal = true;
         const launcherPane = this.#buildLauncherPane(launcherPaneIsHorizontal);
-        const fullWidthTabBar = launcherPaneIsHorizontal && true;
         const tabBar = new TabRowWidget();
 
         return new RootContainer()
             .setParent(appContext)
-            .optChild(launcherPaneIsHorizontal, launcherPane)
-            .optChild(fullWidthTabBar, new FlexContainer('row')
+            .optChild(launcherPaneIsHorizontal, new FlexContainer('row')
                 .child(tabBar)
                 .css('height', '40px')
             )
+            .optChild(launcherPaneIsHorizontal, launcherPane)
             .child(new FlexContainer('row')
                 .css("flex-grow", "1")
                 .optChild(!launcherPaneIsHorizontal, launcherPane)
@@ -115,7 +114,7 @@ export default class DesktopLayout {
                 .child(new FlexContainer('column')
                     .id('rest-pane')
                     .css("flex-grow", "1")
-                    .optChild(!fullWidthTabBar, new FlexContainer('row')
+                    .optChild(!launcherPaneIsHorizontal, new FlexContainer('row')
                         .child(tabBar)
                         .child(new TitleBarButtonsWidget())
                         .css('height', '40px')
