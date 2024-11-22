@@ -304,6 +304,7 @@
     "boolean": "布尔值",
     "date": "日期",
     "date_time": "日期和时间",
+    "time": "时间",
     "url": "网址",
     "precision_title": "值设置界面中浮点数后的位数。",
     "precision": "精度",

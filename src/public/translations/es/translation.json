@@ -311,6 +311,7 @@
     "boolean": "Booleano",
     "date": "Fecha",
     "date_time": "Fecha y hora",
+    "time": "Hora",
     "url": "URL",
     "precision_title": "Cantidad de dígitos después del punto flotante que deben estar disponibles en la interfaz de configuración del valor.",
     "precision": "Precisión",
