@@ -1022,6 +1022,10 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
     overflow: auto;
 }
 
+#launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
+    left: calc(-100% + 10px);
+}
+
 /* rotate caret on hover */
 .dropdown-menu > li > a:hover:after {
     text-decoration: underline;
