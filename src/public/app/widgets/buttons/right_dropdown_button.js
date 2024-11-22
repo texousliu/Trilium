@@ -21,7 +21,7 @@ export default class RightDropdownButtonWidget extends BasicWidget {
         this.dropdownTpl = dropdownTpl;
 
         this.settings = {
-            titlePlacement: "bottom"    
+            titlePlacement: "right"    
         };
     }
 
