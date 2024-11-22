@@ -86,28 +86,28 @@ export default class LauncherWidget extends BasicWidget {
 
     initBuiltinWidget(note) {
         const builtinWidget = note.getLabelValue("builtinWidget");
-
-        if (builtinWidget === 'calendar') {
+        switch (builtinWidget) {
+            case "calendar":
             return new CalendarWidget(note.title, note.getIcon());
-        } else if (builtinWidget === 'spacer') {
+            case "spacer":
             // || has to be inside since 0 is a valid value
             const baseSize = parseInt(note.getLabelValue("baseSize") || "40");
             const growthFactor = parseInt(note.getLabelValue("growthFactor") || "100");
 
             return new SpacerWidget(baseSize, growthFactor);
-        } else if (builtinWidget === 'bookmarks') {
+            case "bookmarks":
             return new BookmarkButtons();
-        } else if (builtinWidget === 'protectedSession') {
+            case "protectedSession":
             return new ProtectedSessionStatusWidget();
-        } else if (builtinWidget === 'syncStatus') {
+            case "syncStatus":
             return new SyncStatusWidget();
-        } else if (builtinWidget === 'backInHistoryButton') {
+            case "backInHistoryButton":
             return new HistoryNavigationButton(note, "backInNoteHistory");
-        } else if (builtinWidget === 'forwardInHistoryButton') {
+            case "forwardInHistoryButton":
             return new HistoryNavigationButton(note, "forwardInNoteHistory");
-        } else if (builtinWidget === 'todayInJournal') {
+            case "todayInJournal":
             return new TodayLauncher(note);
-        } else {
+            default:
             throw new Error(`Unrecognized builtin widget ${builtinWidget} for launcher ${note.noteId} "${note.title}"`);
         }
     }
