@@ -38,10 +38,9 @@ interface DefaultOption {
  * Initializes the default options for new databases only.
  * 
  * @param initialized `true` if the database has been fully initialized (i.e. a new database was created), or `false` if the database is created for sync.
- * @param theme the theme to set as default, based on a user's system preference.
  * @param opts additional options to be initialized, for example the sync configuration.
  */
-async function initNotSyncedOptions(initialized: boolean, theme: string, opts: NotSyncedOpts = {}) {
+async function initNotSyncedOptions(initialized: boolean, opts: NotSyncedOpts = {}) {
     optionService.createOption('openNoteContexts', JSON.stringify([
         {
             notePath: 'root',
@@ -59,7 +58,7 @@ async function initNotSyncedOptions(initialized: boolean, theme: string, opts: N
     optionService.createOption('lastSyncedPull', '0', false);
     optionService.createOption('lastSyncedPush', '0', false);    
 
-    optionService.createOption('theme', theme, false);
+    optionService.createOption('theme', 'next', false);
     
     optionService.createOption('syncServerHost', opts.syncServerHost || '', false);
     optionService.createOption('syncServerTimeout', '120000', false);
