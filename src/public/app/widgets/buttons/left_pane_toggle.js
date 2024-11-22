@@ -4,7 +4,7 @@ import CommandButtonWidget from "./command_button.js";
 import { t } from "../../services/i18n.js";
 
 export default class LeftPaneToggleWidget extends CommandButtonWidget {
-    constructor() {
+    constructor(isHorizontalLayout) {
         super();
 
         this.class("launcher-button");
@@ -20,6 +20,11 @@ export default class LeftPaneToggleWidget extends CommandButtonWidget {
         this.settings.command = () => options.is('leftPaneVisible')
             ? "hideLeftPane"
             : "showLeftPane";
+
+        if (isHorizontalLayout) {
+            this.settings.titlePlacement = "bottom";
+        }
+        console.log(this.settings);
     }
 
     refreshIcon() {

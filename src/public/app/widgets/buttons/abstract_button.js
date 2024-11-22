@@ -26,7 +26,8 @@ export default class AbstractButtonWidget extends NoteContextAwareWidget {
             html: true,
             title: () => this.getTitle(),
             trigger: 'hover',
-            placement: this.settings.titlePlacement
+            placement: this.settings.titlePlacement,
+            fallbackPlacements: [ this.settings.titlePlacement ]
         })
 
         if (this.settings.onContextMenu) {

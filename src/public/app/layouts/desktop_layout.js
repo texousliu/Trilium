@@ -239,16 +239,16 @@ export default class DesktopLayout {
             launcherPane = new FlexContainer("row")
                 .css("height", "53px")
                 .class("horizontal")
-                .child(new LeftPaneToggleWidget())
-                .child(new LauncherContainer(isHorizontal))
+                .child(new LeftPaneToggleWidget(true))
+                .child(new LauncherContainer(true))
                 .child(new GlobalMenuWidget(true))
         } else {
             launcherPane = new FlexContainer("column")
                 .css("width", "53px")
                 .class("vertical")
                 .child(new GlobalMenuWidget(false))
-                .child(new LauncherContainer(isHorizontal))
-                .child(new LeftPaneToggleWidget());
+                .child(new LauncherContainer(false))
+                .child(new LeftPaneToggleWidget(false));
         }
 
         launcherPane.id("launcher-pane");
