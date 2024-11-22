@@ -1529,11 +1529,11 @@
       "label": "Bară de formatare",
       "floating": {
         "title": "Editor cu bară flotantă",
-        "description": "uneltele de editare vor apărea lângă cursor."
+        "description": "uneltele de editare vor apărea lângă cursor;"
       },
       "fixed": {
         "title": "Editor cu bară fixă",
-        "description": "uneltele de editare vor apărea în tab-ul „Formatare” din panglică;"
+        "description": "uneltele de editare vor apărea în tab-ul „Formatare” din panglică."
       }
     }
   },
