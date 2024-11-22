@@ -93,12 +93,7 @@ export default class DesktopLayout {
         appContext.noteTreeWidget = new NoteTreeWidget();
 
         const launcherPaneIsHorizontal = true;
-        const launcherPane = new FlexContainer(launcherPaneIsHorizontal ? "row" : "column")
-            .id("launcher-pane")
-            .css(launcherPaneIsHorizontal ? "height" : "width", "53px")
-            .child(new GlobalMenuWidget())
-            .child(new LauncherContainer(launcherPaneIsHorizontal))
-            .child(new LeftPaneToggleWidget());
+        const launcherPane = this.#buildLauncherPane(launcherPaneIsHorizontal);
 
         return new RootContainer()
             .setParent(appContext)
@@ -230,5 +225,26 @@ export default class DesktopLayout {
             .child(new InfoDialog())
             .child(new ConfirmDialog())
             .child(new PromptDialog());
+    }
+
+    #buildLauncherPane(isHorizontal) {
+        let launcherPane;        
+
+        if (isHorizontal) {
+            launcherPane = new FlexContainer("row")
+                .css("height", "53px")
+                .child(new LeftPaneToggleWidget())
+                .child(new LauncherContainer(isHorizontal))
+                .child(new GlobalMenuWidget())
+        } else {
+            launcherPane = new FlexContainer("column")
+                .css("width", "53px")
+                .child(new GlobalMenuWidget())
+                .child(new LauncherContainer(isHorizontal))
+                .child(new LeftPaneToggleWidget());
+        }
+
+        launcherPane.id("launcher-pane");
+        return launcherPane;
     }
 }
