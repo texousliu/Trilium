@@ -10,6 +10,7 @@ import CommandButtonWidget from "../buttons/command_button.js";
 import utils from "../../services/utils.js";
 import TodayLauncher from "../buttons/launcher/today_launcher.js";
 import HistoryNavigationButton from "../buttons/history_navigation.js";
+import QuickSearchWidget from "../quick_search.js";
 
 export default class LauncherWidget extends BasicWidget {
     constructor() {
@@ -88,27 +89,29 @@ export default class LauncherWidget extends BasicWidget {
         const builtinWidget = note.getLabelValue("builtinWidget");
         switch (builtinWidget) {
             case "calendar":
-            return new CalendarWidget(note.title, note.getIcon());
+                return new CalendarWidget(note.title, note.getIcon());
             case "spacer":
-            // || has to be inside since 0 is a valid value
-            const baseSize = parseInt(note.getLabelValue("baseSize") || "40");
-            const growthFactor = parseInt(note.getLabelValue("growthFactor") || "100");
-
-            return new SpacerWidget(baseSize, growthFactor);
+                // || has to be inside since 0 is a valid value
+                const baseSize = parseInt(note.getLabelValue("baseSize") || "40");
+                const growthFactor = parseInt(note.getLabelValue("growthFactor") || "100");
+        
+                return new SpacerWidget(baseSize, growthFactor);
             case "bookmarks":
-            return new BookmarkButtons();
+                return new BookmarkButtons();
             case "protectedSession":
-            return new ProtectedSessionStatusWidget();
+                return new ProtectedSessionStatusWidget();
             case "syncStatus":
-            return new SyncStatusWidget();
+                return new SyncStatusWidget();
             case "backInHistoryButton":
-            return new HistoryNavigationButton(note, "backInNoteHistory");
+                return new HistoryNavigationButton(note, "backInNoteHistory");
             case "forwardInHistoryButton":
-            return new HistoryNavigationButton(note, "forwardInNoteHistory");
+                return new HistoryNavigationButton(note, "forwardInNoteHistory");
             case "todayInJournal":
-            return new TodayLauncher(note);
+                return new TodayLauncher(note);
+            case "quickSearch":
+                return new QuickSearchWidget();
             default:
-            throw new Error(`Unrecognized builtin widget ${builtinWidget} for launcher ${note.noteId} "${note.title}"`);
+                throw new Error(`Unrecognized builtin widget ${builtinWidget} for launcher ${note.noteId} "${note.title}"`);
         }
     }
 }

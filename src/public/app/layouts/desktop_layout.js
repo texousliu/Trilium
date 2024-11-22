@@ -107,7 +107,7 @@ export default class DesktopLayout {
                 .css("flex-grow", "1")
                 .optChild(!launcherPaneIsHorizontal, launcherPane)
                 .child(new LeftPaneContainer()
-                    .child(new QuickSearchWidget())
+                    .optChild(!launcherPaneIsHorizontal, new QuickSearchWidget())
                     .child(appContext.noteTreeWidget)
                     .child(...this.customWidgets.get('left-pane'))
                 )

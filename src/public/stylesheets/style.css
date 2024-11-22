@@ -1136,6 +1136,9 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
     height: 100%;
 }
 
+#launcher-pane.horizontal .quick-search {
+    width: 350px;
+}
 
 #launcher-pane .icon-action:hover {
     background-color: var(--hover-item-background-color);
