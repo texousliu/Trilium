@@ -70,6 +70,14 @@ class BasicWidget extends Component {
         return this;
     }
 
+    optCss(condition, name, value) {
+        if (condition) {
+            return this.css(name, value);
+        }
+
+        return this;
+    }
+
     contentSized() {
         this.css("contain", "none");
 

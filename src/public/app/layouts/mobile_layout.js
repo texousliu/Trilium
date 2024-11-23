@@ -143,6 +143,7 @@ export default class MobileLayout {
                             .contentSized()
                             .css("position: relative;")
                             .css("top: 5px;")
+                            .optCss(launcherPaneIsHorizontal, "padding-left", "0.5em")
                         )
                         .optChild(launcherPaneIsHorizontal, new MobileDetailMenuWidget(true).contentSized())
                         .child(new CloseDetailButtonWidget().contentSized()))
