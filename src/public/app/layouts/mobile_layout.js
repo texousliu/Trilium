@@ -120,6 +120,7 @@ export default class MobileLayout {
             .cssBlock(MOBILE_CSS)
             .child(new FlexContainer(launcherPaneIsHorizontal ? "row" : "column")
                 .id("launcher-pane")
+                .class(launcherPaneIsHorizontal ? "horizontal" : "vertical")
                 .css(launcherPaneIsHorizontal ? "height" : "width", "53px")
                 .child(new GlobalMenuWidget(launcherPaneIsHorizontal))
                 .child(new LauncherContainer(launcherPaneIsHorizontal))
