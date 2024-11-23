@@ -96,7 +96,7 @@ export default class DesktopLayout {
         const launcherPaneIsHorizontal = (options.get("layoutOrientation") === "horizontal");
         const launcherPane = this.#buildLauncherPane(launcherPaneIsHorizontal);
 
-        return new RootContainer()
+        return new RootContainer(launcherPaneIsHorizontal)
             .setParent(appContext)
             .optChild(launcherPaneIsHorizontal, new FlexContainer('row')               
                 .child(new TabRowWidget().class("full-width"))

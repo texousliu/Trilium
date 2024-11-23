@@ -115,7 +115,7 @@ export default class MobileLayout {
     getRootWidget(appContext) {
         const launcherPaneIsHorizontal = (options.get("layoutOrientation") === "horizontal");
 
-        return new RootContainer()
+        return new RootContainer(launcherPaneIsHorizontal)
             .setParent(appContext)
             .cssBlock(MOBILE_CSS)
             .child(this.#buildLauncherPane(launcherPaneIsHorizontal))
@@ -178,13 +178,13 @@ export default class MobileLayout {
         let launcherPane;
 
         if (isHorizontal) {
-            launcherPane = new FlexContainer(isHorizontal ? "row" : "column")
+            launcherPane = new FlexContainer("row")
                 .class("horizontal")
                 .css("height", "53px")
                 .child(new LauncherContainer(true))
                 .child(new GlobalMenuWidget(true));
         } else {
-            launcherPane = new FlexContainer(launcherPaneIsHorizontal ? "row" : "column")                
+            launcherPane = new FlexContainer("column")                
                 .class("vertical")
                 .css("width", "53px")
                 .child(new GlobalMenuWidget(false))
