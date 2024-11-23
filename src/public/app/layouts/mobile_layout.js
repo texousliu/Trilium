@@ -118,13 +118,7 @@ export default class MobileLayout {
         return new RootContainer()
             .setParent(appContext)
             .cssBlock(MOBILE_CSS)
-            .child(new FlexContainer(launcherPaneIsHorizontal ? "row" : "column")
-                .id("launcher-pane")
-                .class(launcherPaneIsHorizontal ? "horizontal" : "vertical")
-                .css(launcherPaneIsHorizontal ? "height" : "width", "53px")
-                .child(new GlobalMenuWidget(launcherPaneIsHorizontal))
-                .child(new LauncherContainer(launcherPaneIsHorizontal))
-            )
+            .child(this.#buildLauncherPane(launcherPaneIsHorizontal))
             .child(new FlexContainer("row")
                 .filling()
                 .child(new ScreenContainer("tree", 'column')
@@ -177,5 +171,26 @@ export default class MobileLayout {
                 .child(new ProtectedSessionPasswordDialog())
                 .child(new ConfirmDialog())
             );
+    }
+
+    #buildLauncherPane(isHorizontal) {
+        let launcherPane;
+
+        if (isHorizontal) {
+            launcherPane = new FlexContainer(isHorizontal ? "row" : "column")
+                .class("horizontal")
+                .css("height", "53px")
+                .child(new LauncherContainer(true))
+                .child(new GlobalMenuWidget(true));
+        } else {
+            launcherPane = new FlexContainer(launcherPaneIsHorizontal ? "row" : "column")                
+                .class("vertical")
+                .css("width", "53px")
+                .child(new GlobalMenuWidget(false))
+                .child(new LauncherContainer(false));
+        }
+
+        launcherPane.id("launcher-pane");
+        return launcherPane;
     }
 }
