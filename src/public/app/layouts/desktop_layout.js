@@ -83,6 +83,7 @@ import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import CopyImageReferenceButton from "../widgets/floating_buttons/copy_image_reference_button.js";
 import ScrollPaddingWidget from "../widgets/scroll_padding.js";
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
+import options from "../services/options.js";
 
 export default class DesktopLayout {
     constructor(customWidgets) {
@@ -92,7 +93,7 @@ export default class DesktopLayout {
     getRootWidget(appContext) {
         appContext.noteTreeWidget = new NoteTreeWidget();
 
-        const launcherPaneIsHorizontal = true;
+        const launcherPaneIsHorizontal = (options.get("layoutOrientation") === "horizontal");
         const launcherPane = this.#buildLauncherPane(launcherPaneIsHorizontal);
 
         return new RootContainer()
