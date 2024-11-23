@@ -5,22 +5,22 @@ import { t } from "../../../../services/i18n.js";
 
 const TPL = `
 <div class="options-section">
-    <h4>Layout</h4>
+    <h4>${t("theme.layout")}</h4>
 
     <div class="form-group row">
         <div>
             <label>
                 <input type="radio" name="layout-orientation" value="vertical" />
-                <strong>Vertical</strong>
-                - launcher bar is on the left (default)
+                <strong>${t("theme.layout-vertical-title")}</strong>
+                - ${t("theme.layout-vertical-description")}
             </label>
         </div>
 
         <div>
             <label>
                 <input type="radio" name="layout-orientation" value="horizontal" />
-                <strong>Horizontal</strong>
-                - launcher bar is underneath the tab bar, the tab bar is now full width.
+                <strong>${t("theme.layout-horizontal-title")}</strong>
+                - ${t("theme.layout-horizontal-description")}
             </label>
         </div>
     </div>
