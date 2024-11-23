@@ -24,6 +24,7 @@ import RootContainer from "../widgets/containers/root_container.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
+import options from "../services/options.js";
 
 const MOBILE_CSS = `
 <style>
@@ -112,14 +113,16 @@ span.fancytree-expander {
 
 export default class MobileLayout {
     getRootWidget(appContext) {
+        const launcherPaneIsHorizontal = (options.get("layoutOrientation") === "horizontal");
+
         return new RootContainer()
             .setParent(appContext)
             .cssBlock(MOBILE_CSS)
-            .child(new FlexContainer("column")
+            .child(new FlexContainer(launcherPaneIsHorizontal ? "row" : "column")
                 .id("launcher-pane")
-                .css("width", "53px")
-                .child(new GlobalMenuWidget())
-                .child(new LauncherContainer())
+                .css(launcherPaneIsHorizontal ? "height" : "width", "53px")
+                .child(new GlobalMenuWidget(launcherPaneIsHorizontal))
+                .child(new LauncherContainer(launcherPaneIsHorizontal))
             )
             .child(new FlexContainer("row")
                 .filling()
