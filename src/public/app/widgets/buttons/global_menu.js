@@ -219,7 +219,7 @@ const TPL = `
             ${t('global_menu.options')}
         </li>
 
-        <div class="dropdown-divider"></div>
+        <div class="dropdown-divider desktop-only"></div>
 
         <li class="dropdown-item show-help-button" data-trigger-command="showHelp">
             <span class="bx bx-help-circle"></span>

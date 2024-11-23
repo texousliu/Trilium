@@ -40,6 +40,10 @@ body {
     font-size: var(--main-font-size);
 }
 
+body.mobile .desktop-only {
+    display: none !important;
+}
+
 a {
     text-decoration: none;
 }
