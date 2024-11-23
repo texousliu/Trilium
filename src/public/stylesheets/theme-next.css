@@ -1,21 +1,23 @@
+:root {
+    --main-font-family: "Inter Regular", sans-serif;
+    --main-font-size: normal;
+
+    --tree-font-family: var(--main-font-family);
+    --tree-font-size: normal;
+
+    --detail-font-family: var(--main-font-family);
+    --detail-font-size: normal;
+
+    --monospace-font-family: JetBrainsLight;
+    --monospace-font-size: normal;
+}
+
 /*
  * Dark color scheme
  */
 @media (prefers-color-scheme: dark) {
     :root {
-        --theme-style: dark;
-    
-        --main-font-family: Montserrat;
-        --main-font-size: normal;
-    
-        --tree-font-family: Montserrat;
-        --tree-font-size: normal;
-    
-        --detail-font-family: Montserrat;
-        --detail-font-size: normal;
-    
-        --monospace-font-family: JetBrainsLight;
-        --monospace-font-size: normal;
+        --theme-style: dark;        
     
         --main-background-color: #333;
         --main-text-color: #ccc;
