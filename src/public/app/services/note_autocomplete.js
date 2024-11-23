@@ -32,8 +32,7 @@ async function autocompleteSourceForCKEditor(queryText) {
 async function autocompleteSource(term, cb, options = {}) {
     const activeNoteId = appContext.tabManager.getActiveContextNoteId();
 
-    let results = await server.get(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}`);
-
+    let results = await server.get(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${options.fastSearch}`);
     if (term.trim().length >= 1 && options.allowCreatingNotes) {
         results = [
             {
@@ -103,6 +102,15 @@ function showRecentNotes($el) {
     $el.trigger(e);
 }
 
+function fullTextSearch($el,options){
+    const searchString = $el.autocomplete("val")
+        clearText($el);
+        options.fastSearch = false;
+        $el.autocomplete("val", searchString);
+        $el.autocomplete('open');
+        options.fastSearch = true;
+}
+
 function initNoteAutocomplete($el, options) {
     if ($el.hasClass("note-autocomplete-input") || utils.isMobile()) {
         // clear any event listener added in previous invocation of this function
@@ -123,10 +131,14 @@ function initNoteAutocomplete($el, options) {
         .addClass("input-group-text show-recent-notes-button bx bx-time")
         .prop("title", "Show recent notes");
 
+    const $fullTextSearchButton = $("<button>")
+        .addClass("input-group-text full-text-search-button bx bx-search")
+        .prop("title", "Full text search. (Shift+Enter)");    
+
     const $goToSelectedNoteButton = $("<button>")
         .addClass("input-group-text go-to-selected-note-button bx bx-arrow-to-right");
 
-    $el.after($clearTextButton).after($showRecentNotesButton);
+    $el.after($clearTextButton).after($showRecentNotesButton).after($fullTextSearchButton);
 
     if (!options.hideGoToSelectedNoteButton) {
         $el.after($goToSelectedNoteButton);
@@ -140,6 +152,10 @@ function initNoteAutocomplete($el, options) {
         // this will cause the click not give focus to the "show recent notes" button
         // this is important because otherwise input will lose focus immediately and not show the results
         return false;
+    });
+
+    $fullTextSearchButton.on('click', e => {
+        fullTextSearch($el, options);
     });
 
     let autocompleteOptions = {};
@@ -158,7 +174,16 @@ function initNoteAutocomplete($el, options) {
             }
         });
     }
-
+    $el.on('keydown', async (event) => {
+        if (event.shiftKey && event.key === 'Enter') {
+            // Prevent Enter from triggering autoComplete.
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            fullTextSearch($el,options)
+        }
+    });
+    
+    options.fastSearch = true; // Perform fast search by default
     $el.autocomplete({
         ...autocompleteOptions,
         appendTo: document.querySelector('body'),
