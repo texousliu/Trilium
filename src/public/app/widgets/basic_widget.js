@@ -65,11 +65,26 @@ class BasicWidget extends Component {
         return this;
     }
 
+    /**
+     * Sets the CSS attribute of the given name to the given value.
+     * 
+     * @param {string} name the name of the CSS attribute to set (e.g. `padding-left`).
+     * @param {string} value the value of the CSS attribute to set (e.g. `12px`).
+     * @returns self for chaining.
+     */
     css(name, value) {
         this.attrs.style += `${name}: ${value};`;
         return this;
     }
 
+    /**
+     * Sets the CSS attribute of the given name to the given value, but only if the condition provided is truthy.
+     * 
+     * @param {boolean} condition `true` in order to apply the CSS, `false` to ignore it.
+     * @param {string} name the name of the CSS attribute to set (e.g. `padding-left`).
+     * @param {string} value the value of the CSS attribute to set (e.g. `12px`).
+     * @returns self for chaining.
+     */
     optCss(condition, name, value) {
         if (condition) {
             return this.css(name, value);
