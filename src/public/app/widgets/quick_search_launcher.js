@@ -11,8 +11,19 @@ import QuickSearchWidget from "./quick_search.js";
  */
 export default class QuickSearchLauncherWidget extends QuickSearchWidget {
 
+    constructor(isHorizontalLayout) {
+        super();
+        this.isHorizontalLayout = isHorizontalLayout;
+    }
+
     isEnabled() {
+        if (!this.isHorizontalLayout) {
+            // The quick search widget is added somewhere else on the vertical layout.
+            return false;
+        }
+
         if (utils.isMobile()) {
+            // The widget takes too much spaces to be included in the mobile layout.
             return false;
         }
 
