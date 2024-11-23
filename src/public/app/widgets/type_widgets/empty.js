@@ -2,6 +2,7 @@ import noteAutocompleteService from '../../services/note_autocomplete.js';
 import TypeWidget from "./type_widget.js";
 import appContext from "../../components/app_context.js";
 import searchService from "../../services/search.js";
+import { t } from "../../services/i18n.js";
 
 const TPL = `
 <div class="note-detail-empty note-detail-printable">
@@ -17,13 +18,27 @@ const TPL = `
             width: 130px;
             text-align: center;
             margin: 10px;
-            padding; 10px;
             border: 1px transparent solid;
         }
-        
+
         .workspace-notes .workspace-note:hover {
             cursor: pointer;
             border: 1px solid var(--main-border-color);
+        }
+
+        .note-detail-empty-results .aa-dropdown-menu {
+            max-height: 50vh;
+            overflow: scroll;
+            border: var(--bs-border-width) solid var(--bs-border-color);
+            border-top: 0;
+        }
+
+        .empty-tab-search .note-autocomplete-input {
+            border-bottom-left-radius: 0;
+        }
+
+        .empty-tab-search .input-clearer-button {
+            border-bottom-right-radius: 0;
         }
         
         .workspace-icon {
@@ -32,14 +47,14 @@ const TPL = `
         }
     </style>
 
-    <div class="form-group">
-        <label>Open a note by typing the note's title into the input below or choose a note in the tree.</label>
-        <div class="input-group">
-            <input class="form-control note-autocomplete" placeholder="search for a note by its name">
+    <div class="workspace-notes"></div>
+    <div class="form-group empty-tab-search">
+        <label>${t('empty.open_note_instruction')}</label>
+        <div class="input-group mt-1">
+            <input class="form-control note-autocomplete" placeholder="${t('empty.search_placeholder')}">
         </div>
     </div>
-    
-    <div class="workspace-notes"></div>
+    <div class="note-detail-empty-results"></div>
 </div>`;
 
 export default class EmptyTypeWidget extends TypeWidget {
@@ -50,10 +65,13 @@ export default class EmptyTypeWidget extends TypeWidget {
 
         this.$widget = $(TPL);
         this.$autoComplete = this.$widget.find(".note-autocomplete");
+        this.$results = this.$widget.find(".note-detail-empty-results");
 
         noteAutocompleteService.initNoteAutocomplete(this.$autoComplete, {
             hideGoToSelectedNoteButton: true,
-            allowCreatingNotes: true
+            allowCreatingNotes: true,
+            allowSearchNotes: true,
+            container: this.$results
         })
             .on('autocomplete:noteselected', function(event, suggestion, dataset) {
                 if (!suggestion.notePath) {
@@ -65,6 +83,7 @@ export default class EmptyTypeWidget extends TypeWidget {
 
         this.$workspaceNotes = this.$widget.find('.workspace-notes');
 
+        noteAutocompleteService.showRecentNotes(this.$autoComplete);
         super.doRender();
     }
 
@@ -78,7 +97,7 @@ export default class EmptyTypeWidget extends TypeWidget {
                 $('<div class="workspace-note">')
                     .append($("<div>").addClass(`${workspaceNote.getIcon()} workspace-icon`))
                     .append($("<div>").text(workspaceNote.title))
-                    .attr("title", `Enter workspace ${workspaceNote.title}`)
+                    .attr("title", t('empty.enter_workspace', { title: workspaceNote.title }))
                     .on('click', () => this.triggerCommand('hoistNote', {noteId: workspaceNote.noteId}))
             );
         }

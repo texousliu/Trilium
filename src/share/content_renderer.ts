@@ -32,7 +32,7 @@ function getContent(note: SNote) {
         renderCode(result);
     } else if (note.type === 'mermaid') {
         renderMermaid(result, note);
-    } else if (note.type === 'image' || note.type === 'canvas') {
+    } else if ([ "image", "canvas", "mindMap"].includes(note.type)) {
         renderImage(result, note);
     } else if (note.type === 'file') {
         renderFile(note, result);

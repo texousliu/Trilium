@@ -1,6 +1,6 @@
 # TriliumNext Notes
 
-[English](https://github.com/TriliumNext/Notes/blob/master/README.md) | [Chinese](https://github.com/TriliumNext/Notes/blob/master/README-ZH_CN.md) | [Russian](https://github.com/TriliumNext/Notes/blob/master/README.ru.md) | [Japanese](https://github.com/TriliumNext/Notes/blob/master/README.ja.md) | [Italian](https://github.com/TriliumNext/Notes/blob/master/README.it.md)
+[English](./README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
 
 Trilium Notes は、大規模な個人知識ベースの構築に焦点を当てた、階層型ノートアプリケーションです。概要は[スクリーンショット](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)をご覧ください：
 
@@ -51,7 +51,8 @@ Trilium は Flatpak としても提供されます：
 ## 💻 コントリビュート
 
 または、ローカルにクローンして実行
-```
+
+```shell
 npm install
 npm run start-server
 ```

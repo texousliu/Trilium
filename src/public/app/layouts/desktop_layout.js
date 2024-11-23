@@ -38,6 +38,8 @@ import SimilarNotesWidget from "../widgets/ribbon_widgets/similar_notes.js";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
 import EditButton from "../widgets/buttons/edit_button.js";
 import EditedNotesWidget from "../widgets/ribbon_widgets/edited_notes.js";
+import ShowTocWidgetButton from "../widgets/buttons/show_toc_widget_button.js";
+import ShowHighlightsListWidgetButton from "../widgets/buttons/show_highlights_list_widget_button.js";
 import MermaidWidget from "../widgets/mermaid.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
 import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
@@ -69,7 +71,7 @@ import ConfirmDialog from "../widgets/dialogs/confirm.js";
 import PromptDialog from "../widgets/dialogs/prompt.js";
 import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
 import RelationMapButtons from "../widgets/floating_buttons/relation_map_buttons.js";
-import MermaidExportButton from "../widgets/floating_buttons/mermaid_export_button.js";
+import SvgExportButton from "../widgets/floating_buttons/svg_export_button.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
 import RevisionsButton from "../widgets/buttons/revisions_button.js";
 import CodeButtonsWidget from "../widgets/floating_buttons/code_buttons.js";
@@ -80,6 +82,7 @@ import MovePaneButton from "../widgets/buttons/move_pane_button.js";
 import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import CopyImageReferenceButton from "../widgets/floating_buttons/copy_image_reference_button.js";
 import ScrollPaddingWidget from "../widgets/scroll_padding.js";
+import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 
 export default class DesktopLayout {
     constructor(customWidgets) {
@@ -138,6 +141,7 @@ export default class DesktopLayout {
                                             // the order of the widgets matter. Some of these want to "activate" themselves
                                             // when visible. When this happens to multiple of them, the first one "wins".
                                             // promoted attributes should always win.
+                                            .ribbon(new ClassicEditorToolbar())
                                             .ribbon(new PromotedAttributesWidget())
                                             .ribbon(new ScriptExecutorWidget())
                                             .ribbon(new SearchDefinitionWidget())
@@ -160,10 +164,12 @@ export default class DesktopLayout {
                                     .child(new WatchedFileUpdateStatusWidget())
                                     .child(new FloatingButtons()
                                         .child(new EditButton())
+                                        .child(new ShowTocWidgetButton())
+                                        .child(new ShowHighlightsListWidgetButton())
                                         .child(new CodeButtonsWidget())
                                         .child(new RelationMapButtons())
                                         .child(new CopyImageReferenceButton())
-                                        .child(new MermaidExportButton())
+                                        .child(new SvgExportButton())
                                         .child(new BacklinksWidget())
                                         .child(new HideFloatingButtonsButton())
                                     )

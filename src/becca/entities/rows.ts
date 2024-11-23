@@ -38,9 +38,18 @@ export interface RecentNoteRow {
     utcDateCreated?: string;
 }
 
+/**
+ * Database representation of an option.
+ * 
+ * Options are key-value pairs that are used to store information such as user preferences (for example
+ * the current theme, sync server information), but also information about the state of the application).
+ */
 export interface OptionRow {
+    /** The name of the option. */
     name: string;
+    /** The value of the option. */
     value: string;
+    /** `true` if the value should be synced across multiple instances (e.g. locale) or `false` if it should be local-only (e.g. theme). */
     isSynced: boolean;
     utcDateModified?: string;
 }
@@ -91,7 +100,7 @@ export interface BranchRow {
  * end user. Those types should be used only for checking against, they are
  * not for direct use.
  */
-export const ALLOWED_NOTE_TYPES = [ "file", "image", "search", "noteMap", "launcher", "doc", "contentWidget", "text", "relationMap", "render", "canvas", "mermaid", "book", "webView", "code" ] as const;
+export const ALLOWED_NOTE_TYPES = [ "file", "image", "search", "noteMap", "launcher", "doc", "contentWidget", "text", "relationMap", "render", "canvas", "mermaid", "book", "webView", "code", "mindMap" ] as const;
 export type NoteType = typeof ALLOWED_NOTE_TYPES[number];
 
 export interface NoteRow {

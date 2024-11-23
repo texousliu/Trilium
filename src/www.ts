@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import app from "./app.js";
 import sessionParser from "./routes/session_parser.js";
 import fs from "fs";
@@ -55,13 +56,15 @@ async function startTrilium() {
      */
     if (utils.isElectron()) {
         (await import('electron')).app.requestSingleInstanceLock();
-    }
+    }   
 
     log.info(JSON.stringify(appInfo, null, 2));
 
+    // for perf. issues it's good to know the rough configuration
     const cpuInfos = (await import('os')).cpus();
     if (cpuInfos && cpuInfos[0] !== undefined) { // https://github.com/zadam/trilium/pull/3957
-        log.info(`CPU model: ${cpuInfos[0].model}, logical cores: ${cpuInfos.length} freq: ${cpuInfos[0].speed} Mhz`); // for perf. issues it's good to know the rough configuration
+        const cpuModel = (cpuInfos[0].model || "").trimEnd();
+        log.info(`CPU model: ${cpuModel}, logical cores: ${cpuInfos.length}, freq: ${cpuInfos[0].speed} Mhz`);
     }
 
     const httpServer = startHttpServer();
@@ -126,25 +129,42 @@ function startHttpServer() {
     }
 
     httpServer.on('error', error => {
-        if (!listenOnTcp || ("syscall" in error && error.syscall !== 'listen')) {
-            throw error;
-        }
+        let message = error.stack || "An unexpected error has occurred.";
 
         // handle specific listen errors with friendly messages
         if ("code" in error) {
             switch (error.code) {
                 case 'EACCES':
-                    console.error(`Port ${port} requires elevated privileges. It's recommended to use port above 1024.`);
-                    process.exit(1);
+                    message = `Port ${port} requires elevated privileges. It's recommended to use port above 1024.`;
+                    break;
                 case 'EADDRINUSE':
-                    console.error(`Port ${port} is already in use. Most likely, another Trilium process is already running. You might try to find it, kill it, and try again.`);
-                    process.exit(1);
+                    message = `Port ${port} is already in use. Most likely, another Trilium process is already running. You might try to find it, kill it, and try again.`;
+                    break;
+                case 'EADDRNOTAVAIL':
+                    message = `Unable to start the server on host '${host}'. Make sure the host (defined in 'config.ini' or via the 'TRILIUM_HOST' environment variable) is an IP address that can be listened on.`;
+                    break;
             }
         }
 
-        throw error;
-    }
-    )
+        if (utils.isElectron()) {
+            import("electron").then(({ app, dialog }) => {
+                // Not all situations require showing an error dialog. When Trilium is already open,
+                // clicking the shortcut, the software icon, or the taskbar icon, or when creating a new window, 
+                // should simply focus on the existing window or open a new one, without displaying an error message.
+                if ("code" in error && error.code == 'EADDRINUSE') {
+                    if (process.argv.includes('--new-window') || !app.requestSingleInstanceLock()) {
+                        console.error(message);
+                        process.exit(1);
+                    }
+                }
+                dialog.showErrorBox("Error while initializing the server", message);
+                process.exit(1);
+            });
+        } else {
+            console.error(message);
+            process.exit(1);
+        }
+    });
 
     httpServer.on('listening', () => {
         if (listenOnTcp) {

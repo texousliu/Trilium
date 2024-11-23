@@ -13,7 +13,8 @@ const noteTypes = [
     { type: 'webView', defaultMime: '' },
     { type: 'launcher', defaultMime: '' },
     { type: 'doc', defaultMime: '' },
-    { type: 'contentWidget', defaultMime: '' }
+    { type: 'contentWidget', defaultMime: '' },
+    { type: 'mindMap', defaultMime: 'application/json' }
 ];
 
 function getDefaultMimeForNoteType(typeName: string) {

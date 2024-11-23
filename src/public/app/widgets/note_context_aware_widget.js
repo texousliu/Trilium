@@ -48,6 +48,11 @@ class NoteContextAwareWidget extends BasicWidget {
     }
 
     /**
+     * @inheritdoc
+     * 
+     * <p>
+     * If the widget is not enabled, it will not receive `refreshWithNote` updates.
+     * 
      * @returns {boolean} true when an active note exists
      */
     isEnabled() {
@@ -57,7 +62,17 @@ class NoteContextAwareWidget extends BasicWidget {
     async refresh() {
         if (this.isEnabled()) {
             this.toggleInt(true);
-            await this.refreshWithNote(this.note);
+
+            try {
+                await this.refreshWithNote(this.note);
+            } catch (e) {
+                // Ignore errors when user is refreshing or navigating away.
+                if (e === "rejected by browser") {
+                    return;
+                }
+
+                throw e;
+            }
         }
         else {
             this.toggleInt(false);

@@ -1,33 +1,36 @@
+import mimeTypesService from "./mime_types.js";
+import optionsService from "./options.js";
+import { getStylesheetUrl } from "./syntax_highlight.js";
+
 const CKEDITOR = {"js": ["libraries/ckeditor/ckeditor.js"]};
 
 const CODE_MIRROR = {
     js: [
-        "libraries/codemirror/codemirror.js",
-        "libraries/codemirror/addon/display/placeholder.js",
-        "libraries/codemirror/addon/edit/matchbrackets.js",
-        "libraries/codemirror/addon/edit/matchtags.js",
-        "libraries/codemirror/addon/fold/xml-fold.js",
-        "libraries/codemirror/addon/lint/lint.js",
-        "libraries/codemirror/addon/lint/eslint.js",
-        "libraries/codemirror/addon/mode/loadmode.js",
-        "libraries/codemirror/addon/mode/multiplex.js",
-        "libraries/codemirror/addon/mode/overlay.js",
-        "libraries/codemirror/addon/mode/simple.js",
-        "libraries/codemirror/addon/search/match-highlighter.js",
-        "libraries/codemirror/mode/meta.js",
-        "libraries/codemirror/keymap/vim.js"
+        "node_modules/codemirror/lib/codemirror.js",
+        "node_modules/codemirror/addon/display/placeholder.js",
+        "node_modules/codemirror/addon/edit/matchbrackets.js",
+        "node_modules/codemirror/addon/edit/matchtags.js",
+        "node_modules/codemirror/addon/fold/xml-fold.js",
+        "node_modules/codemirror/addon/lint/lint.js",
+        "node_modules/codemirror/addon/mode/loadmode.js",
+        "node_modules/codemirror/addon/mode/multiplex.js",
+        "node_modules/codemirror/addon/mode/overlay.js",
+        "node_modules/codemirror/addon/mode/simple.js",
+        "node_modules/codemirror/addon/search/match-highlighter.js",
+        "node_modules/codemirror/mode/meta.js",
+        "node_modules/codemirror/keymap/vim.js"
     ],
     css: [
-        "libraries/codemirror/codemirror.css",
-        "libraries/codemirror/addon/lint/lint.css"
+        "node_modules/codemirror/lib/codemirror.css",
+        "node_modules/codemirror/addon/lint/lint.css"
     ]
 };
 
-const ESLINT = {js: ["libraries/eslint.js"]};
+const ESLINT = {js: ["node_modules/eslint/bin/eslint.js"]};
 
 const RELATION_MAP = {
     js: [
-        "libraries/jsplumb.js",
+        "node_modules/jsplumb/dist/js/jsplumb.min.js",
         "node_modules/panzoom/dist/panzoom.min.js"
     ],
     css: [
@@ -47,7 +50,7 @@ const KATEX = {
 };
 
 const WHEEL_ZOOM = {
-    js: [ "libraries/wheel-zoom.min.js"]
+    js: [ "node_modules/vanilla-js-wheel-zoom/dist/wheel-zoom.min.js"]
 };
 
 const FORCE_GRAPH = {
@@ -68,7 +71,7 @@ const EXCALIDRAW = {
 
 const MARKJS = {
     js: [
-        "libraries/jquery.mark.es6.min.js"
+        "node_modules/mark.js/dist/jquery.mark.es6.min.js"
     ]
 };
 
@@ -79,16 +82,48 @@ const I18NEXT = {
     ]
 };
 
+const MIND_ELIXIR = {
+    js: [
+        "node_modules/mind-elixir/dist/MindElixir.iife.js"
+    ]
+};
+
+const HIGHLIGHT_JS = {
+    js: () => {
+        const mimeTypes = mimeTypesService.getMimeTypes();
+        const scriptsToLoad = new Set();
+        scriptsToLoad.add("node_modules/@highlightjs/cdn-assets/highlight.min.js");
+        for (const mimeType of mimeTypes) {
+            if (mimeType.enabled && mimeType.highlightJs) {
+                scriptsToLoad.add(`node_modules/@highlightjs/cdn-assets/languages/${mimeType.highlightJs}.min.js`);
+            }
+        }
+        
+        const currentTheme = optionsService.get("codeBlockTheme");
+        loadHighlightingTheme(currentTheme);
+
+        return Array.from(scriptsToLoad);
+    }
+};
+
 async function requireLibrary(library) {
     if (library.css) {
         library.css.map(cssUrl => requireCss(cssUrl));
     }
 
     if (library.js) {
-        for (const scriptUrl of library.js) {
+        for (const scriptUrl of unwrapValue(library.js)) {
             await requireScript(scriptUrl);
         }
     }
+}
+
+function unwrapValue(value) {
+    if (typeof value === "function") {
+        return value();
+    }
+
+    return value;
 }
 
 // we save the promises in case of the same script being required concurrently multiple times
@@ -122,9 +157,36 @@ async function requireCss(url, prependAssetPath = true) {
     }
 }
 
+let highlightingThemeEl = null;
+function loadHighlightingTheme(theme) {
+    if (!theme) {        
+        return;
+    }
+
+    if (theme === "none") {
+        // Deactivate the theme.
+        if (highlightingThemeEl) {
+            highlightingThemeEl.remove();
+            highlightingThemeEl = null;
+        }
+        return;
+    }
+    
+    if (!highlightingThemeEl) {
+        highlightingThemeEl = $(`<link rel="stylesheet" type="text/css" />`);
+        $("head").append(highlightingThemeEl);
+    }
+    
+    const url = getStylesheetUrl(theme);
+    if (url) {
+        highlightingThemeEl.attr("href", url);
+    }
+}
+
 export default {
     requireCss,
     requireLibrary,
+    loadHighlightingTheme,
     CKEDITOR,
     CODE_MIRROR,
     ESLINT,
@@ -137,5 +199,7 @@ export default {
     MERMAID,
     EXCALIDRAW,
     MARKJS,
-    I18NEXT
+    I18NEXT,
+    MIND_ELIXIR,
+    HIGHLIGHT_JS
 }

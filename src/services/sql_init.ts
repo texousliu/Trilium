@@ -11,7 +11,6 @@ import migrationService from "./migration.js";
 import cls from "./cls.js";
 import config from "./config.js";
 import { OptionRow } from '../becca/entities/rows.js';
-import optionsInitService from "./options_init.js";
 import BNote from "../becca/entities/bnote.js";
 import BBranch from "../becca/entities/bbranch.js";
 import zipImportService from "./import/zip.js";
@@ -62,6 +61,9 @@ async function createInitialDatabase() {
 
     let rootNote!: BNote;
 
+    // We have to import async since options init requires keyboard actions which require translations.
+    const optionsInitService = (await import("./options_init.js")).default;
+
     sql.transactional(() => {
         log.info("Creating database schema ...");
 
@@ -86,7 +88,7 @@ async function createInitialDatabase() {
             isExpanded: true,
             notePosition: 10
         }).save();
-
+        
         optionsInitService.initDocumentOptions();
         optionsInitService.initNotSyncedOptions(true, defaultTheme, {});
         optionsInitService.initStartupOptions();
@@ -129,6 +131,9 @@ async function createDatabaseForSync(options: OptionRow[], syncServerHost = '', 
     const defaultTheme = await getDefaultTheme();
     const schema = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/schema.sql`, "utf8");
 
+    // We have to import async since options init requires keyboard actions which require translations.
+    const optionsInitService = (await import("./options_init.js")).default;
+    
     sql.transactional(() => {
         sql.executeScript(schema);
 

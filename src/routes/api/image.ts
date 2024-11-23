@@ -25,7 +25,7 @@ function returnImageInt(image: BNote | BRevision | null, res: Response) {
     if (!image) {
         res.set('Content-Type', 'image/png');
         return res.send(fs.readFileSync(`${RESOURCE_DIR}/db/image-deleted.png`));
-    } else if (!["image", "canvas", "mermaid"].includes(image.type)) {
+    } else if (![ "image", "canvas", "mermaid", "mindMap" ].includes(image.type)) {
         return res.sendStatus(400);
     }
 
@@ -33,6 +33,8 @@ function returnImageInt(image: BNote | BRevision | null, res: Response) {
         renderSvgAttachment(image, res, 'canvas-export.svg');
     } else if (image.type === 'mermaid') {
         renderSvgAttachment(image, res, 'mermaid-export.svg');
+    } else if (image.type === "mindMap") {
+        renderSvgAttachment(image, res, 'mindmap-export.svg');
     } else {
         res.set('Content-Type', image.mime);
         res.set("Cache-Control", "no-cache, no-store, must-revalidate");

@@ -1,3 +1,4 @@
+import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import SpacedUpdate from "../services/spaced_update.js";
@@ -28,6 +29,8 @@ import DocTypeWidget from "./type_widgets/doc.js";
 import ContentWidgetTypeWidget from "./type_widgets/content_widget.js";
 import AttachmentListTypeWidget from "./type_widgets/attachment_list.js";
 import AttachmentDetailTypeWidget from "./type_widgets/attachment_detail.js";
+import MindMapWidget from "./type_widgets/mind_map.js";
+import { getStylesheetUrl, isSyntaxHighlightEnabled } from "../services/syntax_highlight.js";
 
 const TPL = `
 <div class="note-detail">
@@ -63,7 +66,8 @@ const typeWidgetClasses = {
     'doc': DocTypeWidget,
     'contentWidget': ContentWidgetTypeWidget,
     'attachmentDetail': AttachmentDetailTypeWidget,
-    'attachmentList': AttachmentListTypeWidget
+    'attachmentList': AttachmentListTypeWidget,
+    'mindMap': MindMapWidget
 };
 
 export default class NoteDetailWidget extends NoteContextAwareWidget {
@@ -144,7 +148,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         this.$widget.toggleClass("full-height",
             (
                 !this.noteContext.hasNoteList()
-                && ['canvas', 'webView', 'noteMap'].includes(this.type)
+                && ['canvas', 'webView', 'noteMap', 'mindMap'].includes(this.type)
                 && this.mime !== 'text/x-sqlite;schema=trilium'
             )
             || this.noteContext.viewScope.viewMode === 'attachments'
@@ -153,7 +157,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
     getTypeWidget() {
         if (!this.typeWidgets[this.type]) {
-            throw new Error(`Could not find typeWidget for type '${this.type}'`);
+            throw new Error(t(`note_detail.could_not_find_typewidget`, { type: this.type }));
         }
 
         return this.typeWidgets[this.type];
@@ -252,6 +256,19 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         }
 
         const {assetPath} = window.glob;
+        const cssToLoad = [
+            `${assetPath}/node_modules/codemirror/lib/codemirror.css`,
+            `${assetPath}/libraries/ckeditor/ckeditor-content.css`,
+            `${assetPath}/node_modules/bootstrap/dist/css/bootstrap.min.css`,
+            `${assetPath}/node_modules/katex/dist/katex.min.css`,
+            `${assetPath}/stylesheets/print.css`,
+            `${assetPath}/stylesheets/relation_map.css`,
+            `${assetPath}/stylesheets/ckeditor-theme.css`
+        ];
+
+        if (isSyntaxHighlightEnabled()) {
+            cssToLoad.push(getStylesheetUrl("default:vs"));
+        }
 
         this.$widget.find('.note-detail-printable:visible').printThis({
             header: $("<div>")
@@ -270,15 +287,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 </script>
 `,
             importCSS: false,
-            loadCSS: [
-                `${assetPath}/libraries/codemirror/codemirror.css`,
-                `${assetPath}/libraries/ckeditor/ckeditor-content.css`,
-                `${assetPath}/libraries/bootstrap/css/bootstrap.min.css`,
-                `${assetPath}/node_modules/katex/dist/katex.min.css`,
-                `${assetPath}/stylesheets/print.css`,
-                `${assetPath}/stylesheets/relation_map.css`,
-                `${assetPath}/stylesheets/ckeditor-theme.css`
-            ],
+            loadCSS: cssToLoad,
             debug: true
         });
     }

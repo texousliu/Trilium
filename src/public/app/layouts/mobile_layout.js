@@ -13,7 +13,7 @@ import FilePropertiesWidget from "../widgets/ribbon_widgets/file_properties.js";
 import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
 import EditButton from "../widgets/buttons/edit_button.js";
 import RelationMapButtons from "../widgets/floating_buttons/relation_map_buttons.js";
-import MermaidExportButton from "../widgets/floating_buttons/mermaid_export_button.js";
+import SvgExportButton from "../widgets/floating_buttons/svg_export_button.js";
 import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
 import HideFloatingButtonsButton from "../widgets/floating_buttons/hide_floating_buttons_button.js";
 import MermaidWidget from "../widgets/mermaid.js";
@@ -23,6 +23,7 @@ import LauncherContainer from "../widgets/containers/launcher_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
+import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 
 const MOBILE_CSS = `
 <style>
@@ -150,7 +151,7 @@ export default class MobileLayout {
                     .child(new FloatingButtons()
                         .child(new EditButton())
                         .child(new RelationMapButtons())
-                        .child(new MermaidExportButton())
+                        .child(new SvgExportButton())
                         .child(new BacklinksWidget())
                         .child(new HideFloatingButtonsButton())
                     )
@@ -167,6 +168,7 @@ export default class MobileLayout {
                             .child(new NoteListWidget())
                             .child(new FilePropertiesWidget().css('font-size','smaller'))
                     )
+                    .child(new ClassicEditorToolbar())
                 )
                 .child(new ProtectedSessionPasswordDialog())
                 .child(new ConfirmDialog())

@@ -45,6 +45,16 @@ async function autocompleteSource(term, cb, options = {}) {
         ].concat(results);
     }
 
+    if (term.trim().length >= 1 && options.allowSearchNotes) {
+        results = results.concat([
+            {
+                action: 'search-notes',
+                noteTitle: term,
+                highlightedNotePathTitle: `Search for "${utils.escapeHtml(term)}" <kbd style='color: var(--muted-text-color); background-color: transparent; float: right;'>Ctrl+Enter</kbd>`
+            }
+        ]);
+    }
+
     if (term.match(/^[a-z]+:\/\/.+/i) && options.allowExternalLinks) {
         results = [
             {
@@ -105,27 +115,22 @@ function initNoteAutocomplete($el, options) {
 
     $el.addClass("note-autocomplete-input");
 
-    const $clearTextButton = $("<a>")
-            .addClass("input-group-text input-clearer-button bx bxs-tag-x")
-            .prop("title", "Clear text field");
+    const $clearTextButton = $("<button>")
+        .addClass("input-group-text input-clearer-button bx bxs-tag-x")
+        .prop("title", "Clear text field");
 
-    const $showRecentNotesButton = $("<a>")
-            .addClass("input-group-text show-recent-notes-button bx bx-time")
-            .prop("title", "Show recent notes");
+    const $showRecentNotesButton = $("<button>")
+        .addClass("input-group-text show-recent-notes-button bx bx-time")
+        .prop("title", "Show recent notes");
 
-    const $goToSelectedNoteButton = $("<a>")
+    const $goToSelectedNoteButton = $("<button>")
         .addClass("input-group-text go-to-selected-note-button bx bx-arrow-to-right");
 
-    const $sideButtons = $("<div>")
-        .addClass("input-group-append")
-        .append($clearTextButton)
-        .append($showRecentNotesButton);
+    $el.after($clearTextButton).after($showRecentNotesButton);
 
     if (!options.hideGoToSelectedNoteButton) {
-        $sideButtons.append($goToSelectedNoteButton);
+        $el.after($goToSelectedNoteButton);
     }
-
-    $el.after($sideButtons);
 
     $clearTextButton.on('click', () => clearText($el));
 
@@ -141,6 +146,17 @@ function initNoteAutocomplete($el, options) {
     if (options.container) {
         autocompleteOptions.dropdownMenuContainer = options.container;
         autocompleteOptions.debug = true;   // don't close on blur
+    }
+
+    if (options.allowSearchNotes) {
+        $el.on('keydown', (event) => {
+            if (event.ctrlKey && event.key === 'Enter') {
+                // Prevent Ctrl + Enter from triggering autoComplete.
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                $el.trigger('autocomplete:selected', { action: 'search-notes', noteTitle: $el.autocomplete("val")});
+            }
+        });
     }
 
     $el.autocomplete({
@@ -180,13 +196,13 @@ function initNoteAutocomplete($el, options) {
         }
 
         if (suggestion.action === 'create-note') {
-            const {success, noteType, templateNoteId} = await noteCreateService.chooseNoteType();
+            const { success, noteType, templateNoteId } = await noteCreateService.chooseNoteType();
 
             if (!success) {
                 return;
             }
 
-            const {note} = await noteCreateService.createNote(suggestion.parentNoteId, {
+            const { note } = await noteCreateService.createNote(suggestion.parentNoteId, {
                 title: suggestion.noteTitle,
                 activate: false,
                 type: noteType,
@@ -197,6 +213,12 @@ function initNoteAutocomplete($el, options) {
             suggestion.notePath = note.getBestNotePathString(hoistedNoteId);
         }
 
+        if (suggestion.action === 'search-notes') {
+            const searchString = suggestion.noteTitle;
+            appContext.triggerCommand('searchNotes', { searchString });
+            return;
+        }
+        
         $el.setSelectedNotePath(suggestion.notePath);
         $el.setSelectedExternalLink(null);
 

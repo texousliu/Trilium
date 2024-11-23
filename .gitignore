@@ -5,6 +5,7 @@ build/
 src/public/app-dist/
 npm-debug.log
 yarn-error.log
+po-*/
 
 *.db
 !integration-tests/db/document.db
@@ -18,6 +19,7 @@ cert.key
 cert.crt
 server-package.json
 .idea/httpRequests/
+.idea/shelf/
 data/
 data-test/
 tmp/
@@ -25,8 +27,6 @@ tmp/
 
 out/
 
-images/app-icons/png/512x512.png
-images/app-icons/png/1024x1024.png
 images/app-icons/mac/*.png
 /test-results/
 /playwright-report/

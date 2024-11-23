@@ -35,7 +35,16 @@ interface Item {
     growthFactor?: string;
     targetNoteId?: "_backendLog" | "_globalNoteMap";
     builtinWidget?: "bookmarks" | "spacer" | "backInHistoryButton" | "forwardInHistoryButton" | "syncStatus" | "protectedSession" | "todayInJournal" | "calendar";
-    command?: "jumpToNote" | "searchNotes" | "createNoteIntoInbox" | "showRecentChanges";
+    command?: keyof typeof Command;
+}
+
+// TODO: Move this into a commons project once the client/server architecture is well split.
+enum Command {
+    jumpToNote,
+    searchNotes,
+    createNoteIntoInbox,
+    showRecentChanges,
+    showOptions
 }
 
 /*
@@ -48,7 +57,7 @@ const HIDDEN_SUBTREE_DEFINITION: Item = {
     id: '_hidden',
     title: 'Hidden Notes',
     type: 'doc',
-    icon: 'bx bx-chip',
+    icon: 'bx bx-hide',
     // we want to keep the hidden subtree always last, otherwise there will be problems with e.g., keyboard navigation
     // over tree when it's in the middle
     notePosition: 999_999_999,
@@ -222,7 +231,7 @@ const HIDDEN_SUBTREE_DEFINITION: Item = {
                         { id: '_lbJumpTo', title: 'Jump to Note', type: 'launcher', command: 'jumpToNote', icon: 'bx bx-send', attributes: [
                                 { type: 'label', name: 'desktopOnly' }
                             ] },
-                        { id: '_lbNoteMap', title: 'Note Map', type: 'launcher', targetNoteId: '_globalNoteMap', icon: 'bx bx-map-alt' },
+                        { id: '_lbNoteMap', title: 'Note Map', type: 'launcher', targetNoteId: '_globalNoteMap', icon: 'bx bxs-network-chart' },
                         { id: '_lbCalendar', title: 'Calendar', type: 'launcher', builtinWidget: 'calendar', icon: 'bx bx-calendar' },
                         { id: '_lbRecentChanges', title: 'Recent Changes', type: 'launcher', command: 'showRecentChanges', icon: 'bx bx-history', attributes: [
                                 { type: 'label', name: 'desktopOnly' }
@@ -232,7 +241,8 @@ const HIDDEN_SUBTREE_DEFINITION: Item = {
                         { id: '_lbToday', title: "Open Today's Journal Note", type: 'launcher', builtinWidget: 'todayInJournal', icon: 'bx bx-calendar-star' },
                         { id: '_lbSpacer2', title: 'Spacer', type: 'launcher', builtinWidget: 'spacer', baseSize: "0", growthFactor: "1" },
                         { id: '_lbProtectedSession', title: 'Protected Session', type: 'launcher', builtinWidget: 'protectedSession', icon: 'bx bx bx-shield-quarter' },
-                        { id: '_lbSyncStatus', title: 'Sync Status', type: 'launcher', builtinWidget: 'syncStatus', icon: 'bx bx-wifi' }
+                        { id: '_lbSyncStatus', title: 'Sync Status', type: 'launcher', builtinWidget: 'syncStatus', icon: 'bx bx-wifi' },
+                        { id: '_lbSettings', title: 'Settings', type: 'launcher', command: 'showOptions', icon: 'bx bx-cog' }
                     ]
                 }
             ]
@@ -241,6 +251,7 @@ const HIDDEN_SUBTREE_DEFINITION: Item = {
             id: '_options',
             title: 'Options',
             type: 'book',
+            icon: 'bx-cog',
             children: [
                 { id: '_optionsAppearance', title: 'Appearance', type: 'contentWidget', icon: 'bx-layout' },
                 { id: '_optionsShortcuts', title: 'Shortcuts', type: 'contentWidget', icon: 'bxs-keyboard' },

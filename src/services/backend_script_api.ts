@@ -371,7 +371,7 @@ interface Api {
      * This object contains "at your risk" and "no BC guarantees" objects for advanced use cases.
      */
     __private: {
-        /** provides access to the backend in-memory object graph, see {@link https://github.com/zadam/trilium/blob/master/src/becca/becca.js} */
+        /** provides access to the backend in-memory object graph, see {@link Becca} */
         becca: Becca;
     };
 }

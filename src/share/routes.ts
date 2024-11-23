@@ -279,6 +279,8 @@ function register(router: Router) {
             renderImageAttachment(image, res, 'canvas-export.svg');
         } else if (image.type === 'mermaid') {
             renderImageAttachment(image, res, 'mermaid-export.svg');
+        } else if (image.type === "mindMap") {
+            renderImageAttachment(image, res, 'mindmap-export.svg');
         } else {
             return res.status(400)
                 .json({ message: "Requested note is not a shareable image" });

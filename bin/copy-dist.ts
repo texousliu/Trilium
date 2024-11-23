@@ -35,7 +35,7 @@ const copy = async () => {
     await fs.copy(file, path.join(DEST_DIR, file));
   }
 
-  const dirsToCopy = ["images", "libraries", "db"];
+  const dirsToCopy = ["images", "libraries", "translations", "db"];
   for (const dir of dirsToCopy) {
     log(`Copying ${dir}`);
     await fs.copy(dir, path.join(DEST_DIR, dir));
@@ -47,6 +47,15 @@ const copy = async () => {
     await fs.copy(dir, path.join(DEST_DIR_SRC, path.basename(dir)));
   }  
 
+  /**
+   * Directories to be copied relative to the project root into <resource_dir>/src/public/app-dist.
+   */
+  const publicDirsToCopy = [ "./src/public/app/doc_notes" ];
+  const PUBLIC_DIR = path.join(DEST_DIR, "src", "public", "app-dist");
+  for (const dir of publicDirsToCopy) {
+    await fs.copy(dir, path.join(PUBLIC_DIR, path.basename(dir)));
+  }
+
   const nodeModulesFile = [
     "node_modules/react/umd/react.production.min.js",
     "node_modules/react/umd/react.development.js",
@@ -55,6 +64,7 @@ const copy = async () => {
     "node_modules/katex/dist/katex.min.js",
     "node_modules/katex/dist/contrib/mhchem.min.js",
     "node_modules/katex/dist/contrib/auto-render.min.js",
+    "node_modules/@highlightjs/cdn-assets/highlight.min.js"
   ];
 
   for (const file of nodeModulesFile) {
@@ -75,7 +85,23 @@ const copy = async () => {
     "node_modules/split.js/dist/",
     "node_modules/panzoom/dist/",
     "node_modules/i18next/",
-    "node_modules/i18next-http-backend/"
+    "node_modules/i18next-http-backend/",
+    "node_modules/eslint/bin/",
+    "node_modules/jsplumb/dist/",
+    "node_modules/vanilla-js-wheel-zoom/dist/",
+    "node_modules/mark.js/dist/",
+    "node_modules/knockout/build/output/",
+    "node_modules/normalize.css/",
+    "node_modules/jquery.fancytree/dist/",
+    "node_modules/bootstrap/dist/",
+    "node_modules/autocomplete.js/dist/",
+    "node_modules/codemirror/lib/",
+    "node_modules/codemirror/addon/",
+    "node_modules/codemirror/mode/",
+    "node_modules/codemirror/keymap/",
+    "node_modules/mind-elixir/dist/",
+    "node_modules/@highlightjs/cdn-assets/languages",
+    "node_modules/@highlightjs/cdn-assets/styles"
   ];
 
   for (const folder of nodeModulesFolder) {

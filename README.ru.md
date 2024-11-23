@@ -1,6 +1,6 @@
 # TriliumNext Notes
 
-[English](https://github.com/TriliumNext/Notes/blob/master/README.md) | [Chinese](https://github.com/TriliumNext/Notes/blob/master/README-ZH_CN.md) | [Russian](https://github.com/TriliumNext/Notes/blob/master/README.ru.md) | [Japanese](https://github.com/TriliumNext/Notes/blob/master/README.ja.md) | [Italian](https://github.com/TriliumNext/Notes/blob/master/README.it.md)
+[English](./README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
 
 Trilium Notes – это приложение для заметок с иерархической структурой, ориентированное на создание больших персональных баз знаний. Для быстрого ознакомления посмотрите [скриншот-тур](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
@@ -41,7 +41,8 @@ Trilium предоставляется в виде десктопного при
 ## 💻 Участвуйте в разработке
 
 Или склонируйте на своё устройство и запустите
-```
+
+```shell
 npm install
 npm run start-server
 ```

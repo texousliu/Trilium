@@ -23,6 +23,11 @@ function index(req: Request, res: Response) {
     const csrfToken = req.csrfToken();
     log.info(`Generated CSRF token ${csrfToken} with secret ${res.getHeader('set-cookie')}`);
 
+    // We force the page to not be cached since on mobile the CSRF token can be
+    // broken when closing the browser and coming back in to the page.
+    // The page is restored from cache, but the API call fail.
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
     res.render(view, {
         csrfToken: csrfToken,
         themeCssUrl: getThemeCssUrl(options.theme),
@@ -37,7 +42,7 @@ function index(req: Request, res: Response) {
         isDev: env.isDev(),
         isMainWindow: !req.query.extraWindow,
         isProtectedSessionAvailable: protectedSessionService.isProtectedSessionAvailable(),
-        maxContentWidth: parseInt(options.maxContentWidth),
+        maxContentWidth: Math.max(640, parseInt(options.maxContentWidth)),
         triliumVersion: packageJson.version,
         assetPath: assetPath,
         appPath: appPath

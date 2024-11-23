@@ -1,4 +1,6 @@
+import { t } from "../../services/i18n.js";
 import BasicWidget from "../basic_widget.js";
+import utils from "../../services/utils.js";
 
 const TPL = `
 <div style="display: none;">
@@ -23,7 +25,7 @@ const TPL = `
         }
     </style>
     
-    <span class="bx bx-sync global-menu-button-update-available-button" title="Update available"></span>
+    <span class="bx bx-sync global-menu-button-update-available-button" title="${t('update_available.update_available')}"></span>
 </div>
 `;
 
@@ -33,6 +35,6 @@ export default class UpdateAvailableWidget extends BasicWidget {
     }
 
     updateVersionStatus(latestVersion) {
-        this.$widget.toggle(latestVersion > glob.triliumVersion);
+        this.$widget.toggle(utils.isUpdateAvailable(latestVersion, glob.triliumVersion));
     }
 }

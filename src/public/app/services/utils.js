@@ -85,6 +85,9 @@ function now() {
     return formatTimeWithSeconds(new Date());
 }
 
+/**
+ * Returns `true` if the client is currently running under Electron, or `false` if running in a web browser.
+ */
 function isElectron() {
     return !!(window && window.process && window.process.type);
 }
@@ -198,7 +201,7 @@ function getMimeTypeClass(mime) {
 
 function closeActiveDialog() {
     if (glob.activeDialog) {
-        glob.activeDialog.modal('hide');
+        bootstrap.Modal.getOrCreateInstance(glob.activeDialog).hide();
         glob.activeDialog = null;
     }
 }
@@ -242,8 +245,7 @@ async function openDialog($dialog, closeActDialog = true) {
     }
 
     saveFocusedElement();
-
-    $dialog.modal();
+    bootstrap.Modal.getOrCreateInstance($dialog).show();
 
     $dialog.on('hidden.bs.modal', () => {
         $(".aa-input").autocomplete("close");
@@ -505,6 +507,78 @@ function createImageSrcUrl(note) {
     return `api/images/${note.noteId}/${encodeURIComponent(note.title)}?timestamp=${Date.now()}`;
 }
 
+/**
+ * Given a string representation of an SVG, triggers a download of the file on the client device.
+ * 
+ * @param {string} nameWithoutExtension the name of the file. The .svg suffix is automatically added to it.
+ * @param {string} svgContent the content of the SVG file download.
+ */
+function downloadSvg(nameWithoutExtension, svgContent) {
+    const filename = `${nameWithoutExtension}.svg`;
+    const element = document.createElement('a');
+    element.setAttribute('href', `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgContent)}`);
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+/**
+ * Compares two semantic version strings.
+ * Returns:
+ *   1  if v1 is greater than v2
+ *   0  if v1 is equal to v2
+ *   -1 if v1 is less than v2
+ * 
+ * @param {string} v1 First version string
+ * @param {string} v2 Second version string
+ * @returns {number}
+ */
+function compareVersions(v1, v2) {
+
+    // Remove 'v' prefix and everything after dash if present
+    v1 = v1.replace(/^v/, '').split('-')[0];
+    v2 = v2.replace(/^v/, '').split('-')[0];
+    
+    const v1parts = v1.split('.').map(Number);
+    const v2parts = v2.split('.').map(Number);
+    
+    // Pad shorter version with zeros
+    while (v1parts.length < 3) v1parts.push(0);
+    while (v2parts.length < 3) v2parts.push(0);
+    
+    // Compare major version
+    if (v1parts[0] !== v2parts[0]) {
+        return v1parts[0] > v2parts[0] ? 1 : -1;
+    }
+    
+    // Compare minor version
+    if (v1parts[1] !== v2parts[1]) {
+        return v1parts[1] > v2parts[1] ? 1 : -1;
+    }
+    
+    // Compare patch version
+    if (v1parts[2] !== v2parts[2]) {
+        return v1parts[2] > v2parts[2] ? 1 : -1;
+    }
+    
+    return 0;
+}
+
+/**
+ * Compares two semantic version strings and returns `true` if the latest version is greater than the current version.
+ * @param {string} latestVersion
+ * @param {string} currentVersion
+ * @returns {boolean}
+ */
+function isUpdateAvailable(latestVersion, currentVersion) {
+    return compareVersions(latestVersion, currentVersion) > 0;
+}
+
 export default {
     reloadFrontendApp,
     parseDate,
@@ -544,5 +618,8 @@ export default {
     escapeRegExp,
     areObjectsEqual,
     copyHtmlToClipboard,
-    createImageSrcUrl
+    createImageSrcUrl,
+    downloadSvg,
+    compareVersions,
+    isUpdateAvailable
 };
