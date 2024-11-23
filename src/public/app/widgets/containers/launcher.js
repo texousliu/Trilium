@@ -10,7 +10,7 @@ import CommandButtonWidget from "../buttons/command_button.js";
 import utils from "../../services/utils.js";
 import TodayLauncher from "../buttons/launcher/today_launcher.js";
 import HistoryNavigationButton from "../buttons/history_navigation.js";
-import QuickSearchWidget from "../quick_search.js";
+import QuickSearchLauncherWidget from "../quick_search_launcher.js";
 
 export default class LauncherWidget extends BasicWidget {
     constructor(isHorizontalLayout) {
@@ -118,7 +118,7 @@ export default class LauncherWidget extends BasicWidget {
             case "todayInJournal":
                 return new TodayLauncher(note);
             case "quickSearch":
-                return this.isHorizontalLayout ? new QuickSearchWidget() : null;
+                return this.isHorizontalLayout ? new QuickSearchLauncherWidget() : null;
             default:
                 throw new Error(`Unrecognized builtin widget ${builtinWidget} for launcher ${note.noteId} "${note.title}"`);
         }
