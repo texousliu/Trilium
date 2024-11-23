@@ -1022,7 +1022,7 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
     overflow: auto;
 }
 
-#launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
+body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     left: calc(-100% + 10px);
 }
 
