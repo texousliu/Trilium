@@ -55,6 +55,10 @@ const TAB_ROW_TPL = `
         background: var(--main-background-color);
         overflow: hidden;
     }
+
+    .tab-row-widget.full-width {
+        background: var(--launcher-pane-background-color);
+    }
     
     .tab-row-widget * {
         box-sizing: inherit;

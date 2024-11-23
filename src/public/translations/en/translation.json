@@ -1062,7 +1062,12 @@
     "override_theme_fonts_label": "Override theme fonts",
     "light_theme": "Light",
     "dark_theme": "Dark",
-    "triliumnext": "TriliumNext"
+    "triliumnext": "TriliumNext",
+    "layout": "Layout",
+    "layout-vertical-title": "Vertical",
+    "layout-horizontal-title": "Horizontal",
+    "layout-vertical-description": "launcher bar is on the left (default)",
+    "layout-horizontal-description": "launcher bar is underneath the tab bar, the tab bar is now full width."
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",
