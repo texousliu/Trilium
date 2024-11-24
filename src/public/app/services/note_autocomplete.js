@@ -94,21 +94,21 @@ function showRecentNotes($el) {
 
     $el.setSelectedNotePath("");
     $el.autocomplete("val", "");
+    $el.autocomplete('open');
     $el.trigger('focus');
-
-    // simulate pressing down arrow to trigger autocomplete
-    const e = $.Event('keydown');
-    e.which = 40; // arrow down
-    $el.trigger(e);
 }
 
 function fullTextSearch($el,options){
-    const searchString = $el.autocomplete("val")
+    const searchString = $el.autocomplete('val');
+    if (searchString.trim().length >= 1) {
+        const originalFastSearch = options.fastSearch;
         clearText($el);
         options.fastSearch = false;
-        $el.autocomplete("val", searchString);
+        $el.autocomplete('val', searchString);
         $el.autocomplete('open');
-        options.fastSearch = true;
+        $el.trigger('focus');
+        options.fastSearch = originalFastSearch;
+    }
 }
 
 function initNoteAutocomplete($el, options) {
@@ -120,6 +120,7 @@ function initNoteAutocomplete($el, options) {
     }
 
     options = options || {};
+    options.fastSearch = true; // Perform fast search by default
 
     $el.addClass("note-autocomplete-input");
 
@@ -133,7 +134,7 @@ function initNoteAutocomplete($el, options) {
 
     const $fullTextSearchButton = $("<button>")
         .addClass("input-group-text full-text-search-button bx bx-search")
-        .prop("title", "Full text search. (Shift+Enter)");    
+        .prop("title", "Full text search (Shift+Enter)");    
 
     const $goToSelectedNoteButton = $("<button>")
         .addClass("input-group-text go-to-selected-note-button bx bx-arrow-to-right");
@@ -183,7 +184,6 @@ function initNoteAutocomplete($el, options) {
         }
     });
     
-    options.fastSearch = true; // Perform fast search by default
     $el.autocomplete({
         ...autocompleteOptions,
         appendTo: document.querySelector('body'),
