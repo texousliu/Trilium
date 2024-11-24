@@ -44,7 +44,7 @@ async function autocompleteSource(term, cb, options = {}) {
         ].concat(results);
     }
 
-    if (term.trim().length >= 1 && options.allowSearchNotes) {
+    if (term.trim().length >= 1 && options.allowJumpToSearchNotes) {
         results = results.concat([
             {
                 action: 'search-notes',
@@ -165,7 +165,7 @@ function initNoteAutocomplete($el, options) {
         autocompleteOptions.debug = true;   // don't close on blur
     }
 
-    if (options.allowSearchNotes) {
+    if (options.allowJumpToSearchNotes) {
         $el.on('keydown', (event) => {
             if (event.ctrlKey && event.key === 'Enter') {
                 // Prevent Ctrl + Enter from triggering autoComplete.
