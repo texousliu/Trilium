@@ -58,7 +58,7 @@
    --active-item-border-color: transparent;
 
    --menu-text-color: black;
-   --menu-background-color: white;
+   --menu-background-color: #ffffffd9;
 
    --modal-background-color: white;
    --modal-backdrop-color: black;
@@ -132,7 +132,7 @@
         --active-item-border-color: transparent;
     
         --menu-text-color: white;
-        --menu-background-color: #222;
+        --menu-background-color: #222222d9;
     
         --modal-background-color: #333;
         --modal-backdrop-color: #444;
@@ -186,6 +186,9 @@
  * USER INTERFACE
  */
 
+.dropdown-menu {
+    backdrop-filter: blur(10px) saturate(6);
+}
 
 /*
  * TEXT NOTES
