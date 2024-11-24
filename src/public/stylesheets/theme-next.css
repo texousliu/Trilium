@@ -13,9 +13,12 @@
 }
 
 /*
- * Light color scheme
+ * THEME COLORS
  */
 
+ /* 
+  * Light theme scheme
+  */
  :root {
     --theme-style: light;
 
@@ -84,9 +87,10 @@
     --code-block-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
  }
 
-/*
+/* 
  * Dark color scheme
  */
+ 
 @media (prefers-color-scheme: dark) {
     :root {
         --theme-style: dark;        
@@ -178,7 +182,18 @@
     }
 }
 
-/* Code Blocks */
+/*
+ * USER INTERFACE
+ */
+
+
+/*
+ * TEXT NOTES
+ */
+
+/*
+ * Code Blocks 
+ */
 
 .ck-content pre {
     border: 0;
