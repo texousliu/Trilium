@@ -315,6 +315,7 @@
     "boolean": "Boolean",
     "date": "Date",
     "date_time": "Date & Time",
+    "time": "Time",
     "url": "URL",
     "precision_title": "What number of digits after floating point should be available in the value setting interface.",
     "precision": "Precision",
