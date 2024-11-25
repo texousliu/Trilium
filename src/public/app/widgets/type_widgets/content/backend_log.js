@@ -8,6 +8,7 @@ const TPL = `<div style="height: 100%; display: flex; flex-direction: column;">
             flex-grow: 1; 
             width: 100%;
             border: none;
+            resize: none;
         }   
     </style>
 
