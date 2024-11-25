@@ -1193,6 +1193,7 @@
     "backup_now": "立即备份",
     "backup_database_now": "立即备份数据库",
     "existing_backups": "现有备份",
+    "date-and-time": "日期和时间",
     "path": "路径",
     "database_backed_up_to": "数据库已备份到",
     "no_backup_yet": "尚无备份"
