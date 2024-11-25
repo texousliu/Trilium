@@ -61,6 +61,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         const documentStyle = window.getComputedStyle(document.documentElement);
         const mermaidTheme = documentStyle.getPropertyValue('--mermaid-theme');
 
+        mermaid.registerLayoutLoaders(MERMAID_ELK);
         mermaid.mermaidAPI.initialize({
             startOnLoad: false,
             theme: mermaidTheme.trim(),

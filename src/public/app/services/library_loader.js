@@ -58,7 +58,10 @@ const FORCE_GRAPH = {
 };
 
 const MERMAID = {
-    js: [ "node_modules/mermaid/dist/mermaid.min.js" ]
+    js: [
+        "node_modules/mermaid/dist/mermaid.min.js",
+        "libraries/mermaid-elk/elk.min.js"
+    ]
 }
 
 const EXCALIDRAW = {
