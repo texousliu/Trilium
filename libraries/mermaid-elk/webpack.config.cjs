@@ -3,7 +3,7 @@ const webpack = require("webpack");
 
 module.exports = {
     mode: "production",
-    entry: "./node_modules/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs",
+    entry: "../../node_modules/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs",
     output: {
         library: "MERMAID_ELK",
         filename: "elk.min.js",

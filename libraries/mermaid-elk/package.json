@@ -9,7 +9,5 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {
-    "@mermaid-js/layout-elk": "^0.1.5"
-  }
+  "dependencies": {}
 }
