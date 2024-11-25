@@ -1554,5 +1554,14 @@
     "paste": "粘贴",
     "paste-as-plain-text": "以纯文本粘贴",
     "search_online": "用 {{searchEngine}} 搜索 \"{{term}}\""
+  },
+  "image_context_menu": {
+    "copy_reference_to_clipboard": "复制引用到剪贴板",
+    "copy_image_to_clipboard": "复制图片到剪贴板"
+  },
+  "link_context_menu": {
+    "open_note_in_new_tab": "在新标签页中打开笔记",
+    "open_note_in_new_split": "在新分屏中打开笔记",
+    "open_note_in_new_window": "在新窗口中打开笔记"
   }
 }
