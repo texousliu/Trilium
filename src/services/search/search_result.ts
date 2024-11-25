@@ -27,21 +27,32 @@ class SearchResult {
         this.score = 0;
 
         const note = becca.notes[this.noteId];
+        const normalizedQuery = fulltextQuery.toLowerCase();
+        const normalizedTitle = note.title.toLowerCase();
 
+        // Note ID exact match
         if (note.noteId.toLowerCase() === fulltextQuery) {
             this.score += 100;
         }
 
-        if (note.title.toLowerCase() === fulltextQuery) {
-            this.score += 100; // high reward for exact match #3470
+        // Title matching scores - significantly increase the exact match score
+        if (normalizedTitle === normalizedQuery) {
+            this.score += 1000; // Much higher score for exact match
+        }
+        else if (normalizedTitle.startsWith(normalizedQuery)) {
+            this.score += 150;
+        }
+        else if (normalizedTitle.includes(` ${normalizedQuery} `) || 
+                normalizedTitle.startsWith(`${normalizedQuery} `) || 
+                normalizedTitle.endsWith(` ${normalizedQuery}`)) {
+            this.score += 120;
         }
 
-        // notes with matches on its own note title as opposed to ancestors or descendants
+        const beforeTokenScore = this.score;
+        // Add scores for partial matches with lower weights
         this.addScoreForStrings(tokens, note.title, 1.5);
-
-        // matches in attributes don't get extra points and thus are implicitly valued less than note path matches
-
-        this.addScoreForStrings(tokens, this.notePathTitle, 1);
+        this.addScoreForStrings(tokens, this.notePathTitle, 0.5); // Reduced weight for path matches
+        
 
         if (note.isInHiddenSubtree()) {
             this.score = this.score / 2;
@@ -51,19 +62,19 @@ class SearchResult {
     addScoreForStrings(tokens: string[], str: string, factor: number) {
         const chunks = str.toLowerCase().split(" ");
 
-        this.score = 0;
-
+        let tokenScore = 0;
         for (const chunk of chunks) {
             for (const token of tokens) {
                 if (chunk === token) {
-                    this.score += 4 * token.length * factor;
+                    tokenScore += 4 * token.length * factor;
                 } else if (chunk.startsWith(token)) {
-                    this.score += 2 * token.length * factor;
+                    tokenScore += 2 * token.length * factor;
                 } else if (chunk.includes(token)) {
-                    this.score += token.length * factor;
+                    tokenScore += token.length * factor;
                 }
             }
         }
+        this.score += tokenScore;
     }
 }
 
