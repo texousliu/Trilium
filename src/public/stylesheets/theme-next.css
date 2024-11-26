@@ -214,6 +214,13 @@
  * USER INTERFACE
  */
 
+ @keyframes fade-in {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
 
 /*
  *  Launcher pane
@@ -263,6 +270,7 @@
 
 #left-pane div.tree {
     padding: 0 12px;
+    animation: fade-in 200ms ease-in;
 }
 
 #left-pane span.fancytree-node {
