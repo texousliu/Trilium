@@ -30,33 +30,30 @@ class SearchResult {
         const normalizedQuery = fulltextQuery.toLowerCase();
         const normalizedTitle = note.title.toLowerCase();
 
-        // Note ID exact match, also significantly increase
+        // Note ID exact match, much higher score
         if (note.noteId.toLowerCase() === fulltextQuery) {
             this.score += 1000;
         }
 
-        // Title matching scores - significantly increase the exact match score
+        // Title matching scores, make sure to always win
         if (normalizedTitle === normalizedQuery) {
-            this.score += 1000; // Much higher score for exact match
+            this.score += 2000; // Increased from 1000 to ensure exact matches always win
         }
         else if (normalizedTitle.startsWith(normalizedQuery)) {
-            this.score += 150;
+            this.score += 500;  // Increased to give more weight to prefix matches
         }
         else if (normalizedTitle.includes(` ${normalizedQuery} `) || 
                 normalizedTitle.startsWith(`${normalizedQuery} `) || 
                 normalizedTitle.endsWith(` ${normalizedQuery}`)) {
-            this.score += 120;
+            this.score += 300;  // Increased to better distinguish word matches
         }
 
-        // notes with matches on its own note title as opposed to ancestors or descendants
-        const beforeTokenScore = this.score;
-        // Add scores for partial matches with lower weights
-        this.addScoreForStrings(tokens, note.title, 1.5);
-        this.addScoreForStrings(tokens, this.notePathTitle, 0.5); // Reduced weight for path matches
-        
+        // Add scores for partial matches with adjusted weights
+        this.addScoreForStrings(tokens, note.title, 2.0);  // Increased to give more weight to title matches
+        this.addScoreForStrings(tokens, this.notePathTitle, 0.3); // Reduced to further de-emphasize path matches
 
         if (note.isInHiddenSubtree()) {
-            this.score = this.score / 2;
+            this.score = this.score / 3; // Increased penalty for hidden notes
         }
     }
 
