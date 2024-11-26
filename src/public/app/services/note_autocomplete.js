@@ -30,6 +30,15 @@ async function autocompleteSourceForCKEditor(queryText) {
 }
 
 async function autocompleteSource(term, cb, options = {}, fastSearch = true) {
+    if (fastSearch === false) {
+        cb(
+            [{
+                noteTitle: term,
+                highlightedNotePathTitle: `Searching...`
+            }]
+        );
+    }
+    
     const activeNoteId = appContext.tabManager.getActiveContextNoteId();
 
     let results = await server.get(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${fastSearch}`);
