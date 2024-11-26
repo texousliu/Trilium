@@ -29,10 +29,10 @@ async function autocompleteSourceForCKEditor(queryText) {
     });
 }
 
-async function autocompleteSource(term, cb, options = {}) {
+async function autocompleteSource(term, cb, options = {}, fastSearch = true) {
     const activeNoteId = appContext.tabManager.getActiveContextNoteId();
 
-    let results = await server.get(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${options.fastSearch}`);
+    let results = await server.get(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${fastSearch}`);
     if (term.trim().length >= 1 && options.allowCreatingNotes) {
         results = [
             {
@@ -98,16 +98,17 @@ function showRecentNotes($el) {
     $el.trigger('focus');
 }
 
-function fullTextSearch($el,options){
+async function fullTextSearch($el, options){ 
+    if (!options.container) {        
+        // If no container is specified, the dropdown might remain closed. Calling `$el.autocomplete('open')` triggers a search by name and needs to wait for completion. Otherwise, if `$el.autocomplete('open')` executes too slowly, it will overwrite the full-text search results.
+        $el.autocomplete('open');
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
     const searchString = $el.autocomplete('val');
     if (searchString.trim().length >= 1) {
-        const originalFastSearch = options.fastSearch;
-        clearText($el);
-        options.fastSearch = false;
-        $el.autocomplete('val', searchString);
-        $el.autocomplete('open');
+        $el.setSelectedNotePath("");
+        autocompleteSource(searchString, $el.data('autocompleteCallback'), options, false);
         $el.trigger('focus');
-        options.fastSearch = originalFastSearch;
     }
 }
 
@@ -120,7 +121,6 @@ function initNoteAutocomplete($el, options) {
     }
 
     options = options || {};
-    options.fastSearch = true; // Perform fast search by default
 
     $el.addClass("note-autocomplete-input");
 
@@ -157,6 +157,7 @@ function initNoteAutocomplete($el, options) {
 
     $fullTextSearchButton.on('click', e => {
         fullTextSearch($el, options);
+        return false;
     });
 
     let autocompleteOptions = {};
@@ -196,7 +197,10 @@ function initNoteAutocomplete($el, options) {
         tabAutocomplete: false
     }, [
         {
-            source: (term, cb) => autocompleteSource(term, cb, options),
+            source: (term, cb) => {
+                $el.data('autocompleteCallback', cb);
+                autocompleteSource(term, cb, options);
+            },
             displayKey: 'notePathTitle',
             templates: {
                 suggestion: suggestion => suggestion.highlightedNotePathTitle
