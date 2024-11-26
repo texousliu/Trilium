@@ -11,6 +11,8 @@
     --monospace-font-family: JetBrainsLight;
     --monospace-font-size: normal;
 
+    --left-pane-item-selected-shadow-size: 2px;
+
     --launcher-pane-size: 58px;
     --launcher-pane-button-margin: 6px;
     --launcher-pane-button-gap: 3px;
@@ -69,6 +71,10 @@
 
    --left-pane-background-color: #f2f2f2;
    --left-pane-text-color: #383838;
+   --left-pane-item-hover-background: #eaeaea;
+   --left-pane-item-selected-background: white;
+   --left-pane-item-selected-color: black;
+   --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .2);
 
    --launcher-pane-background-color: #e8e8e8;
    --launcher-pane-text-color: #464646;
@@ -146,7 +152,11 @@
     
         --left-pane-background-color: #1f1f1f;
         --left-pane-text-color: #AAAAAA;
-    
+        --left-pane-item-hover-background: #eaeaea;
+        --left-pane-item-selected-background: white;
+        --left-pane-item-selected-color: black;
+        --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .2);
+     
         --launcher-pane-background-color: #1f1f1f;
         --launcher-pane-text-color: #AAAAAA;
         --launcher-pane-button-hover-color: black;
@@ -238,19 +248,32 @@
  * Left pane
  */
 
-#left-pane {
-    --left-pane-item-hover-background: #eaeaea;
-    --left-pane-item-selected-background: white;
-    --left-pane-item-selected-color: black;
-}
-
 #left-pane span.fancytree-node {
     border: unset;
+    border-radius: 6px;
 }
 
 #left-pane span.fancytree-node.fancytree-active {
-    background: var(--left-pane-item-selected-background) !important;
+    position: relative;
+    background: transparent !important;
     color: var(--left-pane-item-selected-color) !important;
+}
+
+#left-pane span.fancytree-node.fancytree-active::before {
+    position: absolute;
+    content: "";
+    top: var(--left-pane-item-selected-shadow-size);
+    left: var(--left-pane-item-selected-shadow-size);
+    bottom: var(--left-pane-item-selected-shadow-size);
+    right: var(--left-pane-item-selected-shadow-size);
+    background: var(--left-pane-item-selected-background) !important;
+    box-shadow: var(--left-pane-item-selected-shadow);
+    border-radius: 6px;
+}
+
+#left-pane .fancytree-custom-icon {
+    position: relative;
+    z-index: 1000;
 }
 
 #left-pane span.fancytree-active .fancytree-title {
