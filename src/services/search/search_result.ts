@@ -30,9 +30,9 @@ class SearchResult {
         const normalizedQuery = fulltextQuery.toLowerCase();
         const normalizedTitle = note.title.toLowerCase();
 
-        // Note ID exact match
+        // Note ID exact match, also significantly increase
         if (note.noteId.toLowerCase() === fulltextQuery) {
-            this.score += 100;
+            this.score += 1000;
         }
 
         // Title matching scores - significantly increase the exact match score
