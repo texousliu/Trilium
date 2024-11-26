@@ -75,6 +75,10 @@
    --left-pane-item-selected-background: white;
    --left-pane-item-selected-color: black;
    --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .2);
+   --left-pane-item-action-button-background: #d7d7d7;
+   --left-pane-item-action-button-hover-background: white;
+   --left-pane-item-action-button-hover-shadow: 2px 2px 3px rgba(0, 0, 0, .15);
+   --left-pane-item-selected-action-button-hover-shadow: 2px 2px 10px rgba(0, 0, 0, .25);
 
    --launcher-pane-background-color: #e8e8e8;
    --launcher-pane-text-color: #464646;
@@ -156,6 +160,10 @@
         --left-pane-item-selected-background: white;
         --left-pane-item-selected-color: black;
         --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .2);
+        --left-pane-item-action-button-background: #d7d7d7;
+        --left-pane-item-action-button-hover-background: white;
+        --left-pane-item-action-button-hover-shadow: 2px 2px 3px rgba(0, 0, 0, .15);
+        --left-pane-item-selected-action-button-hover-shadow: 2px 2px 10px rgba(0, 0, 0, .25);
      
         --launcher-pane-background-color: #1f1f1f;
         --launcher-pane-text-color: #AAAAAA;
@@ -315,6 +323,26 @@
 
 #left-pane span.fancytree-node.shared .fancytree-title::after {
     opacity: .5;
+}
+
+#left-pane .tree-item-button {
+    margin-right: 6px;
+    border: unset;
+    border-radius: 50%;
+    background: var(--left-pane-item-action-button-background);
+    transition: background-color 300ms ease-out,
+                box-shadow 300ms ease-out;
+}
+
+#left-pane .tree-item-button:hover {
+    background: var(--left-pane-item-action-button-hover-background);
+    box-shadow: var(--left-pane-item-action-button-hover-shadow);
+    transition: background-color 100ms ease-in,
+                box-shadow 100ms ease-in;
+}
+
+#left-pane span.fancytree-node.fancytree-active .tree-item-button:hover {
+    box-shadow: var(--left-pane-item-selected-action-button-hover-shadow);
 }
 
 /*
