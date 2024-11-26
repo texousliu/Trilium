@@ -315,6 +315,7 @@
     "boolean": "Boolean",
     "date": "Date",
     "date_time": "Date & Time",
+    "time": "Time",
     "url": "URL",
     "precision_title": "What number of digits after floating point should be available in the value setting interface.",
     "precision": "Precision",
@@ -1061,7 +1062,12 @@
     "theme_label": "Theme",
     "override_theme_fonts_label": "Override theme fonts",
     "light_theme": "Light",
-    "dark_theme": "Dark"
+    "dark_theme": "Dark",
+    "layout": "Layout",
+    "layout-vertical-title": "Vertical",
+    "layout-horizontal-title": "Horizontal",
+    "layout-vertical-description": "launcher bar is on the left (default)",
+    "layout-horizontal-description": "launcher bar is underneath the tab bar, the tab bar is now full width."
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",
@@ -1548,5 +1554,14 @@
     "paste": "Paste",
     "paste-as-plain-text": "Paste as plain text",
     "search_online": "Search for \"{{term}}\" with {{searchEngine}}"
+  },
+  "image_context_menu": {
+    "copy_reference_to_clipboard": "Copy reference to clipboard",
+    "copy_image_to_clipboard": "Copy image to clipboard"
+  },
+  "link_context_menu": {
+    "open_note_in_new_tab": "Open note in a new tab",
+    "open_note_in_new_split": "Open note in a new split",
+    "open_note_in_new_window": "Open note in a new window"
   }
 }

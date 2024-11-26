@@ -127,6 +127,7 @@
     "custom_resource_provider": "a se vedea <a href=\"javascript:\" data-help-page=\"custom-request-handler.html\">Custom request handler</a>",
     "date": "Dată",
     "date_time": "Dată și timp",
+    "time": "Timp",
     "delete": "Șterge",
     "digits": "număr de zecimale",
     "disable_inclusion": "script-urile cu această etichetă nu vor fi incluse în execuția scriptului părinte.",

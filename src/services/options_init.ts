@@ -134,7 +134,9 @@ const defaultOptions: DefaultOption[] = [
     { name: "codeBlockWordWrap", value: "false", isSynced: true },
 
     // Text note configuration
-    { name: "textNoteEditorType", value: "ckeditor-balloon", isSynced: true }
+    { name: "textNoteEditorType", value: "ckeditor-balloon", isSynced: true },
+
+    { name: "layoutOrientation", value: "vertical", isSynced: false }
 ];
 
 /**
