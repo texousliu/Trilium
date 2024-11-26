@@ -10,6 +10,10 @@
 
     --monospace-font-family: JetBrainsLight;
     --monospace-font-size: normal;
+
+    --launcher-pane-size: 58px;
+    --launcher-pane-button-margin: 6px;
+    --launcher-pane-button-gap: 3px;
 }
 
 /*
@@ -68,6 +72,9 @@
 
    --launcher-pane-background-color: #e8e8e8;
    --launcher-pane-text-color: #464646;
+   --launcher-pane-button-hover-color: black;
+   --launcher-pane-button-hover-background: white;
+   --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
 
    --active-tab-background-color: #ddd;
    --active-tab-hover-background-color: #d1d1d1;
@@ -142,6 +149,9 @@
     
         --launcher-pane-background-color: #1f1f1f;
         --launcher-pane-text-color: #AAAAAA;
+        --launcher-pane-button-hover-color: black;
+        --launcher-pane-button-hover-background: white;
+        --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
     
         --active-tab-background-color: #666;
         --active-tab-hover-background-color: #737373;
@@ -184,6 +194,48 @@
 
 /*
  * USER INTERFACE
+ */
+
+
+/*
+ *  Launcher pane
+ */
+
+#launcher-pane.vertical {
+    width: var(--launcher-pane-size) !important;
+    padding-bottom: var(--launcher-pane-button-gap);
+}
+
+#launcher-pane.vertical .launcher-button {
+    width: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
+    height: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
+    margin: var(--launcher-pane-button-gap) var(--launcher-pane-button-margin);
+    padding: 0 !important;
+    border-radius: 8px;
+    transition: background-color 300ms ease-out,
+                color 300ms ease-out,
+                box-shadow 300ms ease-out;
+    cursor: default;
+}
+
+#launcher-pane.vertical .launcher-button:active,
+#launcher-pane.vertical .launcher-button.show {
+    transform: scale(0.9);
+    transition: transform 50ms linear;
+}
+
+#launcher-pane.vertical .launcher-button:hover,
+#launcher-pane.vertical .launcher-button.right-dropdown-button.show {
+    background: var(--launcher-pane-button-hover-background);
+    color: var(--launcher-pane-button-hover-color);
+    box-shadow: var(--launcher-pane-button-hover-shadow);
+    transition: background-color 100ms ease-in,
+                color 80ms ease-in,
+                box-shadow 100ms ease-in;
+}
+
+/*
+ * Menus
  */
 
 .dropdown-menu {
