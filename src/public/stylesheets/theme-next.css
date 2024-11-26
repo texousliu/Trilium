@@ -329,7 +329,11 @@
 }
 
 #left-pane .fancytree-custom-icon {
-    margin-top: 2px; /* Use this to align the icon with the tree view item's caption */
+    margin-top: 0; /* Use this to align the icon with the tree view item's caption */
+}
+
+#left-pane span .fancytree-title {
+    margin-top: -5px;
 }
 
 #left-pane span.fancytree-active .fancytree-title {
