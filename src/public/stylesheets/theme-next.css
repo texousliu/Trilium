@@ -255,6 +255,12 @@
 #left-pane span.fancytree-node {
     border: unset;
     border-radius: 6px;
+    cursor: default;
+}
+
+/* The root element of the tree */
+#left-pane .fancytree-container > li:first-child > span {
+    padding-left: 12px;
 }
 
 #left-pane span.fancytree-node.fancytree-active {
@@ -285,6 +291,16 @@
     z-index: -1;
 }
 
+#left-pane .fancytree-expander {
+    opacity: .65;
+    transition: opacity 150ms ease-in;
+}
+
+#left-pane .fancytree-expander:hover {
+    opacity: 1;
+    transition: opacity 300ms ease-out;
+}
+
 #left-pane .fancytree-custom-icon {
     position: relative;
     z-index: 1000;
@@ -296,6 +312,10 @@
 
 #left-pane span.fancytree-node:hover {
     background: var(--left-pane-item-hover-background);
+}
+
+#left-pane span.fancytree-node.shared .fancytree-title::after {
+    opacity: .5;
 }
 
 /*
