@@ -302,8 +302,7 @@
 }
 
 #left-pane .fancytree-custom-icon {
-    position: relative;
-    z-index: 1000;
+    margin-top: 2px; /* Use this to align the icon with the tree view item's caption */
 }
 
 #left-pane span.fancytree-active .fancytree-title {
