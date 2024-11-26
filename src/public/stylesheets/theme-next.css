@@ -256,6 +256,11 @@
  * Left pane
  */
 
+#left-pane .tree-actions {
+    /* TODO: relocate instead of hiding */
+    display: none;
+}
+
 #left-pane div.tree {
     padding: 0 12px;
 }
