@@ -235,6 +235,33 @@
 }
 
 /*
+ * Left pane
+ */
+
+#left-pane {
+    --left-pane-item-hover-background: #eaeaea;
+    --left-pane-item-selected-background: white;
+    --left-pane-item-selected-color: black;
+}
+
+#left-pane span.fancytree-node {
+    border: unset;
+}
+
+#left-pane span.fancytree-node.fancytree-active {
+    background: var(--left-pane-item-selected-background) !important;
+    color: var(--left-pane-item-selected-color) !important;
+}
+
+#left-pane span.fancytree-active .fancytree-title {
+    font-weight: normal;
+}
+
+#left-pane span.fancytree-node:hover {
+    background: var(--left-pane-item-hover-background);
+}
+
+/*
  * Menus
  */
 
