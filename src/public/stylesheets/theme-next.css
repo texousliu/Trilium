@@ -278,6 +278,7 @@
     box-shadow: var(--left-pane-item-selected-shadow);
     border-radius: 6px;
     animation: left-pane-item-select 200ms ease-out;
+    z-index: -1;
 }
 
 #left-pane .fancytree-custom-icon {
