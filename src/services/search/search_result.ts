@@ -48,6 +48,7 @@ class SearchResult {
             this.score += 120;
         }
 
+        // notes with matches on its own note title as opposed to ancestors or descendants
         const beforeTokenScore = this.score;
         // Add scores for partial matches with lower weights
         this.addScoreForStrings(tokens, note.title, 1.5);
