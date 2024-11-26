@@ -248,6 +248,10 @@
  * Left pane
  */
 
+#left-pane div.tree {
+    padding: 0 12px;
+}
+
 #left-pane span.fancytree-node {
     border: unset;
     border-radius: 6px;
