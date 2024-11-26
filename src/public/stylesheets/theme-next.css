@@ -86,6 +86,9 @@
    --launcher-pane-button-hover-background: white;
    --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
 
+   --gutter-color: #e7e7e7;
+   --gutter-hover-color: #bfbfbf;
+
    --active-tab-background-color: #ddd;
    --active-tab-hover-background-color: #d1d1d1;
    --active-tab-text-color: black;
@@ -170,6 +173,9 @@
         --launcher-pane-button-hover-color: black;
         --launcher-pane-button-hover-background: white;
         --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
+
+        --gutter-color: #e7e7e7;
+        --gutter-hover-color: #bfbfbf;
     
         --active-tab-background-color: #666;
         --active-tab-hover-background-color: #737373;
@@ -356,6 +362,20 @@
 
 #left-pane span.fancytree-node.fancytree-active .tree-item-button:hover {
     box-shadow: var(--left-pane-item-selected-action-button-hover-shadow);
+}
+
+/*
+ * Gutter
+ */
+
+.gutter {
+    background: var(--gutter-color) !important;
+    transition: background 150ms ease-out;
+}
+
+.gutter:hover {
+    background: var(--gutter-hover-color) !important;
+    transition: background 300ms ease-in;
 }
 
 /*
