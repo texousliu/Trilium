@@ -33,6 +33,7 @@ const TPL = `
     .promoted-attribute-cell > label {
         user-select: none;
         font-weight: bold;
+        vertical-align: middle;
     }
     .promoted-attribute-cell > * {
         display: table-cell;
@@ -49,7 +50,7 @@ const TPL = `
         white-space: nowrap;
     }
     .promoted-attribute-cell input[type="checkbox"] {
-        height: 1.5em;        
+        width: 22px !important;
         flex-grow: 0;
         width: unset;
     }
