@@ -86,7 +86,9 @@
    --launcher-pane-button-hover-background: white;
    --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
 
-   --gutter-color: #e7e7e7;
+   --root-background: var(--left-pane-background-color);
+
+   --gutter-color: transparent;
    --gutter-hover-color: #bfbfbf;
 
    --active-tab-background-color: #ddd;
@@ -176,6 +178,8 @@
         --launcher-pane-button-hover-background: white;
         --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
 
+        --root-background: var(--left-pane-background-color);
+
         --gutter-color: #e7e7e7;
         --gutter-hover-color: #bfbfbf;
     
@@ -231,6 +235,11 @@
         opacity: 1;
     }
 }
+
+#root-widget {
+    background-color: var(--root-background);
+}
+
 
 /*
  *  Launcher pane
@@ -387,8 +396,29 @@
 }
 
 /*
+ * Tab bar
+ */
+
+.tab-row-widget {
+    background: transparent !important;
+}
+
+/*
+ * Center pane
+ */
+
+ #center-pane {
+    background: var(--main-background-color);
+ }
+
+
+/*
  * Table of contents & Highlights list
  */
+
+#right-pane {
+    background: var(--main-background-color);
+}
 
 #right-pane .toc li,
 #right-pane .highlights-list li {
