@@ -16,6 +16,10 @@
     --launcher-pane-size: 58px;
     --launcher-pane-button-margin: 6px;
     --launcher-pane-button-gap: 3px;
+
+    --tab-bar-height: 50px;
+    --tab-height: 36px;
+    --tab-first-item-horiz-offset: 0;
 }
 
 /*
@@ -399,8 +403,26 @@
  * Tab bar
  */
 
+/* The parent element of the tab bar */
+#rest-pane > div.component:first-child {
+    height: var(--tab-bar-height) !important;
+}
+
 .tab-row-widget {
     background: transparent !important;
+}
+
+.tab-row-widget-container {
+    margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
+    height: var(--tab-height) !important;
+}
+
+.tab-row-widget .note-tab .note-tab-wrapper {
+    height: var(--tab-height) !important;
+}
+
+.tab-row-widget .note-tab:nth-child(1) {
+    transform: translate3d(var(--tab-first-item-horiz-offset), 0, 0);
 }
 
 /*
