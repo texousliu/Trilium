@@ -351,6 +351,11 @@ export default class RibbonContainer extends NoteContextAwareWidget {
         }
     }
 
+    noteTypeMimeChangedEvent() {
+        // We are ignoring the event which triggers a refresh since it is usually already done by a different
+        // event and causing a race condition in which the items appear twice.
+    }
+
     /**
      * Executed as soon as the user presses the "Edit" floating button in a read-only text note.
      * 
