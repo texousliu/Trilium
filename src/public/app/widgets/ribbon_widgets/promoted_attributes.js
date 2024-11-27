@@ -42,6 +42,7 @@ const TPL = `
     .promoted-attribute-cell div.input-group {
         margin-left: 10px;
         display: flex;
+        min-height: 40px;
     }
     .promoted-attribute-cell strong {
         word-break:keep-all;
