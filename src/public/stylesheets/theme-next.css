@@ -128,6 +128,7 @@
    --active-tab-hover-background-color: var(--active-tab-background-color);
    --active-tab-text-color: black;
    --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .1);
+   --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, .2);
 
    --inactive-tab-background-color: transparent;
    --inactive-tab-hover-background-color: #00000016;
@@ -236,6 +237,7 @@
         --active-tab-hover-background-color: #737373;
         --active-tab-text-color: #ccc;
         --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .1);
+        --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, .2);
     
         --inactive-tab-background-color: #444;
         --inactive-tab-hover-background-color: #525252;
@@ -475,9 +477,18 @@
     transform: translate3d(var(--tab-first-item-horiz-offset), 0, 0);
 }
 
+.tab-row-widget-is-sorting .note-tab[active] .note-tab-wrapper {
+    transform: scale(.85);
+    box-shadow: var(--active-tab-dragging-shadow) !important;
+}
+
 .tab-row-widget .note-tab[active] .note-tab-wrapper {
     box-shadow: var(--active-tab-shadow);
     font-weight: unset !important;
+}
+
+.tab-row-widget-is-sorting .note-tab-drag-handle {
+    cursor: grabbing !important;
 }
 
 .tab-row-widget .note-tab-close {
