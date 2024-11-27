@@ -469,6 +469,44 @@
     background: var(--tab-close-button-hover-background) !important;
 }
 
+.tab-row-widget .note-new-tab {
+    --new-tab-button-size: 24px;
+    position: relative;
+    margin-left: 5px;
+}
+
+.tab-row-widget .note-new-tab::before {
+    /* The background circle */
+    position: absolute;
+    content: "";
+    top: calc((var(--tab-height) - var(--new-tab-button-size)) / 2);
+    left: calc((var(--tab-height) - var(--new-tab-button-size)) / 2);
+    width: var(--new-tab-button-size);
+    height: var(--new-tab-button-size);
+    background: var(--left-pane-item-action-button-background);
+    border-radius: 50%;
+}
+
+.tab-row-widget .note-new-tab:hover::before {
+    background: var(--left-pane-item-action-button-hover-background);
+    box-shadow: var(--left-pane-item-action-button-hover-shadow);
+}
+
+.tab-row-widget .note-new-tab::after {
+    /* The "X" icon */
+    display: flex;
+    position: absolute;
+    content: "\ebc0";
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-family: boxicons;
+    font-size: calc(var(--new-tab-button-size) * .75);
+}
+
 /*
  * Center pane
  */
