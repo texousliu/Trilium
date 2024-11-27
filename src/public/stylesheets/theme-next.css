@@ -104,6 +104,8 @@
 
    --mermaid-theme: default;
 
+   --toc-item-hover-background: #ececec;
+
    --code-block-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -190,6 +192,8 @@
         --tooltip-background-color: #333;
         --link-color: lightskyblue;
     
+        --toc-item-hover-background: #ececec;
+
         --mermaid-theme: dark;
 
         --code-block-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
@@ -380,6 +384,32 @@
 .gutter:hover {
     background: var(--gutter-hover-color) !important;
     transition: background 300ms ease-in;
+}
+
+/*
+ * Table of contents
+ */
+
+#right-pane .toc li {
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-align: unset;
+    transition: background-color 150ms ease-in;
+}
+
+#right-pane .toc li::marker {
+    color: var(--muted-text-color);
+}
+
+#right-pane .toc li:hover {
+    background: var(--toc-item-hover-background);
+    font-weight: normal;
+    transition: background-color 300ms ease-out;
+}
+
+#right-pane .toc li:active {
+    background: transparent;
+    transition: none;
 }
 
 /*
