@@ -121,7 +121,7 @@ function fullTextSearch($el, options){
     $el.autocomplete('val', '');
     $el.setSelectedNotePath("");
     $el.autocomplete('val', searchString);
-    // Set a delay to avoid resetting to true before the full text search is completed.
+    // Set a delay to avoid resetting to true before full text search (await server.get) is called.
     setTimeout(() => { options.fastSearch = true; }, 100);
 }
 
