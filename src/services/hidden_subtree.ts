@@ -103,7 +103,8 @@ const HIDDEN_SUBTREE_DEFINITION: Item = {
             type: 'contentWidget',
             icon: 'bx-terminal',
             attributes: [
-                { type: 'label', name: 'keepCurrentHoisting' }
+                { type: 'label', name: 'keepCurrentHoisting' },
+                { type: 'label', name: 'fullContentWidth' }
             ]
         },
         {
