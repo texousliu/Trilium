@@ -121,7 +121,8 @@
    --gutter-color: transparent;
    --gutter-hover-color: #bfbfbf;
 
-   --tab-close-button-hover-background: #d7d7d7;
+   --tab-close-button-hover-background: #c95a5a;
+   --tab-close-button-hover-color: white;
 
    --active-tab-background-color: white;
    --active-tab-hover-background-color: var(--active-tab-background-color);
@@ -228,7 +229,8 @@
         --gutter-color: transparent;
         --gutter-hover-color: #5e5e5e;
 
-        --tab-close-button-hover-background: #e2e2e2;
+        --tab-close-button-hover-background: #c95a5a;
+        --tab-close-button-hover-color: white;
 
         --active-tab-background-color: #666;
         --active-tab-hover-background-color: #737373;
@@ -478,8 +480,15 @@
     font-weight: unset !important;
 }
 
+.tab-row-widget .note-tab-close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .tab-row-widget .note-tab-close:hover {
     background: var(--tab-close-button-hover-background) !important;
+    color: var(--tab-close-button-hover-color) !important;
 }
 
 .tab-row-widget .note-new-tab {
