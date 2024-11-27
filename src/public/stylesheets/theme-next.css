@@ -387,27 +387,36 @@
 }
 
 /*
- * Table of contents
+ * Table of contents & Highlights list
  */
 
-#right-pane .toc li {
+#right-pane .toc li,
+#right-pane .highlights-list li {
     padding: 2px 8px;
     border-radius: 4px;
     text-align: unset;
     transition: background-color 150ms ease-in;
 }
 
-#right-pane .toc li::marker {
+#right-pane .highlights-list li {
+    line-height: 1.2;
+    padding: 8px;
+}
+
+#right-pane .toc li::marker,
+#right-pane .highlights-list li::marker {
     color: var(--muted-text-color);
 }
 
-#right-pane .toc li:hover {
+#right-pane .toc li:hover,
+#right-pane .highlights-list li:hover {
     background: var(--toc-item-hover-background);
     font-weight: normal;
     transition: background-color 300ms ease-out;
 }
 
-#right-pane .toc li:active {
+#right-pane .toc li:active,
+#right-pane .highlights-list li:active {
     background: transparent;
     transition: none;
 }
