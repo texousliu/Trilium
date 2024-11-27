@@ -441,6 +441,8 @@
  */
 
  #center-pane {
+    border-radius: 10px 0 0 0;
+    padding-top: 10px;
     background: var(--main-background-color);
  }
 
