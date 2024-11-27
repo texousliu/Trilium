@@ -29,8 +29,12 @@ async function autocompleteSourceForCKEditor(queryText) {
     });
 }
 
-async function autocompleteSource(term, cb, options = {}, fastSearch = true) {
+async function autocompleteSource(term, cb, options = {}) {
+    const fastSearch = options.fastSearch === false ? false : true;
     if (fastSearch === false) {
+        if (term.trim().length === 0){
+            return;
+        }
         cb(
             [{
                 noteTitle: term,
@@ -107,18 +111,17 @@ function showRecentNotes($el) {
     $el.trigger('focus');
 }
 
-async function fullTextSearch($el, options){ 
-    if (!options.container) {        
-        // If no container is specified, the dropdown might remain closed. Calling `$el.autocomplete('open')` triggers a search by name and needs to wait for completion. Otherwise, if `$el.autocomplete('open')` executes too slowly, it will overwrite the full-text search results.
-        $el.autocomplete('open');
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
+function fullTextSearch($el, options){
     const searchString = $el.autocomplete('val');
-    if (searchString.trim().length >= 1) {
-        $el.setSelectedNotePath("");
-        autocompleteSource(searchString, $el.data('autocompleteCallback'), options, false);
-        $el.trigger('focus');
+    if (options.fastSearch === false || searchString.trim().length === 0) {
+        return;
     }
+    options.fastSearch = false;
+    $el.autocomplete('val', '');
+    $el.setSelectedNotePath("");
+    $el.autocomplete('val', searchString);
+    $el.trigger('focus');
+    setTimeout(() => { options.fastSearch = true; }, 100);
 }
 
 function initNoteAutocomplete($el, options) {
@@ -206,10 +209,7 @@ function initNoteAutocomplete($el, options) {
         tabAutocomplete: false
     }, [
         {
-            source: (term, cb) => {
-                $el.data('autocompleteCallback', cb);
-                autocompleteSource(term, cb, options);
-            },
+            source: (term, cb) => autocompleteSource(term, cb, options),
             displayKey: 'notePathTitle',
             templates: {
                 suggestion: suggestion => suggestion.highlightedNotePathTitle
