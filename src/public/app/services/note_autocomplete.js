@@ -115,12 +115,13 @@ function fullTextSearch($el, options){
     const searchString = $el.autocomplete('val');
     if (options.fastSearch === false || searchString.trim().length === 0) {
         return;
-    }
+    }    
+    $el.trigger('focus');
     options.fastSearch = false;
     $el.autocomplete('val', '');
     $el.setSelectedNotePath("");
     $el.autocomplete('val', searchString);
-    $el.trigger('focus');
+    // Set a delay to avoid resetting to true before the full text search is completed.
     setTimeout(() => { options.fastSearch = true; }, 100);
 }
 
