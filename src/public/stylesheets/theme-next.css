@@ -130,8 +130,8 @@
    --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .1);
 
    --inactive-tab-background-color: transparent;
-   --inactive-tab-hover-background-color: var(--left-pane-item-hover-background);
-   --inactive-tab-text-color: #666;
+   --inactive-tab-hover-background-color: #00000016;
+   --inactive-tab-text-color: #4e4e4e;
 
    --new-tab-button-background: #d8d8d8;
    --new-tab-button-color: #3a3a3a;
