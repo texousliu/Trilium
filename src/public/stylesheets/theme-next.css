@@ -184,8 +184,8 @@
 
         --root-background: var(--left-pane-background-color);
 
-        --gutter-color: #e7e7e7;
-        --gutter-hover-color: #bfbfbf;
+        --gutter-color: transparent;
+        --gutter-hover-color: #5e5e5e;
     
         --active-tab-background-color: #666;
         --active-tab-hover-background-color: #737373;
