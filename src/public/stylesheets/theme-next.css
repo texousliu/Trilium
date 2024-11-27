@@ -45,6 +45,7 @@
     --tab-bar-height: 50px;
     --tab-height: 36px;
     --tab-first-item-horiz-offset: 0;
+    --new-tab-button-size: 24px;
 }
 
 /*
@@ -131,6 +132,12 @@
    --inactive-tab-hover-background-color: var(--left-pane-item-hover-background);
    --inactive-tab-text-color: #666;
 
+   --new-tab-button-background: #d8d8d8;
+   --new-tab-button-color: #3a3a3a;
+   --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
+   --new-tab-button-hover-background: white;
+   --new-tab-button-hover-color: black;
+
    --scrollbar-border-color: #ddd;
    --scrollbar-background-color: #ddd;
    --tooltip-background-color: #f8f8f8;
@@ -186,6 +193,12 @@
         --active-item-text-color: black;
         --active-item-background-color: #777;
         --active-item-border-color: transparent;
+
+        --new-tab-button-background: #d8d8d8;
+        --new-tab-button-color: #3a3a3a;
+        --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
+        --new-tab-button-hover-background: white;
+        --new-tab-button-hover-color: black;
     
         --menu-text-color: white;
         --menu-background-color: #222222d9;
@@ -470,9 +483,8 @@
 }
 
 .tab-row-widget .note-new-tab {
-    --new-tab-button-size: 24px;
     position: relative;
-    margin-left: 5px;
+    margin-left: 3px;
 }
 
 .tab-row-widget .note-new-tab::before {
@@ -483,13 +495,13 @@
     left: calc((var(--tab-height) - var(--new-tab-button-size)) / 2);
     width: var(--new-tab-button-size);
     height: var(--new-tab-button-size);
-    background: var(--left-pane-item-action-button-background);
+    background: var(--new-tab-button-background);
     border-radius: 50%;
 }
 
 .tab-row-widget .note-new-tab:hover::before {
-    background: var(--left-pane-item-action-button-hover-background);
-    box-shadow: var(--left-pane-item-action-button-hover-shadow);
+    background: var(--new-tab-button-hover-background);
+    box-shadow: var(--new-tab-button-shadow);
 }
 
 .tab-row-widget .note-new-tab::after {
@@ -505,7 +517,13 @@
     justify-content: center;
     font-family: boxicons;
     font-size: calc(var(--new-tab-button-size) * .75);
+    color: var(--new-tab-button-color);
 }
+
+.tab-row-widget .note-new-tab:hover::after {
+    color: var(--new-tab-button-hover-color);
+}
+
 
 /*
  * Center pane
