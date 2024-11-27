@@ -465,7 +465,7 @@
     font-weight: unset !important;
 }
 
-.note-tab-close:hover {
+.tab-row-widget .note-tab-close:hover {
     background: var(--tab-close-button-hover-background) !important;
 }
 
