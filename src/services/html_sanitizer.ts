@@ -60,7 +60,10 @@ function sanitize(dirtyHtml: string) {
             'mumble', 'nfs', 'onenote', 'pop', 'rmi', 's3', 'sftp', 'skype', 'sms', 'spotify', 'steam', 'svn', 'udp',
             'view-source', 'vnc', 'ws', 'wss', 'xmpp', 'jdbc', 'slack'
         ],
-        transformTags,
+        nonTextTags: [
+            'head'
+        ],
+        transformTags
     });
 }
 
