@@ -156,11 +156,12 @@ function importHtml(taskContext: TaskContext, file: File, parentNote: BNote) {
     const htmlTitle = importUtils.extractHtmlTitle(content);
     const title = htmlTitle || utils.getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
 
+    content = importUtils.handleH1(content, title);
+
     if (taskContext?.data?.safeImport) {
         content = htmlSanitizer.sanitize(content);
-    }
+    }    
 
-    content = importUtils.handleH1(content, title);
     
     const {note} = noteService.createNewNote({
         parentNoteId: parentNote.noteId,
