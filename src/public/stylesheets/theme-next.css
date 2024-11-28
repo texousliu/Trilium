@@ -533,8 +533,10 @@
     height: var(--new-tab-button-size);
     background: var(--new-tab-button-background);
     border-radius: 50%;
-    transition: background-color 200ms ease-out,
-                box-shadow 200ms ease-out;
+    transition: background-color 300ms ease-out,
+                box-shadow 300ms ease-out,
+                transform 300ms ease-in;
+    will-change: transform;
 }
 
 .tab-row-widget .note-new-tab:hover::before {
@@ -558,18 +560,14 @@
     font-family: boxicons;
     font-size: calc(var(--new-tab-button-size) * .75);
     color: var(--new-tab-button-color);
-    transition: color 200ms ease-out,
+    transition: color 300ms ease-out,
+                transform 300ms ease-in;
+    will-change: transform;
 }
 
 .tab-row-widget .note-new-tab:hover::after {
     color: var(--new-tab-button-hover-color);
     transition: color 100ms ease-in,
-}
-
-.tab-row-widget .note-new-tab:before,
-.tab-row-widget .note-new-tab:after {
-    will-change: transform;
-    transition: transform 300ms ease-in;
 }
 
 .tab-row-widget .note-new-tab:active:before,
