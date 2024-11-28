@@ -44,7 +44,7 @@
 
     --tab-bar-height: 50px;
     --tab-height: 36px;
-    --tab-first-item-horiz-offset: 0;
+    --tab-first-item-horiz-offset: 1px;
     --new-tab-button-size: 24px;
 }
 
@@ -127,8 +127,8 @@
    --active-tab-background-color: white;
    --active-tab-hover-background-color: var(--active-tab-background-color);
    --active-tab-text-color: black;
-   --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .1);
-   --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, .2);
+   --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .1), -1px -1px 3px rgba(0, 0, 0, .05);
+   --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, .1);
 
    --inactive-tab-background-color: transparent;
    --inactive-tab-hover-background-color: #00000016;
@@ -236,7 +236,7 @@
         --active-tab-background-color: #666;
         --active-tab-hover-background-color: #737373;
         --active-tab-text-color: #ccc;
-        --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .1);
+        --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .1), -1px -1px 3px rgba(0, 0, 0, .05);
         --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, .2);
     
         --inactive-tab-background-color: #444;
