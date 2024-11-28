@@ -67,7 +67,8 @@ const ALLOWED_OPTIONS = new Set([
     'locale',
     'firstDayOfWeek',
     'textNoteEditorType',
-    'layoutOrientation'
+    'layoutOrientation',
+    'allowedHtmlTags' // Allow configuring HTML import tags
 ]);
 
 function getOptions() {

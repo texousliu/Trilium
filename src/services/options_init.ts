@@ -136,7 +136,20 @@ const defaultOptions: DefaultOption[] = [
     // Text note configuration
     { name: "textNoteEditorType", value: "ckeditor-balloon", isSynced: true },
 
-    { name: "layoutOrientation", value: "vertical", isSynced: false }
+    // HTML import configuration
+    { name: "layoutOrientation", value: "vertical", isSynced: false },
+    { name: "allowedHtmlTags", value: JSON.stringify([
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'li', 'b', 'i', 'strong', 'em', 'strike', 's', 'del', 'abbr', 'code', 'hr', 'br', 'div',
+        'table', 'thead', 'caption', 'tbody', 'tfoot', 'tr', 'th', 'td', 'pre', 'section', 'img',
+        'figure', 'figcaption', 'span', 'label', 'input', 'details', 'summary', 'address', 'aside', 'footer',
+        'header', 'hgroup', 'main', 'nav', 'dl', 'dt', 'menu', 'bdi', 'bdo', 'dfn', 'kbd', 'mark', 'q', 'time',
+        'var', 'wbr', 'area', 'map', 'track', 'video', 'audio', 'picture', 'del', 'ins',
+        'en-media',
+        'acronym', 'article', 'big', 'button', 'cite', 'col', 'colgroup', 'data', 'dd',
+        'fieldset', 'form', 'legend', 'meter', 'noscript', 'option', 'progress', 'rp',
+        'samp', 'small', 'sub', 'sup', 'template', 'textarea', 'tt'
+    ]), isSynced: true },
 ];
 
 /**
