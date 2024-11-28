@@ -98,6 +98,7 @@ export default class DesktopLayout {
 
         return new RootContainer(launcherPaneIsHorizontal)
             .setParent(appContext)
+            .class((launcherPaneIsHorizontal ? "horizontal" : "vertical") + "-layout")
             .optChild(launcherPaneIsHorizontal, new FlexContainer('row')               
                 .child(new TabRowWidget().class("full-width"))
                 .child(new TitleBarButtonsWidget())
