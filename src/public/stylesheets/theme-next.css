@@ -503,11 +503,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: background-color 75ms ease-out,
+                color 75ms ease-out;
+    
 }
 
 .tab-row-widget .note-tab-close:hover {
     background: var(--tab-close-button-hover-background) !important;
     color: var(--tab-close-button-hover-color) !important;
+    transition-timing-function: ease-in;
 }
 
 .tab-row-widget .note-new-tab {
