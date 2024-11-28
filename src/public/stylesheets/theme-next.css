@@ -422,8 +422,8 @@
     border: unset;
     border-radius: 50%;
     background: var(--left-pane-item-action-button-background);
-    transition: background-color 300ms ease-out,
-                box-shadow 300ms ease-out;
+    transition: background-color 200ms ease-out,
+                box-shadow 200ms ease-out;
 }
 
 #left-pane .tree-item-button:hover {
@@ -533,8 +533,8 @@
     height: var(--new-tab-button-size);
     background: var(--new-tab-button-background);
     border-radius: 50%;
-    transition: background-color 300ms ease-out,
-                box-shadow 300ms ease-out,
+    transition: background-color 200ms ease-out,
+                box-shadow 200ms ease-out,
                 transform 300ms ease-in;
     will-change: transform;
 }
