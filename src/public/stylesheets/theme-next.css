@@ -519,6 +519,10 @@
     margin-left: 3px;
 }
 
+.tab-row-widget .note-new-tab {
+    background: transparent !important;
+}
+
 .tab-row-widget .note-new-tab::before {
     /* The background circle */
     position: absolute;
