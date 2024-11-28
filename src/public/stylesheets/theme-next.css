@@ -471,6 +471,12 @@
 
 .tab-row-widget .note-tab .note-tab-wrapper {
     height: var(--tab-height) !important;
+    transition: background 75ms ease-in,
+                box-shadow 75ms ease-in;
+}
+
+.tab-row-widget .note-tab .note-tab-wrapper:hover {
+    transition: none;
 }
 
 .tab-row-widget .note-tab:nth-child(1) {
@@ -485,6 +491,8 @@
 .tab-row-widget .note-tab[active] .note-tab-wrapper {
     box-shadow: var(--active-tab-shadow);
     font-weight: unset !important;
+    transition: background 150ms ease-out,
+                box-shadow 300ms ease-out;
 }
 
 .tab-row-widget-is-sorting .note-tab-drag-handle {
