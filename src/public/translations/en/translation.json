@@ -182,7 +182,10 @@
       "placeholder": "Enter HTML tags, one per line",
       "help": "Enter HTML tags to preserve during import. Some tags (like 'script') are always removed for security.",
       "reset_button": "Reset to Default List"
-    }
+    },
+    "import-status": "Import status",
+    "in-progress": "Import in progress: {{progress}}",
+    "successful": "Import finished successfully."
   },
   "include_note": {
     "dialog_title": "Include note",
