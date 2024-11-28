@@ -566,6 +566,17 @@
     transition: color 100ms ease-in,
 }
 
+.tab-row-widget .note-new-tab:before,
+.tab-row-widget .note-new-tab:after {
+    will-change: transform;
+    transition: transform 300ms ease-in;
+}
+
+.tab-row-widget .note-new-tab:active:before,
+.tab-row-widget .note-new-tab:active:after {
+    transform: scale(.85);
+    transition: transform 75ms ease-out;
+}
 
 /*
  * Center pane
