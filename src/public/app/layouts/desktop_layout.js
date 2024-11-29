@@ -101,6 +101,7 @@ export default class DesktopLayout {
             .class((launcherPaneIsHorizontal ? "horizontal" : "vertical") + "-layout")
             .optChild(launcherPaneIsHorizontal, new FlexContainer('row')
                 .class("tab-row-container")
+                .child(new LeftPaneToggleWidget(true))
                 .child(new TabRowWidget().class("full-width"))
                 .child(new TitleBarButtonsWidget())
                 .css('height', '40px')
@@ -244,7 +245,6 @@ export default class DesktopLayout {
             launcherPane = new FlexContainer("row")
                 .css("height", "53px")
                 .class("horizontal")
-                .child(new LeftPaneToggleWidget(true))
                 .child(new LauncherContainer(true))
                 .child(new GlobalMenuWidget(true))
         } else {

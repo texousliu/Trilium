@@ -614,6 +614,10 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     height: var(--tab-bar-height) !important;
 }
 
+.tab-row-container .toggle-button {
+    margin: 13px 10px !important;
+}
+
 .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
     height: var(--tab-height) !important;
