@@ -214,10 +214,10 @@
         --active-item-background-color: #777;
         --active-item-border-color: transparent;
 
-        --new-tab-button-background: #ffffff29;
-        --new-tab-button-color: #969696;
-        --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
-        --new-tab-button-hover-background: #ffffff4a;
+        --new-tab-button-background: #ffffff2e;
+        --new-tab-button-color: #dcdcdc;
+        --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, .4);
+        --new-tab-button-hover-background: #ffffff45;
         --new-tab-button-hover-color: white;
     
         --menu-text-color: #e3e3e3;
