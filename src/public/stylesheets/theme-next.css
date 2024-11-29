@@ -167,6 +167,7 @@
    --mermaid-theme: default;
 
    --toc-item-hover-background: #ececec;
+   --toc-item-hover-color: inherit;
 
    --code-block-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
 }
@@ -283,6 +284,7 @@
         --link-color: lightskyblue;
     
         --toc-item-hover-background: #ffffff26;
+        --toc-item-hover-color: white;
 
         --mermaid-theme: dark;
 
@@ -747,7 +749,8 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     padding: 2px 8px;
     border-radius: 4px;
     text-align: unset;
-    transition: background-color 150ms ease-in;
+    transition: background-color 150ms ease-in,
+                color 150ms ease-in;
 }
 
 #right-pane .highlights-list li {
@@ -763,8 +766,10 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 #right-pane .toc li:hover,
 #right-pane .highlights-list li:hover {
     background: var(--toc-item-hover-background);
+    color: var(--toc-item-hover-color);
     font-weight: normal;
-    transition: background-color 300ms ease-out;
+    transition: background-color 300ms ease-out
+                color 300ms ease-out;
 }
 
 #right-pane .toc li:active,
