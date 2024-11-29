@@ -24,7 +24,9 @@ const TPL = `
             </label>
         </div>
     </div>
+</div>
 
+<div class="options-section">    
     <h4>${t("theme.title")}</h4>
     
     <div class="form-group row">
