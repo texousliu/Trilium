@@ -101,6 +101,12 @@
    --modal-background-color: white;
    --modal-backdrop-color: black;
 
+   --quick-search-background: #00000012;
+   --quick-search-color: #06060682;
+   --quick-search-focus-border: #00000029;
+   --quick-search-focus-background: #ffffff80;
+   --quick-search-focus-color: #000;
+
    --left-pane-collapsed-border-color: #0000000d;
    --left-pane-background-color: #f2f2f2;
    --left-pane-text-color: #383838;
@@ -210,6 +216,12 @@
     
         --modal-background-color: #333;
         --modal-backdrop-color: #444;
+
+        --quick-search-background: #dcdcdc;
+        --quick-search-color: gray;
+        --quick-search-focus-border: gray;
+        --quick-search-focus-background: #dcdcdc;
+        --quick-search-focus-color: black;
     
         --left-pane-collapsed-border-color: #0000000d;
         --left-pane-background-color: #1f1f1f;
@@ -347,9 +359,94 @@
                 box-shadow 100ms ease-in;
 }
 
+
+
 /*
  * Left pane
  */
+
+ /* Search Box */
+
+#left-pane .quick-search {
+    --padding-top: 8px;
+    --padding-left: 8px;
+    --padding-right: 8px;
+    --padding-bottom: 8px;
+
+    position: relative;
+    flex-direction: row-reverse;
+    align-items: center;
+    height: unset;
+    contain: unset;
+    padding: var(--padding-top) var(--padding-right) var(--padding-bottom) var(--padding-left);
+}
+
+#left-pane .quick-search::before {
+    /* The background rectangle of the search box */
+    position: absolute;
+    content: "";
+    top: var(--padding-top);
+    left: var(--padding-left);
+    bottom: var(--padding-bottom);
+    right: var(--padding-right);
+    z-index: 0;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    background: var(--quick-search-background);
+    transition: background-color 200ms ease-in;
+}
+
+#left-pane .quick-search:focus-within:before {
+    /* Focused search box background rectangle */
+    border-color: var(--quick-search-focus-border);
+    background: var(--quick-search-focus-background);
+    transition: background-color 100ms ease-out;
+}
+
+#left-pane .quick-search input {
+    padding-left: 15px;
+    box-shadow: unset;
+    background: transparent;
+}
+
+#left-pane .quick-search input::placeholder {
+    color: var(--quick-search-color);
+}
+
+#left-pane .quick-search:focus-within input {
+    color: var(--quick-search-focus-color) !important;
+}
+
+#left-pane .quick-search .search-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    margin-right: 8px;
+    border-radius: 50%;
+    padding: 0;
+    transition: background-color 200ms ease-in !important;
+}
+
+#left-pane .quick-search .search-button:active {
+    transform: scale(.85);
+}
+
+#left-pane .quick-search:has(input:not(:placeholder-shown)) .search-button {
+    /* Matches when the input has a value */
+    background: var(--left-pane-item-action-button-background) !important;
+    transition: background-color 500ms ease-out !important;
+}
+
+#left-pane .quick-search:focus-within .search-button:hover,
+#left-pane .quick-search .search-button.show  {
+    background: var(--left-pane-item-action-button-background) !important;
+    transition: background-color 100ms ease-out !important;
+}
+
+/* Tree */
+
 
 #left-pane .tree-actions {
     /* TODO: relocate instead of hiding */
