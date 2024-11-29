@@ -608,7 +608,8 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     height: var(--tab-bar-height) !important;
 }
 
-.tab-row-widget {
+.tab-row-widget,
+.tab-row-container {
     background: transparent !important;
     height: var(--tab-bar-height) !important;
 }
