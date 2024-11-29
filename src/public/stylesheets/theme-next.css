@@ -375,7 +375,9 @@
                 box-shadow 100ms ease-in;
 }
 
-
+#launcher-pane .global-menu-button {
+    --hover-item-background-color: transparent;
+}
 
 /*
  * Left pane
