@@ -441,8 +441,8 @@
     transform: scale(.85);
 }
 
-#left-pane .quick-search:has(input:not(:placeholder-shown)) .search-button {
-    /* Matches when the input has a value */
+#left-pane .quick-search:focus-within:has(input:not(:placeholder-shown)) .search-button {
+    /* Matches when the input has a value and the focus is inside the search box */
     background: var(--left-pane-item-action-button-background) !important;
     transition: background-color 500ms ease-out !important;
 }
