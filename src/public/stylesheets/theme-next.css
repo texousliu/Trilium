@@ -610,6 +610,7 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 
 .tab-row-widget {
     background: transparent !important;
+    height: var(--tab-bar-height) !important;
 }
 
 .tab-row-widget-container {
