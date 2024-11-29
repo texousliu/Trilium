@@ -660,6 +660,7 @@
 .tab-row-widget .note-new-tab {
     position: relative;
     margin-left: 3px;
+    color: transparent; /* Prevent the original "+" from being displayed */
 }
 
 .tab-row-widget .note-new-tab {
