@@ -369,7 +369,7 @@
   "consistency_checks": {
     "find_and_fix_button": "Caută și repară probleme de consistență",
     "finding_and_fixing_message": "Se caută și se repară problemele de consistență...",
-    "issues_fixed_message": "Problemele de consistență ar trebuie să fie acum rezolvate.",
+    "issues_fixed_message": "Problemele de consistență ar trebui să fie acum rezolvate.",
     "title": "Verificări de consistență"
   },
   "copy_image_reference_button": {
