@@ -206,9 +206,9 @@
         --input-text-color: #ccc;
         --input-background-color: #333;
     
-        --hover-item-text-color: #ccc;
-        --hover-item-background-color: transparent;
-        --hover-item-border-color: #aaa;
+        --hover-item-text-color: #efefef;
+        --hover-item-background-color: #ffffff24;
+        --hover-item-border-color: transparent;
     
         --active-item-text-color: black;
         --active-item-background-color: #777;
@@ -220,13 +220,13 @@
         --new-tab-button-hover-background: #ffffff4a;
         --new-tab-button-hover-color: white;
     
-        --menu-text-color: white;
+        --menu-text-color: #e3e3e3;
         --menu-background-color: #222222d9;
-        --menu-item-icon-color: #505050;
+        --menu-item-icon-color: #8c8c8c;
         --menu-item-disabled-opacity: .5;
-        --menu-item-keyboard-shortcut-color: #666666a8;
-        --menu-item-arrow-color: #00000080;
-        --menu-item-delimiter-color: #00000030;
+        --menu-item-keyboard-shortcut-color: #ffffff8f;
+        --menu-item-arrow-color: #ffffffa3;
+        --menu-item-delimiter-color: #ffffff1c;
 
 
         --modal-background-color: #333;
@@ -244,8 +244,8 @@
         --left-pane-text-color: #AAAAAA;
         --left-pane-item-hover-background: #ffffff0d;
         --left-pane-item-selected-background: #ffffff25;
-        --left-pane-item-selected-color: white;
-        --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .5);
+        --left-pane-item-selected-color: #dfdfdf;
+        --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .6);
         --left-pane-item-action-button-background: #ffffff29;
         --left-pane-item-action-button-hover-background: #ffffff68;
         --left-pane-item-action-button-hover-shadow: 2px 2px 3px rgba(0, 0, 0, .15);
@@ -265,7 +265,7 @@
         --tab-close-button-hover-background: #c95a5a;
         --tab-close-button-hover-color: white;
 
-        --active-tab-background-color: #ffffff28;
+        --active-tab-background-color: #ffffff1c;
         --active-tab-hover-background-color: var(--active-tab-background-color);
         --active-tab-text-color: #ffffffcd;
         --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .2), -1px -1px 3px rgba(0, 0, 0, .4);
