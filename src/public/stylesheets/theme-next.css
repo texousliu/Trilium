@@ -159,15 +159,15 @@
    --new-tab-button-hover-background: white;
    --new-tab-button-hover-color: black;
 
+   --right-pane-item-hover-background: #ececec;
+   --right-pane-item-hover-color: inherit;
+
    --scrollbar-border-color: #ddd;
    --scrollbar-background-color: #ddd;
    --tooltip-background-color: #f8f8f8;
    --link-color: blue;
 
    --mermaid-theme: default;
-
-   --toc-item-hover-background: #ececec;
-   --toc-item-hover-color: inherit;
 
    --code-block-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
 }
@@ -277,14 +277,14 @@
         --inactive-tab-background-color: transparent;
         --inactive-tab-hover-background-color: #ffffff0f;
         --inactive-tab-text-color: #7c7c7c;
+
+        --right-pane-item-hover-background: #ffffff26;
+        --right-pane-item-hover-color: white;
     
         --scrollbar-border-color: #666;
         --scrollbar-background-color: #333;
         --tooltip-background-color: #333;
         --link-color: lightskyblue;
-    
-        --toc-item-hover-background: #ffffff26;
-        --toc-item-hover-color: white;
 
         --mermaid-theme: dark;
 
@@ -765,8 +765,8 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 
 #right-pane .toc li:hover,
 #right-pane .highlights-list li:hover {
-    background: var(--toc-item-hover-background);
-    color: var(--toc-item-hover-color);
+    background: var(--right-pane-item-hover-background);
+    color: var(--right-pane-item-hover-color);
     font-weight: normal;
     transition: background-color 300ms ease-out
                 color 300ms ease-out;
