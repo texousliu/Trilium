@@ -103,6 +103,7 @@
 
    --quick-search-background: #00000012;
    --quick-search-color: #06060682;
+   --quick-search-hover-background: #00000020;
    --quick-search-focus-border: #00000029;
    --quick-search-focus-background: #ffffff80;
    --quick-search-focus-color: #000;
@@ -219,6 +220,7 @@
 
         --quick-search-background: #dcdcdc;
         --quick-search-color: gray;
+        --quick-search-hover-background: #00000020;
         --quick-search-focus-border: gray;
         --quick-search-focus-background: #dcdcdc;
         --quick-search-focus-color: black;
@@ -394,6 +396,12 @@
     border-radius: 6px;
     background: var(--quick-search-background);
     transition: background-color 200ms ease-in;
+}
+
+#left-pane .quick-search:hover:before {
+    /* Hovered search box background rectangle */
+    background: var(--quick-search-hover-background);
+    transition: background-color 75ms ease-out;
 }
 
 #left-pane .quick-search:focus-within:before {
