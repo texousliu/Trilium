@@ -954,3 +954,14 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     margin-bottom: calc(var(--title-offset) + var(--card-padding)) !important;
     margin-left: calc(-1 * var(--card-padding));
 }
+
+.options-section h5 {
+    font-size: var(--title-font-size);
+    font-weight: bold;
+    margin-top: 1em !important;
+    margin-bottom: unset !important;
+}
+
+.options-section h5:first-of-type {
+    margin-top: unset !important;
+}
