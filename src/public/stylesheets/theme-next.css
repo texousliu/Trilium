@@ -50,7 +50,7 @@
     --center-pane-border-radius: 10px;
 
     --menu-padding-size: 8px;
-    --menu-item-icon-vert-offset: 0;
+    --menu-item-icon-vert-offset: 0;    
 }
 
 /*
@@ -170,6 +170,12 @@
    --mermaid-theme: default;
 
    --code-block-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
+
+   --card-background-color: var(--accented-background-color);
+   --card-background-hover-color: #f9f9f9;
+   --card-background-press-color: #efefef;
+   --card-border-color: #eaeaea;
+   --card-box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
 
 /* 
@@ -289,6 +295,12 @@
         --mermaid-theme: dark;
 
         --code-block-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+
+        --card-background-color: #363636;
+        --card-background-hover-color: #3c3c3c;
+        --card-background-press-color: #464646;
+        --card-border-color: #222222;
+        --card-box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
     }
     
     body ::-webkit-calendar-picker-indicator {
@@ -912,4 +924,33 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 
 .code-sample-wrapper .hljs {
     transition: background-color linear 100ms;
+}
+
+/*
+ * Settings
+ */
+.options-section {
+    --card-padding: 17px;
+    --title-font-size: 1rem;
+    --title-offset: 13px;
+
+    border-radius: 12px;
+    border: 1px solid var(--card-border-color) !important;
+    box-shadow: var(--card-box-shadow);
+    background: var(--card-background-color);
+    padding: var(--card-padding);
+    margin-bottom: calc(var(--title-offset) + 26px) !important;
+}
+
+.options-section:first-of-type {
+    margin-top: calc(var(--title-offset) + var(--title-font-size));
+}
+
+.options-section h4 {
+    font-size: var(--title-font-size);
+    font-weight: bold;
+    color: var(--launcher-pane-text-color);
+    margin-top: calc(-1 * var(--card-padding) - var(--title-font-size) - var(--title-offset)) !important;
+    margin-bottom: calc(var(--title-offset) + var(--card-padding)) !important;
+    margin-left: calc(-1 * var(--card-padding));
 }
