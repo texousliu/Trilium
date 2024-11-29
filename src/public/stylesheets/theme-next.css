@@ -214,11 +214,11 @@
         --active-item-background-color: #777;
         --active-item-border-color: transparent;
 
-        --new-tab-button-background: #d8d8d8;
-        --new-tab-button-color: #3a3a3a;
+        --new-tab-button-background: #ffffff29;
+        --new-tab-button-color: #969696;
         --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, .2);
-        --new-tab-button-hover-background: white;
-        --new-tab-button-hover-color: black;
+        --new-tab-button-hover-background: #ffffff4a;
+        --new-tab-button-hover-color: white;
     
         --menu-text-color: white;
         --menu-background-color: #222222d9;
@@ -232,30 +232,30 @@
         --modal-background-color: #333;
         --modal-backdrop-color: #444;
 
-        --quick-search-background: #dcdcdc;
-        --quick-search-color: gray;
-        --quick-search-hover-background: #00000020;
-        --quick-search-focus-border: gray;
-        --quick-search-focus-background: #dcdcdc;
-        --quick-search-focus-color: black;
+        --quick-search-background: #ffffff12;
+        --quick-search-color: rgba(255, 255, 255, 0.515);
+        --quick-search-hover-background: #ffffff1f;
+        --quick-search-focus-border: #80808095;
+        --quick-search-focus-background: #ffffff1f;
+        --quick-search-focus-color: white;
     
         --left-pane-collapsed-border-color: #0000000d;
         --left-pane-background-color: #1f1f1f;
         --left-pane-text-color: #AAAAAA;
-        --left-pane-item-hover-background: #eaeaea;
-        --left-pane-item-selected-background: white;
-        --left-pane-item-selected-color: black;
-        --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .2);
-        --left-pane-item-action-button-background: #d7d7d7;
-        --left-pane-item-action-button-hover-background: white;
+        --left-pane-item-hover-background: #ffffff0d;
+        --left-pane-item-selected-background: #ffffff25;
+        --left-pane-item-selected-color: white;
+        --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .5);
+        --left-pane-item-action-button-background: #ffffff29;
+        --left-pane-item-action-button-hover-background: #ffffff68;
         --left-pane-item-action-button-hover-shadow: 2px 2px 3px rgba(0, 0, 0, .15);
         --left-pane-item-selected-action-button-hover-shadow: 2px 2px 10px rgba(0, 0, 0, .25);
      
-        --launcher-pane-background-color: #1f1f1f;
-        --launcher-pane-text-color: #AAAAAA;
-        --launcher-pane-button-hover-color: black;
-        --launcher-pane-button-hover-background: white;
-        --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
+        --launcher-pane-background-color: #1a1a1a;
+        --launcher-pane-text-color: #909090;
+        --launcher-pane-button-hover-color: #ffffff;
+        --launcher-pane-button-hover-background: #ffffff1c;
+        --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .2);
 
         --root-background: var(--left-pane-background-color);
 
@@ -265,15 +265,15 @@
         --tab-close-button-hover-background: #c95a5a;
         --tab-close-button-hover-color: white;
 
-        --active-tab-background-color: #666;
-        --active-tab-hover-background-color: #737373;
-        --active-tab-text-color: #ccc;
-        --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .1), -1px -1px 3px rgba(0, 0, 0, .05);
-        --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, .2);
+        --active-tab-background-color: #ffffff28;
+        --active-tab-hover-background-color: var(--active-tab-background-color);
+        --active-tab-text-color: #ffffffcd;
+        --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .2), -1px -1px 3px rgba(0, 0, 0, .4);
+        --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, .4);
     
-        --inactive-tab-background-color: #444;
-        --inactive-tab-hover-background-color: #525252;
-        --inactive-tab-text-color: #bbb;
+        --inactive-tab-background-color: transparent;
+        --inactive-tab-hover-background-color: #ffffff0f;
+        --inactive-tab-text-color: #7c7c7c;
     
         --scrollbar-border-color: #666;
         --scrollbar-background-color: #333;
