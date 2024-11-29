@@ -50,6 +50,7 @@
     --center-pane-border-radius: 10px;
 
     --menu-padding-size: 8px;
+    --menu-item-icon-vert-offset: 1.5px;
 }
 
 /*
@@ -786,8 +787,9 @@ html body .dropdown-item.disabled {
 
 /* Menu item icon */
 .dropdown-item .bx {
-    margin-top: var(--menu-item-icon-vert-offset);
+    transform: translateY(var(--menu-item-icon-vert-offset));
     color: var(--menu-item-icon-color) !important;
+    font-size: 1.1em;
 }
 
 /* Menu item keyboard shortcut */
