@@ -175,7 +175,17 @@
     "codeImportedAsCode": "Importar archivos de código reconocidos (por ejemplo, <code>.json</code>) como notas de código si no están claros en los metadatos",
     "replaceUnderscoresWithSpaces": "Reemplazar guiones bajos con espacios en nombres de notas importadas",
     "import": "Importar",
-    "failed": "La importación falló: {{message}}."
+    "failed": "La importación falló: {{message}}.",
+    "html_import_tags": {
+      "title": "HTML Importar Etiquetas",
+      "description": "Configurar que etiquetas HTML deben ser preservadas al importar notas. Las etiquetas que no estén en esta lista serán eliminadas durante la importación.",
+      "placeholder": "Ingrese las etiquetas HTML, una por línea",
+      "help": "Ingrese las etiquetas HTML a preservar durante la importación. Algunas etiquetas (como 'script') siempre son eliminadas por seguridad.",
+      "reset_button": "Restablecer a lista por defectp"
+    },
+    "import-status": "Estado de importación",
+    "in-progress": "Importación en progreso: {{progress}}",
+    "successful": "Importación finalizada exitosamente."
   },
   "include_note": {
     "dialog_title": "Incluir nota",
@@ -1547,12 +1557,21 @@
     }
   },
   "electron_context_menu": {
-    "add-term-to-dictionary": "Agregar \"{{term}}\" al diccionario.",
+    "add-term-to-dictionary": "Agregar \"{{term}}\" al diccionario",
     "cut": "Cortar",
     "copy": "Copiar",
     "copy-link": "Copiar enlace",
     "paste": "Pegar",
     "paste-as-plain-text": "Pegar como texto plano",
     "search_online": "Buscar \"{{term}}\" con {{searchEngine}}"
+  },
+  "image_context_menu": {
+    "copy_reference_to_clipboard": "Copiar referencia al portapapeles",
+    "copy_image_to_clipboard": "Copiar imagen al portapapeles"
+  },
+  "link_context_menu": {
+    "open_note_in_new_tab": "Abrir nota en una pestaña nueva",
+    "open_note_in_new_split": "Abrir nota en una nueva división",
+    "open_note_in_new_window": "Abrir nota en una nueva ventana"
   }
 }
