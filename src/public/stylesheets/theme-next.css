@@ -182,7 +182,7 @@
         --main-text-color: #ccc;
         --main-border-color: #aaa;
         --dropdown-border-color: #555;
-        --dropdown-shadow-opacity: .4;
+        --dropdown-shadow-opacity: .6;
         --dropdown-item-icon-destructive-color: #de6e5b;
         --disabled-tooltip-icon-color: #7fd2ef;
     
@@ -233,13 +233,13 @@
         --modal-backdrop-color: #444;
 
         --quick-search-background: #ffffff12;
-        --quick-search-color: rgba(255, 255, 255, 0.515);
+        --quick-search-color: #ffffff52;
         --quick-search-hover-background: #ffffff1f;
         --quick-search-focus-border: #80808095;
         --quick-search-focus-background: #ffffff1f;
         --quick-search-focus-color: white;
     
-        --left-pane-collapsed-border-color: #0000000d;
+        --left-pane-collapsed-border-color: #0009;
         --left-pane-background-color: #1f1f1f;
         --left-pane-text-color: #AAAAAA;
         --left-pane-item-hover-background: #ffffff0d;
@@ -260,9 +260,9 @@
         --root-background: var(--left-pane-background-color);
 
         --gutter-color: transparent;
-        --gutter-hover-color: #5e5e5e;
+        --gutter-hover-color: #626262;
 
-        --tab-close-button-hover-background: #c95a5a;
+        --tab-close-button-hover-background: #a45353;
         --tab-close-button-hover-color: white;
 
         --active-tab-background-color: #ffffff1c;
@@ -280,7 +280,7 @@
         --tooltip-background-color: #333;
         --link-color: lightskyblue;
     
-        --toc-item-hover-background: #ececec;
+        --toc-item-hover-background: #ffffff26;
 
         --mermaid-theme: dark;
 
