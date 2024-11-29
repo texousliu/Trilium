@@ -463,15 +463,15 @@
 #left-pane .quick-search:focus-within:has(input:not(:placeholder-shown)) .search-button {
     /* Matches when the input has a value and the focus is inside the search box */
     background: var(--left-pane-item-action-button-background) !important;
-    color: var(--quick-search-focus-color) !important;
+    color: var(--left-pane-item-action-button-color) !important;
     transition: background-color 500ms ease-out !important;
 }
 
-#left-pane .quick-search:focus-within .search-button:hover,
+html body #left-pane .quick-search:focus-within .search-button:hover,
 #left-pane .quick-search .search-button.show  {
     /* Hover state */
-    background: var(--left-pane-item-action-button-background) !important;
-    color: var(--quick-search-focus-color) !important;
+    background: var(--left-pane-item-action-button-hover-background) !important;
+    color: var(--left-pane-item-action-button-color) !important;
     transition: background-color 100ms ease-out !important;
 }
 
