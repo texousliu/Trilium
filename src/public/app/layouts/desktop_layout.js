@@ -98,6 +98,7 @@ export default class DesktopLayout {
 
         return new RootContainer(launcherPaneIsHorizontal)
             .setParent(appContext)
+            .class((launcherPaneIsHorizontal ? "horizontal" : "vertical") + "-layout")
             .optChild(launcherPaneIsHorizontal, new FlexContainer('row')               
                 .child(new TabRowWidget().class("full-width"))
                 .child(new TitleBarButtonsWidget())
@@ -149,8 +150,7 @@ export default class DesktopLayout {
                                                 // the order of the widgets matter. Some of these want to "activate" themselves
                                                 // when visible. When this happens to multiple of them, the first one "wins".
                                                 // promoted attributes should always win.
-                                                .ribbon(new ClassicEditorToolbar())
-                                                .ribbon(new PromotedAttributesWidget())
+                                                .ribbon(new ClassicEditorToolbar())                                                
                                                 .ribbon(new ScriptExecutorWidget())
                                                 .ribbon(new SearchDefinitionWidget())
                                                 .ribbon(new EditedNotesWidget())
@@ -185,6 +185,7 @@ export default class DesktopLayout {
                                         .child(
                                             new ScrollingContainer()
                                                 .filling()
+                                                .child(new PromotedAttributesWidget())
                                                 .child(new SqlTableSchemasWidget())
                                                 .child(new NoteDetailWidget())
                                                 .child(new NoteListWidget())
