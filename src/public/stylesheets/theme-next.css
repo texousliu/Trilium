@@ -434,6 +434,7 @@
     margin-right: 8px;
     border-radius: 50%;
     padding: 0;
+    color: var(--quick-search-color) !important;
     transition: background-color 200ms ease-in !important;
 }
 
@@ -444,12 +445,15 @@
 #left-pane .quick-search:focus-within:has(input:not(:placeholder-shown)) .search-button {
     /* Matches when the input has a value and the focus is inside the search box */
     background: var(--left-pane-item-action-button-background) !important;
+    color: var(--quick-search-focus-color) !important;
     transition: background-color 500ms ease-out !important;
 }
 
 #left-pane .quick-search:focus-within .search-button:hover,
 #left-pane .quick-search .search-button.show  {
+    /* Hover state */
     background: var(--left-pane-item-action-button-background) !important;
+    color: var(--quick-search-focus-color) !important;
     transition: background-color 100ms ease-out !important;
 }
 
