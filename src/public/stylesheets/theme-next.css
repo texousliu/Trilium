@@ -50,7 +50,7 @@
     --center-pane-border-radius: 10px;
 
     --menu-padding-size: 8px;
-    --menu-item-icon-vert-offset: 1.5px;
+    --menu-item-icon-vert-offset: 0;
 }
 
 /*
@@ -571,6 +571,11 @@
 
 #left-pane span.fancytree-node.fancytree-active .tree-item-button:hover {
     box-shadow: var(--left-pane-item-selected-action-button-hover-shadow);
+}
+
+#context-menu-container {
+    /* The context menu of the tree */
+    --menu-item-icon-vert-offset: 1.5px;
 }
 
 /*
