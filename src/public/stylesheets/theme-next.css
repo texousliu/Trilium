@@ -832,7 +832,7 @@ html body .dropdown-item.disabled {
 }
 
 /* Menu item arrow */
-.dropdown-toggle::after {
+.dropdown-menu .dropdown-toggle::after {
     content: "\ed3b" !important;
     position: absolute;
     display: flex !important;
