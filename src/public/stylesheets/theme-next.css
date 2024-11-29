@@ -102,6 +102,7 @@
    --menu-item-icon-color: #505050;
    --menu-item-disabled-opacity: .5;
    --menu-item-accelerator-color: #666666a8;
+   --menu-item-delimiter-color: #00000030;
 
    --modal-background-color: white;
    --modal-backdrop-color: black;
@@ -222,7 +223,8 @@
         --menu-item-icon-color: #505050;
         --menu-item-disabled-opacity: .5;
         --menu-item-accelerator-color: #666666a8;
-    
+        --menu-item-delimiter-color: #00000030;
+
         --modal-background-color: #333;
         --modal-backdrop-color: #444;
 
@@ -789,6 +791,21 @@ html body .dropdown-item.disabled {
     font-family: unset !important;
     font-size: unset !important;
     color: var(--menu-item-accelerator-color) !important;
+}
+
+.dropdown-divider {
+    position: relative;
+    border-color: transparent !important;
+    overflow: visible;
+}
+
+.dropdown-divider::after {
+    position: absolute;
+    content: "";
+    top: -1px;
+    left: calc(0px - var(--menu-padding-size));
+    right: calc(0px - var(--menu-padding-size));
+    border-top: 1px solid var(--menu-item-delimiter-color);
 }
 
 /*
