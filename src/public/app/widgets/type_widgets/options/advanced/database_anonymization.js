@@ -7,19 +7,24 @@ const TPL = `
 <div class="options-section">
     <h4>${t("database_anonymization.title")}</h4>
     
-    <h5>${t("database_anonymization.full_anonymization")}</h5>
-    
-    <p>${t("database_anonymization.full_anonymization_description")}</p>
-    
-    <button class="anonymize-full-button btn">${t("database_anonymization.save_fully_anonymized_database")}</button>
+    <div class="row">
+        <p>${t("database_anonymization.choose_anonymization")}</p>
 
-    <h5>${t("database_anonymization.light_anonymization")}</h5>
-    
-    <p>${t("database_anonymization.light_anonymization_description")}</p>
-    
-    <p>${t("database_anonymization.choose_anonymization")}</p>
-    
-    <button class="anonymize-light-button btn">${t("database_anonymization.save_lightly_anonymized_database")}</button>
+        <div class="col-6">
+            <h5>${t("database_anonymization.full_anonymization")}</h5>
+            
+            <p>${t("database_anonymization.full_anonymization_description")}</p>
+            <button class="anonymize-full-button btn">${t("database_anonymization.save_fully_anonymized_database")}</button>
+        </div>
+
+        <div class="col-6">
+            <h5>${t("database_anonymization.light_anonymization")}</h5>
+            
+            <p>${t("database_anonymization.light_anonymization_description")}</p>
+            
+            <button class="anonymize-light-button btn">${t("database_anonymization.save_lightly_anonymized_database")}</button>
+        </div>
+    </div>
     
     <h5>${t("database_anonymization.existing_anonymized_databases")}</h5>
     
