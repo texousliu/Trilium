@@ -772,8 +772,12 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 }
 
 /*
- * Ribbon
+ * Ribbon & note header
  */
+.note-title.protected {
+    text-shadow: unset !important;
+}
+
 .ribbon-container {
     margin-bottom: 0 !important;
 }
