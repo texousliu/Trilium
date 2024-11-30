@@ -965,3 +965,13 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 .options-section h5:first-of-type {
     margin-top: unset !important;
 }
+
+.options-section hr {
+    margin-left: calc(var(--card-padding) * -1);
+    margin-right: calc(var(--card-padding) * -1);
+}
+
+.options-section .existing-anonymized-databases,
+.options-section h4:first-of-type + p:last-of-type /* Spellcheck */ {
+    margin-bottom: 0;
+}

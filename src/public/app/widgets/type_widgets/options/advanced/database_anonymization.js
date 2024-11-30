@@ -26,6 +26,8 @@ const TPL = `
         </div>
     </div>
     
+    <hr />
+
     <h5>${t("database_anonymization.existing_anonymized_databases")}</h5>
     
     <ul class="existing-anonymized-databases"></ul>
