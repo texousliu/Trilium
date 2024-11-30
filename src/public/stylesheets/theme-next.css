@@ -747,11 +747,11 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
  * Center pane
  */
 
- #center-pane {
-    border-radius: var(--center-pane-border-radius) 0 0 0;
-    padding-top: 30px;
-    background: var(--main-background-color);
- }
+#center-pane {
+   border-radius: var(--center-pane-border-radius) 0 0 0;
+   padding-top: 2px;
+   background: var(--main-background-color);
+}
 
 
 /*
