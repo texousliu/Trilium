@@ -945,7 +945,9 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 }
 
 .note-detail-content-widget-content.options {
-    padding-top: calc(15px + var(--options-title-offset) + var(--options-title-font-size));
+    --default-padding: 15px;
+    padding-top: calc(var(--default-padding) + var(--options-title-offset) + var(--options-title-font-size));
+    padding-bottom: var(--default-padding);
 }
 
 .options-section h4 {
@@ -973,7 +975,12 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     margin-right: calc(var(--options-card-padding) * -1);
 }
 
-.options-section .existing-anonymized-databases,
-.options-section h4:first-of-type + p:last-of-type /* Spellcheck */ {
+.options-section p:last-of-type:not(:first-of-type),
+.options-section h4 + p:last-child {
     margin-bottom: 0;
+}
+
+.options-section .options-mime-types {
+    padding: 0;
+    margin: 0;
 }
