@@ -542,6 +542,23 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     z-index: -1;
 }
 
+#left-pane span.fancytree-node.protected > span.fancytree-custom-icon {
+    position: relative;
+    filter: unset !important;
+}
+
+#left-pane span.fancytree-node.protected > span.fancytree-custom-icon:after {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 14px;
+    content: "\eb4a";
+    font-family: "boxicons";   
+    transform: translateX(25%);
+    background: var(--left-pane-background-color);
+    border-radius: 50%;
+}
+
 #left-pane .fancytree-expander {
     opacity: .65;
     transition: opacity 150ms ease-in;
