@@ -10,7 +10,8 @@ const TPL = `
 </div>
 
 <style>
-.options-mime-types section {
+.options-mime-types section,
+.options-mime-types > li:first-of-type {
     margin-bottom: 1em;
 }
 </style>
@@ -32,6 +33,21 @@ function groupMimeTypesAlphabetically(ungroupedMimeTypes) {
     return result;
 }
 
+function buildSelectionForMimeType(mimeType) {
+    const id = "code-mime-type-" + (idCtr++);
+    return ($("<li>")
+        .append($('<input type="checkbox" class="form-check-input">')
+            .attr("id", id)
+            .attr("data-mime-type", mimeType.mime)
+            .prop("checked", mimeType.enabled))
+        .on('change', () => this.save())
+        .append(" &nbsp; ")
+        .append($('<label>')
+            .attr("for", id)
+            .text(mimeType.title))
+    );
+}
+
 export default class CodeMimeTypesOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
@@ -41,25 +57,19 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
     async optionsLoaded(options) {
         this.$mimeTypes.empty();
 
-        const groupedMimeTypes = groupMimeTypesAlphabetically(mimeTypesService.getMimeTypes());
+        const ungroupedMimeTypes = mimeTypesService.getMimeTypes();
+        const plainTextMimeType = ungroupedMimeTypes.shift();
+        const groupedMimeTypes = groupMimeTypesAlphabetically(ungroupedMimeTypes);
+
+        // Plain text is displayed at the top intentionally.
+        this.$mimeTypes.append(buildSelectionForMimeType(plainTextMimeType));
         
         for (const [ initial, mimeTypes ] of Object.entries(groupedMimeTypes)) {
             const $section = $("<section>");
             $section.append($("<h5>").text(initial));            
 
             for (const mimeType of mimeTypes) {
-                const id = "code-mime-type-" + (idCtr++);
-                $section.append($("<li>")
-                    .append($('<input type="checkbox" class="form-check-input">')
-                        .attr("id", id)
-                        .attr("data-mime-type", mimeType.mime)
-                        .prop("checked", mimeType.enabled))
-                    .on('change', () => this.save())
-                    .append(" &nbsp; ")
-                    .append($('<label>')
-                        .attr("for", id)
-                        .text(mimeType.title))
-                );
+                $section.append(buildSelectionForMimeType(mimeType));
             }
 
             this.$mimeTypes.append($section);
