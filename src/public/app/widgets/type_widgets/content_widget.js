@@ -121,6 +121,7 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
         this.children = [];
 
         const contentWidgets = CONTENT_WIDGETS[note.noteId];
+        this.$content.toggleClass("options", note.noteId.startsWith("_options"));
 
         if (contentWidgets) {
             for (const clazz of contentWidgets) {
