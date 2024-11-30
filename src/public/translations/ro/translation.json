@@ -1202,7 +1202,8 @@
     "layout-horizontal-description": "bara de lansare se află sub bara de taburi, bara de taburi este pe toată lungimea.",
     "layout-horizontal-title": "Orizontal",
     "layout-vertical-title": "Vertical",
-    "layout-vertical-description": "bara de lansare se află pe stânga (implicit)"
+    "layout-vertical-description": "bara de lansare se află pe stânga (implicit)",
+    "triliumnext": "TriliumNext (experimentală)"
   },
   "toast": {
     "critical-error": {
