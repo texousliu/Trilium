@@ -272,17 +272,21 @@ const HIDDEN_SUBTREE_DEFINITION: Item = {
     ]
 };
 
-function checkHiddenSubtree(force = false) {
+interface CheckHiddenExtraOpts {
+    restoreNames?: boolean;
+}
+
+function checkHiddenSubtree(force = false, extraOpts: CheckHiddenExtraOpts = {}) {
     if (!force && !migrationService.isDbUpToDate()) {
         // on-delete hook might get triggered during some future migration and cause havoc
         log.info("Will not check hidden subtree until migration is finished.");
         return;
     }
 
-    checkHiddenSubtreeRecursively('root', HIDDEN_SUBTREE_DEFINITION);
+    checkHiddenSubtreeRecursively('root', HIDDEN_SUBTREE_DEFINITION, extraOpts);
 }
 
-function checkHiddenSubtreeRecursively(parentNoteId: string, item: Item) {
+function checkHiddenSubtreeRecursively(parentNoteId: string, item: Item, extraOpts: CheckHiddenExtraOpts = {}) {
     if (!item.id || !item.type || !item.title) {
         throw new Error(`Item does not contain mandatory properties: ${JSON.stringify(item)}`);
     }
@@ -335,6 +339,11 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: Item) {
         }
     }
 
+    if (extraOpts.restoreNames && note.title !== item.title) {
+        note.title = item.title;
+        note.save();
+    }
+
     if (note.type !== item.type) {
         // enforce a correct note type
         note.type = item.type;
@@ -371,7 +380,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: Item) {
     }
 
     for (const child of item.children || []) {
-        checkHiddenSubtreeRecursively(item.id, child);
+        checkHiddenSubtreeRecursively(item.id, child, extraOpts);
     }
 }
 
