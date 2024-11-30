@@ -51,6 +51,8 @@
 
     --menu-padding-size: 8px;
     --menu-item-icon-vert-offset: 0;    
+
+    --more-accented-background-color: var(--card-background-hover-color);
 }
 
 /*
@@ -65,14 +67,13 @@
 
    --main-background-color: white;
    --main-text-color: black;
-   --main-border-color: #ccc;
+   --main-border-color: #dbdbdb;
    --dropdown-border-color: #ccc;
    --dropdown-shadow-opacity: .2;
    --dropdown-item-icon-destructive-color: #ec5138;
    --disabled-tooltip-icon-color: #004382;
 
-   --accented-background-color: #f5f5f5;
-   --more-accented-background-color: #ddd;
+   --accented-background-color: #f5f5f5;   
 
    --button-background-color: transparent;
    --button-border-color: #ddd;
@@ -94,7 +95,7 @@
    --hover-item-background-color: #0000001a;
    --hover-item-border-color: transparent;
 
-   --active-item-text-color: black;
+   --active-item-text-color: var(--left-pane-text-color);
    --active-item-background-color: #ddd;
    --active-item-border-color: transparent;
 
@@ -175,7 +176,8 @@
    --card-background-hover-color: #f9f9f9;
    --card-background-press-color: #efefef;
    --card-border-color: #eaeaea;
-   --card-box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+   --card-shadow-color: rgba(0, 0, 0, 0.1);
+   --card-box-shadow: 0 0 12px var(--card-shadow-color);
 }
 
 /* 
@@ -187,8 +189,8 @@
         --theme-style: dark;        
     
         --main-background-color: #333;
-        --main-text-color: #ccc;
-        --main-border-color: #aaa;
+        --main-text-color: #ccc;        
+        --main-border-color: #454545;
         --dropdown-border-color: #555;
         --dropdown-shadow-opacity: .6;
         --dropdown-item-icon-destructive-color: #de6e5b;
@@ -196,7 +198,6 @@
     
     
         --accented-background-color: #555;
-        --more-accented-background-color: #777;
     
         --button-background-color: transparent;
         --button-border-color: #ccc;
@@ -218,7 +219,7 @@
         --hover-item-background-color: #ffffff24;
         --hover-item-border-color: transparent;
     
-        --active-item-text-color: black;
+        --active-item-text-color: var(--left-pane-text-color);
         --active-item-background-color: #777;
         --active-item-border-color: transparent;
 
@@ -984,4 +985,62 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 .options-section .options-mime-types {
     padding: 0;
     margin: 0;
+}
+
+/*
+ * Note list
+ */
+.note-list-wrapper .note-book-card {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--card-border-color) !important;
+    box-shadow: 2px 3px 4px var(--card-shadow-color);
+    border-radius: 12px;
+    user-select: none;
+    padding: 15px 22px;
+    margin: 5px 10px 5px 0;
+}
+
+.note-list-wrapper .note-book-card:active {
+    background-color: var(--card-background-press-color);
+}
+
+.note-list-wrapper .note-book-card a {
+    color: inherit !important;
+}
+
+.note-list-wrapper .note-book-card .note-book-header {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 0.25em;
+}
+
+.note-list-wrapper .note-book-card .note-book-header .note-icon {
+    font-size: 17px;                
+    vertical-align: text-bottom;
+}
+
+.note-list-wrapper .note-book-card .note-book-header .note-book-title {            
+    font-size: 1em;
+    color: var(--active-item-text-color);
+    vertical-align: middle;
+}
+
+.note-list-wrapper .note-book-card .note-book-header .note-book-content {
+    padding: 0 !important;
+    font-size: 0.8rem;
+}
+
+.note-list-wrapper .note-book-card .note-book-header .note-book-content h1,
+.note-list-wrapper .note-book-card .note-book-header .note-book-content h2,
+.note-list-wrapper .note-book-card .note-book-header .note-book-content h3,
+.note-list-wrapper .note-book-card .note-book-header .note-book-content h4,
+.note-list-wrapper .note-book-card .note-book-header .note-book-content h5,
+.note-list-wrapper .note-book-card .note-book-header .note-book-content h6 {
+    font-size: 1rem;
+    color: var(--active-item-text-color);   
+}
+
+.note-list-wrapper .note-book-card .bx {
+    color: var(--left-pane-icon-color);
+    font-weight: bold;  
 }
