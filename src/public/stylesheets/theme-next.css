@@ -976,7 +976,8 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 }
 
 .options-section p:last-of-type:not(:first-of-type),
-.options-section h4 + p:last-child {
+.options-section h4 + p:last-child,
+.options-section .existing-anonymized-databases {
     margin-bottom: 0;
 }
 
