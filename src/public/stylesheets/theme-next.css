@@ -996,7 +996,7 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 /*
  * Note list
  */
-.note-list-wrapper .note-book-card {
+.note-list .note-book-card {
     background-color: var(--card-background-color);
     border: 1px solid var(--card-border-color) !important;
     box-shadow: 2px 3px 4px var(--card-shadow-color);
@@ -1004,6 +1004,14 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     user-select: none;
     padding: 15px 22px;
     margin: 5px 10px 5px 0;
+}
+
+.note-list.list-view .note-book-card {
+    box-shadow: 0 0 3px var(--card-shadow-color);
+}
+
+.note-list.list-view .note-book-card .note-book-header .note-icon {
+    vertical-align: middle;
 }
 
 .note-list-wrapper .note-book-card:active {
@@ -1029,6 +1037,12 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     font-size: 1em;
     color: var(--active-item-text-color);
     vertical-align: middle;
+}
+
+.note-list-wrapper .note-book-card .note-book-header:last-child {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .note-list-wrapper .note-book-card .note-book-header .note-book-content {
