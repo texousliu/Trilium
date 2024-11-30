@@ -7,9 +7,30 @@ const TPL = `
     <h4>${t('code_mime_types.title')}</h4>
     
     <ul class="options-mime-types" style="list-style-type: none;"></ul>
-</div>`;
+</div>
+
+<style>
+.options-mime-types section {
+    margin-bottom: 1em;
+}
+</style>
+`;
 
 let idCtr = 1; // global, since this can be shown in multiple dialogs
+
+function groupMimeTypesAlphabetically(ungroupedMimeTypes) {
+    const result = {};
+    ungroupedMimeTypes = ungroupedMimeTypes.toSorted((a, b) => a.title > b.title);
+
+    for (const mimeType of ungroupedMimeTypes) {
+        const initial = mimeType.title.charAt(0).toUpperCase();
+        if (!result[initial]) {
+            result[initial] = [];
+        }
+        result[initial].push(mimeType);
+    }
+    return result;
+}
 
 export default class CodeMimeTypesOptions extends OptionsWidget {
     doRender() {
@@ -19,36 +40,29 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
 
     async optionsLoaded(options) {
         this.$mimeTypes.empty();
-        let index = -1;
-        let prevInitial = "";
 
-        for (const mimeType of mimeTypesService.getMimeTypes()) {
-            const id = "code-mime-type-" + (idCtr++);
-            index++;
-            
-            // Append a heading to group items by the first letter, excepting for the
-            // first item ("Plain Text"). Note: this code assumes the items are already
-            // in alphabetical ordered.
-            if (index > 0) {
-                const initial = mimeType.title.charAt(0).toUpperCase();
-                
-                if (initial !== prevInitial) {
-                    this.$mimeTypes.append($("<h5>").text(initial));
-                    prevInitial = initial;
-                }
+        const groupedMimeTypes = groupMimeTypesAlphabetically(mimeTypesService.getMimeTypes());
+        
+        for (const [ initial, mimeTypes ] of Object.entries(groupedMimeTypes)) {
+            const $section = $("<section>");
+            $section.append($("<h5>").text(initial));            
+
+            for (const mimeType of mimeTypes) {
+                const id = "code-mime-type-" + (idCtr++);
+                $section.append($("<li>")
+                    .append($('<input type="checkbox" class="form-check-input">')
+                        .attr("id", id)
+                        .attr("data-mime-type", mimeType.mime)
+                        .prop("checked", mimeType.enabled))
+                    .on('change', () => this.save())
+                    .append(" &nbsp; ")
+                    .append($('<label>')
+                        .attr("for", id)
+                        .text(mimeType.title))
+                );
             }
 
-            this.$mimeTypes.append($("<li>")
-                .append($('<input type="checkbox" class="form-check-input">')
-                    .attr("id", id)
-                    .attr("data-mime-type", mimeType.mime)
-                    .prop("checked", mimeType.enabled))
-                .on('change', () => this.save())
-                .append(" &nbsp; ")
-                .append($('<label>')
-                    .attr("for", id)
-                    .text(mimeType.title))
-            );
+            this.$mimeTypes.append($section);
         }
     }
 
