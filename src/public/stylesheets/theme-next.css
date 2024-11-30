@@ -754,6 +754,12 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
    background: var(--main-background-color);
 }
 
+/*
+ * Ribbon
+ */
+.ribbon-container {
+    margin-bottom: 0 !important;
+}
 
 /*
  * Table of contents & Highlights list
