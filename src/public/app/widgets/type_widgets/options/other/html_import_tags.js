@@ -22,12 +22,8 @@ const TPL = `
     
     <p>${t("import.html_import_tags.description")}</p>
     
-        <textarea class="allowed-html-tags form-control" style="height: 150px; font-family: monospace;" 
-                  placeholder="${t("import.html_import_tags.placeholder")}"></textarea>
-        
-        <div class="form-text">
-            ${t("import.html_import_tags.help")}
-        </div>
+    <textarea class="allowed-html-tags form-control" style="height: 150px; font-family: monospace;" 
+                placeholder="${t("import.html_import_tags.placeholder")}"></textarea>
     
     <div>
         <button class="btn btn-sm btn-secondary reset-to-default">

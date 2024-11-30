@@ -697,8 +697,7 @@
     "in-progress": "Import în curs: {{progress}}",
     "successful": "Import finalizat cu succes.",
     "html_import_tags": {
-      "description": "Configurați ce etichete HTML să fie păstrate atunci când se importă notițe. Etichetele ce nu se află în această listă vor fi înlăturate la importul de date.",
-      "help": "Introduceți etichetele HTML pentru a se păstra în timpul importului. Unele etichete (precum „script”) sunt înlăturate indiferent din motive de securitate.",
+      "description": "Configurați ce etichete HTML să fie păstrate atunci când se importă notițe. Etichetele ce nu se află în această listă vor fi înlăturate la importul de date. Unele etichete (precum „script”) sunt înlăturate indiferent din motive de securitate.",
       "placeholder": "Introduceți etichetele HTML, câte unul pe linie",
       "reset_button": "Resetează la lista implicită",
       "title": "Etichete HTML la importare"

@@ -178,9 +178,8 @@
     "failed": "La importación falló: {{message}}.",
     "html_import_tags": {
       "title": "HTML Importar Etiquetas",
-      "description": "Configurar que etiquetas HTML deben ser preservadas al importar notas. Las etiquetas que no estén en esta lista serán eliminadas durante la importación.",
+      "description": "Configurar que etiquetas HTML deben ser preservadas al importar notas. Las etiquetas que no estén en esta lista serán eliminadas durante la importación. Algunas etiquetas (como 'script') siempre son eliminadas por seguridad.",
       "placeholder": "Ingrese las etiquetas HTML, una por línea",
-      "help": "Ingrese las etiquetas HTML a preservar durante la importación. Algunas etiquetas (como 'script') siempre son eliminadas por seguridad.",
       "reset_button": "Restablecer a lista por defectp"
     },
     "import-status": "Estado de importación",
