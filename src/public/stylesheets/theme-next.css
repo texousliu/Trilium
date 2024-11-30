@@ -101,7 +101,7 @@
 
    --menu-text-color: #272727;
    --menu-background-color: #ffffffd9;
-   --menu-item-icon-color: #505050;
+   --menu-item-icon-color: #727272;
    --menu-item-disabled-opacity: .5;
    --menu-item-keyboard-shortcut-color: #666666a8;
    --menu-item-arrow-color: #00000080;
@@ -131,7 +131,7 @@
    --left-pane-item-selected-action-button-hover-shadow: 2px 2px 10px rgba(0, 0, 0, .25);
 
    --launcher-pane-background-color: #e8e8e8;
-   --launcher-pane-text-color: #464646;
+   --launcher-pane-text-color: #000000bd;
    --launcher-pane-button-hover-color: black;
    --launcher-pane-button-hover-background: white;
    --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
