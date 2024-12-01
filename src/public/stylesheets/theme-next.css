@@ -39,6 +39,7 @@
     --left-pane-item-selected-shadow-size: 2px;
 
     --launcher-pane-size: 58px;
+    --launcher-pane-horizontal-size: 54px;
     --launcher-pane-button-margin: 6px;
     --launcher-pane-button-gap: 3px;
 
@@ -345,6 +346,7 @@
 
 #root-widget.horizontal-layout {
     --launcher-pane-background-color: var(--launcher-pane-horizontal-background-color);
+    --launcher-pane-size: var(--launcher-pane-horizontal-size);
     --active-tab-background-color: var(--launcher-pane-background-color);
 }
 
@@ -361,6 +363,10 @@
 /*
  *  Launcher pane
  */
+#launcher-container,
+#root-widget.horizontal-layout > .horizontal {
+    align-items: center;
+}
 
 #launcher-pane.vertical {
     width: var(--launcher-pane-size) !important;
@@ -368,19 +374,28 @@
 }
 
 #launcher-pane.horizontal {
-    height: var(--launcher-pane-size) !important;    
+    height: var(--launcher-pane-size) !important;
+    border-bottom: 1px solid var(--subtle-border-color);
 }
 
-#launcher-pane .launcher-button {
+#launcher-pane .launcher-button,
+#launcher-pane .dropdown {
     width: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
     height: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
     margin: var(--launcher-pane-button-gap) var(--launcher-pane-button-margin);
+}
+
+#launcher-pane .launcher-button {    
     padding: 0 !important;
     border-radius: 8px;
     transition: background-color 300ms ease-out,
                 color 300ms ease-out,
                 box-shadow 300ms ease-out;
     cursor: default;
+}
+
+#launcher-pane .dropdown .launcher-button {
+    margin: 0;
 }
 
 #launcher-pane .launcher-button:active,
