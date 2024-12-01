@@ -40,6 +40,7 @@
 
     --launcher-pane-size: 58px;
     --launcher-pane-horizontal-size: 54px;
+    --launcher-pane-horizontal-icon-size: 20px;
     --launcher-pane-button-margin: 6px;
     --launcher-pane-button-gap: 3px;
 
@@ -413,6 +414,10 @@
     transition: background-color 100ms ease-in,
                 color 80ms ease-in,
                 box-shadow 100ms ease-in;
+}
+
+#launcher-pane.horizontal .launcher-button {
+    font-size: var(--launcher-pane-horizontal-icon-size);
 }
 
 #launcher-pane .global-menu-button {
