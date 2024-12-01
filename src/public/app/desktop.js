@@ -50,10 +50,11 @@ function initOnElectron() {
     // Update the native title bar buttons.
     const electronRemote = utils.dynamicRequire("@electron/remote");
     const currentWindow = electronRemote.getCurrentWindow();
+    const documentStyle = window.getComputedStyle(document.documentElement);    
     currentWindow.setTitleBarOverlay({
-        color: "red",
-        symbolColor: "white"
+        color: documentStyle.getPropertyValue("--native-titlebar-background"),
+        symbolColor: documentStyle.getPropertyValue("--native-titlebar-foreground")
     });
-
+    
     console.log("Electron initialized.");
 }

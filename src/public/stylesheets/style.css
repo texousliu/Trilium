@@ -21,6 +21,8 @@
 
 :root {
     --submenu-opening-delay: 300ms;
+    --native-titlebar-background: var(--left-pane-background-color);
+    --native-titlebar-foreground: var(--main-text-color);
 }
 
 html {
