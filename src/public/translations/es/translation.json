@@ -1432,7 +1432,7 @@
     "saved-search-note-refreshed": "La nota de búsqueda guardada fue recargada."
   },
   "title_bar_buttons": {
-    "window-on-top": "Mantener esta ventana en la parte superior."
+    "window-on-top": "Mantener esta ventana en la parte superior"
   },
   "note_detail": {
     "could_not_find_typewidget": "No se pudo encontrar typeWidget para el tipo '{{type}}'"
