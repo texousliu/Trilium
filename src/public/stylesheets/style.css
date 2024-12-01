@@ -1277,7 +1277,7 @@ textarea {
 }
 
 .tab-row-container {
-    width: env(titlebar-area-width, 100%);
+    margin-right: calc(100vw, env(titlebar-area-width, 100vw));
 }
 
 .tab-row-container .toggle-button {
