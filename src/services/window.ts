@@ -8,7 +8,7 @@ import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
 import remoteMain from "@electron/remote/main/index.js";
-import { App, BrowserWindow, WebContents, ipcMain } from 'electron';
+import { App, BrowserWindow, BrowserWindowConstructorOptions, WebContents, ipcMain } from 'electron';
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -71,6 +71,12 @@ async function createMainWindow(app: App) {
 
     const { BrowserWindow } = (await import('electron')); // should not be statically imported
 
+    const extraOpts: Partial<BrowserWindowConstructorOptions> = {};
+    if (!optionService.getOptionBool('nativeTitleBarVisible')) {
+        extraOpts.titleBarStyle = "hidden";
+        extraOpts.titleBarOverlay = (process.platform !== "darwin");
+    }
+
     mainWindow = new BrowserWindow({
         x: mainWindowState.x,
         y: mainWindowState.y,
@@ -82,9 +88,9 @@ async function createMainWindow(app: App) {
             contextIsolation: false,
             spellcheck: spellcheckEnabled,
             webviewTag: true
-        },
-        frame: optionService.getOptionBool('nativeTitleBarVisible'),
-        icon: getIcon()
+        },        
+        icon: getIcon(),
+        ...extraOpts
     });
 
     mainWindowState.manage(mainWindow);
