@@ -1271,6 +1271,10 @@ textarea {
     color: var(--muted-text-color);
 }
 
+.tab-row-container {
+    width: env(titlebar-area-width, 100%);
+}
+
 .tab-row-container .toggle-button {
     background: transparent;
     appearance: none;
