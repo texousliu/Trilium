@@ -39,6 +39,8 @@
     --left-pane-item-selected-shadow-size: 2px;
 
     --launcher-pane-size: 58px;
+    --launcher-pane-horizontal-size: 54px;
+    --launcher-pane-horizontal-icon-size: 20px;
     --launcher-pane-button-margin: 6px;
     --launcher-pane-button-gap: 3px;
 
@@ -68,6 +70,7 @@
    --main-background-color: white;
    --main-text-color: black;
    --main-border-color: #dbdbdb;
+   --subtle-border-color: rgba(0, 0, 0, 0.1);
    --dropdown-border-color: #ccc;
    --dropdown-shadow-opacity: .2;
    --dropdown-item-icon-destructive-color: #ec5138;
@@ -101,7 +104,7 @@
 
    --menu-text-color: #272727;
    --menu-background-color: #ffffffd9;
-   --menu-item-icon-color: #505050;
+   --menu-item-icon-color: #727272;
    --menu-item-disabled-opacity: .5;
    --menu-item-keyboard-shortcut-color: #666666a8;
    --menu-item-arrow-color: #00000080;
@@ -131,7 +134,8 @@
    --left-pane-item-selected-action-button-hover-shadow: 2px 2px 10px rgba(0, 0, 0, .25);
 
    --launcher-pane-background-color: #e8e8e8;
-   --launcher-pane-text-color: #464646;
+   --launcher-pane-horizontal-background-color: #fafafa;
+   --launcher-pane-text-color: #000000bd;
    --launcher-pane-button-hover-color: black;
    --launcher-pane-button-hover-background: white;
    --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
@@ -341,6 +345,14 @@
     background-color: var(--root-background);
 }
 
+#root-widget.horizontal-layout {
+    --launcher-pane-background-color: var(--launcher-pane-horizontal-background-color);
+    --launcher-pane-size: var(--launcher-pane-horizontal-size);
+    --active-tab-background-color: var(--launcher-pane-background-color);
+    --active-tab-hover-background-color: var(--active-tab-background-color);
+    --new-tab-button-background: transparent;
+}
+
 /* Matches when the left pane is collapsed */
 :has(#left-pane.hidden-int) {
     --center-pane-border-radius: 0;
@@ -354,6 +366,10 @@
 /*
  *  Launcher pane
  */
+#launcher-container,
+#root-widget.horizontal-layout > .horizontal {
+    align-items: center;
+}
 
 #launcher-pane.vertical {
     width: var(--launcher-pane-size) !important;
@@ -362,18 +378,27 @@
 
 #launcher-pane.horizontal {
     height: var(--launcher-pane-size) !important;
+    border-bottom: 1px solid var(--subtle-border-color);
 }
 
-#launcher-pane .launcher-button {
+#launcher-pane .launcher-button,
+#launcher-pane .dropdown {
     width: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
     height: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
     margin: var(--launcher-pane-button-gap) var(--launcher-pane-button-margin);
+}
+
+#launcher-pane .launcher-button {    
     padding: 0 !important;
     border-radius: 8px;
     transition: background-color 300ms ease-out,
                 color 300ms ease-out,
                 box-shadow 300ms ease-out;
     cursor: default;
+}
+
+#launcher-pane .dropdown .launcher-button {
+    margin: 0;
 }
 
 #launcher-pane .launcher-button:active,
@@ -390,6 +415,10 @@
     transition: background-color 100ms ease-in,
                 color 80ms ease-in,
                 box-shadow 100ms ease-in;
+}
+
+#launcher-pane.horizontal .launcher-button {
+    font-size: var(--launcher-pane-horizontal-icon-size);
 }
 
 #launcher-pane .global-menu-button {
@@ -645,12 +674,36 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 }
 
 .tab-row-container .toggle-button {
-    margin: 13px 10px !important;
+    margin: 6px 10px !important;
+}
+
+.tab-row-container {
+    position: relative;
+}
+
+#root-widget.horizontal-layout .tab-row-container:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--subtle-border-color);
 }
 
 .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
     height: var(--tab-height) !important;
+    overflow: hidden;
+}
+
+#root-widget.horizontal-layout .tab-row-container {
+    padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
+}
+
+#root-widget.horizontal-layout .tab-row-widget-container {
+    margin-top: 0;
+    position: relative;
 }
 
 .tab-row-widget .note-tab .note-tab-wrapper {
@@ -661,6 +714,11 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 
 .tab-row-widget .note-tab .note-tab-wrapper:hover {
     transition: none;
+}
+
+#root-widget.horizontal-layout .tab-row-widget .note-tab .note-tab-wrapper {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;   
 }
 
 .tab-row-widget .note-tab:nth-child(1) {
