@@ -8,6 +8,7 @@ export default class BookmarkButtons extends FlexContainer {
         super(isHorizontalLayout ? "row" : "column");
 
         this.contentSized();
+        this.settings = {};
     }
 
     async refresh() {
@@ -24,6 +25,10 @@ export default class BookmarkButtons extends FlexContainer {
                 ? new BookmarkFolderWidget(note)
                 : new OpenNoteButtonWidget(note)
                     .class("launcher-button");
+            if (!buttonWidget.settings) {
+                buttonWidget = {};
+            }
+            buttonWidget.settings.titlePlacement = this.settings.titlePlacement;
 
             this.child(buttonWidget);
 
