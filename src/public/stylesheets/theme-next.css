@@ -539,12 +539,14 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 }
 
 #left-pane .ui-fancytree ul {
-    padding-left: 10px;
+    padding-left: 1px;
+    margin-left: 14px;
+    border-left: 1px solid var(--subtle-border-color);
 }
 
 /* The root element of the tree */
 #left-pane .fancytree-container > li:first-child > span {
-    padding-left: 12px;
+    padding-left: 6px;
 }
 
 #left-pane span.fancytree-node.fancytree-active {
