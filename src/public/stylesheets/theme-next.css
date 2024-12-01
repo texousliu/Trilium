@@ -68,6 +68,7 @@
    --main-background-color: white;
    --main-text-color: black;
    --main-border-color: #dbdbdb;
+   --subtle-border-color: rgba(0, 0, 0, 0.1);
    --dropdown-border-color: #ccc;
    --dropdown-shadow-opacity: .2;
    --dropdown-item-icon-destructive-color: #ec5138;
@@ -654,6 +655,20 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     margin: 13px 10px !important;
 }
 
+.tab-row-container {
+    position: relative;
+}
+
+#root-widget.horizontal-layout .tab-row-container:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--subtle-border-color);
+}
+
 .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
     height: var(--tab-height) !important;
@@ -661,6 +676,7 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 
 #root-widget.horizontal-layout .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)));
+    position: relative;
 }
 
 .tab-row-widget .note-tab .note-tab-wrapper {
