@@ -693,17 +693,17 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 
 .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
-    height: var(--tab-height) !important;
-    overflow: hidden;
+    height: var(--tab-height) !important;    
 }
 
 #root-widget.horizontal-layout .tab-row-container {
-    padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
+    padding-top: calc((var(--tab-bar-height) - var(--tab-height)));    
 }
 
 #root-widget.horizontal-layout .tab-row-widget-container {
     margin-top: 0;
     position: relative;
+    overflow: hidden;
 }
 
 .tab-row-widget .note-tab .note-tab-wrapper {
