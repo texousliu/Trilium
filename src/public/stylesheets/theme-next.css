@@ -348,6 +348,7 @@
     --launcher-pane-background-color: var(--launcher-pane-horizontal-background-color);
     --launcher-pane-size: var(--launcher-pane-horizontal-size);
     --active-tab-background-color: var(--launcher-pane-background-color);
+    --active-tab-hover-background-color: var(--active-tab-background-color);
 }
 
 /* Matches when the left pane is collapsed */
@@ -667,7 +668,7 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 }
 
 .tab-row-container .toggle-button {
-    margin: 13px 10px !important;
+    margin: 6px 10px !important;
 }
 
 .tab-row-container {
@@ -687,10 +688,15 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
     height: var(--tab-height) !important;
+    overflow: hidden;
+}
+
+#root-widget.horizontal-layout .tab-row-container {
+    padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
 }
 
 #root-widget.horizontal-layout .tab-row-widget-container {
-    margin-top: calc((var(--tab-bar-height) - var(--tab-height)));
+    margin-top: 0;
     position: relative;
 }
 
