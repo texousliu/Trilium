@@ -528,7 +528,7 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 }
 
 #left-pane div.tree {
-    padding: 0 12px;
+    padding: 3px 6px;
     animation: fade-in 200ms ease-in;
 }
 
@@ -538,9 +538,15 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     cursor: default;
 }
 
+#left-pane .ui-fancytree ul {
+    padding-left: 1px;
+    margin-left: 14px;
+    border-left: 1px solid var(--subtle-border-color);
+}
+
 /* The root element of the tree */
 #left-pane .fancytree-container > li:first-child > span {
-    padding-left: 12px;
+    padding-left: 6px;
 }
 
 #left-pane span.fancytree-node.fancytree-active {
@@ -693,17 +699,17 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 
 .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
-    height: var(--tab-height) !important;
-    overflow: hidden;
+    height: var(--tab-height) !important;    
 }
 
 #root-widget.horizontal-layout .tab-row-container {
-    padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
+    padding-top: calc((var(--tab-bar-height) - var(--tab-height)));    
 }
 
 #root-widget.horizontal-layout .tab-row-widget-container {
     margin-top: 0;
     position: relative;
+    overflow: hidden;
 }
 
 .tab-row-widget .note-tab .note-tab-wrapper {
