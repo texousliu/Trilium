@@ -20,9 +20,7 @@
 }
 
 :root {
-    --submenu-opening-delay: 300ms;
-    --native-titlebar-background: var(--left-pane-background-color);
-    --native-titlebar-foreground: var(--main-text-color);
+    --submenu-opening-delay: 300ms;    
 }
 
 html {
@@ -40,6 +38,13 @@ body {
     color: var(--main-text-color);
     font-family: var(--main-font-family);
     font-size: var(--main-font-size);
+
+    --native-titlebar-background: var(--main-background-color);
+    --native-titlebar-foreground: var(--main-text-color);
+}
+
+body.layout-horizontal {
+    --native-titlebar-background: var(--left-pane-background-color);
 }
 
 body.mobile .desktop-only {

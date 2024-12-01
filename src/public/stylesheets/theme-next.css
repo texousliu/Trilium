@@ -347,7 +347,7 @@
     background-color: var(--root-background);
 }
 
-#root-widget.horizontal-layout {
+body.layout-horizontal {
     --launcher-pane-background-color: var(--launcher-pane-horizontal-background-color);
     --launcher-pane-size: var(--launcher-pane-horizontal-size);
     --active-tab-background-color: var(--launcher-pane-background-color);
@@ -369,7 +369,7 @@
  *  Launcher pane
  */
 #launcher-container,
-#root-widget.horizontal-layout > .horizontal {
+body.layout-horizontal > .horizontal {
     align-items: center;
 }
 
@@ -687,7 +687,7 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     position: relative;
 }
 
-#root-widget.horizontal-layout .tab-row-container:after {
+body.layout-horizontal .tab-row-container:after {
     content: "";
     position: absolute;
     bottom: 0;
@@ -702,11 +702,11 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     height: var(--tab-height) !important;    
 }
 
-#root-widget.horizontal-layout .tab-row-container {
+body.layout-horizontal .tab-row-container {
     padding-top: calc((var(--tab-bar-height) - var(--tab-height)));    
 }
 
-#root-widget.horizontal-layout .tab-row-widget-container {
+body.layout-horizontal .tab-row-widget-container {
     margin-top: 0;
     position: relative;
     overflow: hidden;
@@ -722,7 +722,7 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     transition: none;
 }
 
-#root-widget.horizontal-layout .tab-row-widget .note-tab .note-tab-wrapper {
+body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;   
 }

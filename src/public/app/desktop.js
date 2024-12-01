@@ -57,10 +57,14 @@ function initTitleBarButtons() {
     function applyTitleBarOverlaySettings() {
         const electronRemote = utils.dynamicRequire("@electron/remote");    
         const currentWindow = electronRemote.getCurrentWindow();
-        const documentStyle = window.getComputedStyle(document.documentElement);
-        const color = documentStyle.getPropertyValue("--native-titlebar-background");
-        const symbolColor = documentStyle.getPropertyValue("--native-titlebar-foreground");
-        currentWindow.setTitleBarOverlay({ color, symbolColor });
+        
+        const style = window.getComputedStyle(document.body);
+        const color = style.getPropertyValue("--native-titlebar-background");
+        const symbolColor = style.getPropertyValue("--native-titlebar-foreground");
+
+        if (color && symbolColor) {
+            currentWindow.setTitleBarOverlay({ color, symbolColor });
+        }
     }
     
     // Update the native title bar buttons.

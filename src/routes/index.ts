@@ -32,6 +32,7 @@ function index(req: Request, res: Response) {
         csrfToken: csrfToken,
         themeCssUrl: getThemeCssUrl(options.theme),
         headingStyle: options.headingStyle,
+        layoutOrientation: options.layoutOrientation,
         mainFontSize: parseInt(options.mainFontSize),
         treeFontSize: parseInt(options.treeFontSize),
         detailFontSize: parseInt(options.detailFontSize),
