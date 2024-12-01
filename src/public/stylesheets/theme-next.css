@@ -195,6 +195,7 @@
         --main-background-color: #333;
         --main-text-color: #ccc;        
         --main-border-color: #454545;
+        --subtle-border-color: rgba(0, 0, 0, 0.3);
         --dropdown-border-color: #555;
         --dropdown-shadow-opacity: .6;
         --dropdown-item-icon-destructive-color: #de6e5b;
