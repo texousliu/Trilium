@@ -1,7 +1,6 @@
 import FlexContainer from "../widgets/containers/flex_container.js";
 import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import TabRowWidget from "../widgets/tab_row.js";
-import TitleBarButtonsWidget from "../widgets/title_bar_buttons.js";
 import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import NoteTitleWidget from "../widgets/note_title.js";
