@@ -833,9 +833,12 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
  */
 
 #center-pane {
-   border-radius: var(--center-pane-border-radius) 0 0 0;
    padding-top: 2px;
    background: var(--main-background-color);
+}
+
+.vertical-layout #center-pane {
+    border-radius: var(--center-pane-border-radius) 0 0 0;
 }
 
 /*
