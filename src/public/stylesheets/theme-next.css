@@ -653,6 +653,10 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     height: var(--tab-height) !important;
 }
 
+#root-widget.horizontal-layout .tab-row-widget-container {
+    margin-top: calc((var(--tab-bar-height) - var(--tab-height)));
+}
+
 .tab-row-widget .note-tab .note-tab-wrapper {
     height: var(--tab-height) !important;
     transition: background 75ms ease-in,
@@ -661,6 +665,11 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 
 .tab-row-widget .note-tab .note-tab-wrapper:hover {
     transition: none;
+}
+
+#root-widget.horizontal-layout .tab-row-widget .note-tab .note-tab-wrapper {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;   
 }
 
 .tab-row-widget .note-tab:nth-child(1) {
