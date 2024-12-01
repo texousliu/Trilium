@@ -1433,7 +1433,7 @@
     "saved-search-note-refreshed": "Saved search note refreshed."
   },
   "title_bar_buttons": {
-    "window-on-top": "Keep this window on top"
+    "window-on-top": "Keep Window on Top"
   },
   "note_detail": {
     "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'"
