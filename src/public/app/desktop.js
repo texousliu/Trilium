@@ -48,13 +48,18 @@ function initOnElectron() {
     electron.ipcRenderer.on('globalShortcut', async (event, actionName) => appContext.triggerCommand(actionName));
     
     // Update the native title bar buttons.
-    const electronRemote = utils.dynamicRequire("@electron/remote");
+    applyTitleBarOverlaySettings();
+
+    // Register for changes to the native title bar colors.
+    window.matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", applyTitleBarOverlaySettings);
+}
+
+function applyTitleBarOverlaySettings() {
+    const electronRemote = utils.dynamicRequire("@electron/remote");    
     const currentWindow = electronRemote.getCurrentWindow();
-    const documentStyle = window.getComputedStyle(document.documentElement);    
-    currentWindow.setTitleBarOverlay({
-        color: documentStyle.getPropertyValue("--native-titlebar-background"),
-        symbolColor: documentStyle.getPropertyValue("--native-titlebar-foreground")
-    });
-    
-    console.log("Electron initialized.");
+    const documentStyle = window.getComputedStyle(document.documentElement);
+    const color = documentStyle.getPropertyValue("--native-titlebar-background");
+    const symbolColor = documentStyle.getPropertyValue("--native-titlebar-foreground");
+    currentWindow.setTitleBarOverlay({ color, symbolColor });
 }
