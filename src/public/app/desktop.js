@@ -30,8 +30,7 @@ bundleService.getWidgetBundlesByParent().then(async widgetBundles => {
 glob.setupGlobs();
 
 if (utils.isElectron()) {
-    utils.dynamicRequire('electron').ipcRenderer.on('globalShortcut',
-        async (event, actionName) => appContext.triggerCommand(actionName));
+    initOnElectron();
 }
 
 macInit.init();
@@ -42,4 +41,19 @@ noteAutocompleteService.init();
 
 if (utils.isElectron()) {
     electronContextMenu.setupContextMenu();
+}
+
+function initOnElectron() {
+    const electron = utils.dynamicRequire('electron');
+    electron.ipcRenderer.on('globalShortcut', async (event, actionName) => appContext.triggerCommand(actionName));
+    
+    // Update the native title bar buttons.
+    const electronRemote = utils.dynamicRequire("@electron/remote");
+    const currentWindow = electronRemote.getCurrentWindow();
+    currentWindow.setTitleBarOverlay({
+        color: "red",
+        symbolColor: "white"
+    });
+
+    console.log("Electron initialized.");
 }
