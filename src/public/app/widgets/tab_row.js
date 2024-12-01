@@ -670,12 +670,7 @@ export default class TabRowWidget extends BasicWidget {
         if (noteContext) {
             const hoistedNote = froca.getNoteFromCache(noteContext.hoistedNoteId);
 
-            if (hoistedNote) {
-                $tab.find('.note-tab-icon')
-                    .removeClass()
-                    .addClass("note-tab-icon")
-                    .addClass(hoistedNote.getWorkspaceIconClass());
-
+            if (hoistedNote) {                
                 $tab.find('.note-tab-wrapper').css("background", hoistedNote.getWorkspaceTabBackgroundColor());
             }
             else {
@@ -688,7 +683,7 @@ export default class TabRowWidget extends BasicWidget {
         if (!note) {
             this.updateTitle($tab, t('tab_row.new_tab'));
             return;
-        }
+        }        
 
         const title = await noteContext.getNavigationTitle();
         this.updateTitle($tab, title);
@@ -696,6 +691,11 @@ export default class TabRowWidget extends BasicWidget {
         $tab.addClass(note.getCssClass());
         $tab.addClass(utils.getNoteTypeClass(note.type));
         $tab.addClass(utils.getMimeTypeClass(note.mime));
+
+        $tab.find('.note-tab-icon')
+            .removeClass()
+            .addClass("note-tab-icon")
+            .addClass(note.getIcon());
     }
 
     async entitiesReloadedEvent({loadResults}) {
