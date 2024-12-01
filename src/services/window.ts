@@ -31,7 +31,7 @@ async function createExtraWindow(extraWindowHash: string) {
             contextIsolation: false,
             spellcheck: spellcheckEnabled
         },
-        frame: optionService.getOptionBool('nativeTitleBarVisible'),
+        ...getWindowExtraOpts(),
         icon: getIcon()
     });
 
@@ -71,11 +71,7 @@ async function createMainWindow(app: App) {
 
     const { BrowserWindow } = (await import('electron')); // should not be statically imported
 
-    const extraOpts: Partial<BrowserWindowConstructorOptions> = {};
-    if (!optionService.getOptionBool('nativeTitleBarVisible')) {
-        extraOpts.titleBarStyle = "hidden";
-        extraOpts.titleBarOverlay = (process.platform !== "darwin");
-    }
+    
 
     mainWindow = new BrowserWindow({
         x: mainWindowState.x,
@@ -90,7 +86,7 @@ async function createMainWindow(app: App) {
             webviewTag: true
         },        
         icon: getIcon(),
-        ...extraOpts
+        ...getWindowExtraOpts()
     });
 
     mainWindowState.manage(mainWindow);
@@ -114,6 +110,16 @@ async function createMainWindow(app: App) {
             mainWindow.focus();
         }
     });
+}
+
+function getWindowExtraOpts() {
+    const extraOpts: Partial<BrowserWindowConstructorOptions> = {};
+    if (!optionService.getOptionBool('nativeTitleBarVisible')) {
+        extraOpts.titleBarStyle = "hidden";
+        extraOpts.titleBarOverlay = (process.platform !== "darwin");
+    }
+
+    return extraOpts;
 }
 
 function configureWebContents(webContents: WebContents, spellcheckEnabled: boolean) {
