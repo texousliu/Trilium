@@ -347,6 +347,10 @@
     background-color: var(--root-background);
 }
 
+body.layout-vertical {
+    --native-titlebar-background: var(--root-background);
+}
+
 body.layout-horizontal {
     --launcher-pane-background-color: var(--launcher-pane-horizontal-background-color);
     --launcher-pane-size: var(--launcher-pane-horizontal-size);
