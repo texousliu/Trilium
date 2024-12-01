@@ -528,7 +528,7 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
 }
 
 #left-pane div.tree {
-    padding: 0 12px;
+    padding: 3px 6px;
     animation: fade-in 200ms ease-in;
 }
 
@@ -536,6 +536,10 @@ html body #left-pane .quick-search:focus-within .search-button:hover,
     border: unset;
     border-radius: 6px;
     cursor: default;
+}
+
+#left-pane .ui-fancytree ul {
+    padding-left: 10px;
 }
 
 /* The root element of the tree */
