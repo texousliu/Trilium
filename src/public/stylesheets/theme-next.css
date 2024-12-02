@@ -1229,6 +1229,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 
 .note-list-wrapper .note-book-card .note-book-content.type-code pre {
     height: 100%;
+    padding: 1em;
 }
 
 .note-list-wrapper .note-book-card .bx {
