@@ -39,7 +39,7 @@ const DROPDOWN_TPL = `
                 ${Object.entries(MONTHS).map(([i, month]) => `<option value=${i}>${month}</option>`)}
             </select>
 
-            <button class="calendar-btn bx bx-chevron-right data-calendar-toggle="next"></button>
+            <button class="calendar-btn bx bx-chevron-right" data-calendar-toggle="next"></button>
         </div>
 
         <div class="calendar-year-selector">
@@ -47,7 +47,7 @@ const DROPDOWN_TPL = `
 
             <input type="number" min="1900" max="2999" step="1" data-calendar-input="year" />
 
-            <button class="calendar-btn bx bx-chevron-right data-calendar-toggle="nextYear"></button>
+            <button class="calendar-btn bx bx-chevron-right" data-calendar-toggle="nextYear"></button>
         </div>
     </div>
 
