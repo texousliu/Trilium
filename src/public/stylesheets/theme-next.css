@@ -54,7 +54,7 @@
     --menu-padding-size: 8px;
     --menu-item-icon-vert-offset: 0;    
 
-    --more-accented-background-color: var(--card-background-hover-color);
+    --more-accented-background-color: var(--card-background-hover-color);    
 }
 
 /*
@@ -170,7 +170,6 @@
 
    --scrollbar-border-color: #ddd;
    --scrollbar-background-color: #ddd;
-   --tooltip-background-color: #f8f8f8;
    --link-color: blue;
 
    --mermaid-theme: default;
@@ -189,6 +188,10 @@
    --calendar-day-hover-color: var(--hover-item-text-color);
    --calendar-day-hover-background: var(--active-item-background-color);
    --calendar-day-highlight-background: #80808024;
+
+   --tooltip-border-color: transparent;
+   --tooltip-background-color: rgba(0, 0, 0, 0.8);
+   --tooltip-foreground-color: #fff;
 }
 
 /* 
@@ -304,7 +307,6 @@
     
         --scrollbar-border-color: #666;
         --scrollbar-background-color: #333;
-        --tooltip-background-color: #333;
         --link-color: lightskyblue;
 
         --mermaid-theme: dark;
@@ -322,6 +324,9 @@
         --calendar-day-hover-color: var(--hover-item-text-color);
         --calendar-day-hover-background: var(--active-item-background-color);
         --calendar-day-highlight-background: #8080805a;
+
+        --tooltip-background: rgba(0, 0, 0, 0.9);
+        --tooltip-foreground: #fff;
     }
     
     body ::-webkit-calendar-picker-indicator {
@@ -439,6 +444,19 @@
 
 #launcher-pane .global-menu-button {
     --hover-item-background-color: transparent;
+}
+
+.tooltip .tooltip-arrow {
+    display: none;
+}
+
+.tooltip-inner {
+    padding: 5px 10px !important;
+    border-radius: 8px;
+    border: 1px solid var(--tooltip-border-color) !important;
+    color: var(--tooltip-foreground-color) !important;
+    line-height: 1.25;
+    box-shadow: none !important;
 }
 
  /* 
