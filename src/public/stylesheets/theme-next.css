@@ -1119,7 +1119,8 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 .note-list-wrapper .note-book-card .note-book-header {
     font-size: 1em;
     font-weight: bold;
-    padding: 0.5em 1em;
+    padding: 0.5em 1rem;
+    border-bottom-color: var(--card-border-color);
 }
 
 .note-list-wrapper .note-book-card .note-book-header .note-icon {
@@ -1131,6 +1132,12 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     font-size: 1em;
     color: var(--active-item-text-color);
     vertical-align: middle;
+}
+
+.note-list-wrapper .note-book-card .note-book-header .rendered-note-attributes {
+    font-size: 0.7em;
+    font-weight: normal;
+    margin-bottom: 0;
 }
 
 .note-list-wrapper .note-book-card .note-book-header:last-child {
@@ -1145,7 +1152,11 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 }
 
 .note-list-wrapper .note-book-card .note-book-content .rendered-content {
-    padding: 1em;
+    padding: 1rem;
+}
+
+.note-list-wrapper .note-book-card .note-book-content .rendered-content.text-with-ellipsis {
+    padding: 1rem !important;
 }
 
 .note-list-wrapper .note-book-card .note-book-content h1,
@@ -1171,6 +1182,5 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 }
 
 .note-list-wrapper .note-book-card .bx {
-    color: var(--left-pane-icon-color);
-    font-weight: bold;  
+    color: var(--left-pane-icon-color) !important;
 }
