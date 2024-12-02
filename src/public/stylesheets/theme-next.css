@@ -1173,6 +1173,8 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     margin-bottom: 0;
 }
 
+.note-list-wrapper .note-book-card .note-book-content.type-canvas .rendered-content,
+.note-list-wrapper .note-book-card .note-book-content.type-mindMap .rendered-content,
 .note-list-wrapper .note-book-card .note-book-content.type-code .rendered-content {
     padding: 0;
 }
@@ -1183,4 +1185,9 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 
 .note-list-wrapper .note-book-card .bx {
     color: var(--left-pane-icon-color) !important;
+}
+
+.note-list.grid-view .note-book-card img {
+    object-fit: cover !important;
+    width: 100%;
 }
