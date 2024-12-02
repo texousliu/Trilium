@@ -195,7 +195,8 @@
         --main-background-color: #333;
         --main-text-color: #ccc;        
         --main-border-color: #454545;
-        --dropdown-border-color: #555;
+        --subtle-border-color: #313131;
+        --dropdown-border-color: #292929;
         --dropdown-shadow-opacity: .6;
         --dropdown-item-icon-destructive-color: #de6e5b;
         --disabled-tooltip-icon-color: #7fd2ef;
@@ -710,6 +711,16 @@ div.quick-search .search-button.show  {
     margin-top: 0;
     position: relative;
     overflow: hidden;
+}
+
+#root-widget.horizontal-layout .tab-row-widget .note-tab[active] .note-tab-wrapper {
+    border: 1px solid transparent;
+    border-bottom: 0;
+}
+
+#root-widget.horizontal-layout .tab-row-widget .note-tab[active] .note-tab-wrapper {
+    box-shadow: unset;
+    border-color: var(--subtle-border-color);
 }
 
 .tab-row-widget .note-tab .note-tab-wrapper {
