@@ -983,7 +983,7 @@ html body .dropdown-item.disabled {
     overflow: unset;
 }
 
-html .note-detail-editable-text :not(figure, .include-note):first-child {
+html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
     /* Create some space for the top-side shadow */
     margin-top: 1px !important;
 }
@@ -1046,6 +1046,13 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 .ck-content blockquote:after {
     content: "”";
     right: 0.35em;            
+}
+
+.ck-content hr {
+    margin: 5px 0;
+    height: 1px;
+    background-color: var(--main-border-color);
+    opacity: 1;
 }
 
 .note-detail-printable:not(.word-wrap) pre code {
