@@ -40,7 +40,7 @@
 
     --launcher-pane-size: 58px;
     --launcher-pane-horizontal-size: 54px;
-    --launcher-pane-horizontal-icon-size: 20px;
+    --launcher-pane-horizontal-icon-size: 20px;    
     --launcher-pane-button-margin: 6px;
     --launcher-pane-button-gap: 3px;
 
@@ -135,6 +135,7 @@
 
    --launcher-pane-background-color: #e8e8e8;
    --launcher-pane-horizontal-background-color: #fafafa;
+   --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.1);
    --launcher-pane-text-color: #000000bd;
    --launcher-pane-button-hover-color: black;
    --launcher-pane-button-hover-background: white;
@@ -274,6 +275,7 @@
      
         --launcher-pane-background-color: #1a1a1a;
         --launcher-pane-horizontal-background-color: #282828;
+        --launcher-pane-horizontal-border-color: rgb(22, 22, 22);
         --launcher-pane-text-color: #909090;
         --launcher-pane-button-hover-color: #ffffff;
         --launcher-pane-button-hover-background: #ffffff1c;
@@ -392,7 +394,7 @@
 
 #launcher-pane.horizontal {
     height: var(--launcher-pane-size) !important;
-    border-bottom: 1px solid var(--subtle-border-color);
+    border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
 }
 
 #launcher-pane .launcher-button,
@@ -707,7 +709,7 @@ div.quick-search .search-button.show  {
     left: 0;
     right: 0;
     height: 1px;
-    background: var(--subtle-border-color);
+    border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
 }
 
 .tab-row-widget-container {
@@ -732,7 +734,8 @@ div.quick-search .search-button.show  {
 
 #root-widget.horizontal-layout .tab-row-widget .note-tab[active] .note-tab-wrapper {
     box-shadow: unset;
-    border-color: var(--subtle-border-color);
+    border: 1px solid var(--launcher-pane-horizontal-border-color);
+    border-bottom: 0;
 }
 
 .tab-row-widget .note-tab .note-tab-wrapper {
