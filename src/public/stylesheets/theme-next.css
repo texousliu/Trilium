@@ -1244,3 +1244,15 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
     object-fit: cover !important;
     width: 100%;
 }
+
+.note-list.grid-view .ck-content {
+    line-height: 1.3;
+}
+
+.note-list.grid-view .ck-content p {
+    margin-bottom: 0.5em;
+}
+
+.note-list.grid-view .ck-content figure.image {
+    width: 25%;
+}
