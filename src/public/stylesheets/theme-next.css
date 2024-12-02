@@ -1139,17 +1139,17 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     padding-bottom: 0;
 }
 
-.note-list-wrapper .note-book-card .note-book-header .note-book-content {
+.note-list-wrapper .note-book-card .note-book-content {
     padding: 0 !important;
     font-size: 0.8rem;
 }
 
-.note-list-wrapper .note-book-card .note-book-header .note-book-content h1,
-.note-list-wrapper .note-book-card .note-book-header .note-book-content h2,
-.note-list-wrapper .note-book-card .note-book-header .note-book-content h3,
-.note-list-wrapper .note-book-card .note-book-header .note-book-content h4,
-.note-list-wrapper .note-book-card .note-book-header .note-book-content h5,
-.note-list-wrapper .note-book-card .note-book-header .note-book-content h6 {
+.note-list-wrapper .note-book-card .note-book-content h1,
+.note-list-wrapper .note-book-card .note-book-content h2,
+.note-list-wrapper .note-book-card .note-book-content h3,
+.note-list-wrapper .note-book-card .note-book-content h4,
+.note-list-wrapper .note-book-card .note-book-content h5,
+.note-list-wrapper .note-book-card .note-book-content h6 {
     font-size: 1rem;
     color: var(--active-item-text-color);   
 }
