@@ -1142,8 +1142,6 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 
 .note-list-wrapper .note-book-card .note-book-header:last-child {
     border-bottom: 0;
-    margin-bottom: 0;
-    padding-bottom: 0;
 }
 
 .note-list-wrapper .note-book-card .note-book-content {
