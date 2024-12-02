@@ -243,6 +243,9 @@ const TAB_ROW_TPL = `
 export default class TabRowWidget extends BasicWidget {
     doRender() {
         this.$widget = $(TAB_ROW_TPL);
+        
+        const documentStyle = window.getComputedStyle(document.documentElement);
+        this.showNoteIcons = (documentStyle.getPropertyValue("--tab-note-icons") === "true");
 
         this.draggabillies = [];
 
@@ -667,11 +670,16 @@ export default class TabRowWidget extends BasicWidget {
             }
         }
 
+        let noteIcon = "";
+
         if (noteContext) {
             const hoistedNote = froca.getNoteFromCache(noteContext.hoistedNoteId);
 
-            if (hoistedNote) {                
+            if (hoistedNote) {
                 $tab.find('.note-tab-wrapper').css("background", hoistedNote.getWorkspaceTabBackgroundColor());
+                if (!this.showNoteIcons) {
+                    noteIcon = hoistedNote.getWorkspaceIconClass();
+                }
             }
             else {
                 $tab.find('.note-tab-wrapper').removeAttr("style");
@@ -692,10 +700,16 @@ export default class TabRowWidget extends BasicWidget {
         $tab.addClass(utils.getNoteTypeClass(note.type));
         $tab.addClass(utils.getMimeTypeClass(note.mime));
 
-        $tab.find('.note-tab-icon')
-            .removeClass()
-            .addClass("note-tab-icon")
-            .addClass(note.getIcon());
+        if (this.showNoteIcons) {
+            noteIcon = note.getIcon();
+        }
+
+        if (noteIcon) {
+            $tab.find('.note-tab-icon')
+                .removeClass()
+                .addClass("note-tab-icon")
+                .addClass(noteIcon);
+        }
     }
 
     async entitiesReloadedEvent({loadResults}) {

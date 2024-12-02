@@ -55,6 +55,9 @@
     --menu-item-icon-vert-offset: 0;    
 
     --more-accented-background-color: var(--card-background-hover-color);    
+
+    /* Theme capabilities */
+    --tab-note-icons: true;
 }
 
 /*
@@ -172,7 +175,7 @@
    --scrollbar-background-color: #ddd;
    --link-color: blue;
 
-   --mermaid-theme: default;
+   --mermaid-theme: default;   
 
    --code-block-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
 
