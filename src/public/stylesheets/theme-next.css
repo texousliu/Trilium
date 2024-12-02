@@ -1096,7 +1096,7 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     box-shadow: 2px 3px 4px var(--card-shadow-color);
     border-radius: 12px;
     user-select: none;
-    padding: var(--note-list-vertical-padding) var(--note-list-horizontal-padding);
+    padding: 0;
     margin: 5px 10px 5px 0;
 }
 
@@ -1117,9 +1117,9 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
 }
 
 .note-list-wrapper .note-book-card .note-book-header {
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: bold;
-    margin-bottom: 0.25em;
+    padding: 0.5em 1em;
 }
 
 .note-list-wrapper .note-book-card .note-book-header .note-icon {
@@ -1144,6 +1144,10 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     font-size: 0.8rem;
 }
 
+.note-list-wrapper .note-book-card .note-book-content .rendered-content {
+    padding: 1em;
+}
+
 .note-list-wrapper .note-book-card .note-book-content h1,
 .note-list-wrapper .note-book-card .note-book-content h2,
 .note-list-wrapper .note-book-card .note-book-content h3,
@@ -1154,10 +1158,12 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     color: var(--active-item-text-color);   
 }
 
-.note-list-wrapper .note-book-card .note-book-content.type-code {
-    margin: 0 calc(-1 * var(--note-list-horizontal-padding));
-    margin-bottom: calc(-1 * var(--note-list-vertical-padding));
-    padding-top: 0;
+.note-list-wrapper .note-book-card .note-book-content p:last-child {
+    margin-bottom: 0;
+}
+
+.note-list-wrapper .note-book-card .note-book-content.type-code .rendered-content {
+    padding: 0;
 }
 
 .note-list-wrapper .note-book-card .note-book-content.type-code pre {
