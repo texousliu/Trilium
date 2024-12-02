@@ -748,15 +748,15 @@ div.quick-search .search-button.show  {
     overflow: hidden;
 }
 
-#root-widget.horizontal-layout .tab-row-widget .note-tab[active] .note-tab-wrapper {
+#root-widget.horizontal-layout .tab-row-widget .note-tab .note-tab-wrapper {
     border: 1px solid transparent;
-    border-bottom: 0;
+    border-bottom-color: transparent;
+    box-shadow: unset;
 }
 
 #root-widget.horizontal-layout .tab-row-widget .note-tab[active] .note-tab-wrapper {
-    box-shadow: unset;
     border: 1px solid var(--launcher-pane-horizontal-border-color);
-    border-bottom: 0;
+    border-bottom-color: transparent;
 }
 
 .tab-row-widget .note-tab .note-tab-wrapper {
