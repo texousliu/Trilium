@@ -1185,6 +1185,11 @@ html .note-detail-editable-text :not(figure, .include-note):first-child {
     color: var(--left-pane-icon-color) !important;
 }
 
+.note-list.grid-view .note-book-card:hover {
+    background: var(--card-background-color) !important;
+    filter: contrast(105%);
+}
+
 .note-list.grid-view .note-book-card img {
     object-fit: cover !important;
     width: 100%;
