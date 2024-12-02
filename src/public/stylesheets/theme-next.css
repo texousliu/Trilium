@@ -774,6 +774,20 @@ div.quick-search .search-button.show  {
     border-bottom-right-radius: 0;   
 }
 
+.note-tab .note-tab-wrapper {
+    --tab-background-color: initial !important;
+}
+
+.note-tab .note-tab-wrapper::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: var(--workspace-tab-background-color);
+}
+
 .tab-row-widget .note-tab:nth-child(1) {
     transform: translate3d(var(--tab-first-item-horiz-offset), 0, 0);
 }

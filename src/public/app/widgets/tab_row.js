@@ -139,13 +139,14 @@ const TAB_ROW_TPL = `
         overflow: hidden;
         pointer-events: all;
         color: var(--inactive-tab-text-color);
-        background-color: var(--inactive-tab-background-color);
+        --tab-background-color: var(--workspace-tab-background-color);
+        background-color: var(--tab-background-color, var(--inactive-tab-background-color));
     }
     
     .tab-row-widget .note-tab[active] .note-tab-wrapper {
         font-weight: bold;
         color: var(--active-tab-text-color);
-        background-color : var(--active-tab-background-color);
+        background-color : var(--tab-background-color, var(--active-tab-background-color));
     }
     
     .tab-row-widget .note-tab[is-mini] .note-tab-wrapper {
@@ -189,11 +190,11 @@ const TAB_ROW_TPL = `
     }
     
     .tab-row-widget .note-tab:hover .note-tab-wrapper {
-        background-color: var(--inactive-tab-hover-background-color);
+        background-color: var(--tab-background-color, var(--inactive-tab-hover-background-color));
     }
     
     .tab-row-widget .note-tab[active]:hover .note-tab-wrapper {
-        background-color: var(--active-tab-hover-background-color);
+        background-color: var(--tab-background-color, var(--active-tab-hover-background-color));
     }
     
     .tab-row-widget .note-tab .note-tab-close:hover {
@@ -676,12 +677,12 @@ export default class TabRowWidget extends BasicWidget {
             const hoistedNote = froca.getNoteFromCache(noteContext.hoistedNoteId);
 
             if (hoistedNote) {
-                $tab.find('.note-tab-wrapper').css("background", hoistedNote.getWorkspaceTabBackgroundColor());
+                $tab.find('.note-tab-wrapper')
+                    .css("--workspace-tab-background-color", hoistedNote.getWorkspaceTabBackgroundColor());
                 if (!this.showNoteIcons) {
                     noteIcon = hoistedNote.getWorkspaceIconClass();
                 }
-            }
-            else {
+            } else {
                 $tab.find('.note-tab-wrapper').removeAttr("style");
             }
         }
