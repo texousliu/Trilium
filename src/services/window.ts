@@ -115,7 +115,7 @@ async function createMainWindow(app: App) {
 function getWindowExtraOpts() {
     const extraOpts: Partial<BrowserWindowConstructorOptions> = {};
     if (!optionService.getOptionBool('nativeTitleBarVisible')) {
-        extraOpts.titleBarStyle = "hidden";
+        extraOpts.titleBarStyle = (process.platform !== "darwin" ? "hidden" : "hiddenInset");
         extraOpts.titleBarOverlay = true;
     }
 

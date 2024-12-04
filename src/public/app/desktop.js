@@ -63,8 +63,12 @@ function initTitleBarButtons() {
         const symbolColor = style.getPropertyValue("--native-titlebar-foreground");
 
         if (color && symbolColor) {
-            currentWindow.setTitleBarOverlay({ color, symbolColor });
+            // FIXME, do this only on windows
+            // currentWindow.setTitleBarOverlay({ color, symbolColor });
         }
+
+        // FIXME: call only on darwin
+        currentWindow.setWindowButtonPosition({ x: 20, y: 20 });
     }
     
     // Update the native title bar buttons.
