@@ -500,7 +500,11 @@ table.promoted-attributes-in-tooltip td, table.promoted-attributes-in-tooltip th
 
 .tooltip {
     font-size: var(--main-font-size) !important;
-    z-index: calc(var(--ck-z-panel) - 1) !important;
+    /*
+        TODO: Investigate the purpose of this
+        z-index: calc(var(--ck-z-panel) - 1) !important;
+    */
+    z-index: 3000;
 }
 
 .tooltip-trigger {
