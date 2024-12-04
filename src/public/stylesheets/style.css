@@ -1277,6 +1277,7 @@ textarea {
 }
 
 .tab-row-container {
+    padding-left: env(titlebar-area-x);
     margin-right: calc(100vw, env(titlebar-area-width, 100vw));
 }
 
