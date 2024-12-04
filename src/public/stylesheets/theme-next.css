@@ -144,6 +144,8 @@
    --launcher-pane-button-hover-background: white;
    --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
 
+   --sync-status-error-pulse-color: #ff5528;
+
    --root-background: var(--left-pane-background-color);
 
    --gutter-color: transparent;
@@ -286,6 +288,8 @@
         --launcher-pane-button-hover-color: #ffffff;
         --launcher-pane-button-hover-background: #ffffff1c;
         --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .2);
+
+        --sync-status-error-pulse-color: #f47871;
 
         --root-background: var(--left-pane-background-color);
 
@@ -453,6 +457,19 @@
 
 #launcher-pane .sync-status-icon:not(.sync-status-in-progress):hover {
     background: unset;
+}
+
+@keyframes sync-status-pulse {
+    from {
+        color: currentColor
+    } to {
+        color: var(--pulse-color);
+    }
+}
+
+#launcher-pane .sync-status-disconnected-with-changes {
+    --pulse-color: var(--sync-status-error-pulse-color);
+    animation: sync-status-pulse 1s ease-in-out alternate-reverse infinite;
 }
 
 #launcher-pane.horizontal .launcher-button {
