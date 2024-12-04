@@ -101,6 +101,7 @@ export default class DesktopLayout {
             .class((launcherPaneIsHorizontal ? "horizontal" : "vertical") + "-layout")
             .optChild(fullWidthTabBar, new FlexContainer('row')
                 .class("tab-row-container")
+                .child(new FlexContainer( "row").id("tab-row-left-spacer"))
                 .child(new LeftPaneToggleWidget(true))
                 .child(new TabRowWidget().class("full-width"))
                 .css('height', '40px')
