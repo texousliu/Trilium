@@ -193,7 +193,7 @@
    --calendar-day-highlight-background: #80808024;
 
    --tooltip-border-color: transparent;
-   --tooltip-background-color: rgba(0, 0, 0, 0.8);
+   --tooltip-background-color: rgba(255, 255, 255, 0.8);
    --tooltip-foreground-color: #fff;
 }
 
