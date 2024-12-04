@@ -33,6 +33,7 @@ function index(req: Request, res: Response) {
         themeCssUrl: getThemeCssUrl(options.theme),
         headingStyle: options.headingStyle,
         layoutOrientation: options.layoutOrientation,
+        platform: process.platform,
         mainFontSize: parseInt(options.mainFontSize),
         treeFontSize: parseInt(options.treeFontSize),
         detailFontSize: parseInt(options.detailFontSize),
