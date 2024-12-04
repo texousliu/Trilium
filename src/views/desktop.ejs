@@ -6,7 +6,7 @@
     <link rel="manifest" crossorigin="use-credentials" href="manifest.webmanifest">
     <title>TriliumNext Notes</title>
 </head>
-<body class="desktop heading-style-<%= headingStyle %> layout-<%= layoutOrientation %> platform-<%= platform %>">
+<body class="desktop heading-style-<%= headingStyle %> layout-<%= layoutOrientation %> platform-<%= platform %> <%= isElectron ? 'electron' : '' %>">
 <noscript><%= t("javascript-required") %></noscript>
 
 <script>
@@ -84,5 +84,5 @@
 
 <link rel="stylesheet" type="text/css" href="<%= assetPath %>/node_modules/boxicons/css/boxicons.min.css">
 
-</body>
+</>
 </html>

@@ -34,6 +34,7 @@ function index(req: Request, res: Response) {
         headingStyle: options.headingStyle,
         layoutOrientation: options.layoutOrientation,
         platform: process.platform,
+        isElectron: utils.isElectron(),
         mainFontSize: parseInt(options.mainFontSize),
         treeFontSize: parseInt(options.treeFontSize),
         detailFontSize: parseInt(options.detailFontSize),
