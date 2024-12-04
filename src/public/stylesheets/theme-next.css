@@ -452,7 +452,7 @@
 }
 
 #launcher-pane .sync-status .sync-status-icon {
-    top: 4px;
+    top: 3px;
 }
 
 #launcher-pane .sync-status-icon:not(.sync-status-in-progress):hover {
