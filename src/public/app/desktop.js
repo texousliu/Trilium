@@ -68,7 +68,9 @@ function initTitleBarButtons() {
         }
 
         // FIXME: call only on darwin
-        currentWindow.setWindowButtonPosition({ x: 20, y: 20 });
+        const xOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-x-offset"), 10);
+        const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);
+        currentWindow.setWindowButtonPosition({ x: xOffset, y: yOffset });
     }
     
     // Update the native title bar buttons.

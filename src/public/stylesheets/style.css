@@ -41,6 +41,8 @@ body {
 
     --native-titlebar-background: var(--main-background-color);
     --native-titlebar-foreground: var(--main-text-color);
+    --native-titlebar-darwin-x-offset: 10;
+    --native-titlebar-darwin-y-offset: 12;
 }
 
 body.layout-horizontal {
