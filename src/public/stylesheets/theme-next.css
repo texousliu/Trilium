@@ -1155,6 +1155,9 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 .note-tooltip-content .note-title-with-path {
     display: flex;
     flex-direction: column-reverse;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 6px;
+
 }
 
 .note-tooltip-content .note-path {
@@ -1163,9 +1166,12 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     font-size: .75em;
 }
 
+.note-tooltip-content .note-tooltip-attributes {
+    margin-top: -4px;
+    font-size: .75em;
+}
+
 .note-tooltip-content .rendered-content {
-    margin-top: -2px;
-    border-top: 2px solid currentColor;
     padding-top: 12px;
 }
 
