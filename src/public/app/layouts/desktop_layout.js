@@ -102,7 +102,7 @@ export default class DesktopLayout {
             .optChild(fullWidthTabBar, new FlexContainer('row')
                 .class("tab-row-container")
                 .child(new FlexContainer( "row").id("tab-row-left-spacer"))
-                .child(new LeftPaneToggleWidget(true))
+                .optChild(launcherPaneIsHorizontal, new LeftPaneToggleWidget(true))
                 .child(new TabRowWidget().class("full-width"))
                 .css('height', '40px')
                 .css('background-color', 'var(--launcher-pane-background-color)')
