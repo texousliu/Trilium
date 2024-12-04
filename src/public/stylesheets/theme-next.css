@@ -1145,6 +1145,31 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 /*
+ * Note tooltip
+ */
+
+.note-tooltip-content {
+    padding: 8px;
+ }
+
+.note-tooltip-content .note-title-with-path {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.note-tooltip-content .note-path {
+    display: block;
+    color: var(--muted-text-color);
+    font-size: .75em;
+}
+
+.note-tooltip-content .rendered-content {
+    margin-top: -2px;
+    border-top: 2px solid currentColor;
+    padding-top: 12px;
+}
+
+/*
  * TEXT NOTES
  */
 
