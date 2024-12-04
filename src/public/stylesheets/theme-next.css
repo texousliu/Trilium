@@ -392,6 +392,18 @@
 }
 
 /*
+ * Global menu
+ */
+
+.global-menu div.zoom-buttons a {
+    border: unset;
+}
+
+.global-menu div.zoom-buttons a.bx {
+    color: var(--menu-text-color) !important;
+}
+
+/*
  *  Launcher pane
  */
 #launcher-container,
