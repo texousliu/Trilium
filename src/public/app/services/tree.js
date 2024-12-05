@@ -275,7 +275,7 @@ async function getNoteTitleWithPathAsSuffix(notePath) {
     if (path.length > 0) {
         const $notePath = $('<span class="note-path">');
         
-        $notePath.append($(`<span class="path-bracket">(</span>)`));
+        $notePath.append($(`<span class="path-bracket"> (</span>)`));
 
         for (let segmentIndex = 0; segmentIndex < path.length; segmentIndex++) {
             $notePath.append($(`<span>`).text(path[segmentIndex]));
