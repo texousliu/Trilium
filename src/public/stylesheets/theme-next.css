@@ -1160,6 +1160,27 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 }
 
+.note-tooltip-content .note-title-with-path .path-bracket {
+    /* Hide the leading and trailing bracket from the path */
+    display: none;
+}
+
+.note-tooltip-content .note-title-with-path .path-delimiter {
+    /* Hide the path delimiters (slashes) */
+    display: none;
+}
+
+.note-tooltip-content .note-title-with-path .path-delimiter + span::before {
+    /* Replace the path delimiters with arrows */
+    display: inline-block;
+    content: "\ebe6";
+    padding: 0 4px;
+    line-height: 1;
+    vertical-align: bottom;
+    font-family: boxicons;
+    opacity: .75;
+}
+
 .note-tooltip-content .note-path {
     display: block;
     color: var(--muted-text-color);
