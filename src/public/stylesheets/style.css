@@ -1278,6 +1278,10 @@ textarea {
     color: var(--muted-text-color);
 }
 
+body.electron:not(.native-titlebar) .tab-row-container {
+    padding-left: 2em;
+}
+
 #tab-row-left-spacer {
     width: env(titlebar-area-x);
     -webkit-app-region: drag;
