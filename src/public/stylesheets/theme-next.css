@@ -706,6 +706,10 @@ body.layout-horizontal .tab-row-container:after {
     background: var(--subtle-border-color);
 }
 
+body.layout-vertical.electron.platform-darwin .tab-row-container {
+    border-bottom: 1px solid var(--subtle-border-color);
+}
+
 .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
     height: var(--tab-height) !important;    
