@@ -1148,6 +1148,10 @@ body .calendar-dropdown-widget .calendar-body a:hover {
  * Note tooltip
  */
 
+.tooltip .tooltip-inner:has(.note-tooltip-content) {
+    border-radius: 8px;
+}
+
 .note-tooltip-content {
     padding: 8px;
  }
