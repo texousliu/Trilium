@@ -54,7 +54,13 @@
     --menu-padding-size: 8px;
     --menu-item-icon-vert-offset: 0;    
 
-    --more-accented-background-color: var(--card-background-hover-color);    
+    --more-accented-background-color: var(--card-background-hover-color);
+
+    --timeline-left-gap: 20px;
+    --timeline-right-gap: 20px;
+    --timeline-bullet-size: 10px;
+    --timeline-bullet-vertical-pos: .75em;
+    --timeline-connector-size: 4px;
 
     /* Theme capabilities */
     --tab-note-icons: true;
@@ -194,6 +200,11 @@
    --calendar-day-hover-background: var(--active-item-background-color);
    --calendar-day-highlight-background: #80808024;
 
+   --timeline-bullet-color: gray;
+   --timeline-bullet-hover-color: white;
+   --timeline-connector-color: #464646;
+   --timeline-connector-active-color: #47403b;
+
    --tooltip-background-color: rgba(255, 255, 255, 0.85);
    --tooltip-foreground-color: #000000ba;
    --tooltip-shadow-color: rgba(0, 0, 0, .15);
@@ -331,6 +342,11 @@
         --calendar-day-hover-color: var(--hover-item-text-color);
         --calendar-day-hover-background: var(--active-item-background-color);
         --calendar-day-highlight-background: #8080805a;
+
+        --timeline-bullet-color: gray;
+        --timeline-bullet-hover-color: white;
+        --timeline-connector-color: #464646;
+        --timeline-connector-active-color: #47403b;
 
         --tooltip-background-color: rgba(67, 67, 67, 0.86);
         --tooltip-foreground-color: #ffffffeb;
@@ -1201,6 +1217,85 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 /*
+ * Recent changes list
+ */
+
+.recent-changes-content > div {
+    padding-left: var(--timeline-left-gap);
+}
+
+/* Date headings */
+.recent-changes-content > div > b {
+    display: block;
+    padding: 10px 0;
+    font-size: 1.25em;
+    font-weight: 300;
+    color: white;
+}
+
+.recent-changes-content ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Timeline items */
+.recent-changes-content ul li,
+.recent-changes-content > div > b {
+    position: relative;
+    margin: 0;
+    padding-left: var(--timeline-right-gap);
+}
+
+
+/* Timeline connector */
+.recent-changes-content ul li::before,
+.recent-changes-content > div > b::before {
+    position: absolute;
+    content: "";
+    top: var(--connector-top, 0);
+    left: calc((var(--timeline-bullet-size) - var(--timeline-connector-size)) / 2);
+    bottom: var(--connector-bottom, 0);
+    width: var(--timeline-connector-size);
+    border-radius: var(--connector-radius, 0) var(--connector-radius, 0) 0 0;
+    background: var(--timeline-connector-color);
+    transition: background-color 400ms ease-in-out;
+}
+
+.recent-changes-content > div:hover {
+    --timeline-connector-color: var(--timeline-connector-active-color);
+}
+
+/* The first item of the timeline */
+.recent-changes-content > div:first-child > *:first-child {
+    --connector-top: 50%;
+    --connector-radius: calc(var(--timeline-connector-size) / 2);
+}
+
+/* The last item of the timeline */
+.recent-changes-content > div:last-child  li:last-child {
+    --connector-bottom: 50%;
+}
+
+/* Timeline bullet */
+.recent-changes-content ul li::after {
+    position: absolute;
+    content: "";
+    top: var(--timeline-bullet-vertical-pos);
+    left: 0;
+    width: var(--timeline-bullet-size);
+    height: var(--timeline-bullet-size);
+    border-radius: 50%;
+    background: var(--timeline-bullet-color);
+    transform: translateY(-50%);
+}
+
+/* Hovered timeline bullet */
+.recent-changes-content ul li:hover::after {
+    background: var(--timeline-bullet-hover-color);
+}
+
+/*
  * TEXT NOTES
  */
 
@@ -1487,3 +1582,4 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 .note-list.grid-view .ck-content figure.image {
     width: 25%;
 }
+
