@@ -362,6 +362,9 @@ body.layout-horizontal {
     --active-tab-background-color: var(--launcher-pane-background-color);
     --active-tab-hover-background-color: var(--active-tab-background-color);
     --new-tab-button-background: transparent;
+    --tab-bar-height: 44px;
+    --native-titlebar-darwin-x-offset: 12;
+    --native-titlebar-darwin-y-offset: 14 !important;
 }
 
 /* Matches when the left pane is collapsed */
