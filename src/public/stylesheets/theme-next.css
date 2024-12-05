@@ -347,6 +347,11 @@
     background-color: var(--root-background);
 }
 
+body {
+    --native-titlebar-darwin-x-offset: 10;
+    --native-titlebar-darwin-y-offset: 17 !important;
+}
+
 body.layout-vertical {
     --native-titlebar-background: var(--root-background);
 }
