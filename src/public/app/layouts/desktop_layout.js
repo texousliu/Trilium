@@ -96,7 +96,7 @@ export default class DesktopLayout {
         const launcherPaneIsHorizontal = (options.get("layoutOrientation") === "horizontal");
         const launcherPane = this.#buildLauncherPane(launcherPaneIsHorizontal);
         const isMac = (window.glob.platform === "darwin");
-        const isWindows = (window.glob.platform === "windows");
+        const isWindows = (window.glob.platform === "win32");
         const hasNativeTitleBar = (window.glob.hasNativeTitleBar);
         const fullWidthTabBar = (launcherPaneIsHorizontal && !isMac);
         const customTitleBarButtons = (hasNativeTitleBar && !isMac && !isWindows);

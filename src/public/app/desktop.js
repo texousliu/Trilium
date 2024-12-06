@@ -62,15 +62,16 @@ function initTitleBarButtons() {
         const color = style.getPropertyValue("--native-titlebar-background");
         const symbolColor = style.getPropertyValue("--native-titlebar-foreground");
 
-        if (color && symbolColor) {
-            // FIXME, do this only on windows
-            // currentWindow.setTitleBarOverlay({ color, symbolColor });
+        if (window.glob.platform === "win32" && color && symbolColor) {
+            currentWindow.setTitleBarOverlay({ color, symbolColor });
         }
 
         // FIXME: call only on darwin
-        const xOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-x-offset"), 10);
-        const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);
-        currentWindow.setWindowButtonPosition({ x: xOffset, y: yOffset });
+        if (window.glob.platform === "darwin") {
+            const xOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-x-offset"), 10);
+            const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);
+            currentWindow.setWindowButtonPosition({ x: xOffset, y: yOffset });
+        }
     }
     
     // Update the native title bar buttons.
