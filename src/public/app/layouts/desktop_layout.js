@@ -1,6 +1,7 @@
 import FlexContainer from "../widgets/containers/flex_container.js";
 import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import TabRowWidget from "../widgets/tab_row.js";
+import TitleBarButtonsWidget from "../widgets/title_bar_buttons.js";
 import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import NoteTitleWidget from "../widgets/note_title.js";
@@ -94,7 +95,11 @@ export default class DesktopLayout {
 
         const launcherPaneIsHorizontal = (options.get("layoutOrientation") === "horizontal");
         const launcherPane = this.#buildLauncherPane(launcherPaneIsHorizontal);
+        const isMac = (window.glob.platform === "darwin");
+        const isWindows = (window.glob.platform === "windows");
+        const hasNativeTitleBar = (window.glob.hasNativeTitleBar);
         const fullWidthTabBar = true;
+        const customTitleBarButtons = (hasNativeTitleBar && !isMac && !isWindows);
 
         return new RootContainer(true)
             .setParent(appContext)
@@ -104,6 +109,7 @@ export default class DesktopLayout {
                 .child(new FlexContainer( "row").id("tab-row-left-spacer"))
                 .optChild(launcherPaneIsHorizontal, new LeftPaneToggleWidget(true))
                 .child(new TabRowWidget().class("full-width"))
+                .optChild(customTitleBarButtons, new TitleBarButtonsWidget())
                 .css('height', '40px')
                 .css('background-color', 'var(--launcher-pane-background-color)')
                 .setParent(appContext)
@@ -122,6 +128,7 @@ export default class DesktopLayout {
                     .css("flex-grow", "1")
                     .optChild(!fullWidthTabBar, new FlexContainer('row')
                         .child(new TabRowWidget())
+                        .optChild(customTitleBarButtons, new TitleBarButtonsWidget())
                         .css('height', '40px')
                     )
                     .child(new FlexContainer('row')

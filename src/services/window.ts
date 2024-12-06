@@ -114,9 +114,21 @@ async function createMainWindow(app: App) {
 
 function getWindowExtraOpts() {
     const extraOpts: Partial<BrowserWindowConstructorOptions> = {};
+
+    const isMac = (process.platform === "darwin");
+    const isWindows = (process.platform === "win32");
+
     if (!optionService.getOptionBool('nativeTitleBarVisible')) {
-        extraOpts.titleBarStyle = (process.platform !== "darwin" ? "hidden" : "hiddenInset");
-        extraOpts.titleBarOverlay = true;
+        if (isMac) {
+            extraOpts.titleBarStyle = "hiddenInset";
+            extraOpts.titleBarOverlay = true;
+        } else if (isWindows) {
+            extraOpts.titleBarStyle = "hidden";
+            extraOpts.titleBarOverlay = true;
+        } else {
+            // Linux or other platforms.
+            extraOpts.frame = false;
+        }
     }
 
     return extraOpts;
