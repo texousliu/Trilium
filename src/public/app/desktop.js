@@ -66,7 +66,6 @@ function initTitleBarButtons() {
             currentWindow.setTitleBarOverlay({ color, symbolColor });
         }
 
-        // FIXME: call only on darwin
         if (window.glob.platform === "darwin") {
             const xOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-x-offset"), 10);
             const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);

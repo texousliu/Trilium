@@ -98,7 +98,12 @@ export default class DesktopLayout {
         const isMac = (window.glob.platform === "darwin");
         const isWindows = (window.glob.platform === "win32");
         const hasNativeTitleBar = (window.glob.hasNativeTitleBar);
-        const fullWidthTabBar = (launcherPaneIsHorizontal && !isMac);
+
+        /**
+         * If true, the tab bar is displayed above the launcher pane with full width; if false (default), the tab bar is displayed in the rest pane.
+         * On macOS we need to force the full-width tab bar on Electron in order to allow the semaphore (window controls) enough space.
+         */
+        const fullWidthTabBar = (launcherPaneIsHorizontal || (!hasNativeTitleBar && isMac));
         const customTitleBarButtons = (hasNativeTitleBar && !isMac && !isWindows);
 
         return new RootContainer(true)
