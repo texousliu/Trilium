@@ -37,6 +37,7 @@ function index(req: Request, res: Response) {
         platform: process.platform,
         isElectron,
         hasNativeTitleBar: (isElectron && options.nativeTitleBarVisible === "true"),
+        hasBackgroundEffects: true, // TODO: Replace with option
         mainFontSize: parseInt(options.mainFontSize),
         treeFontSize: parseInt(options.treeFontSize),
         detailFontSize: parseInt(options.detailFontSize),
