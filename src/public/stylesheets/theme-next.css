@@ -412,6 +412,14 @@ body.layout-horizontal {
     --native-titlebar-darwin-y-offset: 14 !important;
 }
 
+body.background-effects,
+body.background-effects #root-widget {
+    background: transparent !important;
+    --launcher-pane-background-color: transparent;
+    --tab-background-color: transparent;
+    --active-tab-background-color: transparent;
+}
+
 /* Matches when the left pane is collapsed */
 :has(#left-pane.hidden-int) {
     --center-pane-border-radius: 0;

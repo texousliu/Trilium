@@ -133,7 +133,7 @@ function getWindowExtraOpts() {
 
     // Window effects (Mica)
     // TODO: Apply only on Windows and allow the user to choose whether to activate it or not.
-    extraOpts.backgroundMaterial = "mica";
+    extraOpts.backgroundMaterial = "tabbed";
 
     return extraOpts;
 }
