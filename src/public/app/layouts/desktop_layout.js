@@ -98,7 +98,7 @@ export default class DesktopLayout {
         const isMac = (window.glob.platform === "darwin");
         const isWindows = (window.glob.platform === "windows");
         const hasNativeTitleBar = (window.glob.hasNativeTitleBar);
-        const fullWidthTabBar = true;
+        const fullWidthTabBar = (launcherPaneIsHorizontal && !isMac);
         const customTitleBarButtons = (hasNativeTitleBar && !isMac && !isWindows);
 
         return new RootContainer(true)
