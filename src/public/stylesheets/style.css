@@ -1283,7 +1283,7 @@ textarea {
 }
 
 body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
-    padding-left: 2em;
+    padding-left: 1em;
 }
 
 #tab-row-left-spacer {
