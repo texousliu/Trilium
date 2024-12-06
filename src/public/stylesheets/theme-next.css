@@ -415,9 +415,13 @@ body.layout-horizontal {
 body.background-effects,
 body.background-effects #root-widget {
     background: transparent !important;
-    --launcher-pane-background-color: transparent;
+    --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
     --tab-background-color: transparent;
-    --active-tab-background-color: transparent;
+    --active-tab-background-color: var(--launcher-pane-background-color);
+}
+
+body.background-effects #launcher-pane .launcher-button {
+    background-color: transparent;
 }
 
 /* Matches when the left pane is collapsed */
