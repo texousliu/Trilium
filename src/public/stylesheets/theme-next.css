@@ -200,10 +200,10 @@
    --calendar-day-hover-background: var(--active-item-background-color);
    --calendar-day-highlight-background: #80808024;
 
-   --timeline-bullet-color: gray;
-   --timeline-bullet-hover-color: white;
-   --timeline-connector-color: #464646;
-   --timeline-connector-active-color: #47403b;
+   --timeline-bullet-color: #a5a5a5;
+   --timeline-bullet-hover-color: black;
+   --timeline-connector-color: #f1f1f1;
+   --timeline-connector-active-color: #ddd;
 
    --tooltip-background-color: rgba(255, 255, 255, 0.85);
    --tooltip-foreground-color: #000000ba;
@@ -346,7 +346,7 @@
         --timeline-bullet-color: gray;
         --timeline-bullet-hover-color: white;
         --timeline-connector-color: #464646;
-        --timeline-connector-active-color: #47403b;
+        --timeline-connector-active-color: #545454;
 
         --tooltip-background-color: rgba(67, 67, 67, 0.86);
         --tooltip-foreground-color: #ffffffeb;
@@ -1220,6 +1220,10 @@ body .calendar-dropdown-widget .calendar-body a:hover {
  * Recent changes list
  */
 
+.recent-changes-content small {
+    color: var(--muted-text-color);
+}
+
 .recent-changes-content > div {
     padding-left: var(--timeline-left-gap);
 }
@@ -1230,7 +1234,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     padding: 10px 0;
     font-size: 1.25em;
     font-weight: 300;
-    color: white;
 }
 
 .recent-changes-content ul {
