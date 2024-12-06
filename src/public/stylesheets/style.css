@@ -1292,7 +1292,7 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
 }
 
 .tab-row-container {
-    margin-right: calc(100vw - env(titlebar-area-width, 100vw));
+    padding-right: calc(100vw - env(titlebar-area-width, 100vw));
 }
 
 .tab-row-container .toggle-button {
