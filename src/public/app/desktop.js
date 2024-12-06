@@ -54,29 +54,29 @@ function initOnElectron() {
 }
 
 function initTitleBarButtons() {
-    function applyTitleBarOverlaySettings() {
-        const electronRemote = utils.dynamicRequire("@electron/remote");    
-        const currentWindow = electronRemote.getCurrentWindow();
+    const electronRemote = utils.dynamicRequire("@electron/remote");    
+    const currentWindow = electronRemote.getCurrentWindow();
+    const style = window.getComputedStyle(document.body);
+    
+    if (window.glob.platform === "win32") {
+        const applyWindowsOverlay = () => {
+            const color = style.getPropertyValue("--native-titlebar-background");
+            const symbolColor = style.getPropertyValue("--native-titlebar-foreground");
+            if (color && symbolColor) {
+                currentWindow.setTitleBarOverlay({ color, symbolColor });
+            }
+        };
         
-        const style = window.getComputedStyle(document.body);
-        const color = style.getPropertyValue("--native-titlebar-background");
-        const symbolColor = style.getPropertyValue("--native-titlebar-foreground");
+        applyWindowsOverlay();
 
-        if (window.glob.platform === "win32" && color && symbolColor) {
-            currentWindow.setTitleBarOverlay({ color, symbolColor });
-        }
-
-        if (window.glob.platform === "darwin") {
-            const xOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-x-offset"), 10);
-            const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);
-            currentWindow.setWindowButtonPosition({ x: xOffset, y: yOffset });
-        }
+        // Register for changes to the native title bar colors.
+        window.matchMedia("(prefers-color-scheme: dark)")
+            .addEventListener("change", applyWindowsOverlay);
     }
-    
-    // Update the native title bar buttons.
-    applyTitleBarOverlaySettings();
-    
-    // Register for changes to the native title bar colors.
-    window.matchMedia("(prefers-color-scheme: dark)")
-        .addEventListener("change", applyTitleBarOverlaySettings);
+
+    if (window.glob.platform === "darwin") {
+        const xOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-x-offset"), 10);
+        const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);
+        currentWindow.setWindowButtonPosition({ x: xOffset, y: yOffset });
+    }    
 }
