@@ -84,6 +84,7 @@ import CopyImageReferenceButton from "../widgets/floating_buttons/copy_image_ref
 import ScrollPaddingWidget from "../widgets/scroll_padding.js";
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 import options from "../services/options.js";
+import utils from "../services/utils.js";
 
 export default class DesktopLayout {
     constructor(customWidgets) {
@@ -95,6 +96,7 @@ export default class DesktopLayout {
 
         const launcherPaneIsHorizontal = (options.get("layoutOrientation") === "horizontal");
         const launcherPane = this.#buildLauncherPane(launcherPaneIsHorizontal);
+        const isElectron = (utils.isElectron());
         const isMac = (window.glob.platform === "darwin");
         const isWindows = (window.glob.platform === "win32");
         const hasNativeTitleBar = (window.glob.hasNativeTitleBar);
@@ -103,7 +105,7 @@ export default class DesktopLayout {
          * If true, the tab bar is displayed above the launcher pane with full width; if false (default), the tab bar is displayed in the rest pane.
          * On macOS we need to force the full-width tab bar on Electron in order to allow the semaphore (window controls) enough space.
          */
-        const fullWidthTabBar = (launcherPaneIsHorizontal || (!hasNativeTitleBar && isMac));
+        const fullWidthTabBar = (launcherPaneIsHorizontal || (isElectron && !hasNativeTitleBar && isMac));
         const customTitleBarButtons = (hasNativeTitleBar && !isMac && !isWindows);
 
         return new RootContainer(true)
