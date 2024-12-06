@@ -846,6 +846,10 @@ body.layout-horizontal .tab-row-widget-container {
     transition: none;
 }
 
+.tab-row-container .title-bar-buttons {
+    margin-top: calc((var(--tab-bar-height) - var(--tab-height)) * -1);
+}
+
 body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;   
