@@ -424,6 +424,10 @@ body.background-effects #launcher-pane .launcher-button {
     background-color: transparent;
 }
 
+body.background-effects #horizontal-main-container {
+    background-color: var(--root-background);
+}
+
 /* Matches when the left pane is collapsed */
 :has(#left-pane.hidden-int) {
     --center-pane-border-radius: 0;

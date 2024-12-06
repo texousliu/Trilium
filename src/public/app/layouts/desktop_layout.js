@@ -124,6 +124,7 @@ export default class DesktopLayout {
             .optChild(launcherPaneIsHorizontal, launcherPane)
             .child(new FlexContainer('row')
                 .css("flex-grow", "1")
+                .id("horizontal-main-container")
                 .optChild(!launcherPaneIsHorizontal, launcherPane)
                 .child(new LeftPaneContainer()
                     .optChild(!launcherPaneIsHorizontal, new QuickSearchWidget())
