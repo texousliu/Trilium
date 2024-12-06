@@ -150,6 +150,7 @@
    --launcher-pane-button-hover-background: white;
    --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .075);
 
+   --protected-session-active-icon-color: #16b516;
    --sync-status-error-pulse-color: #ff5528;
 
    --root-background: var(--left-pane-background-color);
@@ -300,6 +301,7 @@
         --launcher-pane-button-hover-background: #ffffff1c;
         --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .2);
 
+        --protected-session-active-icon-color: #8edd8e;
         --sync-status-error-pulse-color: #f47871;
 
         --root-background: var(--left-pane-background-color);
@@ -479,6 +481,16 @@
     justify-content: center;
     align-items: center;
 }
+
+/* Protected session enabled button */
+
+#launcher-pane button.bx-check-shield,
+#launcher-pane button.bx-check-shield:hover {
+    color: var(--protected-session-active-icon-color);
+    transition: color 500ms ease-in-out;
+}
+
+/* Sync status button */
 
 #launcher-pane .sync-status .sync-status-icon {
     top: 3px;
