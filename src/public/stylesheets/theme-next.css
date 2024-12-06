@@ -20,7 +20,7 @@
 
 :root {
     /* --main-font-family: "Noto Sans", sans-serif; */
-    --main-font-family: "Ubuntu Sans", sans-serif;
+    --main-font-family: "Segoe UI", sans-serif;
     /* --main-font-family: "Ubuntu", sans-serif; */
     /* --main-font-family: "Nunito", sans-serif; */
     /* --main-font-family: "Inter", sans-serif; */
@@ -392,12 +392,24 @@
     background-color: var(--root-background);
 }
 
-#root-widget.horizontal-layout {
+body {
+    --native-titlebar-darwin-x-offset: 10;
+    --native-titlebar-darwin-y-offset: 17 !important;
+}
+
+body.layout-vertical {
+    --native-titlebar-background: var(--root-background);
+}
+
+body.layout-horizontal {
     --launcher-pane-background-color: var(--launcher-pane-horizontal-background-color);
     --launcher-pane-size: var(--launcher-pane-horizontal-size);
     --active-tab-background-color: var(--launcher-pane-background-color);
     --active-tab-hover-background-color: var(--active-tab-background-color);
     --new-tab-button-background: transparent;
+    --tab-bar-height: 44px;
+    --native-titlebar-darwin-x-offset: 12;
+    --native-titlebar-darwin-y-offset: 14 !important;
 }
 
 /* Matches when the left pane is collapsed */
@@ -426,7 +438,7 @@
  *  Launcher pane
  */
 #launcher-container,
-#root-widget.horizontal-layout > .horizontal {
+body.layout-horizontal > .horizontal {
     align-items: center;
 }
 
@@ -837,7 +849,7 @@ div.quick-search .search-button.show  {
     position: relative;
 }
 
-#root-widget.horizontal-layout .tab-row-container:after {
+body.layout-horizontal .tab-row-container:after {
     content: "";
     position: absolute;
     bottom: 0;
@@ -847,16 +859,20 @@ div.quick-search .search-button.show  {
     border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
 }
 
+body.layout-vertical.electron.platform-darwin .tab-row-container {
+    border-bottom: 1px solid var(--subtle-border-color);
+}
+
 .tab-row-widget-container {
     margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
     height: var(--tab-height) !important;    
 }
 
-#root-widget.horizontal-layout .tab-row-container {
+body.layout-horizontal .tab-row-container {
     padding-top: calc((var(--tab-bar-height) - var(--tab-height)));    
 }
 
-#root-widget.horizontal-layout .tab-row-widget-container {
+body.layout-horizontal .tab-row-widget-container {
     margin-top: 0;
     position: relative;
     overflow: hidden;
@@ -883,7 +899,11 @@ div.quick-search .search-button.show  {
     transition: none;
 }
 
-#root-widget.horizontal-layout .tab-row-widget .note-tab .note-tab-wrapper {
+.tab-row-container .title-bar-buttons {
+    margin-top: calc((var(--tab-bar-height) - var(--tab-height)) * -1);
+}
+
+body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;   
 }
