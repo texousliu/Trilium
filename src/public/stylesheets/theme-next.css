@@ -628,6 +628,47 @@ div.quick-search .search-button.show  {
 }
 
 /*
+ * Quick search results
+ */
+
+/* Item */
+.quick-search .dropdown-menu *.dropdown-item {
+    padding: 8px 12px !important;
+}
+
+
+/* Note icon */
+.quick-search .dropdown-menu .dropdown-item > .bx {
+    position: relative;
+    top: 2px;
+}
+
+/* Note title */
+.quick-search .dropdown-menu .dropdown-item > a {
+    color: var(--menu-text-color);
+}
+
+.quick-search .dropdown-menu .dropdown-item > a:hover {
+    --hover-item-background-color: transparent;
+    text-decoration: underline;
+}
+
+
+/* Note path */
+.quick-search .dropdown-menu small {
+    display: block;
+    opacity: .5;
+    font-size: .75em;
+    overflow: hidden;
+}
+
+/* The "Show in full search" button */
+.quick-search .dropdown-menu button {
+    padding: 0;
+    color: var(--menu-text-color) !important;
+}
+
+/*
  * Left pane
  */
 
