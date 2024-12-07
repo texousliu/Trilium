@@ -665,6 +665,47 @@ div.quick-search .search-button.show  {
 }
 
 /*
+ * Quick search results
+ */
+
+/* Item */
+.quick-search .dropdown-menu *.dropdown-item {
+    padding: 8px 12px !important;
+}
+
+
+/* Note icon */
+.quick-search .dropdown-menu .dropdown-item > .bx {
+    position: relative;
+    top: 1px;
+}
+
+/* Note title */
+.quick-search .dropdown-menu .dropdown-item > a {
+    color: var(--menu-text-color);
+}
+
+.quick-search .dropdown-menu .dropdown-item > a:hover {
+    --hover-item-background-color: transparent;
+    text-decoration: underline;
+}
+
+
+/* Note path */
+.quick-search .dropdown-menu small {
+    display: block;
+    opacity: .5;
+    font-size: .75em;
+    overflow: hidden;
+}
+
+/* The "Show in full search" button */
+.quick-search .dropdown-menu button {
+    padding: 0;
+    color: var(--menu-text-color) !important;
+}
+
+/*
  * Left pane
  */
 
@@ -1298,6 +1339,14 @@ body .calendar-dropdown-widget .calendar-body a:hover {
  * Recent changes list
  */
 
+.recent-changes-dialog .modal-body {
+    padding: 0;
+}
+
+.recent-changes-content {
+    margin: var(--bs-modal-padding);
+}
+
 .recent-changes-content small {
     color: var(--muted-text-color);
 }
@@ -1308,10 +1357,14 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 /* Date headings */
 .recent-changes-content > div > b {
+    position: sticky;
     display: block;
+    top: 0;
+    background: var(--modal-background-color);
     padding: 10px 0;
     font-size: 1.25em;
     font-weight: 300;
+    z-index: 10;
 }
 
 .recent-changes-content ul {
@@ -1323,11 +1376,13 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 /* Timeline items */
 .recent-changes-content ul li,
 .recent-changes-content > div > b {
-    position: relative;
     margin: 0;
     padding-left: var(--timeline-right-gap);
 }
 
+.recent-changes-content ul li {
+    position: relative;
+}
 
 /* Timeline connector */
 .recent-changes-content ul li::before,
