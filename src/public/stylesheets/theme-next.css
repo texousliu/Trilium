@@ -413,17 +413,21 @@ body.layout-horizontal {
 }
 
 /* #region Mica */
-body.background-effects,
-body.background-effects #root-widget {
-    background: transparent !important;
+body.background-effects {
     --launcher-pane-background-color: rgba(255, 255, 255, 0.09);
     --tab-background-color: transparent;
     --active-tab-background-color: var(--launcher-pane-background-color);
     --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
 }
 
+body.background-effects,
+body.background-effects #root-widget {
+    background: transparent !important;   
+}
+
 body.background-effects.layout-vertical {
     --left-pane-background-color: transparent;
+    --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
 }
 
 body.background-effects #launcher-pane .launcher-button {
