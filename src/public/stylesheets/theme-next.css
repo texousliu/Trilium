@@ -412,12 +412,14 @@ body.layout-horizontal {
     --native-titlebar-darwin-y-offset: 14 !important;
 }
 
+/* #region Mica */
 body.background-effects,
 body.background-effects #root-widget {
     background: transparent !important;
     --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
     --tab-background-color: transparent;
     --active-tab-background-color: var(--launcher-pane-background-color);
+    --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
 }
 
 body.background-effects #launcher-pane .launcher-button {
@@ -427,6 +429,7 @@ body.background-effects #launcher-pane .launcher-button {
 body.background-effects #horizontal-main-container {
     background-color: var(--root-background);
 }
+/* #endregion */
 
 /* Matches when the left pane is collapsed */
 :has(#left-pane.hidden-int) {
