@@ -48,14 +48,17 @@ function initOnElectron() {
     const electron = utils.dynamicRequire('electron');
     electron.ipcRenderer.on('globalShortcut', async (event, actionName) => appContext.triggerCommand(actionName));
     
+    const electronRemote = utils.dynamicRequire("@electron/remote");    
+    const currentWindow = electronRemote.getCurrentWindow();    
+
+    initTransparencyEffects(currentWindow);
+
     if (options.get("nativeTitleBarVisible") !== "true") {
-        initTitleBarButtons();
-    }
+        initTitleBarButtons(currentWindow);
+    }    
 }
 
-function initTitleBarButtons() {
-    const electronRemote = utils.dynamicRequire("@electron/remote");    
-    const currentWindow = electronRemote.getCurrentWindow();
+function initTitleBarButtons(currentWindow) {    
     const style = window.getComputedStyle(document.body);
     
     if (window.glob.platform === "win32") {
@@ -79,4 +82,12 @@ function initTitleBarButtons() {
         const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);
         currentWindow.setWindowButtonPosition({ x: xOffset, y: yOffset });
     }    
+}
+
+function initTransparencyEffects(currentWindow) {
+    if (window.glob.platform === "win32") {
+        const isHorizontalLayout = (options.get("layoutOrientation") === "horizontal");
+        const backgroundMaterial = isHorizontalLayout ? "tabbed" : "mica";
+        currentWindow.setBackgroundMaterial(backgroundMaterial);
+    }
 }

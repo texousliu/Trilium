@@ -132,7 +132,7 @@ function getWindowExtraOpts() {
     }
 
     // Window effects (Mica)
-    // TODO: Apply only on Windows and allow the user to choose whether to activate it or not.
+    // TODO: Deduplicate with src/public/app/desktop.js#initTransparencyEffects
     const isHorizontalLayout = (optionService.getOption("layoutOrientation") === "horizontal");
     extraOpts.backgroundMaterial = isHorizontalLayout ? "tabbed" : "mica";
 
