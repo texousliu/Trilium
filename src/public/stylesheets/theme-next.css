@@ -417,8 +417,14 @@ body.electron.platform-win32 {
     --launcher-pane-background-color: rgba(255, 255, 255, 0.09);
     --tab-background-color: transparent;
     --active-tab-background-color: var(--launcher-pane-background-color);
-    --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
+    --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.15);
     --native-titlebar-background: #00000000;
+}
+
+@media (prefers-color-scheme: dark) {
+    body.electron.platform-win32 {
+        --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
+    }
 }
 
 body.electron.platform-win32.layout-vertical {
