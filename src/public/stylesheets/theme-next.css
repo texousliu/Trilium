@@ -652,7 +652,7 @@ div.quick-search .search-button.show  {
 /* Note icon */
 .quick-search .dropdown-menu .dropdown-item > .bx {
     position: relative;
-    top: 2px;
+    top: 1px;
 }
 
 /* Note title */
