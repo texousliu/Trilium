@@ -142,6 +142,7 @@ export default class DesktopLayout {
                     .child(new FlexContainer('row')
                         .filling()
                         .collapsible()
+                        .id("vertical-main-container")
                         .child(new FlexContainer('column')
                             .filling()
                             .collapsible()

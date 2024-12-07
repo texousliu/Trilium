@@ -432,7 +432,8 @@ body.electron.platform-win32 #launcher-pane .launcher-button {
     background: transparent !important;   
 }
 
-body.electron.platform-win32.layout-horizontal #horizontal-main-container {
+body.electron.platform-win32.layout-horizontal #horizontal-main-container,
+body.electron.platform-win32.layout-vertical #vertical-main-container {
     background-color: var(--root-background);
 }
 /* #endregion */
