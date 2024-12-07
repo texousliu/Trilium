@@ -131,6 +131,11 @@ function getWindowExtraOpts() {
         }
     }
 
+    // Window effects (Mica)
+    if (isWindows) {
+        extraOpts.backgroundMaterial = "auto";
+    }
+
     return extraOpts;
 }
 

@@ -412,6 +412,43 @@ body.layout-horizontal {
     --native-titlebar-darwin-y-offset: 14 !important;
 }
 
+/* #region Mica */
+body.electron.platform-win32 {
+    --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.15);
+    --launcher-pane-background-color: rgba(255, 255, 255, 0.7);
+    --tab-background-color: transparent;
+    --new-tab-button-background: transparent;
+    --active-tab-background-color: var(--launcher-pane-background-color);
+    --native-titlebar-background: #00000000;
+    --background-material: tabbed;    
+}
+
+@media (prefers-color-scheme: dark) {
+    body.electron.platform-win32 {
+        --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
+        --launcher-pane-background-color: rgba(255, 255, 255, 0.09);
+    }
+}
+
+body.electron.platform-win32.layout-vertical {
+    --left-pane-background-color: transparent;
+    --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
+    --left-pane-item-hover-background: rgba(127, 127, 127, 0.05);
+    --background-material: mica;
+}
+
+body.electron.platform-win32,
+body.electron.platform-win32 #root-widget,
+body.electron.platform-win32 #launcher-pane .launcher-button {
+    background: transparent !important;   
+}
+
+body.electron.platform-win32.layout-horizontal #horizontal-main-container,
+body.electron.platform-win32.layout-vertical #vertical-main-container {
+    background-color: var(--root-background);
+}
+/* #endregion */
+
 /* Matches when the left pane is collapsed */
 :has(#left-pane.hidden-int) {
     --center-pane-border-radius: 0;
@@ -849,15 +886,36 @@ div.quick-search .search-button.show  {
     position: relative;
 }
 
-body.layout-horizontal .tab-row-container:after {
+/* #region Apply a border to the tab bar that avoids the current tab but also allows a transparent active tab. */
+body.layout-horizontal .tab-row-widget,
+body.layout-horizontal .tab-row-widget-container,
+body.layout-horizontal .tab-row-container .note-tab[active] {
+    overflow: visible !important;
+}
+
+body.layout-horizontal .tab-row-container .note-tab[active]:before {    
     content: "";
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: -100vw;
+    top: var(--tab-height);
+    right: calc(100% - 1px);
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
 }
+
+body.layout-horizontal .tab-row-container .note-tab[active]:after {    
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    top: var(--tab-height);
+    right: 0;
+    width: 100vw;
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
+}
+/* #endregion */
 
 body.layout-vertical.electron.platform-darwin .tab-row-container {
     border-bottom: 1px solid var(--subtle-border-color);
