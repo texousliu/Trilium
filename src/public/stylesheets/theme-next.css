@@ -418,6 +418,7 @@ body.background-effects {
     --tab-background-color: transparent;
     --active-tab-background-color: var(--launcher-pane-background-color);
     --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
+    --native-titlebar-background: #00000000;
 }
 
 body.background-effects,
