@@ -430,7 +430,6 @@ body.background-effects #launcher-pane .launcher-button {
     background-color: transparent;
 }
 
-body.background-effects.layout-vertical #rest-pane,
 body.background-effects.layout-horizontal #horizontal-main-container {
     background-color: var(--root-background);
 }
