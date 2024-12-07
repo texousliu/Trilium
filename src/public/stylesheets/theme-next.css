@@ -824,15 +824,36 @@ div.quick-search .search-button.show  {
     position: relative;
 }
 
-body.layout-horizontal .tab-row-container:after {
+/* #region Apply a border to the tab bar that avoids the current tab but also allows a transparent active tab. */
+body.layout-horizontal .tab-row-widget,
+body.layout-horizontal .tab-row-widget-container,
+body.layout-horizontal .tab-row-container .note-tab[active] {
+    overflow: visible !important;
+}
+
+body.layout-horizontal .tab-row-container .note-tab[active]:before {    
     content: "";
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: -100vw;
+    top: var(--tab-height);
+    right: calc(100% - 1px);
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
 }
+
+body.layout-horizontal .tab-row-container .note-tab[active]:after {    
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    top: var(--tab-height);
+    right: 0;
+    width: 100vw;
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
+}
+/* #endregion */
 
 body.layout-vertical.electron.platform-darwin .tab-row-container {
     border-bottom: 1px solid var(--subtle-border-color);
