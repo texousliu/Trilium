@@ -417,6 +417,7 @@ body.electron.platform-win32 {
     --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.15);
     --launcher-pane-background-color: rgba(255, 255, 255, 0.7);
     --tab-background-color: transparent;
+    --new-tab-button-background: transparent;
     --active-tab-background-color: var(--launcher-pane-background-color);
     --native-titlebar-background: #00000000;
     --background-material: tabbed;
