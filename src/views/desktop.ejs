@@ -6,7 +6,7 @@
     <link rel="manifest" crossorigin="use-credentials" href="manifest.webmanifest">
     <title>TriliumNext Notes</title>
 </head>
-<body class="desktop heading-style-<%= headingStyle %> layout-<%= layoutOrientation %> platform-<%= platform %> <%= isElectron ? 'electron' : '' %> <%= hasNativeTitleBar ? 'native-titlebar' : '' %> <%= hasBackgroundEffects ? 'background-effects' : '' %>">
+<body class="desktop heading-style-<%= headingStyle %> layout-<%= layoutOrientation %> platform-<%= platform %> <%= isElectron ? 'electron' : '' %> <%= hasNativeTitleBar ? 'native-titlebar' : '' %>">
 <noscript><%= t("javascript-required") %></noscript>
 
 <script>
@@ -38,7 +38,6 @@
         appPath: "<%= appPath %>",
         platform: "<%= platform %>",
         hasNativeTitleBar: <%= hasNativeTitleBar %>,
-        hasBackgroundEffects: <%= hasBackgroundEffects %>,
         TRILIUM_SAFE_MODE: <%= !!process.env.TRILIUM_SAFE_MODE %>
     };
 </script>

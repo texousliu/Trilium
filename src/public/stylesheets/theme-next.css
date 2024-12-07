@@ -413,7 +413,7 @@ body.layout-horizontal {
 }
 
 /* #region Mica */
-body.background-effects {
+body.electron.platform-win32 {
     --launcher-pane-background-color: rgba(255, 255, 255, 0.09);
     --tab-background-color: transparent;
     --active-tab-background-color: var(--launcher-pane-background-color);
@@ -421,21 +421,18 @@ body.background-effects {
     --native-titlebar-background: #00000000;
 }
 
-body.background-effects,
-body.background-effects #root-widget {
-    background: transparent !important;   
-}
-
-body.background-effects.layout-vertical {
+body.electron.platform-win32.layout-vertical {
     --left-pane-background-color: transparent;
     --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
 }
 
-body.background-effects #launcher-pane .launcher-button {
-    background-color: transparent;
+body.electron.platform-win32,
+body.electron.platform-win32 #root-widget,
+body.electron.platform-win32 #launcher-pane .launcher-button {
+    background: transparent !important;   
 }
 
-body.background-effects.layout-horizontal #horizontal-main-container {
+body.electron.platform-win32.layout-horizontal #horizontal-main-container {
     background-color: var(--root-background);
 }
 /* #endregion */
