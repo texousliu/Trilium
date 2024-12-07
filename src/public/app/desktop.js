@@ -50,17 +50,16 @@ function initOnElectron() {
     
     const electronRemote = utils.dynamicRequire("@electron/remote");    
     const currentWindow = electronRemote.getCurrentWindow();    
+    const style = window.getComputedStyle(document.body);
 
-    initTransparencyEffects(currentWindow);
+    initTransparencyEffects(style, currentWindow);
 
     if (options.get("nativeTitleBarVisible") !== "true") {
-        initTitleBarButtons(currentWindow);
+        initTitleBarButtons(style, currentWindow);
     }    
 }
 
-function initTitleBarButtons(currentWindow) {    
-    const style = window.getComputedStyle(document.body);
-    
+function initTitleBarButtons(style, currentWindow) {
     if (window.glob.platform === "win32") {
         const applyWindowsOverlay = () => {
             const color = style.getPropertyValue("--native-titlebar-background");
@@ -84,10 +83,9 @@ function initTitleBarButtons(currentWindow) {
     }    
 }
 
-function initTransparencyEffects(currentWindow) {
+function initTransparencyEffects(style, currentWindow) {
     if (window.glob.platform === "win32") {
-        const isHorizontalLayout = (options.get("layoutOrientation") === "horizontal");
-        const backgroundMaterial = isHorizontalLayout ? "tabbed" : "mica";
-        currentWindow.setBackgroundMaterial(backgroundMaterial);
+        const material = style.getPropertyValue("--background-material");
+        currentWindow.setBackgroundMaterial(material);
     }
 }
