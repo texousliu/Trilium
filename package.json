@@ -59,7 +59,7 @@
     "archiver": "7.0.1",
     "async-mutex": "0.5.0",
     "autocomplete.js": "0.38.1",
-    "axios": "1.7.7",
+    "axios": "1.7.9",
     "better-sqlite3": "11.6.0",
     "bootstrap": "5.3.3",
     "boxicons": "2.1.4",
