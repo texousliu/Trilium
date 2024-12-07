@@ -132,9 +132,9 @@ function getWindowExtraOpts() {
     }
 
     // Window effects (Mica)
-    // TODO: Deduplicate with src/public/app/desktop.js#initTransparencyEffects
-    const isHorizontalLayout = (optionService.getOption("layoutOrientation") === "horizontal");
-    extraOpts.backgroundMaterial = isHorizontalLayout ? "tabbed" : "mica";
+    if (isWindows) {
+        extraOpts.backgroundMaterial = "auto";
+    }
 
     return extraOpts;
 }
