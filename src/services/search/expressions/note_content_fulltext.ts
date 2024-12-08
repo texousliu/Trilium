@@ -133,6 +133,30 @@ class NoteContentFulltextExp extends Expression {
 
             content = content.replace(/&nbsp;/g, ' ');
         }
+        else if (type === 'mindMap' && mime === 'application/json') {
+            console.log("mindMap", content);
+            let mindMapcontent = JSON.parse (content);
+            console.log("mindMap", mindMapcontent);
+            let topic = mindMapcontent.nodedata.topic;
+            console.log("topic22", topic);
+            content = utils.normalize(topic.toString());
+          } 
+        else if (type === 'canvas' && mime === 'application/json') {
+            interface Element {
+                type: string;
+                text?: string; // Optional since not all objects have a `text` property
+                id: string;
+                [key: string]: any; // Other properties that may exist
+            }
+            console.log("hier")
+            let canvasContent = JSON.parse (content);
+            const elements: Element [] = canvasContent.elements;
+            const texts = elements
+                .filter((element: Element) => element.type === 'text' && element.text) // Filter for 'text' type elements with a 'text' property
+                .map((element: Element) => element.text!); // Use `!` to assert `text` is defined after filtering
+            console.log(texts)
+          }
+
 
         return content.trim();
     }
