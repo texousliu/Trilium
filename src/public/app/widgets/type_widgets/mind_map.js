@@ -23,7 +23,8 @@ const TPL = `
             right: 20px;
             bottom: 80px;
             overflow: auto;
-            background: #fff;
+            background: var(--panel-bgcolor);
+            color: var(--main-color);
             border-radius: 5px;
             box-shadow: 0 1px 2px #0003;
             width: 240px;
@@ -33,7 +34,7 @@ const TPL = `
         }
 
         .mind-elixir .node-menu.close {
-            height: 30px;
+            height: 29px;
             width: 46px;
             overflow: hidden
         }
@@ -71,13 +72,14 @@ const TPL = `
 
         .mind-elixir .node-menu input,
         .mind-elixir .node-menu textarea {
-            background: #f7f9fa;
-            border: 1px solid #dce2e6;
-            border-radius: 3px;
+            background: var(--input-background-color);
+            border: 1px solid var(--panel-border-color);
+            border-radius: var(--bs-border-radius);
+            color: var(--main-color);
             padding: 5px;
             margin: 10px 0;
             width: 100%;
-            box-sizing: border-box
+            box-sizing: border-box;
         }
 
         .mind-elixir .node-menu textarea {
