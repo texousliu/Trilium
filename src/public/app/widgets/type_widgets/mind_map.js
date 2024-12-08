@@ -76,6 +76,7 @@ export default class MindMapWidget extends TypeWidget {
             el: this.$content[0],
             direction: MindElixir.LEFT
         });
+        mind.install(window["@mind-elixir/node-menu"]);
 
         this.mind = mind;
         mind.init(MindElixir.new());
