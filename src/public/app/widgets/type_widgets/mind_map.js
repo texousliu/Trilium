@@ -19,8 +19,10 @@ const TPL = `
 
         .mind-elixir .node-menu {
             position: absolute;
+            top: 60px;
             right: 20px;
-            top: 20px;
+            bottom: 80px;
+            overflow: auto;
             background: #fff;
             border-radius: 5px;
             box-shadow: 0 1px 2px #0003;
