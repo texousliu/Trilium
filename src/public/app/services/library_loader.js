@@ -98,9 +98,6 @@ const MIND_ELIXIR = {
     js: [
         "node_modules/mind-elixir/dist/MindElixir.iife.js",
         "node_modules/@mind-elixir/node-menu/dist/node-menu.umd.cjs"
-    ],
-    css: [
-        "node_modules/@mind-elixir/node-menu/dist/style.css"
     ]
 };
 
