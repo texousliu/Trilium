@@ -132,7 +132,7 @@ function getWindowExtraOpts() {
     }
 
     // Window effects (Mica)
-    if (isWindows) {
+    if (optionService.getOptionBool('backgroundEffects') && isWindows) {
         extraOpts.backgroundMaterial = "auto";
     }
 
