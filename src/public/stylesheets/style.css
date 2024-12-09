@@ -1291,7 +1291,7 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     -webkit-app-region: drag;
 }
 
-.tab-row-container {
+.tab-row-widget {
     padding-right: calc(100vw - env(titlebar-area-width, 100vw));
 }
 
