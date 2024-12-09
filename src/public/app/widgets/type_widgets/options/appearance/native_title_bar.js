@@ -10,7 +10,21 @@ const TPL = `
         <option value="show">${t("native_title_bar.enabled")}</option>
         <option value="hide">${t("native_title_bar.disabled")}</option>
     </select>
-</div>`;
+</div>
+
+<div class="options-section">
+    <h4>Background effects</h4>
+
+    <p>On the desktop application, it's possible to use a semi-transparent background tinted in the colors of the user's wallpaper to add a touch of color.</p>
+
+    <div class="col-6 side-checkbox">
+            <label class="form-check">
+                <input type="checkbox" class="background-effects form-check-input" />
+                Enable background effects (Windows 11 only)
+            </label>
+        </div>
+</div>
+`;
 
 export default class NativeTitleBarOptions extends OptionsWidget {
     doRender() {
@@ -21,6 +35,9 @@ export default class NativeTitleBarOptions extends OptionsWidget {
 
             this.updateOption('nativeTitleBarVisible', nativeTitleBarVisible);
         });
+
+        this.$backgroundEffects = this.$widget.find("input.background-effects");
+        this.$backgroundEffects.on("change", () => this.updateCheckboxOption("backgroundEffects", this.$backgroundEffects));
     }
     
     isEnabled() {
