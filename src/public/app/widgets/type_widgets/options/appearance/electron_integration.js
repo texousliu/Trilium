@@ -3,13 +3,14 @@ import { t } from "../../../../services/i18n.js";
 import utils from "../../../../services/utils.js";
 
 const TPL = `
-<div class="options-section">
-    <h4>${t("native_title_bar.title")}</h4>
-    
-    <select class="native-title-bar-select form-control">
-        <option value="show">${t("native_title_bar.enabled")}</option>
-        <option value="hide">${t("native_title_bar.disabled")}</option>
-    </select>
+<div class="options-section">    
+    <div class="side-checkbox">
+        <label class="form-check">
+            <input type="checkbox" class="native-title-bar form-check-input" />
+            <strong>Native title bar</strong>
+            <p>For Windows and macOS, keeping the native title bar off makes the application look more compact. On Linux, keeping the native title bar on integrates better with the rest of the system.</p>
+        </label>        
+    </div>
 </div>
 
 <div class="options-section">
@@ -30,12 +31,8 @@ const TPL = `
 export default class ElectronIntegrationOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
-        this.$nativeTitleBarSelect = this.$widget.find(".native-title-bar-select");
-        this.$nativeTitleBarSelect.on('change', () => {
-            const nativeTitleBarVisible = this.$nativeTitleBarSelect.val() === 'show' ? 'true' : 'false';
-
-            this.updateOption('nativeTitleBarVisible', nativeTitleBarVisible);
-        });
+        this.$nativeTitleBar = this.$widget.find("input.native-title-bar");
+        this.$nativeTitleBar.on("change", () => this.updateCheckboxOption("nativeTitleBarVisible", this.$nativeTitleBar));
 
         this.$backgroundEffects = this.$widget.find("input.background-effects");
         this.$backgroundEffects.on("change", () => this.updateCheckboxOption("backgroundEffects", this.$backgroundEffects));
@@ -53,7 +50,7 @@ export default class ElectronIntegrationOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options) {
-        this.$nativeTitleBarSelect.val(options.nativeTitleBarVisible === 'true' ? 'show' : 'hide');
+        this.setCheckboxState(this.$nativeTitleBar, options.nativeTitleBarVisible);
         this.setCheckboxState(this.$backgroundEffects, options.backgroundEffects);
     }
 }
