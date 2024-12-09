@@ -413,7 +413,7 @@ body.layout-horizontal {
 }
 
 /* #region Mica */
-body.electron.platform-win32 {
+body.background-effects.platform-win32 {
     --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.15);
     --launcher-pane-background-color: rgba(255, 255, 255, 0.7);
     --tab-background-color: transparent;
@@ -424,27 +424,27 @@ body.electron.platform-win32 {
 }
 
 @media (prefers-color-scheme: dark) {
-    body.electron.platform-win32 {
+    body.background-effects.platform-win32 {
         --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
         --launcher-pane-background-color: rgba(255, 255, 255, 0.09);
     }
 }
 
-body.electron.platform-win32.layout-vertical {
+body.background-effects.platform-win32.layout-vertical {
     --left-pane-background-color: transparent;
     --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
     --left-pane-item-hover-background: rgba(127, 127, 127, 0.05);
     --background-material: mica;
 }
 
-body.electron.platform-win32,
-body.electron.platform-win32 #root-widget,
-body.electron.platform-win32 #launcher-pane .launcher-button {
+body.background-effects.platform-win32,
+body.background-effects.platform-win32 #root-widget,
+body.background-effects.platform-win32 #launcher-pane .launcher-button {
     background: transparent !important;   
 }
 
-body.electron.platform-win32.layout-horizontal #horizontal-main-container,
-body.electron.platform-win32.layout-vertical #vertical-main-container {
+body.background-effects.platform-win32.layout-horizontal #horizontal-main-container,
+body.background-effects.platform-win32.layout-vertical #vertical-main-container {
     background-color: var(--root-background);
 }
 /* #endregion */
