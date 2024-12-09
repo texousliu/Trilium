@@ -984,6 +984,10 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     transform: translate3d(var(--tab-first-item-horiz-offset), 0, 0);
 }
 
+.tab-row-widget .note-tab .note-tab-title {
+    text-overflow: ellipsis;
+}
+
 .tab-row-widget-is-sorting .note-tab[active] .note-tab-wrapper {
     transform: scale(.85);
     box-shadow: var(--active-tab-dragging-shadow) !important;
