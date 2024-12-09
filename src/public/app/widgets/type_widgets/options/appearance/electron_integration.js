@@ -4,25 +4,25 @@ import utils from "../../../../services/utils.js";
 
 const TPL = `
 <div class="options-section">    
-    <h4>Desktop application</h4>
+    <h4>${t("electron_integration.desktop-application")}</h4>
 
     <div class="side-checkbox">
         <label class="form-check">
             <input type="checkbox" class="native-title-bar form-check-input" />
-            <strong>Native title bar</strong>
-            <p>For Windows and macOS, keeping the native title bar off makes the application look more compact. On Linux, keeping the native title bar on integrates better with the rest of the system.</p>
+            <strong>${t("electron_integration.native-title-bar")}</strong>
+            <p>${t("electron_integration.native-title-bar-description")}</p>
         </label>        
     </div>
 
     <div class="side-checkbox">
         <label class="form-check">
             <input type="checkbox" class="background-effects form-check-input" />
-            <strong>Enable background effects (Windows 11 only)</strong>
-            <p>The Mica effect adds a blurred, stylish background to app windows, creating depth and a modern look.</p>
+            <strong>${t("electron_integration.background-effects")}</strong>
+            <p>${t("electron_integration.background-effects-description")}</p>
         </label>        
     </div>
 
-    <button class="btn btn-micro restart-app-button">Restart the application to view the changes</button>
+    <button class="btn btn-micro restart-app-button">${t("electron_integration.restart-app-button")}</button>
 </div>
 `;
 
