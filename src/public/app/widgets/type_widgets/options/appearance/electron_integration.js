@@ -4,6 +4,8 @@ import utils from "../../../../services/utils.js";
 
 const TPL = `
 <div class="options-section">    
+    <h4>Desktop application</h4>
+
     <div class="side-checkbox">
         <label class="form-check">
             <input type="checkbox" class="native-title-bar form-check-input" />
@@ -11,16 +13,12 @@ const TPL = `
             <p>For Windows and macOS, keeping the native title bar off makes the application look more compact. On Linux, keeping the native title bar on integrates better with the rest of the system.</p>
         </label>        
     </div>
-</div>
-
-<div class="options-section">
-    <h4>Background effects</h4>    
 
     <div class="side-checkbox">
         <label class="form-check">
             <input type="checkbox" class="background-effects form-check-input" />
             <strong>Enable background effects (Windows 11 only)</strong>
-            <p>On the desktop application, it's possible to use a semi-transparent background tinted in the colors of the user's wallpaper to add a touch of color.</p>
+            <p>The Mica effect adds a blurred, stylish background to app windows, creating depth and a modern look.</p>
         </label>        
     </div>
 
