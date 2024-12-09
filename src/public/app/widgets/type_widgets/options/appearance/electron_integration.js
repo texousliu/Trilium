@@ -13,14 +13,13 @@ const TPL = `
 </div>
 
 <div class="options-section">
-    <h4>Background effects</h4>
+    <h4>Background effects</h4>    
 
-    <p>On the desktop application, it's possible to use a semi-transparent background tinted in the colors of the user's wallpaper to add a touch of color.</p>
-
-    <div class="col-6 side-checkbox">
+    <div class="side-checkbox">
         <label class="form-check">
             <input type="checkbox" class="background-effects form-check-input" />
-            Enable background effects (Windows 11 only)
+            <strong>Enable background effects (Windows 11 only)</strong>
+            <p>On the desktop application, it's possible to use a semi-transparent background tinted in the colors of the user's wallpaper to add a touch of color.</p>
         </label>
     </div>
 </div>
