@@ -20,8 +20,10 @@ const TPL = `
             <input type="checkbox" class="background-effects form-check-input" />
             <strong>Enable background effects (Windows 11 only)</strong>
             <p>On the desktop application, it's possible to use a semi-transparent background tinted in the colors of the user's wallpaper to add a touch of color.</p>
-        </label>
+        </label>        
     </div>
+
+    <button class="btn btn-micro restart-app-button">Restart the application to view the changes</button>
 </div>
 `;
 
@@ -36,9 +38,13 @@ export default class ElectronIntegrationOptions extends OptionsWidget {
         });
 
         this.$backgroundEffects = this.$widget.find("input.background-effects");
-        this.$backgroundEffects.on("change", async () => {
-            await this.updateCheckboxOption("backgroundEffects", this.$backgroundEffects);
-            utils.reloadFrontendApp("background effect change");
+        this.$backgroundEffects.on("change", () => this.updateCheckboxOption("backgroundEffects", this.$backgroundEffects));
+
+        const restartAppButton = this.$widget.find(".restart-app-button");
+        restartAppButton.on("click", () => {
+            const app = utils.dynamicRequire('@electron/remote').app;
+            app.relaunch();
+            app.exit();
         });
     }
     
