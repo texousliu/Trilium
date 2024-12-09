@@ -37,7 +37,10 @@ export default class ElectronIntegrationOptions extends OptionsWidget {
         });
 
         this.$backgroundEffects = this.$widget.find("input.background-effects");
-        this.$backgroundEffects.on("change", () => this.updateCheckboxOption("backgroundEffects", this.$backgroundEffects));
+        this.$backgroundEffects.on("change", async () => {
+            await this.updateCheckboxOption("backgroundEffects", this.$backgroundEffects);
+            utils.reloadFrontendApp("background effect change");
+        });
     }
     
     isEnabled() {
