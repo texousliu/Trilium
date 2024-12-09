@@ -56,19 +56,20 @@ function index(req: Request, res: Response) {
 
 function getThemeCssUrl(theme: string) {
     if (theme === 'light') {
-        return false; // light theme is always loaded as baseline
+        // light theme is always loaded as baseline
+        return false;
     } else if (theme === 'dark') {
         return `${assetPath}/stylesheets/theme-dark.css`;
     } else if (theme === "next") {
         return `${assetPath}/stylesheets/theme-next.css`;
-    } else {
+    } else if (!process.env.TRILIUM_SAFE_MODE) {
         const themeNote = attributeService.getNoteWithLabel('appTheme', theme);
-
         if (themeNote) {
             return `api/notes/download/${themeNote.noteId}`;
-        } else {
-            return false; // baseline light theme
         }
+    } else {
+        // baseline light theme
+        return false;
     }
 }
 
