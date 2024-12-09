@@ -26,7 +26,7 @@ const TPL = `
 </div>
 `;
 
-export default class NativeTitleBarOptions extends OptionsWidget {
+export default class ElectronIntegrationOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$nativeTitleBarSelect = this.$widget.find(".native-title-bar-select");
