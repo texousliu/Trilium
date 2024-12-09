@@ -1,7 +1,6 @@
 import BasicWidget from "./basic_widget.js";
 import options from "../services/options.js";
 import utils from "../services/utils.js";
-import { t } from "../services/i18n.js";
 
 const TPL = `
 <div class="title-bar-buttons">
