@@ -46,5 +46,6 @@ export default class ElectronIntegrationOptions extends OptionsWidget {
 
     async optionsLoaded(options) {
         this.$nativeTitleBarSelect.val(options.nativeTitleBarVisible === 'true' ? 'show' : 'hide');
+        this.setCheckboxState(this.$backgroundEffects, options.backgroundEffects);
     }
 }
