@@ -68,6 +68,7 @@ const ALLOWED_OPTIONS = new Set([
     'firstDayOfWeek',
     'textNoteEditorType',
     'layoutOrientation',
+    'backgroundEffects',
     'allowedHtmlTags' // Allow configuring HTML import tags
 ]);
 
