@@ -1001,6 +1001,12 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     position: relative;
 }
 
+.recent-changes-content ul li .note-path {
+    margin-left: .5em;
+    color: var(--muted-text-color);
+}
+
+
 /* Timeline connector */
 .recent-changes-content ul li::before,
 .recent-changes-content > div > b::before {
