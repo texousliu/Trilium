@@ -15,7 +15,7 @@ import htmlSanitizer from "./html_sanitizer.js";
 
 async function processImage(uploadBuffer: Buffer, originalName: string, shrinkImageSwitch: boolean) {
     const compressImages = optionService.getOptionBool("compressImages");
-    const origImageFormat = getImageType(uploadBuffer);
+    const origImageFormat = await getImageType(uploadBuffer);
 
     if (!origImageFormat || !["jpg", "png"].includes(origImageFormat.ext)) {
         shrinkImageSwitch = false;
@@ -30,7 +30,7 @@ async function processImage(uploadBuffer: Buffer, originalName: string, shrinkIm
 
     if (compressImages && shrinkImageSwitch) {
         finalImageBuffer = await shrinkImage(uploadBuffer, originalName);
-        imageFormat = getImageType(finalImageBuffer);
+        imageFormat = await getImageType(finalImageBuffer);
     } else {
         finalImageBuffer = uploadBuffer;
         imageFormat = origImageFormat || {
@@ -44,12 +44,12 @@ async function processImage(uploadBuffer: Buffer, originalName: string, shrinkIm
     };
 }
 
-function getImageType(buffer: Buffer) {
+async function getImageType(buffer: Buffer) {
     if (isSvg(buffer.toString())) {
         return { ext: 'svg' }
     }
     else {
-        return imageType(buffer) || { ext: "jpg" }; // optimistic JPG default
+        return await imageType(buffer) || { ext: "jpg" }; // optimistic JPG default
     }
 }
 
