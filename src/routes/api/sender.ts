@@ -6,9 +6,8 @@ import noteService from "../../services/notes.js";
 import sanitize_attribute_name from "../../services/sanitize_attribute_name.js";
 import specialNotesService from "../../services/special_notes.js";
 import { Request } from 'express';
-import { AppRequest } from '../route-interface.js';
 
-function uploadImage(req: AppRequest) {
+function uploadImage(req: Request) {
     const file = req.file;
 
     if (!file) {
