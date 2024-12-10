@@ -310,6 +310,7 @@ export default {
     resolveNotePathToSegments,
     getParentProtectedStatus,
     getNotePath,
+    getNotePathTitleComponents,
     getNoteIdFromUrl,
     getNoteIdAndParentIdFromUrl,
     getBranchIdFromUrl,
