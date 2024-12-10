@@ -1,13 +1,14 @@
+import { formatDateTime } from "../../utils/formatters.js"
 import { t } from "../../services/i18n.js";
-import linkService from '../../services/link.js';
-import utils from '../../services/utils.js';
-import server from '../../services/server.js';
-import froca from "../../services/froca.js";
 import appContext from "../../components/app_context.js";
-import hoistedNoteService from "../../services/hoisted_note.js";
 import BasicWidget from "../basic_widget.js";
 import dialogService from "../../services/dialog.js";
+import froca from "../../services/froca.js";
+import hoistedNoteService from "../../services/hoisted_note.js";
+import linkService from '../../services/link.js';
+import server from '../../services/server.js';
 import toastService from "../../services/toast.js";
+import utils from '../../services/utils.js';
 import ws from "../../services/ws.js";
 
 const TPL = `
@@ -71,10 +72,11 @@ export default class RecentChangesDialog extends BasicWidget {
         for (const [dateDay, dayChanges] of groupedByDate) {
             const $changesList = $('<ul>');
 
-            const dayEl = $('<div>').append($('<b>').text(dateDay)).append($changesList);
+            const formattedDate = formatDateTime(dateDay, "full", "none");
+            const dayEl = $('<div>').append($('<b>').text(formattedDate)).append($changesList);
 
             for (const change of dayChanges) {
-                const formattedTime = change.date.substr(11, 5);
+                const formattedTime = formatDateTime(change.date, "none", "short");
 
                 let $noteLink;
 
