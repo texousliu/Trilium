@@ -12,9 +12,11 @@ export function formatDateTime(date, dateStyle = "medium", timeStyle = "medium")
         // Parse the given string as a date
         parsedDate = new Date(date);
     } else if (typeof date === "number" || date instanceof Date) {
+        // The given date is already a Date instance or a number
         parsedDate = date;
     } else {
-        throw new TypeError();
+        // Invalid type
+        throw new TypeError(`Invalid type for the "date" argument.`);
     };
 
     if (timeStyle === "none") {
