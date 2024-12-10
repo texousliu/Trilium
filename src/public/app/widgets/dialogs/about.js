@@ -1,4 +1,4 @@
-import { formatDate } from "../../utils/formatters.js"
+import { formatDateTime } from "../../utils/formatters.js"
 import { t } from "../../services/i18n.js";
 import BasicWidget from "../basic_widget.js";
 import openService from "../../services/open.js";
@@ -69,7 +69,7 @@ export default class AboutDialog extends BasicWidget {
         this.$appVersion.text(appInfo.appVersion);
         this.$dbVersion.text(appInfo.dbVersion);
         this.$syncVersion.text(appInfo.syncVersion);
-        this.$buildDate.text(formatDate(new Date(appInfo.buildDate)));
+        this.$buildDate.text(formatDateTime(appInfo.buildDate));
         this.$buildRevision.text(appInfo.buildRevision);
         this.$buildRevision.attr('href', `https://github.com/TriliumNext/Notes/commit/${appInfo.buildRevision}`);
         if (utils.isElectron()) {

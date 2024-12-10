@@ -1,4 +1,4 @@
-import { formatDate } from "../../utils/formatters.js"
+import { formatDateTime } from "../../utils/formatters.js"
 import { t } from "../../services/i18n.js";
 import appContext from "../../components/app_context.js";
 import BasicWidget from "../basic_widget.js";
@@ -72,11 +72,11 @@ export default class RecentChangesDialog extends BasicWidget {
         for (const [dateDay, dayChanges] of groupedByDate) {
             const $changesList = $('<ul>');
 
-            const formattedDate = formatDate(new Date(dateDay), "full", "none");
+            const formattedDate = formatDateTime(dateDay, "full", "none");
             const dayEl = $('<div>').append($('<b>').text(formattedDate)).append($changesList);
 
             for (const change of dayChanges) {
-                const formattedTime = formatDate(new Date(change.date), "none", "short");
+                const formattedTime = formatDateTime(change.date, "none", "short");
 
                 let $noteLink;
 

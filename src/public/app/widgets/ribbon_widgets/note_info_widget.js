@@ -1,4 +1,4 @@
-import { formatDate } from "../../utils/formatters.js"
+import { formatDateTime } from "../../utils/formatters.js"
 import { t } from "../../services/i18n.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import server from "../../services/server.js";
@@ -123,11 +123,11 @@ export default class NoteInfoWidget extends NoteContextAwareWidget {
 
         this.$noteId.text(note.noteId);
         this.$dateCreated
-            .text(formatDate(new Date(metadata.dateCreated)))
+            .text(formatDateTime(metadata.dateCreated))
             .attr("title", metadata.dateCreated);
 
         this.$dateModified
-            .text(formatDate(new Date(metadata.dateModified)))
+            .text(formatDateTime(metadata.dateModified))
             .attr("title", metadata.dateModified);
 
         this.$type.text(note.type);

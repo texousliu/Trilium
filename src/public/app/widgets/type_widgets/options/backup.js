@@ -1,4 +1,4 @@
-import { formatDate } from "../../../utils/formatters.js"
+import { formatDateTime } from "../../../utils/formatters.js"
 import { t } from "../../../services/i18n.js";
 import OptionsWidget from "./options_widget.js";
 import server from "../../../services/server.js";
@@ -119,7 +119,7 @@ export default class BackupOptions extends OptionsWidget {
             for (const {filePath, mtime} of backupFiles) {
                 this.$existingBackupList.append($(`
                     <tr>
-                        <td>${(mtime) ? formatDate(new Date(mtime)) : "-"}</td>
+                        <td>${(mtime) ? formatDateTime(mtime) : "-"}</td>
                         <td>${filePath}</td>
                     </tr>
                 `));
