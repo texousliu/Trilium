@@ -273,12 +273,12 @@ async function getNoteTitleWithPathAsSuffix(notePath) {
         .append($('<span class="note-title">').text(title));
 
 
-    $titleWithPath.append(formatPath(path));
+    $titleWithPath.append(formatNotePath(path));
     
     return $titleWithPath;
 }
 
-function formatPath(path) {
+function formatNotePath(path) {
     const $notePath = $('<span class="note-path">');
 
     if (path.length > 0) {
@@ -316,5 +316,6 @@ export default {
     getNoteTitle,
     getNotePathTitle,
     getNoteTitleWithPathAsSuffix,
-    isNotePathInHiddenSubtree
+    isNotePathInHiddenSubtree,
+    formatNotePath
 };
