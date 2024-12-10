@@ -2,7 +2,7 @@
  * Formats the given date and time to a string based on the current locale.
  * @param {string | Date | number} date 
  * @param {"full" | "long" | "medium" | "short" | "none" | undefined} dateStyle 
- * @param {"full" | "long" | "medium" | "short" | "none" | undefined} tiemStyle 
+ * @param {"full" | "long" | "medium" | "short" | "none" | undefined} timeStyle 
  */
 export function formatDateTime(date, dateStyle = "medium", timeStyle = "medium") {
     const locale = navigator.language;
