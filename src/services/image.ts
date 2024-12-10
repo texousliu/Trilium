@@ -45,15 +45,11 @@ async function processImage(uploadBuffer: Buffer, originalName: string, shrinkIm
 }
 
 function getImageType(buffer: Buffer) {
-    if (isSvg(buffer)) {
-        return {
-            ext: 'svg'
-        }
+    if (isSvg(buffer.toString())) {
+        return { ext: 'svg' }
     }
     else {
-        return imageType(buffer) || {
-            ext: "jpg"
-        }; // optimistic JPG default
+        return imageType(buffer) || { ext: "jpg" }; // optimistic JPG default
     }
 }
 
