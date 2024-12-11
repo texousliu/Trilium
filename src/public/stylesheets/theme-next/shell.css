@@ -486,7 +486,7 @@ div.quick-search .search-button.show  {
     padding: var(--tree-actions-toolbar-padding-size);
     padding-right: var(--tree-actions-toolbar-collapsed-width);
     background: transparent;
-    transition: max-width 300ms ease-out;
+    transition: max-width 200ms ease-in;
 }
 
 /* Toolbar container (expanded state) */
@@ -494,6 +494,7 @@ div.quick-search .search-button.show  {
     max-width: 200px;
     border-color: var(--dropdown-border-color);
     background: var(--menu-background-color);
+    backdrop-filter: blur(10px) saturate(6);
     box-shadow: 0 5px 10px rgba(0, 0, 0, var(--dropdown-shadow-opacity))
 }
 
@@ -512,7 +513,7 @@ div.quick-search .search-button.show  {
 /* Toolbar button (toolbar expanded) */
 #left-pane .tree-actions:hover button {
     opacity: 1;
-    transition: opacity 200ms ease-in;
+    transition: opacity 250ms ease-in;
 }
 
 /* The floating expand button (toolbar collapsed) */
@@ -532,6 +533,7 @@ div.quick-search .search-button.show  {
     font-family: boxicons;
     font-size: 18px;
     transform: translateY(-50%);
+    transition: color 200ms ease-in;
 }
 
 /* The floating expand button (toolbar expanded) */
@@ -539,6 +541,7 @@ div.quick-search .search-button.show  {
     background: transparent;
     color: var(--menu-item-icon-color);
     opacity: var(--menu-item-disabled-opacity);
+    transition: color 200ms ease-out;
 }
 
 /*
