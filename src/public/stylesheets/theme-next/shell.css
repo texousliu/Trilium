@@ -478,7 +478,9 @@ div.quick-search .search-button.show  {
     padding: var(--tree-actions-toolbar-padding-size);
     padding-right: var(--tree-actions-toolbar-collapsed-width);
     background: transparent;
-    transition: max-width 200ms ease-in;
+    transition: max-width 400ms ease-out,
+                background-color 400ms ease-out,
+                border-color 400ms ease-out;
 }
 
 /* Toolbar container (expanded state) */
@@ -487,7 +489,7 @@ div.quick-search .search-button.show  {
     border-color: var(--dropdown-border-color);
     background: var(--menu-background-color);
     backdrop-filter: blur(10px) saturate(6);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, var(--dropdown-shadow-opacity))
+    box-shadow: 0 5px 10px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
 }
 
 /* Toolbar button (toolbar collapsed)*/
@@ -495,6 +497,7 @@ div.quick-search .search-button.show  {
     border: unset;
     color: var(--menu-item-icon-color);
     opacity: 0;
+    transition: opacity 200ms ease-out;
 }
 
 /* Toolbar button on hover */
