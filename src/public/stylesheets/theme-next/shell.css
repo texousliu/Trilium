@@ -346,8 +346,12 @@ div.quick-search .search-button.show  {
 /* Tree */
 
 #left-pane .tree-actions {
-    /* TODO: relocate instead of hiding */
-    display: none;
+    right: 3px;
+    bottom: 6px;
+}
+
+button.tree-floating-button {
+    font-size: 18px !important;
 }
 
 #left-pane div.tree {
