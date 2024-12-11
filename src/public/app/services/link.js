@@ -102,15 +102,15 @@ async function createLink(notePath, options = {}) {
     $container.append($noteLink);
 
     if (showNotePath) {
-        const resolvedNotePathSegments = await treeService.resolveNotePathToSegments(notePath);
+        const resolvedPathSegments = await treeService.resolveNotePathToSegments(notePath);
+        resolvedPathSegments.pop(); // Remove last element
 
-        if (resolvedNotePathSegments) {
-            resolvedNotePathSegments.pop(); // remove last element
+        const resolvedPath = resolvedPathSegments.join("/");
+        const pathSegments = await treeService.getNotePathTitleComponents(resolvedPath);
 
-            const parentNotePath = resolvedNotePathSegments.join("/").trim();
-
-            if (parentNotePath) {
-                $container.append($("<small>").text(` (${await treeService.getNotePathTitle(parentNotePath)})`));
+        if (pathSegments) {
+            if (pathSegments.length) {
+                $container.append($("<small>").append(treeService.formatNotePath(pathSegments)));
             }
         }
     }
