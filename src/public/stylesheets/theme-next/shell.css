@@ -348,6 +348,12 @@ div.quick-search .search-button.show  {
 #left-pane .tree-actions {
     right: 3px;
     bottom: 6px;
+    transform: translateY(200%) !important;
+    transition: transform 250ms ease-in-out;
+}
+
+#left-pane:hover .tree-actions {
+    transform: translateY(0) !important;
 }
 
 button.tree-floating-button {
