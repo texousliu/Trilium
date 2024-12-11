@@ -89,9 +89,15 @@ describe("utils tests", () => {
   describe("setContentDispositionHeader tests", () => {
     it("sets Content-Disposition header with specified value", () => {
       const fileName = "file.txt";
-      const value = `attachment; filename="${fileName}"`;
+      const value = `attachment; filename*=utf-8''${fileName}`;
       setContentDispositionHeader(fileName, res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Content-Disposition", value));
+      expect((res.setHeader as SinonStub).calledOnceWith("Content-Disposition", value)).to.be.true;
+    });
+    it("sets Content-Disposition header with specified unicode", () => {
+      const fileName = "file.txt";
+      const value = `attachment; filename*=utf-8''${encodeURIComponent(fileName)}`;
+      setContentDispositionHeader(fileName, res);
+      expect((res.setHeader as SinonStub).calledOnceWith("Content-Disposition", value)).to.be.true;
     });
   });
   describe("setCacheControlHeaderNoCache tests", () => {

@@ -9,5 +9,5 @@ export const setAcceptRangesHeader = setHeader.bind(null, "Accept-Ranges", "byte
 export const setContentRangeHeader = (range: Range | null, size: number, res: Response) =>
   setHeader("Content-Range", `bytes ${range ? `${range.start}-${range.end}` : "*"}/${size}`, res);
 export const setContentDispositionHeader = (fileName: string, res: Response) =>
-  setHeader("Content-Disposition", `attachment; filename="${fileName}"`, res);
+  setHeader("Content-Disposition", `attachment; filename*=utf-8''${encodeURIComponent(fileName)}`, res);
 export const setCacheControlHeaderNoCache = setHeader.bind(null, "Cache-Control", "no-cache");
