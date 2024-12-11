@@ -1221,3 +1221,14 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     opacity: .75;
     transform: translateY(4%);
 }
+
+/* Search */
+
+.search-result-widget-content .note-path .path-bracket {
+    display: inline;
+}
+
+.search-result-widget-content .note-path {
+    opacity: .75;
+    font-weight: normal;
+}
