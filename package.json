@@ -46,7 +46,7 @@
     "nyc": "^13.3.0",
     "rimraf": "^2.6.3",
     "sinon": "^7.2.7",
-    "typescript": "^3.3.3333"
+    "typescript": "^5.7.2"
   },
   "peerDependencies": {
     "express": "^4.16.4"

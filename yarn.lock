@@ -1348,7 +1348,7 @@ __metadata:
     nyc: "npm:^13.3.0"
     rimraf: "npm:^2.6.3"
     sinon: "npm:^7.2.7"
-    typescript: "npm:^3.3.3333"
+    typescript: "npm:^5.7.2"
   peerDependencies:
     express: ^4.16.4
   languageName: unknown
@@ -4155,23 +4155,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^3.3.3333":
-  version: 3.3.3333
-  resolution: "typescript@npm:3.3.3333"
+"typescript@npm:^5.7.2":
+  version: 5.7.2
+  resolution: "typescript@npm:5.7.2"
   bin:
-    tsc: ./bin/tsc
-    tsserver: ./bin/tsserver
-  checksum: 10c0/faa8270fd02639effc92b7d135e2f09e15a87ff6b388c3f55cc49e6a87cfb6bf13eda58c26e96189d3ed3aadcbf4234a8e27894883c5ed5b8f6b54dd536c2b87
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/a873118b5201b2ef332127ef5c63fb9d9c155e6fdbe211cbd9d8e65877283797cca76546bad742eea36ed7efbe3424a30376818f79c7318512064e8625d61622
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^3.3.3333#optional!builtin<compat/typescript>":
-  version: 3.3.3333
-  resolution: "typescript@patch:typescript@npm%3A3.3.3333#optional!builtin<compat/typescript>::version=3.3.3333&hash=9a3324"
+"typescript@patch:typescript@npm%3A^5.7.2#optional!builtin<compat/typescript>":
+  version: 5.7.2
+  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=8c6c40"
   bin:
-    tsc: ./bin/tsc
-    tsserver: ./bin/tsserver
-  checksum: 10c0/cf43149e7eb55c5cd632191a21a8efe39dfc8cafecb92c43e605a7c70038a81ee4b48abe2fd15d69d9aee57c883887b4993bd712a45af6d1a48fff6e89b651e9
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/c891ccf04008bc1305ba34053db951f8a4584b4a1bf2f68fd972c4a354df3dc5e62c8bfed4f6ac2d12e5b3b1c49af312c83a651048f818cd5b4949d17baacd79
   languageName: node
   linkType: hard
 
