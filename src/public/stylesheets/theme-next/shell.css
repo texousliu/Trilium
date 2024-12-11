@@ -527,6 +527,7 @@ div.quick-search .search-button.show  {
     color: var(--left-pane-item-action-button-color);
     font-family: boxicons;
     font-size: 18px;
+    line-height: 1;
     transform: translateY(-50%);
     transition: color 200ms ease-in;
 }
