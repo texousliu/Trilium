@@ -468,14 +468,6 @@ div.quick-search .search-button.show  {
 
 /* Tree actions toolbar */
 
-#left-pane .tree-actions {
-    --tree-actions-toolbar-horizontal-margin: 8px;
-    --tree-actions-toolbar-vertical-margin: 8px;
-    --tree-actions-toolbar-padding-size: 4px;
-    --tree-actions-toolbar-collapsed-width: 40px;
-    --tree-actions-toolbar-expand-button-size: 25px;
-}
-
 /* Toolbar container (collapsed state) */
 #left-pane .tree-actions {
     max-width: var(--tree-actions-toolbar-collapsed-width);
