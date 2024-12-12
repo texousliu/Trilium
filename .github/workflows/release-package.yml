@@ -7,13 +7,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
+            - run: corepack enable
             - uses: actions/setup-node@v4
               with:
                   node-version: 22
-                  registry-url: https://npm.pkg.github.com/
+                  registry-url: https://npm.pkg.github.com/            
             - run: yarn install
-            - run: yarn build
-            - run: yarn publish
+            - run: yarn push
               env:
                   NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 permissions:
