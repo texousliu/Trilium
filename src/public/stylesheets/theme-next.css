@@ -217,6 +217,7 @@
    --timeline-bullet-hover-color: black;
    --timeline-connector-color: #f1f1f1;
    --timeline-connector-active-color: #ddd;
+   --timeline-connector-hover-blend-mode: multiply;
 
    --tooltip-background-color: rgba(255, 255, 255, 0.85);
    --tooltip-foreground-color: #000000ba;
@@ -361,6 +362,7 @@
         --timeline-bullet-hover-color: white;
         --timeline-connector-color: #464646;
         --timeline-connector-active-color: #545454;
+        --timeline-connector-hover-blend-mode: exclusion;
 
         --tooltip-background-color: rgba(67, 67, 67, 0.86);
         --tooltip-foreground-color: #ffffffeb;

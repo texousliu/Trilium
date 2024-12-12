@@ -1140,6 +1140,10 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     transition: background-color 400ms ease-in-out;
 }
 
+.recent-changes-content ul li:hover:before {
+    mix-blend-mode: var(--timeline-connector-hover-blend-mode);
+}
+
 .recent-changes-content > div:hover {
     --timeline-connector-color: var(--timeline-connector-active-color);
 }
