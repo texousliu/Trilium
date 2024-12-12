@@ -522,8 +522,10 @@ div.quick-search .search-button.show  {
     right: calc((var(--tree-actions-toolbar-collapsed-width) - var(--tree-actions-toolbar-expand-button-size)) / 2);
     width: var(--tree-actions-toolbar-expand-button-size);
     height: var(--tree-actions-toolbar-expand-button-size);
+    box-shadow: 2px 2px 6px var(--left-pane-background-color);
     border-radius: 50%;
     background: var(--left-pane-item-action-button-background);
+    backdrop-filter: blur(10px);
     color: var(--left-pane-item-action-button-color);
     font-family: boxicons;
     font-size: 18px;
