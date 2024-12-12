@@ -1,5 +1,5 @@
 {
-  "name": "express-partial-content",
+  "name": "@triliumnext/express-partial-content",
   "description": "A partial content handler implementation for any readable stream with Express. Based on this blog post: https://www.codeproject.com/Articles/813480/HTTP-Partial-Content-In-Node-js.",
   "version": "1.0.1",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
     "build:watch": "npx tsc -w",
     "build:dev": "npx tsc && yarn copy-assets",
     "build:prod": "yarn clean && cross-env NODE_ENV=production tsc -p ./tsconfig.production.json",
-    "push": "yarn test && yarn build:prod && yarn publish",
+    "push": "yarn test && yarn build:prod && yarn npm publish",
     "run:examples:file": "node ./dist/examples/express-file-server/index.js",
     "run:examples:mongo": "node ./dist/examples/express-mongo-server/index.js"
   },

@@ -302,6 +302,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@triliumnext/express-partial-content@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@triliumnext/express-partial-content@workspace:."
+  dependencies:
+    "@types/chai": "npm:^4.1.7"
+    "@types/express": "npm:^4.16.1"
+    "@types/mocha": "npm:^5.2.6"
+    "@types/mongodb": "npm:^3.1.22"
+    "@types/sinon": "npm:^7.0.9"
+    "@typescript-eslint/eslint-plugin": "npm:^1.5.0"
+    "@typescript-eslint/parser": "npm:^1.5.0"
+    chai: "npm:^4.2.0"
+    copyfiles: "npm:^2.1.0"
+    cross-env: "npm:^5.2.0"
+    eslint: "npm:^5.15.3"
+    express: "npm:^4.16.4"
+    mocha: "npm:^6.0.2"
+    mongodb: "npm:^3.1.13"
+    nyc: "npm:^17.1.0"
+    rimraf: "npm:^2.6.3"
+    sinon: "npm:^7.2.7"
+    typescript: "npm:^5.7.2"
+  peerDependencies:
+    express: ^4.16.4
+  languageName: unknown
+  linkType: soft
+
 "@types/body-parser@npm:*":
   version: 1.17.0
   resolution: "@types/body-parser@npm:1.17.0"
@@ -1547,33 +1574,6 @@ __metadata:
   checksum: 10c0/205a60497422746d1c3acbc1d65bd609b945066f239a2b785e69a7a651ac4cbeb4e08555b1ea0023abbe855e6fcb5bbf27d0b371367fdccd303d4fb2b4d66845
   languageName: node
   linkType: hard
-
-"express-partial-content@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "express-partial-content@workspace:."
-  dependencies:
-    "@types/chai": "npm:^4.1.7"
-    "@types/express": "npm:^4.16.1"
-    "@types/mocha": "npm:^5.2.6"
-    "@types/mongodb": "npm:^3.1.22"
-    "@types/sinon": "npm:^7.0.9"
-    "@typescript-eslint/eslint-plugin": "npm:^1.5.0"
-    "@typescript-eslint/parser": "npm:^1.5.0"
-    chai: "npm:^4.2.0"
-    copyfiles: "npm:^2.1.0"
-    cross-env: "npm:^5.2.0"
-    eslint: "npm:^5.15.3"
-    express: "npm:^4.16.4"
-    mocha: "npm:^6.0.2"
-    mongodb: "npm:^3.1.13"
-    nyc: "npm:^17.1.0"
-    rimraf: "npm:^2.6.3"
-    sinon: "npm:^7.2.7"
-    typescript: "npm:^5.7.2"
-  peerDependencies:
-    express: ^4.16.4
-  languageName: unknown
-  linkType: soft
 
 "express@npm:^4.16.4":
   version: 4.16.4
