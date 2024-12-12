@@ -9,6 +9,7 @@ import config from "./config.js";
 import axios from "axios";
 import dayjs from "dayjs";
 import xml2js from "xml2js";
+import * as cheerio from 'cheerio';
 import cloningService from "./cloning.js";
 import appInfo from "./app_info.js";
 import searchService from "./search/services/search.js";
@@ -94,6 +95,12 @@ interface Api {
      */
 
     xml2js: typeof xml2js;
+
+    /**
+     * cheerio library for HTML parsing and manipulation. See {@link https://cheerio.js.org} for documentation
+     */
+
+    cheerio: typeof cheerio;
     
     /**
      * Instance name identifies particular Trilium instance. It can be useful for scripts
@@ -397,6 +404,7 @@ function BackendScriptApi(this: Api, currentNote: BNote, apiParams: ApiParams) {
     this.axios = axios;
     this.dayjs = dayjs;
     this.xml2js = xml2js;
+    this.cheerio = cheerio;
     this.getInstanceName = () => config.General ? config.General.instanceName : null;
     this.getNote = noteId => becca.getNote(noteId);
     this.getBranch = branchId => becca.getBranch(branchId);

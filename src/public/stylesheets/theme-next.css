@@ -68,6 +68,7 @@
 
     --timeline-left-gap: 20px;
     --timeline-right-gap: 20px;
+    --timeline-item-vertical-margin: 4px;
     --timeline-bullet-size: 10px;
     --timeline-bullet-vertical-pos: .75em;
     --timeline-connector-size: 4px;

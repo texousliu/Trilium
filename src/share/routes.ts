@@ -209,8 +209,9 @@ function register(router: Router) {
         shacaLoader.ensureLoad();
 
         if (!shaca.shareRootNote) {
-            return res.status(404)
+            res.status(404)
                 .json({ message: "Share root note not found" });
+            return;
         }
 
         renderNote(shaca.shareRootNote, req, res);
@@ -282,7 +283,7 @@ function register(router: Router) {
         } else if (image.type === "mindMap") {
             renderImageAttachment(image, res, 'mindmap-export.svg');
         } else {
-            return res.status(400)
+            res.status(400)
                 .json({ message: "Requested note is not a shareable image" });
         }
     });
@@ -302,7 +303,7 @@ function register(router: Router) {
             addNoIndexHeader(attachment.note, res);
             res.send(attachment.getContent());
         } else {
-            return res.status(400)
+            res.status(400)
                 .json({ message: "Requested attachment is not a shareable image" });
         }
     });
@@ -354,7 +355,8 @@ function register(router: Router) {
         let note;
 
         if (typeof ancestorNoteId !== "string") {
-            return res.status(400).json({ message: "'ancestorNoteId' parameter is mandatory." });
+            res.status(400).json({ message: "'ancestorNoteId' parameter is mandatory." });
+            return;
         }
 
         // This will automatically return if no ancestorNoteId is provided and there is no shareIndex
@@ -365,7 +367,8 @@ function register(router: Router) {
         const { search } = req.query;
 
         if (typeof search !== "string" || !search?.trim()) {
-            return res.status(400).json({ message: "'search' parameter is mandatory." });
+            res.status(400).json({ message: "'search' parameter is mandatory." });
+            return;
         }
 
         const searchContext = new SearchContext({ ancestorNoteId: ancestorNoteId });

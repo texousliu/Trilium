@@ -1006,27 +1006,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 }
 
-.note-tooltip-content .note-title-with-path .path-bracket {
-    /* Hide the leading and trailing bracket from the path */
-    display: none;
-}
-
-.note-tooltip-content .note-title-with-path .path-delimiter {
-    /* Hide the path delimiters (slashes) */
-    display: none;
-}
-
-.note-tooltip-content .note-title-with-path .path-delimiter + span::before {
-    /* Replace the path delimiters with arrows */
-    display: inline-block;
-    content: "\ebe6";
-    padding: 0 4px;
-    line-height: 1;
-    vertical-align: bottom;
-    font-family: boxicons;
-    opacity: .75;
-}
-
 .note-tooltip-content .note-path {
     display: block;
     color: var(--muted-text-color);
@@ -1052,10 +1031,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 .recent-changes-content {
     margin: var(--bs-modal-padding);
-}
-
-.recent-changes-content small {
-    color: var(--muted-text-color);
 }
 
 .recent-changes-content > div {
@@ -1089,6 +1064,39 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 .recent-changes-content ul li {
     position: relative;
+    color: transparent; /* Hide the "-" character */
+    padding-top: var(--timeline-item-vertical-margin);
+    padding-bottom: var(--timeline-item-vertical-margin);
+}
+
+.recent-changes-content ul li span {
+    /* Ensure spans are not transparent */
+    color: var(--active-item-text-color);
+}
+
+.recent-changes-content ul li .note-path {
+    color: var(--muted-text-color);
+    font-size: .75em;
+}
+
+/* Item time */
+.recent-changes-content ul li > span:first-child {
+    display: inline-block;
+    min-width: 80px;
+    vertical-align: top;
+    color: var(--active-item-text-color);
+}
+
+/* Item title & path container */
+.recent-changes-content ul li > span:nth-child(2) {
+    display: inline-block;
+}
+
+/* Item path */
+.recent-changes-content ul li > span:nth-child(2) small {
+    display: block;
+    line-height: 1;
+    opacity: .75;
 }
 
 /* Timeline connector */
@@ -1124,7 +1132,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 .recent-changes-content ul li::after {
     position: absolute;
     content: "";
-    top: var(--timeline-bullet-vertical-pos);
+    top: calc(var(--timeline-item-vertical-margin) + var(--timeline-bullet-vertical-pos));
     left: 0;
     width: var(--timeline-bullet-size);
     height: var(--timeline-bullet-size);
@@ -1259,4 +1267,37 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 .note-list.grid-view .ck-content figure.image {
     width: 25%;
+}
+
+/* Note paths */
+
+.note-path .path-bracket {
+    /* Hide the leading and trailing bracket from the path */
+    display: none;
+}
+
+.note-path .path-delimiter {
+    /* Hide the path delimiters (slashes) */
+    display: none;
+}
+
+.note-path .path-delimiter + span::before {
+    /* Replace the path delimiters with arrows */
+    display: inline-block;
+    content: "\ed3b";
+    padding: 0 .25em;
+    font-family: boxicons;
+    opacity: .75;
+    transform: translateY(4%);
+}
+
+/* Search */
+
+.search-result-widget-content .note-path .path-bracket {
+    display: inline;
+}
+
+.search-result-widget-content .note-path {
+    opacity: .75;
+    font-weight: normal;
 }
