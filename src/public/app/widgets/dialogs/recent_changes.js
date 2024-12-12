@@ -125,7 +125,6 @@ export default class RecentChangesDialog extends BasicWidget {
                             .text(formattedTime)
                             .attr("title", change.date)
                     )
-                    .append(' - ')
                     .append($noteLink));
             }
 

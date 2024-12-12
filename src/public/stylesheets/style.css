@@ -1305,3 +1305,7 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     margin: 8px 10px;    
     font-size: 18px;
 }
+
+.recent-changes-content li > span:first-child::after {
+    content: " - ";
+}
