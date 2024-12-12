@@ -48,6 +48,12 @@
     --launcher-pane-button-margin: 6px;
     --launcher-pane-button-gap: 3px;
 
+    --tree-actions-toolbar-horizontal-margin: 8px;
+    --tree-actions-toolbar-vertical-margin: 8px;
+    --tree-actions-toolbar-padding-size: 4px;
+    --tree-actions-toolbar-collapsed-width: 40px;
+    --tree-actions-toolbar-expand-button-size: 25px;
+
     --tab-bar-height: 50px;
     --tab-height: 36px;
     --tab-first-item-horiz-offset: 1px;
