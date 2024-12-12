@@ -1084,6 +1084,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 .recent-changes-content ul li {
+    display: flex;
     position: relative;
     color: transparent; /* Hide the "-" character */
     padding-top: var(--timeline-item-vertical-margin);
