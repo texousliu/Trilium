@@ -4,16 +4,23 @@ on:
         tags:
             - 'v*'
 jobs:
-    publish-github-registry:
+    publish-package:
+        name: Publish package
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-            - run: corepack enable
-            - uses: actions/setup-node@v4
+            - name: Set up Node
+              uses: actions/setup-node@v4
               with:
                   node-version: 22
                   registry-url: 'https://registry.npmjs.org'
-            - run: yarn install
-            - run: yarn push
+            - name: Set up yarn with corepack
+              run: |
+                corepack enable &&
+                corepack install
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+            - name: Publish package
+              run: yarn push
               env:
                   NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
