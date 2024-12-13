@@ -1314,7 +1314,7 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     border: 1px solid transparent;
 }
 
-.recent-changes-content li:hover {
+.recent-changes-content li:not(.deleted-note):hover {
     border-color: var(--hover-item-border-color);
     background: var(--hover-item-background-color);
     color: var(--hover-item-text-color);

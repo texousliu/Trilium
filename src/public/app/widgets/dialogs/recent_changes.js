@@ -127,6 +127,9 @@ export default class RecentChangesDialog extends BasicWidget {
                             appContext.tabManager.getActiveContext().setNote(change.noteId);
                         }
                     })
+                    .addClass(() => {
+                        if (change.current_isDeleted) return "deleted-note";
+                    })
                     .append(
                         $("<span>")
                             .text(formattedTime)
