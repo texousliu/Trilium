@@ -1085,6 +1085,12 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     color: var(--active-item-text-color);
 }
 
+.recent-changes-content li > span:first-child::after {
+    /* Remove the dash between time and note title */
+    content: "" !important;
+}
+
+
 .recent-changes-content ul li:not(.deleted-note):hover {
     border-radius: 8px;
     background: var(--hover-item-background-color);
