@@ -1573,5 +1573,13 @@
     "open_note_in_new_split": "Deschide notița într-un panou nou",
     "open_note_in_new_tab": "Deschide notița într-un tab nou",
     "open_note_in_new_window": "Deschide notița într-o fereastră nouă"
+  },
+  "note_autocomplete": {
+    "clear-text-field": "Șterge conținutul casetei",
+    "create-note": "Crează și inserează legătură către „{{term}}”",
+    "full-text-search": "Căutare în întregimea textului",
+    "insert-external-link": "Inserează legătură extern către „{{term}}”",
+    "search-for": "Caută „{{term}}”",
+    "show-recent-notes": "Afișează notițele recente"
   }
 }
