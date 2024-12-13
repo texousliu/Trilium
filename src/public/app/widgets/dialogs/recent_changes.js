@@ -120,6 +120,12 @@ export default class RecentChangesDialog extends BasicWidget {
                 }
 
                 $changesList.append($('<li>')
+                    .on("click", (e) => {
+                        if (e.target?.nodeName !== "A") { // Ignore clicks on the link
+                            // Open the current note
+                            appContext.tabManager.getActiveContext().setNote(change.noteId);
+                        }
+                    })
                     .append(
                         $("<span>")
                             .text(formattedTime)
