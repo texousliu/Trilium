@@ -1,11 +1,11 @@
 {
   "name": "@triliumnext/express-partial-content",
   "description": "A partial content handler implementation for any readable stream with Express. Based on this blog post: https://www.codeproject.com/Articles/813480/HTTP-Partial-Content-In-Node-js.",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "main": "dist/index.js",
-  "repository": "https://github.com/SukantGujar/express-partial-content",
-  "author": "Sukant Gujar <sukantgujar@yahoo.com>",
-  "homepage": "https://sukantgujar.github.io/express-partial-content/",
+  "repository": "https://github.com/TriliumNext/express-partial-content",
+  "author": "Elian Doran <contact@eliandoran.me>",
+  "homepage": "https://github.com/TriliumNext/express-partial-content",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf ./dist",
@@ -18,8 +18,8 @@
     "run:examples:file": "node ./dist/examples/express-file-server/index.js"
   },
   "bugs": {
-    "email": "sukantgujar@yahoo.com",
-    "url": "https://github.com/SukantGujar/express-partial-content/issues"
+    "email": "contact@eliandoran.me",
+    "url": "https://github.com/TriliumNext/express-partial-content/issues"
   },
   "keywords": [
     "partial-content",
