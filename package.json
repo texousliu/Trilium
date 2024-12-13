@@ -83,7 +83,7 @@
     "escape-html": "1.0.3",
     "eslint": "9.16.0",
     "express": "4.21.2",
-    "express-partial-content": "1.0.2",
+    "@triliumnext/express-partial-content": "1.0.1",
     "express-rate-limit": "7.4.1",
     "express-session": "1.18.1",
     "force-graph": "1.47.0",
