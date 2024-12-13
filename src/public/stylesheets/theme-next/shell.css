@@ -1077,6 +1077,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     display: flex;
     position: relative;
     margin: 0;
+    border: unset;
     padding-top: var(--timeline-item-top-margin);
     padding-bottom: var(--timeline-item-bottom-margin);
     padding-left: calc(var(--timeline-left-gap) + var(--timeline-right-gap));
