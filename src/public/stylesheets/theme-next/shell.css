@@ -1117,13 +1117,11 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 /* Item title link */
 
-/* Note: Links with the "href" attribute starting with "javascript:" are not meant to be note
-   titles, but action links such as "undelete". */
-.recent-changes-content ul li a:not([href^="javascript:"]) {
+.recent-changes-content ul li .note-title a {
     color: currentColor;
 }
 
-.recent-changes-content ul li a:not([href^="javascript:"]):hover {
+.recent-changes-content ul li .note-title a:hover {
     text-decoration: underline;
 }
 
