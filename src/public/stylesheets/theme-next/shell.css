@@ -1054,17 +1054,13 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     margin: var(--bs-modal-padding);
 }
 
-.recent-changes-content > div {
-    padding-left: var(--timeline-left-gap);
-}
-
 /* Date headings */
 .recent-changes-content > div > b {
     position: sticky;
     display: block;
     top: 0;
     background: var(--modal-background-color);
-    padding: 10px 0;
+    padding: 10px 0 10px calc(var(--timeline-left-gap) + var(--timeline-right-gap));
     font-size: 1.25em;
     font-weight: 300;
     z-index: 10;
@@ -1077,22 +1073,28 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 /* Timeline items */
-.recent-changes-content ul li,
-.recent-changes-content > div > b {
-    margin: 0;
-    padding-left: var(--timeline-right-gap);
-}
-
 .recent-changes-content ul li {
+    display: flex;
     position: relative;
-    color: transparent; /* Hide the "-" character */
-    padding-top: var(--timeline-item-vertical-margin);
-    padding-bottom: var(--timeline-item-vertical-margin);
+    margin: 0;
+    border: unset;
+    padding-top: var(--timeline-item-top-padding);
+    padding-bottom: var(--timeline-item-bottom-padding);
+    padding-left: calc(var(--timeline-left-gap) + var(--timeline-right-gap));
+    padding-right: var(--timeline-left-gap);
+    color: var(--active-item-text-color);
 }
 
-.recent-changes-content ul li span {
-    /* Ensure spans are not transparent */
-    color: var(--active-item-text-color);
+.recent-changes-content li > span:first-child::after {
+    /* Remove the dash between time and note title */
+    content: "" !important;
+}
+
+
+.recent-changes-content ul li:not(.deleted-note):hover {
+    border-radius: 8px;
+    background: var(--hover-item-background-color);
+    color: var(--hover-item-text-color);
 }
 
 .recent-changes-content ul li .note-path {
@@ -1105,13 +1107,29 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     display: inline-block;
     min-width: 80px;
     vertical-align: top;
-    color: var(--active-item-text-color);
+    color: var(--muted-text-color);
 }
 
 /* Item title & path container */
 .recent-changes-content ul li > span:nth-child(2) {
     display: inline-block;
 }
+
+/* Item title link */
+
+.recent-changes-content ul li .note-title a {
+    color: currentColor;
+}
+
+.recent-changes-content ul li .note-title a:hover {
+    text-decoration: underline;
+}
+
+/* Item title for deleted notes */
+.recent-changes-content ul li.deleted-note .note-title {
+    text-decoration: line-through;
+}
+
 
 /* Item path */
 .recent-changes-content ul li > span:nth-child(2) small {
@@ -1126,12 +1144,16 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     position: absolute;
     content: "";
     top: var(--connector-top, 0);
-    left: calc((var(--timeline-bullet-size) - var(--timeline-connector-size)) / 2);
+    left: calc(var(--timeline-left-gap) + ((var(--timeline-bullet-size) - var(--timeline-connector-size)) / 2));
     bottom: var(--connector-bottom, 0);
     width: var(--timeline-connector-size);
     border-radius: var(--connector-radius, 0) var(--connector-radius, 0) 0 0;
     background: var(--timeline-connector-color);
     transition: background-color 400ms ease-in-out;
+}
+
+.recent-changes-content ul li:hover:before {
+    mix-blend-mode: var(--timeline-connector-hover-blend-mode);
 }
 
 .recent-changes-content > div:hover {
@@ -1153,8 +1175,8 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 .recent-changes-content ul li::after {
     position: absolute;
     content: "";
-    top: calc(var(--timeline-item-vertical-margin) + var(--timeline-bullet-vertical-pos));
-    left: 0;
+    top: calc(var(--timeline-item-top-padding) + var(--timeline-bullet-vertical-pos));
+    left: var(--timeline-left-gap);
     width: var(--timeline-bullet-size);
     height: var(--timeline-bullet-size);
     border-radius: 50%;

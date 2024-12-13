@@ -1305,3 +1305,17 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     margin: 8px 10px;    
     font-size: 18px;
 }
+
+.recent-changes-content li > span:first-child::after {
+    content: " - ";
+}
+
+.recent-changes-content li {
+    border: 1px solid transparent;
+}
+
+.recent-changes-content li:not(.deleted-note):hover {
+    border-color: var(--hover-item-border-color);
+    background: var(--hover-item-background-color);
+    color: var(--hover-item-text-color);
+}
