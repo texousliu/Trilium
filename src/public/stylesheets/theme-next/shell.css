@@ -1078,8 +1078,8 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     position: relative;
     margin: 0;
     border: unset;
-    padding-top: var(--timeline-item-top-margin);
-    padding-bottom: var(--timeline-item-bottom-margin);
+    padding-top: var(--timeline-item-top-padding);
+    padding-bottom: var(--timeline-item-bottom-padding);
     padding-left: calc(var(--timeline-left-gap) + var(--timeline-right-gap));
     padding-right: var(--timeline-left-gap);
     color: var(--active-item-text-color);
@@ -1166,7 +1166,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 .recent-changes-content ul li::after {
     position: absolute;
     content: "";
-    top: calc(var(--timeline-item-top-margin) + var(--timeline-bullet-vertical-pos));
+    top: calc(var(--timeline-item-top-padding) + var(--timeline-bullet-vertical-pos));
     left: var(--timeline-left-gap);
     width: var(--timeline-bullet-size);
     height: var(--timeline-bullet-size);
