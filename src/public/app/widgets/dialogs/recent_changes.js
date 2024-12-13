@@ -81,7 +81,12 @@ export default class RecentChangesDialog extends BasicWidget {
                 let $noteLink;
 
                 if (change.current_isDeleted) {
-                    $noteLink = $("<span>").text(change.current_title);
+                    $noteLink = $("<span>");
+
+                    $noteLink.append($("<span>")
+                        .addClass("note-title")
+                        .text(change.current_title)
+                    );
 
                     if (change.canBeUndeleted) {
                         const $undeleteLink = $(`<a href="javascript:">`)
