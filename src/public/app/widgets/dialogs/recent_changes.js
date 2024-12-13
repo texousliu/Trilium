@@ -121,7 +121,8 @@ export default class RecentChangesDialog extends BasicWidget {
 
                 $changesList.append($('<li>')
                     .on("click", (e) => {
-                        if (e.target?.nodeName !== "A") { // Ignore clicks on the link
+                        // Skip clicks on the link or deleted notes
+                        if (e.target?.nodeName !== "A" && !change.current_isDeleted) {
                             // Open the current note
                             appContext.tabManager.getActiveContext().setNote(change.noteId);
                         }
