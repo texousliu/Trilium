@@ -134,6 +134,7 @@ const defaultOptions: DefaultOption[] = [
 
     // Text note configuration
     { name: "textNoteEditorType", value: "ckeditor-balloon", isSynced: true },
+    { name: "textNoteEditorMultilineToolbar", value: "false", isSynced: true },
 
     // HTML import configuration
     { name: "layoutOrientation", value: "vertical", isSynced: false },
