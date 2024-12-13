@@ -3,6 +3,7 @@ import appContext from "../components/app_context.js";
 import utils from './utils.js';
 import noteCreateService from './note_create.js';
 import froca from "./froca.js";
+import { t } from "./i18n.js";
 
 // this key needs to have this value, so it's hit by the tooltip
 const SELECTED_NOTE_PATH_KEY = "data-note-path";
@@ -38,7 +39,7 @@ async function autocompleteSource(term, cb, options = {}) {
         cb(
             [{
                 noteTitle: term,
-                highlightedNotePathTitle: `Searching...`
+                highlightedNotePathTitle: t("quick-search.searching")
             }]
         );
     }
@@ -52,7 +53,7 @@ async function autocompleteSource(term, cb, options = {}) {
                 action: 'create-note',
                 noteTitle: term,
                 parentNoteId: activeNoteId || 'root',
-                highlightedNotePathTitle: `Create and link child note "${utils.escapeHtml(term)}"`
+                highlightedNotePathTitle: t("note_autocomplete.create-note", { term })
             }
         ].concat(results);
     }
@@ -62,7 +63,7 @@ async function autocompleteSource(term, cb, options = {}) {
             {
                 action: 'search-notes',
                 noteTitle: term,
-                highlightedNotePathTitle: `Search for "${utils.escapeHtml(term)}" <kbd style='color: var(--muted-text-color); background-color: transparent; float: right;'>Ctrl+Enter</kbd>`
+                highlightedNotePathTitle: `${t("note_autocomplete.search-for", { term })} <kbd style='color: var(--muted-text-color); background-color: transparent; float: right;'>Ctrl+Enter</kbd>`
             }
         ]);
     }
@@ -72,7 +73,7 @@ async function autocompleteSource(term, cb, options = {}) {
             {
                 action: 'external-link',
                 externalLink: term,
-                highlightedNotePathTitle: `Insert external link to "${utils.escapeHtml(term)}"`
+                highlightedNotePathTitle: t("note_autocomplete.insert-external-link", { term })
             }
         ].concat(results);
     }
@@ -139,15 +140,15 @@ function initNoteAutocomplete($el, options) {
 
     const $clearTextButton = $("<button>")
         .addClass("input-group-text input-clearer-button bx bxs-tag-x")
-        .prop("title", "Clear text field");
+        .prop("title", t("note_autocomplete.clear-text-field"));
 
     const $showRecentNotesButton = $("<button>")
         .addClass("input-group-text show-recent-notes-button bx bx-time")
-        .prop("title", "Show recent notes");
+        .prop("title", t("note_autocomplete.show-recent-notes"));
 
     const $fullTextSearchButton = $("<button>")
         .addClass("input-group-text full-text-search-button bx bx-search")
-        .prop("title", "Full text search (Shift+Enter)");    
+        .prop("title", `${t("note_autocomplete.full-text-search")} (Shift+Enter)`); 
 
     const $goToSelectedNoteButton = $("<a>")
         .addClass("input-group-text go-to-selected-note-button bx bx-arrow-to-right");

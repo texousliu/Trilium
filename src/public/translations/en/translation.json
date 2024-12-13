@@ -1583,5 +1583,13 @@
     "background-effects-description": "The Mica effect adds a blurred, stylish background to app windows, creating depth and a modern look.",
     "restart-app-button": "Restart the application to view the changes",
     "zoom-factor": "Zoom factor"
+  },
+  "note_autocomplete": {
+    "search-for": "Search for \"{{term}}\"",
+    "create-note": "Create and link child note \"{{term}}\"",
+    "insert-external-link": "Insert external link to \"{{term}}\"",
+    "clear-text-field": "Clear text field",
+    "show-recent-notes": "Show recent notes",
+    "full-text-search": "Full text search"
   }
 }
