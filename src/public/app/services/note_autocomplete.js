@@ -149,7 +149,7 @@ function initNoteAutocomplete($el, options) {
         .addClass("input-group-text full-text-search-button bx bx-search")
         .prop("title", "Full text search (Shift+Enter)");    
 
-    const $goToSelectedNoteButton = $("<button>")
+    const $goToSelectedNoteButton = $("<a>")
         .addClass("input-group-text go-to-selected-note-button bx bx-arrow-to-right");
 
     $el.after($clearTextButton).after($showRecentNotesButton).after($fullTextSearchButton);
