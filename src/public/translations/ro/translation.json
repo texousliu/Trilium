@@ -513,7 +513,8 @@
     "format_markdown": "Markdown - păstrează majoritatea formatării",
     "format_opml": "OPML - format de interschimbare pentru editoare cu structură ierarhică (outline). Formatarea, imaginile și fișierele nu vor fi incluse.",
     "opml_version_1": "OPML v1.0 - text simplu",
-    "opml_version_2": "OPML v2.0 - permite și HTML"
+    "opml_version_2": "OPML v2.0 - permite și HTML",
+    "format_html": "HTML - recomandat deoarece păstrează toata formatarea"
   },
   "fast_search": {
     "description": "Căutarea rapidă dezactivează căutarea la nivel de conținut al notițelor cu scopul de a îmbunătăți performanța de căutare pentru baze de date mari.",
@@ -1581,5 +1582,14 @@
     "insert-external-link": "Inserează legătură extern către „{{term}}”",
     "search-for": "Caută „{{term}}”",
     "show-recent-notes": "Afișează notițele recente"
+  },
+  "electron_integration": {
+    "background-effects": "Activează efectele de fundal (doar pentru Windows 11)",
+    "background-effects-description": "Efectul Mica adaugă un fundal estompat și elegant ferestrelor aplicațiilor, creând profunzime și un aspect modern.",
+    "desktop-application": "Aplicația desktop",
+    "native-title-bar": "Bară de titlu nativă",
+    "native-title-bar-description": "Pentru Windows și macOS, dezactivarea bării de titlu native face aplicația să pară mai compactă. Pe Linux, păstrarea bării integrează mai bine aplicația cu restul sistemului de operare.",
+    "restart-app-button": "Restartează aplicația pentru a aplica setările",
+    "zoom-factor": "Factor de zoom"
   }
 }
