@@ -14,7 +14,7 @@
     "build:watch": "npx tsc -w",
     "build:dev": "npx tsc && yarn copy-assets",
     "build:prod": "yarn clean && cross-env NODE_ENV=production tsc -p ./tsconfig.production.json",
-    "push": "yarn test && yarn build:prod && yarn publish",
+    "push": "yarn test && yarn build:prod && yarn publish --access public",
     "run:examples:file": "node ./dist/examples/express-file-server/index.js"
   },
   "bugs": {

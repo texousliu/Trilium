@@ -1,7 +1,6 @@
 name: Release
 on:
     push:
-
 jobs:
     publish-github-registry:
         runs-on: ubuntu-latest
@@ -11,11 +10,11 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: 22
-                  registry-url: https://npm.pkg.github.com/
+                  registry-url: 'https://registry.npmjs.org'
             - run: yarn install
             - run: yarn push
               env:
-                  NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 permissions:
     contents: read
     packages: write
