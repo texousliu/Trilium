@@ -1121,6 +1121,11 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     text-decoration: underline;
 }
 
+/* Item title for deleted notes */
+.recent-changes-content ul li.deleted-note .note-title {
+    text-decoration: line-through;
+}
+
 
 /* Item path */
 .recent-changes-content ul li > span:nth-child(2) small {
