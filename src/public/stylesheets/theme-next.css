@@ -87,6 +87,7 @@
  */
 :root {
    --theme-style: light;
+   --native-titlebar-background: #ffffff00;
 
    --main-background-color: white;
    --main-text-color: black;
@@ -230,7 +231,8 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --theme-style: dark;        
+        --theme-style: dark;
+        --native-titlebar-background: #00000000;
     
         --main-background-color: #333;
         --main-text-color: #ccc;        

@@ -19,10 +19,6 @@ body {
     --native-titlebar-darwin-y-offset: 17 !important;
 }
 
-body.layout-vertical {
-    --native-titlebar-background: var(--root-background);
-}
-
 body.layout-horizontal {
     --launcher-pane-background-color: var(--launcher-pane-horizontal-background-color);
     --launcher-pane-size: var(--launcher-pane-horizontal-size);
@@ -41,7 +37,6 @@ body.background-effects.platform-win32 {
     --tab-background-color: transparent;
     --new-tab-button-background: transparent;
     --active-tab-background-color: var(--launcher-pane-background-color);
-    --native-titlebar-background: #00000000;
     --background-material: tabbed;    
 }
 
