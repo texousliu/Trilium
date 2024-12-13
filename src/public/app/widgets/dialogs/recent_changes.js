@@ -140,7 +140,7 @@ export default class RecentChangesDialog extends BasicWidget {
                             .text(formattedTime)
                             .attr("title", change.date)
                     )
-                    .append($noteLink));
+                    .append($noteLink.addClass("note-title")));
             }
 
             this.$content.append(dayEl);
