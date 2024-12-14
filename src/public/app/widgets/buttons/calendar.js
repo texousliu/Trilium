@@ -86,6 +86,10 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
         // Month navigation
         this.$monthSelect = this.$dropdownContent.find('[data-calendar-input="month"]');
+        this.$monthSelect.on("show.bs.dropdown", (e) => {
+            // Don't trigger dropdownShown() at widget level when the month selection dropdown is shown, since it would cause a redundant refresh.
+            e.stopPropagation();
+        });
         this.monthDropdown = bootstrap.Dropdown.getOrCreateInstance(this.$monthSelect);
         this.$dropdownContent.find('[data-calendar-input="month-list"] button').on("click", (e) => {            
             this.date.setMonth(e.target.dataset.value);
@@ -218,6 +222,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     async createMonth() {
+        console.log(new Error());
         const month = utils.formatDateISO(this.date).substr(0, 7);
         const dateNotesForMonth = await server.get(`special-notes/notes-for-month/${month}`);
 
