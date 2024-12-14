@@ -293,7 +293,7 @@ async function getNoteTitleWithPathAsSuffix(notePath: string) {
     return $titleWithPath;
 }
 
-function formatNotePath(path) {
+function formatNotePath(path: string[]) {
     const $notePath = $('<span class="note-path">');
 
     if (path.length > 0) {

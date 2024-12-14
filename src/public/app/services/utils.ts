@@ -205,7 +205,7 @@ function getMimeTypeClass(mime: string) {
 
 function closeActiveDialog() {
     if (glob.activeDialog) {
-        bootstrap.Modal.getOrCreateInstance(glob.activeDialog).hide();
+        bootstrap.Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
         glob.activeDialog = null;
     }
 }
@@ -249,7 +249,7 @@ async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
     }
 
     saveFocusedElement();
-    bootstrap.Modal.getOrCreateInstance($dialog).show();
+    bootstrap.Modal.getOrCreateInstance($dialog[0]).show();
 
     $dialog.on('hidden.bs.modal', () => {
         $(".aa-input").autocomplete("close");
@@ -542,11 +542,11 @@ function downloadSvg(nameWithoutExtension: string, svgContent: string) {
  *   0  if v1 is equal to v2
  *   -1 if v1 is less than v2
  * 
- * @param {string} v1 First version string
- * @param {string} v2 Second version string
- * @returns {number}
+ * @param v1 First version string
+ * @param v2 Second version string
+ * @returns 
  */
-function compareVersions(v1, v2) {
+function compareVersions(v1: string, v2: string): number {
 
     // Remove 'v' prefix and everything after dash if present
     v1 = v1.replace(/^v/, '').split('-')[0];
@@ -579,11 +579,8 @@ function compareVersions(v1, v2) {
 
 /**
  * Compares two semantic version strings and returns `true` if the latest version is greater than the current version.
- * @param {string} latestVersion
- * @param {string} currentVersion
- * @returns {boolean}
  */
-function isUpdateAvailable(latestVersion, currentVersion) {
+function isUpdateAvailable(latestVersion: string, currentVersion: string): boolean {
     return compareVersions(latestVersion, currentVersion) > 0;
 }
 
