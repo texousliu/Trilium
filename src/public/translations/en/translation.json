@@ -1555,7 +1555,8 @@
       "fixed": {
         "title": "Fixed",
         "description": "editing tools appear in the \"Formatting\" ribbon tab."
-      }
+      },
+      "multiline-toolbar": "Display the toolbar on multiple lines if it doesn't fit."
     }
   },
   "electron_context_menu": {
