@@ -36,7 +36,7 @@ function register(app: express.Application) {
               use: [{
                 loader: 'ts-loader',
                 options: {
-                  configFile: "./src/public/tsconfig.json"
+                  configFile: path.join(srcRoot, "..", "tsconfig.webpack.json")
                 }
               }],
               exclude: /node_modules/,

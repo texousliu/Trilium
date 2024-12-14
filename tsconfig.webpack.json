@@ -16,12 +16,9 @@
 		"allowJs": true
 	},
 	"include": [
-        "**/*",		
-	],
-	"exclude": [
-		"./app-dist",
+        "./src/public/app/**/*",		
 	],
 	"files": [
-		"./app/types.d.ts"
+		"./src/public/app/types.d.ts"
 	]
 }
