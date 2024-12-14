@@ -987,8 +987,9 @@ html body .dropdown-item.disabled {
 }
 
 .calendar-dropdown-widget .calendar-header input,
-.calendar-dropdown-widget .calendar-header select {
+.calendar-dropdown-widget .calendar-header [data-calendar-input="month"] {
     /* TODO: Provide styling for background and states */
+    background: transparent !important;
     border: unset;
     text-align: center;
     font-size: 1.4em;
