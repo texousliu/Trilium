@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import bootstrap from "bootstrap";
+import { Modal } from "bootstrap";
 
 function reloadFrontendApp(reason?: string) {
     if (reason) {
@@ -205,7 +205,7 @@ function getMimeTypeClass(mime: string) {
 
 function closeActiveDialog() {
     if (glob.activeDialog) {
-        bootstrap.Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
+        Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
         glob.activeDialog = null;
     }
 }
@@ -249,7 +249,7 @@ async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
     }
 
     saveFocusedElement();
-    bootstrap.Modal.getOrCreateInstance($dialog[0]).show();
+    Modal.getOrCreateInstance($dialog[0]).show();
 
     $dialog.on('hidden.bs.modal', () => {
         $(".aa-input").autocomplete("close");
