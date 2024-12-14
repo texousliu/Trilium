@@ -227,7 +227,8 @@
     "workspace_inbox": "marchează locația implicită în care vor apărea noile notițe atunci când este focalizat spațiul de lucru sau un copil al acestuia",
     "workspace_search_home": "notițele de căutare vor fi create sub această notiță",
     "workspace_tab_background_color": "Culoare CSS ce va fi folosită în tab-urile ce aparțin spațiului de lucru",
-    "workspace_template": "Această notița va apărea în lista de șabloane când se crează o nouă notiță, dar doar când spațiul de lucru în care se află notița este focalizat"
+    "workspace_template": "Această notița va apărea în lista de șabloane când se crează o nouă notiță, dar doar când spațiul de lucru în care se află notița este focalizat",
+    "app_theme_base": "setați valoarea la „next” pentru a folosi drept temă de bază „TriliumNext” în loc de cea clasică."
   },
   "attribute_editor": {
     "add_a_new_attribute": "Adaugă un nou attribut",

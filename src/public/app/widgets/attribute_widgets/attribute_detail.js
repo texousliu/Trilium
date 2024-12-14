@@ -201,6 +201,7 @@ const ATTR_HELP = {
         "autoReadOnlyDisabled": t('attribute_detail.auto_read_only_disabled'),
         "appCss": t('attribute_detail.app_css'),
         "appTheme": t('attribute_detail.app_theme'),
+        "appThemeBase": t('attribute_detail.app_theme_base'),
         "cssClass": t('attribute_detail.css_class'),
         "iconClass": t('attribute_detail.icon_class'),
         "pageSize": t('attribute_detail.page_size'),
