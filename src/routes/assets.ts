@@ -7,17 +7,6 @@ import serveStatic from "serve-static";
 import webpack from "webpack";
 import webpackMiddleware from "webpack-dev-middleware";
 
-const frontendCompiler = webpack({
-  mode: "development",
-  entry: {
-    setup: './src/public/app/setup.js',
-    mobile: './src/public/app/mobile.js',
-    desktop: './src/public/app/desktop.js',
-  },
-  devtool: 'source-map',
-  target: 'electron-renderer'
-});
-
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<any, Record<string, any>>>) => {
     if (!env.isDev()) {
         options = {
@@ -30,9 +19,22 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
 
 function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
-    app.use(`/${assetPath}/app`, webpackMiddleware(frontendCompiler, {
-
-    }));
+    if (env.isDev()) {
+      const frontendCompiler = webpack({
+        mode: "development",
+        entry: {
+          setup: './src/public/app/setup.js',
+          mobile: './src/public/app/mobile.js',
+          desktop: './src/public/app/desktop.js',
+        },
+        devtool: 'source-map',
+        target: 'electron-renderer'
+      });
+      
+      app.use(`/${assetPath}/app`, webpackMiddleware(frontendCompiler));
+    } else {
+      app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, 'public/app')));
+    }
     app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, 'public/app-dist')));
     app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(srcRoot, 'public/fonts')));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, 'public/fonts')));
