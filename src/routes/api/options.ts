@@ -6,6 +6,7 @@ import searchService from "../../services/search/services/search.js";
 import ValidationError from "../../errors/validation_error.js";
 import { Request } from 'express';
 import { changeLanguage } from "../../services/i18n.js";
+import { listSyntaxHighlightingThemes } from "../../services/code_block_theme.js";
 
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set([
@@ -15,6 +16,8 @@ const ALLOWED_OPTIONS = new Set([
     'revisionSnapshotNumberLimit',
     'zoomFactor',
     'theme',
+    'codeBlockTheme',
+    "codeBlockWordWrap",
     'syncServerHost',
     'syncServerTimeout',
     'syncProxy',
@@ -62,7 +65,12 @@ const ALLOWED_OPTIONS = new Set([
     'promotedAttributesOpenInRibbon',
     'editedNotesOpenInRibbon',
     'locale',
-    'firstDayOfWeek'
+    'firstDayOfWeek',
+    'textNoteEditorType',
+    'textNoteEditorMultilineToolbar',
+    'layoutOrientation',
+    'backgroundEffects',
+    'allowedHtmlTags' // Allow configuring HTML import tags
 ]);
 
 function getOptions() {
@@ -138,12 +146,20 @@ function getUserThemes() {
     return ret;
 }
 
+function getSyntaxHighlightingThemes() {
+    return listSyntaxHighlightingThemes();
+}
+
 function getSupportedLocales() {
     // TODO: Currently hardcoded, needs to read the list of available languages.
     return [
         {
             "id": "en",
             "name": "English"
+        },
+        {
+            "id": "de",
+            "name": "Deutsch"
         },
         {
             "id": "es",
@@ -156,6 +172,10 @@ function getSupportedLocales() {
         {
             "id": "cn",
             "name": "简体中文"
+        },
+        {
+            "id": "tw",
+            "name": "繁體中文"
         },
         {
             "id": "ro",
@@ -176,5 +196,6 @@ export default {
     updateOption,
     updateOptions,
     getUserThemes,
+    getSyntaxHighlightingThemes,
     getSupportedLocales
 };

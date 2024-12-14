@@ -5,6 +5,7 @@ import ws from "./ws.js";
 import froca from "./froca.js";
 import treeService from "./tree.js";
 import toastService from "./toast.js";
+import { t } from "./i18n.js";
 
 async function createNote(parentNotePath, options = {}) {
     options = Object.assign({

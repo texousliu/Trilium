@@ -33,21 +33,25 @@ const DROPDOWN_TPL = `
 
     <div class="calendar-header">
         <div class="calendar-month-selector">
-            <button class="calendar-btn bx bx-left-arrow-alt" data-calendar-toggle="previous"></button>
+            <button class="calendar-btn bx bx-chevron-left" data-calendar-toggle="previous"></button>
 
-            <select data-calendar-input="month">
-                ${Object.entries(MONTHS).map(([i, month]) => `<option value=${i}>${month}</option>`)}
-            </select>
+            <button class="btn dropdown-toggle" type="button"
+                data-bs-toggle="dropdown" data-bs-auto-close="true"
+                aria-expanded="false"
+                data-calendar-input="month"></button>
+            <ul class="dropdown-menu" data-calendar-input="month-list">
+                ${Object.entries(MONTHS).map(([i, month]) => `<li><button class="dropdown-item" data-value=${i}>${month}</button></li>`).join("")}
+            </ul>
 
-            <button class="calendar-btn bx bx-right-arrow-alt" data-calendar-toggle="next"></button>
+            <button class="calendar-btn bx bx-chevron-right" data-calendar-toggle="next"></button>
         </div>
 
         <div class="calendar-year-selector">
-            <button class="calendar-btn bx bx-left-arrow-alt" data-calendar-toggle="previousYear"></button>
+            <button class="calendar-btn bx bx-chevron-left" data-calendar-toggle="previousYear"></button>
 
             <input type="number" min="1900" max="2999" step="1" data-calendar-input="year" />
 
-            <button class="calendar-btn bx bx-right-arrow-alt" data-calendar-toggle="nextYear"></button>
+            <button class="calendar-btn bx bx-chevron-right" data-calendar-toggle="nextYear"></button>
         </div>
     </div>
 
@@ -82,9 +86,15 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
         // Month navigation
         this.$monthSelect = this.$dropdownContent.find('[data-calendar-input="month"]');
-        this.$monthSelect.on("input", (e) => {
-            this.date.setMonth(e.target.value);
+        this.$monthSelect.on("show.bs.dropdown", (e) => {
+            // Don't trigger dropdownShown() at widget level when the month selection dropdown is shown, since it would cause a redundant refresh.
+            e.stopPropagation();
+        });
+        this.monthDropdown = bootstrap.Dropdown.getOrCreateInstance(this.$monthSelect);
+        this.$dropdownContent.find('[data-calendar-input="month-list"] button').on("click", (e) => {            
+            this.date.setMonth(e.target.dataset.value);
             this.createMonth();
+            this.monthDropdown.hide();
         });
         this.$next = this.$dropdownContent.find('[data-calendar-toggle="next"]');
         this.$next.on('click', () => {
@@ -212,6 +222,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     async createMonth() {
+        console.log(new Error());
         const month = utils.formatDateISO(this.date).substr(0, 7);
         const dateNotesForMonth = await server.get(`special-notes/notes-for-month/${month}`);
 
@@ -234,7 +245,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         this.date.setDate(1);
         this.date.setMonth(this.date.getMonth() - 1);
 
-        this.$monthSelect.val(this.date.getMonth());
+        this.$monthSelect.text(MONTHS[this.date.getMonth()]);
         this.$yearSelect.val(this.date.getFullYear());
     }
 

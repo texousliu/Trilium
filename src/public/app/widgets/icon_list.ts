@@ -5185,7 +5185,7 @@ const icons: Icon[] = [
         "type_of_icon": "REGULAR"
     },
     {
-        "name": '_share',
+        "name": "share",
         "slug": "share-regular",
         "category_id": 101,
         "type_of_icon": "REGULAR"
@@ -6840,7 +6840,7 @@ const icons: Icon[] = [
         "type_of_icon": "SOLID"
     },
     {
-        "name": '_share',
+        "name": "share",
         "slug": "share-solid",
         "category_id": 101,
         "type_of_icon": "SOLID"

@@ -102,15 +102,15 @@ async function createLink(notePath, options = {}) {
     $container.append($noteLink);
 
     if (showNotePath) {
-        const resolvedNotePathSegments = await treeService.resolveNotePathToSegments(notePath);
+        const resolvedPathSegments = await treeService.resolveNotePathToSegments(notePath);
+        resolvedPathSegments.pop(); // Remove last element
 
-        if (resolvedNotePathSegments) {
-            resolvedNotePathSegments.pop(); // remove last element
+        const resolvedPath = resolvedPathSegments.join("/");
+        const pathSegments = await treeService.getNotePathTitleComponents(resolvedPath);
 
-            const parentNotePath = resolvedNotePathSegments.join("/").trim();
-
-            if (parentNotePath) {
-                $container.append($("<small>").text(` (${await treeService.getNotePathTitle(parentNotePath)})`));
+        if (pathSegments) {
+            if (pathSegments.length) {
+                $container.append($("<small>").append(treeService.formatNotePath(pathSegments)));
             }
         }
     }
@@ -254,8 +254,20 @@ function goToLinkExt(evt, hrefLink, $link) {
                 window.open(hrefLink, '_blank');
             } else if (hrefLink.toLowerCase().startsWith('file:') && utils.isElectron()) {
                 const electron = utils.dynamicRequire('electron');
-
                 electron.shell.openPath(hrefLink);
+            } else {
+                // Enable protocols supported by CKEditor 5 to be clickable. 
+                // Refer to `allowedProtocols` in https://github.com/TriliumNext/trilium-ckeditor5/blob/main/packages/ckeditor5-build-balloon-block/src/ckeditor.ts.
+                // And be consistent with `allowedSchemes` in `src\services\html_sanitizer.ts`
+                const allowedSchemes = [
+                    'http', 'https', 'ftp', 'ftps', 'mailto', 'data', 'evernote', 'file', 'facetime', 'gemini', 'git',
+                    'gopher', 'imap', 'irc', 'irc6', 'jabber', 'jar', 'lastfm', 'ldap', 'ldaps', 'magnet', 'message',
+                    'mumble', 'nfs', 'onenote', 'pop', 'rmi', 's3', 'sftp', 'skype', 'sms', 'spotify', 'steam', 'svn', 'udp',
+                    'view-source', 'vlc', 'vnc', 'ws', 'wss', 'xmpp', 'jdbc', 'slack', 'tel', 'smb', 'zotero'
+                ];
+                if (allowedSchemes.some(protocol => hrefLink.toLowerCase().startsWith(protocol+':'))){
+                    window.open(hrefLink, '_blank');
+                }
             }
         }
     }

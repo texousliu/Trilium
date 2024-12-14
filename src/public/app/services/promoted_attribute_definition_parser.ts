@@ -18,7 +18,7 @@ function parse(value: string) {
         if (token === 'promoted') {
             defObj.isPromoted = true;
         }
-        else if (['text', 'number', 'boolean', 'date', 'datetime', 'url'].includes(token)) {
+        else if (['text', 'number', 'boolean', 'date', 'datetime', 'time', 'url'].includes(token)) {
             defObj.labelType = token as LabelType;
         }
         else if (['single', 'multi'].includes(token)) {

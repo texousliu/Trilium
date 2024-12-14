@@ -125,6 +125,7 @@ const TPL = `
                   <option value="boolean">${t('attribute_detail.boolean')}</option>
                   <option value="date">${t('attribute_detail.date')}</option>
                   <option value="datetime">${t('attribute_detail.date_time')}</option>
+                  <option value="time">${t('attribute_detail.time')}</option>
                   <option value="url">${t('attribute_detail.url')}</option>
                 </select>
             </td>
@@ -200,6 +201,7 @@ const ATTR_HELP = {
         "autoReadOnlyDisabled": t('attribute_detail.auto_read_only_disabled'),
         "appCss": t('attribute_detail.app_css'),
         "appTheme": t('attribute_detail.app_theme'),
+        "appThemeBase": t('attribute_detail.app_theme_base'),
         "cssClass": t('attribute_detail.css_class'),
         "iconClass": t('attribute_detail.icon_class'),
         "pageSize": t('attribute_detail.page_size'),

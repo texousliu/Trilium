@@ -19,7 +19,7 @@ class ZoomComponent extends Component {
 
             window.addEventListener("wheel", event => {
                 if (event.ctrlKey) {
-                    this.setZoomFactorAndSave(this.getCurrentZoom() + event.deltaY * 0.001);
+                    this.setZoomFactorAndSave(this.getCurrentZoom() - event.deltaY * 0.001);
                 }
             });
         }

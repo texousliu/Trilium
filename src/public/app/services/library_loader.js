@@ -1,3 +1,7 @@
+import mimeTypesService from "./mime_types.js";
+import optionsService from "./options.js";
+import { getStylesheetUrl } from "./syntax_highlight.js";
+
 const CKEDITOR = {"js": ["libraries/ckeditor/ckeditor.js"]};
 
 const CODE_MIRROR = {
@@ -54,7 +58,19 @@ const FORCE_GRAPH = {
 };
 
 const MERMAID = {
-    js: [ "node_modules/mermaid/dist/mermaid.min.js" ]
+    js: [
+        "node_modules/mermaid/dist/mermaid.min.js"        
+    ]
+}
+
+/**
+ * The ELK extension of Mermaid.js, which supports more advanced layouts.
+ * See https://www.npmjs.com/package/@mermaid-js/layout-elk for more information.
+ */
+const MERMAID_ELK = {
+    js: [
+        "libraries/mermaid-elk/elk.min.js"
+    ]
 }
 
 const EXCALIDRAW = {
@@ -80,8 +96,35 @@ const I18NEXT = {
 
 const MIND_ELIXIR = {
     js: [
-        "node_modules/mind-elixir/dist/MindElixir.iife.js"
+        "node_modules/mind-elixir/dist/MindElixir.iife.js",
+        "node_modules/@mind-elixir/node-menu/dist/node-menu.umd.cjs"
     ]
+};
+
+const HIGHLIGHT_JS = {
+    js: () => {
+        const mimeTypes = mimeTypesService.getMimeTypes();
+        const scriptsToLoad = new Set();
+        scriptsToLoad.add("node_modules/@highlightjs/cdn-assets/highlight.min.js");
+        for (const mimeType of mimeTypes) {
+            const id = mimeType.highlightJs;
+            if (!mimeType.enabled || !id) {
+                continue;
+            }
+
+            if (mimeType.highlightJsSource === "libraries") {
+                scriptsToLoad.add(`libraries/highlightjs/${id}.js`);
+            } else {
+                // Built-in module.
+                scriptsToLoad.add(`node_modules/@highlightjs/cdn-assets/languages/${id}.min.js`);
+            }
+        }
+        
+        const currentTheme = optionsService.get("codeBlockTheme");
+        loadHighlightingTheme(currentTheme);
+
+        return Array.from(scriptsToLoad);
+    }
 };
 
 async function requireLibrary(library) {
@@ -90,10 +133,18 @@ async function requireLibrary(library) {
     }
 
     if (library.js) {
-        for (const scriptUrl of library.js) {
+        for (const scriptUrl of unwrapValue(library.js)) {
             await requireScript(scriptUrl);
         }
     }
+}
+
+function unwrapValue(value) {
+    if (typeof value === "function") {
+        return value();
+    }
+
+    return value;
 }
 
 // we save the promises in case of the same script being required concurrently multiple times
@@ -127,9 +178,36 @@ async function requireCss(url, prependAssetPath = true) {
     }
 }
 
+let highlightingThemeEl = null;
+function loadHighlightingTheme(theme) {
+    if (!theme) {        
+        return;
+    }
+
+    if (theme === "none") {
+        // Deactivate the theme.
+        if (highlightingThemeEl) {
+            highlightingThemeEl.remove();
+            highlightingThemeEl = null;
+        }
+        return;
+    }
+    
+    if (!highlightingThemeEl) {
+        highlightingThemeEl = $(`<link rel="stylesheet" type="text/css" />`);
+        $("head").append(highlightingThemeEl);
+    }
+    
+    const url = getStylesheetUrl(theme);
+    if (url) {
+        highlightingThemeEl.attr("href", url);
+    }
+}
+
 export default {
     requireCss,
     requireLibrary,
+    loadHighlightingTheme,
     CKEDITOR,
     CODE_MIRROR,
     ESLINT,
@@ -140,8 +218,10 @@ export default {
     WHEEL_ZOOM,
     FORCE_GRAPH,
     MERMAID,
+    MERMAID_ELK,
     EXCALIDRAW,
     MARKJS,
     I18NEXT,
-    MIND_ELIXIR
+    MIND_ELIXIR,
+    HIGHLIGHT_JS
 }

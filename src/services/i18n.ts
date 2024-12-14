@@ -2,10 +2,9 @@ import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import options from "./options.js";
 import sql_init from "./sql_init.js";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-import utils from "./utils.js";
-import env from "./env.js";
+import { join } from "path";
+import { getResourceDir } from "./utils.js";
+import hidden_subtree from "./hidden_subtree.js";
 
 export async function initializeTranslations() {
   const resourceDir = getResourceDir();
@@ -19,14 +18,6 @@ export async function initializeTranslations() {
           loadPath: join(resourceDir, "translations/{{lng}}/{{ns}}.json")
       }
   });
-}
-
-function getResourceDir() {
-  if (utils.isElectron() && !env.isDev()) {
-    return process.resourcesPath;
-  } else {
-    return join(dirname(fileURLToPath(import.meta.url)), "..", "..");
-  }
 }
 
 function getCurrentLanguage() {
@@ -43,6 +34,7 @@ function getCurrentLanguage() {
   return language;
 }
 
-export function changeLanguage(locale: string) {
-  return i18next.changeLanguage(locale);
+export async function changeLanguage(locale: string) {
+  await i18next.changeLanguage(locale);
+  hidden_subtree.checkHiddenSubtree(true, { restoreNames: true });
 }

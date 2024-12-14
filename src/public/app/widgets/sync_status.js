@@ -75,6 +75,9 @@ export default class SyncStatusWidget extends BasicWidget {
 
         this.syncState = 'unknown';
         this.allChangesPushed = false;
+        this.settings = {
+            titlePlacement: "right"
+        };
     }
 
     doRender() {
@@ -93,9 +96,11 @@ export default class SyncStatusWidget extends BasicWidget {
             return;
         }
 
+        console.log("Align ", this.settings.titlePlacement);
         bootstrap.Tooltip.getOrCreateInstance(this.$widget.find(`.sync-status-${className}`), {
             html: true,
-            placement: 'right',
+            placement: this.settings.titlePlacement,
+            fallbackPlacements: [ this.settings.titlePlacement ]
         });
 
         this.$widget.show();
