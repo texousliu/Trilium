@@ -996,6 +996,10 @@ html body .dropdown-item.disabled {
     font-weight: 300;
 }
 
+.calendar-dropdown-widget .calendar-header .dropdown-toggle::after {
+    content: unset !important;
+}
+
 .calendar-dropdown-widget .calendar-week span {
     font-size: .85em;
     font-weight: 500;
