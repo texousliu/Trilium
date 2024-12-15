@@ -113,6 +113,7 @@ const TPL = `
     
     
     <div class="tree-settings-popup">
+        <h4>${t("note_tree.tree-settings-title")}</h4>
         <div class="form-check">
             <label class="form-check-label">
                 <input class="form-check-input hide-archived-notes" type="checkbox" value="">

@@ -78,4 +78,5 @@ html {
     --link-color: blue;
 
     --mermaid-theme: default;
+    --native-titlebar-background: #ffffff00;
 }

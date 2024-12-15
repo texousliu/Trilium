@@ -93,7 +93,8 @@
     "export_note_title": "Export note",
     "close": "Close",
     "export_type_subtree": "this note and all of its descendants",
-    "format_html": "HTML in ZIP archive - this is recommended since this preserves all the formatting.",
+    "format_html": "HTML - recommended as it keeps all format",
+    "format_html_zip": "HTML in ZIP archive - this is recommended since this preserves all the formatting.",
     "format_markdown": "Markdown - this preserves most of the formatting.",
     "format_opml": "OPML - outliner interchange format for text only. Formatting, images and files are not included.",
     "opml_version_1": "OPML v1.0 - plain text only",
@@ -358,6 +359,7 @@
     "auto_read_only_disabled": "text/code notes can be set automatically into read mode when they are too large. You can disable this behavior on per-note basis by adding this label to the note",
     "app_css": "marks CSS notes which are loaded into the Trilium application and can thus be used to modify Trilium's looks.",
     "app_theme": "marks CSS notes which are full Trilium themes and are thus available in Trilium options.",
+    "app_theme_base": "set to \"next\" in order to use the TriliumNext theme as a base for a custom theme instead of the legacy one.",
     "css_class": "value of this label is then added as CSS class to the node representing given note in the tree. This can be useful for advanced theming. Can be used in template notes.",
     "icon_class": "value of this label is added as a CSS class to the icon on the tree which can help visually distinguish the notes in the tree. Example might be bx bx-home - icons are taken from boxicons. Can be used in template notes.",
     "page_size": "number of items per page in note listing",
@@ -1433,7 +1435,7 @@
     "saved-search-note-refreshed": "Saved search note refreshed."
   },
   "title_bar_buttons": {
-    "window-on-top": "Keep this window on top."
+    "window-on-top": "Keep Window on Top"
   },
   "note_detail": {
     "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'"
@@ -1553,7 +1555,8 @@
       "fixed": {
         "title": "Fixed",
         "description": "editing tools appear in the \"Formatting\" ribbon tab."
-      }
+      },
+      "multiline-toolbar": "Display the toolbar on multiple lines if it doesn't fit."
     }
   },
   "electron_context_menu": {
@@ -1573,5 +1576,22 @@
     "open_note_in_new_tab": "Open note in a new tab",
     "open_note_in_new_split": "Open note in a new split",
     "open_note_in_new_window": "Open note in a new window"
+  },
+  "electron_integration": {
+    "desktop-application": "Desktop Application",
+    "native-title-bar": "Native title bar",
+    "native-title-bar-description": "For Windows and macOS, keeping the native title bar off makes the application look more compact. On Linux, keeping the native title bar on integrates better with the rest of the system.",
+    "background-effects": "Enable background effects (Windows 11 only)",
+    "background-effects-description": "The Mica effect adds a blurred, stylish background to app windows, creating depth and a modern look.",
+    "restart-app-button": "Restart the application to view the changes",
+    "zoom-factor": "Zoom factor"
+  },
+  "note_autocomplete": {
+    "search-for": "Search for \"{{term}}\"",
+    "create-note": "Create and link child note \"{{term}}\"",
+    "insert-external-link": "Insert external link to \"{{term}}\"",
+    "clear-text-field": "Clear text field",
+    "show-recent-notes": "Show recent notes",
+    "full-text-search": "Full text search"
   }
 }

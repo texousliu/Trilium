@@ -272,28 +272,51 @@ async function getNoteTitleWithPathAsSuffix(notePath) {
     const $titleWithPath = $('<span class="note-title-with-path">')
         .append($('<span class="note-title">').text(title));
 
+
+    $titleWithPath.append(formatNotePath(path));
+    
+    return $titleWithPath;
+}
+
+function formatNotePath(path) {
+    const $notePath = $('<span class="note-path">');
+
     if (path.length > 0) {
-        $titleWithPath
-            .append($('<span class="note-path">').text(` (${path.join(' / ')})`));
+        
+        $notePath.append($(`<span class="path-bracket"> (</span>)`));
+
+        for (let segmentIndex = 0; segmentIndex < path.length; segmentIndex++) {
+            $notePath.append($(`<span>`).text(path[segmentIndex]));
+            
+            if (segmentIndex < path.length - 1) {
+                $notePath.append($(`<span class="path-delimiter">`).text(" / "));
+            }
+        }
+
+        $notePath.append($(`<span class="path-bracket">)</span>)`));
     }
 
-    return $titleWithPath;
+    return $notePath;
 }
 
 function isNotePathInHiddenSubtree(notePath) {
     return notePath?.includes("root/_hidden");
 }
 
+
+
 export default {
     resolveNotePath,
     resolveNotePathToSegments,
     getParentProtectedStatus,
     getNotePath,
+    getNotePathTitleComponents,
     getNoteIdFromUrl,
     getNoteIdAndParentIdFromUrl,
     getBranchIdFromUrl,
     getNoteTitle,
     getNotePathTitle,
     getNoteTitleWithPathAsSuffix,
-    isNotePathInHiddenSubtree
+    isNotePathInHiddenSubtree,
+    formatNotePath
 };

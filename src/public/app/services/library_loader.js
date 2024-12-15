@@ -96,7 +96,8 @@ const I18NEXT = {
 
 const MIND_ELIXIR = {
     js: [
-        "node_modules/mind-elixir/dist/MindElixir.iife.js"
+        "node_modules/mind-elixir/dist/MindElixir.iife.js",
+        "node_modules/@mind-elixir/node-menu/dist/node-menu.umd.cjs"
     ]
 };
 
@@ -106,8 +107,16 @@ const HIGHLIGHT_JS = {
         const scriptsToLoad = new Set();
         scriptsToLoad.add("node_modules/@highlightjs/cdn-assets/highlight.min.js");
         for (const mimeType of mimeTypes) {
-            if (mimeType.enabled && mimeType.highlightJs) {
-                scriptsToLoad.add(`node_modules/@highlightjs/cdn-assets/languages/${mimeType.highlightJs}.min.js`);
+            const id = mimeType.highlightJs;
+            if (!mimeType.enabled || !id) {
+                continue;
+            }
+
+            if (mimeType.highlightJsSource === "libraries") {
+                scriptsToLoad.add(`libraries/highlightjs/${id}.js`);
+            } else {
+                // Built-in module.
+                scriptsToLoad.add(`node_modules/@highlightjs/cdn-assets/languages/${id}.min.js`);
             }
         }
         

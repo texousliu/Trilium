@@ -54,7 +54,7 @@ const TPL = `
         cursor: text !important;
     }
     
-    .note-detail-editable-text *:not(figure,.include-note):first-child {
+    .note-detail-editable-text *:not(figure, .include-note, hr):first-child {
         margin-top: 0 !important;
     }
          
@@ -176,8 +176,16 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
 
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
+            const extraOpts = {};
+            if (isClassicEditor) {
+                extraOpts.toolbar = {
+                    shouldNotGroupWhenFull: options.get("textNoteEditorMultilineToolbar") === "true"
+                };
+            }
+
             const editor = await editorClass.create(elementOrData, {
                 ...editorConfig,
+                ...extraOpts,
                 htmlSupport: {
                     allow: JSON.parse(options.get("allowedHtmlTags")),
                     styles: true,

@@ -134,9 +134,11 @@ const defaultOptions: DefaultOption[] = [
 
     // Text note configuration
     { name: "textNoteEditorType", value: "ckeditor-balloon", isSynced: true },
+    { name: "textNoteEditorMultilineToolbar", value: "false", isSynced: true },
 
     // HTML import configuration
     { name: "layoutOrientation", value: "vertical", isSynced: false },
+    { name: "backgroundEffects", value: "false", isSynced: false },
     { name: "allowedHtmlTags", value: JSON.stringify([
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'li', 'b', 'i', 'strong', 'em', 'strike', 's', 'del', 'abbr', 'code', 'hr', 'br', 'div',

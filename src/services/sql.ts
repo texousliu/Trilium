@@ -347,7 +347,6 @@ export default {
     /**
      * Get single value from the given query - first column from first returned row.
      *
-     * @method
      * @param query - SQL query with ? used as parameter placeholder
      * @param params - array of params if needed
      * @returns single value
@@ -357,7 +356,6 @@ export default {
     /**
      * Get first returned row.
      *
-     * @method
      * @param query - SQL query with ? used as parameter placeholder
      * @param params - array of params if needed
      * @returns - map of column name to column value
@@ -368,7 +366,6 @@ export default {
     /**
      * Get all returned rows.
      *
-     * @method
      * @param query - SQL query with ? used as parameter placeholder
      * @param params - array of params if needed
      * @returns - array of all rows, each row is a map of column name to column value
@@ -381,7 +378,6 @@ export default {
     /**
      * Get a map of first column mapping to second column.
      *
-     * @method
      * @param query - SQL query with ? used as parameter placeholder
      * @param params - array of params if needed
      * @returns - map of first column to second column
@@ -391,7 +387,6 @@ export default {
     /**
      * Get a first column in an array.
      *
-     * @method
      * @param query - SQL query with ? used as parameter placeholder
      * @param params - array of params if needed
      * @returns array of first column of all returned rows
@@ -401,7 +396,6 @@ export default {
     /**
      * Execute SQL
      *
-     * @method
      * @param query - SQL query with ? used as parameter placeholder
      * @param params - array of params if needed
      */
