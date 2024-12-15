@@ -160,7 +160,7 @@ const STRING_MIME_TYPES = [
     "image/svg+xml"
 ];
 
-function isStringNote(type: string | null, mime: string) {
+function isStringNote(type: string | undefined, mime: string) {
     // render and book are string note in the sense that they are expected to contain empty string
     return (type && ["text", "code", "relationMap", "search", "render", "book", "mermaid", "canvas"].includes(type))
         || mime.startsWith('text/')
