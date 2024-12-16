@@ -284,6 +284,7 @@
   },
   "sort_child_notes": {
     "sort_children_by": "Sort children by...",
+    "close": "Close",
     "sorting_criteria": "Sorting criteria",
     "title": "title",
     "date_created": "date created",
