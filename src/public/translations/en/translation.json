@@ -296,6 +296,7 @@
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Upload attachments to note",
+    "close": "Close",
     "choose_files": "Choose files",
     "files_will_be_uploaded": "Files will be uploaded as attachments into",
     "options": "Options",
