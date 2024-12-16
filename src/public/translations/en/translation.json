@@ -231,6 +231,7 @@
   },
   "note_type_chooser": {
     "modal_title": "Choose note type",
+    "close": "Close",
     "modal_body": "Choose note type / template of the new note:",
     "templates": "Templates:"
   },
