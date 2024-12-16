@@ -221,6 +221,7 @@
   },
   "move_to": {
     "dialog_title": "Move notes to ...",
+    "close": "Close",
     "notes_to_move": "Notes to move",
     "target_parent_note": "Target parent note",
     "search_placeholder": "search for note by its name",
