@@ -209,6 +209,7 @@
   },
   "jump_to_note": {
     "search_placeholder": "search for note by its name",
+    "close": "Close",
     "search_button": "Search in full text <kbd>Ctrl+Enter</kbd>"
   },
   "markdown_import": {
