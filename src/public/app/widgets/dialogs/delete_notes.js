@@ -11,7 +11,7 @@ const TPL = `
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">${t('delete_notes.delete_notes_preview')}</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('delete_notes.close')}"></button>
             </div>
             <div class="modal-body">
                 <div class="form-checkbox">

@@ -82,6 +82,7 @@
   },
   "delete_notes": {
     "delete_notes_preview": "Delete notes preview",
+    "close": "Close",
     "delete_all_clones_description": "Delete also all clones (can be undone in recent changes)",
     "erase_notes_description": "Normal (soft) deletion only marks the notes as deleted and they can be undeleted (in recent changes dialog) within a period of time. Checking this option will erase the notes immediately and it won't be possible to undelete the notes.",
     "erase_notes_warning": "Erase notes permanently (can't be undone), including all clones. This will force application reload.",
