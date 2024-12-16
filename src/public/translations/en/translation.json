@@ -60,6 +60,7 @@
   },
   "clone_to": {
     "clone_notes_to": "Clone notes to...",
+    "close": "Close",
     "help_on_links": "Help on links",
     "notes_to_clone": "Notes to clone",
     "target_parent_note": "Target parent note",
