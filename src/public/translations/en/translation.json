@@ -253,6 +253,7 @@
   "recent_changes": {
     "title": "Recent changes",
     "erase_notes_button": "Erase deleted notes now",
+    "close": "Close",
     "deleted_notes_message": "Deleted notes have been erased.",
     "no_changes_message": "No changes yet...",
     "undelete_link": "undelete",
