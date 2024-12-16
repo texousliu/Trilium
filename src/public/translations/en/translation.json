@@ -263,6 +263,7 @@
     "delete_all_revisions": "Delete all revisions of this note",
     "delete_all_button": "Delete all revisions",
     "help_title": "Help on Note Revisions",
+    "close": "Close",
     "revision_last_edited": "This revision was last edited on {{date}}",
     "confirm_delete_all": "Do you want to delete all revisions of this note? This action will erase the revision title and content, but still preserve the revision metadata.",
     "no_revisions": "No revisions for this note yet...",
