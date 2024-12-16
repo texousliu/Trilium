@@ -1072,6 +1072,7 @@
     "title": "Application Theme",
     "theme_label": "Theme",
     "override_theme_fonts_label": "Override theme fonts",
+    "system_theme": "System",
     "light_theme": "Light",
     "dark_theme": "Dark",
     "triliumnext": "TriliumNext Beta (Follow system color scheme)",
