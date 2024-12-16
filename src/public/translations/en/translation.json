@@ -191,6 +191,7 @@
   },
   "include_note": {
     "dialog_title": "Include note",
+    "close": "Close",
     "label_note": "Note",
     "placeholder_search": "search for note by its name",
     "box_size_prompt": "Box size of the included note:",
