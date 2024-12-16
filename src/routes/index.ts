@@ -61,7 +61,7 @@ function index(req: Request, res: Response) {
 }
 
 function getThemeCssUrl(theme: string, themeNote: BNote | null) {
-    if (theme === 'system') {
+    if (theme === 'auto') {
         return `${assetPath}/stylesheets/theme.css`;
     } else if (theme === 'light') {
         // light theme is always loaded as baseline
