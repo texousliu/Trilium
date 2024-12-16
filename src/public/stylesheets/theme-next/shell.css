@@ -1091,19 +1091,66 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 .jump-to-note-dialog .modal-content {
     box-shadow: 0 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
     border: 1px solid var(--dropdown-border-color);
-    padding: 20px;
+    padding: 32px;
     border-radius: 8px;
 }
 
-/* The search input group */
+.jump-to-note-dialog .modal-header {
+    padding: unset !important;
+}
+
+.jump-to-note-dialog .modal-body {
+    padding: 26px 0 !important;
+}
+
+/* Search box wrapper */
 .jump-to-note-dialog .input-group {
-    margin-right: 20px;
+    margin-right: 16px;
+    background: var(--quick-search-background);
+    border: 2px solid transparent;
+    border-radius: 6px;
+    color: var(--quick-search-color);
+}
+
+.jump-to-note-dialog .input-group:hover {
+    background: var(--quick-search-hover-background);
+}
+
+/* Focused search box */
+.jump-to-note-dialog .input-group:focus-within {
+    border-color: var(--quick-search-focus-border);
+    background: var(--quick-search-focus-background);
+    color: var(--quick-search-focus-color)
+}
+
+/* Search box input */
+.jump-to-note-dialog .input-group input {
+    --bs-border-width: 0;
+
+    box-shadow: unset;
+    background: transparent;
+    color: currentColor;
+}
+
+/* Search box buttons */
+.jump-to-note-dialog .input-group button {
+    --bs-border-width: 0;
+    --accented-background-color: transparent;
+}
+
+.jump-to-note-dialog .input-clearer-button {
+    background: transparent !important;
+}
+
+/* List body */
+.jump-to-note-dialog .jump-to-note-results .aa-suggestions {
+    padding: 0;
 }
 
 /* List item */
-.jump-to-note-dialog  .aa-suggestions div {
+.jump-to-note-dialog .aa-suggestions div {
     border-radius: 6px;
-    padding: 4px 12px;
+    padding: 6px 12px;
     color: var(--menu-text-color);
 }
 
