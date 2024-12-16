@@ -1,6 +1,3 @@
-/* Import the Next theme base style */
-@import url(./theme-next/base.css);
-
 /* Import the light color scheme. 
  * This is the base color scheme, always active and overridden by the dark
  * color scheme stylesheet when necessary. */
