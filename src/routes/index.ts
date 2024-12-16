@@ -68,6 +68,10 @@ function getThemeCssUrl(theme: string, themeNote: BNote | null) {
         return `${assetPath}/stylesheets/theme-dark.css`;
     } else if (theme === "next") {
         return `${assetPath}/stylesheets/theme-next.css`;
+    } else if (theme === "next-light") {
+        return `${assetPath}/stylesheets/theme-next-light.css`;
+    } else if (theme === "next-dark") {
+        return `${assetPath}/stylesheets/theme-next-dark.css`;
     } else if (!process.env.TRILIUM_SAFE_MODE && themeNote) {
         return `api/notes/download/${themeNote.noteId}`;
     } else {
