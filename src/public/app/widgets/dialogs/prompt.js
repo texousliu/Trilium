@@ -9,7 +9,7 @@ const TPL = `
             <form class="prompt-dialog-form">
                 <div class="modal-header">
                     <h5 class="prompt-title modal-title">${t("prompt.title")}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('prompt.close')}"></button>
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer">

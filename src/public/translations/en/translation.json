@@ -240,6 +240,7 @@
   },
   "prompt": {
     "title": "Prompt",
+    "close": "Close",
     "ok": "OK <kbd>enter</kbd>",
     "defaultTitle": "Prompt"
   },
