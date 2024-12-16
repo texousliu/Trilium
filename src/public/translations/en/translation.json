@@ -1,6 +1,7 @@
 {
   "about": {
     "title": "About TriliumNext Notes",
+    "close": "Close",
     "homepage": "Homepage:",
     "app_version": "App version:",
     "db_version": "DB version:",
