@@ -1157,6 +1157,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     border-radius: 6px;
     padding: 6px 12px;
     color: var(--menu-text-color);
+    cursor: default;
 }
 
 /* Selected list item */
