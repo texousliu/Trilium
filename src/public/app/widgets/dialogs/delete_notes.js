@@ -15,13 +15,13 @@ const TPL = `
             </div>
             <div class="modal-body">
                 <div class="form-checkbox">
-                    <input class="delete-all-clones form-check-input" value="1" type="checkbox">
-                    <label class="form-check-label">${t('delete_notes.delete_all_clones_description')}</label>
+                    <input id="delete-all-clones" class="delete-all-clones form-check-input" value="1" type="checkbox">
+                    <label for="delete-all-clones" class="form-check-label">${t('delete_notes.delete_all_clones_description')}</label>
                 </div>
 
                 <div class="form-checkbox" style="margin-bottom: 1rem">
-                    <input class="erase-notes form-check-input" value="1" type="checkbox">
-                    <label class="form-check-label">${t('delete_notes.erase_notes_warning')}</label>
+                    <input id="erase-notes" class="erase-notes form-check-input" value="1" type="checkbox">
+                    <label for="erase-notes" class="form-check-label">${t('delete_notes.erase_notes_warning')}</label>
                 </div>
 
                 <div class="delete-notes-list-wrapper">

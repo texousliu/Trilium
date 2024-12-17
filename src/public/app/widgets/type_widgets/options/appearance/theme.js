@@ -31,8 +31,8 @@ const TPL = `
     
     <div class="form-group row">
         <div class="col-6">
-            <label>${t("theme.theme_label")}</label>
-            <select class="theme-select form-select"></select>
+            <label for="theme-select">${t("theme.theme_label")}</label>
+            <select id="theme-select" class="theme-select form-select"></select>
         </div>
         
         <div class="col-6 side-checkbox">
