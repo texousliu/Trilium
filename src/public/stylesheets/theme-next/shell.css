@@ -1136,6 +1136,11 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 .jump-to-note-dialog .input-group button {
     --bs-border-width: 0;
     --accented-background-color: transparent;
+    padding: 0 4px;
+}
+
+.jump-to-note-dialog .input-group button:last-child {
+    padding-right: .75em;
 }
 
 .jump-to-note-dialog .input-clearer-button {
