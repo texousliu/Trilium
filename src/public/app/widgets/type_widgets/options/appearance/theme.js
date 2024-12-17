@@ -69,8 +69,11 @@ export default class ThemeOptions extends OptionsWidget {
     async optionsLoaded(options) {
         const themes = [
             { val: 'next', title: t("theme.triliumnext") },
+            { val: 'next-light', title: t("theme.triliumnext-light") },
+            { val: 'next-dark', title: t("theme.triliumnext-dark") },
+            { val: 'auto', title: t('theme.auto_theme') },
             { val: 'light', title: t('theme.light_theme') },
-            { val: 'dark', title: t('theme.dark_theme') }            
+            { val: 'dark', title: t('theme.dark_theme') }
         ].concat(await server.get('options/user-themes'));
 
         this.$themeSelect.empty();
