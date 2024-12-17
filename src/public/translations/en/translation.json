@@ -1,6 +1,7 @@
 {
   "about": {
     "title": "About TriliumNext Notes",
+    "close": "Close",
     "homepage": "Homepage:",
     "app_version": "App version:",
     "db_version": "DB version:",
@@ -59,6 +60,7 @@
   },
   "clone_to": {
     "clone_notes_to": "Clone notes to...",
+    "close": "Close",
     "help_on_links": "Help on links",
     "notes_to_clone": "Notes to clone",
     "target_parent_note": "Target parent note",
@@ -71,6 +73,7 @@
   },
   "confirm": {
     "confirmation": "Confirmation",
+    "close": "Close",
     "cancel": "Cancel",
     "ok": "OK",
     "are_you_sure_remove_note": "Are you sure you want to remove the note \"{{title}}\" from relation map? ",
@@ -79,6 +82,7 @@
   },
   "delete_notes": {
     "delete_notes_preview": "Delete notes preview",
+    "close": "Close",
     "delete_all_clones_description": "Delete also all clones (can be undone in recent changes)",
     "erase_notes_description": "Normal (soft) deletion only marks the notes as deleted and they can be undeleted (in recent changes dialog) within a period of time. Checking this option will erase the notes immediately and it won't be possible to undelete the notes.",
     "erase_notes_warning": "Erase notes permanently (can't be undone), including all clones. This will force application reload.",
@@ -189,6 +193,7 @@
   },
   "include_note": {
     "dialog_title": "Include note",
+    "close": "Close",
     "label_note": "Note",
     "placeholder_search": "search for note by its name",
     "box_size_prompt": "Box size of the included note:",
@@ -204,16 +209,19 @@
   },
   "jump_to_note": {
     "search_placeholder": "search for note by its name",
+    "close": "Close",
     "search_button": "Search in full text <kbd>Ctrl+Enter</kbd>"
   },
   "markdown_import": {
     "dialog_title": "Markdown import",
+    "close": "Close",
     "modal_body_text": "Because of browser sandbox it's not possible to directly read clipboard from JavaScript. Please paste the Markdown to import to textarea below and click on Import button",
     "import_button": "Import Ctrl+Enter",
     "import_success": "Markdown content has been imported into the document."
   },
   "move_to": {
     "dialog_title": "Move notes to ...",
+    "close": "Close",
     "notes_to_move": "Notes to move",
     "target_parent_note": "Target parent note",
     "search_placeholder": "search for note by its name",
@@ -223,16 +231,19 @@
   },
   "note_type_chooser": {
     "modal_title": "Choose note type",
+    "close": "Close",
     "modal_body": "Choose note type / template of the new note:",
     "templates": "Templates:"
   },
   "password_not_set": {
     "title": "Password is not set",
+    "close": "Close",
     "body1": "Protected notes are encrypted using a user password, but password has not been set yet.",
     "body2": "To be able to protect notes, click <a class=\"open-password-options-button\" href=\"javascript:\">here</a> to open the Options dialog and set your password."
   },
   "prompt": {
     "title": "Prompt",
+    "close": "Close",
     "ok": "OK <kbd>enter</kbd>",
     "defaultTitle": "Prompt"
   },
@@ -246,6 +257,7 @@
   "recent_changes": {
     "title": "Recent changes",
     "erase_notes_button": "Erase deleted notes now",
+    "close": "Close",
     "deleted_notes_message": "Deleted notes have been erased.",
     "no_changes_message": "No changes yet...",
     "undelete_link": "undelete",
@@ -256,6 +268,7 @@
     "delete_all_revisions": "Delete all revisions of this note",
     "delete_all_button": "Delete all revisions",
     "help_title": "Help on Note Revisions",
+    "close": "Close",
     "revision_last_edited": "This revision was last edited on {{date}}",
     "confirm_delete_all": "Do you want to delete all revisions of this note? This action will erase the revision title and content, but still preserve the revision metadata.",
     "no_revisions": "No revisions for this note yet...",
@@ -277,6 +290,7 @@
   },
   "sort_child_notes": {
     "sort_children_by": "Sort children by...",
+    "close": "Close",
     "sorting_criteria": "Sorting criteria",
     "title": "title",
     "date_created": "date created",
@@ -294,6 +308,7 @@
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Upload attachments to note",
+    "close": "Close",
     "choose_files": "Choose files",
     "files_will_be_uploaded": "Files will be uploaded as attachments into",
     "options": "Options",

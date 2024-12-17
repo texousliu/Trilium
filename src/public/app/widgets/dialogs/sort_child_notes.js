@@ -8,7 +8,7 @@ const TPL = `<div class="sort-child-notes-dialog modal mx-auto" tabindex="-1" ro
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">${t("sort_child_notes.sort_children_by")}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("sort_child_notes.close")}"></button>
             </div>
             <form class="sort-child-notes-form">
                 <div class="modal-body">
