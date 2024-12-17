@@ -41,6 +41,10 @@ function toMarkdown(content: string) {
 }
 
 function rewriteLanguageTag(source: string) {
+    if (source === "text-x-trilium-auto") {
+        return "";
+    }
+
     return source
         .split("-")
         .at(-1);

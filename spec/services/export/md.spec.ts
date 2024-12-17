@@ -21,4 +21,21 @@ describe("Markdown export", () => {
 
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
+
+    it("removes auto tag for code blocks", () => {
+        const html = trimIndentation`\
+            <pre><code class="language-text-x-trilium-auto">Hello
+            -world
+            +worldy
+            </code></pre>`;
+        const expected = trimIndentation`\
+            \`\`\`
+            Hello
+            -world
+            +worldy
+
+            \`\`\``;
+
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    })
 });
