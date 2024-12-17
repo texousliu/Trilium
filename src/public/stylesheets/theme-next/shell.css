@@ -1076,6 +1076,97 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 /*
+ * Jump to note
+ */
+
+.jump-to-note-dialog .modal-dialog {
+    --modal-background-color: var(--menu-background-color);
+    --bs-modal-header-border-width: 0;
+    --bs-modal-footer-border-width: 0;
+    --bs-modal-footer-gap: 0;
+
+    backdrop-filter: var(--dropdown-backdrop-filter);
+}
+
+.jump-to-note-dialog .modal-content {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
+    border: 1px solid var(--dropdown-border-color);
+    padding: 32px;
+    border-radius: 8px;
+}
+
+.jump-to-note-dialog .modal-header {
+    padding: unset !important;
+}
+
+.jump-to-note-dialog .modal-body {
+    padding: 26px 0 !important;
+}
+
+/* Search box wrapper */
+.jump-to-note-dialog .input-group {
+    margin-right: 16px;
+    background: var(--quick-search-background);
+    border: 2px solid transparent;
+    border-radius: 6px;
+    color: var(--quick-search-color);
+}
+
+.jump-to-note-dialog .input-group:hover {
+    background: var(--quick-search-hover-background);
+}
+
+/* Focused search box */
+.jump-to-note-dialog .input-group:focus-within {
+    border-color: var(--quick-search-focus-border);
+    background: var(--quick-search-focus-background);
+    color: var(--quick-search-focus-color)
+}
+
+/* Search box input */
+.jump-to-note-dialog .input-group input {
+    --bs-border-width: 0;
+
+    box-shadow: unset;
+    background: transparent;
+    color: currentColor;
+}
+
+/* Search box buttons */
+.jump-to-note-dialog .input-group button {
+    --bs-border-width: 0;
+    --accented-background-color: transparent;
+    padding: 0 4px;
+}
+
+.jump-to-note-dialog .input-group button:last-child {
+    padding-right: .75em;
+}
+
+.jump-to-note-dialog .input-clearer-button {
+    background: transparent !important;
+}
+
+/* List body */
+.jump-to-note-dialog .jump-to-note-results .aa-suggestions {
+    padding: 0;
+}
+
+/* List item */
+.jump-to-note-dialog .aa-suggestions div {
+    border-radius: 6px;
+    padding: 6px 12px;
+    color: var(--menu-text-color);
+    cursor: default;
+}
+
+/* Selected list item */
+.jump-to-note-dialog  .aa-suggestions div.aa-cursor {
+    background: var(--hover-item-background-color);
+    color: var(--hover-item-text-color);
+}
+
+/*
  * Recent changes list
  */
 
