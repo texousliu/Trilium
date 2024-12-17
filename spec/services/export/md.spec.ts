@@ -37,5 +37,16 @@ describe("Markdown export", () => {
             \`\`\``;
 
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
-    })
+    });
+
+    it("supports code block with no language tag", () => {
+        const html = trimIndentation`\
+            <pre><code>Hello</code></pre>`;
+        const expected = trimIndentation`\
+            \`\`\`
+            Hello
+            \`\`\``;
+
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
 });
