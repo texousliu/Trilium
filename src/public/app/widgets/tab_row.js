@@ -116,7 +116,6 @@ const TAB_ROW_TPL = `
     
     .tab-row-widget .note-tab,
     .tab-row-widget .note-tab * {
-        user-select: none;
         cursor: default;
     }
     
@@ -165,6 +164,7 @@ const TAB_ROW_TPL = `
         position: relative;
         top: -1px;
         padding-right: 3px;
+        z-index: -1;
     }
     
     .tab-row-widget .note-tab[is-small] .note-tab-title {
