@@ -1,9 +1,9 @@
 import options from "./options.js";
 
-let leftInstance;
-let rightInstance;
+let leftInstance: ReturnType<typeof Split> | null;
+let rightInstance: ReturnType<typeof Split> | null;
 
-function setupLeftPaneResizer(leftPaneVisible) {
+function setupLeftPaneResizer(leftPaneVisible: boolean) {
     if (leftInstance) {
         leftInstance.destroy();
         leftInstance = null;

@@ -85,4 +85,11 @@ declare global {
         });
     };
     var dayjs: {};
+    var Split: (selectors: string[], config: {
+        sizes: [ number, number ];
+        gutterSize: number;
+        onDragEnd: (sizes: [ number, number ]) => void;
+    }) => {
+        destroy();
+    };
 }
