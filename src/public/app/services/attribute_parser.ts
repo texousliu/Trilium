@@ -1,14 +1,30 @@
+import FAttribute, { AttributeType, FAttributeRow } from "../entities/fattribute.js";
 import utils from "./utils.js";
 
-function lex(str) {
+interface Token {
+    text: string;
+    startIndex: number;
+    endIndex: number;
+}
+
+interface Attribute {
+    type: AttributeType;
+    name: string;
+    isInheritable: boolean;
+    value?: string;
+    startIndex: number;
+    endIndex: number;
+}
+
+function lex(str: string) {
     str = str.trim();
 
-    const tokens = [];
+    const tokens: Token[] = [];
 
-    let quotes = false;
+    let quotes: boolean | string = false;
     let currentWord = '';
 
-    function isOperatorSymbol(chr) {
+    function isOperatorSymbol(chr: string) {
         return ['=', '*', '>', '<', '!'].includes(chr);
     }
 
@@ -24,7 +40,7 @@ function lex(str) {
     /**
      * @param endIndex - index of the last character of the token
      */
-    function finishWord(endIndex) {
+    function finishWord(endIndex: number) {
         if (currentWord === '') {
             return;
         }
@@ -107,7 +123,7 @@ function lex(str) {
     return tokens;
 }
 
-function checkAttributeName(attrName) {
+function checkAttributeName(attrName: string) {
     if (attrName.length === 0) {
         throw new Error("Attribute name is empty, please fill the name.");
     }
@@ -117,10 +133,10 @@ function checkAttributeName(attrName) {
     }
 }
 
-function parse(tokens, str, allowEmptyRelations = false) {
-    const attrs = [];
+function parse(tokens: Token[], str: string, allowEmptyRelations = false) {
+    const attrs: Attribute[] = [];
 
-    function context(i) {
+    function context(i: number) {
         let { startIndex, endIndex } = tokens[i];
         startIndex = Math.max(0, startIndex - 20);
         endIndex = Math.min(str.length, endIndex + 20);
@@ -151,7 +167,7 @@ function parse(tokens, str, allowEmptyRelations = false) {
 
             checkAttributeName(labelName);
 
-            const attr = {
+            const attr: Attribute = {
                 type: 'label',
                 name: labelName,
                 isInheritable: isInheritable(),
@@ -177,7 +193,7 @@ function parse(tokens, str, allowEmptyRelations = false) {
 
             checkAttributeName(relationName);
 
-            const attr = {
+            const attr: Attribute = {
                 type: 'relation',
                 name: relationName,
                 isInheritable: isInheritable(),
@@ -216,7 +232,7 @@ function parse(tokens, str, allowEmptyRelations = false) {
     return attrs;
 }
 
-function lexAndParse(str, allowEmptyRelations = false) {
+function lexAndParse(str: string, allowEmptyRelations = false) {
     const tokens = lex(str);
 
     return parse(tokens, str, allowEmptyRelations);
