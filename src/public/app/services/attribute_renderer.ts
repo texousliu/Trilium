@@ -20,7 +20,11 @@ async function renderAttribute(attribute, renderIsInheritable) {
         // when the relation has just been created, then it might not have a value
         if (attribute.value) {
             $attr.append(document.createTextNode(`~${attribute.name}${isInheritable}=`));
-            $attr.append(await createLink(attribute.value));
+
+            const link = await createLink(attribute.value);
+            if (link) {
+                $attr.append(link);
+            }
         }
     } else {
         ws.logError(`Unknown attr type: ${attribute.type}`);
