@@ -4,7 +4,7 @@ import options from "./options.js";
 await library_loader.requireLibrary(library_loader.I18NEXT);
 
 export async function initLocale() {
-    const locale = options.get("locale") || "en";
+    const locale = (options.get("locale") as string) || "en";
 
     await i18next
         .use(i18nextHttpBackend)
