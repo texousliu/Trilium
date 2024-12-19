@@ -1,7 +1,8 @@
 import server from './server.js';
 import froca from './froca.js';
+import FNote from '../entities/fnote.js';
 
-async function addLabel(noteId, name, value = "") {
+async function addLabel(noteId: string, name: string, value: string = "") {
     await server.put(`notes/${noteId}/attribute`, {
         type: 'label',
         name: name,
@@ -9,7 +10,7 @@ async function addLabel(noteId, name, value = "") {
     });
 }
 
-async function setLabel(noteId, name, value = "") {
+async function setLabel(noteId: string, name: string, value: string = "") {
     await server.put(`notes/${noteId}/set-attribute`, {
         type: 'label',
         name: name,
@@ -17,7 +18,7 @@ async function setLabel(noteId, name, value = "") {
     });
 }
 
-async function removeAttributeById(noteId, attributeId) {
+async function removeAttributeById(noteId: string, attributeId: string) {
     await server.remove(`notes/${noteId}/attributes/${attributeId}`);
 }
 
@@ -28,7 +29,7 @@ async function removeAttributeById(noteId, attributeId) {
  *         2. attribute is owned by the template of the note
  *         3. attribute is owned by some note's ancestor and is inheritable
  */
-function isAffecting(attrRow, affectedNote) {
+function isAffecting(this: { isInheritable: boolean }, attrRow: { noteId: string }, affectedNote: FNote) {
     if (!affectedNote || !attrRow) {
         return false;
     }
@@ -48,6 +49,7 @@ function isAffecting(attrRow, affectedNote) {
         }
     }
 
+    // TODO: This doesn't seem right.
     if (this.isInheritable) {
         for (const owningNote of owningNotes) {
             if (owningNote.hasAncestor(attrNote.noteId, true)) {
