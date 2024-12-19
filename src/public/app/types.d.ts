@@ -58,7 +58,13 @@ declare global {
     var __non_webpack_require__: RequireMethod | undefined;
 
     // Libraries
-    // Replace once library loader is replaced with webpack.
+    // TODO: Replace once library loader is replaced with webpack.
     var i18next: i18n;
     var i18nextHttpBackend: BackendModule<HttpBackendOptions>;
+    var hljs: {
+        highlightAuto(text: string);
+        highlight(text: string, {
+            language: string
+        });
+    };
 }
