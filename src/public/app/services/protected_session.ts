@@ -1,6 +1,7 @@
 import server from './server.js';
 import protectedSessionHolder from './protected_session_holder.js';
 import toastService from "./toast.js";
+import type { ToastOptions } from "./toast.js";
 import ws from "./ws.js";
 import appContext from "../components/app_context.js";
 import froca from "./froca.js";
@@ -8,7 +9,19 @@ import utils from "./utils.js";
 import options from "./options.js";
 import { t } from './i18n.js';
 
-let protectedSessionDeferred = null;
+let protectedSessionDeferred: JQuery.Deferred<any, any, any> | null = null;
+
+// TODO: Deduplicate with server when possible.
+interface Response {
+    success: boolean;
+}
+
+interface Message {
+    taskId: string;
+    data: {
+        protect: boolean
+    }
+}
 
 async function leaveProtectedSession() {
     if (protectedSessionHolder.isProtectedSessionAvailable()) {
@@ -44,11 +57,11 @@ async function reloadData() {
     await froca.loadInitialTree();
 
     // make sure that all notes used in the application are loaded, including the ones not shown in the tree
-    await froca.reloadNotes(allNoteIds, true);
+    await froca.reloadNotes(allNoteIds);
 }
 
-async function setupProtectedSession(password) {
-    const response = await server.post('login/protected', { password: password });
+async function setupProtectedSession(password: string) {
+    const response = await server.post<Response>('login/protected', { password: password });
 
     if (!response.success) {
         toastService.showError(t("protected_session.wrong_password"), 3000);
@@ -80,13 +93,13 @@ ws.subscribeToMessages(async message => {
     }
 });
 
-async function protectNote(noteId, protect, includingSubtree) {
+async function protectNote(noteId: string, protect: boolean, includingSubtree: boolean) {
     await enterProtectedSession();
 
     await server.put(`notes/${noteId}/protect/${protect ? 1 : 0}?subtree=${includingSubtree ? 1 : 0}`);
 }
 
-function makeToast(message, title, text) {
+function makeToast(message: Message, title: string, text: string): ToastOptions {
     return {
         id: message.taskId,
         title,
