@@ -18,7 +18,7 @@ const TPL = `
             <div class="modal-header">
                 <h5 class="modal-title flex-grow-1">${t('recent_changes.title')}</h5>
                 <button class="erase-deleted-notes-now-button btn btn-sm" style="padding: 0 10px">${t('recent_changes.erase_notes_button')}</button>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('recent_changes.close')}"></button>
             </div>
             <div class="modal-body">
                 <div class="recent-changes-content"></div>

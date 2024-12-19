@@ -153,7 +153,7 @@
     "numberedList": "<kbd>1.</kbd> o <kbd>1)</kbd> seguido de espacio para la lista numerada",
     "blockQuote": "comience una línea con <kbd>></kbd> seguido de espacio para el bloque de cita",
     "troubleshooting": "Solución de problemas",
-    "reloadFrontend": "recargar la interfaz de Trillium",
+    "reloadFrontend": "recargar la interfaz de Trilium",
     "showDevTools": "mostrar herramientas de desarrollador",
     "showSQLConsole": "mostrar consola SQL",
     "other": "Otro",

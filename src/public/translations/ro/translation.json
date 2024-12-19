@@ -1195,8 +1195,12 @@
     "title": "Pragul de mod de citire automat"
   },
   "theme": {
+    "auto_theme": "Temă auto (se adaptează la schema de culori a sistemului)",
     "dark_theme": "Temă întunecată",
     "light_theme": "Temă luminoasă",
+    "triliumnext": "TriliumNext Beta (se adaptează la schema de culori a sistemului)",
+    "triliumnext-light": "TriliumNext Beta (luminoasă)",
+    "triliumnext-dark": "TriliumNext Beta (întunecată)",
     "override_theme_fonts_label": "Suprascrie fonturile temei",
     "theme_label": "Temă",
     "title": "Tema aplicației",
@@ -1204,8 +1208,7 @@
     "layout-horizontal-description": "bara de lansare se află sub bara de taburi, bara de taburi este pe toată lungimea.",
     "layout-horizontal-title": "Orizontal",
     "layout-vertical-title": "Vertical",
-    "layout-vertical-description": "bara de lansare se află pe stânga (implicit)",
-    "triliumnext": "TriliumNext (experimentală)"
+    "layout-vertical-description": "bara de lansare se află pe stânga (implicit)"
   },
   "toast": {
     "critical-error": {
