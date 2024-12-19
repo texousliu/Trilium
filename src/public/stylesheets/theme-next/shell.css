@@ -109,6 +109,7 @@ body.layout-horizontal > .horizontal {
 #launcher-pane.horizontal {
     height: var(--launcher-pane-size) !important;
     border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
+    align-items: center;
 }
 
 #launcher-pane .launcher-button,
@@ -138,7 +139,9 @@ body.layout-horizontal > .horizontal {
 }
 
 #launcher-pane .launcher-button:hover,
-#launcher-pane .launcher-button.right-dropdown-button.show {
+#launcher-pane .launcher-button.right-dropdown-button.show,
+#launcher-pane.horizontal .global-menu-button:hover,
+#launcher-pane.horizontal .global-menu-button.show {
     background: var(--launcher-pane-button-hover-background) !important;
     color: var(--launcher-pane-button-hover-color);
     box-shadow: var(--launcher-pane-button-hover-shadow);
