@@ -2,7 +2,7 @@ import library_loader from "./library_loader.js";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 
-export function getStylesheetUrl(theme) {
+export function getStylesheetUrl(theme: string) {
     if (!theme) {
         return null;
     }
@@ -20,7 +20,7 @@ export function getStylesheetUrl(theme) {
  * 
  * @param $container the container under which to look for code blocks and to apply syntax highlighting to them.
  */
-export async function applySyntaxHighlight($container) {
+export async function applySyntaxHighlight($container: JQuery<HTMLElement>) {
     if (!isSyntaxHighlightEnabled()) {
         return;
     }    
@@ -38,11 +38,8 @@ export async function applySyntaxHighlight($container) {
 
 /**
  * Applies syntax highlight to the given code block (assumed to be <pre><code>), using highlight.js.
- * 
- * @param {*} $codeBlock 
- * @param {*} normalizedMimeType 
  */
-export async function applySingleBlockSyntaxHighlight($codeBlock, normalizedMimeType) {
+export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLElement>, normalizedMimeType: string) {
     $codeBlock.parent().toggleClass("hljs");
     const text = $codeBlock.text();
 
@@ -79,10 +76,10 @@ export function isSyntaxHighlightEnabled() {
 /**
  * Given a HTML element, tries to extract the `language-` class name out of it.
  * 
- * @param {string} el the HTML element from which to extract the language tag.
+ * @param el the HTML element from which to extract the language tag.
  * @returns the normalized MIME type (e.g. `text-css` instead of `language-text-css`).
  */
-function extractLanguageFromClassList(el) {
+function extractLanguageFromClassList(el: HTMLElement) {
     const prefix = "language-";
     for (const className of el.classList) {
         if (className.startsWith(prefix)) {
