@@ -2,8 +2,18 @@ import server from "./server.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
 
-async function getNoteTypeItems(command) {
-    const items = [
+type NoteTypeItem = {
+    title: string;
+    command: string;
+    type: string;
+    uiIcon: string;
+    templateNoteId?: string;
+} | {
+    title: "----"
+};
+
+async function getNoteTypeItems(command: string) {
+    const items: NoteTypeItem[] = [
         { title: t("note_types.text"), command: command, type: "text", uiIcon: "bx bx-note" },
         { title: t("note_types.code"), command: command, type: "code", uiIcon: "bx bx-code" },
         { title: t("note_types.saved-search"), command: command, type: "search", uiIcon: "bx bx-file-find" },
@@ -17,7 +27,7 @@ async function getNoteTypeItems(command) {
         { title: t("note_types.mind-map"), command, type: "mindMap", uiIcon: "bx bx-sitemap" }
     ];
 
-    const templateNoteIds = await server.get("search-templates");
+    const templateNoteIds = await server.get<string[]>("search-templates");
     const templateNotes = await froca.getNotes(templateNoteIds);
 
     if (templateNotes.length > 0) {
