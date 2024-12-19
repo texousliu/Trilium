@@ -14,6 +14,7 @@ import MainTreeExecutors from "./main_tree_executors.js";
 import toast from "../services/toast.js";
 import ShortcutComponent from "./shortcut_component.js";
 import { t, initLocale } from "../services/i18n.js";
+import NoteDetailWidget from "../widgets/note_detail.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -27,11 +28,18 @@ interface BeforeUploadListener extends Component {
     beforeUnloadEvent(): boolean;
 }
 
-interface TriggerData {
+export type TriggerData = {
     noteId?: string;
     noteIds?: string[];
-    messages?: unknown[];
+    messages?: unknown[];    
     callback?: () => void;
+} | {
+    ntxId: string;
+    notePath: string;
+} | {
+    text: string;
+} | {
+    callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
 }
 
 class AppContext extends Component {

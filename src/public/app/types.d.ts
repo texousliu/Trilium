@@ -34,6 +34,7 @@ interface CustomGlobals {
     maxEntityChangeIdAtLoad: number;
     maxEntityChangeSyncIdAtLoad: number;
     assetPath: string;
+    instanceName: string;
 }
 
 type RequireMethod = (moduleName: string) => any;
@@ -64,7 +65,7 @@ declare global {
     };
     
     interface JQuery {
-        autocomplete: (action: "close" | "open" | "destroy" | AutoCompleteConfig, args?: AutoCompleteArg[]) => void;
+        autocomplete: (action: "close" | "open" | "destroy" | AutoCompleteConfig, args?: AutoCompleteArg[]) => void;        
     }
 
     var logError: (message: string) => void;
@@ -83,4 +84,5 @@ declare global {
             language: string
         });
     };
+    var dayjs: {};
 }
