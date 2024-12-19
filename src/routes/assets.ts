@@ -4,8 +4,6 @@ import { fileURLToPath } from "url";
 import express from "express";
 import env from "../services/env.js";
 import serveStatic from "serve-static";
-import webpack from "webpack";
-import webpackMiddleware from "webpack-dev-middleware";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<any, Record<string, any>>>) => {
     if (!env.isDev()) {
@@ -17,9 +15,12 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
     return express.static(root, options);
 };
 
-function register(app: express.Application) {
+async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
     if (env.isDev()) {
+      const webpack = (await import("webpack")).default;
+      const webpackMiddleware = (await import("webpack-dev-middleware")).default;
+
       const frontendCompiler = webpack({
         mode: "development",
         entry: {
