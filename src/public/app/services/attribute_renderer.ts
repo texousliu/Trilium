@@ -1,7 +1,9 @@
 import ws from "./ws.js";
 import froca from "./froca.js";
+import FAttribute from "../entities/fattribute.js";
+import FNote from "../entities/fnote.js";
 
-async function renderAttribute(attribute, renderIsInheritable) {
+async function renderAttribute(attribute: FAttribute, renderIsInheritable: boolean) {
     const isInheritable = renderIsInheritable && attribute.isInheritable ? `(inheritable)` : '';
     const $attr = $("<span>");
 
@@ -33,7 +35,7 @@ async function renderAttribute(attribute, renderIsInheritable) {
     return $attr;
 }
 
-function formatValue(val) {
+function formatValue(val: string) {
     if (/^[\p{L}\p{N}\-_,.]+$/u.test(val)) {
         return val;
     }
@@ -51,7 +53,7 @@ function formatValue(val) {
     }
 }
 
-async function createLink(noteId) {
+async function createLink(noteId: string) {
     const note = await froca.getNote(noteId);
 
     if (!note) {
@@ -65,7 +67,7 @@ async function createLink(noteId) {
         .text(note.title);
 }
 
-async function renderAttributes(attributes, renderIsInheritable) {
+async function renderAttributes(attributes: FAttribute[], renderIsInheritable: boolean) {
     const $container = $('<span class="rendered-note-attributes">');
 
     for (let i = 0; i < attributes.length; i++) {
@@ -93,7 +95,7 @@ const HIDDEN_ATTRIBUTES = [
     'viewType'
 ];
 
-async function renderNormalAttributes(note) {
+async function renderNormalAttributes(note: FNote) {
     const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
     let attrs = note.getAttributes();
 
