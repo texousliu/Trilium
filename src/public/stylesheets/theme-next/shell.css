@@ -139,7 +139,7 @@ body.layout-horizontal > .horizontal {
 
 #launcher-pane .launcher-button:hover,
 #launcher-pane .launcher-button.right-dropdown-button.show {
-    background: var(--launcher-pane-button-hover-background);
+    background: var(--launcher-pane-button-hover-background) !important;
     color: var(--launcher-pane-button-hover-color);
     box-shadow: var(--launcher-pane-button-hover-shadow);
     transition: background-color 100ms ease-in,
