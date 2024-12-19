@@ -1,11 +1,19 @@
+import { AttributeType } from "../entities/fattribute.js";
 import server from "./server.js";
+
+interface InitOptions {
+    $el: JQuery<HTMLElement>;
+    attributeType: AttributeType | (() => AttributeType);
+    open: boolean;
+    nameCallback: () => string;
+}
 
 /**
  * @param $el - element on which to init autocomplete
  * @param attributeType - "relation" or "label" or callback providing one of those values as a type of autocompleted attributes
  * @param open - should the autocomplete be opened after init?
  */
-function initAttributeNameAutocomplete({ $el, attributeType, open }) {
+function initAttributeNameAutocomplete({ $el, attributeType, open }: InitOptions) {
     if (!$el.hasClass("aa-input")) {
         $el.autocomplete({
             appendTo: document.querySelector('body'),
@@ -39,7 +47,7 @@ function initAttributeNameAutocomplete({ $el, attributeType, open }) {
     }
 }
 
-async function initLabelValueAutocomplete({ $el, open, nameCallback }) {
+async function initLabelValueAutocomplete({ $el, open, nameCallback }: InitOptions) {
     if ($el.hasClass("aa-input")) {
         // we reinit every time because autocomplete seems to have a bug where it retains state from last
         // open even though the value was reset

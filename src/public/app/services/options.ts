@@ -1,7 +1,7 @@
 
 import server from "./server.js";
 
-type OptionValue = string;
+type OptionValue = number | string;
 
 class Options {
     initializedPromise: Promise<void>;

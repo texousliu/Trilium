@@ -47,8 +47,24 @@ declare global {
         glob?: CustomGlobals;
     }
 
+    interface AutoCompleteConfig {
+        appendTo?: HTMLElement | null;
+        hint?: boolean;
+        openOnFocus?: boolean;
+        minLength?: number;
+        tabAutocomplete?: boolean
+    }
+
+    type AutoCompleteCallback = (values: AutoCompleteCallbackArgs[]) => void;
+
+    interface AutoCompleteArg {
+        displayKey: "name" | "value";
+        cache: boolean;
+        source: (term: string, cb: AutoCompleteCallback) => void
+    };
+    
     interface JQuery {
-        // autocomplete: (action: "close") => void;
+        autocomplete: (action: "close" | "open" | "destroy" | AutoCompleteConfig, args?: AutoCompleteArg[]) => void;
     }
 
     var logError: (message: string) => void;
