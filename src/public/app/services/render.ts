@@ -1,7 +1,12 @@
 import server from "./server.js";
 import bundleService from "./bundle.js";
+import FNote from "../entities/fnote.js";
 
-async function render(note, $el) {
+interface Bundle {
+    html: string;
+}
+
+async function render(note: FNote, $el: JQuery<HTMLElement>) {
     const relations = note.getRelations('renderNote');
     const renderNoteIds = relations
         .map(rel => rel.value)
@@ -10,7 +15,7 @@ async function render(note, $el) {
     $el.empty().toggle(renderNoteIds.length > 0);
 
     for (const renderNoteId of renderNoteIds) {
-        const bundle = await server.post(`script/bundle/${renderNoteId}`);
+        const bundle = await server.post<Bundle>(`script/bundle/${renderNoteId}`);
 
         const $scriptContainer = $('<div>');
         $el.append($scriptContainer);
