@@ -1,4 +1,7 @@
-import FNote from "./entities/fnote";
+import type FNote from "./entities/fnote";
+import type { BackendModule, i18n } from "i18next";
+import type { Froca } from "./services/froca-interface";
+import type { HttpBackendOptions } from "i18next-http-backend";
 
 interface ElectronProcess {
     type: string;
@@ -30,6 +33,7 @@ interface CustomGlobals {
     isMainWindow: boolean;
     maxEntityChangeIdAtLoad: number;
     maxEntityChangeSyncIdAtLoad: number;
+    assetPath: string;
 }
 
 type RequireMethod = (moduleName: string) => any;
@@ -44,12 +48,17 @@ declare global {
     }
 
     interface JQuery {
-        autocomplete: (action: "close") => void;
+        // autocomplete: (action: "close") => void;
     }
 
-    declare var logError: (message: string) => void;
-    declare var logInfo: (message: string) => void;
-    declare var glob: CustomGlobals;
-    declare var require: RequireMethod;
-    declare var __non_webpack_require__: RequireMethod | undefined;
+    var logError: (message: string) => void;
+    var logInfo: (message: string) => void;
+    var glob: CustomGlobals;
+    var require: RequireMethod;
+    var __non_webpack_require__: RequireMethod | undefined;
+
+    // Libraries
+    // Replace once library loader is replaced with webpack.
+    var i18next: i18n;
+    var i18nextHttpBackend: BackendModule<HttpBackendOptions>;
 }
