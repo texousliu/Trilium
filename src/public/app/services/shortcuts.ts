@@ -1,14 +1,17 @@
 import utils from "./utils.js";
 
-function removeGlobalShortcut(namespace) {
+type ElementType = HTMLElement | Document;
+type Handler = (e: JQuery.TriggeredEvent<ElementType, string, ElementType, ElementType>) => void;
+
+function removeGlobalShortcut(namespace: string) {
     bindGlobalShortcut('', null, namespace);
 }
 
-function bindGlobalShortcut(keyboardShortcut, handler, namespace = null) {
+function bindGlobalShortcut(keyboardShortcut: string, handler: Handler | null, namespace: string | null = null) {
     bindElShortcut($(document), keyboardShortcut, handler, namespace);
 }
 
-function bindElShortcut($el, keyboardShortcut, handler, namespace = null) {
+function bindElShortcut($el: JQuery<ElementType>, keyboardShortcut: string, handler: Handler | null, namespace: string | null = null) {
     if (utils.isDesktop()) {
         keyboardShortcut = normalizeShortcut(keyboardShortcut);
 
@@ -24,7 +27,9 @@ function bindElShortcut($el, keyboardShortcut, handler, namespace = null) {
         // method can be called to remove the shortcut (e.g. when keyboardShortcut label is deleted)
         if (keyboardShortcut) {
             $el.bind(eventName, keyboardShortcut, e => {
-                handler(e);
+                if (handler) {
+                    handler(e);
+                }
 
                 e.preventDefault();
                 e.stopPropagation();
@@ -36,7 +41,7 @@ function bindElShortcut($el, keyboardShortcut, handler, namespace = null) {
 /**
  * Normalize to the form expected by the jquery.hotkeys.js
  */
-function normalizeShortcut(shortcut) {
+function normalizeShortcut(shortcut: string): string {
     if (!shortcut) {
         return shortcut;
     }
