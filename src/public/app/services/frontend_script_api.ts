@@ -445,10 +445,8 @@ interface Api {
 /**
  * <p>This is the main frontend API interface for scripts. All the properties and methods are published in the "api" object
  * available in the JS frontend notes. You can use e.g. <code>api.showMessage(api.startNote.title);</code></p>
- *
- * @constructor
  */
-function FrontendScriptApi (this: Api, startNote: FNote, currentNote: FNote, originEntity: Entity | null = null, $container = null) {
+function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, originEntity: Entity | null = null, $container: JQuery<HTMLElement> | null = null) {
     
     this.$container = $container;
     this.startNote = startNote;
@@ -671,4 +669,6 @@ function FrontendScriptApi (this: Api, startNote: FNote, currentNote: FNote, ori
     };
 }
 
-export default FrontendScriptApi;
+export default FrontendScriptApi as any as {
+    new (startNote: FNote, currentNote: FNote, originEntity: Entity | null, $container: JQuery<HTMLElement> | null): Api
+};
