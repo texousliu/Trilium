@@ -276,7 +276,7 @@
     "sort_with_respect_to_different_character_sorting": "trier en fonction de différentes règles de tri et de classement des caractères dans différentes langues ou régions.",
     "natural_sort_language": "Langage de tri naturel",
     "the_language_code_for_natural_sort": "Le code de langue pour le tri naturel, par ex. \"zh-CN\" pour le chinois.",
-    "sort": "Trier"
+    "sort": "Trier <kbd>Entrée</kbd>"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Téléverser des pièces jointes à la note",

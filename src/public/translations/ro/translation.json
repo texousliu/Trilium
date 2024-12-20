@@ -1152,7 +1152,7 @@
     "folders": "Dosare",
     "natural_sort": "Ordonare naturală",
     "natural_sort_language": "Limba pentru ordonare naturală",
-    "sort": "Ordonare",
+    "sort": "Ordonare <kbd>Enter</kbd>",
     "sort_children_by": "Ordonează subnotițele după...",
     "sort_folders_at_top": "ordonează dosarele primele",
     "sort_with_respect_to_different_character_sorting": "ordonează respectând regulile de sortare și clasificare diferite în funcție de limbă și regiune.",

@@ -280,7 +280,7 @@
     "sort_with_respect_to_different_character_sorting": "根據不同語言或地區的字符排序和排序規則排序。",
     "natural_sort_language": "自然排序語言",
     "the_language_code_for_natural_sort": "自然排序的語言程式碼，例如繁體中文的 \"zh-TW\"。",
-    "sort": "排序"
+    "sort": "排序 <kbd>Enter</kbd>"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "上傳附件到筆記",

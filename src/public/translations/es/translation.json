@@ -290,7 +290,7 @@
     "sort_with_respect_to_different_character_sorting": "ordenar con respecto a diferentes reglas de ordenamiento y clasificación de caracteres en diferentes idiomas o regiones.",
     "natural_sort_language": "Idioma de clasificación natural",
     "the_language_code_for_natural_sort": "El código del idioma para el ordenamiento natural, ej. \"zh-CN\" para Chino.",
-    "sort": "Ordenar"
+    "sort": "Ordenar <kbd>Enter</kbd>"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Cargar archivos adjuntos a nota",

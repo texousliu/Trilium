@@ -57,7 +57,7 @@ const TPL = `<div class="sort-child-notes-dialog modal mx-auto" tabindex="-1" ro
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">${t("sort_child_notes.sort")} <kbd>enter</kbd></button>
+                    <button type="submit" class="btn btn-primary">${t("sort_child_notes.sort")}</button>
                 </div>
             </form>
         </div>

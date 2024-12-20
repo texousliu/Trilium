@@ -304,7 +304,7 @@
     "sort_with_respect_to_different_character_sorting": "sort with respect to different character sorting and collation rules in different languages or regions.",
     "natural_sort_language": "Natural sort language",
     "the_language_code_for_natural_sort": "The language code for natural sort, e.g. \"zh-CN\" for Chinese.",
-    "sort": "Sort"
+    "sort": "Sort <kbd>enter</kbd>"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Upload attachments to note",

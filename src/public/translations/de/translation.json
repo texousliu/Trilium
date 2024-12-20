@@ -275,7 +275,7 @@
     "sort_with_respect_to_different_character_sorting": "Sortierung im Hinblick auf unterschiedliche Sortier- und Sortierregeln für Zeichen in verschiedenen Sprachen oder Regionen.",
     "natural_sort_language": "Natürliche Sortiersprache",
     "the_language_code_for_natural_sort": "Der Sprachcode für die natürliche Sortierung, z. B. \"de-DE\" für Deutsch.",
-    "sort": "Sortieren"
+    "sort": "Sortieren <kbd>Eingabetaste</kbd>"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Lade Anhänge zur Notiz hoch",
