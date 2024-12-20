@@ -185,7 +185,7 @@
     "box_size_small": "小型 (顯示大約10行)",
     "box_size_medium": "中型 (顯示大約30行)",
     "box_size_full": "完整顯示（完整文字框）",
-    "button_include": "包含筆記"
+    "button_include": "包含筆記 <kbd>Enter</kbd>"
   },
   "info": {
     "modalTitle": "資訊消息",

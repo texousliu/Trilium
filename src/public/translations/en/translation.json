@@ -200,7 +200,7 @@
     "box_size_small": "small (~ 10 lines)",
     "box_size_medium": "medium (~ 30 lines)",
     "box_size_full": "full (box shows complete text)",
-    "button_include": "Include note"
+    "button_include": "Include note <kbd>enter</kbd>"
   },
   "info": {
     "modalTitle": "Info message",

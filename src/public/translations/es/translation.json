@@ -195,7 +195,7 @@
     "box_size_small": "pequeño (~ 10 líneas)",
     "box_size_medium": "medio (~ 30 líneas)",
     "box_size_full": "completo (el cuadro muestra el texto completo)",
-    "button_include": "Incluir nota"
+    "button_include": "Incluir nota <kbd>Enter</kbd>"
   },
   "info": {
     "modalTitle": "Mensaje informativo",

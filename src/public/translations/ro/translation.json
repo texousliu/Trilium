@@ -717,7 +717,7 @@
     "box_size_medium": "mediu (~ 30 de rânduri)",
     "box_size_prompt": "Dimensiunea căsuței notiței incluse:",
     "box_size_small": "mică (~ 10 rânduri)",
-    "button_include": "Include notița",
+    "button_include": "Include notița <kbd>Enter</kbd>",
     "dialog_title": "Includere notița",
     "label_note": "Notiță",
     "placeholder_search": "căutați notița după denumirea ei",

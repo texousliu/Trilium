@@ -185,7 +185,7 @@
     "box_size_small": "小型 (显示大约10行)",
     "box_size_medium": "中型 (显示大约30行)",
     "box_size_full": "完整显示（完整文本框）",
-    "button_include": "包含笔记"
+    "button_include": "包含笔记 <kbd>回车</kbd>"
   },
   "info": {
     "modalTitle": "信息消息",

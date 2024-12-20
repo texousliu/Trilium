@@ -181,7 +181,7 @@
     "box_size_small": "petit (~ 10 lignes)",
     "box_size_medium": "moyen (~ 30 lignes)",
     "box_size_full": "complet (la boîte affiche le texte complet)",
-    "button_include": "Inclure une note"
+    "button_include": "Inclure une note <kbd>Entrée</kbd>"
   },
   "info": {
     "modalTitle": "Message d'information",
