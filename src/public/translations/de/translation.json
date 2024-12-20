@@ -1303,7 +1303,7 @@
     "button-tree-map": "Baumkarte"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "In neuem Tab öffnen",
+    "open-in-a-new-tab": "In neuem Tab öffnen <kbd>Strg+Klick</kbd>",
     "open-in-a-new-split": "In neuem Split öffnen",
     "insert-note-after": "Notiz dahinter einfügen",
     "insert-child-note": "Unternotiz einfügen",

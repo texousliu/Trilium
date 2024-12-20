@@ -1333,7 +1333,7 @@
     "insert-note-after": "Inserează după notiță",
     "move-to": "Mutare la...",
     "open-in-a-new-split": "Deschide în lateral",
-    "open-in-a-new-tab": "Deschide în tab nou",
+    "open-in-a-new-tab": "Deschide în tab nou <kbd>Ctrl+Clic</kbd>",
     "paste-after": "Lipește după notiță",
     "paste-into": "Lipește în notiță",
     "protect-subtree": "Protejează ierarhia",

@@ -1345,7 +1345,7 @@
     "button-tree-map": "Tree map"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "Open in a new tab",
+    "open-in-a-new-tab": "Open in a new tab <kbd>Ctrl+Click</kbd>",
     "open-in-a-new-split": "Open in a new split",
     "insert-note-after": "Insert note after",
     "insert-child-note": "Insert child note",

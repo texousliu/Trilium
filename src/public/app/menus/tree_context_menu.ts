@@ -59,7 +59,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
         const insertNoteAfterEnabled = isNotRoot && !isHoisted && parentNotSearch;
 
         const items: (MenuItem<TreeCommandNames> | null)[] = [
-            { title: `${t("tree-context-menu.open-in-a-new-tab")} <kbd>Ctrl+Click</kbd>`, command: "openInTab", uiIcon: "bx bx-link-external", enabled: noSelectedNotes },
+            { title: `${t("tree-context-menu.open-in-a-new-tab")}`, command: "openInTab", uiIcon: "bx bx-link-external", enabled: noSelectedNotes },
 
             { title: t("tree-context-menu.open-in-a-new-split"), command: "openNoteInSplit", uiIcon: "bx bx-dock-right", enabled: noSelectedNotes },
 

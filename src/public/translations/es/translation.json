@@ -1327,7 +1327,7 @@
     "button-tree-map": "Mapa de Árbol"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "Abrir en nueva pestaña",
+    "open-in-a-new-tab": "Abrir en nueva pestaña <kbd>Ctrl+Click</kbd>",
     "open-in-a-new-split": "Abrir en nueva división",
     "insert-note-after": "Insertar nota después de",
     "insert-child-note": "Insertar subnota",

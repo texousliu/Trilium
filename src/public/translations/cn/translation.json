@@ -1315,7 +1315,7 @@
     "button-tree-map": "树形地图"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "在新标签页中打开",
+    "open-in-a-new-tab": "在新标签页中打开 <kbd>Ctrl+Click</kbd>",
     "open-in-a-new-split": "在新分栏中打开",
     "insert-note-after": "在后面插入笔记",
     "insert-child-note": "插入子笔记",

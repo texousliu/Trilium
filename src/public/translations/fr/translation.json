@@ -1304,7 +1304,7 @@
     "button-tree-map": "Carte arborescente"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "Ouvrir dans un nouvel onglet",
+    "open-in-a-new-tab": "Ouvrir dans un nouvel onglet <kbd>Ctrl+Clic</kbd>",
     "open-in-a-new-split": "Ouvrir dans une nouvelle division",
     "insert-note-after": "Insérer une note après",
     "insert-child-note": "Insérer une note enfant",
