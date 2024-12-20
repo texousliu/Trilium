@@ -930,7 +930,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "Um die geschützte Notiz anzuzeigen, musst du dein Passwort eingeben:",
-    "start_session_button": "Starte eine geschützte Sitzung",
+    "start_session_button": "Starte eine geschützte Sitzung <kbd>Eingabetaste</kbd>",
     "started": "Geschützte Sitzung gestartet.",
     "wrong_password": "Passwort flasch.",
     "protecting-finished-successfully": "Geschützt erfolgreich beendet.",
