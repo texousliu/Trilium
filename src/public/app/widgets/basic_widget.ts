@@ -9,6 +9,13 @@ import toastService from "../services/toast.js";
  * For information on using widgets, see the tutorial {@tutorial widget_basics}.
  */
 class BasicWidget extends Component {
+    private attrs: Record<string, string>;
+    private classes: string[];
+    private childPositionCounter: number;
+    private cssEl?: string;
+    private $widget!: JQuery<HTMLElement>;
+    _noteId!: string;
+
     constructor() {
         super();
 
@@ -21,7 +28,7 @@ class BasicWidget extends Component {
         this.childPositionCounter = 10;
     }
 
-    child(...components) {
+    child(...components: Component[]) {
         if (!components) {
             return this;
         }
@@ -43,11 +50,11 @@ class BasicWidget extends Component {
     /**
      * Conditionally adds the given components as children to this component.
      * 
-     * @param {boolean} condition whether to add the components.
-     * @param  {...any} components the components to be added as children to this component provided the condition is truthy. 
+     * @param condition whether to add the components.
+     * @param components the components to be added as children to this component provided the condition is truthy. 
      * @returns self for chaining.
      */
-    optChild(condition, ...components) {
+    optChild(condition: boolean, ...components: Component[]) {
         if (condition) {
             return this.child(...components);
         } else {
@@ -55,12 +62,12 @@ class BasicWidget extends Component {
         }
     }
 
-    id(id) {
+    id(id: string) {
         this.attrs.id = id;
         return this;
     }
 
-    class(className) {
+    class(className: string) {
         this.classes.push(className);
         return this;
     }
@@ -68,11 +75,11 @@ class BasicWidget extends Component {
     /**
      * Sets the CSS attribute of the given name to the given value.
      * 
-     * @param {string} name the name of the CSS attribute to set (e.g. `padding-left`).
-     * @param {string} value the value of the CSS attribute to set (e.g. `12px`).
+     * @param name the name of the CSS attribute to set (e.g. `padding-left`).
+     * @param value the value of the CSS attribute to set (e.g. `12px`).
      * @returns self for chaining.
      */
-    css(name, value) {
+    css(name: string, value: string) {
         this.attrs.style += `${name}: ${value};`;
         return this;
     }
@@ -80,12 +87,12 @@ class BasicWidget extends Component {
     /**
      * Sets the CSS attribute of the given name to the given value, but only if the condition provided is truthy.
      * 
-     * @param {boolean} condition `true` in order to apply the CSS, `false` to ignore it.
-     * @param {string} name the name of the CSS attribute to set (e.g. `padding-left`).
-     * @param {string} value the value of the CSS attribute to set (e.g. `12px`).
+     * @param condition `true` in order to apply the CSS, `false` to ignore it.
+     * @param name the name of the CSS attribute to set (e.g. `padding-left`).
+     * @param value the value of the CSS attribute to set (e.g. `12px`).
      * @returns self for chaining.
      */
-    optCss(condition, name, value) {
+    optCss(condition: boolean, name: string, value: string) {
         if (condition) {
             return this.css(name, value);
         }
@@ -112,10 +119,9 @@ class BasicWidget extends Component {
 
     /**
      * Accepts a string of CSS to add with the widget.
-     * @param {string} block
-     * @returns {this} for chaining
+     * @returns for chaining
      */
-    cssBlock(block) {
+    cssBlock(block: string) {
         this.cssEl = block;
         return this;
     }
@@ -123,7 +129,7 @@ class BasicWidget extends Component {
     render() {
         try {
             this.doRender();
-        } catch (e) {                        
+        } catch (e: any) {                        
             this.logRenderingError(e);
         }
 
@@ -163,7 +169,7 @@ class BasicWidget extends Component {
         return this.$widget;
     }
 
-    logRenderingError(e) {
+    logRenderingError(e: Error) {
         console.log("Got issue in widget ", this);
         console.error(e);
 
@@ -175,7 +181,7 @@ class BasicWidget extends Component {
                     icon: "alert",
                     message: t("toast.widget-error.message-custom", {
                         id: noteId,
-                        title: note.title,
+                        title: note?.title,
                         message: e.message
                     })
                 });
@@ -208,7 +214,7 @@ class BasicWidget extends Component {
      */
     doRender() {}
 
-    toggleInt(show) {
+    toggleInt(show: boolean) {
         this.$widget.toggleClass('hidden-int', !show);
     }
 
@@ -216,7 +222,7 @@ class BasicWidget extends Component {
         return this.$widget.hasClass('hidden-int');
     }
 
-    toggleExt(show) {
+    toggleExt(show: boolean) {
         this.$widget.toggleClass('hidden-ext', !show);
     }
 
