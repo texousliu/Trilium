@@ -240,5 +240,8 @@
     "other": "Other",
     "advanced-title": "Advanced",
     "visible-launchers-title": "Visible Launchers"
+  },
+  "notes": {
+    "new-note": "New note"
   }
 }

@@ -52,7 +52,7 @@
     "ci-update-nightly-version": "tsx ./bin/update-nightly-version.ts"
   },
   "dependencies": {
-    "@braintree/sanitize-url": "7.1.0",
+    "@braintree/sanitize-url": "7.1.1",
     "@electron/remote": "2.1.2",
     "@excalidraw/excalidraw": "0.17.6",
     "@highlightjs/cdn-assets": "11.11.0",
@@ -94,7 +94,7 @@
     "html2plaintext": "2.1.4",
     "http-proxy-agent": "7.0.2",
     "https-proxy-agent": "7.0.6",
-    "i18next": "24.1.2",
+    "i18next": "24.2.0",
     "i18next-fs-backend": "2.6.0",
     "i18next-http-backend": "3.0.1",
     "image-type": "5.2.0",
