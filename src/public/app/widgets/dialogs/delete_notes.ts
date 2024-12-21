@@ -12,7 +12,7 @@ interface Response {
     brokenRelations: FAttributeRow[];
 }
 
-interface ResolveOptions {
+export interface ResolveOptions {
     proceed: boolean;
     deleteAllClones?: boolean;    
     eraseNotes?: boolean;

@@ -15,6 +15,7 @@ import toast from "../services/toast.js";
 import ShortcutComponent from "./shortcut_component.js";
 import { t, initLocale } from "../services/i18n.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
+import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -43,6 +44,11 @@ export type TriggerData = {
 } | {
     // For "searchNotes"
     searchString: string | undefined;
+} | {
+    // For "showDeleteNotesDialog"
+    branchIdsToDelete: string[];
+    callback: (value: ResolveOptions) => void;
+    forceDeleteAllClones: boolean;
 }
 
 class AppContext extends Component {

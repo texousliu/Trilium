@@ -1,17 +1,28 @@
 import utils from './utils.js';
 import server from './server.js';
-import toastService from "./toast.js";
+import toastService, { ToastOptions } from "./toast.js";
 import froca from "./froca.js";
 import hoistedNoteService from "./hoisted_note.js";
 import ws from "./ws.js";
 import appContext from "../components/app_context.js";
 import { t } from './i18n.js';
+import { Node } from './tree.js';
+import { ResolveOptions } from '../widgets/dialogs/delete_notes.js';
 
-async function moveBeforeBranch(branchIdsToMove, beforeBranchId) {
+// TODO: Deduplicate type with server
+interface Response {
+    success: boolean;
+    message: string;
+}
+
+async function moveBeforeBranch(branchIdsToMove: string[], beforeBranchId: string) {
     branchIdsToMove = filterRootNote(branchIdsToMove);
     branchIdsToMove = filterSearchBranches(branchIdsToMove);
 
     const beforeBranch = froca.getBranch(beforeBranchId);
+    if (!beforeBranch) {
+        return;
+    }
 
     if (['root', '_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers'].includes(beforeBranch.noteId)) {
         toastService.showError(t("branches.cannot-move-notes-here"));
@@ -19,7 +30,7 @@ async function moveBeforeBranch(branchIdsToMove, beforeBranchId) {
     }
 
     for (const branchIdToMove of branchIdsToMove) {
-        const resp = await server.put(`branches/${branchIdToMove}/move-before/${beforeBranchId}`);
+        const resp = await server.put<Response>(`branches/${branchIdToMove}/move-before/${beforeBranchId}`);
 
         if (!resp.success) {
             toastService.showError(resp.message);
@@ -28,11 +39,14 @@ async function moveBeforeBranch(branchIdsToMove, beforeBranchId) {
     }
 }
 
-async function moveAfterBranch(branchIdsToMove, afterBranchId) {
+async function moveAfterBranch(branchIdsToMove: string[], afterBranchId: string) {
     branchIdsToMove = filterRootNote(branchIdsToMove);
     branchIdsToMove = filterSearchBranches(branchIdsToMove);
 
-    const afterNote = froca.getBranch(afterBranchId).getNote();
+    const afterNote = await froca.getBranch(afterBranchId)?.getNote();
+    if (!afterNote) {
+        return;
+    }
 
     const forbiddenNoteIds = [
         'root',
@@ -50,7 +64,7 @@ async function moveAfterBranch(branchIdsToMove, afterBranchId) {
     branchIdsToMove.reverse(); // need to reverse to keep the note order
 
     for (const branchIdToMove of branchIdsToMove) {
-        const resp = await server.put(`branches/${branchIdToMove}/move-after/${afterBranchId}`);
+        const resp = await server.put<Response>(`branches/${branchIdToMove}/move-after/${afterBranchId}`);
 
         if (!resp.success) {
             toastService.showError(resp.message);
@@ -59,8 +73,11 @@ async function moveAfterBranch(branchIdsToMove, afterBranchId) {
     }
 }
 
-async function moveToParentNote(branchIdsToMove, newParentBranchId) {
+async function moveToParentNote(branchIdsToMove: string[], newParentBranchId: string) {
     const newParentBranch = froca.getBranch(newParentBranchId);
+    if (!newParentBranch) {
+        return;
+    }
 
     if (newParentBranch.noteId === '_lbRoot') {
         toastService.showError(t("branches.cannot-move-notes-here"));
@@ -72,12 +89,13 @@ async function moveToParentNote(branchIdsToMove, newParentBranchId) {
     for (const branchIdToMove of branchIdsToMove) {
         const branchToMove = froca.getBranch(branchIdToMove);
 
-        if (branchToMove.noteId === hoistedNoteService.getHoistedNoteId()
-            || (await branchToMove.getParentNote()).type === 'search') {
+        if (!branchToMove
+            || branchToMove.noteId === hoistedNoteService.getHoistedNoteId()
+            || (await branchToMove.getParentNote())?.type === 'search') {
             continue;
         }
 
-        const resp = await server.put(`branches/${branchIdToMove}/move-to/${newParentBranchId}`);
+        const resp = await server.put<Response>(`branches/${branchIdToMove}/move-to/${newParentBranchId}`);
 
         if (!resp.success) {
             toastService.showError(resp.message);
@@ -86,7 +104,7 @@ async function moveToParentNote(branchIdsToMove, newParentBranchId) {
     }
 }
 
-async function deleteNotes(branchIdsToDelete, forceDeleteAllClones = false) {
+async function deleteNotes(branchIdsToDelete: string[], forceDeleteAllClones = false) {
     branchIdsToDelete = filterRootNote(branchIdsToDelete);
 
     if (branchIdsToDelete.length === 0) {
@@ -100,7 +118,7 @@ async function deleteNotes(branchIdsToDelete, forceDeleteAllClones = false) {
         deleteAllClones = false;
     }
     else {
-        ({proceed, deleteAllClones, eraseNotes} = await new Promise(res =>
+        ({proceed, deleteAllClones, eraseNotes} = await new Promise<ResolveOptions>(res =>
             appContext.triggerCommand('showDeleteNotesDialog', {branchIdsToDelete, callback: res, forceDeleteAllClones})));
     }
 
@@ -127,10 +145,9 @@ async function deleteNotes(branchIdsToDelete, forceDeleteAllClones = false) {
 
         const branch = froca.getBranch(branchIdToDelete);
 
-        if (deleteAllClones) {
+        if (deleteAllClones && branch) {
             await server.remove(`notes/${branch.noteId}${query}`);
-        }
-        else {
+        } else {
             await server.remove(`branches/${branchIdToDelete}${query}`);
         }
     }
@@ -152,7 +169,7 @@ async function activateParentNotePath() {
     }
 }
 
-async function moveNodeUpInHierarchy(node) {
+async function moveNodeUpInHierarchy(node: Node) {
     if (hoistedNoteService.isHoistedNode(node)
         || hoistedNoteService.isTopLevelNode(node)
         || node.getParent().data.noteType === 'search') {
@@ -162,7 +179,7 @@ async function moveNodeUpInHierarchy(node) {
     const targetBranchId = node.getParent().data.branchId;
     const branchIdToMove = node.data.branchId;
 
-    const resp = await server.put(`branches/${branchIdToMove}/move-after/${targetBranchId}`);
+    const resp = await server.put<Response>(`branches/${branchIdToMove}/move-after/${targetBranchId}`);
 
     if (!resp.success) {
         toastService.showError(resp.message);
@@ -175,22 +192,25 @@ async function moveNodeUpInHierarchy(node) {
     }
 }
 
-function filterSearchBranches(branchIds) {
+function filterSearchBranches(branchIds: string[]) {
     return branchIds.filter(branchId => !branchId.startsWith('virt-'));
 }
 
-function filterRootNote(branchIds) {
+function filterRootNote(branchIds: string[]) {
     const hoistedNoteId = hoistedNoteService.getHoistedNoteId();
 
     return branchIds.filter(branchId => {
         const branch = froca.getBranch(branchId);
+        if (!branch) {
+            return false;
+        }
 
         return branch.noteId !== 'root'
             && branch.noteId !== hoistedNoteId;
     });
 }
 
-function makeToast(id, message) {
+function makeToast(id: string, message: string): ToastOptions {
     return {
         id: id,
         title: t("branches.delete-status"),
@@ -235,8 +255,8 @@ ws.subscribeToMessages(async message => {
     }
 });
 
-async function cloneNoteToBranch(childNoteId, parentBranchId, prefix) {
-    const resp = await server.put(`notes/${childNoteId}/clone-to-branch/${parentBranchId}`, {
+async function cloneNoteToBranch(childNoteId: string, parentBranchId: string, prefix: string) {
+    const resp = await server.put<Response>(`notes/${childNoteId}/clone-to-branch/${parentBranchId}`, {
         prefix: prefix
     });
 
@@ -245,8 +265,8 @@ async function cloneNoteToBranch(childNoteId, parentBranchId, prefix) {
     }
 }
 
-async function cloneNoteToParentNote(childNoteId, parentNoteId, prefix) {
-    const resp = await server.put(`notes/${childNoteId}/clone-to-note/${parentNoteId}`, {
+async function cloneNoteToParentNote(childNoteId: string, parentNoteId: string, prefix: string) {
+    const resp = await server.put<Response>(`notes/${childNoteId}/clone-to-note/${parentNoteId}`, {
         prefix: prefix
     });
 
@@ -256,8 +276,8 @@ async function cloneNoteToParentNote(childNoteId, parentNoteId, prefix) {
 }
 
 // beware that the first arg is noteId and the second is branchId!
-async function cloneNoteAfter(noteId, afterBranchId) {
-    const resp = await server.put(`notes/${noteId}/clone-after/${afterBranchId}`);
+async function cloneNoteAfter(noteId: string, afterBranchId: string) {
+    const resp = await server.put<Response>(`notes/${noteId}/clone-after/${afterBranchId}`);
 
     if (!resp.success) {
         toastService.showError(resp.message);
