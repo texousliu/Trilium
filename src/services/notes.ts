@@ -27,6 +27,7 @@ import { AttachmentRow, AttributeRow, BranchRow, NoteRow, NoteType } from '../be
 import TaskContext from "./task_context.js";
 import { NoteParams } from './note-interface.js';
 import imageService from "./image.js";
+import { t } from "i18next";
 
 interface FoundLink {
     name: "imageLink" | "internalLink" | "includeNoteLink" | "relationMapLink",
@@ -95,7 +96,7 @@ function copyChildAttributes(parentNote: BNote, childNote: BNote) {
 }
 
 function getNewNoteTitle(parentNote: BNote) {
-    let title = "new note";
+    let title = t("notes.new-note");
 
     const titleTemplate = parentNote.getLabelValue('titleTemplate');
 
