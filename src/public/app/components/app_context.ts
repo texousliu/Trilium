@@ -31,37 +31,63 @@ interface BeforeUploadListener extends Component {
     beforeUnloadEvent(): boolean;
 }
 
-export type TriggerData = {
+interface ApiLogMessagesData {
     noteId?: string;
     noteIds?: string[];
     messages?: unknown[];    
-} | {
+}
+
+interface FocusOnDetailData {
     ntxId: string;
-    notePath?: string;
-} | {
-    text: string;
-} | {
-    callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
-} | {
-    // For "searchNotes"
+}
+
+interface SearchNotesData {    
     searchString: string | undefined;
-} | {
-    // For "showDeleteNotesDialog"
+}
+
+interface ShowDeleteNotesDialogData {    
     branchIdsToDelete: string[];
     callback: (value: ResolveOptions) => void;
     forceDeleteAllClones: boolean;
-} | {
-    // For "openedFileUpdated"
+}
+
+interface OpenedFileUpdatedData {
     entityType: string;
     entityId: string;
     lastModifiedMs: number;
     filePath: string;
-} | {
-    // For "focusAndSelectTitle"
+}
+
+interface FocusAndSelectTitleData {
     isNewNote: boolean;
 }
-    | PromptDialogOptions    // For "showPromptDialog"
-    | ConfirmWithMessageOptions   // For "showConfirmDialog"
+
+interface OpenNewNoteSplitData {
+    ntxId: string;
+    notePath: string;
+}
+
+interface ExecuteInActiveNoteDetailWidgetData {
+    callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
+}
+
+interface AddTextToActiveEditorData {
+    text: string;   
+}
+
+export type TriggerData =
+      ApiLogMessagesData        // For "api-log-messages"
+    | FocusOnDetailData         // For "focusOnDetail"
+    | SearchNotesData           // For "searchNotes"
+    | ShowDeleteNotesDialogData // For "showDeleteNotesDialog"
+    | OpenedFileUpdatedData     // For "openedFileUpdated"
+    | FocusAndSelectTitleData   // For "focusAndSelectTitle"
+    | PromptDialogOptions       // For "showPromptDialog"
+    | ConfirmWithMessageOptions // For "showConfirmDialog"
+    | OpenNewNoteSplitData      // For "openNewNoteSplit"
+    | ExecuteInActiveNoteDetailWidgetData   // For "executeInActiveNoteDetailWidget"
+    | AddTextToActiveEditorData // For "addTextToActiveEditor"
+;
 
 class AppContext extends Component {
 
