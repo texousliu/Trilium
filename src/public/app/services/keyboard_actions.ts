@@ -1,5 +1,5 @@
 import server from "./server.js";
-import appContext from "../components/app_context.js";
+import appContext, { CommandNames } from "../components/app_context.js";
 import shortcutService from "./shortcuts.js";
 import Component from "../components/component.js";
 
@@ -7,7 +7,7 @@ const keyboardActionRepo: Record<string, Action> = {};
 
 // TODO: Deduplicate with server.
 interface Action {
-	actionName: string;
+	actionName: CommandNames;
 	effectiveShortcuts: string[];
 	scope: string;
 }

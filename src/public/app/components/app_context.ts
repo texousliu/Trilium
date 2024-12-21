@@ -17,7 +17,7 @@ import { t, initLocale } from "../services/i18n.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 import { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
-import { ConfirmWithMessageOptions } from "../widgets/dialogs/confirm.js";
+import { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -31,63 +31,76 @@ interface BeforeUploadListener extends Component {
     beforeUnloadEvent(): boolean;
 }
 
-interface ApiLogMessagesData {
-    noteId?: string;
-    noteIds?: string[];
-    messages?: unknown[];    
+interface CommandData {
+    ntxId?: string;
 }
 
-interface FocusOnDetailData {
+interface ApiLogMessagesData extends CommandData {
+      
+}
+
+interface FocusOnDetailData extends CommandData {
     ntxId: string;
 }
 
-interface SearchNotesData {    
+interface SearchNotesData extends CommandData {    
     searchString: string | undefined;
 }
 
-interface ShowDeleteNotesDialogData {    
+interface ShowDeleteNotesDialogData extends CommandData {    
     branchIdsToDelete: string[];
     callback: (value: ResolveOptions) => void;
     forceDeleteAllClones: boolean;
 }
 
-interface OpenedFileUpdatedData {
+interface OpenedFileUpdatedData extends CommandData {
     entityType: string;
     entityId: string;
     lastModifiedMs: number;
     filePath: string;
 }
 
-interface FocusAndSelectTitleData {
+interface FocusAndSelectTitleData extends CommandData {
     isNewNote: boolean;
 }
 
-interface OpenNewNoteSplitData {
+interface OpenNewNoteSplitData extends CommandData {
     ntxId: string;
     notePath: string;
 }
 
-interface ExecuteInActiveNoteDetailWidgetData {
+interface ExecuteInActiveNoteDetailWidgetData extends CommandData {
     callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
 }
 
-interface AddTextToActiveEditorData {
+interface AddTextToActiveEditorData extends CommandData {
     text: string;   
 }
 
-export type TriggerData =
-      ApiLogMessagesData        // For "api-log-messages"
-    | FocusOnDetailData         // For "focusOnDetail"
-    | SearchNotesData           // For "searchNotes"
-    | ShowDeleteNotesDialogData // For "showDeleteNotesDialog"
-    | OpenedFileUpdatedData     // For "openedFileUpdated"
-    | FocusAndSelectTitleData   // For "focusAndSelectTitle"
-    | PromptDialogOptions       // For "showPromptDialog"
-    | ConfirmWithMessageOptions // For "showConfirmDialog"
-    | OpenNewNoteSplitData      // For "openNewNoteSplit"
-    | ExecuteInActiveNoteDetailWidgetData   // For "executeInActiveNoteDetailWidget"
-    | AddTextToActiveEditorData // For "addTextToActiveEditor"
-;
+interface NoData extends CommandData { }
+
+type CommandMappings = {
+    "api-log-messages": ApiLogMessagesData;
+    focusOnDetail: FocusOnDetailData;
+    searchNotes: SearchNotesData;
+    showDeleteNotesDialog: ShowDeleteNotesDialogData;
+    showConfirmDeleteNoteBoxWithNoteDialog: ConfirmWithTitleOptions;
+    openedFileUpdated: OpenedFileUpdatedData;
+    focusAndSelectTitle: FocusAndSelectTitleData;
+    showPromptDialog: PromptDialogOptions;
+    showInfoDialog: ConfirmWithMessageOptions;
+    showConfirmDialog: ConfirmWithMessageOptions;
+    openNewNoteSplit: OpenNewNoteSplitData;
+    executeInActiveNoteDetailWidget: ExecuteInActiveNoteDetailWidgetData;
+    addTextToActiveEditor: AddTextToActiveEditorData;
+    
+    importMarkdownInline: NoData;
+    showPasswordNotSet: NoData;
+    showProtectedSessionPasswordDialog: NoData;
+    closeProtectedSessionPasswordDialog: NoData;
+}
+
+export type CommandNames = keyof CommandMappings;
 
 class AppContext extends Component {
 
@@ -182,11 +195,14 @@ class AppContext extends Component {
         this.triggerEvent('initialRenderComplete');
     }
 
-    triggerEvent(name: string, data: TriggerData = {}) {
+    // TODO: Update signature once all client code is updated, to use a map similar to triggerCommand.
+    triggerEvent(name: string, data: unknown = {}) {
         return this.handleEvent(name, data);
     }
 
-    triggerCommand(name: string, data: TriggerData = {}) {
+    // TODO: Remove ignore once all commands are mapped out.
+    //@ts-ignore
+    triggerCommand<K extends CommandNames>(name: K, data: CommandMappings[K] = {}) {
         for (const executor of this.components) {
             const fun = (executor as any)[`${name}Command`];
 

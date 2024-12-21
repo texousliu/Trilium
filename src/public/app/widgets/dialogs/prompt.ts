@@ -32,7 +32,7 @@ export interface PromptDialogOptions {
     message?: string;
     defaultValue?: string;
     shown: PromptShownDialogCallback;
-    callback: () => void;
+    callback: (value: unknown) => void;
 }
 
 export type PromptShownDialogCallback = ((callback: ShownCallbackData) => void) | null;

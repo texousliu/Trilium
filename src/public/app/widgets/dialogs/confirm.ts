@@ -41,7 +41,7 @@ export interface ConfirmWithMessageOptions {
     callback: ConfirmDialogCallback;
 }
 
-interface ConfirmWithTitleOptions {
+export interface ConfirmWithTitleOptions {
     title: string;
     callback: ConfirmDialogCallback;       
 }

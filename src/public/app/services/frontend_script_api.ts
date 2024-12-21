@@ -9,7 +9,7 @@ import dateNotesService from './date_notes.js';
 import searchService from './search.js';
 import RightPanelWidget from '../widgets/right_panel_widget.js';
 import ws from "./ws.js";
-import appContext, { TriggerData } from "../components/app_context.js";
+import appContext from "../components/app_context.js";
 import NoteContextAwareWidget from "../widgets/note_context_aware_widget.js";
 import BasicWidget from "../widgets/basic_widget.js";
 import SpacedUpdate from "./spaced_update.js";
@@ -241,12 +241,12 @@ interface Api {
     /**
      * Trigger command. This is a very low-level API which should be avoided if possible.
      */
-    triggerCommand(name: string, data: TriggerData): void;
+    triggerCommand: typeof appContext.triggerCommand;
 
     /**
      * Trigger event. This is a very low-level API which should be avoided if possible.
      */
-    triggerEvent(name: string, data: TriggerData): void;
+    triggerEvent: typeof appContext.triggerEvent;
 
      /**
      * Create a note link (jQuery object) for given note.
