@@ -40,7 +40,7 @@ interface DuplicateResponse {
     note: FNote;
 }
 
-async function createNote(parentNotePath: string, options: CreateNoteOpts = {}) {
+async function createNote(parentNotePath: string | undefined, options: CreateNoteOpts = {}) {
     options = Object.assign({
         activate: true,
         focus: 'title',

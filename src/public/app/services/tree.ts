@@ -149,7 +149,7 @@ function getParentProtectedStatus(node: Node) {
     return hoistedNoteService.isHoistedNode(node) ? false : node.getParent().data.isProtected;
 }
 
-function getNoteIdFromUrl(urlOrNotePath: string) {
+function getNoteIdFromUrl(urlOrNotePath: string | undefined) {
     if (!urlOrNotePath) {
         return null;
     }
