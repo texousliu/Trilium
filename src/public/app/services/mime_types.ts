@@ -9,7 +9,21 @@ const MIME_TYPE_AUTO = "text-x-trilium-auto";
  * For highlight.js-supported languages, see https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md.
  */
 
-const MIME_TYPES_DICT = [
+interface MimeTypeDefinition {
+    default?: boolean;
+    title: string;
+    mime: string;
+    /** The name of the language/mime type as defined by highlight.js (or one of the aliases), in order to be used for syntax highlighting such as inside code blocks. */
+    highlightJs?: string;
+    /** If specified, will load the corresponding highlight.js file from the `libraries/highlightjs/${id}.js` instead of `node_modules/@highlightjs/cdn-assets/languages/${id}.min.js`. */
+    highlightJsSource?: "libraries";
+}
+
+interface MimeType extends MimeTypeDefinition {
+    enabled: boolean
+}
+
+const MIME_TYPES_DICT: MimeTypeDefinition[] = [
     { default: true, title: "Plain text", mime: "text/plain", highlightJs: "plaintext" },
     { title: "APL", mime: "text/apl" },
     { title: "ASN.1", mime: "text/x-ttcn-asn" },
@@ -170,10 +184,10 @@ const MIME_TYPES_DICT = [
     { title: "Z80", mime: "text/x-z80" }
 ];
 
-let mimeTypes = null;
+let mimeTypes: MimeType[] | null = null;
 
 function loadMimeTypes() {
-    mimeTypes = JSON.parse(JSON.stringify(MIME_TYPES_DICT)); // clone
+    mimeTypes = JSON.parse(JSON.stringify(MIME_TYPES_DICT)) as MimeType[]; // clone
 
     const enabledMimeTypes = options.getJson('codeNotesMimeTypes')
         || MIME_TYPES_DICT.filter(mt => mt.default).map(mt => mt.mime);
@@ -183,32 +197,34 @@ function loadMimeTypes() {
     }
 }
 
-function getMimeTypes() {
+function getMimeTypes(): MimeType[] {
     if (mimeTypes === null) {
         loadMimeTypes();
     }
 
-    return mimeTypes;
+    return mimeTypes as MimeType[];
 }
 
-let mimeToHighlightJsMapping = null;
+let mimeToHighlightJsMapping: Record<string, string> | null = null;
 
 /**
  * Obtains the corresponding language tag for highlight.js for a given MIME type.
  * 
  * The mapping is built the first time this method is built and then the results are cached for better performance.
  * 
- * @param {string} mimeType The MIME type of the code block, in the CKEditor-normalized format (e.g. `text-c-src` instead of `text/c-src`).
+ * @param mimeType The MIME type of the code block, in the CKEditor-normalized format (e.g. `text-c-src` instead of `text/c-src`).
  * @returns the corresponding highlight.js tag, for example `c` for `text-c-src`.
  */
-function getHighlightJsNameForMime(mimeType) {    
+function getHighlightJsNameForMime(mimeType: string) {    
     if (!mimeToHighlightJsMapping) {
         const mimeTypes = getMimeTypes();
         mimeToHighlightJsMapping = {};
         for (const mimeType of mimeTypes) {
             // The mime stored by CKEditor is text-x-csrc instead of text/x-csrc so we keep this format for faster lookup.
             const normalizedMime = normalizeMimeTypeForCKEditor(mimeType.mime);
-            mimeToHighlightJsMapping[normalizedMime] = mimeType.highlightJs;
+            if (mimeType.highlightJs) {
+                mimeToHighlightJsMapping[normalizedMime] = mimeType.highlightJs;
+            }
         }
     }
 
@@ -219,10 +235,10 @@ function getHighlightJsNameForMime(mimeType) {
  * Given a MIME type in the usual format (e.g. `text/csrc`), it returns a MIME type that can be passed down to the CKEditor
  * code plugin.
  * 
- * @param {string} mimeType The MIME type to normalize, in the usual format (e.g. `text/c-src`).
+ * @param mimeType The MIME type to normalize, in the usual format (e.g. `text/c-src`).
  * @returns the normalized MIME type (e.g. `text-c-src`).
  */
-function normalizeMimeTypeForCKEditor(mimeType) {
+function normalizeMimeTypeForCKEditor(mimeType: string) {
     return mimeType.toLowerCase()
         .replace(/[\W_]+/g,"-");
 }
