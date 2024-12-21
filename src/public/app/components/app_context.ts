@@ -16,6 +16,7 @@ import ShortcutComponent from "./shortcut_component.js";
 import { t, initLocale } from "../services/i18n.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
+import { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -49,7 +50,7 @@ export type TriggerData = {
     branchIdsToDelete: string[];
     callback: (value: ResolveOptions) => void;
     forceDeleteAllClones: boolean;
-}
+} | PromptDialogOptions;    // For "showPromptDialog"
 
 class AppContext extends Component {
 

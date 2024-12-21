@@ -20,7 +20,34 @@ const TPL = `
     </div>
 </div>`;
 
+interface ShownCallbackData {
+    $dialog: JQuery<HTMLElement>;
+    $question: JQuery<HTMLElement> | null;
+    $answer: JQuery<HTMLElement> | null;
+    $form: JQuery<HTMLElement>;
+}
+
+export interface PromptDialogOptions {
+    title?: string;
+    message?: string;
+    defaultValue?: string;
+    shown: PromptShownDialogCallback;
+    callback: () => void;
+}
+
+export type PromptShownDialogCallback = ((callback: ShownCallbackData) => void) | null;
+
 export default class PromptDialog extends BasicWidget {
+
+    private resolve: ((val: string | null) => void) | null;
+    private shownCb: PromptShownDialogCallback;
+    
+    private modal!: bootstrap.Modal;
+    private $dialogBody!: JQuery<HTMLElement>;
+    private $question!: JQuery<HTMLElement> | null;
+    private $answer!: JQuery<HTMLElement> | null;
+    private $form!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -30,6 +57,8 @@ export default class PromptDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        // TODO: Fix once we use proper ES imports.
+        //@ts-ignore
         this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$dialogBody = this.$widget.find(".modal-body");
         this.$form = this.$widget.find(".prompt-dialog-form");
@@ -46,7 +75,7 @@ export default class PromptDialog extends BasicWidget {
                 });
             }
 
-            this.$answer.trigger('focus').select();
+            this.$answer?.trigger('focus').select();
         });
 
         this.$widget.on("hidden.bs.modal", () => {
@@ -57,13 +86,15 @@ export default class PromptDialog extends BasicWidget {
 
         this.$form.on('submit', e => {
             e.preventDefault();
-            this.resolve(this.$answer.val());
+            if (this.resolve) {
+                this.resolve(this.$answer?.val() as string);
+            }
 
             this.modal.hide();
         });
     }
 
-    showPromptDialogEvent({ title, message, defaultValue, shown, callback }) {
+    showPromptDialogEvent({ title, message, defaultValue, shown, callback }: PromptDialogOptions) {
         this.shownCb = shown;
         this.resolve = callback;
 
@@ -71,7 +102,7 @@ export default class PromptDialog extends BasicWidget {
 
         this.$question = $("<label>")
             .prop("for", "prompt-dialog-answer")
-            .text(message);
+            .text(message || "");
 
         this.$answer = $("<input>")
             .prop("type", "text")
