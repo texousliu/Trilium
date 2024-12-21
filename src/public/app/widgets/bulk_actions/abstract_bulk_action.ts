@@ -5,7 +5,7 @@ import utils from "../../services/utils.js";
 import FAttribute from "../../entities/fattribute.js";
 
 interface ActionDefinition {
-
+    script: string;
 }
 
 export default abstract class AbstractBulkAction {
@@ -36,10 +36,10 @@ export default abstract class AbstractBulkAction {
 
     // to be overridden
     abstract doRender(): JQuery<HTMLElement>;
-    abstract get actionName(): string;
+    static get actionName() { return ""; }
 
     async saveAction(data: {}) {
-        const actionObject = Object.assign({ name: (this.constructor as unknown as AbstractBulkAction).actionName }, data);
+        const actionObject = Object.assign({ name: (this.constructor as typeof AbstractBulkAction).actionName }, data);
 
         await server.put(`notes/${this.attribute.noteId}/attribute`, {
             attributeId: this.attribute.attributeId,
