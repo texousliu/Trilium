@@ -15,7 +15,7 @@ function init() {
     }
 }
 
-function exec(cmd) {
+function exec(cmd: string) {
     document.execCommand(cmd);
 
     return false;
