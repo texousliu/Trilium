@@ -1,6 +1,7 @@
+import { t } from "./i18n.js";
 import toastService from "./toast.js";
 
-function copyImageReferenceToClipboard($imageWrapper) {
+function copyImageReferenceToClipboard($imageWrapper: JQuery<HTMLElement>) {
     try {
         $imageWrapper.attr('contenteditable', 'true');
         selectImage($imageWrapper.get(0));
@@ -14,17 +15,21 @@ function copyImageReferenceToClipboard($imageWrapper) {
         }
     }
     finally {
-        window.getSelection().removeAllRanges();
+        window.getSelection()?.removeAllRanges();
         $imageWrapper.removeAttr('contenteditable');
     }
 }
 
-function selectImage(element) {
+function selectImage(element: HTMLElement | undefined) {
+    if (!element) {
+        return;
+    }
+    
     const selection = window.getSelection();
     const range = document.createRange();
     range.selectNodeContents(element);
-    selection.removeAllRanges();
-    selection.addRange(range);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
 }
 
 export default {
