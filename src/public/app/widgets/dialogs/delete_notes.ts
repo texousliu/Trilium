@@ -4,6 +4,25 @@ import linkService from "../../services/link.js";
 import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
+import FAttribute, { FAttributeRow } from "../../entities/fattribute.js";
+
+// TODO: Use common with server.
+interface Response {
+    noteIdsToBeDeleted: string[];
+    brokenRelations: FAttributeRow[];
+}
+
+interface ResolveOptions {
+    proceed: boolean;
+    deleteAllClones?: boolean;    
+    eraseNotes?: boolean;
+}
+
+interface ShowDeleteNotesDialogOpts {
+    branchIdsToDelete: string[];
+    callback: (opts: ResolveOptions) => void;
+    forceDeleteAllClones: boolean;
+}
 
 const TPL = `
 <div class="delete-notes-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -54,11 +73,29 @@ const TPL = `
 </div>`;
 
 export default class DeleteNotesDialog extends BasicWidget {
+
+    private branchIds: string[] | null;
+    private resolve!: (options: ResolveOptions) => void;
+
+    private $content!: JQuery<HTMLElement>;
+    private $okButton!: JQuery<HTMLElement>;
+    private $cancelButton!: JQuery<HTMLElement>;
+    private $deleteNotesList!: JQuery<HTMLElement>;
+    private $brokenRelationsList!: JQuery<HTMLElement>;
+    private $deletedNotesCount!: JQuery<HTMLElement>;
+    private $noNoteToDeleteWrapper!: JQuery<HTMLElement>;
+    private $deleteNotesListWrapper!: JQuery<HTMLElement>;
+    private $brokenRelationsListWrapper!: JQuery<HTMLElement>;
+    private $brokenRelationsCount!: JQuery<HTMLElement>;
+    private $deleteAllClones!: JQuery<HTMLElement>;
+    private $eraseNotes!: JQuery<HTMLElement>;
+
+    private forceDeleteAllClones?: boolean;
+
     constructor() {
         super();
 
         this.branchIds = null;
-        this.resolve = null;
     }
 
     doRender() {
@@ -98,7 +135,7 @@ export default class DeleteNotesDialog extends BasicWidget {
     }
 
     async renderDeletePreview() {
-        const response = await server.post('delete-notes-preview', {
+        const response = await server.post<Response>('delete-notes-preview', {
             branchIdsToDelete: this.branchIds,
             deleteAllClones: this.forceDeleteAllClones || this.isDeleteAllClonesChecked()
         });
@@ -135,7 +172,7 @@ export default class DeleteNotesDialog extends BasicWidget {
         }
     }
 
-    async showDeleteNotesDialogEvent({branchIdsToDelete, callback, forceDeleteAllClones}) {
+    async showDeleteNotesDialogEvent({branchIdsToDelete, callback, forceDeleteAllClones}: ShowDeleteNotesDialogOpts) {
         this.branchIds = branchIdsToDelete;
         this.forceDeleteAllClones = forceDeleteAllClones;
 

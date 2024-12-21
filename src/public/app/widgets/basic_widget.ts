@@ -13,7 +13,7 @@ class BasicWidget extends Component {
     private classes: string[];
     private childPositionCounter: number;
     private cssEl?: string;
-    private $widget!: JQuery<HTMLElement>;
+    protected $widget!: JQuery<HTMLElement>;
     _noteId!: string;
 
     constructor() {
