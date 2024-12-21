@@ -3,6 +3,9 @@ import type { BackendModule, i18n } from "i18next";
 import type { Froca } from "./services/froca-interface";
 import type { HttpBackendOptions } from "i18next-http-backend";
 import { Suggestion } from "./services/note_autocomplete.ts";
+import utils from "./services/utils.ts";
+import appContext from "./components/app_context.ts";
+import server from "./services/server.ts";
 
 interface ElectronProcess {
     type: string;
@@ -10,11 +13,11 @@ interface ElectronProcess {
 }
 
 interface CustomGlobals {
-    isDesktop: boolean;
-    isMobile: boolean;
+    isDesktop: typeof utils.isDesktop;
+    isMobile: typeof utils.isMobile;
     device: "mobile" | "desktop";
-    getComponentsByEl: (el: unknown) => unknown;
-    getHeaders: Promise<Record<string, string>>;
+    getComponentByEl: typeof appContext.getComponentByEl;
+    getHeaders: typeof server.getHeaders;
     getReferenceLinkTitle: (href: string) => Promise<string>;
     getReferenceLinkTitleSync: (href: string) => string;
     getActiveContextNote: FNote;
@@ -36,6 +39,7 @@ interface CustomGlobals {
     maxEntityChangeSyncIdAtLoad: number;
     assetPath: string;
     instanceName: string;
+    appCssNoteIds: string[];
 }
 
 type RequireMethod = (moduleName: string) => any;

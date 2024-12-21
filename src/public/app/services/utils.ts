@@ -350,7 +350,7 @@ function openHelp($button: JQuery<HTMLElement>) {
     }
 }
 
-function initHelpButtons($el: JQuery<HTMLElement>) {
+function initHelpButtons($el: JQuery<HTMLElement> | JQuery<Window>) {
     // for some reason, the .on(event, listener, handler) does not work here (e.g. Options -> Sync -> Help button)
     // so we do it manually
     $el.on("click", e => {

@@ -27,7 +27,7 @@ function setupGlobs() {
     window.glob.importMarkdownInline = async () => appContext.triggerCommand("importMarkdownInline");
 
     window.onerror = function (msg, url, lineNo, columnNo, error) {
-        const string = msg.toLowerCase();
+        const string = String(msg).toLowerCase();
 
         let message = "Uncaught error: ";
 
