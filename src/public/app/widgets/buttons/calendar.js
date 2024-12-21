@@ -222,7 +222,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     async createMonth() {
-        console.log(new Error());
         const month = utils.formatDateISO(this.date).substr(0, 7);
         const dateNotesForMonth = await server.get(`special-notes/notes-for-month/${month}`);
 
