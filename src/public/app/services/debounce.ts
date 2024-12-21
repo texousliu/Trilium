@@ -7,13 +7,17 @@
  *
  * @source underscore.js
  * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
- * @param {Function} func to wrap
- * @param {Number} waitMs in ms (`100`)
- * @param {Boolean} [immediate=false] whether to execute at the beginning (`false`)
+ * @param func to wrap
+ * @param waitMs in ms (`100`)
+ * @param whether to execute at the beginning (`false`)
  * @api public
  */
-function debounce(func, waitMs, immediate = false) {
-    let timeout, args, context, timestamp, result;
+function debounce<T>(func: (...args: unknown[]) => T, waitMs: number, immediate: boolean = false) {
+    let timeout: any; // TODO: fix once we split client and server.
+    let args: unknown[] | null;
+    let context: unknown;
+    let timestamp: number;
+    let result: T;
     if (null == waitMs) waitMs = 100;
 
     function later() {
@@ -24,20 +28,20 @@ function debounce(func, waitMs, immediate = false) {
         } else {
             timeout = null;
             if (!immediate) {
-                result = func.apply(context, args);
+                result = func.apply(context, args || []);
                 context = args = null;
             }
         }
     }
 
-    const debounced = function () {
+    const debounced = function (this: any) {
         context = this;
-        args = arguments;
+        args = arguments as unknown as unknown[];
         timestamp = Date.now();
         const callNow = immediate && !timeout;
         if (!timeout) timeout = setTimeout(later, waitMs);
         if (callNow) {
-            result = func.apply(context, args);
+            result = func.apply(context, args || []);
             context = args = null;
         }
 
@@ -53,7 +57,7 @@ function debounce(func, waitMs, immediate = false) {
 
     debounced.flush = function() {
         if (timeout) {
-            result = func.apply(context, args);
+            result = func.apply(context, args || []);
             context = args = null;
 
             clearTimeout(timeout);
