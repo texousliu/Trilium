@@ -11,7 +11,7 @@ let elkLoaded = false;
  * 
  * @param mermaidContent the plain text of the mermaid diagram, potentially including a frontmatter.
  */
-export async function loadElkIfNeeded(mermaidContent) {
+export async function loadElkIfNeeded(mermaidContent: string) {
     if (elkLoaded) {
         // Exit immediately since the ELK library is already loaded.
         return;

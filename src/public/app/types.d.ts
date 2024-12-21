@@ -129,7 +129,19 @@ declare global {
         }): void;
         render(selector: string, data: string);
     }
+    interface MermaidLoader {
+
+    }
     var mermaid: {        
         mermaidAPI: MermaidApi;
+        registerLayoutLoaders(loader: MermaidLoader);
+        parse(content: string, opts: {
+            suppressErrors: true
+        }): {
+            config: {
+                layout: string;
+            }            
+        }
     };
+    var MERMAID_ELK: MermaidLoader;
 }
