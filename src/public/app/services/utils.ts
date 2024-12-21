@@ -99,7 +99,7 @@ function isMac() {
     return navigator.platform.indexOf('Mac') > -1;
 }
 
-function isCtrlKey(evt: KeyboardEvent) {
+function isCtrlKey(evt: KeyboardEvent | MouseEvent) {
     return (!isMac() && evt.ctrlKey)
         || (isMac() && evt.metaKey);
 }

@@ -4,19 +4,19 @@ import appContext from "../components/app_context.js";
 import froca from "./froca.js";
 import utils from "./utils.js";
 
-function getNotePathFromUrl(url) {
+function getNotePathFromUrl(url: string) {
     const notePathMatch = /#(root[A-Za-z0-9_/]*)$/.exec(url);
 
     return notePathMatch === null ? null : notePathMatch[1];
 }
 
-async function getLinkIcon(noteId, viewMode) {
+async function getLinkIcon(noteId: string, viewMode: ViewMode | undefined) {
     let icon;
 
-    if (viewMode === 'default') {
+    if (!viewMode || viewMode === 'default') {
         const note = await froca.getNote(noteId);
 
-        icon = note.getIcon();
+        icon = note?.getIcon();
     } else if (viewMode === 'source') {
         icon = 'bx bx-code-curly';
     } else if (viewMode === 'attachments') {
@@ -25,7 +25,24 @@ async function getLinkIcon(noteId, viewMode) {
     return icon;
 }
 
-async function createLink(notePath, options = {}) {
+type ViewMode = "default" | "source" | "attachments" | string;
+
+interface ViewScope {
+    viewMode?: ViewMode;
+    attachmentId?: string;
+}
+
+interface CreateLinkOptions {
+    title?: string;
+    showTooltip?: boolean;
+    showNotePath?: boolean;
+    showNoteIcon?: boolean;
+    referenceLink?: boolean;
+    autoConvertToImage?: boolean;
+    viewScope?: ViewScope;
+}
+
+async function createLink(notePath: string, options: CreateLinkOptions = {}) {
     if (!notePath || !notePath.trim()) {
         logError("Missing note path");
 
@@ -45,6 +62,12 @@ async function createLink(notePath, options = {}) {
     const autoConvertToImage = options.autoConvertToImage === undefined ? false : options.autoConvertToImage;
 
     const { noteId, parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(notePath);
+    if (!noteId) {
+        logError("Missing note ID");
+
+        return $("<span>").text("[missing note]");
+    }
+
     const viewScope = options.viewScope || {};
     const viewMode = viewScope.viewMode || 'default';
     let linkTitle = options.title;
@@ -54,19 +77,19 @@ async function createLink(notePath, options = {}) {
             const attachment = await froca.getAttachment(viewScope.attachmentId);
 
             linkTitle = attachment ? attachment.title : '[missing attachment]';
-        } else {
+        } else if (noteId) {
             linkTitle = await treeService.getNoteTitle(noteId, parentNoteId);
         }
     }
 
     const note = await froca.getNote(noteId);
 
-    if (autoConvertToImage && ['image', 'canvas', 'mermaid'].includes(note.type) && viewMode === 'default') {
-        const encodedTitle = encodeURIComponent(linkTitle);
+    if (autoConvertToImage && (note?.type && ['image', 'canvas', 'mermaid'].includes(note.type)) && viewMode === 'default') {
+        const encodedTitle = encodeURIComponent(linkTitle || "");
 
         return $("<img>")
             .attr("src", `api/images/${noteId}/${encodedTitle}?${Math.random()}`)
-            .attr("alt", linkTitle);
+            .attr("alt", linkTitle || "");
     }
 
     const $container = $("<span>");
@@ -102,7 +125,7 @@ async function createLink(notePath, options = {}) {
     $container.append($noteLink);
 
     if (showNotePath) {
-        const resolvedPathSegments = await treeService.resolveNotePathToSegments(notePath);
+        const resolvedPathSegments = await treeService.resolveNotePathToSegments(notePath) || [];
         resolvedPathSegments.pop(); // Remove last element
 
         const resolvedPath = resolvedPathSegments.join("/");
@@ -118,7 +141,14 @@ async function createLink(notePath, options = {}) {
     return $container;
 }
 
-function calculateHash({notePath, ntxId, hoistedNoteId, viewScope = {}}) {
+interface CalculateHashOpts {
+    notePath: string;
+    ntxId?: string;
+    hoistedNoteId?: string;
+    viewScope: ViewScope;
+}
+
+function calculateHash({notePath, ntxId, hoistedNoteId, viewScope = {}}: CalculateHashOpts) {
     notePath = notePath || "";
     const params = [
         ntxId ? { ntxId: ntxId } : null,
@@ -129,9 +159,9 @@ function calculateHash({notePath, ntxId, hoistedNoteId, viewScope = {}}) {
 
     const paramStr = params.map(pair => {
         const name = Object.keys(pair)[0];
-        const value = pair[name];
+        const value = (pair as Record<string, string | undefined>)[name];
 
-        return `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+        return `${encodeURIComponent(name)}=${encodeURIComponent(value || "")}`;
     }).join("&");
 
     if (!notePath && !paramStr) {
@@ -147,7 +177,7 @@ function calculateHash({notePath, ntxId, hoistedNoteId, viewScope = {}}) {
     return hash;
 }
 
-function parseNavigationStateFromUrl(url) {
+function parseNavigationStateFromUrl(url: string | undefined) {
     if (!url) {
         return {};
     }
@@ -164,7 +194,7 @@ function parseNavigationStateFromUrl(url) {
         return {};
     }
 
-    const viewScope = {
+    const viewScope: ViewScope = {
         viewMode: 'default'
     };
     let ntxId = null;
@@ -184,7 +214,7 @@ function parseNavigationStateFromUrl(url) {
             } else if (name === 'searchString') {
                 searchString = value; // supports triggering search from URL, e.g. #?searchString=blabla
             } else if (['viewMode', 'attachmentId'].includes(name)) {
-                viewScope[name] = value;
+                (viewScope as any)[name] = value;
             } else {
                 console.warn(`Unrecognized hash parameter '${name}'.`);
             }
@@ -201,14 +231,14 @@ function parseNavigationStateFromUrl(url) {
     };
 }
 
-function goToLink(evt) {
-    const $link = $(evt.target).closest("a,.block-link");
+function goToLink(evt: MouseEvent) {
+    const $link = $(evt.target as any).closest("a,.block-link");
     const hrefLink = $link.attr('href') || $link.attr('data-href');
 
     return goToLinkExt(evt, hrefLink, $link);
 }
 
-function goToLinkExt(evt, hrefLink, $link) {
+function goToLinkExt(evt: MouseEvent, hrefLink: string | undefined, $link: JQuery<HTMLElement>) {
     if (hrefLink?.startsWith("data:")) {
         return true;
     }
@@ -230,7 +260,7 @@ function goToLinkExt(evt, hrefLink, $link) {
         if (openInNewTab) {
             appContext.tabManager.openTabWithNoteWithHoisting(notePath, {viewScope});
         } else if (isLeftClick) {
-            const ntxId = $(evt.target).closest("[data-ntx-id]").attr("data-ntx-id");
+            const ntxId = $(evt.target as any).closest("[data-ntx-id]").attr("data-ntx-id");
 
             const noteContext = ntxId
                 ? appContext.tabManager.getNoteContextById(ntxId)
@@ -275,8 +305,8 @@ function goToLinkExt(evt, hrefLink, $link) {
     return true;
 }
 
-function linkContextMenu(e) {
-    const $link = $(e.target).closest("a");
+function linkContextMenu(e: Event) {
+    const $link = $(e.target as any).closest("a");
     const url = $link.attr("href") || $link.attr("data-href");
 
     const { notePath, viewScope } = parseNavigationStateFromUrl(url);
@@ -290,7 +320,7 @@ function linkContextMenu(e) {
     linkContextMenuService.openContextMenu(notePath, e, viewScope, null);
 }
 
-async function loadReferenceLinkTitle($el, href = null) {
+async function loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null | undefined = null) {
     const $link = $el[0].tagName === 'A' ? $el : $el.find("a");
 
     href = href || $link.attr("href");
@@ -300,6 +330,11 @@ async function loadReferenceLinkTitle($el, href = null) {
     }
 
     const {noteId, viewScope} = parseNavigationStateFromUrl(href);
+    if (!noteId) {
+        console.warn("Missing note ID.");
+        return;
+    }
+    
     const note = await froca.getNote(noteId, true);
 
     if (note) {
@@ -312,11 +347,13 @@ async function loadReferenceLinkTitle($el, href = null) {
     if (note) {
         const icon = await getLinkIcon(noteId, viewScope.viewMode);
 
-        $el.prepend($("<span>").addClass(icon));
+        if (icon) {
+            $el.prepend($("<span>").addClass(icon));
+        }
     }
 }
 
-async function getReferenceLinkTitle(href) {
+async function getReferenceLinkTitle(href: string) {
     const {noteId, viewScope} = parseNavigationStateFromUrl(href);
     if (!noteId) {
         return "[missing note]";
@@ -336,7 +373,7 @@ async function getReferenceLinkTitle(href) {
     }
 }
 
-function getReferenceLinkTitleSync(href) {
+function getReferenceLinkTitleSync(href: string) {
     const {noteId, viewScope} = parseNavigationStateFromUrl(href);
     if (!noteId) {
         return "[missing note]";
@@ -360,7 +397,11 @@ function getReferenceLinkTitleSync(href) {
     }
 }
 
+// TODO: Check why the event is not supported.
+//@ts-ignore
 $(document).on('click', "a", goToLink);
+// TODO: Check why the event is not supported.
+//@ts-ignore
 $(document).on('auxclick', "a", goToLink); // to handle the middle button
 $(document).on('contextmenu', 'a', linkContextMenu);
 $(document).on('dblclick', "a", e => {
