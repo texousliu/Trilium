@@ -2,11 +2,10 @@ import mimeTypesService from "./mime_types.js";
 import optionsService from "./options.js";
 import { getStylesheetUrl } from "./syntax_highlight.js";
 
-interface Library {
+export interface Library {
     js?: string[] | (() => string[]);
     css?: string[];
 }
-
 
 const CKEDITOR: Library = {
     js: ["libraries/ckeditor/ckeditor.js"]

@@ -1,10 +1,6 @@
 import server from "./server.js";
-import bundleService from "./bundle.js";
+import bundleService, { Bundle } from "./bundle.js";
 import FNote from "../entities/fnote.js";
-
-interface Bundle {
-    html: string;
-}
 
 async function render(note: FNote, $el: JQuery<HTMLElement>) {
     const relations = note.getRelations('renderNote');

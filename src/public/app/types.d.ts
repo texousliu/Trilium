@@ -6,6 +6,7 @@ import { Suggestion } from "./services/note_autocomplete.ts";
 import utils from "./services/utils.ts";
 import appContext from "./components/app_context.ts";
 import server from "./services/server.ts";
+import library_loader, { Library } from "./services/library_loader.ts";
 
 interface ElectronProcess {
     type: string;
@@ -21,8 +22,8 @@ interface CustomGlobals {
     getReferenceLinkTitle: (href: string) => Promise<string>;
     getReferenceLinkTitleSync: (href: string) => string;
     getActiveContextNote: FNote;
-    requireLibrary: (library: string) => Promise<void>;
-    ESLINT: { js: string[]; };
+    requireLibrary: typeof library_loader.requireLibrary;
+    ESLINT: Library;
     appContext: AppContext;
     froca: Froca;
     treeCache: Froca;
@@ -70,7 +71,7 @@ declare global {
         displayKey: "name" | "value" | "notePathTitle";
         cache: boolean;
         source: (term: string, cb: AutoCompleteCallback) => void,
-        templates: {
+        templates?: {
             suggestion: (suggestion: Suggestion) => string | undefined
         }
     };

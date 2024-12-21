@@ -7,8 +7,9 @@ import { t } from "./i18n.js";
 import { Entity } from "./frontend_script_api.js";
 
 // TODO: Deduplicate with server.
-interface Bundle {
+export interface Bundle {
     script: string;
+    html: string;
     noteId: string;
     allNoteIds: string[];
 }
