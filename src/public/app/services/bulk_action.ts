@@ -14,6 +14,7 @@ import AddLabelBulkAction from "../widgets/bulk_actions/label/add_label.js";
 import AddRelationBulkAction from "../widgets/bulk_actions/relation/add_relation.js";
 import RenameNoteBulkAction from "../widgets/bulk_actions/note/rename_note.js";
 import { t } from "./i18n.js";
+import FNote from "../entities/fnote.js";
 
 const ACTION_GROUPS = [
     {
@@ -50,7 +51,7 @@ const ACTION_CLASSES = [
     ExecuteScriptBulkAction
 ];
 
-async function addAction(noteId, actionName) {
+async function addAction(noteId: string, actionName: string) {
     await server.post(`notes/${noteId}/attributes`, {
         type: 'label',
         name: 'action',
@@ -62,7 +63,7 @@ async function addAction(noteId, actionName) {
     await ws.waitForMaxKnownEntityChangeId();
 }
 
-function parseActions(note) {
+function parseActions(note: FNote) {
     const actionLabels = note.getLabels('action');
 
     return actionLabels.map(actionAttr => {
@@ -70,7 +71,7 @@ function parseActions(note) {
 
         try {
             actionDef = JSON.parse(actionAttr.value);
-        } catch (e) {
+        } catch (e: any) {
             logError(`Parsing of attribute: '${actionAttr.value}' failed with error: ${e.message}`);
             return null;
         }
