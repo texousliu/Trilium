@@ -100,7 +100,26 @@ type CommandMappings = {
     closeProtectedSessionPasswordDialog: NoData;
 }
 
+type EventMappings = {
+    initialRenderComplete: {};
+    frocaReloaded: {};
+    protectedSessionStarted: {};
+    notesReloaded: {
+        noteIds: string[];
+    };
+    refreshIncludedNote: {
+        noteId: string;
+    };
+    apiLogMessages: {
+        noteId: string;
+        messages: string[];
+    };
+}
+
+type CommandAndEventMappings = (CommandMappings & EventMappings);
+
 export type CommandNames = keyof CommandMappings;
+type EventNames = keyof EventMappings;
 
 class AppContext extends Component {
 
@@ -195,8 +214,9 @@ class AppContext extends Component {
         this.triggerEvent('initialRenderComplete');
     }
 
-    // TODO: Update signature once all client code is updated, to use a map similar to triggerCommand.
-    triggerEvent(name: string, data: unknown = {}) {
+    // TODO: Remove ignore once all commands are mapped out.
+    //@ts-ignore
+    triggerEvent<K extends EventNames | CommandNames>(name: K, data: CommandAndEventMappings[K] = {}) {
         return this.handleEvent(name, data);
     }
 
@@ -215,7 +235,7 @@ class AppContext extends Component {
         // in the component tree to communicate with each other
         console.debug(`Unhandled command ${name}, converting to event.`);
 
-        return this.triggerEvent(name, data);
+        return this.triggerEvent(name, data as CommandAndEventMappings[K]);
     }
 
     getComponentByEl(el: HTMLElement) {
