@@ -17,6 +17,7 @@ import { t, initLocale } from "../services/i18n.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 import { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
+import { ConfirmWithMessageOptions } from "../widgets/dialogs/confirm.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -34,7 +35,6 @@ export type TriggerData = {
     noteId?: string;
     noteIds?: string[];
     messages?: unknown[];    
-    callback?: () => void;
 } | {
     ntxId: string;
     notePath: string;
@@ -50,7 +50,9 @@ export type TriggerData = {
     branchIdsToDelete: string[];
     callback: (value: ResolveOptions) => void;
     forceDeleteAllClones: boolean;
-} | PromptDialogOptions;    // For "showPromptDialog"
+}
+    | PromptDialogOptions    // For "showPromptDialog"
+    | ConfirmWithMessageOptions   // For "showConfirmDialog"
 
 class AppContext extends Component {
 

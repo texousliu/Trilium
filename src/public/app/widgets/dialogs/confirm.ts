@@ -27,12 +27,16 @@ const TPL = `
     </div>
 </div>`;
 
-export type ConfirmDialogCallback = (val: false | {
+type ConfirmDialogCallback = (val: false | ConfirmDialogOptions) => void;
+
+export interface ConfirmDialogOptions {
     confirmed: boolean;
     isDeleteNoteChecked: boolean
-}) => void;
+}
 
-interface ConfirmWithMessageOptions {
+// For "showConfirmDialog"
+
+export interface ConfirmWithMessageOptions {
     message: string | HTMLElement | JQuery<HTMLElement>;
     callback: ConfirmDialogCallback;
 }
