@@ -56,6 +56,9 @@ export type TriggerData = {
     entityId: string;
     lastModifiedMs: number;
     filePath: string;
+} | {
+    // For "focusAndSelectTitle"
+    isNewNote: boolean;
 }
     | PromptDialogOptions    // For "showPromptDialog"
     | ConfirmWithMessageOptions   // For "showConfirmDialog"

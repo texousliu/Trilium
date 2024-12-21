@@ -41,13 +41,13 @@ const TPL = `
     </div>
 </div>`;
 
-interface CallbackData {
+export interface ChooseNoteTypeResponse {
     success: boolean;
     noteType?: string;
     templateNoteId?: string;
 }
 
-type Callback = (data: CallbackData) => void;
+type Callback = (data: ChooseNoteTypeResponse) => void;
 
 export default class NoteTypeChooserDialog extends BasicWidget {
 

@@ -6,8 +6,41 @@ import froca from "./froca.js";
 import treeService from "./tree.js";
 import toastService from "./toast.js";
 import { t } from "./i18n.js";
+import FNote from "../entities/fnote.js";
+import FBranch from "../entities/fbranch.js";
+import { ChooseNoteTypeResponse } from "../widgets/dialogs/note_type_chooser.js";
 
-async function createNote(parentNotePath, options = {}) {
+interface CreateNoteOpts {
+    isProtected?: boolean;
+    saveSelection?: boolean;
+    title?: string | null;
+    content?: string | null;
+    type?: string;
+    mime?: string;
+    templateNoteId?: string;
+    activate?: boolean;
+    focus?: "title" | "content";
+    target?: string;
+    targetBranchId?: string;
+    textEditor?: {
+        // TODO: Replace with interface once note_context.js is converted.
+        getSelectedHtml(): string;
+        removeSelection(): void;
+    }
+}
+
+interface Response {
+    // TODO: Deduplicate with server once we have client/server architecture.
+    note: FNote;
+    branch: FBranch;
+}
+
+interface DuplicateResponse {
+    // TODO: Deduplicate with server once we have client/server architecture.
+    note: FNote;
+}
+
+async function createNote(parentNotePath: string, options: CreateNoteOpts = {}) {
     options = Object.assign({
         activate: true,
         focus: 'title',
@@ -24,7 +57,7 @@ async function createNote(parentNotePath, options = {}) {
         options.saveSelection = false;
     }
 
-    if (options.saveSelection) {
+    if (options.saveSelection && options.textEditor) {        
         [options.title, options.content] = parseSelectedHtml(options.textEditor.getSelectedHtml());
     }
 
@@ -38,7 +71,7 @@ async function createNote(parentNotePath, options = {}) {
     C-->D;`
     }
 
-    const {note, branch} = await server.post(`notes/${parentNoteId}/children?target=${options.target}&targetBranchId=${options.targetBranchId || ""}`, {
+    const {note, branch} = await server.post<Response>(`notes/${parentNoteId}/children?target=${options.target}&targetBranchId=${options.targetBranchId || ""}`, {
         title: options.title,
         content: options.content || "",
         isProtected: options.isProtected,
@@ -49,7 +82,7 @@ async function createNote(parentNotePath, options = {}) {
 
     if (options.saveSelection) {
         // we remove the selection only after it was saved to server to make sure we don't lose anything
-        options.textEditor.removeSelection();
+        options.textEditor?.removeSelection();
     }
 
     await ws.waitForMaxKnownEntityChangeId();
@@ -76,12 +109,14 @@ async function createNote(parentNotePath, options = {}) {
 }
 
 async function chooseNoteType() {
-    return new Promise(res => {
+    return new Promise<ChooseNoteTypeResponse>(res => {
+        // TODO: Remove ignore after callback for chooseNoteType is defined in app_context.ts
+        //@ts-ignore
         appContext.triggerCommand("chooseNoteType", {callback: res});
     });
 }
 
-async function createNoteWithTypePrompt(parentNotePath, options = {}) {
+async function createNoteWithTypePrompt(parentNotePath: string, options: CreateNoteOpts = {}) {
     const {success, noteType, templateNoteId} = await chooseNoteType();
 
     if (!success) {
@@ -95,12 +130,16 @@ async function createNoteWithTypePrompt(parentNotePath, options = {}) {
 }
 
 /* If the first element is heading, parse it out and use it as a new heading. */
-function parseSelectedHtml(selectedHtml) {
+function parseSelectedHtml(selectedHtml: string) {
     const dom = $.parseHTML(selectedHtml);
 
+    // TODO: tagName and outerHTML appear to be missing.
+    //@ts-ignore
     if (dom.length > 0 && dom[0].tagName && dom[0].tagName.match(/h[1-6]/i)) {
         const title = $(dom[0]).text();
         // remove the title from content (only first occurrence)
+        // TODO: tagName and outerHTML appear to be missing.
+        //@ts-ignore
         const content = selectedHtml.replace(dom[0].outerHTML, "");
 
         return [title, content];
@@ -110,9 +149,9 @@ function parseSelectedHtml(selectedHtml) {
     }
 }
 
-async function duplicateSubtree(noteId, parentNotePath) {
+async function duplicateSubtree(noteId: string, parentNotePath: string) {
     const parentNoteId = treeService.getNoteIdFromUrl(parentNotePath);
-    const {note} = await server.post(`notes/${noteId}/duplicate/${parentNoteId}`);
+    const {note} = await server.post<DuplicateResponse>(`notes/${noteId}/duplicate/${parentNoteId}`);
 
     await ws.waitForMaxKnownEntityChangeId();
 
@@ -120,7 +159,7 @@ async function duplicateSubtree(noteId, parentNotePath) {
     activeNoteContext.setNote(`${parentNotePath}/${note.noteId}`);
 
     const origNote = await froca.getNote(noteId);
-    toastService.showMessage(t("note_create.duplicated", { title: origNote.title }));
+    toastService.showMessage(t("note_create.duplicated", { title: origNote?.title }));
 }
 
 export default {
