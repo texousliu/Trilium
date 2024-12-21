@@ -5,6 +5,7 @@ import utils from "./utils.js";
 import attributeRenderer from "./attribute_renderer.js";
 import contentRenderer from "./content_renderer.js";
 import appContext from "../components/app_context.js";
+import FNote from "../entities/fnote.js";
 
 function setupGlobalTooltip() {
     $(document).on("mouseenter", "a", mouseEnterHandler);
@@ -24,11 +25,11 @@ function cleanUpTooltips() {
     $('.note-tooltip').remove();
 }
 
-function setupElementTooltip($el) {
+function setupElementTooltip($el: JQuery<HTMLElement>) {
     $el.on('mouseenter', mouseEnterHandler);
 }
 
-async function mouseEnterHandler() {
+async function mouseEnterHandler(this: HTMLElement) {
     const $link = $(this);
 
     if ($link.hasClass("no-tooltip-preview") || $link.hasClass("disabled")) {
@@ -44,7 +45,7 @@ async function mouseEnterHandler() {
     const url = $link.attr("href") || $link.attr("data-href");
     const { notePath, noteId, viewScope } = linkService.parseNavigationStateFromUrl(url);
 
-    if (!notePath || viewScope.viewMode !== 'default') {
+    if (!notePath || !noteId || viewScope?.viewMode !== 'default') {
         return;
     }
 
@@ -64,7 +65,7 @@ async function mouseEnterHandler() {
         new Promise(res => setTimeout(res, 500))
     ]);
 
-    if (utils.isHtmlEmpty(content)) {
+    if (!content || utils.isHtmlEmpty(content)) {
         return;
     }
 
@@ -81,7 +82,8 @@ async function mouseEnterHandler() {
             // with bottom this flickering happens a bit less
             placement: 'bottom',
             trigger: 'manual',
-            boundary: 'window',
+            //TODO: boundary No longer applicable?
+            //boundary: 'window',
             title: html,
             html: true,
             template: `<div class="tooltip note-tooltip ${tooltipClass}" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>`,
@@ -114,7 +116,7 @@ async function mouseEnterHandler() {
     }
 }
 
-async function renderTooltip(note) {
+async function renderTooltip(note: FNote | null) {
     if (!note) {
         return '<div>Note has been deleted.</div>';
     }
@@ -126,7 +128,11 @@ async function renderTooltip(note) {
         return;
     }
 
-    let content = `<h5 class="note-tooltip-title">${(await treeService.getNoteTitleWithPathAsSuffix(bestNotePath)).prop('outerHTML')}</h5>`;
+    const noteTitleWithPathAsSuffix = await treeService.getNoteTitleWithPathAsSuffix(bestNotePath);
+    let content = "";
+    if (noteTitleWithPathAsSuffix) {
+        content = `<h5 class="note-tooltip-title">${noteTitleWithPathAsSuffix.prop('outerHTML')}</h5>`;
+    }
 
     const {$renderedAttributes} = await attributeRenderer.renderNormalAttributes(note);
 
