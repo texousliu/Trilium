@@ -2,17 +2,21 @@ import server from "./server.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
 
-type NoteTypeItem = {
+interface NoteTypeSeparator {
+    title: "----"
+}
+
+export interface NoteType {
     title: string;
-    command: string;
+    command?: string;
     type: string;
     uiIcon: string;
     templateNoteId?: string;
-} | {
-    title: "----"
-};
+}
 
-async function getNoteTypeItems(command: string) {
+type NoteTypeItem = NoteType | NoteTypeSeparator;
+
+async function getNoteTypeItems(command?: string) {
     const items: NoteTypeItem[] = [
         { title: t("note_types.text"), command: command, type: "text", uiIcon: "bx bx-note" },
         { title: t("note_types.code"), command: command, type: "code", uiIcon: "bx bx-code" },

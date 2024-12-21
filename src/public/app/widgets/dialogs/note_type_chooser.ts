@@ -1,5 +1,5 @@
 import { t } from "../../services/i18n.js";
-import noteTypesService from "../../services/note_types.js";
+import noteTypesService, { NoteType } from "../../services/note_types.js";
 import BasicWidget from "../basic_widget.js";
 
 const TPL = `
@@ -41,9 +41,25 @@ const TPL = `
     </div>
 </div>`;
 
+interface CallbackData {
+    success: boolean;
+    noteType?: string;
+    templateNoteId?: string;
+}
+
+type Callback = (data: CallbackData) => void;
+
 export default class NoteTypeChooserDialog extends BasicWidget {
-    constructor(props) {
-        super(props);
+
+    private resolve: Callback | null;
+    private dropdown!: bootstrap.Dropdown;
+    private modal!: JQuery<HTMLElement>;
+    private $noteTypeDropdown!: JQuery<HTMLElement>;
+    private $originalFocused: JQuery<HTMLElement> | null;
+    private $originalDialog: JQuery<HTMLElement> | null;
+
+    constructor(props: {}) {
+        super();
 
         this.resolve = null;
         this.$originalFocused = null; // element focused before the dialog was opened, so we can return to it afterward
@@ -51,10 +67,14 @@ export default class NoteTypeChooserDialog extends BasicWidget {
     }
 
     doRender() {
-        this.$widget = $(TPL);
+        this.$widget = $(TPL);        
+        // TODO: Remove once we import bootstrap the right way
+        //@ts-ignore
         this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
 
         this.$noteTypeDropdown = this.$widget.find(".note-type-dropdown");
+        // TODO: Remove once we import bootstrap the right way
+        //@ts-ignore
         this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find(".note-type-dropdown-trigger"));
 
         this.$widget.on("hidden.bs.modal", () => {
@@ -88,13 +108,15 @@ export default class NoteTypeChooserDialog extends BasicWidget {
 
         this.$noteTypeDropdown.parent().on('hide.bs.dropdown', e => {
             // prevent closing dropdown by clicking outside
+            // TODO: Check if this actually works.
+            //@ts-ignore
             if (e.clickEvent) {
                 e.preventDefault();
             }
         });
     }
 
-    async chooseNoteTypeEvent({ callback }) {
+    async chooseNoteTypeEvent({ callback }: { callback: Callback }) {
         this.$originalFocused = $(':focus');
 
         const noteTypes = await noteTypesService.getNoteTypeItems();
@@ -104,13 +126,12 @@ export default class NoteTypeChooserDialog extends BasicWidget {
         for (const noteType of noteTypes) {
             if (noteType.title === '----') {
                 this.$noteTypeDropdown.append($('<h6 class="dropdown-header">').append(t("note_type_chooser.templates")));
-            }
-            else {
+            } else {          
                 this.$noteTypeDropdown.append(
                     $('<a class="dropdown-item" tabindex="0">')
-                        .attr("data-note-type", noteType.type)
-                        .attr("data-template-note-id", noteType.templateNoteId)
-                        .append($("<span>").addClass(noteType.uiIcon))
+                        .attr("data-note-type", (noteType as NoteType).type)
+                        .attr("data-template-note-id", (noteType as NoteType).templateNoteId || "")
+                        .append($("<span>").addClass((noteType as NoteType).uiIcon))
                         .append(` ${noteType.title}`)
                 );
             }
@@ -127,16 +148,18 @@ export default class NoteTypeChooserDialog extends BasicWidget {
         this.resolve = callback;
     }
 
-    doResolve(e) {
+    doResolve(e: JQuery.KeyDownEvent | JQuery.ClickEvent) {
         const $item = $(e.target).closest(".dropdown-item");
         const noteType = $item.attr("data-note-type");
         const templateNoteId = $item.attr("data-template-note-id");
 
-        this.resolve({
-            success: true,
-            noteType,
-            templateNoteId
-        });
+        if (this.resolve) {
+            this.resolve({
+                success: true,
+                noteType,
+                templateNoteId
+            });
+        }
         this.resolve = null;
 
         this.modal.hide();
