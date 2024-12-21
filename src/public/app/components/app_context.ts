@@ -35,69 +35,45 @@ interface CommandData {
     ntxId?: string;
 }
 
-interface ApiLogMessagesData extends CommandData {
-      
-}
-
-interface FocusOnDetailData extends CommandData {
-    ntxId: string;
-}
-
-interface SearchNotesData extends CommandData {    
-    searchString: string | undefined;
-}
-
-interface ShowDeleteNotesDialogData extends CommandData {    
-    branchIdsToDelete: string[];
-    callback: (value: ResolveOptions) => void;
-    forceDeleteAllClones: boolean;
-}
-
-interface OpenedFileUpdatedData extends CommandData {
-    entityType: string;
-    entityId: string;
-    lastModifiedMs: number;
-    filePath: string;
-}
-
-interface FocusAndSelectTitleData extends CommandData {
-    isNewNote: boolean;
-}
-
-interface OpenNewNoteSplitData extends CommandData {
-    ntxId: string;
-    notePath: string;
-}
-
-interface ExecuteInActiveNoteDetailWidgetData extends CommandData {
-    callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
-}
-
-interface AddTextToActiveEditorData extends CommandData {
-    text: string;   
-}
-
-interface NoData extends CommandData { }
-
 type CommandMappings = {
-    "api-log-messages": ApiLogMessagesData;
-    focusOnDetail: FocusOnDetailData;
-    searchNotes: SearchNotesData;
-    showDeleteNotesDialog: ShowDeleteNotesDialogData;
+    "api-log-messages": CommandData;
+    focusOnDetail: Required<CommandData>;
+    searchNotes: CommandData & {
+        searchString: string | undefined;
+    };
+    showDeleteNotesDialog: CommandData & {
+        branchIdsToDelete: string[];
+        callback: (value: ResolveOptions) => void;
+        forceDeleteAllClones: boolean;
+    };
     showConfirmDeleteNoteBoxWithNoteDialog: ConfirmWithTitleOptions;
-    openedFileUpdated: OpenedFileUpdatedData;
-    focusAndSelectTitle: FocusAndSelectTitleData;
+    openedFileUpdated: CommandData & {
+        entityType: string;
+        entityId: string;
+        lastModifiedMs: number;
+        filePath: string;
+    };
+    focusAndSelectTitle: CommandData & {
+        isNewNote: boolean;
+    };
     showPromptDialog: PromptDialogOptions;
     showInfoDialog: ConfirmWithMessageOptions;
     showConfirmDialog: ConfirmWithMessageOptions;
-    openNewNoteSplit: OpenNewNoteSplitData;
-    executeInActiveNoteDetailWidget: ExecuteInActiveNoteDetailWidgetData;
-    addTextToActiveEditor: AddTextToActiveEditorData;
+    openNewNoteSplit: CommandData & {
+        ntxId: string;
+        notePath: string;   
+    };
+    executeInActiveNoteDetailWidget: CommandData & {
+        callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
+    };
+    addTextToActiveEditor: CommandData & {
+        text: string;
+    };
     
-    importMarkdownInline: NoData;
-    showPasswordNotSet: NoData;
-    showProtectedSessionPasswordDialog: NoData;
-    closeProtectedSessionPasswordDialog: NoData;
+    importMarkdownInline: CommandData;
+    showPasswordNotSet: CommandData;
+    showProtectedSessionPasswordDialog: CommandData;
+    closeProtectedSessionPasswordDialog: CommandData;
 }
 
 type EventMappings = {
