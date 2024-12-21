@@ -16,12 +16,13 @@ import { loadElkIfNeeded } from "./mermaid.js";
 
 let idCounter = 1;
 
-/**
- * @param {FNote|FAttachment} entity
- * @param {object} options
- * @return {Promise<{type: string, $renderedContent: jQuery}>}
- */
-async function getRenderedContent(entity, options = {}) {
+interface Options {
+    tooltip?: boolean;
+    trim?: boolean;
+    imageHasZoom?: boolean;
+}
+
+async function getRenderedContent(this: {} | { ctx: string }, entity: FNote, options: Options = {}) {
     options = Object.assign({
         tooltip: false
     }, options);
@@ -49,7 +50,7 @@ async function getRenderedContent(entity, options = {}) {
     else if (type === 'render') {
         const $content = $('<div>');
 
-        await renderService.render(entity, $content, this.ctx);
+        await renderService.render(entity, $content);
 
         $renderedContent.append($content);
     }
@@ -86,12 +87,11 @@ async function getRenderedContent(entity, options = {}) {
     };
 }
 
-/** @param {FNote} note */
-async function renderText(note, $renderedContent) {
+async function renderText(note: FNote, $renderedContent: JQuery<HTMLElement>) {
     // entity must be FNote
     const blob = await note.getBlob();
 
-    if (!utils.isHtmlEmpty(blob.content)) {
+    if (blob && !utils.isHtmlEmpty(blob.content)) {
         $renderedContent.append($('<div class="ck-content">').html(blob.content));
 
         if ($renderedContent.find('span.math-tex').length > 0) {
@@ -100,9 +100,9 @@ async function renderText(note, $renderedContent) {
             renderMathInElement($renderedContent[0], {trust: true});
         }
 
-        const getNoteIdFromLink = el => treeService.getNoteIdFromUrl($(el).attr('href'));
+        const getNoteIdFromLink = (el: HTMLElement) => treeService.getNoteIdFromUrl($(el).attr('href') || "");
         const referenceLinks = $renderedContent.find("a.reference-link");
-        const noteIdsToPrefetch = referenceLinks.map(el => getNoteIdFromLink(el));
+        const noteIdsToPrefetch = referenceLinks.map((i, el) => getNoteIdFromLink(el));
         await froca.getNotes(noteIdsToPrefetch);
 
         for (const el of referenceLinks) {
@@ -117,19 +117,17 @@ async function renderText(note, $renderedContent) {
 
 /**
  * Renders a code note, by displaying its content and applying syntax highlighting based on the selected MIME type.
- * 
- * @param {FNote} note
  */
-async function renderCode(note, $renderedContent) {
+async function renderCode(note: FNote, $renderedContent: JQuery<HTMLElement>) {
     const blob = await note.getBlob();
 
     const $codeBlock = $("<code>");
-    $codeBlock.text(blob.content);
+    $codeBlock.text(blob?.content || "");
     $renderedContent.append($("<pre>").append($codeBlock));
     await applySingleBlockSyntaxHighlight($codeBlock, mime_types.normalizeMimeTypeForCKEditor(note.mime));
 }
 
-function renderImage(entity, $renderedContent, options = {}) {
+function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>, options: Options = {}) {
     const encodedTitle = encodeURIComponent(entity.title);
 
     let url;
@@ -146,7 +144,7 @@ function renderImage(entity, $renderedContent, options = {}) {
         .css('justify-content', 'center');
 
     const $img = $("<img>")
-        .attr("src", url)
+        .attr("src", url || "")
         .attr("id", "attachment-image-" + idCounter++)
         .css("max-width", "100%");
 
@@ -165,7 +163,7 @@ function renderImage(entity, $renderedContent, options = {}) {
     imageContextMenuService.setupContextMenu($img);
 }
 
-function renderFile(entity, type, $renderedContent) {
+function renderFile(entity: FNote | FAttachment, type: string, $renderedContent: JQuery<HTMLElement>) {
     let entityType, entityId;
 
     if (entity instanceof FNote) {
@@ -201,7 +199,7 @@ function renderFile(entity, type, $renderedContent) {
         $content.append($videoPreview);
     }
 
-    if (entityType === 'notes') {
+    if (entityType === 'notes' && "noteId" in entity) {
         // TODO: we should make this available also for attachments, but there's a problem with "Open externally" support
         //       in attachment list
         const $downloadButton = $('<button class="file-download btn btn-primary" type="button">Download</button>');
@@ -222,11 +220,11 @@ function renderFile(entity, type, $renderedContent) {
     $renderedContent.append($content);
 }
 
-async function renderMermaid(note, $renderedContent) {
+async function renderMermaid(note: FNote, $renderedContent: JQuery<HTMLElement>) {
     await libraryLoader.requireLibrary(libraryLoader.MERMAID);
 
     const blob = await note.getBlob();
-    const content = blob.content || "";
+    const content = blob?.content || "";
 
     $renderedContent
         .css("display", "flex")
@@ -254,7 +252,7 @@ async function renderMermaid(note, $renderedContent) {
  * @param {FNote} note
  * @returns {Promise<void>}
  */
-async function renderChildrenList($renderedContent, note) {
+async function renderChildrenList($renderedContent: JQuery<HTMLElement>, note: FNote) {
     $renderedContent.css("padding", "10px");
     $renderedContent.addClass("text-with-ellipsis");
 
@@ -277,15 +275,21 @@ async function renderChildrenList($renderedContent, note) {
     }
 }
 
-function getRenderingType(entity) {
-    let type = entity.type || entity.role;
-    const mime = entity.mime;
+function getRenderingType(entity: FNote | FAttachment) {
+    let type: string = "";
+    if ("type" in entity) {
+        type = entity.type;
+    } else if ("role" in entity) {
+        type = entity.role;
+    }
+
+    const mime = ("mime" in entity && entity.mime);
 
     if (type === 'file' && mime === 'application/pdf') {
         type = 'pdf';
-    } else if (type === 'file' && mime.startsWith('audio/')) {
+    } else if (type === 'file' && mime && mime.startsWith('audio/')) {
         type = 'audio';
-    } else if (type === 'file' && mime.startsWith('video/')) {
+    } else if (type === 'file' && mime && mime.startsWith('video/')) {
         type = 'video';
     }
 

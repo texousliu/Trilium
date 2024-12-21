@@ -109,4 +109,22 @@ declare global {
     var renderMathInElement: (element: HTMLElement, options: {
         trust: boolean;
     }) => void;
+    var WZoom = {
+        create(selector: string, opts: {
+            maxScale: number;
+            speed: number;
+            zoomOnClick: boolean
+        })
+    };
+    interface MermaidApi {
+        initialize(opts: {
+            startOnLoad: boolean,
+            theme: string,
+            securityLevel: "antiscript"
+        }): void;
+        render(selector: string, data: string);
+    }
+    var mermaid: {        
+        mermaidAPI: MermaidApi;
+    };
 }
