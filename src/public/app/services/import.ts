@@ -1,11 +1,11 @@
-import toastService from "./toast.js";
+import toastService, { ToastOptions } from "./toast.js";
 import server from "./server.js";
 import ws from "./ws.js";
 import utils from "./utils.js";
 import appContext from "../components/app_context.js";
 import { t } from "./i18n.js";
 
-export async function uploadFiles(entityType, parentNoteId, files, options) {
+export async function uploadFiles(entityType: string, parentNoteId: string, files: string[], options: Record<string, string | Blob>) {
     if (!['notes', 'attachments'].includes(entityType)) {
         throw new Error(`Unrecognized import entity type '${entityType}'.`);
     }
@@ -45,7 +45,7 @@ export async function uploadFiles(entityType, parentNoteId, files, options) {
     }
 }
 
-function makeToast(id, message) {
+function makeToast(id: string, message: string): ToastOptions {
     return {
         id: id,
         title: t("import.import-status"),
