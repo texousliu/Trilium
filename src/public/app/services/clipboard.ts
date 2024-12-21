@@ -5,10 +5,10 @@ import linkService from "./link.js";
 import utils from "./utils.js";
 import { t } from "./i18n.js";
 
-let clipboardBranchIds = [];
-let clipboardMode = null;
+let clipboardBranchIds: string[] = [];
+let clipboardMode: string | null = null;
 
-async function pasteAfter(afterBranchId) {
+async function pasteAfter(afterBranchId: string) {
     if (isClipboardEmpty()) {
         return;
     }
@@ -23,7 +23,14 @@ async function pasteAfter(afterBranchId) {
         const clipboardBranches = clipboardBranchIds.map(branchId => froca.getBranch(branchId));
 
         for (const clipboardBranch of clipboardBranches) {
+            if (!clipboardBranch) {
+                continue;
+            }
+
             const clipboardNote = await clipboardBranch.getNote();
+            if (!clipboardNote) {
+                continue;
+            }
 
             await branchService.cloneNoteAfter(clipboardNote.noteId, afterBranchId);
         }
@@ -35,7 +42,7 @@ async function pasteAfter(afterBranchId) {
     }
 }
 
-async function pasteInto(parentBranchId) {
+async function pasteInto(parentBranchId: string) {
     if (isClipboardEmpty()) {
         return;
     }
@@ -50,7 +57,14 @@ async function pasteInto(parentBranchId) {
         const clipboardBranches = clipboardBranchIds.map(branchId => froca.getBranch(branchId));
 
         for (const clipboardBranch of clipboardBranches) {
+            if (!clipboardBranch) {
+                continue;
+            }
+
             const clipboardNote = await clipboardBranch.getNote();
+            if (!clipboardNote) {
+                continue;
+            }
 
             await branchService.cloneNoteToBranch(clipboardNote.noteId, parentBranchId);
         }
@@ -62,7 +76,7 @@ async function pasteInto(parentBranchId) {
     }
 }
 
-async function copy(branchIds) {
+async function copy(branchIds: string[]) {
     clipboardBranchIds = branchIds;
     clipboardMode = 'copy';
 
@@ -82,7 +96,7 @@ async function copy(branchIds) {
     toastService.showMessage(t("clipboard.copied"));
 }
 
-function cut(branchIds) {
+function cut(branchIds: string[]) {
     clipboardBranchIds = branchIds;
 
     if (clipboardBranchIds.length > 0) {
