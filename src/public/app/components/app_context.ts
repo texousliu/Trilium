@@ -50,6 +50,12 @@ export type TriggerData = {
     branchIdsToDelete: string[];
     callback: (value: ResolveOptions) => void;
     forceDeleteAllClones: boolean;
+} | {
+    // For "openedFileUpdated"
+    entityType: string;
+    entityId: string;
+    lastModifiedMs: number;
+    filePath: string;
 }
     | PromptDialogOptions    // For "showPromptDialog"
     | ConfirmWithMessageOptions   // For "showConfirmDialog"
