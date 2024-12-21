@@ -82,7 +82,7 @@ declare global {
         setNote(noteId: string);
     }
 
-    var logError: (message: string) => void;
+    var logError: (message: string, e?: Error) => void;
     var logInfo: (message: string) => void;    
     var glob: CustomGlobals;
     var require: RequireMethod;

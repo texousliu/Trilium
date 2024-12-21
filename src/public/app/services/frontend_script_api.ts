@@ -53,7 +53,7 @@ interface ExecResult {
     error?: string;
 }
 
-interface Entity {
+export interface Entity {
     noteId: string;
 }
 

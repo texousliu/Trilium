@@ -1,8 +1,8 @@
-import FrontendScriptApi from './frontend_script_api.js';
+import FrontendScriptApi, { Entity } from './frontend_script_api.js';
 import utils from './utils.js';
 import froca from './froca.js';
 
-async function ScriptContext(startNoteId: string, allNoteIds: string[], originEntity = null, $container: JQuery<HTMLElement> | null = null) {
+async function ScriptContext(startNoteId: string, allNoteIds: string[], originEntity: Entity | null = null, $container: JQuery<HTMLElement> | null = null) {
     const modules: Record<string, { exports: unknown }> = {};
 
     await froca.initializedPromise;

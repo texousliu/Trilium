@@ -4,9 +4,21 @@ import toastService from "./toast.js";
 import froca from "./froca.js";
 import utils from "./utils.js";
 import { t } from "./i18n.js";
+import { Entity } from "./frontend_script_api.js";
 
-async function getAndExecuteBundle(noteId, originEntity = null, script = null, params = null) {
-    const bundle = await server.post(`script/bundle/${noteId}`, {
+// TODO: Deduplicate with server.
+interface Bundle {
+    script: string;
+    noteId: string;
+    allNoteIds: string[];
+}
+
+interface Widget {
+    parentWidget?: string;
+}
+
+async function getAndExecuteBundle(noteId: string, originEntity = null, script = null, params = null) {
+    const bundle = await server.post<Bundle>(`script/bundle/${noteId}`, {
         script,
         params
     });
@@ -14,24 +26,23 @@ async function getAndExecuteBundle(noteId, originEntity = null, script = null, p
     return await executeBundle(bundle, originEntity);
 }
 
-async function executeBundle(bundle, originEntity, $container) {
+async function executeBundle(bundle: Bundle, originEntity?: Entity | null, $container?: JQuery<HTMLElement>) {
     const apiContext = await ScriptContext(bundle.noteId, bundle.allNoteIds, originEntity, $container);
 
     try {
         return await (function () {
             return eval(`const apiContext = this; (async function() { ${bundle.script}\r\n})()`);
         }.call(apiContext));
-    }
-    catch (e) {
+    } catch (e: any) {
         const note = await froca.getNote(bundle.noteId);
 
-        toastService.showAndLogError(`Execution of JS note "${note.title}" with ID ${bundle.noteId} failed with error: ${e.message}`);
+        toastService.showAndLogError(`Execution of JS note "${note?.title}" with ID ${bundle.noteId} failed with error: ${e?.message}`);
     }
 }
 
 async function executeStartupBundles() {
     const isMobile = utils.isMobile();
-    const scriptBundles = await server.get("script/startup" + (isMobile ? "?mobile=true" : ""));
+    const scriptBundles = await server.get<Bundle[]>("script/startup" + (isMobile ? "?mobile=true" : ""));
 
     for (const bundle of scriptBundles) {
         await executeBundle(bundle);
@@ -39,11 +50,14 @@ async function executeStartupBundles() {
 }
 
 class WidgetsByParent {
+
+    private byParent: Record<string, Widget[]>;
+
     constructor() {
         this.byParent = {};
     }
 
-    add(widget) {
+    add(widget: Widget) {
         if (!widget.parentWidget) {
             console.log(`Custom widget does not have mandatory 'parentWidget' property defined`);
             return;
@@ -53,7 +67,7 @@ class WidgetsByParent {
         this.byParent[widget.parentWidget].push(widget);
     }
 
-    get(parentName) {
+    get(parentName: string) {
         if (!this.byParent[parentName]) {
             return [];
         }
@@ -62,12 +76,12 @@ class WidgetsByParent {
             // previously, custom widgets were provided as a single instance, but that has the disadvantage
             // for splits where we actually need multiple instaces and thus having a class to instantiate is better
             // https://github.com/zadam/trilium/issues/4274
-            .map(w => w.prototype ? new w() : w);
+            .map((w: any) => w.prototype ? new w() : w);
     }
 }
 
 async function getWidgetBundlesByParent() {
-    const scriptBundles = await server.get("script/widgets");
+    const scriptBundles = await server.get<Bundle[]>("script/widgets");
 
     const widgetsByParent = new WidgetsByParent();
 
@@ -80,7 +94,7 @@ async function getWidgetBundlesByParent() {
                 widget._noteId = bundle.noteId;
                 widgetsByParent.add(widget);
             }
-        } catch (e) {
+        } catch (e: any) {
             const noteId = bundle.noteId;
             const note = await froca.getNote(noteId);
             toastService.showPersistent({
@@ -88,7 +102,7 @@ async function getWidgetBundlesByParent() {
                 icon: "alert",
                 message: t("toast.bundle-error.message", {
                     id: noteId,
-                    title: note.title,
+                    title: note?.title,
                     message: e.message
                 })
             });
