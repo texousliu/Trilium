@@ -8,6 +8,8 @@ interface ActionDefinition {
     script: string;
     relationName: string;
     targetNoteId: string;
+    oldRelationName?: string;
+    newRelationName?: string;
 }
 
 export default abstract class AbstractBulkAction {
