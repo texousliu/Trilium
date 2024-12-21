@@ -52,7 +52,7 @@
     "ci-update-nightly-version": "tsx ./bin/update-nightly-version.ts"
   },
   "dependencies": {
-    "@braintree/sanitize-url": "7.1.0",
+    "@braintree/sanitize-url": "7.1.1",
     "@electron/remote": "2.1.2",
     "@excalidraw/excalidraw": "0.17.6",
     "@highlightjs/cdn-assets": "11.11.0",
