@@ -240,5 +240,8 @@
     "other": "Otros",
     "advanced-title": "Avanzado",
     "visible-launchers-title": "Lanzadores visibles"
+  },
+  "notes": {
+    "new-note": "Nueva nota"
   }
 }
