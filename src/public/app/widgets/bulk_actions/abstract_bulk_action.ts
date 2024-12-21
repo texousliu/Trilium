@@ -2,9 +2,17 @@ import { t } from "../../services/i18n.js";
 import server from "../../services/server.js";
 import ws from "../../services/ws.js";
 import utils from "../../services/utils.js";
+import FAttribute from "../../entities/fattribute.js";
 
-export default class AbstractBulkAction {
-    constructor(attribute, actionDef) {
+interface ActionDefinition {
+
+}
+
+export default abstract class AbstractBulkAction {
+    attribute: FAttribute;
+    actionDef: ActionDefinition;
+
+    constructor(attribute: FAttribute, actionDef: ActionDefinition) {
         this.attribute = attribute;
         this.actionDef = actionDef;
     }
@@ -20,18 +28,18 @@ export default class AbstractBulkAction {
             utils.initHelpDropdown($rendered);
 
             return $rendered;
-        }
-        catch (e) {
+        } catch (e: any) {
             logError(`Failed rendering search action: ${JSON.stringify(this.attribute.dto)} with error: ${e.message} ${e.stack}`);
             return null;
         }
     }
 
     // to be overridden
-    doRender() {}
+    abstract doRender(): JQuery<HTMLElement>;
+    abstract get actionName(): string;
 
-    async saveAction(data) {
-        const actionObject = Object.assign({ name: this.constructor.actionName }, data);
+    async saveAction(data: {}) {
+        const actionObject = Object.assign({ name: (this.constructor as unknown as AbstractBulkAction).actionName }, data);
 
         await server.put(`notes/${this.attribute.noteId}/attribute`, {
             attributeId: this.attribute.attributeId,
