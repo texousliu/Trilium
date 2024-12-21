@@ -10,7 +10,26 @@ const SELECTED_NOTE_PATH_KEY = "data-note-path";
 
 const SELECTED_EXTERNAL_LINK_KEY = "data-external-link";
 
-async function autocompleteSourceForCKEditor(queryText) {
+export interface Suggestion {
+    noteTitle?: string;
+    externalLink?: string;
+    notePathTitle?: string;
+    notePath?: string;
+    highlightedNotePathTitle?: string;
+    action?: string | "create-note" | "search-notes" | "external-link";
+    parentNoteId?: string;
+}
+
+interface Options {
+    container?: HTMLElement;
+    fastSearch?: boolean;
+    allowCreatingNotes?: boolean;
+    allowJumpToSearchNotes?: boolean;
+    allowExternalLinks?: boolean;
+    hideGoToSelectedNoteButton?: boolean;
+}
+
+async function autocompleteSourceForCKEditor(queryText: string) {
     return await new Promise((res, rej) => {
         autocompleteSource(queryText, rows => {
             res(rows.map(row => {
@@ -30,7 +49,7 @@ async function autocompleteSourceForCKEditor(queryText) {
     });
 }
 
-async function autocompleteSource(term, cb, options = {}) {
+async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void, options: Options = {}) {
     const fastSearch = options.fastSearch === false ? false : true;
     if (fastSearch === false) {
         if (term.trim().length === 0){
@@ -46,7 +65,7 @@ async function autocompleteSource(term, cb, options = {}) {
     
     const activeNoteId = appContext.tabManager.getActiveContextNoteId();
 
-    let results = await server.get(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${fastSearch}`);
+    let results: Suggestion[] = await server.get<Suggestion[]>(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${fastSearch}`);
     if (term.trim().length >= 1 && options.allowCreatingNotes) {
         results = [
             {
@@ -54,7 +73,7 @@ async function autocompleteSource(term, cb, options = {}) {
                 noteTitle: term,
                 parentNoteId: activeNoteId || 'root',
                 highlightedNotePathTitle: t("note_autocomplete.create-note", { term })
-            }
+            } as Suggestion
         ].concat(results);
     }
 
@@ -74,14 +93,14 @@ async function autocompleteSource(term, cb, options = {}) {
                 action: 'external-link',
                 externalLink: term,
                 highlightedNotePathTitle: t("note_autocomplete.insert-external-link", { term })
-            }
+            } as Suggestion
         ].concat(results);
     }
 
     cb(results);
 }
 
-function clearText($el) {
+function clearText($el: JQuery<HTMLElement>) {
     if (utils.isMobile()) {
         return;
     }
@@ -90,7 +109,7 @@ function clearText($el) {
     $el.autocomplete("val", "").trigger('change');
 }
 
-function setText($el, text) {
+function setText($el: JQuery<HTMLElement>, text: string) {
     if (utils.isMobile()) {
         return;
     }
@@ -101,7 +120,7 @@ function setText($el, text) {
         .autocomplete("open");
 }
 
-function showRecentNotes($el) {
+function showRecentNotes($el:JQuery<HTMLElement>) {
     if (utils.isMobile()) {
         return;
     }
@@ -112,21 +131,22 @@ function showRecentNotes($el) {
     $el.trigger('focus');
 }
 
-function fullTextSearch($el, options){
-    const searchString = $el.autocomplete('val');
-    if (options.fastSearch === false || searchString.trim().length === 0) {
+function fullTextSearch($el: JQuery<HTMLElement>, options: Options){
+    const searchString = $el.autocomplete('val') as unknown as string;
+    if (options.fastSearch === false || searchString?.trim().length === 0) {
         return;
     }    
     $el.trigger('focus');
     options.fastSearch = false;
     $el.autocomplete('val', '');
+    $el.autocomplete()
     $el.setSelectedNotePath("");
     $el.autocomplete('val', searchString);
     // Set a delay to avoid resetting to true before full text search (await server.get) is called.
     setTimeout(() => { options.fastSearch = true; }, 100);
 }
 
-function initNoteAutocomplete($el, options) {
+function initNoteAutocomplete($el: JQuery<HTMLElement>, options: Options) {
     if ($el.hasClass("note-autocomplete-input") || utils.isMobile()) {
         // clear any event listener added in previous invocation of this function
         $el.off('autocomplete:noteselected');
@@ -174,7 +194,7 @@ function initNoteAutocomplete($el, options) {
         return false;
     });
 
-    let autocompleteOptions = {};
+    let autocompleteOptions: AutoCompleteConfig = {};
     if (options.container) {
         autocompleteOptions.dropdownMenuContainer = options.container;
         autocompleteOptions.debug = true;   // don't close on blur
@@ -221,7 +241,8 @@ function initNoteAutocomplete($el, options) {
         }
     ]);
 
-    $el.on('autocomplete:selected', async (event, suggestion) => {
+    // TODO: Types fail due to "autocomplete:selected" not being registered in type definitions.
+    ($el as any).on('autocomplete:selected', async (event: Event, suggestion: Suggestion) => {
         if (suggestion.action === 'external-link') {
             $el.setSelectedNotePath(null);
             $el.setSelectedExternalLink(suggestion.externalLink);
@@ -250,7 +271,7 @@ function initNoteAutocomplete($el, options) {
             });
 
             const hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId;
-            suggestion.notePath = note.getBestNotePathString(hoistedNoteId);
+            suggestion.notePath = note?.getBestNotePathString(hoistedNoteId);
         }
 
         if (suggestion.action === 'search-notes') {
@@ -270,7 +291,7 @@ function initNoteAutocomplete($el, options) {
     });
 
     $el.on('autocomplete:closed', () => {
-        if (!$el.val().trim()) {
+        if (!String($el.val())?.trim()) {
             clearText($el);
         }
     });
@@ -289,7 +310,7 @@ function initNoteAutocomplete($el, options) {
 
 function init() {
     $.fn.getSelectedNotePath = function () {
-        if (!$(this).val().trim()) {
+        if (!String($(this).val())?.trim()) {
             return "";
         } else {
             return $(this).attr(SELECTED_NOTE_PATH_KEY);
@@ -297,7 +318,8 @@ function init() {
     };
 
     $.fn.getSelectedNoteId = function () {
-        const notePath = $(this).getSelectedNotePath();
+        const $el = $(this as unknown as HTMLElement);
+        const notePath = $el.getSelectedNotePath();
         if (!notePath) {
             return null;
         }
@@ -320,7 +342,7 @@ function init() {
     };
 
     $.fn.getSelectedExternalLink = function () {
-        if (!$(this).val().trim()) {
+        if (!String($(this).val())?.trim()) {
             return "";
         } else {
             return $(this).attr(SELECTED_EXTERNAL_LINK_KEY);
@@ -329,6 +351,7 @@ function init() {
 
     $.fn.setSelectedExternalLink = function (externalLink) {
         if (externalLink) {
+            // TODO: This doesn't seem to do anything with the external link, is it normal?
             $(this)
                 .closest(".input-group")
                 .find(".go-to-selected-note-button")

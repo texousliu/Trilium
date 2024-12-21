@@ -40,6 +40,9 @@ export type TriggerData = {
     text: string;
 } | {
     callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
+} | {
+    // For "searchNotes"
+    searchString: string | undefined;
 }
 
 class AppContext extends Component {

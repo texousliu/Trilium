@@ -2,6 +2,7 @@ import type FNote from "./entities/fnote";
 import type { BackendModule, i18n } from "i18next";
 import type { Froca } from "./services/froca-interface";
 import type { HttpBackendOptions } from "i18next-http-backend";
+import { Suggestion } from "./services/note_autocomplete.ts";
 
 interface ElectronProcess {
     type: string;
@@ -42,7 +43,7 @@ type RequireMethod = (moduleName: string) => any;
 declare global {
     interface Window {
         logError(message: string);
-        logInfo(message: string);
+        logInfo(message: string);        
     
         process?: ElectronProcess;
         glob?: CustomGlobals;
@@ -53,23 +54,36 @@ declare global {
         hint?: boolean;
         openOnFocus?: boolean;
         minLength?: number;
-        tabAutocomplete?: boolean
+        tabAutocomplete?: boolean;
+        autoselect?: boolean;
+        dropdownMenuContainer?: HTMLElement;
+        debug?: boolean;
     }
 
-    type AutoCompleteCallback = (values: AutoCompleteCallbackArgs[]) => void;
+    type AutoCompleteCallback = (values: AutoCompleteCallbackArg[]) => void;
 
     interface AutoCompleteArg {
-        displayKey: "name" | "value";
+        displayKey: "name" | "value" | "notePathTitle";
         cache: boolean;
-        source: (term: string, cb: AutoCompleteCallback) => void
+        source: (term: string, cb: AutoCompleteCallback) => void,
+        templates: {
+            suggestion: (suggestion: Suggestion) => string | undefined
+        }
     };
     
     interface JQuery {
-        autocomplete: (action: "close" | "open" | "destroy" | AutoCompleteConfig, args?: AutoCompleteArg[]) => void;        
+        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: AutoCompleteArg[] | string) => JQuery<?>;
+        
+        getSelectedNotePath(): string | undefined;
+        getSelectedNoteId(): string | null;
+        setSelectedNotePath(notePath: string | null | undefined);
+        getSelectedExternalLink(this: HTMLElement): string | undefined;
+        setSelectedExternalLink(externalLink: string | null | undefined);
+        setNote(noteId: string);
     }
 
     var logError: (message: string) => void;
-    var logInfo: (message: string) => void;
+    var logInfo: (message: string) => void;    
     var glob: CustomGlobals;
     var require: RequireMethod;
     var __non_webpack_require__: RequireMethod | undefined;
@@ -92,4 +106,7 @@ declare global {
     }) => {
         destroy();
     };
+    var renderMathInElement: (element: HTMLElement, options: {
+        trust: boolean;
+    }) => void;
 }
