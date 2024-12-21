@@ -27,7 +27,32 @@ const TPL = `
     </div>
 </div>`;
 
+export type ConfirmDialogCallback = (val: false | {
+    confirmed: boolean;
+    isDeleteNoteChecked: boolean
+}) => void;
+
+interface ConfirmWithMessageOptions {
+    message: string | HTMLElement | JQuery<HTMLElement>;
+    callback: ConfirmDialogCallback;
+}
+
+interface ConfirmWithTitleOptions {
+    title: string;
+    callback: ConfirmDialogCallback;       
+}
+
 export default class ConfirmDialog extends BasicWidget {
+
+    private resolve: ConfirmDialogCallback | null;
+
+    private modal!: bootstrap.Modal;
+    private $originallyFocused!: JQuery<HTMLElement> | null;
+    private $confirmContent!: JQuery<HTMLElement>;
+    private $okButton!: JQuery<HTMLElement>;
+    private $cancelButton!: JQuery<HTMLElement>;
+    private $custom!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -37,6 +62,8 @@ export default class ConfirmDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        // TODO: Fix once we use proper ES imports.
+        //@ts-ignore
         this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$confirmContent = this.$widget.find(".confirm-dialog-content");
         this.$okButton = this.$widget.find(".confirm-dialog-ok-button");
@@ -60,7 +87,7 @@ export default class ConfirmDialog extends BasicWidget {
         this.$okButton.on('click', () => this.doResolve(true));
     }
 
-    showConfirmDialogEvent({ message, callback }) {
+    showConfirmDialogEvent({ message, callback }: ConfirmWithMessageOptions) {
         this.$originallyFocused = $(':focus');
 
         this.$custom.hide();
@@ -77,8 +104,8 @@ export default class ConfirmDialog extends BasicWidget {
 
         this.resolve = callback;
     }
-
-    showConfirmDeleteNoteBoxWithNoteDialogEvent({ title, callback }) {
+    
+    showConfirmDeleteNoteBoxWithNoteDialogEvent({ title, callback }: ConfirmWithTitleOptions) {
         glob.activeDialog = this.$widget;
 
         this.$confirmContent.text(`${t('confirm.are_you_sure_remove_note', { title: title })}`);
@@ -107,11 +134,13 @@ export default class ConfirmDialog extends BasicWidget {
         this.resolve = callback;
     }
 
-    doResolve(ret) {
-        this.resolve({
-            confirmed: ret,
-            isDeleteNoteChecked: this.$widget.find(`.${DELETE_NOTE_BUTTON_CLASS}:checked`).length > 0
-        });
+    doResolve(ret: boolean) {
+        if (this.resolve) {
+            this.resolve({
+                confirmed: ret,
+                isDeleteNoteChecked: this.$widget.find(`.${DELETE_NOTE_BUTTON_CLASS}:checked`).length > 0
+            });
+        }
 
         this.resolve = null;
 
