@@ -1,10 +1,18 @@
 import server from "./server.js";
 import appContext from "../components/app_context.js";
 import shortcutService from "./shortcuts.js";
+import Component from "../components/component.js";
 
-const keyboardActionRepo = {};
+const keyboardActionRepo: Record<string, Action> = {};
 
-const keyboardActionsLoaded = server.get('keyboard-actions').then(actions => {
+// TODO: Deduplicate with server.
+interface Action {
+	actionName: string;
+	effectiveShortcuts: string[];
+	scope: string;
+}
+
+const keyboardActionsLoaded = server.get<Action[]>('keyboard-actions').then(actions => {
 	actions = actions.filter(a => !!a.actionName); // filter out separators
 
 	for (const action of actions) {
@@ -20,13 +28,13 @@ async function getActions() {
 	return await keyboardActionsLoaded;
 }
 
-async function getActionsForScope(scope) {
+async function getActionsForScope(scope: string) {
 	const actions = await keyboardActionsLoaded;
 
 	return actions.filter(action => action.scope === scope);
 }
 
-async function setupActionsForElement(scope, $el, component) {
+async function setupActionsForElement(scope: string, $el: JQuery<HTMLElement>, component: Component) {
 	const actions = await getActionsForScope(scope);
 
 	for (const action of actions) {
@@ -44,7 +52,7 @@ getActionsForScope("window").then(actions => {
 	}
 });
 
-async function getAction(actionName, silent = false) {
+async function getAction(actionName: string, silent = false) {
 	await keyboardActionsLoaded;
 
 	const action = keyboardActionRepo[actionName];
@@ -61,9 +69,15 @@ async function getAction(actionName, silent = false) {
 	return action;
 }
 
-function updateDisplayedShortcuts($container) {
+function updateDisplayedShortcuts($container: JQuery<HTMLElement>) {
+	//@ts-ignore
+	//TODO: each() does not support async callbacks.
 	$container.find('kbd[data-command]').each(async (i, el) => {
 		const actionName = $(el).attr('data-command');
+		if (!actionName) {
+			return;
+		}
+
 		const action = await getAction(actionName, true);
 
 		if (action) {
@@ -75,8 +89,13 @@ function updateDisplayedShortcuts($container) {
 		}
 	});
 
+	//@ts-ignore
+	//TODO: each() does not support async callbacks.
 	$container.find('[data-trigger-command]').each(async (i, el) => {
 		const actionName = $(el).attr('data-trigger-command');
+		if (!actionName) {
+			return;
+		}
 		const action = await getAction(actionName, true);
 
 		if (action) {

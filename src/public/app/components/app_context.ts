@@ -37,7 +37,7 @@ export type TriggerData = {
     messages?: unknown[];    
 } | {
     ntxId: string;
-    notePath: string;
+    notePath?: string;
 } | {
     text: string;
 } | {
