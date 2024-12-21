@@ -2,9 +2,17 @@ import mimeTypesService from "./mime_types.js";
 import optionsService from "./options.js";
 import { getStylesheetUrl } from "./syntax_highlight.js";
 
-const CKEDITOR = {"js": ["libraries/ckeditor/ckeditor.js"]};
+interface Library {
+    js?: string[] | (() => string[]);
+    css?: string[];
+}
 
-const CODE_MIRROR = {
+
+const CKEDITOR: Library = {
+    js: ["libraries/ckeditor/ckeditor.js"]
+};
+
+const CODE_MIRROR: Library = {
     js: [
         "node_modules/codemirror/lib/codemirror.js",
         "node_modules/codemirror/addon/display/placeholder.js",
@@ -26,9 +34,13 @@ const CODE_MIRROR = {
     ]
 };
 
-const ESLINT = {js: ["node_modules/eslint/bin/eslint.js"]};
+const ESLINT: Library = {
+    js: [
+        "node_modules/eslint/bin/eslint.js"
+    ]
+};
 
-const RELATION_MAP = {
+const RELATION_MAP: Library = {
     js: [
         "node_modules/jsplumb/dist/js/jsplumb.min.js",
         "node_modules/panzoom/dist/panzoom.min.js"
@@ -38,26 +50,30 @@ const RELATION_MAP = {
     ]
 };
 
-const PRINT_THIS = {js: ["node_modules/print-this/printThis.js"]};
+const PRINT_THIS: Library = {
+    js: ["node_modules/print-this/printThis.js"]
+};
 
-const CALENDAR_WIDGET = {css: ["stylesheets/calendar.css"]};
+const CALENDAR_WIDGET: Library = {
+    css: ["stylesheets/calendar.css"]
+};
 
-const KATEX = {
+const KATEX: Library = {
     js: [ "node_modules/katex/dist/katex.min.js",
         "node_modules/katex/dist/contrib/mhchem.min.js",
         "node_modules/katex/dist/contrib/auto-render.min.js" ],
     css: [ "node_modules/katex/dist/katex.min.css" ]
 };
 
-const WHEEL_ZOOM = {
+const WHEEL_ZOOM: Library = {
     js: [ "node_modules/vanilla-js-wheel-zoom/dist/wheel-zoom.min.js"]
 };
 
-const FORCE_GRAPH = {
+const FORCE_GRAPH: Library = {
     js: [ "node_modules/force-graph/dist/force-graph.min.js"]
 };
 
-const MERMAID = {
+const MERMAID: Library = {
     js: [
         "node_modules/mermaid/dist/mermaid.min.js"        
     ]
@@ -67,13 +83,13 @@ const MERMAID = {
  * The ELK extension of Mermaid.js, which supports more advanced layouts.
  * See https://www.npmjs.com/package/@mermaid-js/layout-elk for more information.
  */
-const MERMAID_ELK = {
+const MERMAID_ELK: Library = {
     js: [
         "libraries/mermaid-elk/elk.min.js"
     ]
 }
 
-const EXCALIDRAW = {
+const EXCALIDRAW: Library = {
     js: [
         "node_modules/react/umd/react.production.min.js",
         "node_modules/react-dom/umd/react-dom.production.min.js",
@@ -81,30 +97,30 @@ const EXCALIDRAW = {
     ]
 };
 
-const MARKJS = {
+const MARKJS: Library = {
     js: [
         "node_modules/mark.js/dist/jquery.mark.es6.min.js"
     ]
 };
 
-const I18NEXT = {
+const I18NEXT: Library = {
     js: [
         "node_modules/i18next/i18next.min.js",
         "node_modules/i18next-http-backend/i18nextHttpBackend.min.js"
     ]
 };
 
-const MIND_ELIXIR = {
+const MIND_ELIXIR: Library = {
     js: [
         "node_modules/mind-elixir/dist/MindElixir.iife.js",
         "node_modules/@mind-elixir/node-menu/dist/node-menu.umd.cjs"
     ]
 };
 
-const HIGHLIGHT_JS = {
+const HIGHLIGHT_JS: Library = {
     js: () => {
         const mimeTypes = mimeTypesService.getMimeTypes();
-        const scriptsToLoad = new Set();
+        const scriptsToLoad = new Set<string>();
         scriptsToLoad.add("node_modules/@highlightjs/cdn-assets/highlight.min.js");
         for (const mimeType of mimeTypes) {
             const id = mimeType.highlightJs;
@@ -120,14 +136,14 @@ const HIGHLIGHT_JS = {
             }
         }
         
-        const currentTheme = optionsService.get("codeBlockTheme");
+        const currentTheme = String(optionsService.get("codeBlockTheme"));
         loadHighlightingTheme(currentTheme);
 
         return Array.from(scriptsToLoad);
     }
 };
 
-async function requireLibrary(library) {
+async function requireLibrary(library: Library) {
     if (library.css) {
         library.css.map(cssUrl => requireCss(cssUrl));
     }
@@ -139,18 +155,18 @@ async function requireLibrary(library) {
     }
 }
 
-function unwrapValue(value) {
+function unwrapValue<T>(value: T | (() => T)) {
     if (typeof value === "function") {
-        return value();
+        return (value as () => T)();
     }
 
     return value;
 }
 
 // we save the promises in case of the same script being required concurrently multiple times
-const loadedScriptPromises = {};
+const loadedScriptPromises: Record<string, JQuery.jqXHR> = {};
 
-async function requireScript(url) {
+async function requireScript(url: string) {
     url = `${window.glob.assetPath}/${url}`;
 
     if (!loadedScriptPromises[url]) {
@@ -164,7 +180,7 @@ async function requireScript(url) {
     await loadedScriptPromises[url];
 }
 
-async function requireCss(url, prependAssetPath = true) {
+async function requireCss(url: string, prependAssetPath = true) {
     const cssLinks = Array
         .from(document.querySelectorAll('link'))
         .map(el => el.href);
@@ -178,8 +194,8 @@ async function requireCss(url, prependAssetPath = true) {
     }
 }
 
-let highlightingThemeEl = null;
-function loadHighlightingTheme(theme) {
+let highlightingThemeEl: JQuery<HTMLElement> | null = null;
+function loadHighlightingTheme(theme: string) {
     if (!theme) {        
         return;
     }
