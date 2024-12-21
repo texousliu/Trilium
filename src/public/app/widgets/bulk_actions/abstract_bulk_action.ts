@@ -12,6 +12,10 @@ interface ActionDefinition {
     oldRelationName?: string;
     newRelationName?: string;
     newTitle?: string;
+    labelName?: string;
+    labelValue?: string;
+    oldLabelName?: string;
+    newLabelName?: string;
 }
 
 export default abstract class AbstractBulkAction {
