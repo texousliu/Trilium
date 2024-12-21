@@ -7,7 +7,8 @@
     "sync_version": "Versiune sincronizare:",
     "build_date": "Data compilării:",
     "build_revision": "Revizia compilării:",
-    "data_directory": "Directorul de date:"
+    "data_directory": "Directorul de date:",
+    "close": "Închide"
   },
   "abstract_bulk_action": {
     "remove_this_search_action": "Înlătură acesată acțiune la căutare"
@@ -339,7 +340,8 @@
     "notes_to_clone": "Notițe de clonat",
     "prefix_optional": "Prefix (opțional)",
     "search_for_note_by_its_name": "căutați notița după nume acesteia",
-    "target_parent_note": "Notița părinte țintă"
+    "target_parent_note": "Notița părinte țintă",
+    "close": "Închide"
   },
   "close_pane_button": {
     "close_this_pane": "Închide acest panou"
@@ -365,7 +367,8 @@
     "cancel": "Anulează",
     "confirmation": "Confirm",
     "if_you_dont_check": "Dacă această opțiune nu este bifată, notița va fi ștearsă doar din harta de relații.",
-    "ok": "OK"
+    "ok": "OK",
+    "close": "Închide"
   },
   "consistency_checks": {
     "find_and_fix_button": "Caută și repară probleme de consistență",
@@ -431,7 +434,8 @@
     "no_note_to_delete": "Nicio notiță nu va fi ștearsă (doar clonele).",
     "notes_to_be_deleted": "Următoarele notițe vor fi șterse ({{- noteCount}})",
     "ok": "OK",
-    "deleted_relation_text": "Notița {{- note}} ce va fi ștearsă este referențiată de relația {{- relation}}, originând din {{- source}}."
+    "deleted_relation_text": "Notița {{- note}} ce va fi ștearsă este referențiată de relația {{- relation}}, originând din {{- source}}.",
+    "close": "Închide"
   },
   "delete_relation": {
     "allowed_characters": "Se permit caractere alfanumerice, underline și două puncte.",
@@ -716,7 +720,8 @@
     "button_include": "Include notița",
     "dialog_title": "Includere notița",
     "label_note": "Notiță",
-    "placeholder_search": "căutați notița după denumirea ei"
+    "placeholder_search": "căutați notița după denumirea ei",
+    "close": "Închide"
   },
   "info": {
     "closeButton": "Închide",
@@ -729,7 +734,8 @@
   },
   "jump_to_note": {
     "search_button": "Caută în întregul conținut <kbd>Ctrl+Enter</kbd>",
-    "search_placeholder": "căutați o notiță după denumirea ei"
+    "search_placeholder": "căutați o notiță după denumirea ei",
+    "close": "Închide"
   },
   "left_pane_toggle": {
     "hide_panel": "Ascunde panoul",
@@ -743,7 +749,8 @@
     "dialog_title": "Importă Markdown",
     "import_button": "Importă Ctrl+Enter",
     "import_success": "Conținutul Markdown a fost importat în document.",
-    "modal_body_text": "Din cauza limitărilor la nivel de navigator, nu este posibilă citirea clipboard-ului din JavaScript. Inserați Markdown-ul pentru a-l importa în caseta de mai jos și dați clic pe butonul Import"
+    "modal_body_text": "Din cauza limitărilor la nivel de navigator, nu este posibilă citirea clipboard-ului din JavaScript. Inserați Markdown-ul pentru a-l importa în caseta de mai jos și dați clic pe butonul Import",
+    "close": "Închide"
   },
   "max_content_width": {
     "apply_changes_description": "Pentru a aplica schimbările de lățime a conținutului, dați click pe",
@@ -779,7 +786,8 @@
     "move_success_message": "Notițele selectate au fost mutate în",
     "notes_to_move": "Notițe de mutat",
     "search_placeholder": "căutați notița după denumirea ei",
-    "target_parent_note": "Notița părinte destinație"
+    "target_parent_note": "Notița părinte destinație",
+    "close": "Închide"
   },
   "native_title_bar": {
     "disabled": "dezactivată",
@@ -851,7 +859,8 @@
   "note_type_chooser": {
     "modal_body": "Selectați tipul notiței/șablonul pentru noua notiță:",
     "modal_title": "Selectați tipul notiței",
-    "templates": "Șabloane:"
+    "templates": "Șabloane:",
+    "close": "Închide"
   },
   "onclick_button": {
     "no_click_handler": "Butonul „{{componentId}}” nu are nicio acțiune la clic definită"
@@ -906,7 +915,8 @@
   "password_not_set": {
     "body1": "Notițele protejate sunt criptate utilizând parola de utilizator, dar nu a fost setată nicio parolă.",
     "body2": "Pentru a putea să protejați notițe, clic <a class=\"open-password-options-button\" href=\"javascript:\">aici</a> pentru a deschide ecranul de opțiuni și pentru a seta parola.",
-    "title": "Parola nu este setată"
+    "title": "Parola nu este setată",
+    "close": "Închide"
   },
   "promoted_attributes": {
     "add_new_attribute": "Adaugă un nou atribut",
@@ -920,7 +930,8 @@
   "prompt": {
     "defaultTitle": "Aviz",
     "ok": "OK <kbd>enter</kbd>",
-    "title": "Aviz"
+    "title": "Aviz",
+    "close": "Închide"
   },
   "protected_session": {
     "enter_password_instruction": "Afișarea notițelor protejate necesită introducerea parolei:",
@@ -951,7 +962,8 @@
     "erase_notes_button": "Elimină notițele șterse",
     "no_changes_message": "Încă nicio schimbare...",
     "title": "Modificări recente",
-    "undelete_link": "restaurare"
+    "undelete_link": "restaurare",
+    "close": "Închide"
   },
   "relation_map": {
     "cannot_match_transform": "Nu s-a putut identifica transformarea: {{transform}}",
@@ -1030,7 +1042,8 @@
     "revisions_deleted": "Notița reviziei a fost ștearsă.",
     "maximum_revisions": "Numărul maxim de revizii pentru notița curentă: {{number}}.",
     "settings": "Setări revizii ale notițelor",
-    "snapshot_interval": "Intervalul de creare a reviziilor pentru notițe: {{seconds}}s."
+    "snapshot_interval": "Intervalul de creare a reviziilor pentru notițe: {{seconds}}s.",
+    "close": "Închide"
   },
   "revisions_button": {
     "note_revisions": "Revizii ale notiței"
@@ -1146,7 +1159,8 @@
     "sorting_criteria": "Criterii de ordonare",
     "sorting_direction": "Direcția de ordonare",
     "the_language_code_for_natural_sort": "Codul limbii pentru ordonarea naturală, e.g. „zn-CN” pentru chineză.",
-    "title": "titlu"
+    "title": "titlu",
+    "close": "Închide"
   },
   "spellcheck": {
     "available_language_codes_label": "Coduri de limbă disponibile:",
@@ -1259,7 +1273,8 @@
     "shrink_images": "Micșorează imaginile",
     "tooltip": "Dacă această opțiune este bifată, Trilium va încerca micșorarea imaginilor încărcate prin scalarea și optimizarea lor, aspect ce va putea afecta calitatea imaginilor. Dacă nu este bifată, imaginile vor fi încărcate fără nicio schimbare.",
     "upload": "Încărcare",
-    "upload_attachments_to_note": "Încarcă atașamentele la notiță"
+    "upload_attachments_to_note": "Încarcă atașamentele la notiță",
+    "close": "Închide"
   },
   "vacuum_database": {
     "button_text": "Compactează baza de date",
@@ -1555,7 +1570,8 @@
       "fixed": {
         "title": "Editor cu bară fixă",
         "description": "uneltele de editare vor apărea în tab-ul „Formatare” din panglică."
-      }
+      },
+      "multiline-toolbar": "Afișează bara de unelte pe mai multe rânduri dacă nu încape."
     }
   },
   "editor": {

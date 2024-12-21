@@ -176,7 +176,7 @@ const TAB_ROW_TPL = `
         bottom: 0;
         right: 0;
         left: 0;
-        z-index: 1000;
+        z-index: 50;
     }
     
     .tab-row-widget .note-tab .note-tab-close {
