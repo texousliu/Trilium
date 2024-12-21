@@ -6,6 +6,8 @@ import FAttribute from "../../entities/fattribute.js";
 
 interface ActionDefinition {
     script: string;
+    relationName: string;
+    targetNoteId: string;
 }
 
 export default abstract class AbstractBulkAction {

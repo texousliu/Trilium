@@ -146,7 +146,7 @@ function fullTextSearch($el: JQuery<HTMLElement>, options: Options){
     setTimeout(() => { options.fastSearch = true; }, 100);
 }
 
-function initNoteAutocomplete($el: JQuery<HTMLElement>, options: Options) {
+function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
     if ($el.hasClass("note-autocomplete-input") || utils.isMobile()) {
         // clear any event listener added in previous invocation of this function
         $el.off('autocomplete:noteselected');
