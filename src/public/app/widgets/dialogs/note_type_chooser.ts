@@ -1,5 +1,6 @@
+import { MenuCommandItem } from "../../menus/context_menu.js";
 import { t } from "../../services/i18n.js";
-import noteTypesService, { NoteType } from "../../services/note_types.js";
+import noteTypesService from "../../services/note_types.js";
 import BasicWidget from "../basic_widget.js";
 
 const TPL = `
@@ -9,7 +10,7 @@ const TPL = `
             /* note type chooser needs to be higher than other dialogs from which it is triggered, e.g. "add link"*/
             z-index: 1100 !important;
         }
-        
+
         .note-type-chooser-dialog .note-type-dropdown {
             position: relative;
             font-size: large;
@@ -67,7 +68,7 @@ export default class NoteTypeChooserDialog extends BasicWidget {
     }
 
     doRender() {
-        this.$widget = $(TPL);        
+        this.$widget = $(TPL);
         // TODO: Remove once we import bootstrap the right way
         //@ts-ignore
         this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
@@ -126,12 +127,13 @@ export default class NoteTypeChooserDialog extends BasicWidget {
         for (const noteType of noteTypes) {
             if (noteType.title === '----') {
                 this.$noteTypeDropdown.append($('<h6 class="dropdown-header">').append(t("note_type_chooser.templates")));
-            } else {          
+            } else {
+                const commandItem = (noteType as MenuCommandItem)
                 this.$noteTypeDropdown.append(
                     $('<a class="dropdown-item" tabindex="0">')
-                        .attr("data-note-type", (noteType as NoteType).type)
-                        .attr("data-template-note-id", (noteType as NoteType).templateNoteId || "")
-                        .append($("<span>").addClass((noteType as NoteType).uiIcon))
+                        .attr("data-note-type", commandItem.type)
+                        .attr("data-template-note-id", commandItem.templateNoteId || "")
+                        .append($("<span>").addClass(commandItem.uiIcon))
                         .append(` ${noteType.title}`)
                 );
             }

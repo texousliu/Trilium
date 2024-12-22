@@ -1,23 +1,10 @@
 import server from "./server.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
-
-interface NoteTypeSeparator {
-    title: "----"
-}
-
-export interface NoteType {
-    title: string;
-    command?: string;
-    type: string;
-    uiIcon: string;
-    templateNoteId?: string;
-}
-
-type NoteTypeItem = NoteType | NoteTypeSeparator;
+import { MenuItem } from "../menus/context_menu.js";
 
 async function getNoteTypeItems(command?: string) {
-    const items: NoteTypeItem[] = [
+    const items: MenuItem[] = [
         { title: t("note_types.text"), command: command, type: "text", uiIcon: "bx bx-note" },
         { title: t("note_types.code"), command: command, type: "code", uiIcon: "bx bx-code" },
         { title: t("note_types.saved-search"), command: command, type: "search", uiIcon: "bx bx-file-find" },
