@@ -3,13 +3,17 @@ import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import noteAutocompleteService from "../../services/note_autocomplete.js";
 import server from "../../services/server.js";
 import contextMenuService from "../../menus/context_menu.js";
-import attributeParser from "../../services/attribute_parser.js";
+import attributeParser, { Attribute } from "../../services/attribute_parser.js";
 import libraryLoader from "../../services/library_loader.js";
 import froca from "../../services/froca.js";
 import attributeRenderer from "../../services/attribute_renderer.js";
 import noteCreateService from "../../services/note_create.js";
 import attributeService from "../../services/attributes.js";
 import linkService from "../../services/link.js";
+import AttributeDetailWidget from "./attribute_detail.js";
+import { CommandData, EventData, EventListener, FilteredCommandNames } from "../../components/app_context.js";
+import FAttribute, { AttributeType } from "../../entities/fattribute.js";
+import FNote from "../../entities/fnote.js";
 
 const HELP_TEXT = `
 <p>${t("attribute_editor.help_text_body1")}</p>
@@ -31,55 +35,55 @@ const TPL = `
         overflow: auto;
         transition: opacity .1s linear;
     }
-    
+
     .attribute-list-editor.ck-content .mention {
         color: var(--muted-text-color) !important;
         background: transparent !important;
     }
-        
+
     .save-attributes-button {
         color: var(--muted-text-color);
-        position: absolute; 
+        position: absolute;
         bottom: 14px;
         right: 25px;
         cursor: pointer;
         border: 1px solid transparent;
         font-size: 130%;
     }
-    
+
     .add-new-attribute-button {
         color: var(--muted-text-color);
-        position: absolute; 
+        position: absolute;
         bottom: 13px;
-        right: 0; 
+        right: 0;
         cursor: pointer;
         border: 1px solid transparent;
         font-size: 130%;
     }
-    
+
     .add-new-attribute-button:hover, .save-attributes-button:hover {
         border: 1px solid var(--button-border-color);
         border-radius: var(--button-border-radius);
         background: var(--button-background-color);
         color: var(--button-text-color);
     }
-    
+
     .attribute-errors {
         color: red;
         padding: 5px 50px 0px 5px; /* large right padding to avoid buttons */
     }
     </style>
-    
+
     <div class="attribute-list-editor" tabindex="200"></div>
 
     <div class="bx bx-save save-attributes-button" title="${t("attribute_editor.save_attributes")}"></div>
     <div class="bx bx-plus add-new-attribute-button" title="${t("attribute_editor.add_a_new_attribute")}"></div>
-    
+
     <div class="attribute-errors" style="display: none;"></div>
 </div>
 `;
 
-const mentionSetup = {
+const mentionSetup: MentionConfig = {
     feeds: [
         {
             marker: '@',
@@ -96,7 +100,7 @@ const mentionSetup = {
         {
             marker: '#',
             feed: async queryText => {
-                const names = await server.get(`attribute-names/?type=label&query=${encodeURIComponent(queryText)}`);
+                const names = await server.get<string[]>(`attribute-names/?type=label&query=${encodeURIComponent(queryText)}`);
 
                 return names.map(name => {
                     return {
@@ -110,7 +114,7 @@ const mentionSetup = {
         {
             marker: '~',
             feed: async queryText => {
-                const names = await server.get(`attribute-names/?type=relation&query=${encodeURIComponent(queryText)}`);
+                const names = await server.get<string[]>(`attribute-names/?type=relation&query=${encodeURIComponent(queryText)}`);
 
                 return names.map(name => {
                     return {
@@ -179,8 +183,24 @@ const editorConfig = {
     mention: mentionSetup
 };
 
-export default class AttributeEditorWidget extends NoteContextAwareWidget {
-    constructor(attributeDetailWidget) {
+type AttributeCommandNames = FilteredCommandNames<CommandData>;
+
+export default class AttributeEditorWidget extends NoteContextAwareWidget implements
+    EventListener<"entitiesReloaded">,
+    EventListener<"addNewLabel">,
+    EventListener<"addNewRelation"> {
+
+    private attributeDetailWidget: AttributeDetailWidget;
+    private $editor!: JQuery<HTMLElement>;
+    private $addNewAttributeButton!: JQuery<HTMLElement>;
+    private $saveAttributesButton!: JQuery<HTMLElement>;
+    private $errors!: JQuery<HTMLElement>;
+
+    private textEditor!: TextEditor;
+    private lastUpdatedNoteId!: string | undefined;
+    private lastSavedContent!: string;
+
+    constructor(attributeDetailWidget: AttributeDetailWidget) {
         super();
 
         this.attributeDetailWidget = attributeDetailWidget;
@@ -212,8 +232,8 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
         this.$errors = this.$widget.find('.attribute-errors');
     }
 
-    addNewAttribute(e) {
-        contextMenuService.show({
+    addNewAttribute(e: JQuery.ClickEvent) {
+        contextMenuService.show<AttributeCommandNames>({
             x: e.pageX,
             y: e.pageY,
             orientation: 'left',
@@ -229,7 +249,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
     }
 
     // triggered from keyboard shortcut
-    async addNewLabelEvent({ntxId}) {
+    async addNewLabelEvent({ntxId}: EventData<"addNewLabel">) {
         if (this.isNoteContext(ntxId)) {
             await this.refresh();
 
@@ -238,7 +258,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
     }
 
     // triggered from keyboard shortcut
-    async addNewRelationEvent({ntxId}) {
+    async addNewRelationEvent({ntxId}: EventData<"addNewRelation">) {
         if (this.isNoteContext(ntxId)) {
             await this.refresh();
 
@@ -246,14 +266,17 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
         }
     }
 
-    async handleAddNewAttributeCommand(command) {
-        const attrs = this.parseAttributes();
+    async handleAddNewAttributeCommand(command: AttributeCommandNames | undefined) {
+        // TODO: Not sure what the relation between FAttribute[] and Attribute[] is.
+        const attrs = this.parseAttributes() as FAttribute[];
 
         if (!attrs) {
             return;
         }
 
-        let type, name, value;
+        let type: AttributeType;
+        let name;
+        let value;
 
         if (command === 'addNewLabel') {
             type = 'label';
@@ -275,6 +298,8 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
             return;
         }
 
+        // TODO: Incomplete type
+        //@ts-ignore
         attrs.push({
             type,
             name,
@@ -326,8 +351,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
     parseAttributes() {
         try {
             return attributeParser.lexAndParse(this.getPreprocessedData());
-        }
-        catch (e) {
+        } catch (e: any) {
             this.$errors.text(e.message).slideDown();
         }
     }
@@ -376,7 +400,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
         }
     }
 
-    async handleEditorClick(e) {
+    async handleEditorClick(e: JQuery.ClickEvent) {
         const pos = this.textEditor.model.document.selection.getFirstPosition();
 
         if (pos && pos.textNode && pos.textNode.data) {
@@ -395,7 +419,8 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
             let matchedAttr = null;
 
             for (const attr of parsedAttrs) {
-                if (clickIndex > attr.startIndex && clickIndex <= attr.endIndex) {
+                if (attr.startIndex && clickIndex > attr.startIndex &&
+                    attr.endIndex && clickIndex <= attr.endIndex) {
                     matchedAttr = attr;
                     break;
                 }
@@ -437,7 +462,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
         this.$editor.tooltip('show');
     }
 
-    getClickIndex(pos) {
+    getClickIndex(pos: TextPosition) {
         let clickIndex = pos.offset - pos.textNode.startOffset;
 
         let curNode = pos.textNode;
@@ -455,20 +480,19 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
         return clickIndex;
     }
 
-    async loadReferenceLinkTitle($el, href) {
+    async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string) {
         const {noteId} = linkService.parseNavigationStateFromUrl(href);
-        const note = await froca.getNote(noteId, true);
-
+        const note = noteId ? await froca.getNote(noteId, true) : null;
         const title = note ? note.title : '[missing]';
 
         $el.text(title);
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         await this.renderOwnedAttributes(note.getOwnedAttributes(), true);
     }
 
-    async renderOwnedAttributes(ownedAttributes, saved) {
+    async renderOwnedAttributes(ownedAttributes: FAttribute[], saved: boolean) {
         // attrs are not resorted if position changes after the initial load
         ownedAttributes.sort((a, b) => a.position - b.position);
 
@@ -487,16 +511,19 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
         }
     }
 
-    async createNoteForReferenceLink(title) {
-        const {note} = await noteCreateService.createNoteWithTypePrompt(this.notePath, {
-            activate: false,
-            title: title
-        });
+    async createNoteForReferenceLink(title: string) {
+        let result;
+        if (this.notePath) {
+            result = await noteCreateService.createNoteWithTypePrompt(this.notePath, {
+                activate: false,
+                title: title
+            });
+        }
 
-        return note.getBestNotePathString();
+        return result?.note?.getBestNotePathString();
     }
 
-    async updateAttributeList(attributes) {
+    async updateAttributeList(attributes: FAttribute[]) {
         await this.renderOwnedAttributes(attributes, false);
     }
 
@@ -510,9 +537,10 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget {
         } );
     }
 
-    entitiesReloadedEvent({loadResults}) {
+    entitiesReloadedEvent({loadResults}: EventData<"entitiesReloaded">) {
         if (loadResults.getAttributeRows(this.componentId).find(attr => attributeService.isAffecting(attr, this.note))) {
             this.refresh();
         }
     }
+
 }

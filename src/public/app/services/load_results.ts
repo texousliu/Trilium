@@ -5,9 +5,11 @@ interface BranchRow {
     componentId: string;
 }
 
-interface AttributeRow {
+export interface AttributeRow {
+    noteId?: string;
     attributeId: string;
     componentId: string;
+    isInheritable?: boolean;
 }
 
 interface RevisionRow {
@@ -79,9 +81,9 @@ export default class LoadResults {
             if (!this.noteIdToComponentId[noteId].includes(componentId)) {
                 this.noteIdToComponentId[noteId].push(componentId);
             }
-    
+
             this.componentIdToNoteIds[componentId] = this.componentIdToNoteIds[componentId] || [];
-    
+
             if (this.componentIdToNoteIds[componentId]) {
                 this.componentIdToNoteIds[componentId].push(noteId);
             }
@@ -110,11 +112,11 @@ export default class LoadResults {
         this.attributeRows.push({attributeId, componentId});
     }
 
-    getAttributeRows(componentId = 'none') {
+    getAttributeRows(componentId = 'none'): AttributeRow[] {
         return this.attributeRows
             .filter(row => row.componentId !== componentId)
             .map(row => this.getEntityRow("attributes", row.attributeId))
-            .filter(attr => !!attr);
+            .filter(attr => !!attr) as AttributeRow[];
     }
 
     addRevision(revisionId: string, noteId?: string, componentId?: string | null) {

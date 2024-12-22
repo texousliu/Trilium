@@ -19,7 +19,8 @@ import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 import { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
 import { Node } from "../services/tree.js";
-import FAttribute from "../entities/fattribute.js";
+import LoadResults from "../services/load_results.js";
+import { Attribute } from "../services/attribute_parser.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -36,7 +37,7 @@ interface BeforeUploadListener extends Component {
 /**
  * Base interface for the data/arguments for a given command (see {@link CommandMappings}).
  */
-interface CommandData {
+export interface CommandData {
     ntxId?: string;
 }
 
@@ -144,8 +145,13 @@ export type CommandMappings = {
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;
     updateAttributesList: {
-        attributes: FAttribute[];
+        attributes: Attribute[];
     };
+
+    addNewLabel: CommandData;
+    addNewRelation: CommandData;
+    addNewLabelDefinition: CommandData;
+    addNewRelationDefinition: CommandData;
 }
 
 type EventMappings = {
@@ -162,7 +168,18 @@ type EventMappings = {
         noteId: string;
         messages: string[];
     };
+    entitiesReloaded: {
+        loadResults: LoadResults
+    };
+    addNewLabel: CommandData;
+    addNewRelation: CommandData;
 }
+
+export type EventListener<T extends EventNames> = {
+    [key in T as `${key}Event`]: (data: EventData<T>) => void
+}
+
+export type EventData<T extends EventNames> = EventMappings[T];
 
 type CommandAndEventMappings = (CommandMappings & EventMappings);
 

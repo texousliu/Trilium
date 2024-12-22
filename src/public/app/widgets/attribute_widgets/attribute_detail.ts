@@ -12,6 +12,7 @@ import shortcutService from "../../services/shortcuts.js";
 import appContext from "../../components/app_context.js";
 import FAttribute from "../../entities/fattribute.js";
 import FNote, { FNoteRow } from "../../entities/fnote.js";
+import { Attribute } from "../../services/attribute_parser.js";
 
 const TPL = `
 <div class="attr-detail">
@@ -269,12 +270,12 @@ const ATTR_HELP: Record<string, Record<string, string>> = {
 };
 
 interface AttributeDetailOpts {
-    allAttributes: FAttribute[];
-    attribute: FAttribute;
+    allAttributes: Attribute[];
+    attribute: Attribute;
     isOwned: boolean;
     x: number;
     y: number;
-    focus: "name";
+    focus?: "name";
 }
 
 interface SearchRelatedResponse {
@@ -319,8 +320,8 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
     private $attrHelp!: JQuery<HTMLElement>;
 
     private relatedNotesSpacedUpdate!: SpacedUpdate;
-    private attribute!: FAttribute;
-    private allAttributes!: FAttribute[];
+    private attribute!: Attribute;
+    private allAttributes!: Attribute[];
     private attrType!: ReturnType<AttributeDetailWidget["getAttrType"]>;
 
     async refresh() {
@@ -475,7 +476,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
                 : (this.attrType === 'relation-definition' ? attribute.name.substr(9) : attribute.name);
 
         const definition = this.attrType?.endsWith('-definition')
-            ? promotedAttributeDefinitionParser.parse(attribute.value)
+            ? promotedAttributeDefinitionParser.parse(attribute.value || "")
             : {};
 
         if (this.attrType) {
@@ -492,8 +493,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         if (isOwned) {
             this.$attrIsOwnedBy.hide();
-        }
-        else {
+        } else if (attribute.noteId) {
             this.$attrIsOwnedBy
                 .show()
                 .empty()
@@ -543,7 +543,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         if (attribute.type === 'label') {
             this.$inputValue
-                .val(attribute.value)
+                .val(attribute.value || "")
                 .attr('readonly', disabledFn);
         }
         else if (attribute.type === 'relation') {
@@ -696,7 +696,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         }
     }
 
-    getAttrType(attribute: FAttribute) {
+    getAttrType(attribute: Attribute) {
         if (attribute.type === 'label') {
             if (attribute.name.startsWith('label:')) {
                 return "label-definition";

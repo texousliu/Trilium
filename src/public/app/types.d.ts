@@ -144,4 +144,89 @@ declare global {
         }
     };
     var MERMAID_ELK: MermaidLoader;
+
+    var CKEditor: {
+        BalloonEditor: {
+            create(el: HTMLElement, config: {
+                removePlugins?: string[];
+                toolbar: {
+                    items: any[];
+                },
+                placeholder: string;
+                mention: MentionConfig
+            })
+        }
+    };
+
+    type TextEditorElement = {};
+    interface Writer {
+        setAttribute(name: string, value: string, el: TextEditorElement);
+        createPositionAt(el: TextEditorElement, opt?: "end");
+        setSelection(pos: number);
+    }
+    interface TextNode {
+        previousSibling?: TextNode;
+        name: string;
+        data: string;
+        startOffset: number;
+        _attrs: {
+            get(key: string): {
+                length: number
+            }
+        }
+    }
+    interface TextPosition {
+        textNode: TextNode;
+        offset: number;
+    }
+    interface TextEditor {
+        model: {
+            document: {
+                on(event: string, cb: () => void);
+                getRoot(): TextEditorElement;
+                selection: {
+                    getFirstPosition(): undefined | TextPosition;
+                }
+            },
+            change(cb: (writer: Writer) => void)
+        },
+        editing: {
+            view: {
+                document: {
+                    on(event: string, cb: (event: {
+                        stop();
+                    }, data: {
+                        preventDefault();
+                    }) => void, opts?: {
+                        priority: "high"
+                    });
+                    getRoot(): TextEditorElement
+                },
+                change(cb: (writer: Writer) => void)
+            }
+        },
+        getData(): string;
+        setData(data: string): void;
+    }
+
+    interface MentionItem {
+        action?: string;
+        noteTitle?: string;
+        id: string;
+        name: string;
+        link?: string;
+        notePath?: string;
+        highlightedNotePathTitle?: string;
+    }
+
+    interface MentionConfig {
+        feeds: {
+            marker: string;
+            feed: (queryText: string) => MentionItem[] | Promise<MentionItem[]>;
+            itemRenderer?: (item: {
+                highlightedNotePathTitle: string
+            }) => void;
+            minimumCharacters: number;
+        }[];
+    }
 }

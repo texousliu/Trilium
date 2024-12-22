@@ -7,13 +7,14 @@ interface Token {
     endIndex: number;
 }
 
-interface Attribute {
+export interface Attribute {
     type: AttributeType;
     name: string;
     isInheritable: boolean;
     value?: string;
-    startIndex: number;
-    endIndex: number;
+    startIndex?: number;
+    endIndex?: number;
+    noteId?: string;
 }
 
 function lex(str: string) {

@@ -30,14 +30,14 @@ interface Options {
 }
 
 async function autocompleteSourceForCKEditor(queryText: string) {
-    return await new Promise((res, rej) => {
+    return await new Promise<MentionItem[]>((res, rej) => {
         autocompleteSource(queryText, rows => {
             res(rows.map(row => {
                 return {
                     action: row.action,
                     noteTitle: row.noteTitle,
                     id: `@${row.notePathTitle}`,
-                    name: row.notePathTitle,
+                    name: row.notePathTitle || "",
                     link: `#${row.notePath}`,
                     notePath: row.notePath,
                     highlightedNotePathTitle: row.highlightedNotePathTitle
@@ -62,7 +62,7 @@ async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void
             }]
         );
     }
-    
+
     const activeNoteId = appContext.tabManager.getActiveContextNoteId();
 
     let results: Suggestion[] = await server.get<Suggestion[]>(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${fastSearch}`);
@@ -135,7 +135,7 @@ function fullTextSearch($el: JQuery<HTMLElement>, options: Options){
     const searchString = $el.autocomplete('val') as unknown as string;
     if (options.fastSearch === false || searchString?.trim().length === 0) {
         return;
-    }    
+    }
     $el.trigger('focus');
     options.fastSearch = false;
     $el.autocomplete('val', '');
@@ -168,7 +168,7 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
 
     const $fullTextSearchButton = $("<button>")
         .addClass("input-group-text full-text-search-button bx bx-search")
-        .prop("title", `${t("note_autocomplete.full-text-search")} (Shift+Enter)`); 
+        .prop("title", `${t("note_autocomplete.full-text-search")} (Shift+Enter)`);
 
     const $goToSelectedNoteButton = $("<a>")
         .addClass("input-group-text go-to-selected-note-button bx bx-arrow-to-right");
@@ -218,7 +218,7 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
             fullTextSearch($el,options)
         }
     });
-    
+
     $el.autocomplete({
         ...autocompleteOptions,
         appendTo: document.querySelector('body'),
@@ -279,7 +279,7 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
             appContext.triggerCommand('searchNotes', { searchString });
             return;
         }
-        
+
         $el.setSelectedNotePath(suggestion.notePath);
         $el.setSelectedExternalLink(null);
 
