@@ -3,9 +3,9 @@ import server from "./server.js";
 
 interface InitOptions {
     $el: JQuery<HTMLElement>;
-    attributeType: AttributeType | (() => AttributeType);
+    attributeType?: AttributeType | (() => AttributeType);
     open: boolean;
-    nameCallback: () => string;
+    nameCallback?: () => string;
 }
 
 /**
@@ -54,7 +54,10 @@ async function initLabelValueAutocomplete({ $el, open, nameCallback }: InitOptio
         $el.autocomplete('destroy');
     }
 
-    const attributeName = nameCallback();
+    let attributeName = "";
+    if (nameCallback) {
+        attributeName = nameCallback();
+    }
 
     if (attributeName.trim() === "") {
         return;

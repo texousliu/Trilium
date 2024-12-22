@@ -10,6 +10,8 @@ import SpacedUpdate from "../../services/spaced_update.js";
 import utils from "../../services/utils.js";
 import shortcutService from "../../services/shortcuts.js";
 import appContext from "../../components/app_context.js";
+import FAttribute from "../../entities/fattribute.js";
+import FNote, { FNoteRow } from "../../entities/fnote.js";
 
 const TPL = `
 <div class="attr-detail">
@@ -27,42 +29,42 @@ const TPL = `
             overflow: auto;
             box-shadow: 10px 10px 93px -25px black;
         }
-        
+
         .attr-help td {
             color: var(--muted-text-color);
             padding: 5px;
         }
-        
+
         .related-notes-list {
             padding-left: 20px;
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        
+
         .attr-edit-table {
             width: 100%;
         }
-        
+
         .attr-edit-table th {
             text-align: left;
         }
-        
+
         .attr-edit-table td input {
             width: 100%;
         }
-        
+
         .close-attr-detail-button {
             font-size: x-large;
             cursor: pointer;
             position: relative;
             top: -2px;
         }
-        
+
         .attr-save-delete-button-container {
-            display: flex; 
+            display: flex;
             margin-top: 15px;
         }
-        
+
         .attr-detail input[readonly] {
             background-color: var(--accented-background-color) !important;
         }
@@ -70,7 +72,7 @@ const TPL = `
 
     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
         <h5 class="attr-detail-title">${t('attribute_detail.attr_detail_title')}</h5>
-        
+
         <span class="bx bx-x close-attr-detail-button" title="${t('attribute_detail.close_button_title')}"></span>
     </div>
 
@@ -154,10 +156,10 @@ const TPL = `
     </table>
 
     <div class="attr-save-delete-button-container">
-        <button class="btn btn-primary btn-sm attr-save-changes-and-close-button" 
+        <button class="btn btn-primary btn-sm attr-save-changes-and-close-button"
             style="flex-grow: 1; margin-right: 20px">
             ${t('attribute_detail.save_and_close')}</button>
-            
+
         <button class="btn btn-secondary btn-sm attr-delete-button">
             ${t('attribute_detail.delete')}</button>
     </div>
@@ -166,23 +168,23 @@ const TPL = `
         <br/>
 
         <h5 class="related-notes-tile">${t('attribute_detail.related_notes_title')}</h5>
-        
+
         <ul class="related-notes-list"></ul>
-        
+
         <div class="related-notes-more-notes">${t('attribute_detail.more_notes')}</div>
     </div>
 </div>`;
 
 const DISPLAYED_NOTES = 10;
 
-const ATTR_TITLES = {
+const ATTR_TITLES: Record<string, string> = {
     "label": t('attribute_detail.label'),
     "label-definition": t('attribute_detail.label_definition'),
     "relation": t('attribute_detail.relation'),
     "relation-definition": t('attribute_detail.relation_definition')
 };
 
-const ATTR_HELP = {
+const ATTR_HELP: Record<string, Record<string, string>> = {
     "label": {
         "disableVersioning": t('attribute_detail.disable_versioning'),
         "calendarRoot": t('attribute_detail.calendar_root'),
@@ -266,7 +268,61 @@ const ATTR_HELP = {
     }
 };
 
+interface AttributeDetailOpts {
+    allAttributes: FAttribute[];
+    attribute: FAttribute;
+    isOwned: boolean;
+    x: number;
+    y: number;
+    focus: "name";
+}
+
+interface SearchRelatedResponse {
+    // TODO: Deduplicate once we split client from server.
+    results: {
+        noteId: string;
+        notePathArray: string[];
+    }[];
+    count: number;
+}
+
 export default class AttributeDetailWidget extends NoteContextAwareWidget {
+
+    private $title!: JQuery<HTMLElement>;
+    private $inputName!: JQuery<HTMLElement>;
+    private $inputValue!: JQuery<HTMLElement>;
+    private $rowPromoted!: JQuery<HTMLElement>;
+    private $inputPromoted!: JQuery<HTMLElement>;
+    private $inputPromotedAlias!: JQuery<HTMLElement>;
+    private $inputMultiplicity!: JQuery<HTMLElement>;
+    private $inputInverseRelation!: JQuery<HTMLElement>;
+    private $inputLabelType!: JQuery<HTMLElement>;
+    private $inputTargetNote!: JQuery<HTMLElement>;
+    private $inputNumberPrecision!: JQuery<HTMLElement>;
+    private $inputInheritable!: JQuery<HTMLElement>;
+    private $rowValue!: JQuery<HTMLElement>;
+    private $rowMultiplicity!: JQuery<HTMLElement>;
+    private $rowLabelType!: JQuery<HTMLElement>;
+    private $rowNumberPrecision!: JQuery<HTMLElement>;
+    private $rowInverseRelation!: JQuery<HTMLElement>;
+    private $rowTargetNote!: JQuery<HTMLElement>;
+    private $rowPromotedAlias!: JQuery<HTMLElement>;
+    private $attrIsOwnedBy!: JQuery<HTMLElement>;
+    private $attrSaveDeleteButtonContainer!: JQuery<HTMLElement>;
+    private $closeAttrDetailButton!: JQuery<HTMLElement>;
+    private $saveAndCloseButton!: JQuery<HTMLElement>;
+    private $deleteButton!: JQuery<HTMLElement>;
+    private $relatedNotesContainer!: JQuery<HTMLElement>;
+    private $relatedNotesTitle!: JQuery<HTMLElement>;
+    private $relatedNotesList!: JQuery<HTMLElement>;
+    private $relatedNotesMoreNotes!: JQuery<HTMLElement>;
+    private $attrHelp!: JQuery<HTMLElement>;
+
+    private relatedNotesSpacedUpdate!: SpacedUpdate;
+    private attribute!: FAttribute;
+    private allAttributes!: FAttribute[];
+    private attrType!: ReturnType<AttributeDetailWidget["getAttrType"]>;
+
     async refresh() {
         // switching note/tab should close the widget
 
@@ -286,7 +342,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.$inputName = this.$widget.find('.attr-input-name');
         this.$inputName.on('input', ev => {
-            if (!ev.originalEvent?.isComposing) { // https://github.com/zadam/trilium/pull/3812
+            if (!(ev.originalEvent as KeyboardEvent)?.isComposing) { // https://github.com/zadam/trilium/pull/3812
                 this.userEditedAttribute();
             }
         });
@@ -296,7 +352,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$inputName.on('focus', () => {
             attributeAutocompleteService.initAttributeNameAutocomplete({
                 $el: this.$inputName,
-                attributeType: () => ['relation', 'relation-definition'].includes(this.attrType) ? 'relation' : 'label',
+                attributeType: () => ['relation', 'relation-definition'].includes(this.attrType || "") ? 'relation' : 'label',
                 open: true
             });
         });
@@ -304,7 +360,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$rowValue = this.$widget.find('.attr-row-value');
         this.$inputValue = this.$widget.find('.attr-input-value');
         this.$inputValue.on('input', ev => {
-            if (!ev.originalEvent?.isComposing) { // https://github.com/zadam/trilium/pull/3812
+            if (!(ev.originalEvent as KeyboardEvent)?.isComposing) { // https://github.com/zadam/trilium/pull/3812
                 this.userEditedAttribute();
             }
         });
@@ -314,7 +370,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
             attributeAutocompleteService.initLabelValueAutocomplete({
                 $el: this.$inputValue,
                 open: true,
-                nameCallback: () => this.$inputName.val()
+                nameCallback: () => String(this.$inputName.val())
             });
         });
 
@@ -341,7 +397,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$rowInverseRelation = this.$widget.find('.attr-row-inverse-relation');
         this.$inputInverseRelation = this.$widget.find('.attr-input-inverse-relation');
         this.$inputInverseRelation.on('input', ev => {
-            if (!ev.originalEvent?.isComposing) { // https://github.com/zadam/trilium/pull/3812
+            if (!(ev.originalEvent as KeyboardEvent)?.isComposing) { // https://github.com/zadam/trilium/pull/3812
                 this.userEditedAttribute();
             }
         });
@@ -403,7 +459,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         });
     }
 
-    async showAttributeDetail({ allAttributes, attribute, isOwned, x, y, focus }) {
+    async showAttributeDetail({ allAttributes, attribute, isOwned, x, y, focus }: AttributeDetailOpts) {
         if (!attribute) {
             this.hide();
 
@@ -418,11 +474,13 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
             this.attrType === 'label-definition' ? attribute.name.substr(6)
                 : (this.attrType === 'relation-definition' ? attribute.name.substr(9) : attribute.name);
 
-        const definition = this.attrType.endsWith('-definition')
+        const definition = this.attrType?.endsWith('-definition')
             ? promotedAttributeDefinitionParser.parse(attribute.value)
             : {};
 
-        this.$title.text(ATTR_TITLES[this.attrType]);
+        if (this.attrType) {
+            this.$title.text(ATTR_TITLES[this.attrType]);
+        }
 
         this.allAttributes = allAttributes;
         this.attribute = attribute;
@@ -444,51 +502,53 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
                 .append(await linkService.createLink(attribute.noteId))
         }
 
+        const disabledFn = (() => !isOwned ? "true" : undefined);
+
         this.$inputName
             .val(attrName)
-            .attr('readonly', () => !isOwned);
+            .attr('readonly', disabledFn);
 
         this.$rowValue.toggle(this.attrType === 'label');
         this.$rowTargetNote.toggle(this.attrType === 'relation');
 
-        this.$rowPromoted.toggle(['label-definition', 'relation-definition'].includes(this.attrType));
+        this.$rowPromoted.toggle(['label-definition', 'relation-definition'].includes(this.attrType || ""));
         this.$inputPromoted
             .prop("checked", !!definition.isPromoted)
-            .attr('disabled', () => !isOwned);
+            .attr('disabled', disabledFn);
 
         this.$rowPromotedAlias.toggle(!!definition.isPromoted);
         this.$inputPromotedAlias
-            .val(definition.promotedAlias)
-            .attr('disabled', () => !isOwned);
+            .val(definition.promotedAlias || "")
+            .attr('disabled', disabledFn);
 
-        this.$rowMultiplicity.toggle(['label-definition', 'relation-definition'].includes(this.attrType));
+        this.$rowMultiplicity.toggle(['label-definition', 'relation-definition'].includes(this.attrType || ""));
         this.$inputMultiplicity
-            .val(definition.multiplicity)
-            .attr('disabled', () => !isOwned);
+            .val(definition.multiplicity || "")
+            .attr('disabled', disabledFn);
 
         this.$rowLabelType.toggle(this.attrType === 'label-definition');
         this.$inputLabelType
-            .val(definition.labelType)
-            .attr('disabled', () => !isOwned);
+            .val(definition.labelType || "")
+            .attr('disabled', disabledFn);
 
         this.$rowNumberPrecision.toggle(this.attrType === 'label-definition' && definition.labelType === 'number');
         this.$inputNumberPrecision
-            .val(definition.numberPrecision)
-            .attr('disabled', () => !isOwned);
+            .val(definition.numberPrecision || "")
+            .attr('disabled', disabledFn);
 
         this.$rowInverseRelation.toggle(this.attrType === 'relation-definition');
         this.$inputInverseRelation
-            .val(definition.inverseRelation)
-            .attr('disabled', () => !isOwned);
+            .val(definition.inverseRelation || "")
+            .attr('disabled', disabledFn);
 
         if (attribute.type === 'label') {
             this.$inputValue
                 .val(attribute.value)
-                .attr('readonly', () => !isOwned);
+                .attr('readonly', disabledFn);
         }
         else if (attribute.type === 'relation') {
             this.$inputTargetNote
-                .attr('readonly', () => !isOwned)
+                .attr('readonly', disabledFn)
                 .val("")
                 .setSelectedNotePath("");
 
@@ -505,23 +565,27 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.$inputInheritable
             .prop("checked", !!attribute.isInheritable)
-            .attr('disabled', () => !isOwned);
+            .attr('disabled', disabledFn);
 
         this.updateHelp();
 
         this.toggleInt(true);
 
-        const offset = this.parent.$widget.offset();
+        const offset = this.parent?.$widget.offset() || { top: 0, left: 0 };
         const detPosition = this.getDetailPosition(x, offset);
+        const outerHeight = this.$widget.outerHeight();
+        const height = $(window).height();
 
-        this.$widget
-            .css("left", detPosition.left)
-            .css("right", detPosition.right)
-            .css("top", y - offset.top + 70)
-            .css("max-height",
-                this.$widget.outerHeight() + y > $(window).height() - 50
-                    ? $(window).height() - y - 50
-                    : 10000);
+        if (detPosition && outerHeight && height) {
+            this.$widget
+                .css("left", detPosition.left)
+                .css("right", detPosition.right)
+                .css("top", y - offset.top + 70)
+                .css("max-height",
+                    outerHeight + y > height - 50
+                        ? height - y - 50
+                        : 10000);
+        }
 
         if (focus === 'name') {
             this.$inputName
@@ -530,16 +594,21 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         }
     }
 
-    getDetailPosition(x, offset) {
-        let left = x - offset.left - this.$widget.outerWidth() / 2;
-        let right = "";
+    getDetailPosition(x: number, offset: { left: number }) {
+        const outerWidth = this.$widget.outerWidth();
+        if (!outerWidth) {
+            return null;
+        }
+
+        let left: number | string = x - offset.left - outerWidth / 2;
+        let right: number | string = "";
 
         if (left < 0) {
             left = 10;
         } else {
-            const rightEdge = left + this.$widget.outerWidth();
+            const rightEdge = left + outerWidth;
 
-            if (rightEdge > this.parent.$widget.outerWidth() - 10) {
+            if (rightEdge > outerWidth - 10) {
                 left = "";
                 right = 10;
             }
@@ -571,9 +640,10 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
     }
 
     updateHelp() {
-        const attrName = this.$inputName.val();
+        const attrName = String(this.$inputName.val());
 
-        if (this.attrType in ATTR_HELP && attrName in ATTR_HELP[this.attrType]) {
+        if (this.attrType && this.attrType in ATTR_HELP &&
+            attrName && attrName in ATTR_HELP[this.attrType]) {
             this.$attrHelp
                 .empty()
                 .append($("<td colspan=2>")
@@ -589,7 +659,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
     }
 
     async updateRelatedNotes() {
-        let { results, count } = await server.post('search-related', this.attribute);
+        let { results, count } = await server.post<SearchRelatedResponse>('search-related', this.attribute);
 
         for (const res of results) {
             res.noteId = res.notePathArray[res.notePathArray.length - 1];
@@ -626,7 +696,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         }
     }
 
-    getAttrType(attribute) {
+    getAttrType(attribute: FAttribute) {
         if (attribute.type === 'label') {
             if (attribute.name.startsWith('label:')) {
                 return "label-definition";
@@ -645,7 +715,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
     }
 
     updateAttributeInEditor() {
-        let attrName = this.$inputName.val();
+        let attrName = String(this.$inputName.val());
 
         if (!utils.isValidAttributeName(attrName)) {
             // invalid characters are simply ignored (from user perspective they are not even entered)
@@ -663,14 +733,14 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.attribute.name = attrName;
         this.attribute.isInheritable = this.$inputInheritable.is(":checked");
 
-        if (this.attrType.endsWith('-definition')) {
+        if (this.attrType?.endsWith('-definition')) {
             this.attribute.value = this.buildDefinitionValue();
         }
         else if (this.attrType === 'relation') {
-            this.attribute.value = this.$inputTargetNote.getSelectedNoteId();
+            this.attribute.value = this.$inputTargetNote.getSelectedNoteId() || "";
         }
         else {
-            this.attribute.value = this.$inputValue.val();
+            this.attribute.value = String(this.$inputValue.val());
         }
 
         this.triggerCommand('updateAttributeList', { attributes: this.allAttributes });
@@ -695,10 +765,10 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
             if (this.$inputLabelType.val() === 'number' && this.$inputNumberPrecision.val() !== '') {
                 props.push(`precision=${this.$inputNumberPrecision.val()}`);
             }
-        } else if (this.attrType === 'relation-definition' && this.$inputInverseRelation.val().trim().length > 0) {
+        } else if (this.attrType === 'relation-definition' && String(this.$inputInverseRelation.val())?.trim().length > 0) {
             const inverseRelationName = this.$inputInverseRelation.val();
 
-            props.push(`inverse=${utils.filterAttributeName(inverseRelationName)}`);
+            props.push(`inverse=${utils.filterAttributeName(String(inverseRelationName))}`);
         }
 
         this.$rowNumberPrecision.toggle(
@@ -714,7 +784,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.toggleInt(false);
     }
 
-    createLink(noteId) {
+    createLink(noteId: string) {
         return $("<a>", {
             href: `#root/${noteId}`,
             class: 'reference-link'

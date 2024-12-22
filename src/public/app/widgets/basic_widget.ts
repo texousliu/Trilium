@@ -13,7 +13,6 @@ class BasicWidget extends Component {
     private classes: string[];
     private childPositionCounter: number;
     private cssEl?: string;
-    protected $widget!: JQuery<HTMLElement>;
     _noteId!: string;
 
     constructor() {
@@ -49,9 +48,9 @@ class BasicWidget extends Component {
 
     /**
      * Conditionally adds the given components as children to this component.
-     * 
+     *
      * @param condition whether to add the components.
-     * @param components the components to be added as children to this component provided the condition is truthy. 
+     * @param components the components to be added as children to this component provided the condition is truthy.
      * @returns self for chaining.
      */
     optChild(condition: boolean, ...components: Component[]) {
@@ -74,7 +73,7 @@ class BasicWidget extends Component {
 
     /**
      * Sets the CSS attribute of the given name to the given value.
-     * 
+     *
      * @param name the name of the CSS attribute to set (e.g. `padding-left`).
      * @param value the value of the CSS attribute to set (e.g. `12px`).
      * @returns self for chaining.
@@ -86,7 +85,7 @@ class BasicWidget extends Component {
 
     /**
      * Sets the CSS attribute of the given name to the given value, but only if the condition provided is truthy.
-     * 
+     *
      * @param condition `true` in order to apply the CSS, `false` to ignore it.
      * @param name the name of the CSS attribute to set (e.g. `padding-left`).
      * @param value the value of the CSS attribute to set (e.g. `12px`).
@@ -129,7 +128,7 @@ class BasicWidget extends Component {
     render() {
         try {
             this.doRender();
-        } catch (e: any) {                        
+        } catch (e: any) {
             this.logRenderingError(e);
         }
 

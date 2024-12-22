@@ -12,6 +12,7 @@ import utils from '../services/utils.js';
  *   event / command is executed in all components - by simply awaiting the `triggerEvent()`.
  */
 export default class Component {
+    $widget!: JQuery<HTMLElement>;
     componentId: string;
     children: Component[];
     initialized: Promise<void> | null;
