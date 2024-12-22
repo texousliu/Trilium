@@ -33,7 +33,8 @@
     "search_note": "search for note by its name",
     "link_title_mirrors": "link title mirrors the note's current title",
     "link_title_arbitrary": "link title can be changed arbitrarily",
-    "link_title": "Link title"
+    "link_title": "Link title",
+    "button_add_link": "Add link <kbd>enter</kbd>"
   },
   "branch_prefix": {
     "edit_branch_prefix": "Edit branch prefix",

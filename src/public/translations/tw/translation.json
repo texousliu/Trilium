@@ -32,7 +32,8 @@
     "search_note": "按名稱搜尋筆記",
     "link_title_mirrors": "鏈接標題跟隨筆記標題變化",
     "link_title_arbitrary": "鏈接標題可隨意修改",
-    "link_title": "鏈接標題"
+    "link_title": "鏈接標題",
+    "button_add_link": "添加鏈接 <kbd>Enter</kbd>"
   },
   "branch_prefix": {
     "edit_branch_prefix": "編輯分支前綴",

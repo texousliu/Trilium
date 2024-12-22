@@ -32,7 +32,8 @@
     "search_note": "rechercher une note par son nom",
     "link_title_mirrors": "le titre du lien reflète le titre actuel de la note",
     "link_title_arbitrary": "le titre du lien peut être modifié arbitrairement",
-    "link_title": "Titre du lien"
+    "link_title": "Titre du lien",
+    "button_add_link": "Ajouter un lien <kbd>Entrée</kbd>"
   },
   "branch_prefix": {
     "edit_branch_prefix": "Modifier le préfixe de branche",

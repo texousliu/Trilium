@@ -32,7 +32,8 @@
     "search_note": "按名称搜索笔记",
     "link_title_mirrors": "链接标题跟随笔记标题变化",
     "link_title_arbitrary": "链接标题可随意修改",
-    "link_title": "链接标题"
+    "link_title": "链接标题",
+    "button_add_link": "添加链接 <kbd>回车</kbd>"
   },
   "branch_prefix": {
     "edit_branch_prefix": "编辑分支前缀",

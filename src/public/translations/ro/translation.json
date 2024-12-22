@@ -36,7 +36,8 @@
     "link_title_arbitrary": "titlul legăturii poate fi schimbat în mod arbitrar",
     "link_title_mirrors": "titlul legăturii corespunde titlul curent al notiței",
     "note": "Notiță",
-    "search_note": "căutați notița după nume"
+    "search_note": "căutați notița după nume",
+    "button_add_link": "Adaugă legătură <kbd>Enter</kbd>"
   },
   "add_relation": {
     "add_relation": "Adaugă relație",
