@@ -143,7 +143,7 @@
     "insertDateTime": "Gebe das aktuelle Datum und die aktuelle Uhrzeit an der Einfügemarke ein",
     "jumpToTreePane": "Springe zum Baumbereich und scrolle zur aktiven Notiz",
     "markdownAutoformat": "Markdown-ähnliche Autoformatierung",
-    "headings": "usw. gefolgt von Platz für Überschriften",
+    "headings": "<kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd> usw. gefolgt von Platz für Überschriften",
     "bulletList": "<kbd>*</kbd> oder <kbd>-</kbd> gefolgt von Leerzeichen für Aufzählungsliste",
     "numberedList": "<kbd>1.</kbd> oder <kbd>1)</kbd> gefolgt von Leerzeichen für nummerierte Liste",
     "blockQuote": "Beginne eine Zeile mit <kbd>></kbd> gefolgt von einem Leerzeichen für Blockzitate",

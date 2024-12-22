@@ -144,7 +144,7 @@
     "insertDateTime": "insérer la date et l'heure courante à la position du curseur",
     "jumpToTreePane": "passer au volet de l'arborescence et aller jusqu'à la note active",
     "markdownAutoformat": "Formatage automatique (comme Markdown)",
-    "headings": " etc. suivi d'un espace pour les titres",
+    "headings": "<kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd>  etc. suivi d'un espace pour les titres",
     "bulletList": "<kbd>*</kbd> ou <kbd>-</kbd> suivi d'un espace pour la liste à puces",
     "numberedList": "<kbd>1.</kbd> ou <kbd>1)</kbd> suivi d'un espace pour la liste numérotée",
     "blockQuote": "commencez une ligne avec <kbd>></kbd> suivi d'un espace pour les guillemets",

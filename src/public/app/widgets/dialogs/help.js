@@ -108,7 +108,7 @@ const TPL = `
 
                             <p class="card-text">
                                 <ul>
-                                    <li><kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd> ${t('help.headings')}</li>
+                                    <li>${t('help.headings')}</li>
                                     <li>${t('help.bulletList')}</li>
                                     <li>${t('help.numberedList')}</li>
                                     <li>${t('help.blockQuote')}</li>

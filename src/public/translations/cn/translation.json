@@ -148,7 +148,7 @@
     "insertDateTime": "在插入点插入当前日期和时间",
     "jumpToTreePane": "跳转到树面板并滚动到活动笔记",
     "markdownAutoformat": "类Markdown自动格式化",
-    "headings": " 等，后跟空格，自动转换为标题",
+    "headings": "<kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd>  等，后跟空格，自动转换为标题",
     "bulletList": "<kbd>*</kbd> 或 <kbd>-</kbd> 后跟空格，自动转换为项目符号列表",
     "numberedList": "<kbd>1.</kbd> or <kbd>1)</kbd> 后跟空格，自动转换为编号列表",
     "blockQuote": "一行以 <kbd>></kbd> 开头并后跟空格，自动转换为块引用",

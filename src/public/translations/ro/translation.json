@@ -612,7 +612,7 @@
     "fullDocumentation": "Instrucțiuni (documentația completă se regăsește <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
     "goBackForwards": "mergi înapoi/înainte în istoric",
     "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - mergi sus/jos în lista de notițe",
-    "headings": " etc. urmat de spațiu pentru titluri",
+    "headings": "<kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd>  etc. urmat de spațiu pentru titluri",
     "inPageSearch": "caută în interiorul paginii",
     "insertDateTime": "inserează data și timpul curente la poziția cursorului",
     "jumpToParentNote": "<kbd>Backspace</kbd> - sari la pagina părinte",

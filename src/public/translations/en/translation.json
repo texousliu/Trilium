@@ -153,7 +153,7 @@
     "insertDateTime": "insert current date and time at caret position",
     "jumpToTreePane": "jump away to the tree pane and scroll to active note",
     "markdownAutoformat": "Markdown-like autoformatting",
-    "headings": " etc. followed by space for headings",
+    "headings": "<kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd>  etc. followed by space for headings",
     "bulletList": "<kbd>*</kbd> or <kbd>-</kbd> followed by space for bullet list",
     "numberedList": "<kbd>1.</kbd> or <kbd>1)</kbd> followed by space for numbered list",
     "blockQuote": "start a line with <kbd>></kbd> followed by space for block quote",

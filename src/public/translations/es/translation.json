@@ -149,7 +149,7 @@
     "insertDateTime": "insertar la fecha y hora actuales en la posición del cursor",
     "jumpToTreePane": "saltar al panel de árbol y desplazarse hasta la nota activa",
     "markdownAutoformat": "Autoformato tipo Markdown",
-    "headings": " etc. seguido de espacio para encabezados",
+    "headings": "<kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd>  etc. seguido de espacio para encabezados",
     "bulletList": "<kbd>*</kbd> o <kbd>-</kbd> seguido de espacio para la lista de viñetas",
     "numberedList": "<kbd>1.</kbd> o <kbd>1)</kbd> seguido de espacio para la lista numerada",
     "blockQuote": "comience una línea con <kbd>></kbd> seguido de espacio para el bloque de cita",
