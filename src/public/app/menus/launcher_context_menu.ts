@@ -1,21 +1,28 @@
-import treeService from '../services/tree.js';
+import treeService, { Node } from '../services/tree.js';
 import froca from "../services/froca.js";
-import contextMenu from "./context_menu.js";
+import contextMenu, { MenuCommandItem, MenuItem } from "./context_menu.js";
 import dialogService from "../services/dialog.js";
 import server from "../services/server.js";
 import { t } from '../services/i18n.js';
+import type { SelectMenuItemEventListener } from '../components/events.js';
+import NoteTreeWidget from '../widgets/note_tree.js';
 
-export default class LauncherContextMenu {
-    /**
-     * @param {NoteTreeWidget} treeWidget
-     * @param {FancytreeNode} node
-     */
-    constructor(treeWidget, node) {
+interface ShowContext {
+    pageX: number;
+    pageY: number;
+}
+
+export default class LauncherContextMenu implements SelectMenuItemEventListener {
+
+    private treeWidget: NoteTreeWidget;
+    private node: Node;
+
+    constructor(treeWidget: NoteTreeWidget, node: Node) {
         this.treeWidget = treeWidget;
         this.node = node;
     }
 
-    async show(e) {
+    async show(e: ShowContext) {
         contextMenu.show({
             x: e.pageX,
             y: e.pageY,
@@ -24,17 +31,17 @@ export default class LauncherContextMenu {
         })
     }
 
-    async getMenuItems() {
-        const note = await froca.getNote(this.node.data.noteId);
+    async getMenuItems(): Promise<MenuItem[]> {
+        const note = this.node.data.noteId ? await froca.getNote(this.node.data.noteId) : null;
         const parentNoteId = this.node.getParent().data.noteId;
 
-        const isVisibleRoot = note.noteId === '_lbVisibleLaunchers';
-        const isAvailableRoot = note.noteId === '_lbAvailableLaunchers';
+        const isVisibleRoot = note?.noteId === '_lbVisibleLaunchers';
+        const isAvailableRoot = note?.noteId === '_lbAvailableLaunchers';
         const isVisibleItem = parentNoteId === '_lbVisibleLaunchers';
         const isAvailableItem = parentNoteId === '_lbAvailableLaunchers';
         const isItem = isVisibleItem || isAvailableItem;
-        const canBeDeleted = !note.noteId.startsWith("_"); // fixed notes can't be deleted
-        const canBeReset = !canBeDeleted && note.isLaunchBarConfig();
+        const canBeDeleted = !note?.noteId.startsWith("_"); // fixed notes can't be deleted
+        const canBeReset = !canBeDeleted && note?.isLaunchBarConfig();
 
         return [
             (isVisibleRoot || isAvailableRoot) ? { title: t("launcher_context_menu.add-note-launcher"), command: 'addNoteLauncher', uiIcon: "bx bx-note" } : null,
@@ -49,14 +56,18 @@ export default class LauncherContextMenu {
 
             { title: `${t("launcher_context_menu.duplicate-launcher")} <kbd data-command="duplicateSubtree">`, command: "duplicateSubtree", uiIcon: "bx bx-outline", enabled: isItem },
             { title: `${t("launcher_context_menu.delete")} <kbd data-command="deleteNotes"></kbd>`, command: "deleteNotes", uiIcon: "bx bx-trash destructive-action-icon", enabled: canBeDeleted },
-           
+
             { title: "----" },
-           
+
             { title: t("launcher_context_menu.reset"), command: "resetLauncher", uiIcon: "bx bx-reset destructive-action-icon", enabled: canBeReset}
         ].filter(row => row !== null);
     }
 
-    async selectMenuItemHandler({command}) {
+    async selectMenuItemHandler({command}: MenuCommandItem) {
+        if (!command) {
+            return;
+        }
+
         if (command === 'resetLauncher') {
             const confirmed = await dialogService.confirm(t("launcher_context_menu.reset_launcher_confirm", { title: this.node.title }));
 

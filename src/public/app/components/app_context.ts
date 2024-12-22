@@ -24,7 +24,7 @@ interface Layout {
 }
 
 interface RootWidget extends Component {
-    render: () => JQuery<HTMLElement>;    
+    render: () => JQuery<HTMLElement>;
 }
 
 interface BeforeUploadListener extends Component {
@@ -61,7 +61,7 @@ type CommandMappings = {
     showConfirmDialog: ConfirmWithMessageOptions;
     openNewNoteSplit: CommandData & {
         ntxId: string;
-        notePath: string;   
+        notePath: string;
     };
     executeInActiveNoteDetailWidget: CommandData & {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
@@ -69,11 +69,12 @@ type CommandMappings = {
     addTextToActiveEditor: CommandData & {
         text: string;
     };
-    
+
     importMarkdownInline: CommandData;
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     closeProtectedSessionPasswordDialog: CommandData;
+    resetLauncher: CommandData;
 }
 
 type EventMappings = {

@@ -5,6 +5,7 @@ import hoistedNoteService from '../services/hoisted_note.js';
 import appContext from "../components/app_context.js";
 
 export interface Node {
+    title: string;
     getParent(): Node;
     getChildren(): Node[];
     folder: boolean;
@@ -85,8 +86,8 @@ async function resolveNotePathToSegments(notePath: string, hoistedNoteId = 'root
                 if (logErrors) {
                     const parent = froca.getNoteFromCache(parentNoteId);
 
-                    console.debug(utils.now(), `Did not find parent ${parentNoteId} (${parent ? parent.title : 'n/a'}) 
-                        for child ${childNoteId} (${child.title}), available parents: ${parents.map(p => `${p.noteId} (${p.title})`)}. 
+                    console.debug(utils.now(), `Did not find parent ${parentNoteId} (${parent ? parent.title : 'n/a'})
+                        for child ${childNoteId} (${child.title}), available parents: ${parents.map(p => `${p.noteId} (${p.title})`)}.
                         You can ignore this message as it is mostly harmless.`);
                 }
 
@@ -294,7 +295,7 @@ async function getNoteTitleWithPathAsSuffix(notePath: string) {
 
 
     $titleWithPath.append(formatNotePath(path));
-    
+
     return $titleWithPath;
 }
 
@@ -302,12 +303,12 @@ function formatNotePath(path: string[]) {
     const $notePath = $('<span class="note-path">');
 
     if (path.length > 0) {
-        
+
         $notePath.append($(`<span class="path-bracket"> (</span>)`));
 
         for (let segmentIndex = 0; segmentIndex < path.length; segmentIndex++) {
             $notePath.append($(`<span>`).text(path[segmentIndex]));
-            
+
             if (segmentIndex < path.length - 1) {
                 $notePath.append($(`<span class="path-delimiter">`).text(" / "));
             }
