@@ -7,11 +7,6 @@ import { t } from '../services/i18n.js';
 import type { SelectMenuItemEventListener } from '../components/events.js';
 import NoteTreeWidget from '../widgets/note_tree.js';
 
-interface ShowContext {
-    pageX: number;
-    pageY: number;
-}
-
 export default class LauncherContextMenu implements SelectMenuItemEventListener {
 
     private treeWidget: NoteTreeWidget;
@@ -22,7 +17,7 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener 
         this.node = node;
     }
 
-    async show(e: ShowContext) {
+    async show(e: PointerEvent) {
         contextMenu.show({
             x: e.pageX,
             y: e.pageY,

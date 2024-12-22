@@ -27,7 +27,7 @@ async function getLinkIcon(noteId: string, viewMode: ViewMode | undefined) {
 
 type ViewMode = "default" | "source" | "attachments" | string;
 
-interface ViewScope {
+export interface ViewScope {
     viewMode?: ViewMode;
     attachmentId?: string;
 }
@@ -286,7 +286,7 @@ function goToLinkExt(evt: MouseEvent, hrefLink: string | undefined, $link: JQuer
                 const electron = utils.dynamicRequire('electron');
                 electron.shell.openPath(hrefLink);
             } else {
-                // Enable protocols supported by CKEditor 5 to be clickable. 
+                // Enable protocols supported by CKEditor 5 to be clickable.
                 // Refer to `allowedProtocols` in https://github.com/TriliumNext/trilium-ckeditor5/blob/main/packages/ckeditor5-build-balloon-block/src/ckeditor.ts.
                 // And be consistent with `allowedSchemes` in `src\services\html_sanitizer.ts`
                 const allowedSchemes = [
@@ -305,7 +305,7 @@ function goToLinkExt(evt: MouseEvent, hrefLink: string | undefined, $link: JQuer
     return true;
 }
 
-function linkContextMenu(e: Event) {
+function linkContextMenu(e: PointerEvent) {
     const $link = $(e.target as any).closest("a");
     const url = $link.attr("href") || $link.attr("data-href");
 
@@ -334,7 +334,7 @@ async function loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | n
         console.warn("Missing note ID.");
         return;
     }
-    
+
     const note = await froca.getNote(noteId, true);
 
     if (note) {
@@ -403,6 +403,8 @@ $(document).on('click', "a", goToLink);
 // TODO: Check why the event is not supported.
 //@ts-ignore
 $(document).on('auxclick', "a", goToLink); // to handle the middle button
+// TODO: Check why the event is not supported.
+//@ts-ignore
 $(document).on('contextmenu', 'a', linkContextMenu);
 $(document).on('dblclick', "a", e => {
     e.preventDefault();

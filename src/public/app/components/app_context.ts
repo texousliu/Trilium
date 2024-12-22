@@ -8,7 +8,7 @@ import zoomComponent from "./zoom.js";
 import TabManager from "./tab_manager.js";
 import Component from "./component.js";
 import keyboardActionsService from "../services/keyboard_actions.js";
-import linkService from "../services/link.js";
+import linkService, { ViewScope } from "../services/link.js";
 import MobileScreenSwitcherExecutor from "./mobile_screen_switcher.js";
 import MainTreeExecutors from "./main_tree_executors.js";
 import toast from "../services/toast.js";
@@ -62,7 +62,14 @@ type CommandMappings = {
     openNewNoteSplit: CommandData & {
         ntxId: string;
         notePath: string;
+        hoistedNoteId?: string;
+        viewScope?: ViewScope;
     };
+    openInWindow: CommandData & {
+        notePath: string;
+        hoistedNoteId: string;
+        viewScope: ViewScope;
+    }
     executeInActiveNoteDetailWidget: CommandData & {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
     };
