@@ -120,7 +120,7 @@
     "collapseWholeTree": "折叠整个笔记树",
     "collapseSubTree": "折叠子树",
     "tabShortcuts": "标签快捷键",
-    "newTabNoteLink": "在笔记链接上使用CTRL+点击（或中键点击）在新标签中打开笔记",
+    "newTabNoteLink": "<kbd>CTRL+click</kbd> - 在笔记链接上使用CTRL+点击（或中键点击）在新标签中打开笔记",
     "onlyInDesktop": "仅在桌面版（电子构建）中",
     "openEmptyTab": "打开空白标签页",
     "closeActiveTab": "关闭活动标签页",

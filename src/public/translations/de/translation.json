@@ -115,7 +115,7 @@
     "collapseWholeTree": "Reduziere den gesamten Notizbaum",
     "collapseSubTree": "Teilbaum einklappen",
     "tabShortcuts": "Tab-Tastenkürzel",
-    "newTabNoteLink": "(oder mittlerer Mausklick) auf den Notizlink öffnet die Notiz in einem neuen Tab",
+    "newTabNoteLink": "<kbd>Strg+Klick</kbd> - (oder mittlerer Mausklick) auf den Notizlink öffnet die Notiz in einem neuen Tab",
     "onlyInDesktop": "Nur im Desktop (Electron Build)",
     "openEmptyTab": "Leeren Tab öffnen",
     "closeActiveTab": "Aktiven Tab schließen",

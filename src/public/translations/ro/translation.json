@@ -622,7 +622,7 @@
     "moveNoteUpHierarchy": "mută notița mai sus în ierarhie",
     "movingCloningNotes": "Mutarea/clonarea notițelor",
     "multiSelectNote": "selectează multiplu notița de sus/jos",
-    "newTabNoteLink": "(sau clic mijlociu) pe o legătură către o notiță va deschide notița într-un tab nou",
+    "newTabNoteLink": "<kbd>CTRL+clic</kbd> - (sau clic mijlociu) pe o legătură către o notiță va deschide notița într-un tab nou",
     "notSet": "nesetat",
     "noteNavigation": "Navigarea printre notițe",
     "numberedList": "<kbd>1.</kbd> sau <kbd>1)</kbd> urmat de spațiu pentru o listă numerotată",

@@ -37,7 +37,7 @@ const TPL = `
 
                             <p class="card-text">
                             <ul>
-                                <li><kbd>CTRL+click</kbd> ${t('help.newTabNoteLink')}</li>
+                                <li>${t('help.newTabNoteLink')}</li>
                             </ul>
 
                             ${t('help.onlyInDesktop')}:

@@ -120,7 +120,7 @@
     "collapseWholeTree": "折疊整個筆記樹",
     "collapseSubTree": "折疊子樹",
     "tabShortcuts": "標籤快捷鍵",
-    "newTabNoteLink": "在筆記鏈接上使用CTRL+點擊（或中鍵點擊）在新標籤中打開筆記",
+    "newTabNoteLink": "<kbd>CTRL+click</kbd> - 在筆記鏈接上使用CTRL+點擊（或中鍵點擊）在新標籤中打開筆記",
     "onlyInDesktop": "僅在桌面版（電子構建）中",
     "openEmptyTab": "打開空白標籤頁",
     "closeActiveTab": "關閉活動標籤頁",

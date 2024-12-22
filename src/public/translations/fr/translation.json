@@ -116,7 +116,7 @@
     "collapseWholeTree": "réduire tout l'arbre des notes",
     "collapseSubTree": "réduire le sous-arbre",
     "tabShortcuts": "Raccourcis des onglets",
-    "newTabNoteLink": "(ou clic central de la souris) sur le lien de la note ouvre la note dans un nouvel onglet",
+    "newTabNoteLink": "<kbd>CTRL+clic</kbd> - (ou clic central de la souris) sur le lien de la note ouvre la note dans un nouvel onglet",
     "onlyInDesktop": "Uniquement sur ordinateur (version Electron)",
     "openEmptyTab": "ouvrir un onglet vide",
     "closeActiveTab": "fermer l'onglet actif",

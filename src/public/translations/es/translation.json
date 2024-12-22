@@ -121,7 +121,7 @@
     "collapseWholeTree": "colapsar todo el árbol de notas",
     "collapseSubTree": "colapsar subárbol",
     "tabShortcuts": "Atajos de pestañas",
-    "newTabNoteLink": "(o clic central del mouse) en el enlace de la nota abre la nota en una nueva pestaña",
+    "newTabNoteLink": "<kbd>CTRL+clic</kbd> - (o clic central del mouse) en el enlace de la nota abre la nota en una nueva pestaña",
     "onlyInDesktop": "Solo en escritorio (compilación con Electron)",
     "openEmptyTab": "abrir pestaña vacía",
     "closeActiveTab": "cerrar pestaña activa",
