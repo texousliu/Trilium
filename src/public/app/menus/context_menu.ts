@@ -15,17 +15,18 @@ interface MenuSeparatorItem {
 export interface MenuCommandItem {
     title: string;
     command?: string;
-    type: string;
-    uiIcon: string;
+    type?: string;
+    uiIcon?: string;
     templateNoteId?: string;
     enabled?: boolean;
     handler?: MenuHandler;
     items?: MenuItem[];
     shortcut?: string;
+    spellingSuggestion?: string;
 }
 
 export type MenuItem = MenuCommandItem | MenuSeparatorItem;
-export type MenuHandler = (item: MenuItem, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
+export type MenuHandler = (item: MenuCommandItem, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
 
 class ContextMenu {
 

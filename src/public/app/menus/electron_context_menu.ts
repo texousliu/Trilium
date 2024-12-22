@@ -3,12 +3,14 @@ import options from "../services/options.js";
 import zoomService from "../components/zoom.js";
 import contextMenu from "./context_menu.js";
 import { t } from "../services/i18n.js";
+import type { BrowserWindow } from "electron";
 
 function setupContextMenu() {
     const electron = utils.dynamicRequire('electron');
 
     const remote = utils.dynamicRequire('@electron/remote');
-    const {webContents} = remote.getCurrentWindow();
+    // FIXME: Remove typecast once Electron is properly integrated.
+    const {webContents} = remote.getCurrentWindow() as BrowserWindow;
 
     webContents.on('context-menu', (event, params) => {
         const {editFlags} = params;
@@ -97,7 +99,7 @@ function setupContextMenu() {
 
             // Read the search engine from the options and fallback to DuckDuckGo if the option is not set.
             const customSearchEngineName = options.get("customSearchEngineName");
-            const customSearchEngineUrl = options.get("customSearchEngineUrl");
+            const customSearchEngineUrl = options.get("customSearchEngineUrl") as string;
             let searchEngineName;
             let searchEngineUrl;
             if (customSearchEngineName && customSearchEngineUrl) {
@@ -132,7 +134,7 @@ function setupContextMenu() {
             y: params.y / zoomLevel,
             items,
             selectMenuItemHandler: ({command, spellingSuggestion}) => {
-                if (command === 'replaceMisspelling') {
+                if (command === 'replaceMisspelling' && spellingSuggestion) {
                     webContents.insertText(spellingSuggestion);
                 }
             }

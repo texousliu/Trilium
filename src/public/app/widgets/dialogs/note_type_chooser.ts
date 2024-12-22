@@ -131,9 +131,9 @@ export default class NoteTypeChooserDialog extends BasicWidget {
                 const commandItem = (noteType as MenuCommandItem)
                 this.$noteTypeDropdown.append(
                     $('<a class="dropdown-item" tabindex="0">')
-                        .attr("data-note-type", commandItem.type)
+                        .attr("data-note-type", commandItem.type || "")
                         .attr("data-template-note-id", commandItem.templateNoteId || "")
-                        .append($("<span>").addClass(commandItem.uiIcon))
+                        .append($("<span>").addClass(commandItem.uiIcon || ""))
                         .append(` ${noteType.title}`)
                 );
             }
