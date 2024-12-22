@@ -1,4 +1,4 @@
-export function trimIndentation(strings: TemplateStringsArray) {   
+export function trimIndentation(strings: TemplateStringsArray) {
     const str = strings.toString();
 
     // Count the number of spaces on the first line.
@@ -6,10 +6,10 @@ export function trimIndentation(strings: TemplateStringsArray) {
     while (str.charAt(numSpaces) == ' ' && numSpaces < str.length) {
         numSpaces++;
     }
-    
-    // Trim the indentation of the first line in all the lines.   
+
+    // Trim the indentation of the first line in all the lines.
     const lines = str.split("\n");
-    const output = []; 
+    const output = [];
     for (let i=0; i<lines.length; i++) {
         let numSpacesLine = 0;
         while (str.charAt(numSpacesLine) == ' ' && numSpacesLine < str.length) {

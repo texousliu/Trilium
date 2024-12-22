@@ -170,7 +170,7 @@ class BAttachment extends AbstractBeccaEntity<BAttachment> {
 
         if (this.role === 'image' && parentNote.type === 'text') {
             const origContent = parentNote.getContent();
-            
+
             if (typeof origContent !== "string") {
                 throw new Error(`Note with ID '${note.noteId} has a text type but non-string content.`);
             }
@@ -201,8 +201,8 @@ class BAttachment extends AbstractBeccaEntity<BAttachment> {
 
         if (this.position === undefined || this.position === null) {
             this.position = 10 + sql.getValue<number>(`SELECT COALESCE(MAX(position), 0)
-                                                       FROM attachments
-                                                       WHERE ownerId = ?`, [this.noteId]);
+                                                        FROM attachments
+                                                        WHERE ownerId = ?`, [this.noteId]);
         }
 
         this.dateModified = dateUtils.localNowDateTime();
