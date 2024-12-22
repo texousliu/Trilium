@@ -1,39 +1,39 @@
 import { CommandNames } from '../components/app_context.js';
 import keyboardActionService from '../services/keyboard_actions.js';
 
-interface ContextMenuOptions {
+interface ContextMenuOptions<T extends CommandNames> {
     x: number;
     y: number;
     orientation?: "left";
-    selectMenuItemHandler: MenuHandler;
-    items: MenuItem[];
+    selectMenuItemHandler: MenuHandler<T>;
+    items: MenuItem<T>[];
 }
 
 interface MenuSeparatorItem {
     title: "----"
 }
 
-export interface MenuCommandItem {
+export interface MenuCommandItem<T extends CommandNames> {
     title: string;
-    command?: CommandNames;
+    command?: T;
     type?: string;
     uiIcon?: string;
     templateNoteId?: string;
     enabled?: boolean;
-    handler?: MenuHandler;
-    items?: MenuItem[];
+    handler?: MenuHandler<T>;
+    items?: MenuItem<T>[] | null;
     shortcut?: string;
     spellingSuggestion?: string;
 }
 
-export type MenuItem = MenuCommandItem | MenuSeparatorItem;
-export type MenuHandler = (item: MenuCommandItem, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
+export type MenuItem<T extends CommandNames> = MenuCommandItem<T> | MenuSeparatorItem;
+export type MenuHandler<T extends CommandNames> = (item: MenuCommandItem<T>, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
 
 class ContextMenu {
 
     private $widget!: JQuery<HTMLElement>;
     private dateContextMenuOpenedMs: number;
-    private options?: ContextMenuOptions;
+    private options?: ContextMenuOptions<any>;
 
     constructor() {
         this.$widget = $("#context-menu-container");
@@ -43,7 +43,7 @@ class ContextMenu {
         $(document).on('click', () => this.hide());
     }
 
-    async show(options: ContextMenuOptions) {
+    async show<T extends CommandNames>(options: ContextMenuOptions<T>) {
         this.options = options;
 
         if (this.$widget.hasClass("show")) {
@@ -119,7 +119,7 @@ class ContextMenu {
         }).addClass("show");
     }
 
-    addItems($parent: JQuery<HTMLElement>, items: MenuItem[]) {
+    addItems($parent: JQuery<HTMLElement>, items: MenuItem<any>[]) {
         for (const item of items) {
             if (!item) {
                 continue;

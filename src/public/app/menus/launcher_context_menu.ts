@@ -6,8 +6,11 @@ import server from "../services/server.js";
 import { t } from '../services/i18n.js';
 import type { SelectMenuItemEventListener } from '../components/events.js';
 import NoteTreeWidget from '../widgets/note_tree.js';
+import { FilteredCommandNames, ContextMenuCommandData } from '../components/app_context.js';
 
-export default class LauncherContextMenu implements SelectMenuItemEventListener {
+type LauncherCommandNames = FilteredCommandNames<ContextMenuCommandData>;
+
+export default class LauncherContextMenu implements SelectMenuItemEventListener<LauncherCommandNames> {
 
     private treeWidget: NoteTreeWidget;
     private node: Node;
@@ -26,7 +29,7 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener 
         })
     }
 
-    async getMenuItems(): Promise<MenuItem[]> {
+    async getMenuItems(): Promise<MenuItem<LauncherCommandNames>[]> {
         const note = this.node.data.noteId ? await froca.getNote(this.node.data.noteId) : null;
         const parentNoteId = this.node.getParent().data.noteId;
 
@@ -38,7 +41,7 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener 
         const canBeDeleted = !note?.noteId.startsWith("_"); // fixed notes can't be deleted
         const canBeReset = !canBeDeleted && note?.isLaunchBarConfig();
 
-        const items: (MenuItem | null)[] = [
+        const items: (MenuItem<LauncherCommandNames> | null)[] = [
             (isVisibleRoot || isAvailableRoot) ? { title: t("launcher_context_menu.add-note-launcher"), command: 'addNoteLauncher', uiIcon: "bx bx-note" } : null,
             (isVisibleRoot || isAvailableRoot) ? { title: t("launcher_context_menu.add-script-launcher"), command: 'addScriptLauncher', uiIcon: "bx bx-code-curly" } : null,
             (isVisibleRoot || isAvailableRoot) ? { title: t("launcher_context_menu.add-custom-widget"), command: 'addWidgetLauncher', uiIcon: "bx bx-customize" } : null,
@@ -59,7 +62,7 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener 
         return items.filter(row => row !== null);
     }
 
-    async selectMenuItemHandler({command}: MenuCommandItem) {
+    async selectMenuItemHandler({command}: MenuCommandItem<LauncherCommandNames>) {
         if (!command) {
             return;
         }

@@ -2,10 +2,12 @@ import server from "./server.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
 import { MenuItem } from "../menus/context_menu.js";
-import { CommandNames } from "../components/app_context.js";
+import { ContextMenuCommandData, FilteredCommandNames } from "../components/app_context.js";
 
-async function getNoteTypeItems(command?: CommandNames) {
-    const items: MenuItem[] = [
+type NoteTypeCommandNames = FilteredCommandNames<ContextMenuCommandData>;
+
+async function getNoteTypeItems(command?: NoteTypeCommandNames) {
+    const items: MenuItem<NoteTypeCommandNames>[] = [
         { title: t("note_types.text"), command, type: "text", uiIcon: "bx bx-note" },
         { title: t("note_types.code"), command, type: "code", uiIcon: "bx bx-code" },
         { title: t("note_types.saved-search"), command, type: "search", uiIcon: "bx bx-file-find" },

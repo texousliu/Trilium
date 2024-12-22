@@ -1,3 +1,4 @@
+import { CommandNames } from "../../components/app_context.js";
 import { MenuCommandItem } from "../../menus/context_menu.js";
 import { t } from "../../services/i18n.js";
 import noteTypesService from "../../services/note_types.js";
@@ -128,7 +129,7 @@ export default class NoteTypeChooserDialog extends BasicWidget {
             if (noteType.title === '----') {
                 this.$noteTypeDropdown.append($('<h6 class="dropdown-header">').append(t("note_type_chooser.templates")));
             } else {
-                const commandItem = (noteType as MenuCommandItem)
+                const commandItem = (noteType as MenuCommandItem<CommandNames>)
                 this.$noteTypeDropdown.append(
                     $('<a class="dropdown-item" tabindex="0">')
                         .attr("data-note-type", commandItem.type || "")

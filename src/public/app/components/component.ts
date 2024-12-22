@@ -1,4 +1,5 @@
 import utils from '../services/utils.js';
+import { CommandMappings, CommandNames } from './app_context.js';
 
 /**
  * Abstract class for all components in the Trilium's frontend.
@@ -84,7 +85,8 @@ export default class Component {
         return promises.length > 0 ? Promise.all(promises) : null;
     }
 
-    triggerCommand(name: string, data = {}): Promise<unknown> | undefined | null {
+    triggerCommand<K extends CommandNames>(name: string, _data?: CommandMappings[K]): Promise<unknown> | undefined | null {
+        const data = _data || {};
         const fun = (this as any)[`${name}Command`];
 
         if (fun) {

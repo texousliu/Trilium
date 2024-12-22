@@ -4,6 +4,7 @@ import zoomService from "../components/zoom.js";
 import contextMenu, { MenuItem } from "./context_menu.js";
 import { t } from "../services/i18n.js";
 import type { BrowserWindow } from "electron";
+import { CommandNames } from "../components/app_context.js";
 
 function setupContextMenu() {
     const electron = utils.dynamicRequire('electron');
@@ -18,7 +19,7 @@ function setupContextMenu() {
         const isMac = process.platform === "darwin";
         const platformModifier = isMac ? 'Meta' : 'Ctrl';
 
-        const items: MenuItem[] = [];
+        const items: MenuItem<CommandNames>[] = [];
 
         if (params.misspelledWord) {
             for (const suggestion of params.dictionarySuggestions) {

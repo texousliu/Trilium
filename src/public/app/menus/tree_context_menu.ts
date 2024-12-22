@@ -3,7 +3,7 @@ import froca from "../services/froca.js";
 import clipboard from '../services/clipboard.js';
 import noteCreateService from "../services/note_create.js";
 import contextMenu, { MenuCommandItem, MenuItem } from "./context_menu.js";
-import appContext from "../components/app_context.js";
+import appContext, { ContextMenuCommandData, FilteredCommandNames } from "../components/app_context.js";
 import noteTypesService from "../services/note_types.js";
 import server from "../services/server.js";
 import toastService from "../services/toast.js";
@@ -18,7 +18,9 @@ interface ConvertToAttachmentResponse {
     attachment?: FAttachment;
 }
 
-export default class TreeContextMenu implements SelectMenuItemEventListener {
+type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData>;
+
+export default class TreeContextMenu implements SelectMenuItemEventListener<TreeCommandNames> {
 
     private treeWidget: NoteTreeWidget;
     private node: Node;
@@ -37,7 +39,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener {
         })
     }
 
-    async getMenuItems(): Promise<MenuItem[]> {
+    async getMenuItems(): Promise<MenuItem<TreeCommandNames>[]> {
         const note = this.node.data.noteId ? await froca.getNote(this.node.data.noteId) : null;
         const branch = froca.getBranch(this.node.data.branchId);
         const isNotRoot = note?.noteId !== 'root';
@@ -56,7 +58,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener {
         const parentNotSearch = !parentNote || parentNote.type !== 'search';
         const insertNoteAfterEnabled = isNotRoot && !isHoisted && parentNotSearch;
 
-        return [
+        const items: (MenuItem<TreeCommandNames> | null)[] = [
             { title: `${t("tree-context-menu.open-in-a-new-tab")} <kbd>Ctrl+Click</kbd>`, command: "openInTab", uiIcon: "bx bx-link-external", enabled: noSelectedNotes },
 
             { title: t("tree-context-menu.open-in-a-new-split"), command: "openNoteInSplit", uiIcon: "bx bx-dock-right", enabled: noSelectedNotes },
@@ -149,10 +151,11 @@ export default class TreeContextMenu implements SelectMenuItemEventListener {
             { title: `${t("tree-context-menu.search-in-subtree")} <kbd data-command="searchInSubtree"></kbd>`, command: "searchInSubtree", uiIcon: "bx bx-search",
             enabled: notSearch && noSelectedNotes },
 
-        ].filter(row => row !== null) as MenuItem[];
+        ];
+        return items.filter(row => row !== null);
     }
 
-    async selectMenuItemHandler({command, type, templateNoteId}: MenuCommandItem) {
+    async selectMenuItemHandler({command, type, templateNoteId}: MenuCommandItem<TreeCommandNames>) {
         const notePath = treeService.getNotePath(this.node);
 
         if (command === 'openInTab') {
@@ -210,7 +213,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener {
             navigator.clipboard.writeText('#' + notePath);
         }
         else if (command) {
-            this.treeWidget.triggerCommand(command, {
+            this.treeWidget.triggerCommand<TreeCommandNames>(command, {
                 node: this.node,
                 notePath: notePath,
                 noteId: this.node.data.noteId,

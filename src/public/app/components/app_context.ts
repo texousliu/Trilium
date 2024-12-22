@@ -18,6 +18,8 @@ import NoteDetailWidget from "../widgets/note_detail.js";
 import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 import { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
+import { Node } from "../services/tree.js";
+import FAttribute from "../entities/fattribute.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -31,11 +33,28 @@ interface BeforeUploadListener extends Component {
     beforeUnloadEvent(): boolean;
 }
 
+/**
+ * Base interface for the data/arguments for a given command (see {@link CommandMappings}).
+ */
 interface CommandData {
     ntxId?: string;
 }
 
-type CommandMappings = {
+/**
+ * Represents a set of commands that are triggered from the context menu, providing information such as the selected note.
+ */
+export interface ContextMenuCommandData extends CommandData {
+    node: Node;
+    notePath: string;
+    noteId?: string;
+    selectedOrActiveBranchIds: any; // TODO: Remove any once type is defined
+    selectedOrActiveNoteIds: any; // TODO: Remove  any once type is defined
+}
+
+/**
+ * The keys represent the different commands that can be triggered via {@link AppContext#triggerCommand} (first argument), and the values represent the data or arguments definition of the given command. All data for commands must extend {@link CommandData}.
+ */
+export type CommandMappings = {
     "api-log-messages": CommandData;
     focusOnDetail: Required<CommandData>;
     searchNotes: CommandData & {
@@ -73,12 +92,42 @@ type CommandMappings = {
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
-    openNoteInSplit: CommandData;
-    openInTab: CommandData;
-    insertNoteAfter: CommandData;
-    insertChildNote: CommandData;
-    convertNoteToAttachment: CommandData;
-    copyNotePathToClipboard: CommandData;
+
+    openInTab: ContextMenuCommandData;
+    openNoteInSplit: ContextMenuCommandData;
+    toggleNoteHoisting: ContextMenuCommandData;
+    insertNoteAfter: ContextMenuCommandData;
+    insertChildNote: ContextMenuCommandData;
+    protectSubtree: ContextMenuCommandData;
+    unprotectSubtree: ContextMenuCommandData;
+    openBulkActionsDialog: ContextMenuCommandData;
+    editBranchPrefix: ContextMenuCommandData;
+    convertNoteToAttachment: ContextMenuCommandData;
+    duplicateSubtree: ContextMenuCommandData;
+    expandSubtree: ContextMenuCommandData;
+    collapseSubtree: ContextMenuCommandData;
+    sortChildNotes: ContextMenuCommandData;
+    copyNotePathToClipboard: ContextMenuCommandData;
+    recentChangesInSubtree: ContextMenuCommandData;
+    cutNotesToClipboard: ContextMenuCommandData;
+    copyNotesToClipboard: ContextMenuCommandData;
+    pasteNotesFromClipboard: ContextMenuCommandData;
+    pasteNotesAfterFromClipboard: ContextMenuCommandData;
+    moveNotesTo: ContextMenuCommandData;
+    cloneNotesTo: ContextMenuCommandData;
+    deleteNotes: ContextMenuCommandData;
+    importIntoNote: ContextMenuCommandData;
+    exportNote: ContextMenuCommandData;
+    searchInSubtree: ContextMenuCommandData;
+
+    addNoteLauncher: ContextMenuCommandData;
+    addScriptLauncher: ContextMenuCommandData;
+    addWidgetLauncher: ContextMenuCommandData;
+    addSpacerLauncher: ContextMenuCommandData;
+    moveLauncherToVisible: ContextMenuCommandData;
+    moveLauncherToAvailable: ContextMenuCommandData;
+    resetLauncher: ContextMenuCommandData;
+
     executeInActiveNoteDetailWidget: CommandData & {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
     };
@@ -92,17 +141,11 @@ type CommandMappings = {
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     closeProtectedSessionPasswordDialog: CommandData;
-    resetLauncher: CommandData;
-    addNoteLauncher: CommandData;
-    addScriptLauncher: CommandData;
-    addWidgetLauncher: CommandData;
-    addSpacerLauncher: CommandData;
-    moveLauncherToVisible: CommandData;
-    moveLauncherToAvailable: CommandData;
-    duplicateSubtree: CommandData;
-    deleteNotes: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;
+    updateAttributesList: {
+        attributes: FAttribute[];
+    };
 }
 
 type EventMappings = {
@@ -123,8 +166,18 @@ type EventMappings = {
 
 type CommandAndEventMappings = (CommandMappings & EventMappings);
 
+/**
+ * This type is a discriminated union which contains all the possible commands that can be triggered via {@link AppContext.triggerCommand}.
+ */
 export type CommandNames = keyof CommandMappings;
 type EventNames = keyof EventMappings;
+
+type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType ? K : never; }[keyof T];
+
+/**
+ * Generic which filters {@link CommandNames} to provide only those commands that take in as data the desired implementation of {@link CommandData}. Mostly useful for contextual menu, to enforce consistency in the commands.
+ */
+export type FilteredCommandNames<T extends CommandData> = keyof Pick<CommandMappings, FilterByValueType<CommandMappings, T>>;
 
 class AppContext extends Component {
 
@@ -225,9 +278,8 @@ class AppContext extends Component {
         return this.handleEvent(name, data);
     }
 
-    // TODO: Remove ignore once all commands are mapped out.
-    //@ts-ignore
-    triggerCommand<K extends CommandNames>(name: K, data: CommandMappings[K] = {}) {
+    triggerCommand<K extends CommandNames>(name: K, _data?: CommandMappings[K]) {
+        const data = _data || {};
         for (const executor of this.components) {
             const fun = (executor as any)[`${name}Command`];
 
