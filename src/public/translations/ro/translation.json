@@ -611,7 +611,7 @@
     "followLink": "urmărește link-ul sub cursor",
     "fullDocumentation": "Instrucțiuni (documentația completă se regăsește <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
     "goBackForwards": "mergi înapoi/înainte în istoric",
-    "goUpDown": "mergi sus/jos în lista de notițe",
+    "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - mergi sus/jos în lista de notițe",
     "headings": " etc. urmat de spațiu pentru titluri",
     "inPageSearch": "caută în interiorul paginii",
     "insertDateTime": "inserează data și timpul curente la poziția cursorului",

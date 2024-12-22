@@ -115,7 +115,7 @@
     "fullDocumentation": "Help (full documentation is available <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
     "close": "Close",
     "noteNavigation": "Note navigation",
-    "goUpDown": "go up/down in the list of notes",
+    "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - go up/down in the list of notes",
     "collapseExpand": "collapse/expand node",
     "notSet": "not set",
     "goBackForwards": "go back / forwards in the history",

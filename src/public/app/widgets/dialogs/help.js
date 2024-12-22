@@ -18,7 +18,7 @@ const TPL = `
 
                             <p class="card-text">
                                 <ul>
-                                    <li><kbd>UP</kbd>, <kbd>DOWN</kbd> - ${t('help.goUpDown')}</li>
+                                    <li>${t('help.goUpDown')}</li>
                                     <li><kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - ${t('help.collapseExpand')}</li>
                                     <li><kbd data-command="backInNoteHistory">${t('help.notSet')}</kbd>, <kbd data-command="forwardInNoteHistory">${t('help.notSet')}</kbd> - ${t('help.goBackForwards')}</li>
                                     <li><kbd data-command="jumpToNote">${t('help.notSet')}</kbd> - ${t('help.showJumpToNoteDialog')}</li>

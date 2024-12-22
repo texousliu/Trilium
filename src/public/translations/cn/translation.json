@@ -110,7 +110,7 @@
     "fullDocumentation": "帮助（完整<a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">在线文档</a>)",
     "close": "关闭",
     "noteNavigation": "笔记导航",
-    "goUpDown": "在笔记列表中向上/向下移动",
+    "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - 在笔记列表中向上/向下移动",
     "collapseExpand": "折叠/展开节点",
     "notSet": "未设置",
     "goBackForwards": "在历史记录中前后移动",
