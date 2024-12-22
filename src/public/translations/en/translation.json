@@ -121,7 +121,7 @@
     "goBackForwards": "go back / forwards in the history",
     "showJumpToNoteDialog": "show <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">\"Jump to\" dialog</a>",
     "scrollToActiveNote": "scroll to active note",
-    "jumpToParentNote": "jump to parent note",
+    "jumpToParentNote": "<kbd>Backspace</kbd> - jump to parent note",
     "collapseWholeTree": "collapse whole note tree",
     "collapseSubTree": "collapse sub-tree",
     "tabShortcuts": "Tab shortcuts",

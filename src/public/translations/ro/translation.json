@@ -615,7 +615,7 @@
     "headings": " etc. urmat de spațiu pentru titluri",
     "inPageSearch": "caută în interiorul paginii",
     "insertDateTime": "inserează data și timpul curente la poziția cursorului",
-    "jumpToParentNote": "sari la pagina părinte",
+    "jumpToParentNote": "<kbd>Backspace</kbd> - sari la pagina părinte",
     "jumpToTreePane": "sari către arborele de notițe și scrolează către notița activă",
     "markdownAutoformat": "Formatare în stil Markdown",
     "moveNoteUpDown": "mută notița sus/jos în lista de notițe",

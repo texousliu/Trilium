@@ -116,7 +116,7 @@
     "goBackForwards": "在歷史記錄中前後移動",
     "showJumpToNoteDialog": "顯示<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">\"跳轉到\" 對話框</a>",
     "scrollToActiveNote": "滾動到活動筆記",
-    "jumpToParentNote": "跳轉到上級筆記",
+    "jumpToParentNote": "<kbd>Backspace</kbd> - 跳轉到上級筆記",
     "collapseWholeTree": "折疊整個筆記樹",
     "collapseSubTree": "折疊子樹",
     "tabShortcuts": "標籤快捷鍵",

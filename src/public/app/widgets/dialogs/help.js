@@ -23,7 +23,7 @@ const TPL = `
                                     <li><kbd data-command="backInNoteHistory">${t('help.notSet')}</kbd>, <kbd data-command="forwardInNoteHistory">${t('help.notSet')}</kbd> - ${t('help.goBackForwards')}</li>
                                     <li><kbd data-command="jumpToNote">${t('help.notSet')}</kbd> - ${t('help.showJumpToNoteDialog')}</li>
                                     <li><kbd data-command="scrollToActiveNote">${t('help.notSet')}</kbd> - ${t('help.scrollToActiveNote')}</li>
-                                    <li><kbd>Backspace</kbd> - ${t('help.jumpToParentNote')}</li>
+                                    <li>${t('help.jumpToParentNote')}</li>
                                     <li><kbd data-command="collapseTree">${t('help.notSet')}</kbd> - ${t('help.collapseWholeTree')}</li>
                                     <li><kbd data-command="collapseSubtree">${t('help.notSet')}</kbd> - ${t('help.collapseSubTree')}</li>
                                 </ul>
