@@ -5,7 +5,7 @@ import imageService from "../services/image.js";
 
 const PROP_NAME = "imageContextMenuInstalled";
 
-function setupContextMenu($image) {
+function setupContextMenu($image: JQuery<HTMLElement>) {
     if (!utils.isElectron() || $image.prop(PROP_NAME)) {
         return;
     }
@@ -37,9 +37,13 @@ function setupContextMenu($image) {
                         const nativeImage = utils.dynamicRequire('electron').nativeImage;
                         const clipboard = utils.dynamicRequire('electron').clipboard;
 
-                        const response = await fetch(
-                            $image.attr('src')
-                        );
+                        const src = $image.attr('src');
+                        if (!src) {
+                            console.error("Missing src");
+                            return;
+                        }
+
+                        const response = await fetch(src);
                         const blob = await response.blob();
 
                         clipboard.writeImage(
