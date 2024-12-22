@@ -138,7 +138,7 @@
     "deleteNotes": "supprimer une note / un sous-arbre",
     "editingNotes": "Édition des notes",
     "editNoteTitle": "dans le volet de l'arborescence, basculera du volet au titre de la note. Presser Entrer à partir du titre de la note basculera vers l’éditeur de texte. <kbd>Ctrl+.</kbd> bascule de l'éditeur au volet arborescent.",
-    "createEditLink": "créer/éditer un lien externe",
+    "createEditLink": "<kbd>Ctrl+K</kbd> - créer/éditer un lien externe",
     "createInternalLink": "créer un lien interne",
     "followLink": "suivre le lien sous le curseur",
     "insertDateTime": "insérer la date et l'heure courante à la position du curseur",

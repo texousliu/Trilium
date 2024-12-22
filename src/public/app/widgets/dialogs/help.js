@@ -92,7 +92,7 @@ const TPL = `
                             <p class="card-text">
                                 <ul>
                                     <li><kbd data-command="editNoteTitle">${t('help.notSet')}</kbd> ${t('help.editNoteTitle')}</li>
-                                    <li><kbd>Ctrl+K</kbd> - ${t('help.createEditLink')}</li>
+                                    <li>${t('help.createEditLink')}</li>
                                     <li><kbd data-command="addLinkToText">${t('help.notSet')}</kbd> - ${t('help.createInternalLink')}</li>
                                     <li><kbd data-command="followLinkUnderCursor">${t('help.notSet')}</kbd> - ${t('help.followLink')}</li>
                                     <li><kbd data-command="insertDateTimeToText">${t('help.notSet')}</kbd> - ${t('help.insertDateTime')}</li>

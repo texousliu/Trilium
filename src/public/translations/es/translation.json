@@ -143,7 +143,7 @@
     "deleteNotes": "eliminar nota/subárbol",
     "editingNotes": "Editando notas",
     "editNoteTitle": "en el panel de árbol cambiará del panel de árbol al título de la nota. Ingresar desde el título de la nota cambiará el foco al editor de texto. <kbd>Ctrl+.</kbd> cambiará de nuevo del editor al panel de árbol.",
-    "createEditLink": "crear/editar enlace externo",
+    "createEditLink": "<kbd>Ctrl+K</kbd> - crear/editar enlace externo",
     "createInternalLink": "crear enlace interno",
     "followLink": "siga el enlace debajo del cursor",
     "insertDateTime": "insertar la fecha y hora actuales en la posición del cursor",

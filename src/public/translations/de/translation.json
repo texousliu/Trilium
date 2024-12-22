@@ -137,7 +137,7 @@
     "deleteNotes": "Notiz / Unterbaum löschen",
     "editingNotes": "Notizen bearbeiten",
     "editNoteTitle": "Im Baumbereich wird vom Baumbereich zum Notiztitel gewechselt. Beim Druck auf Eingabe im Notiztitel, wechselt der Fokus zum Texteditor. <kbd>Strg+.</kbd> wechselt vom Editor zurück zum Baumbereich.",
-    "createEditLink": "Externen Link erstellen/bearbeiten",
+    "createEditLink": "<kbd>Strg+K</kbd> - Externen Link erstellen/bearbeiten",
     "createInternalLink": "Internen Link erstellen",
     "followLink": "Folge dem Link unter dem Cursor",
     "insertDateTime": "Gebe das aktuelle Datum und die aktuelle Uhrzeit an der Einfügemarke ein",

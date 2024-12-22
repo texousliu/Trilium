@@ -598,7 +598,7 @@
     "collapseSubTree": "minimizează subarborele",
     "collapseWholeTree": "minimizează întregul arbore de notițe",
     "copyNotes": "copiază notița activă (sau selecția curentă) în clipboard (utilizat pentru <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">clonare</a>)",
-    "createEditLink": "crează/editează legătură externă",
+    "createEditLink": "<kbd>Ctrl+K</kbd> - crează/editează legătură externă",
     "createInternalLink": "crează legătură internă",
     "createNoteAfter": "crează o nouă notiță după notița activă",
     "createNoteInto": "crează o subnotiță în notița activă",

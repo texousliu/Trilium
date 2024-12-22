@@ -142,7 +142,7 @@
     "deleteNotes": "删除笔记/子树",
     "editingNotes": "编辑笔记",
     "editNoteTitle": "在树形笔记树中，焦点会从笔记树切换到笔记标题。按下 Enter 键会将焦点从笔记标题切换到文本编辑器。按下 <kbd>Ctrl+.</kbd> 会将焦点从编辑器切换回笔记树。",
-    "createEditLink": "创建/编辑外部链接",
+    "createEditLink": "<kbd>Ctrl+K</kbd> - 创建/编辑外部链接",
     "createInternalLink": "创建内部链接",
     "followLink": "跟随光标下的链接",
     "insertDateTime": "在插入点插入当前日期和时间",

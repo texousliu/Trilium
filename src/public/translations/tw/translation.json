@@ -142,7 +142,7 @@
     "deleteNotes": "刪除筆記/子樹",
     "editingNotes": "編輯筆記",
     "editNoteTitle": "在樹形筆記樹中，焦點會從筆記樹切換到筆記標題。按下 Enter 鍵會將焦點從筆記標題切換到文字編輯器。按下 <kbd>Ctrl+.</kbd> 會將焦點從編輯器切換回筆記樹。",
-    "createEditLink": "新增/編輯外部鏈接",
+    "createEditLink": "<kbd>Ctrl+K</kbd> - 新增/編輯外部鏈接",
     "createInternalLink": "新增內部鏈接",
     "followLink": "跟隨遊標下的鏈接",
     "insertDateTime": "在插入點插入當前日期和時間",
