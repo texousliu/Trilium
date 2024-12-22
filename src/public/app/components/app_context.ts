@@ -14,6 +14,10 @@ import MainTreeExecutors from "./main_tree_executors.js";
 import toast from "../services/toast.js";
 import ShortcutComponent from "./shortcut_component.js";
 import { t, initLocale } from "../services/i18n.js";
+import NoteDetailWidget from "../widgets/note_detail.js";
+import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
+import { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
+import { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -27,12 +31,71 @@ interface BeforeUploadListener extends Component {
     beforeUnloadEvent(): boolean;
 }
 
-interface TriggerData {
-    noteId?: string;
-    noteIds?: string[];
-    messages?: unknown[];
-    callback?: () => void;
+interface CommandData {
+    ntxId?: string;
 }
+
+type CommandMappings = {
+    "api-log-messages": CommandData;
+    focusOnDetail: Required<CommandData>;
+    searchNotes: CommandData & {
+        searchString: string | undefined;
+    };
+    showDeleteNotesDialog: CommandData & {
+        branchIdsToDelete: string[];
+        callback: (value: ResolveOptions) => void;
+        forceDeleteAllClones: boolean;
+    };
+    showConfirmDeleteNoteBoxWithNoteDialog: ConfirmWithTitleOptions;
+    openedFileUpdated: CommandData & {
+        entityType: string;
+        entityId: string;
+        lastModifiedMs: number;
+        filePath: string;
+    };
+    focusAndSelectTitle: CommandData & {
+        isNewNote: boolean;
+    };
+    showPromptDialog: PromptDialogOptions;
+    showInfoDialog: ConfirmWithMessageOptions;
+    showConfirmDialog: ConfirmWithMessageOptions;
+    openNewNoteSplit: CommandData & {
+        ntxId: string;
+        notePath: string;   
+    };
+    executeInActiveNoteDetailWidget: CommandData & {
+        callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
+    };
+    addTextToActiveEditor: CommandData & {
+        text: string;
+    };
+    
+    importMarkdownInline: CommandData;
+    showPasswordNotSet: CommandData;
+    showProtectedSessionPasswordDialog: CommandData;
+    closeProtectedSessionPasswordDialog: CommandData;
+}
+
+type EventMappings = {
+    initialRenderComplete: {};
+    frocaReloaded: {};
+    protectedSessionStarted: {};
+    notesReloaded: {
+        noteIds: string[];
+    };
+    refreshIncludedNote: {
+        noteId: string;
+    };
+    apiLogMessages: {
+        noteId: string;
+        messages: string[];
+    };
+}
+
+type CommandAndEventMappings = (CommandMappings & EventMappings);
+
+export type CommandNames = keyof CommandMappings;
+type EventNames = keyof EventMappings;
 
 class AppContext extends Component {
 
@@ -127,11 +190,15 @@ class AppContext extends Component {
         this.triggerEvent('initialRenderComplete');
     }
 
-    triggerEvent(name: string, data: TriggerData = {}) {
+    // TODO: Remove ignore once all commands are mapped out.
+    //@ts-ignore
+    triggerEvent<K extends EventNames | CommandNames>(name: K, data: CommandAndEventMappings[K] = {}) {
         return this.handleEvent(name, data);
     }
 
-    triggerCommand(name: string, data: TriggerData = {}) {
+    // TODO: Remove ignore once all commands are mapped out.
+    //@ts-ignore
+    triggerCommand<K extends CommandNames>(name: K, data: CommandMappings[K] = {}) {
         for (const executor of this.components) {
             const fun = (executor as any)[`${name}Command`];
 
@@ -144,7 +211,7 @@ class AppContext extends Component {
         // in the component tree to communicate with each other
         console.debug(`Unhandled command ${name}, converting to event.`);
 
-        return this.triggerEvent(name, data);
+        return this.triggerEvent(name, data as CommandAndEventMappings[K]);
     }
 
     getComponentByEl(el: HTMLElement) {

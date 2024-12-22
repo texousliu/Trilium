@@ -6,9 +6,14 @@ import appContext from "../components/app_context.js";
 
 export interface Node {
     getParent(): Node;
+    getChildren(): Node[];
+    folder: boolean;
+    renderTitle(): void,
     data: {
         noteId?: string;
         isProtected?: boolean;
+        branchId: string;
+        noteType: string;
     }
 }
 
@@ -144,7 +149,7 @@ function getParentProtectedStatus(node: Node) {
     return hoistedNoteService.isHoistedNode(node) ? false : node.getParent().data.isProtected;
 }
 
-function getNoteIdFromUrl(urlOrNotePath: string) {
+function getNoteIdFromUrl(urlOrNotePath: string | undefined) {
     if (!urlOrNotePath) {
         return null;
     }

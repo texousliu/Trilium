@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { Modal } from "bootstrap";
 
 function reloadFrontendApp(reason?: string) {
     if (reason) {
@@ -99,7 +98,7 @@ function isMac() {
     return navigator.platform.indexOf('Mac') > -1;
 }
 
-function isCtrlKey(evt: KeyboardEvent) {
+function isCtrlKey(evt: KeyboardEvent | MouseEvent) {
     return (!isMac() && evt.ctrlKey)
         || (isMac() && evt.metaKey);
 }
@@ -138,8 +137,8 @@ function formatSize(size: number) {
     }
 }
 
-function toObject<T>(array: T[], fn: (arg0: T) => [key: string, value: T]) {
-    const obj: Record<string, T> = {};
+function toObject<T, R>(array: T[], fn: (arg0: T) => [key: string, value: R]) {
+    const obj: Record<string, R> = {};
 
     for (const item of array) {
         const [key, value] = fn(item);
@@ -205,7 +204,9 @@ function getMimeTypeClass(mime: string) {
 
 function closeActiveDialog() {
     if (glob.activeDialog) {
-        Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
+        // TODO: Fix once we use proper ES imports.
+        //@ts-ignore
+        bootstrap.Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
         glob.activeDialog = null;
     }
 }
@@ -249,7 +250,9 @@ async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
     }
 
     saveFocusedElement();
-    Modal.getOrCreateInstance($dialog[0]).show();
+    // TODO: Fix once we use proper ES imports.
+    //@ts-ignore
+    bootstrap.Modal.getOrCreateInstance($dialog[0]).show();
 
     $dialog.on('hidden.bs.modal', () => {
         $(".aa-input").autocomplete("close");
@@ -350,7 +353,7 @@ function openHelp($button: JQuery<HTMLElement>) {
     }
 }
 
-function initHelpButtons($el: JQuery<HTMLElement>) {
+function initHelpButtons($el: JQuery<HTMLElement> | JQuery<Window>) {
     // for some reason, the .on(event, listener, handler) does not work here (e.g. Options -> Sync -> Help button)
     // so we do it manually
     $el.on("click", e => {

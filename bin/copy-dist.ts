@@ -29,7 +29,7 @@ const copy = async () => {
     fs.copySync(path.join("build", srcFile), destFile, { recursive: true });
   }
 
-  const filesToCopy = ["config-sample.ini"];
+  const filesToCopy = ["config-sample.ini", "tsconfig.webpack.json"];
   for (const file of filesToCopy) {
     log(`Copying ${file}`);
     await fs.copy(file, path.join(DEST_DIR, file));
