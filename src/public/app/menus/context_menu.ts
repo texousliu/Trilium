@@ -1,3 +1,4 @@
+import { CommandNames } from '../components/app_context.js';
 import keyboardActionService from '../services/keyboard_actions.js';
 
 interface ContextMenuOptions {
@@ -14,7 +15,7 @@ interface MenuSeparatorItem {
 
 export interface MenuCommandItem {
     title: string;
-    command?: string;
+    command?: CommandNames;
     type?: string;
     uiIcon?: string;
     templateNoteId?: string;

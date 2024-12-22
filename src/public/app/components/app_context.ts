@@ -69,19 +69,40 @@ type CommandMappings = {
         notePath: string;
         hoistedNoteId: string;
         viewScope: ViewScope;
-    }
+    },
+    openNoteInNewTab: CommandData;
+    openNoteInNewSplit: CommandData;
+    openNoteInNewWindow: CommandData;
+    openNoteInSplit: CommandData;
+    openInTab: CommandData;
+    insertNoteAfter: CommandData;
+    insertChildNote: CommandData;
+    convertNoteToAttachment: CommandData;
+    copyNotePathToClipboard: CommandData;
     executeInActiveNoteDetailWidget: CommandData & {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
     };
     addTextToActiveEditor: CommandData & {
         text: string;
     };
+    /** Works only in the electron context menu. */
+    replaceMisspelling: CommandData;
 
     importMarkdownInline: CommandData;
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     closeProtectedSessionPasswordDialog: CommandData;
     resetLauncher: CommandData;
+    addNoteLauncher: CommandData;
+    addScriptLauncher: CommandData;
+    addWidgetLauncher: CommandData;
+    addSpacerLauncher: CommandData;
+    moveLauncherToVisible: CommandData;
+    moveLauncherToAvailable: CommandData;
+    duplicateSubtree: CommandData;
+    deleteNotes: CommandData;
+    copyImageReferenceToClipboard: CommandData;
+    copyImageToClipboard: CommandData;
 }
 
 type EventMappings = {

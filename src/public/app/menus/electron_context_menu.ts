@@ -1,7 +1,7 @@
 import utils from "../services/utils.js";
 import options from "../services/options.js";
 import zoomService from "../components/zoom.js";
-import contextMenu from "./context_menu.js";
+import contextMenu, { MenuItem } from "./context_menu.js";
 import { t } from "../services/i18n.js";
 import type { BrowserWindow } from "electron";
 
@@ -18,7 +18,7 @@ function setupContextMenu() {
         const isMac = process.platform === "darwin";
         const platformModifier = isMac ? 'Meta' : 'Ctrl';
 
-        const items = [];
+        const items: MenuItem[] = [];
 
         if (params.misspelledWord) {
             for (const suggestion of params.dictionarySuggestions) {

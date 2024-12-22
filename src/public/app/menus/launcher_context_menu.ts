@@ -38,7 +38,7 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener 
         const canBeDeleted = !note?.noteId.startsWith("_"); // fixed notes can't be deleted
         const canBeReset = !canBeDeleted && note?.isLaunchBarConfig();
 
-        return [
+        const items: (MenuItem | null)[] = [
             (isVisibleRoot || isAvailableRoot) ? { title: t("launcher_context_menu.add-note-launcher"), command: 'addNoteLauncher', uiIcon: "bx bx-note" } : null,
             (isVisibleRoot || isAvailableRoot) ? { title: t("launcher_context_menu.add-script-launcher"), command: 'addScriptLauncher', uiIcon: "bx bx-code-curly" } : null,
             (isVisibleRoot || isAvailableRoot) ? { title: t("launcher_context_menu.add-custom-widget"), command: 'addWidgetLauncher', uiIcon: "bx bx-customize" } : null,
@@ -55,7 +55,8 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener 
             { title: "----" },
 
             { title: t("launcher_context_menu.reset"), command: "resetLauncher", uiIcon: "bx bx-reset destructive-action-icon", enabled: canBeReset}
-        ].filter(row => row !== null);
+        ];
+        return items.filter(row => row !== null);
     }
 
     async selectMenuItemHandler({command}: MenuCommandItem) {
