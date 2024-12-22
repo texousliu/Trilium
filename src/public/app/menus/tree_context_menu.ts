@@ -1,26 +1,34 @@
-import treeService from '../services/tree.js';
+import treeService, { Node } from '../services/tree.js';
 import froca from "../services/froca.js";
 import clipboard from '../services/clipboard.js';
 import noteCreateService from "../services/note_create.js";
-import contextMenu from "./context_menu.js";
+import contextMenu, { MenuCommandItem, MenuItem } from "./context_menu.js";
 import appContext from "../components/app_context.js";
 import noteTypesService from "../services/note_types.js";
 import server from "../services/server.js";
 import toastService from "../services/toast.js";
 import dialogService from "../services/dialog.js";
 import { t } from "../services/i18n.js";
+import NoteTreeWidget from '../widgets/note_tree.js';
+import FAttachment from '../entities/fattachment.js';
+import { SelectMenuItemEventListener } from '../components/events.js';
 
-export default class TreeContextMenu {
-    /**
-     * @param {NoteTreeWidget} treeWidget
-     * @param {FancytreeNode} node
-     */
-    constructor(treeWidget, node) {
+// TODO: Deduplicate once client/server is well split.
+interface ConvertToAttachmentResponse {
+    attachment?: FAttachment;
+}
+
+export default class TreeContextMenu implements SelectMenuItemEventListener {
+
+    private treeWidget: NoteTreeWidget;
+    private node: Node;
+
+    constructor(treeWidget: NoteTreeWidget, node: Node) {
         this.treeWidget = treeWidget;
         this.node = node;
     }
 
-    async show(e) {
+    async show(e: PointerEvent) {
         contextMenu.show({
             x: e.pageX,
             y: e.pageY,
@@ -29,12 +37,12 @@ export default class TreeContextMenu {
         })
     }
 
-    async getMenuItems() {
-        const note = await froca.getNote(this.node.data.noteId);
+    async getMenuItems(): Promise<MenuItem[]> {
+        const note = this.node.data.noteId ? await froca.getNote(this.node.data.noteId) : null;
         const branch = froca.getBranch(this.node.data.branchId);
-        const isNotRoot = note.noteId !== 'root';
-        const isHoisted = note.noteId === appContext.tabManager.getActiveContext().hoistedNoteId;
-        const parentNote = isNotRoot ? await froca.getNote(branch.parentNoteId) : null;
+        const isNotRoot = note?.noteId !== 'root';
+        const isHoisted = note?.noteId === appContext.tabManager.getActiveContext().hoistedNoteId;
+        const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
 
         // some actions don't support multi-note, so they are disabled when notes are selected,
         // the only exception is when the only selected note is the one that was right-clicked, then
@@ -43,22 +51,22 @@ export default class TreeContextMenu {
         const noSelectedNotes = selNodes.length === 0
                 || (selNodes.length === 1 && selNodes[0] === this.node);
 
-        const notSearch = note.type !== 'search';
-        const notOptions = !note.noteId.startsWith("_options");
+        const notSearch = note?.type !== 'search';
+        const notOptions = !note?.noteId.startsWith("_options");
         const parentNotSearch = !parentNote || parentNote.type !== 'search';
         const insertNoteAfterEnabled = isNotRoot && !isHoisted && parentNotSearch;
 
         return [
             { title: `${t("tree-context-menu.open-in-a-new-tab")} <kbd>Ctrl+Click</kbd>`, command: "openInTab", uiIcon: "bx bx-link-external", enabled: noSelectedNotes },
-            
+
             { title: t("tree-context-menu.open-in-a-new-split"), command: "openNoteInSplit", uiIcon: "bx bx-dock-right", enabled: noSelectedNotes },
-            
+
             isHoisted ? null : { title: `${t("tree-context-menu.hoist-note")} <kbd data-command="toggleNoteHoisting"></kbd>`, command: "toggleNoteHoisting", uiIcon: "bx bxs-chevrons-up", enabled: noSelectedNotes && notSearch },
             !isHoisted || !isNotRoot ? null : { title: `${t("tree-context-menu.unhoist-note")} <kbd data-command="toggleNoteHoisting"></kbd>`, command: "toggleNoteHoisting", uiIcon: "bx bx-door-open" },
 
 
             { title: "----" },
-            
+
 
             { title: `${t("tree-context-menu.insert-note-after")}<kbd data-command="createNoteAfter"></kbd>`, command: "insertNoteAfter", uiIcon: "bx bx-plus",
                 items: insertNoteAfterEnabled ? await noteTypesService.getNoteTypeItems("insertNoteAfter") : null,
@@ -67,7 +75,7 @@ export default class TreeContextMenu {
             { title: `${t("tree-context-menu.insert-child-note")}<kbd data-command="createNoteInto"></kbd>`, command: "insertChildNote", uiIcon: "bx bx-plus",
                 items: notSearch ? await noteTypesService.getNoteTypeItems("insertChildNote") : null,
                 enabled: notSearch && noSelectedNotes && notOptions },
-            
+
 
             { title: "----" },
 
@@ -103,7 +111,7 @@ export default class TreeContextMenu {
 
 
             { title: "----" },
-            
+
 
             { title: `${t("tree-context-menu.cut")} <kbd data-command="cutNotesToClipboard"></kbd>`, command: "cutNotesToClipboard", uiIcon: "bx bx-cut",
                 enabled: isNotRoot && !isHoisted && parentNotSearch },
@@ -113,13 +121,13 @@ export default class TreeContextMenu {
 
             { title: `${t("tree-context-menu.paste-into")} <kbd data-command="pasteNotesFromClipboard"></kbd>`, command: "pasteNotesFromClipboard", uiIcon: "bx bx-paste",
                 enabled: !clipboard.isClipboardEmpty() && notSearch && noSelectedNotes },
-            
+
             { title: t("tree-context-menu.paste-after"), command: "pasteNotesAfterFromClipboard", uiIcon: "bx bx-paste",
                 enabled: !clipboard.isClipboardEmpty() && isNotRoot && !isHoisted && parentNotSearch && noSelectedNotes },
 
             { title: `${t("tree-context-menu.move-to")} <kbd data-command="moveNotesTo"></kbd>`, command: "moveNotesTo", uiIcon: "bx bx-transfer",
                 enabled: isNotRoot && !isHoisted && parentNotSearch },
-            
+
             { title: `${t("tree-context-menu.clone-to")} <kbd data-command="cloneNotesTo"></kbd>`, command: "cloneNotesTo", uiIcon: "bx bx-duplicate",
                 enabled: isNotRoot && !isHoisted },
 
@@ -137,14 +145,14 @@ export default class TreeContextMenu {
 
             { title: "----" },
 
-            
+
             { title: `${t("tree-context-menu.search-in-subtree")} <kbd data-command="searchInSubtree"></kbd>`, command: "searchInSubtree", uiIcon: "bx bx-search",
             enabled: notSearch && noSelectedNotes },
 
-        ].filter(row => row !== null);
+        ].filter(row => row !== null) as MenuItem[];
     }
 
-    async selectMenuItemHandler({command, type, templateNoteId}) {
+    async selectMenuItemHandler({command, type, templateNoteId}: MenuCommandItem) {
         const notePath = treeService.getNotePath(this.node);
 
         if (command === 'openInTab') {
@@ -187,8 +195,8 @@ export default class TreeContextMenu {
             for (const noteId of this.treeWidget.getSelectedOrActiveNoteIds(this.node)) {
                 const note = await froca.getNote(noteId);
 
-                if (note.isEligibleForConversionToAttachment()) {
-                    const {attachment} = await server.post(`notes/${note.noteId}/convert-to-attachment`);
+                if (note?.isEligibleForConversionToAttachment()) {
+                    const {attachment} = await server.post<ConvertToAttachmentResponse>(`notes/${note.noteId}/convert-to-attachment`);
 
                     if (attachment) {
                         converted++;
@@ -201,7 +209,7 @@ export default class TreeContextMenu {
         else if (command === 'copyNotePathToClipboard') {
             navigator.clipboard.writeText('#' + notePath);
         }
-        else {
+        else if (command) {
             this.treeWidget.triggerCommand(command, {
                 node: this.node,
                 notePath: notePath,
