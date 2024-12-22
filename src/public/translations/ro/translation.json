@@ -594,7 +594,7 @@
     "bulletList": "<kbd>*</kbd> sau <kbd>-</kbd> urmat de spațiu pentru o listă punctată",
     "close": "Închide",
     "closeActiveTab": "închide tabul activ",
-    "collapseExpand": "minimizează/expandează nodul",
+    "collapseExpand": "<kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - minimizează/expandează nodul",
     "collapseSubTree": "minimizează subarborele",
     "collapseWholeTree": "minimizează întregul arbore de notițe",
     "copyNotes": "copiază notița activă (sau selecția curentă) în clipboard (utilizat pentru <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">clonare</a>)",

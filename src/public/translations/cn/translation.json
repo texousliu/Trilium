@@ -111,7 +111,7 @@
     "close": "关闭",
     "noteNavigation": "笔记导航",
     "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - 在笔记列表中向上/向下移动",
-    "collapseExpand": "折叠/展开节点",
+    "collapseExpand": "<kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - 折叠/展开节点",
     "notSet": "未设置",
     "goBackForwards": "在历史记录中前后移动",
     "showJumpToNoteDialog": "显示<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">\"跳转到\" 对话框</a>",

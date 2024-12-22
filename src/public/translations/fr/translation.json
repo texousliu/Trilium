@@ -107,7 +107,7 @@
     "close": "Fermer",
     "noteNavigation": "Navigation dans les notes",
     "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - aller vers le haut/bas dans la liste des notes",
-    "collapseExpand": "réduire/développer le nœud",
+    "collapseExpand": "<kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - réduire/développer le nœud",
     "notSet": "non défini",
     "goBackForwards": "reculer/avancer dans l'historique",
     "showJumpToNoteDialog": "afficher la <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">boîte de dialogue \"Aller à la note\"</a>",

@@ -106,7 +106,7 @@
     "close": "Schließen",
     "noteNavigation": "Notiz Navigation",
     "goUpDown": "<kbd>Pfeil Hoch</kbd>, <kbd>Pfeil Runter</kbd> - In der Liste der Notizen nach oben/unten gehen",
-    "collapseExpand": "Knoten reduzieren/erweitern",
+    "collapseExpand": "<kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - Knoten reduzieren/erweitern",
     "notSet": "nicht eingestellt",
     "goBackForwards": "in der Historie zurück/vorwärts gehen",
     "showJumpToNoteDialog": "zeige <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">\"Springe zu\" dialog</a>",
