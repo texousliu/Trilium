@@ -135,7 +135,7 @@
     "moveNoteUpHierarchy": "在层级结构中向上移动笔记",
     "multiSelectNote": "多选上/下笔记",
     "selectAllNotes": "选择当前级别的所有笔记",
-    "selectNote": "选择笔记",
+    "selectNote": "<kbd>Shift+click</kbd> - 选择笔记",
     "copyNotes": "将活动笔记（或当前选择）复制到剪贴板（用于<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">克隆</a>）",
     "cutNotes": "将当前笔记（或当前选择）剪切到剪贴板（用于移动笔记）",
     "pasteNotes": "将笔记粘贴为活动笔记的子笔记（根据是复制还是剪切到剪贴板来决定是移动还是克隆）",

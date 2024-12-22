@@ -75,7 +75,7 @@ const TPL = `
                                     <li><kbd data-command="moveNoteUpInHierarchy">${t('help.notSet')}</kbd>, <kbd data-command="moveNoteDownInHierarchy">${t('help.notSet')}</kbd> - ${t('help.moveNoteUpHierarchy')}</li>
                                     <li><kbd data-command="addNoteAboveToSelection">${t('help.notSet')}</kbd>, <kbd data-command="addNoteBelowToSelection">${t('help.notSet')}</kbd> - ${t('help.multiSelectNote')}</li>
                                     <li><kbd data-command="selectAllNotesInParent">${t('help.notSet')}</kbd> - ${t('help.selectAllNotes')}</li>
-                                    <li><kbd>Shift+click</kbd> - ${t('help.selectNote')}</li>
+                                    <li>${t('help.selectNote')}</li>
                                     <li><kbd data-command="copyNotesToClipboard">${t('help.notSet')}</kbd> - ${t('help.copyNotes')}</li>
                                     <li><kbd data-command="cutNotesToClipboard">${t('help.notSet')}</kbd> - ${t('help.cutNotes')}</li>
                                     <li><kbd data-command="pasteNotesFromClipboard">${t('help.notSet')}</kbd> - ${t('help.pasteNotes')}</li>

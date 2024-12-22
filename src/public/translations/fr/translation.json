@@ -131,7 +131,7 @@
     "moveNoteUpHierarchy": "déplacer la note vers le haut dans la hiérarchie",
     "multiSelectNote": "sélectionner plusieurs notes au-dessus/au-dessous",
     "selectAllNotes": "sélectionner toutes les notes du niveau actuel",
-    "selectNote": "sélectionner une note",
+    "selectNote": "<kbd>Shift+click</kbd> - sélectionner une note",
     "copyNotes": "copier la note active (ou la sélection actuelle) dans le presse-papiers (utilisé pour le <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">clonage</a>)",
     "cutNotes": "couper la note actuelle (ou la sélection actuelle) dans le presse-papiers (utilisé pour déplacer les notes)",
     "pasteNotes": "coller la ou les notes en tant que sous-note dans la note active (qui est soit déplacée, soit clonée selon qu'elle a été copiée ou coupée dans le presse-papiers)",

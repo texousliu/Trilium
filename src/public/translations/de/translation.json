@@ -130,7 +130,7 @@
     "moveNoteUpHierarchy": "Verschiebe die Notiz in der Hierarchie nach oben",
     "multiSelectNote": "Mehrfachauswahl von Notizen oben/unten",
     "selectAllNotes": "Wähle alle Notizen in der aktuellen Ebene aus",
-    "selectNote": "Notiz auswählen",
+    "selectNote": "<kbd>Umschalt+Klick</kbd> - Notiz auswählen",
     "copyNotes": "Kopiere aktive Notiz (oder aktuelle Auswahl) in den Zwischenspeicher (wird genutzt für <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">Klonen</a>)",
     "cutNotes": "Aktuelle Notiz (oder aktuelle Auswahl) in die Zwischenablage ausschneiden (wird zum Verschieben von Notizen verwendet)",
     "pasteNotes": "Notiz(en) als Unternotiz in die aktive Notiz einfügen (entweder verschieben oder klonen, je nachdem, ob sie kopiert oder in die Zwischenablag e ausgeschnitten wurde)",

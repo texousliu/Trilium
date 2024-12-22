@@ -140,7 +140,7 @@
     "moveNoteUpHierarchy": "move note up in the hierarchy",
     "multiSelectNote": "multi-select note above/below",
     "selectAllNotes": "select all notes in the current level",
-    "selectNote": "select note",
+    "selectNote": "<kbd>Shift+click</kbd> - select note",
     "copyNotes": "copy active note (or current selection) into clipboard (used for <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">cloning</a>)",
     "cutNotes": "cut current note (or current selection) into clipboard (used for moving notes)",
     "pasteNotes": "paste note(s) as sub-note into active note (which is either move or clone depending on whether it was copied or cut into clipboard)",

@@ -634,7 +634,7 @@
     "reloadFrontend": "reîncarcă interfața Trilium",
     "scrollToActiveNote": "scrolează la notița activă",
     "selectAllNotes": "selectează toate notițele din nivelul curent",
-    "selectNote": "selectează notița",
+    "selectNote": "<kbd>Shift+Click</kbd> - selectează notița",
     "showDevTools": "afișează instrumentele de dezvoltatori",
     "showJumpToNoteDialog": "afișează <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">ecranul „Sari la”</a>",
     "showSQLConsole": "afișează consola SQL",
