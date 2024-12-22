@@ -1509,11 +1509,11 @@
     "add-script-launcher": "添加脚本启动器",
     "add-custom-widget": "添加自定义小部件",
     "add-spacer": "添加间隔",
-    "delete": "删除",
+    "delete": "删除 <kbd data-command=\"deleteNotes\"></kbd>",
     "reset": "重置",
     "move-to-visible-launchers": "移动到可见启动器",
     "move-to-available-launchers": "移动到可用启动器",
-    "duplicate-launcher": "复制启动器"
+    "duplicate-launcher": "复制启动器 <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
     "auto-detect-language": "自动检测"

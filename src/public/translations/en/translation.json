@@ -1539,11 +1539,11 @@
     "add-script-launcher": "Add a script launcher",
     "add-custom-widget": "Add a custom widget",
     "add-spacer": "Add spacer",
-    "delete": "Delete",
+    "delete": "Delete <kbd data-command=\"deleteNotes\"></kbd>",
     "reset": "Reset",
     "move-to-visible-launchers": "Move to visible launchers",
     "move-to-available-launchers": "Move to available launchers",
-    "duplicate-launcher": "Duplicate launcher"
+    "duplicate-launcher": "Duplicate launcher <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
     "auto-detect-language": "Auto-detected"

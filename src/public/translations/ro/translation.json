@@ -1539,8 +1539,8 @@
     "add-note-launcher": "Adaugă un lansator de notiță",
     "add-script-launcher": "Adaugă un lansator de script",
     "add-spacer": "Adaugă un separator",
-    "delete": "Șterge",
-    "duplicate-launcher": "Dublifică lansatorul",
+    "delete": "Șterge <kbd data-command=\"deleteNotes\"></kbd>",
+    "duplicate-launcher": "Dublifică lansatorul <kbd data-command=\"duplicateSubtree\">",
     "move-to-available-launchers": "Mută în Lansatoare disponibile",
     "move-to-visible-launchers": "Mută în Lansatoare vizibile",
     "reset": "Resetează"

@@ -1491,11 +1491,11 @@
     "add-script-launcher": "Launcher für Skript hinzufügen",
     "add-custom-widget": "Benutzerdefiniertes Widget hinzufügen",
     "add-spacer": "Spacer hinzufügen",
-    "delete": "Löschen",
+    "delete": "Löschen <kbd data-command=\"deleteNotes\"></kbd>",
     "reset": "Zurücksetzen",
     "move-to-visible-launchers": "Zu sichtbaren Launchern verschieben",
     "move-to-available-launchers": "Zu verfügbaren Launchern verschieben",
-    "duplicate-launcher": "Launcher duplizieren"
+    "duplicate-launcher": "Launcher duplizieren <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
     "auto-detect-language": "Automatisch erkannt"

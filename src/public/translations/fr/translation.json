@@ -1491,10 +1491,10 @@
     "add-script-launcher": "Ajouter un raccourci de script",
     "add-custom-widget": "Ajouter un widget personnalisé",
     "add-spacer": "Ajouter un séparateur",
-    "delete": "Supprimer",
+    "delete": "Supprimer <kbd data-command=\"deleteNotes\"></kbd>",
     "reset": "Réinitialiser",
     "move-to-visible-launchers": "Déplacer vers les raccourcis visibles",
     "move-to-available-launchers": "Déplacer vers les raccourcis disponibles",
-    "duplicate-launcher": "Dupliquer le raccourci"
+    "duplicate-launcher": "Dupliquer le raccourci <kbd data-command=\"duplicateSubtree\">"
   }
 }
