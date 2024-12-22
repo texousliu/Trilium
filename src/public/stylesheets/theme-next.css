@@ -1,4 +1,4 @@
-/* Import the light color scheme. 
+/* Import the light color scheme.
  * This is the base color scheme, always active and overridden by the dark
  * color scheme stylesheet when necessary. */
 @import url(./theme-next-light.css);

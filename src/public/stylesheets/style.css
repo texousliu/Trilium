@@ -20,7 +20,7 @@
 }
 
 :root {
-    --submenu-opening-delay: 300ms;    
+    --submenu-opening-delay: 300ms;
 }
 
 html {
@@ -30,7 +30,7 @@ html {
 
 body {
     /* Fix for CKEditor block gutter icon "stretching" body and causing scrollbar to appear after pressing enter
-       on the last line of the editor. */
+        on the last line of the editor. */
     position: fixed;
     width: 100%;
     height: 100%;
@@ -38,7 +38,7 @@ body {
     color: var(--main-text-color);
     font-family: var(--main-font-family);
     font-size: var(--main-font-size);
-    
+
     --native-titlebar-foreground: var(--main-text-color);
     --native-titlebar-darwin-x-offset: 10;
     --native-titlebar-darwin-y-offset: 12;
@@ -1097,7 +1097,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     cursor: pointer;
     border: none;
     color: var(--launcher-pane-text-color);
-    background-color: var(--launcher-pane-background-color);    
+    background-color: var(--launcher-pane-background-color);
 }
 
 #launcher-pane.vertical .launcher-button {
@@ -1297,7 +1297,7 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     width: 24px;
     height: 24px;
     color: var(--launcher-pane-text-color);
-    margin: 8px 10px;    
+    margin: 8px 10px;
     font-size: 18px;
 }
 

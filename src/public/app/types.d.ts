@@ -48,8 +48,8 @@ type RequireMethod = (moduleName: string) => any;
 declare global {
     interface Window {
         logError(message: string);
-        logInfo(message: string);        
-    
+        logInfo(message: string);
+
         process?: ElectronProcess;
         glob?: CustomGlobals;
     }
@@ -75,10 +75,10 @@ declare global {
             suggestion: (suggestion: Suggestion) => string | undefined
         }
     };
-    
+
     interface JQuery {
         autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: AutoCompleteArg[] | string) => JQuery<?>;
-        
+
         getSelectedNotePath(): string | undefined;
         getSelectedNoteId(): string | null;
         setSelectedNotePath(notePath: string | null | undefined);
@@ -88,7 +88,7 @@ declare global {
     }
 
     var logError: (message: string, e?: Error) => void;
-    var logInfo: (message: string) => void;    
+    var logInfo: (message: string) => void;
     var glob: CustomGlobals;
     var require: RequireMethod;
     var __non_webpack_require__: RequireMethod | undefined;
@@ -132,7 +132,7 @@ declare global {
     interface MermaidLoader {
 
     }
-    var mermaid: {        
+    var mermaid: {
         mermaidAPI: MermaidApi;
         registerLayoutLoaders(loader: MermaidLoader);
         parse(content: string, opts: {
@@ -140,7 +140,7 @@ declare global {
         }): {
             config: {
                 layout: string;
-            }            
+            }
         }
     };
     var MERMAID_ELK: MermaidLoader;

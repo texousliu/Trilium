@@ -8,25 +8,25 @@ let instance: TurndownService | null = null;
 const fencedCodeBlockFilter: TurndownService.Rule = {
   filter: function (node, options) {
     return (
-      options.codeBlockStyle === 'fenced' &&
-      node.nodeName === 'PRE' &&
-      node.firstChild !== null &&
-      node.firstChild.nodeName === 'CODE'
+    options.codeBlockStyle === 'fenced' &&
+    node.nodeName === 'PRE' &&
+    node.firstChild !== null &&
+    node.firstChild.nodeName === 'CODE'
     )
   },
 
   replacement: function (content, node, options) {
     if (!node.firstChild || !("getAttribute" in node.firstChild) || typeof node.firstChild.getAttribute !== "function") {
-      return content;
+    return content;
     }
 
     const className = node.firstChild.getAttribute('class') || ''
     const language = rewriteLanguageTag((className.match(/language-(\S+)/) || [null, ''])[1]);
 
     return (
-      '\n\n' + options.fence + language + '\n' +
-      node.firstChild.textContent +
-      '\n' + options.fence + '\n\n'
+    '\n\n' + options.fence + language + '\n' +
+    node.firstChild.textContent +
+    '\n' + options.fence + '\n\n'
     )
   }
 };
@@ -34,7 +34,7 @@ const fencedCodeBlockFilter: TurndownService.Rule = {
 function toMarkdown(content: string) {
     if (instance === null) {
         instance = new TurndownService({ codeBlockStyle: 'fenced' });
-        // Filter is heavily based on: https://github.com/mixmark-io/turndown/issues/274#issuecomment-458730974 
+        // Filter is heavily based on: https://github.com/mixmark-io/turndown/issues/274#issuecomment-458730974
         instance.addRule('fencedCodeBlock', fencedCodeBlockFilter);
         instance.use(turndownPluginGfm.gfm);
     }
@@ -44,7 +44,7 @@ function toMarkdown(content: string) {
 
 function rewriteLanguageTag(source: string) {
     if (!source) {
-      return source;
+    return source;
     }
 
     if (source === "text-x-trilium-auto") {
