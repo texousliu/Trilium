@@ -159,7 +159,7 @@ const MIME_TYPES_DICT: MimeTypeDefinition[] = [
     { default: true, title: "Swift", mime: "text/x-swift" },
     { title: "SystemVerilog", mime: "text/x-systemverilog" },
     { title: "Tcl", mime: "text/x-tcl", highlightJs: "tcl" },
-    { title: "Terraform (HCL)", mime: "text/x-hcl", highlightJs: "terraform", highlightJsSource: "libraries" },
+    { title: "Terraform (HCL)", mime: "text/x-hcl", highlightJs: "terraform", highlightJsSource: "libraries", codeMirrorSource: "libraries/codemirror/hcl.js" },
     { title: "Textile", mime: "text/x-textile" },
     { title: "TiddlyWiki ", mime: "text/x-tiddlywiki" },
     { title: "Tiki wiki", mime: "text/tiki" },
