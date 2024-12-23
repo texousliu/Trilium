@@ -2,7 +2,7 @@ import utils from "../services/utils.js";
 import dateNoteService from "../services/date_notes.js";
 import protectedSessionHolder from '../services/protected_session_holder.js';
 import server from "../services/server.js";
-import appContext from "./app_context.js";
+import appContext, { NoteCommandData } from "./app_context.js";
 import Component from "./component.js";
 import toastService from "../services/toast.js";
 import ws from "../services/ws.js";
@@ -10,6 +10,22 @@ import bundleService from "../services/bundle.js";
 import froca from "../services/froca.js";
 import linkService from "../services/link.js";
 import { t } from "../services/i18n.js";
+import FNote from "../entities/fnote.js";
+
+// TODO: Move somewhere else nicer.
+export type SqlExecuteResults = unknown[];
+
+// TODO: Deduplicate with server.
+interface SqlExecuteResponse {
+    success: boolean;
+    error?: string;
+    results: SqlExecuteResults;
+}
+
+// TODO: Deduplicate with server.
+interface CreateChildrenResponse {
+    note: FNote;
+}
 
 export default class Entrypoints extends Component {
     constructor() {
@@ -31,8 +47,12 @@ export default class Entrypoints extends Component {
 
     async createNoteIntoInboxCommand() {
         const inboxNote = await dateNoteService.getInboxNote();
+        if (!inboxNote) {
+            console.warn("Missing inbox note.");
+            return;
+        }
 
-        const {note} = await server.post(`notes/${inboxNote.noteId}/children?target=into`, {
+        const {note} = await server.post<CreateChildrenResponse>(`notes/${inboxNote.noteId}/children?target=into`, {
             content: '',
             type: 'text',
             isProtected: inboxNote.isProtected && protectedSessionHolder.isProtectedSessionAvailable()
@@ -46,18 +66,21 @@ export default class Entrypoints extends Component {
     }
 
     async toggleNoteHoistingCommand({noteId = appContext.tabManager.getActiveContextNoteId()}) {
+        if (!noteId) {
+            return;
+        }
+
         const noteToHoist = await froca.getNote(noteId);
         const activeNoteContext = appContext.tabManager.getActiveContext();
 
-        if (noteToHoist.noteId === activeNoteContext.hoistedNoteId) {
+        if (noteToHoist?.noteId === activeNoteContext.hoistedNoteId) {
             await activeNoteContext.unhoist();
-        }
-        else if (noteToHoist.type !== 'search') {
+        } else if (noteToHoist?.type !== 'search') {
             await activeNoteContext.setHoistedNoteId(noteId);
         }
     }
 
-    async hoistNoteCommand({noteId}) {
+    async hoistNoteCommand({noteId}: { noteId: string }) {
         const noteContext = appContext.tabManager.getActiveContext();
 
         if (noteContext.hoistedNoteId !== noteId) {
@@ -137,7 +160,7 @@ export default class Entrypoints extends Component {
         utils.reloadFrontendApp("Switching to mobile version");
     }
 
-    async openInWindowCommand({notePath, hoistedNoteId, viewScope}) {
+    async openInWindowCommand({notePath, hoistedNoteId, viewScope}: NoteCommandData) {
         const extraWindowHash = linkService.calculateHash({notePath, hoistedNoteId, viewScope});
 
         if (utils.isElectron()) {
@@ -170,7 +193,7 @@ export default class Entrypoints extends Component {
         } else if (note.mime.endsWith("env=backend")) {
             await server.post(`script/run/${note.noteId}`);
         } else if (note.mime === 'text/x-sqlite;schema=trilium') {
-            const resp = await server.post(`sql/execute/${note.noteId}`);
+            const resp = await server.post<SqlExecuteResponse>(`sql/execute/${note.noteId}`);
 
             if (!resp.success) {
                 toastService.showError(t("entrypoints.sql-error", { message: resp.error }));

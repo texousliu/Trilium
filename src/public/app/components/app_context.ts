@@ -1,7 +1,7 @@
 import froca from "../services/froca.js";
 import bundleService from "../services/bundle.js";
 import RootCommandExecutor from "./root_command_executor.js";
-import Entrypoints from "./entrypoints.js";
+import Entrypoints, { SqlExecuteResults } from "./entrypoints.js";
 import options from "../services/options.js";
 import utils from "../services/utils.js";
 import zoomComponent from "./zoom.js";
@@ -52,6 +52,12 @@ export interface ContextMenuCommandData extends CommandData {
     selectedOrActiveNoteIds: any; // TODO: Remove  any once type is defined
 }
 
+export interface NoteCommandData extends CommandData {
+    notePath: string;
+    hoistedNoteId?: string;
+    viewScope?: ViewScope;
+}
+
 /**
  * The keys represent the different commands that can be triggered via {@link AppContext#triggerCommand} (first argument), and the values represent the data or arguments definition of the given command. All data for commands must extend {@link CommandData}.
  */
@@ -79,17 +85,8 @@ export type CommandMappings = {
     showPromptDialog: PromptDialogOptions;
     showInfoDialog: ConfirmWithMessageOptions;
     showConfirmDialog: ConfirmWithMessageOptions;
-    openNewNoteSplit: CommandData & {
-        ntxId: string;
-        notePath: string;
-        hoistedNoteId?: string;
-        viewScope?: ViewScope;
-    };
-    openInWindow: CommandData & {
-        notePath: string;
-        hoistedNoteId: string;
-        viewScope: ViewScope;
-    },
+    openNewNoteSplit: NoteCommandData;
+    openInWindow: NoteCommandData,
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
@@ -173,6 +170,10 @@ type EventMappings = {
     };
     addNewLabel: CommandData;
     addNewRelation: CommandData;
+    sqlQueryResults: {
+        ntxId: string;
+        results: SqlExecuteResults;
+    }
 }
 
 export type EventListener<T extends EventNames> = {

@@ -93,6 +93,16 @@ declare global {
         })
     }
 
+    interface JQueryStatic {
+        hotkeys: {
+            options: {
+                filterInputAcceptingElements: boolean;
+                filterContentEditable: boolean;
+                filterTextInputs: boolean;
+            }
+        }
+    }
+
     var logError: (message: string, e?: Error) => void;
     var logInfo: (message: string) => void;
     var glob: CustomGlobals;

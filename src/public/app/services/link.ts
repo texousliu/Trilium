@@ -1,6 +1,6 @@
 import treeService from './tree.js';
 import linkContextMenuService from "../menus/link_context_menu.js";
-import appContext from "../components/app_context.js";
+import appContext, { NoteCommandData } from "../components/app_context.js";
 import froca from "./froca.js";
 import utils from "./utils.js";
 
@@ -141,14 +141,7 @@ async function createLink(notePath: string, options: CreateLinkOptions = {}) {
     return $container;
 }
 
-interface CalculateHashOpts {
-    notePath: string;
-    ntxId?: string;
-    hoistedNoteId?: string;
-    viewScope: ViewScope;
-}
-
-function calculateHash({notePath, ntxId, hoistedNoteId, viewScope = {}}: CalculateHashOpts) {
+function calculateHash({notePath, ntxId, hoistedNoteId, viewScope = {}}: NoteCommandData) {
     notePath = notePath || "";
     const params = [
         ntxId ? { ntxId: ntxId } : null,
