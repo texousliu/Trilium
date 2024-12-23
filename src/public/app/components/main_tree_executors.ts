@@ -15,12 +15,20 @@ export default class MainTreeExecutors extends Component {
     }
 
     async cloneNotesToCommand() {
+        if (!this.tree) {
+            return;
+        }
+
         const selectedOrActiveNoteIds = this.tree.getSelectedOrActiveNodes().map(node => node.data.noteId);
 
         this.triggerCommand('cloneNoteIdsTo', {noteIds: selectedOrActiveNoteIds});
     }
 
     async moveNotesToCommand() {
+        if (!this.tree) {
+            return;
+        }
+
         const selectedOrActiveBranchIds = this.tree.getSelectedOrActiveNodes().map(node => node.data.branchId);
 
         this.triggerCommand('moveBranchIdsTo', {branchIds: selectedOrActiveBranchIds});
@@ -40,6 +48,10 @@ export default class MainTreeExecutors extends Component {
     }
 
     async createNoteAfterCommand() {
+        if (!this.tree) {
+            return;
+        }
+
         const node = this.tree.getActiveNode();
 
         if (!node) {

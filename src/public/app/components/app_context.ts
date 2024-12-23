@@ -21,6 +21,7 @@ import { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/d
 import { Node } from "../services/tree.js";
 import LoadResults from "../services/load_results.js";
 import { Attribute } from "../services/attribute_parser.js";
+import NoteTreeWidget from "../widgets/note_tree.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -149,6 +150,13 @@ export type CommandMappings = {
     addNewRelation: CommandData;
     addNewLabelDefinition: CommandData;
     addNewRelationDefinition: CommandData;
+
+    cloneNoteIdsTo: CommandData & {
+        noteIds: string[];
+    };
+    moveBranchIdsTo: CommandData & {
+        branchIds: string[];
+    };
 }
 
 type EventMappings = {
@@ -204,6 +212,7 @@ class AppContext extends Component {
     beforeUnloadListeners: WeakRef<BeforeUploadListener>[];
     tabManager!: TabManager;
     layout?: Layout;
+    noteTreeWidget?: NoteTreeWidget;
 
     constructor(isMainWindow: boolean) {
         super();
