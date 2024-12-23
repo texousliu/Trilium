@@ -31,7 +31,7 @@ const MIME_TYPES_DICT: MimeTypeDefinition[] = [
     { title: "ASN.1", mime: "text/x-ttcn-asn" },
     { title: "ASP.NET", mime: "application/x-aspx" },
     { title: "Asterisk", mime: "text/x-asterisk" },
-    { title: "Batch file (DOS)", mime: "application/x-bat", codeMirrorSource: "libraries/codemirror/batch.js" },
+    { title: "Batch file (DOS)", mime: "application/x-bat", highlightJs: "dos", codeMirrorSource: "libraries/codemirror/batch.js" },
     { title: "Brainfuck", mime: "text/x-brainfuck", highlightJs: "brainfuck" },
     { default: true, title: "C", mime: "text/x-csrc", highlightJs: "c" },
     { default: true, title: "C#", mime: "text/x-csharp", highlightJs: "csharp" },
