@@ -25,7 +25,7 @@ class NoteContext extends Component
     hoistedNoteId: string;
     private mainNtxId: string | null;
 
-    private notePath?: string | null;
+    notePath?: string | null;
     private noteId?: string | null;
     private parentNoteId?: string | null;
     private viewScope?: ViewScope;
@@ -62,10 +62,14 @@ class NoteContext extends Component
         return !this.noteId;
     }
 
-    async setNote(inputNotePath: string, opts: SetNoteOpts = {}) {
+    async setNote(inputNotePath: string | undefined, opts: SetNoteOpts = {}) {
         opts.triggerSwitchEvent = opts.triggerSwitchEvent !== undefined ? opts.triggerSwitchEvent : true;
         opts.viewScope = opts.viewScope || {};
         opts.viewScope.viewMode = opts.viewScope.viewMode || "default";
+
+        if (!inputNotePath) {
+            return;
+        }
 
         const resolvedNotePath = await this.getResolvedNotePath(inputNotePath);
 
@@ -301,7 +305,7 @@ class NoteContext extends Component
             && !this.note.isLabelTruthy('hideChildrenOverview');
     }
 
-    async getTextEditor(callback: GetTextEditorCallback) {
+    async getTextEditor(callback?: GetTextEditorCallback) {
         return this.timeout(new Promise(resolve => appContext.triggerCommand('executeWithTextEditor', {
             callback,
             resolve,

@@ -1,4 +1,5 @@
 import { NoteRow } from "../../../becca/entities/rows.js";
+import { AttributeType } from "../entities/fattribute.js";
 import { EntityChange } from "../server_types.js";
 
 interface BranchRow {
@@ -11,6 +12,10 @@ export interface AttributeRow {
     attributeId: string;
     componentId: string;
     isInheritable?: boolean;
+    isDeleted?: boolean;
+    name?: string;
+    value?: string;
+    type?: AttributeType;
 }
 
 interface RevisionRow {
@@ -26,6 +31,10 @@ interface ContentNoteIdToComponentIdRow {
 
 interface AttachmentRow {}
 
+interface OptionRow {}
+
+interface NoteReorderingRow {}
+
 interface ContentNoteIdToComponentIdRow {
     noteId: string;
     componentId: string;
@@ -34,7 +43,10 @@ interface ContentNoteIdToComponentIdRow {
 type EntityRowMappings = {
     "notes": NoteRow,
     "branches": BranchRow,
-    "attributes": AttributeRow
+    "attributes": AttributeRow,
+    "options": OptionRow,
+    "revisions": RevisionRow,
+    "note_reordering": NoteReorderingRow
 }
 
 export type EntityRowNames = keyof EntityRowMappings;
