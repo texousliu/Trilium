@@ -21,7 +21,7 @@ async function touchProtectedSession() {
     }
 }
 
-function touchProtectedSessionIfNecessary(note: FNote) {
+function touchProtectedSessionIfNecessary(note: FNote | null) {
     if (note && note.isProtected && isProtectedSessionAvailable()) {
         touchProtectedSession();
     }

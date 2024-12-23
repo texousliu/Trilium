@@ -1,8 +1,10 @@
+import { EntityRowNames } from "./services/load_results.js";
+
 // TODO: Deduplicate with src/services/entity_changes_interface.ts
 export interface EntityChange {
     id?: number | null;
     noteId?: string;
-    entityName: string;
+    entityName: EntityRowNames;
     entityId: string;
     entity?: any;
     positions?: Record<string, number>;

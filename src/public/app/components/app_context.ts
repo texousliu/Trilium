@@ -22,6 +22,7 @@ import { Node } from "../services/tree.js";
 import LoadResults from "../services/load_results.js";
 import { Attribute } from "../services/attribute_parser.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
+import { GetTextEditorCallback } from "./note_context.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -39,7 +40,7 @@ interface BeforeUploadListener extends Component {
  * Base interface for the data/arguments for a given command (see {@link CommandMappings}).
  */
 export interface CommandData {
-    ntxId?: string;
+    ntxId?: string | null;
 }
 
 /**
@@ -57,6 +58,10 @@ export interface NoteCommandData extends CommandData {
     notePath: string;
     hoistedNoteId?: string;
     viewScope?: ViewScope;
+}
+
+export interface ExecuteCommandData extends CommandData {
+    resolve: unknown;
 }
 
 /**
@@ -130,6 +135,12 @@ export type CommandMappings = {
     executeInActiveNoteDetailWidget: CommandData & {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
     };
+    executeWithTextEditor: CommandData & ExecuteCommandData & {
+        callback?: GetTextEditorCallback;
+    };
+    executeWithCodeEditor: CommandData & ExecuteCommandData;
+    executeWithContentElement: CommandData & ExecuteCommandData;
+    executeWithTypeWidget: CommandData & ExecuteCommandData;
     addTextToActiveEditor: CommandData & {
         text: string;
     };
@@ -181,8 +192,7 @@ type EventMappings = {
     };
     addNewLabel: CommandData;
     addNewRelation: CommandData;
-    sqlQueryResults: {
-        ntxId: string;
+    sqlQueryResults: CommandData & {
         results: SqlExecuteResults;
     }
 }

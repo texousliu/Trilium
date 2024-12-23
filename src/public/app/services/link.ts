@@ -30,6 +30,7 @@ type ViewMode = "default" | "source" | "attachments" | string;
 export interface ViewScope {
     viewMode?: ViewMode;
     attachmentId?: string;
+    readOnlyTemporarilyDisabled?: boolean;
 }
 
 interface CreateLinkOptions {

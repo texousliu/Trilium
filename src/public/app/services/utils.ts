@@ -382,7 +382,7 @@ function escapeRegExp(str: string) {
     return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
-function areObjectsEqual () {
+function areObjectsEqual(...args: unknown[]) {
     let i;
     let l;
     let leftChain: Object[];

@@ -1,18 +1,39 @@
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import server from "../services/server.js";
 import utils from "../services/utils.js";
-import appContext from "./app_context.js";
+import appContext, { EventData, EventListener } from "./app_context.js";
 import treeService from "../services/tree.js";
 import Component from "./component.js";
 import froca from "../services/froca.js";
 import hoistedNoteService from "../services/hoisted_note.js";
 import options from "../services/options.js";
+import { ViewScope } from "../services/link.js";
+import FNote from "../entities/fnote.js";
 
-class NoteContext extends Component {
-    constructor(ntxId = null, hoistedNoteId = 'root', mainNtxId = null) {
+interface SetNoteOpts {
+    triggerSwitchEvent?: unknown;
+    viewScope?: ViewScope;
+}
+
+export type GetTextEditorCallback = () => void;
+
+class NoteContext extends Component
+    implements EventListener<"entitiesReloaded">
+{
+
+    ntxId: string | null;
+    hoistedNoteId: string;
+    private mainNtxId: string | null;
+
+    private notePath?: string | null;
+    private noteId?: string | null;
+    private parentNoteId?: string | null;
+    private viewScope?: ViewScope;
+
+    constructor(ntxId: string | null = null, hoistedNoteId: string = 'root', mainNtxId: string | null = null) {
         super();
 
-        this.ntxId = ntxId || this.constructor.generateNtxId();
+        this.ntxId = ntxId || NoteContext.generateNtxId();
         this.hoistedNoteId = hoistedNoteId;
         this.mainNtxId = mainNtxId;
 
@@ -41,7 +62,7 @@ class NoteContext extends Component {
         return !this.noteId;
     }
 
-    async setNote(inputNotePath, opts = {}) {
+    async setNote(inputNotePath: string, opts: SetNoteOpts = {}) {
         opts.triggerSwitchEvent = opts.triggerSwitchEvent !== undefined ? opts.triggerSwitchEvent : true;
         opts.viewScope = opts.viewScope || {};
         opts.viewScope.viewMode = opts.viewScope.viewMode || "default";
@@ -84,16 +105,16 @@ class NoteContext extends Component {
 
     async setHoistedNoteIfNeeded() {
         if (this.hoistedNoteId === 'root'
-            && this.notePath.startsWith("root/_hidden")
-            && !this.note.isLabelTruthy("keepCurrentHoisting")
+            && this.notePath?.startsWith("root/_hidden")
+            && !this.note?.isLabelTruthy("keepCurrentHoisting")
         ) {
             // hidden subtree displays only when hoisted, so it doesn't make sense to keep root as hoisted note
 
             let hoistedNoteId = '_hidden';
 
-            if (this.note.isLaunchBarConfig()) {
+            if (this.note?.isLaunchBarConfig()) {
                 hoistedNoteId = '_lbRoot';
-            } else if (this.note.isOptions()) {
+            } else if (this.note?.isOptions()) {
                 hoistedNoteId = '_options';
             }
 
@@ -138,19 +159,19 @@ class NoteContext extends Component {
         }
     }
 
-    saveToRecentNotes(resolvedNotePath) {
+    saveToRecentNotes(resolvedNotePath: string) {
         setTimeout(async () => {
             // we include the note in the recent list only if the user stayed on the note at least 5 seconds
             if (resolvedNotePath && resolvedNotePath === this.notePath) {
                 await server.post('recent-notes', {
-                    noteId: this.note.noteId,
+                    noteId: this.note?.noteId,
                     notePath: this.notePath
                 });
             }
         }, 5000);
     }
 
-    async getResolvedNotePath(inputNotePath) {
+    async getResolvedNotePath(inputNotePath: string) {
         const resolvedNotePath = await treeService.resolveNotePath(inputNotePath, this.hoistedNoteId);
 
         if (!resolvedNotePath) {
@@ -165,8 +186,7 @@ class NoteContext extends Component {
         return resolvedNotePath;
     }
 
-    /** @returns {FNote} */
-    get note() {
+    get note(): FNote | null {
         if (!this.noteId || !(this.noteId in froca.notes)) {
             return null;
         }
@@ -206,7 +226,7 @@ class NoteContext extends Component {
         await this.setHoistedNoteId('root');
     }
 
-    async setHoistedNoteId(noteIdToHoist) {
+    async setHoistedNoteId(noteIdToHoist: string) {
         if (this.hoistedNoteId === noteIdToHoist) {
             return;
         }
@@ -225,7 +245,7 @@ class NoteContext extends Component {
 
     /** @returns {Promise<boolean>} */
     async isReadOnly() {
-        if (this.viewScope.readOnlyTemporarilyDisabled) {
+        if (this?.viewScope?.readOnlyTemporarilyDisabled) {
             return false;
         }
 
@@ -238,22 +258,26 @@ class NoteContext extends Component {
             return true;
         }
 
-        if (this.viewScope.viewMode === 'source') {
+        if (this.viewScope?.viewMode === 'source') {
             return true;
         }
 
         const blob = await this.note.getBlob();
+        if (!blob) {
+            return false;
+        }
 
         const sizeLimit = this.note.type === 'text'
             ? options.getInt('autoReadonlySizeText')
             : options.getInt('autoReadonlySizeCode');
 
-        return blob.contentLength > sizeLimit
+        return sizeLimit
+            && blob.contentLength > sizeLimit
             && !this.note.isLabelTruthy('autoReadOnlyDisabled');
     }
 
-    async entitiesReloadedEvent({loadResults}) {
-        if (loadResults.isNoteReloaded(this.noteId)) {
+    async entitiesReloadedEvent({loadResults}: EventData<"entitiesReloaded">) {
+        if (this.noteId && loadResults.isNoteReloaded(this.noteId)) {
             const noteRow = loadResults.getEntityRow('notes', this.noteId);
 
             if (noteRow.isDeleted) {
@@ -270,14 +294,14 @@ class NoteContext extends Component {
 
     hasNoteList() {
         return this.note
-            && this.viewScope.viewMode === 'default'
+            && this.viewScope?.viewMode === 'default'
             && this.note.hasChildren()
             && ['book', 'text', 'code'].includes(this.note.type)
             && this.note.mime !== 'text/x-sqlite;schema=trilium'
             && !this.note.isLabelTruthy('hideChildrenOverview');
     }
 
-    async getTextEditor(callback) {
+    async getTextEditor(callback: GetTextEditorCallback) {
         return this.timeout(new Promise(resolve => appContext.triggerCommand('executeWithTextEditor', {
             callback,
             resolve,
@@ -306,7 +330,7 @@ class NoteContext extends Component {
         })));
     }
 
-    timeout(promise) {
+    timeout(promise: Promise<unknown>) {
         return Promise.race([
             promise,
             new Promise(res => setTimeout(() => res(null), 200))
@@ -327,11 +351,11 @@ class NoteContext extends Component {
 
         const { note, viewScope } = this;
 
-        let title = viewScope.viewMode === 'default'
+        let title = viewScope?.viewMode === 'default'
             ? note.title
-            : `${note.title}: ${viewScope.viewMode}`;
+            : `${note.title}: ${viewScope?.viewMode}`;
 
-        if (viewScope.attachmentId) {
+        if (viewScope?.attachmentId) {
             // assuming the attachment has been already loaded
             const attachment = await note.getAttachmentById(viewScope.attachmentId);
 

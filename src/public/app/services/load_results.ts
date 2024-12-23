@@ -1,3 +1,4 @@
+import { NoteRow } from "../../../becca/entities/rows.js";
 import { EntityChange } from "../server_types.js";
 
 interface BranchRow {
@@ -30,8 +31,16 @@ interface ContentNoteIdToComponentIdRow {
     componentId: string;
 }
 
+type EntityRowMappings = {
+    "notes": NoteRow,
+    "branches": BranchRow,
+    "attributes": AttributeRow
+}
+
+export type EntityRowNames = keyof EntityRowMappings;
+
 export default class LoadResults {
-    private entities: Record<string, Record<string, unknown>>;
+    private entities: Record<keyof EntityRowMappings, Record<string, any>>;
     private noteIdToComponentId: Record<string, string[]>;
     private componentIdToNoteIds: Record<string, string[]>;
     private branchRows: BranchRow[];
@@ -43,14 +52,15 @@ export default class LoadResults {
     private attachmentRows: AttachmentRow[];
 
     constructor(entityChanges: EntityChange[]) {
-        this.entities = {};
+        const entities: Record<string, Record<string, any>> = {};
 
         for (const {entityId, entityName, entity} of entityChanges) {
             if (entity) {
-                this.entities[entityName] = this.entities[entityName] || [];
-                this.entities[entityName][entityId] = entity;
+                entities[entityName] = entities[entityName] || [];
+                entities[entityName][entityId] = entity;
             }
         }
+        this.entities = entities;
 
         this.noteIdToComponentId = {};
         this.componentIdToNoteIds = {};
@@ -70,8 +80,8 @@ export default class LoadResults {
         this.attachmentRows = [];
     }
 
-    getEntityRow(entityName: string, entityId: string) {
-        return this.entities[entityName]?.[entityId];
+    getEntityRow<T extends EntityRowNames>(entityName: T, entityId: string): EntityRowMappings[T] {
+        return (this.entities[entityName]?.[entityId]);
     }
 
     addNote(noteId: string, componentId?: string | null) {
