@@ -17,6 +17,8 @@ interface MimeTypeDefinition {
     highlightJs?: string;
     /** If specified, will load the corresponding highlight.js file from the `libraries/highlightjs/${id}.js` instead of `node_modules/@highlightjs/cdn-assets/languages/${id}.min.js`. */
     highlightJsSource?: "libraries";
+    /** If specified, will load the corresponding highlight file from the given path instead of `node_modules`. */
+    codeMirrorSource?: string;
 }
 
 interface MimeType extends MimeTypeDefinition {
@@ -29,6 +31,7 @@ const MIME_TYPES_DICT: MimeTypeDefinition[] = [
     { title: "ASN.1", mime: "text/x-ttcn-asn" },
     { title: "ASP.NET", mime: "application/x-aspx" },
     { title: "Asterisk", mime: "text/x-asterisk" },
+    { title: "Batch file (DOS)", mime: "application/x-bat", codeMirrorSource: "libraries/codemirror/batch.js" },
     { title: "Brainfuck", mime: "text/x-brainfuck", highlightJs: "brainfuck" },
     { default: true, title: "C", mime: "text/x-csrc", highlightJs: "c" },
     { default: true, title: "C#", mime: "text/x-csharp", highlightJs: "csharp" },
@@ -209,13 +212,13 @@ let mimeToHighlightJsMapping: Record<string, string> | null = null;
 
 /**
  * Obtains the corresponding language tag for highlight.js for a given MIME type.
- * 
+ *
  * The mapping is built the first time this method is built and then the results are cached for better performance.
- * 
+ *
  * @param mimeType The MIME type of the code block, in the CKEditor-normalized format (e.g. `text-c-src` instead of `text/c-src`).
  * @returns the corresponding highlight.js tag, for example `c` for `text-c-src`.
  */
-function getHighlightJsNameForMime(mimeType: string) {    
+function getHighlightJsNameForMime(mimeType: string) {
     if (!mimeToHighlightJsMapping) {
         const mimeTypes = getMimeTypes();
         mimeToHighlightJsMapping = {};
@@ -234,7 +237,7 @@ function getHighlightJsNameForMime(mimeType: string) {
 /**
  * Given a MIME type in the usual format (e.g. `text/csrc`), it returns a MIME type that can be passed down to the CKEditor
  * code plugin.
- * 
+ *
  * @param mimeType The MIME type to normalize, in the usual format (e.g. `text/c-src`).
  * @returns the normalized MIME type (e.g. `text-c-src`).
  */

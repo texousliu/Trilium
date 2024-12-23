@@ -12,21 +12,32 @@ const CKEDITOR: Library = {
 };
 
 const CODE_MIRROR: Library = {
-    js: [
-        "node_modules/codemirror/lib/codemirror.js",
-        "node_modules/codemirror/addon/display/placeholder.js",
-        "node_modules/codemirror/addon/edit/matchbrackets.js",
-        "node_modules/codemirror/addon/edit/matchtags.js",
-        "node_modules/codemirror/addon/fold/xml-fold.js",
-        "node_modules/codemirror/addon/lint/lint.js",
-        "node_modules/codemirror/addon/mode/loadmode.js",
-        "node_modules/codemirror/addon/mode/multiplex.js",
-        "node_modules/codemirror/addon/mode/overlay.js",
-        "node_modules/codemirror/addon/mode/simple.js",
-        "node_modules/codemirror/addon/search/match-highlighter.js",
-        "node_modules/codemirror/mode/meta.js",
-        "node_modules/codemirror/keymap/vim.js"
-    ],
+    js: () => {
+        const scriptsToLoad = [
+            "node_modules/codemirror/lib/codemirror.js",
+            "node_modules/codemirror/addon/display/placeholder.js",
+            "node_modules/codemirror/addon/edit/matchbrackets.js",
+            "node_modules/codemirror/addon/edit/matchtags.js",
+            "node_modules/codemirror/addon/fold/xml-fold.js",
+            "node_modules/codemirror/addon/lint/lint.js",
+            "node_modules/codemirror/addon/mode/loadmode.js",
+            "node_modules/codemirror/addon/mode/multiplex.js",
+            "node_modules/codemirror/addon/mode/overlay.js",
+            "node_modules/codemirror/addon/mode/simple.js",
+            "node_modules/codemirror/addon/search/match-highlighter.js",
+            "node_modules/codemirror/mode/meta.js",
+            "node_modules/codemirror/keymap/vim.js"
+        ];
+
+        const mimeTypes = mimeTypesService.getMimeTypes();
+        for (const mimeType of mimeTypes) {
+            if (mimeType.codeMirrorSource) {
+                scriptsToLoad.push(mimeType.codeMirrorSource);
+            }
+        }
+
+        return scriptsToLoad;
+    },
     css: [
         "node_modules/codemirror/lib/codemirror.css",
         "node_modules/codemirror/addon/lint/lint.css"
@@ -74,7 +85,7 @@ const FORCE_GRAPH: Library = {
 
 const MERMAID: Library = {
     js: [
-        "node_modules/mermaid/dist/mermaid.min.js"        
+        "node_modules/mermaid/dist/mermaid.min.js"
     ]
 }
 
@@ -134,7 +145,7 @@ const HIGHLIGHT_JS: Library = {
                 scriptsToLoad.add(`node_modules/@highlightjs/cdn-assets/languages/${id}.min.js`);
             }
         }
-        
+
         const currentTheme = String(optionsService.get("codeBlockTheme"));
         loadHighlightingTheme(currentTheme);
 
@@ -195,7 +206,7 @@ async function requireCss(url: string, prependAssetPath = true) {
 
 let highlightingThemeEl: JQuery<HTMLElement> | null = null;
 function loadHighlightingTheme(theme: string) {
-    if (!theme) {        
+    if (!theme) {
         return;
     }
 
@@ -207,12 +218,12 @@ function loadHighlightingTheme(theme: string) {
         }
         return;
     }
-    
+
     if (!highlightingThemeEl) {
         highlightingThemeEl = $(`<link rel="stylesheet" type="text/css" />`);
         $("head").append(highlightingThemeEl);
     }
-    
+
     const url = getStylesheetUrl(theme);
     if (url) {
         highlightingThemeEl.attr("href", url);
