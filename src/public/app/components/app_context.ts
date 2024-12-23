@@ -9,7 +9,7 @@ import TabManager from "./tab_manager.js";
 import Component from "./component.js";
 import keyboardActionsService from "../services/keyboard_actions.js";
 import linkService, { ViewScope } from "../services/link.js";
-import MobileScreenSwitcherExecutor from "./mobile_screen_switcher.js";
+import MobileScreenSwitcherExecutor, { Screen } from "./mobile_screen_switcher.js";
 import MainTreeExecutors from "./main_tree_executors.js";
 import toast from "../services/toast.js";
 import ShortcutComponent from "./shortcut_component.js";
@@ -157,6 +157,9 @@ export type CommandMappings = {
     moveBranchIdsTo: CommandData & {
         branchIds: string[];
     };
+    setActiveScreen: CommandData & {
+        screen: Screen;
+    }
 }
 
 type EventMappings = {
@@ -188,6 +191,11 @@ export type EventListener<T extends EventNames> = {
     [key in T as `${key}Event`]: (data: EventData<T>) => void
 }
 
+export type CommandListener<T extends CommandNames> = {
+    [key in T as `${key}Command`]: (data: CommandListenerData<T>) => void
+}
+
+export type CommandListenerData<T extends CommandNames> = CommandMappings[T];
 export type EventData<T extends EventNames> = EventMappings[T];
 
 type CommandAndEventMappings = (CommandMappings & EventMappings);

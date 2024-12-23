@@ -1,8 +1,14 @@
 import Component from "./component.js";
-import appContext from "./app_context.js";
+import appContext, { CommandListener, CommandListenerData } from "./app_context.js";
 
-export default class MobileScreenSwitcherExecutor extends Component {
-    setActiveScreenCommand({screen}) {
+export type Screen = "detail" | "tree";
+
+export default class MobileScreenSwitcherExecutor extends Component
+    implements CommandListener<"setActiveScreen">
+{
+    private activeScreen?: Screen;
+
+    setActiveScreenCommand({screen}: CommandListenerData<"setActiveScreen">) {
         if (screen !== this.activeScreen) {
             this.activeScreen = screen;
 
