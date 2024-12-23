@@ -231,14 +231,14 @@ function parseNavigationStateFromUrl(url: string | undefined) {
     };
 }
 
-function goToLink(evt: MouseEvent) {
+function goToLink(evt: MouseEvent | JQuery.ClickEvent) {
     const $link = $(evt.target as any).closest("a,.block-link");
     const hrefLink = $link.attr('href') || $link.attr('data-href');
 
     return goToLinkExt(evt, hrefLink, $link);
 }
 
-function goToLinkExt(evt: MouseEvent, hrefLink: string | undefined, $link: JQuery<HTMLElement>) {
+function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | undefined, $link: JQuery<HTMLElement>) {
     if (hrefLink?.startsWith("data:")) {
         return true;
     }

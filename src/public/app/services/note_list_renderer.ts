@@ -5,6 +5,7 @@ import attributeRenderer from "./attribute_renderer.js";
 import libraryLoader from "./library_loader.js";
 import treeService from "./tree.js";
 import utils from "./utils.js";
+import FNote from "../entities/fnote.js";
 
 const TPL = `
 <div class="note-list">
@@ -32,7 +33,7 @@ const TPL = `
     .note-list.grid-view .note-book-card {
         max-height: 300px;
     }
-    
+
     .note-list.grid-view .note-book-card img {
         max-height: 220px;
         object-fit: contain;
@@ -157,10 +158,21 @@ const TPL = `
 </div>`;
 
 class NoteListRenderer {
+
+    private $noteList: JQuery<HTMLElement>;
+
+    private parentNote: FNote;
+    private noteIds: string[];
+    private page?: number;
+    private pageSize?: number;
+    private viewType?: string | null;
+    private showNotePath?: boolean;
+    private highlightRegex?: RegExp | null;
+
     /*
      * We're using noteIds so that it's not necessary to load all notes at once when paging
      */
-    constructor($parent, parentNote, noteIds, showNotePath = false) {
+    constructor($parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
         this.$noteList = $(TPL);
 
         // note list must be added to the DOM immediately, otherwise some functionality scripting (canvas) won't work
@@ -178,7 +190,7 @@ class NoteListRenderer {
         $parent.append(this.$noteList);
 
         this.page = 1;
-        this.pageSize = parseInt(parentNote.getLabelValue('pageSize'));
+        this.pageSize = parseInt(parentNote.getLabelValue('pageSize') || "");
 
         if (!this.pageSize || this.pageSize < 1) {
             this.pageSize = 20;
@@ -186,7 +198,7 @@ class NoteListRenderer {
 
         this.viewType = parentNote.getLabelValue('viewType');
 
-        if (!['list', 'grid'].includes(this.viewType)) {
+        if (!['list', 'grid'].includes(this.viewType || "")) {
             // when not explicitly set, decide based on the note type
             this.viewType = parentNote.type === 'search' ? 'list' : 'grid';
         }
@@ -207,7 +219,7 @@ class NoteListRenderer {
     }
 
     async renderList() {
-        if (this.noteIds.length === 0) {
+        if (this.noteIds.length === 0 || !this.page || !this.pageSize) {
             this.$noteList.hide();
             return;
         }
@@ -248,6 +260,10 @@ class NoteListRenderer {
 
     renderPager() {
         const $pager = this.$noteList.find('.note-list-pager').empty();
+        if (!this.page || !this.pageSize) {
+            return;
+        }
+
         const pageCount = Math.ceil(this.noteIds.length / this.pageSize);
 
         $pager.toggle(pageCount > 1);
@@ -285,7 +301,7 @@ class NoteListRenderer {
         $pager.append(`<span class="note-list-pager-total-count">(${this.noteIds.length} notes)</span>`);
     }
 
-    async renderNote(note, expand = false) {
+    async renderNote(note: FNote, expand: boolean = false) {
         const $expander = $('<span class="note-expander bx bx-chevron-right"></span>');
 
         const {$renderedAttributes} = await attributeRenderer.renderNormalAttributes(note);
@@ -330,7 +346,7 @@ class NoteListRenderer {
         return $card;
     }
 
-    async toggleContent($card, note, expand) {
+    async toggleContent($card: JQuery<HTMLElement>, note: FNote, expand: boolean) {
         if (this.viewType === 'list' && ((expand && $card.hasClass("expanded")) || (!expand && !$card.hasClass("expanded")))) {
             return;
         }
@@ -351,7 +367,7 @@ class NoteListRenderer {
         }
     }
 
-    async renderNoteContent(note) {
+    async renderNoteContent(note: FNote) {
         const $content = $('<div class="note-book-content">');
 
         try {
@@ -366,7 +382,7 @@ class NoteListRenderer {
                     separateWordSearch: false,
                     caseSensitive: false
                 });
-            }            
+            }
 
             $content.append($renderedContent);
             $content.addClass(`type-${type}`);

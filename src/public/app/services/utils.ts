@@ -98,7 +98,7 @@ function isMac() {
     return navigator.platform.indexOf('Mac') > -1;
 }
 
-function isCtrlKey(evt: KeyboardEvent | MouseEvent) {
+function isCtrlKey(evt: KeyboardEvent | MouseEvent | JQuery.ClickEvent) {
     return (!isMac() && evt.ctrlKey)
         || (isMac() && evt.metaKey);
 }
@@ -166,7 +166,7 @@ function isMobile() {
         || (!window.glob?.device && /Mobi/.test(navigator.userAgent));
 }
 
-function isDesktop() {    
+function isDesktop() {
     return window.glob?.device === "desktop"
         // window.glob.device is not available in setup
         || (!window.glob?.device && !/Mobi/.test(navigator.userAgent));
@@ -520,7 +520,7 @@ function createImageSrcUrl(note: { noteId: string; title: string }) {
 
 /**
  * Given a string representation of an SVG, triggers a download of the file on the client device.
- * 
+ *
  * @param nameWithoutExtension the name of the file. The .svg suffix is automatically added to it.
  * @param svgContent the content of the SVG file download.
  */
@@ -544,39 +544,39 @@ function downloadSvg(nameWithoutExtension: string, svgContent: string) {
  *   1  if v1 is greater than v2
  *   0  if v1 is equal to v2
  *   -1 if v1 is less than v2
- * 
+ *
  * @param v1 First version string
  * @param v2 Second version string
- * @returns 
+ * @returns
  */
 function compareVersions(v1: string, v2: string): number {
 
     // Remove 'v' prefix and everything after dash if present
     v1 = v1.replace(/^v/, '').split('-')[0];
     v2 = v2.replace(/^v/, '').split('-')[0];
-    
+
     const v1parts = v1.split('.').map(Number);
     const v2parts = v2.split('.').map(Number);
-    
+
     // Pad shorter version with zeros
     while (v1parts.length < 3) v1parts.push(0);
     while (v2parts.length < 3) v2parts.push(0);
-    
+
     // Compare major version
     if (v1parts[0] !== v2parts[0]) {
         return v1parts[0] > v2parts[0] ? 1 : -1;
     }
-    
+
     // Compare minor version
     if (v1parts[1] !== v2parts[1]) {
         return v1parts[1] > v2parts[1] ? 1 : -1;
     }
-    
+
     // Compare patch version
     if (v1parts[2] !== v2parts[2]) {
         return v1parts[2] > v2parts[2] ? 1 : -1;
     }
-    
+
     return 0;
 }
 

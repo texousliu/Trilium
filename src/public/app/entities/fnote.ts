@@ -89,7 +89,7 @@ class FNote {
 
     // Managed by Froca.
     searchResultsLoaded?: boolean;
-    highlightedTokens?: unknown;
+    highlightedTokens?: string[];
 
     constructor(froca: Froca, row: FNoteRow) {
         this.froca = froca;
@@ -111,7 +111,7 @@ class FNote {
         this.title = row.title;
         this.isProtected = !!row.isProtected;
         this.type = row.type;
-        
+
         this.mime = row.mime;
 
         this.blobId = row.blobId;
@@ -478,7 +478,7 @@ class FNote {
         return true;
     }
 
-    /**    
+    /**
      * @private
      */
     __filterAttrs(attributes: FAttribute[], type?: AttributeType, name?: string): FAttribute[] {
@@ -602,7 +602,7 @@ class FNote {
      * @param [name] - relation name to filter
      * @returns all note's relations (attributes with type relation), including inherited ones
      */
-    getRelations(name: string) {
+    getRelations(name?: string) {
         return this.getAttributes(RELATION, name);
     }
 
