@@ -1,3 +1,4 @@
+import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import server from "../services/server.js";
@@ -27,7 +28,7 @@ const TPL = `
     }
     </style>
 
-    <input autocomplete="off" value="" placeholder="type note's title here..." class="note-title" tabindex="100">
+    <input autocomplete="off" value="" placeholder="${t('note_title.placeholder')}" class="note-title" tabindex="100">
 </div>`;
 
 export default class NoteTitleWidget extends NoteContextAwareWidget {

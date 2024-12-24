@@ -12,6 +12,7 @@ import packageJson from "../../package.json" with { type: "json" };
 import assetPath from "../services/asset_path.js";
 import appPath from "../services/app_path.js";
 import { Request, Response } from 'express';
+import BNote from "../becca/entities/bnote.js";
 
 function index(req: Request, res: Response) {
     const options = optionService.getOptionMap();
@@ -28,10 +29,20 @@ function index(req: Request, res: Response) {
     // The page is restored from cache, but the API call fail.
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
+    const theme = options.theme;
+    const themeNote = attributeService.getNoteWithLabel('appTheme', theme);
+
+    const isElectron = utils.isElectron();
     res.render(view, {
         csrfToken: csrfToken,
-        themeCssUrl: getThemeCssUrl(options.theme),
+        themeCssUrl: getThemeCssUrl(theme, themeNote),
+        themeUseNextAsBase: themeNote?.getAttributeValue("label", "appThemeBase") === "next",
         headingStyle: options.headingStyle,
+        layoutOrientation: options.layoutOrientation,
+        platform: process.platform,
+        isElectron,
+        hasNativeTitleBar: (isElectron && options.nativeTitleBarVisible === "true"),
+        hasBackgroundEffects: (isElectron && options.backgroundEffects === "true"),
         mainFontSize: parseInt(options.mainFontSize),
         treeFontSize: parseInt(options.treeFontSize),
         detailFontSize: parseInt(options.detailFontSize),
@@ -42,26 +53,32 @@ function index(req: Request, res: Response) {
         isDev: env.isDev(),
         isMainWindow: !req.query.extraWindow,
         isProtectedSessionAvailable: protectedSessionService.isProtectedSessionAvailable(),
-        maxContentWidth: parseInt(options.maxContentWidth),
+        maxContentWidth: Math.max(640, parseInt(options.maxContentWidth)),
         triliumVersion: packageJson.version,
         assetPath: assetPath,
         appPath: appPath
     });
 }
 
-function getThemeCssUrl(theme: string) {
-    if (theme === 'light') {
-        return false; // light theme is always loaded as baseline
+function getThemeCssUrl(theme: string, themeNote: BNote | null) {
+    if (theme === 'auto') {
+        return `${assetPath}/stylesheets/theme.css`;
+    } else if (theme === 'light') {
+        // light theme is always loaded as baseline
+        return false;
     } else if (theme === 'dark') {
         return `${assetPath}/stylesheets/theme-dark.css`;
+    } else if (theme === "next") {
+        return `${assetPath}/stylesheets/theme-next.css`;
+    } else if (theme === "next-light") {
+        return `${assetPath}/stylesheets/theme-next-light.css`;
+    } else if (theme === "next-dark") {
+        return `${assetPath}/stylesheets/theme-next-dark.css`;
+    } else if (!process.env.TRILIUM_SAFE_MODE && themeNote) {
+        return `api/notes/download/${themeNote.noteId}`;
     } else {
-        const themeNote = attributeService.getNoteWithLabel('appTheme', theme);
-
-        if (themeNote) {
-            return `api/notes/download/${themeNote.noteId}`;
-        } else {
-            return false; // baseline light theme
-        }
+        // baseline light theme
+        return false;
     }
 }
 

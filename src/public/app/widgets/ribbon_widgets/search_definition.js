@@ -119,7 +119,7 @@ const TPL = `
                     </button>
                     
                     <div class="dropdown" style="display: inline-block;">
-                      <button class="btn btn-sm dropdown-toggle action-add-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button class="btn btn-sm dropdown-toggle action-add-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="bx bxs-zap"></span>
                         ${t('search_definition.action')}
                       </button>
@@ -219,7 +219,7 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         });
 
         this.$widget.on('click', '[data-action-add]', async event => {
-            this.$widget.find('.action-add-toggle').dropdown('toggle');
+            bootstrap.Dropdown.getOrCreateInstance(this.$widget.find('.action-add-toggle'));
 
             const actionName = $(event.target).attr('data-action-add');
 

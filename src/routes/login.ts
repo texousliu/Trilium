@@ -9,7 +9,6 @@ import assetPath from "../services/asset_path.js";
 import appPath from "../services/app_path.js";
 import ValidationError from "../errors/validation_error.js";
 import { Request, Response } from 'express';
-import { AppRequest } from './route-interface.js';
 import recoveryCodeService from '../services/encryption/recovery_codes.js';
 import openIDService from '../services/open_id.js';
 import openIDEncryption from '../services/encryption/open_id_encryption.js';
@@ -67,7 +66,7 @@ function setPassword(req: Request, res: Response) {
     res.redirect('login');
 }
 
-function login(req: AppRequest, res: Response) {
+function login(req: Request, res: Response) {
     const guessedPassword = req.body.password;
     const guessedTotp = req.body.token;
 
@@ -78,7 +77,7 @@ function login(req: AppRequest, res: Response) {
             return;
             }
         }
-            
+
         const rememberMe = req.body.rememberMe;
 
         req.session.regenerate(() => {
@@ -99,9 +98,9 @@ function login(req: AppRequest, res: Response) {
 
 function verifyTOTP(guessedToken: string) {
     if (totp.validateTOTP(guessedToken)) return true;
-  
+
     const recoveryCodeValidates = recoveryCodeService.verifyRecoveryCode(guessedToken);
-  
+
     return recoveryCodeValidates;
 }
 
@@ -113,14 +112,14 @@ function verifyPassword(guessedPassword: string) {
     return guess_hashed.equals(hashed_password);
 }
 
-function sendLoginError(req: AppRequest, res: Response) {
+function sendLoginError(req: Request, res: Response) {
     // note that logged IP address is usually meaningless since the traffic should come from a reverse proxy
     if ( totp.isTotpEnabled( )){
         log.info(`WARNING: Wrong password or TOTP from ${req.ip}, rejecting.`);
     }else{
         log.info(`WARNING: Wrong password from ${req.ip}, rejecting.`);
     }
-  
+
     res.status(401).render('login', {
       failedAuth: true,
       totpEnabled: optionService.getOption('totpEnabled') && totp.checkForTotSecret(),
@@ -128,7 +127,7 @@ function sendLoginError(req: AppRequest, res: Response) {
     });
 }
 
-function logout(req: AppRequest, res: Response) {
+function logout(req: Request, res: Response) {
     req.session.regenerate(() => {
         req.session.loggedIn = false;
         if (openIDService.isOpenIDEnabled() && openIDEncryption.isSubjectIdentifierSaved()) {

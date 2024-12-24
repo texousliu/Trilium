@@ -1,8 +1,9 @@
+import { formatDateTime } from "../../../utils/formatters.js"
 import { t } from "../../../services/i18n.js";
-import server from "../../../services/server.js";
 import dialogService from "../../../services/dialog.js";
-import toastService from "../../../services/toast.js";
 import OptionsWidget from "./options_widget.js";
+import server from "../../../services/server.js";
+import toastService from "../../../services/toast.js";
 
 const TPL = `
 <div class="options-section">
@@ -12,6 +13,8 @@ const TPL = `
        ${t("etapi.see_more")} <a href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a> ${t("etapi.and")} <a onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>.</p>
     
     <button type="button" class="create-etapi-token btn btn-sm">${t("etapi.create_token")}</button>
+
+    <hr />
 
     <h5>${t("etapi.existing_tokens")}</h5>
     
@@ -93,11 +96,11 @@ export default class EtapiOptions extends OptionsWidget {
             $tokensTableBody.append(
                 $("<tr>")
                     .append($("<td>").text(token.name))
-                    .append($("<td>").text(token.utcDateCreated))
+                    .append($("<td>").text(formatDateTime(token.utcDateCreated)))
                     .append($("<td>").append(
-                        $('<span class="bx bx-pen token-table-button" title="${t("etapi.rename_token")}"></span>')
+                        $(`<span class="bx bx-pen token-table-button" title="${t("etapi.rename_token")}"></span>`)
                             .on("click", () => this.renameToken(token.etapiTokenId, token.name)),
-                        $('<span class="bx bx-trash token-table-button" title="${t("etapi.delete_token")}"></span>')
+                        $(`<span class="bx bx-trash token-table-button" title="${t("etapi.delete_token")}"></span>`)
                             .on("click", () => this.deleteToken(token.etapiTokenId, token.name))
                     ))
             );

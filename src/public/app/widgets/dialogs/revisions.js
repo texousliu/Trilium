@@ -8,6 +8,7 @@ import openService from "../../services/open.js";
 import protectedSessionHolder from "../../services/protected_session_holder.js";
 import BasicWidget from "../basic_widget.js";
 import dialogService from "../../services/dialog.js";
+import options from "../../services/options.js";
 
 const TPL = `
 <div class="revisions-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -40,23 +41,20 @@ const TPL = `
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mr-auto">${t("revisions.note_revisions")}</h5>
-
+                <h5 class="modal-title flex-grow-1">${t("revisions.note_revisions")}</h5>
                 <button class="revisions-erase-all-revisions-button btn btn-sm"
                         title="${t("revisions.delete_all_revisions")}"
                         style="padding: 0 10px 0 10px;" type="button">${t("revisions.delete_all_button")}</button>
-
                 <button class="help-button" type="button" data-help-page="note-revisions.html" title="${t("revisions.help_title")}">?</button>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: 0 !important;">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("revisions.close")}"></button>
             </div>
             <div class="modal-body" style="display: flex; height: 80vh;">
                 <div class="dropdown">
-                    <button class="revision-list-dropdown" type="button" style="display: none;" data-toggle="dropdown"></button>
+                    <button class="revision-list-dropdown" type="button" style="display: none;"
+                            data-bs-toggle="dropdown" data-bs-display="static">
+                    </button>
 
-                    <div class="revision-list dropdown-menu" style="position: static; height: 100%; overflow: auto;"></div>
+                    <div class="revision-list dropdown-menu static" style="position: static; height: 100%; overflow: auto;"></div>
                 </div>
 
                 <div class="revision-content-wrapper">
@@ -68,6 +66,11 @@ const TPL = `
 
                     <div class="revision-content"></div>
                 </div>
+            </div>
+            <div class="modal-footer py-0">
+                <span class="revisions-snapshot-interval flex-grow-1 my-0 py-0"></span>
+                <span class="maximum-revisions-for-current-note flex-grow-1 my-0 py-0"></span>
+                <button class="revision-settings-button icon-action bx bx-cog my-0 py-0" title="${t("revisions.settings")}"></button>
             </div>
         </div>
     </div>
@@ -84,21 +87,32 @@ export default class RevisionsDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
+
         this.$list = this.$widget.find(".revision-list");
         this.$listDropdown = this.$widget.find(".revision-list-dropdown");
+        this.listDropdown = bootstrap.Dropdown.getOrCreateInstance(this.$listDropdown);
         this.$content = this.$widget.find(".revision-content");
         this.$title = this.$widget.find(".revision-title");
         this.$titleButtons = this.$widget.find(".revision-title-buttons");
         this.$eraseAllRevisionsButton = this.$widget.find(".revisions-erase-all-revisions-button");
-
-        this.$listDropdown.dropdown();
+        this.$snapshotInterval = this.$widget.find(".revisions-snapshot-interval");
+        this.$maximumRevisions = this.$widget.find(".maximum-revisions-for-current-note");
+        this.$revisionSettingsButton = this.$widget.find(".revision-settings-button")
+        this.listDropdown.show();
 
         this.$listDropdown.parent().on('hide.bs.dropdown', e => {
-            // prevent closing dropdown by clicking outside
-            if (e.clickEvent) {
-                e.preventDefault();
-            }
+            // Prevent closing dropdown by pressing ESC and clicking outside
+            e.preventDefault();
         });
+
+        document.addEventListener('keydown', e => {
+            // Close the revision dialog when revision element is focused and ESC is pressed
+            if (e.key === 'Escape' ||
+                e.target.classList.contains(['dropdown-item', 'active'])) {
+                this.modal.hide();
+            }
+        }, true)
 
         this.$widget.on('shown.bs.modal', () => {
             this.$list.find(`[data-revision-id="${this.revisionId}"]`)
@@ -111,15 +125,10 @@ export default class RevisionsDialog extends BasicWidget {
             if (await dialogService.confirm(text)) {
                 await server.remove(`notes/${this.note.noteId}/revisions`);
 
-                this.$widget.modal('hide');
+                this.modal.hide();
 
                 toastService.showMessage(t("revisions.revisions_deleted"));
             }
-        });
-
-        this.$list.on('click', '.dropdown-item', e => {
-            e.preventDefault();
-            return false;
         });
 
         this.$list.on('focus', '.dropdown-item', e => {
@@ -129,9 +138,13 @@ export default class RevisionsDialog extends BasicWidget {
 
             this.setContentPane();
         });
+
+        this.$revisionSettingsButton.on('click', async () => {
+            appContext.tabManager.openContextWithNote('_optionsOther', { activate: true });
+        });
     }
 
-    async showRevisionsEvent({noteId = appContext.tabManager.getActiveContextNoteId()}) {
+    async showRevisionsEvent({ noteId = appContext.tabManager.getActiveContextNoteId() }) {
         utils.openDialog(this.$widget);
 
         await this.loadRevisions(noteId);
@@ -154,7 +167,7 @@ export default class RevisionsDialog extends BasicWidget {
             );
         }
 
-        this.$listDropdown.dropdown('show');
+        this.listDropdown.show();
 
         if (this.revisionItems.length > 0) {
             if (!this.revisionId) {
@@ -166,6 +179,17 @@ export default class RevisionsDialog extends BasicWidget {
         }
 
         this.$eraseAllRevisionsButton.toggle(this.revisionItems.length > 0);
+
+        // Show the footer of the revisions dialog
+        this.$snapshotInterval.text(t("revisions.snapshot_interval", { seconds: options.getInt('revisionSnapshotTimeInterval') }))
+        let revisionsNumberLimit = parseInt(this.note.getLabelValue("versioningLimit") ?? "");
+        if (!Number.isInteger(revisionsNumberLimit)) {
+            revisionsNumberLimit = parseInt(options.getInt('revisionSnapshotNumberLimit'));
+        }
+        if (revisionsNumberLimit === -1) {
+            revisionsNumberLimit = "∞"
+        }
+        this.$maximumRevisions.text(t("revisions.maximum_revisions", { number: revisionsNumberLimit }))
     }
 
     async setContentPane() {
@@ -191,7 +215,7 @@ export default class RevisionsDialog extends BasicWidget {
             if (await dialogService.confirm(text)) {
                 await server.post(`revisions/${revisionItem.revisionId}/restore`);
 
-                this.$widget.modal('hide');
+                this.modal.hide();
 
                 toastService.showMessage(t("revisions.revision_restored"));
             }
@@ -241,17 +265,25 @@ export default class RevisionsDialog extends BasicWidget {
             if (this.$content.find('span.math-tex').length > 0) {
                 await libraryLoader.requireLibrary(libraryLoader.KATEX);
 
-                renderMathInElement(this.$content[0], {trust: true});
+                renderMathInElement(this.$content[0], { trust: true });
             }
         } else if (revisionItem.type === 'code') {
             this.$content.html($("<pre>").text(fullRevision.content));
         } else if (revisionItem.type === 'image') {
-            this.$content.html($("<img>")
-                // the reason why we put this inline as base64 is that we do not want to let user copy this
-                // as a URL to be used in a note. Instead, if they copy and paste it into a note, it will be uploaded as a new note
-                .attr("src", `data:${fullRevision.mime};base64,${fullRevision.content}`)
-                .css("max-width", "100%")
-                .css("max-height", "100%"));
+            if (fullRevision.mime === "image/svg+xml") {
+                let encodedSVG = encodeURIComponent(fullRevision.content); //Base64 of other format images may be embedded in svg
+                this.$content.html($("<img>")
+                    .attr("src", `data:${fullRevision.mime};utf8,${encodedSVG}`)
+                    .css("max-width", "100%")
+                    .css("max-height", "100%"));
+            } else {
+                this.$content.html($("<img>")
+                    // the reason why we put this inline as base64 is that we do not want to let user copy this
+                    // as a URL to be used in a note. Instead, if they copy and paste it into a note, it will be uploaded as a new note
+                    .attr("src", `data:${fullRevision.mime};base64,${fullRevision.content}`)
+                    .css("max-width", "100%")
+                    .css("max-height", "100%"));
+            }
         } else if (revisionItem.type === 'file') {
             const $table = $("<table cellpadding='10'>")
                 .append($("<tr>").append(
@@ -274,7 +306,7 @@ export default class RevisionsDialog extends BasicWidget {
             }
 
             this.$content.html($table);
-        } else if ([ "canvas", "mindMap" ].includes(revisionItem.type)) {
+        } else if (["canvas", "mindMap"].includes(revisionItem.type)) {
             const encodedTitle = encodeURIComponent(revisionItem.title);
 
             this.$content.html($("<img>")

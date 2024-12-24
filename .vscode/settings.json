@@ -18,4 +18,10 @@
     "[typescript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
+    "github-actions.workflows.pinned.workflows": [
+        ".github/workflows/nightly.yml"
+    ],
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
 }

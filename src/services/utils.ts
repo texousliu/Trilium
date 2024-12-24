@@ -7,6 +7,9 @@ import escape from "escape-html";
 import sanitize from "sanitize-filename";
 import mimeTypes from "mime-types";
 import path from "path";
+import { fileURLToPath } from "url";
+import env from "./env.js";
+import { dirname, join } from "path";
 
 const randtoken = generator({source: 'crypto'});
 
@@ -157,7 +160,7 @@ const STRING_MIME_TYPES = [
     "image/svg+xml"
 ];
 
-function isStringNote(type: string | null, mime: string) {
+function isStringNote(type: string | undefined, mime: string) {
     // render and book are string note in the sense that they are expected to contain empty string
     return (type && ["text", "code", "relationMap", "search", "render", "book", "mermaid", "canvas"].includes(type))
         || mime.startsWith('text/')
@@ -219,11 +222,14 @@ function formatDownloadTitle(fileName: string, type: string | null, mime: string
 function removeTextFileExtension(filePath: string) {
     const extension = path.extname(filePath).toLowerCase();
 
-    if (extension === '.md' || extension === '.markdown' || extension === '.html') {
-        return filePath.substr(0, filePath.length - extension.length);
-    }
-    else {
-        return filePath;
+    switch (extension) {
+        case ".md":
+        case ".markdown":
+        case ".html":
+        case ".htm":
+            return filePath.substr(0, filePath.length - extension.length);
+        default:
+            return filePath;
     }
 }
 
@@ -266,14 +272,14 @@ function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?: strin
 }
 
 interface DeferredPromise<T> extends Promise<T> {
-	resolve: (value: T | PromiseLike<T>) => void,
-	reject: (reason?: any) => void
+    resolve: (value: T | PromiseLike<T>) => void,
+    reject: (reason?: any) => void
 }
 
 function deferred<T>(): DeferredPromise<T> {
     return (() => {
         let resolve!: (value: T | PromiseLike<T>) => void;
-		let reject!: (reason?: any) => void;
+        let reject!: (reason?: any) => void;
 
         let promise = new Promise<T>((res, rej) => {
             resolve = res;
@@ -312,6 +318,20 @@ function isString(x: any) {
     return Object.prototype.toString.call(x) === "[object String]";
 }
 
+/**
+ * Returns the directory for resources. On Electron builds this corresponds to the `resources` subdirectory inside the distributable package.
+ * On development builds, this simply refers to the root directory of the application.
+ *
+ * @returns the resource dir.
+ */
+export function getResourceDir() {
+    if (isElectron() && !env.isDev()) {
+        return process.resourcesPath;
+    } else {
+        return join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+    }
+}
+
 export default {
     randomSecureToken,
     randomString,
@@ -344,5 +364,6 @@ export default {
     normalize,
     hashedBlobId,
     toMap,
-    isString
+    isString,
+    getResourceDir
 };

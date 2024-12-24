@@ -12,10 +12,7 @@ const TPL = `<div class="jump-to-note-dialog modal mx-auto" tabindex="-1" role="
                 <div class="input-group">
                     <input class="jump-to-note-autocomplete form-control" placeholder="${t('jump_to_note.search_placeholder')}">
                 </div>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('jump_to_note.close')}"></button>
             </div>
             <div class="modal-body">
                 <div class="algolia-autocomplete-container jump-to-note-results"></div>
@@ -38,6 +35,8 @@ export default class JumpToNoteDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
+
         this.$autoComplete = this.$widget.find(".jump-to-note-autocomplete");
         this.$results = this.$widget.find(".jump-to-note-results");
         this.$showInFullTextButton = this.$widget.find(".show-in-full-text-button");
@@ -59,6 +58,7 @@ export default class JumpToNoteDialog extends BasicWidget {
         noteAutocompleteService.initNoteAutocomplete(this.$autoComplete, {
             allowCreatingNotes: true,
             hideGoToSelectedNoteButton: true,
+            allowJumpToSearchNotes: true,
             container: this.$results
         })
             // clear any event listener added in previous invocation of this function
@@ -94,8 +94,8 @@ export default class JumpToNoteDialog extends BasicWidget {
 
         const searchString = this.$autoComplete.val();
 
-        this.triggerCommand('searchNotes', {searchString});
+        this.triggerCommand('searchNotes', { searchString });
 
-        this.$widget.modal('hide');
+        this.modal.hide();
     }
 }

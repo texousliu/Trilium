@@ -17,12 +17,15 @@ const TPL = `
             flex-wrap: wrap;
         }
         
-        .basic-properties-widget > * {
-            margin-right: 30px;
+        .basic-properties-widget > * {            
             margin-top: 9px;
             margin-bottom: 2px;
         }
         
+        .basic-properties-widget > * > :last-child {
+            margin-right: 30px;
+        }
+
         .note-type-container, .editability-select-container {
             display: flex;
             align-items: center;

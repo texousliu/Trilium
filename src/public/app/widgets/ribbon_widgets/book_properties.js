@@ -18,7 +18,7 @@ const TPL = `
     <div style="display: flex; align-items: baseline">
         <span style="white-space: nowrap">${t("book_properties.view_type")}:&nbsp; &nbsp;</span>
         
-        <select class="view-type-select form-control form-control-sm">
+        <select class="view-type-select form-select form-select-sm">
             <option value="grid">${t("book_properties.grid")}</option>
             <option value="list">${t("book_properties.list")}</option>
         </select>

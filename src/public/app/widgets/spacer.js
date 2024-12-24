@@ -1,3 +1,4 @@
+import { t } from "../services/i18n.js";
 import BasicWidget from "./basic_widget.js";
 import contextMenu from "../menus/context_menu.js";
 import appContext from "../components/app_context.js";
@@ -25,7 +26,7 @@ export default class SpacerWidget extends BasicWidget {
                 x: e.pageX,
                 y: e.pageY,
                 items: [
-                    {title: "Configure Launchbar", command: "showLaunchBarSubtree", uiIcon: "bx bx-sidebar"}
+                    {title: t("spacer.configure_launchbar"), command: "showLaunchBarSubtree", uiIcon: "bx bx-sidebar"}
                 ],
                 selectMenuItemHandler: ({command}) => {
                     appContext.triggerCommand(command);

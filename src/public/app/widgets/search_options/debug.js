@@ -9,10 +9,10 @@ const TPL = `
     </td>
     <td class="button-column">
         <div class="dropdown help-dropdown">
-            <span class="bx bx-help-circle icon-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+            <span class="bx bx-help-circle icon-action" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
             <div class="dropdown-menu dropdown-menu-right p-4">
                 <p>${t("debug.debug_info")}</p>
-                <p>${t("debug.access_info")}</p>
+                ${t("debug.access_info")}
             </div>
         </div>
         <span class="bx bx-x icon-action search-option-del"></span>

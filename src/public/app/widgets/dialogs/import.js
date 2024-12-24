@@ -11,9 +11,7 @@ const TPL = `
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">${t('import.importIntoNote')}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="${t('import.close')}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('import.close')}"></button>
             </div>
             <form class="import-form">
                 <div class="modal-body">
@@ -29,21 +27,21 @@ const TPL = `
                         <strong>${t('import.options')}:</strong>
 
                         <div class="checkbox">
-                            <label data-toggle="tooltip" title="${t('import.safeImportTooltip')}">
+                            <label data-bs-toggle="tooltip" title="${t('import.safeImportTooltip')}">
                                 <input class="safe-import-checkbox" value="1" type="checkbox" checked>
                                 <span>${t('import.safeImport')}</span>
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label data-toggle="tooltip" title="${t('import.explodeArchivesTooltip')}">
+                            <label data-bs-toggle="tooltip" title="${t('import.explodeArchivesTooltip')}">
                                 <input class="explode-archives-checkbox" value="1" type="checkbox" checked>
                                 <span>${t('import.explodeArchives')}</span>
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label data-toggle="tooltip" title="${t('import.shrinkImagesTooltip')}">
+                            <label data-bs-toggle="tooltip" title="${t('import.shrinkImagesTooltip')}">
                                 <input class="shrink-images-checkbox" value="1" type="checkbox" checked> <span>${t('import.shrinkImages')}</span>
                             </label>
                         </div>
@@ -86,6 +84,8 @@ export default class ImportDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        bootstrap.Modal.getOrCreateInstance(this.$widget);
+
         this.$form = this.$widget.find(".import-form");
         this.$noteTitle = this.$widget.find(".import-note-title");
         this.$fileUploadInput = this.$widget.find(".import-file-upload-input");
@@ -115,12 +115,14 @@ export default class ImportDialog extends BasicWidget {
             }
         });
 
-        this.$widget.find('[data-toggle="tooltip"]').tooltip({
-            html: true
+        let _ = [...this.$widget.find('[data-bs-toggle="tooltip"]')].forEach(element => {
+            bootstrap.Tooltip.getOrCreateInstance(element, {
+                html: true
+            });
         });
     }
 
-    async showImportDialogEvent({noteId}) {
+    async showImportDialogEvent({ noteId }) {
         this.parentNoteId = noteId;
 
         this.$fileUploadInput.val('').trigger('change'); // to trigger Import button disabling listener below

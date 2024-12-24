@@ -12,9 +12,7 @@ const TPL = `
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">${t("markdown_import.dialog_title")}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("markdown_import.close")}"></button>
             </div>
             <div class="modal-body">
                 <p>${t("markdown_import.modal_body_text")}</p>
@@ -37,6 +35,7 @@ export default class MarkdownImportDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$importTextarea = this.$widget.find('.markdown-import-textarea');
         this.$importButton = this.$widget.find('.markdown-import-button');
 
@@ -48,7 +47,7 @@ export default class MarkdownImportDialog extends BasicWidget {
     }
 
     async convertMarkdownToHtml(markdownContent) {
-        const {htmlContent} = await server.post('other/render-markdown', { markdownContent });
+        const { htmlContent } = await server.post('other/render-markdown', { markdownContent });
 
         const textEditor = await appContext.tabManager.getActiveContext().getTextEditor();
 
@@ -70,7 +69,7 @@ export default class MarkdownImportDialog extends BasicWidget {
         }
 
         if (utils.isElectron()) {
-            const {clipboard} = utils.dynamicRequire('electron');
+            const { clipboard } = utils.dynamicRequire('electron');
             const text = clipboard.readText();
 
             this.convertMarkdownToHtml(text);
@@ -83,7 +82,7 @@ export default class MarkdownImportDialog extends BasicWidget {
     async sendForm() {
         const text = this.$importTextarea.val();
 
-        this.$widget.modal('hide');
+        this.modal.hide();
 
         await this.convertMarkdownToHtml(text);
 

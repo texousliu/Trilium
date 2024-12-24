@@ -18,30 +18,43 @@ const TPL = `
     }
     
     .promoted-attributes-container {
-        margin: auto;
-        display: flex;
-        flex-direction: row;
-        flex-shrink: 0;
-        flex-grow: 0;
-        justify-content: space-evenly;
+        margin: 0 1.5em;
         overflow: auto;
         max-height: 400px;
         flex-wrap: wrap;
+        display: table;
     }
-    
     .promoted-attribute-cell {
         display: flex;
         align-items: center;
         margin: 10px;
+        display: table-row;
+    }
+    .promoted-attribute-cell > label {
+        user-select: none;
+        font-weight: bold;
+        vertical-align: middle;
+    }
+    .promoted-attribute-cell > * {
+        display: table-cell;
+        padding: 1px 0;
     }
     
     .promoted-attribute-cell div.input-group {
         margin-left: 10px;
+        display: flex;
+        min-height: 40px;
     }
     .promoted-attribute-cell strong {
         word-break:keep-all;
         white-space: nowrap;
     }
+    .promoted-attribute-cell input[type="checkbox"] {
+        width: 22px !important;
+        flex-grow: 0;
+        width: unset;
+    }
+    
     </style>
     
     <div class="promoted-attributes-container"></div>
@@ -71,7 +84,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         const promotedDefAttrs = note.getPromotedDefinitionAttributes();
 
         if (promotedDefAttrs.length === 0) {
-            return {show: false};
+            return { show: false };
         }
 
         return {
@@ -133,9 +146,11 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
     async createPromotedAttributeCell(definitionAttr, valueAttr, valueName) {
         const definition = definitionAttr.getDefinition();
+        const id = `value-${valueAttr.attributeId}`;
 
         const $input = $("<input>")
             .prop("tabindex", 200 + definitionAttr.position)
+            .prop("id", id)
             .attr("data-attribute-id", valueAttr.noteId === this.noteId ? valueAttr.attributeId : '') // if not owned, we'll force creation of a new attribute instead of updating the inherited one
             .attr("data-attribute-type", valueAttr.type)
             .attr("data-attribute-name", valueAttr.name)
@@ -150,7 +165,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             .attr("nowrap", true);
 
         const $wrapper = $('<div class="promoted-attribute-cell">')
-            .append($("<strong>").text(definition.promotedAlias ?? valueName))
+            .append($("<label>").prop("for", id).text(definition.promotedAlias ?? valueName))
             .append($("<div>").addClass("input-group").append($input))
             .append($actionCell)
             .append($multiplicityCell);
@@ -167,7 +182,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                             return;
                         }
 
-                        attributeValues = attributeValues.map(attribute => ({value: attribute}));
+                        attributeValues = attributeValues.map(attribute => ({ value: attribute }));
 
                         $input.autocomplete({
                             appendTo: document.querySelector('body'),
@@ -207,9 +222,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             }
             else if (definition.labelType === 'boolean') {
                 $input.prop("type", "checkbox");
-                // hack, without this the checkbox is invisible
-                // we should be using a different bootstrap structure for checkboxes
-                $input.css('width', '80px');
 
                 if (valueAttr.value === "true") {
                     $input.prop("checked", "checked");
@@ -221,6 +233,9 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             else if (definition.labelType === 'datetime') {
                 $input.prop('type', 'datetime-local')
             }
+            else if (definition.labelType === 'time') {
+                $input.prop('type', 'time')
+            }
             else if (definition.labelType === 'url') {
                 $input.prop("placeholder", t("promoted_attributes.url_placeholder"));
 
@@ -229,9 +244,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                     .prop("title", t("promoted_attributes.open_external_link"))
                     .on('click', () => window.open($input.val(), '_blank'));
 
-                $input.after($("<div>")
-                    .addClass("input-group-append")
-                    .append($openButton));
+                $input.after($openButton);
             }
             else {
                 ws.logError(t("promoted_attributes.unknown_label_type", { type: definitionAttr.labelType }));
@@ -244,7 +257,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
             if (utils.isDesktop()) {
                 // no need to wait for this
-                noteAutocompleteService.initNoteAutocomplete($input, {allowCreatingNotes: true});
+                noteAutocompleteService.initNoteAutocomplete($input, { allowCreatingNotes: true });
 
                 $input.on('autocomplete:noteselected', (event, suggestion, dataset) => {
                     this.promotedAttributeChanged(event);
@@ -257,7 +270,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             }
         }
         else {
-            ws.logError(t(`promoted_attributes.unknown_attribute_type`, {type: valueAttr.type}));
+            ws.logError(t(`promoted_attributes.unknown_attribute_type`, { type: valueAttr.type }));
             return;
         }
 
@@ -346,7 +359,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         this.$widget.find(".promoted-attribute-input:first").focus();
     }
 
-    entitiesReloadedEvent({loadResults}) {
+    entitiesReloadedEvent({ loadResults }) {
         if (loadResults.getAttributeRows(this.componentId).find(attr => attributeService.isAffecting(attr, this.note))) {
             this.refresh();
         }

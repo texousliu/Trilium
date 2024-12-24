@@ -7,14 +7,11 @@ const TPL = `
     <div class="modal-dialog" role="document" style="min-width: 100%; height: 100%; margin: 0;">
         <div class="modal-content" style="height: auto;">
             <div class="modal-header">
-                <h5 class="modal-title mr-auto">${t('help.fullDocumentation')}</h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="${t('help.close')}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title">${t('help.fullDocumentation')}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('help.close')}"></button>
             </div>
             <div class="modal-body" style="overflow: auto; height: calc(100vh - 70px);">
-                <div class="card-columns help-cards">
+                <div class="help-cards row row-cols-3 g-3">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">${t('help.noteNavigation')}</h5>

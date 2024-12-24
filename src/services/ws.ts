@@ -18,7 +18,7 @@ if (env.isDev()) {
     const debounce = (await import("debounce")).default;
     const debouncedReloadFrontend = debounce(() => reloadFrontend("source code change"), 200);
     chokidar
-        .watch('src/public')
+        .watch(utils.isElectron() ? 'dist/src/public' : 'src/public')
         .on('add', debouncedReloadFrontend)
         .on('change', debouncedReloadFrontend)
         .on('unlink', debouncedReloadFrontend);
@@ -35,12 +35,12 @@ interface Message {
         shrinkImages?: boolean
     } | null,
     lastSyncedPush?: number | null,
-    
+
     progressCount?: number;
     taskId?: string;
     taskType?: string | null;
     message?: string;
-    reason?: string;    
+    reason?: string;
     result?: string | Record<string, string | undefined>;
 
     script?: string;

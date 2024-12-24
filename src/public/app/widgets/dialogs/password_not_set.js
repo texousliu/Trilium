@@ -7,11 +7,8 @@ const TPL = `
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mr-auto">${t("password_not_set.title")}</h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: 0;">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title">${t("password_not_set.title")}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("password_not_set.close")}"></button>
             </div>
             <div class="modal-body">
                 ${t("password_not_set.body1")}
@@ -26,8 +23,10 @@ const TPL = `
 export default class PasswordNoteSetDialog extends BasicWidget {
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$openPasswordOptionsButton = this.$widget.find(".open-password-options-button");
         this.$openPasswordOptionsButton.on("click", () => {
+            this.modal.hide();
             this.triggerCommand("showOptions", { section: '_optionsPassword' });
         });
     }

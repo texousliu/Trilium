@@ -1,3 +1,4 @@
+import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import server from "../services/server.js";
 
@@ -33,7 +34,7 @@ const TPL = `
     }
     </style>
 
-    Tables:
+    ${t('sql_table_schemas.tables')}:
     <span class="sql-table-schemas"></span>
 </div>`;
 

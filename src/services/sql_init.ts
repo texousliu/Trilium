@@ -11,7 +11,6 @@ import migrationService from "./migration.js";
 import cls from "./cls.js";
 import config from "./config.js";
 import { OptionRow } from '../becca/entities/rows.js';
-import optionsInitService from "./options_init.js";
 import BNote from "../becca/entities/bnote.js";
 import BBranch from "../becca/entities/bbranch.js";
 import zipImportService from "./import/zip.js";
@@ -23,7 +22,7 @@ const dbReady = utils.deferred<void>();
 
 function schemaExists() {
     return !!sql.getValue(`SELECT name FROM sqlite_master
-                                 WHERE type = 'table' AND name = 'options'`);
+                                WHERE type = 'table' AND name = 'options'`);
 }
 
 function isDbInitialized() {
@@ -73,9 +72,11 @@ async function createInitialDatabase() {
 
     const schema = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/schema.sql`, "utf-8");
     const demoFile = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/demo.zip`);
-    const defaultTheme = await getDefaultTheme();
 
     let rootNote!: BNote;
+
+    // We have to import async since options init requires keyboard actions which require translations.
+    const optionsInitService = (await import("./options_init.js")).default;
 
     sql.transactional(() => {
         log.info("Creating database schema ...");
@@ -103,7 +104,7 @@ async function createInitialDatabase() {
         }).save();
 
         optionsInitService.initDocumentOptions();
-        optionsInitService.initNotSyncedOptions(true, defaultTheme, {});
+        optionsInitService.initNotSyncedOptions(true, {});
         optionsInitService.initStartupOptions();
         password.resetPassword();
     });
@@ -141,13 +142,15 @@ async function createDatabaseForSync(options: OptionRow[], syncServerHost = '', 
         throw new Error("DB is already initialized");
     }
 
-    const defaultTheme = await getDefaultTheme();
     const schema = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/schema.sql`, "utf8");
+
+    // We have to import async since options init requires keyboard actions which require translations.
+    const optionsInitService = (await import("./options_init.js")).default;
 
     sql.transactional(() => {
         sql.executeScript(schema);
 
-        optionsInitService.initNotSyncedOptions(false, defaultTheme, { syncServerHost, syncProxy });
+        optionsInitService.initNotSyncedOptions(false, { syncServerHost, syncProxy });
 
         // document options required for sync to kick off
         for (const opt of options) {
@@ -156,16 +159,6 @@ async function createDatabaseForSync(options: OptionRow[], syncServerHost = '', 
     });
 
     log.info("Schema and not synced options generated.");
-}
-
-async function getDefaultTheme() {
-    if (utils.isElectron()) {
-        const {nativeTheme} = await import("electron");
-        return nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
-    } else {
-        // default based on the poll in https://github.com/zadam/trilium/issues/2516
-        return "dark";
-    }
 }
 
 function setDbAsInitialized() {
@@ -193,22 +186,22 @@ function initializeDb() {
     cls.init(initDbConnection);
 
     log.info(`DB size: ${getDbSize()} KB`);
- 
+
     dbReady.then(() => {
         if (config.General && config.General.noBackup === true) {
             log.info("Disabling scheduled backups.");
-    
+
             return;
         }
-    
+
         setInterval(() => backup.regularBackup(), 4 * 60 * 60 * 1000);
-    
+
         // kickoff first backup soon after start up
         setTimeout(() => backup.regularBackup(), 5 * 60 * 1000);
-    
+
         // optimize is usually inexpensive no-op, so running it semi-frequently is not a big deal
         setTimeout(() => optimize(), 60 * 60 * 1000);
-    
+
         setInterval(() => optimize(), 10 * 60 * 60 * 1000);
     });
 }

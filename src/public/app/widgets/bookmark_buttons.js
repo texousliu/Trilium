@@ -4,10 +4,11 @@ import BookmarkFolderWidget from "./buttons/bookmark_folder.js";
 import froca from "../services/froca.js";
 
 export default class BookmarkButtons extends FlexContainer {
-    constructor() {
-        super("column");
+    constructor(isHorizontalLayout) {
+        super(isHorizontalLayout ? "row" : "column");
 
         this.contentSized();
+        this.settings = {};
     }
 
     async refresh() {
@@ -24,6 +25,12 @@ export default class BookmarkButtons extends FlexContainer {
                 ? new BookmarkFolderWidget(note)
                 : new OpenNoteButtonWidget(note)
                     .class("launcher-button");
+            if (this.settings.titlePlacement) {
+                if (!buttonWidget.settings) {
+                    buttonWidget = {};
+                }
+                buttonWidget.settings.titlePlacement = this.settings.titlePlacement;
+            }
 
             this.child(buttonWidget);
 

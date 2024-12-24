@@ -13,7 +13,7 @@ import cls from "../services/cls.js";
 import sql from "../services/sql.js";
 import entityChangesService from "../services/entity_changes.js";
 import csurf from "csurf";
-import { createPartialContentHandler } from "express-partial-content";
+import { createPartialContentHandler } from "@triliumnext/express-partial-content";
 import rateLimit from "express-rate-limit";
 import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 import NotFoundError from "../errors/not_found_error.js";
@@ -73,7 +73,6 @@ import etapiNoteRoutes from "../etapi/notes.js";
 import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
-import { AppRequest, AppRequestHandler } from './route-interface.js';
 
 
 const csrfMiddleware = csurf({
@@ -85,7 +84,8 @@ const csrfMiddleware = csurf({
 const MAX_ALLOWED_FILE_SIZE_MB = 250;
 const GET = 'get', PST = 'post', PUT = 'put', PATCH = 'patch', DEL = 'delete';
 
-type ApiResultHandler = (req: express.Request, res: express.Response, result: unknown) => number;
+export type ApiResultHandler = (req: express.Request, res: express.Response, result: unknown) => number;
+export type ApiRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => unknown;
 
 // TODO: Deduplicate with etapi_utils.ts afterwards.
 type HttpMethod = "all" | "get" | "post" | "put" | "delete" | "patch" | "options" | "head";
@@ -202,6 +202,7 @@ function register(app: express.Application) {
 
     apiRoute(GET, '/api/notes/:noteId/revisions', revisionsApiRoute.getRevisions);
     apiRoute(DEL, '/api/notes/:noteId/revisions', revisionsApiRoute.eraseAllRevisions);
+    apiRoute(PST, '/api/revisions/erase-all-excess-revisions', revisionsApiRoute.eraseAllExcessRevisions);
     apiRoute(GET, '/api/revisions/:revisionId', revisionsApiRoute.getRevision);
     apiRoute(GET, '/api/revisions/:revisionId/blob', revisionsApiRoute.getRevisionBlob);
     apiRoute(DEL, '/api/revisions/:revisionId', revisionsApiRoute.eraseRevision);
@@ -235,6 +236,7 @@ function register(app: express.Application) {
     apiRoute(PUT, '/api/options/:name/:value*', optionsApiRoute.updateOption);
     apiRoute(PUT, '/api/options', optionsApiRoute.updateOptions);
     apiRoute(GET, '/api/options/user-themes', optionsApiRoute.getUserThemes);
+    apiRoute(GET, '/api/options/codeblock-themes', optionsApiRoute.getSyntaxHighlightingThemes);
     apiRoute(GET, '/api/options/locales', optionsApiRoute.getSupportedLocales);
 
     apiRoute(PST, '/api/password/change', passwordApiRoute.changePassword);
@@ -454,11 +456,11 @@ function send(res: express.Response, statusCode: number, response: unknown) {
     }
 }
 
-function apiRoute(method: HttpMethod, path: string, routeHandler: express.Handler) {
+function apiRoute(method: HttpMethod, path: string, routeHandler: ApiRequestHandler) {
     route(method, path, [auth.checkApiAuth, csrfMiddleware], routeHandler, apiResultHandler);
 }
 
-function route(method: HttpMethod, path: string, middleware: (express.Handler | AppRequestHandler)[], routeHandler: AppRequestHandler, resultHandler: ApiResultHandler | null = null, transactional = true) {
+function route(method: HttpMethod, path: string, middleware: express.Handler[], routeHandler: ApiRequestHandler, resultHandler: ApiResultHandler | null = null, transactional = true) {
     router[method](path, ...(middleware as express.Handler[]), (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const start = Date.now();
 
@@ -471,7 +473,7 @@ function route(method: HttpMethod, path: string, middleware: (express.Handler | 
                 cls.set('localNowDateTime', req.headers['trilium-local-now-datetime']);
                 cls.set('hoistedNoteId', req.headers['trilium-hoisted-note-id'] || 'root');
 
-                const cb = () => routeHandler(req as AppRequest, res, next);
+                const cb = () => routeHandler(req, res, next);
 
                 return transactional ? sql.transactional(cb) : cb();
             });

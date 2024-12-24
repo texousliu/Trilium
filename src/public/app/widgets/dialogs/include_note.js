@@ -11,9 +11,7 @@ const TPL = `
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">${t('include_note.dialog_title')}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('include_note.close')}"></button>
             </div>
             <form class="include-note-form">
                 <div class="modal-body">
@@ -27,22 +25,16 @@ const TPL = `
                     ${t('include_note.box_size_prompt')}
 
                     <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" name="include-note-box-size" value="small">
-                            ${t('include_note.box_size_small')}
-                        </label>
+                        <input class="form-check-input" type="radio" name="include-note-box-size" value="small">
+                        <label class="form-check-label">${t('include_note.box_size_small')}</label>
                     </div>
                     <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" name="include-note-box-size" value="medium" checked>
-                            ${t('include_note.box_size_medium')}
-                        </label>
+                        <input class="form-check-input" type="radio" name="include-note-box-size" value="medium" checked>
+                        <label class="form-check-label">${t('include_note.box_size_medium')}</label>
                     </div>
                     <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" name="include-note-box-size" value="full">
-                            ${t('include_note.box_size_full')}
-                        </label>
+                        <input class="form-check-input" type="radio" name="include-note-box-size" value="full">
+                        <label class="form-check-label">${t('include_note.box_size_full')}</label>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -56,13 +48,14 @@ const TPL = `
 export default class IncludeNoteDialog extends BasicWidget {
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$form = this.$widget.find(".include-note-form");
         this.$autoComplete = this.$widget.find(".include-note-autocomplete");
         this.$form.on('submit', () => {
             const notePath = this.$autoComplete.getSelectedNotePath();
 
             if (notePath) {
-                this.$widget.modal('hide');
+                this.modal.hide();
                 this.includeNote(notePath);
             } else {
                 logError("No noteId to include.");
@@ -72,7 +65,7 @@ export default class IncludeNoteDialog extends BasicWidget {
         })
     }
 
-    async showIncludeNoteDialogEvent({textTypeWidget}) {
+    async showIncludeNoteDialogEvent({ textTypeWidget }) {
         this.textTypeWidget = textTypeWidget;
         await this.refresh();
         utils.openDialog(this.$widget);

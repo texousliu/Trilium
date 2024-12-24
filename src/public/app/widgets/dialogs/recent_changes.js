@@ -1,13 +1,14 @@
+import { formatDateTime } from "../../utils/formatters.js"
 import { t } from "../../services/i18n.js";
-import linkService from '../../services/link.js';
-import utils from '../../services/utils.js';
-import server from '../../services/server.js';
-import froca from "../../services/froca.js";
 import appContext from "../../components/app_context.js";
-import hoistedNoteService from "../../services/hoisted_note.js";
 import BasicWidget from "../basic_widget.js";
 import dialogService from "../../services/dialog.js";
+import froca from "../../services/froca.js";
+import hoistedNoteService from "../../services/hoisted_note.js";
+import linkService from '../../services/link.js';
+import server from '../../services/server.js';
 import toastService from "../../services/toast.js";
+import utils from '../../services/utils.js';
 import ws from "../../services/ws.js";
 
 const TPL = `
@@ -15,14 +16,9 @@ const TPL = `
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mr-auto">${t('recent_changes.title')}</h5>
-                
-                <button class="erase-deleted-notes-now-button btn btn-sm" style="padding: 0 10px">
-                    ${t('recent_changes.erase_notes_button')}</button>
-                
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: 0 !important;">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title flex-grow-1">${t('recent_changes.title')}</h5>
+                <button class="erase-deleted-notes-now-button btn btn-sm" style="padding: 0 10px">${t('recent_changes.erase_notes_button')}</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('recent_changes.close')}"></button>
             </div>
             <div class="modal-body">
                 <div class="recent-changes-content"></div>
@@ -34,6 +30,8 @@ const TPL = `
 export default class RecentChangesDialog extends BasicWidget {
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
+
         this.$content = this.$widget.find(".recent-changes-content");
         this.$eraseDeletedNotesNow = this.$widget.find(".erase-deleted-notes-now-button");
         this.$eraseDeletedNotesNow.on("click", () => {
@@ -45,7 +43,7 @@ export default class RecentChangesDialog extends BasicWidget {
         });
     }
 
-    async showRecentChangesEvent({ancestorNoteId}) {
+    async showRecentChangesEvent({ ancestorNoteId }) {
         this.ancestorNoteId = ancestorNoteId;
 
         await this.refresh();
@@ -74,15 +72,21 @@ export default class RecentChangesDialog extends BasicWidget {
         for (const [dateDay, dayChanges] of groupedByDate) {
             const $changesList = $('<ul>');
 
-            const dayEl = $('<div>').append($('<b>').text(dateDay)).append($changesList);
+            const formattedDate = formatDateTime(dateDay, "full", "none");
+            const dayEl = $('<div>').append($('<b>').text(formattedDate)).append($changesList);
 
             for (const change of dayChanges) {
-                const formattedTime = change.date.substr(11, 5);
+                const formattedTime = formatDateTime(change.date, "none", "short");
 
                 let $noteLink;
 
                 if (change.current_isDeleted) {
-                    $noteLink = $("<span>").text(change.current_title);
+                    $noteLink = $("<span>");
+
+                    $noteLink.append($("<span>")
+                        .addClass("note-title")
+                        .text(change.current_title)
+                    );
 
                     if (change.canBeUndeleted) {
                         const $undeleteLink = $(`<a href="javascript:">`)
@@ -93,7 +97,7 @@ export default class RecentChangesDialog extends BasicWidget {
                                 if (await dialogService.confirm(text)) {
                                     await server.put(`notes/${change.noteId}/undelete`);
 
-                                    this.$widget.modal('hide');
+                                    this.modal.hide();
 
                                     await ws.waitForMaxKnownEntityChangeId();
 
@@ -121,13 +125,22 @@ export default class RecentChangesDialog extends BasicWidget {
                 }
 
                 $changesList.append($('<li>')
+                    .on("click", (e) => {
+                        // Skip clicks on the link or deleted notes
+                        if (e.target?.nodeName !== "A" && !change.current_isDeleted) {
+                            // Open the current note
+                            appContext.tabManager.getActiveContext().setNote(change.noteId);
+                        }
+                    })
+                    .addClass(() => {
+                        if (change.current_isDeleted) return "deleted-note";
+                    })
                     .append(
                         $("<span>")
                             .text(formattedTime)
                             .attr("title", change.date)
                     )
-                    .append(' - ')
-                    .append($noteLink));
+                    .append($noteLink.addClass("note-title")));
             }
 
             this.$content.append(dayEl);

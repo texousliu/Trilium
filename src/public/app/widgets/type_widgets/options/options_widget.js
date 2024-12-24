@@ -44,10 +44,26 @@ export default class OptionsWidget extends NoteContextAwareWidget {
 
     optionsLoaded(options) {}
 
+    async refresh() {
+        this.toggleInt(this.isEnabled());
+        try {
+            await this.refreshWithNote(this.note);
+        } catch (e) {
+            // Ignore errors when user is refreshing or navigating away.
+            if (e === "rejected by browser") {
+                return;
+            }
+
+            throw e;
+        }
+    }
+
     async refreshWithNote(note) {
         const options = await server.get('options');
 
-        this.optionsLoaded(options);
+        if (options) {
+            this.optionsLoaded(options);
+        }
     }
 
     async entitiesReloadedEvent({loadResults}) {

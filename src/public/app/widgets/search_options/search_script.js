@@ -14,7 +14,7 @@ const TPL = `
     </td>
     <td class="button-column">
         <div class="dropdown help-dropdown">
-          <span class="bx bx-help-circle icon-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+          <span class="bx bx-help-circle icon-action" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
           <div class="dropdown-menu dropdown-menu-right p-4">
             <p>${t('search_script.description1')}</p>
             
@@ -24,7 +24,7 @@ const TPL = `
             
             <pre>${t('search_script.example_code')}</pre>
 
-            <p>${t('search_script.note')}</p>
+            ${t('search_script.note')}
           </div>
         </div>
         

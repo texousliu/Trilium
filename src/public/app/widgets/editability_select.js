@@ -15,7 +15,7 @@ const TPL = `
         white-space: normal;
     }
     </style>
-    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle editability-button">
+    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle editability-button">
         <span class="editability-active-desc">${t("editability_select.auto")}</span>
         <span class="caret"></span>
     </button>
@@ -43,11 +43,13 @@ export default class EditabilitySelectWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
 
+        this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
+
         this.$editabilityActiveDesc = this.$widget.find(".editability-active-desc");
 
         this.$widget.on('click', '.dropdown-item',
             async e => {
-                this.$widget.find('.dropdown-toggle').dropdown('toggle');
+                this.dropdown.toggle();
 
                 const editability = $(e.target).closest("[data-editability]").attr("data-editability");
 
@@ -85,7 +87,7 @@ export default class EditabilitySelectWidget extends NoteContextAwareWidget {
         this.$editabilityActiveDesc.text(labels[editability]);
     }
 
-    entitiesReloadedEvent({loadResults}) {
+    entitiesReloadedEvent({ loadResults }) {
         if (loadResults.getAttributeRows().find(attr => attr.noteId === this.noteId)) {
             this.refresh();
         }

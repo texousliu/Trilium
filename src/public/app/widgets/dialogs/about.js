@@ -1,18 +1,18 @@
-import server from "../../services/server.js";
-import utils from "../../services/utils.js";
+import { formatDateTime } from "../../utils/formatters.js"
 import { t } from "../../services/i18n.js";
 import BasicWidget from "../basic_widget.js";
+import openService from "../../services/open.js";
+import server from "../../services/server.js";
+import utils from "../../services/utils.js";
+
 
 const TPL = `
 <div class="about-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mr-auto">${t("about.title")}</h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: 0;">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title">${t("about.title")}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('about.close')}"></button>
             </div>
             <div class="modal-body">
                 <table class="table table-borderless text-nowrap">
@@ -69,10 +69,21 @@ export default class AboutDialog extends BasicWidget {
         this.$appVersion.text(appInfo.appVersion);
         this.$dbVersion.text(appInfo.dbVersion);
         this.$syncVersion.text(appInfo.syncVersion);
-        this.$buildDate.text(appInfo.buildDate);
+        this.$buildDate.text(formatDateTime(appInfo.buildDate));
         this.$buildRevision.text(appInfo.buildRevision);
         this.$buildRevision.attr('href', `https://github.com/TriliumNext/Notes/commit/${appInfo.buildRevision}`);
-        this.$dataDirectory.text(appInfo.dataDirectory);
+        if (utils.isElectron()) {
+            this.$dataDirectory.html($('<a></a>', {
+                href: '#',
+                text: appInfo.dataDirectory,
+            }));
+            this.$dataDirectory.find("a").on('click', (event) => {
+                event.preventDefault();
+                openService.openDirectory(appInfo.dataDirectory);
+            })
+        } else {
+            this.$dataDirectory.text(appInfo.dataDirectory);
+        }
     }
 
     async openAboutDialogEvent() {

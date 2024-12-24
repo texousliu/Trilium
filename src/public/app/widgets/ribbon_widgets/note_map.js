@@ -52,7 +52,7 @@ export default class NoteMapRibbonWidget extends NoteContextAwareWidget {
         return {
             show: this.isEnabled(),
             title: t("note_map.title"),
-            icon: 'bx bx-map-alt'
+            icon: 'bx bxs-network-chart'
         };
     }
 

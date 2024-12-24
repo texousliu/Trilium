@@ -13,13 +13,9 @@ const TPL = `
     <div class="modal-dialog modal-lg" style="max-width: 1000px" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mr-auto">${t('clone_to.clone_notes_to')}</h5>
-
+                <h5 class="modal-title flex-grow-1">${t('clone_to.clone_notes_to')}</h5>
                 <button type="button" class="help-button" title="${t('clone_to.help_on_links')}" data-help-page="cloning-notes.html">?</button>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: 0 !important;">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('clone_to.close')}"></button>
             </div>
             <form class="clone-to-form">
                 <div class="modal-body">
@@ -81,9 +77,9 @@ export default class CloneToDialog extends BasicWidget {
         });
     }
 
-    async cloneNoteIdsToEvent({noteIds}) {
+    async cloneNoteIdsToEvent({ noteIds }) {
         if (!noteIds || noteIds.length === 0) {
-            noteIds = [ appContext.tabManager.getActiveContextNoteId() ];
+            noteIds = [appContext.tabManager.getActiveContextNoteId()];
         }
 
         this.clonedNoteIds = [];
@@ -111,7 +107,7 @@ export default class CloneToDialog extends BasicWidget {
     }
 
     async cloneNotesTo(notePath) {
-        const {noteId, parentNoteId} = treeService.getNoteIdAndParentIdFromUrl(notePath);
+        const { noteId, parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(notePath);
         const targetBranchId = await froca.getBranchId(parentNoteId, noteId);
 
         for (const cloneNoteId of this.clonedNoteIds) {
@@ -120,7 +116,7 @@ export default class CloneToDialog extends BasicWidget {
             const clonedNote = await froca.getNote(cloneNoteId);
             const targetNote = await froca.getBranch(targetBranchId).getNote();
 
-            toastService.showMessage(t('clone_to.note_cloned', {clonedTitle: clonedNote.title, targetTitle: targetNote.title}));
+            toastService.showMessage(t('clone_to.note_cloned', { clonedTitle: clonedNote.title, targetTitle: targetNote.title }));
         }
     }
 }

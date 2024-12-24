@@ -5,7 +5,7 @@ const TPL = `
 <div class="options-section">
     <h4>${t("wrap_lines.wrap_lines_in_code_notes")}</h4>
     <label>
-        <input type="checkbox" class="line-wrap-enabled">
+        <input type="checkbox" class="line-wrap-enabled form-check-input">
         ${t("wrap_lines.enable_line_wrap")}
     </label>
 </div>`;

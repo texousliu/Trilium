@@ -80,8 +80,7 @@ export default class KeyboardShortcutsOptions extends OptionsWidget {
                             .attr("style","background-color: var(--accented-background-color); font-weight: bold;")
                             .text(action.separator)
                     )
-                }
-                else {
+                } else if (action.defaultShortcuts) {
                     $tr.append($("<td>").text(action.actionName))
                         .append($("<td>").append(
                                 $(`<input type="text" class="form-control">`)

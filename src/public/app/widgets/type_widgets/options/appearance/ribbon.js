@@ -5,12 +5,12 @@ const TPL = `
 <div class="options-section">
     <h4>${t('ribbon.widgets')}</h4>
     <label>
-        <input type="checkbox" class="promoted-attributes-open-in-ribbon">
+        <input type="checkbox" class="promoted-attributes-open-in-ribbon form-check-input">
         ${t('ribbon.promoted_attributes_message')}
     </label>
     
     <label>
-        <input type="checkbox" class="edited-notes-open-in-ribbon">
+        <input type="checkbox" class="edited-notes-open-in-ribbon form-check-input">
         ${t('ribbon.edited_notes_message')}
     </label>
 </div>`;

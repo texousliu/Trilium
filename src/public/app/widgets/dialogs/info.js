@@ -7,11 +7,8 @@ const TPL = `
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mr-auto">${t("info.modalTitle")}</h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="${t("info.closeButton")}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title">${t("info.modalTitle")}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("info.closeButton")}"></button>
             </div>
             <div class="modal-body">
                 <div class="info-dialog-content"></div>
@@ -33,6 +30,7 @@ export default class InfoDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$infoContent = this.$widget.find(".info-dialog-content");
         this.$okButton = this.$widget.find(".info-dialog-ok-button");
 
@@ -49,10 +47,10 @@ export default class InfoDialog extends BasicWidget {
             }
         });
 
-        this.$okButton.on('click', () => this.$widget.modal("hide"));
+        this.$okButton.on('click', () => this.modal.hide());
     }
 
-    showInfoDialogEvent({message, callback}) {
+    showInfoDialogEvent({ message, callback }) {
         this.$originallyFocused = $(':focus');
 
         this.$infoContent.text(message);

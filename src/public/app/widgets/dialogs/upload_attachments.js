@@ -11,9 +11,7 @@ const TPL = `
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">${t("upload_attachments.upload_attachments_to_note")}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('upload_attachments.close')}"></button>
             </div>
             <form class="upload-attachment-form">
                 <div class="modal-body">
@@ -26,8 +24,8 @@ const TPL = `
                     <div class="form-group">
                         <strong>${t("upload_attachments.options")}:</strong>
                         <div class="checkbox">
-                            <label data-toggle="tooltip" title="${t("upload_attachments.tooltip")}">
-                                <input class="shrink-images-checkbox" value="1" type="checkbox" checked> <span>${t("upload_attachments.shrink_images")}</span>
+                            <label data-bs-toggle="tooltip" title="${t("upload_attachments.tooltip")}">
+                                <input class="shrink-images-checkbox form-check-input" value="1" type="checkbox" checked> <span>${t("upload_attachments.shrink_images")}</span>
                             </label>
                         </div>
                     </div>
@@ -49,6 +47,8 @@ export default class UploadAttachmentsDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
+
         this.$form = this.$widget.find(".upload-attachment-form");
         this.$noteTitle = this.$widget.find(".upload-attachment-note-title");
         this.$fileUploadInput = this.$widget.find(".upload-attachment-file-upload-input");
@@ -71,12 +71,12 @@ export default class UploadAttachmentsDialog extends BasicWidget {
             }
         });
 
-        this.$widget.find('[data-toggle="tooltip"]').tooltip({
+        bootstrap.Tooltip.getOrCreateInstance(this.$widget.find('[data-bs-toggle="tooltip"]'), {
             html: true
         });
     }
 
-    async showUploadAttachmentsDialogEvent({noteId}) {
+    async showUploadAttachmentsDialogEvent({ noteId }) {
         this.parentNoteId = noteId;
 
         this.$fileUploadInput.val('').trigger('change'); // to trigger upload button disabling listener below
@@ -96,7 +96,7 @@ export default class UploadAttachmentsDialog extends BasicWidget {
             shrinkImages: boolToString(this.$shrinkImagesCheckbox),
         };
 
-        this.$widget.modal('hide');
+        this.modal.hide();
 
         await importService.uploadFiles('attachments', parentNoteId, files, options);
     }

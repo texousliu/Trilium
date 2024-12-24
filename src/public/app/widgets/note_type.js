@@ -35,7 +35,7 @@ const TPL = `
         overflow-x: hidden;
     }
     </style>
-    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle note-type-button">
+    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle note-type-button">
         <span class="note-type-desc"></span>
         <span class="caret"></span>
     </button>
@@ -47,14 +47,15 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
 
+        this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
+
         this.$widget.on('show.bs.dropdown', () => this.renderDropdown());
 
         this.$noteTypeDropdown = this.$widget.find(".note-type-dropdown");
         this.$noteTypeButton = this.$widget.find(".note-type-button");
         this.$noteTypeDesc = this.$widget.find(".note-type-desc");
 
-        this.$widget.on('click', '.dropdown-item',
-            () => this.$widget.find('.dropdown-toggle').dropdown('toggle'));
+        this.$widget.on('click', '.dropdown-item', () => this.dropdown.toggle());
     }
 
     async refreshWithNote(note) {
@@ -63,7 +64,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
 
         this.$noteTypeDesc.text(await this.findTypeTitle(note.type, note.mime));
 
-        this.$noteTypeButton.dropdown('hide');
+        this.dropdown.hide();
     }
 
     /** the actual body is rendered lazily on note-type button click */
@@ -92,7 +93,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
                     .append('<span class="check">&check;</span> ')
                     .append($('<strong>').text(noteType.title));
             }
-        
+
             if (this.note.type === noteType.type) {
                 $typeLink.addClass("selected");
             }
@@ -100,7 +101,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
             this.$noteTypeDropdown.append($typeLink);
         }
 
-        for (const mimeType of await mimeTypesService.getMimeTypes()) {
+        for (const mimeType of mimeTypesService.getMimeTypes()) {
             if (!mimeType.enabled) {
                 continue;
             }
@@ -127,7 +128,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
 
     async findTypeTitle(type, mime) {
         if (type === 'code') {
-            const mimeTypes = await mimeTypesService.getMimeTypes();
+            const mimeTypes = mimeTypesService.getMimeTypes();
             const found = mimeTypes.find(mt => mt.mime === mime);
 
             return found ? found.title : mime;
@@ -158,10 +159,10 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
             return true;
         }
 
-        return await dialogService.confirm("It is not recommended to change note type when note content is not empty. Do you want to continue anyway?");
+        return await dialogService.confirm(t("note_types.confirm-change"));
     }
 
-    async entitiesReloadedEvent({loadResults}) {
+    async entitiesReloadedEvent({ loadResults }) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }

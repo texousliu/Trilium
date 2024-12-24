@@ -48,7 +48,10 @@ class NoteContextAwareWidget extends BasicWidget {
     }
 
     /**
-     * @inheritdoc
+     * Indicates if the widget is enabled. Widgets are enabled by default. Generally setting this to `false` will cause the widget not to be displayed, however it will still be available on the DOM but hidden.
+     * 
+     * <p>
+     * If the widget is not enabled, it will not receive `refreshWithNote` updates.
      * 
      * @returns {boolean} true when an active note exists
      */

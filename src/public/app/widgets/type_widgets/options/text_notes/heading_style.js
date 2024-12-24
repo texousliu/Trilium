@@ -5,7 +5,7 @@ const TPL = `
 <div class="options-section">
     <h4>${t("heading_style.title")}</h4>
     
-    <select class="heading-style form-control">
+    <select class="heading-style form-select">
         <option value="plain">${t("heading_style.plain")}</option>
         <option value="underline">${t("heading_style.underline")}</option>
         <option value="markdown">${t("heading_style.markdown")}</option>

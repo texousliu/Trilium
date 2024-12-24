@@ -23,19 +23,19 @@ async function copyNodeModuleFileOrFolder(source: string) {
 }
 
 const copy = async () => {
-  for (const srcFile of fs.readdirSync("build")) {    
+  for (const srcFile of fs.readdirSync("build")) {
     const destFile = path.join(DEST_DIR, path.basename(srcFile));
     log(`Copying source ${srcFile} -> ${destFile}.`);
     fs.copySync(path.join("build", srcFile), destFile, { recursive: true });
   }
 
-  const filesToCopy = ["config-sample.ini"];
+  const filesToCopy = ["config-sample.ini", "tsconfig.webpack.json"];
   for (const file of filesToCopy) {
     log(`Copying ${file}`);
     await fs.copy(file, path.join(DEST_DIR, file));
   }
 
-  const dirsToCopy = ["images", "libraries", "db"];
+  const dirsToCopy = ["images", "libraries", "translations", "db"];
   for (const dir of dirsToCopy) {
     log(`Copying ${dir}`);
     await fs.copy(dir, path.join(DEST_DIR, dir));
@@ -45,7 +45,16 @@ const copy = async () => {
   for (const dir of srcDirsToCopy) {
     log(`Copying ${dir}`);
     await fs.copy(dir, path.join(DEST_DIR_SRC, path.basename(dir)));
-  }  
+  }
+
+  /**
+    * Directories to be copied relative to the project root into <resource_dir>/src/public/app-dist.
+    */
+  const publicDirsToCopy = [ "./src/public/app/doc_notes" ];
+  const PUBLIC_DIR = path.join(DEST_DIR, "src", "public", "app-dist");
+  for (const dir of publicDirsToCopy) {
+    await fs.copy(dir, path.join(PUBLIC_DIR, path.basename(dir)));
+  }
 
   const nodeModulesFile = [
     "node_modules/react/umd/react.production.min.js",
@@ -55,6 +64,8 @@ const copy = async () => {
     "node_modules/katex/dist/katex.min.js",
     "node_modules/katex/dist/contrib/mhchem.min.js",
     "node_modules/katex/dist/contrib/auto-render.min.js",
+    "node_modules/@highlightjs/cdn-assets/highlight.min.js",
+    "node_modules/@mind-elixir/node-menu/dist/node-menu.umd.cjs",
   ];
 
   for (const file of nodeModulesFile) {
@@ -89,7 +100,9 @@ const copy = async () => {
     "node_modules/codemirror/addon/",
     "node_modules/codemirror/mode/",
     "node_modules/codemirror/keymap/",
-    "node_modules/mind-elixir/dist/"
+    "node_modules/mind-elixir/dist/",
+    "node_modules/@highlightjs/cdn-assets/languages",
+    "node_modules/@highlightjs/cdn-assets/styles"
   ];
 
   for (const folder of nodeModulesFolder) {

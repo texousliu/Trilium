@@ -34,9 +34,7 @@ const TPL = `
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">${t('export.export_note_title')} <span class="export-note-title"></span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="${t('export.close')}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('export.close')}"></button>
             </div>
             <form class="export-form">
                 <div class="modal-body">
@@ -51,7 +49,7 @@ const TPL = `
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="radio" name="export-subtree-format" value="html">
-                                ${t('export.format_html')}
+                                ${t('export.format_html_zip')}
                             </label>
                         </div>
 
@@ -127,6 +125,7 @@ export default class ExportDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$form = this.$widget.find(".export-form");
         this.$noteTitle = this.$widget.find(".export-note-title");
         this.$subtreeFormats = this.$widget.find(".export-subtree-formats");
@@ -137,7 +136,7 @@ export default class ExportDialog extends BasicWidget {
         this.$opmlVersions = this.$widget.find(".opml-versions");
 
         this.$form.on('submit', () => {
-            this.$widget.modal('hide');
+            this.modal.hide();
 
             const exportType = this.$widget.find("input[name='export-type']:checked").val();
 
@@ -188,7 +187,7 @@ export default class ExportDialog extends BasicWidget {
         });
     }
 
-    async showExportDialogEvent({notePath, defaultType}) {
+    async showExportDialogEvent({ notePath, defaultType }) {
         this.taskId = '';
         this.$exportButton.removeAttr("disabled");
 
@@ -208,7 +207,7 @@ export default class ExportDialog extends BasicWidget {
 
         utils.openDialog(this.$widget);
 
-        const {noteId, parentNoteId} = treeService.getNoteIdAndParentIdFromUrl(notePath);
+        const { noteId, parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(notePath);
 
         this.branchId = await froca.getBranchId(parentNoteId, noteId);
         this.$noteTitle.text(await treeService.getNoteTitle(noteId));

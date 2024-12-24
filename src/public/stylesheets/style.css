@@ -15,6 +15,14 @@
     src: url(../fonts/JetBrainsMono-Light.woff2) format('woff');
 }
 
+.table {
+    --bs-table-bg: transparent !important;
+}
+
+:root {
+    --submenu-opening-delay: 300ms;
+}
+
 html {
     /* this fixes FF filter vs. position fixed bug: https://github.com/zadam/trilium/issues/233 */
     height: 100%;
@@ -22,7 +30,7 @@ html {
 
 body {
     /* Fix for CKEditor block gutter icon "stretching" body and causing scrollbar to appear after pressing enter
-       on the last line of the editor. */
+        on the last line of the editor. */
     position: fixed;
     width: 100%;
     height: 100%;
@@ -30,28 +38,76 @@ body {
     color: var(--main-text-color);
     font-family: var(--main-font-family);
     font-size: var(--main-font-size);
+
+    --native-titlebar-foreground: var(--main-text-color);
+    --native-titlebar-darwin-x-offset: 10;
+    --native-titlebar-darwin-y-offset: 12;
+}
+
+body.mobile .desktop-only {
+    display: none !important;
+}
+
+a {
+    text-decoration: none;
 }
 
 a, a:visited, a:hover {
     color: var(--link-color);
 }
 
-input, select, textarea {
-    color: var(--input-text-color) !important;
-    background: var(--input-background-color) !important;
+.note-list-widget a {
+    text-decoration: none;
 }
 
-#left-pane input, select, textarea {
-    color: var(--left-pane-text-color) !important;
-    background: var(--left-pane-background-color) !important;
+.note-list-widget a:hover {
+    text-decoration: underline;
 }
 
-input::placeholder {
+input,
+select,
+textarea,
+.form-control,
+.form-select {
+    color: var(--input-text-color);
+    background: var(--input-background-color);
+}
+
+.form-control:focus {
+    color: var(--input-text-color);
+    background: var(--input-background-color);
+}
+
+.form-select {
+    background: var(--input-background-color) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23ffffff' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>") right .75rem center/15px 20px no-repeat;
+}
+
+/* Restore default apperance */
+input[type="number"],
+input[type="checkbox"] {
+    appearance: auto !important;
+}
+
+#left-pane input,
+#left-pane select,
+#left-pane textarea {
+    color: var(--left-pane-text-color);
+    background: var(--left-pane-background-color);
+}
+
+input::placeholder,
+.form-control::placeholder,
+#left-pane input::placeholder {
     color: var(--muted-text-color);
 }
 
-table td, table th {
+.table thead th,
+.table td,
+.table th {
+    /* Fix center vertical alignment of table cells */
+    vertical-align: middle;
     color: var(--main-text-color);
+    background: transparent;
 }
 
 .ck .todo-list__checkmark {
@@ -184,10 +240,43 @@ div.ui-tooltip {
     display: none;
 }
 
+.dropdown-divider {
+    border-color: var(--dropdown-border-color);
+}
+
+@keyframes dropdown-menu-opening {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
+
 .dropdown-menu {
     border: 1px solid var(--dropdown-border-color);
     color: var(--menu-text-color) !important;
     background-color: var(--menu-background-color) !important;
+    font-size: inherit;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
+    animation: dropdown-menu-opening 100ms ease-in;
+}
+
+@supports(animation-fill-mode: forwards) {
+    /* Delay the opening of submenus */
+    .dropdown-submenu .dropdown-menu {
+        opacity: 0;
+        animation-fill-mode: forwards;
+        animation-delay: var(--submenu-opening-delay);
+    }
+}
+
+.dropdown-menu.static {
+    box-shadow: unset;
+}
+
+.dropend .dropdown-toggle::after {
+    margin-left: .5em;
+    color: var(--muted-text-color);
 }
 
 .dropdown-menu .disabled {
@@ -197,15 +286,27 @@ div.ui-tooltip {
 
 .dropdown-menu .disabled .disabled-tooltip {
     pointer-events: all;
-    color: var(--menu-text-color);
+    margin-left: 8px;
+    font-size: .5em;
+    color: var(--disabled-tooltip-icon-color);
     cursor: help;
+    opacity: .75;
 }
 
-.dropdown-menu a:hover:not(.disabled), .dropdown-item:hover:not(.disabled) {
+.dropdown-menu .disabled .disabled-tooltip:hover {
+    opacity: 1;
+}
+
+.dropdown-menu a:hover:not(.disabled), .dropdown-item:hover:not(.disabled, .dropdown-item-container) {
     color: var(--hover-item-text-color) !important;
     background-color: var(--hover-item-background-color) !important;
     border-color: var(--hover-item-border-color) !important;
     cursor: pointer;
+}
+
+.dropdown-item-container, .dropdown-item-container:hover, .dropdown-item-container:active {
+    background: transparent;
+    cursor: default;
 }
 
 .dropdown-menu a:not(.selected) .check {
@@ -237,6 +338,10 @@ div.ui-tooltip {
     background-color: var(--active-item-background-color) !important;
     border-color: var(--active-item-border-color) !important;
     outline: none;
+}
+
+.dropdown-item .destructive-action-icon {
+    color: var(--dropdown-item-icon-destructive-color);
 }
 
 .CodeMirror {
@@ -279,6 +384,10 @@ body .CodeMirror {
 .btn {
     border-radius: var(--button-border-radius);
     border-color: var(--button-border-color);
+}
+
+.btn:hover {
+    border-color: var(--hover-item-border-color);
 }
 
 button.btn, button.btn-sm {
@@ -329,7 +438,7 @@ button.btn, button.btn-sm {
     padding: 0;
 }
 
-pre:not(.CodeMirror-line) {
+pre:not(.CodeMirror-line):not(.hljs) {
     color: var(--main-text-color) !important;
     white-space: pre-wrap;
     font-size: 100%;
@@ -343,7 +452,7 @@ pre:not(.CodeMirror-line) {
     padding-top: 8px;
 }
 
-.show-recent-notes-button {
+.show-recent-notes-button, .full-text-search-button {
     cursor: pointer;
     font-size: 1.3em;
     padding-left: 5px;
@@ -395,50 +504,90 @@ table.promoted-attributes-in-tooltip td, table.promoted-attributes-in-tooltip th
 
 .tooltip {
     font-size: var(--main-font-size) !important;
+    /*
+        TODO: Investigate the purpose of this
+        z-index: calc(var(--ck-z-panel) - 1) !important;
+    */
+    z-index: 3000;
 }
 
-.bs-tooltip-bottom .arrow::before { border-bottom-color: var(--main-border-color) !important; }
-.bs-tooltip-top .arrow::before    { border-top-color: var(--main-border-color) !important; }
-.bs-tooltip-left .arrow::before   { border-left-color: var(--main-border-color) !important; }
-.bs-tooltip-right .arrow::before  { border-right-color: var(--main-border-color) !important; }
-
-.bs-tooltip-bottom .arrow::after { border-bottom-color: var(--tooltip-background-color) !important; }
-.bs-tooltip-top .arrow::after    { border-top-color: var(--tooltip-background-color) !important; }
-.bs-tooltip-left .arrow::after   { border-left-color: var(--tooltip-background-color) !important; }
-.bs-tooltip-right .arrow::after  { border-right-color: var(--tooltip-background-color) !important; }
-
-.tooltip .arrow::after {
+.tooltip-trigger {
     position: absolute;
-    content: '';
-    border-color: transparent;
-    border-style: solid;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    pointer-events: none;
 }
 
-.bs-tooltip-auto[x-placement^='left'] .arrow::after,
-.bs-tooltip-left .arrow::after {
+.bs-tooltip-bottom .tooltip-arrow::before { border-bottom-color: var(--main-border-color) !important; }
+.bs-tooltip-top .tooltip-arrow::before    { border-top-color: var(--main-border-color) !important; }
+.bs-tooltip-left .tooltip-arrow::before   { border-left-color: var(--main-border-color) !important; }
+.bs-tooltip-right .tooltip-arrow::before  { border-right-color: var(--main-border-color) !important; }
+
+.bs-tooltip-bottom .tooltip-arrow::after { border-bottom-color: var(--tooltip-background-color) !important; }
+.bs-tooltip-top .tooltip-arrow::after    { border-top-color: var(--tooltip-background-color) !important; }
+.bs-tooltip-left .tooltip-arrow::after   { border-left-color: var(--tooltip-background-color) !important; }
+.bs-tooltip-right .tooltip-arrow::after  { border-right-color: var(--tooltip-background-color) !important; }
+
+.bs-tooltip-auto[data-popper-placement^='left'] .tooltip-arrow::before,
+.bs-tooltip-left .tooltip-arrow::before {
     left: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
+    border-left-color: var(--main-border-color) !important;
 }
 
-.bs-tooltip-auto[x-placement^='bottom'] .arrow::after,
-.bs-tooltip-bottom .arrow::after {
+.bs-tooltip-auto[data-popper-placement^='bottom'] .tooltip-arrow::before,
+.bs-tooltip-bottom .tooltip-arrow::before {
     bottom: -1px;
     border-width: 0 0.4rem 0.4rem;
+    border-bottom-color: var(--main-border-color) !important;
 }
 
-.bs-tooltip-auto[x-placement^='right'] .arrow::after,
-.bs-tooltip-right .arrow::after {
+.bs-tooltip-auto[data-popper-placement^='right'] .tooltip-arrow::before,
+.bs-tooltip-right .tooltip-arrow::before {
     right: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
+    border-right-color: var(--main-border-color) !important;
 }
 
-.bs-tooltip-auto[x-placement^='top'] .arrow::after,
-.bs-tooltip-top .arrow::after {
+.bs-tooltip-auto[data-popper-placement^='top'] .tooltip-arrow::before,
+.bs-tooltip-top .tooltip-arrow::before {
     top: -1px;
     border-width: 0.4rem 0.4rem 0;
+    border-top-color: var(--main-border-color) !important;
 }
 
-.note-tooltip.tooltip .arrow {
+.bs-tooltip-auto[data-popper-placement^='left'] .tooltip-arrow::after,
+.bs-tooltip-left .tooltip-arrow::after {
+    left: -1px;
+    border-width: 0.4rem 0 0.4rem 0.4rem;
+    border-left-color: var(--tooltip-background-color) !important;
+}
+
+.bs-tooltip-auto[data-popper-placement^='bottom'] .tooltip-arrow::after,
+.bs-tooltip-bottom .tooltip-arrow::after {
+    bottom: -1px;
+    border-width: 0 0.4rem 0.4rem;
+    border-bottom-color: var(--tooltip-background-color) !important;
+}
+
+.bs-tooltip-auto[data-popper-placement^='right'] .tooltip-arrow::after,
+.bs-tooltip-right .tooltip-arrow::after {
+    right: -1px;
+    border-width: 0.4rem 0.4rem 0.4rem 0;
+    border-right-color: var(--tooltip-background-color) !important;
+}
+
+.bs-tooltip-auto[data-popper-placement^='top'] .tooltip-arrow::after,
+.bs-tooltip-top .tooltip-arrow::after {
+    top: -1px;
+    border-width: 0.4rem 0.4rem 0;
+    border-top-color: var(--tooltip-background-color) !important;
+}
+
+.note-tooltip.tooltip .tooltip-arrow {
     display: none;
 }
 
@@ -627,6 +776,10 @@ div[data-notify="container"] {
     margin: 0 !important;
 }
 
+.ck-content a:hover {
+    text-decoration: underline;
+}
+
 #options-dialog input[type=number] {
     text-align: right;
 }
@@ -651,6 +804,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 }
 
 .card {
+    color: inherit !important;
     background-color: inherit !important;
     border-color: var(--main-border-color) !important;
 }
@@ -667,7 +821,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 }
 
 .modal-header {
-    padding: 0.7rem 1rem 0 1rem !important; /* make modal header padding slightly smaller */
+    padding: 0.5rem 1rem 0.5rem 1rem !important; /* make modal header padding slightly smaller */
 }
 
 #toast-container {
@@ -682,7 +836,6 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     color: var(--main-text-color) !important;
     z-index: 9999999999 !important;
     pointer-events: all;
-    flex-basis: 0; /* otherwise toast is always at least 350px tall (happens since 4.5.1, perhaps a bug) */
 }
 
 .toast-header {
@@ -712,6 +865,15 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     font-weight: bold !important;
     color: inherit !important;
     vertical-align: baseline !important;
+}
+
+
+.side-checkbox {
+    display: flex;
+    align-items: end;
+    padding-top: .375rem;
+    padding-bottom: .375rem;
+    line-height: 1.5;
 }
 
 .ck-content .todo-list .todo-list__label > input:before {
@@ -789,10 +951,6 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     cursor: row-resize;
 }
 
-.dropdown-menu {
-    font-size: inherit;
-}
-
 #context-menu-container {
     max-height: 100vh;
     /* !!! Cannot set overflow: auto, submenus will break !!! */
@@ -826,6 +984,18 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
     overflow: auto;
 }
 
+body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
+    left: calc(-100% + 10px);
+}
+
+#launcher-pane.horizontal .right-dropdown-widget {
+    width: 53px;
+}
+
+#launcher-pane.vertical .right-dropdown-widget {
+    height: 53px;
+}
+
 /* rotate caret on hover */
 .dropdown-menu > li > a:hover:after {
     text-decoration: underline;
@@ -846,7 +1016,7 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
     background-color: inherit;
 }
 
-[data-toggle="tooltip"]:not(.button-widget) span {
+[data-bs-toggle="tooltip"]:not(.button-widget) span {
     padding-bottom: 0;
     border-bottom: 1px dotted;
 }
@@ -862,14 +1032,6 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
 .ck.ck-mentions > .ck-list__item .ck-button {
     /* wrap text for very long note path title */
     white-space: normal !important;
-}
-
-/**
-    ckeditor's autocomplete
-    should be higher than 1070 of tooltip
-*/
-.ck.ck-balloon-panel {
-    z-index: 1101;
 }
 
 .area-expander {
@@ -936,8 +1098,20 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
     border: none;
     color: var(--launcher-pane-text-color);
     background-color: var(--launcher-pane-background-color);
-    height: 53px;
+}
+
+#launcher-pane.vertical .launcher-button {
     width: 100%;
+    height: 53px;
+}
+
+#launcher-pane.horizontal .launcher-button {
+    width: 53px;
+    height: 100%;
+}
+
+#launcher-pane.horizontal .quick-search {
+    width: 350px;
 }
 
 #launcher-pane .icon-action:hover {
@@ -953,11 +1127,6 @@ li.dropdown-submenu:hover > ul.dropdown-menu {
     color: var(--launcher-pane-text-color);
     background-color: var(--launcher-pane-background-color);
 }
-
-input {
-    background-color: transparent !important;
-}
-
 
 #right-pane {
     overflow: auto;
@@ -1059,20 +1228,17 @@ button.close:hover {
 }
 
 .options-number-input {
-    text-align: right;
     /* overriding settings from .form-control */
     width: 10em !important;
     flex-grow: 0 !important;
 }
 
-textarea {
-    cursor: auto;
+.options-mime-types {
+    column-width: 250px;
 }
 
-.table thead th,
-.table td, .table th {
-    /* Fix center vertical alignment of table cells */
-    vertical-align: middle;
+textarea {
+    cursor: auto;
 }
 
 .ck-powered-by-balloon {
@@ -1092,7 +1258,6 @@ textarea {
 
 .jump-to-note-dialog .modal-header {
     align-items: center;
-    padding-bottom: 1rem !important;
 }
 
 .jump-to-note-dialog .modal-body {
@@ -1105,4 +1270,47 @@ textarea {
 
 .jump-to-note-results .aa-suggestions {
     padding: 1rem;
+}
+
+.empty-table-placeholder {
+    text-align: center;
+    color: var(--muted-text-color);
+}
+
+body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
+    padding-left: 1em;
+}
+
+#tab-row-left-spacer {
+    width: env(titlebar-area-x);
+    -webkit-app-region: drag;
+}
+
+.tab-row-widget {
+    padding-right: calc(100vw - env(titlebar-area-width, 100vw));
+}
+
+.tab-row-container .toggle-button {
+    background: transparent;
+    appearance: none;
+    border: 0;
+    width: 24px;
+    height: 24px;
+    color: var(--launcher-pane-text-color);
+    margin: 8px 10px;
+    font-size: 18px;
+}
+
+.recent-changes-content li > span:first-child::after {
+    content: " - ";
+}
+
+.recent-changes-content li {
+    border: 1px solid transparent;
+}
+
+.recent-changes-content li:not(.deleted-note):hover {
+    border-color: var(--hover-item-border-color);
+    background: var(--hover-item-background-color);
+    color: var(--hover-item-text-color);
 }

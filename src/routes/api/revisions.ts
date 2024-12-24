@@ -35,9 +35,9 @@ function getRevisionBlob(req: Request) {
 function getRevisions(req: Request) {
     return becca.getRevisionsFromQuery(`
         SELECT revisions.*,
-               LENGTH(blobs.content) AS contentLength
+                LENGTH(blobs.content) AS contentLength
         FROM revisions
-        JOIN blobs ON revisions.blobId = blobs.blobId 
+        JOIN blobs ON revisions.blobId = blobs.blobId
         WHERE revisions.noteId = ?
         ORDER BY revisions.utcDateCreated DESC`, [req.params.noteId]);
 }
@@ -112,6 +112,13 @@ function eraseRevision(req: Request) {
     eraseService.eraseRevisions([req.params.revisionId]);
 }
 
+function eraseAllExcessRevisions() {
+    let allNoteIds = sql.getRows("SELECT noteId FROM notes WHERE SUBSTRING(noteId, 1, 1) != '_'") as { noteId: string }[];
+    allNoteIds.forEach(row => {
+        becca.getNote(row.noteId)?.eraseExcessRevisionSnapshots()
+    });
+}
+
 function restoreRevision(req: Request) {
     const revision = becca.getRevision(req.params.revisionId);
 
@@ -139,6 +146,8 @@ function restoreRevision(req: Request) {
             }
 
             note.title = revision.title;
+            note.mime = revision.mime;
+            note.type = revision.type as any;
             note.setContent(revisionContent, { forceSave: true });
         });
     }
@@ -149,9 +158,9 @@ function getEditedNotesOnDate(req: Request) {
         SELECT notes.*
         FROM notes
         WHERE noteId IN (
-                SELECT noteId FROM notes 
+                SELECT noteId FROM notes
                 WHERE notes.dateCreated LIKE :date
-                   OR notes.dateModified LIKE :date
+                    OR notes.dateModified LIKE :date
             UNION ALL
                 SELECT noteId FROM revisions
                 WHERE revisions.dateLastEdited LIKE :date
@@ -211,6 +220,7 @@ export default {
     downloadRevision,
     getEditedNotesOnDate,
     eraseAllRevisions,
+    eraseAllExcessRevisions,
     eraseRevision,
     restoreRevision
 };

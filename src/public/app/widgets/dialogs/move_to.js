@@ -5,18 +5,15 @@ import froca from "../../services/froca.js";
 import branchService from "../../services/branches.js";
 import treeService from "../../services/tree.js";
 import BasicWidget from "../basic_widget.js";
-import { t } from "../../services/i18n.js"; // Added import
+import { t } from "../../services/i18n.js";
 
 const TPL = `
 <div class="move-to-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" style="max-width: 1000px" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mr-auto">${t("move_to.dialog_title")}</h5>
-                
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: 0 !important;">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title me-auto">${t("move_to.dialog_title")}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("move_to.close")}"></button>
             </div>
             <form class="move-to-form">
                 <div class="modal-body">

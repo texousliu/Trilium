@@ -13,7 +13,7 @@ const TPL = `
             
             <div style="margin-left: 10px; margin-right: 10px">${t('ancestor.depth_label')}:</div>
             
-            <select name="depth" class="form-control d-inline ancestor-depth" style="flex-shrink: 3">
+            <select name="depth" class="form-select d-inline ancestor-depth" style="flex-shrink: 3">
                 <option value="">${t('ancestor.depth_doesnt_matter')}</option>
                 <option value="eq1">${t('ancestor.depth_eq', {count: 1})} (${t('ancestor.direct_children')})</option>
                 <option value="eq2">${t('ancestor.depth_eq', {count: 2})}</option>

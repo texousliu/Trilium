@@ -36,18 +36,16 @@ const TPL = `
     
     <div class="form-group row">
         <div class="col-6">
-            <label>${t("fonts.font_family")}</label>
-            <select class="main-font-family form-control"></select>
+            <label for="main-font-family">${t("fonts.font_family")}</label>
+            <select id="main-font-family" class="main-font-family form-select"></select>
         </div>
     
         <div class="col-6">
-            <label>${t("fonts.size")}</label>
+            <label for="main-font-size">${t("fonts.size")}</label>
 
             <div class="input-group">
-                <input type="number" class="main-font-size form-control options-number-input" min="50" max="200" step="10"/>
-                <div class="input-group-append">
-                    <span class="input-group-text">%</span>
-                </div>
+                <input id="main-font-size" type="number" class="main-font-size form-control options-number-input" min="50" max="200" step="10"/>
+                <span class="input-group-text">%</span>
             </div>
         </div>
     </div>
@@ -56,18 +54,16 @@ const TPL = `
 
     <div class="form-group row">
         <div class="col-4">
-            <label>${t("fonts.font_family")}</label>
-            <select class="tree-font-family form-control"></select>
+            <label for="tree-font-family">${t("fonts.font_family")}</label>
+            <select id="tree-font-family" class="tree-font-family form-select"></select>
         </div>
     
         <div class="col-6">
-            <label>${t("fonts.size")}</label>
+            <label for="tree-font-size">${t("fonts.size")}</label>
 
             <div class="input-group">
-                <input type="number" class="tree-font-size form-control options-number-input" min="50" max="200" step="10"/>
-                <div class="input-group-append">
-                    <span class="input-group-text">%</span>
-                </div>
+                <input id="tree-font-size" type="number" class="tree-font-size form-control options-number-input" min="50" max="200" step="10"/>
+                <span class="input-group-text">%</span>
             </div>
         </div>
     </div>
@@ -76,18 +72,16 @@ const TPL = `
     
     <div class="form-group row">
         <div class="col-4">
-            <label>${t("fonts.font_family")}</label>
-            <select class="detail-font-family form-control"></select>
+            <label for="detail-font-family">${t("fonts.font_family")}</label>
+            <select id="detail-font-family" class="detail-font-family form-select"></select>
         </div>
         
         <div class="col-6">
-            <label>${t("fonts.size")}</label>
+            <label for="detail-font-size">${t("fonts.size")}</label>
 
             <div class="input-group">
-                <input type="number" class="detail-font-size form-control options-number-input" min="50" max="200" step="10"/>
-                <div class="input-group-append">
-                    <span class="input-group-text">%</span>
-                </div>
+                <input id="detail-font-size" type="number" class="detail-font-size form-control options-number-input" min="50" max="200" step="10"/>
+                <span class="input-group-text">%</span>
             </div>
         </div>
     </div>
@@ -96,18 +90,16 @@ const TPL = `
     
     <div class="form-group row">
         <div class="col-4">
-            <label>${t("fonts.font_family")}</label>
-            <select class="monospace-font-family form-control"></select>
+            <label for="monospace-font-family">${t("fonts.font_family")}</label>
+            <select id="monospace-font-family" class="monospace-font-family form-select"></select>
         </div>
     
         <div class="col-6">
-            <label>${t("fonts.size")}</label>
+            <label for="monospace-font-size">${t("fonts.size")}</label>
 
             <div class="input-group">
-                <input type="number" class="monospace-font-size form-control options-number-input" min="50" max="200" step="10"/>
-                <div class="input-group-append">
-                    <span class="input-group-text">%</span>
-                </div>
+                <input id="monospace-font-size" type="number" class="monospace-font-size form-control options-number-input" min="50" max="200" step="10"/>
+                <span class="input-group-text">%</span>
             </div>
         </div>
     </div>
@@ -141,13 +133,16 @@ export default class FontsOptions extends OptionsWidget {
         this.$widget.find(".reload-frontend-button").on("click", () => utils.reloadFrontendApp("changes from appearance options"));
     }
 
+    isEnabled() {
+        return this._isEnabled;
+    }
+
     async optionsLoaded(options) {
-        if (options.overrideThemeFonts !== 'true') {
-            this.toggleInt(false);
+        this._isEnabled = (options.overrideThemeFonts === 'true');
+        this.toggleInt(this._isEnabled);
+        if (!this._isEnabled) {
             return;
         }
-
-        this.toggleInt(true);
 
         this.$mainFontSize.val(options.mainFontSize);
         this.fillFontFamilyOptions(this.$mainFontFamily, options.mainFontFamily);
