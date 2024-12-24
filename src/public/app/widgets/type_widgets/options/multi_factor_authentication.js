@@ -4,7 +4,7 @@ import OptionsWidget from "./options_widget.js";
 
 const TPL = `
 <div class="options-section">
-    <h2 class=""><b>What is Multi-Factor Authentication?</b></h2>
+    <h4 class="">What is Multi-Factor Authentication?</h4>
     <i>
         Multi-Factor Authentication (MFA) adds an extra layer of security to your account. Instead
             of just entering a password to log in, MFA requires you to provide one or more additional
@@ -15,7 +15,7 @@ const TPL = `
 </div>
 
 <div class="options-section">
-    <h3><b>OAuth/OpenID</b></h3>
+    <h4>OAuth/OpenID</h4>
     <span><i>OpenID is a standardized way to let you log into websites using an account from another service, like Google, to verify your identity.</i></span>
     <div>
         <label>
@@ -32,7 +32,7 @@ const TPL = `
 </div>
 
 <div class="options-section">
-    <h3><b>Time-based One-Time Password</b></h3>
+    <h4>Time-based One-Time Password</h4>
     <div>
         <label>
         <b>TOTP Enabled</b>
