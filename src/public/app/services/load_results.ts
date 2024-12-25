@@ -1,6 +1,11 @@
-import { NoteRow } from "../../../becca/entities/rows.js";
 import { AttributeType } from "../entities/fattribute.js";
 import { EntityChange } from "../server_types.js";
+
+// TODO: Deduplicate with server.
+
+interface NoteRow {
+    isDeleted?: boolean;
+}
 
 interface BranchRow {
     branchId: string;
