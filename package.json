@@ -1,6 +1,6 @@
 {
   "name": "@tomaitken/ckeditor5-footnotes",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A plugin for CKEditor 5 to allow footnotes.",
   "keywords": [
     "ckeditor",
@@ -40,7 +40,7 @@
     "@types/mocha": "^9.1.1",
     "@typescript-eslint/eslint-plugin": "~5.43.0",
     "@typescript-eslint/parser": "^5.18.0",
-    "ckeditor5": "latest",
+    "ckeditor5": "^43.0.0",
     "eslint": "^7.32.0",
     "eslint-config-ckeditor5": ">=6.0.0",
     "http-server": "^14.1.0",
