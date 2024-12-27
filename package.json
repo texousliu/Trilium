@@ -55,7 +55,7 @@
     "@braintree/sanitize-url": "7.1.1",
     "@electron/remote": "2.1.2",
     "@excalidraw/excalidraw": "0.17.6",
-    "@highlightjs/cdn-assets": "11.11.0",
+    "@highlightjs/cdn-assets": "11.11.1",
     "@mermaid-js/layout-elk": "0.1.7",
     "@mind-elixir/node-menu": "1.0.3",
     "@triliumnext/express-partial-content": "1.0.1",    
