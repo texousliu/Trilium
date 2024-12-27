@@ -921,6 +921,26 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     cursor: default !important;
 }
 
+body.mobile .dropdown-submenu {
+    padding: 0 !important;
+}
+
+body.mobile .dropdown-submenu > .dropdown-menu {
+    border: 0 !important;
+    padding: 0 !important;
+    margin-top: 0 !important;
+    overflow: hidden !important;
+    top: unset !important;
+}
+
+body.mobile .dropdown-submenu > .dropdown-toggle {
+    display: none;
+}
+
+body.mobile .dropdown-submenu:hover {
+    background: transparent !important;
+}
+
 html body .dropdown-item.disabled {
     color: var(--menu-text-color) !important;
     opacity: var(--menu-item-disabled-opacity);
