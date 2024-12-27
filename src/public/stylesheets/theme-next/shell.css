@@ -485,6 +485,14 @@ div.quick-search .search-button.show  {
     --menu-item-icon-vert-offset: 1.5px;
 }
 
+body.mobile #context-menu-container {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: unset !important;
+}
+
 /* Tree actions toolbar */
 
 /* Toolbar container (collapsed state) */
