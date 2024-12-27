@@ -119,6 +119,14 @@ body.layout-horizontal > .horizontal {
     margin: var(--launcher-pane-button-gap) var(--launcher-pane-button-margin);
 }
 
+body.mobile #launcher-pane .dropdown-menu.show {
+    position: fixed !important;
+    top: var(--launcher-pane-size) !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: unset !important;
+}
+
 #launcher-pane .launcher-button {    
     padding: 0 !important;
     border-radius: 8px;
