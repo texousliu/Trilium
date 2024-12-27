@@ -939,6 +939,7 @@ body.mobile .dropdown-item:not(:last-of-type) {
 
 body.mobile .dropdown-menu {
     font-size: 1.05rem !important;
+    position: static !important;
 }
 
 body.mobile .dropdown-submenu > .dropdown-menu {
@@ -949,7 +950,7 @@ body.mobile .dropdown-submenu > .dropdown-menu {
     margin-top: 0 !important;
 }
 
-body.mobile .dropdown-submenu > .dropdown-toggle {
+body.mobile #launcher-pane .dropdown-submenu > .dropdown-toggle {
     display: none;
 }
 
