@@ -925,12 +925,20 @@ body.mobile .dropdown-submenu {
     padding: 0 !important;
 }
 
+body.mobile .dropdown-item:not(:last-of-type) {
+    margin-bottom: 0.5em;
+}
+
+body.mobile .dropdown-menu {
+    font-size: 1.05rem !important;
+}
+
 body.mobile .dropdown-submenu > .dropdown-menu {
     border: 0 !important;
     padding: 0 !important;
-    margin-top: 0 !important;
     overflow: hidden !important;
     top: unset !important;
+    margin-top: 0 !important;
 }
 
 body.mobile .dropdown-submenu > .dropdown-toggle {
