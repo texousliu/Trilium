@@ -3,7 +3,7 @@ import NoteTitleWidget from "../widgets/note_title.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
-import CloseDetailButtonWidget from "../widgets/mobile_widgets/close_detail_button.js";
+import ToggleSidebarButtonWidget from "../widgets/mobile_widgets/toggle_sidebar_button.js";
 import MobileDetailMenuWidget from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
@@ -24,7 +24,6 @@ import RootContainer from "../widgets/containers/root_container.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
-import options from "../services/options.js";
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 
 const MOBILE_CSS = `
@@ -142,14 +141,14 @@ export default class MobileLayout {
                     .child(new FlexContainer('row').contentSized()
                         .css('font-size', 'larger')
                         .css('align-items', 'center')
+                        .child(new ToggleSidebarButtonWidget().contentSized())
                         .child(new NoteTitleWidget()
                             .contentSized()
                             .css("position: relative;")
                             .css("top: 5px;")
-                            .css("padding-left", "0.5em")
-                        )
+                            .css("padding-left", "0.5em"))
                         .child(new MobileDetailMenuWidget(true).contentSized())
-                        .child(new CloseDetailButtonWidget().contentSized()))
+                    )
                     .child(new SharedInfoWidget())
                     .child(new FloatingButtons()
                         .child(new EditButton())

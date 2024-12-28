@@ -12,7 +12,9 @@ export default class SidebarContainer extends FlexContainer {
         super.doRender();
 
         this.$widget.on("click", () => {
-            this.triggerEvent('activeScreenChanged', "detail");
+            this.triggerCommand('setActiveScreen', {
+                screen: "detail"
+            });
         });
     }
 
