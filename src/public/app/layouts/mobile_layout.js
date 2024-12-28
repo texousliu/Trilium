@@ -120,12 +120,6 @@ export default class MobileLayout {
             .class("horizontal-layout")
             .cssBlock(MOBILE_CSS)
             .child(new FlexContainer("row")
-                .class("horizontal")
-                .css("height", "53px")
-                .child(new LauncherContainer(true))
-                .child(new GlobalMenuWidget(true))
-                .id("launcher-pane"))
-            .child(new FlexContainer("row")
                 .filling()
                 .child(new ScreenContainer("tree", 'column')
                     .class("d-sm-flex d-md-flex d-lg-flex d-xl-flex col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3")
@@ -177,6 +171,12 @@ export default class MobileLayout {
                 )
                 .child(new ProtectedSessionPasswordDialog())
                 .child(new ConfirmDialog())
-            );
+            )
+            .child(new FlexContainer("row")
+                .class("horizontal")
+                .css("height", "53px")
+                .child(new LauncherContainer(true))
+                .child(new GlobalMenuWidget(true))
+                .id("launcher-pane"));
     }
 }

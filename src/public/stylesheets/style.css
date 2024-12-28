@@ -21,6 +21,7 @@
 
 :root {
     --submenu-opening-delay: 300ms;
+    --launcher-pane-size: 53px;
 }
 
 html {
@@ -1174,7 +1175,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
 body.mobile #launcher-pane .dropdown-menu.show {
     position: fixed !important;
-    top: var(--launcher-pane-size) !important;
+    bottom: var(--launcher-pane-size) !important;
+    top: unset !important;
     left: 0 !important;
     right: 0 !important;
     transform: unset !important;
