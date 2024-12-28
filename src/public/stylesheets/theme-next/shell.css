@@ -485,18 +485,6 @@ div.quick-search .search-button.show  {
     --menu-item-icon-vert-offset: 1.5px;
 }
 
-body.mobile #context-menu-container {
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: unset !important;
-    max-height: 70vh;
-    overflow: auto !important;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
 /* Tree actions toolbar */
 
 /* Toolbar container (collapsed state) */
@@ -949,19 +937,6 @@ body.mobile .dropdown-submenu {
 
 body.mobile .dropdown-item:not(:last-of-type) {
     margin-bottom: 0.5em;
-}
-
-body.mobile .dropdown-menu {
-    font-size: 1.05rem !important;
-    position: static !important;
-}
-
-body.mobile .dropdown-submenu > .dropdown-menu {
-    border: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    top: unset !important;
-    margin-top: 0 !important;
 }
 
 body.mobile #launcher-pane .dropdown-submenu > .dropdown-toggle {
