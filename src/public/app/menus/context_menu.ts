@@ -170,14 +170,12 @@ class ContextMenu {
                         }
 
                         if (this.isMobile && "items" in item && item.items) {
-                            // We run using a timeout to avoid the layout change during event handling, which would trigger the menu to be hidden sometimes.
-                            setTimeout(() => {
-                                $(e.target)
-                                    .closest(".dropdown-item")
-                                    .find("ul.dropdown-menu")
-                                    .toggleClass("show");
-                            }, 0);
-                            e.preventDefault();
+                            const $item = $(e.target)
+                                .closest(".dropdown-item");
+
+                            $item.toggleClass("submenu-open");
+                            $item.find("ul.dropdown-menu")
+                                .toggleClass("show");
                             return false;
                         }
 

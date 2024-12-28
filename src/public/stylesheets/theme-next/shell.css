@@ -1014,13 +1014,24 @@ html body .dropdown-item.disabled {
     justify-content: center;
     top: 0;
     right: 0;
-    height: 100%;
     margin: unset !important;
     border: unset !important;
     padding: 0 4px;
     font-family: boxicons;
     font-size: 1.2em;
     color: var(--menu-item-arrow-color) !important;
+}
+
+body.desktop .dropdown-menu .dropdown-toggle::after {
+    height: 100%;
+}
+
+body.mobile .dropdown-menu .dropdown-toggle::after {
+    transform: rotate(90deg);
+}
+
+body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
+    transform: rotate(270deg);
 }
 
 /*
