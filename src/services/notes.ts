@@ -923,8 +923,10 @@ function duplicateSubtree(origNoteId: string, newParentNoteId: string) {
 
     const res = duplicateSubtreeInner(origNote, origBranch, newParentNoteId, noteIdMapping);
 
-    if (!res.note.title.endsWith('(dup)')) {
-        res.note.title += " (dup)";
+    const duplicateNoteSuffix = t("notes.duplicate-note-suffix");
+
+    if (!res.note.title.endsWith(duplicateNoteSuffix) && !res.note.title.startsWith(duplicateNoteSuffix)) {
+        res.note.title = t("notes.duplicate-note-title", { noteTitle: res.note.title, duplicateNoteSuffix: duplicateNoteSuffix });
     }
 
     res.note.save();
