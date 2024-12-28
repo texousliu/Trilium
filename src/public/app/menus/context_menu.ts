@@ -48,6 +48,7 @@ class ContextMenu {
                 return;
             }
 
+            console.log("Hide from ", e.target);
             this.hide();
         });
     }
@@ -168,10 +169,13 @@ class ContextMenu {
                         }
 
                         if (this.isMobile && "items" in item && item.items) {
-                            $(e.target)
-                                .closest(".dropdown-item")
-                                .find("ul.dropdown-menu")
-                                .toggleClass("show");
+                            // We run using a timeout to avoid the layout change during event handling, which would trigger the menu to be hidden sometimes.
+                            setTimeout(() => {
+                                $(e.target)
+                                    .closest(".dropdown-item")
+                                    .find("ul.dropdown-menu")
+                                    .toggleClass("show");
+                            }, 0);
                             e.preventDefault();
                             return false;
                         }
@@ -213,6 +217,7 @@ class ContextMenu {
         // this date checking comes from change in FF66 - https://github.com/zadam/trilium/issues/468
         // "contextmenu" event also triggers "click" event which depending on the timing can close the just opened context menu
         // we might filter out right clicks, but then it's better if even right clicks close the context menu
+        console.warn(new Error());
         if (Date.now() - this.dateContextMenuOpenedMs > 300) {
             // seems like if we hide the menu immediately, some clicks can get propagated to the underlying component
             // see https://github.com/zadam/trilium/pull/3805 for details
