@@ -70,7 +70,7 @@ export default class BackupOptions extends OptionsWidget {
         this.$backupDatabaseButton.on('click', async () => {
             const {backupFile} = await server.post('database/backup-database');
 
-            toastService.showMessage(`${t('backup.database_backed_up_to')} ${backupFile}`, 10000);
+            toastService.showMessage(t('backup.database_backed_up_to', { backupFilePath: backupFile}), 10000);
 
             this.refresh();
         });
