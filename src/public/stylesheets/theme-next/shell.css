@@ -891,6 +891,11 @@ body.mobile .dropdown-menu {
     border-radius: var(--dropdown-border-radius);
 }
 
+body.mobile .dropdown-menu .dropdown-menu {
+    backdrop-filter: unset !important;
+    border-radius: unset !important;
+}
+
 body.desktop .dropdown-menu::before {
     content: "";
     backdrop-filter: var(--dropdown-backdrop-filter);
