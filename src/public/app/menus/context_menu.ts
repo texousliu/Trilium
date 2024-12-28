@@ -46,9 +46,9 @@ class ContextMenu {
         this.isMobile = utils.isMobile();
 
         if (this.isMobile) {
-            this.$cover.on("click", this.hide);
+            this.$cover.on("click", () => this.hide());
         } else {
-            $(document).on('click', (e) => this.hide);
+            $(document).on('click', (e) => this.hide());
         }
     }
 
@@ -218,7 +218,6 @@ class ContextMenu {
         // this date checking comes from change in FF66 - https://github.com/zadam/trilium/issues/468
         // "contextmenu" event also triggers "click" event which depending on the timing can close the just opened context menu
         // we might filter out right clicks, but then it's better if even right clicks close the context menu
-        console.warn(new Error());
         if (Date.now() - this.dateContextMenuOpenedMs > 300) {
             // seems like if we hide the menu immediately, some clicks can get propagated to the underlying component
             // see https://github.com/zadam/trilium/pull/3805 for details
