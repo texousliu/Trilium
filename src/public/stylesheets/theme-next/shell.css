@@ -35,6 +35,10 @@ body.layout-horizontal {
     --native-titlebar-darwin-y-offset: 14 !important;
 }
 
+body.mobile {
+    --hover-item-background-color: transparent;
+}
+
 /* #region Mica */
 body.background-effects.platform-win32 {
     --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.15);
