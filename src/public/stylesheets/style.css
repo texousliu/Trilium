@@ -1174,11 +1174,11 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 #mobile-sidebar-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;   
     right: 0; 
-    bottom: var(--launcher-pane-size);
+    bottom: var(--launcher-pane-size);    
     z-index: -1000;
 }
 
@@ -1190,7 +1190,12 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 #mobile-sidebar-wrapper {
-    width: 85vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 80vw;
+    padding-top: env(safe-area-inset-top);
     transform: translateX(-100%);
     transition: transform 250ms ease-in-out;
     background: var(--main-background-color);
