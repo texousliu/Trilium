@@ -1,5 +1,6 @@
 import { CommandNames } from '../components/app_context.js';
 import keyboardActionService from '../services/keyboard_actions.js';
+import utils from '../services/utils.js';
 
 interface ContextMenuOptions<T extends CommandNames> {
     x: number;
@@ -34,13 +35,21 @@ class ContextMenu {
     private $widget!: JQuery<HTMLElement>;
     private dateContextMenuOpenedMs: number;
     private options?: ContextMenuOptions<any>;
+    private isMobile: boolean;
 
     constructor() {
         this.$widget = $("#context-menu-container");
         this.$widget.addClass("dropend");
         this.dateContextMenuOpenedMs = 0;
+        this.isMobile = utils.isMobile();
 
-        $(document).on('click', () => this.hide());
+        $(document).on('click', (e) => {
+            if (this.isMobile && $(e.target).closest("#context-menu-container").length) {
+                return;
+            }
+
+            this.hide();
+        });
     }
 
     async show<T extends CommandNames>(options: ContextMenuOptions<T>) {
@@ -155,6 +164,16 @@ class ContextMenu {
                         e.stopPropagation();
 
                         if (e.which !== 1) { // only left click triggers menu items
+                            return false;
+                        }
+
+                        if (this.isMobile && "items" in item && item.items) {
+                            const $target = $(e.target);
+                            $target
+                                .parents(".dropdown-item")
+                                .find("ul.dropdown-menu")
+                                .toggleClass("show");
+                            e.preventDefault();
                             return false;
                         }
 

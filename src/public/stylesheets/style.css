@@ -966,7 +966,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     cursor: pointer;
 }
 
-li.dropdown-submenu:hover > ul.dropdown-menu {
+body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
     display: block;
 }
 
