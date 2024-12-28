@@ -168,9 +168,8 @@ class ContextMenu {
                         }
 
                         if (this.isMobile && "items" in item && item.items) {
-                            const $target = $(e.target);
-                            $target
-                                .parents(".dropdown-item")
+                            $(e.target)
+                                .closest(".dropdown-item")
                                 .find("ul.dropdown-menu")
                                 .toggleClass("show");
                             e.preventDefault();
