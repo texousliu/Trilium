@@ -1176,14 +1176,18 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 #mobile-sidebar-container {
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    left: 0;    
     bottom: var(--launcher-pane-size);
     padding-top: env(safe-area-inset-top);
-    z-index: 100;
-    background: var(--main-background-color);
+    z-index: 100;    
     transform: translateX(-100%);
     transition: transform 250ms ease-in-out;
+    backdrop-filter: blur(20px);
+}
+
+#mobile-sidebar-wrapper {
+    width: 85vw;
+    background: var(--main-background-color);
 }
 
 #mobile-sidebar-container.show {
