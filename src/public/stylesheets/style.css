@@ -27,6 +27,7 @@
 html {
     /* this fixes FF filter vs. position fixed bug: https://github.com/zadam/trilium/issues/233 */
     height: 100%;
+    overscroll-behavior: none;
 }
 
 body {
@@ -52,6 +53,10 @@ body.mobile .desktop-only {
 body.mobile.context-menu-shown * {
     user-select: none !important;
     -webkit-user-select: none !important;
+}
+
+#root-widget {
+    padding-top: env(safe-area-inset-top);
 }
 
 a {
