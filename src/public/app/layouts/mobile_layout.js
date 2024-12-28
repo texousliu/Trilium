@@ -25,6 +25,7 @@ import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 import options from "../services/options.js";
+import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 
 const MOBILE_CSS = `
 <style>
@@ -119,8 +120,9 @@ export default class MobileLayout {
             .cssBlock(MOBILE_CSS)
             .child(new FlexContainer("row")
                 .filling()
-                .child(new ScreenContainer("tree", 'column')
+                .child(new SidebarContainer("tree", 'column')
                     .class("d-sm-flex d-md-flex d-lg-flex d-xl-flex col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3")
+                    .id("mobile-sidebar-container")
                     .css("max-height", "100%")
                     .css('padding-left', "0")
                     .css('padding-right', "0")
