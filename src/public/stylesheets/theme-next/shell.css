@@ -425,6 +425,12 @@ div.quick-search .search-button.show  {
     border-radius: 50%;
 }
 
+body.mobile .fancytree-expander::before,
+body.mobile .fancytree-title,
+body.mobile .fancytree-node > span {
+    font-size: 1rem !important;
+}
+
 #left-pane .fancytree-expander {
     opacity: .65;
     transition: opacity 150ms ease-in;
@@ -440,7 +446,7 @@ div.quick-search .search-button.show  {
 }
 
 #left-pane span .fancytree-title {
-    margin-top: -5px;
+    margin-top: -5px;    
 }
 
 #left-pane span.fancytree-active .fancytree-title {
