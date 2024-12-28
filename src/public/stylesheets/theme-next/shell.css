@@ -901,9 +901,15 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     border-radius: var(--dropdown-border-radius);
     padding: var(--menu-padding-size) !important;
     font-size: .90rem !important;    
+    position: relative;
 }
 
-.dropdown-menu::before {
+body.mobile .dropdown-menu {
+    backdrop-filter: var(--dropdown-backdrop-filter);
+    border-radius: var(--dropdown-border-radius);
+}
+
+body.desktop .dropdown-menu::before {
     content: "";
     backdrop-filter: var(--dropdown-backdrop-filter);
     border-radius: var(--dropdown-border-radius);
@@ -915,11 +921,15 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     z-index: -1;
 }
 
-.dropdown-submenu .dropdown-menu::before {
+body.desktop .dropdown-submenu .dropdown-menu::before {
     content: unset;
 }
 
-.dropdown-submenu .dropdown-menu {
+body.mobile .dropdown-submenu .dropdown-menu {
+    background: transparent !important;
+}
+
+body.desktop .dropdown-submenu .dropdown-menu {
     backdrop-filter: var(--dropdown-backdrop-filter);
     background: transparent;
 }
