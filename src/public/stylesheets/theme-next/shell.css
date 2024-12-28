@@ -887,12 +887,12 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     border-radius: var(--dropdown-border-radius);
     padding: var(--menu-padding-size) !important;
     font-size: .90rem !important;    
-    position: relative;
 }
 
 body.mobile .dropdown-menu {
     backdrop-filter: var(--dropdown-backdrop-filter);
     border-radius: var(--dropdown-border-radius);
+    position: relative;
 }
 
 body.mobile .dropdown-menu .dropdown-menu {
