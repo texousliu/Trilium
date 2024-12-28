@@ -53,7 +53,6 @@ class ContextMenu {
     }
 
     async show<T extends CommandNames>(options: ContextMenuOptions<T>) {
-        console.warn(new Error().stack);
         this.options = options;
 
         if (this.$widget.hasClass("show")) {

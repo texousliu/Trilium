@@ -619,7 +619,6 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
             this.$tree.on("touchend", ".fancytree-node", (e) => {
                 clearTimeout(showTimeout);
-                e.preventDefault();
             });
         } else {
             this.$tree.on('contextmenu', '.fancytree-node', e => {
