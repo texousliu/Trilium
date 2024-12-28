@@ -113,8 +113,6 @@ span.fancytree-expander {
 
 export default class MobileLayout {
     getRootWidget(appContext) {
-        const launcherPaneIsHorizontal = true;
-
         return new RootContainer(true)
             .setParent(appContext)
             .class("horizontal-layout")
