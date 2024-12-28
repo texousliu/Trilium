@@ -32,25 +32,24 @@ export type MenuHandler<T extends CommandNames> = (item: MenuCommandItem<T>, e: 
 
 class ContextMenu {
 
-    private $widget!: JQuery<HTMLElement>;
+    private $widget: JQuery<HTMLElement>;
+    private $cover: JQuery<HTMLElement>;
     private dateContextMenuOpenedMs: number;
     private options?: ContextMenuOptions<any>;
     private isMobile: boolean;
 
     constructor() {
         this.$widget = $("#context-menu-container");
+        this.$cover = $("#context-menu-cover");
         this.$widget.addClass("dropend");
         this.dateContextMenuOpenedMs = 0;
         this.isMobile = utils.isMobile();
 
-        $(document).on('click', (e) => {
-            if (this.isMobile && $(e.target).closest("#context-menu-container").length) {
-                return;
-            }
-
-            console.log("Hide from ", e.target);
-            this.hide();
-        });
+        if (this.isMobile) {
+            this.$cover.on("click", this.hide);
+        } else {
+            $(document).on('click', (e) => this.hide);
+        }
     }
 
     async show<T extends CommandNames>(options: ContextMenuOptions<T>) {
@@ -61,6 +60,8 @@ class ContextMenu {
             // at the new location to re-trigger the opening animation.
             await this.hide();
         }
+
+        this.$cover.addClass("show");
 
         this.$widget.empty();
 
@@ -223,7 +224,8 @@ class ContextMenu {
             // see https://github.com/zadam/trilium/pull/3805 for details
             await timeout(100);
             this.$widget.removeClass("show");
-            this.$widget.hide()
+            this.$cover.removeClass("show");
+            this.$widget.hide();
         }
     }
 }
