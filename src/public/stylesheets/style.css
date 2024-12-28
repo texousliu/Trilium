@@ -48,6 +48,11 @@ body.mobile .desktop-only {
     display: none !important;
 }
 
+body.mobile.context-menu-shown * {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
 a {
     text-decoration: none;
 }
@@ -977,6 +982,8 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 #context-menu-container .dropdown-item {
     padding: 0 7px 0 10px;
     cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {

@@ -63,6 +63,7 @@ class ContextMenu {
         }
 
         this.$cover.addClass("show");
+        $("body").addClass("context-menu-shown");
 
         this.$widget.empty();
 
@@ -223,6 +224,7 @@ class ContextMenu {
             await timeout(100);
             this.$widget.removeClass("show");
             this.$cover.removeClass("show");
+            $("body").removeClass("context-menu-shown");
             this.$widget.hide();
         }
     }

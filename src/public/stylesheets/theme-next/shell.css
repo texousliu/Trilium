@@ -491,8 +491,10 @@ body.mobile #context-menu-container {
     right: 0 !important;
     bottom: 0 !important;
     top: unset !important;
-    max-height: 90vh;
+    max-height: 70vh;
     overflow: auto !important;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* Tree actions toolbar */
