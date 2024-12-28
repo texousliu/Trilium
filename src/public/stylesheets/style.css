@@ -1176,21 +1176,27 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 #mobile-sidebar-container {
     position: absolute;
     top: 0;
-    left: 0;    
+    left: 0;   
+    right: 0; 
     bottom: var(--launcher-pane-size);
+    z-index: -1000;
+}
+
+#mobile-sidebar-container.show {
     padding-top: env(safe-area-inset-top);
-    z-index: 1000;    
-    transform: translateX(-100%);
-    transition: transform 250ms ease-in-out;
-    backdrop-filter: blur(20px);
+    z-index: 1000;        
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: background-color 250ms ease-in-out;
 }
 
 #mobile-sidebar-wrapper {
     width: 85vw;
+    transform: translateX(-100%);
+    transition: transform 250ms ease-in-out;
     background: var(--main-background-color);
 }
 
-#mobile-sidebar-container.show {
+#mobile-sidebar-container.show #mobile-sidebar-wrapper {
     transform: translateX(0);
 }
 
