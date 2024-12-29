@@ -1,6 +1,7 @@
 {
   "about": {
     "title": "Acerca de TriliumNext Notes",
+    "close": "Cerrar",
     "homepage": "Página principal:",
     "app_version": "Versión de la aplicación:",
     "db_version": "Versión de base de datos:",
@@ -59,6 +60,7 @@
   },
   "clone_to": {
     "clone_notes_to": "Clonar notas a...",
+    "close": "Cerrar",
     "help_on_links": "Ayuda sobre enlaces",
     "notes_to_clone": "Notas a clonar",
     "target_parent_note": "Nota padre de destino",
@@ -71,6 +73,7 @@
   },
   "confirm": {
     "confirmation": "Confirmación",
+    "close": "Cerrar",
     "cancel": "Cancelar",
     "ok": "Aceptar",
     "are_you_sure_remove_note": "¿Está seguro que desea eliminar la nota \"{{title}}\" del mapa de relaciones? ",
@@ -79,6 +82,7 @@
   },
   "delete_notes": {
     "delete_notes_preview": "Eliminar vista previa de notas",
+    "close": "Cerrar",
     "delete_all_clones_description": "Eliminar también todos los clones (se puede deshacer en cambios recientes)",
     "erase_notes_description": "La eliminación normal (suave) solo marca las notas como eliminadas y se pueden recuperar (en el cuadro de diálogo de cambios recientes) dentro de un periodo de tiempo. Al marcar esta opción se borrarán las notas inmediatamente y no será posible recuperarlas.",
     "erase_notes_warning": "Eliminar notas permanentemente (no se puede deshacer), incluidos todos los clones. Esto forzará la recarga de la aplicación.",
@@ -189,6 +193,7 @@
   },
   "include_note": {
     "dialog_title": "Incluir nota",
+    "close": "Cerrar",
     "label_note": "Nota",
     "placeholder_search": "buscar nota por su nombre",
     "box_size_prompt": "Tamaño de caja de la nota incluida:",
@@ -204,16 +209,19 @@
   },
   "jump_to_note": {
     "search_placeholder": "buscar nota por su nombre",
+    "close": "Cerrar",
     "search_button": "Buscar en texto completo <kbd>Ctrl+Enter</kbd>"
   },
   "markdown_import": {
     "dialog_title": "Importación de Markdown",
+    "close": "Cerrar",
     "modal_body_text": "Debido al entorno limitado del navegador, no es posible leer directamente el portapapeles desde JavaScript. Por favor, pegue el código Markdown para importar en el área de texto a continuación y haga clic en el botón Importar",
     "import_button": "Importar Ctrl+Enter",
     "import_success": "El contenido de Markdown se ha importado al documento."
   },
   "move_to": {
     "dialog_title": "Mover notas a...",
+    "close": "Cerrar",
     "notes_to_move": "Notas a mover",
     "target_parent_note": "Nota padre de destino",
     "search_placeholder": "buscar nota por su nombre",
@@ -223,16 +231,19 @@
   },
   "note_type_chooser": {
     "modal_title": "Elija el tipo de nota",
+    "close": "Cerrar",
     "modal_body": "Elija el tipo de nota/plantilla de la nueva nota:",
     "templates": "Plantillas:"
   },
   "password_not_set": {
     "title": "La contraseña no está establecida",
+    "close": "Cerrar",
     "body1": "Las notas protegidas se cifran mediante una contraseña de usuario, pero la contraseña aún no se ha establecido.",
     "body2": "Para poder proteger notas, dé clic <a class=\"open-password-options-button\" href=\"javascript:\">aquí</a> para abrir el diálogo de Opciones y establecer tu contraseña."
   },
   "prompt": {
     "title": "Aviso",
+    "close": "Cerrar",
     "ok": "Aceptar <kbd>enter</kbd>",
     "defaultTitle": "Aviso"
   },
@@ -246,6 +257,7 @@
   "recent_changes": {
     "title": "Cambios recientes",
     "erase_notes_button": "Borrar notas eliminadas ahora",
+    "close": "Cerrar",
     "deleted_notes_message": "Las notas eliminadas han sido borradas.",
     "no_changes_message": "Aún no hay cambios...",
     "undelete_link": "recuperar",
@@ -256,6 +268,7 @@
     "delete_all_revisions": "Eliminar todas las revisiones de esta nota",
     "delete_all_button": "Eliminar todas las revisiones",
     "help_title": "Ayuda sobre revisiones de notas",
+    "close": "Cerrar",
     "revision_last_edited": "Esta revisión se editó por última vez en {{date}}",
     "confirm_delete_all": "¿Quiere eliminar todas las revisiones de esta nota? Esta acción borrará el título y el contenido de la revisión, pero aún conservará los metadatos de la revisión.",
     "no_revisions": "Aún no hay revisiones para esta nota...",
@@ -277,6 +290,7 @@
   },
   "sort_child_notes": {
     "sort_children_by": "Ordenar hijos por...",
+    "close": "Cerrar",
     "sorting_criteria": "Criterios de ordenamiento",
     "title": "título",
     "date_created": "fecha de creación",
@@ -294,6 +308,7 @@
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Cargar archivos adjuntos a nota",
+    "close": "Cerrar",
     "choose_files": "Elija los archivos",
     "files_will_be_uploaded": "Los archivos se cargarán como archivos adjuntos en",
     "options": "Opciones",
@@ -1072,9 +1087,12 @@
     "title": "Tema",
     "theme_label": "Tema",
     "override_theme_fonts_label": "Sobreescribir fuentes de tema",
+    "auto_theme": "Automático",
     "light_theme": "Claro",
     "dark_theme": "Oscuro",
-    "triliumnext": "TriliumNext (beta)",
+    "triliumnext": "TriliumNext Beta (Sigue el esquema de color del sistema)",
+    "triliumnext-light": "TriliumNext Beta (Claro)",
+    "triliumnext-dark": "TriliumNext Beta (Oscuro)",
     "layout": "Disposición",
     "layout-vertical-title": "Vertical",
     "layout-horizontal-title": "Horizontal",
