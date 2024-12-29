@@ -52,8 +52,8 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener<
             isVisibleItem ? { title: t("launcher_context_menu.move-to-available-launchers"), command: "moveLauncherToAvailable", uiIcon: "bx bx-hide", enabled: true } : null,
             (isVisibleItem || isAvailableItem) ? { title: "----" } : null,
 
-            { title: `${t("launcher_context_menu.duplicate-launcher")} <kbd data-command="duplicateSubtree">`, command: "duplicateSubtree", uiIcon: "bx bx-outline", enabled: isItem },
-            { title: `${t("launcher_context_menu.delete")} <kbd data-command="deleteNotes"></kbd>`, command: "deleteNotes", uiIcon: "bx bx-trash destructive-action-icon", enabled: canBeDeleted },
+            { title: `${t("launcher_context_menu.duplicate-launcher")}`, command: "duplicateSubtree", uiIcon: "bx bx-outline", enabled: isItem },
+            { title: `${t("launcher_context_menu.delete")}`, command: "deleteNotes", uiIcon: "bx bx-trash destructive-action-icon", enabled: canBeDeleted },
 
             { title: "----" },
 

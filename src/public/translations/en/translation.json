@@ -33,7 +33,8 @@
     "search_note": "search for note by its name",
     "link_title_mirrors": "link title mirrors the note's current title",
     "link_title_arbitrary": "link title can be changed arbitrarily",
-    "link_title": "Link title"
+    "link_title": "Link title",
+    "button_add_link": "Add link <kbd>enter</kbd>"
   },
   "branch_prefix": {
     "edit_branch_prefix": "Edit branch prefix",
@@ -114,17 +115,17 @@
     "fullDocumentation": "Help (full documentation is available <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
     "close": "Close",
     "noteNavigation": "Note navigation",
-    "goUpDown": "go up/down in the list of notes",
-    "collapseExpand": "collapse/expand node",
+    "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - go up/down in the list of notes",
+    "collapseExpand": "<kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - collapse/expand node",
     "notSet": "not set",
     "goBackForwards": "go back / forwards in the history",
     "showJumpToNoteDialog": "show <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">\"Jump to\" dialog</a>",
     "scrollToActiveNote": "scroll to active note",
-    "jumpToParentNote": "jump to parent note",
+    "jumpToParentNote": "<kbd>Backspace</kbd> - jump to parent note",
     "collapseWholeTree": "collapse whole note tree",
     "collapseSubTree": "collapse sub-tree",
     "tabShortcuts": "Tab shortcuts",
-    "newTabNoteLink": "(or middle mouse click) on note link opens note in a new tab",
+    "newTabNoteLink": "<kbd>CTRL+click</kbd> - (or middle mouse click) on note link opens note in a new tab",
     "onlyInDesktop": "Only in desktop (Electron build)",
     "openEmptyTab": "open empty tab",
     "closeActiveTab": "close active tab",
@@ -139,20 +140,20 @@
     "moveNoteUpHierarchy": "move note up in the hierarchy",
     "multiSelectNote": "multi-select note above/below",
     "selectAllNotes": "select all notes in the current level",
-    "selectNote": "select note",
+    "selectNote": "<kbd>Shift+click</kbd> - select note",
     "copyNotes": "copy active note (or current selection) into clipboard (used for <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">cloning</a>)",
     "cutNotes": "cut current note (or current selection) into clipboard (used for moving notes)",
     "pasteNotes": "paste note(s) as sub-note into active note (which is either move or clone depending on whether it was copied or cut into clipboard)",
     "deleteNotes": "delete note / sub-tree",
     "editingNotes": "Editing notes",
     "editNoteTitle": "in tree pane will switch from tree pane into note title. Enter from note title will switch focus to text editor. <kbd>Ctrl+.</kbd> will switch back from editor to tree pane.",
-    "createEditLink": "create / edit external link",
+    "createEditLink": "<kbd>Ctrl+K</kbd> - create / edit external link",
     "createInternalLink": "create internal link",
     "followLink": "follow link under cursor",
     "insertDateTime": "insert current date and time at caret position",
     "jumpToTreePane": "jump away to the tree pane and scroll to active note",
     "markdownAutoformat": "Markdown-like autoformatting",
-    "headings": " etc. followed by space for headings",
+    "headings": "<kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd>  etc. followed by space for headings",
     "bulletList": "<kbd>*</kbd> or <kbd>-</kbd> followed by space for bullet list",
     "numberedList": "<kbd>1.</kbd> or <kbd>1)</kbd> followed by space for numbered list",
     "blockQuote": "start a line with <kbd>></kbd> followed by space for block quote",
@@ -200,7 +201,7 @@
     "box_size_small": "small (~ 10 lines)",
     "box_size_medium": "medium (~ 30 lines)",
     "box_size_full": "full (box shows complete text)",
-    "button_include": "Include note"
+    "button_include": "Include note <kbd>enter</kbd>"
   },
   "info": {
     "modalTitle": "Info message",
@@ -304,7 +305,7 @@
     "sort_with_respect_to_different_character_sorting": "sort with respect to different character sorting and collation rules in different languages or regions.",
     "natural_sort_language": "Natural sort language",
     "the_language_code_for_natural_sort": "The language code for natural sort, e.g. \"zh-CN\" for Chinese.",
-    "sort": "Sort"
+    "sort": "Sort <kbd>enter</kbd>"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Upload attachments to note",
@@ -842,8 +843,7 @@
     "debug": "debug",
     "debug_description": "Debug will print extra debugging information into the console to aid in debugging complex queries",
     "action": "action",
-    "search": "Search",
-    "enter": "enter",
+    "search_button": "Search <kbd>enter</kbd>",
     "search_execute": "Search & Execute actions",
     "save_to_note": "Save to note",
     "search_parameters": "Search Parameters",
@@ -961,7 +961,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "Showing protected note requires entering your password:",
-    "start_session_button": "Start protected session",
+    "start_session_button": "Start protected session <kbd>enter</kbd>",
     "started": "Protected session has been started.",
     "wrong_password": "Wrong password.",
     "protecting-finished-successfully": "Protecting finished successfully.",
@@ -1345,7 +1345,7 @@
     "button-tree-map": "Tree map"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "Open in a new tab",
+    "open-in-a-new-tab": "Open in a new tab <kbd>Ctrl+Click</kbd>",
     "open-in-a-new-split": "Open in a new split",
     "insert-note-after": "Insert note after",
     "insert-child-note": "Insert child note",
@@ -1540,11 +1540,11 @@
     "add-script-launcher": "Add a script launcher",
     "add-custom-widget": "Add a custom widget",
     "add-spacer": "Add spacer",
-    "delete": "Delete",
+    "delete": "Delete <kbd data-command=\"deleteNotes\"></kbd>",
     "reset": "Reset",
     "move-to-visible-launchers": "Move to visible launchers",
     "move-to-available-launchers": "Move to available launchers",
-    "duplicate-launcher": "Duplicate launcher"
+    "duplicate-launcher": "Duplicate launcher <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
     "auto-detect-language": "Auto-detected"

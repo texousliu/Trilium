@@ -33,7 +33,8 @@
     "search_note": "buscar nota por su nombre",
     "link_title_mirrors": "el título del enlace replica el título actual de la nota",
     "link_title_arbitrary": "el título del enlace se puede cambiar arbitrariamente",
-    "link_title": "Título del enlace"
+    "link_title": "Título del enlace",
+    "button_add_link": "Agregar enlace <kbd>Enter</kbd>"
   },
   "branch_prefix": {
     "edit_branch_prefix": "Editar prefijo de rama",
@@ -114,17 +115,17 @@
     "fullDocumentation": "Ayuda (la documentación completa está disponible <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
     "close": "Cerrar",
     "noteNavigation": "Navegación de notas",
-    "goUpDown": "subir/bajar en la lista de notas",
-    "collapseExpand": "colapsar/expandir nodo",
+    "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - subir/bajar en la lista de notas",
+    "collapseExpand": "<kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - colapsar/expandir nodo",
     "notSet": "no establecido",
     "goBackForwards": "retroceder / avanzar en la historia",
     "showJumpToNoteDialog": "mostrar <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">\"Saltar a\" diálogo</a>",
     "scrollToActiveNote": "desplazarse hasta la nota activa",
-    "jumpToParentNote": "saltar a la nota padre",
+    "jumpToParentNote": "<kbd>Backspace</kbd> - saltar a la nota padre",
     "collapseWholeTree": "colapsar todo el árbol de notas",
     "collapseSubTree": "colapsar subárbol",
     "tabShortcuts": "Atajos de pestañas",
-    "newTabNoteLink": "(o clic central del mouse) en el enlace de la nota abre la nota en una nueva pestaña",
+    "newTabNoteLink": "<kbd>CTRL+clic</kbd> - (o clic central del mouse) en el enlace de la nota abre la nota en una nueva pestaña",
     "onlyInDesktop": "Solo en escritorio (compilación con Electron)",
     "openEmptyTab": "abrir pestaña vacía",
     "closeActiveTab": "cerrar pestaña activa",
@@ -139,20 +140,20 @@
     "moveNoteUpHierarchy": "mover nota hacia arriba en la jerarquía",
     "multiSelectNote": "selección múltiple de nota hacia arriba/abajo",
     "selectAllNotes": "seleccionar todas las notas en el nivel actual",
-    "selectNote": "seleccionar nota",
+    "selectNote": "<kbd>Shift+click</kbd> - seleccionar nota",
     "copyNotes": "copiar nota activa (o selección actual) al portapapeles (usado para <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">clonar</a>)",
     "cutNotes": "cortar la nota actual (o la selección actual) en el portapapeles (usado para mover notas)",
     "pasteNotes": "pegar notas como subnotas en la nota activa (que se puede mover o clonar dependiendo de si se copió o cortó en el portapapeles)",
     "deleteNotes": "eliminar nota/subárbol",
     "editingNotes": "Editando notas",
     "editNoteTitle": "en el panel de árbol cambiará del panel de árbol al título de la nota. Ingresar desde el título de la nota cambiará el foco al editor de texto. <kbd>Ctrl+.</kbd> cambiará de nuevo del editor al panel de árbol.",
-    "createEditLink": "crear/editar enlace externo",
+    "createEditLink": "<kbd>Ctrl+K</kbd> - crear/editar enlace externo",
     "createInternalLink": "crear enlace interno",
     "followLink": "siga el enlace debajo del cursor",
     "insertDateTime": "insertar la fecha y hora actuales en la posición del cursor",
     "jumpToTreePane": "saltar al panel de árbol y desplazarse hasta la nota activa",
     "markdownAutoformat": "Autoformato tipo Markdown",
-    "headings": " etc. seguido de espacio para encabezados",
+    "headings": "<kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd>  etc. seguido de espacio para encabezados",
     "bulletList": "<kbd>*</kbd> o <kbd>-</kbd> seguido de espacio para la lista de viñetas",
     "numberedList": "<kbd>1.</kbd> o <kbd>1)</kbd> seguido de espacio para la lista numerada",
     "blockQuote": "comience una línea con <kbd>></kbd> seguido de espacio para el bloque de cita",
@@ -200,7 +201,7 @@
     "box_size_small": "pequeño (~ 10 líneas)",
     "box_size_medium": "medio (~ 30 líneas)",
     "box_size_full": "completo (el cuadro muestra el texto completo)",
-    "button_include": "Incluir nota"
+    "button_include": "Incluir nota <kbd>Enter</kbd>"
   },
   "info": {
     "modalTitle": "Mensaje informativo",
@@ -304,7 +305,7 @@
     "sort_with_respect_to_different_character_sorting": "ordenar con respecto a diferentes reglas de ordenamiento y clasificación de caracteres en diferentes idiomas o regiones.",
     "natural_sort_language": "Idioma de clasificación natural",
     "the_language_code_for_natural_sort": "El código del idioma para el ordenamiento natural, ej. \"zh-CN\" para Chino.",
-    "sort": "Ordenar"
+    "sort": "Ordenar <kbd>Enter</kbd>"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Cargar archivos adjuntos a nota",
@@ -842,8 +843,7 @@
     "debug": "depurar",
     "debug_description": "La depuración imprimirá información de depuración adicional en la consola para ayudar a depurar consultas complejas",
     "action": "acción",
-    "search": "Buscar",
-    "enter": "ingresar",
+    "search_button": "Buscar <kbd>Enter</kbd>",
     "search_execute": "Buscar y ejecutar acciones",
     "save_to_note": "Guardar en nota",
     "search_parameters": "Parámetros de búsqueda",
@@ -961,7 +961,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "Para mostrar una nota protegida es necesario ingresar su contraseña:",
-    "start_session_button": "Iniciar sesión protegida",
+    "start_session_button": "Iniciar sesión protegida <kbd>Enter</kbd>",
     "started": "La sesión protegida ha iniciado.",
     "wrong_password": "Contraseña incorrecta.",
     "protecting-finished-successfully": "La protección finalizó exitosamente.",
@@ -1345,7 +1345,7 @@
     "button-tree-map": "Mapa de Árbol"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "Abrir en nueva pestaña",
+    "open-in-a-new-tab": "Abrir en nueva pestaña <kbd>Ctrl+Click</kbd>",
     "open-in-a-new-split": "Abrir en nueva división",
     "insert-note-after": "Insertar nota después de",
     "insert-child-note": "Insertar subnota",
@@ -1540,11 +1540,11 @@
     "add-script-launcher": "Agregar un lanzador de script",
     "add-custom-widget": "Agregar un widget personalizado",
     "add-spacer": "Agregar espaciador",
-    "delete": "Eliminar",
+    "delete": "Eliminar <kbd data-command=\"deleteNotes\"></kbd>",
     "reset": "Restaurar",
     "move-to-visible-launchers": "Mover a lanzadores visibles",
     "move-to-available-launchers": "Mover a lanzadores disponibles",
-    "duplicate-launcher": "Duplicar lanzador"
+    "duplicate-launcher": "Duplicar lanzador <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
     "auto-detect-language": "Detectado automaticamente"

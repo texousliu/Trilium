@@ -18,12 +18,12 @@ const TPL = `
 
                             <p class="card-text">
                                 <ul>
-                                    <li><kbd>UP</kbd>, <kbd>DOWN</kbd> - ${t('help.goUpDown')}</li>
-                                    <li><kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - ${t('help.collapseExpand')}</li>
+                                    <li>${t('help.goUpDown')}</li>
+                                    <li>${t('help.collapseExpand')}</li>
                                     <li><kbd data-command="backInNoteHistory">${t('help.notSet')}</kbd>, <kbd data-command="forwardInNoteHistory">${t('help.notSet')}</kbd> - ${t('help.goBackForwards')}</li>
                                     <li><kbd data-command="jumpToNote">${t('help.notSet')}</kbd> - ${t('help.showJumpToNoteDialog')}</li>
                                     <li><kbd data-command="scrollToActiveNote">${t('help.notSet')}</kbd> - ${t('help.scrollToActiveNote')}</li>
-                                    <li><kbd>Backspace</kbd> - ${t('help.jumpToParentNote')}</li>
+                                    <li>${t('help.jumpToParentNote')}</li>
                                     <li><kbd data-command="collapseTree">${t('help.notSet')}</kbd> - ${t('help.collapseWholeTree')}</li>
                                     <li><kbd data-command="collapseSubtree">${t('help.notSet')}</kbd> - ${t('help.collapseSubTree')}</li>
                                 </ul>
@@ -37,7 +37,7 @@ const TPL = `
 
                             <p class="card-text">
                             <ul>
-                                <li><kbd>CTRL+click</kbd> ${t('help.newTabNoteLink')}</li>
+                                <li>${t('help.newTabNoteLink')}</li>
                             </ul>
 
                             ${t('help.onlyInDesktop')}:
@@ -75,7 +75,7 @@ const TPL = `
                                     <li><kbd data-command="moveNoteUpInHierarchy">${t('help.notSet')}</kbd>, <kbd data-command="moveNoteDownInHierarchy">${t('help.notSet')}</kbd> - ${t('help.moveNoteUpHierarchy')}</li>
                                     <li><kbd data-command="addNoteAboveToSelection">${t('help.notSet')}</kbd>, <kbd data-command="addNoteBelowToSelection">${t('help.notSet')}</kbd> - ${t('help.multiSelectNote')}</li>
                                     <li><kbd data-command="selectAllNotesInParent">${t('help.notSet')}</kbd> - ${t('help.selectAllNotes')}</li>
-                                    <li><kbd>Shift+click</kbd> - ${t('help.selectNote')}</li>
+                                    <li>${t('help.selectNote')}</li>
                                     <li><kbd data-command="copyNotesToClipboard">${t('help.notSet')}</kbd> - ${t('help.copyNotes')}</li>
                                     <li><kbd data-command="cutNotesToClipboard">${t('help.notSet')}</kbd> - ${t('help.cutNotes')}</li>
                                     <li><kbd data-command="pasteNotesFromClipboard">${t('help.notSet')}</kbd> - ${t('help.pasteNotes')}</li>
@@ -92,7 +92,7 @@ const TPL = `
                             <p class="card-text">
                                 <ul>
                                     <li><kbd data-command="editNoteTitle">${t('help.notSet')}</kbd> ${t('help.editNoteTitle')}</li>
-                                    <li><kbd>Ctrl+K</kbd> - ${t('help.createEditLink')}</li>
+                                    <li>${t('help.createEditLink')}</li>
                                     <li><kbd data-command="addLinkToText">${t('help.notSet')}</kbd> - ${t('help.createInternalLink')}</li>
                                     <li><kbd data-command="followLinkUnderCursor">${t('help.notSet')}</kbd> - ${t('help.followLink')}</li>
                                     <li><kbd data-command="insertDateTimeToText">${t('help.notSet')}</kbd> - ${t('help.insertDateTime')}</li>
@@ -108,7 +108,7 @@ const TPL = `
 
                             <p class="card-text">
                                 <ul>
-                                    <li><kbd>##</kbd>, <kbd>###</kbd>, <kbd>####</kbd> ${t('help.headings')}</li>
+                                    <li>${t('help.headings')}</li>
                                     <li>${t('help.bulletList')}</li>
                                     <li>${t('help.numberedList')}</li>
                                     <li>${t('help.blockQuote')}</li>

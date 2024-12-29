@@ -38,7 +38,7 @@ const TPL = `
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">${t('include_note.button_include')} <kbd>enter</kbd></button>
+                    <button type="submit" class="btn btn-primary">${t('include_note.button_include')}</button>
                 </div>
             </form>
         </div>
