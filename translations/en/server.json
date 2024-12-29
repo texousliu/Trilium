@@ -242,6 +242,8 @@
     "visible-launchers-title": "Visible Launchers"
   },
   "notes": {
-    "new-note": "New note"
+    "new-note": "New note",
+    "duplicate-note-suffix": "(dup)",
+    "duplicate-note-title": "{{ noteTitle }} {{ duplicateNoteSuffix }}"
   }
 }
