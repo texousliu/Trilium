@@ -1183,7 +1183,7 @@
     "backup_now": "Jetzt sichern",
     "backup_database_now": "Jetzt Datenbank sichern",
     "existing_backups": "Vorhandene Backups",
-    "database_backed_up_to": "Die Datenbank wurde gesichert",
+    "database_backed_up_to": "Die Datenbank wurde gesichert unter {{backupFilePath}}",
     "no_backup_yet": "noch kein Backup"
   },
   "etapi": {

@@ -1195,7 +1195,7 @@
     "existing_backups": "現有備份",
     "date-and-time": "日期和時間",
     "path": "路徑",
-    "database_backed_up_to": "資料庫已備份到",
+    "database_backed_up_to": "資料庫已備份到 {{backupFilePath}}",
     "no_backup_yet": "尚無備份"
   },
   "etapi": {

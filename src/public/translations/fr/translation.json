@@ -1184,7 +1184,7 @@
     "backup_now": "Sauvegarder maintenant",
     "backup_database_now": "Sauvegarder la base de données maintenant",
     "existing_backups": "Sauvegardes existantes",
-    "database_backed_up_to": "La base de données a été sauvegardée sur",
+    "database_backed_up_to": "La base de données a été sauvegardée sur {{backupFilePath}}",
     "no_backup_yet": "pas encore de sauvegarde"
   },
   "etapi": {

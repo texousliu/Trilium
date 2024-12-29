@@ -253,7 +253,7 @@
     "backup_database_now": "Crează o copie a bazei de date acum",
     "backup_now": "Crează o copie de siguranță acum",
     "backup_recommendation": "Se recomandă a se păstra activată funcția de copii de siguranță, dar acest lucru poate face pornirea aplicației mai lentă pentru baze de date mai mari sau pentru dispozitive de stocare lente.",
-    "database_backed_up_to": "S-a creat o copie de siguranță a bazei de dată la",
+    "database_backed_up_to": "S-a creat o copie de siguranță a bazei de dată la {{backupFilePath}}",
     "enable_daily_backup": "Activează copia de siguranță zilnică",
     "enable_monthly_backup": "Activează copia de siguranță lunară",
     "enable_weekly_backup": "Activează copia de siguranță săptămânală",
