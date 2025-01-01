@@ -1179,7 +1179,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         top: 0;
         left: 0;   
         right: 0; 
-        bottom: var(--launcher-pane-size);    
+        bottom: 0; 
         z-index: -1000;
     }
     
