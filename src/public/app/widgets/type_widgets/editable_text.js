@@ -41,41 +41,41 @@ const TPL = `
         padding-top: 10px;
         height: 100%;
     }
-    
+
     body.mobile .note-detail-editable-text {
         padding-left: 4px;
     }
-    
+
     .note-detail-editable-text a:hover {
         cursor: pointer;
     }
-    
+
     .note-detail-editable-text a[href^="http://"], .note-detail-editable-text a[href^="https://"] {
         cursor: text !important;
     }
-    
+
     .note-detail-editable-text *:not(figure, .include-note, hr):first-child {
         margin-top: 0 !important;
     }
-         
-    .note-detail-editable-text h2 { font-size: 1.6em; } 
+
+    .note-detail-editable-text h2 { font-size: 1.6em; }
     .note-detail-editable-text h3 { font-size: 1.4em; }
     .note-detail-editable-text h4 { font-size: 1.2em; }
     .note-detail-editable-text h5 { font-size: 1.1em; }
     .note-detail-editable-text h6 { font-size: 1.0em; }
-    
+
     body.heading-style-markdown .note-detail-editable-text h2::before { content: "##\\2004"; color: var(--muted-text-color); }
     body.heading-style-markdown .note-detail-editable-text h3::before { content: "###\\2004"; color: var(--muted-text-color); }
     body.heading-style-markdown .note-detail-editable-text h4:not(.include-note-title)::before { content: "####\\2004"; color: var(--muted-text-color); }
     body.heading-style-markdown .note-detail-editable-text h5::before { content: "#####\\2004"; color: var(--muted-text-color); }
     body.heading-style-markdown .note-detail-editable-text h6::before { content: "######\\2004"; color: var(--muted-text-color); }
-    
+
     body.heading-style-underline .note-detail-editable-text h2 { border-bottom: 1px solid var(--main-border-color); }
     body.heading-style-underline .note-detail-editable-text h3 { border-bottom: 1px solid var(--main-border-color); }
     body.heading-style-underline .note-detail-editable-text h4:not(.include-note-title) { border-bottom: 1px solid var(--main-border-color); }
     body.heading-style-underline .note-detail-editable-text h5 { border-bottom: 1px solid var(--main-border-color); }
     body.heading-style-underline .note-detail-editable-text h6 { border-bottom: 1px solid var(--main-border-color); }
-    
+
     .note-detail-editable-text-editor {
         padding-top: 10px;
         border: 0 !important;
@@ -108,7 +108,7 @@ function buildListOfLanguages() {
 
 /**
  * The editor can operate into two distinct modes:
- * 
+ *
  * - Ballon block mode, in which there is a floating toolbar for the selected text, but another floating button for the entire block (i.e. paragraph).
  * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
  */
@@ -204,9 +204,19 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 } else {
                     $classicToolbarWidget = $("body").find(".classic-toolbar-widget");
                 }
-                
+
                 $classicToolbarWidget.empty();
                 $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
+
+                if (utils.isMobile()) {
+                    this.$editor.on("focus", (e) => {
+                        $classicToolbarWidget.addClass("visible");
+                    });
+
+                    this.$editor.on("focusout", (e) => {
+                        $classicToolbarWidget.removeClass("visible");
+                    });
+                }
             }
 
             editor.model.document.on('change:data', () => this.spacedUpdate.scheduleUpdate());

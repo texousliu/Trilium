@@ -23,6 +23,11 @@ const TPL = `\
     }
 
     body.mobile .classic-toolbar-widget {
+        display: none;
+    }
+
+    body.mobile .classic-toolbar-widget.visible {
+        display: block;
         position: absolute;
         left: 0;
         bottom: 0;
