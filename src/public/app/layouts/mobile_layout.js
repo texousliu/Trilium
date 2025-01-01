@@ -138,6 +138,7 @@ export default class MobileLayout {
                     .css("padding-left", "0")
                     .css("padding-right", "0")
                     .css('max-height', '100%')
+                    .css("position", "relative")
                     .child(new FlexContainer('row').contentSized()
                         .css('font-size', 'larger')
                         .css('align-items', 'center')

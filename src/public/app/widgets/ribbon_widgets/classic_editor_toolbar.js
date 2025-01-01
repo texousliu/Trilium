@@ -23,9 +23,9 @@ const TPL = `\
     }
 
     body.mobile .classic-toolbar-widget {
-        position: fixed;
+        position: absolute;
         left: 0;
-        bottom: var(--launcher-pane-size);
+        bottom: 0;
         right: 0;
         overflow-x: auto;
         background: var(--main-background-color);
