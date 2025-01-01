@@ -839,6 +839,10 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     text-shadow: unset !important;
 }
 
+body.mobile .note-title {
+    background: transparent;
+}
+
 .ribbon-container {
     margin-bottom: 0 !important;
 }
