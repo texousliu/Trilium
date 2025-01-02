@@ -332,6 +332,14 @@ export function getResourceDir() {
     }
 }
 
+export function isMac() {
+  return process.platform === "darwin";
+}
+
+export function isWindows() {
+  return process.platform === "win32";
+}
+
 export default {
     randomSecureToken,
     randomString,
@@ -365,5 +373,7 @@ export default {
     hashedBlobId,
     toMap,
     isString,
-    getResourceDir
+    getResourceDir,
+    isMac,
+    isWindows
 };

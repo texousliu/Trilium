@@ -9,6 +9,7 @@ import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
 import remoteMain from "@electron/remote/main/index.js";
 import { App, BrowserWindow, BrowserWindowConstructorOptions, WebContents, ipcMain } from 'electron';
+import { isMac, isWindows } from "./utils.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -115,14 +116,11 @@ async function createMainWindow(app: App) {
 function getWindowExtraOpts() {
     const extraOpts: Partial<BrowserWindowConstructorOptions> = {};
 
-    const isMac = (process.platform === "darwin");
-    const isWindows = (process.platform === "win32");
-
     if (!optionService.getOptionBool('nativeTitleBarVisible')) {
-        if (isMac) {
+        if (isMac()) {
             extraOpts.titleBarStyle = "hiddenInset";
             extraOpts.titleBarOverlay = true;
-        } else if (isWindows) {
+        } else if (isWindows()) {
             extraOpts.titleBarStyle = "hidden";
             extraOpts.titleBarOverlay = true;
         } else {
@@ -132,7 +130,7 @@ function getWindowExtraOpts() {
     }
 
     // Window effects (Mica)
-    if (optionService.getOptionBool('backgroundEffects') && isWindows) {
+    if (optionService.getOptionBool('backgroundEffects') && isWindows()) {
         extraOpts.backgroundMaterial = "auto";
     }
 
