@@ -1,6 +1,7 @@
 {
   "about": {
     "title": "关于 TriliumNext Notes",
+    "close": "关闭",
     "homepage": "项目主页：",
     "app_version": "应用版本：",
     "db_version": "数据库版本：",
@@ -60,6 +61,7 @@
   },
   "clone_to": {
     "clone_notes_to": "克隆笔记到...",
+    "close": "关闭",
     "help_on_links": "链接帮助",
     "notes_to_clone": "要克隆的笔记",
     "target_parent_note": "目标父笔记",
@@ -72,6 +74,7 @@
   },
   "confirm": {
     "confirmation": "确认",
+    "close": "关闭",
     "cancel": "取消",
     "ok": "确定",
     "are_you_sure_remove_note": "确定要从关系图中移除笔记 \"{{title}}\" ？",
@@ -80,6 +83,7 @@
   },
   "delete_notes": {
     "delete_notes_preview": "删除笔记预览",
+    "close": "关闭",
     "delete_all_clones_description": "同时删除所有克隆（可以在最近修改中撤消）",
     "erase_notes_description": "通常（软）删除仅标记笔记为已删除，可以在一段时间内通过最近修改对话框撤消。选中此选项将立即擦除笔记，不可撤销。",
     "erase_notes_warning": "永久擦除笔记（无法撤销），包括所有克隆。这将强制应用程序重新加载。",
@@ -176,7 +180,16 @@
     "codeImportedAsCode": "如果元数据不明确，将识别的代码文件（例如<code>.json</code>）导入为代码笔记",
     "replaceUnderscoresWithSpaces": "在导入的笔记名称中将下划线替换为空格",
     "import": "导入",
-    "failed": "导入失败: {{message}}."
+    "failed": "导入失败: {{message}}.",
+    "html_import_tags": {
+      "title": "HTML 导入标签",
+      "description": "配置在导入笔记时应保留的 HTML 标签。不在此列表中的标签将在导入过程中被移除。一些标签（例如 'script'）为了安全性会始终被移除。",
+      "placeholder": "输入 HTML 标签，每行一个",
+      "reset_button": "重置为默认列表"
+  },
+  "import-status": "导入状态",
+  "in-progress": "导入进行中：{{progress}}",
+  "successful": "导入成功完成。"
   },
   "include_note": {
     "dialog_title": "包含笔记",
@@ -224,6 +237,7 @@
   },
   "prompt": {
     "title": "提示",
+    "close": "关闭",
     "ok": "确定 <kbd>回车</kbd>",
     "defaultTitle": "提示"
   },
@@ -237,6 +251,7 @@
   "recent_changes": {
     "title": "最近修改",
     "erase_notes_button": "立即清理已删除的笔记",
+    "close": "关闭",
     "deleted_notes_message": "已删除的笔记已清理。",
     "no_changes_message": "暂无修改...",
     "undelete_link": "恢复删除",
@@ -247,6 +262,7 @@
     "delete_all_revisions": "删除此笔记的所有历史版本",
     "delete_all_button": "删除所有历史版本",
     "help_title": "关于笔记历史版本的帮助",
+    "close": "关闭",
     "revision_last_edited": "此历史版本上次编辑于 {{date}}",
     "confirm_delete_all": "您是否要删除此笔记的所有历史版本？此操作将擦除历史版本的标题和内容，但仍将保留历史版本的元数据。",
     "no_revisions": "此笔记暂无历史版本...",
@@ -268,6 +284,7 @@
   },
   "sort_child_notes": {
     "sort_children_by": "按...排序子笔记",
+    "close": "关闭",
     "sorting_criteria": "排序条件",
     "title": "标题",
     "date_created": "创建日期",
@@ -285,6 +302,7 @@
   },
   "upload_attachments": {
     "upload_attachments_to_note": "上传附件到笔记",
+    "close": "关闭",
     "choose_files": "选择文件",
     "files_will_be_uploaded": "文件将作为附件上传到",
     "options": "选项",
@@ -1061,8 +1079,12 @@
     "title": "主题",
     "theme_label": "主题",
     "override_theme_fonts_label": "覆盖主题字体",
+    "auto_theme": "自动",
     "light_theme": "浅色",
     "dark_theme": "深色",
+    "triliumnext": "TriliumNext Beta（跟随系统颜色方案）",
+    "triliumnext-light": "TriliumNext Beta（浅色）",
+    "triliumnext-dark": "TriliumNext Beta（深色）",
     "layout": "布局",
     "layout-vertical-title": "垂直",
     "layout-horizontal-title": "水平",
@@ -1543,7 +1565,8 @@
       "fixed": {
         "title": "固定",
         "description": "编辑工具出现在 \"格式化\" 功能区标签中。"
-      }
+      },
+      "multiline-toolbar": "如果工具栏无法完全显示，则分多行显示。"
     }
   },
   "electron_context_menu": {
@@ -1563,5 +1586,22 @@
     "open_note_in_new_tab": "在新标签页中打开笔记",
     "open_note_in_new_split": "在新分屏中打开笔记",
     "open_note_in_new_window": "在新窗口中打开笔记"
+  },
+  "electron_integration": {
+    "desktop-application": "桌面应用程序",
+    "native-title-bar": "原生标题栏",
+    "native-title-bar-description": "对于 Windows 和 macOS，关闭原生标题栏可使应用程序看起来更紧凑。在 Linux 上，保留原生标题栏可以更好地与系统集成。",
+    "background-effects": "启用背景效果（仅适用于 Windows 11）",
+    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。",
+    "restart-app-button": "重启应用程序以查看更改",
+    "zoom-factor": "缩放系数"
+  },
+  "note_autocomplete": {
+    "search-for": "搜索 \"{{term}}\"",
+    "create-note": "创建并链接子笔记 \"{{term}}\"",
+    "insert-external-link": "插入指向 \"{{term}}\" 的外部链接",
+    "clear-text-field": "清除文本字段",
+    "show-recent-notes": "显示最近的笔记",
+    "full-text-search": "全文搜索"
   }
 }
