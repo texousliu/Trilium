@@ -151,7 +151,7 @@ function importEnex(taskContext: TaskContext, file: File, parentNote: BNote): Pr
                 labelName = 'pageUrl';
             }
 
-            labelName = sanitizeAttributeName.sanitizeAttributeName(labelName || "");
+            labelName = sanitizeAttributeName(labelName || "");
 
             if (note.attributes) {
                 note.attributes.push({
@@ -202,7 +202,7 @@ function importEnex(taskContext: TaskContext, file: File, parentNote: BNote): Pr
             } else if (currentTag === 'tag' && note.attributes) {
                 note.attributes.push({
                     type: 'label',
-                    name: sanitizeAttributeName.sanitizeAttributeName(text),
+                    name: sanitizeAttributeName(text),
                     value: ''
                 })
             }

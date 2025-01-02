@@ -3,7 +3,7 @@
 import imageType from "image-type";
 import imageService from "../../services/image.js";
 import noteService from "../../services/notes.js";
-import sanitize_attribute_name from "../../services/sanitize_attribute_name.js";
+import sanitizeAttributeName from "../../services/sanitize_attribute_name.js";
 import specialNotesService from "../../services/special_notes.js";
 import { Request } from 'express';
 
@@ -44,7 +44,7 @@ async function uploadImage(req: Request) {
         const labels = JSON.parse(labelsStr);
 
         for (const { name, value } of labels) {
-            note.setLabel(sanitize_attribute_name.sanitizeAttributeName(name), value);
+            note.setLabel(sanitizeAttributeName(name), value);
         }
     }
 
@@ -73,7 +73,7 @@ function saveNote(req: Request) {
 
     if (req.body.labels) {
         for (const { name, value } of req.body.labels) {
-            note.setLabel(sanitize_attribute_name.sanitizeAttributeName(name), value);
+            note.setLabel(sanitizeAttributeName(name), value);
         }
     }
 
