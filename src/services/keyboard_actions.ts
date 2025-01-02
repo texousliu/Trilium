@@ -462,6 +462,7 @@ function getDefaultKeyboardActions() {
             description: t("keyboard_actions.toggle-inherited-attributes"),
             scope: "window"
         },
+        // TODO: Remove or change since promoted attributes have been changed.
         {
             actionName: "toggleRibbonTabPromotedAttributes",
             defaultShortcuts: [],
