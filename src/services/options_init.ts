@@ -1,7 +1,7 @@
 import optionService from "./options.js";
 import type { OptionMap } from "./options.js";
 import appInfo from "./app_info.js";
-import { randomSecureToken } from "./utils.js";
+import { randomSecureToken, isWindows } from "./utils.js";
 import log from "./log.js";
 import dateUtils from "./date_utils.js";
 import keyboardActions from "./keyboard_actions.js";
@@ -72,7 +72,7 @@ const defaultOptions: DefaultOption[] = [
     { name: 'revisionSnapshotTimeInterval', value: '600', isSynced: true },
     { name: 'revisionSnapshotNumberLimit', value: '-1', isSynced: true },
     { name: 'protectedSessionTimeout', value: '600', isSynced: true },
-    { name: 'zoomFactor', value: process.platform === "win32" ? '0.9' : '1.0', isSynced: false },
+    { name: 'zoomFactor', value: isWindows() ? '0.9' : '1.0', isSynced: false },
     { name: 'overrideThemeFonts', value: 'false', isSynced: false },
     { name: 'mainFontFamily', value: 'theme', isSynced: false },
     { name: 'mainFontSize', value: '100', isSynced: false },
