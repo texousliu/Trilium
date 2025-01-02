@@ -754,7 +754,7 @@ class ConsistencyChecks {
         const attrNames = sql.getColumn<string>(`SELECT DISTINCT name FROM attributes`);
 
         for (const origName of attrNames) {
-            const fixedName = sanitizeAttributeName.sanitizeAttributeName(origName);
+            const fixedName = sanitizeAttributeName(origName);
 
             if (fixedName !== origName) {
                 if (this.autoFix) {
