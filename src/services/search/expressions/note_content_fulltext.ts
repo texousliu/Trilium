@@ -13,7 +13,7 @@ import utils from "../../utils.js";
 import sql from "../../sql.js";
 
 
-const ALLOWED_OPERATORS = ['=', '!=', '*=*', '*=', '=*', '%='];
+const ALLOWED_OPERATORS = new Set(['=', '!=', '*=*', '*=', '=*', '%=']);
 
 const cachedRegexes: Record<string, RegExp> = {};
 
@@ -50,8 +50,8 @@ class NoteContentFulltextExp extends Expression {
     }
 
     execute(inputNoteSet: NoteSet, executionContext: {}, searchContext: SearchContext) {
-        if (!ALLOWED_OPERATORS.includes(this.operator)) {
-            searchContext.addError(`Note content can be searched only with operators: ${ALLOWED_OPERATORS.join(", ")}, operator ${this.operator} given.`);
+        if (!ALLOWED_OPERATORS.has(this.operator)) {
+            searchContext.addError(`Note content can be searched only with operators: ${Array.from(ALLOWED_OPERATORS).join(", ")}, operator ${this.operator} given.`);
 
             return inputNoteSet;
         }
