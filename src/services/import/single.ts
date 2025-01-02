@@ -8,7 +8,7 @@ import imageService from "../../services/image.js";
 import protectedSessionService from "../protected_session.js";
 import markdownService from "./markdown.js";
 import mimeService from "./mime.js";
-import utils from "../../services/utils.js";
+import { getNoteTitle } from "../../services/utils.js";
 import importUtils from "./utils.js";
 import htmlSanitizer from "../html_sanitizer.js";
 import { File } from "./common.js";
@@ -68,7 +68,7 @@ function importFile(taskContext: TaskContext, file: File, parentNote: BNote) {
 }
 
 function importCodeNote(taskContext: TaskContext, file: File, parentNote: BNote) {
-    const title = utils.getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
+    const title = getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
     const content = file.buffer.toString("utf-8");
     const detectedMime = mimeService.getMime(file.originalname) || file.mimetype;
     const mime = mimeService.normalizeMimeType(detectedMime);
@@ -88,7 +88,7 @@ function importCodeNote(taskContext: TaskContext, file: File, parentNote: BNote)
 }
 
 function importPlainText(taskContext: TaskContext, file: File, parentNote: BNote) {
-    const title = utils.getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
+    const title = getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
     const plainTextContent = file.buffer.toString("utf-8");
     const htmlContent = convertTextToHtml(plainTextContent);
 
@@ -125,7 +125,7 @@ function convertTextToHtml(text: string) {
 }
 
 function importMarkdown(taskContext: TaskContext, file: File, parentNote: BNote) {
-    const title = utils.getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
+    const title = getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
 
     const markdownContent = file.buffer.toString("utf-8");
     let htmlContent = markdownService.renderToHtml(markdownContent, title);
@@ -154,7 +154,7 @@ function importHtml(taskContext: TaskContext, file: File, parentNote: BNote) {
     // Try to get title from HTML first, fall back to filename
     // We do this before sanitization since that turns all <h1>s into <h2>
     const htmlTitle = importUtils.extractHtmlTitle(content);
-    const title = htmlTitle || utils.getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
+    const title = htmlTitle || getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
 
     content = importUtils.handleH1(content, title);
 

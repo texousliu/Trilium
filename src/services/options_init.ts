@@ -1,15 +1,15 @@
 import optionService from "./options.js";
 import type { OptionMap } from "./options.js";
 import appInfo from "./app_info.js";
-import utils from "./utils.js";
+import { randomSecureToken } from "./utils.js";
 import log from "./log.js";
 import dateUtils from "./date_utils.js";
 import keyboardActions from "./keyboard_actions.js";
 import { KeyboardShortcutWithRequiredActionName } from './keyboard_actions_interface.js';
 
 function initDocumentOptions() {
-    optionService.createOption('documentId', utils.randomSecureToken(16), false);
-    optionService.createOption('documentSecret', utils.randomSecureToken(16), false);
+    optionService.createOption('documentId', randomSecureToken(16), false);
+    optionService.createOption('documentSecret', randomSecureToken(16), false);
 }
 
 /**

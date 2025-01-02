@@ -8,7 +8,7 @@ import SearchResult from "../search_result.js";
 import SearchContext from "../search_context.js";
 import becca from "../../../becca/becca.js";
 import beccaService from "../../../becca/becca_service.js";
-import utils from "../../utils.js";
+import { normalize, escapeHtml, escapeRegExp } from "../../utils.js";
 import log from "../../log.js";
 import hoistedNoteService from "../../hoisted_note.js";
 import BNote from "../../../becca/entities/bnote.js";
@@ -403,8 +403,8 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
                 continue;
             }
 
-            if (highlightedTokens.find(token => utils.normalize(attr.name).includes(token)
-                || utils.normalize(attr.value).includes(token))) {
+            if (highlightedTokens.find(token => normalize(attr.name).includes(token)
+                || normalize(attr.value).includes(token))) {
 
                 result.highlightedNotePathTitle += ` "${formatAttribute(attr)}'`;
             }
@@ -423,7 +423,7 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
 
         for (const result of searchResults) {
             // Reset token
-            const tokenRegex = new RegExp(utils.escapeRegExp(token), "gi");
+            const tokenRegex = new RegExp(escapeRegExp(token), "gi");
             let match;
 
             // Find all matches
@@ -449,15 +449,15 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
 
 function formatAttribute(attr: BAttribute) {
     if (attr.type === 'relation') {
-        return `~${utils.escapeHtml(attr.name)}=…`;
+        return `~${escapeHtml(attr.name)}=…`;
     }
     else if (attr.type === 'label') {
-        let label = `#${utils.escapeHtml(attr.name)}`;
+        let label = `#${escapeHtml(attr.name)}`;
 
         if (attr.value) {
             const val = /[^\w-]/.test(attr.value) ? `"${attr.value}"` : attr.value;
 
-            label += `=${utils.escapeHtml(val)}`;
+            label += `=${escapeHtml(val)}`;
         }
 
         return label;

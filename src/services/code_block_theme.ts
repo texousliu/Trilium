@@ -8,7 +8,7 @@ import fs from "fs";
 import themeNames from "./code_block_theme_names.json" with { type: "json" }
 import { t } from "i18next";
 import { join } from "path";
-import utils from "./utils.js";
+import { isElectron, getResourceDir } from "./utils.js";
 import env from "./env.js";
 
 /**
@@ -31,7 +31,7 @@ interface ColorTheme {
  * @returns the supported themes, grouped.
  */
 export function listSyntaxHighlightingThemes() {
-    const path = join(utils.getResourceDir(), getStylesDirectory());
+    const path = join(getResourceDir(), getStylesDirectory());
     const systemThemes = readThemesFromFileSystem(path);
 
     return {
@@ -46,7 +46,7 @@ export function listSyntaxHighlightingThemes() {
 }
 
 function getStylesDirectory() {
-    if (utils.isElectron() && !env.isDev()) {
+    if (isElectron() && !env.isDev()) {
         return "styles";
     }
 

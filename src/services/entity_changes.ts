@@ -2,7 +2,7 @@ import sql from "./sql.js";
 import dateUtils from "./date_utils.js";
 import log from "./log.js";
 import cls from "./cls.js";
-import utils from "./utils.js";
+import { randomString } from "./utils.js";
 import instanceId from "./instance_id.js";
 import becca from "../becca/becca.js";
 import blobService from "../services/blob.js";
@@ -30,7 +30,7 @@ function putEntityChange(origEntityChange: EntityChange) {
     delete ec.id;
 
     if (!ec.changeId) {
-        ec.changeId = utils.randomString(12);
+        ec.changeId = randomString(12);
     }
 
     ec.componentId = ec.componentId || cls.getComponentId() || "NA"; // NA = not available

@@ -3,7 +3,7 @@
 import etapiTokenService from "./etapi_tokens.js";
 import log from "./log.js";
 import sqlInit from "./sql_init.js";
-import utils from "./utils.js";
+import { isElectron } from "./utils.js";
 import passwordEncryptionService from "./encryption/password_encryption.js";
 import config from "./config.js";
 import passwordService from "./encryption/password.js";
@@ -15,7 +15,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
     if (!sqlInit.isDbInitialized()) {
         res.redirect("setup");
     }
-    else if (!req.session.loggedIn && !utils.isElectron() && !noAuthentication) {
+    else if (!req.session.loggedIn && !isElectron() && !noAuthentication) {
         res.redirect("login");
     }
     else {
@@ -26,7 +26,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
 // for electron things which need network stuff
 //  currently, we're doing that for file upload because handling form data seems to be difficult
 function checkApiAuthOrElectron(req: Request, res: Response, next: NextFunction) {
-    if (!req.session.loggedIn && !utils.isElectron() && !noAuthentication) {
+    if (!req.session.loggedIn && !isElectron() && !noAuthentication) {
         reject(req, res, "Logged in session not found");
     }
     else {
@@ -53,7 +53,7 @@ function checkAppInitialized(req: Request, res: Response, next: NextFunction) {
 }
 
 function checkPasswordSet(req: Request, res: Response, next: NextFunction) {
-    if (!utils.isElectron() && !passwordService.isPasswordSet()) {
+    if (!isElectron() && !passwordService.isPasswordSet()) {
         res.redirect("set-password");
     } else {
         next();
@@ -61,7 +61,7 @@ function checkPasswordSet(req: Request, res: Response, next: NextFunction) {
 }
 
 function checkPasswordNotSet(req: Request, res: Response, next: NextFunction) {
-    if (!utils.isElectron() && passwordService.isPasswordSet()) {
+    if (!isElectron() && passwordService.isPasswordSet()) {
         res.redirect("login");
     } else {
         next();

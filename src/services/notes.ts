@@ -6,7 +6,7 @@ import eventService from "./events.js";
 import cls from "../services/cls.js";
 import protectedSessionService from "../services/protected_session.js";
 import log from "../services/log.js";
-import utils from "../services/utils.js";
+import { newEntityId, isString, unescapeHtml, quoteRegex, toMap } from "../services/utils.js";
 import revisionService from "./revisions.js";
 import request from "./request.js";
 import path from "path";
@@ -465,7 +465,7 @@ function findRelationMapLinks(content: string, foundLinks: FoundLink[]) {
 const imageUrlToAttachmentIdMapping: Record<string, string> = {};
 
 async function downloadImage(noteId: string, imageUrl: string) {
-    const unescapedUrl = utils.unescapeHtml(imageUrl);
+    const unescapedUrl = unescapeHtml(imageUrl);
 
     try {
         let imageBuffer: Buffer;
@@ -508,7 +508,7 @@ async function downloadImage(noteId: string, imageUrl: string) {
 const downloadImagePromises: Record<string, Promise<void>> = {};
 
 function replaceUrl(content: string, url: string, attachment: Attachment) {
-    const quotedUrl = utils.quoteRegex(url);
+    const quotedUrl = quoteRegex(url);
 
     return content.replace(new RegExp(`\\s+src=[\"']${quotedUrl}[\"']`, "ig"), ` src="api/attachments/${attachment.attachmentId}/image/${encodeURIComponent(attachment.title)}"`);
 }
@@ -744,7 +744,7 @@ function updateNoteData(noteId: string, content: string, attachments: Attachment
     note.setContent(newContent, { forceFrontendReload });
 
     if (attachments?.length > 0) {
-        const existingAttachmentsByTitle = utils.toMap(note.getAttachments({includeContentLength: false}), 'title');
+        const existingAttachmentsByTitle = toMap(note.getAttachments({includeContentLength: false}), 'title');
 
         for (const {attachmentId, role, mime, title, position, content} of attachments) {
             if (attachmentId || !(title in existingAttachmentsByTitle)) {
@@ -886,7 +886,7 @@ async function asyncPostProcessContent(note: BNote, content: string | Buffer) {
         return;
     }
 
-    if (note.hasStringContent() && !utils.isString(content)) {
+    if (note.hasStringContent() && !isString(content)) {
         content = content.toString();
     }
 
@@ -1035,7 +1035,7 @@ function getNoteIdMapping(origNote: BNote) {
 
     // pregenerate new noteIds since we'll need to fix relation references even for not yet created notes
     for (const origNoteId of origNote.getDescendantNoteIds()) {
-        noteIdMapping[origNoteId] = utils.newEntityId();
+        noteIdMapping[origNoteId] = newEntityId();
     }
 
     return noteIdMapping;
