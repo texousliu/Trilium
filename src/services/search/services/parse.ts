@@ -44,7 +44,7 @@ function getFulltext(_tokens: TokenData[], searchContext: SearchContext) {
     }
 }
 
-const OPERATORS = [
+const OPERATORS = new Set([
     "=",
     "!=",
     "*=*",
@@ -55,14 +55,14 @@ const OPERATORS = [
     "<",
     "<=",
     "%="
-];
+]);
 
 function isOperator(token: TokenData) {
     if (Array.isArray(token)) {
         return false;
     }
 
-    return OPERATORS.includes(token.token);
+    return OPERATORS.has(token.token);
 }
 
 function getExpression(tokens: TokenData[], searchContext: SearchContext, level = 0) {
