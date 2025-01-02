@@ -1,7 +1,7 @@
 import log from "./log.js";
 import noteService from "./notes.js";
 import sql from "./sql.js";
-import utils from "./utils.js";
+import { randomString, escapeHtml, unescapeHtml } from "./utils.js";
 import attributeService from "./attributes.js";
 import dateNoteService from "./date_notes.js";
 import treeService from "./tree.js";
@@ -549,9 +549,9 @@ function BackendScriptApi(this: Api, currentNote: BNote, apiParams: ApiParams) {
 
     this.setNoteToParent = treeService.setNoteToParent;
     this.transactional = sql.transactional;
-    this.randomString = utils.randomString;
-    this.escapeHtml = utils.escapeHtml;
-    this.unescapeHtml = utils.unescapeHtml;
+    this.randomString = randomString;
+    this.escapeHtml = escapeHtml;
+    this.unescapeHtml = unescapeHtml;
     this.sql = sql;
     this.getAppInfo = () => appInfo;
 

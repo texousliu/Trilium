@@ -6,7 +6,7 @@ import log from "./log.js";
 import os from "os";
 import fs from "fs";
 import config from "./config.js";
-import utils from "./utils.js";
+import { isElectron } from "./utils.js";
 
 const template = `[Desktop Entry]
 Type=Application
@@ -23,7 +23,7 @@ Terminal=false
  * We overwrite this file during every run as it might have been updated.
  */
 function installLocalAppIcon() {
-    if (!utils.isElectron()
+    if (!isElectron()
         || ["win32", "darwin"].includes(os.platform())
         || (config.General && config.General.noDesktopIcon)) {
         return;

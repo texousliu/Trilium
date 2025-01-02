@@ -13,23 +13,23 @@ import { dirname, join } from "path";
 
 const randtoken = generator({source: 'crypto'});
 
-function newEntityId() {
+export function newEntityId() {
     return randomString(12);
 }
 
-function randomString(length: number): string {
+export function randomString(length: number): string {
     return randtoken.generate(length);
 }
 
-function randomSecureToken(bytes = 32) {
+export function randomSecureToken(bytes = 32) {
     return crypto.randomBytes(bytes).toString('base64');
 }
 
-function md5(content: crypto.BinaryLike) {
+export function md5(content: crypto.BinaryLike) {
     return crypto.createHash('md5').update(content).digest('hex');
 }
 
-function hashedBlobId(content: string | Buffer) {
+export function hashedBlobId(content: string | Buffer) {
     if (content === null || content === undefined) {
         content = "";
     }
@@ -46,47 +46,47 @@ function hashedBlobId(content: string | Buffer) {
     return kindaBase62Hash.substr(0, 20);
 }
 
-function toBase64(plainText: string | Buffer) {
+export function toBase64(plainText: string | Buffer) {
     return Buffer.from(plainText).toString('base64');
 }
 
-function fromBase64(encodedText: string) {
+export function fromBase64(encodedText: string) {
     return Buffer.from(encodedText, 'base64');
 }
 
-function hmac(secret: any, value: any) {
+export function hmac(secret: any, value: any) {
     const hmac = crypto.createHmac('sha256', Buffer.from(secret.toString(), 'ascii'));
     hmac.update(value.toString());
     return hmac.digest('base64');
 }
 
-function isElectron() {
+export function isElectron() {
     return !!process.versions['electron'];
 }
 
-function hash(text: string) {
+export function hash(text: string) {
     text = text.normalize();
 
     return crypto.createHash('sha1').update(text).digest('base64');
 }
 
-function isEmptyOrWhitespace(str: string) {
+export function isEmptyOrWhitespace(str: string) {
     return str === null || str.match(/^ *$/) !== null;
 }
 
-function sanitizeSqlIdentifier(str: string) {
+export function sanitizeSqlIdentifier(str: string) {
     return str.replace(/[^A-Za-z0-9_]/g, "");
 }
 
-function escapeHtml(str: string) {
+export function escapeHtml(str: string) {
     return escape(str);
 }
 
-function unescapeHtml(str: string) {
+export function unescapeHtml(str: string) {
     return unescape(str);
 }
 
-function toObject<T, K extends string | number | symbol, V>(array: T[], fn: (item: T) => [K, V]): Record<K, V> {
+export function toObject<T, K extends string | number | symbol, V>(array: T[], fn: (item: T) => [K, V]): Record<K, V> {
     const obj: Record<K, V> = {} as Record<K, V>; // TODO: unsafe?
 
     for (const item of array) {
@@ -98,11 +98,11 @@ function toObject<T, K extends string | number | symbol, V>(array: T[], fn: (ite
     return obj;
 }
 
-function stripTags(text: string) {
+export function stripTags(text: string) {
     return text.replace(/<(?:.|\n)*?>/gm, '');
 }
 
-function union<T extends string | number | symbol>(a: T[], b: T[]): T[] {
+export function union<T extends string | number | symbol>(a: T[], b: T[]): T[] {
     const obj: Record<T, T> = {} as Record<T, T>; // TODO: unsafe?
 
     for (let i = a.length-1; i >= 0; i--) {
@@ -124,11 +124,11 @@ function union<T extends string | number | symbol>(a: T[], b: T[]): T[] {
     return res;
 }
 
-function escapeRegExp(str: string) {
+export function escapeRegExp(str: string) {
     return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
-async function crash() {
+export async function crash() {
     if (isElectron()) {
         (await import("electron")).app.exit(1);
     } else {
@@ -136,7 +136,7 @@ async function crash() {
     }
 }
 
-function sanitizeFilenameForHeader(filename: string) {
+export function sanitizeFilenameForHeader(filename: string) {
     let sanitizedFilename = sanitize(filename);
 
     if (sanitizedFilename.trim().length === 0) {
@@ -146,7 +146,7 @@ function sanitizeFilenameForHeader(filename: string) {
     return encodeURIComponent(sanitizedFilename);
 }
 
-function getContentDisposition(filename: string) {
+export function getContentDisposition(filename: string) {
     const sanitizedFilename = sanitizeFilenameForHeader(filename);
 
     return `file; filename="${sanitizedFilename}"; filename*=UTF-8''${sanitizedFilename}`;
@@ -160,24 +160,24 @@ const STRING_MIME_TYPES = [
     "image/svg+xml"
 ];
 
-function isStringNote(type: string | undefined, mime: string) {
+export function isStringNote(type: string | undefined, mime: string) {
     // render and book are string note in the sense that they are expected to contain empty string
     return (type && ["text", "code", "relationMap", "search", "render", "book", "mermaid", "canvas"].includes(type))
         || mime.startsWith('text/')
         || STRING_MIME_TYPES.includes(mime);
 }
 
-function quoteRegex(url: string) {
+export function quoteRegex(url: string) {
     return url.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
 }
 
-function replaceAll(string: string, replaceWhat: string, replaceWith: string) {
+export function replaceAll(string: string, replaceWhat: string, replaceWith: string) {
     const quotedReplaceWhat = quoteRegex(replaceWhat);
 
     return string.replace(new RegExp(quotedReplaceWhat, "g"), replaceWith);
 }
 
-function formatDownloadTitle(fileName: string, type: string | null, mime: string) {
+export function formatDownloadTitle(fileName: string, type: string | null, mime: string) {
     if (!fileName) {
         fileName = "untitled";
     }
@@ -219,7 +219,7 @@ function formatDownloadTitle(fileName: string, type: string | null, mime: string
     }
 }
 
-function removeTextFileExtension(filePath: string) {
+export function removeTextFileExtension(filePath: string) {
     const extension = path.extname(filePath).toLowerCase();
 
     switch (extension) {
@@ -227,13 +227,13 @@ function removeTextFileExtension(filePath: string) {
         case ".markdown":
         case ".html":
         case ".htm":
-            return filePath.substr(0, filePath.length - extension.length);
+            return filePath.substring(0, filePath.length - extension.length);
         default:
             return filePath;
     }
 }
 
-function getNoteTitle(filePath: string, replaceUnderscoresWithSpaces: boolean, noteMeta?: { title?: string }) {
+export function getNoteTitle(filePath: string, replaceUnderscoresWithSpaces: boolean, noteMeta?: { title?: string }) {
     if (noteMeta?.title) {
         return noteMeta.title;
     } else {
@@ -245,7 +245,7 @@ function getNoteTitle(filePath: string, replaceUnderscoresWithSpaces: boolean, n
     }
 }
 
-function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?: string): Promise<T> {
+export function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?: string): Promise<T> {
     if (!promise || !promise.then) { // it's not actually a promise
         return promise;
     }
@@ -276,7 +276,7 @@ interface DeferredPromise<T> extends Promise<T> {
     reject: (reason?: any) => void
 }
 
-function deferred<T>(): DeferredPromise<T> {
+export function deferred<T>(): DeferredPromise<T> {
     return (() => {
         let resolve!: (value: T | PromiseLike<T>) => void;
         let reject!: (reason?: any) => void;
@@ -292,7 +292,7 @@ function deferred<T>(): DeferredPromise<T> {
     })();
 }
 
-function removeDiacritic(str: string) {
+export function removeDiacritic(str: string) {
     if (!str) {
         return "";
     }
@@ -300,11 +300,11 @@ function removeDiacritic(str: string) {
     return str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
 }
 
-function normalize(str: string) {
+export function normalize(str: string) {
     return removeDiacritic(str).toLowerCase();
 }
 
-function toMap<T extends Record<string, any>>(list: T[], key: keyof T): Record<string, T> {
+export function toMap<T extends Record<string, any>>(list: T[], key: keyof T): Record<string, T> {
     const map: Record<string, T> = {};
 
     for (const el of list) {
@@ -314,7 +314,7 @@ function toMap<T extends Record<string, any>>(list: T[], key: keyof T): Record<s
     return map;
 }
 
-function isString(x: any) {
+export function isString(x: any) {
     return Object.prototype.toString.call(x) === "[object String]";
 }
 

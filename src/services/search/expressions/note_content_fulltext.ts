@@ -9,7 +9,7 @@ import log from "../../log.js";
 import becca from "../../../becca/becca.js";
 import protectedSessionService from "../../protected_session.js";
 import striptags from "striptags";
-import utils from "../../utils.js";
+import { normalize } from "../../utils.js";
 import sql from "../../sql.js";
 
 
@@ -125,7 +125,7 @@ class NoteContentFulltextExp extends Expression {
     }
 
     preprocessContent(content: string | Buffer, type: string, mime: string) {
-        content = utils.normalize(content.toString());
+        content = normalize(content.toString());
 
         if (type === 'text' && mime === 'text/html') {
             if (!this.raw && content.length < 20000) { // striptags is slow for very large notes
@@ -183,7 +183,7 @@ class NoteContentFulltextExp extends Expression {
             const topicsString = topicsArray.join(", ");
             
         
-            content = utils.normalize(topicsString.toString());
+            content = normalize(topicsString.toString());
           } 
         else if (type === 'canvas' && mime === 'application/json') {
             interface Element {
@@ -199,7 +199,7 @@ class NoteContentFulltextExp extends Expression {
                 .filter((element: Element) => element.type === 'text' && element.text) // Filter for 'text' type elements with a 'text' property
                 .map((element: Element) => element.text!); // Use `!` to assert `text` is defined after filtering
 
-            content =utils.normalize(texts.toString())
+            content = normalize(texts.toString())
           }
 
 

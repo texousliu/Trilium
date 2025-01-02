@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import utils from "./utils.js";
+import { isElectron, randomString } from "./utils.js";
 import log from "./log.js";
 import sql from "./sql.js";
 import cls from "./cls.js";
@@ -18,7 +18,7 @@ if (env.isDev()) {
     const debounce = (await import("debounce")).default;
     const debouncedReloadFrontend = debounce(() => reloadFrontend("source code change"), 200);
     chokidar
-        .watch(utils.isElectron() ? 'dist/src/public' : 'src/public')
+        .watch(isElectron() ? 'dist/src/public' : 'src/public')
         .on('add', debouncedReloadFrontend)
         .on('change', debouncedReloadFrontend)
         .on('unlink', debouncedReloadFrontend);
@@ -62,7 +62,7 @@ function init(httpServer: Server, sessionParser: SessionParser) {
     webSocketServer = new WebSocket.Server({
         verifyClient: (info, done) => {
             sessionParser(info.req, {}, () => {
-                const allowed = utils.isElectron()
+                const allowed = isElectron()
                     || (info.req as any).session.loggedIn
                     || (config.General && config.General.noAuthentication);
 
@@ -77,7 +77,7 @@ function init(httpServer: Server, sessionParser: SessionParser) {
     });
 
     webSocketServer.on('connection', (ws, req) => {
-        (ws as any).id = utils.randomString(10);
+        (ws as any).id = randomString(10);
 
         console.log(`websocket client connected`);
 

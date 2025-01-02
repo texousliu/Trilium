@@ -2,7 +2,7 @@ import log from "./log.js";
 import fs from "fs";
 import resourceDir from "./resource_dir.js";
 import sql from "./sql.js";
-import utils from "./utils.js";
+import { isElectron, deferred } from "./utils.js";
 import optionService from "./options.js";
 import port from "./port.js";
 import BOption from "../becca/entities/boption.js";
@@ -18,7 +18,7 @@ import becca_loader from "../becca/becca_loader.js";
 import password from "./encryption/password.js";
 import backup from "./backup.js";
 
-const dbReady = utils.deferred<void>();
+const dbReady = deferred<void>();
 
 function schemaExists() {
     return !!sql.getValue(`SELECT name FROM sqlite_master
@@ -38,7 +38,7 @@ function isDbInitialized() {
 async function initDbConnection() {
     if (!isDbInitialized()) {
         log.info(`DB not initialized, please visit setup page` +
-            (utils.isElectron() ? '' : ` - http://[your-server-host]:${port} to see instructions on how to initialize Trilium.`));
+            (isElectron() ? '' : ` - http://[your-server-host]:${port} to see instructions on how to initialize Trilium.`));
 
         return;
     }
