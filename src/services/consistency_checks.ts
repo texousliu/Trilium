@@ -10,7 +10,7 @@ import entityChangesService from "./entity_changes.js";
 import optionsService from "./options.js";
 import BBranch from "../becca/entities/bbranch.js";
 import becca from "../becca/becca.js";
-import utils from "../services/utils.js";
+import { hash as getHash, hashedBlobId, randomString } from "../services/utils.js";
 import eraseService from "../services/erase.js";
 import sanitizeAttributeName from "./sanitize_attribute_name.js";
 import noteTypesService from "../services/note_types.js";
@@ -454,7 +454,7 @@ class ConsistencyChecks {
                         logError(`Unable to recover note ${noteId} since it's content could not be retrieved (might be protected note).`);
                         return;
                     }
-                    const blobId = utils.hashedBlobId(blankContent);
+                    const blobId = hashedBlobId(blankContent);
                     const blobAlreadyExists = !!sql.getValue("SELECT 1 FROM blobs WHERE blobId = ?", [blobId]);
 
                     if (!blobAlreadyExists) {
@@ -466,7 +466,7 @@ class ConsistencyChecks {
                             dateModified: fakeDate
                         });
 
-                        const hash = utils.hash(utils.randomString(10));
+                        const hash = getHash(randomString(10));
 
                         entityChangesService.putEntityChange({
                             entityName: 'blobs',
@@ -689,7 +689,7 @@ class ConsistencyChecks {
                     entityChangesService.putEntityChange({
                         entityName,
                         entityId,
-                        hash: utils.randomString(10), // doesn't matter, will force sync, but that's OK
+                        hash: randomString(10), // doesn't matter, will force sync, but that's OK
                         isErased: false,
                         utcDateChanged: entityRow.utcDateModified || entityRow.utcDateCreated,
                         isSynced: entityName !== 'options' || entityRow.isSynced
