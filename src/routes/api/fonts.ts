@@ -3,8 +3,8 @@ import optionService from "../../services/options.js";
 import { OptionMap } from '../../services/options_interface.js';
 
 const SYSTEM_SANS_SERIF = [
-    "-apple-system",
-    "BlinkMacSystemFont",
+    "system-ui",
+    "-apple-system", "BlinkMacSystemFont",
     "Segoe UI",
     "Cantarell",
     "Ubuntu",
@@ -12,11 +12,17 @@ const SYSTEM_SANS_SERIF = [
     "Helvetica",
     "Arial",
     "sans-serif",
-    "Apple Color Emoji",
-    "Segoe UI Emoji"
+    "Apple Color Emoji", "Segoe UI Emoji"
 ].join(",");
 
 const SYSTEM_MONOSPACE = [
+    "ui-monospace",
+    "SFMono-Regular", "SF Mono",
+    "Consolas",
+    "Source Code Pro",
+    "Ubuntu Mono",
+    "Menlo",
+    "Liberation Mono",
     "monospace"
 ].join(",");
 
