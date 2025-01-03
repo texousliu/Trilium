@@ -212,15 +212,17 @@ export default class FontsOptions extends OptionsWidget {
         $select.empty();
 
         for (const { title, items } of Object.values(FONT_FAMILIES)) {
-            $select.append($("<optgroup>")
+            const $group = ($("<optgroup>")
                 .attr("label", title));
 
             for (const {value, label} of items) {
-                $select.append($("<option>")
+                $group.append($("<option>")
                     .attr("value", value)
                     .prop("selected", value === currentValue)
                     .text(label));
             }
+
+            $select.append($group);
         }
 
     }
