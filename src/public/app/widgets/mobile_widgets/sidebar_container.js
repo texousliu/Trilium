@@ -42,6 +42,7 @@ export default class SidebarContainer extends FlexContainer {
 
         this.sidebarContainer.style.zIndex = 1000;
 
+        this.originalTransition = this.sidebarWrapper.style.transition;
         this.sidebarWrapper.style.transition = "none";
 
         e.preventDefault();
@@ -69,6 +70,7 @@ export default class SidebarContainer extends FlexContainer {
         const isOpen = translateX > -50;
         this.sidebarWrapper.classList.toggle("show", isOpen);
         this.sidebarWrapper.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
+        this.sidebarWrapper.style.transition = this.originalTransition;
         this.currentTranslate = isOpen ? 0 : -100;
 
         if (!isOpen) {
