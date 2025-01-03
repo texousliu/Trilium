@@ -66,19 +66,28 @@ function getTriliumDataDir() {
     return homePath;
 }
 
+function getDataDirs(TRILIUM_DATA_DIR: string) {
+    const dataDirs = {
+        "TRILIUM_DATA_DIR":
+            TRILIUM_DATA_DIR,
+        "DOCUMENT_PATH":
+            process.env.TRILIUM_DOCUMENT_PATH || pathJoin(TRILIUM_DATA_DIR, "document.db"),
+        "BACKUP_DIR":
+            process.env.TRILIUM_BACKUP_DIR || pathJoin(TRILIUM_DATA_DIR, "backup"),
+        "LOG_DIR":
+            process.env.TRILIUM_LOG_DIR || pathJoin(TRILIUM_DATA_DIR, "log"),
+        "ANONYMIZED_DB_DIR":
+            process.env.TRILIUM_ANONYMIZED_DB_DIR || pathJoin(TRILIUM_DATA_DIR, "anonymized-db"),
+        "CONFIG_INI_PATH":
+            process.env.TRILIUM_CONFIG_INI_PATH || pathJoin(TRILIUM_DATA_DIR, "config.ini")
+    } as const
+
+    Object.freeze(dataDirs);
+    return dataDirs;
+
+}
+
 const TRILIUM_DATA_DIR = getTriliumDataDir();
+const dataDirs = getDataDirs(TRILIUM_DATA_DIR);
 
-const DOCUMENT_PATH = process.env.TRILIUM_DOCUMENT_PATH || pathJoin(TRILIUM_DATA_DIR, "document.db");
-const BACKUP_DIR = process.env.TRILIUM_BACKUP_DIR || pathJoin(TRILIUM_DATA_DIR, "backup");
-const LOG_DIR = process.env.TRILIUM_LOG_DIR || pathJoin(TRILIUM_DATA_DIR, "log");
-const ANONYMIZED_DB_DIR = process.env.TRILIUM_ANONYMIZED_DB_DIR || pathJoin(TRILIUM_DATA_DIR, "anonymized-db");
-const CONFIG_INI_PATH = process.env.TRILIUM_CONFIG_INI_PATH || pathJoin(TRILIUM_DATA_DIR, "config.ini");
-
-export default {
-    TRILIUM_DATA_DIR,
-    DOCUMENT_PATH,
-    BACKUP_DIR,
-    LOG_DIR,
-    ANONYMIZED_DB_DIR,
-    CONFIG_INI_PATH
-};
+export default dataDirs;
