@@ -6,11 +6,14 @@ const SYSTEM_SANS_SERIF = [
     "-apple-system",
     "BlinkMacSystemFont",
     "Segoe UI",
+    "Cantarell",
+    "Ubuntu",
     "Noto Sans",
     "Helvetica",
     "Arial",
     "sans-serif",
-    "Apple Color Emoji","Segoe UI Emoji"
+    "Apple Color Emoji",
+    "Segoe UI Emoji"
 ].join(",");
 
 const SYSTEM_MONOSPACE = [
