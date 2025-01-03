@@ -35,6 +35,7 @@ export default class SidebarContainer extends FlexContainer {
         }
 
         const x = e.touches ? e.touches[0].clientX : e.clientX;
+
         if (x > 30 && this.currentTranslate === -100) {
             return;
         }
@@ -51,7 +52,7 @@ export default class SidebarContainer extends FlexContainer {
         const x = e.touches ? e.touches[0].clientX : e.clientX;
         const deltaX = x - this.startX;
         if (this.dragState === DRAG_STATE_INITIAL_DRAG) {
-            if (deltaX > 5) {
+            if (Math.abs(deltaX) > 5) {
                 this.sidebarContainer.style.zIndex = 1000;
                 this.originalTransition = this.sidebarWrapper.style.transition;
                 this.sidebarWrapper.style.transition = "none";
