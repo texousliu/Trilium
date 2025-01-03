@@ -10,7 +10,7 @@
 
 import os from "os";
 import fs from "fs";
-import path from "path";
+import { join as pathJoin} from "path";
 
 function getAppDataDir() {
     let appDataDir = os.homedir(); // fallback if OS is not recognized
@@ -46,27 +46,24 @@ function getTriliumDataDir() {
         return process.env.TRILIUM_DATA_DIR;
     }
 
-    const homePath = os.homedir() + path.sep + DIR_NAME;
-
+    const homePath = pathJoin(os.homedir(), DIR_NAME);
     if (fs.existsSync(homePath)) {
         return homePath;
     }
 
-    const appDataPath = getAppDataDir() + path.sep + DIR_NAME;
-
+    const appDataPath = pathJoin(getAppDataDir(), DIR_NAME);
     createDirIfNotExisting(appDataPath);
 
     return appDataPath;
 }
 
 const TRILIUM_DATA_DIR = getTriliumDataDir();
-const DIR_SEP = TRILIUM_DATA_DIR + path.sep;
 
-const DOCUMENT_PATH = process.env.TRILIUM_DOCUMENT_PATH || `${DIR_SEP}document.db`;
-const BACKUP_DIR = process.env.TRILIUM_BACKUP_DIR || `${DIR_SEP}backup`;
-const LOG_DIR = process.env.TRILIUM_LOG_DIR || `${DIR_SEP}log`;
-const ANONYMIZED_DB_DIR = process.env.TRILIUM_ANONYMIZED_DB_DIR || `${DIR_SEP}anonymized-db`;
-const CONFIG_INI_PATH = process.env.TRILIUM_CONFIG_INI_PATH || `${DIR_SEP}config.ini`;
+const DOCUMENT_PATH = process.env.TRILIUM_DOCUMENT_PATH || pathJoin(TRILIUM_DATA_DIR, "document.db");
+const BACKUP_DIR = process.env.TRILIUM_BACKUP_DIR || pathJoin(TRILIUM_DATA_DIR, "backup");
+const LOG_DIR = process.env.TRILIUM_LOG_DIR || pathJoin(TRILIUM_DATA_DIR, "log");
+const ANONYMIZED_DB_DIR = process.env.TRILIUM_ANONYMIZED_DB_DIR || pathJoin(TRILIUM_DATA_DIR, "anonymized-db");
+const CONFIG_INI_PATH = process.env.TRILIUM_CONFIG_INI_PATH || pathJoin(TRILIUM_DATA_DIR, "config.ini");
 
 export default {
     TRILIUM_DATA_DIR,
