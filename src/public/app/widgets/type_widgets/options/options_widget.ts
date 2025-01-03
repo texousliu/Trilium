@@ -1,22 +1,27 @@
+import { FilterOptionsByType, OptionDefinitions, OptionMap, OptionNames } from "../../../../../services/options_interface.js";
+import { EventData, EventListener } from "../../../components/app_context.js";
+import FNote from "../../../entities/fnote.js";
 import { t } from "../../../services/i18n.js";
 import server from "../../../services/server.js";
 import toastService from "../../../services/toast.js";
 import NoteContextAwareWidget from "../../note_context_aware_widget.js";
 
-export default class OptionsWidget extends NoteContextAwareWidget {
+export default class OptionsWidget extends NoteContextAwareWidget
+    implements EventListener<"entitiesReloaded">
+{
     constructor() {
         super();
 
         this.contentSized();
     }
 
-    async updateOption(name, value) {
+    async updateOption<T extends OptionNames>(name: T, value: string) {
         const opts = { [name]: value };
 
         await this.updateMultipleOptions(opts);
     }
 
-    async updateMultipleOptions(opts) {
+    async updateMultipleOptions(opts: Partial<OptionMap>) {
         await server.put('options', opts);
 
         this.showUpdateNotification();
@@ -32,17 +37,17 @@ export default class OptionsWidget extends NoteContextAwareWidget {
         });
     }
 
-    async updateCheckboxOption(name, $checkbox) {
+    async updateCheckboxOption<T extends FilterOptionsByType<boolean>>(name: T, $checkbox: JQuery<HTMLElement>) {
         const isChecked = $checkbox.prop("checked");
 
         return await this.updateOption(name, isChecked ? 'true' : 'false');
     }
 
-    setCheckboxState($checkbox, optionValue) {
+    setCheckboxState($checkbox: JQuery<HTMLElement>, optionValue: string) {
         $checkbox.prop('checked', optionValue === 'true');
     }
 
-    optionsLoaded(options) {}
+    optionsLoaded(options: OptionMap) {}
 
     async refresh() {
         this.toggleInt(this.isEnabled());
@@ -58,15 +63,15 @@ export default class OptionsWidget extends NoteContextAwareWidget {
         }
     }
 
-    async refreshWithNote(note) {
-        const options = await server.get('options');
+    async refreshWithNote(note: FNote) {
+        const options = await server.get<OptionMap>('options');
 
         if (options) {
             this.optionsLoaded(options);
         }
     }
 
-    async entitiesReloadedEvent({loadResults}) {
+    async entitiesReloadedEvent({loadResults}: EventData<"entitiesReloaded">) {
         if (loadResults.getOptionNames().length > 0) {
             this.refresh();
         }
