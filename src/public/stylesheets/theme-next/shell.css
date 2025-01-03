@@ -431,6 +431,16 @@ body.mobile .fancytree-node > span {
     font-size: 1rem !important;
 }
 
+body.mobile #mobile-sidebar-container {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+body.mobile #mobile-sidebar-wrapper {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-right: 1px solid var(--subtle-border-color);
+}
+
 #left-pane .fancytree-expander {
     opacity: .65;
     transition: opacity 150ms ease-in;
