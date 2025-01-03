@@ -57,7 +57,7 @@ export default class SidebarContainer extends FlexContainer {
         const deltaX = x - this.startX;
         const width = this.sidebarWrapper.offsetWidth;
         const translatePercentage = Math.min(0, Math.max(this.currentTranslate + (deltaX / width) * 100, -100));
-
+        this.translatePercentage = translatePercentage;
         this.sidebarWrapper.style.transform = `translateX(${translatePercentage}%)`;
     }
 
@@ -66,8 +66,7 @@ export default class SidebarContainer extends FlexContainer {
             return;
         }
 
-        const translateX = parseFloat(this.sidebarWrapper.style.transform.match(/-?\d+/)[0]);
-        const isOpen = translateX > -50;
+        const isOpen = this.translatePercentage > -50;
         this.sidebarWrapper.classList.toggle("show", isOpen);
         this.sidebarWrapper.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
         this.sidebarWrapper.style.transition = this.originalTransition;
