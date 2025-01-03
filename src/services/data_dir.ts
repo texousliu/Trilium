@@ -15,7 +15,7 @@ import { join as pathJoin} from "path";
 const DIR_NAME = "trilium-data";
 const FOLDER_PERMISSIONS = 0o700;
 
-function getPlatformAppDataDir(platform: ReturnType<typeof os.platform>, ENV_APPDATA_DIR: string | undefined = process.env.APPDATA) {
+export function getPlatformAppDataDir(platform: ReturnType<typeof os.platform>, ENV_APPDATA_DIR: string | undefined = process.env.APPDATA) {
 
     switch(true) {
         case platform === "win32" && !!ENV_APPDATA_DIR:
@@ -40,7 +40,7 @@ function createDirIfNotExisting(path: fs.PathLike, permissionMode: fs.Mode = FOL
     }
 }
 
-function getTriliumDataDir() {
+export function getTriliumDataDir() {
     // case A
     if (process.env.TRILIUM_DATA_DIR) {
         createDirIfNotExisting(process.env.TRILIUM_DATA_DIR);
@@ -66,7 +66,7 @@ function getTriliumDataDir() {
     return homePath;
 }
 
-function getDataDirs(TRILIUM_DATA_DIR: string) {
+export function getDataDirs(TRILIUM_DATA_DIR: string) {
     const dataDirs = {
         "TRILIUM_DATA_DIR":
             TRILIUM_DATA_DIR,
