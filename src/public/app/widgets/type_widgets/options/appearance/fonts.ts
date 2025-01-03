@@ -10,15 +10,20 @@ const FONT_FAMILIES = {
         { value: "sans-serif", label: "Sans Serif" },
         { value: "monospace", label: "Monospace" },
     ],
-    "System fonts": [
+    "Sans-serif system fonts": [
         { value: "Arial", label: "Arial" },
         { value: "Verdana", label: "Verdana" },
         { value: "Helvetica", label: "Helvetica" },
         { value: "Tahoma", label: "Tahoma" },
         { value: "Trebuchet MS", label: "Trebuchet MS" },
+        { value: "Microsoft YaHei", label: "Microsoft YaHei" },
+    ],
+    "Serif system fonts": [
         { value: "Times New Roman", label: "Times New Roman" },
         { value: "Georgia", label: "Georgia" },
         { value: "Garamond", label: "Garamond" },
+    ],
+    "Monospace system fonts": [
         { value: "Courier New", label: "Courier New" },
         { value: "Brush Script MT", label: "Brush Script MT" },
         { value: "Impact", label: "Impact" },
@@ -26,10 +31,11 @@ const FONT_FAMILIES = {
         { value: "Andalé Mono", label: "Andalé Mono" },
         { value: "Lucida Console", label: "Lucida Console" },
         { value: "Monaco", label: "Monaco" },
+    ],
+    "Handwriting system fonts": [
         { value: "Bradley Hand", label: "Bradley Hand" },
         { value: "Luminari", label: "Luminari" },
-        { value: "Comic Sans MS", label: "Comic Sans MS" },
-        { value: "Microsoft YaHei", label: "Microsoft YaHei" },
+        { value: "Comic Sans MS", label: "Comic Sans MS" }
     ]
 };
 
