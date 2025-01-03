@@ -1,9 +1,19 @@
 import OptionsWidget from "../options_widget.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
-import { OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
+import { FontFamily, OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
 
-const FONT_FAMILIES = [
+interface FontFamilyEntry {
+    value: FontFamily;
+    label: string;
+}
+
+interface FontGroup {
+    title: string;
+    items: FontFamilyEntry[];
+}
+
+const FONT_FAMILIES: FontGroup[] = [
     {
         title: t("fonts.generic-fonts"),
         items: [

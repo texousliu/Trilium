@@ -12,6 +12,8 @@ type KeyboardShortcutsOptions<T extends KeyboardActionNames> = {
     [key in T as `keyboardShortcuts${Capitalize<key>}`]: string
 };
 
+export type FontFamily = "theme" | "serif" | "sans-serif" | "monospace" | string;
+
 export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActionNames> {
     "openNoteContexts": string;
     "lastDailyBackupDate": string;
@@ -22,10 +24,10 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     "syncServerHost": string;
     "syncServerTimeout": string;
     "syncProxy": string;
-    "mainFontFamily": string;
-    "treeFontFamily": string;
-    "detailFontFamily": string;
-    "monospaceFontFamily": string;
+    "mainFontFamily": FontFamily;
+    "treeFontFamily": FontFamily;
+    "detailFontFamily": FontFamily;
+    "monospaceFontFamily": FontFamily;
     "spellCheckLanguageCode": string;
     "codeNotesMimeTypes": string;
     "headingStyle": string;
