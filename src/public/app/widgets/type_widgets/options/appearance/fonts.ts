@@ -5,7 +5,7 @@ import { FontFamily, OptionMap, OptionNames } from "../../../../../../services/o
 
 interface FontFamilyEntry {
     value: FontFamily;
-    label: string;
+    label?: string;
 }
 
 interface FontGroup {
@@ -26,40 +26,40 @@ const FONT_FAMILIES: FontGroup[] = [
     {
         title: t("fonts.sans-serif-system-fonts"),
         items: [
-            { value: "Arial", label: "Arial" },
-            { value: "Verdana", label: "Verdana" },
-            { value: "Helvetica", label: "Helvetica" },
-            { value: "Tahoma", label: "Tahoma" },
-            { value: "Trebuchet MS", label: "Trebuchet MS" },
-            { value: "Microsoft YaHei", label: "Microsoft YaHei" },
+            { value: "Arial" },
+            { value: "Verdana" },
+            { value: "Helvetica" },
+            { value: "Tahoma" },
+            { value: "Trebuchet MS" },
+            { value: "Microsoft YaHei" },
         ]
     },
     {
         title: t("fonts.serif-system-fonts"),
         items: [
-            { value: "Times New Roman", label: "Times New Roman" },
-            { value: "Georgia", label: "Georgia" },
-            { value: "Garamond", label: "Garamond" },
+            { value: "Times New Roman" },
+            { value: "Georgia" },
+            { value: "Garamond" },
         ]
     },
     {
         title: t("fonts.monospace-system-fonts"),
         items: [
-            { value: "Courier New", label: "Courier New" },
-            { value: "Brush Script MT", label: "Brush Script MT" },
-            { value: "Impact", label: "Impact" },
-            { value: "American Typewriter", label: "American Typewriter" },
-            { value: "Andalé Mono", label: "Andalé Mono" },
-            { value: "Lucida Console", label: "Lucida Console" },
-            { value: "Monaco", label: "Monaco" },
+            { value: "Courier New" },
+            { value: "Brush Script MT" },
+            { value: "Impact" },
+            { value: "American Typewriter" },
+            { value: "Andalé Mono" },
+            { value: "Lucida Console" },
+            { value: "Monaco" },
         ]
     },
     {
         title: t("fonts.handwriting-system-fonts"),
         items: [
-            { value: "Bradley Hand", label: "Bradley Hand" },
-            { value: "Luminari", label: "Luminari" },
-            { value: "Comic Sans MS", label: "Comic Sans MS" }
+            { value: "Bradley Hand" },
+            { value: "Luminari" },
+            { value: "Comic Sans MS" }
         ]
     }
 ];
@@ -229,7 +229,7 @@ export default class FontsOptions extends OptionsWidget {
                 $group.append($("<option>")
                     .attr("value", value)
                     .prop("selected", value === currentValue)
-                    .text(label));
+                    .text(label ?? value));
             }
 
             $select.append($group);
