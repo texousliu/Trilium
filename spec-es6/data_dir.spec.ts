@@ -1,12 +1,12 @@
 import { describe, it, execute, expect } from "./mini_test.ts";
 
-import { getPlatformAppDataDir } from "../src/services/data_dir.ts"
+import { getPlatformAppDataDir, getDataDirs} from "../src/services/data_dir.ts"
 
 
 
 describe("data_dir.ts unit tests", () => {
 
-  describe("#getPlatformAppDataDir", () => {
+  describe("#getPlatformAppDataDir()", () => {
 
     type TestCaseGetPlatformAppDataDir = [
       description: string,
@@ -69,8 +69,68 @@ describe("data_dir.ts unit tests", () => {
     // TODO
   })
 
-  describe("#getDataDirs", () => {
-    // TODO
+  describe("#getDataDirs()", () => {
+
+    const envKeys: Omit<keyof ReturnType<typeof getDataDirs>, "TRILIUM_DATA_DIR">[] = [
+      "DOCUMENT_PATH",
+      "BACKUP_DIR",
+      "LOG_DIR",
+      "ANONYMIZED_DB_DIR",
+      "CONFIG_INI_PATH",
+    ];
+
+    const setMockedEnv = (prefix: string | null) => {
+      envKeys.forEach(key => {
+        if (prefix) {
+          process.env[`TRILIUM_${key}`] = `${prefix}_${key}`
+        } else {
+          delete process.env[`TRILIUM_${key}`]
+        }
+      })
+    };
+
+    it("w/ process.env values present, it should return an object using values from process.env", () => {
+
+      // set mocked values
+      const mockValuePrefix = "MOCK";
+      setMockedEnv(mockValuePrefix);
+
+      // get result
+      const result = getDataDirs(`${mockValuePrefix}_TRILIUM_DATA_DIR`);
+
+      for (const key in result) {
+        expect(result[key]).toEqual(`${mockValuePrefix}_${key}`)
+      }
+    })
+
+    it("w/ NO process.env values present, it should return an object using supplied TRILIUM_DATA_DIR as base", () => {
+
+      // make sure values are undefined
+      setMockedEnv(null);
+
+      const mockDataDir = "/home/test/MOCK_TRILIUM_DATA_DIR"
+      const result = getDataDirs(mockDataDir);
+
+      for (const key in result) {
+        expect(result[key].startsWith(mockDataDir)).toBeTruthy()
+      }
+    })
+
+    it("should ignore attempts to change a property on the returned object", () => {
+
+      // make sure values are undefined
+      setMockedEnv(null);
+
+      const mockDataDir = "/home/test/MOCK_TRILIUM_DATA_DIR"
+      const result = getDataDirs(mockDataDir);
+
+      //@ts-expect-error - attempt to change value of readonly property
+      result.BACKUP_DIR = "attempt to change";
+
+      for (const key in result) {
+        expect(result[key].startsWith(mockDataDir)).toBeTruthy()
+      }
+    })
   })
 
 });
