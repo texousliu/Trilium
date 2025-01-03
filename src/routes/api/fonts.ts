@@ -2,6 +2,21 @@ import { Request, Response } from 'express';
 import optionService from "../../services/options.js";
 import { OptionMap } from '../../services/options_interface.js';
 
+const SYSTEM_SANS_SERIF = [
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Noto Sans",
+    "Helvetica",
+    "Arial",
+    "sans-serif",
+    "Apple Color Emoji","Segoe UI Emoji"
+].join(",");
+
+const SYSTEM_MONOSPACE = [
+    "monospace"
+].join(",");
+
 function getFontCss(req: Request, res: Response) {
     res.setHeader('Content-Type', 'text/css');
 
@@ -22,23 +37,41 @@ function getFontCss(req: Request, res: Response) {
     res.send(style);
 }
 
-function getFontFamily(optionsMap: OptionMap) {
+function getFontFamily({ mainFontFamily, treeFontFamily, detailFontFamily, monospaceFontFamily }: OptionMap) {
     let style = "";
 
-    if (optionsMap.mainFontFamily !== 'theme') {
-        style += `--main-font-family: ${optionsMap.mainFontFamily};`;
+    // System override
+    if (mainFontFamily === "system") {
+        mainFontFamily = SYSTEM_SANS_SERIF;
     }
 
-    if (optionsMap.treeFontFamily !== 'theme') {
-        style += `--tree-font-family: ${optionsMap.treeFontFamily};`;
+    if (treeFontFamily === "system") {
+        treeFontFamily = SYSTEM_SANS_SERIF;
     }
 
-    if (optionsMap.detailFontFamily !== 'theme') {
-        style += `--detail-font-family: ${optionsMap.detailFontFamily};`;
+    if (detailFontFamily === "system") {
+        detailFontFamily = SYSTEM_SANS_SERIF;
     }
 
-    if (optionsMap.monospaceFontFamily !== 'theme') {
-        style += `--monospace-font-family: ${optionsMap.monospaceFontFamily};`;
+    if (monospaceFontFamily === "system") {
+        monospaceFontFamily = SYSTEM_MONOSPACE;
+    }
+
+    // Apply the font override if not using theme fonts.
+    if (mainFontFamily !== 'theme') {
+        style += `--main-font-family: ${mainFontFamily};`;
+    }
+
+    if (treeFontFamily !== 'theme') {
+        style += `--tree-font-family: ${treeFontFamily};`;
+    }
+
+    if (detailFontFamily !== 'theme') {
+        style += `--detail-font-family: ${detailFontFamily};`;
+    }
+
+    if (monospaceFontFamily !== 'theme') {
+        style += `--monospace-font-family: ${monospaceFontFamily};`;
     }
 
     return style;

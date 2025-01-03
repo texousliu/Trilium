@@ -1071,7 +1071,8 @@
     "handwriting-system-fonts": "Handwriting system fonts",
     "serif": "Serif",
     "sans-serif": "Sans Serif",
-    "monospace": "Monospace"
+    "monospace": "Monospace",
+    "system-default": "System default"
   },
   "max_content_width": {
     "title": "Content Width",

@@ -18,9 +18,10 @@ const FONT_FAMILIES: FontGroup[] = [
         title: t("fonts.generic-fonts"),
         items: [
             { value: "theme", label: t("fonts.theme_defined") },
+            { value: "system", label: t("fonts.system-default") },
             { value: "serif", label: t("fonts.serif") },
             { value: "sans-serif", label: t("fonts.sans-serif") },
-            { value: "monospace", label: t("fonts.monospace") },
+            { value: "monospace", label: t("fonts.monospace") }
         ]
     },
     {

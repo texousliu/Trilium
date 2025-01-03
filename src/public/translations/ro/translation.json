@@ -561,7 +561,8 @@
     "serif-system-fonts": "Fonturi de sistem cu serifuri",
     "monospace": "Monospațiu",
     "sans-serif": "Fără serifuri",
-    "serif": "Cu serifuri"
+    "serif": "Cu serifuri",
+    "system-default": "Fontul predefinit al sistemului"
   },
   "global_menu": {
     "about": "Despre TriliumNext Notes",
