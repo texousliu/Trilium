@@ -60,7 +60,7 @@ export default class SidebarContainer extends FlexContainer {
                 this.sidebarEl.style.transition = "none";
                 this.backdropEl.style.transition = "none";
 
-                this.backdropEl.style.opacity = Math.max(0, 1 + (this.translatePercentage / 100));
+                this.backdropEl.style.opacity = (this.currentTranslate === -100 ? 0 : 1);
                 this.backdropEl.classList.add("show");
 
                 this.dragState = DRAG_STATE_DRAGGING;
