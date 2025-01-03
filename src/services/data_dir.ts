@@ -35,9 +35,9 @@ function getPlatformAppDataDir(platform: ReturnType<typeof os.platform>, ENV_APP
 }
 
 function createDirIfNotExisting(path: fs.PathLike, permissionMode: fs.Mode = FOLDER_PERMISSIONS) {
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path, permissionMode);
-  }
+    if (!fs.existsSync(path)) {
+        fs.mkdirSync(path, permissionMode);
+    }
 }
 
 function getTriliumDataDir() {
