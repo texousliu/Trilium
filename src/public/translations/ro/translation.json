@@ -553,7 +553,12 @@
     "note_tree_font": "Fontul arborelui de notițe",
     "reload_frontend": "reîncarcă interfața",
     "size": "Mărime",
-    "theme_defined": "Definit de temă"
+    "theme_defined": "Definit de temă",
+    "generic-fonts": "Fonturi generice",
+    "handwriting-system-fonts": "Fonturi de sistem cu stil de scris de mână",
+    "monospace-system-fonts": "Fonturi de sistem monospațiu",
+    "sans-serif-system-fonts": "Fonturi de sistem fără serifuri",
+    "serif-system-fonts": "Fonturi de sistem cu serifuri"
   },
   "global_menu": {
     "about": "Despre TriliumNext Notes",

@@ -1063,7 +1063,12 @@
     "note_tree_and_detail_font_sizing": "Note that tree and detail font sizing is relative to the main font size setting.",
     "not_all_fonts_available": "Not all listed fonts may be available on your system.",
     "apply_font_changes": "To apply font changes, click on",
-    "reload_frontend": "reload frontend"
+    "reload_frontend": "reload frontend",
+    "generic-fonts": "Generic fonts",
+    "sans-serif-system-fonts": "Sans-serif system fonts",
+    "serif-system-fonts": "Serif system fonts",
+    "monospace-system-fonts": "Monospace system fonts",
+    "handwriting-system-fonts": "Handwriting system fonts"
   },
   "max_content_width": {
     "title": "Content Width",

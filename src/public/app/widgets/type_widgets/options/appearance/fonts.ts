@@ -3,41 +3,56 @@ import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
 import { OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
 
-const FONT_FAMILIES = {
-    "Generic fonts": [
-        { value: "theme", label: t("fonts.theme_defined") },
-        { value: "serif", label: "Serif" },
-        { value: "sans-serif", label: "Sans Serif" },
-        { value: "monospace", label: "Monospace" },
-    ],
-    "Sans-serif system fonts": [
-        { value: "Arial", label: "Arial" },
-        { value: "Verdana", label: "Verdana" },
-        { value: "Helvetica", label: "Helvetica" },
-        { value: "Tahoma", label: "Tahoma" },
-        { value: "Trebuchet MS", label: "Trebuchet MS" },
-        { value: "Microsoft YaHei", label: "Microsoft YaHei" },
-    ],
-    "Serif system fonts": [
-        { value: "Times New Roman", label: "Times New Roman" },
-        { value: "Georgia", label: "Georgia" },
-        { value: "Garamond", label: "Garamond" },
-    ],
-    "Monospace system fonts": [
-        { value: "Courier New", label: "Courier New" },
-        { value: "Brush Script MT", label: "Brush Script MT" },
-        { value: "Impact", label: "Impact" },
-        { value: "American Typewriter", label: "American Typewriter" },
-        { value: "Andalé Mono", label: "Andalé Mono" },
-        { value: "Lucida Console", label: "Lucida Console" },
-        { value: "Monaco", label: "Monaco" },
-    ],
-    "Handwriting system fonts": [
-        { value: "Bradley Hand", label: "Bradley Hand" },
-        { value: "Luminari", label: "Luminari" },
-        { value: "Comic Sans MS", label: "Comic Sans MS" }
-    ]
-};
+const FONT_FAMILIES = [
+    {
+        title: t("fonts.generic-fonts"),
+        items: [
+            { value: "theme", label: t("fonts.theme_defined") },
+            { value: "serif", label: "Serif" },
+            { value: "sans-serif", label: "Sans Serif" },
+            { value: "monospace", label: "Monospace" },
+        ]
+    },
+    {
+        title: t("fonts.sans-serif-system-fonts"),
+        items: [
+            { value: "Arial", label: "Arial" },
+            { value: "Verdana", label: "Verdana" },
+            { value: "Helvetica", label: "Helvetica" },
+            { value: "Tahoma", label: "Tahoma" },
+            { value: "Trebuchet MS", label: "Trebuchet MS" },
+            { value: "Microsoft YaHei", label: "Microsoft YaHei" },
+        ]
+    },
+    {
+        title: t("fonts.serif-system-fonts"),
+        items: [
+            { value: "Times New Roman", label: "Times New Roman" },
+            { value: "Georgia", label: "Georgia" },
+            { value: "Garamond", label: "Garamond" },
+        ]
+    },
+    {
+        title: t("fonts.monospace-system-fonts"),
+        items: [
+            { value: "Courier New", label: "Courier New" },
+            { value: "Brush Script MT", label: "Brush Script MT" },
+            { value: "Impact", label: "Impact" },
+            { value: "American Typewriter", label: "American Typewriter" },
+            { value: "Andalé Mono", label: "Andalé Mono" },
+            { value: "Lucida Console", label: "Lucida Console" },
+            { value: "Monaco", label: "Monaco" },
+        ]
+    },
+    {
+        title: t("fonts.handwriting-system-fonts"),
+        items: [
+            { value: "Bradley Hand", label: "Bradley Hand" },
+            { value: "Luminari", label: "Luminari" },
+            { value: "Comic Sans MS", label: "Comic Sans MS" }
+        ]
+    }
+];
 
 const TPL = `
 <div class="options-section">
@@ -196,11 +211,11 @@ export default class FontsOptions extends OptionsWidget {
     fillFontFamilyOptions($select: JQuery<HTMLElement>, currentValue: string) {
         $select.empty();
 
-        for (const [group, fonts] of Object.entries(FONT_FAMILIES)) {
+        for (const { title, items } of Object.values(FONT_FAMILIES)) {
             $select.append($("<optgroup>")
-                .attr("label", group));
+                .attr("label", title));
 
-            for (const {value, label} of fonts) {
+            for (const {value, label} of items) {
                 $select.append($("<option>")
                     .attr("value", value)
                     .prop("selected", value === currentValue)
