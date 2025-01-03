@@ -34,13 +34,15 @@ function getAppDataDir() {
 const DIR_NAME = "trilium-data";
 const FOLDER_PERMISSIONS = 0o700;
 
+function createDirIfNotExisting(path: fs.PathLike, permissionMode: fs.Mode = FOLDER_PERMISSIONS) {
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path, permissionMode);
+  }
+}
 
 function getTriliumDataDir() {
     if (process.env.TRILIUM_DATA_DIR) {
-        if (!fs.existsSync(process.env.TRILIUM_DATA_DIR)) {
-            fs.mkdirSync(process.env.TRILIUM_DATA_DIR, FOLDER_PERMISSIONS);
-        }
-
+        createDirIfNotExisting(process.env.TRILIUM_DATA_DIR);
         return process.env.TRILIUM_DATA_DIR;
     }
 
@@ -52,9 +54,7 @@ function getTriliumDataDir() {
 
     const appDataPath = getAppDataDir() + path.sep + DIR_NAME;
 
-    if (!fs.existsSync(appDataPath)) {
-        fs.mkdirSync(appDataPath, FOLDER_PERMISSIONS);
-    }
+    createDirIfNotExisting(appDataPath);
 
     return appDataPath;
 }
