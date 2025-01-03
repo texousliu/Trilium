@@ -29,9 +29,9 @@ export default class SidebarContainer extends FlexContainer {
     }
 
     #onDragStart(e) {
-        if (!this.sidebarContainer) {
-            this.sidebarContainer = document.getElementById("mobile-sidebar-container");
-            this.sidebarWrapper = document.getElementById("mobile-sidebar-wrapper");
+        if (!this.backdropEl) {
+            this.backdropEl = document.getElementById("mobile-sidebar-container");
+            this.sidebarEl = document.getElementById("mobile-sidebar-wrapper");
         }
 
         const x = e.touches ? e.touches[0].clientX : e.clientX;
@@ -42,6 +42,7 @@ export default class SidebarContainer extends FlexContainer {
 
         this.startX = x;
         this.dragState = DRAG_STATE_INITIAL_DRAG;
+        this.translatePercentage = 0;
     }
 
     #onDragMove(e) {
@@ -53,16 +54,23 @@ export default class SidebarContainer extends FlexContainer {
         const deltaX = x - this.startX;
         if (this.dragState === DRAG_STATE_INITIAL_DRAG) {
             if (Math.abs(deltaX) > 5) {
-                this.sidebarContainer.style.zIndex = 1000;
-                this.originalTransition = this.sidebarWrapper.style.transition;
-                this.sidebarWrapper.style.transition = "none";
+                /* Disable the transitions since they affect performance, they are going to reenabled once drag ends. */
+                this.originalSidebarTransition = this.sidebarEl.style.transition;
+                this.originalBackdropTransition = this.backdropEl.style.transition;
+                this.sidebarEl.style.transition = "none";
+                this.backdropEl.style.transition = "none";
+
+                this.backdropEl.style.opacity = Math.max(0, 1 + (this.translatePercentage / 100));
+                this.backdropEl.classList.add("show");
+
                 this.dragState = DRAG_STATE_DRAGGING;
             }
         } else if (this.dragState === DRAG_STATE_DRAGGING) {
-            const width = this.sidebarWrapper.offsetWidth;
+            const width = this.sidebarEl.offsetWidth;
             const translatePercentage = Math.min(0, Math.max(this.currentTranslate + (deltaX / width) * 100, -100));
             this.translatePercentage = translatePercentage;
-            this.sidebarWrapper.style.transform = `translateX(${translatePercentage}%)`;
+            this.sidebarEl.style.transform = `translateX(${translatePercentage}%)`;
+            this.backdropEl.style.opacity = Math.max(0, 1 + (translatePercentage / 100));
         }
 
         e.preventDefault();
@@ -74,13 +82,14 @@ export default class SidebarContainer extends FlexContainer {
         }
 
         const isOpen = this.translatePercentage > -50;
-        this.sidebarWrapper.classList.toggle("show", isOpen);
-        this.sidebarWrapper.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
-        this.sidebarWrapper.style.transition = this.originalTransition;
+        this.sidebarEl.classList.toggle("show", isOpen);
+        this.sidebarEl.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
+        this.sidebarEl.style.transition = this.originalSidebarTransition;
+        this.backdropEl.style.transition = this.originalBackdropTransition;
         this.currentTranslate = isOpen ? 0 : -100;
 
         if (!isOpen) {
-            this.sidebarContainer.style.zIndex = -1000;
+            this.backdropEl.classList.remove("show");
         }
 
         this.dragState = DRAG_STATE_NONE;
