@@ -1,6 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
+import { OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
 
 const FONT_FAMILIES = [
     { value: "theme", label: t("fonts.theme_defined") },
@@ -31,15 +32,15 @@ const FONT_FAMILIES = [
 const TPL = `
 <div class="options-section">
     <h4>${t("fonts.fonts")}</h4>
-    
+
     <h5>${t("fonts.main_font")}</h5>
-    
+
     <div class="form-group row">
         <div class="col-6">
             <label for="main-font-family">${t("fonts.font_family")}</label>
             <select id="main-font-family" class="main-font-family form-select"></select>
         </div>
-    
+
         <div class="col-6">
             <label for="main-font-size">${t("fonts.size")}</label>
 
@@ -57,7 +58,7 @@ const TPL = `
             <label for="tree-font-family">${t("fonts.font_family")}</label>
             <select id="tree-font-family" class="tree-font-family form-select"></select>
         </div>
-    
+
         <div class="col-6">
             <label for="tree-font-size">${t("fonts.size")}</label>
 
@@ -67,15 +68,15 @@ const TPL = `
             </div>
         </div>
     </div>
-    
+
     <h5>${t("fonts.note_detail_font")}</h5>
-    
+
     <div class="form-group row">
         <div class="col-4">
             <label for="detail-font-family">${t("fonts.font_family")}</label>
             <select id="detail-font-family" class="detail-font-family form-select"></select>
         </div>
-        
+
         <div class="col-6">
             <label for="detail-font-size">${t("fonts.size")}</label>
 
@@ -85,15 +86,15 @@ const TPL = `
             </div>
         </div>
     </div>
-    
+
     <h5>${t("fonts.monospace_font")}</h5>
-    
+
     <div class="form-group row">
         <div class="col-4">
             <label for="monospace-font-family">${t("fonts.font_family")}</label>
             <select id="monospace-font-family" class="monospace-font-family form-select"></select>
         </div>
-    
+
         <div class="col-6">
             <label for="monospace-font-size">${t("fonts.size")}</label>
 
@@ -107,7 +108,7 @@ const TPL = `
     <p>${t("fonts.note_tree_and_detail_font_sizing")}</p>
 
     <p>${t("fonts.not_all_fonts_available")}</p>
-    
+
     <p>
         ${t("fonts.apply_font_changes")}
         <button class="btn btn-micro reload-frontend-button">${t("fonts.reload_frontend")}</button>
@@ -115,6 +116,18 @@ const TPL = `
 </div>`;
 
 export default class FontsOptions extends OptionsWidget {
+
+    private $mainFontSize!: JQuery<HTMLElement>;
+    private $mainFontFamily!: JQuery<HTMLElement>;
+    private $treeFontSize!: JQuery<HTMLElement>;
+    private $treeFontFamily!: JQuery<HTMLElement>;
+    private $detailFontSize!: JQuery<HTMLElement>;
+    private $detailFontFamily!: JQuery<HTMLElement>;
+    private $monospaceFontSize!: JQuery<HTMLElement>;
+    private $monospaceFontFamily!: JQuery<HTMLElement>;
+
+    private _isEnabled?: boolean;
+
     doRender() {
         this.$widget = $(TPL);
 
@@ -134,10 +147,10 @@ export default class FontsOptions extends OptionsWidget {
     }
 
     isEnabled() {
-        return this._isEnabled;
+        return !!this._isEnabled;
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this._isEnabled = (options.overrideThemeFonts === 'true');
         this.toggleInt(this._isEnabled);
         if (!this._isEnabled) {
@@ -156,7 +169,7 @@ export default class FontsOptions extends OptionsWidget {
         this.$monospaceFontSize.val(options.monospaceFontSize);
         this.fillFontFamilyOptions(this.$monospaceFontFamily, options.monospaceFontFamily);
 
-        const optionsToSave = [
+        const optionsToSave: OptionNames[] = [
             'mainFontFamily', 'mainFontSize',
             'treeFontFamily', 'treeFontSize',
             'detailFontFamily', 'detailFontSize',
@@ -164,12 +177,13 @@ export default class FontsOptions extends OptionsWidget {
         ];
 
         for (const optionName of optionsToSave) {
-            this[`$${optionName}`].on('change', () =>
-                this.updateOption(optionName, this[`$${optionName}`].val()));
+            const $el = (this as any)[`$${optionName}`];
+            $el.on('change', () =>
+                this.updateOption(optionName, $el.val()));
         }
     }
 
-    fillFontFamilyOptions($select, currentValue) {
+    fillFontFamilyOptions($select: JQuery<HTMLElement>, currentValue: string) {
         $select.empty();
 
         for (const {value, label} of FONT_FAMILIES) {
