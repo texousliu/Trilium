@@ -84,7 +84,9 @@ export default class SidebarContainer extends FlexContainer {
             return;
         }
 
-        const isOpen = this.translatePercentage > -(100 - DRAG_THRESHOLD);
+        // If the sidebar is closed, snap the sidebar open only if the user swiped over a threshold.
+        // When the sidebar is open, always close for a smooth experience.
+        const isOpen = (this.currentTranslate === -100 && this.translatePercentage > -(100 - DRAG_THRESHOLD));
         this.sidebarEl.classList.toggle("show", isOpen);
         this.sidebarEl.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
         this.sidebarEl.style.transition = this.originalSidebarTransition;
