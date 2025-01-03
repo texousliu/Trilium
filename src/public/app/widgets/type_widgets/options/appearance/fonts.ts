@@ -8,9 +8,9 @@ const FONT_FAMILIES = [
         title: t("fonts.generic-fonts"),
         items: [
             { value: "theme", label: t("fonts.theme_defined") },
-            { value: "serif", label: "Serif" },
-            { value: "sans-serif", label: "Sans Serif" },
-            { value: "monospace", label: "Monospace" },
+            { value: "serif", label: t("fonts.serif") },
+            { value: "sans-serif", label: t("fonts.sans-serif") },
+            { value: "monospace", label: t("fonts.monospace") },
         ]
     },
     {

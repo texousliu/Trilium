@@ -1068,7 +1068,10 @@
     "sans-serif-system-fonts": "Sans-serif system fonts",
     "serif-system-fonts": "Serif system fonts",
     "monospace-system-fonts": "Monospace system fonts",
-    "handwriting-system-fonts": "Handwriting system fonts"
+    "handwriting-system-fonts": "Handwriting system fonts",
+    "serif": "Serif",
+    "sans-serif": "Sans Serif",
+    "monospace": "Monospace"
   },
   "max_content_width": {
     "title": "Content Width",

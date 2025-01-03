@@ -558,7 +558,10 @@
     "handwriting-system-fonts": "Fonturi de sistem cu stil de scris de mână",
     "monospace-system-fonts": "Fonturi de sistem monospațiu",
     "sans-serif-system-fonts": "Fonturi de sistem fără serifuri",
-    "serif-system-fonts": "Fonturi de sistem cu serifuri"
+    "serif-system-fonts": "Fonturi de sistem cu serifuri",
+    "monospace": "Monospațiu",
+    "sans-serif": "Fără serifuri",
+    "serif": "Cu serifuri"
   },
   "global_menu": {
     "about": "Despre TriliumNext Notes",
