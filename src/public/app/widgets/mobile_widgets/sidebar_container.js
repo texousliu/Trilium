@@ -32,11 +32,6 @@ export default class SidebarContainer extends FlexContainer {
     }
 
     #onDragStart(e) {
-        if (!this.backdropEl) {
-            this.backdropEl = document.getElementById("mobile-sidebar-container");
-            this.sidebarEl = document.getElementById("mobile-sidebar-wrapper");
-        }
-
         const x = e.touches ? e.touches[0].clientX : e.clientX;
 
         if (x > 30 && this.currentTranslate === -100) {
@@ -44,6 +39,7 @@ export default class SidebarContainer extends FlexContainer {
         }
 
         this.startX = x;
+        this.#setInitialState();
         this.dragState = DRAG_STATE_INITIAL_DRAG;
         this.translatePercentage = 0;
     }
@@ -58,8 +54,6 @@ export default class SidebarContainer extends FlexContainer {
         if (this.dragState === DRAG_STATE_INITIAL_DRAG) {
             if (Math.abs(deltaX) > 5) {
                 /* Disable the transitions since they affect performance, they are going to reenabled once drag ends. */
-                this.originalSidebarTransition = this.sidebarEl.style.transition;
-                this.originalBackdropTransition = this.backdropEl.style.transition;
                 this.sidebarEl.style.transition = "none";
                 this.backdropEl.style.transition = "none";
 
@@ -87,25 +81,41 @@ export default class SidebarContainer extends FlexContainer {
         // If the sidebar is closed, snap the sidebar open only if the user swiped over a threshold.
         // When the sidebar is open, always close for a smooth experience.
         const isOpen = (this.currentTranslate === -100 && this.translatePercentage > -(100 - DRAG_THRESHOLD));
+        this.#setSidebarOpen(isOpen);
+    }
+
+    #setInitialState() {
+        if (this.sidebarEl) {
+            // Already initialized.
+            return;
+        }
+
+        this.sidebarEl = document.getElementById("mobile-sidebar-wrapper");
+        this.backdropEl = document.getElementById("mobile-sidebar-container");
+        this.originalSidebarTransition = this.sidebarEl.style.transition;
+        this.originalBackdropTransition = this.backdropEl.style.transition;
+    }
+
+    #setSidebarOpen(isOpen) {
+        if (!this.sidebarEl) {
+            return;
+        }
+
         this.sidebarEl.classList.toggle("show", isOpen);
         this.sidebarEl.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
         this.sidebarEl.style.transition = this.originalSidebarTransition;
+
+        this.backdropEl.classList.toggle("show", isOpen);
         this.backdropEl.style.transition = this.originalBackdropTransition;
+        this.backdropEl.style.opacity = isOpen ? 1 : 0;
+
         this.currentTranslate = isOpen ? 0 : -100;
-
-        if (!isOpen) {
-            this.backdropEl.classList.remove("show");
-        }
-
         this.dragState = DRAG_STATE_NONE;
     }
 
     activeScreenChangedEvent({activeScreen}) {
-        if (activeScreen === this.screenName) {
-            this.$widget.addClass('show');
-        } else {
-            this.$widget.removeClass('show');
-        }
+        this.#setInitialState();
+        this.#setSidebarOpen(activeScreen === this.screenName);
     }
 
 }
