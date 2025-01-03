@@ -23,10 +23,8 @@ export default class SidebarContainer extends FlexContainer {
             });
         });
 
-        document.addEventListener("touchstart", (e) => this.#onDragStart(e), {
-            passive: false
-        });
-        document.addEventListener("touchmove", (e) => this.#onDragMove(e));
+        document.addEventListener("touchstart", (e) => this.#onDragStart(e));
+        document.addEventListener("touchmove", (e) => this.#onDragMove(e), { passive: false });
         document.addEventListener("touchend", (e) => this.#onDragEnd(e));
     }
 
