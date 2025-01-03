@@ -92,7 +92,7 @@ const enum KeyboardActionNamesEnum {
     forceSaveRevision
 }
 
-type KeyboardActionNames = keyof typeof KeyboardActionNamesEnum;
+export type KeyboardActionNames = keyof typeof KeyboardActionNamesEnum;
 
 export interface KeyboardShortcut {
     separator?: string;

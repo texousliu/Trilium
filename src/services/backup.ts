@@ -1,7 +1,7 @@
 "use strict";
 
 import dateUtils from "./date_utils.js";
-import optionService from "./options.js";
+import optionService, { OptionNames } from "./options.js";
 import fs from "fs-extra";
 import dataDir from "./data_dir.js";
 import log from "./log.js";
@@ -38,12 +38,23 @@ function regularBackup() {
 }
 
 function isBackupEnabled(backupType: BackupType) {
-    const optionName = `${backupType}BackupEnabled`;
+    let optionName: OptionNames;
+    switch (backupType) {
+        case "daily":
+            optionName = "dailyBackupEnabled";
+            break;
+        case "weekly":
+            optionName = "weeklyBackupEnabled";
+            break;
+        case "monthly":
+            optionName = "monthlyBackupEnabled";
+            break;
+    }
 
     return optionService.getOptionBool(optionName);
 }
 
-function periodBackup(optionName: string, backupType: BackupType, periodInSeconds: number) {
+function periodBackup(optionName: "lastDailyBackupDate" | "lastWeeklyBackupDate" | "lastMonthlyBackupDate", backupType: BackupType, periodInSeconds: number) {
     if (!isBackupEnabled(backupType)) {
         return;
     }

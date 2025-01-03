@@ -1,5 +1,5 @@
 import optionService from "./options.js";
-import type { OptionMap } from "./options.js";
+import type { OptionMap, OptionNames } from "./options.js";
 import appInfo from "./app_info.js";
 import { randomSecureToken, isWindows } from "./utils.js";
 import log from "./log.js";
@@ -24,11 +24,11 @@ interface NotSyncedOpts {
  * Represents a correspondence between an option and its default value, to be initialized when the database is missing that particular option (after a migration from an older version, or when creating a new database).
  */
 interface DefaultOption {
-    name: string;
+    name: OptionNames;
     /**
     * The value to initialize the option with, if the option is not already present in the database.
     *
-    * If a function is passed in instead, the function is called if the option does not exist (with access to the current options) and the return value is used instead. Useful to migrate a new option with a value depending on some other option that might be initialized.
+    * If a function is passed Gin instead, the function is called if the option does not exist (with access to the current options) and the return value is used instead. Useful to migrate a new option with a value depending on some other option that might be initialized.
     */
     value: string | ((options: OptionMap) => string);
     isSynced: boolean;
@@ -194,7 +194,7 @@ function getKeyboardDefaultOptions() {
             name: `keyboardShortcuts${ka.actionName.charAt(0).toUpperCase()}${ka.actionName.slice(1)}`,
             value: JSON.stringify(ka.defaultShortcuts),
             isSynced: false
-        }));
+        })) as DefaultOption[];
 }
 
 export default {

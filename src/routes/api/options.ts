@@ -1,6 +1,6 @@
 "use strict";
 
-import optionService from "../../services/options.js";
+import optionService, { OptionNames } from "../../services/options.js";
 import log from "../../services/log.js";
 import searchService from "../../services/search/services/search.js";
 import ValidationError from "../../errors/validation_error.js";
@@ -79,7 +79,7 @@ function getOptions() {
 
     for (const optionName in optionMap) {
         if (isAllowed(optionName)) {
-            resultMap[optionName] = optionMap[optionName];
+            resultMap[optionName] = optionMap[optionName as OptionNames];
         }
     }
 
@@ -115,7 +115,7 @@ function update(name: string, value: string) {
         log.info(`Updating option '${name}' to '${value}'`);
     }
 
-    optionService.setOption(name, value);
+    optionService.setOption(name as OptionNames, value);
 
     if (name === "locale") {
         // This runs asynchronously, so it's not perfect, but it does the trick for now.
