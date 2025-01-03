@@ -178,45 +178,29 @@ export function replaceAll(string: string, replaceWhat: string, replaceWith: str
 }
 
 export function formatDownloadTitle(fileName: string, type: string | null, mime: string) {
-    if (!fileName) {
-        fileName = "untitled";
-    }
+  const fileNameBase = (!fileName) ? "untitled" : sanitize(fileName);
 
-    fileName = sanitize(fileName);
+  const getExtension = () => {
+    if (type === "text") return ".html";
+    if (type === "relationMap" || type === "canvas" || type === "search") return ".json";
+    if (!mime) return "";
 
-    if (type === 'text') {
-        return `${fileName}.html`;
-    } else if (type && ['relationMap', 'canvas', 'search'].includes(type)) {
-        return `${fileName}.json`;
-    } else {
-        if (!mime) {
-            return fileName;
-        }
+    const mimeLc = mime.toLowerCase();
 
-        mime = mime.toLowerCase();
-        const filenameLc = fileName.toLowerCase();
-        const extensions = mimeTypes.extensions[mime];
+    // better to just return the current name without a fake extension
+    // it's possible that the title still preserves the correct extension anyways
+    if (mimeLc === 'application/octet-stream') return "";
 
-        if (!extensions || extensions.length === 0) {
-            return fileName;
-        }
+    // if fileName has an extension matching the mime already - reuse it
+    const mimeTypeFromFileName = mimeTypes.lookup(fileName);
+    if (mimeTypeFromFileName === mimeLc) return "";
 
-        for (const ext of extensions) {
-            if (filenameLc.endsWith(`.${ext}`)) {
-                return fileName;
-            }
-        }
+    // as last resort try to get extension from mimeType
+    const extensions = mimeTypes.extension(mime);
+    return extensions ? `.${extensions}` : "";
+  };
 
-        if (mime === 'application/octet-stream') {
-            // we didn't find any good guess for this one, it will be better to just return
-            // the current name without a fake extension. It's possible that the title still preserves the correct
-            // extension too
-
-            return fileName;
-        }
-
-        return `${fileName}.${extensions[0]}`;
-    }
+  return `${fileNameBase}${getExtension()}`;
 }
 
 export function removeTextFileExtension(filePath: string) {
