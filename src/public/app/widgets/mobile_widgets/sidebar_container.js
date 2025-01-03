@@ -4,6 +4,9 @@ const DRAG_STATE_NONE = 0;
 const DRAG_STATE_INITIAL_DRAG = 1;
 const DRAG_STATE_DRAGGING = 2;
 
+/** Percentage of drag that the user has to do in order for the popup to open/close (0-100). */
+const DRAG_THRESHOLD = 10;
+
 export default class SidebarContainer extends FlexContainer {
 
     constructor(screenName, direction) {
@@ -81,7 +84,7 @@ export default class SidebarContainer extends FlexContainer {
             return;
         }
 
-        const isOpen = this.translatePercentage > -50;
+        const isOpen = this.translatePercentage > -(100 - DRAG_THRESHOLD);
         this.sidebarEl.classList.toggle("show", isOpen);
         this.sidebarEl.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
         this.sidebarEl.style.transition = this.originalSidebarTransition;
