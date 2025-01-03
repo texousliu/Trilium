@@ -3,31 +3,35 @@ import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
 import { OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
 
-const FONT_FAMILIES = [
-    { value: "theme", label: t("fonts.theme_defined") },
-    { value: "serif", label: "Serif" },
-    { value: "sans-serif", label: "Sans Serif" },
-    { value: "monospace", label: "Monospace" },
-    { value: "Arial", label: "Arial" },
-    { value: "Verdana", label: "Verdana" },
-    { value: "Helvetica", label: "Helvetica" },
-    { value: "Tahoma", label: "Tahoma" },
-    { value: "Trebuchet MS", label: "Trebuchet MS" },
-    { value: "Times New Roman", label: "Times New Roman" },
-    { value: "Georgia", label: "Georgia" },
-    { value: "Garamond", label: "Garamond" },
-    { value: "Courier New", label: "Courier New" },
-    { value: "Brush Script MT", label: "Brush Script MT" },
-    { value: "Impact", label: "Impact" },
-    { value: "American Typewriter", label: "American Typewriter" },
-    { value: "Andalé Mono", label: "Andalé Mono" },
-    { value: "Lucida Console", label: "Lucida Console" },
-    { value: "Monaco", label: "Monaco" },
-    { value: "Bradley Hand", label: "Bradley Hand" },
-    { value: "Luminari", label: "Luminari" },
-    { value: "Comic Sans MS", label: "Comic Sans MS" },
-    { value: "Microsoft YaHei", label: "Microsoft YaHei" },
-];
+const FONT_FAMILIES = {
+    "Generic fonts": [
+        { value: "theme", label: t("fonts.theme_defined") },
+        { value: "serif", label: "Serif" },
+        { value: "sans-serif", label: "Sans Serif" },
+        { value: "monospace", label: "Monospace" },
+    ],
+    "System fonts": [
+        { value: "Arial", label: "Arial" },
+        { value: "Verdana", label: "Verdana" },
+        { value: "Helvetica", label: "Helvetica" },
+        { value: "Tahoma", label: "Tahoma" },
+        { value: "Trebuchet MS", label: "Trebuchet MS" },
+        { value: "Times New Roman", label: "Times New Roman" },
+        { value: "Georgia", label: "Georgia" },
+        { value: "Garamond", label: "Garamond" },
+        { value: "Courier New", label: "Courier New" },
+        { value: "Brush Script MT", label: "Brush Script MT" },
+        { value: "Impact", label: "Impact" },
+        { value: "American Typewriter", label: "American Typewriter" },
+        { value: "Andalé Mono", label: "Andalé Mono" },
+        { value: "Lucida Console", label: "Lucida Console" },
+        { value: "Monaco", label: "Monaco" },
+        { value: "Bradley Hand", label: "Bradley Hand" },
+        { value: "Luminari", label: "Luminari" },
+        { value: "Comic Sans MS", label: "Comic Sans MS" },
+        { value: "Microsoft YaHei", label: "Microsoft YaHei" },
+    ]
+};
 
 const TPL = `
 <div class="options-section">
@@ -186,11 +190,17 @@ export default class FontsOptions extends OptionsWidget {
     fillFontFamilyOptions($select: JQuery<HTMLElement>, currentValue: string) {
         $select.empty();
 
-        for (const {value, label} of FONT_FAMILIES) {
-            $select.append($("<option>")
-                .attr("value", value)
-                .prop("selected", value === currentValue)
-                .text(label));
+        for (const [group, fonts] of Object.entries(FONT_FAMILIES)) {
+            $select.append($("<optgroup>")
+                .attr("label", group));
+
+            for (const {value, label} of fonts) {
+                $select.append($("<option>")
+                    .attr("value", value)
+                    .prop("selected", value === currentValue)
+                    .text(label));
+            }
         }
+
     }
 }
