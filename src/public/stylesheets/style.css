@@ -990,6 +990,7 @@ body.mobile #context-menu-container {
     overflow: auto !important;
     user-select: none;
     -webkit-user-select: none;
+    padding-bottom: env(safe-area-inset-bottom) !important;
 }
 
 body.mobile .dropdown-menu {
