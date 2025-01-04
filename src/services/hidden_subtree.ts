@@ -254,6 +254,34 @@ function buildHiddenSubtreeDefinition(): Item {
                 ]
             },
             {
+                id: '_lbMobileRoot',
+                title: "Mobile Launch Bar",
+                type: "doc",
+                icon: "bx-mobile",
+                isExpanded: true,
+                attributes: [ { type: 'label', name: 'docName', value: 'launchbar_intro' } ],
+                children: [
+                    {
+                        id: "_lbMobileAvailableLaunchers",
+                        title: t("hidden-subtree.available-launchers-title"),
+                        type: 'doc',
+                        icon: 'bx-hide',
+                        isExpanded: true,
+                        attributes: [ { type: 'label', name: 'docName', value: 'launchbar_intro' } ],
+                        children: []
+                    },
+                    {
+                        id: "_lbMobileVisibleLaunchers",
+                        title: t("hidden-subtree.visible-launchers-title"),
+                        type: 'doc',
+                        icon: 'bx-show',
+                        isExpanded: true,
+                        attributes: [ { type: 'label', name: 'docName', value: 'launchbar_intro' } ],
+                        children: []
+                    }
+                ]
+            },
+            {
                 id: '_options',
                 title: t("hidden-subtree.options-title"),
                 type: 'book',
