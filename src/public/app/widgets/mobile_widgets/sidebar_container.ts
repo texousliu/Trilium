@@ -17,6 +17,8 @@ const DRAG_OPENED_START_THRESHOLD = 80;
 export default class SidebarContainer extends FlexContainer {
 
     private screenName: Screen;
+    /** The screen name that is currently active, according to the screen changed event. */
+    private activeScreenName?: Screen;
     private currentTranslate: number;
     private dragState: number;
     private startX?: number;
@@ -41,9 +43,7 @@ export default class SidebarContainer extends FlexContainer {
         super.doRender();
 
         this.$widget.on("click", () => {
-            this.triggerCommand('setActiveScreen', {
-                screen: "detail"
-            });
+            this.triggerCommand('setActiveScreen', { screen: "detail" });
         });
 
         document.addEventListener("touchstart", (e) => this.#onDragStart(e));
@@ -113,7 +113,16 @@ export default class SidebarContainer extends FlexContainer {
         // When the sidebar is open, always close for a smooth experience.
         const isOpen = (this.currentTranslate === -100 && this.translatePercentage > -(100 - DRAG_OPEN_THRESHOLD));
         const screen = (isOpen ? "tree" : "detail");
-        this.triggerCommand("setActiveScreen", { screen });
+
+        if (this.activeScreenName !== screen) {
+            // Trigger the set active screen command for the rest of the UI to know whether the sidebar is active or not.
+            // This allows the toggle sidebar button to work, by knowing the right state.
+            this.triggerCommand("setActiveScreen", { screen });
+        } else {
+            // If the active screen hasn't changed, usually due to the user making a very short gesture that results in the sidebar not being closed/opened,
+            // we need to hide the animation but setActiveScreen command will not trigger the event since we are still on the same screen.
+            this.#setSidebarOpen(isOpen);
+        }
     }
 
     #setInitialState() {
@@ -153,6 +162,7 @@ export default class SidebarContainer extends FlexContainer {
     }
 
     activeScreenChangedEvent({activeScreen}: EventData<"activeScreenChanged">) {
+        this.activeScreenName = activeScreen;
         this.#setInitialState();
         this.#setSidebarOpen(activeScreen === this.screenName);
     }
