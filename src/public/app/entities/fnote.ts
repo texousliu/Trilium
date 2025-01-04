@@ -7,6 +7,7 @@ import cssClassManager from "../services/css_class_manager.js";
 import { Froca } from '../services/froca-interface.js';
 import FAttachment from './fattachment.js';
 import FAttribute, { AttributeType } from './fattribute.js';
+import utils from '../services/utils.js';
 
 const LABEL = 'label';
 const RELATION = 'relation';
@@ -983,7 +984,7 @@ class FNote {
     }
 
     isLaunchBarConfig() {
-        return this.type === 'launcher' || ['_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers', "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers" ].includes(this.noteId);
+        return this.type === 'launcher' || utils.isLaunchBarConfig(this.noteId);
     }
 
     isOptions() {

@@ -590,6 +590,13 @@ function isUpdateAvailable(latestVersion: string, currentVersion: string): boole
     return compareVersions(latestVersion, currentVersion) > 0;
 }
 
+function isLaunchBarConfig(noteId: string) {
+    return [
+        "_lbRoot", "_lbAvailableLaunchers", "_lbVisibleLaunchers",
+        "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers"
+    ].includes(noteId);
+}
+
 export default {
     reloadFrontendApp,
     parseDate,
@@ -632,5 +639,6 @@ export default {
     createImageSrcUrl,
     downloadSvg,
     compareVersions,
-    isUpdateAvailable
+    isUpdateAvailable,
+    isLaunchBarConfig
 };
