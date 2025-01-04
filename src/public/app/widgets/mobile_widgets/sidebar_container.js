@@ -33,12 +33,12 @@ export default class SidebarContainer extends FlexContainer {
 
     #onDragStart(e) {
         const x = e.touches ? e.touches[0].clientX : e.clientX;
+        this.startX = x;
 
         if (x > 30 && this.currentTranslate === -100) {
             return;
         }
 
-        this.startX = x;
         this.#setInitialState();
         this.dragState = DRAG_STATE_INITIAL_DRAG;
         this.translatePercentage = 0;
@@ -52,7 +52,7 @@ export default class SidebarContainer extends FlexContainer {
         const x = e.touches ? e.touches[0].clientX : e.clientX;
         const deltaX = x - this.startX;
         if (this.dragState === DRAG_STATE_INITIAL_DRAG) {
-            if (Math.abs(deltaX) > 5) {
+            if (Math.abs(deltaX) > 10) {
                 /* Disable the transitions since they affect performance, they are going to reenabled once drag ends. */
                 this.sidebarEl.style.transition = "none";
                 this.backdropEl.style.transition = "none";
@@ -75,6 +75,11 @@ export default class SidebarContainer extends FlexContainer {
 
     #onDragEnd(e) {
         if (this.dragState === DRAG_STATE_NONE) {
+            return;
+        }
+
+        if (this.dragState === DRAG_STATE_INITIAL_DRAG) {
+            this.dragState = DRAG_STATE_NONE;
             return;
         }
 
