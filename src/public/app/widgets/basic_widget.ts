@@ -9,7 +9,7 @@ import toastService from "../services/toast.js";
  * For information on using widgets, see the tutorial {@tutorial widget_basics}.
  */
 class BasicWidget extends Component {
-    private attrs: Record<string, string>;
+    protected attrs: Record<string, string>;
     private classes: string[];
     private childPositionCounter: number;
     private cssEl?: string;

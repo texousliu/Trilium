@@ -1,4 +1,6 @@
-import FlexContainer from "../containers/flex_container.js";
+import { EventData } from "../../components/app_context.js";
+import { Screen } from "../../components/mobile_screen_switcher.js";
+import FlexContainer, { FlexDirection } from "../containers/flex_container.js";
 
 const DRAG_STATE_NONE = 0;
 const DRAG_STATE_INITIAL_DRAG = 1;
@@ -9,12 +11,25 @@ const DRAG_THRESHOLD = 10;
 
 export default class SidebarContainer extends FlexContainer {
 
-    constructor(screenName, direction) {
+    private screenName: Screen;
+    private currentTranslate: number;
+    private dragState: number;
+    private startX?: number;
+    private translatePercentage: number;
+    private sidebarEl!: HTMLElement;
+    private backdropEl!: HTMLElement;
+    private originalSidebarTransition: string;
+    private originalBackdropTransition: string;
+
+    constructor(screenName: Screen, direction: FlexDirection) {
         super(direction);
 
         this.screenName = screenName;
         this.currentTranslate = -100;
+        this.translatePercentage = 0;
         this.dragState = DRAG_STATE_NONE;
+        this.originalSidebarTransition = "";
+        this.originalBackdropTransition = "";
     }
 
     doRender() {
@@ -31,8 +46,8 @@ export default class SidebarContainer extends FlexContainer {
         document.addEventListener("touchend", (e) => this.#onDragEnd(e));
     }
 
-    #onDragStart(e) {
-        const x = e.touches ? e.touches[0].clientX : e.clientX;
+    #onDragStart(e: TouchEvent | MouseEvent) {
+        const x = "touches" in e ? e.touches[0].clientX : e.clientX;
         this.startX = x;
 
         if (x > 30 && this.currentTranslate === -100) {
@@ -44,12 +59,12 @@ export default class SidebarContainer extends FlexContainer {
         this.translatePercentage = 0;
     }
 
-    #onDragMove(e) {
-        if (this.dragState === DRAG_STATE_NONE) {
+    #onDragMove(e: TouchEvent | MouseEvent) {
+        if (this.dragState === DRAG_STATE_NONE || !this.startX) {
             return;
         }
 
-        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const x = "touches" in e ? e.touches[0].clientX : e.clientX;
         const deltaX = x - this.startX;
         if (this.dragState === DRAG_STATE_INITIAL_DRAG) {
             if (Math.abs(deltaX) > 10) {
@@ -57,7 +72,7 @@ export default class SidebarContainer extends FlexContainer {
                 this.sidebarEl.style.transition = "none";
                 this.backdropEl.style.transition = "none";
 
-                this.backdropEl.style.opacity = (this.currentTranslate === -100 ? 0 : 1);
+                this.backdropEl.style.opacity = String(this.currentTranslate === -100 ? 0 : 1);
                 this.backdropEl.classList.add("show");
 
                 this.dragState = DRAG_STATE_DRAGGING;
@@ -67,13 +82,13 @@ export default class SidebarContainer extends FlexContainer {
             const translatePercentage = Math.min(0, Math.max(this.currentTranslate + (deltaX / width) * 100, -100));
             this.translatePercentage = translatePercentage;
             this.sidebarEl.style.transform = `translateX(${translatePercentage}%)`;
-            this.backdropEl.style.opacity = Math.max(0, 1 + (translatePercentage / 100));
+            this.backdropEl.style.opacity = String(Math.max(0, 1 + (translatePercentage / 100)));
         }
 
         e.preventDefault();
     }
 
-    #onDragEnd(e) {
+    #onDragEnd(e: TouchEvent | MouseEvent) {
         if (this.dragState === DRAG_STATE_NONE) {
             return;
         }
@@ -96,13 +111,20 @@ export default class SidebarContainer extends FlexContainer {
             return;
         }
 
-        this.sidebarEl = document.getElementById("mobile-sidebar-wrapper");
-        this.backdropEl = document.getElementById("mobile-sidebar-container");
+        const sidebarEl = document.getElementById("mobile-sidebar-wrapper");
+        const backdropEl = document.getElementById("mobile-sidebar-container");
+
+        if (!sidebarEl || !backdropEl) {
+            throw new Error("Unable to find the sidebar or backdrop.");
+        }
+
+        this.sidebarEl = sidebarEl;
+        this.backdropEl = backdropEl;
         this.originalSidebarTransition = this.sidebarEl.style.transition;
         this.originalBackdropTransition = this.backdropEl.style.transition;
     }
 
-    #setSidebarOpen(isOpen) {
+    #setSidebarOpen(isOpen: boolean) {
         if (!this.sidebarEl) {
             return;
         }
@@ -113,13 +135,13 @@ export default class SidebarContainer extends FlexContainer {
 
         this.backdropEl.classList.toggle("show", isOpen);
         this.backdropEl.style.transition = this.originalBackdropTransition;
-        this.backdropEl.style.opacity = isOpen ? 1 : 0;
+        this.backdropEl.style.opacity = String(isOpen ? 1 : 0);
 
         this.currentTranslate = isOpen ? 0 : -100;
         this.dragState = DRAG_STATE_NONE;
     }
 
-    activeScreenChangedEvent({activeScreen}) {
+    activeScreenChangedEvent({activeScreen}: EventData<"activeScreenChanged">) {
         this.#setInitialState();
         this.#setSidebarOpen(activeScreen === this.screenName);
     }

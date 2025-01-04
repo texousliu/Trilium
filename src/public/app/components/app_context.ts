@@ -173,6 +173,7 @@ export type CommandMappings = {
     moveBranchIdsTo: CommandData & {
         branchIds: string[];
     };
+    /** Sets the active {@link Screen} (e.g. to toggle the tree sidebar). It triggers the {@link EventMappings.activeScreenChanged} event, but only if the provided <em>screen</em> is different than the current one. */
     setActiveScreen: CommandData & {
         screen: Screen;
     }
@@ -202,6 +203,10 @@ type EventMappings = {
     },
     readOnlyTemporarilyDisabled: {
         noteContext: NoteContext
+    },
+    /** Triggered when the {@link CommandMappings.setActiveScreen} command is invoked. */
+    activeScreenChanged: {
+        activeScreen: Screen;
     }
 }
 

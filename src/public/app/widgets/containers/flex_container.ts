@@ -1,7 +1,10 @@
 import Container from "./container.js";
 
+export type FlexDirection = "row" | "column";
+
 export default class FlexContainer extends Container {
-    constructor(direction) {
+
+    constructor(direction: FlexDirection) {
         super();
 
         if (!direction || !['row', 'column'].includes(direction)) {

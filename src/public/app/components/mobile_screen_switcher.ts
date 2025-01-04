@@ -1,5 +1,5 @@
 import Component from "./component.js";
-import appContext, { CommandListener, CommandListenerData } from "./app_context.js";
+import type { CommandListener, CommandListenerData } from "./app_context.js";
 
 export type Screen = "detail" | "tree";
 
