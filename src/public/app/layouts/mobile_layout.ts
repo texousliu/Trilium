@@ -28,6 +28,7 @@ import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 import AboutDialog from "../widgets/dialogs/about.js";
 import HelpDialog from "../widgets/dialogs/help.js";
 import AppContext from "../components/app_context.js";
+import TabRowWidget from "../widgets/tab_row.js";
 
 const MOBILE_CSS = `
 <style>
@@ -183,6 +184,7 @@ export default class MobileLayout {
                 .child(new ProtectedSessionPasswordDialog())
                 .child(new ConfirmDialog())
             )
+            .child(new TabRowWidget().css('height', '40px'))
             .child(new FlexContainer("row")
                 .class("horizontal")
                 .css("height", "53px")

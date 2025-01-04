@@ -49,10 +49,10 @@ class NoteContextAwareWidget extends BasicWidget {
 
     /**
      * Indicates if the widget is enabled. Widgets are enabled by default. Generally setting this to `false` will cause the widget not to be displayed, however it will still be available on the DOM but hidden.
-     * 
+     *
      * <p>
      * If the widget is not enabled, it will not receive `refreshWithNote` updates.
-     * 
+     *
      * @returns {boolean} true when an active note exists
      */
     isEnabled() {
@@ -88,6 +88,7 @@ class NoteContextAwareWidget extends BasicWidget {
     async refreshWithNote(note) {}
 
     async noteSwitchedEvent({noteContext, notePath}) {
+        this.noteContext = noteContext;
         // if notePath does not match, then the noteContext has been switched to another note in the meantime
         if (noteContext.notePath === notePath) {
             await this.noteSwitched();

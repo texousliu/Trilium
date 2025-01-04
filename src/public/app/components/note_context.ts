@@ -237,7 +237,7 @@ class NoteContext extends Component
 
         this.hoistedNoteId = noteIdToHoist;
 
-        if (!this.notePathArray?.includes(noteIdToHoist) && !utils.isMobile()) {
+        if (!this.notePathArray?.includes(noteIdToHoist)) {
             await this.setNote(noteIdToHoist);
         }
 
