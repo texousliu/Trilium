@@ -1,10 +1,12 @@
 import FlexContainer from "./flex_container.js";
 import froca from "../../services/froca.js";
-import appContext from "../../components/app_context.js";
+import appContext, { EventData } from "../../components/app_context.js";
 import LauncherWidget from "./launcher.js";
 
 export default class LauncherContainer extends FlexContainer {
-    constructor(isHorizontalLayout) {
+    private isHorizontalLayout: boolean;
+
+    constructor(isHorizontalLayout: boolean) {
         super(isHorizontalLayout ? "row" : "column");
 
         this.id('launcher-container');
@@ -66,8 +68,8 @@ export default class LauncherContainer extends FlexContainer {
         }
     }
 
-    entitiesReloadedEvent({loadResults}) {
-        if (loadResults.getBranchRows().find(branch => froca.getNoteFromCache(branch.parentNoteId)?.isLaunchBarConfig())) {
+    entitiesReloadedEvent({loadResults}: EventData<"entitiesReloaded">) {
+        if (loadResults.getBranchRows().find(branch => branch.parentNoteId && froca.getNoteFromCache(branch.parentNoteId)?.isLaunchBarConfig())) {
             // changes in note placement require reload of all launchers, all other changes are handled by individual
             // launchers
             this.load();

@@ -11,12 +11,22 @@ import utils from "../../services/utils.js";
 import TodayLauncher from "../buttons/launcher/today_launcher.js";
 import HistoryNavigationButton from "../buttons/history_navigation.js";
 import QuickSearchLauncherWidget from "../quick_search_launcher.js";
+import FNote from "../../entities/fnote.js";
+
+interface InnerWidget extends BasicWidget {
+    settings?: {
+        titlePlacement: "bottom"
+    }
+}
 
 export default class LauncherWidget extends BasicWidget {
-    constructor(isHorizontalLayout) {
+
+    private innerWidget!: InnerWidget;
+    private isHorizontalLayout: boolean;
+
+    constructor(isHorizontalLayout: boolean) {
         super();
 
-        this.innerWidget = null;
         this.isHorizontalLayout = isHorizontalLayout;
     }
 
@@ -28,7 +38,7 @@ export default class LauncherWidget extends BasicWidget {
         this.$widget = this.innerWidget.render();
     }
 
-    async initLauncher(note) {
+    async initLauncher(note: FNote) {
         if (note.type !== 'launcher') {
             throw new Error(`Note '${note.noteId}' '${note.title}' is not a launcher even though it's in the launcher subtree`);
         }
@@ -43,28 +53,30 @@ export default class LauncherWidget extends BasicWidget {
             return false;
         }
 
+        let widget: BasicWidget;
         if (launcherType === 'command') {
-            this.innerWidget = this.initCommandLauncherWidget(note)
+            widget = this.initCommandLauncherWidget(note)
                 .class("launcher-button");
         } else if (launcherType === 'note') {
-            this.innerWidget = new NoteLauncher(note)
+            widget = new NoteLauncher(note)
                 .class("launcher-button");
         } else if (launcherType === 'script') {
-            this.innerWidget = new ScriptLauncher(note)
+            widget = new ScriptLauncher(note)
                 .class("launcher-button");
         } else if (launcherType === 'customWidget') {
-            this.innerWidget = await this.initCustomWidget(note);
+            widget = await this.initCustomWidget(note);
         } else if (launcherType === 'builtinWidget') {
-            this.innerWidget = this.initBuiltinWidget(note);
+            widget = this.initBuiltinWidget(note);
         } else {
             throw new Error(`Unrecognized launcher type '${launcherType}' for launcher '${note.noteId}' title '${note.title}'`);
         }
 
-        if (!this.innerWidget) {
+        if (!widget) {
             throw new Error(`Unknown initialization error for note '${note.noteId}', title '${note.title}'`);
         }
 
-        this.child(this.innerWidget);
+        this.child(widget);
+        this.innerWidget = widget as InnerWidget;
         if (this.isHorizontalLayout && this.innerWidget.settings) {
             this.innerWidget.settings.titlePlacement = "bottom";
         }
@@ -72,14 +84,14 @@ export default class LauncherWidget extends BasicWidget {
         return true;
     }
 
-    initCommandLauncherWidget(note) {
+    initCommandLauncherWidget(note: FNote) {
         return new CommandButtonWidget()
             .title(() => note.title)
             .icon(() => note.getIcon())
             .command(() => note.getLabelValue("command"));
     }
 
-    async initCustomWidget(note) {
+    async initCustomWidget(note: FNote) {
         const widget = await note.getRelationTarget('widget');
 
         if (widget) {
@@ -89,7 +101,7 @@ export default class LauncherWidget extends BasicWidget {
         }
     }
 
-    initBuiltinWidget(note) {
+    initBuiltinWidget(note: FNote) {
         const builtinWidget = note.getLabelValue("builtinWidget");
         switch (builtinWidget) {
             case "calendar":
@@ -98,7 +110,7 @@ export default class LauncherWidget extends BasicWidget {
                 // || has to be inside since 0 is a valid value
                 const baseSize = parseInt(note.getLabelValue("baseSize") || "40");
                 const growthFactor = parseInt(note.getLabelValue("growthFactor") || "100");
-        
+
                 return new SpacerWidget(baseSize, growthFactor);
             case "bookmarks":
                 return new BookmarkButtons(this.isHorizontalLayout);

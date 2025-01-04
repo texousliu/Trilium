@@ -10,6 +10,7 @@ interface NoteRow {
 interface BranchRow {
     branchId: string;
     componentId: string;
+    parentNoteId?: string;
 }
 
 export interface AttributeRow {
