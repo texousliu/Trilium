@@ -111,9 +111,16 @@ body.layout-horizontal > .horizontal {
 }
 
 #launcher-pane.horizontal {
-    height: var(--launcher-pane-size) !important;
-    border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
+    height: var(--launcher-pane-size) !important;    
     align-items: center;
+    border-top: 1px solid var(--launcher-pane-horizontal-border-color);
+}
+
+@media (min-width: 992px) {
+    #launcher-pane.horizontal {
+        border-top: unset;
+        border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
+    }
 }
 
 #launcher-pane .launcher-button,
