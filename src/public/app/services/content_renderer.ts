@@ -22,6 +22,10 @@ interface Options {
     imageHasZoom?: boolean;
 }
 
+const CODE_MIME_TYPES = new Set([
+    "application/json"
+]);
+
 async function getRenderedContent(this: {} | { ctx: string }, entity: FNote, options: Options = {}) {
     options = Object.assign({
         tooltip: false
@@ -31,6 +35,7 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote, opt
     // attachment supports only image and file/pdf/audio/video
 
     const $renderedContent = $('<div class="rendered-content">');
+    console.log(type);
 
     if (type === 'text') {
         await renderText(entity, $renderedContent);
@@ -284,9 +289,12 @@ function getRenderingType(entity: FNote | FAttachment) {
     }
 
     const mime = ("mime" in entity && entity.mime);
+    console.log("MIME ", mime);
 
     if (type === 'file' && mime === 'application/pdf') {
         type = 'pdf';
+    } else if (type === "file" && mime && CODE_MIME_TYPES.has(mime) ) {
+        type = "code";
     } else if (type === 'file' && mime && mime.startsWith('audio/')) {
         type = 'audio';
     } else if (type === 'file' && mime && mime.startsWith('video/')) {
