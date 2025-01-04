@@ -1209,6 +1209,12 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     }
 }
 
+@media (min-width: 992px) {
+    #mobile-sidebar-wrapper {
+        transform: none !important;
+    }
+}
+
 #launcher-pane {
     color: var(--launcher-pane-text-color);
     background-color: var(--launcher-pane-background-color);
