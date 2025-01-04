@@ -1218,6 +1218,11 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
     #mobile-sidebar-wrapper {
         transform: none !important;
+        background-color: var(--left-pane-background-color) !important;
+    }
+
+    #detail-container {
+        background: var(--main-background-color);
     }
 }
 

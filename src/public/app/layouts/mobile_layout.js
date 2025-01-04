@@ -137,6 +137,7 @@ export default class MobileLayout {
                         .child(new NoteTreeWidget()
                             .cssBlock(FANCYTREE_CSS))))
                 .child(new ScreenContainer("detail", "column")
+                    .id("detail-container")
                     .class("d-sm-flex d-md-flex d-lg-flex d-xl-flex col-12 col-sm-7 col-md-8 col-lg-9")
                     .css("padding-left", "0")
                     .css("padding-right", "0")
