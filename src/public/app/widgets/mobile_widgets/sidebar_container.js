@@ -86,7 +86,8 @@ export default class SidebarContainer extends FlexContainer {
         // If the sidebar is closed, snap the sidebar open only if the user swiped over a threshold.
         // When the sidebar is open, always close for a smooth experience.
         const isOpen = (this.currentTranslate === -100 && this.translatePercentage > -(100 - DRAG_THRESHOLD));
-        this.#setSidebarOpen(isOpen);
+        const screen = (isOpen ? "tree" : "detail");
+        this.triggerCommand("setActiveScreen", { screen });
     }
 
     #setInitialState() {
