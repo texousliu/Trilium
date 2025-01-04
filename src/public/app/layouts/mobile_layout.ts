@@ -27,6 +27,7 @@ import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolb
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 import AboutDialog from "../widgets/dialogs/about.js";
 import HelpDialog from "../widgets/dialogs/help.js";
+import AppContext from "../components/app_context.js";
 
 const MOBILE_CSS = `
 <style>
@@ -114,7 +115,7 @@ span.fancytree-expander {
 </style>`;
 
 export default class MobileLayout {
-    getRootWidget(appContext) {
+    getRootWidget(appContext: typeof AppContext) {
         return new RootContainer(true)
             .setParent(appContext)
             .class("horizontal-layout")
@@ -151,8 +152,8 @@ export default class MobileLayout {
                         .child(new ToggleSidebarButtonWidget().contentSized())
                         .child(new NoteTitleWidget()
                             .contentSized()
-                            .css("position: relative;")
-                            .css("top: 5px;")
+                            .css("position", "relative")
+                            .css("top", "5px")
                             .css("padding-left", "0.5em"))
                         .child(new MobileDetailMenuWidget(true).contentSized())
                     )
