@@ -1,5 +1,5 @@
 import optionService from "./options.js";
-import type { OptionMap, OptionNames } from "./options.js";
+import type { OptionMap, OptionNames } from "./options_interface.js";
 import appInfo from "./app_info.js";
 import { randomSecureToken, isWindows } from "./utils.js";
 import log from "./log.js";

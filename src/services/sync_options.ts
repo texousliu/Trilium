@@ -1,6 +1,7 @@
 "use strict";
 
-import optionService, { OptionNames } from "./options.js";
+import optionService from "./options.js";
+import type { OptionNames } from "./options_interface.js";
 import config from "./config.js";
 
 /*
