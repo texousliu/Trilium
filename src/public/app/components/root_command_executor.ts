@@ -91,7 +91,8 @@ export default class RootCommandExecutor extends Component {
     }
 
     async showLaunchBarSubtreeCommand() {
-        await this.showAndHoistSubtree('_lbRoot');
+        const rootNote = utils.isMobile() ? "_lbMobileRoot" : "_lbRoot";
+        await this.showAndHoistSubtree(rootNote);
         this.showLeftPaneCommand();
     }
 

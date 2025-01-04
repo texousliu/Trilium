@@ -156,7 +156,7 @@ const TPL = `
         </li>
 
         <li class="dropdown-item" data-trigger-command="showLaunchBarSubtree">
-            <span class="bx bx-sidebar"></span>
+            <span class="bx ${utils.isMobile() ? "bx-mobile" : "bx-sidebar"}"></span>
             ${t('global_menu.configure_launchbar')}
         </li>
 
