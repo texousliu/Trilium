@@ -6,6 +6,10 @@ import appContext from "../components/app_context.js";
 const TPL = `<div class="spacer"></div>`;
 
 export default class SpacerWidget extends BasicWidget {
+
+    private baseSize: number;
+    private growthFactor: number;
+
     constructor(baseSize = 0, growthFactor = 1000) {
         super();
 
@@ -29,7 +33,9 @@ export default class SpacerWidget extends BasicWidget {
                     {title: t("spacer.configure_launchbar"), command: "showLaunchBarSubtree", uiIcon: "bx bx-sidebar"}
                 ],
                 selectMenuItemHandler: ({command}) => {
-                    appContext.triggerCommand(command);
+                    if (command) {
+                        appContext.triggerCommand(command);
+                    }
                 }
             });
 

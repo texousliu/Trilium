@@ -75,6 +75,7 @@ export type CommandMappings = {
         searchString?: string;
         ancestorNoteId?: string | null;
     };
+    showLaunchBarSubtree: CommandData;
     showOptions: CommandData & {
         section: string;
     };
