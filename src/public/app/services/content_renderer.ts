@@ -35,7 +35,6 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote, opt
     // attachment supports only image and file/pdf/audio/video
 
     const $renderedContent = $('<div class="rendered-content">');
-    console.log(type);
 
     if (type === 'text') {
         await renderText(entity, $renderedContent);
@@ -289,7 +288,6 @@ function getRenderingType(entity: FNote | FAttachment) {
     }
 
     const mime = ("mime" in entity && entity.mime);
-    console.log("MIME ", mime);
 
     if (type === 'file' && mime === 'application/pdf') {
         type = 'pdf';
