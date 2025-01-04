@@ -6,8 +6,13 @@ const DRAG_STATE_NONE = 0;
 const DRAG_STATE_INITIAL_DRAG = 1;
 const DRAG_STATE_DRAGGING = 2;
 
-/** Percentage of drag that the user has to do in order for the popup to open/close (0-100). */
-const DRAG_THRESHOLD = 10;
+/** Percentage of drag that the user has to do in order for the popup to open (0-100). */
+const DRAG_OPEN_THRESHOLD = 10;
+
+/** The number of pixels the user has to drag across the screen to the right when the sidebar is closed to trigger the drag open animation. */
+const DRAG_CLOSED_START_THRESHOLD = 10;
+/** The number of pixels the user has to drag across the screen to the left when the sidebar is opened to trigger the drag close animation. */
+const DRAG_OPENED_START_THRESHOLD = 80;
 
 export default class SidebarContainer extends FlexContainer {
 
@@ -67,7 +72,7 @@ export default class SidebarContainer extends FlexContainer {
         const x = "touches" in e ? e.touches[0].clientX : e.clientX;
         const deltaX = x - this.startX;
         if (this.dragState === DRAG_STATE_INITIAL_DRAG) {
-            if (Math.abs(deltaX) > 10) {
+            if (this.currentTranslate === -100 ? deltaX > DRAG_CLOSED_START_THRESHOLD : deltaX < -DRAG_OPENED_START_THRESHOLD) {
                 /* Disable the transitions since they affect performance, they are going to reenabled once drag ends. */
                 this.sidebarEl.style.transition = "none";
                 this.backdropEl.style.transition = "none";
@@ -100,7 +105,7 @@ export default class SidebarContainer extends FlexContainer {
 
         // If the sidebar is closed, snap the sidebar open only if the user swiped over a threshold.
         // When the sidebar is open, always close for a smooth experience.
-        const isOpen = (this.currentTranslate === -100 && this.translatePercentage > -(100 - DRAG_THRESHOLD));
+        const isOpen = (this.currentTranslate === -100 && this.translatePercentage > -(100 - DRAG_OPEN_THRESHOLD));
         const screen = (isOpen ? "tree" : "detail");
         this.triggerCommand("setActiveScreen", { screen });
     }
