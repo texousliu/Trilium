@@ -57,6 +57,7 @@ body.mobile.context-menu-shown * {
 
 body.mobile #root-widget {
     padding-top: env(safe-area-inset-top);
+    padding-bottom: calc(env(safe-area-inset-bottom) * 0.75);
 }
 
 body.desktop #root-widget.horizontal-layout {
