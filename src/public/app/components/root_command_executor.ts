@@ -1,5 +1,5 @@
 import Component from "./component.js";
-import appContext from "./app_context.js";
+import appContext, { CommandData, CommandListenerData } from "./app_context.js";
 import dateNoteService from "../services/date_notes.js";
 import treeService from "../services/tree.js";
 import openService from "../services/open.js";
@@ -11,21 +11,28 @@ import utils from "../services/utils.js";
 export default class RootCommandExecutor extends Component {
     editReadOnlyNoteCommand() {
         const noteContext = appContext.tabManager.getActiveContext();
-        noteContext.viewScope.readOnlyTemporarilyDisabled = true;
-
-        appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext });
+        if (noteContext?.viewScope) {
+            noteContext.viewScope.readOnlyTemporarilyDisabled = true;
+            appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext });
+        }
     }
 
     async showSQLConsoleCommand() {
         const sqlConsoleNote = await dateNoteService.createSqlConsole();
+        if (!sqlConsoleNote) {
+            return;
+        }
 
         const noteContext = await appContext.tabManager.openTabWithNoteWithHoisting(sqlConsoleNote.noteId, { activate: true });
 
         appContext.triggerEvent('focusOnDetail', {ntxId: noteContext.ntxId});
     }
 
-    async searchNotesCommand({searchString, ancestorNoteId}) {
+    async searchNotesCommand({searchString, ancestorNoteId}: CommandListenerData<"searchNotes">) {
         const searchNote = await dateNoteService.createSearchNote({searchString, ancestorNoteId});
+        if (!searchNote) {
+            return;
+        }
 
         // force immediate search
         await froca.loadSearchNote(searchNote.noteId);
@@ -37,7 +44,7 @@ export default class RootCommandExecutor extends Component {
         appContext.triggerCommand('focusOnSearchDefinition', {ntxId: noteContext.ntxId});
     }
 
-    async searchInSubtreeCommand({notePath}) {
+    async searchInSubtreeCommand({notePath}: CommandListenerData<"searchInSubtree">) {
         const noteId = treeService.getNoteIdFromUrl(notePath);
 
         this.searchNotesCommand({ancestorNoteId: noteId});
@@ -47,7 +54,7 @@ export default class RootCommandExecutor extends Component {
         const noteId = appContext.tabManager.getActiveContextNoteId();
         const mime = appContext.tabManager.getActiveContextNoteMime();
         if (noteId) {
-            openService.openNoteExternally(noteId, mime);
+            openService.openNoteExternally(noteId, mime || "");
         }
     }
 
@@ -55,7 +62,7 @@ export default class RootCommandExecutor extends Component {
         const noteId = appContext.tabManager.getActiveContextNoteId();
         const mime = appContext.tabManager.getActiveContextNoteMime();
         if (noteId) {
-            openService.openNoteCustom(noteId, mime);
+            openService.openNoteCustom(noteId, mime || "");
         }
     }
 
@@ -82,7 +89,7 @@ export default class RootCommandExecutor extends Component {
     async showBackendLogCommand() {
         await appContext.tabManager.openTabWithNoteWithHoisting('_backendLog', { activate: true });
     }
-    
+
     async showLaunchBarSubtreeCommand() {
         await this.showAndHoistSubtree('_lbRoot');
         this.showLeftPaneCommand();
@@ -96,7 +103,7 @@ export default class RootCommandExecutor extends Component {
         await this.showAndHoistSubtree('_hidden');
     }
 
-    async showOptionsCommand({section}) {
+    async showOptionsCommand({section}: CommandListenerData<"showOptions">) {
         await appContext.tabManager.openContextWithNote(section || '_options', {
             activate: true,
             hoistedNoteId: '_options'
@@ -111,7 +118,7 @@ export default class RootCommandExecutor extends Component {
         await this.showAndHoistSubtree('_search');
     }
 
-    async showAndHoistSubtree(subtreeNoteId) {
+    async showAndHoistSubtree(subtreeNoteId: string) {
         await appContext.tabManager.openContextWithNote(subtreeNoteId, {
             activate: true,
             hoistedNoteId: subtreeNoteId
@@ -160,7 +167,7 @@ export default class RootCommandExecutor extends Component {
     toggleTrayCommand() {
         if (!utils.isElectron()) return;
         const {BrowserWindow} = utils.dynamicRequire('@electron/remote');
-        const windows = BrowserWindow.getAllWindows();
+        const windows = (BrowserWindow.getAllWindows()) as Electron.BaseWindow[];
         const isVisible = windows.every(w => w.isVisible());
         const action = isVisible ? "hide" : "show"
         for (const window of windows) window[action]();
@@ -177,7 +184,7 @@ export default class RootCommandExecutor extends Component {
     ninthTabCommand()   { this.#goToTab(9); }
     lastTabCommand()    { this.#goToTab(Number.POSITIVE_INFINITY); }
 
-    #goToTab(tabNumber) {
+    #goToTab(tabNumber: number) {
         const mainNoteContexts = appContext.tabManager.getMainNoteContexts();
 
         const index = tabNumber === Number.POSITIVE_INFINITY ? mainNoteContexts.length - 1 : tabNumber - 1;

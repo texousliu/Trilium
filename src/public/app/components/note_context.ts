@@ -28,7 +28,7 @@ class NoteContext extends Component
     notePath?: string | null;
     private noteId?: string | null;
     private parentNoteId?: string | null;
-    private viewScope?: ViewScope;
+    viewScope?: ViewScope;
 
     constructor(ntxId: string | null = null, hoistedNoteId: string = 'root', mainNtxId: string | null = null) {
         super();

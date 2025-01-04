@@ -22,7 +22,7 @@ import { Node } from "../services/tree.js";
 import LoadResults from "../services/load_results.js";
 import { Attribute } from "../services/attribute_parser.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
-import { GetTextEditorCallback } from "./note_context.js";
+import NoteContext, { GetTextEditorCallback } from "./note_context.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -70,8 +70,13 @@ export interface ExecuteCommandData extends CommandData {
 export type CommandMappings = {
     "api-log-messages": CommandData;
     focusOnDetail: Required<CommandData>;
+    focusOnSearchDefinition: Required<CommandData>;
     searchNotes: CommandData & {
-        searchString: string | undefined;
+        searchString?: string;
+        ancestorNoteId?: string | null;
+    };
+    showOptions: CommandData & {
+        section: string;
     };
     showDeleteNotesDialog: CommandData & {
         branchIdsToDelete: string[];
@@ -194,6 +199,9 @@ type EventMappings = {
     addNewRelation: CommandData;
     sqlQueryResults: CommandData & {
         results: SqlExecuteResults;
+    },
+    readOnlyTemporarilyDisabled: {
+        noteContext: NoteContext
     }
 }
 
