@@ -2,6 +2,7 @@ import FlexContainer from "./flex_container.js";
 import froca from "../../services/froca.js";
 import appContext, { EventData } from "../../components/app_context.js";
 import LauncherWidget from "./launcher.js";
+import utils from "../../services/utils.js";
 
 export default class LauncherContainer extends FlexContainer {
     private isHorizontalLayout: boolean;
@@ -20,7 +21,8 @@ export default class LauncherContainer extends FlexContainer {
     async load() {
         await froca.initializedPromise;
 
-        const visibleLaunchersRoot = await froca.getNote('_lbVisibleLaunchers', true);
+        const visibleLaunchersRootId = utils.isMobile() ? '_lbMobileVisibleLaunchers' : '_lbVisibleLaunchers';
+        const visibleLaunchersRoot = await froca.getNote(visibleLaunchersRootId, true);
 
         if (!visibleLaunchersRoot) {
             console.log("Visible launchers root note doesn't exist.");
