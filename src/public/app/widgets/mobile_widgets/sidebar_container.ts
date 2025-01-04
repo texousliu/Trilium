@@ -82,6 +82,11 @@ export default class SidebarContainer extends FlexContainer {
 
                 this.dragState = DRAG_STATE_DRAGGING;
             }
+
+            if (this.currentTranslate !== -100) {
+                // Return early to avoid consuming the event, this allows the user to scroll vertically.
+                return;
+            }
         } else if (this.dragState === DRAG_STATE_DRAGGING) {
             const width = this.sidebarEl.offsetWidth;
             const translatePercentage = Math.min(0, Math.max(this.currentTranslate + (deltaX / width) * 100, -100));
@@ -90,6 +95,7 @@ export default class SidebarContainer extends FlexContainer {
             this.backdropEl.style.opacity = String(Math.max(0, 1 + (translatePercentage / 100)));
         }
 
+        // Consume the event to prevent the user from doing the back to previous page gesture on iOS.
         e.preventDefault();
     }
 
