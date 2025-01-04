@@ -1231,6 +1231,14 @@ body.mobile #launcher-pane .dropdown-menu.show {
         margin: 0 !important;
         max-height: 85vh;
     }
+
+    body.mobile .modal-content {
+        height: 100% !important;
+    }
+
+    body.mobile .help-dialog kbd {
+        display: inline !important;
+    }
 }
 
 /* Mobile, tablet mode */

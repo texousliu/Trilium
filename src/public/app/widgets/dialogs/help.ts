@@ -11,7 +11,7 @@ const TPL = `
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('help.close')}"></button>
             </div>
             <div class="modal-body" style="overflow: auto; height: calc(100vh - 70px);">
-                <div class="help-cards row row-cols-3 g-3">
+                <div class="help-cards row row-cols-md-3 g-3">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">${t('help.noteNavigation')}</h5>
