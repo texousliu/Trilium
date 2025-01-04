@@ -277,7 +277,13 @@ function buildHiddenSubtreeDefinition(): Item {
                         icon: 'bx-show',
                         isExpanded: true,
                         attributes: [ { type: 'label', name: 'docName', value: 'launchbar_intro' } ],
-                        children: []
+                        children: [
+                            { id: '_lbMobileBackInHistory', title: t("hidden-subtree.go-to-previous-note-title"), type: 'launcher', builtinWidget: 'backInHistoryButton', icon: 'bx bxs-chevron-left',
+                                attributes: [ { type: 'label', name: 'docName', value: 'launchbar_history_navigation' } ]},
+                            { id: '_lbMobileForwardInHistory', title: t("hidden-subtree.go-to-next-note-title"), type: 'launcher', builtinWidget: 'forwardInHistoryButton', icon: 'bx bxs-chevron-right',
+                                attributes: [ { type: 'label', name: 'docName', value: 'launchbar_history_navigation' } ]},
+                            { id: '_lbMobileSpacerEnd', title: t("hidden-subtree.spacer-title"), type: 'launcher', builtinWidget: 'spacer', baseSize: "0", growthFactor: "1" },
+                        ]
                     }
                 ]
             },
