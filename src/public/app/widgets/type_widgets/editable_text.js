@@ -229,7 +229,11 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     });
 
                     this.$editor.on("focusout", (e) => {
-                        $classicToolbarWidget.removeClass("visible");
+                        setTimeout(() => {
+                            if (document.activeElement !== this.$editor[0]) {
+                                $classicToolbarWidget.removeClass("visible");
+                            }
+                        }, 100);
                     });
                 }
             }
