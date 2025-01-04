@@ -34,6 +34,7 @@ const TPL = `\
         right: 0;
         overflow-x: auto;
         background: var(--main-background-color);
+        z-index: 500;
     }
 
     body.mobile .classic-toolbar-widget .ck.ck-toolbar {
@@ -70,13 +71,7 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
             window.visualViewport.addEventListener("resize", () => {
                 const keyboardSize = originalHeight - window.visualViewport.height;
                 const bottom = Math.max(keyboardSize, originalBottom);
-
-                if (keyboardSize !== 0) {
-                    this.$widget.css("bottom", `${bottom}px`);``
-                } else {
-                    const style = window.getComputedStyle(this.$widget[0]);
-                    this.$widget.css("bottom", style.getPropertyValue("--launcher-pane-size"));
-                }
+                this.$widget.css("bottom", `${bottom}px`);
             });
         }
     }
