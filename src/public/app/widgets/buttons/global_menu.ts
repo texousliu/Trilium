@@ -89,11 +89,6 @@ const TPL = `
         margin-right: 5px;
     }
 
-    body.mobile .show-help-button {
-        /* hidden because these dialogs are not available for mobile */
-        display: none;
-    }
-
     body.mobile .global-menu .dropdown-submenu .dropdown-menu {
         display: block;
         font-size: 90%;

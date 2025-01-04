@@ -26,6 +26,7 @@ import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attribu
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 import AboutDialog from "../widgets/dialogs/about.js";
+import HelpDialog from "../widgets/dialogs/help.js";
 
 const MOBILE_CSS = `
 <style>
@@ -188,5 +189,6 @@ export default class MobileLayout {
                 .child(new GlobalMenuWidget(true))
                 .id("launcher-pane"))
             .child(new AboutDialog())
+            .child(new HelpDialog())
     }
 }
