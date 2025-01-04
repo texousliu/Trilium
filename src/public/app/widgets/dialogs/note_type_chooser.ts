@@ -60,7 +60,7 @@ export default class NoteTypeChooserDialog extends BasicWidget {
     private $originalFocused: JQuery<HTMLElement> | null;
     private $originalDialog: JQuery<HTMLElement> | null;
 
-    constructor(props: {}) {
+    constructor() {
         super();
 
         this.resolve = null;
