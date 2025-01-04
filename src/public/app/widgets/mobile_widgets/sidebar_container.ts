@@ -42,10 +42,6 @@ export default class SidebarContainer extends FlexContainer {
     doRender() {
         super.doRender();
 
-        this.$widget.on("click", () => {
-            this.triggerCommand('setActiveScreen', { screen: "detail" });
-        });
-
         document.addEventListener("touchstart", (e) => this.#onDragStart(e));
         document.addEventListener("touchmove", (e) => this.#onDragMove(e), { passive: false });
         document.addEventListener("touchend", (e) => this.#onDragEnd(e));
@@ -133,6 +129,9 @@ export default class SidebarContainer extends FlexContainer {
 
         const sidebarEl = document.getElementById("mobile-sidebar-wrapper");
         const backdropEl = document.getElementById("mobile-sidebar-container");
+        backdropEl?.addEventListener("click", () => {
+            this.triggerCommand('setActiveScreen', { screen: "detail" });
+        });
 
         if (!sidebarEl || !backdropEl) {
             throw new Error("Unable to find the sidebar or backdrop.");
