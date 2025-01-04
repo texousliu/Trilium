@@ -12,6 +12,7 @@ import appContext from "../../components/app_context.js";
 import dialogService from "../../services/dialog.js";
 import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
+import toast from "../../services/toast.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -192,6 +193,12 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     classes: true,
                     attributes: true
                 }
+            });
+
+            const notificationsPlugin = editor.plugins.get("Notification");
+            notificationsPlugin.on("show:warning", (evt, data) => {
+                toast.showErrorTitleAndMessage(data.title, data.message.message);
+                evt.stop();
             });
 
             await initSyntaxHighlighting(editor);
