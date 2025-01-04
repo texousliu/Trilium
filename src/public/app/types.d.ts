@@ -41,6 +41,7 @@ interface CustomGlobals {
     assetPath: string;
     instanceName: string;
     appCssNoteIds: string[];
+    triliumVersion: string;
 }
 
 type RequireMethod = (moduleName: string) => any;
