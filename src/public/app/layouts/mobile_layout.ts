@@ -173,7 +173,7 @@ export default class MobileLayout {
                             .contentSized()
                             .child(
                                 new NoteDetailWidget()
-                                    .css('padding', '5px 20px 10px 0')
+                                    .css('padding', '5px 0 10px 0')
                             )
                             .child(new NoteListWidget())
                             .child(new FilePropertiesWidget().css('font-size','smaller'))
