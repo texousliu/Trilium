@@ -392,7 +392,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 autoExpandMS: 600,
                 preventLazyParents: false,
                 dragStart: (node, data) => {
-                    if (['root', '_hidden', '_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers'].includes(node.data.noteId)
+                    if (['root', '_hidden', '_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers', "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers" ].includes(node.data.noteId)
                         || node.data.noteId.startsWith("_options")) {
                         return false;
                     }

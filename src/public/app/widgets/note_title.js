@@ -14,7 +14,7 @@ const TPL = `
         flex-grow: 1000;
         height: 100%;
     }
-    
+
     .note-title-widget input.note-title {
         font-size: 180%;
         border: 0;
@@ -22,7 +22,7 @@ const TPL = `
         min-width: 5em;
         width: 100%;
     }
-    
+
     .note-title-widget input.note-title.protected {
         text-shadow: 4px 4px 4px var(--muted-text-color);
     }
@@ -73,7 +73,7 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
 
     async refreshWithNote(note) {
         const isReadOnly = (note.isProtected && !protectedSessionHolder.isProtectedSessionAvailable())
-            || ['_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers'].includes(note.noteId)
+            || ['_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers', "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers" ].includes(note.noteId)
             || this.noteContext.viewScope.viewMode !== 'default';
 
         this.$noteTitle.val(

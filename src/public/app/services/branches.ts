@@ -24,7 +24,7 @@ async function moveBeforeBranch(branchIdsToMove: string[], beforeBranchId: strin
         return;
     }
 
-    if (['root', '_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers'].includes(beforeBranch.noteId)) {
+    if (['root', '_lbRoot', '_lbAvailableLaunchers', '_lbVisibleLaunchers', "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers" ].includes(beforeBranch.noteId)) {
         toastService.showError(t("branches.cannot-move-notes-here"));
         return;
     }
