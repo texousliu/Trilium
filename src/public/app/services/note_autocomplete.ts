@@ -101,19 +101,11 @@ async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void
 }
 
 function clearText($el: JQuery<HTMLElement>) {
-    if (utils.isMobile()) {
-        return;
-    }
-
     $el.setSelectedNotePath("");
     $el.autocomplete("val", "").trigger('change');
 }
 
 function setText($el: JQuery<HTMLElement>, text: string) {
-    if (utils.isMobile()) {
-        return;
-    }
-
     $el.setSelectedNotePath("");
     $el
         .autocomplete("val", text.trim())
@@ -121,10 +113,6 @@ function setText($el: JQuery<HTMLElement>, text: string) {
 }
 
 function showRecentNotes($el:JQuery<HTMLElement>) {
-    if (utils.isMobile()) {
-        return;
-    }
-
     $el.setSelectedNotePath("");
     $el.autocomplete("val", "");
     $el.autocomplete('open');
@@ -147,7 +135,7 @@ function fullTextSearch($el: JQuery<HTMLElement>, options: Options){
 }
 
 function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
-    if ($el.hasClass("note-autocomplete-input") || utils.isMobile()) {
+    if ($el.hasClass("note-autocomplete-input")) {
         // clear any event listener added in previous invocation of this function
         $el.off('autocomplete:noteselected');
 

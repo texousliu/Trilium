@@ -29,6 +29,7 @@ import AboutDialog from "../widgets/dialogs/about.js";
 import HelpDialog from "../widgets/dialogs/help.js";
 import AppContext from "../components/app_context.js";
 import TabRowWidget from "../widgets/tab_row.js";
+import JumpToNoteDialog from "../widgets/dialogs/jump_to_note.js";
 
 const MOBILE_CSS = `
 <style>
@@ -196,5 +197,6 @@ export default class MobileLayout {
                     .id("launcher-pane")))
             .child(new AboutDialog())
             .child(new HelpDialog())
+            .child(new JumpToNoteDialog())
     }
 }
