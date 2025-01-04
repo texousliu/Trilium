@@ -197,7 +197,15 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             const notificationsPlugin = editor.plugins.get("Notification");
             notificationsPlugin.on("show:warning", (evt, data) => {
-                toast.showErrorTitleAndMessage(data.title, data.message.message);
+                const title = data.title;
+                const message = data.message.message;
+
+                if (title && message) {
+                    toast.showErrorTitleAndMessage(data.title, data.message.message);
+                } else if (title) {
+                    toast.showError(title || message);
+                }
+
                 evt.stop();
             });
 
