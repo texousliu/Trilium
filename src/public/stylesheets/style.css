@@ -22,6 +22,7 @@
 :root {
     --submenu-opening-delay: 300ms;
     --launcher-pane-size: 53px;
+    --mobile-bottom-offset: calc(env(safe-area-inset-bottom) * 0.75);
 }
 
 html {
@@ -57,7 +58,10 @@ body.mobile.context-menu-shown * {
 
 body.mobile #root-widget {
     padding-top: env(safe-area-inset-top);
-    padding-bottom: calc(env(safe-area-inset-bottom) * 0.75);
+}
+
+#mobile-bottom-bar {
+    padding-bottom: var(--mobile-bottom-offset);
 }
 
 body.desktop #root-widget.horizontal-layout {
@@ -1190,7 +1194,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
 body.mobile #launcher-pane .dropdown-menu.show {
     position: fixed !important;
-    bottom: var(--launcher-pane-size) !important;
+    bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size)) !important;
     top: unset !important;
     left: 0 !important;
     right: 0 !important;

@@ -112,8 +112,17 @@ body.layout-horizontal > .horizontal {
 
 #launcher-pane.horizontal {
     height: var(--launcher-pane-size) !important;    
-    align-items: center;
-    border-top: 1px solid var(--launcher-pane-horizontal-border-color);
+    align-items: center;    
+}
+
+@media (max-width: 991px) {
+    #mobile-bottom-bar {
+        background: var(--launcher-pane-background-color);
+    }
+
+    #launcher-pane {
+        background: transparent !important;
+    }
 }
 
 @media (min-width: 992px) {
