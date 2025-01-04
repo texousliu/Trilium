@@ -269,6 +269,8 @@ async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
     // @ts-ignore
     const keyboardActionsService = (await import("./keyboard_actions.js")).default;
     keyboardActionsService.updateDisplayedShortcuts($dialog);
+
+    return $dialog;
 }
 
 function isHtmlEmpty(html: string) {

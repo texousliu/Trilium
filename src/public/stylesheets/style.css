@@ -1267,6 +1267,15 @@ body.mobile #launcher-pane .dropdown-menu.show {
     body.mobile .options-section table {
         word-break: break-all;
     }
+
+    body.mobile .jump-to-note-dialog .modal-content {
+        overflow-y: auto;
+    }
+
+    body.mobile .jump-to-note-dialog .modal-dialog .aa-dropdown-menu {
+        max-height: unset;
+        overflow: auto;
+    }
 }
 
 /* Mobile, tablet mode */

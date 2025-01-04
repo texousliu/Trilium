@@ -46,7 +46,30 @@ export default class JumpToNoteDialog extends BasicWidget {
     }
 
     async jumpToNoteEvent() {
-        utils.openDialog(this.$widget);
+        const dialogPromise = utils.openDialog(this.$widget)
+        if (utils.isMobile()) {
+            dialogPromise.then(($dialog) => {
+                const el = $dialog.find(">.modal-dialog")[0];
+
+                function reposition() {
+                    const offset = 100;
+                    const modalHeight = window.visualViewport.height - offset;
+                    const safeAreaInsetBottom = window.visualViewport.height - window.innerHeight;
+                    el.style.height = `${modalHeight}px`;
+                    el.style.bottom = `${window.visualViewport.height - modalHeight - safeAreaInsetBottom - offset}px`;
+                }
+
+                this.$autoComplete.on("focus", () => {
+                    reposition();
+                });
+
+                window.visualViewport.addEventListener("resize", () => {
+                    reposition();
+                });
+
+                reposition();
+            });
+        }
 
         // first open dialog, then refresh since refresh is doing focus which should be visible
         this.refresh();
