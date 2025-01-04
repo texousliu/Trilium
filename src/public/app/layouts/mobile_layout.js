@@ -25,6 +25,7 @@ import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
+import AboutDialog from "../widgets/dialogs/about.js";
 
 const MOBILE_CSS = `
 <style>
@@ -185,6 +186,7 @@ export default class MobileLayout {
                 .css("height", "53px")
                 .child(new LauncherContainer(true))
                 .child(new GlobalMenuWidget(true))
-                .id("launcher-pane"));
+                .id("launcher-pane"))
+            .child(new AboutDialog())
     }
 }
