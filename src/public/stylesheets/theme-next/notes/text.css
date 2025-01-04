@@ -6,12 +6,16 @@
  * Code Blocks 
  */
 
+ .attachment-content-wrapper pre,
  .ck-content pre {
     border: 0;
     border-radius: 6px;
     box-shadow: var(--code-block-box-shadow);
     padding: 0 !important;
-    margin-top: 2px !important;
+    margin-top: 2px !important;    
+}
+
+.ck-content pre {
     overflow: unset;
 }
 
@@ -28,6 +32,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
     font-weight: bold;
 }
 
+.attachment-content-wrapper pre code,
 .ck-content pre code {
     display: block;
     padding: 1em;
