@@ -1230,6 +1230,14 @@ body.mobile #launcher-pane .dropdown-menu.show {
         transform: translateX(0);
     }
 
+    body.mobile #launcher-container {
+        justify-content: center;
+    }
+
+    body.mobile #launcher-container button {
+        margin: 0 16px;
+    }
+
     body.mobile .modal.show {
         background-color: rgba(0, 0, 0, 0.7);
     }
