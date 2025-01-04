@@ -27,18 +27,21 @@ const TPL = `\
     }
 
     body.mobile .classic-toolbar-widget.visible {
-        display: block;
+        display: flex;
+        align-items: flex-end;
         position: absolute;
         left: 0;
         bottom: 0;
         right: 0;
+        height: 50vh;
         overflow-x: auto;
-        background: var(--main-background-color);
+        background: transparent;
         z-index: 500;
     }
 
     body.mobile .classic-toolbar-widget .ck.ck-toolbar {
         position: absolute;
+        background-color: var(--main-background-color);
     }
 </style>
 `;
