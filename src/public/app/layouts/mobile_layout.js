@@ -122,6 +122,7 @@ export default class MobileLayout {
             )
             .child(new FlexContainer("row")
                 .filling()
+                .id("mobile-rest-container")
                 .child(new SidebarContainer("tree", 'column')
                     .class("d-sm-flex d-md-flex d-lg-flex d-xl-flex col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3")
                     .id("mobile-sidebar-wrapper")
