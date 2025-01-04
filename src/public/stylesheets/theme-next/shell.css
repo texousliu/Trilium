@@ -19,16 +19,6 @@
     background-color: var(--root-background);
 }
 
-@media (min-width: 992px) {
-    body.mobile #root-widget {
-        background-color: var(--launcher-pane-background-color);
-    }
-
-    body.mobile #mobile-rest-container {
-        background-color: var(--root-background);
-    }
-}
-
 body {
     --native-titlebar-darwin-x-offset: 10;
     --native-titlebar-darwin-y-offset: 17 !important;

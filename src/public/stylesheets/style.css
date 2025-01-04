@@ -1214,11 +1214,16 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 @media (min-width: 992px) {
     body.mobile #root-widget {
         flex-direction: column-reverse !important;
+        background-color: var(--launcher-pane-background-color);
     }
 
     #mobile-sidebar-wrapper {
         transform: none !important;
         background-color: var(--left-pane-background-color) !important;
+    }
+
+    #mobile-rest-container {
+        background-color: var(--root-background);
     }
 
     #detail-container {
