@@ -1174,6 +1174,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     background-color: var(--left-pane-background-color);
 }
 
+/* Mobile, phone mode */
 @media (max-width: 991px) {
     #mobile-sidebar-container {
         position: fixed;
@@ -1209,7 +1210,12 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     }
 }
 
+/* Mobile, tablet mode */
 @media (min-width: 992px) {
+    body.mobile #root-widget {
+        flex-direction: column-reverse !important;
+    }
+
     #mobile-sidebar-wrapper {
         transform: none !important;
     }
