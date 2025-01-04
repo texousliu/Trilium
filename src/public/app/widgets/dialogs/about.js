@@ -15,7 +15,7 @@ const TPL = `
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('about.close')}"></button>
             </div>
             <div class="modal-body">
-                <table class="table table-borderless text-nowrap">
+                <table class="table table-borderless">
                     <tr>
                         <th>${t("about.homepage")}</th>
                         <td><a href="https://github.com/TriliumNext/Notes" class="external">https://github.com/TriliumNext/Notes</a></td>
@@ -50,7 +50,14 @@ const TPL = `
             </div>
         </div>
     </div>
-</div>`;
+</div>
+
+<style>
+.about-dialog a {
+    word-break: break-all;
+}
+</style>
+`;
 
 export default class AboutDialog extends BasicWidget {
     doRender() {
