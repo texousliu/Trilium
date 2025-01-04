@@ -1239,6 +1239,10 @@ body.mobile #launcher-pane .dropdown-menu.show {
     body.mobile .help-dialog kbd {
         display: inline !important;
     }
+
+    body.mobile .options-section table {
+        word-break: break-all;
+    }
 }
 
 /* Mobile, tablet mode */

@@ -26,22 +26,22 @@ const TPL = `
     </div>
 </div>
 
-<div class="options-section">    
+<div class="options-section">
     <h4>${t("theme.title")}</h4>
-    
+
     <div class="form-group row">
-        <div class="col-6">
+        <div class="col-md-6">
             <label for="theme-select">${t("theme.theme_label")}</label>
             <select id="theme-select" class="theme-select form-select"></select>
         </div>
-        
-        <div class="col-6 side-checkbox">
+
+        <div class="col-md-6 side-checkbox">
             <label class="form-check">
                 <input type="checkbox" class="override-theme-fonts form-check-input">
                 ${t("theme.override_theme_fonts_label")}
             </label>
         </div>
-    </div>    
+    </div>
 </div>`;
 
 export default class ThemeOptions extends OptionsWidget {
