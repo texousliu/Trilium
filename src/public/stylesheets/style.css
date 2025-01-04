@@ -994,10 +994,12 @@ body.mobile #context-menu-container {
 }
 
 body.mobile .dropdown-menu {
-    position: static !important;
+    position: fixed !important;
+    z-index: 3000 !important;
 }
 
 body.mobile .dropdown-submenu > .dropdown-menu {
+    position: static !important;
     border: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
