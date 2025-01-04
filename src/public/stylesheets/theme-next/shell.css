@@ -688,6 +688,10 @@ body.layout-horizontal .tab-row-widget-container {
     overflow: hidden;
 }
 
+body.desktop #root-widget.horizontal-layout {
+    background-color: var(--root-background) !important;
+}
+
 #root-widget.horizontal-layout .tab-row-widget .note-tab .note-tab-wrapper {
     border: 1px solid transparent;
     border-bottom-color: transparent;

@@ -55,7 +55,18 @@ body.mobile.context-menu-shown * {
     -webkit-user-select: none !important;
 }
 
-#root-widget {
+body.mobile #root-widget {
+    padding-top: env(safe-area-inset-top);
+}
+
+body.desktop #root-widget.horizontal-layout {
+    padding-top: env(safe-area-inset-top);    
+    background-color: var(--launcher-pane-background-color);
+}
+
+body.desktop #root-widget.vertical-layout #launcher-pane,
+body.desktop #root-widget.vertical-layout #left-pane,
+body.desktop #root-widget.vertical-layout #rest-pane {
     padding-top: env(safe-area-inset-top);
 }
 
