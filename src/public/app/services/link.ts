@@ -276,7 +276,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
         ) {
             if (hrefLink.toLowerCase().startsWith('http') || hrefLink.startsWith("api/")) {
                 window.open(hrefLink, '_blank');
-            } else if (hrefLink.toLowerCase().startsWith('file:') && utils.isElectron()) {
+            } else if ((hrefLink.toLowerCase().startsWith('file:') || hrefLink.toLowerCase().startsWith('geo:')) && utils.isElectron()) {
                 const electron = utils.dynamicRequire('electron');
                 electron.shell.openPath(hrefLink);
             } else {
@@ -287,7 +287,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
                     'http', 'https', 'ftp', 'ftps', 'mailto', 'data', 'evernote', 'file', 'facetime', 'gemini', 'git',
                     'gopher', 'imap', 'irc', 'irc6', 'jabber', 'jar', 'lastfm', 'ldap', 'ldaps', 'magnet', 'message',
                     'mumble', 'nfs', 'onenote', 'pop', 'rmi', 's3', 'sftp', 'skype', 'sms', 'spotify', 'steam', 'svn', 'udp',
-                    'view-source', 'vlc', 'vnc', 'ws', 'wss', 'xmpp', 'jdbc', 'slack', 'tel', 'smb', 'zotero'
+                    'view-source', 'vlc', 'vnc', 'ws', 'wss', 'xmpp', 'jdbc', 'slack', 'tel', 'smb', 'zotero', 'geo'
                 ];
                 if (allowedSchemes.some(protocol => hrefLink.toLowerCase().startsWith(protocol+':'))){
                     window.open(hrefLink, '_blank');
