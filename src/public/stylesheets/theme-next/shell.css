@@ -120,7 +120,7 @@ body.layout-horizontal > .horizontal {
         background: var(--launcher-pane-background-color);
     }
 
-    #launcher-pane {
+    body.mobile #launcher-pane {
         background: transparent !important;
     }
 }
