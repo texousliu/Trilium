@@ -33,15 +33,23 @@ const TPL = `\
         left: 0;
         bottom: 0;
         right: 0;
-        height: 10vh;
         overflow-x: auto;
         z-index: 500;
         user-select: none;
     }
 
+    body.mobile .classic-toolbar-widget.dropdown-active {
+        height: 50vh;
+    }
+
     body.mobile .classic-toolbar-widget .ck.ck-toolbar {
         position: absolute;
         background-color: var(--main-background-color);
+    }
+
+    body.mobile .classic-toolbar-widget .ck.ck-dropdown__panel {
+        bottom: 100% !important;
+        top: unset !important;
     }
 </style>
 `;
@@ -56,6 +64,12 @@ const TPL = `\
  * The ribbon item is active by default for text notes, as long as they are not in read-only mode.
  */
 export default class ClassicEditorToolbar extends NoteContextAwareWidget {
+
+    constructor() {
+        super();
+        this.observer = new MutationObserver((e) => this.#onDropdownStateChanged(e));
+    }
+
     get name() {
         return "classicEditor";
     }
@@ -69,9 +83,24 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
         this.contentSized();
 
         if (utils.isMobile()) {
+            // The virtual keyboard obscures the editing toolbar so we have to reposition by calculating the height of the keyboard.
             window.visualViewport.addEventListener("resize", () => this.#adjustPosition());
             window.addEventListener("scroll", () => this.#adjustPosition());
+
+            // Observe when a dropdown is expanded to apply a style that allows the dropdown to be visible, since we can't have the element both visible and the toolbar scrollable.
+            this.observer.disconnect();
+            this.observer.observe(this.$widget[0], {
+                attributeFilter: [ "aria-expanded" ],
+                subtree: true
+            });
         }
+    }
+
+    #onDropdownStateChanged(e) {
+        const dropdownActive = e
+            .map((e) => e.target.ariaExpanded === "true")
+            .reduce((acc, e) => acc && e);
+        this.$widget[0].classList.toggle("dropdown-active", dropdownActive);
     }
 
     #adjustPosition() {

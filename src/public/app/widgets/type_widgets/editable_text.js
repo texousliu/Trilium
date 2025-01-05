@@ -230,18 +230,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
                     // Hide the formatting toolbar
                     this.$editor.on("focusout", (e) => {
-                        setTimeout(() => {
-                            if (document.activeElement === this.$editor[0]) {
-                                // Editor has been refocused.
-                                return;
-                            }
-
-                            if ($classicToolbarWidget[0].contains(document.activeElement)) {
-                                return;
-                            }
-
-                            $classicToolbarWidget.removeClass("visible");
-                        }, 100);
+                        this.$editor[0].focus();
                     });
                 }
             }
