@@ -15,6 +15,7 @@ import rateLimit from "express-rate-limit";
 import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 import NotFoundError from "../errors/not_found_error.js";
 import ValidationError from "../errors/validation_error.js";
+import sessionSecret from "../services/session_secret.js";
 
 // page routes
 import setupRoute from "./setup.js";
@@ -72,7 +73,7 @@ import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 
 const { doubleCsrfProtection: csrfMiddleware } = doubleCsrf({
-  getSecret: (req) => req.secret,
+  getSecret: () => sessionSecret,
   cookieOptions: {
     path: "",       // empty, so cookie is valid only for the current path
     secure: false,
