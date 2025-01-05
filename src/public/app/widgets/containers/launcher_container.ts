@@ -4,7 +4,7 @@ import appContext, { EventData } from "../../components/app_context.js";
 import LauncherWidget from "./launcher.js";
 import utils from "../../services/utils.js";
 
-export default class LauncherContainer extends FlexContainer {
+export default class LauncherContainer extends FlexContainer<LauncherWidget> {
     private isHorizontalLayout: boolean;
 
     constructor(isHorizontalLayout: boolean) {

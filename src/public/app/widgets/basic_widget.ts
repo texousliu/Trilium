@@ -1,14 +1,9 @@
-import Component from "../components/component.js";
+import Component, { TypedComponent } from "../components/component.js";
 import froca from "../services/froca.js";
 import { t } from "../services/i18n.js";
 import toastService from "../services/toast.js";
 
-/**
- * This is the base widget for all other widgets.
- *
- * For information on using widgets, see the tutorial {@tutorial widget_basics}.
- */
-class BasicWidget extends Component {
+export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedComponent<T> {
     protected attrs: Record<string, string>;
     private classes: string[];
     private childPositionCounter: number;
@@ -27,7 +22,7 @@ class BasicWidget extends Component {
         this.childPositionCounter = 10;
     }
 
-    child(...components: Component[]) {
+    child(...components: T[]) {
         if (!components) {
             return this;
         }
@@ -53,7 +48,7 @@ class BasicWidget extends Component {
      * @param components the components to be added as children to this component provided the condition is truthy.
      * @returns self for chaining.
      */
-    optChild(condition: boolean, ...components: Component[]) {
+    optChild(condition: boolean, ...components: T[]) {
         if (condition) {
             return this.child(...components);
         } else {
@@ -259,4 +254,11 @@ class BasicWidget extends Component {
     cleanup() {}
 }
 
-export default BasicWidget;
+/**
+ * This is the base widget for all other widgets.
+ *
+ * For information on using widgets, see the tutorial {@tutorial widget_basics}.
+ */
+export default class BasicWidget extends TypedBasicWidget<Component> {
+
+}

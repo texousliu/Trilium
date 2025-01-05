@@ -1,5 +1,6 @@
 import { EventData } from "../../components/app_context.js";
 import { Screen } from "../../components/mobile_screen_switcher.js";
+import BasicWidget from "../basic_widget.js";
 import FlexContainer, { FlexDirection } from "../containers/flex_container.js";
 
 const DRAG_STATE_NONE = 0;
@@ -14,7 +15,7 @@ const DRAG_CLOSED_START_THRESHOLD = 10;
 /** The number of pixels the user has to drag across the screen to the left when the sidebar is opened to trigger the drag close animation. */
 const DRAG_OPENED_START_THRESHOLD = 80;
 
-export default class SidebarContainer extends FlexContainer {
+export default class SidebarContainer extends FlexContainer<BasicWidget> {
 
     private screenName: Screen;
     /** The screen name that is currently active, according to the screen changed event. */

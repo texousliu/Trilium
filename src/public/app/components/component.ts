@@ -12,12 +12,12 @@ import { CommandMappings, CommandNames } from './app_context.js';
  * - although the execution is async, we are collecting all the promises, and therefore it is possible to wait until the
  *   event / command is executed in all components - by simply awaiting the `triggerEvent()`.
  */
-export default class Component {
+export class TypedComponent<ChildT extends TypedComponent<ChildT>> {
     $widget!: JQuery<HTMLElement>;
     componentId: string;
-    children: Component[];
+    children: ChildT[];
     initialized: Promise<void> | null;
-    parent?: Component;
+    parent?: TypedComponent<any>;
     position!: number;
 
     constructor() {
@@ -31,12 +31,12 @@ export default class Component {
         return this.constructor.name.replace(/[^A-Z0-9]/ig, "_");
     }
 
-    setParent(parent: Component) {
+    setParent(parent: TypedComponent<any>) {
         this.parent = parent;
         return this;
     }
 
-    child(...components: Component[]) {
+    child(...components: ChildT[]) {
         for (const component of components) {
             component.setParent(this);
 
@@ -122,3 +122,5 @@ export default class Component {
         return promise;
     }
 }
+
+export default class Component extends TypedComponent<Component> {}

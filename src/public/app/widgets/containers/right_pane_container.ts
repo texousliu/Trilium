@@ -1,7 +1,11 @@
 import FlexContainer from "./flex_container.js";
 import splitService from "../../services/resizer.js";
+import RightPanelWidget from "../right_panel_widget.js";
 
-export default class RightPaneContainer extends FlexContainer {
+export default class RightPaneContainer extends FlexContainer<RightPanelWidget> {
+
+    private rightPaneHidden: boolean;
+
     constructor() {
         super('column');
 
@@ -19,7 +23,7 @@ export default class RightPaneContainer extends FlexContainer {
             && !!this.children.find(ch => ch.isEnabled() && ch.canBeShown());
     }
 
-    handleEventInChildren(name, data) {
+    handleEventInChildren(name: string, data: unknown) {
         const promise = super.handleEventInChildren(name, data);
 
         if (['activeContextChanged', 'noteSwitchedAndActivated', 'noteSwitched'].includes(name)) {

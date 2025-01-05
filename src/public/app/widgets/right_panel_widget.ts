@@ -1,6 +1,5 @@
+import BasicWidget from "./basic_widget.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
-import toastService from "../services/toast.js";
-import { t } from "../services/i18n.js";
 
 const WIDGET_TPL = `
 <div class="card widget">
@@ -19,6 +18,12 @@ const WIDGET_TPL = `
  * @extends {NoteContextAwareWidget}
  */
 class RightPanelWidget extends NoteContextAwareWidget {
+
+    private $bodyWrapper!: JQuery<HTMLElement>;
+    $body!: JQuery<HTMLElement>;
+    private $title!: JQuery<HTMLElement>;
+    private $buttons!: JQuery<HTMLElement>;
+
     /** Title to show in the panel. */
     get widgetTitle() { return "Untitled widget"; }
 
@@ -53,7 +58,7 @@ class RightPanelWidget extends NoteContextAwareWidget {
         this.$buttons.empty();
 
         for (const buttonWidget of this.children) {
-            this.$buttons.append(buttonWidget.render());
+            this.$buttons.append((buttonWidget as BasicWidget).render());
         }
 
         this.initialized = this.doRenderBody().catch(e => {
