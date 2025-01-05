@@ -33,10 +33,10 @@ const TPL = `\
         left: 0;
         bottom: 0;
         right: 0;
-        height: 50vh;
+        height: 10vh;
         overflow-x: auto;
-        background: transparent;
         z-index: 500;
+        user-select: none;
     }
 
     body.mobile .classic-toolbar-widget .ck.ck-toolbar {
@@ -69,14 +69,14 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
         this.contentSized();
 
         if (utils.isMobile()) {
-            let originalHeight = window.visualViewport.height;
-            let originalBottom = this.$widget[0].style.bottom;
-            window.visualViewport.addEventListener("resize", () => {
-                const keyboardSize = originalHeight - window.visualViewport.height;
-                const bottom = Math.max(keyboardSize, originalBottom);
-                this.$widget.css("bottom", `${bottom}px`);
-            });
+            window.visualViewport.addEventListener("resize", () => this.#adjustPosition());
+            window.addEventListener("scroll", () => this.#adjustPosition());
         }
+    }
+
+    #adjustPosition() {
+        const bottom = window.innerHeight - window.visualViewport.height;
+        this.$widget.css("bottom", `${bottom}px`);
     }
 
     async getTitle() {
