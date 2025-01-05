@@ -1,5 +1,4 @@
 import child_process from "child_process";
-import kill from "tree-kill";
 
 let etapiAuthToken: string | undefined;
 
