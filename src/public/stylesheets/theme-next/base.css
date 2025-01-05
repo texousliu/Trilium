@@ -3,31 +3,12 @@
 @import url(./notes/text.css);
 
 @font-face {
-    font-family: "Noto Sans";
-    src: url(../fonts/Noto_Sans/NotoSans-VariableFont_wdth\,wght.ttf);
-}
-
-@font-face {
-    font-family: "Ubuntu Sans";
-    src: url(../fonts/Ubuntu_Sans/UbuntuSans-VariableFont_wdth\,wght.ttf);
-}
-
-@font-face {
-    font-family: "Nunito";
-    src: url(../fonts/Nunito/Nunito-VariableFont_wght.ttf);
-}
-
-@font-face {
     font-family: "Inter";
-    src: url(../fonts/Inter/Inter-VariableFont_opsz\,wght.ttf);
+    src: url(../../fonts/Inter/Inter-VariableFont_opsz\,wght.ttf);
 }
 
 :root {
-    /* --main-font-family: "Noto Sans", sans-serif; */
-    --main-font-family: "Segoe UI", sans-serif;
-    /* --main-font-family: "Ubuntu", sans-serif; */
-    /* --main-font-family: "Nunito", sans-serif; */
-    /* --main-font-family: "Inter", sans-serif; */
+    --main-font-family: "Inter", sans-serif;
 
     --main-font-size: normal;
 
