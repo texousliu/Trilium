@@ -40,7 +40,7 @@ function createDirIfNotExisting(path: fs.PathLike, permissionMode: fs.Mode = FOL
     }
 }
 
-export function getTriliumDataDir() {
+export function getTriliumDataDir(dataDirName: string) {
     // case A
     if (process.env.TRILIUM_DATA_DIR) {
         createDirIfNotExisting(process.env.TRILIUM_DATA_DIR);
@@ -48,7 +48,7 @@ export function getTriliumDataDir() {
     }
 
     // case B
-    const homePath = pathJoin(os.homedir(), DIR_NAME);
+    const homePath = pathJoin(os.homedir(), dataDirName);
     if (fs.existsSync(homePath)) {
         return homePath;
     }
@@ -56,7 +56,7 @@ export function getTriliumDataDir() {
     // case C
     const platformAppDataDir = getPlatformAppDataDir(os.platform(), process.env.APPDATA);
     if (platformAppDataDir && fs.existsSync(platformAppDataDir)) {
-        const appDataDirPath = pathJoin(platformAppDataDir, DIR_NAME);
+        const appDataDirPath = pathJoin(platformAppDataDir, dataDirName);
         createDirIfNotExisting(appDataDirPath);
         return appDataDirPath;
     }
@@ -87,7 +87,7 @@ export function getDataDirs(TRILIUM_DATA_DIR: string) {
 
 }
 
-const TRILIUM_DATA_DIR = getTriliumDataDir();
+const TRILIUM_DATA_DIR = getTriliumDataDir(DIR_NAME);
 const dataDirs = getDataDirs(TRILIUM_DATA_DIR);
 
 export default dataDirs;
