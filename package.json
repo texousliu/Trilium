@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/ckeditor5-footnotes",
-  "version": "0.0.4-hotfix10",
+  "version": "0.0.4-hotfix11",
   "description": "A plugin for CKEditor 5 to allow footnotes.",
   "keywords": [
     "ckeditor",
