@@ -1,10 +1,6 @@
-import {
-	type DowncastConversionApi,
-	type Editor,
-	type ViewContainerElement,
-	Element,
-	toWidget,
-	toWidgetEditable } from 'ckeditor5';
+import { type Editor, } from 'ckeditor5/src/core.js';
+import { type DowncastConversionApi, type ViewContainerElement, Element } from "ckeditor5/src/engine.js";
+import { toWidget, toWidgetEditable } from 'ckeditor5/src/widget.js';
 
 import { ATTRIBUTES, CLASSES, ELEMENTS } from '../constants.js';
 import { viewQueryElement } from '../utils.js';

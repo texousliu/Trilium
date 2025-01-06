@@ -1,4 +1,4 @@
-import { Plugin } from 'ckeditor5';
+import { Plugin } from 'ckeditor5/src/core.js';
 
 import FootnoteEditing from './footnote-editing/footnote-editing.js';
 import FootnoteUI from './footnote-ui.js';

@@ -5,15 +5,18 @@
  */
 
 import {
-	Autoformat,
 	Element,
-	Plugin,
-	viewToModelPositionOutsideModelElement,
-	Widget,
 	type Batch,
 	type RootElement,
 	type Writer
-} from 'ckeditor5';
+} from 'ckeditor5/src/engine.js';
+
+import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
+import { Plugin } from "ckeditor5/src/core.js";
+import { Widget } from 'ckeditor5/src/widget.js';
+import { viewToModelPositionOutsideModelElement } from '@ckeditor/ckeditor5-widget';
+
+import { type ViewElement } from "ckeditor5/src/engine.js";
 
 import '../footnote.css';
 

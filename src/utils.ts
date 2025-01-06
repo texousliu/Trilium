@@ -1,4 +1,5 @@
-import { type Editor, Element, Text, TextProxy, ViewElement } from 'ckeditor5';
+import { type Editor } from 'ckeditor5/src/core.js';
+import { Element, Text, TextProxy, ViewElement } from 'ckeditor5/src/engine.js';
 
 // There's ample DRY violation in this file; type checking
 // polymorphism without full typescript is just incredibly finicky.
