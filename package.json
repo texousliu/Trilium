@@ -89,5 +89,6 @@
   "bugs": {
     "url": "https://github.com/ThomasAitken/ckeditor5-footnotes/issues"
   },
-  "homepage": "https://github.com/ThomasAitken/ckeditor5-footnotes#readme"
+  "homepage": "https://github.com/ThomasAitken/ckeditor5-footnotes#readme",
+  "packageManager": "yarn@1.22.22"
 }
