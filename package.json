@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/ckeditor5-footnotes",
-  "version": "0.0.4-hotfix4",
+  "version": "0.0.4-hotfix5",
   "description": "A plugin for CKEditor 5 to allow footnotes.",
   "keywords": [
     "ckeditor",
@@ -60,18 +60,18 @@
     "ckeditor5": ">=42.0.0 || ^0.0.0-nightly"
   },
   "scripts": {
-    "build:dist": "node ./scripts/build-dist.mjs",
     "ts:build": "tsc -p ./tsconfig.release.json",
     "ts:clear": "npx rimraf \"src/**/*.@(js|d.ts)\"",
-    "lint": "eslint \"**/*.{js,ts}\" --quiet",
-    "start": "ckeditor5-package-tools start",
+    "dll:build": "ckeditor5-package-tools dll:build",
+    "dll:serve": "http-server ./ -o sample/dll.html",
+    "lint": "eslint --quiet --ext .ts src/",
+    "lint:fix": "eslint --quiet --fix --ext .ts src/",
     "stylelint": "stylelint --quiet --allow-empty-input 'theme/**/*.css'",
-    "prepare": "yarn run build:dist",
+    "test": "ckeditor5-package-tools test",
+    "prepare": "yarn run dll:build",
     "prepublishOnly": "yarn run ts:build && ckeditor5-package-tools export-package-as-javascript",
     "postpublish": "yarn run ts:clear && ckeditor5-package-tools export-package-as-typescript",
-    "translations:collect": "ckeditor5-package-tools translations:collect",
-    "translations:download": "ckeditor5-package-tools translations:download",
-    "translations:upload": "ckeditor5-package-tools translations:upload"
+    "start": "ckeditor5-package-tools start"
   },
   "lint-staged": {
     "**/*.{js,ts}": [
