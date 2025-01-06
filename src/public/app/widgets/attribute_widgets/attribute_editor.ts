@@ -174,7 +174,8 @@ const editorConfig = {
         'Mathematics',
         'AutoformatMath',
         'indentBlockShortcutPlugin',
-        'removeFormatLinksPlugin'
+        'removeFormatLinksPlugin',
+        'Footnotes'
     ],
     toolbar: {
         items: []
