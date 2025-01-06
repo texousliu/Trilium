@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/ckeditor5-footnotes",
-  "version": "0.0.4-hotfix5",
+  "version": "0.0.4-hotfix6",
   "description": "A plugin for CKEditor 5 to allow footnotes.",
   "keywords": [
     "ckeditor",
@@ -29,8 +29,13 @@
     "npm": ">=5.7.1"
   },
   "files": [
-    "dist",
-    "ckeditor5-metadata.json"
+    "lang",
+    "src/**/*.js",
+    "src/**/*.d.ts",
+    "build",
+    "theme",
+    "ckeditor5-metadata.json",
+    "CHANGELOG.md"
   ],
   "dependencies": {
     "ckeditor5": "43.2.0"
