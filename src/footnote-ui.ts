@@ -1,6 +1,6 @@
 import { Plugin } from 'ckeditor5/src/core.js';
 import { addListToDropdown, createDropdown, ViewModel, type ListDropdownItemDefinition } from '@ckeditor/ckeditor5-ui';
-import { Collection } from 'ckeditor5/src/utils.js';
+import { Collection } from '@ckeditor/ckeditor5-utils';
 
 import {
 	ATTRIBUTES,
