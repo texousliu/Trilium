@@ -12,9 +12,6 @@
     "katex"
   ],
   "main": "src/index.ts",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "dependencies": {
     "ckeditor5": "41.4.2"
   },
@@ -104,5 +101,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
