@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/ckeditor5-footnotes",
-  "version": "0.0.4-hotfix1",
+  "version": "0.0.4-hotfix2",
   "description": "A plugin for CKEditor 5 to allow footnotes.",
   "keywords": [
     "ckeditor",
@@ -36,6 +36,8 @@
     "ckeditor5": "43.2.0"
   },
   "devDependencies": {
+    "@ckeditor/ckeditor5-autoformat": "43.2.0",
+    "@ckeditor/ckeditor5-core": "43.2.0",
     "@ckeditor/ckeditor5-dev-build-tools": "42.0.1",
     "@ckeditor/ckeditor5-inspector": ">=4.1.0",
     "@ckeditor/ckeditor5-package-tools": "^2.1.0",
