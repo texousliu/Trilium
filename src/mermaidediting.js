@@ -5,8 +5,6 @@
 import { Plugin } from 'ckeditor5/src/core.js';
 import { toWidget } from 'ckeditor5/src/widget.js';
 
-import mermaid from 'mermaid/dist/mermaid.js';
-
 import { debounce } from 'lodash-es';
 
 import MermaidPreviewCommand from './commands/mermaidPreviewCommand.js';

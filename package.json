@@ -31,7 +31,6 @@
   ],
   "dependencies": {
     "ckeditor5": "43.2.0",
-    "mermaid": "^9.1.4",
     "lodash-es": "^4.17.15"
   },
   "devDependencies": {
