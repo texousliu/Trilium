@@ -58,10 +58,15 @@ async function mouseEnterHandler(this: HTMLElement) {
         return;
     }
 
-    const note = await froca.getNote(noteId);
+    let renderPromise;
+    if (url?.startsWith("#fn")) {
+        renderPromise = renderFootnote($link, url);
+    } else {
+        renderPromise = renderTooltip(await froca.getNote(noteId))
+    }
 
     const [content] = await Promise.all([
-        renderTooltip(note),
+        renderPromise,
         // to reduce flicker due to accidental mouseover, cursor must stay for a bit over the link for tooltip to appear
         new Promise(res => setTimeout(res, 500))
     ]);
@@ -145,6 +150,19 @@ async function renderTooltip(note: FNote | null) {
     content = `${content}<div class="note-tooltip-attributes">${$renderedAttributes[0].outerHTML}</div>${$renderedContent[0].outerHTML}`;
 
     return content;
+}
+
+function renderFootnote($link: JQuery<HTMLElement>, url: string) {
+    // A footnote text reference
+    const footnoteRef = url.substring(3);
+    const $footnoteContent = $link
+        .closest(".ck-content")           // find the parent CK content
+        .find("> .footnote-section")                // find the footnote section
+        .find(`a[href="#fnref${footnoteRef}"]`)     // find the footnote link
+        .closest(".footnote-item")        // find the parent container of the footnote
+        .find(".footnote-content");                 // find the actual text content of the footnote
+
+    return $footnoteContent.html() || "";
 }
 
 export default {
