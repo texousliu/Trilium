@@ -31,6 +31,7 @@ export default class MermaidEditing extends Plugin {
 	init() {
 		this._registerCommands();
 		this._defineConverters();
+		this._config = this.editor.config.get("mermaid");
 	}
 
 	/**
@@ -284,7 +285,11 @@ export default class MermaidEditing extends Plugin {
 	 *
 	 * @param {HTMLElement} domElement
 	 */
-	_renderMermaid( domElement ) {
+	async _renderMermaid( domElement ) {
+		if (!window.mermaid && typeof this._config?.lazyLoad === "function") {
+			await this._config.lazyLoad();
+		}
+
 		mermaid.init( undefined, domElement );
 	}
 }
