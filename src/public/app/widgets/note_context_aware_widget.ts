@@ -11,7 +11,7 @@ class NoteContextAwareWidget extends BasicWidget {
 
     protected noteContext?: NoteContext;
 
-    isNoteContext(ntxId: string) {
+    isNoteContext(ntxId: string | null | undefined) {
         if (Array.isArray(ntxId)) {
             return this.noteContext && ntxId.includes(this.noteContext.ntxId);
         }

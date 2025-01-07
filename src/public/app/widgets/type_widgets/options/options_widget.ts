@@ -63,7 +63,7 @@ export default class OptionsWidget extends NoteContextAwareWidget
         }
     }
 
-    async refreshWithNote(note: FNote) {
+    async refreshWithNote(note: FNote | null | undefined) {
         const options = await server.get<OptionMap>('options');
 
         if (options) {

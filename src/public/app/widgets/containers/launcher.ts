@@ -12,6 +12,7 @@ import TodayLauncher from "../buttons/launcher/today_launcher.js";
 import HistoryNavigationButton from "../buttons/history_navigation.js";
 import QuickSearchLauncherWidget from "../quick_search_launcher.js";
 import FNote from "../../entities/fnote.js";
+import { CommandNames } from "../../components/app_context.js";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -88,7 +89,7 @@ export default class LauncherWidget extends BasicWidget {
         return new CommandButtonWidget()
             .title(() => note.title)
             .icon(() => note.getIcon())
-            .command(() => note.getLabelValue("command"));
+            .command(() => note.getLabelValue("command") as CommandNames);
     }
 
     async initCustomWidget(note: FNote) {
