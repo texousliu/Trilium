@@ -15,7 +15,6 @@ const WIDGET_TPL = `
 
 /**
  * This widget manages rendering panels in the right-hand pane.
- * @extends {NoteContextAwareWidget}
  */
 class RightPanelWidget extends NoteContextAwareWidget {
 

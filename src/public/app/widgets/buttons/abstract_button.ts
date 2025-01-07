@@ -4,7 +4,22 @@ const TPL = `<button class="button-widget bx"
       data-bs-toggle="tooltip"
       title=""></button>`;
 
+type TitlePlacement = "top" | "bottom" | "left" | "right";
+type StringOrCallback = (() => string);
+type ContextMenuHandler = (e: JQuery.ContextMenuEvent<any, any, any, any> | null) => void;
+
+interface Settings {
+    titlePlacement: TitlePlacement;
+    title: string | StringOrCallback | null;
+    icon: string | StringOrCallback | null;
+    onContextMenu: ContextMenuHandler | null;
+}
+
 export default class AbstractButtonWidget extends NoteContextAwareWidget {
+
+    private settings: Settings;
+    private tooltip!: bootstrap.Tooltip;
+
     isEnabled() {
         return true;
     }
@@ -22,6 +37,8 @@ export default class AbstractButtonWidget extends NoteContextAwareWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        // Fix once bootstrap is available as non-UMD
+        //@ts-ignore
         this.tooltip = new bootstrap.Tooltip(this.$widget, {
             html: true,
             title: () => this.getTitle(),
@@ -34,7 +51,9 @@ export default class AbstractButtonWidget extends NoteContextAwareWidget {
             this.$widget.on("contextmenu", e => {
                 this.tooltip.hide();
 
-                this.settings.onContextMenu(e);
+                if (this.settings.onContextMenu) {
+                    this.settings.onContextMenu(e);
+                }
 
                 return false; // blocks default browser right click menu
             });
@@ -60,32 +79,31 @@ export default class AbstractButtonWidget extends NoteContextAwareWidget {
             ? this.settings.icon()
             : this.settings.icon;
 
-        this.$widget.addClass(icon);
+        if (icon) {
+            this.$widget.addClass(icon);
+        }
     }
 
     initialRenderCompleteEvent() {
         this.refreshIcon();
     }
 
-    /** @param {string|function} icon */
-    icon(icon) {
+    icon(icon: StringOrCallback) {
         this.settings.icon = icon;
         return this;
     }
 
-    /** @param {string|function} title */
-    title(title) {
+    title(title: StringOrCallback) {
         this.settings.title = title;
         return this;
     }
 
-    /** @param {string} placement - "top", "bottom", "left", "right" */
-    titlePlacement(placement) {
+    titlePlacement(placement: TitlePlacement) {
         this.settings.titlePlacement = placement;
         return this;
     }
 
-    onContextMenu(handler) {
+    onContextMenu(handler: ContextMenuHandler) {
         this.settings.onContextMenu = handler;
         return this;
     }
