@@ -16,14 +16,14 @@ class Options {
     }
 
     get(key: string) {
-        return this.arr?.[key];
+        return this.arr?.[key] as string;
     }
 
     getNames() {
         return Object.keys(this.arr || []);
     }
 
-    getJson(key: string) {                
+    getJson(key: string) {
         const value = this.arr?.[key];
         if (typeof value !== "string") {
             return null;

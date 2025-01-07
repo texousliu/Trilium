@@ -306,7 +306,7 @@ class NoteContext extends Component
     }
 
     async getTextEditor(callback?: GetTextEditorCallback) {
-        return this.timeout(new Promise(resolve => appContext.triggerCommand('executeWithTextEditor', {
+        return this.timeout<TextEditor>(new Promise(resolve => appContext.triggerCommand('executeWithTextEditor', {
             callback,
             resolve,
             ntxId: this.ntxId
@@ -321,7 +321,7 @@ class NoteContext extends Component
     }
 
     async getContentElement() {
-        return this.timeout(new Promise(resolve => appContext.triggerCommand('executeWithContentElement', {
+        return this.timeout<JQuery<HTMLElement>>(new Promise(resolve => appContext.triggerCommand('executeWithContentElement', {
             resolve,
             ntxId: this.ntxId
         })));
@@ -334,11 +334,11 @@ class NoteContext extends Component
         })));
     }
 
-    timeout(promise: Promise<unknown>) {
+    timeout<T>(promise: Promise<T | null>) {
         return Promise.race([
             promise,
             new Promise(res => setTimeout(() => res(null), 200))
-        ]);
+        ]) as Promise<T>;
     }
 
     resetViewScope() {

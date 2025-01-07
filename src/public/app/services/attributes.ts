@@ -30,7 +30,7 @@ async function removeAttributeById(noteId: string, attributeId: string) {
  *         2. attribute is owned by the template of the note
  *         3. attribute is owned by some note's ancestor and is inheritable
  */
-function isAffecting(attrRow: AttributeRow, affectedNote: FNote) {
+function isAffecting(attrRow: AttributeRow, affectedNote: FNote | null | undefined) {
     if (!affectedNote || !attrRow) {
         return false;
     }

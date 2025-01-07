@@ -172,7 +172,7 @@ export default class LoadResults {
         this.contentNoteIdToComponentId.push({noteId, componentId});
     }
 
-    isNoteContentReloaded(noteId: string, componentId: string) {
+    isNoteContentReloaded(noteId: string, componentId?: string) {
         if (!noteId) {
             return false;
         }

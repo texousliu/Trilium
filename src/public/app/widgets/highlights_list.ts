@@ -10,22 +10,23 @@ import attributeService from "../services/attributes.js";
 import RightPanelWidget from "./right_panel_widget.js";
 import options from "../services/options.js";
 import OnClickButtonWidget from "./buttons/onclick_button.js";
-import appContext from "../components/app_context.js";
+import appContext, { EventData } from "../components/app_context.js";
 import libraryLoader from "../services/library_loader.js";
+import FNote from "../entities/fnote.js";
 
 const TPL = `<div class="highlights-list-widget">
     <style>
         .highlights-list-widget {
             padding: 10px;
-            contain: none; 
+            contain: none;
             overflow: auto;
             position: relative;
         }
-        
+
         .highlights-list > ol {
             padding-left: 20px;
         }
-        
+
         .highlights-list li {
             cursor: pointer;
             margin-bottom: 3px;
@@ -33,7 +34,7 @@ const TPL = `<div class="highlights-list-widget">
             word-wrap: break-word;
             hyphens: auto;
         }
-        
+
         .highlights-list li:hover {
             font-weight: bold;
         }
@@ -43,6 +44,9 @@ const TPL = `<div class="highlights-list-widget">
 </div>`;
 
 export default class HighlightsListWidget extends RightPanelWidget {
+
+    private $highlightsList!: JQuery<HTMLElement>;
+
     get widgetTitle() {
         return t("highlights_list_2.title");
     }
@@ -58,16 +62,16 @@ export default class HighlightsListWidget extends RightPanelWidget {
             new OnClickButtonWidget()
                 .icon("bx-x")
                 .titlePlacement("left")
-                .onClick(widget => widget.triggerCommand("closeHlt"))
+                .onClick((widget: OnClickButtonWidget) => widget.triggerCommand("closeHlt"))
                 .class("icon-action")
         ];
     }
 
     isEnabled() {
         return super.isEnabled()
-            && this.note.type === 'text'
-            && !this.noteContext.viewScope.highlightsListTemporarilyHidden
-            && this.noteContext.viewScope.viewMode === 'default';
+            && this.note != null && this.note.type === 'text'
+            && !this.noteContext?.viewScope?.highlightsListTemporarilyHidden
+            && this.noteContext?.viewScope?.viewMode === 'default';
     }
 
     async doRenderBody() {
@@ -75,13 +79,13 @@ export default class HighlightsListWidget extends RightPanelWidget {
         this.$highlightsList = this.$body.find('.highlights-list');
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote | null | undefined) {
         /* The reason for adding highlightsListPreviousVisible is to record whether the previous state
            of the highlightsList is hidden or displayed, and then let it be displayed/hidden at the initial time.
            If there is no such value, when the right panel needs to display toc but not highlighttext,
            every time the note content is changed, highlighttext Widget will appear and then close immediately,
            because getHlt function will consume time */
-        if (this.noteContext.viewScope.highlightsListPreviousVisible) {
+        if (this.noteContext?.viewScope?.highlightsListPreviousVisible) {
             this.toggleInt(true);
         } else {
             this.toggleInt(false);
@@ -89,31 +93,41 @@ export default class HighlightsListWidget extends RightPanelWidget {
 
         const optionsHighlightsList = JSON.parse(options.get('highlightsList'));
 
-        if (note.isLabelTruthy('hideHighlightWidget') || !optionsHighlightsList.length) {
+        if (note?.isLabelTruthy('hideHighlightWidget') || !optionsHighlightsList.length) {
             this.toggleInt(false);
             this.triggerCommand("reEvaluateRightPaneVisibility");
             return;
         }
 
-        let $highlightsList = "", hlLiCount = -1;
+        let $highlightsList: JQuery<HTMLElement> | null = null;
+        let hlLiCount = -1;
         // Check for type text unconditionally in case alwaysShowWidget is set
-        if (this.note.type === 'text') {
-            const { content } = await note.getNoteComplement();
-            ({ $highlightsList, hlLiCount } = await this.getHighlightList(content, optionsHighlightsList));
+        if (note && this.note?.type === 'text') {
+            const noteComplement = await note.getNoteComplement();
+            if (noteComplement && "content" in noteComplement) {
+                ({ $highlightsList, hlLiCount } = await this.getHighlightList(noteComplement.content, optionsHighlightsList));
+            }
         }
-        this.$highlightsList.empty().append($highlightsList);
+        this.$highlightsList.empty();
+        if ($highlightsList) {
+            this.$highlightsList.append($highlightsList);
+        }
         if (hlLiCount > 0) {
             this.toggleInt(true);
-            this.noteContext.viewScope.highlightsListPreviousVisible = true;
+            if (this.noteContext?.viewScope) {
+                this.noteContext.viewScope.highlightsListPreviousVisible = true;
+            }
         } else {
             this.toggleInt(false);
-            this.noteContext.viewScope.highlightsListPreviousVisible = false;
+            if (this.noteContext?.viewScope) {
+                this.noteContext.viewScope.highlightsListPreviousVisible = false;
+            }
         }
 
         this.triggerCommand("reEvaluateRightPaneVisibility");
     }
 
-    extractOuterTag(htmlStr) {
+    extractOuterTag(htmlStr: string | null) {
         if (htmlStr === null) {
             return null
         }
@@ -128,7 +142,7 @@ export default class HighlightsListWidget extends RightPanelWidget {
         return null;
     }
 
-    areOuterTagsConsistent(str1, str2) {
+    areOuterTagsConsistent(str1: string | null, str2: string | null) {
         const tag1 = this.extractOuterTag(str1);
         const tag2 = this.extractOuterTag(str2);
         // If one of them has no label, returns false
@@ -142,10 +156,10 @@ export default class HighlightsListWidget extends RightPanelWidget {
     /**
      * Rendering formulas in strings using katex
      *
-     * @param {string} html Note's html content
-     * @returns {string} The HTML content with mathematical formulas rendered by KaTeX.
+     * @param html Note's html content
+     * @returns The HTML content with mathematical formulas rendered by KaTeX.
      */
-    async replaceMathTextWithKatax(html) {
+    async replaceMathTextWithKatax(html: string) {
         const mathTextRegex = /<span class="math-tex">\\\(([\s\S]*?)\\\)<\/span>/g;
         var matches = [...html.matchAll(mathTextRegex)];
         let modifiedText = html;
@@ -185,7 +199,7 @@ export default class HighlightsListWidget extends RightPanelWidget {
         return modifiedText;
     }
 
-    async getHighlightList(content, optionsHighlightsList) {
+    async getHighlightList(content: string, optionsHighlightsList: string[]) {
         // matches a span containing background-color
         const regex1 = /<span[^>]*style\s*=\s*[^>]*background-color:[^>]*?>[\s\S]*?<\/span>/gi;
         // matches a span containing color
@@ -225,7 +239,7 @@ export default class HighlightsListWidget extends RightPanelWidget {
         const combinedRegex = new RegExp(combinedRegexStr, 'gi');
         const $highlightsList = $("<ol>");
         let prevEndIndex = -1, hlLiCount = 0;
-        let prevSubHtml = null;
+        let prevSubHtml: string | null = null;
         // Used to determine if a string is only a formula
         const onlyMathRegex = /^<span class="math-tex">\\\([^\)]*?\)<\/span>(?:<span class="math-tex">\\\([^\)]*?\)<\/span>)*$/;
 
@@ -272,7 +286,11 @@ export default class HighlightsListWidget extends RightPanelWidget {
         };
     }
 
-    async jumpToHighlightsList(findSubStr, itemIndex) {
+    async jumpToHighlightsList(findSubStr: string, itemIndex: number) {
+        if (!this.noteContext) {
+            return;
+        }
+
         const isReadOnly = await this.noteContext.isReadOnly();
         let targetElement;
         if (isReadOnly) {
@@ -280,59 +298,70 @@ export default class HighlightsListWidget extends RightPanelWidget {
             targetElement = $container.find(findSubStr).filter(function () {
                 if (findSubStr.indexOf("color") >= 0 && findSubStr.indexOf("background-color") < 0) {
                     let color = this.style.color;
-                    return !($(this).prop('tagName') === "SPAN" && color === "");
+                    const $el = $(this as HTMLElement);
+                    return !($el.prop('tagName') === "SPAN" && color === "");
                 } else {
                     return true;
                 }
             }).filter(function () {
-                return $(this).parent(findSubStr).length === 0
-                    && $(this).parent().parent(findSubStr).length === 0
-                    && $(this).parent().parent().parent(findSubStr).length === 0
-                    && $(this).parent().parent().parent().parent(findSubStr).length === 0;
+                const $el = $(this as HTMLElement);
+                return $el.parent(findSubStr).length === 0
+                    && $el.parent().parent(findSubStr).length === 0
+                    && $el.parent().parent().parent(findSubStr).length === 0
+                    && $el.parent().parent().parent().parent(findSubStr).length === 0;
             })
         } else {
             const textEditor = await this.noteContext.getTextEditor();
-            targetElement = $(textEditor.editing.view.domRoots.values().next().value).find(findSubStr).filter(function () {
-                // When finding span[style*="color"] but not looking for span[style*="background-color"],
-                // the background-color error will be regarded as color, so it needs to be filtered
-                if (findSubStr.indexOf("color") >= 0 && findSubStr.indexOf("background-color") < 0) {
-                    let color = this.style.color;
-                    return !($(this).prop('tagName') === "SPAN" && color === "");
-                } else {
-                    return true;
-                }
-            }).filter(function () {
-                // Need to filter out the child elements of the element that has been found
-                return $(this).parent(findSubStr).length === 0
-                    && $(this).parent().parent(findSubStr).length === 0
-                    && $(this).parent().parent().parent(findSubStr).length === 0
-                    && $(this).parent().parent().parent().parent(findSubStr).length === 0;
-            })
+            if (textEditor) {
+                targetElement = $(textEditor.editing.view.domRoots.values().next().value).find(findSubStr).filter(function () {
+                    // When finding span[style*="color"] but not looking for span[style*="background-color"],
+                    // the background-color error will be regarded as color, so it needs to be filtered
+                    const $el = $(this as HTMLElement);
+                    if (findSubStr.indexOf("color") >= 0 && findSubStr.indexOf("background-color") < 0) {
+                        let color = this.style.color;
+                        return !($el.prop('tagName') === "SPAN" && color === "");
+                    } else {
+                        return true;
+                    }
+                }).filter(function () {
+                    // Need to filter out the child elements of the element that has been found
+                    const $el = $(this as HTMLElement);
+                    return $el.parent(findSubStr).length === 0
+                        && $el.parent().parent(findSubStr).length === 0
+                        && $el.parent().parent().parent(findSubStr).length === 0
+                        && $el.parent().parent().parent().parent(findSubStr).length === 0;
+                })
+            }
         }
-        targetElement[itemIndex].scrollIntoView({
-            behavior: "smooth", block: "center"
-        });
+
+        if (targetElement) {
+            targetElement[itemIndex].scrollIntoView({
+                behavior: "smooth", block: "center"
+            });
+        }
     }
 
     async closeHltCommand() {
-        this.noteContext.viewScope.highlightsListTemporarilyHidden = true;
+        if (this.noteContext?.viewScope) {
+            this.noteContext.viewScope.highlightsListTemporarilyHidden = true;
+        }
         await this.refresh();
         this.triggerCommand('reEvaluateRightPaneVisibility');
         appContext.triggerEvent("reEvaluateHighlightsListWidgetVisibility", { noteId: this.noteId });
     }
 
-    async showHighlightsListWidgetEvent({ noteId }) {
+    async showHighlightsListWidgetEvent({ noteId }: EventData<"showHighlightsListWidget">) {
         if (this.noteId === noteId) {
             await this.refresh();
             this.triggerCommand('reEvaluateRightPaneVisibility');
         }
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.isNoteContentReloaded(this.noteId)) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (this.noteId && loadResults.isNoteContentReloaded(this.noteId)) {
             await this.refresh();
         } else if (loadResults.getAttributeRows().find(attr => attr.type === 'label'
-            && (attr.name.toLowerCase().includes('readonly') || attr.name === 'hideHighlightWidget')
+            && (attr.name?.toLowerCase().includes('readonly') || attr.name === 'hideHighlightWidget')
             && attributeService.isAffecting(attr, this.note))) {
             await this.refresh();
         }

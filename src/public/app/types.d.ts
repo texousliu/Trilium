@@ -176,6 +176,12 @@ declare global {
         }
     };
 
+    var katex: {
+        renderToString(text: string, opts: {
+            throwOnError: boolean
+        });
+    }
+
     type TextEditorElement = {};
     interface Writer {
         setAttribute(name: string, value: string, el: TextEditorElement);
@@ -220,6 +226,13 @@ declare global {
                     });
                     getRoot(): TextEditorElement
                 },
+                domRoots: {
+                    values: () => {
+                        next: () => {
+                            value: string;
+                        }
+                    };
+                }
                 change(cb: (writer: Writer) => void)
             }
         },

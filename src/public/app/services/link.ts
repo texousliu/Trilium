@@ -31,6 +31,8 @@ export interface ViewScope {
     viewMode?: ViewMode;
     attachmentId?: string;
     readOnlyTemporarilyDisabled?: boolean;
+    highlightsListPreviousVisible?: boolean;
+    highlightsListTemporarilyHidden?: boolean;
 }
 
 interface CreateLinkOptions {

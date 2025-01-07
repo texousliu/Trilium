@@ -9,7 +9,7 @@ import NoteContext from "../components/note_context.js";
  */
 class NoteContextAwareWidget extends BasicWidget {
 
-    private noteContext?: NoteContext;
+    protected noteContext?: NoteContext;
 
     isNoteContext(ntxId: string) {
         if (Array.isArray(ntxId)) {

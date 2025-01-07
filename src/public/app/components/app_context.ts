@@ -208,6 +208,29 @@ type EventMappings = {
     /** Triggered when the {@link CommandMappings.setActiveScreen} command is invoked. */
     activeScreenChanged: {
         activeScreen: Screen;
+    },
+    activeContextChanged: {
+        noteContext: NoteContext;
+    },
+    noteSwitched: {
+        noteContext: NoteContext;
+        notePath: string;
+    },
+    noteSwitchedAndActivatedEvent: {
+        noteContext: NoteContext;
+        notePath: string;
+    },
+    setNoteContext: {
+        noteContext: NoteContext;
+    },
+    noteTypeMimeChangedEvent: {
+        noteId: string;
+    },
+    reEvaluateHighlightsListWidgetVisibility: {
+        noteId: string | undefined;
+    },
+    showHighlightsListWidget: {
+        noteId: string;
     }
 }
 
