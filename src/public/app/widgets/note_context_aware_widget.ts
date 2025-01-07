@@ -1,12 +1,17 @@
 import BasicWidget from "./basic_widget.js";
-import appContext from "../components/app_context.js";
+import appContext, { EventData } from "../components/app_context.js";
+import FNote from "../entities/fnote.js";
+import NoteContext from "../components/note_context.js";
 
 /**
  * This widget allows for changing and updating depending on the active note.
  * @extends {BasicWidget}
  */
 class NoteContextAwareWidget extends BasicWidget {
-    isNoteContext(ntxId) {
+
+    private noteContext?: NoteContext;
+
+    isNoteContext(ntxId: string) {
         if (Array.isArray(ntxId)) {
             return this.noteContext && ntxId.includes(this.noteContext.ntxId);
         }
@@ -19,26 +24,22 @@ class NoteContextAwareWidget extends BasicWidget {
         return appContext.tabManager.getActiveContext() === this.noteContext;
     }
 
-    isNote(noteId) {
+    isNote(noteId: string) {
         return this.noteId === noteId;
     }
 
-    /** @returns {FNote|undefined} */
     get note() {
         return this.noteContext?.note;
     }
 
-    /** @returns {string|undefined} */
     get noteId() {
         return this.note?.noteId;
     }
 
-    /** @returns {string|undefined} */
     get notePath() {
         return this.noteContext?.notePath;
     }
 
-    /** @returns {string} */
     get hoistedNoteId() {
         return this.noteContext?.hoistedNoteId;
     }
@@ -53,7 +54,7 @@ class NoteContextAwareWidget extends BasicWidget {
      * <p>
      * If the widget is not enabled, it will not receive `refreshWithNote` updates.
      *
-     * @returns {boolean} true when an active note exists
+     * @returns true when an active note exists
      */
     isEnabled() {
         return !!this.note;
@@ -80,14 +81,11 @@ class NoteContextAwareWidget extends BasicWidget {
     }
 
     /**
-     * Override this method to be able to refresh your
-     * widget with each note.
-     * @param {FNote} note
-     * @returns {Promise<void>}
+     * Override this method to be able to refresh your widget with each note.
      */
-    async refreshWithNote(note) {}
+    async refreshWithNote(note: FNote | null | undefined) {}
 
-    async noteSwitchedEvent({noteContext, notePath}) {
+    async noteSwitchedEvent({noteContext, notePath}: EventData<"noteSwitched">) {
         this.noteContext = noteContext;
         // if notePath does not match, then the noteContext has been switched to another note in the meantime
         if (noteContext.notePath === notePath) {
@@ -99,7 +97,7 @@ class NoteContextAwareWidget extends BasicWidget {
         await this.refresh();
     }
 
-    async activeContextChangedEvent({noteContext}) {
+    async activeContextChangedEvent({noteContext}: EventData<"activeContextChanged">) {
         this.noteContext = noteContext;
 
         await this.activeContextChanged();
@@ -110,7 +108,7 @@ class NoteContextAwareWidget extends BasicWidget {
     }
 
     // when note is both switched and activated, this should not produce a double refresh
-    async noteSwitchedAndActivatedEvent({noteContext, notePath}) {
+    async noteSwitchedAndActivatedEvent({noteContext, notePath}: EventData<"noteSwitchedAndActivatedEvent">) {
         this.noteContext = noteContext;
 
         // if notePath does not match, then the noteContext has been switched to another note in the meantime
@@ -119,12 +117,12 @@ class NoteContextAwareWidget extends BasicWidget {
         }
     }
 
-    setNoteContextEvent({noteContext}) {
+    setNoteContextEvent({noteContext}: EventData<"setNoteContext">) {
         /** @var {NoteContext} */
         this.noteContext = noteContext;
     }
 
-    async noteTypeMimeChangedEvent({noteId}) {
+    async noteTypeMimeChangedEvent({noteId}: EventData<"noteTypeMimeChangedEvent">) {
         if (this.isNote(noteId)) {
             await this.refresh();
         }
