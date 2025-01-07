@@ -66,9 +66,8 @@
         if (mQ?.media === '(pointer:coarse)') return !!mQ.matches;
 
         if ('orientation' in window) return true;
-
-        return /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(navigator.userAgent) ||
-            /\b(Android|Windows Phone|iPad|iPod)\b/i.test(navigator.userAgent);
+        const userAgentsRegEx = /\b(Android|iPhone|iPad|iPod|Windows Phone|BlackBerry|webOS|IEMobile)\b/i
+        return userAgentsRegEx.test(navigator.userAgent)
     }
 </script>
 
