@@ -7,7 +7,8 @@
  */
 
  .attachment-content-wrapper pre,
- .ck-content pre {
+ .ck-content pre,
+ .ck-mermaid__editing-view {
     border: 0;
     border-radius: 6px;
     box-shadow: var(--code-block-box-shadow);
@@ -33,9 +34,10 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 }
 
 .attachment-content-wrapper pre code,
-.ck-content pre code {
+.ck-content pre code,
+.ck-mermaid__editing-view {
     display: block;
-    padding: 1em;
+    padding: 1em !important;
     overflow: auto;
 }
 
