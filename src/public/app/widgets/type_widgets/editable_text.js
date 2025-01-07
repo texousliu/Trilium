@@ -13,6 +13,7 @@ import dialogService from "../../services/dialog.js";
 import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
+import { getMermaidConfig } from "../mermaid.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -259,7 +260,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 enablePreview: true // Enable preview view
             },
             mermaid: {
-                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.MERMAID)
+                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.MERMAID),
+                config: getMermaidConfig()
             }
         });
     }
