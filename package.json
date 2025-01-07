@@ -22,14 +22,15 @@
     "npm": ">=5.7.1"
   },
   "files": [
-    "dist",
     "lang",
-    "src",
+    "src/**/*.js",
+    "src/**/*.css",
     "theme",
     "build",
     "ckeditor5-metadata.json"
   ],
   "dependencies": {
+    "ckeditor5": "43.2.0",
     "mermaid": "^9.1.4",
     "lodash-es": "^4.17.15"
   },
@@ -51,17 +52,15 @@
   },
   "scripts": {
     "dll:build": "ckeditor5-package-tools dll:build",
-    "dll:serve": "http-server ./ -o sample/index.html",
-    "build:dist": "node ./scripts/build-dist.mjs",
-    "lint": "eslint \"**/*.js\" --quiet --ignore-pattern \"build/\"",
-    "start": "ckeditor5-package-tools start",
-    "stylelint": "stylelint --quiet --allow-empty-input 'theme/*.css'",
+    "dll:serve": "http-server ./ -o sample/dll.html",
+    "lint": "eslint --quiet --ext .ts src/",
+    "lint:fix": "eslint --quiet --fix --ext .ts src/",
+    "stylelint": "stylelint --quiet --allow-empty-input 'theme/**/*.css'",
     "test": "ckeditor5-package-tools test",
-    "prepare": "yarn run dll:build && yarn run build:dist",
-    "prepublishOnly": "yarn run dll:build",
-    "translations:collect": "ckeditor5-package-tools translations:collect",
-    "translations:download": "ckeditor5-package-tools translations:download",
-    "translations:upload": "ckeditor5-package-tools translations:upload"
+    "prepare": "yarn run dll:build",
+    "prepublishOnly": "ckeditor5-package-tools export-package-as-javascript",
+    "postpublish": "ckeditor5-package-tools export-package-as-typescript",
+    "start": "ckeditor5-package-tools start"
   },
   "lint-staged": {
     "**/*.js": [
