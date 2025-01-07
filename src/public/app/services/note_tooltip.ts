@@ -6,6 +6,7 @@ import attributeRenderer from "./attribute_renderer.js";
 import contentRenderer from "./content_renderer.js";
 import appContext from "../components/app_context.js";
 import FNote from "../entities/fnote.js";
+import { t } from "./i18n.js";
 
 function setupGlobalTooltip() {
     $(document).on("mouseenter", "a", mouseEnterHandler);
@@ -93,7 +94,7 @@ async function mouseEnterHandler(this: HTMLElement) {
 
         cleanUpTooltips();
         $(this).tooltip('show');
-        
+
         // Dismiss the tooltip immediately if a link was clicked inside the tooltip.
         $(`.${tooltipClass} a`).on("click", (e) => {
             cleanUpTooltips();
@@ -118,7 +119,7 @@ async function mouseEnterHandler(this: HTMLElement) {
 
 async function renderTooltip(note: FNote | null) {
     if (!note) {
-        return '<div>Note has been deleted.</div>';
+        return `<div>${t("note_tooltip.note-has-been-deleted")}</div>`;
     }
 
     const hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId;

@@ -1620,5 +1620,8 @@
     "native-title-bar-description": "Pentru Windows și macOS, dezactivarea bării de titlu native face aplicația să pară mai compactă. Pe Linux, păstrarea bării integrează mai bine aplicația cu restul sistemului de operare.",
     "restart-app-button": "Restartează aplicația pentru a aplica setările",
     "zoom-factor": "Factor de zoom"
+  },
+  "note_tooltip": {
+    "note-has-been-deleted": "Notița a fost ștearsă."
   }
 }

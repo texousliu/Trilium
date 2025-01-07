@@ -253,7 +253,6 @@ export default class HighlightsListWidget extends RightPanelWidget {
                 continue;
             }
 
-            console.log(subHtml);
             if (prevEndIndex !== -1 && startIndex === prevEndIndex) {
                 // If the previous element is connected to this element in HTML, then concatenate them into one.
                 $highlightsList.children().last().append(subHtml);
