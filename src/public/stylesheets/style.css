@@ -793,6 +793,10 @@ div[data-notify="container"] {
     color: var(--muted-text-color);
 }
 
+.ck-editor__editable .ck-mermaid__editing-view {
+    font-family: var(--monospace-font-family);
+}
+
 .ck-content .table table th {
     background-color: var(--accented-background-color);
 }
