@@ -43,20 +43,8 @@
     // Required for correct loading of scripts in Electron
     if (typeof module === 'object') {window.module = module; module = undefined;}
 
-    let device;
-
-    if (window.location.search === '?desktop') {
-        device = "desktop";
-    }
-    else if (window.location.search === '?mobile') {
-        device = "mobile";
-    }
-    else {
-        device = isMobile() ? "mobile" : "desktop";
-    }
-
+    const device = getDeviceType()
     console.log("Setting device cookie to:", device);
-
     setCookie("trilium-device", device);
 
     function setCookie(name, value) {
@@ -64,6 +52,12 @@
         const expires = "; expires=" + date.toUTCString();
 
         document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+
+    function getDeviceType() {
+        if (window.location.search === '?desktop') return "desktop";
+        if (window.location.search === '?mobile') return "mobile";
+        return isMobile() ? "mobile" : "desktop";
     }
 
     // https://stackoverflow.com/a/73731646/944162
