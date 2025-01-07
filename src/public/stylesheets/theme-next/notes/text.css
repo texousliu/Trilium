@@ -115,3 +115,8 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 .code-sample-wrapper .hljs {
     transition: background-color linear 100ms;
 }
+
+.ck-content .footnote-section {
+    border: 0;
+    border-top: 1px solid var(--main-border-color);
+}
