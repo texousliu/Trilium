@@ -290,6 +290,6 @@ export default class MermaidEditing extends Plugin {
 			await this._config.lazyLoad();
 		}
 
-		mermaid.init( undefined, domElement );
+		mermaid.init( this._config.config, domElement );
 	}
 }
