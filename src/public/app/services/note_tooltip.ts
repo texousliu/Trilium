@@ -46,6 +46,11 @@ async function mouseEnterHandler(this: HTMLElement) {
     const url = $link.attr("href") || $link.attr("data-href");
     const { notePath, noteId, viewScope } = linkService.parseNavigationStateFromUrl(url);
 
+    if (url?.startsWith("#fnref")) {
+        // The "^" symbol from footnotes within text notes, doesn't require a tooltip.
+        return;
+    }
+
     if (!notePath || !noteId || viewScope?.viewMode !== 'default') {
         return;
     }

@@ -242,6 +242,10 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
     evt.preventDefault();
     evt.stopPropagation();
 
+    if (hrefLink?.startsWith("#fnref")) {
+        return handleFootnote(hrefLink, $link);
+    }
+
     const {notePath, viewScope} = parseNavigationStateFromUrl(hrefLink);
 
     const ctrlKey = utils.isCtrlKey(evt);
@@ -298,6 +302,15 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
         }
     }
 
+    return true;
+}
+
+function handleFootnote(hrefLink: string, $link: JQuery<HTMLElement>) {
+    const el = $link.closest(".ck-content")
+        .find(hrefLink)[0];
+    if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
     return true;
 }
 
