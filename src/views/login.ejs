@@ -6,6 +6,10 @@
     <title><%= t("login.title") %></title>
     <link rel="apple-touch-icon" sizes="180x180" href="<%= assetPath %>/images/app-icons/ios/apple-touch-icon.png">
     <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="<%= assetPath %>/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%= assetPath %>/stylesheets/theme-light.css">
+    <link rel="stylesheet" href="<%= assetPath %>/stylesheets/theme-next.css">
+    <link rel="stylesheet" href="<%= assetPath %>/stylesheets/style.css">
 </head>
 <body>
 <div class="container">
@@ -77,10 +81,5 @@
             /\b(Android|Windows Phone|iPad|iPod)\b/i.test(navigator.userAgent);
     }
 </script>
-
-<link href="<%= assetPath %>/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="<%= assetPath %>/stylesheets/theme-light.css" rel="stylesheet" />
-<link href="<%= assetPath %>/stylesheets/theme-next.css" rel="stylesheet" />
-<link href="<%= assetPath %>/stylesheets/style.css" rel="stylesheet">
 </body>
 </html>
