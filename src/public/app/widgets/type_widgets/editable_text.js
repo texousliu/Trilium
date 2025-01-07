@@ -257,6 +257,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.KATEX),
                 forceOutputType: false, // forces output to use outputType
                 enablePreview: true // Enable preview view
+            },
+            mermaid: {
+                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.MERMAID)
             }
         });
     }

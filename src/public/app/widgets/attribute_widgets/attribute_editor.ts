@@ -175,7 +175,8 @@ const editorConfig = {
         'AutoformatMath',
         'indentBlockShortcutPlugin',
         'removeFormatLinksPlugin',
-        'Footnotes'
+        'Footnotes',
+        'Mermaid'
     ],
     toolbar: {
         items: []
