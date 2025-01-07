@@ -242,7 +242,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
     evt.preventDefault();
     evt.stopPropagation();
 
-    if (hrefLink?.startsWith("#fnref")) {
+    if (hrefLink?.startsWith("#fn")) {
         return handleFootnote(hrefLink, $link);
     }
 
@@ -305,6 +305,13 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
     return true;
 }
 
+/**
+ * Scrolls to either the footnote (if clicking on a reference such as `[1]`), or to the reference of a footnote (if clicking on the footnote `^` arrow).
+ *
+ * @param hrefLink the URL of the link that was clicked (it should be in the form of `#fn` or `#fnref`).
+ * @param $link the element of the link that was clicked.
+ * @returns whether the event should be consumed or not.
+ */
 function handleFootnote(hrefLink: string, $link: JQuery<HTMLElement>) {
     const el = $link.closest(".ck-content")
         .find(hrefLink)[0];
