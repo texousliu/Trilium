@@ -101,6 +101,7 @@
     "button": "Iniciar sesión"
   },
   "set_password": {
+    "title": "Establecer contraseña",
     "heading": "Establecer contraseña",
     "description": "Antes de poder comenzar a usar Trilium desde la web, primero debe establecer una contraseña. Luego utilizará esta contraseña para iniciar sesión.",
     "password": "Contraseña",

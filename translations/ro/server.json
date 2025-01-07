@@ -101,6 +101,7 @@
     "title": "Autentificare"
   },
   "set_password": {
+    "title": "Setare parolă",
     "heading": "Setare parolă",
     "button": "Setează parola",
     "description": "Înainte de a putea utiliza Trilium din navigator, trebuie mai întâi setată o parolă. Ulterior această parolă va fi folosită la autentificare.",

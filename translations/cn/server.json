@@ -101,6 +101,7 @@
         "button": "登录"
     },
     "set_password": {
+        "title": "设置密码",
         "heading": "设置密码",
         "description": "在您可以从Web开始使用Trilium之前，您需要先设置一个密码。然后您将使用此密码登录。",
         "password": "密码",
