@@ -3,6 +3,10 @@ body {
     line-height: 1.5;
 }
 
+a {
+    text-decoration: none;
+}
+
 #layout {
     max-width: 1200px;
     margin: 0 auto;
@@ -177,6 +181,10 @@ iframe.pdf-view {
     display: flex;
     list-style: none;
     margin-left: .5em
+}
+
+.ck-content .footnote-item:target .footnote-content {
+    background: #eee;
 }
 
 .ck-content .footnote-item>* {
