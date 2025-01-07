@@ -117,6 +117,6 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 }
 
 .ck-content .footnote-section {
-    border: 0;
-    border-top: 1px solid var(--main-border-color);
+    border: 0 !important;
+    border-top: 1px solid var(--main-border-color) !important;
 }
