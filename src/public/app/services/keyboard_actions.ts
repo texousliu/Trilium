@@ -6,7 +6,7 @@ import Component from "../components/component.js";
 const keyboardActionRepo: Record<string, Action> = {};
 
 // TODO: Deduplicate with server.
-interface Action {
+export interface Action {
 	actionName: CommandNames;
 	effectiveShortcuts: string[];
 	scope: string;

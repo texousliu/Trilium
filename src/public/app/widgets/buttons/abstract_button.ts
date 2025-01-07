@@ -5,34 +5,23 @@ const TPL = `<button class="button-widget bx"
       title=""></button>`;
 
 type TitlePlacement = "top" | "bottom" | "left" | "right";
-type StringOrCallback = (() => string);
+type StringOrCallback = string | (() => string);
 type ContextMenuHandler = (e: JQuery.ContextMenuEvent<any, any, any, any> | null) => void;
 
-interface Settings {
+export interface AbstractButtonWidgetSettings {
     titlePlacement: TitlePlacement;
-    title: string | StringOrCallback | null;
-    icon: string | StringOrCallback | null;
+    title: StringOrCallback | null;
+    icon: StringOrCallback | null;
     onContextMenu: ContextMenuHandler | null;
 }
 
-export default class AbstractButtonWidget extends NoteContextAwareWidget {
+export default class AbstractButtonWidget<SettingsT extends AbstractButtonWidgetSettings> extends NoteContextAwareWidget {
 
-    private settings: Settings;
-    private tooltip!: bootstrap.Tooltip;
+    protected settings!: SettingsT;
+    protected tooltip!: bootstrap.Tooltip;
 
     isEnabled() {
         return true;
-    }
-
-    constructor() {
-        super();
-
-        this.settings = {
-            titlePlacement: 'right',
-            title: null,
-            icon: null,
-            onContextMenu: null
-        };
     }
 
     doRender() {

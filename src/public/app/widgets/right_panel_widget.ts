@@ -1,4 +1,5 @@
 import BasicWidget from "./basic_widget.js";
+import AbstractButtonWidget from "./buttons/abstract_button.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 
 const WIDGET_TPL = `
@@ -26,7 +27,7 @@ class RightPanelWidget extends NoteContextAwareWidget {
     /** Title to show in the panel. */
     get widgetTitle() { return "Untitled widget"; }
 
-    get widgetButtons() { return []; }
+    get widgetButtons(): AbstractButtonWidget<any>[] { return []; }
 
     get help() { return {}; }
 
