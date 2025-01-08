@@ -1613,6 +1613,12 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     letter-spacing: .5pt;
 }
 
+.help-dialog .help-cards code {
+    border-radius: 4px;
+    background: #d7d5d5;
+    padding: 0 8px;
+}
+
 .help-dialog .help-cards kbd:first-child {
     margin-left: 0;
 }
