@@ -1,5 +1,5 @@
 import { Plugin } from 'ckeditor5/src/core.js';
-import { addListToDropdown, createDropdown, ViewModel, type ListDropdownItemDefinition } from '@ckeditor/ckeditor5-ui';
+import { addListToDropdown, createDropdown, SplitButtonView, ViewModel, type ListDropdownItemDefinition } from '@ckeditor/ckeditor5-ui';
 import { Collection } from '@ckeditor/ckeditor5-utils';
 
 import {
@@ -17,7 +17,8 @@ export default class FootnoteUI extends Plugin {
 		const translate = editor.t;
 
 		editor.ui.componentFactory.add( TOOLBAR_COMPONENT_NAME, locale => {
-			const dropdownView = createDropdown( locale );
+			const dropdownView = createDropdown( locale, SplitButtonView );
+			const splitButtonView = dropdownView.buttonView;
 
 			// Populate the list in the dropdown with items.
 			// addListToDropdown( dropdownView, getDropdownItemsDefinitions( placeholderNames ) );
@@ -26,10 +27,18 @@ export default class FootnoteUI extends Plugin {
 				throw new Error( 'Command not found.' );
 			}
 
-			dropdownView.buttonView.set( {
+			splitButtonView.set( {
 				label: translate( 'Footnote' ),
 				icon: insertFootnoteIcon,
-				tooltip: true
+				tooltip: true,
+				isToggleable: true
+			} );
+			splitButtonView.bind( 'isOn' ).to( command, 'value', value => !!value );
+			splitButtonView.on( 'execute', () => {
+				editor.execute( COMMANDS.insertFootnote, {
+					footnoteIndex: 0
+				} );
+				editor.editing.view.focus();
 			} );
 
 			dropdownView.class = 'ck-code-block-dropdown';

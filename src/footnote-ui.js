@@ -1,5 +1,5 @@
 import { Plugin } from 'ckeditor5/src/core.js';
-import { addListToDropdown, createDropdown, ViewModel } from '@ckeditor/ckeditor5-ui';
+import { addListToDropdown, createDropdown, SplitButtonView, ViewModel } from '@ckeditor/ckeditor5-ui';
 import { Collection } from '@ckeditor/ckeditor5-utils';
 import { ATTRIBUTES, COMMANDS, ELEMENTS, TOOLBAR_COMPONENT_NAME } from './constants.js';
 import insertFootnoteIcon from '../theme/icons/insert-footnote.svg';
@@ -9,17 +9,26 @@ export default class FootnoteUI extends Plugin {
         const editor = this.editor;
         const translate = editor.t;
         editor.ui.componentFactory.add(TOOLBAR_COMPONENT_NAME, locale => {
-            const dropdownView = createDropdown(locale);
+            const dropdownView = createDropdown(locale, SplitButtonView);
+            const splitButtonView = dropdownView.buttonView;
             // Populate the list in the dropdown with items.
             // addListToDropdown( dropdownView, getDropdownItemsDefinitions( placeholderNames ) );
             const command = editor.commands.get(COMMANDS.insertFootnote);
             if (!command) {
                 throw new Error('Command not found.');
             }
-            dropdownView.buttonView.set({
+            splitButtonView.set({
                 label: translate('Footnote'),
                 icon: insertFootnoteIcon,
-                tooltip: true
+                tooltip: true,
+                isToggleable: true
+            });
+            splitButtonView.bind('isOn').to(command, 'value', value => !!value);
+            splitButtonView.on('execute', () => {
+                editor.execute(COMMANDS.insertFootnote, {
+                    footnoteIndex: 0
+                });
+                editor.editing.view.focus();
             });
             dropdownView.class = 'ck-code-block-dropdown';
             dropdownView.bind('isEnabled').to(command);
