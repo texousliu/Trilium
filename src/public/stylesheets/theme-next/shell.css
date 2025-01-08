@@ -1563,19 +1563,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 /* Help */
 
-.help-dialog {
-    --help-background-color: #fffc;
-    --help-backdrop-blur: 10px;
-    --help-card-background: var(--card-background-color);
-    --help-card-shadow: 2px 2px 2px rgba(0, 0, 0, .10);
-    --help-card-heading-color: #797979;
-    --help-kbd-shortcut-color: #3f3f3f;
-    --help-kbd-shortcut-background: white;
-    --help-kbd-shortcut-shadow: 1px 1px 2px rgba(0, 0, 0, .3);
-    --help-code-color: black;
-    --help-code-background: #d7d5d5;
-}
-
 .help-dialog .modal-content {
     --modal-background-color: var(--help-background-color);
     backdrop-filter: blur(var(--help-backdrop-blur));

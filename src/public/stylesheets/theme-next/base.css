@@ -55,6 +55,8 @@
     --timeline-bullet-vertical-pos: .75em;
     --timeline-connector-size: 4px;
 
+    --help-backdrop-blur: 10px;
+
     /* Theme capabilities */
     --tab-note-icons: true;
 }
