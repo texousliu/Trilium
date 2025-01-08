@@ -144,7 +144,7 @@
     --tooltip-foreground-color: #ffffffeb;
     --tooltip-shadow-color: rgba(0, 0, 0, 0.4);
 
-    --help-background-color: #00000059;
+    --help-background-color: var(--menu-background-color);
     --help-card-background: var(--card-background-color);
     --help-card-shadow: 2px 2px 2px rgba(0, 0, 0, .2);
     --help-card-heading-color: #959595;
