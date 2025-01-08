@@ -16,14 +16,14 @@ const TPL = `<div class="note-map-widget" style="position: relative;">
             height: 100%;
             overflow: hidden;
         }
-        
+
         .map-type-switcher {
-            position: absolute; 
-            top: 10px; 
-            left: 10px; 
+            position: absolute;
+            top: 10px;
+            left: 10px;
             z-index: 10; /* should be below dropdown (note actions) */
         }
-        
+
         .map-type-switcher button.bx {
             font-size: 130%;
             padding: 1px 10px 1px 10px;
@@ -31,8 +31,8 @@ const TPL = `<div class="note-map-widget" style="position: relative;">
 
         /* Style Ui Element to Drag Nodes */
         .fixnodes-type-switcher {
-            position: absolute; 
-            top: 10px; 
+            position: absolute;
+            top: 10px;
             left: 45%;
             z-index: 10; /* should be below dropdown (note actions) */
             border-radius:0.2rem;
@@ -40,13 +40,13 @@ const TPL = `<div class="note-map-widget" style="position: relative;">
 
         /* Start of styling the slider */
             input[type="range"] {
-  
+
             /* removing default appearance */
             -webkit-appearance: none;
-            appearance: none; 
+            appearance: none;
             margin-left: 15px;
             width:50%
-            
+
         }
 
 
@@ -63,7 +63,7 @@ const TPL = `<div class="note-map-widget" style="position: relative;">
         input[type="range"]::-webkit-slider-thumb {
         /* removing default appearance */
         -webkit-appearance: none;
-        appearance: none; 
+        appearance: none;
         /* creating a custom design */
         height: 15px;
         width: 15px;
@@ -74,7 +74,7 @@ const TPL = `<div class="note-map-widget" style="position: relative;">
         /* End of styling the slider */
 
     </style>
-    
+
     <div class="btn-group btn-group-sm map-type-switcher" role="group">
       <button type="button" class="btn bx bx-network-chart" title="${t("note-map.button-link-map")}" data-type="link"></button>
       <button type="button" class="btn bx bx-sitemap" title="${t("note-map.button-tree-map")}" data-type="tree"></button>
@@ -83,9 +83,9 @@ const TPL = `<div class="note-map-widget" style="position: relative;">
     <! UI for dragging Notes and link force >
 
      <div class=" btn-group-sm fixnodes-type-switcher" role="group">
-      <button type="button" class="btn bx bx-expand" title="Fixation" data-type="moveable"></button>
-      <input type="range" class=" slider" min="1" title="Link distance" max="100" value="40" >
-      
+      <button type="button" class="btn bx bx-expand" title="${t("note_map.fix-nodes")}" data-type="moveable"></button>
+      <input type="range" class=" slider" min="1" title="${t("note_map.link-distance")}" max="100" value="40" >
+
     </div>
 
     <div class="style-resolver"></div>
@@ -180,7 +180,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                 hoverNode = node || null;
                 highlightLinks.clear();
             })
-            
+
             // set link width to immitate a highlight effekt. Checking the condition if any links are saved in the previous defined set highlightlinks
             .linkWidth(link => (highlightLinks.has(link) ? 3 : 0.4))
             .linkColor(link => (highlightLinks.has(link) ? 'white' : this.css.mutedTextColor))

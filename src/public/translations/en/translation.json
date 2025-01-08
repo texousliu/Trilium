@@ -795,7 +795,9 @@
   "note_map": {
     "open_full": "Expand to full",
     "collapse": "Collapse to normal size",
-    "title": "Note Map"
+    "title": "Note Map",
+    "fix-nodes": "Fix nodes",
+    "link-distance": "Link distance"
   },
   "note_paths": {
     "title": "Note Paths",

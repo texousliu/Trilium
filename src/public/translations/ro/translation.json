@@ -851,7 +851,9 @@
   "note_map": {
     "collapse": "Micșorează la dimensiunea normală",
     "open_full": "Expandează la maximum",
-    "title": "Harta notițelor"
+    "title": "Harta notițelor",
+    "fix-nodes": "Fixează nodurile",
+    "link-distance": "Distanța dintre legături"
   },
   "note_paths": {
     "archived": "Arhivat",
