@@ -1449,7 +1449,11 @@
     "scroll-active-title": "Mergi la notița activă",
     "tree-settings-title": "Setări ale ierarhiei notițelor",
     "auto-collapsing-notes-after-inactivity": "Se minimizează notițele după inactivitate...",
-    "saved-search-note-refreshed": "Notița de căutare salvată a fost reîmprospătată."
+    "saved-search-note-refreshed": "Notița de căutare salvată a fost reîmprospătată.",
+    "create-child-note": "Crează subnotiță",
+    "hoist-this-note-workspace": "Focalizează spațiul de lucru",
+    "refresh-saved-search-results": "Reîmprospătează căutarea salvată",
+    "unhoist": "Defocalizează notița"
   },
   "title_bar_buttons": {
     "window-on-top": "Menține fereastra mereu vizibilă"

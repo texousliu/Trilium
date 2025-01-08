@@ -1459,7 +1459,11 @@
     "automatically-collapse-notes-title": "Notes will be collapsed after period of inactivity to declutter the tree.",
     "save-changes": "Save & apply changes",
     "auto-collapsing-notes-after-inactivity": "Auto collapsing notes after inactivity...",
-    "saved-search-note-refreshed": "Saved search note refreshed."
+    "saved-search-note-refreshed": "Saved search note refreshed.",
+    "hoist-this-note-workspace": "Hoist this note (workspace)",
+    "refresh-saved-search-results": "Refresh saved search results",
+    "create-child-note": "Create child note",
+    "unhoist": "Unhoist"
   },
   "title_bar_buttons": {
     "window-on-top": "Keep Window on Top"

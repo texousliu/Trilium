@@ -548,28 +548,28 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 const isHoistedNote = activeNoteContext && activeNoteContext.hoistedNoteId === note.noteId && note.noteId !== 'root';
 
                 if (note.hasLabel('workspace') && !isHoistedNote) {
-                    const $enterWorkspaceButton = $('<span class="tree-item-button enter-workspace-button bx bx-door-open" title="Hoist this note (workspace)"></span>')
+                    const $enterWorkspaceButton = $(`<span class="tree-item-button enter-workspace-button bx bx-door-open" title="${t("note_tree.hoist-this-note-workspace")}"></span>`)
                         .on("click", cancelClickPropagation);
 
                     $span.append($enterWorkspaceButton);
                 }
 
                 if (note.type === 'search') {
-                    const $refreshSearchButton = $('<span class="tree-item-button refresh-search-button bx bx-refresh" title="Refresh saved search results"></span>')
+                    const $refreshSearchButton = $(`<span class="tree-item-button refresh-search-button bx bx-refresh" title="${t("note_tree.refresh-saved-search-results")}"></span>`)
                         .on("click", cancelClickPropagation);
 
                     $span.append($refreshSearchButton);
                 }
 
                 if (!['search', 'launcher'].includes(note.type) && !note.isOptions() && !note.isLaunchBarConfig()) {
-                    const $createChildNoteButton = $('<span class="tree-item-button add-note-button bx bx-plus" title="Create child note"></span>')
+                    const $createChildNoteButton = $(`<span class="tree-item-button add-note-button bx bx-plus" title="${t("note_tree.create-child-note")}"></span>`)
                         .on("click", cancelClickPropagation);
 
                     $span.append($createChildNoteButton);
                 }
 
                 if (isHoistedNote) {
-                    const $unhoistButton = $('<span class="tree-item-button unhoist-button bx bx-door-open" title="Unhoist"></span>')
+                    const $unhoistButton = $(`<span class="tree-item-button unhoist-button bx bx-door-open" title="${t("note_tree.unhoist")}"></span>`)
                         .on("click", cancelClickPropagation);
 
                     $span.append($unhoistButton);
