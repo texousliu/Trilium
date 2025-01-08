@@ -101,6 +101,7 @@
     "button": "Login"
   },
   "set_password": {
+    "title": "Set Password",
     "heading": "Set password",
     "description": "Before you can start using Trilium from web, you need to set a password first. You will then use this password to login.",
     "password": "Password",
