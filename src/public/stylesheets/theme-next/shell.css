@@ -1563,6 +1563,11 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 /* Help */
 
+.help-dialog .modal-content {
+    --modal-background-color: #fffc;
+    backdrop-filter: blur(10px);
+}
+
 .help-dialog .help-cards {
     display: block;
     columns: 3;
