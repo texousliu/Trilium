@@ -34,6 +34,7 @@ function index(req: Request, res: Response) {
 
     const isElectron = utils.isElectron();
     res.render(view, {
+        device: view,
         csrfToken: csrfToken,
         themeCssUrl: getThemeCssUrl(theme, themeNote),
         themeUseNextAsBase: themeNote?.getAttributeValue("label", "appThemeBase") === "next",
@@ -51,7 +52,7 @@ function index(req: Request, res: Response) {
         instanceName: config.General ? config.General.instanceName : null,
         appCssNoteIds: getAppCssNoteIds(),
         isDev: env.isDev(),
-        isMainWindow: !req.query.extraWindow,
+        isMainWindow: (view === "mobile") ? true : !req.query.extraWindow,
         isProtectedSessionAvailable: protectedSessionService.isProtectedSessionAvailable(),
         maxContentWidth: Math.max(640, parseInt(options.maxContentWidth)),
         triliumVersion: packageJson.version,

@@ -106,26 +106,7 @@
 
 <div class="dropdown-menu dropdown-menu-sm" id="context-menu-container"></div>
 
-<script type="text/javascript">
-    global = globalThis; /* fixes https://github.com/webpack/webpack/issues/10035 */
-
-    window.glob = {
-        device: "mobile",
-        baseApiUrl: 'api/',
-        activeDialog: null,
-        maxEntityChangeIdAtLoad: <%= maxEntityChangeIdAtLoad %>,
-        maxEntityChangeSyncIdAtLoad: <%= maxEntityChangeSyncIdAtLoad %>,
-        instanceName: '<%= instanceName %>',
-        csrfToken: '<%= csrfToken %>',
-        isDev: <%= isDev %>,
-        appCssNoteIds: <%- JSON.stringify(appCssNoteIds) %>,
-        isMainWindow: true,
-        isProtectedSessionAvailable: <%= isProtectedSessionAvailable %>,
-        assetPath: "<%= assetPath %>",
-        appPath: "<%= appPath %>",
-        TRILIUM_SAFE_MODE: <%= !!process.env.TRILIUM_SAFE_MODE %>
-    };
-</script>
+<%- include("./partials/windowGlobal.ejs", locals) %>
 
 <script src="<%= assetPath %>/node_modules/jquery/dist/jquery.min.js"></script>
 
