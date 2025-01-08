@@ -39,8 +39,7 @@ const TPL = `
                             <ul>
                                 <li>${t('help.newTabNoteLink')}</li>
                             </ul>
-
-                            ${t('help.onlyInDesktop')}:
+                            <h6>${t('help.onlyInDesktop')}:</h6>
                             <ul>
                                 <li><kbd data-command="openNewTab">${t('help.notSet')}</kbd> ${t('help.openEmptyTab')}</li>
                                 <li><kbd data-command="closeActiveTab">${t('help.notSet')}</kbd> ${t('help.closeActiveTab')}</li>
