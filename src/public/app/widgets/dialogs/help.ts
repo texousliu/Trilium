@@ -4,13 +4,13 @@ import { t } from "../../services/i18n.js";
 
 const TPL = `
 <div class="help-dialog modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="min-width: 100%; height: 100%; margin: 0;">
+    <div class="modal-dialog" role="document" style="min-width: 90%;">
         <div class="modal-content" style="height: auto;">
             <div class="modal-header">
                 <h5 class="modal-title">${t('help.fullDocumentation')}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('help.close')}"></button>
             </div>
-            <div class="modal-body" style="overflow: auto; height: calc(100vh - 70px);">
+            <div class="modal-body" style="overflow: auto;">
                 <div class="help-cards row row-cols-md-3 g-3">
                     <div class="card">
                         <div class="card-body">
