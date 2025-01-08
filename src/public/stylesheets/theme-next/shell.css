@@ -1563,11 +1563,19 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 /* Help */
 
+.help-dialog .help-cards {
+    display: block;
+    columns: 3;
+    column-gap: 20px;
+}
+
 .help-dialog .card {
     margin: 0;
+    width: auto;
     border: none;
-    padding: 8px;
+    padding: 16px 8px;
     background: unset;
+    break-inside: avoid-column;
 }
 
 .help-dialog .card-body {
