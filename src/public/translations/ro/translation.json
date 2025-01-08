@@ -1629,5 +1629,9 @@
   },
   "note_tooltip": {
     "note-has-been-deleted": "Notița a fost ștearsă."
+  },
+  "notes": {
+    "duplicate-note-suffix": "(dupl.)",
+    "duplicate-note-title": "{{ noteTitle }} {{ duplicateNoteSuffix }}"
   }
 }
