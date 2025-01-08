@@ -94,7 +94,7 @@
   },
   "login": {
     "title": "Login",
-    "heading": "Trilium login",
+    "heading": "Trilium Login",
     "incorrect-password": "Password is incorrect. Please try again.",
     "password": "Password",
     "remember-me": "Remember me",
