@@ -16,12 +16,11 @@ import { CommandNames } from "../../components/app_context.js";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
-        titlePlacement: "bottom"
-    }
+        titlePlacement: "bottom";
+    };
 }
 
 export default class LauncherWidget extends BasicWidget {
-
     private innerWidget!: InnerWidget;
     private isHorizontalLayout: boolean;
 
@@ -40,33 +39,30 @@ export default class LauncherWidget extends BasicWidget {
     }
 
     async initLauncher(note: FNote) {
-        if (note.type !== 'launcher') {
+        if (note.type !== "launcher") {
             throw new Error(`Note '${note.noteId}' '${note.title}' is not a launcher even though it's in the launcher subtree`);
         }
 
-        if (!utils.isDesktop() && note.isLabelTruthy('desktopOnly')) {
+        if (!utils.isDesktop() && note.isLabelTruthy("desktopOnly")) {
             return false;
         }
 
         const launcherType = note.getLabelValue("launcherType");
 
-        if (glob.TRILIUM_SAFE_MODE && launcherType === 'customWidget') {
+        if (glob.TRILIUM_SAFE_MODE && launcherType === "customWidget") {
             return false;
         }
 
         let widget: BasicWidget;
-        if (launcherType === 'command') {
-            widget = this.initCommandLauncherWidget(note)
-                .class("launcher-button");
-        } else if (launcherType === 'note') {
-            widget = new NoteLauncher(note)
-                .class("launcher-button");
-        } else if (launcherType === 'script') {
-            widget = new ScriptLauncher(note)
-                .class("launcher-button");
-        } else if (launcherType === 'customWidget') {
+        if (launcherType === "command") {
+            widget = this.initCommandLauncherWidget(note).class("launcher-button");
+        } else if (launcherType === "note") {
+            widget = new NoteLauncher(note).class("launcher-button");
+        } else if (launcherType === "script") {
+            widget = new ScriptLauncher(note).class("launcher-button");
+        } else if (launcherType === "customWidget") {
             widget = await this.initCustomWidget(note);
-        } else if (launcherType === 'builtinWidget') {
+        } else if (launcherType === "builtinWidget") {
             widget = this.initBuiltinWidget(note);
         } else {
             throw new Error(`Unrecognized launcher type '${launcherType}' for launcher '${note.noteId}' title '${note.title}'`);
@@ -93,7 +89,7 @@ export default class LauncherWidget extends BasicWidget {
     }
 
     async initCustomWidget(note: FNote) {
-        const widget = await note.getRelationTarget('widget');
+        const widget = await note.getRelationTarget("widget");
 
         if (widget) {
             return await widget.executeScript();

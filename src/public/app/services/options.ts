@@ -1,4 +1,3 @@
-
 import server from "./server.js";
 
 type OptionValue = number | string;
@@ -8,7 +7,7 @@ class Options {
     private arr!: Record<string, OptionValue>;
 
     constructor() {
-        this.initializedPromise = server.get<Record<string, OptionValue>>('options').then(data => this.load(data));
+        this.initializedPromise = server.get<Record<string, OptionValue>>("options").then((data) => this.load(data));
     }
 
     load(arr: Record<string, OptionValue>) {
@@ -30,8 +29,7 @@ class Options {
         }
         try {
             return JSON.parse(value);
-        }
-        catch (e) {
+        } catch (e) {
             return null;
         }
     }
@@ -53,7 +51,7 @@ class Options {
     }
 
     is(key: string) {
-        return this.arr[key] === 'true';
+        return this.arr[key] === "true";
     }
 
     set(key: string, value: OptionValue) {

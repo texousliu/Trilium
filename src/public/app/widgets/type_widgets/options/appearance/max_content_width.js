@@ -29,8 +29,7 @@ export default class MaxContentWidthOptions extends OptionsWidget {
 
         this.$maxContentWidth = this.$widget.find(".max-content-width");
 
-        this.$maxContentWidth.on('change', async () =>
-            this.updateOption('maxContentWidth', this.$maxContentWidth.val()))
+        this.$maxContentWidth.on("change", async () => this.updateOption("maxContentWidth", this.$maxContentWidth.val()));
 
         this.$widget.find(".reload-frontend-button").on("click", () => utils.reloadFrontendApp(t("max_content_width.reload_description")));
     }

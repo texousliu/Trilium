@@ -59,22 +59,21 @@ export default class PasswordOptions extends OptionsWidget {
             if (confirm(t("password.reset_confirmation"))) {
                 await server.post("password/reset?really=yesIReallyWantToResetPasswordAndLoseAccessToMyProtectedNotes");
 
-                const options = await server.get('options');
+                const options = await server.get("options");
                 this.optionsLoaded(options);
 
                 toastService.showError(t("password.reset_success_message"));
             }
         });
 
-        this.$changePasswordForm.on('submit', () => this.save());
+        this.$changePasswordForm.on("submit", () => this.save());
 
         this.$protectedSessionTimeout = this.$widget.find(".protected-session-timeout-in-seconds");
-        this.$protectedSessionTimeout.on('change', () =>
-            this.updateOption('protectedSessionTimeout', this.$protectedSessionTimeout.val()));
+        this.$protectedSessionTimeout.on("change", () => this.updateOption("protectedSessionTimeout", this.$protectedSessionTimeout.val()));
     }
 
     optionsLoaded(options) {
-        const isPasswordSet = options.isPasswordSet === 'true';
+        const isPasswordSet = options.isPasswordSet === "true";
 
         this.$widget.find(".old-password-form-group").toggle(isPasswordSet);
         this.$passwordHeading.text(isPasswordSet ? t("password.change_password_heading") : t("password.set_password_heading"));
@@ -87,29 +86,30 @@ export default class PasswordOptions extends OptionsWidget {
         const newPassword1 = this.$newPassword1.val();
         const newPassword2 = this.$newPassword2.val();
 
-        this.$oldPassword.val('');
-        this.$newPassword1.val('');
-        this.$newPassword2.val('');
+        this.$oldPassword.val("");
+        this.$newPassword1.val("");
+        this.$newPassword2.val("");
 
         if (newPassword1 !== newPassword2) {
             toastService.showError(t("password.password_mismatch"));
             return false;
         }
 
-        server.post('password/change', {
-            'current_password': oldPassword,
-            'new_password': newPassword1
-        }).then(result => {
-            if (result.success) {
-                toastService.showError(t("password.password_changed_success"));
+        server
+            .post("password/change", {
+                current_password: oldPassword,
+                new_password: newPassword1
+            })
+            .then((result) => {
+                if (result.success) {
+                    toastService.showError(t("password.password_changed_success"));
 
-                // password changed so current protected session is invalid and needs to be cleared
-                protectedSessionHolder.resetProtectedSession();
-            }
-            else {
-                toastService.showError(result.message);
-            }
-        });
+                    // password changed so current protected session is invalid and needs to be cleared
+                    protectedSessionHolder.resetProtectedSession();
+                } else {
+                    toastService.showError(result.message);
+                }
+            });
 
         return false;
     }

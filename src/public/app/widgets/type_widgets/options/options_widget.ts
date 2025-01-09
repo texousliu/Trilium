@@ -6,9 +6,7 @@ import server from "../../../services/server.js";
 import toastService from "../../../services/toast.js";
 import NoteContextAwareWidget from "../../note_context_aware_widget.js";
 
-export default class OptionsWidget extends NoteContextAwareWidget
-    implements EventListener<"entitiesReloaded">
-{
+export default class OptionsWidget extends NoteContextAwareWidget implements EventListener<"entitiesReloaded"> {
     constructor() {
         super();
 
@@ -22,7 +20,7 @@ export default class OptionsWidget extends NoteContextAwareWidget
     }
 
     async updateMultipleOptions(opts: Partial<OptionMap>) {
-        await server.put('options', opts);
+        await server.put("options", opts);
 
         this.showUpdateNotification();
     }
@@ -40,11 +38,11 @@ export default class OptionsWidget extends NoteContextAwareWidget
     async updateCheckboxOption<T extends FilterOptionsByType<boolean>>(name: T, $checkbox: JQuery<HTMLElement>) {
         const isChecked = $checkbox.prop("checked");
 
-        return await this.updateOption(name, isChecked ? 'true' : 'false');
+        return await this.updateOption(name, isChecked ? "true" : "false");
     }
 
     setCheckboxState($checkbox: JQuery<HTMLElement>, optionValue: string) {
-        $checkbox.prop('checked', optionValue === 'true');
+        $checkbox.prop("checked", optionValue === "true");
     }
 
     optionsLoaded(options: OptionMap) {}
@@ -64,14 +62,14 @@ export default class OptionsWidget extends NoteContextAwareWidget
     }
 
     async refreshWithNote(note: FNote | null | undefined) {
-        const options = await server.get<OptionMap>('options');
+        const options = await server.get<OptionMap>("options");
 
         if (options) {
             this.optionsLoaded(options);
         }
     }
 
-    async entitiesReloadedEvent({loadResults}: EventData<"entitiesReloaded">) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.getOptionNames().length > 0) {
             this.refresh();
         }

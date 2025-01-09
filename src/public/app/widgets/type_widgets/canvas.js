@@ -1,8 +1,8 @@
-import libraryLoader from '../../services/library_loader.js';
-import TypeWidget from './type_widget.js';
-import utils from '../../services/utils.js';
-import linkService from '../../services/link.js';
-import server from '../../services/server.js';
+import libraryLoader from "../../services/library_loader.js";
+import TypeWidget from "./type_widget.js";
+import utils from "../../services/utils.js";
+import linkService from "../../services/link.js";
+import server from "../../services/server.js";
 const TPL = `
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
         <style>
@@ -119,7 +119,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         // these 2 variables are needed to compare the library state (all library items) after loading to the state when the library changed. So we can find attachments to be deleted.
         //every libraryitem is saved on its own json file in the attachments of the note.
         this.librarycache = [];
-        this.attachmentMetadata=[]
+        this.attachmentMetadata = [];
     }
 
     static getType() {
@@ -128,7 +128,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.$widget.bind('mousewheel DOMMouseScroll', event => {
+        this.$widget.bind("mousewheel DOMMouseScroll", (event) => {
             if (event.ctrlKey) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -137,21 +137,19 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         });
 
         this.$widget.toggleClass("full-height", true);
-        this.$render = this.$widget.find('.canvas-render');
+        this.$render = this.$widget.find(".canvas-render");
         const documentStyle = window.getComputedStyle(document.documentElement);
-        this.themeStyle = documentStyle.getPropertyValue('--theme-style')?.trim();
+        this.themeStyle = documentStyle.getPropertyValue("--theme-style")?.trim();
 
-        libraryLoader
-            .requireLibrary(libraryLoader.EXCALIDRAW)
-            .then(() => {
-                const React = window.React;
-                const ReactDOM = window.ReactDOM;
-                const renderElement = this.$render.get(0);
+        libraryLoader.requireLibrary(libraryLoader.EXCALIDRAW).then(() => {
+            const React = window.React;
+            const ReactDOM = window.ReactDOM;
+            const renderElement = this.$render.get(0);
 
-                ReactDOM.unmountComponentAtNode(renderElement);
-                const root = ReactDOM.createRoot(renderElement);
-                root.render(React.createElement(() => this.createExcalidrawReactApp()));
-            });
+            ReactDOM.unmountComponentAtNode(renderElement);
+            const root = ReactDOM.createRoot(renderElement);
+            root.render(React.createElement(() => this.createExcalidrawReactApp()));
+        });
 
         return this.$widget;
     }
@@ -195,14 +193,13 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             };
 
             this.excalidrawApi.updateScene(sceneData);
-        }
-        else if (blob.content) {
+        } else if (blob.content) {
             // load saved content into excalidraw canvas
             let content;
 
             try {
                 content = blob.getJsonContent();
-            } catch(err) {
+            } catch (err) {
                 console.error("Error parsing content. Probably note.type changed. Starting with empty canvas", note, blob, err);
 
                 content = {
@@ -212,7 +209,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 };
             }
 
-            const {elements, files, appState = {}} = content;
+            const { elements, files, appState = {} } = content;
 
             appState.theme = this.themeStyle;
 
@@ -242,46 +239,42 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             }
 
             Promise.all(
-                (await note.getAttachmentsByRole('canvasLibraryItem'))
-                    .map(async attachment => {
-                        const blob = await attachment.getBlob();
-                        return {
-                            blob, // Save the blob for libraryItems
-                            metadata: { // metadata to use in the cache variables for comparing old library state and new one. We delete unnecessary items later, calling the server directly
-                                attachmentId: attachment.attachmentId,
-                                title: attachment.title,
-                            },
-                        };
-                    })
-            ).then(results => {
+                (await note.getAttachmentsByRole("canvasLibraryItem")).map(async (attachment) => {
+                    const blob = await attachment.getBlob();
+                    return {
+                        blob, // Save the blob for libraryItems
+                        metadata: {
+                            // metadata to use in the cache variables for comparing old library state and new one. We delete unnecessary items later, calling the server directly
+                            attachmentId: attachment.attachmentId,
+                            title: attachment.title
+                        }
+                    };
+                })
+            ).then((results) => {
                 if (note.noteId !== this.currentNoteId) {
                     // current note changed in the course of the async operation
                     return;
                 }
-            
+
                 // Extract libraryItems from the blobs
-                const libraryItems = results
-                    .map(result => result.blob.getJsonContentSafely())
-                    .filter(item => !!item);
-            
+                const libraryItems = results.map((result) => result.blob.getJsonContentSafely()).filter((item) => !!item);
+
                 // Extract metadata for each attachment
-                const metadata = results.map(result => result.metadata);
-            
+                const metadata = results.map((result) => result.metadata);
+
                 // Update the library and save to independent variables
                 this.excalidrawApi.updateLibrary({ libraryItems, merge: false });
-                
+
                 // save state of library to compare it to the new state later.
                 this.librarycache = libraryItems;
                 this.attachmentMetadata = metadata;
             });
-            
+
             // Update the scene
             this.excalidrawApi.updateScene(sceneData);
             this.excalidrawApi.addFiles(fileArray);
             this.excalidrawApi.history.clear();
         }
-        
-        
 
         // set initial scene version
         if (this.currentSceneVersion === this.SCENE_VERSION_INITIAL) {
@@ -308,7 +301,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             elements,
             appState,
             exportPadding: 5, // 5 px padding
-            metadata: 'trilium-export',
+            metadata: "trilium-export",
             files
         });
         const svgString = svg.outerHTML;
@@ -332,64 +325,54 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             }
         };
 
-        const attachments = [
-            { role: 'image', title: 'canvas-export.svg', mime: 'image/svg+xml', content: svgString, position: 0 }
-        ];
+        const attachments = [{ role: "image", title: "canvas-export.svg", mime: "image/svg+xml", content: svgString, position: 0 }];
 
         if (this.libraryChanged) {
             // this.libraryChanged is unset in dataSaved()
 
             // there's no separate method to get library items, so have to abuse this one
-            const libraryItems = await this.excalidrawApi.updateLibrary({merge: true});
+            const libraryItems = await this.excalidrawApi.updateLibrary({ merge: true });
 
             // excalidraw saves the library as a own state. the items are saved to libraryItems. then we compare the library right now with a libraryitemcache. The cache is filled when we first load the Library into the note.
             //We need the cache to delete old attachments later in the server.
 
-            const libraryItemsMissmatch = this.librarycache.filter(obj1 => !libraryItems.some(obj2 => obj1.id === obj2.id));
-
+            const libraryItemsMissmatch = this.librarycache.filter((obj1) => !libraryItems.some((obj2) => obj1.id === obj2.id));
 
             // before we saved the metadata of the attachments in a cache. the title of the attachment is a combination of libraryitem  ´s ID und it´s name.
             // we compare the library items in the libraryitemmissmatch variable (this one saves all libraryitems that are different to the state right now. E.g. you delete 1 item, this item is saved as mismatch)
             // then we combine its id and title and search the according attachmentID.
-            
-            const matchingItems = this.attachmentMetadata.filter(meta => {
+
+            const matchingItems = this.attachmentMetadata.filter((meta) => {
                 // Loop through the second array and check for a match
-                return libraryItemsMissmatch.some(item => {
+                return libraryItemsMissmatch.some((item) => {
                     // Combine the `name` and `id` from the second array
                     const combinedTitle = `${item.id}${item.name}`;
                     return meta.title === combinedTitle;
                 });
             });
-            
+
             // we save the attachment ID`s in a variable and delete every attachmentID. Now the items that the user deleted will be deleted.
-            const attachmentIds = matchingItems.map(item => item.attachmentId);
-
-
+            const attachmentIds = matchingItems.map((item) => item.attachmentId);
 
             //delete old attachments that are no longer used
-            for (const item of attachmentIds){
-                
-                 await server.remove(`attachments/${item}`);
-
+            for (const item of attachmentIds) {
+                await server.remove(`attachments/${item}`);
             }
 
             let position = 10;
 
-                // prepare data to save to server e.g. new library items.
+            // prepare data to save to server e.g. new library items.
             for (const libraryItem of libraryItems) {
-                
                 attachments.push({
-                    role: 'canvasLibraryItem',
+                    role: "canvasLibraryItem",
                     title: libraryItem.id + libraryItem.name,
-                    mime: 'application/json',
+                    mime: "application/json",
                     content: JSON.stringify(libraryItem),
                     position: position
-                    
                 });
-                
+
                 position += 10;
             }
-          
         }
 
         return {
@@ -448,7 +431,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             setDimensions(dimensions);
 
             const onResize = () => {
-                if (this.note?.type !== 'canvas') {
+                if (this.note?.type !== "canvas") {
                     return;
                 }
 
@@ -476,7 +459,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             event.preventDefault();
 
             return linkService.goToLinkExt(nativeEvent, link, null);
-          }, []);
+        }, []);
 
         return React.createElement(
             React.Fragment,
@@ -490,7 +473,9 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 React.createElement(Excalidraw, {
                     // this makes sure that 1) manual theme switch button is hidden 2) theme stays as it should after opening menu
                     theme: this.themeStyle,
-                    excalidrawAPI: api => { this.excalidrawApi = api; },
+                    excalidrawAPI: (api) => {
+                        this.excalidrawApi = api;
+                    },
                     width: dimensions.width,
                     height: dimensions.height,
                     onPaste: (data, event) => {
@@ -526,11 +511,13 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
      *
      * info: sceneVersions are not incrementing. it seems to be a pseudo-random number
      */
-     isNewSceneVersion() {
+    isNewSceneVersion() {
         const sceneVersion = this.getSceneVersion();
 
-        return this.currentSceneVersion === this.SCENE_VERSION_INITIAL // initial scene version update
-            || this.currentSceneVersion !== sceneVersion; // ensure scene changed
+        return (
+            this.currentSceneVersion === this.SCENE_VERSION_INITIAL || // initial scene version update
+            this.currentSceneVersion !== sceneVersion
+        ); // ensure scene changed
     }
 
     getSceneVersion() {

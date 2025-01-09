@@ -22,7 +22,7 @@ interface MimeTypeDefinition {
 }
 
 interface MimeType extends MimeTypeDefinition {
-    enabled: boolean
+    enabled: boolean;
 }
 
 const MIME_TYPES_DICT: MimeTypeDefinition[] = [
@@ -192,11 +192,10 @@ let mimeTypes: MimeType[] | null = null;
 function loadMimeTypes() {
     mimeTypes = JSON.parse(JSON.stringify(MIME_TYPES_DICT)) as MimeType[]; // clone
 
-    const enabledMimeTypes = options.getJson('codeNotesMimeTypes')
-        || MIME_TYPES_DICT.filter(mt => mt.default).map(mt => mt.mime);
+    const enabledMimeTypes = options.getJson("codeNotesMimeTypes") || MIME_TYPES_DICT.filter((mt) => mt.default).map((mt) => mt.mime);
 
     for (const mt of mimeTypes) {
-        mt.enabled = enabledMimeTypes.includes(mt.mime) || mt.mime === 'text/plain'; // text/plain is always enabled
+        mt.enabled = enabledMimeTypes.includes(mt.mime) || mt.mime === "text/plain"; // text/plain is always enabled
     }
 }
 
@@ -242,8 +241,7 @@ function getHighlightJsNameForMime(mimeType: string) {
  * @returns the normalized MIME type (e.g. `text-c-src`).
  */
 function normalizeMimeTypeForCKEditor(mimeType: string) {
-    return mimeType.toLowerCase()
-        .replace(/[\W_]+/g,"-");
+    return mimeType.toLowerCase().replace(/[\W_]+/g, "-");
 }
 
 export default {
@@ -252,4 +250,4 @@ export default {
     loadMimeTypes,
     getHighlightJsNameForMime,
     normalizeMimeTypeForCKEditor
-}
+};

@@ -33,23 +33,21 @@ const TPL = `
     }
     </style>
     
-    <div class="bx bx-x close-api-log-button" title="${t('api_log.close')}"></div>
+    <div class="bx bx-x close-api-log-button" title="${t("api_log.close")}"></div>
    
     <div class="api-log-container"></div>
 </div>`;
 
 export default class ApiLogWidget extends NoteContextAwareWidget {
     isEnabled() {
-        return this.note
-            && this.note.mime.startsWith('application/javascript;env=')
-            && super.isEnabled();
+        return this.note && this.note.mime.startsWith("application/javascript;env=") && super.isEnabled();
     }
 
     doRender() {
         this.$widget = $(TPL);
         this.toggle(false);
 
-        this.$logContainer = this.$widget.find('.api-log-container');
+        this.$logContainer = this.$widget.find(".api-log-container");
         this.$closeButton = this.$widget.find(".close-api-log-button");
         this.$closeButton.on("click", () => this.toggle(false));
     }
@@ -58,7 +56,7 @@ export default class ApiLogWidget extends NoteContextAwareWidget {
         this.$logContainer.empty();
     }
 
-    apiLogMessagesEvent({messages, noteId}) {
+    apiLogMessagesEvent({ messages, noteId }) {
         if (!this.isNote(noteId)) {
             return;
         }

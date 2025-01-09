@@ -1068,7 +1068,7 @@
     "layout-horizontal-title": "水平",
     "layout-vertical-description": "啓動欄位於左側（默認）",
     "layout-horizontal-description": "啓動欄位於標籤欄下方，標籤欄現在是全寬的。"
- },
+  },
   "zoom_factor": {
     "title": "縮放系數（僅桌面客戶端有效）",
     "description": "縮放也可以通過 CTRL+- 和 CTRL+= 快捷鍵進行控制。"

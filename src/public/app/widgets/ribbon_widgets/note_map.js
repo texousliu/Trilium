@@ -36,7 +36,7 @@ export default class NoteMapRibbonWidget extends NoteContextAwareWidget {
     constructor() {
         super();
 
-        this.noteMapWidget = new NoteMapWidget('ribbon');
+        this.noteMapWidget = new NoteMapWidget("ribbon");
         this.child(this.noteMapWidget);
     }
 
@@ -52,7 +52,7 @@ export default class NoteMapRibbonWidget extends NoteContextAwareWidget {
         return {
             show: this.isEnabled(),
             title: t("note_map.title"),
-            icon: 'bx bxs-network-chart'
+            icon: "bx bxs-network-chart"
         };
     }
 
@@ -62,44 +62,44 @@ export default class NoteMapRibbonWidget extends NoteContextAwareWidget {
         this.$container = this.$widget.find(".note-map-container");
         this.$container.append(this.noteMapWidget.render());
 
-        this.openState = 'small';
+        this.openState = "small";
 
-        this.$openFullButton = this.$widget.find('.open-full-button');
-        this.$openFullButton.on('click', () => {
+        this.$openFullButton = this.$widget.find(".open-full-button");
+        this.$openFullButton.on("click", () => {
             this.setFullHeight();
 
             this.$openFullButton.hide();
             this.$collapseButton.show();
 
-            this.openState = 'full';
+            this.openState = "full";
 
             this.noteMapWidget.setDimensions();
         });
 
-        this.$collapseButton = this.$widget.find('.collapse-button');
-        this.$collapseButton.on('click', () => {
+        this.$collapseButton = this.$widget.find(".collapse-button");
+        this.$collapseButton.on("click", () => {
             this.setSmallSize();
 
             this.$openFullButton.show();
             this.$collapseButton.hide();
 
-            this.openState = 'small';
+            this.openState = "small";
 
             this.noteMapWidget.setDimensions();
         });
 
         const handleResize = () => {
-            if (!this.noteMapWidget.graph) { // no graph has been even rendered
+            if (!this.noteMapWidget.graph) {
+                // no graph has been even rendered
                 return;
             }
 
-            if (this.openState === 'full') {
+            if (this.openState === "full") {
                 this.setFullHeight();
-            }
-            else if (this.openState === 'small') {
+            } else if (this.openState === "small") {
                 this.setSmallSize();
             }
-        }
+        };
 
         new ResizeObserver(handleResize).observe(this.$widget[0]);
     }
@@ -108,19 +108,15 @@ export default class NoteMapRibbonWidget extends NoteContextAwareWidget {
         const SMALL_SIZE_HEIGHT = 300;
         const width = this.$widget.width();
 
-        this.$widget.find('.note-map-container')
-            .height(SMALL_SIZE_HEIGHT)
-            .width(width);
+        this.$widget.find(".note-map-container").height(SMALL_SIZE_HEIGHT).width(width);
     }
 
     setFullHeight() {
-        const {top} = this.$widget[0].getBoundingClientRect();
+        const { top } = this.$widget[0].getBoundingClientRect();
 
         const height = $(window).height() - top;
         const width = this.$widget.width();
 
-        this.$widget.find('.note-map-container')
-            .height(height)
-            .width(width);
+        this.$widget.find(".note-map-container").height(height).width(width);
     }
 }

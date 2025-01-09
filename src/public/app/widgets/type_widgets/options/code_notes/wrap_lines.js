@@ -14,8 +14,7 @@ export default class WrapLinesOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$codeLineWrapEnabled = this.$widget.find(".line-wrap-enabled");
-        this.$codeLineWrapEnabled.on('change', () =>
-            this.updateCheckboxOption('codeLineWrapEnabled', this.$codeLineWrapEnabled));
+        this.$codeLineWrapEnabled.on("change", () => this.updateCheckboxOption("codeLineWrapEnabled", this.$codeLineWrapEnabled));
     }
 
     async optionsLoaded(options) {

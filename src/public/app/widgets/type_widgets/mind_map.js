@@ -137,16 +137,18 @@ const TPL = `
 `;
 
 export default class MindMapWidget extends TypeWidget {
-    static getType() { return "mindMap"; }
+    static getType() {
+        return "mindMap";
+    }
 
     doRender() {
         this.$widget = $(TPL);
-        this.$content = this.$widget.find(".mind-map-container");        
+        this.$content = this.$widget.find(".mind-map-container");
         this.$content.on("keydown", (e) => {
             /*
              * Some global shortcuts interfere with the default shortcuts of the mind map,
              * as defined here: https://mind-elixir.com/docs/guides/shortcuts
-             */            
+             */
             if (e.key === "F1") {
                 e.stopPropagation();
             }
@@ -158,7 +160,7 @@ export default class MindMapWidget extends TypeWidget {
             }
         });
 
-        super.doRender();        
+        super.doRender();
     }
 
     async doRefresh(note) {
@@ -170,19 +172,19 @@ export default class MindMapWidget extends TypeWidget {
         if (!window.MindElixir) {
             await libraryLoader.requireLibrary(libraryLoader.MIND_ELIXIR);
         }
-        
+
         this.#initLibrary();
-        await this.#loadData(note);   
+        await this.#loadData(note);
     }
 
     cleanup() {
         this.triggeredByUserOperation = false;
     }
-    
+
     async #loadData(note) {
-        const blob = await note.getBlob();        
+        const blob = await note.getBlob();
         const content = blob.getJsonContent() || MindElixir.new();
-        
+
         this.mind.refresh(content);
         this.mind.toCenter();
     }
@@ -202,7 +204,7 @@ export default class MindMapWidget extends TypeWidget {
                 this.spacedUpdate.scheduleUpdate();
             }
         });
-        
+
         // If the note is displayed directly after a refresh, the scroll ends up at (0,0), making it difficult for the user to see.
         // Adding an arbitrary wait until the element is attached to the DOM seems to do the trick for now.
         setTimeout(() => {
@@ -216,7 +218,7 @@ export default class MindMapWidget extends TypeWidget {
             return;
         }
 
-        const svgContent = await this.renderSvg();   
+        const svgContent = await this.renderSvg();
         return {
             content: mind.getDataString(),
             attachments: [
@@ -235,13 +237,13 @@ export default class MindMapWidget extends TypeWidget {
         return await this.mind.exportSvg().text();
     }
 
-    async entitiesReloadedEvent({loadResults}) {
+    async entitiesReloadedEvent({ loadResults }) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }
     }
 
-    async exportSvgEvent({ntxId}) {
+    async exportSvgEvent({ ntxId }) {
         if (!this.isNoteContext(ntxId) || this.note.type !== "mindMap") {
             return;
         }
@@ -249,5 +251,4 @@ export default class MindMapWidget extends TypeWidget {
         const svg = await this.renderSvg();
         utils.downloadSvg(this.note.title, svg);
     }
-
 }

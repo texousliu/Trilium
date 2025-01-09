@@ -27,9 +27,9 @@ const TPL = `
 export default class LocalizationOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
-        
+
         this.$localeSelect = this.$widget.find(".locale-select");
-        this.$localeSelect.on("change", async() => {
+        this.$localeSelect.on("change", async () => {
             const newLocale = this.$localeSelect.val();
             await server.put(`options/locale/${newLocale}`);
             utils.reloadFrontendApp("locale change");
@@ -46,9 +46,7 @@ export default class LocalizationOptions extends OptionsWidget {
         this.$localeSelect.empty();
 
         for (const locale of availableLocales) {
-            this.$localeSelect.append($("<option>")
-                .attr("value", locale.id)
-                .text(locale.name));
+            this.$localeSelect.append($("<option>").attr("value", locale.id).text(locale.name));
         }
 
         this.$localeSelect.val(options.locale);

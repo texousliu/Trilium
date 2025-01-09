@@ -16,10 +16,10 @@ export default class VacuumDatabaseOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$vacuumDatabaseButton = this.$widget.find(".vacuum-database-button");
-        this.$vacuumDatabaseButton.on('click', async () => {
+        this.$vacuumDatabaseButton.on("click", async () => {
             toastService.showMessage(t("vacuum_database.vacuuming_database"));
 
-            await server.post('database/vacuum-database');
+            await server.post("database/vacuum-database");
 
             toastService.showMessage(t("vacuum_database.database_vacuumed"));
         });

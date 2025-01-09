@@ -1,4 +1,4 @@
-import { formatDateTime } from "../../../utils/formatters.js"
+import { formatDateTime } from "../../../utils/formatters.js";
 import { t } from "../../../services/i18n.js";
 import OptionsWidget from "./options_widget.js";
 import server from "../../../services/server.js";
@@ -6,42 +6,42 @@ import toastService from "../../../services/toast.js";
 
 const TPL = `
 <div class="options-section">
-    <h4>${t('backup.automatic_backup')}</h4>
+    <h4>${t("backup.automatic_backup")}</h4>
     
-    <p>${t('backup.automatic_backup_description')}</p>
+    <p>${t("backup.automatic_backup_description")}</p>
     
     <ul style="list-style: none">
         <li>
             <label>
                 <input type="checkbox" class="daily-backup-enabled form-check-input">
-                ${t('backup.enable_daily_backup')}
+                ${t("backup.enable_daily_backup")}
             </label>
         </li>
         <li>    
             <label>
                 <input type="checkbox" class="weekly-backup-enabled form-check-input">
-                ${t('backup.enable_weekly_backup')}
+                ${t("backup.enable_weekly_backup")}
             </label>
         </li>
         <li>
         <label>
             <input type="checkbox" class="monthly-backup-enabled form-check-input">
-            ${t('backup.enable_monthly_backup')}
+            ${t("backup.enable_monthly_backup")}
             </label>
         </li>
     </ul>
     
-    <p>${t('backup.backup_recommendation')}</p>
+    <p>${t("backup.backup_recommendation")}</p>
 </div>
 
 <div class="options-section">
-    <h4>${t('backup.backup_now')}</h4>
+    <h4>${t("backup.backup_now")}</h4>
     
-    <button class="backup-database-button btn">${t('backup.backup_database_now')}</button>
+    <button class="backup-database-button btn">${t("backup.backup_database_now")}</button>
 </div>
 
 <div class="options-section">
-    <h4>${t('backup.existing_backups')}</h4>
+    <h4>${t("backup.existing_backups")}</h4>
     
     <table class="table table-stripped">
         <colgroup>
@@ -67,10 +67,10 @@ export default class BackupOptions extends OptionsWidget {
 
         this.$backupDatabaseButton = this.$widget.find(".backup-database-button");
 
-        this.$backupDatabaseButton.on('click', async () => {
-            const {backupFile} = await server.post('database/backup-database');
+        this.$backupDatabaseButton.on("click", async () => {
+            const { backupFile } = await server.post("database/backup-database");
 
-            toastService.showMessage(t('backup.database_backed_up_to', { backupFilePath: backupFile}), 10000);
+            toastService.showMessage(t("backup.database_backed_up_to", { backupFilePath: backupFile }), 10000);
 
             this.refresh();
         });
@@ -79,14 +79,11 @@ export default class BackupOptions extends OptionsWidget {
         this.$weeklyBackupEnabled = this.$widget.find(".weekly-backup-enabled");
         this.$monthlyBackupEnabled = this.$widget.find(".monthly-backup-enabled");
 
-        this.$dailyBackupEnabled.on('change', () =>
-            this.updateCheckboxOption('dailyBackupEnabled', this.$dailyBackupEnabled));
+        this.$dailyBackupEnabled.on("change", () => this.updateCheckboxOption("dailyBackupEnabled", this.$dailyBackupEnabled));
 
-        this.$weeklyBackupEnabled.on('change', () =>
-            this.updateCheckboxOption('weeklyBackupEnabled', this.$weeklyBackupEnabled));
+        this.$weeklyBackupEnabled.on("change", () => this.updateCheckboxOption("weeklyBackupEnabled", this.$weeklyBackupEnabled));
 
-        this.$monthlyBackupEnabled.on('change', () =>
-            this.updateCheckboxOption('monthlyBackupEnabled', this.$monthlyBackupEnabled));
+        this.$monthlyBackupEnabled.on("change", () => this.updateCheckboxOption("monthlyBackupEnabled", this.$monthlyBackupEnabled));
 
         this.$existingBackupList = this.$widget.find(".existing-backup-list-items");
     }
@@ -96,15 +93,17 @@ export default class BackupOptions extends OptionsWidget {
         this.setCheckboxState(this.$weeklyBackupEnabled, options.weeklyBackupEnabled);
         this.setCheckboxState(this.$monthlyBackupEnabled, options.monthlyBackupEnabled);
 
-        server.get("database/backups").then(backupFiles => {
+        server.get("database/backups").then((backupFiles) => {
             this.$existingBackupList.empty();
 
             if (!backupFiles.length) {
-                this.$existingBackupList.append($(`
+                this.$existingBackupList.append(
+                    $(`
                     <tr>
-                        <td class="empty-table-placeholder" colspan="2">${t('backup.no_backup_yet')}</td>
+                        <td class="empty-table-placeholder" colspan="2">${t("backup.no_backup_yet")}</td>
                     </tr>
-                `));
+                `)
+                );
 
                 return;
             }
@@ -116,13 +115,15 @@ export default class BackupOptions extends OptionsWidget {
                 return 0;
             });
 
-            for (const {filePath, mtime} of backupFiles) {
-                this.$existingBackupList.append($(`
+            for (const { filePath, mtime } of backupFiles) {
+                this.$existingBackupList.append(
+                    $(`
                     <tr>
-                        <td>${(mtime) ? formatDateTime(mtime) : "-"}</td>
+                        <td>${mtime ? formatDateTime(mtime) : "-"}</td>
                         <td>${filePath}</td>
                     </tr>
-                `));
+                `)
+                );
             }
         });
     }

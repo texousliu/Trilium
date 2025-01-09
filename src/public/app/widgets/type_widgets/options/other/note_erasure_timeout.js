@@ -23,11 +23,11 @@ export default class NoteErasureTimeoutOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$eraseEntitiesAfterTimeInSeconds = this.$widget.find(".erase-entities-after-time-in-seconds");
-        this.$eraseEntitiesAfterTimeInSeconds.on('change', () => this.updateOption('eraseEntitiesAfterTimeInSeconds', this.$eraseEntitiesAfterTimeInSeconds.val()));
+        this.$eraseEntitiesAfterTimeInSeconds.on("change", () => this.updateOption("eraseEntitiesAfterTimeInSeconds", this.$eraseEntitiesAfterTimeInSeconds.val()));
 
         this.$eraseDeletedNotesButton = this.$widget.find(".erase-deleted-notes-now-button");
-        this.$eraseDeletedNotesButton.on('click', () => {
-            server.post('notes/erase-deleted-notes-now').then(() => {
+        this.$eraseDeletedNotesButton.on("click", () => {
+            server.post("notes/erase-deleted-notes-now").then(() => {
                 toastService.showMessage(t("note_erasure_timeout.deleted_notes_erased"));
             });
         });

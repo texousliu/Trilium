@@ -3,13 +3,13 @@
  * will create 1000 new notes and some clones into the current document.db
  */
 
-import sqlInit from '../services/sql_init.js';
-import noteService from '../services/notes.js';
-import attributeService from '../services/attributes.js';
-import cls from '../services/cls.js';
-import cloningService from '../services/cloning.js';
-import loremIpsum from 'lorem-ipsum';
-import '../becca/entity_constructor.js';
+import sqlInit from "../services/sql_init.js";
+import noteService from "../services/notes.js";
+import attributeService from "../services/attributes.js";
+import cls from "../services/cls.js";
+import cloningService from "../services/cloning.js";
+import loremIpsum from "lorem-ipsum";
+import "../becca/entity_constructor.js";
 
 const noteCount = parseInt(process.argv[2]);
 
@@ -18,7 +18,7 @@ if (!noteCount) {
     process.exit(1);
 }
 
-const notes = ['root'];
+const notes = ["root"];
 
 function getRandomNoteId() {
     const index = Math.floor(Math.random() * notes.length);
@@ -30,7 +30,7 @@ async function start() {
     for (let i = 0; i < noteCount; i++) {
         const title = loremIpsum.loremIpsum({
             count: 1,
-            units: 'sentences',
+            units: "sentences",
             sentenceLowerBound: 1,
             sentenceUpperBound: 10
         });
@@ -38,19 +38,19 @@ async function start() {
         const paragraphCount = Math.floor(Math.random() * Math.random() * 100);
         const content = loremIpsum.loremIpsum({
             count: paragraphCount,
-            units: 'paragraphs',
+            units: "paragraphs",
             sentenceLowerBound: 1,
             sentenceUpperBound: 15,
             paragraphLowerBound: 3,
             paragraphUpperBound: 10,
-            format: 'html'
+            format: "html"
         });
 
         const { note } = noteService.createNewNote({
             parentNoteId: getRandomNoteId(),
             title,
             content,
-            type: 'text'
+            type: "text"
         });
 
         console.log(`Created note ${i}: ${title}`);
@@ -58,7 +58,7 @@ async function start() {
         if (Math.random() < 0.04) {
             const noteIdToClone = note.noteId;
             const parentNoteId = getRandomNoteId();
-            const prefix = Math.random() > 0.8 ? "prefix" : '';
+            const prefix = Math.random() > 0.8 ? "prefix" : "";
 
             const result = await cloningService.cloneNoteToBranch(noteIdToClone, parentNoteId, prefix);
 
@@ -68,16 +68,16 @@ async function start() {
         // does not have to be for the current note
         await attributeService.createAttribute({
             noteId: getRandomNoteId(),
-            type: 'label',
-            name: 'label',
-            value: 'value',
+            type: "label",
+            name: "label",
+            value: "value",
             isInheritable: Math.random() > 0.1 // 10% are inheritable
         });
 
         await attributeService.createAttribute({
             noteId: getRandomNoteId(),
-            type: 'relation',
-            name: 'relation',
+            type: "relation",
+            name: "relation",
             value: getRandomNoteId(),
             isInheritable: Math.random() > 0.1 // 10% are inheritable
         });

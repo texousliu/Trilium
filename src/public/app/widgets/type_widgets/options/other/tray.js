@@ -16,8 +16,7 @@ export default class TrayOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$trayEnabled = this.$widget.find(".tray-enabled");
-        this.$trayEnabled.on('change', () =>
-            this.updateOption('disableTray', !this.$trayEnabled.is(":checked") ? "true" : "false"));
+        this.$trayEnabled.on("change", () => this.updateOption("disableTray", !this.$trayEnabled.is(":checked") ? "true" : "false"));
     }
 
     isEnabled() {
@@ -25,6 +24,6 @@ export default class TrayOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options) {
-        this.$trayEnabled.prop("checked", options.disableTray !== 'true');
+        this.$trayEnabled.prop("checked", options.disableTray !== "true");
     }
 }

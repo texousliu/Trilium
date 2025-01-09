@@ -47,8 +47,7 @@ export function expect(val: any) {
         toThrow: (errorMessage: any) => {
             try {
                 val();
-            }
-            catch (e: any) {
+            } catch (e: any) {
                 if (e.message !== errorMessage) {
                     console.trace("toThrow caught exception, but messages differ");
                     console.error(`expected: ${errorMessage}`);
@@ -66,7 +65,7 @@ export function expect(val: any) {
             console.error(`got:      [none]`);
             errorCount++;
         }
-    }
+    };
 }
 
 export function execute() {
@@ -74,8 +73,7 @@ export function execute() {
 
     if (errorCount) {
         console.log(`!!!${errorCount} tests failed!!!`);
-    }
-    else {
+    } else {
         console.log("All tests passed!");
     }
 }

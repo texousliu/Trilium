@@ -20,7 +20,7 @@ export default class NoteLauncher extends AbstractLauncher {
             .icon(() => this.launcherNote.getIcon())
             .onClick((widget, evt) => this.launch(evt))
             .onAuxClick((widget, evt) => this.launch(evt))
-            .onContextMenu(evt => {
+            .onContextMenu((evt) => {
                 const targetNoteId = this.getTargetNoteId();
                 if (!targetNoteId) {
                     return;
@@ -56,7 +56,7 @@ export default class NoteLauncher extends AbstractLauncher {
     }
 
     getTargetNoteId() {
-        const targetNoteId = this.launcherNote.getRelationValue('target');
+        const targetNoteId = this.launcherNote.getRelationValue("target");
 
         if (!targetNoteId) {
             dialogService.info(t("note_launcher.this_launcher_doesnt_define_target_note"));
@@ -67,14 +67,14 @@ export default class NoteLauncher extends AbstractLauncher {
     }
 
     getHoistedNoteId() {
-        return this.launcherNote.getRelationValue('hoistedNote')
-            || appContext.tabManager.getActiveContext().hoistedNoteId;
+        return this.launcherNote.getRelationValue("hoistedNote") || appContext.tabManager.getActiveContext().hoistedNoteId;
     }
 
     getTitle() {
-        const shortcuts = this.launcherNote.getLabels("keyboardShortcut")
-            .map(l => l.value)
-            .filter(v => !!v)
+        const shortcuts = this.launcherNote
+            .getLabels("keyboardShortcut")
+            .map((l) => l.value)
+            .filter((v) => !!v)
             .join(", ");
 
         let title = super.getTitle();

@@ -1,9 +1,8 @@
-import { formatDateTime } from "../../utils/formatters.js"
+import { formatDateTime } from "../../utils/formatters.js";
 import { t } from "../../services/i18n.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import server from "../../services/server.js";
 import utils from "../../services/utils.js";
-
 
 const TPL = `
 <div class="note-info-widget">
@@ -79,7 +78,7 @@ export default class NoteInfoWidget extends NoteContextAwareWidget {
         return {
             show: this.isEnabled(),
             title: t("note_info_widget.title"),
-            icon: 'bx bx-info-circle'
+            icon: "bx bx-info-circle"
         };
     }
 
@@ -93,12 +92,12 @@ export default class NoteInfoWidget extends NoteContextAwareWidget {
         this.$type = this.$widget.find(".note-info-type");
         this.$mime = this.$widget.find(".note-info-mime");
 
-        this.$noteSizesWrapper = this.$widget.find('.note-sizes-wrapper');
+        this.$noteSizesWrapper = this.$widget.find(".note-sizes-wrapper");
         this.$noteSize = this.$widget.find(".note-size");
         this.$subTreeSize = this.$widget.find(".subtree-size");
 
         this.$calculateButton = this.$widget.find(".calculate-button");
-        this.$calculateButton.on('click', async () => {
+        this.$calculateButton.on("click", async () => {
             this.$noteSizesWrapper.show();
             this.$calculateButton.hide();
 
@@ -122,13 +121,9 @@ export default class NoteInfoWidget extends NoteContextAwareWidget {
         const metadata = await server.get(`notes/${this.noteId}/metadata`);
 
         this.$noteId.text(note.noteId);
-        this.$dateCreated
-            .text(formatDateTime(metadata.dateCreated))
-            .attr("title", metadata.dateCreated);
+        this.$dateCreated.text(formatDateTime(metadata.dateCreated)).attr("title", metadata.dateCreated);
 
-        this.$dateModified
-            .text(formatDateTime(metadata.dateModified))
-            .attr("title", metadata.dateModified);
+        this.$dateModified.text(formatDateTime(metadata.dateModified)).attr("title", metadata.dateModified);
 
         this.$type.text(note.type);
 

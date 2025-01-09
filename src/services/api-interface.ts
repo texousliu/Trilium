@@ -13,5 +13,5 @@ export interface SetupStatusResponse {
  */
 export interface SetupSyncSeedResponse {
     syncVersion: number;
-    options: OptionRow[]
+    options: OptionRow[];
 }

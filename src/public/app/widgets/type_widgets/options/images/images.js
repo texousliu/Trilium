@@ -47,22 +47,19 @@ export default class ImageOptions extends OptionsWidget {
         this.$imageMaxWidthHeight = this.$widget.find(".image-max-width-height");
         this.$imageJpegQuality = this.$widget.find(".image-jpeg-quality");
 
-        this.$imageMaxWidthHeight.on('change', () =>
-            this.updateOption('imageMaxWidthHeight', this.$imageMaxWidthHeight.val()));
+        this.$imageMaxWidthHeight.on("change", () => this.updateOption("imageMaxWidthHeight", this.$imageMaxWidthHeight.val()));
 
-        this.$imageJpegQuality.on('change', () =>
-            this.updateOption('imageJpegQuality', this.$imageJpegQuality.val().trim() || "75"));
+        this.$imageJpegQuality.on("change", () => this.updateOption("imageJpegQuality", this.$imageJpegQuality.val().trim() || "75"));
 
         this.$downloadImagesAutomatically = this.$widget.find(".download-images-automatically");
 
-        this.$downloadImagesAutomatically.on("change", () =>
-            this.updateCheckboxOption('downloadImagesAutomatically', this.$downloadImagesAutomatically));
+        this.$downloadImagesAutomatically.on("change", () => this.updateCheckboxOption("downloadImagesAutomatically", this.$downloadImagesAutomatically));
 
         this.$enableImageCompression = this.$widget.find(".image-compresion-enabled");
         this.$imageCompressionWrapper = this.$widget.find(".image-compression-enabled-wraper");
 
         this.$enableImageCompression.on("change", () => {
-            this.updateCheckboxOption('compressImages', this.$enableImageCompression);
+            this.updateCheckboxOption("compressImages", this.$enableImageCompression);
             this.setImageCompression();
         });
     }

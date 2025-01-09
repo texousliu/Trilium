@@ -9,7 +9,6 @@ import { t } from "../../services/i18n.js";
 const TPL = `<button type="button" class="action-button bx" style="padding-top: 10px;"></button>`;
 
 class MobileDetailMenuWidget extends BasicWidget {
-
     constructor(isHorizontalLayout) {
         super();
         this.isHorizontalLayout = isHorizontalLayout;
@@ -20,23 +19,20 @@ class MobileDetailMenuWidget extends BasicWidget {
 
         this.$widget.addClass(this.isHorizontalLayout ? "bx-dots-vertical-rounded" : "bx-menu");
 
-        this.$widget.on("click", async e => {
+        this.$widget.on("click", async (e) => {
             const note = appContext.tabManager.getActiveContextNote();
 
             contextMenu.show({
                 x: e.pageX,
                 y: e.pageY,
                 items: [
-                    { title: t("mobile_detail_menu.insert_child_note"), command: "insertChildNote", uiIcon: "bx bx-plus",
-                        enabled: note.type !== 'search' },
-                    { title: t("mobile_detail_menu.delete_this_note"), command: "delete", uiIcon: "bx bx-trash",
-                        enabled: note.noteId !== 'root' }
+                    { title: t("mobile_detail_menu.insert_child_note"), command: "insertChildNote", uiIcon: "bx bx-plus", enabled: note.type !== "search" },
+                    { title: t("mobile_detail_menu.delete_this_note"), command: "delete", uiIcon: "bx bx-trash", enabled: note.noteId !== "root" }
                 ],
-                selectMenuItemHandler: async ({command}) => {
+                selectMenuItemHandler: async ({ command }) => {
                     if (command === "insertChildNote") {
                         noteCreateService.createNote(appContext.tabManager.getActiveContextNotePath());
-                    }
-                    else if (command === "delete") {
+                    } else if (command === "delete") {
                         const notePath = appContext.tabManager.getActiveContextNotePath();
                         const branchId = await treeService.getBranchIdFromUrl(notePath);
 
@@ -45,10 +41,9 @@ class MobileDetailMenuWidget extends BasicWidget {
                         }
 
                         if (await branchService.deleteNotes([branchId])) {
-                            this.triggerCommand('setActiveScreen', {screen:'tree'})
+                            this.triggerCommand("setActiveScreen", { screen: "tree" });
                         }
-                    }
-                    else {
+                    } else {
                         throw new Error(t("mobile_detail_menu.error_unrecognized_command", { command }));
                     }
                 }

@@ -17,12 +17,12 @@ export default class HeadingStyleOptions extends OptionsWidget {
         this.$widget = $(TPL);
         this.$body = $("body");
         this.$headingStyle = this.$widget.find(".heading-style");
-        this.$headingStyle.on('change', () => {
+        this.$headingStyle.on("change", () => {
             const newHeadingStyle = this.$headingStyle.val();
 
             this.toggleBodyClass("heading-style-", newHeadingStyle);
 
-            this.updateOption('headingStyle', newHeadingStyle);
+            this.updateOption("headingStyle", newHeadingStyle);
         });
     }
 
@@ -31,7 +31,8 @@ export default class HeadingStyleOptions extends OptionsWidget {
     }
 
     toggleBodyClass(prefix, value) {
-        for (const clazz of Array.from(this.$body[0].classList)) { // create copy to safely iterate over while removing classes
+        for (const clazz of Array.from(this.$body[0].classList)) {
+            // create copy to safely iterate over while removing classes
             if (clazz.startsWith(prefix)) {
                 this.$body.removeClass(clazz);
             }

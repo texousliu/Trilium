@@ -18,7 +18,7 @@ function greet(times) {
     console.log("Hello World!");
   }
 }
-`
+`;
 
 const TPL = `
 <div class="options-section">
@@ -77,14 +77,12 @@ export default class CodeBlockOptions extends OptionsWidget {
     #setupPreview(shouldEnableSyntaxHighlight) {
         const text = SAMPLE_CODE;
         if (shouldEnableSyntaxHighlight) {
-            library_loader
-                .requireLibrary(library_loader.HIGHLIGHT_JS)
-                .then(() => {
-                    const highlightedText = hljs.highlight(text, {
-                        language: SAMPLE_LANGUAGE
-                    });
-                    this.$sampleEl.html(highlightedText.value);
+            library_loader.requireLibrary(library_loader.HIGHLIGHT_JS).then(() => {
+                const highlightedText = hljs.highlight(text, {
+                    language: SAMPLE_LANGUAGE
                 });
+                this.$sampleEl.html(highlightedText.value);
+            });
         } else {
             this.$sampleEl.text(text);
         }
@@ -94,13 +92,11 @@ export default class CodeBlockOptions extends OptionsWidget {
         const themeGroups = await server.get("options/codeblock-themes");
         this.$themeSelect.empty();
 
-        for (const [ key, themes ] of Object.entries(themeGroups)) {
-            const $group = (key ? $("<optgroup>").attr("label", key) : null);
+        for (const [key, themes] of Object.entries(themeGroups)) {
+            const $group = key ? $("<optgroup>").attr("label", key) : null;
 
             for (const theme of themes) {
-                const option = $("<option>")
-                    .attr("value", theme.val)
-                    .text(theme.title);
+                const option = $("<option>").attr("value", theme.val).text(theme.title);
 
                 if ($group) {
                     $group.append(option);

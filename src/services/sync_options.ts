@@ -12,20 +12,20 @@ import config from "./config.js";
  */
 
 function get(name: OptionNames) {
-    return (config['Sync'] && config['Sync'][name]) || optionService.getOption(name);
+    return (config["Sync"] && config["Sync"][name]) || optionService.getOption(name);
 }
 
 export default {
     // env variable is the easiest way to guarantee we won't overwrite prod data during development
     // after copying prod document/data directory
-    getSyncServerHost: () => process.env.TRILIUM_SYNC_SERVER_HOST || get('syncServerHost'),
+    getSyncServerHost: () => process.env.TRILIUM_SYNC_SERVER_HOST || get("syncServerHost"),
     isSyncSetup: () => {
-        const syncServerHost = get('syncServerHost');
+        const syncServerHost = get("syncServerHost");
 
         // special value "disabled" is here to support a use case where the document is configured with sync server,
         // and we need to override it with config from config.ini
-        return !!syncServerHost && syncServerHost !== 'disabled';
+        return !!syncServerHost && syncServerHost !== "disabled";
     },
-    getSyncTimeout: () => parseInt(get('syncServerTimeout')) || 120000,
-    getSyncProxy: () => get('syncProxy')
+    getSyncTimeout: () => parseInt(get("syncServerTimeout")) || 120000,
+    getSyncProxy: () => get("syncProxy")
 };

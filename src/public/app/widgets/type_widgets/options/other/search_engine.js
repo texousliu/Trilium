@@ -36,11 +36,11 @@ const TPL = `
 </div>`;
 
 const SEARCH_ENGINES = {
-    "Bing": "https://www.bing.com/search?q={keyword}",
-    "Baidu": "https://www.baidu.com/s?wd={keyword}",
-    "DuckDuckGo": "https://duckduckgo.com/?q={keyword}",
-    "Google": "https://www.google.com/search?q={keyword}",
-}
+    Bing: "https://www.bing.com/search?q={keyword}",
+    Baidu: "https://www.baidu.com/s?wd={keyword}",
+    DuckDuckGo: "https://duckduckgo.com/?q={keyword}",
+    Google: "https://www.google.com/search?q={keyword}"
+};
 
 export default class SearchEngineOptions extends OptionsWidget {
     isEnabled() {
@@ -55,16 +55,16 @@ export default class SearchEngineOptions extends OptionsWidget {
         this.$customSearchEngineName = this.$widget.find(".custom-search-engine-name");
         this.$customSearchEngineUrl = this.$widget.find(".custom-search-engine-url");
 
-        this.$predefinedSearchEngineSelect.on('change', () => {
+        this.$predefinedSearchEngineSelect.on("change", () => {
             const predefinedSearchEngine = this.$predefinedSearchEngineSelect.val();
             this.$customSearchEngineName[0].value = predefinedSearchEngine;
             this.$customSearchEngineUrl[0].value = SEARCH_ENGINES[predefinedSearchEngine];
         });
 
-        this.$form.on('submit', () => {
+        this.$form.on("submit", () => {
             this.updateMultipleOptions({
-                'customSearchEngineName': this.$customSearchEngineName.val(),
-                'customSearchEngineUrl': this.$customSearchEngineUrl.val()
+                customSearchEngineName: this.$customSearchEngineName.val(),
+                customSearchEngineUrl: this.$customSearchEngineUrl.val()
             });
         });
     }

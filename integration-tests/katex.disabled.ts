@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 const ROOT_URL = "http://localhost:8080";
 const LOGIN_PASSWORD = "eliandoran";
@@ -12,7 +12,6 @@ test("Can insert equations", async ({ page }) => {
     //     .click();
 
     const activeNote = page.locator(".component.note-split:visible");
-    const noteContent = activeNote
-        .locator(".note-detail-editable-text-editor")
+    const noteContent = activeNote.locator(".note-detail-editable-text-editor");
     await noteContent.press("Ctrl+M");
 });

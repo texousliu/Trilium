@@ -1,4 +1,3 @@
-
 export interface FBlobRow {
     blobId: string;
     content: string;
@@ -8,7 +7,6 @@ export interface FBlobRow {
 }
 
 export default class FBlob {
-
     blobId: string;
     /**
      * can either contain the whole content (in e.g. string notes), only part (large text notes) or nothing at all (binary notes, images)
@@ -40,8 +38,7 @@ export default class FBlob {
     getJsonContentSafely(): unknown | null {
         try {
             return this.getJsonContent();
-        }
-        catch (e) {
+        } catch (e) {
             return null;
         }
     }

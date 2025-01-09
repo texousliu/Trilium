@@ -29,7 +29,7 @@ const TPL = `
     }
     </style>
 
-    <input autocomplete="off" value="" placeholder="${t('note_title.placeholder')}" class="note-title" tabindex="100">
+    <input autocomplete="off" value="" placeholder="${t("note_title.placeholder")}" class="note-title" tabindex="100">
 </div>`;
 
 export default class NoteTitleWidget extends NoteContextAwareWidget {
@@ -41,7 +41,7 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
 
             protectedSessionHolder.touchProtectedSessionIfNecessary(this.note);
 
-            await server.put(`notes/${this.noteId}/title`, {title}, this.componentId);
+            await server.put(`notes/${this.noteId}/title`, { title }, this.componentId);
         });
 
         this.deleteNoteOnEscape = false;
@@ -53,35 +53,29 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
         this.$widget = $(TPL);
         this.$noteTitle = this.$widget.find(".note-title");
 
-        this.$noteTitle.on('input', () => this.spacedUpdate.scheduleUpdate());
+        this.$noteTitle.on("input", () => this.spacedUpdate.scheduleUpdate());
 
-        this.$noteTitle.on('blur', () => {
+        this.$noteTitle.on("blur", () => {
             this.spacedUpdate.updateNowIfNecessary();
 
             this.deleteNoteOnEscape = false;
         });
 
-        shortcutService.bindElShortcut(this.$noteTitle, 'esc', () => {
+        shortcutService.bindElShortcut(this.$noteTitle, "esc", () => {
             if (this.deleteNoteOnEscape && this.noteContext.isActive()) {
                 branchService.deleteNotes(Object.values(this.noteContext.note.parentToBranch));
             }
         });
 
-        shortcutService.bindElShortcut(this.$noteTitle, 'return', () => {
-            this.triggerCommand('focusOnDetail', {ntxId: this.noteContext.ntxId});
+        shortcutService.bindElShortcut(this.$noteTitle, "return", () => {
+            this.triggerCommand("focusOnDetail", { ntxId: this.noteContext.ntxId });
         });
     }
 
     async refreshWithNote(note) {
-        const isReadOnly = (note.isProtected && !protectedSessionHolder.isProtectedSessionAvailable())
-            || utils.isLaunchBarConfig(note.noteId)
-            || this.noteContext.viewScope.viewMode !== 'default';
+        const isReadOnly = (note.isProtected && !protectedSessionHolder.isProtectedSessionAvailable()) || utils.isLaunchBarConfig(note.noteId) || this.noteContext.viewScope.viewMode !== "default";
 
-        this.$noteTitle.val(
-            isReadOnly
-                ? await this.noteContext.getNavigationTitle()
-                : note.title
-        );
+        this.$noteTitle.val(isReadOnly ? await this.noteContext.getNavigationTitle() : note.title);
         this.$noteTitle.prop("readonly", isReadOnly);
 
         this.setProtectedStatus(note);
@@ -92,13 +86,13 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
         this.$noteTitle.toggleClass("protected", !!note.isProtected);
     }
 
-    async beforeNoteSwitchEvent({noteContext}) {
+    async beforeNoteSwitchEvent({ noteContext }) {
         if (this.isNoteContext(noteContext.ntxId)) {
             await this.spacedUpdate.updateNowIfNecessary();
         }
     }
 
-    async beforeNoteContextRemoveEvent({ntxIds}) {
+    async beforeNoteContextRemoveEvent({ ntxIds }) {
         if (this.isNoteContext(ntxIds)) {
             await this.spacedUpdate.updateNowIfNecessary();
         }
@@ -106,21 +100,19 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
 
     focusOnTitleEvent() {
         if (this.noteContext && this.noteContext.isActive()) {
-            this.$noteTitle.trigger('focus');
+            this.$noteTitle.trigger("focus");
         }
     }
 
-    focusAndSelectTitleEvent({isNewNote} = {isNewNote: false}) {
+    focusAndSelectTitleEvent({ isNewNote } = { isNewNote: false }) {
         if (this.noteContext && this.noteContext.isActive()) {
-            this.$noteTitle
-                .trigger('focus')
-                .trigger('select');
+            this.$noteTitle.trigger("focus").trigger("select");
 
             this.deleteNoteOnEscape = isNewNote;
         }
     }
 
-    entitiesReloadedEvent({loadResults}) {
+    entitiesReloadedEvent({ loadResults }) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             // not updating the title specifically since the synced title might be older than what the user is currently typing
             this.setProtectedStatus(this.note);

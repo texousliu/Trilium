@@ -16,22 +16,20 @@ export default class AdvancedSyncOptions extends OptionsWidget {
         this.$widget = $(TPL);
         this.$forceFullSyncButton = this.$widget.find(".force-full-sync-button");
         this.$fillEntityChangesButton = this.$widget.find(".fill-entity-changes-button");
-        this.$forceFullSyncButton.on('click', async () => {
-            await server.post('sync/force-full-sync');
+        this.$forceFullSyncButton.on("click", async () => {
+            await server.post("sync/force-full-sync");
 
             toastService.showMessage(t("sync.full_sync_triggered"));
         });
 
-        this.$fillEntityChangesButton.on('click', async () => {
+        this.$fillEntityChangesButton.on("click", async () => {
             toastService.showMessage(t("sync.filling_entity_changes"));
 
-            await server.post('sync/fill-entity-changes');
+            await server.post("sync/fill-entity-changes");
 
             toastService.showMessage(t("sync.sync_rows_filled_successfully"));
         });
     }
 
-    async optionsLoaded(options) {
-
-    }
+    async optionsLoaded(options) {}
 }

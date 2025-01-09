@@ -15,22 +15,22 @@ const TPL = `
     </div>
 
     <button class="erase-excess-revision-snapshots-now-button btn btn-sm" style="padding: 0 10px">
-                    ${t('revisions_snapshot_limit.erase_excess_revision_snapshots')}</button>
+                    ${t("revisions_snapshot_limit.erase_excess_revision_snapshots")}</button>
 </div>`;
 
 export default class RevisionSnapshotsLimitOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$revisionSnapshotsNumberLimit = this.$widget.find(".revision-snapshot-number-limit");
-        this.$revisionSnapshotsNumberLimit.on('change', () => {
+        this.$revisionSnapshotsNumberLimit.on("change", () => {
             let revisionSnapshotNumberLimit = this.$revisionSnapshotsNumberLimit.val();
             if (!isNaN(revisionSnapshotNumberLimit) && revisionSnapshotNumberLimit >= -1) {
-                this.updateOption('revisionSnapshotNumberLimit', revisionSnapshotNumberLimit)
-            } 
+                this.updateOption("revisionSnapshotNumberLimit", revisionSnapshotNumberLimit);
+            }
         });
         this.$eraseExcessRevisionSnapshotsButton = this.$widget.find(".erase-excess-revision-snapshots-now-button");
-        this.$eraseExcessRevisionSnapshotsButton.on('click', () => {
-            server.post('revisions/erase-all-excess-revisions').then(() => {
+        this.$eraseExcessRevisionSnapshotsButton.on("click", () => {
+            server.post("revisions/erase-all-excess-revisions").then(() => {
                 toastService.showMessage(t("revisions_snapshot_limit.erase_excess_revision_snapshots_prompt"));
             });
         });

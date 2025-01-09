@@ -3,9 +3,15 @@ import { BlobRow } from "./rows.js";
 
 // TODO: Why this does not extend the abstract becca?
 class BBlob extends AbstractBeccaEntity<BBlob> {
-    static get entityName() { return "blobs"; }
-    static get primaryKeyName() { return "blobId"; }
-    static get hashedProperties() { return ["blobId", "content"]; }
+    static get entityName() {
+        return "blobs";
+    }
+    static get primaryKeyName() {
+        return "blobId";
+    }
+    static get hashedProperties() {
+        return ["blobId", "content"];
+    }
 
     content!: string | Buffer;
     contentLength!: number;

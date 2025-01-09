@@ -40,7 +40,9 @@ export default class ElectronIntegrationOptions extends OptionsWidget {
         this.$widget = $(TPL);
 
         this.$zoomFactorSelect = this.$widget.find(".zoom-factor-select");
-        this.$zoomFactorSelect.on('change', () => { appContext.triggerCommand('setZoomFactorAndSave', {zoomFactor: this.$zoomFactorSelect.val()}); });
+        this.$zoomFactorSelect.on("change", () => {
+            appContext.triggerCommand("setZoomFactorAndSave", { zoomFactor: this.$zoomFactorSelect.val() });
+        });
 
         this.$nativeTitleBar = this.$widget.find("input.native-title-bar");
         this.$nativeTitleBar.on("change", () => this.updateCheckboxOption("nativeTitleBarVisible", this.$nativeTitleBar));
@@ -50,12 +52,12 @@ export default class ElectronIntegrationOptions extends OptionsWidget {
 
         const restartAppButton = this.$widget.find(".restart-app-button");
         restartAppButton.on("click", () => {
-            const app = utils.dynamicRequire('@electron/remote').app;
+            const app = utils.dynamicRequire("@electron/remote").app;
             app.relaunch();
             app.exit();
         });
     }
-    
+
     isEnabled() {
         return utils.isElectron();
     }

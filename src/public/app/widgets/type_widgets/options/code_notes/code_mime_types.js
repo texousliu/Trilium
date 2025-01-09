@@ -4,7 +4,7 @@ import mimeTypesService from "../../../../services/mime_types.js";
 
 const TPL = `
 <div class="options-section">
-    <h4>${t('code_mime_types.title')}</h4>
+    <h4>${t("code_mime_types.title")}</h4>
     
     <ul class="options-mime-types" style="list-style-type: none;"></ul>
 </div>
@@ -34,18 +34,12 @@ function groupMimeTypesAlphabetically(ungroupedMimeTypes) {
 }
 
 function buildSelectionForMimeType(mimeType) {
-    const id = "code-mime-type-" + (idCtr++);
-    return ($("<li>")
-        .append($('<input type="checkbox" class="form-check-input">')
-            .attr("id", id)
-            .attr("data-mime-type", mimeType.mime)
-            .prop("checked", mimeType.enabled))
-        .on('change', () => this.save())
+    const id = "code-mime-type-" + idCtr++;
+    return $("<li>")
+        .append($('<input type="checkbox" class="form-check-input">').attr("id", id).attr("data-mime-type", mimeType.mime).prop("checked", mimeType.enabled))
+        .on("change", () => this.save())
         .append(" &nbsp; ")
-        .append($('<label>')
-            .attr("for", id)
-            .text(mimeType.title))
-    );
+        .append($("<label>").attr("for", id).text(mimeType.title));
 }
 
 export default class CodeMimeTypesOptions extends OptionsWidget {
@@ -63,10 +57,10 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
 
         // Plain text is displayed at the top intentionally.
         this.$mimeTypes.append(buildSelectionForMimeType.call(this, plainTextMimeType));
-        
-        for (const [ initial, mimeTypes ] of Object.entries(groupedMimeTypes)) {
+
+        for (const [initial, mimeTypes] of Object.entries(groupedMimeTypes)) {
             const $section = $("<section>");
-            $section.append($("<h5>").text(initial));            
+            $section.append($("<h5>").text(initial));
 
             for (const mimeType of mimeTypes) {
                 $section.append(buildSelectionForMimeType.call(this, mimeType));
@@ -79,10 +73,9 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
     async save() {
         const enabledMimeTypes = [];
 
-        this.$mimeTypes.find("input:checked").each(
-            (i, el) => enabledMimeTypes.push(this.$widget.find(el).attr("data-mime-type")));
+        this.$mimeTypes.find("input:checked").each((i, el) => enabledMimeTypes.push(this.$widget.find(el).attr("data-mime-type")));
 
-        await this.updateOption('codeNotesMimeTypes', JSON.stringify(enabledMimeTypes));
+        await this.updateOption("codeNotesMimeTypes", JSON.stringify(enabledMimeTypes));
 
         mimeTypesService.loadMimeTypes();
     }

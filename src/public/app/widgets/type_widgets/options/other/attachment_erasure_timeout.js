@@ -23,11 +23,11 @@ export default class AttachmentErasureTimeoutOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$eraseUnusedAttachmentsAfterTimeInSeconds = this.$widget.find(".erase-unused-attachments-after-time-in-seconds");
-        this.$eraseUnusedAttachmentsAfterTimeInSeconds.on('change', () => this.updateOption('eraseUnusedAttachmentsAfterSeconds', this.$eraseUnusedAttachmentsAfterTimeInSeconds.val()));
+        this.$eraseUnusedAttachmentsAfterTimeInSeconds.on("change", () => this.updateOption("eraseUnusedAttachmentsAfterSeconds", this.$eraseUnusedAttachmentsAfterTimeInSeconds.val()));
 
         this.$eraseUnusedAttachmentsNowButton = this.$widget.find(".erase-unused-attachments-now-button");
-        this.$eraseUnusedAttachmentsNowButton.on('click', () => {
-            server.post('notes/erase-unused-attachments-now').then(() => {
+        this.$eraseUnusedAttachmentsNowButton.on("click", () => {
+            server.post("notes/erase-unused-attachments-now").then(() => {
                 toastService.showMessage(t("attachment_erasure_timeout.unused_attachments_erased"));
             });
         });

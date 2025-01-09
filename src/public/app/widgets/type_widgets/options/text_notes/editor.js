@@ -42,19 +42,18 @@ export default class EditorOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$body = $("body");
-        this.$widget.find(`input[name="editor-type"]`).on('change', async () => {
+        this.$widget.find(`input[name="editor-type"]`).on("change", async () => {
             const newEditorType = this.$widget.find(`input[name="editor-type"]:checked`).val();
-            await this.updateOption('textNoteEditorType', newEditorType);
+            await this.updateOption("textNoteEditorType", newEditorType);
             utils.reloadFrontendApp("editor type change");
         });
-        
+
         this.$multilineToolbarCheckbox = this.$widget.find('input[name="multiline-toolbar"]');
         this.$multilineToolbarCheckbox.on("change", () => this.updateCheckboxOption("textNoteEditorMultilineToolbar", this.$multilineToolbarCheckbox));
     }
 
     async optionsLoaded(options) {
-        this.$widget.find(`input[name="editor-type"][value="${options.textNoteEditorType}"]`)
-                    .prop("checked", "true");
+        this.$widget.find(`input[name="editor-type"][value="${options.textNoteEditorType}"]`).prop("checked", "true");
         this.setCheckboxState(this.$multilineToolbarCheckbox, options.textNoteEditorMultilineToolbar);
     }
 }

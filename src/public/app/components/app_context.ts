@@ -98,7 +98,7 @@ export type CommandMappings = {
     showInfoDialog: ConfirmWithMessageOptions;
     showConfirmDialog: ConfirmWithMessageOptions;
     openNewNoteSplit: NoteCommandData;
-    openInWindow: NoteCommandData,
+    openInWindow: NoteCommandData;
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
@@ -139,11 +139,12 @@ export type CommandMappings = {
     resetLauncher: ContextMenuCommandData;
 
     executeInActiveNoteDetailWidget: CommandData & {
-        callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void
+        callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void;
     };
-    executeWithTextEditor: CommandData & ExecuteCommandData & {
-        callback?: GetTextEditorCallback;
-    };
+    executeWithTextEditor: CommandData &
+        ExecuteCommandData & {
+            callback?: GetTextEditorCallback;
+        };
     executeWithCodeEditor: CommandData & ExecuteCommandData;
     executeWithContentElement: CommandData & ExecuteCommandData;
     executeWithTypeWidget: CommandData & ExecuteCommandData;
@@ -177,8 +178,8 @@ export type CommandMappings = {
     /** Sets the active {@link Screen} (e.g. to toggle the tree sidebar). It triggers the {@link EventMappings.activeScreenChanged} event, but only if the provided <em>screen</em> is different than the current one. */
     setActiveScreen: CommandData & {
         screen: Screen;
-    }
-}
+    };
+};
 
 type EventMappings = {
     initialRenderComplete: {};
@@ -195,57 +196,57 @@ type EventMappings = {
         messages: string[];
     };
     entitiesReloaded: {
-        loadResults: LoadResults
+        loadResults: LoadResults;
     };
     addNewLabel: CommandData;
     addNewRelation: CommandData;
     sqlQueryResults: CommandData & {
         results: SqlExecuteResults;
-    },
+    };
     readOnlyTemporarilyDisabled: {
-        noteContext: NoteContext
-    },
+        noteContext: NoteContext;
+    };
     /** Triggered when the {@link CommandMappings.setActiveScreen} command is invoked. */
     activeScreenChanged: {
         activeScreen: Screen;
-    },
+    };
     activeContextChanged: {
         noteContext: NoteContext;
-    },
+    };
     noteSwitched: {
         noteContext: NoteContext;
         notePath: string;
-    },
+    };
     noteSwitchedAndActivatedEvent: {
         noteContext: NoteContext;
         notePath: string;
-    },
+    };
     setNoteContext: {
         noteContext: NoteContext;
-    },
+    };
     noteTypeMimeChangedEvent: {
         noteId: string;
-    },
+    };
     reEvaluateHighlightsListWidgetVisibility: {
         noteId: string | undefined;
-    },
+    };
     showHighlightsListWidget: {
         noteId: string;
-    }
-}
+    };
+};
 
 export type EventListener<T extends EventNames> = {
-    [key in T as `${key}Event`]: (data: EventData<T>) => void
-}
+    [key in T as `${key}Event`]: (data: EventData<T>) => void;
+};
 
 export type CommandListener<T extends CommandNames> = {
-    [key in T as `${key}Command`]: (data: CommandListenerData<T>) => void
-}
+    [key in T as `${key}Command`]: (data: CommandListenerData<T>) => void;
+};
 
 export type CommandListenerData<T extends CommandNames> = CommandMappings[T];
 export type EventData<T extends EventNames> = EventMappings[T];
 
-type CommandAndEventMappings = (CommandMappings & EventMappings);
+type CommandAndEventMappings = CommandMappings & EventMappings;
 
 /**
  * This type is a discriminated union which contains all the possible commands that can be triggered via {@link AppContext.triggerCommand}.
@@ -253,7 +254,7 @@ type CommandAndEventMappings = (CommandMappings & EventMappings);
 export type CommandNames = keyof CommandMappings;
 type EventNames = keyof EventMappings;
 
-type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType ? K : never; }[keyof T];
+type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType ? K : never }[keyof T];
 
 /**
  * Generic which filters {@link CommandNames} to provide only those commands that take in as data the desired implementation of {@link CommandData}. Mostly useful for contextual menu, to enforce consistency in the commands.
@@ -261,7 +262,6 @@ type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType 
 export type FilteredCommandNames<T extends CommandData> = keyof Pick<CommandMappings, FilterByValueType<CommandMappings, T>>;
 
 class AppContext extends Component {
-
     isMainWindow: boolean;
     components: Component[];
     beforeUnloadListeners: WeakRef<BeforeUploadListener>[];
@@ -304,13 +304,7 @@ class AppContext extends Component {
     initComponents() {
         this.tabManager = new TabManager();
 
-        this.components = [
-            this.tabManager,
-            new RootCommandExecutor(),
-            new Entrypoints(),
-            new MainTreeExecutors(),
-            new ShortcutComponent()
-        ];
+        this.components = [this.tabManager, new RootCommandExecutor(), new Entrypoints(), new MainTreeExecutors(), new ShortcutComponent()];
 
         if (utils.isMobile()) {
             this.components.push(new MobileScreenSwitcherExecutor());
@@ -337,21 +331,21 @@ class AppContext extends Component {
 
         $("body").append($renderedWidget);
 
-        $renderedWidget.on('click', "[data-trigger-command]", function() {
+        $renderedWidget.on("click", "[data-trigger-command]", function () {
             if ($(this).hasClass("disabled")) {
                 return;
             }
 
-            const commandName = $(this).attr('data-trigger-command');
+            const commandName = $(this).attr("data-trigger-command");
             const $component = $(this).closest(".component");
             const component = $component.prop("component");
 
-            component.triggerCommand(commandName, {$el: $(this)});
+            component.triggerCommand(commandName, { $el: $(this) });
         });
 
         this.child(rootWidget);
 
-        this.triggerEvent('initialRenderComplete');
+        this.triggerEvent("initialRenderComplete");
     }
 
     // TODO: Remove ignore once all commands are mapped out.
@@ -378,7 +372,7 @@ class AppContext extends Component {
     }
 
     getComponentByEl(el: HTMLElement) {
-        return $(el).closest(".component").prop('component');
+        return $(el).closest(".component").prop("component");
     }
 
     addBeforeUnloadListener(obj: BeforeUploadListener) {
@@ -394,10 +388,10 @@ class AppContext extends Component {
 const appContext = new AppContext(window.glob.isMainWindow);
 
 // we should save all outstanding changes before the page/app is closed
-$(window).on('beforeunload', () => {
+$(window).on("beforeunload", () => {
     let allSaved = true;
 
-    appContext.beforeUnloadListeners = appContext.beforeUnloadListeners.filter(wr => !!wr.deref());
+    appContext.beforeUnloadListeners = appContext.beforeUnloadListeners.filter((wr) => !!wr.deref());
 
     for (const weakRef of appContext.beforeUnloadListeners) {
         const component = weakRef.deref();
@@ -420,8 +414,8 @@ $(window).on('beforeunload', () => {
     }
 });
 
-$(window).on('hashchange', function() {
-    const {notePath, ntxId, viewScope} = linkService.parseNavigationStateFromUrl(window.location.href);
+$(window).on("hashchange", function () {
+    const { notePath, ntxId, viewScope } = linkService.parseNavigationStateFromUrl(window.location.href);
 
     if (notePath || ntxId) {
         appContext.tabManager.switchToNoteContext(ntxId, notePath, viewScope);

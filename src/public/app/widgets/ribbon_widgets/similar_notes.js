@@ -41,16 +41,14 @@ export default class SimilarNotesWidget extends NoteContextAwareWidget {
     }
 
     isEnabled() {
-        return super.isEnabled()
-            && this.note.type !== 'search'
-            && !this.note.isLabelTruthy('similarNotesWidgetDisabled');
+        return super.isEnabled() && this.note.type !== "search" && !this.note.isLabelTruthy("similarNotesWidgetDisabled");
     }
 
     getTitle() {
         return {
             show: this.isEnabled(),
-            title: t('similar_notes.title'),
-            icon: 'bx bx-bar-chart'
+            title: t("similar_notes.title"),
+            icon: "bx bx-bar-chart"
         };
     }
 
@@ -68,16 +66,16 @@ export default class SimilarNotesWidget extends NoteContextAwareWidget {
         const similarNotes = await server.get(`similar-notes/${this.noteId}`);
 
         if (similarNotes.length === 0) {
-            this.$similarNotesWrapper.empty().append(t('similar_notes.no_similar_notes_found'));
+            this.$similarNotesWrapper.empty().append(t("similar_notes.no_similar_notes_found"));
 
             return;
         }
 
-        const noteIds = similarNotes.flatMap(note => note.notePath);
+        const noteIds = similarNotes.flatMap((note) => note.notePath);
 
         await froca.getNotes(noteIds, true); // preload all at once
 
-        const $list = $('<div>');
+        const $list = $("<div>");
 
         for (const similarNote of similarNotes) {
             const note = await froca.getNote(similarNote.noteId, true);
@@ -86,8 +84,7 @@ export default class SimilarNotesWidget extends NoteContextAwareWidget {
                 continue;
             }
 
-            const $item = (await linkService.createLink(similarNote.notePath.join("/")))
-                .css("font-size", 24 * (1 - 1 / (1 +  similarNote.score)));
+            const $item = (await linkService.createLink(similarNote.notePath.join("/"))).css("font-size", 24 * (1 - 1 / (1 + similarNote.score)));
 
             $list.append($item);
         }
@@ -95,7 +92,7 @@ export default class SimilarNotesWidget extends NoteContextAwareWidget {
         this.$similarNotesWrapper.empty().append($list);
     }
 
-    entitiesReloadedEvent({loadResults}) {
+    entitiesReloadedEvent({ loadResults }) {
         if (this.note && this.title !== this.note.title) {
             this.rendered = false;
 

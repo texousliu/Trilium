@@ -56,35 +56,16 @@ const TPL = `<div class="note-detail-content-widget note-detail-printable">
 </div>`;
 
 const CONTENT_WIDGETS = {
-    _optionsAppearance: [
-        LocalizationOptions,
-        ThemeOptions,
-        FontsOptions,
-        CodeBlockOptions,
-        ElectronIntegrationOptions,
-        MaxContentWidthOptions,
-        RibbonOptions
-    ],
-    _optionsShortcuts: [ KeyboardShortcutsOptions ],
-    _optionsTextNotes: [
-        EditorOptions,
-        HeadingStyleOptions,
-        TableOfContentsOptions,
-        HighlightsListOptions,
-        TextAutoReadOnlySizeOptions
-    ],
-    _optionsCodeNotes: [
-        VimKeyBindingsOptions,
-        WrapLinesOptions,
-        CodeAutoReadOnlySizeOptions,
-        CodeMimeTypesOptions
-    ],
-    _optionsImages: [ ImageOptions ],
-    _optionsSpellcheck: [ SpellcheckOptions ],
-    _optionsPassword: [ PasswordOptions ],
-    _optionsEtapi: [ EtapiOptions ],
-    _optionsBackup: [ BackupOptions ],
-    _optionsSync: [ SyncOptions ],
+    _optionsAppearance: [LocalizationOptions, ThemeOptions, FontsOptions, CodeBlockOptions, ElectronIntegrationOptions, MaxContentWidthOptions, RibbonOptions],
+    _optionsShortcuts: [KeyboardShortcutsOptions],
+    _optionsTextNotes: [EditorOptions, HeadingStyleOptions, TableOfContentsOptions, HighlightsListOptions, TextAutoReadOnlySizeOptions],
+    _optionsCodeNotes: [VimKeyBindingsOptions, WrapLinesOptions, CodeAutoReadOnlySizeOptions, CodeMimeTypesOptions],
+    _optionsImages: [ImageOptions],
+    _optionsSpellcheck: [SpellcheckOptions],
+    _optionsPassword: [PasswordOptions],
+    _optionsEtapi: [EtapiOptions],
+    _optionsBackup: [BackupOptions],
+    _optionsSync: [SyncOptions],
     _optionsOther: [
         SearchEngineOptions,
         TrayOptions,
@@ -95,17 +76,14 @@ const CONTENT_WIDGETS = {
         NetworkConnectionsOptions,
         HtmlImportTagsOptions
     ],
-    _optionsAdvanced: [
-        DatabaseIntegrityCheckOptions,
-        DatabaseAnonymizationOptions,
-        AdvancedSyncOptions,
-        VacuumDatabaseOptions
-    ],
-    _backendLog: [ BackendLogWidget ]
+    _optionsAdvanced: [DatabaseIntegrityCheckOptions, DatabaseAnonymizationOptions, AdvancedSyncOptions, VacuumDatabaseOptions],
+    _backendLog: [BackendLogWidget]
 };
 
 export default class ContentWidgetTypeWidget extends TypeWidget {
-    static getType() { return "contentWidget"; }
+    static getType() {
+        return "contentWidget";
+    }
 
     doRender() {
         this.$widget = $(TPL);
@@ -125,7 +103,7 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
             for (const clazz of contentWidgets) {
                 const widget = new clazz();
 
-                await widget.handleEvent('setNoteContext', { noteContext: this.noteContext });
+                await widget.handleEvent("setNoteContext", { noteContext: this.noteContext });
                 this.child(widget);
 
                 this.$content.append(widget.render());

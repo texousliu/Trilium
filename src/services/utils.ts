@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 import env from "./env.js";
 import { dirname, join } from "path";
 
-const randtoken = generator({source: 'crypto'});
+const randtoken = generator({ source: "crypto" });
 
 export function newEntityId() {
     return randomString(12);
@@ -22,11 +22,11 @@ export function randomString(length: number): string {
 }
 
 export function randomSecureToken(bytes = 32) {
-    return crypto.randomBytes(bytes).toString('base64');
+    return crypto.randomBytes(bytes).toString("base64");
 }
 
 export function md5(content: crypto.BinaryLike) {
-    return crypto.createHash('md5').update(content).digest('hex');
+    return crypto.createHash("md5").update(content).digest("hex");
 }
 
 export function hashedBlobId(content: string | Buffer) {
@@ -35,39 +35,37 @@ export function hashedBlobId(content: string | Buffer) {
     }
 
     // sha512 is faster than sha256
-    const base64Hash = crypto.createHash('sha512').update(content).digest('base64');
+    const base64Hash = crypto.createHash("sha512").update(content).digest("base64");
 
     // we don't want such + and / in the IDs
-    const kindaBase62Hash = base64Hash
-        .replaceAll('+', 'X')
-        .replaceAll('/', 'Y');
+    const kindaBase62Hash = base64Hash.replaceAll("+", "X").replaceAll("/", "Y");
 
     // 20 characters of base62 gives us ~120 bit of entropy which is plenty enough
     return kindaBase62Hash.substr(0, 20);
 }
 
 export function toBase64(plainText: string | Buffer) {
-    return Buffer.from(plainText).toString('base64');
+    return Buffer.from(plainText).toString("base64");
 }
 
 export function fromBase64(encodedText: string) {
-    return Buffer.from(encodedText, 'base64');
+    return Buffer.from(encodedText, "base64");
 }
 
 export function hmac(secret: any, value: any) {
-    const hmac = crypto.createHmac('sha256', Buffer.from(secret.toString(), 'ascii'));
+    const hmac = crypto.createHmac("sha256", Buffer.from(secret.toString(), "ascii"));
     hmac.update(value.toString());
-    return hmac.digest('base64');
+    return hmac.digest("base64");
 }
 
 export function isElectron() {
-    return !!process.versions['electron'];
+    return !!process.versions["electron"];
 }
 
 export function hash(text: string) {
     text = text.normalize();
 
-    return crypto.createHash('sha1').update(text).digest('base64');
+    return crypto.createHash("sha1").update(text).digest("base64");
 }
 
 export function isEmptyOrWhitespace(str: string) {
@@ -99,24 +97,25 @@ export function toObject<T, K extends string | number | symbol, V>(array: T[], f
 }
 
 export function stripTags(text: string) {
-    return text.replace(/<(?:.|\n)*?>/gm, '');
+    return text.replace(/<(?:.|\n)*?>/gm, "");
 }
 
 export function union<T extends string | number | symbol>(a: T[], b: T[]): T[] {
     const obj: Record<T, T> = {} as Record<T, T>; // TODO: unsafe?
 
-    for (let i = a.length-1; i >= 0; i--) {
+    for (let i = a.length - 1; i >= 0; i--) {
         obj[a[i]] = a[i];
     }
 
-    for (let i = b.length-1; i >= 0; i--) {
+    for (let i = b.length - 1; i >= 0; i--) {
         obj[b[i]] = b[i];
     }
 
     const res: T[] = [];
 
     for (const k in obj) {
-        if (obj.hasOwnProperty(k)) { // <-- optional
+        if (obj.hasOwnProperty(k)) {
+            // <-- optional
             res.push(obj[k]);
         }
     }
@@ -152,23 +151,15 @@ export function getContentDisposition(filename: string) {
     return `file; filename="${sanitizedFilename}"; filename*=UTF-8''${sanitizedFilename}`;
 }
 
-const STRING_MIME_TYPES = new Set([
-    "application/javascript",
-    "application/x-javascript",
-    "application/json",
-    "application/x-sql",
-    "image/svg+xml"
-]);
+const STRING_MIME_TYPES = new Set(["application/javascript", "application/x-javascript", "application/json", "application/x-sql", "image/svg+xml"]);
 
 export function isStringNote(type: string | undefined, mime: string) {
     // render and book are string note in the sense that they are expected to contain empty string
-    return (type && ["text", "code", "relationMap", "search", "render", "book", "mermaid", "canvas"].includes(type))
-        || mime.startsWith('text/')
-        || STRING_MIME_TYPES.has(mime);
+    return (type && ["text", "code", "relationMap", "search", "render", "book", "mermaid", "canvas"].includes(type)) || mime.startsWith("text/") || STRING_MIME_TYPES.has(mime);
 }
 
 export function quoteRegex(url: string) {
-    return url.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
+    return url.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
 }
 
 export function replaceAll(string: string, replaceWhat: string, replaceWith: string) {
@@ -178,29 +169,29 @@ export function replaceAll(string: string, replaceWhat: string, replaceWith: str
 }
 
 export function formatDownloadTitle(fileName: string, type: string | null, mime: string) {
-  const fileNameBase = (!fileName) ? "untitled" : sanitize(fileName);
+    const fileNameBase = !fileName ? "untitled" : sanitize(fileName);
 
-  const getExtension = () => {
-    if (type === "text") return ".html";
-    if (type === "relationMap" || type === "canvas" || type === "search") return ".json";
-    if (!mime) return "";
+    const getExtension = () => {
+        if (type === "text") return ".html";
+        if (type === "relationMap" || type === "canvas" || type === "search") return ".json";
+        if (!mime) return "";
 
-    const mimeLc = mime.toLowerCase();
+        const mimeLc = mime.toLowerCase();
 
-    // better to just return the current name without a fake extension
-    // it's possible that the title still preserves the correct extension anyways
-    if (mimeLc === 'application/octet-stream') return "";
+        // better to just return the current name without a fake extension
+        // it's possible that the title still preserves the correct extension anyways
+        if (mimeLc === "application/octet-stream") return "";
 
-    // if fileName has an extension matching the mime already - reuse it
-    const mimeTypeFromFileName = mimeTypes.lookup(fileName);
-    if (mimeTypeFromFileName === mimeLc) return "";
+        // if fileName has an extension matching the mime already - reuse it
+        const mimeTypeFromFileName = mimeTypes.lookup(fileName);
+        if (mimeTypeFromFileName === mimeLc) return "";
 
-    // as last resort try to get extension from mimeType
-    const extensions = mimeTypes.extension(mime);
-    return extensions ? `.${extensions}` : "";
-  };
+        // as last resort try to get extension from mimeType
+        const extensions = mimeTypes.extension(mime);
+        return extensions ? `.${extensions}` : "";
+    };
 
-  return `${fileNameBase}${getExtension()}`;
+    return `${fileNameBase}${getExtension()}`;
 }
 
 export function removeTextFileExtension(filePath: string) {
@@ -223,14 +214,15 @@ export function getNoteTitle(filePath: string, replaceUnderscoresWithSpaces: boo
     } else {
         const basename = path.basename(removeTextFileExtension(filePath));
         if (replaceUnderscoresWithSpaces) {
-            return basename.replace(/_/g, ' ').trim();
+            return basename.replace(/_/g, " ").trim();
         }
         return basename;
     }
 }
 
 export function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?: string): Promise<T> {
-    if (!promise || !promise.then) { // it's not actually a promise
+    if (!promise || !promise.then) {
+        // it's not actually a promise
         return promise;
     }
 
@@ -240,12 +232,13 @@ export function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?
     return new Promise((res, rej) => {
         let resolved = false;
 
-        promise.then(result => {
-            resolved = true;
+        promise
+            .then((result) => {
+                resolved = true;
 
-            res(result);
-        })
-            .catch(error => rej(error));
+                res(result);
+            })
+            .catch((error) => rej(error));
 
         setTimeout(() => {
             if (!resolved) {
@@ -256,8 +249,8 @@ export function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?
 }
 
 interface DeferredPromise<T> extends Promise<T> {
-    resolve: (value: T | PromiseLike<T>) => void,
-    reject: (reason?: any) => void
+    resolve: (value: T | PromiseLike<T>) => void;
+    reject: (reason?: any) => void;
 }
 
 export function deferred<T>(): DeferredPromise<T> {
@@ -317,11 +310,11 @@ export function getResourceDir() {
 }
 
 export function isMac() {
-  return process.platform === "darwin";
+    return process.platform === "darwin";
 }
 
 export function isWindows() {
-  return process.platform === "win32";
+    return process.platform === "win32";
 }
 
 export default {

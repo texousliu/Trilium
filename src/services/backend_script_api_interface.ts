@@ -5,7 +5,7 @@ import BNote from "../becca/entities/bnote.js";
 export interface ApiParams {
     startNote?: BNote | null;
     originEntity?: AbstractBeccaEntity<any> | null;
-    pathParams?: string[],
-    req?: Request,
-    res?: Response
+    pathParams?: string[];
+    req?: Request;
+    res?: Response;
 }

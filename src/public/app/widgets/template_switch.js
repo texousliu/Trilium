@@ -6,10 +6,8 @@ import { t } from "../services/i18n.js";
  * Switch for the basic properties widget which allows the user to select whether the note is a template or not, which toggles the `#template` attribute.
  */
 export default class TemplateSwitchWidget extends SwitchWidget {
-
     isEnabled() {
-        return super.isEnabled()
-            && !this.noteId.startsWith('_options');
+        return super.isEnabled() && !this.noteId.startsWith("_options");
     }
 
     doRender() {
@@ -25,11 +23,11 @@ export default class TemplateSwitchWidget extends SwitchWidget {
     }
 
     async switchOn() {
-        await attributeService.setLabel(this.noteId, 'template');
+        await attributeService.setLabel(this.noteId, "template");
     }
 
     async switchOff() {
-        for (const templateAttr of this.note.getOwnedLabels('template')) {
+        for (const templateAttr of this.note.getOwnedLabels("template")) {
             await attributeService.removeAttributeById(this.noteId, templateAttr.attributeId);
         }
     }
@@ -40,10 +38,9 @@ export default class TemplateSwitchWidget extends SwitchWidget {
         this.$switchOff.toggle(!!isTemplate);
     }
 
-    entitiesReloadedEvent({loadResults}) {
-        if (loadResults.getAttributeRows().find(attr => attr.type === 'label' && attr.name === "template" && attr.noteId === this.noteId)) {
+    entitiesReloadedEvent({ loadResults }) {
+        if (loadResults.getAttributeRows().find((attr) => attr.type === "label" && attr.name === "template" && attr.noteId === this.noteId)) {
             this.refresh();
         }
     }
-
 }

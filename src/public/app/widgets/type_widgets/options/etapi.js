@@ -1,4 +1,4 @@
-import { formatDateTime } from "../../../utils/formatters.js"
+import { formatDateTime } from "../../../utils/formatters.js";
 import { t } from "../../../services/i18n.js";
 import dialogService from "../../../services/dialog.js";
 import OptionsWidget from "./options_widget.js";
@@ -66,7 +66,7 @@ export default class EtapiOptions extends OptionsWidget {
                 return;
             }
 
-            const {authToken} = await server.post('etapi-tokens', {tokenName});
+            const { authToken } = await server.post("etapi-tokens", { tokenName });
 
             await dialogService.prompt({
                 title: t("etapi.token_created_title"),
@@ -84,7 +84,7 @@ export default class EtapiOptions extends OptionsWidget {
         const $noTokensYet = this.$widget.find(".no-tokens-yet");
         const $tokensTable = this.$widget.find(".tokens-table");
 
-        const tokens = await server.get('etapi-tokens');
+        const tokens = await server.get("etapi-tokens");
 
         $noTokensYet.toggle(tokens.length === 0);
         $tokensTable.toggle(tokens.length > 0);
@@ -97,12 +97,12 @@ export default class EtapiOptions extends OptionsWidget {
                 $("<tr>")
                     .append($("<td>").text(token.name))
                     .append($("<td>").text(formatDateTime(token.utcDateCreated)))
-                    .append($("<td>").append(
-                        $(`<span class="bx bx-pen token-table-button" title="${t("etapi.rename_token")}"></span>`)
-                            .on("click", () => this.renameToken(token.etapiTokenId, token.name)),
-                        $(`<span class="bx bx-trash token-table-button" title="${t("etapi.delete_token")}"></span>`)
-                            .on("click", () => this.deleteToken(token.etapiTokenId, token.name))
-                    ))
+                    .append(
+                        $("<td>").append(
+                            $(`<span class="bx bx-pen token-table-button" title="${t("etapi.rename_token")}"></span>`).on("click", () => this.renameToken(token.etapiTokenId, token.name)),
+                            $(`<span class="bx bx-trash token-table-button" title="${t("etapi.delete_token")}"></span>`).on("click", () => this.deleteToken(token.etapiTokenId, token.name))
+                        )
+                    )
             );
         }
     }
@@ -118,13 +118,13 @@ export default class EtapiOptions extends OptionsWidget {
             return;
         }
 
-        await server.patch(`etapi-tokens/${etapiTokenId}`, {name: tokenName});
+        await server.patch(`etapi-tokens/${etapiTokenId}`, { name: tokenName });
 
         this.refreshTokens();
     }
 
     async deleteToken(etapiTokenId, name) {
-        if (!await dialogService.confirm(t("etapi.delete_token_confirmation", { name }))) {
+        if (!(await dialogService.confirm(t("etapi.delete_token_confirmation", { name })))) {
             return;
         }
 

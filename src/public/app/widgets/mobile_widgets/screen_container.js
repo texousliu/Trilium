@@ -7,7 +7,5 @@ export default class ScreenContainer extends FlexContainer {
         this.screenName = screenName;
     }
 
-    activeScreenChangedEvent({activeScreen}) {
-
-    }
+    activeScreenChangedEvent({ activeScreen }) {}
 }

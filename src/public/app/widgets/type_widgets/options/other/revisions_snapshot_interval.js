@@ -17,8 +17,7 @@ export default class RevisionsSnapshotIntervalOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$revisionsTimeInterval = this.$widget.find(".revision-snapshot-time-interval-in-seconds");
-        this.$revisionsTimeInterval.on('change', () =>
-            this.updateOption('revisionSnapshotTimeInterval', this.$revisionsTimeInterval.val()));
+        this.$revisionsTimeInterval.on("change", () => this.updateOption("revisionSnapshotTimeInterval", this.$revisionsTimeInterval.val()));
     }
 
     async optionsLoaded(options) {

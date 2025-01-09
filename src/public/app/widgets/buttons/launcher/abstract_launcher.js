@@ -11,7 +11,7 @@ export default class AbstractLauncher extends OnClickButtonWidget {
         /** @type {FNote} */
         this.launcherNote = launcherNote;
 
-        for (const label of launcherNote.getOwnedLabels('keyboardShortcut')) {
+        for (const label of launcherNote.getOwnedLabels("keyboardShortcut")) {
             this.bindNoteShortcutHandler(label);
         }
     }
@@ -23,18 +23,19 @@ export default class AbstractLauncher extends OnClickButtonWidget {
     bindNoteShortcutHandler(labelOrRow) {
         const namespace = labelOrRow.attributeId;
 
-        if (labelOrRow.isDeleted) { // only applicable if row
+        if (labelOrRow.isDeleted) {
+            // only applicable if row
             shortcutService.removeGlobalShortcut(namespace);
         } else {
             shortcutService.bindGlobalShortcut(labelOrRow.value, () => this.launch(), namespace);
         }
     }
 
-    entitiesReloadedEvent({loadResults}) {
+    entitiesReloadedEvent({ loadResults }) {
         for (const attr of loadResults.getAttributeRows()) {
-            if (attr.noteId === this.launcherNote.noteId && attr.type === 'label' && attr.name === 'keyboardShortcut') {
+            if (attr.noteId === this.launcherNote.noteId && attr.type === "label" && attr.name === "keyboardShortcut") {
                 this.bindNoteShortcutHandler(attr);
-            } else if (attr.type === 'label' && attr.name === 'iconClass' && attributesService.isAffecting(attr, this.launcherNote)) {
+            } else if (attr.type === "label" && attr.name === "iconClass" && attributesService.isAffecting(attr, this.launcherNote)) {
                 this.refreshIcon();
             }
         }

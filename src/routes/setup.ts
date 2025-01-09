@@ -5,14 +5,14 @@ import setupService from "../services/setup.js";
 import utils from "../services/utils.js";
 import assetPath from "../services/asset_path.js";
 import appPath from "../services/app_path.js";
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 function setupPage(req: Request, res: Response) {
     if (sqlInit.isDbInitialized()) {
         if (utils.isElectron()) {
             handleElectronRedirect();
         } else {
-            res.redirect('.');
+            res.redirect(".");
         }
 
         return;
@@ -27,7 +27,7 @@ function setupPage(req: Request, res: Response) {
         setupService.triggerSync();
     }
 
-    res.render('setup', {
+    res.render("setup", {
         syncInProgress: syncInProgress,
         assetPath: assetPath,
         appPath: appPath

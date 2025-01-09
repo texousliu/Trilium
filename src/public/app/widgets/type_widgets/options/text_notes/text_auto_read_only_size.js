@@ -17,8 +17,7 @@ export default class TextAutoReadOnlySizeOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$autoReadonlySizeText = this.$widget.find(".auto-readonly-size-text");
-        this.$autoReadonlySizeText.on('change', () =>
-            this.updateOption('autoReadonlySizeText', this.$autoReadonlySizeText.val()));
+        this.$autoReadonlySizeText.on("change", () => this.updateOption("autoReadonlySizeText", this.$autoReadonlySizeText.val()));
     }
 
     async optionsLoaded(options) {

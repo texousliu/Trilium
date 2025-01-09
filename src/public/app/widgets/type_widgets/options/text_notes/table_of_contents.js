@@ -20,8 +20,7 @@ export default class TableOfContentsOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$minTocHeadings = this.$widget.find(".min-toc-headings");
-        this.$minTocHeadings.on('change', () =>
-            this.updateOption('minTocHeadings', this.$minTocHeadings.val()));
+        this.$minTocHeadings.on("change", () => this.updateOption("minTocHeadings", this.$minTocHeadings.val()));
     }
 
     async optionsLoaded(options) {

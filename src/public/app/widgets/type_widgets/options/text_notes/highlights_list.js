@@ -28,11 +28,14 @@ export default class HighlightsListOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$hlt = this.$widget.find("input.highlights-list-check");
-        this.$hlt.on('change', () => {
-            const hltVals = this.$widget.find('input.highlights-list-check[type="checkbox"]:checked').map(function () {
-                return this.value;
-            }).get();
-            this.updateOption('highlightsList', JSON.stringify(hltVals));
+        this.$hlt.on("change", () => {
+            const hltVals = this.$widget
+                .find('input.highlights-list-check[type="checkbox"]:checked')
+                .map(function () {
+                    return this.value;
+                })
+                .get();
+            this.updateOption("highlightsList", JSON.stringify(hltVals));
         });
     }
 

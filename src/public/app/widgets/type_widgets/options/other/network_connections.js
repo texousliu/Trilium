@@ -15,8 +15,7 @@ export default class NetworkConnectionsOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$checkForUpdates = this.$widget.find(".check-for-updates");
-        this.$checkForUpdates.on("change", () =>
-            this.updateCheckboxOption('checkForUpdates', this.$checkForUpdates));
+        this.$checkForUpdates.on("change", () => this.updateCheckboxOption("checkForUpdates", this.$checkForUpdates));
     }
 
     async optionsLoaded(options) {

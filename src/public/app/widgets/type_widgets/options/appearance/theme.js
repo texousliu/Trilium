@@ -55,7 +55,7 @@ export default class ThemeOptions extends OptionsWidget {
             utils.reloadFrontendApp("layout orientation change");
         });
 
-        this.$themeSelect.on('change', async () => {
+        this.$themeSelect.on("change", async () => {
             const newTheme = this.$themeSelect.val();
 
             await server.put(`options/theme/${newTheme}`);
@@ -63,33 +63,29 @@ export default class ThemeOptions extends OptionsWidget {
             utils.reloadFrontendApp("theme change");
         });
 
-        this.$overrideThemeFonts.on('change', () => this.updateCheckboxOption('overrideThemeFonts', this.$overrideThemeFonts));
+        this.$overrideThemeFonts.on("change", () => this.updateCheckboxOption("overrideThemeFonts", this.$overrideThemeFonts));
     }
 
     async optionsLoaded(options) {
         const themes = [
-            { val: 'next', title: t("theme.triliumnext") },
-            { val: 'next-light', title: t("theme.triliumnext-light") },
-            { val: 'next-dark', title: t("theme.triliumnext-dark") },
-            { val: 'auto', title: t('theme.auto_theme') },
-            { val: 'light', title: t('theme.light_theme') },
-            { val: 'dark', title: t('theme.dark_theme') }
-        ].concat(await server.get('options/user-themes'));
+            { val: "next", title: t("theme.triliumnext") },
+            { val: "next-light", title: t("theme.triliumnext-light") },
+            { val: "next-dark", title: t("theme.triliumnext-dark") },
+            { val: "auto", title: t("theme.auto_theme") },
+            { val: "light", title: t("theme.light_theme") },
+            { val: "dark", title: t("theme.dark_theme") }
+        ].concat(await server.get("options/user-themes"));
 
         this.$themeSelect.empty();
 
         for (const theme of themes) {
-            this.$themeSelect.append($("<option>")
-                .attr("value", theme.val)
-                .attr("data-note-id", theme.noteId)
-                .text(theme.title));
+            this.$themeSelect.append($("<option>").attr("value", theme.val).attr("data-note-id", theme.noteId).text(theme.title));
         }
 
         this.$themeSelect.val(options.theme);
 
         this.setCheckboxState(this.$overrideThemeFonts, options.overrideThemeFonts);
 
-        this.$widget.find(`input[name="layout-orientation"][value="${options.layoutOrientation}"]`)
-            .prop("checked", "true");
+        this.$widget.find(`input[name="layout-orientation"][value="${options.layoutOrientation}"]`).prop("checked", "true");
     }
 }

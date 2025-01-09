@@ -1,5 +1,5 @@
 import utils from "./services/utils.js";
-import macInit from './services/mac_init.js';
+import macInit from "./services/mac_init.js";
 
 macInit.init();
 
@@ -26,14 +26,13 @@ function SetupModel() {
     this.setupTypeSelected = () => !!this.setupType();
 
     this.selectSetupType = () => {
-        if (this.setupType() === 'new-document') {
-            this.step('new-document-in-progress');
+        if (this.setupType() === "new-document") {
+            this.step("new-document-in-progress");
 
-            $.post('api/setup/new-document').then(() => {
+            $.post("api/setup/new-document").then(() => {
                 window.location.replace("./setup");
             });
-        }
-        else {
+        } else {
             this.step(this.setupType());
         }
     };
@@ -60,39 +59,36 @@ function SetupModel() {
         }
 
         // not using server.js because it loads too many dependencies
-        const resp = await $.post('api/setup/sync-from-server', {
+        const resp = await $.post("api/setup/sync-from-server", {
             syncServerHost: syncServerHost,
             syncProxy: syncProxy,
             password: password
         });
 
-        if (resp.result === 'success') {
-            this.step('sync-in-progress');
+        if (resp.result === "success") {
+            this.step("sync-in-progress");
 
             setInterval(checkOutstandingSyncs, 1000);
 
             hideAlert();
-        }
-        else {
+        } else {
             showAlert(`Sync setup failed: ${resp.error}`);
         }
     };
 }
 
 async function checkOutstandingSyncs() {
-    const { outstandingPullCount, initialized } = await $.get('api/sync/stats');
+    const { outstandingPullCount, initialized } = await $.get("api/sync/stats");
 
     if (initialized) {
         if (utils.isElectron()) {
-            const remote = utils.dynamicRequire('@electron/remote');
+            const remote = utils.dynamicRequire("@electron/remote");
             remote.app.relaunch();
             remote.app.exit(0);
-        }
-        else {
+        } else {
             utils.reloadFrontendApp();
         }
-    }
-    else {
+    } else {
         $("#outstanding-syncs").html(outstandingPullCount);
     }
 }
@@ -106,6 +102,6 @@ function hideAlert() {
     $("#alert").hide();
 }
 
-ko.applyBindings(new SetupModel(), document.getElementById('setup-dialog'));
+ko.applyBindings(new SetupModel(), document.getElementById("setup-dialog"));
 
 $("#setup-dialog").show();

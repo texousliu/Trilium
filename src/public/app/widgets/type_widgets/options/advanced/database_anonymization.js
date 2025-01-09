@@ -38,30 +38,28 @@ export default class DatabaseAnonymizationOptions extends OptionsWidget {
         this.$widget = $(TPL);
         this.$anonymizeFullButton = this.$widget.find(".anonymize-full-button");
         this.$anonymizeLightButton = this.$widget.find(".anonymize-light-button");
-        this.$anonymizeFullButton.on('click', async () => {
+        this.$anonymizeFullButton.on("click", async () => {
             toastService.showMessage(t("database_anonymization.creating_fully_anonymized_database"));
 
-            const resp = await server.post('database/anonymize/full');
+            const resp = await server.post("database/anonymize/full");
 
             if (!resp.success) {
                 toastService.showError(t("database_anonymization.error_creating_anonymized_database"));
-            }
-            else {
+            } else {
                 toastService.showMessage(t("database_anonymization.successfully_created_fully_anonymized_database", { anonymizedFilePath: resp.anonymizedFilePath }), 10000);
             }
 
             this.refresh();
         });
 
-        this.$anonymizeLightButton.on('click', async () => {
+        this.$anonymizeLightButton.on("click", async () => {
             toastService.showMessage(t("database_anonymization.creating_lightly_anonymized_database"));
 
-            const resp = await server.post('database/anonymize/light');
+            const resp = await server.post("database/anonymize/light");
 
             if (!resp.success) {
                 toastService.showError(t("database_anonymization.error_creating_anonymized_database"));
-            }
-            else {
+            } else {
                 toastService.showMessage(t("database_anonymization.successfully_created_lightly_anonymized_database", { anonymizedFilePath: resp.anonymizedFilePath }), 10000);
             }
 
@@ -72,14 +70,14 @@ export default class DatabaseAnonymizationOptions extends OptionsWidget {
     }
 
     optionsLoaded(options) {
-        server.get("database/anonymized-databases").then(anonymizedDatabases => {
+        server.get("database/anonymized-databases").then((anonymizedDatabases) => {
             this.$existingAnonymizedDatabases.empty();
 
             if (!anonymizedDatabases.length) {
-                anonymizedDatabases = [{filePath: t("database_anonymization.no_anonymized_database_yet")}];
+                anonymizedDatabases = [{ filePath: t("database_anonymization.no_anonymized_database_yet") }];
             }
 
-            for (const {filePath} of anonymizedDatabases) {
+            for (const { filePath } of anonymizedDatabases) {
                 this.$existingAnonymizedDatabases.append($("<li>").text(filePath));
             }
         });

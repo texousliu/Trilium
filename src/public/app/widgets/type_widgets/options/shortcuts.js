@@ -26,25 +26,25 @@ const TPL = `
         }
     </style>
 
-    <h4>${t('shortcuts.keyboard_shortcuts')}</h4>
+    <h4>${t("shortcuts.keyboard_shortcuts")}</h4>
     
     <p>
-      ${t('shortcuts.multiple_shortcuts')}
-      ${t('shortcuts.electron_documentation')}
+      ${t("shortcuts.multiple_shortcuts")}
+      ${t("shortcuts.electron_documentation")}
     </p>
     
     <div class="form-group">
-        <input type="text" class="keyboard-shortcut-filter form-control" placeholder="${t('shortcuts.type_text_to_filter')}">
+        <input type="text" class="keyboard-shortcut-filter form-control" placeholder="${t("shortcuts.type_text_to_filter")}">
     </div>
     
     <div class="shortcuts-table-container">
         <table class="keyboard-shortcut-table" cellpadding="10">
         <thead>
             <tr class="text-nowrap">
-                <th>${t('shortcuts.action_name')}</th>
-                <th>${t('shortcuts.shortcuts')}</th>
-                <th>${t('shortcuts.default_shortcuts')}</th>
-                <th>${t('shortcuts.description')}</th>
+                <th>${t("shortcuts.action_name")}</th>
+                <th>${t("shortcuts.shortcuts")}</th>
+                <th>${t("shortcuts.default_shortcuts")}</th>
+                <th>${t("shortcuts.description")}</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -52,9 +52,9 @@ const TPL = `
     </div>
     
     <div class="shortcuts-options-buttons">
-        <button class="options-keyboard-shortcuts-reload-app btn btn-primary">${t('shortcuts.reload_app')}</button>
+        <button class="options-keyboard-shortcuts-reload-app btn btn-primary">${t("shortcuts.reload_app")}</button>
         
-        <button class="options-keyboard-shortcuts-set-all-to-default btn">${t('shortcuts.set_all_to_default')}</button>
+        <button class="options-keyboard-shortcuts-set-all-to-default btn">${t("shortcuts.set_all_to_default")}</button>
     </div>
 </div>`;
 
@@ -68,25 +68,22 @@ export default class KeyboardShortcutsOptions extends OptionsWidget {
 
         const $table = this.$widget.find(".keyboard-shortcut-table tbody");
 
-        server.get('keyboard-actions').then(actions => {
+        server.get("keyboard-actions").then((actions) => {
             globActions = actions;
 
             for (const action of actions) {
                 const $tr = $("<tr>");
 
                 if (action.separator) {
-                    $tr.append(
-                        $('<td colspan="4">')
-                            .attr("style","background-color: var(--accented-background-color); font-weight: bold;")
-                            .text(action.separator)
-                    )
+                    $tr.append($('<td colspan="4">').attr("style", "background-color: var(--accented-background-color); font-weight: bold;").text(action.separator));
                 } else if (action.defaultShortcuts) {
                     $tr.append($("<td>").text(action.actionName))
-                        .append($("<td>").append(
+                        .append(
+                            $("<td>").append(
                                 $(`<input type="text" class="form-control">`)
                                     .val(action.effectiveShortcuts.join(", "))
-                                    .attr('data-keyboard-action-name', action.actionName)
-                                    .attr('data-default-keyboard-shortcuts', action.defaultShortcuts.join(", "))
+                                    .attr("data-keyboard-action-name", action.actionName)
+                                    .attr("data-default-keyboard-shortcuts", action.defaultShortcuts.join(", "))
                             )
                         )
                         .append($("<td>").text(action.defaultShortcuts.join(", ")))
@@ -97,39 +94,38 @@ export default class KeyboardShortcutsOptions extends OptionsWidget {
             }
         });
 
-        $table.on('change', 'input.form-control', e => {
+        $table.on("change", "input.form-control", (e) => {
             const $input = this.$widget.find(e.target);
-            const actionName = $input.attr('data-keyboard-action-name');
-            const shortcuts = $input.val()
-                .replace('+,', "+Comma")
+            const actionName = $input.attr("data-keyboard-action-name");
+            const shortcuts = $input
+                .val()
+                .replace("+,", "+Comma")
                 .split(",")
-                .map(shortcut => shortcut.replace("+Comma", "+,"))
-                .filter(shortcut => !!shortcut);
+                .map((shortcut) => shortcut.replace("+Comma", "+,"))
+                .filter((shortcut) => !!shortcut);
 
             const optionName = `keyboardShortcuts${actionName.substr(0, 1).toUpperCase()}${actionName.substr(1)}`;
 
             this.updateOption(optionName, JSON.stringify(shortcuts));
         });
 
-        this.$widget.find(".options-keyboard-shortcuts-set-all-to-default").on('click', async () => {
-            if (!await dialogService.confirm(t('shortcuts.confirm_reset'))) {
+        this.$widget.find(".options-keyboard-shortcuts-set-all-to-default").on("click", async () => {
+            if (!(await dialogService.confirm(t("shortcuts.confirm_reset")))) {
                 return;
             }
 
-            $table.find('input.form-control').each((_index, el) => {
-                const defaultShortcuts = this.$widget.find(el).attr('data-default-keyboard-shortcuts');
+            $table.find("input.form-control").each((_index, el) => {
+                const defaultShortcuts = this.$widget.find(el).attr("data-default-keyboard-shortcuts");
 
                 if (this.$widget.find(el).val() !== defaultShortcuts) {
-                    this.$widget.find(el)
-                        .val(defaultShortcuts)
-                        .trigger('change');
+                    this.$widget.find(el).val(defaultShortcuts).trigger("change");
                 }
             });
         });
 
         const $filter = this.$widget.find(".keyboard-shortcut-filter");
 
-        $filter.on('keyup', () => {
+        $filter.on("keyup", () => {
             const filter = $filter.val().trim().toLowerCase();
 
             $table.find("tr").each((i, el) => {
@@ -138,26 +134,30 @@ export default class KeyboardShortcutsOptions extends OptionsWidget {
                     return;
                 }
 
-                const actionName = this.$widget.find(el).find('input').attr('data-keyboard-action-name');
+                const actionName = this.$widget.find(el).find("input").attr("data-keyboard-action-name");
 
                 if (!actionName) {
                     this.$widget.find(el).hide();
                     return;
                 }
 
-                const action = globActions.find(act => act.actionName === actionName);
+                const action = globActions.find((act) => act.actionName === actionName);
 
                 if (!action) {
                     this.$widget.find(el).hide();
                     return;
                 }
 
-                this.$widget.find(el).toggle(!!(
-                    action.actionName.toLowerCase().includes(filter)
-                    || action.defaultShortcuts.some(shortcut => shortcut.toLowerCase().includes(filter))
-                    || action.effectiveShortcuts.some(shortcut => shortcut.toLowerCase().includes(filter))
-                    || (action.description && action.description.toLowerCase().includes(filter))
-                ));
+                this.$widget
+                    .find(el)
+                    .toggle(
+                        !!(
+                            action.actionName.toLowerCase().includes(filter) ||
+                            action.defaultShortcuts.some((shortcut) => shortcut.toLowerCase().includes(filter)) ||
+                            action.effectiveShortcuts.some((shortcut) => shortcut.toLowerCase().includes(filter)) ||
+                            (action.description && action.description.toLowerCase().includes(filter))
+                        )
+                    );
             });
         });
     }

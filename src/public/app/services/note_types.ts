@@ -43,4 +43,4 @@ async function getNoteTypeItems(command?: NoteTypeCommandNames) {
 
 export default {
     getNoteTypeItems
-}
+};

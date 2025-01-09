@@ -1,4 +1,4 @@
-import attributeService from '../services/attributes.js';
+import attributeService from "../services/attributes.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import { t } from "../services/i18n.js";
 
@@ -47,48 +47,46 @@ export default class EditabilitySelectWidget extends NoteContextAwareWidget {
 
         this.$editabilityActiveDesc = this.$widget.find(".editability-active-desc");
 
-        this.$widget.on('click', '.dropdown-item',
-            async e => {
-                this.dropdown.toggle();
+        this.$widget.on("click", ".dropdown-item", async (e) => {
+            this.dropdown.toggle();
 
-                const editability = $(e.target).closest("[data-editability]").attr("data-editability");
+            const editability = $(e.target).closest("[data-editability]").attr("data-editability");
 
-                for (const ownedAttr of this.note.getOwnedLabels()) {
-                    if (['readOnly', 'autoReadOnlyDisabled'].includes(ownedAttr.name)) {
-                        await attributeService.removeAttributeById(this.noteId, ownedAttr.attributeId);
-                    }
+            for (const ownedAttr of this.note.getOwnedLabels()) {
+                if (["readOnly", "autoReadOnlyDisabled"].includes(ownedAttr.name)) {
+                    await attributeService.removeAttributeById(this.noteId, ownedAttr.attributeId);
                 }
+            }
 
-                if (editability !== 'auto') {
-                    await attributeService.addLabel(this.noteId, editability);
-                }
-            });
+            if (editability !== "auto") {
+                await attributeService.addLabel(this.noteId, editability);
+            }
+        });
     }
 
     async refreshWithNote(note) {
-        let editability = 'auto'
+        let editability = "auto";
 
-        if (this.note.isLabelTruthy('readOnly')) {
-            editability = 'readOnly';
-        }
-        else if (this.note.isLabelTruthy('autoReadOnlyDisabled')) {
-            editability = 'autoReadOnlyDisabled';
+        if (this.note.isLabelTruthy("readOnly")) {
+            editability = "readOnly";
+        } else if (this.note.isLabelTruthy("autoReadOnlyDisabled")) {
+            editability = "autoReadOnlyDisabled";
         }
 
         const labels = {
-            "auto": t("editability_select.auto"),
-            "readOnly": t("editability_select.read_only"),
-            "autoReadOnlyDisabled": t("editability_select.always_editable")
-        }
+            auto: t("editability_select.auto"),
+            readOnly: t("editability_select.read_only"),
+            autoReadOnlyDisabled: t("editability_select.always_editable")
+        };
 
-        this.$widget.find('.dropdown-item').removeClass("selected");
+        this.$widget.find(".dropdown-item").removeClass("selected");
         this.$widget.find(`.dropdown-item[data-editability='${editability}']`).addClass("selected");
 
         this.$editabilityActiveDesc.text(labels[editability]);
     }
 
     entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.getAttributeRows().find(attr => attr.noteId === this.noteId)) {
+        if (loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId)) {
             this.refresh();
         }
     }

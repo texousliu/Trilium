@@ -29,7 +29,7 @@ const TPL = `<div class="mermaid-widget">
     </style>
 
     <div class="mermaid-error alert alert-warning">
-        <p><strong>${t('mermaid.diagram_error')}</strong></p>
+        <p><strong>${t("mermaid.diagram_error")}</strong></p>
         <p class="error-content"></p>
     </div>
 
@@ -40,16 +40,13 @@ let idCounter = 1;
 
 export default class MermaidWidget extends NoteContextAwareWidget {
     isEnabled() {
-        return super.isEnabled()
-            && this.note?.type === 'mermaid'
-            && this.note.isContentAvailable()
-            && this.noteContext?.viewScope.viewMode === 'default';
+        return super.isEnabled() && this.note?.type === "mermaid" && this.note.isContentAvailable() && this.noteContext?.viewScope.viewMode === "default";
     }
 
     doRender() {
         this.$widget = $(TPL);
         this.contentSized();
-        this.$display = this.$widget.find('.mermaid-render');
+        this.$display = this.$widget.find(".mermaid-render");
         this.$errorContainer = this.$widget.find(".mermaid-error");
         this.$errorMessage = this.$errorContainer.find(".error-content");
     }
@@ -75,9 +72,9 @@ export default class MermaidWidget extends NoteContextAwareWidget {
 
             if (this.dirtyAttachment) {
                 const payload = {
-                    role: 'image',
-                    title: 'mermaid-export.svg',
-                    mime: 'image/svg+xml',
+                    role: "image",
+                    title: "mermaid-export.svg",
+                    mime: "image/svg+xml",
                     content: svg,
                     position: 0
                 };
@@ -94,7 +91,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             this.$display.attr("id", `mermaid-render-${idCounter}`);
 
             WZoom.create(`#mermaid-render-${idCounter}`, {
-                type: 'html',
+                type: "html",
                 maxScale: 50,
                 speed: 1.3,
                 zoomOnClick: false
@@ -113,11 +110,11 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         const content = blob.content || "";
 
         await loadElkIfNeeded(content);
-        const {svg} = await mermaid.mermaidAPI.render(`mermaid-graph-${idCounter}`, content);
+        const { svg } = await mermaid.mermaidAPI.render(`mermaid-graph-${idCounter}`, content);
         return svg;
     }
 
-    async entitiesReloadedEvent({loadResults}) {
+    async entitiesReloadedEvent({ loadResults }) {
         if (loadResults.isNoteContentReloaded(this.noteId)) {
             this.dirtyAttachment = true;
 
@@ -125,7 +122,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         }
     }
 
-    async exportSvgEvent({ntxId}) {
+    async exportSvgEvent({ ntxId }) {
         if (!this.isNoteContext(ntxId) || this.note.type !== "mermaid") {
             return;
         }
@@ -137,18 +134,18 @@ export default class MermaidWidget extends NoteContextAwareWidget {
 
 export function getMermaidConfig() {
     const documentStyle = window.getComputedStyle(document.documentElement);
-    const mermaidTheme = documentStyle.getPropertyValue('--mermaid-theme');
+    const mermaidTheme = documentStyle.getPropertyValue("--mermaid-theme");
 
     return {
         theme: mermaidTheme.trim(),
-        securityLevel: 'antiscript',
+        securityLevel: "antiscript",
         flow: { useMaxWidth: false },
         sequence: { useMaxWidth: false },
         gantt: { useMaxWidth: false },
-        "class": { useMaxWidth: false },
+        class: { useMaxWidth: false },
         state: { useMaxWidth: false },
         pie: { useMaxWidth: true },
         journey: { useMaxWidth: false },
-        git: { useMaxWidth: false },
+        git: { useMaxWidth: false }
     };
 }
