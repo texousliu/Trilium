@@ -1,12 +1,13 @@
-import Draggabilly from "draggabilly";
+import Draggabilly, { type DraggabillyCallback, type MoveVector } from "draggabilly";
 import { t } from "../services/i18n.js";
 import BasicWidget from "./basic_widget.js";
 import contextMenu from "../menus/context_menu.js";
 import utils from "../services/utils.js";
 import keyboardActionService from "../services/keyboard_actions.js";
-import appContext from "../components/app_context.js";
+import appContext, { type CommandData, type CommandListenerData, type EventData } from "../components/app_context.js";
 import froca from "../services/froca.js";
 import attributeService from "../services/attributes.js";
+import type NoteContext from "../components/note_context.js";
 
 const TAB_CONTAINER_MIN_WIDTH = 24;
 const TAB_CONTAINER_MAX_WIDTH = 240;
@@ -229,6 +230,16 @@ const TAB_ROW_TPL = `
 </div>`;
 
 export default class TabRowWidget extends BasicWidget {
+
+    private isDragging?: boolean;
+    private showNoteIcons?: boolean;
+    private draggabillies!: Draggabilly[];
+    private draggabillyDragging?: Draggabilly | null;
+
+    private $style!: JQuery<HTMLElement>;
+    private $filler!: JQuery<HTMLElement>;
+    private $newTab!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TAB_ROW_TPL);
 
@@ -256,7 +267,7 @@ export default class TabRowWidget extends BasicWidget {
                 items: [
                     { title: t("tab_row.close"), command: "closeTab", uiIcon: "bx bx-x" },
                     { title: t("tab_row.close_other_tabs"), command: "closeOtherTabs", uiIcon: "bx bx-empty", enabled: appContext.tabManager.noteContexts.length !== 1 },
-                    { title: t("tab_row.close_right_tabs"), command: "closeRightTabs", uiIcon: "bx bx-empty", enabled: appContext.tabManager.noteContexts.at(-1).ntxId !== ntxId },
+                    { title: t("tab_row.close_right_tabs"), command: "closeRightTabs", uiIcon: "bx bx-empty", enabled: appContext.tabManager.noteContexts?.at(-1)?.ntxId !== ntxId },
                     { title: t("tab_row.close_all_tabs"), command: "closeAllTabs", uiIcon: "bx bx-empty" },
 
                     { title: "----" },
@@ -269,7 +280,9 @@ export default class TabRowWidget extends BasicWidget {
                     { title: t("tab_row.copy_tab_to_new_window"), command: "copyTabToNewWindow", uiIcon: "bx bx-empty" }
                 ],
                 selectMenuItemHandler: ({ command }) => {
-                    this.triggerCommand(command, { ntxId });
+                    if (command) {
+                        this.triggerCommand(command, { ntxId });
+                    }
                 }
             });
         });
@@ -281,12 +294,10 @@ export default class TabRowWidget extends BasicWidget {
     }
 
     setupEvents() {
-        const resizeListener = (_) => {
+        new ResizeObserver((_) => {
             this.cleanUpPreviouslyDraggedTabs();
             this.layoutTabs();
-        };
-
-        new ResizeObserver(resizeListener).observe(this.$widget[0]);
+        }).observe(this.$widget[0]);
 
         this.tabEls.forEach((tabEl) => this.setTabCloseEvent(tabEl));
     }
@@ -334,7 +345,7 @@ export default class TabRowWidget extends BasicWidget {
     }
 
     getTabPositions() {
-        const tabPositions = [];
+        const tabPositions: number[] = [];
 
         let position = TAB_CONTAINER_LEFT_PADDING;
         this.tabWidths.forEach((width) => {
@@ -380,7 +391,7 @@ export default class TabRowWidget extends BasicWidget {
         this.$style.html(styleHTML);
     }
 
-    addTab(ntxId) {
+    addTab(ntxId: string) {
         const $tab = $(TAB_TPL).attr("data-ntx-id", ntxId);
 
         keyboardActionService.updateDisplayedShortcuts($tab);
@@ -398,13 +409,13 @@ export default class TabRowWidget extends BasicWidget {
         this.setupDraggabilly();
     }
 
-    closeActiveTabCommand({ $el }) {
+    closeActiveTabCommand({ $el }: CommandListenerData<"closeActiveTab">) {
         const ntxId = $el.closest(".note-tab").attr("data-ntx-id");
 
         appContext.tabManager.removeNoteContext(ntxId);
     }
 
-    setTabCloseEvent($tab) {
+    setTabCloseEvent($tab: JQuery<HTMLElement>) {
         $tab.on("mousedown", (e) => {
             if (e.which === 2) {
                 appContext.tabManager.removeNoteContext($tab.attr("data-ntx-id"));
@@ -436,17 +447,17 @@ export default class TabRowWidget extends BasicWidget {
         if (tabEl) tabEl.setAttribute("active", "");
     }
 
-    newNoteContextCreatedEvent({ noteContext }) {
-        if (!noteContext.mainNtxId) {
+    newNoteContextCreatedEvent({ noteContext }: EventData<"newNoteContextCreated">) {
+        if (!noteContext.mainNtxId && noteContext.ntxId) {
             this.addTab(noteContext.ntxId);
         }
     }
 
-    removeTab(ntxId) {
+    removeTab(ntxId: string) {
         const tabEl = this.getTabById(ntxId)[0];
 
         if (tabEl) {
-            tabEl.parentNode.removeChild(tabEl);
+            tabEl.parentNode?.removeChild(tabEl);
             this.cleanUpPreviouslyDraggedTabs();
             this.layoutTabs();
             this.setupDraggabilly();
@@ -458,20 +469,20 @@ export default class TabRowWidget extends BasicWidget {
         return this.tabEls.map((el) => el.getAttribute("data-ntx-id"));
     }
 
-    updateTitle($tab, title) {
+    updateTitle($tab: JQuery<HTMLElement>, title: string) {
         $tab.attr("title", title);
         $tab.find(".note-tab-title").text(title);
     }
 
-    getTabById(ntxId) {
+    getTabById(ntxId: string | null) {
         return this.$widget.find(`[data-ntx-id='${ntxId}']`);
     }
 
-    getTabId($tab) {
+    getTabId($tab: JQuery<HTMLElement>) {
         return $tab.attr("data-ntx-id");
     }
 
-    noteContextRemovedEvent({ ntxIds }) {
+    noteContextRemovedEvent({ ntxIds }: EventData<"noteContextRemovedEvent">) {
         for (const ntxId of ntxIds) {
             this.removeTab(ntxId);
         }
@@ -485,14 +496,15 @@ export default class TabRowWidget extends BasicWidget {
         const tabEls = this.tabEls;
         const { tabPositions } = this.getTabPositions();
 
-        if (this.isDragging) {
+        if (this.isDragging && this.draggabillyDragging) {
             this.isDragging = false;
             this.$widget.removeClass("tab-row-widget-is-sorting");
+            // TODO: Some of these don't make sense, might need removal.
             this.draggabillyDragging.element.classList.remove("note-tab-is-dragging");
             this.draggabillyDragging.element.style.transform = "";
             this.draggabillyDragging.dragEnd();
             this.draggabillyDragging.isDragging = false;
-            this.draggabillyDragging.positionDrag = (_) => {}; // Prevent Draggabilly from updating tabEl.style.transform in later frames
+            this.draggabillyDragging.positionDrag = () => {}; // Prevent Draggabilly from updating tabEl.style.transform in later frames
             this.draggabillyDragging.destroy();
             this.draggabillyDragging = null;
         }
@@ -509,18 +521,18 @@ export default class TabRowWidget extends BasicWidget {
 
             this.draggabillies.push(draggabilly);
 
-            draggabilly.on("pointerDown", (_) => {
+            draggabilly.on("pointerDown", () => {
                 appContext.tabManager.activateNoteContext(tabEl.getAttribute("data-ntx-id"));
             });
 
-            draggabilly.on("dragStart", (_) => {
+            draggabilly.on("dragStart", () => {
                 this.isDragging = true;
                 this.draggabillyDragging = draggabilly;
                 tabEl.classList.add("note-tab-is-dragging");
                 this.$widget.addClass("tab-row-widget-is-sorting");
             });
 
-            draggabilly.on("dragEnd", (_) => {
+            draggabilly.on("dragEnd", () => {
                 this.isDragging = false;
                 const finalTranslateX = parseFloat(tabEl.style.left);
                 tabEl.style.transform = `translate3d(0, 0, 0)`;
@@ -546,7 +558,7 @@ export default class TabRowWidget extends BasicWidget {
                 });
             });
 
-            draggabilly.on("dragMove", (event, pointer, moveVector) => {
+            draggabilly.on("dragMove", (event: unknown, pointer: unknown, moveVector: MoveVector) => {
                 // The current index be computed within the event since it can change during the dragMove
                 const tabEls = this.tabEls;
                 const currentIndex = tabEls.indexOf(tabEl);
@@ -566,13 +578,13 @@ export default class TabRowWidget extends BasicWidget {
         });
     }
 
-    animateTabMove(tabEl, originIndex, destinationIndex) {
+    animateTabMove(tabEl: HTMLElement, originIndex: number, destinationIndex: number) {
         if (destinationIndex < originIndex) {
-            tabEl.parentNode.insertBefore(tabEl, this.tabEls[destinationIndex]);
+            tabEl.parentNode?.insertBefore(tabEl, this.tabEls[destinationIndex]);
         } else {
             const beforeEl = this.tabEls[destinationIndex + 1] || this.$newTab[0];
 
-            tabEl.parentNode.insertBefore(tabEl, beforeEl);
+            tabEl.parentNode?.insertBefore(tabEl, beforeEl);
         }
         this.triggerEvent("tabReorder", { ntxIdsInOrder: this.getNtxIdsInOrder() });
         this.layoutTabs();
@@ -590,7 +602,7 @@ export default class TabRowWidget extends BasicWidget {
         this.$tabContainer.append(this.$filler);
     }
 
-    closest(value, array) {
+    closest(value: number, array: number[]) {
         let closest = Infinity;
         let closestIndex = -1;
 
@@ -604,17 +616,17 @@ export default class TabRowWidget extends BasicWidget {
         return closestIndex;
     }
 
-    noteSwitchedAndActivatedEvent({ noteContext }) {
+    noteSwitchedAndActivatedEvent({ noteContext }: EventData<"noteSwitchedAndActivatedEvent">) {
         this.activeContextChangedEvent();
 
         this.updateTabById(noteContext.mainNtxId || noteContext.ntxId);
     }
 
-    noteSwitchedEvent({ noteContext }) {
+    noteSwitchedEvent({ noteContext }: EventData<"noteSwitched">) {
         this.updateTabById(noteContext.mainNtxId || noteContext.ntxId);
     }
 
-    noteContextReorderEvent({ oldMainNtxId, newMainNtxId }) {
+    noteContextReorderEvent({ oldMainNtxId, newMainNtxId }: EventData<"noteContextReorderEvent">) {
         if (!oldMainNtxId || !newMainNtxId) {
             // no need to update tab row
             return;
@@ -625,16 +637,16 @@ export default class TabRowWidget extends BasicWidget {
         this.updateTabById(newMainNtxId);
     }
 
-    contextsReopenedEvent({ mainNtxId, tabPosition }) {
+    contextsReopenedEvent({ mainNtxId, tabPosition }: EventData<"contextsReopenedEvent">) {
         if (mainNtxId === undefined || tabPosition === undefined) {
             // no tab reopened
             return;
         }
         const tabEl = this.getTabById(mainNtxId)[0];
-        tabEl.parentNode.insertBefore(tabEl, this.tabEls[tabPosition]);
+        tabEl.parentNode?.insertBefore(tabEl, this.tabEls[tabPosition]);
     }
 
-    updateTabById(ntxId) {
+    updateTabById(ntxId: string | null) {
         const $tab = this.getTabById(ntxId);
 
         const noteContext = appContext.tabManager.getNoteContextById(ntxId);
@@ -642,11 +654,7 @@ export default class TabRowWidget extends BasicWidget {
         this.updateTab($tab, noteContext);
     }
 
-    /**
-     * @param {jQuery} $tab
-     * @param {NoteContext} noteContext
-     */
-    async updateTab($tab, noteContext) {
+    async updateTab($tab: JQuery<HTMLElement>, noteContext: NoteContext) {
         if (!$tab.length) {
             return;
         }
@@ -681,7 +689,9 @@ export default class TabRowWidget extends BasicWidget {
         }
 
         const title = await noteContext.getNavigationTitle();
-        this.updateTitle($tab, title);
+        if (title) {
+            this.updateTitle($tab, title);
+        }
 
         $tab.addClass(note.getCssClass());
         $tab.addClass(utils.getNoteTypeClass(note.type));
@@ -696,7 +706,7 @@ export default class TabRowWidget extends BasicWidget {
         }
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         for (const noteContext of appContext.tabManager.noteContexts) {
             if (!noteContext.noteId) {
                 continue;
@@ -706,7 +716,7 @@ export default class TabRowWidget extends BasicWidget {
                 loadResults.isNoteReloaded(noteContext.noteId) ||
                 loadResults
                     .getAttributeRows()
-                    .find((attr) => ["workspace", "workspaceIconClass", "workspaceTabBackgroundColor"].includes(attr.name) && attributeService.isAffecting(attr, noteContext.note))
+                    .find((attr) => ["workspace", "workspaceIconClass", "workspaceTabBackgroundColor"].includes(attr.name || "") && attributeService.isAffecting(attr, noteContext.note))
             ) {
                 const $tab = this.getTabById(noteContext.ntxId);
 
@@ -723,7 +733,7 @@ export default class TabRowWidget extends BasicWidget {
         }
     }
 
-    hoistedNoteChangedEvent({ ntxId }) {
+    hoistedNoteChangedEvent({ ntxId }: EventData<"hoistedNoteChanged">) {
         const $tab = this.getTabById(ntxId);
 
         if ($tab) {

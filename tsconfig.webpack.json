@@ -14,5 +14,8 @@
     "allowJs": true
   },
   "include": ["./src/public/app/**/*"],
-  "files": ["./src/public/app/types.d.ts"]
+  "files": [
+    "./src/public/app/types.d.ts",
+    "./src/public/app/types-lib.d.ts"
+  ]
 }

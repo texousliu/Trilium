@@ -20,10 +20,10 @@ export type GetTextEditorCallback = () => void;
 class NoteContext extends Component implements EventListener<"entitiesReloaded"> {
     ntxId: string | null;
     hoistedNoteId: string;
-    private mainNtxId: string | null;
+    mainNtxId: string | null;
 
     notePath?: string | null;
-    private noteId?: string | null;
+    noteId?: string | null;
     private parentNoteId?: string | null;
     viewScope?: ViewScope;
 

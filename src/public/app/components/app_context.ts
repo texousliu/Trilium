@@ -179,6 +179,16 @@ export type CommandMappings = {
     setActiveScreen: CommandData & {
         screen: Screen;
     };
+    closeTab: CommandData;
+    closeOtherTabs: CommandData;
+    closeRightTabs: CommandData;
+    closeAllTabs: CommandData;
+    reopenLastTab: CommandData;
+    moveTabToNewWindow: CommandData;
+    copyTabToNewWindow: CommandData;
+    closeActiveTab: CommandData & {
+        $el: JQuery<HTMLElement>
+    }
 };
 
 type EventMappings = {
@@ -233,6 +243,23 @@ type EventMappings = {
     showHighlightsListWidget: {
         noteId: string;
     };
+    hoistedNoteChanged: {
+        ntxId: string;
+    };
+    contextsReopenedEvent: {
+        mainNtxId: string;
+        tabPosition: number;
+    };
+    noteContextReorderEvent: {
+        oldMainNtxId: string;
+        newMainNtxId: string;
+    };
+    newNoteContextCreated: {
+        noteContext: NoteContext;
+    };
+    noteContextRemovedEvent: {
+        ntxIds: string[];
+    }
 };
 
 export type EventListener<T extends EventNames> = {
