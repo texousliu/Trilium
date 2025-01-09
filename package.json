@@ -74,7 +74,7 @@
     "codemirror": "5.65.18",
     "compression": "1.7.5",
     "cookie-parser": "1.4.7",
-    "csurf": "1.11.0",
+    "csurf": "1.2.2",
     "dayjs": "1.11.13",
     "dayjs-plugin-utc": "0.1.2",
     "debounce": "2.2.0",
