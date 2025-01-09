@@ -11,7 +11,8 @@
     "lib": ["ES2022"],
     "downlevelIteration": true,
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["./src/**/*.js", "./src/**/*.ts", "./*.ts", "./spec/**/*.ts"],
   "exclude": ["./node_modules/**/*", "./spec-es6/**/*.ts"],

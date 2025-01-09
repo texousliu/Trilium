@@ -4,7 +4,7 @@ import linkService from "../../services/link.js";
 import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
-import FAttribute, { FAttributeRow } from "../../entities/fattribute.js";
+import type { FAttributeRow } from "../../entities/fattribute.js";
 
 // TODO: Use common with server.
 interface Response {

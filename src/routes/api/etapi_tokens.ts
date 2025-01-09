@@ -1,4 +1,4 @@
-import { Request } from "express";
+import type { Request } from "express";
 import etapiTokenService from "../../services/etapi_tokens.js";
 
 function getTokens() {

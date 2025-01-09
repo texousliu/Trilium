@@ -21,7 +21,7 @@ import { removeDiacritic } from "../../utils.js";
 import TrueExp from "../expressions/true.js";
 import IsHiddenExp from "../expressions/is_hidden.js";
 import SearchContext from "../search_context.js";
-import { TokenData, TokenStructure } from "./types.js";
+import type { TokenData, TokenStructure } from "./types.js";
 import Expression from "../expressions/expression.js";
 
 function getFulltext(_tokens: TokenData[], searchContext: SearchContext) {

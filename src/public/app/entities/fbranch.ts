@@ -1,4 +1,4 @@
-import { Froca } from "../services/froca-interface.js";
+import type { Froca } from "../services/froca-interface.js";
 
 export interface FBranchRow {
     branchId: string;

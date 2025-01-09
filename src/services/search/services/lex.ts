@@ -1,4 +1,4 @@
-import { TokenData } from "./types.js";
+import type { TokenData } from "./types.js";
 
 function lex(str: string) {
     str = str.toLowerCase();

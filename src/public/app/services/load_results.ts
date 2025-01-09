@@ -1,5 +1,5 @@
-import { AttributeType } from "../entities/fattribute.js";
-import { EntityChange } from "../server_types.js";
+import type { AttributeType } from "../entities/fattribute.js";
+import type { EntityChange } from "../server_types.js";
 
 // TODO: Deduplicate with server.
 

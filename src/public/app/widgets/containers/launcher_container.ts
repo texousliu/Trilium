@@ -1,6 +1,6 @@
 import FlexContainer from "./flex_container.js";
 import froca from "../../services/froca.js";
-import appContext, { EventData } from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import LauncherWidget from "./launcher.js";
 import utils from "../../services/utils.js";
 

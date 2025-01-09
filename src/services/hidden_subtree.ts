@@ -1,5 +1,5 @@
 import BAttribute from "../becca/entities/battribute.js";
-import { AttributeType, NoteType } from "../becca/entities/rows.js";
+import type { AttributeType, NoteType } from "../becca/entities/rows.js";
 
 import becca from "../becca/becca.js";
 import noteService from "./notes.js";

@@ -1,7 +1,7 @@
 "use strict";
 
 import hoistedNoteService from "../hoisted_note.js";
-import { SearchParams } from "./services/types.js";
+import type { SearchParams } from "./services/types.js";
 
 class SearchContext {
     fastSearch: boolean;

@@ -1,28 +1,28 @@
 import froca from "../services/froca.js";
 import bundleService from "../services/bundle.js";
 import RootCommandExecutor from "./root_command_executor.js";
-import Entrypoints, { SqlExecuteResults } from "./entrypoints.js";
+import Entrypoints, { type SqlExecuteResults } from "./entrypoints.js";
 import options from "../services/options.js";
 import utils from "../services/utils.js";
 import zoomComponent from "./zoom.js";
 import TabManager from "./tab_manager.js";
 import Component from "./component.js";
 import keyboardActionsService from "../services/keyboard_actions.js";
-import linkService, { ViewScope } from "../services/link.js";
-import MobileScreenSwitcherExecutor, { Screen } from "./mobile_screen_switcher.js";
+import linkService, { type ViewScope } from "../services/link.js";
+import MobileScreenSwitcherExecutor, { type Screen } from "./mobile_screen_switcher.js";
 import MainTreeExecutors from "./main_tree_executors.js";
 import toast from "../services/toast.js";
 import ShortcutComponent from "./shortcut_component.js";
 import { t, initLocale } from "../services/i18n.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
-import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
-import { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
-import { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
-import { Node } from "../services/tree.js";
+import type { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
+import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
+import type { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
+import type { Node } from "../services/tree.js";
 import LoadResults from "../services/load_results.js";
-import { Attribute } from "../services/attribute_parser.js";
+import type { Attribute } from "../services/attribute_parser.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
-import NoteContext, { GetTextEditorCallback } from "./note_context.js";
+import NoteContext, { type GetTextEditorCallback } from "./note_context.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;

@@ -1,6 +1,6 @@
 "use strict";
 
-import { TaskData } from "./task_context_interface.js";
+import type { TaskData } from "./task_context_interface.js";
 import ws from "./ws.js";
 
 // taskId => TaskContext

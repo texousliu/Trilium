@@ -8,7 +8,7 @@ import toastService from "./toast.js";
 import { t } from "./i18n.js";
 import FNote from "../entities/fnote.js";
 import FBranch from "../entities/fbranch.js";
-import { ChooseNoteTypeResponse } from "../widgets/dialogs/note_type_chooser.js";
+import type { ChooseNoteTypeResponse } from "../widgets/dialogs/note_type_chooser.js";
 
 interface CreateNoteOpts {
     isProtected?: boolean;

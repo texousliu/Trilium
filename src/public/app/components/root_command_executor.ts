@@ -1,5 +1,5 @@
 import Component from "./component.js";
-import appContext, { CommandData, CommandListenerData } from "./app_context.js";
+import appContext, { type CommandData, type CommandListenerData } from "./app_context.js";
 import dateNoteService from "../services/date_notes.js";
 import treeService from "../services/tree.js";
 import openService from "../services/open.js";

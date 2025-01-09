@@ -31,10 +31,10 @@ import BAttachment from "../becca/entities/battachment.js";
 import BRevision from "../becca/entities/brevision.js";
 import BEtapiToken from "../becca/entities/betapi_token.js";
 import BOption from "../becca/entities/boption.js";
-import { AttributeRow } from "../becca/entities/rows.js";
+import type { AttributeRow } from "../becca/entities/rows.js";
 import Becca from "../becca/becca-interface.js";
-import { NoteParams } from "./note-interface.js";
-import { ApiParams } from "./backend_script_api_interface.js";
+import type { NoteParams } from "./note-interface.js";
+import type { ApiParams } from "./backend_script_api_interface.js";
 
 /**
  * A whole number

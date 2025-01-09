@@ -1,5 +1,5 @@
 import utils from "../services/utils.js";
-import { CommandMappings, CommandNames } from "./app_context.js";
+import type { CommandMappings, CommandNames } from "./app_context.js";
 
 /**
  * Abstract class for all components in the Trilium's frontend.

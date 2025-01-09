@@ -1,10 +1,10 @@
 "use strict";
 
-import { Request } from "express";
+import type { Request } from "express";
 
 import becca from "../../becca/becca.js";
 import SearchContext from "../../services/search/search_context.js";
-import searchService, { EMPTY_RESULT, SearchNoteResult } from "../../services/search/services/search.js";
+import searchService, { EMPTY_RESULT, type SearchNoteResult } from "../../services/search/services/search.js";
 import bulkActionService from "../../services/bulk_actions.js";
 import cls from "../../services/cls.js";
 import attributeFormatter from "../../services/attribute_formatter.js";

@@ -3,7 +3,7 @@
 import optionService from "./options.js";
 import log from "./log.js";
 import { isElectron as getIsElectron, isMac as getIsMac } from "./utils.js";
-import { KeyboardShortcut } from "./keyboard_actions_interface.js";
+import type { KeyboardShortcut } from "./keyboard_actions_interface.js";
 import { t } from "i18next";
 
 const isMac = getIsMac();

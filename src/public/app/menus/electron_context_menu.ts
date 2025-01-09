@@ -1,10 +1,10 @@
 import utils from "../services/utils.js";
 import options from "../services/options.js";
 import zoomService from "../components/zoom.js";
-import contextMenu, { MenuItem } from "./context_menu.js";
+import contextMenu, { type MenuItem } from "./context_menu.js";
 import { t } from "../services/i18n.js";
 import type { BrowserWindow } from "electron";
-import { CommandNames } from "../components/app_context.js";
+import type { CommandNames } from "../components/app_context.js";
 
 function setupContextMenu() {
     const electron = utils.dynamicRequire("electron");

@@ -1,6 +1,6 @@
 "use strict";
 
-import { Request } from "express";
+import type { Request } from "express";
 
 import attributeService from "../../services/attributes.js";
 import cloneService from "../../services/cloning.js";

@@ -1,6 +1,6 @@
-import { CommandNames } from "../../components/app_context.js";
-import keyboardActionsService, { Action } from "../../services/keyboard_actions.js";
-import AbstractButtonWidget, { AbstractButtonWidgetSettings } from "./abstract_button.js";
+import type { CommandNames } from "../../components/app_context.js";
+import keyboardActionsService, { type Action } from "../../services/keyboard_actions.js";
+import AbstractButtonWidget, { type AbstractButtonWidgetSettings } from "./abstract_button.js";
 
 let actions: Action[];
 

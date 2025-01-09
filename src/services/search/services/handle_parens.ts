@@ -1,4 +1,4 @@
-import { TokenData, TokenStructure } from "./types.js";
+import type { TokenData, TokenStructure } from "./types.js";
 
 /**
  * This will create a recursive object from a list of tokens - tokens between parenthesis are grouped in a single array

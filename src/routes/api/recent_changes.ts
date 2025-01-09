@@ -4,8 +4,8 @@ import sql from "../../services/sql.js";
 import protectedSessionService from "../../services/protected_session.js";
 import noteService from "../../services/notes.js";
 import becca from "../../becca/becca.js";
-import { Request } from "express";
-import { RevisionRow } from "../../becca/entities/rows.js";
+import type { Request } from "express";
+import type { RevisionRow } from "../../becca/entities/rows.js";
 
 interface RecentChangeRow {
     noteId: string;

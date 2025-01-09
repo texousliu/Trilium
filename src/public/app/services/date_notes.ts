@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { FNoteRow } from "../entities/fnote.js";
+import type { FNoteRow } from "../entities/fnote.js";
 import froca from "./froca.js";
 import server from "./server.js";
 import ws from "./ws.js";

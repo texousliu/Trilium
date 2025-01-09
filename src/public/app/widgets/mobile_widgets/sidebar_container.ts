@@ -1,7 +1,7 @@
-import { EventData } from "../../components/app_context.js";
-import { Screen } from "../../components/mobile_screen_switcher.js";
+import type { EventData } from "../../components/app_context.js";
+import type { Screen } from "../../components/mobile_screen_switcher.js";
 import BasicWidget from "../basic_widget.js";
-import FlexContainer, { FlexDirection } from "../containers/flex_container.js";
+import FlexContainer, { type FlexDirection } from "../containers/flex_container.js";
 
 const DRAG_STATE_NONE = 0;
 const DRAG_STATE_INITIAL_DRAG = 1;

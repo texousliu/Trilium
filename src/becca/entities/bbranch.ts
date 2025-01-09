@@ -7,7 +7,7 @@ import utils from "../../services/utils.js";
 import TaskContext from "../../services/task_context.js";
 import cls from "../../services/cls.js";
 import log from "../../services/log.js";
-import { BranchRow } from "./rows.js";
+import type { BranchRow } from "./rows.js";
 import handlers from "../../services/handlers.js";
 
 /**

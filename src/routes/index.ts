@@ -11,7 +11,7 @@ import protectedSessionService from "../services/protected_session.js";
 import packageJson from "../../package.json" with { type: "json" };
 import assetPath from "../services/asset_path.js";
 import appPath from "../services/app_path.js";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import BNote from "../becca/entities/bnote.js";
 
 function index(req: Request, res: Response) {

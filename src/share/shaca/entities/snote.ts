@@ -4,11 +4,11 @@ import sql from "../../sql.js";
 import utils from "../../../services/utils.js";
 import AbstractShacaEntity from "./abstract_shaca_entity.js";
 import escape from "escape-html";
-import { Blob } from "../../../services/blob-interface.js";
+import type { Blob } from "../../../services/blob-interface.js";
 import SAttachment from "./sattachment.js";
 import SAttribute from "./sattribute.js";
 import SBranch from "./sbranch.js";
-import { SNoteRow } from "./rows.js";
+import type { SNoteRow } from "./rows.js";
 
 const LABEL = "label";
 const RELATION = "relation";

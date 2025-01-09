@@ -11,7 +11,7 @@ import branchService from "../../services/branches.js";
 import log from "../../services/log.js";
 import ValidationError from "../../errors/validation_error.js";
 import eventService from "../../services/events.js";
-import { Request } from "express";
+import type { Request } from "express";
 
 /**
  * Code in this file deals with moving and cloning branches. The relationship between note and parent note is unique

@@ -1,5 +1,5 @@
-import { CommandNames } from "../../components/app_context.js";
-import { MenuCommandItem } from "../../menus/context_menu.js";
+import type { CommandNames } from "../../components/app_context.js";
+import type { MenuCommandItem } from "../../menus/context_menu.js";
 import { t } from "../../services/i18n.js";
 import noteTypesService from "../../services/note_types.js";
 import BasicWidget from "../basic_widget.js";

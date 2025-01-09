@@ -17,10 +17,10 @@ import BAttachment from "../../becca/entities/battachment.js";
 import markdownService from "./markdown.js";
 import TaskContext from "../task_context.js";
 import BNote from "../../becca/entities/bnote.js";
-import NoteMeta from "../meta/note_meta.js";
-import AttributeMeta from "../meta/attribute_meta.js";
+import type NoteMeta from "../meta/note_meta.js";
+import type AttributeMeta from "../meta/attribute_meta.js";
 import { Stream } from "stream";
-import { ALLOWED_NOTE_TYPES, NoteType } from "../../becca/entities/rows.js";
+import { ALLOWED_NOTE_TYPES, type NoteType } from "../../becca/entities/rows.js";
 
 interface MetaFile {
     files: NoteMeta[];

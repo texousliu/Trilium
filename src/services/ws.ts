@@ -11,7 +11,7 @@ import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 
 import env from "./env.js";
 import { IncomingMessage, Server } from "http";
-import { EntityChange } from "./entity_changes_interface.js";
+import type { EntityChange } from "./entity_changes_interface.js";
 
 if (env.isDev()) {
     const chokidar = (await import("chokidar")).default;

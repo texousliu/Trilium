@@ -10,9 +10,7 @@ import SpacedUpdate from "../../services/spaced_update.js";
 import utils from "../../services/utils.js";
 import shortcutService from "../../services/shortcuts.js";
 import appContext from "../../components/app_context.js";
-import FAttribute from "../../entities/fattribute.js";
-import FNote, { FNoteRow } from "../../entities/fnote.js";
-import { Attribute } from "../../services/attribute_parser.js";
+import type { Attribute } from "../../services/attribute_parser.js";
 
 const TPL = `
 <div class="attr-detail">

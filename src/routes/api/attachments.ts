@@ -2,7 +2,7 @@ import becca from "../../becca/becca.js";
 import blobService from "../../services/blob.js";
 import ValidationError from "../../errors/validation_error.js";
 import imageService from "../../services/image.js";
-import { Request } from "express";
+import type { Request } from "express";
 
 function getAttachmentBlob(req: Request) {
     const preview = req.query.preview === "true";

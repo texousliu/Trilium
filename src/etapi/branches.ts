@@ -6,7 +6,7 @@ import mappers from "./mappers.js";
 import BBranch from "../becca/entities/bbranch.js";
 import entityChangesService from "../services/entity_changes.js";
 import v from "./validators.js";
-import { BranchRow } from "../becca/entities/rows.js";
+import type { BranchRow } from "../becca/entities/rows.js";
 
 function register(router: Router) {
     eu.route(router, "get", "/etapi/branches/:branchId", (req, res, next) => {

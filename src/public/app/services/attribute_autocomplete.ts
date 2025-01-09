@@ -1,4 +1,4 @@
-import { AttributeType } from "../entities/fattribute.js";
+import type { AttributeType } from "../entities/fattribute.js";
 import server from "./server.js";
 
 interface InitOptions {

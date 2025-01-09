@@ -1,6 +1,6 @@
 "use strict";
 
-import { Request } from "express";
+import type { Request } from "express";
 import cloningService from "../../services/cloning.js";
 
 function cloneNoteToBranch(req: Request) {

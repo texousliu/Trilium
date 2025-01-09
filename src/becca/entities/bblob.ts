@@ -1,5 +1,5 @@
 import AbstractBeccaEntity from "./abstract_becca_entity.js";
-import { BlobRow } from "./rows.js";
+import type { BlobRow } from "./rows.js";
 
 // TODO: Why this does not extend the abstract becca?
 class BBlob extends AbstractBeccaEntity<BBlob> {

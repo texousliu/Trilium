@@ -6,7 +6,7 @@ import AbstractBeccaEntity from "./abstract_becca_entity.js";
 import sql from "../../services/sql.js";
 import protectedSessionService from "../../services/protected_session.js";
 import log from "../../services/log.js";
-import { AttachmentRow } from "./rows.js";
+import type { AttachmentRow } from "./rows.js";
 import BNote from "./bnote.js";
 import BBranch from "./bbranch.js";
 import noteService from "../../services/notes.js";

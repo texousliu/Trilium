@@ -1,7 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
-import { FontFamily, OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
+import type { FontFamily, OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
 
 interface FontFamilyEntry {
     value: FontFamily;

@@ -4,7 +4,7 @@ import scriptService from "../services/script.js";
 import cls from "../services/cls.js";
 import sql from "../services/sql.js";
 import becca from "../becca/becca.js";
-import { Request, Response, Router } from "express";
+import type { Request, Response, Router } from "express";
 
 function handleRequest(req: Request, res: Response) {
     // express puts content after first slash into 0 index element

@@ -1,9 +1,9 @@
-import appContext, { EventData, EventListener } from "./app_context.js";
+import appContext, { type EventData, type EventListener } from "./app_context.js";
 import shortcutService from "../services/shortcuts.js";
 import server from "../services/server.js";
 import Component from "./component.js";
 import froca from "../services/froca.js";
-import { AttributeRow } from "../services/load_results.js";
+import type { AttributeRow } from "../services/load_results.js";
 
 export default class ShortcutComponent extends Component implements EventListener<"entitiesReloaded"> {
     constructor() {

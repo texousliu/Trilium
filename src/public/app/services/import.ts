@@ -1,4 +1,4 @@
-import toastService, { ToastOptions } from "./toast.js";
+import toastService, { type ToastOptions } from "./toast.js";
 import server from "./server.js";
 import ws from "./ws.js";
 import utils from "./utils.js";

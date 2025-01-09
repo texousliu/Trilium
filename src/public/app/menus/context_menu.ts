@@ -1,4 +1,4 @@
-import { CommandNames } from "../components/app_context.js";
+import type { CommandNames } from "../components/app_context.js";
 import keyboardActionService from "../services/keyboard_actions.js";
 import utils from "../services/utils.js";
 

@@ -13,7 +13,7 @@ import log from "../../log.js";
 import hoistedNoteService from "../../hoisted_note.js";
 import BNote from "../../../becca/entities/bnote.js";
 import BAttribute from "../../../becca/entities/battribute.js";
-import { SearchParams, TokenStructure } from "./types.js";
+import type { SearchParams, TokenStructure } from "./types.js";
 import Expression from "../expressions/expression.js";
 import sql from "../../sql.js";
 import scriptService from "../../script.js";
@@ -122,12 +122,12 @@ function loadNeededInfoFromDatabase() {
         length: number;
     };
     const noteContentLengths = sql.getRows<NoteContentLengthsRow>(`
-        SELECT 
-            noteId, 
+        SELECT
+            noteId,
             blobId,
-            LENGTH(content) AS length 
+            LENGTH(content) AS length
         FROM notes
-             JOIN blobs USING(blobId) 
+             JOIN blobs USING(blobId)
         WHERE notes.isDeleted = 0`);
 
     for (const { noteId, blobId, length } of noteContentLengths) {
@@ -155,7 +155,7 @@ function loadNeededInfoFromDatabase() {
         FROM attachments
             JOIN notes ON attachments.ownerId = notes.noteId
             JOIN blobs ON attachments.blobId = blobs.blobId
-        WHERE attachments.isDeleted = 0 
+        WHERE attachments.isDeleted = 0
             AND notes.isDeleted = 0`);
 
     for (const { noteId, blobId, length } of attachmentContentLengths) {
@@ -183,13 +183,13 @@ function loadNeededInfoFromDatabase() {
         isNoteRevision: true;
     };
     const revisionContentLengths = sql.getRows<RevisionRow>(`
-            SELECT 
-                noteId, 
+            SELECT
+                noteId,
                 revisions.blobId,
                 LENGTH(content) AS length,
                 1 AS isNoteRevision
             FROM notes
-                JOIN revisions USING(noteId) 
+                JOIN revisions USING(noteId)
                 JOIN blobs ON revisions.blobId = blobs.blobId
             WHERE notes.isDeleted = 0
         UNION ALL

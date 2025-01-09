@@ -1,7 +1,7 @@
 import server from "./server.js";
 import froca from "./froca.js";
 import FNote from "../entities/fnote.js";
-import { AttributeRow } from "./load_results.js";
+import type { AttributeRow } from "./load_results.js";
 
 async function addLabel(noteId: string, name: string, value: string = "") {
     await server.put(`notes/${noteId}/attribute`, {

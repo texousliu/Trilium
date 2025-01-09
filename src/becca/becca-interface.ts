@@ -8,7 +8,7 @@ import BAttribute from "./entities/battribute.js";
 import BBranch from "./entities/bbranch.js";
 import BRevision from "./entities/brevision.js";
 import BAttachment from "./entities/battachment.js";
-import { AttachmentRow, BlobRow, RevisionRow } from "./entities/rows.js";
+import type { AttachmentRow, BlobRow, RevisionRow } from "./entities/rows.js";
 import BBlob from "./entities/bblob.js";
 import BRecentNote from "./entities/brecent_note.js";
 import AbstractBeccaEntity from "./entities/abstract_becca_entity.js";

@@ -15,11 +15,11 @@ import archiver from "archiver";
 import log from "../log.js";
 import TaskContext from "../task_context.js";
 import ValidationError from "../../errors/validation_error.js";
-import NoteMeta from "../meta/note_meta.js";
-import AttachmentMeta from "../meta/attachment_meta.js";
-import AttributeMeta from "../meta/attribute_meta.js";
+import type NoteMeta from "../meta/note_meta.js";
+import type AttachmentMeta from "../meta/attachment_meta.js";
+import type AttributeMeta from "../meta/attribute_meta.js";
 import BBranch from "../../becca/entities/bbranch.js";
-import { Response } from "express";
+import type { Response } from "express";
 import { RESOURCE_DIR } from "../resource_dir.js";
 
 async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "html" | "markdown", res: Response | fs.WriteStream, setHeaders = true) {

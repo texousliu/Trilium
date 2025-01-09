@@ -7,7 +7,7 @@ import mdService from "./md.js";
 import becca from "../../becca/becca.js";
 import TaskContext from "../task_context.js";
 import BBranch from "../../becca/entities/bbranch.js";
-import { Response } from "express";
+import type { Response } from "express";
 
 function exportSingleNote(taskContext: TaskContext, branch: BBranch, format: "html" | "markdown", res: Response) {
     const note = branch.getNote();

@@ -8,7 +8,8 @@ import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
 import remoteMain from "@electron/remote/main/index.js";
-import { App, BrowserWindow, BrowserWindowConstructorOptions, WebContents, ipcMain } from "electron";
+import type { App, BrowserWindow, BrowserWindowConstructorOptions, WebContents } from "electron";
+import { ipcMain } from "electron";
 import { isMac, isWindows } from "./utils.js";
 
 import { fileURLToPath } from "url";

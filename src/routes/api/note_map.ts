@@ -4,7 +4,7 @@ import becca from "../../becca/becca.js";
 import { JSDOM } from "jsdom";
 import BNote from "../../becca/entities/bnote.js";
 import BAttribute from "../../becca/entities/battribute.js";
-import { Request } from "express";
+import type { Request } from "express";
 
 function buildDescendantCountMap(noteIdsToCount: string[]) {
     if (!Array.isArray(noteIdsToCount)) {

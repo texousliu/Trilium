@@ -11,7 +11,7 @@ import beccaLoader from "../../becca/becca_loader.js";
 import log from "../../services/log.js";
 import TaskContext from "../../services/task_context.js";
 import ValidationError from "../../errors/validation_error.js";
-import { Request } from "express";
+import type { Request } from "express";
 import BNote from "../../becca/entities/bnote.js";
 
 async function importNotesToBranch(req: Request) {

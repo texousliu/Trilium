@@ -6,7 +6,7 @@ import log from "../../services/log.js";
 import utils from "../../services/utils.js";
 import cls from "../../services/cls.js";
 import becca from "../../becca/becca.js";
-import { Request } from "express";
+import type { Request } from "express";
 import ValidationError from "../../errors/validation_error.js";
 
 function getAutocomplete(req: Request) {

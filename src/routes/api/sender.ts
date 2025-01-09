@@ -5,7 +5,7 @@ import imageService from "../../services/image.js";
 import noteService from "../../services/notes.js";
 import sanitizeAttributeName from "../../services/sanitize_attribute_name.js";
 import specialNotesService from "../../services/special_notes.js";
-import { Request } from "express";
+import type { Request } from "express";
 
 async function uploadImage(req: Request) {
     const file = req.file;

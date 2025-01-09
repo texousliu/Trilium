@@ -1,5 +1,5 @@
 import handleParens from "../../src/services/search/services/handle_parens.js";
-import { TokenStructure } from "../../src/services/search/services/types.js";
+import type { TokenStructure } from "../../src/services/search/services/types.js";
 
 describe("Parens handler", () => {
     it("handles parens", () => {

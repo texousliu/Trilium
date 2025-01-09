@@ -1,8 +1,8 @@
 import server from "./server.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
-import { MenuItem } from "../menus/context_menu.js";
-import { ContextMenuCommandData, FilteredCommandNames } from "../components/app_context.js";
+import type { MenuItem } from "../menus/context_menu.js";
+import type { ContextMenuCommandData, FilteredCommandNames } from "../components/app_context.js";
 
 type NoteTypeCommandNames = FilteredCommandNames<ContextMenuCommandData>;
 

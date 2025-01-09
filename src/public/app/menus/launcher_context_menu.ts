@@ -1,12 +1,12 @@
-import treeService, { Node } from "../services/tree.js";
+import treeService, { type Node } from "../services/tree.js";
 import froca from "../services/froca.js";
-import contextMenu, { MenuCommandItem, MenuItem } from "./context_menu.js";
+import contextMenu, { type MenuCommandItem, type MenuItem } from "./context_menu.js";
 import dialogService from "../services/dialog.js";
 import server from "../services/server.js";
 import { t } from "../services/i18n.js";
 import type { SelectMenuItemEventListener } from "../components/events.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
-import { FilteredCommandNames, ContextMenuCommandData } from "../components/app_context.js";
+import type { FilteredCommandNames, ContextMenuCommandData } from "../components/app_context.js";
 
 type LauncherCommandNames = FilteredCommandNames<ContextMenuCommandData>;
 

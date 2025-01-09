@@ -1,9 +1,9 @@
-import treeService, { Node } from "../services/tree.js";
+import treeService, { type Node } from "../services/tree.js";
 import froca from "../services/froca.js";
 import clipboard from "../services/clipboard.js";
 import noteCreateService from "../services/note_create.js";
-import contextMenu, { MenuCommandItem, MenuItem } from "./context_menu.js";
-import appContext, { ContextMenuCommandData, FilteredCommandNames } from "../components/app_context.js";
+import contextMenu, { type MenuCommandItem, type MenuItem } from "./context_menu.js";
+import appContext, { type ContextMenuCommandData, type FilteredCommandNames } from "../components/app_context.js";
 import noteTypesService from "../services/note_types.js";
 import server from "../services/server.js";
 import toastService from "../services/toast.js";
@@ -11,7 +11,7 @@ import dialogService from "../services/dialog.js";
 import { t } from "../services/i18n.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import FAttachment from "../entities/fattachment.js";
-import { SelectMenuItemEventListener } from "../components/events.js";
+import type { SelectMenuItemEventListener } from "../components/events.js";
 
 // TODO: Deduplicate once client/server is well split.
 interface ConvertToAttachmentResponse {

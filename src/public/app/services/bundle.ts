@@ -4,7 +4,7 @@ import toastService from "./toast.js";
 import froca from "./froca.js";
 import utils from "./utils.js";
 import { t } from "./i18n.js";
-import { Entity } from "./frontend_script_api.js";
+import type { Entity } from "./frontend_script_api.js";
 
 // TODO: Deduplicate with server.
 export interface Bundle {

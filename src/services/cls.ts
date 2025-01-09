@@ -1,5 +1,5 @@
 import clsHooked from "cls-hooked";
-import { EntityChange } from "./entity_changes_interface.js";
+import type { EntityChange } from "./entity_changes_interface.js";
 const namespace = clsHooked.createNamespace("trilium");
 
 type Callback = (...args: any[]) => any;

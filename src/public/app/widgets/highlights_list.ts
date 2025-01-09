@@ -10,7 +10,7 @@ import attributeService from "../services/attributes.js";
 import RightPanelWidget from "./right_panel_widget.js";
 import options from "../services/options.js";
 import OnClickButtonWidget from "./buttons/onclick_button.js";
-import appContext, { EventData } from "../components/app_context.js";
+import appContext, { type EventData } from "../components/app_context.js";
 import libraryLoader from "../services/library_loader.js";
 import FNote from "../entities/fnote.js";
 

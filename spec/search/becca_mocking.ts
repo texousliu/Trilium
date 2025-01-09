@@ -4,7 +4,7 @@ import BAttribute from "../../src/becca/entities/battribute.js";
 import becca from "../../src/becca/becca.js";
 import randtoken from "rand-token";
 import SearchResult from "../../src/services/search/search_result.js";
-import { NoteType } from "../../src/becca/entities/rows.js";
+import type { NoteType } from "../../src/becca/entities/rows.js";
 randtoken.generator({ source: "crypto" });
 
 function findNoteByTitle(searchResults: Array<SearchResult>, title: string): BNote | undefined {

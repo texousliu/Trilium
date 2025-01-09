@@ -1,4 +1,4 @@
-import { Froca } from "../services/froca-interface.js";
+import type { Froca } from "../services/froca-interface.js";
 import promotedAttributeDefinitionParser from "../services/promoted_attribute_definition_parser.js";
 
 /**

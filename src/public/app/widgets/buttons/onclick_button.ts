@@ -1,4 +1,4 @@
-import AbstractButtonWidget, { AbstractButtonWidgetSettings } from "./abstract_button.js";
+import AbstractButtonWidget, { type AbstractButtonWidgetSettings } from "./abstract_button.js";
 import { t } from "../../services/i18n.js";
 
 export type ClickHandler = (widget: OnClickButtonWidget, e: JQuery.ClickEvent<any, any, any, any>) => void;

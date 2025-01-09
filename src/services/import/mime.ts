@@ -2,7 +2,7 @@
 
 import mimeTypes from "mime-types";
 import path from "path";
-import { TaskData } from "../task_context_interface.js";
+import type { TaskData } from "../task_context_interface.js";
 
 const CODE_MIME_TYPES: Record<string, boolean | string> = {
     "text/plain": true,

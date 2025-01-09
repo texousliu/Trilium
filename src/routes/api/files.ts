@@ -11,7 +11,7 @@ import chokidar from "chokidar";
 import ws from "../../services/ws.js";
 import becca from "../../becca/becca.js";
 import ValidationError from "../../errors/validation_error.js";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import BNote from "../../becca/entities/bnote.js";
 import BAttachment from "../../becca/entities/battachment.js";
 

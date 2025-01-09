@@ -8,7 +8,7 @@ import hiddenSubtreeService from "./hidden_subtree.js";
 import oneTimeTimer from "./one_time_timer.js";
 import BNote from "../becca/entities/bnote.js";
 import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
-import { DefinitionObject } from "./promoted_attribute_definition_interface.js";
+import type { DefinitionObject } from "./promoted_attribute_definition_interface.js";
 
 type Handler = (definition: DefinitionObject, note: BNote, targetNote: BNote) => void;
 

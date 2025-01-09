@@ -1,7 +1,7 @@
 import { t } from "../services/i18n.js";
 import contextMenu from "./context_menu.js";
 import appContext from "../components/app_context.js";
-import { ViewScope } from "../services/link.js";
+import type { ViewScope } from "../services/link.js";
 
 function openContextMenu(notePath: string, e: PointerEvent, viewScope: ViewScope = {}, hoistedNoteId: string | null = null) {
     contextMenu.show({

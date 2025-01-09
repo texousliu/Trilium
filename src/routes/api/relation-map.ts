@@ -1,4 +1,4 @@
-import { Request } from "express";
+import type { Request } from "express";
 import becca from "../../becca/becca.js";
 import sql from "../../services/sql.js";
 

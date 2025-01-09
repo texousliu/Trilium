@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import optionService from "../../services/options.js";
-import { OptionMap } from "../../services/options_interface.js";
+import type { OptionMap } from "../../services/options_interface.js";
 
 const SYSTEM_SANS_SERIF = [
     "system-ui",

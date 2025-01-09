@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { Application } from "express";
+import type { Application } from "express";
 
 interface Response {
     statusCode: number;

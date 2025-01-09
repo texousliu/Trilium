@@ -11,7 +11,7 @@ import BOption from "./entities/boption.js";
 import BEtapiToken from "./entities/betapi_token.js";
 import cls from "../services/cls.js";
 import entityConstructor from "../becca/entity_constructor.js";
-import { AttributeRow, BranchRow, EtapiTokenRow, NoteRow, OptionRow } from "./entities/rows.js";
+import type { AttributeRow, BranchRow, EtapiTokenRow, NoteRow, OptionRow } from "./entities/rows.js";
 import AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
 import ws from "../services/ws.js";
 

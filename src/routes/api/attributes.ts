@@ -6,7 +6,7 @@ import attributeService from "../../services/attributes.js";
 import BAttribute from "../../becca/entities/battribute.js";
 import becca from "../../becca/becca.js";
 import ValidationError from "../../errors/validation_error.js";
-import { Request } from "express";
+import type { Request } from "express";
 
 function getEffectiveNoteAttributes(req: Request) {
     const note = becca.getNote(req.params.noteId);

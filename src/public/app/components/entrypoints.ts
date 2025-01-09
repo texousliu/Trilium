@@ -2,7 +2,7 @@ import utils from "../services/utils.js";
 import dateNoteService from "../services/date_notes.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import server from "../services/server.js";
-import appContext, { NoteCommandData } from "./app_context.js";
+import appContext, { type NoteCommandData } from "./app_context.js";
 import Component from "./component.js";
 import toastService from "../services/toast.js";
 import ws from "../services/ws.js";

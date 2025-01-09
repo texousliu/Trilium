@@ -1,13 +1,13 @@
 import utils from "./utils.js";
 import server from "./server.js";
-import toastService, { ToastOptions } from "./toast.js";
+import toastService, { type ToastOptions } from "./toast.js";
 import froca from "./froca.js";
 import hoistedNoteService from "./hoisted_note.js";
 import ws from "./ws.js";
 import appContext from "../components/app_context.js";
 import { t } from "./i18n.js";
-import { Node } from "./tree.js";
-import { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
+import type { Node } from "./tree.js";
+import type { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 
 // TODO: Deduplicate type with server
 interface Response {

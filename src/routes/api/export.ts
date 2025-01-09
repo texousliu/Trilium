@@ -7,7 +7,7 @@ import becca from "../../becca/becca.js";
 import TaskContext from "../../services/task_context.js";
 import log from "../../services/log.js";
 import NotFoundError from "../../errors/not_found_error.js";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import ValidationError from "../../errors/validation_error.js";
 
 function exportBranch(req: Request, res: Response) {

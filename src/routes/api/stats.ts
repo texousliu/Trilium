@@ -1,6 +1,6 @@
 import sql from "../../services/sql.js";
 import becca from "../../becca/becca.js";
-import { Request } from "express";
+import type { Request } from "express";
 
 function getNoteSize(req: Request) {
     const { noteId } = req.params;

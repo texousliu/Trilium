@@ -1,6 +1,6 @@
 import appContext from "../components/app_context.js";
-import { ConfirmDialogOptions, ConfirmWithMessageOptions } from "../widgets/dialogs/confirm.js";
-import { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
+import type { ConfirmDialogOptions, ConfirmWithMessageOptions } from "../widgets/dialogs/confirm.js";
+import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 
 async function info(message: string) {
     return new Promise((res) => appContext.triggerCommand("showInfoDialog", { message, callback: res }));

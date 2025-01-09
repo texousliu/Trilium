@@ -4,7 +4,7 @@ import { isElectron } from "./utils.js";
 import log from "./log.js";
 import url from "url";
 import syncOptions from "./sync_options.js";
-import { ExecOpts } from "./request_interface.js";
+import type { ExecOpts } from "./request_interface.js";
 
 // this service provides abstraction over node's HTTP/HTTPS and electron net.client APIs
 // this allows supporting system proxy

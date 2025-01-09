@@ -1,4 +1,4 @@
-import FAttribute, { AttributeType, FAttributeRow } from "../entities/fattribute.js";
+import type { AttributeType, FAttributeRow } from "../entities/fattribute.js";
 import utils from "./utils.js";
 
 interface Token {

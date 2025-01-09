@@ -4,9 +4,9 @@ import log from "../services/log.js";
 import becca from "../becca/becca.js";
 import etapiTokenService from "../services/etapi_tokens.js";
 import config from "../services/config.js";
-import { NextFunction, Request, RequestHandler, Response, Router } from "express";
-import { ValidatorMap } from "./etapi-interface.js";
-import { ApiRequestHandler } from "../routes/routes.js";
+import type { NextFunction, Request, RequestHandler, Response, Router } from "express";
+import type { ValidatorMap } from "./etapi-interface.js";
+import type { ApiRequestHandler } from "../routes/routes.js";
 const GENERIC_CODE = "GENERIC";
 
 type HttpMethod = "all" | "get" | "post" | "put" | "delete" | "patch" | "options" | "head";

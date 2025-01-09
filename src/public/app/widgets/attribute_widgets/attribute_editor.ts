@@ -3,7 +3,7 @@ import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import noteAutocompleteService from "../../services/note_autocomplete.js";
 import server from "../../services/server.js";
 import contextMenuService from "../../menus/context_menu.js";
-import attributeParser, { Attribute } from "../../services/attribute_parser.js";
+import attributeParser from "../../services/attribute_parser.js";
 import libraryLoader from "../../services/library_loader.js";
 import froca from "../../services/froca.js";
 import attributeRenderer from "../../services/attribute_renderer.js";
@@ -11,8 +11,8 @@ import noteCreateService from "../../services/note_create.js";
 import attributeService from "../../services/attributes.js";
 import linkService from "../../services/link.js";
 import AttributeDetailWidget from "./attribute_detail.js";
-import { CommandData, EventData, EventListener, FilteredCommandNames } from "../../components/app_context.js";
-import FAttribute, { AttributeType } from "../../entities/fattribute.js";
+import type { CommandData, EventData, EventListener, FilteredCommandNames } from "../../components/app_context.js";
+import FAttribute, { type AttributeType } from "../../entities/fattribute.js";
 import FNote from "../../entities/fnote.js";
 
 const HELP_TEXT = `

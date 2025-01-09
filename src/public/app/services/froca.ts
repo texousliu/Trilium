@@ -1,11 +1,11 @@
-import FBranch, { FBranchRow } from "../entities/fbranch.js";
-import FNote, { FNoteRow } from "../entities/fnote.js";
-import FAttribute, { FAttributeRow } from "../entities/fattribute.js";
+import FBranch, { type FBranchRow } from "../entities/fbranch.js";
+import FNote, { type FNoteRow } from "../entities/fnote.js";
+import FAttribute, { type FAttributeRow } from "../entities/fattribute.js";
 import server from "./server.js";
 import appContext from "../components/app_context.js";
-import FBlob, { FBlobRow } from "../entities/fblob.js";
-import FAttachment, { FAttachmentRow } from "../entities/fattachment.js";
-import { Froca } from "./froca-interface.js";
+import FBlob, { type FBlobRow } from "../entities/fblob.js";
+import FAttachment, { type FAttachmentRow } from "../entities/fattachment.js";
+import type { Froca } from "./froca-interface.js";
 
 interface SubtreeResponse {
     notes: FNoteRow[];

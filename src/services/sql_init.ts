@@ -10,7 +10,7 @@ import TaskContext from "./task_context.js";
 import migrationService from "./migration.js";
 import cls from "./cls.js";
 import config from "./config.js";
-import { OptionRow } from "../becca/entities/rows.js";
+import type { OptionRow } from "../becca/entities/rows.js";
 import BNote from "../becca/entities/bnote.js";
 import BBranch from "../becca/entities/bbranch.js";
 import zipImportService from "./import/zip.js";

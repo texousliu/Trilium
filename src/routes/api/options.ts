@@ -4,7 +4,7 @@ import optionService from "../../services/options.js";
 import log from "../../services/log.js";
 import searchService from "../../services/search/services/search.js";
 import ValidationError from "../../errors/validation_error.js";
-import { Request } from "express";
+import type { Request } from "express";
 import { changeLanguage } from "../../services/i18n.js";
 import { listSyntaxHighlightingThemes } from "../../services/code_block_theme.js";
 import type { OptionNames } from "../../services/options_interface.js";

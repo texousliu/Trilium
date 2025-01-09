@@ -7,7 +7,7 @@ import request from "./request.js";
 import appInfo from "./app_info.js";
 import { timeLimit } from "./utils.js";
 import becca from "../becca/becca.js";
-import { SetupStatusResponse, SetupSyncSeedResponse } from "./api-interface.js";
+import type { SetupStatusResponse, SetupSyncSeedResponse } from "./api-interface.js";
 
 async function hasSyncServerSchemaAndSeed() {
     const response = await requestToSyncServer<SetupStatusResponse>("GET", "/api/setup/status");

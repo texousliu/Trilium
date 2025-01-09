@@ -5,7 +5,7 @@ import attributeService from "../../services/attributes.js";
 import becca from "../../becca/becca.js";
 import syncService from "../../services/sync.js";
 import sql from "../../services/sql.js";
-import { Request } from "express";
+import type { Request } from "express";
 
 interface ScriptBody {
     script: string;

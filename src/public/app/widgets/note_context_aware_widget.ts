@@ -1,5 +1,5 @@
 import BasicWidget from "./basic_widget.js";
-import appContext, { EventData } from "../components/app_context.js";
+import appContext, { type EventData } from "../components/app_context.js";
 import FNote from "../entities/fnote.js";
 import NoteContext from "../components/note_context.js";
 

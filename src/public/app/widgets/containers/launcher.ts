@@ -12,7 +12,7 @@ import TodayLauncher from "../buttons/launcher/today_launcher.js";
 import HistoryNavigationButton from "../buttons/history_navigation.js";
 import QuickSearchLauncherWidget from "../quick_search_launcher.js";
 import FNote from "../../entities/fnote.js";
-import { CommandNames } from "../../components/app_context.js";
+import type { CommandNames } from "../../components/app_context.js";
 
 interface InnerWidget extends BasicWidget {
     settings?: {

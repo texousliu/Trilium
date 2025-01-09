@@ -1,4 +1,4 @@
-import FrontendScriptApi, { Entity } from "./frontend_script_api.js";
+import FrontendScriptApi, { type Entity } from "./frontend_script_api.js";
 import utils from "./utils.js";
 import froca from "./froca.js";
 

@@ -5,7 +5,7 @@ import { randomSecureToken, isWindows } from "./utils.js";
 import log from "./log.js";
 import dateUtils from "./date_utils.js";
 import keyboardActions from "./keyboard_actions.js";
-import { KeyboardShortcutWithRequiredActionName } from "./keyboard_actions_interface.js";
+import type { KeyboardShortcutWithRequiredActionName } from "./keyboard_actions_interface.js";
 
 function initDocumentOptions() {
     optionService.createOption("documentId", randomSecureToken(16), false);

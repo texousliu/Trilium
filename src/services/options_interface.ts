@@ -1,4 +1,4 @@
-import { KeyboardActionNames } from "./keyboard_actions_interface.js";
+import type { KeyboardActionNames } from "./keyboard_actions_interface.js";
 
 /**
  * A dictionary where the keys are the option keys (e.g. `theme`) and their corresponding values.

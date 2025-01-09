@@ -1,5 +1,5 @@
-import { FilterOptionsByType, OptionDefinitions, OptionMap, OptionNames } from "../../../../../services/options_interface.js";
-import { EventData, EventListener } from "../../../components/app_context.js";
+import type { FilterOptionsByType, OptionDefinitions, OptionMap, OptionNames } from "../../../../../services/options_interface.js";
+import type { EventData, EventListener } from "../../../components/app_context.js";
 import FNote from "../../../entities/fnote.js";
 import { t } from "../../../services/i18n.js";
 import server from "../../../services/server.js";
