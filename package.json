@@ -78,7 +78,7 @@
     "dayjs": "1.11.13",
     "dayjs-plugin-utc": "0.1.2",
     "debounce": "2.2.0",
-    "draggabilly": "2.3.0",
+    "draggabilly": "2.4.1",
     "ejs": "3.1.10",
     "electron-debug": "4.1.0",
     "electron-dl": "4.0.0",
