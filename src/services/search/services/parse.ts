@@ -423,7 +423,14 @@ function getExpression(tokens: TokenData[], searchContext: SearchContext, level 
     return getAggregateExpression();
 }
 
-function parse({ fulltextTokens, expressionTokens, searchContext }: { fulltextTokens: TokenData[]; expressionTokens: TokenStructure; searchContext: SearchContext; originalQuery: string }) {
+export interface ParseOpts {
+    fulltextTokens: TokenData[];
+    expressionTokens: TokenStructure;
+    searchContext: SearchContext;
+    originalQuery?: string
+}
+
+function parse({ fulltextTokens, expressionTokens, searchContext }: ParseOpts) {
     let expression: Expression | undefined | null;
 
     try {

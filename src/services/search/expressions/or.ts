@@ -6,7 +6,7 @@ import TrueExp from "./true.js";
 import SearchContext from "../search_context.js";
 
 class OrExp extends Expression {
-    private subExpressions: Expression[];
+    subExpressions: Expression[];
 
     static of(subExpressions: Expression[]) {
         subExpressions = subExpressions.filter((exp) => !!exp);

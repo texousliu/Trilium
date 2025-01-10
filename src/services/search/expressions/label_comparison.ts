@@ -8,9 +8,9 @@ import SearchContext from "../search_context.js";
 type Comparator = (value: string) => boolean;
 
 class LabelComparisonExp extends Expression {
-    private attributeType: string;
-    private attributeName: string;
-    private comparator: Comparator;
+    attributeType: string;
+    attributeName: string;
+    comparator: Comparator;
 
     constructor(attributeType: string, attributeName: string, comparator: Comparator) {
         super();

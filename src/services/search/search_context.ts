@@ -22,7 +22,7 @@ class SearchContext {
     originalQuery: string;
     fulltextQuery: string;
     dbLoadNeeded: boolean;
-    private error: string | null;
+    error: string | null;
 
     constructor(params: SearchParams = {}) {
         this.fastSearch = !!params.fastSearch;
