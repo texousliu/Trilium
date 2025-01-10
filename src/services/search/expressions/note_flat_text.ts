@@ -10,7 +10,7 @@ import { normalize } from "../../utils.js";
 import beccaService from "../../../becca/becca_service.js";
 
 class NoteFlatTextExp extends Expression {
-    private tokens: string[];
+    tokens: string[];
 
     constructor(tokens: string[]) {
         super();
