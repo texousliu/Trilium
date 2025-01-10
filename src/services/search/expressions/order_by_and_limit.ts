@@ -18,7 +18,7 @@ interface OrderDefinition {
 
 class OrderByAndLimitExp extends Expression {
     private orderDefinitions: OrderDefinition[];
-    private limit: number;
+    limit: number;
     subExpression: Expression | null;
 
     constructor(orderDefinitions: Pick<OrderDefinition, "direction" | "valueExtractor">[], limit?: number) {

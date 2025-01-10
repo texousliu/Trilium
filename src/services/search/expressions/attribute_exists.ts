@@ -7,8 +7,8 @@ import becca from "../../../becca/becca.js";
 import Expression from "./expression.js";
 
 class AttributeExistsExp extends Expression {
-    private attributeType: string;
-    private attributeName: string;
+    attributeType: string;
+    attributeName: string;
     private isTemplateLabel: boolean;
     private prefixMatch: boolean;
 

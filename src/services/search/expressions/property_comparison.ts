@@ -41,9 +41,9 @@ interface SearchContext {
 }
 
 class PropertyComparisonExp extends Expression {
-    private propertyName: string;
-    private operator: string;
-    private comparedValue: string;
+    propertyName: string;
+    operator: string;
+    comparedValue: string;
     private comparator;
 
     static isProperty(name: string) {

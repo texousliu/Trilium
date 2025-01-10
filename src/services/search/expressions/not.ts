@@ -5,7 +5,7 @@ import SearchContext from "../search_context.js";
 import Expression from "./expression.js";
 
 class NotExp extends Expression {
-    private subExpression: Expression;
+    subExpression: Expression;
 
     constructor(subExpression: Expression) {
         super();

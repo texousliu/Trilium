@@ -704,7 +704,7 @@ body.layout-horizontal .tab-row-widget-container {
     overflow: hidden;
 }
 
-body.desktop #root-widget.horizontal-layout {
+body.desktop:not(.background-effects.platform-win32) #root-widget.horizontal-layout {
     background-color: var(--root-background) !important;
 }
 
