@@ -423,7 +423,14 @@ function getExpression(tokens: TokenData[], searchContext: SearchContext, level 
     return getAggregateExpression();
 }
 
-function parse({ fulltextTokens, expressionTokens, searchContext }: { fulltextTokens: TokenData[]; expressionTokens: TokenStructure; searchContext: SearchContext; originalQuery: string }) {
+export interface ParseOpts {
+    fulltextTokens: TokenData[];
+    expressionTokens: TokenStructure;
+    searchContext: SearchContext;
+    originalQuery?: string
+}
+
+function parse({ fulltextTokens, expressionTokens, searchContext }: ParseOpts) {
     let expression: Expression | undefined | null;
 
     try {
@@ -440,6 +447,12 @@ function parse({ fulltextTokens, expressionTokens, searchContext }: { fulltextTo
         getFulltext(fulltextTokens, searchContext),
         expression
     ]);
+
+    if (searchContext.limit && !searchContext.orderBy) {
+        const filterExp = exp;
+        exp = new OrderByAndLimitExp([], searchContext.limit || undefined );
+        (exp as any).subExpression = filterExp;
+    }
 
     if (searchContext.orderBy && searchContext.orderBy !== "relevancy") {
         const filterExp = exp;

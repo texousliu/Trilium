@@ -5,10 +5,14 @@ import shareRoot from "./share_root.js";
 import escapeHtml from "escape-html";
 import SNote from "./shaca/entities/snote.js";
 
-interface Result {
+/**
+ * Represents the output of the content renderer.
+ */
+export interface Result {
     header: string;
     content: string | Buffer | undefined;
-    isEmpty: boolean;
+    /** Set to `true` if the provided content should be rendered as empty. */
+    isEmpty?: boolean;
 }
 
 function getContent(note: SNote) {
@@ -137,7 +141,10 @@ function handleAttachmentLink(linkEl: HTMLAnchorElement, href: string) {
     }
 }
 
-function renderCode(result: Result) {
+/**
+ * Renders a code note.
+ */
+export function renderCode(result: Result) {
     if (typeof result.content !== "string" || !result.content?.trim()) {
         result.isEmpty = true;
     } else {

@@ -34,7 +34,7 @@ type SearchRow = Pick<NoteRow, "noteId" | "type" | "mime" | "content" | "isProte
 
 class NoteContentFulltextExp extends Expression {
     private operator: string;
-    private tokens: string[];
+    tokens: string[];
     private raw: boolean;
     private flatText: boolean;
 
