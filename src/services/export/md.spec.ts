@@ -1,5 +1,5 @@
-import markdownExportService from "../../../src/services/export/md.js";
-import { trimIndentation } from "../../support/utils.js";
+import markdownExportService from "./md.js";
+import { trimIndentation } from "../../../spec/support/utils.js";
 
 describe("Markdown export", () => {
     it("trims language tag for code blocks", () => {
