@@ -3,6 +3,7 @@
 // but we access properties like "subExpressions" which is not defined in the "Expression" class.
 
 import Expression from "../../src/services/search/expressions/expression.js";
+import OrderByAndLimitExp from "../../src/services/search/expressions/order_by_and_limit.js";
 import SearchContext from "../../src/services/search/search_context.js";
 import parse from "../../src/services/search/services/parse.js";
 
@@ -243,6 +244,21 @@ describe("Parser", () => {
 
         expect(thirdSub.constructor.name).toEqual("AttributeExistsExp");
         expect(thirdSub.attributeName).toEqual("fourth");
+    });
+
+    it("parses limit without order by", () => {
+        const rootExp = parse({
+            fulltextTokens: tokens(["hello", "hi"]),
+            expressionTokens: [],
+            searchContext: new SearchContext({
+                excludeArchived: true,
+                limit: 2
+            })
+        });
+
+        expect(rootExp).toBeInstanceOf(OrderByAndLimitExp);
+        expect(rootExp.limit).toBe(2);
+        expect(rootExp.subExpression).toBeInstanceOf(AndExp);
     });
 });
 

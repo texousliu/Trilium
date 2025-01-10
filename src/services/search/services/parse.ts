@@ -441,6 +441,12 @@ function parse({ fulltextTokens, expressionTokens, searchContext }: { fulltextTo
         expression
     ]);
 
+    if (searchContext.limit && !searchContext.orderBy) {
+        const filterExp = exp;
+        exp = new OrderByAndLimitExp([], searchContext.limit || undefined );
+        (exp as any).subExpression = filterExp;
+    }
+
     if (searchContext.orderBy && searchContext.orderBy !== "relevancy") {
         const filterExp = exp;
 
