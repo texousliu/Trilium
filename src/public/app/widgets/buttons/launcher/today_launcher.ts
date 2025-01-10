@@ -6,7 +6,7 @@ export default class TodayLauncher extends NoteLauncher {
     async getTargetNoteId() {
         const todayNote = await dateNotesService.getTodayNote();
 
-        return todayNote.noteId;
+        return todayNote?.noteId;
     }
 
     getHoistedNoteId() {

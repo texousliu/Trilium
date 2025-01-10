@@ -1,7 +1,8 @@
+import type FNote from "../../../entities/fnote.js";
 import AbstractLauncher from "./abstract_launcher.js";
 
 export default class ScriptLauncher extends AbstractLauncher {
-    constructor(launcherNote) {
+    constructor(launcherNote: FNote) {
         super(launcherNote);
 
         this.title(() => this.launcherNote.title)
@@ -14,8 +15,9 @@ export default class ScriptLauncher extends AbstractLauncher {
             await this.launcherNote.executeScript();
         } else {
             const script = await this.launcherNote.getRelationTarget("script");
-
-            await script.executeScript();
+            if (script) {
+                await script.executeScript();
+            }
         }
     }
 }

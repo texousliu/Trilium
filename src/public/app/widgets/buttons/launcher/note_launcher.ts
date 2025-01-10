@@ -4,6 +4,7 @@ import dialogService from "../../../services/dialog.js";
 import appContext from "../../../components/app_context.js";
 import utils from "../../../services/utils.js";
 import linkContextMenuService from "../../../menus/link_context_menu.js";
+import type FNote from "../../../entities/fnote.js";
 
 // we're intentionally displaying the launcher title and icon instead of the target,
 // e.g. you want to make launchers to 2 mermaid diagrams which both have mermaid icon (ok),
@@ -13,16 +14,17 @@ import linkContextMenuService from "../../../menus/link_context_menu.js";
 // The only downside is more work in setting up the typical case
 // where you actually want to have both title and icon in sync, but for those cases there are bookmarks
 export default class NoteLauncher extends AbstractLauncher {
-    constructor(launcherNote) {
+    constructor(launcherNote: FNote) {
         super(launcherNote);
 
         this.title(() => this.launcherNote.title)
             .icon(() => this.launcherNote.getIcon())
             .onClick((widget, evt) => this.launch(evt))
             .onAuxClick((widget, evt) => this.launch(evt))
-            .onContextMenu((evt) => {
-                const targetNoteId = this.getTargetNoteId();
-                if (!targetNoteId) {
+            .onContextMenu(async (evt) => {
+                let targetNoteId = await Promise.resolve(this.getTargetNoteId());
+
+                if (!targetNoteId || !evt) {
                     return;
                 }
 
@@ -32,30 +34,39 @@ export default class NoteLauncher extends AbstractLauncher {
             });
     }
 
-    async launch(evt) {
+    async launch(evt?: JQuery.ClickEvent | JQuery.ContextMenuEvent | JQuery.TriggeredEvent) {
         // await because subclass overrides can be async
         const targetNoteId = await this.getTargetNoteId();
-        if (!targetNoteId || evt.which === 3) {
+        if (!targetNoteId || evt?.which === 3) {
             return;
         }
 
         const hoistedNoteId = await this.getHoistedNoteId();
+        if (!hoistedNoteId) {
+            return;
+        }
 
         if (!evt) {
             // keyboard shortcut
+            // TODO: Fix once tabManager is ported.
+            //@ts-ignore
             await appContext.tabManager.openInSameTab(targetNoteId, hoistedNoteId);
         } else {
             const ctrlKey = utils.isCtrlKey(evt);
 
             if ((evt.which === 1 && ctrlKey) || evt.which === 2) {
+                // TODO: Fix once tabManager is ported.
+                //@ts-ignore
                 await appContext.tabManager.openInNewTab(targetNoteId, hoistedNoteId);
             } else {
+                // TODO: Fix once tabManager is ported.
+                //@ts-ignore
                 await appContext.tabManager.openInSameTab(targetNoteId, hoistedNoteId);
             }
         }
     }
 
-    getTargetNoteId() {
+    getTargetNoteId(): void | string | Promise<string | undefined> {
         const targetNoteId = this.launcherNote.getRelationValue("target");
 
         if (!targetNoteId) {
