@@ -1,5 +1,6 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -14,13 +15,16 @@ const TPL = `
 </div>`;
 
 export default class RevisionsSnapshotIntervalOptions extends OptionsWidget {
+
+    private $revisionsTimeInterval!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$revisionsTimeInterval = this.$widget.find(".revision-snapshot-time-interval-in-seconds");
         this.$revisionsTimeInterval.on("change", () => this.updateOption("revisionSnapshotTimeInterval", this.$revisionsTimeInterval.val()));
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$revisionsTimeInterval.val(options.revisionSnapshotTimeInterval);
     }
 }

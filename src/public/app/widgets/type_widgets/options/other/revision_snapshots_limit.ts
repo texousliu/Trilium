@@ -2,6 +2,7 @@ import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
 import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -19,11 +20,15 @@ const TPL = `
 </div>`;
 
 export default class RevisionSnapshotsLimitOptions extends OptionsWidget {
+
+    private $revisionSnapshotsNumberLimit!: JQuery<HTMLElement>;
+    private $eraseExcessRevisionSnapshotsButton!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$revisionSnapshotsNumberLimit = this.$widget.find(".revision-snapshot-number-limit");
         this.$revisionSnapshotsNumberLimit.on("change", () => {
-            let revisionSnapshotNumberLimit = this.$revisionSnapshotsNumberLimit.val();
+            let revisionSnapshotNumberLimit = parseInt(String(this.$revisionSnapshotsNumberLimit.val()), 10);
             if (!isNaN(revisionSnapshotNumberLimit) && revisionSnapshotNumberLimit >= -1) {
                 this.updateOption("revisionSnapshotNumberLimit", revisionSnapshotNumberLimit);
             }
@@ -36,7 +41,7 @@ export default class RevisionSnapshotsLimitOptions extends OptionsWidget {
         });
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$revisionSnapshotsNumberLimit.val(options.revisionSnapshotNumberLimit);
     }
 }

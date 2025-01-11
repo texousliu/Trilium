@@ -2,6 +2,7 @@ import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -13,13 +14,17 @@ const TPL = `
         <label>${t("attachment_erasure_timeout.erase_attachments_after_x_seconds")}</label>
         <input class="erase-unused-attachments-after-time-in-seconds form-control options-number-input" type="number" min="0">
     </div>
-    
+
     <p>${t("attachment_erasure_timeout.manual_erasing_description")}</p>
-    
+
     <button class="erase-unused-attachments-now-button btn">${t("attachment_erasure_timeout.erase_unused_attachments_now")}</button>
 </div>`;
 
 export default class AttachmentErasureTimeoutOptions extends OptionsWidget {
+
+    private $eraseUnusedAttachmentsAfterTimeInSeconds!: JQuery<HTMLElement>;
+    private $eraseUnusedAttachmentsNowButton!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$eraseUnusedAttachmentsAfterTimeInSeconds = this.$widget.find(".erase-unused-attachments-after-time-in-seconds");
@@ -33,7 +38,7 @@ export default class AttachmentErasureTimeoutOptions extends OptionsWidget {
         });
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$eraseUnusedAttachmentsAfterTimeInSeconds.val(options.eraseUnusedAttachmentsAfterSeconds);
     }
 }

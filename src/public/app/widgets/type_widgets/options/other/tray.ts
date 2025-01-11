@@ -1,6 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
 import utils from "../../../../services/utils.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -13,6 +14,9 @@ const TPL = `
 </div>`;
 
 export default class TrayOptions extends OptionsWidget {
+
+    private $trayEnabled!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$trayEnabled = this.$widget.find(".tray-enabled");
@@ -23,7 +27,7 @@ export default class TrayOptions extends OptionsWidget {
         return utils.isElectron();
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$trayEnabled.prop("checked", options.disableTray !== "true");
     }
 }

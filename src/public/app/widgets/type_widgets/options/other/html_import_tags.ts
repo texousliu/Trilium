@@ -1,5 +1,6 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 // TODO: Deduplicate with src/services/html_sanitizer once there is a commons project between client and server.
 export const DEFAULT_ALLOWED_TAGS = [
@@ -103,12 +104,12 @@ export const DEFAULT_ALLOWED_TAGS = [
 const TPL = `
 <div class="options-section">
     <h4>${t("import.html_import_tags.title")}</h4>
-    
+
     <p>${t("import.html_import_tags.description")}</p>
-    
-    <textarea class="allowed-html-tags form-control" style="height: 150px; font-family: monospace;" 
+
+    <textarea class="allowed-html-tags form-control" style="height: 150px; font-family: monospace;"
                 placeholder="${t("import.html_import_tags.placeholder")}"></textarea>
-    
+
     <div>
         <button class="btn btn-sm btn-secondary reset-to-default">
             ${t("import.html_import_tags.reset_button")}
@@ -117,6 +118,10 @@ const TPL = `
 </div>`;
 
 export default class HtmlImportTagsOptions extends OptionsWidget {
+
+    private $allowedTags!: JQuery<HTMLElement>;
+    private $resetButton!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.contentSized();
@@ -131,7 +136,7 @@ export default class HtmlImportTagsOptions extends OptionsWidget {
         this.refresh();
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         try {
             if (options.allowedHtmlTags) {
                 const tags = JSON.parse(options.allowedHtmlTags);
@@ -148,7 +153,7 @@ export default class HtmlImportTagsOptions extends OptionsWidget {
     }
 
     async saveTags() {
-        const tagsText = this.$allowedTags.val();
+        const tagsText = String(this.$allowedTags.val()) || "";
         const tags = tagsText
             .split(/[\n,\s]+/) // Split on newlines, commas, or spaces
             .map((tag) => tag.trim())

@@ -1,13 +1,14 @@
 import OptionsWidget from "../options_widget.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
     <h4>${t("search_engine.title")}</h4>
-    
+
     <p>${t("search_engine.custom_search_engine_info")}</p>
-    
+
     <form class="sync-setup-form">
         <div class="form-group">
             <label for="predefined-search-engine-select">${t("search_engine.predefined_templates_label")}</label>
@@ -18,24 +19,24 @@ const TPL = `
                 <option value="Google">${t("search_engine.google")}</option>
             </select>
         </div>
-        
+
         <div class="form-group">
             <label>${t("search_engine.custom_name_label")}</label>
             <input type="text" class="custom-search-engine-name form-control" placeholder="${t("search_engine.custom_name_placeholder")}">
         </div>
-        
+
         <div class="form-group">
             <label>${t("search_engine.custom_url_label")}</label>
             <input type="text" class="custom-search-engine-url form-control" placeholder="${t("search_engine.custom_url_placeholder")}">
         </div>
-        
+
         <div style="display: flex; justify-content: space-between;">
             <button class="btn btn-primary">${t("search_engine.save_button")}</button>
         </div>
     </form>
 </div>`;
 
-const SEARCH_ENGINES = {
+const SEARCH_ENGINES: Record<string, string> = {
     Bing: "https://www.bing.com/search?q={keyword}",
     Baidu: "https://www.baidu.com/s?wd={keyword}",
     DuckDuckGo: "https://duckduckgo.com/?q={keyword}",
@@ -43,6 +44,12 @@ const SEARCH_ENGINES = {
 };
 
 export default class SearchEngineOptions extends OptionsWidget {
+
+    private $form!: JQuery<HTMLElement>;
+    private $predefinedSearchEngineSelect!: JQuery<HTMLElement>;
+    private $customSearchEngineName!: JQuery<HTMLInputElement>;
+    private $customSearchEngineUrl!: JQuery<HTMLInputElement>;
+
     isEnabled() {
         return super.isEnabled() && utils.isElectron();
     }
@@ -56,7 +63,7 @@ export default class SearchEngineOptions extends OptionsWidget {
         this.$customSearchEngineUrl = this.$widget.find(".custom-search-engine-url");
 
         this.$predefinedSearchEngineSelect.on("change", () => {
-            const predefinedSearchEngine = this.$predefinedSearchEngineSelect.val();
+            const predefinedSearchEngine = String(this.$predefinedSearchEngineSelect.val());
             this.$customSearchEngineName[0].value = predefinedSearchEngine;
             this.$customSearchEngineUrl[0].value = SEARCH_ENGINES[predefinedSearchEngine];
         });
@@ -69,7 +76,7 @@ export default class SearchEngineOptions extends OptionsWidget {
         });
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$predefinedSearchEngineSelect.val("");
         this.$customSearchEngineName[0].value = options.customSearchEngineName;
         this.$customSearchEngineUrl[0].value = options.customSearchEngineUrl;

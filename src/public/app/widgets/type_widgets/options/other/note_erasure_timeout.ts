@@ -2,6 +2,7 @@ import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -13,13 +14,17 @@ const TPL = `
         <label>${t("note_erasure_timeout.erase_notes_after_x_seconds")}</label>
         <input class="erase-entities-after-time-in-seconds form-control options-number-input" type="number" min="0">
     </div>
-    
+
     <p>${t("note_erasure_timeout.manual_erasing_description")}</p>
-    
+
     <button class="erase-deleted-notes-now-button btn">${t("note_erasure_timeout.erase_deleted_notes_now")}</button>
 </div>`;
 
 export default class NoteErasureTimeoutOptions extends OptionsWidget {
+
+    private $eraseEntitiesAfterTimeInSeconds!: JQuery<HTMLElement>;
+    private $eraseDeletedNotesButton!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$eraseEntitiesAfterTimeInSeconds = this.$widget.find(".erase-entities-after-time-in-seconds");
@@ -33,7 +38,7 @@ export default class NoteErasureTimeoutOptions extends OptionsWidget {
         });
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$eraseEntitiesAfterTimeInSeconds.val(options.eraseEntitiesAfterTimeInSeconds);
     }
 }
