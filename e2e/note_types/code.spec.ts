@@ -30,10 +30,11 @@ test("Displays lint errors for backend script", async ({ page }) => {
     const codeEditor = app.currentNoteSplit.locator(".CodeMirror");
 
     // Expect two warning signs in the gutter.
-    expect(codeEditor.locator(".CodeMirror-gutter-wrapper .CodeMirror-lint-marker-error")).toHaveCount(1);
+    const errorMarker = codeEditor.locator(".CodeMirror-gutter-wrapper .CodeMirror-lint-marker-error");
+    await expect(errorMarker).toHaveCount(1);
 
     // Hover over hello
-    await codeEditor.getByText("world").first().hover();
+    await errorMarker.hover();
     await expectTooltip(page, "Parsing error: Unexpected token world");
 });
 
