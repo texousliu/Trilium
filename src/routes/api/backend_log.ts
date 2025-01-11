@@ -1,6 +1,6 @@
 "use strict";
 
-import { readFile  } from "fs/promises";
+import { readFile } from "fs/promises";
 import { join } from "path";
 import dateUtils from "../../services/date_utils.js";
 import dataDir from "../../services/data_dir.js";
@@ -10,7 +10,7 @@ import { t } from "i18next";
 const { LOG_DIR } = dataDir;
 
 async function getBackendLog() {
-    const fileName = `trilium-${dateUtils.localNowDate()}.log`
+    const fileName = `trilium-${dateUtils.localNowDate()}.log`;
     try {
         const file = join(LOG_DIR, fileName);
         return await readFile(file, "utf8");
