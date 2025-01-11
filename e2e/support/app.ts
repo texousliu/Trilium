@@ -6,12 +6,14 @@ export default class App {
     readonly tabBar: Locator;
     readonly noteTree: Locator;
     readonly currentNoteSplit: Locator;
+    readonly sidebar: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.tabBar = page.locator(".tab-row-widget-container");
         this.noteTree = page.locator(".tree-wrapper");
         this.currentNoteSplit = page.locator(".note-split:not(.hidden-ext)")
+        this.sidebar = page.locator("#right-pane");
     }
 
     async goto() {
