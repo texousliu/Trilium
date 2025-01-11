@@ -1,11 +1,12 @@
 import { t } from "../../../../services/i18n.js";
 import OptionsWidget from "../options_widget.js";
 import mimeTypesService from "../../../../services/mime_types.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
     <h4>${t("code_mime_types.title")}</h4>
-    
+
     <ul class="options-mime-types" style="list-style-type: none;"></ul>
 </div>
 
@@ -19,9 +20,17 @@ const TPL = `
 
 let idCtr = 1; // global, since this can be shown in multiple dialogs
 
-function groupMimeTypesAlphabetically(ungroupedMimeTypes) {
-    const result = {};
-    ungroupedMimeTypes = ungroupedMimeTypes.toSorted((a, b) => a.title > b.title);
+interface MimeType {
+    title: string;
+    mime: string;
+    enabled: boolean;
+}
+
+type GroupedMimes = Record<string, MimeType[]>;
+
+function groupMimeTypesAlphabetically(ungroupedMimeTypes: MimeType[]) {
+    const result: GroupedMimes = {};
+    ungroupedMimeTypes = ungroupedMimeTypes.toSorted((a, b) => a.title.localeCompare(b.title));
 
     for (const mimeType of ungroupedMimeTypes) {
         const initial = mimeType.title.charAt(0).toUpperCase();
@@ -33,22 +42,16 @@ function groupMimeTypesAlphabetically(ungroupedMimeTypes) {
     return result;
 }
 
-function buildSelectionForMimeType(mimeType) {
-    const id = "code-mime-type-" + idCtr++;
-    return $("<li>")
-        .append($('<input type="checkbox" class="form-check-input">').attr("id", id).attr("data-mime-type", mimeType.mime).prop("checked", mimeType.enabled))
-        .on("change", () => this.save())
-        .append(" &nbsp; ")
-        .append($("<label>").attr("for", id).text(mimeType.title));
-}
-
 export default class CodeMimeTypesOptions extends OptionsWidget {
+
+    private $mimeTypes!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$mimeTypes = this.$widget.find(".options-mime-types");
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$mimeTypes.empty();
 
         const ungroupedMimeTypes = mimeTypesService.getMimeTypes();
@@ -56,14 +59,16 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
         const groupedMimeTypes = groupMimeTypesAlphabetically(ungroupedMimeTypes);
 
         // Plain text is displayed at the top intentionally.
-        this.$mimeTypes.append(buildSelectionForMimeType.call(this, plainTextMimeType));
+        if (plainTextMimeType) {
+            this.$mimeTypes.append(this.#buildSelectionForMimeType(plainTextMimeType));
+        }
 
         for (const [initial, mimeTypes] of Object.entries(groupedMimeTypes)) {
             const $section = $("<section>");
             $section.append($("<h5>").text(initial));
 
             for (const mimeType of mimeTypes) {
-                $section.append(buildSelectionForMimeType.call(this, mimeType));
+                $section.append(this.#buildSelectionForMimeType(mimeType));
             }
 
             this.$mimeTypes.append($section);
@@ -71,12 +76,26 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
     }
 
     async save() {
-        const enabledMimeTypes = [];
+        const enabledMimeTypes: string[] = [];
 
-        this.$mimeTypes.find("input:checked").each((i, el) => enabledMimeTypes.push(this.$widget.find(el).attr("data-mime-type")));
+        this.$mimeTypes.find("input:checked").each((i, el) => {
+            const mimeType = this.$widget.find(el).attr("data-mime-type");
+            if (mimeType) {
+                enabledMimeTypes.push(mimeType);
+            }
+        });
 
         await this.updateOption("codeNotesMimeTypes", JSON.stringify(enabledMimeTypes));
 
         mimeTypesService.loadMimeTypes();
+    }
+
+    #buildSelectionForMimeType(mimeType: MimeType) {
+        const id = "code-mime-type-" + idCtr++;
+        return $("<li>")
+            .append($('<input type="checkbox" class="form-check-input">').attr("id", id).attr("data-mime-type", mimeType.mime).prop("checked", mimeType.enabled))
+            .on("change", () => this.save())
+            .append(" &nbsp; ")
+            .append($("<label>").attr("for", id).text(mimeType.title));
     }
 }

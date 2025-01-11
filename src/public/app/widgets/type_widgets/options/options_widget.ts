@@ -13,7 +13,7 @@ export default class OptionsWidget extends NoteContextAwareWidget implements Eve
         this.contentSized();
     }
 
-    async updateOption<T extends OptionNames>(name: T, value: string) {
+    async updateOption<T extends OptionNames>(name: T, value: string | number | string[] | undefined) {
         const opts = { [name]: value };
 
         await this.updateMultipleOptions(opts);

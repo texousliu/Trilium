@@ -1,5 +1,6 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -11,13 +12,16 @@ const TPL = `
 </div>`;
 
 export default class VimKeyBindingsOptions extends OptionsWidget {
+
+    private $vimKeymapEnabled!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$vimKeymapEnabled = this.$widget.find(".vim-keymap-enabled");
         this.$vimKeymapEnabled.on("change", () => this.updateCheckboxOption("vimKeymapEnabled", this.$vimKeymapEnabled));
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.setCheckboxState(this.$vimKeymapEnabled, options.vimKeymapEnabled);
     }
 }

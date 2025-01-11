@@ -1,3 +1,4 @@
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 import { t } from "../../../../services/i18n.js";
 import OptionsWidget from "../options_widget.js";
 
@@ -14,13 +15,16 @@ const TPL = `
 </div>`;
 
 export default class CodeAutoReadOnlySizeOptions extends OptionsWidget {
+
+    private $autoReadonlySizeCode!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$autoReadonlySizeCode = this.$widget.find(".auto-readonly-size-code");
         this.$autoReadonlySizeCode.on("change", () => this.updateOption("autoReadonlySizeCode", this.$autoReadonlySizeCode.val()));
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$autoReadonlySizeCode.val(options.autoReadonlySizeCode);
     }
 }
