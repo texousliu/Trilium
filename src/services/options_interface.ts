@@ -69,6 +69,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     firstDayOfWeek: number;
 
     initialized: boolean;
+    isPasswordSet: boolean;
     overrideThemeFonts: boolean;
     spellCheckEnabled: boolean;
     autoFixConsistencyIssues: boolean;

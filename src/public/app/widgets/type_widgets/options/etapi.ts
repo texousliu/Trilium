@@ -8,18 +8,18 @@ import toastService from "../../../services/toast.js";
 const TPL = `
 <div class="options-section">
     <h4>${t("etapi.title")}</h4>
-    
+
     <p>${t("etapi.description")} <br/>
        ${t("etapi.see_more")} <a href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a> ${t("etapi.and")} <a onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>.</p>
-    
+
     <button type="button" class="create-etapi-token btn btn-sm">${t("etapi.create_token")}</button>
 
     <hr />
 
     <h5>${t("etapi.existing_tokens")}</h5>
-    
+
     <div class="no-tokens-yet">${t("etapi.no_tokens_yet")}</div>
-    
+
     <div style="overflow: auto; height: 500px;">
         <table class="tokens-table table table-stripped">
         <thead>
@@ -44,13 +44,26 @@ const TPL = `
         border: 1px solid transparent;
         border-radius: var(--button-border-radius);
     }
-    
+
     .token-table-button:hover {
         border: 1px solid var(--button-border-color);
     }
 </style>`;
 
+// TODO: Deduplicate
+interface PostTokensResponse {
+    authToken: string;
+}
+
+// TODO: Deduplicate
+interface Token {
+    name: string;
+    utcDateCreated: number;
+    etapiTokenId: string;
+}
+
 export default class EtapiOptions extends OptionsWidget {
+
     doRender() {
         this.$widget = $(TPL);
 
@@ -61,12 +74,12 @@ export default class EtapiOptions extends OptionsWidget {
                 defaultValue: t("etapi.default_token_name")
             });
 
-            if (!tokenName.trim()) {
+            if (!tokenName?.trim()) {
                 toastService.showError(t("etapi.error_empty_name"));
                 return;
             }
 
-            const { authToken } = await server.post("etapi-tokens", { tokenName });
+            const { authToken } = await server.post<PostTokensResponse>("etapi-tokens", { tokenName });
 
             await dialogService.prompt({
                 title: t("etapi.token_created_title"),
@@ -84,7 +97,7 @@ export default class EtapiOptions extends OptionsWidget {
         const $noTokensYet = this.$widget.find(".no-tokens-yet");
         const $tokensTable = this.$widget.find(".tokens-table");
 
-        const tokens = await server.get("etapi-tokens");
+        const tokens = await server.get<Token[]>("etapi-tokens");
 
         $noTokensYet.toggle(tokens.length === 0);
         $tokensTable.toggle(tokens.length > 0);
@@ -107,7 +120,7 @@ export default class EtapiOptions extends OptionsWidget {
         }
     }
 
-    async renameToken(etapiTokenId, oldName) {
+    async renameToken(etapiTokenId: string, oldName: string) {
         const tokenName = await dialogService.prompt({
             title: t("etapi.rename_token_title"),
             message: t("etapi.rename_token_message"),
@@ -123,7 +136,7 @@ export default class EtapiOptions extends OptionsWidget {
         this.refreshTokens();
     }
 
-    async deleteToken(etapiTokenId, name) {
+    async deleteToken(etapiTokenId: string, name: string) {
         if (!(await dialogService.confirm(t("etapi.delete_token_confirmation", { name })))) {
             return;
         }

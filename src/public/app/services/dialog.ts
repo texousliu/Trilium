@@ -20,7 +20,7 @@ async function confirmDeleteNoteBoxWithNote(title: string) {
 }
 
 async function prompt(props: PromptDialogOptions) {
-    return new Promise((res) => appContext.triggerCommand("showPromptDialog", { ...props, callback: res }));
+    return new Promise<string | null>((res) => appContext.triggerCommand("showPromptDialog", { ...props, callback: res }));
 }
 
 export default {

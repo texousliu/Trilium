@@ -1,6 +1,7 @@
 import utils from "../../../services/utils.js";
 import OptionsWidget from "./options_widget.js";
 import { t } from "../../../services/i18n.js";
+import type { OptionMap } from "../../../../../services/options_interface.js";
 
 const TPL_WEB = `
 <div class="options-section">
@@ -29,11 +30,16 @@ const TPL_ELECTRON = `
     </div>
 
     <p>${t("spellcheck.multiple_languages_info")}</p>
-    
+
     <p><strong>${t("spellcheck.available_language_codes_label")} </strong> <span class="available-language-codes"></span></p>
 </div>`;
 
 export default class SpellcheckOptions extends OptionsWidget {
+
+    private $spellCheckEnabled!: JQuery<HTMLElement>;
+    private $spellCheckLanguageCode!: JQuery<HTMLElement>;
+    private $availableLanguageCodes!: JQuery<HTMLElement>;
+
     doRender() {
         const template = utils.isElectron() ? TPL_ELECTRON : TPL_WEB;
         this.$widget = $(template);
@@ -54,7 +60,7 @@ export default class SpellcheckOptions extends OptionsWidget {
         }
     }
 
-    optionsLoaded(options) {
+    optionsLoaded(options: OptionMap) {
         this.setCheckboxState(this.$spellCheckEnabled, options.spellCheckEnabled);
         this.$spellCheckLanguageCode.val(options.spellCheckLanguageCode);
     }

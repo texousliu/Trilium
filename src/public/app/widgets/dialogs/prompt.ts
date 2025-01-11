@@ -31,15 +31,15 @@ export interface PromptDialogOptions {
     title?: string;
     message?: string;
     defaultValue?: string;
-    shown: PromptShownDialogCallback;
-    callback: (value: unknown) => void;
+    shown?: PromptShownDialogCallback;
+    callback?: (value: string | null) => void;
 }
 
 export type PromptShownDialogCallback = ((callback: ShownCallbackData) => void) | null;
 
 export default class PromptDialog extends BasicWidget {
-    private resolve: ((val: string | null) => void) | null;
-    private shownCb: PromptShownDialogCallback;
+    private resolve?: ((value: string | null) => void) | undefined | null;
+    private shownCb?: PromptShownDialogCallback | null;
 
     private modal!: bootstrap.Modal;
     private $dialogBody!: JQuery<HTMLElement>;

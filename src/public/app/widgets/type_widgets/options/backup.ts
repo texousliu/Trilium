@@ -3,13 +3,14 @@ import { t } from "../../../services/i18n.js";
 import OptionsWidget from "./options_widget.js";
 import server from "../../../services/server.js";
 import toastService from "../../../services/toast.js";
+import type { OptionMap } from "../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
     <h4>${t("backup.automatic_backup")}</h4>
-    
+
     <p>${t("backup.automatic_backup_description")}</p>
-    
+
     <ul style="list-style: none">
         <li>
             <label>
@@ -17,7 +18,7 @@ const TPL = `
                 ${t("backup.enable_daily_backup")}
             </label>
         </li>
-        <li>    
+        <li>
             <label>
                 <input type="checkbox" class="weekly-backup-enabled form-check-input">
                 ${t("backup.enable_weekly_backup")}
@@ -30,19 +31,19 @@ const TPL = `
             </label>
         </li>
     </ul>
-    
+
     <p>${t("backup.backup_recommendation")}</p>
 </div>
 
 <div class="options-section">
     <h4>${t("backup.backup_now")}</h4>
-    
+
     <button class="backup-database-button btn">${t("backup.backup_database_now")}</button>
 </div>
 
 <div class="options-section">
     <h4>${t("backup.existing_backups")}</h4>
-    
+
     <table class="table table-stripped">
         <colgroup>
             <col width="33%" />
@@ -61,14 +62,32 @@ const TPL = `
 </div>
 `;
 
+// TODO: Deduplicate.
+interface PostDatabaseResponse {
+    backupFile: string;
+}
+
+// TODO: Deduplicate
+interface Backup {
+    filePath: string;
+    mtime: number;
+}
+
 export default class BackupOptions extends OptionsWidget {
+
+    private $backupDatabaseButton!: JQuery<HTMLElement>;
+    private $dailyBackupEnabled!: JQuery<HTMLElement>;
+    private $weeklyBackupEnabled!: JQuery<HTMLElement>;
+    private $monthlyBackupEnabled!: JQuery<HTMLElement>;
+    private $existingBackupList!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
 
         this.$backupDatabaseButton = this.$widget.find(".backup-database-button");
 
         this.$backupDatabaseButton.on("click", async () => {
-            const { backupFile } = await server.post("database/backup-database");
+            const { backupFile } = await server.post<PostDatabaseResponse>("database/backup-database");
 
             toastService.showMessage(t("backup.database_backed_up_to", { backupFilePath: backupFile }), 10000);
 
@@ -88,12 +107,12 @@ export default class BackupOptions extends OptionsWidget {
         this.$existingBackupList = this.$widget.find(".existing-backup-list-items");
     }
 
-    optionsLoaded(options) {
+    optionsLoaded(options: OptionMap) {
         this.setCheckboxState(this.$dailyBackupEnabled, options.dailyBackupEnabled);
         this.setCheckboxState(this.$weeklyBackupEnabled, options.weeklyBackupEnabled);
         this.setCheckboxState(this.$monthlyBackupEnabled, options.monthlyBackupEnabled);
 
-        server.get("database/backups").then((backupFiles) => {
+        server.get<Backup[]>("database/backups").then((backupFiles) => {
             this.$existingBackupList.empty();
 
             if (!backupFiles.length) {
