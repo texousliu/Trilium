@@ -5,11 +5,13 @@ export default class App {
 
     readonly tabBar: Locator;
     readonly noteTree: Locator;
+    readonly currentNoteSplit: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.tabBar = page.locator(".tab-row-widget-container");
         this.noteTree = page.locator(".tree-wrapper");
+        this.currentNoteSplit = page.locator(".note-split:not(.hidden-ext)")
     }
 
     async goto() {
@@ -18,6 +20,13 @@ export default class App {
         // Wait for the page to load.
         await expect(this.page.locator(".tree"))
             .toContainText("Trilium Integration Test");
+    }
+
+    async goToNoteInNewTab(noteTitle: string) {
+        const autocomplete = this.currentNoteSplit.locator(".note-autocomplete");
+        await autocomplete.fill(noteTitle);
+        await autocomplete.press("ArrowDown");
+        await autocomplete.press("Enter");
     }
 
     getTab(tabIndex: number) {
