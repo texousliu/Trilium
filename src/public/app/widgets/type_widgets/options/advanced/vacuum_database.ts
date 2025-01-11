@@ -6,13 +6,15 @@ import { t } from "../../../../services/i18n.js";
 const TPL = `
 <div class="options-section">
     <h4>${t("vacuum_database.title")}</h4>
-    
+
     <p>${t("vacuum_database.description")}</p>
-    
+
     <button class="vacuum-database-button btn">${t("vacuum_database.button_text")}</button>
 </div>`;
 
 export default class VacuumDatabaseOptions extends OptionsWidget {
+    private $vacuumDatabaseButton!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$vacuumDatabaseButton = this.$widget.find(".vacuum-database-button");

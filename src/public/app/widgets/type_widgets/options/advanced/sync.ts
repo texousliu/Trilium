@@ -2,16 +2,21 @@ import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
     <h4>${t("sync.title")}</h4>
-    <button class="force-full-sync-button btn">${t("sync.force_full_sync_button")}</button> 
-    
+    <button class="force-full-sync-button btn">${t("sync.force_full_sync_button")}</button>
+
     <button class="fill-entity-changes-button btn">${t("sync.fill_entity_changes_button")}</button>
 </div>`;
 
 export default class AdvancedSyncOptions extends OptionsWidget {
+
+    private $forceFullSyncButton!: JQuery<HTMLElement>;
+    private $fillEntityChangesButton!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$forceFullSyncButton = this.$widget.find(".force-full-sync-button");
@@ -31,5 +36,5 @@ export default class AdvancedSyncOptions extends OptionsWidget {
         });
     }
 
-    async optionsLoaded(options) {}
+    async optionsLoaded(options: OptionMap) {}
 }

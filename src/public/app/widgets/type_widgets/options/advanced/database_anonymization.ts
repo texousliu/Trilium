@@ -2,6 +2,7 @@ import OptionsWidget from "../options_widget.js";
 import toastService from "../../../../services/toast.js";
 import server from "../../../../services/server.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -33,7 +34,22 @@ const TPL = `
     <ul class="existing-anonymized-databases"></ul>
 </div>`;
 
+// TODO: Deduplicate with server
+interface AnonymizeResponse {
+    success: boolean;
+    anonymizedFilePath: string;
+}
+
+interface AnonymizedDbResponse {
+    filePath: string;
+}
+
 export default class DatabaseAnonymizationOptions extends OptionsWidget {
+
+    private $anonymizeFullButton!: JQuery<HTMLElement>;
+    private $anonymizeLightButton!: JQuery<HTMLElement>;
+    private $existingAnonymizedDatabases!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$anonymizeFullButton = this.$widget.find(".anonymize-full-button");
@@ -41,7 +57,7 @@ export default class DatabaseAnonymizationOptions extends OptionsWidget {
         this.$anonymizeFullButton.on("click", async () => {
             toastService.showMessage(t("database_anonymization.creating_fully_anonymized_database"));
 
-            const resp = await server.post("database/anonymize/full");
+            const resp = await server.post<AnonymizeResponse>("database/anonymize/full");
 
             if (!resp.success) {
                 toastService.showError(t("database_anonymization.error_creating_anonymized_database"));
@@ -55,7 +71,7 @@ export default class DatabaseAnonymizationOptions extends OptionsWidget {
         this.$anonymizeLightButton.on("click", async () => {
             toastService.showMessage(t("database_anonymization.creating_lightly_anonymized_database"));
 
-            const resp = await server.post("database/anonymize/light");
+            const resp = await server.post<AnonymizeResponse>("database/anonymize/light");
 
             if (!resp.success) {
                 toastService.showError(t("database_anonymization.error_creating_anonymized_database"));
@@ -69,8 +85,8 @@ export default class DatabaseAnonymizationOptions extends OptionsWidget {
         this.$existingAnonymizedDatabases = this.$widget.find(".existing-anonymized-databases");
     }
 
-    optionsLoaded(options) {
-        server.get("database/anonymized-databases").then((anonymizedDatabases) => {
+    optionsLoaded(options: OptionMap) {
+        server.get<AnonymizedDbResponse[]>("database/anonymized-databases").then((anonymizedDatabases) => {
             this.$existingAnonymizedDatabases.empty();
 
             if (!anonymizedDatabases.length) {
