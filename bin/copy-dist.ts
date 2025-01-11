@@ -87,7 +87,6 @@ const copy = async () => {
         "node_modules/panzoom/dist/",
         "node_modules/i18next/",
         "node_modules/i18next-http-backend/",
-        "node_modules/eslint/bin/",
         "node_modules/jsplumb/dist/",
         "node_modules/vanilla-js-wheel-zoom/dist/",
         "node_modules/mark.js/dist/",
