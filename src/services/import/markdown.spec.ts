@@ -16,4 +16,27 @@ describe("markdown", () => {
             <p>Hello, world</p>
         `);
     });
+
+    it("rewrites language of known language tags", () => {
+        const result = markdownService.renderToHtml(trimIndentation`\
+            \`\`\`javascript
+            Hi
+            \`\`\`
+            \`\`\`css
+            there
+            \`\`\`
+        `, "title");
+        expect(result).toBe(trimIndentation`\
+            <pre><code class="language-application-javascript-env-backend">Hi</code></pre><pre><code class="language-text-css">there</code></pre>`);
+    });
+
+    it("rewrites language of unknown language tags", () => {
+        const result = markdownService.renderToHtml(trimIndentation`\
+            \`\`\`unknownlanguage
+            Hi
+            \`\`\`
+        `, "title");
+        expect(result).toBe(trimIndentation`\
+            <pre><code class="language-text-x-trilium-auto">Hi</code></pre>`);
+    });
 });

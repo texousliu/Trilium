@@ -11,8 +11,8 @@ import FNote from "../entities/fnote.js";
 import FAttachment from "../entities/fattachment.js";
 import imageContextMenuService from "../menus/image_context_menu.js";
 import { applySingleBlockSyntaxHighlight, applySyntaxHighlight } from "./syntax_highlight.js";
-import mime_types from "./mime_types.js";
 import { loadElkIfNeeded } from "./mermaid.js";
+import { normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
 
 let idCounter = 1;
 
@@ -116,7 +116,7 @@ async function renderCode(note: FNote, $renderedContent: JQuery<HTMLElement>) {
     const $codeBlock = $("<code>");
     $codeBlock.text(blob?.content || "");
     $renderedContent.append($("<pre>").append($codeBlock));
-    await applySingleBlockSyntaxHighlight($codeBlock, mime_types.normalizeMimeTypeForCKEditor(note.mime));
+    await applySingleBlockSyntaxHighlight($codeBlock, normalizeMimeTypeForCKEditor(note.mime));
 }
 
 function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>, options: Options = {}) {

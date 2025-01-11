@@ -14,6 +14,7 @@ import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
 import { getMermaidConfig } from "../mermaid.js";
+import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -96,7 +97,7 @@ function buildListOfLanguages() {
         .getMimeTypes()
         .filter((mt) => mt.enabled)
         .map((mt) => ({
-            language: mimeTypesService.normalizeMimeTypeForCKEditor(mt.mime),
+            language: normalizeMimeTypeForCKEditor(mt.mime),
             label: mt.title
         }));
 
