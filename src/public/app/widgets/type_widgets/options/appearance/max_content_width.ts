@@ -1,6 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const MIN_VALUE = 640;
 
@@ -24,17 +25,20 @@ const TPL = `
 </div>`;
 
 export default class MaxContentWidthOptions extends OptionsWidget {
+
+    private $maxContentWidth!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
 
         this.$maxContentWidth = this.$widget.find(".max-content-width");
 
-        this.$maxContentWidth.on("change", async () => this.updateOption("maxContentWidth", this.$maxContentWidth.val()));
+        this.$maxContentWidth.on("change", async () => this.updateOption("maxContentWidth", String(this.$maxContentWidth.val())));
 
         this.$widget.find(".reload-frontend-button").on("click", () => utils.reloadFrontendApp(t("max_content_width.reload_description")));
     }
 
-    async optionsLoaded(options) {
-        this.$maxContentWidth.val(Math.max(MIN_VALUE, options.maxContentWidth));
+    async optionsLoaded(options: OptionMap) {
+        this.$maxContentWidth.val(Math.max(MIN_VALUE, parseInt(options.maxContentWidth, 10)));
     }
 }

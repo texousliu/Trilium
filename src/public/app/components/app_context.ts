@@ -188,6 +188,9 @@ export type CommandMappings = {
     copyTabToNewWindow: CommandData;
     closeActiveTab: CommandData & {
         $el: JQuery<HTMLElement>
+    },
+    setZoomFactorAndSave: {
+        zoomFactor: string;
     }
 };
 

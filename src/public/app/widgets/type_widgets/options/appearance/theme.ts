@@ -2,6 +2,7 @@ import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -44,13 +45,24 @@ const TPL = `
     </div>
 </div>`;
 
+interface Theme {
+    val: string;
+    title: string;
+    noteId?: string;
+}
+
 export default class ThemeOptions extends OptionsWidget {
+
+    private $themeSelect!: JQuery<HTMLElement>;
+    private $overrideThemeFonts!: JQuery<HTMLElement>;
+    private $layoutOrientation!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$themeSelect = this.$widget.find(".theme-select");
         this.$overrideThemeFonts = this.$widget.find(".override-theme-fonts");
         this.$layoutOrientation = this.$widget.find(`input[name="layout-orientation"]`).on("change", async () => {
-            const newLayoutOrientation = this.$widget.find(`input[name="layout-orientation"]:checked`).val();
+            const newLayoutOrientation = String(this.$widget.find(`input[name="layout-orientation"]:checked`).val());
             await this.updateOption("layoutOrientation", newLayoutOrientation);
             utils.reloadFrontendApp("layout orientation change");
         });
@@ -66,20 +78,23 @@ export default class ThemeOptions extends OptionsWidget {
         this.$overrideThemeFonts.on("change", () => this.updateCheckboxOption("overrideThemeFonts", this.$overrideThemeFonts));
     }
 
-    async optionsLoaded(options) {
-        const themes = [
+    async optionsLoaded(options: OptionMap) {
+        const themes: Theme[] = [
             { val: "next", title: t("theme.triliumnext") },
             { val: "next-light", title: t("theme.triliumnext-light") },
             { val: "next-dark", title: t("theme.triliumnext-dark") },
             { val: "auto", title: t("theme.auto_theme") },
             { val: "light", title: t("theme.light_theme") },
             { val: "dark", title: t("theme.dark_theme") }
-        ].concat(await server.get("options/user-themes"));
+        ].concat(await server.get<Theme[]>("options/user-themes"));
 
         this.$themeSelect.empty();
 
         for (const theme of themes) {
-            this.$themeSelect.append($("<option>").attr("value", theme.val).attr("data-note-id", theme.noteId).text(theme.title));
+            this.$themeSelect.append($("<option>")
+                .attr("value", theme.val)
+                .attr("data-note-id", theme.noteId || "")
+                .text(theme.title));
         }
 
         this.$themeSelect.val(options.theme);

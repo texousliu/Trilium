@@ -2,6 +2,7 @@ import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -24,7 +25,17 @@ const TPL = `
 </div>
 `;
 
+// TODO: Deduplicate with server.
+interface Locale {
+    id: string;
+    name: string;
+}
+
 export default class LocalizationOptions extends OptionsWidget {
+
+    private $localeSelect!: JQuery<HTMLElement>;
+    private $firstDayOfWeek!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
 
@@ -37,12 +48,12 @@ export default class LocalizationOptions extends OptionsWidget {
 
         this.$firstDayOfWeek = this.$widget.find(".first-day-of-week-select");
         this.$firstDayOfWeek.on("change", () => {
-            this.updateOption("firstDayOfWeek", this.$firstDayOfWeek.val());
+            this.updateOption("firstDayOfWeek", String(this.$firstDayOfWeek.val()));
         });
     }
 
-    async optionsLoaded(options) {
-        const availableLocales = await server.get("options/locales");
+    async optionsLoaded(options: OptionMap) {
+        const availableLocales = await server.get<Locale[]>("options/locales");
         this.$localeSelect.empty();
 
         for (const locale of availableLocales) {

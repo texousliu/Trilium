@@ -1,3 +1,4 @@
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 import { t } from "../../../../services/i18n.js";
 import library_loader from "../../../../services/library_loader.js";
 import server from "../../../../services/server.js";
@@ -54,15 +55,27 @@ const TPL = `
 </div>
 `;
 
+interface Theme {
+    title: string;
+    val: string;
+}
+
+type Response = Record<string, Theme[]>
+
 /**
  * Contains appearance settings for code blocks within text notes, such as the theme for the syntax highlighter.
  */
 export default class CodeBlockOptions extends OptionsWidget {
+
+    private $themeSelect!: JQuery<HTMLElement>;
+    private $wordWrap!: JQuery<HTMLElement>;
+    private $sampleEl!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$themeSelect = this.$widget.find(".theme-select");
         this.$themeSelect.on("change", async () => {
-            const newTheme = this.$themeSelect.val();
+            const newTheme = String(this.$themeSelect.val());
             library_loader.loadHighlightingTheme(newTheme);
             await server.put(`options/codeBlockTheme/${newTheme}`);
         });
@@ -74,7 +87,7 @@ export default class CodeBlockOptions extends OptionsWidget {
         this.$sampleEl = this.$widget.find(".code-sample");
     }
 
-    #setupPreview(shouldEnableSyntaxHighlight) {
+    #setupPreview(shouldEnableSyntaxHighlight: boolean) {
         const text = SAMPLE_CODE;
         if (shouldEnableSyntaxHighlight) {
             library_loader.requireLibrary(library_loader.HIGHLIGHT_JS).then(() => {
@@ -88,8 +101,8 @@ export default class CodeBlockOptions extends OptionsWidget {
         }
     }
 
-    async optionsLoaded(options) {
-        const themeGroups = await server.get("options/codeblock-themes");
+    async optionsLoaded(options: OptionMap) {
+        const themeGroups = await server.get<Response>("options/codeblock-themes");
         this.$themeSelect.empty();
 
         for (const [key, themes] of Object.entries(themeGroups)) {
@@ -104,7 +117,9 @@ export default class CodeBlockOptions extends OptionsWidget {
                     this.$themeSelect.append(option);
                 }
             }
-            this.$themeSelect.append($group);
+            if ($group) {
+                this.$themeSelect.append($group);
+            }
         }
         this.$themeSelect.val(options.codeBlockTheme);
         this.setCheckboxState(this.$wordWrap, options.codeBlockWordWrap);

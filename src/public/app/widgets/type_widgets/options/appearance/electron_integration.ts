@@ -1,15 +1,16 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
 import utils from "../../../../services/utils.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
-<div class="options-section">    
+<div class="options-section">
     <h4>${t("electron_integration.desktop-application")}</h4>
 
     <div class="form-group row">
         <div class="col-12">
             <label for="zoom-factor-select">${t("electron_integration.zoom-factor")}</label>
-            <input id="zoom-factor-select" type="number" class="zoom-factor-select form-control options-number-input" min="0.3" max="2.0" step="0.1"/>            
+            <input id="zoom-factor-select" type="number" class="zoom-factor-select form-control options-number-input" min="0.3" max="2.0" step="0.1"/>
             <p>${t("zoom_factor.description")}</p>
         </div>
     </div>
@@ -20,7 +21,7 @@ const TPL = `
             <input type="checkbox" class="native-title-bar form-check-input" />
             <strong>${t("electron_integration.native-title-bar")}</strong>
             <p>${t("electron_integration.native-title-bar-description")}</p>
-        </label>        
+        </label>
     </div>
 
     <div class="side-checkbox">
@@ -28,7 +29,7 @@ const TPL = `
             <input type="checkbox" class="background-effects form-check-input" />
             <strong>${t("electron_integration.background-effects")}</strong>
             <p>${t("electron_integration.background-effects-description")}</p>
-        </label>        
+        </label>
     </div>
 
     <button class="btn btn-micro restart-app-button">${t("electron_integration.restart-app-button")}</button>
@@ -36,12 +37,17 @@ const TPL = `
 `;
 
 export default class ElectronIntegrationOptions extends OptionsWidget {
+
+    private $zoomFactorSelect!: JQuery<HTMLElement>;
+    private $nativeTitleBar!: JQuery<HTMLElement>;
+    private $backgroundEffects!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
 
         this.$zoomFactorSelect = this.$widget.find(".zoom-factor-select");
         this.$zoomFactorSelect.on("change", () => {
-            appContext.triggerCommand("setZoomFactorAndSave", { zoomFactor: this.$zoomFactorSelect.val() });
+            this.triggerCommand("setZoomFactorAndSave", { zoomFactor: String(this.$zoomFactorSelect.val()) });
         });
 
         this.$nativeTitleBar = this.$widget.find("input.native-title-bar");
@@ -62,7 +68,7 @@ export default class ElectronIntegrationOptions extends OptionsWidget {
         return utils.isElectron();
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$zoomFactorSelect.val(options.zoomFactor);
         this.setCheckboxState(this.$nativeTitleBar, options.nativeTitleBarVisible);
         this.setCheckboxState(this.$backgroundEffects, options.backgroundEffects);
