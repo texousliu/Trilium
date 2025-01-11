@@ -5,6 +5,7 @@ import { join } from "path";
 import dateUtils from "../../services/date_utils.js";
 import dataDir from "../../services/data_dir.js";
 import log from "../../services/log.js";
+import { t } from "i18next";
 
 const { LOG_DIR } = dataDir;
 
@@ -19,11 +20,11 @@ async function getBackendLog() {
         // most probably the log file does not exist yet - https://github.com/zadam/trilium/issues/1977
         if (isErrorInstance && "code" in e && e.code === "ENOENT") {
             log.error(e);
-            return `The backend log file '${fileName}' does not exist (yet).`;
+            return t("backend_log.log-does-not-exist", { fileName });
         }
 
         log.error(isErrorInstance ? e : `Reading the backend log '${fileName}' failed with an unknown error: '${e}'.`);
-        return `Reading the backend log '${fileName}' failed.`;
+        return t("backend_log.reading-log-failed", { fileName });
     }
 }
 
