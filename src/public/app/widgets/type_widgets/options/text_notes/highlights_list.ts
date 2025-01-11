@@ -1,5 +1,6 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -20,11 +21,14 @@ const TPL = `
     <h5>${t("highlights_list.visibility_title")}</h5>
 
     <p>${t("highlights_list.visibility_description")}</p>
-    
+
     <p>${t("highlights_list.shortcut_info")}</p>
 </div>`;
 
 export default class HighlightsListOptions extends OptionsWidget {
+
+    private $hlt!: JQuery<HTMLInputElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$hlt = this.$widget.find("input.highlights-list-check");
@@ -32,14 +36,14 @@ export default class HighlightsListOptions extends OptionsWidget {
             const hltVals = this.$widget
                 .find('input.highlights-list-check[type="checkbox"]:checked')
                 .map(function () {
-                    return this.value;
+                    return (this as HTMLInputElement).value;
                 })
                 .get();
             this.updateOption("highlightsList", JSON.stringify(hltVals));
         });
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         const hltVals = JSON.parse(options.highlightsList);
         this.$widget.find('input.highlights-list-check[type="checkbox"]').each(function () {
             if ($.inArray($(this).val(), hltVals) !== -1) {

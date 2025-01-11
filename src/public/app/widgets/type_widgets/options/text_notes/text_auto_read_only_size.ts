@@ -1,5 +1,6 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -14,13 +15,16 @@ const TPL = `
 </div>`;
 
 export default class TextAutoReadOnlySizeOptions extends OptionsWidget {
+
+    private $autoReadonlySizeText!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$autoReadonlySizeText = this.$widget.find(".auto-readonly-size-text");
         this.$autoReadonlySizeText.on("change", () => this.updateOption("autoReadonlySizeText", this.$autoReadonlySizeText.val()));
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$autoReadonlySizeText.val(options.autoReadonlySizeText);
     }
 }

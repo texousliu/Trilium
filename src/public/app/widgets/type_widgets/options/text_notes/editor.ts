@@ -1,3 +1,4 @@
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 import { t } from "../../../../services/i18n.js";
 import utils from "../../../../services/utils.js";
 import OptionsWidget from "../options_widget.js";
@@ -5,7 +6,7 @@ import OptionsWidget from "../options_widget.js";
 const TPL = `
 <div class="options-section formatting-toolbar">
     <h4>${t("editing.editor_type.label")}</h4>
-    
+
     <div>
         <label>
             <input type="radio" name="editor-type" value="ckeditor-balloon" />
@@ -39,6 +40,10 @@ const TPL = `
 `;
 
 export default class EditorOptions extends OptionsWidget {
+
+    private $body!: JQuery<HTMLElement>;
+    private $multilineToolbarCheckbox!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$body = $("body");
@@ -52,7 +57,7 @@ export default class EditorOptions extends OptionsWidget {
         this.$multilineToolbarCheckbox.on("change", () => this.updateCheckboxOption("textNoteEditorMultilineToolbar", this.$multilineToolbarCheckbox));
     }
 
-    async optionsLoaded(options) {
+    async optionsLoaded(options: OptionMap) {
         this.$widget.find(`input[name="editor-type"][value="${options.textNoteEditorType}"]`).prop("checked", "true");
         this.setCheckboxState(this.$multilineToolbarCheckbox, options.textNoteEditorMultilineToolbar);
     }
