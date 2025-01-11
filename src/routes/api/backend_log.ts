@@ -14,10 +14,16 @@ async function getBackendLog() {
         const file = join(LOG_DIR, fileName);
         return await readFile(file, "utf8");
     } catch (e) {
-        log.error((e instanceof Error) ? e : `Reading the backend log '${fileName}' failed with an unknown error.`);
+        const isErrorInstance = e instanceof Error;
 
         // most probably the log file does not exist yet - https://github.com/zadam/trilium/issues/1977
-        return "";
+        if (isErrorInstance && "code" in e && e.code === "ENOENT") {
+            log.error(e);
+            return `The backend log file '${fileName}' does not exist (yet).`;
+        }
+
+        log.error(isErrorInstance ? e : `Reading the backend log '${fileName}' failed with an unknown error: '${e}'.`);
+        return `Reading the backend log '${fileName}' failed.`;
     }
 }
 
