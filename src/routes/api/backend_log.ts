@@ -9,11 +9,12 @@ import log from "../../services/log.js";
 const { LOG_DIR } = dataDir;
 
 async function getBackendLog() {
+    const fileName = `trilium-${dateUtils.localNowDate()}.log`
     try {
-        const file = join(LOG_DIR, `trilium-${dateUtils.localNowDate()}.log`);
+        const file = join(LOG_DIR, fileName);
         return await readFile(file, "utf8");
     } catch (e) {
-        log.error((e instanceof Error) ? e : "Reading the Backend Log failed with an unknown error.");
+        log.error((e instanceof Error) ? e : `Reading the backend log '${fileName}' failed with an unknown error.`);
 
         // most probably the log file does not exist yet - https://github.com/zadam/trilium/issues/1977
         return "";
