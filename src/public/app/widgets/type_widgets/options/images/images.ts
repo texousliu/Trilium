@@ -1,5 +1,6 @@
 import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -11,14 +12,14 @@ const TPL = `
     </style>
 
     <h4>${t("images.images_section_title")}</h4>
-    
+
     <label>
         <input class="download-images-automatically" type="checkbox" name="download-images-automatically">
         ${t("images.download_images_automatically")}
     </label>
-    
+
     <p>${t("images.download_images_description")}</p>
-    
+
     <hr />
 
     <label>
@@ -31,7 +32,7 @@ const TPL = `
             <label>${t("images.max_image_dimensions")}</label>
             <input class="image-max-width-height form-control options-number-input" type="number" min="1">
         </div>
-    
+
         <div class="form-group">
             <label>${t("images.jpeg_quality_description")}</label>
             <input class="image-jpeg-quality form-control options-number-input" min="10" max="100" type="number">
@@ -41,6 +42,13 @@ const TPL = `
 `;
 
 export default class ImageOptions extends OptionsWidget {
+
+    private $imageMaxWidthHeight!: JQuery<HTMLElement>;
+    private $imageJpegQuality!: JQuery<HTMLElement>;
+    private $downloadImagesAutomatically!: JQuery<HTMLElement>;
+    private $enableImageCompression!: JQuery<HTMLElement>;
+    private $imageCompressionWrapper!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
 
@@ -49,7 +57,7 @@ export default class ImageOptions extends OptionsWidget {
 
         this.$imageMaxWidthHeight.on("change", () => this.updateOption("imageMaxWidthHeight", this.$imageMaxWidthHeight.val()));
 
-        this.$imageJpegQuality.on("change", () => this.updateOption("imageJpegQuality", this.$imageJpegQuality.val().trim() || "75"));
+        this.$imageJpegQuality.on("change", () => this.updateOption("imageJpegQuality", String(this.$imageJpegQuality.val()).trim() || "75"));
 
         this.$downloadImagesAutomatically = this.$widget.find(".download-images-automatically");
 
@@ -64,7 +72,7 @@ export default class ImageOptions extends OptionsWidget {
         });
     }
 
-    optionsLoaded(options) {
+    optionsLoaded(options: OptionMap) {
         this.$imageMaxWidthHeight.val(options.imageMaxWidthHeight);
         this.$imageJpegQuality.val(options.imageJpegQuality);
 
