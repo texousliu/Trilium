@@ -26,7 +26,8 @@ const CODE_MIRROR: Library = {
             "node_modules/codemirror/addon/mode/simple.js",
             "node_modules/codemirror/addon/search/match-highlighter.js",
             "node_modules/codemirror/mode/meta.js",
-            "node_modules/codemirror/keymap/vim.js"
+            "node_modules/codemirror/keymap/vim.js",
+            "libraries/codemirror/eslint.js"
         ];
 
         const mimeTypes = mimeTypesService.getMimeTypes();
@@ -42,7 +43,7 @@ const CODE_MIRROR: Library = {
 };
 
 const ESLINT: Library = {
-    js: ["node_modules/eslint/bin/eslint.js"]
+    js: ["libraries/eslint/eslint.js"]
 };
 
 const RELATION_MAP: Library = {
