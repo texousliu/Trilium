@@ -38,11 +38,15 @@ function rewriteLanguageTag(source: string) {
         return source;
     }
 
-    if (source === "text-x-trilium-auto") {
-        return "";
+    switch (source) {
+        case "text-x-trilium-auto":
+            return "";
+        case "application-javascript-env-frontend":
+        case "application-javascript-env-backend":
+            return "javascript";
+        default:
+            return source.split("-").at(-1);
     }
-
-    return source.split("-").at(-1);
 }
 
 export default {

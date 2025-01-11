@@ -22,6 +22,24 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
+    it("rewrites frontend script JavaScript code block", () => {
+        const html = `<pre><code class="language-application-javascript-env-frontend">Hello</code></pre>`;
+        const expected = trimIndentation`\
+            \`\`\`javascript
+            Hello
+            \`\`\``;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("rewrites backend script JavaScript code block", () => {
+        const html = `<pre><code class="language-application-javascript-env-backend">Hello</code></pre>`;
+        const expected = trimIndentation`\
+            \`\`\`javascript
+            Hello
+            \`\`\``;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
     it("removes auto tag for code blocks", () => {
         const html = trimIndentation`\
             <pre><code class="language-text-x-trilium-auto">Hello
