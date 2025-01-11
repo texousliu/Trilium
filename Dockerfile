@@ -22,8 +22,7 @@ COPY server-package.json package.json
 
 # Build and cleanup in a single layer
 RUN cp -R build/src/* src/. && \
-    cp build/docker_healthcheck.js . && \
-    rm -r build && \
+    cp build/docker_healthcheck.js . && \    
     rm docker_healthcheck.ts && \
     npm install && \
     npm run webpack && \
@@ -31,8 +30,11 @@ RUN cp -R build/src/* src/. && \
     npm cache clean --force && \
     cp src/public/app/share.js src/public/app-dist/. && \
     cp -r src/public/app/doc_notes src/public/app-dist/. && \
-    rm -rf src/public/app && \
-    rm src/services/asset_path.ts
+    rm -rf src/public/app/* && \
+    mkdir -p src/public/app/services && \
+    cp -r build/src/public/app/services/mime_type_definitions.js src/public/app/services/mime_type_definitions.js && \
+    rm src/services/asset_path.ts && \
+    rm -r build
 
 # Runtime stage
 FROM node:22.13.0-bullseye-slim
