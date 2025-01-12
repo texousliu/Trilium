@@ -1,5 +1,5 @@
+import { expect, describe, it } from "vitest";
 import sanitizeAttributeName from "../src/services/sanitize_attribute_name";
-import { describe, it, execute, expect } from "./mini_test";
 
 // fn value, expected value
 const testCases: [fnValue: string, expectedValue: string][] = [
@@ -31,9 +31,7 @@ describe("sanitizeAttributeName unit tests", () => {
         return it(`'${testCase[0]}' should return '${testCase[1]}'`, () => {
             const [value, expected] = testCase;
             const actual = sanitizeAttributeName(value);
-            expect(actual).toEqual(expected);
+            expect(actual).toStrictEqual(expected);
         });
     });
 });
-
-execute();

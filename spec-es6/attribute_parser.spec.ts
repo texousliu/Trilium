@@ -1,6 +1,6 @@
-import * as attributeParser from "../src/public/app/services/attribute_parser.js";
+import { describe, it, expect } from "vitest";
+import attributeParser from "../src/public/app/services/attribute_parser.ts";
 
-import { describe, it, expect, execute } from "./mini_test.js";
 
 describe("Lexing", () => {
     it("simple label", () => {
@@ -96,5 +96,3 @@ describe("error cases", () => {
         expect(() => attributeParser.lexAndParse("#")).toThrow(`Attribute name is empty, please fill the name.`);
     });
 });
-
-execute();

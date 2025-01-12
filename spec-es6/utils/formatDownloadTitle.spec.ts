@@ -1,5 +1,5 @@
+import { expect, describe, it } from "vitest";
 import { formatDownloadTitle } from "../../src/services/utils.ts";
-import { describe, it, execute, expect } from "../mini_test.ts";
 
 const testCases: [fnValue: Parameters<typeof formatDownloadTitle>, expectedValue: ReturnType<typeof formatDownloadTitle>][] = [
     // empty fileName tests
@@ -55,9 +55,7 @@ describe("utils/formatDownloadTitle unit tests", () => {
         return it(`With args '${JSON.stringify(testCase[0])}' it should return '${testCase[1]}'`, () => {
             const [value, expected] = testCase;
             const actual = formatDownloadTitle(...value);
-            expect(actual).toEqual(expected);
+            expect(actual).toStrictEqual(expected);
         });
     });
 });
-
-execute();
