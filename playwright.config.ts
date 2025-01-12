@@ -76,6 +76,6 @@ export default defineConfig({
   webServer: !process.env.TRILIUM_DOCKER ? {
     command: 'npm run integration-mem-db-dev',
     url: SERVER_URL,
-    // reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !process.env.CI,
   } : undefined,
 });
