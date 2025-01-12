@@ -31,6 +31,10 @@ export default class App {
         await autocomplete.press("Enter");
     }
 
+    async goToSettings() {
+        await this.page.locator(".launcher-button.bx-cog").click();
+    }
+
     getTab(tabIndex: number) {
         return this.tabBar.locator(".note-tab-wrapper").nth(tabIndex);
     }
@@ -43,6 +47,7 @@ export default class App {
         await this.getTab(0).click({ button: "right" });
         await this.page.waitForTimeout(500); // TODO: context menu won't dismiss otherwise
         await this.page.getByText("Close all tabs").click({ force: true });
+        await this.page.waitForTimeout(500); // TODO: context menu won't dismiss otherwise
     }
 
     async addNewTab() {
