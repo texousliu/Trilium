@@ -49,7 +49,7 @@ test("Can drag tab to new window", async ({ page }) => {
         await page.mouse.move(x, y + tabPos.height + 100, { steps: 5 });
         await page.mouse.up();
     } else {
-        fail("Unable to determine tab position");
+        test.fail(true, "Unable to determine tab position");
     }
 
     // Wait for the popup to show
