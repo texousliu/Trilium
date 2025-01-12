@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import handleParens from "../../src/services/search/services/handle_parens.js";
 import type { TokenStructure } from "../../src/services/search/services/types.js";
 
