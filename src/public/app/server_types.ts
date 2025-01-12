@@ -1,4 +1,4 @@
-import { EntityRowNames } from "./services/load_results.js";
+import type { EntityRowNames } from "./services/load_results.js";
 
 // TODO: Deduplicate with src/services/entity_changes_interface.ts
 export interface EntityChange {

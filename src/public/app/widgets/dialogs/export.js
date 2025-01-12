@@ -33,15 +33,15 @@ const TPL = `
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">${t('export.export_note_title')} <span class="export-note-title"></span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t('export.close')}"></button>
+                <h5 class="modal-title">${t("export.export_note_title")} <span class="export-note-title"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("export.close")}"></button>
             </div>
             <form class="export-form">
                 <div class="modal-body">
                     <div class="form-check">
                         <label class="form-check-label">
                             <input class="export-type-subtree form-check-input" type="radio" name="export-type" value="subtree">
-                            ${t('export.export_type_subtree')}
+                            ${t("export.export_type_subtree")}
                         </label>
                     </div>
 
@@ -49,21 +49,21 @@ const TPL = `
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="radio" name="export-subtree-format" value="html">
-                                ${t('export.format_html_zip')}
+                                ${t("export.format_html_zip")}
                             </label>
                         </div>
 
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="radio" name="export-subtree-format" value="markdown">
-                                ${t('export.format_markdown')}
+                                ${t("export.format_markdown")}
                             </label>
                         </div>
 
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="radio" name="export-subtree-format" value="opml">
-                                ${t('export.format_opml')}
+                                ${t("export.format_opml")}
                             </label>
                         </div>
 
@@ -71,14 +71,14 @@ const TPL = `
                             <div class="form-check">
                                 <label class="form-check-label">
                                     <input class="form-check-input" type="radio" name="opml-version" value="1.0">
-                                    ${t('export.opml_version_1')}
+                                    ${t("export.opml_version_1")}
                                 </label>
                             </div>
 
                             <div class="form-check">
                                 <label class="form-check-label">
                                     <input class="form-check-input" type="radio" name="opml-version" value="2.0">
-                                    ${t('export.opml_version_2')}
+                                    ${t("export.opml_version_2")}
                                 </label>
                             </div>
                         </div>
@@ -87,7 +87,7 @@ const TPL = `
                     <div class="form-check">
                         <label class="form-check-label">
                             <input class="form-check-input" type="radio" name="export-type" value="single">
-                            ${t('export.export_type_single')}
+                            ${t("export.export_type_single")}
                         </label>
                     </div>
 
@@ -95,20 +95,20 @@ const TPL = `
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="radio" name="export-single-format" value="html">
-                                ${t('export.format_html')}
+                                ${t("export.format_html")}
                             </label>
                         </div>
 
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="radio" name="export-single-format" value="markdown">
-                                ${t('export.format_markdown')}
+                                ${t("export.format_markdown")}
                             </label>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="export-button btn btn-primary">${t('export.export')}</button>
+                    <button class="export-button btn btn-primary">${t("export.export")}</button>
                 </div>
             </form>
         </div>
@@ -119,7 +119,7 @@ export default class ExportDialog extends BasicWidget {
     constructor() {
         super();
 
-        this.taskId = '';
+        this.taskId = "";
         this.branchId = null;
     }
 
@@ -135,39 +135,34 @@ export default class ExportDialog extends BasicWidget {
         this.$exportButton = this.$widget.find(".export-button");
         this.$opmlVersions = this.$widget.find(".opml-versions");
 
-        this.$form.on('submit', () => {
+        this.$form.on("submit", () => {
             this.modal.hide();
 
             const exportType = this.$widget.find("input[name='export-type']:checked").val();
 
             if (!exportType) {
-                toastService.showError(t('export.choose_export_type'));
+                toastService.showError(t("export.choose_export_type"));
                 return;
             }
 
-            const exportFormat = exportType === 'subtree'
-                ? this.$widget.find("input[name=export-subtree-format]:checked").val()
-                : this.$widget.find("input[name=export-single-format]:checked").val();
+            const exportFormat = exportType === "subtree" ? this.$widget.find("input[name=export-subtree-format]:checked").val() : this.$widget.find("input[name=export-single-format]:checked").val();
 
-            const exportVersion = exportFormat === 'opml'
-                ? this.$widget.find("input[name='opml-version']:checked").val()
-                : "1.0";
+            const exportVersion = exportFormat === "opml" ? this.$widget.find("input[name='opml-version']:checked").val() : "1.0";
 
             this.exportBranch(this.branchId, exportType, exportFormat, exportVersion);
 
             return false;
         });
 
-        this.$widget.find('input[name=export-type]').on('change', e => {
-            if (e.currentTarget.value === 'subtree') {
+        this.$widget.find("input[name=export-type]").on("change", (e) => {
+            if (e.currentTarget.value === "subtree") {
                 if (this.$widget.find("input[name=export-subtree-format]:checked").length === 0) {
                     this.$widget.find("input[name=export-subtree-format]:first").prop("checked", true);
                 }
 
                 this.$subtreeFormats.slideDown();
                 this.$singleFormats.slideUp();
-            }
-            else {
+            } else {
                 if (this.$widget.find("input[name=export-single-format]:checked").length === 0) {
                     this.$widget.find("input[name=export-single-format]:first").prop("checked", true);
                 }
@@ -177,29 +172,26 @@ export default class ExportDialog extends BasicWidget {
             }
         });
 
-        this.$widget.find('input[name=export-subtree-format]').on('change', e => {
-            if (e.currentTarget.value === 'opml') {
+        this.$widget.find("input[name=export-subtree-format]").on("change", (e) => {
+            if (e.currentTarget.value === "opml") {
                 this.$opmlVersions.slideDown();
-            }
-            else {
+            } else {
                 this.$opmlVersions.slideUp();
             }
         });
     }
 
     async showExportDialogEvent({ notePath, defaultType }) {
-        this.taskId = '';
+        this.taskId = "";
         this.$exportButton.removeAttr("disabled");
 
-        if (defaultType === 'subtree') {
-            this.$subtreeType.prop("checked", true).trigger('change');
+        if (defaultType === "subtree") {
+            this.$subtreeType.prop("checked", true).trigger("change");
 
-            this.$widget.find("input[name=export-subtree-format]:checked").trigger('change');
-        }
-        else if (defaultType === 'single') {
-            this.$singleType.prop("checked", true).trigger('change');
-        }
-        else {
+            this.$widget.find("input[name=export-subtree-format]:checked").trigger("change");
+        } else if (defaultType === "single") {
+            this.$singleType.prop("checked", true).trigger("change");
+        } else {
             throw new Error(`Unrecognized type '${defaultType}'`);
         }
 
@@ -222,27 +214,25 @@ export default class ExportDialog extends BasicWidget {
     }
 }
 
-ws.subscribeToMessages(async message => {
+ws.subscribeToMessages(async (message) => {
     const makeToast = (id, message) => ({
         id: id,
-        title: t('export.export_status'),
+        title: t("export.export_status"),
         message: message,
         icon: "arrow-square-up-right"
     });
 
-    if (message.taskType !== 'export') {
+    if (message.taskType !== "export") {
         return;
     }
 
-    if (message.type === 'taskError') {
+    if (message.type === "taskError") {
         toastService.closePersistent(message.taskId);
         toastService.showError(message.message);
-    }
-    else if (message.type === 'taskProgressCount') {
-        toastService.showPersistent(makeToast(message.taskId, t('export.export_in_progress', { progressCount: message.progressCount })));
-    }
-    else if (message.type === 'taskSucceeded') {
-        const toast = makeToast(message.taskId, t('export.export_finished_successfully'));
+    } else if (message.type === "taskProgressCount") {
+        toastService.showPersistent(makeToast(message.taskId, t("export.export_in_progress", { progressCount: message.progressCount })));
+    } else if (message.type === "taskSucceeded") {
+        const toast = makeToast(message.taskId, t("export.export_finished_successfully"));
         toast.closeAfter = 5000;
 
         toastService.showPersistent(toast);

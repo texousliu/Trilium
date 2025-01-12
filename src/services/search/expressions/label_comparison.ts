@@ -8,10 +8,9 @@ import SearchContext from "../search_context.js";
 type Comparator = (value: string) => boolean;
 
 class LabelComparisonExp extends Expression {
-    
-    private attributeType: string;
-    private attributeName: string;
-    private comparator: Comparator;
+    attributeType: string;
+    attributeName: string;
+    comparator: Comparator;
 
     constructor(attributeType: string, attributeName: string, comparator: Comparator) {
         super();
@@ -32,11 +31,9 @@ class LabelComparisonExp extends Expression {
             if (inputNoteSet.hasNoteId(note.noteId) && this.comparator(value)) {
                 if (attr.isInheritable) {
                     resultNoteSet.addAll(note.getSubtreeNotesIncludingTemplated());
-                }
-                else if (note.isInherited()) {
+                } else if (note.isInherited()) {
                     resultNoteSet.addAll(note.getInheritingNotes());
-                }
-                else {
+                } else {
                     resultNoteSet.add(note);
                 }
             }

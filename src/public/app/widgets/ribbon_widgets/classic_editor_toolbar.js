@@ -64,7 +64,6 @@ const TPL = `\
  * The ribbon item is active by default for text notes, as long as they are not in read-only mode.
  */
 export default class ClassicEditorToolbar extends NoteContextAwareWidget {
-
     constructor() {
         super();
         this.observer = new MutationObserver((e) => this.#onDropdownStateChanged(e));
@@ -90,16 +89,14 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
             // Observe when a dropdown is expanded to apply a style that allows the dropdown to be visible, since we can't have the element both visible and the toolbar scrollable.
             this.observer.disconnect();
             this.observer.observe(this.$widget[0], {
-                attributeFilter: [ "aria-expanded" ],
+                attributeFilter: ["aria-expanded"],
                 subtree: true
             });
         }
     }
 
     #onDropdownStateChanged(e) {
-        const dropdownActive = e
-            .map((e) => e.target.ariaExpanded === "true")
-            .reduce((acc, e) => acc && e);
+        const dropdownActive = e.map((e) => e.target.ariaExpanded === "true").reduce((acc, e) => acc && e);
         this.$widget[0].classList.toggle("dropdown-active", dropdownActive);
     }
 
@@ -138,5 +135,4 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
 
         return true;
     }
-
 }

@@ -1,7 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
-import { FontFamily, OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
+import type { FontFamily, OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
 
 interface FontFamilyEntry {
     value: FontFamily;
@@ -26,22 +26,11 @@ const FONT_FAMILIES: FontGroup[] = [
     },
     {
         title: t("fonts.sans-serif-system-fonts"),
-        items: [
-            { value: "Arial" },
-            { value: "Verdana" },
-            { value: "Helvetica" },
-            { value: "Tahoma" },
-            { value: "Trebuchet MS" },
-            { value: "Microsoft YaHei" },
-        ]
+        items: [{ value: "Arial" }, { value: "Verdana" }, { value: "Helvetica" }, { value: "Tahoma" }, { value: "Trebuchet MS" }, { value: "Microsoft YaHei" }]
     },
     {
         title: t("fonts.serif-system-fonts"),
-        items: [
-            { value: "Times New Roman" },
-            { value: "Georgia" },
-            { value: "Garamond" },
-        ]
+        items: [{ value: "Times New Roman" }, { value: "Georgia" }, { value: "Garamond" }]
     },
     {
         title: t("fonts.monospace-system-fonts"),
@@ -52,16 +41,12 @@ const FONT_FAMILIES: FontGroup[] = [
             { value: "American Typewriter" },
             { value: "Andalé Mono" },
             { value: "Lucida Console" },
-            { value: "Monaco" },
+            { value: "Monaco" }
         ]
     },
     {
         title: t("fonts.handwriting-system-fonts"),
-        items: [
-            { value: "Bradley Hand" },
-            { value: "Luminari" },
-            { value: "Comic Sans MS" }
-        ]
+        items: [{ value: "Bradley Hand" }, { value: "Luminari" }, { value: "Comic Sans MS" }]
     }
 ];
 
@@ -152,7 +137,6 @@ const TPL = `
 </div>`;
 
 export default class FontsOptions extends OptionsWidget {
-
     private $mainFontSize!: JQuery<HTMLElement>;
     private $mainFontFamily!: JQuery<HTMLElement>;
     private $treeFontSize!: JQuery<HTMLElement>;
@@ -187,7 +171,7 @@ export default class FontsOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        this._isEnabled = (options.overrideThemeFonts === 'true');
+        this._isEnabled = options.overrideThemeFonts === "true";
         this.toggleInt(this._isEnabled);
         if (!this._isEnabled) {
             return;
@@ -205,17 +189,11 @@ export default class FontsOptions extends OptionsWidget {
         this.$monospaceFontSize.val(options.monospaceFontSize);
         this.fillFontFamilyOptions(this.$monospaceFontFamily, options.monospaceFontFamily);
 
-        const optionsToSave: OptionNames[] = [
-            'mainFontFamily', 'mainFontSize',
-            'treeFontFamily', 'treeFontSize',
-            'detailFontFamily', 'detailFontSize',
-            'monospaceFontFamily', 'monospaceFontSize'
-        ];
+        const optionsToSave: OptionNames[] = ["mainFontFamily", "mainFontSize", "treeFontFamily", "treeFontSize", "detailFontFamily", "detailFontSize", "monospaceFontFamily", "monospaceFontSize"];
 
         for (const optionName of optionsToSave) {
             const $el = (this as any)[`$${optionName}`];
-            $el.on('change', () =>
-                this.updateOption(optionName, $el.val()));
+            $el.on("change", () => this.updateOption(optionName, $el.val()));
         }
     }
 
@@ -223,18 +201,18 @@ export default class FontsOptions extends OptionsWidget {
         $select.empty();
 
         for (const { title, items } of Object.values(FONT_FAMILIES)) {
-            const $group = ($("<optgroup>")
-                .attr("label", title));
+            const $group = $("<optgroup>").attr("label", title);
 
-            for (const {value, label} of items) {
-                $group.append($("<option>")
-                    .attr("value", value)
-                    .prop("selected", value === currentValue)
-                    .text(label ?? value));
+            for (const { value, label } of items) {
+                $group.append(
+                    $("<option>")
+                        .attr("value", value)
+                        .prop("selected", value === currentValue)
+                        .text(label ?? value)
+                );
             }
 
             $select.append($group);
         }
-
     }
 }

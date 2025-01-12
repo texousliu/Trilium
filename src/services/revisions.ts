@@ -19,7 +19,7 @@ function protectRevisions(note: BNote) {
                 revision.isProtected = !!note.isProtected;
 
                 // this will force de/encryption
-                revision.setContent(content, {forceSave: true});
+                revision.setContent(content, { forceSave: true });
             } catch (e) {
                 log.error(`Could not un/protect note revision '${revision.revisionId}'`);
 
@@ -33,7 +33,7 @@ function protectRevisions(note: BNote) {
                     const content = attachment.getContent();
 
                     attachment.isProtected = note.isProtected;
-                    attachment.setContent(content, {forceSave: true});
+                    attachment.setContent(content, { forceSave: true });
                 } catch (e) {
                     log.error(`Could not un/protect attachment '${attachment.attachmentId}'`);
 

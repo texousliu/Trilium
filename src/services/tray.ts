@@ -1,4 +1,4 @@
-import { Menu, Tray } from 'electron';
+import { Menu, Tray } from "electron";
 import path from "path";
 import windowService from "./window.js";
 import optionService from "./options.js";
@@ -9,56 +9,52 @@ let tray: Tray;
 // is minimized
 let isVisible = true;
 
-
 // Inspired by https://github.com/signalapp/Signal-Desktop/blob/dcb5bb672635c4b29a51adec8a5658e3834ec8fc/app/tray_icon.ts#L20
 const getIconSize = () => {
     switch (process.platform) {
-        case 'darwin':
+        case "darwin":
             return 16;
-        case 'win32':
+        case "win32":
             return 32;
         default:
             return 256;
     }
-}
+};
 const getIconPath = () => {
     const iconSize = getIconSize();
 
-    return path.join(
-        path.dirname(fileURLToPath(import.meta.url)),
-        "../..",
-        "images",
-        "app-icons",
-        "png",
-        `${iconSize}x${iconSize}.png`
-    )
-}
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "png", `${iconSize}x${iconSize}.png`);
+};
 const registerVisibilityListener = () => {
     const mainWindow = windowService.getMainWindow();
-    if (!mainWindow) { return; }
+    if (!mainWindow) {
+        return;
+    }
 
     // They need to be registered before the tray updater is registered
-    mainWindow.on('show', () => {
+    mainWindow.on("show", () => {
         isVisible = true;
         updateTrayMenu();
     });
-    mainWindow.on('hide', () => {
+    mainWindow.on("hide", () => {
         isVisible = false;
         updateTrayMenu();
     });
 
     mainWindow.on("minimize", updateTrayMenu);
     mainWindow.on("maximize", updateTrayMenu);
-}
+};
 
 const updateTrayMenu = () => {
     const mainWindow = windowService.getMainWindow();
-    if (!mainWindow) { return; }
+    if (!mainWindow) {
+        return;
+    }
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: isVisible ? 'Hide' : 'Show',
-            type: 'normal',
+            label: isVisible ? "Hide" : "Show",
+            type: "normal",
             click: () => {
                 if (isVisible) {
                     mainWindow.hide();
@@ -69,22 +65,24 @@ const updateTrayMenu = () => {
             }
         },
         {
-            type: 'separator'
+            type: "separator"
         },
         {
-            label: 'Quit',
-            type: 'normal',
+            label: "Quit",
+            type: "normal",
             click: () => {
                 mainWindow.close();
             }
-        },
+        }
     ]);
 
     tray?.setContextMenu(contextMenu);
-}
+};
 const changeVisibility = () => {
     const window = windowService.getMainWindow();
-    if (!window) { return; }
+    if (!window) {
+        return;
+    }
 
     if (isVisible) {
         window.hide();
@@ -92,7 +90,7 @@ const changeVisibility = () => {
         window.show();
         window.focus();
     }
-}
+};
 
 function createTray() {
     if (optionService.getOptionBool("disableTray")) {
@@ -100,9 +98,9 @@ function createTray() {
     }
 
     tray = new Tray(getIconPath());
-    tray.setToolTip('TriliumNext Notes')
+    tray.setToolTip("TriliumNext Notes");
     // Restore focus
-    tray.on('click', changeVisibility)
+    tray.on("click", changeVisibility);
     updateTrayMenu();
 
     registerVisibilityListener();
@@ -110,4 +108,4 @@ function createTray() {
 
 export default {
     createTray
-}
+};

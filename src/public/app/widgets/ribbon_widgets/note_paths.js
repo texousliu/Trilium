@@ -49,7 +49,7 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
         return {
             show: true,
             title: t("note_paths.title"),
-            icon: 'bx bx-collection'
+            icon: "bx bx-collection"
         };
     }
 
@@ -59,22 +59,19 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
 
         this.$notePathIntro = this.$widget.find(".note-path-intro");
         this.$notePathList = this.$widget.find(".note-path-list");
-        this.$widget.on('show.bs.dropdown', () => this.renderDropdown());
+        this.$widget.on("show.bs.dropdown", () => this.renderDropdown());
     }
 
     async refreshWithNote(note) {
         this.$notePathList.empty();
 
-        if (this.noteId === 'root') {
-            this.$notePathList.empty().append(
-                await this.getRenderedPath('root')
-            );
+        if (this.noteId === "root") {
+            this.$notePathList.empty().append(await this.getRenderedPath("root"));
 
             return;
         }
 
-        const sortedNotePaths = this.note.getSortedNotePathRecords(this.hoistedNoteId)
-            .filter(notePath => !notePath.isHidden);
+        const sortedNotePaths = this.note.getSortedNotePathRecords(this.hoistedNoteId).filter((notePath) => !notePath.isHidden);
 
         if (sortedNotePaths.length > 0) {
             this.$notePathIntro.text(t("note_paths.intro_placed"));
@@ -85,7 +82,7 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
         const renderedPaths = [];
 
         for (const notePathRecord of sortedNotePaths) {
-            const notePath = notePathRecord.notePath.join('/');
+            const notePath = notePathRecord.notePath.join("/");
 
             renderedPaths.push(await this.getRenderedPath(notePath, notePathRecord));
         }
@@ -96,11 +93,9 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
     async getRenderedPath(notePath, notePathRecord = null) {
         const title = await treeService.getNotePathTitle(notePath);
 
-        const $noteLink = await linkService.createLink(notePath, {title});
+        const $noteLink = await linkService.createLink(notePath, { title });
 
-        $noteLink
-            .find('a')
-            .addClass("no-tooltip-preview");
+        $noteLink.find("a").addClass("no-tooltip-preview");
 
         const icons = [];
 
@@ -127,16 +122,14 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
         }
 
         if (icons.length > 0) {
-            $noteLink.append(` ${icons.join(' ')}`);
+            $noteLink.append(` ${icons.join(" ")}`);
         }
 
         return $("<li>").append($noteLink);
     }
 
-    entitiesReloadedEvent({loadResults}) {
-        if (loadResults.getBranchRows().find(branch => branch.noteId === this.noteId)
-            || loadResults.isNoteReloaded(this.noteId)) {
-
+    entitiesReloadedEvent({ loadResults }) {
+        if (loadResults.getBranchRows().find((branch) => branch.noteId === this.noteId) || loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }
     }

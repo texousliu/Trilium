@@ -15,13 +15,11 @@ import path from "path";
 function getAppDataDir() {
     let appDataDir = os.homedir(); // fallback if OS is not recognized
 
-    if (os.platform() === 'win32' && process.env.APPDATA) {
+    if (os.platform() === "win32" && process.env.APPDATA) {
         appDataDir = process.env.APPDATA;
-    }
-    else if (os.platform() === 'linux') {
+    } else if (os.platform() === "linux") {
         appDataDir = `${os.homedir()}/.local/share`;
-    }
-    else if (os.platform() === 'darwin') {
+    } else if (os.platform() === "darwin") {
         appDataDir = `${os.homedir()}/Library/Application Support`;
     }
 
@@ -33,7 +31,7 @@ function getAppDataDir() {
     return appDataDir;
 }
 
-const DIR_NAME = 'trilium-data';
+const DIR_NAME = "trilium-data";
 
 function getTriliumDataDir() {
     if (process.env.TRILIUM_DATA_DIR) {

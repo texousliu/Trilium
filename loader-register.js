@@ -5,6 +5,6 @@
 // Then probably can change webpack comand to
 // "webpack": "cross-env NODE_OPTIONS=--import=ts-node/esm webpack -c webpack.config.ts",
 
-import { register } from 'node:module';
-import { pathToFileURL } from 'node:url';
-register('ts-node/esm', pathToFileURL('./'));
+import { register } from "node:module";
+import { pathToFileURL } from "node:url";
+register("ts-node/esm", pathToFileURL("./"));

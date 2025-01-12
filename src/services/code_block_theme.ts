@@ -5,7 +5,7 @@
  */
 
 import fs from "fs";
-import themeNames from "./code_block_theme_names.json" with { type: "json" }
+import themeNames from "./code_block_theme_names.json" with { type: "json" };
 import { t } from "i18next";
 import { join } from "path";
 import { isElectron, getResourceDir } from "./utils.js";
@@ -42,7 +42,7 @@ export function listSyntaxHighlightingThemes() {
             }
         ],
         ...groupThemesByLightOrDark(systemThemes)
-    }
+    };
 }
 
 function getStylesDirectory() {
@@ -62,7 +62,8 @@ function getStylesDirectory() {
  * @returns the list of themes.
  */
 function readThemesFromFileSystem(path: string): ColorTheme[] {
-    return fs.readdirSync(path)
+    return fs
+        .readdirSync(path)
         .filter((el) => el.endsWith(".min.css"))
         .map((name) => {
             const nameWithoutExtension = name.replace(".min.css", "");

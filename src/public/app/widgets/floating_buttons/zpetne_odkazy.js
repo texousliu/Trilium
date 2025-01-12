@@ -67,9 +67,9 @@ const TPL = `
 export default class BacklinksWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
-        this.$count = this.$widget.find('.backlinks-count');
-        this.$items = this.$widget.find('.backlinks-items');
-        this.$ticker = this.$widget.find('.backlinks-ticker');
+        this.$count = this.$widget.find(".backlinks-count");
+        this.$items = this.$widget.find(".backlinks-items");
+        this.$ticker = this.$widget.find(".backlinks-ticker");
 
         this.$count.on("click", () => {
             this.$items.toggle();
@@ -86,7 +86,7 @@ export default class BacklinksWidget extends NoteContextAwareWidget {
     async refreshWithNote(note) {
         this.clearItems();
 
-        if (this.noteContext?.viewScope?.viewMode !== 'default') {
+        if (this.noteContext?.viewScope?.viewMode !== "default") {
             this.toggle(false);
             return;
         }
@@ -102,7 +102,7 @@ export default class BacklinksWidget extends NoteContextAwareWidget {
         this.toggle(true);
         this.$count.text(
             // i18next plural
-            `${t('zpetne_odkazy.backlink', {count: resp.count})}`
+            `${t("zpetne_odkazy.backlink", { count: resp.count })}`
         );
     }
 
@@ -127,21 +127,22 @@ export default class BacklinksWidget extends NoteContextAwareWidget {
             return;
         }
 
-        await froca.getNotes(backlinks.map(bl => bl.noteId)); // prefetch all
+        await froca.getNotes(backlinks.map((bl) => bl.noteId)); // prefetch all
 
         for (const backlink of backlinks) {
             const $item = $("<div>");
 
-            $item.append(await linkService.createLink(backlink.noteId, {
-                showNoteIcon: true,
-                showNotePath: true,
-                showTooltip: false
-            }));
+            $item.append(
+                await linkService.createLink(backlink.noteId, {
+                    showNoteIcon: true,
+                    showNotePath: true,
+                    showTooltip: false
+                })
+            );
 
             if (backlink.relationName) {
-                $item.append($("<p>").text(`${t('zpetne_odkazy.relation')}: ${backlink.relationName}`));
-            }
-            else {
+                $item.append($("<p>").text(`${t("zpetne_odkazy.relation")}: ${backlink.relationName}`));
+            } else {
                 $item.append(...backlink.excerpts);
             }
 

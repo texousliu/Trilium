@@ -82,39 +82,32 @@ const TPL = `
 export default class NoteIconWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
-        this.$icon = this.$widget.find('button.note-icon');
-        this.$iconList = this.$widget.find('.icon-list');
-        this.$iconList.on('click', 'span', async e => {
-            const clazz = $(e.target).attr('class');
+        this.$icon = this.$widget.find("button.note-icon");
+        this.$iconList = this.$widget.find(".icon-list");
+        this.$iconList.on("click", "span", async (e) => {
+            const clazz = $(e.target).attr("class");
 
-            await attributeService.setLabel(this.noteId,
-                this.note.hasOwnedLabel('workspace') ? 'workspaceIconClass' : 'iconClass',
-                clazz
-            );
+            await attributeService.setLabel(this.noteId, this.note.hasOwnedLabel("workspace") ? "workspaceIconClass" : "iconClass", clazz);
         });
 
         this.$iconCategory = this.$widget.find("select[name='icon-category']");
-        this.$iconCategory.on('change', () => this.renderDropdown());
-        this.$iconCategory.on('click', e => e.stopPropagation());
+        this.$iconCategory.on("change", () => this.renderDropdown());
+        this.$iconCategory.on("click", (e) => e.stopPropagation());
 
         this.$iconSearch = this.$widget.find("input[name='icon-search']");
-        this.$iconSearch.on('input', () => this.renderDropdown());
+        this.$iconSearch.on("input", () => this.renderDropdown());
 
         this.$notePathList = this.$widget.find(".note-path-list");
-        this.$widget.on('show.bs.dropdown', async () => {
-            const {categories} = (await import('./icon_list.js')).default;
+        this.$widget.on("show.bs.dropdown", async () => {
+            const { categories } = (await import("./icon_list.js")).default;
 
             this.$iconCategory.empty();
 
             for (const category of categories) {
-                this.$iconCategory.append(
-                    $("<option>")
-                        .text(category.name)
-                        .attr("value", category.id)
-                );
+                this.$iconCategory.append($("<option>").text(category.name).attr("value", category.id));
             }
 
-            this.$iconSearch.val('');
+            this.$iconSearch.val("");
 
             this.renderDropdown();
         });
@@ -124,17 +117,14 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
         this.$icon.removeClass().addClass(`${note.getIcon()} note-icon`);
     }
 
-    async entitiesReloadedEvent({loadResults}) {
+    async entitiesReloadedEvent({ loadResults }) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
             return;
         }
 
         for (const attr of loadResults.getAttributeRows()) {
-            if (attr.type === 'label'
-                && ['iconClass', 'workspaceIconClass'].includes(attr.name)
-                && attributeService.isAffecting(attr, this.note)) {
-
+            if (attr.type === "label" && ["iconClass", "workspaceIconClass"].includes(attr.name) && attributeService.isAffecting(attr, this.note)) {
                 this.refresh();
                 break;
             }
@@ -143,32 +133,30 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
 
     async renderDropdown() {
         const iconToCount = await this.getIconToCountMap();
-        const {icons} = (await import('./icon_list.js')).default;
+        const { icons } = (await import("./icon_list.js")).default;
 
         this.$iconList.empty();
 
         if (this.getIconLabels().length > 0) {
             this.$iconList.append(
-                $(`<div style="text-align: center">`)
-                    .append(
-                        $(`<button class="btn btn-sm">${t("note_icon.reset-default")}</button>`)
-                            .on('click', () => this.getIconLabels()
-                                .forEach(label => attributeService.removeAttributeById(this.noteId, label.attributeId))
-                            )
+                $(`<div style="text-align: center">`).append(
+                    $(`<button class="btn btn-sm">${t("note_icon.reset-default")}</button>`).on("click", () =>
+                        this.getIconLabels().forEach((label) => attributeService.removeAttributeById(this.noteId, label.attributeId))
                     )
+                )
             );
         }
 
-        const categoryId = parseInt(this.$iconCategory.find('option:selected').val());
+        const categoryId = parseInt(this.$iconCategory.find("option:selected").val());
         const search = this.$iconSearch.val().trim().toLowerCase();
 
-        const filteredIcons = icons.filter(icon => {
+        const filteredIcons = icons.filter((icon) => {
             if (categoryId && icon.category_id !== categoryId) {
                 return false;
             }
 
             if (search) {
-                if (!icon.name.includes(search) && !icon.term?.find(t => t.includes(search))) {
+                if (!icon.name.includes(search) && !icon.term?.find((t) => t.includes(search))) {
                     return false;
                 }
             }
@@ -192,21 +180,20 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
 
     async getIconToCountMap() {
         if (!this.iconToCountCache) {
-            this.iconToCountCache = server.get('other/icon-usage');
-            setTimeout(() => this.iconToCountCache = null, 20000); // invalidate cache after 20 seconds
+            this.iconToCountCache = server.get("other/icon-usage");
+            setTimeout(() => (this.iconToCountCache = null), 20000); // invalidate cache after 20 seconds
         }
 
         return (await this.iconToCountCache).iconClassToCountMap;
     }
 
     renderIcon(icon) {
-        return $('<span>')
+        return $("<span>")
             .addClass("bx " + icon.className)
             .attr("title", icon.name);
     }
 
     getIconLabels() {
-        return this.note.getOwnedLabels()
-            .filter(label => ['workspaceIconClass', 'iconClass'].includes(label.name));
+        return this.note.getOwnedLabels().filter((label) => ["workspaceIconClass", "iconClass"].includes(label.name));
     }
 }

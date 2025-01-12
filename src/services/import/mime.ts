@@ -2,46 +2,46 @@
 
 import mimeTypes from "mime-types";
 import path from "path";
-import { TaskData } from '../task_context_interface.js';
+import type { TaskData } from "../task_context_interface.js";
 
 const CODE_MIME_TYPES: Record<string, boolean | string> = {
-    'text/plain': true,
-    'text/x-csrc': true,
-    'text/x-c++src': true,
-    'text/x-csharp': true,
-    'text/x-clojure': true,
-    'text/css': true,
-    'text/x-dockerfile': true,
-    'text/x-erlang': true,
-    'text/x-feature': true,
-    'text/x-go': true,
-    'text/x-groovy': true,
-    'text/x-haskell': true,
-    'text/html': true,
-    'message/http': true,
-    'text/x-java': true,
-    'application/javascript': 'application/javascript;env=frontend',
-    'application/x-javascript': 'application/javascript;env=frontend',
-    'application/json': true,
-    'text/x-kotlin': true,
-    'text/x-stex': true,
-    'text/x-lua': true,
+    "text/plain": true,
+    "text/x-csrc": true,
+    "text/x-c++src": true,
+    "text/x-csharp": true,
+    "text/x-clojure": true,
+    "text/css": true,
+    "text/x-dockerfile": true,
+    "text/x-erlang": true,
+    "text/x-feature": true,
+    "text/x-go": true,
+    "text/x-groovy": true,
+    "text/x-haskell": true,
+    "text/html": true,
+    "message/http": true,
+    "text/x-java": true,
+    "application/javascript": "application/javascript;env=frontend",
+    "application/x-javascript": "application/javascript;env=frontend",
+    "application/json": true,
+    "text/x-kotlin": true,
+    "text/x-stex": true,
+    "text/x-lua": true,
     // possibly later migrate to text/markdown as primary MIME
-    'text/markdown': 'text/x-markdown',
-    'text/x-markdown': true,
-    'text/x-objectivec': true,
-    'text/x-pascal': true,
-    'text/x-perl': true,
-    'text/x-php': true,
-    'text/x-python': true,
-    'text/x-ruby': true,
-    'text/x-rustsrc': true,
-    'text/x-scala': true,
-    'text/x-sh': true,
-    'text/x-sql': true,
-    'text/x-swift': true,
-    'text/xml': true,
-    'text/x-yaml': true
+    "text/markdown": "text/x-markdown",
+    "text/x-markdown": true,
+    "text/x-objectivec": true,
+    "text/x-pascal": true,
+    "text/x-perl": true,
+    "text/x-php": true,
+    "text/x-python": true,
+    "text/x-ruby": true,
+    "text/x-rustsrc": true,
+    "text/x-scala": true,
+    "text/x-sh": true,
+    "text/x-sql": true,
+    "text/x-swift": true,
+    "text/xml": true,
+    "text/x-yaml": true
 };
 
 // extensions missing in mime-db
@@ -67,7 +67,7 @@ const EXTENSION_TO_MIME: Record<string, string> = {
 
 /** @returns false if MIME is not detected */
 function getMime(fileName: string) {
-    if (fileName.toLowerCase() === 'dockerfile') {
+    if (fileName.toLowerCase() === "dockerfile") {
         return "text/x-dockerfile";
     }
 
@@ -81,24 +81,21 @@ function getMime(fileName: string) {
 }
 
 function getType(options: TaskData, mime: string) {
-    mime = mime ? mime.toLowerCase() : '';
+    mime = mime ? mime.toLowerCase() : "";
 
-    if (options.textImportedAsText && (mime === 'text/html' || ['text/markdown', 'text/x-markdown'].includes(mime))) {
-        return 'text';
-    }
-    else if (options.codeImportedAsCode && mime in CODE_MIME_TYPES) {
-        return 'code';
-    }
-    else if (mime.startsWith("image/")) {
-        return 'image';
-    }
-    else {
-        return 'file';
+    if (options.textImportedAsText && (mime === "text/html" || ["text/markdown", "text/x-markdown"].includes(mime))) {
+        return "text";
+    } else if (options.codeImportedAsCode && mime in CODE_MIME_TYPES) {
+        return "code";
+    } else if (mime.startsWith("image/")) {
+        return "image";
+    } else {
+        return "file";
     }
 }
 
 function normalizeMimeType(mime: string) {
-    mime = mime ? mime.toLowerCase() : '';
+    mime = mime ? mime.toLowerCase() : "";
     const mappedMime = CODE_MIME_TYPES[mime];
 
     if (mappedMime === true) {

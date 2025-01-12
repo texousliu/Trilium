@@ -9,7 +9,7 @@ import FAttribute from "../entities/fattribute.js";
  */
 class NoteAttributeCache {
     attributes: Record<string, FAttribute[]>;
-    
+
     constructor() {
         this.attributes = {};
     }

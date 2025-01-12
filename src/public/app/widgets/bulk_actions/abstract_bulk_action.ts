@@ -31,9 +31,10 @@ export default abstract class AbstractBulkAction {
         try {
             const $rendered = this.doRender();
 
-            $rendered.find('.action-conf-del')
-                .on('click', () => this.deleteAction())
-                .attr('title', t('abstract_bulk_action.remove_this_search_action'));
+            $rendered
+                .find(".action-conf-del")
+                .on("click", () => this.deleteAction())
+                .attr("title", t("abstract_bulk_action.remove_this_search_action"));
 
             utils.initHelpDropdown($rendered);
 
@@ -46,15 +47,17 @@ export default abstract class AbstractBulkAction {
 
     // to be overridden
     abstract doRender(): JQuery<HTMLElement>;
-    static get actionName() { return ""; }
+    static get actionName() {
+        return "";
+    }
 
     async saveAction(data: {}) {
         const actionObject = Object.assign({ name: (this.constructor as typeof AbstractBulkAction).actionName }, data);
 
         await server.put(`notes/${this.attribute.noteId}/attribute`, {
             attributeId: this.attribute.attributeId,
-            type: 'label',
-            name: 'action',
+            type: "label",
+            name: "action",
             value: JSON.stringify(actionObject)
         });
 

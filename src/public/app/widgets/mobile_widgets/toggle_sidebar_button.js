@@ -7,9 +7,11 @@ class ToggleSidebarButtonWidget extends BasicWidget {
     doRender() {
         this.$widget = $(TPL);
 
-        this.$widget.on('click', () => this.triggerCommand('setActiveScreen', {
-            screen: 'tree'
-        }));
+        this.$widget.on("click", () =>
+            this.triggerCommand("setActiveScreen", {
+                screen: "tree"
+            })
+        );
     }
 }
 

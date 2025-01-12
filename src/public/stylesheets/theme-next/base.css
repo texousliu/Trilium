@@ -26,7 +26,7 @@
 
     --launcher-pane-size: 58px;
     --launcher-pane-horizontal-size: 54px;
-    --launcher-pane-horizontal-icon-size: 20px;    
+    --launcher-pane-horizontal-icon-size: 20px;
     --launcher-pane-button-margin: 6px;
     --launcher-pane-button-gap: 3px;
 
@@ -44,7 +44,7 @@
     --center-pane-border-radius: 10px;
 
     --menu-padding-size: 8px;
-    --menu-item-icon-vert-offset: 0;    
+    --menu-item-icon-vert-offset: 0;
 
     --more-accented-background-color: var(--card-background-hover-color);
 
@@ -53,7 +53,7 @@
     --timeline-item-top-padding: 4px;
     --timeline-item-bottom-padding: 8px;
     --timeline-bullet-size: 10px;
-    --timeline-bullet-vertical-pos: .75em;
+    --timeline-bullet-vertical-pos: 0.75em;
     --timeline-connector-size: 4px;
 
     --help-backdrop-blur: 10px;

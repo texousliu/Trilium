@@ -27,8 +27,7 @@ export default class SpacedUpdate {
 
             try {
                 await this.updater();
-            }
-            catch (e) {
+            } catch (e) {
                 this.changed = true;
 
                 throw e;
@@ -53,8 +52,7 @@ export default class SpacedUpdate {
             this.updater();
             this.lastUpdated = Date.now();
             this.changed = false;
-        }
-        else {
+        } else {
             // update isn't triggered but changes are still pending, so we need to schedule another check
             this.scheduleUpdate();
         }
@@ -65,8 +63,7 @@ export default class SpacedUpdate {
 
         try {
             await callback();
-        }
-        finally {
+        } finally {
             this.changeForbidden = false;
         }
     }

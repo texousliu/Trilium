@@ -27,7 +27,7 @@ const ACTION_GROUPS = [
     },
     {
         title: t("bulk_actions.notes"),
-        actions: [RenameNoteBulkAction, MoveNoteBulkAction, DeleteNoteBulkAction, DeleteRevisionsBulkAction],
+        actions: [RenameNoteBulkAction, MoveNoteBulkAction, DeleteNoteBulkAction, DeleteRevisionsBulkAction]
     },
     {
         title: t("bulk_actions.other"),
@@ -53,8 +53,8 @@ const ACTION_CLASSES = [
 
 async function addAction(noteId: string, actionName: string) {
     await server.post(`notes/${noteId}/attributes`, {
-        type: 'label',
-        name: 'action',
+        type: "label",
+        name: "action",
         value: JSON.stringify({
             name: actionName
         })
@@ -64,28 +64,29 @@ async function addAction(noteId: string, actionName: string) {
 }
 
 function parseActions(note: FNote) {
-    const actionLabels = note.getLabels('action');
+    const actionLabels = note.getLabels("action");
 
-    return actionLabels.map(actionAttr => {
-        let actionDef;
+    return actionLabels
+        .map((actionAttr) => {
+            let actionDef;
 
-        try {
-            actionDef = JSON.parse(actionAttr.value);
-        } catch (e: any) {
-            logError(`Parsing of attribute: '${actionAttr.value}' failed with error: ${e.message}`);
-            return null;
-        }
+            try {
+                actionDef = JSON.parse(actionAttr.value);
+            } catch (e: any) {
+                logError(`Parsing of attribute: '${actionAttr.value}' failed with error: ${e.message}`);
+                return null;
+            }
 
-        const ActionClass = ACTION_CLASSES.find(actionClass => actionClass.actionName === actionDef.name);
+            const ActionClass = ACTION_CLASSES.find((actionClass) => actionClass.actionName === actionDef.name);
 
-        if (!ActionClass) {
-            logError(`No action class for '${actionDef.name}' found.`);
-            return null;
-        }
+            if (!ActionClass) {
+                logError(`No action class for '${actionDef.name}' found.`);
+                return null;
+            }
 
-        return new ActionClass(actionAttr, actionDef);
-    })
-        .filter(action => !!action);
+            return new ActionClass(actionAttr, actionDef);
+        })
+        .filter((action) => !!action);
 }
 
 export default {

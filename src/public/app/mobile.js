@@ -1,8 +1,8 @@
 import appContext from "./components/app_context.js";
-import noteAutocompleteService from './services/note_autocomplete.js';
+import noteAutocompleteService from "./services/note_autocomplete.js";
 import glob from "./services/glob.js";
 
-glob.setupGlobs()
+glob.setupGlobs();
 
 await appContext.earlyInit();
 

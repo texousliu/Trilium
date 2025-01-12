@@ -73,7 +73,7 @@ export default class SyncStatusWidget extends BasicWidget {
     constructor() {
         super();
 
-        this.syncState = 'unknown';
+        this.syncState = "unknown";
         this.allChangesPushed = false;
         this.settings = {
             titlePlacement: "right"
@@ -84,14 +84,13 @@ export default class SyncStatusWidget extends BasicWidget {
         this.$widget = $(TPL);
         this.$widget.hide();
 
-        this.$widget.find('.sync-status-icon:not(.sync-status-in-progress)')
-            .on('click', () => syncService.syncNow());
+        this.$widget.find(".sync-status-icon:not(.sync-status-in-progress)").on("click", () => syncService.syncNow());
 
-        ws.subscribeToMessages(message => this.processMessage(message));
+        ws.subscribeToMessages((message) => this.processMessage(message));
     }
 
     showIcon(className) {
-        if (!options.get('syncServerHost')) {
+        if (!options.get("syncServerHost")) {
             this.toggleInt(false);
             return;
         }
@@ -99,41 +98,37 @@ export default class SyncStatusWidget extends BasicWidget {
         bootstrap.Tooltip.getOrCreateInstance(this.$widget.find(`.sync-status-${className}`), {
             html: true,
             placement: this.settings.titlePlacement,
-            fallbackPlacements: [ this.settings.titlePlacement ]
+            fallbackPlacements: [this.settings.titlePlacement]
         });
 
         this.$widget.show();
-        this.$widget.find('.sync-status-icon').hide();
+        this.$widget.find(".sync-status-icon").hide();
         this.$widget.find(`.sync-status-${className}`).show();
     }
 
     processMessage(message) {
-        if (message.type === 'sync-pull-in-progress') {
-            this.syncState = 'in-progress';
+        if (message.type === "sync-pull-in-progress") {
+            this.syncState = "in-progress";
             this.lastSyncedPush = message.lastSyncedPush;
-        }
-        else if (message.type === 'sync-push-in-progress') {
-            this.syncState = 'in-progress';
+        } else if (message.type === "sync-push-in-progress") {
+            this.syncState = "in-progress";
             this.lastSyncedPush = message.lastSyncedPush;
-        }
-        else if (message.type === 'sync-finished') {
-            this.syncState = 'connected';
+        } else if (message.type === "sync-finished") {
+            this.syncState = "connected";
             this.lastSyncedPush = message.lastSyncedPush;
-        }
-        else if (message.type === 'sync-failed') {
-            this.syncState = 'disconnected';
+        } else if (message.type === "sync-failed") {
+            this.syncState = "disconnected";
             this.lastSyncedPush = message.lastSyncedPush;
-        }
-        else if (message.type === 'frontend-update') {
+        } else if (message.type === "frontend-update") {
             this.lastSyncedPush = message.data.lastSyncedPush;
         }
 
         this.allChangesPushed = this.lastSyncedPush === ws.getMaxKnownEntityChangeSyncId();
 
-        if (['unknown', 'in-progress'].includes(this.syncState)) {
+        if (["unknown", "in-progress"].includes(this.syncState)) {
             this.showIcon(this.syncState);
         } else {
-            this.showIcon(`${this.syncState}-${this.allChangesPushed ? 'no-changes' : 'with-changes'}`);
+            this.showIcon(`${this.syncState}-${this.allChangesPushed ? "no-changes" : "with-changes"}`);
         }
     }
 }

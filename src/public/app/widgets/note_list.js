@@ -26,16 +26,19 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
         this.contentSized();
-        this.$content = this.$widget.find('.note-list-widget-content');
+        this.$content = this.$widget.find(".note-list-widget-content");
 
-        const observer = new IntersectionObserver(entries => {
-            this.isIntersecting = entries[0].isIntersecting;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                this.isIntersecting = entries[0].isIntersecting;
 
-            this.checkRenderStatus();
-        }, {
-            rootMargin: '50px',
-            threshold: 0.1
-        });
+                this.checkRenderStatus();
+            },
+            {
+                rootMargin: "50px",
+                threshold: 0.1
+            }
+        );
 
         // there seems to be a race condition on Firefox which triggers the observer only before the widget is visible
         // (intersection is false). https://github.com/zadam/trilium/issues/4165
@@ -47,10 +50,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         // console.log(`${this.noteIdRefreshed} === ${this.noteId}`, this.noteIdRefreshed === this.noteId);
         // console.log("this.shownNoteId !== this.noteId", this.shownNoteId !== this.noteId);
 
-        if (this.isIntersecting
-            && this.noteIdRefreshed === this.noteId
-            && this.shownNoteId !== this.noteId) {
-
+        if (this.isIntersecting && this.noteIdRefreshed === this.noteId && this.shownNoteId !== this.noteId) {
             this.shownNoteId = this.noteId;
             this.renderNoteList(this.note);
         }
@@ -67,7 +67,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         await super.refresh();
     }
 
-    async refreshNoteListEvent({noteId}) {
+    async refreshNoteListEvent({ noteId }) {
         if (this.isNote(noteId)) {
             await this.renderNoteList(this.note);
         }
@@ -78,7 +78,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
      * If it's evaluated before note detail, then it's clearly intersected (visible) although after note detail load
      * it is not intersected (visible) anymore.
      */
-    noteDetailRefreshedEvent({ntxId}) {
+    noteDetailRefreshedEvent({ ntxId }) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }
@@ -88,14 +88,14 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         setTimeout(() => this.checkRenderStatus(), 100);
     }
 
-    notesReloadedEvent({noteIds}) {
+    notesReloadedEvent({ noteIds }) {
         if (noteIds.includes(this.noteId)) {
             this.refresh();
         }
     }
 
-    entitiesReloadedEvent({loadResults}) {
-        if (loadResults.getAttributeRows().find(attr => attr.noteId === this.noteId && ['viewType', 'expanded', 'pageSize'].includes(attr.name))) {
+    entitiesReloadedEvent({ loadResults }) {
+        if (loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && ["viewType", "expanded", "pageSize"].includes(attr.name))) {
             this.shownNoteId = null; // force render
 
             this.checkRenderStatus();

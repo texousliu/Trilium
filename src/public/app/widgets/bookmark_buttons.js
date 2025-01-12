@@ -16,15 +16,12 @@ export default class BookmarkButtons extends FlexContainer {
         this.children = [];
         this.noteIds = [];
 
-        const bookmarkParentNote = await froca.getNote('_lbBookmarks');
+        const bookmarkParentNote = await froca.getNote("_lbBookmarks");
 
         for (const note of await bookmarkParentNote.getChildNotes()) {
             this.noteIds.push(note.noteId);
 
-            const buttonWidget = note.isLabelTruthy("bookmarkFolder")
-                ? new BookmarkFolderWidget(note)
-                : new OpenNoteButtonWidget(note)
-                    .class("launcher-button");
+            const buttonWidget = note.isLabelTruthy("bookmarkFolder") ? new BookmarkFolderWidget(note) : new OpenNoteButtonWidget(note).class("launcher-button");
             if (this.settings.titlePlacement) {
                 if (!buttonWidget.settings) {
                     buttonWidget = {};
@@ -44,15 +41,12 @@ export default class BookmarkButtons extends FlexContainer {
         this.refresh();
     }
 
-    entitiesReloadedEvent({loadResults}) {
-        if (loadResults.getBranchRows().find(branch => branch.parentNoteId === '_lbBookmarks')) {
+    entitiesReloadedEvent({ loadResults }) {
+        if (loadResults.getBranchRows().find((branch) => branch.parentNoteId === "_lbBookmarks")) {
             this.refresh();
         }
 
-        if (loadResults.getAttributeRows().find(attr => attr.type === 'label'
-            && ['iconClass', 'workspaceIconClass', 'bookmarkFolder'].includes(attr.name)
-            && this.noteIds.includes(attr.noteId))
-        ) {
+        if (loadResults.getAttributeRows().find((attr) => attr.type === "label" && ["iconClass", "workspaceIconClass", "bookmarkFolder"].includes(attr.name) && this.noteIds.includes(attr.noteId))) {
             this.refresh();
         }
     }

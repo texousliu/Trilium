@@ -9,11 +9,11 @@ import resourceDir from "./resource_dir.js";
 const configSampleFilePath = path.resolve(resourceDir.RESOURCE_DIR, "config-sample.ini");
 
 if (!fs.existsSync(dataDir.CONFIG_INI_PATH)) {
-    const configSample = fs.readFileSync(configSampleFilePath).toString('utf8');
+    const configSample = fs.readFileSync(configSampleFilePath).toString("utf8");
 
     fs.writeFileSync(dataDir.CONFIG_INI_PATH, configSample);
 }
 
-const config = ini.parse(fs.readFileSync(dataDir.CONFIG_INI_PATH, 'utf-8'));
+const config = ini.parse(fs.readFileSync(dataDir.CONFIG_INI_PATH, "utf-8"));
 
 export default config;

@@ -18,7 +18,7 @@ export default class ProtectedNoteSwitchWidget extends SwitchWidget {
     }
 
     switchOff() {
-        protectedSessionService.protectNote(this.noteId, false, false)
+        protectedSessionService.protectNote(this.noteId, false, false);
     }
 
     async refreshWithNote(note) {
@@ -26,7 +26,7 @@ export default class ProtectedNoteSwitchWidget extends SwitchWidget {
         this.$switchOff.toggle(!!note.isProtected);
     }
 
-    entitiesReloadedEvent({loadResults}) {
+    entitiesReloadedEvent({ loadResults }) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }

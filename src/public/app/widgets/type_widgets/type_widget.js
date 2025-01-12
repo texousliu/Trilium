@@ -22,13 +22,12 @@ export default class TypeWidget extends NoteContextAwareWidget {
             this.toggleInt(false);
 
             this.cleanup();
-        }
-        else {
+        } else {
             this.toggleInt(true);
 
             await this.doRefresh(this.note);
 
-            this.triggerEvent('noteDetailRefreshed', {ntxId: this.noteContext.ntxId});
+            this.triggerEvent("noteDetailRefreshed", { ntxId: this.noteContext.ntxId });
         }
     }
 
@@ -41,7 +40,7 @@ export default class TypeWidget extends NoteContextAwareWidget {
 
     focus() {}
 
-    async readOnlyTemporarilyDisabledEvent({noteContext}) {
+    async readOnlyTemporarilyDisabledEvent({ noteContext }) {
         if (this.isNoteContext(noteContext.ntxId)) {
             await this.refresh();
 
@@ -51,14 +50,12 @@ export default class TypeWidget extends NoteContextAwareWidget {
 
     // events should be propagated manually to the children widgets
     handleEventInChildren(name, data) {
-        if (['activeContextChanged', 'setNoteContext'].includes(name)) {
+        if (["activeContextChanged", "setNoteContext"].includes(name)) {
             // won't trigger .refresh();
-            return super.handleEventInChildren('setNoteContext', data);
-        }
-        else if (name === 'entitiesReloaded') {
+            return super.handleEventInChildren("setNoteContext", data);
+        } else if (name === "entitiesReloaded") {
             return super.handleEventInChildren(name, data);
-        }
-        else {
+        } else {
             return Promise.resolve();
         }
     }

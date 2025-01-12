@@ -13,10 +13,9 @@
     --main-border-color: #454545;
     --subtle-border-color: #313131;
     --dropdown-border-color: #292929;
-    --dropdown-shadow-opacity: .6;
+    --dropdown-shadow-opacity: 0.6;
     --dropdown-item-icon-destructive-color: #de6e5b;
     --disabled-tooltip-icon-color: #7fd2ef;
-
 
     --accented-background-color: #555;
 
@@ -46,18 +45,17 @@
 
     --new-tab-button-background: #fff0;
     --new-tab-button-color: #ffffff96;
-    --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, .4);
+    --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
     --new-tab-button-hover-background: #fff3;
     --new-tab-button-hover-color: white;
 
     --menu-text-color: #e3e3e3;
     --menu-background-color: #222222d9;
     --menu-item-icon-color: #8c8c8c;
-    --menu-item-disabled-opacity: .5;
+    --menu-item-disabled-opacity: 0.5;
     --menu-item-keyboard-shortcut-color: #ffffff8f;
     --menu-item-arrow-color: #ffffffa3;
     --menu-item-delimiter-color: #ffffff1c;
-
 
     --modal-background-color: #333;
     --modal-backdrop-color: #444;
@@ -71,16 +69,16 @@
 
     --left-pane-collapsed-border-color: #0009;
     --left-pane-background-color: #1f1f1f;
-    --left-pane-text-color: #AAAAAA;
+    --left-pane-text-color: #aaaaaa;
     --left-pane-item-hover-background: #ffffff0d;
     --left-pane-item-selected-background: #ffffff25;
     --left-pane-item-selected-color: #dfdfdf;
-    --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, .6);
+    --left-pane-item-selected-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
     --left-pane-item-action-button-background: #ffffff73;
     --left-pane-item-action-button-color: black;
     --left-pane-item-action-button-hover-background: #ffffffad;
-    --left-pane-item-action-button-hover-shadow: 2px 2px 3px rgba(0, 0, 0, .15);
-    --left-pane-item-selected-action-button-hover-shadow: 2px 2px 10px rgba(0, 0, 0, .25);
+    --left-pane-item-action-button-hover-shadow: 2px 2px 3px rgba(0, 0, 0, 0.15);
+    --left-pane-item-selected-action-button-hover-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
 
     --launcher-pane-background-color: #1a1a1a;
     --launcher-pane-horizontal-background-color: #282828;
@@ -88,7 +86,7 @@
     --launcher-pane-text-color: #909090;
     --launcher-pane-button-hover-color: #ffffff;
     --launcher-pane-button-hover-background: #ffffff1c;
-    --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, .2);
+    --launcher-pane-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
 
     --protected-session-active-icon-color: #8edd8e;
     --sync-status-error-pulse-color: #f47871;
@@ -104,8 +102,8 @@
     --active-tab-background-color: #ffffff1c;
     --active-tab-hover-background-color: var(--active-tab-background-color);
     --active-tab-text-color: #ffffffcd;
-    --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, .2), -1px -1px 3px rgba(0, 0, 0, .4);
-    --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, .4);
+    --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -1px -1px 3px rgba(0, 0, 0, 0.4);
+    --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, 0.4);
 
     --inactive-tab-background-color: transparent;
     --inactive-tab-hover-background-color: #ffffff0f;
@@ -146,11 +144,11 @@
 
     --help-background-color: var(--menu-background-color);
     --help-card-background: var(--card-background-color);
-    --help-card-shadow: 2px 2px 2px rgba(0, 0, 0, .2);
+    --help-card-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     --help-card-heading-color: #959595;
     --help-kbd-shortcut-color: white;
     --help-kbd-shortcut-background: #676767;
-    --help-kbd-shortcut-shadow: 1px 1px 2px rgba(0, 0, 0, .7);
+    --help-kbd-shortcut-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     --help-code-color: inherit;
     --help-code-background: #565656;
 }

@@ -6,18 +6,16 @@ import TrueExp from "./true.js";
 import SearchContext from "../search_context.js";
 
 class OrExp extends Expression {
-    private subExpressions: Expression[];
+    subExpressions: Expression[];
 
     static of(subExpressions: Expression[]) {
-        subExpressions = subExpressions.filter(exp => !!exp);
+        subExpressions = subExpressions.filter((exp) => !!exp);
 
         if (subExpressions.length === 1) {
             return subExpressions[0];
-        }
-        else if (subExpressions.length > 0) {
+        } else if (subExpressions.length > 0) {
             return new OrExp(subExpressions);
-        }
-        else {
+        } else {
             return new TrueExp();
         }
     }
