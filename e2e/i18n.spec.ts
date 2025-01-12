@@ -1,16 +1,24 @@
 import { test, expect, Page } from "@playwright/test";
 import App from "./support/app";
 
-test("Displays translation on desktop", async ({ page }) => {
-    const app = new App(page);
+test("Displays translation on desktop", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
 
     await expect(page.locator("#left-pane .quick-search input"))
         .toHaveAttribute("placeholder", "Quick search");
 });
 
-test("Displays translations in Settings", async ({ page }) => {
-    const app = new App(page);
+test("Displays translation on mobile", async ({ page, context }) => {
+    const app = new App(page, context);
+    await app.goto({ isMobile: true });
+
+    await expect(page.locator("#mobile-sidebar-wrapper .quick-search input"))
+        .toHaveAttribute("placeholder", "Quick search");
+});
+
+test("Displays translations in Settings", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
     await app.closeAllTabs();
     await app.goToSettings();
@@ -20,8 +28,8 @@ test("Displays translations in Settings", async ({ page }) => {
     await expect(app.currentNoteSplit).toContainText("Language");
 });
 
-test("User can change language from settings", async ({ page }) => {
-    const app = new App(page);
+test("User can change language from settings", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
 
     await app.closeAllTabs();

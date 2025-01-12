@@ -1,8 +1,8 @@
 import { test, expect, Page } from "@playwright/test";
 import App from "../support/app";
 
-test("Displays lint warnings for backend script", async ({ page }) => {
-    const app = new App(page);
+test("Displays lint warnings for backend script", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
     await app.closeAllTabs();
     await app.goToNoteInNewTab("Backend script with lint warnings");
@@ -21,8 +21,8 @@ test("Displays lint warnings for backend script", async ({ page }) => {
     await expectTooltip(page, "'world' is defined but never used.");
 });
 
-test("Displays lint errors for backend script", async ({ page }) => {
-    const app = new App(page);
+test("Displays lint errors for backend script", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
     await app.closeAllTabs();
     await app.goToNoteInNewTab("Backend script with lint errors");

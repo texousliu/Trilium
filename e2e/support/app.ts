@@ -1,27 +1,44 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
+import type { BrowserContext } from "@playwright/test";
+
+interface GotoOpts {
+    isMobile?: boolean;
+}
 
 export default class App {
     readonly page: Page;
+    readonly context: BrowserContext;
 
     readonly tabBar: Locator;
     readonly noteTree: Locator;
     readonly currentNoteSplit: Locator;
     readonly sidebar: Locator;
 
-    constructor(page: Page) {
+    constructor(page: Page, context: BrowserContext) {
         this.page = page;
+        this.context = context;
+
         this.tabBar = page.locator(".tab-row-widget-container");
         this.noteTree = page.locator(".tree-wrapper");
         this.currentNoteSplit = page.locator(".note-split:not(.hidden-ext)")
         this.sidebar = page.locator("#right-pane");
     }
 
-    async goto() {
+    async goto(opts: GotoOpts = {}) {
+        await this.context.addCookies([
+            {
+                url: "http://127.0.0.1:8082",
+                name: "trilium-device",
+                value: opts.isMobile ? "mobile" : "desktop"
+            }
+        ]);
+
         await this.page.goto("/", { waitUntil: "networkidle" });
 
         // Wait for the page to load.
         await expect(this.page.locator(".tree"))
             .toContainText("Trilium Integration Test");
+        await this.closeAllTabs();
     }
 
     async goToNoteInNewTab(noteTitle: string) {
