@@ -42,9 +42,10 @@ test("User can change language from settings", async ({ page, context }) => {
     await expect(languageCombobox).toHaveValue("en");
 
     // Select Chinese and ensure the translation is set.
-    languageCombobox.selectOption("cn");
+    await languageCombobox.selectOption("cn");
     await expect(app.currentNoteSplit).toContainText("主题");
 
     // Select English again.
-    languageCombobox.selectOption("en");
+    await languageCombobox.selectOption("en");
+    await expect(app.currentNoteSplit).toContainText("Language");
 });
