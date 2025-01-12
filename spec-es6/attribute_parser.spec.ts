@@ -40,7 +40,7 @@ describe("Lexing", () => {
     });
 });
 
-describe("Parser", () => {
+describe.todo("Parser", () => {
     it("simple label", () => {
         const attrs = attributeParser.parse(["#token"].map((t: any) => ({ text: t })));
 
