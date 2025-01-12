@@ -1,7 +1,7 @@
 import { test, expect, Page } from "@playwright/test";
 import App from "../support/app";
 
-test("Displays simple map", async ({ page, context }) => {
+test("displays simple map", async ({ page, context }) => {
     const app = new App(page, context);
     await app.goto();
     await app.goToNoteInNewTab("Sample mindmap");
@@ -9,4 +9,14 @@ test("Displays simple map", async ({ page, context }) => {
     expect(app.currentNoteSplit).toContainText("Hello world");
     expect(app.currentNoteSplit).toContainText("1");
     expect(app.currentNoteSplit).toContainText("1a");
+});
+
+test("displays note settings", async ({ page, context }) => {
+    const app = new App(page, context);
+    await app.goto();
+    await app.goToNoteInNewTab("Sample mindmap");
+
+    await app.currentNoteSplit.getByText("Hello world").click({ force: true });
+    const nodeMenu = app.currentNoteSplit.locator(".node-menu");
+    expect(nodeMenu).toBeVisible();
 });
