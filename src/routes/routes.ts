@@ -73,14 +73,14 @@ import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 
 const { doubleCsrfProtection: csrfMiddleware } = doubleCsrf({
-  getSecret: () => sessionSecret,
-  cookieOptions: {
-    path: "",       // empty, so cookie is valid only for the current path
-    secure: false,
-    sameSite: false,
-    httpOnly: false,
-  },
-  cookieName: "_csrf",
+    getSecret: () => sessionSecret,
+    cookieOptions: {
+        path: "", // empty, so cookie is valid only for the current path
+        secure: false,
+        sameSite: false,
+        httpOnly: false
+    },
+    cookieName: "_csrf"
 });
 
 const MAX_ALLOWED_FILE_SIZE_MB = 250;
