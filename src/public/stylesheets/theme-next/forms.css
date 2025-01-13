@@ -97,6 +97,7 @@ input::selection,
     background: transparent;
     padding: 0 4px;
     
+    /* Workaround to set the "color" property. */
     --muted-text-color: var(--input-action-button-color);
 }
 
@@ -107,6 +108,8 @@ input::selection,
 
 .input-group a.disabled {
     opacity: .5;
+    /* Workaround to set the "background" property. */
+    --button-disabled-background-color: transparent;
 }
 
 .input-group .input-clearer-button {
