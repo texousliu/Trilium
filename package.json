@@ -36,6 +36,7 @@
     "build-frontend-docs": "rimraf ./docs/frontend_api && jsdoc -c jsdoc-conf.json -d ./docs/frontend_api src/public/app/entities/*.js src/public/app/services/frontend_script_api.js src/public/app/widgets/basic_widget.js src/public/app/widgets/note_context_aware_widget.js src/public/app/widgets/right_panel_widget.js",
     "build-docs": "npm run build-backend-docs && npm run build-frontend-docs",
     "webpack": "cross-env node --import ./loader-register.js node_modules/webpack/bin/webpack.js -c webpack.config.ts",
+    "test-playwright": "playwright test",
     "test-jasmine": "cross-env TRILIUM_DATA_DIR=./data-test tsx ./node_modules/jasmine/bin/jasmine.js",
     "test-es6": "tsx -r esm spec-es6/attribute_parser.spec.ts",
     "test": "npm run test-jasmine && npm run test-es6",
