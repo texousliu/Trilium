@@ -1,4 +1,4 @@
-import { Router } from "express";
+import type { Router } from "express";
 import appInfo from "../services/app_info.js";
 import eu from "./etapi_utils.js";
 

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
-import BNote from "../becca/entities/bnote.js";
+import type AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
+import type BNote from "../becca/entities/bnote.js";
 
 export interface ApiParams {
     startNote?: BNote | null;

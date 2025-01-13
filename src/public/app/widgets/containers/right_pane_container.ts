@@ -1,6 +1,6 @@
 import FlexContainer from "./flex_container.js";
 import splitService from "../../services/resizer.js";
-import RightPanelWidget from "../right_panel_widget.js";
+import type RightPanelWidget from "../right_panel_widget.js";
 
 export default class RightPaneContainer extends FlexContainer<RightPanelWidget> {
     private rightPaneHidden: boolean;

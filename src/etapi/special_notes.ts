@@ -2,7 +2,7 @@ import specialNotesService from "../services/special_notes.js";
 import dateNotesService from "../services/date_notes.js";
 import eu from "./etapi_utils.js";
 import mappers from "./mappers.js";
-import { Router } from "express";
+import type { Router } from "express";
 
 const getDateInvalidError = (date: string) => new eu.EtapiError(400, "DATE_INVALID", `Date "${date}" is not valid.`);
 const getMonthInvalidError = (month: string) => new eu.EtapiError(400, "MONTH_INVALID", `Month "${month}" is not valid.`);

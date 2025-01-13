@@ -1,4 +1,4 @@
-import FAttribute from "../entities/fattribute.js";
+import type FAttribute from "../entities/fattribute.js";
 
 /**
  * The purpose of this class is to cache the list of attributes for notes.

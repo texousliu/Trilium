@@ -3,7 +3,7 @@
 import Expression from "./expression.js";
 import NoteSet from "../note_set.js";
 import TrueExp from "./true.js";
-import SearchContext from "../search_context.js";
+import type SearchContext from "../search_context.js";
 
 class OrExp extends Expression {
     subExpressions: Expression[];

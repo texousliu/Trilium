@@ -27,7 +27,7 @@ import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolb
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 import AboutDialog from "../widgets/dialogs/about.js";
 import HelpDialog from "../widgets/dialogs/help.js";
-import AppContext from "../components/app_context.js";
+import type AppContext from "../components/app_context.js";
 import TabRowWidget from "../widgets/tab_row.js";
 import JumpToNoteDialog from "../widgets/dialogs/jump_to_note.js";
 

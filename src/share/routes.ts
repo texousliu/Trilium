@@ -12,9 +12,9 @@ import appPath from "../services/app_path.js";
 import searchService from "../services/search/services/search.js";
 import SearchContext from "../services/search/search_context.js";
 import log from "../services/log.js";
-import SNote from "./shaca/entities/snote.js";
-import SBranch from "./shaca/entities/sbranch.js";
-import SAttachment from "./shaca/entities/sattachment.js";
+import type SNote from "./shaca/entities/snote.js";
+import type SBranch from "./shaca/entities/sbranch.js";
+import type SAttachment from "./shaca/entities/sattachment.js";
 import utils from "../services/utils.js";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {

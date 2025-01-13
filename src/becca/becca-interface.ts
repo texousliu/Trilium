@@ -1,17 +1,17 @@
 import sql from "../services/sql.js";
 import NoteSet from "../services/search/note_set.js";
 import NotFoundError from "../errors/not_found_error.js";
-import BOption from "./entities/boption.js";
-import BNote from "./entities/bnote.js";
-import BEtapiToken from "./entities/betapi_token.js";
-import BAttribute from "./entities/battribute.js";
-import BBranch from "./entities/bbranch.js";
+import type BOption from "./entities/boption.js";
+import type BNote from "./entities/bnote.js";
+import type BEtapiToken from "./entities/betapi_token.js";
+import type BAttribute from "./entities/battribute.js";
+import type BBranch from "./entities/bbranch.js";
 import BRevision from "./entities/brevision.js";
 import BAttachment from "./entities/battachment.js";
 import type { AttachmentRow, BlobRow, RevisionRow } from "./entities/rows.js";
 import BBlob from "./entities/bblob.js";
 import BRecentNote from "./entities/brecent_note.js";
-import AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
+import type AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
 
 interface AttachmentOpts {
     includeContentLength?: boolean;

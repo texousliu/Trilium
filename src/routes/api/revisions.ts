@@ -10,9 +10,9 @@ import becca from "../../becca/becca.js";
 import blobService from "../../services/blob.js";
 import eraseService from "../../services/erase.js";
 import type { Request, Response } from "express";
-import BRevision from "../../becca/entities/brevision.js";
-import BNote from "../../becca/entities/bnote.js";
-import { type NotePojo } from "../../becca/becca-interface.js";
+import type BRevision from "../../becca/entities/brevision.js";
+import type BNote from "../../becca/entities/bnote.js";
+import type { NotePojo } from "../../becca/becca-interface.js";
 
 interface NotePath {
     noteId: string;

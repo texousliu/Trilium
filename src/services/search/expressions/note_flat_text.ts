@@ -1,7 +1,7 @@
 "use strict";
 
-import BNote from "../../../becca/entities/bnote.js";
-import SearchContext from "../search_context.js";
+import type BNote from "../../../becca/entities/bnote.js";
+import type SearchContext from "../search_context.js";
 
 import Expression from "./expression.js";
 import NoteSet from "../note_set.js";

@@ -1,6 +1,6 @@
 import server from "./server.js";
 import bundleService, { type Bundle } from "./bundle.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 
 async function render(note: FNote, $el: JQuery<HTMLElement>) {
     const relations = note.getRelations("renderNote");

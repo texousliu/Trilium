@@ -5,7 +5,7 @@ import utils from "./utils.js";
 import attributeRenderer from "./attribute_renderer.js";
 import contentRenderer from "./content_renderer.js";
 import appContext from "../components/app_context.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 import { t } from "./i18n.js";
 
 function setupGlobalTooltip() {

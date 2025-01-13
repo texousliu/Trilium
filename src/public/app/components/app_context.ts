@@ -14,15 +14,15 @@ import MainTreeExecutors from "./main_tree_executors.js";
 import toast from "../services/toast.js";
 import ShortcutComponent from "./shortcut_component.js";
 import { t, initLocale } from "../services/i18n.js";
-import NoteDetailWidget from "../widgets/note_detail.js";
+import type NoteDetailWidget from "../widgets/note_detail.js";
 import type { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import type { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
 import type { Node } from "../services/tree.js";
-import LoadResults from "../services/load_results.js";
+import type LoadResults from "../services/load_results.js";
 import type { Attribute } from "../services/attribute_parser.js";
-import NoteTreeWidget from "../widgets/note_tree.js";
-import NoteContext, { type GetTextEditorCallback } from "./note_context.js";
+import type NoteTreeWidget from "../widgets/note_tree.js";
+import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;

@@ -15,11 +15,11 @@ import htmlSanitizer from "../html_sanitizer.js";
 import becca from "../../becca/becca.js";
 import BAttachment from "../../becca/entities/battachment.js";
 import markdownService from "./markdown.js";
-import TaskContext from "../task_context.js";
-import BNote from "../../becca/entities/bnote.js";
+import type TaskContext from "../task_context.js";
+import type BNote from "../../becca/entities/bnote.js";
 import type NoteMeta from "../meta/note_meta.js";
 import type AttributeMeta from "../meta/attribute_meta.js";
-import { Stream } from "stream";
+import type { Stream } from "stream";
 import { ALLOWED_NOTE_TYPES, type NoteType } from "../../becca/entities/rows.js";
 
 interface MetaFile {

@@ -2,7 +2,7 @@ import appContext from "../components/app_context.js";
 import treeService, { type Node } from "./tree.js";
 import dialogService from "./dialog.js";
 import froca from "./froca.js";
-import NoteContext from "../components/note_context.js";
+import type NoteContext from "../components/note_context.js";
 import { t } from "./i18n.js";
 
 function getHoistedNoteId() {

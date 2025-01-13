@@ -5,8 +5,8 @@ import froca from "../services/froca.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import cssClassManager from "../services/css_class_manager.js";
 import type { Froca } from "../services/froca-interface.js";
-import FAttachment from "./fattachment.js";
-import FAttribute, { type AttributeType } from "./fattribute.js";
+import type FAttachment from "./fattachment.js";
+import type { default as FAttribute, AttributeType } from "./fattribute.js";
 import utils from "../services/utils.js";
 
 const LABEL = "label";
