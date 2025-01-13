@@ -54,10 +54,56 @@ input::selection,
     color: var(--input-selection-text-color);
 }
 
+/* Input groups */
+
+.input-group {
+    outline: 3px solid transparent;
+    outline-offset: 6px;
+    background: var(--input-background-color);
+    border-radius: 6px;
+    padding-right: 8px;
+    color: var(--quick-search-color);
+}
+
+.input-group:hover {
+    background: var(--input-hover-background);
+}
+
+.input-group:focus-within {
+    outline: 3px solid var(--input-focus-outline-color);
+    outline-offset: 0;
+    background: var(--input-focus-background);
+    transition: outline-color 50ms linear,
+                outline-offset 200ms ease-out;
+}
+
 .input-group input
+.input-group input:hover,
 .input-group input:focus,
 .input-group .form-control,
+.input-group .form-control:hover,
 .input-group .form-control:focus {
     /* Ignore the focus outline for the inputs that are children of an input group */
     outline: unset;
+
+    background: transparent;
+}
+
+.input-group button,
+.input-group a {
+    display: flex;
+    --bs-border-width: 0;
+    --accented-background-color: transparent;
+    background: transparent;
+    padding: 0 4px;
+    
+    --muted-text-color: var(--input-text-color);
+}
+
+.input-group a.disabled {
+    opacity: .5;
+}
+
+.input-group .input-clearer-button {
+    background: transparent !important;
 }

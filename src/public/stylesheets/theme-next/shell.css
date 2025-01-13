@@ -1209,10 +1209,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 /* Search box wrapper */
 .jump-to-note-dialog .input-group {
     margin-right: 16px;
-    background: var(--quick-search-background);
-    border: 2px solid transparent;
-    border-radius: 6px;
-    color: var(--quick-search-color);
 }
 
 .jump-to-note-dialog .input-group:hover {
@@ -1224,22 +1220,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     border-color: var(--quick-search-focus-border);
     background: var(--quick-search-focus-background);
     color: var(--quick-search-focus-color);
-}
-
-/* Search box input */
-.jump-to-note-dialog .input-group input {
-    --bs-border-width: 0;
-
-    box-shadow: unset;
-    background: transparent;
-    color: currentColor;
-}
-
-/* Search box buttons */
-.jump-to-note-dialog .input-group button {
-    --bs-border-width: 0;
-    --accented-background-color: transparent;
-    padding: 0 4px;
 }
 
 .jump-to-note-dialog .input-group button:last-child {
