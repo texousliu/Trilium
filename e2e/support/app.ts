@@ -60,19 +60,36 @@ export default class App {
         return this.tabBar.locator(".note-tab[active]");
     }
 
+    /**
+     * Closes all the tabs in the client by issuing a command.
+     */
     async closeAllTabs() {
-        await this.getTab(0).click({ button: "right" });
-        await this.page.waitForTimeout(500); // TODO: context menu won't dismiss otherwise
-        await this.page.getByText("Close all tabs").click({ force: true });
-        await this.page.waitForTimeout(500); // TODO: context menu won't dismiss otherwise
+        await this.triggerCommand("closeAllTabs");
     }
 
+    /**
+     * Adds a new tab by cliking on the + button near the tab bar.
+     */
     async addNewTab() {
         await this.page.locator('[data-trigger-command="openNewTab"]').click();
     }
 
+    /**
+     * Looks for a given title in the note tree and clicks on it. Useful for selecting option pages in settings in a similar fashion as the user.
+     * @param title the title of the note to click, as displayed in the note tree.
+     */
     async clickNoteOnNoteTreeByTitle(title: string) {
-        this.noteTree.getByText(title).click();
+        await this.noteTree.getByText(title).click();
+    }
+
+    /**
+     * Executes any Trilium command on the client.
+     * @param command the command to send.
+     */
+    async triggerCommand(command: string) {
+        await this.page.evaluate(async (command: string) => {
+            await (window as any).glob.appContext.triggerCommand(command);
+        }, command);
     }
 
 }
