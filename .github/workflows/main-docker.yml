@@ -68,7 +68,7 @@ jobs:
       
       - name: Validate container run output
         run: |
-          CONTAINER_ID=$(docker run -d --log-driver=journald --rm --network=host --name trilium_local ${{ env.TEST_TAG }})
+          CONTAINER_ID=$(docker run -d --log-driver=journald --rm --network=host --volume ./integration-tests/db:/home/node/trilium-data --name trilium_local ${{ env.TEST_TAG }})
           echo "Container ID: $CONTAINER_ID"
       
       - name: Wait for the healthchecks to pass
