@@ -53,3 +53,11 @@ input::selection,
     background: var(--input-selection-background);
     color: var(--input-selection-text-color);
 }
+
+.input-group input
+.input-group input:focus,
+.input-group .form-control,
+.input-group .form-control:focus {
+    /* Ignore the focus outline for the inputs that are children of an input group */
+    outline: unset;
+}
