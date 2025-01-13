@@ -32,8 +32,16 @@
 
     --muted-text-color: #bbb;
 
-    --input-text-color: #ccc;
-    --input-background-color: #333;
+    --input-background-color: #ffffff12;
+    --input-text-color:  #ffffff52;
+    --input-placeholder-color: #b7b7b782;
+    --input-selection-background: gray;
+    --input-selection-text-color: white;
+    --input-hover-background: #ffffff1f;
+    --input-hover-color: var(--input-text-color);
+    --input-focus-outline-color: #80808095;
+    --input-focus-background: #ffffff1f;
+    --input-focus-color: white;
 
     --hover-item-text-color: #efefef;
     --hover-item-background-color: #ffffff24;

@@ -32,8 +32,16 @@
 
     --muted-text-color: #666;
 
+    --input-background-color: #00000012;
     --input-text-color: black;
-    --input-background-color: transparent;
+    --input-placeholder-color: #06060682;
+    --input-selection-background: gray;
+    --input-selection-text-color: white;
+    --input-hover-background: #00000020;
+    --input-hover-color: black;
+    --input-focus-outline-color: #00000063;
+    --input-focus-background: #ffffff80;
+    --input-focus-color: #000;
 
     --hover-item-text-color: black;
     --hover-item-background-color: #0000001a;

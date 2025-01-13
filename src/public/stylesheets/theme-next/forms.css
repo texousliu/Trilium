@@ -1,0 +1,49 @@
+/* 
+ * Input boxes
+ */
+
+input:disabled {
+    opacity: .33;
+}
+
+/* Text boxes */
+
+input:not([type]),
+input[type="text"],
+input[type="number"],
+input[type="password"] {
+    outline: 3px solid transparent;
+    border: unset;
+    outline-offset: 6px;
+}
+
+input:not([type]):hover,
+input[type="text"]:hover,
+input[type="number"]:hover,
+input[type="password"]:hover {
+    --input-background-color: var(--input-hover-background);
+    --input-text-color: var(--input-hover-color);
+}
+
+input:not([type]):focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus {
+    --input-background-color: var(--input-focus-background);
+    --input-text-color: var(--input-focus-color);
+
+    outline: 3px solid var(--input-focus-outline-color);
+    outline-offset: 0;
+    box-shadow: unset;
+    transition: outline-color 50ms linear,
+                outline-offset 200ms ease-out;
+}
+
+input::placeholder {
+    --muted-text-color: var(--input-placeholder-color);
+}
+
+input::selection {
+    background: var(--input-selection-background);
+    color: var(--input-selection-text-color);
+}
