@@ -97,7 +97,12 @@ input::selection,
     background: transparent;
     padding: 0 4px;
     
-    --muted-text-color: var(--input-text-color);
+    --muted-text-color: var(--input-action-button-color);
+}
+
+.input-group button:hover,
+.input-group a:hover {
+    --muted-text-color: var(--input-action-button-hover);
 }
 
 .input-group a.disabled {

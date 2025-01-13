@@ -43,6 +43,9 @@
     --input-focus-background: #ffffff80;
     --input-focus-color: #000;
 
+    --input-action-button-color: #575757;
+    --input-action-button-hover: black;
+
     --hover-item-text-color: black;
     --hover-item-background-color: #0000001a;
     --hover-item-border-color: transparent;
