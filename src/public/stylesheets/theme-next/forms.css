@@ -11,7 +11,8 @@ input:disabled {
 input:not([type]),
 input[type="text"],
 input[type="number"],
-input[type="password"] {
+input[type="password"],
+.form-control {
     outline: 3px solid transparent;
     outline-offset: 6px;
     border: unset;
@@ -22,7 +23,8 @@ input[type="password"] {
 input:not([type]):hover,
 input[type="text"]:hover,
 input[type="number"]:hover,
-input[type="password"]:hover {
+input[type="password"]:hover,
+.form-control:hover {
     background: var(--input-hover-background);
     color: var(--input-hover-color);
 }
@@ -30,7 +32,8 @@ input[type="password"]:hover {
 input:not([type]):focus,
 input[type="text"]:focus,
 input[type="number"]:focus,
-input[type="password"]:focus {
+input[type="password"]:focus,
+.form-control:focus {
     box-shadow: unset;
     outline: 3px solid var(--input-focus-outline-color);
     outline-offset: 0;
@@ -40,11 +43,13 @@ input[type="password"]:focus {
                 outline-offset 200ms ease-out;
 }
 
-input::placeholder {
+input::placeholder,
+.form-control::placeholder {
     --muted-text-color: var(--input-placeholder-color);
 }
 
-input::selection {
+input::selection,
+.form-control::selection {
     background: var(--input-selection-background);
     color: var(--input-selection-text-color);
 }
