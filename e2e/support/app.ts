@@ -5,6 +5,8 @@ interface GotoOpts {
     isMobile?: boolean;
 }
 
+const BASE_URL = "http://127.0.0.1:8082";
+
 export default class App {
     readonly page: Page;
     readonly context: BrowserContext;
@@ -27,7 +29,7 @@ export default class App {
     async goto(opts: GotoOpts = {}) {
         await this.context.addCookies([
             {
-                url: "http://127.0.0.1:8082",
+                url: BASE_URL,
                 name: "trilium-device",
                 value: opts.isMobile ? "mobile" : "desktop"
             }
@@ -90,6 +92,19 @@ export default class App {
         await this.page.evaluate(async (command: string) => {
             await (window as any).glob.appContext.triggerCommand(command);
         }, command);
+    }
+
+    async setOption(key: string, value: string) {
+        const csrfToken = await this.page.evaluate(() => {
+            return (window as any).glob.csrfToken;
+        });
+
+        expect(csrfToken).toBeTruthy();
+        await expect(await this.page.request.put(`${BASE_URL}/api/options/${key}/${value}`, {
+            headers: {
+                "x-csrf-token": csrfToken
+            }
+        })).toBeOK();
     }
 
 }
