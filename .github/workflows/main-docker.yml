@@ -48,7 +48,11 @@ jobs:
           node-version: 20
           cache: "npm"
       
-      - run: npm ci
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
       
       - name: Run the TypeScript build
         run: npx tsc
@@ -78,9 +82,7 @@ jobs:
           wait-time: 50
           require-status: running
           require-healthy: true
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+    
       - name: Run Playwright tests
         run: TRILIUM_DOCKER=1 npx playwright test
       - uses: actions/upload-artifact@v4
