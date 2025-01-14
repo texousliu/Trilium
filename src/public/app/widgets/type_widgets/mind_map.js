@@ -1,6 +1,7 @@
-import libraryLoader from "../../services/library_loader.js";
 import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
+import MindElixir from "mind-elixir";
+import nodeMenu from "@mind-elixir/node-menu";
 
 const TPL = `
 <div class="note-detail-mind-map note-detail-printable">
@@ -169,10 +170,6 @@ export default class MindMapWidget extends TypeWidget {
             return;
         }
 
-        if (!window.MindElixir) {
-            await libraryLoader.requireLibrary(libraryLoader.MIND_ELIXIR);
-        }
-
         this.#initLibrary();
         await this.#loadData(note);
     }
@@ -194,7 +191,7 @@ export default class MindMapWidget extends TypeWidget {
             el: this.$content[0],
             direction: MindElixir.LEFT
         });
-        mind.install(window["@mind-elixir/node-menu"]);
+        mind.install(nodeMenu);
 
         this.mind = mind;
         mind.init(MindElixir.new());
