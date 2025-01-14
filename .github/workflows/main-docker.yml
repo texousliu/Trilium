@@ -88,7 +88,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: Playwright report (${{ matrix.dockerfile }})
           path: playwright-report/
           retention-days: 30
 
