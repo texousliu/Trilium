@@ -246,5 +246,9 @@
     "new-note": "New note",
     "duplicate-note-suffix": "(dup)",
     "duplicate-note-title": "{{ noteTitle }} {{ duplicateNoteSuffix }}"
+  },
+  "backend_log": {
+    "log-does-not-exist": "The backend log file '{{ fileName }}' does not exist (yet).",
+    "reading-log-failed": "Reading the backend log file '{{ fileName }}' failed."
   }
 }
