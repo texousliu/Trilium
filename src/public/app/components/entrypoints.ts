@@ -114,11 +114,9 @@ export default class Entrypoints extends Component {
         utils.reloadFrontendApp();
     }
 
-    logoutCommand() {
-        const $logoutForm = $('<form action="logout" method="POST">').append($(`<input type='_hidden' name="_csrf" value="${glob.csrfToken}"/>`));
-
-        $("body").append($logoutForm);
-        $logoutForm.trigger("submit");
+    async logoutCommand() {
+        await server.post("../logout");
+        window.location.replace(`/login`);
     }
 
     backInNoteHistoryCommand() {

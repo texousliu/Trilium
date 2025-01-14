@@ -9,12 +9,13 @@ import auth from "../services/auth.js";
 import cls from "../services/cls.js";
 import sql from "../services/sql.js";
 import entityChangesService from "../services/entity_changes.js";
-import csurf from "csurf";
+import { doubleCsrf } from "csrf-csrf";
 import { createPartialContentHandler } from "@triliumnext/express-partial-content";
 import rateLimit from "express-rate-limit";
 import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 import NotFoundError from "../errors/not_found_error.js";
 import ValidationError from "../errors/validation_error.js";
+import sessionSecret from "../services/session_secret.js";
 
 // page routes
 import setupRoute from "./setup.js";
@@ -71,10 +72,15 @@ import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 
-const csrfMiddleware = csurf({
-    cookie: {
-        path: "" // empty, so cookie is valid only for the current path
-    }
+const { doubleCsrfProtection: csrfMiddleware } = doubleCsrf({
+    getSecret: () => sessionSecret,
+    cookieOptions: {
+        path: "", // empty, so cookie is valid only for the current path
+        secure: false,
+        sameSite: false,
+        httpOnly: false
+    },
+    cookieName: "_csrf"
 });
 
 const MAX_ALLOWED_FILE_SIZE_MB = 250;

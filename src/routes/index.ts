@@ -19,7 +19,7 @@ function index(req: Request, res: Response) {
 
     const view = !utils.isElectron() && req.cookies["trilium-device"] === "mobile" ? "mobile" : "desktop";
 
-    const csrfToken = req.csrfToken();
+    const csrfToken = (typeof req.csrfToken === "function") ? req.csrfToken() : undefined;
     log.info(`Generated CSRF token ${csrfToken} with secret ${res.getHeader("set-cookie")}`);
 
     // We force the page to not be cached since on mobile the CSRF token can be
