@@ -12,7 +12,8 @@ input:not([type]),
 input[type="text"],
 input[type="number"],
 input[type="password"],
-.form-control {
+textarea.form-control,
+textarea {
     outline: 3px solid transparent;
     outline-offset: 6px;
     border: unset;
@@ -24,7 +25,8 @@ input:not([type]):hover,
 input[type="text"]:hover,
 input[type="number"]:hover,
 input[type="password"]:hover,
-.form-control:hover {
+textarea.form-control:hover,
+textarea:hover {
     background: var(--input-hover-background);
     color: var(--input-hover-color);
 }
@@ -33,7 +35,8 @@ input:not([type]):focus,
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="password"]:focus,
-.form-control:focus {
+textarea.form-control:focus,
+textarea:focus {
     box-shadow: unset;
     outline: 3px solid var(--input-focus-outline-color);
     outline-offset: 0;
