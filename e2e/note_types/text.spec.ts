@@ -1,8 +1,8 @@
 import { test, expect, Page } from "@playwright/test";
 import App from "../support/app";
 
-test("Table of contents is displayed", async ({ page }) => {
-    const app = new App(page);
+test("Table of contents is displayed", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
     await app.closeAllTabs();
     await app.goToNoteInNewTab("Table of contents");
@@ -36,8 +36,8 @@ test("Table of contents is displayed", async ({ page }) => {
     await expect(rootList.locator("> ol").nth(1).locator("> ol > ol > ol")).toHaveCount(1);
 });
 
-test("Highlights list is displayed", async ({ page }) => {
-    const app = new App(page);
+test("Highlights list is displayed", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
     await app.closeAllTabs();
     await app.goToNoteInNewTab("Highlights list");

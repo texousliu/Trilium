@@ -6,8 +6,8 @@ import froca from "./froca.js";
 import treeService from "./tree.js";
 import toastService from "./toast.js";
 import { t } from "./i18n.js";
-import FNote from "../entities/fnote.js";
-import FBranch from "../entities/fbranch.js";
+import type FNote from "../entities/fnote.js";
+import type FBranch from "../entities/fbranch.js";
 import type { ChooseNoteTypeResponse } from "../widgets/dialogs/note_type_chooser.js";
 
 interface CreateNoteOpts {

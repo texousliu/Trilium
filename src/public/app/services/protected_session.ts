@@ -74,9 +74,9 @@ ws.subscribeToMessages(async (message) => {
     if (message.type === "protectedSessionLogin") {
         await reloadData();
 
-        await appContext.triggerEvent("frocaReloaded");
+        await appContext.triggerEvent("frocaReloaded", {});
 
-        appContext.triggerEvent("protectedSessionStarted");
+        appContext.triggerEvent("protectedSessionStarted", {});
 
         appContext.triggerCommand("closeProtectedSessionPasswordDialog");
 

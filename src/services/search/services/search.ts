@@ -11,10 +11,10 @@ import beccaService from "../../../becca/becca_service.js";
 import { normalize, escapeHtml, escapeRegExp } from "../../utils.js";
 import log from "../../log.js";
 import hoistedNoteService from "../../hoisted_note.js";
-import BNote from "../../../becca/entities/bnote.js";
-import BAttribute from "../../../becca/entities/battribute.js";
+import type BNote from "../../../becca/entities/bnote.js";
+import type BAttribute from "../../../becca/entities/battribute.js";
 import type { SearchParams, TokenStructure } from "./types.js";
-import Expression from "../expressions/expression.js";
+import type Expression from "../expressions/expression.js";
 import sql from "../../sql.js";
 import scriptService from "../../script.js";
 

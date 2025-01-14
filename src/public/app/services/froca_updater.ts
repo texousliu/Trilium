@@ -6,7 +6,7 @@ import noteAttributeCache from "./note_attribute_cache.js";
 import FBranch, { type FBranchRow } from "../entities/fbranch.js";
 import FAttribute, { type FAttributeRow } from "../entities/fattribute.js";
 import FAttachment, { type FAttachmentRow } from "../entities/fattachment.js";
-import FNote, { type FNoteRow } from "../entities/fnote.js";
+import type { default as FNote, FNoteRow } from "../entities/fnote.js";
 import type { EntityChange } from "../server_types.js";
 
 async function processEntityChanges(entityChanges: EntityChange[]) {

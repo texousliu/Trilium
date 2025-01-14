@@ -51,7 +51,7 @@ export default class LauncherContainer extends FlexContainer<LauncherWidget> {
         this.$widget.empty();
         this.renderChildren();
 
-        await this.handleEventInChildren("initialRenderComplete");
+        await this.handleEventInChildren("initialRenderComplete", {});
 
         const activeContext = appContext.tabManager.getActiveContext();
 

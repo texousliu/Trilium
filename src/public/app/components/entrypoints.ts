@@ -10,7 +10,7 @@ import bundleService from "../services/bundle.js";
 import froca from "../services/froca.js";
 import linkService from "../services/link.js";
 import { t } from "../services/i18n.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 
 // TODO: Move somewhere else nicer.
 export type SqlExecuteResults = unknown[];

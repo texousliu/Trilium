@@ -6,7 +6,7 @@ import log from "./log.js";
 import attributeService from "../services/attributes.js";
 import protectedSessionService from "../services/protected_session.js";
 import hiddenSubtreeService from "./hidden_subtree.js";
-import BNote from "../becca/entities/bnote.js";
+import type BNote from "../becca/entities/bnote.js";
 
 function getRunAtHours(note: BNote): number[] {
     try {

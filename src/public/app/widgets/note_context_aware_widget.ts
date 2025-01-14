@@ -1,7 +1,7 @@
 import BasicWidget from "./basic_widget.js";
 import appContext, { type EventData } from "../components/app_context.js";
-import FNote from "../entities/fnote.js";
-import NoteContext from "../components/note_context.js";
+import type FNote from "../entities/fnote.js";
+import type NoteContext from "../components/note_context.js";
 
 /**
  * This widget allows for changing and updating depending on the active note.

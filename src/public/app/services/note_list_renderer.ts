@@ -5,7 +5,7 @@ import attributeRenderer from "./attribute_renderer.js";
 import libraryLoader from "./library_loader.js";
 import treeService from "./tree.js";
 import utils from "./utils.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 
 const TPL = `
 <div class="note-list">

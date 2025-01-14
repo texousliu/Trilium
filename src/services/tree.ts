@@ -5,7 +5,7 @@ import log from "./log.js";
 import BBranch from "../becca/entities/bbranch.js";
 import entityChangesService from "./entity_changes.js";
 import becca from "../becca/becca.js";
-import BNote from "../becca/entities/bnote.js";
+import type BNote from "../becca/entities/bnote.js";
 
 interface ValidationResponse {
     branch: BBranch | null;

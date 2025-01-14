@@ -1,6 +1,6 @@
 "use strict";
 
-import BNote from "../../becca/entities/bnote.js";
+import type BNote from "../../becca/entities/bnote.js";
 
 /**
  * Search string is lower cased for case-insensitive comparison. But when retrieving properties,

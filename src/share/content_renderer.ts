@@ -3,7 +3,7 @@ import shaca from "./shaca/shaca.js";
 import assetPath from "../services/asset_path.js";
 import shareRoot from "./share_root.js";
 import escapeHtml from "escape-html";
-import SNote from "./shaca/entities/snote.js";
+import type SNote from "./shaca/entities/snote.js";
 
 /**
  * Represents the output of the content renderer.

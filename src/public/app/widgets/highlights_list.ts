@@ -12,7 +12,7 @@ import options from "../services/options.js";
 import OnClickButtonWidget from "./buttons/onclick_button.js";
 import appContext, { type EventData } from "../components/app_context.js";
 import libraryLoader from "../services/library_loader.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 
 const TPL = `<div class="highlights-list-widget">
     <style>

@@ -2,8 +2,8 @@
 
 import { getContentDisposition, stripTags } from "../utils.js";
 import becca from "../../becca/becca.js";
-import TaskContext from "../task_context.js";
-import BBranch from "../../becca/entities/bbranch.js";
+import type TaskContext from "../task_context.js";
+import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 
 function exportToOpml(taskContext: TaskContext, branch: BBranch, version: string, res: Response) {
