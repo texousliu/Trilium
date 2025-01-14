@@ -165,13 +165,13 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         this.watchdog.on("stateChange", () => {
             const currentState = this.watchdog.state;
+            logInfo(`CKEditor state changed to ${currentState}`);
 
             if (!["crashed", "crashedPermanently"].includes(currentState)) {
                 return;
             }
 
-            console.log(`CKEditor changed to ${currentState}`);
-
+            logInfo(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes)}`);
             this.watchdog.crashes.forEach((crashInfo) => console.log(crashInfo));
 
             if (currentState === "crashedPermanently") {
@@ -182,6 +182,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
 
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
+            logInfo("Creating new CKEditor");
             const extraOpts = {};
             if (isClassicEditor) {
                 extraOpts.toolbar = {
