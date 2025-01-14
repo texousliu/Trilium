@@ -46,6 +46,10 @@
     --input-action-button-color: #c6c6c6;
     --input-action-button-hover: white;
 
+    --select-focus-background: #333;
+    --select-focus-text-color: var(--input-text-color);
+    --select-dropdown-text-color: var(--input-text-color);
+
     --hover-item-text-color: #efefef;
     --hover-item-background-color: #ffffff24;
     --hover-item-border-color: transparent;

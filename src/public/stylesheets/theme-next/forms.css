@@ -122,3 +122,32 @@ input::selection,
 .input-group .input-clearer-button {
     background: transparent !important;
 }
+
+/* Combo boxes */
+
+select, select.form-select {
+    outline: 3px solid transparent;
+    outline-offset: 6px;
+    background-color: var(--input-background-color);
+    color: var(--input-text-color);
+    border: unset;
+}
+
+select:hover, select.form-select:hover {
+    background-color: var(--input-hover-background);
+    color: var(--input-hover-color);
+}
+
+select:focus, select.form-select:focus {
+    box-shadow: unset;
+    outline: 3px solid var(--input-focus-outline-color);
+    outline-offset: 0;
+    background-color: var(--select-focus-background);
+    color: var(--select-focus-text-color);
+    transition: outline-color 50ms linear,
+                outline-offset 200ms ease-out;
+}
+
+option {
+    color: var(--select-dropdown-text-color);
+}
