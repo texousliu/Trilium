@@ -106,6 +106,13 @@ input::selection,
     --muted-text-color: var(--input-action-button-hover);
 }
 
+.input-group button:focus-visible,
+.input-group a:focus-visible {
+    outline: transparent;
+    border: transparent;
+    text-shadow: 0 0 3px var(--input-action-button-hover);
+}
+
 .input-group a.disabled {
     opacity: .5;
     /* Workaround to set the "background" property. */
