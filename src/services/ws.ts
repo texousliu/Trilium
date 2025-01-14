@@ -10,7 +10,7 @@ import becca from "../becca/becca.js";
 import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 
 import env from "./env.js";
-import { IncomingMessage, Server } from "http";
+import type { IncomingMessage, Server } from "http";
 import type { EntityChange } from "./entity_changes_interface.js";
 
 if (env.isDev()) {

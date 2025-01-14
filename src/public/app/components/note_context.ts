@@ -8,7 +8,7 @@ import froca from "../services/froca.js";
 import hoistedNoteService from "../services/hoisted_note.js";
 import options from "../services/options.js";
 import type { ViewScope } from "../services/link.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 
 interface SetNoteOpts {
     triggerSwitchEvent?: unknown;

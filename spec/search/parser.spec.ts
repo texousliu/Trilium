@@ -1,6 +1,6 @@
 import AndExp from "../../src/services/search/expressions/and.js";
 import AttributeExistsExp from "../../src/services/search/expressions/attribute_exists.js";
-import Expression from "../../src/services/search/expressions/expression.js";
+import type Expression from "../../src/services/search/expressions/expression.js";
 import LabelComparisonExp from "../../src/services/search/expressions/label_comparison.js";
 import NotExp from "../../src/services/search/expressions/not.js";
 import NoteContentFulltextExp from "../../src/services/search/expressions/note_content_fulltext.js";

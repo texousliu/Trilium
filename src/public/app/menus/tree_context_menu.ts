@@ -9,8 +9,8 @@ import server from "../services/server.js";
 import toastService from "../services/toast.js";
 import dialogService from "../services/dialog.js";
 import { t } from "../services/i18n.js";
-import NoteTreeWidget from "../widgets/note_tree.js";
-import FAttachment from "../entities/fattachment.js";
+import type NoteTreeWidget from "../widgets/note_tree.js";
+import type FAttachment from "../entities/fattachment.js";
 import type { SelectMenuItemEventListener } from "../components/events.js";
 
 // TODO: Deduplicate once client/server is well split.
@@ -196,7 +196,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 enabled: notSearch && noSelectedNotes
             }
         ];
-        return items.filter((row) => row !== null);
+        return items.filter((row) => row !== null) as MenuItem<TreeCommandNames>[];
     }
 
     async selectMenuItemHandler({ command, type, templateNoteId }: MenuCommandItem<TreeCommandNames>) {

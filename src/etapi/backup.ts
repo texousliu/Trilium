@@ -1,4 +1,4 @@
-import { Router } from "express";
+import type { Router } from "express";
 
 import eu from "./etapi_utils.js";
 import backupService from "../services/backup.js";

@@ -4,7 +4,7 @@ import log from "./log.js";
 import sql from "./sql.js";
 import protectedSessionService from "./protected_session.js";
 import dateUtils from "./date_utils.js";
-import BNote from "../becca/entities/bnote.js";
+import type BNote from "../becca/entities/bnote.js";
 
 function protectRevisions(note: BNote) {
     if (!protectedSessionService.isProtectedSessionAvailable()) {

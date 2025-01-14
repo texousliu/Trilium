@@ -9,7 +9,7 @@ import bulkActionService from "../../services/bulk_actions.js";
 import cls from "../../services/cls.js";
 import attributeFormatter from "../../services/attribute_formatter.js";
 import ValidationError from "../../errors/validation_error.js";
-import SearchResult from "../../services/search/search_result.js";
+import type SearchResult from "../../services/search/search_result.js";
 
 function searchFromNote(req: Request): SearchNoteResult {
     const note = becca.getNoteOrThrow(req.params.noteId);

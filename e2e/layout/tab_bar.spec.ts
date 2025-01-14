@@ -3,8 +3,8 @@ import App from "../support/app";
 
 const NOTE_TITLE = "Trilium Integration Test DB";
 
-test("Can drag tabs around", async ({ page }) => {
-    const app = new App(page);
+test("Can drag tabs around", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
 
     // [1]: Trilium Integration Test DB note
@@ -29,8 +29,8 @@ test("Can drag tabs around", async ({ page }) => {
     await expect(app.getTab(0)).toContainText(NOTE_TITLE);
 });
 
-test("Can drag tab to new window", async ({ page }) => {
-    const app = new App(page);
+test("Can drag tab to new window", async ({ page, context }) => {
+    const app = new App(page, context);
     await app.goto();
 
     await app.closeAllTabs();
@@ -49,11 +49,11 @@ test("Can drag tab to new window", async ({ page }) => {
         await page.mouse.move(x, y + tabPos.height + 100, { steps: 5 });
         await page.mouse.up();
     } else {
-        fail("Unable to determine tab position");
+        test.fail(true, "Unable to determine tab position");
     }
 
     // Wait for the popup to show
     const popup = await popupPromise;
-    const popupApp = new App(popup);
+    const popupApp = new App(popup, context);
     await expect(popupApp.getActiveTab()).toHaveText(NOTE_TITLE);
 });

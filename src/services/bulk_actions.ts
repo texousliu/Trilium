@@ -4,7 +4,7 @@ import cloningService from "./cloning.js";
 import branchService from "./branches.js";
 import { randomString } from "./utils.js";
 import eraseService from "./erase.js";
-import BNote from "../becca/entities/bnote.js";
+import type BNote from "../becca/entities/bnote.js";
 
 interface Action {
     labelName: string;

@@ -1,4 +1,4 @@
-import { Router } from "express";
+import type { Router } from "express";
 
 import fs from "fs";
 import path from "path";

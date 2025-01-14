@@ -2,7 +2,7 @@ import { t } from "../../services/i18n.js";
 import server from "../../services/server.js";
 import ws from "../../services/ws.js";
 import utils from "../../services/utils.js";
-import FAttribute from "../../entities/fattribute.js";
+import type FAttribute from "../../entities/fattribute.js";
 
 interface ActionDefinition {
     script: string;
