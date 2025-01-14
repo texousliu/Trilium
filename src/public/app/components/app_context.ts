@@ -262,6 +262,9 @@ type EventMappings = {
     };
     noteContextRemovedEvent: {
         ntxIds: string[];
+    };
+    exportSvg: {
+        ntxId: string;
     }
 };
 

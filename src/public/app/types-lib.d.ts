@@ -20,3 +20,7 @@ declare module "draggabilly" {
         destroy();
     }
 }
+
+declare module '@mind-elixir/node-menu' {
+    export default mindmap;
+}

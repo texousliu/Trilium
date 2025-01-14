@@ -2,8 +2,12 @@ import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import appContext, { type EventData, type EventNames } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import type NoteDetailWidget from "../note_detail.js";
+import type SpacedUpdate from "../../services/spaced_update.js";
 
 export default abstract class TypeWidget extends NoteContextAwareWidget {
+
+    protected spacedUpdate!: SpacedUpdate;
+
     // for overriding
     static getType() {}
 
