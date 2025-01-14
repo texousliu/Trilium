@@ -92,7 +92,7 @@ export type CommandMappings = {
         filePath: string;
     };
     focusAndSelectTitle: CommandData & {
-        isNewNote: boolean;
+        isNewNote?: boolean;
     };
     showPromptDialog: PromptDialogOptions;
     showInfoDialog: ConfirmWithMessageOptions;
@@ -277,15 +277,16 @@ export type CommandListener<T extends CommandNames> = {
 };
 
 export type CommandListenerData<T extends CommandNames> = CommandMappings[T];
-export type EventData<T extends EventNames> = EventMappings[T];
 
 type CommandAndEventMappings = CommandMappings & EventMappings;
+type EventOnlyNames = keyof EventMappings;
+export type EventNames = CommandNames | EventOnlyNames;
+export type EventData<T extends EventNames> = CommandAndEventMappings[T];
 
 /**
  * This type is a discriminated union which contains all the possible commands that can be triggered via {@link AppContext.triggerCommand}.
  */
 export type CommandNames = keyof CommandMappings;
-export type EventNames = keyof EventMappings;
 
 type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType ? K : never }[keyof T];
 
@@ -378,12 +379,10 @@ class AppContext extends Component {
 
         this.child(rootWidget);
 
-        this.triggerEvent("initialRenderComplete");
+        this.triggerEvent("initialRenderComplete", {});
     }
 
-    // TODO: Remove ignore once all commands are mapped out.
-    //@ts-ignore
-    triggerEvent<K extends EventNames | CommandNames>(name: K, data: CommandAndEventMappings[K] = {}) {
+    triggerEvent<K extends EventNames>(name: K, data: EventData<K>) {
         return this.handleEvent(name, data);
     }
 
