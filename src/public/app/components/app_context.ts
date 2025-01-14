@@ -282,7 +282,7 @@ type CommandAndEventMappings = CommandMappings & EventMappings;
  * This type is a discriminated union which contains all the possible commands that can be triggered via {@link AppContext.triggerCommand}.
  */
 export type CommandNames = keyof CommandMappings;
-type EventNames = keyof EventMappings;
+export type EventNames = keyof EventMappings;
 
 type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType ? K : never }[keyof T];
 
