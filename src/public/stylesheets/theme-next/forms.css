@@ -153,3 +153,11 @@ select:focus, select.form-select:focus {
 option {
     color: var(--select-dropdown-text-color);
 }
+
+optgroup {
+    color: var(--select-group-heading-text-color);
+    font-size: .75em;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 40px;
+}
