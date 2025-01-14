@@ -128,7 +128,9 @@ input::selection,
 select, select.form-select {
     outline: 3px solid transparent;
     outline-offset: 6px;
-    background-color: var(--input-background-color);
+    background: unset;
+    background: var(--input-background-color)
+                var(--select-arrow-svg) right 0.75rem center/15px 20px no-repeat;
     color: var(--input-text-color);
     border: unset;
 }
