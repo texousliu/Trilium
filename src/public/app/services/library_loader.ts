@@ -96,10 +96,6 @@ const I18NEXT: Library = {
     js: ["node_modules/i18next/i18next.min.js", "node_modules/i18next-http-backend/i18nextHttpBackend.min.js"]
 };
 
-const MIND_ELIXIR: Library = {
-    js: ["node_modules/mind-elixir/dist/MindElixir.iife.js", "node_modules/@mind-elixir/node-menu/dist/node-menu.umd.cjs"]
-};
-
 const HIGHLIGHT_JS: Library = {
     js: () => {
         const mimeTypes = mimeTypesService.getMimeTypes();
@@ -219,6 +215,5 @@ export default {
     EXCALIDRAW,
     MARKJS,
     I18NEXT,
-    MIND_ELIXIR,
     HIGHLIGHT_JS
 };

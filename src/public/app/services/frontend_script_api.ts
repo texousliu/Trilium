@@ -463,7 +463,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         await ws.waitForMaxKnownEntityChangeId();
 
         await appContext.tabManager.getActiveContext().setNote(notePath);
-        await appContext.triggerEvent("focusAndSelectTitle");
+        await appContext.triggerEvent("focusAndSelectTitle", {});
     };
 
     this.openTabWithNote = async (notePath, activate) => {
@@ -472,7 +472,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         await appContext.tabManager.openTabWithNoteWithHoisting(notePath, { activate });
 
         if (activate) {
-            await appContext.triggerEvent("focusAndSelectTitle");
+            await appContext.triggerEvent("focusAndSelectTitle", {});
         }
     };
 
@@ -485,7 +485,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         await appContext.triggerCommand("openNewNoteSplit", { ntxId, notePath });
 
         if (activate) {
-            await appContext.triggerEvent("focusAndSelectTitle");
+            await appContext.triggerEvent("focusAndSelectTitle", {});
         }
     };
 

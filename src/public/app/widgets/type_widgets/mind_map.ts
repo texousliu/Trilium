@@ -1,6 +1,11 @@
-import libraryLoader from "../../services/library_loader.js";
 import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
+import MindElixir, { type MindElixirCtor } from "mind-elixir";
+import nodeMenu from "@mind-elixir/node-menu";
+import type FNote from "../../entities/fnote.js";
+import type { EventData } from "../../components/app_context.js";
+
+const NEW_TOPIC_NAME = "";
 
 const TPL = `
 <div class="note-detail-mind-map note-detail-printable">
@@ -137,6 +142,11 @@ const TPL = `
 `;
 
 export default class MindMapWidget extends TypeWidget {
+
+    private $content!: JQuery<HTMLElement>;
+    private triggeredByUserOperation?: boolean;
+    private mind?: ReturnType<MindElixirCtor["new"]>;
+
     static getType() {
         return "mindMap";
     }
@@ -163,14 +173,10 @@ export default class MindMapWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         if (this.triggeredByUserOperation) {
             this.triggeredByUserOperation = false;
             return;
-        }
-
-        if (!window.MindElixir) {
-            await libraryLoader.requireLibrary(libraryLoader.MIND_ELIXIR);
         }
 
         this.#initLibrary();
@@ -181,12 +187,14 @@ export default class MindMapWidget extends TypeWidget {
         this.triggeredByUserOperation = false;
     }
 
-    async #loadData(note) {
+    async #loadData(note: FNote) {
         const blob = await note.getBlob();
-        const content = blob.getJsonContent() || MindElixir.new();
+        const content = blob?.getJsonContent() || MindElixir.new(NEW_TOPIC_NAME);
 
-        this.mind.refresh(content);
-        this.mind.toCenter();
+        if (this.mind) {
+            this.mind.refresh(content);
+            this.mind.toCenter();
+        }
     }
 
     #initLibrary() {
@@ -194,11 +202,12 @@ export default class MindMapWidget extends TypeWidget {
             el: this.$content[0],
             direction: MindElixir.LEFT
         });
-        mind.install(window["@mind-elixir/node-menu"]);
+        mind.install(nodeMenu);
 
         this.mind = mind;
-        mind.init(MindElixir.new());
-        mind.bus.addListener("operation", (operation) => {
+        mind.init(MindElixir.new(NEW_TOPIC_NAME));
+        // TODO: See why the typeof mindmap is not correct.
+        mind.bus.addListener("operation", (operation: { name: string }) => {
             this.triggeredByUserOperation = true;
             if (operation.name !== "beginEdit") {
                 this.spacedUpdate.scheduleUpdate();
@@ -237,14 +246,14 @@ export default class MindMapWidget extends TypeWidget {
         return await this.mind.exportSvg().text();
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.isNoteReloaded(this.noteId)) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded"> ) {
+        if (this.noteId && loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }
     }
 
-    async exportSvgEvent({ ntxId }) {
-        if (!this.isNoteContext(ntxId) || this.note.type !== "mindMap") {
+    async exportSvgEvent({ ntxId }: EventData<"exportSvg">) {
+        if (!this.isNoteContext(ntxId) || this.note?.type !== "mindMap") {
             return;
         }
 

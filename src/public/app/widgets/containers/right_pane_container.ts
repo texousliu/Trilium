@@ -1,6 +1,7 @@
 import FlexContainer from "./flex_container.js";
 import splitService from "../../services/resizer.js";
 import type RightPanelWidget from "../right_panel_widget.js";
+import type { EventData, EventNames } from "../../components/app_context.js";
 
 export default class RightPaneContainer extends FlexContainer<RightPanelWidget> {
     private rightPaneHidden: boolean;
@@ -19,7 +20,7 @@ export default class RightPaneContainer extends FlexContainer<RightPanelWidget> 
         return super.isEnabled() && !this.rightPaneHidden && this.children.length > 0 && !!this.children.find((ch) => ch.isEnabled() && ch.canBeShown());
     }
 
-    handleEventInChildren(name: string, data: unknown) {
+    handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
         const promise = super.handleEventInChildren(name, data);
 
         if (["activeContextChanged", "noteSwitchedAndActivated", "noteSwitched"].includes(name)) {

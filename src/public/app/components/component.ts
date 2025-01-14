@@ -1,5 +1,5 @@
 import utils from "../services/utils.js";
-import type { CommandMappings, CommandNames } from "./app_context.js";
+import type { CommandMappings, CommandNames, EventData, EventNames } from "./app_context.js";
 
 /**
  * Abstract class for all components in the Trilium's frontend.
@@ -46,7 +46,7 @@ export class TypedComponent<ChildT extends TypedComponent<ChildT>> {
         return this;
     }
 
-    handleEvent(name: string, data: unknown): Promise<unknown> | null {
+    handleEvent<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
         try {
             const callMethodPromise = this.initialized ? this.initialized.then(() => this.callMethod((this as any)[`${name}Event`], data)) : this.callMethod((this as any)[`${name}Event`], data);
 
@@ -65,11 +65,11 @@ export class TypedComponent<ChildT extends TypedComponent<ChildT>> {
         return this.parent?.triggerEvent(name, data);
     }
 
-    handleEventInChildren(name: string, data: unknown = {}) {
-        const promises = [];
+    handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
+        const promises: Promise<unknown>[] = [];
 
         for (const child of this.children) {
-            const ret = child.handleEvent(name, data);
+            const ret = child.handleEvent(name, data) as Promise<void>;
 
             if (ret) {
                 promises.push(ret);
