@@ -795,7 +795,9 @@
   "note_map": {
     "open_full": "Ampliar al máximo",
     "collapse": "Contraer al tamaño normal",
-    "title": "Mapa de notas"
+    "title": "Mapa de notas",
+    "fix-nodes": "Arreglar nodos",
+    "link-distance": "Distancia de enlace"
   },
   "note_paths": {
     "title": "Rutas de nota",
@@ -1063,7 +1065,16 @@
     "note_tree_and_detail_font_sizing": "Tenga en cuenta que el tamaño de fuente del árbol y de los detalles es relativo a la configuración del tamaño de fuente principal.",
     "not_all_fonts_available": "Es posible que no todas las fuentes enumeradas estén disponibles en su sistema.",
     "apply_font_changes": "Para aplicar cambios de fuente, haga clic en",
-    "reload_frontend": "recargar la interfaz"
+    "reload_frontend": "recargar la interfaz",
+    "generic-fonts": "Fuentes genéricas",
+    "sans-serif-system-fonts": "Fuentes Sans-serif del sistema",
+    "serif-system-fonts": "Fuentes Serif del sistema",
+    "monospace-system-fonts": "Fuentes Monoespaciadas del sistema",
+    "handwriting-system-fonts": "Fuentes a mano alzada del sistema",
+    "serif": "Serif",
+    "sans-serif": "Sans Serif",
+    "monospace": "Monoespaciada",
+    "system-default": "Predeterminada del sistema"
   },
   "max_content_width": {
     "title": "Ancho del contenido",
@@ -1450,7 +1461,11 @@
     "automatically-collapse-notes-title": "Las notas serán colapsadas después de un periodo de inactividad para despejar el árbol.",
     "save-changes": "Guardar y aplicar cambios",
     "auto-collapsing-notes-after-inactivity": "Colapsando notas automáticamente después de inactividad...",
-    "saved-search-note-refreshed": "La nota de búsqueda guardada fue recargada."
+    "saved-search-note-refreshed": "La nota de búsqueda guardada fue recargada.",
+    "hoist-this-note-workspace": "Anclar esta nota (espacio de trabajo)",
+    "refresh-saved-search-results": "Refrescar resultados de búsqueda guardados",
+    "create-child-note": "Crear subnota",
+    "unhoist": "Desanclar"
   },
   "title_bar_buttons": {
     "window-on-top": "Mantener esta ventana en la parte superior"
@@ -1611,5 +1626,8 @@
     "clear-text-field": "Limpiar campo de texto",
     "show-recent-notes": "Mostrar notas recientes",
     "full-text-search": "Búsqueda de texto completo"
+  },
+  "note_tooltip": {
+    "note-has-been-deleted": "La nota ha sido eliminada."
   }
 }
