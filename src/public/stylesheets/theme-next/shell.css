@@ -1627,3 +1627,20 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     padding: 0 8px;
     color: var(--help-code-color);
 }
+
+/* Note area */
+
+.title-row > *:first-child {
+    margin-right: 0;
+}
+
+.title-row > *:nth-child(2) {
+    margin-left: 0;
+}
+
+.note-title-widget input {
+    --input-background-color: transparent;
+    
+    border-radius: 8px;
+    padding-left: 12px;
+}
