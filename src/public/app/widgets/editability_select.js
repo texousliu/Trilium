@@ -8,14 +8,14 @@ const TPL = `
     .editability-dropdown {
         width: 300px;
     }
-    
+
     .editability-dropdown .dropdown-item div {
         font-size: small;
         color: var(--muted-text-color);
         white-space: normal;
     }
     </style>
-    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle editability-button">
+    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle select-button editability-button">
         <span class="editability-active-desc">${t("editability_select.auto")}</span>
         <span class="caret"></span>
     </button>
@@ -23,7 +23,7 @@ const TPL = `
         <a class="dropdown-item" href="#" data-editability="auto">
             <span class="check">&check;</span>
             ${t("editability_select.auto")}
-            <div>${t("editability_select.note_is_editable")}</div>    
+            <div>${t("editability_select.note_is_editable")}</div>
         </a>
         <a class="dropdown-item" href="#" data-editability="readOnly">
             <span class="check">&check;</span>
