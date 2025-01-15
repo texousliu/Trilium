@@ -260,6 +260,12 @@ div.quick-search {
     padding: var(--padding-top) var(--padding-right) var(--padding-bottom) var(--padding-left);
 }
 
+div.quick-search, div.quick-search:hover, div.quick-search:focus-within {
+    /* Prevent changes to background and outline when the state of the input group changes */
+    background: transparent;
+    outline: none;
+}
+
 div.quick-search::before {
     /* The background rectangle of the search box */
     position: absolute;
