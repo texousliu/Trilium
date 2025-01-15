@@ -16,7 +16,7 @@ function decryptString(dataKey: any, cipherText: any) {
     return str;
 }
 
-function decrypt(key: any, cipherText: any, ivLength = 13) {
+function decrypt(key: any, cipherText: any, ivLength = 16) {
     if (cipherText === null) {
         return null;
     }
