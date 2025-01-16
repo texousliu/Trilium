@@ -136,7 +136,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
-        const isClassicEditor = options.get("textNoteEditorType") === "ckeditor-classic";
+        const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
         const editorClass = isClassicEditor ? CKEditor.DecoupledEditor : CKEditor.BalloonEditor;
 
         const codeBlockLanguages = buildListOfLanguages();
@@ -186,7 +186,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const extraOpts = {};
             if (isClassicEditor) {
                 extraOpts.toolbar = {
-                    shouldNotGroupWhenFull: options.get("textNoteEditorMultilineToolbar") === "true"
+                    shouldNotGroupWhenFull: utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true"
                 };
             }
 
@@ -230,14 +230,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
 
                 if (utils.isMobile()) {
-                    this.$editor.on("focus", (e) => {
-                        $classicToolbarWidget.addClass("visible");
-                    });
-
-                    // Hide the formatting toolbar
-                    this.$editor.on("focusout", (e) => {
-                        this.$editor[0].focus();
-                    });
+                    $classicToolbarWidget.addClass("visible");
                 }
             }
 
