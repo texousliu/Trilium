@@ -218,15 +218,15 @@ label:has(input[type="radio"])::after {
 
 /* The outer circle */
 label:has(input[type="radio"])::before {
-    background: lightgray;
+    background: var(--radio-background);
 }
 
 label:has(input[type="radio"]:hover)::before {
-    background: lightgray;
+    background: var(--radio-hover-background);
 }
 
 label:has(input[type="radio"]:focus-visible)::before {
-    outline: 2px solid blue;
+    outline: 2px solid var(--input-focus-outline-color);
 }   
 
 /* The inner circle */
@@ -237,7 +237,7 @@ label:has(input[type="radio"])::after {
 }
 
 label:has(input[type="radio"]:checked)::after {
-    background: black;
+    background: var(--radio-indicator-color);
     transform: scale(.5);
     transition: transform 150ms ease-in;
 }

@@ -46,6 +46,10 @@
     --input-action-button-color: #575757;
     --input-action-button-hover: black;
 
+    --radio-background: #0000002e;
+    --radio-hover-background: #0000004f;
+    --radio-indicator-color: black;
+
     --select-focus-background: white;
     --select-focus-text-color: var(--input-text-color);
     --select-dropdown-text-color: var(--input-text-color);
