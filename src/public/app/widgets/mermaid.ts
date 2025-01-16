@@ -4,6 +4,8 @@ import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import server from "../services/server.js";
 import utils from "../services/utils.js";
 import { loadElkIfNeeded } from "../services/mermaid.js";
+import type FNote from "../entities/fnote.js";
+import type { EventData } from "../components/app_context.js";
 
 const TPL = `<div class="mermaid-widget">
     <style>
@@ -39,8 +41,14 @@ const TPL = `<div class="mermaid-widget">
 let idCounter = 1;
 
 export default class MermaidWidget extends NoteContextAwareWidget {
+
+    private $display!: JQuery<HTMLElement>;
+    private $errorContainer!: JQuery<HTMLElement>;
+    private $errorMessage!: JQuery<HTMLElement>;
+    private dirtyAttachment?: boolean;
+
     isEnabled() {
-        return super.isEnabled() && this.note?.type === "mermaid" && this.note.isContentAvailable() && this.noteContext?.viewScope.viewMode === "default";
+        return super.isEnabled() && this.note?.type === "mermaid" && this.note.isContentAvailable() && this.noteContext?.viewScope?.viewMode === "default";
     }
 
     doRender() {
@@ -51,14 +59,14 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         this.$errorMessage = this.$errorContainer.find(".error-content");
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.$errorContainer.hide();
 
         await libraryLoader.requireLibrary(libraryLoader.MERMAID);
 
         mermaid.mermaidAPI.initialize({
             startOnLoad: false,
-            ...getMermaidConfig()
+            ...getMermaidConfig() as any
         });
 
         this.$display.empty();
@@ -91,12 +99,11 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             this.$display.attr("id", `mermaid-render-${idCounter}`);
 
             WZoom.create(`#mermaid-render-${idCounter}`, {
-                type: "html",
                 maxScale: 50,
                 speed: 1.3,
                 zoomOnClick: false
             });
-        } catch (e) {
+        } catch (e: any) {
             console.warn(e);
             this.$errorMessage.text(e.message);
             this.$errorContainer.show();
@@ -106,24 +113,28 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     async renderSvg() {
         idCounter++;
 
+        if (!this.note) {
+            return "";
+        }
+
         const blob = await this.note.getBlob();
-        const content = blob.content || "";
+        const content = blob?.content || "";
 
         await loadElkIfNeeded(content);
         const { svg } = await mermaid.mermaidAPI.render(`mermaid-graph-${idCounter}`, content);
         return svg;
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.isNoteContentReloaded(this.noteId)) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (this.noteId && loadResults.isNoteContentReloaded(this.noteId)) {
             this.dirtyAttachment = true;
 
             await this.refresh();
         }
     }
 
-    async exportSvgEvent({ ntxId }) {
-        if (!this.isNoteContext(ntxId) || this.note.type !== "mermaid") {
+    async exportSvgEvent({ ntxId }: EventData<"exportSvg">) {
+        if (!this.isNoteContext(ntxId) || this.note?.type !== "mermaid") {
             return;
         }
 
@@ -139,6 +150,7 @@ export function getMermaidConfig() {
     return {
         theme: mermaidTheme.trim(),
         securityLevel: "antiscript",
+        // TODO: Are all these options correct?
         flow: { useMaxWidth: false },
         sequence: { useMaxWidth: false },
         gantt: { useMaxWidth: false },
