@@ -283,15 +283,26 @@ label:has(input[type="radio"]:hover)::before {
     background: var(--radio-checkbox-hover-background);
 }
 
+@keyframes radio-checked {
+    from {
+        transform: scale(1.5);
+    } to {
+        transform: scale(.5);
+    }
+}
+
 /* The inner circle */
 label:has(input[type="radio"])::after {
-    background: transparent;
+    background: var(--radio-checkbox-indicator-color);
     transform: scale(0);
-    transition: transform 300ms ease-out;
+    opacity: 0;
+    transition: opacity 300ms linear,
+                transform 300ms ease-in;
 }
 
 label:has(input[type="radio"]:checked)::after {
-    background: var(--radio-checkbox-indicator-color);
     transform: scale(.5);
-    transition: transform 150ms ease-in;
+    opacity: 1;
+    transition: opacity 150ms linear;
+    animation: radio-checked 200ms ease-out;
 }
