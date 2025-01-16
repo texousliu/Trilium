@@ -6,8 +6,8 @@ const doubleCsrfUtilities = doubleCsrf({
     cookieOptions: {
         path: "", // empty, so cookie is valid only for the current path
         secure: false,
-        sameSite: false,
-        httpOnly: false
+        sameSite: "strict",
+        httpOnly: true
     },
     cookieName: "_csrf"
 });
