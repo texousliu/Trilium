@@ -31,11 +31,23 @@ const TPL = `\
         align-items: flex-end;
         position: absolute;
         left: 0;
-        bottom: calc(var(--tab-bar-height) + var(--launcher-pane-height) + var(--mobile-bottom-offset));
         right: 0;
         overflow-x: auto;
         z-index: 500;
         user-select: none;
+    }
+
+    @media (max-width: 991px) {
+        body.mobile .classic-toolbar-widget.visible {
+            bottom: calc(var(--tab-bar-height) + var(--launcher-pane-height) + var(--mobile-bottom-offset));
+        }
+    }
+
+    @media (min-width: 991px) {
+        body.mobile .classic-toolbar-widget.visible {
+            bottom: 0;
+            left: 25%;
+        }
     }
 
     body.mobile .classic-toolbar-widget.dropdown-active {
