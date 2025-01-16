@@ -33,6 +33,7 @@ const TPL = `\
         left: 0;
         right: 0;
         overflow-x: auto;
+        overscroll-behavior: none;
         z-index: 500;
         user-select: none;
     }
