@@ -46,9 +46,9 @@
     --input-action-button-color: #c6c6c6;
     --input-action-button-hover: white;
 
-    --radio-background: #ffffff30;
-    --radio-hover-background: #ffffff61;
-    --radio-indicator-color: white;
+    --radio-checkbox-background: #ffffff30;
+    --radio-checkbox-hover-background: #ffffff61;
+    --radio-checkbox-indicator-color: white;
 
     --select-focus-background: #333;
     --select-focus-text-color: var(--input-text-color);
