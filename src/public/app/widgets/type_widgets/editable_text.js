@@ -230,14 +230,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
 
                 if (utils.isMobile()) {
-                    this.$editor.on("focus", (e) => {
-                        $classicToolbarWidget.addClass("visible");
-                    });
-
-                    // Hide the formatting toolbar
-                    this.$editor.on("focusout", (e) => {
-                        this.$editor[0].focus();
-                    });
+                    $classicToolbarWidget.addClass("visible");
                 }
             }
 

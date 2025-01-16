@@ -31,7 +31,7 @@ const TPL = `\
         align-items: flex-end;
         position: absolute;
         left: 0;
-        bottom: 0;
+        bottom: calc(var(--tab-bar-height) + var(--launcher-pane-height) + var(--mobile-bottom-offset));
         right: 0;
         overflow-x: auto;
         z-index: 500;
