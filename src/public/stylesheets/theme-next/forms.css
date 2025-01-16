@@ -188,12 +188,15 @@ optgroup {
 /* The parent label */
 label:has(input[type="radio"]),
 label:has(input[type="checkbox"]) {
+    --box-size: 1em;
+    --box-label-gap: .5em;
+
     position: relative;
 }
 
 label:has(input[type="radio"]),
 label:has(input[type="checkbox"]) {
-    padding-left: 1.5em !important;
+    padding-left: calc(var(--box-size) + var(--box-label-gap)) !important;
 }
 
 /* The original input */
@@ -202,7 +205,7 @@ label > input[type="checkbox"] {
     position: absolute;
     top: 0;
     left: 0;
-    width: 1em;
+    width: var(--box-size);
     height: 100%;
     opacity: 0;
 }
@@ -216,8 +219,8 @@ label:has(input[type="checkbox"])::after {
     top: 50%;
     left: 0;
     translate: 0 -50%;
-    width: 1em;
-    height: 1em;
+    width: var(--box-size);
+    height: var(--box-size);
 }
 
 label:has(input[type="radio"]:focus-visible)::before,
