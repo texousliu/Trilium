@@ -192,6 +192,7 @@ label:has(input[type="checkbox"]) {
     --box-label-gap: .5em;
 
     position: relative;
+    user-select: none;
 }
 
 label:has(input[type="radio"]),
