@@ -290,14 +290,16 @@ function processAttachment(loadResults: LoadResults, ec: EntityChange) {
         return;
     }
 
-    if (attachment) {
-        attachment.update(ec.entity as FAttachmentRow);
-    } else {
-        const attachmentRow = ec.entity as FAttachmentRow;
-        const note = froca.notes[attachmentRow.ownerId];
+    if (ec.entity) {
+        if (attachment) {
+            attachment.update(ec.entity as FAttachmentRow);
+        } else {
+            const attachmentRow = ec.entity as FAttachmentRow;
+            const note = froca.notes[attachmentRow.ownerId];
 
-        if (note?.attachments) {
-            note.attachments.push(new FAttachment(froca, attachmentRow));
+            if (note?.attachments) {
+                note.attachments.push(new FAttachment(froca, attachmentRow));
+            }
         }
     }
 
