@@ -16,7 +16,7 @@ function decryptString(dataKey: any, cipherText: any) {
     return str;
 }
 
-function decrypt(key: any, cipherText: any, ivLength = 16) {
+function decrypt(key: any, cipherText: any) {
     if (cipherText === null) {
         return null;
     }
@@ -27,6 +27,8 @@ function decrypt(key: any, cipherText: any, ivLength = 16) {
 
     try {
         const cipherTextBufferWithIv = Buffer.from(cipherText.toString(), "base64");
+        // old encrypted data can have IV of length 13, see some details here: https://github.com/zadam/trilium/issues/3017
+        const ivLength = cipherTextBufferWithIv.length % 16 === 0 ? 16 : 13;
         const iv = cipherTextBufferWithIv.slice(0, ivLength);
 
         const cipherTextBuffer = cipherTextBufferWithIv.slice(ivLength);
