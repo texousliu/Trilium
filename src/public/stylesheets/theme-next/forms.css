@@ -183,19 +183,22 @@ optgroup {
     line-height: 40px;
 }
 
-/* Radio buttons */
+/* Check box & radio button commons */
 
 /* The parent label */
-label:has(input[type="radio"]) {
+label:has(input[type="radio"]),
+label:has(input[type="checkbox"]) {
     position: relative;
 }
 
-label:has(input[type="radio"]) {
+label:has(input[type="radio"]),
+label:has(input[type="checkbox"]) {
     padding-left: 1.5em;
 }
 
-/* The original radio input */
-input[type="radio"] {
+/* The original input */
+label > input[type="radio"],
+label > input[type="checkbox"] {
     position: absolute;
     top: 0;
     left: 0;
@@ -205,7 +208,9 @@ input[type="radio"] {
 }
 
 label:has(input[type="radio"])::before,
-label:has(input[type="radio"])::after {
+label:has(input[type="radio"])::after,
+label:has(input[type="checkbox"])::before,
+label:has(input[type="checkbox"])::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -213,6 +218,56 @@ label:has(input[type="radio"])::after {
     translate: 0 -50%;
     width: 1em;
     height: 1em;
+}
+
+label:has(input[type="radio"]:focus-visible)::before,
+label:has(input[type="checkbox"]:focus-visible)::before {
+    outline: 2px solid var(--input-focus-outline-color);
+}
+
+/* Check boxes */
+
+/* The check box background */
+label:has(input[type="checkbox"])::before {
+    border-radius: 3px;
+    background: var(--radio-background);
+}
+
+label:has(input[type="checkbox"]):hover:before {
+    background: var(--radio-hover-background);
+}
+
+@keyframes checkbox-checked {
+    from {
+        transform: scale(2);
+    } to {
+        transform: scale(1);
+    }
+}
+
+/* The tick mark */
+label:has(input[type="checkbox"])::after {
+    mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3ctitle%3echeck-bold%3c/title%3e%3cpath d='M9%2c20.42L2.79%2c14.21L5.62%2c11.38L9%2c14.77L18.88%2c4.88L21.71%2c7.71L9%2c20.42Z' /%3e%3c/svg%3e");
+    mask-position: center center;
+    mask-size: .95em;
+    background-color: var(--radio-indicator-color);
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 300ms ease-out,
+                opacity 300ms linear;
+}
+
+label:has(input[type="checkbox"]:checked)::after {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 100ms ease-in-out;
+    animation: checkbox-checked 150ms ease-out;
+}
+
+/* Radio buttons */
+
+label:has(input[type="radio"])::before,
+label:has(input[type="radio"])::after {
     border-radius: 50%;
 }
 
@@ -224,10 +279,6 @@ label:has(input[type="radio"])::before {
 label:has(input[type="radio"]:hover)::before {
     background: var(--radio-hover-background);
 }
-
-label:has(input[type="radio"]:focus-visible)::before {
-    outline: 2px solid var(--input-focus-outline-color);
-}   
 
 /* The inner circle */
 label:has(input[type="radio"])::after {
