@@ -186,7 +186,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const extraOpts = {};
             if (isClassicEditor) {
                 extraOpts.toolbar = {
-                    shouldNotGroupWhenFull: options.get("textNoteEditorMultilineToolbar") === "true"
+                    shouldNotGroupWhenFull: utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true"
                 };
             }
 
