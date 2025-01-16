@@ -12,4 +12,4 @@ const doubleCsrfUtilities = doubleCsrf({
     cookieName: "_csrf"
 });
 
-export const { doubleCsrfProtection } = doubleCsrfUtilities;
+export const { generateToken, doubleCsrfProtection } = doubleCsrfUtilities;
