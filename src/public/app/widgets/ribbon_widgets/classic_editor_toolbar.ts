@@ -150,4 +150,11 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
 
         return true;
     }
+
+    async refreshWithNote() {
+        if (utils.isMobile()) {
+            this.toggleExt(await this.#shouldDisplay());
+        }
+    }
+
 }
