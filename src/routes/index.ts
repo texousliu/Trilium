@@ -24,7 +24,7 @@ function index(req: Request, res: Response) {
     //'overwrite' set to false (default) => the existing token will be re-used and validated
     //'validateOnReuse' set to false => if validation fails, generate a new token instead of throwing an error
     const csrfToken = generateCsrfToken(req, res, false, false);
-    log.info(`Generated CSRF token ${csrfToken} with secret ${res.getHeader("set-cookie")}`);
+    log.info(`CSRF token generation: ${csrfToken ? "Successful" : "Failed"}`);
 
     // We force the page to not be cached since on mobile the CSRF token can be
     // broken when closing the browser and coming back in to the page.
