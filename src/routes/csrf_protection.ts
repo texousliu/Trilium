@@ -1,0 +1,15 @@
+import { doubleCsrf } from "csrf-csrf";
+import sessionSecret from "../services/session_secret.js";
+
+const doubleCsrfUtilities = doubleCsrf({
+    getSecret: () => sessionSecret,
+    cookieOptions: {
+        path: "", // empty, so cookie is valid only for the current path
+        secure: false,
+        sameSite: false,
+        httpOnly: false
+    },
+    cookieName: "_csrf"
+});
+
+export const { doubleCsrfProtection } = doubleCsrfUtilities;
