@@ -182,3 +182,62 @@ optgroup {
     font-style: normal;
     line-height: 40px;
 }
+
+/* Radio buttons */
+
+/* The parent label */
+label:has(input[type="radio"]) {
+    position: relative;
+}
+
+label:has(input[type="radio"]) {
+    padding-left: 1.5em;
+}
+
+/* The original radio input */
+input[type="radio"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1em;
+    height: 100%;
+    opacity: 0;
+}
+
+label:has(input[type="radio"])::before,
+label:has(input[type="radio"])::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    translate: 0 -50%;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+}
+
+/* The outer circle */
+label:has(input[type="radio"])::before {
+    background: lightgray;
+}
+
+label:has(input[type="radio"]:hover)::before {
+    background: lightgray;
+}
+
+label:has(input[type="radio"]:focus-visible)::before {
+    outline: 2px solid blue;
+}   
+
+/* The inner circle */
+label:has(input[type="radio"])::after {
+    background: transparent;
+    transform: scale(0);
+    transition: transform 300ms ease-out;
+}
+
+label:has(input[type="radio"]:checked)::after {
+    background: black;
+    transform: scale(.5);
+    transition: transform 150ms ease-in;
+}
