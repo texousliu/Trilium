@@ -136,7 +136,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
-        const isClassicEditor = options.get("textNoteEditorType") === "ckeditor-classic";
+        const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
         const editorClass = isClassicEditor ? CKEditor.DecoupledEditor : CKEditor.BalloonEditor;
 
         const codeBlockLanguages = buildListOfLanguages();

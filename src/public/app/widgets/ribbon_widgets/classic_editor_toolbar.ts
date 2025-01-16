@@ -136,7 +136,7 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
     }
 
     async #shouldDisplay() {
-        if (options.get("textNoteEditorType") !== "ckeditor-classic") {
+        if (utils.isDesktop() && options.get("textNoteEditorType") !== "ckeditor-classic") {
             return false;
         }
 
