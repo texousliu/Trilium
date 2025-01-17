@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import lex from "../../src/services/search/services/lex.js";
 
 describe("Lexer fulltext", () => {
