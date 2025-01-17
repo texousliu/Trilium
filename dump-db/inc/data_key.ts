@@ -12,7 +12,7 @@ function getDataKey(password: any) {
 
         const encryptedDataKey = getOption("encryptedDataKey");
 
-        const decryptedDataKey = decryptService.decrypt(passwordDerivedKey, encryptedDataKey, 16);
+        const decryptedDataKey = decryptService.decrypt(passwordDerivedKey, encryptedDataKey);
 
         return decryptedDataKey;
     } catch (e: any) {
