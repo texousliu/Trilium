@@ -162,8 +162,7 @@ const TPL = `
 
         <li class="dropdown-item dropdown-submenu">
             <span class="dropdown-toggle">
-                <span class="bx bx-chip"></span>
-                ${t("global_menu.advanced")}
+                <span class="bx bx-chip"></span>${t("global_menu.advanced")}
             </span>
 
             <ul class="dropdown-menu">
