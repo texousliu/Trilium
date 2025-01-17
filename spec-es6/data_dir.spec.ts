@@ -65,7 +65,7 @@ describe("data_dir.ts unit tests", () => {
 
   })
 
-  describe("#getTriliumDataDir", () => {
+  describe.todo("#getTriliumDataDir", () => {
     // TODO
   })
 
@@ -134,5 +134,3 @@ describe("data_dir.ts unit tests", () => {
   })
 
 });
-
-execute()
