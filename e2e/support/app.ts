@@ -2,6 +2,7 @@ import { expect, Locator, Page } from "@playwright/test";
 import type { BrowserContext } from "@playwright/test";
 
 interface GotoOpts {
+    url?: string;
     isMobile?: boolean;
 }
 
@@ -28,21 +29,27 @@ export default class App {
         this.sidebar = page.locator("#right-pane");
     }
 
-    async goto(opts: GotoOpts = {}) {
+    async goto({ url, isMobile }: GotoOpts = {}) {
         await this.context.addCookies([
             {
                 url: BASE_URL,
                 name: "trilium-device",
-                value: opts.isMobile ? "mobile" : "desktop"
+                value: isMobile ? "mobile" : "desktop"
             }
         ]);
 
-        await this.page.goto("/", { waitUntil: "networkidle" });
+        if (!url) {
+            url = "/";
+        }
+
+        await this.page.goto(url, { waitUntil: "networkidle" });
 
         // Wait for the page to load.
-        await expect(this.page.locator(".tree"))
-            .toContainText("Trilium Integration Test");
-        await this.closeAllTabs();
+        if (url === "/") {
+            await expect(this.page.locator(".tree"))
+                .toContainText("Trilium Integration Test");
+            await this.closeAllTabs();
+        }
     }
 
     async goToNoteInNewTab(noteTitle: string) {
