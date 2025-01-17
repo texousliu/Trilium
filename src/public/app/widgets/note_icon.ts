@@ -92,7 +92,6 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
     private $iconList!: JQuery<HTMLElement>;
     private $iconCategory!: JQuery<HTMLElement>;
     private $iconSearch!: JQuery<HTMLElement>;
-    private $notePathList!: JQuery<HTMLElement>;
     private iconToCountCache!: Promise<IconToCountCache | null> | null;
 
     doRender() {
@@ -114,7 +113,6 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
         this.$iconSearch = this.$widget.find("input[name='icon-search']");
         this.$iconSearch.on("input", () => this.renderDropdown());
 
-        this.$notePathList = this.$widget.find(".note-path-list");
         this.$widget.on("show.bs.dropdown", async () => {
             const { categories } = (await import("./icon_list.js")).default;
 
