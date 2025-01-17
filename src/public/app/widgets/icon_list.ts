@@ -5,7 +5,7 @@ interface Category {
     id: number;
 }
 
-interface Icon {
+export interface Icon {
     name: string;
     slug: string;
     category_id: number;

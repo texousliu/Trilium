@@ -4,6 +4,7 @@ import attributeService from "../services/attributes.js";
 import server from "../services/server.js";
 import type FNote from "../entities/fnote.js";
 import type { EventData } from "../components/app_context.js";
+import type { Icon } from "./icon_list.js";
 
 const TPL = `
 <div class="note-icon-widget dropdown">
@@ -80,11 +81,6 @@ const TPL = `
         <div class="icon-list"></div>
     </div>
 </div>`;
-
-interface Icon {
-    className?: string;
-    name: string;
-}
 
 interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
