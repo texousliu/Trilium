@@ -8,6 +8,8 @@ interface ContextMenuOptions<T extends CommandNames> {
     orientation?: "left";
     selectMenuItemHandler: MenuHandler<T>;
     items: MenuItem<T>[];
+    /** On mobile, if set to `true` then the context menu is shown near the element. If `false` (default), then the context menu is shown at the bottom of the screen. */
+    forcePositionOnMobile?: boolean;
 }
 
 interface MenuSeparatorItem {
@@ -60,6 +62,7 @@ class ContextMenu {
             await this.hide();
         }
 
+        this.$widget.toggleClass("mobile-bottom-menu", !this.options.forcePositionOnMobile);
         this.$cover.addClass("show");
         $("body").addClass("context-menu-shown");
 

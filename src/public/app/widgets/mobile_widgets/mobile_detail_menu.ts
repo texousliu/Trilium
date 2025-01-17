@@ -52,7 +52,8 @@ class MobileDetailMenuWidget extends BasicWidget {
                     } else {
                         throw new Error(t("mobile_detail_menu.error_unrecognized_command", { command }));
                     }
-                }
+                },
+                forcePositionOnMobile: true
             });
         });
     }

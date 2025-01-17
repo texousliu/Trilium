@@ -1094,7 +1094,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     /* !!! Cannot set overflow: auto, submenus will break !!! */
 }
 
-body.mobile #context-menu-container {
+body.mobile #context-menu-container.mobile-bottom-menu {
     position: fixed !important;
     left: 0 !important;
     right: 0 !important;
