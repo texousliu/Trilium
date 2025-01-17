@@ -9,7 +9,7 @@ const TPL = `
         .excalidraw .App-menu_top .buttonList {
             display: flex;
         }
-        
+
         /* Conflict between excalidraw and bootstrap classes keeps the menu hidden */
         /* https://github.com/zadam/trilium/issues/3780 */
         /* https://github.com/excalidraw/excalidraw/issues/6567 */
@@ -20,7 +20,7 @@ const TPL = `
         .excalidraw-wrapper {
             height: 100%;
         }
-        
+
         .excalidraw button[data-testid="json-export-button"] {
             display: none !important;
         }
@@ -31,23 +31,23 @@ const TPL = `
         .zen-mode-transition.App-menu_bottom--transition-left {
             transform: none;
         }
-        
+
         /* collaboration not possible so hide the button */
         .CollabButton {
             display: none !important;
         }
-        
+
         button[data-testid='save-button'], button[data-testid='json-export-button'] {
             display: none !important; /* these exports don't work, user should use import/export dialog */
         }
-        
+
         .library-button {
             display: none !important; /* library won't work without extra support which isn't currently implemented */
         }
 
         </style>
         <!-- height here necessary. otherwise excalidraw not shown -->
-        <div class="canvas-render" style="height: 100%"></div>  
+        <div class="canvas-render" style="height: 100%"></div>
     </div>
 `;
 
@@ -383,9 +383,10 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
     /**
      * save content to backend
-     * spacedUpdate is kind of a debouncer.
      */
     saveData() {
+        // Since Excalidraw sends an enormous amount of events, wait for them to stop before actually saving.
+        this.spacedUpdate.resetUpdateTimer();
         this.spacedUpdate.scheduleUpdate();
     }
 
