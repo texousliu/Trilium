@@ -357,8 +357,14 @@ body.desktop .dropdown-menu {
     visibility: hidden;
 }
 
+.dropdown-menu:not(#context-menu-container) .dropdown-item,
+#context-menu-container .dropdown-item > span {
+    display: flex;
+}
+
 .dropdown-menu kbd {
-    float: right;
+    flex-grow: 1;
+    text-align: right;
     color: var(--muted-text-color);
     border: none;
     background-color: transparent;

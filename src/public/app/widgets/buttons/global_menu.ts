@@ -86,7 +86,7 @@ const TPL = `
         position: relative;
         top: 3px;
         font-size: 120%;
-        margin-right: 5px;
+        margin-right: 6px;
     }
 
     body.mobile .global-menu .dropdown-submenu .dropdown-menu {
