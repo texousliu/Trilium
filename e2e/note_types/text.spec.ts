@@ -56,7 +56,7 @@ test("Displays math popup", async ({ page, context }) => {
     await app.goToNoteInNewTab("Empty text");
     const noteContent = app.currentNoteSplit.locator(".note-detail-editable-text-editor")
     await noteContent.fill("Hello world");
-    await noteContent.press("Control+M");
+    await noteContent.press("ControlOrMeta+M");
 
     const mathForm = page.locator(".ck-math-form");
     await expect(mathForm).toBeVisible();
