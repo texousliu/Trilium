@@ -76,7 +76,6 @@ const copy = async () => {
         "node_modules/@excalidraw/excalidraw/dist/",
         "node_modules/katex/dist/",
         "node_modules/dayjs/",
-        "node_modules/force-graph/dist/",
         "node_modules/boxicons/css/",
         "node_modules/boxicons/fonts/",
         "node_modules/mermaid/dist/",
