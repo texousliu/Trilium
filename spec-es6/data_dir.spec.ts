@@ -1,7 +1,6 @@
-import { describe, it, execute, expect } from "./mini_test.ts";
+import { describe, it, expect } from "vitest";
 
 import { getPlatformAppDataDir, getDataDirs} from "../src/services/data_dir.ts"
-
 
 
 describe("data_dir.ts unit tests", () => {
@@ -121,15 +120,36 @@ describe("data_dir.ts unit tests", () => {
       // make sure values are undefined
       setMockedEnv(null);
 
-      const mockDataDir = "/home/test/MOCK_TRILIUM_DATA_DIR"
-      const result = getDataDirs(mockDataDir);
+      const mockDataDirBase = "/home/test/MOCK_TRILIUM_DATA_DIR"
+      const result = getDataDirs(mockDataDirBase);
 
-      //@ts-expect-error - attempt to change value of readonly property
-      result.BACKUP_DIR = "attempt to change";
+      // as per MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#description
+      // Any attempt to change a frozen object will, either silently be ignored or
+      // throw a TypeError exception (most commonly, but not exclusively, when in strict mode).
+      // so be safe and check for both, even though it looks weird
 
-      for (const key in result) {
-        expect(result[key].startsWith(mockDataDir)).toBeTruthy()
+      const getChangeAttemptResult = () => {
+        try {
+          //@ts-expect-error - attempt to change value of readonly property
+          result.BACKUP_DIR = "attempt to change";
+          return result.BACKUP_DIR;
+        }
+        catch(error) {
+          return error
+        }
       }
+
+      const changeAttemptResult = getChangeAttemptResult();
+
+      if (typeof changeAttemptResult === "string") {
+        // if it didn't throw above: assert that it did not change the value of it or any other keys of the object
+        for (const key in result) {
+          expect(result[key].startsWith(mockDataDirBase)).toBeTruthy()
+        }
+      } else {
+        expect(changeAttemptResult).toBeInstanceOf(TypeError)
+      }
+
     })
   })
 
