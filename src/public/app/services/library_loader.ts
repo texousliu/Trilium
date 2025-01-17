@@ -76,14 +76,6 @@ const MERMAID: Library = {
     js: ["node_modules/mermaid/dist/mermaid.min.js"]
 };
 
-/**
- * The ELK extension of Mermaid.js, which supports more advanced layouts.
- * See https://www.npmjs.com/package/@mermaid-js/layout-elk for more information.
- */
-const MERMAID_ELK: Library = {
-    js: ["libraries/mermaid-elk/elk.min.js"]
-};
-
 const EXCALIDRAW: Library = {
     js: ["node_modules/react/umd/react.production.min.js", "node_modules/react-dom/umd/react-dom.production.min.js", "node_modules/@excalidraw/excalidraw/dist/excalidraw.production.min.js"]
 };
@@ -211,7 +203,6 @@ export default {
     WHEEL_ZOOM,
     FORCE_GRAPH,
     MERMAID,
-    MERMAID_ELK,
     EXCALIDRAW,
     MARKJS,
     I18NEXT,

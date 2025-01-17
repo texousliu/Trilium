@@ -155,13 +155,12 @@ declare global {
         registerLayoutLoaders(loader: MermaidLoader);
         parse(content: string, opts: {
             suppressErrors: true
-        }): {
+        }): Promise<{
             config: {
                 layout: string;
             }
-        }
+        }>
     };
-    var MERMAID_ELK: MermaidLoader;
 
     var CKEditor: {
         BalloonEditor: {
