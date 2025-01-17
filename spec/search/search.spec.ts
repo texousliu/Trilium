@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach,  } from "vitest";
 import searchService from "../../src/services/search/services/search.js";
 import BNote from "../../src/becca/entities/bnote.js";
 import BBranch from "../../src/becca/entities/bbranch.js";
@@ -21,7 +22,7 @@ describe("Search", () => {
         });
     });
 
-    xit("simple path match", () => {
+    it.skip("simple path match", () => {
         rootNote.child(becca_mocking.note("Europe").child(becca_mocking.note("Austria")));
 
         const searchContext = new SearchContext();
@@ -31,7 +32,7 @@ describe("Search", () => {
         expect(becca_mocking.findNoteByTitle(searchResults, "Austria")).toBeTruthy();
     });
 
-    xit("normal search looks also at attributes", () => {
+    it.skip("normal search looks also at attributes", () => {
         const austria = becca_mocking.note("Austria");
         const vienna = becca_mocking.note("Vienna");
 
@@ -49,7 +50,7 @@ describe("Search", () => {
         expect(becca_mocking.findNoteByTitle(searchResults, "Vienna")).toBeTruthy();
     });
 
-    xit("normal search looks also at type and mime", () => {
+    it.skip("normal search looks also at type and mime", () => {
         rootNote.child(becca_mocking.note("Effective Java", { type: "book", mime: "" })).child(becca_mocking.note("Hello World.java", { type: "code", mime: "text/x-java" }));
 
         const searchContext = new SearchContext();
@@ -68,7 +69,7 @@ describe("Search", () => {
         expect(searchResults.length).toEqual(2);
     });
 
-    xit("only end leafs are results", () => {
+    it.skip("only end leafs are results", () => {
         rootNote.child(becca_mocking.note("Europe").child(becca_mocking.note("Austria")));
 
         const searchContext = new SearchContext();
@@ -78,7 +79,7 @@ describe("Search", () => {
         expect(becca_mocking.findNoteByTitle(searchResults, "Europe")).toBeTruthy();
     });
 
-    xit("only end leafs are results", () => {
+    it.skip("only end leafs are results", () => {
         rootNote.child(becca_mocking.note("Europe").child(becca_mocking.note("Austria").label("capital", "Vienna")));
 
         const searchContext = new SearchContext();
@@ -133,7 +134,7 @@ describe("Search", () => {
         expect(becca_mocking.findNoteByTitle(searchResults, "Czech Republic")).toBeTruthy();
     });
 
-    xit("inherited label comparison", () => {
+    it.skip("inherited label comparison", () => {
         rootNote.child(becca_mocking.note("Europe").label("country", "", true).child(becca_mocking.note("Austria")).child(becca_mocking.note("Czech Republic")));
 
         const searchContext = new SearchContext();
@@ -183,8 +184,7 @@ describe("Search", () => {
 
         function test(query: string, expectedResultCount: number) {
             const searchResults = searchService.findResultsWithQuery(query, searchContext);
-            expect(searchResults.length)
-                .withContext(`While searching for ${query} got unexpected result: [${searchResults.join(", ")}]`)
+            expect(searchResults.length, `While searching for ${query} got unexpected result: [${searchResults.join(", ")}]`)
                 .toEqual(expectedResultCount);
 
             if (expectedResultCount === 1) {
@@ -549,7 +549,7 @@ describe("Search", () => {
         expect(becca.notes[searchResults[0].noteId].title).toEqual("Europe");
     });
 
-    xit("test note.text *=* something", () => {
+    it.skip("test note.text *=* something", () => {
         const italy = becca_mocking.note("Italy").label("capital", "Rome");
         const slovakia = becca_mocking.note("Slovakia").label("capital", "Bratislava");
 
@@ -562,7 +562,7 @@ describe("Search", () => {
         expect(becca.notes[searchResults[0].noteId].title).toEqual("Slovakia");
     });
 
-    xit("test that fulltext does not match archived notes", () => {
+    it.skip("test that fulltext does not match archived notes", () => {
         const italy = becca_mocking.note("Italy").label("capital", "Rome");
         const slovakia = becca_mocking.note("Slovakia").label("capital", "Bratislava");
 

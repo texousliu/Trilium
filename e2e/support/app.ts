@@ -13,6 +13,7 @@ export default class App {
 
     readonly tabBar: Locator;
     readonly noteTree: Locator;
+    readonly launcherBar: Locator;
     readonly currentNoteSplit: Locator;
     readonly sidebar: Locator;
 
@@ -22,6 +23,7 @@ export default class App {
 
         this.tabBar = page.locator(".tab-row-widget-container");
         this.noteTree = page.locator(".tree-wrapper");
+        this.launcherBar = page.locator("#launcher-container");
         this.currentNoteSplit = page.locator(".note-split:not(.hidden-ext)")
         this.sidebar = page.locator("#right-pane");
     }

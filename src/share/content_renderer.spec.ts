@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import { renderCode, type Result } from "./content_renderer.js";
 
 describe("content_renderer", () => {
@@ -8,7 +9,7 @@ describe("content_renderer", () => {
                 content: "   "
             };
             renderCode(emptyResult);
-            expect(emptyResult.isEmpty).toBeTrue();
+            expect(emptyResult.isEmpty).toBeTruthy();
         });
 
         it("identifies unsupported content type", () => {
@@ -17,7 +18,7 @@ describe("content_renderer", () => {
                 content: Buffer.from("Hello world")
             };
             renderCode(emptyResult);
-            expect(emptyResult.isEmpty).toBeTrue();
+            expect(emptyResult.isEmpty).toBeTruthy();
         });
 
         it("wraps code in <pre>", () => {

@@ -68,20 +68,8 @@ const WHEEL_ZOOM: Library = {
     js: ["node_modules/vanilla-js-wheel-zoom/dist/wheel-zoom.min.js"]
 };
 
-const FORCE_GRAPH: Library = {
-    js: ["node_modules/force-graph/dist/force-graph.min.js"]
-};
-
 const MERMAID: Library = {
     js: ["node_modules/mermaid/dist/mermaid.min.js"]
-};
-
-/**
- * The ELK extension of Mermaid.js, which supports more advanced layouts.
- * See https://www.npmjs.com/package/@mermaid-js/layout-elk for more information.
- */
-const MERMAID_ELK: Library = {
-    js: ["libraries/mermaid-elk/elk.min.js"]
 };
 
 const EXCALIDRAW: Library = {
@@ -209,9 +197,7 @@ export default {
     CALENDAR_WIDGET,
     KATEX,
     WHEEL_ZOOM,
-    FORCE_GRAPH,
     MERMAID,
-    MERMAID_ELK,
     EXCALIDRAW,
     MARKJS,
     I18NEXT,

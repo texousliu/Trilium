@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import AndExp from "../../src/services/search/expressions/and.js";
 import AttributeExistsExp from "../../src/services/search/expressions/attribute_exists.js";
 import type Expression from "../../src/services/search/expressions/expression.js";

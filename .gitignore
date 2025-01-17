@@ -2,6 +2,7 @@
 node_modules/
 dist/
 build/
+coverage/
 src/public/app-dist/
 npm-debug.log
 yarn-error.log

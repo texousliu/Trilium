@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import markdownExportService from "./md.js";
 import { trimIndentation } from "../../../spec/support/utils.js";
 

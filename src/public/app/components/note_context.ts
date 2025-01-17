@@ -24,7 +24,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
     notePath?: string | null;
     noteId?: string | null;
-    private parentNoteId?: string | null;
+    parentNoteId?: string | null;
     viewScope?: ViewScope;
 
     constructor(ntxId: string | null = null, hoistedNoteId: string = "root", mainNtxId: string | null = null) {

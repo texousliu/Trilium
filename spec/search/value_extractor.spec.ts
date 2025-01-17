@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from "vitest";
 import becca_mocking from "./becca_mocking.js";
 import ValueExtractor from "../../src/services/search/value_extractor.js";
 import becca from "../../src/becca/becca.js";
