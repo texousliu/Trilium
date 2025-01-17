@@ -1,4 +1,3 @@
-import libraryLoader from "../services/library_loader.js";
 import server from "../services/server.js";
 import attributeService from "../services/attributes.js";
 import hoistedNoteService from "../services/hoisted_note.js";
@@ -149,14 +148,13 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
 
         this.mapType = this.note.getLabelValue("mapType") === "tree" ? "tree" : "link";
 
-        await libraryLoader.requireLibrary(libraryLoader.FORCE_GRAPH);
-
         //variables for the hover effekt. We have to save the neighbours of a hovered node in a set. Also we need to save the links as well as the hovered node itself
 
         let hoverNode = null;
         const highlightLinks = new Set();
         const neighbours = new Set();
 
+        const ForceGraph = (await import("force-graph")).default;
         this.graph = ForceGraph()(this.$container[0])
             .width(this.$container.width())
             .height(this.$container.height())
