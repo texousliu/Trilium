@@ -14,7 +14,7 @@ import AddLabelBulkAction from "../widgets/bulk_actions/label/add_label.js";
 import AddRelationBulkAction from "../widgets/bulk_actions/relation/add_relation.js";
 import RenameNoteBulkAction from "../widgets/bulk_actions/note/rename_note.js";
 import { t } from "./i18n.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 
 const ACTION_GROUPS = [
     {

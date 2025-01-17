@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import env from "../services/env.js";
-import serveStatic from "serve-static";
+import type serveStatic from "serve-static";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<any, Record<string, any>>>) => {
     if (!env.isDev()) {
@@ -63,7 +63,6 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/node_modules/katex/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/katex/dist/")));
 
     app.use(`/${assetPath}/node_modules/dayjs/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/dayjs/")));
-    app.use(`/${assetPath}/node_modules/force-graph/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/force-graph/dist/")));
 
     app.use(`/${assetPath}/node_modules/boxicons/css/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/boxicons/css/")));
     app.use(`/${assetPath}/node_modules/boxicons/fonts/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/boxicons/fonts/")));

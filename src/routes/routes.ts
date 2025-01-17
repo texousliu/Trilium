@@ -9,7 +9,7 @@ import auth from "../services/auth.js";
 import cls from "../services/cls.js";
 import sql from "../services/sql.js";
 import entityChangesService from "../services/entity_changes.js";
-import csurf from "csurf";
+import { doubleCsrfProtection as csrfMiddleware } from "./csrf_protection.js";
 import { createPartialContentHandler } from "@triliumnext/express-partial-content";
 import rateLimit from "express-rate-limit";
 import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
@@ -71,11 +71,7 @@ import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 
-const csrfMiddleware = csurf({
-    cookie: {
-        path: "" // empty, so cookie is valid only for the current path
-    }
-});
+
 
 const MAX_ALLOWED_FILE_SIZE_MB = 250;
 const GET = "get",

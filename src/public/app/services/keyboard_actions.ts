@@ -1,7 +1,7 @@
 import server from "./server.js";
 import appContext, { type CommandNames } from "../components/app_context.js";
 import shortcutService from "./shortcuts.js";
-import Component from "../components/component.js";
+import type Component from "../components/component.js";
 
 const keyboardActionRepo: Record<string, Action> = {};
 

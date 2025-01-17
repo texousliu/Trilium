@@ -9,8 +9,8 @@ import imageService from "../image.js";
 import protectedSessionService from "../protected_session.js";
 import htmlSanitizer from "../html_sanitizer.js";
 import sanitizeAttributeName from "../sanitize_attribute_name.js";
-import TaskContext from "../task_context.js";
-import BNote from "../../becca/entities/bnote.js";
+import type TaskContext from "../task_context.js";
+import type BNote from "../../becca/entities/bnote.js";
 import type { File } from "./common.js";
 import type { AttributeType } from "../../becca/entities/rows.js";
 

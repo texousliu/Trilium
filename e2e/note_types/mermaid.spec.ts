@@ -1,22 +1,67 @@
-import { test, expect, Page } from "@playwright/test";
+import { test, expect, Page, BrowserContext } from "@playwright/test";
 import App from "../support/app";
 
-test("displays simple map", async ({ page, context }) => {
-    const app = new App(page, context);
-    await app.goto();
-    await app.goToNoteInNewTab("Sample mindmap");
-
-    expect(app.currentNoteSplit).toContainText("Hello world");
-    expect(app.currentNoteSplit).toContainText("1");
-    expect(app.currentNoteSplit).toContainText("1a");
+test("renders ELK flowchart", async ({ page, context }) => {
+    await testAriaSnapshot({
+        page, context,
+        noteTitle: "Flowchart ELK on",
+        snapshot: `
+            - document:
+                - paragraph: A
+                - paragraph: B
+                - paragraph: C
+                - paragraph: Guarantee
+                - paragraph: User attributes
+                - paragraph: Master data
+                - paragraph: Exchange Rate
+                - paragraph: Profit Centers
+                - paragraph: Vendor Partners
+                - paragraph: Work Situation
+                - paragraph: Customer
+                - paragraph: Profit Centers
+                - paragraph: Guarantee
+                - text: Interfaces for B
+        `
+    })
 });
 
-test("displays note settings", async ({ page, context }) => {
+test("renders standard flowchart", async ({ page, context }) => {
+    await testAriaSnapshot({
+        page, context,
+        noteTitle: "Flowchart ELK off",
+        snapshot: `
+            - document:
+                - paragraph: Guarantee
+                - paragraph: User attributes
+                - paragraph: Master data
+                - paragraph: Exchange Rate
+                - paragraph: Profit Centers
+                - paragraph: Vendor Partners
+                - paragraph: Work Situation
+                - paragraph: Customer
+                - paragraph: Profit Centers
+                - paragraph: Guarantee
+                - paragraph: A
+                - paragraph: B
+                - paragraph: C
+                - text: Interfaces for B
+        `
+    })
+});
+
+interface AriaTestOpts {
+    page: Page;
+    context: BrowserContext;
+    noteTitle: string;
+    snapshot: string;
+}
+
+async function testAriaSnapshot({ page, context, noteTitle, snapshot }: AriaTestOpts) {
     const app = new App(page, context);
     await app.goto();
-    await app.goToNoteInNewTab("Sample mindmap");
+    await app.goToNoteInNewTab(noteTitle);
 
-    await app.currentNoteSplit.getByText("Hello world").click({ force: true });
-    const nodeMenu = app.currentNoteSplit.locator(".node-menu");
-    expect(nodeMenu).toBeVisible();
-});
+    const svgData = app.currentNoteSplit.locator(".mermaid-render svg");
+    await expect(svgData).toBeVisible();
+    await expect(svgData).toMatchAriaSnapshot(snapshot);
+}

@@ -1,4 +1,4 @@
-import child_process from "child_process";
+import type child_process from "child_process";
 
 let etapiAuthToken: string | undefined;
 

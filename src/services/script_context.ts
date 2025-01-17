@@ -1,6 +1,6 @@
 import { toObject } from "./utils.js";
 import BackendScriptApi from "./backend_script_api.js";
-import BNote from "../becca/entities/bnote.js";
+import type BNote from "../becca/entities/bnote.js";
 import type { ApiParams } from "./backend_script_api_interface.js";
 
 type Module = {

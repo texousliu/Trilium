@@ -9,7 +9,7 @@ import searchService from "../services/search/services/search.js";
 import SearchContext from "../services/search/search_context.js";
 import zipExportService from "../services/export/zip.js";
 import zipImportService from "../services/import/zip.js";
-import { type Request, Router } from "express";
+import type { Request, Router } from "express";
 import type { ParsedQs } from "qs";
 import type { NoteParams } from "../services/note-interface.js";
 import type { SearchParams } from "../services/search/services/types.js";

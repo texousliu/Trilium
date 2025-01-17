@@ -1,5 +1,3 @@
-import library_loader from "./library_loader.js";
-
 let elkLoaded = false;
 
 /**
@@ -22,7 +20,6 @@ export async function loadElkIfNeeded(mermaidContent: string) {
     });
     if (parsedContent?.config?.layout === "elk") {
         elkLoaded = true;
-        await library_loader.requireLibrary(library_loader.MERMAID_ELK);
-        mermaid.registerLayoutLoaders(MERMAID_ELK);
+        mermaid.registerLayoutLoaders((await import("@mermaid-js/layout-elk")).default);
     }
 }

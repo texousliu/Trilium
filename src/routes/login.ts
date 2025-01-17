@@ -94,8 +94,7 @@ function verifyPassword(guessedPassword: string) {
 function logout(req: Request, res: Response) {
     req.session.regenerate(() => {
         req.session.loggedIn = false;
-
-        res.redirect("login");
+        res.sendStatus(200);
     });
 }
 

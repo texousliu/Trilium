@@ -16,7 +16,7 @@ import path from "path";
 import htmlSanitizer from "../../services/html_sanitizer.js";
 import attributeFormatter from "../../services/attribute_formatter.js";
 import jsdom from "jsdom";
-import BNote from "../../becca/entities/bnote.js";
+import type BNote from "../../becca/entities/bnote.js";
 import ValidationError from "../../errors/validation_error.js";
 const { JSDOM } = jsdom;
 

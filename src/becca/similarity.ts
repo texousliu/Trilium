@@ -3,7 +3,7 @@ import log from "../services/log.js";
 import beccaService from "./becca_service.js";
 import dateUtils from "../services/date_utils.js";
 import { JSDOM } from "jsdom";
-import BNote from "./entities/bnote.js";
+import type BNote from "./entities/bnote.js";
 
 const DEBUG = false;
 

@@ -136,7 +136,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
-        const isClassicEditor = options.get("textNoteEditorType") === "ckeditor-classic";
+        const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
         const editorClass = isClassicEditor ? CKEditor.DecoupledEditor : CKEditor.BalloonEditor;
 
         const codeBlockLanguages = buildListOfLanguages();
@@ -165,13 +165,13 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         this.watchdog.on("stateChange", () => {
             const currentState = this.watchdog.state;
+            logInfo(`CKEditor state changed to ${currentState}`);
 
             if (!["crashed", "crashedPermanently"].includes(currentState)) {
                 return;
             }
 
-            console.log(`CKEditor changed to ${currentState}`);
-
+            logInfo(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes)}`);
             this.watchdog.crashes.forEach((crashInfo) => console.log(crashInfo));
 
             if (currentState === "crashedPermanently") {
@@ -182,10 +182,11 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
 
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
+            logInfo("Creating new CKEditor");
             const extraOpts = {};
             if (isClassicEditor) {
                 extraOpts.toolbar = {
-                    shouldNotGroupWhenFull: options.get("textNoteEditorMultilineToolbar") === "true"
+                    shouldNotGroupWhenFull: utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true"
                 };
             }
 
@@ -229,14 +230,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
 
                 if (utils.isMobile()) {
-                    this.$editor.on("focus", (e) => {
-                        $classicToolbarWidget.addClass("visible");
-                    });
-
-                    // Hide the formatting toolbar
-                    this.$editor.on("focusout", (e) => {
-                        this.$editor[0].focus();
-                    });
+                    $classicToolbarWidget.addClass("visible");
                 }
             }
 

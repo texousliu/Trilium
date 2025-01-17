@@ -12,7 +12,7 @@ import log from "../../services/log.js";
 import TaskContext from "../../services/task_context.js";
 import ValidationError from "../../errors/validation_error.js";
 import type { Request } from "express";
-import BNote from "../../becca/entities/bnote.js";
+import type BNote from "../../becca/entities/bnote.js";
 
 async function importNotesToBranch(req: Request) {
     const { parentNoteId } = req.params;
