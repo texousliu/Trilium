@@ -1021,6 +1021,7 @@ html body .dropdown-item.disabled {
     font-family: unset !important;
     font-size: unset !important;
     color: var(--menu-item-keyboard-shortcut-color) !important;
+    padding-top: 0;
 }
 
 .dropdown-divider {
