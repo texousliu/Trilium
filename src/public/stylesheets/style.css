@@ -360,6 +360,7 @@ body.desktop .dropdown-menu {
 .dropdown-menu:not(#context-menu-container) .dropdown-item,
 #context-menu-container .dropdown-item > span {
     display: flex;
+    align-items: center;
 }
 
 .dropdown-menu kbd {
@@ -369,8 +370,6 @@ body.desktop .dropdown-menu {
     border: none;
     background-color: transparent;
     box-shadow: none;
-    /* 0 padding needed otherwise this increases the size of dropdown after dynamic positioning (which is then screwed) */
-    padding-top: 0;
     padding-bottom: 0;
 }
 
