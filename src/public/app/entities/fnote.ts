@@ -515,10 +515,10 @@ class FNote {
     }
 
     /**
-     * @param [name] - label name to filter
+     * @param name - label name to filter
      * @returns all note's labels (attributes with type label), including inherited ones
      */
-    getOwnedLabels(name: string) {
+    getOwnedLabels(name?: string) {
         return this.getOwnedAttributes(LABEL, name);
     }
 

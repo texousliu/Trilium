@@ -2,6 +2,8 @@ import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import attributeService from "../services/attributes.js";
 import server from "../services/server.js";
+import type FNote from "../entities/fnote.js";
+import type { EventData } from "../components/app_context.js";
 
 const TPL = `
 <div class="note-icon-widget dropdown">
@@ -13,7 +15,7 @@ const TPL = `
         width: 50px;
         height: 50px;
     }
-    
+
     .note-icon-widget button.note-icon {
         font-size: 180%;
         background-color: transparent;
@@ -22,38 +24,38 @@ const TPL = `
         padding: 6px;
         color: var(--main-text-color);
     }
-    
+
     .note-icon-widget button.note-icon:hover {
         border: 1px solid var(--main-border-color);
     }
-    
+
     .note-icon-widget .dropdown-menu {
         border-radius: 10px;
         border-width: 2px;
         box-shadow: 10px 10px 93px -25px black;
         padding: 10px 15px 10px 15px !important;
     }
-    
+
     .note-icon-widget .filter-row {
         padding-top: 10px;
         padding-bottom: 10px;
         padding-right: 20px;
-        display: flex; 
+        display: flex;
         align-items: baseline;
     }
-    
+
     .note-icon-widget .filter-row span {
         display: block;
         padding-left: 15px;
         padding-right: 15px;
         font-weight: bold;
     }
-    
+
     .note-icon-widget .icon-list {
         height: 500px;
         overflow: auto;
     }
-    
+
     .note-icon-widget .icon-list span {
         display: inline-block;
         padding: 10px;
@@ -61,25 +63,42 @@ const TPL = `
         border: 1px solid transparent;
         font-size: 180%;
     }
-    
+
     .note-icon-widget .icon-list span:hover {
         border: 1px solid var(--main-border-color);
     }
     </style>
-    
+
     <button class="btn dropdown-toggle note-icon" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="${t("note_icon.change_note_icon")}"></button>
     <div class="dropdown-menu" aria-labelledby="note-path-list-button" style="width: 610px;">
         <div class="filter-row">
             <span>${t("note_icon.category")}</span> <select name="icon-category" class="form-control"></select>
-            
+
             <span>${t("note_icon.search")}</span> <input type="text" name="icon-search" class="form-control" />
         </div>
-        
+
         <div class="icon-list"></div>
     </div>
 </div>`;
 
+interface Icon {
+    className?: string;
+    name: string;
+}
+
+interface IconToCountCache {
+    iconClassToCountMap: Record<string, number>;
+}
+
 export default class NoteIconWidget extends NoteContextAwareWidget {
+
+    private $icon!: JQuery<HTMLElement>;
+    private $iconList!: JQuery<HTMLElement>;
+    private $iconCategory!: JQuery<HTMLElement>;
+    private $iconSearch!: JQuery<HTMLElement>;
+    private $notePathList!: JQuery<HTMLElement>;
+    private iconToCountCache!: Promise<IconToCountCache | null> | null;
+
     doRender() {
         this.$widget = $(TPL);
         this.$icon = this.$widget.find("button.note-icon");
@@ -87,7 +106,9 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
         this.$iconList.on("click", "span", async (e) => {
             const clazz = $(e.target).attr("class");
 
-            await attributeService.setLabel(this.noteId, this.note.hasOwnedLabel("workspace") ? "workspaceIconClass" : "iconClass", clazz);
+            if (this.noteId && this.note) {
+                await attributeService.setLabel(this.noteId, this.note.hasOwnedLabel("workspace") ? "workspaceIconClass" : "iconClass", clazz);
+            }
         });
 
         this.$iconCategory = this.$widget.find("select[name='icon-category']");
@@ -113,18 +134,18 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
         });
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.$icon.removeClass().addClass(`${note.getIcon()} note-icon`);
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.isNoteReloaded(this.noteId)) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (this.noteId && loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
             return;
         }
 
         for (const attr of loadResults.getAttributeRows()) {
-            if (attr.type === "label" && ["iconClass", "workspaceIconClass"].includes(attr.name) && attributeService.isAffecting(attr, this.note)) {
+            if (attr.type === "label" && ["iconClass", "workspaceIconClass"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note)) {
                 this.refresh();
                 break;
             }
@@ -141,14 +162,18 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
             this.$iconList.append(
                 $(`<div style="text-align: center">`).append(
                     $(`<button class="btn btn-sm">${t("note_icon.reset-default")}</button>`).on("click", () =>
-                        this.getIconLabels().forEach((label) => attributeService.removeAttributeById(this.noteId, label.attributeId))
+                        this.getIconLabels().forEach((label) => {
+                            if (this.noteId) {
+                                attributeService.removeAttributeById(this.noteId, label.attributeId);
+                            }
+                        })
                     )
                 )
             );
         }
 
-        const categoryId = parseInt(this.$iconCategory.find("option:selected").val());
-        const search = this.$iconSearch.val().trim().toLowerCase();
+        const categoryId = parseInt(String(this.$iconCategory.find("option:selected")?.val()));
+        const search = String(this.$iconSearch.val())?.trim()?.toLowerCase();
 
         const filteredIcons = icons.filter((icon) => {
             if (categoryId && icon.category_id !== categoryId) {
@@ -164,12 +189,14 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
             return true;
         });
 
-        filteredIcons.sort((a, b) => {
-            const countA = iconToCount[a.className] || 0;
-            const countB = iconToCount[b.className] || 0;
+        if (iconToCount) {
+            filteredIcons.sort((a, b) => {
+                const countA = iconToCount[a.className ?? ""] || 0;
+                const countB = iconToCount[b.className ?? ""] || 0;
 
-            return countB - countA;
-        });
+                return countB - countA;
+            });
+        }
 
         for (const icon of filteredIcons) {
             this.$iconList.append(this.renderIcon(icon));
@@ -180,20 +207,23 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
 
     async getIconToCountMap() {
         if (!this.iconToCountCache) {
-            this.iconToCountCache = server.get("other/icon-usage");
+            this.iconToCountCache = server.get<typeof this.iconToCountCache>("other/icon-usage");
             setTimeout(() => (this.iconToCountCache = null), 20000); // invalidate cache after 20 seconds
         }
 
-        return (await this.iconToCountCache).iconClassToCountMap;
+        return (await this.iconToCountCache)?.iconClassToCountMap;
     }
 
-    renderIcon(icon) {
+    renderIcon(icon: Icon) {
         return $("<span>")
             .addClass("bx " + icon.className)
             .attr("title", icon.name);
     }
 
     getIconLabels() {
+        if (!this.note) {
+            return [];
+        }
         return this.note.getOwnedLabels().filter((label) => ["workspaceIconClass", "iconClass"].includes(label.name));
     }
 }
