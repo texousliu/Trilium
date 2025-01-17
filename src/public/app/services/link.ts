@@ -234,7 +234,7 @@ function goToLink(evt: MouseEvent | JQuery.ClickEvent) {
     return goToLinkExt(evt, hrefLink, $link);
 }
 
-function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | undefined, $link: JQuery<HTMLElement>) {
+function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | undefined, $link: JQuery<HTMLElement> | null) {
     if (hrefLink?.startsWith("data:")) {
         return true;
     }
@@ -242,7 +242,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
     evt.preventDefault();
     evt.stopPropagation();
 
-    if (hrefLink?.startsWith("#fn")) {
+    if (hrefLink?.startsWith("#fn") && $link) {
         return handleFootnote(hrefLink, $link);
     }
 

@@ -3,6 +3,7 @@ import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
 import linkService from "../../services/link.js";
 import server from "../../services/server.js";
+import type FNote from "../../entities/fnote.js";
 const TPL = `
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
         <style>
@@ -51,6 +52,17 @@ const TPL = `
     </div>
 `;
 
+interface CanvasContent {
+    elements: ExcalidrawElement[],
+    files: ExcalidrawElement[],
+    appState: ExcalidrawAppState
+}
+
+interface AttachmentMetadata {
+    title: string;
+    attachmentId: string;
+}
+
 /**
  * # Canvas note with excalidraw
  * @author thfrei 2022-05-11
@@ -95,6 +107,24 @@ const TPL = `
  *  - Make it easy to include a canvas note inside a text note
  */
 export default class ExcalidrawTypeWidget extends TypeWidget {
+
+    private readonly SCENE_VERSION_INITIAL: number;
+    private readonly SCENE_VERSION_ERROR: number;
+
+    private currentNoteId: string;
+    private currentSceneVersion: number;
+    private libraryChanged: boolean;
+    private librarycache: ExcalidrawLibrary[];
+    private attachmentMetadata: AttachmentMetadata[];
+    private themeStyle!: string;
+    private excalidrawApi!: ExcalidrawApi;
+    private excalidrawWrapperRef!: {
+        current: HTMLElement
+    };
+
+    private $render!: JQuery<HTMLElement>;
+    private reactHandlers!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -145,6 +175,9 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             const React = window.React;
             const ReactDOM = window.ReactDOM;
             const renderElement = this.$render.get(0);
+            if (!renderElement) {
+                throw new Error("Unable to find element to render.");
+            }
 
             ReactDOM.unmountComponentAtNode(renderElement);
             const root = ReactDOM.createRoot(renderElement);
@@ -156,10 +189,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
     /**
      * called to populate the widget container with the note content
-     *
-     * @param {FNote} note
      */
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         // see if the note changed, since we do not get a new class for a new note
         const noteChanged = this.currentNoteId !== note.noteId;
         if (noteChanged) {
@@ -183,7 +214,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
          * note into this fresh note. Probably due to that this note-instance does not get
          * newly instantiated?
          */
-        if (!blob.content?.trim()) {
+        if (!blob?.content?.trim()) {
             const sceneData = {
                 elements: [],
                 appState: {
@@ -194,11 +225,11 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
             this.excalidrawApi.updateScene(sceneData);
         } else if (blob.content) {
-            // load saved content into excalidraw canvas
-            let content;
+            let content: CanvasContent;
 
+            // load saved content into excalidraw canvas
             try {
-                content = blob.getJsonContent();
+                content = blob.getJsonContent() as CanvasContent;
             } catch (err) {
                 console.error("Error parsing content. Probably note.type changed. Starting with empty canvas", note, blob, err);
 
@@ -219,7 +250,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             appState.offsetLeft = boundingClientRect.left;
             appState.offsetTop = boundingClientRect.top;
 
-            const sceneData = {
+            const sceneData: ExcalidrawScene = {
                 elements,
                 appState,
                 collaborators: []
@@ -257,7 +288,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 }
 
                 // Extract libraryItems from the blobs
-                const libraryItems = results.map((result) => result.blob.getJsonContentSafely()).filter((item) => !!item);
+                const libraryItems = results.map((result) => result?.blob?.getJsonContentSafely()).filter((item) => !!item) as ExcalidrawLibrary[];
 
                 // Extract metadata for each attachment
                 const metadata = results.map((result) => result.metadata);
@@ -297,7 +328,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         const files = this.excalidrawApi.getFiles();
 
         // parallel svg export to combat bitrot and enable rendering image for note inclusion, preview, and share
-        const svg = await ExcalidrawLib.exportToSvg({
+        const svg = await window.ExcalidrawLib.exportToSvg({
             elements,
             appState,
             exportPadding: 5, // 5 px padding
@@ -306,7 +337,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         });
         const svgString = svg.outerHTML;
 
-        const activeFiles = {};
+        const activeFiles: Record<string, ExcalidrawElement> = {};
         elements.forEach((element) => {
             if (element.fileId) {
                 activeFiles[element.fileId] = files[element.fileId];
@@ -474,12 +505,12 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 React.createElement(Excalidraw, {
                     // this makes sure that 1) manual theme switch button is hidden 2) theme stays as it should after opening menu
                     theme: this.themeStyle,
-                    excalidrawAPI: (api) => {
+                    excalidrawAPI: (api: ExcalidrawApi) => {
                         this.excalidrawApi = api;
                     },
                     width: dimensions.width,
                     height: dimensions.height,
-                    onPaste: (data, event) => {
+                    onPaste: (data: unknown, event: unknown) => {
                         console.log("Verbose: excalidraw internal paste. No trilium action implemented.", data, event);
                     },
                     onLibraryChange: () => {
