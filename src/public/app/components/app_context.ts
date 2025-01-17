@@ -108,6 +108,7 @@ export type CommandMappings = {
     toggleNoteHoisting: ContextMenuCommandData;
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;
+    delete: ContextMenuCommandData;
     protectSubtree: ContextMenuCommandData;
     unprotectSubtree: ContextMenuCommandData;
     openBulkActionsDialog: ContextMenuCommandData;
