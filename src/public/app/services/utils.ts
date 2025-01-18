@@ -97,7 +97,7 @@ function isMac() {
     return navigator.platform.indexOf("Mac") > -1;
 }
 
-function isCtrlKey(evt: KeyboardEvent | MouseEvent | JQuery.ClickEvent | JQuery.ContextMenuEvent | JQuery.TriggeredEvent) {
+function isCtrlKey(evt: KeyboardEvent | MouseEvent | JQuery.ClickEvent | JQuery.ContextMenuEvent | JQuery.TriggeredEvent | React.PointerEvent<HTMLCanvasElement>) {
     return (!isMac() && evt.ctrlKey) || (isMac() && evt.metaKey);
 }
 

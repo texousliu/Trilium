@@ -72,10 +72,6 @@ const MERMAID: Library = {
     js: ["node_modules/mermaid/dist/mermaid.min.js"]
 };
 
-const EXCALIDRAW: Library = {
-    js: ["node_modules/react/umd/react.production.min.js", "node_modules/react-dom/umd/react-dom.production.min.js", "node_modules/@excalidraw/excalidraw/dist/excalidraw.production.min.js"]
-};
-
 const MARKJS: Library = {
     js: ["node_modules/mark.js/dist/jquery.mark.es6.min.js"]
 };
@@ -198,7 +194,6 @@ export default {
     KATEX,
     WHEEL_ZOOM,
     MERMAID,
-    EXCALIDRAW,
     MARKJS,
     I18NEXT,
     HIGHLIGHT_JS

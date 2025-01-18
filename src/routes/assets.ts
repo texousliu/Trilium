@@ -44,13 +44,6 @@ async function register(app: express.Application) {
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));
     app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "..", "libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
-
-    // excalidraw-view mode in shared notes
-    app.use(`/${assetPath}/node_modules/react/umd/react.production.min.js`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/react/umd/react.production.min.js")));
-    app.use(`/${assetPath}/node_modules/react/umd/react.development.js`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/react/umd/react.development.js")));
-    app.use(`/${assetPath}/node_modules/react-dom/umd/react-dom.production.min.js`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/react-dom/umd/react-dom.production.min.js")));
-    app.use(`/${assetPath}/node_modules/react-dom/umd/react-dom.development.js`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/react-dom/umd/react-dom.development.js")));
-    // expose the whole dist folder since complete assets are needed in edit and share
     app.use(`/node_modules/@excalidraw/excalidraw/dist/`, express.static(path.join(srcRoot, "..", "node_modules/@excalidraw/excalidraw/dist/")));
     app.use(`/${assetPath}/node_modules/@excalidraw/excalidraw/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/@excalidraw/excalidraw/dist/")));
 
