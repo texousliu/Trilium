@@ -140,8 +140,15 @@ describe("data_dir.ts unit tests", async () => {
         resetAllMocks();
     });
 
+    /**
+     * case A – process.env.TRILIUM_DATA_DIR is set
+     * case B – process.env.TRILIUM_DATA_DIR is not set and Trilium folder is existing in platform
+     * case C – process.env.TRILIUM_DATA_DIR is not set and Trilium folder is not existing in platform's home dir
+     * case D – fallback to creating Trilium folder in home dir
+     */
 
-    describe("case A – process.env.TRILIUM_DATA_DIR is set", () => {
+
+    describe("case A", () => {
         it("when folder exists – it should return the path, without attempting to create the folder", async () => {
             const mockTriliumDataPath = "/home/mock/trilium-data-ENV-A1";
             process.env.TRILIUM_DATA_DIR = mockTriliumDataPath;
@@ -175,7 +182,7 @@ describe("data_dir.ts unit tests", async () => {
         });
     });
 
-    describe("case B – process.env.TRILIUM_DATA_DIR is not set and Trilium folder is existing in platform's home dir", () => {
+    describe("case B", () => {
         it("it should check if folder exists and return it", async () => {
             const homedir = "/home/mock";
             const dataDirName = "trilium-data";
@@ -193,7 +200,7 @@ describe("data_dir.ts unit tests", async () => {
         });
     });
 
-    describe("case C – process.env.TRILIUM_DATA_DIR is not set and Trilium folder is not existing in platform's home dir", () => {
+    describe("case C", () => {
         it("w/ Platform 'Linux', an existing App Data Folder (~/.local/share) but non-existing Trilium dir (~/.local/share/trilium-data) – it should attempt to create the dir", async () => {
             const homedir = "/home/mock";
             const dataDirName = "trilium-data";
@@ -278,7 +285,7 @@ describe("data_dir.ts unit tests", async () => {
         });
     });
 
-    describe("case D – fallback to creating Trilium folder in home dir", () => {
+    describe("case D", () => {
         it("w/ unknown PlatformAppDataDir it should attempt to create the folder in the homefolder", async () => {
             const homedir = "/home/mock";
             const dataDirName = "trilium-data";
