@@ -15,11 +15,11 @@ import BasicWidget from "../widgets/basic_widget.js";
 import SpacedUpdate from "./spaced_update.js";
 import shortcutService from "./shortcuts.js";
 import dialogService from "./dialog.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 import { t } from "./i18n.js";
-import NoteContext from "../components/note_context.js";
-import NoteDetailWidget from "../widgets/note_detail.js";
-import Component from "../components/component.js";
+import type NoteContext from "../components/note_context.js";
+import type NoteDetailWidget from "../widgets/note_detail.js";
+import type Component from "../components/component.js";
 
 /**
  * A whole number
@@ -463,7 +463,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         await ws.waitForMaxKnownEntityChangeId();
 
         await appContext.tabManager.getActiveContext().setNote(notePath);
-        await appContext.triggerEvent("focusAndSelectTitle");
+        await appContext.triggerEvent("focusAndSelectTitle", {});
     };
 
     this.openTabWithNote = async (notePath, activate) => {
@@ -472,7 +472,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         await appContext.tabManager.openTabWithNoteWithHoisting(notePath, { activate });
 
         if (activate) {
-            await appContext.triggerEvent("focusAndSelectTitle");
+            await appContext.triggerEvent("focusAndSelectTitle", {});
         }
     };
 
@@ -485,7 +485,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         await appContext.triggerCommand("openNewNoteSplit", { ntxId, notePath });
 
         if (activate) {
-            await appContext.triggerEvent("focusAndSelectTitle");
+            await appContext.triggerEvent("focusAndSelectTitle", {});
         }
     };
 

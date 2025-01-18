@@ -234,7 +234,7 @@ function goToLink(evt: MouseEvent | JQuery.ClickEvent) {
     return goToLinkExt(evt, hrefLink, $link);
 }
 
-function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | undefined, $link: JQuery<HTMLElement>) {
+function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | React.PointerEvent<HTMLCanvasElement>, hrefLink: string | undefined, $link: JQuery<HTMLElement> | null) {
     if (hrefLink?.startsWith("data:")) {
         return true;
     }
@@ -242,19 +242,16 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
     evt.preventDefault();
     evt.stopPropagation();
 
-    if (hrefLink?.startsWith("#fn")) {
+    if (hrefLink?.startsWith("#fn") && $link) {
         return handleFootnote(hrefLink, $link);
     }
 
     const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
 
     const ctrlKey = utils.isCtrlKey(evt);
-    const isLeftClick = evt.which === 1;
-    const isMiddleClick = evt.which === 2;
+    const isLeftClick = ("which" in evt && evt.which === 1);
+    const isMiddleClick = ("which" in evt && evt.which === 2);
     const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick;
-
-    const leftClick = evt.which === 1;
-    const middleClick = evt.which === 2;
 
     if (notePath) {
         if (openInNewTab) {
@@ -276,7 +273,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent, hrefLink: string | und
         const withinEditLink = $link?.hasClass("ck-link-actions__preview");
         const outsideOfCKEditor = !$link || $link.closest("[contenteditable]").length === 0;
 
-        if (openInNewTab || (withinEditLink && (leftClick || middleClick)) || (outsideOfCKEditor && (leftClick || middleClick))) {
+        if (openInNewTab || (withinEditLink && (isLeftClick || isMiddleClick)) || (outsideOfCKEditor && (isLeftClick || isMiddleClick))) {
             if (hrefLink.toLowerCase().startsWith("http") || hrefLink.startsWith("api/")) {
                 window.open(hrefLink, "_blank");
             } else if ((hrefLink.toLowerCase().startsWith("file:") || hrefLink.toLowerCase().startsWith("geo:")) && utils.isElectron()) {

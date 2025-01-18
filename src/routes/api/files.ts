@@ -12,8 +12,8 @@ import ws from "../../services/ws.js";
 import becca from "../../becca/becca.js";
 import ValidationError from "../../errors/validation_error.js";
 import type { Request, Response } from "express";
-import BNote from "../../becca/entities/bnote.js";
-import BAttachment from "../../becca/entities/battachment.js";
+import type BNote from "../../becca/entities/bnote.js";
+import type BAttachment from "../../becca/entities/battachment.js";
 
 function updateFile(req: Request) {
     const note = becca.getNoteOrThrow(req.params.noteId);

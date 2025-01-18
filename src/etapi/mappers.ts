@@ -1,7 +1,7 @@
-import BAttachment from "../becca/entities/battachment.js";
-import BAttribute from "../becca/entities/battribute.js";
-import BBranch from "../becca/entities/bbranch.js";
-import BNote from "../becca/entities/bnote.js";
+import type BAttachment from "../becca/entities/battachment.js";
+import type BAttribute from "../becca/entities/battribute.js";
+import type BBranch from "../becca/entities/bbranch.js";
+import type BNote from "../becca/entities/bnote.js";
 
 function mapNoteToPojo(note: BNote) {
     return {

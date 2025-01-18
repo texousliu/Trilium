@@ -36,10 +36,14 @@ class Options {
 
     getInt(key: string) {
         const value = this.arr?.[key];
-        if (typeof value !== "string") {
-            return null;
+        if (typeof value === "number") {
+            return value;
         }
-        return parseInt(value);
+        if (typeof value == "string") {
+            return parseInt(value);
+        }
+        console.warn("Attempting to read int for unsupported value: ", value);
+        return null;
     }
 
     getFloat(key: string) {

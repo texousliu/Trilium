@@ -14,15 +14,15 @@ import MainTreeExecutors from "./main_tree_executors.js";
 import toast from "../services/toast.js";
 import ShortcutComponent from "./shortcut_component.js";
 import { t, initLocale } from "../services/i18n.js";
-import NoteDetailWidget from "../widgets/note_detail.js";
+import type NoteDetailWidget from "../widgets/note_detail.js";
 import type { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import type { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
 import type { Node } from "../services/tree.js";
-import LoadResults from "../services/load_results.js";
+import type LoadResults from "../services/load_results.js";
 import type { Attribute } from "../services/attribute_parser.js";
-import NoteTreeWidget from "../widgets/note_tree.js";
-import NoteContext, { type GetTextEditorCallback } from "./note_context.js";
+import type NoteTreeWidget from "../widgets/note_tree.js";
+import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -92,7 +92,7 @@ export type CommandMappings = {
         filePath: string;
     };
     focusAndSelectTitle: CommandData & {
-        isNewNote: boolean;
+        isNewNote?: boolean;
     };
     showPromptDialog: PromptDialogOptions;
     showInfoDialog: ConfirmWithMessageOptions;
@@ -108,6 +108,7 @@ export type CommandMappings = {
     toggleNoteHoisting: ContextMenuCommandData;
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;
+    delete: ContextMenuCommandData;
     protectSubtree: ContextMenuCommandData;
     unprotectSubtree: ContextMenuCommandData;
     openBulkActionsDialog: ContextMenuCommandData;
@@ -262,6 +263,9 @@ type EventMappings = {
     };
     noteContextRemovedEvent: {
         ntxIds: string[];
+    };
+    exportSvg: {
+        ntxId: string;
     }
 };
 
@@ -274,15 +278,16 @@ export type CommandListener<T extends CommandNames> = {
 };
 
 export type CommandListenerData<T extends CommandNames> = CommandMappings[T];
-export type EventData<T extends EventNames> = EventMappings[T];
 
 type CommandAndEventMappings = CommandMappings & EventMappings;
+type EventOnlyNames = keyof EventMappings;
+export type EventNames = CommandNames | EventOnlyNames;
+export type EventData<T extends EventNames> = CommandAndEventMappings[T];
 
 /**
  * This type is a discriminated union which contains all the possible commands that can be triggered via {@link AppContext.triggerCommand}.
  */
 export type CommandNames = keyof CommandMappings;
-type EventNames = keyof EventMappings;
 
 type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType ? K : never }[keyof T];
 
@@ -375,12 +380,10 @@ class AppContext extends Component {
 
         this.child(rootWidget);
 
-        this.triggerEvent("initialRenderComplete");
+        this.triggerEvent("initialRenderComplete", {});
     }
 
-    // TODO: Remove ignore once all commands are mapped out.
-    //@ts-ignore
-    triggerEvent<K extends EventNames | CommandNames>(name: K, data: CommandAndEventMappings[K] = {}) {
+    triggerEvent<K extends EventNames>(name: K, data: EventData<K>) {
         return this.handleEvent(name, data);
     }
 

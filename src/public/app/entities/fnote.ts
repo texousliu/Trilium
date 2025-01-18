@@ -5,8 +5,8 @@ import froca from "../services/froca.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import cssClassManager from "../services/css_class_manager.js";
 import type { Froca } from "../services/froca-interface.js";
-import FAttachment from "./fattachment.js";
-import FAttribute, { type AttributeType } from "./fattribute.js";
+import type FAttachment from "./fattachment.js";
+import type { default as FAttribute, AttributeType } from "./fattribute.js";
 import utils from "../services/utils.js";
 
 const LABEL = "label";
@@ -35,7 +35,7 @@ const NOTE_TYPE_ICONS = {
  * end user. Those types should be used only for checking against, they are
  * not for direct use.
  */
-type NoteType = "file" | "image" | "search" | "noteMap" | "launcher" | "doc" | "contentWidget" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "book" | "webView" | "code";
+type NoteType = "file" | "image" | "search" | "noteMap" | "launcher" | "doc" | "contentWidget" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "book" | "webView" | "code" | "mindMap";
 
 interface NotePathRecord {
     isArchived: boolean;
@@ -515,10 +515,10 @@ class FNote {
     }
 
     /**
-     * @param [name] - label name to filter
+     * @param name - label name to filter
      * @returns all note's labels (attributes with type label), including inherited ones
      */
-    getOwnedLabels(name: string) {
+    getOwnedLabels(name?: string) {
         return this.getOwnedAttributes(LABEL, name);
     }
 

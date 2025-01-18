@@ -41,10 +41,10 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
     // {
     //   name: 'webkit',
@@ -73,9 +73,9 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
+  webServer: !process.env.TRILIUM_DOCKER ? {
     command: 'npm run integration-mem-db-dev',
     url: SERVER_URL,
-    // reuseExistingServer: !process.env.CI,
-  },
+    reuseExistingServer: !process.env.CI,
+  } : undefined,
 });

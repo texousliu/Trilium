@@ -1,7 +1,7 @@
 "use strict";
 
-import BNote from "../../becca/entities/bnote.js";
-import TaskContext from "../task_context.js";
+import type BNote from "../../becca/entities/bnote.js";
+import type TaskContext from "../task_context.js";
 
 import noteService from "../../services/notes.js";
 import imageService from "../../services/image.js";

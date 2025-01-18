@@ -1,4 +1,4 @@
-import { TypedComponent } from "../../components/component.js";
+import type { TypedComponent } from "../../components/component.js";
 import Container from "./container.js";
 
 export type FlexDirection = "row" | "column";

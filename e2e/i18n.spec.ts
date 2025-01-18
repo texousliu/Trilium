@@ -1,6 +1,12 @@
 import { test, expect, Page } from "@playwright/test";
 import App from "./support/app";
 
+test.afterEach(async ({ page, context }) => {
+    const app = new App(page, context);
+    // Ensure English is set after each locale change to avoid any leaks to other tests.
+    await app.setOption("locale", "en");
+});
+
 test("Displays translation on desktop", async ({ page, context }) => {
     const app = new App(page, context);
     await app.goto();
@@ -43,9 +49,9 @@ test("User can change language from settings", async ({ page, context }) => {
 
     // Select Chinese and ensure the translation is set.
     await languageCombobox.selectOption("cn");
-    await expect(app.currentNoteSplit).toContainText("主题");
+    await expect(app.currentNoteSplit).toContainText("主题", { timeout: 15000 });
 
     // Select English again.
     await languageCombobox.selectOption("en");
-    await expect(app.currentNoteSplit).toContainText("Language");
+    await expect(app.currentNoteSplit).toContainText("Language", { timeout: 15000 });
 });

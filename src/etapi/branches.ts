@@ -1,4 +1,4 @@
-import { Router } from "express";
+import type { Router } from "express";
 
 import becca from "../becca/becca.js";
 import eu from "./etapi_utils.js";

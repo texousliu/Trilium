@@ -8,7 +8,7 @@ import protectedSessionService from "./protected_session.js";
 import searchService from "../services/search/services/search.js";
 import SearchContext from "../services/search/search_context.js";
 import hoistedNoteService from "./hoisted_note.js";
-import BNote from "../becca/entities/bnote.js";
+import type BNote from "../becca/entities/bnote.js";
 import { t } from "i18next";
 
 const CALENDAR_ROOT_LABEL = "calendarRoot";

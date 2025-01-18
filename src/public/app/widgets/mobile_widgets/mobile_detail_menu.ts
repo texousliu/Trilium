@@ -9,7 +9,9 @@ import { t } from "../../services/i18n.js";
 const TPL = `<button type="button" class="action-button bx" style="padding-top: 10px;"></button>`;
 
 class MobileDetailMenuWidget extends BasicWidget {
-    constructor(isHorizontalLayout) {
+    private isHorizontalLayout: boolean;
+
+    constructor(isHorizontalLayout: boolean) {
         super();
         this.isHorizontalLayout = isHorizontalLayout;
     }
@@ -31,9 +33,13 @@ class MobileDetailMenuWidget extends BasicWidget {
                 ],
                 selectMenuItemHandler: async ({ command }) => {
                     if (command === "insertChildNote") {
-                        noteCreateService.createNote(appContext.tabManager.getActiveContextNotePath());
+                        noteCreateService.createNote(appContext.tabManager.getActiveContextNotePath() ?? undefined);
                     } else if (command === "delete") {
                         const notePath = appContext.tabManager.getActiveContextNotePath();
+                        if (!notePath) {
+                            throw new Error("Cannot get note path to delete.");
+                        }
+
                         const branchId = await treeService.getBranchIdFromUrl(notePath);
 
                         if (!branchId) {
@@ -46,7 +52,8 @@ class MobileDetailMenuWidget extends BasicWidget {
                     } else {
                         throw new Error(t("mobile_detail_menu.error_unrecognized_command", { command }));
                     }
-                }
+                },
+                forcePositionOnMobile: true
             });
         });
     }

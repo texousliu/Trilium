@@ -49,3 +49,20 @@ test("Highlights list is displayed", async ({ page, context }) => {
         await expect(rootList.locator("li").nth(index++)).toContainText(highlightedEl);
     }
 });
+
+test("Displays math popup", async ({ page, context }) => {
+    const app = new App(page, context);
+    await app.goto();
+    await app.goToNoteInNewTab("Empty text");
+    const noteContent = app.currentNoteSplit.locator(".note-detail-editable-text-editor")
+    await noteContent.fill("Hello world");
+    await noteContent.press("ControlOrMeta+M");
+
+    const mathForm = page.locator(".ck-math-form");
+    await expect(mathForm).toBeVisible();
+
+    await mathForm.locator(".ck-input").first().fill("e=mc^2");
+
+    const preview = page.locator('[id^="math-preview"]');
+    await expect(preview).toMatchAriaSnapshot("- math: e = m c 2");
+});

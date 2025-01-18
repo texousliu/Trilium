@@ -4,8 +4,8 @@ import noteService from "../../services/notes.js";
 import xml2js from "xml2js";
 import protectedSessionService from "../protected_session.js";
 import htmlSanitizer from "../html_sanitizer.js";
-import TaskContext from "../task_context.js";
-import BNote from "../../becca/entities/bnote.js";
+import type TaskContext from "../task_context.js";
+import type BNote from "../../becca/entities/bnote.js";
 const parseString = xml2js.parseString;
 
 interface OpmlXml {

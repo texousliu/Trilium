@@ -31,11 +31,24 @@ const TPL = `\
         align-items: flex-end;
         position: absolute;
         left: 0;
-        bottom: 0;
         right: 0;
         overflow-x: auto;
+        overscroll-behavior: none;
         z-index: 500;
         user-select: none;
+    }
+
+    @media (max-width: 991px) {
+        body.mobile .classic-toolbar-widget.visible {
+            bottom: calc(var(--tab-bar-height) + var(--launcher-pane-height) + var(--mobile-bottom-offset));
+        }
+    }
+
+    @media (min-width: 991px) {
+        body.mobile .classic-toolbar-widget.visible {
+            bottom: 0;
+            left: 25%;
+        }
     }
 
     body.mobile .classic-toolbar-widget.dropdown-active {
@@ -64,6 +77,9 @@ const TPL = `\
  * The ribbon item is active by default for text notes, as long as they are not in read-only mode.
  */
 export default class ClassicEditorToolbar extends NoteContextAwareWidget {
+
+    private observer: MutationObserver;
+
     constructor() {
         super();
         this.observer = new MutationObserver((e) => this.#onDropdownStateChanged(e));
@@ -83,7 +99,7 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
 
         if (utils.isMobile()) {
             // The virtual keyboard obscures the editing toolbar so we have to reposition by calculating the height of the keyboard.
-            window.visualViewport.addEventListener("resize", () => this.#adjustPosition());
+            window.visualViewport?.addEventListener("resize", () => this.#adjustPosition());
             window.addEventListener("scroll", () => this.#adjustPosition());
 
             // Observe when a dropdown is expanded to apply a style that allows the dropdown to be visible, since we can't have the element both visible and the toolbar scrollable.
@@ -95,13 +111,13 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
         }
     }
 
-    #onDropdownStateChanged(e) {
-        const dropdownActive = e.map((e) => e.target.ariaExpanded === "true").reduce((acc, e) => acc && e);
+    #onDropdownStateChanged(e: MutationRecord[]) {
+        const dropdownActive = e.map((e) => (e.target as any).ariaExpanded === "true").reduce((acc, e) => acc && e);
         this.$widget[0].classList.toggle("dropdown-active", dropdownActive);
     }
 
     #adjustPosition() {
-        let bottom = window.innerHeight - window.visualViewport.height;
+        let bottom = window.innerHeight - (window.visualViewport?.height || 0);
 
         if (bottom === 0) {
             // The keyboard is not visible, align it to the launcher bar instead.
@@ -121,18 +137,25 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
     }
 
     async #shouldDisplay() {
-        if (options.get("textNoteEditorType") !== "ckeditor-classic") {
+        if (utils.isDesktop() && options.get("textNoteEditorType") !== "ckeditor-classic") {
             return false;
         }
 
-        if (this.note.type !== "text") {
+        if (!this.note || this.note.type !== "text") {
             return false;
         }
 
-        if (await this.noteContext.isReadOnly()) {
+        if (await this.noteContext?.isReadOnly()) {
             return false;
         }
 
         return true;
     }
+
+    async refreshWithNote() {
+        if (utils.isMobile()) {
+            this.toggleExt(await this.#shouldDisplay());
+        }
+    }
+
 }

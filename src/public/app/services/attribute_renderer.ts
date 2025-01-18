@@ -1,7 +1,7 @@
 import ws from "./ws.js";
 import froca from "./froca.js";
-import FAttribute from "../entities/fattribute.js";
-import FNote from "../entities/fnote.js";
+import type FAttribute from "../entities/fattribute.js";
+import type FNote from "../entities/fnote.js";
 
 async function renderAttribute(attribute: FAttribute, renderIsInheritable: boolean) {
     const isInheritable = renderIsInheritable && attribute.isInheritable ? `(inheritable)` : "";

@@ -3,7 +3,7 @@ import eu from "./etapi_utils.js";
 import mappers from "./mappers.js";
 import attributeService from "../services/attributes.js";
 import v from "./validators.js";
-import { Router } from "express";
+import type { Router } from "express";
 import type { AttributeRow } from "../becca/entities/rows.js";
 import type { ValidatorMap } from "./etapi-interface.js";
 

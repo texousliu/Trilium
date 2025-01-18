@@ -5,7 +5,7 @@ import dialogService from "../services/dialog.js";
 import server from "../services/server.js";
 import { t } from "../services/i18n.js";
 import type { SelectMenuItemEventListener } from "../components/events.js";
-import NoteTreeWidget from "../widgets/note_tree.js";
+import type NoteTreeWidget from "../widgets/note_tree.js";
 import type { FilteredCommandNames, ContextMenuCommandData } from "../components/app_context.js";
 
 type LauncherCommandNames = FilteredCommandNames<ContextMenuCommandData>;
@@ -34,8 +34,8 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener<
 
         const isVisibleRoot = note?.noteId === "_lbVisibleLaunchers";
         const isAvailableRoot = note?.noteId === "_lbAvailableLaunchers";
-        const isVisibleItem = parentNoteId === "_lbVisibleLaunchers";
-        const isAvailableItem = parentNoteId === "_lbAvailableLaunchers";
+        const isVisibleItem = (parentNoteId === "_lbVisibleLaunchers" || parentNoteId === "_lbMobileVisibleLaunchers");
+        const isAvailableItem = (parentNoteId === "_lbAvailableLaunchers" || parentNoteId === "_lbMobileAvailableLaunchers");
         const isItem = isVisibleItem || isAvailableItem;
         const canBeDeleted = !note?.noteId.startsWith("_"); // fixed notes can't be deleted
         const canBeReset = !canBeDeleted && note?.isLaunchBarConfig();
@@ -58,7 +58,7 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener<
 
             { title: t("launcher_context_menu.reset"), command: "resetLauncher", uiIcon: "bx bx-reset destructive-action-icon", enabled: canBeReset }
         ];
-        return items.filter((row) => row !== null);
+        return items.filter((row) => row !== null) as MenuItem<LauncherCommandNames>[];
     }
 
     async selectMenuItemHandler({ command }: MenuCommandItem<LauncherCommandNames>) {

@@ -43,6 +43,14 @@ export default class SpacedUpdate {
         return allSaved;
     }
 
+    /**
+     * Normally {@link scheduleUpdate()} would actually trigger the update only once per {@link updateInterval}. If the method is called 200 times within 20s, it will execute only 20 times.
+     * Sometimes, if the updates are continuous this would cause a performance impact. Resetting the time ensures that the calls to {@link triggerUpdate} have stopped before actually triggering an update.
+     */
+    resetUpdateTimer() {
+        this.lastUpdated = Date.now();
+    }
+
     triggerUpdate() {
         if (!this.changed) {
             return;

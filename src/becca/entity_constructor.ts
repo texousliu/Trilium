@@ -1,5 +1,5 @@
 import type { ConstructorData } from "./becca-interface.js";
-import AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
+import type AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
 import BAttachment from "./entities/battachment.js";
 import BAttribute from "./entities/battribute.js";
 import BBlob from "./entities/bblob.js";

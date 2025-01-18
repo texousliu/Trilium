@@ -5,8 +5,8 @@ import html from "html";
 import { getContentDisposition, escapeHtml } from "../utils.js";
 import mdService from "./md.js";
 import becca from "../../becca/becca.js";
-import TaskContext from "../task_context.js";
-import BBranch from "../../becca/entities/bbranch.js";
+import type TaskContext from "../task_context.js";
+import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 
 function exportSingleNote(taskContext: TaskContext, branch: BBranch, format: "html" | "markdown", res: Response) {

@@ -45,6 +45,8 @@ body {
     --native-titlebar-foreground: var(--main-text-color);
     --native-titlebar-darwin-x-offset: 10;
     --native-titlebar-darwin-y-offset: 12;
+    --launcher-pane-height: 53px;
+    --tab-bar-height: 40px;
 }
 
 body.mobile .desktop-only {
@@ -355,14 +357,19 @@ body.desktop .dropdown-menu {
     visibility: hidden;
 }
 
+.dropdown-menu:not(#context-menu-container) .dropdown-item,
+#context-menu-container .dropdown-item > span {
+    display: flex;
+    align-items: center;
+}
+
 .dropdown-menu kbd {
-    float: right;
+    flex-grow: 1;
+    text-align: right;
     color: var(--muted-text-color);
     border: none;
     background-color: transparent;
     box-shadow: none;
-    /* 0 padding needed otherwise this increases the size of dropdown after dynamic positioning (which is then screwed) */
-    padding-top: 0;
     padding-bottom: 0;
 }
 
@@ -944,6 +951,11 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     padding: 0.5rem 1rem 0.5rem 1rem !important; /* make modal header padding slightly smaller */
 }
 
+.modal-header .help-button {
+    padding: 6px;
+    margin: 0 12px;
+}
+
 #toast-container {
     position: absolute;
     width: 100%;
@@ -1087,7 +1099,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     /* !!! Cannot set overflow: auto, submenus will break !!! */
 }
 
-body.mobile #context-menu-container {
+body.mobile #context-menu-container.mobile-bottom-menu {
     position: fixed !important;
     left: 0 !important;
     right: 0 !important;

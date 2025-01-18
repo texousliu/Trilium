@@ -86,7 +86,7 @@ const TPL = `
         position: relative;
         top: 3px;
         font-size: 120%;
-        margin-right: 5px;
+        margin-right: 6px;
     }
 
     body.mobile .global-menu .dropdown-submenu .dropdown-menu {
@@ -162,8 +162,7 @@ const TPL = `
 
         <li class="dropdown-item dropdown-submenu">
             <span class="dropdown-toggle">
-                <span class="bx bx-chip"></span>
-                ${t("global_menu.advanced")}
+                <span class="bx bx-chip"></span>${t("global_menu.advanced")}
             </span>
 
             <ul class="dropdown-menu">

@@ -1,8 +1,9 @@
 import options from "../../services/options.js";
 import FlexContainer from "./flex_container.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
+import type Component from "../../components/component.js";
 
-export default class LeftPaneContainer extends FlexContainer {
+export default class LeftPaneContainer extends FlexContainer<Component> {
     constructor() {
         super("column");
 
@@ -15,7 +16,7 @@ export default class LeftPaneContainer extends FlexContainer {
         return super.isEnabled() && options.is("leftPaneVisible");
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isOptionReloaded("leftPaneVisible")) {
             const visible = this.isEnabled();
             this.toggleInt(visible);

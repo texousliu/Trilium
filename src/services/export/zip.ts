@@ -18,7 +18,7 @@ import ValidationError from "../../errors/validation_error.js";
 import type NoteMeta from "../meta/note_meta.js";
 import type AttachmentMeta from "../meta/attachment_meta.js";
 import type AttributeMeta from "../meta/attribute_meta.js";
-import BBranch from "../../becca/entities/bbranch.js";
+import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import { RESOURCE_DIR } from "../resource_dir.js";
 

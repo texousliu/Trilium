@@ -2,7 +2,7 @@ import ScriptContext from "./script_context.js";
 import cls from "./cls.js";
 import log from "./log.js";
 import becca from "../becca/becca.js";
-import BNote from "../becca/entities/bnote.js";
+import type BNote from "../becca/entities/bnote.js";
 import type { ApiParams } from "./backend_script_api_interface.js";
 
 interface Bundle {

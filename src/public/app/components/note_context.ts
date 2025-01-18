@@ -8,7 +8,7 @@ import froca from "../services/froca.js";
 import hoistedNoteService from "../services/hoisted_note.js";
 import options from "../services/options.js";
 import type { ViewScope } from "../services/link.js";
-import FNote from "../entities/fnote.js";
+import type FNote from "../entities/fnote.js";
 
 interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
@@ -24,7 +24,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
     notePath?: string | null;
     noteId?: string | null;
-    private parentNoteId?: string | null;
+    parentNoteId?: string | null;
     viewScope?: ViewScope;
 
     constructor(ntxId: string | null = null, hoistedNoteId: string = "root", mainNtxId: string | null = null) {

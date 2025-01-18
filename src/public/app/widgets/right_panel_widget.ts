@@ -1,5 +1,5 @@
-import BasicWidget from "./basic_widget.js";
-import AbstractButtonWidget from "./buttons/abstract_button.js";
+import type BasicWidget from "./basic_widget.js";
+import type AbstractButtonWidget from "./buttons/abstract_button.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 
 const WIDGET_TPL = `

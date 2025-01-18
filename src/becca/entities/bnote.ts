@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import eventService from "../../services/events.js";
 import type { AttachmentRow, AttributeType, NoteRow, NoteType, RevisionRow } from "./rows.js";
-import BBranch from "./bbranch.js";
+import type BBranch from "./bbranch.js";
 import BAttribute from "./battribute.js";
 import type { NotePojo } from "../becca-interface.js";
 import searchService from "../../services/search/services/search.js";
@@ -1528,7 +1528,9 @@ class BNote extends AbstractBeccaEntity<BNote> {
     }
 
     isLaunchBarConfig() {
-        return this.type === "launcher" || ["_lbRoot", "_lbAvailableLaunchers", "_lbVisibleLaunchers"].includes(this.noteId);
+        return this.type === "launcher"
+            || ["_lbRoot", "_lbAvailableLaunchers", "_lbVisibleLaunchers"].includes(this.noteId)
+            || ["_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers"].includes(this.noteId);
     }
 
     isOptions() {

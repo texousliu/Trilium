@@ -63,6 +63,7 @@ async function initNotSyncedOptions(initialized: boolean, opts: NotSyncedOpts = 
     optionService.createOption("lastSyncedPush", "0", false);
 
     optionService.createOption("theme", "next", false);
+    optionService.createOption("layoutOrientation", "horizontal", false);
 
     optionService.createOption("syncServerHost", opts.syncServerHost || "", false);
     optionService.createOption("syncServerTimeout", "120000", false);
@@ -148,9 +149,11 @@ const defaultOptions: DefaultOption[] = [
     { name: "textNoteEditorType", value: "ckeditor-balloon", isSynced: true },
     { name: "textNoteEditorMultilineToolbar", value: "false", isSynced: true },
 
-    // HTML import configuration
+    // Appearance
     { name: "layoutOrientation", value: "vertical", isSynced: false },
     { name: "backgroundEffects", value: "false", isSynced: false },
+
+    // HTML import configuration
     {
         name: "allowedHtmlTags",
         value: JSON.stringify([

@@ -10,7 +10,7 @@ test("Displays lint warnings for backend script", async ({ page, context }) => {
     const codeEditor = app.currentNoteSplit.locator(".CodeMirror");
 
     // Expect two warning signs in the gutter.
-    expect(codeEditor.locator(".CodeMirror-gutter-wrapper .CodeMirror-lint-marker-warning")).toHaveCount(2);
+    await expect(codeEditor.locator(".CodeMirror-gutter-wrapper .CodeMirror-lint-marker-warning")).toHaveCount(2);
 
     // Hover over hello
     await codeEditor.getByText("hello").first().hover();

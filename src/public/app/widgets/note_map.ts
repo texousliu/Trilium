@@ -1,12 +1,14 @@
-import libraryLoader from "../services/library_loader.js";
 import server from "../services/server.js";
 import attributeService from "../services/attributes.js";
 import hoistedNoteService from "../services/hoisted_note.js";
-import appContext from "../components/app_context.js";
+import appContext, { type EventData } from "../components/app_context.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import linkContextMenuService from "../menus/link_context_menu.js";
 import utils from "../services/utils.js";
 import { t } from "../services/i18n.js";
+import type ForceGraph from "force-graph";
+import type { GraphData, LinkObject, NodeObject } from "force-graph";
+import type FNote from "../entities/fnote.js";
 
 const esc = utils.escapeHtml;
 
@@ -93,8 +95,80 @@ const TPL = `<div class="note-map-widget" style="position: relative;">
     <div class="note-map-container"></div>
 </div>`;
 
+type WidgetMode = "type" | "ribbon";
+type MapType = "tree" | "link";
+type Data = GraphData<NodeObject, LinkObject<NodeObject>>;
+
+interface Node extends NodeObject {
+    id: string;
+    name: string;
+    type: string;
+    color: string;
+}
+
+interface Link extends LinkObject<NodeObject> {
+    id: string;
+    name: string;
+
+    x: number;
+    y: number;
+    source: Node;
+    target: Node;
+}
+
+interface NotesAndRelationsData {
+    nodes: Node[];
+    links: {
+        id: string;
+        source: string;
+        target: string;
+        name: string;
+    }[]
+}
+
+// Replace
+interface ResponseLink {
+    key: string;
+    sourceNoteId: string;
+    targetNoteId: string;
+    name: string;
+}
+
+interface PostNotesMapResponse {
+    notes: string[];
+    links: ResponseLink[],
+    noteIdToDescendantCountMap: Record<string, number>;
+}
+
+interface GroupedLink {
+    id: string;
+    sourceNoteId: string;
+    targetNoteId: string;
+    names: string[]
+}
+
+interface CssData {
+    fontFamily: string;
+    textColor: string;
+    mutedTextColor: string;
+}
+
 export default class NoteMapWidget extends NoteContextAwareWidget {
-    constructor(widgetMode) {
+
+    private fixNodes: boolean;
+    private widgetMode: WidgetMode;
+    private mapType?: MapType;
+    private cssData!: CssData;
+
+    private themeStyle!: string;
+    private $container!: JQuery<HTMLElement>;
+    private $styleResolver!: JQuery<HTMLElement>;
+    private graph!: ForceGraph;
+    private noteIdToSizeMap!: Record<string, number>;
+    private zoomLevel!: number;
+    private nodes!: Node[];
+
+    constructor(widgetMode: WidgetMode) {
         super();
         this.fixNodes = false; // needed to save the status of the UI element. Is set later in the code
         this.widgetMode = widgetMode; // 'type' or 'ribbon'
@@ -114,7 +188,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         this.$widget.find(".map-type-switcher button").on("click", async (e) => {
             const type = $(e.target).closest("button").attr("data-type");
 
-            await attributeService.setLabel(this.noteId, "mapType", type);
+            await attributeService.setLabel(this.noteId ?? "", "mapType", type);
         });
 
         // Reading the status of the Drag nodes Ui element. Changing it´s color when activated. Reading Force value of the link distance.
@@ -135,31 +209,32 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
 
         const $parent = this.$widget.parent();
 
-        this.graph.height($parent.height()).width($parent.width());
+        this.graph
+            .height($parent.height() || 0)
+            .width($parent.width() || 0);
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.$widget.show();
 
-        this.css = {
+        this.cssData = {
             fontFamily: this.$container.css("font-family"),
             textColor: this.rgb2hex(this.$container.css("color")),
             mutedTextColor: this.rgb2hex(this.$styleResolver.css("color"))
         };
 
-        this.mapType = this.note.getLabelValue("mapType") === "tree" ? "tree" : "link";
-
-        await libraryLoader.requireLibrary(libraryLoader.FORCE_GRAPH);
+        this.mapType = note.getLabelValue("mapType") === "tree" ? "tree" : "link";
 
         //variables for the hover effekt. We have to save the neighbours of a hovered node in a set. Also we need to save the links as well as the hovered node itself
 
-        let hoverNode = null;
+        let hoverNode: NodeObject | null = null;
         const highlightLinks = new Set();
         const neighbours = new Set();
 
-        this.graph = ForceGraph()(this.$container[0])
-            .width(this.$container.width())
-            .height(this.$container.height())
+        const ForceGraph = (await import("force-graph")).default;
+        this.graph = new ForceGraph(this.$container[0])
+            .width(this.$container.width() || 0)
+            .height(this.$container.height() || 0)
             .onZoom((zoom) => this.setZoomLevel(zoom.k))
             .d3AlphaDecay(0.01)
             .d3VelocityDecay(0.08)
@@ -170,8 +245,8 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                     node.fx = node.x;
                     node.fy = node.y;
                 } else {
-                    node.fx = null;
-                    node.fy = null;
+                    node.fx = undefined;
+                    node.fy = undefined;
                 }
             })
             //check if hovered and set the hovernode variable, saving the hovered node object into it. Clear links variable everytime you hover. Without clearing links will stay highlighted
@@ -182,17 +257,19 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
 
             // set link width to immitate a highlight effekt. Checking the condition if any links are saved in the previous defined set highlightlinks
             .linkWidth((link) => (highlightLinks.has(link) ? 3 : 0.4))
-            .linkColor((link) => (highlightLinks.has(link) ? "white" : this.css.mutedTextColor))
+            .linkColor((link) => (highlightLinks.has(link) ? "white" : this.cssData.mutedTextColor))
             .linkDirectionalArrowLength(4)
             .linkDirectionalArrowRelPos(0.95)
 
             // main code for highlighting hovered nodes and neighbours. here we "style" the nodes. the nodes are rendered several hundred times per second.
-            .nodeCanvasObject((node, ctx) => {
+            .nodeCanvasObject((_node, ctx) => {
+                const node = _node as Node;
                 if (hoverNode == node) {
                     //paint only hovered node
                     this.paintNode(node, "#661822", ctx);
                     neighbours.clear(); //clearing neighbours or the effect would be maintained after hovering is over
-                    for (const link of data.links) {
+                    for (const _link of data.links) {
+                        const link = _link as unknown as Link;
                         //check if node is part of a link in the canvas, if so add it´s neighbours and related links to the previous defined variables to paint the nodes
                         if (link.source.id == node.id || link.target.id == node.id) {
                             neighbours.add(link.source);
@@ -209,23 +286,39 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                 }
             })
 
-            .nodePointerAreaPaint((node, ctx) => this.paintNode(node, this.getColorForNode(node), ctx))
+            .nodePointerAreaPaint((node, _, ctx) => this.paintNode(node as Node, this.getColorForNode(node as Node), ctx))
             .nodePointerAreaPaint((node, color, ctx) => {
+                if (!node.id) {
+                    return;
+                }
+
                 ctx.fillStyle = color;
                 ctx.beginPath();
-                ctx.arc(node.x, node.y, this.noteIdToSizeMap[node.id], 0, 2 * Math.PI, false);
+                if (node.x && node.y) {
+                    ctx.arc(node.x, node.y,
+                        this.noteIdToSizeMap[node.id], 0,
+                        2 * Math.PI, false);
+                }
                 ctx.fill();
             })
-            .nodeLabel((node) => esc(node.name))
+            .nodeLabel((node) => esc((node as Node).name))
             .maxZoom(7)
             .warmupTicks(30)
-            .onNodeClick((node) => appContext.tabManager.getActiveContext().setNote(node.id))
-            .onNodeRightClick((node, e) => linkContextMenuService.openContextMenu(node.id, e));
+            .onNodeClick((node) => {
+                if (node.id) {
+                    appContext.tabManager.getActiveContext().setNote((node as Node).id);
+                }
+            })
+            .onNodeRightClick((node, e) => {
+                if (node.id) {
+                    linkContextMenuService.openContextMenu((node as Node).id, e);
+                }
+            });
 
         if (this.mapType === "link") {
             this.graph
-                .linkLabel((l) => `${esc(l.source.name)} - <strong>${esc(l.name)}</strong> - ${esc(l.target.name)}`)
-                .linkCanvasObject((link, ctx) => this.paintLink(link, ctx))
+                .linkLabel((l) => `${esc((l as Link).source.name)} - <strong>${esc((l as Link).name)}</strong> - ${esc((l as Link).target.name)}`)
+                .linkCanvasObject((link, ctx) => this.paintLink(link as Link, ctx))
                 .linkCanvasObjectMode(() => "after");
         }
 
@@ -239,25 +332,25 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         let distancevalue = 40; // default value for the link force of the nodes
 
         this.$widget.find(".fixnodes-type-switcher input").on("change", async (e) => {
-            distancevalue = e.target.closest("input").value;
-            this.graph.d3Force("link").distance(distancevalue);
+            distancevalue = parseInt(e.target.closest("input")?.value ?? "0");
+            this.graph.d3Force("link")?.distance(distancevalue);
 
             this.renderData(data);
         });
 
-        this.graph.d3Force("center").strength(0.2);
-        this.graph.d3Force("charge").strength(boundedCharge);
-        this.graph.d3Force("charge").distanceMax(1000);
+        this.graph.d3Force("center")?.strength(0.2);
+        this.graph.d3Force("charge")?.strength(boundedCharge);
+        this.graph.d3Force("charge")?.distanceMax(1000);
 
         this.renderData(data);
     }
 
-    getMapRootNoteId() {
-        if (this.widgetMode === "ribbon") {
+    getMapRootNoteId(): string {
+        if (this.noteId && this.widgetMode === "ribbon") {
             return this.noteId;
         }
 
-        let mapRootNoteId = this.note.getLabelValue("mapRootNoteId");
+        let mapRootNoteId = this.note?.getLabelValue("mapRootNoteId");
 
         if (mapRootNoteId === "hoisted") {
             mapRootNoteId = hoistedNoteService.getHoistedNoteId();
@@ -265,10 +358,10 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
             mapRootNoteId = appContext.tabManager.getActiveContext().parentNoteId;
         }
 
-        return mapRootNoteId;
+        return mapRootNoteId ?? "";
     }
 
-    getColorForNode(node) {
+    getColorForNode(node: Node) {
         if (node.color) {
             return node.color;
         } else if (this.widgetMode === "ribbon" && node.id === this.noteId) {
@@ -278,7 +371,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         }
     }
 
-    generateColorFromString(str) {
+    generateColorFromString(str: string) {
         if (this.themeStyle === "dark") {
             str = `0${str}`; // magic lightning modifier
         }
@@ -297,20 +390,22 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         return color;
     }
 
-    rgb2hex(rgb) {
-        return `#${rgb
-            .match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
+    rgb2hex(rgb: string) {
+        return `#${(rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/) || [])
             .slice(1)
             .map((n) => parseInt(n, 10).toString(16).padStart(2, "0"))
             .join("")}`;
     }
 
-    setZoomLevel(level) {
+    setZoomLevel(level: number) {
         this.zoomLevel = level;
     }
 
-    paintNode(node, color, ctx) {
+    paintNode(node: Node, color: string, ctx: CanvasRenderingContext2D) {
         const { x, y } = node;
+        if (!x || !y) {
+            return;
+        }
         const size = this.noteIdToSizeMap[node.id];
 
         ctx.fillStyle = color;
@@ -324,8 +419,8 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
             return;
         }
 
-        ctx.fillStyle = this.css.textColor;
-        ctx.font = `${size}px ${this.css.fontFamily}`;
+        ctx.fillStyle = this.cssData.textColor;
+        ctx.font = `${size}px ${this.cssData.fontFamily}`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
 
@@ -338,42 +433,47 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         ctx.fillText(title, x, y + Math.round(size * 1.5));
     }
 
-    paintLink(link, ctx) {
+    paintLink(link: Link, ctx: CanvasRenderingContext2D) {
         if (this.zoomLevel < 5) {
             return;
         }
 
-        ctx.font = `3px ${this.css.fontFamily}`;
+        ctx.font = `3px ${this.cssData.fontFamily}`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillStyle = this.css.mutedTextColor;
+        ctx.fillStyle = this.cssData.mutedTextColor;
 
         const { source, target } = link;
-
-        const x = (source.x + target.x) / 2;
-        const y = (source.y + target.y) / 2;
-
-        ctx.save();
-        ctx.translate(x, y);
-
-        const deltaY = source.y - target.y;
-        const deltaX = source.x - target.x;
-
-        let angle = Math.atan2(deltaY, deltaX);
-        let moveY = 2;
-
-        if (angle < -Math.PI / 2 || angle > Math.PI / 2) {
-            angle += Math.PI;
-            moveY = -2;
+        if (typeof source !== "object" || typeof target !== "object") {
+            return;
         }
 
-        ctx.rotate(angle);
-        ctx.fillText(link.name, 0, moveY);
+        if (source.x && source.y && target.x && target.y) {
+            const x = ((source.x) + (target.x)) / 2;
+            const y = ((source.y) + (target.y)) / 2;
+            ctx.save();
+            ctx.translate(x, y);
+
+            const deltaY = (source.y) - (target.y);
+            const deltaX = (source.x) - (target.x);
+
+            let angle = Math.atan2(deltaY, deltaX);
+            let moveY = 2;
+
+            if (angle < -Math.PI / 2 || angle > Math.PI / 2) {
+                angle += Math.PI;
+                moveY = -2;
+            }
+
+            ctx.rotate(angle);
+            ctx.fillText(link.name, 0, moveY);
+        }
+
         ctx.restore();
     }
 
-    async loadNotesAndRelations(mapRootNoteId) {
-        const resp = await server.post(`note-map/${mapRootNoteId}/${this.mapType}`);
+    async loadNotesAndRelations(mapRootNoteId: string): Promise<NotesAndRelationsData> {
+        const resp = await server.post<PostNotesMapResponse>(`note-map/${mapRootNoteId}/${this.mapType}`);
 
         this.calculateNodeSizes(resp);
 
@@ -397,8 +497,8 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         };
     }
 
-    getGroupedLinks(links) {
-        const linksGroupedBySourceTarget = {};
+    getGroupedLinks(links: ResponseLink[]): GroupedLink[] {
+        const linksGroupedBySourceTarget: Record<string, GroupedLink> = {};
 
         for (const link of links) {
             const key = `${link.sourceNoteId}-${link.targetNoteId}`;
@@ -420,7 +520,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         return Object.values(linksGroupedBySourceTarget);
     }
 
-    calculateNodeSizes(resp) {
+    calculateNodeSizes(resp: PostNotesMapResponse) {
         this.noteIdToSizeMap = {};
 
         if (this.mapType === "tree") {
@@ -436,7 +536,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                 }
             }
         } else if (this.mapType === "link") {
-            const noteIdToLinkCount = {};
+            const noteIdToLinkCount: Record<string, number> = {};
 
             for (const link of resp.links) {
                 noteIdToLinkCount[link.targetNoteId] = 1 + (noteIdToLinkCount[link.targetNoteId] || 0);
@@ -452,7 +552,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         }
     }
 
-    renderData(data) {
+    renderData(data: Data) {
         this.graph.graphData(data);
 
         if (this.widgetMode === "ribbon" && this.note?.type !== "search") {
@@ -475,7 +575,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                     const noteIdsWithLinks = this.getNoteIdsWithLinks(data);
 
                     if (noteIdsWithLinks.size > 0) {
-                        this.graph.zoomToFit(400, 30, (node) => noteIdsWithLinks.has(node.id));
+                        this.graph.zoomToFit(400, 30, (node) => noteIdsWithLinks.has(node.id ?? ""));
                     }
 
                     if (noteIdsWithLinks.size < 30) {
@@ -486,25 +586,35 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         }
     }
 
-    getNoteIdsWithLinks(data) {
-        const noteIds = new Set();
+    getNoteIdsWithLinks(data: Data) {
+        const noteIds = new Set<string | number>();
 
         for (const link of data.links) {
-            noteIds.add(link.source.id);
-            noteIds.add(link.target.id);
+            if (typeof link.source === "object" && link.source.id) {
+                noteIds.add(link.source.id);
+            }
+            if (typeof link.target === "object" && link.target.id) {
+                noteIds.add(link.target.id);
+            }
         }
 
         return noteIds;
     }
 
-    getSubGraphConnectedToCurrentNote(data) {
-        function getGroupedLinks(links, type) {
-            const map = {};
+    getSubGraphConnectedToCurrentNote(data: Data) {
+        function getGroupedLinks(links: LinkObject<NodeObject>[], type: "source" | "target") {
+            const map: Record<string | number, LinkObject<NodeObject>[]> = {};
 
             for (const link of links) {
+                if (typeof link[type] !== "object") {
+                    continue;
+                }
+
                 const key = link[type].id;
-                map[key] = map[key] || [];
-                map[key].push(link);
+                if (key) {
+                    map[key] = map[key] || [];
+                    map[key].push(link);
+                }
             }
 
             return map;
@@ -515,19 +625,23 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
 
         const subGraphNoteIds = new Set();
 
-        function traverseGraph(noteId) {
-            if (subGraphNoteIds.has(noteId)) {
+        function traverseGraph(noteId?: string | number) {
+            if (!noteId || subGraphNoteIds.has(noteId)) {
                 return;
             }
 
             subGraphNoteIds.add(noteId);
 
             for (const link of linksBySource[noteId] || []) {
-                traverseGraph(link.target.id);
+                if (typeof link.target === "object") {
+                    traverseGraph(link.target?.id);
+                }
             }
 
             for (const link of linksByTarget[noteId] || []) {
-                traverseGraph(link.source.id);
+                if (typeof link.source === "object") {
+                    traverseGraph(link.source?.id);
+                }
             }
         }
 
@@ -539,8 +653,9 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         this.$container.html("");
     }
 
-    entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.getAttributeRows(this.componentId).find((attr) => attr.type === "label" && ["mapType", "mapRootNoteId"].includes(attr.name) && attributeService.isAffecting(attr, this.note))) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.getAttributeRows(this.componentId)
+                .find((attr) => attr.type === "label" && ["mapType", "mapRootNoteId"].includes(attr.name || "") && attributeService.isAffecting(attr, this.note))) {
             this.refresh();
         }
     }

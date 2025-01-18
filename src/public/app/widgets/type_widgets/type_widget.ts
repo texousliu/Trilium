@@ -1,7 +1,13 @@
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData, type EventNames } from "../../components/app_context.js";
+import type FNote from "../../entities/fnote.js";
+import type NoteDetailWidget from "../note_detail.js";
+import type SpacedUpdate from "../../services/spaced_update.js";
 
-export default class TypeWidget extends NoteContextAwareWidget {
+export default abstract class TypeWidget extends NoteContextAwareWidget {
+
+    protected spacedUpdate!: SpacedUpdate;
+
     // for overriding
     static getType() {}
 
@@ -11,12 +17,11 @@ export default class TypeWidget extends NoteContextAwareWidget {
         return super.doRender();
     }
 
-    /** @param {FNote} note */
-    async doRefresh(note) {}
+    abstract doRefresh(note: FNote | null | undefined): Promise<void>;
 
     async refresh() {
-        const thisWidgetType = this.constructor.getType();
-        const noteWidgetType = await this.parent.getWidgetType();
+        const thisWidgetType = (this.constructor as any).getType();
+        const noteWidgetType = await (this.parent as NoteDetailWidget).getWidgetType();
 
         if (thisWidgetType !== noteWidgetType) {
             this.toggleInt(false);
@@ -27,7 +32,7 @@ export default class TypeWidget extends NoteContextAwareWidget {
 
             await this.doRefresh(this.note);
 
-            this.triggerEvent("noteDetailRefreshed", { ntxId: this.noteContext.ntxId });
+            this.triggerEvent("noteDetailRefreshed", { ntxId: this.noteContext?.ntxId });
         }
     }
 
@@ -40,7 +45,7 @@ export default class TypeWidget extends NoteContextAwareWidget {
 
     focus() {}
 
-    async readOnlyTemporarilyDisabledEvent({ noteContext }) {
+    async readOnlyTemporarilyDisabledEvent({ noteContext }: EventData<"readOnlyTemporarilyDisabled">) {
         if (this.isNoteContext(noteContext.ntxId)) {
             await this.refresh();
 
@@ -49,10 +54,10 @@ export default class TypeWidget extends NoteContextAwareWidget {
     }
 
     // events should be propagated manually to the children widgets
-    handleEventInChildren(name, data) {
+    handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>) {
         if (["activeContextChanged", "setNoteContext"].includes(name)) {
             // won't trigger .refresh();
-            return super.handleEventInChildren("setNoteContext", data);
+            return super.handleEventInChildren("setNoteContext", data as EventData<"activeContextChanged">);
         } else if (name === "entitiesReloaded") {
             return super.handleEventInChildren(name, data);
         } else {

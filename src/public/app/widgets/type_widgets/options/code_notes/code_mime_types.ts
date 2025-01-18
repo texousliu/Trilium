@@ -53,14 +53,17 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
 
     async optionsLoaded(options: OptionMap) {
         this.$mimeTypes.empty();
+        mimeTypesService.loadMimeTypes();
 
-        const ungroupedMimeTypes = mimeTypesService.getMimeTypes();
+        const ungroupedMimeTypes = Array.from(mimeTypesService.getMimeTypes());
         const plainTextMimeType = ungroupedMimeTypes.shift();
         const groupedMimeTypes = groupMimeTypesAlphabetically(ungroupedMimeTypes);
 
         // Plain text is displayed at the top intentionally.
         if (plainTextMimeType) {
-            this.$mimeTypes.append(this.#buildSelectionForMimeType(plainTextMimeType));
+            const $plainEl = this.#buildSelectionForMimeType(plainTextMimeType);
+            $plainEl.find("input").attr("disabled", "");
+            this.$mimeTypes.append($plainEl);
         }
 
         for (const [initial, mimeTypes] of Object.entries(groupedMimeTypes)) {
@@ -86,8 +89,6 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
         });
 
         await this.updateOption("codeNotesMimeTypes", JSON.stringify(enabledMimeTypes));
-
-        mimeTypesService.loadMimeTypes();
     }
 
     #buildSelectionForMimeType(mimeType: MimeType) {

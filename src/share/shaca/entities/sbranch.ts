@@ -2,7 +2,7 @@
 
 import AbstractShacaEntity from "./abstract_shaca_entity.js";
 import type { SBranchRow } from "./rows.js";
-import SNote from "./snote.js";
+import type SNote from "./snote.js";
 
 class SBranch extends AbstractShacaEntity {
     private branchId: string;

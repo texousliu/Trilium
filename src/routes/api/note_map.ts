@@ -2,8 +2,8 @@
 
 import becca from "../../becca/becca.js";
 import { JSDOM } from "jsdom";
-import BNote from "../../becca/entities/bnote.js";
-import BAttribute from "../../becca/entities/battribute.js";
+import type BNote from "../../becca/entities/bnote.js";
+import type BAttribute from "../../becca/entities/battribute.js";
 import type { Request } from "express";
 
 function buildDescendantCountMap(noteIdsToCount: string[]) {

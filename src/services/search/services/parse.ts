@@ -20,9 +20,9 @@ import ValueExtractor from "../value_extractor.js";
 import { removeDiacritic } from "../../utils.js";
 import TrueExp from "../expressions/true.js";
 import IsHiddenExp from "../expressions/is_hidden.js";
-import SearchContext from "../search_context.js";
+import type SearchContext from "../search_context.js";
 import type { TokenData, TokenStructure } from "./types.js";
-import Expression from "../expressions/expression.js";
+import type Expression from "../expressions/expression.js";
 
 function getFulltext(_tokens: TokenData[], searchContext: SearchContext) {
     const tokens: string[] = _tokens.map((t) => removeDiacritic(t.token));
