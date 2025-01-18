@@ -1637,11 +1637,23 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
     }
 
     moveLauncherToVisibleCommand({ selectedOrActiveBranchIds }) {
-        branchService.moveToParentNote(selectedOrActiveBranchIds, "_lbRoot__lbVisibleLaunchers");
+        this.#moveLaunchers(selectedOrActiveBranchIds, "_lbVisibleLaunchers", "_lbMobileVisibleLaunchers");
     }
 
     moveLauncherToAvailableCommand({ selectedOrActiveBranchIds }) {
-        branchService.moveToParentNote(selectedOrActiveBranchIds, "_lbRoot__lbAvailableLaunchers");
+        this.#moveLaunchers(selectedOrActiveBranchIds, "_lbAvailableLaunchers", "_lbMobileAvailableLaunchers");
+    }
+
+    #moveLaunchers(selectedOrActiveBranchIds, desktopParent, mobileParent) {
+        const desktopLaunchersToMove = selectedOrActiveBranchIds.filter((branchId) => !branchId.startsWith("_lbMobile"));
+        if (desktopLaunchersToMove) {
+            branchService.moveToParentNote(desktopLaunchersToMove, "_lbRoot_" + desktopParent);
+        }
+
+        const mobileLaunchersToMove = selectedOrActiveBranchIds.filter((branchId) => branchId.startsWith("_lbMobile"));
+        if (mobileLaunchersToMove) {
+            branchService.moveToParentNote(mobileLaunchersToMove, "_lbMobileRoot_" + mobileParent);
+        }
     }
 
     addNoteLauncherCommand({ node }) {
