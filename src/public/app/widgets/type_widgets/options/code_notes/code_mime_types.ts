@@ -54,7 +54,7 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
     async optionsLoaded(options: OptionMap) {
         this.$mimeTypes.empty();
 
-        const ungroupedMimeTypes = mimeTypesService.getMimeTypes();
+        const ungroupedMimeTypes = Array.from(mimeTypesService.getMimeTypes());
         const plainTextMimeType = ungroupedMimeTypes.shift();
         const groupedMimeTypes = groupMimeTypesAlphabetically(ungroupedMimeTypes);
 
