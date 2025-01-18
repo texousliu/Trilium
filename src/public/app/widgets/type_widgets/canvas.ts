@@ -8,6 +8,7 @@ import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/types/elem
 import type { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types/types.js";
 import type { JSX } from "react";
 import type React from "react";
+import type { Root } from "react-dom/client";
 
 const TPL = `
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -127,6 +128,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
     private excalidrawWrapperRef!: React.RefObject<HTMLElement | null>;
 
     private $render!: JQuery<HTMLElement>;
+    private root?: Root;
     private reactHandlers!: JQuery<HTMLElement>;
 
     constructor() {
@@ -199,12 +201,11 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         const excalidraw = (await import("@excalidraw/excalidraw"));
         this.excalidrawLib = excalidraw;
 
-        const { unmountComponentAtNode } = await import("react-dom");
         const { createRoot } = await import("react-dom/client");
         const React = (await import("react")).default;
-        unmountComponentAtNode(renderElement);
-        const root = createRoot(renderElement);
-        root.render(React.createElement(() => this.createExcalidrawReactApp(React, excalidraw.Excalidraw)));
+        this.root?.unmount();
+        this.root = createRoot(renderElement);
+        this.root.render(React.createElement(() => this.createExcalidrawReactApp(React, excalidraw.Excalidraw)));
     }
 
     /**
