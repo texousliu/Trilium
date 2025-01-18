@@ -49,6 +49,7 @@ cp "$script_dir/../build/electron-main.js" "$DIR"
 if [[ -d "$DIR"/node_modules ]]; then
     # cleanup of useless files in dependencies
     for d in 'image-q/demo' \
+        '@excalidraw/excalidraw/dist/excalidraw-assets-dev' '@excalidraw/excalidraw/dist/excalidraw.development.js' '@excalidraw/excalidraw/dist/excalidraw-with-preact.development.js' \
         'mermaid/dist/mermaid.js' \
         'boxicons/svg' 'boxicons/node_modules/react'/* \
         '@jimp/plugin-print/fonts' 'jimp/browser' 'jimp/fonts'; do

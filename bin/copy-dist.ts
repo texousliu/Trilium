@@ -73,6 +73,7 @@ const copy = async () => {
     }
 
     const nodeModulesFolder = [
+        "node_modules/@excalidraw/excalidraw/dist/",
         "node_modules/katex/dist/",
         "node_modules/dayjs/",
         "node_modules/boxicons/css/",
