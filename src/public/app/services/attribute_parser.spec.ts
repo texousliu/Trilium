@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import attributeParser from "../src/public/app/services/attribute_parser.ts";
+import attributeParser from "./attribute_parser.js";
 
 
 describe("Lexing", () => {
