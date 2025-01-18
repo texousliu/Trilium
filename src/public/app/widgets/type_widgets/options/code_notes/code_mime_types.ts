@@ -60,7 +60,9 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
 
         // Plain text is displayed at the top intentionally.
         if (plainTextMimeType) {
-            this.$mimeTypes.append(this.#buildSelectionForMimeType(plainTextMimeType));
+            const $plainEl = this.#buildSelectionForMimeType(plainTextMimeType);
+            $plainEl.find("input").attr("disabled", "");
+            this.$mimeTypes.append($plainEl);
         }
 
         for (const [initial, mimeTypes] of Object.entries(groupedMimeTypes)) {
