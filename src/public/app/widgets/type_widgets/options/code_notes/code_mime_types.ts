@@ -53,6 +53,7 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
 
     async optionsLoaded(options: OptionMap) {
         this.$mimeTypes.empty();
+        mimeTypesService.loadMimeTypes();
 
         const ungroupedMimeTypes = Array.from(mimeTypesService.getMimeTypes());
         const plainTextMimeType = ungroupedMimeTypes.shift();
@@ -88,8 +89,6 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
         });
 
         await this.updateOption("codeNotesMimeTypes", JSON.stringify(enabledMimeTypes));
-
-        mimeTypesService.loadMimeTypes();
     }
 
     #buildSelectionForMimeType(mimeType: MimeType) {
