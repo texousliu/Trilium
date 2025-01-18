@@ -1,5 +1,5 @@
 import { expect, describe, it } from "vitest";
-import sanitizeAttributeName from "../src/services/sanitize_attribute_name";
+import sanitizeAttributeName from "./sanitize_attribute_name.js";
 
 // fn value, expected value
 const testCases: [fnValue: string, expectedValue: string][] = [

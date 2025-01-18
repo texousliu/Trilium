@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
-import type { getTriliumDataDir as getTriliumDataDirType, getDataDirs as getDataDirsType, getPlatformAppDataDir as getPlatformAppDataDirType } from "../src/services/data_dir";
+import type { getTriliumDataDir as getTriliumDataDirType, getDataDirs as getDataDirsType, getPlatformAppDataDir as getPlatformAppDataDirType } from "./data_dir.js";
 
 describe("data_dir.ts unit tests", async () => {
     let getTriliumDataDir: typeof getTriliumDataDirType;
@@ -42,9 +42,9 @@ describe("data_dir.ts unit tests", async () => {
     });
 
     // import function to test now, after creating the mocks
-    ({ getTriliumDataDir } = await import("../src/services/data_dir.ts"));
-    ({ getPlatformAppDataDir } = await import("../src/services/data_dir.ts"));
-    ({ getDataDirs } = await import("../src/services/data_dir.ts"));
+    ({ getTriliumDataDir } = await import("./data_dir.js"));
+    ({ getPlatformAppDataDir } = await import("./data_dir.js"));
+    ({ getDataDirs } = await import("./data_dir.js"));
 
     // helper to reset call counts
     const resetAllMocks = () => {
@@ -287,7 +287,7 @@ describe("data_dir.ts unit tests", async () => {
             const result = getDataDirs(`${mockValuePrefix}_TRILIUM_DATA_DIR`);
 
             for (const key in result) {
-                expect(result[key]).toEqual(`${mockValuePrefix}_${key}`);
+                expect(result[key as keyof typeof result]).toEqual(`${mockValuePrefix}_${key}`);
             }
         });
 
@@ -302,7 +302,7 @@ describe("data_dir.ts unit tests", async () => {
             const result = getDataDirs(mockDataDir);
 
             for (const key in result) {
-                expect(result[key].startsWith(mockDataDir)).toBeTruthy();
+                expect(result[key as keyof typeof result].startsWith(mockDataDir)).toBeTruthy();
             }
 
             mockFn.pathJoinMock.mockReset();
@@ -335,7 +335,7 @@ describe("data_dir.ts unit tests", async () => {
             if (typeof changeAttemptResult === "string") {
                 // if it didn't throw above: assert that it did not change the value of it or any other keys of the object
                 for (const key in result) {
-                    expect(result[key].startsWith(mockDataDirBase)).toBeTruthy();
+                    expect(result[key as keyof typeof result].startsWith(mockDataDirBase)).toBeTruthy();
                 }
             } else {
                 expect(changeAttemptResult).toBeInstanceOf(TypeError);

@@ -1,5 +1,5 @@
 import { expect, describe, it } from "vitest";
-import { formatDownloadTitle } from "../../src/services/utils.ts";
+import { formatDownloadTitle } from "./utils.js";
 
 const testCases: [fnValue: Parameters<typeof formatDownloadTitle>, expectedValue: ReturnType<typeof formatDownloadTitle>][] = [
     // empty fileName tests

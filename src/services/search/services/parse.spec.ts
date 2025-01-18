@@ -1,16 +1,16 @@
 import { describe, it, expect } from "vitest";
-import AndExp from "../../src/services/search/expressions/and.js";
-import AttributeExistsExp from "../../src/services/search/expressions/attribute_exists.js";
-import type Expression from "../../src/services/search/expressions/expression.js";
-import LabelComparisonExp from "../../src/services/search/expressions/label_comparison.js";
-import NotExp from "../../src/services/search/expressions/not.js";
-import NoteContentFulltextExp from "../../src/services/search/expressions/note_content_fulltext.js";
-import NoteFlatTextExp from "../../src/services/search/expressions/note_flat_text.js";
-import OrExp from "../../src/services/search/expressions/or.js";
-import OrderByAndLimitExp from "../../src/services/search/expressions/order_by_and_limit.js";
-import PropertyComparisonExp from "../../src/services/search/expressions/property_comparison.js";
-import SearchContext from "../../src/services/search/search_context.js";
-import { default as parseInternal, type ParseOpts } from "../../src/services/search/services/parse.js";
+import AndExp from "../../search/expressions/and.js";
+import AttributeExistsExp from "../../search/expressions/attribute_exists.js";
+import type Expression from "../../search/expressions/expression.js";
+import LabelComparisonExp from "../../search/expressions/label_comparison.js";
+import NotExp from "../../search/expressions/not.js";
+import NoteContentFulltextExp from "../../search/expressions/note_content_fulltext.js";
+import NoteFlatTextExp from "../../search/expressions/note_flat_text.js";
+import OrExp from "../../search/expressions/or.js";
+import OrderByAndLimitExp from "../../search/expressions/order_by_and_limit.js";
+import PropertyComparisonExp from "../../search/expressions/property_comparison.js";
+import SearchContext from "../../search/search_context.js";
+import { default as parseInternal, type ParseOpts } from "./parse.js";
 
 describe("Parser", () => {
     it("fulltext parser without content", () => {
