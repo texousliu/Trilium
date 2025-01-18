@@ -213,7 +213,7 @@ function resetLauncher(noteId: string) {
 
     if (note?.isLaunchBarConfig()) {
         if (note) {
-            if (noteId === "_lbRoot") {
+            if (noteId === "_lbRoot" || noteId === "_lbMobileRoot") {
                 // deleting hoisted notes are not allowed, so we just reset the children
                 for (const childNote of note.getChildNotes()) {
                     childNote.deleteNote();
