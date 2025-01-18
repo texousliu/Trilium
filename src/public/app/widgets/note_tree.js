@@ -1636,12 +1636,12 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         }
     }
 
-    moveShortcutToVisibleCommand({ node, selectedOrActiveBranchIds }) {
-        branchService.moveToParentNote(selectedOrActiveBranchIds, "_lbVisibleLaunchers");
+    moveLauncherToVisibleCommand({ selectedOrActiveBranchIds }) {
+        branchService.moveToParentNote(selectedOrActiveBranchIds, "_lbRoot__lbVisibleLaunchers");
     }
 
-    moveShortcutToAvailableCommand({ node, selectedOrActiveBranchIds }) {
-        branchService.moveToParentNote(selectedOrActiveBranchIds, "_lbAvailableLaunchers");
+    moveLauncherToAvailableCommand({ selectedOrActiveBranchIds }) {
+        branchService.moveToParentNote(selectedOrActiveBranchIds, "_lbRoot__lbAvailableLaunchers");
     }
 
     addNoteLauncherCommand({ node }) {
