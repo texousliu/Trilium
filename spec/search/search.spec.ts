@@ -184,7 +184,7 @@ describe("Search", () => {
 
         function test(query: string, expectedResultCount: number) {
             const searchResults = searchService.findResultsWithQuery(query, searchContext);
-            expect(searchResults.length, `While searching for ${query} got unexpected result: [${searchResults.join(", ")}]`)
+            expect(searchResults.length, `Searching for '${query}' unexpectedly returned ${Number(searchResults?.length)} instead of ${expectedResultCount} results. SearchResult: '${JSON.stringify(searchResults)}'`)
                 .toEqual(expectedResultCount);
 
             if (expectedResultCount === 1) {
