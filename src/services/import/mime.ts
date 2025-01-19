@@ -4,45 +4,48 @@ import mimeTypes from "mime-types";
 import path from "path";
 import type { TaskData } from "../task_context_interface.js";
 
-const CODE_MIME_TYPES: Record<string, boolean | string> = {
-    "text/plain": true,
-    "text/x-csrc": true,
-    "text/x-c++src": true,
-    "text/x-csharp": true,
-    "text/x-clojure": true,
-    "text/css": true,
-    "text/x-dockerfile": true,
-    "text/x-erlang": true,
-    "text/x-feature": true,
-    "text/x-go": true,
-    "text/x-groovy": true,
-    "text/x-haskell": true,
-    "text/html": true,
-    "message/http": true,
-    "text/x-java": true,
-    "application/javascript": "application/javascript;env=frontend",
-    "application/x-javascript": "application/javascript;env=frontend",
-    "application/json": true,
-    "text/x-kotlin": true,
-    "text/x-stex": true,
-    "text/x-lua": true,
+const CODE_MIME_TYPES = new Set([
+    "application/json",
+    "message/http",
+    "text/css",
+    "text/html",
+    "text/plain",
+    "text/x-clojure",
+    "text/x-csharp",
+    "text/x-c++src",
+    "text/x-csrc",
+    "text/x-dockerfile",
+    "text/x-erlang",
+    "text/x-feature",
+    "text/x-go",
+    "text/x-groovy",
+    "text/x-haskell",
+    "text/x-java",
+    "text/x-kotlin",
+    "text/x-lua",
+    "text/x-markdown",
+    "text/xml",
+    "text/x-objectivec",
+    "text/x-pascal",
+    "text/x-perl",
+    "text/x-php",
+    "text/x-python",
+    "text/x-ruby",
+    "text/x-rustsrc",
+    "text/x-scala",
+    "text/x-sh",
+    "text/x-sql",
+    "text/x-stex",
+    "text/x-swift",
+    "text/x-yaml"
+]);
+
+const CODE_MIME_TYPES_OVERRIDE = new Map([
+    ["application/javascript", "application/javascript;env=frontend"],
+    ["application/x-javascript", "application/javascript;env=frontend"],
     // possibly later migrate to text/markdown as primary MIME
-    "text/markdown": "text/x-markdown",
-    "text/x-markdown": true,
-    "text/x-objectivec": true,
-    "text/x-pascal": true,
-    "text/x-perl": true,
-    "text/x-php": true,
-    "text/x-python": true,
-    "text/x-ruby": true,
-    "text/x-rustsrc": true,
-    "text/x-scala": true,
-    "text/x-sh": true,
-    "text/x-sql": true,
-    "text/x-swift": true,
-    "text/xml": true,
-    "text/x-yaml": true
-};
+    ["text/markdown", "text/x-markdown"]
+]);
 
 // extensions missing in mime-db
 const EXTENSION_TO_MIME: Record<string, string> = {
@@ -85,7 +88,7 @@ function getType(options: TaskData, mime: string) {
 
     if (options.textImportedAsText && (mime === "text/html" || ["text/markdown", "text/x-markdown"].includes(mime))) {
         return "text";
-    } else if (options.codeImportedAsCode && mime in CODE_MIME_TYPES) {
+    } else if (options.codeImportedAsCode && CODE_MIME_TYPES.has(mime)) {
         return "code";
     } else if (mime.startsWith("image/")) {
         return "image";
@@ -96,12 +99,11 @@ function getType(options: TaskData, mime: string) {
 
 function normalizeMimeType(mime: string) {
     mime = mime ? mime.toLowerCase() : "";
-    const mappedMime = CODE_MIME_TYPES[mime];
 
-    if (mappedMime === true) {
+    if (CODE_MIME_TYPES.has(mime)) {
         return mime;
-    } else if (typeof mappedMime === "string") {
-        return mappedMime;
+    } else if (CODE_MIME_TYPES_OVERRIDE.get(mime)) {
+        return CODE_MIME_TYPES_OVERRIDE.get(mime);
     }
 
     return undefined;
