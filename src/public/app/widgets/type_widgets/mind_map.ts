@@ -179,7 +179,6 @@ export default class MindMapWidget extends TypeWidget {
             return;
         }
 
-        this.#initLibrary();
         await this.#loadData(note);
     }
 
@@ -191,16 +190,18 @@ export default class MindMapWidget extends TypeWidget {
         const blob = await note.getBlob();
         const content = blob?.getJsonContent() || MindElixir.new(NEW_TOPIC_NAME);
 
-        if (this.mind) {
-            this.mind.refresh(content);
-            this.mind.toCenter();
+        if (!this.mind) {
+            this.#initLibrary(content.direction ?? MindElixir.LEFT);
         }
+
+        this.mind.refresh(content);
+        this.mind.toCenter();
     }
 
-    #initLibrary() {
+    #initLibrary(direction: unknown) {
         const mind = new MindElixir({
             el: this.$content[0],
-            direction: MindElixir.LEFT
+            direction
         });
         mind.install(nodeMenu);
 
