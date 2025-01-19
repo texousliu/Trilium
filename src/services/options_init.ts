@@ -63,6 +63,7 @@ async function initNotSyncedOptions(initialized: boolean, opts: NotSyncedOpts = 
     optionService.createOption("lastSyncedPush", "0", false);
 
     optionService.createOption("theme", "next", false);
+    optionService.createOption("textNoteEditorType", "ckeditor-classic", true);
 
     optionService.createOption("syncServerHost", opts.syncServerHost || "", false);
     optionService.createOption("syncServerTimeout", "120000", false);

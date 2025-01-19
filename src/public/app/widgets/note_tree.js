@@ -1636,12 +1636,24 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         }
     }
 
-    moveShortcutToVisibleCommand({ node, selectedOrActiveBranchIds }) {
-        branchService.moveToParentNote(selectedOrActiveBranchIds, "_lbVisibleLaunchers");
+    moveLauncherToVisibleCommand({ selectedOrActiveBranchIds }) {
+        this.#moveLaunchers(selectedOrActiveBranchIds, "_lbVisibleLaunchers", "_lbMobileVisibleLaunchers");
     }
 
-    moveShortcutToAvailableCommand({ node, selectedOrActiveBranchIds }) {
-        branchService.moveToParentNote(selectedOrActiveBranchIds, "_lbAvailableLaunchers");
+    moveLauncherToAvailableCommand({ selectedOrActiveBranchIds }) {
+        this.#moveLaunchers(selectedOrActiveBranchIds, "_lbAvailableLaunchers", "_lbMobileAvailableLaunchers");
+    }
+
+    #moveLaunchers(selectedOrActiveBranchIds, desktopParent, mobileParent) {
+        const desktopLaunchersToMove = selectedOrActiveBranchIds.filter((branchId) => !branchId.startsWith("_lbMobile"));
+        if (desktopLaunchersToMove) {
+            branchService.moveToParentNote(desktopLaunchersToMove, "_lbRoot_" + desktopParent);
+        }
+
+        const mobileLaunchersToMove = selectedOrActiveBranchIds.filter((branchId) => branchId.startsWith("_lbMobile"));
+        if (mobileLaunchersToMove) {
+            branchService.moveToParentNote(mobileLaunchersToMove, "_lbMobileRoot_" + mobileParent);
+        }
     }
 
     addNoteLauncherCommand({ node }) {

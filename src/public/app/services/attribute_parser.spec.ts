@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import attributeParser from "../src/public/app/services/attribute_parser.ts";
+import attributeParser from "./attribute_parser.js";
 
 
 describe("Lexing", () => {
@@ -41,7 +41,9 @@ describe("Lexing", () => {
 });
 
 describe.todo("Parser", () => {
+  /* #TODO
     it("simple label", () => {
+
         const attrs = attributeParser.parse(["#token"].map((t: any) => ({ text: t })));
 
         expect(attrs.length).toEqual(1);
@@ -85,6 +87,7 @@ describe.todo("Parser", () => {
         expect(attrs[0].name).toEqual("token");
         expect(attrs[0].value).toEqual("NFi2gL4xtPxM");
     });
+    */
 });
 
 describe("error cases", () => {

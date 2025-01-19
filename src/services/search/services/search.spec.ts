@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach,  } from "vitest";
-import searchService from "../../src/services/search/services/search.js";
-import BNote from "../../src/becca/entities/bnote.js";
-import BBranch from "../../src/becca/entities/bbranch.js";
-import SearchContext from "../../src/services/search/search_context.js";
-import dateUtils from "../../src/services/date_utils.js";
-import becca from "../../src/becca/becca.js";
-import becca_mocking from "./becca_mocking.js";
+import searchService from "./search.js";
+import BNote from "../../../becca/entities/bnote.js";
+import BBranch from "../../../becca/entities/bbranch.js";
+import SearchContext from "../search_context.js";
+import dateUtils from "../../date_utils.js";
+import becca from "../../../becca/becca.js";
+import becca_mocking from "../../../../spec/support/becca_mocking.js";
 
 describe("Search", () => {
     let rootNote: any;
