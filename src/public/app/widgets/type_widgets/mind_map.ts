@@ -196,19 +196,19 @@ export default class MindMapWidget extends TypeWidget {
         const content = blob?.getJsonContent<MindmapModel>();
 
         if (!this.mind) {
-            await this.#initLibrary(content?.direction ?? this.MindElixir.LEFT);
+            await this.#initLibrary(content?.direction);
         }
 
         this.mind.refresh(content ?? this.MindElixir.new(NEW_TOPIC_NAME));
         this.mind.toCenter();
     }
 
-    async #initLibrary(direction: unknown) {
+    async #initLibrary(direction?: number) {
         this.MindElixir = (await import("mind-elixir")).default;
 
         const mind = new this.MindElixir({
             el: this.$content[0],
-            direction
+            direction: direction ?? this.MindElixir.LEFT
         });
         mind.install(nodeMenu);
 
