@@ -48,39 +48,38 @@ const CODE_MIME_TYPES_OVERRIDE = new Map<string, string>([
 ]);
 
 // extensions missing in mime-db
-const EXTENSION_TO_MIME: Record<string, string> = {
-    ".c": "text/x-csrc",
-    ".cs": "text/x-csharp",
-    ".clj": "text/x-clojure",
-    ".erl": "text/x-erlang",
-    ".hrl": "text/x-erlang",
-    ".feature": "text/x-feature",
-    ".go": "text/x-go",
-    ".groovy": "text/x-groovy",
-    ".hs": "text/x-haskell",
-    ".lhs": "text/x-haskell",
-    ".http": "message/http",
-    ".kt": "text/x-kotlin",
-    ".m": "text/x-objectivec",
-    ".py": "text/x-python",
-    ".rb": "text/x-ruby",
-    ".scala": "text/x-scala",
-    ".swift": "text/x-swift"
-};
+const EXTENSION_TO_MIME = new Map<string, string>([
+    [".c", "text/x-csrc"],
+    [".cs", "text/x-csharp"],
+    [".clj", "text/x-clojure"],
+    [".erl", "text/x-erlang"],
+    [".hrl", "text/x-erlang"],
+    [".feature", "text/x-feature"],
+    [".go", "text/x-go"],
+    [".groovy", "text/x-groovy"],
+    [".hs", "text/x-haskell"],
+    [".lhs", "text/x-haskell"],
+    [".http", "message/http"],
+    [".kt", "text/x-kotlin"],
+    [".m", "text/x-objectivec"],
+    [".py", "text/x-python"],
+    [".rb", "text/x-ruby"],
+    [".scala", "text/x-scala"],
+    [".swift", "text/x-swift"]
+]);
 
 /** @returns false if MIME is not detected */
 function getMime(fileName: string) {
-    if (fileName.toLowerCase() === "dockerfile") {
+    const fileNameLc = fileName?.toLowerCase();
+
+    if (fileNameLc === "dockerfile") {
         return "text/x-dockerfile";
     }
 
-    const ext = path.extname(fileName).toLowerCase();
+    const ext = path.extname(fileNameLc);
+    const mimeFromExt = EXTENSION_TO_MIME.get(ext);
 
-    if (ext in EXTENSION_TO_MIME) {
-        return EXTENSION_TO_MIME[ext];
-    }
-
-    return mimeTypes.lookup(fileName);
+    return mimeFromExt || mimeTypes.lookup(fileNameLc);
 }
 
 function getType(options: TaskData, mime: string) {
