@@ -2,6 +2,11 @@ import type { LatLng } from "leaflet";
 import type FNote from "../../entities/fnote.js";
 import GeoMapWidget from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
+import server from "../../services/server.js";
+import toastService from "../../services/toast.js";
+import dialogService from "../../services/dialog.js";
+import type { EventData } from "../../components/app_context.js";
+import { t } from "../../services/i18n.js";
 
 const TPL = `\
 <div class="note-detail-geo-map note-detail-printable">
@@ -19,9 +24,22 @@ interface MapData {
     }
 }
 
+// TODO: Deduplicate
+interface CreateChildResponse {
+    note: {
+        noteId: string;
+    }
+}
+
+interface Clipboard {
+    noteId: string;
+    title: string;
+}
+
 export default class GeoMapTypeWidget extends TypeWidget {
 
     private geoMapWidget: GeoMapWidget;
+    private clipboard?: Clipboard;
 
     static getType() {
         return "geoMap";
@@ -80,6 +98,28 @@ export default class GeoMapTypeWidget extends TypeWidget {
         return {
             content: JSON.stringify(data)
         };
+    }
+
+    async geoMapCreateChildNoteEvent({ ntxId }: EventData<"geoMapCreateChildNote">) {
+        if (!this.isNoteContext(ntxId)) {
+            return;
+        }
+
+        const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
+
+        if (!title?.trim()) {
+            return;
+        }
+
+        const { note } = await server.post<CreateChildResponse>(`notes/${this.noteId}/children?target=into`, {
+            title,
+            content: "",
+            type: "text"
+        });
+
+        toastService.showMessage(t("relation_map.click_on_canvas_to_place_new_note"));
+
+        this.clipboard = { noteId: note.noteId, title };
     }
 
     async doRefresh(note: FNote) {

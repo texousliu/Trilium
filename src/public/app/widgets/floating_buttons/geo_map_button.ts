@@ -35,6 +35,7 @@ export default class GeoMapButtons extends NoteContextAwareWidget {
         super.doRender();
 
         this.$widget = $(TPL);
+        this.$widget.find(".geo-map-create-child-note").on("click", () => this.triggerEvent("geoMapCreateChildNote", { ntxId: this.ntxId }));
     }
 
 }

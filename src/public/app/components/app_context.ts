@@ -266,7 +266,10 @@ type EventMappings = {
     };
     exportSvg: {
         ntxId: string;
-    }
+    };
+    geoMapCreateChildNote: {
+        ntxId: string | null | undefined; // TODO: deduplicate ntxId
+    };
 };
 
 export type EventListener<T extends EventNames> = {
