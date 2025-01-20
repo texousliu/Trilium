@@ -1,8 +1,15 @@
+import type { LatLng } from "leaflet";
 import type FNote from "../../entities/fnote.js";
 import GeoMapWidget from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
 
 const TPL = `<div class="note-detail-geo-map note-detail-printable"></div>`;
+
+interface MapData {
+    view?: {
+        center: LatLng | [ number, number ];
+    }
+}
 
 export default class GeoMapTypeWidget extends TypeWidget {
 
@@ -27,8 +34,23 @@ export default class GeoMapTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    #onMapInitialized() {
-        this.geoMapWidget.map?.on("moveend", () => this.spacedUpdate.scheduleUpdate());
+    async #onMapInitialized() {
+        const map = this.geoMapWidget.map;
+        if (!map) {
+            throw new Error("Unable to load map.");
+        }
+
+        const blob = await this.note?.getBlob();
+
+        let parsedContent: MapData = {};
+        if (blob) {
+            parsedContent = JSON.parse(blob.content);
+        }
+        console.log(parsedContent);
+        const center = parsedContent.view?.center ?? [51.505, -0.09];
+
+        map.setView(center, 13);
+        map.on("moveend", () => this.spacedUpdate.scheduleUpdate());
     }
 
     getData(): any {
@@ -37,7 +59,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
-        const data = {
+        const data: MapData = {
             view: {
                 center: map.getBounds().getCenter()
             }

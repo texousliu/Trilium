@@ -39,7 +39,6 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
 
                 });
 
-                map.setView([51.505, -0.09], 13);
                 this.map = map;
                 if (this.initCallback) {
                     this.initCallback();
