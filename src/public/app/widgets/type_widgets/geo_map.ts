@@ -7,7 +7,8 @@ const TPL = `<div class="note-detail-geo-map note-detail-printable"></div>`;
 
 interface MapData {
     view?: {
-        center: LatLng | [ number, number ];
+        center?: LatLng | [ number, number ];
+        zoom?: number;
     }
 }
 
@@ -46,11 +47,14 @@ export default class GeoMapTypeWidget extends TypeWidget {
         if (blob) {
             parsedContent = JSON.parse(blob.content);
         }
-        console.log(parsedContent);
-        const center = parsedContent.view?.center ?? [51.505, -0.09];
 
-        map.setView(center, 13);
-        map.on("moveend", () => this.spacedUpdate.scheduleUpdate());
+        const center = parsedContent.view?.center ?? [51.505, -0.09];
+        const zoom = parsedContent.view?.zoom ?? 13;
+        map.setView(center, zoom);
+
+        const updateFn = () => this.spacedUpdate.scheduleUpdate();
+        map.on("moveend", updateFn);
+        map.on("zoomend", updateFn);
     }
 
     getData(): any {
@@ -61,7 +65,8 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         const data: MapData = {
             view: {
-                center: map.getBounds().getCenter()
+                center: map.getBounds().getCenter(),
+                zoom: map.getZoom()
             }
         };
 
