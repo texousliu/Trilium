@@ -17,6 +17,7 @@ const TPL = `\
 
 `
 
+//@ts-nocheck
 export default class GeoMapWidget extends NoteContextAwareWidget {
 
     constructor(widgetMode: "type") {
@@ -30,10 +31,15 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
 
         library_loader.requireLibrary(library_loader.LEAFLET)
             .then(() => {
-                //@ts-ignore
-                L.map($container[0], {
+                const map = L.map($container[0], {
 
                 });
+
+                map.setView([51.505, -0.09], 13);
+
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
             });
     }
 
