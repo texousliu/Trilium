@@ -40,7 +40,7 @@ const CODE_MIME_TYPES = new Set([
     "text/x-yaml"
 ]);
 
-const CODE_MIME_TYPES_OVERRIDE = new Map([
+const CODE_MIME_TYPES_OVERRIDE = new Map<string, string>([
     ["application/javascript", "application/javascript;env=frontend"],
     ["application/x-javascript", "application/javascript;env=frontend"],
     // possibly later migrate to text/markdown as primary MIME
@@ -98,15 +98,12 @@ function getType(options: TaskData, mime: string) {
 }
 
 function normalizeMimeType(mime: string) {
-    mime = mime ? mime.toLowerCase() : "";
+    const mimeLc = mime.toLowerCase();
 
-    if (CODE_MIME_TYPES.has(mime)) {
-        return mime;
-    } else if (CODE_MIME_TYPES_OVERRIDE.get(mime)) {
-        return CODE_MIME_TYPES_OVERRIDE.get(mime);
-    }
-
-    return undefined;
+    //prettier-ignore
+    return CODE_MIME_TYPES.has(mimeLc)
+        ? mimeLc
+        : CODE_MIME_TYPES_OVERRIDE.get(mimeLc);
 }
 
 export default {
