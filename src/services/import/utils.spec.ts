@@ -29,8 +29,6 @@ describe("#extractHtmlTitle", () => {
   </body>
   </html>`;
 
-    type TestCaseExtractHtmlTitle = [htmlContent: string, expected: string | null, description: string];
-
     // prettier-ignore
     const testCases: TestCase<typeof importUtils.extractHtmlTitle>[] = [
         [
