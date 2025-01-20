@@ -3,7 +3,14 @@ import type FNote from "../../entities/fnote.js";
 import GeoMapWidget from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
 
-const TPL = `<div class="note-detail-geo-map note-detail-printable"></div>`;
+const TPL = `\
+<div class="note-detail-geo-map note-detail-printable">
+    <style>
+        .leaflet-pane {
+            z-index: 1;
+        }
+    </style>
+</div>`;
 
 interface MapData {
     view?: {
