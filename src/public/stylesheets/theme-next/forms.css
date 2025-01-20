@@ -208,7 +208,7 @@ label > input[type="checkbox"] {
     left: 0;
     width: var(--box-size);
     height: 100%;
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 label:has(input[type="radio"])::before,
@@ -237,7 +237,7 @@ label:has(input[type="checkbox"])::before {
     background: var(--radio-checkbox-background);
 }
 
-label:has(input[type="checkbox"]):hover:before {
+label:has(input[type="checkbox"]:not(:disabled)):hover:before {
     background: var(--radio-checkbox-hover-background);
 }
 
@@ -280,7 +280,7 @@ label:has(input[type="radio"])::before {
     background: var(--radio-checkbox-background);
 }
 
-label:has(input[type="radio"]:hover)::before {
+label:has(input[type="radio"]:not(:disabled)):hover::before {
     background: var(--radio-checkbox-hover-background);
 }
 
@@ -306,4 +306,13 @@ label:has(input[type="radio"]:checked)::after {
     opacity: 1;
     transition: opacity 150ms linear;
     animation: radio-checked 200ms ease-out;
+}
+
+/* Disabled check boxes and radio buttons */
+
+label:has(input[type="radio"]:disabled)::before,
+label:has(input[type="radio"]:disabled)::after,
+label:has(input[type="checkbox"]:disabled)::before,
+label:has(input[type="checkbox"]:disabled)::after {
+    opacity: .5;
 }
