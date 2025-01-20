@@ -16,12 +16,15 @@ const TPL = `\
     <div class="geo-map-container"></div>
 </div>`
 
+export type Leaflet = typeof import("leaflet");
+export type InitCallback = ((L: Leaflet) => void);
+
 export default class GeoMapWidget extends NoteContextAwareWidget {
 
     map?: Map;
-    private initCallback?: () => void;
+    private initCallback?: InitCallback;
 
-    constructor(widgetMode: "type", initCallback?: () => void) {
+    constructor(widgetMode: "type", initCallback?: InitCallback) {
         super();
         this.initCallback = initCallback;
     }
@@ -41,7 +44,7 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
 
                 this.map = map;
                 if (this.initCallback) {
-                    this.initCallback();
+                    this.initCallback(L);
                 }
 
                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

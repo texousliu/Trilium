@@ -1,6 +1,6 @@
 import type { LatLng, LeafletMouseEvent } from "leaflet";
 import type FNote from "../../entities/fnote.js";
-import GeoMapWidget from "../geo_map.js";
+import GeoMapWidget, { type InitCallback, type Leaflet } from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
 import server from "../../services/server.js";
 import toastService from "../../services/toast.js";
@@ -51,7 +51,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     constructor() {
         super();
 
-        this.geoMapWidget = new GeoMapWidget("type", () => this.#onMapInitialized());
+        this.geoMapWidget = new GeoMapWidget("type", (L: Leaflet) => this.#onMapInitialized(L));
 
         this.child(this.geoMapWidget);
     }
@@ -63,22 +63,41 @@ export default class GeoMapTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async #onMapInitialized() {
+    async #onMapInitialized(L: Leaflet) {
         const map = this.geoMapWidget.map;
         if (!map) {
             throw new Error("Unable to load map.");
         }
 
-        const blob = await this.note?.getBlob();
+        if (!this.note) {
+            return;
+        }
+
+        const blob = await this.note.getBlob();
 
         let parsedContent: MapData = {};
         if (blob) {
             parsedContent = JSON.parse(blob.content);
         }
 
+        // Restore viewport position & zoom
         const center = parsedContent.view?.center ?? [51.505, -0.09];
         const zoom = parsedContent.view?.zoom ?? 13;
         map.setView(center, zoom);
+
+        // Restore markers.
+        const childNotes = await this.note.getChildNotes();
+        for (const childNote of childNotes) {
+            const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
+            if (!latLng) {
+                continue;
+            }
+
+            const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
+            L.marker(L.latLng(lat, lng))
+                .addTo(map)
+                .bindPopup(childNote.title);
+        }
 
         const updateFn = () => this.spacedUpdate.scheduleUpdate();
         map.on("moveend", updateFn);
