@@ -125,6 +125,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         const { noteId } = this.clipboard;
         await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, [e.latlng.lat, e.latlng.lng].join(","));
+        this.clipboard = undefined;
     }
 
     getData(): any {
