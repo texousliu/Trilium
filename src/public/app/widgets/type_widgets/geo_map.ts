@@ -43,6 +43,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     private geoMapWidget: GeoMapWidget;
     private clipboard?: Clipboard;
+    private L!: Leaflet;
 
     static getType() {
         return "geoMap";
@@ -64,6 +65,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     async #onMapInitialized(L: Leaflet) {
+        this.L = L;
         const map = this.geoMapWidget.map;
         if (!map) {
             throw new Error("Unable to load map.");
@@ -86,7 +88,23 @@ export default class GeoMapTypeWidget extends TypeWidget {
         map.setView(center, zoom);
 
         // Restore markers.
+        await this.#reloadMarkers();
+
+        const updateFn = () => this.spacedUpdate.scheduleUpdate();
+        map.on("moveend", updateFn);
+        map.on("zoomend", updateFn);
+        map.on("click", (e) => this.#onMapClicked(e));
+    }
+
+    async #reloadMarkers() {
+        const map = this.geoMapWidget.map;
+
+        if (!this.note || !map) {
+            return;
+        }
+
         const childNotes = await this.note.getChildNotes();
+        const L = this.L;
         for (const childNote of childNotes) {
             const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
             if (!latLng) {
@@ -98,11 +116,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
                 .addTo(map)
                 .bindPopup(childNote.title);
         }
-
-        const updateFn = () => this.spacedUpdate.scheduleUpdate();
-        map.on("moveend", updateFn);
-        map.on("zoomend", updateFn);
-        map.on("click", (e) => this.#onMapClicked(e));
     }
 
     async #onMapClicked(e: LeafletMouseEvent) {
@@ -156,6 +169,13 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     async doRefresh(note: FNote) {
         await this.geoMapWidget.refresh();
+    }
+
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        const attributeRows = loadResults.getAttributeRows();
+        if (attributeRows.find((at) => at.name === LOCATION_ATTRIBUTE)) {
+            this.#reloadMarkers();
+        }
     }
 
 }
