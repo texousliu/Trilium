@@ -3,13 +3,13 @@
  * will create 1000 new notes and some clones into the current document.db
  */
 
-import sqlInit from "../services/sql_init.js";
-import noteService from "../services/notes.js";
-import attributeService from "../services/attributes.js";
-import cls from "../services/cls.js";
-import cloningService from "../services/cloning.js";
+import sqlInit from "../src/services/sql_init.js";
+import noteService from "../src/services/notes.js";
+import attributeService from "../src/services/attributes.js";
+import cls from "../src/services/cls.js";
+import cloningService from "../src/services/cloning.js";
 import loremIpsum from "lorem-ipsum";
-import "../becca/entity_constructor.js";
+import "../src/becca/entity_constructor.js";
 
 const noteCount = parseInt(process.argv[2]);
 
