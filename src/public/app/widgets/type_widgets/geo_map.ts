@@ -1,4 +1,4 @@
-import type { LatLng } from "leaflet";
+import type { LatLng, LeafletMouseEvent } from "leaflet";
 import type FNote from "../../entities/fnote.js";
 import GeoMapWidget from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
@@ -7,6 +7,7 @@ import toastService from "../../services/toast.js";
 import dialogService from "../../services/dialog.js";
 import type { EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
+import attributes from "../../services/attributes.js";
 
 const TPL = `\
 <div class="note-detail-geo-map note-detail-printable">
@@ -16,6 +17,8 @@ const TPL = `\
         }
     </style>
 </div>`;
+
+const LOCATION_ATTRIBUTE = "latLng";
 
 interface MapData {
     view?: {
@@ -80,6 +83,16 @@ export default class GeoMapTypeWidget extends TypeWidget {
         const updateFn = () => this.spacedUpdate.scheduleUpdate();
         map.on("moveend", updateFn);
         map.on("zoomend", updateFn);
+        map.on("click", (e) => this.#onMapClicked(e));
+    }
+
+    async #onMapClicked(e: LeafletMouseEvent) {
+        if (!this.clipboard) {
+            return;
+        }
+
+        const { noteId } = this.clipboard;
+        await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, [e.latlng.lat, e.latlng.lng].join(","));
     }
 
     getData(): any {
