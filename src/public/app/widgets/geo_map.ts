@@ -13,11 +13,8 @@ const TPL = `\
     </style>
 
     <div class="geo-map-container"></div>
-</div>
+</div>`
 
-`
-
-//@ts-nocheck
 export default class GeoMapWidget extends NoteContextAwareWidget {
 
     constructor(widgetMode: "type") {
@@ -30,7 +27,9 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
         const $container = this.$widget.find(".geo-map-container");
 
         library_loader.requireLibrary(library_loader.LEAFLET)
-            .then(() => {
+            .then(async () => {
+                const L = (await import("leaflet")).default;
+
                 const map = L.map($container[0], {
 
                 });

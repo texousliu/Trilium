@@ -107,7 +107,6 @@ const HIGHLIGHT_JS: Library = {
 };
 
 const LEAFLET: Library = {
-    js: [ "node_modules/leaflet/dist/leaflet.js" ],
     css: [ "node_modules/leaflet/dist/leaflet.css" ],
 }
 
