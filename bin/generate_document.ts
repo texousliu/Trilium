@@ -1,5 +1,5 @@
 /**
- * Usage: node src/tools/generate_document.js 1000
+ * Usage: tsx ./generate_document.ts 1000
  * will create 1000 new notes and some clones into the current document.db
  */
 
@@ -90,4 +90,6 @@ async function start() {
     process.exit(0);
 }
 
-sqlInit.dbReady.then(cls.wrap(start));
+// @TriliumNextTODO sqlInit.dbReady never seems to resolve so program hangs
+// see https://github.com/TriliumNext/Notes/issues/1020
+sqlInit.dbReady.then(cls.wrap(start)).catch((err) => console.error(err));
