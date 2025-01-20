@@ -84,16 +84,20 @@ function getMime(fileName: string) {
 }
 
 function getType(options: TaskData, mime: string) {
-    mime = mime ? mime.toLowerCase() : "";
+    const mimeLc = mime?.toLowerCase();
 
-    if (options.textImportedAsText && (mime === "text/html" || ["text/markdown", "text/x-markdown"].includes(mime))) {
-        return "text";
-    } else if (options.codeImportedAsCode && CODE_MIME_TYPES.has(mime)) {
-        return "code";
-    } else if (mime.startsWith("image/")) {
-        return "image";
-    } else {
-        return "file";
+    switch (true) {
+        case options.textImportedAsText && ["text/html", "text/markdown", "text/x-markdown"].includes(mimeLc):
+            return "text";
+
+        case options.codeImportedAsCode && CODE_MIME_TYPES.has(mimeLc):
+            return "code";
+
+        case mime.startsWith("image/"):
+            return "image";
+
+        default:
+            return "file";
     }
 }
 
