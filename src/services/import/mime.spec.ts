@@ -17,6 +17,11 @@ describe("#getMime", () => {
         ],
 
         [
+            "File extension with inconsisten capitalization that is defined in EXTENSION_TO_MIME",
+            ["test.gRoOvY"], "text/x-groovy"
+        ],
+
+        [
             "File extension that is not defined in EXTENSION_TO_MIME should use mimeTypes.lookup",
             ["test.zip"], "application/zip"
         ],
