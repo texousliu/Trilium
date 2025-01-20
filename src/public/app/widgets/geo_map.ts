@@ -1,3 +1,4 @@
+import type { Map } from "leaflet";
 import library_loader from "../services/library_loader.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 
@@ -17,8 +18,12 @@ const TPL = `\
 
 export default class GeoMapWidget extends NoteContextAwareWidget {
 
-    constructor(widgetMode: "type") {
+    map?: Map;
+    private initCallback?: () => void;
+
+    constructor(widgetMode: "type", initCallback?: () => void) {
         super();
+        this.initCallback = initCallback;
     }
 
     doRender() {
@@ -35,6 +40,10 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
                 });
 
                 map.setView([51.505, -0.09], 13);
+                this.map = map;
+                if (this.initCallback) {
+                    this.initCallback();
+                }
 
                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

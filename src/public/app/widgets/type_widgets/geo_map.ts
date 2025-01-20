@@ -15,7 +15,8 @@ export default class GeoMapTypeWidget extends TypeWidget {
     constructor() {
         super();
 
-        this.geoMapWidget = new GeoMapWidget("type");
+        this.geoMapWidget = new GeoMapWidget("type", () => this.#onMapInitialized());
+
         this.child(this.geoMapWidget);
     }
 
@@ -24,6 +25,27 @@ export default class GeoMapTypeWidget extends TypeWidget {
         this.$widget.append(this.geoMapWidget.render());
 
         super.doRender();
+    }
+
+    #onMapInitialized() {
+        this.geoMapWidget.map?.on("moveend", () => this.spacedUpdate.scheduleUpdate());
+    }
+
+    getData(): any {
+        const map = this.geoMapWidget.map;
+        if (!map) {
+            return;
+        }
+
+        const data = {
+            view: {
+                center: map.getBounds().getCenter()
+            }
+        };
+
+        return {
+            content: JSON.stringify(data)
+        };
     }
 
     async doRefresh(note: FNote) {
