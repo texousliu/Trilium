@@ -178,11 +178,12 @@ export default class GeoMapTypeWidget extends TypeWidget {
             const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
             const icon = L.divIcon({
                 html: `\
-                    <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
-                    <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
-                    <span class="bx ${childNote.getIcon()}"></span>
-                    <span class="title-label">${childNote.title}</span>
-                `,
+                    <a data-href="#${childNote.noteId}">
+                        <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
+                        <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
+                        <span class="bx ${childNote.getIcon()}"></span>
+                        <span class="title-label">${childNote.title}</span>
+                    </a>`,
                 iconSize: [ 25, 41 ],
                 iconAnchor: [ 12, 41 ]
             })
@@ -194,7 +195,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
                 autoPanSpeed: 5,
             })
                 .addTo(map)
-                .bindPopup(childNote.title)
                 .on("moveend", e => {
                     this.moveMarker(childNote.noteId, (e.target as Marker).getLatLng());
                 });
