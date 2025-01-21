@@ -5,25 +5,74 @@ const TPL = `
 <div class="switch-widget">
     <style>
     .switch-widget {
+        --switch-track-width: 50px;
+        --switch-track-height: 24px;
+        --switch-off-track-background: var(--more-accented-background-color);
+        --switch-on-track-background: var(--main-text-color);
+
+        --switch-thumb-width: 16px;
+        --switch-thumb-height: 16px;
+        --switch-off-thumb-background: var(--main-background-color);
+        --switch-on-thumb-background: var(--main-background-color);
+
         display: flex;
         align-items: center;
     }
 
-    .switch-widget {
-        display: flex;
-        position: relative;
-    }
-
     .switch-widget .switch-button {
+        display: block;
         position: relative;
+        width: var(--switch-track-width);
+        height: var(--switch-track-height);
+        border-radius: 24px;
+        background-color: var(--switch-off-track-background);
+        transition: background 200ms ease-in;
+        cursor: pointer;
     }
 
-    .switch-widget .slider.checked {
-        background-color: var(--main-text-color);
+    .switch-widget .switch-button.on {
+        background: var(--switch-on-track-background);
+        transition: background 100ms ease-out;
     }
 
-    .switch-widget .slider.checked:before {
-        transform: translateX(26px);
+    .switch-widget .switch-button:after {
+        --y: calc((var(--switch-track-height) - var(--switch-thumb-height)) / 2);
+        --x: var(--y);
+
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: var(--switch-thumb-width);
+        height: var(--switch-thumb-height);
+        background-color: var(--switch-off-thumb-background);
+        border-radius: 50%;
+        transform: translate(var(--x), var(--y));
+        transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+                    background 200ms ease-out;
+    }
+
+    .switch-widget .switch-button.on:after {
+        --x: calc(var(--switch-track-width) - var(--switch-thumb-width) - var(--y));
+
+        background: var(--switch-on-thumb-background);
+        transition: transform 200ms cubic-bezier(0.64, 0, 0.78, 0),
+                    background 100ms ease-in;
+    }
+
+    .switch-widget > .switch-button > input[type="checkbox"] {
+        position: absolute:
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .switch-widget > .switch-button:has(input[type="checkbox"]:focus-visible) {
+        outline: 2px solid var(--button-border-color);
+        outline-offset: 2px;
     }
 
     .switch-widget .switch-disabled {
@@ -38,25 +87,12 @@ const TPL = `
         cursor: pointer;
         color: var(--main-text-color);
     }
-
-    .switch-widget .switch-button {
-        background: red !important;
-    }
-
-    .switch-widget .switch-button.on {
-        background: green !important;
-    }
-
-    .switch-widget input[type="checkbox"] {
-        pointer-events: none;
-    }
     </style>
 
     <div class="switch-widget">
         <span class="switch-name"></span>
         &nbsp;
         <label class="switch-button">
-            [...]
             <input class="switch-toggle" type="checkbox" />
         </label>
     </div>
@@ -113,7 +149,6 @@ export default class SwitchWidget extends NoteContextAwareWidget {
 
         this.$switchButton.toggleClass("on", this.currentState);
         this.$switchToggle.prop("checked", this.currentState);
-        console.log(this.currentState);
 
         if (this.currentState) {
             this.$switchName.text(this.switchOffName);
