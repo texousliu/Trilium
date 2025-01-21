@@ -15,6 +15,10 @@ const TPL = `\
         .leaflet-pane {
             z-index: 1;
         }
+
+        .geo-map-container.placing-note {
+            cursor: crosshair;
+        }
     </style>
 </div>`;
 
@@ -118,6 +122,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
         }
     }
 
+    #adjustCursor() {
+        this.geoMapWidget.$container.toggleClass("placing-note", !!this.clipboard);
+    }
+
     async #onMapClicked(e: LeafletMouseEvent) {
         if (!this.clipboard) {
             return;
@@ -126,6 +134,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         const { noteId } = this.clipboard;
         await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, [e.latlng.lat, e.latlng.lng].join(","));
         this.clipboard = undefined;
+        this.#adjustCursor();
     }
 
     getData(): any {
@@ -166,6 +175,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         toastService.showMessage(t("relation_map.click_on_canvas_to_place_new_note"));
 
         this.clipboard = { noteId: note.noteId, title };
+        this.#adjustCursor();
     }
 
     async doRefresh(note: FNote) {

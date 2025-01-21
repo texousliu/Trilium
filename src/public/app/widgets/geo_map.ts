@@ -22,6 +22,7 @@ export type InitCallback = ((L: Leaflet) => void);
 export default class GeoMapWidget extends NoteContextAwareWidget {
 
     map?: Map;
+    $container!: JQuery<HTMLElement>;
     private initCallback?: InitCallback;
 
     constructor(widgetMode: "type", initCallback?: InitCallback) {
@@ -32,13 +33,13 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
 
-        const $container = this.$widget.find(".geo-map-container");
+        this.$container = this.$widget.find(".geo-map-container");
 
         library_loader.requireLibrary(library_loader.LEAFLET)
             .then(async () => {
                 const L = (await import("leaflet")).default;
 
-                const map = L.map($container[0], {
+                const map = L.map(this.$container[0], {
 
                 });
 
