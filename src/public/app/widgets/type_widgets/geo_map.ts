@@ -212,6 +212,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
+        toastService.closePersistent("geo-new-note");
         const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
 
         if (title?.trim()) {
@@ -254,7 +255,12 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
-        toastService.showMessage(t("relation_map.click_on_canvas_to_place_new_note"));
+        toastService.showPersistent({
+            icon: "plus",
+            id: "geo-new-note",
+            title: "New note",
+            message: "Click on the map to create a new note at that location or press Escape to dismiss."
+        });
 
         this.#changeState(State.NewNote);
 
@@ -262,6 +268,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
             this.#changeState(State.Normal);
 
             window.removeEventListener("keydown", globalKeyListener);
+            toastService.closePersistent("geo-new-note");
         };
         window.addEventListener("keydown", globalKeyListener);
     }
