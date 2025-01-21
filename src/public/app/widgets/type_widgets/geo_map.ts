@@ -258,6 +258,14 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         this.state = State.NewNote;
         this.#adjustCursor();
+
+        const globalKeyListener: (this: Window, ev: KeyboardEvent) => any = (e) => {
+            this.state = State.Normal;
+            this.#adjustCursor();
+
+            window.removeEventListener("keydown", globalKeyListener);
+        };
+        window.addEventListener("keydown", globalKeyListener);
     }
 
     async doRefresh(note: FNote) {
