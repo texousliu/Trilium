@@ -186,8 +186,8 @@ optgroup {
 /* Check box & radio button commons */
 
 /* The parent label */
-label:has(input[type="radio"]),
-label:has(input[type="checkbox"]) {
+label:has(>input[type="radio"]),
+label:has(>input[type="checkbox"]) {
     --box-size: 1em;
     --box-label-gap: .5em;
 
@@ -195,8 +195,8 @@ label:has(input[type="checkbox"]) {
     user-select: none;
 }
 
-label:has(input[type="radio"]),
-label:has(input[type="checkbox"]) {
+label:has(>input[type="radio"]),
+label:has(>input[type="checkbox"]) {
     padding-left: calc(var(--box-size) + var(--box-label-gap)) !important;
 }
 
@@ -211,10 +211,10 @@ label > input[type="checkbox"] {
     opacity: 0 !important;
 }
 
-label:has(input[type="radio"])::before,
-label:has(input[type="radio"])::after,
-label:has(input[type="checkbox"])::before,
-label:has(input[type="checkbox"])::after {
+label:has(>input[type="radio"])::before,
+label:has(>input[type="radio"])::after,
+label:has(>input[type="checkbox"])::before,
+label:has(>input[type="checkbox"])::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -224,20 +224,20 @@ label:has(input[type="checkbox"])::after {
     height: var(--box-size);
 }
 
-label:has(input[type="radio"]:focus-visible)::before,
-label:has(input[type="checkbox"]:focus-visible)::before {
+label:has(>input[type="radio"]:focus-visible)::before,
+label:has(>input[type="checkbox"]:focus-visible)::before {
     outline: 2px solid var(--input-focus-outline-color);
 }
 
 /* Check boxes */
 
 /* The check box background */
-label:has(input[type="checkbox"])::before {
+label:has(>input[type="checkbox"])::before {
     border-radius: 3px;
     background: var(--radio-checkbox-background);
 }
 
-label:has(input[type="checkbox"]:not(:disabled)):hover:before {
+label:has(>input[type="checkbox"]:not(:disabled)):hover:before {
     background: var(--radio-checkbox-hover-background);
 }
 
@@ -250,7 +250,7 @@ label:has(input[type="checkbox"]:not(:disabled)):hover:before {
 }
 
 /* The tick mark */
-label:has(input[type="checkbox"])::after {
+label:has(>input[type="checkbox"])::after {
     mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3ctitle%3echeck-bold%3c/title%3e%3cpath d='M9%2c20.42L2.79%2c14.21L5.62%2c11.38L9%2c14.77L18.88%2c4.88L21.71%2c7.71L9%2c20.42Z' /%3e%3c/svg%3e");
     mask-position: center center;
     mask-size: .95em;
@@ -261,7 +261,7 @@ label:has(input[type="checkbox"])::after {
                 opacity 300ms linear;
 }
 
-label:has(input[type="checkbox"]:checked)::after {
+label:has(>input[type="checkbox"]:checked)::after {
     opacity: 1;
     transform: scale(1);
     transition: opacity 100ms ease-in-out;
@@ -270,17 +270,17 @@ label:has(input[type="checkbox"]:checked)::after {
 
 /* Radio buttons */
 
-label:has(input[type="radio"])::before,
-label:has(input[type="radio"])::after {
+label:has(>input[type="radio"])::before,
+label:has(>input[type="radio"])::after {
     border-radius: 50%;
 }
 
 /* The outer circle */
-label:has(input[type="radio"])::before {
+label:has(>input[type="radio"])::before {
     background: var(--radio-checkbox-background);
 }
 
-label:has(input[type="radio"]:not(:disabled)):hover::before {
+label:has(>input[type="radio"]:not(:disabled)):hover::before {
     background: var(--radio-checkbox-hover-background);
 }
 
@@ -293,7 +293,7 @@ label:has(input[type="radio"]:not(:disabled)):hover::before {
 }
 
 /* The inner circle */
-label:has(input[type="radio"])::after {
+label:has(>input[type="radio"])::after {
     background: var(--radio-checkbox-indicator-color);
     transform: scale(0);
     opacity: 0;
@@ -301,7 +301,7 @@ label:has(input[type="radio"])::after {
                 transform 300ms ease-in;
 }
 
-label:has(input[type="radio"]:checked)::after {
+label:has(>input[type="radio"]:checked)::after {
     transform: scale(.5);
     opacity: 1;
     transition: opacity 150ms linear;
@@ -310,9 +310,9 @@ label:has(input[type="radio"]:checked)::after {
 
 /* Disabled check boxes and radio buttons */
 
-label:has(input[type="radio"]:disabled)::before,
-label:has(input[type="radio"]:disabled)::after,
-label:has(input[type="checkbox"]:disabled)::before,
-label:has(input[type="checkbox"]:disabled)::after {
+label:has(> input[type="radio"]:disabled)::before,
+label:has(> input[type="radio"]:disabled)::after,
+label:has(> input[type="checkbox"]:disabled)::before,
+label:has(> input[type="checkbox"]:disabled)::after {
     opacity: .5;
 }
