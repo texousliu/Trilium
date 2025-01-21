@@ -96,7 +96,7 @@ enum State {
 export default class GeoMapTypeWidget extends TypeWidget {
 
     private geoMapWidget: GeoMapWidget;
-    private state: State;
+    private _state: State;
     private L!: Leaflet;
     private currentMarkerData: MarkerData;
 
@@ -109,7 +109,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         this.geoMapWidget = new GeoMapWidget("type", (L: Leaflet) => this.#onMapInitialized(L));
         this.currentMarkerData = {};
-        this.state = State.Normal;
+        this._state = State.Normal;
 
         this.child(this.geoMapWidget);
     }
@@ -202,12 +202,13 @@ export default class GeoMapTypeWidget extends TypeWidget {
         }
     }
 
-    #adjustCursor() {
-        this.geoMapWidget.$container.toggleClass("placing-note", this.state === State.NewNote);
+    #changeState(newState: State) {
+        this._state = newState;
+        this.geoMapWidget.$container.toggleClass("placing-note", newState === State.NewNote);
     }
 
     async #onMapClicked(e: LeafletMouseEvent) {
-        if (this.state !== State.NewNote) {
+        if (this._state !== State.NewNote) {
             return;
         }
 
@@ -223,8 +224,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
             this.moveMarker(note.noteId, e.latlng);
         }
 
-        this.state = State.Normal;
-        this.#adjustCursor();
+        this.#changeState(State.Normal);
     }
 
     async moveMarker(noteId: string, latLng: LatLng) {
@@ -256,12 +256,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         toastService.showMessage(t("relation_map.click_on_canvas_to_place_new_note"));
 
-        this.state = State.NewNote;
-        this.#adjustCursor();
+        this.#changeState(State.NewNote);
 
         const globalKeyListener: (this: Window, ev: KeyboardEvent) => any = (e) => {
-            this.state = State.Normal;
-            this.#adjustCursor();
+            this.#changeState(State.Normal);
 
             window.removeEventListener("keydown", globalKeyListener);
         };
