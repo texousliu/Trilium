@@ -1,4 +1,4 @@
-import type { LatLng, LeafletMouseEvent, Marker } from "leaflet";
+import { Marker, type LatLng, type LeafletMouseEvent } from "leaflet";
 import type FNote from "../../entities/fnote.js";
 import GeoMapWidget, { type InitCallback, type Leaflet } from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
@@ -43,11 +43,14 @@ interface Clipboard {
     title: string;
 }
 
+type MarkerData = Record<string, Marker>;
+
 export default class GeoMapTypeWidget extends TypeWidget {
 
     private geoMapWidget: GeoMapWidget;
     private clipboard?: Clipboard;
     private L!: Leaflet;
+    private currentMarkerData: MarkerData;
 
     static getType() {
         return "geoMap";
@@ -57,6 +60,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         super();
 
         this.geoMapWidget = new GeoMapWidget("type", (L: Leaflet) => this.#onMapInitialized(L));
+        this.currentMarkerData = {};
 
         this.child(this.geoMapWidget);
     }
@@ -107,6 +111,13 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
+        // Delete all existing markers
+        for (const marker of Object.values(this.currentMarkerData)) {
+            marker.remove();
+        }
+
+        // Add the new markers.
+        this.currentMarkerData = {};
         const childNotes = await this.note.getChildNotes();
         const L = this.L;
         for (const childNote of childNotes) {
@@ -116,7 +127,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
             }
 
             const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
-            L.marker(L.latLng(lat, lng), {
+            const marker = L.marker(L.latLng(lat, lng), {
                 draggable: true
             })
                 .addTo(map)
@@ -124,6 +135,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
                 .on("moveend", e => {
                     this.moveMarker(childNote.noteId, (e.target as Marker).getLatLng());
                 });
+            this.currentMarkerData[childNote.noteId] = marker;
         }
     }
 
