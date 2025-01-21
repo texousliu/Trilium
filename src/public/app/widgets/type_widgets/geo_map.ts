@@ -8,6 +8,9 @@ import dialogService from "../../services/dialog.js";
 import type { EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import attributes from "../../services/attributes.js";
+import asset_path from "../../../../services/asset_path.js";
+
+const ICON_WIDTH = 30;
 
 const TPL = `\
 <div class="note-detail-geo-map note-detail-printable">
@@ -18,6 +21,27 @@ const TPL = `\
 
         .geo-map-container.placing-note {
             cursor: crosshair;
+        }
+
+        .geo-map-container .marker-pin {
+            position: relative;
+        }
+
+        .geo-map-container .leaflet-div-icon {
+            position: relative;
+            background: transparent;
+            border: 0;
+        }
+
+        .geo-map-container .leaflet-div-icon span {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            background-color: white;
+            color: black;
+            padding: 2px;
+            border-radius: 50%;
+            font-size: 16px;
         }
     </style>
 </div>`;
@@ -127,7 +151,17 @@ export default class GeoMapTypeWidget extends TypeWidget {
             }
 
             const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
+            const icon = L.divIcon({
+                html: `\
+                    <img src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
+                    <span class="bx ${childNote.getIcon()}"></span>
+                `,
+                iconSize: [ 25, 42 ],
+                iconAnchor: [ 7, 42 ]
+            })
+
             const marker = L.marker(L.latLng(lat, lng), {
+                icon,
                 draggable: true,
                 autoPan: true,
                 autoPanSpeed: 5
