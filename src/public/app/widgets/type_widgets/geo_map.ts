@@ -86,17 +86,17 @@ interface CreateChildResponse {
     }
 }
 
-interface Clipboard {
-    noteId: string;
-    title: string;
-}
-
 type MarkerData = Record<string, Marker>;
+
+enum State {
+    Normal,
+    NewNote
+}
 
 export default class GeoMapTypeWidget extends TypeWidget {
 
     private geoMapWidget: GeoMapWidget;
-    private clipboard?: Clipboard;
+    private state: State;
     private L!: Leaflet;
     private currentMarkerData: MarkerData;
 
@@ -109,6 +109,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         this.geoMapWidget = new GeoMapWidget("type", (L: Leaflet) => this.#onMapInitialized(L));
         this.currentMarkerData = {};
+        this.state = State.Normal;
 
         this.child(this.geoMapWidget);
     }
@@ -202,16 +203,29 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     #adjustCursor() {
-        this.geoMapWidget.$container.toggleClass("placing-note", !!this.clipboard);
+        this.geoMapWidget.$container.toggleClass("placing-note", this.state === State.NewNote);
     }
 
     async #onMapClicked(e: LeafletMouseEvent) {
-        if (!this.clipboard) {
+        if (this.state !== State.NewNote) {
             return;
         }
 
-        this.moveMarker(this.clipboard.noteId, e.latlng);
-        this.clipboard = undefined;
+        const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
+
+        if (!title?.trim()) {
+            return;
+        }
+
+        const { note } = await server.post<CreateChildResponse>(`notes/${this.noteId}/children?target=into`, {
+            title,
+            content: "",
+            type: "text"
+        });
+        attributes.setLabel(note.noteId, "iconClass", CHILD_NOTE_ICON);
+        this.moveMarker(note.noteId, e.latlng);
+
+        this.state = State.Normal;
         this.#adjustCursor();
     }
 
@@ -242,22 +256,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
-        const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
-
-        if (!title?.trim()) {
-            return;
-        }
-
-        const { note } = await server.post<CreateChildResponse>(`notes/${this.noteId}/children?target=into`, {
-            title,
-            content: "",
-            type: "text"
-        });
-        attributes.setLabel(note.noteId, "iconClass", CHILD_NOTE_ICON);
-
         toastService.showMessage(t("relation_map.click_on_canvas_to_place_new_note"));
 
-        this.clipboard = { noteId: note.noteId, title };
+        this.state = State.NewNote;
         this.#adjustCursor();
     }
 
