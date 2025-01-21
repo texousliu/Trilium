@@ -69,7 +69,7 @@ const TPL = `\
     </style>
 </div>`;
 
-const LOCATION_ATTRIBUTE = "latLng";
+const LOCATION_ATTRIBUTE = "geolocation";
 const CHILD_NOTE_ICON = "bx bx-pin";
 
 interface MapData {
