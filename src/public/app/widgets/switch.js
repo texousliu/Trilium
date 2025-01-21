@@ -46,6 +46,10 @@ const TPL = `
     .switch-widget .switch-button.on {
         background: green !important;
     }
+
+    .switch-widget input[type="checkbox"] {
+        pointer-events: none;
+    }
     </style>
 
     <div class="switch-widget">
@@ -75,7 +79,13 @@ export default class SwitchWidget extends NoteContextAwareWidget {
         this.$switchButton = this.$widget.find(".switch-button");
 
         this.$switchToggle = this.$widget.find(".switch-toggle");
-        this.$switchToggle.on("click", () => this.toggle(!this.currentState));
+        this.$switchToggle.on("click", (e) => {
+            this.toggle(!this.currentState);
+
+            // Prevent the check box from being toggled by the click, the value of the check box
+            // should be set exclusively by the 'isToggled' property setter.
+            e.preventDefault();
+        });
 
         this.$switchName = this.$widget.find(".switch-name");
 
@@ -103,6 +113,7 @@ export default class SwitchWidget extends NoteContextAwareWidget {
 
         this.$switchButton.toggleClass("on", this.currentState);
         this.$switchToggle.prop("checked", this.currentState);
+        console.log(this.currentState);
 
         if (this.currentState) {
             this.$switchName.text(this.switchOffName);
