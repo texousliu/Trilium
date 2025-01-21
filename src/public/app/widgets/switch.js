@@ -9,7 +9,7 @@ const TPL = `
         align-items: center;
     }
 
-    .switch {
+    .switch-widget {
         display: flex;
         position: relative;
     }
@@ -48,12 +48,13 @@ const TPL = `
     }
     </style>
 
-    <div class="switch">
+    <div class="switch-widget">
         <span class="switch-name"></span>
         &nbsp;
-        <span class="switch-button">
+        <label class="switch-button">
             [...]
-        </span>
+            <input class="switch-toggle" type="checkbox" />
+        </label>
     </div>
 
     <button class="switch-help-button" type="button" data-help-page="" title="${t("open-help-page")}" style="display: none;">?</button>
@@ -72,7 +73,9 @@ export default class SwitchWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$switchButton = this.$widget.find(".switch-button");
-        this.$switchButton.on("click", () => this.toggle(!this.currentState));
+
+        this.$switchToggle = this.$widget.find(".switch-toggle");
+        this.$switchToggle.on("click", () => this.toggle(!this.currentState));
 
         this.$switchName = this.$widget.find(".switch-name");
 
@@ -98,16 +101,15 @@ export default class SwitchWidget extends NoteContextAwareWidget {
     set isToggled(state) {
         this.currentState = !!state;
 
+        this.$switchButton.toggleClass("on", this.currentState);
+        this.$switchToggle.prop("checked", this.currentState);
+
         if (this.currentState) {
             this.$switchName.text(this.switchOffName);
-
             this.$switchButton.attr("title", this.switchOffTooltip);
-            this.$switchButton.addClass("on");
         } else {
             this.$switchName.text(this.switchOnName);
-
             this.$switchButton.attr("title", this.switchOnTooltip);
-            this.$switchButton.removeClass("on");
         }
     }
 }
