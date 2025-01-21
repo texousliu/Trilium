@@ -33,6 +33,13 @@ const TPL = `\
             border: 0;
         }
 
+        .geo-map-container .leaflet-div-icon .icon-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
         .geo-map-container .leaflet-div-icon span {
             position: absolute;
             top: 3px;
@@ -153,7 +160,8 @@ export default class GeoMapTypeWidget extends TypeWidget {
             const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
             const icon = L.divIcon({
                 html: `\
-                    <img src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
+                    <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
+                    <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
                     <span class="bx ${childNote.getIcon()}"></span>
                 `,
                 iconSize: [ 25, 41 ],
