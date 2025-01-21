@@ -156,15 +156,15 @@ export default class GeoMapTypeWidget extends TypeWidget {
                     <img src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
                     <span class="bx ${childNote.getIcon()}"></span>
                 `,
-                iconSize: [ 25, 42 ],
-                iconAnchor: [ 7, 42 ]
+                iconSize: [ 25, 41 ],
+                iconAnchor: [ 12, 41 ]
             })
 
             const marker = L.marker(L.latLng(lat, lng), {
                 icon,
                 draggable: true,
                 autoPan: true,
-                autoPanSpeed: 5
+                autoPanSpeed: 5,
             })
                 .addTo(map)
                 .bindPopup(childNote.title)
