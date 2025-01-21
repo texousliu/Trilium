@@ -1,4 +1,4 @@
-import type { LatLng, LeafletMouseEvent } from "leaflet";
+import type { LatLng, LeafletMouseEvent, Marker } from "leaflet";
 import type FNote from "../../entities/fnote.js";
 import GeoMapWidget, { type InitCallback, type Leaflet } from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
@@ -116,9 +116,14 @@ export default class GeoMapTypeWidget extends TypeWidget {
             }
 
             const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
-            L.marker(L.latLng(lat, lng))
+            L.marker(L.latLng(lat, lng), {
+                draggable: true
+            })
                 .addTo(map)
-                .bindPopup(childNote.title);
+                .bindPopup(childNote.title)
+                .on("moveend", e => {
+                    this.moveMarker(childNote.noteId, (e.target as Marker).getLatLng());
+                });
         }
     }
 
@@ -131,10 +136,13 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
-        const { noteId } = this.clipboard;
-        await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, [e.latlng.lat, e.latlng.lng].join(","));
+        this.moveMarker(this.clipboard.noteId, e.latlng);
         this.clipboard = undefined;
         this.#adjustCursor();
+    }
+
+    async moveMarker(noteId: string, latLng: LatLng) {
+        await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, [latLng.lat, latLng.lng].join(","));
     }
 
     getData(): any {
