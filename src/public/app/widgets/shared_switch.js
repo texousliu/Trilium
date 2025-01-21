@@ -56,11 +56,11 @@ export default class SharedSwitchWidget extends SwitchWidget {
         this.isToggled = isShared;
 
         if (switchDisabled) {
-            //this.$widget.attr("title", t("shared_switch.inherited"));
-            //this.$switchOff.addClass("switch-disabled");
+            this.disabledTooltip = t("shared_switch.inherited");
+            this.canToggle = false;
         } else {
-            //this.$widget.removeAttr("title");
-            //this.$switchOff.removeClass("switch-disabled");
+            this.disabledTooltip = "";
+            this.canToggle = true;
         }
     }
 

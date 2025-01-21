@@ -28,7 +28,6 @@ const TPL = `
         border-radius: 24px;
         background-color: var(--switch-off-track-background);
         transition: background 200ms ease-in;
-        cursor: pointer;
     }
 
     .switch-widget .switch-button.on {
@@ -61,13 +60,17 @@ const TPL = `
                     background 100ms ease-in;
     }
 
-    .switch-widget .switch-button > input[type="checkbox"] {
+    .switch-widget .switch-button input[type="checkbox"] {
         position: absolute:
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         opacity: 0;
+    }
+
+    .switch-widget .switch-button:not(.disabled) input[type="checkbox"],
+    .switch-widget .switch-button:not(.disabled) {
         cursor: pointer;
     }
 
@@ -76,9 +79,8 @@ const TPL = `
         outline-offset: 2px;
     }
 
-    .switch-widget .switch-disabled {
+    .switch-widget .switch-button.disabled {
         opacity: 70%;
-        pointer-events: none;
     }
 
     .switch-widget .switch-help-button {
@@ -116,6 +118,8 @@ export default class SwitchWidget extends NoteContextAwareWidget {
 
     switchOffName;
     switchOffTooltip;
+
+    disabledTooltip;
 
     currentState = false;
 
@@ -165,6 +169,21 @@ export default class SwitchWidget extends NoteContextAwareWidget {
         } else {
             this.$switchName.text(this.switchOnName);
             this.$switchButton.attr("title", this.switchOnTooltip);
+        }
+    }
+
+    get canToggle() {
+        return (!this.$switchButton.hasClass("disabled"));
+    }
+
+    set canToggle(isEnabled) {
+        this.$switchButton.toggleClass("disabled", !isEnabled);
+        this.$switchToggle.attr("disabled", !isEnabled);
+
+        if (isEnabled) {
+            this.isToggled = this.currentState; // Reapply the correct tooltip
+        } else {
+            this.$switchButton.attr("title", this.disabledTooltip);
         }
     }
 }
