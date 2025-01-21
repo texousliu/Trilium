@@ -70,6 +70,7 @@ const TPL = `\
 </div>`;
 
 const LOCATION_ATTRIBUTE = "latLng";
+const CHILD_NOTE_ICON = "bx bx-pin";
 
 interface MapData {
     view?: {
@@ -252,6 +253,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
             content: "",
             type: "text"
         });
+        attributes.setLabel(note.noteId, "iconClass", CHILD_NOTE_ICON);
 
         toastService.showMessage(t("relation_map.click_on_canvas_to_place_new_note"));
 
