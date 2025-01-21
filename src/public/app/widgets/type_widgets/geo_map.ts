@@ -128,7 +128,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
             const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
             const marker = L.marker(L.latLng(lat, lng), {
-                draggable: true
+                draggable: true,
+                autoPan: true,
+                autoPanSpeed: 5
             })
                 .addTo(map)
                 .bindPopup(childNote.title)
