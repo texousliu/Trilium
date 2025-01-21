@@ -15,11 +15,11 @@ export default class BookmarkSwitchWidget extends SwitchWidget {
     doRender() {
         super.doRender();
 
-        this.$switchOnName.text(t("bookmark_switch.bookmark"));
-        this.$switchOnButton.attr("title", t("bookmark_switch.bookmark_this_note"));
+        this.switchOnName = t("bookmark_switch.bookmark");
+        this.switchOnTooltip = t("bookmark_switch.bookmark_this_note");
 
-        this.$switchOffName.text(t("bookmark_switch.bookmark"));
-        this.$switchOffButton.attr("title", t("bookmark_switch.remove_bookmark"));
+        this.switchOffName = t("bookmark_switch.bookmark");
+        this.switchOffTooltip = t("bookmark_switch.remove_bookmark");
     }
 
     async toggle(state) {
@@ -33,8 +33,7 @@ export default class BookmarkSwitchWidget extends SwitchWidget {
     async refreshWithNote(note) {
         const isBookmarked = !!note.getParentBranches().find((b) => b.parentNoteId === "_lbBookmarks");
 
-        this.$switchOn.toggle(!isBookmarked);
-        this.$switchOff.toggle(isBookmarked);
+        this.isToggled = isBookmarked;
     }
 
     entitiesReloadedEvent({ loadResults }) {
