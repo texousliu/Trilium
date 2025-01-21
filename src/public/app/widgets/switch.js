@@ -22,6 +22,7 @@ const TPL = `
     .switch-widget .switch-button {
         display: block;
         position: relative;
+        margin-left: 8px;
         width: var(--switch-track-width);
         height: var(--switch-track-height);
         border-radius: 24px;
@@ -60,7 +61,7 @@ const TPL = `
                     background 100ms ease-in;
     }
 
-    .switch-widget > .switch-button > input[type="checkbox"] {
+    .switch-widget .switch-button > input[type="checkbox"] {
         position: absolute:
         top: 0;
         left: 0;
@@ -70,7 +71,7 @@ const TPL = `
         cursor: pointer;
     }
 
-    .switch-widget > .switch-button:has(input[type="checkbox"]:focus-visible) {
+    .switch-widget .switch-button:has(input[type="checkbox"]:focus-visible) {
         outline: 2px solid var(--button-border-color);
         outline-offset: 2px;
     }
@@ -81,23 +82,31 @@ const TPL = `
     }
 
     .switch-widget .switch-help-button {
-        font-weight: 900;
         border: 0;
+        margin-left: 4px;
         background: none;
         cursor: pointer;
+        font-size: 1.1em;
+        color: var(--muted-text-color);
+    }
+
+    .switch-widget .switch-help-button:hover {
         color: var(--main-text-color);
     }
     </style>
 
     <div class="switch-widget">
         <span class="switch-name"></span>
-        &nbsp;
-        <label class="switch-button">
-            <input class="switch-toggle" type="checkbox" />
+
+        <label>
+            <div class="switch-button">
+                <input class="switch-toggle" type="checkbox" />
+            </div>
         </label>
+
+        <button class="switch-help-button bx bx-help-circle" type="button" data-help-page="" title="${t("open-help-page")}" style="display: none;"></button>
     </div>
 
-    <button class="switch-help-button" type="button" data-help-page="" title="${t("open-help-page")}" style="display: none;">?</button>
 </div>`;
 
 export default class SwitchWidget extends NoteContextAwareWidget {
