@@ -19,6 +19,8 @@ const TPL = `
         align-items: center;
     }
 
+    /* The track of the toggle switch */
+
     .switch-widget .switch-button {
         display: block;
         position: relative;
@@ -34,6 +36,8 @@ const TPL = `
         background: var(--switch-on-track-background);
         transition: background 100ms ease-out;
     }
+
+    /* The thumb of the toggle switch */
 
     .switch-widget .switch-button:after {
         --y: calc((var(--switch-track-height) - var(--switch-thumb-height)) / 2);
@@ -60,7 +64,9 @@ const TPL = `
                     background 100ms ease-in;
     }
 
+
     .switch-widget .switch-button input[type="checkbox"] {
+        /* A hidden check box for accesibility purposes */
         position: absolute:
         top: 0;
         left: 0;
@@ -69,6 +75,7 @@ const TPL = `
         opacity: 0;
     }
 
+    /* Disabled state */
     .switch-widget .switch-button:not(.disabled) input[type="checkbox"],
     .switch-widget .switch-button:not(.disabled) {
         cursor: pointer;
@@ -113,13 +120,13 @@ const TPL = `
 
 export default class SwitchWidget extends NoteContextAwareWidget {
 
-    switchOnName;
-    switchOnTooltip;
+    switchOnName = "";
+    switchOnTooltip = "";
 
-    switchOffName;
-    switchOffTooltip;
+    switchOffName = "";
+    switchOffTooltip = "";
 
-    disabledTooltip;
+    disabledTooltip = "";
 
     currentState = false;
 
@@ -137,7 +144,6 @@ export default class SwitchWidget extends NoteContextAwareWidget {
         });
 
         this.$switchName = this.$widget.find(".switch-name");
-
         this.$helpButton = this.$widget.find(".switch-help-button");
     }
 
@@ -172,6 +178,7 @@ export default class SwitchWidget extends NoteContextAwareWidget {
         }
     }
 
+    /** Gets or sets whether the switch is enabled. */
     get canToggle() {
         return (!this.$switchButton.hasClass("disabled"));
     }
