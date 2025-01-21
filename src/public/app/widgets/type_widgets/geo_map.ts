@@ -213,17 +213,15 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
 
-        if (!title?.trim()) {
-            return;
+        if (title?.trim()) {
+            const { note } = await server.post<CreateChildResponse>(`notes/${this.noteId}/children?target=into`, {
+                title,
+                content: "",
+                type: "text"
+            });
+            attributes.setLabel(note.noteId, "iconClass", CHILD_NOTE_ICON);
+            this.moveMarker(note.noteId, e.latlng);
         }
-
-        const { note } = await server.post<CreateChildResponse>(`notes/${this.noteId}/children?target=into`, {
-            title,
-            content: "",
-            type: "text"
-        });
-        attributes.setLabel(note.noteId, "iconClass", CHILD_NOTE_ICON);
-        this.moveMarker(note.noteId, e.latlng);
 
         this.state = State.Normal;
         this.#adjustCursor();
