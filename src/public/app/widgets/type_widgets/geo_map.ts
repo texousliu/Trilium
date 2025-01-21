@@ -10,8 +10,6 @@ import { t } from "../../services/i18n.js";
 import attributes from "../../services/attributes.js";
 import asset_path from "../../../../services/asset_path.js";
 
-const ICON_WIDTH = 30;
-
 const TPL = `\
 <div class="note-detail-geo-map note-detail-printable">
     <style>
@@ -31,6 +29,7 @@ const TPL = `\
             position: relative;
             background: transparent;
             border: 0;
+            overflow: visible;
         }
 
         .geo-map-container .leaflet-div-icon .icon-shadow {
@@ -40,7 +39,7 @@ const TPL = `\
             z-index: -1;
         }
 
-        .geo-map-container .leaflet-div-icon span {
+        .geo-map-container .leaflet-div-icon .bx {
             position: absolute;
             top: 3px;
             left: 2px;
@@ -49,6 +48,23 @@ const TPL = `\
             padding: 2px;
             border-radius: 50%;
             font-size: 17px;
+        }
+
+        .geo-map-container .leaflet-div-icon .title-label {
+            display: block;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            height: 1rem;
+            color: black;
+            width: 100px;
+            text-align: center;
+            text-overflow: ellipsis;
+            text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+            white-space: no-wrap;
+            overflow: hidden;
         }
     </style>
 </div>`;
@@ -163,6 +179,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
                     <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
                     <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
                     <span class="bx ${childNote.getIcon()}"></span>
+                    <span class="title-label">${childNote.title}</span>
                 `,
                 iconSize: [ 25, 41 ],
                 iconAnchor: [ 12, 41 ]
