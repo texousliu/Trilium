@@ -36,12 +36,12 @@ const TPL = `\
         .geo-map-container .leaflet-div-icon span {
             position: absolute;
             top: 3px;
-            left: 3px;
+            left: 2px;
             background-color: white;
             color: black;
             padding: 2px;
             border-radius: 50%;
-            font-size: 16px;
+            font-size: 17px;
         }
     </style>
 </div>`;
