@@ -265,6 +265,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
         this.#changeState(State.NewNote);
 
         const globalKeyListener: (this: Window, ev: KeyboardEvent) => any = (e) => {
+            if (e.key !== "Escape") {
+                return;
+            }
+
             this.#changeState(State.Normal);
 
             window.removeEventListener("keydown", globalKeyListener);
