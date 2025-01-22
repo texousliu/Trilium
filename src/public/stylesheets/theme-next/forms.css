@@ -316,3 +316,74 @@ label:has(> input[type="checkbox"]:disabled)::before,
 label:has(> input[type="checkbox"]:disabled)::after {
     opacity: .5;
 }
+
+/* Links */
+
+:root {
+    --link-hover-background: #ffffff26;
+    --link-hover-color: white;
+}
+
+body a.tn-link,
+body a.tn-link:visited,
+.use-tn-links a,
+.use-tn-links a:visited {
+    --background: transparent;
+    
+    border-radius: 4px;
+    background: var(--background);
+    outline: 0 solid var(--background);
+    color: currentColor;
+    font-weight: normal;
+    text-decoration: underline;
+
+    transition: background-color 200ms ease-out,
+                outline 200ms ease-out,
+                color 300ms ease-out;
+}
+
+body a.tn-link:focus-visible,
+.use-tn-links a:focus-visible {
+    outline: 2px solid var(--input-focus-outline-color);
+    outline-offset: 2px;
+}
+
+body a.tn-link:hover, 
+.use-tn-links a:hover {
+    --background: var(--link-hover-background);
+
+    outline-width: 4px;
+    outline-offset: 0;
+    color: var(--link-hover-color);
+
+    transition: background-color 100ms ease-in,
+                outline 100ms ease-in,
+                color 150ms ease-in;
+}
+
+a.tn-link.external:not(.no-arrow)::after,
+a.tn-link[href^="http://"]:not(.no-arrow)::after,
+a.tn-link[href^="https://"]:not(.no-arrow)::after,
+.use-tn-links a.external:not(.no-arrow)::after,
+.use-tn-links a[href^="http://"]:not(.no-arrow)::after,
+.use-tn-links a[href^="https://"]:not(.no-arrow)::after {
+    display: inline-block;
+    opacity: .5;
+}
+
+@keyframes link-arrow-blink {
+    from {
+        opacity: 1;
+    } to {
+        opacity: .5;
+    }
+}
+
+a.tn-link:hover.external:not(.no-arrow)::after,
+a.tn-link:hover[href^="http://"]:not(.no-arrow)::after,
+a.tn-link:hover[href^="https://"]:not(.no-arrow)::after,
+.use-tn-links a:hover.external:not(.no-arrow)::after,
+.use-tn-links a:hover[href^="http://"]:not(.no-arrow)::after,
+.use-tn-links a:hover[href^="https://"]:not(.no-arrow)::after {
+    animation: link-arrow-blink 500ms linear alternate infinite;
+}
