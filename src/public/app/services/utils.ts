@@ -308,7 +308,9 @@ function dynamicRequire(moduleName: string) {
     if (typeof __non_webpack_require__ !== "undefined") {
         return __non_webpack_require__(moduleName);
     } else {
-        return require(moduleName);
+        // explicitly pass as string and not as expression to suppress webpack warning
+        // 'Critical dependency: the request of a dependency is an expression'
+        return require(`${moduleName}`);
     }
 }
 

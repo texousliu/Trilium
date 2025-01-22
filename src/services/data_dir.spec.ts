@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
-import type { getTriliumDataDir as getTriliumDataDirType, getDataDirs as getDataDirsType, getPlatformAppDataDir as getPlatformAppDataDirType } from "../src/services/data_dir";
+import type { getTriliumDataDir as getTriliumDataDirType, getDataDirs as getDataDirsType, getPlatformAppDataDir as getPlatformAppDataDirType } from "./data_dir.js";
 
 describe("data_dir.ts unit tests", async () => {
     let getTriliumDataDir: typeof getTriliumDataDirType;
@@ -42,9 +42,9 @@ describe("data_dir.ts unit tests", async () => {
     });
 
     // import function to test now, after creating the mocks
-    ({ getTriliumDataDir } = await import("../src/services/data_dir.ts"));
-    ({ getPlatformAppDataDir } = await import("../src/services/data_dir.ts"));
-    ({ getDataDirs } = await import("../src/services/data_dir.ts"));
+    ({ getTriliumDataDir } = await import("./data_dir.js"));
+    ({ getPlatformAppDataDir } = await import("./data_dir.js"));
+    ({ getDataDirs } = await import("./data_dir.js"));
 
     // helper to reset call counts
     const resetAllMocks = () => {
@@ -61,27 +61,33 @@ describe("data_dir.ts unit tests", async () => {
     };
 
     describe("#getPlatformAppDataDir()", () => {
-        type TestCaseGetPlatformAppDataDir = [description: string, fnValue: Parameters<typeof getPlatformAppDataDir>, expectedValueFn: (val: ReturnType<typeof getPlatformAppDataDir>) => boolean];
+        type TestCaseGetPlatformAppDataDir = [description: string, fnValue: Parameters<typeof getPlatformAppDataDir>, expectedValue: string | null, osHomedirMockValue: string | null];
+
         const testCases: TestCaseGetPlatformAppDataDir[] = [
-            ["w/ unsupported OS it should return 'null'", ["aix", undefined], (val) => val === null],
+            ["w/ unsupported OS it should return 'null'", ["aix", undefined], null, null],
 
-            ["w/ win32 and no APPDATA set it should return 'null'", ["win32", undefined], (val) => val === null],
+            ["w/ win32 and no APPDATA set it should return 'null'", ["win32", undefined], null, null],
 
-            ["w/ win32 and set APPDATA it should return set 'APPDATA'", ["win32", "AppData"], (val) => val === "AppData"],
+            ["w/ win32 and set APPDATA it should return set 'APPDATA'", ["win32", "AppData"], "AppData", null],
 
-            ["w/ linux it should return '/.local/share'", ["linux", undefined], (val) => val !== null && val.endsWith("/.local/share")],
+            ["w/ linux it should return '~/.local/share'", ["linux", undefined], "/home/mock/.local/share", "/home/mock"],
 
-            ["w/ linux and wrongly set APPDATA it should ignore APPDATA and return /.local/share", ["linux", "FakeAppData"], (val) => val !== null && val.endsWith("/.local/share")],
+            ["w/ linux and wrongly set APPDATA it should ignore APPDATA and return '~/.local/share'", ["linux", "FakeAppData"], "/home/mock/.local/share", "/home/mock"],
 
-            ["w/ darwin it should return /Library/Application Support", ["darwin", undefined], (val) => val !== null && val.endsWith("/Library/Application Support")]
+            ["w/ darwin it should return '~/Library/Application Support'", ["darwin", undefined], "/Users/mock/Library/Application Support", "/Users/mock"]
         ];
 
+        beforeEach(() => {
+            // make sure OS does not set its own process.env.APPDATA, so that we can use our own supplied value
+            delete process.env.APPDATA;
+        });
+
         testCases.forEach((testCase) => {
-            const [testDescription, value, isExpected] = testCase;
+            const [testDescription, fnValues, expected, osHomedirMockValue] = testCase;
             return it(testDescription, () => {
-                const actual = getPlatformAppDataDir(...value);
-                const result = isExpected(actual);
-                expect(result).toBeTruthy();
+                mockFn.osHomedirMock.mockReturnValue(osHomedirMockValue);
+                const actual = getPlatformAppDataDir(...fnValues);
+                expect(actual).toEqual(expected);
             });
         });
     });
@@ -287,7 +293,7 @@ describe("data_dir.ts unit tests", async () => {
             const result = getDataDirs(`${mockValuePrefix}_TRILIUM_DATA_DIR`);
 
             for (const key in result) {
-                expect(result[key]).toEqual(`${mockValuePrefix}_${key}`);
+                expect(result[key as keyof typeof result]).toEqual(`${mockValuePrefix}_${key}`);
             }
         });
 
@@ -302,7 +308,7 @@ describe("data_dir.ts unit tests", async () => {
             const result = getDataDirs(mockDataDir);
 
             for (const key in result) {
-                expect(result[key].startsWith(mockDataDir)).toBeTruthy();
+                expect(result[key as keyof typeof result].startsWith(mockDataDir)).toBeTruthy();
             }
 
             mockFn.pathJoinMock.mockReset();
@@ -335,7 +341,7 @@ describe("data_dir.ts unit tests", async () => {
             if (typeof changeAttemptResult === "string") {
                 // if it didn't throw above: assert that it did not change the value of it or any other keys of the object
                 for (const key in result) {
-                    expect(result[key].startsWith(mockDataDirBase)).toBeTruthy();
+                    expect(result[key as keyof typeof result].startsWith(mockDataDirBase)).toBeTruthy();
                 }
             } else {
                 expect(changeAttemptResult).toBeInstanceOf(TypeError);

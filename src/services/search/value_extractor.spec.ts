@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import becca_mocking from "./becca_mocking.js";
-import ValueExtractor from "../../src/services/search/value_extractor.js";
-import becca from "../../src/becca/becca.js";
-import SearchContext from "../../src/services/search/search_context.js";
+import becca_mocking from "../../../spec/support/becca_mocking.js";
+import ValueExtractor from "./value_extractor.js";
+import becca from "../../becca/becca.js";
+import SearchContext from "./search_context.js";
 
 const dsc = new SearchContext();
 

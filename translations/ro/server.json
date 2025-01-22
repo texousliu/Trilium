@@ -244,5 +244,9 @@
   },
   "notes": {
     "new-note": "Notiță nouă"
+  },
+  "backend_log": {
+    "log-does-not-exist": "Fișierul de loguri de backend „{{ fileName }}” nu există (încă).",
+    "reading-log-failed": "Nu s-a putut citi fișierul de loguri de backend „{{fileName}}”."
   }
 }

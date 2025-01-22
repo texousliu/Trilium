@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import lex from "../../src/services/search/services/lex.js";
+import lex from "./lex.js";
 
 describe("Lexer fulltext", () => {
     it("simple lexing", () => {
