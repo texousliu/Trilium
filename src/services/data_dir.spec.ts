@@ -77,6 +77,11 @@ describe("data_dir.ts unit tests", async () => {
             ["w/ darwin it should return '~/Library/Application Support'", ["darwin", undefined], "/Users/mock/Library/Application Support", "/Users/mock"]
         ];
 
+        beforeEach(() => {
+            // make sure OS does not set its own process.env.APPDATA, so that we can use our own supplied value
+            delete process.env.APPDATA;
+        });
+
         testCases.forEach((testCase) => {
             const [testDescription, fnValues, expected, osHomedirMockValue] = testCase;
             return it(testDescription, () => {
