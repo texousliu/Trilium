@@ -70,6 +70,7 @@ export interface ExecuteCommandData extends CommandData {
  */
 export type CommandMappings = {
     "api-log-messages": CommandData;
+    focusTree: CommandData,
     focusOnDetail: Required<CommandData>;
     focusOnSearchDefinition: Required<CommandData>;
     searchNotes: CommandData & {
@@ -232,9 +233,12 @@ type EventMappings = {
     activeContextChanged: {
         noteContext: NoteContext;
     };
+    beforeNoteSwitch: {
+        noteContext: NoteContext;
+    };
     noteSwitched: {
         noteContext: NoteContext;
-        notePath: string;
+        notePath: string | null;
     };
     noteSwitchedAndActivatedEvent: {
         noteContext: NoteContext;
@@ -253,11 +257,15 @@ type EventMappings = {
         noteId: string;
     };
     hoistedNoteChanged: {
-        ntxId: string;
+        noteId: string;
+        ntxId: string | null;
     };
     contextsReopenedEvent: {
         mainNtxId: string;
         tabPosition: number;
+    };
+    noteDetailRefreshed: {
+        ntxId?: string | null;
     };
     noteContextReorderEvent: {
         oldMainNtxId: string;
@@ -274,6 +282,9 @@ type EventMappings = {
     };
     geoMapCreateChildNote: {
         ntxId: string | null | undefined; // TODO: deduplicate ntxId
+    };
+    tabReorder: {
+        ntxIdsInOrder: string[]
     };
 };
 
