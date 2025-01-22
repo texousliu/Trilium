@@ -279,6 +279,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     async doRefresh(note: FNote) {
         await this.geoMapWidget.refresh();
+        await this.#reloadMarkers();
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
