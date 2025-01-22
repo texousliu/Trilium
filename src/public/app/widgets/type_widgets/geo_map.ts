@@ -74,6 +74,8 @@ const TPL = `\
 
 const LOCATION_ATTRIBUTE = "geolocation";
 const CHILD_NOTE_ICON = "bx bx-pin";
+const DEFAULT_COORDINATES: [ number, number ] = [ 3.878638227135724, 446.6630455551659 ];
+const DEFAULT_ZOOM = 2;
 
 interface MapData {
     view?: {
@@ -143,8 +145,8 @@ export default class GeoMapTypeWidget extends TypeWidget {
         }
 
         // Restore viewport position & zoom
-        const center = parsedContent.view?.center ?? [51.505, -0.09];
-        const zoom = parsedContent.view?.zoom ?? 13;
+        const center = parsedContent.view?.center ?? DEFAULT_COORDINATES;
+        const zoom = parsedContent.view?.zoom ?? DEFAULT_ZOOM;
         map.setView(center, zoom);
 
         // Restore markers.
