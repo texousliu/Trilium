@@ -138,7 +138,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         const blob = await this.note.getBlob();
 
         let parsedContent: MapData = {};
-        if (blob) {
+        if (blob && blob.content) {
             parsedContent = JSON.parse(blob.content);
         }
 
