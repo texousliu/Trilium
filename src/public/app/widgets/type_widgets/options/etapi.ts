@@ -10,7 +10,7 @@ const TPL = `
     <h4>${t("etapi.title")}</h4>
 
     <p>${t("etapi.description")} <br/>
-       ${t("etapi.see_more")} <a href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a> ${t("etapi.and")} <a onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>.</p>
+       ${t("etapi.see_more")} <a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a> ${t("etapi.and")} <a class="tn-link" onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>.</p>
 
     <button type="button" class="create-etapi-token btn btn-sm">${t("etapi.create_token")}</button>
 

@@ -4,7 +4,7 @@ import attributeService from "../services/attributes.js";
 import { t } from "../services/i18n.js";
 
 const TPL = `
-<div class="shared-info-widget alert alert-warning">
+<div class="shared-info-widget alert alert-warning use-tn-links">
     <style>
         .shared-info-widget {
             margin: 10px;
@@ -13,7 +13,7 @@ const TPL = `
             font-weight: bold;
         }
     </style>
-    
+
     <span class="shared-text"></span> <a class="shared-link external"></a>. ${t("shared_info.help_link")}
 </div>`;
 
