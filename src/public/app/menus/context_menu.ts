@@ -1,5 +1,6 @@
 import type { CommandNames } from "../components/app_context.js";
 import keyboardActionService from "../services/keyboard_actions.js";
+import note_tooltip from "../services/note_tooltip.js";
 import utils from "../services/utils.js";
 
 interface ContextMenuOptions<T extends CommandNames> {
@@ -56,6 +57,8 @@ class ContextMenu {
 
     async show<T extends CommandNames>(options: ContextMenuOptions<T>) {
         this.options = options;
+
+        note_tooltip.dismissAllTooltips();
 
         if (this.$widget.hasClass("show")) {
             // The menu is already visible. Hide the menu then open it again
