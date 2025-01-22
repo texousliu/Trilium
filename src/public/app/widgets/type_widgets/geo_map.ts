@@ -10,6 +10,7 @@ import { t } from "../../services/i18n.js";
 import attributes from "../../services/attributes.js";
 import asset_path from "../../../../services/asset_path.js";
 import openContextMenu from "./geo_map_context_menu.js";
+import link from "../../services/link.js";
 
 const TPL = `\
 <div class="note-detail-geo-map note-detail-printable">
@@ -292,6 +293,17 @@ export default class GeoMapTypeWidget extends TypeWidget {
         if (attributeRows.find((at) => at.name === LOCATION_ATTRIBUTE)) {
             this.#reloadMarkers();
         }
+    }
+
+    openGeoLocationEvent({ noteId, event }: EventData<"openGeoLocation">) {
+        const marker = this.currentMarkerData[noteId];
+        if (!marker) {
+            return;
+        }
+
+        const latLng = this.currentMarkerData[noteId].getLatLng();
+        const url = `geo:${latLng.lat},${latLng.lng}`;
+        link.goToLinkExt(event, url);
     }
 
     deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {

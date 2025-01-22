@@ -9,12 +9,18 @@ export default function openContextMenu(noteId: string, e: ContextMenuEvent) {
         y: e.pageY,
         items: [
             ...linkContextMenu.getItems(),
+            { title: "Open location", command: "openGeoLocation", uiIcon: "bx bx-map-alt" },
             { title: "----" },
             { title: "Remove from map", command: "deleteFromMap", uiIcon: "bx bx-trash" }
         ],
-        selectMenuItemHandler: ({ command }) => {
+        selectMenuItemHandler: ({ command }, e) => {
             if (command === "deleteFromMap") {
                 appContext.triggerCommand(command, { noteId });
+                return;
+            }
+
+            if (command === "openGeoLocation") {
+                appContext.triggerCommand(command, { noteId, event: e });
                 return;
             }
 

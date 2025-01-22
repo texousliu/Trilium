@@ -23,6 +23,7 @@ import type LoadResults from "../services/load_results.js";
 import type { Attribute } from "../services/attribute_parser.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
 import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
+import type { ContextMenuEvent } from "../menus/context_menu.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -195,9 +196,8 @@ export type CommandMappings = {
     }
 
     // Geomap
-    deleteFromMap: {
-        noteId: string;
-    }
+    deleteFromMap: { noteId: string },
+    openGeoLocation: { noteId: string, event: JQuery.MouseDownEvent }
 };
 
 type EventMappings = {

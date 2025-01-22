@@ -12,7 +12,7 @@ function openContextMenu(notePath: string, e: ContextMenuEvent, viewScope: ViewS
     });
 }
 
-function getItems(): MenuItem<any>[] {
+function getItems(): MenuItem<CommandNames>[] {
     return [
         { title: t("link_context_menu.open_note_in_new_tab"), command: "openNoteInNewTab", uiIcon: "bx bx-link-external" },
         { title: t("link_context_menu.open_note_in_new_split"), command: "openNoteInNewSplit", uiIcon: "bx bx-dock-right" },
