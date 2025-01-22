@@ -11,6 +11,7 @@ import attributes from "../../services/attributes.js";
 import asset_path from "../../../../services/asset_path.js";
 import openContextMenu from "./geo_map_context_menu.js";
 import link from "../../services/link.js";
+import note_tooltip from "../../services/note_tooltip.js";
 
 const TPL = `\
 <div class="note-detail-geo-map note-detail-printable">
@@ -202,6 +203,13 @@ export default class GeoMapTypeWidget extends TypeWidget {
             marker.on("contextmenu", (e) => {
                 openContextMenu(childNote.noteId, e.originalEvent);
             });
+
+            const el = marker.getElement();
+            if (el) {
+                const $el = $(el);
+                $el.attr("data-href", `#${childNote.noteId}`);
+                note_tooltip.setupElementTooltip($($el));
+            }
 
             this.currentMarkerData[childNote.noteId] = marker;
         }
