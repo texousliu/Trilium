@@ -9,6 +9,7 @@ import type { EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import attributes from "../../services/attributes.js";
 import asset_path from "../../../../services/asset_path.js";
+import openContextMenu from "./geo_map_context_menu.js";
 
 const TPL = `\
 <div class="note-detail-geo-map note-detail-printable">
@@ -178,12 +179,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
             const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
             const icon = L.divIcon({
                 html: `\
-                    <a data-href="#${childNote.noteId}">
-                        <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
-                        <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
-                        <span class="bx ${childNote.getIcon()}"></span>
-                        <span class="title-label">${childNote.title}</span>
-                    </a>`,
+                    <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
+                    <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
+                    <span class="bx ${childNote.getIcon()}"></span>
+                    <span class="title-label">${childNote.title}</span>`,
                 iconSize: [ 25, 41 ],
                 iconAnchor: [ 12, 41 ]
             })
@@ -198,6 +197,11 @@ export default class GeoMapTypeWidget extends TypeWidget {
                 .on("moveend", e => {
                     this.moveMarker(childNote.noteId, (e.target as Marker).getLatLng());
                 });
+
+            marker.on("contextmenu", (e) => {
+                openContextMenu(childNote.noteId, e.originalEvent);
+            });
+
             this.currentMarkerData[childNote.noteId] = marker;
         }
     }
@@ -228,8 +232,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
         this.#changeState(State.Normal);
     }
 
-    async moveMarker(noteId: string, latLng: LatLng) {
-        await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, [latLng.lat, latLng.lng].join(","));
+    async moveMarker(noteId: string, latLng: LatLng | null) {
+        const value = (latLng ? [latLng.lat, latLng.lng].join(",") : "");
+        await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, value);
     }
 
     getData(): any {
@@ -287,6 +292,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
         if (attributeRows.find((at) => at.name === LOCATION_ATTRIBUTE)) {
             this.#reloadMarkers();
         }
+    }
+
+    deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {
+        this.moveMarker(noteId, null);
     }
 
 }

@@ -31,6 +31,7 @@ export interface MenuCommandItem<T extends CommandNames> {
 
 export type MenuItem<T extends CommandNames> = MenuCommandItem<T> | MenuSeparatorItem;
 export type MenuHandler<T extends CommandNames> = (item: MenuCommandItem<T>, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
+export type ContextMenuEvent = PointerEvent | MouseEvent | JQuery.ContextMenuEvent;
 
 class ContextMenu {
     private $widget: JQuery<HTMLElement>;

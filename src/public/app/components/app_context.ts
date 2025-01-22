@@ -193,6 +193,11 @@ export type CommandMappings = {
     setZoomFactorAndSave: {
         zoomFactor: string;
     }
+
+    // Geomap
+    deleteFromMap: {
+        noteId: string;
+    }
 };
 
 type EventMappings = {
