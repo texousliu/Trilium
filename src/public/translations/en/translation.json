@@ -1630,5 +1630,14 @@
   },
   "note_tooltip": {
     "note-has-been-deleted": "Note has been deleted."
+  },
+  "geo-map": {
+    "create-child-note-title": "Create a new child note and add it to the map",
+    "create-child-note-instruction": "Click on the map to create a new note at that location or press Escape to dismiss.",
+    "unable-to-load-map": "Unable to load map."
+  },
+  "geo-map-context": {
+    "open-location": "Open location",
+    "remove-from-map": "Remove from map"
   }
 }

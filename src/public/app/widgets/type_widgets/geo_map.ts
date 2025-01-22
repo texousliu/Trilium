@@ -128,7 +128,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         this.L = L;
         const map = this.geoMapWidget.map;
         if (!map) {
-            throw new Error("Unable to load map.");
+            throw new Error(t("geo-map.unable-to-load-map"));
         }
 
         if (!this.note) {
@@ -273,7 +273,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
             icon: "plus",
             id: "geo-new-note",
             title: "New note",
-            message: "Click on the map to create a new note at that location or press Escape to dismiss."
+            message: t("geo-map.create-child-note-instruction")
         });
 
         this.#changeState(State.NewNote);
