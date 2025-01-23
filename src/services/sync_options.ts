@@ -1,7 +1,6 @@
 "use strict";
 
 import optionService from "./options.js";
-import type { OptionNames } from "./options_interface.js";
 import config from "./config.js";
 
 /*
@@ -11,8 +10,8 @@ import config from "./config.js";
  * to live sync server.
  */
 
-function get(name: OptionNames) {
-    return (config["Sync"] && config["Sync"][name]) || optionService.getOption(name);
+function get(name: keyof typeof config.Sync) {
+  return (config["Sync"] && config["Sync"][name]) || optionService.getOption(name);
 }
 
 export default {
