@@ -38,27 +38,57 @@ export interface TriliumConfig {
         syncProxy: string;
     };
 }
+
+//prettier-ignore
 const config: TriliumConfig = {
 
     General: {
-        instanceName: process.env.TRILIUM_GENERAL_INSTANCENAME || iniConfig.General.instanceName,
-        noAuthentication: envToBoolean(process.env.TRILIUM_GENERAL_NOAUTHENTICATION) || iniConfig.General.noAuthentication,
-        noBackup: envToBoolean(process.env.TRILIUM_GENERAL_NOBACKUP) || iniConfig.General.noBackup,
-        noDesktopIcon: envToBoolean(process.env.TRILIUM_GENERAL_NODESKTOPICON) || iniConfig.General.noDesktopIcon
+        instanceName:
+            process.env.TRILIUM_GENERAL_INSTANCENAME || iniConfig.General.instanceName || "",
+
+        noAuthentication: 
+            envToBoolean(process.env.TRILIUM_GENERAL_NOAUTHENTICATION) || iniConfig.General.noAuthentication || false,
+
+        noBackup: 
+            envToBoolean(process.env.TRILIUM_GENERAL_NOBACKUP) || iniConfig.General.noBackup || false,
+
+        noDesktopIcon: 
+            envToBoolean(process.env.TRILIUM_GENERAL_NODESKTOPICON) || iniConfig.General.noDesktopIcon || false
     },
 
     Network: {
-        host: process.env.TRILIUM_NETWORK_HOST || iniConfig.Network.host,
-        port: process.env.TRILIUM_NETWORK_PORT || iniConfig.Network.port,
-        https: envToBoolean(process.env.TRILIUM_NETWORK_HTTPS) || iniConfig.Network.https,
-        certPath: process.env.TRILIUM_NETWORK_CERTPATH  || iniConfig.Network.certPath,
-        keyPath: process.env.TRILIUM_NETWORK_KEYPATH  || iniConfig.Network.keyPath,
-        trustedReverseProxy: process.env.TRILIUM_NETWORK_TRUSTEDREVERSEPROXY || iniConfig.Network.trustedReverseProxy
+        host:
+            process.env.TRILIUM_NETWORK_HOST || iniConfig.Network.host || "0.0.0.0",
+
+        port:
+            process.env.TRILIUM_NETWORK_PORT || iniConfig.Network.port || "3000",
+
+        https: 
+            envToBoolean(process.env.TRILIUM_NETWORK_HTTPS) || iniConfig.Network.https || false,
+
+        certPath: 
+            process.env.TRILIUM_NETWORK_CERTPATH || iniConfig.Network.certPath || "",
+
+        keyPath: 
+            process.env.TRILIUM_NETWORK_KEYPATH  || iniConfig.Network.keyPath || "",
+
+        trustedReverseProxy:
+            process.env.TRILIUM_NETWORK_TRUSTEDREVERSEPROXY || iniConfig.Network.trustedReverseProxy || false
     },
-    // @TODO correctly define here
-    //Sync: {}
+
+    Sync: {
+        syncServerHost:
+            process.env.TRILIUM_SYNC_SERVER_HOST || iniConfig?.Sync?.syncServerHost || "",
+
+        syncServerTimeout:
+            process.env.TRILIUM_SYNC_SERVER_TIMEOUT || iniConfig?.Sync?.syncServerTimeout || "120000",
+
+        // @TriliumNextTODO: check if we can rename misnamed syncProxy to syncServerProxy without
+        // breaking backwards compatibility - for naming consistency
+        syncProxy:
+            process.env.TRILIUM_SYNC_SERVER_PROXY || iniConfig?.Sync?.syncProxy || ""
+    }
 
 };
-
 
 export default config;
