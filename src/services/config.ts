@@ -17,7 +17,28 @@ if (!fs.existsSync(dataDir.CONFIG_INI_PATH)) {
 
 const iniConfig = ini.parse(fs.readFileSync(dataDir.CONFIG_INI_PATH, "utf-8"));
 
-const config = {
+export interface TriliumConfig {
+    General: {
+        instanceName: string;
+        noAuthentication: boolean;
+        noBackup: boolean;
+        noDesktopIcon: boolean;
+    };
+    Network: {
+        host: string;
+        port: string;
+        https: boolean;
+        certPath: string;
+        keyPath: string;
+        trustedReverseProxy: boolean | string;
+    };
+    Sync: {
+        syncServerHost: string;
+        syncServerTimeout: string;
+        syncProxy: string;
+    };
+}
+const config: TriliumConfig = {
 
     General: {
         instanceName: process.env.TRILIUM_GENERAL_INSTANCENAME || iniConfig.General.instanceName,
