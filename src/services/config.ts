@@ -22,16 +22,20 @@ const config = {
     General: {
         instanceName: process.env.TRILIUM_GENERAL_INSTANCENAME || iniConfig.General.instanceName,
         noAuthentication: envToBoolean(process.env.TRILIUM_GENERAL_NOAUTHENTICATION) || iniConfig.General.noAuthentication,
-        noBackup: envToBoolean(process.env.TRILIUM_GENERAL_NOBACKUP) || iniConfig.General.noBackup
+        noBackup: envToBoolean(process.env.TRILIUM_GENERAL_NOBACKUP) || iniConfig.General.noBackup,
+        noDesktopIcon: envToBoolean(process.env.TRILIUM_GENERAL_NODESKTOPICON) || iniConfig.General.noDesktopIcon
     },
 
     Network: {
+        host: process.env.TRILIUM_NETWORK_HOST || iniConfig.Network.host,
         port: process.env.TRILIUM_NETWORK_PORT || iniConfig.Network.port,
         https: envToBoolean(process.env.TRILIUM_NETWORK_HTTPS) || iniConfig.Network.https,
         certPath: process.env.TRILIUM_NETWORK_CERTPATH  || iniConfig.Network.certPath,
         keyPath: process.env.TRILIUM_NETWORK_KEYPATH  || iniConfig.Network.keyPath,
         trustedReverseProxy: process.env.TRILIUM_NETWORK_TRUSTEDREVERSEPROXY || iniConfig.Network.trustedReverseProxy
-    }
+    },
+    // @TODO correctly define here
+    //Sync: {}
 
 };
 
