@@ -17,7 +17,7 @@ function get(name: keyof typeof config.Sync) {
 export default {
     // env variable is the easiest way to guarantee we won't overwrite prod data during development
     // after copying prod document/data directory
-    getSyncServerHost: () => process.env.TRILIUM_SYNC_SERVER_HOST || get("syncServerHost"),
+    getSyncServerHost: () => get("syncServerHost"),
     isSyncSetup: () => {
         const syncServerHost = get("syncServerHost");
 
