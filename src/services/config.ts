@@ -5,6 +5,7 @@ import fs from "fs";
 import dataDir from "./data_dir.js";
 import path from "path";
 import resourceDir from "./resource_dir.js";
+import { envToBoolean } from "./utils.js";
 
 const configSampleFilePath = path.resolve(resourceDir.RESOURCE_DIR, "config-sample.ini");
 
@@ -14,6 +15,25 @@ if (!fs.existsSync(dataDir.CONFIG_INI_PATH)) {
     fs.writeFileSync(dataDir.CONFIG_INI_PATH, configSample);
 }
 
-const config = ini.parse(fs.readFileSync(dataDir.CONFIG_INI_PATH, "utf-8"));
+const iniConfig = ini.parse(fs.readFileSync(dataDir.CONFIG_INI_PATH, "utf-8"));
+
+const config = {
+
+    General: {
+        instanceName: process.env.TRILIUM_GENERAL_INSTANCENAME || iniConfig.General.instanceName,
+        noAuthentication: envToBoolean(process.env.TRILIUM_GENERAL_NOAUTHENTICATION) || iniConfig.General.noAuthentication,
+        noBackup: envToBoolean(process.env.TRILIUM_GENERAL_NOBACKUP) || iniConfig.General.noBackup
+    },
+
+    Network: {
+        port: process.env.TRILIUM_NETWORK_PORT || iniConfig.Network.port,
+        https: envToBoolean(process.env.TRILIUM_NETWORK_HTTPS) || iniConfig.Network.https,
+        certPath: process.env.TRILIUM_NETWORK_CERTPATH  || iniConfig.Network.certPath,
+        keyPath: process.env.TRILIUM_NETWORK_KEYPATH  || iniConfig.Network.keyPath,
+        trustedReverseProxy: process.env.TRILIUM_NETWORK_TRUSTEDREVERSEPROXY || iniConfig.Network.trustedReverseProxy
+    }
+
+};
+
 
 export default config;
