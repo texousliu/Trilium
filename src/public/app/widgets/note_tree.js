@@ -115,16 +115,14 @@ const TPL = `
     <div class="tree-settings-popup">
         <h4>${t("note_tree.tree-settings-title")}</h4>
         <div class="form-check">
-            <label class="form-check-label">
+            <label class="form-check-label tn-checkbox">
                 <input class="form-check-input hide-archived-notes" type="checkbox" value="">
-
                 ${t("note_tree.hide-archived-notes")}
             </label>
         </div>
         <div class="form-check">
-            <label class="form-check-label">
+            <label class="form-check-label tn-checkbox">
                 <input class="form-check-input auto-collapse-note-tree" type="checkbox" value="">
-
                 ${t("note_tree.automatically-collapse-notes")}
                 <span class="bx bx-info-circle"
                       title="${t("note_tree.automatically-collapse-notes-title")}"></span>

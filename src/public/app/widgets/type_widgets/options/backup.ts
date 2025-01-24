@@ -13,19 +13,19 @@ const TPL = `
 
     <ul style="list-style: none">
         <li>
-            <label>
+            <label class="tn-checkbox">
                 <input type="checkbox" class="daily-backup-enabled form-check-input">
                 ${t("backup.enable_daily_backup")}
             </label>
         </li>
         <li>
-            <label>
+            <label class="tn-checkbox">
                 <input type="checkbox" class="weekly-backup-enabled form-check-input">
                 ${t("backup.enable_weekly_backup")}
             </label>
         </li>
         <li>
-        <label>
+        <label class="tn-checkbox">
             <input type="checkbox" class="monthly-backup-enabled form-check-input">
             ${t("backup.enable_monthly_backup")}
             </label>

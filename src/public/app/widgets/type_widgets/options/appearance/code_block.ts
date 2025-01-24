@@ -34,7 +34,7 @@ const TPL = `
         </div>
 
         <div class="col-md-6 side-checkbox">
-            <label class="form-check">
+            <label class="form-check tn-checkbox">
                 <input type="checkbox" class="word-wrap form-check-input" />
                 ${t("code_block.word_wrapping")}
             </label>

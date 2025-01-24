@@ -13,7 +13,7 @@ const TPL = `
 
     <h4>${t("images.images_section_title")}</h4>
 
-    <label>
+    <label class="tn-checkbox">
         <input class="download-images-automatically" type="checkbox" name="download-images-automatically">
         ${t("images.download_images_automatically")}
     </label>
@@ -22,7 +22,7 @@ const TPL = `
 
     <hr />
 
-    <label>
+    <label class="tn-checkbox">
         <input class="image-compresion-enabled" type="checkbox" name="image-compression-enabled">
         ${t("images.enable_image_compression")}
     </label>

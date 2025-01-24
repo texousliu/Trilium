@@ -14,17 +14,17 @@ const TPL = `
         padding-top: 10px;
         padding-bottom: 10px;
     }
-    
+
     .export-dialog .export-form .format-choice {
         padding-left: 40px;
         display: none;
     }
-    
+
     .export-dialog .export-form .opml-versions {
         padding-left: 60px;
         display: none;
     }
-    
+
     .export-dialog .export-form .form-check-label {
         padding: 2px;
     }
@@ -39,7 +39,7 @@ const TPL = `
             <form class="export-form">
                 <div class="modal-body">
                     <div class="form-check">
-                        <label class="form-check-label">
+                        <label class="form-check-label tn-radio">
                             <input class="export-type-subtree form-check-input" type="radio" name="export-type" value="subtree">
                             ${t("export.export_type_subtree")}
                         </label>
@@ -47,21 +47,21 @@ const TPL = `
 
                     <div class="export-subtree-formats format-choice">
                         <div class="form-check">
-                            <label class="form-check-label">
+                            <label class="form-check-label tn-radio">
                                 <input class="form-check-input" type="radio" name="export-subtree-format" value="html">
                                 ${t("export.format_html_zip")}
                             </label>
                         </div>
 
                         <div class="form-check">
-                            <label class="form-check-label">
+                            <label class="form-check-label tn-radio">
                                 <input class="form-check-input" type="radio" name="export-subtree-format" value="markdown">
                                 ${t("export.format_markdown")}
                             </label>
                         </div>
 
                         <div class="form-check">
-                            <label class="form-check-label">
+                            <label class="form-check-label tn-radio">
                                 <input class="form-check-input" type="radio" name="export-subtree-format" value="opml">
                                 ${t("export.format_opml")}
                             </label>
@@ -69,14 +69,14 @@ const TPL = `
 
                         <div class="opml-versions">
                             <div class="form-check">
-                                <label class="form-check-label">
+                                <label class="form-check-label tn-radio">
                                     <input class="form-check-input" type="radio" name="opml-version" value="1.0">
                                     ${t("export.opml_version_1")}
                                 </label>
                             </div>
 
                             <div class="form-check">
-                                <label class="form-check-label">
+                                <label class="form-check-label tn-radio">
                                     <input class="form-check-input" type="radio" name="opml-version" value="2.0">
                                     ${t("export.opml_version_2")}
                                 </label>
@@ -85,7 +85,7 @@ const TPL = `
                     </div>
 
                     <div class="form-check">
-                        <label class="form-check-label">
+                        <label class="form-check-label tn-radio">
                             <input class="form-check-input" type="radio" name="export-type" value="single">
                             ${t("export.export_type_single")}
                         </label>
@@ -93,14 +93,14 @@ const TPL = `
 
                     <div class="export-single-formats format-choice">
                         <div class="form-check">
-                            <label class="form-check-label">
+                            <label class="form-check-label tn-radio">
                                 <input class="form-check-input" type="radio" name="export-single-format" value="html">
                                 ${t("export.format_html")}
                             </label>
                         </div>
 
                         <div class="form-check">
-                            <label class="form-check-label">
+                            <label class="form-check-label tn-radio">
                                 <input class="form-check-input" type="radio" name="export-single-format" value="markdown">
                                 ${t("export.format_markdown")}
                             </label>
