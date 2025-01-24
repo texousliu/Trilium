@@ -11,28 +11,28 @@ const TPL = `
         max-height: 300px;
         overflow-y: auto;
     }
-    
+
     .note-path-list {
         margin-top: 10px;
     }
-    
+
     .note-path-list .path-current {
         font-weight: bold;
     }
-    
+
     .note-path-list .path-archived {
         color: var(--muted-text-color) !important;
     }
-    
+
     .note-path-list .path-search {
         font-style: italic;
     }
     </style>
-    
+
     <div class="note-path-intro"></div>
-    
+
     <ul class="note-path-list"></ul>
-    
+
     <button class="btn btn-sm" data-trigger-command="cloneNoteIdsTo">${t("note_paths.clone_button")}</button>
 </div>`;
 
@@ -95,7 +95,7 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
 
         const $noteLink = await linkService.createLink(notePath, { title });
 
-        $noteLink.find("a").addClass("no-tooltip-preview");
+        $noteLink.find("a").addClass("no-tooltip-preview tn-link");
 
         const icons = [];
 
