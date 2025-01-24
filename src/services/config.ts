@@ -83,10 +83,9 @@ const config: TriliumConfig = {
         syncServerTimeout:
             process.env.TRILIUM_SYNC_SERVER_TIMEOUT || iniConfig?.Sync?.syncServerTimeout || "120000",
 
-        // @TriliumNextTODO: check if we can rename misnamed syncProxy to syncServerProxy without
-        // breaking backwards compatibility - for naming consistency
         syncProxy:
-            process.env.TRILIUM_SYNC_SERVER_PROXY || iniConfig?.Sync?.syncProxy || ""
+            // additionally checking in iniConfig for inconsistently named syncProxy for backwards compatibility
+            process.env.TRILIUM_SYNC_SERVER_PROXY || iniConfig?.Sync?.syncProxy || iniConfig?.Sync?.syncServerProxy || ""
     }
 
 };
