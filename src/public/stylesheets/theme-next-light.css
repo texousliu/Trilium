@@ -56,6 +56,9 @@
     --select-arrow-svg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='transparent' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
     --select-group-heading-text-color: gray;
 
+    --link-hover-background: #00000012;
+    --link-hover-color: black;
+
     --hover-item-text-color: black;
     --hover-item-background-color: #0000001a;
     --hover-item-border-color: transparent;

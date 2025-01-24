@@ -319,11 +319,6 @@ label:has(> input[type="checkbox"]:disabled)::after {
 
 /* Links */
 
-:root {
-    --link-hover-background: #ffffff26;
-    --link-hover-color: white;
-}
-
 body a.tn-link,
 body a.tn-link:visited,
 .use-tn-links a,
