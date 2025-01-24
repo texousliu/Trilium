@@ -330,15 +330,15 @@ body a.tn-link:visited,
 .use-tn-links a:visited {
     --background: transparent;
     
+    box-shadow: 0 0 0 0 var(--background);
     border-radius: 4px;
     background: var(--background);
-    outline: 0 solid var(--background);
     color: currentColor;
     font-weight: normal;
     text-decoration: underline;
 
     transition: background-color 200ms ease-out,
-                outline 200ms ease-out,
+                box-shadow 200ms ease-out,
                 color 300ms ease-out;
 }
 
@@ -350,14 +350,12 @@ body a.tn-link:focus-visible,
 
 body a.tn-link:hover, 
 .use-tn-links a:hover {
+    box-shadow: 0 0 0 4px var(--link-hover-background);
     --background: var(--link-hover-background);
-
-    outline-width: 4px;
-    outline-offset: 0;
     color: var(--link-hover-color);
 
     transition: background-color 100ms ease-in,
-                outline 100ms ease-in,
+                box-shadow 100ms ease-in,
                 color 150ms ease-in;
 }
 
