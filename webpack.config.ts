@@ -8,7 +8,8 @@ export default {
     entry: {
         setup: "./src/public/app/setup.js",
         mobile: "./src/public/app/mobile.js",
-        desktop: "./src/public/app/desktop.js"
+        desktop: "./src/public/app/desktop.js",
+        share: "./src/public/app/share.js"
     },
     output: {
         publicPath: `${assetPath}/app-dist/`,
