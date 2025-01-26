@@ -189,7 +189,7 @@
     "@types/stream-throttle": "0.1.4",
     "@types/tmp": "0.2.6",
     "@types/turndown": "5.0.5",
-    "@types/ws": "8.5.13",
+    "@types/ws": "8.5.14",
     "@types/xml2js": "0.4.14",
     "@types/yargs": "17.0.33",
     "@vitest/coverage-v8": "3.0.4",
