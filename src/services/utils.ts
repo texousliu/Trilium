@@ -295,6 +295,18 @@ export function isString(x: any) {
     return Object.prototype.toString.call(x) === "[object String]";
 }
 
+// try to turn 'true' and 'false' strings from process.env variables into boolean values or undefined
+export function envToBoolean(val: string | undefined) {
+    if (val === undefined || typeof val !== "string") return undefined;
+
+    const valLc = val.toLowerCase().trim();
+
+    if (valLc === "true") return true;
+    if (valLc === "false") return false;
+
+    return undefined;
+}
+
 /**
  * Returns the directory for resources. On Electron builds this corresponds to the `resources` subdirectory inside the distributable package.
  * On development builds, this simply refers to the root directory of the application.
@@ -352,5 +364,6 @@ export default {
     isString,
     getResourceDir,
     isMac,
-    isWindows
+    isWindows,
+    envToBoolean
 };
