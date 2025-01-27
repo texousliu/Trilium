@@ -3,7 +3,7 @@
  *
  * @param noteId of the given note to be fetched. If false, fetches current note.
  */
-async function fetchNote(noteId = null) {
+async function fetchNote(noteId: string | null = null) {
     if (!noteId) {
         noteId = document.body.getAttribute("data-note-id");
     }
@@ -25,3 +25,9 @@ document.addEventListener(
     },
     false
 );
+
+// workaround to prevent webpack from removing "fetchNote" as dead code:
+// add fetchNote as property to the window object
+Object.defineProperty(window, "fetchNote", {
+    value: fetchNote
+});
