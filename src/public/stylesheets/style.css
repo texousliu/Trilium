@@ -396,6 +396,10 @@ body.desktop .dropdown-menu {
     color: var(--dropdown-item-icon-destructive-color);
 }
 
+.dropdown-item > span:not(.bx) {
+    width: 100%;
+}
+
 .CodeMirror {
     height: 100%;
     background: inherit;
