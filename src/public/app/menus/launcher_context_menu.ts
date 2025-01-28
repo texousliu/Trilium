@@ -1,4 +1,4 @@
-import treeService, { type Node } from "../services/tree.js";
+import treeService from "../services/tree.js";
 import froca from "../services/froca.js";
 import contextMenu, { type MenuCommandItem, type MenuItem } from "./context_menu.js";
 import dialogService from "../services/dialog.js";
@@ -12,14 +12,14 @@ type LauncherCommandNames = FilteredCommandNames<ContextMenuCommandData>;
 
 export default class LauncherContextMenu implements SelectMenuItemEventListener<LauncherCommandNames> {
     private treeWidget: NoteTreeWidget;
-    private node: Node;
+    private node: Fancytree.FancytreeNode;
 
-    constructor(treeWidget: NoteTreeWidget, node: Node) {
+    constructor(treeWidget: NoteTreeWidget, node: Fancytree.FancytreeNode) {
         this.treeWidget = treeWidget;
         this.node = node;
     }
 
-    async show(e: PointerEvent) {
+    async show(e: PointerEvent | JQuery.TouchStartEvent | JQuery.ContextMenuEvent) {
         contextMenu.show({
             x: e.pageX,
             y: e.pageY,

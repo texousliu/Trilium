@@ -61,6 +61,7 @@
     "@mermaid-js/layout-elk": "0.1.7",
     "@mind-elixir/node-menu": "1.0.4",
     "@triliumnext/express-partial-content": "1.0.1",
+    "@types/jquery.fancytree": "0.0.11",
     "@types/leaflet": "1.9.16",
     "@types/react-dom": "18.3.5",
     "archiver": "7.0.1",
