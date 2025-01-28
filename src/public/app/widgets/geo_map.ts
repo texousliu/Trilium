@@ -40,7 +40,7 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
                 const L = (await import("leaflet")).default;
 
                 const map = L.map(this.$container[0], {
-
+                    worldCopyJump: true
                 });
 
                 this.map = map;
