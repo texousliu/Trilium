@@ -21,6 +21,7 @@ const NOTE_TYPES = [
     { type: "mermaid", mime: "text/mermaid", title: t("note_types.mermaid-diagram"), selectable: true },
     { type: "book", mime: "", title: t("note_types.book"), selectable: true },
     { type: "webView", mime: "", title: t("note_types.web-view"), selectable: true },
+    { type: "geoMap", mime: "application/json", title: t("note_types.geo-map"), selectable: true },
     { type: "code", mime: "text/plain", title: t("note_types.code"), selectable: true }
 ];
 
