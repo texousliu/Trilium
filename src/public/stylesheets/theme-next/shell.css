@@ -1353,7 +1353,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 /* Item title for deleted notes */
-.recent-changes-content ul li.deleted-note .note-title {
+.recent-changes-content ul li.deleted-note .note-title > .note-title {
     text-decoration: line-through;
 }
 
