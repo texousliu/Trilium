@@ -43,6 +43,7 @@ interface CustomGlobals {
     appCssNoteIds: string[];
     triliumVersion: string;
     TRILIUM_SAFE_MODE: boolean;
+    platform?: typeof process.platform;
 }
 
 type RequireMethod = (moduleName: string) => any;
