@@ -124,6 +124,10 @@ function escapeHtml(str: string) {
     return str.replace(/[&<>"'`=\/]/g, (s) => entityMap[s]);
 }
 
+export function escapeQuotes(value: string) {
+    return value.replaceAll("\"", "&quot;");
+}
+
 function formatSize(size: number) {
     size = Math.max(Math.round(size / 1024), 1);
 
