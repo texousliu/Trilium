@@ -396,7 +396,7 @@ body.desktop .dropdown-menu {
     color: var(--dropdown-item-icon-destructive-color);
 }
 
-.dropdown-item > span:not(.bx) {
+.dropdown-item > span:not([class]) {
     width: 100%;
 }
 
