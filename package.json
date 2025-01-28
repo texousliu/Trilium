@@ -28,7 +28,7 @@
     "start-electron": "npm run prepare-dist && cross-env TRILIUM_DATA_DIR=./data TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 TRILIUM_ENV=dev electron ./dist/electron-main.js --inspect=5858 .",
     "start-electron-nix": "npm run prepare-dist && cross-env TRILIUM_DATA_DIR=./data TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 TRILIUM_ENV=dev nix-shell -p electron_33 --run \"electron ./dist/electron-main.js --inspect=5858 .\"",
     "start-electron-no-dir": "npm run prepare-dist && cross-env TRILIUM_ENV=dev electron --inspect=5858 .",
-    "start-electron-no-dir-nix": "npm run prepare-dist && cross-env TRILIUM_ENV=dev nix-shell -p electron_33 --run \"electron ./dist/electron-main.js --inspect=5858 .\"",
+    "start-electron-no-dir-nix": "electron-rebuild --version 33.3.1 && npm run prepare-dist && cross-env TRILIUM_ENV=dev nix-shell -p electron_33 --run \"electron ./dist/electron-main.js --inspect=5858 .\"",
     "qstart-electron": "npm run switch-electron && npm run start-electron",
     "switch-server": "rimraf ./node_modules/better-sqlite3 && npm install",
     "switch-electron": "electron-rebuild",
