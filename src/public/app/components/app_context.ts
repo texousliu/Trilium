@@ -291,6 +291,9 @@ type EventMappings = {
     tabReorder: {
         ntxIdsInOrder: string[]
     };
+    refreshNoteList: {
+        noteId: string;
+    }
 };
 
 export type EventListener<T extends EventNames> = {

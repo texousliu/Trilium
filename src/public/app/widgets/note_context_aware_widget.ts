@@ -54,7 +54,7 @@ class NoteContextAwareWidget extends BasicWidget {
      *
      * @returns true when an active note exists
      */
-    isEnabled() {
+    isEnabled(): boolean | null | undefined {
         return !!this.note;
     }
 
