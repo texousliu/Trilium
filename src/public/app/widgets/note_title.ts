@@ -3,10 +3,11 @@ import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import server from "../services/server.js";
 import SpacedUpdate from "../services/spaced_update.js";
-import appContext from "../components/app_context.js";
+import appContext, { type EventData } from "../components/app_context.js";
 import branchService from "../services/branches.js";
 import shortcutService from "../services/shortcuts.js";
 import utils from "../services/utils.js";
+import type FNote from "../entities/fnote.js";
 
 const TPL = `
 <div class="note-title-widget">
@@ -33,13 +34,20 @@ const TPL = `
 </div>`;
 
 export default class NoteTitleWidget extends NoteContextAwareWidget {
+
+    private $noteTitle!: JQuery<HTMLElement>;
+    private deleteNoteOnEscape: boolean;
+    private spacedUpdate: SpacedUpdate;
+
     constructor() {
         super();
 
         this.spacedUpdate = new SpacedUpdate(async () => {
             const title = this.$noteTitle.val();
 
-            protectedSessionHolder.touchProtectedSessionIfNecessary(this.note);
+            if (this.note) {
+                protectedSessionHolder.touchProtectedSessionIfNecessary(this.note);
+            }
 
             await server.put(`notes/${this.noteId}/title`, { title }, this.componentId);
         });
@@ -62,37 +70,36 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
         });
 
         shortcutService.bindElShortcut(this.$noteTitle, "esc", () => {
-            if (this.deleteNoteOnEscape && this.noteContext.isActive()) {
+            if (this.deleteNoteOnEscape && this.noteContext?.isActive() && this.noteContext?.note) {
                 branchService.deleteNotes(Object.values(this.noteContext.note.parentToBranch));
             }
         });
 
         shortcutService.bindElShortcut(this.$noteTitle, "return", () => {
-            this.triggerCommand("focusOnDetail", { ntxId: this.noteContext.ntxId });
+            this.triggerCommand("focusOnDetail", { ntxId: this.noteContext?.ntxId });
         });
     }
 
-    async refreshWithNote(note) {
-        const isReadOnly = (note.isProtected && !protectedSessionHolder.isProtectedSessionAvailable()) || utils.isLaunchBarConfig(note.noteId) || this.noteContext.viewScope.viewMode !== "default";
+    async refreshWithNote(note: FNote) {
+        const isReadOnly = (note.isProtected && !protectedSessionHolder.isProtectedSessionAvailable()) || utils.isLaunchBarConfig(note.noteId) || this.noteContext?.viewScope?.viewMode !== "default";
 
-        this.$noteTitle.val(isReadOnly ? await this.noteContext.getNavigationTitle() : note.title);
+        this.$noteTitle.val(isReadOnly ? await this.noteContext?.getNavigationTitle() || "" : note.title);
         this.$noteTitle.prop("readonly", isReadOnly);
 
         this.setProtectedStatus(note);
     }
 
-    /** @param {FNote} note */
-    setProtectedStatus(note) {
+    setProtectedStatus(note: FNote) {
         this.$noteTitle.toggleClass("protected", !!note.isProtected);
     }
 
-    async beforeNoteSwitchEvent({ noteContext }) {
+    async beforeNoteSwitchEvent({ noteContext }: EventData<"beforeNoteSwitch">) {
         if (this.isNoteContext(noteContext.ntxId)) {
             await this.spacedUpdate.updateNowIfNecessary();
         }
     }
 
-    async beforeNoteContextRemoveEvent({ ntxIds }) {
+    async beforeNoteContextRemoveEvent({ ntxIds }: EventData<"beforeNoteContextRemove">) {
         if (this.isNoteContext(ntxIds)) {
             await this.spacedUpdate.updateNowIfNecessary();
         }
@@ -112,8 +119,8 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
         }
     }
 
-    entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.isNoteReloaded(this.noteId)) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.isNoteReloaded(this.noteId) && this.note) {
             // not updating the title specifically since the synced title might be older than what the user is currently typing
             this.setProtectedStatus(this.note);
         }

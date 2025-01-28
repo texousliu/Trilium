@@ -71,7 +71,7 @@ export interface ExecuteCommandData extends CommandData {
 export type CommandMappings = {
     "api-log-messages": CommandData;
     focusTree: CommandData,
-    focusOnDetail: Required<CommandData>;
+    focusOnDetail: CommandData;
     focusOnSearchDefinition: Required<CommandData>;
     searchNotes: CommandData & {
         searchString?: string;
@@ -237,6 +237,9 @@ type EventMappings = {
     };
     beforeNoteSwitch: {
         noteContext: NoteContext;
+    };
+    beforeNoteContextRemove: {
+        ntxIds: string[];
     };
     noteSwitched: {
         noteContext: NoteContext;
