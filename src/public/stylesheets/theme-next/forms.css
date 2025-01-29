@@ -54,6 +54,14 @@ button.btn.btn-success:focus-visible {
     outline: 2px solid var(--input-focus-outline-color);
 }
 
+button.btn.btn-primary span.bx,
+button.btn.btn-secondary span.bx,
+button.btn.btn-sm span.bx,
+button.btn.btn-success span.bx {
+    vertical-align: baseline;
+    color: var(--cmd-button-icon-color);
+}
+
 button.btn.btn-primary kbd,
 button.btn.btn-secondary kbd,
 button.btn.btn-sm kbd,
