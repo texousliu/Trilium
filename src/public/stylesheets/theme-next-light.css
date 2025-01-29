@@ -26,6 +26,7 @@
     --cmd-button-hover-background-color: #00000016;
     --cmd-button-hover-text-color: #000;
     --cmd-button-shadow-color: #00000040;
+    --cmd-button-disabled-opacity: .5;
 
     --muted-text-color: #666;
 
