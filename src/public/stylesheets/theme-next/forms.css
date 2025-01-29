@@ -2,23 +2,33 @@
  * Buttons
  */
 
-button.btn,
-button.btn.btn-primary {
+ button.btn.btn-primary,
+ button.btn.btn-secondary,
+ button.btn.btn-sm {
     box-shadow: 1px 1px 1px var(--button-shadow-color);
     padding: 4px 16px;
-    min-width: 120px;
     border: unset;
     border-radius: 6px;
     background: var(--button-background-color);
     color: var(--button-text-color);
 }
 
-button.btn:hover {
+button.btn.btn-primary,
+button.btn.btn-secondary,
+button.btn.btn-sm {
+    min-width: 120px;
+}
+
+button.btn.btn-primary:hover,
+button.btn.btn-secondary:hover,
+button.btn.btn-sm:hover {
     background: var(--button-hover-background-color);
     color: var(--button-hover-text-color);
 }
 
-button.btn:active {
+button.btn.btn-primary:active,
+button.btn.btn-secondary:active,
+button.btn.btn-sm:active {
     box-shadow: unset;
     opacity: .85;
     background: var(--button-background-color) !important;
