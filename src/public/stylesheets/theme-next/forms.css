@@ -66,7 +66,6 @@ button.btn.btn-primary kbd,
 button.btn.btn-secondary kbd,
 button.btn.btn-sm kbd,
 button.btn.btn-success kbd {
-    vertical-align: middle;
     margin-left: .5em;
     background: var(--cmd-button-keyboard-shortcut-background);
     color: var(--cmd-button-keyboard-shortcut-color);
