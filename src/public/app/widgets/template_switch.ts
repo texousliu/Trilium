@@ -18,7 +18,7 @@ export default class TemplateSwitchWidget extends SwitchWidget {
         this.$switchOnName.text(t("template_switch.template"));
         this.$switchOnButton.attr("title", t("template_switch.toggle-on-hint"));
 
-        this.$switchOffName.text("Template");
+        this.$switchOffName.text(t("template_switch.template"));
         this.$switchOffButton.attr("title", t("template_switch.toggle-off-hint"));
 
         this.$helpButton.attr("data-help-page", "template.html").show();
