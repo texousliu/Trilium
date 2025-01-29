@@ -19,6 +19,8 @@
 
     --accented-background-color: #555;
 
+    --button-text-color: currentColor;
+
     --cmd-button-background-color: #ffffff28;
     --cmd-button-text-color: #ffffffc2;
     --cmd-button-hover-background-color: #ffffff37;
