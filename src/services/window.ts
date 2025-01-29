@@ -2,7 +2,6 @@ import path from "path";
 import url from "url";
 import port from "./port.js";
 import optionService from "./options.js";
-import env from "./env.js";
 import log from "./log.js";
 import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
@@ -10,7 +9,7 @@ import keyboardActionsService from "./keyboard_actions.js";
 import remoteMain from "@electron/remote/main/index.js";
 import type { App, BrowserWindow, BrowserWindowConstructorOptions, WebContents } from "electron";
 import { ipcMain } from "electron";
-import { isMac, isWindows } from "./utils.js";
+import { isDev, isMac, isWindows } from "./utils.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -116,10 +115,10 @@ function getWindowExtraOpts() {
     const extraOpts: Partial<BrowserWindowConstructorOptions> = {};
 
     if (!optionService.getOptionBool("nativeTitleBarVisible")) {
-        if (isMac()) {
+        if (isMac) {
             extraOpts.titleBarStyle = "hiddenInset";
             extraOpts.titleBarOverlay = true;
-        } else if (isWindows()) {
+        } else if (isWindows) {
             extraOpts.titleBarStyle = "hidden";
             extraOpts.titleBarOverlay = true;
         } else {
@@ -129,7 +128,7 @@ function getWindowExtraOpts() {
     }
 
     // Window effects (Mica)
-    if (optionService.getOptionBool("backgroundEffects") && isWindows()) {
+    if (optionService.getOptionBool("backgroundEffects") && isWindows) {
         extraOpts.backgroundMaterial = "auto";
     }
 
@@ -169,7 +168,7 @@ function configureWebContents(webContents: WebContents, spellcheckEnabled: boole
 }
 
 function getIcon() {
-    return path.join(dirname(fileURLToPath(import.meta.url)), "../../images/app-icons/png/256x256" + (env.isDev() ? "-dev" : "") + ".png");
+    return path.join(dirname(fileURLToPath(import.meta.url)), "../../images/app-icons/png/256x256" + (isDev ? "-dev" : "") + ".png");
 }
 
 async function createSetupWindow() {
