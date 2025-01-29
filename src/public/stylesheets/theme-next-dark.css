@@ -19,11 +19,11 @@
 
     --accented-background-color: #555;
 
-    --button-background-color: #ffffff28;
-    --button-text-color: #ffffffc2;
-    --button-hover-background-color: #ffffff37;
-    --button-hover-text-color: white;
-    --button-shadow-color: #00000080;
+    --cmd-button-background-color: #ffffff28;
+    --cmd-button-text-color: #ffffffc2;
+    --cmd-button-hover-background-color: #ffffff37;
+    --cmd-button-hover-text-color: white;
+    --cmd-button-shadow-color: #00000080;
 
     --muted-text-color: #bbb;
 

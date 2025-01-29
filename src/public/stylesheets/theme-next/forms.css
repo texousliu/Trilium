@@ -5,12 +5,12 @@
  button.btn.btn-primary,
  button.btn.btn-secondary,
  button.btn.btn-sm {
-    box-shadow: 1px 1px 1px var(--button-shadow-color);
+    box-shadow: 1px 1px 1px var(--cmd-button-shadow-color);
     padding: 4px 16px;
     border: unset;
     border-radius: 6px;
-    background: var(--button-background-color);
-    color: var(--button-text-color);
+    background: var(--cmd-button-background-color);
+    color: var(--cmd-button-text-color);
 }
 
 button.btn.btn-primary,
@@ -22,8 +22,8 @@ button.btn.btn-sm {
 button.btn.btn-primary:hover,
 button.btn.btn-secondary:hover,
 button.btn.btn-sm:hover {
-    background: var(--button-hover-background-color);
-    color: var(--button-hover-text-color);
+    background: var(--cmd-button-hover-background-color);
+    color: var(--cmd-button-hover-text-color);
 }
 
 button.btn.btn-primary:active,
@@ -31,8 +31,8 @@ button.btn.btn-secondary:active,
 button.btn.btn-sm:active {
     box-shadow: unset;
     opacity: .85;
-    background: var(--button-background-color) !important;
-    color: var(--button-text-color) !important;
+    background: var(--cmd-button-background-color) !important;
+    color: var(--cmd-button-text-color) !important;
     transform: scale(.95);
 }
 
