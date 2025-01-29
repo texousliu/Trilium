@@ -38,7 +38,7 @@ const TPL = `
 <div class="options-section">
     <h4>${t("backup.backup_now")}</h4>
 
-    <button class="backup-database-button btn">${t("backup.backup_database_now")}</button>
+    <button class="backup-database-button btn btn-primary">${t("backup.backup_database_now")}</button>
 </div>
 
 <div class="options-section">

@@ -17,7 +17,7 @@ const TPL = `
 
     <p>${t("attachment_erasure_timeout.manual_erasing_description")}</p>
 
-    <button class="erase-unused-attachments-now-button btn">${t("attachment_erasure_timeout.erase_unused_attachments_now")}</button>
+    <button class="erase-unused-attachments-now-button btn btn-primary">${t("attachment_erasure_timeout.erase_unused_attachments_now")}</button>
 </div>`;
 
 export default class AttachmentErasureTimeoutOptions extends OptionsWidget {

@@ -132,7 +132,7 @@ const TPL = `
 
     <p>
         ${t("fonts.apply_font_changes")}
-        <button class="btn btn-micro reload-frontend-button">${t("fonts.reload_frontend")}</button>
+        <button class="btn btn-primary btn-micro reload-frontend-button">${t("fonts.reload_frontend")}</button>
     </p>
 </div>`;
 
