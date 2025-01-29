@@ -147,11 +147,14 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
      */
     checkFullHeight() {
         // https://github.com/zadam/trilium/issues/2522
-        this.$widget.toggleClass(
-            "full-height",
-            (!this.noteContext.hasNoteList() && ["canvas", "webView", "noteMap", "mindMap", "geoMap"].includes(this.type) && this.mime !== "text/x-sqlite;schema=trilium") ||
-                this.noteContext.viewScope.viewMode === "attachments"
-        );
+        const isBackendNote = this.noteContext?.noteId === "_backendLog";
+        const isSqlNote = this.mime === "text/x-sqlite;schema=trilium";
+        const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "geoMap"].includes(this.type);
+        const isFullHeight = (!this.noteContext.hasNoteList() && isFullHeightNoteType && !isSqlNote)
+            || this.noteContext.viewScope.viewMode === "attachments"
+            || isBackendNote;
+
+        this.$widget.toggleClass("full-height", isFullHeight);
     }
 
     getTypeWidget() {

@@ -3,35 +3,36 @@ import BasicWidget from "./basic_widget.js";
 import ws from "../services/ws.js";
 import options from "../services/options.js";
 import syncService from "../services/sync.js";
+import { escapeQuotes } from "../services/utils.js";
 
 const TPL = `
 <div class="sync-status-widget launcher-button">
     <style>
     .sync-status-widget {
     }
-    
+
     .sync-status {
         box-sizing: border-box;
     }
-    
+
     .sync-status .sync-status-icon {
         display: inline-block;
         position: relative;
         top: -5px;
         font-size: 110%;
     }
-    
+
     .sync-status .sync-status-sub-icon {
-        font-size: 40%; 
-        position: absolute; 
+        font-size: 40%;
+        position: absolute;
         left: 0;
         top: 16px;
     }
-    
+
     .sync-status .sync-status-icon span {
         border: none !important;
     }
-    
+
     .sync-status-icon:not(.sync-status-in-progress):hover {
         background-color: var(--hover-item-background-color);
         cursor: pointer;
@@ -39,31 +40,31 @@ const TPL = `
     </style>
 
     <div class="sync-status">
-        <span class="sync-status-icon sync-status-unknown bx bx-time" 
-              data-bs-toggle="tooltip" 
-              title="${t("sync_status.unknown")}">
+        <span class="sync-status-icon sync-status-unknown bx bx-time"
+              data-bs-toggle="tooltip"
+              title="${escapeQuotes(t("sync_status.unknown"))}">
         </span>
         <span class="sync-status-icon sync-status-connected-with-changes bx bx-wifi"
-              data-bs-toggle="tooltip" 
-              title="${t("sync_status.connected_with_changes")}">
+              data-bs-toggle="tooltip"
+              title="${escapeQuotes(t("sync_status.connected_with_changes"))}">
             <span class="bx bxs-star sync-status-sub-icon"></span>
         </span>
-        <span class="sync-status-icon sync-status-connected-no-changes bx bx-wifi" 
-              data-bs-toggle="tooltip" 
-              title="${t("sync_status.connected_no_changes")}">
+        <span class="sync-status-icon sync-status-connected-no-changes bx bx-wifi"
+              data-bs-toggle="tooltip"
+              title="${escapeQuotes(t("sync_status.connected_no_changes"))}">
         </span>
         <span class="sync-status-icon sync-status-disconnected-with-changes bx bx-wifi-off"
-              data-bs-toggle="tooltip" 
-              title="${t("sync_status.disconnected_with_changes")}">
+              data-bs-toggle="tooltip"
+              title="${escapeQuotes(t("sync_status.disconnected_with_changes"))}">
             <span class="bx bxs-star sync-status-sub-icon"></span>
         </span>
-        <span class="sync-status-icon sync-status-disconnected-no-changes bx bx-wifi-off" 
+        <span class="sync-status-icon sync-status-disconnected-no-changes bx bx-wifi-off"
               data-bs-toggle="tooltip"
-              title="${t("sync_status.disconnected_no_changes")}">
+              title="${escapeQuotes(t("sync_status.disconnected_no_changes"))}">
         </span>
-        <span class="sync-status-icon sync-status-in-progress bx bx-analyse bx-spin" 
+        <span class="sync-status-icon sync-status-in-progress bx bx-analyse bx-spin"
               data-bs-toggle="tooltip"
-              title="${t("sync_status.in_progress")}">
+              title="${escapeQuotes(t("sync_status.in_progress"))}">
         </span>
     </div>
 </div>

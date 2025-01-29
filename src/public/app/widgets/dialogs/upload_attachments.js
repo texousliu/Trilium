@@ -1,5 +1,5 @@
 import { t } from "../../services/i18n.js";
-import utils from "../../services/utils.js";
+import utils, { escapeQuotes } from "../../services/utils.js";
 import treeService from "../../services/tree.js";
 import importService from "../../services/import.js";
 import options from "../../services/options.js";
@@ -24,7 +24,7 @@ const TPL = `
                     <div class="form-group">
                         <strong>${t("upload_attachments.options")}:</strong>
                         <div class="checkbox">
-                            <label data-bs-toggle="tooltip" title="${t("upload_attachments.tooltip")}">
+                            <label data-bs-toggle="tooltip" title="${escapeQuotes(t("upload_attachments.tooltip"))}">
                                 <input class="shrink-images-checkbox form-check-input" value="1" type="checkbox" checked> <span>${t("upload_attachments.shrink_images")}</span>
                             </label>
                         </div>

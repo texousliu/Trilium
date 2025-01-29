@@ -1,4 +1,4 @@
-import utils from "../../services/utils.js";
+import utils, { escapeQuotes } from "../../services/utils.js";
 import treeService from "../../services/tree.js";
 import importService from "../../services/import.js";
 import options from "../../services/options.js";
@@ -27,21 +27,21 @@ const TPL = `
                         <strong>${t("import.options")}:</strong>
 
                         <div class="checkbox">
-                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${t("import.safeImportTooltip")}">
+                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${escapeQuotes(t("import.safeImportTooltip"))}">
                                 <input class="safe-import-checkbox" value="1" type="checkbox" checked>
                                 <span>${t("import.safeImport")}</span>
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${t("import.explodeArchivesTooltip")}">
+                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${escapeQuotes(t("import.explodeArchivesTooltip"))}">
                                 <input class="explode-archives-checkbox" value="1" type="checkbox" checked>
                                 <span>${t("import.explodeArchives")}</span>
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${t("import.shrinkImagesTooltip")}">
+                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${escapeQuotes(t("import.shrinkImagesTooltip"))}">
                                 <input class="shrink-images-checkbox" value="1" type="checkbox" checked> <span>${t("import.shrinkImages")}</span>
                             </label>
                         </div>

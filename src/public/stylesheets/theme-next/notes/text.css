@@ -31,6 +31,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
     padding: 0px 10px;
     letter-spacing: 0.5px;
     font-weight: bold;
+    top: 0;
 }
 
 .attachment-content-wrapper pre code,

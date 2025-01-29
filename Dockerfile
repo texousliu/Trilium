@@ -1,5 +1,5 @@
 # Build stage
-FROM node:22.13.0-bullseye-slim AS builder
+FROM node:22.13.1-bullseye-slim AS builder
 
 # Configure build dependencies in a single layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -28,7 +28,6 @@ RUN cp -R build/src/* src/. && \
     npm run webpack && \
     npm prune --omit=dev && \
     npm cache clean --force && \
-    cp src/public/app/share.js src/public/app-dist/. && \
     cp -r src/public/app/doc_notes src/public/app-dist/. && \
     rm -rf src/public/app/* && \
     mkdir -p src/public/app/services && \
@@ -37,7 +36,7 @@ RUN cp -R build/src/* src/. && \
     rm -r build
 
 # Runtime stage
-FROM node:22.13.0-bullseye-slim
+FROM node:22.13.1-bullseye-slim
 
 # Install only runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \

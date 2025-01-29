@@ -1,5 +1,7 @@
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import NoteListRenderer from "../services/note_list_renderer.js";
+import type FNote from "../entities/fnote.js";
+import type { EventData } from "../components/app_context.js";
 
 const TPL = `
 <div class="note-list-widget">
@@ -8,19 +10,25 @@ const TPL = `
         min-height: 0;
         overflow: auto;
     }
-    
+
     .note-list-widget .note-list {
         padding: 10px;
     }
     </style>
-    
+
     <div class="note-list-widget-content">
     </div>
 </div>`;
 
 export default class NoteListWidget extends NoteContextAwareWidget {
+
+    private $content!: JQuery<HTMLElement>;
+    private isIntersecting?: boolean;
+    private noteIdRefreshed?: string;
+    private shownNoteId?: string | null;
+
     isEnabled() {
-        return super.isEnabled() && this.noteContext.hasNoteList();
+        return super.isEnabled() && this.noteContext?.hasNoteList();
     }
 
     doRender() {
@@ -50,13 +58,13 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         // console.log(`${this.noteIdRefreshed} === ${this.noteId}`, this.noteIdRefreshed === this.noteId);
         // console.log("this.shownNoteId !== this.noteId", this.shownNoteId !== this.noteId);
 
-        if (this.isIntersecting && this.noteIdRefreshed === this.noteId && this.shownNoteId !== this.noteId) {
+        if (this.note && this.isIntersecting && this.noteIdRefreshed === this.noteId && this.shownNoteId !== this.noteId) {
             this.shownNoteId = this.noteId;
             this.renderNoteList(this.note);
         }
     }
 
-    async renderNoteList(note) {
+    async renderNoteList(note: FNote) {
         const noteListRenderer = new NoteListRenderer(this.$content, note, note.getChildNoteIds());
         await noteListRenderer.renderList();
     }
@@ -67,8 +75,8 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         await super.refresh();
     }
 
-    async refreshNoteListEvent({ noteId }) {
-        if (this.isNote(noteId)) {
+    async refreshNoteListEvent({ noteId }: EventData<"refreshNoteList">) {
+        if (this.isNote(noteId) && this.note) {
             await this.renderNoteList(this.note);
         }
     }
@@ -78,7 +86,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
      * If it's evaluated before note detail, then it's clearly intersected (visible) although after note detail load
      * it is not intersected (visible) anymore.
      */
-    noteDetailRefreshedEvent({ ntxId }) {
+    noteDetailRefreshedEvent({ ntxId }: EventData<"noteDetailRefreshed">) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }
@@ -88,14 +96,14 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         setTimeout(() => this.checkRenderStatus(), 100);
     }
 
-    notesReloadedEvent({ noteIds }) {
-        if (noteIds.includes(this.noteId)) {
+    notesReloadedEvent({ noteIds }: EventData<"notesReloaded">) {
+        if (this.noteId && noteIds.includes(this.noteId)) {
             this.refresh();
         }
     }
 
-    entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && ["viewType", "expanded", "pageSize"].includes(attr.name))) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && attr.name && ["viewType", "expanded", "pageSize"].includes(attr.name))) {
             this.shownNoteId = null; // force render
 
             this.checkRenderStatus();

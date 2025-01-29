@@ -9,6 +9,8 @@ import electronContextMenu from "./menus/electron_context_menu.js";
 import glob from "./services/glob.js";
 import { t } from "./services/i18n.js";
 import options from "./services/options.js";
+import type ElectronRemote from "@electron/remote";
+import type Electron from "electron";
 
 await appContext.earlyInit();
 
@@ -44,10 +46,9 @@ if (utils.isElectron()) {
 }
 
 function initOnElectron() {
-    const electron = utils.dynamicRequire("electron");
+    const electron: typeof Electron = utils.dynamicRequire("electron");
     electron.ipcRenderer.on("globalShortcut", async (event, actionName) => appContext.triggerCommand(actionName));
-
-    const electronRemote = utils.dynamicRequire("@electron/remote");
+    const electronRemote: typeof ElectronRemote = utils.dynamicRequire("@electron/remote");
     const currentWindow = electronRemote.getCurrentWindow();
     const style = window.getComputedStyle(document.body);
 
@@ -58,7 +59,7 @@ function initOnElectron() {
     }
 }
 
-function initTitleBarButtons(style, currentWindow) {
+function initTitleBarButtons(style: CSSStyleDeclaration, currentWindow: Electron.BrowserWindow) {
     if (window.glob.platform === "win32") {
         const applyWindowsOverlay = () => {
             const color = style.getPropertyValue("--native-titlebar-background");
@@ -81,9 +82,14 @@ function initTitleBarButtons(style, currentWindow) {
     }
 }
 
-function initTransparencyEffects(style, currentWindow) {
+function initTransparencyEffects(style: CSSStyleDeclaration, currentWindow: Electron.BrowserWindow) {
     if (window.glob.platform === "win32") {
         const material = style.getPropertyValue("--background-material");
-        currentWindow.setBackgroundMaterial(material);
+        // TriliumNextTODO: find a nicer way to make TypeScript happy – unfortunately TS did not like Array.includes here
+        const bgMaterialOptions = ["auto", "none", "mica", "acrylic", "tabbed"] as const;
+        const foundBgMaterialOption = bgMaterialOptions.find((bgMaterialOption) => material === bgMaterialOption);
+        if (foundBgMaterialOption) {
+            currentWindow.setBackgroundMaterial(foundBgMaterialOption);
+        }
     }
 }

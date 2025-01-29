@@ -1,4 +1,4 @@
-import WebSocket from "ws";
+import { WebSocketServer as WebSocketServer, WebSocket } from "ws";
 import { isElectron, randomString } from "./utils.js";
 import log from "./log.js";
 import sql from "./sql.js";
@@ -10,7 +10,7 @@ import becca from "../becca/becca.js";
 import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 
 import env from "./env.js";
-import type { IncomingMessage, Server } from "http";
+import type { IncomingMessage, Server as HttpServer } from "http";
 import type { EntityChange } from "./entity_changes_interface.js";
 
 if (env.isDev()) {
@@ -24,7 +24,7 @@ if (env.isDev()) {
         .on("unlink", debouncedReloadFrontend);
 }
 
-let webSocketServer!: WebSocket.Server;
+let webSocketServer!: WebSocketServer;
 let lastSyncedPush: number | null = null;
 
 interface Message {
@@ -58,8 +58,8 @@ interface Message {
 }
 
 type SessionParser = (req: IncomingMessage, params: {}, cb: () => void) => void;
-function init(httpServer: Server, sessionParser: SessionParser) {
-    webSocketServer = new WebSocket.Server({
+function init(httpServer: HttpServer, sessionParser: SessionParser) {
+    webSocketServer = new WebSocketServer({
         verifyClient: (info, done) => {
             sessionParser(info.req, {}, () => {
                 const allowed = isElectron() || (info.req as any).session.loggedIn || (config.General && config.General.noAuthentication);

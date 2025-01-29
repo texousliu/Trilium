@@ -8,6 +8,7 @@ interface NoteRow {
 }
 
 interface BranchRow {
+    noteId?: string;
     branchId: string;
     componentId: string;
     parentNoteId?: string;
@@ -157,7 +158,7 @@ export default class LoadResults {
         return Object.keys(this.noteIdToComponentId);
     }
 
-    isNoteReloaded(noteId: string, componentId = null) {
+    isNoteReloaded(noteId: string | undefined, componentId: string | null = null) {
         if (!noteId) {
             return false;
         }

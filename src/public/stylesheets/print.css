@@ -26,6 +26,11 @@
         border-radius: 2pt !important;
     }
 
+    span[style] {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
     /* Fix visibility of checkbox checkmarks
        see https://github.com/TriliumNext/Notes/issues/901 */
     .ck-editor__editable.ck-content .todo-list .todo-list__label > span[contenteditable="false"] > input[checked]::after {
