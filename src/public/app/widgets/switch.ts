@@ -96,13 +96,13 @@ const TPL = `
 
 export default class SwitchWidget extends NoteContextAwareWidget {
 
-    private $switchOn!: JQuery<HTMLElement>;
-    private $switchOnName!: JQuery<HTMLElement>;
-    private $switchOnButton!: JQuery<HTMLElement>;
-    private $switchOff!: JQuery<HTMLElement>;
-    private $switchOffName!: JQuery<HTMLElement>;
-    private $switchOffButton!: JQuery<HTMLElement>;
-    private $helpButton!: JQuery<HTMLElement>;
+    protected $switchOn!: JQuery<HTMLElement>;
+    protected $switchOnName!: JQuery<HTMLElement>;
+    protected $switchOnButton!: JQuery<HTMLElement>;
+    protected $switchOff!: JQuery<HTMLElement>;
+    protected $switchOffName!: JQuery<HTMLElement>;
+    protected $switchOffButton!: JQuery<HTMLElement>;
+    protected $helpButton!: JQuery<HTMLElement>;
 
     doRender() {
         this.$widget = $(TPL);
