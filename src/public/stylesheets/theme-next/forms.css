@@ -6,6 +6,9 @@ button.btn.btn-primary,
 button.btn.btn-secondary,
 button.btn.btn-sm,
 button.btn.btn-success {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     min-width: 120px;
     box-shadow: 1px 1px 1px var(--cmd-button-shadow-color);
     border: unset;
@@ -53,8 +56,9 @@ button.btn.btn-primary span.bx,
 button.btn.btn-secondary span.bx,
 button.btn.btn-sm span.bx,
 button.btn.btn-success span.bx {
-    vertical-align: baseline;
     color: var(--cmd-button-icon-color);
+    padding-right: .35em;
+    font-size: 1.2em;
 }
 
 /* Button's keyboard shortcut */
