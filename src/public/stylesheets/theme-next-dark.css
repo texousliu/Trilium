@@ -19,16 +19,11 @@
 
     --accented-background-color: #555;
 
-    --button-background-color: transparent;
-    --button-border-color: #ccc;
-    --button-text-color: currentColor;
-    --button-border-radius: 5px;
-    --button-disabled-background-color: transparent;
-    --button-disabled-text-color: #999;
-
-    --primary-button-background-color: #888;
-    --primary-button-text-color: white;
-    --primary-button-border-color: #999;
+    --button-background-color: #ffffff28;
+    --button-text-color: #ffffffc2;
+    --button-hover-background-color: #ffffff37;
+    --button-hover-text-color: white;
+    --button-shadow-color: #00000080;
 
     --muted-text-color: #bbb;
 
