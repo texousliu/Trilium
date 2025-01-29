@@ -9,7 +9,7 @@ test("Help popup", async ({ page, context }) => {
 
     const popupPromise = page.waitForEvent("popup");
     await app.currentNoteSplit.press("F1");
-    await page.getByRole("link", { name: "online↗" }).click();
+    await page.getByRole("link", { name: "online" }).click();
     const popup = await popupPromise;
     expect(popup.url()).toBe("https://triliumnext.github.io/Docs/");
 });
