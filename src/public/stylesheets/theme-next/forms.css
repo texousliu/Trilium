@@ -1,24 +1,18 @@
 /*
- * Buttons
+ * Command buttons (.btn-primary / .btn-secondary / .btn-sm / .btn-success)
  */
-
- button.btn.btn-primary,
- button.btn.btn-secondary,
- button.btn.btn-sm,
- button.btn.btn-success {
-    box-shadow: 1px 1px 1px var(--cmd-button-shadow-color);
-    padding: 4px 16px;
-    border: unset;
-    border-radius: 6px;
-    background: var(--cmd-button-background-color);
-    color: var(--cmd-button-text-color);
-}
 
 button.btn.btn-primary,
 button.btn.btn-secondary,
 button.btn.btn-sm,
 button.btn.btn-success {
     min-width: 120px;
+    box-shadow: 1px 1px 1px var(--cmd-button-shadow-color);
+    border: unset;
+    border-radius: 6px;
+    padding: 4px 16px;
+    background: var(--cmd-button-background-color);
+    color: var(--cmd-button-text-color);
 }
 
 button.btn.btn-primary:hover,
@@ -33,8 +27,8 @@ button.btn.btn-primary:active,
 button.btn.btn-secondary:active,
 button.btn.btn-sm:active,
 button.btn.btn-success:active {
-    box-shadow: unset;
     opacity: .85;
+    box-shadow: unset;
     background: var(--cmd-button-background-color) !important;
     color: var(--cmd-button-text-color) !important;
     transform: scale(.95);
@@ -54,6 +48,7 @@ button.btn.btn-success:focus-visible {
     outline: 2px solid var(--input-focus-outline-color);
 }
 
+/* Button's icon */
 button.btn.btn-primary span.bx,
 button.btn.btn-secondary span.bx,
 button.btn.btn-sm span.bx,
@@ -62,12 +57,13 @@ button.btn.btn-success span.bx {
     color: var(--cmd-button-icon-color);
 }
 
+/* Button's keyboard shortcut */
 button.btn.btn-primary kbd,
 button.btn.btn-secondary kbd,
 button.btn.btn-sm kbd,
 button.btn.btn-success kbd {
-    margin-left: .5em;
     vertical-align: middle;
+    margin-left: .5em;
     background: var(--cmd-button-keyboard-shortcut-background);
     color: var(--cmd-button-keyboard-shortcut-color);
     font-size: .6em;
