@@ -905,6 +905,10 @@ body.mobile .note-title {
     background: var(--main-background-color);
 }
 
+#right-pane .card-header-buttons {
+    align-items: center;
+}
+
 #right-pane .toc li,
 #right-pane .highlights-list li {
     padding: 2px 8px;
