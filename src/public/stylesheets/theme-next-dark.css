@@ -8,7 +8,7 @@
     --theme-style: dark;
     --native-titlebar-background: #00000000;
 
-    --main-background-color: #333;
+    --main-background-color: #272727;
     --main-text-color: #ccc;
     --main-border-color: #454545;
     --subtle-border-color: #313131;
@@ -38,7 +38,7 @@
     --muted-text-color: #bbb;
 
     --input-background-color: #ffffff12;
-    --input-text-color:  #ffffff52;
+    --input-text-color:  #ffffffc7;
     --input-placeholder-color: #b7b7b782;
     --input-selection-background: gray;
     --input-selection-text-color: white;
