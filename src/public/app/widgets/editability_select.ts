@@ -23,7 +23,7 @@ const TPL = `
         white-space: normal;
     }
     </style>
-    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle editability-button">
+    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm select-button dropdown-toggle editability-button">
         <span class="editability-active-desc">${t("editability_select.auto")}</span>
         <span class="caret"></span>
     </button>
