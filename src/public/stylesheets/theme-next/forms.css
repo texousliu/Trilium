@@ -4,7 +4,7 @@
 
 button.btn.btn-primary,
 button.btn.btn-secondary,
-button.btn.btn-sm,
+button.btn.btn-sm:not(.select-button),
 button.btn.btn-success {
     display: inline-flex;
     align-items: center;
@@ -20,7 +20,7 @@ button.btn.btn-success {
 
 button.btn.btn-primary:hover,
 button.btn.btn-secondary:hover,
-button.btn.btn-sm:hover,
+button.btn.btn-sm:not(.select-button):hover,
 button.btn.btn-success:hover {
     background: var(--cmd-button-hover-background-color);
     color: var(--cmd-button-hover-text-color);
@@ -28,7 +28,7 @@ button.btn.btn-success:hover {
 
 button.btn.btn-primary:active,
 button.btn.btn-secondary:active,
-button.btn.btn-sm:active,
+button.btn.btn-sm:not(.select-button):active,
 button.btn.btn-success:active {
     opacity: .85;
     box-shadow: unset;
@@ -39,14 +39,14 @@ button.btn.btn-success:active {
 
 button.btn.btn-primary:disabled,
 button.btn.btn-secondary:disabled,
-button.btn.btn-sm:disabled,
+button.btn.btn-sm:not(.select-button):disabled,
 button.btn.btn-success:disabled {
     opacity: var(--cmd-button-disabled-opacity);
 }
 
 button.btn.btn-primary:focus-visible,
 button.btn.btn-secondary:focus-visible,
-button.btn.btn-sm:focus-visible,
+button.btn.btn-sm:not(.select-button):focus-visible,
 button.btn.btn-success:focus-visible {
     outline: 2px solid var(--input-focus-outline-color);
 }
