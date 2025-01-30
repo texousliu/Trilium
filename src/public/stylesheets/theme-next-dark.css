@@ -44,7 +44,7 @@
     --input-selection-text-color: white;
     --input-hover-background: #ffffff1f;
     --input-hover-color: var(--input-text-color);
-    --input-focus-outline-color: #80808095;
+    --input-focus-outline-color: #ffffff57;
     --input-focus-background: #ffffff1f;
     --input-focus-color: white;
 
@@ -149,7 +149,7 @@
 
     --code-block-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 
-    --card-background-color: #424242;
+    --card-background-color: #ffffff12;
     --card-background-hover-color: #3c3c3c;
     --card-background-press-color: #464646;
     --card-border-color: #222222;
