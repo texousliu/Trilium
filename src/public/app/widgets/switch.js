@@ -113,7 +113,7 @@ const TPL = `
             </div>
         </label>
 
-        <button class="switch-help-button bx bx-help-circle" type="button" data-help-page="" title="${t("open-help-page")}" style="display: none;"></button>
+        <button class="switch-help-button icon-action bx bx-help-circle" type="button" data-help-page="" title="${t("open-help-page")}" style="display: none;"></button>
     </div>
 
 </div>`;

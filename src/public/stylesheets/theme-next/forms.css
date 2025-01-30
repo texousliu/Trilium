@@ -445,6 +445,12 @@ optgroup {
 
 }
 
+/* Switches */
+
+.switch-widget.component {
+    --icon-button-size: 28px;
+}
+
 /* Links */
 
 body a.tn-link,
