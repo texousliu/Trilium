@@ -95,7 +95,8 @@ button.btn.btn-success kbd {
     font-size: calc(var(--icon-button-size) * var(--icon-button-icon-ratio));
 }
 
-:root .icon-action:not(.global-menu-button):hover {
+:root .icon-action:not(.global-menu-button):hover,
+:root .icon-action:not(.global-menu-button).show {
     background: var(--icon-button-hover-background);
     color: var(--icon-button-hover-color);
 }
