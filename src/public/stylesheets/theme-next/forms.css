@@ -88,6 +88,16 @@ button.btn.btn-success kbd {
     color: var(--icon-button-color);
 }
 
+/* The "x" icon button */
+:root .icon-action.bx-x {
+    --icon-button-hover-background: var(--tab-close-button-hover-background);
+    --icon-button-hover-color: var(--tab-close-button-hover-color);
+    --icon-button-size: 24px;
+    --icon-button-icon-ratio: .8;
+    
+    border-radius: 50%;
+}
+
 /* The icon */
 :root .icon-action:not(.global-menu-button)::before {
     display: block;
