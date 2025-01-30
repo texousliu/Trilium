@@ -9,7 +9,7 @@ const TPL = `
 
     <p>${t("vacuum_database.description")}</p>
 
-    <button class="vacuum-database-button btn btn-primary">${t("vacuum_database.button_text")}</button>
+    <button class="vacuum-database-button btn btn-secondary">${t("vacuum_database.button_text")}</button>
 </div>`;
 
 export default class VacuumDatabaseOptions extends OptionsWidget {

@@ -40,7 +40,7 @@ const TPL = `
 
     <p>${t("sync_2.test_description")}</p>
 
-    <button class="test-sync-button btn btn-primary">${t("sync_2.test_button")}</button>
+    <button class="test-sync-button btn btn-secondary">${t("sync_2.test_button")}</button>
 </div>`;
 
 // TODO: Deduplicate

@@ -17,7 +17,7 @@ const TPL = `
 
     <p>${t("note_erasure_timeout.manual_erasing_description")}</p>
 
-    <button class="erase-deleted-notes-now-button btn btn-primary">${t("note_erasure_timeout.erase_deleted_notes_now")}</button>
+    <button class="erase-deleted-notes-now-button btn btn-secondary">${t("note_erasure_timeout.erase_deleted_notes_now")}</button>
 </div>`;
 
 export default class NoteErasureTimeoutOptions extends OptionsWidget {
