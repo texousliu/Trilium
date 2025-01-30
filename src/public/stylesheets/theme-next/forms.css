@@ -74,6 +74,36 @@ button.btn.btn-success kbd {
     letter-spacing: .5pt;
 }
 
+/*
+ * Icon buttons
+ */
+
+:root .icon-action:not(.global-menu-button) {
+    width: var(--icon-button-size);
+    height: var(--icon-button-size);
+    border: unset;
+    border-radius: 8px;
+    padding: 0;
+    text-align: center;
+    color: var(--icon-button-color);
+}
+
+/* The icon */
+:root .icon-action:not(.global-menu-button)::before {
+    display: block;
+    line-height: var(--icon-button-size);
+    font-size: calc(var(--icon-button-size) * var(--icon-button-icon-ratio));
+}
+
+:root .icon-action:not(.global-menu-button):hover {
+    background: var(--icon-button-hover-background);
+    color: var(--icon-button-hover-color);
+}
+
+:root .icon-action:not(.global-menu-button):active::before {
+    transform: scale(.85);
+}
+
 /* 
  * Input boxes
  */

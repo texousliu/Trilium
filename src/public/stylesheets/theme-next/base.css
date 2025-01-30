@@ -58,6 +58,9 @@
 
     --help-backdrop-blur: 10px;
 
+    --icon-button-size: 32px;
+    --icon-button-icon-ratio: .65;
+
     /* Theme capabilities */
     --tab-note-icons: true;
 }
