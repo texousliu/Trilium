@@ -1645,6 +1645,11 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     margin-left: 0;
 }
 
+.title-row {
+    /* Aligns the "Create new split" button with the note menu button (the three dots button) */
+    padding-right: 3px;
+}
+
 .note-title-widget input {
     --input-background-color: transparent;
     
