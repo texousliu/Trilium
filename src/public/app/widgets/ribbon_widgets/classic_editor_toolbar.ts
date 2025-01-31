@@ -119,10 +119,8 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
     #adjustPosition() {
         let bottom = window.innerHeight - (window.visualViewport?.height || 0);
 
-        if (bottom === 0) {
-            // The keyboard is not visible, align it to the launcher bar instead.
-            bottom = document.getElementById("mobile-bottom-bar")?.offsetHeight || 0;
-        }
+        // When the keyboard is not visible, align it to the launcher bar instead.
+        bottom = Math.max(bottom, document.getElementById("mobile-bottom-bar")?.offsetHeight || 0);
 
         this.$widget.css("bottom", `${bottom}px`);
     }

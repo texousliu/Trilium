@@ -250,5 +250,8 @@
   "backend_log": {
     "log-does-not-exist": "The backend log file '{{ fileName }}' does not exist (yet).",
     "reading-log-failed": "Reading the backend log file '{{ fileName }}' failed."
+  },
+  "content_renderer": {
+    "note-cannot-be-displayed": "This note type cannot be displayed."
   }
 }
