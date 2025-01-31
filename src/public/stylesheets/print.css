@@ -96,6 +96,7 @@ pre {
     border-radius: 2pt !important;
 }
 
+th,
 span[style] {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
