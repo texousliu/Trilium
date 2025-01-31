@@ -1605,3 +1605,52 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     background: var(--hover-item-background-color);
     color: var(--hover-item-text-color);
 }
+
+@media print {
+    .tab-row-container,
+    #launcher-pane,
+    #left-pane,
+    #right-pane,
+    .title-row .button-widget,
+    .ribbon-container {
+        display: none !important;
+    }    
+    
+    body,
+    #root-widget,
+    #rest-pane > div.component:first-child,
+    .note-detail-printable,
+    .note-detail-editable-text-editor {
+        height: unset !important;
+        overflow: auto;
+    }
+
+    html,
+    body {
+        height: unset !important;
+        overflow: visible;
+        position: unset;
+    }
+
+    #root-widget,
+    #horizontal-main-container,
+    #rest-pane,
+    #vertical-main-container,
+    #center-pane,
+    .split-note-container-widget,
+    .note-split {
+        display: block !important;
+        overflow: auto;
+    }
+    
+    #rest-pane,
+    .note-split {
+        width: 100% !important;
+        max-width: unset !important;
+    }
+
+    .component {
+        contain: none !important;
+    }
+
+}
