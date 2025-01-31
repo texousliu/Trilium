@@ -128,3 +128,8 @@ span[style] {
     /* fallback to default ck-editor green */
     border-color: hsl(126, 64%, 41%);
 }
+
+.include-note .include-note-content {
+    max-height: unset !important;
+    overflow: unset !important;
+}
