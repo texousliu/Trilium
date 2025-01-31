@@ -65,7 +65,7 @@ const TPL = `
         <div class="col-6">
             <label for="main-font-size">${t("fonts.size")}</label>
 
-            <div class="input-group">
+            <div class="input-group main-font-size-input-group">
                 <input id="main-font-size" type="number" class="main-font-size form-control options-number-input" min="50" max="200" step="10"/>
                 <span class="input-group-text">%</span>
             </div>
@@ -83,7 +83,7 @@ const TPL = `
         <div class="col-6">
             <label for="tree-font-size">${t("fonts.size")}</label>
 
-            <div class="input-group">
+            <div class="input-group tree-font-size-input-group">
                 <input id="tree-font-size" type="number" class="tree-font-size form-control options-number-input" min="50" max="200" step="10"/>
                 <span class="input-group-text">%</span>
             </div>
@@ -101,7 +101,7 @@ const TPL = `
         <div class="col-6">
             <label for="detail-font-size">${t("fonts.size")}</label>
 
-            <div class="input-group">
+            <div class="input-group detail-font-size-input-group">
                 <input id="detail-font-size" type="number" class="detail-font-size form-control options-number-input" min="50" max="200" step="10"/>
                 <span class="input-group-text">%</span>
             </div>
@@ -119,7 +119,7 @@ const TPL = `
         <div class="col-6">
             <label for="monospace-font-size">${t("fonts.size")}</label>
 
-            <div class="input-group">
+            <div class="input-group monospace-font-size-input-group">
                 <input id="monospace-font-size" type="number" class="monospace-font-size form-control options-number-input" min="50" max="200" step="10"/>
                 <span class="input-group-text">%</span>
             </div>

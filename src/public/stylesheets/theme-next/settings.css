@@ -71,3 +71,12 @@
     padding: 0;
     margin-bottom: 1em;
 }
+
+/* Appeareance */
+
+.main-font-size-input-group,
+.tree-font-size-input-group,
+.detail-font-size-input-group,
+.monospace-font-size-input-group {
+    width: fit-content;
+}
