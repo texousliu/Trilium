@@ -151,7 +151,7 @@ const TPL = `
     <div class="note-list-wrapper">
         <div class="note-list-pager"></div>
 
-        <div class="note-list-container"></div>
+        <div class="note-list-container use-tn-links"></div>
 
         <div class="note-list-pager"></div>
     </div>

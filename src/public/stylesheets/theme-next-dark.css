@@ -8,7 +8,7 @@
     --theme-style: dark;
     --native-titlebar-background: #00000000;
 
-    --main-background-color: #333;
+    --main-background-color: #272727;
     --main-text-color: #ccc;
     --main-border-color: #454545;
     --subtle-border-color: #313131;
@@ -19,21 +19,50 @@
 
     --accented-background-color: #555;
 
-    --button-background-color: transparent;
-    --button-border-color: #ccc;
     --button-text-color: currentColor;
-    --button-border-radius: 5px;
-    --button-disabled-background-color: transparent;
-    --button-disabled-text-color: #999;
 
-    --primary-button-background-color: #888;
-    --primary-button-text-color: white;
-    --primary-button-border-color: #999;
+    --cmd-button-background-color: #ffffff28;
+    --cmd-button-text-color: #ffffffc2;
+    --cmd-button-hover-background-color: #ffffff37;
+    --cmd-button-hover-text-color: white;
+    --cmd-button-shadow-color: #00000080;
+    --cmd-button-icon-color: white;
+    --cmd-button-keyboard-shortcut-background: #0000004d;
+    --cmd-button-keyboard-shortcut-color: white;
+    --cmd-button-disabled-opacity: .5;
+
+    --icon-button-color: currentColor;
+    --icon-button-hover-background: var(--hover-item-background-color);
+    --icon-button-hover-color: var(--hover-item-text-color);
 
     --muted-text-color: #bbb;
 
-    --input-text-color: #ccc;
-    --input-background-color: #333;
+    --input-background-color: #ffffff12;
+    --input-text-color:  #ffffffc7;
+    --input-placeholder-color: #b7b7b782;
+    --input-selection-background: gray;
+    --input-selection-text-color: white;
+    --input-hover-background: #ffffff1f;
+    --input-hover-color: var(--input-text-color);
+    --input-focus-outline-color: #ffffff57;
+    --input-focus-background: #ffffff1f;
+    --input-focus-color: white;
+
+    --input-action-button-color: #c6c6c6;
+    --input-action-button-hover: white;
+
+    --radio-checkbox-background: #ffffff30;
+    --radio-checkbox-hover-background: #ffffff61;
+    --radio-checkbox-indicator-color: white;
+
+    --select-focus-background: #333;
+    --select-focus-text-color: var(--input-text-color);
+    --select-dropdown-text-color: var(--input-text-color);
+    --select-arrow-svg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='transparent' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+    --select-group-heading-text-color: gray;
+
+    --link-hover-background: #ffffff26;
+    --link-hover-color: white;
 
     --hover-item-text-color: #efefef;
     --hover-item-background-color: #ffffff24;
@@ -120,7 +149,7 @@
 
     --code-block-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 
-    --card-background-color: #363636;
+    --card-background-color: #ffffff12;
     --card-background-hover-color: #3c3c3c;
     --card-background-press-color: #464646;
     --card-border-color: #222222;

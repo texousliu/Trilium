@@ -30,7 +30,7 @@ const TPL = `
 
     <h4>${t("shortcuts.keyboard_shortcuts")}</h4>
 
-    <p>
+    <p class="use-tn-links">
       ${t("shortcuts.multiple_shortcuts")}
       ${t("shortcuts.electron_documentation")}
     </p>
@@ -56,7 +56,7 @@ const TPL = `
     <div class="shortcuts-options-buttons">
         <button class="options-keyboard-shortcuts-reload-app btn btn-primary">${t("shortcuts.reload_app")}</button>
 
-        <button class="options-keyboard-shortcuts-set-all-to-default btn">${t("shortcuts.set_all_to_default")}</button>
+        <button class="options-keyboard-shortcuts-set-all-to-default btn btn-secondary">${t("shortcuts.set_all_to_default")}</button>
     </div>
 </div>`;
 

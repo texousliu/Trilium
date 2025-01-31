@@ -11,7 +11,7 @@ const TPL = `
             padding-left: 15px;
             padding-right: 15px;
         }
-        
+
         .attachment-list .links-wrapper {
             font-size: larger;
             margin-bottom: 15px;
@@ -20,7 +20,7 @@ const TPL = `
             align-items: baseline;
         }
     </style>
-    
+
     <div class="links-wrapper"></div>
 
     <div class="attachment-list-wrapper"></div>
@@ -48,6 +48,7 @@ export default class AttachmentListTypeWidget extends TypeWidget {
         utils.initHelpButtons($helpButton);
 
         const noteLink = await linkService.createLink(this.noteId); // do separately to avoid race condition between empty() and .append()
+        noteLink.addClass("use-tn-links");
 
         this.$linksWrapper.empty().append(
             $("<div>").append(t("attachment_list.owning_note"), noteLink),

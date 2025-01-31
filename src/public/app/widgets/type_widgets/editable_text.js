@@ -88,7 +88,7 @@ const TPL = `
     }
     </style>
 
-    <div class="note-detail-editable-text-editor" tabindex="300"></div>
+    <div class="note-detail-editable-text-editor use-tn-links" tabindex="300"></div>
 </div>
 `;
 

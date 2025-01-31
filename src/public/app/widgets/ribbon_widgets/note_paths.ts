@@ -101,7 +101,7 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
 
         const $noteLink = await linkService.createLink(notePath, { title });
 
-        $noteLink.find("a").addClass("no-tooltip-preview");
+        $noteLink.find("a").addClass("no-tooltip-preview tn-link");
 
         const icons = [];
 

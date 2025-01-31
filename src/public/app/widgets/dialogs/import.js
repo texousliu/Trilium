@@ -27,40 +27,40 @@ const TPL = `
                         <strong>${t("import.options")}:</strong>
 
                         <div class="checkbox">
-                            <label data-bs-toggle="tooltip" title="${escapeQuotes(t("import.safeImportTooltip"))}">
+                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${escapeQuotes(t("import.safeImportTooltip"))}">
                                 <input class="safe-import-checkbox" value="1" type="checkbox" checked>
                                 <span>${t("import.safeImport")}</span>
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label data-bs-toggle="tooltip" title="${escapeQuotes(t("import.explodeArchivesTooltip"))}">
+                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${escapeQuotes(t("import.explodeArchivesTooltip"))}">
                                 <input class="explode-archives-checkbox" value="1" type="checkbox" checked>
                                 <span>${t("import.explodeArchives")}</span>
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label data-bs-toggle="tooltip" title="${escapeQuotes(t("import.shrinkImagesTooltip"))}">
+                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${escapeQuotes(t("import.shrinkImagesTooltip"))}">
                                 <input class="shrink-images-checkbox" value="1" type="checkbox" checked> <span>${t("import.shrinkImages")}</span>
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label>
+                            <label class="tn-checkbox">
                                 <input class="text-imported-as-text-checkbox" value="1" type="checkbox" checked>
                                 ${t("import.textImportedAsText")}
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label>
+                            <label class="tn-checkbox">
                                 <input class="code-imported-as-code-checkbox" value="1" type="checkbox" checked> ${t("import.codeImportedAsCode")}
                             </label>
                         </div>
 
                         <div class="checkbox">
-                            <label>
+                            <label class="tn-checkbox">
                                 <input class="replace-underscores-with-spaces-checkbox" value="1" type="checkbox" checked>
                                 ${t("import.replaceUnderscoresWithSpaces")}
                             </label>

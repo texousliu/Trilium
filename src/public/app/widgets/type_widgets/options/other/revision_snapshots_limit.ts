@@ -15,7 +15,7 @@ const TPL = `
         <input class="revision-snapshot-number-limit form-control options-number-input" type="number" min="-1">
     </div>
 
-    <button class="erase-excess-revision-snapshots-now-button btn btn-sm" style="padding: 0 10px">
+    <button class="erase-excess-revision-snapshots-now-button btn btn-sm">
                     ${t("revisions_snapshot_limit.erase_excess_revision_snapshots")}</button>
 </div>`;
 

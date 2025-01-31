@@ -260,6 +260,12 @@ div.quick-search {
     padding: var(--padding-top) var(--padding-right) var(--padding-bottom) var(--padding-left);
 }
 
+div.quick-search, div.quick-search:hover, div.quick-search:focus-within {
+    /* Prevent changes to background and outline when the state of the input group changes */
+    background: transparent;
+    outline: none;
+}
+
 div.quick-search::before {
     /* The background rectangle of the search box */
     position: absolute;
@@ -899,6 +905,10 @@ body.mobile .note-title {
     background: var(--main-background-color);
 }
 
+#right-pane .card-header-buttons {
+    align-items: center;
+}
+
 #right-pane .toc li,
 #right-pane .highlights-list li {
     padding: 2px 8px;
@@ -1210,10 +1220,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 /* Search box wrapper */
 .jump-to-note-dialog .input-group {
     margin-right: 16px;
-    background: var(--quick-search-background);
-    border: 2px solid transparent;
-    border-radius: 6px;
-    color: var(--quick-search-color);
 }
 
 .jump-to-note-dialog .input-group:hover {
@@ -1225,26 +1231,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     border-color: var(--quick-search-focus-border);
     background: var(--quick-search-focus-background);
     color: var(--quick-search-focus-color);
-}
-
-/* Search box input */
-.jump-to-note-dialog .input-group input {
-    --bs-border-width: 0;
-
-    box-shadow: unset;
-    background: transparent;
-    color: currentColor;
-}
-
-/* Search box buttons */
-.jump-to-note-dialog .input-group button {
-    --bs-border-width: 0;
-    --accented-background-color: transparent;
-    padding: 0 4px;
-}
-
-.jump-to-note-dialog .input-group button:last-child {
-    padding-right: 0.75em;
 }
 
 .jump-to-note-dialog .input-clearer-button {
@@ -1647,4 +1633,26 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     background: var(--help-code-background);
     padding: 0 8px;
     color: var(--help-code-color);
+}
+
+/* Note area */
+
+.title-row > *:first-child {
+    margin-right: 0;
+}
+
+.title-row > *:nth-child(2) {
+    margin-left: 0;
+}
+
+.title-row {
+    /* Aligns the "Create new split" button with the note menu button (the three dots button) */
+    padding-right: 3px;
+}
+
+.note-title-widget input {
+    --input-background-color: transparent;
+    
+    border-radius: 8px;
+    padding-left: 12px;
 }

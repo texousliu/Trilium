@@ -20,7 +20,7 @@ const TPL = `
 
     <p>
         ${t("max_content_width.apply_changes_description")}
-        <button class="btn btn-micro reload-frontend-button">${t("max_content_width.reload_button")}</button>
+        <button class="btn btn-secondary btn-micro reload-frontend-button">${t("max_content_width.reload_button")}</button>
     </p>
 </div>`;
 

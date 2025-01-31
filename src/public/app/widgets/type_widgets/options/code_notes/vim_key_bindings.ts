@@ -5,7 +5,7 @@ import type { OptionMap } from "../../../../../../services/options_interface.js"
 const TPL = `
 <div class="options-section">
     <h4>${t("vim_key_bindings.use_vim_keybindings_in_code_notes")}</h4>
-    <label>
+    <label class="tn-checkbox">
         <input type="checkbox" class="vim-keymap-enabled form-check-input">
         ${t("vim_key_bindings.enable_vim_keybindings")}
     </label>

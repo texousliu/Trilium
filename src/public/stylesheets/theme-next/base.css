@@ -1,3 +1,4 @@
+@import url(./forms.css);
 @import url(./shell.css);
 @import url(./settings.css);
 @import url(./notes/text.css);
@@ -56,6 +57,9 @@
     --timeline-connector-size: 4px;
 
     --help-backdrop-blur: 10px;
+
+    --icon-button-size: 32px;
+    --icon-button-icon-ratio: .65;
 
     /* Theme capabilities */
     --tab-note-icons: true;

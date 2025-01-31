@@ -17,7 +17,7 @@ const TPL = `
                 <table class="table table-borderless">
                     <tr>
                         <th>${t("about.homepage")}</th>
-                        <td><a href="https://github.com/TriliumNext/Notes" class="external">https://github.com/TriliumNext/Notes</a></td>
+                        <td><a class="tn-link" href="https://github.com/TriliumNext/Notes" class="external">https://github.com/TriliumNext/Notes</a></td>
                     </tr>
                     <tr>
                         <th>${t("about.app_version")}</th>
@@ -38,7 +38,7 @@ const TPL = `
 
                     <tr>
                         <th>${t("about.build_revision")}</th>
-                        <td><a href="" class="build-revision external" target="_blank"></a></td>
+                        <td><a class="tn-link" href="" class="build-revision external" target="_blank"></a></td>
                     </tr>
 
                     <tr>
@@ -82,6 +82,7 @@ export default class AboutDialog extends BasicWidget {
             this.$dataDirectory.html(
                 $("<a></a>", {
                     href: "#",
+                    class: "tn-link",
                     text: appInfo.dataDirectory
                 })
             );

@@ -119,15 +119,16 @@ export default class AttachmentDetailWidget extends BasicWidget {
         this.$wrapper.addClass(this.isFullDetail ? "full-detail" : "list-view");
 
         if (!this.isFullDetail) {
-            this.$wrapper.find(".attachment-title").append(
-                await linkService.createLink(this.attachment.ownerId, {
-                    title: this.attachment.title,
-                    viewScope: {
-                        viewMode: "attachments",
-                        attachmentId: this.attachment.attachmentId
-                    }
-                })
-            );
+            const $link = await linkService.createLink(this.attachment.ownerId, {
+                title: this.attachment.title,
+                viewScope: {
+                    viewMode: "attachments",
+                    attachmentId: this.attachment.attachmentId
+                }
+            });
+            $link.addClass("use-tn-links");
+
+            this.$wrapper.find(".attachment-title").append($link);
         } else {
             this.$wrapper.find(".attachment-title").text(this.attachment.title);
         }
