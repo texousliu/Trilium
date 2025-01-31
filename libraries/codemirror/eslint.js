@@ -46,7 +46,7 @@
         const errors = new eslint().verify(text, {
             root: true,
             parserOptions: {
-                ecmaVersion: "latest"
+                ecmaVersion: "2019"
             },
             extends: ['eslint:recommended', 'airbnb-base'],
             env: {
