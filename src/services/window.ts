@@ -71,11 +71,20 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
         return;
     }
 
-    // TODO: Report if there is an error in generating the PDF.
-    const buffer = await browserWindow.webContents.printToPDF({});
+    let buffer: Buffer;
+    try {
+        buffer = await browserWindow.webContents.printToPDF({});
+    } catch (e) {
+        dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
+        return;
+    }
 
-    // TODO: Report if there was an error in saving the PDF.
-    fs.writeFileSync(filePath, buffer);
+    try {
+        fs.writeFileSync(filePath, buffer);
+    } catch (e) {
+        dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
+        return;
+    }
 
     shell.openPath(filePath);
 });
