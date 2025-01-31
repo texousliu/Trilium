@@ -1612,7 +1612,9 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     #left-pane,
     #right-pane,
     .title-row .button-widget,
-    .ribbon-container {
+    .ribbon-container,
+    .scroll-padding-widget,
+    .spacer {
         display: none !important;
     }    
     
@@ -1638,7 +1640,7 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     #vertical-main-container,
     #center-pane,
     .split-note-container-widget,
-    .note-split {
+    .note-split:not(.hidden-ext) {
         display: block !important;
         overflow: auto;
     }
