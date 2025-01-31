@@ -75,6 +75,7 @@ const enum KeyboardActionNamesEnum {
     toggleRibbonTabSimilarNotes,
     toggleRightPane,
     printActiveNote,
+    exportAsPdf,
     openNoteExternally,
     renderActiveNote,
     runActiveNote,
