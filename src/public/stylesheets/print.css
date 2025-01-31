@@ -1,3 +1,8 @@
+:root {
+    --main-background-color: white;
+    --input-text-color: black;
+}
+
 .no-print,
 .no-print *,
 .tab-row-container,
