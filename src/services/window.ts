@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs/promises";
 import path from "path";
 import url from "url";
 import port from "./port.js";
@@ -83,7 +83,7 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
     }
 
     try {
-        fs.writeFileSync(filePath, buffer);
+        await fs.writeFile(filePath, buffer);
     } catch (e) {
         dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
         return;
