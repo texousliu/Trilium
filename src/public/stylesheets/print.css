@@ -109,6 +109,7 @@ span[style] {
     outline: none !important;
 }
 
+.ck-placeholder,
 .ck-widget__type-around,
 .ck-widget__selection-handle {
     display: none !important;
