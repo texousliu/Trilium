@@ -194,6 +194,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         const canPrint = ["text", "code"].includes(note.type);
         this.toggleDisabled(this.$printActiveNoteButton, canPrint);
         this.toggleDisabled(this.$exportAsPdfButton, canPrint);
+        this.$exportAsPdfButton.toggleClass("hidden-ext", !utils.isElectron());
 
         this.$renderNoteButton.toggle(note.type === "render");
 
