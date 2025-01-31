@@ -51,6 +51,7 @@ body {
 .note-split:not(.hidden-ext) {
     display: block !important;
     overflow: auto;
+    border-radius: 0 !important;
 }
 
 #rest-pane,
