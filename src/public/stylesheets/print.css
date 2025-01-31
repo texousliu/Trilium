@@ -56,9 +56,10 @@ body {
     border-radius: 0 !important;
 }
 
+#center-pane,
 #rest-pane,
 .note-split {
-    width: 100% !important;
+    width: unset !important;
     max-width: unset !important;
 }
 
