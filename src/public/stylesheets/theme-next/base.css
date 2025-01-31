@@ -44,7 +44,7 @@
     --center-pane-border-radius: 10px;
 
     --menu-padding-size: 8px;
-    --menu-item-icon-vert-offset: 0;
+    --menu-item-icon-vert-offset: -2px;
 
     --more-accented-background-color: var(--card-background-hover-color);
 

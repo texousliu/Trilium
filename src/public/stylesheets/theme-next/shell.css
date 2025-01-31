@@ -524,7 +524,7 @@ body.mobile .fancytree-node > span {
 
 #context-menu-container {
     /* The context menu of the tree */
-    --menu-item-icon-vert-offset: 1.5px;
+    --menu-item-icon-vert-offset: -1px;
 }
 
 /* Tree actions toolbar */
