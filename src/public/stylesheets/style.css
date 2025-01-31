@@ -1627,6 +1627,10 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
         overflow: auto;
     }
 
+    .note-detail-editable-text-editor {
+        padding: 0 !important;
+    }
+
     html,
     body {
         height: unset !important;
