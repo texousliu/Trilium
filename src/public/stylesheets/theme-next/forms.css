@@ -451,6 +451,14 @@ optgroup {
     --icon-button-size: 28px;
 }
 
+div.switch-widget {
+    --switch-off-track-background: var(--cmd-button-background-color);
+    --switch-on-track-background: var(--cmd-button-text-color);
+
+    --switch-off-thumb-background: var(--cmd-button-text-color);
+    --switch-on-thumb-background: var(--main-background-color);
+}
+
 /* Links */
 
 body a.tn-link,
