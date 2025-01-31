@@ -1,5 +1,7 @@
 :root {
     --main-background-color: white;
+    --root-background: var(--main-background-color);
+    --launcher-pane-background-color: var(--main-background-color);
     --main-text-color: black;
     --input-text-color: var(--main-text-color);
 }
@@ -20,6 +22,20 @@
 .spacer {
     display: none !important;
 }    
+
+body.mobile #mobile-sidebar-wrapper,
+body.mobile .classic-toolbar-widget,
+body.mobile .action-button {
+    display: none !important;
+}
+
+body.mobile #detail-container {
+    max-height: unset;
+}
+
+body.mobile .note-title-widget {
+    padding: 0 !important;
+}
 
 body,
 #root-widget,
@@ -52,7 +68,8 @@ body {
 #vertical-main-container,
 #center-pane,
 .split-note-container-widget,
-.note-split:not(.hidden-ext) {
+.note-split:not(.hidden-ext),
+body.mobile #mobile-rest-container {
     display: block !important;
     overflow: auto;
     border-radius: 0 !important;
@@ -60,7 +77,8 @@ body {
 
 #center-pane,
 #rest-pane,
-.note-split {
+.note-split,
+body.mobile #detail-container {
     width: unset !important;
     max-width: unset !important;
 }
