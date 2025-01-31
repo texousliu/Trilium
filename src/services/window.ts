@@ -53,7 +53,14 @@ ipcMain.on("export-as-pdf", async (e) => {
         return;
     }
 
-    const filePath = dialog.showSaveDialogSync(browserWindow, {});
+    const filePath = dialog.showSaveDialogSync(browserWindow, {
+        filters: [
+            {
+                name: "PDF",
+                extensions: [ "pdf" ]
+            }
+        ]
+    });
     if (!filePath) {
         return;
     }
