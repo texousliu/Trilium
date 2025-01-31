@@ -254,5 +254,8 @@
   },
   "content_renderer": {
     "note-cannot-be-displayed": "Acest tip de notiță nu poate fi afișat."
+  },
+  "pdf": {
+    "export_filter": "Document PDF (*.pdf)"
   }
 }

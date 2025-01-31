@@ -253,5 +253,8 @@
   },
   "content_renderer": {
     "note-cannot-be-displayed": "This note type cannot be displayed."
+  },
+  "pdf": {
+    "export_filter": "PDF Document (*.pdf)"
   }
 }

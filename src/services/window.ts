@@ -14,6 +14,7 @@ import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { t } from "i18next";
 
 // Prevent the window being garbage collected
 let mainWindow: BrowserWindow | null;
@@ -61,7 +62,7 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
         defaultPath: formatDownloadTitle(opts.title, "file", "application/pdf"),
         filters: [
             {
-                name: "PDF",
+                name: t("pdf.export_filter"),
                 extensions: [ "pdf" ]
             }
         ]
