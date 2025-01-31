@@ -10,7 +10,7 @@ import keyboardActionsService from "./keyboard_actions.js";
 import remoteMain from "@electron/remote/main/index.js";
 import { BrowserWindow, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
 import { dialog, ipcMain } from "electron";
-import { isDev, isMac, isWindows } from "./utils.js";
+import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -47,13 +47,18 @@ ipcMain.on("create-extra-window", (event, arg) => {
     createExtraWindow(arg.extraWindowHash);
 });
 
-ipcMain.on("export-as-pdf", async (e) => {
+interface ExportAsPdfOpts {
+    title: string;
+}
+
+ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
     const browserWindow = BrowserWindow.fromWebContents(e.sender);
     if (!browserWindow) {
         return;
     }
 
     const filePath = dialog.showSaveDialogSync(browserWindow, {
+        defaultPath: formatDownloadTitle(opts.title, "file", "application/pdf"),
         filters: [
             {
                 name: "PDF",
