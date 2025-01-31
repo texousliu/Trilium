@@ -1655,4 +1655,14 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
         contain: none !important;
     }
 
+    /* Respect page breaks */
+    .page-break {
+        page-break-after: always;
+        break-after: always;
+    }
+
+    .page-break > * {
+        display: none !important;
+    }
+
 }
