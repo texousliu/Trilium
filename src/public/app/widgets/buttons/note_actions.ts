@@ -63,7 +63,7 @@ const TPL = `
         </li>
 
         <li data-trigger-command="exportAsPdf" class="dropdown-item export-as-pdf-button">
-            <span class="bx bx-printer"></span> ${t("note_actions.print_pdf")}<kbd data-command="exportAsPdf"></kbd>
+            <span class="bx bxs-file-pdf"></span> ${t("note_actions.print_pdf")}<kbd data-command="exportAsPdf"></kbd>
         </li>
 
         <div class="dropdown-divider"></div>
