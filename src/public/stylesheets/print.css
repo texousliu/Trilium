@@ -152,3 +152,11 @@ span[style] {
     max-height: unset !important;
     overflow: unset !important;
 }
+
+/*
+ * Code note specific fixes.
+ */
+.note-detail-code pre {
+    border: unset !important;
+    border-radius: unset !important;
+}
