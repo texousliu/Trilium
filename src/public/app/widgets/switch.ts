@@ -120,15 +120,20 @@ const TPL = `
 
 export default class SwitchWidget extends NoteContextAwareWidget {
 
-    switchOnName = "";
-    switchOnTooltip = "";
+    private $switchButton!: JQuery<HTMLElement>;
+    private $switchToggle!: JQuery<HTMLElement>;
+    private $switchName!: JQuery<HTMLElement>;
+    private $helpButton!: JQuery<HTMLElement>;
 
-    switchOffName = "";
-    switchOffTooltip = "";
+    private switchOnName = "";
+    private switchOnTooltip = "";
 
-    disabledTooltip = "";
+    private switchOffName = "";
+    private switchOffTooltip = "";
 
-    currentState = false;
+    private disabledTooltip = "";
+
+    private currentState = false;
 
     doRender() {
         this.$widget = $(TPL);
@@ -147,7 +152,7 @@ export default class SwitchWidget extends NoteContextAwareWidget {
         this.$helpButton = this.$widget.find(".switch-help-button");
     }
 
-    toggle(state) {
+    toggle(state: boolean) {
         if (state) {
             this.switchOn();
         } else {
@@ -185,7 +190,7 @@ export default class SwitchWidget extends NoteContextAwareWidget {
 
     set canToggle(isEnabled) {
         this.$switchButton.toggleClass("disabled", !isEnabled);
-        this.$switchToggle.attr("disabled", !isEnabled);
+        this.$switchToggle.attr("disabled", !isEnabled ? "disabled" : null);
 
         if (isEnabled) {
             this.isToggled = this.currentState; // Reapply the correct tooltip
