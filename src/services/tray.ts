@@ -10,7 +10,7 @@ let tray: Tray;
 let isVisible = true;
 
 // Inspired by https://github.com/signalapp/Signal-Desktop/blob/dcb5bb672635c4b29a51adec8a5658e3834ec8fc/app/tray_icon.ts#L20
-const getIconSize = () => {
+function getIconSize() {
     switch (process.platform) {
         case "darwin":
             return 16;
@@ -19,13 +19,15 @@ const getIconSize = () => {
         default:
             return 256;
     }
-};
-const getIconPath = () => {
+}
+
+function getIconPath() {
     const iconSize = getIconSize();
 
     return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "png", `${iconSize}x${iconSize}.png`);
-};
-const registerVisibilityListener = () => {
+}
+
+function registerVisibilityListener() {
     const mainWindow = windowService.getMainWindow();
     if (!mainWindow) {
         return;
@@ -43,9 +45,9 @@ const registerVisibilityListener = () => {
 
     mainWindow.on("minimize", updateTrayMenu);
     mainWindow.on("maximize", updateTrayMenu);
-};
+}
 
-const updateTrayMenu = () => {
+function updateTrayMenu() {
     const mainWindow = windowService.getMainWindow();
     if (!mainWindow) {
         return;
@@ -77,8 +79,9 @@ const updateTrayMenu = () => {
     ]);
 
     tray?.setContextMenu(contextMenu);
-};
-const changeVisibility = () => {
+}
+
+function changeVisibility() {
     const window = windowService.getMainWindow();
     if (!window) {
         return;
@@ -90,7 +93,7 @@ const changeVisibility = () => {
         window.show();
         window.focus();
     }
-};
+}
 
 function createTray() {
     if (optionService.getOptionBool("disableTray")) {
