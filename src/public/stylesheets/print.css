@@ -13,7 +13,9 @@
 .title-row .note-icon-widget,
 .title-row .button-widget,
 .ribbon-container,
+.promoted-attributes-widget,
 .scroll-padding-widget,
+.note-list-widget,
 .spacer {
     display: none !important;
 }    
