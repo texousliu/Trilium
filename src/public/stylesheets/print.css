@@ -1,6 +1,7 @@
 :root {
     --main-background-color: white;
-    --input-text-color: black;
+    --main-text-color: black;
+    --input-text-color: var(--main-text-color);
 }
 
 .no-print,
@@ -98,6 +99,26 @@ pre {
 span[style] {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+}
+
+/*
+ * Text note specific fixes
+ */
+.ck-widget {
+    outline: none !important;
+}
+
+.ck-widget__type-around,
+.ck-widget__selection-handle {
+    display: none !important;
+}
+
+.ck-widget.table td.ck-editor__nested-editable.ck-editor__nested-editable_focused,
+.ck-widget.table td.ck-editor__nested-editable:focus,
+.ck-widget.table th.ck-editor__nested-editable.ck-editor__nested-editable_focused,
+.ck-widget.table th.ck-editor__nested-editable:focus {
+    background: unset !important;
+    outline: unset !important;
 }
 
 /* Fix visibility of checkbox checkmarks
