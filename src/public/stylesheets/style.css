@@ -1611,6 +1611,7 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     #launcher-pane,
     #left-pane,
     #right-pane,
+    .title-row .note-icon-widget,
     .title-row .button-widget,
     .ribbon-container,
     .scroll-padding-widget,
@@ -1627,6 +1628,8 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
         overflow: auto;
     }
 
+    .note-title-widget input,
+    .note-detail-editable-text,
     .note-detail-editable-text-editor {
         padding: 0 !important;
     }
