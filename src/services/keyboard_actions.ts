@@ -504,6 +504,12 @@ function getDefaultKeyboardActions() {
             scope: "window"
         },
         {
+            actionName: "exportAsPdf",
+            defaultShortcuts: [],
+            description: t("keyboard_actions.export-as-pdf"),
+            scope: "window"
+        },
+        {
             actionName: "openNoteExternally",
             defaultShortcuts: [],
             description: t("keyboard_actions.open-note-externally"),

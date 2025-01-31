@@ -81,7 +81,6 @@ const copy = async () => {
         "node_modules/mermaid/dist/",
         "node_modules/jquery/dist/",
         "node_modules/jquery-hotkeys/",
-        "node_modules/print-this/",
         "node_modules/split.js/dist/",
         "node_modules/panzoom/dist/",
         "node_modules/i18next/",

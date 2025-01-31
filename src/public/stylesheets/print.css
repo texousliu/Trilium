@@ -1,40 +1,162 @@
-@media print {
-    html body {
-        /* https://github.com/zadam/trilium/issues/3202 */
-        color: black;
-    }
+:root {
+    --main-background-color: white;
+    --root-background: var(--main-background-color);
+    --launcher-pane-background-color: var(--main-background-color);
+    --main-text-color: black;
+    --input-text-color: var(--main-text-color);
+}
 
-    .no-print,
-    .no-print * {
-        display: none !important;
-    }
+.no-print,
+.no-print *,
+.tab-row-container,
+.tab-row-widget,
+#launcher-pane,
+#left-pane,
+#right-pane,
+.title-row .note-icon-widget,
+.title-row .button-widget,
+.ribbon-container,
+.promoted-attributes-widget,
+.scroll-padding-widget,
+.note-list-widget,
+.spacer {
+    display: none !important;
+}    
 
-    .relation-map-wrapper {
-        height: 100vh !important;
-    }
+body.mobile #mobile-sidebar-wrapper,
+body.mobile .classic-toolbar-widget,
+body.mobile .action-button {
+    display: none !important;
+}
 
-    .table thead th,
-    .table td,
-    .table th {
-        /* Fix center vertical alignment of table cells */
-        vertical-align: middle;
-    }
+body.mobile #detail-container {
+    max-height: unset;
+}
 
-    pre {
-        box-shadow: unset !important;
-        border: 0.75pt solid gray !important;
-        border-radius: 2pt !important;
-    }
+body.mobile .note-title-widget {
+    padding: 0 !important;
+}
 
-    span[style] {
-        print-color-adjust: exact;
-        -webkit-print-color-adjust: exact;
-    }
+body,
+#root-widget,
+#rest-pane > div.component:first-child,
+.note-detail-printable,
+.note-detail-editable-text-editor {
+    height: unset !important;
+    overflow: auto;
+}
 
-    /* Fix visibility of checkbox checkmarks
-       see https://github.com/TriliumNext/Notes/issues/901 */
-    .ck-editor__editable.ck-content .todo-list .todo-list__label > span[contenteditable="false"] > input[checked]::after {
-        /* fallback to default ck-editor green */
-        border-color: hsl(126, 64%, 41%);
-    }
+.note-title-widget input,
+.note-detail-editable-text,
+.note-detail-editable-text-editor {
+    padding: 0 !important;
+}
+
+html,
+body {
+    width: unset !important;
+    height: unset !important;
+    overflow: visible;
+    position: unset;
+    /* https://github.com/zadam/trilium/issues/3202 */
+    color: black;
+}
+
+#root-widget,
+#horizontal-main-container,
+#rest-pane,
+#vertical-main-container,
+#center-pane,
+.split-note-container-widget,
+.note-split:not(.hidden-ext),
+body.mobile #mobile-rest-container {
+    display: block !important;
+    overflow: auto;
+    border-radius: 0 !important;
+}
+
+#center-pane,
+#rest-pane,
+.note-split,
+body.mobile #detail-container {
+    width: unset !important;
+    max-width: unset !important;
+}
+
+.component {
+    contain: none !important;
+}
+
+/* Respect page breaks */
+.page-break {
+    page-break-after: always;
+    break-after: always;
+}
+
+.page-break > * {
+    display: none !important;
+}
+
+.relation-map-wrapper {
+    height: 100vh !important;
+}
+
+.table thead th,
+.table td,
+.table th {
+    /* Fix center vertical alignment of table cells */
+    vertical-align: middle;
+}
+
+pre {
+    box-shadow: unset !important;
+    border: 0.75pt solid gray !important;
+    border-radius: 2pt !important;
+}
+
+th,
+span[style] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+
+/*
+ * Text note specific fixes
+ */
+.ck-widget {
+    outline: none !important;
+}
+
+.ck-placeholder,
+.ck-widget__type-around,
+.ck-widget__selection-handle {
+    display: none !important;
+}
+
+.ck-widget.table td.ck-editor__nested-editable.ck-editor__nested-editable_focused,
+.ck-widget.table td.ck-editor__nested-editable:focus,
+.ck-widget.table th.ck-editor__nested-editable.ck-editor__nested-editable_focused,
+.ck-widget.table th.ck-editor__nested-editable:focus {
+    background: unset !important;
+    outline: unset !important;
+}
+
+/* Fix visibility of checkbox checkmarks
+    see https://github.com/TriliumNext/Notes/issues/901 */
+.ck-editor__editable.ck-content .todo-list .todo-list__label > span[contenteditable="false"] > input[checked]::after {
+    /* fallback to default ck-editor green */
+    border-color: hsl(126, 64%, 41%);
+}
+
+.include-note .include-note-content {
+    max-height: unset !important;
+    overflow: unset !important;
+}
+
+/*
+ * Code note specific fixes.
+ */
+.note-detail-code pre {
+    border: unset !important;
+    border-radius: unset !important;
 }

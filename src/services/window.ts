@@ -1,3 +1,4 @@
+import fs from "fs/promises";
 import path from "path";
 import url from "url";
 import port from "./port.js";
@@ -7,12 +8,13 @@ import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
 import remoteMain from "@electron/remote/main/index.js";
-import type { App, BrowserWindow, BrowserWindowConstructorOptions, WebContents } from "electron";
-import { ipcMain } from "electron";
-import { isDev, isMac, isWindows } from "./utils.js";
+import { BrowserWindow, shell, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
+import { dialog, ipcMain } from "electron";
+import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { t } from "i18next";
 
 // Prevent the window being garbage collected
 let mainWindow: BrowserWindow | null;
@@ -44,6 +46,50 @@ async function createExtraWindow(extraWindowHash: string) {
 
 ipcMain.on("create-extra-window", (event, arg) => {
     createExtraWindow(arg.extraWindowHash);
+});
+
+interface ExportAsPdfOpts {
+    title: string;
+    landscape: boolean;
+}
+
+ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
+    const browserWindow = BrowserWindow.fromWebContents(e.sender);
+    if (!browserWindow) {
+        return;
+    }
+
+    const filePath = dialog.showSaveDialogSync(browserWindow, {
+        defaultPath: formatDownloadTitle(opts.title, "file", "application/pdf"),
+        filters: [
+            {
+                name: t("pdf.export_filter"),
+                extensions: [ "pdf" ]
+            }
+        ]
+    });
+    if (!filePath) {
+        return;
+    }
+
+    let buffer: Buffer;
+    try {
+        buffer = await browserWindow.webContents.printToPDF({
+            landscape: opts.landscape
+        });
+    } catch (e) {
+        dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
+        return;
+    }
+
+    try {
+        await fs.writeFile(filePath, buffer);
+    } catch (e) {
+        dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
+        return;
+    }
+
+    shell.openPath(filePath);
 });
 
 async function createMainWindow(app: App) {

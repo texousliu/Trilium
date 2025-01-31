@@ -81,6 +81,10 @@ export type CommandMappings = {
     showOptions: CommandData & {
         section: string;
     };
+    showExportDialog: CommandData & {
+        notePath: string;
+        defaultType: "single";
+    };
     showDeleteNotesDialog: CommandData & {
         branchIdsToDelete: string[];
         callback: (value: ResolveOptions) => void;
