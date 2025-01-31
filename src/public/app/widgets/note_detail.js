@@ -299,7 +299,8 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
         const { ipcRenderer } = utils.dynamicRequire("electron");
         ipcRenderer.send("export-as-pdf", {
-            title: this.note.title
+            title: this.note.title,
+            landscape: this.note.hasAttribute("label", "printLandscape")
         });
     }
 

@@ -50,6 +50,7 @@ ipcMain.on("create-extra-window", (event, arg) => {
 
 interface ExportAsPdfOpts {
     title: string;
+    landscape: boolean;
 }
 
 ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
@@ -73,7 +74,9 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
 
     let buffer: Buffer;
     try {
-        buffer = await browserWindow.webContents.printToPDF({});
+        buffer = await browserWindow.webContents.printToPDF({
+            landscape: opts.landscape
+        });
     } catch (e) {
         dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
         return;
