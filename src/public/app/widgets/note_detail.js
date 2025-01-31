@@ -32,6 +32,7 @@ import AttachmentDetailTypeWidget from "./type_widgets/attachment_detail.js";
 import MindMapWidget from "./type_widgets/mind_map.js";
 import { getStylesheetUrl, isSyntaxHighlightEnabled } from "../services/syntax_highlight.js";
 import GeoMapTypeWidget from "./type_widgets/geo_map.js";
+import utils from "../services/utils.js";
 
 const TPL = `
 <div class="note-detail">
@@ -296,7 +297,8 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             return;
         }
 
-        alert("Hi");
+        const { ipcRenderer } = utils.dynamicRequire("electron");
+        ipcRenderer.send("export-as-pdf");
     }
 
     hoistedNoteChangedEvent({ ntxId }) {

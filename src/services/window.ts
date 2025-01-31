@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import url from "url";
 import port from "./port.js";
@@ -7,8 +8,8 @@ import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
 import remoteMain from "@electron/remote/main/index.js";
-import type { App, BrowserWindow, BrowserWindowConstructorOptions, WebContents } from "electron";
-import { ipcMain } from "electron";
+import { BrowserWindow, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
+import { dialog, ipcMain } from "electron";
 import { isDev, isMac, isWindows } from "./utils.js";
 
 import { fileURLToPath } from "url";
@@ -44,6 +45,24 @@ async function createExtraWindow(extraWindowHash: string) {
 
 ipcMain.on("create-extra-window", (event, arg) => {
     createExtraWindow(arg.extraWindowHash);
+});
+
+ipcMain.on("export-as-pdf", async (e) => {
+    const browserWindow = BrowserWindow.fromWebContents(e.sender);
+    if (!browserWindow) {
+        return;
+    }
+
+    const filePath = dialog.showSaveDialogSync(browserWindow, {});
+    if (!filePath) {
+        return;
+    }
+
+    // TODO: Report if there is an error in generating the PDF.
+    const buffer = await browserWindow.webContents.printToPDF({});
+
+    // TODO: Report if there was an error in saving the PDF.
+    fs.writeFileSync(filePath, buffer);
 });
 
 async function createMainWindow(app: App) {
