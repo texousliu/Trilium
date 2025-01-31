@@ -1607,6 +1607,8 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
 }
 
 @media print {
+    .no-print,
+    .no-print *,
     .tab-row-container,
     #launcher-pane,
     #left-pane,
@@ -1639,6 +1641,8 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
         height: unset !important;
         overflow: visible;
         position: unset;
+        /* https://github.com/zadam/trilium/issues/3202 */
+        color: black;
     }
 
     #root-widget,
@@ -1670,6 +1674,35 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
 
     .page-break > * {
         display: none !important;
+    }
+
+    .relation-map-wrapper {
+        height: 100vh !important;
+    }
+
+    .table thead th,
+    .table td,
+    .table th {
+        /* Fix center vertical alignment of table cells */
+        vertical-align: middle;
+    }
+
+    pre {
+        box-shadow: unset !important;
+        border: 0.75pt solid gray !important;
+        border-radius: 2pt !important;
+    }
+
+    span[style] {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    /* Fix visibility of checkbox checkmarks
+       see https://github.com/TriliumNext/Notes/issues/901 */
+    .ck-editor__editable.ck-content .todo-list .todo-list__label > span[contenteditable="false"] > input[checked]::after {
+        /* fallback to default ck-editor green */
+        border-color: hsl(126, 64%, 41%);
     }
 
 }
