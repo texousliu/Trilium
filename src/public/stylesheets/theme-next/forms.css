@@ -247,6 +247,13 @@ input::selection,
     background: transparent !important;
 }
 
+.input-group .input-group-text {
+    /* Background color hijack */
+    --accented-background-color: transparent;
+    
+    border: none;
+}
+
 /* Combo box-like dropdown buttons */
 
 .select-button.dropdown-toggle {
