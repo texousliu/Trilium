@@ -250,46 +250,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             return;
         }
 
-        await libraryLoader.requireLibrary(libraryLoader.PRINT_THIS);
-
-        let $promotedAttributes = $("");
-
-        if (this.note.getPromotedDefinitionAttributes().length > 0) {
-            $promotedAttributes = (await attributeRenderer.renderNormalAttributes(this.note)).$renderedAttributes;
-        }
-
-        const { assetPath } = window.glob;
-        const cssToLoad = [
-            `${assetPath}/node_modules/codemirror/lib/codemirror.css`,
-            `${assetPath}/libraries/ckeditor/ckeditor-content.css`,
-            `${assetPath}/node_modules/bootstrap/dist/css/bootstrap.min.css`,
-            `${assetPath}/node_modules/katex/dist/katex.min.css`,
-            `${assetPath}/stylesheets/print.css`,
-            `${assetPath}/stylesheets/relation_map.css`,
-            `${assetPath}/stylesheets/ckeditor-theme.css`
-        ];
-
-        if (isSyntaxHighlightEnabled()) {
-            cssToLoad.push(getStylesheetUrl("default:vs"));
-        }
-
-        this.$widget.find(".note-detail-printable:visible").printThis({
-            header: $("<div>").append($("<h2>").text(this.note.title)).append($promotedAttributes).prop("outerHTML"),
-
-            footer: `
-<script src="${assetPath}/node_modules/katex/dist/katex.min.js"></script>
-<script src="${assetPath}/node_modules/katex/dist/contrib/mhchem.min.js"></script>
-<script src="${assetPath}/node_modules/katex/dist/contrib/auto-render.min.js"></script>
-<script>
-    document.body.className += ' ck-content printed-content';
-
-    renderMathInElement(document.body, {trust: true});
-</script>
-`,
-            importCSS: false,
-            loadCSS: cssToLoad,
-            debug: true
-        });
+        window.print();
     }
 
     async exportAsPdfEvent() {
