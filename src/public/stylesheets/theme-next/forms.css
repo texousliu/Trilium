@@ -252,6 +252,10 @@ input::selection,
     --accented-background-color: transparent;
     
     border: none;
+    font-style: italic;
+    color: var(--input-placeholder-color);
+    user-select: none;
+    cursor: default;
 }
 
 /* Combo box-like dropdown buttons */
