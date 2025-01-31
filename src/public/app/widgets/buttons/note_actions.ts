@@ -141,7 +141,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         this.$convertNoteIntoAttachmentButton = this.$widget.find("[data-trigger-command='convertNoteIntoAttachment']");
         this.$findInTextButton = this.$widget.find(".find-in-text-button");
         this.$printActiveNoteButton = this.$widget.find(".print-active-note-button");
-        this.$exportAsPdfButton = this.$widget.find("export-as-pdf-button");
+        this.$exportAsPdfButton = this.$widget.find(".export-as-pdf-button");
         this.$showSourceButton = this.$widget.find(".show-source-button");
         this.$showAttachmentsButton = this.$widget.find(".show-attachments-button");
         this.$renderNoteButton = this.$widget.find(".render-note-button");
