@@ -291,6 +291,14 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         });
     }
 
+    async exportAsPdfEvent() {
+        if (!this.noteContext.isActive()) {
+            return;
+        }
+
+        alert("Hi");
+    }
+
     hoistedNoteChangedEvent({ ntxId }) {
         if (this.isNoteContext(ntxId)) {
             this.refresh();

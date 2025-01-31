@@ -59,8 +59,12 @@ const TPL = `
         </li>
 
         <li data-trigger-command="printActiveNote" class="dropdown-item print-active-note-button">
-            <span class="bx bx-printer"></span> ${t("note_actions.print_note")}<kbd data-command="printActiveNote"></kbd></li>
+            <span class="bx bx-printer"></span> ${t("note_actions.print_note")}<kbd data-command="printActiveNote"></kbd>
+        </li>
 
+        <li data-trigger-command="exportAsPdf" class="dropdown-item export-as-pdf-button">
+            <span class="bx bx-printer"></span> ${t("note_actions.print_pdf")}<kbd data-command="exportAsPdf"></kbd>
+        </li>
 
         <div class="dropdown-divider"></div>
 
@@ -111,6 +115,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
     private $convertNoteIntoAttachmentButton!: JQuery<HTMLElement>;
     private $findInTextButton!: JQuery<HTMLElement>;
     private $printActiveNoteButton!: JQuery<HTMLElement>;
+    private $exportAsPdfButton!: JQuery<HTMLElement>;
     private $showSourceButton!: JQuery<HTMLElement>;
     private $showAttachmentsButton!: JQuery<HTMLElement>;
     private $renderNoteButton!: JQuery<HTMLElement>;
@@ -136,6 +141,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         this.$convertNoteIntoAttachmentButton = this.$widget.find("[data-trigger-command='convertNoteIntoAttachment']");
         this.$findInTextButton = this.$widget.find(".find-in-text-button");
         this.$printActiveNoteButton = this.$widget.find(".print-active-note-button");
+        this.$exportAsPdfButton = this.$widget.find("export-as-pdf-button");
         this.$showSourceButton = this.$widget.find(".show-source-button");
         this.$showAttachmentsButton = this.$widget.find(".show-attachments-button");
         this.$renderNoteButton = this.$widget.find(".render-note-button");
@@ -185,7 +191,9 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         this.toggleDisabled(this.$showAttachmentsButton, !isInOptions);
         this.toggleDisabled(this.$showSourceButton, ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "geoMap"].includes(note.type));
 
-        this.toggleDisabled(this.$printActiveNoteButton, ["text", "code"].includes(note.type));
+        const canPrint = ["text", "code"].includes(note.type);
+        this.toggleDisabled(this.$printActiveNoteButton, canPrint);
+        this.toggleDisabled(this.$exportAsPdfButton, canPrint);
 
         this.$renderNoteButton.toggle(note.type === "render");
 
