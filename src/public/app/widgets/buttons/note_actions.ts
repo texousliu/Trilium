@@ -5,8 +5,15 @@ import dialogService from "../../services/dialog.js";
 import server from "../../services/server.js";
 import toastService from "../../services/toast.js";
 import ws from "../../services/ws.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
+import type { FAttachmentRow } from "../../entities/fattachment.js";
+
+// TODO: Deduplicate with server
+interface ConvertToAttachmentResponse {
+    attachment: FAttachmentRow;
+}
 
 const TPL = `
 <div class="dropdown note-actions">
@@ -100,13 +107,31 @@ const TPL = `
 </div>`;
 
 export default class NoteActionsWidget extends NoteContextAwareWidget {
+
+    private $convertNoteIntoAttachmentButton!: JQuery<HTMLElement>;
+    private $findInTextButton!: JQuery<HTMLElement>;
+    private $printActiveNoteButton!: JQuery<HTMLElement>;
+    private $showSourceButton!: JQuery<HTMLElement>;
+    private $showAttachmentsButton!: JQuery<HTMLElement>;
+    private $renderNoteButton!: JQuery<HTMLElement>;
+    private $saveRevisionButton!: JQuery<HTMLElement>;
+    private $exportNoteButton!: JQuery<HTMLElement>;
+    private $importNoteButton!: JQuery<HTMLElement>;
+    private $openNoteExternallyButton!: JQuery<HTMLElement>;
+    private $openNoteCustomButton!: JQuery<HTMLElement>;
+    private $deleteNoteButton!: JQuery<HTMLElement>;
+
     isEnabled() {
         return this.note?.type !== "launcher";
     }
 
     doRender() {
         this.$widget = $(TPL);
-        this.$widget.on("show.bs.dropdown", () => this.refreshVisibility(this.note));
+        this.$widget.on("show.bs.dropdown", () => {
+            if (this.note) {
+                this.refreshVisibility(this.note);
+            }
+        });
 
         this.$convertNoteIntoAttachmentButton = this.$widget.find("[data-trigger-command='convertNoteIntoAttachment']");
         this.$findInTextButton = this.$widget.find(".find-in-text-button");
@@ -118,7 +143,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
 
         this.$exportNoteButton = this.$widget.find(".export-note-button");
         this.$exportNoteButton.on("click", () => {
-            if (this.$exportNoteButton.hasClass("disabled")) {
+            if (this.$exportNoteButton.hasClass("disabled") || !this.noteContext?.notePath) {
                 return;
             }
 
@@ -129,7 +154,11 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         });
 
         this.$importNoteButton = this.$widget.find(".import-files-button");
-        this.$importNoteButton.on("click", () => this.triggerCommand("showImportDialog", { noteId: this.noteId }));
+        this.$importNoteButton.on("click", () => {
+            if (this.noteId) {
+                this.triggerCommand("showImportDialog", { noteId: this.noteId });
+            }
+        });
 
         this.$widget.on("click", ".dropdown-item", () => this.$widget.find("[data-bs-toggle='dropdown']").dropdown("toggle"));
 
@@ -138,7 +167,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
 
         this.$deleteNoteButton = this.$widget.find(".delete-note-button");
         this.$deleteNoteButton.on("click", () => {
-            if (this.note.noteId === "root") {
+            if (!this.note || this.note.noteId === "root") {
                 return;
             }
 
@@ -146,7 +175,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         });
     }
 
-    async refreshVisibility(note) {
+    async refreshVisibility(note: FNote) {
         const isInOptions = note.noteId.startsWith("_options");
 
         this.$convertNoteIntoAttachmentButton.toggle(note.isEligibleForConversionToAttachment());
@@ -177,11 +206,11 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
     }
 
     async convertNoteIntoAttachmentCommand() {
-        if (!(await dialogService.confirm(t("note_actions.convert_into_attachment_prompt", { title: this.note.title })))) {
+        if (!this.note || !(await dialogService.confirm(t("note_actions.convert_into_attachment_prompt", { title: this.note.title })))) {
             return;
         }
 
-        const { attachment: newAttachment } = await server.post(`notes/${this.noteId}/convert-to-attachment`);
+        const { attachment: newAttachment } = await server.post<ConvertToAttachmentResponse>(`notes/${this.noteId}/convert-to-attachment`);
 
         if (!newAttachment) {
             toastService.showMessage(t("note_actions.convert_into_attachment_failed", { title: this.note.title }));
@@ -198,7 +227,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         });
     }
 
-    toggleDisabled($el, enable) {
+    toggleDisabled($el: JQuery<HTMLElement>, enable: boolean) {
         if (enable) {
             $el.removeAttr("disabled");
         } else {
@@ -206,7 +235,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         }
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }
