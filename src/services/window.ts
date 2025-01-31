@@ -8,7 +8,7 @@ import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
 import remoteMain from "@electron/remote/main/index.js";
-import { BrowserWindow, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
+import { BrowserWindow, shell, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
 import { dialog, ipcMain } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
 
@@ -75,6 +75,8 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
 
     // TODO: Report if there was an error in saving the PDF.
     fs.writeFileSync(filePath, buffer);
+
+    shell.openPath(filePath);
 });
 
 async function createMainWindow(app: App) {
