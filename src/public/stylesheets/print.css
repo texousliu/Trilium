@@ -37,6 +37,7 @@ body,
 
 html,
 body {
+    width: unset !important;
     height: unset !important;
     overflow: visible;
     position: unset;
