@@ -75,7 +75,14 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
     let buffer: Buffer;
     try {
         buffer = await browserWindow.webContents.printToPDF({
-            landscape: opts.landscape
+            landscape: opts.landscape,
+            displayHeaderFooter: true,
+            headerTemplate: `<div></div>`,
+            footerTemplate: `
+                <div style="width: 100%; text-align: center; font-size: 10pt;">
+                    <span class="pageNumber"></span>
+                </div>
+            `
         });
     } catch (e) {
         dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
