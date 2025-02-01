@@ -4,6 +4,8 @@ import windowService from "./window.js";
 import optionService from "./options.js";
 import { fileURLToPath } from "url";
 import type { KeyboardActionNames } from "./keyboard_actions_interface.js";
+import date_notes from "./date_notes.js";
+import type BNote from "../becca/entities/bnote.js";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -58,11 +60,20 @@ function updateTrayMenu() {
         mainWindow?.webContents.send("globalShortcut", actionName);
     }
 
+    function openInSameTab(note: BNote) {
+        mainWindow?.webContents.send("openInSameTab", note.noteId);
+    }
+
     const contextMenu = Menu.buildFromTemplate([
         {
             label: "New Note",
             type: "normal",
             click: () => triggerKeyboardAction("createNoteIntoInbox")
+        },
+        {
+            label: "Open today's journal note",
+            type: "normal",
+            click: () => openInSameTab(date_notes.getTodayNote())
         },
         { type: "separator" },
         {
