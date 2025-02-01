@@ -1,4 +1,4 @@
-import { Marker, type LatLng, type LeafletMouseEvent } from "leaflet";
+import { GPX, Marker, type LatLng, type LeafletMouseEvent } from "leaflet";
 import type FNote from "../../entities/fnote.js";
 import GeoMapWidget, { type InitCallback, type Leaflet } from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
@@ -91,8 +91,6 @@ interface CreateChildResponse {
     }
 }
 
-type MarkerData = Record<string, Marker>;
-
 enum State {
     Normal,
     NewNote
@@ -103,7 +101,8 @@ export default class GeoMapTypeWidget extends TypeWidget {
     private geoMapWidget: GeoMapWidget;
     private _state: State;
     private L!: Leaflet;
-    private currentMarkerData: MarkerData;
+    private currentMarkerData: Record<string, Marker>;
+    private currentTrackData: Record<string, GPX>;
     private gpxLoaded?: boolean;
 
     static getType() {
@@ -115,6 +114,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         this.geoMapWidget = new GeoMapWidget("type", (L: Leaflet) => this.#onMapInitialized(L));
         this.currentMarkerData = {};
+        this.currentTrackData = {};
         this._state = State.Normal;
 
         this.child(this.geoMapWidget);
@@ -169,6 +169,11 @@ export default class GeoMapTypeWidget extends TypeWidget {
             marker.remove();
         }
 
+        // Delete all existing tracks
+        for (const track of Object.values(this.currentTrackData)) {
+            track.remove();
+        }
+
         // Add the new markers.
         this.currentMarkerData = {};
         const childNotes = await this.note.getChildNotes();
@@ -203,6 +208,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         });
         track.addTo(this.geoMapWidget.map);
+        this.currentTrackData[note.noteId] = track;
     }
 
     #processNoteWithMarker(note: FNote, latLng: string) {
