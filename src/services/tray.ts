@@ -10,6 +10,7 @@ import becca from "../becca/becca.js";
 import becca_service from "../becca/becca_service.js";
 import type BRecentNote from "../becca/entities/brecent_note.js";
 import { ipcMain, nativeTheme } from "electron/main";
+import { t } from "i18next";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -140,7 +141,7 @@ function updateTrayMenu() {
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: "Show windows",
+            label: t("tray.show-windows"),
             type: "checkbox",
             checked: isVisible,
             click: () => {
@@ -153,32 +154,32 @@ function updateTrayMenu() {
         },
         { type: "separator" },
         {
-            label: "New note",
+            label: t("tray.new-note"),
             type: "normal",
             icon: getIconPath("new-note"),
             click: () => triggerKeyboardAction("createNoteIntoInbox")
         },
         {
-            label: "Open today's journal note",
+            label: t("tray.today"),
             type: "normal",
             icon: getIconPath("today"),
             click: () => openInSameTab(date_notes.getTodayNote())
         },
         {
-            label: "Bookmarks",
+            label: t("tray.bookmarks"),
             type: "submenu",
             icon: getIconPath("bookmarks"),
             submenu: buildBookmarksMenu()
         },
         {
-            label: "Recent notes",
+            label: t("tray.recents"),
             type: "submenu",
             icon: getIconPath("recents"),
             submenu: buildRecentNotesMenu()
         },
         { type: "separator" },
         {
-            label: "Quit Trilium",
+            label: t("tray.close"),
             type: "normal",
             icon: getIconPath("close"),
             click: () => {
@@ -210,7 +211,7 @@ function createTray() {
     }
 
     tray = new Tray(getTrayIconPath());
-    tray.setToolTip("TriliumNext Notes");
+    tray.setToolTip(t("tray.tooltip"));
     // Restore focus
     tray.on("click", changeVisibility);
     updateTrayMenu();

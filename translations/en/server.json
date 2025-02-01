@@ -260,5 +260,14 @@
     "unable-to-export-message": "The current note could not be exported as a PDF.",
     "unable-to-export-title": "Unable to export as PDF",
     "unable-to-save-message": "The selected file could not be written to. Try again or select another destination."
+  },
+  "tray": {
+    "tooltip": "TriliumNext Notes",
+    "close": "Quit Trilium",
+    "recents": "Recent notes",
+    "bookmarks": "Bookmarks",
+    "today": "Open today's journal note",
+    "new-note": "New note",
+    "show-windows": "Show windows"
   }
 }

@@ -261,5 +261,14 @@
     "unable-to-export-message": "Notița curentă nu a putut fi exportată ca PDF.",
     "unable-to-export-title": "Nu s-a putut exporta ca PDF",
     "unable-to-save-message": "Nu s-a putut scrie fișierul selectat. Încercați din nou sau selectați altă destinație."
+  },
+  "tray": {
+    "bookmarks": "Semne de carte",
+    "close": "Închide Trilium",
+    "new-note": "Notiță nouă",
+    "recents": "Notițe recente",
+    "today": "Mergi la notița de astăzi",
+    "tooltip": "TriliumNext Notes",
+    "show-windows": "Afișează ferestrele"
   }
 }
