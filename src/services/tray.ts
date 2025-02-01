@@ -59,6 +59,7 @@ function registerVisibilityListener() {
 
     mainWindow.on("minimize", updateTrayMenu);
     mainWindow.on("maximize", updateTrayMenu);
+    nativeTheme.on("updated", updateTrayMenu);
 }
 
 function updateTrayMenu() {
