@@ -104,6 +104,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     private _state: State;
     private L!: Leaflet;
     private currentMarkerData: MarkerData;
+    private gpxLoaded?: boolean;
 
     static getType() {
         return "geoMap";
@@ -172,11 +173,36 @@ export default class GeoMapTypeWidget extends TypeWidget {
         this.currentMarkerData = {};
         const childNotes = await this.note.getChildNotes();
         for (const childNote of childNotes) {
+            if (childNote.mime === "application/gpx+xml") {
+                this.#processNoteWithGpxTrack(childNote);
+                continue;
+            }
+
             const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
             if (latLng) {
                 this.#processNoteWithMarker(childNote, latLng);
             }
         }
+    }
+
+    async #processNoteWithGpxTrack(note: FNote) {
+        if (!this.L || !this.geoMapWidget.map) {
+            return;
+        }
+
+        if (!this.gpxLoaded) {
+            await import("leaflet-gpx");
+            this.gpxLoaded = true;
+        }
+
+        // TODO: This is not very efficient as it's probably a string response that is parsed and then converted back to string and parsed again.
+        const xmlResponse = await server.get<XMLDocument>(`notes/${note.noteId}/open`);
+        const stringResponse = new XMLSerializer().serializeToString(xmlResponse);
+
+        const track = new this.L.GPX(stringResponse, {
+
+        });
+        track.addTo(this.geoMapWidget.map);
     }
 
     #processNoteWithMarker(note: FNote, latLng: string) {
