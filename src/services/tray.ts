@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import type { KeyboardActionNames } from "./keyboard_actions_interface.js";
 import date_notes from "./date_notes.js";
 import type BNote from "../becca/entities/bnote.js";
+import becca from "../becca/becca.js";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -64,6 +65,26 @@ function updateTrayMenu() {
         mainWindow?.webContents.send("openInSameTab", note.noteId);
     }
 
+    function buildBookmarksMenu() {
+        const parentNote = becca.getNoteOrThrow("_lbBookmarks");
+        const menuItems: Electron.MenuItemConstructorOptions[] = [];
+
+        for (const bookmarkNote of parentNote?.children) {
+            if (bookmarkNote.isLabelTruthy("bookmarkFolder")) {
+                // Ignore bookmark folders for now.
+                continue;
+            }
+
+            menuItems.push({
+                label: bookmarkNote.title,
+                type: "normal",
+                click: () => openInSameTab(bookmarkNote)
+            });
+        }
+
+        return menuItems;
+    }
+
     const contextMenu = Menu.buildFromTemplate([
         {
             label: "New Note",
@@ -74,6 +95,11 @@ function updateTrayMenu() {
             label: "Open today's journal note",
             type: "normal",
             click: () => openInSameTab(date_notes.getTodayNote())
+        },
+        {
+            label: "Bookmarks",
+            type: "submenu",
+            submenu: buildBookmarksMenu()
         },
         { type: "separator" },
         {
