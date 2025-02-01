@@ -246,9 +246,6 @@ describe.todo("#quoteRegex", () => {});
 
 describe.todo("#replaceAll", () => {});
 
-// TriliumNextTODO move existing formatDownloadTitle in here
-// describe.todo("#formatDownloadTitle", () => {});
-
 describe("#removeTextFileExtension", () => {
     const testCases: TestCase<typeof utils.removeTextFileExtension>[] = [
         ["w/ 'test.md' it should strip '.md'", ["test.md"], "test"],
