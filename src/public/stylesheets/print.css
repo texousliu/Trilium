@@ -8,6 +8,10 @@
     --print-font-size: 11pt;
 }
 
+@page {
+    margin: 2cm;
+}
+
 .ck-content {
     font-size: var(--print-font-size);
 }
