@@ -381,7 +381,13 @@ describe("#timeLimit", () => {
 
 });
 
-describe.todo("#deferred", () => {});
+describe("#deferred", () => {
+    it("should return a promise", () => {
+        const result = utils.deferred();
+        expect(result).toBeInstanceOf(Promise)
+    })
+    // TriliumNextTODO: Add further tests!
+});
 
 describe("#removeDiacritic", () => {
 
