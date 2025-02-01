@@ -127,7 +127,7 @@ function updateTrayMenu() {
         `);
         const menuItems: Electron.MenuItemConstructorOptions[] = [];
         const formatter = new Intl.DateTimeFormat(undefined, {
-            dateStyle: "medium",
+            dateStyle: "short",
             timeStyle: "short"
         });
 
