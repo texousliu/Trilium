@@ -68,12 +68,21 @@ function updateTrayMenu() {
         return;
     }
 
+    function ensureVisible() {
+        if (mainWindow) {
+            mainWindow.show();
+            mainWindow.focus();
+        }
+    }
+
     function triggerKeyboardAction(actionName: KeyboardActionNames) {
         mainWindow?.webContents.send("globalShortcut", actionName);
+        ensureVisible();
     }
 
     function openInSameTab(note: BNote | BRecentNote) {
         mainWindow?.webContents.send("openInSameTab", note.noteId);
+        ensureVisible();
     }
 
     function buildBookmarksMenu() {
@@ -127,8 +136,7 @@ function updateTrayMenu() {
                 if (isVisible) {
                     mainWindow.hide();
                 } else {
-                    mainWindow.show();
-                    mainWindow.focus();
+                    ensureVisible();
                 }
             }
         },
