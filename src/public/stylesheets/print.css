@@ -189,6 +189,14 @@ span[style] {
 }
 
 /*
+ * Blockquotes
+ */
+
+.note-detail-printable blockquote {
+    box-shadow: unset;
+}
+
+/*
  * Footnotes
  */
 
