@@ -11,7 +11,7 @@ import becca_service from "../becca/becca_service.js";
 import type BRecentNote from "../becca/entities/brecent_note.js";
 import { ipcMain, nativeTheme } from "electron/main";
 import { default as i18next, t } from "i18next";
-import { isDev } from "./utils.js";
+import { isDev, isMac } from "./utils.js";
 import cls from "./cls.js";
 
 let tray: Tray;
@@ -19,21 +19,15 @@ let tray: Tray;
 // is minimized
 let isVisible = true;
 
-// Inspired by https://github.com/signalapp/Signal-Desktop/blob/dcb5bb672635c4b29a51adec8a5658e3834ec8fc/app/tray_icon.ts#L20
-function getIconSize() {
-    switch (process.platform) {
-        case "darwin":
-            return 16;
-        case "win32":
-            return 32;
-        default:
-            return 256;
-    }
-}
-
 function getTrayIconPath() {
-    const iconSize = getIconSize();
-    const name = isDev ? "icon-purple" : "icon-color";
+    let name: string;
+    if (isMac) {
+        name = "icon-black";
+    } else if (isDev) {
+        name = "icon-purple";
+    } else {
+        name = "icon-color";
+    }
 
     return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}.png`);
 }

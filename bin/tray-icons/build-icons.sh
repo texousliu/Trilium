@@ -23,6 +23,7 @@ function generateDpiScaledIcons {
   inkscape -w 32 -h 32 "$file" -o "$output_dir/$name@2x.png"
 }
 
+generateDpiScaledIcons "$images_dir/icon-black.svg"
 generateDpiScaledIcons "$images_dir/icon-color.svg"
 generateDpiScaledIcons "$images_dir/icon-purple.svg"
 
