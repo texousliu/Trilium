@@ -91,15 +91,25 @@ function updateTrayMenu() {
 
         for (const bookmarkNote of parentNote?.children) {
             if (bookmarkNote.isLabelTruthy("bookmarkFolder")) {
-                // Ignore bookmark folders for now.
-                continue;
+                menuItems.push({
+                    label: bookmarkNote.title,
+                    type: "submenu",
+                    submenu: bookmarkNote.children.map((subitem) => {
+                        return {
+                            label: subitem.title,
+                            type: "normal",
+                            click: () => openInSameTab(subitem)
+                        };
+                    })
+                });
+            } else {
+                menuItems.push({
+                    label: bookmarkNote.title,
+                    type: "normal",
+                    click: () => openInSameTab(bookmarkNote)
+                });
             }
 
-            menuItems.push({
-                label: bookmarkNote.title,
-                type: "normal",
-                click: () => openInSameTab(bookmarkNote)
-            });
         }
 
         return menuItems;
