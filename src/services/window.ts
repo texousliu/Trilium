@@ -79,8 +79,7 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
             displayHeaderFooter: true,
             headerTemplate: `<div></div>`,
             footerTemplate: `
-                <div style="width: 100%; text-align: center; font-size: 10pt;">
-                    <span class="pageNumber"></span>
+                <div class="pageNumber" style="width: 100%; text-align: center; font-size: 10pt;">
                 </div>
             `
         });
