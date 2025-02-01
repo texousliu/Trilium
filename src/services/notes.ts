@@ -731,13 +731,13 @@ function updateNoteData(noteId: string, content: string, attachments: Attachment
     note.setContent(newContent, { forceFrontendReload });
 
     if (attachments?.length > 0) {
-        const existingAttachmentsByTitle = toMap(note.getAttachments({ includeContentLength: false }), "title");
+      const existingAttachmentsByTitle = toMap(note.getAttachments({ includeContentLength: false }), "title");
 
         for (const { attachmentId, role, mime, title, position, content } of attachments) {
-            if (attachmentId || !(title in existingAttachmentsByTitle)) {
+            const existingAttachment = existingAttachmentsByTitle.get(title);
+            if (attachmentId || !existingAttachment) {
                 note.saveAttachment({ attachmentId, role, mime, title, content, position });
             } else {
-                const existingAttachment = existingAttachmentsByTitle[title];
                 existingAttachment.role = role;
                 existingAttachment.mime = mime;
                 existingAttachment.position = position;

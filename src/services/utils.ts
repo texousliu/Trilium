@@ -247,13 +247,15 @@ export function normalize(str: string) {
     return removeDiacritic(str).toLowerCase();
 }
 
-export function toMap<T extends Record<string, any>>(list: T[], key: keyof T): Record<string, T> {
-    const map: Record<string, T> = {};
-
+export function toMap<T extends Record<string, any>>(list: T[], key: keyof T) {
+    const map = new Map<string, T>();
     for (const el of list) {
-        map[el[key]] = el;
+        const keyForMap = el[key];
+        if (!keyForMap) continue;
+        // TriliumNextTODO: do we need to handle the case when the same key is used?
+        // currently this will overwrite the existing entry in the map
+        map.set(keyForMap, el);
     }
-
     return map;
 }
 
