@@ -38,9 +38,7 @@ function getTrayIconPath() {
 }
 
 function getIconPath(name: string) {
-    const size = 16;
-    let suffix = (nativeTheme.shouldUseDarkColors ? "-inverted" : "");
-    suffix += `-${size}`;
+    const suffix = (nativeTheme.shouldUseDarkColors ? "-inverted" : "");
     return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}${suffix}.png`);
 }
 

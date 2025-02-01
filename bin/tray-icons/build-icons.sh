@@ -15,6 +15,8 @@ output_dir="$script_dir/../../images/app-icons/tray"
 
 for file in *.svg; do
     name=$(basename $file .svg)
-    inkscape -w 16 -h 16 "$file" -o "$output_dir/$name-16.png"
-    magick "$output_dir/$name-16.png" -channel RGB -negate "$output_dir/$name-inverted-16.png"
+    inkscape -w 16 -h 16 "$file" -o "$output_dir/$name.png"
+    inkscape -w 32 -h 32 "$file" -o "$output_dir/$name@2x.png"
+    magick "$output_dir/$name.png" -channel RGB -negate "$output_dir/$name-inverted.png"
+    magick "$output_dir/$name@2x.png" -channel RGB -negate "$output_dir/$name-inverted@2x.png"
 done
