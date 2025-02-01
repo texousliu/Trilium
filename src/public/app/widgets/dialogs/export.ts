@@ -1,11 +1,12 @@
 import treeService from "../../services/tree.js";
 import utils from "../../services/utils.js";
 import ws from "../../services/ws.js";
-import toastService from "../../services/toast.js";
+import toastService, { type ToastOptions } from "../../services/toast.js";
 import froca from "../../services/froca.js";
 import openService from "../../services/open.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="export-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -116,6 +117,19 @@ const TPL = `
 </div>`;
 
 export default class ExportDialog extends BasicWidget {
+
+    private taskId: string;
+    private branchId: string | null;
+    private modal?: bootstrap.Modal;
+    private $form!: JQuery<HTMLElement>;
+    private $noteTitle!: JQuery<HTMLElement>;
+    private $subtreeFormats!: JQuery<HTMLElement>;
+    private $singleFormats!: JQuery<HTMLElement>;
+    private $subtreeType!: JQuery<HTMLElement>;
+    private $singleType!: JQuery<HTMLElement>;
+    private $exportButton!: JQuery<HTMLElement>;
+    private $opmlVersions!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -125,6 +139,8 @@ export default class ExportDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        // Remove once bootstrap is fixed.
+        // @ts-ignore
         this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$form = this.$widget.find(".export-form");
         this.$noteTitle = this.$widget.find(".export-note-title");
@@ -136,7 +152,7 @@ export default class ExportDialog extends BasicWidget {
         this.$opmlVersions = this.$widget.find(".opml-versions");
 
         this.$form.on("submit", () => {
-            this.modal.hide();
+            this.modal?.hide();
 
             const exportType = this.$widget.find("input[name='export-type']:checked").val();
 
@@ -149,13 +165,15 @@ export default class ExportDialog extends BasicWidget {
 
             const exportVersion = exportFormat === "opml" ? this.$widget.find("input[name='opml-version']:checked").val() : "1.0";
 
-            this.exportBranch(this.branchId, exportType, exportFormat, exportVersion);
+            if (this.branchId) {
+                this.exportBranch(this.branchId, String(exportType), String(exportFormat), String(exportVersion));
+            }
 
             return false;
         });
 
         this.$widget.find("input[name=export-type]").on("change", (e) => {
-            if (e.currentTarget.value === "subtree") {
+            if ((e.currentTarget as HTMLInputElement).value === "subtree") {
                 if (this.$widget.find("input[name=export-subtree-format]:checked").length === 0) {
                     this.$widget.find("input[name=export-subtree-format]:first").prop("checked", true);
                 }
@@ -173,7 +191,7 @@ export default class ExportDialog extends BasicWidget {
         });
 
         this.$widget.find("input[name=export-subtree-format]").on("change", (e) => {
-            if (e.currentTarget.value === "opml") {
+            if ((e.currentTarget as HTMLInputElement).value === "opml") {
                 this.$opmlVersions.slideDown();
             } else {
                 this.$opmlVersions.slideUp();
@@ -181,7 +199,7 @@ export default class ExportDialog extends BasicWidget {
         });
     }
 
-    async showExportDialogEvent({ notePath, defaultType }) {
+    async showExportDialogEvent({ notePath, defaultType }: EventData<"showExportDialog">) {
         this.taskId = "";
         this.$exportButton.removeAttr("disabled");
 
@@ -201,11 +219,15 @@ export default class ExportDialog extends BasicWidget {
 
         const { noteId, parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(notePath);
 
-        this.branchId = await froca.getBranchId(parentNoteId, noteId);
-        this.$noteTitle.text(await treeService.getNoteTitle(noteId));
+        if (parentNoteId) {
+            this.branchId = await froca.getBranchId(parentNoteId, noteId);
+        }
+        if (noteId) {
+            this.$noteTitle.text(await treeService.getNoteTitle(noteId));
+        }
     }
 
-    exportBranch(branchId, type, format, version) {
+    exportBranch(branchId: string, type: string, format: string, version: string) {
         this.taskId = utils.randomString(10);
 
         const url = openService.getUrlForDownload(`api/branches/${branchId}/export/${type}/${format}/${version}/${this.taskId}`);
@@ -215,12 +237,14 @@ export default class ExportDialog extends BasicWidget {
 }
 
 ws.subscribeToMessages(async (message) => {
-    const makeToast = (id, message) => ({
-        id: id,
-        title: t("export.export_status"),
-        message: message,
-        icon: "arrow-square-up-right"
-    });
+    function makeToast(id: string, message: string): ToastOptions {
+        return {
+            id: id,
+            title: t("export.export_status"),
+            message: message,
+            icon: "arrow-square-up-right"
+        };
+    };
 
     if (message.taskType !== "export") {
         return;

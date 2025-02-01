@@ -83,7 +83,7 @@ export type CommandMappings = {
     };
     showExportDialog: CommandData & {
         notePath: string;
-        defaultType: "single";
+        defaultType: "single" | "subtree";
     };
     showDeleteNotesDialog: CommandData & {
         branchIdsToDelete: string[];
