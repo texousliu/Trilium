@@ -120,7 +120,20 @@ describe("#unescapeHtml", () => {
     });
 });
 
-describe.todo("#toObject", () => {});
+describe("#toObject", () => {
+    it("should return an object with keys and value being set from the supplied Function", () => {
+        type TestListEntry = { testPropA: string, testPropB: string };
+        type TestListFn = (testListEntry: TestListEntry) => [string, string];
+        const testList: [TestListEntry, TestListEntry] = [{ testPropA: "keyA", testPropB: "valueA" }, { testPropA: "keyB", testPropB: "valueB" }];
+        const fn: TestListFn = (testListEntry: TestListEntry) => [testListEntry.testPropA + "_fn", testListEntry.testPropB + "_fn"];
+
+        const result = utils.toObject(testList, fn);
+        expect(result).toStrictEqual({
+            "keyA_fn": "valueA_fn",
+            "keyB_fn": "valueB_fn"
+        });
+    });
+});
 
 describe("#stripTags", () => {
 
