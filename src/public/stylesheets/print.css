@@ -4,6 +4,16 @@
     --launcher-pane-background-color: var(--main-background-color);
     --main-text-color: black;
     --input-text-color: var(--main-text-color);
+
+    --print-font-size: 11pt;
+}
+
+.ck-content {
+    font-size: var(--print-font-size);
+}
+
+.note-detail-readonly-text {
+    padding: 0 !important;
 }
 
 .no-print,
