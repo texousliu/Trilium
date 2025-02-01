@@ -7,6 +7,8 @@ import type { KeyboardActionNames } from "./keyboard_actions_interface.js";
 import date_notes from "./date_notes.js";
 import type BNote from "../becca/entities/bnote.js";
 import becca from "../becca/becca.js";
+import becca_service from "../becca/becca_service.js";
+import type BRecentNote from "../becca/entities/brecent_note.js";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -61,7 +63,7 @@ function updateTrayMenu() {
         mainWindow?.webContents.send("globalShortcut", actionName);
     }
 
-    function openInSameTab(note: BNote) {
+    function openInSameTab(note: BNote | BRecentNote) {
         mainWindow?.webContents.send("openInSameTab", note.noteId);
     }
 
@@ -85,6 +87,28 @@ function updateTrayMenu() {
         return menuItems;
     }
 
+    function buildRecentNotesMenu() {
+        const recentNotes = becca.getRecentNotesFromQuery(`
+            SELECT recent_notes.*
+            FROM recent_notes
+            JOIN notes USING(noteId)
+            WHERE notes.isDeleted = 0
+            ORDER BY utcDateCreated DESC
+            LIMIT 10
+        `);
+        const menuItems: Electron.MenuItemConstructorOptions[] = [];
+
+        for (const recentNote of recentNotes) {
+            menuItems.push({
+                label: becca_service.getNoteTitle(recentNote.noteId),
+                type: "normal",
+                click: () => openInSameTab(recentNote)
+            })
+        }
+
+        return menuItems;
+    }
+
     const contextMenu = Menu.buildFromTemplate([
         {
             label: "New Note",
@@ -100,6 +124,11 @@ function updateTrayMenu() {
             label: "Bookmarks",
             type: "submenu",
             submenu: buildBookmarksMenu()
+        },
+        {
+            label: "Recent notes",
+            type: "submenu",
+            submenu: buildRecentNotesMenu()
         },
         { type: "separator" },
         {
