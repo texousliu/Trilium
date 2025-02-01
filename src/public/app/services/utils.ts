@@ -8,6 +8,15 @@ function reloadFrontendApp(reason?: string) {
     window.location.reload();
 }
 
+function reloadTray() {
+    if (!isElectron()) {
+        return;
+    }
+
+    const { ipcRenderer } = dynamicRequire("electron");
+    ipcRenderer.send("reload-tray");
+}
+
 function parseDate(str: string) {
     try {
         return new Date(Date.parse(str));
@@ -602,6 +611,7 @@ function isLaunchBarConfig(noteId: string) {
 
 export default {
     reloadFrontendApp,
+    reloadTray,
     parseDate,
     formatDateISO,
     formatDateTime,
