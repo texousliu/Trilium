@@ -126,11 +126,18 @@ function updateTrayMenu() {
             LIMIT 10
         `);
         const menuItems: Electron.MenuItemConstructorOptions[] = [];
+        const formatter = new Intl.DateTimeFormat(undefined, {
+            dateStyle: "medium",
+            timeStyle: "short"
+        });
 
         for (const recentNote of recentNotes) {
+            const date = new Date(recentNote.utcDateCreated);
+
             menuItems.push({
                 label: becca_service.getNoteTitle(recentNote.noteId),
                 type: "normal",
+                sublabel: formatter.format(date),
                 click: () => openInSameTab(recentNote)
             })
         }
