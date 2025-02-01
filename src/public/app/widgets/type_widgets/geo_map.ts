@@ -330,6 +330,14 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        // If any of the children branches are altered.
+        if (loadResults.getBranchRows().find((branch) => branch.parentNoteId === this.noteId)) {
+            this.#reloadMarkers();
+            return;
+        }
+
+        // If any of note has its location attribute changed.
+        // TODO: Should probably filter by parent here as well.
         const attributeRows = loadResults.getAttributeRows();
         if (attributeRows.find((at) => at.name === LOCATION_ATTRIBUTE)) {
             this.#reloadMarkers();
