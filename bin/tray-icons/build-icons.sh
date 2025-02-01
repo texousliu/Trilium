@@ -11,16 +11,26 @@ if ! command -v inkscape &> /dev/null; then
 fi
 
 script_dir=$(realpath $(dirname $0))
-output_dir="$script_dir/../../images/app-icons/tray"
+images_dir="$script_dir/../../images"
+output_dir="$images_dir/app-icons/tray"
+
+function generateDpiScaledIcons {
+  file=$1
+  name=$(basename $file .svg) 
+  inkscape -w 16 -h 16 "$file" -o "$output_dir/$name.png"
+  inkscape -w 20 -h 20 "$file" -o "$output_dir/$name@1.25x.png"
+  inkscape -w 24 -h 24 "$file" -o "$output_dir/$name@1.5x.png"
+  inkscape -w 32 -h 32 "$file" -o "$output_dir/$name@2x.png"
+}
+
+generateDpiScaledIcons "$images_dir/icon-color.svg"
 
 for file in *.svg; do
     name=$(basename $file .svg) 
-    inkscape -w 16 -h 16 "$file" -o "$output_dir/$name.png"
-    inkscape -w 20 -h 20 "$file" -o "$output_dir/$name@1.25x.png"
-    inkscape -w 24 -h 24 "$file" -o "$output_dir/$name@1.5x.png"
-    inkscape -w 32 -h 32 "$file" -o "$output_dir/$name@2x.png"
+    generateDpiScaledIcons "$file"
     magick "$output_dir/$name.png" -channel RGB -negate "$output_dir/$name-inverted.png"
     magick "$output_dir/$name@1.25x.png" -channel RGB -negate "$output_dir/$name-inverted@1.25x.png"
     magick "$output_dir/$name@1.5x.png" -channel RGB -negate "$output_dir/$name-inverted@1.5x.png"
     magick "$output_dir/$name@2x.png" -channel RGB -negate "$output_dir/$name-inverted@2x.png"
 done
+
