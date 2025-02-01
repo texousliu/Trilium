@@ -14,6 +14,7 @@
 
 .ck-content {
     font-size: var(--print-font-size);
+    text-align: justify;
 }
 
 .note-detail-readonly-text {
@@ -202,7 +203,7 @@ span[style] {
 
 .note-detail-printable figcaption {
     --accented-background-color: transparent;
-    
+
     font-style: italic;
 }
 
