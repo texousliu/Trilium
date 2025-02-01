@@ -3,6 +3,7 @@ import path from "path";
 import windowService from "./window.js";
 import optionService from "./options.js";
 import { fileURLToPath } from "url";
+import type { KeyboardActionNames } from "./keyboard_actions_interface.js";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -53,7 +54,17 @@ function updateTrayMenu() {
         return;
     }
 
+    function triggerKeyboardAction(actionName: KeyboardActionNames) {
+        mainWindow?.webContents.send("globalShortcut", actionName);
+    }
+
     const contextMenu = Menu.buildFromTemplate([
+        {
+            label: "New Note",
+            type: "normal",
+            click: () => triggerKeyboardAction("createNoteIntoInbox")
+        },
+        { type: "separator" },
         {
             label: isVisible ? "Hide" : "Show",
             type: "normal",
@@ -66,9 +77,7 @@ function updateTrayMenu() {
                 }
             }
         },
-        {
-            type: "separator"
-        },
+        { type: "separator" },
         {
             label: "Quit",
             type: "normal",
