@@ -12,6 +12,7 @@ import type BRecentNote from "../becca/entities/brecent_note.js";
 import { ipcMain, nativeTheme } from "electron/main";
 import { default as i18next, t } from "i18next";
 import { isDev } from "./utils.js";
+import cls from "./cls.js";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -164,7 +165,7 @@ function updateTrayMenu() {
             label: t("tray.today"),
             type: "normal",
             icon: getIconPath("today"),
-            click: () => openInSameTab(date_notes.getTodayNote())
+            click: cls.wrap(() => openInSameTab(date_notes.getTodayNote()))
         },
         {
             label: t("tray.bookmarks"),
