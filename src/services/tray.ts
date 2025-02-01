@@ -10,7 +10,7 @@ import becca from "../becca/becca.js";
 import becca_service from "../becca/becca_service.js";
 import type BRecentNote from "../becca/entities/brecent_note.js";
 import { ipcMain, nativeTheme } from "electron/main";
-import { t } from "i18next";
+import { default as i18next, t } from "i18next";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -62,6 +62,7 @@ function registerVisibilityListener() {
     mainWindow.on("maximize", updateTrayMenu);
     nativeTheme.on("updated", updateTrayMenu);
     ipcMain.on("reload-tray", updateTrayMenu);
+    i18next.on("languageChanged", updateTrayMenu);
 }
 
 function updateTrayMenu() {
