@@ -174,3 +174,16 @@ span[style] {
     border: unset !important;
     border-radius: unset !important;
 }
+
+/*
+ * Links
+ */
+
+.note-detail-printable a {
+    color: #374a75;
+}
+
+.note-detail-printable a::after {
+    /* Hide the external link trailing arrow */
+    display: none !important;
+}
