@@ -22,7 +22,7 @@ let isVisible = true;
 function getTrayIconPath() {
     let name: string;
     if (isMac) {
-        name = "icon-black";
+        name = "icon-blackTemplate";
     } else if (isDev) {
         name = "icon-purple";
     } else {

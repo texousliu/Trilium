@@ -16,14 +16,15 @@ output_dir="$images_dir/app-icons/tray"
 
 function generateDpiScaledIcons {
   file=$1
-  name=$(basename $file .svg) 
+  suffix=$2
+  name="$(basename $file .svg)$suffix"
   inkscape -w 16 -h 16 "$file" -o "$output_dir/$name.png"
   inkscape -w 20 -h 20 "$file" -o "$output_dir/$name@1.25x.png"
   inkscape -w 24 -h 24 "$file" -o "$output_dir/$name@1.5x.png"
   inkscape -w 32 -h 32 "$file" -o "$output_dir/$name@2x.png"
 }
 
-generateDpiScaledIcons "$images_dir/icon-black.svg"
+generateDpiScaledIcons "$images_dir/icon-black.svg" "Template"
 generateDpiScaledIcons "$images_dir/icon-color.svg"
 generateDpiScaledIcons "$images_dir/icon-purple.svg"
 
