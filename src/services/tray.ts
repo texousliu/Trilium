@@ -11,6 +11,7 @@ import becca_service from "../becca/becca_service.js";
 import type BRecentNote from "../becca/entities/brecent_note.js";
 import { ipcMain, nativeTheme } from "electron/main";
 import { default as i18next, t } from "i18next";
+import { isDev } from "./utils.js";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -31,8 +32,9 @@ function getIconSize() {
 
 function getTrayIconPath() {
     const iconSize = getIconSize();
+    const suffix = isDev ? "-dev" : "";
 
-    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "png", `${iconSize}x${iconSize}.png`);
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "png", `${iconSize}x${iconSize}${suffix}.png`);
 }
 
 function getIconPath(name: string) {

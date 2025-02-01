@@ -22,6 +22,10 @@ inkscape -w 180 -h 180 "../icon-color.svg" -o "./ios/apple-touch-icon.png"
 # Build PNGs
 inkscape -w 128 -h 128 "../icon-color.svg" -o "./png/128x128.png"
 inkscape -w 256 -h 256 "../icon-color.svg" -o "./png/256x256.png"
+
+# Build dev icons (including tray)
+inkscape -w 16 -h 16 "../icon-purple.svg" -o "./png/16x16-dev.png"
+inkscape -w 32 -h 32 "../icon-purple.svg" -o "./png/32x32-dev.png"
 inkscape -w 256 -h 256 "../icon-purple.svg" -o "./png/256x256-dev.png"
 
 # Build Mac .icns
