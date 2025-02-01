@@ -158,9 +158,15 @@ span[style] {
 
 /* Fix visibility of checkbox checkmarks
     see https://github.com/TriliumNext/Notes/issues/901 */
-.ck-editor__editable.ck-content .todo-list .todo-list__label > span[contenteditable="false"] > input[checked]::after {
+.ck-content .todo-list .todo-list__label > input {
+    opacity: 1;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+
+.ck-content .todo-list .todo-list__label > span[contenteditable="false"] > input[checked]::after {
     /* fallback to default ck-editor green */
-    border-color: hsl(126, 64%, 41%);
+    border-color: hsl(126, 64%, 41%) !important;
 }
 
 .include-note .include-note-content {
