@@ -187,3 +187,12 @@ span[style] {
     /* Hide the external link trailing arrow */
     display: none !important;
 }
+
+/*
+ * Footnotes
+ */
+
+.note-detail-printable .footnote-reference a,
+.footnote-back-link a {
+    text-decoration: none;
+ }
