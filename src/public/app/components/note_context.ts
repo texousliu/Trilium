@@ -163,6 +163,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
                     noteId: this.note?.noteId,
                     notePath: this.notePath
                 });
+                utils.reloadTray();
             }
         }, 5000);
     }

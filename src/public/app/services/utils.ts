@@ -8,6 +8,11 @@ function reloadFrontendApp(reason?: string) {
     window.location.reload();
 }
 
+/**
+ * Triggers the system tray to update its menu items, i.e. after a change in dynamic content such as bookmarks or recent notes.
+ *
+ * On any other platform than Electron, nothing happens.
+ */
 function reloadTray() {
     if (!isElectron()) {
         return;
