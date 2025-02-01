@@ -423,7 +423,28 @@ describe("#normalize", () => {
 
 });
 
-describe.todo("#toMap", () => {});
+describe("#toMap", () => {
+    it("should return an instace of Map, with the correct size and keys, when supplied with a list and existing keys", () => {
+        const testList = [{title: "test", propA: "text", propB: 123 }, {title: "test2", propA: "prop2", propB: 456 }];
+        const result = utils.toMap(testList, "title");
+        expect(result).toBeInstanceOf(Map);
+        expect(result.size).toBe(2);
+        expect(Array.from(result.keys())).toStrictEqual(["test", "test2"]);
+    });
+    it("should return an instace of Map, with an empty size, when the supplied list does not contain the supplied key", () => {
+        const testList = [{title: "test", propA: "text", propB: 123 }, {title: "test2", propA: "prop2", propB: 456 }];
+        //@ts-expect-error - key is non-existing on supplied list type
+        const result = utils.toMap(testList, "nonExistingKey");
+        expect(result).toBeInstanceOf(Map);
+        expect(result.size).toBe(0);
+    });
+    it.fails("should correctly handle duplicate keys? (currently it will overwrite the entry, so returned size will be 1 instead of 2)", () => {
+        const testList = [{title: "testDupeTitle", propA: "text", propB: 123 }, {title: "testDupeTitle", propA: "prop2", propB: 456 }];
+        const result = utils.toMap(testList, "title");
+        expect(result).toBeInstanceOf(Map);
+        expect(result.size).toBe(2);
+    });
+});
 
 describe("#envToBoolean", () => {
     const testCases: TestCase<typeof utils.envToBoolean>[] = [
