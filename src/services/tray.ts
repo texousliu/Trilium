@@ -33,9 +33,9 @@ function getIconSize() {
 
 function getTrayIconPath() {
     const iconSize = getIconSize();
-    const suffix = isDev ? "-dev" : "";
+    const name = isDev ? "icon-purple" : "icon-color";
 
-    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `icon-color.png`);
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}.png`);
 }
 
 function getIconPath(name: string) {

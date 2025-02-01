@@ -24,6 +24,7 @@ function generateDpiScaledIcons {
 }
 
 generateDpiScaledIcons "$images_dir/icon-color.svg"
+generateDpiScaledIcons "$images_dir/icon-purple.svg"
 
 for file in *.svg; do
     name=$(basename $file .svg) 
