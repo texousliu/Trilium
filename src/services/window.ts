@@ -80,6 +80,7 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
             pageSize: opts.pageSize,
             generateDocumentOutline: true,
             generateTaggedPDF: true,
+            printBackground: true,
             displayHeaderFooter: true,
             headerTemplate: `<div></div>`,
             footerTemplate: `
