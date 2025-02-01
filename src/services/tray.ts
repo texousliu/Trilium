@@ -111,7 +111,21 @@ function updateTrayMenu() {
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: "New Note",
+            label: "Show windows",
+            type: "checkbox",
+            checked: isVisible,
+            click: () => {
+                if (isVisible) {
+                    mainWindow.hide();
+                } else {
+                    mainWindow.show();
+                    mainWindow.focus();
+                }
+            }
+        },
+        { type: "separator" },
+        {
+            label: "New note",
             type: "normal",
             click: () => triggerKeyboardAction("createNoteIntoInbox")
         },
@@ -132,20 +146,7 @@ function updateTrayMenu() {
         },
         { type: "separator" },
         {
-            label: isVisible ? "Hide" : "Show",
-            type: "normal",
-            click: () => {
-                if (isVisible) {
-                    mainWindow.hide();
-                } else {
-                    mainWindow.show();
-                    mainWindow.focus();
-                }
-            }
-        },
-        { type: "separator" },
-        {
-            label: "Quit",
+            label: "Quit Trilium",
             type: "normal",
             click: () => {
                 mainWindow.close();
