@@ -214,3 +214,17 @@ span[style] {
 .footnote-back-link a {
     text-decoration: none;
  }
+
+/*
+ * Widows and orphans
+ */
+p,
+blockquote {
+    widows: 4;
+    orphans: 4;
+}
+
+pre > code {
+    widows: 6;
+    orphans: 6;
+}
