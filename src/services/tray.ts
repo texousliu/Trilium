@@ -33,8 +33,8 @@ function getTrayIconPath() {
 }
 
 function getIconPath(name: string) {
-    const suffix = (nativeTheme.shouldUseDarkColors ? "-inverted" : "");
-    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}${suffix}.png`);
+    const suffix = (!isMac && nativeTheme.shouldUseDarkColors ? "-inverted" : "");
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}Template${suffix}.png`);
 }
 
 function registerVisibilityListener() {
@@ -55,7 +55,10 @@ function registerVisibilityListener() {
 
     mainWindow.on("minimize", updateTrayMenu);
     mainWindow.on("maximize", updateTrayMenu);
-    nativeTheme.on("updated", updateTrayMenu);
+    if (!isMac) {
+        // macOS uses template icons which work great on dark & light themes.
+        nativeTheme.on("updated", updateTrayMenu);
+    }
     ipcMain.on("reload-tray", updateTrayMenu);
     i18next.on("languageChanged", updateTrayMenu);
 }

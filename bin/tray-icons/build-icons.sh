@@ -29,8 +29,8 @@ generateDpiScaledIcons "$images_dir/icon-color.svg"
 generateDpiScaledIcons "$images_dir/icon-purple.svg"
 
 for file in *.svg; do
-    name=$(basename $file .svg) 
-    generateDpiScaledIcons "$file"
+    name="$(basename $file .svg)Template"
+    generateDpiScaledIcons "$file" "Template"
     magick "$output_dir/$name.png" -channel RGB -negate "$output_dir/$name-inverted.png"
     magick "$output_dir/$name@1.25x.png" -channel RGB -negate "$output_dir/$name-inverted@1.25x.png"
     magick "$output_dir/$name@1.5x.png" -channel RGB -negate "$output_dir/$name-inverted@1.5x.png"
