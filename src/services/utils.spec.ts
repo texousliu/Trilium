@@ -345,7 +345,7 @@ describe("#timeLimit", () => {
             }, 200);
             //rej("rejected!");
         });
-        expect(utils.timeLimit(testPromise, 1_000)).resolves.toBe(resolvedValue);
+        await expect(utils.timeLimit(testPromise, 1_000)).resolves.toBe(resolvedValue);
     });
 
     it("when promise execution rejects within timeout, it should return the original promises' rejected value, not the custom set one", async () => {
@@ -356,7 +356,7 @@ describe("#timeLimit", () => {
                 rej(rejectedValue);
             }, 100);
         });
-        expect(utils.timeLimit(testPromise, 200, "Custom Error")).rejects.toThrow(rejectedValue)
+        await expect(utils.timeLimit(testPromise, 200, "Custom Error")).rejects.toThrow(rejectedValue)
     });
 
     it("when promise execution exceeds the set timeout, and 'errorMessage' is NOT set, it should reject the promise and display default error message", async () => {
@@ -366,7 +366,7 @@ describe("#timeLimit", () => {
             }, 500);
             //rej("rejected!");
         });
-        expect(utils.timeLimit(testPromise, 200)).rejects.toThrow(`Process exceeded time limit 200`)
+        await expect(utils.timeLimit(testPromise, 200)).rejects.toThrow(`Process exceeded time limit 200`)
     });
 
     it("when promise execution exceeds the set timeout, and 'errorMessage' is set, it should reject the promise and display set error message", async () => {
@@ -377,7 +377,7 @@ describe("#timeLimit", () => {
             }, 500);
             //rej("rejected!");
         });
-        expect(utils.timeLimit(testPromise, 200, customErrorMsg)).rejects.toThrow(customErrorMsg)
+        await expect(utils.timeLimit(testPromise, 200, customErrorMsg)).rejects.toThrow(customErrorMsg)
     });
 
     // TriliumNextTODO: since TS avoids this from ever happening – do we need this check?
