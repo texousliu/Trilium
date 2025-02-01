@@ -76,6 +76,8 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
     try {
         buffer = await browserWindow.webContents.printToPDF({
             landscape: opts.landscape,
+            generateDocumentOutline: true,
+            generateTaggedPDF: true,
             displayHeaderFooter: true,
             headerTemplate: `<div></div>`,
             footerTemplate: `
