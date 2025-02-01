@@ -27,10 +27,15 @@ function getIconSize() {
     }
 }
 
-function getIconPath() {
+function getTrayIconPath() {
     const iconSize = getIconSize();
 
     return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "png", `${iconSize}x${iconSize}.png`);
+}
+
+function getIconPath(name: string) {
+    const size = 16;
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}-${size}.png`);
 }
 
 function registerVisibilityListener() {
@@ -127,27 +132,32 @@ function updateTrayMenu() {
         {
             label: "New note",
             type: "normal",
+            icon: getIconPath("new-note"),
             click: () => triggerKeyboardAction("createNoteIntoInbox")
         },
         {
             label: "Open today's journal note",
             type: "normal",
+            icon: getIconPath("today"),
             click: () => openInSameTab(date_notes.getTodayNote())
         },
         {
             label: "Bookmarks",
             type: "submenu",
+            icon: getIconPath("bookmarks"),
             submenu: buildBookmarksMenu()
         },
         {
             label: "Recent notes",
             type: "submenu",
+            icon: getIconPath("recents"),
             submenu: buildRecentNotesMenu()
         },
         { type: "separator" },
         {
             label: "Quit Trilium",
             type: "normal",
+            icon: getIconPath("close"),
             click: () => {
                 mainWindow.close();
             }
@@ -176,7 +186,7 @@ function createTray() {
         return;
     }
 
-    tray = new Tray(getIconPath());
+    tray = new Tray(getTrayIconPath());
     tray.setToolTip("TriliumNext Notes");
     // Restore focus
     tray.on("click", changeVisibility);
