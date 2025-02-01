@@ -62,7 +62,7 @@ module.exports = {
             name: "@electron-forge/maker-squirrel",
             config: {
                 iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
-                setupIcon: "./images/app-icons/icon.ico",
+                setupIcon: "./images/app-icons/win/setup.ico",
                 loadingGif: "./images/app-icons/win/setup-banner.gif"
             }
         },
