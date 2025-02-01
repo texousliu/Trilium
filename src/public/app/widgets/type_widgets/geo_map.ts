@@ -159,9 +159,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     async #reloadMarkers() {
-        const map = this.geoMapWidget.map;
-
-        if (!this.note || !map) {
+        if (!this.note) {
             return;
         }
 
@@ -173,48 +171,55 @@ export default class GeoMapTypeWidget extends TypeWidget {
         // Add the new markers.
         this.currentMarkerData = {};
         const childNotes = await this.note.getChildNotes();
-        const L = this.L;
         for (const childNote of childNotes) {
             const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
-            if (!latLng) {
-                continue;
+            if (latLng) {
+                this.#processNoteWithMarker(childNote, latLng);
             }
+        }
+    }
 
-            const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
-            const icon = L.divIcon({
-                html: `\
-                    <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
-                    <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
-                    <span class="bx ${childNote.getIcon()}"></span>
-                    <span class="title-label">${childNote.title}</span>`,
-                iconSize: [ 25, 41 ],
-                iconAnchor: [ 12, 41 ]
-            })
+    #processNoteWithMarker(note: FNote, latLng: string) {
+        const map = this.geoMapWidget.map;
+        if (!map) {
+            return;
+        }
 
-            const marker = L.marker(L.latLng(lat, lng), {
-                icon,
-                draggable: true,
-                autoPan: true,
-                autoPanSpeed: 5,
-            })
-                .addTo(map)
-                .on("moveend", e => {
-                    this.moveMarker(childNote.noteId, (e.target as Marker).getLatLng());
-                });
+        const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
+        const L = this.L;
+        const icon = L.divIcon({
+            html: `\
+                <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
+                <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
+                <span class="bx ${note.getIcon()}"></span>
+                <span class="title-label">${note.title}</span>`,
+            iconSize: [ 25, 41 ],
+            iconAnchor: [ 12, 41 ]
+        })
 
-            marker.on("contextmenu", (e) => {
-                openContextMenu(childNote.noteId, e.originalEvent);
+        const marker = L.marker(L.latLng(lat, lng), {
+            icon,
+            draggable: true,
+            autoPan: true,
+            autoPanSpeed: 5,
+        })
+            .addTo(map)
+            .on("moveend", e => {
+                this.moveMarker(note.noteId, (e.target as Marker).getLatLng());
             });
 
-            const el = marker.getElement();
-            if (el) {
-                const $el = $(el);
-                $el.attr("data-href", `#${childNote.noteId}`);
-                note_tooltip.setupElementTooltip($($el));
-            }
+        marker.on("contextmenu", (e) => {
+            openContextMenu(note.noteId, e.originalEvent);
+        });
 
-            this.currentMarkerData[childNote.noteId] = marker;
+        const el = marker.getElement();
+        if (el) {
+            const $el = $(el);
+            $el.attr("data-href", `#${note.noteId}`);
+            note_tooltip.setupElementTooltip($($el));
         }
+
+        this.currentMarkerData[note.noteId] = marker;
     }
 
     #changeState(newState: State) {
