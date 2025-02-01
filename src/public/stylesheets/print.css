@@ -196,6 +196,16 @@ span[style] {
     box-shadow: unset;
 }
 
+/* 
+ * Figures
+ */
+
+.note-detail-printable figcaption {
+    --accented-background-color: transparent;
+    
+    font-style: italic;
+}
+
 /*
  * Footnotes
  */
