@@ -242,7 +242,9 @@ const ATTR_HELP: Record<string, Record<string, string>> = {
         executeDescription: t("attribute_detail.execute_description"),
         excludeFromNoteMap: t("attribute_detail.exclude_from_note_map"),
         newNotesOnTop: t("attribute_detail.new_notes_on_top"),
-        hideHighlightWidget: t("attribute_detail.hide_highlight_widget")
+        hideHighlightWidget: t("attribute_detail.hide_highlight_widget"),
+        printLandscape: t("attribute_detail.print_landscape"),
+        printPageSize: t("attribute_detail.print_page_size")
     },
     relation: {
         runOnNoteCreation: t("attribute_detail.run_on_note_creation"),
