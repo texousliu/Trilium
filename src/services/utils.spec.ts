@@ -124,7 +124,7 @@ describe.todo("#toObject", () => {});
 
 describe("#stripTags", () => {
 
-    //pre
+    //prettier-ignore
     const htmlWithNewlines =
 `<p>abc
 def</p>
