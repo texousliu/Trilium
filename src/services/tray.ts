@@ -9,6 +9,7 @@ import type BNote from "../becca/entities/bnote.js";
 import becca from "../becca/becca.js";
 import becca_service from "../becca/becca_service.js";
 import type BRecentNote from "../becca/entities/brecent_note.js";
+import { nativeTheme } from "electron/main";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
@@ -35,7 +36,9 @@ function getTrayIconPath() {
 
 function getIconPath(name: string) {
     const size = 16;
-    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}-${size}.png`);
+    let suffix = (nativeTheme.shouldUseDarkColors ? "-inverted" : "");
+    suffix += `-${size}`;
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}${suffix}.png`);
 }
 
 function registerVisibilityListener() {
