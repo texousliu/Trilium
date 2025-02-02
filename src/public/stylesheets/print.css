@@ -246,7 +246,39 @@ span[style] {
 .note-detail-printable .footnote-reference a,
 .footnote-back-link a {
     text-decoration: none;
- }
+}
+
+/* Make the "^" link cover the whole area of the footnote item */
+
+.footnote-section {
+    clear: both;
+}
+
+.note-detail-printable li.footnote-item {
+    position: relative;
+    width: fit-content;
+}
+
+.note-detail-printable .footnote-back-link,
+.note-detail-printable .footnote-back-link *,
+.note-detail-printable .footnote-back-link a {
+    display: block;
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.note-detail-printable .footnote-back-link a {
+    color: transparent;
+}
+
+.note-detail-printable .footnote-content {
+    display: inline-block;
+    width: unset;
+}
 
 /*
  * Widows and orphans
