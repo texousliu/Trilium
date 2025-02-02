@@ -227,7 +227,7 @@ const TPL = `
         </li>
 
         <li class="dropdown-item show-help-button" data-trigger-command="showCheatsheet">
-            <span class="bx bx-help-circle"></span>
+            <span class="bx bxs-keyboard"></span>
             ${t("global_menu.show-cheatsheet")}
             <kbd data-command="showCheatsheet"></kbd>
         </li>
