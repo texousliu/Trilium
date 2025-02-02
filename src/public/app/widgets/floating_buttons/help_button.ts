@@ -54,7 +54,8 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
             const { ntxId } = subContexts[subContexts.length - 1];
             this.triggerCommand("openNewNoteSplit", {
                 ntxId,
-                notePath: `_help_${this.helpNoteIdToOpen}`
+                notePath: `_help_${this.helpNoteIdToOpen}`,
+                hoistedNoteId: "_help"
             })
         });
     }
