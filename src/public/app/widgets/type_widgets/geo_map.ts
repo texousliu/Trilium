@@ -204,9 +204,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         const xmlResponse = await server.get<XMLDocument>(`notes/${note.noteId}/open`);
         const stringResponse = new XMLSerializer().serializeToString(xmlResponse);
 
-        const track = new this.L.GPX(stringResponse, {
-
-        });
+        const track = new this.L.GPX(stringResponse, {});
         track.addTo(this.geoMapWidget.map);
         this.currentTrackData[note.noteId] = track;
     }
@@ -219,15 +217,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
         const L = this.L;
-        const icon = L.divIcon({
-            html: `\
-                <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
-                <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
-                <span class="bx ${note.getIcon()}"></span>
-                <span class="title-label">${note.title}</span>`,
-            iconSize: [ 25, 41 ],
-            iconAnchor: [ 12, 41 ]
-        })
+        const icon = this.#buildIcon(note.getIcon(), note.title);
 
         const marker = L.marker(L.latLng(lat, lng), {
             icon,
@@ -252,6 +242,18 @@ export default class GeoMapTypeWidget extends TypeWidget {
         }
 
         this.currentMarkerData[note.noteId] = marker;
+    }
+
+    #buildIcon(bxIconClass: string, title: string) {
+        return this.L.divIcon({
+            html: `\
+                <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
+                <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
+                <span class="bx ${bxIconClass}"></span>
+                <span class="title-label">${title}</span>`,
+            iconSize: [ 25, 41 ],
+            iconAnchor: [ 12, 41 ]
+        })
     }
 
     #changeState(newState: State) {
