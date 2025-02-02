@@ -39,7 +39,7 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
         type: "doc",
         attributes: []
     };
-    let iconClass: string | undefined = undefined;
+    let iconClass: string = "bx bx-file";
 
     // Handle attributes
     for (const attribute of noteMeta.attributes ?? []) {
@@ -76,13 +76,11 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
     }
 
     // Handle note icon
-    if (iconClass) {
-        item.attributes?.push({
-            name: "iconClass",
-            value: iconClass,
-            type: "label"
-        });
-    }
+    item.attributes?.push({
+        name: "iconClass",
+        value: iconClass,
+        type: "label"
+    });
 
     return item;
 }
