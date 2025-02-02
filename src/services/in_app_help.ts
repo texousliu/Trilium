@@ -33,13 +33,13 @@ function parseNoteMetaFile(noteMetaFile: NoteMetaFile): HiddenSubtreeItem[] {
 }
 
 function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeItem {
+    let iconClass: string = "bx bx-file";
     const item: HiddenSubtreeItem = {
         id: `_help_${noteMeta.noteId}`,
         title: noteMeta.title,
-        type: "doc",
+        type: "doc", // can change
         attributes: []
     };
-    let iconClass: string = "bx bx-file";
 
     // Handle attributes
     for (const attribute of noteMeta.attributes ?? []) {
@@ -51,6 +51,7 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
     // Handle folder notes
     if (!noteMeta.dataFileName) {
         iconClass = "bx bx-folder";
+        item.type = "book";
     }
 
     // Handle text notes
