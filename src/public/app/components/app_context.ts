@@ -155,6 +155,10 @@ export type CommandMappings = {
             callback?: GetTextEditorCallback;
         };
     executeWithCodeEditor: CommandData & ExecuteCommandData<null>;
+    /**
+     * Called upon when attempting to retrieve the content element of a {@link NoteContext}.
+     * Generally should not be invoked manually, as it is used by {@link NoteContext.getContentElement}.
+     */
     executeWithContentElement: CommandData & ExecuteCommandData<JQuery<HTMLElement>>;
     executeWithTypeWidget: CommandData & ExecuteCommandData<null>;
     addTextToActiveEditor: CommandData & {

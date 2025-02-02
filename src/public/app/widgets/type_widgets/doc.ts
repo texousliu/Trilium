@@ -36,25 +36,33 @@ export default class DocTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: FNote) {
-        const docName = note.getLabelValue("docName");
+        this.initialized = this.#loadContent(note);
+    }
 
-        if (docName) {
-            // find doc based on language
-            const lng = i18next.language;
-            const url = `${window.glob.appPath}/doc_notes/${lng}/${docName}.html`.replaceAll(" ", "%20");
-            this.$content.load(url, (response, status) => {
-                // fallback to english doc if no translation available
-                if (status === "error") {
-                    const fallbackUrl = `${window.glob.appPath}/doc_notes/en/${docName}.html`;
-                    this.$content.load(fallbackUrl, () => this.#processContent(fallbackUrl));
-                    return;
-                }
+    #loadContent(note: FNote) {
+        return new Promise<void>((resolve) => {
+            const docName = note.getLabelValue("docName");
 
-                this.#processContent(url);
-            });
-        } else {
-            this.$content.empty();
-        }
+            if (docName) {
+                // find doc based on language
+                const lng = i18next.language;
+                const url = `${window.glob.appPath}/doc_notes/${lng}/${docName}.html`.replaceAll(" ", "%20");
+                this.$content.load(url, (response, status) => {
+                    // fallback to english doc if no translation available
+                    if (status === "error") {
+                        const fallbackUrl = `${window.glob.appPath}/doc_notes/en/${docName}.html`;
+                        this.$content.load(fallbackUrl, () => this.#processContent(fallbackUrl));
+                        resolve();
+                        return;
+                    }
+
+                    this.#processContent(url);
+                    resolve();
+                });
+            } else {
+                this.$content.empty();
+            }
+        });
     }
 
     #processContent(url: string) {

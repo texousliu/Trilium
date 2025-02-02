@@ -319,6 +319,15 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         );
     }
 
+    /**
+     * Returns a promise which will retrieve the JQuery element of the content of this note context.
+     *
+     * Do note that retrieving the content element needs to be handled by the type widget, which is the one which
+     * provides the content element by listening to the `executeWithContentElement` event. Not all note types support
+     * this.
+     *
+     * If no content could be determined `null` is returned instead.
+     */
     async getContentElement() {
         return this.timeout<JQuery<HTMLElement>>(
             new Promise((resolve) =>
