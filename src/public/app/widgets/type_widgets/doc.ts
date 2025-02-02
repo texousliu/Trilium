@@ -1,4 +1,5 @@
 import type FNote from "../../entities/fnote.js";
+import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 import TypeWidget from "./type_widget.js";
 
 const TPL = `<div class="note-detail-doc note-detail-printable">
@@ -66,6 +67,8 @@ export default class DocTypeWidget extends TypeWidget {
             const $img = $(el);
             $img.attr("src", dir + "/" + $img.attr("src"));
         });
+
+        applySyntaxHighlight(this.$content);
     }
 
 }
