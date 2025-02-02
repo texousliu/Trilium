@@ -39,7 +39,8 @@ export default class DocTypeWidget extends TypeWidget {
         if (docName) {
             // find doc based on language
             const lng = i18next.language;
-            this.$content.load(`${window.glob.appPath}/doc_notes/${lng}/${docName}.html`, (response, status) => {
+            const url = `${window.glob.appPath}/doc_notes/${lng}/${docName}.html`.replaceAll(" ", "%20");
+            this.$content.load(url, (response, status) => {
                 // fallback to english doc if no translation available
                 if (status === "error") {
                     this.$content.load(`${window.glob.appPath}/doc_notes/en/${docName}.html`);

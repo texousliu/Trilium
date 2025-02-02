@@ -26,21 +26,36 @@ function parseNoteMetaFile(noteMetaFile: NoteMetaFile): HiddenSubtreeItem[] {
         return [];
     }
 
-    const metaRoot = parseNoteMeta(noteMetaFile.files[0]);
-    return metaRoot.children ?? [];
+    const metaRoot = noteMetaFile.files[0];
+    const parsedMetaRoot = parseNoteMeta(metaRoot, "/" + (metaRoot.dirFileName ?? ""));
+    console.log(JSON.stringify(parsedMetaRoot, null, 4));
+    return parsedMetaRoot.children ?? [];
 }
 
-function parseNoteMeta(noteMeta: NoteMeta): HiddenSubtreeItem {
+function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeItem {
     const item: HiddenSubtreeItem = {
         id: `_help_${noteMeta.noteId}`,
         title: noteMeta.title,
-        type: "doc"
+        type: "doc",
+        attributes: []
     };
+
+    // Handle text notes
+    if (noteMeta.type === "text" && noteMeta.dataFileName) {
+        const docPath = `${docNameRoot}/${path.basename(noteMeta.dataFileName, ".html")}`
+            .substring(1);
+        item.attributes?.push({
+            type: "label",
+            name: "docName",
+            value: docPath
+        });
+    }
 
     if (noteMeta.children) {
         const children: HiddenSubtreeItem[] = [];
         for (const childMeta of noteMeta.children) {
-            children.push(parseNoteMeta(childMeta));
+            let newDocNameRoot = (noteMeta.dirFileName ? `${docNameRoot}/${noteMeta.dirFileName}` : docNameRoot);
+            children.push(parseNoteMeta(childMeta, newDocNameRoot));
         }
 
         item.children = children;
