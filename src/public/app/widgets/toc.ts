@@ -132,10 +132,9 @@ export default class TocWidget extends RightPanelWidget {
             }
         }
 
+        this.$toc.empty();
         if ($toc) {
             this.$toc.append($toc);
-        } else {
-            this.$toc.empty();
         }
 
         if (["", "show"].includes(tocLabel?.value ?? "") || headingCount >= (options.getInt("minTocHeadings") ?? 0)) {
