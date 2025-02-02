@@ -345,6 +345,12 @@ function buildHiddenSubtreeDefinition(): Item {
                     { id: "_optionsOther", title: t("hidden-subtree.other"), type: "contentWidget", icon: "bx-dots-horizontal" },
                     { id: "_optionsAdvanced", title: t("hidden-subtree.advanced-title"), type: "contentWidget" }
                 ]
+            },
+            {
+                id: "_help",
+                title: t("hidden-subtree.user-guide"),
+                type: "book",
+                icon: "bx-help-circle"
             }
         ]
     };
