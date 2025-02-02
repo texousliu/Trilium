@@ -1,6 +1,12 @@
 import type AttachmentMeta from "./attachment_meta.js";
 import type AttributeMeta from "./attribute_meta.js";
 
+export interface NoteMetaFile {
+    formatVersion: number;
+    appVersion: string;
+    files: NoteMeta[];
+}
+
 export default interface NoteMeta {
     noteId?: string;
     notePath?: string[];
