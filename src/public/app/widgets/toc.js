@@ -25,26 +25,26 @@ const TPL = `<div class="toc-widget">
     <style>
         .toc-widget {
             padding: 10px;
-            contain: none; 
+            contain: none;
             overflow: auto;
             position: relative;
         }
-        
+
         .toc ol {
             padding-left: 25px;
         }
-        
+
         .toc > ol {
             padding-left: 20px;
         }
-        
+
         .toc li {
             cursor: pointer;
             text-align: justify;
             word-wrap: break-word;
             hyphens: auto;
         }
-        
+
         .toc li:hover {
             font-weight: bold;
         }
@@ -75,7 +75,15 @@ export default class TocWidget extends RightPanelWidget {
     }
 
     isEnabled() {
-        return super.isEnabled() && this.note.type === "text" && !this.noteContext.viewScope.tocTemporarilyHidden && this.noteContext.viewScope.viewMode === "default";
+        if (!super.isEnabled()) {
+            return false;
+        }
+
+        const isHelpNote = (this.note.type === "doc" && this.note.noteId.startsWith("_help"));
+        const isTextNote = (this.note.type === "text");
+        const isNoteSupported = isTextNote || isHelpNote;
+
+        return isNoteSupported && !this.noteContext.viewScope.tocTemporarilyHidden && this.noteContext.viewScope.viewMode === "default";
     }
 
     async doRenderBody() {
@@ -104,6 +112,14 @@ export default class TocWidget extends RightPanelWidget {
         if (this.note.type === "text") {
             const { content } = await note.getBlob();
             ({ $toc, headingCount } = await this.getToc(content));
+        } else if (this.note.type === "doc") {
+            const $contentEl = await this.noteContext.getContentElement();
+            if ($contentEl) {
+                const content = $contentEl.html();
+                ({ $toc, headingCount } = await this.getToc(content));
+            } else {
+                console.warn("Unable to get content element for doctype");
+            }
         }
 
         this.$toc.html($toc);

@@ -61,8 +61,8 @@ export interface NoteCommandData extends CommandData {
     viewScope?: ViewScope;
 }
 
-export interface ExecuteCommandData extends CommandData {
-    resolve: unknown;
+export interface ExecuteCommandData<T> extends CommandData {
+    resolve: (data: T) => void
 }
 
 /**
@@ -151,12 +151,12 @@ export type CommandMappings = {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void;
     };
     executeWithTextEditor: CommandData &
-        ExecuteCommandData & {
+        ExecuteCommandData<TextEditor> & {
             callback?: GetTextEditorCallback;
         };
-    executeWithCodeEditor: CommandData & ExecuteCommandData;
-    executeWithContentElement: CommandData & ExecuteCommandData;
-    executeWithTypeWidget: CommandData & ExecuteCommandData;
+    executeWithCodeEditor: CommandData & ExecuteCommandData<null>;
+    executeWithContentElement: CommandData & ExecuteCommandData<JQuery<HTMLElement>>;
+    executeWithTypeWidget: CommandData & ExecuteCommandData<null>;
     addTextToActiveEditor: CommandData & {
         text: string;
     };

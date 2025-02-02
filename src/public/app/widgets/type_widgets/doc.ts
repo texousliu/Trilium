@@ -1,3 +1,4 @@
+import type { EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 import TypeWidget from "./type_widget.js";
@@ -69,6 +70,16 @@ export default class DocTypeWidget extends TypeWidget {
         });
 
         applySyntaxHighlight(this.$content);
+    }
+
+    async executeWithContentElementEvent({ resolve, ntxId }: EventData<"executeWithContentElement">) {
+        if (!this.isNoteContext(ntxId)) {
+            return;
+        }
+
+        await this.initialized;
+
+        resolve(this.$content);
     }
 
 }
