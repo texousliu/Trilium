@@ -33,6 +33,14 @@ export interface ViewScope {
     readOnlyTemporarilyDisabled?: boolean;
     highlightsListPreviousVisible?: boolean;
     highlightsListTemporarilyHidden?: boolean;
+    tocTemporarilyHidden?: boolean;
+    /*
+     * The reason for adding tocPreviousVisible is to record whether the previous state of the toc is hidden or displayed,
+     * and then let it be displayed/hidden at the initial time. If there is no such value,
+     * when the right panel needs to display highlighttext but not toc, every time the note content is changed,
+     * toc will appear and then close immediately, because getToc(html) function will consume time
+     */
+    tocPreviousVisible?: boolean;
 }
 
 interface CreateLinkOptions {

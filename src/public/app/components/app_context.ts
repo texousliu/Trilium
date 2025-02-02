@@ -77,6 +77,7 @@ export type CommandMappings = {
         searchString?: string;
         ancestorNoteId?: string | null;
     };
+    closeTocCommand: CommandData;
     showLaunchBarSubtree: CommandData;
     showOptions: CommandData & {
         section: string;
@@ -206,6 +207,8 @@ export type CommandMappings = {
         zoomFactor: string;
     }
 
+    reEvaluateRightPaneVisibility: CommandData;
+
     // Geomap
     deleteFromMap: { noteId: string },
     openGeoLocation: { noteId: string, event: JQuery.MouseDownEvent }
@@ -266,6 +269,9 @@ type EventMappings = {
     reEvaluateHighlightsListWidgetVisibility: {
         noteId: string | undefined;
     };
+    reEvaluateTocWidgetVisibility: {
+        noteId: string | undefined;
+    };
     showHighlightsListWidget: {
         noteId: string;
     };
@@ -301,7 +307,10 @@ type EventMappings = {
     };
     refreshNoteList: {
         noteId: string;
-    }
+    };
+    showToc: {
+        noteId: string;
+    };
 };
 
 export type EventListener<T extends EventNames> = {

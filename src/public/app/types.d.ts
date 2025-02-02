@@ -239,6 +239,7 @@ declare global {
         },
         getData(): string;
         setData(data: string): void;
+        sourceElement: HTMLElement;
     }
 
     interface MentionItem {
