@@ -270,10 +270,11 @@ export default class TocWidget extends RightPanelWidget {
         // intervening events, do the readonly calculation at navigation
         // time and not at outline creation time
         // See https://github.com/zadam/trilium/issues/2828
+        const isDocNote = this.note.type === "doc";
         const isReadOnly = await this.noteContext.isReadOnly();
 
         let $container;
-        if (isReadOnly) {
+        if (isReadOnly || isDocNote) {
             $container = await this.noteContext.getContentElement();
         } else {
             const textEditor = await this.noteContext.getTextEditor();
