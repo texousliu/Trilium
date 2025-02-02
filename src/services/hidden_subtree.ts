@@ -458,7 +458,9 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
     for (const attr of attrs) {
         const attrId = note.noteId + "_" + attr.type.charAt(0) + attr.name;
 
-        if (!note.getAttributes().find((attr) => attr.attributeId === attrId)) {
+        const existingAttribute = note.getAttributes().find((attr) => attr.attributeId === attrId);
+
+        if (!existingAttribute) {
             new BAttribute({
                 attributeId: attrId,
                 noteId: note.noteId,
@@ -467,6 +469,10 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
                 value: attr.value,
                 isInheritable: false
             }).save();
+        } else if (attr.name === "docName") {
+            // Updating docname
+            existingAttribute.value = attr.value ?? "";
+            existingAttribute.save();
         }
     }
 
