@@ -25,9 +25,16 @@ async function getLinkIcon(noteId: string, viewMode: ViewMode | undefined) {
     return icon;
 }
 
-type ViewMode = "default" | "source" | "attachments" | string;
+// TODO: Remove `string` once all the view modes have been mapped.
+type ViewMode = "default" | "source" | "attachments" | "contextual-help" | string;
 
 export interface ViewScope {
+    /**
+     * - "source", when viewing the source code of a note.
+     * - "attachments", when viewing the attachments of a note.
+     * - "contextual-help", if the current view represents a help window that was opened to the side of the main content.
+     * - "default", otherwise.
+     */
     viewMode?: ViewMode;
     attachmentId?: string;
     readOnlyTemporarilyDisabled?: boolean;

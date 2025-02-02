@@ -55,7 +55,10 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
             this.triggerCommand("openNewNoteSplit", {
                 ntxId,
                 notePath: `_help_${this.helpNoteIdToOpen}`,
-                hoistedNoteId: "_help"
+                hoistedNoteId: "_help",
+                viewScope: {
+                    viewMode: "contextual-help"
+                }
             })
         });
     }
