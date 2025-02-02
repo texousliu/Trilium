@@ -39,12 +39,18 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
         type: "doc",
         attributes: []
     };
+    let iconClass: string | undefined = undefined;
 
     // Handle attributes
     for (const attribute of noteMeta.attributes ?? []) {
         if (attribute.name === "iconClass") {
-            item.attributes?.push(attribute);
+            iconClass = attribute.value;
         }
+    }
+
+    // Handle folder notes
+    if (!noteMeta.dataFileName) {
+        iconClass = "bx bx-folder";
     }
 
     // Handle text notes
@@ -58,6 +64,7 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
         });
     }
 
+    // Handle children
     if (noteMeta.children) {
         const children: HiddenSubtreeItem[] = [];
         for (const childMeta of noteMeta.children) {
@@ -66,6 +73,15 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
         }
 
         item.children = children;
+    }
+
+    // Handle note icon
+    if (iconClass) {
+        item.attributes?.push({
+            name: "iconClass",
+            value: iconClass,
+            type: "label"
+        });
     }
 
     return item;
