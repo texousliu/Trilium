@@ -90,6 +90,10 @@ export default class RootCommandExecutor extends Component {
         await appContext.tabManager.openTabWithNoteWithHoisting("_backendLog", { activate: true });
     }
 
+    async showHelpCommand() {
+        await appContext.tabManager.openTabWithNoteWithHoisting("_help", { activate: true });
+    }
+
     async showLaunchBarSubtreeCommand() {
         const rootNote = utils.isMobile() ? "_lbMobileRoot" : "_lbRoot";
         await this.showAndHoistSubtree(rootNote);

@@ -226,6 +226,12 @@ const TPL = `
             <kbd data-command="showHelp"></kbd>
         </li>
 
+        <li class="dropdown-item show-help-button" data-trigger-command="showCheatsheet">
+            <span class="bx bx-help-circle"></span>
+            ${t("global_menu.show-cheatsheet")}
+            <kbd data-command="showCheatsheet"></kbd>
+        </li>
+
         <li class="dropdown-item show-about-dialog-button">
             <span class="bx bx-info-circle"></span>
             ${t("global_menu.about")}

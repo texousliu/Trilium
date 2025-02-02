@@ -344,6 +344,12 @@ function getDefaultKeyboardActions() {
             description: t("keyboard_actions.show-help"),
             scope: "window"
         },
+        {
+            actionName: "showCheatsheet",
+            defaultShortcuts: ["Shift+F1"],
+            description: t("keyboard_actions.show-cheatsheet"),
+            scope: "window"
+        },
 
         {
             separator: t("keyboard_actions.text-note-operations")

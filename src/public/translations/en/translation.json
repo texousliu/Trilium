@@ -641,7 +641,8 @@
     "show_hidden_subtree": "Show Hidden Subtree",
     "show_help": "Show Help",
     "about": "About TriliumNext Notes",
-    "logout": "Logout"
+    "logout": "Logout",
+    "show-cheatsheet": "Show Cheatsheet"
   },
   "sync_status": {
     "unknown": "<p>Sync status will be known once the next sync attempt starts.</p><p>Click to trigger sync now.</p>",
