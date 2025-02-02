@@ -40,6 +40,13 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
         attributes: []
     };
 
+    // Handle attributes
+    for (const attribute of noteMeta.attributes ?? []) {
+        if (attribute.name === "iconClass") {
+            item.attributes?.push(attribute);
+        }
+    }
+
     // Handle text notes
     if (noteMeta.type === "text" && noteMeta.dataFileName) {
         const docPath = `${docNameRoot}/${path.basename(noteMeta.dataFileName, ".html")}`
