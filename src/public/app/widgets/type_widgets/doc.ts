@@ -1,3 +1,4 @@
+import type FNote from "../../entities/fnote.js";
 import TypeWidget from "./type_widget.js";
 
 const TPL = `<div class="note-detail-doc note-detail-printable">
@@ -5,7 +6,7 @@ const TPL = `<div class="note-detail-doc note-detail-printable">
         .note-detail-doc-content {
             padding: 15px;
         }
-        
+
         .note-detail-doc-content pre {
             background-color: var(--accented-background-color);
             border: 1px solid var(--main-border-color);
@@ -13,11 +14,14 @@ const TPL = `<div class="note-detail-doc note-detail-printable">
             border-radius: 5px;
         }
     </style>
-    
+
     <div class="note-detail-doc-content"></div>
 </div>`;
 
 export default class DocTypeWidget extends TypeWidget {
+
+    private $content!: JQuery<HTMLElement>;
+
     static getType() {
         return "doc";
     }
@@ -29,7 +33,7 @@ export default class DocTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         const docName = note.getLabelValue("docName");
 
         if (docName) {
