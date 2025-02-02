@@ -91,7 +91,7 @@ export default class RootCommandExecutor extends Component {
     }
 
     async showHelpCommand() {
-        await appContext.tabManager.openTabWithNoteWithHoisting("_help", { activate: true });
+        await this.showAndHoistSubtree("_help");
     }
 
     async showLaunchBarSubtreeCommand() {

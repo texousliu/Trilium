@@ -353,7 +353,8 @@ function buildHiddenSubtreeDefinition(): HiddenSubtreeItem {
                 title: t("hidden-subtree.user-guide"),
                 type: "book",
                 icon: "bx-help-circle",
-                children: getHelpHiddenSubtreeData()
+                children: getHelpHiddenSubtreeData(),
+                isExpanded: true
             }
         ]
     };
