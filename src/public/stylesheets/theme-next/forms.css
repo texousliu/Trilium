@@ -247,7 +247,7 @@ input::selection,
     background: transparent !important;
 }
 
-.input-group .input-group-text {
+.input-group .input-group-text:not(button):not(a) {
     /* Background color hijack */
     --accented-background-color: transparent;
     
