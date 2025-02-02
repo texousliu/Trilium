@@ -58,6 +58,9 @@ export default class DocTypeWidget extends TypeWidget {
     #processContent(url: string) {
         const dir = url.substring(0, url.lastIndexOf("/"));
 
+        // Remove top-level heading since it's already handled by the note title
+        this.$content.find("h1").remove();
+
         // Images are relative to the docnote but that will not work when rendered in the application since the path breaks.
         this.$content.find("img").each((i, el) => {
             const $img = $(el);
