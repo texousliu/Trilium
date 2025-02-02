@@ -1,8 +1,5 @@
 import utils from "./services/utils.js";
-import macInit from "./services/mac_init.js";
 import ko from "knockout";
-
-macInit.init();
 
 // TriliumNextTODO: properly make use of below types
 // type SetupModelSetupType = "new-document" | "sync-from-desktop" | "sync-from-server" | "";
