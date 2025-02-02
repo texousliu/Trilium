@@ -43,11 +43,26 @@ export default class DocTypeWidget extends TypeWidget {
             this.$content.load(url, (response, status) => {
                 // fallback to english doc if no translation available
                 if (status === "error") {
-                    this.$content.load(`${window.glob.appPath}/doc_notes/en/${docName}.html`);
+                    const fallbackUrl = `${window.glob.appPath}/doc_notes/en/${docName}.html`;
+                    this.$content.load(fallbackUrl, () => this.#processContent(fallbackUrl));
+                    return;
                 }
+
+                this.#processContent(url);
             });
         } else {
             this.$content.empty();
         }
     }
+
+    #processContent(url: string) {
+        const dir = url.substring(0, url.lastIndexOf("/"));
+
+        // Images are relative to the docnote but that will not work when rendered in the application since the path breaks.
+        this.$content.find("img").each((i, el) => {
+            const $img = $(el);
+            $img.attr("src", dir + "/" + $img.attr("src"));
+        });
+    }
+
 }
