@@ -1,0 +1,500 @@
+{
+	"formatVersion": 2,
+	"appVersion": "0.91.5",
+	"files": [
+		{
+			"isClone": false,
+			"noteId": "OkOZllzB3fqN",
+			"notePath": [
+				"OkOZllzB3fqN"
+			],
+			"title": "User Guide",
+			"notePosition": 20,
+			"prefix": null,
+			"isExpanded": false,
+			"type": "text",
+			"mime": "text/html",
+			"attributes": [
+				{
+					"type": "label",
+					"name": "iconClass",
+					"value": "bx bx-help-circle",
+					"isInheritable": false,
+					"position": 10
+				}
+			],
+			"format": "html",
+			"attachments": [],
+			"dirFileName": "User Guide",
+			"children": [
+				{
+					"isClone": false,
+					"noteId": "wmegHv51MJMd",
+					"notePath": [
+						"OkOZllzB3fqN",
+						"wmegHv51MJMd"
+					],
+					"title": "Types of notes",
+					"notePosition": 20,
+					"prefix": null,
+					"isExpanded": false,
+					"type": "text",
+					"mime": "text/html",
+					"attributes": [],
+					"format": "html",
+					"attachments": [],
+					"dirFileName": "Types of notes",
+					"children": [
+						{
+							"isClone": false,
+							"noteId": "foPEtsL51pD2",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"wmegHv51MJMd",
+								"foPEtsL51pD2"
+							],
+							"title": "Geo map",
+							"notePosition": 10,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [
+								{
+									"type": "label",
+									"name": "iconClass",
+									"value": "bx bx-map-alt",
+									"isInheritable": false,
+									"position": 10
+								}
+							],
+							"format": "html",
+							"dataFileName": "Geo map.html",
+							"attachments": [
+								{
+									"attachmentId": "viN50n5G4kB0",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "Geo map_image.png"
+								},
+								{
+									"attachmentId": "eUrcqc8RRuZG",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "1_Geo map_image.png"
+								},
+								{
+									"attachmentId": "1quk4yxJpeHZ",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "2_Geo map_image.png"
+								},
+								{
+									"attachmentId": "mgwGrtQZjxxb",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "3_Geo map_image.png"
+								},
+								{
+									"attachmentId": "JULizn130rVI",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "4_Geo map_image.png"
+								},
+								{
+									"attachmentId": "kcYjOvJDFkbS",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "5_Geo map_image.png"
+								},
+								{
+									"attachmentId": "ut6vm2aXVfXI",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "6_Geo map_image.png"
+								},
+								{
+									"attachmentId": "0AwaQMqt3FVA",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "7_Geo map_image.png"
+								},
+								{
+									"attachmentId": "gFR2Izzp18LQ",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "8_Geo map_image.png"
+								},
+								{
+									"attachmentId": "PMqmCbNLlZOG",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "9_Geo map_image.png"
+								},
+								{
+									"attachmentId": "pKdtiq4r0eFY",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "10_Geo map_image.png"
+								},
+								{
+									"attachmentId": "FXRVvYpOxWyR",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "11_Geo map_image.png"
+								},
+								{
+									"attachmentId": "42AncDs7SSAf",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "12_Geo map_image.png"
+								},
+								{
+									"attachmentId": "gR2c2Thmfy3I",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "13_Geo map_image.png"
+								},
+								{
+									"attachmentId": "FDP3JzIVSnuJ",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "14_Geo map_image.png"
+								},
+								{
+									"attachmentId": "GhHYO2LteDmZ",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "15_Geo map_image.png"
+								},
+								{
+									"attachmentId": "J0baLTpafs7C",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "16_Geo map_image.png"
+								},
+								{
+									"attachmentId": "uYdb9wWf5Nuv",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "17_Geo map_image.png"
+								},
+								{
+									"attachmentId": "iSpyhQ5Ya6Nk",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "18_Geo map_image.png"
+								},
+								{
+									"attachmentId": "MdC0DpifJwu4",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "19_Geo map_image.png"
+								}
+							]
+						}
+					]
+				},
+				{
+					"isClone": false,
+					"noteId": "BDEpqZHDS51s",
+					"notePath": [
+						"OkOZllzB3fqN",
+						"BDEpqZHDS51s"
+					],
+					"title": "Working with notes",
+					"notePosition": 30,
+					"prefix": null,
+					"isExpanded": false,
+					"type": "text",
+					"mime": "text/html",
+					"attributes": [],
+					"format": "html",
+					"attachments": [],
+					"dirFileName": "Working with notes",
+					"children": [
+						{
+							"isClone": false,
+							"noteId": "13D1lOc9sqmZ",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"BDEpqZHDS51s",
+								"13D1lOc9sqmZ"
+							],
+							"title": "Exporting as PDF",
+							"notePosition": 10,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [],
+							"format": "html",
+							"dataFileName": "Exporting as PDF.html",
+							"attachments": [
+								{
+									"attachmentId": "b3v1pLE6TF1Y",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "Exporting as PDF_image.png"
+								},
+								{
+									"attachmentId": "xsGM34t8ssKV",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "1_Exporting as PDF_image.png"
+								},
+								{
+									"attachmentId": "cvyes4f1Vhmm",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "2_Exporting as PDF_image.png"
+								}
+							]
+						}
+					]
+				},
+				{
+					"isClone": false,
+					"noteId": "XUG1egT28FBk",
+					"notePath": [
+						"OkOZllzB3fqN",
+						"XUG1egT28FBk"
+					],
+					"title": "Power users",
+					"notePosition": 50,
+					"prefix": null,
+					"isExpanded": true,
+					"type": "text",
+					"mime": "text/html",
+					"attributes": [],
+					"format": "html",
+					"attachments": [],
+					"dirFileName": "Power users",
+					"children": [
+						{
+							"isClone": false,
+							"noteId": "DtJJ20yEozPA",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"XUG1egT28FBk",
+								"DtJJ20yEozPA"
+							],
+							"title": "Theme development",
+							"notePosition": 10,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [
+								{
+									"type": "label",
+									"name": "iconClass",
+									"value": "bx bx-palette",
+									"isInheritable": false,
+									"position": 10
+								}
+							],
+							"format": "html",
+							"attachments": [],
+							"dirFileName": "Theme development",
+							"children": [
+								{
+									"isClone": false,
+									"noteId": "5HH79ztN0fZA",
+									"notePath": [
+										"OkOZllzB3fqN",
+										"XUG1egT28FBk",
+										"DtJJ20yEozPA",
+										"5HH79ztN0fZA"
+									],
+									"title": "Creating a custom theme",
+									"notePosition": 10,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/html",
+									"attributes": [
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "aH8Dk5aMiq7R",
+											"isInheritable": false,
+											"position": 10
+										}
+									],
+									"format": "html",
+									"dataFileName": "Creating a custom theme.html",
+									"attachments": [
+										{
+											"attachmentId": "bn93hwF7C8sR",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "Creating a custom theme_im.png"
+										},
+										{
+											"attachmentId": "17p6z24yW5eP",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "1_Creating a custom theme_im.png"
+										},
+										{
+											"attachmentId": "gXLyv5KXjfxg",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "2_Creating a custom theme_im.png"
+										},
+										{
+											"attachmentId": "AJHVfQtIQgJ7",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "3_Creating a custom theme_im.png"
+										},
+										{
+											"attachmentId": "on1gD7BzCWdN",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "4_Creating a custom theme_im.png"
+										},
+										{
+											"attachmentId": "K3cdwj8f90m0",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "5_Creating a custom theme_im.png"
+										}
+									]
+								},
+								{
+									"isClone": false,
+									"noteId": "aH8Dk5aMiq7R",
+									"notePath": [
+										"OkOZllzB3fqN",
+										"XUG1egT28FBk",
+										"DtJJ20yEozPA",
+										"aH8Dk5aMiq7R"
+									],
+									"title": "Theme base (legacy vs. next)",
+									"notePosition": 20,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/html",
+									"attributes": [],
+									"format": "html",
+									"dataFileName": "Theme base (legacy vs. next).html",
+									"attachments": [
+										{
+											"attachmentId": "u0zkXkD7rGXA",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "Theme base (legacy vs. nex.png"
+										},
+										{
+											"attachmentId": "5z4bC0x0eH0P",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "1_Theme base (legacy vs. nex.png"
+										}
+									]
+								},
+								{
+									"isClone": false,
+									"noteId": "pMq6N1oBV9oo",
+									"notePath": [
+										"OkOZllzB3fqN",
+										"XUG1egT28FBk",
+										"DtJJ20yEozPA",
+										"pMq6N1oBV9oo"
+									],
+									"title": "Reference",
+									"notePosition": 30,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/html",
+									"attributes": [],
+									"format": "html",
+									"dataFileName": "Reference.html",
+									"attachments": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"noImport": true,
+			"dataFileName": "navigation.html"
+		},
+		{
+			"noImport": true,
+			"dataFileName": "index.html"
+		},
+		{
+			"noImport": true,
+			"dataFileName": "style.css"
+		}
+	]
+}
