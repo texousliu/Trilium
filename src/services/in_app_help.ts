@@ -26,14 +26,8 @@ function parseNoteMetaFile(noteMetaFile: NoteMetaFile): HiddenSubtreeItem[] {
         return [];
     }
 
-    const metaRoot = noteMetaFile.files[0];
-    const items: HiddenSubtreeItem[] = [];
-
-    for (const childMeta of metaRoot.children ?? []) {
-        items.push(parseNoteMeta(childMeta));
-    }
-
-    return items;
+    const metaRoot = parseNoteMeta(noteMetaFile.files[0]);
+    return metaRoot.children ?? [];
 }
 
 function parseNoteMeta(noteMeta: NoteMeta): HiddenSubtreeItem {
@@ -42,6 +36,15 @@ function parseNoteMeta(noteMeta: NoteMeta): HiddenSubtreeItem {
         title: noteMeta.title,
         type: "doc"
     };
+
+    if (noteMeta.children) {
+        const children: HiddenSubtreeItem[] = [];
+        for (const childMeta of noteMeta.children) {
+            children.push(parseNoteMeta(childMeta));
+        }
+
+        item.children = children;
+    }
 
     return item;
 }
