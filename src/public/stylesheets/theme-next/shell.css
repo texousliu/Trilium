@@ -1656,3 +1656,8 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     border-radius: 8px;
     padding-left: 12px;
 }
+
+/* Promoted attributes */
+.promoted-attribute-cell div.input-group {
+    margin: 1px 0;    
+}
