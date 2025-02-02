@@ -41,16 +41,15 @@ export default class DocTypeWidget extends TypeWidget {
 
     #loadContent(note: FNote) {
         return new Promise<void>((resolve) => {
-            const docName = note.getLabelValue("docName");
+            let docName = note.getLabelValue("docName");
 
             if (docName) {
                 // find doc based on language
-                const lng = i18next.language;
-                const url = `${window.glob.appPath}/doc_notes/${lng}/${docName}.html`.replaceAll(" ", "%20");
+                const url = this.#getUrl(docName, i18next.language);
                 this.$content.load(url, (response, status) => {
                     // fallback to english doc if no translation available
                     if (status === "error") {
-                        const fallbackUrl = `${window.glob.appPath}/doc_notes/en/${docName}.html`;
+                        const fallbackUrl = this.#getUrl(docName, "en");
                         this.$content.load(fallbackUrl, () => this.#processContent(fallbackUrl));
                         resolve();
                         return;
@@ -63,6 +62,19 @@ export default class DocTypeWidget extends TypeWidget {
                 this.$content.empty();
             }
         });
+    }
+
+    #getUrl(docNameValue: string, language: string) {
+        // For help notes, we only get the content to avoid loading of styles and meta.
+        let suffix = "";
+        if (docNameValue?.startsWith("User Guide")) {
+            suffix = " .content";
+        }
+
+        // Cannot have spaces in the URL due to how JQuery.load works.
+        docNameValue = docNameValue.replaceAll(" ", "%20");
+
+        return `${window.glob.appPath}/doc_notes/${language}/${docNameValue}.html${suffix}`;
     }
 
     #processContent(url: string) {
