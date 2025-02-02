@@ -6,6 +6,8 @@ import noteService from "./notes.js";
 import log from "./log.js";
 import migrationService from "./migration.js";
 import { t } from "i18next";
+import app_path from "./app_path.js";
+import { getHelpHiddenSubtreeData } from "./in_app_help.js";
 
 const LBTPL_ROOT = "_lbTplRoot";
 const LBTPL_BASE = "_lbTplBase";
@@ -16,21 +18,21 @@ const LBTPL_BUILTIN_WIDGET = "_lbTplBuiltinWidget";
 const LBTPL_SPACER = "_lbTplSpacer";
 const LBTPL_CUSTOM_WIDGET = "_lbTplCustomWidget";
 
-interface Attribute {
+interface HiddenSubtreeAttribute {
     type: AttributeType;
     name: string;
     isInheritable?: boolean;
     value?: string;
 }
 
-interface Item {
+export interface HiddenSubtreeItem {
     notePosition?: number;
     id: string;
     title: string;
     type: NoteType;
     icon?: string;
-    attributes?: Attribute[];
-    children?: Item[];
+    attributes?: HiddenSubtreeAttribute[];
+    children?: HiddenSubtreeItem[];
     isExpanded?: boolean;
     baseSize?: string;
     growthFactor?: string;
@@ -54,9 +56,9 @@ enum Command {
  * duplicate subtrees. This way, all instances will generate the same structure with the same IDs.
  */
 
-let hiddenSubtreeDefinition: Item;
+let hiddenSubtreeDefinition: HiddenSubtreeItem;
 
-function buildHiddenSubtreeDefinition(): Item {
+function buildHiddenSubtreeDefinition(): HiddenSubtreeItem {
     return {
         id: "_hidden",
         title: t("hidden-subtree.root-title"),
@@ -350,7 +352,8 @@ function buildHiddenSubtreeDefinition(): Item {
                 id: "_help",
                 title: t("hidden-subtree.user-guide"),
                 type: "book",
-                icon: "bx-help-circle"
+                icon: "bx-help-circle",
+                children: getHelpHiddenSubtreeData()
             }
         ]
     };
@@ -374,7 +377,7 @@ function checkHiddenSubtree(force = false, extraOpts: CheckHiddenExtraOpts = {})
     checkHiddenSubtreeRecursively("root", hiddenSubtreeDefinition, extraOpts);
 }
 
-function checkHiddenSubtreeRecursively(parentNoteId: string, item: Item, extraOpts: CheckHiddenExtraOpts = {}) {
+function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtreeItem, extraOpts: CheckHiddenExtraOpts = {}) {
     if (!item.id || !item.type || !item.title) {
         throw new Error(`Item does not contain mandatory properties: ${JSON.stringify(item)}`);
     }
