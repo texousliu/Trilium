@@ -4,7 +4,6 @@ import noteTooltipService from "./services/note_tooltip.js";
 import bundleService from "./services/bundle.js";
 import toastService from "./services/toast.js";
 import noteAutocompleteService from "./services/note_autocomplete.js";
-import macInit from "./services/mac_init.js";
 import electronContextMenu from "./menus/electron_context_menu.js";
 import glob from "./services/glob.js";
 import { t } from "./services/i18n.js";
@@ -34,8 +33,6 @@ glob.setupGlobs();
 if (utils.isElectron()) {
     initOnElectron();
 }
-
-macInit.init();
 
 noteTooltipService.setupGlobalTooltip();
 
