@@ -1,6 +1,7 @@
 import appContext from "../../components/app_context.js";
 import type { NoteType } from "../../entities/fnote.js";
 import { t } from "../../services/i18n.js";
+import type { ViewScope } from "../../services/link.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
 const TPL = `
@@ -51,15 +52,24 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
         this.$widget = $(TPL);
         this.$widget.on("click", () => {
             const subContexts = appContext.tabManager.getActiveContext().getSubContexts();
-            const { ntxId } = subContexts[subContexts.length - 1];
-            this.triggerCommand("openNewNoteSplit", {
-                ntxId,
-                notePath: `_help_${this.helpNoteIdToOpen}`,
-                hoistedNoteId: "_help",
-                viewScope: {
-                    viewMode: "contextual-help"
-                }
-            })
+            const targetNote = `_help_${this.helpNoteIdToOpen}`;
+            const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
+            const viewScope: ViewScope = {
+                viewMode: "contextual-help",
+            };
+            if (!helpSubcontext) {
+                // The help is not already open, open a new split with it.
+                const { ntxId } = subContexts[subContexts.length - 1];
+                this.triggerCommand("openNewNoteSplit", {
+                    ntxId,
+                    notePath: targetNote,
+                    hoistedNoteId: "_help",
+                    viewScope
+                })
+            } else {
+                // There is already a help window open, make sure it opens on the right note.
+                helpSubcontext.setNote(targetNote, { viewScope });
+            }
         });
     }
 
