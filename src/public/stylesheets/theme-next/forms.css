@@ -216,6 +216,7 @@ input::selection,
 .input-group button,
 .input-group a {
     display: flex;
+    align-items: center;
     --bs-border-width: 0;
     --accented-background-color: transparent;
     background: transparent;
@@ -228,13 +229,19 @@ input::selection,
 .input-group button:hover,
 .input-group a:hover {
     --muted-text-color: var(--input-action-button-hover);
+    color: var(--input-action-button-hover);
 }
 
 .input-group button:focus-visible,
 .input-group a:focus-visible {
+    box-shadow: unset;
     outline: transparent;
     border: transparent;
     text-shadow: 0 0 3px var(--input-action-button-hover);
+}
+
+.input-group button:active {
+    background: transparent !important;
 }
 
 .input-group a.disabled {
