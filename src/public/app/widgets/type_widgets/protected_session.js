@@ -10,7 +10,8 @@ const TPL = `
         margin: 30px auto auto;
     }
 
-    input, button {
+    .protected-session-password-component input,
+    .protected-session-password-component button {
         margin-top: 12px;
     }
 
