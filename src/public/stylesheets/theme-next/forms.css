@@ -273,6 +273,7 @@ input::selection,
 
 select,
 select.form-select,
+select.form-control,
 .select-button.dropdown-toggle.btn {
     outline: 3px solid transparent;
     outline-offset: 6px;
@@ -285,6 +286,7 @@ select.form-select,
 
 select:hover,
 select.form-select:hover,
+select.form-control:hover,
 .select-button.dropdown-toggle.btn:hover {
     background-color: var(--input-hover-background);
     color: var(--input-hover-color);
@@ -297,6 +299,7 @@ button.select-button.dropdown-toggle.btn:active {
 
 select:focus,
 select.form-select:focus,
+select.form-control:focus,
 .select-button.dropdown-toggle.btn:focus {
     box-shadow: unset;
     outline: 3px solid var(--input-focus-outline-color);
