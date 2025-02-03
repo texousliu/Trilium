@@ -60,6 +60,15 @@ module.exports = {
             }
         },
         {
+            name: "@electron-forge/maker-flatpak",
+            config: {
+                options: {
+                    icon: "./images/app-icons/png/128x128.png",
+                    desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
+                },
+            }
+        },
+        {
             name: "@electron-forge/maker-rpm",
             config: {
                 options: {
