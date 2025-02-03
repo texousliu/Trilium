@@ -149,8 +149,13 @@ const TPL = `
             </td>
         </tr>
         <tr title="${t("attribute_detail.inheritable_title")}">
-            <th>${t("attribute_detail.inheritable")}</th>
-            <td><input type="checkbox" class="attr-input-inheritable form-check" /></td>
+            <th></th>
+            <td>
+                <label class="tn-checkbox">
+                    <input type="checkbox" class="attr-input-inheritable form-check" />
+                    ${t("attribute_detail.inheritable")}
+                </label>
+            </td>
         </tr>
     </table>
 
