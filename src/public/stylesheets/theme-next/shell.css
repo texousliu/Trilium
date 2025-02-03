@@ -1237,25 +1237,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     background: transparent !important;
 }
 
-/* List body */
-.jump-to-note-dialog .jump-to-note-results .aa-suggestions {
-    padding: 0;
-}
-
-/* List item */
-.jump-to-note-dialog .aa-suggestions div {
-    border-radius: 6px;
-    padding: 6px 12px;
-    color: var(--menu-text-color);
-    cursor: default;
-}
-
-/* Selected list item */
-.jump-to-note-dialog .aa-suggestions div.aa-cursor {
-    background: var(--hover-item-background-color);
-    color: var(--hover-item-text-color);
-}
-
 /*
  * Recent changes list
  */
