@@ -27,7 +27,7 @@ const TPL = `
         <span class="editability-active-desc">${t("editability_select.auto")}</span>
         <span class="caret"></span>
     </button>
-    <div class="editability-dropdown dropdown-menu dropdown-menu-right">
+    <div class="editability-dropdown dropdown-menu dropdown-menu-right tn-dropdown-list">
         <a class="dropdown-item" href="#" data-editability="auto">
             <span class="check">&check;</span>
             ${t("editability_select.auto")}

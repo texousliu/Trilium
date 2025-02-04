@@ -951,6 +951,9 @@ body.mobile .note-title {
 
 /*
  * Menus
+ *
+ * Note: apply the "tn-dropdown-list" class for scrollable dropdown menus. Submenus are not
+ * supported when this class is used.
  */
 
 .dropdown-menu {
@@ -980,6 +983,14 @@ body.desktop .dropdown-menu::before {
     right: 0;
     bottom: 0;
     z-index: -1;
+}
+
+body.desktop .dropdown-menu.tn-dropdown-list {
+    backdrop-filter: var(--dropdown-backdrop-filter);
+}
+
+body.desktop .dropdown-menu.tn-dropdown-list::before {
+    display: none;
 }
 
 body.desktop .dropdown-submenu .dropdown-menu::before {
