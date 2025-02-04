@@ -31,6 +31,7 @@ async function register(app: express.Application) {
             target: productionConfig.target
         });
 
+        app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "public/app/doc_notes")));
         app.use(`/${assetPath}/app`, webpackMiddleware(frontendCompiler));
     } else {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));

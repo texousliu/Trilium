@@ -39,6 +39,7 @@ interface CustomGlobals {
     maxEntityChangeIdAtLoad: number;
     maxEntityChangeSyncIdAtLoad: number;
     assetPath: string;
+    appPath: string;
     instanceName: string;
     appCssNoteIds: string[];
     triliumVersion: string;

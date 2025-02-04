@@ -9,6 +9,12 @@ const TPL = `
         width: 300px;
         margin: 30px auto auto;
     }
+
+    .protected-session-password-component input,
+    .protected-session-password-component button {
+        margin-top: 12px;
+    }
+
     </style>
 
     <form class="protected-session-password-form">

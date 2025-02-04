@@ -51,6 +51,7 @@ ipcMain.on("create-extra-window", (event, arg) => {
 interface ExportAsPdfOpts {
     title: string;
     landscape: boolean;
+    pageSize: "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "Legal" | "Letter" | "Tabloid" | "Ledger";
 }
 
 ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
@@ -76,11 +77,14 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
     try {
         buffer = await browserWindow.webContents.printToPDF({
             landscape: opts.landscape,
+            pageSize: opts.pageSize,
+            generateDocumentOutline: true,
+            generateTaggedPDF: true,
+            printBackground: true,
             displayHeaderFooter: true,
             headerTemplate: `<div></div>`,
             footerTemplate: `
-                <div style="width: 100%; text-align: center; font-size: 10pt;">
-                    <span class="pageNumber"></span>
+                <div class="pageNumber" style="width: 100%; text-align: center; font-size: 10pt;">
                 </div>
             `
         });

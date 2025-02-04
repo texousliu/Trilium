@@ -77,8 +77,8 @@ const TPL = `
 
     <div class="attribute-list-editor" tabindex="200"></div>
 
-    <div class="bx bx-save save-attributes-button" title="${escapeQuotes(t("attribute_editor.save_attributes"))}"></div>
-    <div class="bx bx-plus add-new-attribute-button" title="${escapeQuotes(t("attribute_editor.add_a_new_attribute"))}"></div>
+    <div class="bx bx-save save-attributes-button tn-tool-button" title="${escapeQuotes(t("attribute_editor.save_attributes"))}"></div>
+    <div class="bx bx-plus add-new-attribute-button tn-tool-button" title="${escapeQuotes(t("attribute_editor.add_a_new_attribute"))}"></div>
 
     <div class="attribute-errors" style="display: none;"></div>
 </div>

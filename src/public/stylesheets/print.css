@@ -4,6 +4,21 @@
     --launcher-pane-background-color: var(--main-background-color);
     --main-text-color: black;
     --input-text-color: var(--main-text-color);
+
+    --print-font-size: 11pt;
+}
+
+@page {
+    margin: 2cm;
+}
+
+.ck-content {
+    font-size: var(--print-font-size);
+    text-align: justify;
+}
+
+.note-detail-readonly-text {
+    padding: 0 !important;
 }
 
 .no-print,
@@ -141,13 +156,6 @@ span[style] {
     outline: unset !important;
 }
 
-/* Fix visibility of checkbox checkmarks
-    see https://github.com/TriliumNext/Notes/issues/901 */
-.ck-editor__editable.ck-content .todo-list .todo-list__label > span[contenteditable="false"] > input[checked]::after {
-    /* fallback to default ck-editor green */
-    border-color: hsl(126, 64%, 41%);
-}
-
 .include-note .include-note-content {
     max-height: unset !important;
     overflow: unset !important;
@@ -159,4 +167,139 @@ span[style] {
 .note-detail-code pre {
     border: unset !important;
     border-radius: unset !important;
+}
+
+/*
+ * Links
+ */
+
+.note-detail-printable a {
+    text-decoration: none;
+}
+
+.note-detail-printable a:not([href^="#root/"]) {
+    text-decoration: underline;
+    color: #374a75;
+}
+
+.note-detail-printable a::after {
+    /* Hide the external link trailing arrow */
+    display: none !important;
+}
+
+/*
+ * TODO list check boxes
+ */
+
+.note-detail-printable .todo-list__label * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;  
+}
+
+@supports selector(.todo-list__label__description:has(*)) and (height: 1lh) {
+    .note-detail-printable .todo-list__label__description {
+
+        /* The percentage of the line height that the check box occupies */
+        --box-ratio: .75;
+        /* The size of the gap between the check box and the caption */
+        --box-text-gap: 0.25em;
+
+        --box-size: calc(1lh * var(--box-ratio));
+        --box-vert-offset: calc((1lh - var(--box-size)) / 2);
+
+        display: inline-block;
+        padding-left: calc(var(--box-size) + var(--box-text-gap));
+        /* Source: https://pictogrammers.com/library/mdi/icon/checkbox-blank-outline/ */
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3e%3cpath d='M19%2c3H5C3.89%2c3 3%2c3.89 3%2c5V19A2%2c2 0 0%2c0 5%2c21H19A2%2c2 0 0%2c0 21%2c19V5C21%2c3.89 20.1%2c3 19%2c3M19%2c5V19H5V5H19Z' /%3e%3c/svg%3e");
+        background-position: 0 var(--box-vert-offset);
+        background-size: var(--box-size);
+        background-repeat: no-repeat;
+    }
+
+    .note-detail-printable .todo-list__label:has(input[type="checkbox"]:checked) .todo-list__label__description {
+        /* Source: https://pictogrammers.com/library/mdi/icon/checkbox-outline/ */
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3e%3cpath d='M19%2c3H5A2%2c2 0 0%2c0 3%2c5V19A2%2c2 0 0%2c0 5%2c21H19A2%2c2 0 0%2c0 21%2c19V5A2%2c2 0 0%2c0 19%2c3M19%2c5V19H5V5H19M10%2c17L6%2c13L7.41%2c11.58L10%2c14.17L16.59%2c7.58L18%2c9' /%3e%3c/svg%3e");
+    }
+
+    .note-detail-printable .todo-list__label input[type="checkbox"] {
+        display: none !important;
+    }
+}
+
+/*
+ * Blockquotes
+ */
+
+.note-detail-printable blockquote {
+    box-shadow: unset;
+}
+
+/* 
+ * Figures
+ */
+
+.note-detail-printable figcaption {
+    --accented-background-color: transparent;
+
+    font-style: italic;
+}
+
+/*
+ * Footnotes
+ */
+
+.note-detail-printable .footnote-reference a,
+.footnote-back-link a {
+    text-decoration: none;
+}
+
+/* Make the "^" link cover the whole area of the footnote item */
+
+.footnote-section {
+    clear: both;
+}
+
+.note-detail-printable li.footnote-item {
+    position: relative;
+    width: fit-content;
+}
+
+.note-detail-printable .footnote-back-link,
+.note-detail-printable .footnote-back-link *,
+.note-detail-printable .footnote-back-link a {
+    display: block;
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.note-detail-printable .footnote-back-link a {
+    color: transparent;
+}
+
+.note-detail-printable .footnote-content {
+    display: inline-block;
+    width: unset;
+}
+
+/*
+ * Widows and orphans
+ */
+p,
+blockquote {
+    widows: 4;
+    orphans: 4;
+}
+
+pre > code {
+    widows: 6;
+    orphans: 6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
 }

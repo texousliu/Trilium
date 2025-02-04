@@ -67,6 +67,10 @@ const TPL = `
         .attr-detail input[readonly] {
             background-color: var(--accented-background-color) !important;
         }
+
+        .attr-edit-table td {
+            padding: 4px 0;
+        }
     </style>
 
     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
@@ -97,8 +101,13 @@ const TPL = `
         </tr>
         <tr class="attr-row-promoted"
             title="${t("attribute_detail.promoted_title")}">
-            <th>${t("attribute_detail.promoted")}</th>
-            <td><input type="checkbox" class="attr-input-promoted form-check" /></td>
+            <th></th>
+            <td>
+                <label class="tn-checkbox">
+                    <input type="checkbox" class="attr-input-promoted form-check" />
+                    ${t("attribute_detail.promoted")}
+                </label>
+            </td>
         </tr>
         <tr class="attr-row-promoted-alias">
             <th title="${t("attribute_detail.promoted_alias_title")}">${t("attribute_detail.promoted_alias")}</th>
@@ -149,8 +158,13 @@ const TPL = `
             </td>
         </tr>
         <tr title="${t("attribute_detail.inheritable_title")}">
-            <th>${t("attribute_detail.inheritable")}</th>
-            <td><input type="checkbox" class="attr-input-inheritable form-check" /></td>
+            <th></th>
+            <td>
+                <label class="tn-checkbox">
+                    <input type="checkbox" class="attr-input-inheritable form-check" />
+                    ${t("attribute_detail.inheritable")}
+                </label>
+            </td>
         </tr>
     </table>
 
@@ -242,7 +256,9 @@ const ATTR_HELP: Record<string, Record<string, string>> = {
         executeDescription: t("attribute_detail.execute_description"),
         excludeFromNoteMap: t("attribute_detail.exclude_from_note_map"),
         newNotesOnTop: t("attribute_detail.new_notes_on_top"),
-        hideHighlightWidget: t("attribute_detail.hide_highlight_widget")
+        hideHighlightWidget: t("attribute_detail.hide_highlight_widget"),
+        printLandscape: t("attribute_detail.print_landscape"),
+        printPageSize: t("attribute_detail.print_page_size")
     },
     relation: {
         runOnNoteCreation: t("attribute_detail.run_on_note_creation"),

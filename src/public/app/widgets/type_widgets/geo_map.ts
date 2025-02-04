@@ -1,4 +1,4 @@
-import { Marker, type LatLng, type LeafletMouseEvent } from "leaflet";
+import { GPX, Marker, type LatLng, type LeafletMouseEvent } from "leaflet";
 import type FNote from "../../entities/fnote.js";
 import GeoMapWidget, { type InitCallback, type Leaflet } from "../geo_map.js";
 import TypeWidget from "./type_widget.js"
@@ -91,8 +91,6 @@ interface CreateChildResponse {
     }
 }
 
-type MarkerData = Record<string, Marker>;
-
 enum State {
     Normal,
     NewNote
@@ -103,7 +101,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
     private geoMapWidget: GeoMapWidget;
     private _state: State;
     private L!: Leaflet;
-    private currentMarkerData: MarkerData;
+    private currentMarkerData: Record<string, Marker>;
+    private currentTrackData: Record<string, GPX>;
+    private gpxLoaded?: boolean;
 
     static getType() {
         return "geoMap";
@@ -114,6 +114,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         this.geoMapWidget = new GeoMapWidget("type", (L: Leaflet) => this.#onMapInitialized(L));
         this.currentMarkerData = {};
+        this.currentTrackData = {};
         this._state = State.Normal;
 
         this.child(this.geoMapWidget);
@@ -159,9 +160,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     async #reloadMarkers() {
-        const map = this.geoMapWidget.map;
-
-        if (!this.note || !map) {
+        if (!this.note) {
             return;
         }
 
@@ -170,51 +169,91 @@ export default class GeoMapTypeWidget extends TypeWidget {
             marker.remove();
         }
 
+        // Delete all existing tracks
+        for (const track of Object.values(this.currentTrackData)) {
+            track.remove();
+        }
+
         // Add the new markers.
         this.currentMarkerData = {};
         const childNotes = await this.note.getChildNotes();
-        const L = this.L;
         for (const childNote of childNotes) {
-            const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
-            if (!latLng) {
+            if (childNote.mime === "application/gpx+xml") {
+                this.#processNoteWithGpxTrack(childNote);
                 continue;
             }
 
-            const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
-            const icon = L.divIcon({
-                html: `\
-                    <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
-                    <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
-                    <span class="bx ${childNote.getIcon()}"></span>
-                    <span class="title-label">${childNote.title}</span>`,
-                iconSize: [ 25, 41 ],
-                iconAnchor: [ 12, 41 ]
-            })
+            const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
+            if (latLng) {
+                this.#processNoteWithMarker(childNote, latLng);
+            }
+        }
+    }
 
-            const marker = L.marker(L.latLng(lat, lng), {
-                icon,
-                draggable: true,
-                autoPan: true,
-                autoPanSpeed: 5,
-            })
-                .addTo(map)
-                .on("moveend", e => {
-                    this.moveMarker(childNote.noteId, (e.target as Marker).getLatLng());
-                });
+    async #processNoteWithGpxTrack(note: FNote) {
+        if (!this.L || !this.geoMapWidget.map) {
+            return;
+        }
 
-            marker.on("contextmenu", (e) => {
-                openContextMenu(childNote.noteId, e.originalEvent);
+        if (!this.gpxLoaded) {
+            await import("leaflet-gpx");
+            this.gpxLoaded = true;
+        }
+
+        // TODO: This is not very efficient as it's probably a string response that is parsed and then converted back to string and parsed again.
+        const xmlResponse = await server.get<XMLDocument>(`notes/${note.noteId}/open`);
+        const stringResponse = new XMLSerializer().serializeToString(xmlResponse);
+
+        const track = new this.L.GPX(stringResponse, {});
+        track.addTo(this.geoMapWidget.map);
+        this.currentTrackData[note.noteId] = track;
+    }
+
+    #processNoteWithMarker(note: FNote, latLng: string) {
+        const map = this.geoMapWidget.map;
+        if (!map) {
+            return;
+        }
+
+        const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
+        const L = this.L;
+        const icon = this.#buildIcon(note.getIcon(), note.title);
+
+        const marker = L.marker(L.latLng(lat, lng), {
+            icon,
+            draggable: true,
+            autoPan: true,
+            autoPanSpeed: 5,
+        })
+            .addTo(map)
+            .on("moveend", e => {
+                this.moveMarker(note.noteId, (e.target as Marker).getLatLng());
             });
 
-            const el = marker.getElement();
-            if (el) {
-                const $el = $(el);
-                $el.attr("data-href", `#${childNote.noteId}`);
-                note_tooltip.setupElementTooltip($($el));
-            }
+        marker.on("contextmenu", (e) => {
+            openContextMenu(note.noteId, e.originalEvent);
+        });
 
-            this.currentMarkerData[childNote.noteId] = marker;
+        const el = marker.getElement();
+        if (el) {
+            const $el = $(el);
+            $el.attr("data-href", `#${note.noteId}`);
+            note_tooltip.setupElementTooltip($($el));
         }
+
+        this.currentMarkerData[note.noteId] = marker;
+    }
+
+    #buildIcon(bxIconClass: string, title: string) {
+        return this.L.divIcon({
+            html: `\
+                <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
+                <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
+                <span class="bx ${bxIconClass}"></span>
+                <span class="title-label">${title}</span>`,
+            iconSize: [ 25, 41 ],
+            iconAnchor: [ 12, 41 ]
+        })
     }
 
     #changeState(newState: State) {
@@ -299,6 +338,14 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        // If any of the children branches are altered.
+        if (loadResults.getBranchRows().find((branch) => branch.parentNoteId === this.noteId)) {
+            this.#reloadMarkers();
+            return;
+        }
+
+        // If any of note has its location attribute changed.
+        // TODO: Should probably filter by parent here as well.
         const attributeRows = loadResults.getAttributeRows();
         if (attributeRows.find((at) => at.name === LOCATION_ATTRIBUTE)) {
             this.#reloadMarkers();
