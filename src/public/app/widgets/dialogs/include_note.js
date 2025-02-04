@@ -25,16 +25,22 @@ const TPL = `
                     ${t("include_note.box_size_prompt")}
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="include-note-box-size" value="small">
-                        <label class="form-check-label">${t("include_note.box_size_small")}</label>
+                        <label class="form-check-label tn-radio">
+                            <input class="form-check-input" type="radio" name="include-note-box-size" value="small">
+                            ${t("include_note.box_size_small")}
+                        </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="include-note-box-size" value="medium" checked>
-                        <label class="form-check-label">${t("include_note.box_size_medium")}</label>
+                        <label class="form-check-label tn-radio">
+                            <input class="form-check-input" type="radio" name="include-note-box-size" value="medium" checked>
+                            ${t("include_note.box_size_medium")}
+                        </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="include-note-box-size" value="full">
-                        <label class="form-check-label">${t("include_note.box_size_full")}</label>
+                        <label class="form-check-label tn-radio">
+                            <input class="form-check-input" type="radio" name="include-note-box-size" value="full">
+                            ${t("include_note.box_size_full")}
+                        </label>
                     </div>
                 </div>
                 <div class="modal-footer">

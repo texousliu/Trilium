@@ -78,10 +78,11 @@ button.btn.btn-success kbd {
  * Icon buttons
  */
 
-:root .icon-action:not(.global-menu-button) {
+:root .icon-action:not(.global-menu-button),
+:root .tn-tool-button {
     width: var(--icon-button-size);
     height: var(--icon-button-size);
-    border: unset;
+    border: unset !important;
     border-radius: 8px;
     padding: 0;
     text-align: center;
@@ -89,7 +90,8 @@ button.btn.btn-success kbd {
 }
 
 /* The "x" icon button */
-:root .icon-action.bx-x {
+:root .icon-action.bx-x,
+:root .tn-tool-button.bx-x {
     --icon-button-hover-background: var(--tab-close-button-hover-background);
     --icon-button-hover-color: var(--tab-close-button-hover-color);
     --icon-button-size: 24px;
@@ -99,23 +101,28 @@ button.btn.btn-success kbd {
 }
 
 /* The icon */
-:root .icon-action:not(.global-menu-button)::before {
+:root .icon-action:not(.global-menu-button)::before,
+:root .tn-tool-button::before {
     display: block;
     line-height: var(--icon-button-size);
     font-size: calc(var(--icon-button-size) * var(--icon-button-icon-ratio));
 }
 
 :root .icon-action:not(.global-menu-button):hover,
-:root .icon-action:not(.global-menu-button).show {
+:root .icon-action:not(.global-menu-button).show,
+:root .tn-tool-button:hover,
+:root .tn-tool-button.show {
     background: var(--icon-button-hover-background);
     color: var(--icon-button-hover-color);
 }
 
-:root .icon-action:not(.global-menu-button):active::before {
+:root .icon-action:not(.global-menu-button):active::before,
+:root .tn-tool-button:active::before {
     transform: scale(.85);
 }
 
-:root .icon-action:not(.global-menu-button):focus-visible {
+:root .icon-action:not(.global-menu-button):focus-visible,
+:root .tn-tool-button:focus-visible {
     outline: 2px solid var(--input-focus-outline-color);
 }
 
@@ -216,6 +223,7 @@ input::selection,
 .input-group button,
 .input-group a {
     display: flex;
+    align-items: center;
     --bs-border-width: 0;
     --accented-background-color: transparent;
     background: transparent;
@@ -228,13 +236,19 @@ input::selection,
 .input-group button:hover,
 .input-group a:hover {
     --muted-text-color: var(--input-action-button-hover);
+    color: var(--input-action-button-hover);
 }
 
 .input-group button:focus-visible,
 .input-group a:focus-visible {
+    box-shadow: unset;
     outline: transparent;
     border: transparent;
     text-shadow: 0 0 3px var(--input-action-button-hover);
+}
+
+.input-group button:active {
+    background: transparent !important;
 }
 
 .input-group a.disabled {
@@ -273,6 +287,7 @@ input::selection,
 
 select,
 select.form-select,
+select.form-control,
 .select-button.dropdown-toggle.btn {
     outline: 3px solid transparent;
     outline-offset: 6px;
@@ -285,6 +300,7 @@ select.form-select,
 
 select:hover,
 select.form-select:hover,
+select.form-control:hover,
 .select-button.dropdown-toggle.btn:hover {
     background-color: var(--input-hover-background);
     color: var(--input-hover-color);
@@ -297,6 +313,7 @@ button.select-button.dropdown-toggle.btn:active {
 
 select:focus,
 select.form-select:focus,
+select.form-control:focus,
 .select-button.dropdown-toggle.btn:focus {
     box-shadow: unset;
     outline: 3px solid var(--input-focus-outline-color);
