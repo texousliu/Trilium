@@ -324,6 +324,48 @@ export function getResourceDir() {
     }
 }
 
+// TODO: Deduplicate with src/public/app/services/utils.ts
+/**
+ * Compares two semantic version strings.
+ * Returns:
+ *   1  if v1 is greater than v2
+ *   0  if v1 is equal to v2
+ *   -1 if v1 is less than v2
+ *
+ * @param v1 First version string
+ * @param v2 Second version string
+ * @returns
+ */
+function compareVersions(v1: string, v2: string): number {
+    // Remove 'v' prefix and everything after dash if present
+    v1 = v1.replace(/^v/, "").split("-")[0];
+    v2 = v2.replace(/^v/, "").split("-")[0];
+
+    const v1parts = v1.split(".").map(Number);
+    const v2parts = v2.split(".").map(Number);
+
+    // Pad shorter version with zeros
+    while (v1parts.length < 3) v1parts.push(0);
+    while (v2parts.length < 3) v2parts.push(0);
+
+    // Compare major version
+    if (v1parts[0] !== v2parts[0]) {
+        return v1parts[0] > v2parts[0] ? 1 : -1;
+    }
+
+    // Compare minor version
+    if (v1parts[1] !== v2parts[1]) {
+        return v1parts[1] > v2parts[1] ? 1 : -1;
+    }
+
+    // Compare patch version
+    if (v1parts[2] !== v2parts[2]) {
+        return v1parts[2] > v2parts[2] ? 1 : -1;
+    }
+
+    return 0;
+}
+
 export default {
     randomSecureToken,
     randomString,
@@ -360,5 +402,6 @@ export default {
     getResourceDir,
     isMac,
     isWindows,
-    envToBoolean
+    envToBoolean,
+    compareVersions
 };
