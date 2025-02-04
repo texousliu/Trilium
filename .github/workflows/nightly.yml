@@ -45,6 +45,7 @@ jobs:
           os: ${{ matrix.os.name }}
           arch: ${{ matrix.arch }}
           extension: ${{ matrix.os.extension }}
+      - run: find output
 
       - name: Deploy release
         uses: WebFreak001/deploy-nightly@v3.2.0
