@@ -15,6 +15,10 @@ runs:
       if: ${{ inputs.os == 'macos' }}
       shell: bash
       run: brew install python-setuptools
+    - name: Install rpm on Ubuntu for RPM package building
+      if: ${{ inputs.os == 'linux' }}
+      shell: bash
+      run: sudo apt install rpm
     - name: Install dependencies
       shell: bash
       run: npm ci
@@ -27,8 +31,9 @@ runs:
     - name: Prepare artifacts
       shell: bash
       run: |
-        mkdir -p upload
-        file=$(find out/make -name '*.zip' -print -quit)
-        cp "$file" "upload/TriliumNextNotes-${{ github.ref_name }}-${{ inputs.os }}-${{ inputs.arch }}.zip"
-        file=$(find out/make -name '*.${{ matrix.os.extension }}' -print -quit)
-        cp "$file" "upload/TriliumNextNotes-${{ github.ref_name }}-${{ inputs.os }}-${{ inputs.arch }}.${{ matrix.os.extension }}"
+        mkdir -p upload;
+        for ext in ${{ join(inputs.extension, ' ') }};
+        do
+          file=$(find out/make -name "*.$ext" -print -quit);
+          cp "$file" "upload/TriliumNextNotes-${{ github.ref_name }}-${{ inputs.os }}-${{ inputs.arch }}.$ext";
+        done
