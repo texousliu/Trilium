@@ -100,21 +100,20 @@ module.exports = {
 };
 
 function getExtraResourcesForPlatform() {
-    let resources = ["dump-db/", "./bin/tpl/anonymize-database.sql"];
-    const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
+    const resources = ["dump-db/", "./bin/tpl/anonymize-database.sql"];
+
+    const getScriptRessources = () => {
+        const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
+        const scriptExt = (process.platform === "win32") ? "bat" : "sh";
+        return scripts.map(script => `./bin/tpl/${script}.${scriptExt}`);
+    }
+
     switch (process.platform) {
         case "win32":
-            for (const script of scripts) {
-                resources.push(`./bin/tpl/${script}.bat`);
-            }
-            break;
-        case "darwin":
+            resources.push(...getScriptRessources())
             break;
         case "linux":
-            resources.push("images/app-icons/png/256x256.png");
-            for (const script of scripts) {
-                resources.push(`./bin/tpl/${script}.sh`);
-            }
+            resources.push(...getScriptRessources(), "images/app-icons/png/256x256.png");
             break;
         default:
             break;
