@@ -15,6 +15,24 @@ const TPL = `<div class="note-detail-doc note-detail-printable">
             padding: 15px;
             border-radius: 5px;
         }
+
+        .note-detail-doc.contextual-help {
+            padding-bottom: 15vh;
+        }
+
+        .note-detail-doc.contextual-help h2,
+        .note-detail-doc.contextual-help h3,
+        .note-detail-doc.contextual-help h4,
+        .note-detail-doc.contextual-help h5,
+        .note-detail-doc.contextual-help h6 {
+            font-size: 1.25rem;
+            background-color: var(--main-background-color);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            margin: 0;
+            padding-bottom: 0.25em;
+        }
     </style>
 
     <div class="note-detail-doc-content"></div>
@@ -37,6 +55,7 @@ export default class DocTypeWidget extends TypeWidget {
 
     async doRefresh(note: FNote) {
         this.initialized = this.#loadContent(note);
+        this.$widget.toggleClass("contextual-help", this.noteContext?.viewScope?.viewMode === "contextual-help");
     }
 
     #loadContent(note: FNote) {
