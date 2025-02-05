@@ -1,0 +1,41 @@
+/*
+ * Owned attributes
+ */
+
+.attribute-list .add-new-attribute-button,
+.attribute-list .save-attributes-button  {
+    bottom: .3em;
+}
+
+.attribute-list .save-attributes-button {
+    right: 30px;
+}
+
+/*
+ * Similar notes
+ */
+
+:root .similar-notes-widget a {
+    color: var(--cmd-button-text-color);
+    background: var(--cmd-button-background-color);
+}
+
+:root .similar-notes-widget a:hover {
+    color: var(--cmd-button-hover-text-color);
+    background: var(--cmd-button-hover-background-color);
+}
+
+/* 
+ * Note info
+ */
+
+.note-info-widget-table th {
+    opacity: .65;
+    font-weight: 500;
+}
+
+:root .note-info-widget-table button.calculate-button {
+    min-width: 0;
+    padding: 4px 10px !important;
+    font-size: .8em;
+}
