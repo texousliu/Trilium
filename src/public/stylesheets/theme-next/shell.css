@@ -227,6 +227,12 @@ body.layout-horizontal > .horizontal {
     --hover-item-background-color: transparent;
 }
 
+#launcher-pane.horizontal .global-menu-button .global-menu-button-update-available {
+    right: -23px;
+    bottom: -22px;
+    transform: scale(0.85);
+}
+
 .tooltip .tooltip-arrow {
     display: none;
 }
@@ -945,12 +951,19 @@ body.mobile .note-title {
 
 /*
  * Menus
+ *
+ * Note: apply the "tn-dropdown-list" class for scrollable dropdown menus. Submenus are not
+ * supported when this class is used.
  */
 
 .dropdown-menu {
     border-radius: var(--dropdown-border-radius);
     padding: var(--menu-padding-size) !important;
     font-size: 0.9rem !important;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background: var(--menu-background-color);
 }
 
 body.mobile .dropdown-menu {
@@ -974,6 +987,14 @@ body.desktop .dropdown-menu::before {
     right: 0;
     bottom: 0;
     z-index: -1;
+}
+
+body.desktop .dropdown-menu.tn-dropdown-list {
+    backdrop-filter: var(--dropdown-backdrop-filter);
+}
+
+body.desktop .dropdown-menu.tn-dropdown-list::before {
+    display: none;
 }
 
 body.desktop .dropdown-submenu .dropdown-menu::before {
@@ -1235,25 +1256,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 .jump-to-note-dialog .input-clearer-button {
     background: transparent !important;
-}
-
-/* List body */
-.jump-to-note-dialog .jump-to-note-results .aa-suggestions {
-    padding: 0;
-}
-
-/* List item */
-.jump-to-note-dialog .aa-suggestions div {
-    border-radius: 6px;
-    padding: 6px 12px;
-    color: var(--menu-text-color);
-    cursor: default;
-}
-
-/* Selected list item */
-.jump-to-note-dialog .aa-suggestions div.aa-cursor {
-    background: var(--hover-item-background-color);
-    color: var(--hover-item-text-color);
 }
 
 /*
@@ -1657,7 +1659,17 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     padding-left: 12px;
 }
 
+.note-actions {
+    --menu-item-icon-vert-offset: -2.5px;
+}
+
 /* Promoted attributes */
 .promoted-attribute-cell div.input-group {
     margin: 1px 0;    
+}
+
+/* Delete notes preview dialog */
+
+.delete-notes-list .note-path {
+    padding-left: 8px;
 }

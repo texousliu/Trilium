@@ -56,18 +56,26 @@
         <div id="setup-type" data-bind="visible: step() == 'setup-type'" style="margin-top: 20px;">
             <form data-bind="submit: selectSetupType">
 
-              <div class="radio" style="margin-bottom: 15px;">
-                  <label><input type="radio" name="setup-type" value="new-document" data-bind="checked: setupType"">
-                      <%= t("setup.new-document") %></label>
-              </div>
-              <div class="radio" style="margin-bottom: 15px;">
-                  <label><input type="radio" name="setup-type" value="sync-from-desktop" data-bind="checked: setupType">
-                      <%= t("setup.sync-from-desktop") %></label>
-              </div>
-              <div class="radio" style="margin-bottom: 15px;">
-                  <label><input type="radio" name="setup-type" value="sync-from-server" data-bind="checked: setupType"">
-                      <%= t("setup.sync-from-server") %></label>
-              </div>
+            <div class="radio" style="margin-bottom: 15px;">
+                <label class="tn-radio">
+                    <input type="radio" name="setup-type" value="new-document" data-bind="checked: setupType">
+                    <%= t("setup.new-document") %>
+                </label>
+            </div>
+
+            <div class="radio" style="margin-bottom: 15px;">
+                <label class="tn-radio">
+                    <input type="radio" name="setup-type" value="sync-from-desktop" data-bind="checked: setupType">
+                    <%= t("setup.sync-from-desktop") %>
+                </label>
+            </div>
+
+            <div class="radio" style="margin-bottom: 15px;">
+                <label class="tn-radio">
+                    <input type="radio" name="setup-type" value="sync-from-server" data-bind="checked: setupType">
+                    <%= t("setup.sync-from-server") %>
+                </label>
+            </div>
 
               <button type="submit" data-bind="disable: !setupTypeSelected()" class="btn btn-primary"><%= t("setup.next") %></button>
             </form>

@@ -1,0 +1,39 @@
+inputs:
+  os:
+    description: "One of the supported platforms: macos, linux, windows"
+    required: true
+  arch:
+    description: "The architecture to build for: x64, arm64"
+    required: true
+  extension:
+    description: "Platform specific extensions to copy in the output: dmg, deb, rpm, exe"
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Set up Python for appdmg to be installed
+      if: ${{ inputs.os == 'macos' }}
+      shell: bash
+      run: brew install python-setuptools
+    - name: Install rpm on Ubuntu for RPM package building
+      if: ${{ inputs.os == 'linux' }}
+      shell: bash
+      run: sudo apt install rpm
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
+    - name: Update build info
+      shell: bash
+      run: npm run update-build-info
+    - name: Run electron-forge
+      shell: bash
+      run: npm run make-electron -- --arch=${{ inputs.arch }}
+    - name: Prepare artifacts
+      shell: bash
+      run: |
+        mkdir -p upload;
+        for ext in ${{ inputs.extension }};
+        do
+          file=$(find out/make -name "*.$ext" -print -quit);
+          cp "$file" "upload/TriliumNextNotes-${{ github.ref_name }}-${{ inputs.os }}-${{ inputs.arch }}.$ext";
+        done

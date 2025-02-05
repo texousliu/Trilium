@@ -1,6 +1,8 @@
 @import url(./forms.css);
 @import url(./shell.css);
+@import url(./ribbon.css);
 @import url(./settings.css);
+@import url(./notes/empty.css);
 @import url(./notes/text.css);
 
 @font-face {
@@ -63,4 +65,30 @@
 
     /* Theme capabilities */
     --tab-note-icons: true;
+}
+
+/*
+ * Note search suggestions
+ */
+
+/* List body */
+.jump-to-note-dialog .jump-to-note-results .aa-suggestions,
+.note-detail-empty .aa-suggestions {
+    padding: 0;
+}
+
+/* List item */
+.jump-to-note-dialog .aa-suggestions div,
+.note-detail-empty .aa-suggestions div {
+    border-radius: 6px;
+    padding: 6px 12px;
+    color: var(--menu-text-color);
+    cursor: default;
+}
+
+/* Selected list item */
+.jump-to-note-dialog .aa-suggestions div.aa-cursor,
+.note-detail-empty .aa-suggestions div.aa-cursor {
+    background: var(--hover-item-background-color);
+    color: var(--hover-item-text-color);
 }
