@@ -24,6 +24,7 @@ import type { Attribute } from "../services/attribute_parser.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
 import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
 import type { ContextMenuEvent } from "../menus/context_menu.js";
+import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -161,7 +162,7 @@ export type CommandMappings = {
      * Generally should not be invoked manually, as it is used by {@link NoteContext.getContentElement}.
      */
     executeWithContentElement: CommandData & ExecuteCommandData<JQuery<HTMLElement>>;
-    executeWithTypeWidget: CommandData & ExecuteCommandData<null>;
+    executeWithTypeWidget: CommandData & ExecuteCommandData<TypeWidget | null>;
     addTextToActiveEditor: CommandData & {
         text: string;
     };
@@ -208,6 +209,7 @@ export type CommandMappings = {
     }
 
     reEvaluateRightPaneVisibility: CommandData;
+    runActiveNote: CommandData;
 
     // Geomap
     deleteFromMap: { noteId: string },
@@ -311,6 +313,8 @@ type EventMappings = {
     showToc: {
         noteId: string;
     };
+    scrollToEnd: { ntxId: string };
+    noteTypeMimeChanged: { noteId: string };
 };
 
 export type EventListener<T extends EventNames> = {
