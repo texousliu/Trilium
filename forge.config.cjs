@@ -3,6 +3,7 @@ const fs = require("fs-extra");
 
 const APP_NAME = "TriliumNext Notes";
 
+const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
   icon: "./images/app-icons/png/128x128.png",
   desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
@@ -17,7 +18,7 @@ module.exports = {
         icon: "./images/app-icons/icon",
         extraResource: [
             // Moved to root
-            ...getExtraResourcesForPlatform(),
+            ...extraResourcesForPlatform,
 
             // Moved to resources (TriliumNext Notes.app/Contents/Resources on macOS)
             "translations/",
@@ -25,8 +26,7 @@ module.exports = {
         ],
         afterComplete: [
             (buildPath, _electronVersion, platform, _arch, callback) => {
-                const extraResources = getExtraResourcesForPlatform();
-                for (const resource of extraResources) {
+                for (const resource of extraResourcesForPlatform) {
                     const baseName = path.basename(resource);
 
                     // prettier-ignore
