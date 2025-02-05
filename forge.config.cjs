@@ -23,19 +23,16 @@ module.exports = {
                 const extraResources = getExtraResourcesForPlatform();
                 for (const resource of extraResources) {
                     const baseName = path.basename(resource);
-                    let sourcePath;
-                    if (platform === "darwin") {
-                        sourcePath = path.join(buildPath, `${APP_NAME}.app`, "Contents", "Resources", baseName);
-                    } else {
-                        sourcePath = path.join(buildPath, "resources", baseName);
-                    }
-                    let destPath;
 
-                    if (baseName !== "256x256.png") {
-                        destPath = path.join(buildPath, baseName);
-                    } else {
-                        destPath = path.join(buildPath, "icon.png");
-                    }
+                    // prettier-ignore
+                    const sourcePath = (platform === "darwin")
+                        ? path.join(buildPath, `${APP_NAME}.app`, "Contents", "Resources", baseName)
+                        : path.join(buildPath, "resources", baseName);
+
+                    // prettier-ignore
+                    const destPath = (baseName !== "256x256.png")
+                        ? path.join(buildPath, baseName)
+                        : path.join(buildPath, "icon.png");
 
                     // Copy files from resources folder to root
                     fs.move(sourcePath, destPath)
