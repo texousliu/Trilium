@@ -255,6 +255,7 @@ input::selection,
     opacity: .5;
     /* Workaround to set the "background" property. */
     --button-disabled-background-color: transparent;
+    --button-disabled-text-color: var(--input-action-button-color);
 }
 
 .input-group .input-clearer-button {
