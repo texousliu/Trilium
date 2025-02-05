@@ -1659,6 +1659,10 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     padding-left: 12px;
 }
 
+.note-actions {
+    --menu-item-icon-vert-offset: -2.5px;
+}
+
 /* Promoted attributes */
 .promoted-attribute-cell div.input-group {
     margin: 1px 0;    
