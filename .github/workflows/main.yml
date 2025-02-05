@@ -23,10 +23,10 @@ jobs:
         os:
           - name: macos
             image: macos-latest
-            extension: dmg
+            extension: [dmg, zip]
           - name: linux
             image: ubuntu-latest
-            extension: deb
+            extension: [deb, rpm, zip]
           - name: windows
             image: windows-latest
             extension: exe
