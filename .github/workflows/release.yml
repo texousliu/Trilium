@@ -39,7 +39,7 @@ jobs:
         with:
           os: ${{ matrix.os.name }}
           arch: ${{ matrix.arch }}
-          extension: ${{ matrix.os.extension }}
+          extension: ${{ join(matrix.os.extension, ' ') }}
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
