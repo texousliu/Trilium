@@ -3,6 +3,11 @@ const fs = require("fs-extra");
 
 const APP_NAME = "TriliumNext Notes";
 
+const baseLinuxMakerConfigOptions = {
+  icon: "./images/app-icons/png/128x128.png",
+  desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
+};
+
 module.exports = {
     packagerConfig: {
         executableName: "trilium",
@@ -50,8 +55,7 @@ module.exports = {
             name: "@electron-forge/maker-deb",
             config: {
                 options: {
-                    icon: "./images/app-icons/png/128x128.png",
-                    desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs")
+                  ...baseLinuxMakerConfigOptions
                 }
             }
         },
@@ -59,8 +63,7 @@ module.exports = {
             name: "@electron-forge/maker-rpm",
             config: {
                 options: {
-                    icon: "./images/app-icons/png/128x128.png",
-                    desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs")
+                  ...baseLinuxMakerConfigOptions
                 }
             }
         },
