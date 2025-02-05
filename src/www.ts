@@ -13,7 +13,7 @@ import utils from "./services/utils.js";
 import port from "./services/port.js";
 import host from "./services/host.js";
 
-const MINIMUM_NODE_VERSION = "22.0.0";
+const MINIMUM_NODE_VERSION = "20.0.0";
 
 // setup basic error handling even before requiring dependencies, since those can produce errors as well
 
@@ -33,8 +33,12 @@ function exit() {
 process.on("SIGINT", exit);
 process.on("SIGTERM", exit);
 
-if (utils.compareVersions(process.version, MINIMUM_NODE_VERSION) < 0) {
-    console.error(`\nTrilium requires Node.js ${MINIMUM_NODE_VERSION} and later.\n`);
+if (utils.compareVersions(process.versions.node, MINIMUM_NODE_VERSION) < 0) {
+    console.error();
+    console.error(`The Trilium server requires Node.js ${MINIMUM_NODE_VERSION} and later in order to start.\n`);
+    console.error(`\tCurrent version:\t${process.versions.node}`);
+    console.error(`\tExpected version:\t${MINIMUM_NODE_VERSION}`);
+    console.error();
     process.exit(1);
 }
 
