@@ -35,7 +35,7 @@ const DROPDOWN_TPL = `
         <div class="calendar-month-selector">
             <button class="calendar-btn bx bx-chevron-left" data-calendar-toggle="previous"></button>
 
-            <button class="btn dropdown-toggle" type="button"
+            <button class="btn dropdown-toggle select-button" type="button"
                 data-bs-toggle="dropdown" data-bs-auto-close="true"
                 aria-expanded="false"
                 data-calendar-input="month"></button>

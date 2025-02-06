@@ -1138,6 +1138,13 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
     outline: 3px solid transparent;
 }
 
+.calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
+    --select-arrow-svg: ""; /* Disable the dropdown arrow */
+
+    min-width: 120px;
+    padding: 0 10px;
+}
+
 .calendar-dropdown-widget .calendar-header .dropdown-toggle::after {
     content: unset !important;
 }
