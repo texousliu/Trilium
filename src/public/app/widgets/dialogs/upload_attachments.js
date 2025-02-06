@@ -17,7 +17,9 @@ const TPL = `
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="upload-attachment-file-upload-input"><strong>${t("upload_attachments.choose_files")}</strong></label>
-                        <input type="file" class="upload-attachment-file-upload-input form-control-file" multiple />
+                            <label class="tn-file-input tn-input-field">
+                                <input type="file" class="upload-attachment-file-upload-input form-control-file" multiple />
+                            </label>
                         <p>${t("upload_attachments.files_will_be_uploaded")} <strong class="upload-attachment-note-title"></strong>.</p>
                     </div>
 
