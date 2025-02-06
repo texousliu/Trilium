@@ -26,7 +26,7 @@ const TPL = `
                     <div class="form-group">
                         <strong>${t("upload_attachments.options")}:</strong>
                         <div class="checkbox">
-                            <label data-bs-toggle="tooltip" title="${escapeQuotes(t("upload_attachments.tooltip"))}">
+                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${escapeQuotes(t("upload_attachments.tooltip"))}">
                                 <input class="shrink-images-checkbox form-check-input" value="1" type="checkbox" checked> <span>${t("upload_attachments.shrink_images")}</span>
                             </label>
                         </div>
