@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import becca_mocking from "../../spec/support/becca_mocking.js";
+import { note, NoteBuilder } from "../../spec/support/becca_mocking.js";
 import becca from "../becca/becca.js";
 import BBranch from "../becca/entities/bbranch.js";
 import BNote from "../becca/entities/bnote.js";
@@ -7,12 +7,12 @@ import tree from "./tree.js";
 import cls from "./cls.js";
 
 describe("Tree", () => {
-    let rootNote!: any;
+    let rootNote!: NoteBuilder;
 
     beforeEach(() => {
         becca.reset();
 
-        rootNote = new becca_mocking.NoteBuilder(new BNote({
+        rootNote = new NoteBuilder(new BNote({
             noteId: "root",
             title: "root",
             type: "text"
@@ -27,12 +27,12 @@ describe("Tree", () => {
         vi.mock("./sql.js", () => {
             return {
                 default: {
-                    transactional: (cb) => {
+                    transactional: (cb: Function) => {
                         cb();
                     },
-                    execute: (...args) => { },
-                    replace: (...args) => { },
-                    getMap: (...args) => { }
+                    execute: () => { },
+                    replace: () => { },
+                    getMap: () => { }
                 }
             }
         });
@@ -49,12 +49,12 @@ describe("Tree", () => {
 
         // Add values which have a defined order.
         for (let i=0; i<=5; i++) {
-            rootNote.child(becca_mocking.note(String(i)).label("order", String(i)));
+            rootNote.child(note(String(i)).label("order", String(i)));
         }
 
         // Add a few values which have no defined order.
         for (let i=6; i<10; i++) {
-            rootNote.child(becca_mocking.note(String(i)));
+            rootNote.child(note(String(i)));
         }
 
         const expectedOrder = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ];
