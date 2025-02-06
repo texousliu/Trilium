@@ -956,7 +956,7 @@ body.mobile .note-title {
  * supported when this class is used.
  */
 
-.dropdown-menu {
+.dropdown-menu:not(.static) {
     border-radius: var(--dropdown-border-radius);
     padding: var(--menu-padding-size) !important;
     font-size: 0.9rem !important;
@@ -1086,6 +1086,20 @@ html body .dropdown-item[disabled] {
     font-family: boxicons;
     font-size: 1.2em;
     color: var(--menu-item-arrow-color) !important;
+}
+
+/* Static menus (used as a list, such as on the note revisions dialog) */
+body.desktop .dropdown-menu.static {
+    box-shadow: unset;
+    border-radius: 4px;
+    border: unset;
+    background-color: var(--card-background-color) !important;
+    padding: var(--menu-padding-size) !important;
+    user-select: none;
+}
+
+body.desktop .dropdown-menu.static .dropdown-item.active {
+    --active-item-text-color: var(--menu-text-color);
 }
 
 body.desktop .dropdown-menu .dropdown-toggle::after {
