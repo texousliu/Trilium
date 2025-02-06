@@ -37,6 +37,11 @@ div.editability-dropdown a.dropdown-item {
     right: 30px;
 }
 
+/* Note path in attribute detail dialog */
+.attr-detail .note-path {
+    margin-left: 8px;
+}
+
 /*
  * Similar notes
  */
