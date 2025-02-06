@@ -1120,7 +1120,6 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
     --input-background-color: transparent;
     --menu-background-color: transparent;
 
-    border-radius: var(--bs-border-radius);
     text-align: center;
     font-size: 1.4em;
     font-weight: 300;
