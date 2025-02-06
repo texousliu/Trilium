@@ -21,7 +21,7 @@ const NOTE_TYPES = [
     { type: "mermaid", mime: "text/mermaid", title: t("note_types.mermaid-diagram"), selectable: true },
     { type: "book", mime: "", title: t("note_types.book"), selectable: true },
     { type: "webView", mime: "", title: t("note_types.web-view"), selectable: true },
-    { type: "geoMap", mime: "application/json", title: t("note_types.geo-map"), selectable: true },
+    { type: "geoMap", mime: "application/json", title: t("note_types.geo-map"), isBeta: true, selectable: true },
     { type: "code", mime: "text/plain", title: t("note_types.code"), selectable: true }
 ];
 
@@ -30,11 +30,18 @@ const NOT_SELECTABLE_NOTE_TYPES = NOTE_TYPES.filter((nt) => !nt.selectable).map(
 const TPL = `
 <div class="dropdown note-type-widget">
     <style>
-    .note-type-dropdown {
-        max-height: 500px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
+        .note-type-dropdown {
+            max-height: 500px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .note-type-dropdown .badge {
+            margin-left: 8px;
+            background: var(--accented-background-color);
+            font-weight: normal;
+            color: var(--menu-text-color);
+        }
     </style>
     <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle select-button note-type-button">
         <span class="note-type-desc"></span>
@@ -74,11 +81,16 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
         for (const noteType of NOTE_TYPES.filter((nt) => nt.selectable)) {
             let $typeLink;
 
+            const $title = $("<span>").text(noteType.title);
+            if (noteType.isBeta) {
+                $title.append($(`<span class="badge">`).text(t("note_types.beta-feature")));
+            }
+
             if (noteType.type !== "code") {
                 $typeLink = $('<a class="dropdown-item">')
                     .attr("data-note-type", noteType.type)
                     .append('<span class="check">&check;</span> ')
-                    .append($("<span>").text(noteType.title))
+                    .append($title)
                     .on("click", (e) => {
                         const type = $typeLink.attr("data-note-type");
                         const noteType = NOTE_TYPES.find((nt) => nt.type === type);

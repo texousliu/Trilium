@@ -1381,7 +1381,8 @@
     "launcher": "Scurtătură",
     "widget": "Widget",
     "confirm-change": "Nu se recomandă schimbarea tipului notiței atunci când ea are un conținut. Procedați oricum?",
-    "geo-map": "Hartă geografică (beta)"
+    "geo-map": "Hartă geografică",
+    "beta-feature": "Beta"
   },
   "protect_note": {
     "toggle-off": "Deprotejează notița",

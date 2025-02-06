@@ -1414,7 +1414,8 @@
     "doc": "Doc",
     "widget": "Widget",
     "confirm-change": "It is not recommended to change note type when note content is not empty. Do you want to continue anyway?",
-    "geo-map": "Geo Map (beta)"
+    "geo-map": "Geo Map",
+    "beta-feature": "Beta"
   },
   "protect_note": {
     "toggle-on": "Protect the note",
