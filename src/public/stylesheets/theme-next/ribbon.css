@@ -2,6 +2,13 @@
  * Basic properties
  */
 
+/* Note type dropdown */
+
+div.note-type-dropdown .check {
+    margin-right: 4px;
+    font-weight: normal;
+}
+
  /* Editability dropdown */
 
 div.editability-dropdown a.dropdown-item {
