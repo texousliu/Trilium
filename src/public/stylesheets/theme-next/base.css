@@ -67,6 +67,14 @@
     --tab-note-icons: true;
 }
 
+/* Tool dialogs - small dialogs without a backdrop */
+div.tn-tool-dialog {
+    border-radius: 10px;
+    background: var(--tool-dialog-background-color) !important;
+    user-select: none;
+    box-shadow: 10px 10px 93px -25px var(--tool-dialog-shadow-color);
+}
+
 /*
  * Note search suggestions
  */
