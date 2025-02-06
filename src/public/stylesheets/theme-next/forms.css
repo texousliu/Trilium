@@ -141,10 +141,12 @@ input[type="text"],
 input[type="number"],
 input[type="password"],
 textarea.form-control,
-textarea {
+textarea,
+.tn-input-field {
     outline: 3px solid transparent;
     outline-offset: 6px;
     border: unset;
+    border-radius: var(--bs-border-radius);
     background: var(--input-background-color);
     color: var(--input-text-color);
 }
@@ -154,7 +156,8 @@ input[type="text"]:hover,
 input[type="number"]:hover,
 input[type="password"]:hover,
 textarea.form-control:hover,
-textarea:hover {
+textarea:hover,
+.tn-input-field:hover {
     background: var(--input-hover-background);
     color: var(--input-hover-color);
 }
@@ -164,7 +167,9 @@ input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="password"]:focus,
 textarea.form-control:focus,
-textarea:focus {
+textarea:focus,
+.tn-input-field:focus,
+.tn-input-field:focus-within {
     box-shadow: unset;
     outline: 3px solid var(--input-focus-outline-color);
     outline-offset: 0;
@@ -335,6 +340,47 @@ optgroup {
     font-weight: normal;
     font-style: normal;
     line-height: 40px;
+}
+
+/* 
+ * File input
+ *
+ * <label class="tn-file-input tn-input-field">
+ *     <input type="file" />
+ * </label>
+ */
+
+ .tn-file-input {
+    position: relative;
+    padding: .375rem 2.25rem .375rem .75rem;
+}
+
+.tn-file-input input[type="file"] {
+    background: transparent;
+}
+
+.tn-file-input input[type="file"]::file-selector-button {
+    /* Hide the "Browse..." button */
+    display: none;
+}
+
+.tn-file-input input[type="file"]:focus {
+    outline: none;
+}
+
+/* The browse icon */
+.tn-file-input::before {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    content: "\eae1";
+    width: 2em;
+    height: 100%;
+    right: 0;
+    top: 0;
+    font-size: 1.2em;
+    font-family: boxicons;
 }
 
 /* Check boxes and radio buttons */
