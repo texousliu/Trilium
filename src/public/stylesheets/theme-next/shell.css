@@ -1034,7 +1034,8 @@ body.mobile .dropdown-submenu:hover {
     background: transparent !important;
 }
 
-html body .dropdown-item.disabled {
+html body .dropdown-item.disabled,
+html body .dropdown-item[disabled] {
     color: var(--menu-text-color) !important;
     opacity: var(--menu-item-disabled-opacity);
 }
