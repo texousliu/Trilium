@@ -1115,22 +1115,11 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
     gap: 10px;
 }
 
-.calendar-dropdown-widget .calendar-header input[type="number"] {
-    appearance: textfield !important;
-}
-
-.calendar-dropdown-widget .calendar-header input[type="number"]::-webkit-outer-spin-button,
-.calendar-dropdown-widget .calendar-header input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
 .calendar-dropdown-widget .calendar-header input,
 .calendar-dropdown-widget .calendar-header [data-calendar-input="month"] {
     --input-background-color: transparent;
     --menu-background-color: transparent;
 
-    border: unset;
     border-radius: var(--bs-border-radius);
     text-align: center;
     font-size: 1.4em;
@@ -1190,6 +1179,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     border-radius: 6px;
     background: var(--calendar-day-hover-background);
     color: var(--calendar-day-hover-color) !important;
+    text-decoration: unset;
 }
 
 /*
