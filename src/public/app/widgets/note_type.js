@@ -5,24 +5,39 @@ import dialogService from "../services/dialog.js";
 import { t } from "../services/i18n.js";
 
 const NOTE_TYPES = [
-    { type: "file", title: t("note_types.file"), selectable: false },
-    { type: "image", title: t("note_types.image"), selectable: false },
-    { type: "search", title: t("note_types.saved-search"), selectable: false },
-    { type: "noteMap", mime: "", title: t("note_types.note-map"), selectable: false },
-    { type: "launcher", mime: "", title: t("note_types.launcher"), selectable: false },
-    { type: "doc", mime: "", title: t("note_types.doc"), selectable: false },
-    { type: "contentWidget", mime: "", title: t("note_types.widget"), selectable: false },
+    // The suggested note type ordering method: insert the item into the corresponding group,
+    // then ensure the items within the group are ordered alphabetically.
 
+    // The default note type (always the first item)
     { type: "text", mime: "text/html", title: t("note_types.text"), selectable: true },
-    { type: "relationMap", mime: "application/json", title: t("note_types.relation-map"), selectable: true },
-    { type: "mindMap", mime: "application/json", title: t("note_types.mind-map"), selectable: true },
-    { type: "render", mime: "", title: t("note_types.render-note"), selectable: true },
+
+    // Text notes group
+    { type: "book", mime: "", title: t("note_types.book"), selectable: true },
+
+    // Graphic notes
     { type: "canvas", mime: "application/json", title: t("note_types.canvas"), selectable: true },
     { type: "mermaid", mime: "text/mermaid", title: t("note_types.mermaid-diagram"), selectable: true },
-    { type: "book", mime: "", title: t("note_types.book"), selectable: true },
-    { type: "webView", mime: "", title: t("note_types.web-view"), selectable: true },
+
+    // Map notes
     { type: "geoMap", mime: "application/json", title: t("note_types.geo-map"), isBeta: true, selectable: true },
-    { type: "code", mime: "text/plain", title: t("note_types.code"), selectable: true }
+    { type: "mindMap", mime: "application/json", title: t("note_types.mind-map"), selectable: true },
+    { type: "relationMap", mime: "application/json", title: t("note_types.relation-map"), selectable: true },
+
+    // Misc note types
+    { type: "render", mime: "", title: t("note_types.render-note"), selectable: true },
+    { type: "webView", mime: "", title: t("note_types.web-view"), selectable: true },
+
+    // Code notes
+    { type: "code", mime: "text/plain", title: t("note_types.code"), selectable: true },
+
+    // Reserved types (cannot be created by the user)
+    { type: "contentWidget", mime: "", title: t("note_types.widget"), selectable: false },
+    { type: "doc", mime: "", title: t("note_types.doc"), selectable: false },
+    { type: "file", title: t("note_types.file"), selectable: false },
+    { type: "image", title: t("note_types.image"), selectable: false },
+    { type: "launcher", mime: "", title: t("note_types.launcher"), selectable: false },
+    { type: "noteMap", mime: "", title: t("note_types.note-map"), selectable: false },
+    { type: "search", title: t("note_types.saved-search"), selectable: false }
 ];
 
 const NOT_SELECTABLE_NOTE_TYPES = NOTE_TYPES.filter((nt) => !nt.selectable).map((nt) => nt.type);
