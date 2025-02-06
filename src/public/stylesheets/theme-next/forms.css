@@ -364,8 +364,14 @@ optgroup {
     display: none;
 }
 
-.tn-file-input input[type="file"]:focus {
+.tn-file-input:hover input[type="file"] {
+    color: var(--input-hover-color);
+}
+
+.tn-file-input input[type="file"]:focus,
+.tn-file-input input[type="file"]:active {
     outline: none;
+    color: var(--input-focus-color);
 }
 
 /* The browse icon */
