@@ -1104,12 +1104,15 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
  */
 
 .calendar-dropdown-widget {
+    width: unset !important;
     padding: 12px;
     color: var(--calendar-color);
+    user-select: none;
 }
 
 .calendar-dropdown-widget .calendar-header {
     padding: 8px 0 20px 0;
+    gap: 10px;
 }
 
 .calendar-dropdown-widget .calendar-header input[type="number"] {
@@ -1124,9 +1127,9 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
 
 .calendar-dropdown-widget .calendar-header input,
 .calendar-dropdown-widget .calendar-header [data-calendar-input="month"] {
-    /* TODO: Provide styling for background and states */
     --input-background-color: transparent;
     --menu-background-color: transparent;
+
     border: unset;
     border-radius: var(--bs-border-radius);
     text-align: center;
