@@ -1,4 +1,24 @@
 /*
+ * Basic properties
+ */
+
+ /* Editability dropdown */
+
+div.editability-dropdown a.dropdown-item {
+    padding: 4px 16px 4px 0;
+    align-items: start !important;
+}
+
+.editability-dropdown .dropdown-item .check {
+    margin-left: 8px;
+}
+
+.editability-dropdown .dropdown-item .description {
+    opacity: .75;
+    font-size: .85em;
+}
+
+/*
  * Owned attributes
  */
 
