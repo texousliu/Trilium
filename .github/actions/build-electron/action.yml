@@ -15,10 +15,15 @@ runs:
       if: ${{ inputs.os == 'macos' }}
       shell: bash
       run: brew install python-setuptools
-    - name: Install rpm on Ubuntu for RPM package building
+    - name: Install dependencies for RPM and Flatpak package building
       if: ${{ inputs.os == 'linux' }}
       shell: bash
-      run: sudo apt install rpm
+      run: |
+        sudo apt-get update && sudo apt-get install rpm flatpak-builder elfutils
+        flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        FLATPAK_ARCH=$(if [[ ${{ inputs.arch }} = 'arm64' ]]; then echo 'aarch64'; else echo 'x86_64'; fi)
+        FLATPAK_VERSION='24.08'
+        flatpak install --user --no-deps --arch $FLATPAK_ARCH --assumeyes runtime/org.freedesktop.Platform/$FLATPAK_ARCH/$FLATPAK_VERSION runtime/org.freedesktop.Sdk/$FLATPAK_ARCH/$FLATPAK_VERSION org.electronjs.Electron2.BaseApp/$FLATPAK_ARCH/$FLATPAK_VERSION
     - name: Install dependencies
       shell: bash
       run: npm ci
