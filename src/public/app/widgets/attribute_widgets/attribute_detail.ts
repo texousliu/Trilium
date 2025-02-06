@@ -48,8 +48,12 @@ const TPL = `
             text-align: left;
         }
 
-        .attr-edit-table td input {
+        .attr-edit-table td input[not(type="checkbox")] {
             width: 100%;
+        }
+
+        .attr-edit-table td input[type="checkbox"] {
+            display: inline-block;
         }
 
         .close-attr-detail-button {
@@ -104,7 +108,7 @@ const TPL = `
             <th></th>
             <td>
                 <label class="tn-checkbox">
-                    <input type="checkbox" class="attr-input-promoted form-check" />
+                    <input type="checkbox" class="attr-input-promoted" />
                     ${t("attribute_detail.promoted")}
                 </label>
             </td>
@@ -161,7 +165,7 @@ const TPL = `
             <th></th>
             <td>
                 <label class="tn-checkbox">
-                    <input type="checkbox" class="attr-input-inheritable form-check" />
+                    <input type="checkbox" class="attr-input-inheritable" />
                     ${t("attribute_detail.inheritable")}
                 </label>
             </td>
