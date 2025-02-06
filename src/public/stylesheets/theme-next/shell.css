@@ -1125,11 +1125,17 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
 .calendar-dropdown-widget .calendar-header input,
 .calendar-dropdown-widget .calendar-header [data-calendar-input="month"] {
     /* TODO: Provide styling for background and states */
-    background: transparent !important;
+    --input-background-color: transparent;
+    --menu-background-color: transparent;
     border: unset;
+    border-radius: var(--bs-border-radius);
     text-align: center;
     font-size: 1.4em;
     font-weight: 300;
+}
+
+.calendar-dropdown-widget .calendar-header input:not(:focus) {
+    outline: 3px solid transparent;
 }
 
 .calendar-dropdown-widget .calendar-header .dropdown-toggle::after {

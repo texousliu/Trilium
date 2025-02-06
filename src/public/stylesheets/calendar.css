@@ -51,7 +51,7 @@
     text-align: center;
     border: 0;
     border-bottom: 1px solid var(--button-border-color);
-    background-color: var(--menu-background-color) !important;
+    background-color: var(--menu-background-color);
     outline: 0;
 }
 
