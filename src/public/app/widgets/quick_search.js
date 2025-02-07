@@ -34,7 +34,7 @@ const TPL = `
     <button class="btn btn-outline-secondary search-button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="bx bx-search"></span>
     </button>
-    <div class="dropdown-menu dropdown-menu-left"></div>
+    <div class="dropdown-menu dropdown-menu-left tn-dropdown-list"></div>
   </div>
   <input type="text" class="form-control form-control-sm search-string" placeholder="${t("quick-search.placeholder")}">
 </div>`;
