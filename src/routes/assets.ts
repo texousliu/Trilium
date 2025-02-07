@@ -26,9 +26,7 @@ async function register(app: express.Application) {
             mode: "development",
             cache: {
                 type: "filesystem",
-                cacheDirectory: isElectron
-                    ? path.join(srcRoot, "..", "..", ".cache", "electron")
-                    : path.join(srcRoot, "..", ".cache", "server")
+                cacheDirectory: path.join(srcRoot, "..", ".cache", isElectron ? "electron" : "server")
             },
             entry: productionConfig.entry,
             module: productionConfig.module,
