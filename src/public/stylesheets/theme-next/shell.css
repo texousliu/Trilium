@@ -1206,13 +1206,21 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 .note-tooltip-content {
     padding: 8px;
+    min-height: 56px;
 }
 
-.note-tooltip-content .note-title-with-path {
+.note-tooltip-title .note-title-with-path {
     display: flex;
     flex-direction: column-reverse;
-    border-bottom: 2px solid currentColor;
+}
+
+.note-tooltip-title.note-no-content {
+    margin: 0;
+}
+
+.note-tooltip-title:not(.note-no-content) .note-title-with-path {
     padding-bottom: 6px;
+    border-bottom: 2px solid currentColor;
 }
 
 .note-tooltip-content .note-path {
