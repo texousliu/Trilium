@@ -12,6 +12,7 @@ import asset_path from "../../../../services/asset_path.js";
 import openContextMenu from "./geo_map_context_menu.js";
 import link from "../../services/link.js";
 import note_tooltip from "../../services/note_tooltip.js";
+import appContext from "../../components/app_context.js";
 
 const TPL = `\
 <div class="note-detail-geo-map note-detail-printable">
@@ -229,7 +230,15 @@ export default class GeoMapTypeWidget extends TypeWidget {
             .on("moveend", e => {
                 this.moveMarker(note.noteId, (e.target as Marker).getLatLng());
             });
-
+        marker.on("mousedown", ({ originalEvent }) => {
+            // Middle click to open in new tab
+            if (originalEvent.button === 1) {
+                const hoistedNoteId = this.hoistedNoteId;
+                //@ts-ignore, fix once tab manager is ported.
+                appContext.tabManager.openInNewTab(note.noteId, hoistedNoteId);
+                return true;
+            }
+        });
         marker.on("contextmenu", (e) => {
             openContextMenu(note.noteId, e.originalEvent);
         });
