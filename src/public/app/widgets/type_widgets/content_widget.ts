@@ -35,17 +35,19 @@ import RibbonOptions from "./options/appearance/ribbon.js";
 import LocalizationOptions from "./options/appearance/i18n.js";
 import CodeBlockOptions from "./options/appearance/code_block.js";
 import EditorOptions from "./options/text_notes/editor.js";
+import type FNote from "../../entities/fnote.js";
+import type NoteContextAwareWidget from "../note_context_aware_widget.js";
 
 const TPL = `<div class="note-detail-content-widget note-detail-printable">
     <style>
         .type-contentWidget .note-detail {
             height: 100%;
         }
-        
+
         .note-detail-content-widget {
             height: 100%;
         }
-    
+
         .note-detail-content-widget-content {
             padding: 15px;
             height: 100%;
@@ -55,7 +57,7 @@ const TPL = `<div class="note-detail-content-widget note-detail-printable">
     <div class="note-detail-content-widget-content"></div>
 </div>`;
 
-const CONTENT_WIDGETS = {
+const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     _optionsAppearance: [LocalizationOptions, ThemeOptions, FontsOptions, CodeBlockOptions, ElectronIntegrationOptions, MaxContentWidthOptions, RibbonOptions],
     _optionsShortcuts: [KeyboardShortcutsOptions],
     _optionsTextNotes: [EditorOptions, HeadingStyleOptions, TableOfContentsOptions, HighlightsListOptions, TextAutoReadOnlySizeOptions],
@@ -81,6 +83,9 @@ const CONTENT_WIDGETS = {
 };
 
 export default class ContentWidgetTypeWidget extends TypeWidget {
+
+    private $content!: JQuery<HTMLElement>;
+
     static getType() {
         return "contentWidget";
     }
@@ -92,7 +97,7 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         this.$content.empty();
         this.children = [];
 
@@ -103,7 +108,9 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
             for (const clazz of contentWidgets) {
                 const widget = new clazz();
 
-                await widget.handleEvent("setNoteContext", { noteContext: this.noteContext });
+                if (this.noteContext) {
+                    await widget.handleEvent("setNoteContext", { noteContext: this.noteContext });
+                }
                 this.child(widget);
 
                 this.$content.append(widget.render());

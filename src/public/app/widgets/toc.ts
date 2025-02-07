@@ -18,33 +18,34 @@ import attributeService from "../services/attributes.js";
 import RightPanelWidget from "./right_panel_widget.js";
 import options from "../services/options.js";
 import OnClickButtonWidget from "./buttons/onclick_button.js";
-import appContext from "../components/app_context.js";
+import appContext, { type EventData } from "../components/app_context.js";
 import libraryLoader from "../services/library_loader.js";
+import type FNote from "../entities/fnote.js";
 
 const TPL = `<div class="toc-widget">
     <style>
         .toc-widget {
             padding: 10px;
-            contain: none; 
+            contain: none;
             overflow: auto;
             position: relative;
         }
-        
+
         .toc ol {
             padding-left: 25px;
         }
-        
+
         .toc > ol {
             padding-left: 20px;
         }
-        
+
         .toc li {
             cursor: pointer;
             text-align: justify;
             word-wrap: break-word;
             hyphens: auto;
         }
-        
+
         .toc li:hover {
             font-weight: bold;
         }
@@ -53,7 +54,16 @@ const TPL = `<div class="toc-widget">
     <span class="toc"></span>
 </div>`;
 
+interface Toc {
+    $toc: JQuery<HTMLElement>,
+    headingCount: number
+}
+
 export default class TocWidget extends RightPanelWidget {
+
+    private $toc!: JQuery<HTMLElement>;
+    private tocLabelValue?: string | null;
+
     get widgetTitle() {
         return t("toc.table_of_contents");
     }
@@ -75,7 +85,17 @@ export default class TocWidget extends RightPanelWidget {
     }
 
     isEnabled() {
-        return super.isEnabled() && this.note.type === "text" && !this.noteContext.viewScope.tocTemporarilyHidden && this.noteContext.viewScope.viewMode === "default";
+        if (!super.isEnabled() || !this.note) {
+            return false;
+        }
+
+        const isHelpNote = (this.note.type === "doc" && this.note.noteId.startsWith("_help"));
+        const isTextNote = (this.note.type === "text");
+        const isNoteSupported = isTextNote || isHelpNote;
+
+        return isNoteSupported
+            && !this.noteContext?.viewScope?.tocTemporarilyHidden
+            && this.noteContext?.viewScope?.viewMode === "default";
     }
 
     async doRenderBody() {
@@ -83,36 +103,63 @@ export default class TocWidget extends RightPanelWidget {
         this.$toc = this.$body.find(".toc");
     }
 
-    async refreshWithNote(note) {
-        /*The reason for adding tocPreviousVisible is to record whether the previous state of the toc is hidden or displayed,
-         * and then let it be displayed/hidden at the initial time. If there is no such value,
-         * when the right panel needs to display highlighttext but not toc, every time the note content is changed,
-         * toc will appear and then close immediately, because getToc(html) function will consume time*/
-        this.toggleInt(!!this.noteContext.viewScope.tocPreviousVisible);
+    async refreshWithNote(note: FNote) {
 
-        const tocLabel = note.getLabel("toc");
+        this.toggleInt(!!this.noteContext?.viewScope?.tocPreviousVisible);
 
-        if (tocLabel?.value === "hide") {
+        this.tocLabelValue = note.getLabelValue("toc");
+
+        if (this.tocLabelValue === "hide") {
             this.toggleInt(false);
             this.triggerCommand("reEvaluateRightPaneVisibility");
             return;
         }
 
-        let $toc = "",
-            headingCount = 0;
-        // Check for type text unconditionally in case alwaysShowWidget is set
-        if (this.note.type === "text") {
-            const { content } = await note.getBlob();
-            ({ $toc, headingCount } = await this.getToc(content));
+        if (!this.note || !this.noteContext?.viewScope) {
+            return;
         }
 
-        this.$toc.html($toc);
-        if (["", "show"].includes(tocLabel?.value) || headingCount >= options.getInt("minTocHeadings")) {
-            this.toggleInt(true);
-            this.noteContext.viewScope.tocPreviousVisible = true;
-        } else {
-            this.toggleInt(false);
-            this.noteContext.viewScope.tocPreviousVisible = false;
+        // Check for type text unconditionally in case alwaysShowWidget is set
+        if (this.note.type === "text") {
+            const blob = await note.getBlob();
+            if (blob) {
+                const toc = await this.getToc(blob.content);
+                this.#updateToc(toc);
+            }
+            return;
+        }
+
+        if (this.note.type === "doc") {
+            /**
+             * For document note types, we obtain the content directly from the DOM since it allows us to obtain processed data without
+             * requesting data twice. However, when immediately navigating to a new note the new document is not yet attached to the hierarchy,
+             * resulting in an empty TOC. The fix is to simply wait for it to pop up.
+             */
+            setTimeout(async () => {
+                const $contentEl = await this.noteContext?.getContentElement();
+                if ($contentEl) {
+                    const content = $contentEl.html();
+                    const toc = await this.getToc(content);
+                    this.#updateToc(toc);
+                } else {
+                    console.warn("Unable to get content element for doctype");
+                }
+            }, 10);
+        }
+    }
+
+    #updateToc({ $toc, headingCount }: Toc) {
+        this.$toc.empty();
+        if ($toc) {
+            this.$toc.append($toc);
+        }
+
+        const tocLabelValue = this.tocLabelValue;
+
+        const visible = (tocLabelValue === "" || tocLabelValue === "show") || headingCount >= (options.getInt("minTocHeadings") ?? 0);
+        this.toggleInt(visible);
+        if (this.noteContext?.viewScope) {
+            this.noteContext.viewScope.tocPreviousVisible = visible;
         }
 
         this.triggerCommand("reEvaluateRightPaneVisibility");
@@ -121,10 +168,10 @@ export default class TocWidget extends RightPanelWidget {
     /**
      * Rendering formulas in strings using katex
      *
-     * @param {string} html Note's html content
-     * @returns {string} The HTML content with mathematical formulas rendered by KaTeX.
+     * @param html Note's html content
+     * @returns The HTML content with mathematical formulas rendered by KaTeX.
      */
-    async replaceMathTextWithKatax(html) {
+    async replaceMathTextWithKatax(html: string) {
         const mathTextRegex = /<span class="math-tex">\\\(([\s\S]*?)\\\)<\/span>/g;
         var matches = [...html.matchAll(mathTextRegex)];
         let modifiedText = html;
@@ -167,12 +214,12 @@ export default class TocWidget extends RightPanelWidget {
     /**
      * Builds a jquery table of contents.
      *
-     * @param {string} html Note's html content
-     * @returns {$toc: jQuery, headingCount: integer} ordered list table of headings, nested by heading level
+     * @param html Note's html content
+     * @returns ordered list table of headings, nested by heading level
      *         with an onclick event that will cause the document to scroll to
      *         the desired position.
      */
-    async getToc(html) {
+    async getToc(html: string): Promise<Toc> {
         // Regular expression for headings <h1>...</h1> using non-greedy
         // matching and backreferences
         const headingTagsRegex = /<h(\d+)[^>]*>(.*?)<\/h\1>/gi;
@@ -184,12 +231,12 @@ export default class TocWidget extends RightPanelWidget {
         // Note heading 2 is the first level Trilium makes available to the note
         let curLevel = 2;
         const $ols = [$toc];
-        let headingCount;
+        let headingCount = 0;
         for (let m = null, headingIndex = 0; (m = headingTagsRegex.exec(html)) !== null; headingIndex++) {
             //
             // Nest/unnest whatever necessary number of ordered lists
             //
-            const newLevel = m[1];
+            const newLevel = parseInt(m[1]);
             const levelDelta = newLevel - curLevel;
             if (levelDelta > 0) {
                 // Open as many lists as newLevel - curLevel
@@ -229,7 +276,7 @@ export default class TocWidget extends RightPanelWidget {
     /**
      * Reduce indent if a larger headings are not being used: https://github.com/zadam/trilium/issues/4363
      */
-    pullLeft($toc) {
+    pullLeft($toc: JQuery<HTMLElement>) {
         while (true) {
             const $children = $toc.children();
 
@@ -248,16 +295,21 @@ export default class TocWidget extends RightPanelWidget {
         return $toc;
     }
 
-    async jumpToHeading(headingIndex) {
+    async jumpToHeading(headingIndex: number) {
+        if (!this.note || !this.noteContext) {
+            return;
+        }
+
         // A readonly note can change state to "readonly disabled
         // temporarily" (ie "edit this note" button) without any
         // intervening events, do the readonly calculation at navigation
         // time and not at outline creation time
         // See https://github.com/zadam/trilium/issues/2828
+        const isDocNote = this.note.type === "doc";
         const isReadOnly = await this.noteContext.isReadOnly();
 
         let $container;
-        if (isReadOnly) {
+        if (isReadOnly || isDocNote) {
             $container = await this.noteContext.getContentElement();
         } else {
             const textEditor = await this.noteContext.getTextEditor();
@@ -269,26 +321,28 @@ export default class TocWidget extends RightPanelWidget {
     }
 
     async closeTocCommand() {
-        this.noteContext.viewScope.tocTemporarilyHidden = true;
+        if (this.noteContext?.viewScope) {
+            this.noteContext.viewScope.tocTemporarilyHidden = true;
+        }
         await this.refresh();
         this.triggerCommand("reEvaluateRightPaneVisibility");
         appContext.triggerEvent("reEvaluateTocWidgetVisibility", { noteId: this.noteId });
     }
 
-    async showTocWidgetEvent({ noteId }) {
+    async showTocWidgetEvent({ noteId }: EventData<"showToc">) {
         if (this.noteId === noteId) {
             await this.refresh();
             this.triggerCommand("reEvaluateRightPaneVisibility");
         }
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.isNoteContentReloaded(this.noteId)) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (this.noteId && loadResults.isNoteContentReloaded(this.noteId)) {
             await this.refresh();
         } else if (
             loadResults
                 .getAttributeRows()
-                .find((attr) => attr.type === "label" && (attr.name.toLowerCase().includes("readonly") || attr.name === "toc") && attributeService.isAffecting(attr, this.note))
+                .find((attr) => attr.type === "label" && ((attr.name ?? "").toLowerCase().includes("readonly") || attr.name === "toc") && attributeService.isAffecting(attr, this.note))
         ) {
             await this.refresh();
         }

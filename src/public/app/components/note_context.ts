@@ -9,6 +9,7 @@ import hoistedNoteService from "../services/hoisted_note.js";
 import options from "../services/options.js";
 import type { ViewScope } from "../services/link.js";
 import type FNote from "../entities/fnote.js";
+import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 
 interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
@@ -288,7 +289,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     hasNoteList() {
         return (
             this.note &&
-            this.viewScope?.viewMode === "default" &&
+            ["default", "contextual-help"].includes(this.viewScope?.viewMode ?? "") &&
             this.note.hasChildren() &&
             ["book", "text", "code"].includes(this.note.type) &&
             this.note.mime !== "text/x-sqlite;schema=trilium" &&
@@ -319,6 +320,15 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         );
     }
 
+    /**
+     * Returns a promise which will retrieve the JQuery element of the content of this note context.
+     *
+     * Do note that retrieving the content element needs to be handled by the type widget, which is the one which
+     * provides the content element by listening to the `executeWithContentElement` event. Not all note types support
+     * this.
+     *
+     * If no content could be determined `null` is returned instead.
+     */
     async getContentElement() {
         return this.timeout<JQuery<HTMLElement>>(
             new Promise((resolve) =>
@@ -332,7 +342,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
     async getTypeWidget() {
         return this.timeout(
-            new Promise((resolve) =>
+            new Promise<TypeWidget | null>((resolve) =>
                 appContext.triggerCommand("executeWithTypeWidget", {
                     resolve,
                     ntxId: this.ntxId

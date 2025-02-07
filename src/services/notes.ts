@@ -146,7 +146,10 @@ function getAndValidateParent(params: GetValidateParams) {
     }
 
     if (!params.ignoreForbiddenParents) {
-        if (["_lbRoot", "_hidden"].includes(parentNote.noteId) || parentNote.noteId.startsWith("_lbTpl") || parentNote.isOptions()) {
+        if (["_lbRoot", "_hidden"].includes(parentNote.noteId)
+                || parentNote.noteId.startsWith("_lbTpl")
+                || parentNote.noteId.startsWith("_help")
+                || parentNote.isOptions()) {
             throw new ValidationError(`Creating child notes into '${parentNote.noteId}' is not allowed.`);
         }
     }

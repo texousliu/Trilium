@@ -25,14 +25,29 @@ async function getLinkIcon(noteId: string, viewMode: ViewMode | undefined) {
     return icon;
 }
 
-type ViewMode = "default" | "source" | "attachments" | string;
+// TODO: Remove `string` once all the view modes have been mapped.
+type ViewMode = "default" | "source" | "attachments" | "contextual-help" | string;
 
 export interface ViewScope {
+    /**
+     * - "source", when viewing the source code of a note.
+     * - "attachments", when viewing the attachments of a note.
+     * - "contextual-help", if the current view represents a help window that was opened to the side of the main content.
+     * - "default", otherwise.
+     */
     viewMode?: ViewMode;
     attachmentId?: string;
     readOnlyTemporarilyDisabled?: boolean;
     highlightsListPreviousVisible?: boolean;
     highlightsListTemporarilyHidden?: boolean;
+    tocTemporarilyHidden?: boolean;
+    /*
+     * The reason for adding tocPreviousVisible is to record whether the previous state of the toc is hidden or displayed,
+     * and then let it be displayed/hidden at the initial time. If there is no such value,
+     * when the right panel needs to display highlighttext but not toc, every time the note content is changed,
+     * toc will appear and then close immediately, because getToc(html) function will consume time
+     */
+    tocPreviousVisible?: boolean;
 }
 
 interface CreateLinkOptions {

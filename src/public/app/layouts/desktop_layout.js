@@ -86,6 +86,7 @@ import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolb
 import options from "../services/options.js";
 import utils from "../services/utils.js";
 import GeoMapButtons from "../widgets/floating_buttons/geo_map_button.js";
+import ContextualHelpButton from "../widgets/floating_buttons/help_button.js";
 
 export default class DesktopLayout {
     constructor(customWidgets) {
@@ -205,6 +206,7 @@ export default class DesktopLayout {
                                                                 .child(new CopyImageReferenceButton())
                                                                 .child(new SvgExportButton())
                                                                 .child(new BacklinksWidget())
+                                                                .child(new ContextualHelpButton())
                                                                 .child(new HideFloatingButtonsButton())
                                                         )
                                                         .child(new MermaidWidget())

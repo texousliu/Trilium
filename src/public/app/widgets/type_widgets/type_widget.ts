@@ -6,7 +6,7 @@ import type SpacedUpdate from "../../services/spaced_update.js";
 
 export default abstract class TypeWidget extends NoteContextAwareWidget {
 
-    protected spacedUpdate!: SpacedUpdate;
+    spacedUpdate!: SpacedUpdate;
 
     // for overriding
     static getType() {}
@@ -44,6 +44,14 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
     getData() {}
 
     focus() {}
+
+    scrollToEnd() {
+        // Do nothing by default.
+    }
+
+    dataSaved() {
+        // Do nothing by default.
+    }
 
     async readOnlyTemporarilyDisabledEvent({ noteContext }: EventData<"readOnlyTemporarilyDisabled">) {
         if (this.isNoteContext(noteContext.ntxId)) {

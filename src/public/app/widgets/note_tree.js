@@ -368,7 +368,11 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 const notePath = treeService.getNotePath(data.node);
 
                 const activeNoteContext = appContext.tabManager.getActiveContext();
-                await activeNoteContext.setNote(notePath);
+                const opts = {};
+                if (activeNoteContext.viewScope.viewMode === "contextual-help") {
+                    opts.viewScope = activeNoteContext.viewScope;
+                }
+                await activeNoteContext.setNote(notePath, opts);
             },
             expand: (event, data) => this.setExpanded(data.node.data.branchId, true),
             collapse: (event, data) => this.setExpanded(data.node.data.branchId, false),
@@ -550,7 +554,12 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                     $span.append($refreshSearchButton);
                 }
 
-                if (!["search", "launcher"].includes(note.type) && !note.isOptions() && !note.isLaunchBarConfig()) {
+                // TODO: Deduplicate with server's notes.ts#getAndValidateParent
+                if (!["search", "launcher"].includes(note.type)
+                        && !note.isOptions()
+                        && !note.isLaunchBarConfig()
+                        && !note.noteId.startsWith("_help")
+                    ) {
                     const $createChildNoteButton = $(`<span class="tree-item-button add-note-button bx bx-plus" title="${t("note_tree.create-child-note")}"></span>`).on(
                         "click",
                         cancelClickPropagation
