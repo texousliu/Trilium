@@ -63,8 +63,7 @@ module.exports = {
             name: "@electron-forge/maker-flatpak",
             config: {
                 options: {
-                    icon: "./images/app-icons/png/128x128.png",
-                    desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
+                    ...baseLinuxMakerConfigOptions,
                     id: "com.github.triliumnext.notes",
                     runtimeVersion: "24.08",
                     base: "org.electronjs.Electron2.BaseApp",
