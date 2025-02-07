@@ -54,9 +54,15 @@ const TPL = `<div class="toc-widget">
     <span class="toc"></span>
 </div>`;
 
+interface Toc {
+    $toc: JQuery<HTMLElement>,
+    headingCount: number
+}
+
 export default class TocWidget extends RightPanelWidget {
 
     private $toc!: JQuery<HTMLElement>;
+    private tocLabelValue?: string | null;
 
     get widgetTitle() {
         return t("toc.table_of_contents");
@@ -101,9 +107,9 @@ export default class TocWidget extends RightPanelWidget {
 
         this.toggleInt(!!this.noteContext?.viewScope?.tocPreviousVisible);
 
-        const tocLabel = note.getLabel("toc");
+        this.tocLabelValue = note.getLabelValue("toc");
 
-        if (tocLabel?.value === "hide") {
+        if (this.tocLabelValue === "hide") {
             this.toggleInt(false);
             this.triggerCommand("reEvaluateRightPaneVisibility");
             return;
@@ -113,36 +119,47 @@ export default class TocWidget extends RightPanelWidget {
             return;
         }
 
-        let $toc: JQuery<HTMLElement> | null = null;
-        let headingCount = 0;
-
         // Check for type text unconditionally in case alwaysShowWidget is set
         if (this.note.type === "text") {
             const blob = await note.getBlob();
             if (blob) {
-                ({ $toc, headingCount } = await this.getToc(blob.content));
+                const toc = await this.getToc(blob.content);
+                this.#updateToc(toc);
             }
-        } else if (this.note.type === "doc") {
-            const $contentEl = await this.noteContext.getContentElement();
-            if ($contentEl) {
-                const content = $contentEl.html();
-                ({ $toc, headingCount } = await this.getToc(content));
-            } else {
-                console.warn("Unable to get content element for doctype");
-            }
+            return;
         }
 
+        if (this.note.type === "doc") {
+            /**
+             * For document note types, we obtain the content directly from the DOM since it allows us to obtain processed data without
+             * requesting data twice. However, when immediately navigating to a new note the new document is not yet attached to the hierarchy,
+             * resulting in an empty TOC. The fix is to simply wait for it to pop up.
+             */
+            setTimeout(async () => {
+                const $contentEl = await this.noteContext?.getContentElement();
+                if ($contentEl) {
+                    const content = $contentEl.html();
+                    const toc = await this.getToc(content);
+                    this.#updateToc(toc);
+                } else {
+                    console.warn("Unable to get content element for doctype");
+                }
+            }, 10);
+        }
+    }
+
+    #updateToc({ $toc, headingCount }: Toc) {
         this.$toc.empty();
         if ($toc) {
             this.$toc.append($toc);
         }
 
-        if ((tocLabel?.value === "" || tocLabel?.value === "show") || headingCount >= (options.getInt("minTocHeadings") ?? 0)) {
-            this.toggleInt(true);
-            this.noteContext.viewScope.tocPreviousVisible = true;
-        } else {
-            this.toggleInt(false);
-            this.noteContext.viewScope.tocPreviousVisible = false;
+        const tocLabelValue = this.tocLabelValue;
+
+        const visible = (tocLabelValue === "" || tocLabelValue === "show") || headingCount >= (options.getInt("minTocHeadings") ?? 0);
+        this.toggleInt(visible);
+        if (this.noteContext?.viewScope) {
+            this.noteContext.viewScope.tocPreviousVisible = visible;
         }
 
         this.triggerCommand("reEvaluateRightPaneVisibility");
@@ -202,7 +219,7 @@ export default class TocWidget extends RightPanelWidget {
      *         with an onclick event that will cause the document to scroll to
      *         the desired position.
      */
-    async getToc(html: string) {
+    async getToc(html: string): Promise<Toc> {
         // Regular expression for headings <h1>...</h1> using non-greedy
         // matching and backreferences
         const headingTagsRegex = /<h(\d+)[^>]*>(.*?)<\/h\1>/gi;
@@ -251,7 +268,7 @@ export default class TocWidget extends RightPanelWidget {
         $toc = this.pullLeft($toc);
 
         return {
-            $toc: $toc,
+            $toc,
             headingCount
         };
     }
