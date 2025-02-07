@@ -65,7 +65,7 @@ module.exports = {
             config: {
                 options: {
                     ...baseLinuxMakerConfigOptions,
-                    id: "com.github.triliumnext.notes",
+                    id: "com.triliumnext.notes",
                     runtimeVersion: "24.08",
                     base: "org.electronjs.Electron2.BaseApp",
                     baseVersion: "24.08",
