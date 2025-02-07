@@ -289,7 +289,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     hasNoteList() {
         return (
             this.note &&
-            this.viewScope?.viewMode === "default" &&
+            ["default", "contextual-help"].includes(this.viewScope?.viewMode ?? "") &&
             this.note.hasChildren() &&
             ["book", "text", "code"].includes(this.note.type) &&
             this.note.mime !== "text/x-sqlite;schema=trilium" &&
