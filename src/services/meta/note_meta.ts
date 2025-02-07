@@ -8,10 +8,10 @@ export interface NoteMetaFile {
 }
 
 export default interface NoteMeta {
-    noteId: string;
+    noteId?: string;
     notePath?: string[];
     isClone?: boolean;
-    title: string;
+    title?: string;
     notePosition?: number;
     prefix?: string | null;
     isExpanded?: boolean;

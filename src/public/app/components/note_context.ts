@@ -9,6 +9,7 @@ import hoistedNoteService from "../services/hoisted_note.js";
 import options from "../services/options.js";
 import type { ViewScope } from "../services/link.js";
 import type FNote from "../entities/fnote.js";
+import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 
 interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
@@ -341,7 +342,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
     async getTypeWidget() {
         return this.timeout(
-            new Promise((resolve) =>
+            new Promise<TypeWidget | null>((resolve) =>
                 appContext.triggerCommand("executeWithTypeWidget", {
                     resolve,
                     ntxId: this.ntxId

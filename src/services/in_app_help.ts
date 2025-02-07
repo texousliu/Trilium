@@ -36,7 +36,7 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
     let iconClass: string = "bx bx-file";
     const item: HiddenSubtreeItem = {
         id: `_help_${noteMeta.noteId}`,
-        title: noteMeta.title,
+        title: noteMeta.title ?? "",
         type: "doc", // can change
         attributes: []
     };
