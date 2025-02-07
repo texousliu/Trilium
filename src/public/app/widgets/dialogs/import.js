@@ -18,7 +18,9 @@ const TPL = `
                     <div class="form-group">
                         <label for="import-file-upload-input"><strong>${t("import.chooseImportFile")}</strong></label>
 
-                        <input type="file" class="import-file-upload-input form-control-file" multiple />
+                        <label class="tn-file-input tn-input-field">
+                            <input type="file" class="import-file-upload-input form-control-file" multiple />
+                        </label>
 
                         <p>${t("import.importDescription")} <strong class="import-note-title"></strong>.
                     </div>

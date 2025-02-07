@@ -376,6 +376,10 @@ function linkContextMenu(e: PointerEvent) {
     const $link = $(e.target as any).closest("a");
     const url = $link.attr("href") || $link.attr("data-href");
 
+    if ($link.attr("data-no-context-menu")) {
+        return;
+    }
+
     const { notePath, viewScope } = parseNavigationStateFromUrl(url);
 
     if (!notePath) {

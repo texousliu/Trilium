@@ -33,9 +33,9 @@ const DROPDOWN_TPL = `
 
     <div class="calendar-header">
         <div class="calendar-month-selector">
-            <button class="calendar-btn bx bx-chevron-left" data-calendar-toggle="previous"></button>
+            <button class="calendar-btn tn-tool-button bx bx-chevron-left" data-calendar-toggle="previous"></button>
 
-            <button class="btn dropdown-toggle" type="button"
+            <button class="btn dropdown-toggle select-button" type="button"
                 data-bs-toggle="dropdown" data-bs-auto-close="true"
                 aria-expanded="false"
                 data-calendar-input="month"></button>
@@ -45,15 +45,15 @@ const DROPDOWN_TPL = `
                     .join("")}
             </ul>
 
-            <button class="calendar-btn bx bx-chevron-right" data-calendar-toggle="next"></button>
+            <button class="calendar-btn tn-tool-button bx bx-chevron-right" data-calendar-toggle="next"></button>
         </div>
 
         <div class="calendar-year-selector">
-            <button class="calendar-btn bx bx-chevron-left" data-calendar-toggle="previousYear"></button>
+            <button class="calendar-btn tn-tool-button bx bx-chevron-left" data-calendar-toggle="previousYear"></button>
 
             <input type="number" min="1900" max="2999" step="1" data-calendar-input="year" />
 
-            <button class="calendar-btn bx bx-chevron-right" data-calendar-toggle="nextYear"></button>
+            <button class="calendar-btn tn-tool-button bx bx-chevron-right" data-calendar-toggle="nextYear"></button>
         </div>
     </div>
 

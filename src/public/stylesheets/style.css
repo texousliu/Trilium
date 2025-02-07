@@ -1536,15 +1536,16 @@ textarea {
     display: none !important;
 }
 
+.attachment-actions-toolbar {
+    display: flex;
+    align-items: center;
+}
+
 .attachment-help-button {
-    font-size: xx-large;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    color: var(--main-text-color);
-    margin-left: 20px;
-    position: relative;
-    top: 8px;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+    font-size: 1em;
 }
 
 .jump-to-note-dialog .modal-header {

@@ -19,6 +19,9 @@
 
     --accented-background-color: #555;
 
+    --tool-dialog-background-color: #262626;
+    --tool-dialog-shadow-color: black;
+
     --button-text-color: currentColor;
 
     --cmd-button-background-color: #ffffff28;

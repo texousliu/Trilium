@@ -26,7 +26,7 @@ jobs:
             extension: [dmg, zip]
           - name: linux
             image: ubuntu-latest
-            extension: [deb, rpm, zip]
+            extension: [deb, rpm, zip, flatpak]
           - name: windows
             image: windows-latest
             extension: exe
@@ -53,6 +53,7 @@ jobs:
         with:
           name: TriliumNextNotes ${{ matrix.os.name }} ${{ matrix.arch }}.${{matrix.os.extension}}
           path: upload/*.${{ matrix.os.extension }}
+
   build_linux_server:
     name: Build Linux Server
     strategy:

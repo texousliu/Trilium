@@ -7,6 +7,7 @@ const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
   icon: "./images/app-icons/png/128x128.png",
   desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
+  categories: ["Office", "Utility"]
 };
 
 module.exports = {
@@ -57,6 +58,29 @@ module.exports = {
                 options: {
                   ...baseLinuxMakerConfigOptions
                 }
+            }
+        },
+        {
+            name: "@electron-forge/maker-flatpak",
+            config: {
+                options: {
+                    ...baseLinuxMakerConfigOptions,
+                    id: "com.triliumnext.notes",
+                    runtimeVersion: "24.08",
+                    base: "org.electronjs.Electron2.BaseApp",
+                    baseVersion: "24.08",
+                    baseFlatpakref: "https://flathub.org/repo/flathub.flatpakrepo",
+                    modules: [
+                        {
+                            name: "zypak",
+                            sources: {
+                                type: "git",
+                                url: "https://github.com/refi64/zypak",
+                                tag: "v2024.01.17"
+                            }
+                        }
+                    ]
+                },
             }
         },
         {

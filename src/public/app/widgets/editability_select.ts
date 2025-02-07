@@ -14,10 +14,14 @@ const TPL = `
     }
 
     .editability-dropdown .dropdown-item {
-        display: block !important;
+        display: flex !importamt;
     }
 
-    .editability-dropdown .dropdown-item div {
+    .editability-dropdown .dropdown-item > div {
+        margin-left: 10px;
+    }
+
+    .editability-dropdown .description {
         font-size: small;
         color: var(--muted-text-color);
         white-space: normal;
@@ -30,18 +34,24 @@ const TPL = `
     <div class="editability-dropdown dropdown-menu dropdown-menu-right tn-dropdown-list">
         <a class="dropdown-item" href="#" data-editability="auto">
             <span class="check">&check;</span>
-            ${t("editability_select.auto")}
-            <div>${t("editability_select.note_is_editable")}</div>
+            <div>
+                ${t("editability_select.auto")}
+                <div class="description">${t("editability_select.note_is_editable")}</div>
+            </div>
         </a>
         <a class="dropdown-item" href="#" data-editability="readOnly">
             <span class="check">&check;</span>
-            ${t("editability_select.read_only")}
-            <div>${t("editability_select.note_is_read_only")}</div>
+            <div>
+                ${t("editability_select.read_only")}
+                <div class="description">${t("editability_select.note_is_read_only")}</div>
+            </div>
         </a>
         <a class="dropdown-item" href="#" data-editability="autoReadOnlyDisabled">
             <span class="check">&check;</span>
-            ${t("editability_select.always_editable")}
-            <div>${t("editability_select.note_is_always_editable")}</div>
+            <div>
+                ${t("editability_select.always_editable")}
+                <div class="description">${t("editability_select.note_is_always_editable")}</div>
+            </div>
         </a>
     </div>
 </div>

@@ -23,7 +23,7 @@ jobs:
             extension: [dmg, zip]
           - name: linux
             image: ubuntu-latest
-            extension: [deb, rpm, zip]
+            extension: [deb, rpm, zip, flatpak]
           - name: windows
             image: windows-latest
             extension: exe
@@ -49,11 +49,14 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
+          make_latest: false
+          prerelease: true
+          draft: false
           fail_on_unmatched_files: true
           files: upload/*.*
           tag_name: nightly
           name: Nightly Build
+
   nightly-server:
     name: Deploy server nightly
     strategy:
@@ -77,7 +80,9 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
+          make_latest: false
+          prerelease: true
+          draft: false
           fail_on_unmatched_files: true
           files: upload/*.*
           tag_name: nightly

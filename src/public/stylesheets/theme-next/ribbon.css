@@ -1,4 +1,30 @@
 /*
+ * Basic properties
+ */
+
+/* Note type dropdown */
+
+div.note-type-dropdown .check {
+    margin-right: 6px;
+}
+
+ /* Editability dropdown */
+
+div.editability-dropdown a.dropdown-item {
+    padding: 4px 16px 4px 0;
+    align-items: start !important;
+}
+
+.editability-dropdown .dropdown-item .check {
+    margin-left: 4px;
+}
+
+.editability-dropdown .dropdown-item .description {
+    opacity: .75;
+    font-size: .85em;
+}
+
+/*
  * Owned attributes
  */
 
@@ -9,6 +35,11 @@
 
 .attribute-list .save-attributes-button {
     right: 30px;
+}
+
+/* Note path in attribute detail dialog */
+.attr-detail .note-path {
+    margin-left: 8px;
 }
 
 /*

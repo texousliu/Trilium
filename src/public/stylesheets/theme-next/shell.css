@@ -956,7 +956,7 @@ body.mobile .note-title {
  * supported when this class is used.
  */
 
-.dropdown-menu {
+.dropdown-menu:not(.static) {
     border-radius: var(--dropdown-border-radius);
     padding: var(--menu-padding-size) !important;
     font-size: 0.9rem !important;
@@ -1034,7 +1034,8 @@ body.mobile .dropdown-submenu:hover {
     background: transparent !important;
 }
 
-html body .dropdown-item.disabled {
+html body .dropdown-item.disabled,
+html body .dropdown-item[disabled] {
     color: var(--menu-text-color) !important;
     opacity: var(--menu-item-disabled-opacity);
 }
@@ -1087,6 +1088,20 @@ html body .dropdown-item.disabled {
     color: var(--menu-item-arrow-color) !important;
 }
 
+/* Static menus (used as a list, such as on the note revisions dialog) */
+body.desktop .dropdown-menu.static {
+    box-shadow: unset;
+    border-radius: 4px;
+    border: unset;
+    background-color: var(--card-background-color) !important;
+    padding: var(--menu-padding-size) !important;
+    user-select: none;
+}
+
+body.desktop .dropdown-menu.static .dropdown-item.active {
+    --active-item-text-color: var(--menu-text-color);
+}
+
 body.desktop .dropdown-menu .dropdown-toggle::after {
     height: 100%;
 }
@@ -1104,32 +1119,36 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
  */
 
 .calendar-dropdown-widget {
+    width: unset !important;
     padding: 12px;
     color: var(--calendar-color);
+    user-select: none;
 }
 
 .calendar-dropdown-widget .calendar-header {
     padding: 8px 0 20px 0;
-}
-
-.calendar-dropdown-widget .calendar-header input[type="number"] {
-    appearance: textfield !important;
-}
-
-.calendar-dropdown-widget .calendar-header input[type="number"]::-webkit-outer-spin-button,
-.calendar-dropdown-widget .calendar-header input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    gap: 10px;
 }
 
 .calendar-dropdown-widget .calendar-header input,
 .calendar-dropdown-widget .calendar-header [data-calendar-input="month"] {
-    /* TODO: Provide styling for background and states */
-    background: transparent !important;
-    border: unset;
+    --input-background-color: transparent;
+    --menu-background-color: transparent;
+
     text-align: center;
     font-size: 1.4em;
     font-weight: 300;
+}
+
+.calendar-dropdown-widget .calendar-header input:not(:focus) {
+    outline: 3px solid transparent;
+}
+
+.calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
+    --select-arrow-svg: ""; /* Disable the dropdown arrow */
+
+    min-width: 120px;
+    padding: 0 10px;
 }
 
 .calendar-dropdown-widget .calendar-header .dropdown-toggle::after {
@@ -1174,6 +1193,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     border-radius: 6px;
     background: var(--calendar-day-hover-background);
     color: var(--calendar-day-hover-color) !important;
+    text-decoration: unset;
 }
 
 /*
@@ -1186,13 +1206,25 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 .note-tooltip-content {
     padding: 8px;
+    min-height: 56px;
 }
 
-.note-tooltip-content .note-title-with-path {
+.note-tooltip-title .note-title-with-path {
     display: flex;
     flex-direction: column-reverse;
-    border-bottom: 2px solid currentColor;
+}
+
+.note-tooltip-title a {
+    color: inherit !important;
+}
+
+.note-tooltip-title.note-no-content {
+    margin: 0;
+}
+
+.note-tooltip-title:not(.note-no-content) .note-title-with-path {
     padding-bottom: 6px;
+    border-bottom: 2px solid currentColor;
 }
 
 .note-tooltip-content .note-path {

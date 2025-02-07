@@ -17,14 +17,16 @@ const TPL = `
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="upload-attachment-file-upload-input"><strong>${t("upload_attachments.choose_files")}</strong></label>
-                        <input type="file" class="upload-attachment-file-upload-input form-control-file" multiple />
+                            <label class="tn-file-input tn-input-field">
+                                <input type="file" class="upload-attachment-file-upload-input form-control-file" multiple />
+                            </label>
                         <p>${t("upload_attachments.files_will_be_uploaded")} <strong class="upload-attachment-note-title"></strong>.</p>
                     </div>
 
                     <div class="form-group">
                         <strong>${t("upload_attachments.options")}:</strong>
                         <div class="checkbox">
-                            <label data-bs-toggle="tooltip" title="${escapeQuotes(t("upload_attachments.tooltip"))}">
+                            <label class="tn-checkbox" data-bs-toggle="tooltip" title="${escapeQuotes(t("upload_attachments.tooltip"))}">
                                 <input class="shrink-images-checkbox form-check-input" value="1" type="checkbox" checked> <span>${t("upload_attachments.shrink_images")}</span>
                             </label>
                         </div>
