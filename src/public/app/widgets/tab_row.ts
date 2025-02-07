@@ -42,6 +42,7 @@ const TAB_ROW_TPL = `
         width: 100%;
         background: var(--main-background-color);
         overflow: hidden;
+        user-select: none;
     }
 
     .tab-row-widget.full-width {
