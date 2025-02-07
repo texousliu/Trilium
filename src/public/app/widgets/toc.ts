@@ -137,7 +137,7 @@ export default class TocWidget extends RightPanelWidget {
             this.$toc.append($toc);
         }
 
-        if (["", "show"].includes(tocLabel?.value ?? "") || headingCount >= (options.getInt("minTocHeadings") ?? 0)) {
+        if ((tocLabel?.value === "" || tocLabel?.value === "show") || headingCount >= (options.getInt("minTocHeadings") ?? 0)) {
             this.toggleInt(true);
             this.noteContext.viewScope.tocPreviousVisible = true;
         } else {
