@@ -379,12 +379,6 @@ div.quick-search .search-button.show {
     overflow: hidden;
 }
 
-/* The "Show in full search" button */
-.quick-search .dropdown-menu button {
-    padding: 0;
-    color: var(--menu-text-color) !important;
-}
-
 /*
  * Left pane
  */
