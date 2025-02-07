@@ -2,7 +2,7 @@ import assetPath from "../services/asset_path.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
-import { isDev } from "../services/utils.js";
+import { isDev, isElectron } from "../services/utils.js";
 import type serveStatic from "serve-static";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<any, Record<string, any>>>) => {
@@ -24,6 +24,12 @@ async function register(app: express.Application) {
 
         const frontendCompiler = webpack({
             mode: "development",
+            cache: {
+                type: "filesystem",
+                cacheDirectory: isElectron
+                    ? path.join(srcRoot, "..", "..", ".cache", "electron")
+                    : path.join(srcRoot, "..", ".cache", "server")
+            },
             entry: productionConfig.entry,
             module: productionConfig.module,
             resolve: productionConfig.resolve,

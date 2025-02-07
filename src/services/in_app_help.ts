@@ -28,7 +28,6 @@ function parseNoteMetaFile(noteMetaFile: NoteMetaFile): HiddenSubtreeItem[] {
 
     const metaRoot = noteMetaFile.files[0];
     const parsedMetaRoot = parseNoteMeta(metaRoot, "/" + (metaRoot.dirFileName ?? ""));
-    console.log(JSON.stringify(parsedMetaRoot, null, 4));
     return parsedMetaRoot.children ?? [];
 }
 
