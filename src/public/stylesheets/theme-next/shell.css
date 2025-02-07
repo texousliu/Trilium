@@ -1214,6 +1214,10 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     flex-direction: column-reverse;
 }
 
+.note-tooltip-title a {
+    color: inherit !important;
+}
+
 .note-tooltip-title.note-no-content {
     margin: 0;
 }

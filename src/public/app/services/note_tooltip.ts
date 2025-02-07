@@ -155,7 +155,7 @@ async function renderTooltip(note: FNote | null) {
         if (isContentEmpty) {
             classes.push("note-no-content");
         }
-        content = `<h5 class="${classes.join(" ")}">${noteTitleWithPathAsSuffix.prop("outerHTML")}</h5>`;
+        content = `<h5 class="${classes.join(" ")}"><a href="#${note.noteId}" data-no-context-menu="true">${noteTitleWithPathAsSuffix.prop("outerHTML")}</a></h5>`;
     }
 
     content = `${content}<div class="note-tooltip-attributes">${$renderedAttributes[0].outerHTML}</div>`;
