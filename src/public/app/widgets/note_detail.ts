@@ -156,7 +156,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             }
 
             // this is happening in update(), so note has been already set, and we need to reflect this
-            if (this.noteContext && this.noteContext.notePath) {
+            if (this.noteContext) {
                 await typeWidget.handleEvent("noteSwitched", {
                     noteContext: this.noteContext,
                     notePath: this.noteContext.notePath

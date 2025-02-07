@@ -256,7 +256,7 @@ type EventMappings = {
     };
     noteSwitched: {
         noteContext: NoteContext;
-        notePath: string | null;
+        notePath?: string | null;
     };
     noteSwitchedAndActivatedEvent: {
         noteContext: NoteContext;
