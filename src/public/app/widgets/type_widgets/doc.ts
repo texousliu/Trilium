@@ -42,6 +42,10 @@ const TPL = `<div class="note-detail-doc note-detail-printable">
         td img {
             max-width: 40vw;
         }
+
+        figure.table {
+            overflow: auto !important;
+        }
     </style>
 
     <div class="note-detail-doc-content"></div>
