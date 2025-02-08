@@ -1,23 +1,26 @@
 import { t } from "i18next";
 import type { HiddenSubtreeItem } from "./hidden_subtree.js";
 
-export const desktopAvailableLaunchers: HiddenSubtreeItem[] = [
-    {
-        id: "_lbBackInHistory",
+const sharedLaunchers: Record<string, Omit<HiddenSubtreeItem, "id">> = {
+    backInHistory: {
         title: t("hidden-subtree.go-to-previous-note-title"),
         type: "launcher",
         builtinWidget: "backInHistoryButton",
         icon: "bx bxs-chevron-left",
         attributes: [{ type: "label", name: "docName", value: "launchbar_history_navigation" }]
     },
-    {
-        id: "_lbForwardInHistory",
+    forwardInHistory: {
         title: t("hidden-subtree.go-to-next-note-title"),
         type: "launcher",
         builtinWidget: "forwardInHistoryButton",
         icon: "bx bxs-chevron-right",
         attributes: [{ type: "label", name: "docName", value: "launchbar_history_navigation" }]
-    },
+    }
+};
+
+export const desktopAvailableLaunchers: HiddenSubtreeItem[] = [
+    { id: "_lbBackInHistory", ...sharedLaunchers.backInHistory },
+    { id: "_lbForwardInHistory", ...sharedLaunchers.forwardInHistory },
     { id: "_lbBackendLog", title: t("hidden-subtree.backend-log-title"), type: "launcher", targetNoteId: "_backendLog", icon: "bx bx-terminal" }
 ];
 
@@ -64,21 +67,7 @@ export const mobileAvailableLaunchers: HiddenSubtreeItem[] = [
 ];
 
 export const mobileVisibleLaunchers: HiddenSubtreeItem[] = [
-    {
-        id: "_lbMobileBackInHistory",
-        title: t("hidden-subtree.go-to-previous-note-title"),
-        type: "launcher",
-        builtinWidget: "backInHistoryButton",
-        icon: "bx bxs-chevron-left",
-        attributes: [{ type: "label", name: "docName", value: "launchbar_history_navigation" }]
-    },
-    {
-        id: "_lbMobileForwardInHistory",
-        title: t("hidden-subtree.go-to-next-note-title"),
-        type: "launcher",
-        builtinWidget: "forwardInHistoryButton",
-        icon: "bx bxs-chevron-right",
-        attributes: [{ type: "label", name: "docName", value: "launchbar_history_navigation" }]
-    },
+    { id: "_lbMobileBackInHistory", ...sharedLaunchers.backInHistory },
+    { id: "_lbMobileForwardInHistory", ...sharedLaunchers.forwardInHistory },
     { id: "_lbMobileJumpTo", title: t("hidden-subtree.jump-to-note-title"), type: "launcher", command: "jumpToNote", icon: "bx bx-plus-circle" }
 ];
