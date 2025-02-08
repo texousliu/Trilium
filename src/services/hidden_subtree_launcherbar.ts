@@ -9,6 +9,12 @@ export default function buildLaunchBarConfig() {
             command: "createNoteIntoInbox",
             icon: "bx bx-file-blank"
         },
+        openToday: {
+            title: t("hidden-subtree.open-today-journal-note-title"),
+            type: "launcher",
+            builtinWidget: "todayInJournal",
+            icon: "bx bx-calendar-star"
+        },
         backInHistory: {
             title: t("hidden-subtree.go-to-previous-note-title"),
             type: "launcher",
@@ -61,7 +67,7 @@ export default function buildLaunchBarConfig() {
         },
         { id: "_lbSpacer1", title: t("hidden-subtree.spacer-title"), type: "launcher", builtinWidget: "spacer", baseSize: "50", growthFactor: "0" },
         { id: "_lbBookmarks", title: t("hidden-subtree.bookmarks-title"), type: "launcher", builtinWidget: "bookmarks", icon: "bx bx-bookmark" },
-        { id: "_lbToday", title: t("hidden-subtree.open-today-journal-note-title"), type: "launcher", builtinWidget: "todayInJournal", icon: "bx bx-calendar-star" },
+        { id: "_lbToday", ...sharedLaunchers.openToday },
         { id: "_lbSpacer2", title: t("hidden-subtree.spacer-title"), type: "launcher", builtinWidget: "spacer", baseSize: "0", growthFactor: "1" },
         { id: "_lbQuickSearch", title: t("hidden-subtree.quick-search-title"), type: "launcher", builtinWidget: "quickSearch", icon: "bx bx-rectangle" },
         { id: "_lbProtectedSession", title: t("hidden-subtree.protected-session-title"), type: "launcher", builtinWidget: "protectedSession", icon: "bx bx bx-shield-quarter" },
@@ -70,7 +76,8 @@ export default function buildLaunchBarConfig() {
     ]
 
     const mobileAvailableLaunchers: HiddenSubtreeItem[] = [
-        { id: "_lbMobileNewNote", ...sharedLaunchers.newNote }
+        { id: "_lbMobileNewNote", ...sharedLaunchers.newNote },
+        { id: "_lbMobileToday", ...sharedLaunchers.openToday }
     ];
 
     const mobileVisibleLaunchers: HiddenSubtreeItem[] = [
