@@ -45,7 +45,7 @@ kbd {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 1.5em;
+    font-size: 1.25em;
     padding-left: 0.5em;
     padding-right: 0.5em;
     color: var(--main-text-color);
