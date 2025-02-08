@@ -1082,6 +1082,29 @@ html body .dropdown-item[disabled] {
     color: var(--menu-item-arrow-color) !important;
 }
 
+/* Menu item group heading */
+
+/* The heading body */
+.dropdown-menu h6 {
+    position: relative;
+    background: transparent;
+    padding: 1em 8px 14px 8px;
+    text-transform: uppercase;
+    font-size: .8em;
+    letter-spacing: 1pt;
+    color: var(--menu-item-group-header-color) !important;
+}
+
+/* The delimiter line */
+.dropdown-menu h6::before {
+    content: "";
+    position: absolute;
+    bottom: 8px;
+    left: calc(0px - var(--menu-padding-size));
+    right: calc(0px - var(--menu-padding-size));
+    border-top: 1px solid var(--menu-item-delimiter-color);
+}
+
 /* Static menus (used as a list, such as on the note revisions dialog) */
 body.desktop .dropdown-menu.static {
     box-shadow: unset;
