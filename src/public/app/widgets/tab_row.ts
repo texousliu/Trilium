@@ -494,10 +494,6 @@ export default class TabRowWidget extends BasicWidget {
     }
 
     setupDraggabilly() {
-        if (utils.isMobile()) {
-            return;
-        }
-
         const tabEls = this.tabEls;
         const { tabPositions } = this.getTabPositions();
 
