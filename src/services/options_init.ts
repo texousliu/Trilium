@@ -105,6 +105,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "rightPaneVisible", value: "true", isSynced: false },
     { name: "nativeTitleBarVisible", value: "false", isSynced: false },
     { name: "eraseEntitiesAfterTimeInSeconds", value: "604800", isSynced: true }, // default is 7 days
+    { name: "eraseEntitiesAfterTimeScale", value: "86400", isSynced: true }, // default 86400 seconds = Day
     { name: "hideArchivedNotes_main", value: "false", isSynced: false },
     { name: "debugModeEnabled", value: "false", isSynced: false },
     { name: "headingStyle", value: "underline", isSynced: true },
