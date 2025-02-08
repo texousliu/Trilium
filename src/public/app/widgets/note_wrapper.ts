@@ -4,6 +4,7 @@ import attributeService from "../services/attributes.js";
 import type BasicWidget from "./basic_widget.js";
 import type { EventData } from "../components/app_context.js";
 import type NoteContext from "../components/note_context.js";
+import type FNote from "../entities/fnote.js";
 
 export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
 
@@ -47,7 +48,7 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
             return;
         }
 
-        this.$widget.toggleClass("full-content-width", ["image", "mermaid", "book", "render", "canvas", "webView", "mindMap", "geoMap"].includes(note.type) || !!note?.isLabelTruthy("fullContentWidth"));
+        this.$widget.toggleClass("full-content-width", this.#isFullWidthNote(note));
 
         this.$widget.addClass(note.getCssClass());
 
@@ -55,6 +56,18 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
         this.$widget.addClass(utils.getMimeTypeClass(note.mime));
 
         this.$widget.toggleClass("protected", note.isProtected);
+    }
+
+    #isFullWidthNote(note: FNote) {
+        if (["image", "mermaid", "book", "render", "canvas", "webView", "mindMap", "geoMap"].includes(note.type)) {
+            return true;
+        }
+
+        if (note.type === "file" && note.mime === "application/pdf") {
+            return true;
+        }
+
+        return !!note?.isLabelTruthy("fullContentWidth");
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
