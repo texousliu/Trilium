@@ -1,15 +1,21 @@
 import FlexContainer from "./containers/flex_container.js";
 import utils from "../services/utils.js";
 import attributeService from "../services/attributes.js";
+import type BasicWidget from "./basic_widget.js";
+import type { EventData } from "../components/app_context.js";
+import type NoteContext from "../components/note_context.js";
 
-export default class NoteWrapperWidget extends FlexContainer {
+export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
+
+    private noteContext?: NoteContext;
+
     constructor() {
         super("column");
 
         this.css("flex-grow", "1").collapsible();
     }
 
-    setNoteContextEvent({ noteContext }) {
+    setNoteContextEvent({ noteContext }: EventData<"setNoteContext">) {
         this.noteContext = noteContext;
 
         this.refresh();
@@ -51,7 +57,7 @@ export default class NoteWrapperWidget extends FlexContainer {
         this.$widget.toggleClass("protected", note.isProtected);
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         // listening on changes of note.type and CSS class
 
         const noteId = this.noteContext?.noteId;
