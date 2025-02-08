@@ -7,7 +7,7 @@ import log from "./log.js";
 import migrationService from "./migration.js";
 import { t } from "i18next";
 import { getHelpHiddenSubtreeData } from "./in_app_help.js";
-import * as launchbarConfig from "./hidden_subtree_launcherbar.js";
+import buildLaunchBarConfig from "./hidden_subtree_launcherbar.js";
 
 const LBTPL_ROOT = "_lbTplRoot";
 const LBTPL_BASE = "_lbTplBase";
@@ -59,6 +59,8 @@ enum Command {
 let hiddenSubtreeDefinition: HiddenSubtreeItem;
 
 function buildHiddenSubtreeDefinition(): HiddenSubtreeItem {
+    const launchbarConfig = buildLaunchBarConfig();
+
     return {
         id: "_hidden",
         title: t("hidden-subtree.root-title"),
