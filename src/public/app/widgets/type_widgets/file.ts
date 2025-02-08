@@ -16,6 +16,10 @@ const TPL = `
             height: 100%;
         }
 
+        .note-split.full-content-width .note-detail-file {
+            padding: 0;
+        }
+
         .file-preview-content {
             background-color: var(--accented-background-color);
             padding: 15px;
