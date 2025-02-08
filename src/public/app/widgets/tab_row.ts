@@ -9,11 +9,13 @@ import froca from "../services/froca.js";
 import attributeService from "../services/attributes.js";
 import type NoteContext from "../components/note_context.js";
 
+const isDesktop = utils.isDesktop();
+
 const TAB_CONTAINER_MIN_WIDTH = 24;
 const TAB_CONTAINER_MAX_WIDTH = 240;
 const TAB_CONTAINER_LEFT_PADDING = 5;
 const NEW_TAB_WIDTH = 32;
-const MIN_FILLER_WIDTH = 50;
+const MIN_FILLER_WIDTH = (isDesktop ? 50 : 15);
 const MARGIN_WIDTH = 5;
 
 const TAB_SIZE_SMALL = 84;
@@ -97,6 +99,10 @@ const TAB_ROW_TPL = `
         position: absolute;
         left: 0;
         height: 100%;
+    }
+
+    body.mobile .tab-row-filler {
+        display: none;
     }
 
     .tab-row-widget .note-tab[active] {
@@ -186,7 +192,7 @@ const TAB_ROW_TPL = `
         background-color: var(--tab-background-color, var(--active-tab-hover-background-color));
     }
 
-    .tab-row-widget .note-tab .note-tab-close:hover {
+    body.desktop .tab-row-widget .note-tab .note-tab-close:hover {
         background-color: var(--hover-item-background-color);
         color: var(--hover-item-text-color);
     }
