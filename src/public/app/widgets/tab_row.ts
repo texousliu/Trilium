@@ -28,7 +28,7 @@ const TAB_TPL = `
     <div class="note-tab-drag-handle"></div>
     <div class="note-tab-icon"></div>
     <div class="note-tab-title"></div>
-    <div class="note-tab-close bx bx-x" title="${t("tab_row.close_tab")}" data-trigger-command="closeActiveTab"></div>
+    <div class="note-tab-close bx bx-x" title="${t("tab_row.close_tab")}"></div>
   </div>
 </div>`;
 
@@ -429,6 +429,11 @@ export default class TabRowWidget extends BasicWidget {
 
                 return true; // event has been handled
             }
+        });
+
+        $tab.find(".note-tab-close").on("click", (e) => {
+            this.triggerCommand("closeActiveTab", { $el: $(e.target) });
+            return true;
         });
     }
 
