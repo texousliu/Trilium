@@ -28,6 +28,12 @@ export default function buildLaunchBarConfig() {
             builtinWidget: "forwardInHistoryButton",
             icon: "bx bxs-chevron-right",
             attributes: [{ type: "label", name: "docName", value: "launchbar_history_navigation" }]
+        },
+        calendar: {
+            title: t("hidden-subtree.calendar-title"),
+            type: "launcher",
+            builtinWidget: "calendar",
+            icon: "bx bx-calendar"
         }
     };
 
@@ -56,7 +62,7 @@ export default function buildLaunchBarConfig() {
             attributes: [{ type: "label", name: "desktopOnly" }]
         },
         { id: "_lbNoteMap", title: t("hidden-subtree.note-map-title"), type: "launcher", targetNoteId: "_globalNoteMap", icon: "bx bxs-network-chart" },
-        { id: "_lbCalendar", title: t("hidden-subtree.calendar-title"), type: "launcher", builtinWidget: "calendar", icon: "bx bx-calendar" },
+        { id: "_lbCalendar", ...sharedLaunchers.calendar },
         {
             id: "_lbRecentChanges",
             title: t("hidden-subtree.recent-changes-title"),
@@ -83,7 +89,8 @@ export default function buildLaunchBarConfig() {
     const mobileVisibleLaunchers: HiddenSubtreeItem[] = [
         { id: "_lbMobileBackInHistory", ...sharedLaunchers.backInHistory },
         { id: "_lbMobileForwardInHistory", ...sharedLaunchers.forwardInHistory },
-        { id: "_lbMobileJumpTo", title: t("hidden-subtree.jump-to-note-title"), type: "launcher", command: "jumpToNote", icon: "bx bx-plus-circle" }
+        { id: "_lbMobileJumpTo", title: t("hidden-subtree.jump-to-note-title"), type: "launcher", command: "jumpToNote", icon: "bx bx-plus-circle" },
+        { id: "_lbMobileCalendar", ...sharedLaunchers.calendar }
     ];
 
     return {

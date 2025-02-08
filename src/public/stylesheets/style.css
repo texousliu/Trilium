@@ -1302,7 +1302,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     background-color: var(--left-pane-background-color);
 }
 
-body.mobile #launcher-pane .dropdown.global-menu > .dropdown-menu.show {
+body.mobile #launcher-pane .dropdown.global-menu > .dropdown-menu.show,
+body.mobile #launcher-container .dropdown > .dropdown-menu.show {
     position: fixed !important;
     bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size)) !important;
     top: unset !important;
