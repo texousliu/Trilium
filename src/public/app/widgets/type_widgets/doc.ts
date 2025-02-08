@@ -79,6 +79,7 @@ export default class DocTypeWidget extends TypeWidget {
                 });
             } else {
                 this.$content.empty();
+                resolve();
             }
         });
     }
