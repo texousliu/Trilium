@@ -1423,10 +1423,21 @@ body.mobile #launcher-pane .dropdown.global-menu > .dropdown-menu.show {
         width: 100vw;
         transform: none !important;
         background-color: var(--left-pane-background-color) !important;
+        border-bottom: 0.5px solid var(--main-border-color);
+    }
+
+    body.mobile.force-fixed-tree #mobile-sidebar-container {
+        display: none !important;
     }
 
     body.mobile.force-fixed-tree #mobile-sidebar-wrapper .quick-search {
         display: none;
+    }
+
+    body.mobile.force-fixed-tree .component > button.bx-sidebar {
+        visibility: hidden;
+        padding: 0;
+        width: 6px;
     }
 
     body.mobile.force-fixed-tree #mobile-rest-container {
