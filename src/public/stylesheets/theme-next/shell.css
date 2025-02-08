@@ -1020,10 +1020,6 @@ body.mobile .dropdown-item:not(:last-of-type) {
     margin-bottom: 0.5em;
 }
 
-body.mobile #launcher-pane .dropdown-submenu > .dropdown-toggle {
-    display: none;
-}
-
 body.mobile .dropdown-submenu:hover {
     background: transparent !important;
 }

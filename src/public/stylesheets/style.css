@@ -357,8 +357,8 @@ body.desktop .dropdown-menu {
     visibility: hidden;
 }
 
-.dropdown-menu:not(#context-menu-container) .dropdown-item,
-#context-menu-container .dropdown-item > span {
+body.desktop .dropdown-menu:not(#context-menu-container) .dropdown-item,
+body.desktop #context-menu-container .dropdown-item > span {
     display: flex;
     align-items: center;
 }
@@ -1302,7 +1302,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     background-color: var(--left-pane-background-color);
 }
 
-body.mobile #launcher-pane .dropdown-menu.show {
+body.mobile #launcher-pane .dropdown.global-menu > .dropdown-menu.show {
     position: fixed !important;
     bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size)) !important;
     top: unset !important;
