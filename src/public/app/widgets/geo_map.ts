@@ -11,6 +11,11 @@ const TPL = `\
             height: 100%;
             overflow: hidden;
         }
+
+        .leaflet-top,
+        .leaflet-bottom {
+            z-index: 900;
+        }
     </style>
 
     <div class="geo-map-container"></div>
