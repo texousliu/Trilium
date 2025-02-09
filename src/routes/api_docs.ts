@@ -12,11 +12,11 @@ const swaggerDocument = yaml.load(
 
 function register(router: Router) {
     router.use(
-        "/api-docs",
+        "/etapi",
         swaggerUi.serve,
         swaggerUi.setup(swaggerDocument, {
             explorer: true,
-            customSiteTitle: "Trilium ETAPI Documentation"
+            customSiteTitle: "TriliumNext ETAPI Documentation"
         })
     );
 }
