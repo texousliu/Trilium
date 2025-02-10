@@ -32,7 +32,7 @@ export interface TriliumConfig {
         keyPath: string;
         trustedReverseProxy: boolean | string;
     };
-    Cookies: {
+    Session: {
         cookiePath: string;
     }
     Sync: {
@@ -79,9 +79,9 @@ const config: TriliumConfig = {
             process.env.TRILIUM_NETWORK_TRUSTEDREVERSEPROXY || iniConfig.Network.trustedReverseProxy || false
     },
 
-    Cookies: {
+    Session: {
         cookiePath:
-            process.env.TRILIUM_COOKIES_COOKIEPATH || iniConfig?.Cookies?.cookiePath || "/"
+            process.env.TRILIUM_SESSION_COOKIEPATH || iniConfig?.Session?.cookiePath || "/"
     },
 
     Sync: {

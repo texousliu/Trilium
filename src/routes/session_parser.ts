@@ -10,7 +10,7 @@ const sessionParser = session({
     resave: false, // true forces the session to be saved back to the session store, even if the session was never modified during the request.
     saveUninitialized: false, // true forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified.
     cookie: {
-        path: config.Cookies.cookiePath,
+        path: config.Session.cookiePath,
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000 // in milliseconds
     },
