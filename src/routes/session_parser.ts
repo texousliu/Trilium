@@ -16,7 +16,7 @@ const sessionParser = session({
     },
     name: "trilium.sid",
     store: new FileStore({
-        ttl: 30 * 24 * 3600,
+        ttl: config.Session.cookieMaxAge / 1000, // needs value in seconds
         path: `${dataDir.TRILIUM_DATA_DIR}/sessions`
     })
 });
