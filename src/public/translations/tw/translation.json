@@ -1112,7 +1112,7 @@
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "筆記清理超時",
     "note_erasure_description": "被刪除的筆記（以及屬性、歷史版本等）最初僅被標記為「刪除」，可以從「最近修改」對話框中恢復它們。經過一段時間後，已刪除的筆記會被「清理」，這意味著它們的內容將無法恢復。此設定允許您設定從刪除到清除筆記之間的時間長度。",
-    "erase_notes_after_x_seconds": "在筆記刪除 X 秒後清理",
+    "erase_notes_after": "Erase notes after",
     "manual_erasing_description": "您還可以手動觸發清理（不考慮上述定義的超時）：",
     "erase_deleted_notes_now": "立即清理已刪除的筆記",
     "deleted_notes_erased": "已刪除的筆記已被清理。"

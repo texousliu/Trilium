@@ -1134,7 +1134,7 @@
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "笔记清理超时",
     "note_erasure_description": "被删除的笔记（以及属性、历史版本等）最初仅被标记为“删除”，可以从“最近修改”对话框中恢复它们。经过一段时间后，已删除的笔记会被“清理”，这意味着它们的内容将无法恢复。此设置允许您配置从删除到清除笔记之间的时间长度。",
-    "erase_notes_after_x_seconds": "在笔记删除 X 秒后清理",
+    "erase_notes_after": "Erase notes after",
     "manual_erasing_description": "您还可以手动触发清理（不考虑上述定义的超时）：",
     "erase_deleted_notes_now": "立即清理已删除的笔记",
     "deleted_notes_erased": "已删除的笔记已被清理。"

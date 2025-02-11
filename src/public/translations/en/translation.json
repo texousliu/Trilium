@@ -1158,7 +1158,7 @@
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "Note Erasure Timeout",
     "note_erasure_description": "Deleted notes (and attributes, revisions...) are at first only marked as deleted and it is possible to recover them from Recent Notes dialog. After a period of time, deleted notes are \"erased\" which means their content is not recoverable anymore. This setting allows you to configure the length of the period between deleting and erasing the note.",
-    "erase_notes_after_x_seconds": "Erase notes after X seconds",
+    "erase_notes_after": "Erase notes after",
     "manual_erasing_description": "You can also trigger erasing manually (without considering the timeout defined above):",
     "erase_deleted_notes_now": "Erase deleted notes now",
     "deleted_notes_erased": "Deleted notes have been erased."
