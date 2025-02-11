@@ -184,17 +184,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
             logInfo("Creating new CKEditor");
-            const extraOpts = {};
-            if (isClassicEditor) {
-                extraOpts.toolbar = {
-                    ...buildToolbarConfig(),
-                    shouldNotGroupWhenFull: utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true"
-                };
-            }
 
             const editor = await editorClass.create(elementOrData, {
                 ...editorConfig,
-                ...extraOpts,
+                ...buildToolbarConfig(),
                 htmlSupport: {
                     allow: JSON.parse(options.get("allowedHtmlTags")),
                     styles: true,
