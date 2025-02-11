@@ -283,10 +283,6 @@ input::selection,
 
 /* Combo box-like dropdown buttons */
 
-.select-button.dropdown-toggle {
-    padding-right: 40px;
-}
-
 .select-button.dropdown-toggle::after {
     /* Remove the original arrow */
     content: unset;
@@ -300,6 +296,7 @@ select.form-control,
 .select-button.dropdown-toggle.btn {
     outline: 3px solid transparent;
     outline-offset: 6px;
+    padding-right: calc(15px + 1.5rem);
     background: var(--input-background-color)
                 var(--select-arrow-svg) right 0.75rem center/15px 20px no-repeat;
     color: var(--input-text-color);
