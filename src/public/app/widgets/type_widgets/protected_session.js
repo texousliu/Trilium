@@ -48,4 +48,8 @@ export default class ProtectedSessionTypeWidget extends TypeWidget {
 
         super.doRender();
     }
+
+    async doRefresh(note) {
+        // do nothing
+    }
 }
