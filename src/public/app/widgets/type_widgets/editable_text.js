@@ -15,6 +15,7 @@ import options from "../../services/options.js";
 import toast from "../../services/toast.js";
 import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
+import { buildToolbarConfig } from "./ckeditor/toolbars.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -186,6 +187,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const extraOpts = {};
             if (isClassicEditor) {
                 extraOpts.toolbar = {
+                    ...buildToolbarConfig(),
                     shouldNotGroupWhenFull: utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true"
                 };
             }
