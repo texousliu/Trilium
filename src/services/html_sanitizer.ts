@@ -2,6 +2,16 @@ import sanitizeHtml from "sanitize-html";
 import sanitizeUrl from "@braintree/sanitize-url";
 import optionService from "./options.js";
 
+// Be consistent with `ALLOWED_PROTOCOLS` in `src\public\app\services\link.js`
+// TODO: Deduplicate with client once we can.
+export const ALLOWED_PROTOCOLS = [
+    'http', 'https', 'ftp', 'ftps', 'mailto', 'data', 'evernote', 'file', 'facetime', 'gemini', 'git',
+    'gopher', 'imap', 'irc', 'irc6', 'jabber', 'jar', 'lastfm', 'ldap', 'ldaps', 'magnet', 'message',
+    'mumble', 'nfs', 'onenote', 'pop', 'rmi', 's3', 'sftp', 'skype', 'sms', 'spotify', 'steam', 'svn', 'udp',
+    'view-source', 'vlc', 'vnc', 'ws', 'wss', 'xmpp', 'jdbc', 'slack', 'tel', 'smb', 'zotero', 'geo',
+    'mid'
+];
+
 // Default list of allowed HTML tags
 export const DEFAULT_ALLOWED_TAGS = [
     "h1",
@@ -138,56 +148,7 @@ function sanitize(dirtyHtml: string) {
             "*": ["class", "style", "title", "src", "href", "hash", "disabled", "align", "alt", "center", "data-*"],
             input: ["type", "checked"]
         },
-        // Be consistent with `allowedSchemes` in `src\public\app\services\link.js`
-        allowedSchemes: [
-            "http",
-            "https",
-            "ftp",
-            "ftps",
-            "mailto",
-            "data",
-            "evernote",
-            "file",
-            "facetime",
-            "gemini",
-            "git",
-            "gopher",
-            "imap",
-            "irc",
-            "irc6",
-            "jabber",
-            "jar",
-            "lastfm",
-            "ldap",
-            "ldaps",
-            "magnet",
-            "message",
-            "mumble",
-            "nfs",
-            "onenote",
-            "pop",
-            "rmi",
-            "s3",
-            "sftp",
-            "skype",
-            "sms",
-            "spotify",
-            "steam",
-            "svn",
-            "udp",
-            "view-source",
-            "vlc",
-            "vnc",
-            "ws",
-            "wss",
-            "xmpp",
-            "jdbc",
-            "slack",
-            "tel",
-            "smb",
-            "zotero",
-            "geo"
-        ],
+        allowedSchemes: ALLOWED_PROTOCOLS,
         nonTextTags: ["head"],
         transformTags
     });

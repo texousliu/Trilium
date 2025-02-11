@@ -71,7 +71,7 @@ import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 
-
+import apiDocsRoute from "./api_docs.js";
 
 const MAX_ALLOWED_FILE_SIZE_MB = 250;
 const GET = "get",
@@ -368,6 +368,9 @@ function register(app: express.Application) {
     etapiSpecialNoteRoutes.register(router);
     etapiSpecRoute.register(router);
     etapiBackupRoute.register(router);
+
+    // API Documentation
+    apiDocsRoute.register(app);
 
     app.use("", router);
 }

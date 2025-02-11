@@ -17,7 +17,7 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         return super.doRender();
     }
 
-    abstract doRefresh(note: FNote | null | undefined): Promise<void>;
+    doRefresh(note: FNote | null | undefined) {}
 
     async refresh() {
         const thisWidgetType = (this.constructor as any).getType();

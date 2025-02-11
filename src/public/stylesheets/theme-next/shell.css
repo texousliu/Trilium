@@ -462,7 +462,7 @@ body.mobile .fancytree-node > span {
         background-color: rgba(0, 0, 0, 0.5);
     }
 
-    body.mobile #mobile-sidebar-wrapper {
+    body.mobile:not(.force-fixed-tree) #mobile-sidebar-wrapper {
         border-top-right-radius: 12px;
         border-bottom-right-radius: 12px;
         border-right: 1px solid var(--subtle-border-color);
@@ -1020,10 +1020,6 @@ body.mobile .dropdown-item:not(:last-of-type) {
     margin-bottom: 0.5em;
 }
 
-body.mobile #launcher-pane .dropdown-submenu > .dropdown-toggle {
-    display: none;
-}
-
 body.mobile .dropdown-submenu:hover {
     background: transparent !important;
 }
@@ -1162,10 +1158,26 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
 }
 
 .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
-    --select-arrow-svg: ""; /* Disable the dropdown arrow */
+    --select-arrow-svg: ""; /* Disable the dropdown arrow */    
+}
 
-    min-width: 120px;
-    padding: 0 10px;
+@media (max-width: 992px) {
+    .calendar-dropdown-widget .calendar-header button {
+        margin: 0 !important;
+        padding: 0;
+    }
+
+    .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
+        padding: 0 8px;
+        flex-grow: 1;
+    }
+}
+
+@media (min-width: 992px) {
+    .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
+        min-width: 120px;
+        padding: 0 10px;
+    }
 }
 
 .calendar-dropdown-widget .calendar-header .dropdown-toggle::after {
