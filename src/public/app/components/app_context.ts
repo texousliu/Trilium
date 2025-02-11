@@ -80,6 +80,7 @@ export type CommandMappings = {
     };
     closeTocCommand: CommandData;
     showLaunchBarSubtree: CommandData;
+    showRevisions: CommandData;
     showOptions: CommandData & {
         section: string;
     };

@@ -28,6 +28,10 @@ const TPL = `
 </div>`;
 
 export default class ProtectedSessionTypeWidget extends TypeWidget {
+
+    private $passwordForm!: JQuery<HTMLElement>;
+    private $passwordInput!: JQuery<HTMLElement>;
+
     static getType() {
         return "protectedSession";
     }
@@ -38,7 +42,7 @@ export default class ProtectedSessionTypeWidget extends TypeWidget {
         this.$passwordInput = this.$widget.find(".protected-session-password");
 
         this.$passwordForm.on("submit", () => {
-            const password = this.$passwordInput.val();
+            const password = String(this.$passwordInput.val());
             this.$passwordInput.val("");
 
             protectedSessionService.setupProtectedSession(password);

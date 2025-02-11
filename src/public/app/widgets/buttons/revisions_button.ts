@@ -9,6 +9,6 @@ export default class RevisionsButton extends CommandButtonWidget {
     }
 
     isEnabled() {
-        return super.isEnabled() && !["launcher", "doc"].includes(this.note?.type);
+        return super.isEnabled() && !["launcher", "doc"].includes(this.note?.type ?? "");
     }
 }
