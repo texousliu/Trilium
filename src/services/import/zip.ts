@@ -302,7 +302,9 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
         });
 
         if (taskContext.data?.safeImport) {
+            console.log("Before", content);
             content = htmlSanitizer.sanitize(content);
+            console.log("After", content);
         }
 
         content = content.replace(/<html.*<body[^>]*>/gis, "");

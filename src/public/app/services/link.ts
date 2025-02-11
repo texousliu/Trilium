@@ -4,6 +4,15 @@ import appContext, { type NoteCommandData } from "../components/app_context.js";
 import froca from "./froca.js";
 import utils from "./utils.js";
 
+// Be consistent with `allowedSchemes` in `src\services\html_sanitizer.ts`
+// TODO: Deduplicate with server once we can.
+export const ALLOWED_PROTOCOLS = [
+    'http', 'https', 'ftp', 'ftps', 'mailto', 'data', 'evernote', 'file', 'facetime', 'gemini', 'git',
+    'gopher', 'imap', 'irc', 'irc6', 'jabber', 'jar', 'lastfm', 'ldap', 'ldaps', 'magnet', 'message',
+    'mumble', 'nfs', 'onenote', 'pop', 'rmi', 's3', 'sftp', 'skype', 'sms', 'spotify', 'steam', 'svn', 'udp',
+    'view-source', 'vlc', 'vnc', 'ws', 'wss', 'xmpp', 'jdbc', 'slack', 'tel', 'smb', 'zotero', 'geo'
+];
+
 function getNotePathFromUrl(url: string) {
     const notePathMatch = /#(root[A-Za-z0-9_/]*)$/.exec(url);
 
@@ -296,58 +305,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
                 electron.shell.openPath(hrefLink);
             } else {
                 // Enable protocols supported by CKEditor 5 to be clickable.
-                // Refer to `allowedProtocols` in https://github.com/TriliumNext/trilium-ckeditor5/blob/main/packages/ckeditor5-build-balloon-block/src/ckeditor.ts.
-                // And be consistent with `allowedSchemes` in `src\services\html_sanitizer.ts`
-                const allowedSchemes = [
-                    "http",
-                    "https",
-                    "ftp",
-                    "ftps",
-                    "mailto",
-                    "data",
-                    "evernote",
-                    "file",
-                    "facetime",
-                    "gemini",
-                    "git",
-                    "gopher",
-                    "imap",
-                    "irc",
-                    "irc6",
-                    "jabber",
-                    "jar",
-                    "lastfm",
-                    "ldap",
-                    "ldaps",
-                    "magnet",
-                    "message",
-                    "mumble",
-                    "nfs",
-                    "onenote",
-                    "pop",
-                    "rmi",
-                    "s3",
-                    "sftp",
-                    "skype",
-                    "sms",
-                    "spotify",
-                    "steam",
-                    "svn",
-                    "udp",
-                    "view-source",
-                    "vlc",
-                    "vnc",
-                    "ws",
-                    "wss",
-                    "xmpp",
-                    "jdbc",
-                    "slack",
-                    "tel",
-                    "smb",
-                    "zotero",
-                    "geo"
-                ];
-                if (allowedSchemes.some((protocol) => hrefLink.toLowerCase().startsWith(protocol + ":"))) {
+                if (ALLOWED_PROTOCOLS.some((protocol) => hrefLink.toLowerCase().startsWith(protocol + ":"))) {
                     window.open(hrefLink, "_blank");
                 }
             }

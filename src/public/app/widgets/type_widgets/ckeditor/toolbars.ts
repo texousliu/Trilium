@@ -1,3 +1,4 @@
+import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import options from "../../../services/options.js";
 import utils from "../../../services/utils.js";
 
@@ -101,12 +102,7 @@ export function buildConfig() {
         },
         link: {
             defaultProtocol: 'https://',
-            allowedProtocols: [
-                'http', 'https', 'ftp', 'ftps', 'mailto', 'data', 'evernote', 'file', 'facetime', 'gemini', 'git',
-                'gopher', 'imap', 'irc', 'irc6', 'jabber', 'jar', 'lastfm', 'ldap', 'ldaps', 'magnet', 'message',
-                'mumble', 'nfs', 'onenote', 'pop', 'rmi', 's3', 'sftp', 'skype', 'sms', 'spotify', 'steam', 'svn', 'udp',
-                'view-source', 'vlc', 'vnc', 'ws', 'wss', 'xmpp', 'jdbc', 'slack', 'tel', 'smb', 'zotero', 'geo'
-              ]
+            allowedProtocols: ALLOWED_PROTOCOLS
         },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: 'en'
