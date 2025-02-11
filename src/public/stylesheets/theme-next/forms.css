@@ -294,11 +294,13 @@ select,
 select.form-select,
 select.form-control,
 .select-button.dropdown-toggle.btn {
+    --dropdown-arrow: var(--select-arrow-svg) right 0.75rem center/15px 20px no-repeat;
+
     outline: 3px solid transparent;
     outline-offset: 6px;
     padding-right: calc(15px + 1.5rem);
     background: var(--input-background-color)
-                var(--select-arrow-svg) right 0.75rem center/15px 20px no-repeat;
+                var(--dropdown-arrow);
     color: var(--input-text-color);
     border: unset;
     border-radius: 0.375rem;
@@ -308,7 +310,8 @@ select:hover,
 select.form-select:hover,
 select.form-control:hover,
 .select-button.dropdown-toggle.btn:hover {
-    background-color: var(--input-hover-background);
+    background: var(--input-hover-background)
+                var(--dropdown-arrow);
     color: var(--input-hover-color);
 }
 
@@ -324,7 +327,8 @@ select.form-control:focus,
     box-shadow: unset;
     outline: 3px solid var(--input-focus-outline-color);
     outline-offset: 0;
-    background-color: var(--select-focus-background);
+    background: var(--select-focus-background)
+                var(--dropdown-arrow);
     color: var(--select-focus-text-color);
     transition: outline-color 50ms linear,
                 outline-offset 200ms ease-out;
