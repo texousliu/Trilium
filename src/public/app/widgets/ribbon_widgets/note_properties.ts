@@ -1,3 +1,4 @@
+import type FNote from "../../entities/fnote.js";
 import { t } from "../../services/i18n.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
@@ -19,6 +20,9 @@ const TPL = `
  * TODO: figure out better name or conceptualize better.
  */
 export default class NotePropertiesWidget extends NoteContextAwareWidget {
+
+    private $pageUrl!: JQuery<HTMLElement>;
+
     isEnabled() {
         return this.note && !!this.note.getLabelValue("pageUrl");
     }
@@ -39,9 +43,9 @@ export default class NotePropertiesWidget extends NoteContextAwareWidget {
         this.$pageUrl = this.$widget.find(".page-url");
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         const pageUrl = note.getLabelValue("pageUrl");
 
-        this.$pageUrl.attr("href", pageUrl).attr("title", pageUrl).text(pageUrl);
+        this.$pageUrl.attr("href", pageUrl).attr("title", pageUrl).text(pageUrl ?? "");
     }
 }

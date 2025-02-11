@@ -10,7 +10,10 @@ import QuickSearchWidget from "./quick_search.js";
  * - Hiding the widget on mobile.
  */
 export default class QuickSearchLauncherWidget extends QuickSearchWidget {
-    constructor(isHorizontalLayout) {
+
+    private isHorizontalLayout: boolean;
+
+    constructor(isHorizontalLayout: boolean) {
         super();
         this.isHorizontalLayout = isHorizontalLayout;
     }

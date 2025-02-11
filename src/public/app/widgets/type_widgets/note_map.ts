@@ -1,9 +1,13 @@
 import TypeWidget from "./type_widget.js";
 import NoteMapWidget from "../note_map.js";
+import type FNote from "../../entities/fnote.js";
 
 const TPL = `<div class="note-detail-note-map note-detail-printable"></div>`;
 
 export default class NoteMapTypeWidget extends TypeWidget {
+
+    private noteMapWidget: NoteMapWidget;
+
     static getType() {
         return "noteMap";
     }
@@ -22,7 +26,7 @@ export default class NoteMapTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         await this.noteMapWidget.refresh();
     }
 }

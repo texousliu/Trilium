@@ -1,15 +1,19 @@
 import froca from "../../services/froca.js";
 import attributeService from "../../services/attributes.js";
 import CommandButtonWidget from "./command_button.js";
+import type { EventData } from "../../components/app_context.js";
+
+export type ButtonNoteIdProvider = () => string;
 
 export default class ButtonFromNoteWidget extends CommandButtonWidget {
+
     constructor() {
         super();
 
         this.settings.buttonNoteIdProvider = null;
     }
 
-    buttonNoteIdProvider(provider) {
+    buttonNoteIdProvider(provider: ButtonNoteIdProvider) {
         this.settings.buttonNoteIdProvider = provider;
         return this;
     }
@@ -21,6 +25,11 @@ export default class ButtonFromNoteWidget extends CommandButtonWidget {
     }
 
     updateIcon() {
+        if (!this.settings.buttonNoteIdProvider) {
+            console.error(`buttonNoteId for '${this.componentId}' is not defined.`);
+            return;
+        }
+
         const buttonNoteId = this.settings.buttonNoteIdProvider();
 
         if (!buttonNoteId) {
@@ -29,13 +38,18 @@ export default class ButtonFromNoteWidget extends CommandButtonWidget {
         }
 
         froca.getNote(buttonNoteId).then((note) => {
-            this.settings.icon = note.getIcon();
+            const icon = note?.getIcon();
+            if (icon) {
+                this.settings.icon = icon;
+            }
 
             this.refreshIcon();
         });
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        // TODO: this seems incorrect
+        //@ts-ignore
         const buttonNote = froca.getNoteFromCache(this.buttonNoteIdProvider());
 
         if (!buttonNote) {

@@ -12,7 +12,7 @@ const TPL = `
             <span class="bx bx-help-circle icon-action" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
             <div class="dropdown-menu dropdown-menu-right p-4">
                 ${t("fast_search.description")}
-            </div> 
+            </div>
         </div>
         <span class="bx bx-x icon-action search-option-del"></span>
     </td>
@@ -26,7 +26,7 @@ export default class FastSearch extends AbstractSearchOption {
         return "label";
     }
 
-    static async create(noteId) {
+    static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "fastSearch");
     }
 

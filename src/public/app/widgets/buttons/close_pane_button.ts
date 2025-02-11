@@ -1,3 +1,4 @@
+import type { EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import OnClickButtonWidget from "./onclick_button.js";
 
@@ -11,7 +12,7 @@ export default class ClosePaneButton extends OnClickButtonWidget {
         );
     }
 
-    async noteContextReorderEvent({ ntxIdsInOrder }) {
+    async noteContextReorderEvent({ ntxIdsInOrder }: EventData<"noteContextReorderEvent">) {
         this.refresh();
     }
 

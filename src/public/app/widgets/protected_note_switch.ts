@@ -1,3 +1,5 @@
+import type { EventData } from "../components/app_context.js";
+import type FNote from "../entities/fnote.js";
 import { t } from "../services/i18n.js";
 import protectedSessionService from "../services/protected_session.js";
 import SwitchWidget from "./switch.js";
@@ -14,18 +16,22 @@ export default class ProtectedNoteSwitchWidget extends SwitchWidget {
     }
 
     switchOn() {
-        protectedSessionService.protectNote(this.noteId, true, false);
+        if (this.noteId) {
+            protectedSessionService.protectNote(this.noteId, true, false);
+        }
     }
 
     switchOff() {
-        protectedSessionService.protectNote(this.noteId, false, false);
+        if (this.noteId) {
+            protectedSessionService.protectNote(this.noteId, false, false);
+        }
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.isToggled = note.isProtected;
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }

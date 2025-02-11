@@ -3,7 +3,10 @@ import appContext from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 
 export default class MovePaneButton extends OnClickButtonWidget {
-    constructor(isMovingLeft) {
+
+    private isMovingLeft: boolean;
+
+    constructor(isMovingLeft: boolean) {
         super();
 
         this.isMovingLeft = isMovingLeft;

@@ -27,7 +27,7 @@ export default class Debug extends AbstractSearchOption {
         return "label";
     }
 
-    static async create(noteId) {
+    static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "debug");
     }
 

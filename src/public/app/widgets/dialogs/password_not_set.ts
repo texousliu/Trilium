@@ -12,7 +12,7 @@ const TPL = `
             </div>
             <div class="modal-body">
                 ${t("password_not_set.body1")}
-                
+
                 ${t("password_not_set.body2")}
             </div>
         </div>
@@ -21,8 +21,13 @@ const TPL = `
 `;
 
 export default class PasswordNoteSetDialog extends BasicWidget {
+
+    private modal!: bootstrap.Modal;
+    private $openPasswordOptionsButton!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
+        //@ts-ignore fix once bootstrap is imported via JQuery.
         this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
         this.$openPasswordOptionsButton = this.$widget.find(".open-password-options-button");
         this.$openPasswordOptionsButton.on("click", () => {

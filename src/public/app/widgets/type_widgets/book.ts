@@ -1,5 +1,6 @@
 import TypeWidget from "./type_widget.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
 
 const TPL = `
 <div class="note-detail-book note-detail-printable">
@@ -19,6 +20,9 @@ const TPL = `
 </div>`;
 
 export default class BookTypeWidget extends TypeWidget {
+
+    private $helpNoChildren!: JQuery<HTMLElement>;
+
     static getType() {
         return "book";
     }
@@ -30,7 +34,7 @@ export default class BookTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
-        this.$helpNoChildren.toggle(!this.note.hasChildren());
+    async doRefresh(note: FNote) {
+        this.$helpNoChildren.toggle(!this.note?.hasChildren());
     }
 }

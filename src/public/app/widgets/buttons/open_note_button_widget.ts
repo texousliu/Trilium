@@ -2,9 +2,13 @@ import OnClickButtonWidget from "./onclick_button.js";
 import linkContextMenuService from "../../menus/link_context_menu.js";
 import utils from "../../services/utils.js";
 import appContext from "../../components/app_context.js";
+import type FNote from "../../entities/fnote.js";
 
 export default class OpenNoteButtonWidget extends OnClickButtonWidget {
-    constructor(noteToOpen) {
+
+    private noteToOpen: FNote;
+
+    constructor(noteToOpen: FNote) {
         super();
 
         this.noteToOpen = noteToOpen;
@@ -13,10 +17,14 @@ export default class OpenNoteButtonWidget extends OnClickButtonWidget {
             .icon(() => this.noteToOpen.getIcon())
             .onClick((widget, evt) => this.launch(evt))
             .onAuxClick((widget, evt) => this.launch(evt))
-            .onContextMenu((evt) => linkContextMenuService.openContextMenu(this.noteToOpen.noteId, evt));
+            .onContextMenu((evt) => {
+                if (evt) {
+                    linkContextMenuService.openContextMenu(this.noteToOpen.noteId, evt);
+                }
+            });
     }
 
-    async launch(evt) {
+    async launch(evt: JQuery.ClickEvent | JQuery.TriggeredEvent | JQuery.ContextMenuEvent) {
         if (evt.which === 3) {
             return;
         }
