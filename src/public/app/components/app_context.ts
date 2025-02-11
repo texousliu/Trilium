@@ -211,6 +211,9 @@ export type CommandMappings = {
 
     reEvaluateRightPaneVisibility: CommandData;
     runActiveNote: CommandData;
+    scrollContainerToCommand: CommandData & {
+        position: number;
+    };
 
     // Geomap
     deleteFromMap: { noteId: string },
