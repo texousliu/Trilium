@@ -1784,3 +1784,14 @@ div.bookmark-folder-widget .note-link .bx {
 .delete-notes-list .note-path {
     padding-left: 8px;
 }
+
+/* Note icon dialog */
+
+.note-icon-widget .icon-list span {
+    border-radius: 8px;
+}
+
+.note-icon-widget .icon-list span:hover {
+    background: var(--hover-item-background-color);
+    color: var(--hover-item-text-color);
+}
