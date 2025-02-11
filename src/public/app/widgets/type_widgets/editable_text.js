@@ -15,7 +15,7 @@ import options from "../../services/options.js";
 import toast from "../../services/toast.js";
 import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
-import { buildToolbarConfig } from "./ckeditor/toolbars.js";
+import { buildConfig, buildToolbarConfig } from "./ckeditor/toolbars.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -187,7 +187,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             const editor = await editorClass.create(elementOrData, {
                 ...editorConfig,
-                ...buildToolbarConfig(),
+                ...buildConfig(),
+                ...buildToolbarConfig(isClassicEditor),
                 htmlSupport: {
                     allow: JSON.parse(options.get("allowedHtmlTags")),
                     styles: true,
