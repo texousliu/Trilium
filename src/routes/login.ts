@@ -57,30 +57,27 @@ function setPassword(req: Request, res: Response) {
 }
 
 function login(req: Request, res: Response) {
-    const guessedPassword = req.body.password;
+    const { password, rememberMe } = req.body;
 
-    if (verifyPassword(guessedPassword)) {
-        const rememberMe = req.body.rememberMe;
-
-        req.session.regenerate(() => {
-            if (rememberMe) {
-                req.session.cookie.maxAge = 21 * 24 * 3600000; // 3 weeks
-            } else {
-                req.session.cookie.expires = null;
-            }
-
-            req.session.loggedIn = true;
-            res.redirect(".");
-        });
-    } else {
+    if (!verifyPassword(password)) {
         // note that logged IP address is usually meaningless since the traffic should come from a reverse proxy
         log.info(`WARNING: Wrong password from ${req.ip}, rejecting.`);
 
-        res.status(401).render("login", {
+        return res.status(401).render("login", {
             failedAuth: true,
             assetPath: assetPath
         });
     }
+
+    req.session.regenerate(() => {
+        const sessionMaxAge = 21 * 24 * 3600000 // 3 weeks in Milliseconds
+
+        req.session.cookie.maxAge = (rememberMe) ? sessionMaxAge : undefined;
+        req.session.loggedIn = true;
+
+        res.redirect(".");
+    });
+
 }
 
 function verifyPassword(guessedPassword: string) {
