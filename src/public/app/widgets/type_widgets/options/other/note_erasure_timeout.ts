@@ -14,7 +14,7 @@ const TPL = `
         <label for="erase-entities-after-time">${t("note_erasure_timeout.erase_notes_after_x_seconds")}</label>
         <div class="d-flex gap-2">
             <input id="erase-entities-after-time" class="form-control options-number-input" type="number" min="0" steps="1" required>
-            <!-- TriliumNextTODO: i18n the strings -->
+            <!-- TriliumNextTODO: i18n the strings when refactoring this to a standalone widget -->
             <select id="erase-entities-after-time-scale" class="form-select" required>
                 <option value="1">Seconds</option>
                 <option value="60">Minutes</option>
