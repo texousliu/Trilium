@@ -1785,6 +1785,18 @@ div.bookmark-folder-widget .note-link .bx {
     padding-left: 8px;
 }
 
+/* The "Change note icon" button */
+
+.note-icon-widget .note-icon {
+    border: none;
+    border-radius: 8px;
+}
+
+.note-icon-widget .note-icon:hover {
+    background: var(--icon-button-hover-background);
+    color: var(--icon-button-hover-color);
+}
+
 /* Note icon popup */
 
 .note-icon-widget .icon-list span {
