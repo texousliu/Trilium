@@ -80,6 +80,7 @@ export type CommandMappings = {
     };
     closeTocCommand: CommandData;
     showLaunchBarSubtree: CommandData;
+    showRevisions: CommandData;
     showOptions: CommandData & {
         section: string;
     };
@@ -112,6 +113,8 @@ export type CommandMappings = {
     openNoteInNewWindow: CommandData;
     hideLeftPane: CommandData;
     showLeftPane: CommandData;
+    leaveProtectedSession: CommandData;
+    enterProtectedSession: CommandData;
 
     openInTab: ContextMenuCommandData;
     openNoteInSplit: ContextMenuCommandData;
@@ -210,6 +213,12 @@ export type CommandMappings = {
 
     reEvaluateRightPaneVisibility: CommandData;
     runActiveNote: CommandData;
+    scrollContainerToCommand: CommandData & {
+        position: number;
+    };
+    moveThisNoteSplit: CommandData & {
+        isMovingLeft: boolean;
+    };
 
     // Geomap
     deleteFromMap: { noteId: string },
@@ -291,6 +300,7 @@ type EventMappings = {
     noteContextReorderEvent: {
         oldMainNtxId: string;
         newMainNtxId: string;
+        ntxIdsInOrder: string[];
     };
     newNoteContextCreated: {
         noteContext: NoteContext;
@@ -299,7 +309,7 @@ type EventMappings = {
         ntxIds: string[];
     };
     exportSvg: {
-        ntxId: string;
+        ntxId: string | null | undefined;
     };
     geoMapCreateChildNote: {
         ntxId: string | null | undefined; // TODO: deduplicate ntxId

@@ -19,7 +19,7 @@ export default class AbstractButtonWidget<SettingsT extends AbstractButtonWidget
     protected settings!: SettingsT;
     protected tooltip!: bootstrap.Tooltip;
 
-    isEnabled() {
+    isEnabled(): boolean | null | undefined {
         return true;
     }
 

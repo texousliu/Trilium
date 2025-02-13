@@ -294,6 +294,8 @@ button kbd {
     color: var(--menu-text-color) !important;
     font-size: inherit;
     background-color: var(--menu-background-color) !important;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 body.desktop .dropdown-menu {

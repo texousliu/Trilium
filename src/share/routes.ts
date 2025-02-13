@@ -143,7 +143,7 @@ function register(router: Router) {
 
         addNoIndexHeader(note, res);
 
-        if (note.isLabelTruthy("shareRaw")) {
+        if (note.isLabelTruthy("shareRaw") || typeof req.query.raw !== "undefined") {
             res.setHeader("Content-Type", note.mime).send(note.getContent());
 
             return;
