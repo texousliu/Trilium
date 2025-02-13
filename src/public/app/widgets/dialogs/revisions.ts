@@ -297,7 +297,7 @@ export default class RevisionsDialog extends BasicWidget {
         const fullRevision = await server.get<FullRevision>(`revisions/${revisionItem.revisionId}`);
 
         if (revisionItem.type === "text") {
-            this.$content.html(fullRevision.content);
+            this.$content.html(`<div class="ck-content">${fullRevision.content}</div>`);
 
             if (this.$content.find("span.math-tex").length > 0) {
                 await libraryLoader.requireLibrary(libraryLoader.KATEX);
