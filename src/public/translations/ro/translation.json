@@ -1644,5 +1644,11 @@
   "geo-map": {
     "create-child-note-title": "Crează o notiță nouă și adaug-o pe hartă",
     "unable-to-load-map": "Nu s-a putut încărca harta."
+  },
+  "duration": {
+    "days": "zile",
+    "hours": "ore",
+    "minutes": "minute",
+    "seconds": "secunde"
   }
 }

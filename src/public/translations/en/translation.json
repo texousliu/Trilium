@@ -1648,5 +1648,11 @@
   },
   "help-button": {
     "title": "Open the relevant help page"
+  },
+  "duration": {
+    "seconds": "Seconds",
+    "minutes": "Minutes",
+    "hours": "Hours",
+    "days": "Days"
   }
 }

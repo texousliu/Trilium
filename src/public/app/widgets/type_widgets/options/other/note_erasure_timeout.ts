@@ -16,10 +16,10 @@ const TPL = `
             <input id="erase-entities-after-time" class="form-control options-number-input" type="number" min="0" steps="1" required>
             <!-- TriliumNextTODO: i18n the strings when refactoring this to a standalone widget -->
             <select id="erase-entities-after-time-scale" class="form-select" required>
-                <option value="1">Seconds</option>
-                <option value="60">Minutes</option>
-                <option value="3600">Hours</option>
-                <option value="86400">Days</option>
+                <option value="1">${t("duration.seconds")}</option>
+                <option value="60">${t("duration.minutes")}</option>
+                <option value="3600">${t("duration.hours")}</option>
+                <option value="86400">${t("duration.days")}</option>
             </select>
         </div>
     </div>
