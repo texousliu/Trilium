@@ -91,7 +91,8 @@
     "zoom-in": "Mărește zoom-ul",
     "zoom-out": "Micșorează zoom-ul",
     "toggle-classic-editor-toolbar": "Comută tab-ul „Formatare” pentru editorul cu bară fixă",
-    "export-as-pdf": "Exportă notița curentă ca PDF"
+    "export-as-pdf": "Exportă notița curentă ca PDF",
+    "show-cheatsheet": "Afișează o fereastră cu scurtături de la tastatură comune"
   },
   "login": {
     "button": "Autentifică",
@@ -241,7 +242,8 @@
     "sql-console-history-title": "Istoricul consolei SQL",
     "go-to-next-note-title": "Mergi la notița următoare",
     "launch-bar-templates-title": "Șabloane bară de lansare",
-    "visible-launchers-title": "Lansatoare vizibile"
+    "visible-launchers-title": "Lansatoare vizibile",
+    "user-guide": "Ghidul de utilizare"
   },
   "notes": {
     "new-note": "Notiță nouă"
