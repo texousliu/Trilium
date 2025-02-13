@@ -172,12 +172,10 @@ class ListOrGridView extends ViewMode {
     /*
      * We're using noteIds so that it's not necessary to load all notes at once when paging
      */
-    constructor($parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
+    constructor(viewType: string, $parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
         super($parent, parentNote, noteIds, showNotePath);
         this.$noteList = $(TPL);
-
-        // note list must be added to the DOM immediately, otherwise some functionality scripting (canvas) won't work
-        $parent.empty();
+        this.viewType = viewType;
 
         this.parentNote = parentNote;
         const includedNoteIds = this.getIncludedNoteIds();
@@ -195,13 +193,6 @@ class ListOrGridView extends ViewMode {
 
         if (!this.pageSize || this.pageSize < 1) {
             this.pageSize = 20;
-        }
-
-        this.viewType = parentNote.getLabelValue("viewType");
-
-        if (!["list", "grid"].includes(this.viewType || "")) {
-            // when not explicitly set, decide based on the note type
-            this.viewType = parentNote.type === "search" ? "list" : "grid";
         }
 
         this.$noteList.addClass(`${this.viewType}-view`);
