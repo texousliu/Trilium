@@ -70,14 +70,16 @@ function login(req: Request, res: Response) {
     }
 
     req.session.regenerate(() => {
-        const sessionMaxAge = 21 * 24 * 3600000 // 3 weeks in Milliseconds
+        if (!rememberMe) {
+            // unset default maxAge set by sessionParser
+            // Cookie becomes non-persistent and expires after current browser session (e.g. when browser is closed)
+            req.session.cookie.maxAge = undefined;
+        }
 
-        req.session.cookie.maxAge = (rememberMe) ? sessionMaxAge : undefined;
         req.session.loggedIn = true;
 
         res.redirect(".");
     });
-
 }
 
 function verifyPassword(guessedPassword: string) {

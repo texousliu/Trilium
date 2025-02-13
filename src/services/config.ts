@@ -34,6 +34,7 @@ export interface TriliumConfig {
     };
     Session: {
         cookiePath: string;
+        cookieMaxAge: number;
     }
     Sync: {
         syncServerHost: string;
@@ -81,7 +82,10 @@ const config: TriliumConfig = {
 
     Session: {
         cookiePath:
-            process.env.TRILIUM_SESSION_COOKIEPATH || iniConfig?.Session?.cookiePath || "/"
+            process.env.TRILIUM_SESSION_COOKIEPATH || iniConfig?.Session?.cookiePath || "/",
+
+        cookieMaxAge:
+            parseInt(String(process.env.TRILIUM_SESSION_COOKIEMAXAGE)) || parseInt(iniConfig?.Session?.cookieMaxAge) || 21 * 24 * 60 * 60 // 21 Days in Seconds
     },
 
     Sync: {
