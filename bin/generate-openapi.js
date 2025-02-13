@@ -24,7 +24,12 @@ const options = {
       },
     },
   },
-  apis: ['./src/routes/api/*.ts', './bin/generate-openapi.js'],
+  apis: [
+    // Put individual files here to have them ordered first.
+    './src/routes/api/setup.ts',
+    // all other files
+    './src/routes/api/*.ts', './bin/generate-openapi.js'
+  ],
 };
 
 const openapiSpecification = swaggerJsdoc(options);
@@ -33,8 +38,34 @@ console.log(JSON.stringify(openapiSpecification));
 
 /**
  * @swagger
+ * tags:
+ *   - name: auth
+ *     description: Authentication
+ *   - name: sync
+ *     description: Synchronization
+ */
+
+/**
+ * @swagger
  * components:
  *   schemas:
+ *     EntityChange:
+ *       type: object
+ *       properties:
+ *         entityChange:
+ *           type: object
+ *           properties:
+ *             entityName:
+ *               type: string
+ *               example: "notes"
+ *               description: Database table for this entity.
+ *             changeId:
+ *               type: string
+ *               example: "changeId9630"
+ *               description: ID, referenced in `entity_changes` table.
+ *         entity:
+ *           type: object
+ *           description: Encoded entity data. Object has one property for each database column.
  *     UtcDateTime:
  *       type: string
  *       example: "2025-02-13T07:42:47.698Z"
