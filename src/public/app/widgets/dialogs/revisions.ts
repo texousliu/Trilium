@@ -131,7 +131,7 @@ export default class RevisionsDialog extends BasicWidget {
         this.$list = this.$widget.find(".revision-list");
         this.$listDropdown = this.$widget.find(".revision-list-dropdown");
         //@ts-ignore
-        this.listDropdown = bootstrap.Dropdown.getOrCreateInstance(this.$listDropdown);
+        this.listDropdown = bootstrap.Dropdown.getOrCreateInstance(this.$listDropdown, { autoClose: false });
         this.$content = this.$widget.find(".revision-content");
         this.$title = this.$widget.find(".revision-title");
         this.$titleButtons = this.$widget.find(".revision-title-buttons");
@@ -142,22 +142,8 @@ export default class RevisionsDialog extends BasicWidget {
         this.listDropdown.show();
 
         this.$listDropdown.parent().on("hide.bs.dropdown", (e) => {
-            // Prevent closing dropdown by pressing ESC and clicking outside
-            e.preventDefault();
+            this.modal.hide();
         });
-
-        document.addEventListener(
-            "keydown",
-            (e) => {
-                // Close the revision dialog when revision element is focused and ESC is pressed
-                // TODO: Is this corret?
-                // @ts-ignore
-                if (e.key === "Escape" || ((e.target as HTMLElement)?.classList?.contains(["dropdown-item", "active"]))) {
-                    this.modal.hide();
-                }
-            },
-            true
-        );
 
         this.$widget.on("shown.bs.modal", () => {
             this.$list.find(`[data-revision-id="${this.revisionId}"]`).trigger("focus");
