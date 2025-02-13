@@ -23,6 +23,7 @@ const TPL = `
         <select class="view-type-select form-select form-select-sm">
             <option value="grid">${t("book_properties.grid")}</option>
             <option value="list">${t("book_properties.list")}</option>
+            <option value="calendar">${t("book_properties.calendar")}</option>
         </select>
     </div>
 
@@ -125,7 +126,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (type !== "list" && type !== "grid") {
+        if (![ "list", "grid", "calendar"].includes(type)) {
             throw new Error(t("book_properties.invalid_view_type", { type }));
         }
 
