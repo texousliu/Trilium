@@ -15,7 +15,7 @@ const TPL = `
         <div class="d-flex gap-2">
             <input id="erase-entities-after-time" class="form-control options-number-input" type="number" min="0" steps="1" required>
             <!-- TriliumNextTODO: i18n the strings when refactoring this to a standalone widget -->
-            <select id="erase-entities-after-time-scale" class="form-select" required>
+            <select id="erase-entities-after-time-scale" class="form-select duration-selector" required>
                 <option value="1">${t("duration.seconds")}</option>
                 <option value="60">${t("duration.minutes")}</option>
                 <option value="3600">${t("duration.hours")}</option>
@@ -27,6 +27,12 @@ const TPL = `
     <p>${t("note_erasure_timeout.manual_erasing_description")}</p>
 
     <button id="erase-deleted-notes-now-button" class="btn btn-secondary">${t("note_erasure_timeout.erase_deleted_notes_now")}</button>
+
+    <style>
+        .duration-selector {
+            width: auto;
+        }
+    </style>
 </div>`;
 
 export default class NoteErasureTimeoutOptions extends OptionsWidget {
