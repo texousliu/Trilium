@@ -26,7 +26,7 @@
     "server:start-test": "npm run server:switch && rimraf ./data-test && cross-env TRILIUM_DATA_DIR=./data-test TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 TRILIUM_ENV=dev TRILIUM_PORT=9999 nodemon src/main.ts",
     "server:qstart": "npm run server:switch && npm run server:start",
     "server:switch": "rimraf ./node_modules/better-sqlite3 && npm install",
-    "start-electron": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 TRILIUM_ENV=dev electron ./electron-main.ts --inspect=5858 .",
+    "electron:start": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 TRILIUM_ENV=dev electron ./electron-main.ts --inspect=5858 .",
     "start-electron-nix": "electron-rebuild --version 33.3.1 && cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data TRILIUM_SYNC_SERVER_HOST=http://tsyncserver:4000 TRILIUM_ENV=dev nix-shell -p electron_33 --run \"electron ./electron-main.ts --inspect=5858 .\"",
     "start-electron-no-dir": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_ENV=dev electron --inspect=5858 .",
     "start-electron-no-dir-nix": "electron-rebuild --version 33.3.1 && cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_ENV=dev nix-shell -p electron_33 --run \"electron ./electron-main.ts --inspect=5858 .\"",
