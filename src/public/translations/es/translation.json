@@ -440,7 +440,7 @@
     "other_notes_with_name": "Otras notas con nombre de {{attributeType}} \"{{attributeName}}\"",
     "and_more": "... y {{count}} más.",
     "print_landscape": "Al exportar a PDF, cambia la orientación de la página a paisaje en lugar de retrato.",
-    "print_page_size": "Al exportar a PDF, cambia el tamaño de la página. Valores soportados: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Carta</code>, <code>Tabloide</code>, <code>Ledger</code>."
+    "print_page_size": "Al exportar a PDF, cambia el tamaño de la página. Valores soportados: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>."
   },
   "attribute_editor": {
     "help_text_body1": "Para agregar una etiqueta, simplemente escriba, por ejemplo. <code>#rock</code> o si desea agregar también valor, p.e. <code>#año = 2020</code>",
