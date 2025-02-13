@@ -85,7 +85,7 @@ const config: TriliumConfig = {
             process.env.TRILIUM_SESSION_COOKIEPATH || iniConfig?.Session?.cookiePath || "/",
 
         cookieMaxAge:
-            process.env.TRILIUM_SESSION_COOKIEMAXAGE || iniConfig?.Session?.cookieMaxAge || "24 * 60 * 60 * 1000" // 24 hours in Milliseconds
+            process.env.TRILIUM_SESSION_COOKIEMAXAGE || iniConfig?.Session?.cookieMaxAge || 21 * 24 * 60 * 60 // 21 Days in Seconds
     },
 
     Sync: {
