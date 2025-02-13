@@ -12,7 +12,7 @@ const sessionParser = session({
     cookie: {
         path: config.Session.cookiePath,
         httpOnly: true,
-        maxAge:  config.Session.cookieMaxAge * 1000 // needs value in milliseconds
+        maxAge: config.Session.cookieMaxAge * 1000 // needs value in milliseconds
     },
     name: "trilium.sid",
     store: new FileStore({

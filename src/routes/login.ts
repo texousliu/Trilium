@@ -80,7 +80,6 @@ function login(req: Request, res: Response) {
 
         res.redirect(".");
     });
-
 }
 
 function verifyPassword(guessedPassword: string) {
