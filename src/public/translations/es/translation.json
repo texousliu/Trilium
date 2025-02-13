@@ -1158,7 +1158,7 @@
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "Tiempo de espera de borrado de notas",
     "note_erasure_description": "Las notas eliminadas (y los atributos, las revisiones ...) en principio solo están marcadas como eliminadas y es posible recuperarlas del diálogo de Notas recientes. Después de un período de tiempo, las notas eliminadas son \" borradas\", lo que significa que su contenido ya no es recuperable. Esta configuración le permite configurar la longitud del período entre eliminar y borrar la nota.",
-    "erase_notes_after_x_seconds": "Borrar notas después de X segundos",
+    "erase_notes_after": "Borrar notas después de",
     "manual_erasing_description": "También puede activar el borrado manualmente (sin considerar el tiempo de espera definido anteriormente):",
     "erase_deleted_notes_now": "Borrar notas eliminadas ahora",
     "deleted_notes_erased": "Las notas eliminadas han sido borradas."
