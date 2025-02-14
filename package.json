@@ -54,7 +54,7 @@
     "integration-mem-db-dev": "cross-env TRILIUM_INTEGRATION_TEST=memory TRILIUM_PORT=8082 TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
     "generate-document": "cross-env nodemon ./bin/generate_document.ts 1000",
     "generate-openapi": "node bin/generate-openapi.js",
-    "ci-update-nightly-version": "tsx ./bin/update-nightly-version.ts",
+    "chore:ci-update-nightly-version": "tsx ./bin/update-nightly-version.ts",
     "prettier-check": "prettier . --check",
     "prettier-fix": "prettier . --write"
   },
