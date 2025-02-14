@@ -26,7 +26,7 @@
                 <th>1</th>
                 <td>
                   <figure class="image image_resized" style="width:100%;">
-                    <img style="aspect-ratio:1256/1044;" src="Geo map_image.png" width="1256"
+                    <img style="aspect-ratio:1256/1044;" src="10_Geo map_image.png" width="1256"
                     height="1044">
                   </figure>
                 </td>
@@ -36,7 +36,7 @@
                 <th>2</th>
                 <td>
                   <figure class="image image_resized" style="width:100%;">
-                    <img style="aspect-ratio:1720/1396;" src="1_Geo map_image.png" width="1720"
+                    <img style="aspect-ratio:1720/1396;" src="3_Geo map_image.png" width="1720"
                     height="1396">
                   </figure>
                 </td>
@@ -51,8 +51,8 @@
           <li>Use the mouse wheel, two-finger gesture on a touchpad or the +/- buttons
             on the top-left to adjust the zoom.</li>
         </ul>
-        <p>The position on the map and the zoom are saved inside the map note. When
-          visting again the note it will restore this position.</p>
+        <p>The position on the map and the zoom are saved inside the map note and
+          restored when visiting again the note.</p>
         <h2>Adding a marker using the map</h2>
         <figure class="table" style="width:100%;">
           <table class="ck-table-resized">
@@ -69,18 +69,18 @@
                   <p>To create a marker, first navigate to the desired point on the map. Then
                     press the
                     <img class="image_resized" style="aspect-ratio:72/66;width:7.37%;"
-                    src="2_Geo map_image.png" width="72" height="66">button on the top-right of the map.</p>
+                    src="5_Geo map_image.png" width="72" height="66">button on the top-right of the map.</p>
                   <p>If the button is not visible, make sure the button section is visible
                     by pressing the chevron button (
                     <img class="image_resized" style="aspect-ratio:72/66;width:7.51%;"
-                    src="3_Geo map_image.png" width="72" height="66">) in the top-right of the map.</p>
+                    src="11_Geo map_image.png" width="72" height="66">) in the top-right of the map.</p>
                 </td>
               </tr>
               <tr>
                 <th>2</th>
                 <td>
                   <figure class="image image_resized" style="width:100%;">
-                    <img style="aspect-ratio:1730/416;" src="4_Geo map_image.png" width="1730"
+                    <img style="aspect-ratio:1730/416;" src="14_Geo map_image.png" width="1730"
                     height="416">
                   </figure>
                   <p>&nbsp;</p>
@@ -96,7 +96,7 @@
                 <th>3</th>
                 <td>
                   <figure class="image">
-                    <img style="aspect-ratio:1586/404;" src="5_Geo map_image.png" width="1586"
+                    <img style="aspect-ratio:1586/404;" src="1_Geo map_image.png" width="1586"
                     height="404">
                   </figure>
                   <p>&nbsp;</p>
@@ -107,7 +107,7 @@
                 <th>4</th>
                 <td>
                   <figure class="image">
-                    <img style="aspect-ratio:1696/608;" src="6_Geo map_image.png" width="1696"
+                    <img style="aspect-ratio:1696/608;" src="7_Geo map_image.png" width="1696"
                     height="608">
                   </figure>
                   <p>&nbsp;</p>
@@ -118,6 +118,15 @@
             </tbody>
           </table>
         </figure>
+        <h2>How the location of the markers is stored</h2>
+        <p>The location of a marker is stored in the <code>#geolocation</code> attribute
+          of the child notes:</p>
+        <figure class="image">
+          <img style="aspect-ratio:1288/278;" src="4_Geo map_image.png" width="1288"
+          height="278">
+        </figure>
+        <p>This value can be added manually if needed. The value of the attribute
+          is made up of the latitude and longitude separated by a comma.</p>
         <h2>Repositioning markers</h2>
         <p>It's possible to reposition existing markers by simply drag and dropping
           them to the new destination.</p>
@@ -125,13 +134,30 @@
         <p>If moved by mistake, there is currently no way to undo the change. If
           the mouse was not yet released, it's possible to force a refresh of the
           page (Ctrl+R or Meta+R) to cancel it.</p>
-        <h2>Adding the geolocation manually</h2>
-        <p>The location of a marker is stored in the <code>#geolocation</code> attribute
-          of the child notes:</p>
-        <figure class="image">
-          <img style="aspect-ratio:1288/278;" src="7_Geo map_image.png" width="1288"
-          height="278">
-        </figure>
+        <h2>Interaction with the markers</h2>
+        <ul>
+          <li>Hovering over a marker will display the content of the note it belongs
+            to.
+            <ul>
+              <li>Clicking on the note title in the tooltip will navigate to the note in
+                the current view.</li>
+            </ul>
+          </li>
+          <li>Middle-clicking the marker will open the note in a new tab.</li>
+          <li>Right-clicking the marker will open a contextual menu allowing:
+            <ul>
+              <li>Opening the note in a new tab, split or window.</li>
+              <li>Opening the location using an external application (if the operating system
+                supports it).</li>
+              <li>Removing the marker from the map, which will remove the <code>#geolocation</code> attribute
+                of the note. To add it back again, the coordinates have to be manually
+                added back in.</li>
+            </ul>
+          </li>
+        </ul>
+        <h2>Adding the coordinates manually</h2>
+        <p>In a nutshell, create a child note and set the <code>#geolocation</code> attribute
+          to the coordinates.</p>
         <p>The value of the attribute is made up of the latitude and longitude separated
           by a comma.</p>
         <h3>Adding from Google Maps</h3>
@@ -142,7 +168,7 @@
                 <th>1</th>
                 <td>
                   <figure class="image image-style-align-center image_resized" style="width:100%;">
-                    <img style="aspect-ratio:732/918;" src="8_Geo map_image.png" width="732"
+                    <img style="aspect-ratio:732/918;" src="16_Geo map_image.png" width="732"
                     height="918">
                   </figure>
                 </td>
@@ -159,7 +185,7 @@
                 <th>2</th>
                 <td>
                   <figure class="image image_resized" style="width:100%;">
-                    <img style="aspect-ratio:518/84;" src="11_Geo map_image.png" width="518"
+                    <img style="aspect-ratio:518/84;" src="19_Geo map_image.png" width="518"
                     height="84">
                   </figure>
                 </td>
@@ -173,7 +199,7 @@
                 <th>3</th>
                 <td>
                   <figure class="image image_resized" style="width:100%;">
-                    <img style="aspect-ratio:1074/276;" src="9_Geo map_image.png" width="1074"
+                    <img style="aspect-ratio:1074/276;" src="12_Geo map_image.png" width="1074"
                     height="276">
                   </figure>
                 </td>
@@ -199,7 +225,7 @@
                 <th>1</th>
                 <td>
                   <figure class="image image_resized" style="width:100%;">
-                    <img style="aspect-ratio:562/454;" src="12_Geo map_image.png" width="562"
+                    <img style="aspect-ratio:562/454;" src="17_Geo map_image.png" width="562"
                     height="454">
                   </figure>
                 </td>
@@ -224,7 +250,7 @@
                 <th>3</th>
                 <td>
                   <figure class="image">
-                    <img style="aspect-ratio:640/276;" src="14_Geo map_image.png" width="640"
+                    <img style="aspect-ratio:640/276;" src="2_Geo map_image.png" width="640"
                     height="276">
                   </figure>
                 </td>
@@ -249,7 +275,7 @@
                 <th>1</th>
                 <td>
                   <figure class="image">
-                    <img style="aspect-ratio:226/74;" src="17_Geo map_image.png" width="226"
+                    <img style="aspect-ratio:226/74;" src="8_Geo map_image.png" width="226"
                     height="74">
                   </figure>
                 </td>
@@ -260,7 +286,7 @@
                 <th>2</th>
                 <td>
                   <figure class="image">
-                    <img style="aspect-ratio:322/222;" src="18_Geo map_image.png" width="322"
+                    <img style="aspect-ratio:322/222;" src="6_Geo map_image.png" width="322"
                     height="222">
                   </figure>
                 </td>
@@ -271,7 +297,7 @@
                 <th>3</th>
                 <td>
                   <figure class="image image_resized" style="width:100%;">
-                    <img style="aspect-ratio:620/530;" src="19_Geo map_image.png" width="620"
+                    <img style="aspect-ratio:620/530;" src="15_Geo map_image.png" width="620"
                     height="530">
                   </figure>
                 </td>
