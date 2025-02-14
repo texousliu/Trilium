@@ -1,4 +1,7 @@
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 import swaggerJsdoc from 'swagger-jsdoc';
+import fs from "fs";
 
 /*
  * Usage: npm run generate-openapi | tail -n1 > x.json
@@ -33,8 +36,10 @@ const options = {
 };
 
 const openapiSpecification = swaggerJsdoc(options);
-
-console.log(JSON.stringify(openapiSpecification));
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const outputPath = join(scriptDir, "..", "src", "routes", "api", "openapi.json");
+fs.writeFileSync(outputPath, JSON.stringify(openapiSpecification));
+console.log("Saved to ", outputPath);
 
 /**
  * @swagger
