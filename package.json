@@ -61,10 +61,10 @@
     "dev:prettier-check": "prettier . --check",
     "dev:prettier-fix": "prettier . --write",
 
-    "generate-document": "cross-env nodemon ./bin/generate_document.ts 1000",
-    "generate-openapi": "node bin/generate-openapi.js",
     "chore:update-build-info": "tsx bin/update-build-info.ts",
-    "chore:ci-update-nightly-version": "tsx ./bin/update-nightly-version.ts"
+    "chore:ci-update-nightly-version": "tsx ./bin/update-nightly-version.ts",
+    "chore:generate-document": "cross-env nodemon ./bin/generate_document.ts 1000",
+    "chore:generate-openapi": "node bin/generate-openapi.js"
   },
   "dependencies": {
     "@braintree/sanitize-url": "7.1.1",
