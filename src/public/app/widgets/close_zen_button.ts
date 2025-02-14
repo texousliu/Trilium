@@ -19,15 +19,15 @@ const TPL = `\
     body.zen .close-zen-container {
         display: block;
         position: fixed;
-        top: 0;
-        right: 0;
+        top: 2px;
+        right: 2px;
         z-index: 9999;
         -webkit-app-region: no-drag;
     }
 
     body.zen.electron:not(.native-titlebar) .close-zen-container {
         --size: 32px;
-        left: calc(env(titlebar-area-width) - var(--size));
+        left: calc(env(titlebar-area-width) - var(--size) - 2px);
         right: unset;
     }
     </style>
