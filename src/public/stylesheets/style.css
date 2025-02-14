@@ -1672,3 +1672,15 @@ body.zen #launcher-pane {
     background: transparent !important;
     border: 0 !important;
 }
+
+body.zen .title-row {
+    display: block !important;
+    height: unset !important;
+    -webkit-app-region: drag;
+}
+
+body.zen .note-title-widget,
+body.zen .note-title-widget input {
+    font-size: 1rem !important;
+    background: transparent !important;
+}
