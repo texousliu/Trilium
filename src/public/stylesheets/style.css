@@ -1645,14 +1645,21 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     border-radius: 4px;
 }
 
+body.zen {
+    --tab-bar-height: 0;
+}
+
 body.zen .gutter,
 body.zen #launcher-container,
+body.zen #launcher-pane > :not(.global-menu),
 body.zen #left-pane,
 body.zen #right-pane,
 body.zen .tab-row-container,
+body.zen .tab-row-widget,
 body.zen .ribbon-container,
 body.zen .note-icon-widget,
-body.zen .title-row .button-widget {
+body.zen .title-row .button-widget,
+body.zen .floating-buttons {
     display: none !important;
 }
 
