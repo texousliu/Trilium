@@ -133,7 +133,12 @@ const TPL = `
             ${t("title_bar_buttons.window-on-top")}
         </li>
 
-        <div class="dropdown-divider zoom-container-separator"></div>
+        <li class="dropdown-item toggle-zen">
+            <span class="bx bxs-yin-yang"></span>
+            ${t("global_menu.toggle-zen-mode")}
+        </li>
+
+        <div class="dropdown-divider"></div>
 
         <li class="dropdown-item switch-to-mobile-version-button" data-trigger-command="switchToMobileVersion">
             <span class="bx bx-mobile"></span>
@@ -355,7 +360,6 @@ export default class GlobalMenuWidget extends BasicWidget {
 
         if (!utils.isElectron()) {
             this.$widget.find(".zoom-container").hide();
-            this.$widget.find(".zoom-container-separator").hide();
         }
 
         this.$zoomState = this.$widget.find(".zoom-state");
