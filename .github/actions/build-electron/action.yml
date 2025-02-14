@@ -36,7 +36,7 @@ runs:
       run: npm run chore:update-build-info
     - name: Run electron-forge
       shell: bash
-      run: npm run make-electron -- --arch=${{ inputs.arch }}
+      run: npm run electron-forge:make -- --arch=${{ inputs.arch }}
     - name: Prepare artifacts
       shell: bash
       run: |

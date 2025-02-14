@@ -38,6 +38,10 @@
     "electron:qstart": "npm run electron:switch && npm run electron:start",
     "electron:switch": "electron-rebuild",
 
+    "electron-forge:start": "npm run build:prepare-dist && electron-forge start",
+    "electron-forge:make": "npm run build:webpack && npm run build:prepare-dist && electron-forge make",
+    "electron-forge:package": "electron-forge package",
+
     "docs:build-backend": "rimraf ./docs/backend_api && typedoc ./docs/backend_api src/becca/entities/*.ts src/services/backend_script_api.ts src/services/sql.ts",
     "docs:build-frontend": "rimraf ./docs/frontend_api && jsdoc -c jsdoc-conf.json -d ./docs/frontend_api src/public/app/entities/*.js src/public/app/services/frontend_script_api.js src/public/app/widgets/basic_widget.js src/public/app/widgets/note_context_aware_widget.js src/public/app/widgets/right_panel_widget.js",
     "docs:build": "npm run docs:build-backend && npm run docs:build-frontend",
@@ -48,9 +52,6 @@
     "test-playwright": "playwright test",
     "test": "cross-env TRILIUM_DATA_DIR=./data-test vitest",
     "test-coverage": "cross-env TRILIUM_DATA_DIR=./data-test vitest --coverage",
-    "start-electron-forge": "npm run build:prepare-dist && electron-forge start",
-    "make-electron": "npm run build:webpack && npm run build:prepare-dist && electron-forge make",
-    "package-electron": "electron-forge package",
     "watch-dist": "tsx ./bin/watch-dist.ts",
     "integration-edit-db": "cross-env TRILIUM_INTEGRATION_TEST=edit TRILIUM_PORT=8081 TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
     "integration-mem-db": "cross-env TRILIUM_INTEGRATION_TEST=memory TRILIUM_PORT=8082 TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
