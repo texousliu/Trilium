@@ -116,6 +116,7 @@ function forceFullSync() {
  *         description: Marker to identify this request in server log
  *     responses:
  *       '200':
+ *         description: Sync changes, limited to approximately one megabyte.
  *         content:
  *           application/json:
  *             schema:
