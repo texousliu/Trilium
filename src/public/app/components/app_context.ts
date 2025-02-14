@@ -327,6 +327,7 @@ type EventMappings = {
     };
     scrollToEnd: { ntxId: string };
     noteTypeMimeChanged: { noteId: string };
+    zenModeChanged: { isEnabled: boolean };
 };
 
 export type EventListener<T extends EventNames> = {

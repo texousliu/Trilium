@@ -1651,7 +1651,7 @@ body.zen {
 
 body.zen .gutter,
 body.zen #launcher-container,
-body.zen #launcher-pane > :not(.global-menu),
+body.zen #launcher-pane,
 body.zen #left-pane,
 body.zen #right-pane,
 body.zen .tab-row-container,

@@ -179,7 +179,10 @@ export default class RootCommandExecutor extends Component {
     }
 
     toggleZenModeCommand() {
-        $("body").toggleClass("zen");
+        const $body = $("body");
+        $body.toggleClass("zen");
+        const isEnabled = $body.hasClass("zen");
+        appContext.triggerEvent("zenModeChanged", { isEnabled });
     }
 
     firstTabCommand() {
