@@ -12,8 +12,8 @@ const TPL = `\
 
     .close-zen-container {
         display: none;
-        width: var(--size);
-        height: var(--size);
+        width: var(--zen-button-size);
+        height: var(--zen-button-size);
     }
 
     body.zen .close-zen-container {
@@ -26,8 +26,7 @@ const TPL = `\
     }
 
     body.zen.electron:not(.native-titlebar) .close-zen-container {
-        --size: 32px;
-        left: calc(env(titlebar-area-width) - var(--size) - 2px);
+        left: calc(env(titlebar-area-width) - var(--zen-button-size) - 2px);
         right: unset;
     }
     </style>
