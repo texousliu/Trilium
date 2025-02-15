@@ -1,7 +1,9 @@
-import type { EventSourceInput } from "@fullcalendar/core";
+import type { EventSourceInput, PluginDef } from "@fullcalendar/core";
 import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import type FNote from "../../entities/fnote.js";
+import server from "../../services/server.js";
+import ws from "../../services/ws.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -40,13 +42,47 @@ export default class CalendarView extends ViewMode {
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
+        const editable = true;
+
         const { Calendar } = await import("@fullcalendar/core");
-        const dayGridPlugin = (await import("@fullcalendar/daygrid")).default;
+        const plugins: PluginDef[] = [];
+        plugins.push((await import("@fullcalendar/daygrid")).default);
+
+        if (editable) {
+            plugins.push((await import("@fullcalendar/interaction")).default);
+        }
 
         const calendar = new Calendar(this.$calendarContainer[0], {
-            plugins: [ dayGridPlugin ],
+            plugins,
             initialView: "dayGridMonth",
-            events: await CalendarView.#buildEvents(this.noteIds)
+            events: await CalendarView.#buildEvents(this.noteIds),
+            editable,
+            eventDragStop: async (e) => {
+                const startDate = e.event.start?.toISOString().substring(0, 10);
+                let endDate = e.event.end?.toISOString().substring(0, 10);
+                const noteId = e.event.extendedProps.noteId;
+
+                // Fullcalendar end date is exclusive, not inclusive but we store it the other way around.
+                if (endDate) {
+                    const endDateParsed = new Date(endDate);
+                    endDateParsed.setDate(endDateParsed.getDate() - 1);
+                    endDate = endDateParsed.toISOString().substring(0, 10);
+                }
+
+                // Don't store the end date if it's empty.
+                if (endDate === startDate) {
+                    endDate = undefined;
+                }
+
+                // Update start date
+                const note = await froca.getNote(noteId);
+                if (!note) {
+                    return;
+                }
+
+                CalendarView.#setAttribute(note, "label", "startDate", startDate);
+                CalendarView.#setAttribute(note, "label", "endDate", endDate);
+            }
         });
         calendar.render();
 
@@ -70,7 +106,8 @@ export default class CalendarView extends ViewMode {
                 const eventData: typeof events[0] = {
                     title: title,
                     start: startDate,
-                    url: `#${note.noteId}`
+                    url: `#${note.noteId}`,
+                    noteId: note.noteId
                 };
 
                 const endDate = new Date(note.getAttributeValue("label", "endDate") ?? startDate);
@@ -114,6 +151,20 @@ export default class CalendarView extends ViewMode {
         }
 
         return [ note.title ];
+    }
+
+    static async #setAttribute(note: FNote, type: "label" | "relation", name: string, value: string | null | undefined) {
+        if (value) {
+            // Create or update the attribute.
+            await server.put(`notes/${note.noteId}/set-attribute`, { type, name, value });
+        } else {
+            // Remove the attribute if it exists on the server but we don't define a value for it.
+            const attributeId = note.getAttribute(type, name);
+            if (attributeId) {
+                await server.remove(`notes/${note.noteId}/attributes/${attributeId}`);
+            }
+        }
+        await ws.waitForMaxKnownEntityChangeId();
     }
 
 }
