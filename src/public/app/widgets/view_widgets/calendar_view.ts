@@ -7,6 +7,7 @@ const TPL = `
         overflow: hidden;
         position: relative;
         height: 100%;
+        user-select: none;
     }
     </style>
 
