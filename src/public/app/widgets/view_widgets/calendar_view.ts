@@ -84,11 +84,35 @@ export default class CalendarView extends ViewMode {
                 day: t("calendar_view.day"),
                 list: t("calendar_view.list")
             },
-            firstDay: options.getInt("firstDayOfWeek") ?? 0
+            firstDay: options.getInt("firstDayOfWeek") ?? 0,
+            locale: await CalendarView.#getLocale()
         });
         calendar.render();
 
         return this.$root;
+    }
+
+    static async #getLocale() {
+        const locale = options.get("locale");
+
+        // Here we hard-code the imports in order to ensure that they are embedded by webpack without having to load all the languages.
+        switch (locale) {
+            case "de":
+                return (await import("@fullcalendar/core/locales/de")).default;
+            case "es":
+                return (await import("@fullcalendar/core/locales/es")).default;
+            case "fr":
+                return (await import("@fullcalendar/core/locales/fr")).default;
+            case "cn":
+                return (await import("@fullcalendar/core/locales/zh-cn")).default;
+            case "tw":
+                return (await import("@fullcalendar/core/locales/zh-tw")).default;
+            case "ro":
+                return (await import("@fullcalendar/core/locales/ro")).default;
+            case "en":
+            default:
+                return undefined;
+        }
     }
 
     async #onEventMoved(e: EventChangeArg) {
