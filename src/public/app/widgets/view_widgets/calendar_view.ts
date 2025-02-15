@@ -1,6 +1,7 @@
 import type { EventSourceInput } from "@fullcalendar/core";
 import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
+import type FNote from "../../entities/fnote.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -58,12 +59,14 @@ export default class CalendarView extends ViewMode {
 
         for (const note of notes) {
             const startDate = note.getAttributeValue("label", "startDate");
+            const customTitle = note.getAttributeValue("label", "calendar:title");
+
             if (!startDate) {
                 continue;
             }
 
             const eventData: typeof events[0] = {
-                title: note.title,
+                title: CalendarView.#parseCustomTitle(customTitle, note),
                 start: startDate
             };
 
@@ -78,6 +81,17 @@ export default class CalendarView extends ViewMode {
         }
 
         return events;
+    }
+
+    static #parseCustomTitle(customTitleValue: string | null, note: FNote) {
+        if (customTitleValue && customTitleValue.startsWith("#")) {
+            const labelValue = note.getAttributeValue("label", customTitleValue.substring(1));
+            if (labelValue) {
+                return labelValue;
+            }
+        }
+
+        return note.title;
     }
 
 }
