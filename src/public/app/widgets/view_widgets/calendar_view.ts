@@ -5,6 +5,7 @@ import type FNote from "../../entities/fnote.js";
 import server from "../../services/server.js";
 import ws from "../../services/ws.js";
 import type { EventDragStopArg, EventResizeDoneArg } from "@fullcalendar/interaction";
+import { t } from "../../services/i18n.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -76,6 +77,13 @@ export default class CalendarView extends ViewMode {
             events: await CalendarView.#buildEvents(this.noteIds),
             editable,
             eventChange: (e) => this.#onEventMoved(e),
+            buttonText: {
+                today: t("calendar_view.today"),
+                month: t("calendar_view.month"),
+                week: t("calendar_view.week"),
+                day: t("calendar_view.day"),
+                list: t("calendar_view.list")
+            }
         });
         calendar.render();
 

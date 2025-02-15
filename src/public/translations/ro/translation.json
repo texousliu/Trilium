@@ -281,7 +281,8 @@
     "grid": "Grilă",
     "invalid_view_type": "Mod de afișare incorect „{{type}}”",
     "list": "Listă",
-    "view_type": "Mod de afișare"
+    "view_type": "Mod de afișare",
+    "calendar": "Calendar"
   },
   "bookmark_switch": {
     "bookmark": "Semn de carte",
@@ -1657,5 +1658,12 @@
   },
   "help-button": {
     "title": "Deschide ghidul relevant"
+  },
+  "calendar_view": {
+    "day": "zi",
+    "list": "listă",
+    "month": "lună",
+    "today": "azi",
+    "week": "săptămână"
   }
 }
