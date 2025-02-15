@@ -7,9 +7,9 @@ const DEST_DIR_NODE_MODULES = path.join(DEST_DIR, "node_modules");
 
 const VERBOSE = process.env.VERBOSE;
 
-function log(...args) {
+function log(...args: any[]) {
     if (VERBOSE) {
-        console.log(args);
+        console.log(...args);
     }
 }
 
