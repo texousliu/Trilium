@@ -69,7 +69,8 @@ export default class CalendarView extends ViewMode {
             for (const title of titles) {
                 const eventData: typeof events[0] = {
                     title: title,
-                    start: startDate
+                    start: startDate,
+                    url: `#${note.noteId}`
                 };
 
                 const endDate = new Date(note.getAttributeValue("label", "endDate") ?? startDate);
