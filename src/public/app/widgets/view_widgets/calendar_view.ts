@@ -1,4 +1,4 @@
-import type { EventChangeArg, EventDropArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
+import type { DateSelectArg, EventChangeArg, EventDropArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
 import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import type FNote from "../../entities/fnote.js";
@@ -6,6 +6,8 @@ import server from "../../services/server.js";
 import ws from "../../services/ws.js";
 import { t } from "../../services/i18n.js";
 import options from "../../services/options.js";
+import dialogService from "../../services/dialog.js";
+import attributes from "../../services/attributes.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -45,11 +47,19 @@ const TPL = `
 </div>
 `;
 
+// TODO: Deduplicate
+interface CreateChildResponse {
+    note: {
+        noteId: string;
+    }
+}
+
 export default class CalendarView extends ViewMode {
 
     private $root: JQuery<HTMLElement>;
     private $calendarContainer: JQuery<HTMLElement>;
     private noteIds: string[];
+    private parentNote: FNote;
 
     constructor(args: ViewModeArgs) {
         super(args);
@@ -57,17 +67,19 @@ export default class CalendarView extends ViewMode {
         this.$root = $(TPL);
         this.$calendarContainer = this.$root.find(".calendar-container");
         this.noteIds = args.noteIds;
+        this.parentNote = args.parentNote;
+        console.log(args);
         args.$parent.append(this.$root);
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
-        const editable = true;
+        const isEditable = true;
 
         const { Calendar } = await import("@fullcalendar/core");
         const plugins: PluginDef[] = [];
         plugins.push((await import("@fullcalendar/daygrid")).default);
 
-        if (editable) {
+        if (isEditable) {
             plugins.push((await import("@fullcalendar/interaction")).default);
         }
 
@@ -75,7 +87,9 @@ export default class CalendarView extends ViewMode {
             plugins,
             initialView: "dayGridMonth",
             events: await CalendarView.#buildEvents(this.noteIds),
-            editable,
+            editable: isEditable,
+            selectable: isEditable,
+            select: (e) => this.#onCalendarSelection(e),
             eventChange: (e) => this.#onEventMoved(e),
             firstDay: options.getInt("firstDayOfWeek") ?? 0,
             locale: await CalendarView.#getLocale()
@@ -108,9 +122,33 @@ export default class CalendarView extends ViewMode {
         }
     }
 
+    async #onCalendarSelection(e: DateSelectArg) {
+        const startDate = CalendarView.#formatDateToLocalISO(e.start);
+        if (!startDate) {
+            return;
+        }
+
+        const endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
+
+        const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
+        if (!title?.trim()) {
+            return;
+        }
+
+        const { note } = await server.post<CreateChildResponse>(`notes/${this.parentNote.noteId}/children?target=into`, {
+            title,
+            content: "",
+            type: "text"
+        });
+        attributes.setLabel(note.noteId, "startDate", startDate);
+        if (endDate) {
+            attributes.setLabel(note.noteId, "endDate", endDate);
+        }
+    }
+
     async #onEventMoved(e: EventChangeArg) {
         const startDate = CalendarView.#formatDateToLocalISO(e.event.start);
-        let endDate = CalendarView.#formatDateToLocalISO(e.event.end);
+        let endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.event.end, -1));
         const noteId = e.event.extendedProps.noteId;
 
         // Fullcalendar end date is exclusive, not inclusive but we store it the other way around.
@@ -156,7 +194,7 @@ export default class CalendarView extends ViewMode {
                     noteId: note.noteId
                 };
 
-                const endDate = new Date(note.getAttributeValue("label", "endDate") ?? startDate);
+                const endDate = CalendarView.#offsetDate(note.getAttributeValue("label", "endDate") ?? startDate, -1);
                 if (endDate) {
                     // Fullcalendar end date is exclusive, not inclusive.
                     endDate.setDate(endDate.getDate() + 1);
@@ -221,6 +259,16 @@ export default class CalendarView extends ViewMode {
         const offset = date.getTimezoneOffset();
         const localDate = new Date(date.getTime() - offset * 60 * 1000);
         return localDate.toISOString().split('T')[0];
+    }
+
+    static #offsetDate(date: Date | string | null | undefined, offset: number) {
+        if (!date) {
+            return undefined;
+        }
+
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + offset);
+        return newDate;
     }
 
 }
