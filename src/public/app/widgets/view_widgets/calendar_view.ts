@@ -66,7 +66,7 @@ export default class CalendarView extends ViewMode {
             }
 
             const eventData: typeof events[0] = {
-                title: CalendarView.#parseCustomTitle(customTitle, note),
+                title: (await CalendarView.#parseCustomTitle(customTitle, note))[0],
                 start: startDate
             };
 
@@ -83,15 +83,33 @@ export default class CalendarView extends ViewMode {
         return events;
     }
 
-    static #parseCustomTitle(customTitleValue: string | null, note: FNote) {
-        if (customTitleValue && customTitleValue.startsWith("#")) {
-            const labelValue = note.getAttributeValue("label", customTitleValue.substring(1));
-            if (labelValue) {
-                return labelValue;
+    static async #parseCustomTitle(customTitleValue: string | null, note: FNote, allowRelations = true): Promise<string[]> {
+        if (customTitleValue) {
+            const attributeName = customTitleValue.substring(1);
+            if (customTitleValue.startsWith("#")) {
+                const labelValue = note.getAttributeValue("label", attributeName);
+                if (labelValue) {
+                    return [ labelValue ];
+                }
+            } else if (allowRelations && customTitleValue.startsWith("~")) {
+                const relations = note.getRelations(attributeName);
+                if (relations.length > 0) {
+                    const noteIds = relations.map((r) => r.targetNoteId);
+                    const notesFromRelation = await froca.getNotes(noteIds);
+                    const titles = [];
+
+                    for (const targetNote of notesFromRelation) {
+                        const targetCustomTitleValue = targetNote.getAttributeValue("label", "calendar:title");
+                        const targetTitles = await CalendarView.#parseCustomTitle(targetCustomTitleValue, targetNote, false);
+                        titles.push(targetTitles.flat());
+                    }
+
+                    return titles.flat();
+                }
             }
         }
 
-        return note.title;
+        return [ note.title ];
     }
 
 }
