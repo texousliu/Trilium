@@ -65,19 +65,22 @@ export default class CalendarView extends ViewMode {
                 continue;
             }
 
-            const eventData: typeof events[0] = {
-                title: (await CalendarView.#parseCustomTitle(customTitle, note))[0],
-                start: startDate
-            };
+            const titles = await CalendarView.#parseCustomTitle(customTitle, note);
+            for (const title of titles) {
+                const eventData: typeof events[0] = {
+                    title: title,
+                    start: startDate
+                };
 
-            const endDate = new Date(note.getAttributeValue("label", "endDate") ?? startDate);
-            if (endDate) {
-                // Fullcalendar end date is exclusive, not inclusive.
-                endDate.setDate(endDate.getDate() + 1);
-                eventData.end = endDate.toISOString().substring(0, 10);
+                const endDate = new Date(note.getAttributeValue("label", "endDate") ?? startDate);
+                if (endDate) {
+                    // Fullcalendar end date is exclusive, not inclusive.
+                    endDate.setDate(endDate.getDate() + 1);
+                    eventData.end = endDate.toISOString().substring(0, 10);
+                }
+
+                events.push(eventData);
             }
-
-            events.push(eventData);
         }
 
         return events;
