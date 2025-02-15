@@ -9,6 +9,10 @@ const TPL = `
         height: 100%;
         user-select: none;
     }
+
+    .calendar-view a {
+        color: unset;
+    }
     </style>
 
     <div class="calendar-container">
