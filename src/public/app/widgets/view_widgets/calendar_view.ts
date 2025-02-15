@@ -8,6 +8,7 @@ const TPL = `
         position: relative;
         height: 100%;
         user-select: none;
+        padding: 10px;
     }
 
     .calendar-view a {
