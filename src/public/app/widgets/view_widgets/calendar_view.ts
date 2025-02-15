@@ -58,15 +58,23 @@ export default class CalendarView extends ViewMode {
 
         for (const note of notes) {
             const startDate = note.getAttributeValue("label", "startDate");
-
             if (!startDate) {
                 continue;
             }
 
-            events.push({
+            const eventData: typeof events[0] = {
                 title: note.title,
                 start: startDate
-            });
+            };
+
+            const endDate = new Date(note.getAttributeValue("label", "endDate") ?? startDate);
+            if (endDate) {
+                // Fullcalendar end date is exclusive, not inclusive.
+                endDate.setDate(endDate.getDate() + 1);
+                eventData.end = endDate.toISOString().substring(0, 10);
+            }
+
+            events.push(eventData);
         }
 
         return events;
