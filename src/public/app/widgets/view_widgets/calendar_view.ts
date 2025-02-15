@@ -1,9 +1,10 @@
-import type { EventSourceInput, PluginDef } from "@fullcalendar/core";
+import type { EventChangeArg, EventDropArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
 import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import type FNote from "../../entities/fnote.js";
 import server from "../../services/server.js";
 import ws from "../../services/ws.js";
+import type { EventDragStopArg, EventResizeDoneArg } from "@fullcalendar/interaction";
 
 const TPL = `
 <div class="calendar-view">
@@ -57,36 +58,38 @@ export default class CalendarView extends ViewMode {
             initialView: "dayGridMonth",
             events: await CalendarView.#buildEvents(this.noteIds),
             editable,
-            eventDragStop: async (e) => {
-                const startDate = e.event.start?.toISOString().substring(0, 10);
-                let endDate = e.event.end?.toISOString().substring(0, 10);
-                const noteId = e.event.extendedProps.noteId;
-
-                // Fullcalendar end date is exclusive, not inclusive but we store it the other way around.
-                if (endDate) {
-                    const endDateParsed = new Date(endDate);
-                    endDateParsed.setDate(endDateParsed.getDate() - 1);
-                    endDate = endDateParsed.toISOString().substring(0, 10);
-                }
-
-                // Don't store the end date if it's empty.
-                if (endDate === startDate) {
-                    endDate = undefined;
-                }
-
-                // Update start date
-                const note = await froca.getNote(noteId);
-                if (!note) {
-                    return;
-                }
-
-                CalendarView.#setAttribute(note, "label", "startDate", startDate);
-                CalendarView.#setAttribute(note, "label", "endDate", endDate);
-            }
+            eventChange: (e) => this.#onEventMoved(e),
         });
         calendar.render();
 
         return this.$root;
+    }
+
+    async #onEventMoved(e: EventChangeArg) {
+        const startDate = CalendarView.#formatDateToLocalISO(e.event.start);
+        let endDate = CalendarView.#formatDateToLocalISO(e.event.end);
+        const noteId = e.event.extendedProps.noteId;
+
+        // Fullcalendar end date is exclusive, not inclusive but we store it the other way around.
+        if (endDate) {
+            const endDateParsed = new Date(endDate);
+            endDateParsed.setDate(endDateParsed.getDate() - 1);
+            endDate = CalendarView.#formatDateToLocalISO(endDateParsed);
+        }
+
+        // Don't store the end date if it's empty.
+        if (endDate === startDate) {
+            endDate = undefined;
+        }
+
+        // Update start date
+        const note = await froca.getNote(noteId);
+        if (!note) {
+            return;
+        }
+
+        CalendarView.#setAttribute(note, "label", "startDate", startDate);
+        CalendarView.#setAttribute(note, "label", "endDate", endDate);
     }
 
     static async #buildEvents(noteIds: string[]) {
@@ -114,7 +117,7 @@ export default class CalendarView extends ViewMode {
                 if (endDate) {
                     // Fullcalendar end date is exclusive, not inclusive.
                     endDate.setDate(endDate.getDate() + 1);
-                    eventData.end = endDate.toISOString().substring(0, 10);
+                    eventData.end = CalendarView.#formatDateToLocalISO(endDate);
                 }
 
                 events.push(eventData);
@@ -159,12 +162,22 @@ export default class CalendarView extends ViewMode {
             await server.put(`notes/${note.noteId}/set-attribute`, { type, name, value });
         } else {
             // Remove the attribute if it exists on the server but we don't define a value for it.
-            const attributeId = note.getAttribute(type, name);
+            const attributeId = note.getAttribute(type, name)?.attributeId;
             if (attributeId) {
                 await server.remove(`notes/${note.noteId}/attributes/${attributeId}`);
             }
         }
         await ws.waitForMaxKnownEntityChangeId();
+    }
+
+    static #formatDateToLocalISO(date: Date | null | undefined) {
+        if (!date) {
+            return undefined;
+        }
+
+        const offset = date.getTimezoneOffset();
+        const localDate = new Date(date.getTime() - offset * 60 * 1000);
+        return localDate.toISOString().split('T')[0];
     }
 
 }
