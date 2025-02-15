@@ -1,5 +1,5 @@
 # Build stage
-FROM node:22.13.1-bullseye-slim AS builder
+FROM node:22.14.0-bullseye-slim AS builder
 
 # Configure build dependencies in a single layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -36,7 +36,7 @@ RUN cp -R build/src/* src/. && \
     rm -r build
 
 # Runtime stage
-FROM node:22.13.1-bullseye-slim
+FROM node:22.14.0-bullseye-slim
 
 # Install only runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
