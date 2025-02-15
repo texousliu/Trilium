@@ -24,6 +24,19 @@ const TPL = `
     .calendar-container {
         height: 100%;
     }
+
+    .calendar-container .fc-toolbar.fc-header-toolbar {
+        margin-bottom: 0.5em;
+    }
+
+    .calendar-container .fc-toolbar-title {
+        font-size: 1.3rem;
+        font-weight: normal;
+    }
+
+    .calendar-container .fc-button {
+        padding: 0.2em 0.5em;
+    }
     </style>
 
     <div class="calendar-container">
