@@ -77,13 +77,6 @@ export default class CalendarView extends ViewMode {
             events: await CalendarView.#buildEvents(this.noteIds),
             editable,
             eventChange: (e) => this.#onEventMoved(e),
-            buttonText: {
-                today: t("calendar_view.today"),
-                month: t("calendar_view.month"),
-                week: t("calendar_view.week"),
-                day: t("calendar_view.day"),
-                list: t("calendar_view.list")
-            },
             firstDay: options.getInt("firstDayOfWeek") ?? 0,
             locale: await CalendarView.#getLocale()
         });

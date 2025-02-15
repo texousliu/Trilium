@@ -1658,12 +1658,5 @@
   },
   "help-button": {
     "title": "Deschide ghidul relevant"
-  },
-  "calendar_view": {
-    "day": "zi",
-    "list": "listă",
-    "month": "lună",
-    "today": "azi",
-    "week": "săptămână"
   }
 }

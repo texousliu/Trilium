@@ -1655,12 +1655,5 @@
     "minutes": "Minutes",
     "hours": "Hours",
     "days": "Days"
-  },
-  "calendar_view": {
-    "today": "today",
-    "month": "month",
-    "week": "week",
-    "day": "day",
-    "list": "list"
   }
 }
