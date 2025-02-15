@@ -20,6 +20,10 @@ const TPL = `
     .calendar-view a {
         color: unset;
     }
+
+    .calendar-container {
+        height: 100%;
+    }
     </style>
 
     <div class="calendar-container">
