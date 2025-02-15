@@ -1,6 +1,7 @@
 import type FNote from "../entities/fnote.js";
 import CalendarView from "../widgets/view_widgets/calendar_view.js";
 import ListOrGridView from "../widgets/view_widgets/list_or_grid_view.js";
+import type { ViewModeArgs } from "../widgets/view_widgets/view_mode.js";
 import type ViewMode from "../widgets/view_widgets/view_mode.js";
 
 export default class NoteListRenderer {
@@ -9,14 +10,18 @@ export default class NoteListRenderer {
     private viewMode: ViewMode | null;
 
     constructor($parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
-        console.log("Parent note is ", parentNote);
         this.viewType = this.#getViewType(parentNote);
-        console.log("View type is ", this.viewType);
+        const args: ViewModeArgs = {
+            $parent,
+            parentNote,
+            noteIds,
+            showNotePath
+        }
 
         if (this.viewType === "list" || this.viewType === "grid") {
-            this.viewMode = new ListOrGridView(this.viewType, $parent, parentNote, noteIds, showNotePath);
+            this.viewMode = new ListOrGridView(this.viewType, args);
         } else if (this.viewType === "calendar") {
-            this.viewMode = new CalendarView(this.viewType, $parent, parentNote, noteIds, showNotePath);
+            this.viewMode = new CalendarView(args);
         } else {
             this.viewMode = null;
         }

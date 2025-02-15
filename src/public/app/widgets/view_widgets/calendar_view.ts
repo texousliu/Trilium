@@ -1,5 +1,5 @@
 import type FNote from "../../entities/fnote.js";
-import ViewMode from "./view_mode.js";
+import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -19,11 +19,11 @@ export default class CalendarView extends ViewMode {
 
     private $root: JQuery<HTMLElement>;
 
-    constructor(viewType: string, $parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
-        super($parent, parentNote, noteIds, showNotePath);
+    constructor(args: ViewModeArgs) {
+        super(args);
 
         this.$root = $(TPL);
-        $parent.append(this.$root);
+        args.$parent.append(this.$root);
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {

@@ -6,7 +6,7 @@ import libraryLoader from "../../services/library_loader.js";
 import treeService from "../../services/tree.js";
 import utils from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
-import ViewMode from "./view_mode.js";
+import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 
 const TPL = `
 <div class="note-list">
@@ -172,24 +172,24 @@ class ListOrGridView extends ViewMode {
     /*
      * We're using noteIds so that it's not necessary to load all notes at once when paging
      */
-    constructor(viewType: string, $parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
-        super($parent, parentNote, noteIds, showNotePath);
+    constructor(viewType: string, args: ViewModeArgs) {
+        super(args);
         this.$noteList = $(TPL);
         this.viewType = viewType;
 
-        this.parentNote = parentNote;
+        this.parentNote = args.parentNote;
         const includedNoteIds = this.getIncludedNoteIds();
 
-        this.noteIds = noteIds.filter((noteId) => !includedNoteIds.has(noteId) && noteId !== "_hidden");
+        this.noteIds = args.noteIds.filter((noteId) => !includedNoteIds.has(noteId) && noteId !== "_hidden");
 
         if (this.noteIds.length === 0) {
             return;
         }
 
-        $parent.append(this.$noteList);
+        args.$parent.append(this.$noteList);
 
         this.page = 1;
-        this.pageSize = parseInt(parentNote.getLabelValue("pageSize") || "");
+        this.pageSize = parseInt(args.parentNote.getLabelValue("pageSize") || "");
 
         if (!this.pageSize || this.pageSize < 1) {
             this.pageSize = 20;
@@ -197,7 +197,7 @@ class ListOrGridView extends ViewMode {
 
         this.$noteList.addClass(`${this.viewType}-view`);
 
-        this.showNotePath = showNotePath;
+        this.showNotePath = args.showNotePath;
     }
 
     /** @returns {Set<string>} list of noteIds included (images, included notes) in the parent note and which
