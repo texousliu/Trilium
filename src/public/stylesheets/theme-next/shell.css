@@ -1807,3 +1807,8 @@ div.bookmark-folder-widget .note-link .bx {
     background: var(--hover-item-background-color);
     color: var(--hover-item-text-color);
 }
+
+body.background-effects.zen #root-widget {
+    --main-background-color: transparent;
+    --root-background: transparent;
+}
