@@ -136,6 +136,8 @@
     --inactive-tab-hover-background-color: #00000016;
     --inactive-tab-text-color: #4e4e4e;
 
+    --alert-bar-background: #32637b29;
+
     --new-tab-button-background: #d8d8d8;
     --new-tab-button-color: #3a3a3a;
     --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
