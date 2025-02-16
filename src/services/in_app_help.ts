@@ -44,6 +44,15 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
     for (const attribute of noteMeta.attributes ?? []) {
         if (attribute.name === "iconClass") {
             iconClass = attribute.value;
+            continue;
+        }
+
+        if (attribute.name === "webViewSrc") {
+            item.attributes?.push({
+                type: "label",
+                name: attribute.name,
+                value: attribute.value
+            });
         }
     }
 
@@ -62,6 +71,11 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
             name: "docName",
             value: docPath
         });
+    }
+
+    // Handle web views
+    if (noteMeta.type === "webView") {
+        item.type = "webView";
     }
 
     // Handle children
