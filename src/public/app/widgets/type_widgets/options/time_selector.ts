@@ -116,8 +116,7 @@ export default class TimeSelector extends OptionsWidget {
 
     handleTimeValidation() {
         if (this.$timeValueInput.is(":invalid")) {
-            // TriliumNextTODO: i18n
-            toastService.showMessage("The entered time value is not a valid number.");
+            toastService.showMessage(t("time_selector.invalid_input"));
             return false
         }
         return true;
