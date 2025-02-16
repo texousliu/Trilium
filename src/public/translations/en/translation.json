@@ -642,7 +642,8 @@
     "show_help": "Show Help",
     "about": "About TriliumNext Notes",
     "logout": "Logout",
-    "show-cheatsheet": "Show Cheatsheet"
+    "show-cheatsheet": "Show Cheatsheet",
+    "toggle-zen-mode": "Zen Mode"
   },
   "sync_status": {
     "unknown": "<p>Sync status will be known once the next sync attempt starts.</p><p>Click to trigger sync now.</p>",

@@ -25,7 +25,7 @@ RUN cp -R build/src/* src/. && \
     cp build/docker_healthcheck.js . && \    
     rm docker_healthcheck.ts && \
     npm install && \
-    npm run webpack && \
+    npm run build:webpack && \
     npm prune --omit=dev && \
     npm cache clean --force && \
     cp -r src/public/app/doc_notes src/public/app-dist/. && \

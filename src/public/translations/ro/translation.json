@@ -593,7 +593,8 @@
     "zoom": "Zoom",
     "zoom_in": "Mărește",
     "zoom_out": "Micșorează",
-    "show-cheatsheet": "Afișează ghidul rapid"
+    "show-cheatsheet": "Afișează ghidul rapid",
+    "toggle-zen-mode": "Mod zen"
   },
   "heading_style": {
     "markdown": "Stil Markdown",

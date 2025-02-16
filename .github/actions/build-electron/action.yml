@@ -33,10 +33,10 @@ runs:
       run:  sed -e "s/case 'armv7l'/case 'arm64'/g" -e "s/return 'arm'/return 'aarch64'/g" -i node_modules/@electron-forge/maker-flatpak/dist/MakerFlatpak.js
     - name: Update build info
       shell: bash
-      run: npm run update-build-info
+      run: npm run chore:update-build-info
     - name: Run electron-forge
       shell: bash
-      run: npm run make-electron -- --arch=${{ inputs.arch }}
+      run: npm run electron-forge:make -- --arch=${{ inputs.arch }}
     - name: Prepare artifacts
       shell: bash
       run: |
