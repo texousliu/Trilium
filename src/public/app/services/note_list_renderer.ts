@@ -7,7 +7,7 @@ import type ViewMode from "../widgets/view_widgets/view_mode.js";
 export default class NoteListRenderer {
 
     private viewType: string;
-    private viewMode: ViewMode | null;
+    public viewMode: ViewMode | null;
 
     constructor($parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
         this.viewType = this.#getViewType(parentNote);

@@ -1,4 +1,4 @@
-import type { DateSelectArg, EventChangeArg, EventDropArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
+import type { Calendar, DateSelectArg, EventChangeArg, EventDropArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
 import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import type FNote from "../../entities/fnote.js";
@@ -8,6 +8,7 @@ import { t } from "../../services/i18n.js";
 import options from "../../services/options.js";
 import dialogService from "../../services/dialog.js";
 import attributes from "../../services/attributes.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -60,6 +61,7 @@ export default class CalendarView extends ViewMode {
     private $calendarContainer: JQuery<HTMLElement>;
     private noteIds: string[];
     private parentNote: FNote;
+    private calendar?: Calendar;
 
     constructor(args: ViewModeArgs) {
         super(args);
@@ -86,7 +88,7 @@ export default class CalendarView extends ViewMode {
         const calendar = new Calendar(this.$calendarContainer[0], {
             plugins,
             initialView: "dayGridMonth",
-            events: await CalendarView.#buildEvents(this.noteIds),
+            events: async () => await CalendarView.#buildEvents(this.noteIds),
             editable: isEditable,
             selectable: isEditable,
             select: (e) => this.#onCalendarSelection(e),
@@ -95,6 +97,7 @@ export default class CalendarView extends ViewMode {
             locale: await CalendarView.#getLocale()
         });
         calendar.render();
+        this.calendar = calendar;
 
         return this.$root;
     }
@@ -171,6 +174,17 @@ export default class CalendarView extends ViewMode {
 
         CalendarView.#setAttribute(note, "label", "startDate", startDate);
         CalendarView.#setAttribute(note, "label", "endDate", endDate);
+    }
+
+    entitiesReloadedEvents({ loadResults }: EventData<"entitiesReloaded">): void {
+        // Refresh note IDs if they got changed.
+        if (loadResults.getBranchRows().some((branch) => branch.parentNoteId == this.parentNote.noteId)) {
+            this.noteIds = this.parentNote.getChildNoteIds();
+        }
+
+        if (this.calendar && loadResults.getAttributeRows().some((a) => this.noteIds.includes(a.noteId ?? ""))) {
+            this.calendar.refetchEvents();
+        }
     }
 
     static async #buildEvents(noteIds: string[]) {

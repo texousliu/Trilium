@@ -1,3 +1,4 @@
+import type { EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 
 export interface ViewModeArgs {
@@ -15,5 +16,9 @@ export default abstract class ViewMode {
     }
 
     abstract renderList(): Promise<JQuery<HTMLElement> | undefined>;
+
+    entitiesReloadedEvents(e: EventData<"entitiesReloaded">) {
+        // Do nothing by default.
+    }
 
 }
