@@ -208,10 +208,8 @@ export default class CalendarView extends ViewMode {
                     noteId: note.noteId
                 };
 
-                const endDate = CalendarView.#offsetDate(note.getAttributeValue("label", "endDate") ?? startDate, -1);
+                const endDate = CalendarView.#offsetDate(note.getAttributeValue("label", "endDate") ?? startDate, 1);
                 if (endDate) {
-                    // Fullcalendar end date is exclusive, not inclusive.
-                    endDate.setDate(endDate.getDate() + 1);
                     eventData.end = CalendarView.#formatDateToLocalISO(endDate);
                 }
 
