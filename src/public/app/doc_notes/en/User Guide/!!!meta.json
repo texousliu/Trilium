@@ -1,6 +1,6 @@
 {
 	"formatVersion": 2,
-	"appVersion": "0.91.5",
+	"appVersion": "0.91.6-test-250214-024424",
 	"files": [
 		{
 			"isClone": false,
@@ -11,7 +11,7 @@
 			"title": "User Guide",
 			"notePosition": 20,
 			"prefix": null,
-			"isExpanded": false,
+			"isExpanded": true,
 			"type": "text",
 			"mime": "text/html",
 			"attributes": [
@@ -29,13 +29,142 @@
 			"children": [
 				{
 					"isClone": false,
-					"noteId": "wmegHv51MJMd",
+					"noteId": "jrai60LsOhdk",
 					"notePath": [
 						"OkOZllzB3fqN",
-						"wmegHv51MJMd"
+						"jrai60LsOhdk"
 					],
-					"title": "Types of notes",
+					"title": "Installation",
 					"notePosition": 20,
+					"prefix": null,
+					"isExpanded": false,
+					"type": "text",
+					"mime": "text/html",
+					"attributes": [
+						{
+							"type": "relation",
+							"name": "internalLink",
+							"value": "KPeRqBU7YSAY",
+							"isInheritable": false,
+							"position": 10
+						},
+						{
+							"type": "label",
+							"name": "hideChildrenOverview",
+							"value": "",
+							"isInheritable": false,
+							"position": 10
+						}
+					],
+					"format": "html",
+					"dataFileName": "Installation.html",
+					"attachments": [
+						{
+							"attachmentId": "Mp9RaDeLtETz",
+							"title": "Fedora_logo.svg",
+							"role": "image",
+							"mime": "image/svg+xml",
+							"position": 10,
+							"dataFileName": "Installation_Fedora_logo.svg"
+						}
+					],
+					"dirFileName": "Installation",
+					"children": [
+						{
+							"isClone": false,
+							"noteId": "KPeRqBU7YSAY",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"jrai60LsOhdk",
+								"KPeRqBU7YSAY"
+							],
+							"title": "On Fedora Linux",
+							"notePosition": 10,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [
+								{
+									"type": "label",
+									"name": "iconClass",
+									"value": "bx bxl-tux",
+									"isInheritable": false,
+									"position": 10
+								}
+							],
+							"format": "html",
+							"dataFileName": "On Fedora Linux.html",
+							"attachments": [
+								{
+									"attachmentId": "YHD8kyEhgkyZ",
+									"title": "Screenshot From 2025-02-05 19-30-50.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "On Fedora Linux_Screenshot.png"
+								},
+								{
+									"attachmentId": "0CpZ5v5xUMia",
+									"title": "Screenshot From 2025-02-05 19-35-45.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "1_On Fedora Linux_Screenshot.png"
+								},
+								{
+									"attachmentId": "9u7nBYvUbXJW",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "On Fedora Linux_image.png"
+								},
+								{
+									"attachmentId": "ipGBq0moRvF3",
+									"title": "Screenshot From 2025-02-05 19-36-27.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "2_On Fedora Linux_Screenshot.png"
+								},
+								{
+									"attachmentId": "fa83WbDUIB4G",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "1_On Fedora Linux_image.png"
+								},
+								{
+									"attachmentId": "kcCWr0YXytOU",
+									"title": "Screenshot From 2025-02-05 19-30-30.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "3_On Fedora Linux_Screenshot.png"
+								},
+								{
+									"attachmentId": "YF3JZy1qz7Fq",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "2_On Fedora Linux_image.png"
+								}
+							]
+						}
+					]
+				},
+				{
+					"isClone": false,
+					"noteId": "yoAe4jV2yzbd",
+					"notePath": [
+						"OkOZllzB3fqN",
+						"yoAe4jV2yzbd"
+					],
+					"title": "Features",
+					"notePosition": 40,
 					"prefix": null,
 					"isExpanded": false,
 					"type": "text",
@@ -43,8 +172,183 @@
 					"attributes": [],
 					"format": "html",
 					"attachments": [],
-					"dirFileName": "Types of notes",
+					"dirFileName": "Features",
 					"children": [
+						{
+							"isClone": false,
+							"noteId": "13D1lOc9sqmZ",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"yoAe4jV2yzbd",
+								"13D1lOc9sqmZ"
+							],
+							"title": "Export as PDF",
+							"notePosition": 20,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [],
+							"format": "html",
+							"dataFileName": "Export as PDF.html",
+							"attachments": [
+								{
+									"attachmentId": "xsGM34t8ssKV",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "Export as PDF_image.png"
+								},
+								{
+									"attachmentId": "cvyes4f1Vhmm",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "1_Export as PDF_image.png"
+								},
+								{
+									"attachmentId": "b3v1pLE6TF1Y",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "2_Export as PDF_image.png"
+								}
+							]
+						},
+						{
+							"isClone": false,
+							"noteId": "B3YLYM4erjnW",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"yoAe4jV2yzbd",
+								"B3YLYM4erjnW"
+							],
+							"title": "Zen mode",
+							"notePosition": 30,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [],
+							"format": "html",
+							"dataFileName": "Zen mode.html",
+							"attachments": [
+								{
+									"attachmentId": "TS5MS8fQ8Rfr",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/jpg",
+									"position": 10,
+									"dataFileName": "Zen mode_image.png"
+								},
+								{
+									"attachmentId": "cswryNtIFZHy",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/jpg",
+									"position": 10,
+									"dataFileName": "1_Zen mode_image.png"
+								},
+								{
+									"attachmentId": "UDk4M7uiTE7w",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/jpg",
+									"position": 10,
+									"dataFileName": "2_Zen mode_image.png"
+								},
+								{
+									"attachmentId": "sQldbByAmE0k",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "3_Zen mode_image.png"
+								},
+								{
+									"attachmentId": "DzrJD3hXJwXJ",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "4_Zen mode_image.png"
+								},
+								{
+									"attachmentId": "HeGfp8wObFO5",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "5_Zen mode_image.png"
+								},
+								{
+									"attachmentId": "uWsrFwgfypsS",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "6_Zen mode_image.png"
+								},
+								{
+									"attachmentId": "hX8xmbxgSNFh",
+									"title": "image.png",
+									"role": "image",
+									"mime": "image/png",
+									"position": 10,
+									"dataFileName": "7_Zen mode_image.png"
+								}
+							]
+						}
+					]
+				},
+				{
+					"isClone": false,
+					"noteId": "wmegHv51MJMd",
+					"notePath": [
+						"OkOZllzB3fqN",
+						"wmegHv51MJMd"
+					],
+					"title": "Note Types",
+					"notePosition": 70,
+					"prefix": null,
+					"isExpanded": false,
+					"type": "text",
+					"mime": "text/html",
+					"attributes": [],
+					"format": "html",
+					"attachments": [],
+					"dirFileName": "Note Types",
+					"children": [
+						{
+							"isClone": false,
+							"noteId": "TTWESa9YFyB4",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"wmegHv51MJMd",
+								"TTWESa9YFyB4"
+							],
+							"title": "Mermaid Diagram",
+							"notePosition": 10,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [
+								{
+									"type": "label",
+									"name": "iconClass",
+									"value": "bx bx-shape-square",
+									"isInheritable": false,
+									"position": 10
+								}
+							],
+							"format": "html",
+							"dataFileName": "Mermaid Diagram.html",
+							"attachments": []
+						},
 						{
 							"isClone": false,
 							"noteId": "foPEtsL51pD2",
@@ -54,7 +358,7 @@
 								"foPEtsL51pD2"
 							],
 							"title": "Geo map",
-							"notePosition": 10,
+							"notePosition": 20,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
@@ -72,7 +376,7 @@
 							"dataFileName": "Geo map.html",
 							"attachments": [
 								{
-									"attachmentId": "viN50n5G4kB0",
+									"attachmentId": "J0baLTpafs7C",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -80,7 +384,7 @@
 									"dataFileName": "Geo map_image.png"
 								},
 								{
-									"attachmentId": "eUrcqc8RRuZG",
+									"attachmentId": "kcYjOvJDFkbS",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -88,7 +392,7 @@
 									"dataFileName": "1_Geo map_image.png"
 								},
 								{
-									"attachmentId": "1quk4yxJpeHZ",
+									"attachmentId": "FDP3JzIVSnuJ",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -96,7 +400,7 @@
 									"dataFileName": "2_Geo map_image.png"
 								},
 								{
-									"attachmentId": "mgwGrtQZjxxb",
+									"attachmentId": "eUrcqc8RRuZG",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -104,7 +408,7 @@
 									"dataFileName": "3_Geo map_image.png"
 								},
 								{
-									"attachmentId": "JULizn130rVI",
+									"attachmentId": "0AwaQMqt3FVA",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -112,7 +416,7 @@
 									"dataFileName": "4_Geo map_image.png"
 								},
 								{
-									"attachmentId": "kcYjOvJDFkbS",
+									"attachmentId": "1quk4yxJpeHZ",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -120,7 +424,7 @@
 									"dataFileName": "5_Geo map_image.png"
 								},
 								{
-									"attachmentId": "ut6vm2aXVfXI",
+									"attachmentId": "iSpyhQ5Ya6Nk",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -128,7 +432,7 @@
 									"dataFileName": "6_Geo map_image.png"
 								},
 								{
-									"attachmentId": "0AwaQMqt3FVA",
+									"attachmentId": "ut6vm2aXVfXI",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -136,7 +440,7 @@
 									"dataFileName": "7_Geo map_image.png"
 								},
 								{
-									"attachmentId": "gFR2Izzp18LQ",
+									"attachmentId": "uYdb9wWf5Nuv",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -144,7 +448,7 @@
 									"dataFileName": "8_Geo map_image.png"
 								},
 								{
-									"attachmentId": "PMqmCbNLlZOG",
+									"attachmentId": "GhHYO2LteDmZ",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -152,7 +456,7 @@
 									"dataFileName": "9_Geo map_image.png"
 								},
 								{
-									"attachmentId": "pKdtiq4r0eFY",
+									"attachmentId": "viN50n5G4kB0",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -160,7 +464,7 @@
 									"dataFileName": "10_Geo map_image.png"
 								},
 								{
-									"attachmentId": "FXRVvYpOxWyR",
+									"attachmentId": "mgwGrtQZjxxb",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -168,7 +472,7 @@
 									"dataFileName": "11_Geo map_image.png"
 								},
 								{
-									"attachmentId": "42AncDs7SSAf",
+									"attachmentId": "PMqmCbNLlZOG",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -184,7 +488,7 @@
 									"dataFileName": "13_Geo map_image.png"
 								},
 								{
-									"attachmentId": "FDP3JzIVSnuJ",
+									"attachmentId": "JULizn130rVI",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -192,7 +496,7 @@
 									"dataFileName": "14_Geo map_image.png"
 								},
 								{
-									"attachmentId": "GhHYO2LteDmZ",
+									"attachmentId": "MdC0DpifJwu4",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -200,7 +504,7 @@
 									"dataFileName": "15_Geo map_image.png"
 								},
 								{
-									"attachmentId": "J0baLTpafs7C",
+									"attachmentId": "gFR2Izzp18LQ",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -208,7 +512,7 @@
 									"dataFileName": "16_Geo map_image.png"
 								},
 								{
-									"attachmentId": "uYdb9wWf5Nuv",
+									"attachmentId": "42AncDs7SSAf",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -216,7 +520,7 @@
 									"dataFileName": "17_Geo map_image.png"
 								},
 								{
-									"attachmentId": "iSpyhQ5Ya6Nk",
+									"attachmentId": "pKdtiq4r0eFY",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -224,7 +528,7 @@
 									"dataFileName": "18_Geo map_image.png"
 								},
 								{
-									"attachmentId": "MdC0DpifJwu4",
+									"attachmentId": "FXRVvYpOxWyR",
 									"title": "image.png",
 									"role": "image",
 									"mime": "image/png",
@@ -237,13 +541,13 @@
 				},
 				{
 					"isClone": false,
-					"noteId": "BDEpqZHDS51s",
+					"noteId": "BhLd0mxKn0gY",
 					"notePath": [
 						"OkOZllzB3fqN",
-						"BDEpqZHDS51s"
+						"BhLd0mxKn0gY"
 					],
-					"title": "Working with notes",
-					"notePosition": 30,
+					"title": "Shared notes",
+					"notePosition": 100,
 					"prefix": null,
 					"isExpanded": false,
 					"type": "text",
@@ -251,17 +555,17 @@
 					"attributes": [],
 					"format": "html",
 					"attachments": [],
-					"dirFileName": "Working with notes",
+					"dirFileName": "Shared notes",
 					"children": [
 						{
 							"isClone": false,
-							"noteId": "13D1lOc9sqmZ",
+							"noteId": "1DtQ2mHreeOI",
 							"notePath": [
 								"OkOZllzB3fqN",
-								"BDEpqZHDS51s",
-								"13D1lOc9sqmZ"
+								"BhLd0mxKn0gY",
+								"1DtQ2mHreeOI"
 							],
-							"title": "Exporting as PDF",
+							"title": "Serving directly the content of a note",
 							"notePosition": 10,
 							"prefix": null,
 							"isExpanded": false,
@@ -269,31 +573,23 @@
 							"mime": "text/html",
 							"attributes": [],
 							"format": "html",
-							"dataFileName": "Exporting as PDF.html",
+							"dataFileName": "Serving directly the content o.html",
 							"attachments": [
 								{
-									"attachmentId": "b3v1pLE6TF1Y",
+									"attachmentId": "2zgbdi7zMieM",
 									"title": "image.png",
 									"role": "image",
-									"mime": "image/png",
+									"mime": "image/jpg",
 									"position": 10,
-									"dataFileName": "Exporting as PDF_image.png"
+									"dataFileName": "Serving directly the conte.png"
 								},
 								{
-									"attachmentId": "xsGM34t8ssKV",
+									"attachmentId": "DsKDaFOcumH6",
 									"title": "image.png",
 									"role": "image",
-									"mime": "image/png",
+									"mime": "image/jpg",
 									"position": 10,
-									"dataFileName": "1_Exporting as PDF_image.png"
-								},
-								{
-									"attachmentId": "cvyes4f1Vhmm",
-									"title": "image.png",
-									"role": "image",
-									"mime": "image/png",
-									"position": 10,
-									"dataFileName": "2_Exporting as PDF_image.png"
+									"dataFileName": "1_Serving directly the conte.png"
 								}
 							]
 						}
@@ -301,28 +597,89 @@
 				},
 				{
 					"isClone": false,
-					"noteId": "XUG1egT28FBk",
+					"noteId": "LTnkDnYmmZ7s",
 					"notePath": [
 						"OkOZllzB3fqN",
-						"XUG1egT28FBk"
+						"LTnkDnYmmZ7s"
 					],
-					"title": "Power users",
-					"notePosition": 50,
+					"title": "Scripting",
+					"notePosition": 110,
 					"prefix": null,
-					"isExpanded": true,
+					"isExpanded": false,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [],
 					"format": "html",
 					"attachments": [],
-					"dirFileName": "Power users",
+					"dirFileName": "Scripting",
+					"children": [
+						{
+							"isClone": false,
+							"noteId": "cTWlUHkiv1fB",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"LTnkDnYmmZ7s",
+								"cTWlUHkiv1fB"
+							],
+							"title": "Examples",
+							"notePosition": 10,
+							"prefix": null,
+							"isExpanded": true,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [],
+							"format": "html",
+							"attachments": [],
+							"dirFileName": "Examples",
+							"children": [
+								{
+									"isClone": false,
+									"noteId": "g5Vta7jt3aq3",
+									"notePath": [
+										"OkOZllzB3fqN",
+										"LTnkDnYmmZ7s",
+										"cTWlUHkiv1fB",
+										"g5Vta7jt3aq3"
+									],
+									"title": "Downloading responses from Google Forms",
+									"notePosition": 10,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/html",
+									"attributes": [],
+									"format": "html",
+									"dataFileName": "Downloading responses from Goo.html",
+									"attachments": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"isClone": false,
+					"noteId": "m4Paddd5qnnQ",
+					"notePath": [
+						"OkOZllzB3fqN",
+						"m4Paddd5qnnQ"
+					],
+					"title": "Advanced usage",
+					"notePosition": 120,
+					"prefix": null,
+					"isExpanded": false,
+					"type": "text",
+					"mime": "text/html",
+					"attributes": [],
+					"format": "html",
+					"attachments": [],
+					"dirFileName": "Advanced usage",
 					"children": [
 						{
 							"isClone": false,
 							"noteId": "DtJJ20yEozPA",
 							"notePath": [
 								"OkOZllzB3fqN",
-								"XUG1egT28FBk",
+								"m4Paddd5qnnQ",
 								"DtJJ20yEozPA"
 							],
 							"title": "Theme development",
@@ -349,7 +706,7 @@
 									"noteId": "5HH79ztN0fZA",
 									"notePath": [
 										"OkOZllzB3fqN",
-										"XUG1egT28FBk",
+										"m4Paddd5qnnQ",
 										"DtJJ20yEozPA",
 										"5HH79ztN0fZA"
 									],
@@ -372,7 +729,7 @@
 									"dataFileName": "Creating a custom theme.html",
 									"attachments": [
 										{
-											"attachmentId": "bn93hwF7C8sR",
+											"attachmentId": "AJHVfQtIQgJ7",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
@@ -380,7 +737,7 @@
 											"dataFileName": "Creating a custom theme_im.png"
 										},
 										{
-											"attachmentId": "17p6z24yW5eP",
+											"attachmentId": "gXLyv5KXjfxg",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
@@ -388,7 +745,7 @@
 											"dataFileName": "1_Creating a custom theme_im.png"
 										},
 										{
-											"attachmentId": "gXLyv5KXjfxg",
+											"attachmentId": "on1gD7BzCWdN",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
@@ -396,7 +753,7 @@
 											"dataFileName": "2_Creating a custom theme_im.png"
 										},
 										{
-											"attachmentId": "AJHVfQtIQgJ7",
+											"attachmentId": "17p6z24yW5eP",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
@@ -404,7 +761,7 @@
 											"dataFileName": "3_Creating a custom theme_im.png"
 										},
 										{
-											"attachmentId": "on1gD7BzCWdN",
+											"attachmentId": "K3cdwj8f90m0",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
@@ -412,7 +769,7 @@
 											"dataFileName": "4_Creating a custom theme_im.png"
 										},
 										{
-											"attachmentId": "K3cdwj8f90m0",
+											"attachmentId": "bn93hwF7C8sR",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
@@ -426,11 +783,11 @@
 									"noteId": "aH8Dk5aMiq7R",
 									"notePath": [
 										"OkOZllzB3fqN",
-										"XUG1egT28FBk",
+										"m4Paddd5qnnQ",
 										"DtJJ20yEozPA",
 										"aH8Dk5aMiq7R"
 									],
-									"title": "Theme base (legacy vs. next)",
+									"title": "Customize the Next theme",
 									"notePosition": 20,
 									"prefix": null,
 									"isExpanded": false,
@@ -438,23 +795,23 @@
 									"mime": "text/html",
 									"attributes": [],
 									"format": "html",
-									"dataFileName": "Theme base (legacy vs. next).html",
+									"dataFileName": "Customize the Next theme.html",
 									"attachments": [
-										{
-											"attachmentId": "u0zkXkD7rGXA",
-											"title": "image.png",
-											"role": "image",
-											"mime": "image/png",
-											"position": 10,
-											"dataFileName": "Theme base (legacy vs. nex.png"
-										},
 										{
 											"attachmentId": "5z4bC0x0eH0P",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
 											"position": 10,
-											"dataFileName": "1_Theme base (legacy vs. nex.png"
+											"dataFileName": "Customize the Next theme_i.png"
+										},
+										{
+											"attachmentId": "u0zkXkD7rGXA",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "1_Customize the Next theme_i.png"
 										}
 									]
 								},
@@ -463,7 +820,7 @@
 									"noteId": "pMq6N1oBV9oo",
 									"notePath": [
 										"OkOZllzB3fqN",
-										"XUG1egT28FBk",
+										"m4Paddd5qnnQ",
 										"DtJJ20yEozPA",
 										"pMq6N1oBV9oo"
 									],
@@ -473,10 +830,158 @@
 									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
-									"attributes": [],
+									"attributes": [
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "po38jIc0LD2H",
+											"isInheritable": false,
+											"position": 10
+										}
+									],
 									"format": "html",
 									"dataFileName": "Reference.html",
 									"attachments": []
+								}
+							]
+						},
+						{
+							"isClone": false,
+							"noteId": "po38jIc0LD2H",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"m4Paddd5qnnQ",
+								"po38jIc0LD2H"
+							],
+							"title": "Custom resource providers",
+							"notePosition": 20,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [],
+							"format": "html",
+							"dataFileName": "Custom resource providers.html",
+							"attachments": []
+						},
+						{
+							"isClone": false,
+							"noteId": "rGq9oI9hWwGf",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"m4Paddd5qnnQ",
+								"rGq9oI9hWwGf"
+							],
+							"title": "REST API",
+							"notePosition": 30,
+							"prefix": null,
+							"isExpanded": false,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [],
+							"format": "html",
+							"attachments": [],
+							"dirFileName": "REST API",
+							"children": [
+								{
+									"isClone": false,
+									"noteId": "sztusxU10ADE",
+									"notePath": [
+										"OkOZllzB3fqN",
+										"m4Paddd5qnnQ",
+										"rGq9oI9hWwGf",
+										"sztusxU10ADE"
+									],
+									"title": "ETAPI",
+									"notePosition": 10,
+									"prefix": null,
+									"isExpanded": true,
+									"type": "text",
+									"mime": "text/html",
+									"attributes": [],
+									"format": "html",
+									"attachments": [],
+									"dirFileName": "ETAPI",
+									"children": [
+										{
+											"isClone": false,
+											"noteId": "f3xpgx6H01PW",
+											"notePath": [
+												"OkOZllzB3fqN",
+												"m4Paddd5qnnQ",
+												"rGq9oI9hWwGf",
+												"sztusxU10ADE",
+												"f3xpgx6H01PW"
+											],
+											"title": "API Reference",
+											"notePosition": 10,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "webView",
+											"mime": "",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "webViewSrc",
+													"value": "/etapi/docs",
+													"isInheritable": false,
+													"position": 10
+												}
+											],
+											"dataFileName": "API Reference.dat",
+											"attachments": []
+										}
+									]
+								},
+								{
+									"isClone": false,
+									"noteId": "9OiEC6pf3Wfv",
+									"notePath": [
+										"OkOZllzB3fqN",
+										"m4Paddd5qnnQ",
+										"rGq9oI9hWwGf",
+										"9OiEC6pf3Wfv"
+									],
+									"title": "Internal API",
+									"notePosition": 20,
+									"prefix": null,
+									"isExpanded": true,
+									"type": "text",
+									"mime": "text/html",
+									"attributes": [],
+									"format": "html",
+									"attachments": [],
+									"dirFileName": "Internal API",
+									"children": [
+										{
+											"isClone": false,
+											"noteId": "7uB5k0iCmOtZ",
+											"notePath": [
+												"OkOZllzB3fqN",
+												"m4Paddd5qnnQ",
+												"rGq9oI9hWwGf",
+												"9OiEC6pf3Wfv",
+												"7uB5k0iCmOtZ"
+											],
+											"title": "API Reference",
+											"notePosition": 10,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "webView",
+											"mime": "",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "webViewSrc",
+													"value": "/api/docs",
+													"isInheritable": false,
+													"position": 10
+												}
+											],
+											"dataFileName": "API Reference.dat",
+											"attachments": []
+										}
+									]
 								}
 							]
 						}

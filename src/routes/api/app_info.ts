@@ -13,6 +13,7 @@ import appInfo from "../../services/app_info.js";
  *       url: https://github.com/TriliumNext/Notes/blob/v0.91.6/src/services/app_info.ts
  *     responses:
  *       '200':
+ *         description: Installation info
  *         content:
  *           application/json:
  *             schema:
