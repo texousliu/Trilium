@@ -33,7 +33,7 @@ const TPL = `
         margin-bottom: 0.5em;
     }
 
-    body.desktop .calendar-container .fc-toolbar.fc-header-toolbar {
+    body.desktop:not(.zen) .calendar-container .fc-toolbar.fc-header-toolbar {
         padding-right: 5em;
     }
 
