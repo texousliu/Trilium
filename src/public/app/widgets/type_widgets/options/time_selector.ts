@@ -9,19 +9,22 @@ type TimeSelectorConstructor = {
     widgetLabelId: string;
     optionValueId: keyof OptionDefinitions;
     optionTimeScaleId: keyof OptionDefinitions;
+    includedTimeScales?: Set<TimeSelectorScale>;
 };
 
+type TimeSelectorScale = "seconds" | "minutes" | "hours" | "days";
 
-const TPL = (options: Pick<TimeSelectorConstructor, "widgetId" | "widgetLabelId">) => `
+
+const TPL = (options: Omit<TimeSelectorConstructor, "optionValueId" | "optionTimeScaleId">) => `
     <div class="form-group">
         <label for="${options.widgetId}">${t(options.widgetLabelId)}</label>
         <div class="d-flex gap-2">
             <input id="${options.widgetId}" class="form-control options-number-input" type="number" min="0" steps="1" required>
             <select id="${options.widgetId}-time-scale" class="form-select duration-selector" required>
-                <option value="1">${t("duration.seconds")}</option>
-                <option value="60">${t("duration.minutes")}</option>
-                <option value="3600">${t("duration.hours")}</option>
-                <option value="86400">${t("duration.days")}</option>
+                ${options.includedTimeScales?.has("seconds") ? `<option value="1">${t("duration.seconds")}</option>` : ""}
+                ${options.includedTimeScales?.has("minutes") ? `<option value="60">${t("duration.minutes")}</option>` : ""}
+                ${options.includedTimeScales?.has("hours") ? `<option value="3600">${t("duration.hours")}</option>` : ""}
+                ${options.includedTimeScales?.has("days") ? `<option value="86400">${t("duration.days")}</option>` : ""}
             </select>
         </div>
     </div>
@@ -42,6 +45,7 @@ export default class TimeSelector extends OptionsWidget {
     private widgetLabelId: string;
     private optionValueId: keyof OptionDefinitions;
     private optionTimeScaleId: keyof OptionDefinitions;
+    private includedTimeScales: Set<TimeSelectorScale>;
 
     constructor(options: TimeSelectorConstructor) {
         super();
@@ -49,12 +53,14 @@ export default class TimeSelector extends OptionsWidget {
         this.widgetLabelId = options.widgetLabelId;
         this.optionValueId = options.optionValueId;
         this.optionTimeScaleId = options.optionTimeScaleId;
+        this.includedTimeScales = (!options.includedTimeScales) ? new Set(["seconds", "minutes", "hours", "days"]) : options.includedTimeScales;
     }
 
     doRender() {
         this.$widget = $(TPL({
             widgetId: this.widgetId,
-            widgetLabelId: this.widgetLabelId
+            widgetLabelId: this.widgetLabelId,
+            includedTimeScales: this.includedTimeScales,
         }));
 
         this.$timeValueInput = this.$widget.find(`#${this.widgetId}`);
