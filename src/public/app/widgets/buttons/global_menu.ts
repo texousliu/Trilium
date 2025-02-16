@@ -365,6 +365,7 @@ export default class GlobalMenuWidget extends BasicWidget {
 
         this.$zoomState = this.$widget.find(".zoom-state");
         this.$toggleZenMode = this.$widget.find('[data-trigger-command="toggleZenMode"');
+        this.$toggleZenMode.toggle(!utils.isMobile());
         this.$widget.on("show.bs.dropdown", () => this.#onShown());
         if (this.tooltip) {
             this.$widget.on("hide.bs.dropdown", () => this.tooltip.enable());

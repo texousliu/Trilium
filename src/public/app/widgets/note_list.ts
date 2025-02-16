@@ -2,6 +2,7 @@ import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import NoteListRenderer from "../services/note_list_renderer.js";
 import type FNote from "../entities/fnote.js";
 import type { EventData } from "../components/app_context.js";
+import type ViewMode from "./view_widgets/view_mode.js";
 
 const TPL = `
 <div class="note-list-widget">
@@ -26,6 +27,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     private isIntersecting?: boolean;
     private noteIdRefreshed?: string;
     private shownNoteId?: string | null;
+    private viewMode?: ViewMode | null;
 
     isEnabled() {
         return super.isEnabled() && this.noteContext?.hasNoteList();
@@ -67,6 +69,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     async renderNoteList(note: FNote) {
         const noteListRenderer = new NoteListRenderer(this.$content, note, note.getChildNoteIds());
         await noteListRenderer.renderList();
+        this.viewMode = noteListRenderer.viewMode;
     }
 
     async refresh() {
@@ -102,11 +105,14 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         }
     }
 
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && attr.name && ["viewType", "expanded", "pageSize"].includes(attr.name))) {
-            this.shownNoteId = null; // force render
-
+    entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
+        if (e.loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && attr.name && ["viewType", "expanded", "pageSize"].includes(attr.name))) {
+            this.refresh();
             this.checkRenderStatus();
+        }
+
+        if (this.viewMode) {
+            this.viewMode.entitiesReloadedEvents(e);
         }
     }
 }

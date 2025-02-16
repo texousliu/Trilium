@@ -752,7 +752,8 @@
     "collapse": "Collapse",
     "expand": "Expand",
     "book_properties": "Book Properties",
-    "invalid_view_type": "Invalid view type '{{type}}'"
+    "invalid_view_type": "Invalid view type '{{type}}'",
+    "calendar": "Calendar"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
