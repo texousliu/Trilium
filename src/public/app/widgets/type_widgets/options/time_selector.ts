@@ -114,7 +114,7 @@ export default class TimeSelector extends OptionsWidget {
 
     handleTimeValidation() {
         if (this.$timeValueInput.is(":invalid")) {
-            toastService.showMessage(t("time_selector.invalid_input"));
+            toastService.showError(t("time_selector.invalid_input"));
             return false;
         }
         return true;
