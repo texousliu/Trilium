@@ -31,6 +31,7 @@ import type AppContext from "../components/app_context.js";
 import TabRowWidget from "../widgets/tab_row.js";
 import JumpToNoteDialog from "../widgets/dialogs/jump_to_note.js";
 import RecentChangesDialog from "../widgets/dialogs/recent_changes.js";
+import PromptDialog from "../widgets/dialogs/prompt.js";
 
 const MOBILE_CSS = `
 <style>
@@ -189,6 +190,7 @@ export default class MobileLayout {
             .child(new AboutDialog())
             .child(new HelpDialog())
             .child(new RecentChangesDialog())
-            .child(new JumpToNoteDialog());
+            .child(new JumpToNoteDialog())
+            .child(new PromptDialog());
     }
 }
