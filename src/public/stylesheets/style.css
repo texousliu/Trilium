@@ -1677,6 +1677,7 @@ body.zen .title-row {
     display: block !important;
     height: unset !important;
     -webkit-app-region: drag;
+    padding-left: env(titlebar-area-x);
 }
 
 body.zen .note-title-widget,

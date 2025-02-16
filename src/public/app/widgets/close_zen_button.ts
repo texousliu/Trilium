@@ -25,7 +25,7 @@ const TPL = `\
         -webkit-app-region: no-drag;
     }
 
-    body.zen.electron:not(.native-titlebar) .close-zen-container {
+    body.zen.electron:not(.platform-darwin):not(.native-titlebar) .close-zen-container {
         left: calc(env(titlebar-area-width) - var(--zen-button-size) - 2px);
         right: unset;
     }
