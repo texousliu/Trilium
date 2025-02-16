@@ -4,9 +4,11 @@ import ListOrGridView from "../widgets/view_widgets/list_or_grid_view.js";
 import type { ViewModeArgs } from "../widgets/view_widgets/view_mode.js";
 import type ViewMode from "../widgets/view_widgets/view_mode.js";
 
+export type ViewTypeOptions = "list" | "grid" | "calendar";
+
 export default class NoteListRenderer {
 
-    private viewType: string;
+    private viewType: ViewTypeOptions;
     public viewMode: ViewMode | null;
 
     constructor($parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
@@ -27,14 +29,14 @@ export default class NoteListRenderer {
         }
     }
 
-    #getViewType(parentNote: FNote): string {
+    #getViewType(parentNote: FNote): ViewTypeOptions {
         const viewType = parentNote.getLabelValue("viewType");
 
         if (!["list", "grid", "calendar"].includes(viewType || "")) {
             // when not explicitly set, decide based on the note type
             return parentNote.type === "search" ? "list" : "grid";
         } else {
-            return viewType as string;
+            return viewType as ViewTypeOptions;
         }
     }
 

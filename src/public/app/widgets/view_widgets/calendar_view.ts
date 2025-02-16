@@ -33,6 +33,10 @@ const TPL = `
         margin-bottom: 0.5em;
     }
 
+    body.desktop .calendar-container .fc-toolbar.fc-header-toolbar {
+        padding-right: 5em;
+    }
+
     .calendar-container .fc-toolbar-title {
         font-size: 1.3rem;
         font-weight: normal;
