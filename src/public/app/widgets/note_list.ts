@@ -107,8 +107,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
 
     entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
         if (e.loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && attr.name && ["viewType", "expanded", "pageSize"].includes(attr.name))) {
-            this.shownNoteId = null; // force render
-
+            this.refresh();
             this.checkRenderStatus();
         }
 

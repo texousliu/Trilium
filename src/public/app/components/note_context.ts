@@ -290,7 +290,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         return (
             this.note &&
             ["default", "contextual-help"].includes(this.viewScope?.viewMode ?? "") &&
-            this.note.hasChildren() &&
+            (this.note.hasChildren() || this.note.getLabelValue("viewType") === "calendar") &&
             ["book", "text", "code"].includes(this.note.type) &&
             this.note.mime !== "text/x-sqlite;schema=trilium" &&
             !this.note.isLabelTruthy("hideChildrenOverview")

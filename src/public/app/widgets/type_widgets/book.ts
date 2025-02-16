@@ -1,6 +1,7 @@
 import TypeWidget from "./type_widget.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="note-detail-book note-detail-printable">
@@ -35,6 +36,15 @@ export default class BookTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: FNote) {
-        this.$helpNoChildren.toggle(!this.note?.hasChildren());
+        this.$helpNoChildren.toggle(
+            !this.note?.hasChildren()
+            && this.note?.getAttributeValue("label", "viewType") !== "calendar");
     }
+
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && attr.name === "viewType")) {
+            this.refresh();
+        }
+    }
+
 }
