@@ -11,7 +11,7 @@
 			"title": "User Guide",
 			"notePosition": 20,
 			"prefix": null,
-			"isExpanded": true,
+			"isExpanded": false,
 			"type": "text",
 			"mime": "text/html",
 			"attributes": [
@@ -166,7 +166,7 @@
 					"title": "Features",
 					"notePosition": 40,
 					"prefix": null,
-					"isExpanded": false,
+					"isExpanded": true,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [],
@@ -314,7 +314,7 @@
 					"title": "Note Types",
 					"notePosition": 70,
 					"prefix": null,
-					"isExpanded": false,
+					"isExpanded": true,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [],
@@ -536,6 +536,208 @@
 									"dataFileName": "19_Geo map_image.png"
 								}
 							]
+						},
+						{
+							"isClone": false,
+							"noteId": "pSDzQIgLGswQ",
+							"notePath": [
+								"OkOZllzB3fqN",
+								"wmegHv51MJMd",
+								"pSDzQIgLGswQ"
+							],
+							"title": "Book",
+							"notePosition": 30,
+							"prefix": null,
+							"isExpanded": true,
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [
+								{
+									"type": "label",
+									"name": "iconClass",
+									"value": "bx bx-book-alt",
+									"isInheritable": false,
+									"position": 10
+								}
+							],
+							"format": "html",
+							"attachments": [],
+							"dirFileName": "Book",
+							"children": [
+								{
+									"isClone": false,
+									"noteId": "fDGg7QcJg3Xm",
+									"notePath": [
+										"OkOZllzB3fqN",
+										"wmegHv51MJMd",
+										"pSDzQIgLGswQ",
+										"fDGg7QcJg3Xm"
+									],
+									"title": "Calendar View",
+									"notePosition": 10,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "text",
+									"mime": "text/html",
+									"attributes": [
+										{
+											"type": "label",
+											"name": "iconClass",
+											"value": "bx bx-calendar",
+											"isInheritable": false,
+											"position": 10
+										}
+									],
+									"format": "html",
+									"dataFileName": "Calendar View.html",
+									"attachments": [
+										{
+											"attachmentId": "j1NIQJvjsFrc",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "Calendar View_image.png"
+										},
+										{
+											"attachmentId": "9FxGltAPWr9V",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "1_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "8kfaJPGjJ1t5",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "2_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "GaH4K6lKfcQe",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "3_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "xr4c0Mdf7gPm",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "4_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "K8NQktF9sCss",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "5_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "fFaq1mWTFlJA",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "6_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "2CExLYphNtCd",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "7_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "UaXBPb7fINm4",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "8_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "TIzqtnGIPlxu",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "9_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "p7eRe4TFFdIt",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "10_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "bnKESYv4Toa1",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "11_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "MwECr6EjQjEE",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "12_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "0J8MfQPq7E1H",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "13_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "0yGXmgB3yfGg",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "14_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "XBOyB2RH28OS",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "15_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "BsiAqW51VJOz",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "16_Calendar View_image.png"
+										},
+										{
+											"attachmentId": "RTFdV19BHn28",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/png",
+											"position": 10,
+											"dataFileName": "17_Calendar View_image.png"
+										}
+									]
+								}
+							]
 						}
 					]
 				},
@@ -624,7 +826,7 @@
 							"title": "Examples",
 							"notePosition": 10,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [],
@@ -895,7 +1097,7 @@
 									"title": "ETAPI",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [],
@@ -945,7 +1147,7 @@
 									"title": "Internal API",
 									"notePosition": 20,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [],

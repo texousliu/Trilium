@@ -155,15 +155,9 @@ export default class CalendarView extends ViewMode {
 
     async #onEventMoved(e: EventChangeArg) {
         const startDate = CalendarView.#formatDateToLocalISO(e.event.start);
+        // Fullcalendar end date is exclusive, not inclusive but we store it the other way around.
         let endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.event.end, -1));
         const noteId = e.event.extendedProps.noteId;
-
-        // Fullcalendar end date is exclusive, not inclusive but we store it the other way around.
-        if (endDate) {
-            const endDateParsed = new Date(endDate);
-            endDateParsed.setDate(endDateParsed.getDate() - 1);
-            endDate = CalendarView.#formatDateToLocalISO(endDateParsed);
-        }
 
         // Don't store the end date if it's empty.
         if (endDate === startDate) {
