@@ -1,3 +1,5 @@
+import type { EventData } from "../../components/app_context.js";
+import type FNote from "../../entities/fnote.js";
 import { t } from "../../services/i18n.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
 import options from "../../services/options.js";
@@ -10,7 +12,7 @@ const TPL = `
         position: relative;
         height: 100%;
     }
-    
+
     .note-detail-code-editor {
         min-height: 50px;
         height: 100%;
@@ -21,6 +23,9 @@ const TPL = `
 </div>`;
 
 export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
+
+    private $editor!: JQuery<HTMLElement>;
+
     static getType() {
         return "editableCode";
     }
@@ -50,11 +55,11 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         this.codeEditor.on("change", () => this.spacedUpdate.scheduleUpdate());
     }
 
-    async doRefresh(note) {
-        const blob = await this.note.getBlob();
+    async doRefresh(note: FNote) {
+        const blob = await this.note?.getBlob();
 
         await this.spacedUpdate.allowUpdateWithoutChange(() => {
-            this._update(note, blob.content);
+            this._update(note, blob?.content);
         });
 
         this.show();
@@ -66,7 +71,7 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         };
     }
 
-    async executeWithCodeEditorEvent({ resolve, ntxId }) {
+    async executeWithCodeEditorEvent({ resolve, ntxId }: EventData<"executeWithCodeEditor">) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }

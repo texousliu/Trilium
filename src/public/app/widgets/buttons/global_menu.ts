@@ -133,7 +133,12 @@ const TPL = `
             ${t("title_bar_buttons.window-on-top")}
         </li>
 
-        <div class="dropdown-divider zoom-container-separator"></div>
+        <li class="dropdown-item" data-trigger-command="toggleZenMode">
+            <span class="bx bxs-yin-yang"></span>
+            ${t("global_menu.toggle-zen-mode")}
+        </li>
+
+        <div class="dropdown-divider"></div>
 
         <li class="dropdown-item switch-to-mobile-version-button" data-trigger-command="switchToMobileVersion">
             <span class="bx bx-mobile"></span>
@@ -251,6 +256,7 @@ export default class GlobalMenuWidget extends BasicWidget {
 
     private $updateToLatestVersionButton!: JQuery<HTMLElement>;
     private $zoomState!: JQuery<HTMLElement>;
+    private $toggleZenMode!: JQuery<HTMLElement>;
 
     constructor(isHorizontalLayout: boolean) {
         super();
@@ -355,17 +361,11 @@ export default class GlobalMenuWidget extends BasicWidget {
 
         if (!utils.isElectron()) {
             this.$widget.find(".zoom-container").hide();
-            this.$widget.find(".zoom-container-separator").hide();
         }
 
         this.$zoomState = this.$widget.find(".zoom-state");
-        this.$widget.on("show.bs.dropdown", () => {
-            this.updateZoomState();
-            if (this.tooltip) {
-                this.tooltip.hide();
-                this.tooltip.disable();
-            }
-        });
+        this.$toggleZenMode = this.$widget.find('[data-trigger-command="toggleZenMode"');
+        this.$widget.on("show.bs.dropdown", () => this.#onShown());
         if (this.tooltip) {
             this.$widget.on("hide.bs.dropdown", () => this.tooltip.enable());
         }
@@ -379,6 +379,15 @@ export default class GlobalMenuWidget extends BasicWidget {
         this.updateVersionStatus();
 
         setInterval(() => this.updateVersionStatus(), 8 * 60 * 60 * 1000);
+    }
+
+    #onShown() {
+        this.$toggleZenMode.toggleClass("active", $("body").hasClass("zen"));
+        this.updateZoomState();
+        if (this.tooltip) {
+            this.tooltip.hide();
+            this.tooltip.disable();
+        }
     }
 
     updateZoomState() {

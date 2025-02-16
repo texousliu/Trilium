@@ -92,7 +92,8 @@
     "toggle-book-properties": "Toggle Book Properties",
     "toggle-classic-editor-toolbar": "Toggle the Formatting tab for the editor with fixed toolbar",
     "export-as-pdf": "Exports the current note as a PDF",
-    "show-cheatsheet": "Shows a modal with common keyboard operations"
+    "show-cheatsheet": "Shows a modal with common keyboard operations",
+    "toggle-zen-mode": "Enables/disables the zen mode (minimal UI for more focused editing)"
   },
   "login": {
     "title": "Login",

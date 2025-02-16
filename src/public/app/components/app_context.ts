@@ -223,6 +223,8 @@ export type CommandMappings = {
     // Geomap
     deleteFromMap: { noteId: string },
     openGeoLocation: { noteId: string, event: JQuery.MouseDownEvent }
+
+    toggleZenMode: CommandData;
 };
 
 type EventMappings = {
@@ -325,6 +327,7 @@ type EventMappings = {
     };
     scrollToEnd: { ntxId: string };
     noteTypeMimeChanged: { noteId: string };
+    zenModeChanged: { isEnabled: boolean };
 };
 
 export type EventListener<T extends EventNames> = {

@@ -9,6 +9,8 @@ import protectedSessionHolder from "../../services/protected_session_holder.js";
 import BasicWidget from "../basic_widget.js";
 import dialogService from "../../services/dialog.js";
 import options from "../../services/options.js";
+import type FNote from "../../entities/fnote.js";
+import type { NoteType } from "../../entities/fnote.js";
 
 const TPL = `
 <div class="revisions-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -76,7 +78,43 @@ const TPL = `
     </div>
 </div>`;
 
+interface RevisionItem {
+    noteId: string;
+    revisionId: string;
+    dateLastEdited: string;
+    contentLength: number;
+    type: NoteType;
+    title: string;
+    isProtected: boolean;
+    mime: string;
+}
+
+interface FullRevision {
+    content: string;
+    mime: string;
+}
+
 export default class RevisionsDialog extends BasicWidget {
+
+    private revisionItems: RevisionItem[];
+    private note: FNote | null;
+    private revisionId: string | null;
+
+    //@ts-ignore
+    private modal: bootstrap.Modal;
+    //@ts-ignore
+    private listDropdown: bootstrap.Dropdown;
+
+    private $list!: JQuery<HTMLElement>;
+    private $listDropdown!: JQuery<HTMLElement>;
+    private $content!: JQuery<HTMLElement>;
+    private $title!: JQuery<HTMLElement>;
+    private $titleButtons!: JQuery<HTMLElement>;
+    private $eraseAllRevisionsButton!: JQuery<HTMLElement>;
+    private $maximumRevisions!: JQuery<HTMLElement>;
+    private $snapshotInterval!: JQuery<HTMLElement>;
+    private $revisionSettingsButton!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -87,11 +125,13 @@ export default class RevisionsDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
+        //@ts-ignore
         this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
 
         this.$list = this.$widget.find(".revision-list");
         this.$listDropdown = this.$widget.find(".revision-list-dropdown");
-        this.listDropdown = bootstrap.Dropdown.getOrCreateInstance(this.$listDropdown);
+        //@ts-ignore
+        this.listDropdown = bootstrap.Dropdown.getOrCreateInstance(this.$listDropdown, { autoClose: false });
         this.$content = this.$widget.find(".revision-content");
         this.$title = this.$widget.find(".revision-title");
         this.$titleButtons = this.$widget.find(".revision-title-buttons");
@@ -102,26 +142,18 @@ export default class RevisionsDialog extends BasicWidget {
         this.listDropdown.show();
 
         this.$listDropdown.parent().on("hide.bs.dropdown", (e) => {
-            // Prevent closing dropdown by pressing ESC and clicking outside
-            e.preventDefault();
+            this.modal.hide();
         });
-
-        document.addEventListener(
-            "keydown",
-            (e) => {
-                // Close the revision dialog when revision element is focused and ESC is pressed
-                if (e.key === "Escape" || e.target.classList.contains(["dropdown-item", "active"])) {
-                    this.modal.hide();
-                }
-            },
-            true
-        );
 
         this.$widget.on("shown.bs.modal", () => {
             this.$list.find(`[data-revision-id="${this.revisionId}"]`).trigger("focus");
         });
 
         this.$eraseAllRevisionsButton.on("click", async () => {
+            if (!this.note) {
+                return;
+            }
+
             const text = t("revisions.confirm_delete_all");
 
             if (await dialogService.confirm(text)) {
@@ -147,18 +179,22 @@ export default class RevisionsDialog extends BasicWidget {
     }
 
     async showRevisionsEvent({ noteId = appContext.tabManager.getActiveContextNoteId() }) {
+        if (!noteId) {
+            return;
+        }
+
         utils.openDialog(this.$widget);
 
         await this.loadRevisions(noteId);
     }
 
-    async loadRevisions(noteId) {
+    async loadRevisions(noteId: string) {
         this.$list.empty();
         this.$content.empty();
         this.$titleButtons.empty();
 
         this.note = appContext.tabManager.getActiveContextNote();
-        this.revisionItems = await server.get(`notes/${noteId}/revisions`);
+        this.revisionItems = await server.get<RevisionItem[]>(`notes/${noteId}/revisions`);
 
         for (const item of this.revisionItems) {
             this.$list.append(
@@ -184,9 +220,9 @@ export default class RevisionsDialog extends BasicWidget {
 
         // Show the footer of the revisions dialog
         this.$snapshotInterval.text(t("revisions.snapshot_interval", { seconds: options.getInt("revisionSnapshotTimeInterval") }));
-        let revisionsNumberLimit = parseInt(this.note.getLabelValue("versioningLimit") ?? "");
+        let revisionsNumberLimit: number | string = parseInt(this.note?.getLabelValue("versioningLimit") ?? "");
         if (!Number.isInteger(revisionsNumberLimit)) {
-            revisionsNumberLimit = parseInt(options.getInt("revisionSnapshotNumberLimit"));
+            revisionsNumberLimit = options.getInt("revisionSnapshotNumberLimit") ?? 0;
         }
         if (revisionsNumberLimit === -1) {
             revisionsNumberLimit = "∞";
@@ -198,6 +234,9 @@ export default class RevisionsDialog extends BasicWidget {
         const revisionId = this.$list.find(".active").attr("data-revision-id");
 
         const revisionItem = this.revisionItems.find((r) => r.revisionId === revisionId);
+        if (!revisionItem) {
+            return;
+        }
 
         this.$title.html(revisionItem.title);
 
@@ -206,7 +245,7 @@ export default class RevisionsDialog extends BasicWidget {
         await this.renderContent(revisionItem);
     }
 
-    renderContentButtons(revisionItem) {
+    renderContentButtons(revisionItem: RevisionItem) {
         this.$titleButtons.empty();
 
         const $restoreRevisionButton = $(`<button class="btn btn-sm" type="button">${t("revisions.restore_button")}</button>`);
@@ -252,13 +291,13 @@ export default class RevisionsDialog extends BasicWidget {
         }
     }
 
-    async renderContent(revisionItem) {
+    async renderContent(revisionItem: RevisionItem) {
         this.$content.empty();
 
-        const fullRevision = await server.get(`revisions/${revisionItem.revisionId}`);
+        const fullRevision = await server.get<FullRevision>(`revisions/${revisionItem.revisionId}`);
 
         if (revisionItem.type === "text") {
-            this.$content.html(fullRevision.content);
+            this.$content.html(`<div class="ck-content">${fullRevision.content}</div>`);
 
             if (this.$content.find("span.math-tex").length > 0) {
                 await libraryLoader.requireLibrary(libraryLoader.KATEX);
@@ -266,11 +305,15 @@ export default class RevisionsDialog extends BasicWidget {
                 renderMathInElement(this.$content[0], { trust: true });
             }
         } else if (revisionItem.type === "code") {
-            this.$content.html($("<pre>").text(fullRevision.content));
+            this.$content.html($("<pre>")
+                .text(fullRevision.content).html());
         } else if (revisionItem.type === "image") {
             if (fullRevision.mime === "image/svg+xml") {
                 let encodedSVG = encodeURIComponent(fullRevision.content); //Base64 of other format images may be embedded in svg
-                this.$content.html($("<img>").attr("src", `data:${fullRevision.mime};utf8,${encodedSVG}`).css("max-width", "100%").css("max-height", "100%"));
+                this.$content.html($("<img>")
+                    .attr("src", `data:${fullRevision.mime};utf8,${encodedSVG}`)
+                    .css("max-width", "100%")
+                    .css("max-height", "100%").html());
             } else {
                 this.$content.html(
                     $("<img>")
@@ -278,13 +321,16 @@ export default class RevisionsDialog extends BasicWidget {
                         // as a URL to be used in a note. Instead, if they copy and paste it into a note, it will be uploaded as a new note
                         .attr("src", `data:${fullRevision.mime};base64,${fullRevision.content}`)
                         .css("max-width", "100%")
-                        .css("max-height", "100%")
+                        .css("max-height", "100%").html()
                 );
             }
         } else if (revisionItem.type === "file") {
             const $table = $("<table cellpadding='10'>")
-                .append($("<tr>").append($("<th>").text(t("revisions.mime")), $("<td>").text(revisionItem.mime)))
-                .append($("<tr>").append($("<th>").text(t("revisions.file_size")), $("<td>").text(utils.formatSize(revisionItem.contentLength))));
+                .append($("<tr>")
+                    .append(
+                        $("<th>").text(t("revisions.mime")),
+                        $("<td>").text(revisionItem.mime)))
+                    .append($("<tr>").append($("<th>").text(t("revisions.file_size")), $("<td>").text(utils.formatSize(revisionItem.contentLength))));
 
             if (fullRevision.content) {
                 $table.append(
@@ -294,15 +340,23 @@ export default class RevisionsDialog extends BasicWidget {
                 );
             }
 
-            this.$content.html($table);
+            this.$content.html($table.html());
         } else if (["canvas", "mindMap"].includes(revisionItem.type)) {
             const encodedTitle = encodeURIComponent(revisionItem.title);
 
-            this.$content.html($("<img>").attr("src", `api/revisions/${revisionItem.revisionId}/image/${encodedTitle}?${Math.random()}`).css("max-width", "100%"));
+            this.$content.html(
+                $("<img>")
+                    .attr("src", `api/revisions/${revisionItem.revisionId}/image/${encodedTitle}?${Math.random()}`)
+                    .css("max-width", "100%")
+                .html());
         } else if (revisionItem.type === "mermaid") {
             const encodedTitle = encodeURIComponent(revisionItem.title);
 
-            this.$content.html($("<img>").attr("src", `api/revisions/${revisionItem.revisionId}/image/${encodedTitle}?${Math.random()}`).css("max-width", "100%"));
+            this.$content.html(
+                $("<img>")
+                    .attr("src", `api/revisions/${revisionItem.revisionId}/image/${encodedTitle}?${Math.random()}`)
+                    .css("max-width", "100%")
+                .html());
 
             this.$content.append($("<pre>").text(fullRevision.content));
         } else {

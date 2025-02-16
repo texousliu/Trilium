@@ -12,6 +12,7 @@ import type { OptionNames } from "../../services/options_interface.js";
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set([
     "eraseEntitiesAfterTimeInSeconds",
+    "eraseEntitiesAfterTimeScale",
     "protectedSessionTimeout",
     "revisionSnapshotTimeInterval",
     "revisionSnapshotNumberLimit",
