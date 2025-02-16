@@ -3,7 +3,6 @@ import toastService from "../../../services/toast.js";
 import { t } from "../../../services/i18n.js";
 import type { OptionDefinitions, OptionMap } from "../../../../../services/options_interface.js";
 
-
 type TimeSelectorConstructor = {
     widgetId: string;
     widgetLabelId: string;
@@ -13,7 +12,6 @@ type TimeSelectorConstructor = {
 };
 
 type TimeSelectorScale = "seconds" | "minutes" | "hours" | "days";
-
 
 const TPL = (options: Omit<TimeSelectorConstructor, "optionValueId" | "optionTimeScaleId">) => `
     <div class="form-group">
@@ -37,7 +35,6 @@ const TPL = (options: Omit<TimeSelectorConstructor, "optionValueId" | "optionTim
 </style>`;
 
 export default class TimeSelector extends OptionsWidget {
-
     private $timeValueInput!: JQuery<HTMLInputElement>;
     private $timeScaleSelect!: JQuery<HTMLSelectElement>;
     private internalTimeInSeconds!: string | number;
@@ -53,15 +50,17 @@ export default class TimeSelector extends OptionsWidget {
         this.widgetLabelId = options.widgetLabelId;
         this.optionValueId = options.optionValueId;
         this.optionTimeScaleId = options.optionTimeScaleId;
-        this.includedTimeScales = (!options.includedTimeScales) ? new Set(["seconds", "minutes", "hours", "days"]) : options.includedTimeScales;
+        this.includedTimeScales = !options.includedTimeScales ? new Set(["seconds", "minutes", "hours", "days"]) : options.includedTimeScales;
     }
 
     doRender() {
-        this.$widget = $(TPL({
-            widgetId: this.widgetId,
-            widgetLabelId: this.widgetLabelId,
-            includedTimeScales: this.includedTimeScales,
-        }));
+        this.$widget = $(
+            TPL({
+                widgetId: this.widgetId,
+                widgetLabelId: this.widgetLabelId,
+                includedTimeScales: this.includedTimeScales
+            })
+        );
 
         this.$timeValueInput = this.$widget.find(`#${this.widgetId}`);
         this.$timeScaleSelect = this.$widget.find(`#${this.widgetId}-time-scale`);
@@ -74,11 +73,9 @@ export default class TimeSelector extends OptionsWidget {
 
             this.internalTimeInSeconds = this.convertTime(time, timeScale).toOption();
             this.updateOption(this.optionValueId, this.internalTimeInSeconds);
-
         });
 
         this.$timeScaleSelect.on("change", () => {
-
             const timeScale = this.$timeScaleSelect.val();
 
             if (!this.handleTimeValidation() || typeof timeScale !== "string") return;
@@ -88,9 +85,7 @@ export default class TimeSelector extends OptionsWidget {
 
             this.updateOption(this.optionTimeScaleId, timeScale);
             this.$timeValueInput.val(displayedTime).trigger("change");
-
         });
-
     }
 
     async optionsLoaded(options: OptionMap) {
@@ -100,12 +95,10 @@ export default class TimeSelector extends OptionsWidget {
         this.$timeScaleSelect.val(options[this.optionTimeScaleId]);
     }
 
-
     convertTime(time: string | number, timeScale: string | number) {
-
         const value = typeof time === "number" ? time : parseInt(time);
         if (Number.isNaN(value)) {
-          throw new Error(`Time needs to be a valid integer, but received: ${time}`);
+            throw new Error(`Time needs to be a valid integer, but received: ${time}`);
         }
 
         const operand = typeof timeScale === "number" ? timeScale : parseInt(timeScale);
@@ -115,17 +108,15 @@ export default class TimeSelector extends OptionsWidget {
 
         return {
             toOption: () => Math.ceil(value * operand),
-            toDisplay: () => Math.ceil(value / operand),
-        }
-
+            toDisplay: () => Math.ceil(value / operand)
+        };
     }
 
     handleTimeValidation() {
         if (this.$timeValueInput.is(":invalid")) {
             toastService.showMessage(t("time_selector.invalid_input"));
-            return false
+            return false;
         }
         return true;
     }
-
 }

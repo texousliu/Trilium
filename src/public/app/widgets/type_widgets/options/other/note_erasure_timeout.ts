@@ -17,22 +17,19 @@ const TPL2 = `
 </div>`;
 
 export default class NoteErasureTimeoutOptions extends TimeSelector {
-
     private $eraseDeletedNotesButton!: JQuery<HTMLButtonElement>;
 
     constructor() {
-        super( {
+        super({
             widgetId: "erase-entities-after",
             widgetLabelId: "note_erasure_timeout.erase_notes_after",
             optionValueId: "eraseEntitiesAfterTimeInSeconds",
             optionTimeScaleId: "eraseEntitiesAfterTimeScale"
-        })
+        });
         super.doRender();
-
     }
 
     doRender() {
-
         this.$widget = $(TPL).append(this.$widget).append(TPL2);
 
         this.$eraseDeletedNotesButton = this.$widget.find("#erase-deleted-notes-now-button");
@@ -43,5 +40,4 @@ export default class NoteErasureTimeoutOptions extends TimeSelector {
             });
         });
     }
-
 }

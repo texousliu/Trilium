@@ -18,7 +18,6 @@ const TPL2 = `
 </div>`;
 
 export default class AttachmentErasureTimeoutOptions extends TimeSelector {
-
     private $eraseUnusedAttachmentsNowButton!: JQuery<HTMLElement>;
 
     constructor() {
@@ -27,8 +26,8 @@ export default class AttachmentErasureTimeoutOptions extends TimeSelector {
             widgetLabelId: "attachment_erasure_timeout.erase_attachments_after_x_seconds",
             optionValueId: "eraseUnusedAttachmentsAfterSeconds",
             optionTimeScaleId: "eraseUnusedAttachmentsAfterTimeScale"
-        })
-      super.doRender()
+        });
+        super.doRender();
     }
 
     doRender() {
@@ -41,5 +40,4 @@ export default class AttachmentErasureTimeoutOptions extends TimeSelector {
             });
         });
     }
-
 }
