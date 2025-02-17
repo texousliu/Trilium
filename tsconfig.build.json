@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "declaration": false,
+    "sourceMap": true,
+    "outDir": "./build",
+    "strict": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "lib": ["ES2023"],
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["./src/**/*.[jt]s", "./*.ts"],
+  "exclude": [
+	  "./node_modules/**/*", 
+	  "./spec-es6/**/*.ts",
+	  "./spec/**/*",
+	  "./**/*.spec.ts",
+	  "./src/public/**/*",
+    "./*.config.[jt]s",
+  ],
+  "files": ["src/types.d.ts"]
+}
