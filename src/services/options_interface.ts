@@ -29,6 +29,9 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     detailFontFamily: FontFamily;
     monospaceFontFamily: FontFamily;
     spellCheckLanguageCode: string;
+    // Share settings
+    redirectBareDomain: string;
+    showLoginInShareTheme: string;
     codeNotesMimeTypes: string;
     headingStyle: string;
     highlightsList: string;
