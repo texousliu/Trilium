@@ -78,7 +78,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
         RevisionSnapshotsLimitOptions,
         NetworkConnectionsOptions,
         HtmlImportTagsOptions,
-        ShareSettingsOptions // moved to the end of the array
+        ShareSettingsOptions
     ],
     _optionsAdvanced: [DatabaseIntegrityCheckOptions, DatabaseAnonymizationOptions, AdvancedSyncOptions, VacuumDatabaseOptions],
     _backendLog: [BackendLogWidget]

@@ -29,9 +29,6 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     detailFontFamily: FontFamily;
     monospaceFontFamily: FontFamily;
     spellCheckLanguageCode: string;
-    // Share settings
-    redirectBareDomain: string;
-    showLoginInShareTheme: string;
     codeNotesMimeTypes: string;
     headingStyle: string;
     highlightsList: string;
@@ -97,6 +94,10 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
     backgroundEffects: boolean;
+    // Share settings
+    redirectBareDomain: boolean;
+    showLoginInShareTheme: boolean;
+
 }
 
 export type OptionNames = keyof OptionDefinitions;

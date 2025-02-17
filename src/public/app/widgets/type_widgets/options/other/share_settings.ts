@@ -5,22 +5,23 @@ import type { OptionMap, OptionNames } from "../../../../../../services/options_
 
 const TPL = `
 <div class="card-body">
-    <h4>${t("Share Settings")}</h4>
-    
+    <h4>${t("share.title")}</h4>
+
     <div class="form-check">
         <label class="form-check-label">
             <input class="form-check-input" type="checkbox" name="redirectBareDomain" value="true">
-            ${t("Redirect bare domain to Share page")}
+            ${t("share.redirect_bare_domain")}
         </label>
-        <p class="form-text">${t("When enabled, accessing the root URL will redirect to the Share page instead of Login")}</p>
+        <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
     </div>
 
     <div class="form-check">
         <label class="form-check-label">
             <input class="form-check-input" type="checkbox" name="showLoginInShareTheme" value="true">
-            ${t("Show Login link in Share theme")}
+            ${t("share.show_login_link")}
         </label>
-        <p class="form-text">${t("Add a login link to the Share page footer")}</p>
+        <p class="form-text">${t("share.show_login_link_description")}</p>
+        <p>&nbsp;</p>
     </div>
 </div>`;
 
