@@ -1,6 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import options from "../../../../services/options.js";
 import { t } from "../../../../services/i18n.js";
+import type { OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="card-body">
@@ -27,9 +28,12 @@ export default class ShareSettingsOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.contentSized();
+
+        // Add change handlers for both checkboxes
+        this.$widget.find('input[type="checkbox"]').on('change', () => this.save());
     }
 
-    async optionsLoaded(options: Record<string, any>) {
+    async optionsLoaded(options: OptionMap) {
         this.$widget.find('input[name="redirectBareDomain"]').prop('checked', 
             options.redirectBareDomain === 'true');
             
@@ -39,9 +43,9 @@ export default class ShareSettingsOptions extends OptionsWidget {
 
     async save() {
         const redirectBareDomain = this.$widget.find('input[name="redirectBareDomain"]').prop('checked');
-        await this.updateOption('redirectBareDomain', redirectBareDomain.toString());
+        await this.updateOption<'redirectBareDomain'>('redirectBareDomain', redirectBareDomain.toString());
 
         const showLoginInShareTheme = this.$widget.find('input[name="showLoginInShareTheme"]').prop('checked');
-        await this.updateOption('showLoginInShareTheme', showLoginInShareTheme.toString());
+        await this.updateOption<'showLoginInShareTheme'>('showLoginInShareTheme', showLoginInShareTheme.toString());
     }
 }
