@@ -1005,9 +1005,7 @@
   "web_view": {
     "web_view": "Web View",
     "embed_websites": "Note of type Web View allows you to embed websites into Trilium.",
-    "create_label": "To start, please create a label with a URL address you want to embed, e.g. #webViewSrc=\"https://www.google.com\"",
-    "disclaimer": "Disclaimer on the experimental status",
-    "experimental_note": "Web View is an experimental note type, and it might be removed or substantially changed in the future."
+    "create_label": "To start, please create a label with a URL address you want to embed, e.g. #webViewSrc=\"https://www.google.com\""
   },
   "backend_log": {
     "refresh": "Refresh"

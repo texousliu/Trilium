@@ -970,9 +970,7 @@
   "web_view": {
     "web_view": "網頁視圖",
     "embed_websites": "網頁視圖類型的筆記允許您將網站嵌入到 Trilium 中。",
-    "create_label": "首先，請新增一個帶有您要嵌入的 URL 地址的標籤，例如 #webViewSrc=\"https://www.bing.com\"",
-    "disclaimer": "實驗性功能免責聲明",
-    "experimental_note": "網頁視圖是一種實驗性的筆記類型，將來可能會被移除或大幅更改。"
+    "create_label": "首先，請新增一個帶有您要嵌入的 URL 地址的標籤，例如 #webViewSrc=\"https://www.bing.com\""
   },
   "backend_log": {
     "refresh": "刷新"

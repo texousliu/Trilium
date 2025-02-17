@@ -13,10 +13,6 @@ const TPL = `
         <p>${t("web_view.embed_websites")}</p>
 
         <p>${t("web_view.create_label")}</p>
-
-        <h4>${t("web_view.disclaimer")}</h4>
-
-        <p>${t("web_view.experimental_note")}</p>
     </div>
 
     ${buildElement()}
