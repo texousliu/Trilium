@@ -5,8 +5,6 @@ import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 import utils from "../../services/utils.js";
 
-const el = utils.isElectron() ? "webview" : "iframe";
-
 const TPL = `
 <div class="note-detail-web-view note-detail-printable" style="height: 100%">
     <div class="note-detail-web-view-help alert alert-warning" style="margin: 50px; padding: 20px 20px 0px 20px;">
@@ -21,8 +19,16 @@ const TPL = `
         <p>${t("web_view.experimental_note")}</p>
     </div>
 
-    <${el} class="note-detail-web-view-content"></${el}>
+    ${buildElement()}
 </div>`;
+
+function buildElement() {
+    if (!utils.isElectron()) {
+        return `<iframe class="note-detail-web-view-content" sandbox="allow-same-origin allow-scripts"></iframe>`;
+    } else {
+        return `<webview class="note-detail-web-view-content"></webview>`;
+    }
+}
 
 export default class WebViewTypeWidget extends TypeWidget {
 
