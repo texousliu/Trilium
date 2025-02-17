@@ -1,6 +1,6 @@
 {
 	"formatVersion": 2,
-	"appVersion": "0.91.6-test-250214-024424",
+	"appVersion": "0.91.6-test-250217-024840",
 	"files": [
 		{
 			"isClone": false,
@@ -11,7 +11,7 @@
 			"title": "User Guide",
 			"notePosition": 20,
 			"prefix": null,
-			"isExpanded": false,
+			"isExpanded": true,
 			"type": "text",
 			"mime": "text/html",
 			"attributes": [
@@ -29,135 +29,6 @@
 			"children": [
 				{
 					"isClone": false,
-					"noteId": "jrai60LsOhdk",
-					"notePath": [
-						"OkOZllzB3fqN",
-						"jrai60LsOhdk"
-					],
-					"title": "Installation",
-					"notePosition": 20,
-					"prefix": null,
-					"isExpanded": false,
-					"type": "text",
-					"mime": "text/html",
-					"attributes": [
-						{
-							"type": "relation",
-							"name": "internalLink",
-							"value": "KPeRqBU7YSAY",
-							"isInheritable": false,
-							"position": 10
-						},
-						{
-							"type": "label",
-							"name": "hideChildrenOverview",
-							"value": "",
-							"isInheritable": false,
-							"position": 10
-						}
-					],
-					"format": "html",
-					"dataFileName": "Installation.html",
-					"attachments": [
-						{
-							"attachmentId": "Mp9RaDeLtETz",
-							"title": "Fedora_logo.svg",
-							"role": "image",
-							"mime": "image/svg+xml",
-							"position": 10,
-							"dataFileName": "Installation_Fedora_logo.svg"
-						}
-					],
-					"dirFileName": "Installation",
-					"children": [
-						{
-							"isClone": false,
-							"noteId": "KPeRqBU7YSAY",
-							"notePath": [
-								"OkOZllzB3fqN",
-								"jrai60LsOhdk",
-								"KPeRqBU7YSAY"
-							],
-							"title": "On Fedora Linux",
-							"notePosition": 10,
-							"prefix": null,
-							"isExpanded": false,
-							"type": "text",
-							"mime": "text/html",
-							"attributes": [
-								{
-									"type": "label",
-									"name": "iconClass",
-									"value": "bx bxl-tux",
-									"isInheritable": false,
-									"position": 10
-								}
-							],
-							"format": "html",
-							"dataFileName": "On Fedora Linux.html",
-							"attachments": [
-								{
-									"attachmentId": "YHD8kyEhgkyZ",
-									"title": "Screenshot From 2025-02-05 19-30-50.png",
-									"role": "image",
-									"mime": "image/png",
-									"position": 10,
-									"dataFileName": "On Fedora Linux_Screenshot.png"
-								},
-								{
-									"attachmentId": "0CpZ5v5xUMia",
-									"title": "Screenshot From 2025-02-05 19-35-45.png",
-									"role": "image",
-									"mime": "image/png",
-									"position": 10,
-									"dataFileName": "1_On Fedora Linux_Screenshot.png"
-								},
-								{
-									"attachmentId": "9u7nBYvUbXJW",
-									"title": "image.png",
-									"role": "image",
-									"mime": "image/png",
-									"position": 10,
-									"dataFileName": "On Fedora Linux_image.png"
-								},
-								{
-									"attachmentId": "ipGBq0moRvF3",
-									"title": "Screenshot From 2025-02-05 19-36-27.png",
-									"role": "image",
-									"mime": "image/png",
-									"position": 10,
-									"dataFileName": "2_On Fedora Linux_Screenshot.png"
-								},
-								{
-									"attachmentId": "fa83WbDUIB4G",
-									"title": "image.png",
-									"role": "image",
-									"mime": "image/png",
-									"position": 10,
-									"dataFileName": "1_On Fedora Linux_image.png"
-								},
-								{
-									"attachmentId": "kcCWr0YXytOU",
-									"title": "Screenshot From 2025-02-05 19-30-30.png",
-									"role": "image",
-									"mime": "image/png",
-									"position": 10,
-									"dataFileName": "3_On Fedora Linux_Screenshot.png"
-								},
-								{
-									"attachmentId": "YF3JZy1qz7Fq",
-									"title": "image.png",
-									"role": "image",
-									"mime": "image/png",
-									"position": 10,
-									"dataFileName": "2_On Fedora Linux_image.png"
-								}
-							]
-						}
-					]
-				},
-				{
-					"isClone": false,
 					"noteId": "yoAe4jV2yzbd",
 					"notePath": [
 						"OkOZllzB3fqN",
@@ -166,7 +37,7 @@
 					"title": "Features",
 					"notePosition": 40,
 					"prefix": null,
-					"isExpanded": true,
+					"isExpanded": false,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [],
@@ -314,7 +185,7 @@
 					"title": "Note Types",
 					"notePosition": 70,
 					"prefix": null,
-					"isExpanded": true,
+					"isExpanded": false,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [],
@@ -548,7 +419,7 @@
 							"title": "Book",
 							"notePosition": 30,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [

@@ -135,10 +135,22 @@ export default class GeoMapTypeWidget extends TypeWidget {
             throw new Error(t("geo-map.unable-to-load-map"));
         }
 
-        if (!this.note) {
+        this.#restoreViewportAndZoom();
+
+        // Restore markers.
+        await this.#reloadMarkers();
+
+        const updateFn = () => this.spacedUpdate.scheduleUpdate();
+        map.on("moveend", updateFn);
+        map.on("zoomend", updateFn);
+        map.on("click", (e) => this.#onMapClicked(e));
+    }
+
+    async #restoreViewportAndZoom() {
+        const map = this.geoMapWidget.map;
+        if (!map || !this.note) {
             return;
         }
-
         const blob = await this.note.getBlob();
 
         let parsedContent: MapData = {};
@@ -150,14 +162,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
         const center = parsedContent.view?.center ?? DEFAULT_COORDINATES;
         const zoom = parsedContent.view?.zoom ?? DEFAULT_ZOOM;
         map.setView(center, zoom);
-
-        // Restore markers.
-        await this.#reloadMarkers();
-
-        const updateFn = () => this.spacedUpdate.scheduleUpdate();
-        map.on("moveend", updateFn);
-        map.on("zoomend", updateFn);
-        map.on("click", (e) => this.#onMapClicked(e));
     }
 
     async #reloadMarkers() {
@@ -343,6 +347,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     async doRefresh(note: FNote) {
         await this.geoMapWidget.refresh();
+        this.#restoreViewportAndZoom();
         await this.#reloadMarkers();
     }
 
