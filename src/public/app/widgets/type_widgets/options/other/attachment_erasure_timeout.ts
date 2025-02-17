@@ -23,7 +23,7 @@ export default class AttachmentErasureTimeoutOptions extends TimeSelector {
     constructor() {
         super({
             widgetId: "erase-unused-attachments-after",
-            widgetLabelId: "attachment_erasure_timeout.erase_attachments_after_x_seconds",
+            widgetLabelId: "attachment_erasure_timeout.erase_attachments_after",
             optionValueId: "eraseUnusedAttachmentsAfterSeconds",
             optionTimeScaleId: "eraseUnusedAttachmentsAfterTimeScale"
         });

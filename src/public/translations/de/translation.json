@@ -1090,7 +1090,7 @@
   "attachment_erasure_timeout": {
     "attachment_erasure_timeout": "Zeitüberschreitung beim Löschen von Anhängen",
     "attachment_auto_deletion_description": "Anhänge werden automatisch gelöscht (und gelöscht), wenn sie nach einer definierten Zeitspanne nicht mehr in ihrer Notiz referenziert werden.",
-    "erase_attachments_after_x_seconds": "Anhänge nach X Sekunden löschen, nachdem sie nicht in der Notiz verwendet wurden",
+    "erase_attachments_after": "Erase unused attachments after:",
     "manual_erasing_description": "Du kannst das Löschen auch manuell auslösen (ohne Berücksichtigung des oben definierten Timeouts):",
     "erase_unused_attachments_now": "Lösche jetzt nicht verwendete Anhangnotizen",
     "unused_attachments_erased": "Nicht verwendete Anhänge wurden gelöscht."
@@ -1102,7 +1102,7 @@
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "Beachte das Zeitlimit für die Löschung",
     "note_erasure_description": "Deleted notes (and attributes, revisions...) are at first only marked as deleted and it is possible to recover them from Recent Notes dialog. After a period of time, deleted notes are \"erased\" which means their content is not recoverable anymore. This setting allows you to configure the length of the period between deleting and erasing the note.",
-    "erase_notes_after": "Notizen löschen nach",
+    "erase_notes_after": "Notizen löschen nach:",
     "manual_erasing_description": "Du kannst das Löschen auch manuell auslösen (ohne Berücksichtigung des oben definierten Timeouts):",
     "erase_deleted_notes_now": "Jetzt gelöschte Notizen löschen",
     "deleted_notes_erased": "Gelöschte Notizen wurden gelöscht."

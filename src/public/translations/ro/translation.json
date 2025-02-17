@@ -78,7 +78,7 @@
   "attachment_erasure_timeout": {
     "attachment_auto_deletion_description": "Atașamentele se șterg automat (permanent) dacă nu sunt referențiate de către notița lor părinte după un timp prestabilit de timp.",
     "attachment_erasure_timeout": "Perioadă de ștergere a atașamentelor",
-    "erase_attachments_after_x_seconds": "Șterge atașamentele după X secunde după ce acestea n-au mai fost folosite într-o notiță",
+    "erase_attachments_after": "Erase unused attachments after:",
     "erase_unused_attachments_now": "Elimină atașamentele șterse acum",
     "manual_erasing_description": "Șterge acum toate atașamentele nefolosite din notițe",
     "unused_attachments_erased": "Atașamentele nefolosite au fost șterse."
@@ -835,7 +835,7 @@
   "note_erasure_timeout": {
     "deleted_notes_erased": "Notițele șterse au fost eliminate permanent.",
     "erase_deleted_notes_now": "Elimină notițele șterse acum",
-    "erase_notes_after": "Elimină notițele șterse după",
+    "erase_notes_after": "Elimină notițele șterse după:",
     "manual_erasing_description": "Se poate rula o eliminare manuală (fără a lua în considerare timpul definit mai sus):",
     "note_erasure_description": "Notițele șterse (precum și atributele, reviziile) sunt prima oară doar marcate drept șterse și este posibil să fie recuperate din ecranul Notițe recente. După o perioadă de timp, notițele șterse vor fi „eliminate”, caz în care conținutul lor nu se poate recupera. Această setare permite configurarea duratei de timp dintre ștergerea și eliminarea notițelor.",
     "note_erasure_timeout_title": "Timpul de eliminare automată a notițelor șterse"

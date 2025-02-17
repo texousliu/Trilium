@@ -1091,7 +1091,7 @@
   "attachment_erasure_timeout": {
     "attachment_erasure_timeout": "Délai d'effacement des pièces jointes",
     "attachment_auto_deletion_description": "Les pièces jointes sont automatiquement supprimées (et effacées) si elles ne sont plus référencées par leur note après un certain délai.",
-    "erase_attachments_after_x_seconds": "Effacer les pièces jointes après X secondes sans utilisation dans sa note",
+    "erase_attachments_after": "Erase unused attachments after:",
     "manual_erasing_description": "Vous pouvez également déclencher l'effacement manuellement (sans tenir compte du délai défini ci-dessus) :",
     "erase_unused_attachments_now": "Effacez maintenant les pièces jointes inutilisées",
     "unused_attachments_erased": "Les pièces jointes inutilisées ont été effacées."
@@ -1103,7 +1103,7 @@
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "Délai d'effacement des notes",
     "note_erasure_description": "Les notes supprimées (et les attributs, versions...) sont seulement marquées comme supprimées et il est possible de les récupérer à partir de la boîte de dialogue Notes récentes. Après un certain temps, les notes supprimées sont « effacées », ce qui signifie que leur contenu n'est plus récupérable. Ce paramètre vous permet de configurer la durée entre la suppression et l'effacement de la note.",
-    "erase_notes_after": "Effacer les notes après",
+    "erase_notes_after": "Effacer les notes après:",
     "manual_erasing_description": "Vous pouvez également déclencher l'effacement manuellement (sans tenir compte de la durée définie ci-dessus) :",
     "erase_deleted_notes_now": "Effacer les notes supprimées maintenant",
     "deleted_notes_erased": "Les notes supprimées ont été effacées."
