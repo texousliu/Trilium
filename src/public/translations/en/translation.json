@@ -1662,21 +1662,6 @@
     "show_login_link": "Show Login link in Share theme",
     "show_login_link_description": "Add a login link to the Share page footer"
   },
-  "sync_2": {
-    "config_title": "Sync Configuration",
-    "server_address": "Server instance address",
-    "timeout": "Sync timeout (milliseconds)",
-    "proxy_label": "Sync proxy server (optional)",
-    "note": "Note",
-    "note_description": "If you leave the proxy setting blank, the system proxy will be used (applies to desktop/electron build only).",
-    "special_value_description": "Another special value is <code>noproxy</code> which forces ignoring even the system proxy and respects <code>NODE_TLS_REJECT_UNAUTHORIZED</code>.",
-    "save": "Save",
-    "help": "Help",
-    "test_title": "Sync Test",
-    "test_description": "This will test the connection and handshake to the sync server. If the sync server isn't initialized, this will set it up to sync with the local document.",
-    "test_button": "Test sync",
-    "handshake_failed": "Sync server handshake failed, error: {{message}}"
-  },
   "time_selector": {
     "invalid_input": "The entered time value is not a valid number."
   }
