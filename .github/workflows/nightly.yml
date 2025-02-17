@@ -75,6 +75,7 @@ jobs:
       - name: Run the build
         uses: ./.github/actions/build-server
         with:
+          os: linux
           arch: ${{ matrix.arch }}
 
       - name: Publish release
