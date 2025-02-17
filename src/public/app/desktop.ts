@@ -50,6 +50,7 @@ function initOnElectron() {
     const currentWindow = electronRemote.getCurrentWindow();
     const style = window.getComputedStyle(document.body);
 
+    initDarkOrLightMode(style);
     initTransparencyEffects(style, currentWindow);
 
     if (options.get("nativeTitleBarVisible") !== "true") {
@@ -90,4 +91,22 @@ function initTransparencyEffects(style: CSSStyleDeclaration, currentWindow: Elec
             currentWindow.setBackgroundMaterial(foundBgMaterialOption);
         }
     }
+}
+
+/**
+ * Informs Electron that we prefer a dark or light theme. Apart from changing prefers-color-scheme at CSS level which is a side effect,
+ * this fixes color issues with background effects or native title bars.
+ *
+ * @param style the root CSS element to read variables from.
+ */
+function initDarkOrLightMode(style: CSSStyleDeclaration) {
+    let themeSource: typeof nativeTheme.themeSource = "system";
+
+    const themeStyle = style.getPropertyValue("--theme-style");
+    if (style.getPropertyValue("--theme-style-auto") !== "true" && (themeStyle === "light" || themeStyle === "dark")) {
+        themeSource = themeStyle;
+    }
+
+    const { nativeTheme } = utils.dynamicRequire("@electron/remote") as typeof ElectronRemote;
+    nativeTheme.themeSource = themeSource;
 }
