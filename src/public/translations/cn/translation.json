@@ -990,7 +990,7 @@
     "embed_websites": "网页视图类型的笔记允许您将网站嵌入到 Trilium 中。",
     "create_label": "首先，请创建一个带有您要嵌入的 URL 地址的标签，例如 #webViewSrc=\"https://www.bing.com\"",
     "disclaimer": "实验性功能免责声明",
-    "experimental_note": "网页视图是一种实验性的笔记类型，将来可能会被移除或大幅更改。网页视图只在桌面端有效。"
+    "experimental_note": "网页视图是一种实验性的笔记类型，将来可能会被移除或大幅更改。"
   },
   "backend_log": {
     "refresh": "刷新"

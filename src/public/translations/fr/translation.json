@@ -968,7 +968,7 @@
     "embed_websites": "Les notes de type Affichage Web vous permet d'intégrer des sites Web dans Trilium.",
     "create_label": "Pour commencer, veuillez créer un label avec l'adresse URL que vous souhaitez intégrer, par ex. #webViewSrc=\"https://www.google.com\"",
     "disclaimer": "Avertissement sur le statut expérimental",
-    "experimental_note": "Affichage Web est un type de note expérimental et il pourrait être supprimé ou considérablement modifié à l'avenir. Affichage Web ne fonctionne que dans la version de bureau."
+    "experimental_note": "Affichage Web est un type de note expérimental et il pourrait être supprimé ou considérablement modifié à l'avenir."
   },
   "backend_log": {
     "refresh": "Rafraîchir"

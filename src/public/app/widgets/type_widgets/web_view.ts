@@ -3,6 +3,9 @@ import TypeWidget from "./type_widget.js";
 import attributeService from "../../services/attributes.js";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
+import utils from "../../services/utils.js";
+
+const el = utils.isElectron() ? "webview" : "iframe";
 
 const TPL = `
 <div class="note-detail-web-view note-detail-printable" style="height: 100%">
@@ -18,7 +21,7 @@ const TPL = `
         <p>${t("web_view.experimental_note")}</p>
     </div>
 
-    <webview class="note-detail-web-view-content"></webview>
+    <${el} class="note-detail-web-view-content"></${el}>
 </div>`;
 
 export default class WebViewTypeWidget extends TypeWidget {

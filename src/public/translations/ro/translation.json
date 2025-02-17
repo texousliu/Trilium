@@ -1309,7 +1309,7 @@
     "create_label": "Pentru a începe, creați o etichetă cu adresa URL de încorporat, e.g.  #webViewSrc=\"https://www.google.com\"",
     "disclaimer": "Avertisment despre statutul experimental",
     "embed_websites": "Notițele de tip „Vizualizare web” permit încorporarea site-urilor web în Trilium.",
-    "experimental_note": "„Vizualizare web” este un tip experimental de notiță, și poate fi înlăturat sau schimbat substanțial în viitor. De asemenea, Web View funcționeză doar în aplicația desktop.",
+    "experimental_note": "„Vizualizare web” este un tip experimental de notiță, și poate fi înlăturat sau schimbat substanțial în viitor.",
     "web_view": "Vizualizare web"
   },
   "wrap_lines": {

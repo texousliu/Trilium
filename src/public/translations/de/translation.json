@@ -967,7 +967,7 @@
     "embed_websites": "Hinweis vom Typ Web View ermöglicht das Einbetten von Websites in Trilium.",
     "create_label": "To start, please create a label with a URL address you want to embed, e.g. #webViewSrc=\"https://www.google.com\"",
     "disclaimer": "Haftungsausschluss zum experimentellen Status",
-    "experimental_note": "Web View ist ein experimenteller Notiztyp und könnte in Zukunft entfernt oder grundlegend geändert werden. Web View funktioniert auch nur im Desktop-Build."
+    "experimental_note": "Web View ist ein experimenteller Notiztyp und könnte in Zukunft entfernt oder grundlegend geändert werden."
   },
   "backend_log": {
     "refresh": "Aktualisieren"
