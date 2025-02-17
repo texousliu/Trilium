@@ -3,8 +3,19 @@ import mimeTypesService from "../services/mime_types.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import dialogService from "../services/dialog.js";
 import { t } from "../services/i18n.js";
+import type FNote from "../entities/fnote.js";
+import type { NoteType } from "../entities/fnote.js";
+import type { EventData } from "../components/app_context.js";
 
-const NOTE_TYPES = [
+interface NoteTypeMapping {
+    type: NoteType;
+    mime?: string;
+    title: string;
+    isBeta?: boolean;
+    selectable: boolean;
+}
+
+const NOTE_TYPES: NoteTypeMapping[] = [
     // The suggested note type ordering method: insert the item into the corresponding group,
     // then ensure the items within the group are ordered alphabetically.
 
@@ -67,9 +78,16 @@ const TPL = `
 `;
 
 export default class NoteTypeWidget extends NoteContextAwareWidget {
+
+    private dropdown!: bootstrap.Dropdown;
+    private $noteTypeDropdown!: JQuery<HTMLElement>;
+    private $noteTypeButton!: JQuery<HTMLElement>;
+    private $noteTypeDesc!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
 
+        //@ts-ignore
         this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
 
         this.$widget.on("show.bs.dropdown", () => this.renderDropdown());
@@ -81,7 +99,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
         this.$widget.on("click", ".dropdown-item", () => this.dropdown.toggle());
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.$noteTypeButton.prop("disabled", () => NOT_SELECTABLE_NOTE_TYPES.includes(note.type));
 
         this.$noteTypeDesc.text(await this.findTypeTitle(note.type, note.mime));
@@ -93,8 +111,12 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
     async renderDropdown() {
         this.$noteTypeDropdown.empty();
 
+        if (!this.note) {
+            return;
+        }
+
         for (const noteType of NOTE_TYPES.filter((nt) => nt.selectable)) {
-            let $typeLink;
+            let $typeLink: JQuery<HTMLElement>;
 
             const $title = $("<span>").text(noteType.title);
             if (noteType.isBeta) {
@@ -110,7 +132,9 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
                         const type = $typeLink.attr("data-note-type");
                         const noteType = NOTE_TYPES.find((nt) => nt.type === type);
 
-                        this.save(noteType.type, noteType.mime);
+                        if (noteType) {
+                            this.save(noteType.type, noteType.mime);
+                        }
                     });
             } else {
                 this.$noteTypeDropdown.append('<div class="dropdown-divider"></div>');
@@ -136,7 +160,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
                 .on("click", (e) => {
                     const $link = $(e.target).closest(".dropdown-item");
 
-                    this.save("code", $link.attr("data-mime-type"));
+                    this.save("code", $link.attr("data-mime-type") ?? "");
                 });
 
             if (this.note.type === "code" && this.note.mime === mimeType.mime) {
@@ -149,7 +173,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
         }
     }
 
-    async findTypeTitle(type, mime) {
+    async findTypeTitle(type: NoteType, mime: string) {
         if (type === "code") {
             const mimeTypes = mimeTypesService.getMimeTypes();
             const found = mimeTypes.find((mt) => mt.mime === mime);
@@ -162,12 +186,12 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
         }
     }
 
-    async save(type, mime) {
-        if (type === this.note.type && mime === this.note.mime) {
+    async save(type: NoteType, mime?: string) {
+        if (type === this.note?.type && mime === this.note?.mime) {
             return;
         }
 
-        if (type !== this.note.type && !(await this.confirmChangeIfContent())) {
+        if (type !== this.note?.type && !(await this.confirmChangeIfContent())) {
             return;
         }
 
@@ -175,16 +199,20 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
     }
 
     async confirmChangeIfContent() {
+        if (!this.note) {
+            return;
+        }
+
         const blob = await this.note.getBlob();
 
-        if (!blob.content || !blob.content.trim().length) {
+        if (!blob?.content || !blob.content.trim().length) {
             return true;
         }
 
         return await dialogService.confirm(t("note_types.confirm-change"));
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }
