@@ -14,14 +14,14 @@
     "esModuleInterop": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["./src/**/*.[jt]s", "./*.ts"],
+  "include": ["./src/**/*.ts", "./src/**/*.js", "./*.ts"],
   "exclude": [
 	  "./node_modules/**/*", 
 	  "./spec-es6/**/*.ts",
 	  "./spec/**/*",
 	  "./**/*.spec.ts",
 	  "./src/public/**/*",
-    "./*.config.[jt]s",
+    "./*.config.ts",
   ],
   "files": ["src/types.d.ts"]
 }
