@@ -1677,7 +1677,7 @@
     "test_button": "Test sync",
     "handshake_failed": "Sync server handshake failed, error: {{message}}"
   },
-    "time_selector": {
+  "time_selector": {
     "invalid_input": "The entered time value is not a valid number."
-    }
+  }
 }
