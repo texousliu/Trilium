@@ -85,7 +85,6 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
 };
 
 export default class ContentWidgetTypeWidget extends TypeWidget {
-
     private $content!: JQuery<HTMLElement>;
 
     static getType() {
