@@ -9,9 +9,7 @@ const TPL = `
     <h4>${t("attachment_erasure_timeout.attachment_erasure_timeout")}</h4>
 
     <p>${t("attachment_erasure_timeout.attachment_auto_deletion_description")}</p>
-`;
-
-const TPL2 = `
+    <div id="time-selector-placeholder"></div>
     <p>${t("attachment_erasure_timeout.manual_erasing_description")}</p>
 
     <button class="erase-unused-attachments-now-button btn btn-secondary">${t("attachment_erasure_timeout.erase_unused_attachments_now")}</button>
@@ -31,7 +29,10 @@ export default class AttachmentErasureTimeoutOptions extends TimeSelector {
     }
 
     doRender() {
-        this.$widget = $(TPL).append(this.$widget).append(TPL2);
+        const $timeSelector = this.$widget;
+        this.$widget = $(TPL);
+        // inject TimeSelector widget template
+        this.$widget.find("#time-selector-placeholder").replaceWith($timeSelector);
 
         this.$eraseUnusedAttachmentsNowButton = this.$widget.find(".erase-unused-attachments-now-button");
         this.$eraseUnusedAttachmentsNowButton.on("click", () => {

@@ -9,9 +9,7 @@ const TPL = `
 <div class="options-section">
     <h4>${t("note_erasure_timeout.note_erasure_timeout_title")}</h4>
     <p>${t("note_erasure_timeout.note_erasure_description")}</p>
-`;
-
-const TPL2 = `
+    <div id="time-selector-placeholder"></div>
     <p>${t("note_erasure_timeout.manual_erasing_description")}</p>
     <button id="erase-deleted-notes-now-button" class="btn btn-secondary">${t("note_erasure_timeout.erase_deleted_notes_now")}</button>
 </div>`;
@@ -30,7 +28,10 @@ export default class NoteErasureTimeoutOptions extends TimeSelector {
     }
 
     doRender() {
-        this.$widget = $(TPL).append(this.$widget).append(TPL2);
+        const $timeSelector = this.$widget;
+        // inject TimeSelector widget template
+        this.$widget = $(TPL);
+        this.$widget.find("#time-selector-placeholder").replaceWith($timeSelector)
 
         this.$eraseDeletedNotesButton = this.$widget.find("#erase-deleted-notes-now-button");
 
