@@ -75,7 +75,7 @@ const config: Configuration = {
             ".mjs": [".mjs", ".mts"]
         }
     },
-    devtool: "source-map",
+    devtool: "nosources-source-map",
     target: "electron-renderer"
 };
 
