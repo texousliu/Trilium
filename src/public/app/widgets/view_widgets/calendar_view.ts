@@ -192,6 +192,7 @@ export default class CalendarView extends ViewMode {
         for (const note of notes) {
             const startDate = note.getAttributeValue("label", "startDate");
             const customTitle = note.getAttributeValue("label", "calendar:title");
+            const color = note.getAttributeValue("label", "calendar:color") ??  note.getAttributeValue("label", "color") ?? undefined;
 
             if (!startDate) {
                 continue;
@@ -203,7 +204,8 @@ export default class CalendarView extends ViewMode {
                     title: title,
                     start: startDate,
                     url: `#${note.noteId}`,
-                    noteId: note.noteId
+                    noteId: note.noteId,
+                    color: color,
                 };
 
                 const endDate = CalendarView.#offsetDate(note.getAttributeValue("label", "endDate") ?? startDate, 1);
