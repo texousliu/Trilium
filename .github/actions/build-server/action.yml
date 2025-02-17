@@ -1,4 +1,7 @@
 inputs:
+  os:
+    description: "One of the supported platforms: windows"
+    required: true
   arch:
     description: "The architecture to build for: x64, arm64"
     required: true
