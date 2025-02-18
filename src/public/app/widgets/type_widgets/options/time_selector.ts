@@ -131,7 +131,7 @@ export default class TimeSelector extends OptionsWidget {
 
     private setInternalTimeInSeconds(time: number) {
         if (time < this.minimumSeconds) {
-            toastService.showError(`Entered time needs to be at least ${this.minimumSeconds} seconds.`);
+            toastService.showError(t("time_selector.minimum_input", {minimumSeconds: this.minimumSeconds}));
             return this.internalTimeInSeconds = this.minimumSeconds;
         }
         return this.internalTimeInSeconds = time;
