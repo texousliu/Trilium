@@ -14,6 +14,7 @@ const ALLOWED_OPTIONS = new Set([
     "eraseEntitiesAfterTimeInSeconds",
     "eraseEntitiesAfterTimeScale",
     "protectedSessionTimeout",
+    "protectedSessionTimeoutTimeScale",
     "revisionSnapshotTimeInterval",
     "revisionSnapshotNumberLimit",
     "zoomFactor",
