@@ -74,7 +74,8 @@ export default class TimeSelector extends OptionsWidget {
 
             if (!this.handleTimeValidation() || typeof timeScale !== "string" || !time) return;
 
-            this.internalTimeInSeconds = this.convertTime(time, timeScale).toOption();
+            this.setInternalTimeInSeconds(this.convertTime(time, timeScale).toOption());
+
             this.updateOption(this.optionValueId, this.internalTimeInSeconds);
         });
 
@@ -122,4 +123,13 @@ export default class TimeSelector extends OptionsWidget {
         }
         return true;
     }
+
+    private setInternalTimeInSeconds(time: number) {
+        if (time < this.minimumSeconds) {
+            toastService.showError(`Entered time needs to be at least ${this.minimumSeconds} seconds.`);
+            return this.internalTimeInSeconds = this.minimumSeconds;
+        }
+        return this.internalTimeInSeconds = time;
+    }
+
 }
