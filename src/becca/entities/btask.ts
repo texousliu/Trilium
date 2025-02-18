@@ -31,6 +31,7 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
         }
 
         this.updateFromRow(row);
+        this.init();
     }
 
     get isDeleted() {
@@ -43,6 +44,16 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
         this.title = row.title;
         this.dueDate = row.dueDate;
         this._isDeleted = !!row.isDeleted;
+
+        if (this.taskId) {
+            this.becca.tasks[this.taskId] = this;
+        }
+    }
+
+    init() {
+        if (this.taskId) {
+            this.becca.tasks[this.taskId] = this;
+        }
     }
 
     getPojo() {
