@@ -9,6 +9,7 @@ type TimeSelectorConstructor = {
     optionValueId: keyof OptionDefinitions;
     optionTimeScaleId: keyof OptionDefinitions;
     includedTimeScales?: Set<TimeSelectorScale>;
+    minimumSeconds?: number;
 };
 
 type TimeSelectorScale = "seconds" | "minutes" | "hours" | "days";
@@ -43,6 +44,7 @@ export default class TimeSelector extends OptionsWidget {
     private optionValueId: keyof OptionDefinitions;
     private optionTimeScaleId: keyof OptionDefinitions;
     private includedTimeScales: Set<TimeSelectorScale>;
+    private minimumSeconds: number;
 
     constructor(options: TimeSelectorConstructor) {
         super();
@@ -51,6 +53,7 @@ export default class TimeSelector extends OptionsWidget {
         this.optionValueId = options.optionValueId;
         this.optionTimeScaleId = options.optionTimeScaleId;
         this.includedTimeScales = !options.includedTimeScales ? new Set(["seconds", "minutes", "hours", "days"]) : options.includedTimeScales;
+        this.minimumSeconds = options.minimumSeconds || 0
     }
 
     doRender() {
