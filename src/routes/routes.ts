@@ -281,6 +281,7 @@ function register(app: express.Application) {
     apiRoute(DEL, "/api/etapi-tokens/:etapiTokenId", etapiTokensApiRoutes.deleteToken);
 
     apiRoute(GET, "/api/tasks", tasksRoute.getTasks);
+    apiRoute(PST, "/api/tasks", tasksRoute.createNewTask);
 
     // in case of local electron, local calls are allowed unauthenticated, for server they need auth
     const clipperMiddleware = isElectron ? [] : [auth.checkEtapiToken];

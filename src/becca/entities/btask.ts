@@ -16,7 +16,7 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
         return [ "taskId", "parentNoteId", "title", "dueDate", "isDone", "isDeleted" ];
     }
 
-    taskId!: string;
+    taskId?: string;
     parentNoteId!: string;
     title!: string;
     dueDate?: string;
@@ -43,6 +43,7 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
         this.parentNoteId = row.parentNoteId;
         this.title = row.title;
         this.dueDate = row.dueDate;
+        this.isDone = !!row.isDeleted;
         this._isDeleted = !!row.isDeleted;
 
         if (this.taskId) {

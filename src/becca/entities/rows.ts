@@ -138,10 +138,10 @@ export interface NoteRow {
 }
 
 export interface TaskRow {
-    taskId: string;
+    taskId?: string;
     parentNoteId: string;
     title: string;
     dueDate?: string;
-    isDone: boolean;
-    isDeleted: boolean;
+    isDone?: boolean;
+    isDeleted?: boolean;
 }
