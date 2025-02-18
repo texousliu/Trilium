@@ -36,6 +36,7 @@ const TPL = (options: Omit<TimeSelectorConstructor, "optionValueId" | "optionTim
     }
 </style>`;
 
+//TriliumNextTODO: add support for setting minimum number of entered seconds
 export default class TimeSelector extends OptionsWidget {
     private $timeValueInput!: JQuery<HTMLInputElement>;
     private $timeScaleSelect!: JQuery<HTMLSelectElement>;
