@@ -98,7 +98,7 @@ export default class TimeSelector extends OptionsWidget {
         this.$timeScaleSelect.val(options[this.optionTimeScaleId]);
     }
 
-    convertTime(time: string | number, timeScale: string | number) {
+    private convertTime(time: string | number, timeScale: string | number) {
         const value = typeof time === "number" ? time : parseInt(time);
         if (Number.isNaN(value)) {
             throw new Error(`Time needs to be a valid integer, but received: ${time}`);
@@ -115,7 +115,7 @@ export default class TimeSelector extends OptionsWidget {
         };
     }
 
-    handleTimeValidation() {
+    private handleTimeValidation() {
         if (this.$timeValueInput.is(":invalid")) {
             toastService.showError(t("time_selector.invalid_input"));
             return false;
