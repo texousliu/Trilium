@@ -2,6 +2,7 @@ import type FNote from "../../entities/fnote.js";
 import type FTask from "../../entities/ftask.js";
 import froca from "../../services/froca.js";
 import TypeWidget from "./type_widget.js";
+import * as taskService from "../../services/tasks.js";
 
 const TPL = `
 <div class="note-detail-task-list note-detail-printable">
@@ -37,12 +38,28 @@ function buildTask(task: FTask) {
 export default class TaskListWidget extends TypeWidget {
 
     private $taskContainer!: JQuery<HTMLElement>;
+    private $addNewTask!: JQuery<HTMLElement>;
 
     static getType() { return "taskList" }
 
     doRender() {
         this.$widget = $(TPL);
+        this.$addNewTask = this.$widget.find(".add-new-task");
         this.$taskContainer = this.$widget.find(".task-container");
+
+        this.$addNewTask.on("keydown", (e) => {
+            if (e.key === "Enter") {
+                this.#createNewTask(String(this.$addNewTask.val()));
+            }
+        });
+    }
+
+    async #createNewTask(title: string) {
+        if (!title) {
+            return;
+        }
+
+        await taskService.createNewTask(title);
     }
 
     async doRefresh(note: FNote) {
