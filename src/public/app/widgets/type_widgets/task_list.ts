@@ -5,8 +5,28 @@ import TypeWidget from "./type_widget.js";
 
 const TPL = `
 <div class="note-detail-task-list note-detail-printable">
+
+    <header>
+        <input type="text" placeholder="Add a new task" class="add-new-task" />
+    </header>
+
     <div class="task-container">
     </div>
+
+    <style>
+        .note-detail-task-list {
+            padding: 10px;
+        }
+
+        .note-detail-task-list header {
+            margin-bottom: 1em;
+        }
+
+        .note-detail-task-list .add-new-task {
+            width: 100%;
+            padding: 0.25em 0.5em;
+        }
+    </style>
 </div>
 `;
 
