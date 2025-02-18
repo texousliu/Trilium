@@ -1138,9 +1138,9 @@
     "deleted_notes_erased": "已删除的笔记已被清理。"
   },
   "revisions_snapshot_interval": {
-    "note_revisions_snapshot_interval_title": "笔记修改快照间隔",
-    "note_revisions_snapshot_description": "笔记修改快照时间间隔是指经过多少秒后会为笔记创建新的修改历史。更多信息请参见<a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a>。",
-    "snapshot_time_interval_label": "笔记修改快照时间间隔（单位:秒）"
+    "note_revisions_snapshot_interval_title": "Note Revision Snapshot Interval",
+    "note_revisions_snapshot_description": "The Note revision snapshot interval is the time after which a new note revision will be created for the note. See <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> for more info.",
+    "snapshot_time_interval_label": "Note revision snapshot time interval:"
   },
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "笔记历史快照限制",
