@@ -8,7 +8,7 @@ const TPL = `
     <p class="use-tn-links">${t("revisions_snapshot_interval.note_revisions_snapshot_description")}</p>
     <div id="time-selector-placeholder"></div>
 </div>`;
-//TriliumNextTODO: add support for setting minimum number of entered seconds -> snapshot revision should not be less than 10 seconds
+
 export default class RevisionsSnapshotIntervalOptions extends TimeSelector {
 
     constructor() {
@@ -16,7 +16,8 @@ export default class RevisionsSnapshotIntervalOptions extends TimeSelector {
             widgetId: "revision-snapshot-time-interval",
             widgetLabelId: "revisions_snapshot_interval.snapshot_time_interval_label",
             optionValueId: "revisionSnapshotTimeInterval",
-            optionTimeScaleId: "revisionSnapshotTimeIntervalTimeScale"
+            optionTimeScaleId: "revisionSnapshotTimeIntervalTimeScale",
+            minimumSeconds: 10
         });
         super.doRender();
     }
