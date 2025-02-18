@@ -1,3 +1,4 @@
+import date_utils from "../../services/date_utils.js";
 import AbstractBeccaEntity from "./abstract_becca_entity.js";
 import type BOption from "./boption.js";
 import type { TaskRow } from "./rows.js";
@@ -45,6 +46,7 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
         this.dueDate = row.dueDate;
         this.isDone = !!row.isDeleted;
         this._isDeleted = !!row.isDeleted;
+        this.utcDateModified = row.utcDateModified;
 
         if (this.taskId) {
             this.becca.tasks[this.taskId] = this;
@@ -57,13 +59,20 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
         }
     }
 
+    protected beforeSaving(opts?: {}): void {
+        super.beforeSaving();
+
+        this.utcDateModified = date_utils.utcNowDateTime();
+    }
+
     getPojo() {
         return {
             taskId: this.taskId,
             parentNoteId: this.parentNoteId,
             title: this.title,
             dueDate: this.dueDate,
-            isDeleted: this.isDeleted
+            isDeleted: this.isDeleted,
+            utcDateModified: this.utcDateModified
         };
     }
 

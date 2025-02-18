@@ -6,6 +6,7 @@ export interface FTaskRow {
     title: string;
     dueDate?: string;
     isDone?: boolean;
+    utcDateModified: string;
 }
 
 export default class FTask {
@@ -15,6 +16,7 @@ export default class FTask {
     title!: string;
     dueDate?: string;
     isDone!: boolean;
+    utcDateModified!: string;
 
     constructor(froca: Froca, row: FTaskRow) {
         this.froca = froca;
@@ -27,5 +29,6 @@ export default class FTask {
         this.title = row.title;
         this.dueDate = row.dueDate;
         this.isDone = !!row.isDone;
+        this.utcDateModified = row.utcDateModified;
     }
 }
