@@ -2,6 +2,7 @@ import OptionsWidget from "./options_widget.js";
 import toastService from "../../../services/toast.js";
 import { t } from "../../../services/i18n.js";
 import type { OptionDefinitions, OptionMap } from "../../../../../services/options_interface.js";
+import optionsService from "../../../services/options.js";
 
 type TimeSelectorConstructor = {
     widgetId: string;
@@ -93,10 +94,14 @@ export default class TimeSelector extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        this.internalTimeInSeconds = options[this.optionValueId];
-        const displayedTime = this.convertTime(options[this.optionValueId], options[this.optionTimeScaleId]).toDisplay();
+        const optionValue = optionsService.getInt(this.optionValueId) || 0;
+        const optionTimeScale = optionsService.getInt(this.optionTimeScaleId) || 1;
+
+        this.setInternalTimeInSeconds(optionValue);
+
+        const displayedTime = this.convertTime(optionValue, optionTimeScale).toDisplay();
         this.$timeValueInput.val(displayedTime);
-        this.$timeScaleSelect.val(options[this.optionTimeScaleId]);
+        this.$timeScaleSelect.val(optionTimeScale);
     }
 
     private convertTime(time: string | number, timeScale: string | number) {
