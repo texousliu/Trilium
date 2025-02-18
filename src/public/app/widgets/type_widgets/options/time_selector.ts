@@ -52,7 +52,7 @@ export default class TimeSelector extends OptionsWidget {
         this.widgetLabelId = options.widgetLabelId;
         this.optionValueId = options.optionValueId;
         this.optionTimeScaleId = options.optionTimeScaleId;
-        this.includedTimeScales = !options.includedTimeScales ? new Set(["seconds", "minutes", "hours", "days"]) : options.includedTimeScales;
+        this.includedTimeScales = options.includedTimeScales || new Set(["seconds", "minutes", "hours", "days"]);
         this.minimumSeconds = options.minimumSeconds || 0
     }
 
