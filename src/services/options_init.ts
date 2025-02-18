@@ -75,6 +75,7 @@ async function initNotSyncedOptions(initialized: boolean, opts: NotSyncedOpts = 
  */
 const defaultOptions: DefaultOption[] = [
     { name: "revisionSnapshotTimeInterval", value: "600", isSynced: true },
+    { name: "revisionSnapshotTimeIntervalTimeScale", value: "60", isSynced: true }, // default to Minutes
     { name: "revisionSnapshotNumberLimit", value: "-1", isSynced: true },
     { name: "protectedSessionTimeout", value: "600", isSynced: true },
     { name: "zoomFactor", value: isWindows ? "0.9" : "1.0", isSynced: false },
