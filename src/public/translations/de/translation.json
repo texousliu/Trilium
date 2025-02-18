@@ -1470,10 +1470,10 @@
     "save-changes": "Änderungen speichern und anwenden",
     "auto-collapsing-notes-after-inactivity": "Automatisches Zusammenklappen von Notizen nach Inaktivität…",
     "saved-search-note-refreshed": "Gespeicherte Such-Notiz wurde aktualisiert.",
-    "hoist-this-note-workspace": "Diese Notiz anheben (Arbeitsbereich)",
+    "hoist-this-note-workspace": "Diese Notiz fokussieren (Arbeitsbereich)",
     "refresh-saved-search-results": "Gespeicherte Suchergebnisse aktualisieren",
     "create-child-note": "Unternotiz anlegen",
-    "unhoist": "Unhoist"
+    "unhoist": "Entfokussieren"
   },
   "title_bar_buttons": {
     "window-on-top": "Dieses Fenster immer oben halten"
@@ -1504,7 +1504,9 @@
     "close_other_tabs": "Andere Tabs schließen",
     "close_right_tabs": "Tabs rechts schließen",
     "close_all_tabs": "Alle Tabs schließen",
+    "reopen_last_tab": "Zuletzt geschlossenen Tab erneut öffnen",
     "move_tab_to_new_window": "Tab in neues Fenster verschieben",
+    "copy_tab_to_new_window": "Tab in neues Fenster kopieren",
     "new_tab": "Neuer Tab"
   },
   "toc": {
@@ -1577,5 +1579,84 @@
   },
   "code_block": {
     "word_wrapping": "Wortumbruch"
+  },
+  "classic_editor_toolbar": {
+    "title": "Format"
+  },
+  "editor": {
+    "title": "Editor"
+  },
+  "editing": {
+    "editor_type": {
+      "label": "Format Toolbar",
+      "floating": {
+        "title": "Schwebend",
+        "description": "Werkzeuge erscheinen in Cursornähe"
+      },
+      "fixed": {
+        "title": "Fixiert",
+        "description": "Werkzeuge erscheinen im \"Format\" Tab"
+      },
+      "multiline-toolbar": "Toolbar wenn nötig in mehreren Zeilen darstellen."
+    }
+  },
+  "electron_context_menu": {
+    "add-term-to-dictionary": "Begriff \"{{term}}\" zum Wörterbuch hinzufügen",
+    "cut": "Ausschneiden",
+    "copy": "Kopieren",
+    "copy-link": "Link opieren",
+    "paste": "Einfügen",
+    "paste-as-plain-text": "Als unformatierten Text einfügen",
+    "search_online": "Suche nach \"{{term}}\" mit {{searchEngine}} starten"
+  },
+  "image_context_menu": {
+    "copy_reference_to_clipboard": "Referenz in Zwischenablage kopieren",
+    "copy_image_to_clipboard": "Bild in die Zwischenablage kopieren"
+  },
+  "link_context_menu": {
+    "open_note_in_new_tab": "Notiz in neuen Tab öffnen",
+    "open_note_in_new_split": "Notiz in neuen geteilten Tab öffnen",
+    "open_note_in_new_window": "Notiz in neuen Fenster öffnen"
+  },
+  "electron_integration": {
+    "desktop-application": "Desktop Anwendung",
+    "native-title-bar": "Native Anwendungsleiste",
+    "native-title-bar-description": "In Windows und macOS, sorgt das Deaktivieren der nativen Anwendungsleiste für ein kompakteres Aussehen. Unter Linux, sorgt das Aktivieren der nativen Anwendungsleiste für eine bessere Integration mit anderen Teilen des Systems.",
+    "background-effects": "Hintergrundeffekte aktivieren (nur Windows 11)",
+    "background-effects-description": "Der Mica Effekt fügt einen unscharfen, stylischen Hintergrund in Anwendungsfenstern ein. Dieser erzeugt Tiefe und ein modernes Auftreten.",
+    "restart-app-button": "Anwendung neustarten um Änderungen anzuwenden",
+    "zoom-factor": "Zoomfaktor"
+  },
+  "note_autocomplete": {
+    "search-for": "Suche nach \"{{term}}\"",
+    "create-note": "Erstelle und verlinke Unternotiz \"{{term}}\"",
+    "insert-external-link": "Einfügen von Externen Link zu \"{{term}}\"",
+    "clear-text-field": "Textfeldinhalt löschen",
+    "show-recent-notes": "Aktuelle Notizen anzeigen",
+    "full-text-search": "Volltextsuche"
+  },
+  "note_tooltip": {
+    "note-has-been-deleted": "Notiz wurde gelöscht."
+  },
+  "geo-map": {
+    "create-child-note-title": "Neue Unternotiz anlegen und zur Karte hinzufügen",
+    "create-child-note-instruction": "Auf die Karte klicken, um eine neue Notiz an der Stelle zu erstellen oder Escape drücken um abzubrechen.",
+    "unable-to-load-map": "Karte konnte nicht geladen werden."
+  },
+  "geo-map-context": {
+    "open-location": "Ort öffnen",
+    "remove-from-map": "Von Karte entfernen"
+  },
+  "help-button": {
+    "title": "Relevante Hilfeseite öffnen"
+  },
+  "duration": {
+    "seconds": "Sekunden",
+    "minutes": "Minuten",
+    "hours": "Stunden",
+    "days": "Tage"
+  },
+  "time_selector": {
+    "invalid_input": "Die eingegebene Zeit ist keine valide Zahl."
   }
 }
