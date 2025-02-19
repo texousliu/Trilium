@@ -4,25 +4,20 @@ import { t } from "../../../../services/i18n.js";
 import type { OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
 
 const TPL = `
-<div class="card-body">
+<div class="options-section">
     <h4>${t("share.title")}</h4>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" name="redirectBareDomain" value="true">
-            ${t("share.redirect_bare_domain")}
-        </label>
-        <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
-    </div>
+    <label class="tn-checkbox">
+        <input class="form-check-input" type="checkbox" name="redirectBareDomain" value="true">
+        ${t("share.redirect_bare_domain")}
+    </label>
+    <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" name="showLoginInShareTheme" value="true">
-            ${t("share.show_login_link")}
-        </label>
-        <p class="form-text">${t("share.show_login_link_description")}</p>
-        <p>&nbsp;</p>
-    </div>
+    <label class="tn-checkbox">
+        <input class="form-check-input" type="checkbox" name="showLoginInShareTheme" value="true">
+        ${t("share.show_login_link")}
+    </label>
+    <p class="form-text">${t("share.show_login_link_description")}</p>
 </div>`;
 
 export default class ShareSettingsOptions extends OptionsWidget {
