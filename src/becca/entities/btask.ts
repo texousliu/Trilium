@@ -63,6 +63,10 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
         super.beforeSaving();
 
         this.utcDateModified = date_utils.utcNowDateTime();
+
+        if (this.taskId) {
+            this.becca.tasks[this.taskId] = this;
+        }
     }
 
     getPojo() {
