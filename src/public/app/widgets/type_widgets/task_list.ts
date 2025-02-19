@@ -11,8 +11,8 @@ const TPL = `
         <input type="text" placeholder="Add a new task" class="add-new-task" />
     </header>
 
-    <div class="task-container">
-    </div>
+    <ol class="task-container">
+    </ol>
 
     <style>
         .note-detail-task-list {
@@ -34,12 +34,26 @@ const TPL = `
             width: 100%;
             padding: 0.25em 0.5em;
         }
+
+        .note-detail-task-list .task-container {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            border-radius: var(--bs-border-radius);
+            overflow: hidden;
+        }
+
+        .note-detail-task-list .task-container li {
+            background: var(--input-background-color);
+            border-bottom: 1px solid var(--main-background-color);
+            padding: 0.5em 1em;
+        }
     </style>
 </div>
 `;
 
 function buildTask(task: FTask) {
-    return `<div class="task">${task.title}</div>`;
+    return `<li class="task">${task.title}</li>`;
 }
 
 export default class TaskListWidget extends TypeWidget {
