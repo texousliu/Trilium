@@ -19,3 +19,9 @@ export function createNewTask(params: CreateTaskParams) {
         task
     }
 }
+
+export function toggleTaskDone(taskId: string) {
+    const task = becca.tasks[taskId];
+    task.isDone = !task.isDone;
+    task.save();
+}

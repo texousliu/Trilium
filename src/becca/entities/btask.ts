@@ -75,6 +75,7 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
             parentNoteId: this.parentNoteId,
             title: this.title,
             dueDate: this.dueDate,
+            isDone: this.isDone,
             isDeleted: this.isDeleted,
             utcDateModified: this.utcDateModified
         };

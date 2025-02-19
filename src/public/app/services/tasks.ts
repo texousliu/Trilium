@@ -5,3 +5,7 @@ export async function createNewTask(title: string) {
         title
     });
 }
+
+export async function toggleTaskDone(taskId: string) {
+    await server.post(`tasks/${taskId}/toggle`);
+}

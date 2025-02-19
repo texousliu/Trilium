@@ -48,12 +48,19 @@ const TPL = `
             border-bottom: 1px solid var(--main-background-color);
             padding: 0.5em 1em;
         }
+
+        .note-detail-task-list .task-container li .check {
+            margin-right: 0.5em;
+        }
     </style>
 </div>
 `;
 
 function buildTask(task: FTask) {
-    return `<li class="task">${task.title}</li>`;
+    return `\
+<li class="task">
+    <input type="checkbox" class="check" data-task-id="${task.taskId}" /> ${task.title}
+</li>`;
 }
 
 export default class TaskListWidget extends TypeWidget {
@@ -72,6 +79,17 @@ export default class TaskListWidget extends TypeWidget {
             if (e.key === "Enter") {
                 this.#createNewTask(String(this.$addNewTask.val()));
             }
+        });
+
+        this.$taskContainer.on("change", "input", (e) => {
+            const target = e.target as HTMLInputElement;
+            const taskId = target.dataset.taskId;
+
+            if (!taskId) {
+                return;
+            }
+
+            taskService.toggleTaskDone(taskId);
         });
     }
 
