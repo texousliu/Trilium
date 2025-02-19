@@ -16,11 +16,18 @@ const TPL = `
 
     <style>
         .note-detail-task-list {
+            height: 100%;
+            contain: none;
             padding: 10px;
         }
 
         .note-detail-task-list header {
-            margin-bottom: 1em;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin: 0;
+            padding: 0.5em 0;
+            background-color: var(--main-background-color);
         }
 
         .note-detail-task-list .add-new-task {
