@@ -44,7 +44,7 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
         this.parentNoteId = row.parentNoteId;
         this.title = row.title;
         this.dueDate = row.dueDate;
-        this.isDone = !!row.isDeleted;
+        this.isDone = !!row.isDone;
         this._isDeleted = !!row.isDeleted;
         this.utcDateModified = row.utcDateModified;
 
