@@ -9,7 +9,7 @@ const TPL = `
     <div id="time-selector-placeholder"></div>
 </div>`;
 
-export default class ProtectedSessionTimeoutOption extends TimeSelector {
+export default class ProtectedSessionTimeoutOptions extends TimeSelector {
     constructor() {
         super({
             widgetId: "protected-session-timeout",
