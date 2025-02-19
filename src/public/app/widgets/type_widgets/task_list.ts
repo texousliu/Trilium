@@ -121,7 +121,9 @@ export default class TaskListWidget extends TypeWidget {
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        console.log("Update", loadResults);
+        if (this.noteId && loadResults.isTaskListReloaded(this.noteId)) {
+            this.refresh();
+        }
     }
 
 }

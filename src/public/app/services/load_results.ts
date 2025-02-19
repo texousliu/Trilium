@@ -183,6 +183,14 @@ export default class LoadResults {
         return this.contentNoteIdToComponentId.find((l) => l.noteId === noteId && l.componentId !== componentId);
     }
 
+    isTaskListReloaded(parentNoteId: string) {
+        if (!parentNoteId) {
+            return false;
+        }
+
+        return !!this.taskRows.find((tr) => tr.parentNoteId === parentNoteId);
+    }
+
     addOption(name: string) {
         this.optionNames.push(name);
     }
