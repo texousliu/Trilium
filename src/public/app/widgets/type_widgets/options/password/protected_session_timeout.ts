@@ -9,14 +9,14 @@ const TPL = `
     <div id="time-selector-placeholder"></div>
 </div>`;
 
-// TriliumNextTODO: set minimum value to 60 seconds
 export default class ProtectedSessionTimeoutOption extends TimeSelector {
     constructor() {
         super({
             widgetId: "protected-session-timeout",
             widgetLabelId: "password.protected_session_timeout_label",
             optionValueId: "protectedSessionTimeout",
-            optionTimeScaleId: "protectedSessionTimeoutTimeScale"
+            optionTimeScaleId: "protectedSessionTimeoutTimeScale",
+            minimumSeconds: 60
         });
         super.doRender();
     }
