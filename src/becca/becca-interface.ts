@@ -217,7 +217,9 @@ export default class Becca {
     }
 
     getTasks(): BTask[] {
-        return Object.values(this.tasks);
+        return Object
+            .values(this.tasks)
+            .filter((task) => !task.isDone);
     }
 
     getEntity<T extends AbstractBeccaEntity<T>>(entityName: string, entityId: string): AbstractBeccaEntity<T> | null {
