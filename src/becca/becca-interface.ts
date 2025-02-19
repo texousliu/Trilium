@@ -217,9 +217,7 @@ export default class Becca {
     }
 
     getTasks(): BTask[] {
-        return Object
-            .values(this.tasks)
-            .filter((task) => !task.isDone);
+        return Object.values(this.tasks);
     }
 
     getTask(taskId: string): BTask | null {

@@ -280,7 +280,7 @@ function register(app: express.Application) {
     apiRoute(PATCH, "/api/etapi-tokens/:etapiTokenId", etapiTokensApiRoutes.patchToken);
     apiRoute(DEL, "/api/etapi-tokens/:etapiTokenId", etapiTokensApiRoutes.deleteToken);
 
-    apiRoute(GET, "/api/tasks", tasksRoute.getTasks);
+    apiRoute(GET, "/api/tasks/:parentNoteId", tasksRoute.getTasks);
     apiRoute(PST, "/api/tasks", tasksRoute.createNewTask);
     apiRoute(PST, "/api/tasks/:taskId/toggle", tasksRoute.toggleTaskDone);
 

@@ -1,8 +1,9 @@
 import type { Request } from "express";
 import * as tasksService from "../../services/tasks.js";
 
-export function getTasks() {
-    return tasksService.getTasks();
+export function getTasks(req: Request) {
+    const { parentNoteId } = req.params;
+    return tasksService.getTasks(parentNoteId);
 }
 
 export function createNewTask(req: Request) {

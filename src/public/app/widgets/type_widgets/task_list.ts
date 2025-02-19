@@ -108,13 +108,13 @@ export default class TaskListWidget extends TypeWidget {
     async doRefresh(note: FNote) {
         this.$widget.show();
 
-        if (!this.note) {
+        if (!this.note || !this.noteId) {
             return;
         }
 
         this.$taskContainer.html("");
 
-        const tasks = await froca.getTasks();
+        const tasks = await froca.getTasks(this.noteId);
         for (const task of tasks) {
             this.$taskContainer.append($(buildTask(task)));
         }

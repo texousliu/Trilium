@@ -1,8 +1,9 @@
 import becca from "../becca/becca.js";
 import BTask from "../becca/entities/btask.js";
 
-export function getTasks() {
-    return becca.getTasks();
+export function getTasks(parentNoteId: string) {
+    return becca.getTasks()
+        .filter((task) => task.parentNoteId === parentNoteId && !task.isDone);
 }
 
 interface CreateTaskParams {

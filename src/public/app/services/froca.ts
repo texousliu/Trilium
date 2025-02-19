@@ -372,8 +372,8 @@ class FrocaImpl implements Froca {
         });
     }
 
-    async getTasks() {
-        const taskRows = await server.get<FTaskRow[]>(`tasks`);
+    async getTasks(parentNoteId: string) {
+        const taskRows = await server.get<FTaskRow[]>(`tasks/${parentNoteId}`);
         return this.processTaskRow(taskRows);
     }
 
