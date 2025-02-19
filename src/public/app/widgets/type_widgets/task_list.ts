@@ -59,7 +59,7 @@ const TPL = `
 function buildTask(task: FTask) {
     return `\
 <li class="task">
-    <input type="checkbox" class="check" data-task-id="${task.taskId}" /> ${task.title}
+    <input type="checkbox" class="check" data-task-id="${task.taskId}" ${task.isDone ? "checked" : ""} /> ${task.title}
 </li>`;
 }
 
