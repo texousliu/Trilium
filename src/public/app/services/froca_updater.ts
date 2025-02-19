@@ -335,6 +335,8 @@ function processTaskChange(loadResults: LoadResults, ec: EntityChange) {
             froca.tasks[task.taskId] = task;
         }
     }
+
+    loadResults.addTaskRow(taskEntity);
 }
 
 export default {

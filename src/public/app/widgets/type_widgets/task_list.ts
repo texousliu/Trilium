@@ -3,6 +3,7 @@ import type FTask from "../../entities/ftask.js";
 import froca from "../../services/froca.js";
 import TypeWidget from "./type_widget.js";
 import * as taskService from "../../services/tasks.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="note-detail-task-list note-detail-printable">
@@ -114,6 +115,10 @@ export default class TaskListWidget extends TypeWidget {
         for (const task of tasks) {
             this.$taskContainer.append($(buildTask(task)));
         }
+    }
+
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        console.log("Update", loadResults);
     }
 
 }

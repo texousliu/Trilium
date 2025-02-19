@@ -222,6 +222,10 @@ export default class Becca {
             .filter((task) => !task.isDone);
     }
 
+    getTask(taskId: string): BTask | null {
+        return this.tasks[taskId];
+    }
+
     getEntity<T extends AbstractBeccaEntity<T>>(entityName: string, entityId: string): AbstractBeccaEntity<T> | null {
         if (!entityName || !entityId) {
             return null;
