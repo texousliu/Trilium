@@ -144,5 +144,5 @@ export interface TaskRow {
     dueDate?: string;
     isDone?: boolean;
     isDeleted?: boolean;
-    utcDateModified: string;
+    utcDateModified?: string;
 }
