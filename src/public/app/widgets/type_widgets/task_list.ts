@@ -95,11 +95,14 @@ export default class TaskListWidget extends TypeWidget {
     }
 
     async #createNewTask(title: string) {
-        if (!title) {
+        if (!title || !this.noteId) {
             return;
         }
 
-        await taskService.createNewTask(title);
+        await taskService.createNewTask({
+            title,
+            parentNoteId: this.noteId
+        });
     }
 
     async doRefresh(note: FNote) {

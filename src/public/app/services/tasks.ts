@@ -1,7 +1,13 @@
 import server from "./server.js";
 
-export async function createNewTask(title: string) {
+interface CreateNewTasksOpts {
+    parentNoteId: string;
+    title: string;
+}
+
+export async function createNewTask({ parentNoteId, title }: CreateNewTasksOpts) {
     await server.post(`tasks`, {
+        parentNoteId,
         title
     });
 }
