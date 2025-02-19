@@ -31,7 +31,7 @@ const TPL = `
         }
     </style>
 
-    <div class="file-preview-too-big alert alert-info">
+    <div class="file-preview-too-big alert alert-info hidden-ext">
         ${t("file.too_big", { maxNumChars: TEXT_MAX_NUM_CHARS })}
     </div>
 
@@ -81,7 +81,7 @@ export default class FileTypeWidget extends TypeWidget {
         this.$previewContent.empty().hide();
         this.$pdfPreview.attr("src", "").empty().hide();
         this.$previewNotAvailable.hide();
-        this.$previewTooBig.hide();
+        this.$previewTooBig.addClass("hidden-ext");
         this.$videoPreview.hide();
         this.$audioPreview.hide();
 
@@ -89,7 +89,7 @@ export default class FileTypeWidget extends TypeWidget {
             this.$previewContent.show().scrollTop(0);
             const trimmedContent = blob.content.substring(0, TEXT_MAX_NUM_CHARS);
             if (trimmedContent.length !== blob.content.length) {
-                this.$previewTooBig.show();
+                this.$previewTooBig.removeClass("hidden-ext");
             }
             this.$previewContent.text(trimmedContent);
         } else if (note.mime === "application/pdf") {
