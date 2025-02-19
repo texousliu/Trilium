@@ -1285,7 +1285,7 @@
     "protected_session_timeout_description": "Protected session timeout is a time period after which the protected session is wiped from the browser's memory. This is measured from the last interaction with protected notes. See",
     "wiki": "wiki",
     "for_more_info": "for more info.",
-    "protected_session_timeout_label": "Protected session timeout (in seconds)",
+    "protected_session_timeout_label": "Protected session timeout:",
     "reset_confirmation": "By resetting the password you will forever lose access to all your existing protected notes. Do you really want to reset the password?",
     "reset_success_message": "Password has been reset. Please set new password",
     "change_password_heading": "Change Password",
