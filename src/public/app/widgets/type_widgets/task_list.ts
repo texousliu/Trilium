@@ -108,7 +108,7 @@ export default class TaskListWidget extends TypeWidget {
             return;
         }
 
-        this.$taskContainer.clearQueue();
+        this.$taskContainer.html("");
 
         const tasks = await froca.getTasks();
         for (const task of tasks) {
