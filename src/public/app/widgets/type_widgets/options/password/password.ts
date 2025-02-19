@@ -1,9 +1,9 @@
-import { t } from "../../../services/i18n.js";
-import server from "../../../services/server.js";
-import protectedSessionHolder from "../../../services/protected_session_holder.js";
-import toastService from "../../../services/toast.js";
-import OptionsWidget from "./options_widget.js";
-import type { OptionMap } from "../../../../../services/options_interface.js";
+import { t } from "../../../../services/i18n.js";
+import server from "../../../../services/server.js";
+import protectedSessionHolder from "../../../../services/protected_session_holder.js";
+import toastService from "../../../../services/toast.js";
+import OptionsWidget from "../options_widget.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
