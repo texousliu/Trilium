@@ -10,6 +10,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import type NoteMeta from "./meta/note_meta.js";
+import log from "./log.js";
+import { t } from "i18next";
 
 const randtoken = generator({ source: "crypto" });
 
@@ -105,10 +107,13 @@ export function escapeRegExp(str: string) {
     return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
-export async function crash() {
+export async function crash(message: string) {
     if (isElectron) {
-        (await import("electron")).app.exit(1);
+        const electron = await import("electron");
+        electron.dialog.showErrorBox(t("modals.error_title"), message);
+        electron.app.exit(1);
     } else {
+        log.error(message);
         process.exit(1);
     }
 }
@@ -168,6 +173,7 @@ export function removeTextFileExtension(filePath: string) {
 
     switch (extension) {
         case ".md":
+        case ".mdx":
         case ".markdown":
         case ".html":
         case ".htm":
