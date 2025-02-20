@@ -2,6 +2,7 @@ import OptionsWidget from "./options_widget.js";
 import toastService from "../../../services/toast.js";
 import { t } from "../../../services/i18n.js";
 import type { OptionDefinitions, OptionMap } from "../../../../../services/options_interface.js";
+import optionsService from "../../../services/options.js";
 
 type TimeSelectorConstructor = {
     widgetId: string;
@@ -9,6 +10,7 @@ type TimeSelectorConstructor = {
     optionValueId: keyof OptionDefinitions;
     optionTimeScaleId: keyof OptionDefinitions;
     includedTimeScales?: Set<TimeSelectorScale>;
+    minimumSeconds?: number;
 };
 
 type TimeSelectorScale = "seconds" | "minutes" | "hours" | "days";
@@ -43,6 +45,7 @@ export default class TimeSelector extends OptionsWidget {
     private optionValueId: keyof OptionDefinitions;
     private optionTimeScaleId: keyof OptionDefinitions;
     private includedTimeScales: Set<TimeSelectorScale>;
+    private minimumSeconds: number;
 
     constructor(options: TimeSelectorConstructor) {
         super();
@@ -50,7 +53,8 @@ export default class TimeSelector extends OptionsWidget {
         this.widgetLabelId = options.widgetLabelId;
         this.optionValueId = options.optionValueId;
         this.optionTimeScaleId = options.optionTimeScaleId;
-        this.includedTimeScales = !options.includedTimeScales ? new Set(["seconds", "minutes", "hours", "days"]) : options.includedTimeScales;
+        this.includedTimeScales = options.includedTimeScales || new Set(["seconds", "minutes", "hours", "days"]);
+        this.minimumSeconds = options.minimumSeconds || 0
     }
 
     doRender() {
@@ -71,7 +75,8 @@ export default class TimeSelector extends OptionsWidget {
 
             if (!this.handleTimeValidation() || typeof timeScale !== "string" || !time) return;
 
-            this.internalTimeInSeconds = this.convertTime(time, timeScale).toOption();
+            this.setInternalTimeInSeconds(this.convertTime(time, timeScale).toOption());
+
             this.updateOption(this.optionValueId, this.internalTimeInSeconds);
         });
 
@@ -89,13 +94,17 @@ export default class TimeSelector extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        this.internalTimeInSeconds = options[this.optionValueId];
-        const displayedTime = this.convertTime(options[this.optionValueId], options[this.optionTimeScaleId]).toDisplay();
+        const optionValue = optionsService.getInt(this.optionValueId) || 0;
+        const optionTimeScale = optionsService.getInt(this.optionTimeScaleId) || 1;
+
+        this.setInternalTimeInSeconds(optionValue);
+
+        const displayedTime = this.convertTime(optionValue, optionTimeScale).toDisplay();
         this.$timeValueInput.val(displayedTime);
-        this.$timeScaleSelect.val(options[this.optionTimeScaleId]);
+        this.$timeScaleSelect.val(optionTimeScale);
     }
 
-    convertTime(time: string | number, timeScale: string | number) {
+    private convertTime(time: string | number, timeScale: string | number) {
         const value = typeof time === "number" ? time : parseInt(time);
         if (Number.isNaN(value)) {
             throw new Error(`Time needs to be a valid integer, but received: ${time}`);
@@ -112,11 +121,20 @@ export default class TimeSelector extends OptionsWidget {
         };
     }
 
-    handleTimeValidation() {
+    private handleTimeValidation() {
         if (this.$timeValueInput.is(":invalid")) {
             toastService.showError(t("time_selector.invalid_input"));
             return false;
         }
         return true;
     }
+
+    private setInternalTimeInSeconds(time: number) {
+        if (time < this.minimumSeconds) {
+            toastService.showError(t("time_selector.minimum_input", {minimumSeconds: this.minimumSeconds}));
+            return this.internalTimeInSeconds = this.minimumSeconds;
+        }
+        return this.internalTimeInSeconds = time;
+    }
+
 }
