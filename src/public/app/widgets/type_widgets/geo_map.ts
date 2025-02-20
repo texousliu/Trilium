@@ -361,7 +361,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         // If any of note has its location attribute changed.
         // TODO: Should probably filter by parent here as well.
         const attributeRows = loadResults.getAttributeRows();
-        if (attributeRows.find((at) => at.name === LOCATION_ATTRIBUTE)) {
+        if (attributeRows.find((at) => [ LOCATION_ATTRIBUTE, "color" ].includes(at.name ?? ""))) {
             this.#reloadMarkers();
         }
     }
