@@ -49,7 +49,7 @@
     "build:webpack": "tsx node_modules/webpack/bin/webpack.js -c webpack.config.ts",
     "build:prepare-dist": "npm run build:webpack && rimraf ./dist && tsc && tsx ./bin/copy-dist.ts",
 
-    "test": "cross-env TRILIUM_DATA_DIR=./integration-tests/db vitest",
+    "test": "cross-env TRILIUM_DATA_DIR=./integration-tests/db TRILIUM_INTEGRATION_TEST=memory vitest",
     "test:coverage": "cross-env TRILIUM_DATA_DIR=./integration-tests/db vitest --coverage",
     "test:playwright": "playwright test",
 
