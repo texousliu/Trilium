@@ -8,21 +8,17 @@ const TPL = `
 <div class="options-section">
     <h4>${t("share.title")}</h4>
 
-    <p>${t("share.redirect_bare_domain_description")}</p>
     <label class="tn-checkbox">
-        <input type="checkbox" name="redirectBareDomain">
-        <span>${t("share.redirect_bare_domain")}</span>
+        <input class="form-check-input" type="checkbox" name="redirectBareDomain" value="true">
+        ${t("share.redirect_bare_domain")}
     </label>
-
-    <div class="share-root-check mt-2 mb-2" style="display: none;">
-        <button class="btn btn-sm btn-secondary check-share-root">${t("share.check_share_root")}</button>
-        <div class="share-root-status form-text mt-2"></div>
-    </div>
+    <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
 
     <label class="tn-checkbox">
-        <input type="checkbox" name="showLoginInShareTheme">
-        <span>${t("share.show_login_link")}</span>
+        <input class="form-check-input" type="checkbox" name="showLoginInShareTheme" value="true">
+        ${t("share.show_login_link")}
     </label>
+    <p class="form-text">${t("share.show_login_link_description")}</p>
 </div>`;
 
 export default class ShareSettingsOptions extends OptionsWidget {

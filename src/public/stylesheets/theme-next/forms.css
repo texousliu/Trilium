@@ -193,6 +193,11 @@ input::selection,
     color: var(--input-selection-text-color);
 }
 
+.form-text {
+    color: var(--main-text-color);
+    opacity: 0.8;
+}
+
 /* Input groups */
 
 .input-group {
