@@ -8,6 +8,7 @@ import passwordEncryptionService from "./encryption/password_encryption.js";
 import config from "./config.js";
 import passwordService from "./encryption/password.js";
 import options from "./options.js";
+import attributes from "./attributes.js";
 import type { NextFunction, Request, Response } from "express";
 
 const noAuthentication = config.General && config.General.noAuthentication === true;
@@ -16,7 +17,15 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
     if (!sqlInit.isDbInitialized()) {
         res.redirect("setup");
     } else if (!req.session.loggedIn && !isElectron && !noAuthentication) {
-        const redirectToShare = options.getOption("redirectBareDomain") === "true";
+        const redirectToShare = options.getOptionBool("redirectBareDomain");
+        if (redirectToShare) {
+            // Check if any note has the #shareRoot label
+            const shareRootNotes = attributes.getNotesWithLabel("shareRoot");
+            if (shareRootNotes.length === 0) {
+                res.status(404).json({ message: "Share root not found. Please set up a note with #shareRoot label first." });
+                return;
+            }
+        }
         res.redirect(redirectToShare ? "share" : "login");
     } else {
         next();
