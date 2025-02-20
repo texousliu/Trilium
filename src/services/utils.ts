@@ -173,6 +173,7 @@ export function removeTextFileExtension(filePath: string) {
 
     switch (extension) {
         case ".md":
+        case ".mdx":
         case ".markdown":
         case ".html":
         case ".htm":

@@ -35,6 +35,7 @@ describe("processNoteContent", () => {
                 try {
                     expect(importedNote.mime).toBe("text/mdx");
                     expect(importedNote.type).toBe("text");
+                    expect(importedNote.title).toBe("Text Note");
                 } catch (e) {
                     reject(e);
                 }
