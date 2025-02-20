@@ -6,6 +6,8 @@ import searchService from "../../../../services/search.js";
 
 const TPL = `
 <div class="options-section">
+    <h4>${t("share.title")}</h4>
+
     <p>${t("share.redirect_bare_domain_description")}</p>
     <label class="tn-checkbox">
         <input type="checkbox" name="redirectBareDomain">
@@ -37,7 +39,7 @@ export default class ShareSettingsOptions extends OptionsWidget {
         // Add change handlers for both checkboxes
         this.$widget.find('input[type="checkbox"]').on("change", (e: JQuery.ChangeEvent) => {
             this.save();
-            
+
             // Show/hide share root status section based on redirectBareDomain checkbox
             const target = e.target as HTMLInputElement;
             if (target.name === 'redirectBareDomain') {
@@ -66,7 +68,7 @@ export default class ShareSettingsOptions extends OptionsWidget {
     async checkShareRoot() {
         const $button = this.$widget.find('.check-share-root');
         $button.prop('disabled', true);
-        
+
         try {
             const shareRootNotes = await searchService.searchForNotes("#shareRoot");
             const sharedShareRootNote = shareRootNotes.find(note => note.isShared());
@@ -80,7 +82,7 @@ export default class ShareSettingsOptions extends OptionsWidget {
                 this.$shareRootStatus
                     .removeClass('text-success')
                     .addClass('text-danger')
-                    .text(shareRootNotes.length > 0 
+                    .text(shareRootNotes.length > 0
                         ? t("share.share_root_not_shared", {noteTitle: shareRootNotes[0].title})
                         : t("share.share_root_not_found"));
             }
