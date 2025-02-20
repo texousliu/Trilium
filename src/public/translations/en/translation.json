@@ -1658,12 +1658,13 @@
   "share": {
     "title": "Share Settings",
     "redirect_bare_domain": "Redirect bare domain to Share page",
-    "redirect_bare_domain_description": "When enabled, accessing the root URL will redirect to the Share page instead of Login",
+    "redirect_bare_domain_description": "Redirect anonymous users to the Share page instead of showing Login",
     "show_login_link": "Show Login link in Share theme",
     "show_login_link_description": "Add a login link to the Share page footer",
     "check_share_root": "Check Share Root Status",
-    "share_root_found": "Share root found: {{noteTitle}}",
-    "share_root_not_found": "No note with #shareRoot label found. Set up a note with #shareRoot label first."
+    "share_root_found": "Share root note '{{noteTitle}}' is ready",
+    "share_root_not_found": "No note with #shareRoot label found",
+    "share_root_not_shared": "Note '{{noteTitle}}' has #shareRoot label but is not Shared"
   },
   "time_selector": {
     "invalid_input": "The entered time value is not a valid number."

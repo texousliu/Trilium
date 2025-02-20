@@ -6,11 +6,11 @@ import searchService from "../../../../services/search.js";
 
 const TPL = `
 <div class="options-section">
+    <p>${t("share.redirect_bare_domain_description")}</p>
     <label class="tn-checkbox">
         <input type="checkbox" name="redirectBareDomain">
         <span>${t("share.redirect_bare_domain")}</span>
     </label>
-    <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
 
     <div class="share-root-check mt-2 mb-2" style="display: none;">
         <button class="btn btn-sm btn-secondary check-share-root">${t("share.check_share_root")}</button>
@@ -18,8 +18,8 @@ const TPL = `
     </div>
 
     <label class="tn-checkbox">
-        <input type="checkbox" name="shareSubtree">
-        <span>${t("share.share_subtree")}</span>
+        <input type="checkbox" name="showLoginInShareTheme">
+        <span>${t("share.show_login_link")}</span>
     </label>
 </div>`;
 
@@ -60,25 +60,32 @@ export default class ShareSettingsOptions extends OptionsWidget {
             await this.checkShareRoot();
         }
 
-        this.$widget.find('input[name="shareSubtree"]').prop("checked", options.shareSubtree === "true");
+        this.$widget.find('input[name="showLoginInShareTheme"]').prop("checked", options.showLoginInShareTheme === "true");
     }
 
     async checkShareRoot() {
-        const shareRootNotes = await searchService.searchNotes("#shareRoot", {
-            includeArchivedNotes: true,
-            ignoreHoistedNote: true
-        });
+        const $button = this.$widget.find('.check-share-root');
+        $button.prop('disabled', true);
+        
+        try {
+            const shareRootNotes = await searchService.searchForNotes("#shareRoot");
+            const sharedShareRootNote = shareRootNotes.find(note => note.isShared());
 
-        if (shareRootNotes.length > 0) {
-            this.$shareRootStatus
-                .removeClass('text-danger')
-                .addClass('text-success')
-                .text(t("share.share_root_found", {noteTitle: shareRootNotes[0].title}));
-        } else {
-            this.$shareRootStatus
-                .removeClass('text-success')
-                .addClass('text-danger')
-                .text(t("share.share_root_not_found"));
+            if (sharedShareRootNote) {
+                this.$shareRootStatus
+                    .removeClass('text-danger')
+                    .addClass('text-success')
+                    .text(t("share.share_root_found", {noteTitle: sharedShareRootNote.title}));
+            } else {
+                this.$shareRootStatus
+                    .removeClass('text-success')
+                    .addClass('text-danger')
+                    .text(shareRootNotes.length > 0 
+                        ? t("share.share_root_not_shared", {noteTitle: shareRootNotes[0].title})
+                        : t("share.share_root_not_found"));
+            }
+        } finally {
+            $button.prop('disabled', false);
         }
     }
 
@@ -86,7 +93,7 @@ export default class ShareSettingsOptions extends OptionsWidget {
         const redirectBareDomain = this.$widget.find('input[name="redirectBareDomain"]').prop("checked");
         await this.updateOption<"redirectBareDomain">("redirectBareDomain", redirectBareDomain.toString());
 
-        const showLoginInShareTheme = this.$widget.find('input[name="shareSubtree"]').prop("checked");
-        await this.updateOption<"shareSubtree">("shareSubtree", showLoginInShareTheme.toString());
+        const showLoginInShareTheme = this.$widget.find('input[name="showLoginInShareTheme"]').prop("checked");
+        await this.updateOption<"showLoginInShareTheme">("showLoginInShareTheme", showLoginInShareTheme.toString());
     }
 }
