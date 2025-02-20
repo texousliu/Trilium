@@ -5,7 +5,7 @@ import log from "../../services/log.js";
 import searchService from "../../services/search/services/search.js";
 import ValidationError from "../../errors/validation_error.js";
 import type { Request } from "express";
-import { changeLanguage } from "../../services/i18n.js";
+import { changeLanguage, getLocales } from "../../services/i18n.js";
 import { listSyntaxHighlightingThemes } from "../../services/code_block_theme.js";
 import type { OptionNames } from "../../services/options_interface.js";
 
@@ -154,37 +154,7 @@ function getSyntaxHighlightingThemes() {
 }
 
 function getSupportedLocales() {
-    // TODO: Currently hardcoded, needs to read the list of available languages.
-    return [
-        {
-            id: "en",
-            name: "English"
-        },
-        {
-            id: "de",
-            name: "Deutsch"
-        },
-        {
-            id: "es",
-            name: "Español"
-        },
-        {
-            id: "fr",
-            name: "Français"
-        },
-        {
-            id: "cn",
-            name: "简体中文"
-        },
-        {
-            id: "tw",
-            name: "繁體中文"
-        },
-        {
-            id: "ro",
-            name: "Română"
-        }
-    ];
+    return getLocales();
 }
 
 function isAllowed(name: string) {
