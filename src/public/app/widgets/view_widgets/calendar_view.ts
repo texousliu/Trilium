@@ -103,6 +103,7 @@ export default class CalendarView extends ViewMode {
             eventChange: (e) => this.#onEventMoved(e),
             firstDay: options.getInt("firstDayOfWeek") ?? 0,
             weekends: !this.parentNote.hasAttribute("label", "calendar:hideWeekends"),
+            weekNumbers: this.parentNote.hasAttribute("label", "calendar:weekNumbers"),
             locale: await CalendarView.#getLocale(),
             height: "100%"
         });
