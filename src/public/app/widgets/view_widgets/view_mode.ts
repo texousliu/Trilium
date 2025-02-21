@@ -21,4 +21,9 @@ export default abstract class ViewMode {
         // Do nothing by default.
     }
 
+    get isFullHeight() {
+        // Override to change its value.
+        return false;
+    }
+
 }

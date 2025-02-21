@@ -78,6 +78,10 @@ export default class CalendarView extends ViewMode {
         args.$parent.append(this.$root);
     }
 
+    get isFullHeight(): boolean {
+        return true;
+    }
+
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
         const isEditable = true;
 
@@ -98,7 +102,8 @@ export default class CalendarView extends ViewMode {
             select: (e) => this.#onCalendarSelection(e),
             eventChange: (e) => this.#onEventMoved(e),
             firstDay: options.getInt("firstDayOfWeek") ?? 0,
-            locale: await CalendarView.#getLocale()
+            locale: await CalendarView.#getLocale(),
+            height: "100%"
         });
         calendar.render();
         this.calendar = calendar;

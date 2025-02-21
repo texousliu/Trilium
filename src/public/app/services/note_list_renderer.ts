@@ -40,6 +40,10 @@ export default class NoteListRenderer {
         }
     }
 
+    get isFullHeight() {
+        return this.viewMode?.isFullHeight;
+    }
+
     async renderList() {
         if (!this.viewMode) {
             return null;
