@@ -9,6 +9,7 @@ import options from "../../services/options.js";
 import dialogService from "../../services/dialog.js";
 import attributes from "../../services/attributes.js";
 import type { EventData } from "../../components/app_context.js";
+import utils from "../../services/utils.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -105,7 +106,18 @@ export default class CalendarView extends ViewMode {
             weekends: !this.parentNote.hasAttribute("label", "calendar:hideWeekends"),
             weekNumbers: this.parentNote.hasAttribute("label", "calendar:weekNumbers"),
             locale: await CalendarView.#getLocale(),
-            height: "100%"
+            height: "100%",
+            eventContent: (e => {
+                let html = "";
+
+                const iconClass = e.event.extendedProps.iconClass;
+                if (iconClass) {
+                    html += `<span class="${iconClass}"></span> `;
+                }
+
+                html += utils.escapeHtml(e.event.title);
+                return { html };
+            })
         });
         calendar.render();
         this.calendar = calendar;
@@ -219,6 +231,7 @@ export default class CalendarView extends ViewMode {
                     url: `#${note.noteId}`,
                     noteId: note.noteId,
                     color: color,
+                    iconClass: note.getLabelValue("iconClass")
                 };
 
                 const endDate = CalendarView.#offsetDate(note.getAttributeValue("label", "endDate") ?? startDate, 1);
