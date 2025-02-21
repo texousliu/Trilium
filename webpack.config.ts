@@ -23,7 +23,10 @@ const config: Configuration = {
         filename: "[name].js"
     },
     plugins: [
-        new miniCssExtractPlugin()
+        new miniCssExtractPlugin({
+            // TriliumNextTODO: enable this, once webpack build outputs into the "build" folder, instead of "src/public/app-dist" folder => @pano9000
+            //filename: "../stylesheets/[name].css"
+        })
     ],
     module: {
         rules: [
