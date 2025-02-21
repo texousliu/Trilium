@@ -1871,6 +1871,7 @@ div.promoted-attribute-cell label {
 
 div.promoted-attribute-cell div.input-group {
     min-height: auto;
+    padding: 2px 6px;
 }
 
 div.promoted-attribute-cell input {
