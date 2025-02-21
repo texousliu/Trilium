@@ -1,5 +1,6 @@
 import { fileURLToPath } from "url";
 import path from "path";
+import autoprefixer from "autoprefixer";
 import assetPath from "./src/services/asset_path.js";
 import type { Configuration } from "webpack";
 
@@ -30,6 +31,29 @@ const config: Configuration = {
                     }
                 ],
                 exclude: /node_modules/
+            },
+            {
+                // bootstrap CSS related configuration
+                test: /\.(scss)$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader"
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            postcssOptions: {
+                                plugins: [autoprefixer]
+                            }
+                        }
+                    },
+                    {
+                        loader: "sass-loader"
+                    }
+                ]
             }
         ]
     },
@@ -41,7 +65,7 @@ const config: Configuration = {
             ".mjs": [".mjs", ".mts"]
         }
     },
-    devtool: "source-map",
+    //devtool: "none",
     target: "electron-renderer"
 };
 
