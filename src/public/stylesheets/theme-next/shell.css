@@ -1878,6 +1878,13 @@ div.promoted-attribute-cell input {
     font-weight: 500;
 }
 
+div.promoted-attribute-cell .tn-checkbox {
+    --box-label-gap: 0;
+
+    height: 1cap;
+    margin: 0 1em;
+}
+
 div.promoted-attribute-cell .multiplicity {
     --icon-button-size: 28px;
 

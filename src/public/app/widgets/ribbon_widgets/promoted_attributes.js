@@ -226,6 +226,9 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             } else if (definition.labelType === "boolean") {
                 $input.prop("type", "checkbox");
 
+                $input.wrap($(`<label class="tn-checkbox"></label>`));
+                $wrapper.find(".input-group").removeClass("input-group");
+
                 if (valueAttr.value === "true") {
                     $input.prop("checked", "checked");
                 }
