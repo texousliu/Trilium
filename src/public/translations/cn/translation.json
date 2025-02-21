@@ -1259,7 +1259,7 @@
     "protected_session_timeout_description": "保护会话超时是一个时间段，超时后保护会话会从浏览器内存中清除。这是从最后一次与保护笔记的交互开始计时的。更多信息请见",
     "wiki": "维基",
     "for_more_info": "更多信息。",
-    "protected_session_timeout_label": "Protected session timeout:",
+    "protected_session_timeout_label": "",
     "reset_confirmation": "重置密码将永久丧失对所有现受保护笔记的访问。您真的要重置密码吗？",
     "reset_success_message": "密码已重置。请设置新密码",
     "change_password_heading": "更改密码",

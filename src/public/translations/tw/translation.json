@@ -1237,7 +1237,7 @@
     "protected_session_timeout_description": "保護會話超時是一個時間段，超時後保護會話會從瀏覽器內存中清除。這是從最後一次與保護筆記的交互開始計時的。更多資訊請見",
     "wiki": "維基",
     "for_more_info": "更多資訊。",
-    "protected_session_timeout_label": "Protected session timeout:",
+    "protected_session_timeout_label": "",
     "reset_confirmation": "重置密碼將永久喪失對所有現受保護筆記的訪問。您真的要重置密碼嗎？",
     "reset_success_message": "密碼已重置。請設定新密碼",
     "change_password_heading": "更改密碼",
