@@ -10,6 +10,7 @@ import { t } from "./services/i18n.js";
 import options from "./services/options.js";
 import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
+import "../stylesheets/bootstrap.scss";
 
 await appContext.earlyInit();
 
