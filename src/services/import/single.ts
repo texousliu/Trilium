@@ -71,7 +71,7 @@ function importFile(taskContext: TaskContext, file: File, parentNote: BNote) {
 
 function importCodeNote(taskContext: TaskContext, file: File, parentNote: BNote) {
     const title = getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
-    const content = file.buffer.toString("utf-8");
+    const content = processStringOrBuffer(file.buffer);
     const detectedMime = mimeService.getMime(file.originalname) || file.mimetype;
     const mime = mimeService.normalizeMimeType(detectedMime);
 
