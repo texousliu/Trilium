@@ -17,7 +17,13 @@ export default abstract class ViewMode {
 
     abstract renderList(): Promise<JQuery<HTMLElement> | undefined>;
 
-    entitiesReloadedEvents(e: EventData<"entitiesReloaded">) {
+    /**
+     * Called whenever an "entitiesReloaded" event has been received by the parent component.
+     *
+     * @param e the event data.
+     * @return {@code true} if the view should be re-rendered, a falsy value otherwise.
+     */
+    onEntitiesReloaded(e: EventData<"entitiesReloaded">): boolean | void {
         // Do nothing by default.
     }
 

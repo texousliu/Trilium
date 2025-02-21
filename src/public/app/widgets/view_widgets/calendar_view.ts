@@ -102,6 +102,7 @@ export default class CalendarView extends ViewMode {
             select: (e) => this.#onCalendarSelection(e),
             eventChange: (e) => this.#onEventMoved(e),
             firstDay: options.getInt("firstDayOfWeek") ?? 0,
+            weekends: !this.parentNote.hasAttribute("label", "calendar:hideWeekends"),
             locale: await CalendarView.#getLocale(),
             height: "100%"
         });
@@ -179,12 +180,18 @@ export default class CalendarView extends ViewMode {
         CalendarView.#setAttribute(note, "label", "endDate", endDate);
     }
 
-    entitiesReloadedEvents({ loadResults }: EventData<"entitiesReloaded">): void {
+    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         // Refresh note IDs if they got changed.
-        if (loadResults.getBranchRows().some((branch) => branch.parentNoteId == this.parentNote.noteId)) {
+        if (loadResults.getBranchRows().some((branch) => branch.parentNoteId === this.parentNote.noteId)) {
             this.noteIds = this.parentNote.getChildNoteIds();
         }
 
+        // Refresh calendar on attribute change.
+        if (loadResults.getAttributeRows().some((attribute) => attribute.noteId === this.parentNote.noteId && attribute.name?.startsWith("calendar:"))) {
+            return true;
+        }
+
+        // Refresh dataset on subnote change.
         if (this.calendar && loadResults.getAttributeRows().some((a) => this.noteIds.includes(a.noteId ?? ""))) {
             this.calendar.refetchEvents();
         }
