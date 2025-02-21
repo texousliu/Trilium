@@ -3,6 +3,8 @@
 import type BNote from "../../becca/entities/bnote.js";
 import type TaskContext from "../task_context.js";
 
+import chardet from "chardet";
+import stripBom from "strip-bom";
 import noteService from "../../services/notes.js";
 import imageService from "../../services/image.js";
 import protectedSessionService from "../protected_session.js";
@@ -146,8 +148,23 @@ function importMarkdown(taskContext: TaskContext, file: File, parentNote: BNote)
     return note;
 }
 
+function processStringOrBuffer(data: string | Buffer) {
+    if (!Buffer.isBuffer(data)) {
+        return data;
+    }
+
+    const detectedEncoding = chardet.detect(data);
+    switch (detectedEncoding) {
+        case "UTF-16LE":
+            return stripBom(data.toString("utf-16le"));
+        case "UTF-8":
+        default:
+            return data.toString("utf-8");
+    }
+}
+
 function importHtml(taskContext: TaskContext, file: File, parentNote: BNote) {
-    let content = file.buffer.toString("utf-8");
+    let content = processStringOrBuffer(file.buffer);
 
     // Try to get title from HTML first, fall back to filename
     // We do this before sanitization since that turns all <h1>s into <h2>
