@@ -127,7 +127,7 @@ function convertTextToHtml(text: string) {
 function importMarkdown(taskContext: TaskContext, file: File, parentNote: BNote) {
     const title = getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
 
-    const markdownContent = file.buffer.toString("utf-8");
+    const markdownContent = processStringOrBuffer(file.buffer);
     let htmlContent = markdownService.renderToHtml(markdownContent, title);
 
     if (taskContext.data?.safeImport) {

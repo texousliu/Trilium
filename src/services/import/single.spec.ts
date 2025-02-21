@@ -72,4 +72,10 @@ describe("processNoteContent", () => {
         expect(importedNote.mime).toBe("text/html");
         expect(importedNote.getContent().toString()).toBe("<p>Plain text goes here.<br></p>");
     });
+
+    it("supports markdown note with UTF-16", async () => {
+        const { importedNote } = await testImport("UTF-16LE Text Note.md", "text/markdown");
+        expect(importedNote.mime).toBe("text/html");
+        expect(importedNote.getContent().toString()).toBe("<h2>Hello world</h2>\n<p>Plain text goes here.</p>\n");
+    });
 })
