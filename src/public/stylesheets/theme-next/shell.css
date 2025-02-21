@@ -1877,3 +1877,10 @@ div.promoted-attribute-cell input {
     padding: 2px 8px;
     font-weight: 500;
 }
+
+div.promoted-attribute-cell .multiplicity {
+    --icon-button-size: 28px;
+
+    margin-left: 8px;
+    font-size: 0; /* Prevent whitespaces creating a gap between buttons */
+}
