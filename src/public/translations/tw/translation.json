@@ -1116,9 +1116,9 @@
     "deleted_notes_erased": "已刪除的筆記已被清理。"
   },
   "revisions_snapshot_interval": {
-    "note_revisions_snapshot_interval_title": "Note Revision Snapshot Interval",
-    "note_revisions_snapshot_description": "The Note revision snapshot interval is the time after which a new note revision will be created for the note. See <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> for more info.",
-    "snapshot_time_interval_label": "Note revision snapshot time interval:"
+    "note_revisions_snapshot_interval_title": "",
+    "note_revisions_snapshot_description": "",
+    "snapshot_time_interval_label": ""
   },
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "筆記歷史快照限制",
