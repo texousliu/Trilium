@@ -3,14 +3,12 @@
 import type BNote from "../../becca/entities/bnote.js";
 import type TaskContext from "../task_context.js";
 
-import chardet from "chardet";
-import stripBom from "strip-bom";
 import noteService from "../../services/notes.js";
 import imageService from "../../services/image.js";
 import protectedSessionService from "../protected_session.js";
 import markdownService from "./markdown.js";
 import mimeService from "./mime.js";
-import { getNoteTitle } from "../../services/utils.js";
+import { getNoteTitle, processStringOrBuffer } from "../../services/utils.js";
 import importUtils from "./utils.js";
 import htmlSanitizer from "../html_sanitizer.js";
 import type { File } from "./common.js";
@@ -146,21 +144,6 @@ function importMarkdown(taskContext: TaskContext, file: File, parentNote: BNote)
     taskContext.increaseProgressCount();
 
     return note;
-}
-
-function processStringOrBuffer(data: string | Buffer) {
-    if (!Buffer.isBuffer(data)) {
-        return data;
-    }
-
-    const detectedEncoding = chardet.detect(data);
-    switch (detectedEncoding) {
-        case "UTF-16LE":
-            return stripBom(data.toString("utf-16le"));
-        case "UTF-8":
-        default:
-            return data.toString("utf-8");
-    }
 }
 
 function importHtml(taskContext: TaskContext, file: File, parentNote: BNote) {
