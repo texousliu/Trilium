@@ -10,6 +10,7 @@ const config: Configuration = {
     mode: "production",
     entry: {
         setup: "./src/public/app/setup.js",
+        login: "./src/public/app/login.js",
         mobile: "./src/public/app/mobile.js",
         desktop: "./src/public/app/desktop.js",
         share: "./src/public/app/share.js",
