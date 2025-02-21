@@ -1836,3 +1836,44 @@ body.background-effects.zen #root-widget {
     animation: alert-show 300ms ease-in;
     border-bottom: 2px solid #0000001c !important;
 }
+
+/* Promoted attributes */
+
+div.promoted-attributes-container {
+    display: flex;
+    padding: 6px 0;
+    gap: 8px;
+    font-size: .85em;
+    align-items: stretch;
+}
+
+div.promoted-attribute-cell {
+    --input-background-color: transparent;
+
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, .2);
+    display: inline-flex;
+    margin: 0;
+    border-radius: 8px;
+    padding: 4px 16px;
+    background: var(--card-background-color);
+    overflow-y: visible;
+}
+
+div.promoted-attribute-cell > * {
+    display: inline-block;
+}
+
+div.promoted-attribute-cell label {
+    font-weight: normal;
+    white-space: nowrap;
+    opacity: .75;
+}
+
+div.promoted-attribute-cell div.input-group {
+    min-height: auto;
+}
+
+div.promoted-attribute-cell input {
+    padding: 2px 8px;
+    font-weight: 500;
+}
