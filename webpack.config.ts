@@ -2,6 +2,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 import autoprefixer from "autoprefixer";
 import assetPath from "./src/services/asset_path.js";
+import miniCssExtractPlugin from "mini-css-extract-plugin";
 import type { Configuration } from "webpack";
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
@@ -18,6 +19,9 @@ const config: Configuration = {
         path: path.resolve(rootDir, "src/public/app-dist"),
         filename: "[name].js"
     },
+    plugins: [
+        new miniCssExtractPlugin()
+    ],
     module: {
         rules: [
             {
@@ -37,7 +41,7 @@ const config: Configuration = {
                 test: /\.(scss)$/,
                 use: [
                     {
-                        loader: "style-loader"
+                        loader: miniCssExtractPlugin.loader
                     },
                     {
                         loader: "css-loader"
