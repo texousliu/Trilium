@@ -12,7 +12,9 @@ const config: Configuration = {
         setup: "./src/public/app/setup.js",
         mobile: "./src/public/app/mobile.js",
         desktop: "./src/public/app/desktop.js",
-        share: "./src/public/app/share.js"
+        share: "./src/public/app/share.js",
+        // TriliumNextTODO: integrate set_password into setup entry point/view
+        set_password: "./src/public/app/set_password.js"
     },
     output: {
         publicPath: `${assetPath}/app-dist/`,
