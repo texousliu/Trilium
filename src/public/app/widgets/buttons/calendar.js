@@ -7,6 +7,7 @@ import appContext from "../../components/app_context.js";
 import RightDropdownButtonWidget from "./right_dropdown_button.js";
 import toastService from "../../services/toast.js";
 import options from "../../services/options.js";
+import { Dropdown } from "bootstrap";
 
 const MONTHS = [
     t("calendar.january"),
@@ -84,7 +85,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             // Don't trigger dropdownShown() at widget level when the month selection dropdown is shown, since it would cause a redundant refresh.
             e.stopPropagation();
         });
-        this.monthDropdown = bootstrap.Dropdown.getOrCreateInstance(this.$monthSelect);
+        this.monthDropdown = Dropdown.getOrCreateInstance(this.$monthSelect);
         this.$dropdownContent.find('[data-calendar-input="month-list"] button').on("click", (e) => {
             this.date.setMonth(e.target.dataset.value);
             this.createMonth();

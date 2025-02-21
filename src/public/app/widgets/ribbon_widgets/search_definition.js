@@ -16,6 +16,7 @@ import Limit from "../search_options/limit.js";
 import Debug from "../search_options/debug.js";
 import appContext from "../../components/app_context.js";
 import bulkActionService from "../../services/bulk_action.js";
+import { Dropdown } from "bootstrap";
 
 const TPL = `
 <div class="search-definition-widget">
@@ -203,7 +204,7 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         });
 
         this.$widget.on("click", "[data-action-add]", async (event) => {
-            bootstrap.Dropdown.getOrCreateInstance(this.$widget.find(".action-add-toggle"));
+            Dropdown.getOrCreateInstance(this.$widget.find(".action-add-toggle"));
 
             const actionName = $(event.target).attr("data-action-add");
 

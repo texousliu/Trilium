@@ -4,6 +4,7 @@ import noteAutocompleteService from "../../services/note_autocomplete.js";
 import utils from "../../services/utils.js";
 import froca from "../../services/froca.js";
 import BasicWidget from "../basic_widget.js";
+import { Modal } from "bootstrap";
 
 const TPL = `
 <div class="include-note-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -54,7 +55,7 @@ const TPL = `
 export default class IncludeNoteDialog extends BasicWidget {
     doRender() {
         this.$widget = $(TPL);
-        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget);
         this.$form = this.$widget.find(".include-note-form");
         this.$autoComplete = this.$widget.find(".include-note-autocomplete");
         this.$form.on("submit", () => {

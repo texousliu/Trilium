@@ -4,6 +4,7 @@ import treeService from "../../services/tree.js";
 import importService from "../../services/import.js";
 import options from "../../services/options.js";
 import BasicWidget from "../basic_widget.js";
+import { Modal, Tooltip } from "bootstrap";
 
 const TPL = `
 <div class="upload-attachments-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -49,7 +50,7 @@ export default class UploadAttachmentsDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.modal = bootstrap.Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget);
 
         this.$form = this.$widget.find(".upload-attachment-form");
         this.$noteTitle = this.$widget.find(".upload-attachment-note-title");
@@ -72,7 +73,7 @@ export default class UploadAttachmentsDialog extends BasicWidget {
             }
         });
 
-        bootstrap.Tooltip.getOrCreateInstance(this.$widget.find('[data-bs-toggle="tooltip"]'), {
+        Tooltip.getOrCreateInstance(this.$widget.find('[data-bs-toggle="tooltip"]'), {
             html: true
         });
     }
