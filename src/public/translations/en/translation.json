@@ -1658,6 +1658,7 @@
     "days": "Days"
   },
   "time_selector": {
-    "invalid_input": "The entered time value is not a valid number."
+    "invalid_input": "The entered time value is not a valid number.",
+    "minimum_input": "The entered time value needs to be at least {{minimumSeconds}} seconds."
   }
 }

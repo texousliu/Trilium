@@ -19,7 +19,7 @@ function importSingleFile(taskContext: TaskContext, file: File, parentNote: BNot
     if (taskContext?.data?.textImportedAsText) {
         if (mime === "text/html") {
             return importHtml(taskContext, file, parentNote);
-        } else if (["text/markdown", "text/x-markdown"].includes(mime)) {
+        } else if (["text/markdown", "text/x-markdown", "text/mdx"].includes(mime)) {
             return importMarkdown(taskContext, file, parentNote);
         } else if (mime === "text/plain") {
             return importPlainText(taskContext, file, parentNote);

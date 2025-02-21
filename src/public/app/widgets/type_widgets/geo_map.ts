@@ -222,7 +222,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
         const L = this.L;
-        const icon = this.#buildIcon(note.getIcon(), note.title);
+        const icon = this.#buildIcon(note.getIcon(), note.getColorClass(), note.title);
 
         const marker = L.marker(L.latLng(lat, lng), {
             icon,
@@ -257,12 +257,12 @@ export default class GeoMapTypeWidget extends TypeWidget {
         this.currentMarkerData[note.noteId] = marker;
     }
 
-    #buildIcon(bxIconClass: string, title: string) {
+    #buildIcon(bxIconClass: string, colorClass: string, title: string) {
         return this.L.divIcon({
             html: `\
                 <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
                 <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
-                <span class="bx ${bxIconClass}"></span>
+                <span class="bx ${bxIconClass} ${colorClass}"></span>
                 <span class="title-label">${title}</span>`,
             iconSize: [ 25, 41 ],
             iconAnchor: [ 12, 41 ]
@@ -361,7 +361,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         // If any of note has its location attribute changed.
         // TODO: Should probably filter by parent here as well.
         const attributeRows = loadResults.getAttributeRows();
-        if (attributeRows.find((at) => at.name === LOCATION_ATTRIBUTE)) {
+        if (attributeRows.find((at) => [ LOCATION_ATTRIBUTE, "color" ].includes(at.name ?? ""))) {
             this.#reloadMarkers();
         }
     }
