@@ -66,4 +66,10 @@ describe("processNoteContent", () => {
         expect(importedNote.mime).toBe("application/json");
         expect(importedNote.getContent().toString()).toStrictEqual(stripBom(buffer.toString("utf-16le")));
     });
+
+    it("supports plain text note with UTF-16", async () => {
+        const { importedNote } = await testImport("UTF-16LE Text Note.txt", "text/plain");
+        expect(importedNote.mime).toBe("text/html");
+        expect(importedNote.getContent().toString()).toBe("<p>Plain text goes here.<br></p>");
+    });
 })

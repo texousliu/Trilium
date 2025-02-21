@@ -91,7 +91,7 @@ function importCodeNote(taskContext: TaskContext, file: File, parentNote: BNote)
 
 function importPlainText(taskContext: TaskContext, file: File, parentNote: BNote) {
     const title = getNoteTitle(file.originalname, !!taskContext.data?.replaceUnderscoresWithSpaces);
-    const plainTextContent = file.buffer.toString("utf-8");
+    const plainTextContent = processStringOrBuffer(file.buffer);
     const htmlContent = convertTextToHtml(plainTextContent);
 
     const { note } = noteService.createNewNote({
