@@ -3,6 +3,7 @@ import AttachmentDetailWidget from "../attachment_detail.js";
 import linkService from "../../services/link.js";
 import utils from "../../services/utils.js";
 import { t } from "../../services/i18n.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="attachment-list note-detail-printable">
@@ -27,6 +28,10 @@ const TPL = `
 </div>`;
 
 export default class AttachmentListTypeWidget extends TypeWidget {
+    $list!: JQuery<HTMLElement>;
+    $linksWrapper!: JQuery<HTMLElement>;
+    renderedAttachmentIds!: Set<string>;
+
     static getType() {
         return "attachmentList";
     }
@@ -39,7 +44,10 @@ export default class AttachmentListTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: Parameters<TypeWidget["doRefresh"]>[0]) {
+        // TriliumNextTODO: do we need to handle an undefined/null note?
+        if (!note) return false;
+
         const $helpButton = $(`
             <button class="attachment-help-button icon-action bx bx-help-circle"
                      type="button" data-help-page="attachments.html"
@@ -56,7 +64,11 @@ export default class AttachmentListTypeWidget extends TypeWidget {
             $(`<div class="attachment-actions-toolbar">`).append(
                 $('<button class="btn btn-sm">')
                     .text(t("attachment_list.upload_attachments"))
-                    .on("click", () => this.triggerCommand("showUploadAttachmentsDialog", { noteId: this.noteId })),
+                    .on("click", () => {
+                        if (this.noteId) {
+                            this.triggerCommand("showUploadAttachmentsDialog", { noteId: this.noteId })
+                        }
+                    }),
                 $helpButton
             )
         );
@@ -83,9 +95,9 @@ export default class AttachmentListTypeWidget extends TypeWidget {
         }
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         // updates and deletions are handled by the detail, for new attachments the whole list has to be refreshed
-        const attachmentsAdded = loadResults.getAttachmentRows().some((att) => !this.renderedAttachmentIds.has(att.attachmentId));
+        const attachmentsAdded = loadResults.getAttachmentRows().some((att) => att.attachmentId && !this.renderedAttachmentIds.has(att.attachmentId));
 
         if (attachmentsAdded) {
             this.refresh();
