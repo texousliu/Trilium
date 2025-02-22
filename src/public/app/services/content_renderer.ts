@@ -24,7 +24,8 @@ interface Options {
 
 const CODE_MIME_TYPES = new Set(["application/json"]);
 
-async function getRenderedContent(this: {} | { ctx: string }, entity: FNote, options: Options = {}) {
+async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FAttachment, options: Options = {}) {
+
     options = Object.assign(
         {
             tooltip: false
@@ -47,7 +48,7 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote, opt
         renderFile(entity, type, $renderedContent);
     } else if (type === "mermaid") {
         await renderMermaid(entity, $renderedContent);
-    } else if (type === "render") {
+    } else if (type === "render" && entity instanceof FNote) {
         const $content = $("<div>");
 
         await renderService.render(entity, $content);
@@ -79,7 +80,7 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote, opt
     };
 }
 
-async function renderText(note: FNote, $renderedContent: JQuery<HTMLElement>) {
+async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>) {
     // entity must be FNote
     const blob = await note.getBlob();
 
@@ -102,7 +103,7 @@ async function renderText(note: FNote, $renderedContent: JQuery<HTMLElement>) {
         }
 
         await applySyntaxHighlight($renderedContent);
-    } else {
+    } else if (note instanceof FNote) {
         await renderChildrenList($renderedContent, note);
     }
 }
@@ -110,7 +111,7 @@ async function renderText(note: FNote, $renderedContent: JQuery<HTMLElement>) {
 /**
  * Renders a code note, by displaying its content and applying syntax highlighting based on the selected MIME type.
  */
-async function renderCode(note: FNote, $renderedContent: JQuery<HTMLElement>) {
+async function renderCode(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>) {
     const blob = await note.getBlob();
 
     const $codeBlock = $("<code>");
@@ -208,7 +209,7 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
     $renderedContent.append($content);
 }
 
-async function renderMermaid(note: FNote, $renderedContent: JQuery<HTMLElement>) {
+async function renderMermaid(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>) {
     await libraryLoader.requireLibrary(libraryLoader.MERMAID);
 
     const blob = await note.getBlob();
