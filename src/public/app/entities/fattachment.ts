@@ -57,6 +57,10 @@ class FAttachment {
         return this.froca.notes[this.ownerId];
     }
 
+    getOwnerId() {
+      return this.ownerId;
+    }
+
     async getBlob() {
         return await this.froca.getBlob("attachments", this.attachmentId);
     }
