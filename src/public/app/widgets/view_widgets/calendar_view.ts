@@ -87,7 +87,7 @@ export default class CalendarView extends ViewMode {
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
-        this.isCalendarRoot = this.parentNote.hasLabel("calendarRoot");
+        this.isCalendarRoot = this.parentNote.hasLabel("calendarRoot") || this.parentNote.hasLabel("workspaceCalendarRoot");
         const isEditable = !this.isCalendarRoot;
 
         const { Calendar } = await import("@fullcalendar/core");
