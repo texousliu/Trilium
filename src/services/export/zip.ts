@@ -407,6 +407,10 @@ ${markdownContent}`;
     }
 
     function saveNavigation(rootMeta: NoteMeta, navigationMeta: NoteMeta) {
+        if (!navigationMeta.dataFileName) {
+            return;
+        }
+
         function saveNavigationInner(meta: NoteMeta) {
             let html = "<li>";
 
@@ -451,6 +455,10 @@ ${markdownContent}`;
         let firstNonEmptyNote;
         let curMeta = rootMeta;
 
+        if (!indexMeta.dataFileName) {
+            return;
+        }
+
         while (!firstNonEmptyNote) {
             if (curMeta.dataFileName && curMeta.noteId) {
                 firstNonEmptyNote = getNoteTargetUrl(curMeta.noteId, rootMeta);
@@ -479,6 +487,10 @@ ${markdownContent}`;
     }
 
     function saveCss(rootMeta: NoteMeta, cssMeta: NoteMeta) {
+        if (!cssMeta.dataFileName) {
+            return;
+        }
+
         const cssContent = fs.readFileSync(`${RESOURCE_DIR}/libraries/ckeditor/ckeditor-content.css`);
 
         archive.append(cssContent, { name: cssMeta.dataFileName });
