@@ -281,10 +281,13 @@ input::selection,
     --accented-background-color: transparent;
     
     border: none;
-    font-style: italic;
     color: var(--input-placeholder-color);
     user-select: none;
     cursor: default;
+}
+
+.input-group .input-group-text:not(button):not(a):not(.bx) {
+    font-style: italic;
 }
 
 /* Combo box-like dropdown buttons */
