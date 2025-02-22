@@ -10,6 +10,8 @@ import dialogService from "../../services/dialog.js";
 import attributes from "../../services/attributes.js";
 import type { EventData } from "../../components/app_context.js";
 import utils from "../../services/utils.js";
+import date_notes from "../../services/date_notes.js";
+import appContext from "../../components/app_context.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -91,8 +93,7 @@ export default class CalendarView extends ViewMode {
         const { Calendar } = await import("@fullcalendar/core");
         const plugins: PluginDef[] = [];
         plugins.push((await import("@fullcalendar/daygrid")).default);
-
-        if (isEditable) {
+        if (isEditable || this.isCalendarRoot) {
             plugins.push((await import("@fullcalendar/interaction")).default);
         }
 
@@ -119,7 +120,17 @@ export default class CalendarView extends ViewMode {
 
                 html += utils.escapeHtml(e.event.title);
                 return { html };
-            })
+            }),
+            dateClick: async (e) => {
+                if (!this.isCalendarRoot) {
+                    return;
+                }
+
+                const note = await date_notes.getDayNote(e.dateStr);
+                if (note) {
+                    appContext.tabManager.getActiveContext().setNote(note.noteId);
+                }
+            }
         });
         calendar.render();
         this.calendar = calendar;
