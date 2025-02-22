@@ -1872,7 +1872,7 @@ div.promoted-attribute-cell {
     overflow-y: visible;
 }
 
-@container (max-width: 400px) {
+@container (max-width: 500px) {
     /* Narrow promoted attributes section */
     div.promoted-attribute-cell {
         flex-grow: 1;
