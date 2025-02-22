@@ -6,7 +6,7 @@ import noteService from "./notes.js";
 import log from "./log.js";
 import migrationService from "./migration.js";
 import { t } from "i18next";
-import { getHelpHiddenSubtreeData } from "./in_app_help.js";
+import { cleanUpHelp, getHelpHiddenSubtreeData } from "./in_app_help.js";
 import buildLaunchBarConfig from "./hidden_subtree_launcherbar.js";
 
 const LBTPL_ROOT = "_lbTplRoot";
@@ -58,7 +58,7 @@ enum Command {
 
 let hiddenSubtreeDefinition: HiddenSubtreeItem;
 
-function buildHiddenSubtreeDefinition(): HiddenSubtreeItem {
+function buildHiddenSubtreeDefinition(helpSubtree: HiddenSubtreeItem[]): HiddenSubtreeItem {
     const launchbarConfig = buildLaunchBarConfig();
 
     return {
@@ -283,7 +283,7 @@ function buildHiddenSubtreeDefinition(): HiddenSubtreeItem {
                 title: t("hidden-subtree.user-guide"),
                 type: "book",
                 icon: "bx-help-circle",
-                children: getHelpHiddenSubtreeData(),
+                children: helpSubtree,
                 isExpanded: true
             }
         ]
@@ -301,11 +301,19 @@ function checkHiddenSubtree(force = false, extraOpts: CheckHiddenExtraOpts = {})
         return;
     }
 
+    const helpSubtree = getHelpHiddenSubtreeData();
     if (!hiddenSubtreeDefinition || force) {
-        hiddenSubtreeDefinition = buildHiddenSubtreeDefinition();
+        hiddenSubtreeDefinition = buildHiddenSubtreeDefinition(helpSubtree);
     }
 
     checkHiddenSubtreeRecursively("root", hiddenSubtreeDefinition, extraOpts);
+
+    try {
+        cleanUpHelp(helpSubtree);
+    } catch (e) {
+        // Non-critical operation should something go wrong.
+        console.error(e);
+    }
 }
 
 function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtreeItem, extraOpts: CheckHiddenExtraOpts = {}) {

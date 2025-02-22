@@ -5,6 +5,8 @@ import type NoteMeta from "./meta/note_meta.js";
 import type { NoteMetaFile } from "./meta/note_meta.js";
 import { fileURLToPath } from "url";
 import { isDev } from "./utils.js";
+import type BNote from "../becca/entities/bnote.js";
+import becca from "../becca/becca.js";
 
 export function getHelpHiddenSubtreeData() {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -97,4 +99,56 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
     });
 
     return item;
+}
+/**
+ * Iterates recursively through the help subtree that the user has and compares it against the definition
+ * to remove any notes that are no longer present in the latest version of the help.
+ *
+ * @param helpDefinition the hidden subtree definition for the help, to compare against the user's structure.
+ */
+export function cleanUpHelp(helpDefinition: HiddenSubtreeItem[]) {
+    function getFlatIds(items: HiddenSubtreeItem | HiddenSubtreeItem[]) {
+        const ids: (string | string[])[] = [];
+        if (Array.isArray(items)) {
+            for (const item of items) {
+                ids.push(getFlatIds(item));
+            }
+        } else {
+            if (items.children) {
+                for (const child of items.children) {
+                    ids.push(getFlatIds(child));
+                }
+            }
+            ids.push(items.id);
+        }
+        return ids.flat();
+    }
+
+    function getFlatIdsFromNote(note: BNote | null) {
+        if (!note) {
+            return [];
+        }
+
+        const ids: (string | string[])[] = [];
+
+        for (const subnote of note.getChildNotes()) {
+            ids.push(getFlatIdsFromNote(subnote));
+        }
+
+        ids.push(note.noteId);
+        return ids.flat();
+    }
+
+    const definitionHelpIds = new Set(getFlatIds(helpDefinition));
+    const realHelpIds = getFlatIdsFromNote(becca.getNote("_help"));
+
+    for (const realHelpId of realHelpIds) {
+        if (realHelpId === "_help") {
+            continue;
+        }
+
+        if (!definitionHelpIds.has(realHelpId)) {
+            becca.getNote(realHelpId)?.deleteNote();
+        }
+    }
 }
