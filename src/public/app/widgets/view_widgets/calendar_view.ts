@@ -279,7 +279,10 @@ export default class CalendarView extends ViewMode {
         const events: EventSourceInput = [];
 
         for (const note of notes) {
-            let startDate = note.getLabelValue("startDate");
+            const startDate = note.getLabelValue("startDate");
+            if (!startDate) {
+                continue;
+            }
 
             if (note.hasChildren()) {
                 const childrenEventData = await this.#buildEvents(note.getChildNoteIds());
@@ -288,9 +291,6 @@ export default class CalendarView extends ViewMode {
                 }
             }
 
-            if (!startDate) {
-                continue;
-            }
 
             const endDate = note.getAttributeValue("label", "endDate");
             events.push(await CalendarView.#buildEvent(note, startDate, endDate));
@@ -304,9 +304,24 @@ export default class CalendarView extends ViewMode {
         const titles = await CalendarView.#parseCustomTitle(customTitle, note);
         const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
         const events: EventInput[] = [];
+        // the user can specify one or multiple attributes to be promoted onto the calendar view by setting `#calendar:promotedAttributes` at the note level
+        // their values will then be rentered into the event title and appear as "[eventIcon] $eventTitle [#promotedAttributeX=valueX] [#promotedAttributeY=valueY]"
+        const promotedAttrs = note
+            .getAttributes()
+            .filter((attr) => attr.type == "label" && attr.name == "calendar:promotedAttribute")
+            .map((attr) => attr.value.substring(1));
+        let titleExtended = "";
+        if (promotedAttrs && promotedAttrs.length) {
+            const promotedValues = note
+                .getAttributes()
+                .filter((attr) => promotedAttrs.includes(attr.name))
+                .map((attr) => [attr.name, attr.value]);
+            for (const defined of promotedValues) titleExtended = titleExtended + ` [#${defined[0]}="${defined[1]}"]`;
+        }
+
         for (const title of titles) {
             const eventData: EventInput = {
-                title: title,
+                title: title + titleExtended,
                 start: startDate,
                 url: `#${note.noteId}`,
                 noteId: note.noteId,
