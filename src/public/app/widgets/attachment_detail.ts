@@ -8,6 +8,7 @@ import linkService from "../services/link.js";
 import contentRenderer from "../services/content_renderer.js";
 import toastService from "../services/toast.js";
 import type FAttachment from "../entities/fattachment.js";
+import type { EventData } from "../components/app_context.js";
 
 const TPL = `
 <div class="attachment-detail-widget">
@@ -146,7 +147,8 @@ export default class AttachmentDetailWidget extends BasicWidget {
             this.$wrapper.addClass("scheduled-for-deletion");
 
             const scheduledSinceTimestamp = utils.parseDate(utcDateScheduledForErasureSince)?.getTime();
-            const intervalMs = options.getInt("eraseUnusedAttachmentsAfterSeconds") * 1000;
+            // use default value (30 days in seconds) from options_init as fallback, in case getInt returns null
+            const intervalMs = options.getInt("eraseUnusedAttachmentsAfterSeconds") || 2592000 * 1000;
             const deletionTimestamp = scheduledSinceTimestamp + intervalMs;
             const willBeDeletedInMs = deletionTimestamp - Date.now();
 
@@ -191,7 +193,7 @@ export default class AttachmentDetailWidget extends BasicWidget {
         }
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         const attachmentRow = loadResults.getAttachmentRows().find((att) => att.attachmentId === this.attachment.attachmentId);
 
         if (attachmentRow) {
