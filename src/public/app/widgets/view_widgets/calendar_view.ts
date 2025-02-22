@@ -238,7 +238,7 @@ export default class CalendarView extends ViewMode {
         let allDateNoteIds: string[] = [];
         for (const month of dateRange) {
             // TODO: Deduplicate get type.
-            const dateNotesForMonth = await server.get<Record<string, string>>(`special-notes/notes-for-month/${month}`);
+            const dateNotesForMonth = await server.get<Record<string, string>>(`special-notes/notes-for-month/${month}?calendarRoot=${this.parentNote.noteId}`);
             const dateNoteIds = Object.values(dateNotesForMonth);
             allDateNoteIds = [ ...allDateNoteIds, ...dateNoteIds ];
         }

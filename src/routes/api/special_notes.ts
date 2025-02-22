@@ -29,8 +29,8 @@ function getYearNote(req: Request) {
 
 function getDayNotesForMonth(req: Request) {
     const month = req.params.month;
-
-    return sql.getMap(`
+    const calendarRoot = req.query.calendarRoot;
+    const query = `\
         SELECT
             attr.value AS date,
             notes.noteId
@@ -40,7 +40,22 @@ function getDayNotesForMonth(req: Request) {
             AND attr.isDeleted = 0
             AND attr.type = 'label'
             AND attr.name = 'dateNote'
-            AND attr.value LIKE '${month}%'`);
+            AND attr.value LIKE '${month}%'`;
+
+    if (calendarRoot) {
+        const rows = sql.getRows<{ date: string, noteId: string }>(query);
+        const result: Record<string, string> = {};
+        for (const {date, noteId} of rows) {
+            const note = becca.getNote(noteId);
+            if (note?.hasAncestor(String(calendarRoot))) {
+                result[date] = noteId;
+            }
+        }
+
+        return result;
+    } else {
+        return sql.getMap(query);
+    }
 }
 
 function saveSqlConsole(req: Request) {
