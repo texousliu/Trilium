@@ -70,7 +70,7 @@ interface CreateLinkOptions {
     viewScope?: ViewScope;
 }
 
-async function createLink(notePath: string, options: CreateLinkOptions = {}) {
+async function createLink(notePath: string | undefined, options: CreateLinkOptions = {}) {
     if (!notePath || !notePath.trim()) {
         logError("Missing note path");
 
