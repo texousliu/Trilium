@@ -1837,16 +1837,21 @@ body.background-effects.zen #root-widget {
     border-bottom: 2px solid #0000001c !important;
 }
 
-/* Promoted attributes */
+/*
+ * Promoted attributes
+ */
 
+/* The promoted attributes section */
 div.promoted-attributes-container {
     display: flex;
+    margin-right: 15%;
     padding: 6px 0;
     gap: 8px;
     font-size: .85em;
     align-items: stretch;
 }
 
+/* A promoted attribute card */
 div.promoted-attribute-cell {
     --pa-card-padding-left: 16px;
     --pa-card-padding-right: 4px;
@@ -1861,6 +1866,7 @@ div.promoted-attribute-cell {
     overflow-y: visible;
 }
 
+/* A promoted attribute card (boolean attribute) */
 div.promoted-attribute-cell:has(input[type="checkbox"]):not(:has(.multiplicity > span)) {
     /* Checbox attribute, without multiplicity */
     padding-right: var(--pa-card-padding-left);
@@ -1892,11 +1898,13 @@ div.promoted-attribute-cell .tn-checkbox {
     height: 1cap;
 }
 
+/* The <div> containing the checkbox for a promoted boolean attribute */
 div.promoted-attribute-cell div:has(input[type="checkbox"]) {
-    order: -1;    
+    order: -1; /* Relocate the checkbox before the label */
     margin-right: 1.5em;
 }
 
+/* The element containing the "new attribute" and "remove this attribute button" */
 div.promoted-attribute-cell .multiplicity:has(span) {
     --icon-button-size: 28px;
 
