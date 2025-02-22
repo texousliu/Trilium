@@ -27,7 +27,8 @@ const byNoteType: Record<Exclude<NoteType, "book">, string | null> = {
     render: null,
     search: null,
     text: null,
-    webView: null
+    webView: null,
+    taskList: null
 };
 
 const byBookType: Record<ViewTypeOptions, string | null> = {
