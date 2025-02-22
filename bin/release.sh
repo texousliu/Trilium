@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-export GITHUB_REPO=trilium
-
 if [[ $# -eq 0 ]] ; then
     echo "Missing argument of new version"
     exit 1
@@ -47,3 +45,11 @@ echo "Tagging commit with $TAG"
 
 git tag $TAG
 git push origin $TAG
+
+echo "Updating master"
+
+git fetch
+git checkout master
+git reset --hard origin/master
+git merge origin/develop
+git push
