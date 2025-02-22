@@ -40,7 +40,7 @@ TAG=v$VERSION
 
 echo "Committing package.json version change"
 
-git commit -m "release $VERSION"
+git commit -m "chore(release): $VERSION"
 git push
 
 echo "Tagging commit with $TAG"
