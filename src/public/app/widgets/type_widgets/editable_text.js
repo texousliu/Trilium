@@ -223,7 +223,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 }
 
                 $classicToolbarWidget.empty();
-                $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
+                if ($classicToolbarWidget.length) {
+                    $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
+                }
 
                 if (utils.isMobile()) {
                     $classicToolbarWidget.addClass("visible");

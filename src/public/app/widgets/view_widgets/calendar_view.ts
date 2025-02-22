@@ -1,4 +1,4 @@
-import type { Calendar, DateSelectArg, EventChangeArg, EventDropArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
+import type { Calendar, DateSelectArg, EventChangeArg, EventDropArg, EventInput, EventSourceFunc, EventSourceFuncArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
 import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import type FNote from "../../entities/fnote.js";
@@ -10,6 +10,8 @@ import dialogService from "../../services/dialog.js";
 import attributes from "../../services/attributes.js";
 import type { EventData } from "../../components/app_context.js";
 import utils from "../../services/utils.js";
+import date_notes from "../../services/date_notes.js";
+import appContext from "../../components/app_context.js";
 
 const TPL = `
 <div class="calendar-view">
@@ -67,6 +69,7 @@ export default class CalendarView extends ViewMode {
     private noteIds: string[];
     private parentNote: FNote;
     private calendar?: Calendar;
+    private isCalendarRoot: boolean;
 
     constructor(args: ViewModeArgs) {
         super(args);
@@ -75,7 +78,7 @@ export default class CalendarView extends ViewMode {
         this.$calendarContainer = this.$root.find(".calendar-container");
         this.noteIds = args.noteIds;
         this.parentNote = args.parentNote;
-        console.log(args);
+        this.isCalendarRoot = false;
         args.$parent.append(this.$root);
     }
 
@@ -84,20 +87,27 @@ export default class CalendarView extends ViewMode {
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
-        const isEditable = true;
+        this.isCalendarRoot = this.parentNote.hasLabel("calendarRoot") || this.parentNote.hasLabel("workspaceCalendarRoot");
+        const isEditable = !this.isCalendarRoot;
 
         const { Calendar } = await import("@fullcalendar/core");
         const plugins: PluginDef[] = [];
         plugins.push((await import("@fullcalendar/daygrid")).default);
-
-        if (isEditable) {
+        if (isEditable || this.isCalendarRoot) {
             plugins.push((await import("@fullcalendar/interaction")).default);
+        }
+
+        let eventBuilder: EventSourceFunc;
+        if (!this.isCalendarRoot) {
+            eventBuilder = async () => await this.#buildEvents(this.noteIds)
+        } else {
+            eventBuilder = async (e: EventSourceFuncArg) => await this.#buildEventsForCalendar(e);
         }
 
         const calendar = new Calendar(this.$calendarContainer[0], {
             plugins,
             initialView: "dayGridMonth",
-            events: async () => await CalendarView.#buildEvents(this.noteIds),
+            events: eventBuilder,
             editable: isEditable,
             selectable: isEditable,
             select: (e) => this.#onCalendarSelection(e),
@@ -117,7 +127,17 @@ export default class CalendarView extends ViewMode {
 
                 html += utils.escapeHtml(e.event.title);
                 return { html };
-            })
+            }),
+            dateClick: async (e) => {
+                if (!this.isCalendarRoot) {
+                    return;
+                }
+
+                const note = await date_notes.getDayNote(e.dateStr);
+                if (note) {
+                    appContext.tabManager.getActiveContext().setNote(note.noteId);
+                }
+            }
         });
         calendar.render();
         this.calendar = calendar;
@@ -210,39 +230,96 @@ export default class CalendarView extends ViewMode {
         }
     }
 
-    static async #buildEvents(noteIds: string[]) {
+    async #buildEventsForCalendar(e: EventSourceFuncArg) {
+        const events = [];
+
+        // Gather all the required date note IDs.
+        const dateRange = utils.getMonthsInDateRange(e.startStr, e.endStr);
+        let allDateNoteIds: string[] = [];
+        for (const month of dateRange) {
+            // TODO: Deduplicate get type.
+            const dateNotesForMonth = await server.get<Record<string, string>>(`special-notes/notes-for-month/${month}`);
+            const dateNoteIds = Object.values(dateNotesForMonth);
+            allDateNoteIds = [ ...allDateNoteIds, ...dateNoteIds ];
+        }
+
+        // Request all the date notes.
+        const dateNotes = await froca.getNotes(allDateNoteIds);
+        const childNoteToDateMapping: Record<string, string> = {};
+        for (const dateNote of dateNotes) {
+            const startDate = dateNote.getLabelValue("dateNote");
+            if (!startDate) {
+                continue;
+            }
+
+            events.push(await CalendarView.#buildEvent(dateNote, startDate));
+
+            if (dateNote.hasChildren()) {
+                const childNoteIds = dateNote.getChildNoteIds();
+                for (const childNoteId of childNoteIds) {
+                    childNoteToDateMapping[childNoteId] = startDate;
+                }
+            }
+        }
+
+        // Request all child notes of date notes in a single run.
+        const childNoteIds = Object.keys(childNoteToDateMapping);
+        const childNotes = await froca.getNotes(childNoteIds);
+        for (const childNote of childNotes) {
+            const startDate = childNoteToDateMapping[childNote.noteId];
+            const event = await CalendarView.#buildEvent(childNote, startDate);
+            events.push(event);
+        }
+
+        return events.flat();
+    }
+
+    async #buildEvents(noteIds: string[]) {
         const notes = await froca.getNotes(noteIds);
         const events: EventSourceInput = [];
 
         for (const note of notes) {
-            const startDate = note.getAttributeValue("label", "startDate");
-            const customTitle = note.getAttributeValue("label", "calendar:title");
-            const color = note.getAttributeValue("label", "calendar:color") ??  note.getAttributeValue("label", "color") ?? undefined;
+            let startDate = note.getLabelValue("startDate");
+
+            if (note.hasChildren()) {
+                const childrenEventData = await this.#buildEvents(note.getChildNoteIds());
+                if (childrenEventData.length > 0) {
+                    events.push(childrenEventData);
+                }
+            }
 
             if (!startDate) {
                 continue;
             }
 
-            const titles = await CalendarView.#parseCustomTitle(customTitle, note);
-            for (const title of titles) {
-                const eventData: typeof events[0] = {
-                    title: title,
-                    start: startDate,
-                    url: `#${note.noteId}`,
-                    noteId: note.noteId,
-                    color: color,
-                    iconClass: note.getLabelValue("iconClass")
-                };
-
-                const endDate = CalendarView.#offsetDate(note.getAttributeValue("label", "endDate") ?? startDate, 1);
-                if (endDate) {
-                    eventData.end = CalendarView.#formatDateToLocalISO(endDate);
-                }
-
-                events.push(eventData);
-            }
+            const endDate = note.getAttributeValue("label", "endDate");
+            events.push(await CalendarView.#buildEvent(note, startDate, endDate));
         }
 
+        return events.flat();
+    }
+
+    static async #buildEvent(note: FNote, startDate: string, endDate?: string | null) {
+        const customTitle = note.getLabelValue("calendar:title");
+        const titles = await CalendarView.#parseCustomTitle(customTitle, note);
+        const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
+        const events: EventInput[] = [];
+        for (const title of titles) {
+            const eventData: EventInput = {
+                title: title,
+                start: startDate,
+                url: `#${note.noteId}`,
+                noteId: note.noteId,
+                color: color ?? undefined,
+                iconClass: note.getLabelValue("iconClass")
+            };
+
+            const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
+            if (endDateOffset) {
+                eventData.end = CalendarView.#formatDateToLocalISO(endDateOffset);
+            }
+            events.push(eventData);
+        }
         return events;
     }
 
