@@ -61,6 +61,10 @@ class FAttachment {
       return this.ownerId;
     }
 
+    getUtcDateScheduledForErasureSince() {
+      return this.utcDateScheduledForErasureSince;
+    }
+
     async getBlob() {
         return await this.froca.getBlob("attachments", this.attachmentId);
     }

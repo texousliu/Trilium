@@ -140,7 +140,7 @@ export default class AttachmentDetailWidget extends BasicWidget {
         }
 
         const $deletionWarning = this.$wrapper.find(".attachment-deletion-warning");
-        const { utcDateScheduledForErasureSince } = this.attachment;
+        const utcDateScheduledForErasureSince = this.attachment.getUtcDateScheduledForErasureSince();
 
         if (utcDateScheduledForErasureSince) {
             this.$wrapper.addClass("scheduled-for-deletion");
