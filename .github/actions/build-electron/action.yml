@@ -6,7 +6,7 @@ inputs:
     description: "The architecture to build for: x64, arm64"
     required: true
   extension:
-    description: "Platform specific extensions to copy in the output: dmg, deb, rpm, exe"
+    description: "Platform specific extensions to copy in the output: dmg, deb, rpm, exe, zip"
     required: true
 runs:
   using: composite
