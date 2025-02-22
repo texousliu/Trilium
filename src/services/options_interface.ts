@@ -97,6 +97,10 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
     backgroundEffects: boolean;
+    // Share settings
+    redirectBareDomain: boolean;
+    showLoginInShareTheme: boolean;
+
 }
 
 export type OptionNames = keyof OptionDefinitions;
