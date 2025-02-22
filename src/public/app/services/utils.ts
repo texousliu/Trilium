@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Modal } from "bootstrap";
 
 function reloadFrontendApp(reason?: string) {
     if (reason) {
@@ -244,9 +245,7 @@ function getMimeTypeClass(mime: string) {
 
 function closeActiveDialog() {
     if (glob.activeDialog) {
-        // TODO: Fix once we use proper ES imports.
-        //@ts-ignore
-        bootstrap.Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
+        Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
         glob.activeDialog = null;
     }
 }
@@ -288,9 +287,7 @@ async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
     }
 
     saveFocusedElement();
-    // TODO: Fix once we use proper ES imports.
-    //@ts-ignore
-    bootstrap.Modal.getOrCreateInstance($dialog[0]).show();
+    Modal.getOrCreateInstance($dialog[0]).show();
 
     $dialog.on("hidden.bs.modal", () => {
         const $autocompleteEl = $(".aa-input");

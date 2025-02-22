@@ -7,6 +7,7 @@ import ws from "../../services/ws.js";
 import appContext from "../../components/app_context.js";
 import openService from "../../services/open.js";
 import utils from "../../services/utils.js";
+import { Dropdown } from "bootstrap";
 
 const TPL = `
 <div class="dropdown attachment-actions">
@@ -91,7 +92,7 @@ export default class AttachmentActionsWidget extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
+        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
         this.$widget.on("click", ".dropdown-item", () => this.dropdown.toggle());
 
         this.$uploadNewRevisionInput = this.$widget.find(".attachment-upload-new-revision-input");

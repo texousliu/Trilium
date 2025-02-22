@@ -95,7 +95,6 @@ const copy = async () => {
         "node_modules/mark.js/dist/",
         "node_modules/normalize.css/",
         "node_modules/jquery.fancytree/dist/",
-        "node_modules/bootstrap/dist/",
         "node_modules/autocomplete.js/dist/",
         "node_modules/codemirror/lib/",
         "node_modules/codemirror/addon/",

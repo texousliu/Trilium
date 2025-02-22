@@ -4,6 +4,7 @@ import ws from "../services/ws.js";
 import options from "../services/options.js";
 import syncService from "../services/sync.js";
 import { escapeQuotes } from "../services/utils.js";
+import { Tooltip } from "bootstrap";
 
 const TPL = `
 <div class="sync-status-widget launcher-button">
@@ -96,7 +97,7 @@ export default class SyncStatusWidget extends BasicWidget {
             return;
         }
 
-        bootstrap.Tooltip.getOrCreateInstance(this.$widget.find(`.sync-status-${className}`), {
+        Tooltip.getOrCreateInstance(this.$widget.find(`.sync-status-${className}`), {
             html: true,
             placement: this.settings.titlePlacement,
             fallbackPlacements: [this.settings.titlePlacement]

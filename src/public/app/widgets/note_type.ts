@@ -6,6 +6,7 @@ import { t } from "../services/i18n.js";
 import type FNote from "../entities/fnote.js";
 import type { NoteType } from "../entities/fnote.js";
 import type { EventData } from "../components/app_context.js";
+import { Dropdown } from "bootstrap";
 
 interface NoteTypeMapping {
     type: NoteType;
@@ -80,7 +81,7 @@ const TPL = `
 
 export default class NoteTypeWidget extends NoteContextAwareWidget {
 
-    private dropdown!: bootstrap.Dropdown;
+    private dropdown!: Dropdown;
     private $noteTypeDropdown!: JQuery<HTMLElement>;
     private $noteTypeButton!: JQuery<HTMLElement>;
     private $noteTypeDesc!: JQuery<HTMLElement>;
@@ -88,8 +89,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
 
-        //@ts-ignore
-        this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
+        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0]);
 
         this.$widget.on("show.bs.dropdown", () => this.renderDropdown());
 
