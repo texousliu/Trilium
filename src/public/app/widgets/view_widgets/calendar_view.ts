@@ -85,7 +85,8 @@ export default class CalendarView extends ViewMode {
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
-        const isEditable = true;
+        this.isCalendarRoot = this.parentNote.hasLabel("calendarRoot");
+        const isEditable = !this.isCalendarRoot;
 
         const { Calendar } = await import("@fullcalendar/core");
         const plugins: PluginDef[] = [];
@@ -122,7 +123,6 @@ export default class CalendarView extends ViewMode {
         });
         calendar.render();
         this.calendar = calendar;
-        this.isCalendarRoot = this.parentNote.hasLabel("calendarRoot");
 
         return this.$root;
     }
