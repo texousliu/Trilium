@@ -101,10 +101,8 @@ export default class RevisionsDialog extends BasicWidget {
     private note: FNote | null;
     private revisionId: string | null;
 
-    //@ts-ignore
-    private modal: Modal;
-    //@ts-ignore
-    private listDropdown: Dropdown;
+    private modal!: Modal;
+    private listDropdown!: Dropdown;
 
     private $list!: JQuery<HTMLElement>;
     private $listDropdown!: JQuery<HTMLElement>;
@@ -126,13 +124,13 @@ export default class RevisionsDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        //@ts-ignore
-        this.modal = Modal.getOrCreateInstance(this.$widget);
+
+        this.modal = Modal.getOrCreateInstance(this.$widget[0]);
 
         this.$list = this.$widget.find(".revision-list");
         this.$listDropdown = this.$widget.find(".revision-list-dropdown");
-        //@ts-ignore
-        this.listDropdown = Dropdown.getOrCreateInstance(this.$listDropdown, { autoClose: false });
+
+        this.listDropdown = Dropdown.getOrCreateInstance(this.$listDropdown[0], { autoClose: false });
         this.$content = this.$widget.find(".revision-content");
         this.$title = this.$widget.find(".revision-title");
         this.$titleButtons = this.$widget.find(".revision-title-buttons");

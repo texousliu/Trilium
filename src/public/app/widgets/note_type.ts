@@ -88,8 +88,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
 
-        //@ts-ignore
-        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
+        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0]);
 
         this.$widget.on("show.bs.dropdown", () => this.renderDropdown());
 
