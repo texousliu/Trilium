@@ -1848,6 +1848,7 @@ div.promoted-attributes-container {
     padding: 6px 0;
     gap: 8px;
     align-items: stretch;
+    container-type: inline-size;
 }
 
 div.promoted-attributes-container,
@@ -1868,6 +1869,13 @@ div.promoted-attribute-cell {
     padding: 2px var(--pa-card-padding-right) 2px var(--pa-card-padding-left);
     background: var(--promoted-attribute-card-background-color);
     overflow-y: visible;
+}
+
+@container (max-width: 400px) {
+    /* Narrow promoted attributes section */
+    div.promoted-attribute-cell {
+        flex-grow: 1;
+    }
 }
 
 /* A promoted attribute card (boolean attribute) */
