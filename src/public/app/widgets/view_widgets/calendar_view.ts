@@ -67,6 +67,7 @@ export default class CalendarView extends ViewMode {
     private noteIds: string[];
     private parentNote: FNote;
     private calendar?: Calendar;
+    private isCalendarRoot: boolean;
 
     constructor(args: ViewModeArgs) {
         super(args);
@@ -75,7 +76,7 @@ export default class CalendarView extends ViewMode {
         this.$calendarContainer = this.$root.find(".calendar-container");
         this.noteIds = args.noteIds;
         this.parentNote = args.parentNote;
-        console.log(args);
+        this.isCalendarRoot = false;
         args.$parent.append(this.$root);
     }
 
@@ -97,7 +98,7 @@ export default class CalendarView extends ViewMode {
         const calendar = new Calendar(this.$calendarContainer[0], {
             plugins,
             initialView: "dayGridMonth",
-            events: async () => await CalendarView.#buildEvents(this.noteIds),
+            events: async () => await this.#buildEvents(this.noteIds),
             editable: isEditable,
             selectable: isEditable,
             select: (e) => this.#onCalendarSelection(e),
@@ -121,6 +122,7 @@ export default class CalendarView extends ViewMode {
         });
         calendar.render();
         this.calendar = calendar;
+        this.isCalendarRoot = this.parentNote.hasLabel("calendarRoot");
 
         return this.$root;
     }
@@ -210,17 +212,32 @@ export default class CalendarView extends ViewMode {
         }
     }
 
-    static async #buildEvents(noteIds: string[]) {
+    async #buildEvents(noteIds: string[], enforcedStartDate?: string) {
         const notes = await froca.getNotes(noteIds);
         const events: EventSourceInput = [];
 
         for (const note of notes) {
-            const startDate = note.getLabelValue("startDate") ?? note.getLabelValue("dateNote");
+            let startDate;
+
+            if (enforcedStartDate) {
+                startDate = enforcedStartDate;
+            } else if (!this.isCalendarRoot) {
+                startDate = note.getLabelValue("startDate");
+            } else {
+                startDate = note.getLabelValue("dateNote");
+            }
             const customTitle = note.getAttributeValue("label", "calendar:title");
             const color = note.getAttributeValue("label", "calendar:color") ??  note.getAttributeValue("label", "color") ?? undefined;
 
             if (note.hasChildren()) {
-                const childrenEventData = await this.#buildEvents(note.getChildNoteIds());
+                const dateNote = note.getLabelValue("dateNote");
+                let enforcedStartDate = undefined;
+                if (dateNote) {
+                    // This is a day note which can have children. Make sure the children are added to the calendar even if they themselves don't have it.
+                    enforcedStartDate = dateNote;
+                }
+
+                const childrenEventData = await this.#buildEvents(note.getChildNoteIds(), enforcedStartDate);
                 if (childrenEventData.length > 0) {
                     events.push(childrenEventData);
                 }
