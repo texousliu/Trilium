@@ -151,6 +151,8 @@ export default class AttachmentActionsWidget extends BasicWidget {
 
     async copyAttachmentLinkToClipboardCommand() {
         //TriliumNextTODO: the parent here is AttachmentDetailWidget
+        //how can we pass that to the generic TypedComponent<any>?
+        //@ts-ignore - TypedComponent<any>
         this.parent?.copyAttachmentLinkToClipboard();
     }
 
