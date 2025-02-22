@@ -215,9 +215,16 @@ export default class CalendarView extends ViewMode {
         const events: EventSourceInput = [];
 
         for (const note of notes) {
-            const startDate = note.getAttributeValue("label", "startDate");
+            const startDate = note.getLabelValue("startDate") ?? note.getLabelValue("dateNote");
             const customTitle = note.getAttributeValue("label", "calendar:title");
             const color = note.getAttributeValue("label", "calendar:color") ??  note.getAttributeValue("label", "color") ?? undefined;
+
+            if (note.hasChildren()) {
+                const childrenEventData = await this.#buildEvents(note.getChildNoteIds());
+                if (childrenEventData.length > 0) {
+                    events.push(childrenEventData);
+                }
+            }
 
             if (!startDate) {
                 continue;
@@ -243,7 +250,7 @@ export default class CalendarView extends ViewMode {
             }
         }
 
-        return events;
+        return events.flat();
     }
 
     static async #parseCustomTitle(customTitleValue: string | null, note: FNote, allowRelations = true): Promise<string[]> {
