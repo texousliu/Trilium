@@ -164,7 +164,7 @@ export default class AttachmentDetailWidget extends BasicWidget {
             $deletionWarning.hide();
         }
 
-        this.$wrapper.find(".attachment-details").text(t("attachment_detail_2.role_and_size", { role: this.attachment.role, size: utils.formatSize(this.attachment.contentLength) }));
+        this.$wrapper.find(".attachment-details").text(t("attachment_detail_2.role_and_size", { role: this.attachment.role, size: utils.formatSize(this.attachment.getContentLength()) }));
         this.$wrapper.find(".attachment-actions-container").append(this.attachmentActionsWidget.render());
 
         const { $renderedContent } = await contentRenderer.getRenderedContent(this.attachment, { imageHasZoom: this.isFullDetail });

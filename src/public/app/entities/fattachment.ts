@@ -61,6 +61,10 @@ class FAttachment {
       return this.ownerId;
     }
 
+    getContentLength() {
+      return this.contentLength;
+    }
+
     getUtcDateScheduledForErasureSince() {
       return this.utcDateScheduledForErasureSince;
     }
