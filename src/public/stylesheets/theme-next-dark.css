@@ -144,6 +144,9 @@
 
     --alert-bar-background: #6b6b6b3b;
 
+    --promoted-attribute-card-background-color: var(--card-background-color);
+    --promoted-attribute-card-shadow-color: #000000b3;
+
     --right-pane-item-hover-background: #ffffff26;
     --right-pane-item-hover-color: white;
 

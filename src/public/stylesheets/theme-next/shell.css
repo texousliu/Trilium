@@ -1847,22 +1847,26 @@ div.promoted-attributes-container {
     margin-right: 15%;
     padding: 6px 0;
     gap: 8px;
-    font-size: .85em;
     align-items: stretch;
+}
+
+div.promoted-attributes-container,
+div.promoted-attributes-container input {
+    font-size: .9rem;
 }
 
 /* A promoted attribute card */
 div.promoted-attribute-cell {
     --pa-card-padding-left: 16px;
-    --pa-card-padding-right: 4px;
+    --pa-card-padding-right: 2px;
     --input-background-color: transparent;
 
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, .2);
+    box-shadow: 1px 1px 2px var(--promoted-attribute-card-shadow-color);
     display: inline-flex;
     margin: 0;
     border-radius: 8px;
-    padding: 4px var(--pa-card-padding-right) 4px var(--pa-card-padding-left);
-    background: var(--card-background-color);
+    padding: 2px var(--pa-card-padding-right) 2px var(--pa-card-padding-left);
+    background: var(--promoted-attribute-card-background-color);
     overflow-y: visible;
 }
 
@@ -1880,6 +1884,10 @@ div.promoted-attribute-cell label {
     font-weight: normal;
     white-space: nowrap;
     opacity: .75;
+}
+
+div.promoted-attribute-cell label::after {
+    content: ":";
 }
 
 div.promoted-attribute-cell div.input-group {
@@ -1906,7 +1914,7 @@ div.promoted-attribute-cell div:has(input[type="checkbox"]) {
 
 /* The element containing the "new attribute" and "remove this attribute button" */
 div.promoted-attribute-cell .multiplicity:has(span) {
-    --icon-button-size: 28px;
+    --icon-button-size: 24px;
 
     margin-left: 8px;
     margin-right: calc(var(--pa-card-padding-left) - var(--pa-card-padding-right));
