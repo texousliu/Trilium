@@ -141,12 +141,33 @@ function sanitize(dirtyHtml: string) {
         allowedTags = DEFAULT_ALLOWED_TAGS;
     }
 
+    const colorRegex = [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/, /^hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/];
+    const sizeRegex = [/^\d+(?:px|em|%)$/];
+
     // to minimize document changes, compress H
     return sanitizeHtml(dirtyHtml, {
         allowedTags,
         allowedAttributes: {
             "*": ["class", "style", "title", "src", "href", "hash", "disabled", "align", "alt", "center", "data-*"],
             input: ["type", "checked"]
+        },
+        allowedStyles: {
+            "*": {
+                "color": colorRegex,
+                "background-color": colorRegex
+            },
+            "figure": {
+                "float": [ /^\s*(left|right|none)\s*$/ ],
+                "width": sizeRegex,
+                "height": sizeRegex
+            },
+            "table": {
+                "border-color": colorRegex,
+                "border-style": [ /^\s*(none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset)\s*$/ ]
+            },
+            "td": {
+                "border": [ /^\s*\d+(?:px|em|%)\s*(none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset)\s*(#(0x)?[0-9a-fA-F]+|rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)|hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\))\s*$/ ]
+            }
         },
         allowedSchemes: ALLOWED_PROTOCOLS,
         nonTextTags: ["head"],
