@@ -1286,7 +1286,7 @@
     "protected_session_timeout_description": "Das Zeitlimit für geschützte Sitzungen ist ein Zeitraum, nach dem die geschützte Sitzung aus dem Speicher des Browsers gelöscht wird. Dies wird ab der letzten Interaktion mit geschützten Notizen gemessen. Sehen",
     "wiki": "Wiki",
     "for_more_info": "für weitere Informationen.",
-    "protected_session_timeout_label": "Zeitüberschreitung der geschützten Sitzung (in Sekunden)",
+    "protected_session_timeout_label": "Zeitüberschreitung der geschützten Sitzung:",
     "reset_confirmation": "Durch das Zurücksetzen des Passworts verlierst du für immer den Zugriff auf alle Ihre bestehenden geschützten Notizen. Möchtest du das Passwort wirklich zurücksetzen?",
     "reset_success_message": "Das Passwort wurde zurückgesetzt. Bitte lege ein neues Passwort fest",
     "change_password_heading": "Kennwort ändern",

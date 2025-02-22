@@ -923,7 +923,7 @@
     "password_mismatch": "Noile parole nu coincid.",
     "protected_session_timeout": "Timpul de expirare a sesiunii protejate",
     "protected_session_timeout_description": "Timpul de expirare a sesiunii protejate este o perioadă de timp după care sesiunea protejată este ștearsă din memoria navigatorului. Aceasta este măsurată de la timpul ultimei interacțiuni cu notițele protejate. Vezi",
-    "protected_session_timeout_label": "Timpul de expirare a sesiunii protejate (în secunde)",
+    "protected_session_timeout_label": "Timpul de expirare a sesiunii protejate:",
     "reset_confirmation": "Prin resetarea parolei se va pierde pentru totdeauna accesul la notițele protejate existente. Sigur doriți resetarea parolei?",
     "reset_link": "click aici pentru a o reseta.",
     "reset_success_message": "Parola a fost resetată. Setați o nouă parolă",
