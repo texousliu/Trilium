@@ -1844,7 +1844,7 @@ body.background-effects.zen #root-widget {
 /* The promoted attributes section */
 div.promoted-attributes-container {
     display: flex;
-    margin-right: 15%;
+    margin-right: 10%;
     padding: 6px 0;
     gap: 8px;
     align-items: stretch;
@@ -1863,6 +1863,7 @@ div.promoted-attribute-cell {
     --input-background-color: transparent;
 
     box-shadow: 1px 1px 2px var(--promoted-attribute-card-shadow-color);
+
     display: inline-flex;
     margin: 0;
     border-radius: 8px;
@@ -1888,13 +1889,13 @@ div.promoted-attribute-cell > * {
     display: inline-block;
 }
 
-div.promoted-attribute-cell label {
+div.promoted-attribute-cell > label {
     font-weight: normal;
     white-space: nowrap;
     opacity: .75;
 }
 
-div.promoted-attribute-cell label::after {
+div.promoted-attribute-cell:not(:has(input[type="checkbox"])) > label::after {
     content: ":";
 }
 
@@ -1906,6 +1907,20 @@ div.promoted-attribute-cell div.input-group {
 div.promoted-attribute-cell input {
     padding: 2px 8px;
     font-weight: 500;
+}
+
+div.promoted-attribute-cell input[type="text"] {
+    width: 10em !important;
+}
+
+div.promoted-attribute-cell input[type="number"] {
+    width: 6em !important;
+}
+
+div.promoted-attribute-cell span.open-external-link-button {
+    display: flex;
+    padding: 0;
+    font-size: 1.2em;
 }
 
 div.promoted-attribute-cell .tn-checkbox {
