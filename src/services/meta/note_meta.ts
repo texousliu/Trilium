@@ -20,7 +20,7 @@ export default interface NoteMeta {
     mime?: string;
     /** 'html' or 'markdown', applicable to text notes only */
     format?: "html" | "markdown";
-    dataFileName: string;
+    dataFileName?: string;
     dirFileName?: string;
     /** this file should not be imported (e.g., HTML navigation) */
     noImport?: boolean;

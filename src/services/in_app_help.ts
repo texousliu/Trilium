@@ -33,7 +33,7 @@ function parseNoteMetaFile(noteMetaFile: NoteMetaFile): HiddenSubtreeItem[] {
     return parsedMetaRoot.children ?? [];
 }
 
-function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeItem {
+export function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeItem {
     let iconClass: string = "bx bx-file";
     const item: HiddenSubtreeItem = {
         id: `_help_${noteMeta.noteId}`,
@@ -41,6 +41,12 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
         type: "doc", // can change
         attributes: []
     };
+
+    // Handle folder notes
+    if (!noteMeta.dataFileName) {
+        iconClass = "bx bx-folder";
+        item.type = "book";
+    }
 
     // Handle attributes
     for (const attribute of noteMeta.attributes ?? []) {
@@ -56,12 +62,6 @@ function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeIt
                 value: attribute.value
             });
         }
-    }
-
-    // Handle folder notes
-    if (!noteMeta.dataFileName) {
-        iconClass = "bx bx-folder";
-        item.type = "book";
     }
 
     // Handle text notes
