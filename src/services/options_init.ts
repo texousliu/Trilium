@@ -75,8 +75,10 @@ async function initNotSyncedOptions(initialized: boolean, opts: NotSyncedOpts = 
  */
 const defaultOptions: DefaultOption[] = [
     { name: "revisionSnapshotTimeInterval", value: "600", isSynced: true },
+    { name: "revisionSnapshotTimeIntervalTimeScale", value: "60", isSynced: true }, // default to Minutes
     { name: "revisionSnapshotNumberLimit", value: "-1", isSynced: true },
     { name: "protectedSessionTimeout", value: "600", isSynced: true },
+    { name: "protectedSessionTimeoutTimeScale", value: "60", isSynced: true },
     { name: "zoomFactor", value: isWindows ? "0.9" : "1.0", isSynced: false },
     { name: "overrideThemeFonts", value: "false", isSynced: false },
     { name: "mainFontFamily", value: "theme", isSynced: false },
@@ -253,7 +255,11 @@ const defaultOptions: DefaultOption[] = [
             "tt"
         ]),
         isSynced: true
-    }
+    },
+
+    // Share settings
+    { name: "redirectBareDomain", value: "false", isSynced: true },
+    { name: "showLoginInShareTheme", value: "false", isSynced: true }
 ];
 
 /**

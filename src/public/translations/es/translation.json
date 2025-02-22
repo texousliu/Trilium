@@ -1163,8 +1163,8 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "Intervalo de instantáneas de revisiones de notas",
-    "note_revisions_snapshot_description": "El intervalo de tiempo de la instantánea de revisión de nota es el tiempo en segundos después de lo cual se creará una nueva revisión para la nota. Ver <a href=\"https://triliumnext.github.io/docs/wiki/note-revisions.html\" class=\"external\"> wiki </a> para obtener más información.",
-    "snapshot_time_interval_label": "Intervalo de tiempo de la instantánea de revisión de notas (en segundos)"
+    "note_revisions_snapshot_description": "El intervalo de tiempo de la instantánea de revisión de nota es el tiempo después de lo cual se creará una nueva revisión para la nota. Ver <a href=\"https://triliumnext.github.io/docs/wiki/note-revisions.html\" class=\"external\"> wiki </a> para obtener más información.",
+    "snapshot_time_interval_label": "Intervalo de tiempo de la instantánea de revisión de notas:"
   },
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "Límite de respaldos de revisiones de nota",
@@ -1283,7 +1283,7 @@
     "protected_session_timeout_description": "El tiempo de espera de la sesión protegida es el período de tiempo después del cual la sesión protegida se borra de la memoria del navegador. Esto se mide desde la última interacción con notas protegidas. Ver",
     "wiki": "wiki",
     "for_more_info": "para más información.",
-    "protected_session_timeout_label": "Tiempo de espera de sesión protegida (en segundos)",
+    "protected_session_timeout_label": "Tiempo de espera de sesión protegida:",
     "reset_confirmation": "Al restablecer la contraseña, perderá para siempre el acceso a todas sus notas protegidas existentes. ¿Realmente quieres restablecer la contraseña?",
     "reset_success_message": "La contraseña ha sido restablecida. Por favor establezca una nueva contraseña",
     "change_password_heading": "Cambiar contraseña",

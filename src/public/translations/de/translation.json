@@ -1166,8 +1166,8 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "Snapshot-Intervall für Notizrevisionen",
-    "note_revisions_snapshot_description": "Das Snapshot-Zeitintervall für Notizrevisionen ist die Zeit in Sekunden, nach der eine neue Notizrevision erstellt wird. Weitere Informationen findest du im <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">Wiki</a>.",
-    "snapshot_time_interval_label": "Zeitintervall für Notiz-Revisions-Snapshot (in Sekunden)"
+    "note_revisions_snapshot_description": "Das Snapshot-Zeitintervall für Notizrevisionen ist die Zeit, nach der eine neue Notizrevision erstellt wird. Weitere Informationen findest du im <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">Wiki</a>.",
+    "snapshot_time_interval_label": "Zeitintervall für Notiz-Revisions-Snapshot:"
   },
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "Limit für Notizrevision-Snapshots",
@@ -1286,7 +1286,7 @@
     "protected_session_timeout_description": "Das Zeitlimit für geschützte Sitzungen ist ein Zeitraum, nach dem die geschützte Sitzung aus dem Speicher des Browsers gelöscht wird. Dies wird ab der letzten Interaktion mit geschützten Notizen gemessen. Sehen",
     "wiki": "Wiki",
     "for_more_info": "für weitere Informationen.",
-    "protected_session_timeout_label": "Zeitüberschreitung der geschützten Sitzung (in Sekunden)",
+    "protected_session_timeout_label": "Zeitüberschreitung der geschützten Sitzung:",
     "reset_confirmation": "Durch das Zurücksetzen des Passworts verlierst du für immer den Zugriff auf alle Ihre bestehenden geschützten Notizen. Möchtest du das Passwort wirklich zurücksetzen?",
     "reset_success_message": "Das Passwort wurde zurückgesetzt. Bitte lege ein neues Passwort fest",
     "change_password_heading": "Kennwort ändern",

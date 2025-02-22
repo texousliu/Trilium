@@ -15,6 +15,11 @@ const TPL = `
     .note-list-widget .note-list {
         padding: 10px;
     }
+
+    .note-list-widget.full-height,
+    .note-list-widget.full-height .note-list-widget-content {
+        height: 100%;
+    }
     </style>
 
     <div class="note-list-widget-content">
@@ -68,6 +73,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
 
     async renderNoteList(note: FNote) {
         const noteListRenderer = new NoteListRenderer(this.$content, note, note.getChildNoteIds());
+        this.$widget.toggleClass("full-height", noteListRenderer.isFullHeight);
         await noteListRenderer.renderList();
         this.viewMode = noteListRenderer.viewMode;
     }
@@ -111,8 +117,10 @@ export default class NoteListWidget extends NoteContextAwareWidget {
             this.checkRenderStatus();
         }
 
-        if (this.viewMode) {
-            this.viewMode.entitiesReloadedEvents(e);
+        // Inform the view mode of changes and refresh if needed.
+        if (this.viewMode && this.viewMode.onEntitiesReloaded(e)) {
+            this.refresh();
+            this.checkRenderStatus();
         }
     }
 }

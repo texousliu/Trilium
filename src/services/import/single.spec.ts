@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -10,40 +10,72 @@ import cls from "../cls.js";
 import sql_init from "../sql_init.js";
 import { initializeTranslations } from "../i18n.js";
 import single from "./single.js";
+import stripBom from "strip-bom";
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 
-describe("processNoteContent", () => {
-    it("treats single MDX as Markdown", async () => {
-        const mdxSample = fs.readFileSync(path.join(scriptDir, "samples", "Text Note.mdx"));
-        const taskContext = TaskContext.getInstance("import-mdx", "import", {
-            textImportedAsText: true
-        });
+async function testImport(fileName: string, mimetype: string) {
+    const buffer = fs.readFileSync(path.join(scriptDir, "samples", fileName));
+    const taskContext = TaskContext.getInstance("import-mdx", "import", {
+        textImportedAsText: true,
+        codeImportedAsCode: true
+    });
 
-        await new Promise<void>((resolve, reject) => {
-            cls.init(async () => {
-                initializeTranslations();
-                sql_init.initializeDb();
-                await sql_init.dbReady;
+    return new Promise<{ buffer: Buffer, importedNote: BNote }>((resolve, reject) => {
+        cls.init(async () => {
+            const rootNote = becca.getNote("root");
+            if (!rootNote) {
+                reject("Missing root note.");
+            }
 
-                const rootNote = becca.getNote("root");
-                if (!rootNote) {
-                    reject("Missing root note.");
-                }
-
-                const importedNote = single.importSingleFile(taskContext, {
-                    originalname: "Text Note.mdx",
-                    mimetype: "text/mdx",
-                    buffer: mdxSample
-                }, rootNote as BNote);
-                try {
-                    expect(importedNote.mime).toBe("text/html");
-                    expect(importedNote.type).toBe("text");
-                    expect(importedNote.title).toBe("Text Note");
-                } catch (e) {
-                    reject(e);
-                }
-                resolve();
+            const importedNote = single.importSingleFile(taskContext, {
+                originalname: fileName,
+                mimetype,
+                buffer: buffer
+            }, rootNote as BNote);
+            resolve({
+                buffer,
+                importedNote
             });
         });
+    });
+}
+
+describe("processNoteContent", () => {
+    beforeAll(async () => {
+        initializeTranslations();
+        sql_init.initializeDb();
+        await sql_init.dbReady;
+    });
+
+    it("treats single MDX as Markdown", async () => {
+        const { importedNote } = await testImport("Text Note.mdx", "text/mdx");
+        expect(importedNote.mime).toBe("text/html");
+        expect(importedNote.type).toBe("text");
+        expect(importedNote.title).toBe("Text Note");
+    });
+
+    it("supports HTML note with UTF-16 (w/ BOM) from Microsoft Outlook", async () => {
+        const { importedNote } = await testImport("IREN Reports Q2 FY25 Results.htm", "text/html");
+        expect(importedNote.mime).toBe("text/html");
+        expect(importedNote.title).toBe("IREN Reports Q2 FY25 Results");
+        expect(importedNote.getContent().toString().substring(0, 5)).toEqual("<html");
+    });
+
+    it("supports code note with UTF-16", async () => {
+        const { importedNote, buffer } = await testImport("UTF-16LE Code Note.json", "application/json");
+        expect(importedNote.mime).toBe("application/json");
+        expect(importedNote.getContent().toString()).toStrictEqual(stripBom(buffer.toString("utf-16le")));
+    });
+
+    it("supports plain text note with UTF-16", async () => {
+        const { importedNote } = await testImport("UTF-16LE Text Note.txt", "text/plain");
+        expect(importedNote.mime).toBe("text/html");
+        expect(importedNote.getContent().toString()).toBe("<p>Plain text goes here.<br></p>");
+    });
+
+    it("supports markdown note with UTF-16", async () => {
+        const { importedNote } = await testImport("UTF-16LE Text Note.md", "text/markdown");
+        expect(importedNote.mime).toBe("text/html");
+        expect(importedNote.getContent().toString()).toBe("<h2>Hello world</h2>\n<p>Plain text goes here.</p>\n");
     });
 })

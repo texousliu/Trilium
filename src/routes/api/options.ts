@@ -14,7 +14,9 @@ const ALLOWED_OPTIONS = new Set([
     "eraseEntitiesAfterTimeInSeconds",
     "eraseEntitiesAfterTimeScale",
     "protectedSessionTimeout",
+    "protectedSessionTimeoutTimeScale",
     "revisionSnapshotTimeInterval",
+    "revisionSnapshotTimeIntervalTimeScale",
     "revisionSnapshotNumberLimit",
     "zoomFactor",
     "theme",
@@ -73,7 +75,9 @@ const ALLOWED_OPTIONS = new Set([
     "textNoteEditorMultilineToolbar",
     "layoutOrientation",
     "backgroundEffects",
-    "allowedHtmlTags" // Allow configuring HTML import tags
+    "allowedHtmlTags",
+    "redirectBareDomain",
+    "showLoginInShareTheme"
 ]);
 
 function getOptions() {

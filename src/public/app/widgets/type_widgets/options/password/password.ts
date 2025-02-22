@@ -1,9 +1,9 @@
-import { t } from "../../../services/i18n.js";
-import server from "../../../services/server.js";
-import protectedSessionHolder from "../../../services/protected_session_holder.js";
-import toastService from "../../../services/toast.js";
-import OptionsWidget from "./options_widget.js";
-import type { OptionMap } from "../../../../../services/options_interface.js";
+import { t } from "../../../../services/i18n.js";
+import server from "../../../../services/server.js";
+import protectedSessionHolder from "../../../../services/protected_session_holder.js";
+import toastService from "../../../../services/toast.js";
+import OptionsWidget from "../options_widget.js";
+import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
 <div class="options-section">
@@ -32,17 +32,7 @@ const TPL = `
         <button class="save-password-button btn btn-primary">${t("password.change_password")}</button>
     </form>
 </div>
-
-<div class="options-section">
-    <h4>${t("password.protected_session_timeout")}</h4>
-
-    <p>${t("password.protected_session_timeout_description")} <a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/protected-notes.html" class="external">${t("password.wiki")}</a> ${t("password.for_more_info")}</p>
-
-    <div class="form-group">
-        <label for="protected-session-timeout-in-seconds">${t("password.protected_session_timeout_label")}</label>
-        <input id="protected-session-timeout-in-seconds" class="protected-session-timeout-in-seconds form-control options-number-input" type="number" min="60">
-    </div>
-</div>`;
+`;
 
 // TODO: Deduplicate
 interface ChangePasswordResponse {

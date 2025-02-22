@@ -824,6 +824,7 @@
   },
   "promoted_attributes": {
     "promoted_attributes": "Promoted Attributes",
+    "unset-field-placeholder": "not set",
     "url_placeholder": "http://website...",
     "open_external_link": "Open external link",
     "unknown_label_type": "Unknown label type '{{type}}'",
@@ -1166,8 +1167,8 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "Note Revision Snapshot Interval",
-    "note_revisions_snapshot_description": "The Note revision snapshot interval is the time in seconds after which a new note revision will be created for the note. See <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> for more info.",
-    "snapshot_time_interval_label": "Note revision snapshot time interval (in seconds):"
+    "note_revisions_snapshot_description": "The Note revision snapshot interval is the time after which a new note revision will be created for the note. See <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> for more info.",
+    "snapshot_time_interval_label": "Note revision snapshot time interval:"
   },
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "Note Revision Snapshot Limit",
@@ -1286,7 +1287,7 @@
     "protected_session_timeout_description": "Protected session timeout is a time period after which the protected session is wiped from the browser's memory. This is measured from the last interaction with protected notes. See",
     "wiki": "wiki",
     "for_more_info": "for more info.",
-    "protected_session_timeout_label": "Protected session timeout (in seconds)",
+    "protected_session_timeout_label": "Protected session timeout:",
     "reset_confirmation": "By resetting the password you will forever lose access to all your existing protected notes. Do you really want to reset the password?",
     "reset_success_message": "Password has been reset. Please set new password",
     "change_password_heading": "Change Password",
@@ -1656,6 +1657,17 @@
     "minutes": "Minutes",
     "hours": "Hours",
     "days": "Days"
+  },
+  "share": {
+    "title": "Share Settings",
+    "redirect_bare_domain": "Redirect bare domain to Share page",
+    "redirect_bare_domain_description": "Redirect anonymous users to the Share page instead of showing Login",
+    "show_login_link": "Show Login link in Share theme",
+    "show_login_link_description": "Add a login link to the Share page footer",
+    "check_share_root": "Check Share Root Status",
+    "share_root_found": "Share root note '{{noteTitle}}' is ready",
+    "share_root_not_found": "No note with #shareRoot label found",
+    "share_root_not_shared": "Note '{{noteTitle}}' has #shareRoot label but is not Shared"
   },
   "time_selector": {
     "invalid_input": "The entered time value is not a valid number.",

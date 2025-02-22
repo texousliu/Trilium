@@ -49,8 +49,10 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     lastSyncedPull: number;
     lastSyncedPush: number;
     revisionSnapshotTimeInterval: number;
+    revisionSnapshotTimeIntervalTimeScale: number;
     revisionSnapshotNumberLimit: number;
     protectedSessionTimeout: number;
+    protectedSessionTimeoutTimeScale: number;
     zoomFactor: number;
     mainFontSize: number;
     treeFontSize: number;
@@ -95,6 +97,10 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
     backgroundEffects: boolean;
+    // Share settings
+    redirectBareDomain: boolean;
+    showLoginInShareTheme: boolean;
+
 }
 
 export type OptionNames = keyof OptionDefinitions;
