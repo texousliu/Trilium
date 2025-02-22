@@ -137,6 +137,7 @@ const TPL = `
         <li class="dropdown-item" data-trigger-command="toggleZenMode">
             <span class="bx bxs-yin-yang"></span>
             ${t("global_menu.toggle-zen-mode")}
+            <kbd data-command="toggleZenMode"></kbd>
         </li>
 
         <div class="dropdown-divider"></div>
