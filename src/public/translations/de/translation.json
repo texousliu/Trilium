@@ -1166,8 +1166,8 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "Snapshot-Intervall für Notizrevisionen",
-    "note_revisions_snapshot_description": "Das Snapshot-Zeitintervall für Notizrevisionen ist die Zeit in Sekunden, nach der eine neue Notizrevision erstellt wird. Weitere Informationen findest du im <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">Wiki</a>.",
-    "snapshot_time_interval_label": "Zeitintervall für Notiz-Revisions-Snapshot (in Sekunden)"
+    "note_revisions_snapshot_description": "Das Snapshot-Zeitintervall für Notizrevisionen ist die Zeit, nach der eine neue Notizrevision erstellt wird. Weitere Informationen findest du im <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">Wiki</a>.",
+    "snapshot_time_interval_label": "Zeitintervall für Notiz-Revisions-Snapshot:"
   },
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "Limit für Notizrevision-Snapshots",

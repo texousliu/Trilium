@@ -16,6 +16,7 @@ const ALLOWED_OPTIONS = new Set([
     "protectedSessionTimeout",
     "protectedSessionTimeoutTimeScale",
     "revisionSnapshotTimeInterval",
+    "revisionSnapshotTimeIntervalTimeScale",
     "revisionSnapshotNumberLimit",
     "zoomFactor",
     "theme",

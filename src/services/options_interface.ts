@@ -49,6 +49,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     lastSyncedPull: number;
     lastSyncedPush: number;
     revisionSnapshotTimeInterval: number;
+    revisionSnapshotTimeIntervalTimeScale: number;
     revisionSnapshotNumberLimit: number;
     protectedSessionTimeout: number;
     protectedSessionTimeoutTimeScale: number;

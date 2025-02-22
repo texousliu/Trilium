@@ -1108,8 +1108,8 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "Intervalle d'enregistrement automatique des versions des notes",
-    "note_revisions_snapshot_description": "L'intervalle d'enregistrement automatique des versions de note est le temps en secondes après lequel une nouvelle version de note est créée pour une note. Consultez le <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> pour plus d'informations.",
-    "snapshot_time_interval_label": "Intervalle de temps entre deux enregistrements de version de note (en secondes) :"
+    "note_revisions_snapshot_description": "L'intervalle d'enregistrement automatique des versions de note est le temps après lequel une nouvelle version de note est créée pour une note. Consultez le <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> pour plus d'informations.",
+    "snapshot_time_interval_label": "Intervalle de temps entre deux enregistrements de version de note :"
   },
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "Limite des enregistrements de version de note",

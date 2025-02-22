@@ -1068,9 +1068,9 @@
     "note_revisions": "Revizii ale notiței"
   },
   "revisions_snapshot_interval": {
-    "note_revisions_snapshot_description": "Intervalul de salvare a reviziilor este timpul în secunde după care se crează o nouă revizie a unei notițe. Vedeți <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki-ul</a> pentru mai multe informații.",
+    "note_revisions_snapshot_description": "Intervalul de salvare a reviziilor este timpul după care se crează o nouă revizie a unei notițe. Vedeți <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki-ul</a> pentru mai multe informații.",
     "note_revisions_snapshot_interval_title": "Intervalul de salvare a reviziilor",
-    "snapshot_time_interval_label": "Intervalul de salvare a reviziilor (în secunde)"
+    "snapshot_time_interval_label": "Intervalul de salvare a reviziilor:"
   },
   "ribbon": {
     "edited_notes_message": "Tab-ul panglicii „Notițe editate” se va deschide automat pentru notițele zilnice",
