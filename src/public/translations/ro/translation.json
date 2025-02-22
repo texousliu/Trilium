@@ -944,7 +944,8 @@
     "remove_this_attribute": "Elimină acest atribut",
     "unknown_attribute_type": "Tip de atribut necunoscut „{{type}}”",
     "unknown_label_type": "Tip de etichetă necunoscut „{{type}}”",
-    "url_placeholder": "http://siteweb..."
+    "url_placeholder": "http://siteweb...",
+    "unset-field-placeholder": "nesetat"
   },
   "prompt": {
     "defaultTitle": "Aviz",

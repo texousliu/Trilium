@@ -824,6 +824,7 @@
   },
   "promoted_attributes": {
     "promoted_attributes": "Promoted Attributes",
+    "unset-field-placeholder": "not set",
     "url_placeholder": "http://website...",
     "open_external_link": "Open external link",
     "unknown_label_type": "Unknown label type '{{type}}'",

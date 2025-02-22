@@ -155,6 +155,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             .attr("data-attribute-type", valueAttr.type)
             .attr("data-attribute-name", valueAttr.name)
             .prop("value", valueAttr.value)
+            .prop("placeholder", t("promoted_attributes.unset-field-placeholder"))
             .addClass("form-control")
             .addClass("promoted-attribute-input")
             .on("change", (event) => this.promotedAttributeChanged(event));
