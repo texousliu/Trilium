@@ -1,7 +1,7 @@
 "use strict";
 
 import BAttribute from "../../becca/entities/battribute.js";
-import { removeTextFileExtension, newEntityId, getNoteTitle } from "../../services/utils.js";
+import { removeTextFileExtension, newEntityId, getNoteTitle, processStringOrBuffer } from "../../services/utils.js";
 import log from "../../services/log.js";
 import noteService from "../../services/notes.js";
 import attributeService from "../../services/attributes.js";
@@ -457,7 +457,7 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
         }
 
         if (type !== "file" && type !== "image") {
-            content = content.toString("utf-8");
+            content = processStringOrBuffer(content);
         }
 
         const noteTitle = getNoteTitle(filePath, taskContext.data?.replaceUnderscoresWithSpaces || false, noteMeta);
