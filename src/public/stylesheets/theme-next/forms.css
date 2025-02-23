@@ -79,7 +79,9 @@ button.btn.btn-success kbd {
  */
 
 :root .icon-action:not(.global-menu-button),
-:root .tn-tool-button {
+:root .tn-tool-button,
+:root .btn-group .tn-tool-button:not(:last-child),
+:root .btn-group .tn-tool-button:last-child {
     width: var(--icon-button-size);
     height: var(--icon-button-size);
     border: unset !important;
@@ -87,6 +89,10 @@ button.btn.btn-success kbd {
     padding: 0;
     text-align: center;
     color: var(--icon-button-color);
+}
+
+.btn-group .tn-tool-button + .tn-tool-button {
+    margin-left: 4px !important;
 }
 
 /* The "x" icon button */
