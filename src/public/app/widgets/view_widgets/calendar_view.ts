@@ -48,6 +48,11 @@ const TPL = `
     .calendar-container .fc-button {
         padding: 0.2em 0.5em;
     }
+
+    .calendar-container .promoted-attribute {
+        font-size: 0.85em;
+        opacity: 0.85;
+    }
     </style>
 
     <div class="calendar-container">
@@ -119,13 +124,24 @@ export default class CalendarView extends ViewMode {
             height: "100%",
             eventContent: (e => {
                 let html = "";
+                const { iconClass, promotedAttributes } = e.event.extendedProps;
 
-                const iconClass = e.event.extendedProps.iconClass;
+                // Title and icon
                 if (iconClass) {
                     html += `<span class="${iconClass}"></span> `;
                 }
-
                 html += utils.escapeHtml(e.event.title);
+
+                // Promoted attributes
+                if (promotedAttributes) {
+                    for (const [ name, value ] of Object.entries(promotedAttributes)) {
+                        html += `\
+                        <div class="promoted-attribute">
+                            <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
+                        </div>`;
+                    }
+                }
+
                 return { html };
             }),
             dateClick: async (e) => {
@@ -306,27 +322,22 @@ export default class CalendarView extends ViewMode {
         const events: EventInput[] = [];
         // the user can specify one or multiple attributes to be promoted onto the calendar view by setting `#calendar:promotedAttributes` at the note level
         // their values will then be rentered into the event title and appear as "[eventIcon] $eventTitle [#promotedAttributeX=valueX] [#promotedAttributeY=valueY]"
-        const promotedAttrs = note
-            .getAttributes()
-            .filter((attr) => attr.type == "label" && attr.name == "calendar:promotedAttribute")
-            .map((attr) => attr.value.substring(1));
-        let titleExtended = "";
-        if (promotedAttrs && promotedAttrs.length) {
-            const promotedValues = note
-                .getAttributes()
-                .filter((attr) => promotedAttrs.includes(attr.name))
-                .map((attr) => [attr.name, attr.value]);
-            for (const defined of promotedValues) titleExtended = titleExtended + ` [#${defined[0]}="${defined[1]}"]`;
+
+        const calendarPromotedAttributes = note.getLabelValue("calendar:promotedAttributes");
+        let promotedAttributesData = null;
+        if (calendarPromotedAttributes) {
+            promotedAttributesData = await this.#buildPromotedAttributes(note, calendarPromotedAttributes);
         }
 
         for (const title of titles) {
             const eventData: EventInput = {
-                title: title + titleExtended,
+                title: title,
                 start: startDate,
                 url: `#${note.noteId}`,
                 noteId: note.noteId,
                 color: color ?? undefined,
-                iconClass: note.getLabelValue("iconClass")
+                iconClass: note.getLabelValue("iconClass"),
+                promotedAttributes: promotedAttributesData
             };
 
             const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
@@ -336,6 +347,35 @@ export default class CalendarView extends ViewMode {
             events.push(eventData);
         }
         return events;
+    }
+
+    static async #buildPromotedAttributes(note: FNote, calendarPromotedAttributes: string) {
+        const promotedAttributeNames = calendarPromotedAttributes.split(",");
+        const filteredPromotedAttributes = note.getPromotedDefinitionAttributes().filter((attr) => promotedAttributeNames.includes(attr.name));
+        const result: Record<string, string> = {};
+
+        for (const promotedAttribute of filteredPromotedAttributes) {
+            const [ type, name ] = promotedAttribute.name.split(":", 2);
+            const definition = promotedAttribute.getDefinition();
+
+            if (definition.multiplicity !== "single") {
+                // TODO: Add support for multiple definitions.
+                continue;
+            }
+
+            // TODO: Add support for relations
+            if (type !== "label" || !note.hasLabel(name)) {
+                continue;
+            }
+
+            const value = note.getLabelValue(name);
+            const friendlyName = definition.promotedAlias ?? name;
+            if (friendlyName && value) {
+                result[friendlyName] = value;
+            }
+        }
+
+        return result;
     }
 
     static async #parseCustomTitle(customTitleValue: string | null, note: FNote, allowRelations = true): Promise<string[]> {
