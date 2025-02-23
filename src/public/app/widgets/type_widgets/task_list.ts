@@ -61,10 +61,7 @@ function buildTasks(tasks: FTask[]) {
     let html = '';
 
     for (const task of tasks) {
-        html += `\
-        <li class="task">
-            <input type="checkbox" class="check" data-task-id="${task.taskId}" ${task.isDone ? "checked" : ""} /> ${task.title}
-        </li>`;
+        html += `<li class="task"><input type="checkbox" class="check" data-task-id="${task.taskId}" ${task.isDone ? "checked" : ""} />${task.title}</li>`;
     }
 
     return html;
