@@ -1,4 +1,5 @@
 // TODO: Booleans should probably be numbers instead (as SQLite does not have booleans.);
+// TODO: check against schema.sql which properties really are "optional"
 
 export interface AttachmentRow {
     attachmentId?: string;
@@ -12,6 +13,8 @@ export interface AttachmentRow {
     dateModified?: string;
     utcDateModified?: string;
     utcDateScheduledForErasureSince?: string;
+    isDeleted?: boolean;
+    deleteId?: string;
     contentLength?: number;
     content?: Buffer | string;
 }
