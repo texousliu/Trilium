@@ -280,9 +280,6 @@ export default class CalendarView extends ViewMode {
 
         for (const note of notes) {
             const startDate = note.getLabelValue("startDate");
-            if (!startDate) {
-                continue;
-            }
 
             if (note.hasChildren()) {
                 const childrenEventData = await this.#buildEvents(note.getChildNoteIds());
@@ -291,6 +288,9 @@ export default class CalendarView extends ViewMode {
                 }
             }
 
+            if (!startDate) {
+                continue;
+            }
 
             const endDate = note.getAttributeValue("label", "endDate");
             events.push(await CalendarView.#buildEvent(note, startDate, endDate));
