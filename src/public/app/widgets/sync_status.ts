@@ -72,6 +72,15 @@ const TPL = `
 `;
 
 export default class SyncStatusWidget extends BasicWidget {
+
+    syncState: "unknown" | "in-progress" | "connected" | "disconnected";
+    allChangesPushed: boolean;
+    lastSyncedPush!: number;
+    settings: {
+        // TriliumNextTODO: narrow types and use TitlePlacement Type
+        titlePlacement: string; 
+    }
+
     constructor() {
         super();
 
@@ -91,13 +100,14 @@ export default class SyncStatusWidget extends BasicWidget {
         ws.subscribeToMessages((message) => this.processMessage(message));
     }
 
-    showIcon(className) {
+    showIcon(className: string) {
         if (!options.get("syncServerHost")) {
             this.toggleInt(false);
             return;
         }
 
-        Tooltip.getOrCreateInstance(this.$widget.find(`.sync-status-${className}`), {
+
+        Tooltip.getOrCreateInstance(this.$widget.find(`.sync-status-${className}`)[0], {
             html: true,
             placement: this.settings.titlePlacement,
             fallbackPlacements: [this.settings.titlePlacement]
@@ -108,7 +118,8 @@ export default class SyncStatusWidget extends BasicWidget {
         this.$widget.find(`.sync-status-${className}`).show();
     }
 
-    processMessage(message) {
+    // TriliumNextTODO: Use Type Message from "services/ws.ts"
+    processMessage(message: { type: string; lastSyncedPush: number; data: { lastSyncedPush: number } }) {
         if (message.type === "sync-pull-in-progress") {
             this.syncState = "in-progress";
             this.lastSyncedPush = message.lastSyncedPush;
