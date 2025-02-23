@@ -16,9 +16,6 @@
   },
   "include": ["./src/**/*.ts", "./src/**/*.js", "./*.ts"],
   "exclude": [
-	  "./node_modules/**/*", 
-	  "./spec-es6/**/*.ts",
-	  "./spec/**/*",
 	  "./**/*.spec.ts",
 	  "./src/public/**/*",
     "./*.config.ts",
