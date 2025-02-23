@@ -627,3 +627,11 @@ a.tn-link:hover[href^="https://"]:not(.no-arrow)::after,
 .use-tn-links a:hover[href^="https://"]:not(.no-arrow)::after {
     animation: link-arrow-blink 500ms linear alternate infinite;
 }
+
+/*
+ * Range inputs (sliders)
+ */
+
+input[type="range"] {
+    background: transparent;
+}
