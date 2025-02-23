@@ -57,11 +57,17 @@ const TPL = `
 </div>
 `;
 
-function buildTask(task: FTask) {
-    return `\
-<li class="task">
-    <input type="checkbox" class="check" data-task-id="${task.taskId}" ${task.isDone ? "checked" : ""} /> ${task.title}
-</li>`;
+function buildTasks(tasks: FTask[]) {
+    let html = '';
+
+    for (const task of tasks) {
+        html += `\
+        <li class="task">
+            <input type="checkbox" class="check" data-task-id="${task.taskId}" ${task.isDone ? "checked" : ""} /> ${task.title}
+        </li>`;
+    }
+
+    return html;
 }
 
 export default class TaskListWidget extends TypeWidget {
@@ -113,12 +119,9 @@ export default class TaskListWidget extends TypeWidget {
             return;
         }
 
-        this.$taskContainer.html("");
-
         const tasks = await froca.getTasks(this.noteId);
-        for (const task of tasks) {
-            this.$taskContainer.append($(buildTask(task)));
-        }
+        const tasksHtml = buildTasks(tasks);
+        this.$taskContainer.html(tasksHtml);
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
