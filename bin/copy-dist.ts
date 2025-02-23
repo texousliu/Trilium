@@ -31,7 +31,6 @@ const copy = async () => {
 
     const filesToCopy = [
         "config-sample.ini",
-        "tsconfig.webpack.json",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json"
     ];
