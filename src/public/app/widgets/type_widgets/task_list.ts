@@ -79,6 +79,7 @@ export default class TaskListWidget extends TypeWidget {
         this.$addNewTask.on("keydown", (e) => {
             if (e.key === "Enter") {
                 this.#createNewTask(String(this.$addNewTask.val()));
+                this.$addNewTask.val("");
             }
         });
 
