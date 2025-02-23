@@ -126,7 +126,7 @@ export default class AttachmentDetailWidget extends BasicWidget {
         this.$wrapper.addClass(this.isFullDetail ? "full-detail" : "list-view");
 
         if (!this.isFullDetail) {
-            const $link = await linkService.createLink(this.attachment.getOwnerId(), {
+            const $link = await linkService.createLink(this.attachment.ownerId, {
                 title: this.attachment.title,
                 viewScope: {
                     viewMode: "attachments",
@@ -141,7 +141,7 @@ export default class AttachmentDetailWidget extends BasicWidget {
         }
 
         const $deletionWarning = this.$wrapper.find(".attachment-deletion-warning");
-        const utcDateScheduledForErasureSince = this.attachment.getUtcDateScheduledForErasureSince();
+        const { utcDateScheduledForErasureSince } = this.attachment;
 
         if (utcDateScheduledForErasureSince) {
             this.$wrapper.addClass("scheduled-for-deletion");
@@ -166,7 +166,7 @@ export default class AttachmentDetailWidget extends BasicWidget {
             $deletionWarning.hide();
         }
 
-        this.$wrapper.find(".attachment-details").text(t("attachment_detail_2.role_and_size", { role: this.attachment.role, size: utils.formatSize(this.attachment.getContentLength()) }));
+        this.$wrapper.find(".attachment-details").text(t("attachment_detail_2.role_and_size", { role: this.attachment.role, size: utils.formatSize(this.attachment.contentLength) }));
         this.$wrapper.find(".attachment-actions-container").append(this.attachmentActionsWidget.render());
 
         const { $renderedContent } = await contentRenderer.getRenderedContent(this.attachment, { imageHasZoom: this.isFullDetail });
@@ -177,7 +177,7 @@ export default class AttachmentDetailWidget extends BasicWidget {
         if (this.attachment.role === "image") {
             imageService.copyImageReferenceToClipboard(this.$wrapper.find(".attachment-content-wrapper"));
         } else if (this.attachment.role === "file") {
-            const $link = await linkService.createLink(this.attachment.getOwnerId(), {
+            const $link = await linkService.createLink(this.attachment.ownerId, {
                 referenceLink: true,
                 viewScope: {
                     viewMode: "attachments",
