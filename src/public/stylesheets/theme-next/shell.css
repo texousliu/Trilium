@@ -1320,6 +1320,14 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 /*
+ * Note Map
+ */
+
+.note-detail-note-map .fixnodes-type-switcher .tn-tool-button.toggled {
+    color: var(--tab-close-button-hover-background);
+}
+
+/*
  * Recent changes list
  */
 
