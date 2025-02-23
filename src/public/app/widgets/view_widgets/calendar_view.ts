@@ -320,8 +320,6 @@ export default class CalendarView extends ViewMode {
         const titles = await CalendarView.#parseCustomTitle(customTitle, note);
         const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
         const events: EventInput[] = [];
-        // the user can specify one or multiple attributes to be promoted onto the calendar view by setting `#calendar:promotedAttributes` at the note level
-        // their values will then be rentered into the event title and appear as "[eventIcon] $eventTitle [#promotedAttributeX=valueX] [#promotedAttributeY=valueY]"
 
         const calendarPromotedAttributes = note.getLabelValue("calendar:promotedAttributes");
         let promotedAttributesData = null;
