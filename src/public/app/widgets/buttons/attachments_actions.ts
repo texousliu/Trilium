@@ -10,6 +10,7 @@ import utils from "../../services/utils.js";
 import { Dropdown } from "bootstrap";
 import type attachmentsApiRoute from "../../../../routes/api/attachments.js"
 import type FAttachment from "../../entities/fattachment.js";
+import type AttachmentDetailWidget from "../attachment_detail.js";
 
 const TPL = `
 <div class="dropdown attachment-actions">
@@ -18,11 +19,11 @@ const TPL = `
         width: 35px;
         height: 35px;
     }
-    
+
     .attachment-actions .dropdown-menu {
         width: 20em;
     }
-    
+
     .attachment-actions .dropdown-item .bx {
         position: relative;
         top: 3px;
@@ -37,7 +38,7 @@ const TPL = `
     }
     </style>
 
-    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" 
+    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
         aria-expanded="false" class="icon-action icon-action-always-border bx bx-dots-vertical-rounded"
         style="position: relative; top: 3px;"></button>
 
@@ -45,17 +46,17 @@ const TPL = `
 
         <li data-trigger-command="openAttachment" class="dropdown-item"
             title="${t("attachments_actions.open_externally_title")}"><span class="bx bx-file-find"></span> ${t("attachments_actions.open_externally")}</li>
-        
+
         <li data-trigger-command="openAttachmentCustom" class="dropdown-item"
             title="${t("attachments_actions.open_custom_title")}"><span class="bx bx-customize"></span> ${t("attachments_actions.open_custom")}</li>
-        
+
         <li data-trigger-command="downloadAttachment" class="dropdown-item">
             <span class="bx bx-download"></span> ${t("attachments_actions.download")}</li>
 
         <li data-trigger-command="copyAttachmentLinkToClipboard" class="dropdown-item"><span class="bx bx-link">
             </span> ${t("attachments_actions.copy_link_to_clipboard")}</li>
 
-        
+
         <div class="dropdown-divider"></div>
 
 
@@ -70,13 +71,13 @@ const TPL = `
 
 
         <div class="dropdown-divider"></div>
-            
+
 
         <li data-trigger-command="convertAttachmentIntoNote" class="dropdown-item"><span class="bx bx-note">
             </span> ${t("attachments_actions.convert_attachment_into_note")}</li>
-        
+
     </div>
-    
+
     <input type="file" class="attachment-upload-new-revision-input" style="display: none">
 </div>`;
 
@@ -150,10 +151,9 @@ export default class AttachmentActionsWidget extends BasicWidget {
     }
 
     async copyAttachmentLinkToClipboardCommand() {
-        //TriliumNextTODO: the parent here is AttachmentDetailWidget
-        //how can we pass that to the generic TypedComponent<any>?
-        //@ts-ignore - TypedComponent<any>
-        this.parent?.copyAttachmentLinkToClipboard();
+        if (this.parent && "copyAttachmentLinkToClipboard" in this.parent) {
+            (this.parent as AttachmentDetailWidget).copyAttachmentLinkToClipboard();
+        }
     }
 
     async deleteAttachmentCommand() {
