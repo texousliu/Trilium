@@ -45,6 +45,10 @@ const TPL = `
         font-weight: normal;
     }
 
+    .calendar-container a.fc-event {
+        text-decoration: none;
+    }
+
     .calendar-container .fc-button {
         padding: 0.2em 0.5em;
     }
