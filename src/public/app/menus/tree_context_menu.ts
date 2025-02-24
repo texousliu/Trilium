@@ -52,7 +52,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
         const noSelectedNotes = selNodes.length === 0 || (selNodes.length === 1 && selNodes[0] === this.node);
 
         const notSearch = note?.type !== "search";
-        const notOptions = !note?.noteId.startsWith("_options");
+        const notOptionsOrHelp = !note?.noteId.startsWith("_options") && !note?.noteId.startsWith("_help");
         const parentNotSearch = !parentNote || parentNote.type !== "search";
         const insertNoteAfterEnabled = isNotRoot && !isHoisted && parentNotSearch;
 
@@ -80,7 +80,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 command: "insertNoteAfter",
                 uiIcon: "bx bx-plus",
                 items: insertNoteAfterEnabled ? await noteTypesService.getNoteTypeItems("insertNoteAfter") : null,
-                enabled: insertNoteAfterEnabled && noSelectedNotes && notOptions
+                enabled: insertNoteAfterEnabled && noSelectedNotes && notOptionsOrHelp
             },
 
             {
@@ -88,7 +88,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 command: "insertChildNote",
                 uiIcon: "bx bx-plus",
                 items: notSearch ? await noteTypesService.getNoteTypeItems("insertChildNote") : null,
-                enabled: notSearch && noSelectedNotes && notOptions
+                enabled: notSearch && noSelectedNotes && notOptionsOrHelp
             },
 
             { title: "----" },
@@ -112,14 +112,14 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                         title: `${t("tree-context-menu.edit-branch-prefix")} <kbd data-command="editBranchPrefix"></kbd>`,
                         command: "editBranchPrefix",
                         uiIcon: "bx bx-rename",
-                        enabled: isNotRoot && parentNotSearch && noSelectedNotes && notOptions
+                        enabled: isNotRoot && parentNotSearch && noSelectedNotes && notOptionsOrHelp
                     },
-                    { title: t("tree-context-menu.convert-to-attachment"), command: "convertNoteToAttachment", uiIcon: "bx bx-paperclip", enabled: isNotRoot && !isHoisted && notOptions },
+                    { title: t("tree-context-menu.convert-to-attachment"), command: "convertNoteToAttachment", uiIcon: "bx bx-paperclip", enabled: isNotRoot && !isHoisted && notOptionsOrHelp },
                     {
                         title: `${t("tree-context-menu.duplicate-subtree")} <kbd data-command="duplicateSubtree">`,
                         command: "duplicateSubtree",
                         uiIcon: "bx bx-outline",
-                        enabled: parentNotSearch && isNotRoot && !isHoisted && notOptions
+                        enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp
                     },
 
                     { title: "----" },
@@ -136,7 +136,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                     { title: "----" },
 
                     { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
-                    { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: noSelectedNotes && notOptions }
+                    { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: noSelectedNotes && notOptionsOrHelp }
                 ]
             },
 
@@ -178,14 +178,14 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 title: `${t("tree-context-menu.delete")} <kbd data-command="deleteNotes"></kbd>`,
                 command: "deleteNotes",
                 uiIcon: "bx bx-trash destructive-action-icon",
-                enabled: isNotRoot && !isHoisted && parentNotSearch && notOptions
+                enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp
             },
 
             { title: "----" },
 
-            { title: t("tree-context-menu.import-into-note"), command: "importIntoNote", uiIcon: "bx bx-import", enabled: notSearch && noSelectedNotes && notOptions },
+            { title: t("tree-context-menu.import-into-note"), command: "importIntoNote", uiIcon: "bx bx-import", enabled: notSearch && noSelectedNotes && notOptionsOrHelp },
 
-            { title: t("tree-context-menu.export"), command: "exportNote", uiIcon: "bx bx-export", enabled: notSearch && noSelectedNotes && notOptions },
+            { title: t("tree-context-menu.export"), command: "exportNote", uiIcon: "bx bx-export", enabled: notSearch && noSelectedNotes && notOptionsOrHelp },
 
             { title: "----" },
 

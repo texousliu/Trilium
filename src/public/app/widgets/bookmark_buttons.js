@@ -2,6 +2,7 @@ import FlexContainer from "./containers/flex_container.js";
 import OpenNoteButtonWidget from "./buttons/open_note_button_widget.js";
 import BookmarkFolderWidget from "./buttons/bookmark_folder.js";
 import froca from "../services/froca.js";
+import utils from "../services/utils.js";
 
 export default class BookmarkButtons extends FlexContainer {
     constructor(isHorizontalLayout) {
@@ -35,6 +36,8 @@ export default class BookmarkButtons extends FlexContainer {
 
             buttonWidget.refreshIcon();
         }
+
+        utils.reloadTray();
     }
 
     initialRenderCompleteEvent() {

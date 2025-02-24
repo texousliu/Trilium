@@ -39,6 +39,7 @@ interface CustomGlobals {
     maxEntityChangeIdAtLoad: number;
     maxEntityChangeSyncIdAtLoad: number;
     assetPath: string;
+    appPath: string;
     instanceName: string;
     appCssNoteIds: string[];
     triliumVersion: string;
@@ -238,6 +239,9 @@ declare global {
         },
         getData(): string;
         setData(data: string): void;
+        getSelectedHtml(): string;
+        removeSelection(): void;
+        sourceElement: HTMLElement;
     }
 
     interface MentionItem {

@@ -109,7 +109,8 @@
     "choose_export_type": "Choose export type first please",
     "export_status": "Export status",
     "export_in_progress": "Export in progress: {{progressCount}}",
-    "export_finished_successfully": "Export finished successfully."
+    "export_finished_successfully": "Export finished successfully.",
+    "format_pdf": "PDF - for printing or sharing purposes."
   },
   "help": {
     "fullDocumentation": "Help (full documentation is available <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
@@ -437,7 +438,9 @@
     "share_favicon": "Favicon note to be set in the shared page. Typically you want to set it to share root and make it inheritable. Favicon note must be in the shared sub-tree as well. Consider using 'share_hidden_from_tree'.",
     "is_owned_by_note": "is owned by note",
     "other_notes_with_name": "Other notes with {{attributeType}} name \"{{attributeName}}\"",
-    "and_more": "... and {{count}} more."
+    "and_more": "... and {{count}} more.",
+    "print_landscape": "When exporting to PDF, changes the orientation of the page to landscape instead of portrait.",
+    "print_page_size": "When exporting to PDF, changes the size of the page. Supported values: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>."
   },
   "attribute_editor": {
     "help_text_body1": "To add label, just type e.g. <code>#rock</code> or if you want to add also value then e.g. <code>#year = 2020</code>",
@@ -638,7 +641,8 @@
     "show_hidden_subtree": "Show Hidden Subtree",
     "show_help": "Show Help",
     "about": "About TriliumNext Notes",
-    "logout": "Logout"
+    "logout": "Logout",
+    "show-cheatsheet": "Show Cheatsheet"
   },
   "sync_status": {
     "unknown": "<p>Sync status will be known once the next sync attempt starts.</p><p>Click to trigger sync now.</p>",
@@ -672,7 +676,8 @@
     "save_revision": "Save revision",
     "convert_into_attachment_failed": "Converting note '{{title}}' failed.",
     "convert_into_attachment_successful": "Note '{{title}}' has been converted to attachment.",
-    "convert_into_attachment_prompt": "Are you sure you want to convert note '{{title}}' into an attachment of the parent note?"
+    "convert_into_attachment_prompt": "Are you sure you want to convert note '{{title}}' into an attachment of the parent note?",
+    "print_pdf": "Export as PDF..."
   },
   "onclick_button": {
     "no_click_handler": "Button widget '{{componentId}}' has no defined click handler"
@@ -1403,14 +1408,15 @@
     "mermaid-diagram": "Mermaid Diagram",
     "canvas": "Canvas",
     "web-view": "Web View",
-    "mind-map": "Mind Map (Beta)",
+    "mind-map": "Mind Map",
     "file": "File",
     "image": "Image",
     "launcher": "Launcher",
     "doc": "Doc",
     "widget": "Widget",
     "confirm-change": "It is not recommended to change note type when note content is not empty. Do you want to continue anyway?",
-    "geo-map": "Geo Map (beta)"
+    "geo-map": "Geo Map",
+    "beta-feature": "Beta"
   },
   "protect_note": {
     "toggle-on": "Protect the note",
@@ -1639,5 +1645,8 @@
   "geo-map-context": {
     "open-location": "Open location",
     "remove-from-map": "Remove from map"
+  },
+  "help-button": {
+    "title": "Open the relevant help page"
   }
 }

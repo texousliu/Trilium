@@ -10,7 +10,7 @@ const TPL = `
     <h4>${t("etapi.title")}</h4>
 
     <p>${t("etapi.description")} <br/>
-       ${t("etapi.see_more")} <a href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a> ${t("etapi.and")} <a onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>.</p>
+       ${t("etapi.see_more")} <a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a> ${t("etapi.and")} <a class="tn-link" onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>.</p>
 
     <button type="button" class="create-etapi-token btn btn-sm">${t("etapi.create_token")}</button>
 
@@ -112,8 +112,8 @@ export default class EtapiOptions extends OptionsWidget {
                     .append($("<td>").text(formatDateTime(token.utcDateCreated)))
                     .append(
                         $("<td>").append(
-                            $(`<span class="bx bx-pen token-table-button" title="${t("etapi.rename_token")}"></span>`).on("click", () => this.renameToken(token.etapiTokenId, token.name)),
-                            $(`<span class="bx bx-trash token-table-button" title="${t("etapi.delete_token")}"></span>`).on("click", () => this.deleteToken(token.etapiTokenId, token.name))
+                            $(`<span class="bx bx-pen token-table-button icon-action" title="${t("etapi.rename_token")}"></span>`).on("click", () => this.renameToken(token.etapiTokenId, token.name)),
+                            $(`<span class="bx bx-trash token-table-button icon-action" title="${t("etapi.delete_token")}"></span>`).on("click", () => this.deleteToken(token.etapiTokenId, token.name))
                         )
                     )
             );

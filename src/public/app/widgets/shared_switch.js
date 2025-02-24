@@ -14,11 +14,11 @@ export default class SharedSwitchWidget extends SwitchWidget {
     doRender() {
         super.doRender();
 
-        this.$switchOnName.text(t("shared_switch.shared"));
-        this.$switchOnButton.attr("title", t("shared_switch.toggle-on-title"));
+        this.switchOnName = t("shared_switch.shared");
+        this.switchOnTooltip = t("shared_switch.toggle-on-title");
 
-        this.$switchOffName.text(t("shared_switch.shared"));
-        this.$switchOffButton.attr("title", t("shared_switch.toggle-off-title"));
+        this.switchOffName = t("shared_switch.shared");
+        this.switchOffTooltip = t("shared_switch.toggle-off-title");
 
         this.$helpButton.attr("data-help-page", "sharing.html").show();
         this.$helpButton.on("click", (e) => utils.openHelp($(e.target)));
@@ -53,15 +53,14 @@ export default class SharedSwitchWidget extends SwitchWidget {
         const canBeUnshared = isShared && note.getParentBranches().find((b) => b.parentNoteId === "_share");
         const switchDisabled = isShared && !canBeUnshared;
 
-        this.$switchOn.toggle(!isShared);
-        this.$switchOff.toggle(!!isShared);
+        this.isToggled = isShared;
 
         if (switchDisabled) {
-            this.$widget.attr("title", t("shared_switch.inherited"));
-            this.$switchOff.addClass("switch-disabled");
+            this.disabledTooltip = t("shared_switch.inherited");
+            this.canToggle = false;
         } else {
-            this.$widget.removeAttr("title");
-            this.$switchOff.removeClass("switch-disabled");
+            this.disabledTooltip = "";
+            this.canToggle = true;
         }
     }
 

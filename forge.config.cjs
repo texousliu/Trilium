@@ -3,6 +3,13 @@ const fs = require("fs-extra");
 
 const APP_NAME = "TriliumNext Notes";
 
+const extraResourcesForPlatform = getExtraResourcesForPlatform();
+const baseLinuxMakerConfigOptions = {
+  icon: "./images/app-icons/png/128x128.png",
+  desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
+  categories: ["Office", "Utility"]
+};
+
 module.exports = {
     packagerConfig: {
         executableName: "trilium",
@@ -12,7 +19,7 @@ module.exports = {
         icon: "./images/app-icons/icon",
         extraResource: [
             // Moved to root
-            ...getExtraResourcesForPlatform(),
+            ...extraResourcesForPlatform,
 
             // Moved to resources (TriliumNext Notes.app/Contents/Resources on macOS)
             "translations/",
@@ -20,22 +27,18 @@ module.exports = {
         ],
         afterComplete: [
             (buildPath, _electronVersion, platform, _arch, callback) => {
-                const extraResources = getExtraResourcesForPlatform();
-                for (const resource of extraResources) {
+                for (const resource of extraResourcesForPlatform) {
                     const baseName = path.basename(resource);
-                    let sourcePath;
-                    if (platform === "darwin") {
-                        sourcePath = path.join(buildPath, `${APP_NAME}.app`, "Contents", "Resources", baseName);
-                    } else {
-                        sourcePath = path.join(buildPath, "resources", baseName);
-                    }
-                    let destPath;
 
-                    if (baseName !== "256x256.png") {
-                        destPath = path.join(buildPath, baseName);
-                    } else {
-                        destPath = path.join(buildPath, "icon.png");
-                    }
+                    // prettier-ignore
+                    const sourcePath = (platform === "darwin")
+                        ? path.join(buildPath, `${APP_NAME}.app`, "Contents", "Resources", baseName)
+                        : path.join(buildPath, "resources", baseName);
+
+                    // prettier-ignore
+                    const destPath = (baseName !== "256x256.png")
+                        ? path.join(buildPath, baseName)
+                        : path.join(buildPath, "icon.png");
 
                     // Copy files from resources folder to root
                     fs.move(sourcePath, destPath)
@@ -53,8 +56,38 @@ module.exports = {
             name: "@electron-forge/maker-deb",
             config: {
                 options: {
-                    icon: "./images/app-icons/png/128x128.png",
-                    desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs")
+                  ...baseLinuxMakerConfigOptions
+                }
+            }
+        },
+        {
+            name: "@electron-forge/maker-flatpak",
+            config: {
+                options: {
+                    ...baseLinuxMakerConfigOptions,
+                    id: "com.triliumnext.notes",
+                    runtimeVersion: "24.08",
+                    base: "org.electronjs.Electron2.BaseApp",
+                    baseVersion: "24.08",
+                    baseFlatpakref: "https://flathub.org/repo/flathub.flatpakrepo",
+                    modules: [
+                        {
+                            name: "zypak",
+                            sources: {
+                                type: "git",
+                                url: "https://github.com/refi64/zypak",
+                                tag: "v2024.01.17"
+                            }
+                        }
+                    ]
+                },
+            }
+        },
+        {
+            name: "@electron-forge/maker-rpm",
+            config: {
+                options: {
+                  ...baseLinuxMakerConfigOptions
                 }
             }
         },
@@ -62,7 +95,7 @@ module.exports = {
             name: "@electron-forge/maker-squirrel",
             config: {
                 iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
-                setupIcon: "./images/app-icons/icon.ico",
+                setupIcon: "./images/app-icons/win/setup.ico",
                 loadingGif: "./images/app-icons/win/setup-banner.gif"
             }
         },
@@ -91,21 +124,20 @@ module.exports = {
 };
 
 function getExtraResourcesForPlatform() {
-    let resources = ["dump-db/", "./bin/tpl/anonymize-database.sql"];
-    const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
+    const resources = ["dump-db/", "./bin/tpl/anonymize-database.sql"];
+
+    const getScriptRessources = () => {
+        const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
+        const scriptExt = (process.platform === "win32") ? "bat" : "sh";
+        return scripts.map(script => `./bin/tpl/${script}.${scriptExt}`);
+    }
+
     switch (process.platform) {
         case "win32":
-            for (const script of scripts) {
-                resources.push(`./bin/tpl/${script}.bat`);
-            }
-            break;
-        case "darwin":
+            resources.push(...getScriptRessources())
             break;
         case "linux":
-            resources.push("images/app-icons/png/256x256.png");
-            for (const script of scripts) {
-                resources.push(`./bin/tpl/${script}.sh`);
-            }
+            resources.push(...getScriptRessources(), "images/app-icons/png/256x256.png");
             break;
         default:
             break;

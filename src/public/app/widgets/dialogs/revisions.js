@@ -64,7 +64,7 @@ const TPL = `
                         <div class="revision-title-buttons"></div>
                     </div>
 
-                    <div class="revision-content"></div>
+                    <div class="revision-content use-tn-links"></div>
                 </div>
             </div>
             <div class="modal-footer py-0">

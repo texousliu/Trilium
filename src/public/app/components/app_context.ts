@@ -23,6 +23,7 @@ import type { Attribute } from "../services/attribute_parser.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
 import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
 import type { ContextMenuEvent } from "../menus/context_menu.js";
+import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -60,8 +61,8 @@ export interface NoteCommandData extends CommandData {
     viewScope?: ViewScope;
 }
 
-export interface ExecuteCommandData extends CommandData {
-    resolve: unknown;
+export interface ExecuteCommandData<T> extends CommandData {
+    resolve: (data: T) => void
 }
 
 /**
@@ -77,9 +78,14 @@ export type CommandMappings = {
         searchString?: string;
         ancestorNoteId?: string | null;
     };
+    closeTocCommand: CommandData;
     showLaunchBarSubtree: CommandData;
     showOptions: CommandData & {
         section: string;
+    };
+    showExportDialog: CommandData & {
+        notePath: string;
+        defaultType: "single" | "subtree";
     };
     showDeleteNotesDialog: CommandData & {
         branchIdsToDelete: string[];
@@ -162,12 +168,16 @@ export type CommandMappings = {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void;
     };
     executeWithTextEditor: CommandData &
-        ExecuteCommandData & {
+        ExecuteCommandData<TextEditor> & {
             callback?: GetTextEditorCallback;
         };
-    executeWithCodeEditor: CommandData & ExecuteCommandData;
-    executeWithContentElement: CommandData & ExecuteCommandData;
-    executeWithTypeWidget: CommandData & ExecuteCommandData;
+    executeWithCodeEditor: CommandData & ExecuteCommandData<null>;
+    /**
+     * Called upon when attempting to retrieve the content element of a {@link NoteContext}.
+     * Generally should not be invoked manually, as it is used by {@link NoteContext.getContentElement}.
+     */
+    executeWithContentElement: CommandData & ExecuteCommandData<JQuery<HTMLElement>>;
+    executeWithTypeWidget: CommandData & ExecuteCommandData<TypeWidget | null>;
     addTextToActiveEditor: CommandData & {
         text: string;
     };
@@ -212,6 +222,9 @@ export type CommandMappings = {
     setZoomFactorAndSave: {
         zoomFactor: string;
     }
+
+    reEvaluateRightPaneVisibility: CommandData;
+    runActiveNote: CommandData;
 
     // Geomap
     deleteFromMap: { noteId: string },
@@ -258,7 +271,7 @@ type EventMappings = {
     };
     noteSwitched: {
         noteContext: NoteContext;
-        notePath: string | null;
+        notePath?: string | null;
     };
     noteSwitchedAndActivatedEvent: {
         noteContext: NoteContext;
@@ -271,6 +284,9 @@ type EventMappings = {
         noteId: string;
     };
     reEvaluateHighlightsListWidgetVisibility: {
+        noteId: string | undefined;
+    };
+    reEvaluateTocWidgetVisibility: {
         noteId: string | undefined;
     };
     showHighlightsListWidget: {
@@ -308,7 +324,12 @@ type EventMappings = {
     };
     refreshNoteList: {
         noteId: string;
-    }
+    };
+    showToc: {
+        noteId: string;
+    };
+    scrollToEnd: { ntxId: string };
+    noteTypeMimeChanged: { noteId: string };
 };
 
 export type EventListener<T extends EventNames> = {

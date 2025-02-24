@@ -7,11 +7,14 @@ interface NoteRow {
     isDeleted?: boolean;
 }
 
-interface BranchRow {
+// TODO: Deduplicate with BranchRow from `rows.ts`/
+export interface BranchRow {
     noteId?: string;
     branchId: string;
     componentId: string;
     parentNoteId?: string;
+    isDeleted?: boolean;
+    isExpanded?: boolean;
 }
 
 export interface AttributeRow {
@@ -158,7 +161,7 @@ export default class LoadResults {
         return Object.keys(this.noteIdToComponentId);
     }
 
-    isNoteReloaded(noteId: string | undefined, componentId: string | null = null) {
+    isNoteReloaded(noteId: string | undefined | null, componentId: string | null = null) {
         if (!noteId) {
             return false;
         }

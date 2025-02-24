@@ -5,23 +5,39 @@ import dialogService from "../services/dialog.js";
 import { t } from "../services/i18n.js";
 
 const NOTE_TYPES = [
-    { type: "file", title: t("note_types.file"), selectable: false },
-    { type: "image", title: t("note_types.image"), selectable: false },
-    { type: "search", title: t("note_types.saved-search"), selectable: false },
-    { type: "noteMap", mime: "", title: t("note_types.note-map"), selectable: false },
-    { type: "launcher", mime: "", title: t("note_types.launcher"), selectable: false },
-    { type: "doc", mime: "", title: t("note_types.doc"), selectable: false },
-    { type: "contentWidget", mime: "", title: t("note_types.widget"), selectable: false },
+    // The suggested note type ordering method: insert the item into the corresponding group,
+    // then ensure the items within the group are ordered alphabetically.
 
+    // The default note type (always the first item)
     { type: "text", mime: "text/html", title: t("note_types.text"), selectable: true },
-    { type: "relationMap", mime: "application/json", title: t("note_types.relation-map"), selectable: true },
-    { type: "mindMap", mime: "application/json", title: t("note_types.mind-map"), selectable: true },
-    { type: "render", mime: "", title: t("note_types.render-note"), selectable: true },
+
+    // Text notes group
+    { type: "book", mime: "", title: t("note_types.book"), selectable: true },
+
+    // Graphic notes
     { type: "canvas", mime: "application/json", title: t("note_types.canvas"), selectable: true },
     { type: "mermaid", mime: "text/mermaid", title: t("note_types.mermaid-diagram"), selectable: true },
-    { type: "book", mime: "", title: t("note_types.book"), selectable: true },
+
+    // Map notes
+    { type: "geoMap", mime: "application/json", title: t("note_types.geo-map"), isBeta: true, selectable: true },
+    { type: "mindMap", mime: "application/json", title: t("note_types.mind-map"), selectable: true },
+    { type: "relationMap", mime: "application/json", title: t("note_types.relation-map"), selectable: true },
+
+    // Misc note types
+    { type: "render", mime: "", title: t("note_types.render-note"), selectable: true },
     { type: "webView", mime: "", title: t("note_types.web-view"), selectable: true },
-    { type: "code", mime: "text/plain", title: t("note_types.code"), selectable: true }
+
+    // Code notes
+    { type: "code", mime: "text/plain", title: t("note_types.code"), selectable: true },
+
+    // Reserved types (cannot be created by the user)
+    { type: "contentWidget", mime: "", title: t("note_types.widget"), selectable: false },
+    { type: "doc", mime: "", title: t("note_types.doc"), selectable: false },
+    { type: "file", title: t("note_types.file"), selectable: false },
+    { type: "image", title: t("note_types.image"), selectable: false },
+    { type: "launcher", mime: "", title: t("note_types.launcher"), selectable: false },
+    { type: "noteMap", mime: "", title: t("note_types.note-map"), selectable: false },
+    { type: "search", title: t("note_types.saved-search"), selectable: false }
 ];
 
 const NOT_SELECTABLE_NOTE_TYPES = NOTE_TYPES.filter((nt) => !nt.selectable).map((nt) => nt.type);
@@ -29,17 +45,24 @@ const NOT_SELECTABLE_NOTE_TYPES = NOTE_TYPES.filter((nt) => !nt.selectable).map(
 const TPL = `
 <div class="dropdown note-type-widget">
     <style>
-    .note-type-dropdown {
-        max-height: 500px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
+        .note-type-dropdown {
+            max-height: 500px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .note-type-dropdown .badge {
+            margin-left: 8px;
+            background: var(--accented-background-color);
+            font-weight: normal;
+            color: var(--menu-text-color);
+        }
     </style>
-    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle note-type-button">
+    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle select-button note-type-button">
         <span class="note-type-desc"></span>
         <span class="caret"></span>
     </button>
-    <div class="note-type-dropdown dropdown-menu dropdown-menu-left"></div>
+    <div class="note-type-dropdown dropdown-menu dropdown-menu-left tn-dropdown-list"></div>
 </div>
 `;
 
@@ -73,11 +96,16 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
         for (const noteType of NOTE_TYPES.filter((nt) => nt.selectable)) {
             let $typeLink;
 
+            const $title = $("<span>").text(noteType.title);
+            if (noteType.isBeta) {
+                $title.append($(`<span class="badge">`).text(t("note_types.beta-feature")));
+            }
+
             if (noteType.type !== "code") {
                 $typeLink = $('<a class="dropdown-item">')
                     .attr("data-note-type", noteType.type)
                     .append('<span class="check">&check;</span> ')
-                    .append($("<span>").text(noteType.title))
+                    .append($title)
                     .on("click", (e) => {
                         const type = $typeLink.attr("data-note-type");
                         const noteType = NOTE_TYPES.find((nt) => nt.type === type);

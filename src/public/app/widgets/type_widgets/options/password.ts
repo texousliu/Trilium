@@ -10,7 +10,7 @@ const TPL = `
     <h4 class="password-heading">${t("password.heading")}</h4>
 
     <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
-      ${t("password.alert_message")} <a class="reset-password-button" href="javascript:">${t("password.reset_link")}</a>
+      ${t("password.alert_message")} <a class="reset-password-button tn-link" href="javascript:">${t("password.reset_link")}</a>
     </div>
 
     <form class="change-password-form">
@@ -36,7 +36,7 @@ const TPL = `
 <div class="options-section">
     <h4>${t("password.protected_session_timeout")}</h4>
 
-    <p>${t("password.protected_session_timeout_description")} <a href="https://triliumnext.github.io/Docs/Wiki/protected-notes.html" class="external">${t("password.wiki")}</a> ${t("password.for_more_info")}</p>
+    <p>${t("password.protected_session_timeout_description")} <a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/protected-notes.html" class="external">${t("password.wiki")}</a> ${t("password.for_more_info")}</p>
 
     <div class="form-group">
         <label for="protected-session-timeout-in-seconds">${t("password.protected_session_timeout_label")}</label>

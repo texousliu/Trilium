@@ -238,11 +238,15 @@ async function renderMermaid(note: FNote, $renderedContent: JQuery<HTMLElement>)
  * @param {FNote} note
  * @returns {Promise<void>}
  */
-async function renderChildrenList($renderedContent: JQuery<HTMLElement>, note: FNote) {
+async function renderChildrenList($renderedContent: JQuery<HTMLElement>, note: FNote) {    
+    let childNoteIds = note.getChildNoteIds();
+
+    if (!childNoteIds.length) {
+        return;
+    }
+
     $renderedContent.css("padding", "10px");
     $renderedContent.addClass("text-with-ellipsis");
-
-    let childNoteIds = note.getChildNoteIds();
 
     if (childNoteIds.length > 10) {
         childNoteIds = childNoteIds.slice(0, 10);

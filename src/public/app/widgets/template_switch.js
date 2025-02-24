@@ -13,11 +13,11 @@ export default class TemplateSwitchWidget extends SwitchWidget {
     doRender() {
         super.doRender();
 
-        this.$switchOnName.text(t("template_switch.template"));
-        this.$switchOnButton.attr("title", t("template_switch.toggle-on-hint"));
+        this.switchOnName = t("template_switch.template");
+        this.switchOnTooltip =  t("template_switch.toggle-on-hint");
 
-        this.$switchOffName.text("Template");
-        this.$switchOffButton.attr("title", t("template_switch.toggle-off-hint"));
+        this.switchOffName = t("template_switch.template");
+        this.switchOffTooltip =  t("template_switch.toggle-off-hint");
 
         this.$helpButton.attr("data-help-page", "template.html").show();
     }
@@ -34,8 +34,7 @@ export default class TemplateSwitchWidget extends SwitchWidget {
 
     async refreshWithNote(note) {
         const isTemplate = note.hasLabel("template");
-        this.$switchOn.toggle(!isTemplate);
-        this.$switchOff.toggle(!!isTemplate);
+        this.isToggled = isTemplate;
     }
 
     entitiesReloadedEvent({ loadResults }) {

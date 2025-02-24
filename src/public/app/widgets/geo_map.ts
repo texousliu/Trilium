@@ -11,6 +11,11 @@ const TPL = `\
             height: 100%;
             overflow: hidden;
         }
+
+        .leaflet-top,
+        .leaflet-bottom {
+            z-index: 900;
+        }
     </style>
 
     <div class="geo-map-container"></div>
@@ -40,7 +45,7 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
                 const L = (await import("leaflet")).default;
 
                 const map = L.map(this.$container[0], {
-
+                    worldCopyJump: true
                 });
 
                 this.map = map;
@@ -49,7 +54,8 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
                 }
 
                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    detectRetina: true
                 }).addTo(map);
             });
     }

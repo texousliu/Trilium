@@ -8,6 +8,20 @@ function reloadFrontendApp(reason?: string) {
     window.location.reload();
 }
 
+/**
+ * Triggers the system tray to update its menu items, i.e. after a change in dynamic content such as bookmarks or recent notes.
+ *
+ * On any other platform than Electron, nothing happens.
+ */
+function reloadTray() {
+    if (!isElectron()) {
+        return;
+    }
+
+    const { ipcRenderer } = dynamicRequire("electron");
+    ipcRenderer.send("reload-tray");
+}
+
 function parseDate(str: string) {
     try {
         return new Date(Date.parse(str));
@@ -122,6 +136,10 @@ const entityMap: Record<string, string> = {
 
 function escapeHtml(str: string) {
     return str.replace(/[&<>"'`=\/]/g, (s) => entityMap[s]);
+}
+
+export function escapeQuotes(value: string) {
+    return value.replaceAll("\"", "&quot;");
 }
 
 function formatSize(size: number) {
@@ -588,7 +606,10 @@ function compareVersions(v1: string, v2: string): number {
 /**
  * Compares two semantic version strings and returns `true` if the latest version is greater than the current version.
  */
-function isUpdateAvailable(latestVersion: string, currentVersion: string): boolean {
+function isUpdateAvailable(latestVersion: string | null | undefined, currentVersion: string): boolean {
+    if (!latestVersion) {
+        return false;
+    }
     return compareVersions(latestVersion, currentVersion) > 0;
 }
 
@@ -598,6 +619,7 @@ function isLaunchBarConfig(noteId: string) {
 
 export default {
     reloadFrontendApp,
+    reloadTray,
     parseDate,
     formatDateISO,
     formatDateTime,

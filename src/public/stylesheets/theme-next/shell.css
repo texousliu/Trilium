@@ -227,6 +227,12 @@ body.layout-horizontal > .horizontal {
     --hover-item-background-color: transparent;
 }
 
+#launcher-pane.horizontal .global-menu-button .global-menu-button-update-available {
+    right: -23px;
+    bottom: -22px;
+    transform: scale(0.85);
+}
+
 .tooltip .tooltip-arrow {
     display: none;
 }
@@ -258,6 +264,12 @@ div.quick-search {
     height: unset;
     contain: unset;
     padding: var(--padding-top) var(--padding-right) var(--padding-bottom) var(--padding-left);
+}
+
+div.quick-search, div.quick-search:hover, div.quick-search:focus-within {
+    /* Prevent changes to background and outline when the state of the input group changes */
+    background: transparent;
+    outline: none;
 }
 
 div.quick-search::before {
@@ -367,12 +379,6 @@ div.quick-search .search-button.show {
     overflow: hidden;
 }
 
-/* The "Show in full search" button */
-.quick-search .dropdown-menu button {
-    padding: 0;
-    color: var(--menu-text-color) !important;
-}
-
 /*
  * Left pane
  */
@@ -456,7 +462,7 @@ body.mobile .fancytree-node > span {
         background-color: rgba(0, 0, 0, 0.5);
     }
 
-    body.mobile #mobile-sidebar-wrapper {
+    body.mobile:not(.force-fixed-tree) #mobile-sidebar-wrapper {
         border-top-right-radius: 12px;
         border-bottom-right-radius: 12px;
         border-right: 1px solid var(--subtle-border-color);
@@ -518,7 +524,7 @@ body.mobile .fancytree-node > span {
 
 #context-menu-container {
     /* The context menu of the tree */
-    --menu-item-icon-vert-offset: 1.5px;
+    --menu-item-icon-vert-offset: -1px;
 }
 
 /* Tree actions toolbar */
@@ -899,6 +905,10 @@ body.mobile .note-title {
     background: var(--main-background-color);
 }
 
+#right-pane .card-header-buttons {
+    align-items: center;
+}
+
 #right-pane .toc li,
 #right-pane .highlights-list li {
     padding: 2px 8px;
@@ -935,12 +945,19 @@ body.mobile .note-title {
 
 /*
  * Menus
+ *
+ * Note: apply the "tn-dropdown-list" class for scrollable dropdown menus. Submenus are not
+ * supported when this class is used.
  */
 
-.dropdown-menu {
+.dropdown-menu:not(.static) {
     border-radius: var(--dropdown-border-radius);
     padding: var(--menu-padding-size) !important;
     font-size: 0.9rem !important;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background: var(--menu-background-color);
 }
 
 body.mobile .dropdown-menu {
@@ -964,6 +981,14 @@ body.desktop .dropdown-menu::before {
     right: 0;
     bottom: 0;
     z-index: -1;
+}
+
+body.desktop .dropdown-menu.tn-dropdown-list {
+    backdrop-filter: var(--dropdown-backdrop-filter);
+}
+
+body.desktop .dropdown-menu.tn-dropdown-list::before {
+    display: none;
 }
 
 body.desktop .dropdown-submenu .dropdown-menu::before {
@@ -995,15 +1020,12 @@ body.mobile .dropdown-item:not(:last-of-type) {
     margin-bottom: 0.5em;
 }
 
-body.mobile #launcher-pane .dropdown-submenu > .dropdown-toggle {
-    display: none;
-}
-
 body.mobile .dropdown-submenu:hover {
     background: transparent !important;
 }
 
-html body .dropdown-item.disabled {
+html body .dropdown-item.disabled,
+html body .dropdown-item[disabled] {
     color: var(--menu-text-color) !important;
     opacity: var(--menu-item-disabled-opacity);
 }
@@ -1056,6 +1078,43 @@ html body .dropdown-item.disabled {
     color: var(--menu-item-arrow-color) !important;
 }
 
+/* Menu item group heading */
+
+/* The heading body */
+.dropdown-menu h6 {
+    position: relative;
+    background: transparent;
+    padding: 1em 8px 14px 8px;
+    text-transform: uppercase;
+    font-size: .8em;
+    letter-spacing: 1pt;
+    color: var(--menu-item-group-header-color) !important;
+}
+
+/* The delimiter line */
+.dropdown-menu h6::before {
+    content: "";
+    position: absolute;
+    bottom: 8px;
+    left: calc(0px - var(--menu-padding-size));
+    right: calc(0px - var(--menu-padding-size));
+    border-top: 1px solid var(--menu-item-delimiter-color);
+}
+
+/* Static menus (used as a list, such as on the note revisions dialog) */
+body.desktop .dropdown-menu.static {
+    box-shadow: unset;
+    border-radius: 4px;
+    border: unset;
+    background-color: var(--card-background-color) !important;
+    padding: var(--menu-padding-size) !important;
+    user-select: none;
+}
+
+body.desktop .dropdown-menu.static .dropdown-item.active {
+    --active-item-text-color: var(--menu-text-color);
+}
+
 body.desktop .dropdown-menu .dropdown-toggle::after {
     height: 100%;
 }
@@ -1073,32 +1132,52 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
  */
 
 .calendar-dropdown-widget {
+    width: unset !important;
     padding: 12px;
     color: var(--calendar-color);
+    user-select: none;
 }
 
 .calendar-dropdown-widget .calendar-header {
     padding: 8px 0 20px 0;
-}
-
-.calendar-dropdown-widget .calendar-header input[type="number"] {
-    appearance: textfield !important;
-}
-
-.calendar-dropdown-widget .calendar-header input[type="number"]::-webkit-outer-spin-button,
-.calendar-dropdown-widget .calendar-header input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    gap: 10px;
 }
 
 .calendar-dropdown-widget .calendar-header input,
 .calendar-dropdown-widget .calendar-header [data-calendar-input="month"] {
-    /* TODO: Provide styling for background and states */
-    background: transparent !important;
-    border: unset;
+    --input-background-color: transparent;
+    --menu-background-color: transparent;
+
     text-align: center;
     font-size: 1.4em;
     font-weight: 300;
+}
+
+.calendar-dropdown-widget .calendar-header input:not(:focus) {
+    outline: 3px solid transparent;
+}
+
+.calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
+    --select-arrow-svg: ""; /* Disable the dropdown arrow */    
+}
+
+@media (max-width: 992px) {
+    .calendar-dropdown-widget .calendar-header button {
+        margin: 0 !important;
+        padding: 0;
+    }
+
+    .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
+        padding: 0 8px;
+        flex-grow: 1;
+    }
+}
+
+@media (min-width: 992px) {
+    .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
+        min-width: 120px;
+        padding: 0 10px;
+    }
 }
 
 .calendar-dropdown-widget .calendar-header .dropdown-toggle::after {
@@ -1143,6 +1222,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     border-radius: 6px;
     background: var(--calendar-day-hover-background);
     color: var(--calendar-day-hover-color) !important;
+    text-decoration: unset;
 }
 
 /*
@@ -1155,13 +1235,25 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 .note-tooltip-content {
     padding: 8px;
+    min-height: 56px;
 }
 
-.note-tooltip-content .note-title-with-path {
+.note-tooltip-title .note-title-with-path {
     display: flex;
     flex-direction: column-reverse;
-    border-bottom: 2px solid currentColor;
+}
+
+.note-tooltip-title a {
+    color: inherit !important;
+}
+
+.note-tooltip-title.note-no-content {
+    margin: 0;
+}
+
+.note-tooltip-title:not(.note-no-content) .note-title-with-path {
     padding-bottom: 6px;
+    border-bottom: 2px solid currentColor;
 }
 
 .note-tooltip-content .note-path {
@@ -1210,10 +1302,6 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 /* Search box wrapper */
 .jump-to-note-dialog .input-group {
     margin-right: 16px;
-    background: var(--quick-search-background);
-    border: 2px solid transparent;
-    border-radius: 6px;
-    color: var(--quick-search-color);
 }
 
 .jump-to-note-dialog .input-group:hover {
@@ -1227,47 +1315,8 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     color: var(--quick-search-focus-color);
 }
 
-/* Search box input */
-.jump-to-note-dialog .input-group input {
-    --bs-border-width: 0;
-
-    box-shadow: unset;
-    background: transparent;
-    color: currentColor;
-}
-
-/* Search box buttons */
-.jump-to-note-dialog .input-group button {
-    --bs-border-width: 0;
-    --accented-background-color: transparent;
-    padding: 0 4px;
-}
-
-.jump-to-note-dialog .input-group button:last-child {
-    padding-right: 0.75em;
-}
-
 .jump-to-note-dialog .input-clearer-button {
     background: transparent !important;
-}
-
-/* List body */
-.jump-to-note-dialog .jump-to-note-results .aa-suggestions {
-    padding: 0;
-}
-
-/* List item */
-.jump-to-note-dialog .aa-suggestions div {
-    border-radius: 6px;
-    padding: 6px 12px;
-    color: var(--menu-text-color);
-    cursor: default;
-}
-
-/* Selected list item */
-.jump-to-note-dialog .aa-suggestions div.aa-cursor {
-    background: var(--hover-item-background-color);
-    color: var(--hover-item-text-color);
 }
 
 /*
@@ -1353,7 +1402,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 /* Item title for deleted notes */
-.recent-changes-content ul li.deleted-note .note-title {
+.recent-changes-content ul li.deleted-note .note-title > .note-title {
     text-decoration: line-through;
 }
 
@@ -1413,6 +1462,56 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 /* Hovered timeline bullet */
 .recent-changes-content ul li:hover::after {
     background: var(--timeline-bullet-hover-color);
+}
+
+/*
+ * Bookmarks folder popup
+ */
+
+div.bookmark-folder-widget {
+    min-width: auto;
+    max-width: 40vw;
+    padding: 0;
+    font-size: 1.1em;
+}
+
+div.bookmark-folder-widget .children-notes {
+    margin: 0;
+}
+
+/* Item */
+div.bookmark-folder-widget span.note-link {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 6px;
+    padding: 6px 25px;
+}
+
+/* Item: the parent note */
+div.bookmark-folder-widget .parent-note .note-link {
+    padding: 6px 8px;
+    font-weight: bold;
+}
+
+div.bookmark-folder-widget .note-link:hover {
+    background: var(--hover-item-background-color);
+}
+
+div.bookmark-folder-widget .note-link a {
+    padding-left: 8px;
+    color: var(--menu-text-color);
+    cursor: default;
+}
+
+div.bookmark-folder-widget .note-link:hover a {
+    color: var(--hover-item-text-color);
+}
+
+/* The item's icon */
+div.bookmark-folder-widget .note-link .bx {
+    color: var(--menu-item-icon-color);
+    font-size: 1.2em;
 }
 
 /*
@@ -1647,4 +1746,41 @@ body .calendar-dropdown-widget .calendar-body a:hover {
     background: var(--help-code-background);
     padding: 0 8px;
     color: var(--help-code-color);
+}
+
+/* Note area */
+
+.title-row > *:first-child {
+    margin-right: 0;
+}
+
+.title-row > *:nth-child(2) {
+    margin-left: 0;
+}
+
+.title-row {
+    /* Aligns the "Create new split" button with the note menu button (the three dots button) */
+    padding-right: 3px;
+}
+
+.note-title-widget input {
+    --input-background-color: transparent;
+    
+    border-radius: 8px;
+    padding-left: 12px;
+}
+
+.note-actions {
+    --menu-item-icon-vert-offset: -2.5px;
+}
+
+/* Promoted attributes */
+.promoted-attribute-cell div.input-group {
+    margin: 1px 0;    
+}
+
+/* Delete notes preview dialog */
+
+.delete-notes-list .note-path {
+    padding-left: 8px;
 }

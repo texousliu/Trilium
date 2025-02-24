@@ -88,16 +88,6 @@ const TPL = `
         font-size: 120%;
         margin-right: 6px;
     }
-
-    body.mobile .global-menu .dropdown-submenu .dropdown-menu {
-        display: block;
-        font-size: 90%;
-        position: relative;
-        left: 0;
-        top: 5px;
-        --dropdown-shadow-opacity: 0;
-        --submenu-opening-delay: 0;
-    }
     </style>
 
     <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -226,6 +216,12 @@ const TPL = `
             <kbd data-command="showHelp"></kbd>
         </li>
 
+        <li class="dropdown-item show-help-button" data-trigger-command="showCheatsheet">
+            <span class="bx bxs-keyboard"></span>
+            ${t("global_menu.show-cheatsheet")}
+            <kbd data-command="showCheatsheet"></kbd>
+        </li>
+
         <li class="dropdown-item show-about-dialog-button">
             <span class="bx bx-info-circle"></span>
             ${t("global_menu.about")}
@@ -338,6 +334,15 @@ export default class GlobalMenuWidget extends BasicWidget {
 
             this.dropdown.toggle();
         });
+        if (utils.isMobile()) {
+            this.$widget.on("click", ".dropdown-submenu .dropdown-toggle", (e) => {
+                const $submenu = $(e.target).closest(".dropdown-item");
+                $submenu.toggleClass("submenu-open");
+                $submenu.find("ul.dropdown-menu").toggleClass("show");
+                e.stopPropagation();
+                return;
+            });
+        }
         this.$widget.on("click", ".dropdown-submenu", (e) => {
             if ($(e.target).children(".dropdown-menu").length === 1 || $(e.target).hasClass("dropdown-toggle")) {
                 e.stopPropagation();

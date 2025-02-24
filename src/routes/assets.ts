@@ -2,11 +2,11 @@ import assetPath from "../services/asset_path.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
-import env from "../services/env.js";
+import { isDev, isElectron } from "../services/utils.js";
 import type serveStatic from "serve-static";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<any, Record<string, any>>>) => {
-    if (!env.isDev()) {
+    if (!isDev) {
         options = {
             maxAge: "1y",
             ...options
@@ -17,13 +17,17 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
 
 async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-    if (env.isDev()) {
+    if (isDev) {
         const webpack = (await import("webpack")).default;
         const webpackMiddleware = (await import("webpack-dev-middleware")).default;
         const productionConfig = (await import("../../webpack.config.js")).default;
 
         const frontendCompiler = webpack({
             mode: "development",
+            cache: {
+                type: "filesystem",
+                cacheDirectory: path.join(srcRoot, "..", ".cache", isElectron ? "electron" : "server")
+            },
             entry: productionConfig.entry,
             module: productionConfig.module,
             resolve: productionConfig.resolve,
@@ -31,6 +35,7 @@ async function register(app: express.Application) {
             target: productionConfig.target
         });
 
+        app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "public/app/doc_notes")));
         app.use(`/${assetPath}/app`, webpackMiddleware(frontendCompiler));
     } else {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));
@@ -66,8 +71,6 @@ async function register(app: express.Application) {
 
     app.use(`/${assetPath}/node_modules/jquery-hotkeys/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/jquery-hotkeys/")));
 
-    app.use(`/${assetPath}/node_modules/print-this/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/print-this/")));
-
     app.use(`/${assetPath}/node_modules/split.js/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/split.js/dist/")));
 
     app.use(`/${assetPath}/node_modules/panzoom/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/panzoom/dist/")));
@@ -87,8 +90,6 @@ async function register(app: express.Application) {
 
     // Deprecated, https://www.npmjs.com/package/autocomplete.js?activeTab=readme
     app.use(`/${assetPath}/node_modules/autocomplete.js/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/autocomplete.js/dist/")));
-
-    app.use(`/${assetPath}/node_modules/knockout/build/output/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/knockout/build/output/")));
 
     app.use(`/${assetPath}/node_modules/normalize.css/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/normalize.css/")));
 

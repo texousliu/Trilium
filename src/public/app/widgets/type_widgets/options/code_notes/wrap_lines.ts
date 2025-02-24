@@ -5,7 +5,7 @@ import type { OptionMap } from "../../../../../../services/options_interface.js"
 const TPL = `
 <div class="options-section">
     <h4>${t("wrap_lines.wrap_lines_in_code_notes")}</h4>
-    <label>
+    <label class="tn-checkbox">
         <input type="checkbox" class="line-wrap-enabled form-check-input">
         ${t("wrap_lines.enable_line_wrap")}
     </label>

@@ -824,7 +824,8 @@
     "search_in_note": "Caută în notiță",
     "convert_into_attachment_failed": "Nu s-a putut converti notița „{{title}}”.",
     "convert_into_attachment_successful": "Notița „{{title}}” a fost convertită în atașament.",
-    "convert_into_attachment_prompt": "Doriți convertirea notiței „{{title}}” într-un atașament al notiței părinte?"
+    "convert_into_attachment_prompt": "Doriți convertirea notiței „{{title}}” într-un atașament al notiței părinte?",
+    "print_pdf": "Exportare ca PDF..."
   },
   "note_erasure_timeout": {
     "deleted_notes_erased": "Notițele șterse au fost eliminate permanent.",
@@ -1367,7 +1368,7 @@
     "canvas": "Schiță",
     "code": "Cod sursă",
     "mermaid-diagram": "Diagramă Mermaid",
-    "mind-map": "Hartă mentală (beta)",
+    "mind-map": "Hartă mentală",
     "note-map": "Hartă notițe",
     "relation-map": "Hartă relații",
     "render-note": "Randare notiță",
@@ -1380,7 +1381,8 @@
     "launcher": "Scurtătură",
     "widget": "Widget",
     "confirm-change": "Nu se recomandă schimbarea tipului notiței atunci când ea are un conținut. Procedați oricum?",
-    "geo-map": "Hartă geografică (beta)"
+    "geo-map": "Hartă geografică",
+    "beta-feature": "Beta"
   },
   "protect_note": {
     "toggle-off": "Deprotejează notița",

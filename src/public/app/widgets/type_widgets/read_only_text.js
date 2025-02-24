@@ -66,7 +66,7 @@ const TPL = `
     }
     </style>
 
-    <div class="note-detail-readonly-text-content ck-content"></div>
+    <div class="note-detail-readonly-text-content ck-content use-tn-links"></div>
 </div>
 `;
 

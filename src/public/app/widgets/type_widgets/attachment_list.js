@@ -11,7 +11,7 @@ const TPL = `
             padding-left: 15px;
             padding-right: 15px;
         }
-        
+
         .attachment-list .links-wrapper {
             font-size: larger;
             margin-bottom: 15px;
@@ -20,7 +20,7 @@ const TPL = `
             align-items: baseline;
         }
     </style>
-    
+
     <div class="links-wrapper"></div>
 
     <div class="attachment-list-wrapper"></div>
@@ -40,18 +40,20 @@ export default class AttachmentListTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note) {
-        const $helpButton = $(
-            '<button class="attachment-help-button" type="button" data-help-page="attachments.html" title="' +
-                t("attachment_list.open_help_page") +
-                '"><span class="bx bx-help-circle"></span></button>'
-        );
+        const $helpButton = $(`
+            <button class="attachment-help-button icon-action bx bx-help-circle"
+                     type="button" data-help-page="attachments.html"
+                     title="${t("attachment_list.open_help_page")}">
+            </button>
+        `);
         utils.initHelpButtons($helpButton);
 
         const noteLink = await linkService.createLink(this.noteId); // do separately to avoid race condition between empty() and .append()
+        noteLink.addClass("use-tn-links");
 
         this.$linksWrapper.empty().append(
             $("<div>").append(t("attachment_list.owning_note"), noteLink),
-            $("<div>").append(
+            $(`<div class="attachment-actions-toolbar">`).append(
                 $('<button class="btn btn-sm">')
                     .text(t("attachment_list.upload_attachments"))
                     .on("click", () => this.triggerCommand("showUploadAttachmentsDialog", { noteId: this.noteId })),

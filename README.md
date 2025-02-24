@@ -118,8 +118,10 @@ Head on over to our [Docs repo](https://github.com/TriliumNext/Docs)
 
 ## 🤝 Support
 
-You can support the original Trilium developer using GitHub Sponsors, [PayPal](https://paypal.me/za4am) or Bitcoin (bitcoin:bc1qv3svjn40v89mnkre5vyvs2xw6y8phaltl385d2).
-Support for the TriliumNext organization will be possible in the near future.
+Support for the TriliumNext organization will be possible in the near future. For now, you can:
+- Support continued development on TriliumNext by supporting our developers: [eliandoran](https://github.com/sponsors/eliandoran) (See the [repository insights]([developers]([url](https://github.com/TriliumNext/Notes/graphs/contributors))) for a full list)
+- Show a token of gratitude to the original Trilium developer ([zadam](https://github.com/sponsors/zadam)) via [PayPal](https://paypal.me/za4am) or Bitcoin (bitcoin:bc1qv3svjn40v89mnkre5vyvs2xw6y8phaltl385d2).
+
 
 ## 🔑 License
 

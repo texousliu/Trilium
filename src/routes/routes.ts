@@ -1,6 +1,6 @@
 "use strict";
 
-import utils from "../services/utils.js";
+import { isElectron } from "../services/utils.js";
 import multer from "multer";
 import log from "../services/log.js";
 import express from "express";
@@ -71,7 +71,7 @@ import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 
-
+import apiDocsRoute from "./api_docs.js";
 
 const MAX_ALLOWED_FILE_SIZE_MB = 250;
 const GET = "get",
@@ -280,7 +280,7 @@ function register(app: express.Application) {
     apiRoute(DEL, "/api/etapi-tokens/:etapiTokenId", etapiTokensApiRoutes.deleteToken);
 
     // in case of local electron, local calls are allowed unauthenticated, for server they need auth
-    const clipperMiddleware = utils.isElectron() ? [] : [auth.checkEtapiToken];
+    const clipperMiddleware = isElectron ? [] : [auth.checkEtapiToken];
 
     route(GET, "/api/clipper/handshake", clipperMiddleware, clipperRoute.handshake, apiResultHandler);
     route(PST, "/api/clipper/clippings", clipperMiddleware, clipperRoute.addClipping, apiResultHandler);
@@ -368,6 +368,9 @@ function register(app: express.Application) {
     etapiSpecialNoteRoutes.register(router);
     etapiSpecRoute.register(router);
     etapiBackupRoute.register(router);
+
+    // API Documentation
+    apiDocsRoute.register(app);
 
     app.use("", router);
 }

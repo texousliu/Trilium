@@ -15,18 +15,18 @@ const TPL = `
             display: flex;
             flex-direction: column;
         }
-        
+
         .attachment-detail .links-wrapper {
             font-size: larger;
             padding: 0 0 16px 0;
         }
-        
+
         .attachment-detail .attachment-wrapper {
             flex-grow: 1;
         }
     </style>
 
-    <div class="links-wrapper"></div>
+    <div class="links-wrapper use-tn-links"></div>
 
     <div class="attachment-wrapper"></div>
 </div>`;
@@ -48,16 +48,17 @@ export default class AttachmentDetailTypeWidget extends TypeWidget {
         this.$wrapper.empty();
         this.children = [];
 
-        const $helpButton = $(
-            '<button class="attachment-help-button" type="button" data-help-page="attachments.html" title="' +
-                t("attachment_detail.open_help_page") +
-                '"><span class="bx bx-help-circle"></span></button>'
-        );
+        const $helpButton = $(`
+            <button class="attachment-help-button icon-action bx bx-help-circle"
+                     type="button" data-help-page="attachments.html"
+                     title="${t("attachment_detail.open_help_page")}"
+            </button>
+        `);
         utils.initHelpButtons($helpButton);
 
         this.$linksWrapper.empty().append(
             t("attachment_detail.owning_note"),
-            await linkService.createLink(this.noteId),
+            (await linkService.createLink(this.noteId)),
             t("attachment_detail.you_can_also_open"),
             await linkService.createLink(this.noteId, {
                 title: t("attachment_detail.list_of_all_attachments"),

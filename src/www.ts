@@ -12,7 +12,8 @@ import ws from "./services/ws.js";
 import utils from "./services/utils.js";
 import port from "./services/port.js";
 import host from "./services/host.js";
-import semver from "semver";
+
+const MINIMUM_NODE_VERSION = "20.0.0";
 
 // setup basic error handling even before requiring dependencies, since those can produce errors as well
 
@@ -32,8 +33,12 @@ function exit() {
 process.on("SIGINT", exit);
 process.on("SIGTERM", exit);
 
-if (!semver.satisfies(process.version, ">=10.5.0")) {
-    console.error("Trilium only supports node.js 10.5 and later");
+if (utils.compareVersions(process.versions.node, MINIMUM_NODE_VERSION) < 0) {
+    console.error();
+    console.error(`The Trilium server requires Node.js ${MINIMUM_NODE_VERSION} and later in order to start.\n`);
+    console.error(`\tCurrent version:\t${process.versions.node}`);
+    console.error(`\tExpected version:\t${MINIMUM_NODE_VERSION}`);
+    console.error();
     process.exit(1);
 }
 
@@ -53,7 +58,7 @@ async function startTrilium() {
      * its startup is slower than focusing the existing process/window. So in the end, it works out without having
      * to do a complex evaluation.
      */
-    if (utils.isElectron()) {
+    if (utils.isElectron) {
         (await import("electron")).app.requestSingleInstanceLock();
     }
 
@@ -71,7 +76,7 @@ async function startTrilium() {
 
     ws.init(httpServer, sessionParser as any); // TODO: Not sure why session parser is incompatible.
 
-    if (utils.isElectron()) {
+    if (utils.isElectron) {
         const electronRouting = await import("./routes/electron.js");
         electronRouting.default(app);
     }
@@ -146,7 +151,7 @@ function startHttpServer() {
             }
         }
 
-        if (utils.isElectron()) {
+        if (utils.isElectron) {
             import("electron").then(({ app, dialog }) => {
                 // Not all situations require showing an error dialog. When Trilium is already open,
                 // clicking the shortcut, the software icon, or the taskbar icon, or when creating a new window,

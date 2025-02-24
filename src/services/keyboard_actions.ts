@@ -2,12 +2,9 @@
 
 import optionService from "./options.js";
 import log from "./log.js";
-import { isElectron as getIsElectron, isMac as getIsMac } from "./utils.js";
+import { isElectron, isMac } from "./utils.js";
 import type { KeyboardShortcut } from "./keyboard_actions_interface.js";
 import { t } from "i18next";
-
-const isMac = getIsMac();
-const isElectron = getIsElectron();
 
 function getDefaultKeyboardActions() {
     if (!t("keyboard_actions.note-navigation")) {
@@ -347,6 +344,12 @@ function getDefaultKeyboardActions() {
             description: t("keyboard_actions.show-help"),
             scope: "window"
         },
+        {
+            actionName: "showCheatsheet",
+            defaultShortcuts: ["Shift+F1"],
+            description: t("keyboard_actions.show-cheatsheet"),
+            scope: "window"
+        },
 
         {
             separator: t("keyboard_actions.text-note-operations")
@@ -504,6 +507,12 @@ function getDefaultKeyboardActions() {
             actionName: "printActiveNote",
             defaultShortcuts: [],
             description: t("keyboard_actions.print-active-note"),
+            scope: "window"
+        },
+        {
+            actionName: "exportAsPdf",
+            defaultShortcuts: [],
+            description: t("keyboard_actions.export-as-pdf"),
             scope: "window"
         },
         {

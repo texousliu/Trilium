@@ -51,10 +51,6 @@ const RELATION_MAP: Library = {
     css: ["stylesheets/relation_map.css"]
 };
 
-const PRINT_THIS: Library = {
-    js: ["node_modules/print-this/printThis.js"]
-};
-
 const CALENDAR_WIDGET: Library = {
     css: ["stylesheets/calendar.css"]
 };
@@ -193,7 +189,6 @@ export default {
     CODE_MIRROR,
     ESLINT,
     RELATION_MAP,
-    PRINT_THIS,
     CALENDAR_WIDGET,
     KATEX,
     WHEEL_ZOOM,
