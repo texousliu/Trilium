@@ -56,7 +56,7 @@ export interface ContextMenuCommandData extends CommandData {
 }
 
 export interface NoteCommandData extends CommandData {
-    notePath: string;
+    notePath?: string;
     hoistedNoteId?: string;
     viewScope?: ViewScope;
 }
@@ -79,6 +79,7 @@ export type CommandMappings = {
         ancestorNoteId?: string | null;
     };
     closeTocCommand: CommandData;
+    closeHlt: CommandData;
     showLaunchBarSubtree: CommandData;
     showRevisions: CommandData;
     showOptions: CommandData & {
@@ -113,6 +114,8 @@ export type CommandMappings = {
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
+    openAboutDialog: CommandData;
+    hideFloatingButtons: {};
     hideLeftPane: CommandData;
     showLeftPane: CommandData;
     hoistNote: CommandData & { noteId: string };
@@ -129,7 +132,7 @@ export type CommandMappings = {
     protectSubtree: ContextMenuCommandData;
     unprotectSubtree: ContextMenuCommandData;
     openBulkActionsDialog: ContextMenuCommandData | {
-        selectedOrActiveNoteIds: string[]
+        selectedOrActiveNoteIds?: string[]
     };
     editBranchPrefix: ContextMenuCommandData;
     convertNoteToAttachment: ContextMenuCommandData;
@@ -186,6 +189,7 @@ export type CommandMappings = {
     importMarkdownInline: CommandData;
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
+    showUploadAttachmentsDialog: CommandData & { noteId: string };
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;
@@ -209,6 +213,7 @@ export type CommandMappings = {
         screen: Screen;
     };
     closeTab: CommandData;
+    closeToc: CommandData;
     closeOtherTabs: CommandData;
     closeRightTabs: CommandData;
     closeAllTabs: CommandData;
@@ -227,15 +232,20 @@ export type CommandMappings = {
     scrollContainerToCommand: CommandData & {
         position: number;
     };
-    moveThisNoteSplit: CommandData & {
-        isMovingLeft: boolean;
-    };
+    scrollToEnd: CommandData;
+    closeThisNoteSplit: CommandData;
+    moveThisNoteSplit: CommandData & { isMovingLeft: boolean; };
 
     // Geomap
     deleteFromMap: { noteId: string },
     openGeoLocation: { noteId: string, event: JQuery.MouseDownEvent }
 
     toggleZenMode: CommandData;
+
+    updateAttributeList: CommandData & { attributes: Attribute[] };
+    saveAttributes: CommandData;
+    reloadAttributes: CommandData;
+    refreshNoteList: CommandData & { noteId: string; };
 };
 
 type EventMappings = {
@@ -336,7 +346,6 @@ type EventMappings = {
     showToc: {
         noteId: string;
     };
-    scrollToEnd: { ntxId: string };
     noteTypeMimeChanged: { noteId: string };
     zenModeChanged: { isEnabled: boolean };
 };

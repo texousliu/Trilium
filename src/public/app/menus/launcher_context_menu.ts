@@ -21,8 +21,8 @@ export default class LauncherContextMenu implements SelectMenuItemEventListener<
 
     async show(e: PointerEvent | JQuery.TouchStartEvent | JQuery.ContextMenuEvent) {
         contextMenu.show({
-            x: e.pageX,
-            y: e.pageY,
+            x: e.pageX ?? 0,
+            y: e.pageY ?? 0,
             items: await this.getMenuItems(),
             selectMenuItemHandler: (item, e) => this.selectMenuItemHandler(item)
         });
