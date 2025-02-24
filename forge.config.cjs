@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs-extra");
 
-const APP_NAME = "TriliumNextNotes";
+const APP_NAME = "TriliumNext Notes";
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
