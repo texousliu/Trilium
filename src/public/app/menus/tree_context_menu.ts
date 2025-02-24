@@ -18,7 +18,9 @@ interface ConvertToAttachmentResponse {
     attachment?: FAttachment;
 }
 
-type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData>;
+// This will include all commands that implement ContextMenuCommandData, but it will not work if it additional options are added via the `|` operator,
+// so they need to be added manually.
+export type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData> | "openBulkActionsDialog";
 
 export default class TreeContextMenu implements SelectMenuItemEventListener<TreeCommandNames> {
     private treeWidget: NoteTreeWidget;
