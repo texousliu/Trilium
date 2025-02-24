@@ -38,6 +38,8 @@ module.exports = {
                     for (const resource of extraResourcesForPlatform) {
                         const baseName = path.basename(resource);
                         const sourcePath = path.join(buildPath, "resources", baseName);
+
+                        // prettier-ignore
                         const destPath = (baseName !== "256x256.png")
                             ? path.join(buildPath, baseName)
                             : path.join(buildPath, "icon.png");
