@@ -73,10 +73,6 @@ runs:
     - name: Run electron-forge build with enhanced logging
       shell: bash
       env:
-        DEBUG: "electron-osx-sign*,@electron/notarize*,electron-forge:*"
-        ELECTRON_NOTARIZE_DEBUG: 1
-        ELECTRON_ENABLE_LOGGING: 1
-        ELECTRON_DEBUG_NOTARIZATION: 1
         # Pass through required environment variables for signing and notarization
         APPLE_TEAM_ID: ${{ env.APPLE_TEAM_ID }}
         APPLE_ID: ${{ env.APPLE_ID }}
@@ -93,8 +89,7 @@ runs:
 
         npm run electron-forge:make -- \
           --arch=${{ inputs.arch }} \
-          --platform=$PLATFORM \
-          --verbose
+          --platform=$PLATFORM
 
     # Add DMG signing step
     - name: Sign DMG
