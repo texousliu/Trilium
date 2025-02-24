@@ -246,6 +246,9 @@ export type CommandMappings = {
     saveAttributes: CommandData;
     reloadAttributes: CommandData;
     refreshNoteList: CommandData & { noteId: string; };
+
+    refreshResults: {};
+    refreshSearchDefinition: {};
 };
 
 type EventMappings = {
