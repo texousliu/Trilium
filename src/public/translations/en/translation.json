@@ -645,6 +645,9 @@
     "show-cheatsheet": "Show Cheatsheet",
     "toggle-zen-mode": "Zen Mode"
   },
+  "zen_mode": {
+    "button_exit": "Exit Zen Mode"
+  },
   "sync_status": {
     "unknown": "<p>Sync status will be known once the next sync attempt starts.</p><p>Click to trigger sync now.</p>",
     "connected_with_changes": "<p>Connected to the sync server. <br>There are some outstanding changes yet to be synced.</p><p>Click to trigger sync.</p>",

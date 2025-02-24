@@ -4,6 +4,8 @@ import linkService from "../../services/link.js";
 import froca from "../../services/froca.js";
 import utils from "../../services/utils.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="attachment-detail note-detail-printable">
@@ -32,6 +34,9 @@ const TPL = `
 </div>`;
 
 export default class AttachmentDetailTypeWidget extends TypeWidget {
+    $wrapper!: JQuery<HTMLElement>;
+    $linksWrapper!: JQuery<HTMLElement>;
+
     static getType() {
         return "attachmentDetail";
     }
@@ -44,7 +49,7 @@ export default class AttachmentDetailTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: Parameters<TypeWidget["doRefresh"]>[0]) {
         this.$wrapper.empty();
         this.children = [];
 
@@ -69,7 +74,7 @@ export default class AttachmentDetailTypeWidget extends TypeWidget {
             $helpButton
         );
 
-        const attachment = await froca.getAttachment(this.attachmentId, true);
+        const attachment = (this.attachmentId) ? await froca.getAttachment(this.attachmentId, true) : null;
 
         if (!attachment) {
             this.$wrapper.html("<strong>" + t("attachment_detail.attachment_deleted") + "</strong>");
@@ -82,7 +87,7 @@ export default class AttachmentDetailTypeWidget extends TypeWidget {
         this.$wrapper.append(attachmentDetailWidget.render());
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         const attachmentRow = loadResults.getAttachmentRows().find((att) => att.attachmentId === this.attachmentId);
 
         if (attachmentRow?.isDeleted) {
@@ -91,6 +96,6 @@ export default class AttachmentDetailTypeWidget extends TypeWidget {
     }
 
     get attachmentId() {
-        return this.noteContext.viewScope.attachmentId;
+        return this?.noteContext?.viewScope?.attachmentId;
     }
 }

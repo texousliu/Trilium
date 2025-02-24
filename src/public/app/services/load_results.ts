@@ -1,4 +1,4 @@
-import type { TaskRow } from "../../../becca/entities/rows.js";
+import type { TaskRow, AttachmentRow } from "../../../becca/entities/rows.js";
 import type { AttributeType } from "../entities/fattribute.js";
 import type { EntityChange } from "../server_types.js";
 
@@ -36,8 +36,6 @@ interface ContentNoteIdToComponentIdRow {
     noteId: string;
     componentId: string;
 }
-
-interface AttachmentRow {}
 
 interface OptionRow {}
 

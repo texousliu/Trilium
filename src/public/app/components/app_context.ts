@@ -288,6 +288,10 @@ type EventMappings = {
     showHighlightsListWidget: {
         noteId: string;
     };
+    showSearchError: {
+        error: string;
+    };
+    searchRefreshed: { ntxId?: string | null };
     hoistedNoteChanged: {
         noteId: string;
         ntxId: string | null;
@@ -364,6 +368,8 @@ class AppContext extends Component {
     tabManager!: TabManager;
     layout?: Layout;
     noteTreeWidget?: NoteTreeWidget;
+
+    lastSearchString?: string;
 
     constructor(isMainWindow: boolean) {
         super();
