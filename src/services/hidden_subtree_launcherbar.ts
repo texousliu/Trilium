@@ -34,6 +34,12 @@ export default function buildLaunchBarConfig() {
             type: "launcher",
             builtinWidget: "calendar",
             icon: "bx bx-calendar"
+        },
+        recentChanges: {
+            title: t("hidden-subtree.recent-changes-title"),
+            type: "launcher",
+            command: "showRecentChanges",
+            icon: "bx bx-history"
         }
     };
 
@@ -63,14 +69,7 @@ export default function buildLaunchBarConfig() {
         },
         { id: "_lbNoteMap", title: t("hidden-subtree.note-map-title"), type: "launcher", targetNoteId: "_globalNoteMap", icon: "bx bxs-network-chart" },
         { id: "_lbCalendar", ...sharedLaunchers.calendar },
-        {
-            id: "_lbRecentChanges",
-            title: t("hidden-subtree.recent-changes-title"),
-            type: "launcher",
-            command: "showRecentChanges",
-            icon: "bx bx-history",
-            attributes: [{ type: "label", name: "desktopOnly" }]
-        },
+        { id: "_lbRecentChanges", ...sharedLaunchers.recentChanges },
         { id: "_lbSpacer1", title: t("hidden-subtree.spacer-title"), type: "launcher", builtinWidget: "spacer", baseSize: "50", growthFactor: "0" },
         { id: "_lbBookmarks", title: t("hidden-subtree.bookmarks-title"), type: "launcher", builtinWidget: "bookmarks", icon: "bx bx-bookmark" },
         { id: "_lbToday", ...sharedLaunchers.openToday },
@@ -90,7 +89,8 @@ export default function buildLaunchBarConfig() {
         { id: "_lbMobileBackInHistory", ...sharedLaunchers.backInHistory },
         { id: "_lbMobileForwardInHistory", ...sharedLaunchers.forwardInHistory },
         { id: "_lbMobileJumpTo", title: t("hidden-subtree.jump-to-note-title"), type: "launcher", command: "jumpToNote", icon: "bx bx-plus-circle" },
-        { id: "_lbMobileCalendar", ...sharedLaunchers.calendar }
+        { id: "_lbMobileCalendar", ...sharedLaunchers.calendar },
+        { id: "_lbMobileRecentChanges", ...sharedLaunchers.recentChanges }
     ];
 
     return {

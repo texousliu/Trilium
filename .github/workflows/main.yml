@@ -29,7 +29,7 @@ jobs:
             extension: [deb, rpm, zip, flatpak]
           - name: windows
             image: windows-latest
-            extension: exe
+            extension: [exe, zip]
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4

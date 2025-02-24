@@ -88,7 +88,7 @@ function getType(options: TaskData, mime: string) {
     const mimeLc = mime?.toLowerCase();
 
     switch (true) {
-        case options.textImportedAsText && ["text/html", "text/markdown", "text/x-markdown"].includes(mimeLc):
+        case options.textImportedAsText && ["text/html", "text/markdown", "text/x-markdown", "text/mdx"].includes(mimeLc):
             return "text";
 
         case options.codeImportedAsCode && CODE_MIME_TYPES.has(mimeLc):

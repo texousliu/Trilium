@@ -167,12 +167,12 @@ describe("#getContentDisposition", () => {
     const defaultFallBackDisposition = `file; filename="file"; filename*=UTF-8''file`;
     const testCases: TestCase<typeof utils.getContentDisposition>[] = [
         [
-            "when passed filename is empty, it should fallback to default value 'file'", 
+            "when passed filename is empty, it should fallback to default value 'file'",
             [" "],
             defaultFallBackDisposition
         ],
         [
-            "when passed filename '..' would cause sanitized filename to be empty, it should fallback to default value 'file'", 
+            "when passed filename '..' would cause sanitized filename to be empty, it should fallback to default value 'file'",
             [".."],
             defaultFallBackDisposition
         ],
@@ -304,19 +304,16 @@ describe("#getNoteTitle", () => {
         ],
         [
           "when a noteMeta object is passed, it should use the title from the noteMeta, if present",
-          //@ts-expect-error - passing in incomplete noteMeta - but we only care about the title prop here
           ["test_file.md", true, { title: "some other title"}],
           "some other title"
         ],
         [
           "when a noteMeta object is passed, but the title prop is empty, it should try to handle the filename as if no noteMeta was passed",
-          //@ts-expect-error - passing in incomplete noteMeta - but we only care about the title prop here
           ["test_file.md", true, { title: ""}],
           "test file"
         ],
         [
             "when a noteMeta object is passed, but the title prop is empty, it should try to handle the filename as if no noteMeta was passed",
-            //@ts-expect-error - passing in incomplete noteMeta - but we only care about the title prop here
             ["test_file.json", false, { title: " "}],
             "test_file.json"
         ]

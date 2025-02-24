@@ -22,7 +22,7 @@ describe("Search", () => {
         });
     });
 
-    it.skip("simple path match", () => {
+    it("simple path match", () => {
         rootNote.child(note("Europe").child(note("Austria")));
 
         const searchContext = new SearchContext();
@@ -32,7 +32,7 @@ describe("Search", () => {
         expect(findNoteByTitle(searchResults, "Austria")).toBeTruthy();
     });
 
-    it.skip("normal search looks also at attributes", () => {
+    it("normal search looks also at attributes", () => {
         const austria = note("Austria");
         const vienna = note("Vienna");
 
@@ -50,7 +50,7 @@ describe("Search", () => {
         expect(findNoteByTitle(searchResults, "Vienna")).toBeTruthy();
     });
 
-    it.skip("normal search looks also at type and mime", () => {
+    it("normal search looks also at type and mime", () => {
         rootNote.child(note("Effective Java", { type: "book", mime: "" })).child(note("Hello World.java", { type: "code", mime: "text/x-java" }));
 
         const searchContext = new SearchContext();
@@ -69,7 +69,7 @@ describe("Search", () => {
         expect(searchResults.length).toEqual(2);
     });
 
-    it.skip("only end leafs are results", () => {
+    it("only end leafs are results", () => {
         rootNote.child(note("Europe").child(note("Austria")));
 
         const searchContext = new SearchContext();
@@ -79,7 +79,7 @@ describe("Search", () => {
         expect(findNoteByTitle(searchResults, "Europe")).toBeTruthy();
     });
 
-    it.skip("only end leafs are results", () => {
+    it("only end leafs are results", () => {
         rootNote.child(note("Europe").child(note("Austria").label("capital", "Vienna")));
 
         const searchContext = new SearchContext();
@@ -132,7 +132,7 @@ describe("Search", () => {
         expect(findNoteByTitle(searchResults, "Czech Republic")).toBeTruthy();
     });
 
-    it.skip("inherited label comparison", () => {
+    it("inherited label comparison", () => {
         rootNote.child(note("Europe").label("country", "", true).child(note("Austria")).child(note("Czech Republic")));
 
         const searchContext = new SearchContext();
@@ -527,7 +527,7 @@ describe("Search", () => {
         expect(becca.notes[searchResults[0].noteId].title).toEqual("Europe");
     });
 
-    it.skip("test note.text *=* something", () => {
+    it("test note.text *=* something", () => {
         const italy = note("Italy").label("capital", "Rome");
         const slovakia = note("Slovakia").label("capital", "Bratislava");
 
@@ -540,7 +540,7 @@ describe("Search", () => {
         expect(becca.notes[searchResults[0].noteId].title).toEqual("Slovakia");
     });
 
-    it.skip("test that fulltext does not match archived notes", () => {
+    it("test that fulltext does not match archived notes", () => {
         const italy = note("Italy").label("capital", "Rome");
         const slovakia = note("Slovakia").label("capital", "Bratislava");
 

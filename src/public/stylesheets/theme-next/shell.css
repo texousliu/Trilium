@@ -1320,6 +1320,14 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 /*
+ * Note Map
+ */
+
+.note-detail-note-map .fixnodes-type-switcher .tn-tool-button.toggled {
+    color: var(--tab-close-button-hover-background);
+}
+
+/*
  * Recent changes list
  */
 
@@ -1783,4 +1791,163 @@ div.bookmark-folder-widget .note-link .bx {
 
 .delete-notes-list .note-path {
     padding-left: 8px;
+}
+
+/* The "Change note icon" button */
+
+.note-icon-widget .note-icon {
+    border: none;
+    border-radius: 8px;
+}
+
+.note-icon-widget .note-icon:hover {
+    background: var(--icon-button-hover-background);
+    color: var(--icon-button-hover-color);
+}
+
+/* Note icon popup */
+
+.note-icon-widget .icon-list span {
+    border-radius: 8px;
+}
+
+.note-icon-widget .icon-list span:hover {
+    background: var(--hover-item-background-color);
+    color: var(--hover-item-text-color);
+}
+
+body.background-effects.zen #root-widget {
+    --main-background-color: transparent;
+    --root-background: transparent;
+}
+
+
+/* Alert bar */
+
+@keyframes alert-show {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
+
+#center-pane div.alert {
+    position: relative;
+    margin: 8px 0 0 0;
+    border: unset;
+    border-radius: 0;
+    padding: 8px 16px;
+    background: var(--alert-bar-background) !important;
+    font-size: .9em;
+    font-weight: normal;
+    animation: alert-show 300ms ease-in;
+    border-bottom: 2px solid #0000001c !important;
+}
+
+/*
+ * Promoted attributes
+ */
+
+/* The promoted attributes section */
+div.promoted-attributes-container {
+    display: flex;
+    margin-right: 10%;
+    padding: 6px 0;
+    gap: 8px;
+    align-items: stretch;
+    container-type: inline-size;
+}
+
+div.promoted-attributes-container,
+div.promoted-attributes-container input {
+    font-size: .9rem;
+}
+
+/* A promoted attribute card */
+div.promoted-attribute-cell {
+    --pa-card-padding-left: 16px;
+    --pa-card-padding-right: 2px;
+    --input-background-color: transparent;
+
+    box-shadow: 1px 1px 2px var(--promoted-attribute-card-shadow-color);
+
+    display: inline-flex;
+    margin: 0;
+    border-radius: 8px;
+    padding: 2px var(--pa-card-padding-right) 2px var(--pa-card-padding-left);
+    background: var(--promoted-attribute-card-background-color);
+    overflow-y: visible;
+}
+
+@container (max-width: 500px) {
+    /* Narrow promoted attributes section */
+    div.promoted-attribute-cell {
+        flex-grow: 1;
+    }
+}
+
+/* A promoted attribute card (boolean attribute) */
+div.promoted-attribute-cell:has(input[type="checkbox"]):not(:has(.multiplicity > span)) {
+    /* Checbox attribute, without multiplicity */
+    padding-right: var(--pa-card-padding-left);
+}
+
+div.promoted-attribute-cell > * {
+    display: inline-block;
+}
+
+div.promoted-attribute-cell > label {
+    font-weight: normal;
+    white-space: nowrap;
+    opacity: .75;
+}
+
+div.promoted-attribute-cell:not(:has(input[type="checkbox"])) > label::after {
+    content: ":";
+}
+
+div.promoted-attribute-cell div.input-group {
+    min-height: auto;
+    padding: 1px 6px;
+}
+
+div.promoted-attribute-cell input {
+    padding: 2px 8px;
+    font-weight: 500;
+}
+
+div.promoted-attribute-cell input[type="text"] {
+    width: 10em !important;
+}
+
+div.promoted-attribute-cell input[type="number"] {
+    width: 6em !important;
+}
+
+div.promoted-attribute-cell span.open-external-link-button {
+    display: flex;
+    padding: 0;
+    font-size: 1.2em;
+}
+
+div.promoted-attribute-cell .tn-checkbox {
+    --box-label-gap: 0;
+
+    height: 1cap;
+}
+
+/* The <div> containing the checkbox for a promoted boolean attribute */
+div.promoted-attribute-cell div:has(input[type="checkbox"]) {
+    order: -1; /* Relocate the checkbox before the label */
+    margin-right: 1.5em;
+}
+
+/* The element containing the "new attribute" and "remove this attribute button" */
+div.promoted-attribute-cell .multiplicity:has(span) {
+    --icon-button-size: 24px;
+
+    margin-left: 8px;
+    margin-right: calc(var(--pa-card-padding-left) - var(--pa-card-padding-right));
+    font-size: 0; /* Prevent whitespaces creating a gap between buttons */
 }

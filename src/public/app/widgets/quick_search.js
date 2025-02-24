@@ -6,6 +6,7 @@ import utils from "../services/utils.js";
 import appContext from "../components/app_context.js";
 import shortcutService from "../services/shortcuts.js";
 import { t } from "../services/i18n.js";
+import { Dropdown, Tooltip } from "bootstrap";
 
 const TPL = `
 <div class="quick-search input-group input-group-sm">
@@ -44,7 +45,7 @@ const MAX_DISPLAYED_NOTES = 15;
 export default class QuickSearchWidget extends BasicWidget {
     doRender() {
         this.$widget = $(TPL);
-        this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
+        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
 
         this.$searchString = this.$widget.find(".search-string");
         this.$dropdownMenu = this.$widget.find(".dropdown-menu");
@@ -100,7 +101,7 @@ export default class QuickSearchWidget extends BasicWidget {
         const { searchResultNoteIds, error } = await server.get(`quick-search/${encodeURIComponent(searchString)}`);
 
         if (error) {
-            let tooltip = new bootstrap.Tooltip(this.$searchString, {
+            let tooltip = new Tooltip(this.$searchString, {
                 trigger: "manual",
                 title: `Search error: ${error}`,
                 placement: "right"

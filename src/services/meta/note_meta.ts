@@ -1,3 +1,4 @@
+import type { NoteType } from "../../becca/entities/rows.js";
 import type AttachmentMeta from "./attachment_meta.js";
 import type AttributeMeta from "./attribute_meta.js";
 
@@ -15,11 +16,11 @@ export default interface NoteMeta {
     notePosition?: number;
     prefix?: string | null;
     isExpanded?: boolean;
-    type?: string;
+    type?: NoteType;
     mime?: string;
     /** 'html' or 'markdown', applicable to text notes only */
     format?: "html" | "markdown";
-    dataFileName: string;
+    dataFileName?: string;
     dirFileName?: string;
     /** this file should not be imported (e.g., HTML navigation) */
     noImport?: boolean;

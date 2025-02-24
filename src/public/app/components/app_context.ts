@@ -80,6 +80,7 @@ export type CommandMappings = {
     };
     closeTocCommand: CommandData;
     showLaunchBarSubtree: CommandData;
+    showRevisions: CommandData;
     showOptions: CommandData & {
         section: string;
     };
@@ -106,10 +107,6 @@ export type CommandMappings = {
     showInfoDialog: ConfirmWithMessageOptions;
     showConfirmDialog: ConfirmWithMessageOptions;
     showRecentChanges: CommandData & { ancestorNoteId: string };
-    showExportDialog: CommandData & {
-        notePath: string;
-        defaultType: "subtree"
-    };
     showImportDialog: CommandData & { noteId: string; };
     openNewNoteSplit: NoteCommandData;
     openInWindow: NoteCommandData;
@@ -119,6 +116,8 @@ export type CommandMappings = {
     hideLeftPane: CommandData;
     showLeftPane: CommandData;
     hoistNote: CommandData & { noteId: string };
+    leaveProtectedSession: CommandData;
+    enterProtectedSession: CommandData;
 
     openInTab: ContextMenuCommandData;
     openNoteInSplit: ContextMenuCommandData;
@@ -225,10 +224,18 @@ export type CommandMappings = {
 
     reEvaluateRightPaneVisibility: CommandData;
     runActiveNote: CommandData;
+    scrollContainerToCommand: CommandData & {
+        position: number;
+    };
+    moveThisNoteSplit: CommandData & {
+        isMovingLeft: boolean;
+    };
 
     // Geomap
     deleteFromMap: { noteId: string },
     openGeoLocation: { noteId: string, event: JQuery.MouseDownEvent }
+
+    toggleZenMode: CommandData;
 };
 
 type EventMappings = {
@@ -306,6 +313,7 @@ type EventMappings = {
     noteContextReorderEvent: {
         oldMainNtxId: string;
         newMainNtxId: string;
+        ntxIdsInOrder: string[];
     };
     newNoteContextCreated: {
         noteContext: NoteContext;
@@ -314,7 +322,7 @@ type EventMappings = {
         ntxIds: string[];
     };
     exportSvg: {
-        ntxId: string;
+        ntxId: string | null | undefined;
     };
     geoMapCreateChildNote: {
         ntxId: string | null | undefined; // TODO: deduplicate ntxId
@@ -330,6 +338,7 @@ type EventMappings = {
     };
     scrollToEnd: { ntxId: string };
     noteTypeMimeChanged: { noteId: string };
+    zenModeChanged: { isEnabled: boolean };
 };
 
 export type EventListener<T extends EventNames> = {

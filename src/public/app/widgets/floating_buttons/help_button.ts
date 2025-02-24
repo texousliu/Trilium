@@ -1,7 +1,8 @@
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import type { NoteType } from "../../entities/fnote.js";
 import { t } from "../../services/i18n.js";
 import type { ViewScope } from "../../services/link.js";
+import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
 const TPL = `
@@ -10,8 +11,7 @@ const TPL = `
 </button>
 `;
 
-const byNoteType: Record<NoteType, string | null> = {
-    book: null,
+const byNoteType: Record<Exclude<NoteType, "book">, string | null> = {
     canvas: null,
     code: null,
     contentWidget: null,
@@ -27,7 +27,14 @@ const byNoteType: Record<NoteType, string | null> = {
     render: null,
     search: null,
     text: null,
-    webView: null
+    webView: null,
+    taskList: null
+};
+
+const byBookType: Record<ViewTypeOptions, string | null> = {
+    list: null,
+    grid: null,
+    calendar: "fDGg7QcJg3Xm"
 };
 
 export default class ContextualHelpButton extends NoteContextAwareWidget {
@@ -41,8 +48,10 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
             return false;
         }
 
-        if (this.note && byNoteType[this.note.type]) {
+        if (this.note && this.note.type !== "book" && byNoteType[this.note.type]) {
             this.helpNoteIdToOpen = byNoteType[this.note.type];
+        } else if (this.note && this.note.type === "book") {
+            this.helpNoteIdToOpen = byBookType[this.note.getAttributeValue("label", "viewType") as ViewTypeOptions ?? ""]
         }
 
         return !!this.helpNoteIdToOpen;
@@ -71,6 +80,12 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
                 helpSubcontext.setNote(targetNote, { viewScope });
             }
         });
+    }
+
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (this.note?.type === "book" && loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && attr.name === "viewType")) {
+            this.refresh();
+        }
     }
 
 }

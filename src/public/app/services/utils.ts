@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Modal } from "bootstrap";
 
 function reloadFrontendApp(reason?: string) {
     if (reason) {
@@ -28,6 +29,27 @@ function parseDate(str: string) {
     } catch (e: any) {
         throw new Error(`Can't parse date from '${str}': ${e.message} ${e.stack}`);
     }
+}
+
+// Source: https://stackoverflow.com/a/30465299/4898894
+function getMonthsInDateRange(startDate: string, endDate: string) {
+    const start = startDate.split('-');
+    const end = endDate.split('-');
+    const startYear = parseInt(start[0]);
+    const endYear = parseInt(end[0]);
+    const dates = [];
+
+    for (let i = startYear; i <= endYear; i++) {
+        const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
+        const startMon = i === startYear ? parseInt(start[1])-1 : 0;
+
+        for(let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j+1) {
+            const month = j+1;
+            const displayMonth = month < 10 ? '0'+month : month;
+            dates.push([i, displayMonth].join('-'));
+        }
+    }
+    return dates;
 }
 
 function padNum(num: number) {
@@ -223,9 +245,7 @@ function getMimeTypeClass(mime: string) {
 
 function closeActiveDialog() {
     if (glob.activeDialog) {
-        // TODO: Fix once we use proper ES imports.
-        //@ts-ignore
-        bootstrap.Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
+        Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
         glob.activeDialog = null;
     }
 }
@@ -267,9 +287,7 @@ async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
     }
 
     saveFocusedElement();
-    // TODO: Fix once we use proper ES imports.
-    //@ts-ignore
-    bootstrap.Modal.getOrCreateInstance($dialog[0]).show();
+    Modal.getOrCreateInstance($dialog[0]).show();
 
     $dialog.on("hidden.bs.modal", () => {
         const $autocompleteEl = $(".aa-input");
@@ -621,6 +639,7 @@ export default {
     reloadFrontendApp,
     reloadTray,
     parseDate,
+    getMonthsInDateRange,
     formatDateISO,
     formatDateTime,
     formatTimeInterval,

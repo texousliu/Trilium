@@ -28,6 +28,7 @@ async function register(app: express.Application) {
                 type: "filesystem",
                 cacheDirectory: path.join(srcRoot, "..", ".cache", isElectron ? "electron" : "server")
             },
+            plugins: productionConfig.plugins,
             entry: productionConfig.entry,
             module: productionConfig.module,
             resolve: productionConfig.resolve,
@@ -94,8 +95,6 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/node_modules/normalize.css/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/normalize.css/")));
 
     app.use(`/${assetPath}/node_modules/jquery.fancytree/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/jquery.fancytree/dist/")));
-
-    app.use(`/${assetPath}/node_modules/bootstrap/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/bootstrap/dist/")));
 
     // CodeMirror
     app.use(`/${assetPath}/node_modules/codemirror/lib/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/codemirror/lib/")));

@@ -24,7 +24,10 @@ const fencedCodeBlockFilter: TurndownService.Rule = {
 
 function toMarkdown(content: string) {
     if (instance === null) {
-        instance = new TurndownService({ codeBlockStyle: "fenced" });
+        instance = new TurndownService({
+            headingStyle: "atx",
+            codeBlockStyle: "fenced"
+        });
         // Filter is heavily based on: https://github.com/mixmark-io/turndown/issues/274#issuecomment-458730974
         instance.addRule("fencedCodeBlock", fencedCodeBlockFilter);
         instance.use(turndownPluginGfm.gfm);

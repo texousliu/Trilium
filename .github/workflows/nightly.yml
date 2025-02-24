@@ -26,7 +26,7 @@ jobs:
             extension: [deb, rpm, zip, flatpak]
           - name: windows
             image: windows-latest
-            extension: exe
+            extension: [exe, zip]
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
         shell: bash
         run: npm ci
       - name: Update nightly version
-        run: npm run ci-update-nightly-version
+        run: npm run chore:ci-update-nightly-version
       - name: Run the build
         uses: ./.github/actions/build-electron
         with:
@@ -75,6 +75,7 @@ jobs:
       - name: Run the build
         uses: ./.github/actions/build-server
         with:
+          os: linux
           arch: ${{ matrix.arch }}
 
       - name: Publish release

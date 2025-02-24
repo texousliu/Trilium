@@ -14,7 +14,8 @@ import CodeAutoReadOnlySizeOptions from "./options/code_notes/code_auto_read_onl
 import CodeMimeTypesOptions from "./options/code_notes/code_mime_types.js";
 import ImageOptions from "./options/images/images.js";
 import SpellcheckOptions from "./options/spellcheck.js";
-import PasswordOptions from "./options/password.js";
+import PasswordOptions from "./options/password/password.js";
+import ProtectedSessionTimeoutOptions from "./options/password/protected_session_timeout.js"
 import EtapiOptions from "./options/etapi.js";
 import BackupOptions from "./options/backup.js";
 import SyncOptions from "./options/sync.js";
@@ -35,6 +36,7 @@ import RibbonOptions from "./options/appearance/ribbon.js";
 import LocalizationOptions from "./options/appearance/i18n.js";
 import CodeBlockOptions from "./options/appearance/code_block.js";
 import EditorOptions from "./options/text_notes/editor.js";
+import ShareSettingsOptions from "./options/other/share_settings.js";
 import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
 
@@ -64,7 +66,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     _optionsCodeNotes: [VimKeyBindingsOptions, WrapLinesOptions, CodeAutoReadOnlySizeOptions, CodeMimeTypesOptions],
     _optionsImages: [ImageOptions],
     _optionsSpellcheck: [SpellcheckOptions],
-    _optionsPassword: [PasswordOptions],
+    _optionsPassword: [PasswordOptions, ProtectedSessionTimeoutOptions],
     _optionsEtapi: [EtapiOptions],
     _optionsBackup: [BackupOptions],
     _optionsSync: [SyncOptions],
@@ -76,14 +78,14 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
         RevisionsSnapshotIntervalOptions,
         RevisionSnapshotsLimitOptions,
         NetworkConnectionsOptions,
-        HtmlImportTagsOptions
+        HtmlImportTagsOptions,
+        ShareSettingsOptions
     ],
     _optionsAdvanced: [DatabaseIntegrityCheckOptions, DatabaseAnonymizationOptions, AdvancedSyncOptions, VacuumDatabaseOptions],
     _backendLog: [BackendLogWidget]
 };
 
 export default class ContentWidgetTypeWidget extends TypeWidget {
-
     private $content!: JQuery<HTMLElement>;
 
     static getType() {

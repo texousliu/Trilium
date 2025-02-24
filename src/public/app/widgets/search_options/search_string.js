@@ -4,6 +4,7 @@ import server from "../../services/server.js";
 import shortcutService from "../../services/shortcuts.js";
 import appContext from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
+import { Tooltip } from "bootstrap";
 
 const TPL = `
 <tr>
@@ -78,7 +79,7 @@ export default class SearchString extends AbstractSearchOption {
     }
 
     showSearchErrorEvent({ error }) {
-        let tooltip = new bootstrap.Tooltip(this.$searchString, {
+        let tooltip = new Tooltip(this.$searchString, {
             trigger: "manual",
             title: `${t("search_string.error", { error })}`,
             placement: "bottom"
