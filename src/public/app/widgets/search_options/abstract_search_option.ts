@@ -10,7 +10,7 @@ import type { AttributeType } from "../../entities/fattribute.js";
 export default abstract class AbstractSearchOption extends Component {
 
     private attribute: FAttribute;
-    private note: FNote;
+    protected note: FNote;
 
     constructor(attribute: FAttribute, note: FNote) {
         super();

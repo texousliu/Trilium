@@ -369,6 +369,8 @@ class AppContext extends Component {
     layout?: Layout;
     noteTreeWidget?: NoteTreeWidget;
 
+    lastSearchString?: string;
+
     constructor(isMainWindow: boolean) {
         super();
 

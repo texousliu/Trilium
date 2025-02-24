@@ -2,7 +2,7 @@ import AbstractSearchOption from "./abstract_search_option.js";
 import SpacedUpdate from "../../services/spaced_update.js";
 import server from "../../services/server.js";
 import shortcutService from "../../services/shortcuts.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import { Tooltip } from "bootstrap";
 
@@ -29,12 +29,16 @@ const TPL = `
             </ul>
           </div>
         </div>
-        
+
         <span class="bx bx-x icon-action search-option-del"></span>
     </td>
 </tr>`;
 
 export default class SearchString extends AbstractSearchOption {
+
+    private $searchString!: JQuery<HTMLElement>;
+    private spacedUpdate!: SpacedUpdate;
+
     static get optionName() {
         return "searchString";
     }
@@ -42,7 +46,7 @@ export default class SearchString extends AbstractSearchOption {
         return "label";
     }
 
-    static async create(noteId) {
+    static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "searchString");
     }
 
@@ -61,7 +65,7 @@ export default class SearchString extends AbstractSearchOption {
         });
 
         this.spacedUpdate = new SpacedUpdate(async () => {
-            const searchString = this.$searchString.val();
+            const searchString = String(this.$searchString.val());
             appContext.lastSearchString = searchString;
 
             await this.setAttribute("label", "searchString", searchString);
@@ -73,13 +77,13 @@ export default class SearchString extends AbstractSearchOption {
             }
         }, 1000);
 
-        this.$searchString.val(this.note.getLabelValue("searchString"));
+        this.$searchString.val(this.note.getLabelValue("searchString") ?? "");
 
         return $option;
     }
 
-    showSearchErrorEvent({ error }) {
-        let tooltip = new Tooltip(this.$searchString, {
+    showSearchErrorEvent({ error }: EventData<"showSearchError">) {
+        let tooltip = new Tooltip(this.$searchString[0], {
             trigger: "manual",
             title: `${t("search_string.error", { error })}`,
             placement: "bottom"
@@ -92,7 +96,7 @@ export default class SearchString extends AbstractSearchOption {
 
     focusOnSearchDefinitionEvent() {
         this.$searchString
-            .val(this.$searchString.val().trim() || appContext.lastSearchString)
+            .val(String(this.$searchString.val()).trim() ?? appContext.lastSearchString)
             .focus()
             .select();
         this.spacedUpdate.scheduleUpdate();
