@@ -14,13 +14,15 @@ import OrderBy from "../search_options/order_by.js";
 import SearchScript from "../search_options/search_script.js";
 import Limit from "../search_options/limit.js";
 import Debug from "../search_options/debug.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import bulkActionService from "../../services/bulk_action.js";
 import { Dropdown } from "bootstrap";
+import type FNote from "../../entities/fnote.js";
+import type { AttributeType } from "../../entities/fattribute.js";
 
 const TPL = `
 <div class="search-definition-widget">
-    <style> 
+    <style>
     .search-setting-table {
         margin-top: 0;
         margin-bottom: 7px;
@@ -28,28 +30,28 @@ const TPL = `
         border-collapse: separate;
         border-spacing: 10px;
     }
-    
+
     .search-setting-table div {
         white-space: nowrap;
     }
-    
+
     .search-setting-table .button-column {
         /* minimal width so that table remains static sized and most space remains for middle column with settings */
         width: 50px;
         white-space: nowrap;
         text-align: right;
     }
-    
+
     .search-setting-table .title-column {
         /* minimal width so that table remains static sized and most space remains for middle column with settings */
         width: 50px;
-        white-space: nowrap;    
+        white-space: nowrap;
     }
-    
+
     .search-setting-table .button-column .dropdown-menu {
         white-space: normal;
     }
-    
+
     .attribute-list hr {
         height: 1px;
         border-color: var(--main-border-color);
@@ -58,7 +60,7 @@ const TPL = `
         margin-top: 5px;
         margin-bottom: 0;
     }
-    
+
     .search-definition-widget input:invalid {
         border: 3px solid red;
     }
@@ -66,7 +68,7 @@ const TPL = `
     .add-search-option button {
         margin-top: 5px; /* to give some spacing when buttons overflow on the next line */
     }
-    
+
     .dropdown-header {
         background-color: var(--accented-background-color);
     }
@@ -78,47 +80,47 @@ const TPL = `
                 <td class="title-column">${t("search_definition.add_search_option")}</td>
                 <td colspan="2" class="add-search-option">
                     <button type="button" class="btn btn-sm" data-search-option-add="searchString">
-                        <span class="bx bx-text"></span> 
+                        <span class="bx bx-text"></span>
                         ${t("search_definition.search_string")}
                     </button>
-                    
+
                     <button type="button" class="btn btn-sm" data-search-option-add="searchScript">
-                        <span class="bx bx-code"></span> 
+                        <span class="bx bx-code"></span>
                         ${t("search_definition.search_script")}
                     </button>
-                    
+
                     <button type="button" class="btn btn-sm" data-search-option-add="ancestor">
-                        <span class="bx bx-filter-alt"></span> 
+                        <span class="bx bx-filter-alt"></span>
                         ${t("search_definition.ancestor")}
                     </button>
-                    
+
                     <button type="button" class="btn btn-sm" data-search-option-add="fastSearch"
                         title="${t("search_definition.fast_search_description")}">
                         <span class="bx bx-run"></span>
                         ${t("search_definition.fast_search")}
                     </button>
-                    
+
                     <button type="button" class="btn btn-sm" data-search-option-add="includeArchivedNotes"
                         title="${t("search_definition.include_archived_notes_description")}">
                         <span class="bx bx-archive"></span>
                         ${t("search_definition.include_archived")}
                     </button>
-                    
+
                     <button type="button" class="btn btn-sm" data-search-option-add="orderBy">
                         <span class="bx bx-arrow-from-top"></span>
                         ${t("search_definition.order_by")}
                     </button>
-                    
+
                     <button type="button" class="btn btn-sm" data-search-option-add="limit" title="${t("search_definition.limit_description")}">
                         <span class="bx bx-stop"></span>
                         ${t("search_definition.limit")}
                     </button>
-                    
+
                     <button type="button" class="btn btn-sm" data-search-option-add="debug" title="${t("search_definition.debug_description")}">
                         <span class="bx bx-bug"></span>
                         ${t("search_definition.debug")}
                     </button>
-                    
+
                     <div class="dropdown" style="display: inline-block;">
                       <button class="btn btn-sm dropdown-toggle action-add-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="bx bxs-zap"></span>
@@ -138,12 +140,12 @@ const TPL = `
                                 <span class="bx bx-search"></span>
                                 ${t("search_definition.search_button")}
                             </button>
-        
+
                             <button type="button" class="btn btn-sm search-and-execute-button">
                                 <span class="bx bxs-zap"></span>
                                 ${t("search_definition.search_execute")}
                             </button>
-                            
+
                             <button type="button" class="btn btn-sm save-to-note-button">
                                 <span class="bx bx-save"></span>
                                 ${t("search_definition.save_to_note")}
@@ -158,7 +160,21 @@ const TPL = `
 
 const OPTION_CLASSES = [SearchString, SearchScript, Ancestor, FastSearch, IncludeArchivedNotes, OrderBy, Limit, Debug];
 
+// TODO: Deduplicate with server
+interface SaveSearchNoteResponse {
+    notePath: string;
+}
+
 export default class SearchDefinitionWidget extends NoteContextAwareWidget {
+
+    private $component!: JQuery<HTMLElement>;
+    private $actionList!: JQuery<HTMLElement>;
+    private $searchOptions!: JQuery<HTMLElement>;
+    private $searchButton!: JQuery<HTMLElement>;
+    private $searchAndExecuteButton!: JQuery<HTMLElement>;
+    private $saveToNoteButton!: JQuery<HTMLElement>;
+    private $actionOptions!: JQuery<HTMLElement>;
+
     get name() {
         return "searchDefinition";
     }
@@ -194,7 +210,7 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
             const searchOptionName = $(event.target).attr("data-search-option-add");
             const clazz = OPTION_CLASSES.find((SearchOptionClass) => SearchOptionClass.optionName === searchOptionName);
 
-            if (clazz) {
+            if (clazz && this.noteId) {
                 await clazz.create(this.noteId);
             } else {
                 logError(t("search_definition.unknown_search_option", { searchOptionName }));
@@ -204,11 +220,13 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         });
 
         this.$widget.on("click", "[data-action-add]", async (event) => {
-            Dropdown.getOrCreateInstance(this.$widget.find(".action-add-toggle"));
+            Dropdown.getOrCreateInstance(this.$widget.find(".action-add-toggle")[0]);
 
             const actionName = $(event.target).attr("data-action-add");
 
-            await bulkActionService.addAction(this.noteId, actionName);
+            if (this.noteId && actionName) {
+                await bulkActionService.addAction(this.noteId, actionName);
+            }
 
             this.refresh();
         });
@@ -224,7 +242,7 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
 
         this.$saveToNoteButton = this.$widget.find(".save-to-note-button");
         this.$saveToNoteButton.on("click", async () => {
-            const { notePath } = await server.post("special-notes/save-search-note", { searchNoteId: this.noteId });
+            const { notePath } = await server.post<SaveSearchNoteResponse>("special-notes/save-search-note", { searchNoteId: this.noteId });
 
             await ws.waitForMaxKnownEntityChangeId();
 
@@ -236,24 +254,32 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
     }
 
     async refreshResultsCommand() {
-        try {
-            const { error } = await froca.loadSearchNote(this.noteId);
+        if (!this.noteId) {
+            return;
+        }
 
-            if (error) {
-                this.handleEvent("showSearchError", { error });
+        try {
+            const result = await froca.loadSearchNote(this.noteId);
+
+            if (result && result.error) {
+                this.handleEvent("showSearchError", { error: result.error });
             }
-        } catch (e) {
+        } catch (e: any) {
             toastService.showError(e.message);
         }
 
-        this.triggerEvent("searchRefreshed", { ntxId: this.noteContext.ntxId });
+        this.triggerEvent("searchRefreshed", { ntxId: this.noteContext?.ntxId });
     }
 
     async refreshSearchDefinitionCommand() {
         await this.refresh();
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
+        if (!this.note) {
+            return;
+        }
+
         this.$component.show();
 
         this.$saveToNoteButton.toggle(note.isHiddenCompletely());
@@ -263,7 +289,7 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         for (const OptionClass of OPTION_CLASSES) {
             const { attributeType, optionName } = OptionClass;
 
-            const attr = this.note.getAttribute(attributeType, optionName);
+            const attr = this.note.getAttribute(attributeType as AttributeType, optionName);
 
             this.$widget.find(`[data-search-option-add='${optionName}'`).toggle(!attr);
 
@@ -271,14 +297,19 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
                 const searchOption = new OptionClass(attr, this.note).setParent(this);
                 this.child(searchOption);
 
-                this.$searchOptions.append(searchOption.render());
+                const renderedEl = searchOption.render();
+                if (renderedEl) {
+                    this.$searchOptions.append(renderedEl);
+                }
             }
         }
 
         const actions = bulkActionService.parseActions(this.note);
+        const renderedEls = actions
+            .map((action) => action.render())
+            .filter((e) => e) as JQuery<HTMLElement>[];
 
-        this.$actionOptions.empty().append(...actions.map((action) => action.render()));
-
+        this.$actionOptions.empty().append(...renderedEls);
         this.$searchAndExecuteButton.css("visibility", actions.length > 0 ? "visible" : "_hidden");
     }
 
@@ -294,7 +325,7 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         toastService.showMessage(t("search_definition.actions_executed"), 3000);
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         // only refreshing deleted attrs, otherwise components update themselves
         if (loadResults.getAttributeRows().find((attrRow) => attrRow.type === "label" && attrRow.name === "action" && attrRow.isDeleted)) {
             this.refresh();

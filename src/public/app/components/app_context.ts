@@ -288,6 +288,10 @@ type EventMappings = {
     showHighlightsListWidget: {
         noteId: string;
     };
+    showSearchError: {
+        error: string;
+    };
+    searchRefreshed: { ntxId?: string | null };
     hoistedNoteChanged: {
         noteId: string;
         ntxId: string | null;
