@@ -1,4 +1,4 @@
-import treeService, { type Node } from "../services/tree.js";
+import treeService from "../services/tree.js";
 import froca from "../services/froca.js";
 import clipboard from "../services/clipboard.js";
 import noteCreateService from "../services/note_create.js";
@@ -18,21 +18,23 @@ interface ConvertToAttachmentResponse {
     attachment?: FAttachment;
 }
 
-type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData>;
+// This will include all commands that implement ContextMenuCommandData, but it will not work if it additional options are added via the `|` operator,
+// so they need to be added manually.
+export type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData> | "openBulkActionsDialog";
 
 export default class TreeContextMenu implements SelectMenuItemEventListener<TreeCommandNames> {
     private treeWidget: NoteTreeWidget;
-    private node: Node;
+    private node: Fancytree.FancytreeNode;
 
-    constructor(treeWidget: NoteTreeWidget, node: Node) {
+    constructor(treeWidget: NoteTreeWidget, node: Fancytree.FancytreeNode) {
         this.treeWidget = treeWidget;
         this.node = node;
     }
 
-    async show(e: PointerEvent) {
+    async show(e: PointerEvent | JQuery.TouchStartEvent | JQuery.ContextMenuEvent) {
         contextMenu.show({
-            x: e.pageX,
-            y: e.pageY,
+            x: e.pageX ?? 0,
+            y: e.pageY ?? 0,
             items: await this.getMenuItems(),
             selectMenuItemHandler: (item, e) => this.selectMenuItemHandler(item)
         });

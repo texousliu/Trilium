@@ -8,11 +8,14 @@ interface NoteRow {
     isDeleted?: boolean;
 }
 
-interface BranchRow {
+// TODO: Deduplicate with BranchRow from `rows.ts`/
+export interface BranchRow {
     noteId?: string;
     branchId: string;
     componentId: string;
     parentNoteId?: string;
+    isDeleted?: boolean;
+    isExpanded?: boolean;
 }
 
 export interface AttributeRow {

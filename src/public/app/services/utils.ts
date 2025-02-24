@@ -137,7 +137,7 @@ function isCtrlKey(evt: KeyboardEvent | MouseEvent | JQuery.ClickEvent | JQuery.
     return (!isMac() && evt.ctrlKey) || (isMac() && evt.metaKey);
 }
 
-function assertArguments(...args: string[]) {
+function assertArguments<T>(...args: T[]) {
     for (const i in args) {
         if (!args[i]) {
             console.trace(`Argument idx#${i} should not be falsy: ${args[i]}`);

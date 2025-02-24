@@ -3,7 +3,7 @@
 import dateNoteService from "../../services/date_notes.js";
 import sql from "../../services/sql.js";
 import cls from "../../services/cls.js";
-import specialNotesService from "../../services/special_notes.js";
+import specialNotesService, { type LauncherType } from "../../services/special_notes.js";
 import becca from "../../becca/becca.js";
 import type { Request } from "express";
 
@@ -85,7 +85,8 @@ function getHoistedNote() {
 function createLauncher(req: Request) {
     return specialNotesService.createLauncher({
         parentNoteId: req.params.parentNoteId,
-        launcherType: req.params.launcherType
+        // TODO: Validate the parameter
+        launcherType: req.params.launcherType as LauncherType
     });
 }
 

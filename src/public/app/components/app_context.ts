@@ -18,7 +18,6 @@ import type NoteDetailWidget from "../widgets/note_detail.js";
 import type { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import type { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
-import type { Node } from "../services/tree.js";
 import type LoadResults from "../services/load_results.js";
 import type { Attribute } from "../services/attribute_parser.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
@@ -49,15 +48,15 @@ export interface CommandData {
  * Represents a set of commands that are triggered from the context menu, providing information such as the selected note.
  */
 export interface ContextMenuCommandData extends CommandData {
-    node: Node;
-    notePath: string;
+    node: Fancytree.FancytreeNode;
+    notePath?: string;
     noteId?: string;
-    selectedOrActiveBranchIds: any; // TODO: Remove any once type is defined
+    selectedOrActiveBranchIds?: any; // TODO: Remove any once type is defined
     selectedOrActiveNoteIds: any; // TODO: Remove  any once type is defined
 }
 
 export interface NoteCommandData extends CommandData {
-    notePath: string;
+    notePath?: string;
     hoistedNoteId?: string;
     viewScope?: ViewScope;
 }
@@ -72,6 +71,7 @@ export interface ExecuteCommandData<T> extends CommandData {
 export type CommandMappings = {
     "api-log-messages": CommandData;
     focusTree: CommandData,
+    focusOnTitle: CommandData;
     focusOnDetail: CommandData;
     focusOnSearchDefinition: Required<CommandData>;
     searchNotes: CommandData & {
@@ -79,6 +79,7 @@ export type CommandMappings = {
         ancestorNoteId?: string | null;
     };
     closeTocCommand: CommandData;
+    closeHlt: CommandData;
     showLaunchBarSubtree: CommandData;
     showRevisions: CommandData;
     showOptions: CommandData & {
@@ -106,13 +107,18 @@ export type CommandMappings = {
     showPromptDialog: PromptDialogOptions;
     showInfoDialog: ConfirmWithMessageOptions;
     showConfirmDialog: ConfirmWithMessageOptions;
+    showRecentChanges: CommandData & { ancestorNoteId: string };
+    showImportDialog: CommandData & { noteId: string; };
     openNewNoteSplit: NoteCommandData;
     openInWindow: NoteCommandData;
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
+    openAboutDialog: CommandData;
+    hideFloatingButtons: {};
     hideLeftPane: CommandData;
     showLeftPane: CommandData;
+    hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
     enterProtectedSession: CommandData;
 
@@ -122,9 +128,12 @@ export type CommandMappings = {
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;
     delete: ContextMenuCommandData;
+    editNoteTitle: ContextMenuCommandData;
     protectSubtree: ContextMenuCommandData;
     unprotectSubtree: ContextMenuCommandData;
-    openBulkActionsDialog: ContextMenuCommandData;
+    openBulkActionsDialog: ContextMenuCommandData | {
+        selectedOrActiveNoteIds?: string[]
+    };
     editBranchPrefix: ContextMenuCommandData;
     convertNoteToAttachment: ContextMenuCommandData;
     duplicateSubtree: ContextMenuCommandData;
@@ -143,6 +152,11 @@ export type CommandMappings = {
     importIntoNote: ContextMenuCommandData;
     exportNote: ContextMenuCommandData;
     searchInSubtree: ContextMenuCommandData;
+    moveNoteUp: ContextMenuCommandData;
+    moveNoteDown: ContextMenuCommandData;
+    moveNoteUpInHierarchy: ContextMenuCommandData;
+    moveNoteDownInHierarchy: ContextMenuCommandData;
+    selectAllNotesInParent: ContextMenuCommandData;
 
     addNoteLauncher: ContextMenuCommandData;
     addScriptLauncher: ContextMenuCommandData;
@@ -175,6 +189,7 @@ export type CommandMappings = {
     importMarkdownInline: CommandData;
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
+    showUploadAttachmentsDialog: CommandData & { noteId: string };
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;
@@ -198,6 +213,7 @@ export type CommandMappings = {
         screen: Screen;
     };
     closeTab: CommandData;
+    closeToc: CommandData;
     closeOtherTabs: CommandData;
     closeRightTabs: CommandData;
     closeAllTabs: CommandData;
@@ -216,15 +232,20 @@ export type CommandMappings = {
     scrollContainerToCommand: CommandData & {
         position: number;
     };
-    moveThisNoteSplit: CommandData & {
-        isMovingLeft: boolean;
-    };
+    scrollToEnd: CommandData;
+    closeThisNoteSplit: CommandData;
+    moveThisNoteSplit: CommandData & { isMovingLeft: boolean; };
 
     // Geomap
     deleteFromMap: { noteId: string },
     openGeoLocation: { noteId: string, event: JQuery.MouseDownEvent }
 
     toggleZenMode: CommandData;
+
+    updateAttributeList: CommandData & { attributes: Attribute[] };
+    saveAttributes: CommandData;
+    reloadAttributes: CommandData;
+    refreshNoteList: CommandData & { noteId: string; };
 };
 
 type EventMappings = {
@@ -329,7 +350,6 @@ type EventMappings = {
     showToc: {
         noteId: string;
     };
-    scrollToEnd: { ntxId: string };
     noteTypeMimeChanged: { noteId: string };
     zenModeChanged: { isEnabled: boolean };
 };

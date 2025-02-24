@@ -11,7 +11,7 @@ import type { ViewScope } from "../services/link.js";
 import type FNote from "../entities/fnote.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 
-interface SetNoteOpts {
+export interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
     viewScope?: ViewScope;
 }
