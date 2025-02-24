@@ -10,7 +10,7 @@ const TPL = `
 <tr>
     <td class="title-column">${t("search_string.title_column")}</td>
     <td>
-        <textarea class="form-control search-string" placeholder="${t("search_string.placeholder")}"></textarea>
+        <textarea class="form-control search-string" placeholder="${t("search_string.placeholder")}" autofocus></textarea>
     </td>
     <td class="button-column">
         <div class="dropdown help-dropdown">
