@@ -23,10 +23,10 @@ jobs:
             extension: [dmg, zip]
           - name: linux
             image: ubuntu-latest
-            extension: [deb, rpm, zip]
+            extension: [deb, rpm, zip, flatpak]
           - name: windows
             image: windows-latest
-            extension: exe
+            extension: [exe, zip]
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4
@@ -39,13 +39,23 @@ jobs:
         with:
           os: ${{ matrix.os.name }}
           arch: ${{ matrix.arch }}
-          extension: ${{ matrix.os.extension }}
+          extension: ${{ join(matrix.os.extension, ' ') }}
+        env:
+          APPLE_APP_CERTIFICATE_BASE64: ${{ secrets.APPLE_APP_CERTIFICATE_BASE64 }}
+          APPLE_APP_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_APP_CERTIFICATE_PASSWORD }}
+          APPLE_INSTALLER_CERTIFICATE_BASE64: ${{ secrets.APPLE_INSTALLER_CERTIFICATE_BASE64 }}
+          APPLE_INSTALLER_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_INSTALLER_CERTIFICATE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
           fail_on_unmatched_files: true
           files: upload/*.*
+
   build_linux_server-x64:
     name: Build Linux Server
     strategy:
@@ -64,6 +74,7 @@ jobs:
       - name: Run the build
         uses: ./.github/actions/build-server
         with:
+          os: linux
           arch: ${{ matrix.arch }}
 
       - name: Publish release

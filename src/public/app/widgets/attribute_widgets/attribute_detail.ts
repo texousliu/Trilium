@@ -13,7 +13,7 @@ import appContext from "../../components/app_context.js";
 import type { Attribute } from "../../services/attribute_parser.js";
 
 const TPL = `
-<div class="attr-detail">
+<div class="attr-detail tn-tool-dialog">
     <style>
         .attr-detail {
             display: block;
@@ -48,8 +48,12 @@ const TPL = `
             text-align: left;
         }
 
-        .attr-edit-table td input {
+        .attr-edit-table td input[not(type="checkbox")] {
             width: 100%;
+        }
+
+        .attr-edit-table td input[type="checkbox"] {
+            display: inline-block;
         }
 
         .close-attr-detail-button {
@@ -76,7 +80,7 @@ const TPL = `
     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
         <h5 class="attr-detail-title">${t("attribute_detail.attr_detail_title")}</h5>
 
-        <span class="bx bx-x close-attr-detail-button" title="${t("attribute_detail.close_button_title")}"></span>
+        <span class="bx bx-x close-attr-detail-button tn-tool-button" title="${t("attribute_detail.close_button_title")}"></span>
     </div>
 
     <div class="attr-is-owned-by">${t("attribute_detail.attr_is_owned_by")}</div>
@@ -104,7 +108,7 @@ const TPL = `
             <th></th>
             <td>
                 <label class="tn-checkbox">
-                    <input type="checkbox" class="attr-input-promoted form-check" />
+                    <input type="checkbox" class="attr-input-promoted" />
                     ${t("attribute_detail.promoted")}
                 </label>
             </td>
@@ -161,7 +165,7 @@ const TPL = `
             <th></th>
             <td>
                 <label class="tn-checkbox">
-                    <input type="checkbox" class="attr-input-inheritable form-check" />
+                    <input type="checkbox" class="attr-input-inheritable" />
                     ${t("attribute_detail.inheritable")}
                 </label>
             </td>

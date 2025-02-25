@@ -1,5 +1,7 @@
 "use strict";
 
+import chardet from "chardet";
+import stripBom from "strip-bom";
 import crypto from "crypto";
 import { generator } from "rand-token";
 import unescape from "unescape";
@@ -10,6 +12,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import type NoteMeta from "./meta/note_meta.js";
+import log from "./log.js";
+import { t } from "i18next";
 
 const randtoken = generator({ source: "crypto" });
 
@@ -105,10 +109,13 @@ export function escapeRegExp(str: string) {
     return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
-export async function crash() {
+export async function crash(message: string) {
     if (isElectron) {
-        (await import("electron")).app.exit(1);
+        const electron = await import("electron");
+        electron.dialog.showErrorBox(t("modals.error_title"), message);
+        electron.app.exit(1);
     } else {
+        log.error(message);
         process.exit(1);
     }
 }
@@ -168,6 +175,7 @@ export function removeTextFileExtension(filePath: string) {
 
     switch (extension) {
         case ".md":
+        case ".mdx":
         case ".markdown":
         case ".html":
         case ".htm":
@@ -322,6 +330,36 @@ function compareVersions(v1: string, v2: string): number {
     }
 
     return 0;
+}
+
+/**
+ * For buffers, they are scanned for a supported encoding and decoded (UTF-8, UTF-16). In some cases, the BOM is also stripped.
+ *
+ * For strings, they are returned immediately without any transformation.
+ *
+ * For nullish values, an empty string is returned.
+ *
+ * @param data the string or buffer to process.
+ * @returns the string representation of the buffer, or the same string is it's a string.
+ */
+export function processStringOrBuffer(data: string | Buffer | null) {
+    if (!data) {
+        return "";
+    }
+
+    if (!Buffer.isBuffer(data)) {
+        return data;
+    }
+
+    const detectedEncoding = chardet.detect(data);
+    console.log("Detected as ", detectedEncoding);
+    switch (detectedEncoding) {
+        case "UTF-16LE":
+            return stripBom(data.toString("utf-16le"));
+        case "UTF-8":
+        default:
+            return data.toString("utf-8");
+    }
 }
 
 export default {

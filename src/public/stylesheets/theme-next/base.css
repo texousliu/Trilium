@@ -1,5 +1,6 @@
 @import url(./forms.css);
 @import url(./shell.css);
+@import url(./ribbon.css);
 @import url(./settings.css);
 @import url(./notes/empty.css);
 @import url(./notes/text.css);
@@ -64,6 +65,14 @@
 
     /* Theme capabilities */
     --tab-note-icons: true;
+}
+
+/* Tool dialogs - small dialogs without a backdrop */
+div.tn-tool-dialog {
+    border-radius: 10px;
+    background: var(--tool-dialog-background-color) !important;
+    user-select: none;
+    box-shadow: 10px 10px 93px -25px var(--tool-dialog-shadow-color);
 }
 
 /*

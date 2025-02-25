@@ -1,4 +1,7 @@
 inputs:
+  os:
+    description: "One of the supported platforms: windows"
+    required: true
   arch:
     description: "The architecture to build for: x64, arm64"
     required: true
@@ -18,11 +21,11 @@ runs:
         MATRIX_ARCH: ${{ inputs.arch }}
       shell: bash
       run: |
-        npm run update-build-info
+        npm run chore:update-build-info
         ./bin/build-server.sh
     - name: Prepare artifacts
       shell: bash
       run: |
         mkdir -p upload
         file=$(find dist -name '*.tar.xz' -print -quit)
-        cp "$file" "upload/TriliumNextNotes-linux-${{ inputs.arch }}-${{ github.ref_name }}.tar.xz"
+        cp "$file" "upload/TriliumNextNotes-Server-${{ github.ref_name }}-${{ inputs.os }}-${{ inputs.arch }}.tar.xz"

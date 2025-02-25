@@ -20,13 +20,13 @@ jobs:
         os:
           - name: macos
             image: macos-latest
-            extension: dmg
+            extension: [dmg, zip]
           - name: linux
             image: ubuntu-latest
-            extension: deb
+            extension: [deb, rpm, zip, flatpak]
           - name: windows
             image: windows-latest
-            extension: exe
+            extension: [exe, zip]
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4
@@ -38,32 +38,25 @@ jobs:
         shell: bash
         run: npm ci
       - name: Update nightly version
-        run: npm run ci-update-nightly-version
+        run: npm run chore:ci-update-nightly-version
       - name: Run the build
         uses: ./.github/actions/build-electron
         with:
           os: ${{ matrix.os.name }}
           arch: ${{ matrix.arch }}
-          extension: ${{ matrix.os.extension }}
-      - run: find output
+          extension: ${{ join(matrix.os.extension, ' ') }}
 
-      - name: Deploy release
-        uses: WebFreak001/deploy-nightly@v3.2.0
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ env.GITHUB_UPLOAD_URL }}
-          release_id: ${{ env.GITHUB_RELEASE_ID }}
-          asset_path: upload/TriliumNextNotes-${{ github.ref_name }}-${{ matrix.os.name }}-${{ matrix.arch }}.zip # path to archive to upload
-          asset_name: TriliumNextNotes-${{ github.ref_name }}-${{ matrix.os.name }}-${{ matrix.arch }}-nightly.zip # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
-          asset_content_type: application/zip # required by GitHub API
+          make_latest: false
+          prerelease: true
+          draft: false
+          fail_on_unmatched_files: true
+          files: upload/*.*
+          tag_name: nightly
+          name: Nightly Build
 
-      - name: Deploy installer release
-        uses: WebFreak001/deploy-nightly@v3.2.0
-        with:
-          upload_url: ${{ env.GITHUB_UPLOAD_URL }}
-          release_id: ${{ env.GITHUB_RELEASE_ID }}
-          asset_path: upload/TriliumNextNotes-${{ github.ref_name }}-${{ matrix.os.name }}-${{ matrix.arch }}.${{ matrix.os.extension }} # path to archive to upload
-          asset_name: TriliumNextNotes-${{ github.ref_name }}-${{ matrix.os.name }}-${{ matrix.arch }}-nightly.${{ matrix.os.extension }} # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
-          asset_content_type: application/zip # required by GitHub API
   nightly-server:
     name: Deploy server nightly
     strategy:
@@ -82,13 +75,16 @@ jobs:
       - name: Run the build
         uses: ./.github/actions/build-server
         with:
+          os: linux
           arch: ${{ matrix.arch }}
 
-      - name: Deploy release
-        uses: WebFreak001/deploy-nightly@v3.2.0
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ env.GITHUB_UPLOAD_URL }}
-          release_id: ${{ env.GITHUB_RELEASE_ID }}
-          asset_path: upload/TriliumNextNotes-linux-${{ matrix.arch }}-${{ github.ref_name }}.tar.xz # path to archive to upload
-          asset_name: TriliumNextNotes-linux-${{ matrix.arch }}-nightly.zip # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
-          asset_content_type: application/zip # required by GitHub API
+          make_latest: false
+          prerelease: true
+          draft: false
+          fail_on_unmatched_files: true
+          files: upload/*.*
+          tag_name: nightly
+          name: Nightly Build
