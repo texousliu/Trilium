@@ -191,6 +191,26 @@ export default class TaskListWidget extends TypeWidget {
         });
     }
 
+    async #getTasks() {
+        if (!this.noteId) {
+            return [];
+        }
+
+        return (await froca.getTasks(this.noteId))
+            .toSorted((a, b) => {
+                // Sort by due date, closest date first.
+                if (!a.dueDate) {
+                    return 1;
+                }
+
+                if (!b.dueDate) {
+                    return -1;
+                }
+
+                return a.dueDate.localeCompare(b.dueDate, "en");
+            });
+    }
+
     async doRefresh(note: FNote) {
         this.$widget.show();
 
@@ -198,7 +218,7 @@ export default class TaskListWidget extends TypeWidget {
             return;
         }
 
-        const tasks = await froca.getTasks(this.noteId);
+        const tasks = await this.#getTasks();
         const tasksHtml = buildTasks(tasks);
         this.$taskContainer.html(tasksHtml);
     }
