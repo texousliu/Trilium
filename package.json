@@ -76,7 +76,7 @@
     "axios": "1.7.9",
     "better-sqlite3": "11.8.1",
     "boxicons": "2.1.4",
-    "chardet": "2.0.0",
+    "chardet": "2.1.0",
     "cheerio": "1.0.0",
     "chokidar": "4.0.3",
     "cls-hooked": "4.2.2",
