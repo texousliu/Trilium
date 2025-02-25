@@ -37,7 +37,7 @@ export default class RightDropdownButtonWidget extends BasicWidget {
         };
     }
 
-    doRender(): void {
+    doRender() {
         this.$widget = $(TPL);
         this.$dropdownMenu = this.$widget.find(".dropdown-menu");
         this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0]);
