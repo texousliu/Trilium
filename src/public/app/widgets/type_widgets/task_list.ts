@@ -162,7 +162,7 @@ export default class TaskListWidget extends TypeWidget {
             }
         });
 
-        this.$taskContainer.on("change", "input", async (e) => {
+        this.$taskContainer.on("change", "input:not(.check)", async (e) => {
             const $target = $(e.target);
             const task = this.#getCorrespondingTask($target);
             if (!task) {
