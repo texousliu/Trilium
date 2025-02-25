@@ -4,7 +4,9 @@ import froca from "../../services/froca.js";
 import TypeWidget from "./type_widget.js";
 import * as taskService from "../../services/tasks.js";
 import type { EventData } from "../../components/app_context.js";
-import { html } from "cheerio";
+import dayjs from "dayjs";
+import calendarTime from "dayjs/plugin/calendar.js";
+dayjs.extend(calendarTime);
 
 const TPL = `
 <div class="note-detail-task-list note-detail-printable">
@@ -81,7 +83,7 @@ function buildTasks(tasks: FTask[]) {
         if (task.dueDate) {
             html += `<span class="due-date">`;
             html += `<span class="bx bx-calendar"></span> `;
-            html += task.dueDate;
+            html += dayjs(task.dueDate).calendar();
             html += "</span>";
         }
         html += `<div class="edit-container"></div>`;
