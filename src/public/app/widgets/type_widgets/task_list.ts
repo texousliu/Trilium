@@ -4,6 +4,7 @@ import froca from "../../services/froca.js";
 import TypeWidget from "./type_widget.js";
 import * as taskService from "../../services/tasks.js";
 import type { EventData } from "../../components/app_context.js";
+import { html } from "cheerio";
 
 const TPL = `
 <div class="note-detail-task-list note-detail-printable">
@@ -48,6 +49,12 @@ const TPL = `
             background: var(--input-background-color);
             border-bottom: 1px solid var(--main-background-color);
             padding: 0.5em 1em;
+            cursor: pointer;
+        }
+
+        .note-detail-task-list .task-container li:hover {
+            background: var(--input-hover-background);
+            transition: background 250ms ease-in-out;
         }
 
         .note-detail-task-list .task-container li .check {
@@ -61,9 +68,18 @@ function buildTasks(tasks: FTask[]) {
     let html = '';
 
     for (const task of tasks) {
-        html += `<li class="task"><input type="checkbox" class="check" data-task-id="${task.taskId}" ${task.isDone ? "checked" : ""} />${task.title}</li>`;
+        html += `<li class="task">`;
+        html += `<input type="checkbox" class="check" data-task-id="${task.taskId}" ${task.isDone ? "checked" : ""} />`;
+        html += task.title;
+        html += `<div class="edit-container"></div>`;
+        html += `</li>`;
     }
 
+    return html;
+}
+
+function buildEditContainer() {
+    const html = `Edit goes here.`;
     return html;
 }
 
@@ -95,6 +111,12 @@ export default class TaskListWidget extends TypeWidget {
             }
 
             taskService.toggleTaskDone(taskId);
+        });
+
+        this.$taskContainer.on("click", "li", (e) => {
+            const $target = $(e.target);
+            const $editContainer = $target.find(".edit-container");
+            $editContainer.html(buildEditContainer());
         });
     }
 
