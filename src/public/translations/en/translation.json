@@ -1670,7 +1670,10 @@
     "check_share_root": "Check Share Root Status",
     "share_root_found": "Share root note '{{noteTitle}}' is ready",
     "share_root_not_found": "No note with #shareRoot label found",
-    "share_root_not_shared": "Note '{{noteTitle}}' has #shareRoot label but is not Shared"
+    "share_root_not_shared": "Note '{{noteTitle}}' has #shareRoot label but is not Shared",
+    "use_clean_urls": "Use clean URLs for shared notes",
+    "use_clean_urls_description": "When enabled, shared note URLs will be simplified from /share/STi3RCMhUvG6 to /STi3RCMhUvG6",
+    "share_subtree": "Share subtree"
   },
   "time_selector": {
     "invalid_input": "The entered time value is not a valid number.",

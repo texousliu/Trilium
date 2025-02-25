@@ -14,11 +14,24 @@ const TPL = `
     </label>
     <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
 
+    <div class="share-root-check mt-2 mb-2" style="display: none;">
+        <button class="btn btn-sm btn-secondary check-share-root">${t("share.check_share_root")}</button>
+        <div class="share-root-status form-text mt-2"></div>
+    </div>
+
     <label class="tn-checkbox">
         <input class="form-check-input" type="checkbox" name="showLoginInShareTheme" value="true">
         ${t("share.show_login_link")}
     </label>
     <p class="form-text">${t("share.show_login_link_description")}</p>
+
+    <div class="mt-3">
+        <label class="tn-checkbox">
+            <input class="form-check-input" type="checkbox" name="useCleanUrls" value="true">
+            <span>${t("share.use_clean_urls")}</span>
+        </label>
+        <p class="form-text">${t("share.use_clean_urls_description")}</p>
+    </div>
 </div>`;
 
 export default class ShareSettingsOptions extends OptionsWidget {
@@ -59,6 +72,7 @@ export default class ShareSettingsOptions extends OptionsWidget {
         }
 
         this.$widget.find('input[name="showLoginInShareTheme"]').prop("checked", options.showLoginInShareTheme === "true");
+        this.$widget.find('input[name="useCleanUrls"]').prop("checked", options.useCleanUrls === "true");
     }
 
     async checkShareRoot() {
@@ -93,5 +107,8 @@ export default class ShareSettingsOptions extends OptionsWidget {
 
         const showLoginInShareTheme = this.$widget.find('input[name="showLoginInShareTheme"]').prop("checked");
         await this.updateOption<"showLoginInShareTheme">("showLoginInShareTheme", showLoginInShareTheme.toString());
+
+        const useCleanUrls = this.$widget.find('input[name="useCleanUrls"]').prop("checked");
+        await this.updateOption<"useCleanUrls">("useCleanUrls", useCleanUrls.toString());
     }
 }

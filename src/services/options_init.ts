@@ -259,7 +259,9 @@ const defaultOptions: DefaultOption[] = [
 
     // Share settings
     { name: "redirectBareDomain", value: "false", isSynced: true },
-    { name: "showLoginInShareTheme", value: "false", isSynced: true }
+    { name: "showLoginInShareTheme", value: "false", isSynced: true },
+    { name: "useCleanUrls", value: "false", isSynced: true },
+    { name: "shareSubtree", value: "false", isSynced: true }
 ];
 
 /**

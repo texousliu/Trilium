@@ -77,7 +77,9 @@ const ALLOWED_OPTIONS = new Set([
     "backgroundEffects",
     "allowedHtmlTags",
     "redirectBareDomain",
-    "showLoginInShareTheme"
+    "showLoginInShareTheme",
+    "shareSubtree",
+    "useCleanUrls"
 ]);
 
 function getOptions() {

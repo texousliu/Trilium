@@ -22,11 +22,42 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
             // Check if any note has the #shareRoot label
             const shareRootNotes = attributes.getNotesWithLabel("shareRoot");
             if (shareRootNotes.length === 0) {
+                // should this be a translation string?
                 res.status(404).json({ message: "Share root not found. Please set up a note with #shareRoot label first." });
                 return;
             }
         }
+        // not sure about this. 'share' is dynamic, whatever is turned up by shareRootNote
         res.redirect(redirectToShare ? "share" : "login");
+    } else {
+        next();
+    }
+}
+
+/**
+ * Checks if a URL path might be a shared note ID when clean URLs are enabled
+ */
+function checkCleanUrl(req: Request, res: Response, next: NextFunction) {
+    // Only process if not logged in and clean URLs are enabled
+    if (!req.session.loggedIn && !isElectron && !noAuthentication &&
+        options.getOptionBool("redirectBareDomain") &&
+        options.getOptionBool("useCleanUrls")) {
+
+        // Get path without leading slash
+        const path = req.path.substring(1);
+
+        // Skip processing for known routes and empty paths
+        if (!path || path === 'login' || path === 'setup' || path.startsWith('share/') || path.startsWith('api/')) {
+            next();
+            return;
+        }
+
+        // Redirect to the share URL with this ID
+        // broken, we don't know what `/share/` will be.
+        // oh! we need to add "what should be share path url?" to settings,
+        //  require path begin with slash
+        // and allow bare `/` as an answer
+        res.redirect(`/share/${path}`);
     } else {
         next();
     }
@@ -134,5 +165,6 @@ export default {
     checkAppNotInitialized,
     checkApiAuthOrElectron,
     checkEtapiToken,
-    checkCredentials
+    checkCredentials,
+    checkCleanUrl
 };
