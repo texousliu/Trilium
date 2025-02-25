@@ -114,6 +114,11 @@ export default class TaskListWidget extends TypeWidget {
         });
 
         this.$taskContainer.on("click", "li", (e) => {
+            // Clear existing edit containers.
+            const $existingContainers = this.$taskContainer.find(".edit-container");
+            $existingContainers.html("");
+
+            // Add the new edit container.
             const $target = $(e.target);
             const $editContainer = $target.find(".edit-container");
             $editContainer.html(buildEditContainer());
