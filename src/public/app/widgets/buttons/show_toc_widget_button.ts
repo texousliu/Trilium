@@ -5,7 +5,7 @@ import { t } from "../../services/i18n.js";
 import LoadResults from "../../services/load_results.js";
 import type { AttributeRow } from "../../services/load_results.js";
 
-export default class ShowHighlightsListWidgetButton extends OnClickButtonWidget {
+export default class ShowTocWidgetButton extends OnClickButtonWidget {
     isEnabled(): boolean {
         return Boolean(super.isEnabled() && this.note && this.note.type === "text" && this.noteContext?.viewScope?.viewMode === "default");
     }
@@ -13,13 +13,13 @@ export default class ShowHighlightsListWidgetButton extends OnClickButtonWidget 
     constructor() {
         super();
 
-        this.icon("bx-highlight")
-            .title(t("show_highlights_list_widget_button.show_highlights_list"))
+        this.icon("bx-objects-horizontal-left")
+            .title(t("show_toc_widget_button.show_toc"))
             .titlePlacement("bottom")
             .onClick(() => {
                 if (this.noteContext?.viewScope && this.noteId) {
-                    this.noteContext.viewScope.highlightsListTemporarilyHidden = false;
-                    appContext.triggerEvent("showHighlightsListWidget", { noteId: this.noteId });
+                    this.noteContext.viewScope.tocTemporarilyHidden = false;
+                    appContext.triggerEvent("showTocWidget", { noteId: this.noteId });
                 }
                 this.toggleInt(false);
             });
@@ -27,11 +27,11 @@ export default class ShowHighlightsListWidgetButton extends OnClickButtonWidget 
 
     async refreshWithNote(): Promise<void> {
         if (this.noteContext?.viewScope) {
-            this.toggleInt(this.noteContext.viewScope.highlightsListTemporarilyHidden);
+            this.toggleInt(this.noteContext.viewScope.tocTemporarilyHidden);
         }
     }
 
-    async reEvaluateHighlightsListWidgetVisibilityEvent({ noteId }: { noteId: string }): Promise<void> {
+    async reEvaluateTocWidgetVisibilityEvent({ noteId }: { noteId: string }): Promise<void> {
         if (noteId === this.noteId) {
             await this.refresh();
         }
@@ -45,7 +45,7 @@ export default class ShowHighlightsListWidgetButton extends OnClickButtonWidget 
                 .getAttributeRows()
                 .find((attr: AttributeRow) =>
                     attr.type === "label" &&
-                    (attr.name?.toLowerCase().includes("readonly") || attr.name === "hideHighlightWidget") &&
+                    (attr.name?.toLowerCase().includes("readonly") || attr.name === "toc") &&
                     this.note &&
                     attributeService.isAffecting(attr, this.note)
                 )
