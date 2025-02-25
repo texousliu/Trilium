@@ -78,10 +78,10 @@ function buildTasks(tasks: FTask[]) {
     return html;
 }
 
-function buildEditContainer() {
+function buildEditContainer(task: FTask) {
     return `\
         <label>Due date:</label>
-        <input type="date" data-tasks-role="due-date" />
+        <input type="date" data-tasks-role="due-date" value="${task.dueDate ?? ""}" />
     `;
 }
 
@@ -130,18 +130,15 @@ export default class TaskListWidget extends TypeWidget {
 
             // Add the new edit container.
             const $editContainer = $target.find(".edit-container");
-            $editContainer.html(buildEditContainer());
+            const task = this.#getCorrespondingTask($target);
+            if (task) {
+                $editContainer.html(buildEditContainer(task));
+            }
         });
 
         this.$taskContainer.on("change", "input", async (e) => {
             const $target = $(e.target);
-            const taskId = $target.closest("li")[0].dataset.taskId;
-            if (!taskId) {
-                return;
-            }
-
-            const task = froca.getTask(taskId);
-
+            const task = this.#getCorrespondingTask($target);
             if (!task) {
                 return;
             }
@@ -157,6 +154,15 @@ export default class TaskListWidget extends TypeWidget {
 
             await taskService.updateTask(task);
         });
+    }
+
+    #getCorrespondingTask($target: JQuery<HTMLElement>) {
+        const taskId = $target.closest("li")[0].dataset.taskId;
+        if (!taskId) {
+            return;
+        }
+
+        return froca.getTask(taskId);
     }
 
     async #createNewTask(title: string) {
