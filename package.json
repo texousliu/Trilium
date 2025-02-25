@@ -206,7 +206,7 @@
     "@types/ws": "8.5.14",
     "@types/xml2js": "0.4.14",
     "@types/yargs": "17.0.33",
-    "@vitest/coverage-v8": "3.0.6",
+    "@vitest/coverage-v8": "3.0.7",
     "autoprefixer": "10.4.20",
     "bootstrap": "5.3.3",
     "cross-env": "7.0.3",
@@ -228,7 +228,7 @@
     "tsx": "4.19.3",
     "typedoc": "0.27.9",
     "typescript": "5.7.3",
-    "vitest": "3.0.6",
+    "vitest": "3.0.7",
     "webpack": "5.98.0",
     "webpack-cli": "6.0.1",
     "webpack-dev-middleware": "7.4.2"
