@@ -68,8 +68,8 @@ function buildTasks(tasks: FTask[]) {
     let html = '';
 
     for (const task of tasks) {
-        html += `<li class="task">`;
-        html += `<input type="checkbox" class="check" data-task-id="${task.taskId}" ${task.isDone ? "checked" : ""} />`;
+        html += `<li class="task" data-task-id="${task.taskId}">`;
+        html += `<input type="checkbox" class="check" ${task.isDone ? "checked" : ""} />`;
         html += task.title;
         html += `<div class="edit-container"></div>`;
         html += `</li>`;
@@ -79,8 +79,10 @@ function buildTasks(tasks: FTask[]) {
 }
 
 function buildEditContainer() {
-    const html = `Edit goes here.`;
-    return html;
+    return `\
+        <label>Due date:</label>
+        <input type="date" data-tasks-role="due-date" />
+    `;
 }
 
 export default class TaskListWidget extends TypeWidget {
@@ -102,9 +104,9 @@ export default class TaskListWidget extends TypeWidget {
             }
         });
 
-        this.$taskContainer.on("change", "input", (e) => {
-            const target = e.target as HTMLInputElement;
-            const taskId = target.dataset.taskId;
+        this.$taskContainer.on("change", "input.check", (e) => {
+            const $target = $(e.target);
+            const taskId = $target.closest("li")[0].dataset.taskId;
 
             if (!taskId) {
                 return;
@@ -114,14 +116,46 @@ export default class TaskListWidget extends TypeWidget {
         });
 
         this.$taskContainer.on("click", "li", (e) => {
+            const $target = $(e.target);
+
+            // Don't collapse when clicking on an inside element such as the due date dropdown.
+            if (e.currentTarget !== e.target) {
+                return;
+            }
+
             // Clear existing edit containers.
             const $existingContainers = this.$taskContainer.find(".edit-container");
+
             $existingContainers.html("");
 
             // Add the new edit container.
-            const $target = $(e.target);
             const $editContainer = $target.find(".edit-container");
             $editContainer.html(buildEditContainer());
+        });
+
+        this.$taskContainer.on("change", "input", async (e) => {
+            const $target = $(e.target);
+            const taskId = $target.closest("li")[0].dataset.taskId;
+            if (!taskId) {
+                return;
+            }
+
+            const task = froca.getTask(taskId);
+
+            if (!task) {
+                return;
+            }
+
+            const role = $target.data("tasks-role");
+            const value = String($target.val());
+
+            switch (role) {
+                case "due-date":
+                    task.dueDate = value;
+                    break;
+            }
+
+            await taskService.updateTask(task);
         });
     }
 
