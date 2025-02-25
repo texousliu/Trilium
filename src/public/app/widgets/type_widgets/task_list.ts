@@ -60,6 +60,13 @@ const TPL = `
         .note-detail-task-list .task-container li .check {
             margin-right: 0.5em;
         }
+
+        .note-detail-task-list .task-container li .due-date {
+            float: right;
+            font-size: 0.9rem;
+            margin-top: 0.1rem;
+            vertical-align: middle;
+        }
     </style>
 </div>
 `;
@@ -71,6 +78,12 @@ function buildTasks(tasks: FTask[]) {
         html += `<li class="task" data-task-id="${task.taskId}">`;
         html += `<input type="checkbox" class="check" ${task.isDone ? "checked" : ""} />`;
         html += task.title;
+        if (task.dueDate) {
+            html += `<span class="due-date">`;
+            html += `<span class="bx bx-calendar"></span> `;
+            html += task.dueDate;
+            html += "</span>";
+        }
         html += `<div class="edit-container"></div>`;
         html += `</li>`;
     }
