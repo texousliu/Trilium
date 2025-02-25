@@ -69,6 +69,10 @@ const TPL = `
             margin-top: 0.1rem;
             vertical-align: middle;
         }
+
+        .note-detail-task-list .task-container li.overdue .due-date {
+            color: #fd8282;
+        }
     </style>
 </div>
 `;
@@ -76,8 +80,15 @@ const TPL = `
 function buildTasks(tasks: FTask[]) {
     let html = '';
 
+    const now = dayjs();
     for (const task of tasks) {
-        html += `<li class="task" data-task-id="${task.taskId}">`;
+        const classes = ["task"];
+
+        if (task.dueDate && dayjs(task.dueDate).isBefore(now, "days")) {
+            classes.push("overdue");
+        }
+
+        html += `<li class="${classes.join(" ")}" data-task-id="${task.taskId}">`;
         html += `<input type="checkbox" class="check" ${task.isDone ? "checked" : ""} />`;
         html += task.title;
         if (task.dueDate) {
