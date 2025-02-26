@@ -20,8 +20,8 @@ runs:
       if: inputs.os == 'macos'
       uses: apple-actions/import-codesign-certs@v2
       with:
-        p12-file-base64: ${{ env.APPLE_APP_CERTIFICATE_BASE64 }}
-        p12-password: ${{ env.APPLE_APP_CERTIFICATE_PASSWORD }}
+        p12-file-base64: ${{ secrets.APPLE_APP_CERTIFICATE_BASE64 }}
+        p12-password: ${{ secrets.APPLE_APP_CERTIFICATE_PASSWORD }}
         keychain: build
         keychain-password: ${{ github.run_id }}
 
@@ -29,8 +29,8 @@ runs:
       if: inputs.os == 'macos'
       uses: apple-actions/import-codesign-certs@v2
       with:
-        p12-file-base64: ${{ env.APPLE_INSTALLER_CERTIFICATE_BASE64 }}
-        p12-password: ${{ env.APPLE_INSTALLER_CERTIFICATE_PASSWORD }}
+        p12-file-base64: ${{ secrets.APPLE_INSTALLER_CERTIFICATE_BASE64 }}
+        p12-password: ${{ secrets.APPLE_INSTALLER_CERTIFICATE_PASSWORD }}
         keychain: build
         keychain-password: ${{ github.run_id }}
         # We don't need to create a keychain here because we're using the build keychain that was created in the previous step
@@ -74,9 +74,9 @@ runs:
       shell: bash
       env:
         # Pass through required environment variables for signing and notarization
-        APPLE_TEAM_ID: ${{ env.APPLE_TEAM_ID }}
-        APPLE_ID: ${{ env.APPLE_ID }}
-        APPLE_ID_PASSWORD: ${{ env.APPLE_ID_PASSWORD }}
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
       run: |
         # Map OS names to Electron Forge platform names
         if [ "${{ inputs.os }}" = "macos" ]; then
