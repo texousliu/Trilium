@@ -12,7 +12,8 @@ const TPL = `
     <p>${t("etapi.description")} <br/>
       ${t("etapi.see_more", {
         link_to_wiki: `<a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a>`,
-        link_to_openapi_spec: `<a class="tn-link" onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>`
+        link_to_openapi_spec: `<a class="tn-link" onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>`,
+        link_to_swagger_ui: `<a class="tn-link" onclick="window.open('etapi/docs')" href="etapi/docs">${t("etapi.swagger_ui")}</a>`
       })}
     </p>
 

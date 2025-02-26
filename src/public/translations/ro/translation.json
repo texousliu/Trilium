@@ -491,6 +491,7 @@
     "new_token_title": "Token ETAPI nou",
     "no_tokens_yet": "Nu există încă token-uri. Clic pe butonul de deasupra pentru a crea una.",
     "openapi_spec": "Specificația OpenAPI pentru ETAPI",
+    "swagger_ui": "",
     "rename_token": "Redenumește token-ul",
     "rename_token_message": "Introduceți denumirea noului token",
     "rename_token_title": "Redenumire token",

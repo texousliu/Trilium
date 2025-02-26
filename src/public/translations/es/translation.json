@@ -1248,6 +1248,7 @@
     "see_more": "",
     "wiki": "wiki",
     "openapi_spec": "Especificación ETAPI OpenAPI",
+    "swagger_ui": "",
     "create_token": "Crear nuevo token ETAPI",
     "existing_tokens": "Tokens existentes",
     "no_tokens_yet": "Aún no hay tokens. Dé clic en el botón de arriba para crear uno.",

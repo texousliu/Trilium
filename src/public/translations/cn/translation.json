@@ -1224,6 +1224,7 @@
     "see_more": "",
     "wiki": "维基",
     "openapi_spec": "ETAPI OpenAPI 规范",
+    "swagger_ui": "",
     "create_token": "创建新的 ETAPI 令牌",
     "existing_tokens": "现有令牌",
     "no_tokens_yet": "目前还没有令牌。点击上面的按钮创建一个。",

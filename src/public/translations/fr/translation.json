@@ -1255,6 +1255,7 @@
     "see_more": "",
     "wiki": "wiki",
     "openapi_spec": "Spec ETAPI OpenAPI",
+    "swagger_ui": "",
     "create_token": "Créer un nouveau jeton ETAPI",
     "existing_tokens": "Jetons existants",
     "no_tokens_yet": "Il n'y a pas encore de jetons. Cliquez sur le bouton ci-dessus pour en créer un.",
