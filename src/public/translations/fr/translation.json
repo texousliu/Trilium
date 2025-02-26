@@ -1252,10 +1252,10 @@
   "etapi": {
     "title": "ETAPI",
     "description": "ETAPI est une API REST utilisée pour accéder à l'instance Trilium par programme, sans interface utilisateur.",
-    "see_more": "Voir plus de détails sur",
+    "see_more": "",
     "wiki": "wiki",
-    "and": "et",
     "openapi_spec": "Spec ETAPI OpenAPI",
+    "swagger_ui": "",
     "create_token": "Créer un nouveau jeton ETAPI",
     "existing_tokens": "Jetons existants",
     "no_tokens_yet": "Il n'y a pas encore de jetons. Cliquez sur le bouton ci-dessus pour en créer un.",

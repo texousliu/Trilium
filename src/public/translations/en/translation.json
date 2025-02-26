@@ -1252,10 +1252,10 @@
   "etapi": {
     "title": "ETAPI",
     "description": "ETAPI is a REST API used to access Trilium instance programmatically, without UI.",
-    "see_more": "See more details on",
+    "see_more": "See more details in the {{- link_to_wiki}} and the {{- link_to_openapi_spec}} or the {{- link_to_swagger_ui }}.",
     "wiki": "wiki",
-    "and": "and",
     "openapi_spec": "ETAPI OpenAPI spec",
+    "swagger_ui": "ETAPI Swagger UI",
     "create_token": "Create new ETAPI token",
     "existing_tokens": "Existing tokens",
     "no_tokens_yet": "There are no tokens yet. Click on the button above to create one.",
