@@ -56,7 +56,7 @@ const copy = async () => {
         await fs.copy(dir, path.join(DEST_DIR, dir));
     }
 
-    const srcDirsToCopy = ["./src/public", "./src/views"];
+    const srcDirsToCopy = ["./src/views"];
     for (const dir of srcDirsToCopy) {
         log(`Copying ${dir}`);
         await fs.copy(dir, path.join(DEST_DIR_SRC, path.basename(dir)));
