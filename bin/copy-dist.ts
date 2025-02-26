@@ -49,17 +49,12 @@ const copy = async () => {
         "db",
         "src/public/fonts",
         "src/public/stylesheets",
-        "src/public/translations"
+        "src/public/translations",
+        "src/views/"
     ];
     for (const dir of dirsToCopy) {
         log(`Copying ${dir}`);
         await fs.copy(dir, path.join(DEST_DIR, dir));
-    }
-
-    const srcDirsToCopy = ["./src/views"];
-    for (const dir of srcDirsToCopy) {
-        log(`Copying ${dir}`);
-        await fs.copy(dir, path.join(DEST_DIR_SRC, path.basename(dir)));
     }
 
     /**
