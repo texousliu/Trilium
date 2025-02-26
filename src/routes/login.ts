@@ -46,7 +46,8 @@ function setPassword(req: Request, res: Response) {
     if (error) {
         res.render("set_password", {
             error,
-            assetPath: assetPath
+            assetPath: assetPath,
+            appPath: appPath
         });
         return;
     }
@@ -65,7 +66,8 @@ function login(req: Request, res: Response) {
 
         return res.status(401).render("login", {
             failedAuth: true,
-            assetPath: assetPath
+            assetPath: assetPath,
+            appPath: appPath
         });
     }
 
