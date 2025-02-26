@@ -124,7 +124,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "highlightsList", value: '["bold","italic","underline","color","bgColor"]', isSynced: true },
     { name: "checkForUpdates", value: "true", isSynced: true },
     { name: "disableTray", value: "false", isSynced: false },
-    { name: "eraseUnusedAttachmentsAfterSeconds", value: "2592000", isSynced: true }, // default 30 days  
+    { name: "eraseUnusedAttachmentsAfterSeconds", value: "2592000", isSynced: true }, // default 30 days
     { name: "eraseUnusedAttachmentsAfterTimeScale", value: "86400", isSynced: true }, // default 86400 seconds = Day
     { name: "customSearchEngineName", value: "DuckDuckGo", isSynced: true },
     { name: "customSearchEngineUrl", value: "https://duckduckgo.com/?q={keyword}", isSynced: true },
@@ -258,6 +258,15 @@ const defaultOptions: DefaultOption[] = [
     },
 
     // Share settings
+    {
+        name: "sharePath",
+        // ensure always starts with slash
+        value: (optionsMap) => {
+            const sharePath = optionsMap.sharePath || "/share";
+            return sharePath.startsWith("/") ? sharePath : "/" + sharePath;
+        },
+        isSynced: true
+    },
     { name: "redirectBareDomain", value: "false", isSynced: true },
     { name: "showLoginInShareTheme", value: "false", isSynced: true },
     { name: "useCleanUrls", value: "false", isSynced: true },

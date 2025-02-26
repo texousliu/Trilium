@@ -9,7 +9,7 @@ const TPL = `
     <h4>${t("share.title")}</h4>
 
     <label class="tn-checkbox">
-        <input class="form-check-input" type="checkbox" name="redirectBareDomain" value="true">
+        <input class="form-check-input redirect-bare-domain" type="checkbox" name="redirectBareDomain" value="true">
         ${t("share.redirect_bare_domain")}
     </label>
     <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
@@ -20,21 +20,33 @@ const TPL = `
     </div>
 
     <label class="tn-checkbox">
-        <input class="form-check-input" type="checkbox" name="showLoginInShareTheme" value="true">
+        <input class="form-check-input use-clean-urls" type="checkbox" name="useCleanUrls" value="true">
+        ${t("share.use_clean_urls")}
+    </label>
+    <p class="form-text">${t("share.use_clean_urls_description")}</p>
+
+    <div class="form-group">
+        <label>${t("share.share_path")}</label>
+        <div>
+            <input type="text" class="form-control share-path" placeholder="/share or / for root">
+        </div>
+        <div class="form-text">
+            ${t("share.share_path_description")}
+        </div>
+    </div>
+
+    <label class="tn-checkbox">
+        <input class="form-check-input show-login-in-share-theme" type="checkbox" name="showLoginInShareTheme" value="true">
         ${t("share.show_login_link")}
     </label>
     <p class="form-text">${t("share.show_login_link_description")}</p>
-
-    <div class="mt-3">
-        <label class="tn-checkbox">
-            <input class="form-check-input" type="checkbox" name="useCleanUrls" value="true">
-            <span>${t("share.use_clean_urls")}</span>
-        </label>
-        <p class="form-text">${t("share.use_clean_urls_description")}</p>
-    </div>
 </div>`;
 
 export default class ShareSettingsOptions extends OptionsWidget {
+    private $redirectBareDomain!: JQuery<HTMLInputElement>;
+    private $showLoginInShareTheme!: JQuery<HTMLInputElement>;
+    private $useCleanUrls!: JQuery<HTMLInputElement>;
+    private $sharePath!: JQuery<HTMLInputElement>;
     private $shareRootCheck!: JQuery<HTMLElement>;
     private $shareRootStatus!: JQuery<HTMLElement>;
 
@@ -42,21 +54,37 @@ export default class ShareSettingsOptions extends OptionsWidget {
         this.$widget = $(TPL);
         this.contentSized();
 
+        this.$redirectBareDomain = this.$widget.find(".redirect-bare-domain");
+        this.$showLoginInShareTheme = this.$widget.find(".show-login-in-share-theme");
+        this.$useCleanUrls = this.$widget.find(".use-clean-urls");
+        this.$sharePath = this.$widget.find(".share-path");
         this.$shareRootCheck = this.$widget.find('.share-root-check');
         this.$shareRootStatus = this.$widget.find('.share-root-status');
 
-        // Add change handlers for both checkboxes
-        this.$widget.find('input[type="checkbox"]').on("change", (e: JQuery.ChangeEvent) => {
+        this.$redirectBareDomain.on('change', () => {
+            const redirectBareDomain = this.$redirectBareDomain.is(":checked");
             this.save();
 
             // Show/hide share root status section based on redirectBareDomain checkbox
-            const target = e.target as HTMLInputElement;
-            if (target.name === 'redirectBareDomain') {
-                this.$shareRootCheck.toggle(target.checked);
-                if (target.checked) {
-                    this.checkShareRoot();
-                }
+            this.$shareRootCheck.toggle(redirectBareDomain);
+            if (redirectBareDomain) {
+                this.checkShareRoot();
             }
+        });
+
+        this.$showLoginInShareTheme.on('change', () => {
+            const showLoginInShareTheme = this.$showLoginInShareTheme.is(":checked");
+            this.save();
+        });
+
+        this.$useCleanUrls.on('change', () => {
+            const useCleanUrls = this.$useCleanUrls.is(":checked");
+            this.save();
+        });
+
+        this.$sharePath.on('change', () => {
+            const sharePath = this.$sharePath.val() as string;
+            this.save();
         });
 
         // Add click handler for check share root button
@@ -65,14 +93,15 @@ export default class ShareSettingsOptions extends OptionsWidget {
 
     async optionsLoaded(options: OptionMap) {
         const redirectBareDomain = options.redirectBareDomain === "true";
-        this.$widget.find('input[name="redirectBareDomain"]').prop("checked", redirectBareDomain);
+        this.$redirectBareDomain.prop("checked", redirectBareDomain);
         this.$shareRootCheck.toggle(redirectBareDomain);
         if (redirectBareDomain) {
             await this.checkShareRoot();
         }
 
-        this.$widget.find('input[name="showLoginInShareTheme"]').prop("checked", options.showLoginInShareTheme === "true");
-        this.$widget.find('input[name="useCleanUrls"]').prop("checked", options.useCleanUrls === "true");
+        this.$showLoginInShareTheme.prop("checked", options.showLoginInShareTheme === "true");
+        this.$useCleanUrls.prop("checked", options.useCleanUrls === "true");
+        this.$sharePath.val(options.sharePath);
     }
 
     async checkShareRoot() {
@@ -102,13 +131,20 @@ export default class ShareSettingsOptions extends OptionsWidget {
     }
 
     async save() {
-        const redirectBareDomain = this.$widget.find('input[name="redirectBareDomain"]').prop("checked");
+        const redirectBareDomain = this.$redirectBareDomain.is(":checked");
         await this.updateOption<"redirectBareDomain">("redirectBareDomain", redirectBareDomain.toString());
 
-        const showLoginInShareTheme = this.$widget.find('input[name="showLoginInShareTheme"]').prop("checked");
+        const showLoginInShareTheme = this.$showLoginInShareTheme.is(":checked");
         await this.updateOption<"showLoginInShareTheme">("showLoginInShareTheme", showLoginInShareTheme.toString());
 
-        const useCleanUrls = this.$widget.find('input[name="useCleanUrls"]').prop("checked");
+        const useCleanUrls = this.$useCleanUrls.is(":checked");
         await this.updateOption<"useCleanUrls">("useCleanUrls", useCleanUrls.toString());
+
+        // Ensure sharePath always starts with a slash
+        let sharePath = this.$sharePath.val() as string;
+        if (sharePath && !sharePath.startsWith('/')) {
+            sharePath = '/' + sharePath;
+        }
+        await this.updateOption<"sharePath">("sharePath", sharePath);
     }
 }

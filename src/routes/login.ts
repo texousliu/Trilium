@@ -46,7 +46,8 @@ function setPassword(req: Request, res: Response) {
     if (error) {
         res.render("set_password", {
             error,
-            assetPath: assetPath
+            assetPath: assetPath,
+            appPath: appPath
         });
         return;
     }

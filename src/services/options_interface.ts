@@ -102,6 +102,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     showLoginInShareTheme: boolean;
     shareSubtree: boolean;
     useCleanUrls: boolean;
+    sharePath: string;
 
 }
 

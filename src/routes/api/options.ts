@@ -79,7 +79,8 @@ const ALLOWED_OPTIONS = new Set([
     "redirectBareDomain",
     "showLoginInShareTheme",
     "shareSubtree",
-    "useCleanUrls"
+    "useCleanUrls",
+    "sharePath"
 ]);
 
 function getOptions() {
