@@ -531,7 +531,8 @@
     "fast_search": "Căutare rapidă"
   },
   "file": {
-    "file_preview_not_available": "Previzualizarea fișierelor nu este disponibilă pentru acest format de fișier."
+    "file_preview_not_available": "Previzualizarea fișierelor nu este disponibilă pentru acest format de fișier.",
+    "too_big": "Previzualizarea conține doar primele {{maxNumChars}} caractere din fișier din motive de performanță. Descărcați fișierul și deschideți-l extern pentru a-l putea vedea în întregime."
   },
   "file_properties": {
     "download": "Descarcă",
@@ -1387,7 +1388,8 @@
     "widget": "Widget",
     "confirm-change": "Nu se recomandă schimbarea tipului notiței atunci când ea are un conținut. Procedați oricum?",
     "geo-map": "Hartă geografică",
-    "beta-feature": "Beta"
+    "beta-feature": "Beta",
+    "task-list": "Listă de sarcini"
   },
   "protect_note": {
     "toggle-off": "Deprotejează notița",
@@ -1658,5 +1660,23 @@
   },
   "help-button": {
     "title": "Deschide ghidul relevant"
+  },
+  "zen_mode": {
+    "button_exit": "Ieși din modul zen"
+  },
+  "time_selector": {
+    "minimum_input": "Valoarea introdusă trebuie să fie de cel puțin {{minimumSeconds}} secunde.",
+    "invalid_input": "Valoarea de timp introdusă nu este corectă."
+  },
+  "share": {
+    "title": "Setări de partajare",
+    "show_login_link_description": "Adaugă o legătură de autentificare în subsolul paginilor partajate",
+    "show_login_link": "Afișează legătura de autentificare în tema de partajare",
+    "share_root_not_shared": "Notița „{{noteTitle}}” are eticheta #shareRoot dar nu este partajată",
+    "share_root_not_found": "Nu s-a identificat nicio notiță cu eticheta `#shareRoot`",
+    "share_root_found": "Notița principală pentru partajare „{{noteTitle}}” este pregătită",
+    "redirect_bare_domain_description": "Redirecționează utilizatorii anonimi către pagina de partajare în locul paginii de autentificare",
+    "redirect_bare_domain": "Redirecționează domeniul principal la pagina de partajare",
+    "check_share_root": "Verificare stare pagină partajată principală"
   }
 }
