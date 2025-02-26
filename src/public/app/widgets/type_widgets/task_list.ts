@@ -6,6 +6,7 @@ import * as taskService from "../../services/tasks.js";
 import type { EventData } from "../../components/app_context.js";
 import dayjs from "dayjs";
 import calendarTime from "dayjs/plugin/calendar.js";
+import { t } from "../../services/i18n.js";
 dayjs.extend(calendarTime);
 
 const TPL = `
@@ -81,6 +82,7 @@ function buildTasks(tasks: FTask[]) {
     let html = '';
 
     const now = dayjs();
+    const dateFormat = "DD-MM-YYYY";
     for (const task of tasks) {
         const classes = ["task"];
 
@@ -94,7 +96,14 @@ function buildTasks(tasks: FTask[]) {
         if (task.dueDate) {
             html += `<span class="due-date">`;
             html += `<span class="bx bx-calendar"></span> `;
-            html += dayjs(task.dueDate).calendar();
+            html += dayjs(task.dueDate).calendar(null, {
+                sameDay: `[${t("tasks.due.today")}]`,
+                nextDay: `[${t("tasks.due.tomorrow")}]`,
+                nextWeek: "dddd",
+                lastDay: `[${t("tasks.due.yesterday")}]`,
+                lastWeek: dateFormat,
+                sameElse: dateFormat
+            });
             html += "</span>";
         }
         html += `<div class="edit-container"></div>`;
