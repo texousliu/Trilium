@@ -9,7 +9,7 @@ interface CreateNewTasksOpts {
 export async function createNewTask({ parentNoteId, title }: CreateNewTasksOpts) {
     await server.post(`tasks`, {
         parentNoteId,
-        title
+        title: title.trim()
     });
 }
 
