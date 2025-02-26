@@ -32,14 +32,25 @@ const copy = async () => {
     const filesToCopy = [
         "config-sample.ini",
         "./src/etapi/etapi.openapi.yaml",
-        "./src/routes/api/openapi.json"
+        "./src/routes/api/openapi.json",
+        "./src/public/icon.png",
+        "./src/public/manifest.webmanifest",
+        "./src/public/robots.txt"
     ];
     for (const file of filesToCopy) {
         log(`Copying ${file}`);
         await fs.copy(file, path.join(DEST_DIR, file));
     }
 
-    const dirsToCopy = ["images", "libraries", "translations", "db"];
+    const dirsToCopy = [
+        "images",
+        "libraries",
+        "translations",
+        "db",
+        "src/public/fonts",
+        "src/public/stylesheets",
+        "src/public/translations"
+    ];
     for (const dir of dirsToCopy) {
         log(`Copying ${dir}`);
         await fs.copy(dir, path.join(DEST_DIR, dir));
