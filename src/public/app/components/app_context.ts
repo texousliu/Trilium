@@ -312,6 +312,9 @@ type EventMappings = {
     showHighlightsListWidget: {
         noteId: string;
     };
+    showTocWidget: {
+        noteId: string;
+    };
     showSearchError: {
         error: string;
     };
@@ -348,9 +351,6 @@ type EventMappings = {
         ntxIdsInOrder: string[]
     };
     refreshNoteList: {
-        noteId: string;
-    };
-    showToc: {
         noteId: string;
     };
     noteTypeMimeChanged: { noteId: string };
