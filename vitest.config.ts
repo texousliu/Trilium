@@ -19,6 +19,7 @@ export default defineConfig({
     test: {
         exclude: [...configDefaults.exclude, ...customExcludes],
         coverage: {
+            reporter: [ "text", "html" ],
             exclude: [...coverageConfigDefaults.exclude, ...customExcludes]
         }
     }
