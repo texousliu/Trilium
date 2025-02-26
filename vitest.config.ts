@@ -8,6 +8,7 @@ const customExcludes = [
     "tests-examples/**",
     "node_modules/**",
     "src/public/app-dist/**",
+    "src/public/app/**",
     "libraries/**",
     "docs/**",
     "out/**",
