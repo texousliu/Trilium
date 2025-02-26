@@ -180,7 +180,7 @@ runs:
           dmg_file=$(find out -name "*.dmg" -print -quit)
           if [ -n "$dmg_file" ]; then
             echo "Found DMG: $dmg_file"
-            cp "$dmg_file" "upload/TriliumNextNotes-${{ github.ref_name }}-darwin-${{ inputs.arch }}.dmg"
+            cp "$dmg_file" "upload/TriliumNextNotes-${{ github.ref_name }}-macos-${{ inputs.arch }}.dmg"
           else
             echo "Warning: No DMG file found"
           fi
@@ -190,7 +190,7 @@ runs:
           zip_file=$(find out -name "*.zip" -print -quit)
           if [ -n "$zip_file" ]; then
             echo "Found ZIP: $zip_file"
-            cp "$zip_file" "upload/TriliumNextNotes-${{ github.ref_name }}-darwin-${{ inputs.arch }}.zip"
+            cp "$zip_file" "upload/TriliumNextNotes-${{ github.ref_name }}-macos-${{ inputs.arch }}.zip"
           else
             echo "Warning: No ZIP file found"
           fi
