@@ -1221,9 +1221,8 @@
   "etapi": {
     "title": "ETAPI",
     "description": "ETAPI 是一个 REST API，用于以编程方式访问 Trilium 实例，而无需 UI。",
-    "see_more": "更多详情见",
+    "see_more": "",
     "wiki": "维基",
-    "and": "和",
     "openapi_spec": "ETAPI OpenAPI 规范",
     "create_token": "创建新的 ETAPI 令牌",
     "existing_tokens": "现有令牌",

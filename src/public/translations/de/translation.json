@@ -1248,9 +1248,8 @@
   "etapi": {
     "title": "ETAPI",
     "description": "ETAPI ist eine REST-API, die für den programmgesteuerten Zugriff auf die Trilium-Instanz ohne Benutzeroberfläche verwendet wird.",
-    "see_more": "Weitere Details findest du unter",
+    "see_more": "Weitere Details können im {{- link_to_wiki}} und in der {{- link_to_openapi_spec}} gefunden werden.",
     "wiki": "Wiki",
-    "and": "und",
     "openapi_spec": "ETAPI OpenAPI-Spezifikation",
     "create_token": "Erstelle ein neues ETAPI-Token",
     "existing_tokens": "Vorhandene Token",

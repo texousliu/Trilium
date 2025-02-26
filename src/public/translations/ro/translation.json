@@ -479,7 +479,6 @@
   },
   "etapi": {
     "actions": "Acțiuni",
-    "and": "și",
     "create_token": "Crează un token ETAPI nou",
     "created": "Creat",
     "default_token_name": "token nou",
@@ -495,7 +494,7 @@
     "rename_token": "Redenumește token-ul",
     "rename_token_message": "Introduceți denumirea noului token",
     "rename_token_title": "Redenumire token",
-    "see_more": "Mai multe informații pe",
+    "see_more": "",
     "title": "ETAPI",
     "token_created_message": "Copiați token-ul creat în clipboard. Trilium stochează token-ul ca hash așadar această valoare poate fi văzută doar acum.",
     "token_created_title": "Token ETAPI creat",
