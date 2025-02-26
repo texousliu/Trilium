@@ -20,7 +20,8 @@ export default defineConfig({
         exclude: [...configDefaults.exclude, ...customExcludes],
         coverage: {
             reporter: [ "text", "html" ],
-            exclude: [...coverageConfigDefaults.exclude, ...customExcludes]
+            include: ["src/**"],
+            exclude: ["src/public/**"]
         }
     }
 });
