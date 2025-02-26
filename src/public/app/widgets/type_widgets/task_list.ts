@@ -6,6 +6,7 @@ import * as taskService from "../../services/tasks.js";
 import type { EventData } from "../../components/app_context.js";
 import dayjs from "dayjs";
 import calendarTime from "dayjs/plugin/calendar.js";
+import { t } from "../../services/i18n.js";
 dayjs.extend(calendarTime);
 
 const TPL = `
@@ -25,7 +26,7 @@ const TPL = `
             padding: 10px;
         }
 
-        .note-detail-task-list header {
+        .note-detail-task-list > header {
             position: sticky;
             top: 0;
             z-index: 100;
@@ -59,15 +60,23 @@ const TPL = `
             transition: background 250ms ease-in-out;
         }
 
+        .note-detail-task-list .task-container li > header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
         .note-detail-task-list .task-container li .check {
             margin-right: 0.5em;
         }
 
+        .note-detail-task-list .task-container li .title {
+            flex-grow: 1;
+        }
+
         .note-detail-task-list .task-container li .due-date {
-            float: right;
             font-size: 0.9rem;
-            margin-top: 0.1rem;
-            vertical-align: middle;
         }
 
         .note-detail-task-list .task-container li.overdue .due-date {
@@ -81,6 +90,7 @@ function buildTasks(tasks: FTask[]) {
     let html = '';
 
     const now = dayjs();
+    const dateFormat = "DD-MM-YYYY";
     for (const task of tasks) {
         const classes = ["task"];
 
@@ -89,14 +99,25 @@ function buildTasks(tasks: FTask[]) {
         }
 
         html += `<li class="${classes.join(" ")}" data-task-id="${task.taskId}">`;
+        html += "<header>";
+        html += '<span class="title">';
         html += `<input type="checkbox" class="check" ${task.isDone ? "checked" : ""} />`;
-        html += task.title;
+        html += `${task.title}</span>`;
+        html += '</span>';
         if (task.dueDate) {
             html += `<span class="due-date">`;
             html += `<span class="bx bx-calendar"></span> `;
-            html += dayjs(task.dueDate).calendar();
+            html += dayjs(task.dueDate).calendar(null, {
+                sameDay: `[${t("tasks.due.today")}]`,
+                nextDay: `[${t("tasks.due.tomorrow")}]`,
+                nextWeek: "dddd",
+                lastDay: `[${t("tasks.due.yesterday")}]`,
+                lastWeek: dateFormat,
+                sameElse: dateFormat
+            });
             html += "</span>";
         }
+        html += "</header>";
         html += `<div class="edit-container"></div>`;
         html += `</li>`;
     }
@@ -142,12 +163,11 @@ export default class TaskListWidget extends TypeWidget {
         });
 
         this.$taskContainer.on("click", "li", (e) => {
-            const $target = $(e.target);
-
-            // Don't collapse when clicking on an inside element such as the due date dropdown.
-            if (e.currentTarget !== e.target) {
+            if ((e.target as HTMLElement).tagName === "INPUT") {
                 return;
             }
+
+            const $target = $(e.target);
 
             // Clear existing edit containers.
             const $existingContainers = this.$taskContainer.find(".edit-container");
@@ -155,7 +175,7 @@ export default class TaskListWidget extends TypeWidget {
             $existingContainers.html("");
 
             // Add the new edit container.
-            const $editContainer = $target.find(".edit-container");
+            const $editContainer = $target.closest("li").find(".edit-container");
             const task = this.#getCorrespondingTask($target);
             if (task) {
                 $editContainer.html(buildEditContainer(task));
@@ -183,7 +203,11 @@ export default class TaskListWidget extends TypeWidget {
     }
 
     #getCorrespondingTask($target: JQuery<HTMLElement>) {
-        const taskId = $target.closest("li")[0].dataset.taskId;
+        const $parentEl = $target.closest("li");
+        if (!$parentEl.length) {
+            return;
+        }
+        const taskId = $parentEl[0].dataset.taskId;
         if (!taskId) {
             return;
         }

@@ -19,7 +19,9 @@ export default defineConfig({
     test: {
         exclude: [...configDefaults.exclude, ...customExcludes],
         coverage: {
-            exclude: [...coverageConfigDefaults.exclude, ...customExcludes]
+            reporter: [ "text", "html" ],
+            include: ["src/**"],
+            exclude: ["src/public/**"]
         }
     }
 });

@@ -1678,5 +1678,12 @@
     "redirect_bare_domain_description": "Redirecționează utilizatorii anonimi către pagina de partajare în locul paginii de autentificare",
     "redirect_bare_domain": "Redirecționează domeniul principal la pagina de partajare",
     "check_share_root": "Verificare stare pagină partajată principală"
+  },
+  "tasks": {
+    "due": {
+      "today": "Azi",
+      "tomorrow": "Mâine",
+      "yesterday": "Ieri"
+    }
   }
 }
