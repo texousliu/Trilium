@@ -9,6 +9,8 @@ const TPL = `
 <div class="options-section">
     <h4>${t("etapi.title")}</h4>
 
+    // TriliumNextTODO: src/public/app/services/link.ts -> prevents regular click behavior on "a" element here
+    // because it is a relative path, and not a URL starting with http(s) -> onclick="window.open(...)" is used as workaround for now
     <p>${t("etapi.description")} <br/>
       ${t("etapi.see_more", {
         link_to_wiki: `<a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a>`,
