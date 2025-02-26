@@ -299,7 +299,7 @@ export default class CalendarView extends ViewMode {
         const events: EventSourceInput = [];
 
         for (const note of notes) {
-            const startDate = note.getLabelValue("startDate");
+            const startDate = CalendarView.#getCustomisableLabel(note, "startDate", "calendar:startDate");
 
             if (note.hasChildren()) {
                 const childrenEventData = await this.#buildEvents(note.getChildNoteIds());
@@ -312,11 +312,33 @@ export default class CalendarView extends ViewMode {
                 continue;
             }
 
-            const endDate = note.getAttributeValue("label", "endDate");
+            const endDate = CalendarView.#getCustomisableLabel(note, "endDate", "calendar:endDate");
             events.push(await CalendarView.#buildEvent(note, startDate, endDate));
         }
 
         return events.flat();
+    }
+
+    /**
+     * Allows the user to customize the attribute from which to obtain a particular value. For example, if `customLabelNameAttribute` is `calendar:startDate`
+     * and `defaultLabelName` is `startDate` and the note at hand has `#calendar:startDate=#myStartDate #myStartDate=2025-02-26` then the value returned will
+     * be `2025-02-26`. If there is no custom attribute value, then the value of the default attribute is returned instead (e.g. `#startDate`).
+     *
+     * @param note the note from which to read the values.
+     * @param defaultLabelName the name of the label in case a custom value is not found.
+     * @param customLabelNameAttribute the name of the label to look for a custom value.
+     * @returns the value of either the custom label or the default label.
+     */
+    static #getCustomisableLabel(note: FNote, defaultLabelName: string, customLabelNameAttribute: string) {
+        const customAttributeName = note.getLabelValue(customLabelNameAttribute);
+        if (customAttributeName?.startsWith("#")) {
+            const customValue = note.getLabelValue(customAttributeName.substring(1));
+            if (customValue) {
+                return customValue;
+            }
+        }
+
+        return note.getLabelValue(defaultLabelName);
     }
 
     static async #buildEvent(note: FNote, startDate: string, endDate?: string | null) {
