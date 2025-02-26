@@ -100,8 +100,10 @@ function buildTasks(tasks: FTask[]) {
 
         html += `<li class="${classes.join(" ")}" data-task-id="${task.taskId}">`;
         html += "<header>";
+        html += '<span class="title">';
         html += `<input type="checkbox" class="check" ${task.isDone ? "checked" : ""} />`;
-        html += `<span class="title">${task.title}</span>`;
+        html += `${task.title}</span>`;
+        html += '</span>';
         if (task.dueDate) {
             html += `<span class="due-date">`;
             html += `<span class="bx bx-calendar"></span> `;
