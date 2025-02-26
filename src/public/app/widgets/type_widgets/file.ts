@@ -29,6 +29,11 @@ const TPL = `
             overflow: auto;
             margin: 10px;
         }
+
+        .note-detail-file > .video-preview {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 
     <div class="file-preview-too-big alert alert-info hidden-ext">
