@@ -11,11 +11,11 @@ function log(...args: any[]) {
     }
 }
 
-async function copyNodeModuleFileOrFolder(source: string) {
+function copyNodeModuleFileOrFolder(source: string) {
     const destination = path.join(DEST_DIR, source);
     log(`Copying ${source} to ${destination}`);
-    await fs.ensureDir(path.dirname(destination));
-    await fs.copy(source, destination);
+    fs.ensureDirSync(path.dirname(destination));
+    fs.copySync(source, destination);
 }
 
 const copy = async () => {
@@ -41,7 +41,7 @@ const copy = async () => {
 
     for (const asset of assetsToCopy) {
         log(`Copying ${asset}`);
-        await fs.copy(asset, path.join(DEST_DIR, asset));
+        fs.copySync(asset, path.join(DEST_DIR, asset));
     }
 
     /**
@@ -50,7 +50,7 @@ const copy = async () => {
     const publicDirsToCopy = ["./src/public/app/doc_notes"];
     const PUBLIC_DIR = path.join(DEST_DIR, "src", "public", "app-dist");
     for (const dir of publicDirsToCopy) {
-        await fs.copy(dir, path.join(PUBLIC_DIR, path.basename(dir)));
+        fs.copySync(dir, path.join(PUBLIC_DIR, path.basename(dir)));
     }
 
     const nodeModulesFile = [
@@ -66,7 +66,7 @@ const copy = async () => {
     ];
 
     for (const file of nodeModulesFile) {
-        await copyNodeModuleFileOrFolder(file);
+        copyNodeModuleFileOrFolder(file);
     }
 
     const nodeModulesFolder = [
@@ -99,7 +99,7 @@ const copy = async () => {
     ];
 
     for (const folder of nodeModulesFolder) {
-        await copyNodeModuleFileOrFolder(folder);
+        copyNodeModuleFileOrFolder(folder);
     }
 };
 
