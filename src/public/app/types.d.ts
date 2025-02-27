@@ -123,13 +123,6 @@ declare global {
             language: string
         });
     };
-    var Split: (selectors: string[], config: {
-        sizes: [ number, number ];
-        gutterSize: number;
-        onDragEnd: (sizes: [ number, number ]) => void;
-    }) => {
-        destroy();
-    };
     var renderMathInElement: (element: HTMLElement, options: {
         trust: boolean;
     }) => void;

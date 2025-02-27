@@ -70,8 +70,6 @@ async function register(app: express.Application) {
 
     app.use(`/${assetPath}/node_modules/jquery-hotkeys/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/jquery-hotkeys/")));
 
-    app.use(`/${assetPath}/node_modules/split.js/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/split.js/dist/")));
-
     app.use(`/${assetPath}/node_modules/panzoom/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/panzoom/dist/")));
 
     // i18n
