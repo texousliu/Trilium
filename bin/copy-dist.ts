@@ -14,9 +14,7 @@ function log(...args: any[]) {
 }
 
 async function copyNodeModuleFileOrFolder(source: string) {
-    const adjustedSource = source.substring(13);
-    const destination = path.join(DEST_DIR_NODE_MODULES, adjustedSource);
-
+    const destination = path.join(DEST_DIR, source);
     log(`Copying ${source} to ${destination}`);
     await fs.ensureDir(path.dirname(destination));
     await fs.copy(source, destination);
