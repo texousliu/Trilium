@@ -53,7 +53,7 @@ const copy = async () => {
         fs.copySync(dir, path.join(PUBLIC_DIR, path.basename(dir)));
     }
 
-    const nodeModulesFile = [
+    const nodeModulesFile = new Set([
         "node_modules/react/umd/react.production.min.js",
         "node_modules/react/umd/react.development.js",
         "node_modules/react-dom/umd/react-dom.production.min.js",
@@ -63,13 +63,9 @@ const copy = async () => {
         "node_modules/katex/dist/contrib/auto-render.min.js",
         "node_modules/@highlightjs/cdn-assets/highlight.min.js",
         "node_modules/@mind-elixir/node-menu/dist/node-menu.umd.cjs"
-    ];
+    ]);
 
-    for (const file of nodeModulesFile) {
-        copyNodeModuleFileOrFolder(file);
-    }
-
-    const nodeModulesFolder = [
+    const nodeModulesFolder = new Set([
         "node_modules/@excalidraw/excalidraw/dist/",
         "node_modules/katex/dist/",
         "node_modules/dayjs/",
@@ -96,10 +92,12 @@ const copy = async () => {
         "node_modules/@highlightjs/cdn-assets/languages",
         "node_modules/@highlightjs/cdn-assets/styles",
         "node_modules/leaflet/dist"
-    ];
+    ]);
 
-    for (const folder of nodeModulesFolder) {
-        copyNodeModuleFileOrFolder(folder);
+
+
+    for (const nodeModuleItem of [...nodeModulesFile, ...nodeModulesFolder]) {
+        copyNodeModuleFileOrFolder(nodeModuleItem);
     }
 };
 
