@@ -18,7 +18,8 @@ function copyNodeModuleFileOrFolder(source: string) {
     fs.copySync(source, destination);
 }
 
-const copy = async () => {
+try {
+
     log(`Copying build into dist folder.`);
     fs.copySync("./build", DEST_DIR);
 
@@ -99,8 +100,8 @@ const copy = async () => {
     for (const nodeModuleItem of [...nodeModulesFile, ...nodeModulesFolder]) {
         copyNodeModuleFileOrFolder(nodeModuleItem);
     }
-};
+    console.log("Copying complete!")
 
-copy()
-    .then(() => console.log("Copying complete!"))
-    .catch((err) => console.error("Error during copy:", err));
+} catch(err) {
+    console.error("Error during copy:", err)
+}
