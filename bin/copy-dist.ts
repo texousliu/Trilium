@@ -23,11 +23,8 @@ async function copyNodeModuleFileOrFolder(source: string) {
 }
 
 const copy = async () => {
-    for (const srcFile of fs.readdirSync("build")) {
-        const destFile = path.join(DEST_DIR, path.basename(srcFile));
-        log(`Copying source ${srcFile} -> ${destFile}.`);
-        fs.copySync(path.join("build", srcFile), destFile, { recursive: true });
-    }
+    log(`Copying build into dist folder.`);
+    fs.copySync("./build", DEST_DIR);
 
     const assetsToCopy = new Set([
         "./images",
