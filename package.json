@@ -100,7 +100,7 @@
     "express": "4.21.2",
     "express-rate-limit": "7.5.0",
     "express-session": "1.18.1",
-    "force-graph": "1.49.0",
+    "force-graph": "1.49.1",
     "fs-extra": "11.3.0",
     "happy-dom": "17.1.8",
     "helmet": "8.0.0",
