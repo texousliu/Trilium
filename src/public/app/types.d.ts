@@ -123,7 +123,6 @@ declare global {
             language: string
         });
     };
-    var dayjs: {};
     var Split: (selectors: string[], config: {
         sizes: [ number, number ];
         gutterSize: number;
