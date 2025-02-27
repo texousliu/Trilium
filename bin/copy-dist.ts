@@ -29,32 +29,26 @@ const copy = async () => {
         fs.copySync(path.join("build", srcFile), destFile, { recursive: true });
     }
 
-    const filesToCopy = [
-        "config-sample.ini",
+    const assetsToCopy = new Set([
+        "./images",
+        "./libraries",
+        "./translations",
+        "./db",
+        "./config-sample.ini",
+        "./src/views/",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json",
         "./src/public/icon.png",
         "./src/public/manifest.webmanifest",
-        "./src/public/robots.txt"
-    ];
-    for (const file of filesToCopy) {
-        log(`Copying ${file}`);
-        await fs.copy(file, path.join(DEST_DIR, file));
-    }
+        "./src/public/robots.txt",
+        "./src/public/fonts",
+        "./src/public/stylesheets",
+        "./src/public/translations"
+    ]);
 
-    const dirsToCopy = [
-        "images",
-        "libraries",
-        "translations",
-        "db",
-        "src/public/fonts",
-        "src/public/stylesheets",
-        "src/public/translations",
-        "src/views/"
-    ];
-    for (const dir of dirsToCopy) {
-        log(`Copying ${dir}`);
-        await fs.copy(dir, path.join(DEST_DIR, dir));
+    for (const asset of assetsToCopy) {
+        log(`Copying ${asset}`);
+        await fs.copy(asset, path.join(DEST_DIR, asset));
     }
 
     /**
