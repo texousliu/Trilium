@@ -2,8 +2,6 @@ import fs from "fs-extra";
 import path from "path";
 
 const DEST_DIR = "./dist";
-const DEST_DIR_SRC = path.join(DEST_DIR, "src");
-const DEST_DIR_NODE_MODULES = path.join(DEST_DIR, "node_modules");
 
 const VERBOSE = process.env.VERBOSE;
 
