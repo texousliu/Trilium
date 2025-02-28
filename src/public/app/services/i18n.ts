@@ -16,3 +16,4 @@ export async function initLocale() {
 }
 
 export const t = i18next.t;
+export const getCurrentLanguage = () => i18next.language;
