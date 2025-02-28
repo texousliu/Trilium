@@ -1,7 +1,5 @@
 import type FNote from "./entities/fnote";
-import type { BackendModule, i18n } from "i18next";
 import type { Froca } from "./services/froca-interface";
-import type { HttpBackendOptions } from "i18next-http-backend";
 import { Suggestion } from "./services/note_autocomplete.ts";
 import utils from "./services/utils.ts";
 import appContext from "./components/app_context.ts";
@@ -115,8 +113,6 @@ declare global {
 
     // Libraries
     // TODO: Replace once library loader is replaced with webpack.
-    var i18next: i18n;
-    var i18nextHttpBackend: BackendModule<HttpBackendOptions>;
     var hljs: {
         highlightAuto(text: string);
         highlight(text: string, {
