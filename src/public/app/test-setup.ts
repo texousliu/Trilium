@@ -1,8 +1,9 @@
 import { beforeAll, vi } from "vitest";
 import $ from "jquery";
 
+injectGlobals();
+
 beforeAll(() => {
-    injectGlobals();
     vi.mock("./services/ws.js", mockWebsocket);
     vi.mock("./services/server.js", mockServer);
 });

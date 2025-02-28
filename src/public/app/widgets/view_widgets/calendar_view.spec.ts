@@ -1,5 +1,8 @@
 import { describe, it } from "vitest";
 import utils from "../../services/utils.js";
+import FNote from "../../entities/fnote.js";
+import froca from "../../services/froca.js";
+import FAttribute from "../../entities/fattribute.js";
 
 interface NoteDefinition {
     title: string;
@@ -10,10 +13,6 @@ async function buildNotes(notes: NoteDefinition[]) {
     const ids = [];
 
     for (const noteDef of notes) {
-        const FNote = (await import("../../entities/fnote.js")).default;
-        const FAttribute = (await import("../../entities/fattribute.js")).default;
-        const froca = (await import("../../services/froca.js")).default;
-
         const fakeNoteId = utils.randomString(6);
         const note = new FNote(froca, {
             noteId: fakeNoteId,
@@ -57,8 +56,6 @@ describe("Building events", () => {
         ]);
 
         // import CalendarView from "./calendar_view.js";
-        const FNote = (await import("../../entities/fnote.js")).default;
-        const froca = (await import("../../services/froca.js"));
         const CalendarView = (await import("./calendar_view.js")).default;
         const events = await CalendarView.buildEvents(noteIds);
         console.log(noteIds, events);
