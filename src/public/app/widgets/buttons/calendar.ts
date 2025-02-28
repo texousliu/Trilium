@@ -38,7 +38,7 @@ const DROPDOWN_TPL = `
             <button class="calendar-btn tn-tool-button bx bx-chevron-left" data-calendar-toggle="previous"></button>
 
             <button class="btn dropdown-toggle select-button" type="button"
-                data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                data-bs-toggle="dropdown" data-bs-auto-close="true"
                 aria-expanded="false"
                 data-calendar-input="month"></button>
             <ul class="dropdown-menu" data-calendar-input="month-list">
@@ -111,7 +111,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             if (value) {
                 this.date.setMonth(parseInt(value));
                 this.createMonth();
-                this.monthDropdown.hide();
             }
         });
         this.$next = this.$dropdownContent.find('[data-calendar-toggle="next"]');
@@ -143,8 +142,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             this.createMonth();
         });
 
-        this.$dropdownContent.find(".calendar-header").on("click", (e) => e.stopPropagation());
-
         this.$dropdownContent.on("click", ".calendar-date", async (ev) => {
             const date = $(ev.target).closest(".calendar-date").attr("data-calendar-date");
 
@@ -162,8 +159,22 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             ev.stopPropagation();
         });
 
-        // Prevent dismissing the calendar popup by clicking on an empty space inside it.
-        this.$dropdownContent.on("click", (e) => e.stopPropagation());
+        // Handle click events for the entire calendar widget
+        this.$dropdownContent.on("click", (e) => {
+            const $target = $(e.target);
+
+            // Keep dropdown open when clicking on month select button or year selector area
+            if ($target.closest('.btn.dropdown-toggle.select-button').length ||
+                $target.closest('.calendar-year-selector').length) {
+                e.stopPropagation();
+                return;
+            }
+
+            // Hide dropdown for all other cases
+            this.monthDropdown.hide();
+            // Prevent dismissing the calendar popup by clicking on an empty space inside it.
+            e.stopPropagation();
+        });
     }
 
     manageFirstDayOfWeek() {
