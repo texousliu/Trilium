@@ -48,8 +48,6 @@ async function buildNotes(notes: NoteDefinition[]) {
 
             position++;
         }
-
-        console.log("Attributes", note.getOwnedAttributes());
     }
 
     return ids;
@@ -107,7 +105,7 @@ describe("Building events", () => {
         const FNote = (await import("../../entities/fnote.js")).default;
         const froca = (await import("../../services/froca.js"));
         const CalendarView = (await import("./calendar_view.js")).default;
-        const events = CalendarView.buildEvents(noteIds);
+        const events = await CalendarView.buildEvents(noteIds);
         console.log(noteIds, events);
     });
 
