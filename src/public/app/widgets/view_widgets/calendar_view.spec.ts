@@ -52,4 +52,41 @@ describe("Building events", () => {
             end: "2025-05-09"
         });
     });
+
+    it("supports custom start date", async () => {
+        const noteIds = buildNotes([
+            { title: "Note 1", "#myStartDate": "2025-05-05", "#calendar:startDate": "#myStartDate" },
+            { title: "Note 2", "#startDate": "2025-05-07", "#calendar:startDate": "#myStartDate" },
+        ]);
+        const events = await CalendarView.buildEvents(noteIds);
+
+        expect(events).toHaveLength(2);
+        expect(events[0]).toMatchObject({
+            title: "Note 1",
+            start: "2025-05-05",
+            end: "2025-05-06"
+        });
+        expect(events[1]).toMatchObject({
+            title: "Note 2",
+            start: "2025-05-07",
+            end: "2025-05-08"
+        });
+    });
+
+    it("supports custom start date and end date", async () => {
+        const noteIds = buildNotes([
+            { title: "Note 1", "#myStartDate": "2025-05-05", "#myEndDate": "2025-05-05", "#calendar:startDate": "#myStartDate", "#calendar:endDate": "#myEndDate" },
+            { title: "Note 2", "#myStartDate": "2025-05-07", "#endDate": "2025-05-08", "#calendar:startDate": "#myStartDate", "#calendar:endDate": "#myEndDate" },
+            { title: "Note 3", "#startDate": "2025-05-05", "#myEndDate": "2025-05-05", "#calendar:startDate": "#myStartDate", "#calendar:endDate": "#myEndDate" },
+            { title: "Note 4", "#startDate": "2025-05-07", "#myEndDate": "2025-05-08", "#calendar:startDate": "#myStartDate", "#calendar:endDate": "#myEndDate" },
+        ]);
+        const events = await CalendarView.buildEvents(noteIds);
+
+        expect(events).toHaveLength(4);
+        expect(events[0]).toMatchObject({ title: "Note 1", start: "2025-05-05", end: "2025-05-06" });
+        expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07", end: "2025-05-09" });
+        expect(events[2]).toMatchObject({ title: "Note 3", start: "2025-05-05", end: "2025-05-06" });
+        expect(events[3]).toMatchObject({ title: "Note 4", start: "2025-05-07", end: "2025-05-09" });
+    });
+
 });
