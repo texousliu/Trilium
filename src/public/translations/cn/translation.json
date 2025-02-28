@@ -195,7 +195,7 @@
   },
   "include_note": {
     "dialog_title": "包含笔记",
-    "close": "Close",
+    "close": "关闭",
     "label_note": "笔记",
     "placeholder_search": "按名称搜索笔记",
     "box_size_prompt": "包含笔记的框大小：",
@@ -211,19 +211,19 @@
   },
   "jump_to_note": {
     "search_placeholder": "按笔记名称搜索",
-    "close": "Close",
+    "close": "关闭",
     "search_button": "全文搜索 <kbd>Ctrl+回车</kbd>"
   },
   "markdown_import": {
     "dialog_title": "Markdown 导入",
-    "close": "Close",
+    "close": "关闭",
     "modal_body_text": "由于浏览器沙箱的限制，无法直接从 JavaScript 读取剪贴板内容。请将要导入的 Markdown 文本粘贴到下面的文本框中，然后点击导入按钮",
     "import_button": "导入 Ctrl+回车",
     "import_success": "Markdown 内容已成功导入文档。"
   },
   "move_to": {
     "dialog_title": "移动笔记到...",
-    "close": "Close",
+    "close": "关闭",
     "notes_to_move": "需要移动的笔记",
     "target_parent_note": "目标父笔记",
     "search_placeholder": "通过名称搜索笔记",
@@ -233,13 +233,13 @@
   },
   "note_type_chooser": {
     "modal_title": "选择笔记类型",
-    "close": "Close",
+    "close": "关闭",
     "modal_body": "选择新笔记的类型或模板：",
     "templates": "模板:"
   },
   "password_not_set": {
     "title": "密码未设置",
-    "close": "Close",
+    "close": "关闭",
     "body1": "受保护的笔记使用用户密码加密，但密码尚未设置。",
     "body2": "点击<a class=\"open-password-options-button\" href=\"javascript:\">这里</a>打开选项对话框并设置您的密码。"
   },
