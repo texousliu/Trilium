@@ -2,6 +2,7 @@ import utils from "../services/utils.js";
 import FNote from "../entities/fnote.js";
 import froca from "../services/froca.js";
 import FAttribute from "../entities/fattribute.js";
+import noteAttributeCache from "../services/note_attribute_cache.js";
 
 type AttributeDefinitions = { [key in `#${string}`]: string; };
 type RelationDefinitions = { [key in `~${string}`]: string; };
@@ -60,7 +61,6 @@ export function buildNotes(notes: NoteDefinition[]) {
             }
 
             if (key.startsWith("~")) {
-                console.log("Created relation with ", name, value);
                 attribute = new FAttribute(froca, {
                     noteId: note.noteId,
                     attributeId,
@@ -79,6 +79,13 @@ export function buildNotes(notes: NoteDefinition[]) {
             froca.attributes[attributeId] = attribute;
             note.attributes.push(attributeId);
             position++;
+
+            // Inject the attribute into the note attribute cache, since FNote.getAttribute() doesn't always work.
+            // If we add support for templates into froca, this might cause issues.
+            if (!noteAttributeCache.attributes[note.noteId]) {
+                noteAttributeCache.attributes[note.noteId] = [];
+            }
+            noteAttributeCache.attributes[note.noteId].push(attribute);
         }
     }
 

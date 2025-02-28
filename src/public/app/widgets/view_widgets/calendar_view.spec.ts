@@ -98,4 +98,17 @@ describe("Building events", () => {
         expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07" });
     });
 
+    it("supports relation as custom title with custom label", async () => {
+        const noteIds = buildNotes([
+            { id: "mySharedTitle", title: "My custom title", "#myTitle": "My shared custom title", "#calendar:title": "#myTitle" },
+            { title: "Note 1", "~myTitle": "mySharedTitle", "#startDate": "2025-05-05", "#calendar:title": "~myTitle" },
+            { title: "Note 2", "#startDate": "2025-05-07", "#calendar:title": "~myTitle" },
+        ]);
+        const events = await CalendarView.buildEvents(noteIds);
+
+        expect(events).toHaveLength(2);
+        expect(events[0]).toMatchObject({ title: "My shared custom title", start: "2025-05-05" });
+        expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07" });
+    });
+
 });
