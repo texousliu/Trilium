@@ -11,16 +11,8 @@ describe("Building events", () => {
         const events = await CalendarView.buildEvents(noteIds);
 
         expect(events).toHaveLength(2);
-        expect(events[0]).toMatchObject({
-            title: "Note 1",
-            start: "2025-05-05",
-            end: "2025-05-06"
-        });
-        expect(events[1]).toMatchObject({
-            title: "Note 2",
-            start: "2025-05-07",
-            end: "2025-05-08"
-        });
+        expect(events[0]).toMatchObject({ title: "Note 1", start: "2025-05-05", end: "2025-05-06" });
+        expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07", end: "2025-05-08" });
     });
 
     it("ignores notes with only end date", async () => {
@@ -41,16 +33,8 @@ describe("Building events", () => {
         const events = await CalendarView.buildEvents(noteIds);
 
         expect(events).toHaveLength(2);
-        expect(events[0]).toMatchObject({
-            title: "Note 1",
-            start: "2025-05-05",
-            end: "2025-05-06"
-        });
-        expect(events[1]).toMatchObject({
-            title: "Note 2",
-            start: "2025-05-07",
-            end: "2025-05-09"
-        });
+        expect(events[0]).toMatchObject({ title: "Note 1", start: "2025-05-05", end: "2025-05-06" });
+        expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07", end: "2025-05-09" });
     });
 
     it("supports custom start date", async () => {
@@ -87,6 +71,18 @@ describe("Building events", () => {
         expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07", end: "2025-05-09" });
         expect(events[2]).toMatchObject({ title: "Note 3", start: "2025-05-05", end: "2025-05-06" });
         expect(events[3]).toMatchObject({ title: "Note 4", start: "2025-05-07", end: "2025-05-09" });
+    });
+
+    it("supports label as custom title", async () => {
+        const noteIds = buildNotes([
+            { title: "Note 1", "#myTitle": "My Custom Title 1", "#startDate": "2025-05-05", "#calendar:title": "#myTitle" },
+            { title: "Note 2", "#startDate": "2025-05-07", "#calendar:title": "#myTitle" },
+        ]);
+        const events = await CalendarView.buildEvents(noteIds);
+
+        expect(events).toHaveLength(2);
+        expect(events[0]).toMatchObject({ title: "My Custom Title 1", start: "2025-05-05" });
+        expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07" });
     });
 
 });
