@@ -3,9 +3,11 @@ import FNote from "../entities/fnote.js";
 import froca from "../services/froca.js";
 import FAttribute from "../entities/fattribute.js";
 
-interface NoteDefinition {
+type AttributeDefinitions = { [key in `#${string}`]: string; }
+
+interface NoteDefinition extends AttributeDefinitions {
+    id?: string | undefined;
     title: string;
-    [key: string]: string;
 }
 
 /**
@@ -27,9 +29,8 @@ export function buildNotes(notes: NoteDefinition[]) {
     const ids = [];
 
     for (const noteDef of notes) {
-        const fakeNoteId = utils.randomString(6);
         const note = new FNote(froca, {
-            noteId: fakeNoteId,
+            noteId: noteDef.id ?? utils.randomString(12),
             title: noteDef.title,
             type: "text",
             mime: "text/html",

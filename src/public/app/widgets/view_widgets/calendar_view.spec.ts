@@ -18,7 +18,7 @@ describe("Building events", () => {
     it("ignores notes with only end date", async () => {
         const noteIds = buildNotes([
             { title: "Note 1", "#endDate": "2025-05-05" },
-            { title: "Note 2", "#endDateDate": "2025-05-07" },
+            { title: "Note 2", "#endDateDate": "2025-05-07" }
         ]);
         const events = await CalendarView.buildEvents(noteIds);
 
