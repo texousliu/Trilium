@@ -355,6 +355,10 @@ type EventMappings = {
     };
     noteTypeMimeChanged: { noteId: string };
     zenModeChanged: { isEnabled: boolean };
+    relationMapCreateChildNote: { ntxId: string | null | undefined };
+    relationMapResetPanZoom: { ntxId: string | null | undefined };
+    relationMapResetZoomIn: { ntxId: string | null | undefined };
+    relationMapResetZoomOut: { ntxId: string | null | undefined };
 };
 
 export type EventListener<T extends EventNames> = {
