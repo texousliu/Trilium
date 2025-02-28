@@ -145,4 +145,21 @@ describe("Promoted attributes", () => {
             Mood: "happy"
         })
     });
+
+    it("supports relations", async () => {
+        const note = buildNote({
+            "title": "Hello",
+            "~assignee": buildNote({
+                "title": "Target note"
+            }).noteId,
+            "#calendar:promotedAttributes": "relation:assignee",
+            "#relation:assignee": "promoted,alias=Assignee,single,text",
+        });
+
+        const event = await CalendarView.buildEvent(note, "2025-04-04");
+        expect(event).toHaveLength(1);
+        expect(event[0]?.promotedAttributes).toMatchObject({
+            "Assignee": "Target note"
+        })
+    });
 });

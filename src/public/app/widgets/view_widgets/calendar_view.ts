@@ -378,8 +378,6 @@ export default class CalendarView extends ViewMode {
         const filteredPromotedAttributes = note.getPromotedDefinitionAttributes().filter((attr) => promotedAttributeNames.includes(attr.name));
         const result: Record<string, string> = {};
 
-        console.log("Got promoted attributes ", promotedAttributeNames, filteredPromotedAttributes);
-
         for (const promotedAttribute of filteredPromotedAttributes) {
             const [ type, name ] = promotedAttribute.name.split(":", 2);
             const definition = promotedAttribute.getDefinition();
@@ -389,12 +387,15 @@ export default class CalendarView extends ViewMode {
                 continue;
             }
 
-            // TODO: Add support for relations
-            if (type !== "label" || !note.hasLabel(name)) {
-                continue;
+            let value: string | undefined | null = null;
+
+            if (type === "label" && note.hasLabel(name)) {
+                value = note.getLabelValue(name);
+            } else if (type === "relation" && note.hasRelation(name)) {
+                const targetNote = await note.getRelationTarget(name);
+                value = targetNote?.title;
             }
 
-            const value = note.getLabelValue(name);
             const friendlyName = definition.promotedAlias ?? name;
             if (friendlyName && value) {
                 result[friendlyName] = value;
