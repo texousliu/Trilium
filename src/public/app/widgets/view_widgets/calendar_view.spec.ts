@@ -1,7 +1,4 @@
-import $ from "jquery";
-(window as any).$ = $;
-
-import { beforeAll, describe, it, vi } from "vitest";
+import { describe, it } from "vitest";
 import utils from "../../services/utils.js";
 
 interface NoteDefinition {
@@ -54,48 +51,6 @@ async function buildNotes(notes: NoteDefinition[]) {
 }
 
 describe("Building events", () => {
-
-    beforeAll(async () => {
-        (window as any).WebSocket = () => {};
-        (window as any).glob = {
-            isMainWindow: true
-        };
-
-        vi.mock("../../services/ws.js", () => {
-            return {
-                default: {
-                    subscribeToMessages(callback: (message: unknown) => void) {
-                        // Do nothing.
-                    }
-                }
-            }
-        });
-
-        vi.mock("../../services/server.js", () => {
-            return {
-                default: {
-                    async get(url: string) {
-                        if (url === "options") {
-                            return {};
-                        }
-
-                        if (url === "keyboard-actions") {
-                            return [];
-                        }
-
-                        if (url === "tree") {
-                            return {
-                                branches: [],
-                                notes: [],
-                                attributes: []
-                            }
-                        }
-                    }
-                }
-            };
-        });
-    });
-
     it("supports start date", async () => {
         const noteIds = await buildNotes([
             { title: "A", "#startDate": "2025-05-05" }
