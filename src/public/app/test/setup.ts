@@ -48,9 +48,9 @@ function mockServer() {
                 }
             },
 
-            async post(url: string, data: {}) {
+            async post(url: string, data: object) {
                 if (url === "tree/load") {
-                    throw new Error(`A module tried to load from the server the following notes: ${data.noteIds.join(",")}\nThis is not supported, use Froca mocking instead and ensure the note exist in the mock.`)
+                    throw new Error(`A module tried to load from the server the following notes: ${((data as any).noteIds || []).join(",")}\nThis is not supported, use Froca mocking instead and ensure the note exist in the mock.`)
                 }
             }
         }
