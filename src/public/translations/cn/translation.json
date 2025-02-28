@@ -819,7 +819,7 @@
     "search": "搜索"
   },
   "note_properties": {
-    "this_note_was_originally_taken_from": "笔记来源：",
+    "this_note_was_originally_taken_from": "笔记来源:",
     "info": "信息"
   },
   "owned_attribute_list": {
@@ -828,7 +828,7 @@
   "promoted_attributes": {
     "promoted_attributes": "升级属性",
     "unset-field-placeholder": "未设置",
-    "url_placeholder": "http://网站链接...",
+    "url_placeholder": "http://www...",
     "open_external_link": "打开外部链接",
     "unknown_label_type": "未知的标签类型 '{{type}}'",
     "unknown_attribute_type": "未知的属性类型 '{{type}}'",
@@ -896,7 +896,7 @@
   },
   "limit": {
     "limit": "限制",
-    "take_first_x_results": "仅取前X个指定结果。"
+    "take_first_x_results": "仅取前 X 个指定结果。"
   },
   "order_by": {
     "order_by": "排序依据",
@@ -927,15 +927,15 @@
     "note": "注意，搜索脚本和搜索字符串不能相互结合使用。"
   },
   "search_string": {
-    "title_column": "搜索字符串：",
+    "title_column": "搜索字符串:",
     "placeholder": "全文关键词，#标签 = 值 ...",
     "search_syntax": "搜索语法",
     "also_see": "另见",
     "complete_help": "完整的搜索语法帮助",
     "full_text_search": "只需输入任何文本进行全文搜索",
-    "label_abc": "返回带有标签abc的笔记",
-    "label_year": "匹配带有标签年份且值为2019的笔记",
-    "label_rock_pop": "匹配同时具有rock和pop标签的笔记",
+    "label_abc": "返回带有标签 abc 的笔记",
+    "label_year": "匹配带有标签年份且值为 2019 的笔记",
+    "label_rock_pop": "匹配同时具有 rock 和 pop 标签的笔记",
     "label_rock_or_pop": "只需一个标签存在即可",
     "label_year_comparison": "数字比较（也包括>，>=，<）。",
     "label_date_created": "上个月创建的笔记",
@@ -1004,8 +1004,8 @@
     "click_on_canvas_to_place_new_note": "点击画布以放置新笔记"
   },
   "render": {
-    "note_detail_render_help_1": "之所以显示此帮助说明，是因为该类型的渲染 HTML 没有设置好必须的关联关系。",
-    "note_detail_render_help_2": "渲染笔记类型用于编写 <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/scripts.html\">脚本</a>。简单说就是您可以写 HTML 代码（或者加上一些 JavaScript 代码）， 然后这个笔记会把页面渲染出来。要使其正常工作，您需要定义一个名为 \"renderNote\" 的关系 <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/attributes.html\">关系</a> 指向要呈现的 HTML 笔记。"
+    "note_detail_render_help_1": "之所以显示此帮助说明，是因为这个类型为渲染 HTML 的笔记没有正常工作所需的关系。",
+    "note_detail_render_help_2": "渲染 HTML 笔记类型用于<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/scripts.html\">编写脚本</a>。简而言之，您有一份 HTML 代码笔记（可包含一些 JavaScript），然后这个笔记会把页面渲染出来。要使其正常工作，您需要定义一个名为 \"renderNote\" 的<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/attributes.html\">关系</a>指向要渲染的 HTML 笔记。"
   },
   "web_view": {
     "web_view": "网页视图",
@@ -1027,15 +1027,15 @@
     "full_anonymization_description": "此操作将创建一个新的数据库副本并进行匿名化处理（删除所有笔记内容，仅保留结构和一些非敏感元数据），用来分享到网上做调试而不用担心泄漏您的个人资料。",
     "save_fully_anonymized_database": "保存完全匿名化的数据库",
     "light_anonymization": "轻度匿名化",
-    "light_anonymization_description": "此操作将创建一个新的数据库副本，并对其进行轻度匿名化处理——仅删除所有笔记的内容，但保留标题和属性。此外，自定义JS前端/后端脚本笔记和自定义小部件将保留。这提供了更多上下文以调试问题。",
+    "light_anonymization_description": "此操作将创建一个新的数据库副本，并对其进行轻度匿名化处理——仅删除所有笔记的内容，但保留标题和属性。此外，自定义 JS 前端/后端脚本笔记和自定义小部件将保留。这提供了更多上下文以调试问题。",
     "choose_anonymization": "您可以自行决定是提供完全匿名化还是轻度匿名化的数据库。即使是完全匿名化的数据库也非常有用，但在某些情况下，轻度匿名化的数据库可以加快错误识别和修复的过程。",
     "save_lightly_anonymized_database": "保存轻度匿名化的数据库",
     "existing_anonymized_databases": "现有的匿名化数据库",
     "creating_fully_anonymized_database": "正在创建完全匿名化的数据库...",
     "creating_lightly_anonymized_database": "正在创建轻度匿名化的数据库...",
     "error_creating_anonymized_database": "无法创建匿名化数据库，请检查后端日志以获取详细信息",
-    "successfully_created_fully_anonymized_database": "成功创建完全匿名化的数据库，路径为{{anonymizedFilePath}}",
-    "successfully_created_lightly_anonymized_database": "成功创建轻度匿名化的数据库，路径为{{anonymizedFilePath}}",
+    "successfully_created_fully_anonymized_database": "成功创建完全匿名化的数据库，路径为 {{anonymizedFilePath}}",
+    "successfully_created_lightly_anonymized_database": "成功创建轻度匿名化的数据库，路径为 {{anonymizedFilePath}}",
     "no_anonymized_database_yet": "尚无匿名化数据库"
   },
   "database_integrity_check": {
