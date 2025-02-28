@@ -4,8 +4,8 @@ import $ from "jquery";
 injectGlobals();
 
 beforeAll(() => {
-    vi.mock("./services/ws.js", mockWebsocket);
-    vi.mock("./services/server.js", mockServer);
+    vi.mock("../services/ws.js", mockWebsocket);
+    vi.mock("../services/server.js", mockServer);
 });
 
 function injectGlobals() {
