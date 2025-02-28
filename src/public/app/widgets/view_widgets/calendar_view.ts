@@ -108,7 +108,7 @@ export default class CalendarView extends ViewMode {
 
         let eventBuilder: EventSourceFunc;
         if (!this.isCalendarRoot) {
-            eventBuilder = async () => await this.#buildEvents(this.noteIds)
+            eventBuilder = async () => await CalendarView.buildEvents(this.noteIds)
         } else {
             eventBuilder = async (e: EventSourceFuncArg) => await this.#buildEventsForCalendar(e);
         }
@@ -294,7 +294,7 @@ export default class CalendarView extends ViewMode {
         return events.flat();
     }
 
-    async #buildEvents(noteIds: string[]) {
+    static async buildEvents(noteIds: string[]) {
         const notes = await froca.getNotes(noteIds);
         const events: EventSourceInput = [];
 
@@ -302,7 +302,7 @@ export default class CalendarView extends ViewMode {
             const startDate = CalendarView.#getCustomisableLabel(note, "startDate", "calendar:startDate");
 
             if (note.hasChildren()) {
-                const childrenEventData = await this.#buildEvents(note.getChildNoteIds());
+                const childrenEventData = await this.buildEvents(note.getChildNoteIds());
                 if (childrenEventData.length > 0) {
                     events.push(childrenEventData);
                 }
