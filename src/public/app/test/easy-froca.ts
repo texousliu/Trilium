@@ -3,9 +3,10 @@ import FNote from "../entities/fnote.js";
 import froca from "../services/froca.js";
 import FAttribute from "../entities/fattribute.js";
 
-type AttributeDefinitions = { [key in `#${string}`]: string; }
+type AttributeDefinitions = { [key in `#${string}`]: string; };
+type RelationDefinitions = { [key in `~${string}`]: string; };
 
-interface NoteDefinition extends AttributeDefinitions {
+interface NoteDefinition extends AttributeDefinitions, RelationDefinitions {
     id?: string | undefined;
     title: string;
 }
@@ -42,21 +43,41 @@ export function buildNotes(notes: NoteDefinition[]) {
 
         let position = 0;
         for (const [ key, value ] of Object.entries(noteDef)) {
+            const attributeId = utils.randomString(12);
+            const name = key.substring(1);
+
+            let attribute: FAttribute | null = null;
             if (key.startsWith("#")) {
-                const attributeId = utils.randomString(12);
-                const attribute = new FAttribute(froca, {
+                attribute = new FAttribute(froca, {
                     noteId: note.noteId,
-                    attributeId: attributeId,
+                    attributeId,
                     type: "label",
-                    name: key.substring(1),
-                    value: value,
-                    position: position,
+                    name,
+                    value,
+                    position,
                     isInheritable: false
                 });
-                froca.attributes[attributeId] = attribute;
-                note.attributes.push(attributeId);
             }
 
+            if (key.startsWith("~")) {
+                console.log("Created relation with ", name, value);
+                attribute = new FAttribute(froca, {
+                    noteId: note.noteId,
+                    attributeId,
+                    type: "relation",
+                    name,
+                    value,
+                    position,
+                    isInheritable: false
+                });
+            }
+
+            if (!attribute) {
+                continue;
+            }
+
+            froca.attributes[attributeId] = attribute;
+            note.attributes.push(attributeId);
             position++;
         }
     }
