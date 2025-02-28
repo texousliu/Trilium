@@ -272,7 +272,7 @@ export default class CalendarView extends ViewMode {
                 continue;
             }
 
-            events.push(await CalendarView.#buildEvent(dateNote, startDate));
+            events.push(await CalendarView.buildEvent(dateNote, startDate));
 
             if (dateNote.hasChildren()) {
                 const childNoteIds = dateNote.getChildNoteIds();
@@ -287,7 +287,7 @@ export default class CalendarView extends ViewMode {
         const childNotes = await froca.getNotes(childNoteIds);
         for (const childNote of childNotes) {
             const startDate = childNoteToDateMapping[childNote.noteId];
-            const event = await CalendarView.#buildEvent(childNote, startDate);
+            const event = await CalendarView.buildEvent(childNote, startDate);
             events.push(event);
         }
 
@@ -313,7 +313,7 @@ export default class CalendarView extends ViewMode {
             }
 
             const endDate = CalendarView.#getCustomisableLabel(note, "endDate", "calendar:endDate");
-            events.push(await CalendarView.#buildEvent(note, startDate, endDate));
+            events.push(await CalendarView.buildEvent(note, startDate, endDate));
         }
 
         return events.flat();
@@ -341,7 +341,7 @@ export default class CalendarView extends ViewMode {
         return note.getLabelValue(defaultLabelName);
     }
 
-    static async #buildEvent(note: FNote, startDate: string, endDate?: string | null) {
+    static async buildEvent(note: FNote, startDate: string, endDate?: string | null) {
         const customTitle = note.getLabelValue("calendar:title");
         const titles = await CalendarView.#parseCustomTitle(customTitle, note);
         const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
@@ -377,6 +377,8 @@ export default class CalendarView extends ViewMode {
         const promotedAttributeNames = calendarPromotedAttributes.split(",");
         const filteredPromotedAttributes = note.getPromotedDefinitionAttributes().filter((attr) => promotedAttributeNames.includes(attr.name));
         const result: Record<string, string> = {};
+
+        console.log("Got promoted attributes ", promotedAttributeNames, filteredPromotedAttributes);
 
         for (const promotedAttribute of filteredPromotedAttributes) {
             const [ type, name ] = promotedAttribute.name.split(":", 2);

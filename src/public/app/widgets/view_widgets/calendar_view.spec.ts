@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildNotes } from "../../test/easy-froca.js";
+import { buildNote, buildNotes } from "../../test/easy-froca.js";
 import CalendarView from "./calendar_view.js";
 
 describe("Building events", () => {
@@ -125,4 +125,24 @@ describe("Building events", () => {
         expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07" });
     });
 
+});
+
+describe("Promoted attributes", () => {
+    it("supports labels", async () => {
+        const note = buildNote({
+            "title": "Hello",
+            "#weight": "75",
+            "#mood": "happy",
+            "#label:weight": "promoted,number,single,precision=1",
+            "#label:mood": "promoted,alias=Mood,single,text",
+            "#calendar:promotedAttributes": "label:weight,label:mood"
+        });
+
+        const event = await CalendarView.buildEvent(note, "2025-04-04");
+        expect(event).toHaveLength(1);
+        expect(event[0]?.promotedAttributes).toMatchObject({
+            weight: "75",
+            Mood: "happy"
+        })
+    });
 });
