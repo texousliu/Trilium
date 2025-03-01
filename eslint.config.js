@@ -20,5 +20,8 @@ export default tseslint.config(
         rules: {
             // add rule overrides here
         }
+    },
+    {
+        ignores: ["build/*", "dist/*", "src/public/app-dist/*"]
     }
 );
