@@ -39,6 +39,7 @@ import EditorOptions from "./options/text_notes/editor.js";
 import ShareSettingsOptions from "./options/other/share_settings.js";
 import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
+import { t } from "i18next";
 
 const TPL = `<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -119,7 +120,7 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
                 await widget.refresh();
             }
         } else {
-            this.$content.append(`Unknown widget for "${note.noteId}"`);
+            this.$content.append(t("content_widget.unknown_widget", { id: note.noteId }));
         }
     }
 }

@@ -1682,5 +1682,8 @@
       "tomorrow": "Tomorrow",
       "yesterday": "Yesterday"
     }
+  },
+  "content_widget": {
+    "unknown_widget": "Unknown widget for \"{{id}}\"."
   }
 }
