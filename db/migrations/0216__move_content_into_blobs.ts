@@ -1,3 +1,6 @@
+import sql from "../../src/services/sql";
+import utils from "../../src/services/utils";
+
 interface NoteContentsRow {
     noteId: string;
     content: string | Buffer;
@@ -11,10 +14,7 @@ interface NoteRevisionContents {
     utcDateModified: string;
 }
 
-export default async () => {
-    const sql = (await import("../../src/services/sql")).default;
-    const utils = (await import("../../src/services/utils")).default;
-
+export default () => {
     const existingBlobIds = new Set();
 
     for (const noteId of sql.getColumn<string>(`SELECT noteId FROM note_contents`)) {

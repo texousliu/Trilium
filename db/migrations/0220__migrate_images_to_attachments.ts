@@ -1,15 +1,15 @@
-export default async () => {
-    const beccaLoader = (await import("../../src/becca/becca_loader")).default;
-    const becca = (await import("../../src/becca/becca")).default;
-    const cls = (await import("../../src/services/cls")).default;
-    const log = (await import("../../src/services/log")).default;
-    const sql = (await import("../../src/services/sql")).default;
+import becca from "../../src/becca/becca";
+import becca_loader from "../../src/becca/becca_loader";
+import cls from "../../src/services/cls";
+import log from "../../src/services/log";
+import sql from "../../src/services/sql";
 
+export default () => {
     cls.init(() => {
         // emergency disabling of image compression since it appears to make problems in migration to 0.61
         sql.execute(`UPDATE options SET value = 'false' WHERE name = 'compressImages'`);
 
-        beccaLoader.load();
+        becca_loader.load();
 
         for (const note of Object.values(becca.notes)) {
             try {
