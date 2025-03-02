@@ -28,15 +28,33 @@ export default class LanguageOptions extends OptionsWidget {
         this.$languagesContainer = this.$widget.find(".options-languages");
     }
 
+    async save() {
+        const enabledLanguages: string[] = [];
+
+        this.$languagesContainer.find("input:checked").each((i, el) => {
+            const languageId = $(el).attr("data-language-id");
+            if (languageId) {
+                enabledLanguages.push(languageId);
+            }
+        });
+
+        await this.updateOption("languages", JSON.stringify(enabledLanguages));
+    }
+
     async optionsLoaded(options: OptionMap) {
         const availableLocales = await server.get<Locale[]>("options/locales");
+        const enabledLanguages = (JSON.parse(options.languages) as string[]);
 
         this.$languagesContainer.empty();
         for (const locale of availableLocales) {
-            const checkbox = $(`<label class="tn-checkbox">`)
-                .append($('<input type="checkbox" class="form-check-input">'))
+            const checkbox = $('<input type="checkbox" class="form-check-input">')
+                .attr("data-language-id", locale.id)
+                .prop("checked", enabledLanguages.includes(locale.id));
+            const wrapper = $(`<label class="tn-checkbox">`)
+                .append(checkbox)
+                .on("change", () => this.save())
                 .append(locale.name);
-            this.$languagesContainer.append($("<li>").append(checkbox));
+            this.$languagesContainer.append($("<li>").append(wrapper));
         }
     }
 
