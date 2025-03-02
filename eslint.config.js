@@ -19,6 +19,7 @@ export default tseslint.config(
     {
         rules: {
             // add rule overrides here
+            "no-undef": "off"
         }
     },
     {
