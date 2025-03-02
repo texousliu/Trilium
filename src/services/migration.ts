@@ -106,7 +106,7 @@ async function executeMigration(mig: MigrationInfo) {
         console.log("Migration with JS module");
 
         const migrationModule = await import(`${resourceDir.MIGRATIONS_DIR}/${mig.file}`);
-        migrationModule();
+        await migrationModule.default();
     } else {
         throw new Error(`Unknown migration type '${mig.type}'`);
     }
