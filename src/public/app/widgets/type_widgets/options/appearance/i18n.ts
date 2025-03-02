@@ -26,7 +26,7 @@ const TPL = `
 `;
 
 // TODO: Deduplicate with server.
-interface Locale {
+export interface Locale {
     id: string;
     name: string;
 }
