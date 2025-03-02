@@ -36,7 +36,7 @@ async function migrate() {
 
     const migrations = migrationFiles
         .map((file) => {
-            const match = file.match(/^([0-9]{4})__([a-zA-Z0-9_ ]+)\.(sql|js)$/);
+            const match = file.match(/^([0-9]{4})__([a-zA-Z0-9_ ]+)\.(sql|js|ts)$/);
             if (!match) {
                 return null;
             }
@@ -82,6 +82,7 @@ async function migrate() {
 
                 log.info(`Migration to version ${mig.dbVersion} has been successful.`);
             } catch (e: any) {
+                console.error(e);
                 crash(t("migration.error_message", { version: mig.dbVersion, stack: e.stack }));
                 break; // crash() is sometimes async
             }
@@ -102,7 +103,7 @@ async function executeMigration(mig: MigrationInfo) {
         console.log(`Migration with SQL script: ${migrationSql}`);
 
         sql.executeScript(migrationSql);
-    } else if (mig.type === "js") {
+    } else if (mig.type === "js" || mig.type === "ts") {
         console.log("Migration with JS module");
 
         const migrationModule = await import(`${resourceDir.MIGRATIONS_DIR}/${mig.file}`);
