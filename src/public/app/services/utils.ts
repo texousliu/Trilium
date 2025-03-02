@@ -33,20 +33,20 @@ function parseDate(str: string) {
 
 // Source: https://stackoverflow.com/a/30465299/4898894
 function getMonthsInDateRange(startDate: string, endDate: string) {
-    const start = startDate.split('-');
-    const end = endDate.split('-');
+    const start = startDate.split("-");
+    const end = endDate.split("-");
     const startYear = parseInt(start[0]);
     const endYear = parseInt(end[0]);
     const dates = [];
 
     for (let i = startYear; i <= endYear; i++) {
         const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
-        const startMon = i === startYear ? parseInt(start[1])-1 : 0;
+        const startMon = i === startYear ? parseInt(start[1]) - 1 : 0;
 
-        for(let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j+1) {
-            const month = j+1;
-            const displayMonth = month < 10 ? '0'+month : month;
-            dates.push([i, displayMonth].join('-'));
+        for (let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
+            const month = j + 1;
+            const displayMonth = month < 10 ? "0" + month : month;
+            dates.push([i, displayMonth].join("-"));
         }
     }
     return dates;
@@ -161,7 +161,7 @@ function escapeHtml(str: string) {
 }
 
 export function escapeQuotes(value: string) {
-    return value.replaceAll("\"", "&quot;");
+    return value.replaceAll('"', "&quot;");
 }
 
 function formatSize(size: number) {

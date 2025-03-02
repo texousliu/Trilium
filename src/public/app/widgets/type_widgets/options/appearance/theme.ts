@@ -94,10 +94,12 @@ export default class ThemeOptions extends OptionsWidget {
         this.$themeSelect.empty();
 
         for (const theme of themes) {
-            this.$themeSelect.append($("<option>")
-                .attr("value", theme.val)
-                .attr("data-note-id", theme.noteId || "")
-                .text(theme.title));
+            this.$themeSelect.append(
+                $("<option>")
+                    .attr("value", theme.val)
+                    .attr("data-note-id", theme.noteId || "")
+                    .text(theme.title)
+            );
         }
 
         this.$themeSelect.val(options.theme);

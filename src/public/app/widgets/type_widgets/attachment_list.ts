@@ -66,7 +66,7 @@ export default class AttachmentListTypeWidget extends TypeWidget {
                     .text(t("attachment_list.upload_attachments"))
                     .on("click", () => {
                         if (this.noteId) {
-                            this.triggerCommand("showUploadAttachmentsDialog", { noteId: this.noteId })
+                            this.triggerCommand("showUploadAttachmentsDialog", { noteId: this.noteId });
                         }
                     }),
                 $helpButton

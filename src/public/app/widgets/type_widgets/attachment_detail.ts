@@ -63,7 +63,7 @@ export default class AttachmentDetailTypeWidget extends TypeWidget {
 
         this.$linksWrapper.empty().append(
             t("attachment_detail.owning_note"),
-            (await linkService.createLink(this.noteId)),
+            await linkService.createLink(this.noteId),
             t("attachment_detail.you_can_also_open"),
             await linkService.createLink(this.noteId, {
                 title: t("attachment_detail.list_of_all_attachments"),
@@ -74,7 +74,7 @@ export default class AttachmentDetailTypeWidget extends TypeWidget {
             $helpButton
         );
 
-        const attachment = (this.attachmentId) ? await froca.getAttachment(this.attachmentId, true) : null;
+        const attachment = this.attachmentId ? await froca.getAttachment(this.attachmentId, true) : null;
 
         if (!attachment) {
             this.$wrapper.html("<strong>" + t("attachment_detail.attachment_deleted") + "</strong>");

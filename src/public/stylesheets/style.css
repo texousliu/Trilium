@@ -1439,7 +1439,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
     body.mobile.force-fixed-tree #mobile-rest-container {
         flex-direction: column !important;
-    } 
+    }
 
     body.mobile.force-fixed-tree #detail-container {
         flex-grow: 1;

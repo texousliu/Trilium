@@ -3,8 +3,7 @@ import BTask from "../becca/entities/btask.js";
 import type { TaskRow } from "../becca/entities/rows.js";
 
 export function getTasks(parentNoteId: string) {
-    return becca.getTasks()
-        .filter((task) => task.parentNoteId === parentNoteId && !task.isDone);
+    return becca.getTasks().filter((task) => task.parentNoteId === parentNoteId && !task.isDone);
 }
 
 interface CreateTaskParams {
@@ -19,7 +18,7 @@ export function createNewTask(params: CreateTaskParams) {
 
     return {
         task
-    }
+    };
 }
 
 export function toggleTaskDone(taskId: string) {

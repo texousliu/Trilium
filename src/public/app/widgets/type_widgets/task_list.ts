@@ -87,7 +87,7 @@ const TPL = `
 `;
 
 function buildTasks(tasks: FTask[]) {
-    let html = '';
+    let html = "";
 
     const now = dayjs();
     const dateFormat = "DD-MM-YYYY";
@@ -137,7 +137,9 @@ export default class TaskListWidget extends TypeWidget {
     private $taskContainer!: JQuery<HTMLElement>;
     private $addNewTask!: JQuery<HTMLElement>;
 
-    static getType() { return "taskList" }
+    static getType() {
+        return "taskList";
+    }
 
     doRender() {
         this.$widget = $(TPL);
@@ -231,19 +233,18 @@ export default class TaskListWidget extends TypeWidget {
             return [];
         }
 
-        return (await froca.getTasks(this.noteId))
-            .toSorted((a, b) => {
-                // Sort by due date, closest date first.
-                if (!a.dueDate) {
-                    return 1;
-                }
+        return (await froca.getTasks(this.noteId)).toSorted((a, b) => {
+            // Sort by due date, closest date first.
+            if (!a.dueDate) {
+                return 1;
+            }
 
-                if (!b.dueDate) {
-                    return -1;
-                }
+            if (!b.dueDate) {
+                return -1;
+            }
 
-                return a.dueDate.localeCompare(b.dueDate, "en");
-            });
+            return a.dueDate.localeCompare(b.dueDate, "en");
+        });
     }
 
     async doRefresh(note: FNote) {
