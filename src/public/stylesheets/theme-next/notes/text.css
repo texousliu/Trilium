@@ -146,7 +146,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
     padding-top: 0;
 }
 
-div.find-replace-widget div.find-widget-found-wrapper {
+div.find-replace-widget div.find-widget-found-wrapper > span {
     min-width: 50px;
     font-style: normal;
     font-weight: normal;

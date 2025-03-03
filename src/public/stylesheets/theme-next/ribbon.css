@@ -79,3 +79,14 @@ div.editability-dropdown a.dropdown-item {
     padding: 4px 10px !important;
     font-size: 0.8em;
 }
+
+/*
+ * Attribute detail dialog
+ */
+
+/* Labels */
+.attr-edit-table th {
+    padding-right: 12px;
+    font-weight: normal;
+    white-space: nowrap;
+}
