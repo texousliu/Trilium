@@ -290,7 +290,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.watchdog?.editor.editing.view.focus();
     }
 
-    show() {}
+    show() { }
 
     getEditor() {
         return this.watchdog?.editor;
@@ -337,14 +337,14 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.addTextToEditor(text);
     }
 
-    async addLink(notePath, linkTitle) {
+    async addLink(notePath, linkTitle, externalLink = false) {
         await this.initialized;
 
         if (linkTitle) {
             if (this.hasSelection()) {
-                this.watchdog.editor.execute("link", `#${notePath}`);
+                this.watchdog.editor.execute("link", externalLink ? `${notePath}` : `#${notePath}`);
             } else {
-                await this.addLinkToEditor(`#${notePath}`, linkTitle);
+                await this.addLinkToEditor(externalLink ? `${notePath}` : `#${notePath}`, linkTitle);
             }
         } else {
             this.watchdog.editor.execute("referenceLink", { href: "#" + notePath });

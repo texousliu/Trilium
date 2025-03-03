@@ -88,13 +88,13 @@ export default class AddLinkDialog extends BasicWidget {
             if (this.$autoComplete.getSelectedNotePath()) {
                 this.$widget.modal("hide");
 
-                const linkTitle = this.getLinkType() === "reference-link" ? null : this.$linkTitle.val() as string;
+                const linkTitle = this.getLinkType() === "reference-link" ? null : this.$linkTitle.val();
 
                 this.textTypeWidget?.addLink(this.$autoComplete.getSelectedNotePath()!, linkTitle);
             } else if (this.$autoComplete.getSelectedExternalLink()) {
                 this.$widget.modal("hide");
 
-                this.textTypeWidget?.addLink(this.$autoComplete.getSelectedExternalLink()!, this.$linkTitle.val() as string);
+                this.textTypeWidget?.addLink(this.$autoComplete.getSelectedExternalLink()!, this.$linkTitle.val(), true);
             } else {
                 logError("No link to add.");
             }
@@ -149,7 +149,6 @@ export default class AddLinkDialog extends BasicWidget {
         });
 
         this.$autoComplete.on("autocomplete:externallinkselected", (event: JQuery.Event, suggestion: Suggestion) => {
-            console.log("autocomplete:externallinkselected", event, suggestion);
             if (!suggestion.externalLink) {
                 return false;
             }
