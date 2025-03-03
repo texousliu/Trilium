@@ -20,9 +20,6 @@ function copyNodeModuleFileOrFolder(source: string) {
 
 try {
 
-    log(`Copying build into dist folder.`);
-    fs.copySync("./build", DEST_DIR);
-
     const assetsToCopy = new Set([
         "./images",
         "./libraries",
