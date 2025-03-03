@@ -46,6 +46,9 @@ export default class NotePropertiesWidget extends NoteContextAwareWidget {
     async refreshWithNote(note: FNote) {
         const pageUrl = note.getLabelValue("pageUrl");
 
-        this.$pageUrl.attr("href", pageUrl).attr("title", pageUrl).text(pageUrl ?? "");
+        this.$pageUrl
+            .attr("href", pageUrl)
+            .attr("title", pageUrl)
+            .text(pageUrl ?? "");
     }
 }

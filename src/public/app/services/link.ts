@@ -274,8 +274,8 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
 
     const ctrlKey = utils.isCtrlKey(evt);
-    const isLeftClick = ("which" in evt && evt.which === 1);
-    const isMiddleClick = ("which" in evt && evt.which === 2);
+    const isLeftClick = "which" in evt && evt.which === 1;
+    const isMiddleClick = "which" in evt && evt.which === 2;
     const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick;
 
     if (notePath) {

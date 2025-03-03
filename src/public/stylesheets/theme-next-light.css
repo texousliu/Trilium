@@ -32,7 +32,7 @@
     --cmd-button-icon-color: black;
     --cmd-button-keyboard-shortcut-background: #00000017;
     --cmd-button-keyboard-shortcut-color: black;
-    --cmd-button-disabled-opacity: .5;
+    --cmd-button-disabled-opacity: 0.5;
 
     --icon-button-color: currentColor;
     --icon-button-hover-background: var(--hover-item-background-color);

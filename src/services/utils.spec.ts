@@ -4,24 +4,20 @@ import utils from "./utils.js";
 type TestCase<T extends (...args: any) => any> = [desc: string, fnParams: Parameters<T>, expected: ReturnType<T>];
 
 describe("#newEntityId", () => {
-
-  it("should return a string with a length of 12", () => {
-    const result = utils.newEntityId();
-    expect(result).toBeTypeOf("string");
-    expect(result).toHaveLength(12);
-  });
-
+    it("should return a string with a length of 12", () => {
+        const result = utils.newEntityId();
+        expect(result).toBeTypeOf("string");
+        expect(result).toHaveLength(12);
+    });
 });
 
 describe("#randomString", () => {
-
-  it("should return a string with a length as per argument", () => {
-    const stringLength = 5;
-    const result = utils.randomString(stringLength);
-    expect(result).toBeTypeOf("string");
-    expect(result).toHaveLength(stringLength);
-  });
-
+    it("should return a string with a length as per argument", () => {
+        const stringLength = 5;
+        const result = utils.randomString(stringLength);
+        expect(result).toBeTypeOf("string");
+        expect(result).toHaveLength(stringLength);
+    });
 });
 
 // TriliumNextTODO: should use mocks and assert that functions get called
@@ -64,48 +60,44 @@ describe.todo("#hmac", () => {});
 describe.todo("#hash", () => {});
 
 describe("#isEmptyOrWhitespace", () => {
+    const testCases: TestCase<typeof utils.isEmptyOrWhitespace>[] = [
+        ["w/ 'null' it should return true", [null], true],
+        ["w/ 'null' it should return true", [null], true],
+        ["w/ undefined it should return true", [undefined], true],
+        ["w/ empty string '' it should return true", [""], true],
+        ["w/ single whitespace string ' ' it should return true", [" "], true],
+        ["w/ multiple whitespace string '   ' it should return true", ["  "], true],
+        ["w/ non-empty string ' t  ' it should return false", [" t  "], false]
+    ];
 
-  const testCases: TestCase<typeof utils.isEmptyOrWhitespace>[] = [
-    ["w/ 'null' it should return true", [null], true],
-    ["w/ 'null' it should return true", [null], true],
-    ["w/ undefined it should return true", [undefined], true],
-    ["w/ empty string '' it should return true", [""], true],
-    ["w/ single whitespace string ' ' it should return true", [" "], true],
-    ["w/ multiple whitespace string '   ' it should return true", ["  "], true],
-    ["w/ non-empty string ' t  ' it should return false", [" t  "], false],
-  ];
-
-  testCases.forEach(testCase => {
-    const [desc, fnParams, expected] = testCase;
-    it(desc, () => {
-      const result = utils.isEmptyOrWhitespace(...fnParams);
-      expect(result).toStrictEqual(expected);
-    })
-  })
-
+    testCases.forEach((testCase) => {
+        const [desc, fnParams, expected] = testCase;
+        it(desc, () => {
+            const result = utils.isEmptyOrWhitespace(...fnParams);
+            expect(result).toStrictEqual(expected);
+        });
+    });
 });
 
 describe("#sanitizeSqlIdentifier", () => {
+    const testCases: TestCase<typeof utils.sanitizeSqlIdentifier>[] = [
+        ["w/ 'test' it should not strip anything", ["test"], "test"],
+        ["w/ 'test123' it should not strip anything", ["test123"], "test123"],
+        ["w/ 'tEst_TeSt' it should not strip anything", ["tEst_TeSt"], "tEst_TeSt"],
+        ["w/ 'test_test' it should not strip '_'", ["test_test"], "test_test"],
+        ["w/ 'test-' it should strip the '-'", ["test-"], "test"],
+        ["w/ 'test-test' it should strip the '-'", ["test-test"], "testtest"],
+        ["w/ 'test; --test' it should strip the '; --'", ["test; --test"], "testtest"],
+        ["w/ 'test test' it should strip the ' '", ["test test"], "testtest"]
+    ];
 
-  const testCases: TestCase<typeof utils.sanitizeSqlIdentifier>[] = [
-    ["w/ 'test' it should not strip anything", ["test"], "test"],
-    ["w/ 'test123' it should not strip anything", ["test123"], "test123"],
-    ["w/ 'tEst_TeSt' it should not strip anything", ["tEst_TeSt"], "tEst_TeSt"],
-    ["w/ 'test_test' it should not strip '_'", ["test_test"], "test_test"],
-    ["w/ 'test-' it should strip the '-'", ["test-"], "test"],
-    ["w/ 'test-test' it should strip the '-'", ["test-test"], "testtest"],
-    ["w/ 'test; --test' it should strip the '; --'", ["test; --test"], "testtest"],
-    ["w/ 'test test' it should strip the ' '", ["test test"], "testtest"],
-  ];
-
-  testCases.forEach(testCase => {
-    const [desc, fnParams, expected] = testCase;
-    it(desc, () => {
-      const result = utils.sanitizeSqlIdentifier(...fnParams);
-      expect(result).toStrictEqual(expected);
-    })
-  });
-
+    testCases.forEach((testCase) => {
+        const [desc, fnParams, expected] = testCase;
+        it(desc, () => {
+            const result = utils.sanitizeSqlIdentifier(...fnParams);
+            expect(result).toStrictEqual(expected);
+        });
+    });
 });
 
 describe("#escapeHtml", () => {
@@ -122,21 +114,23 @@ describe("#unescapeHtml", () => {
 
 describe("#toObject", () => {
     it("should return an object with keys and value being set from the supplied Function", () => {
-        type TestListEntry = { testPropA: string, testPropB: string };
+        type TestListEntry = { testPropA: string; testPropB: string };
         type TestListFn = (testListEntry: TestListEntry) => [string, string];
-        const testList: [TestListEntry, TestListEntry] = [{ testPropA: "keyA", testPropB: "valueA" }, { testPropA: "keyB", testPropB: "valueB" }];
+        const testList: [TestListEntry, TestListEntry] = [
+            { testPropA: "keyA", testPropB: "valueA" },
+            { testPropA: "keyB", testPropB: "valueB" }
+        ];
         const fn: TestListFn = (testListEntry: TestListEntry) => [testListEntry.testPropA + "_fn", testListEntry.testPropB + "_fn"];
 
         const result = utils.toObject(testList, fn);
         expect(result).toStrictEqual({
-            "keyA_fn": "valueA_fn",
-            "keyB_fn": "valueB_fn"
+            keyA_fn: "valueA_fn",
+            keyB_fn: "valueB_fn"
         });
     });
 });
 
 describe("#stripTags", () => {
-
     //prettier-ignore
     const htmlWithNewlines =
 `<p>abc
@@ -146,15 +140,15 @@ def</p>
     const testCases: TestCase<typeof utils.stripTags>[] = [
         ["should strip all tags and only return the content, leaving new lines and spaces in tact", [htmlWithNewlines], "abc\ndef\nghi"],
         //TriliumNextTODO: should this actually insert a space between content to prevent concatenated text?
-        ["should strip all tags and only return the content", ["<h1>abc</h1><p>def</p>"], "abcdef"],
+        ["should strip all tags and only return the content", ["<h1>abc</h1><p>def</p>"], "abcdef"]
     ];
 
-    testCases.forEach(testCase => {
+    testCases.forEach((testCase) => {
         const [desc, fnParams, expected] = testCase;
         it(desc, () => {
-          const result = utils.stripTags(...fnParams);
-          expect(result).toStrictEqual(expected);
-        })
+            const result = utils.stripTags(...fnParams);
+            expect(result).toStrictEqual(expected);
+        });
     });
 });
 
@@ -233,12 +227,12 @@ describe("#isStringNote", () => {
         ],
     ];
 
-    testCases.forEach(testCase => {
+    testCases.forEach((testCase) => {
         const [desc, fnParams, expected] = testCase;
         it(desc, () => {
             const result = utils.isStringNote(...fnParams);
             expect(result).toStrictEqual(expected);
-          });
+        });
     });
 });
 
@@ -252,17 +246,16 @@ describe("#removeTextFileExtension", () => {
         ["w/ 'test.markdown' it should strip '.markdown'", ["test.markdown"], "test"],
         ["w/ 'test.html' it should strip '.html'", ["test.html"], "test"],
         ["w/ 'test.htm' it should strip '.htm'", ["test.htm"], "test"],
-        ["w/ 'test.zip' it should NOT strip '.zip'", ["test.zip"], "test.zip"],
+        ["w/ 'test.zip' it should NOT strip '.zip'", ["test.zip"], "test.zip"]
     ];
 
-    testCases.forEach(testCase => {
+    testCases.forEach((testCase) => {
         const [desc, fnParams, expected] = testCase;
         it(desc, () => {
             const result = utils.removeTextFileExtension(...fnParams);
             expect(result).toStrictEqual(expected);
-          });
+        });
     });
-
 });
 
 describe("#getNoteTitle", () => {
@@ -330,7 +323,6 @@ describe("#getNoteTitle", () => {
 });
 
 describe("#timeLimit", () => {
-
     it("when promise execution does NOT exceed timeout, it should resolve with promises' value", async () => {
         const resolvedValue = `resolved: ${new Date().toISOString()}`;
         const testPromise = new Promise((res, rej) => {
@@ -350,7 +342,7 @@ describe("#timeLimit", () => {
                 rej(rejectedValue);
             }, 100);
         });
-        await expect(utils.timeLimit(testPromise, 200, "Custom Error")).rejects.toThrow(rejectedValue)
+        await expect(utils.timeLimit(testPromise, 200, "Custom Error")).rejects.toThrow(rejectedValue);
     });
 
     it("when promise execution exceeds the set timeout, and 'errorMessage' is NOT set, it should reject the promise and display default error message", async () => {
@@ -360,7 +352,7 @@ describe("#timeLimit", () => {
             }, 500);
             //rej("rejected!");
         });
-        await expect(utils.timeLimit(testPromise, 200)).rejects.toThrow(`Process exceeded time limit 200`)
+        await expect(utils.timeLimit(testPromise, 200)).rejects.toThrow(`Process exceeded time limit 200`);
     });
 
     it("when promise execution exceeds the set timeout, and 'errorMessage' is set, it should reject the promise and display set error message", async () => {
@@ -371,69 +363,64 @@ describe("#timeLimit", () => {
             }, 500);
             //rej("rejected!");
         });
-        await expect(utils.timeLimit(testPromise, 200, customErrorMsg)).rejects.toThrow(customErrorMsg)
+        await expect(utils.timeLimit(testPromise, 200, customErrorMsg)).rejects.toThrow(customErrorMsg);
     });
 
     // TriliumNextTODO: since TS avoids this from ever happening – do we need this check?
     it("when the passed promise is not a promise but 'undefined', it should return 'undefined'", async () => {
         //@ts-expect-error - passing in illegal type 'undefined'
-        expect(utils.timeLimit(undefined, 200)).toBe(undefined)
+        expect(utils.timeLimit(undefined, 200)).toBe(undefined);
     });
 
     // TriliumNextTODO: since TS avoids this from ever happening – do we need this check?
     it("when the passed promise is not a promise, it should return the passed value", async () => {
         //@ts-expect-error - passing in illegal type 'object'
-        expect(utils.timeLimit({test: 1}, 200)).toStrictEqual({test: 1})
+        expect(utils.timeLimit({ test: 1 }, 200)).toStrictEqual({ test: 1 });
     });
-
 });
 
 describe("#deferred", () => {
     it("should return a promise", () => {
         const result = utils.deferred();
-        expect(result).toBeInstanceOf(Promise)
-    })
+        expect(result).toBeInstanceOf(Promise);
+    });
     // TriliumNextTODO: Add further tests!
 });
 
 describe("#removeDiacritic", () => {
-
     const testCases: TestCase<typeof utils.removeDiacritic>[] = [
         ["w/ 'Äpfel' it should replace the 'Ä'", ["Äpfel"], "Apfel"],
         ["w/ 'Été' it should replace the 'É' and 'é'", ["Été"], "Ete"],
         ["w/ 'Fête' it should replace the 'ê'", ["Fête"], "Fete"],
         ["w/ 'Αλφαβήτα' it should replace the 'ή'", ["Αλφαβήτα"], "Αλφαβητα"],
-        ["w/ '' (empty string) it should return empty string", [""], ""],
+        ["w/ '' (empty string) it should return empty string", [""], ""]
     ];
 
-    testCases.forEach(testCase => {
+    testCases.forEach((testCase) => {
         const [desc, fnParams, expected] = testCase;
         it(desc, () => {
             const result = utils.removeDiacritic(...fnParams);
             expect(result).toStrictEqual(expected);
-          });
+        });
     });
 });
 
-
 describe("#normalize", () => {
-
     const testCases: TestCase<typeof utils.normalize>[] = [
         ["w/ 'Äpfel' it should replace the 'Ä' and return lowercased", ["Äpfel"], "apfel"],
         ["w/ 'Été' it should replace the 'É' and 'é' and return lowercased", ["Été"], "ete"],
         ["w/ 'FêTe' it should replace the 'ê' and return lowercased", ["FêTe"], "fete"],
         ["w/ 'ΑλΦαβήΤα' it should replace the 'ή' and return lowercased", ["ΑλΦαβήΤα"], "αλφαβητα"],
-        ["w/ '' (empty string) it should return empty string", [""], ""],
+        ["w/ '' (empty string) it should return empty string", [""], ""]
     ];
 
-    testCases.forEach(testCase => {
+    testCases.forEach((testCase) => {
         const [desc, fnParams, expected] = testCase;
         it(desc, () => {
             const result = utils.normalize(...fnParams);
             expect(result).toStrictEqual(expected);
-          });
+        });
     });
-
 });
 
 describe("#toMap", () => {
@@ -475,15 +462,15 @@ describe("#envToBoolean", () => {
         ["w/ ' ' (white space string) it should return undefined", [" "], undefined],
         ["w/ undefined it should return undefined", [undefined], undefined],
         //@ts-expect-error - pass wrong type as param
-        ["w/ number 1 it should return undefined", [1], undefined],
+        ["w/ number 1 it should return undefined", [1], undefined]
     ];
 
-    testCases.forEach(testCase => {
+    testCases.forEach((testCase) => {
         const [desc, fnParams, expected] = testCase;
         it(desc, () => {
             const result = utils.envToBoolean(...fnParams);
             expect(result).toStrictEqual(expected);
-          });
+        });
     });
 });
 
@@ -514,7 +501,6 @@ describe("#isDev", () => {
 });
 
 describe("#formatDownloadTitle", () => {
-
     //prettier-ignore
     const testCases: [fnValue: Parameters<typeof utils.formatDownloadTitle>, expectedValue: ReturnType<typeof utils.formatDownloadTitle>][] = [
 

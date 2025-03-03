@@ -61,4 +61,4 @@ describe("processNoteContent", () => {
         const htmlNote = rootNote.children.find((ch) => ch.title === "IREN Reports Q2 FY25 Results");
         expect(htmlNote?.getContent().toString().substring(0, 4)).toEqual("<div");
     });
-})
+});

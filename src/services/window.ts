@@ -65,7 +65,7 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
         filters: [
             {
                 name: t("pdf.export_filter"),
-                extensions: [ "pdf" ]
+                extensions: ["pdf"]
             }
         ]
     });

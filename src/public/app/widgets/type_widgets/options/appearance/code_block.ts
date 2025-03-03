@@ -60,7 +60,7 @@ interface Theme {
     val: string;
 }
 
-type Response = Record<string, Theme[]>
+type Response = Record<string, Theme[]>;
 
 /**
  * Contains appearance settings for code blocks within text notes, such as the theme for the syntax highlighter.
