@@ -19,7 +19,15 @@ export default tseslint.config(
     {
         rules: {
             // add rule overrides here
-            "no-undef": "off"
+            "no-undef": "off",
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    "argsIgnorePattern": "^_",
+                    "varsIgnorePattern": "^_",
+                }
+            ]
         }
     },
     {
