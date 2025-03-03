@@ -3,6 +3,17 @@ import treeService from "../../services/tree.js";
 import noteAutocompleteService from "../../services/note_autocomplete.js";
 import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
+import type { Suggestion } from "../../services/note_autocomplete.js";
+import type { default as TextTypeWidget } from "../type_widgets/editable_text.js";
+
+interface NoteAutocompleteElement extends HTMLElement {
+    getSelectedNotePath(): string | null;
+    getSelectedExternalLink(): string | null;
+}
+
+interface NoteAutocompleteEvent extends Event {
+    suggestion: Suggestion;
+}
 
 const TPL = `
 <div class="add-link-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -41,7 +52,7 @@ const TPL = `
                             <br/>
                             <label>
                                 ${t("add_link.link_title")}
-                                
+
                                 <input class="link-title form-control" style="width: 100%;">
                             </label>
                         </div>
@@ -56,6 +67,14 @@ const TPL = `
 </div>`;
 
 export default class AddLinkDialog extends BasicWidget {
+    private $form!: JQuery<HTMLElement>;
+    private $autoComplete!: JQuery<NoteAutocompleteElement>;
+    private $linkTitle!: JQuery<HTMLElement>;
+    private $addLinkTitleSettings!: JQuery<HTMLElement>;
+    private $addLinkTitleRadios!: JQuery<HTMLElement>;
+    private $addLinkTitleFormGroup!: JQuery<HTMLElement>;
+    private textTypeWidget: TextTypeWidget | null = null;
+
     doRender() {
         this.$widget = $(TPL);
         this.$form = this.$widget.find(".add-link-form");
@@ -65,20 +84,17 @@ export default class AddLinkDialog extends BasicWidget {
         this.$addLinkTitleRadios = this.$widget.find(".add-link-title-radios");
         this.$addLinkTitleFormGroup = this.$widget.find(".add-link-title-form-group");
 
-        /** @var TextTypeWidget */
-        this.textTypeWidget = null;
-
         this.$form.on("submit", () => {
             if (this.$autoComplete.getSelectedNotePath()) {
                 this.$widget.modal("hide");
 
-                const linkTitle = this.getLinkType() === "reference-link" ? null : this.$linkTitle.val();
+                const linkTitle = this.getLinkType() === "reference-link" ? null : this.$linkTitle.val() as string;
 
-                this.textTypeWidget.addLink(this.$autoComplete.getSelectedNotePath(), linkTitle);
+                this.textTypeWidget?.addLink(this.$autoComplete.getSelectedNotePath()!, linkTitle);
             } else if (this.$autoComplete.getSelectedExternalLink()) {
                 this.$widget.modal("hide");
 
-                this.textTypeWidget.addLink(this.$autoComplete.getSelectedExternalLink(), this.$linkTitle.val());
+                this.textTypeWidget?.addLink(this.$autoComplete.getSelectedExternalLink()!, this.$linkTitle.val() as string);
             } else {
                 logError("No link to add.");
             }
@@ -87,12 +103,12 @@ export default class AddLinkDialog extends BasicWidget {
         });
     }
 
-    async showAddLinkDialogEvent({ textTypeWidget, text = "" }) {
+    async showAddLinkDialogEvent({ textTypeWidget, text = "" }: { textTypeWidget: TextTypeWidget; text: string }) {
         this.textTypeWidget = textTypeWidget;
 
         this.$addLinkTitleSettings.toggle(!this.textTypeWidget.hasSelection());
 
-        this.$addLinkTitleSettings.find("input[type=radio]").on("change", (e) => this.updateTitleSettingsVisibility(e));
+        this.$addLinkTitleSettings.find("input[type=radio]").on("change", () => this.updateTitleSettingsVisibility());
 
         // with selection hyperlink is implied
         if (this.textTypeWidget.hasSelection()) {
@@ -108,9 +124,8 @@ export default class AddLinkDialog extends BasicWidget {
         this.$autoComplete.val("");
         this.$linkTitle.val("");
 
-        const setDefaultLinkTitle = async (noteId) => {
+        const setDefaultLinkTitle = async (noteId: string) => {
             const noteTitle = await treeService.getNoteTitle(noteId);
-
             this.$linkTitle.val(noteTitle);
         };
 
@@ -119,7 +134,7 @@ export default class AddLinkDialog extends BasicWidget {
             allowCreatingNotes: true
         });
 
-        this.$autoComplete.on("autocomplete:noteselected", (event, suggestion, dataset) => {
+        this.$autoComplete.on("autocomplete:noteselected", (event: JQuery.Event, suggestion: Suggestion) => {
             if (!suggestion.notePath) {
                 return false;
             }
@@ -133,7 +148,8 @@ export default class AddLinkDialog extends BasicWidget {
             }
         });
 
-        this.$autoComplete.on("autocomplete:externallinkselected", (event, suggestion, dataset) => {
+        this.$autoComplete.on("autocomplete:externallinkselected", (event: JQuery.Event, suggestion: Suggestion) => {
+            console.log("autocomplete:externallinkselected", event, suggestion);
             if (!suggestion.externalLink) {
                 return false;
             }
@@ -143,11 +159,11 @@ export default class AddLinkDialog extends BasicWidget {
             this.$linkTitle.val(suggestion.externalLink);
         });
 
-        this.$autoComplete.on("autocomplete:cursorchanged", (event, suggestion, dataset) => {
+        this.$autoComplete.on("autocomplete:cursorchanged", (event: JQuery.Event, suggestion: Suggestion) => {
             if (suggestion.externalLink) {
                 this.$linkTitle.val(suggestion.externalLink);
             } else {
-                const noteId = treeService.getNoteIdFromUrl(suggestion.notePath);
+                const noteId = treeService.getNoteIdFromUrl(suggestion.notePath!);
 
                 if (noteId) {
                     setDefaultLinkTitle(noteId);
@@ -164,7 +180,7 @@ export default class AddLinkDialog extends BasicWidget {
         this.$autoComplete.trigger("focus").trigger("select"); // to be able to quickly remove entered text
     }
 
-    getLinkType() {
+    private getLinkType() {
         if (this.$autoComplete.getSelectedExternalLink()) {
             return "external-link";
         }
@@ -172,7 +188,7 @@ export default class AddLinkDialog extends BasicWidget {
         return this.$addLinkTitleSettings.find("input[type=radio]:checked").val();
     }
 
-    updateTitleSettingsVisibility() {
+    private updateTitleSettingsVisibility() {
         const linkType = this.getLinkType();
 
         this.$addLinkTitleFormGroup.toggle(linkType !== "reference-link");
