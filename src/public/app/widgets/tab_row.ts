@@ -495,7 +495,6 @@ export default class TabRowWidget extends BasicWidget {
     }
 
     noteContextRemovedEvent({ ntxIds }: EventData<"noteContextRemoved">) {
-        console.log(ntxIds);
         for (const ntxId of ntxIds) {
             this.removeTab(ntxId);
         }
