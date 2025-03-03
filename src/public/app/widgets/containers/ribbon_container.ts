@@ -139,7 +139,8 @@ export default class RibbonContainer extends NoteContextAwareWidget {
         return super.isEnabled() && this.noteContext?.viewScope?.viewMode === "default";
     }
 
-    ribbon(widget: NoteContextAwareWidget) { // TODO: Base class
+    ribbon(widget: NoteContextAwareWidget) {
+        // TODO: Base class
         super.child(widget);
 
         this.ribbonWidgets.push(widget);
@@ -236,7 +237,12 @@ export default class RibbonContainer extends NoteContextAwareWidget {
             const $ribbonTitle = $('<div class="ribbon-tab-title">')
                 .attr("data-ribbon-component-id", ribbonWidget.componentId)
                 .attr("data-ribbon-component-name", (ribbonWidget as any).name as string) // TODO: base class for ribbon widgets
-                .append($('<span class="ribbon-tab-title-icon">').addClass(ret.icon).attr("title", ret.title).attr("data-toggle-command", (ribbonWidget as any).toggleCommand)) // TODO: base class
+                .append(
+                    $('<span class="ribbon-tab-title-icon">')
+                        .addClass(ret.icon)
+                        .attr("title", ret.title)
+                        .attr("data-toggle-command", (ribbonWidget as any).toggleCommand)
+                ) // TODO: base class
                 .append(" ")
                 .append($('<span class="ribbon-tab-title-label">').text(ret.title));
 

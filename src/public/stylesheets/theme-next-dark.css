@@ -32,7 +32,7 @@
     --cmd-button-icon-color: white;
     --cmd-button-keyboard-shortcut-background: #0000004d;
     --cmd-button-keyboard-shortcut-color: white;
-    --cmd-button-disabled-opacity: .5;
+    --cmd-button-disabled-opacity: 0.5;
 
     --icon-button-color: currentColor;
     --icon-button-hover-background: var(--hover-item-background-color);
@@ -41,7 +41,7 @@
     --muted-text-color: #bbb;
 
     --input-background-color: #ffffff12;
-    --input-text-color:  #ffffffc7;
+    --input-text-color: #ffffffc7;
     --input-placeholder-color: #b7b7b782;
     --input-selection-background: gray;
     --input-selection-text-color: white;

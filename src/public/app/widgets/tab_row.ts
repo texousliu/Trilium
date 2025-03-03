@@ -15,7 +15,7 @@ const TAB_CONTAINER_MIN_WIDTH = 24;
 const TAB_CONTAINER_MAX_WIDTH = 240;
 const TAB_CONTAINER_LEFT_PADDING = 5;
 const NEW_TAB_WIDTH = 32;
-const MIN_FILLER_WIDTH = (isDesktop ? 50 : 15);
+const MIN_FILLER_WIDTH = isDesktop ? 50 : 15;
 const MARGIN_WIDTH = 5;
 
 const TAB_SIZE_SMALL = 84;

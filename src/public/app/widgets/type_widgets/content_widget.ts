@@ -15,7 +15,7 @@ import CodeMimeTypesOptions from "./options/code_notes/code_mime_types.js";
 import ImageOptions from "./options/images/images.js";
 import SpellcheckOptions from "./options/spellcheck.js";
 import PasswordOptions from "./options/password/password.js";
-import ProtectedSessionTimeoutOptions from "./options/password/protected_session_timeout.js"
+import ProtectedSessionTimeoutOptions from "./options/password/protected_session_timeout.js";
 import EtapiOptions from "./options/etapi.js";
 import BackupOptions from "./options/backup.js";
 import SyncOptions from "./options/sync.js";

@@ -61,7 +61,7 @@ export interface NoteCommandData extends CommandData {
 }
 
 export interface ExecuteCommandData<T> extends CommandData {
-    resolve: (data: T) => void
+    resolve: (data: T) => void;
 }
 
 /**
@@ -69,7 +69,7 @@ export interface ExecuteCommandData<T> extends CommandData {
  */
 export type CommandMappings = {
     "api-log-messages": CommandData;
-    focusTree: CommandData,
+    focusTree: CommandData;
     focusOnTitle: CommandData;
     focusOnDetail: CommandData;
     focusOnSearchDefinition: Required<CommandData>;
@@ -107,7 +107,7 @@ export type CommandMappings = {
     showInfoDialog: ConfirmWithMessageOptions;
     showConfirmDialog: ConfirmWithMessageOptions;
     showRecentChanges: CommandData & { ancestorNoteId: string };
-    showImportDialog: CommandData & { noteId: string; };
+    showImportDialog: CommandData & { noteId: string };
     openNewNoteSplit: NoteCommandData;
     openInWindow: NoteCommandData;
     openNoteInNewTab: CommandData;
@@ -130,9 +130,11 @@ export type CommandMappings = {
     editNoteTitle: ContextMenuCommandData;
     protectSubtree: ContextMenuCommandData;
     unprotectSubtree: ContextMenuCommandData;
-    openBulkActionsDialog: ContextMenuCommandData | {
-        selectedOrActiveNoteIds?: string[]
-    };
+    openBulkActionsDialog:
+        | ContextMenuCommandData
+        | {
+              selectedOrActiveNoteIds?: string[];
+          };
     editBranchPrefix: ContextMenuCommandData;
     convertNoteToAttachment: ContextMenuCommandData;
     duplicateSubtree: ContextMenuCommandData;
@@ -220,11 +222,11 @@ export type CommandMappings = {
     moveTabToNewWindow: CommandData;
     copyTabToNewWindow: CommandData;
     closeActiveTab: CommandData & {
-        $el: JQuery<HTMLElement>
-    },
+        $el: JQuery<HTMLElement>;
+    };
     setZoomFactorAndSave: {
         zoomFactor: string;
-    }
+    };
 
     reEvaluateRightPaneVisibility: CommandData;
     runActiveNote: CommandData;
@@ -233,18 +235,18 @@ export type CommandMappings = {
     };
     scrollToEnd: CommandData;
     closeThisNoteSplit: CommandData;
-    moveThisNoteSplit: CommandData & { isMovingLeft: boolean; };
+    moveThisNoteSplit: CommandData & { isMovingLeft: boolean };
 
     // Geomap
-    deleteFromMap: { noteId: string },
-    openGeoLocation: { noteId: string, event: JQuery.MouseDownEvent }
+    deleteFromMap: { noteId: string };
+    openGeoLocation: { noteId: string; event: JQuery.MouseDownEvent };
 
     toggleZenMode: CommandData;
 
     updateAttributeList: CommandData & { attributes: Attribute[] };
     saveAttributes: CommandData;
     reloadAttributes: CommandData;
-    refreshNoteList: CommandData & { noteId: string; };
+    refreshNoteList: CommandData & { noteId: string };
 
     refreshResults: {};
     refreshSearchDefinition: {};
@@ -347,7 +349,7 @@ type EventMappings = {
         ntxId: string | null | undefined; // TODO: deduplicate ntxId
     };
     tabReorder: {
-        ntxIdsInOrder: string[]
+        ntxIdsInOrder: string[];
     };
     refreshNoteList: {
         noteId: string;

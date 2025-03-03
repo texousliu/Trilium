@@ -51,7 +51,7 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
         if (this.note && this.note.type !== "book" && byNoteType[this.note.type]) {
             this.helpNoteIdToOpen = byNoteType[this.note.type];
         } else if (this.note && this.note.type === "book") {
-            this.helpNoteIdToOpen = byBookType[this.note.getAttributeValue("label", "viewType") as ViewTypeOptions ?? ""]
+            this.helpNoteIdToOpen = byBookType[(this.note.getAttributeValue("label", "viewType") as ViewTypeOptions) ?? ""];
         }
 
         return !!this.helpNoteIdToOpen;
@@ -64,7 +64,7 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
             const targetNote = `_help_${this.helpNoteIdToOpen}`;
             const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
             const viewScope: ViewScope = {
-                viewMode: "contextual-help",
+                viewMode: "contextual-help"
             };
             if (!helpSubcontext) {
                 // The help is not already open, open a new split with it.
@@ -74,7 +74,7 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
                     notePath: targetNote,
                     hoistedNoteId: "_help",
                     viewScope
-                })
+                });
             } else {
                 // There is already a help window open, make sure it opens on the right note.
                 helpSubcontext.setNote(targetNote, { viewScope });

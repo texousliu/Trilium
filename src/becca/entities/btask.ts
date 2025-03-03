@@ -14,7 +14,7 @@ export default class BTask extends AbstractBeccaEntity<BOption> {
     }
 
     static get hashedProperties() {
-        return [ "taskId", "parentNoteId", "title", "dueDate", "isDone", "isDeleted" ];
+        return ["taskId", "parentNoteId", "title", "dueDate", "isDone", "isDeleted"];
     }
 
     taskId?: string;

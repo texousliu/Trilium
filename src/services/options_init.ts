@@ -124,7 +124,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "highlightsList", value: '["bold","italic","underline","color","bgColor"]', isSynced: true },
     { name: "checkForUpdates", value: "true", isSynced: true },
     { name: "disableTray", value: "false", isSynced: false },
-    { name: "eraseUnusedAttachmentsAfterSeconds", value: "2592000", isSynced: true }, // default 30 days  
+    { name: "eraseUnusedAttachmentsAfterSeconds", value: "2592000", isSynced: true }, // default 30 days
     { name: "eraseUnusedAttachmentsAfterTimeScale", value: "86400", isSynced: true }, // default 86400 seconds = Day
     { name: "customSearchEngineName", value: "DuckDuckGo", isSynced: true },
     { name: "customSearchEngineUrl", value: "https://duckduckgo.com/?q={keyword}", isSynced: true },

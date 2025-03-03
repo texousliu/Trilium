@@ -157,7 +157,7 @@ export default class BacklinksWidget extends NoteContextAwareWidget {
             if (backlink.relationName) {
                 $item.append($("<p>").text(`${t("zpetne_odkazy.relation")}: ${backlink.relationName}`));
             } else {
-                $item.append(...backlink.excerpts ?? []);
+                $item.append(...(backlink.excerpts ?? []));
             }
 
             this.$items.append($item);
