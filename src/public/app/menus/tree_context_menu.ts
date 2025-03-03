@@ -44,7 +44,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
         const note = this.node.data.noteId ? await froca.getNote(this.node.data.noteId) : null;
         const branch = froca.getBranch(this.node.data.branchId);
         const isNotRoot = note?.noteId !== "root";
-        const isHoisted = note?.noteId === appContext.tabManager.getActiveContext().hoistedNoteId;
+        const isHoisted = note?.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
         const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
 
         // some actions don't support multi-note, so they are disabled when notes are selected,
@@ -226,8 +226,8 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 templateNoteId: templateNoteId
             });
         } else if (command === "openNoteInSplit") {
-            const subContexts = appContext.tabManager.getActiveContext().getSubContexts();
-            const { ntxId } = subContexts[subContexts.length - 1];
+            const subContexts = appContext.tabManager.getActiveContext()?.getSubContexts();
+            const { ntxId } = subContexts?.[subContexts.length - 1] ?? {};
 
             this.treeWidget.triggerCommand("openNewNoteSplit", { ntxId, notePath });
         } else if (command === "convertNoteToAttachment") {
