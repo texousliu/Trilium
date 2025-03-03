@@ -11,10 +11,6 @@ interface NoteAutocompleteElement extends HTMLElement {
     getSelectedExternalLink(): string | null;
 }
 
-interface NoteAutocompleteEvent extends Event {
-    suggestion: Suggestion;
-}
-
 const TPL = `
 <div class="add-link-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" style="max-width: 1000px" role="document">
