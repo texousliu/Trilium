@@ -22,19 +22,13 @@ function getItems(): MenuItem<CommandNames>[] {
 
 function handleLinkContextMenuItem(command: string | undefined, notePath: string, viewScope = {}, hoistedNoteId: string | null = null) {
     if (!hoistedNoteId) {
-        hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId ?? null;
+        hoistedNoteId = appContext.tabManager.getActiveContext().hoistedNoteId;
     }
 
     if (command === "openNoteInNewTab") {
         appContext.tabManager.openContextWithNote(notePath, { hoistedNoteId, viewScope });
     } else if (command === "openNoteInNewSplit") {
-        const subContexts = appContext.tabManager.getActiveContext()?.getSubContexts();
-
-        if (!subContexts) {
-            logError("subContexts is null");
-            return;
-        }
-
+        const subContexts = appContext.tabManager.getActiveContext().getSubContexts();
         const { ntxId } = subContexts[subContexts.length - 1];
 
         appContext.triggerCommand("openNewNoteSplit", { ntxId, notePath, hoistedNoteId, viewScope });
