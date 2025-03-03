@@ -77,7 +77,7 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
 /* #endregion */
 
 /* Matches when the left pane is collapsed */
-:has(#left-pane.hidden-int) {
+:has(.layout-vertical #left-pane.hidden-int) {
     --center-pane-border-radius: 0;
     --tab-first-item-horiz-offset: 5px;
 }
