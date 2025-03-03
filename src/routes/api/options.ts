@@ -77,7 +77,21 @@ const ALLOWED_OPTIONS = new Set([
     "backgroundEffects",
     "allowedHtmlTags",
     "redirectBareDomain",
-    "showLoginInShareTheme"
+    "showLoginInShareTheme",
+    // AI/LLM integration options
+    "aiEnabled",
+    "openaiApiKey",
+    "openaiDefaultModel",
+    "openaiBaseUrl",
+    "anthropicApiKey",
+    "anthropicDefaultModel",
+    "anthropicBaseUrl",
+    "ollamaEnabled",
+    "ollamaBaseUrl",
+    "ollamaDefaultModel",
+    "aiProviderPrecedence",
+    "aiTemperature",
+    "aiSystemPrompt"
 ]);
 
 function getOptions() {

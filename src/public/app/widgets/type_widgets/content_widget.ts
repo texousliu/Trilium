@@ -37,6 +37,7 @@ import LocalizationOptions from "./options/appearance/i18n.js";
 import CodeBlockOptions from "./options/appearance/code_block.js";
 import EditorOptions from "./options/text_notes/editor.js";
 import ShareSettingsOptions from "./options/other/share_settings.js";
+import AiSettingsOptions from "./options/ai_settings.js";
 import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
 
@@ -70,6 +71,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     _optionsEtapi: [EtapiOptions],
     _optionsBackup: [BackupOptions],
     _optionsSync: [SyncOptions],
+    _optionsAi: [AiSettingsOptions],
     _optionsOther: [
         SearchEngineOptions,
         TrayOptions,
