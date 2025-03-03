@@ -99,8 +99,8 @@ const HIGHLIGHT_JS: Library = {
 };
 
 const LEAFLET: Library = {
-    css: [ "node_modules/leaflet/dist/leaflet.css" ],
-}
+    css: ["node_modules/leaflet/dist/leaflet.css"]
+};
 
 async function requireLibrary(library: Library) {
     if (library.css) {

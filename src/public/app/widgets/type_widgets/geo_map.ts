@@ -1,7 +1,7 @@
 import { GPX, Marker, type LatLng, type LeafletMouseEvent } from "leaflet";
 import type FNote from "../../entities/fnote.js";
 import GeoMapWidget, { type InitCallback, type Leaflet } from "../geo_map.js";
-import TypeWidget from "./type_widget.js"
+import TypeWidget from "./type_widget.js";
 import server from "../../services/server.js";
 import toastService from "../../services/toast.js";
 import dialogService from "../../services/dialog.js";
@@ -75,21 +75,21 @@ const TPL = `\
 
 const LOCATION_ATTRIBUTE = "geolocation";
 const CHILD_NOTE_ICON = "bx bx-pin";
-const DEFAULT_COORDINATES: [ number, number ] = [ 3.878638227135724, 446.6630455551659 ];
+const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
 
 interface MapData {
     view?: {
-        center?: LatLng | [ number, number ];
+        center?: LatLng | [number, number];
         zoom?: number;
-    }
+    };
 }
 
 // TODO: Deduplicate
 interface CreateChildResponse {
     note: {
         noteId: string;
-    }
+    };
 }
 
 enum State {
@@ -220,7 +220,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
-        const [ lat, lng ] = latLng.split(",", 2).map((el) => parseFloat(el));
+        const [lat, lng] = latLng.split(",", 2).map((el) => parseFloat(el));
         const L = this.L;
         const icon = this.#buildIcon(note.getIcon(), note.getColorClass(), note.title);
 
@@ -228,10 +228,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
             icon,
             draggable: true,
             autoPan: true,
-            autoPanSpeed: 5,
+            autoPanSpeed: 5
         })
             .addTo(map)
-            .on("moveend", e => {
+            .on("moveend", (e) => {
                 this.moveMarker(note.noteId, (e.target as Marker).getLatLng());
             });
         marker.on("mousedown", ({ originalEvent }) => {
@@ -264,9 +264,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
                 <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
                 <span class="bx ${bxIconClass} ${colorClass}"></span>
                 <span class="title-label">${title}</span>`,
-            iconSize: [ 25, 41 ],
-            iconAnchor: [ 12, 41 ]
-        })
+            iconSize: [25, 41],
+            iconAnchor: [12, 41]
+        });
     }
 
     #changeState(newState: State) {
@@ -296,7 +296,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     async moveMarker(noteId: string, latLng: LatLng | null) {
-        const value = (latLng ? [latLng.lat, latLng.lng].join(",") : "");
+        const value = latLng ? [latLng.lat, latLng.lng].join(",") : "";
         await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, value);
     }
 
@@ -361,7 +361,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         // If any of note has its location attribute changed.
         // TODO: Should probably filter by parent here as well.
         const attributeRows = loadResults.getAttributeRows();
-        if (attributeRows.find((at) => [ LOCATION_ATTRIBUTE, "color" ].includes(at.name ?? ""))) {
+        if (attributeRows.find((at) => [LOCATION_ATTRIBUTE, "color"].includes(at.name ?? ""))) {
             this.#reloadMarkers();
         }
     }

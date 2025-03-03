@@ -20,18 +20,22 @@ async function testImport(fileName: string, mimetype: string) {
         codeImportedAsCode: true
     });
 
-    return new Promise<{ buffer: Buffer, importedNote: BNote }>((resolve, reject) => {
+    return new Promise<{ buffer: Buffer; importedNote: BNote }>((resolve, reject) => {
         cls.init(async () => {
             const rootNote = becca.getNote("root");
             if (!rootNote) {
                 reject("Missing root note.");
             }
 
-            const importedNote = single.importSingleFile(taskContext, {
-                originalname: fileName,
-                mimetype,
-                buffer: buffer
-            }, rootNote as BNote);
+            const importedNote = single.importSingleFile(
+                taskContext,
+                {
+                    originalname: fileName,
+                    mimetype,
+                    buffer: buffer
+                },
+                rootNote as BNote
+            );
             resolve({
                 buffer,
                 importedNote
@@ -85,4 +89,4 @@ describe("processNoteContent", () => {
         expect(importedNote.mime).toBe("text/html");
         expect(importedNote.getContent().toString()).toBe("<h2>Hello world</h2>\n<p>Plain text goes here.</p>\n");
     });
-})
+});

@@ -159,11 +159,11 @@ interface CreateLauncherResponse {
     message: string;
     note: {
         noteId: string;
-    }
+    };
 }
 
 interface ExpandedSubtreeResponse {
-    branchIds: string[]
+    branchIds: string[];
 }
 
 interface Node extends Fancytree.NodeData {
@@ -180,7 +180,6 @@ interface RefreshContext {
 }
 
 export default class NoteTreeWidget extends NoteContextAwareWidget {
-
     private $tree!: JQuery<HTMLElement>;
     private $treeActions!: JQuery<HTMLElement>;
     private $treeSettingsButton!: JQuery<HTMLElement>;
@@ -571,10 +570,13 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             clones: {
                 highlightActiveClones: true
             },
-            enhanceTitle: async function (event: Event, data: {
-                node: Fancytree.FancytreeNode;
-                noteId: string;
-            }) {
+            enhanceTitle: async function (
+                event: Event,
+                data: {
+                    node: Fancytree.FancytreeNode;
+                    noteId: string;
+                }
+            ) {
                 const node = data.node;
 
                 if (!node.data.noteId) {

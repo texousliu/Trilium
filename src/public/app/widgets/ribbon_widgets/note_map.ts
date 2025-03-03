@@ -122,7 +122,7 @@ export default class NoteMapRibbonWidget extends NoteContextAwareWidget {
         const { top } = this.$widget[0].getBoundingClientRect();
 
         const height = ($(window).height() ?? 0) - top;
-        const width = (this.$widget.width() ?? 0);
+        const width = this.$widget.width() ?? 0;
 
         this.$widget.find(".note-map-container")
             .height(height)

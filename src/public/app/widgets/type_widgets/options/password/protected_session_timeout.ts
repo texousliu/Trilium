@@ -25,6 +25,6 @@ export default class ProtectedSessionTimeoutOptions extends TimeSelector {
         const $timeSelector = this.$widget;
         // inject TimeSelector widget template
         this.$widget = $(TPL);
-        this.$widget.find("#time-selector-placeholder").replaceWith($timeSelector)
+        this.$widget.find("#time-selector-placeholder").replaceWith($timeSelector);
     }
 }

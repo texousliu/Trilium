@@ -68,7 +68,7 @@ const TPL = `
 interface CreateChildResponse {
     note: {
         noteId: string;
-    }
+    };
 }
 
 export default class CalendarView extends ViewMode {
@@ -126,7 +126,7 @@ export default class CalendarView extends ViewMode {
             weekNumbers: this.parentNote.hasAttribute("label", "calendar:weekNumbers"),
             locale: await CalendarView.#getLocale(),
             height: "100%",
-            eventContent: (e => {
+            eventContent: (e) => {
                 let html = "";
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
 
@@ -138,7 +138,7 @@ export default class CalendarView extends ViewMode {
 
                 // Promoted attributes
                 if (promotedAttributes) {
-                    for (const [ name, value ] of Object.entries(promotedAttributes)) {
+                    for (const [name, value] of Object.entries(promotedAttributes)) {
                         html += `\
                         <div class="promoted-attribute">
                             <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
@@ -147,7 +147,7 @@ export default class CalendarView extends ViewMode {
                 }
 
                 return { html };
-            }),
+            },
             dateClick: async (e) => {
                 if (!this.isCalendarRoot) {
                     return;
@@ -260,7 +260,7 @@ export default class CalendarView extends ViewMode {
             // TODO: Deduplicate get type.
             const dateNotesForMonth = await server.get<Record<string, string>>(`special-notes/notes-for-month/${month}?calendarRoot=${this.parentNote.noteId}`);
             const dateNoteIds = Object.values(dateNotesForMonth);
-            allDateNoteIds = [ ...allDateNoteIds, ...dateNoteIds ];
+            allDateNoteIds = [...allDateNoteIds, ...dateNoteIds];
         }
 
         // Request all the date notes.
@@ -379,7 +379,7 @@ export default class CalendarView extends ViewMode {
         const result: Record<string, string> = {};
 
         for (const promotedAttribute of filteredPromotedAttributes) {
-            const [ type, name ] = promotedAttribute.name.split(":", 2);
+            const [type, name] = promotedAttribute.name.split(":", 2);
             const definition = promotedAttribute.getDefinition();
 
             if (definition.multiplicity !== "single") {
@@ -411,7 +411,7 @@ export default class CalendarView extends ViewMode {
             if (customTitleValue.startsWith("#")) {
                 const labelValue = note.getAttributeValue("label", attributeName);
                 if (labelValue) {
-                    return [ labelValue ];
+                    return [labelValue];
                 }
             } else if (allowRelations && customTitleValue.startsWith("~")) {
                 const relations = note.getRelations(attributeName);
@@ -432,7 +432,7 @@ export default class CalendarView extends ViewMode {
             }
         }
 
-        return [ note.title ];
+        return [note.title];
     }
 
     static async #setAttribute(note: FNote, type: "label" | "relation", name: string, value: string | null | undefined) {
@@ -456,7 +456,7 @@ export default class CalendarView extends ViewMode {
 
         const offset = date.getTimezoneOffset();
         const localDate = new Date(date.getTime() - offset * 60 * 1000);
-        return localDate.toISOString().split('T')[0];
+        return localDate.toISOString().split("T")[0];
     }
 
     static #offsetDate(date: Date | string | null | undefined, offset: number) {

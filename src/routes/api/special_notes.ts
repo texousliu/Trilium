@@ -43,9 +43,9 @@ function getDayNotesForMonth(req: Request) {
             AND attr.value LIKE '${month}%'`;
 
     if (calendarRoot) {
-        const rows = sql.getRows<{ date: string, noteId: string }>(query);
+        const rows = sql.getRows<{ date: string; noteId: string }>(query);
         const result: Record<string, string> = {};
-        for (const {date, noteId} of rows) {
+        for (const { date, noteId } of rows) {
             const note = becca.getNote(noteId);
             if (note?.hasAncestor(String(calendarRoot))) {
                 result[date] = noteId;

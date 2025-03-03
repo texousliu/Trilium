@@ -35,7 +35,7 @@ export interface TriliumConfig {
     Session: {
         cookiePath: string;
         cookieMaxAge: number;
-    }
+    };
     Sync: {
         syncServerHost: string;
         syncServerTimeout: string;
