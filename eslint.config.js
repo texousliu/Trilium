@@ -7,7 +7,7 @@ export default tseslint.config(
     // consider using rules below, once we have a full TS codebase and can be more strict
     // tseslint.configs.strictTypeChecked,
     // tseslint.configs.stylisticTypeChecked,
-    //tseslint.configs.recommendedTypeChecked,
+    // tseslint.configs.recommendedTypeChecked,
     {
         languageOptions: {
             parserOptions: {
@@ -23,6 +23,13 @@ export default tseslint.config(
         }
     },
     {
-        ignores: ["build/*", "dist/*", "src/public/app-dist/*"]
+        ignores: [
+            "build/*",
+            "dist/*",
+            "docs/*",
+            "libraries/*",
+            "src/public/app-dist/*",
+            "src/public/app/doc_notes/*"
+        ]
     }
 );
