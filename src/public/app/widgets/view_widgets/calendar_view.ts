@@ -155,7 +155,7 @@ export default class CalendarView extends ViewMode {
 
                 const note = await date_notes.getDayNote(e.dateStr);
                 if (note) {
-                    appContext.tabManager.getActiveContext().setNote(note.noteId);
+                    appContext.tabManager.getActiveContext()?.setNote(note.noteId);
                 }
             }
         });
