@@ -6,11 +6,6 @@ import BasicWidget from "../basic_widget.js";
 import type { Suggestion } from "../../services/note_autocomplete.js";
 import type { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 
-interface NoteAutocompleteElement extends HTMLElement {
-    getSelectedNotePath(): string | null;
-    getSelectedExternalLink(): string | null;
-}
-
 const TPL = `
 <div class="add-link-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" style="max-width: 1000px" role="document">
@@ -64,7 +59,7 @@ const TPL = `
 
 export default class AddLinkDialog extends BasicWidget {
     private $form!: JQuery<HTMLElement>;
-    private $autoComplete!: JQuery<NoteAutocompleteElement>;
+    private $autoComplete!: JQuery<HTMLElement>;
     private $linkTitle!: JQuery<HTMLElement>;
     private $addLinkTitleSettings!: JQuery<HTMLElement>;
     private $addLinkTitleRadios!: JQuery<HTMLElement>;
