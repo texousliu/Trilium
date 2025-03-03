@@ -110,85 +110,102 @@ export function buildConfig() {
 }
 
 export function buildToolbarConfig(isClassicToolbar: boolean) {
+    const languages = JSON.parse(options.get("languages") ?? "[]") as string[];
+    const enableLanguageSwitcher = languages.length > 1;
+
     if (isClassicToolbar) {
         const multilineToolbar = utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true"
-        return buildClassicToolbar(multilineToolbar);
+        return buildClassicToolbar(multilineToolbar, enableLanguageSwitcher);
     } else {
-        return buildFloatingToolbar();
+        return buildFloatingToolbar(enableLanguageSwitcher);
     }
 }
 
-function buildClassicToolbar(multilineToolbar: boolean) {
+function buildClassicToolbar(multilineToolbar: boolean, enableLanguageSwitcher: boolean) {
+    const items = [
+        'heading', 'fontSize',
+        '|',
+        'bold', 'italic',
+        {
+            label: "Text formatting",
+            icon: "text",
+            items: [
+                'underline',
+                'strikethrough',
+                'superscript',
+                'subscript',
+                'code',
+            ],
+        },
+        '|',
+        'fontColor', 'fontBackgroundColor', 'removeFormat',
+        '|',
+        'bulletedList', 'numberedList', 'todoList',
+        '|',
+        'blockQuote', 'insertTable', 'codeBlock', 'footnote',
+        {
+            label: "Insert",
+            icon: "plus",
+            items: [
+                'imageUpload',
+                '|',
+                'link',
+                'internallink',
+                'includeNote',
+                '|',
+                'specialCharacters',
+                'math',
+                'mermaid',
+                'horizontalLine',
+                'pageBreak'
+            ]
+        },
+        '|',
+        'outdent', 'indent',
+        '|',
+        'markdownImport', 'cuttonote', 'findAndReplace',
+    ];
+
+    if (enableLanguageSwitcher) {
+        items.push('|');
+        items.push('textPartLanguage');
+    }
+
     // For nested toolbars, refer to https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/toolbar.html#grouping-toolbar-items-in-dropdowns-nested-toolbars.
     return {
         toolbar: {
-            items: [
-                'heading', 'fontSize',
-                '|',
-                'bold', 'italic',
-                {
-                    label: "Text formatting",
-                    icon: "text",
-                    items: [
-                        'underline',
-                        'strikethrough',
-                        'superscript',
-                        'subscript',
-                        'code',
-                    ],
-                },
-                '|',
-                'fontColor', 'fontBackgroundColor', 'removeFormat',
-                '|',
-                'bulletedList', 'numberedList', 'todoList',
-                '|',
-                'blockQuote', 'insertTable', 'codeBlock', 'footnote',
-                {
-                    label: "Insert",
-                    icon: "plus",
-                    items: [
-                        'imageUpload',
-                        '|',
-                        'link',
-                        'internallink',
-                        'includeNote',
-                        '|',
-                        'specialCharacters',
-                        'math',
-                        'mermaid',
-                        'horizontalLine',
-                        'pageBreak'
-                    ]
-                },
-                '|',
-                'outdent', 'indent',
-                '|',
-                'markdownImport', 'cuttonote', 'findAndReplace'
-            ],
+            items,
             shouldNotGroupWhenFull: multilineToolbar
         }
     }
 }
 
-function buildFloatingToolbar() {
+function buildFloatingToolbar(enableLanguageSwitcher: boolean) {
+    const items = [
+        'fontSize',
+        'bold',
+        'italic',
+        'underline',
+        'strikethrough',
+        'superscript',
+        'subscript',
+        'fontColor',
+        'fontBackgroundColor',
+        'code',
+        'link',
+        'removeFormat',
+        'internallink',
+        'cuttonote'
+    ];
+
+    if (enableLanguageSwitcher) {
+        items.push('|');
+        items.push('textPartLanguage');
+    }
+
     return {
         toolbar: {
-			items: [
-				'fontSize',
-				'bold',
-				'italic',
-				'underline',
-				'strikethrough',
-				'superscript',
-				'subscript',
-				'fontColor',
-				'fontBackgroundColor',
-				'code',
-				'link',
-				'removeFormat',
-				'internallink',
-				'cuttonote'
-			]
+			items
 		},
 
 		blockToolbar: [
