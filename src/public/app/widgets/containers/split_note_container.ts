@@ -1,8 +1,29 @@
 import FlexContainer from "./flex_container.js";
 import appContext from "../../components/app_context.js";
+import NoteContext from "../../components/note_context.js";
+import type { CommandMappings, EventNames, EventData } from "../../components/app_context.js";
+import type BasicWidget from "../basic_widget.js";
 
-export default class SplitNoteContainer extends FlexContainer {
-    constructor(widgetFactory) {
+interface NoteContextEvent {
+    noteContext: NoteContext;
+}
+
+interface SplitNoteWidget extends BasicWidget {
+    hasBeenAlreadyShown?: boolean;
+    ntxId?: string;
+}
+
+type WidgetFactory = () => SplitNoteWidget;
+
+interface Widgets {
+    [key: string]: SplitNoteWidget;
+}
+
+export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
+    private widgetFactory: WidgetFactory;
+    private widgets: Widgets;
+
+    constructor(widgetFactory: WidgetFactory) {
         super("row");
 
         this.widgetFactory = widgetFactory;
@@ -13,7 +34,7 @@ export default class SplitNoteContainer extends FlexContainer {
         this.collapsible();
     }
 
-    async newNoteContextCreatedEvent({ noteContext }) {
+    async newNoteContextCreatedEvent({ noteContext }: NoteContextEvent) {
         const widget = this.widgetFactory();
 
         const $renderedWidget = widget.render();
@@ -23,19 +44,31 @@ export default class SplitNoteContainer extends FlexContainer {
 
         this.$widget.append($renderedWidget);
 
-        widget.handleEvent("initialRenderComplete");
+        widget.handleEvent("initialRenderComplete", {});
 
         widget.toggleExt(false);
 
-        this.widgets[noteContext.ntxId] = widget;
+        if (noteContext.ntxId) {
+            this.widgets[noteContext.ntxId] = widget;
+        }
 
         await widget.handleEvent("setNoteContext", { noteContext });
 
         this.child(widget);
     }
 
-    async openNewNoteSplitEvent({ ntxId, notePath, hoistedNoteId, viewScope }) {
-        const mainNtxId = appContext.tabManager.getActiveMainContext().ntxId;
+    async openNewNoteSplitEvent({ ntxId, notePath, hoistedNoteId, viewScope }: {
+        ntxId: string;
+        notePath?: string;
+        hoistedNoteId?: string;
+        viewScope?: any;
+    }) {
+        const mainNtxId = appContext.tabManager.getActiveMainContext()?.ntxId;
+
+        if (!mainNtxId) {
+            logError("empty mainNtxId!");
+            return;
+        }
 
         if (!ntxId) {
             logError("empty ntxId!");
@@ -43,7 +76,7 @@ export default class SplitNoteContainer extends FlexContainer {
             ntxId = mainNtxId;
         }
 
-        hoistedNoteId = hoistedNoteId || appContext.tabManager.getActiveContext().hoistedNoteId;
+        hoistedNoteId = hoistedNoteId || appContext.tabManager.getActiveContext()?.hoistedNoteId;
 
         const noteContext = await appContext.tabManager.openEmptyTab(null, hoistedNoteId, mainNtxId);
 
@@ -53,7 +86,7 @@ export default class SplitNoteContainer extends FlexContainer {
         // insert the note context after the originating note context
         ntxIds.splice(ntxIds.indexOf(ntxId) + 1, 0, noteContext.ntxId);
 
-        this.triggerCommand("noteContextReorder", { ntxIdsInOrder: ntxIds });
+        this.triggerCommand("noteContextReorder" as keyof CommandMappings, { ntxIdsInOrder: ntxIds });
 
         // move the note context rendered widget after the originating widget
         this.$widget.find(`[data-ntx-id="${noteContext.ntxId}"]`).insertAfter(this.$widget.find(`[data-ntx-id="${ntxId}"]`));
@@ -67,11 +100,11 @@ export default class SplitNoteContainer extends FlexContainer {
         }
     }
 
-    closeThisNoteSplitCommand({ ntxId }) {
+    closeThisNoteSplitCommand({ ntxId }: { ntxId: string }): void {
         appContext.tabManager.removeNoteContext(ntxId);
     }
 
-    async moveThisNoteSplitCommand({ ntxId, isMovingLeft }) {
+    async moveThisNoteSplitCommand({ ntxId, isMovingLeft }: { ntxId: string; isMovingLeft: boolean }): Promise<void> {
         if (!ntxId) {
             logError("empty ntxId!");
             return;
@@ -96,7 +129,7 @@ export default class SplitNoteContainer extends FlexContainer {
         const newNtxIds = [...ntxIds.slice(0, leftIndex), ntxIds[leftIndex + 1], ntxIds[leftIndex], ...ntxIds.slice(leftIndex + 2)];
         const isChangingMainContext = !contexts[leftIndex].mainNtxId;
 
-        this.triggerCommand("noteContextReorder", {
+        this.triggerCommand("noteContextReorder" as keyof CommandMappings, {
             ntxIdsInOrder: newNtxIds,
             oldMainNtxId: isChangingMainContext ? ntxIds[leftIndex] : null,
             newMainNtxId: isChangingMainContext ? ntxIds[leftIndex + 1] : null
@@ -109,16 +142,16 @@ export default class SplitNoteContainer extends FlexContainer {
         await appContext.tabManager.activateNoteContext(isMovingLeft ? ntxIds[leftIndex + 1] : ntxIds[leftIndex]);
     }
 
-    activeContextChangedEvent() {
+    activeContextChangedEvent(): void {
         this.refresh();
     }
 
-    noteSwitchedAndActivatedEvent() {
+    noteSwitchedAndActivatedEvent(): void {
         this.refresh();
     }
 
-    noteContextRemovedEvent({ ntxIds }) {
-        this.children = this.children.filter((c) => !ntxIds.includes(c.ntxId));
+    noteContextRemovedEvent({ ntxIds }: { ntxIds: string[] }): void {
+        this.children = this.children.filter((c) => c.ntxId && !ntxIds.includes(c.ntxId));
 
         for (const ntxId of ntxIds) {
             this.$widget.find(`[data-ntx-id="${ntxId}"]`).remove();
@@ -127,7 +160,7 @@ export default class SplitNoteContainer extends FlexContainer {
         }
     }
 
-    contextsReopenedEvent({ ntxId, afterNtxId }) {
+    contextsReopenedEvent({ ntxId, afterNtxId }: { ntxId?: string; afterNtxId?: string }): void {
         if (ntxId === undefined || afterNtxId === undefined) {
             // no single split reopened
             return;
@@ -135,13 +168,11 @@ export default class SplitNoteContainer extends FlexContainer {
         this.$widget.find(`[data-ntx-id="${ntxId}"]`).insertAfter(this.$widget.find(`[data-ntx-id="${afterNtxId}"]`));
     }
 
-    async refresh() {
+    async refresh(): Promise<void> {
         this.toggleExt(true);
     }
 
-    toggleInt(show) {} // not needed
-
-    toggleExt(show) {
+    toggleExt(show: boolean): void {
         const activeMainContext = appContext.tabManager.getActiveMainContext();
         const activeNtxId = activeMainContext ? activeMainContext.ntxId : null;
 
@@ -149,7 +180,7 @@ export default class SplitNoteContainer extends FlexContainer {
             const noteContext = appContext.tabManager.getNoteContextById(ntxId);
 
             const widget = this.widgets[ntxId];
-            widget.toggleExt(show && activeNtxId && [noteContext.ntxId, noteContext.mainNtxId].includes(activeNtxId));
+            widget.toggleExt(show && activeNtxId !== null && [noteContext.ntxId, noteContext.mainNtxId].includes(activeNtxId));
         }
     }
 
@@ -158,41 +189,50 @@ export default class SplitNoteContainer extends FlexContainer {
      * are not executed, we're waiting for the first tab activation, and then we update the tab. After this initial
      * activation, further note switches are always propagated to the tabs.
      */
-    handleEventInChildren(name, data) {
+    handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<any> | null {
         if (["noteSwitched", "noteSwitchedAndActivated"].includes(name)) {
             // this event is propagated only to the widgets of a particular tab
-            const widget = this.widgets[data.noteContext.ntxId];
+            const noteContext = (data as NoteContextEvent).noteContext;
+            const widget = noteContext.ntxId ? this.widgets[noteContext.ntxId] : undefined;
 
             if (!widget) {
                 return Promise.resolve();
             }
 
-            if (widget.hasBeenAlreadyShown || name === "noteSwitchedAndActivated" || appContext.tabManager.getActiveMainContext() === data.noteContext.getMainContext()) {
+            if (widget.hasBeenAlreadyShown || name === "noteSwitchedAndActivatedEvent" || appContext.tabManager.getActiveMainContext() === noteContext.getMainContext()) {
                 widget.hasBeenAlreadyShown = true;
 
-                return [widget.handleEvent("noteSwitched", data), this.refreshNotShown(data)];
+                return Promise.all([
+                    widget.handleEvent("noteSwitched", { noteContext, notePath: noteContext.notePath }),
+                    this.refreshNotShown({ noteContext })
+                ]);
             } else {
                 return Promise.resolve();
             }
         }
 
         if (name === "activeContextChanged") {
-            return this.refreshNotShown(data);
+            return this.refreshNotShown(data as NoteContextEvent);
         } else {
             return super.handleEventInChildren(name, data);
         }
     }
 
-    refreshNotShown(data) {
-        const promises = [];
+    private refreshNotShown(data: NoteContextEvent): Promise<any> {
+        const promises: Promise<any>[] = [];
 
         for (const subContext of data.noteContext.getMainContext().getSubContexts()) {
+            if (!subContext.ntxId) {
+                continue;
+            }
+
             const widget = this.widgets[subContext.ntxId];
 
             if (!widget.hasBeenAlreadyShown) {
                 widget.hasBeenAlreadyShown = true;
 
-                promises.push(widget.handleEvent("activeContextChanged", { noteContext: subContext }));
+                const eventPromise = widget.handleEvent("activeContextChanged", { noteContext: subContext });
+                promises.push(eventPromise || Promise.resolve());
             }
         }
 

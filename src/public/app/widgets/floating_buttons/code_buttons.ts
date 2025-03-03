@@ -65,7 +65,7 @@ export default class CodeButtonsWidget extends NoteContextAwareWidget {
 
             await ws.waitForMaxKnownEntityChangeId();
 
-            await appContext.tabManager.getActiveContext().setNote(notePath);
+            await appContext.tabManager.getActiveContext()?.setNote(notePath);
 
             toastService.showMessage(t("code_buttons.sql_console_saved_message", { notePath: await treeService.getNotePathTitle(notePath) }));
         });

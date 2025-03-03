@@ -171,7 +171,7 @@ export default class AttachmentActionsWidget extends BasicWidget {
         const { note: newNote } = await server.post<ReturnType<typeof attachmentsApiRoute.convertAttachmentToNote>>(`attachments/${this.attachmentId}/convert-to-note`);
         toastService.showMessage(t("attachments_actions.convert_success", { title: this.attachment.title }));
         await ws.waitForMaxKnownEntityChangeId();
-        await appContext.tabManager.getActiveContext().setNote(newNote.noteId);
+        await appContext.tabManager.getActiveContext()?.setNote(newNote.noteId);
     }
 
     async renameAttachmentCommand() {

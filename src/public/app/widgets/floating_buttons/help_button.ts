@@ -60,15 +60,15 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$widget.on("click", () => {
-            const subContexts = appContext.tabManager.getActiveContext().getSubContexts();
+            const subContexts = appContext.tabManager.getActiveContext()?.getSubContexts();
             const targetNote = `_help_${this.helpNoteIdToOpen}`;
-            const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
+            const helpSubcontext = subContexts?.find((s) => s.viewScope?.viewMode === "contextual-help");
             const viewScope: ViewScope = {
                 viewMode: "contextual-help"
             };
             if (!helpSubcontext) {
                 // The help is not already open, open a new split with it.
-                const { ntxId } = subContexts[subContexts.length - 1];
+                const { ntxId } = subContexts?.[subContexts.length - 1] ?? {};
                 this.triggerCommand("openNewNoteSplit", {
                     ntxId,
                     notePath: targetNote,

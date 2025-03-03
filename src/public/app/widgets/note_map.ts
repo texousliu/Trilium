@@ -322,7 +322,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
             .warmupTicks(30)
             .onNodeClick((node) => {
                 if (node.id) {
-                    appContext.tabManager.getActiveContext().setNote((node as Node).id);
+                    appContext.tabManager.getActiveContext()?.setNote((node as Node).id);
                 }
             })
             .onNodeRightClick((node, e) => {
@@ -371,7 +371,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         if (mapRootNoteId === "hoisted") {
             mapRootNoteId = hoistedNoteService.getHoistedNoteId();
         } else if (!mapRootNoteId) {
-            mapRootNoteId = appContext.tabManager.getActiveContext().parentNoteId;
+            mapRootNoteId = appContext.tabManager.getActiveContext()?.parentNoteId;
         }
 
         return mapRootNoteId ?? "";
