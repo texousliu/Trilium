@@ -303,9 +303,6 @@ type EventMappings = {
     setNoteContext: {
         noteContext: NoteContext;
     };
-    noteTypeMimeChangedEvent: {
-        noteId: string;
-    };
     reEvaluateHighlightsListWidgetVisibility: {
         noteId: string | undefined;
     };
@@ -333,7 +330,7 @@ type EventMappings = {
     noteDetailRefreshed: {
         ntxId?: string | null;
     };
-    noteContextReorderEvent: {
+    noteContextReorder: {
         oldMainNtxId: string;
         newMainNtxId: string;
         ntxIdsInOrder: string[];
