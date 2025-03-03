@@ -19,10 +19,10 @@ WORKDIR /usr/src/app
 
 # Copy only necessary files for build
 COPY . .
-COPY server-package.json package.json
 
 # Build and cleanup in a single layer
-RUN cp -R build/src/* src/. && \
+RUN sed -i "/electron/d" package.json && \
+    cp -R build/src/* src/. && \
     cp build/docker_healthcheck.js . && \    
     rm docker_healthcheck.ts && \
     npm install && \
