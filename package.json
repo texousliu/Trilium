@@ -57,7 +57,7 @@
     "dev:watch-dist": "tsx ./bin/watch-dist.ts",
     "dev:prettier-check": "prettier . --check",
     "dev:prettier-fix": "prettier . --write",
-    "dev:linter-check": "eslint . --cache",
+    "dev:linter-check": "eslint .",
     "dev:linter-fix": "eslint . --fix",
     "chore:update-build-info": "tsx bin/update-build-info.ts",
     "chore:ci-update-nightly-version": "tsx ./bin/update-nightly-version.ts",
