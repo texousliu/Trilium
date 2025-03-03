@@ -876,7 +876,6 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
  */
 
 #center-pane {
-    padding-top: 2px;
     background: var(--main-background-color);
 }
 
@@ -901,6 +900,20 @@ body.mobile .note-title {
 
 .note-split:not(.hidden-ext) + .note-split:not(.hidden-ext) {
     border-left: 4px solid var(--root-background);
+}
+
+@keyframes note-entrance {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
+
+.note-split {
+    padding-top: 2px;
+    animation: note-entrance 100ms linear;
+    will-change: opacity;
 }
 
 /*
