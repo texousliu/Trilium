@@ -899,6 +899,10 @@ body.mobile .note-title {
     margin-bottom: 0 !important;
 }
 
+.note-split:not(.hidden-ext) + .note-split:not(.hidden-ext) {
+    border-left: 4px solid var(--root-background);
+}
+
 /*
  * Table of contents & Highlights list
  */
