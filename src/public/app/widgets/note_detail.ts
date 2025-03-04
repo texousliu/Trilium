@@ -148,6 +148,9 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             typeWidget.spacedUpdate = this.spacedUpdate;
             typeWidget.setParent(this);
 
+            if (this.noteContext) {
+                typeWidget.setNoteContextEvent({ noteContext: this.noteContext });
+            }
             const $renderedWidget = typeWidget.render();
             keyboardActionsService.updateDisplayedShortcuts($renderedWidget);
 

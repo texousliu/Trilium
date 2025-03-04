@@ -185,7 +185,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.watchdog.setCreator(async (elementOrData, editorConfig) => {
             logInfo("Creating new CKEditor");
 
-            const editor = await editorClass.create(elementOrData, {
+            const finalConfig = {
                 ...editorConfig,
                 ...buildConfig(),
                 ...buildToolbarConfig(isClassicEditor),
@@ -195,7 +195,17 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     classes: true,
                     attributes: true
                 }
-            });
+            };
+
+            const contentLanguage = this.note.getLabelValue("language");
+            if (contentLanguage) {
+                finalConfig.language = {
+                    ui: (typeof finalConfig.language === "string" ? finalConfig.language : "en"),
+                    content: contentLanguage
+                }
+            }
+
+            const editor = await editorClass.create(elementOrData, finalConfig);
 
             const notificationsPlugin = editor.plugins.get("Notification");
             notificationsPlugin.on("show:warning", (evt, data) => {
