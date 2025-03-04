@@ -50,6 +50,28 @@ export function getLocales() {
         {
             id: "ro",
             name: "Română"
+        },
+
+        /*
+         * Right to left languages
+         *
+         * Currently they are only for setting the language of text notes.
+         */
+        { // Arabic
+            id: "ar",
+            name: "اَلْعَرَبِيَّةُ"
+        },
+        { // Hebrew
+            id: "he",
+            name: "עברית"
+        },
+        { // Kurdish
+            id: "ku",
+            name: "کوردی"
+        },
+        { // Persian
+            id: "fa",
+            name: "فارسی"
         }
     ];
 }
