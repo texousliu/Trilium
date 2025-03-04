@@ -4,6 +4,7 @@ import { getAvailableLocales, type Locale } from "../services/i18n.js";
 import { t } from "i18next";
 import type { EventData } from "../components/app_context.js";
 import type FNote from "../entities/fnote.js";
+import attributes from "../services/attributes.js";
 
 const TPL = `\
 <div class="dropdown note-language-widget">
@@ -54,11 +55,25 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
                 const $link = $('<a class="dropdown-item">')
                     .attr("data-language", locale.id)
                     .append('<span class="check">&check;</span> ')
-                    .append($title);
+                    .append($title)
+                    .on("click", () => {
+                        const languageId = $link.attr("data-language") ?? "";
+                        this.save(languageId);
+                    })
                 this.$noteLanguageDropdown.append($link);
             } else {
                 this.$noteLanguageDropdown.append('<div class="dropdown-divider"></div>');
             }
+        }
+    }
+
+    async save(languageId: string) {
+        if (!this.note) {
+            return;
+        }
+
+        if (languageId) {
+            attributes.setLabel(this.note.noteId, "language", languageId);
         }
     }
 
