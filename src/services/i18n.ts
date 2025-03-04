@@ -13,6 +13,63 @@ export interface Locale {
     rtl?: boolean;
 }
 
+const LOCALES: Locale[] = [
+    {
+        id: "en",
+        name: "English"
+    },
+    {
+        id: "de",
+        name: "Deutsch"
+    },
+    {
+        id: "es",
+        name: "Español"
+    },
+    {
+        id: "fr",
+        name: "Français"
+    },
+    {
+        id: "cn",
+        name: "简体中文"
+    },
+    {
+        id: "tw",
+        name: "繁體中文"
+    },
+    {
+        id: "ro",
+        name: "Română"
+    },
+
+    /*
+     * Right to left languages
+     *
+     * Currently they are only for setting the language of text notes.
+     */
+    { // Arabic
+        id: "ar",
+        name: "اَلْعَرَبِيَّةُ",
+        rtl: true
+    },
+    { // Hebrew
+        id: "he",
+        name: "עברית",
+        rtl: true
+    },
+    { // Kurdish
+        id: "ku",
+        name: "کوردی",
+        rtl: true
+    },
+    { // Persian
+        id: "fa",
+        name: "فارسی",
+        rtl: true
+    }
+].sort((a, b) => a.name.localeCompare(b.name));
+
 export async function initializeTranslations() {
     const resourceDir = getResourceDir();
 
@@ -28,63 +85,7 @@ export async function initializeTranslations() {
 }
 
 export function getLocales(): Locale[] {
-    // TODO: Currently hardcoded, needs to read the list of available languages.
-    return [
-        {
-            id: "en",
-            name: "English"
-        },
-        {
-            id: "de",
-            name: "Deutsch"
-        },
-        {
-            id: "es",
-            name: "Español"
-        },
-        {
-            id: "fr",
-            name: "Français"
-        },
-        {
-            id: "cn",
-            name: "简体中文"
-        },
-        {
-            id: "tw",
-            name: "繁體中文"
-        },
-        {
-            id: "ro",
-            name: "Română"
-        },
-
-        /*
-         * Right to left languages
-         *
-         * Currently they are only for setting the language of text notes.
-         */
-        { // Arabic
-            id: "ar",
-            name: "اَلْعَرَبِيَّةُ",
-            rtl: true
-        },
-        { // Hebrew
-            id: "he",
-            name: "עברית",
-            rtl: true
-        },
-        { // Kurdish
-            id: "ku",
-            name: "کوردی",
-            rtl: true
-        },
-        { // Persian
-            id: "fa",
-            name: "فارسی",
-            rtl: true
-        }
-    ];
+    return LOCALES;
 }
 
 function getCurrentLanguage() {
