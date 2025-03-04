@@ -6,6 +6,7 @@ import type { EventData } from "../components/app_context.js";
 import type FNote from "../entities/fnote.js";
 import attributes from "../services/attributes.js";
 import type { Locale } from "../../../services/i18n.js";
+import options from "../services/options.js";
 
 const TPL = `\
 <div class="dropdown note-language-widget">
@@ -43,9 +44,10 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     constructor() {
         super();
 
-        const allLanguages = getAvailableLocales();
-        const leftToRightLanguages = allLanguages.filter((l) => !l.rtl);
-        const rightToLeftLanguages = allLanguages.filter((l) => l.rtl);
+        const enabledLanguages = JSON.parse(options.get("languages") ?? "[]") as string[];
+        const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
+        const leftToRightLanguages = filteredLanguages.filter((l) => !l.rtl);
+        const rightToLeftLanguages = filteredLanguages.filter((l) => l.rtl);
 
         this.locales = [
             DEFAULT_LOCALE,
