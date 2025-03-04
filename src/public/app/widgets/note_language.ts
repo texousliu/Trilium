@@ -1,6 +1,6 @@
 import { Dropdown } from "bootstrap";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
-import { getAvailableLocales } from "../services/i18n.js";
+import { getAvailableLocales, getLocaleById } from "../services/i18n.js";
 import { t } from "i18next";
 import type { EventData } from "../components/app_context.js";
 import type FNote from "../entities/fnote.js";
@@ -118,7 +118,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
 
     async refreshWithNote(note: FNote) {
         const currentLanguageId = note.getLabelValue("language") ?? "";
-        const language = (this.locales.find((l) => (typeof l === "object" && l.id === currentLanguageId)) as Locale | null) ?? DEFAULT_LOCALE;
+        const language = getLocaleById(currentLanguageId) ?? DEFAULT_LOCALE;
         this.currentLanguageId = currentLanguageId;
         this.$noteLanguageDesc.text(language.name);
         this.dropdown.hide();

@@ -29,5 +29,15 @@ export function getAvailableLocales() {
     return locales;
 }
 
+/**
+ * Finds the given locale by ID.
+ *
+ * @param localeId the locale ID to search for.
+ * @returns the corresponding {@link Locale} or `null` if it was not found.
+ */
+export function getLocaleById(localeId: string ) {
+    return locales?.find((l) => l.id === localeId);
+}
+
 export const t = i18next.t;
 export const getCurrentLanguage = () => i18next.language;
