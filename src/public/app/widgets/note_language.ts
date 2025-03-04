@@ -2,6 +2,8 @@ import { Dropdown } from "bootstrap";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import { getAvailableLocales, type Locale } from "../services/i18n.js";
 import { t } from "i18next";
+import type { EventData } from "../components/app_context.js";
+import type FNote from "../entities/fnote.js";
 
 const TPL = `\
 <div class="dropdown note-language-widget">
@@ -57,6 +59,16 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
             } else {
                 this.$noteLanguageDropdown.append('<div class="dropdown-divider"></div>');
             }
+        }
+    }
+
+    async refreshWithNote(note: FNote) {
+        this.$noteLanguageDesc.text(t("note_language.not_set"));
+    }
+
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.isNoteReloaded(this.noteId)) {
+            this.refresh();
         }
     }
 
