@@ -76,9 +76,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (languageId) {
-            attributes.setLabel(this.note.noteId, "language", languageId);
-        }
+        attributes.setAttribute(this.note, "label", "language", languageId);
     }
 
     async refreshWithNote(note: FNote) {
