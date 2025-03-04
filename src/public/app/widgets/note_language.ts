@@ -37,11 +37,24 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
 
     constructor() {
         super();
+
+        const allLanguages = getAvailableLocales();
+        const leftToRightLanguages = allLanguages.filter((l) => !l.rtl);
+        const rightToLeftLanguages = allLanguages.filter((l) => l.rtl);
+
         this.locales = [
             DEFAULT_LOCALE,
             "---",
-            ...getAvailableLocales()
+            ...leftToRightLanguages
         ];
+
+        if (rightToLeftLanguages.length > 0) {
+            this.locales = [
+                ...this.locales,
+                "---",
+                ...rightToLeftLanguages
+            ];
+        }
     }
 
     doRender() {
