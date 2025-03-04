@@ -19,6 +19,10 @@ const TPL = `\
         .note-language-dropdown [dir=rtl] {
             text-align: right;
         }
+
+        .dropdown-item.rtl > .check {
+            order: 1;
+        }
     </style>
 </div>
 `;
@@ -77,9 +81,6 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
         for (const locale of this.locales) {
             if (typeof locale === "object") {
                 const $title = $("<span>").text(locale.name);
-                if (locale.rtl) {
-                    $title.attr("dir", "rtl");
-                }
 
                 const $link = $('<a class="dropdown-item">')
                     .attr("data-language", locale.id)
@@ -89,6 +90,10 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
                     const languageId = $link.attr("data-language") ?? "";
                     this.save(languageId);
                 });
+
+                if (locale.rtl) {
+                    $link.attr("dir", "rtl");
+                }
 
                 if (locale.id === this.currentLanguageId) {
                     $link.addClass("selected");
