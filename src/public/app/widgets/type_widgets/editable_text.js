@@ -16,6 +16,7 @@ import toast from "../../services/toast.js";
 import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/toolbars.js";
+import attributes from "../../services/attributes.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -140,8 +141,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
         const editorClass = isClassicEditor ? CKEditor.DecoupledEditor : CKEditor.BalloonEditor;
 
-        const codeBlockLanguages = buildListOfLanguages();
-
         // CKEditor since version 12 needs the element to be visible before initialization. At the same time,
         // we want to avoid flicker - i.e., show editor only once everything is ready. That's why we have separate
         // display of $widget in both branches.
@@ -252,11 +251,15 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             return editor;
         });
 
+        await this.createEditor();
+    }
+
+    async createEditor() {
         await this.watchdog.create(this.$editor[0], {
             placeholder: t("editable_text.placeholder"),
             mention: mentionSetup,
             codeBlock: {
-                languages: codeBlockLanguages
+                languages: buildListOfLanguages()
             },
             math: {
                 engine: "katex",
@@ -478,4 +481,28 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async refreshIncludedNoteEvent({ noteId }) {
         this.refreshIncludedNote(this.$editor, noteId);
     }
+
+    async reinitialize() {
+        if (!this.watchdog) {
+            return;
+        }
+
+        const data = this.watchdog.editor.getData();
+        this.watchdog.destroy();
+        await this.createEditor();
+        this.watchdog.editor.setData(data);
+    }
+
+    async entitiesReloadedEvent(e) {
+        if (e.loadResults.getAttributeRows().find((attr) =>
+            attr.type === "label" &&
+            attr.name === "language" &&
+            attributes.isAffecting(attr, this.note)))
+        {
+            await this.reinitialize();
+        }
+
+        super.entitiesReloadedEvent(e);
+    }
+
 }
