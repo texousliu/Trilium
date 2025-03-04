@@ -1,7 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import utils from "../../../../services/utils.js";
-import { getAvailableLocales, t, type Locale } from "../../../../services/i18n.js";
+import { getAvailableLocales, t } from "../../../../services/i18n.js";
 import type { OptionMap } from "../../../../../../services/options_interface.js";
 
 const TPL = `
@@ -47,7 +47,7 @@ export default class LocalizationOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        const availableLocales = getAvailableLocales();
+        const availableLocales = getAvailableLocales().filter(l => !l.contentOnly);
         this.$localeSelect.empty();
 
         for (const locale of availableLocales) {

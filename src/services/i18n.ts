@@ -11,6 +11,8 @@ export interface Locale {
     name: string;
     /** `true` if the language is a right-to-left one, or `false` if it's left-to-right. */
     rtl?: boolean;
+    /** `true` if the language is not supported by the application as a display language, but it is selectable by the user for the content. */
+    contentOnly?: boolean;
 }
 
 const LOCALES: Locale[] = [
@@ -51,22 +53,26 @@ const LOCALES: Locale[] = [
     { // Arabic
         id: "ar",
         name: "اَلْعَرَبِيَّةُ",
-        rtl: true
+        rtl: true,
+        contentOnly: true
     },
     { // Hebrew
         id: "he",
         name: "עברית",
-        rtl: true
+        rtl: true,
+        contentOnly: true
     },
     { // Kurdish
         id: "ku",
         name: "کوردی",
-        rtl: true
+        rtl: true,
+        contentOnly: true
     },
     { // Persian
         id: "fa",
         name: "فارسی",
-        rtl: true
+        rtl: true,
+        contentOnly: true
     }
 ].sort((a, b) => a.name.localeCompare(b.name));
 
