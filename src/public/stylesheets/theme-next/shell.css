@@ -913,7 +913,7 @@ body.mobile .note-title {
 .note-split {
     padding-top: 2px;
     animation: note-entrance 100ms linear;
-    will-change: opacity;
+    /* will-change: opacity; -- causes some weird artifacts to the note menu in split view */
 }
 
 /*
