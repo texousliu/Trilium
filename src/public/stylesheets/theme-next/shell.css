@@ -201,6 +201,22 @@ body.layout-horizontal > .horizontal {
     top: 3px;
 }
 
+@keyframes sync-icon-animation {
+    from {
+        transform: rotate(360deg);
+    } to {
+        transform: rotate(0deg);
+    }
+}
+
+/* Sync in progres / unknown sync status icon */
+#launcher-pane .sync-status-icon.sync-status-in-progress::before,
+#launcher-pane .sync-status-icon.sync-status-unknown::before {
+    display: block;
+    content: "\ec37";
+    animation: sync-icon-animation 2s linear infinite;
+}
+
 #launcher-pane .sync-status-icon:not(.sync-status-in-progress):hover {
     background: unset;
 }
