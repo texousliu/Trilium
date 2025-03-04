@@ -2,6 +2,8 @@ import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
 import libraryLoader from "../../services/library_loader.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 import { getMermaidConfig } from "../mermaid.js";
+import type FNote from "../../entities/fnote.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="note-detail-readonly-text note-detail-printable">
@@ -71,6 +73,9 @@ const TPL = `
 `;
 
 export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
+
+    private $content!: JQuery<HTMLElement>;
+
     static getType() {
         return "readOnlyText";
     }
@@ -89,7 +94,7 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         this.$content.html("");
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         // we load CKEditor also for read only notes because they contain content styles required for correct rendering of even read only notes
         // we could load just ckeditor-content.css but that causes CSS conflicts when both build CSS and this content CSS is loaded at the same time
         // (see https://github.com/zadam/trilium/issues/1590 for example of such conflict)
@@ -97,13 +102,13 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
 
         const blob = await note.getBlob();
 
-        this.$content.html(blob.content);
+        this.$content.html(blob?.content ?? "");
 
-        this.$content.find("a.reference-link").each(async (_, el) => {
+        this.$content.find("a.reference-link").each((_, el) => {
             this.loadReferenceLinkTitle($(el));
         });
 
-        this.$content.find("section").each(async (_, el) => {
+        this.$content.find("section").each((_, el) => {
             const noteId = $(el).attr("data-note-id");
 
             this.loadIncludedNote(noteId, $(el));
@@ -135,11 +140,11 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         mermaid.init(getMermaidConfig(), this.$content.find(".mermaid-diagram"));
     }
 
-    async refreshIncludedNoteEvent({ noteId }) {
+    async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {
         this.refreshIncludedNote(this.$content, noteId);
     }
 
-    async executeWithContentElementEvent({ resolve, ntxId }) {
+    async executeWithContentElementEvent({ resolve, ntxId }: EventData<"executeWithContentElement">) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }

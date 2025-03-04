@@ -143,7 +143,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     }
 }
 
-export function getMermaidConfig() {
+export function getMermaidConfig(): MermaidConfig {
     const documentStyle = window.getComputedStyle(document.documentElement);
     const mermaidTheme = documentStyle.getPropertyValue("--mermaid-theme");
 
