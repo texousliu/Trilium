@@ -34,6 +34,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     private $noteLanguageDropdown!: JQuery<HTMLElement>;
     private $noteLanguageDesc!: JQuery<HTMLElement>;
     private locales: (Locale | "---")[];
+    private currentLanguageId?: string;
 
     constructor() {
         super();
@@ -85,9 +86,13 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
                     .append('<span class="check">&check;</span> ')
                     .append($title)
                     .on("click", () => {
-                        const languageId = $link.attr("data-language") ?? "";
-                        this.save(languageId);
-                    })
+                    const languageId = $link.attr("data-language") ?? "";
+                    this.save(languageId);
+                });
+
+                if (locale.id === this.currentLanguageId) {
+                    $link.addClass("selected");
+                }
 
                 this.$noteLanguageDropdown.append($link);
             } else {
@@ -105,8 +110,9 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     }
 
     async refreshWithNote(note: FNote) {
-        const languageId = note.getLabelValue("language") ?? "";
-        const language = (this.locales.find((l) => (typeof l === "object" && l.id === languageId)) as Locale | null) ?? DEFAULT_LOCALE;
+        const currentLanguageId = note.getLabelValue("language") ?? "";
+        const language = (this.locales.find((l) => (typeof l === "object" && l.id === currentLanguageId)) as Locale | null) ?? DEFAULT_LOCALE;
+        this.currentLanguageId = currentLanguageId;
         this.$noteLanguageDesc.text(language.name);
         this.dropdown.hide();
     }
