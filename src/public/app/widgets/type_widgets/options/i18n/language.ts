@@ -13,6 +13,7 @@ const TPL = `
         ul.options-languages {
             list-style-type: none;
             margin-bottom: 0;
+            column-width: 400px;
         }
     </style>
 </div>
