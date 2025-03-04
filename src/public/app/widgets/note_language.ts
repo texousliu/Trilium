@@ -1,6 +1,7 @@
 import { Dropdown } from "bootstrap";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import { getAvailableLocales, type Locale } from "../services/i18n.js";
+import { t } from "i18next";
 
 const TPL = `\
 <div class="dropdown note-language-widget">
@@ -36,13 +37,26 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
             return;
         }
 
-        for (const locale of getAvailableLocales()) {
-            const $title = $("<span>").text(locale.name);
-            const $link = $('<a class="dropdown-item">')
-                .attr("data-language", locale.id)
-                .append('<span class="check">&check;</span> ')
-                .append($title);
-            this.$noteLanguageDropdown.append($link);
+        const locales: (Locale | "---")[] = [
+            {
+                id: "",
+                name: t("note_language.not_set")
+            },
+            "---",
+            ...getAvailableLocales()
+        ];
+
+        for (const locale of locales) {
+            if (typeof locale === "object") {
+                const $title = $("<span>").text(locale.name);
+                const $link = $('<a class="dropdown-item">')
+                    .attr("data-language", locale.id)
+                    .append('<span class="check">&check;</span> ')
+                    .append($title);
+                this.$noteLanguageDropdown.append($link);
+            } else {
+                this.$noteLanguageDropdown.append('<div class="dropdown-divider"></div>');
+            }
         }
     }
 

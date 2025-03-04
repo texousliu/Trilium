@@ -1686,5 +1686,8 @@
   },
   "content_widget": {
     "unknown_widget": "Unknown widget for \"{{id}}\"."
+  },
+  "note_language": {
+    "not_set": "Not set"
   }
 }
