@@ -1,7 +1,6 @@
 import OptionsWidget from "../options_widget.js";
 import type { OptionMap } from "../../../../../../services/options_interface.js";
-import server from "../../../../services/server.js";
-import type { Locale } from "../appearance/i18n.js";
+import { getAvailableLocales } from "../../../../services/i18n.js";
 
 const TPL = `
 <div class="options-section">
@@ -42,7 +41,7 @@ export default class LanguageOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        const availableLocales = await server.get<Locale[]>("options/locales");
+        const availableLocales = getAvailableLocales();
         const enabledLanguages = (JSON.parse(options.languages) as string[]);
 
         this.$languagesContainer.empty();
