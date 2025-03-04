@@ -25,7 +25,6 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
 
     private dropdown!: Dropdown;
     private $noteLanguageDropdown!: JQuery<HTMLElement>;
-    private $noteLanguageButton!: JQuery<HTMLElement>;
     private $noteLanguageDesc!: JQuery<HTMLElement>;
     private locales: (Locale | "---")[];
 
@@ -44,7 +43,6 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
         this.$widget.on("show.bs.dropdown", () => this.renderDropdown());
 
         this.$noteLanguageDropdown = this.$widget.find(".note-language-dropdown")
-        this.$noteLanguageButton = this.$widget.find(".note-language-button");
         this.$noteLanguageDesc = this.$widget.find(".note-language-desc");
     }
 
@@ -85,6 +83,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
         const languageId = note.getLabelValue("language") ?? "";
         const language = (this.locales.find((l) => (typeof l === "object" && l.id === languageId)) as Locale | null) ?? DEFAULT_LOCALE;
         this.$noteLanguageDesc.text(language.name);
+        this.dropdown.hide();
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
