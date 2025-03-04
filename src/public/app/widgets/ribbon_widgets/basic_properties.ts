@@ -124,5 +124,6 @@ export default class BasicPropertiesWidget extends NoteContextAwareWidget {
         }
 
         this.$widget.find(".editability-select-container").toggle(this.note && ["text", "code"].includes(this.note.type));
+        this.$widget.find(".note-language-container").toggle(this.note && ["text"].includes(this.note.type));
     }
 }
