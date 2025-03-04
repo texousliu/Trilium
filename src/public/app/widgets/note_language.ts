@@ -22,6 +22,19 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     private $noteLanguageDropdown!: JQuery<HTMLElement>;
     private $noteLanguageButton!: JQuery<HTMLElement>;
     private $noteLanguageDesc!: JQuery<HTMLElement>;
+    private locales: (Locale | "---")[];
+
+    constructor() {
+        super();
+        this.locales = [
+            {
+                id: "",
+                name: t("note_language.not_set")
+            },
+            "---",
+            ...getAvailableLocales()
+        ];
+    }
 
     doRender() {
         this.$widget = $(TPL);
@@ -40,16 +53,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
             return;
         }
 
-        const locales: (Locale | "---")[] = [
-            {
-                id: "",
-                name: t("note_language.not_set")
-            },
-            "---",
-            ...getAvailableLocales()
-        ];
-
-        for (const locale of locales) {
+        for (const locale of this.locales) {
             if (typeof locale === "object") {
                 const $title = $("<span>").text(locale.name);
                 const $link = $('<a class="dropdown-item">')
@@ -78,11 +82,13 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     }
 
     async refreshWithNote(note: FNote) {
-        this.$noteLanguageDesc.text(t("note_language.not_set"));
+        const languageId = note.getLabelValue("language") ?? "";
+        const language = this.locales.find((l) => (typeof l === "object" && l.id === languageId)) as Locale;
+        this.$noteLanguageDesc.text(language.name);
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isNoteReloaded(this.noteId)) {
+        if (loadResults.getAttributeRows().find((a) => a.noteId === this.noteId && a.name === "language")) {
             this.refresh();
         }
     }
