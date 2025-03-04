@@ -4,6 +4,7 @@ import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 import { getMermaidConfig } from "../mermaid.js";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
+import { getLocaleById } from "../../services/i18n.js";
 
 const TPL = `
 <div class="note-detail-readonly-text note-detail-printable">
@@ -99,6 +100,11 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         // we could load just ckeditor-content.css but that causes CSS conflicts when both build CSS and this content CSS is loaded at the same time
         // (see https://github.com/zadam/trilium/issues/1590 for example of such conflict)
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
+
+        const languageCode = note.getLabelValue("language");
+        const correspondingLocale = getLocaleById(languageCode);
+        const isRtl = correspondingLocale?.rtl;
+        this.$content.attr("dir", isRtl ? "rtl" : "ltr");
 
         const blob = await note.getBlob();
 

@@ -35,8 +35,9 @@ export function getAvailableLocales() {
  * @param localeId the locale ID to search for.
  * @returns the corresponding {@link Locale} or `null` if it was not found.
  */
-export function getLocaleById(localeId: string ) {
-    return locales?.find((l) => l.id === localeId);
+export function getLocaleById(localeId: string | null | undefined) {
+    if (!localeId) return null;
+    return locales?.find((l) => l.id === localeId) ?? null;
 }
 
 export const t = i18next.t;
