@@ -2,14 +2,9 @@ import options from "./options.js";
 import i18next from "i18next";
 import i18nextHttpBackend from "i18next-http-backend";
 import server from "./server.js";
+import type { Locale } from "../../../services/i18n.js";
 
 let locales: Locale[] | null;
-
-// TODO: Deduplicate with server.
-export interface Locale {
-    id: string;
-    name: string;
-}
 
 export async function initLocale() {
     const locale = (options.get("locale") as string) || "en";
@@ -28,7 +23,7 @@ export async function initLocale() {
 
 export function getAvailableLocales() {
     if (!locales) {
-        throw new Error("Tried to load list of locales, but localization is not yet initialized.");
+        throw new Error("Tried to load list of locales, but localization is not yet initialized.")
     }
 
     return locales;

@@ -1,10 +1,11 @@
 import { Dropdown } from "bootstrap";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
-import { getAvailableLocales, type Locale } from "../services/i18n.js";
+import { getAvailableLocales } from "../services/i18n.js";
 import { t } from "i18next";
 import type { EventData } from "../components/app_context.js";
 import type FNote from "../entities/fnote.js";
 import attributes from "../services/attributes.js";
+import type { Locale } from "../../../services/i18n.js";
 
 const TPL = `\
 <div class="dropdown note-language-widget">
@@ -13,6 +14,12 @@ const TPL = `\
         <span class="caret"></span>
     </button>
     <div class="note-language-dropdown dropdown-menu dropdown-menu-left tn-dropdown-list"></div>
+
+    <style>
+        .note-language-dropdown [dir=rtl] {
+            text-align: right;
+        }
+    </style>
 </div>
 `;
 
@@ -56,6 +63,10 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
         for (const locale of this.locales) {
             if (typeof locale === "object") {
                 const $title = $("<span>").text(locale.name);
+                if (locale.rtl) {
+                    $title.attr("dir", "rtl");
+                }
+
                 const $link = $('<a class="dropdown-item">')
                     .attr("data-language", locale.id)
                     .append('<span class="check">&check;</span> ')
@@ -64,6 +75,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
                         const languageId = $link.attr("data-language") ?? "";
                         this.save(languageId);
                     })
+
                 this.$noteLanguageDropdown.append($link);
             } else {
                 this.$noteLanguageDropdown.append('<div class="dropdown-divider"></div>');

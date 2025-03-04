@@ -6,6 +6,13 @@ import { join } from "path";
 import { getResourceDir } from "./utils.js";
 import hidden_subtree from "./hidden_subtree.js";
 
+export interface Locale {
+    id: string;
+    name: string;
+    /** `true` if the language is a right-to-left one, or `false` if it's left-to-right. */
+    rtl?: boolean;
+}
+
 export async function initializeTranslations() {
     const resourceDir = getResourceDir();
 
@@ -20,7 +27,7 @@ export async function initializeTranslations() {
     });
 }
 
-export function getLocales() {
+export function getLocales(): Locale[] {
     // TODO: Currently hardcoded, needs to read the list of available languages.
     return [
         {
@@ -59,19 +66,23 @@ export function getLocales() {
          */
         { // Arabic
             id: "ar",
-            name: "اَلْعَرَبِيَّةُ"
+            name: "اَلْعَرَبِيَّةُ",
+            rtl: true
         },
         { // Hebrew
             id: "he",
-            name: "עברית"
+            name: "עברית",
+            rtl: true
         },
         { // Kurdish
             id: "ku",
-            name: "کوردی"
+            name: "کوردی",
+            rtl: true
         },
         { // Persian
             id: "fa",
-            name: "فارسی"
+            name: "فارسی",
+            rtl: true
         }
     ];
 }
