@@ -16,6 +16,11 @@ const TPL = `\
 </div>
 `;
 
+const DEFAULT_LOCALE: Locale = {
+    id: "",
+    name: t("note_language.not_set")
+};
+
 export default class NoteLanguageWidget extends NoteContextAwareWidget {
 
     private dropdown!: Dropdown;
@@ -27,10 +32,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     constructor() {
         super();
         this.locales = [
-            {
-                id: "",
-                name: t("note_language.not_set")
-            },
+            DEFAULT_LOCALE,
             "---",
             ...getAvailableLocales()
         ];
@@ -81,7 +83,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
 
     async refreshWithNote(note: FNote) {
         const languageId = note.getLabelValue("language") ?? "";
-        const language = this.locales.find((l) => (typeof l === "object" && l.id === languageId)) as Locale;
+        const language = (this.locales.find((l) => (typeof l === "object" && l.id === languageId)) as Locale | null) ?? DEFAULT_LOCALE;
         this.$noteLanguageDesc.text(language.name);
     }
 
