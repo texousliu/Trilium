@@ -492,21 +492,19 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.refreshIncludedNote(this.$editor, noteId);
     }
 
-    async reinitialize(data = null) {
+    async reinitialize(data) {
         if (!this.watchdog) {
             return;
         }
 
-        if (!data) {
-            data = this.watchdog.editor.getData();
-        }
         this.watchdog.destroy();
         await this.createEditor();
         this.watchdog.editor.setData(data);
     }
 
     async onLanguageChanged() {
-        await this.reinitialize();
+        const data = this.watchdog.editor.getData();
+        await this.reinitialize(data);
     }
 
 }
