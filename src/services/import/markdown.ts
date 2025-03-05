@@ -3,7 +3,7 @@
 import { parse, Renderer, type Tokens } from "marked";
 
 const renderer = new Renderer({ async: false });
-renderer.code = ({text, lang, escaped}: Tokens.Code) => {
+renderer.code = ({ text, lang, escaped }: Tokens.Code) => {
     if (!text) {
         return "";
     }

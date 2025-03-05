@@ -139,7 +139,7 @@ interface NotesAndRelationsData {
         source: string;
         target: string;
         name: string;
-    }[]
+    }[];
 }
 
 // Replace
@@ -152,7 +152,7 @@ interface ResponseLink {
 
 interface PostNotesMapResponse {
     notes: string[];
-    links: ResponseLink[],
+    links: ResponseLink[];
     noteIdToDescendantCountMap: Record<string, number>;
 }
 
@@ -160,7 +160,7 @@ interface GroupedLink {
     id: string;
     sourceNoteId: string;
     targetNoteId: string;
-    names: string[]
+    names: string[];
 }
 
 interface CssData {
@@ -313,9 +313,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                 ctx.fillStyle = color;
                 ctx.beginPath();
                 if (node.x && node.y) {
-                    ctx.arc(node.x, node.y,
-                        this.noteIdToSizeMap[node.id], 0,
-                        2 * Math.PI, false);
+                    ctx.arc(node.x, node.y, this.noteIdToSizeMap[node.id], 0, 2 * Math.PI, false);
                 }
                 ctx.fill();
             })
@@ -324,7 +322,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
             .warmupTicks(30)
             .onNodeClick((node) => {
                 if (node.id) {
-                    appContext.tabManager.getActiveContext().setNote((node as Node).id);
+                    appContext.tabManager.getActiveContext()?.setNote((node as Node).id);
                 }
             })
             .onNodeRightClick((node, e) => {
@@ -373,7 +371,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         if (mapRootNoteId === "hoisted") {
             mapRootNoteId = hoistedNoteService.getHoistedNoteId();
         } else if (!mapRootNoteId) {
-            mapRootNoteId = appContext.tabManager.getActiveContext().parentNoteId;
+            mapRootNoteId = appContext.tabManager.getActiveContext()?.parentNoteId;
         }
 
         return mapRootNoteId ?? "";
@@ -467,13 +465,13 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         }
 
         if (source.x && source.y && target.x && target.y) {
-            const x = ((source.x) + (target.x)) / 2;
-            const y = ((source.y) + (target.y)) / 2;
+            const x = (source.x + target.x) / 2;
+            const y = (source.y + target.y) / 2;
             ctx.save();
             ctx.translate(x, y);
 
-            const deltaY = (source.y) - (target.y);
-            const deltaX = (source.x) - (target.x);
+            const deltaY = source.y - target.y;
+            const deltaX = source.x - target.x;
 
             let angle = Math.atan2(deltaY, deltaX);
             let moveY = 2;

@@ -17,7 +17,7 @@ div.note-type-dropdown .check {
     margin-right: 6px;
 }
 
- /* Editability dropdown */
+/* Editability dropdown */
 
 div.editability-dropdown a.dropdown-item {
     padding: 4px 16px 4px 0;
@@ -29,8 +29,8 @@ div.editability-dropdown a.dropdown-item {
 }
 
 .editability-dropdown .dropdown-item .description {
-    opacity: .75;
-    font-size: .85em;
+    opacity: 0.75;
+    font-size: 0.85em;
 }
 
 /*
@@ -38,8 +38,8 @@ div.editability-dropdown a.dropdown-item {
  */
 
 .attribute-list .add-new-attribute-button,
-.attribute-list .save-attributes-button  {
-    bottom: .3em;
+.attribute-list .save-attributes-button {
+    bottom: 0.3em;
 }
 
 .attribute-list .save-attributes-button {
@@ -70,12 +70,52 @@ div.editability-dropdown a.dropdown-item {
  */
 
 .note-info-widget-table th {
-    opacity: .65;
+    opacity: 0.65;
     font-weight: 500;
 }
 
 :root .note-info-widget-table button.calculate-button {
     min-width: 0;
     padding: 4px 10px !important;
-    font-size: .8em;
+    font-size: 0.8em;
+}
+
+/* Narrow width layout */
+.note-info-widget {
+    container: note-info / inline-size;
+}
+
+@container note-info (max-width: 800px) {
+    table, tbody, tr, td, th {
+        display: block;
+        padding: 0 !important;
+    }
+
+    tbody {
+        display: flex;
+        gap: 10px;
+    }
+
+    tr {
+        flex-grow: 1;
+    }
+
+    th {
+        font-size: .85em;
+    }
+
+    td {
+        margin-bottom: .5em;
+    }
+}
+
+/*
+ * Attribute detail dialog
+ */
+
+/* Labels */
+.attr-edit-table th {
+    padding-right: 12px;
+    font-weight: normal;
+    white-space: nowrap;
 }

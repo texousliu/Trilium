@@ -32,7 +32,7 @@ const TPL = `
         </label>
     </div>
 
-    <button class="btn btn-micro restart-app-button">${t("electron_integration.restart-app-button")}</button>
+    <button class="btn btn-secondary btn-micro restart-app-button">${t("electron_integration.restart-app-button")}</button>
 </div>
 `;
 

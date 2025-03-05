@@ -66,7 +66,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
 
         mermaid.mermaidAPI.initialize({
             startOnLoad: false,
-            ...getMermaidConfig() as any
+            ...(getMermaidConfig() as any)
         });
 
         this.$display.empty();

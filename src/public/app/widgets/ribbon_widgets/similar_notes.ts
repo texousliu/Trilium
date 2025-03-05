@@ -40,7 +40,6 @@ interface SimilarNote {
     noteId: string;
 }
 
-
 export default class SimilarNotesWidget extends NoteContextAwareWidget {
 
     private $similarNotesWrapper!: JQuery<HTMLElement>;

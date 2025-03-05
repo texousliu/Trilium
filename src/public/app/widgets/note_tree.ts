@@ -159,11 +159,11 @@ interface CreateLauncherResponse {
     message: string;
     note: {
         noteId: string;
-    }
+    };
 }
 
 interface ExpandedSubtreeResponse {
-    branchIds: string[]
+    branchIds: string[];
 }
 
 interface Node extends Fancytree.NodeData {
@@ -180,7 +180,6 @@ interface RefreshContext {
 }
 
 export default class NoteTreeWidget extends NoteContextAwareWidget {
-
     private $tree!: JQuery<HTMLElement>;
     private $treeActions!: JQuery<HTMLElement>;
     private $treeSettingsButton!: JQuery<HTMLElement>;
@@ -425,10 +424,10 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
                 const activeNoteContext = appContext.tabManager.getActiveContext();
                 const opts: SetNoteOpts = {};
-                if (activeNoteContext.viewScope?.viewMode === "contextual-help") {
+                if (activeNoteContext?.viewScope?.viewMode === "contextual-help") {
                     opts.viewScope = activeNoteContext.viewScope;
                 }
-                await activeNoteContext.setNote(notePath, opts);
+                await activeNoteContext?.setNote(notePath, opts);
             },
             expand: (event, data) => this.setExpanded(data.node.data.branchId, true),
             collapse: (event, data) => this.setExpanded(data.node.data.branchId, false),
@@ -571,10 +570,13 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             clones: {
                 highlightActiveClones: true
             },
-            enhanceTitle: async function (event: Event, data: {
-                node: Fancytree.FancytreeNode;
-                noteId: string;
-            }) {
+            enhanceTitle: async function (
+                event: Event,
+                data: {
+                    node: Fancytree.FancytreeNode;
+                    noteId: string;
+                }
+            ) {
                 const node = data.node;
 
                 if (!node.data.noteId) {
@@ -617,10 +619,10 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
                 // TODO: Deduplicate with server's notes.ts#getAndValidateParent
                 if (!["search", "launcher"].includes(note.type)
-                        && !note.isOptions()
-                        && !note.isLaunchBarConfig()
-                        && !note.noteId.startsWith("_help")
-                    ) {
+                    && !note.isOptions()
+                    && !note.isLaunchBarConfig()
+                    && !note.noteId.startsWith("_help")
+                ) {
                     const $createChildNoteButton = $(`<span class="tree-item-button add-note-button bx bx-plus" title="${t("note_tree.create-child-note")}"></span>`).on(
                         "click",
                         cancelClickPropagation
@@ -1756,6 +1758,6 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
         await ws.waitForMaxKnownEntityChangeId();
 
-        appContext.tabManager.getActiveContext().setNote(resp.note.noteId);
+        appContext.tabManager.getActiveContext()?.setNote(resp.note.noteId);
     }
 }

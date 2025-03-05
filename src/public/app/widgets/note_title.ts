@@ -94,7 +94,7 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
             || utils.isLaunchBarConfig(note.noteId)
             || this.noteContext?.viewScope?.viewMode !== "default";
 
-        this.$noteTitle.val(isReadOnly ? await this.noteContext?.getNavigationTitle() || "" : note.title);
+        this.$noteTitle.val(isReadOnly ? (await this.noteContext?.getNavigationTitle()) || "" : note.title);
         this.$noteTitle.prop("readonly", isReadOnly);
 
         this.setProtectedStatus(note);

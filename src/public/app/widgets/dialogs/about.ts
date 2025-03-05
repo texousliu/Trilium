@@ -5,6 +5,15 @@ import openService from "../../services/open.js";
 import server from "../../services/server.js";
 import utils from "../../services/utils.js";
 
+interface AppInfo {
+    appVersion: string;
+    dbVersion: number;
+    syncVersion: number;
+    buildDate: string;
+    buildRevision: string;
+    dataDirectory: string;
+}
+
 const TPL = `
 <div class="about-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -35,12 +44,10 @@ const TPL = `
                         <th>${t("about.build_date")}</th>
                         <td class="build-date"></td>
                     </tr>
-
                     <tr>
                         <th>${t("about.build_revision")}</th>
-                        <td><a class="tn-link" href="" class="build-revision external" target="_blank"></a></td>
+                        <td><a class="tn-link build-revision external" href="" target="_blank"></a></td>
                     </tr>
-
                     <tr>
                         <th>${t("about.data_directory")}</th>
                         <td class="data-directory"></td>
@@ -59,7 +66,14 @@ const TPL = `
 `;
 
 export default class AboutDialog extends BasicWidget {
-    doRender() {
+    private $appVersion!: JQuery<HTMLElement>;
+    private $dbVersion!: JQuery<HTMLElement>;
+    private $syncVersion!: JQuery<HTMLElement>;
+    private $buildDate!: JQuery<HTMLElement>;
+    private $buildRevision!: JQuery<HTMLElement>;
+    private $dataDirectory!: JQuery<HTMLElement>;
+
+    doRender(): void {
         this.$widget = $(TPL);
         this.$appVersion = this.$widget.find(".app-version");
         this.$dbVersion = this.$widget.find(".db-version");
@@ -70,11 +84,11 @@ export default class AboutDialog extends BasicWidget {
     }
 
     async refresh() {
-        const appInfo = await server.get("app-info");
+        const appInfo = await server.get<AppInfo>("app-info");
 
         this.$appVersion.text(appInfo.appVersion);
-        this.$dbVersion.text(appInfo.dbVersion);
-        this.$syncVersion.text(appInfo.syncVersion);
+        this.$dbVersion.text(appInfo.dbVersion.toString());
+        this.$syncVersion.text(appInfo.syncVersion.toString());
         this.$buildDate.text(formatDateTime(appInfo.buildDate));
         this.$buildRevision.text(appInfo.buildRevision);
         this.$buildRevision.attr("href", `https://github.com/TriliumNext/Notes/commit/${appInfo.buildRevision}`);
@@ -84,9 +98,9 @@ export default class AboutDialog extends BasicWidget {
                     href: "#",
                     class: "tn-link",
                     text: appInfo.dataDirectory
-                })
+                }).prop("outerHTML")
             );
-            this.$dataDirectory.find("a").on("click", (event) => {
+            this.$dataDirectory.find("a").on("click", (event: JQuery.ClickEvent) => {
                 event.preventDefault();
                 openService.openDirectory(appInfo.dataDirectory);
             });
@@ -97,7 +111,6 @@ export default class AboutDialog extends BasicWidget {
 
     async openAboutDialogEvent() {
         await this.refresh();
-
         utils.openDialog(this.$widget);
     }
 }

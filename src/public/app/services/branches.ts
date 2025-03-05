@@ -152,10 +152,10 @@ async function deleteNotes(branchIdsToDelete: string[], forceDeleteAllClones = f
 async function activateParentNotePath() {
     // this is not perfect, maybe we should find the next/previous sibling, but that's more complex
     const activeContext = appContext.tabManager.getActiveContext();
-    const parentNotePathArr = activeContext.notePathArray.slice(0, -1);
+    const parentNotePathArr = activeContext?.notePathArray.slice(0, -1);
 
-    if (parentNotePathArr.length > 0) {
-        activeContext.setNote(parentNotePathArr.join("/"));
+    if (parentNotePathArr && parentNotePathArr.length > 0) {
+        activeContext?.setNote(parentNotePathArr.join("/"));
     }
 }
 

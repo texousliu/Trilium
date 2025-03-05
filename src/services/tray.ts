@@ -33,7 +33,7 @@ function getTrayIconPath() {
 }
 
 function getIconPath(name: string) {
-    const suffix = (!isMac && nativeTheme.shouldUseDarkColors ? "-inverted" : "");
+    const suffix = !isMac && nativeTheme.shouldUseDarkColors ? "-inverted" : "";
     return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}Template${suffix}.png`);
 }
 
@@ -110,7 +110,6 @@ function updateTrayMenu() {
                     click: () => openInSameTab(bookmarkNote)
                 });
             }
-
         }
 
         return menuItems;
@@ -139,7 +138,7 @@ function updateTrayMenu() {
                 type: "normal",
                 sublabel: formatter.format(date),
                 click: () => openInSameTab(recentNote)
-            })
+            });
         }
 
         return menuItems;

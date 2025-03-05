@@ -43,8 +43,8 @@ const DROPDOWN_TPL = `
                 data-calendar-input="month"></button>
             <ul class="dropdown-menu" data-calendar-input="month-list">
                 ${Object.entries(MONTHS)
-                    .map(([i, month]) => `<li><button class="dropdown-item" data-value=${i}>${month}</button></li>`)
-                    .join("")}
+        .map(([i, month]) => `<li><button class="dropdown-item" data-value=${i}>${month}</button></li>`)
+        .join("")}
             </ul>
 
             <button class="calendar-btn tn-tool-button bx bx-chevron-right" data-calendar-toggle="next"></button>
@@ -149,7 +149,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
                 const note = await dateNoteService.getDayNote(date);
 
                 if (note) {
-                    appContext.tabManager.getActiveContext().setNote(note.noteId);
+                    appContext.tabManager.getActiveContext()?.setNote(note.noteId);
                     this.dropdown?.hide();
                 } else {
                     toastService.showError(t("calendar.cannot_find_day_note"));
@@ -189,10 +189,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
     async dropdownShown() {
         await libraryLoader.requireLibrary(libraryLoader.CALENDAR_WIDGET);
-
-        const activeNote = appContext.tabManager.getActiveContextNote();
-
-        this.init(activeNote?.getOwnedLabelValue("dateNote"));
+        this.init(appContext.tabManager.getActiveContextNote()?.getOwnedLabelValue("dateNote") ?? null);
     }
 
     init(activeDate: string | null) {

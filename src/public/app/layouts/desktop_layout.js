@@ -264,7 +264,7 @@ export default class DesktopLayout {
             .child(new InfoDialog())
             .child(new ConfirmDialog())
             .child(new PromptDialog())
-            .child(new CloseZenButton())
+            .child(new CloseZenButton());
     }
 
     #buildLauncherPane(isHorizontal) {

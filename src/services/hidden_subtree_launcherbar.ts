@@ -78,7 +78,7 @@ export default function buildLaunchBarConfig() {
         { id: "_lbProtectedSession", title: t("hidden-subtree.protected-session-title"), type: "launcher", builtinWidget: "protectedSession", icon: "bx bx bx-shield-quarter" },
         { id: "_lbSyncStatus", title: t("hidden-subtree.sync-status-title"), type: "launcher", builtinWidget: "syncStatus", icon: "bx bx-wifi" },
         { id: "_lbSettings", title: t("hidden-subtree.settings-title"), type: "launcher", command: "showOptions", icon: "bx bx-cog" }
-    ]
+    ];
 
     const mobileAvailableLaunchers: HiddenSubtreeItem[] = [
         { id: "_lbMobileNewNote", ...sharedLaunchers.newNote },
@@ -98,5 +98,5 @@ export default function buildLaunchBarConfig() {
         desktopVisibleLaunchers,
         mobileAvailableLaunchers,
         mobileVisibleLaunchers
-    }
+    };
 }

@@ -30,7 +30,7 @@ function buildIntegrationTestDatabase(dbPath?: string) {
     return new Database(dbBuffer);
 }
 
-function rebuildIntegrationTestDatabase(dbPath: string) {
+function rebuildIntegrationTestDatabase(dbPath?: string) {
     if (dbConnection) {
         dbConnection.close();
     }

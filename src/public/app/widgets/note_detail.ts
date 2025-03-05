@@ -81,7 +81,16 @@ const typeWidgetClasses = {
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
  * for protected session or attachment information.
  */
-type ExtendedNoteType = Exclude<NoteType, "mermaid" | "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" | "protectedSession";
+type ExtendedNoteType =
+    | Exclude<NoteType, "mermaid" | "launcher" | "text" | "code">
+    | "empty"
+    | "readOnlyCode"
+    | "readOnlyText"
+    | "editableText"
+    | "editableCode"
+    | "attachmentDetail"
+    | "attachmentList"
+    | "protectedSession";
 
 export default class NoteDetailWidget extends NoteContextAwareWidget {
 
@@ -332,7 +341,9 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
             const label = attrs.find(
                 (attr) =>
-                    attr.type === "label" && ["readOnly", "autoReadOnlyDisabled", "cssClass", "displayRelations", "hideRelations"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note)
+                    attr.type === "label" &&
+                    ["readOnly", "autoReadOnlyDisabled", "cssClass", "displayRelations", "hideRelations"].includes(attr.name ?? "") &&
+                    attributeService.isAffecting(attr, this.note)
             );
 
             const relation = attrs.find((attr) => attr.type === "relation" && ["template", "inherit", "renderNote"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note));

@@ -77,7 +77,7 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
 /* #endregion */
 
 /* Matches when the left pane is collapsed */
-:has(#left-pane.hidden-int) {
+:has(.layout-vertical #left-pane.hidden-int) {
     --center-pane-border-radius: 0;
     --tab-first-item-horiz-offset: 5px;
 }
@@ -266,7 +266,9 @@ div.quick-search {
     padding: var(--padding-top) var(--padding-right) var(--padding-bottom) var(--padding-left);
 }
 
-div.quick-search, div.quick-search:hover, div.quick-search:focus-within {
+div.quick-search,
+div.quick-search:hover,
+div.quick-search:focus-within {
     /* Prevent changes to background and outline when the state of the input group changes */
     background: transparent;
     outline: none;
@@ -767,7 +769,7 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     text-overflow: ellipsis;
 }
 
-.tab-row-widget-is-sorting .note-tab[active] .note-tab-wrapper {
+body.layout-vertical .tab-row-widget-is-sorting .note-tab[active] .note-tab-wrapper {
     transform: scale(0.85);
     box-shadow: var(--active-tab-dragging-shadow) !important;
 }
@@ -874,7 +876,6 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
  */
 
 #center-pane {
-    padding-top: 2px;
     background: var(--main-background-color);
 }
 
@@ -895,6 +896,24 @@ body.mobile .note-title {
 
 .ribbon-container {
     margin-bottom: 0 !important;
+}
+
+.note-split:not(.hidden-ext) + .note-split:not(.hidden-ext) {
+    border-left: 4px solid var(--root-background);
+}
+
+@keyframes note-entrance {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
+
+.note-split {
+    padding-top: 2px;
+    animation: note-entrance 100ms linear;
+    /* will-change: opacity; -- causes some weird artifacts to the note menu in split view */
 }
 
 /*
@@ -1087,7 +1106,7 @@ html body .dropdown-item[disabled] {
     background: transparent;
     padding: 1em 8px 14px 8px;
     text-transform: uppercase;
-    font-size: .8em;
+    font-size: 0.8em;
     letter-spacing: 1pt;
     color: var(--menu-item-group-header-color) !important;
 }
@@ -1159,7 +1178,7 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
 }
 
 .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
-    --select-arrow-svg: ""; /* Disable the dropdown arrow */    
+    --select-arrow-svg: ""; /* Disable the dropdown arrow */
 }
 
 @media (max-width: 992px) {
@@ -1673,7 +1692,9 @@ div.bookmark-folder-widget .note-link .bx {
     transform: translateY(4%);
 }
 
-/* Search */
+/* 
+ * Search
+ */
 
 .search-result-widget-content .note-path .path-bracket {
     display: inline;
@@ -1684,7 +1705,51 @@ div.bookmark-folder-widget .note-link .bx {
     font-weight: normal;
 }
 
-/* Help */
+/*
+ * SQL Console
+ */
+
+/* Table buttons */
+
+.sql-table-schemas-widget .sql-table-schemas button {
+    --color: var(--main-text-color);
+    --background: var(--card-background-color);
+
+    display: inline-block;
+    box-shadow: 2px 2px 2px var(--card-shadow-color);
+    margin-top: 4px;
+    vertical-align: baseline;
+    border: unset;
+    border-radius: 12px;
+    padding: 2px 12px;
+    background: var(--background) !important;
+    color: var(--color) !important;
+    line-height: unset;
+    cursor: help;
+}
+
+.sql-table-schemas-widget .sql-table-schemas button:hover,
+.sql-table-schemas-widget .sql-table-schemas button:active,
+.sql-table-schemas-widget .sql-table-schemas button:focus-visible {
+    --background: var(--card-background-press-color);
+    --color: var(--main-text-color);
+}
+
+/* Tooltip */
+
+.tooltip .table-schema {
+    font-family: var(--monospace-font-family);
+    font-size: .85em;
+}
+
+/* Data type */
+.tooltip .table-schema td:nth-child(2) {
+    color: var(--muted-text-color);
+}
+
+/*
+ * Help
+ */
 
 .help-dialog .modal-content {
     --modal-background-color: var(--help-background-color);
@@ -1779,7 +1844,7 @@ div.bookmark-folder-widget .note-link .bx {
 
 .note-title-widget input {
     --input-background-color: transparent;
-    
+
     border-radius: 8px;
     padding-left: 12px;
 }
@@ -1790,7 +1855,7 @@ div.bookmark-folder-widget .note-link .bx {
 
 /* Promoted attributes */
 .promoted-attribute-cell div.input-group {
-    margin: 1px 0;    
+    margin: 1px 0;
 }
 
 /* Delete notes preview dialog */
@@ -1827,13 +1892,13 @@ body.background-effects.zen #root-widget {
     --root-background: transparent;
 }
 
-
 /* Alert bar */
 
 @keyframes alert-show {
     from {
         opacity: 0;
-    } to {
+    }
+    to {
         opacity: 1;
     }
 }
@@ -1845,7 +1910,7 @@ body.background-effects.zen #root-widget {
     border-radius: 0;
     padding: 8px 16px;
     background: var(--alert-bar-background) !important;
-    font-size: .9em;
+    font-size: 0.9em;
     font-weight: normal;
     animation: alert-show 300ms ease-in;
     border-bottom: 2px solid #0000001c !important;
@@ -1867,7 +1932,7 @@ div.promoted-attributes-container {
 
 div.promoted-attributes-container,
 div.promoted-attributes-container input {
-    font-size: .9rem;
+    font-size: 0.9rem;
 }
 
 /* A promoted attribute card */
@@ -1906,7 +1971,7 @@ div.promoted-attribute-cell > * {
 div.promoted-attribute-cell > label {
     font-weight: normal;
     white-space: nowrap;
-    opacity: .75;
+    opacity: 0.75;
 }
 
 div.promoted-attribute-cell:not(:has(input[type="checkbox"])) > label::after {
