@@ -1,20 +1,6 @@
 # Build stage
 FROM node:22.14.0-bullseye-slim AS builder
 
-# Configure build dependencies in a single layer
-# TriliumNextTODO: These don't seem to be required at all
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#     autoconf \
-#     automake \
-#     g++ \
-#     gcc \
-#     libtool \
-#     make \
-#     nasm \
-#     libpng-dev \
-#     python3 \
-#     && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /usr/src/app/build
 
 # Copy only necessary files for build
