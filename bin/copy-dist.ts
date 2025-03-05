@@ -26,6 +26,8 @@ try {
         "./translations",
         "./db",
         "./config-sample.ini",
+        "./package-lock.json",
+        "./package.json",
         "./src/views/",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json",
