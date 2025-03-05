@@ -16,6 +16,7 @@ const TPL = `\
         <span class="caret"></span>
     </button>
     <div class="note-language-dropdown dropdown-menu dropdown-menu-left tn-dropdown-list"></div>
+    <button class="language-help-button icon-action bx bx-help-circle" type="button" data-in-app-help="B0lcI9xz1r8K" title="${t("open-help-page")}"></button>
 
     <style>
         .note-language-dropdown [dir=rtl] {
