@@ -81,7 +81,7 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
         const noteId = this.noteContext?.noteId;
         if (
             loadResults.isNoteReloaded(noteId) ||
-            loadResults.getAttributeRows().find((attr) => attr.type === "label" && attr.name === "cssClass" && attributeService.isAffecting(attr, this.noteContext?.note))
+            loadResults.getAttributeRows().find((attr) => attr.type === "label" && ["cssClass", "language"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.noteContext?.note))
         ) {
             this.refresh();
         }
