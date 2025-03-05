@@ -84,7 +84,7 @@ declare global {
         getSelectedNotePath(): string | undefined;
         getSelectedNoteId(): string | null;
         setSelectedNotePath(notePath: string | null | undefined);
-        getSelectedExternalLink(this: HTMLElement): string | undefined;
+        getSelectedExternalLink(): string | undefined;
         setSelectedExternalLink(externalLink: string | null | undefined);
         setNote(noteId: string);
         markRegExp(regex: RegExp, opts: {
