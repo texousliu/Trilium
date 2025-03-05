@@ -44,27 +44,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
 
     constructor() {
         super();
-
-        const enabledLanguages = JSON.parse(options.get("languages") ?? "[]") as string[];
-        const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
-        const leftToRightLanguages = filteredLanguages.filter((l) => !l.rtl);
-        const rightToLeftLanguages = filteredLanguages.filter((l) => l.rtl);
-
-        this.locales = [
-            DEFAULT_LOCALE,
-            "---",
-            ...leftToRightLanguages
-        ];
-
-        if (rightToLeftLanguages.length > 0) {
-            this.locales = [
-                ...this.locales,
-                "---",
-                ...rightToLeftLanguages
-            ];
-        }
-
-        this.locales.push("---"); // this will separate the list of languages from the "Configure languages" button.
+        this.locales = NoteLanguageWidget.#buildLocales();
     }
 
     doRender() {
@@ -133,9 +113,37 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.isOptionReloaded("languages")) {
+            this.locales = NoteLanguageWidget.#buildLocales();
+        }
+
         if (loadResults.getAttributeRows().find((a) => a.noteId === this.noteId && a.name === "language")) {
             this.refresh();
         }
+    }
+
+    static #buildLocales() {
+        const enabledLanguages = JSON.parse(options.get("languages") ?? "[]") as string[];
+        const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
+        const leftToRightLanguages = filteredLanguages.filter((l) => !l.rtl);
+        const rightToLeftLanguages = filteredLanguages.filter((l) => l.rtl);
+
+        let locales: ("---" | Locale)[] = [
+            DEFAULT_LOCALE,
+            "---",
+            ...leftToRightLanguages
+        ];
+
+        if (rightToLeftLanguages.length > 0) {
+            locales = [
+                ...locales,
+                "---",
+                ...rightToLeftLanguages
+            ];
+        }
+
+        locales.push("---"); // this will separate the list of languages from the "Configure languages" button.
+        return locales;
     }
 
 }
