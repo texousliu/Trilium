@@ -219,9 +219,9 @@ function handshake() {
 }
 
 function findNotesByUrl(req: Request) {
-    let pageUrl = req.params.noteUrl;
+    const pageUrl = req.params.noteUrl;
     const clipperInbox = getClipperInboxNote();
-    let foundPage = findClippingNote(clipperInbox, pageUrl, null);
+    const foundPage = findClippingNote(clipperInbox, pageUrl, null);
     return {
         noteId: foundPage ? foundPage.noteId : null
     };
