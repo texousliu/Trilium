@@ -15,49 +15,40 @@ FROM node:22.14.0-bullseye-slim AS builder
 #     python3 \
 #     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/build
 
 # Copy only necessary files for build
 COPY . .
 
 # Build and cleanup in a single layer
-RUN sed -i "/electron/d" package.json && \
-    cp -R build/src/* src/. && \
-    cp build/docker_healthcheck.js . && \    
-    rm docker_healthcheck.ts && \
-    npm install && \
-    npm run build:webpack && \
-    npm prune --omit=dev && \
+RUN npm ci && \
+    npm run build:prepare-dist && \
     npm cache clean --force && \
-    cp -r src/public/app/doc_notes src/public/app-dist/. && \
-    rm -rf src/public/app/* && \
-    mkdir -p src/public/app/services && \
-    cp -r build/src/public/app/services/mime_type_definitions.js src/public/app/services/mime_type_definitions.js && \
-    rm src/services/asset_path.ts && \
-    rm -r build
+    mv dist/* \
+      start-docker.sh \
+      package-lock.json \
+      /usr/src/app/ && \
+    rm -rf /usr/src/app/build
+
+#TODO: move package-lock copying into copy-dist
 
 # Runtime stage
 FROM node:22.14.0-bullseye-slim
 
-# Install only runtime dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gosu \
-    && rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/*
-
 WORKDIR /usr/src/app
 
-# Copy only necessary files from builder
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/src ./src
-COPY --from=builder /usr/src/app/db ./db
-COPY --from=builder /usr/src/app/docker_healthcheck.js .
-COPY --from=builder /usr/src/app/start-docker.sh .
-COPY --from=builder /usr/src/app/package.json .
-COPY --from=builder /usr/src/app/config-sample.ini .
-COPY --from=builder /usr/src/app/images ./images
-COPY --from=builder /usr/src/app/translations ./translations
-COPY --from=builder /usr/src/app/libraries ./libraries
+# Install only runtime dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      gosu && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt/*
+
+COPY --from=builder /usr/src/app ./
+
+RUN sed -i "/electron/d" package.json && \
+    npm ci --omit=dev && \
+    npm cache clean --force
 
 # Configure container
 EXPOSE 8080
