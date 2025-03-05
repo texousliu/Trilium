@@ -139,10 +139,16 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
         const rightToLeftLanguages = filteredLanguages.filter((l) => l.rtl);
 
         let locales: ("---" | Locale)[] = [
-            DEFAULT_LOCALE,
-            "---",
-            ...leftToRightLanguages
+            DEFAULT_LOCALE
         ];
+
+        if (leftToRightLanguages.length > 0) {
+            locales = [
+                ...locales,
+                "---",
+                ...leftToRightLanguages
+            ];
+        }
 
         if (rightToLeftLanguages.length > 0) {
             locales = [
