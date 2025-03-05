@@ -83,7 +83,7 @@ export default class AboutDialog extends BasicWidget {
         this.$dataDirectory = this.$widget.find(".data-directory");
     }
 
-    async refresh(): Promise<void> {
+    async refresh() {
         const appInfo = await server.get<AppInfo>("app-info");
 
         this.$appVersion.text(appInfo.appVersion);
@@ -109,7 +109,7 @@ export default class AboutDialog extends BasicWidget {
         }
     }
 
-    async openAboutDialogEvent(): Promise<void> {
+    async openAboutDialogEvent() {
         await this.refresh();
         utils.openDialog(this.$widget);
     }

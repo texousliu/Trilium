@@ -5,6 +5,7 @@ import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import type { Suggestion } from "../../services/note_autocomplete.js";
 import type { default as TextTypeWidget } from "../type_widgets/editable_text.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="add-link-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -94,7 +95,7 @@ export default class AddLinkDialog extends BasicWidget {
         });
     }
 
-    async showAddLinkDialogEvent({ textTypeWidget, text = "" }: { textTypeWidget: TextTypeWidget; text: string }) {
+    async showAddLinkDialogEvent({ textTypeWidget, text = "" }: EventData<"showAddLinkDialog">) {
         this.textTypeWidget = textTypeWidget;
 
         this.$addLinkTitleSettings.toggle(!this.textTypeWidget.hasSelection());

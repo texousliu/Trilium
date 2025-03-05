@@ -23,6 +23,7 @@ import type { Attribute } from "../services/attribute_parser.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
 import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
+import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -131,10 +132,10 @@ export type CommandMappings = {
     protectSubtree: ContextMenuCommandData;
     unprotectSubtree: ContextMenuCommandData;
     openBulkActionsDialog:
-        | ContextMenuCommandData
-        | {
-              selectedOrActiveNoteIds?: string[];
-          };
+    | ContextMenuCommandData
+    | {
+        selectedOrActiveNoteIds?: string[];
+    };
     editBranchPrefix: ContextMenuCommandData;
     convertNoteToAttachment: ContextMenuCommandData;
     duplicateSubtree: ContextMenuCommandData;
@@ -361,6 +362,10 @@ type EventMappings = {
     relationMapResetZoomIn: { ntxId: string | null | undefined };
     relationMapResetZoomOut: { ntxId: string | null | undefined };
     activeNoteChangedEvent: {};
+    showAddLinkDialog: {
+        textTypeWidget: EditableTextTypeWidget;
+        text: string;
+    };
 };
 
 export type EventListener<T extends EventNames> = {
