@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 import { Modal } from "bootstrap";
 import type { ViewScope } from "./link.js";
 import appContext from "../components/app_context.js";
-import { setLogLevel } from "mermaid/dist/logger.js";
 
 function reloadFrontendApp(reason?: string) {
     if (reason) {
