@@ -36,7 +36,7 @@ const TPL = `<div class="note-detail-doc note-detail-printable">
         }
 
         img {
-            max-width: 90vw;
+            max-width: 100%;
             height: auto;
         }
 
