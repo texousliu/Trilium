@@ -202,6 +202,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     ui: (typeof finalConfig.language === "string" ? finalConfig.language : "en"),
                     content: contentLanguage
                 }
+                this.contentLanguage = contentLanguage;
+            } else {
+                this.contentLanguage = null;
             }
 
             const editor = await editorClass.create(elementOrData, finalConfig);
@@ -278,7 +281,15 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async doRefresh(note) {
         const blob = await note.getBlob();
 
-        await this.spacedUpdate.allowUpdateWithoutChange(() => this.watchdog.editor.setData(blob.content || ""));
+        await this.spacedUpdate.allowUpdateWithoutChange(async () => {
+            const data = blob.content || "";
+            const newContentLanguage = this.note.getLabelValue("language");
+            if (this.contentLanguage !== newContentLanguage) {
+                await this.reinitialize(data);
+            } else {
+                this.watchdog.editor.setData(data);
+            }
+        });
     }
 
     getData() {
@@ -482,12 +493,14 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.refreshIncludedNote(this.$editor, noteId);
     }
 
-    async reinitialize() {
+    async reinitialize(data = null) {
         if (!this.watchdog) {
             return;
         }
 
-        const data = this.watchdog.editor.getData();
+        if (!data) {
+            data = this.watchdog.editor.getData();
+        }
         this.watchdog.destroy();
         await this.createEditor();
         this.watchdog.editor.setData(data);
