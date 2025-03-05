@@ -19,6 +19,15 @@ const TPL = `\
     <button class="language-help-button icon-action bx bx-help-circle" type="button" data-in-app-help="B0lcI9xz1r8K" title="${t("open-help-page")}"></button>
 
     <style>
+        .note-language-widget {
+            display: flex;
+            align-items: center;
+        }
+
+        .language-help-button {
+            margin-left: 4px;
+        }
+
         .note-language-dropdown [dir=rtl] {
             text-align: right;
         }
