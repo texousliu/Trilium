@@ -14,7 +14,9 @@ RUN npm ci && \
     mv dist/* \
       start-docker.sh \
       /usr/src/app/ && \
-    rm -rf /usr/src/app/build
+    rm -rf \
+      /usr/src/app/build \
+      /tmp/node-compile-cache
 
 #TODO: improve node_modules handling in copy-dist/Dockerfile -> remove duplicated work
 #      currently copy-dist will copy certain node_module folders, but in the Dockerfile we delete them again (to keep image size down),
@@ -29,14 +31,16 @@ WORKDIR /usr/src/app
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       gosu && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/*
+    rm -rf \
+      /var/lib/apt/lists/* \
+      /var/cache/apt/*
 
 COPY --from=builder /usr/src/app ./
 
 RUN sed -i "/electron/d" package.json && \
     npm ci --omit=dev && \
-    npm cache clean --force
+    npm cache clean --force && \
+    rm -rf /tmp/node-compile-cache
 
 # Configure container
 EXPOSE 8080
