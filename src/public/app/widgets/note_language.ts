@@ -7,6 +7,7 @@ import type FNote from "../entities/fnote.js";
 import attributes from "../services/attributes.js";
 import type { Locale } from "../../../services/i18n.js";
 import options from "../services/options.js";
+import appContext from "../components/app_context.js";
 
 const TPL = `\
 <div class="dropdown note-language-widget">
@@ -62,6 +63,8 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
                 ...rightToLeftLanguages
             ];
         }
+
+        this.locales.push("---"); // this will separate the list of languages from the "Configure languages" button.
     }
 
     doRender() {
@@ -106,6 +109,11 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
                 this.$noteLanguageDropdown.append('<div class="dropdown-divider"></div>');
             }
         }
+
+        const $configureLink = $('<a class="dropdown-item">')
+            .append(`<span>${t("note_language.configure-languages")}</span>`)
+            .on("click", () => appContext.tabManager.openContextWithNote("_optionsLocalization", { activate: true }));
+        this.$noteLanguageDropdown.append($configureLink);
     }
 
     async save(languageId: string) {
