@@ -5,6 +5,7 @@ import type BasicWidget from "./basic_widget.js";
 import type { EventData } from "../components/app_context.js";
 import type NoteContext from "../components/note_context.js";
 import type FNote from "../entities/fnote.js";
+import { getLocaleById } from "../services/i18n.js";
 
 export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
 
@@ -56,6 +57,10 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
         this.$widget.addClass(utils.getMimeTypeClass(note.mime));
 
         this.$widget.toggleClass("protected", note.isProtected);
+
+        const noteLanguage = note?.getLabelValue("language");
+        const locale = getLocaleById(noteLanguage);
+        this.$widget.toggleClass("rtl", !!locale?.rtl);
     }
 
     #isFullWidthNote(note: FNote) {
