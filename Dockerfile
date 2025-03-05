@@ -10,6 +10,7 @@ COPY . .
 RUN npm ci && \
     npm run build:prepare-dist && \
     npm cache clean --force && \
+    rm -rf dist/node_modules && \
     mv dist/* \
       start-docker.sh \
       package-lock.json \
@@ -17,6 +18,9 @@ RUN npm ci && \
     rm -rf /usr/src/app/build
 
 #TODO: move package-lock copying into copy-dist
+#TODO: improve node_modules handling in copy-dist/Dockerfile -> remove duplicated work
+#      currently copy-dist will copy certain node_module folders, but in the Dockerfile we delete them again (to keep image size down),
+#      as we install necessary dependencies in runtime buildstage anyways
 
 # Runtime stage
 FROM node:22.14.0-bullseye-slim
