@@ -1,10 +1,12 @@
 import OptionsWidget from "../options_widget.js";
 import type { OptionMap } from "../../../../../../services/options_interface.js";
 import { getAvailableLocales } from "../../../../services/i18n.js";
+import { t } from "i18next";
 
 const TPL = `
 <div class="options-section">
-    <h4>Languages</h4>
+    <h4>${t("content_language.title")}</h4>
+    <p>${t("content_language.description")}</p>
 
     <ul class="options-languages">
     </ul>

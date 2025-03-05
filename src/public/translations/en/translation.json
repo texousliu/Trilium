@@ -1690,5 +1690,9 @@
   "note_language": {
     "not_set": "Not set",
     "configure-languages": "Configure languages..."
+  },
+  "content_language": {
+    "title": "Content languages",
+    "description": "Select one or more languages that should appear in the language selection in the Basic Properties section of a read-only or editable text note. This will allow features such as spell-checking or right-to-left support."
   }
 }
