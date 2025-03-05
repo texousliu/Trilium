@@ -44,14 +44,6 @@ jobs:
       - test_dev
     steps:
       - uses: actions/checkout@v4
-      - name: Set up node & dependencies
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-      - run: npm ci
-      - name: Run the TypeScript build
-        run: npx tsc
       - uses: docker/setup-buildx-action@v3
       - uses: docker/build-push-action@v6
         with:
@@ -79,17 +71,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Set up node & dependencies
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-
-      - run: npm ci
-
-      - name: Run the TypeScript build
-        run: npx tsc
 
       - name: Build and export to Docker
         uses: docker/build-push-action@v6

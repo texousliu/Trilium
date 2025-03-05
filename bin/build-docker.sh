@@ -5,9 +5,6 @@ set -e  # Fail on any command error
 VERSION=`jq -r ".version" package.json`
 SERIES=${VERSION:0:4}-latest
 
-echo "Compiling typescript..."
-npx tsc
-
 sudo docker build -t triliumnext/notes:$VERSION --network host -t triliumnext/notes:$SERIES .
 
 if [[ $VERSION != *"beta"* ]]; then
