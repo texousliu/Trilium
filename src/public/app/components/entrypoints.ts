@@ -66,13 +66,12 @@ export default class Entrypoints extends Component {
     }
 
     async toggleNoteHoistingCommand({ noteId = appContext.tabManager.getActiveContextNoteId() }) {
-        const activeNoteContext = appContext.tabManager.getActiveContext();
-
-        if (!activeNoteContext || !noteId) {
+        if (!noteId) {
             return;
         }
 
         const noteToHoist = await froca.getNote(noteId);
+        const activeNoteContext = appContext.tabManager.getActiveContext();
 
         if (noteToHoist?.noteId === activeNoteContext.hoistedNoteId) {
             await activeNoteContext.unhoist();
@@ -83,11 +82,6 @@ export default class Entrypoints extends Component {
 
     async hoistNoteCommand({ noteId }: { noteId: string }) {
         const noteContext = appContext.tabManager.getActiveContext();
-
-        if (!noteContext) {
-            logError("hoistNoteCommand: noteContext is null");
-            return;
-        }
 
         if (noteContext.hoistedNoteId !== noteId) {
             await noteContext.setHoistedNoteId(noteId);
@@ -180,11 +174,7 @@ export default class Entrypoints extends Component {
     }
 
     async runActiveNoteCommand() {
-        const noteContext = appContext.tabManager.getActiveContext();
-        if (!noteContext) {
-            return;
-        }
-        const { ntxId, note } = noteContext;
+        const { ntxId, note } = appContext.tabManager.getActiveContext();
 
         // ctrl+enter is also used elsewhere, so make sure we're running only when appropriate
         if (!note || note.type !== "code") {

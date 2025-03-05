@@ -140,6 +140,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 
 .find-replace-widget {
     container-type: inline-size;
+    border-top: 3px solid var(--root-background) !important;
 }
 
 .find-replace-widget > div {

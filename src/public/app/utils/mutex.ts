@@ -16,7 +16,7 @@ export default class Mutex {
         return newPromise;
     }
 
-    async runExclusively(cb: () => Promise<any>) {
+    async runExclusively(cb: () => Promise<void>) {
         const unlock = await this.lock();
 
         try {
