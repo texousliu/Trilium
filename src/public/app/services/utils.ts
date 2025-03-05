@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import { Modal } from "bootstrap";
 import type { ViewScope } from "./link.js";
-import appContext from "../components/app_context.js";
 
 function reloadFrontendApp(reason?: string) {
     if (reason) {
@@ -403,13 +402,15 @@ function openHelp($button: JQuery<HTMLElement>) {
     }
 }
 
-function openInAppHelp($button: JQuery<HTMLElement>) {
+async function openInAppHelp($button: JQuery<HTMLElement>) {
     if ($button.length === 0) {
         return;
     }
 
     const inAppHelpPage = $button.attr("data-in-app-help");
     if (inAppHelpPage) {
+        // Dynamic import to avoid import issues in tests.
+        const appContext = (await import("../components/app_context.js")).default;
         const subContexts = appContext.tabManager.getActiveContext().getSubContexts();
         const targetNote = `_help_${inAppHelpPage}`;
         const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
