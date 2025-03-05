@@ -101,10 +101,7 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         // (see https://github.com/zadam/trilium/issues/1590 for example of such conflict)
         await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
 
-        const languageCode = note.getLabelValue("language");
-        const correspondingLocale = getLocaleById(languageCode);
-        const isRtl = correspondingLocale?.rtl;
-        this.$widget.attr("dir", isRtl ? "rtl" : "ltr");
+        this.onLanguageChanged();
 
         const blob = await note.getBlob();
 
@@ -159,4 +156,12 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
 
         resolve(this.$content);
     }
+
+    async onLanguageChanged(): Promise<void> {
+        const languageCode = this.note?.getLabelValue("language");
+        const correspondingLocale = getLocaleById(languageCode);
+        const isRtl = correspondingLocale?.rtl;
+        this.$widget.attr("dir", isRtl ? "rtl" : "ltr");
+    }
+
 }

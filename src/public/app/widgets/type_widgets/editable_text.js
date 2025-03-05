@@ -16,7 +16,6 @@ import toast from "../../services/toast.js";
 import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/toolbars.js";
-import attributes from "../../services/attributes.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -506,16 +505,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.watchdog.editor.setData(data);
     }
 
-    async entitiesReloadedEvent(e) {
-        if (e.loadResults.getAttributeRows().find((attr) =>
-            attr.type === "label" &&
-            attr.name === "language" &&
-            attributes.isAffecting(attr, this.note)))
-        {
-            await this.reinitialize();
-        }
-
-        super.entitiesReloadedEvent(e);
+    async onLanguageChanged() {
+        await this.reinitialize();
     }
 
 }
