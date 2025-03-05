@@ -32,7 +32,7 @@ const TPL = `
     body.heading-style-underline .note-detail-readonly-text h6 { border-bottom: 1px solid var(--main-border-color); }
 
     .note-detail-readonly-text {
-        padding-left: 24px;
+        padding-inline-start: 24px;
         padding-top: 10px;
         font-family: var(--detail-font-family);
         min-height: 50px;
@@ -104,7 +104,7 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         const languageCode = note.getLabelValue("language");
         const correspondingLocale = getLocaleById(languageCode);
         const isRtl = correspondingLocale?.rtl;
-        this.$content.attr("dir", isRtl ? "rtl" : "ltr");
+        this.$widget.attr("dir", isRtl ? "rtl" : "ltr");
 
         const blob = await note.getBlob();
 
