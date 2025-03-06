@@ -160,9 +160,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
 
         // This will separate the list of languages from the "Configure languages" button.
         // If there is at least one language.
-        if (locales.length > 2) {
-            locales.push("---");
-        }
+        locales.push("---");
         return locales;
     }
 
