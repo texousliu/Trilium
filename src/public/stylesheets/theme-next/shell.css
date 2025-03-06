@@ -2031,6 +2031,7 @@ div.promoted-attribute-cell .multiplicity:has(span) {
 .modal .modal-content {
     box-shadow: 0 .5em 3em .5em var(--modal-shadow-color);
     border: 1px solid var(--modal-border-color);
+    background: var(--modal-background-color);
 }
 
 /* Modal header */
