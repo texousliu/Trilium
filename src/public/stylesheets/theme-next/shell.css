@@ -1296,6 +1296,7 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 
 .jump-to-note-dialog .modal-dialog {
     --modal-background-color: var(--menu-background-color);
+    --modal-footer-background: transparent;
     --bs-modal-header-border-width: 0;
     --bs-modal-footer-border-width: 0;
     --bs-modal-footer-gap: 0;
