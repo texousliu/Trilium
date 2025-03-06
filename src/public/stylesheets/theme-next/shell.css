@@ -2021,3 +2021,92 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     margin-right: calc(var(--pa-card-padding-left) - var(--pa-card-padding-right));
     font-size: 0; /* Prevent whitespaces creating a gap between buttons */
 }
+
+/*
+ * Modals
+ */
+
+/* Modal body */
+.modal .modal-content {
+    box-shadow: 0 .5em 3em .5em var(--modal-shadow-color);
+    border: 1px solid var(--modal-border-color);
+}
+
+/* Modal header */
+.modal .modal-header {
+    border-bottom: unset;
+    user-select: none;
+}
+
+.modal .modal-header .modal-title {
+    flex-grow: 1;
+    font-size: 1.2em;
+    color: var(--modal-title-color);
+}
+
+/* Modal control buttons (close and help) */
+
+.modal .modal-header .btn-close,
+.modal .modal-header .help-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    width: var(--modal-control-button-size);
+    height: var(--modal-control-button-size);
+    background: var(--modal-control-button-background);
+    font-size: var(--modal-control-button-size);
+    line-height: normal;
+    font-weight: normal;
+    color: var(--modal-control-button-color);
+    opacity: 1;
+    cursor: default;
+}
+
+.modal .modal-header .btn-close {
+    --modal-control-button-hover-background: var(--modal-close-button-hover-background);
+}
+
+.modal .modal-header .btn-close::after {
+    content: "\ec8d";
+    font-family: boxicons;
+}
+
+.modal .modal-header .help-button {
+    margin-right: 0;
+    font-size: calc(var(--modal-control-button-size) * .75);
+    font-family: unset;
+    font-weight: bold;
+}
+
+.modal .modal-header .btn-close:hover,
+.modal .modal-header .help-button:hover {
+    background: var(--modal-control-button-hover-background);
+    color: var(--modal-control-button-hover-color);
+}
+
+.modal .modal-header .btn-close:active,
+.modal .modal-header .help-button:active {
+    transform: scale(.85);
+}
+
+.modal .modal-header .btn-close:focus,
+.modal .modal-header .help-button:focus {
+    box-shadow: none !important;
+}
+
+.modal .modal-header .btn-close:focus-visible,
+.modal .modal-header .help-button:focus-visible {
+    outline: 2px solid var(--input-focus-outline-color);
+    outline-offset: 2px;
+}
+
+/* Modal footer */
+.modal .modal-footer {
+    background: var(--modal-footer-background);
+    color: var(--modal-footer-color);
+    border-top: unset;
+}
