@@ -1025,7 +1025,8 @@ body.desktop .dropdown-submenu .dropdown-menu {
 
 .dropdown-item,
 body.mobile .dropdown-submenu .dropdown-toggle {
-    padding: 2px 16px 2px 8px !important;
+    padding: 2px 2px 2px 8px !important;
+    padding-inline-end: 16px;
     /* Note: the right padding should also accommodate the submenu arrow. */
     border-radius: 6px;
     cursor: default !important;
