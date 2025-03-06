@@ -33,7 +33,9 @@ function getAllAttachments(req: Request) {
 function saveAttachment(req: Request) {
     const { noteId } = req.params;
     const { attachmentId, role, mime, title, content } = req.body;
-    const { matchBy } = req.query as any;
+    const matchByQuery = req.query.matchBy
+    const isValidMatchBy = (typeof matchByQuery === "string") && (matchByQuery === "attachmentId" || matchByQuery === "title");
+    const matchBy = isValidMatchBy ? matchByQuery : undefined;
 
     const note = becca.getNoteOrThrow(noteId);
     note.saveAttachment({ attachmentId, role, mime, title, content }, matchBy);
