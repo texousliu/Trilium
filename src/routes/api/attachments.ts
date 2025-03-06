@@ -43,7 +43,14 @@ function saveAttachment(req: Request) {
 
 function uploadAttachment(req: Request) {
     const { noteId } = req.params;
-    const { file } = req as any;
+    const { file } = req;
+
+    if (!file) {
+        return {
+            uploaded: false,
+            message: `Missing attachment data.`
+        };
+    }
 
     const note = becca.getNoteOrThrow(noteId);
     let url;
