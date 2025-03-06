@@ -37,11 +37,11 @@ function exportBranch(req: Request, res: Response) {
         } else {
             throw new NotFoundError(`Unrecognized export format '${format}'`);
         }
-    } catch (e: any) {
-        const message = `Export failed with following error: '${e.message}'. More details might be in the logs.`;
+    } catch (e: unknown) {
+        const message = `Export failed with following error: '${(e instanceof Error) ? e.message : e}'. More details might be in the logs.`;
         taskContext.reportError(message);
 
-        log.error(message + e.stack);
+        log.error((e instanceof Error) ? message + e.stack : message);
 
         res.setHeader("Content-Type", "text/plain").status(500).send(message);
     }
