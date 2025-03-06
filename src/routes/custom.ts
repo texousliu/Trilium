@@ -68,7 +68,7 @@ function handleRequest(req: Request, res: Response) {
 function register(router: Router) {
     // explicitly no CSRF middleware since it's meant to allow integration from external services
 
-    router.all("/custom/:path*", (req: Request, res: Response, next) => {
+    router.all("/custom/:path*", (req: Request, res: Response, _next) => {
         cls.namespace.bindEmitter(req);
         cls.namespace.bindEmitter(res);
 

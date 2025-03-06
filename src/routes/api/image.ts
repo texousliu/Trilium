@@ -82,7 +82,7 @@ function updateImage(req: Request) {
     const { noteId } = req.params;
     const { file } = req;
 
-    const note = becca.getNoteOrThrow(noteId);
+    const _note = becca.getNoteOrThrow(noteId);
 
     if (!file) {
         return {

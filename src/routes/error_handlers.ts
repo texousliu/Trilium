@@ -22,7 +22,7 @@ function register(app: Application) {
     });
 
     // error handler
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
         if (err.status !== 404) {
             log.info(err);
         } else {
