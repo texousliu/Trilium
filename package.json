@@ -218,7 +218,7 @@
     "electron": "34.3.0",
     "eslint": "9.21.0",
     "esm": "3.2.25",
-    "happy-dom": "17.2.2",
+    "happy-dom": "17.3.0",
     "i18next-http-backend": "3.0.2",
     "jsdoc": "4.0.4",
     "knockout": "3.5.1",
