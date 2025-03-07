@@ -1,6 +1,7 @@
 import type { Application, NextFunction, Request, Response } from "express";
 import log from "../services/log.js";
 import NotFoundError from "../errors/not_found_error.js";
+import ForbiddenError from "../errors/forbidden_error.js";
 
 function register(app: Application) {
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -9,10 +10,7 @@ function register(app: Application) {
         }
 
         log.error(`Invalid CSRF token: ${req.headers["x-csrf-token"]}, secret: ${req.cookies["_csrf"]}`);
-
-        err = new Error("Invalid CSRF token");
-        err.status = 403;
-        next(err);
+        next(new ForbiddenError("Invalid CSRF token"));
     });
 
     // catch 404 and forward to error handler
