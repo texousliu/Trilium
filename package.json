@@ -50,7 +50,7 @@
     "server:coverage": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db TRILIUM_INTEGRATION_TEST=memory vitest --coverage",
     "client:test": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db TRILIUM_INTEGRATION_TEST=memory vitest --root src/public/app",
     "client:coverage": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db TRILIUM_INTEGRATION_TEST=memory vitest --root src/public/app --coverage",
-    "test:playwright": "playwright test",
+    "test:playwright": "playwright test --workers 1",
     "test:integration-edit-db": "cross-env TRILIUM_INTEGRATION_TEST=edit TRILIUM_PORT=8081 TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
     "test:integration-mem-db": "cross-env TRILIUM_INTEGRATION_TEST=memory TRILIUM_PORT=8082 TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
     "test:integration-mem-db-dev": "cross-env TRILIUM_INTEGRATION_TEST=memory TRILIUM_PORT=8082 TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db nodemon src/main.ts",
