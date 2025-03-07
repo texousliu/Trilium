@@ -1,9 +1,10 @@
-class ValidationError extends Error {
-    statusCode: number;
+import HttpError from "./http_error.js";
+
+class ValidationError extends HttpError {
+
     constructor(message: string) {
-        super(message)
+        super(message, 400)
         this.name = "ValidationError";
-        this.statusCode = 400;
     }
 
 }
