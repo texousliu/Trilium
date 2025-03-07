@@ -5,13 +5,20 @@ import ForbiddenError from "../errors/forbidden_error.js";
 import HttpError from "../errors/http_error.js";
 
 function register(app: Application) {
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        if (err.code !== "EBADCSRFTOKEN") {
-            return next(err);
+
+    app.use((err: unknown | Error, req: Request, res: Response, next: NextFunction) => {
+
+        const isCsrfTokenError = typeof err === "object"
+            && err
+            && "code" in err
+            && err.code === "EBADCSRFTOKEN";
+
+        if (isCsrfTokenError) {
+            log.error(`Invalid CSRF token: ${req.headers["x-csrf-token"]}, secret: ${req.cookies["_csrf"]}`);
+            return next(new ForbiddenError("Invalid CSRF token"));
         }
 
-        log.error(`Invalid CSRF token: ${req.headers["x-csrf-token"]}, secret: ${req.cookies["_csrf"]}`);
-        next(new ForbiddenError("Invalid CSRF token"));
+        return next(err);
     });
 
     // catch 404 and forward to error handler
