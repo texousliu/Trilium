@@ -112,7 +112,7 @@ const TPL = `
     </style>
     <h4>${t("import.html_import_tags.title")}</h4>
 
-    <p>${t("import.html_import_tags.description")}</p>
+    <p class="form-text">${t("import.html_import_tags.description")}</p>
 
     <textarea class="allowed-html-tags form-control" spellcheck="false"
               placeholder="${t("import.html_import_tags.placeholder")}"></textarea>

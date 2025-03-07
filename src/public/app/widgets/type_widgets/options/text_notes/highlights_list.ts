@@ -20,9 +20,9 @@ const TPL = `
 
     <h5>${t("highlights_list.visibility_title")}</h5>
 
-    <p>${t("highlights_list.visibility_description")}</p>
+    <p class="form-text">${t("highlights_list.visibility_description")}</p>
 
-    <p>${t("highlights_list.shortcut_info")}</p>
+    <p class="form-text">${t("highlights_list.shortcut_info")}</p>
 </div>`;
 
 export default class HighlightsListOptions extends OptionsWidget {

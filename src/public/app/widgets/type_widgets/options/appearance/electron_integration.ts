@@ -11,7 +11,7 @@ const TPL = `
         <div class="col-12">
             <label for="zoom-factor-select">${t("electron_integration.zoom-factor")}</label>
             <input id="zoom-factor-select" type="number" class="zoom-factor-select form-control options-number-input" min="0.3" max="2.0" step="0.1"/>
-            <p>${t("zoom_factor.description")}</p>
+            <p class="form-text">${t("zoom_factor.description")}</p>
         </div>
     </div>
     <hr />

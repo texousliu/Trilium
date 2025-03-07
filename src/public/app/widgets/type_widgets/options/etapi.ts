@@ -9,7 +9,7 @@ const TPL = `
 <div class="options-section">
     <h4>${t("etapi.title")}</h4>
 
-    <p>${t("etapi.description")} <br/>
+    <p class="form-text">${t("etapi.description")} <br/>
       ${t("etapi.see_more", {
         link_to_wiki: `<a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a>`,
         // TODO: We use window.open src/public/app/services/link.ts -> prevents regular click behavior on "a" element here because it's a relative path

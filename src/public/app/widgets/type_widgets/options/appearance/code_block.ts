@@ -25,7 +25,7 @@ const TPL = `
 <div class="options-section">
     <h4>${t("highlighting.title")}</h4>
 
-    <p>${t("highlighting.description")}</p>
+    <p class="form-text">${t("highlighting.description")}</p>
 
     <div class="form-group row">
         <div class="col-md-6">

@@ -30,7 +30,7 @@ const TPL = `
 
     <h4>${t("shortcuts.keyboard_shortcuts")}</h4>
 
-    <p class="use-tn-links">
+    <p class="form-text use-tn-links">
       ${t("shortcuts.multiple_shortcuts")}
       ${t("shortcuts.electron_documentation")}
     </p>

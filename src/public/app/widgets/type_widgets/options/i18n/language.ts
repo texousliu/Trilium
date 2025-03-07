@@ -6,7 +6,7 @@ import { t } from "i18next";
 const TPL = `
 <div class="options-section">
     <h4>${t("content_language.title")}</h4>
-    <p>${t("content_language.description")}</p>
+    <p class="form-text">${t("content_language.description")}</p>
 
     <ul class="options-languages">
     </ul>
