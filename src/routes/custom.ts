@@ -25,8 +25,9 @@ function handleRequest(req: Request, res: Response) {
 
         try {
             match = path.match(regex);
-        } catch (e: any) {
-            log.error(`Testing path for label '${attr.attributeId}', regex '${attr.value}' failed with error: ${e.message}, stack: ${e.stack}`);
+        } catch (e: unknown) {
+            const [errMessage, errStack] = e instanceof Error ? [e.message, e.stack] : ["Unknown Error", undefined];
+            log.error(`Testing path for label '${attr.attributeId}', regex '${attr.value}' failed with error: ${errMessage}, stack: ${errStack}`);
             continue;
         }
 
@@ -45,10 +46,12 @@ function handleRequest(req: Request, res: Response) {
                     req,
                     res
                 });
-            } catch (e: any) {
-                log.error(`Custom handler '${note.noteId}' failed with: ${e.message}, ${e.stack}`);
+            } catch (e: unknown) {
+                const [errMessage, errStack] = e instanceof Error ? [e.message, e.stack] : ["Unknown Error", undefined];
 
-                res.setHeader("Content-Type", "text/plain").status(500).send(e.message);
+                log.error(`Custom handler '${note.noteId}' failed with: ${errMessage}, ${errStack}`);
+
+                res.setHeader("Content-Type", "text/plain").status(500).send(errMessage);
             }
         } else if (attr.name === "customResourceProvider") {
             fileService.downloadNoteInt(attr.noteId, res);
