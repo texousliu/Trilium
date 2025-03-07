@@ -493,22 +493,20 @@ function handleResponse(resultHandler: ApiResultHandler, req: express.Request, r
     log.request(req, res, Date.now() - start, responseLength);
 }
 
-function handleException(e: any, method: HttpMethod, path: string, res: express.Response) {
-    log.error(`${method} ${path} threw exception: '${e.message}', stack: ${e.stack}`);
+function handleException(e: unknown | Error, method: HttpMethod, path: string, res: express.Response) {
 
-    if (e instanceof ValidationError) {
-        res.status(400).json({
-            message: e.message
-        });
-    } else if (e instanceof NotFoundError) {
-        res.status(404).json({
-            message: e.message
-        });
-    } else {
-        res.status(500).json({
-            message: e.message
-        });
-    }
+    const [errMessage, errStack]: [message: string, stack: string] = (e instanceof Error)
+        ? [e.message, e.stack || "No Stack Trace"]
+        : ["Unknown Error", "No Stack Trace"];
+
+    log.error(`${method} ${path} threw exception: '${errMessage}', stack: ${errStack}`);
+
+    const resStatusCode = (e instanceof ValidationError || e instanceof NotFoundError) ?  e.statusCode : 500;
+
+    res.status(resStatusCode).json({
+        message: errMessage
+    });
+
 }
 
 function createUploadMiddleware() {
