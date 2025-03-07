@@ -115,6 +115,10 @@ textarea,
         right 0.75rem center/15px 20px no-repeat;
 }
 
+.form-text {
+    color: var(--muted-text-color);
+}
+
 /* Restore default apperance */
 input[type="number"],
 input[type="checkbox"] {
