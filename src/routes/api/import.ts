@@ -68,11 +68,12 @@ async function importNotesToBranch(req: Request) {
         } else {
             note = await singleImportService.importSingleFile(taskContext, file, parentNote);
         }
-    } catch (e: any) {
-        const message = `Import failed with following error: '${e.message}'. More details might be in the logs.`;
+    } catch (e: unknown) {
+        const [errMessage, errStack] = e instanceof Error ? [e.message, e.stack] : ["Unknown Error", undefined];
+        const message = `Import failed with following error: '${errMessage}'. More details might be in the logs.`;
         taskContext.reportError(message);
 
-        log.error(message + e.stack);
+        log.error(message + errStack);
 
         return [500, message];
     }
@@ -120,11 +121,13 @@ async function importAttachmentsToNote(req: Request) {
 
     try {
         await singleImportService.importAttachment(taskContext, file, parentNote);
-    } catch (e: any) {
-        const message = `Import failed with following error: '${e.message}'. More details might be in the logs.`;
+    } catch (e: unknown) {
+        const [errMessage, errStack] = e instanceof Error ? [e.message, e.stack] : ["Unknown Error", undefined];
+
+        const message = `Import failed with following error: '${errMessage}'. More details might be in the logs.`;
         taskContext.reportError(message);
 
-        log.error(message + e.stack);
+        log.error(message + errStack);
 
         return [500, message];
     }
