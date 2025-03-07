@@ -168,7 +168,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "7.7.0",
     "@electron/rebuild": "3.7.1",
     "@eslint/js": "9.21.0",
-    "@playwright/test": "1.50.1",
+    "@playwright/test": "1.51.0",
     "@popperjs/core": "2.11.8",
     "@types/archiver": "6.0.3",
     "@types/better-sqlite3": "7.6.12",
