@@ -16,20 +16,24 @@ const TPL = `
     </div>
     <hr />
 
-    <div class="side-checkbox">
+    <div>
         <label class="form-check tn-checkbox">
             <input type="checkbox" class="native-title-bar form-check-input" />
-            <strong>${t("electron_integration.native-title-bar")}</strong>
-            <p>${t("electron_integration.native-title-bar-description")}</p>
+            ${t("electron_integration.native-title-bar")}
         </label>
+        <p class="form-text">
+            ${t("electron_integration.native-title-bar-description")}
+        </p>
     </div>
 
-    <div class="side-checkbox">
+    <div>
         <label class="form-check tn-checkbox">
             <input type="checkbox" class="background-effects form-check-input" />
-            <strong>${t("electron_integration.background-effects")}</strong>
-            <p>${t("electron_integration.background-effects-description")}</p>
+            ${t("electron_integration.background-effects")}
         </label>
+        <p class="form-text">
+            ${t("electron_integration.background-effects-description")}
+        </p>
     </div>
 
     <button class="btn btn-secondary btn-micro restart-app-button">${t("electron_integration.restart-app-button")}</button>
