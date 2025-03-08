@@ -72,6 +72,10 @@
     margin-bottom: 1em;
 }
 
+.options-section label:not(.tn-checkbox):not(.tn-radio) {
+    margin-bottom: 6px;
+}
+
 /* Appeareance */
 
 .main-font-size-input-group,
