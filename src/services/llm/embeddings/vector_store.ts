@@ -6,6 +6,7 @@ import log from "../../log.js";
 import becca from "../../../becca/becca.js";
 import type { NoteEmbeddingContext } from "./embeddings_interface.js";
 import { getEmbeddingProviders, getEnabledEmbeddingProviders } from "./providers.js";
+import eventService from "../../events.js";
 
 // Type definition for embedding result
 interface EmbeddingResult {
@@ -382,37 +383,42 @@ export async function processEmbeddingQueue() {
 }
 
 /**
- * Setup note event listeners to keep embeddings up to date
+ * Set up event listeners for embedding-related events
  */
 export function setupEmbeddingEventListeners() {
-    require("../../../becca/entity_events.js").subscribe({
-        entityName: "notes",
-        eventType: "created",
-        handler: (note: { noteId: string }) => queueNoteForEmbedding(note.noteId, 'CREATE')
+    // Listen for note content changes
+    eventService.subscribe(eventService.NOTE_CONTENT_CHANGE, ({ entity }) => {
+        if (entity && entity.noteId) {
+            queueNoteForEmbedding(entity.noteId);
+        }
     });
 
-    require("../../../becca/entity_events.js").subscribe({
-        entityName: "notes",
-        eventType: "updated",
-        handler: ({entity}: { entity: { noteId: string } }) => queueNoteForEmbedding(entity.noteId, 'UPDATE')
+    // Listen for new notes
+    eventService.subscribe(eventService.ENTITY_CREATED, ({ entityName, entity }) => {
+        if (entityName === "notes" && entity && entity.noteId) {
+            queueNoteForEmbedding(entity.noteId);
+        }
     });
 
-    require("../../../becca/entity_events.js").subscribe({
-        entityName: "notes",
-        eventType: "deleted",
-        handler: (note: { noteId: string }) => queueNoteForEmbedding(note.noteId, 'DELETE')
+    // Listen for note title changes
+    eventService.subscribe(eventService.NOTE_TITLE_CHANGED, ({ noteId }) => {
+        if (noteId) {
+            queueNoteForEmbedding(noteId);
+        }
     });
 
-    require("../../../becca/entity_events.js").subscribe({
-        entityName: "attributes",
-        eventType: ["created", "updated", "deleted"],
-        handler: ({entity}: { entity: { noteId: string } }) => queueNoteForEmbedding(entity.noteId, 'UPDATE')
+    // Listen for note deletions
+    eventService.subscribe(eventService.ENTITY_DELETED, ({ entityName, entityId }) => {
+        if (entityName === "notes" && entityId) {
+            queueNoteForEmbedding(entityId, 'DELETE');
+        }
     });
 
-    require("../../../becca/entity_events.js").subscribe({
-        entityName: "branches",
-        eventType: ["created", "updated", "deleted"],
-        handler: ({entity}: { entity: { noteId: string } }) => queueNoteForEmbedding(entity.noteId, 'UPDATE')
+    // Listen for attribute changes that might affect context
+    eventService.subscribe(eventService.ENTITY_CHANGED, ({ entityName, entity }) => {
+        if (entityName === "attributes" && entity && entity.noteId) {
+            queueNoteForEmbedding(entity.noteId);
+        }
     });
 }
 

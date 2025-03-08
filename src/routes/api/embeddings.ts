@@ -3,6 +3,8 @@ import vectorStore from "../../services/llm/embeddings/vector_store.js";
 import providerManager from "../../services/llm/embeddings/providers.js";
 import becca from "../../becca/becca.js";
 import type { Request, Response } from "express";
+import log from "../../services/log.js";
+import sql from "../../services/sql.js";
 
 /**
  * Get similar notes based on note ID
@@ -172,18 +174,34 @@ async function updateProvider(req: Request, res: Response) {
  * Manually trigger a reprocessing of all notes
  */
 async function reprocessAllNotes(req: Request, res: Response) {
+    // Wrap in a try-catch to handle errors
     try {
-        await vectorStore.reprocessAllNotes();
-
-        return res.send({
+        // Start the reprocessing operation in the background
+        // and immediately respond to the client
+        res.send({
             success: true,
-            message: "Notes queued for reprocessing"
+            message: "Embedding reprocessing started in the background"
         });
+
+        // Continue processing in the background after sending the response
+        setTimeout(async () => {
+            try {
+                await vectorStore.reprocessAllNotes();
+                log.info("Embedding reprocessing completed successfully");
+            } catch (error: any) {
+                log.error(`Error during background embedding reprocessing: ${error.message || "Unknown error"}`);
+            }
+        }, 0);
     } catch (error: any) {
-        return res.status(500).send({
-            success: false,
-            message: error.message || "Unknown error"
-        });
+        // Only catch errors that happen before we send the response
+        log.error(`Error initiating embedding reprocessing: ${error.message || "Unknown error"}`);
+
+        if (!res.headersSent) {
+            res.status(500).send({
+                success: false,
+                message: error.message || "Unknown error"
+            });
+        }
     }
 }
 
@@ -192,9 +210,7 @@ async function reprocessAllNotes(req: Request, res: Response) {
  */
 async function getQueueStatus(req: Request, res: Response) {
     try {
-        // Use sql directly instead of becca.sqliteDB
-        const sql = require("../../services/sql.js").default;
-
+        // Use the imported sql instead of requiring it
         const queueCount = await sql.getValue(
             "SELECT COUNT(*) FROM embedding_queue"
         );
