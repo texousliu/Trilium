@@ -66,8 +66,6 @@ chmod 755 $PKG_DIR/trilium.sh
 cp bin/tpl/anonymize-database.sql $PKG_DIR/
 
 cp -r translations $PKG_DIR/
-cp -r dump-db $PKG_DIR/
-rm -rf $PKG_DIR/dump-db/node_modules
 
 VERSION=`jq -r ".version" package.json`
 

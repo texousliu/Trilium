@@ -11,7 +11,7 @@ import FNote from "../entities/fnote.js";
 import FAttachment from "../entities/fattachment.js";
 import imageContextMenuService from "../menus/image_context_menu.js";
 import { applySingleBlockSyntaxHighlight, applySyntaxHighlight } from "./syntax_highlight.js";
-import { loadElkIfNeeded } from "./mermaid.js";
+import { loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
 
 let idCounter = 1;
@@ -203,7 +203,7 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
         // open doesn't work for protected notes since it works through a browser which isn't in protected session
         $openButton.toggle(!entity.isProtected);
 
-        $content.append($('<div style="display: flex; justify-content: space-evenly; margin-top: 5px;">').append($downloadButton).append($openButton));
+        $content.append($('<footer class="file-footer">').append($downloadButton).append($openButton));
     }
 
     $renderedContent.append($content);
@@ -226,7 +226,7 @@ async function renderMermaid(note: FNote | FAttachment, $renderedContent: JQuery
         await loadElkIfNeeded(content);
         const { svg } = await mermaid.mermaidAPI.render("in-mermaid-graph-" + idCounter++, content);
 
-        $renderedContent.append($(svg));
+        $renderedContent.append($(postprocessMermaidSvg(svg)));
     } catch (e) {
         const $error = $("<p>The diagram could not displayed.</p>");
 
@@ -239,7 +239,7 @@ async function renderMermaid(note: FNote | FAttachment, $renderedContent: JQuery
  * @param {FNote} note
  * @returns {Promise<void>}
  */
-async function renderChildrenList($renderedContent: JQuery<HTMLElement>, note: FNote) {    
+async function renderChildrenList($renderedContent: JQuery<HTMLElement>, note: FNote) {
     let childNoteIds = note.getChildNoteIds();
 
     if (!childNoteIds.length) {

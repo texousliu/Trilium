@@ -32,7 +32,7 @@ const TPL = `
         </li>
     </ul>
 
-    <p>${t("backup.backup_recommendation")}</p>
+    <p class="form-text">${t("backup.backup_recommendation")}</p>
 </div>
 
 <div class="options-section">

@@ -153,20 +153,22 @@ function sanitize(dirtyHtml: string) {
         },
         allowedStyles: {
             "*": {
-                "color": colorRegex,
+                color: colorRegex,
                 "background-color": colorRegex
             },
-            "figure": {
-                "float": [ /^\s*(left|right|none)\s*$/ ],
-                "width": sizeRegex,
-                "height": sizeRegex
+            figure: {
+                float: [/^\s*(left|right|none)\s*$/],
+                width: sizeRegex,
+                height: sizeRegex
             },
-            "table": {
+            table: {
                 "border-color": colorRegex,
-                "border-style": [ /^\s*(none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset)\s*$/ ]
+                "border-style": [/^\s*(none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset)\s*$/]
             },
-            "td": {
-                "border": [ /^\s*\d+(?:px|em|%)\s*(none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset)\s*(#(0x)?[0-9a-fA-F]+|rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)|hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\))\s*$/ ]
+            td: {
+                border: [
+                    /^\s*\d+(?:px|em|%)\s*(none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset)\s*(#(0x)?[0-9a-fA-F]+|rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)|hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\))\s*$/
+                ]
             }
         },
         allowedSchemes: ALLOWED_PROTOCOLS,

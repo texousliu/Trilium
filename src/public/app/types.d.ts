@@ -1,12 +1,12 @@
 import type FNote from "./entities/fnote";
-import type { BackendModule, i18n } from "i18next";
 import type { Froca } from "./services/froca-interface";
-import type { HttpBackendOptions } from "i18next-http-backend";
 import { Suggestion } from "./services/note_autocomplete.ts";
 import utils from "./services/utils.ts";
 import appContext from "./components/app_context.ts";
 import server from "./services/server.ts";
 import library_loader, { Library } from "./services/library_loader.ts";
+import type { init } from "i18next";
+import type { lint } from "./services/eslint.ts";
 
 interface ElectronProcess {
     type: string;
@@ -45,6 +45,7 @@ interface CustomGlobals {
     triliumVersion: string;
     TRILIUM_SAFE_MODE: boolean;
     platform?: typeof process.platform;
+    linter: typeof lint;
 }
 
 type RequireMethod = (moduleName: string) => any;
@@ -86,7 +87,7 @@ declare global {
         getSelectedNotePath(): string | undefined;
         getSelectedNoteId(): string | null;
         setSelectedNotePath(notePath: string | null | undefined);
-        getSelectedExternalLink(this: HTMLElement): string | undefined;
+        getSelectedExternalLink(): string | undefined;
         setSelectedExternalLink(externalLink: string | null | undefined);
         setNote(noteId: string);
         markRegExp(regex: RegExp, opts: {
@@ -115,21 +116,11 @@ declare global {
 
     // Libraries
     // TODO: Replace once library loader is replaced with webpack.
-    var i18next: i18n;
-    var i18nextHttpBackend: BackendModule<HttpBackendOptions>;
     var hljs: {
         highlightAuto(text: string);
         highlight(text: string, {
             language: string
         });
-    };
-    var dayjs: {};
-    var Split: (selectors: string[], config: {
-        sizes: [ number, number ];
-        gutterSize: number;
-        onDragEnd: (sizes: [ number, number ]) => void;
-    }) => {
-        destroy();
     };
     var renderMathInElement: (element: HTMLElement, options: {
         trust: boolean;
@@ -152,9 +143,25 @@ declare global {
     interface MermaidLoader {
 
     }
+    interface MermaidChartConfig {
+        useMaxWidth: boolean;
+    }
+    interface MermaidConfig {
+        theme: string;
+        securityLevel: "antiscript",
+        flow: MermaidChartConfig;
+        sequence: MermaidChartConfig;
+        gantt: MermaidChartConfig;
+        class: MermaidChartConfig;
+        state: MermaidChartConfig;
+        pie: MermaidChartConfig;
+        journey: MermaidChartConfig;
+        git: MermaidChartConfig;
+    }
     var mermaid: {
         mermaidAPI: MermaidApi;
         registerLayoutLoaders(loader: MermaidLoader);
+        init(config: MermaidConfig, el: HTMLElement | JQuery<HTMLElement>);
         parse(content: string, opts: {
             suppressErrors: true
         }): Promise<{

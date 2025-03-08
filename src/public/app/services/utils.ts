@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { Modal } from "bootstrap";
+import type { ViewScope } from "./link.js";
 
 function reloadFrontendApp(reason?: string) {
     if (reason) {
@@ -33,20 +34,20 @@ function parseDate(str: string) {
 
 // Source: https://stackoverflow.com/a/30465299/4898894
 function getMonthsInDateRange(startDate: string, endDate: string) {
-    const start = startDate.split('-');
-    const end = endDate.split('-');
+    const start = startDate.split("-");
+    const end = endDate.split("-");
     const startYear = parseInt(start[0]);
     const endYear = parseInt(end[0]);
     const dates = [];
 
     for (let i = startYear; i <= endYear; i++) {
         const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
-        const startMon = i === startYear ? parseInt(start[1])-1 : 0;
+        const startMon = i === startYear ? parseInt(start[1]) - 1 : 0;
 
-        for(let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j+1) {
-            const month = j+1;
-            const displayMonth = month < 10 ? '0'+month : month;
-            dates.push([i, displayMonth].join('-'));
+        for (let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
+            const month = j + 1;
+            const displayMonth = month < 10 ? "0" + month : month;
+            dates.push([i, displayMonth].join("-"));
         }
     }
     return dates;
@@ -161,7 +162,7 @@ function escapeHtml(str: string) {
 }
 
 export function escapeQuotes(value: string) {
-    return value.replaceAll("\"", "&quot;");
+    return value.replaceAll('"', "&quot;");
 }
 
 function formatSize(size: number) {
@@ -388,6 +389,10 @@ function initHelpDropdown($el: JQuery<HTMLElement>) {
 const wikiBaseUrl = "https://triliumnext.github.io/Docs/Wiki/";
 
 function openHelp($button: JQuery<HTMLElement>) {
+    if ($button.length === 0) {
+        return;
+    }
+
     const helpPage = $button.attr("data-help-page");
 
     if (helpPage) {
@@ -397,12 +402,44 @@ function openHelp($button: JQuery<HTMLElement>) {
     }
 }
 
+async function openInAppHelp($button: JQuery<HTMLElement>) {
+    if ($button.length === 0) {
+        return;
+    }
+
+    const inAppHelpPage = $button.attr("data-in-app-help");
+    if (inAppHelpPage) {
+        // Dynamic import to avoid import issues in tests.
+        const appContext = (await import("../components/app_context.js")).default;
+        const subContexts = appContext.tabManager.getActiveContext().getSubContexts();
+        const targetNote = `_help_${inAppHelpPage}`;
+        const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
+        const viewScope: ViewScope = {
+            viewMode: "contextual-help",
+        };
+        if (!helpSubcontext) {
+            // The help is not already open, open a new split with it.
+            const { ntxId } = subContexts[subContexts.length - 1];
+            appContext.triggerCommand("openNewNoteSplit", {
+                ntxId,
+                notePath: targetNote,
+                hoistedNoteId: "_help",
+                viewScope
+            })
+        } else {
+            // There is already a help window open, make sure it opens on the right note.
+            helpSubcontext.setNote(targetNote, { viewScope });
+        }
+        return;
+    }
+}
+
 function initHelpButtons($el: JQuery<HTMLElement> | JQuery<Window>) {
     // for some reason, the .on(event, listener, handler) does not work here (e.g. Options -> Sync -> Help button)
     // so we do it manually
     $el.on("click", (e) => {
-        const $helpButton = $(e.target).closest("[data-help-page]");
-        openHelp($helpButton);
+        openHelp($(e.target).closest("[data-help-page]"));
+        openInAppHelp($(e.target).closest("[data-in-app-help]"));
     });
 }
 

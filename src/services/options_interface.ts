@@ -71,6 +71,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     eraseUnusedAttachmentsAfterSeconds: number;
     eraseUnusedAttachmentsAfterTimeScale: number;
     firstDayOfWeek: number;
+    languages: string;
 
     initialized: boolean;
     isPasswordSet: boolean;
@@ -103,7 +104,6 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     shareSubtree: boolean;
     useCleanUrls: boolean;
     sharePath: string;
-
 }
 
 export type OptionNames = keyof OptionDefinitions;

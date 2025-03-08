@@ -250,7 +250,7 @@ ws.subscribeToMessages(async (message) => {
             message: message,
             icon: "arrow-square-up-right"
         };
-    };
+    }
 
     if (message.taskType !== "export") {
         return;

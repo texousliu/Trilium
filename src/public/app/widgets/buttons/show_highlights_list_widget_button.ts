@@ -16,7 +16,7 @@ export default class ShowHighlightsListWidgetButton extends OnClickButtonWidget 
         this.icon("bx-highlight")
             .title(t("show_highlights_list_widget_button.show_highlights_list"))
             .titlePlacement("bottom")
-            .onClick((widget) => {
+            .onClick(() => {
                 if (this.noteContext?.viewScope && this.noteId) {
                     this.noteContext.viewScope.highlightsListTemporarilyHidden = false;
                     appContext.triggerEvent("showHighlightsListWidget", { noteId: this.noteId });

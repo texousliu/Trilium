@@ -23,8 +23,8 @@ const TPL = `
             <label for="sync-proxy form-control" >${t("sync_2.proxy_label")}</label>
             <input id="sync-proxy form-control" class="sync-proxy form-control" placeholder="https://<host>:<port>">
 
-            <p><strong>${t("sync_2.note")}:</strong> ${t("sync_2.note_description")}</p>
-            <p>${t("sync_2.special_value_description")}</p>
+            <p class="form-text"><strong>${t("sync_2.note")}:</strong> ${t("sync_2.note_description")}</p>
+            <p class="form-text">${t("sync_2.special_value_description")}</p>
         </div>
 
         <div style="display: flex; justify-content: space-between;">

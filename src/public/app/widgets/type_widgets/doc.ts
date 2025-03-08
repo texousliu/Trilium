@@ -2,6 +2,7 @@ import type { EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 import TypeWidget from "./type_widget.js";
+import { getCurrentLanguage } from "../../services/i18n.js";
 
 const TPL = `<div class="note-detail-doc note-detail-printable">
     <style>
@@ -17,7 +18,7 @@ const TPL = `<div class="note-detail-doc note-detail-printable">
         }
 
         .note-detail-doc.contextual-help {
-            padding-bottom: 15vh;
+            padding-bottom: 0;
         }
 
         .note-detail-doc.contextual-help h2,
@@ -35,7 +36,7 @@ const TPL = `<div class="note-detail-doc note-detail-printable">
         }
 
         img {
-            max-width: 90vw;
+            max-width: 100%;
             height: auto;
         }
 
@@ -77,7 +78,7 @@ export default class DocTypeWidget extends TypeWidget {
 
             if (docName) {
                 // find doc based on language
-                const url = this.#getUrl(docName, i18next.language);
+                const url = this.#getUrl(docName, getCurrentLanguage());
                 this.$content.load(url, (response, status) => {
                     // fallback to english doc if no translation available
                     if (status === "error") {

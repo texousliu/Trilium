@@ -8,7 +8,7 @@ const TPL = `
 <div class="options-section">
     <h4>${t("revisions_snapshot_limit.note_revisions_snapshot_limit_title")}</h4>
 
-    <p>${t("revisions_snapshot_limit.note_revisions_snapshot_limit_description")}</p>
+    <p class="form-text">${t("revisions_snapshot_limit.note_revisions_snapshot_limit_description")}</p>
 
     <div class="form-group">
         <label>${t("revisions_snapshot_limit.snapshot_number_limit_label")}</label>

@@ -19,7 +19,7 @@ const config: Configuration = {
     },
     output: {
         publicPath: `${assetPath}/app-dist/`,
-        path: path.resolve(rootDir, "src/public/app-dist"),
+        path: path.resolve(rootDir, "dist/src/public/app-dist"),
         filename: "[name].js"
     },
     plugins: [
@@ -75,7 +75,7 @@ const config: Configuration = {
             ".mjs": [".mjs", ".mts"]
         }
     },
-    devtool: "source-map",
+    devtool: "nosources-source-map",
     target: "electron-renderer"
 };
 

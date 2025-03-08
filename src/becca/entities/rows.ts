@@ -22,7 +22,7 @@ export interface AttachmentRow {
 export interface RevisionRow {
     revisionId?: string;
     noteId: string;
-    type: string;
+    type: NoteType;
     mime: string;
     isProtected?: boolean;
     title: string;
@@ -138,14 +138,4 @@ export interface NoteRow {
     utcDateCreated: string;
     utcDateModified: string;
     content?: string | Buffer;
-}
-
-export interface TaskRow {
-    taskId?: string;
-    parentNoteId: string;
-    title: string;
-    dueDate?: string;
-    isDone?: boolean;
-    isDeleted?: boolean;
-    utcDateModified?: string;
 }

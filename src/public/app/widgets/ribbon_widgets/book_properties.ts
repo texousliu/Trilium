@@ -126,7 +126,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (![ "list", "grid", "calendar"].includes(type)) {
+        if (!["list", "grid", "calendar"].includes(type)) {
             throw new Error(t("book_properties.invalid_view_type", { type }));
         }
 

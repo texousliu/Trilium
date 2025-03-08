@@ -6,11 +6,17 @@ import server from "../../../services/server.js";
 import toastService from "../../../services/toast.js";
 
 const TPL = `
-<div class="options-section">
+<div class="etapi-options-section options-section">
     <h4>${t("etapi.title")}</h4>
 
-    <p>${t("etapi.description")} <br/>
-       ${t("etapi.see_more")} <a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a> ${t("etapi.and")} <a class="tn-link" onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>.</p>
+    <p class="form-text">${t("etapi.description")} <br/>
+      ${t("etapi.see_more", {
+        link_to_wiki: `<a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/etapi.html">${t("etapi.wiki")}</a>`,
+        // TODO: We use window.open src/public/app/services/link.ts -> prevents regular click behavior on "a" element here because it's a relative path
+        link_to_openapi_spec: `<a class="tn-link" onclick="window.open('etapi/etapi.openapi.yaml')" href="etapi/etapi.openapi.yaml">${t("etapi.openapi_spec")}</a>`,
+        link_to_swagger_ui: `<a class="tn-link" href="#_help_f3xpgx6H01PW">${t("etapi.swagger_ui")}</a>`
+      })}
+    </p>
 
     <button type="button" class="create-etapi-token btn btn-sm">${t("etapi.create_token")}</button>
 

@@ -1,6 +1,6 @@
 "use strict";
 
-import { isElectron } from "../services/utils.js";
+import { isElectron, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import multer from "multer";
 import log from "../services/log.js";
 import express from "express";
@@ -72,7 +72,6 @@ import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 
 import apiDocsRoute from "./api_docs.js";
-import * as tasksRoute from "./api/tasks.js";
 
 const MAX_ALLOWED_FILE_SIZE_MB = 250;
 const GET = "get",
@@ -282,11 +281,6 @@ function register(app: express.Application) {
     apiRoute(PATCH, "/api/etapi-tokens/:etapiTokenId", etapiTokensApiRoutes.patchToken);
     apiRoute(DEL, "/api/etapi-tokens/:etapiTokenId", etapiTokensApiRoutes.deleteToken);
 
-    apiRoute(GET, "/api/tasks/:parentNoteId", tasksRoute.getTasks);
-    apiRoute(PST, "/api/tasks", tasksRoute.createNewTask);
-    apiRoute(PST, "/api/tasks/:taskId/toggle", tasksRoute.toggleTaskDone);
-    apiRoute(PATCH, "/api/tasks/:taskId", tasksRoute.updateTask);
-
     // in case of local electron, local calls are allowed unauthenticated, for server they need auth
     const clipperMiddleware = isElectron ? [] : [auth.checkEtapiToken];
 
@@ -479,7 +473,7 @@ function route(method: HttpMethod, path: string, middleware: express.Handler[], 
 
             if (result?.then) {
                 // promise
-                result.then((promiseResult: unknown) => handleResponse(resultHandler, req, res, promiseResult, start)).catch((e: any) => handleException(e, method, path, res));
+                result.then((promiseResult: unknown) => handleResponse(resultHandler, req, res, promiseResult, start)).catch((e: unknown) => handleException(e, method, path, res));
             } else {
                 handleResponse(resultHandler, req, res, result, start);
             }
@@ -495,22 +489,17 @@ function handleResponse(resultHandler: ApiResultHandler, req: express.Request, r
     log.request(req, res, Date.now() - start, responseLength);
 }
 
-function handleException(e: any, method: HttpMethod, path: string, res: express.Response) {
-    log.error(`${method} ${path} threw exception: '${e.message}', stack: ${e.stack}`);
+function handleException(e: unknown | Error, method: HttpMethod, path: string, res: express.Response) {
+    const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
 
-    if (e instanceof ValidationError) {
-        res.status(400).json({
-            message: e.message
-        });
-    } else if (e instanceof NotFoundError) {
-        res.status(404).json({
-            message: e.message
-        });
-    } else {
-        res.status(500).json({
-            message: e.message
-        });
-    }
+    log.error(`${method} ${path} threw exception: '${errMessage}', stack: ${errStack}`);
+
+    const resStatusCode = (e instanceof ValidationError || e instanceof NotFoundError) ?  e.statusCode : 500;
+
+    res.status(resStatusCode).json({
+        message: errMessage
+    });
+
 }
 
 function createUploadMiddleware() {
