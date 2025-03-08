@@ -5,7 +5,7 @@ import TypeWidget from "./type_widget.js";
 import server from "../../services/server.js";
 import toastService from "../../services/toast.js";
 import dialogService from "../../services/dialog.js";
-import type { EventData } from "../../components/app_context.js";
+import type { CommandListenerData, EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import attributes from "../../services/attributes.js";
 import asset_path from "../../../../services/asset_path.js";
@@ -379,6 +379,29 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {
         this.moveMarker(noteId, null);
+    }
+
+    buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {
+        const map = this.geoMapWidget.map;
+        if (!map) {
+            return;
+        }
+
+        return [
+            new TouchBar.TouchBarSlider({
+                label: "Zoom",
+                value: map.getZoom(),
+                minValue: map.getMinZoom(),
+                maxValue: map.getMaxZoom(),
+                change(newValue) {
+                    map.setZoom(newValue);
+                },
+            }),
+            new TouchBar.TouchBarButton({
+                label: "New geo note",
+                click: () => this.triggerCommand("geoMapCreateChildNote", { ntxId: this.ntxId })
+            })
+        ];
     }
 
 }

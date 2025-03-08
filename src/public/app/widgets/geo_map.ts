@@ -1,7 +1,6 @@
 import type { Map } from "leaflet";
 import library_loader from "../services/library_loader.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
-import type { CommandListenerData } from "../components/app_context.js";
 
 const TPL = `\
 <div class="geo-map-widget">
@@ -60,29 +59,6 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
                 detectRetina: true
             }).addTo(map);
         });
-    }
-
-    buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {
-        const map = this.map;
-        if (!map) {
-            return;
-        }
-
-        return [
-            new TouchBar.TouchBarSlider({
-                label: "Zoom",
-                value: map.getZoom(),
-                minValue: map.getMinZoom(),
-                maxValue: map.getMaxZoom(),
-                change(newValue) {
-                    map.setZoom(newValue);
-                },
-            }),
-            new TouchBar.TouchBarButton({
-                label: "New geo note",
-                click: () => this.parent?.triggerEvent("geoMapCreateChildNote", { ntxId: this.ntxId })
-            })
-        ];
     }
 
 }
