@@ -38,14 +38,14 @@ export default class TouchBarWidget extends Component {
         return newImage;
     }
 
-    async #triggerTextEditorCommand(command: string) {
+    async #triggerTextEditorCommand(command: string, args?: object) {
         const editor = await appContext.tabManager.getActiveContext().getTextEditor();
         if (!editor) {
             return;
         }
 
         // TODO: Fix type of editor.
-        (editor as any).execute(command);
+        (editor as any).execute(command, args);
     }
 
     #buildTouchBar() {
@@ -61,6 +61,18 @@ export default class TouchBarWidget extends Component {
             new TouchBarGroup({
                 items: new TouchBar({
                     items: [
+                        new TouchBarButton({
+                            label: "P",
+                            click: () => this.#triggerTextEditorCommand("paragraph")
+                        }),
+                        new TouchBarButton({
+                            label: "H2",
+                            click: () => this.#triggerTextEditorCommand("heading", { value: "heading2" })
+                        }),
+                        new TouchBarButton({
+                            label: "H3",
+                            click: () => this.#triggerTextEditorCommand("heading", { value: "heading3" })
+                        }),
                         new TouchBarButton({
                             icon: this.#buildIcon("NSTouchBarTextBoldTemplate"),
                             click: () => this.#triggerTextEditorCommand("bold")
