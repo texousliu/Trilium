@@ -500,6 +500,23 @@ describe("#isDev", () => {
     });
 });
 
+describe("#safeExtractMessageAndStackFromError", () => {
+    it("should correctly extract the message and stack property if it gets passed an instance of an Error", () => {
+        const testMessage = "Test Message";
+        const testError = new Error(testMessage);
+        const actual = utils.safeExtractMessageAndStackFromError(testError);
+        expect(actual[0]).toBe(testMessage);
+        expect(actual[1]).not.toBeUndefined();
+    });
+
+    it("should use the fallback 'Unknown Error' message, if it gets passed anything else than an instance of an Error", () => {
+        const testNonError = "this is not an instance of an Error, but JS technically allows us to throw this anyways";
+        const actual = utils.safeExtractMessageAndStackFromError(testNonError);
+        expect(actual[0]).toBe("Unknown Error");
+        expect(actual[1]).toBeUndefined();
+    });
+})
+
 describe("#formatDownloadTitle", () => {
     //prettier-ignore
     const testCases: [fnValue: Parameters<typeof utils.formatDownloadTitle>, expectedValue: ReturnType<typeof utils.formatDownloadTitle>][] = [

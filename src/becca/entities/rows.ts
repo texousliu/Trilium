@@ -22,7 +22,7 @@ export interface AttachmentRow {
 export interface RevisionRow {
     revisionId?: string;
     noteId: string;
-    type: string;
+    type: NoteType;
     mime: string;
     isProtected?: boolean;
     title: string;
