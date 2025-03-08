@@ -1904,7 +1904,7 @@ body.background-effects.zen #root-widget {
     }
 }
 
-#center-pane div.alert {
+#center-pane .note-split > div.alert {
     position: relative;
     margin: 8px 0 0 0;
     border: unset;
