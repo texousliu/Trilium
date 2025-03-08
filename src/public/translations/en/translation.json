@@ -1176,7 +1176,8 @@
     "never": "Never",
     "refresh_stats": "Refresh Stats",
     "refreshing": "Refreshing...",
-    "stats_error": "Error fetching embedding statistics"
+    "stats_error": "Error fetching embedding statistics",
+    "auto_refresh_notice": "Auto-refreshes every {{seconds}} seconds"
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",

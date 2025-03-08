@@ -31,6 +31,9 @@ interface EmbeddingStats {
 }
 
 export default class AiSettingsWidget extends OptionsWidget {
+    private statsRefreshInterval: NodeJS.Timeout | null = null;
+    private readonly STATS_REFRESH_INTERVAL = 5000; // 5 seconds
+
     doRender() {
         this.$widget = $(`
         <div class="options-section">
@@ -203,9 +206,12 @@ export default class AiSettingsWidget extends OptionsWidget {
                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                             </div>
                         </div>
-                        <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats mt-2">
-                            ${t("ai_llm.refresh_stats")}
-                        </button>
+                        <div class="mt-2">
+                            <span class="text-muted small">${t("ai_llm.auto_refresh_notice", { seconds: this.STATS_REFRESH_INTERVAL/1000 })}</span>
+                            <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats ml-2">
+                                ${t("ai_llm.refresh_stats")}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -385,18 +391,51 @@ export default class AiSettingsWidget extends OptionsWidget {
         // Initial fetch of embedding stats
         setTimeout(async () => {
             await this.refreshEmbeddingStats();
+            // Start polling for stats updates
+            this.startStatsPolling();
         }, 500);
 
         return this.$widget;
     }
 
-    async refreshEmbeddingStats() {
+    /**
+     * Start automatic polling for embedding statistics
+     */
+    startStatsPolling() {
+        // Clear any existing interval first
+        this.stopStatsPolling();
+
+        // Set up new polling interval
+        this.statsRefreshInterval = setInterval(async () => {
+            // Only refresh if this widget is still visible
+            if (this.$widget && this.$widget.is(':visible') &&
+                this.$widget.find('.embedding-section').is(':visible')) {
+                await this.refreshEmbeddingStats(true);
+            }
+        }, this.STATS_REFRESH_INTERVAL);
+    }
+
+    /**
+     * Stop automatic polling for embedding statistics
+     */
+    stopStatsPolling() {
+        if (this.statsRefreshInterval) {
+            clearInterval(this.statsRefreshInterval);
+            this.statsRefreshInterval = null;
+        }
+    }
+
+    async refreshEmbeddingStats(silent = false) {
         if (!this.$widget) return;
 
         try {
             const $refreshButton = this.$widget.find('.embedding-refresh-stats');
-            $refreshButton.prop('disabled', true);
-            $refreshButton.text(t("ai_llm.refreshing"));
+
+            // Only update button state if not in silent mode
+            if (!silent) {
+                $refreshButton.prop('disabled', true);
+                $refreshButton.text(t("ai_llm.refreshing"));
+            }
 
             const response = await server.get<EmbeddingStats>('embeddings/stats');
 
@@ -420,11 +459,16 @@ export default class AiSettingsWidget extends OptionsWidget {
             }
         } catch (error) {
             console.error("Error fetching embedding stats:", error);
-            toastService.showError(t("ai_llm.stats_error"));
+            if (!silent) {
+                toastService.showError(t("ai_llm.stats_error"));
+            }
         } finally {
-            const $refreshButton = this.$widget.find('.embedding-refresh-stats');
-            $refreshButton.prop('disabled', false);
-            $refreshButton.text(t("ai_llm.refresh_stats"));
+            // Only update button state if not in silent mode
+            if (!silent) {
+                const $refreshButton = this.$widget.find('.embedding-refresh-stats');
+                $refreshButton.prop('disabled', false);
+                $refreshButton.text(t("ai_llm.refresh_stats"));
+            }
         }
     }
 
@@ -435,6 +479,19 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.ai-providers-section').toggle(aiEnabled);
         this.$widget.find('.ai-provider').toggle(aiEnabled);
         this.$widget.find('.embedding-section').toggle(aiEnabled);
+
+        // Start or stop polling based on visibility
+        if (aiEnabled && this.$widget.find('.embedding-section').is(':visible')) {
+            this.startStatsPolling();
+        } else {
+            this.stopStatsPolling();
+        }
+    }
+
+    // Clean up when the widget is removed
+    cleanup() {
+        this.stopStatsPolling();
+        super.cleanup();
     }
 
     optionsLoaded(options: OptionMap) {
