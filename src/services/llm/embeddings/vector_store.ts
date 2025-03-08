@@ -7,6 +7,7 @@ import becca from "../../../becca/becca.js";
 import type { NoteEmbeddingContext } from "./embeddings_interface.js";
 import { getEmbeddingProviders, getEnabledEmbeddingProviders } from "./providers.js";
 import eventService from "../../events.js";
+import type BNote from "../../../becca/entities/bnote.js";
 
 // Type definition for embedding result
 interface EmbeddingResult {
@@ -179,6 +180,31 @@ export async function findSimilarNotes(
 }
 
 /**
+ * Clean note content by removing HTML tags and normalizing whitespace
+ */
+function cleanNoteContent(content: string, type: string, mime: string): string {
+    // If it's HTML content, remove HTML tags
+    if ((type === 'text' && mime === 'text/html') || content.includes('<div>') || content.includes('<p>')) {
+        // Simple tag removal - for more complex HTML parsing, consider using a proper HTML parser
+        content = content.replace(/<[^>]*>/g, ' '); // Replace tags with a space
+    }
+
+    // Normalize whitespace (replace multiple spaces/newlines with single space)
+    content = content.replace(/\s+/g, ' ');
+
+    // Trim the content
+    content = content.trim();
+
+    // Truncate if extremely long (optional, adjust limit as needed)
+    const MAX_CONTENT_LENGTH = 10000;
+    if (content.length > MAX_CONTENT_LENGTH) {
+        content = content.substring(0, MAX_CONTENT_LENGTH) + ' [content truncated]';
+    }
+
+    return content;
+}
+
+/**
  * Gets context for a note to be embedded
  */
 export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbeddingContext> {
@@ -196,12 +222,57 @@ export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbed
     const childNotes = note.getChildNotes();
     const childTitles = childNotes.map(note => note.title);
 
-    // Get attributes
-    const attributes = note.getOwnedAttributes().map(attr => ({
+    // Get all attributes (not just owned ones)
+    const attributes = note.getAttributes().map(attr => ({
         type: attr.type,
         name: attr.name,
         value: attr.value
     }));
+
+    // Get backlinks (notes that reference this note through relations)
+    const targetRelations = note.getTargetRelations();
+    const backlinks = targetRelations
+        .map(relation => {
+            const sourceNote = relation.getNote();
+            if (sourceNote && sourceNote.type !== 'search') { // Filter out search notes
+                return {
+                    sourceNoteId: sourceNote.noteId,
+                    sourceTitle: sourceNote.title,
+                    relationName: relation.name
+                };
+            }
+            return null;
+        })
+        .filter((item): item is { sourceNoteId: string; sourceTitle: string; relationName: string } => item !== null);
+
+    // Get related notes through relations
+    const relations = note.getRelations();
+    const relatedNotes = relations
+        .map(relation => {
+            const targetNote = relation.targetNote;
+            if (targetNote) {
+                return {
+                    targetNoteId: targetNote.noteId,
+                    targetTitle: targetNote.title,
+                    relationName: relation.name
+                };
+            }
+            return null;
+        })
+        .filter((item): item is { targetNoteId: string; targetTitle: string; relationName: string } => item !== null);
+
+    // Extract important labels that might affect semantics
+    const labelValues: Record<string, string> = {};
+    const labels = note.getLabels();
+    for (const label of labels) {
+        // Skip CSS and UI-related labels that don't affect semantics
+        if (!label.name.startsWith('css') &&
+            !label.name.startsWith('workspace') &&
+            !label.name.startsWith('hide') &&
+            !label.name.startsWith('collapsed')) {
+            labelValues[label.name] = label.value;
+        }
+    }
 
     // Get attachments
     const attachments = note.getAttachments().map(att => ({
@@ -219,6 +290,17 @@ export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbed
         content = `[${note.type} attachment: ${note.mime}]`;
     }
 
+    // Clean the content to remove HTML tags and normalize whitespace
+    content = cleanNoteContent(content, note.type, note.mime);
+
+    // Get template/inheritance relationships
+    // This is from FNote.getNotesToInheritAttributesFrom - recreating similar logic for BNote
+    const templateRelations = note.getRelations('template').concat(note.getRelations('inherit'));
+    const templateTitles = templateRelations
+        .map(rel => rel.targetNote)
+        .filter((note): note is BNote => note !== undefined)
+        .map(templateNote => templateNote.title);
+
     return {
         noteId: note.noteId,
         title: note.title,
@@ -230,7 +312,11 @@ export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbed
         attributes,
         parentTitles,
         childTitles,
-        attachments
+        attachments,
+        backlinks,
+        relatedNotes,
+        labelValues,
+        templateTitles
     };
 }
 

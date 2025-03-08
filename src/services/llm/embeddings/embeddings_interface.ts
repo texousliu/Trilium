@@ -22,6 +22,18 @@ export interface NoteEmbeddingContext {
         title: string;
         mime: string;
     }[];
+    backlinks?: {
+        sourceNoteId: string;
+        sourceTitle: string;
+        relationName: string;
+    }[];
+    relatedNotes?: {
+        targetNoteId: string;
+        targetTitle: string;
+        relationName: string;
+    }[];
+    labelValues?: Record<string, string>;
+    templateTitles?: string[];
 }
 
 /**
