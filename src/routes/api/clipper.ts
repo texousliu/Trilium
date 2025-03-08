@@ -123,8 +123,6 @@ function createNote(req: Request) {
         note.setLabel("clipType", clipType);
 
         if (pageUrl) {
-            pageUrl = htmlSanitizer.sanitizeUrl(pageUrl);
-
             note.setLabel("pageUrl", pageUrl);
             note.setLabel("iconClass", "bx bx-globe");
         }
