@@ -6,7 +6,7 @@ import server from "../../../services/server.js";
 import toastService from "../../../services/toast.js";
 
 const TPL = `
-<div class="options-section">
+<div class="etapi-options-section options-section">
     <h4>${t("etapi.title")}</h4>
 
     <p class="form-text">${t("etapi.description")} <br/>

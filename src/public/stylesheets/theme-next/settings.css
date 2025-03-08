@@ -2,12 +2,26 @@
  * Settings
  */
 :root {
+    --options-card-max-width: 900px;
     --options-card-padding: 17px;
     --options-title-font-size: 1rem;
     --options-title-offset: 13px;
 }
 
+/* Create a gap at the bottom of option pages */
+.note-detail-content-widget-content.options::after {
+    display: block;
+    content: "";
+    height: 1em;
+}
+
+.note-detail-content-widget-content.options:has(.shortcuts-options-section)::after {
+    height: 0;
+}
+
 .options-section {
+    margin: auto;
+    max-width: var(--options-card-max-width);
     border-radius: 12px;
     border: 1px solid var(--card-border-color) !important;
     box-shadow: var(--card-box-shadow);
@@ -43,8 +57,12 @@
 }
 
 .options-section hr {
+    --bs-border-width: 2px;
+
     margin-left: calc(var(--options-card-padding) * -1);
     margin-right: calc(var(--options-card-padding) * -1);
+    opacity: 1;
+    color: var(--root-background);
 }
 
 .options-section p:last-of-type:not(:first-of-type),
@@ -87,6 +105,11 @@
 
 /* Shortcuts */
 
+.shortcuts-options-section {
+    /* Allow the card to extend on the full width of the parent */
+    --options-card-max-width: 100%;
+}
+
 /* Group heading */
 .shortcuts-options-section .separator {
     padding-top: 2em;
@@ -102,4 +125,10 @@
     width: 100%;
     height: 2px;
     background: currentColor;
+}
+
+/* ETAPI */
+
+.etapi-options-section div {
+    height: auto !important;
 }
