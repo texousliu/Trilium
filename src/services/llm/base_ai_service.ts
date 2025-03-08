@@ -11,7 +11,7 @@ export abstract class BaseAIService implements AIService {
     abstract generateChatCompletion(messages: Message[], options?: ChatCompletionOptions): Promise<ChatResponse>;
 
     isAvailable(): boolean {
-        return options.getOption('aiEnabled') === 'true'; // Base check if AI is enabled globally
+        return options.getOptionBool('aiEnabled'); // Base check if AI is enabled globally
     }
 
     getName(): string {
