@@ -210,6 +210,11 @@ function register(router: Router) {
             renderNote(shaca.shareRootNote, req, res);
         });
     } else {
+        router.get(`${sharePath}`, (req, res, next) => {
+            // Redirect to the path with trailing slash for consistency
+            res.redirect(`${sharePath}/`);
+        });
+
         router.get(`${sharePath}/`, (req, res, next) => {
             if (req.path !== `${sharePath}/`) {
                 res.redirect(`${sharePath}/`);

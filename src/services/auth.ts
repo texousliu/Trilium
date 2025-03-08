@@ -39,7 +39,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
             
             // Redirect to the share path
             log.info(`checkAuth: Redirecting to share path. From: ${req.path}, To: ${sharePath}`);
-            res.redirect(sharePath);
+            res.redirect(`${sharePath}/`);
         } else {
             res.redirect("login");
         }

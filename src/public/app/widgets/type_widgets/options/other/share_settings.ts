@@ -28,7 +28,7 @@ const TPL = `
     <div class="form-group">
         <label>${t("share.share_path")}</label>
         <div>
-            <input type="text" class="form-control share-path" placeholder="/share or / for root">
+            <input type="text" class="form-control share-path" placeholder="${t("share.share_path_placeholder")}">
         </div>
         <div class="form-text">
             ${t("share.share_path_description")}
