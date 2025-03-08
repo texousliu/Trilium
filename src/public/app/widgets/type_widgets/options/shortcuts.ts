@@ -77,7 +77,7 @@ export default class KeyboardShortcutsOptions extends OptionsWidget {
                 const $tr = $("<tr>");
 
                 if (action.separator) {
-                    $tr.append($('<td colspan="4">').attr("style", "background-color: var(--accented-background-color); font-weight: bold;").text(action.separator));
+                    $tr.append($('<td class="separator" colspan="4">').attr("style", "background-color: var(--accented-background-color); font-weight: bold;").text(action.separator));
                 } else if (action.defaultShortcuts && action.actionName) {
                     $tr.append($("<td>").text(action.actionName))
                         .append(
