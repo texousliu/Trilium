@@ -43,7 +43,10 @@ const CODE_MIRROR: Library = {
 };
 
 const ESLINT: Library = {
-    js: ["libraries/eslint/eslint.js"]
+    js: async () => {
+        (window as any).eslint = (await import("eslint-linter-browserify")).Linter;
+        return [];
+    }
 };
 
 const RELATION_MAP: Library = {
@@ -108,13 +111,17 @@ async function requireLibrary(library: Library) {
     }
 
     if (library.js) {
-        for (const scriptUrl of unwrapValue(library.js)) {
+        for (const scriptUrl of await unwrapValue(library.js)) {
             await requireScript(scriptUrl);
         }
     }
 }
 
-function unwrapValue<T>(value: T | (() => T)) {
+async function unwrapValue<T>(value: T | (() => T) | Promise<(() => T)>) {
+    if (value && typeof value === "object" && "then" in value) {
+        return (await (value as Promise<() => T>))();
+    }
+
     if (typeof value === "function") {
         return (value as () => T)();
     }

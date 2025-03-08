@@ -44,29 +44,7 @@
         }
 
         const errors = new eslint().verify(text, {
-            root: true,
-            parserOptions: {
-                ecmaVersion: "2019"
-            },
-            extends: ['eslint:recommended', 'airbnb-base'],
-            env: {
-                'browser': true,
-                'node': true
-            },
-            rules: {
-                'import/no-unresolved': 'off',
-                'func-names': 'off',
-                'comma-dangle': ['warn'],
-                'padded-blocks': 'off',
-                'linebreak-style': 'off',
-                'class-methods-use-this': 'off',
-                'no-unused-vars': ['warn', { vars: 'local', args: 'after-used' }],
-                'no-nested-ternary': 'off',
-                'no-underscore-dangle': ['error', {'allow': ['_super', '_lookupFactory']}]
-            },
-            globals: {
-                "api": "readonly"
-            }
+
         });
 
         console.log(errors);
