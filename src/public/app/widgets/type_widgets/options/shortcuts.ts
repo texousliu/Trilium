@@ -7,7 +7,7 @@ import type { KeyboardShortcut } from "../../../../../services/keyboard_actions_
 import type { OptionNames } from "../../../../../services/options_interface.js";
 
 const TPL = `
-<div class="options-section shortcuts-options-section">
+<div class="options-section shortcuts-options-section tn-no-card">
     <style>
         .shortcuts-options-section {
             display: flex;
