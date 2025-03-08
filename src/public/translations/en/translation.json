@@ -1161,11 +1161,22 @@
     "embedding_update_interval_description": "Time between processing batches of embeddings (in milliseconds)",
     "embedding_default_dimension": "Default Dimension",
     "embedding_default_dimension_description": "Default embedding vector dimension when creating new embeddings",
-    "reprocess_all_embeddings": "Reprocess All Notes",
-    "reprocess_all_embeddings_description": "Queue all notes for embedding generation or update",
-    "reprocessing_embeddings": "Processing...",
-    "reprocess_started": "All notes have been queued for embedding processing",
-    "reprocess_error": "Error starting embedding reprocessing"
+    "reprocess_all_embeddings": "Reprocess All Embeddings",
+    "reprocess_all_embeddings_description": "Queue all notes for embedding processing. This may take some time depending on your number of notes.",
+    "reprocessing_embeddings": "Reprocessing...",
+    "reprocess_started": "Embedding reprocessing started in the background",
+    "reprocess_error": "Error starting embedding reprocessing",
+
+    "embedding_statistics": "Embedding Statistics",
+    "total_notes": "Total Notes",
+    "processed_notes": "Processed Notes",
+    "queued_notes": "Queued Notes",
+    "failed_notes": "Failed Notes",
+    "last_processed": "Last Processed",
+    "never": "Never",
+    "refresh_stats": "Refresh Stats",
+    "refreshing": "Refreshing...",
+    "stats_error": "Error fetching embedding statistics"
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",

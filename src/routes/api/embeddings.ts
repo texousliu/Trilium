@@ -191,11 +191,24 @@ async function getQueueStatus(req: Request, res: Response) {
     };
 }
 
+/**
+ * Get embedding statistics
+ */
+async function getEmbeddingStats(req: Request, res: Response) {
+    const stats = await vectorStore.getEmbeddingStats();
+
+    return {
+        success: true,
+        stats
+    };
+}
+
 export default {
     findSimilarNotes,
     searchByText,
     getProviders,
     updateProvider,
     reprocessAllNotes,
-    getQueueStatus
+    getQueueStatus,
+    getEmbeddingStats
 };

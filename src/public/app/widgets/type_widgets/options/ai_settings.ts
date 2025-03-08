@@ -17,6 +17,19 @@ interface OllamaModelResponse {
     }>;
 }
 
+// Interface for embedding statistics
+interface EmbeddingStats {
+    success: boolean;
+    stats: {
+        totalNotesCount: number;
+        embeddedNotesCount: number;
+        queuedNotesCount: number;
+        failedNotesCount: number;
+        lastProcessedDate: string | null;
+        percentComplete: number;
+    }
+}
+
 export default class AiSettingsWidget extends OptionsWidget {
     doRender() {
         this.$widget = $(`
@@ -175,6 +188,26 @@ export default class AiSettingsWidget extends OptionsWidget {
                     </button>
                     <div class="help-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
                 </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.embedding_statistics")}</label>
+                    <div class="embedding-stats-container">
+                        <div class="embedding-stats">
+                            <div><strong>${t("ai_llm.total_notes")}:</strong> <span class="embedding-total-notes">-</span></div>
+                            <div><strong>${t("ai_llm.processed_notes")}:</strong> <span class="embedding-processed-notes">-</span></div>
+                            <div><strong>${t("ai_llm.queued_notes")}:</strong> <span class="embedding-queued-notes">-</span></div>
+                            <div><strong>${t("ai_llm.failed_notes")}:</strong> <span class="embedding-failed-notes">-</span></div>
+                            <div><strong>${t("ai_llm.last_processed")}:</strong> <span class="embedding-last-processed">-</span></div>
+                            <div class="progress mt-2" style="height: 10px;">
+                                <div class="progress-bar embedding-progress" role="progressbar" style="width: 0%;"
+                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats mt-2">
+                            ${t("ai_llm.refresh_stats")}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>`);
 
@@ -253,44 +286,44 @@ export default class AiSettingsWidget extends OptionsWidget {
         $refreshModels.on('click', async () => {
             $refreshModels.prop('disabled', true);
             $refreshModels.text(t("ai_llm.refreshing_models"));
-            
+
             try {
                 const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
                 const response = await server.post<OllamaModelResponse>('ollama/list-models', { baseUrl: ollamaBaseUrl });
-                
+
                 if (response && response.success && response.models && response.models.length > 0) {
                     const $embedModelSelect = this.$widget.find('.ollama-embedding-model');
                     const currentValue = $embedModelSelect.val();
-                    
+
                     // Clear existing options
                     $embedModelSelect.empty();
-                    
+
                     // Add embedding-specific models first
-                    const embeddingModels = response.models.filter(model => 
+                    const embeddingModels = response.models.filter(model =>
                         model.name.includes('embed') || model.name.includes('bert'));
-                        
+
                     embeddingModels.forEach(model => {
                         $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
                     });
-                    
+
                     // Add separator if we have both types
                     if (embeddingModels.length > 0) {
                         $embedModelSelect.append(`<option disabled>───────────</option>`);
                     }
-                    
+
                     // Add other models (LLMs can also generate embeddings)
-                    const otherModels = response.models.filter(model => 
+                    const otherModels = response.models.filter(model =>
                         !model.name.includes('embed') && !model.name.includes('bert'));
-                        
+
                     otherModels.forEach(model => {
                         $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
                     });
-                    
+
                     // Restore previous selection if possible
                     if (currentValue) {
                         $embedModelSelect.val(currentValue);
                     }
-                    
+
                     toastService.showMessage("Models refreshed successfully");
                 } else {
                     toastService.showError("No models found from Ollama server");
@@ -333,6 +366,8 @@ export default class AiSettingsWidget extends OptionsWidget {
             try {
                 await server.post('embeddings/reprocess');
                 toastService.showMessage(t("ai_llm.reprocess_started"));
+                // Refresh stats after reprocessing starts
+                await this.refreshEmbeddingStats();
             } catch (error) {
                 console.error("Error reprocessing embeddings:", error);
                 toastService.showError(t("ai_llm.reprocess_error"));
@@ -342,7 +377,55 @@ export default class AiSettingsWidget extends OptionsWidget {
             }
         });
 
+        const $embeddingRefreshStats = this.$widget.find('.embedding-refresh-stats');
+        $embeddingRefreshStats.on('click', async () => {
+            await this.refreshEmbeddingStats();
+        });
+
+        // Initial fetch of embedding stats
+        setTimeout(async () => {
+            await this.refreshEmbeddingStats();
+        }, 500);
+
         return this.$widget;
+    }
+
+    async refreshEmbeddingStats() {
+        if (!this.$widget) return;
+
+        try {
+            const $refreshButton = this.$widget.find('.embedding-refresh-stats');
+            $refreshButton.prop('disabled', true);
+            $refreshButton.text(t("ai_llm.refreshing"));
+
+            const response = await server.get<EmbeddingStats>('embeddings/stats');
+
+            if (response && response.success) {
+                const stats = response.stats;
+
+                this.$widget.find('.embedding-total-notes').text(stats.totalNotesCount);
+                this.$widget.find('.embedding-processed-notes').text(stats.embeddedNotesCount);
+                this.$widget.find('.embedding-queued-notes').text(stats.queuedNotesCount);
+                this.$widget.find('.embedding-failed-notes').text(stats.failedNotesCount);
+
+                const lastProcessed = stats.lastProcessedDate
+                    ? new Date(stats.lastProcessedDate).toLocaleString()
+                    : t("ai_llm.never");
+                this.$widget.find('.embedding-last-processed').text(lastProcessed);
+
+                const $progressBar = this.$widget.find('.embedding-progress');
+                $progressBar.css('width', `${stats.percentComplete}%`);
+                $progressBar.attr('aria-valuenow', stats.percentComplete.toString());
+                $progressBar.text(`${stats.percentComplete}%`);
+            }
+        } catch (error) {
+            console.error("Error fetching embedding stats:", error);
+            toastService.showError(t("ai_llm.stats_error"));
+        } finally {
+            const $refreshButton = this.$widget.find('.embedding-refresh-stats');
+            $refreshButton.prop('disabled', false);
+            $refreshButton.text(t("ai_llm.refresh_stats"));
+        }
     }
 
     updateAiSectionVisibility() {

@@ -378,6 +378,7 @@ function register(app: express.Application) {
     apiRoute(PATCH, "/api/embeddings/providers/:providerId", embeddingsRoute.updateProvider);
     apiRoute(PST, "/api/embeddings/reprocess", embeddingsRoute.reprocessAllNotes);
     apiRoute(GET, "/api/embeddings/queue-status", embeddingsRoute.getQueueStatus);
+    apiRoute(GET, "/api/embeddings/stats", embeddingsRoute.getEmbeddingStats);
 
     // Ollama API endpoints
     route(PST, "/api/ollama/list-models", [auth.checkApiAuth, csrfMiddleware], ollamaRoute.listModels, apiResultHandler);

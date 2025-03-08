@@ -471,6 +471,41 @@ export async function reprocessAllNotes() {
     }
 }
 
+/**
+ * Get current embedding statistics
+ */
+export async function getEmbeddingStats() {
+    const totalNotesCount = await sql.getValue(
+        "SELECT COUNT(*) FROM notes WHERE isDeleted = 0"
+    ) as number;
+
+    const embeddedNotesCount = await sql.getValue(
+        "SELECT COUNT(DISTINCT noteId) FROM note_embeddings"
+    ) as number;
+
+    const queuedNotesCount = await sql.getValue(
+        "SELECT COUNT(*) FROM embedding_queue"
+    ) as number;
+
+    const failedNotesCount = await sql.getValue(
+        "SELECT COUNT(*) FROM embedding_queue WHERE attempts > 0"
+    ) as number;
+
+    // Get the last processing time by checking the most recent embedding
+    const lastProcessedDate = await sql.getValue(
+        "SELECT utcDateCreated FROM note_embeddings ORDER BY utcDateCreated DESC LIMIT 1"
+    ) as string | null || null;
+
+    return {
+        totalNotesCount,
+        embeddedNotesCount,
+        queuedNotesCount,
+        failedNotesCount,
+        lastProcessedDate,
+        percentComplete: totalNotesCount > 0 ? Math.round((embeddedNotesCount / totalNotesCount) * 100) : 0
+    };
+}
+
 export default {
     cosineSimilarity,
     embeddingToBuffer,
@@ -485,5 +520,6 @@ export default {
     setupEmbeddingEventListeners,
     setupEmbeddingBackgroundProcessing,
     initEmbeddings,
-    reprocessAllNotes
+    reprocessAllNotes,
+    getEmbeddingStats
 };
