@@ -162,6 +162,8 @@ export type CommandMappings = {
     moveNoteDownInHierarchy: ContextMenuCommandData;
     selectAllNotesInParent: ContextMenuCommandData;
 
+    createNoteIntoInbox: CommandData;
+
     addNoteLauncher: ContextMenuCommandData;
     addScriptLauncher: ContextMenuCommandData;
     addWidgetLauncher: ContextMenuCommandData;

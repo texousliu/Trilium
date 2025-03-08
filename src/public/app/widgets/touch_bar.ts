@@ -42,10 +42,8 @@ export default class TouchBarWidget extends Component {
 
         const items = [
             new TouchBarButton({
-                icon: this.#buildIcon("NSTouchBarAddDetailTemplate"),
-                click: () => {
-                    console.log("New note pressed.");
-                }
+                icon: this.#buildIcon("NSTouchBarComposeTemplate"),
+                click: () => this.triggerCommand("createNoteIntoInbox")
             })
         ];
 
