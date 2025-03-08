@@ -90,9 +90,16 @@ const ALLOWED_OPTIONS = new Set([
     "ollamaEnabled",
     "ollamaBaseUrl",
     "ollamaDefaultModel",
+    "ollamaEmbeddingModel",
     "aiProviderPrecedence",
     "aiTemperature",
-    "aiSystemPrompt"
+    "aiSystemPrompt",
+    // Embedding options
+    "embeddingAutoUpdate",
+    "embeddingAutoUpdateEnabled",
+    "embeddingBatchSize",
+    "embeddingUpdateInterval",
+    "embeddingDefaultDimension"
 ]);
 
 function getOptions() {

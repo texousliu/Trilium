@@ -1,4 +1,5 @@
 -- Add tables for vector embeddings storage and management
+-- This migration adds embedding support to the main document.db database
 
 -- Store embeddings for notes
 CREATE TABLE IF NOT EXISTS "note_embeddings" (
@@ -44,7 +45,11 @@ CREATE TABLE IF NOT EXISTS "embedding_providers" (
 );
 
 -- Add default embedding provider options
-INSERT INTO options (name, value, isSynced) VALUES ('embeddingAutoUpdateEnabled', 'true', 1);
-INSERT INTO options (name, value, isSynced) VALUES ('embeddingUpdateInterval', '5000', 1); -- 5 seconds
-INSERT INTO options (name, value, isSynced) VALUES ('embeddingBatchSize', '10', 1);
-INSERT INTO options (name, value, isSynced) VALUES ('embeddingDefaultDimension', '1536', 1); 
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingAutoUpdateEnabled', 'true', 1, strftime('%Y-%m-%d %H:%M:%f', 'now'));
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingUpdateInterval', '5000', 1, strftime('%Y-%m-%d %H:%M:%f', 'now')); -- 5 seconds
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingBatchSize', '10', 1, strftime('%Y-%m-%d %H:%M:%f', 'now'));
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingDefaultDimension', '1536', 1, strftime('%Y-%m-%d %H:%M:%f', 'now')); 
