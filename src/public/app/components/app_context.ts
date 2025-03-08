@@ -22,10 +22,9 @@ import type LoadResults from "../services/load_results.js";
 import type { Attribute } from "../services/attribute_parser.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
 import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
-import type { ContextMenuEvent } from "../menus/context_menu.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.js";
-import TouchBarWidget from "../widgets/touch_bar.js";
+import type { NativeImage } from "electron";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -256,6 +255,11 @@ export type CommandMappings = {
 
     refreshResults: {};
     refreshSearchDefinition: {};
+
+    buildTouchBar: CommandData & {
+        TouchBar: typeof import("electron").TouchBar;
+        buildIcon(name: string): NativeImage;
+    };
 };
 
 type EventMappings = {
@@ -447,10 +451,6 @@ class AppContext extends Component {
         this.tabManager = new TabManager();
 
         this.components = [this.tabManager, new RootCommandExecutor(), new Entrypoints(), new MainTreeExecutors(), new ShortcutComponent()];
-
-        if (utils.isElectron() && utils.isMac()) {
-            this.components.push(new TouchBarWidget());
-        }
 
         if (utils.isMobile()) {
             this.components.push(new MobileScreenSwitcherExecutor());

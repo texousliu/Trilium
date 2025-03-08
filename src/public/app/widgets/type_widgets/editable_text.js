@@ -507,4 +507,49 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         await this.reinitialize(data);
     }
 
+    buildTouchBarCommand(data) {
+        const { TouchBar, buildIcon } = data;
+        const { TouchBarSegmentedControl, TouchBarGroup, TouchBarButton } = TouchBar;
+        return [
+            new TouchBarSegmentedControl({
+                segments: [
+                    { label: "P" },
+                    { label: "H2" },
+                    { label: "H3" }
+                ],
+                change(selectedIndex, isSelected) {
+                    switch (selectedIndex) {
+                        case 0:
+                            triggerTextEditorCommand("paragraph")
+                            break;
+                        case 1:
+                            triggerTextEditorCommand("heading", { value: "heading2" });
+                            break;
+                        case 2:
+                            triggerTextEditorCommand("heading", { value: "heading3" });
+                            break;
+                    }
+                },
+            }),
+            new TouchBarGroup({
+                items: new TouchBar({
+                    items: [
+                        new TouchBarButton({
+                            icon: buildIcon("NSTouchBarTextBoldTemplate"),
+                            click: () => triggerTextEditorCommand("bold")
+                        }),
+                        new TouchBarButton({
+                            icon: buildIcon("NSTouchBarTextItalicTemplate"),
+                            click: () => triggerTextEditorCommand("italic")
+                        }),
+                        new TouchBarButton({
+                            icon: buildIcon("NSTouchBarTextUnderlineTemplate"),
+                            click: () => triggerTextEditorCommand("underline")
+                        })
+                    ]
+                })
+            })
+        ];
+    }
+
 }

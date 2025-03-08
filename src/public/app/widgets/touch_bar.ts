@@ -1,6 +1,8 @@
 import utils from "../services/utils.js";
 import Component from "../components/component.js";
 import appContext from "../components/app_context.js";
+import NoteContextAwareWidget from "./note_context_aware_widget.js";
+import type FNote from "../entities/fnote.js";
 
 async function triggerTextEditorCommand(command: string, args?: object) {
     const editor = await appContext.tabManager.getActiveContext().getTextEditor();
@@ -12,7 +14,7 @@ async function triggerTextEditorCommand(command: string, args?: object) {
     (editor as any).execute(command, args);
 }
 
-export default class TouchBarWidget extends Component {
+export default class TouchBarWidget extends NoteContextAwareWidget {
 
     nativeImage: typeof import("electron").nativeImage;
     remote: typeof import("@electron/remote");
@@ -21,15 +23,30 @@ export default class TouchBarWidget extends Component {
         super();
         this.nativeImage = utils.dynamicRequire("electron").nativeImage;
         this.remote = utils.dynamicRequire("@electron/remote") as typeof import("@electron/remote");
-        this.#setTouchBar();
+        this.$widget = $("<div>");
+
+        $(window).on("focusin", async (e) => {
+            const target = e.target;
+            const parentComponentEl = $(target).closest(".component");
+            // TODO: Remove typecast once it's no longer necessary.
+            const parentComponent = appContext.getComponentByEl(parentComponentEl[0]) as Component;
+            const { TouchBar } = this.remote;
+            if (!parentComponent) {
+                return;
+            }
+
+            const result = parentComponent.triggerCommand("buildTouchBar", {
+                TouchBar,
+                buildIcon: this.buildIcon.bind(this)
+            });
+
+            if (result) {
+                this.remote.getCurrentWindow().setTouchBar(result);
+            }
+        });
     }
 
-    #setTouchBar() {
-        const touchBarData = this.#buildTouchBar();
-        this.remote.getCurrentWindow().setTouchBar(touchBarData);
-    }
-
-    #buildIcon(name: string) {
+    buildIcon(name: string) {
         const sourceImage = this.nativeImage.createFromNamedImage(name, [-1, 0, 1]);
         const { width, height } = sourceImage.getSize();
         const newImage = this.nativeImage.createEmpty();
@@ -48,58 +65,21 @@ export default class TouchBarWidget extends Component {
         return newImage;
     }
 
-    #buildTouchBar() {
+    #buildTextTouchBar() {
         const { TouchBar } = this.remote;
         const { TouchBarButton, TouchBarSpacer, TouchBarGroup, TouchBarSegmentedControl, TouchBarOtherItemsProxy } = this.remote.TouchBar;
 
         const items = [
             new TouchBarButton({
-                icon: this.#buildIcon("NSTouchBarComposeTemplate"),
+                icon: this.buildIcon("NSTouchBarComposeTemplate"),
                 click: () => this.triggerCommand("createNoteIntoInbox")
             }),
             new TouchBarSpacer({ size: "large" }),
-            new TouchBarSegmentedControl({
-                segments: [
-                    { label: "P" },
-                    { label: "H2" },
-                    { label: "H3" }
-                ],
-                change(selectedIndex, isSelected) {
-                    switch (selectedIndex) {
-                        case 0:
-                            triggerTextEditorCommand("paragraph")
-                            break;
-                        case 1:
-                            triggerTextEditorCommand("heading", { value: "heading2" });
-                            break;
-                        case 2:
-                            triggerTextEditorCommand("heading", { value: "heading3" });
-                            break;
-                    }
-                },
-            }),
-            new TouchBarGroup({
-                items: new TouchBar({
-                    items: [
-                        new TouchBarButton({
-                            icon: this.#buildIcon("NSTouchBarTextBoldTemplate"),
-                            click: () => triggerTextEditorCommand("bold")
-                        }),
-                        new TouchBarButton({
-                            icon: this.#buildIcon("NSTouchBarTextItalicTemplate"),
-                            click: () => triggerTextEditorCommand("italic")
-                        }),
-                        new TouchBarButton({
-                            icon: this.#buildIcon("NSTouchBarTextUnderlineTemplate"),
-                            click: () => triggerTextEditorCommand("underline")
-                        })
-                    ]
-                })
-            }),
+            // data should go here
             new TouchBarOtherItemsProxy(),
             new TouchBarSpacer({ size: "flexible" }),
             new TouchBarButton({
-                icon: this.#buildIcon("NSTouchBarAddDetailTemplate"),
+                icon: this.buildIcon("NSTouchBarAddDetailTemplate"),
                 click: () => this.triggerCommand("jumpToNote")
             })
         ];
