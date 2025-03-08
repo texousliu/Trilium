@@ -91,7 +91,7 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
  */
 
 .login-page {
-    display: flex;
+    display: flex; /* Note: the login page contents is hidden before this property is applied  */
     height: 100%;
     flex-direction: column;
     justify-content: center;

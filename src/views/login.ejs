@@ -6,6 +6,12 @@
     <title><%= t("login.title") %></title>
     <link rel="apple-touch-icon" sizes="180x180" href="<%= assetPath %>/images/app-icons/ios/apple-touch-icon.png">
     <link rel="shortcut icon" href="favicon.ico">
+    <style>
+        .login-page {
+            /* Prevent the content from being rendered before the main stylesheet loads */
+            display: none;
+        }
+    </style>
     <% // TriliumNextTODO: move the css file to ${assetPath}/stylesheets/  %>
     <link rel="stylesheet" href="<%= appPath %>/login.css">
     <link rel="stylesheet" href="<%= assetPath %>/stylesheets/theme-light.css">
