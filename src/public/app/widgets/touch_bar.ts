@@ -19,9 +19,21 @@ export default class TouchBarWidget extends Component {
     }
 
     #buildIcon(name: string) {
-        return this.nativeImage
-            .createFromNamedImage(name, [-1, 0, 1])
-            .resize({ height: 20 });
+        const sourceImage = this.nativeImage.createFromNamedImage(name, [-1, 0, 1]);
+        const newImage = this.nativeImage.createEmpty()
+        newImage.addRepresentation({
+            scaleFactor: 1,
+            width: 22,
+            height: 22,
+            buffer: sourceImage.resize({ height: 22 }).toBitmap()
+        });
+        newImage.addRepresentation({
+            scaleFactor: 2,
+            width: 44,
+            height: 44,
+            buffer: sourceImage.resize({ height: 44 }).toBitmap()
+        });
+        return newImage;
     }
 
     #buildTouchBar() {
