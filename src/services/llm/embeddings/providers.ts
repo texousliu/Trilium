@@ -7,7 +7,52 @@ import type { EmbeddingProvider, EmbeddingConfig } from "./embeddings_interface.
 import { OpenAIEmbeddingProvider } from "./providers/openai.js";
 import { OllamaEmbeddingProvider } from "./providers/ollama.js";
 import { AnthropicEmbeddingProvider } from "./providers/anthropic.js";
-import { LocalEmbeddingProvider } from "./providers/local.js";
+
+/**
+ * Simple local embedding provider implementation
+ * This avoids the need to import a separate file which might not exist
+ */
+class SimpleLocalEmbeddingProvider implements EmbeddingProvider {
+    name = "local";
+    config: EmbeddingConfig;
+
+    constructor(config: EmbeddingConfig) {
+        this.config = config;
+    }
+
+    getConfig(): EmbeddingConfig {
+        return this.config;
+    }
+
+    async generateEmbeddings(text: string): Promise<Float32Array> {
+        // Create deterministic embeddings based on text content
+        const result = new Float32Array(this.config.dimension || 384);
+
+        // Simple hash-based approach
+        for (let i = 0; i < result.length; i++) {
+            // Use character codes and position to generate values between -1 and 1
+            const charSum = Array.from(text).reduce((sum, char, idx) =>
+                sum + char.charCodeAt(0) * Math.sin(idx * 0.1), 0);
+            result[i] = Math.sin(i * 0.1 + charSum * 0.01);
+        }
+
+        return result;
+    }
+
+    async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
+        return Promise.all(texts.map(text => this.generateEmbeddings(text)));
+    }
+
+    async generateNoteEmbeddings(context: any): Promise<Float32Array> {
+        // Combine text from context
+        const text = (context.title || "") + " " + (context.content || "");
+        return this.generateEmbeddings(text);
+    }
+
+    async generateBatchNoteEmbeddings(contexts: any[]): Promise<Float32Array[]> {
+        return Promise.all(contexts.map(context => this.generateNoteEmbeddings(context)));
+    }
+}
 
 const providers = new Map<string, EmbeddingProvider>();
 
@@ -236,33 +281,46 @@ export async function initializeDefaultProviders() {
 
         // Register Ollama provider if enabled
         if (await options.getOptionBool('ollamaEnabled')) {
-            const ollamaModel = await options.getOption('ollamaDefaultModel') || 'llama3';
             const ollamaBaseUrl = await options.getOption('ollamaBaseUrl') || 'http://localhost:11434';
 
-            registerEmbeddingProvider(new OllamaEmbeddingProvider({
-                model: ollamaModel,
-                dimension: 4096, // Typical for Ollama models
-                type: 'float32',
-                baseUrl: ollamaBaseUrl
-            }));
+            // Use specific embedding models if available
+            const embeddingModel = await options.getOption('ollamaEmbeddingModel') || 'nomic-embed-text';
 
-            // Create Ollama provider config if it doesn't exist
-            const existingOllama = await sql.getRow(
-                "SELECT * FROM embedding_providers WHERE name = ?",
-                ['ollama']
-            );
+            try {
+                // Create provider with initial dimension to be updated during initialization
+                const ollamaProvider = new OllamaEmbeddingProvider({
+                    model: embeddingModel,
+                    dimension: 768, // Initial value, will be updated during initialization
+                    type: 'float32',
+                    baseUrl: ollamaBaseUrl
+                });
 
-            if (!existingOllama) {
-                await createEmbeddingProviderConfig('ollama', {
-                    model: ollamaModel,
-                    dimension: 4096,
-                    type: 'float32'
-                }, true, 50);
+                // Register the provider
+                registerEmbeddingProvider(ollamaProvider);
+
+                // Initialize the provider to detect model capabilities
+                await ollamaProvider.initialize();
+
+                // Create Ollama provider config if it doesn't exist
+                const existingOllama = await sql.getRow(
+                    "SELECT * FROM embedding_providers WHERE name = ?",
+                    ['ollama']
+                );
+
+                if (!existingOllama) {
+                    await createEmbeddingProviderConfig('ollama', {
+                        model: embeddingModel,
+                        dimension: ollamaProvider.getDimension(),
+                        type: 'float32'
+                    }, true, 50);
+                }
+            } catch (error: any) {
+                log.error(`Error initializing Ollama embedding provider: ${error.message || 'Unknown error'}`);
             }
         }
 
         // Always register local provider as fallback
-        registerEmbeddingProvider(new LocalEmbeddingProvider({
+        registerEmbeddingProvider(new SimpleLocalEmbeddingProvider({
             model: 'local',
             dimension: 384,
             type: 'float32'

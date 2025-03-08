@@ -57,6 +57,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     ollamaEnabled: boolean;
     ollamaBaseUrl: string;
     ollamaDefaultModel: string;
+    ollamaEmbeddingModel: string;
     aiProviderPrecedence: string;
     aiTemperature: string;
     aiSystemPrompt: string;
@@ -66,6 +67,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     embeddingUpdateInterval: number;
     embeddingBatchSize: number;
     embeddingDefaultDimension: number;
+    embeddingAutoUpdate: boolean;
 
     lastSyncedPull: number;
     lastSyncedPush: number;

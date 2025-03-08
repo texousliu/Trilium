@@ -4,6 +4,19 @@ import type { FilterOptionsByType, OptionMap } from "../../../../../services/opt
 import server from "../../../services/server.js";
 import toastService from "../../../services/toast.js";
 
+// Interface for the Ollama model response
+interface OllamaModelResponse {
+    success: boolean;
+    models: Array<{
+        name: string;
+        model: string;
+        details?: {
+            family?: string;
+            parameter_size?: string;
+        }
+    }>;
+}
+
 export default class AiSettingsWidget extends OptionsWidget {
     doRender() {
         this.$widget = $(`
@@ -102,15 +115,26 @@ export default class AiSettingsWidget extends OptionsWidget {
                 </div>
 
                 <div class="form-group">
-                    <label>${t("ai_llm.base_url")}</label>
+                    <label>${t("ai_llm.ollama_url")}</label>
                     <input class="ollama-base-url form-control" type="text">
                     <div class="help-text">${t("ai_llm.ollama_url_description")}</div>
                 </div>
 
                 <div class="form-group">
-                    <label>${t("ai_llm.default_model")}</label>
+                    <label>${t("ai_llm.ollama_model")}</label>
                     <input class="ollama-default-model form-control" type="text">
                     <div class="help-text">${t("ai_llm.ollama_model_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.ollama_embedding_model")}</label>
+                    <select class="ollama-embedding-model form-control">
+                        <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
+                        <option value="mxbai-embed-large">mxbai-embed-large</option>
+                        <option value="llama3">llama3</option>
+                    </select>
+                    <div class="help-text">${t("ai_llm.ollama_embedding_model_description")}</div>
+                    <button class="btn btn-sm btn-outline-secondary refresh-models">${t("ai_llm.refresh_models")}</button>
                 </div>
             </div>
 
@@ -220,6 +244,59 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.updateOption('ollamaDefaultModel', $ollamaDefaultModel.val() as string);
         });
 
+        const $ollamaEmbeddingModel = this.$widget.find('.ollama-embedding-model');
+        $ollamaEmbeddingModel.on('change', async () => {
+            await this.updateOption('ollamaEmbeddingModel', $ollamaEmbeddingModel.val() as string);
+        });
+
+        const $refreshModels = this.$widget.find('.refresh-models');
+        $refreshModels.on('click', async () => {
+            $refreshModels.prop('disabled', true);
+            $refreshModels.text(t("ai_llm.refresh_models"));
+
+            try {
+                const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
+                const response = await server.post<OllamaModelResponse>('ollama/list-models', { baseUrl: ollamaBaseUrl });
+
+                if (response && response.models) {
+                    const $embedModelSelect = this.$widget.find('.ollama-embedding-model');
+                    const currentValue = $embedModelSelect.val();
+
+                    // Clear existing options
+                    $embedModelSelect.empty();
+
+                    // Add embedding-specific models first
+                    const embeddingModels = response.models.filter(model =>
+                        model.name.includes('embed') || model.name.includes('bert'));
+
+                    embeddingModels.forEach(model => {
+                        $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                    });
+
+                    // Add separator
+                    $embedModelSelect.append(`<option disabled>───────────</option>`);
+
+                    // Add other models (LLMs can also generate embeddings)
+                    const otherModels = response.models.filter(model =>
+                        !model.name.includes('embed') && !model.name.includes('bert'));
+
+                    otherModels.forEach(model => {
+                        $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                    });
+
+                    // Restore previous selection if possible
+                    if (currentValue) {
+                        $embedModelSelect.val(currentValue);
+                    }
+                }
+            } catch (error) {
+                console.error("Error refreshing Ollama models:", error);
+            } finally {
+                $refreshModels.prop('disabled', false);
+                $refreshModels.text(t("ai_llm.refresh_models"));
+            }
+        });
+
         // Embedding options event handlers
         const $embeddingAutoUpdateEnabled = this.$widget.find('.embedding-auto-update-enabled');
         $embeddingAutoUpdateEnabled.on('change', async () => {
@@ -290,6 +367,7 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl);
         this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel);
+        this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || 'nomic-embed-text');
 
         // Load embedding options
         this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled);
