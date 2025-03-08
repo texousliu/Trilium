@@ -15,11 +15,18 @@ const TPL = `
         </div>
 
         <div class="col-6">
-            <label for="first-day-of-week-select">${t("i18n.first-day-of-the-week")}</label>
-            <select id="first-day-of-week-select" class="first-day-of-week-select form-select">
-                <option value="0">${t("i18n.sunday")}</option>
-                <option value="1">${t("i18n.monday")}</option>
-            </select>
+            <label id="first-day-of-week-label">${t("i18n.first-day-of-the-week")}</label>
+            <div role="group" aria-labelledby="first-day-of-week-label" style="margin-top: .33em;">
+                <label class="tn-radio">
+                    <input name="first-day-of-week" type="radio" value="0" />
+                    ${t("i18n.sunday")}
+                </label>
+
+                <label class="tn-radio">
+                    <input name="first-day-of-week" type="radio" value="1" />
+                    ${t("i18n.monday")}
+                </label>
+            </div>
         </div>
     </div>
 </div>
@@ -28,7 +35,6 @@ const TPL = `
 export default class LocalizationOptions extends OptionsWidget {
 
     private $localeSelect!: JQuery<HTMLElement>;
-    private $firstDayOfWeek!: JQuery<HTMLElement>;
 
     doRender() {
         this.$widget = $(TPL);
@@ -40,9 +46,9 @@ export default class LocalizationOptions extends OptionsWidget {
             utils.reloadFrontendApp("locale change");
         });
 
-        this.$firstDayOfWeek = this.$widget.find(".first-day-of-week-select");
-        this.$firstDayOfWeek.on("change", () => {
-            this.updateOption("firstDayOfWeek", String(this.$firstDayOfWeek.val()));
+        this.$widget.find(`input[name="first-day-of-week"]`).on("change", () => {
+            const firstDayOfWeek = String(this.$widget.find(`input[name="first-day-of-week"]:checked`).val());
+            this.updateOption("firstDayOfWeek", firstDayOfWeek);
         });
     }
 
@@ -55,6 +61,7 @@ export default class LocalizationOptions extends OptionsWidget {
         }
 
         this.$localeSelect.val(options.locale);
-        this.$firstDayOfWeek.val(options.firstDayOfWeek);
+        this.$widget.find(`input[name="first-day-of-week"][value="${options.firstDayOfWeek}"]`)
+                    .prop("checked", "true");
     }
 }
