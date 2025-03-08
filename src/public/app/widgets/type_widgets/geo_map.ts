@@ -397,31 +397,23 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
-        switch (this._state) {
-            case State.Normal:
-                return [
-                    new TouchBar.TouchBarSlider({
-                        label: "Zoom",
-                        value: map.getZoom(),
-                        minValue: map.getMinZoom(),
-                        maxValue: map.getMaxZoom(),
-                        change(newValue) {
-                            that.ignoreNextZoomEvent = true;
-                            map.setZoom(newValue);
-                        },
-                    }),
-                    new TouchBar.TouchBarButton({
-                        label: "New geo note",
-                        click: () => this.triggerCommand("geoMapCreateChildNote", { ntxId: this.ntxId })
-                    })
-                ];
-
-            case State.NewNote:
-                return [
-                    new TouchBar.TouchBarSpacer({ size: "flexible" }),
-                    new TouchBar.TouchBarLabel({ label: "New note" })
-                ]
-        }
+        return [
+            new TouchBar.TouchBarSlider({
+                label: "Zoom",
+                value: map.getZoom(),
+                minValue: map.getMinZoom(),
+                maxValue: map.getMaxZoom(),
+                change(newValue) {
+                    that.ignoreNextZoomEvent = true;
+                    map.setZoom(newValue);
+                },
+            }),
+            new TouchBar.TouchBarButton({
+                label: "New geo note",
+                click: () => this.triggerCommand("geoMapCreateChildNote", { ntxId: this.ntxId }),
+                enabled: (this._state === State.Normal)
+            })
+        ];
     }
 
 }
