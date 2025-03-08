@@ -1,6 +1,6 @@
 "use strict";
 
-import { isElectron } from "../services/utils.js";
+import { isElectron, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import multer from "multer";
 import log from "../services/log.js";
 import express from "express";
@@ -494,10 +494,7 @@ function handleResponse(resultHandler: ApiResultHandler, req: express.Request, r
 }
 
 function handleException(e: unknown | Error, method: HttpMethod, path: string, res: express.Response) {
-
-    const [errMessage, errStack]: [message: string, stack: string] = (e instanceof Error)
-        ? [e.message, e.stack || "No Stack Trace"]
-        : ["Unknown Error", "No Stack Trace"];
+    const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
 
     log.error(`${method} ${path} threw exception: '${errMessage}', stack: ${errStack}`);
 

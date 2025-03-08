@@ -4,6 +4,7 @@ import sql from "../../services/sql.js";
 import becca from "../../becca/becca.js";
 import type { Request } from "express";
 import ValidationError from "../../errors/validation_error.js";
+import { safeExtractMessageAndStackFromError } from "../../services/utils.js";
 
 function getSchema() {
     const tableNames = sql.getColumn(`SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name`);
@@ -57,9 +58,10 @@ function execute(req: Request) {
             results
         };
     } catch (e: unknown) {
+        const [errMessage] = safeExtractMessageAndStackFromError(e);
         return {
             success: false,
-            error: (e instanceof Error) ? e.message : "Unknown Error"
+            error: errMessage
         };
     }
 }

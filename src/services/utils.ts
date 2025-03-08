@@ -363,6 +363,11 @@ export function processStringOrBuffer(data: string | Buffer | null) {
     }
 }
 
+export function safeExtractMessageAndStackFromError(err: unknown) {
+    return (err instanceof Error) ? [err.message, err.stack] as const : ["Unknown Error", undefined] as const;
+}
+
+
 export default {
     compareVersions,
     crash,
@@ -393,6 +398,7 @@ export default {
     removeDiacritic,
     removeTextFileExtension,
     replaceAll,
+    safeExtractMessageAndStackFromError,
     sanitizeSqlIdentifier,
     stripTags,
     timeLimit,

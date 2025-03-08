@@ -5,6 +5,7 @@ import cls from "../services/cls.js";
 import sql from "../services/sql.js";
 import becca from "../becca/becca.js";
 import type { Request, Response, Router } from "express";
+import { safeExtractMessageAndStackFromError } from "../services/utils.js";
 
 function handleRequest(req: Request, res: Response) {
     // express puts content after first slash into 0 index element
@@ -26,7 +27,7 @@ function handleRequest(req: Request, res: Response) {
         try {
             match = path.match(regex);
         } catch (e: unknown) {
-            const [errMessage, errStack] = e instanceof Error ? [e.message, e.stack] : ["Unknown Error", undefined];
+            const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
             log.error(`Testing path for label '${attr.attributeId}', regex '${attr.value}' failed with error: ${errMessage}, stack: ${errStack}`);
             continue;
         }
@@ -47,10 +48,8 @@ function handleRequest(req: Request, res: Response) {
                     res
                 });
             } catch (e: unknown) {
-                const [errMessage, errStack] = e instanceof Error ? [e.message, e.stack] : ["Unknown Error", undefined];
-
+                const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
                 log.error(`Custom handler '${note.noteId}' failed with: ${errMessage}, ${errStack}`);
-
                 res.setHeader("Content-Type", "text/plain").status(500).send(errMessage);
             }
         } else if (attr.name === "customResourceProvider") {

@@ -13,6 +13,7 @@ import TaskContext from "../../services/task_context.js";
 import ValidationError from "../../errors/validation_error.js";
 import type { Request } from "express";
 import type BNote from "../../becca/entities/bnote.js";
+import { safeExtractMessageAndStackFromError } from "../../services/utils.js";
 
 async function importNotesToBranch(req: Request) {
     const { parentNoteId } = req.params;
@@ -69,7 +70,7 @@ async function importNotesToBranch(req: Request) {
             note = await singleImportService.importSingleFile(taskContext, file, parentNote);
         }
     } catch (e: unknown) {
-        const [errMessage, errStack] = e instanceof Error ? [e.message, e.stack] : ["Unknown Error", undefined];
+        const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
         const message = `Import failed with following error: '${errMessage}'. More details might be in the logs.`;
         taskContext.reportError(message);
 
@@ -122,7 +123,7 @@ async function importAttachmentsToNote(req: Request) {
     try {
         await singleImportService.importAttachment(taskContext, file, parentNote);
     } catch (e: unknown) {
-        const [errMessage, errStack] = e instanceof Error ? [e.message, e.stack] : ["Unknown Error", undefined];
+        const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
 
         const message = `Import failed with following error: '${errMessage}'. More details might be in the logs.`;
         taskContext.reportError(message);

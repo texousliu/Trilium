@@ -9,6 +9,7 @@ import log from "../../services/log.js";
 import NotFoundError from "../../errors/not_found_error.js";
 import type { Request, Response } from "express";
 import ValidationError from "../../errors/validation_error.js";
+import { safeExtractMessageAndStackFromError } from "../../services/utils.js";
 
 function exportBranch(req: Request, res: Response) {
     const { branchId, type, format, version, taskId } = req.params;
@@ -38,10 +39,11 @@ function exportBranch(req: Request, res: Response) {
             throw new NotFoundError(`Unrecognized export format '${format}'`);
         }
     } catch (e: unknown) {
-        const message = `Export failed with following error: '${(e instanceof Error) ? e.message : e}'. More details might be in the logs.`;
+        const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
+        const message = `Export failed with following error: '${errMessage}'. More details might be in the logs.`;
         taskContext.reportError(message);
 
-        log.error((e instanceof Error) ? message + e.stack : message);
+        log.error(errMessage + errStack);
 
         res.setHeader("Content-Type", "text/plain").status(500).send(message);
     }
