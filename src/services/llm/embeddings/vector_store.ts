@@ -496,13 +496,32 @@ export async function getEmbeddingStats() {
         "SELECT utcDateCreated FROM note_embeddings ORDER BY utcDateCreated DESC LIMIT 1"
     ) as string | null || null;
 
+    // Calculate the actual completion percentage
+    // When reprocessing, we need to consider notes in the queue as not completed yet
+    // We calculate the percentage of notes that are embedded and NOT in the queue
+
+    // First, get the count of notes that are both in the embeddings table and queue
+    const notesInQueueWithEmbeddings = await sql.getValue(`
+        SELECT COUNT(DISTINCT eq.noteId)
+        FROM embedding_queue eq
+        JOIN note_embeddings ne ON eq.noteId = ne.noteId
+    `) as number;
+
+    // The number of notes with valid, up-to-date embeddings
+    const upToDateEmbeddings = embeddedNotesCount - notesInQueueWithEmbeddings;
+
+    // Calculate the percentage of notes that are properly embedded
+    const percentComplete = totalNotesCount > 0
+        ? Math.round((upToDateEmbeddings / totalNotesCount) * 100)
+        : 0;
+
     return {
         totalNotesCount,
         embeddedNotesCount,
         queuedNotesCount,
         failedNotesCount,
         lastProcessedDate,
-        percentComplete: totalNotesCount > 0 ? Math.round((embeddedNotesCount / totalNotesCount) * 100) : 0
+        percentComplete: Math.max(0, Math.min(100, percentComplete)) // Ensure between 0-100
     };
 }
 

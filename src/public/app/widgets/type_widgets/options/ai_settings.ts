@@ -201,7 +201,10 @@ export default class AiSettingsWidget extends OptionsWidget {
                             <div><strong>${t("ai_llm.queued_notes")}:</strong> <span class="embedding-queued-notes">-</span></div>
                             <div><strong>${t("ai_llm.failed_notes")}:</strong> <span class="embedding-failed-notes">-</span></div>
                             <div><strong>${t("ai_llm.last_processed")}:</strong> <span class="embedding-last-processed">-</span></div>
-                            <div class="progress mt-2" style="height: 10px;">
+                            <div class="mt-2">
+                                <strong>${t("ai_llm.progress")}:</strong> <span class="embedding-status-text">-</span>
+                            </div>
+                            <div class="progress mt-1" style="height: 10px;">
                                 <div class="progress-bar embedding-progress" role="progressbar" style="width: 0%;"
                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                             </div>
@@ -456,6 +459,30 @@ export default class AiSettingsWidget extends OptionsWidget {
                 $progressBar.css('width', `${stats.percentComplete}%`);
                 $progressBar.attr('aria-valuenow', stats.percentComplete.toString());
                 $progressBar.text(`${stats.percentComplete}%`);
+
+                // Update status text based on state
+                const $statusText = this.$widget.find('.embedding-status-text');
+                if (stats.queuedNotesCount > 0) {
+                    $statusText.text(t("ai_llm.processing", { percentage: stats.percentComplete }));
+                } else if (stats.percentComplete < 100) {
+                    $statusText.text(t("ai_llm.incomplete", { percentage: stats.percentComplete }));
+                } else {
+                    $statusText.text(t("ai_llm.complete"));
+                }
+
+                // Change progress bar color based on state
+                if (stats.queuedNotesCount > 0) {
+                    // Processing in progress - use animated progress bar
+                    $progressBar.addClass('progress-bar-striped progress-bar-animated bg-info');
+                    $progressBar.removeClass('bg-success');
+                } else if (stats.percentComplete < 100) {
+                    // Incomplete - use standard progress bar
+                    $progressBar.removeClass('progress-bar-striped progress-bar-animated bg-info bg-success');
+                } else {
+                    // Complete - show success color
+                    $progressBar.removeClass('progress-bar-striped progress-bar-animated bg-info');
+                    $progressBar.addClass('bg-success');
+                }
             }
         } catch (error) {
             console.error("Error fetching embedding stats:", error);
