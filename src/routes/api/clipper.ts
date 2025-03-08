@@ -137,7 +137,7 @@ function createNote(req: Request) {
 
     const existingContent = note.getContent();
     if (typeof existingContent !== "string") {
-        throw new ValidationError("Invalid note content tpye.");
+        throw new ValidationError("Invalid note content type.");
     }
     const rewrittenContent = processContent(images, note, content);
     const newContent = `${existingContent}${existingContent.trim() ? "<br/>" : ""}${rewrittenContent}`;
