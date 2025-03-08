@@ -115,10 +115,20 @@ textarea,
         right 0.75rem center/15px 20px no-repeat;
 }
 
+.form-text {
+    color: var(--muted-text-color);
+}
+
 /* Restore default apperance */
 input[type="number"],
 input[type="checkbox"] {
     appearance: auto !important;
+}
+
+/* Add a gap between consecutive radios / check boxes */
+label.tn-radio + label.tn-radio,
+label.tn-checkbox + label.tn-checkbox {
+    margin-left: 12px;
 }
 
 #left-pane input,

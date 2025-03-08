@@ -2,12 +2,32 @@
  * Settings
  */
 :root {
+    --options-card-min-width: 500px;
+    --options-card-max-width: 900px;
     --options-card-padding: 17px;
     --options-title-font-size: 1rem;
     --options-title-offset: 13px;
 }
+/* Create a gap at the top of the option pages */
+.note-detail-content-widget-content.options>*:first-child {
+    margin-top: 1em;
+}
+
+/* Create a gap at the bottom of option pages */
+.note-detail-content-widget-content.options::after {
+    display: block;
+    content: "";
+    height: 1em;
+}
+
+.note-detail-content-widget-content.options:has(.shortcuts-options-section)::after {
+    height: 0;
+}
 
 .options-section {
+    margin: auto;
+    min-width: var(--options-card-min-width);
+    max-width: var(--options-card-max-width);
     border-radius: 12px;
     border: 1px solid var(--card-border-color) !important;
     box-shadow: var(--card-box-shadow);
@@ -43,8 +63,12 @@
 }
 
 .options-section hr {
+    --bs-border-width: 2px;
+
     margin-left: calc(var(--options-card-padding) * -1);
     margin-right: calc(var(--options-card-padding) * -1);
+    opacity: 1;
+    color: var(--root-background);
 }
 
 .options-section p:last-of-type:not(:first-of-type),
@@ -72,6 +96,10 @@
     margin-bottom: 1em;
 }
 
+.options-section label:not(.tn-checkbox):not(.tn-radio) {
+    margin-bottom: 6px;
+}
+
 /* Appeareance */
 
 .main-font-size-input-group,
@@ -81,8 +109,32 @@
     width: fit-content;
 }
 
-/* Advanced */
+/* Shortcuts */
 
-.options-section ul.existing-anonymized-databases {
-    margin: 1em;
+.shortcuts-options-section {
+    /* Allow the card to extend on the full width of the parent */
+    --options-card-max-width: 100%;
+}
+
+/* Group heading */
+.shortcuts-options-section .separator {
+    padding-top: 2em;
+    padding-bottom: 1em;
+    background: transparent !important;
+    font-weight: 500;
+}
+
+/* Simulates the underline for group headings */
+.shortcuts-options-section .separator::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+}
+
+/* ETAPI */
+
+.etapi-options-section div {
+    height: auto !important;
 }

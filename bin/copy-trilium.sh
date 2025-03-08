@@ -14,7 +14,7 @@ fi
 
 # Trigger the TypeScript build
 echo TypeScript build start
-npx tsc
+npm run build:ts
 echo TypeScript build finished
 
 # Copy the TypeScript artifacts

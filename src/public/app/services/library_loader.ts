@@ -42,10 +42,6 @@ const CODE_MIRROR: Library = {
     css: ["node_modules/codemirror/lib/codemirror.css", "node_modules/codemirror/addon/lint/lint.css"]
 };
 
-const ESLINT: Library = {
-    js: ["libraries/eslint/eslint.js"]
-};
-
 const RELATION_MAP: Library = {
     js: ["node_modules/jsplumb/dist/js/jsplumb.min.js", "node_modules/panzoom/dist/panzoom.min.js"],
     css: ["stylesheets/relation_map.css"]
@@ -108,13 +104,17 @@ async function requireLibrary(library: Library) {
     }
 
     if (library.js) {
-        for (const scriptUrl of unwrapValue(library.js)) {
+        for (const scriptUrl of await unwrapValue(library.js)) {
             await requireScript(scriptUrl);
         }
     }
 }
 
-function unwrapValue<T>(value: T | (() => T)) {
+async function unwrapValue<T>(value: T | (() => T) | Promise<(() => T)>) {
+    if (value && typeof value === "object" && "then" in value) {
+        return (await (value as Promise<() => T>))();
+    }
+
     if (typeof value === "function") {
         return (value as () => T)();
     }
@@ -183,7 +183,6 @@ export default {
     loadHighlightingTheme,
     CKEDITOR,
     CODE_MIRROR,
-    ESLINT,
     RELATION_MAP,
     CALENDAR_WIDGET,
     KATEX,

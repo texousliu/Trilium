@@ -5,6 +5,8 @@ import utils from "./services/utils.ts";
 import appContext from "./components/app_context.ts";
 import server from "./services/server.ts";
 import library_loader, { Library } from "./services/library_loader.ts";
+import type { init } from "i18next";
+import type { lint } from "./services/eslint.ts";
 
 interface ElectronProcess {
     type: string;
@@ -43,6 +45,7 @@ interface CustomGlobals {
     triliumVersion: string;
     TRILIUM_SAFE_MODE: boolean;
     platform?: typeof process.platform;
+    linter: typeof lint;
 }
 
 type RequireMethod = (moduleName: string) => any;
@@ -140,9 +143,25 @@ declare global {
     interface MermaidLoader {
 
     }
+    interface MermaidChartConfig {
+        useMaxWidth: boolean;
+    }
+    interface MermaidConfig {
+        theme: string;
+        securityLevel: "antiscript",
+        flow: MermaidChartConfig;
+        sequence: MermaidChartConfig;
+        gantt: MermaidChartConfig;
+        class: MermaidChartConfig;
+        state: MermaidChartConfig;
+        pie: MermaidChartConfig;
+        journey: MermaidChartConfig;
+        git: MermaidChartConfig;
+    }
     var mermaid: {
         mermaidAPI: MermaidApi;
         registerLayoutLoaders(loader: MermaidLoader);
+        init(config: MermaidConfig, el: HTMLElement | JQuery<HTMLElement>);
         parse(content: string, opts: {
             suppressErrors: true
         }): Promise<{
