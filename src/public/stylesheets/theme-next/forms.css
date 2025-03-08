@@ -428,12 +428,6 @@ optgroup {
         user-select: none;
     }
 
-    /* Add a gap between consecutive radios / check boxes */
-    label.tn-radio + label.tn-radio,
-    label.tn-checkbox + label.tn-checkbox {
-        margin-left: 12px;
-    }
-
     /* The original input */
     label.tn-radio > input[type="radio"],
     label.tn-checkbox > input[type="checkbox"] {

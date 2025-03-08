@@ -125,6 +125,12 @@ input[type="checkbox"] {
     appearance: auto !important;
 }
 
+/* Add a gap between consecutive radios / check boxes */
+label.tn-radio + label.tn-radio,
+label.tn-checkbox + label.tn-checkbox {
+    margin-left: 12px;
+}
+
 #left-pane input,
 #left-pane select,
 #left-pane textarea {
