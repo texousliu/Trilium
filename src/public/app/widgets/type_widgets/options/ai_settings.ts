@@ -210,8 +210,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                             </div>
                         </div>
                         <div class="mt-2">
-                            <span class="text-muted small">${t("ai_llm.auto_refresh_notice", { seconds: this.STATS_REFRESH_INTERVAL/1000 })}</span>
-                            <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats ml-2">
+                            <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats">
                                 ${t("ai_llm.refresh_stats")}
                             </button>
                         </div>
