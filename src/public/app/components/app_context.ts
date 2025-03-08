@@ -25,6 +25,7 @@ import type { default as NoteContext, GetTextEditorCallback } from "./note_conte
 import type { ContextMenuEvent } from "../menus/context_menu.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.js";
+import TouchBarWidget from "../widgets/touch_bar.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -443,6 +444,10 @@ class AppContext extends Component {
         this.tabManager = new TabManager();
 
         this.components = [this.tabManager, new RootCommandExecutor(), new Entrypoints(), new MainTreeExecutors(), new ShortcutComponent()];
+
+        if (utils.isElectron() && utils.isMac()) {
+            this.components.push(new TouchBarWidget());
+        }
 
         if (utils.isMobile()) {
             this.components.push(new MobileScreenSwitcherExecutor());
