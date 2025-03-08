@@ -50,14 +50,14 @@ export default class TouchBarWidget extends Component {
 
     #buildTouchBar() {
         const { TouchBar } = this.remote;
-        const { TouchBarButton, TouchBarSpacer, TouchBarGroup } = this.remote.TouchBar;
+        const { TouchBarButton, TouchBarSpacer, TouchBarGroup, TouchBarOtherItemsProxy } = this.remote.TouchBar;
 
         const items = [
             new TouchBarButton({
                 icon: this.#buildIcon("NSTouchBarComposeTemplate"),
                 click: () => this.triggerCommand("createNoteIntoInbox")
             }),
-            new TouchBarSpacer({ size: "flexible" }),
+            new TouchBarSpacer({ size: "large" }),
             new TouchBarGroup({
                 items: new TouchBar({
                     items: [
@@ -76,6 +76,7 @@ export default class TouchBarWidget extends Component {
                     ]
                 })
             }),
+            new TouchBarOtherItemsProxy(),
             new TouchBarSpacer({ size: "flexible" }),
             new TouchBarButton({
                 icon: this.#buildIcon("NSTouchBarAddDetailTemplate"),
