@@ -60,6 +60,7 @@ import etapiTokensApiRoutes from "./api/etapi_tokens.js";
 import relationMapApiRoute from "./api/relation-map.js";
 import otherRoute from "./api/other.js";
 import shareRoutes from "../share/routes.js";
+import embeddingsRoute from "./api/embeddings.js";
 
 import etapiAuthRoutes from "../etapi/auth.js";
 import etapiAppInfoRoutes from "../etapi/app_info.js";
@@ -368,6 +369,14 @@ function register(app: express.Application) {
     etapiSpecialNoteRoutes.register(router);
     etapiSpecRoute.register(router);
     etapiBackupRoute.register(router);
+
+    // Embeddings API endpoints
+    route(GET, "/api/embeddings/similar/:noteId", [auth.checkApiAuth], embeddingsRoute.findSimilarNotes, apiResultHandler);
+    route(PST, "/api/embeddings/search", [auth.checkApiAuth, csrfMiddleware], embeddingsRoute.searchByText, apiResultHandler);
+    route(GET, "/api/embeddings/providers", [auth.checkApiAuth], embeddingsRoute.getProviders, apiResultHandler);
+    route(PATCH, "/api/embeddings/providers/:providerId", [auth.checkApiAuth, csrfMiddleware], embeddingsRoute.updateProvider, apiResultHandler);
+    route(PST, "/api/embeddings/reprocess", [auth.checkApiAuth, csrfMiddleware], embeddingsRoute.reprocessAllNotes, apiResultHandler);
+    route(GET, "/api/embeddings/queue-status", [auth.checkApiAuth], embeddingsRoute.getQueueStatus, apiResultHandler);
 
     // API Documentation
     apiDocsRoute.register(app);
