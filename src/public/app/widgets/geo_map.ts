@@ -77,6 +77,10 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
                 change(newValue) {
                     map.setZoom(newValue);
                 },
+            }),
+            new TouchBar.TouchBarButton({
+                label: "New geo note",
+                click: () => this.parent?.triggerEvent("geoMapCreateChildNote", { ntxId: this.ntxId })
             })
         ];
     }

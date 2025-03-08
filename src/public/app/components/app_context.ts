@@ -256,6 +256,8 @@ export type CommandMappings = {
     refreshResults: {};
     refreshSearchDefinition: {};
 
+    geoMapCreateChildNote: CommandData;
+
     buildTouchBar: CommandData & {
         TouchBar: typeof import("electron").TouchBar;
         buildIcon(name: string): NativeImage;
@@ -355,9 +357,6 @@ type EventMappings = {
     };
     exportSvg: {
         ntxId: string | null | undefined;
-    };
-    geoMapCreateChildNote: {
-        ntxId: string | null | undefined; // TODO: deduplicate ntxId
     };
     tabReorder: {
         ntxIdsInOrder: string[];
