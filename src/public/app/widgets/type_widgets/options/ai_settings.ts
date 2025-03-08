@@ -1,6 +1,8 @@
 import OptionsWidget from "./options_widget.js";
 import { t } from "../../../services/i18n.js";
 import type { FilterOptionsByType, OptionMap } from "../../../../../services/options_interface.js";
+import server from "../../../services/server.js";
+import toastService from "../../../services/toast.js";
 
 export default class AiSettingsWidget extends OptionsWidget {
     doRender() {
@@ -111,6 +113,45 @@ export default class AiSettingsWidget extends OptionsWidget {
                     <div class="help-text">${t("ai_llm.ollama_model_description")}</div>
                 </div>
             </div>
+
+            <hr />
+
+            <div class="embedding-section">
+                <h5>${t("ai_llm.embedding_configuration")}</h5>
+
+                <div class="form-group">
+                    <label>
+                        <input class="embedding-auto-update-enabled" type="checkbox">
+                        ${t("ai_llm.enable_auto_update_embeddings")}
+                    </label>
+                    <div class="help-text">${t("ai_llm.enable_auto_update_embeddings_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.embedding_batch_size")}</label>
+                    <input class="embedding-batch-size form-control" type="number" min="1" max="50">
+                    <div class="help-text">${t("ai_llm.embedding_batch_size_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.embedding_update_interval")}</label>
+                    <input class="embedding-update-interval form-control" type="number" min="1000" step="1000">
+                    <div class="help-text">${t("ai_llm.embedding_update_interval_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.embedding_default_dimension")}</label>
+                    <input class="embedding-default-dimension form-control" type="number" min="128">
+                    <div class="help-text">${t("ai_llm.embedding_default_dimension_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-sm btn-primary embedding-reprocess-all">
+                        ${t("ai_llm.reprocess_all_embeddings")}
+                    </button>
+                    <div class="help-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
+                </div>
+            </div>
         </div>`);
 
         const $aiEnabled = this.$widget.find('.ai-enabled');
@@ -179,6 +220,44 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.updateOption('ollamaDefaultModel', $ollamaDefaultModel.val() as string);
         });
 
+        // Embedding options event handlers
+        const $embeddingAutoUpdateEnabled = this.$widget.find('.embedding-auto-update-enabled');
+        $embeddingAutoUpdateEnabled.on('change', async () => {
+            await this.updateOption('embeddingAutoUpdateEnabled', $embeddingAutoUpdateEnabled.prop('checked') ? "true" : "false");
+        });
+
+        const $embeddingBatchSize = this.$widget.find('.embedding-batch-size');
+        $embeddingBatchSize.on('change', async () => {
+            await this.updateOption('embeddingBatchSize', $embeddingBatchSize.val() as string);
+        });
+
+        const $embeddingUpdateInterval = this.$widget.find('.embedding-update-interval');
+        $embeddingUpdateInterval.on('change', async () => {
+            await this.updateOption('embeddingUpdateInterval', $embeddingUpdateInterval.val() as string);
+        });
+
+        const $embeddingDefaultDimension = this.$widget.find('.embedding-default-dimension');
+        $embeddingDefaultDimension.on('change', async () => {
+            await this.updateOption('embeddingDefaultDimension', $embeddingDefaultDimension.val() as string);
+        });
+
+        const $embeddingReprocessAll = this.$widget.find('.embedding-reprocess-all');
+        $embeddingReprocessAll.on('click', async () => {
+            $embeddingReprocessAll.prop('disabled', true);
+            $embeddingReprocessAll.text(t("ai_llm.reprocessing_embeddings"));
+
+            try {
+                await server.post('embeddings/reprocess');
+                toastService.showMessage(t("ai_llm.reprocess_started"));
+            } catch (error) {
+                console.error("Error reprocessing embeddings:", error);
+                toastService.showError(t("ai_llm.reprocess_error"));
+            } finally {
+                $embeddingReprocessAll.prop('disabled', false);
+                $embeddingReprocessAll.text(t("ai_llm.reprocess_all_embeddings"));
+            }
+        });
+
         return this.$widget;
     }
 
@@ -188,6 +267,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         const aiEnabled = this.$widget.find('.ai-enabled').prop('checked');
         this.$widget.find('.ai-providers-section').toggle(aiEnabled);
         this.$widget.find('.ai-provider').toggle(aiEnabled);
+        this.$widget.find('.embedding-section').toggle(aiEnabled);
     }
 
     optionsLoaded(options: OptionMap) {
@@ -210,6 +290,12 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl);
         this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel);
+
+        // Load embedding options
+        this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled);
+        this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize);
+        this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval);
+        this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension);
 
         this.updateAiSectionVisibility();
     }
