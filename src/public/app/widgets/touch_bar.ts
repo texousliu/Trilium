@@ -2,18 +2,7 @@ import utils from "../services/utils.js";
 import Component from "../components/component.js";
 import appContext from "../components/app_context.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
-import type FNote from "../entities/fnote.js";
 import type { TouchBarButton, TouchBarGroup, TouchBarSegmentedControl, TouchBarSpacer } from "@electron/remote";
-
-async function triggerTextEditorCommand(command: string, args?: object) {
-    const editor = await appContext.tabManager.getActiveContext().getTextEditor();
-    if (!editor) {
-        return;
-    }
-
-    // TODO: Fix type of editor.
-    (editor as any).execute(command, args);
-}
 
 export default class TouchBarWidget extends NoteContextAwareWidget {
 
