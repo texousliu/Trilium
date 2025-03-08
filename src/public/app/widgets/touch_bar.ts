@@ -3,6 +3,7 @@ import Component from "../components/component.js";
 import appContext from "../components/app_context.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import type FNote from "../entities/fnote.js";
+import type { TouchBarButton, TouchBarGroup, TouchBarSegmentedControl, TouchBarSpacer } from "@electron/remote";
 
 async function triggerTextEditorCommand(command: string, args?: object) {
     const editor = await appContext.tabManager.getActiveContext().getTextEditor();
@@ -35,14 +36,13 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
                 return;
             }
 
-            const result = parentComponent.triggerCommand("buildTouchBar", {
+            let result = parentComponent.triggerCommand("buildTouchBar", {
                 TouchBar,
                 buildIcon: this.buildIcon.bind(this)
             });
 
-            if (result) {
-                this.remote.getCurrentWindow().setTouchBar(result);
-            }
+            const touchBar = this.#buildTouchBar(result);
+            this.remote.getCurrentWindow().setTouchBar(touchBar);
         });
     }
 
@@ -65,9 +65,14 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
         return newImage;
     }
 
-    #buildTextTouchBar() {
+    #buildTouchBar(componentSpecificItems?: (TouchBarButton | TouchBarSpacer | TouchBarGroup | TouchBarSegmentedControl)[]) {
         const { TouchBar } = this.remote;
         const { TouchBarButton, TouchBarSpacer, TouchBarGroup, TouchBarSegmentedControl, TouchBarOtherItemsProxy } = this.remote.TouchBar;
+
+        // Disregard recursive calls or empty results.
+        if (!componentSpecificItems || "then" in componentSpecificItems) {
+            componentSpecificItems = [];
+        }
 
         const items = [
             new TouchBarButton({
@@ -75,14 +80,14 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
                 click: () => this.triggerCommand("createNoteIntoInbox")
             }),
             new TouchBarSpacer({ size: "large" }),
-            // data should go here
+            ...componentSpecificItems,
             new TouchBarOtherItemsProxy(),
             new TouchBarSpacer({ size: "flexible" }),
             new TouchBarButton({
                 icon: this.buildIcon("NSTouchBarAddDetailTemplate"),
                 click: () => this.triggerCommand("jumpToNote")
             })
-        ];
+        ].flat();
 
         console.log("Update ", items);
         return new TouchBar({
