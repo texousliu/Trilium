@@ -57,7 +57,7 @@ export default class TouchBarWidget extends Component {
                 icon: this.#buildIcon("NSTouchBarComposeTemplate"),
                 click: () => this.triggerCommand("createNoteIntoInbox")
             }),
-            new TouchBarSpacer({ }),
+            new TouchBarSpacer({ size: "flexible" }),
             new TouchBarGroup({
                 items: new TouchBar({
                     items: [
@@ -75,6 +75,11 @@ export default class TouchBarWidget extends Component {
                         })
                     ]
                 })
+            }),
+            new TouchBarSpacer({ size: "flexible" }),
+            new TouchBarButton({
+                icon: this.#buildIcon("NSTouchBarAddDetailTemplate"),
+                click: () => this.triggerCommand("jumpToNote")
             })
         ];
 

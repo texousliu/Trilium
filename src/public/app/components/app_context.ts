@@ -241,6 +241,7 @@ export type CommandMappings = {
     scrollToEnd: CommandData;
     closeThisNoteSplit: CommandData;
     moveThisNoteSplit: CommandData & { isMovingLeft: boolean };
+    jumpToNote: CommandData;
 
     // Geomap
     deleteFromMap: { noteId: string };
