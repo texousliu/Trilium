@@ -62,7 +62,7 @@ async function createNote(parentNotePath: string | undefined, options: CreateNot
 
     const parentNoteId = treeService.getNoteIdFromUrl(parentNotePath);
 
-    if (options.type === "mermaid" && !options.content) {
+    if (options.type === "mermaid" && !options.content && !options.templateNoteId) {
         options.content = `graph TD;
     A-->B;
     A-->C;
