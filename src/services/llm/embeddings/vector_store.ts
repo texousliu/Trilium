@@ -148,7 +148,7 @@ export async function findSimilarNotes(
     providerId: string,
     modelId: string,
     limit = 10,
-    threshold = 0.7
+    threshold = 0.65  // Slightly lowered from 0.7 to account for relationship focus
 ): Promise<{noteId: string, similarity: number}[]> {
     // Get all embeddings for the given provider and model
     const rows = await sql.getRows(`
@@ -172,7 +172,7 @@ export async function findSimilarNotes(
         };
     });
 
-    // Filter by threshold and sort by similarity (descending)
+    // Filter by threshold and sort by similarity (highest first)
     return similarities
         .filter(item => item.similarity >= threshold)
         .sort((a, b) => b.similarity - a.similarity)

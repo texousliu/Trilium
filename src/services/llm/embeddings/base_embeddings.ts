@@ -29,11 +29,68 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
      * Generates a rich text representation of a note's context for embedding
      */
     protected generateNoteContextText(context: NoteEmbeddingContext): string {
+        // Build a relationship-focused summary first
+        const relationshipSummary = [];
+
+        // Summarize the note's place in the hierarchy
+        if (context.parentTitles.length > 0) {
+            relationshipSummary.push(`This note is a child of: ${context.parentTitles.map(t => this.cleanText(t)).join(', ')}.`);
+        }
+
+        if (context.childTitles.length > 0) {
+            relationshipSummary.push(`This note has children: ${context.childTitles.map(t => this.cleanText(t)).join(', ')}.`);
+        }
+
+        // Emphasize relationships with other notes
+        if (context.relatedNotes && context.relatedNotes.length > 0) {
+            // Group by relation type for better understanding
+            const relationsByType: Record<string, string[]> = {};
+            for (const rel of context.relatedNotes) {
+                if (!relationsByType[rel.relationName]) {
+                    relationsByType[rel.relationName] = [];
+                }
+                relationsByType[rel.relationName].push(this.cleanText(rel.targetTitle));
+            }
+
+            for (const [relType, targets] of Object.entries(relationsByType)) {
+                relationshipSummary.push(`This note has ${relType} relationship with: ${targets.join(', ')}.`);
+            }
+        }
+
+        // Emphasize backlinks for bidirectional relationships
+        if (context.backlinks && context.backlinks.length > 0) {
+            // Group by relation type
+            const backlinksByType: Record<string, string[]> = {};
+            for (const link of context.backlinks) {
+                if (!backlinksByType[link.relationName]) {
+                    backlinksByType[link.relationName] = [];
+                }
+                backlinksByType[link.relationName].push(this.cleanText(link.sourceTitle));
+            }
+
+            for (const [relType, sources] of Object.entries(backlinksByType)) {
+                relationshipSummary.push(`This note is ${relType} of: ${sources.join(', ')}.`);
+            }
+        }
+
+        // Emphasize templates/inheritance
+        if (context.templateTitles && context.templateTitles.length > 0) {
+            relationshipSummary.push(`This note inherits from: ${context.templateTitles.map(t => this.cleanText(t)).join(', ')}.`);
+        }
+
         // Start with core note information
         let result =
             `Title: ${this.cleanText(context.title)}\n` +
             `Type: ${context.type}\n` +
-            `MIME: ${context.mime}\n` +
+            `MIME: ${context.mime}\n`;
+
+        // Add the relationship summary at the beginning for emphasis
+        if (relationshipSummary.length > 0) {
+            result += `Relationships: ${relationshipSummary.join(' ')}\n`;
+        }
+
+        // Continue with dates
+        result +=
             `Created: ${context.dateCreated}\n` +
             `Modified: ${context.dateModified}\n`;
 
@@ -55,22 +112,21 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
             result += labelTexts.join('; ') + '\n';
         }
 
-        // Add parents concisely
+        // Parents, children, templates, relations, and backlinks are now handled in the relationship summary
+        // But we'll include them again in a more structured format for organization
+
         if (context.parentTitles.length > 0) {
             result += `Parents: ${context.parentTitles.map(t => this.cleanText(t)).join('; ')}\n`;
         }
 
-        // Add children concisely
         if (context.childTitles.length > 0) {
             result += `Children: ${context.childTitles.map(t => this.cleanText(t)).join('; ')}\n`;
         }
 
-        // Add template/inheritance relationships concisely
         if (context.templateTitles && context.templateTitles.length > 0) {
             result += `Templates: ${context.templateTitles.map(t => this.cleanText(t)).join('; ')}\n`;
         }
 
-        // Add related notes concisely
         if (context.relatedNotes && context.relatedNotes.length > 0) {
             result += 'Related: ';
             const relatedTexts = context.relatedNotes.map(rel =>
@@ -79,7 +135,6 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
             result += relatedTexts.join('; ') + '\n';
         }
 
-        // Add backlinks concisely
         if (context.backlinks && context.backlinks.length > 0) {
             result += 'Referenced By: ';
             const backlinkTexts = context.backlinks.map(link =>
