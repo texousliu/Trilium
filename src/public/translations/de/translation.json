@@ -61,7 +61,7 @@
   },
   "clone_to": {
     "clone_notes_to": "Notizen klonen nach...",
-    "close":"Schließen",
+    "close": "Schließen",
     "help_on_links": "Hilfe zu Links",
     "notes_to_clone": "Notizen zum Klonen",
     "target_parent_note": "Ziel-Übergeordnetenotiz",
@@ -74,7 +74,7 @@
   },
   "confirm": {
     "confirmation": "Bestätigung",
-    "close":"Schließen",
+    "close": "Schließen",
     "cancel": "Abbrechen",
     "ok": "OK",
     "are_you_sure_remove_note": "Bist du sicher, dass du \"{{title}}\" von der Beziehungskarte entfernen möchten? ",
@@ -93,7 +93,6 @@
     "cancel": "Abbrechen",
     "ok": "OK",
     "deleted_relation_text": "Notiz {{- note}} (soll gelöscht werden) wird von Beziehung {{- relation}} ausgehend von {{- source}} referenziert."
-
   },
   "export": {
     "export_note_title": "Notiz exportieren",
@@ -273,12 +272,12 @@
     "help_title": "Hilfe zu Notizrevisionen",
     "close": "Schließen",
     "revision_last_edited": "Diese Revision wurde zuletzt am {{date}} bearbeitet",
-    "confirm_delete_all": "Möchtest du alle Revisionen dieser Notiz löschen? Durch diese Aktion werden der Titel und der Inhalt der Revision gelöscht, die Metadaten der Revision bleiben jedoch erhalten.",
+    "confirm_delete_all": "Möchtest du alle Revisionen dieser Notiz löschen?",
     "no_revisions": "Für diese Notiz gibt es noch keine Revisionen...",
     "restore_button": "Stelle diese Revision wieder her",
     "confirm_restore": "Möchtest du diese Revision wiederherstellen? Dadurch werden der aktuelle Titel und Inhalt der Notiz mit dieser Revision überschrieben.",
     "delete_button": "Lösche diese Revision",
-    "confirm_delete": "Möchtest du diese Revision löschen? Durch diese Aktion werden der Titel und der Inhalt der Revision gelöscht, die Metadaten der Revision bleiben jedoch erhalten.",
+    "confirm_delete": "Möchtest du diese Revision löschen?",
     "revisions_deleted": "Notizrevisionen wurden gelöscht.",
     "revision_restored": "Die Notizrevision wurde wiederhergestellt.",
     "revision_deleted": "Notizrevision wurde gelöscht.",

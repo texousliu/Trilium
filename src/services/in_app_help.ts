@@ -66,8 +66,7 @@ export function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSu
 
     // Handle text notes
     if (noteMeta.type === "text" && noteMeta.dataFileName) {
-        const docPath = `${docNameRoot}/${path.basename(noteMeta.dataFileName, ".html")}`
-            .substring(1);
+        const docPath = `${docNameRoot}/${path.basename(noteMeta.dataFileName, ".html")}`.substring(1);
         item.attributes?.push({
             type: "label",
             name: "docName",
@@ -84,7 +83,7 @@ export function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSu
     if (noteMeta.children) {
         const children: HiddenSubtreeItem[] = [];
         for (const childMeta of noteMeta.children) {
-            let newDocNameRoot = (noteMeta.dirFileName ? `${docNameRoot}/${noteMeta.dirFileName}` : docNameRoot);
+            let newDocNameRoot = noteMeta.dirFileName ? `${docNameRoot}/${noteMeta.dirFileName}` : docNameRoot;
             children.push(parseNoteMeta(childMeta, newDocNameRoot));
         }
 

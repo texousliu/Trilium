@@ -9,7 +9,7 @@ const TPL = `
 <div class="options-section">
     <h4 class="password-heading">${t("password.heading")}</h4>
 
-    <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+    <div class="alert alert-warning" role="alert">
       ${t("password.alert_message")} <a class="reset-password-button tn-link" href="javascript:">${t("password.reset_link")}</a>
     </div>
 

@@ -185,7 +185,7 @@ export default class SwitchWidget extends NoteContextAwareWidget {
 
     /** Gets or sets whether the switch is enabled. */
     get canToggle() {
-        return (!this.$switchButton.hasClass("disabled"));
+        return !this.$switchButton.hasClass("disabled");
     }
 
     set canToggle(isEnabled) {

@@ -276,6 +276,7 @@ function buildHiddenSubtreeDefinition(helpSubtree: HiddenSubtreeItem[]): HiddenS
                     { id: "_optionsSync", title: t("hidden-subtree.sync-title"), type: "contentWidget", icon: "bx-wifi" },
                     { id: "_optionsAi", title: t("hidden-subtree.ai-llm-title"), type: "contentWidget", icon: "bx-bot" },
                     { id: "_optionsOther", title: t("hidden-subtree.other"), type: "contentWidget", icon: "bx-dots-horizontal" },
+                    { id: "_optionsLocalization", title: t("hidden-subtree.localization"), type: "contentWidget", icon: "bx-world" },
                     { id: "_optionsAdvanced", title: t("hidden-subtree.advanced-title"), type: "contentWidget" }
                 ]
             },
@@ -409,8 +410,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
                 value: attr.value,
                 isInheritable: false
             }).save();
-        } else if (attr.name === "docName"
-                || (existingAttribute.noteId.startsWith("_help") && attr.name === "iconClass")) {
+        } else if (attr.name === "docName" || (existingAttribute.noteId.startsWith("_help") && attr.name === "iconClass")) {
             if (existingAttribute.value !== attr.value) {
                 existingAttribute.value = attr.value ?? "";
                 console.log("Updating attribute ", attrId);

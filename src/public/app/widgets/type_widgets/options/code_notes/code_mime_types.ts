@@ -97,9 +97,8 @@ export default class CodeMimeTypesOptions extends OptionsWidget {
         const checkbox = $(`<label class="tn-checkbox">`)
             .append($('<input type="checkbox" class="form-check-input">').attr("id", id).attr("data-mime-type", mimeType.mime).prop("checked", mimeType.enabled))
             .on("change", () => this.save())
-            .append(mimeType.title)
+            .append(mimeType.title);
 
-        return $("<li>")
-            .append(checkbox);
+        return $("<li>").append(checkbox);
     }
 }

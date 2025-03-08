@@ -18,7 +18,7 @@ const TPL = `
         ${t("images.download_images_automatically")}
     </label>
 
-    <p>${t("images.download_images_description")}</p>
+    <p class="form-text">${t("images.download_images_description")}</p>
 
     <hr />
 

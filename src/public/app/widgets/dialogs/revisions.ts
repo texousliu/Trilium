@@ -320,7 +320,8 @@ export default class RevisionsDialog extends BasicWidget {
                         // as a URL to be used in a note. Instead, if they copy and paste it into a note, it will be uploaded as a new note
                         .attr("src", `data:${fullRevision.mime};base64,${fullRevision.content}`)
                         .css("max-width", "100%")
-                        .css("max-height", "100%").html()
+                        .css("max-height", "100%")
+                        .html()
                 );
             }
         } else if (revisionItem.type === "file") {

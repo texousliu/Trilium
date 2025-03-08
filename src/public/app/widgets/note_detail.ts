@@ -35,7 +35,6 @@ import GeoMapTypeWidget from "./type_widgets/geo_map.js";
 import utils from "../services/utils.js";
 import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
-import TaskListWidget from "./type_widgets/task_list.js";
 
 const TPL = `
 <div class="note-detail">
@@ -73,15 +72,23 @@ const typeWidgetClasses = {
     attachmentDetail: AttachmentDetailTypeWidget,
     attachmentList: AttachmentListTypeWidget,
     mindMap: MindMapWidget,
-    geoMap: GeoMapTypeWidget,
-    taskList: TaskListWidget
+    geoMap: GeoMapTypeWidget
 };
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
  * for protected session or attachment information.
  */
-type ExtendedNoteType = Exclude<NoteType, "mermaid" | "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" | "protectedSession";
+type ExtendedNoteType =
+    | Exclude<NoteType, "mermaid" | "launcher" | "text" | "code">
+    | "empty"
+    | "readOnlyCode"
+    | "readOnlyText"
+    | "editableText"
+    | "editableCode"
+    | "attachmentDetail"
+    | "attachmentList"
+    | "protectedSession";
 
 export default class NoteDetailWidget extends NoteContextAwareWidget {
 
@@ -148,6 +155,9 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             typeWidget.spacedUpdate = this.spacedUpdate;
             typeWidget.setParent(this);
 
+            if (this.noteContext) {
+                typeWidget.setNoteContextEvent({ noteContext: this.noteContext });
+            }
             const $renderedWidget = typeWidget.render();
             keyboardActionsService.updateDisplayedShortcuts($renderedWidget);
 
@@ -329,7 +339,9 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
             const label = attrs.find(
                 (attr) =>
-                    attr.type === "label" && ["readOnly", "autoReadOnlyDisabled", "cssClass", "displayRelations", "hideRelations"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note)
+                    attr.type === "label" &&
+                    ["readOnly", "autoReadOnlyDisabled", "cssClass", "displayRelations", "hideRelations"].includes(attr.name ?? "") &&
+                    attributeService.isAffecting(attr, this.note)
             );
 
             const relation = attrs.find((attr) => attr.type === "relation" && ["template", "inherit", "renderNote"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note));

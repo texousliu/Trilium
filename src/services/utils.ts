@@ -353,7 +353,6 @@ export function processStringOrBuffer(data: string | Buffer | null) {
     }
 
     const detectedEncoding = chardet.detect(data);
-    console.log("Detected as ", detectedEncoding);
     switch (detectedEncoding) {
         case "UTF-16LE":
             return stripBom(data.toString("utf-16le"));
@@ -362,6 +361,11 @@ export function processStringOrBuffer(data: string | Buffer | null) {
             return data.toString("utf-8");
     }
 }
+
+export function safeExtractMessageAndStackFromError(err: unknown) {
+    return (err instanceof Error) ? [err.message, err.stack] as const : ["Unknown Error", undefined] as const;
+}
+
 
 export default {
     compareVersions,
@@ -393,6 +397,7 @@ export default {
     removeDiacritic,
     removeTextFileExtension,
     replaceAll,
+    safeExtractMessageAndStackFromError,
     sanitizeSqlIdentifier,
     stripTags,
     timeLimit,

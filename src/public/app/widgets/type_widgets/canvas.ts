@@ -59,9 +59,9 @@ const TPL = `
 `;
 
 interface CanvasContent {
-    elements: ExcalidrawElement[],
-    files: BinaryFileData[],
-    appState: Partial<AppState>
+    elements: ExcalidrawElement[];
+    files: BinaryFileData[];
+    appState: Partial<AppState>;
 }
 
 interface AttachmentMetadata {
@@ -198,7 +198,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         }
         (window.process.env as any).PREACT = false;
 
-        const excalidraw = (await import("@excalidraw/excalidraw"));
+        const excalidraw = await import("@excalidraw/excalidraw");
         this.excalidrawLib = excalidraw;
 
         const { createRoot } = await import("react-dom/client");
@@ -476,7 +476,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
     createExcalidrawReactApp(react: typeof React, excalidrawComponent: React.MemoExoticComponent<(props: ExcalidrawProps) => JSX.Element>) {
         const excalidrawWrapperRef = react.useRef<HTMLElement>(null);
         this.excalidrawWrapperRef = excalidrawWrapperRef;
-        const [dimensions, setDimensions] = react.useState<{ width?: number, height?: number}>({
+        const [dimensions, setDimensions] = react.useState<{ width?: number; height?: number }>({
             width: undefined,
             height: undefined
         });
@@ -540,10 +540,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                     theme: this.themeStyle,
                     excalidrawAPI: (api: ExcalidrawImperativeAPI) => {
                         this.excalidrawApi = api;
-                    },
-                    onPaste: (data: unknown, event: unknown) => {
-                        console.log("Verbose: excalidraw internal paste. No trilium action implemented.", data, event);
-                        return false;
                     },
                     onLibraryChange: () => {
                         this.libraryChanged = true;

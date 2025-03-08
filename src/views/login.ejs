@@ -6,23 +6,23 @@
     <title><%= t("login.title") %></title>
     <link rel="apple-touch-icon" sizes="180x180" href="<%= assetPath %>/images/app-icons/ios/apple-touch-icon.png">
     <link rel="shortcut icon" href="favicon.ico">
+    <style>
+        .login-page {
+            /* Prevent the content from being rendered before the main stylesheet loads */
+            display: none;
+        }
+    </style>
+    <% // TriliumNextTODO: move the css file to ${assetPath}/stylesheets/  %>
+    <link rel="stylesheet" href="<%= appPath %>/login.css">
     <link rel="stylesheet" href="<%= assetPath %>/stylesheets/theme-light.css">
     <link rel="stylesheet" href="<%= assetPath %>/stylesheets/theme-next.css">
     <link rel="stylesheet" href="<%= assetPath %>/stylesheets/style.css">
-    <% // TriliumNextTODO: move the css file to ${assetPath}/stylesheets/  %>
-    <link rel="stylesheet" href="<%= appPath %>/login.css">
 </head>
 <body>
-<div class="container">
+<div class="container login-page">
     <div class="col-xs-12 col-sm-10 col-md-6 col-lg-4 col-xl-4 mx-auto pt-4">
-        <img class="img-fluid d-block mx-auto" style="height: 8rem;" src="<%= assetPath %>/images/icon-color.svg" aria-hidden="true">
+        <img class="img-fluid d-block mx-auto" style="height: 8rem;" src="<%= assetPath %>/images/icon-color.svg" aria-hidden="true" draggable="false" >
         <h1 class="text-center"><%= t("login.heading") %></h1>
-
-        <% if (failedAuth) { %>
-            <div class="alert alert-warning">
-                <%= t("login.incorrect-password") %>
-            </div>
-        <% } %>
 
         <form action="login" method="POST">
             <div class="form-group">
@@ -31,6 +31,13 @@
                     <input id="password" name="password" placeholder="" class="form-control" type="password" autofocus>
                 </div>
             </div>
+
+            <% if (failedAuth) { %>
+                <div class="alert alert-warning">
+                    <%= t("login.incorrect-password") %>
+                </div>
+            <% } %>
+
             <div class="form-group">
                 <div class="checkbox">
                     <label class="tn-checkbox">
@@ -46,7 +53,6 @@
     </div>
 </div>
 <script src="<%= appPath %>/login.js" crossorigin type="module"></script>
-
 
 </body>
 </html>
