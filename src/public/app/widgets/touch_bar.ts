@@ -18,14 +18,19 @@ export default class TouchBarWidget extends Component {
         this.remote.getCurrentWindow().setTouchBar(touchBarData);
     }
 
+    #buildIcon(name: string) {
+        return this.nativeImage
+            .createFromNamedImage(name, [-1, 0, 1])
+            .resize({ height: 20 });
+    }
+
     #buildTouchBar() {
-        const { nativeImage } = this;
         const { TouchBar } = this.remote;
         const { TouchBarButton } = this.remote.TouchBar;
 
         const items = [
             new TouchBarButton({
-                icon: nativeImage.createFromNamedImage("NSTouchBarAddDetailTemplate", [-1, 0, 1]),
+                icon: this.#buildIcon("NSTouchBarAddDetailTemplate"),
                 click: () => {
                     console.log("New note pressed.");
                 }
