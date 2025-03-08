@@ -280,6 +280,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     #changeState(newState: State) {
         this._state = newState;
         this.geoMapWidget.$container.toggleClass("placing-note", newState === State.NewNote);
+        this.triggerCommand("refreshTouchBar");
     }
 
     async #onMapClicked(e: LeafletMouseEvent) {
@@ -396,22 +397,31 @@ export default class GeoMapTypeWidget extends TypeWidget {
             return;
         }
 
-        return [
-            new TouchBar.TouchBarSlider({
-                label: "Zoom",
-                value: map.getZoom(),
-                minValue: map.getMinZoom(),
-                maxValue: map.getMaxZoom(),
-                change(newValue) {
-                    that.ignoreNextZoomEvent = true;
-                    map.setZoom(newValue);
-                },
-            }),
-            new TouchBar.TouchBarButton({
-                label: "New geo note",
-                click: () => this.triggerCommand("geoMapCreateChildNote", { ntxId: this.ntxId })
-            })
-        ];
+        switch (this._state) {
+            case State.Normal:
+                return [
+                    new TouchBar.TouchBarSlider({
+                        label: "Zoom",
+                        value: map.getZoom(),
+                        minValue: map.getMinZoom(),
+                        maxValue: map.getMaxZoom(),
+                        change(newValue) {
+                            that.ignoreNextZoomEvent = true;
+                            map.setZoom(newValue);
+                        },
+                    }),
+                    new TouchBar.TouchBarButton({
+                        label: "New geo note",
+                        click: () => this.triggerCommand("geoMapCreateChildNote", { ntxId: this.ntxId })
+                    })
+                ];
+
+            case State.NewNote:
+                return [
+                    new TouchBar.TouchBarSpacer({ size: "flexible" }),
+                    new TouchBar.TouchBarLabel({ label: "New note" })
+                ]
+        }
     }
 
 }
