@@ -87,6 +87,40 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
 }
 
 /*
+ * Log in page
+ */
+
+.login-page {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-page > div {
+    padding-top: 0 !important;
+    padding-bottom: 20vh;
+}
+
+.login-page h1 {
+    margin-bottom: .5em;
+    font-weight: 300;
+    color: var(--muted-text-color);
+}
+
+.login-page .form-group {
+    margin-top: 8px;
+}
+
+.login-page .alert {
+    margin: 0;
+    border: unset;
+    padding: 8px 0 0 0;
+    font-size: .85em;
+    color: var(--dropdown-item-icon-destructive-color) !important;
+}
+
+/*
  * Global menu
  */
 

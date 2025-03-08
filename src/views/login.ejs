@@ -13,16 +13,10 @@
     <link rel="stylesheet" href="<%= assetPath %>/stylesheets/style.css">
 </head>
 <body>
-<div class="container">
+<div class="container login-page">
     <div class="col-xs-12 col-sm-10 col-md-6 col-lg-4 col-xl-4 mx-auto pt-4">
         <img class="img-fluid d-block mx-auto" style="height: 8rem;" src="<%= assetPath %>/images/icon-color.svg" aria-hidden="true">
         <h1 class="text-center"><%= t("login.heading") %></h1>
-
-        <% if (failedAuth) { %>
-            <div class="alert alert-warning">
-                <%= t("login.incorrect-password") %>
-            </div>
-        <% } %>
 
         <form action="login" method="POST">
             <div class="form-group">
@@ -31,6 +25,13 @@
                     <input id="password" name="password" placeholder="" class="form-control" type="password" autofocus>
                 </div>
             </div>
+
+            <% if (failedAuth) { %>
+                <div class="alert alert-warning">
+                    <%= t("login.incorrect-password") %>
+                </div>
+            <% } %>
+
             <div class="form-group">
                 <div class="checkbox">
                     <label class="tn-checkbox">
