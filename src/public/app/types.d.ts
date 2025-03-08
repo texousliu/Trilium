@@ -6,6 +6,7 @@ import appContext from "./components/app_context.ts";
 import server from "./services/server.ts";
 import library_loader, { Library } from "./services/library_loader.ts";
 import type { init } from "i18next";
+import type { lint } from "./services/eslint.ts";
 
 interface ElectronProcess {
     type: string;
@@ -44,6 +45,7 @@ interface CustomGlobals {
     triliumVersion: string;
     TRILIUM_SAFE_MODE: boolean;
     platform?: typeof process.platform;
+    linter: typeof lint;
 }
 
 type RequireMethod = (moduleName: string) => any;

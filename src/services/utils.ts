@@ -353,7 +353,6 @@ export function processStringOrBuffer(data: string | Buffer | null) {
     }
 
     const detectedEncoding = chardet.detect(data);
-    console.log("Detected as ", detectedEncoding);
     switch (detectedEncoding) {
         case "UTF-16LE":
             return stripBom(data.toString("utf-16le"));
