@@ -35,17 +35,13 @@
             return [];
         }
 
-        await glob.requireLibrary(glob.ESLINT);
-
         if (text.length > 20000) {
             console.log("Skipping linting because of large size: ", text.length);
 
             return [];
         }
 
-        const errors = new eslint().verify(text, {
-
-        });
+        const errors = await glob.linter(text);
 
         console.log(errors);
 
