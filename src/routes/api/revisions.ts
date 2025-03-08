@@ -144,7 +144,7 @@ function restoreRevision(req: Request) {
 
             note.title = revision.title;
             note.mime = revision.mime;
-            note.type = revision.type as any;
+            note.type = revision.type;
             note.setContent(revisionContent, { forceSave: true });
         });
     }
