@@ -5,7 +5,7 @@ import express from "express";
 import { isDev, isElectron } from "../services/utils.js";
 import type serveStatic from "serve-static";
 
-const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<any, Record<string, any>>>) => {
+const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<unknown, Record<string, unknown>>>) => {
     if (!isDev) {
         options = {
             maxAge: "1y",

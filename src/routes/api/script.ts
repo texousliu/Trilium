@@ -33,8 +33,11 @@ async function exec(req: Request) {
             executionResult: result,
             maxEntityChangeId: syncService.getMaxEntityChangeId()
         };
-    } catch (e: any) {
-        return { success: false, error: e.message };
+    } catch (e: unknown) {
+        return {
+            success: false,
+            error: (e instanceof Error) ? e.message : "Unknown Error"
+        };
     }
 }
 

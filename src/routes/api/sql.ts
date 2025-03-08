@@ -56,10 +56,10 @@ function execute(req: Request) {
             success: true,
             results
         };
-    } catch (e: any) {
+    } catch (e: unknown) {
         return {
             success: false,
-            error: e.message
+            error: (e instanceof Error) ? e.message : "Unknown Error"
         };
     }
 }

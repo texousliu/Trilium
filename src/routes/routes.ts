@@ -477,7 +477,7 @@ function route(method: HttpMethod, path: string, middleware: express.Handler[], 
 
             if (result?.then) {
                 // promise
-                result.then((promiseResult: unknown) => handleResponse(resultHandler, req, res, promiseResult, start)).catch((e: any) => handleException(e, method, path, res));
+                result.then((promiseResult: unknown) => handleResponse(resultHandler, req, res, promiseResult, start)).catch((e: unknown) => handleException(e, method, path, res));
             } else {
                 handleResponse(resultHandler, req, res, result, start);
             }

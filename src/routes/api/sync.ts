@@ -30,10 +30,10 @@ async function testSync() {
         syncService.sync();
 
         return { success: true, message: t("test_sync.successful") };
-    } catch (e: any) {
+    } catch (e: unknown) {
         return {
             success: false,
-            message: e.message
+            error: (e instanceof Error) ? e.message : "Unknown Error"
         };
     }
 }
