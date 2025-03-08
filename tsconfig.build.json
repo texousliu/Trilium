@@ -7,16 +7,18 @@
     "strict": true,
     "noImplicitAny": true,
     "resolveJsonModule": true,
+    "allowJs": true,
     "lib": ["ES2023"],
     "downlevelIteration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowJs": true
+    "verbatimModuleSyntax": true
   },
-  "include": ["./src/public/app/**/*"],
-  "files": [
-    "./src/public/app/types.d.ts",
-    "./src/public/app/types-lib.d.ts",
-    "./src/types.d.ts"
-  ]
+  "include": ["./src/**/*.ts", "./src/**/*.js", "./*.ts"],
+  "exclude": [
+	  "./**/*.spec.ts",
+	  "./src/public/**/*",
+    "./*.config.ts",
+  ],
+  "files": ["src/types.d.ts"]
 }
