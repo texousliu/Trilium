@@ -2,10 +2,15 @@
  * Settings
  */
 :root {
+    --options-card-min-width: 500px;
     --options-card-max-width: 900px;
     --options-card-padding: 17px;
     --options-title-font-size: 1rem;
     --options-title-offset: 13px;
+}
+/* Create a gap at the top of the option pages */
+.note-detail-content-widget-content.options>*:first-child {
+    margin-top: 1em;
 }
 
 /* Create a gap at the bottom of option pages */
@@ -21,6 +26,7 @@
 
 .options-section {
     margin: auto;
+    min-width: var(--options-card-min-width);
     max-width: var(--options-card-max-width);
     border-radius: 12px;
     border: 1px solid var(--card-border-color) !important;
