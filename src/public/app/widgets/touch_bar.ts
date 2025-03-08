@@ -2,6 +2,16 @@ import utils from "../services/utils.js";
 import Component from "../components/component.js";
 import appContext from "../components/app_context.js";
 
+async function triggerTextEditorCommand(command: string, args?: object) {
+    const editor = await appContext.tabManager.getActiveContext().getTextEditor();
+    if (!editor) {
+        return;
+    }
+
+    // TODO: Fix type of editor.
+    (editor as any).execute(command, args);
+}
+
 export default class TouchBarWidget extends Component {
 
     nativeImage: typeof import("electron").nativeImage;
@@ -38,19 +48,9 @@ export default class TouchBarWidget extends Component {
         return newImage;
     }
 
-    async #triggerTextEditorCommand(command: string, args?: object) {
-        const editor = await appContext.tabManager.getActiveContext().getTextEditor();
-        if (!editor) {
-            return;
-        }
-
-        // TODO: Fix type of editor.
-        (editor as any).execute(command, args);
-    }
-
     #buildTouchBar() {
         const { TouchBar } = this.remote;
-        const { TouchBarButton, TouchBarSpacer, TouchBarGroup, TouchBarOtherItemsProxy } = this.remote.TouchBar;
+        const { TouchBarButton, TouchBarSpacer, TouchBarGroup, TouchBarSegmentedControl, TouchBarOtherItemsProxy } = this.remote.TouchBar;
 
         const items = [
             new TouchBarButton({
@@ -58,32 +58,40 @@ export default class TouchBarWidget extends Component {
                 click: () => this.triggerCommand("createNoteIntoInbox")
             }),
             new TouchBarSpacer({ size: "large" }),
+            new TouchBarSegmentedControl({
+                segments: [
+                    { label: "P" },
+                    { label: "H2" },
+                    { label: "H3" }
+                ],
+                change(selectedIndex, isSelected) {
+                    switch (selectedIndex) {
+                        case 0:
+                            triggerTextEditorCommand("paragraph")
+                            break;
+                        case 1:
+                            triggerTextEditorCommand("heading", { value: "heading2" });
+                            break;
+                        case 2:
+                            triggerTextEditorCommand("heading", { value: "heading3" });
+                            break;
+                    }
+                },
+            }),
             new TouchBarGroup({
                 items: new TouchBar({
                     items: [
                         new TouchBarButton({
-                            label: "P",
-                            click: () => this.#triggerTextEditorCommand("paragraph")
-                        }),
-                        new TouchBarButton({
-                            label: "H2",
-                            click: () => this.#triggerTextEditorCommand("heading", { value: "heading2" })
-                        }),
-                        new TouchBarButton({
-                            label: "H3",
-                            click: () => this.#triggerTextEditorCommand("heading", { value: "heading3" })
-                        }),
-                        new TouchBarButton({
                             icon: this.#buildIcon("NSTouchBarTextBoldTemplate"),
-                            click: () => this.#triggerTextEditorCommand("bold")
+                            click: () => triggerTextEditorCommand("bold")
                         }),
                         new TouchBarButton({
                             icon: this.#buildIcon("NSTouchBarTextItalicTemplate"),
-                            click: () => this.#triggerTextEditorCommand("italic")
+                            click: () => triggerTextEditorCommand("italic")
                         }),
                         new TouchBarButton({
                             icon: this.#buildIcon("NSTouchBarTextUnderlineTemplate"),
-                            click: () => this.#triggerTextEditorCommand("underline")
+                            click: () => triggerTextEditorCommand("underline")
                         })
                     ]
                 })
