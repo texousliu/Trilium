@@ -17,62 +17,55 @@ async function findSimilarNotes(req: Request, res: Response) {
     const threshold = parseFloat(req.query.threshold as string || '0.7');
 
     if (!noteId) {
-        return res.status(400).send({
+        return [400, {
             success: false,
             message: "Note ID is required"
-        });
+        }];
     }
 
-    try {
-        const embedding = await vectorStore.getEmbeddingForNote(noteId, providerId, modelId);
+    const embedding = await vectorStore.getEmbeddingForNote(noteId, providerId, modelId);
 
-        if (!embedding) {
-            // If no embedding exists for this note yet, generate one
-            const note = becca.getNote(noteId);
-            if (!note) {
-                return res.status(404).send({
-                    success: false,
-                    message: "Note not found"
-                });
-            }
-
-            const context = await vectorStore.getNoteEmbeddingContext(noteId);
-            const provider = providerManager.getEmbeddingProvider(providerId);
-
-            if (!provider) {
-                return res.status(400).send({
-                    success: false,
-                    message: `Embedding provider '${providerId}' not found`
-                });
-            }
-
-            const newEmbedding = await provider.generateNoteEmbeddings(context);
-            await vectorStore.storeNoteEmbedding(noteId, providerId, modelId, newEmbedding);
-
-            const similarNotes = await vectorStore.findSimilarNotes(
-                newEmbedding, providerId, modelId, limit, threshold
-            );
-
-            return res.send({
-                success: true,
-                similarNotes
-            });
+    if (!embedding) {
+        // If no embedding exists for this note yet, generate one
+        const note = becca.getNote(noteId);
+        if (!note) {
+            return [404, {
+                success: false,
+                message: "Note not found"
+            }];
         }
 
+        const context = await vectorStore.getNoteEmbeddingContext(noteId);
+        const provider = providerManager.getEmbeddingProvider(providerId);
+
+        if (!provider) {
+            return [400, {
+                success: false,
+                message: `Embedding provider '${providerId}' not found`
+            }];
+        }
+
+        const newEmbedding = await provider.generateNoteEmbeddings(context);
+        await vectorStore.storeNoteEmbedding(noteId, providerId, modelId, newEmbedding);
+
         const similarNotes = await vectorStore.findSimilarNotes(
-            embedding.embedding, providerId, modelId, limit, threshold
+            newEmbedding, providerId, modelId, limit, threshold
         );
 
-        return res.send({
+        return {
             success: true,
             similarNotes
-        });
-    } catch (error: any) {
-        return res.status(500).send({
-            success: false,
-            message: error.message || "Unknown error"
-        });
+        };
     }
+
+    const similarNotes = await vectorStore.findSimilarNotes(
+        embedding.embedding, providerId, modelId, limit, threshold
+    );
+
+    return {
+        success: true,
+        similarNotes
+    };
 }
 
 /**
@@ -86,58 +79,45 @@ async function searchByText(req: Request, res: Response) {
     const threshold = parseFloat(req.query.threshold as string || '0.7');
 
     if (!text) {
-        return res.status(400).send({
+        return [400, {
             success: false,
             message: "Search text is required"
-        });
+        }];
     }
 
-    try {
-        const provider = providerManager.getEmbeddingProvider(providerId);
+    const provider = providerManager.getEmbeddingProvider(providerId);
 
-        if (!provider) {
-            return res.status(400).send({
-                success: false,
-                message: `Embedding provider '${providerId}' not found`
-            });
-        }
-
-        // Generate embedding for the search text
-        const embedding = await provider.generateEmbeddings(text);
-
-        // Find similar notes
-        const similarNotes = await vectorStore.findSimilarNotes(
-            embedding, providerId, modelId, limit, threshold
-        );
-
-        return res.send({
-            success: true,
-            similarNotes
-        });
-    } catch (error: any) {
-        return res.status(500).send({
+    if (!provider) {
+        return [400, {
             success: false,
-            message: error.message || "Unknown error"
-        });
+            message: `Embedding provider '${providerId}' not found`
+        }];
     }
+
+    // Generate embedding for the search text
+    const embedding = await provider.generateEmbeddings(text);
+
+    // Find similar notes
+    const similarNotes = await vectorStore.findSimilarNotes(
+        embedding, providerId, modelId, limit, threshold
+    );
+
+    return {
+        success: true,
+        similarNotes
+    };
 }
 
 /**
  * Get embedding providers
  */
 async function getProviders(req: Request, res: Response) {
-    try {
-        const providerConfigs = await providerManager.getEmbeddingProviderConfigs();
-        return res.send({
-            success: true,
-            providers: providerConfigs
-        });
-    } catch (error: any) {
-        return res.status(500).send({
-            success: false,
-            message: error.message || "Unknown error"
-        });
-    }
+    const providerConfigs = await providerManager.getEmbeddingProviderConfigs();
+
+    return {
+        success: true,
+        providers: providerConfigs
+    };
 }
 
 /**
@@ -147,96 +127,68 @@ async function updateProvider(req: Request, res: Response) {
     const { providerId } = req.params;
     const { isEnabled, priority, config } = req.body;
 
-    try {
-        const success = await providerManager.updateEmbeddingProviderConfig(
-            providerId, isEnabled, priority, config
-        );
+    const success = await providerManager.updateEmbeddingProviderConfig(
+        providerId, isEnabled, priority, config
+    );
 
-        if (!success) {
-            return res.status(404).send({
-                success: false,
-                message: "Provider not found"
-            });
-        }
-
-        return res.send({
-            success: true
-        });
-    } catch (error: any) {
-        return res.status(500).send({
+    if (!success) {
+        return [404, {
             success: false,
-            message: error.message || "Unknown error"
-        });
+            message: "Provider not found"
+        }];
     }
+
+    return {
+        success: true
+    };
 }
 
 /**
  * Manually trigger a reprocessing of all notes
  */
 async function reprocessAllNotes(req: Request, res: Response) {
-    // Wrap in a try-catch to handle errors
-    try {
-        // Start the reprocessing operation in the background
-        // and immediately respond to the client
-        res.send({
-            success: true,
-            message: "Embedding reprocessing started in the background"
-        });
-
-        // Continue processing in the background after sending the response
-        setTimeout(async () => {
-            try {
-                await vectorStore.reprocessAllNotes();
-                log.info("Embedding reprocessing completed successfully");
-            } catch (error: any) {
-                log.error(`Error during background embedding reprocessing: ${error.message || "Unknown error"}`);
-            }
-        }, 0);
-    } catch (error: any) {
-        // Only catch errors that happen before we send the response
-        log.error(`Error initiating embedding reprocessing: ${error.message || "Unknown error"}`);
-
-        if (!res.headersSent) {
-            res.status(500).send({
-                success: false,
-                message: error.message || "Unknown error"
-            });
+    // Start the reprocessing operation in the background
+    setTimeout(async () => {
+        try {
+            await vectorStore.reprocessAllNotes();
+            log.info("Embedding reprocessing completed successfully");
+        } catch (error: any) {
+            log.error(`Error during background embedding reprocessing: ${error.message || "Unknown error"}`);
         }
-    }
+    }, 0);
+
+    // Return the response data
+    return {
+        success: true,
+        message: "Embedding reprocessing started in the background"
+    };
 }
 
 /**
  * Get embedding queue status
  */
 async function getQueueStatus(req: Request, res: Response) {
-    try {
-        // Use the imported sql instead of requiring it
-        const queueCount = await sql.getValue(
-            "SELECT COUNT(*) FROM embedding_queue"
-        );
+    // Use the imported sql instead of requiring it
+    const queueCount = await sql.getValue(
+        "SELECT COUNT(*) FROM embedding_queue"
+    );
 
-        const failedCount = await sql.getValue(
-            "SELECT COUNT(*) FROM embedding_queue WHERE attempts > 0"
-        );
+    const failedCount = await sql.getValue(
+        "SELECT COUNT(*) FROM embedding_queue WHERE attempts > 0"
+    );
 
-        const totalEmbeddingsCount = await sql.getValue(
-            "SELECT COUNT(*) FROM note_embeddings"
-        );
+    const totalEmbeddingsCount = await sql.getValue(
+        "SELECT COUNT(*) FROM note_embeddings"
+    );
 
-        return res.send({
-            success: true,
-            status: {
-                queueCount,
-                failedCount,
-                totalEmbeddingsCount
-            }
-        });
-    } catch (error: any) {
-        return res.status(500).send({
-            success: false,
-            message: error.message || "Unknown error"
-        });
-    }
+    return {
+        success: true,
+        status: {
+            queueCount,
+            failedCount,
+            totalEmbeddingsCount
+        }
+    };
 }
 
 export default {

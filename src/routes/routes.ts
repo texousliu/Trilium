@@ -372,12 +372,12 @@ function register(app: express.Application) {
     etapiBackupRoute.register(router);
 
     // Embeddings API endpoints
-    route(GET, "/api/embeddings/similar/:noteId", [auth.checkApiAuth], embeddingsRoute.findSimilarNotes, apiResultHandler);
-    route(PST, "/api/embeddings/search", [auth.checkApiAuth, csrfMiddleware], embeddingsRoute.searchByText, apiResultHandler);
-    route(GET, "/api/embeddings/providers", [auth.checkApiAuth], embeddingsRoute.getProviders, apiResultHandler);
-    route(PATCH, "/api/embeddings/providers/:providerId", [auth.checkApiAuth, csrfMiddleware], embeddingsRoute.updateProvider, apiResultHandler);
-    route(PST, "/api/embeddings/reprocess", [auth.checkApiAuth, csrfMiddleware], embeddingsRoute.reprocessAllNotes, apiResultHandler);
-    route(GET, "/api/embeddings/queue-status", [auth.checkApiAuth], embeddingsRoute.getQueueStatus, apiResultHandler);
+    apiRoute(GET, "/api/embeddings/similar/:noteId", embeddingsRoute.findSimilarNotes);
+    apiRoute(PST, "/api/embeddings/search", embeddingsRoute.searchByText);
+    apiRoute(GET, "/api/embeddings/providers", embeddingsRoute.getProviders);
+    apiRoute(PATCH, "/api/embeddings/providers/:providerId", embeddingsRoute.updateProvider);
+    apiRoute(PST, "/api/embeddings/reprocess", embeddingsRoute.reprocessAllNotes);
+    apiRoute(GET, "/api/embeddings/queue-status", embeddingsRoute.getQueueStatus);
 
     // Ollama API endpoints
     route(PST, "/api/ollama/list-models", [auth.checkApiAuth, csrfMiddleware], ollamaRoute.listModels, apiResultHandler);
