@@ -252,45 +252,52 @@ export default class AiSettingsWidget extends OptionsWidget {
         const $refreshModels = this.$widget.find('.refresh-models');
         $refreshModels.on('click', async () => {
             $refreshModels.prop('disabled', true);
-            $refreshModels.text(t("ai_llm.refresh_models"));
-
+            $refreshModels.text(t("ai_llm.refreshing_models"));
+            
             try {
                 const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
                 const response = await server.post<OllamaModelResponse>('ollama/list-models', { baseUrl: ollamaBaseUrl });
-
-                if (response && response.models) {
+                
+                if (response && response.success && response.models && response.models.length > 0) {
                     const $embedModelSelect = this.$widget.find('.ollama-embedding-model');
                     const currentValue = $embedModelSelect.val();
-
+                    
                     // Clear existing options
                     $embedModelSelect.empty();
-
+                    
                     // Add embedding-specific models first
-                    const embeddingModels = response.models.filter(model =>
+                    const embeddingModels = response.models.filter(model => 
                         model.name.includes('embed') || model.name.includes('bert'));
-
+                        
                     embeddingModels.forEach(model => {
                         $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
                     });
-
-                    // Add separator
-                    $embedModelSelect.append(`<option disabled>───────────</option>`);
-
+                    
+                    // Add separator if we have both types
+                    if (embeddingModels.length > 0) {
+                        $embedModelSelect.append(`<option disabled>───────────</option>`);
+                    }
+                    
                     // Add other models (LLMs can also generate embeddings)
-                    const otherModels = response.models.filter(model =>
+                    const otherModels = response.models.filter(model => 
                         !model.name.includes('embed') && !model.name.includes('bert'));
-
+                        
                     otherModels.forEach(model => {
                         $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
                     });
-
+                    
                     // Restore previous selection if possible
                     if (currentValue) {
                         $embedModelSelect.val(currentValue);
                     }
+                    
+                    toastService.showMessage("Models refreshed successfully");
+                } else {
+                    toastService.showError("No models found from Ollama server");
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Error refreshing Ollama models:", error);
+                toastService.showError(`Error refreshing models: ${error.message || 'Unknown error'}`);
             } finally {
                 $refreshModels.prop('disabled', false);
                 $refreshModels.text(t("ai_llm.refresh_models"));

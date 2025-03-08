@@ -20,18 +20,18 @@ async function listModels(req: Request, res: Response) {
         });
 
         // Return the models list
-        return res.send({
+        const models = response.data.models || [];
+
+        // Important: don't use "return res.send()" - just return the data
+        return {
             success: true,
-            models: response.data.models || []
-        });
+            models: models
+        };
     } catch (error: any) {
         log.error(`Error listing Ollama models: ${error.message || 'Unknown error'}`);
 
-        return res.status(500).send({
-            success: false,
-            message: error.message || 'Failed to list Ollama models',
-            error: error.toString()
-        });
+        // Properly throw the error to be handled by the global error handler
+        throw new Error(`Failed to list Ollama models: ${error.message || 'Unknown error'}`);
     }
 }
 
