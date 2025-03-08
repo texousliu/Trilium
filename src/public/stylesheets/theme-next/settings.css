@@ -103,9 +103,3 @@
     height: 2px;
     background: currentColor;
 }
-
-/* Advanced */
-
-.options-section ul.existing-anonymized-databases {
-    margin: 1em;
-}
