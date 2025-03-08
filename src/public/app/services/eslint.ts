@@ -14,9 +14,11 @@ export async function lint(code: string) {
                 globals: {
                     ...globals.browser,
                     api: "readonly"
-                }
+                },
             },
-            rules: { }
+            rules: {
+                "no-unused-vars": [ "warn", { vars: "local", args: "after-used" }]
+            }
         }
     ]);
 

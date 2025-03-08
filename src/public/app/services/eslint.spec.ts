@@ -26,4 +26,23 @@ describe("Linter", () => {
         `);
         expect(result.length).toBe(0);
     });
+
+    it("reports unused functions as warnings", async () => {
+        const result = await lint(trimIndentation`
+            function hello() { }
+            function world() { }
+
+            console.log("Hello world");
+        `);
+        expect(result).toMatchObject([
+            {
+                message: "'hello' is defined but never used.",
+                severity: 1
+            },
+            {
+                message: "'world' is defined but never used.",
+                severity: 1
+            }
+        ]);
+    });
 });
