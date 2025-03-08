@@ -57,7 +57,7 @@ const TPL = `
     <h5>${t("fonts.main_font")}</h5>
 
     <div class="form-group row">
-        <div class="col-6">
+        <div class="col-4">
             <label for="main-font-family">${t("fonts.font_family")}</label>
             <select id="main-font-family" class="main-font-family form-select"></select>
         </div>
