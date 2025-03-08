@@ -43,9 +43,13 @@ const TPL = `
 
     <hr />
 
-    <h5>${t("database_anonymization.existing_anonymized_databases")}</h5>
-
-    <ul class="existing-anonymized-databases"></ul>
+    <table class="existing-anonymized-databases-table table table-stripped">
+        <thead>
+            <th>${t("database_anonymization.existing_anonymized_databases")}</th>
+        </thead>
+        <tbody class="existing-anonymized-databases">
+        </tbody>
+    </table>
 </div>`;
 
 // TODO: Deduplicate with server
@@ -108,7 +112,7 @@ export default class DatabaseAnonymizationOptions extends OptionsWidget {
             }
 
             for (const { filePath } of anonymizedDatabases) {
-                this.$existingAnonymizedDatabases.append($("<li>").text(filePath));
+                this.$existingAnonymizedDatabases.append($("<tr>").append($("<td>").text(filePath)));
             }
         });
     }
