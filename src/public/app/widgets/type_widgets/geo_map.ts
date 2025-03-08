@@ -105,6 +105,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     private currentMarkerData: Record<string, Marker>;
     private currentTrackData: Record<string, GPX>;
     private gpxLoaded?: boolean;
+    private ignoreNextZoomEvent?: boolean;
 
     static getType() {
         return "geoMap";
@@ -144,6 +145,13 @@ export default class GeoMapTypeWidget extends TypeWidget {
         map.on("moveend", updateFn);
         map.on("zoomend", updateFn);
         map.on("click", (e) => this.#onMapClicked(e));
+        map.on("zoom", () => {
+            if (!this.ignoreNextZoomEvent) {
+                this.triggerCommand("refreshTouchBar");
+            }
+
+            this.ignoreNextZoomEvent = false;
+        });
     }
 
     async #restoreViewportAndZoom() {
@@ -383,6 +391,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {
         const map = this.geoMapWidget.map;
+        const that = this;
         if (!map) {
             return;
         }
@@ -394,6 +403,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
                 minValue: map.getMinZoom(),
                 maxValue: map.getMaxZoom(),
                 change(newValue) {
+                    that.ignoreNextZoomEvent = true;
                     map.setZoom(newValue);
                 },
             }),
