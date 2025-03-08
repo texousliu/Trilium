@@ -1042,8 +1042,8 @@
     "note_detail_render_help_2": "Notița de tipul „Render HTML” este utilizată pentru <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/scripts.html\">scriptare</a>. Pe scurt, se folosește o notiță de tip cod HTML (opțional cu niște JavaScript) și această notiță o va randa. Pentru a funcționa, trebuie definită o <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/attributes.html\">relație</a> denumită „renderNote” ce indică notița HTML de randat."
   },
   "revisions": {
-    "confirm_delete": "Doriți ștergerea acestei revizii? Această acțiune va șterge titlul reviziei și conținutul, dar va păstra metainformațiile.",
-    "confirm_delete_all": "Doriți ștergerea tuturor reviziilor acestei notițe? Acest lucru va șterge titlurile și conținuturile reviziilor, dar va păstra metainformațiile.",
+    "confirm_delete": "Doriți ștergerea acestei revizii?",
+    "confirm_delete_all": "Doriți ștergerea tuturor reviziilor acestei notițe?",
     "confirm_restore": "Doriți restaurarea acestei revizii? Acest lucru va suprascrie titlul și conținutul curent cu cele ale acestei revizii.",
     "delete_all_button": "Șterge toate reviziile",
     "delete_all_revisions": "Șterge toate reviziile acestei notițe",
