@@ -37,7 +37,7 @@ function index(req: Request, res: Response) {
         device: view,
         csrfToken: csrfToken,
         themeCssUrl: getThemeCssUrl(theme, themeNote),
-        themeUseNextAsBase: themeNote?.getAttributeValue("label", "appThemeBase") === "next",
+        themeUseNextAsBase: themeNote?.getAttributeValue("label", "appThemeBase"),
         headingStyle: options.headingStyle,
         layoutOrientation: options.layoutOrientation,
         platform: process.platform,
