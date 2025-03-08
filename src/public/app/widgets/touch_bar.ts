@@ -8,6 +8,7 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
 
     nativeImage: typeof import("electron").nativeImage;
     remote: typeof import("@electron/remote");
+    lastFocusedComponent?: Component;
 
     constructor() {
         super();
@@ -19,19 +20,8 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
             const target = e.target;
             const parentComponentEl = $(target).closest(".component");
             // TODO: Remove typecast once it's no longer necessary.
-            const parentComponent = appContext.getComponentByEl(parentComponentEl[0]) as Component;
-            const { TouchBar } = this.remote;
-            if (!parentComponent) {
-                return;
-            }
-
-            let result = parentComponent.triggerCommand("buildTouchBar", {
-                TouchBar,
-                buildIcon: this.buildIcon.bind(this)
-            });
-
-            const touchBar = this.#buildTouchBar(result);
-            this.remote.getCurrentWindow().setTouchBar(touchBar);
+            this.lastFocusedComponent = appContext.getComponentByEl(parentComponentEl[0]) as Component;
+            this.#refreshTouchBar();
         });
     }
 
@@ -52,6 +42,22 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
             buffer: sourceImage.toBitmap()
         });
         return newImage;
+    }
+
+    #refreshTouchBar() {
+        const { TouchBar } = this.remote;
+        const parentComponent = this.lastFocusedComponent;
+        if (!parentComponent) {
+            return;
+        }
+
+        let result = parentComponent.triggerCommand("buildTouchBar", {
+            TouchBar,
+            buildIcon: this.buildIcon.bind(this)
+        });
+
+        const touchBar = this.#buildTouchBar(result);
+        this.remote.getCurrentWindow().setTouchBar(touchBar);
     }
 
     #buildTouchBar(componentSpecificItems?: (TouchBarButton | TouchBarSpacer | TouchBarGroup | TouchBarSegmentedControl)[]) {
@@ -82,6 +88,10 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
         return new TouchBar({
             items
         });
+    }
+
+    refreshTouchBarEvent() {
+        this.#refreshTouchBar();
     }
 
 }

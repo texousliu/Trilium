@@ -53,6 +53,8 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
                 this.initCallback(L);
             }
 
+            map.addEventListener("zoom", () => this.triggerCommand("refreshTouchBar"));
+
             L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 detectRetina: true
@@ -69,6 +71,7 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
         return [
             new TouchBar.TouchBarSlider({
                 label: "Zoom",
+                value: map.getZoom(),
                 minValue: map.getMinZoom(),
                 maxValue: map.getMaxZoom(),
                 change(newValue) {

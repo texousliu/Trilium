@@ -260,6 +260,7 @@ export type CommandMappings = {
         TouchBar: typeof import("electron").TouchBar;
         buildIcon(name: string): NativeImage;
     };
+    refreshTouchBar: CommandData;
 };
 
 type EventMappings = {
