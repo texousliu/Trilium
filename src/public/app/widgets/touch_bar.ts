@@ -1,5 +1,6 @@
 import utils from "../services/utils.js";
 import Component from "../components/component.js";
+import appContext from "../components/app_context.js";
 
 export default class TouchBarWidget extends Component {
 
@@ -20,30 +21,60 @@ export default class TouchBarWidget extends Component {
 
     #buildIcon(name: string) {
         const sourceImage = this.nativeImage.createFromNamedImage(name, [-1, 0, 1]);
-        const newImage = this.nativeImage.createEmpty()
+        const { width, height } = sourceImage.getSize();
+        const newImage = this.nativeImage.createEmpty();
         newImage.addRepresentation({
             scaleFactor: 1,
-            width: 22,
-            height: 22,
-            buffer: sourceImage.resize({ height: 22 }).toBitmap()
+            width: width / 2,
+            height: height / 2,
+            buffer: sourceImage.resize({ height: height / 2 }).toBitmap()
         });
         newImage.addRepresentation({
             scaleFactor: 2,
-            width: 44,
-            height: 44,
-            buffer: sourceImage.resize({ height: 44 }).toBitmap()
+            width: width,
+            height: height,
+            buffer: sourceImage.toBitmap()
         });
         return newImage;
     }
 
+    async #triggerTextEditorCommand(command: string) {
+        const editor = await appContext.tabManager.getActiveContext().getTextEditor();
+        if (!editor) {
+            return;
+        }
+
+        // TODO: Fix type of editor.
+        (editor as any).execute(command);
+    }
+
     #buildTouchBar() {
         const { TouchBar } = this.remote;
-        const { TouchBarButton } = this.remote.TouchBar;
+        const { TouchBarButton, TouchBarSpacer, TouchBarGroup } = this.remote.TouchBar;
 
         const items = [
             new TouchBarButton({
                 icon: this.#buildIcon("NSTouchBarComposeTemplate"),
                 click: () => this.triggerCommand("createNoteIntoInbox")
+            }),
+            new TouchBarSpacer({ }),
+            new TouchBarGroup({
+                items: new TouchBar({
+                    items: [
+                        new TouchBarButton({
+                            icon: this.#buildIcon("NSTouchBarTextBoldTemplate"),
+                            click: () => this.#triggerTextEditorCommand("bold")
+                        }),
+                        new TouchBarButton({
+                            icon: this.#buildIcon("NSTouchBarTextItalicTemplate"),
+                            click: () => this.#triggerTextEditorCommand("italic")
+                        }),
+                        new TouchBarButton({
+                            icon: this.#buildIcon("NSTouchBarTextUnderlineTemplate"),
+                            click: () => this.#triggerTextEditorCommand("underline")
+                        })
+                    ]
+                })
             })
         ];
 
