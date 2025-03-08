@@ -30,12 +30,12 @@ function addClipping(req: Request) {
     // if a note under the clipperInbox has the same 'pageUrl' attribute,
     // add the content to that note and clone it under today's inbox
     // otherwise just create a new note under today's inbox
-    let { title, content, pageUrl, images } = req.body;
+    const { title, content, images } = req.body;
     const clipType = "clippings";
 
     const clipperInbox = getClipperInboxNote();
 
-    pageUrl = htmlSanitizer.sanitizeUrl(pageUrl);
+    const pageUrl = htmlSanitizer.sanitizeUrl(req.body.pageUrl);
     let clippingNote = findClippingNote(clipperInbox, pageUrl, clipType);
 
     if (!clippingNote) {
@@ -100,16 +100,15 @@ function getClipperInboxNote() {
 }
 
 function createNote(req: Request) {
-    let { title, content, pageUrl, images, clipType, labels } = req.body;
+    const { content, images, labels } = req.body;
 
-    if (!title || !title.trim()) {
-        title = `Clipped note from ${pageUrl}`;
-    }
+    const clipType = htmlSanitizer.sanitize(req.body.clipType);
+    const pageUrl = htmlSanitizer.sanitizeUrl(req.body.pageUrl);
 
-    clipType = htmlSanitizer.sanitize(clipType);
+    const trimmedTitle = (typeof req.body.title === "string") ? req.body.title.trim() : "";
+    const title = trimmedTitle || `Clipped note from ${pageUrl}`;
 
     const clipperInbox = getClipperInboxNote();
-    pageUrl = htmlSanitizer.sanitizeUrl(pageUrl);
     let note = findClippingNote(clipperInbox, pageUrl, clipType);
 
     if (!note) {
