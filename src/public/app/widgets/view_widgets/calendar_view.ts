@@ -347,10 +347,10 @@ export default class CalendarView extends ViewMode {
         const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
         const events: EventInput[] = [];
 
-        const calendarPromotedAttributes = note.getLabelValue("calendar:promotedAttributes");
-        let promotedAttributesData = null;
-        if (calendarPromotedAttributes) {
-            promotedAttributesData = await this.#buildPromotedAttributes(note, calendarPromotedAttributes);
+        const calendarDisplayedAttributes = note.getLabelValue("calendar:displayedAttributes")?.split(",");
+        let displayedAttributesData = null;
+        if (calendarDisplayedAttributes) {
+            displayedAttributesData = await this.#buildDisplayedAttributes(note, calendarDisplayedAttributes);
         }
 
         for (const title of titles) {
@@ -361,7 +361,7 @@ export default class CalendarView extends ViewMode {
                 noteId: note.noteId,
                 color: color ?? undefined,
                 iconClass: note.getLabelValue("iconClass"),
-                promotedAttributes: promotedAttributesData
+                promotedAttributes: displayedAttributesData
             };
 
             const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
@@ -373,33 +373,13 @@ export default class CalendarView extends ViewMode {
         return events;
     }
 
-    static async #buildPromotedAttributes(note: FNote, calendarPromotedAttributes: string) {
-        const promotedAttributeNames = calendarPromotedAttributes.split(",");
-        const filteredPromotedAttributes = note.getPromotedDefinitionAttributes().filter((attr) => promotedAttributeNames.includes(attr.name));
+    static async #buildDisplayedAttributes(note: FNote, calendarDisplayedAttributes: string[]) {
+        const filteredDisplayedAttributes = note.getAttributes().filter((attr): boolean => calendarDisplayedAttributes.includes(attr.name))
         const result: Record<string, string> = {};
 
-        for (const promotedAttribute of filteredPromotedAttributes) {
-            const [type, name] = promotedAttribute.name.split(":", 2);
-            const definition = promotedAttribute.getDefinition();
-
-            if (definition.multiplicity !== "single") {
-                // TODO: Add support for multiple definitions.
-                continue;
-            }
-
-            let value: string | undefined | null = null;
-
-            if (type === "label" && note.hasLabel(name)) {
-                value = note.getLabelValue(name);
-            } else if (type === "relation" && note.hasRelation(name)) {
-                const targetNote = await note.getRelationTarget(name);
-                value = targetNote?.title;
-            }
-
-            const friendlyName = definition.promotedAlias ?? name;
-            if (friendlyName && value) {
-                result[friendlyName] = value;
-            }
+        for (const attribute of filteredDisplayedAttributes) {
+            if (attribute.type === "label") result[attribute.name] = attribute.value;
+            else result[attribute.name] = (await attribute.getTargetNote())?.title || ""
         }
 
         return result;
