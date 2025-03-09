@@ -62,6 +62,7 @@ rm -r $BUILD_DIR/node/lib/node_modules/npm \
 printf "#!/bin/sh\n./node/bin/node src/main" > $BUILD_DIR/trilium.sh
 chmod 755 $BUILD_DIR/trilium.sh
 
+# TriliumNextTODO: is this still required? If yes → move to copy-dist/copy-trilium
 cp bin/tpl/anonymize-database.sql $BUILD_DIR/
 
 cp -r translations $BUILD_DIR/
