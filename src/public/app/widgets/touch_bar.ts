@@ -4,6 +4,8 @@ import appContext from "../components/app_context.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import type { TouchBarButton, TouchBarGroup, TouchBarSegmentedControl, TouchBarSpacer } from "@electron/remote";
 
+export type TouchBarItem = (TouchBarButton | TouchBarSpacer | TouchBarGroup | TouchBarSegmentedControl);
+
 export function buildSelectedBackgroundColor(isSelected: boolean) {
     return isSelected ? "#757575" : undefined;
 }
@@ -58,13 +60,13 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
         let result = parentComponent.triggerCommand("buildTouchBar", {
             TouchBar,
             buildIcon: this.buildIcon.bind(this)
-        });
+        }) as unknown as TouchBarItem[];
 
         const touchBar = this.#buildTouchBar(result);
         this.remote.getCurrentWindow().setTouchBar(touchBar);
     }
 
-    #buildTouchBar(componentSpecificItems?: (TouchBarButton | TouchBarSpacer | TouchBarGroup | TouchBarSegmentedControl)[]) {
+    #buildTouchBar(componentSpecificItems?: TouchBarItem[]) {
         const { TouchBar } = this.remote;
         const { TouchBarButton, TouchBarSpacer, TouchBarGroup, TouchBarSegmentedControl, TouchBarOtherItemsProxy } = this.remote.TouchBar;
 
@@ -81,7 +83,6 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
             new TouchBarSpacer({ size: "large" }),
             ...componentSpecificItems,
             new TouchBarOtherItemsProxy(),
-            new TouchBarSpacer({ size: "flexible" }),
             new TouchBarButton({
                 icon: this.buildIcon("NSTouchBarAddDetailTemplate"),
                 click: () => this.triggerCommand("jumpToNote")
