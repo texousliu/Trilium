@@ -28,10 +28,12 @@ DIST_DIR="./dist"
 
 ./bin/copy-trilium.sh
 
-echo "Downloading Node.js runtime..."
+NODE_FILENAME=node-v${NODE_VERSION}-linux-${ARCH}
+
+echo "Downloading Node.js runtime $NODE_FILENAME..."
 cd $BUILD_DIR
-wget -qO- https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz | tar xfJ -
-mv node-v${NODE_VERSION}-linux-${ARCH} node
+wget -qO- https://nodejs.org/dist/v${NODE_VERSION}/${NODE_FILENAME}.tar.xz | tar xfJ -
+mv $NODE_FILENAME node
 cd ..
 
 
@@ -48,9 +50,9 @@ cp bin/tpl/anonymize-database.sql $BUILD_DIR/
 
 VERSION=`jq -r ".version" package.json`
 
-echo "Creating Archive..."
 
 ARCHIVE_NAME="TriliumNextNotes-Server-${VERSION}-linux-${ARCH}"
+echo "Creating Archive $ARCHIVE_NAME..."
 
 mkdir $DIST_DIR
 cp -r "$BUILD_DIR" "$DIST_DIR/$ARCHIVE_NAME"
