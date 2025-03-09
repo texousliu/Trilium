@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
 
-const DEST_DIR = "./dist";
+const DEST_DIR = "./build";
 
 const VERBOSE = process.env.VERBOSE;
 
