@@ -138,7 +138,7 @@ export default class CalendarView extends ViewMode {
 
                 // Promoted attributes
                 if (promotedAttributes) {
-                    for (const [name, value] of Object.entries(promotedAttributes)) {
+                    for (const [name, value] of promotedAttributes) {
                         html += `\
                         <div class="promoted-attribute">
                             <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
@@ -353,7 +353,7 @@ export default class CalendarView extends ViewMode {
         const events: EventInput[] = [];
 
         const calendarDisplayedAttributes = note.getLabelValue("calendar:displayedAttributes")?.split(",");
-        let displayedAttributesData = null;
+        let displayedAttributesData: Array<[string, string]> | null = null;
         if (calendarDisplayedAttributes) {
             displayedAttributesData = await this.#buildDisplayedAttributes(note, calendarDisplayedAttributes);
         }
@@ -380,11 +380,11 @@ export default class CalendarView extends ViewMode {
 
     static async #buildDisplayedAttributes(note: FNote, calendarDisplayedAttributes: string[]) {
         const filteredDisplayedAttributes = note.getAttributes().filter((attr): boolean => calendarDisplayedAttributes.includes(attr.name))
-        const result: Record<string, string> = {};
+        const result: Array<[string, string]> = [];
 
         for (const attribute of filteredDisplayedAttributes) {
-            if (attribute.type === "label") result[attribute.name] = attribute.value;
-            else result[attribute.name] = (await attribute.getTargetNote())?.title || ""
+            if (attribute.type === "label") result.push([attribute.name, attribute.value]);
+            else result.push([attribute.name, (await attribute.getTargetNote())?.title || ""])
         }
 
         return result;
