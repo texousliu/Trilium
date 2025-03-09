@@ -252,7 +252,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
 
             // Touch bar integration
-            editor.commands.get("bold").on("change", () => this.triggerCommand("refreshTouchBar"));
+            for (const event of [ "bold", "italic", "underline" ]) {
+                editor.commands.get(event).on("change", () => this.triggerCommand("refreshTouchBar"));
+            }
 
             return editor;
         });
@@ -516,6 +518,12 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         const { TouchBarSegmentedControl, TouchBarGroup, TouchBarButton } = TouchBar;
         const { editor } = this.watchdog;
 
+        const commandButton = (icon, command) => new TouchBarButton({
+            icon: buildIcon(icon),
+            click: () => editor.execute(command),
+            backgroundColor: buildSelectedBackgroundColor(editor.commands.get(command).value)
+        });
+
         return [
             new TouchBarSegmentedControl({
                 segments: [
@@ -540,19 +548,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             new TouchBarGroup({
                 items: new TouchBar({
                     items: [
-                        new TouchBarButton({
-                            icon: buildIcon("NSTouchBarTextBoldTemplate"),
-                            click: () => editor.execute("bold"),
-                            backgroundColor: buildSelectedBackgroundColor(editor.commands.get("bold").value)
-                        }),
-                        new TouchBarButton({
-                            icon: buildIcon("NSTouchBarTextItalicTemplate"),
-                            click: () => editor.execute("italic")
-                        }),
-                        new TouchBarButton({
-                            icon: buildIcon("NSTouchBarTextUnderlineTemplate"),
-                            click: () => editor.execute("underline")
-                        })
+                        commandButton("NSTouchBarTextBoldTemplate", "bold"),
+                        commandButton("NSTouchBarTextItalicTemplate", "italic"),
+                        commandButton("NSTouchBarTextUnderlineTemplate", "underline")
                     ]
                 })
             })
