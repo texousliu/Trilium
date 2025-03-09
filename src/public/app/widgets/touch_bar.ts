@@ -5,7 +5,7 @@ import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import type { TouchBarButton, TouchBarGroup, TouchBarSegmentedControl, TouchBarSpacer } from "@electron/remote";
 
 export function buildSelectedBackgroundColor(isSelected: boolean) {
-    return isSelected ? "#ff0000" : undefined;
+    return isSelected ? "#757575" : undefined;
 }
 
 export default class TouchBarWidget extends NoteContextAwareWidget {
