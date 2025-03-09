@@ -3,11 +3,12 @@ import libraryLoader from "../../services/library_loader.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 import { getMermaidConfig } from "../mermaid.js";
 import type FNote from "../../entities/fnote.js";
-import type { EventData } from "../../components/app_context.js";
+import type { CommandListenerData, EventData } from "../../components/app_context.js";
 import { getLocaleById } from "../../services/i18n.js";
+import appContext from "../../components/app_context.js";
 
 const TPL = `
-<div class="note-detail-readonly-text note-detail-printable">
+<div class="note-detail-readonly-text note-detail-printable" tabindex="100">
     <style>
     /* h1 should not be used at all since semantically that's a note title */
     .note-detail-readonly-text h1 { font-size: 1.8em; }
@@ -162,6 +163,22 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         const correspondingLocale = getLocaleById(languageCode);
         const isRtl = correspondingLocale?.rtl;
         this.$widget.attr("dir", isRtl ? "rtl" : "ltr");
+    }
+
+    buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
+        return [
+            new TouchBar.TouchBarSpacer({ size: "flexible" }),
+            new TouchBar.TouchBarButton({
+                icon: buildIcon("NSLockUnlockedTemplate"),
+                click: () => {
+                    if (this.noteContext?.viewScope) {
+                        this.noteContext.viewScope.readOnlyTemporarilyDisabled = true;
+                        appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext: this.noteContext });
+                    }
+                    this.refresh();
+                }
+            })
+        ];
     }
 
 }
