@@ -20,10 +20,6 @@ echo Build finished
 # Patch package.json main
 sed -i 's/.\/dist\/electron-main.js/electron-main.js/g' "$DIR/package.json"
 
-script_dir=$(realpath $(dirname $0))
-cp -R "$script_dir/../build/src" "$DIR"
-cp "$script_dir/../build/electron-main.js" "$DIR"
-
 # run in subshell (so we return to original dir)
 (cd $DIR && npm ci --omit=dev)
 
@@ -47,9 +43,4 @@ find $DIR/libraries -name "*.map" -type f -delete
 find $DIR/node_modules -name "*.map" -type f -delete
 find $DIR -name "*.ts" -type f -delete
 
-d="$DIR"/src/public
-[[ -d "$d"/app-dist ]] || mkdir -pv "$d"/app-dist
-cp -r "$d"/app/doc_notes "$d"/app-dist/
-
-rm -rf "$d"/app
 unset f d DIR
