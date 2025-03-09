@@ -45,4 +45,9 @@ describe("Linter", () => {
             }
         ]);
     });
+
+    it("supports JQuery global", async () => {
+        expect(await lint(`$("<div>");`, "application/javascript;env=backend")).toMatchObject([{ "ruleId": "no-undef" }]);
+        expect(await lint(`console.log($("<div>"));`, "application/javascript;env=frontend")).toStrictEqual([]);
+    });
 });
