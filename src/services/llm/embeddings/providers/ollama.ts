@@ -150,7 +150,8 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
                 `${this.baseUrl}/api/embeddings`,
                 {
                     model: modelName,
-                    prompt: trimmedText
+                    prompt: trimmedText,
+                    format: "json"
                 },
                 {
                     headers: {

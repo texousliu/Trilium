@@ -14,7 +14,7 @@ async function listModels(req: Request, res: Response) {
         const ollamaBaseUrl = baseUrl || await options.getOption('ollamaBaseUrl') || 'http://localhost:11434';
 
         // Call Ollama API to get models
-        const response = await axios.get(`${ollamaBaseUrl}/api/tags`, {
+        const response = await axios.get(`${ollamaBaseUrl}/api/tags?format=json`, {
             headers: { 'Content-Type': 'application/json' },
             timeout: 10000
         });

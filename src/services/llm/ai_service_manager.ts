@@ -3,6 +3,7 @@ import type { AIService, ChatCompletionOptions, ChatResponse, Message } from './
 import { OpenAIService } from './openai_service.js';
 import { AnthropicService } from './anthropic_service.js';
 import { OllamaService } from './ollama_service.js';
+import log from '../log.js';
 
 type ServiceProviders = 'openai' | 'anthropic' | 'ollama';
 
@@ -13,39 +14,65 @@ export class AIServiceManager {
         ollama: new OllamaService()
     };
 
-    private providerOrder: ServiceProviders[] = [];
+    private providerOrder: ServiceProviders[] = ['openai', 'anthropic', 'ollama']; // Default order
+    private initialized = false;
 
     constructor() {
-        this.updateProviderOrder();
+        // Don't call updateProviderOrder here
+        // Wait until a method is called to initialize
     }
 
     /**
      * Update the provider precedence order from saved options
+     * Returns true if successful, false if options not available yet
      */
-    updateProviderOrder() {
-        // Default precedence: openai, anthropic, ollama
-        const defaultOrder: ServiceProviders[] = ['openai', 'anthropic', 'ollama'];
+    updateProviderOrder(): boolean {
+        if (this.initialized) {
+            return true;
+        }
 
-        // Get custom order from options
-        const customOrder = options.getOption('aiProviderPrecedence');
+        try {
+            // Default precedence: openai, anthropic, ollama
+            const defaultOrder: ServiceProviders[] = ['openai', 'anthropic', 'ollama'];
 
-        if (customOrder) {
-            try {
-                const parsed = JSON.parse(customOrder);
-                // Validate that all providers are valid
-                if (Array.isArray(parsed) &&
-                    parsed.every(p => Object.keys(this.services).includes(p))) {
-                    this.providerOrder = parsed as ServiceProviders[];
-                } else {
-                    console.warn('Invalid AI provider precedence format, using defaults');
+            // Get custom order from options
+            const customOrder = options.getOption('aiProviderPrecedence');
+
+            if (customOrder) {
+                try {
+                    const parsed = JSON.parse(customOrder);
+                    // Validate that all providers are valid
+                    if (Array.isArray(parsed) &&
+                        parsed.every(p => Object.keys(this.services).includes(p))) {
+                        this.providerOrder = parsed as ServiceProviders[];
+                    } else {
+                        log.info('Invalid AI provider precedence format, using defaults');
+                        this.providerOrder = defaultOrder;
+                    }
+                } catch (e) {
+                    log.error(`Failed to parse AI provider precedence: ${e}`);
                     this.providerOrder = defaultOrder;
                 }
-            } catch (e) {
-                console.error('Failed to parse AI provider precedence:', e);
+            } else {
                 this.providerOrder = defaultOrder;
             }
-        } else {
-            this.providerOrder = defaultOrder;
+
+            this.initialized = true;
+            return true;
+        } catch (error) {
+            // If options table doesn't exist yet, use defaults
+            // This happens during initial database creation
+            this.providerOrder = ['openai', 'anthropic', 'ollama'];
+            return false;
+        }
+    }
+
+    /**
+     * Ensure manager is initialized before using
+     */
+    private ensureInitialized() {
+        if (!this.initialized) {
+            this.updateProviderOrder();
         }
     }
 
@@ -60,6 +87,7 @@ export class AIServiceManager {
      * Get list of available providers
      */
     getAvailableProviders(): ServiceProviders[] {
+        this.ensureInitialized();
         return Object.entries(this.services)
             .filter(([_, service]) => service.isAvailable())
             .map(([key, _]) => key as ServiceProviders);
@@ -70,11 +98,11 @@ export class AIServiceManager {
      * based on the configured precedence order
      */
     async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
+        this.ensureInitialized();
+
         if (!messages || messages.length === 0) {
             throw new Error('No messages provided for chat completion');
         }
-
-        this.updateProviderOrder();
 
         // Try providers in order of preference
         const availableProviders = this.getAvailableProviders();
@@ -96,7 +124,7 @@ export class AIServiceManager {
                     const modifiedOptions = { ...options, model: modelName };
                     return await this.services[providerName as ServiceProviders].generateChatCompletion(messages, modifiedOptions);
                 } catch (error) {
-                    console.error(`Error with specified provider ${providerName}:`, error);
+                    log.error(`Error with specified provider ${providerName}: ${error}`);
                     // If the specified provider fails, continue with the fallback providers
                 }
             }
@@ -109,7 +137,7 @@ export class AIServiceManager {
             try {
                 return await this.services[provider].generateChatCompletion(messages, options);
             } catch (error) {
-                console.error(`Error with provider ${provider}:`, error);
+                log.error(`Error with provider ${provider}: ${error}`);
                 lastError = error as Error;
                 // Continue to the next provider
             }
@@ -120,6 +148,29 @@ export class AIServiceManager {
     }
 }
 
-// Singleton instance
-const aiServiceManager = new AIServiceManager();
-export default aiServiceManager;
+// Don't create singleton immediately, use a lazy-loading pattern
+let instance: AIServiceManager | null = null;
+
+/**
+ * Get the AIServiceManager instance (creates it if not already created)
+ */
+function getInstance(): AIServiceManager {
+    if (!instance) {
+        instance = new AIServiceManager();
+    }
+    return instance;
+}
+
+export default {
+    getInstance,
+    // Also export methods directly for convenience
+    isAnyServiceAvailable(): boolean {
+        return getInstance().isAnyServiceAvailable();
+    },
+    getAvailableProviders() {
+        return getInstance().getAvailableProviders();
+    },
+    async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
+        return getInstance().generateChatCompletion(messages, options);
+    }
+};

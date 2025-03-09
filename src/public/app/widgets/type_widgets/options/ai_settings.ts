@@ -160,6 +160,17 @@ export default class AiSettingsWidget extends OptionsWidget {
                 <h5>${t("ai_llm.embedding_configuration")}</h5>
 
                 <div class="form-group">
+                    <label>${t("ai_llm.embedding_default_provider")}</label>
+                    <select class="embedding-default-provider form-control">
+                        <option value="openai">OpenAI</option>
+                        <option value="anthropic">Anthropic</option>
+                        <option value="ollama">Ollama</option>
+                        <option value="local">Local</option>
+                    </select>
+                    <div class="help-text">${t("ai_llm.embedding_default_provider_description")}</div>
+                </div>
+
+                <div class="form-group">
                     <label>
                         <input class="embedding-auto-update-enabled" type="checkbox">
                         ${t("ai_llm.enable_auto_update_embeddings")}
@@ -349,6 +360,11 @@ export default class AiSettingsWidget extends OptionsWidget {
         const $embeddingAutoUpdateEnabled = this.$widget.find('.embedding-auto-update-enabled');
         $embeddingAutoUpdateEnabled.on('change', async () => {
             await this.updateOption('embeddingAutoUpdateEnabled', $embeddingAutoUpdateEnabled.prop('checked') ? "true" : "false");
+        });
+
+        const $embeddingDefaultProvider = this.$widget.find('.embedding-default-provider');
+        $embeddingDefaultProvider.on('change', async () => {
+            await this.updateOption('embeddingsDefaultProvider', $embeddingDefaultProvider.val() as string);
         });
 
         const $embeddingBatchSize = this.$widget.find('.embedding-batch-size');
@@ -543,6 +559,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || 'nomic-embed-text');
 
         // Load embedding options
+        this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
         this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled);
         this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize);
         this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval);
