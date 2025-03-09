@@ -26,11 +26,7 @@ NODE_VERSION=20.15.1
 BUILD_DIR="./build"
 DIST_DIR="./dist"
 
-if [ "$1" != "DONTCOPY" ]
-then
-    # Need to modify copy-trilium.sh to accept the target directory
-    ./bin/copy-trilium.sh
-fi
+./bin/copy-trilium.sh
 
 echo "Downloading Node.js runtime..."
 cd $BUILD_DIR
