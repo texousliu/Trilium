@@ -33,9 +33,7 @@ then
 fi
 
 cd $BUILD_DIR
-wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz
-tar xfJ node-v${NODE_VERSION}-linux-${ARCH}.tar.xz
-rm node-v${NODE_VERSION}-linux-${ARCH}.tar.xz
+wget -qO- https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz | tar xfJ -
 mv node-v${NODE_VERSION}-linux-${ARCH} node
 cd ..
 
