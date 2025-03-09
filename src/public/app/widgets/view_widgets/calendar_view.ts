@@ -231,8 +231,8 @@ export default class CalendarView extends ViewMode {
 
         // Since they can be customized via calendar:startDate=$foo and calendar:endDate=$bar we need to determine the
         // attributes to be effectively updated
-        const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value.replace("#", "")||"startDate"
-        const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value.replace("#", "")||"endDate"
+        const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value||"startDate"
+        const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value||"endDate"
 
         attributes.setAttribute(note, "label", startAttribute, startDate);
         attributes.setAttribute(note, "label", endAttribute, endDate);
@@ -326,7 +326,7 @@ export default class CalendarView extends ViewMode {
 
     /**
      * Allows the user to customize the attribute from which to obtain a particular value. For example, if `customLabelNameAttribute` is `calendar:startDate`
-     * and `defaultLabelName` is `startDate` and the note at hand has `#calendar:startDate=#myStartDate #myStartDate=2025-02-26` then the value returned will
+     * and `defaultLabelName` is `startDate` and the note at hand has `#calendar:startDate=myStartDate #myStartDate=2025-02-26` then the value returned will
      * be `2025-02-26`. If there is no custom attribute value, then the value of the default attribute is returned instead (e.g. `#startDate`).
      *
      * @param note the note from which to read the values.
@@ -336,8 +336,8 @@ export default class CalendarView extends ViewMode {
      */
     static #getCustomisableLabel(note: FNote, defaultLabelName: string, customLabelNameAttribute: string) {
         const customAttributeName = note.getLabelValue(customLabelNameAttribute);
-        if (customAttributeName?.startsWith("#")) {
-            const customValue = note.getLabelValue(customAttributeName.substring(1));
+        if (customAttributeName) {
+            const customValue = note.getLabelValue(customAttributeName);
             if (customValue) {
                 return customValue;
             }
@@ -347,8 +347,8 @@ export default class CalendarView extends ViewMode {
     }
 
     static async buildEvent(note: FNote, startDate: string, endDate?: string | null) {
-        const customTitle = note.getLabelValue("calendar:title");
-        const titles = await CalendarView.#parseCustomTitle(customTitle, note);
+        const customTitleAttributeName = note.getLabelValue("calendar:title");
+        const titles = await CalendarView.#parseCustomTitle(customTitleAttributeName, note);
         const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
         const events: EventInput[] = [];
 
@@ -390,16 +390,13 @@ export default class CalendarView extends ViewMode {
         return result;
     }
 
-    static async #parseCustomTitle(customTitleValue: string | null, note: FNote, allowRelations = true): Promise<string[]> {
-        if (customTitleValue) {
-            const attributeName = customTitleValue.substring(1);
-            if (customTitleValue.startsWith("#")) {
-                const labelValue = note.getAttributeValue("label", attributeName);
-                if (labelValue) {
-                    return [labelValue];
-                }
-            } else if (allowRelations && customTitleValue.startsWith("~")) {
-                const relations = note.getRelations(attributeName);
+    static async #parseCustomTitle(customTitlettributeName: string | null, note: FNote, allowRelations = true): Promise<string[]> {
+        if (customTitlettributeName) {
+            const labelValue = note.getAttributeValue("label", customTitlettributeName);
+            if (labelValue) return [labelValue];
+
+            if (allowRelations) {
+                const relations = note.getRelations(customTitlettributeName);
                 if (relations.length > 0) {
                     const noteIds = relations.map((r) => r.targetNoteId);
                     const notesFromRelation = await froca.getNotes(noteIds);
