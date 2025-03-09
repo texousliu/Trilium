@@ -32,6 +32,7 @@ then
     ./bin/copy-trilium.sh
 fi
 
+echo "Downloading Node.js runtime..."
 cd $BUILD_DIR
 wget -qO- https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz | tar xfJ -
 mv node-v${NODE_VERSION}-linux-${ARCH} node
@@ -51,8 +52,10 @@ cp bin/tpl/anonymize-database.sql $BUILD_DIR/
 
 VERSION=`jq -r ".version" package.json`
 
+echo "Creating Archive..."
 mkdir $DIST_DIR
 cp -r "$BUILD_DIR" "$DIST_DIR/trilium-linux-${ARCH}-server"
 cd $DIST_DIR
 tar cJf trilium-linux-${ARCH}-server-${VERSION}.tar.xz trilium-linux-${ARCH}-server
 rm -rf trilium-linux-${ARCH}-server
+echo "Server Build Completed!"
