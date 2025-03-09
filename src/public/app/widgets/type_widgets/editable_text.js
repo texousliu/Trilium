@@ -16,6 +16,7 @@ import toast from "../../services/toast.js";
 import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/toolbars.js";
+import { buildSelectedBackgroundColor } from "../touch_bar.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -249,6 +250,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 await import(/* webpackIgnore: true */ "../../../libraries/ckeditor/inspector.js");
                 CKEditorInspector.attach(editor);
             }
+
+            // Touch bar integration
+            editor.commands.get("bold").on("change", () => this.triggerCommand("refreshTouchBar"));
 
             return editor;
         });
@@ -538,7 +542,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     items: [
                         new TouchBarButton({
                             icon: buildIcon("NSTouchBarTextBoldTemplate"),
-                            click: () => editor.execute("bold")
+                            click: () => editor.execute("bold"),
+                            backgroundColor: buildSelectedBackgroundColor(editor.commands.get("bold").value)
                         }),
                         new TouchBarButton({
                             icon: buildIcon("NSTouchBarTextItalicTemplate"),
