@@ -43,7 +43,7 @@ echo "Package directory: $PKG_DIR"
 if [ "$1" != "DONTCOPY" ]
 then
     # Need to modify copy-trilium.sh to accept the target directory
-    ./bin/copy-trilium.sh "$PKG_DIR"
+    ./bin/copy-trilium.sh
 fi
 
 cd dist
