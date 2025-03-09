@@ -229,8 +229,13 @@ export default class CalendarView extends ViewMode {
             return;
         }
 
-        attributes.setAttribute(note, "label", "startDate", startDate);
-        attributes.setAttribute(note, "label", "endDate", endDate);
+        // Since they can be customized via calendar:startDate=$foo and calendar:endDate=$bar we need to determine the
+        // attributes to be effectively updated
+        const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value.replace("#", "")||"startDate"
+        const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value.replace("#", "")||"endDate"
+
+        attributes.setAttribute(note, "label", startAttribute, startDate);
+        attributes.setAttribute(note, "label", endAttribute, endDate);
     }
 
     onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
