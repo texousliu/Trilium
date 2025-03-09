@@ -16,7 +16,7 @@ npm run build:prepare-dist
 echo Build finished
 
 # Patch package.json main
-sed -i 's/.\/dist\/electron-main.js/electron-main.js/g' "$BUILD_DIR/package.json"
+sed -i 's|./dist/electron-main.js|electron-main.js|g' "$BUILD_DIR/package.json"
 
 # run in subshell (so we return to original dir)
 (cd $BUILD_DIR && npm ci --omit=dev)
