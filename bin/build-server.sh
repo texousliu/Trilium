@@ -72,3 +72,4 @@ mkdir $DIST_DIR
 cp -r "$BUILD_DIR" "$DIST_DIR/trilium-linux-${ARCH}-server"
 cd $DIST_DIR
 tar cJf trilium-linux-${ARCH}-server-${VERSION}.tar.xz trilium-linux-${ARCH}-server
+rm -rf trilium-linux-${ARCH}-server
