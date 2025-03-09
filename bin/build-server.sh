@@ -41,7 +41,7 @@ cd ..
 rm -r $BUILD_DIR/node/lib/node_modules/npm \
     $BUILD_DIR/node/include/node \
     $BUILD_DIR/node_modules/electron* \
-    $BUILD_DIR/electron*.js
+    $BUILD_DIR/electron*.{js,map}
 
 printf "#!/bin/sh\n./node/bin/node src/main" > $BUILD_DIR/trilium.sh
 chmod 755 $BUILD_DIR/trilium.sh
