@@ -12,29 +12,10 @@ if ! [[ $(which npm) ]]; then
     exit 1
 fi
 
-# Trigger the TypeScript build
-echo TypeScript build start
-npm run build:ts
-echo TypeScript build finished
-
-# Copy the TypeScript artifacts
-DIR="$1"
-rm -rf "$DIR"
-mkdir -pv "$DIR"
-
-echo Webpack start
-npm run build:webpack
-echo Webpack finish
-
-echo "Copying Trilium to build directory $DIR"
-
-for d in 'images' 'libraries' 'src' 'db'; do
-    cp -r "$d" "$DIR"/
-done
-
-for f in 'package.json' 'package-lock.json' 'README.md' 'LICENSE' 'config-sample.ini'; do
-    cp "$f" "$DIR"/
-done
+# Trigger the build
+echo Build start
+npm run build:prepare-dist
+echo Build finished
 
 # Patch package.json main
 sed -i 's/.\/dist\/electron-main.js/electron-main.js/g' "$DIR/package.json"
