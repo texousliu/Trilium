@@ -65,8 +65,6 @@ chmod 755 $BUILD_DIR/trilium.sh
 # TriliumNextTODO: is this still required? If yes → move to copy-dist/copy-trilium
 cp bin/tpl/anonymize-database.sql $BUILD_DIR/
 
-cp -r translations $BUILD_DIR/
-
 VERSION=`jq -r ".version" package.json`
 
 mkdir $DIST_DIR
