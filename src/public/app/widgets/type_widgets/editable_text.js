@@ -252,7 +252,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
 
             // Touch bar integration
-            for (const event of [ "bold", "italic", "underline" ]) {
+            for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
                 editor.commands.get(event).on("change", () => this.triggerCommand("refreshTouchBar"));
             }
 
@@ -524,6 +524,17 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             backgroundColor: buildSelectedBackgroundColor(editor.commands.get(command).value)
         });
 
+        let headingSelectedIndex = undefined;
+        const headingCommand = editor.commands.get("heading");
+        const paragraphCommand = editor.commands.get("paragraph");
+        if (paragraphCommand.value) {
+            headingSelectedIndex = 0;
+        } else if (headingCommand.value === "heading2") {
+            headingSelectedIndex = 1;
+        } else if (headingCommand.value === "heading3") {
+            headingSelectedIndex = 2;
+        }
+
         return [
             new TouchBarSegmentedControl({
                 segments: [
@@ -544,6 +555,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                             break;
                     }
                 },
+                selectedIndex: headingSelectedIndex
             }),
             new TouchBarGroup({
                 items: new TouchBar({
