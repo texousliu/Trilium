@@ -22,20 +22,6 @@ echo "Selected Arch: $ARCH"
 
 # Set Node.js version and architecture-specific filename
 NODE_VERSION=20.15.1
-NODE_ARCH=$ARCH
-
-# Debug output
-echo "Node arch: $NODE_ARCH"
-
-# Special case for x64 in Node.js downloads
-if [ "$NODE_ARCH" = "x64" ]; then
-    NODE_FILENAME="x64"
-elif [ "$NODE_ARCH" = "arm64" ]; then
-    NODE_FILENAME="arm64"
-fi
-
-# Debug output
-echo "Node filename: $NODE_FILENAME"
 
 BUILD_DIR="./build"
 DIST_DIR="./dist"
@@ -47,10 +33,10 @@ then
 fi
 
 cd $BUILD_DIR
-wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${NODE_FILENAME}.tar.xz
-tar xfJ node-v${NODE_VERSION}-linux-${NODE_FILENAME}.tar.xz
-rm node-v${NODE_VERSION}-linux-${NODE_FILENAME}.tar.xz
-mv node-v${NODE_VERSION}-linux-${NODE_FILENAME} node
+wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz
+tar xfJ node-v${NODE_VERSION}-linux-${ARCH}.tar.xz
+rm node-v${NODE_VERSION}-linux-${ARCH}.tar.xz
+mv node-v${NODE_VERSION}-linux-${ARCH} node
 cd ..
 
 
