@@ -6,7 +6,8 @@ export async function lint(code: string, mimeType: string) {
 
     let globals: Record<string, any> = {
         ...globalDefinitions.browser,
-        api: "readonly"
+        api: "readonly",
+        module: "readonly"
     };
 
     if (mimeType === "application/javascript;env=frontend") {

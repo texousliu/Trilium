@@ -50,4 +50,9 @@ describe("Linter", () => {
         expect(await lint(`$("<div>");`, "application/javascript;env=backend")).toMatchObject([{ "ruleId": "no-undef" }]);
         expect(await lint(`console.log($("<div>"));`, "application/javascript;env=frontend")).toStrictEqual([]);
     });
+
+    it("supports module.exports", async () => {
+        expect(await lint(`module.exports("Hi");`, "application/javascript;env=backend")).toStrictEqual([]);
+        expect(await lint(`module.exports("Hi");`, "application/javascript;env=frontend")).toStrictEqual([]);
+    });
 });
