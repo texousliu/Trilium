@@ -49,9 +49,13 @@ cp bin/tpl/anonymize-database.sql $BUILD_DIR/
 VERSION=`jq -r ".version" package.json`
 
 echo "Creating Archive..."
+
+ARCHIVE_NAME="TriliumNextNotes-Server-${VERSION}-linux-${ARCH}"
+
 mkdir $DIST_DIR
-cp -r "$BUILD_DIR" "$DIST_DIR/trilium-linux-${ARCH}-server"
+cp -r "$BUILD_DIR" "$DIST_DIR/$ARCHIVE_NAME"
 cd $DIST_DIR
-tar cJf trilium-linux-${ARCH}-server-${VERSION}.tar.xz trilium-linux-${ARCH}-server
-rm -rf trilium-linux-${ARCH}-server
+tar cJf "$ARCHIVE_NAME.tar.xz" "$ARCHIVE_NAME"
+rm -rf "$ARCHIVE_NAME"
+
 echo "Server Build Completed!"
