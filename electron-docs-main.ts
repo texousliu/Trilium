@@ -1,8 +1,11 @@
 import fs from "fs/promises";
 import fsExtra from "fs-extra";
 import path from "path";
+import type NoteMeta from "./src/services/meta/note_meta.js";
+import type { NoteMetaFile } from "./src/services/meta/note_meta.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
+const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
 async function startElectron() {
     await import("./electron-main.js");
@@ -15,7 +18,6 @@ async function main() {
 
 async function exportData() {
     const zipFilePath = "output.zip";
-    const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
     const deferred = (await import("./src/services/utils.js")).deferred;
 
@@ -51,6 +53,26 @@ async function exportData() {
             await fsExtra.rm(zipFilePath);
         }
     }
+
+    await cleanUpMeta();
+}
+
+async function cleanUpMeta() {
+    const metaPath = path.join(destRootPath, "!!!meta.json");
+    const meta = JSON.parse(await fs.readFile(metaPath, "utf-8")) as NoteMetaFile;
+    for (const file of meta.files) {
+        traverse(file);
+    }
+
+    function traverse(el: NoteMeta) {
+        for (const child of el.children || []) {
+            traverse(child);
+        }
+
+        el.isExpanded = false;
+    }
+
+    await fs.writeFile(metaPath, JSON.stringify(meta, null, 4));
 }
 
 await main();
