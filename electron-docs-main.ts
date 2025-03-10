@@ -8,7 +8,7 @@ import { initializeTranslations } from "./src/services/i18n.js";
 import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
 
-const NOTE_ID_USER_GUIDE = "_help_user_guide";
+const NOTE_ID_USER_GUIDE = "help_user_guide";
 const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
 async function startElectron() {
@@ -63,24 +63,7 @@ async function createImportZip() {
         zlib: { level: 0 }
     });
 
-    async function iterate(currentPath: string) {
-        console.log(currentPath);
-        for (const entry of await fs.readdir(path.join(destRootPath, currentPath), { withFileTypes: true })) {
-            const entryPath = path.join(currentPath, entry.name);
-
-            if (entry.isDirectory()) {
-                await iterate(entryPath);
-                continue;
-            }
-
-            const source = fsExtra.createReadStream(path.join(destRootPath, entryPath));
-            archive.append(source, {
-                name: path.join(currentPath, entry.name)
-            });
-        }
-    }
-
-    await iterate("/");
+    archive.directory(destRootPath, "/");
 
     const outputStream = fsExtra.createWriteStream("input.zip");
     archive.pipe(outputStream);
