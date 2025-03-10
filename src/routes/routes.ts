@@ -505,8 +505,14 @@ function route(method: HttpMethod, path: string, middleware: express.Handler[], 
 }
 
 function handleResponse(resultHandler: ApiResultHandler, req: express.Request, res: express.Response, result: unknown, start: number) {
-    const responseLength = resultHandler(req, res, result);
+    // Skip result handling if the response has already been handled
+    if ((res as any).triliumResponseHandled) {
+        // Just log the request without additional processing
+        log.request(req, res, Date.now() - start, 0);
+        return;
+    }
 
+    const responseLength = resultHandler(req, res, result);
     log.request(req, res, Date.now() - start, responseLength);
 }
 

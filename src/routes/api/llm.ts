@@ -469,7 +469,7 @@ async function sendMessage(req: Request, res: Response) {
 
         // Get the Accept header once at the start
         const acceptHeader = req.get('Accept');
-        const isStreamingRequest = acceptHeader && acceptHeader.includes('text/event-stream');
+        const isStreamingRequest = req.method === 'GET' && req.query.format === 'stream';
 
         // For GET requests, ensure we have the format=stream parameter
         if (req.method === 'GET' && (!req.query.format || req.query.format !== 'stream')) {
@@ -580,46 +580,81 @@ async function sendMessage(req: Request, res: Response) {
 
                 // Process based on whether this is a streaming request
                 if (isStreamingRequest) {
+                    // Set streaming headers once
                     res.setHeader('Content-Type', 'text/event-stream');
                     res.setHeader('Cache-Control', 'no-cache');
                     res.setHeader('Connection', 'keep-alive');
 
+                    // Flag to indicate we've handled the response directly
+                    // This lets the route handler know not to process the result
+                    (res as any).triliumResponseHandled = true;
+
                     let messageContent = '';
 
-                    // Use the correct method name: generateChatCompletion
-                    const response = await service.generateChatCompletion(aiMessages, chatOptions);
+                    try {
+                        // Use the correct method name: generateChatCompletion
+                        const response = await service.generateChatCompletion(aiMessages, chatOptions);
 
-                    // Handle streaming if the response includes a stream method
-                    if (response.stream) {
-                        await response.stream((chunk: { text: string; done: boolean }) => {
-                            if (chunk.text) {
-                                messageContent += chunk.text;
-                                res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
-                            }
+                        // Handle streaming if the response includes a stream method
+                        if (response.stream) {
+                            await response.stream((chunk: { text: string; done: boolean }) => {
+                                if (chunk.text) {
+                                    messageContent += chunk.text;
+                                    // Only write if the response hasn't finished
+                                    if (!res.writableEnded) {
+                                        res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
+                                    }
+                                }
 
-                            if (chunk.done) {
-                                // Signal the end of the stream when done
+                                if (chunk.done) {
+                                    // Signal the end of the stream when done, only if not already ended
+                                    if (!res.writableEnded) {
+                                        res.write('data: [DONE]\n\n');
+                                        res.end();
+                                    }
+                                }
+                            });
+                        } else {
+                            // If no streaming available, send the response as a single chunk
+                            messageContent = response.text;
+                            // Only write if the response hasn't finished
+                            if (!res.writableEnded) {
+                                res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
                                 res.write('data: [DONE]\n\n');
                                 res.end();
                             }
+                        }
+
+                        // Store the full response for the session
+                        aiResponse = messageContent;
+
+                        // Store the assistant's response in the session
+                        session.messages.push({
+                            role: 'assistant',
+                            content: aiResponse,
+                            timestamp: new Date()
                         });
-                    } else {
-                        // If no streaming available, send the response as a single chunk
-                        messageContent = response.text;
-                        res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
-                        res.write('data: [DONE]\n\n');
-                        res.end();
+
+                        // For streaming requests we don't return anything as we've already sent the response
+                        return null;
+                    } catch (streamingError: any) {
+                        // If streaming fails and we haven't sent a response yet, throw the error
+                        if (!res.headersSent) {
+                            throw streamingError;
+                        } else {
+                            // If headers were already sent, try to send an error event
+                            try {
+                                if (!res.writableEnded) {
+                                    res.write(`data: ${JSON.stringify({ error: streamingError.message })}\n\n`);
+                                    res.write('data: [DONE]\n\n');
+                                    res.end();
+                                }
+                            } catch (e) {
+                                log.error(`Failed to write streaming error: ${e}`);
+                            }
+                            return null;
+                        }
                     }
-
-                    // Store the full response for the session
-                    aiResponse = messageContent;
-
-                    // Store the assistant's response in the session
-                    session.messages.push({
-                        role: 'assistant',
-                        content: aiResponse,
-                        timestamp: new Date()
-                    });
                 } else {
                     // Non-streaming approach for POST requests
                     const response = await service.generateChatCompletion(aiMessages, chatOptions);
@@ -646,7 +681,7 @@ async function sendMessage(req: Request, res: Response) {
             } else {
                 // Original approach - find relevant notes through direct embedding comparison
                 const relevantNotes = await findRelevantNotes(
-                    content,
+                    messageContent,
                     session.noteContext || null,
                     5
                 );
@@ -654,7 +689,7 @@ async function sendMessage(req: Request, res: Response) {
                 sourceNotes = relevantNotes;
 
                 // Build context from relevant notes
-                const context = buildContextFromNotes(relevantNotes, content);
+                const context = buildContextFromNotes(relevantNotes, messageContent);
 
                 // Add system message with the context
                 const contextMessage: Message = {
@@ -680,46 +715,81 @@ async function sendMessage(req: Request, res: Response) {
                 };
 
                 if (isStreamingRequest) {
+                    // Set streaming headers once
                     res.setHeader('Content-Type', 'text/event-stream');
                     res.setHeader('Cache-Control', 'no-cache');
                     res.setHeader('Connection', 'keep-alive');
 
+                    // Flag to indicate we've handled the response directly
+                    // This lets the route handler know not to process the result
+                    (res as any).triliumResponseHandled = true;
+
                     let messageContent = '';
 
-                    // Use the correct method name: generateChatCompletion
-                    const response = await service.generateChatCompletion(aiMessages, chatOptions);
+                    try {
+                        // Use the correct method name: generateChatCompletion
+                        const response = await service.generateChatCompletion(aiMessages, chatOptions);
 
-                    // Handle streaming if the response includes a stream method
-                    if (response.stream) {
-                        await response.stream((chunk: { text: string; done: boolean }) => {
-                            if (chunk.text) {
-                                messageContent += chunk.text;
-                                res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
-                            }
+                        // Handle streaming if the response includes a stream method
+                        if (response.stream) {
+                            await response.stream((chunk: { text: string; done: boolean }) => {
+                                if (chunk.text) {
+                                    messageContent += chunk.text;
+                                    // Only write if the response hasn't finished
+                                    if (!res.writableEnded) {
+                                        res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
+                                    }
+                                }
 
-                            if (chunk.done) {
-                                // Signal the end of the stream when done
+                                if (chunk.done) {
+                                    // Signal the end of the stream when done, only if not already ended
+                                    if (!res.writableEnded) {
+                                        res.write('data: [DONE]\n\n');
+                                        res.end();
+                                    }
+                                }
+                            });
+                        } else {
+                            // If no streaming available, send the response as a single chunk
+                            messageContent = response.text;
+                            // Only write if the response hasn't finished
+                            if (!res.writableEnded) {
+                                res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
                                 res.write('data: [DONE]\n\n');
                                 res.end();
                             }
+                        }
+
+                        // Store the full response for the session
+                        aiResponse = messageContent;
+
+                        // Store the assistant's response in the session
+                        session.messages.push({
+                            role: 'assistant',
+                            content: aiResponse,
+                            timestamp: new Date()
                         });
-                    } else {
-                        // If no streaming available, send the response as a single chunk
-                        messageContent = response.text;
-                        res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
-                        res.write('data: [DONE]\n\n');
-                        res.end();
+
+                        // For streaming requests we don't return anything as we've already sent the response
+                        return null;
+                    } catch (streamingError: any) {
+                        // If streaming fails and we haven't sent a response yet, throw the error
+                        if (!res.headersSent) {
+                            throw streamingError;
+                        } else {
+                            // If headers were already sent, try to send an error event
+                            try {
+                                if (!res.writableEnded) {
+                                    res.write(`data: ${JSON.stringify({ error: streamingError.message })}\n\n`);
+                                    res.write('data: [DONE]\n\n');
+                                    res.end();
+                                }
+                            } catch (e) {
+                                log.error(`Failed to write streaming error: ${e}`);
+                            }
+                            return null;
+                        }
                     }
-
-                    // Store the full response for the session
-                    aiResponse = messageContent;
-
-                    // Store the assistant's response in the session
-                    session.messages.push({
-                        role: 'assistant',
-                        content: aiResponse,
-                        timestamp: new Date()
-                    });
                 } else {
                     // Non-streaming approach for POST requests
                     const response = await service.generateChatCompletion(aiMessages, chatOptions);
@@ -744,6 +814,12 @@ async function sendMessage(req: Request, res: Response) {
                     };
                 }
             }
+        } else {
+            // If it's not a POST or streaming GET request, return the session's message history
+            return {
+                id: session.id,
+                messages: session.messages
+            };
         }
     } catch (error: any) {
         log.error(`Error sending message to LLM: ${error.message}`);

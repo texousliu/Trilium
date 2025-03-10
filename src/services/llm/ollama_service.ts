@@ -29,6 +29,10 @@ export class OllamaService extends BaseAIService {
         // Format messages for Ollama
         const formattedMessages = this.formatMessages(messages, systemPrompt);
 
+        // Log the formatted messages for debugging
+        console.log('Input messages for formatting:', messages);
+        console.log('Formatted messages for Ollama:', formattedMessages);
+
         try {
             const endpoint = `${baseUrl.replace(/\/+$/, '')}/api/chat`;
 
@@ -75,6 +79,7 @@ export class OllamaService extends BaseAIService {
                         const reader = response.body.getReader();
                         let fullText = "";
                         let partialLine = "";
+                        let receivedAnyContent = false;
 
                         try {
                             while (true) {
@@ -102,6 +107,7 @@ export class OllamaService extends BaseAIService {
                                             const newContent = data.message.content;
                                             // Add to full text
                                             fullText += newContent;
+                                            receivedAnyContent = true;
                                             // Call the callback with the new content
                                             await callback({
                                                 text: newContent,
@@ -110,6 +116,18 @@ export class OllamaService extends BaseAIService {
                                         }
 
                                         if (data.done) {
+                                            // If we received an empty response with done=true,
+                                            // generate a fallback response
+                                            if (!receivedAnyContent && fullText.trim() === "") {
+                                                // Generate a fallback response
+                                                const fallbackText = "I've processed your request but don't have a specific response for you at this time.";
+                                                await callback({
+                                                    text: fallbackText,
+                                                    done: false
+                                                });
+                                                fullText = fallbackText;
+                                            }
+
                                             // Final message in the stream
                                             await callback({
                                                 text: "",
@@ -136,19 +154,64 @@ export class OllamaService extends BaseAIService {
                                     const data = JSON.parse(partialLine.trim());
                                     if (data.message && data.message.content) {
                                         fullText += data.message.content;
+                                        receivedAnyContent = true;
                                         await callback({
                                             text: data.message.content,
                                             done: false
                                         });
                                     }
+
+                                    if (data.done) {
+                                        // Check for empty responses
+                                        if (!receivedAnyContent && fullText.trim() === "") {
+                                            // Generate a fallback response
+                                            const fallbackText = "I've processed your request but don't have a specific response for you at this time.";
+                                            await callback({
+                                                text: fallbackText,
+                                                done: false
+                                            });
+                                            fullText = fallbackText;
+                                        }
+
+                                        await callback({
+                                            text: "",
+                                            done: true,
+                                            usage: {
+                                                promptTokens: data.prompt_eval_count || 0,
+                                                completionTokens: data.eval_count || 0,
+                                                totalTokens: (data.prompt_eval_count || 0) + (data.eval_count || 0)
+                                            }
+                                        });
+                                    }
                                 } catch (err) {
-                                    console.error("Error parsing final JSON from Ollama stream:", err);
+                                    console.error("Error parsing JSON from last line:", err, "Line:", partialLine);
                                 }
+                            }
+
+                            // If we reached the end without a done message and without any content
+                            if (!receivedAnyContent && fullText.trim() === "") {
+                                // Generate a fallback response
+                                const fallbackText = "I've processed your request but don't have a specific response for you at this time.";
+                                await callback({
+                                    text: fallbackText,
+                                    done: false
+                                });
+
+                                // Final message
+                                await callback({
+                                    text: "",
+                                    done: true,
+                                    usage: {
+                                        promptTokens: 0,
+                                        completionTokens: 0,
+                                        totalTokens: 0
+                                    }
+                                });
                             }
 
                             return fullText;
                         } catch (err) {
-                            console.error("Error reading Ollama stream:", err);
+                            console.error("Error processing Ollama stream:", err);
                             throw err;
                         }
                     }

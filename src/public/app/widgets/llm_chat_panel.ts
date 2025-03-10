@@ -141,13 +141,39 @@ export default class LlmChatPanel extends BasicWidget {
             };
 
             // First, send the message via POST request
-            await server.post<any>(`llm/sessions/${this.sessionId}/messages`, messageParams);
+            const postResponse = await server.post<any>(`llm/sessions/${this.sessionId}/messages`, messageParams);
+
+            // If the POST request returned content directly, display it
+            if (postResponse && postResponse.content) {
+                this.addMessageToChat('assistant', postResponse.content);
+
+                // If there are sources, show them
+                if (postResponse.sources && postResponse.sources.length > 0) {
+                    this.showSources(postResponse.sources);
+                }
+
+                this.hideLoadingIndicator();
+                return;
+            }
 
             // Then set up streaming via EventSource
             const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&useAdvancedContext=${useAdvancedContext}`;
             const source = new EventSource(streamUrl);
 
             let assistantResponse = '';
+            let receivedAnyContent = false;
+            let timeoutId: number | null = null;
+
+            // Set a timeout to handle case where streaming doesn't work properly
+            timeoutId = window.setTimeout(() => {
+                if (!receivedAnyContent) {
+                    // If we haven't received any content after a reasonable timeout (10 seconds),
+                    // add a fallback message and close the stream
+                    this.hideLoadingIndicator();
+                    this.addMessageToChat('assistant', 'I\'m having trouble generating a response right now. Please try again later.');
+                    source.close();
+                }
+            }, 10000);
 
             // Handle streaming response
             source.onmessage = (event) => {
@@ -155,13 +181,29 @@ export default class LlmChatPanel extends BasicWidget {
                     // Stream completed
                     source.close();
                     this.hideLoadingIndicator();
+
+                    // Clear the timeout since we're done
+                    if (timeoutId !== null) {
+                        window.clearTimeout(timeoutId);
+                    }
+
+                    // If we didn't receive any content but the stream completed normally,
+                    // display a message to the user
+                    if (!receivedAnyContent) {
+                        this.addMessageToChat('assistant', 'I processed your request, but I don\'t have any specific information to share at the moment.');
+                    }
                     return;
                 }
 
                 try {
                     const data = JSON.parse(event.data);
+                    console.log("Received streaming data:", data); // Debug log
+
+                    // Handle both content and error cases
                     if (data.content) {
+                        receivedAnyContent = true;
                         assistantResponse += data.content;
+
                         // Update the UI with the accumulated response
                         const assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
                         if (assistantElement) {
@@ -169,18 +211,38 @@ export default class LlmChatPanel extends BasicWidget {
                         } else {
                             this.addMessageToChat('assistant', assistantResponse);
                         }
-                        // Scroll to the bottom
-                        this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+                    } else if (data.error) {
+                        // Handle error message
+                        this.hideLoadingIndicator();
+                        this.addMessageToChat('assistant', `Error: ${data.error}`);
+                        receivedAnyContent = true;
+                        source.close();
+
+                        if (timeoutId !== null) {
+                            window.clearTimeout(timeoutId);
+                        }
                     }
+
+                    // Scroll to the bottom
+                    this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
                 } catch (e) {
-                    console.error('Error parsing SSE message:', e);
+                    console.error('Error parsing SSE message:', e, 'Raw data:', event.data);
                 }
             };
 
             source.onerror = () => {
                 source.close();
                 this.hideLoadingIndicator();
-                toastService.showError('Error connecting to the LLM service. Please try again.');
+
+                // Clear the timeout if there was an error
+                if (timeoutId !== null) {
+                    window.clearTimeout(timeoutId);
+                }
+
+                // Only show error message if we haven't received any content yet
+                if (!receivedAnyContent) {
+                    this.addMessageToChat('assistant', 'Error connecting to the LLM service. Please try again.');
+                }
             };
 
         } catch (error) {
