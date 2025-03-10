@@ -636,7 +636,7 @@ export function readZipFile(buffer: Buffer, processEntryCallback: (zipfile: yauz
 }
 
 function resolveNoteType(type: string | undefined): NoteType {
-    // BC for ZIPs created in Triliun 0.57 and older
+    // BC for ZIPs created in Trilium 0.57 and older
     if (type === "relation-map") {
         return "relationMap";
     } else if (type === "note-map") {

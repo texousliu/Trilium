@@ -3,6 +3,8 @@ import fsExtra from "fs-extra";
 import path from "path";
 import type NoteMeta from "./src/services/meta/note_meta.js";
 import type { NoteMetaFile } from "./src/services/meta/note_meta.js";
+import cls from "./src/services/cls.js";
+import { initializeTranslations } from "./src/services/i18n.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
 const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
@@ -12,8 +14,20 @@ async function startElectron() {
 }
 
 async function main() {
+    await initializeTranslations();
+    await importData();
+
     await startElectron();
-    await exportData();
+    // await exportData();
+}
+
+async function importData() {
+    const sql = (await import("./src/services/sql.js")).default;
+    const sqlInit = (await import("./src/services/sql_init.js")).default;
+
+    cls.init(() => {
+        sqlInit.createInitialDatabase();
+    });
 }
 
 async function exportData() {
