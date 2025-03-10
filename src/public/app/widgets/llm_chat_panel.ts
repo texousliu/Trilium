@@ -24,6 +24,7 @@ export default class LlmChatPanel extends BasicWidget {
     private chatContainer!: HTMLElement;
     private loadingIndicator!: HTMLElement;
     private sourcesList!: HTMLElement;
+    private useAdvancedContextCheckbox!: HTMLInputElement;
     private sessionId: string | null = null;
     private currentNoteId: string | null = null;
 
@@ -45,15 +46,29 @@ export default class LlmChatPanel extends BasicWidget {
                     <div class="sources-list"></div>
                 </div>
 
-                <form class="note-context-chat-form d-flex border-top p-2">
-                    <textarea
-                        class="form-control note-context-chat-input"
-                        placeholder="${t('ai.enter_message')}"
-                        rows="3"
-                    ></textarea>
-                    <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2">
-                        <i class="bx bx-send"></i>
-                    </button>
+                <form class="note-context-chat-form d-flex flex-column border-top p-2">
+                    <div class="d-flex mb-2 align-items-center">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useAdvancedContext" checked>
+                            <label class="form-check-label" for="useAdvancedContext">
+                                ${t('ai.use_advanced_context')}
+                            </label>
+                        </div>
+                        <div class="ms-2 small text-muted">
+                            <i class="bx bx-info-circle"></i>
+                            <span>${t('ai.advanced_context_helps')}</span>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <textarea
+                            class="form-control note-context-chat-input"
+                            placeholder="${t('ai.enter_message')}"
+                            rows="3"
+                        ></textarea>
+                        <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2">
+                            <i class="bx bx-send"></i>
+                        </button>
+                    </div>
                 </form>
             </div>
         `);
@@ -66,6 +81,7 @@ export default class LlmChatPanel extends BasicWidget {
         this.chatContainer = element.querySelector('.note-context-chat-container') as HTMLElement;
         this.loadingIndicator = element.querySelector('.loading-indicator') as HTMLElement;
         this.sourcesList = element.querySelector('.sources-list') as HTMLElement;
+        this.useAdvancedContextCheckbox = element.querySelector('.use-advanced-context-checkbox') as HTMLInputElement;
 
         this.initializeEventListeners();
 
@@ -109,47 +125,67 @@ export default class LlmChatPanel extends BasicWidget {
             return;
         }
 
+        this.addMessageToChat('user', content);
+        this.noteContextChatInput.value = '';
         this.showLoadingIndicator();
+        this.hideSources();
 
         try {
-            // Add user message to chat
-            this.addMessageToChat('user', content);
-            this.noteContextChatInput.value = '';
+            const useAdvancedContext = this.useAdvancedContextCheckbox.checked;
 
-            // Get AI settings
-            const useRAG = true; // Always use RAG for this widget
+            // Setup streaming
+            const source = new EventSource(`./api/llm/messages?sessionId=${this.sessionId}&format=stream`);
+            let assistantResponse = '';
 
-            // Send message to server
-            const response = await server.post<ChatResponse>('llm/sessions/' + this.sessionId + '/messages', {
-                sessionId: this.sessionId,
-                content: content,
-                options: {
-                    useRAG: useRAG
+            // Handle streaming response
+            source.onmessage = (event) => {
+                if (event.data === '[DONE]') {
+                    // Stream completed
+                    source.close();
+                    this.hideLoadingIndicator();
+                    return;
                 }
+
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.content) {
+                        assistantResponse += data.content;
+                        // Update the UI with the accumulated response
+                        const assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
+                        if (assistantElement) {
+                            assistantElement.innerHTML = this.formatMarkdown(assistantResponse);
+                        } else {
+                            this.addMessageToChat('assistant', assistantResponse);
+                        }
+                        // Scroll to the bottom
+                        this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+                    }
+                } catch (e) {
+                    console.error('Error parsing SSE message:', e);
+                }
+            };
+
+            source.onerror = () => {
+                source.close();
+                this.hideLoadingIndicator();
+                toastService.showError('Error connecting to the LLM service. Please try again.');
+            };
+
+            // Send the actual message
+            const response = await server.post<any>('llm/messages', {
+                sessionId: this.sessionId,
+                content,
+                contextNoteId: this.currentNoteId,
+                useAdvancedContext
             });
 
-            // Get the assistant's message (last one)
-            if (response?.messages?.length) {
-                const messages = response.messages;
-                const lastMessage = messages[messages.length - 1];
-
-                if (lastMessage && lastMessage.role === 'assistant') {
-                    this.addMessageToChat('assistant', lastMessage.content);
-                }
-            }
-
-            // Display sources if available
-            if (response?.sources?.length) {
+            // Handle sources if returned in non-streaming response
+            if (response && response.sources && response.sources.length > 0) {
                 this.showSources(response.sources);
-            } else {
-                this.hideSources();
             }
-
         } catch (error) {
-            console.error('Failed to send message:', error);
-            toastService.showError('Failed to send message to AI');
-        } finally {
             this.hideLoadingIndicator();
+            toastService.showError('Error sending message: ' + (error as Error).message);
         }
     }
 
@@ -242,5 +278,18 @@ export default class LlmChatPanel extends BasicWidget {
                 this.noteContextChatForm.dispatchEvent(new Event('submit'));
             }
         });
+    }
+
+    /**
+     * Format markdown content for display
+     */
+    private formatMarkdown(content: string): string {
+        // Simple markdown formatting - could be replaced with a proper markdown library
+        return content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/`(.*?)`/g, '<code>$1</code>')
+            .replace(/\n/g, '<br>')
+            .replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>');
     }
 }
