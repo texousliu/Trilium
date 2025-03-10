@@ -62,6 +62,10 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
     }
 
     function getNewAttachmentId(origAttachmentId: string) {
+        if (opts?.preserveIds) {
+            return origAttachmentId;
+        }
+
         if (!origAttachmentId.trim()) {
             // this probably shouldn't happen, but still good to have this precaution
             return "empty_attachment_id";
