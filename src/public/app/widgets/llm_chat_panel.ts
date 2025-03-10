@@ -4,6 +4,12 @@ import server from "../services/server.js";
 import appContext from "../components/app_context.js";
 import utils from "../services/utils.js";
 import { t } from "../services/i18n.js";
+import libraryLoader from "../services/library_loader.js";
+
+// Import the LLM Chat CSS
+(async function() {
+    await libraryLoader.requireCss('stylesheets/llm_chat.css');
+})();
 
 interface ChatResponse {
     id: string;
@@ -42,33 +48,33 @@ export default class LlmChatPanel extends BasicWidget {
                 </div>
 
                 <div class="sources-container p-2 border-top" style="display: none;">
-                    <h6 class="m-0 p-1">
-                        <i class="bx bx-link-alt"></i> ${t('ai.sources')}
-                        <span class="badge bg-secondary rounded-pill ms-2 sources-count"></span>
+                    <h6 class="m-0 p-1 d-flex align-items-center">
+                        <i class="bx bx-link-alt me-1"></i> ${t('ai.sources')}
+                        <span class="badge bg-primary rounded-pill ms-2 sources-count"></span>
                     </h6>
                     <div class="sources-list mt-2"></div>
                 </div>
 
                 <form class="note-context-chat-form d-flex flex-column border-top p-2">
-                    <div class="d-flex mb-2 align-items-center">
+                    <div class="d-flex mb-2 align-items-center context-option-container">
                         <div class="form-check form-switch">
-                            <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useAdvancedContext" checked>
-                            <label class="form-check-label" for="useAdvancedContext">
-                                ${t('ai.use_advanced_context')}
+                            <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useEnhancedContext" checked>
+                            <label class="form-check-label" for="useEnhancedContext">
+                                ${t('ai.use_enhanced_context')}
                             </label>
                         </div>
                         <div class="ms-2 small text-muted">
                             <i class="bx bx-info-circle"></i>
-                            <span>${t('ai.advanced_context_helps')}</span>
+                            <span>${t('ai.enhanced_context_description')}</span>
                         </div>
                     </div>
-                    <div class="d-flex">
+                    <div class="d-flex chat-input-container">
                         <textarea
                             class="form-control note-context-chat-input"
                             placeholder="${t('ai.enter_message')}"
-                            rows="3"
+                            rows="2"
                         ></textarea>
-                        <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2">
+                        <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2 d-flex align-items-center justify-content-center">
                             <i class="bx bx-send"></i>
                         </button>
                     </div>
@@ -256,26 +262,30 @@ export default class LlmChatPanel extends BasicWidget {
 
     private addMessageToChat(role: 'user' | 'assistant', content: string) {
         const messageElement = document.createElement('div');
-        messageElement.className = `chat-message ${role}-message mb-3`;
+        messageElement.className = `chat-message ${role}-message mb-3 d-flex`;
 
         const avatarElement = document.createElement('div');
-        avatarElement.className = 'message-avatar';
-        avatarElement.innerHTML = role === 'user'
-            ? '<i class="bx bx-user"></i>'
-            : '<i class="bx bx-bot"></i>';
+        avatarElement.className = 'message-avatar d-flex align-items-center justify-content-center me-2';
+
+        if (role === 'user') {
+            avatarElement.innerHTML = '<i class="bx bx-user"></i>';
+            avatarElement.classList.add('user-avatar');
+        } else {
+            avatarElement.innerHTML = '<i class="bx bx-bot"></i>';
+            avatarElement.classList.add('assistant-avatar');
+        }
 
         const contentElement = document.createElement('div');
-        contentElement.className = 'message-content p-3';
+        contentElement.className = 'message-content p-3 rounded flex-grow-1';
 
-        // Use a simple markdown formatter if utils.formatMarkdown is not available
-        let formattedContent = content
-            .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-            .replace(/`([^`]+)`/g, '<code>$1</code>')
-            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-            .replace(/\n/g, '<br>');
+        if (role === 'user') {
+            contentElement.classList.add('user-content', 'bg-light');
+        } else {
+            contentElement.classList.add('assistant-content');
+        }
 
-        contentElement.innerHTML = formattedContent;
+        // Format the content with markdown
+        contentElement.innerHTML = this.formatMarkdown(content);
 
         messageElement.appendChild(avatarElement);
         messageElement.appendChild(contentElement);
@@ -297,16 +307,17 @@ export default class LlmChatPanel extends BasicWidget {
 
         sources.forEach(source => {
             const sourceElement = document.createElement('div');
-            sourceElement.className = 'source-item p-2 mb-1 border rounded';
+            sourceElement.className = 'source-item p-2 mb-1 border rounded d-flex align-items-center';
 
             // Create the direct link to the note
             sourceElement.innerHTML = `
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center w-100">
                     <a href="#root/${source.noteId}"
                        data-note-id="${source.noteId}"
-                       class="source-link text-truncate"
+                       class="source-link text-truncate d-flex align-items-center"
                        title="Open note: ${source.title}">
-                        <i class="bx bx-file"></i> ${source.title}
+                        <i class="bx bx-file-blank me-1"></i>
+                        <span class="source-title">${source.title}</span>
                     </a>
                 </div>`;
 
