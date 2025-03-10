@@ -387,6 +387,7 @@ function register(app: express.Application) {
     apiRoute(PATCH, "/api/llm/sessions/:sessionId", llmRoute.updateSession);
     apiRoute(DEL, "/api/llm/sessions/:sessionId", llmRoute.deleteSession);
     apiRoute(PST, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
+    route(GET, "/api/llm/sessions/:sessionId/messages", [auth.checkApiAuth, csrfMiddleware], llmRoute.sendMessage, apiResultHandler);
 
     // Ollama API endpoints
     route(PST, "/api/ollama/list-models", [auth.checkApiAuth, csrfMiddleware], ollamaRoute.listModels, apiResultHandler);

@@ -133,8 +133,20 @@ export default class LlmChatPanel extends BasicWidget {
         try {
             const useAdvancedContext = this.useAdvancedContextCheckbox.checked;
 
-            // Setup streaming
-            const source = new EventSource(`./api/llm/messages?sessionId=${this.sessionId}&format=stream`);
+            // Create the message parameters
+            const messageParams = {
+                content,
+                contextNoteId: this.currentNoteId,
+                useAdvancedContext
+            };
+
+            // First, send the message via POST request
+            await server.post<any>(`llm/sessions/${this.sessionId}/messages`, messageParams);
+
+            // Then set up streaming via EventSource
+            const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&useAdvancedContext=${useAdvancedContext}`;
+            const source = new EventSource(streamUrl);
+
             let assistantResponse = '';
 
             // Handle streaming response
@@ -171,18 +183,6 @@ export default class LlmChatPanel extends BasicWidget {
                 toastService.showError('Error connecting to the LLM service. Please try again.');
             };
 
-            // Send the actual message
-            const response = await server.post<any>('llm/messages', {
-                sessionId: this.sessionId,
-                content,
-                contextNoteId: this.currentNoteId,
-                useAdvancedContext
-            });
-
-            // Handle sources if returned in non-streaming response
-            if (response && response.sources && response.sources.length > 0) {
-                this.showSources(response.sources);
-            }
         } catch (error) {
             this.hideLoadingIndicator();
             toastService.showError('Error sending message: ' + (error as Error).message);

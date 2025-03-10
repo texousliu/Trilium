@@ -40,7 +40,20 @@ export class AIServiceManager {
 
             if (customOrder) {
                 try {
-                    const parsed = JSON.parse(customOrder);
+                    // Try to parse as JSON first
+                    let parsed;
+
+                    // Handle both array in JSON format and simple string format
+                    if (customOrder.startsWith('[') && customOrder.endsWith(']')) {
+                        parsed = JSON.parse(customOrder);
+                    } else if (typeof customOrder === 'string') {
+                        // If it's a simple string (like "ollama"), convert to single-item array
+                        parsed = [customOrder];
+                    } else {
+                        // Fallback to default
+                        parsed = defaultOrder;
+                    }
+
                     // Validate that all providers are valid
                     if (Array.isArray(parsed) &&
                         parsed.every(p => Object.keys(this.services).includes(p))) {

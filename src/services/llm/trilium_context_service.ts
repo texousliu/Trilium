@@ -102,12 +102,13 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                 maxTokens: 300
             };
 
-            // Get the response from the LLM
-            const response = await llmService.sendTextCompletion(messages, options);
+            // Get the response from the LLM using the correct method name
+            const response = await llmService.generateChatCompletion(messages, options);
+            const responseText = response.text; // Extract the text from the response object
 
             try {
                 // Parse the JSON response
-                const jsonStr = response.trim().replace(/```json|```/g, '').trim();
+                const jsonStr = responseText.trim().replace(/```json|```/g, '').trim();
                 const queries = JSON.parse(jsonStr);
 
                 if (Array.isArray(queries) && queries.length > 0) {
@@ -117,7 +118,7 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                 }
             } catch (parseError) {
                 // Fallback: if JSON parsing fails, try to extract queries line by line
-                const lines = response.split('\n')
+                const lines = responseText.split('\n')
                     .map((line: string) => line.trim())
                     .filter((line: string) => line.length > 0 && !line.startsWith('```'));
 
@@ -176,8 +177,8 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
 
             // Process each query
             for (const query of queries) {
-                // Get embeddings for this query
-                const queryEmbedding = await this.provider.getEmbedding(query);
+                // Get embeddings for this query using the correct method name
+                const queryEmbedding = await this.provider.generateEmbeddings(query);
 
                 // Find notes similar to this query
                 let results;
@@ -192,8 +193,8 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                     // Search all notes
                     results = await vectorStore.findSimilarNotes(
                         queryEmbedding,
-                        this.provider.id,
-                        this.provider.modelId,
+                        this.provider.name, // Use name property instead of id
+                        this.provider.getConfig().model, // Use getConfig().model instead of modelId
                         Math.min(limit, 5), // Limit per query
                         0.5 // Lower threshold to get more diverse results
                     );
@@ -265,8 +266,8 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             for (const noteId of subtreeNoteIds) {
                 const noteEmbedding = await vectorStore.getEmbeddingForNote(
                     noteId,
-                    this.provider.id,
-                    this.provider.modelId
+                    this.provider.name, // Use name property instead of id
+                    this.provider.getConfig().model // Use getConfig().model instead of modelId
                 );
 
                 if (noteEmbedding) {
@@ -338,7 +339,10 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
      */
     buildContextFromNotes(sources: any[], query: string): string {
         if (!sources || sources.length === 0) {
-            return "";
+            // Return a default context instead of empty string
+            return "I am an AI assistant helping you with your Trilium notes. " +
+                   "I couldn't find any specific notes related to your query, but I'll try to assist you " +
+                   "with general knowledge about Trilium or other topics you're interested in.";
         }
 
         let context = `The following are relevant notes from your knowledge base that may help answer the query: "${query}"\n\n`;
@@ -382,28 +386,62 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
      */
     async processQuery(userQuestion: string, llmService: any, contextNoteId: string | null = null) {
         if (!this.initialized) {
-            await this.initialize();
+            try {
+                await this.initialize();
+            } catch (error) {
+                log.error(`Failed to initialize TriliumContextService: ${error}`);
+                // Return a fallback response if initialization fails
+                return {
+                    context: "I am an AI assistant helping you with your Trilium notes. " +
+                             "I'll try to assist you with general knowledge about your query.",
+                    notes: [],
+                    queries: [userQuestion]
+                };
+            }
         }
 
-        // Step 1: Generate search queries
-        const searchQueries = await this.generateSearchQueries(userQuestion, llmService);
-        log.info(`Generated search queries: ${JSON.stringify(searchQueries)}`);
+        try {
+            // Step 1: Generate search queries
+            let searchQueries: string[];
+            try {
+                searchQueries = await this.generateSearchQueries(userQuestion, llmService);
+            } catch (error) {
+                log.error(`Error generating search queries, using fallback: ${error}`);
+                searchQueries = [userQuestion]; // Fallback to using the original question
+            }
+            log.info(`Generated search queries: ${JSON.stringify(searchQueries)}`);
 
-        // Step 2: Find relevant notes using those queries
-        const relevantNotes = await this.findRelevantNotesMultiQuery(
-            searchQueries,
-            contextNoteId,
-            8 // Get more notes since we're using multiple queries
-        );
+            // Step 2: Find relevant notes using those queries
+            let relevantNotes: any[] = [];
+            try {
+                relevantNotes = await this.findRelevantNotesMultiQuery(
+                    searchQueries,
+                    contextNoteId,
+                    8 // Get more notes since we're using multiple queries
+                );
+            } catch (error) {
+                log.error(`Error finding relevant notes: ${error}`);
+                // Continue with empty notes list
+            }
 
-        // Step 3: Build context from the notes
-        const context = this.buildContextFromNotes(relevantNotes, userQuestion);
+            // Step 3: Build context from the notes
+            const context = this.buildContextFromNotes(relevantNotes, userQuestion);
 
-        return {
-            context,
-            notes: relevantNotes,
-            queries: searchQueries
-        };
+            return {
+                context,
+                notes: relevantNotes,
+                queries: searchQueries
+            };
+        } catch (error) {
+            log.error(`Error in processQuery: ${error}`);
+            // Return a fallback response if anything fails
+            return {
+                context: "I am an AI assistant helping you with your Trilium notes. " +
+                         "I encountered an error while processing your query, but I'll try to assist you anyway.",
+                notes: [],
+                queries: [userQuestion]
+            };
+        }
     }
 }
 

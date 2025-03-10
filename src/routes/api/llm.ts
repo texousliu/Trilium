@@ -449,26 +449,57 @@ Now, based on the above notes, please answer: ${query}`;
  */
 async function sendMessage(req: Request, res: Response) {
     try {
-        // Extract the content from the request body
-        const { content, sessionId, useAdvancedContext = false } = req.body || {};
+        // Extract parameters differently based on the request method
+        let content, useAdvancedContext, sessionId;
 
-        // Validate the content
-        if (!content || typeof content !== 'string' || content.trim().length === 0) {
+        if (req.method === 'POST') {
+            // For POST requests, get content from the request body
+            const requestBody = req.body || {};
+            content = requestBody.content;
+            useAdvancedContext = requestBody.useAdvancedContext || false;
+        } else if (req.method === 'GET') {
+            // For GET (streaming) requests, get format from query params
+            // The content should have been sent in a previous POST request
+            useAdvancedContext = req.query.useAdvancedContext === 'true';
+            content = ''; // We don't need content for GET requests
+        }
+
+        // Get sessionId from URL params since it's part of the route
+        sessionId = req.params.sessionId;
+
+        // Get the Accept header once at the start
+        const acceptHeader = req.get('Accept');
+        const isStreamingRequest = acceptHeader && acceptHeader.includes('text/event-stream');
+
+        // For GET requests, ensure we have the format=stream parameter
+        if (req.method === 'GET' && (!req.query.format || req.query.format !== 'stream')) {
+            throw new Error('Stream format parameter is required for GET requests');
+        }
+
+        // For POST requests, validate the content
+        if (req.method === 'POST' && (!content || typeof content !== 'string' || content.trim().length === 0)) {
             throw new Error('Content cannot be empty');
         }
 
-        // Get or create the session
-        let session: ChatSession;
+        // Get session
+        if (!sessionId || !sessions.has(sessionId)) {
+            throw new Error('Session not found');
+        }
 
-        if (sessionId && sessions.has(sessionId)) {
-            session = sessions.get(sessionId)!;
-            session.lastActive = new Date();
-        } else {
-            const result = await createSession(req, res);
-            if (!result?.id) {
-                throw new Error('Failed to create a new session');
-            }
-            session = sessions.get(result.id)!;
+        const session = sessions.get(sessionId)!;
+        session.lastActive = new Date();
+
+        // For POST requests, store the user message
+        if (req.method === 'POST' && content) {
+            // Add message to session
+            session.messages.push({
+                role: 'user',
+                content,
+                timestamp: new Date()
+            });
+
+            // Log a preview of the message
+            log.info(`Processing LLM message: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"`);
         }
 
         // Check if AI services are available
@@ -495,183 +526,224 @@ async function sendMessage(req: Request, res: Response) {
             throw new Error('No AI service is available');
         }
 
-        // Create user message
-        const userMessage: Message = {
-            role: 'user',
-            content
-        };
-
-        // Add message to session
-        session.messages.push({
-            role: 'user',
-            content,
-            timestamp: new Date()
-        });
-
-        // Log a preview of the message
-        log.info(`Processing LLM message: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"`);
-
         // Information to return to the client
         let aiResponse = '';
         let sourceNotes: NoteSource[] = [];
 
-        // If Advanced Context is enabled, we use the improved method
-        if (useAdvancedContext) {
-            // Use the Trilium-specific approach
-            const contextNoteId = session.noteContext || null;
-            const results = await triliumContextService.processQuery(content, service, contextNoteId);
+        // For POST requests, we need to process the message
+        // For GET (streaming) requests, we use the latest user message from the session
+        if (req.method === 'POST' || isStreamingRequest) {
+            // Get the latest user message for context
+            const latestUserMessage = session.messages
+                .filter(msg => msg.role === 'user')
+                .pop();
 
-            // Get the generated context
-            const context = results.context;
-            sourceNotes = results.notes;
+            if (!latestUserMessage && req.method === 'GET') {
+                throw new Error('No user message found in session');
+            }
 
-            // Add system message with the context
-            const contextMessage: Message = {
-                role: 'system',
-                content: context
-            };
+            // Use the latest message content for GET requests
+            const messageContent = req.method === 'POST' ? content : latestUserMessage!.content;
 
-            // Format all messages for the AI
-            const aiMessages: Message[] = [
-                contextMessage,
-                ...session.messages.slice(-10).map(msg => ({
-                    role: msg.role,
-                    content: msg.content
-                }))
-            ];
+            // If Advanced Context is enabled, we use the improved method
+            if (useAdvancedContext) {
+                // Use the Trilium-specific approach
+                const contextNoteId = session.noteContext || null;
+                const results = await triliumContextService.processQuery(messageContent, service, contextNoteId);
 
-            // Configure chat options from session metadata
-            const chatOptions: ChatCompletionOptions = {
-                temperature: session.metadata.temperature || 0.7,
-                maxTokens: session.metadata.maxTokens,
-                model: session.metadata.model
-                // 'provider' property has been removed as it's not in the ChatCompletionOptions type
-            };
+                // Get the generated context
+                const context = results.context;
+                sourceNotes = results.notes;
 
-            // Get streaming response if requested
-            const acceptHeader = req.get('Accept');
-            if (acceptHeader && acceptHeader.includes('text/event-stream')) {
-                res.setHeader('Content-Type', 'text/event-stream');
-                res.setHeader('Cache-Control', 'no-cache');
-                res.setHeader('Connection', 'keep-alive');
+                // Add system message with the context
+                const contextMessage: Message = {
+                    role: 'system',
+                    content: context
+                };
 
-                let messageContent = '';
+                // Format all messages for the AI
+                const aiMessages: Message[] = [
+                    contextMessage,
+                    ...session.messages.slice(-10).map(msg => ({
+                        role: msg.role,
+                        content: msg.content
+                    }))
+                ];
 
-                // Stream the response
-                await service.sendChatCompletion(
-                    aiMessages,
-                    chatOptions,
-                    (chunk: string) => {
-                        messageContent += chunk;
-                        res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`);
+                // Configure chat options from session metadata
+                const chatOptions: ChatCompletionOptions = {
+                    temperature: session.metadata.temperature || 0.7,
+                    maxTokens: session.metadata.maxTokens,
+                    model: session.metadata.model,
+                    stream: isStreamingRequest ? true : undefined
+                };
+
+                // Process based on whether this is a streaming request
+                if (isStreamingRequest) {
+                    res.setHeader('Content-Type', 'text/event-stream');
+                    res.setHeader('Cache-Control', 'no-cache');
+                    res.setHeader('Connection', 'keep-alive');
+
+                    let messageContent = '';
+
+                    // Use the correct method name: generateChatCompletion
+                    const response = await service.generateChatCompletion(aiMessages, chatOptions);
+
+                    // Handle streaming if the response includes a stream method
+                    if (response.stream) {
+                        await response.stream((chunk: { text: string; done: boolean }) => {
+                            if (chunk.text) {
+                                messageContent += chunk.text;
+                                res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
+                            }
+
+                            if (chunk.done) {
+                                // Signal the end of the stream when done
+                                res.write('data: [DONE]\n\n');
+                                res.end();
+                            }
+                        });
+                    } else {
+                        // If no streaming available, send the response as a single chunk
+                        messageContent = response.text;
+                        res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
+                        res.write('data: [DONE]\n\n');
+                        res.end();
                     }
+
+                    // Store the full response for the session
+                    aiResponse = messageContent;
+
+                    // Store the assistant's response in the session
+                    session.messages.push({
+                        role: 'assistant',
+                        content: aiResponse,
+                        timestamp: new Date()
+                    });
+                } else {
+                    // Non-streaming approach for POST requests
+                    const response = await service.generateChatCompletion(aiMessages, chatOptions);
+                    aiResponse = response.text; // Extract the text from the response
+
+                    // Store the assistant's response in the session
+                    session.messages.push({
+                        role: 'assistant',
+                        content: aiResponse,
+                        timestamp: new Date()
+                    });
+
+                    // Return the response for POST requests
+                    return {
+                        content: aiResponse,
+                        sources: sourceNotes.map(note => ({
+                            noteId: note.noteId,
+                            title: note.title,
+                            similarity: note.similarity,
+                            branchId: note.branchId
+                        }))
+                    };
+                }
+            } else {
+                // Original approach - find relevant notes through direct embedding comparison
+                const relevantNotes = await findRelevantNotes(
+                    content,
+                    session.noteContext || null,
+                    5
                 );
 
-                // Close the stream
-                res.write('data: [DONE]\n\n');
-                res.end();
+                sourceNotes = relevantNotes;
 
-                // Store the full response
-                aiResponse = messageContent;
-            } else {
-                // Non-streaming approach
-                aiResponse = await service.sendChatCompletion(aiMessages, chatOptions);
-            }
-        } else {
-            // Original approach - find relevant notes through direct embedding comparison
-            const relevantNotes = await findRelevantNotes(
-                content,
-                session.noteContext || null,
-                5
-            );
+                // Build context from relevant notes
+                const context = buildContextFromNotes(relevantNotes, content);
 
-            sourceNotes = relevantNotes;
+                // Add system message with the context
+                const contextMessage: Message = {
+                    role: 'system',
+                    content: context
+                };
 
-            // Build context from relevant notes
-            const context = buildContextFromNotes(relevantNotes, content);
+                // Format all messages for the AI
+                const aiMessages: Message[] = [
+                    contextMessage,
+                    ...session.messages.slice(-10).map(msg => ({
+                        role: msg.role,
+                        content: msg.content
+                    }))
+                ];
 
-            // Add system message with the context
-            const contextMessage: Message = {
-                role: 'system',
-                content: context
-            };
+                // Configure chat options from session metadata
+                const chatOptions: ChatCompletionOptions = {
+                    temperature: session.metadata.temperature || 0.7,
+                    maxTokens: session.metadata.maxTokens,
+                    model: session.metadata.model,
+                    stream: isStreamingRequest ? true : undefined
+                };
 
-            // Format all messages for the AI
-            const aiMessages: Message[] = [
-                contextMessage,
-                ...session.messages.slice(-10).map(msg => ({
-                    role: msg.role,
-                    content: msg.content
-                }))
-            ];
+                if (isStreamingRequest) {
+                    res.setHeader('Content-Type', 'text/event-stream');
+                    res.setHeader('Cache-Control', 'no-cache');
+                    res.setHeader('Connection', 'keep-alive');
 
-            // Configure chat options from session metadata
-            const chatOptions: ChatCompletionOptions = {
-                temperature: session.metadata.temperature || 0.7,
-                maxTokens: session.metadata.maxTokens,
-                model: session.metadata.model
-                // 'provider' property has been removed as it's not in the ChatCompletionOptions type
-            };
+                    let messageContent = '';
 
-            // Get streaming response if requested
-            const acceptHeader = req.get('Accept');
-            if (acceptHeader && acceptHeader.includes('text/event-stream')) {
-                res.setHeader('Content-Type', 'text/event-stream');
-                res.setHeader('Cache-Control', 'no-cache');
-                res.setHeader('Connection', 'keep-alive');
+                    // Use the correct method name: generateChatCompletion
+                    const response = await service.generateChatCompletion(aiMessages, chatOptions);
 
-                let messageContent = '';
+                    // Handle streaming if the response includes a stream method
+                    if (response.stream) {
+                        await response.stream((chunk: { text: string; done: boolean }) => {
+                            if (chunk.text) {
+                                messageContent += chunk.text;
+                                res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
+                            }
 
-                // Stream the response
-                await service.sendChatCompletion(
-                    aiMessages,
-                    chatOptions,
-                    (chunk: string) => {
-                        messageContent += chunk;
-                        res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`);
+                            if (chunk.done) {
+                                // Signal the end of the stream when done
+                                res.write('data: [DONE]\n\n');
+                                res.end();
+                            }
+                        });
+                    } else {
+                        // If no streaming available, send the response as a single chunk
+                        messageContent = response.text;
+                        res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
+                        res.write('data: [DONE]\n\n');
+                        res.end();
                     }
-                );
 
-                // Close the stream
-                res.write('data: [DONE]\n\n');
-                res.end();
+                    // Store the full response for the session
+                    aiResponse = messageContent;
 
-                // Store the full response
-                aiResponse = messageContent;
-            } else {
-                // Non-streaming approach
-                aiResponse = await service.sendChatCompletion(aiMessages, chatOptions);
+                    // Store the assistant's response in the session
+                    session.messages.push({
+                        role: 'assistant',
+                        content: aiResponse,
+                        timestamp: new Date()
+                    });
+                } else {
+                    // Non-streaming approach for POST requests
+                    const response = await service.generateChatCompletion(aiMessages, chatOptions);
+                    aiResponse = response.text; // Extract the text from the response
+
+                    // Store the assistant's response in the session
+                    session.messages.push({
+                        role: 'assistant',
+                        content: aiResponse,
+                        timestamp: new Date()
+                    });
+
+                    // Return the response for POST requests
+                    return {
+                        content: aiResponse,
+                        sources: sourceNotes.map(note => ({
+                            noteId: note.noteId,
+                            title: note.title,
+                            similarity: note.similarity,
+                            branchId: note.branchId
+                        }))
+                    };
+                }
             }
-        }
-
-        // Only store the assistant's message if we're not streaming (otherwise we already did)
-        const acceptHeader = req.get('Accept');
-        if (!acceptHeader || !acceptHeader.includes('text/event-stream')) {
-            // Store the assistant's response in the session
-            session.messages.push({
-                role: 'assistant',
-                content: aiResponse,
-                timestamp: new Date()
-            });
-
-            // Return the response
-            return {
-                content: aiResponse,
-                sources: sourceNotes.map(note => ({
-                    noteId: note.noteId,
-                    title: note.title,
-                    similarity: note.similarity,
-                    branchId: note.branchId
-                }))
-            };
-        } else {
-            // For streaming responses, we've already sent the data
-            // But we still need to add the message to the session
-            session.messages.push({
-                role: 'assistant',
-                content: aiResponse,
-                timestamp: new Date()
-            });
         }
     } catch (error: any) {
         log.error(`Error sending message to LLM: ${error.message}`);
