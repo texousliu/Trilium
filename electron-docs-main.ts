@@ -15,18 +15,19 @@ async function startElectron() {
 
 async function main() {
     await initializeTranslations();
-    await importData();
+    await initializeDatabase();
 
     await startElectron();
     // await exportData();
 }
 
-async function importData() {
-    const sql = (await import("./src/services/sql.js")).default;
+async function initializeDatabase() {
     const sqlInit = (await import("./src/services/sql_init.js")).default;
 
     cls.init(() => {
-        sqlInit.createInitialDatabase();
+        if (!sqlInit.isDbInitialized()) {
+            sqlInit.createInitialDatabase();
+        }
     });
 }
 
