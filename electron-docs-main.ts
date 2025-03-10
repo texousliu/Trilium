@@ -7,6 +7,7 @@ import cls from "./src/services/cls.js";
 import { initializeTranslations } from "./src/services/i18n.js";
 import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
+import debounce from "./src/public/app/services/debounce.js";
 
 const NOTE_ID_USER_GUIDE = "help_user_guide";
 const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
@@ -24,7 +25,17 @@ async function main() {
     });
 
     await startElectron();
-    // await exportData();
+
+
+    const events = (await import("./src/services/events.js")).default;
+    const debouncer = debounce(() => {
+        console.log("Exporting data");
+        exportData();
+    }, 10_000);;
+    events.subscribe(events.ENTITY_CHANGED, async () => {
+        console.log("Got entity changed");
+        debouncer();
+    });
 }
 
 async function initializeDatabase() {

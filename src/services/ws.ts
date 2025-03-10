@@ -17,7 +17,9 @@ if (isDev) {
     const debounce = (await import("debounce")).default;
     const debouncedReloadFrontend = debounce(() => reloadFrontend("source code change"), 200);
     chokidar
-        .watch("src/public")
+        .watch("src/public", {
+            ignored: "src/public/app/doc_notes/en/User Guide"
+        })
         .on("add", debouncedReloadFrontend)
         .on("change", debouncedReloadFrontend)
         .on("unlink", debouncedReloadFrontend);
