@@ -9,7 +9,7 @@ import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
 import debounce from "./src/public/app/services/debounce.js";
 
-const NOTE_ID_USER_GUIDE = "help_user_guide";
+const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
 const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
 async function startElectron() {
