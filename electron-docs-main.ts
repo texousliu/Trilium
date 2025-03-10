@@ -5,7 +5,8 @@ import type NoteMeta from "./src/services/meta/note_meta.js";
 import type { NoteMetaFile } from "./src/services/meta/note_meta.js";
 import cls from "./src/services/cls.js";
 import { initializeTranslations } from "./src/services/i18n.js";
-import archiver from "archiver";
+import archiver, { type Archiver } from "archiver";
+import type { WriteStream } from "fs";
 
 const NOTE_ID_USER_GUIDE = "_help_user_guide";
 const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
@@ -16,10 +17,10 @@ async function startElectron() {
 
 async function main() {
     await initializeTranslations();
-    await createImportZip();
+    const zipBuffer = await createImportZip();
     await initializeDatabase();
     cls.init(() => {
-        importData();
+        importData(zipBuffer);
     });
 
     await startElectron();
@@ -36,20 +37,25 @@ async function initializeDatabase() {
     });
 }
 
-async function importData() {
+async function importData(input: Buffer) {
     const beccaLoader = ((await import("./src/becca/becca_loader.js")).default);
     const notes = ((await import("./src/services/notes.js")).default);
     beccaLoader.load();
 
     const becca = ((await import("./src/becca/becca.js")).default);
 
-    notes.createNewNoteWithTarget("into", "none_root", {
+    const { note } = notes.createNewNoteWithTarget("into", "none_root", {
         parentNoteId: "root",
         noteId: NOTE_ID_USER_GUIDE,
         title: "User Guide",
         content: "The sub-children of this note are automatically synced.",
         type: "text"
     });
+
+    const TaskContext = (await import("./src/services/task_context.js")).default;
+    const { importZip } = ((await import("./src/services/import/zip.js")).default);
+    const context = new TaskContext("no-report");
+    await importZip(context, input, note);
 }
 
 async function createImportZip() {
@@ -58,6 +64,7 @@ async function createImportZip() {
     });
 
     async function iterate(currentPath: string) {
+        console.log(currentPath);
         for (const entry of await fs.readdir(path.join(destRootPath, currentPath), { withFileTypes: true })) {
             const entryPath = path.join(currentPath, entry.name);
 
@@ -77,7 +84,17 @@ async function createImportZip() {
 
     const outputStream = fsExtra.createWriteStream("input.zip");
     archive.pipe(outputStream);
-    await archive.finalize();
+    await waitForEnd(archive, outputStream);
+
+    return await fsExtra.readFile("input.zip");
+}
+
+function waitForEnd(archive: Archiver, stream: WriteStream) {
+    return new Promise<void>(async (res, rej) => {
+        stream.on("finish", () => res());
+        await archive.finalize();
+    });
+
 }
 
 async function exportData() {
