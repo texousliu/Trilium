@@ -304,21 +304,30 @@ export default class ChatWidget extends TabAwareWidget {
     formatMessageContent(content) {
         if (!content) return '';
 
-        // Escape HTML
-        let formatted = utils.escapeHtml(content);
-
-        // Convert markdown-style code blocks to HTML
-        formatted = formatted.replace(/```(\w+)?\n([\s\S]+?)\n```/g, (match, language, code) => {
-            return `<pre class="code${language ? ' language-' + language : ''}"><code>${utils.escapeHtml(code)}</code></pre>`;
+        // First extract code blocks to protect them from HTML escaping
+        const codeBlocks = [];
+        let processedContent = content.replace(/```(\w+)?\n([\s\S]+?)\n```/g, (match, language, code) => {
+            const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
+            const languageClass = language ? ` language-${language}` : '';
+            codeBlocks.push(`<pre class="code${languageClass}"><code>${utils.escapeHtml(code)}</code></pre>`);
+            return placeholder;
         });
 
-        // Convert inline code
-        formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+        // Escape HTML in the remaining content
+        processedContent = utils.escapeHtml(processedContent);
+
+        // Convert inline code - look for backticks that weren't part of a code block
+        processedContent = processedContent.replace(/`([^`]+)`/g, '<code>$1</code>');
 
         // Convert line breaks
-        formatted = formatted.replace(/\n/g, '<br>');
+        processedContent = processedContent.replace(/\n/g, '<br>');
 
-        return formatted;
+        // Restore code blocks
+        codeBlocks.forEach((block, index) => {
+            processedContent = processedContent.replace(`__CODE_BLOCK_${index}__`, block);
+        });
+
+        return processedContent;
     }
 
     scrollToBottom() {

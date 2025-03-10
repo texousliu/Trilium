@@ -5,6 +5,7 @@ import appContext from "../components/app_context.js";
 import utils from "../services/utils.js";
 import { t } from "../services/i18n.js";
 import libraryLoader from "../services/library_loader.js";
+import { applySyntaxHighlight } from "../services/syntax_highlight.js";
 
 // Import the LLM Chat CSS
 (async function() {
@@ -217,6 +218,8 @@ export default class LlmChatPanel extends BasicWidget {
                         const assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
                         if (assistantElement) {
                             assistantElement.innerHTML = this.formatMarkdown(assistantResponse);
+                            // Apply syntax highlighting to any code blocks in the updated content
+                            applySyntaxHighlight($(assistantElement as HTMLElement));
                         } else {
                             this.addMessageToChat('assistant', assistantResponse);
                         }
@@ -291,6 +294,9 @@ export default class LlmChatPanel extends BasicWidget {
         messageElement.appendChild(contentElement);
 
         this.noteContextChatMessages.appendChild(messageElement);
+
+        // Apply syntax highlighting to any code blocks in the message
+        applySyntaxHighlight($(contentElement));
 
         // Scroll to bottom
         this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
@@ -382,12 +388,29 @@ export default class LlmChatPanel extends BasicWidget {
      * Format markdown content for display
      */
     private formatMarkdown(content: string): string {
-        // Simple markdown formatting - could be replaced with a proper markdown library
-        return content
+        if (!content) return '';
+
+        // First, extract code blocks to protect them from other replacements
+        const codeBlocks: string[] = [];
+        let processedContent = content.replace(/```(\w+)?\n([\s\S]+?)\n```/gs, (match, language, code) => {
+            const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
+            const languageClass = language ? ` language-${language}` : '';
+            codeBlocks.push(`<pre class="code${languageClass}"><code>${code}</code></pre>`);
+            return placeholder;
+        });
+
+        // Apply other markdown formatting
+        processedContent = processedContent
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
-            .replace(/`(.*?)`/g, '<code>$1</code>')
-            .replace(/\n/g, '<br>')
-            .replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>');
+            .replace(/`([^`]+)`/g, '<code>$1</code>')
+            .replace(/\n/g, '<br>');
+
+        // Restore code blocks
+        codeBlocks.forEach((block, index) => {
+            processedContent = processedContent.replace(`__CODE_BLOCK_${index}__`, block);
+        });
+
+        return processedContent;
     }
 }
