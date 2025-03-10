@@ -17,29 +17,40 @@ async function exportData() {
     const zipFilePath = "output.zip";
     const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
-    await fsExtra.remove(destRootPath);
-    await fsExtra.mkdir(destRootPath);
+    const deferred = (await import("./src/services/utils.js")).deferred;
 
-    // First export as zip.
-    const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
-    await exportToZipFile(NOTE_ID_USER_GUIDE, "html", zipFilePath);
+    try {
+        await fsExtra.remove(destRootPath);
+        await fsExtra.mkdir(destRootPath);
 
-    setTimeout(async () => {
-        // Then extract the zip.
-        const { readZipFile, readContent } = (await import("./src/services/import/zip.js"));
-        await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
-            // We ignore directories since they can appear out of order anyway.
-            if (!entry.fileName.endsWith("/")) {
-                const destPath = path.join(destRootPath, entry.fileName);
-                const fileContent = await readContent(zip, entry);
+        // First export as zip.
+        const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
+        await exportToZipFile(NOTE_ID_USER_GUIDE, "html", zipFilePath);
 
-                await fsExtra.mkdirs(path.dirname(destPath));
-                await fs.writeFile(destPath, fileContent);
-            }
+        const promise = deferred<void>()
+        setTimeout(async () => {
+            // Then extract the zip.
+            const { readZipFile, readContent } = (await import("./src/services/import/zip.js"));
+            await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
+                // We ignore directories since they can appear out of order anyway.
+                if (!entry.fileName.endsWith("/")) {
+                    const destPath = path.join(destRootPath, entry.fileName);
+                    const fileContent = await readContent(zip, entry);
 
-            zip.readEntry();
-        });
-    }, 1000);
+                    await fsExtra.mkdirs(path.dirname(destPath));
+                    await fs.writeFile(destPath, fileContent);
+                }
+
+                zip.readEntry();
+            });
+            promise.resolve();
+        }, 1000);
+        await promise;
+    } finally {
+        if (await fsExtra.exists(zipFilePath)) {
+            await fsExtra.rm(zipFilePath);
+        }
+    }
 }
 
 await main();
