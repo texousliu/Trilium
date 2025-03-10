@@ -41,7 +41,7 @@
             return [];
         }
 
-        const errors = await glob.linter(text);
+        const errors = await glob.linter(text, glob.getActiveContextNote().mime);
 
         console.log(errors);
 

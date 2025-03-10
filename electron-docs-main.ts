@@ -1,26 +1,151 @@
+import fs from "fs/promises";
+import fsExtra from "fs-extra";
+import path from "path";
+import type NoteMeta from "./src/services/meta/note_meta.js";
+import type { NoteMetaFile } from "./src/services/meta/note_meta.js";
 import cls from "./src/services/cls.js";
-import sql_init from "./src/services/sql_init.js";
+import { initializeTranslations } from "./src/services/i18n.js";
+import archiver, { type Archiver } from "archiver";
+import type { WriteStream } from "fs";
+import debounce from "./src/public/app/services/debounce.js";
+
+const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
+const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
 async function startElectron() {
     await import("./electron-main.js");
 }
 
-async function initializeDb() {
-    return new Promise<void>((resolve) => {
-        cls.init(async () => {
-            await sql_init.createInitialDatabase();
-            sql_init.setDbAsInitialized();
-            resolve();
-        });
-    })
-}
-
 async function main() {
-    if (!sql_init.isDbInitialized()) {
-        initializeDb();
-    }
+    await initializeTranslations();
+    const zipBuffer = await createImportZip();
+    await initializeDatabase();
+    cls.init(() => {
+        importData(zipBuffer);
+    });
 
     await startElectron();
+
+
+    const events = (await import("./src/services/events.js")).default;
+    const debouncer = debounce(() => {
+        console.log("Exporting data");
+        exportData();
+    }, 10_000);;
+    events.subscribe(events.ENTITY_CHANGED, async () => {
+        console.log("Got entity changed");
+        debouncer();
+    });
+}
+
+async function initializeDatabase() {
+    const sqlInit = (await import("./src/services/sql_init.js")).default;
+
+    cls.init(() => {
+        if (!sqlInit.isDbInitialized()) {
+            sqlInit.createInitialDatabase();
+        }
+    });
+}
+
+async function importData(input: Buffer) {
+    const beccaLoader = ((await import("./src/becca/becca_loader.js")).default);
+    const notes = ((await import("./src/services/notes.js")).default);
+    beccaLoader.load();
+
+    const { note } = notes.createNewNoteWithTarget("into", "none_root", {
+        parentNoteId: "root",
+        noteId: NOTE_ID_USER_GUIDE,
+        title: "User Guide",
+        content: "The sub-children of this note are automatically synced.",
+        type: "text"
+    });
+
+    const TaskContext = (await import("./src/services/task_context.js")).default;
+    const { importZip } = ((await import("./src/services/import/zip.js")).default);
+    const context = new TaskContext("no-report");
+    await importZip(context, input, note, { preserveIds: true });
+}
+
+async function createImportZip() {
+    const archive = archiver("zip", {
+        zlib: { level: 0 }
+    });
+
+    archive.directory(destRootPath, "/");
+
+    const outputStream = fsExtra.createWriteStream("input.zip");
+    archive.pipe(outputStream);
+    await waitForEnd(archive, outputStream);
+
+    return await fsExtra.readFile("input.zip");
+}
+
+function waitForEnd(archive: Archiver, stream: WriteStream) {
+    return new Promise<void>(async (res, rej) => {
+        stream.on("finish", () => res());
+        await archive.finalize();
+    });
+
+}
+
+async function exportData() {
+    const zipFilePath = "output.zip";
+
+    const deferred = (await import("./src/services/utils.js")).deferred;
+
+    try {
+        await fsExtra.remove(destRootPath);
+        await fsExtra.mkdir(destRootPath);
+
+        // First export as zip.
+        const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
+        await exportToZipFile(NOTE_ID_USER_GUIDE, "markdown", zipFilePath);
+
+        const promise = deferred<void>()
+        setTimeout(async () => {
+            // Then extract the zip.
+            const { readZipFile, readContent } = (await import("./src/services/import/zip.js"));
+            await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
+                // We ignore directories since they can appear out of order anyway.
+                if (!entry.fileName.endsWith("/")) {
+                    const destPath = path.join(destRootPath, entry.fileName);
+                    const fileContent = await readContent(zip, entry);
+
+                    await fsExtra.mkdirs(path.dirname(destPath));
+                    await fs.writeFile(destPath, fileContent);
+                }
+
+                zip.readEntry();
+            });
+            promise.resolve();
+        }, 1000);
+        await promise;
+    } finally {
+        if (await fsExtra.exists(zipFilePath)) {
+            await fsExtra.rm(zipFilePath);
+        }
+    }
+
+    await cleanUpMeta();
+}
+
+async function cleanUpMeta() {
+    const metaPath = path.join(destRootPath, "!!!meta.json");
+    const meta = JSON.parse(await fs.readFile(metaPath, "utf-8")) as NoteMetaFile;
+    for (const file of meta.files) {
+        traverse(file);
+    }
+
+    function traverse(el: NoteMeta) {
+        for (const child of el.children || []) {
+            traverse(child);
+        }
+
+        el.isExpanded = false;
+    }
+
+    await fs.writeFile(metaPath, JSON.stringify(meta, null, 4));
 }
 
 await main();

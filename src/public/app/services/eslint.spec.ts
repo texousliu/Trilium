@@ -7,7 +7,7 @@ describe("Linter", () => {
         const result = await lint(trimIndentation`
             for (const i = 0; i<10; i++) {
             }
-        `);
+        `, "application/javascript;env=frontend");
         expect(result).toMatchObject([
             { message: "'i' is constant.", },
             { message: "Empty block statement." }
@@ -23,7 +23,7 @@ describe("Linter", () => {
             }
 
             api.showMessage("Hi");
-        `);
+        `, "application/javascript;env=frontend");
         expect(result.length).toBe(0);
     });
 
@@ -33,7 +33,7 @@ describe("Linter", () => {
             function world() { }
 
             console.log("Hello world");
-        `);
+        `, "application/javascript;env=frontend");
         expect(result).toMatchObject([
             {
                 message: "'hello' is defined but never used.",
@@ -44,5 +44,15 @@ describe("Linter", () => {
                 severity: 1
             }
         ]);
+    });
+
+    it("supports JQuery global", async () => {
+        expect(await lint(`$("<div>");`, "application/javascript;env=backend")).toMatchObject([{ "ruleId": "no-undef" }]);
+        expect(await lint(`console.log($("<div>"));`, "application/javascript;env=frontend")).toStrictEqual([]);
+    });
+
+    it("supports module.exports", async () => {
+        expect(await lint(`module.exports("Hi");`, "application/javascript;env=backend")).toStrictEqual([]);
+        expect(await lint(`module.exports("Hi");`, "application/javascript;env=frontend")).toStrictEqual([]);
     });
 });

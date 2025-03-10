@@ -26,7 +26,11 @@ interface MetaFile {
     files: NoteMeta[];
 }
 
-async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRootNote: BNote): Promise<BNote> {
+interface ImportZipOpts {
+    preserveIds?: boolean;
+}
+
+async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRootNote: BNote, opts?: ImportZipOpts): Promise<BNote> {
     /** maps from original noteId (in ZIP file) to newly generated noteId */
     const noteIdMap: Record<string, string> = {};
     /** type maps from original attachmentId (in ZIP file) to newly generated attachmentId */
@@ -45,7 +49,7 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
             return "empty_note_id";
         }
 
-        if (origNoteId === "root" || origNoteId.startsWith("_")) {
+        if (origNoteId === "root" || origNoteId.startsWith("_") || opts?.preserveIds) {
             // these "named" noteIds don't differ between Trilium instances
             return origNoteId;
         }
@@ -58,6 +62,10 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
     }
 
     function getNewAttachmentId(origAttachmentId: string) {
+        if (opts?.preserveIds) {
+            return origAttachmentId;
+        }
+
         if (!origAttachmentId.trim()) {
             // this probably shouldn't happen, but still good to have this precaution
             return "empty_attachment_id";
@@ -490,6 +498,10 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
                     notePosition: noteMeta?.notePosition
                 }).save();
             }
+
+            if (opts?.preserveIds) {
+                firstNote = firstNote || note;
+            }
         } else {
             ({ note } = noteService.createNewNote({
                 parentNoteId: parentNoteId,
@@ -605,7 +617,7 @@ function streamToBuffer(stream: Stream): Promise<Buffer> {
     return new Promise((res, rej) => stream.on("end", () => res(Buffer.concat(chunks))));
 }
 
-function readContent(zipfile: yauzl.ZipFile, entry: yauzl.Entry): Promise<Buffer> {
+export function readContent(zipfile: yauzl.ZipFile, entry: yauzl.Entry): Promise<Buffer> {
     return new Promise((res, rej) => {
         zipfile.openReadStream(entry, function (err, readStream) {
             if (err) rej(err);
@@ -616,8 +628,8 @@ function readContent(zipfile: yauzl.ZipFile, entry: yauzl.Entry): Promise<Buffer
     });
 }
 
-function readZipFile(buffer: Buffer, processEntryCallback: (zipfile: yauzl.ZipFile, entry: yauzl.Entry) => void) {
-    return new Promise((res, rej) => {
+export function readZipFile(buffer: Buffer, processEntryCallback: (zipfile: yauzl.ZipFile, entry: yauzl.Entry) => Promise<void>) {
+    return new Promise<void>((res, rej) => {
         yauzl.fromBuffer(buffer, { lazyEntries: true, validateEntrySizes: false }, function (err, zipfile) {
             if (err) rej(err);
             if (!zipfile) throw new Error("Unable to read zip file.");
@@ -636,7 +648,7 @@ function readZipFile(buffer: Buffer, processEntryCallback: (zipfile: yauzl.ZipFi
 }
 
 function resolveNoteType(type: string | undefined): NoteType {
-    // BC for ZIPs created in Triliun 0.57 and older
+    // BC for ZIPs created in Trilium 0.57 and older
     if (type === "relation-map") {
         return "relationMap";
     } else if (type === "note-map") {
