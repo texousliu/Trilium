@@ -100,7 +100,7 @@ async function exportData() {
 
         // First export as zip.
         const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
-        await exportToZipFile(NOTE_ID_USER_GUIDE, "html", zipFilePath);
+        await exportToZipFile(NOTE_ID_USER_GUIDE, "markdown", zipFilePath);
 
         const promise = deferred<void>()
         setTimeout(async () => {
