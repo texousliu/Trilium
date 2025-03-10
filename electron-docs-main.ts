@@ -5,6 +5,7 @@ import type NoteMeta from "./src/services/meta/note_meta.js";
 import type { NoteMetaFile } from "./src/services/meta/note_meta.js";
 import cls from "./src/services/cls.js";
 import { initializeTranslations } from "./src/services/i18n.js";
+import archiver from "archiver";
 
 const NOTE_ID_USER_GUIDE = "_help_user_guide";
 const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
@@ -15,6 +16,7 @@ async function startElectron() {
 
 async function main() {
     await initializeTranslations();
+    await createImportZip();
     await initializeDatabase();
     cls.init(() => {
         importData();
@@ -48,6 +50,35 @@ async function importData() {
         content: "The sub-children of this note are automatically synced.",
         type: "text"
     });
+}
+
+async function createImportZip() {
+    const archive = archiver("zip", {
+        zlib: { level: 0 }
+    });
+
+    async function iterate(currentPath: string) {
+        console.log("Found ", currentPath);
+        for (const entry of await fs.readdir(currentPath, { withFileTypes: true })) {
+            const entryPath = path.join(currentPath, entry.name);
+
+            if (entry.isDirectory()) {
+                await iterate(entryPath);
+                continue;
+            }
+
+            const source = fsExtra.createReadStream(entryPath);
+            archive.append(source, {
+                name: entryPath
+            });
+        }
+    }
+
+    await iterate(destRootPath);
+
+    const outputStream = fsExtra.createWriteStream("input.zip");
+    archive.pipe(outputStream);
+    await archive.finalize();
 }
 
 async function exportData() {
