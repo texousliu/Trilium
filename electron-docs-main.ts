@@ -6,7 +6,7 @@ import type { NoteMetaFile } from "./src/services/meta/note_meta.js";
 import cls from "./src/services/cls.js";
 import { initializeTranslations } from "./src/services/i18n.js";
 
-const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
+const NOTE_ID_USER_GUIDE = "_help_user_guide";
 const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
 async function startElectron() {
@@ -16,6 +16,9 @@ async function startElectron() {
 async function main() {
     await initializeTranslations();
     await initializeDatabase();
+    cls.init(() => {
+        importData();
+    });
 
     await startElectron();
     // await exportData();
@@ -28,6 +31,22 @@ async function initializeDatabase() {
         if (!sqlInit.isDbInitialized()) {
             sqlInit.createInitialDatabase();
         }
+    });
+}
+
+async function importData() {
+    const beccaLoader = ((await import("./src/becca/becca_loader.js")).default);
+    const notes = ((await import("./src/services/notes.js")).default);
+    beccaLoader.load();
+
+    const becca = ((await import("./src/becca/becca.js")).default);
+
+    notes.createNewNoteWithTarget("into", "none_root", {
+        parentNoteId: "root",
+        noteId: NOTE_ID_USER_GUIDE,
+        title: "User Guide",
+        content: "The sub-children of this note are automatically synced.",
+        type: "text"
     });
 }
 
