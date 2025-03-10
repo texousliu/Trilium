@@ -26,7 +26,11 @@ interface MetaFile {
     files: NoteMeta[];
 }
 
-async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRootNote: BNote): Promise<BNote> {
+interface ImportZipOpts {
+    preserveIds?: boolean;
+}
+
+async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRootNote: BNote, opts?: ImportZipOpts): Promise<BNote> {
     /** maps from original noteId (in ZIP file) to newly generated noteId */
     const noteIdMap: Record<string, string> = {};
     /** type maps from original attachmentId (in ZIP file) to newly generated attachmentId */
@@ -45,7 +49,7 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
             return "empty_note_id";
         }
 
-        if (origNoteId === "root" || origNoteId.startsWith("_")) {
+        if (origNoteId === "root" || origNoteId.startsWith("_") || opts?.preserveIds) {
             // these "named" noteIds don't differ between Trilium instances
             return origNoteId;
         }
@@ -489,6 +493,10 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
                     prefix: noteMeta?.prefix,
                     notePosition: noteMeta?.notePosition
                 }).save();
+            }
+
+            if (opts?.preserveIds) {
+                firstNote = firstNote || note;
             }
         } else {
             ({ note } = noteService.createNewNote({

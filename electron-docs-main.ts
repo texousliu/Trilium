@@ -42,8 +42,6 @@ async function importData(input: Buffer) {
     const notes = ((await import("./src/services/notes.js")).default);
     beccaLoader.load();
 
-    const becca = ((await import("./src/becca/becca.js")).default);
-
     const { note } = notes.createNewNoteWithTarget("into", "none_root", {
         parentNoteId: "root",
         noteId: NOTE_ID_USER_GUIDE,
@@ -55,7 +53,7 @@ async function importData(input: Buffer) {
     const TaskContext = (await import("./src/services/task_context.js")).default;
     const { importZip } = ((await import("./src/services/import/zip.js")).default);
     const context = new TaskContext("no-report");
-    await importZip(context, input, note);
+    await importZip(context, input, note, { preserveIds: true });
 }
 
 async function createImportZip() {
