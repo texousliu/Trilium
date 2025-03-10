@@ -102,6 +102,107 @@ export class ContextExtractor {
                 // Format code notes with code blocks
                 formattedContent += '```\n' + content + '\n```';
                 break;
+            case 'canvas':
+            case 'mindMap':
+            case 'relationMap':
+            case 'geoMap':
+                if (mime === 'application/json') {
+                    try {
+                        // Parse JSON content
+                        const jsonContent = JSON.parse(content);
+
+                        if (type === 'canvas') {
+                            // Extract text elements from canvas
+                            if (jsonContent.elements && Array.isArray(jsonContent.elements)) {
+                                const texts = jsonContent.elements
+                                    .filter((element: any) => element.type === 'text' && element.text)
+                                    .map((element: any) => element.text);
+
+                                formattedContent += 'Canvas content:\n' + texts.join('\n');
+                                break;
+                            }
+                        }
+                        else if (type === 'mindMap') {
+                            // Extract node text from mind map
+                            const extractMindMapNodes = (node: any): string[] => {
+                                let texts: string[] = [];
+                                if (node.text) {
+                                    texts.push(node.text);
+                                }
+                                if (node.children && Array.isArray(node.children)) {
+                                    for (const child of node.children) {
+                                        texts = texts.concat(extractMindMapNodes(child));
+                                    }
+                                }
+                                return texts;
+                            };
+
+                            if (jsonContent.root) {
+                                formattedContent += 'Mind map content:\n' + extractMindMapNodes(jsonContent.root).join('\n');
+                                break;
+                            }
+                        }
+                        else if (type === 'relationMap') {
+                            // Extract relation map entities and connections
+                            let result = 'Relation map content:\n';
+
+                            if (jsonContent.notes && Array.isArray(jsonContent.notes)) {
+                                result += 'Notes: ' + jsonContent.notes
+                                    .map((note: any) => note.title || note.name)
+                                    .filter(Boolean)
+                                    .join(', ') + '\n';
+                            }
+
+                            if (jsonContent.relations && Array.isArray(jsonContent.relations)) {
+                                result += 'Relations: ' + jsonContent.relations
+                                    .map((rel: any) => {
+                                        const sourceNote = jsonContent.notes.find((n: any) => n.noteId === rel.sourceNoteId);
+                                        const targetNote = jsonContent.notes.find((n: any) => n.noteId === rel.targetNoteId);
+                                        const source = sourceNote ? (sourceNote.title || sourceNote.name) : 'unknown';
+                                        const target = targetNote ? (targetNote.title || targetNote.name) : 'unknown';
+                                        return `${source} → ${rel.name || ''} → ${target}`;
+                                    })
+                                    .join('; ');
+                            }
+
+                            formattedContent += result;
+                            break;
+                        }
+                        else if (type === 'geoMap') {
+                            let result = 'Geographic map content:\n';
+
+                            if (jsonContent.markers && Array.isArray(jsonContent.markers)) {
+                                result += jsonContent.markers
+                                    .map((marker: any) => {
+                                        return `Location: ${marker.title || ''} (${marker.lat}, ${marker.lng})${marker.description ? ' - ' + marker.description : ''}`;
+                                    })
+                                    .join('\n');
+                            }
+
+                            formattedContent += result || 'Empty geographic map';
+                            break;
+                        }
+                    }
+                    catch (e: any) {
+                        formattedContent += `[Error parsing ${type} content: ${e.message}]`;
+                        break;
+                    }
+                }
+
+                // If JSON parsing or specific handling failed, use default handling
+                formattedContent += `[${type} content]`;
+                break;
+
+            case 'mermaid':
+                // Format mermaid diagrams as code blocks
+                formattedContent += '```mermaid\n' + content + '\n```';
+                break;
+
+            case 'image':
+            case 'file':
+                formattedContent += `[${type} attachment]`;
+                break;
+
             default:
                 // For other notes, just use the content as is
                 formattedContent += this.sanitizeHtml(content);
@@ -114,7 +215,10 @@ export class ContextExtractor {
      * Sanitize HTML content to plain text
      */
     private sanitizeHtml(html: string): string {
-        return sanitizeHtml(html, {
+        if (!html) return '';
+
+        // Use sanitizeHtml to remove all HTML tags
+        let content = sanitizeHtml(html, {
             allowedTags: [],
             allowedAttributes: {},
             textFilter: (text) => {
@@ -122,6 +226,17 @@ export class ContextExtractor {
                 return text.replace(/\n\s*\n/g, '\n\n');
             }
         });
+
+        // Additional cleanup for any remaining HTML entities
+        content = content
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+
+        return content;
     }
 
     /**

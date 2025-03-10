@@ -5,6 +5,7 @@ import options from "../options.js";
 import log from "../log.js";
 import type { Message } from "./ai_interface.js";
 import { cosineSimilarity } from "./embeddings/vector_store.js";
+import sanitizeHtml from "sanitize-html";
 
 /**
  * TriliumContextService provides intelligent context management for working with large knowledge bases
@@ -351,15 +352,16 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             context += `--- NOTE ${index + 1}: ${source.title} ---\n`;
 
             if (source.content) {
+                // Clean up HTML content before adding it to the context
+                let cleanContent = this.sanitizeNoteContent(source.content, source.type, source.mime);
+
                 // Truncate content if it's too long
                 const maxContentLength = 1000;
-                let content = source.content;
-
-                if (content.length > maxContentLength) {
-                    content = content.substring(0, maxContentLength) + " [content truncated due to length]";
+                if (cleanContent.length > maxContentLength) {
+                    cleanContent = cleanContent.substring(0, maxContentLength) + " [content truncated due to length]";
                 }
 
-                context += `${content}\n`;
+                context += `${cleanContent}\n`;
             } else {
                 context += "[This note doesn't contain textual content]\n";
             }
@@ -371,6 +373,45 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
         context += "Please use the information above to help answer the query. If the information doesn't contain what you need, just say so and use your general knowledge instead.";
 
         return context;
+    }
+
+    /**
+     * Sanitize note content for use in context, removing HTML tags
+     */
+    private sanitizeNoteContent(content: string, type?: string, mime?: string): string {
+        if (!content) return '';
+
+        // If it's likely HTML content
+        if (
+            (type === 'text' && mime === 'text/html') ||
+            content.includes('<div') ||
+            content.includes('<p>') ||
+            content.includes('<span')
+        ) {
+            // Use sanitizeHtml to remove all HTML tags
+            content = sanitizeHtml(content, {
+                allowedTags: [],
+                allowedAttributes: {},
+                textFilter: (text) => {
+                    // Replace multiple newlines with a single one
+                    return text.replace(/\n\s*\n/g, '\n\n');
+                }
+            });
+
+            // Additional cleanup for remaining HTML entities
+            content = content
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&')
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'");
+        }
+
+        // Normalize whitespace
+        content = content.replace(/\s+/g, ' ').trim();
+
+        return content;
     }
 
     /**

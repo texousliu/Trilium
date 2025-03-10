@@ -8,6 +8,7 @@ import type { NoteEmbeddingContext } from "./embeddings_interface.js";
 import { getEmbeddingProviders, getEnabledEmbeddingProviders } from "./providers.js";
 import eventService from "../../events.js";
 import type BNote from "../../../becca/entities/bnote.js";
+import sanitizeHtml from "sanitize-html";
 
 // Type definition for embedding result
 interface EmbeddingResult {
@@ -183,11 +184,29 @@ export async function findSimilarNotes(
  * Clean note content by removing HTML tags and normalizing whitespace
  */
 function cleanNoteContent(content: string, type: string, mime: string): string {
+    if (!content) return '';
+
     // If it's HTML content, remove HTML tags
     if ((type === 'text' && mime === 'text/html') || content.includes('<div>') || content.includes('<p>')) {
-        // Simple tag removal - for more complex HTML parsing, consider using a proper HTML parser
-        content = content.replace(/<[^>]*>/g, ' '); // Replace tags with a space
+        // Use sanitizeHtml to remove all HTML tags
+        content = sanitizeHtml(content, {
+            allowedTags: [],
+            allowedAttributes: {},
+            textFilter: (text) => {
+                // Normalize the text, removing excessive whitespace
+                return text.replace(/\s+/g, ' ');
+            }
+        });
     }
+
+    // Additional cleanup for any remaining HTML entities
+    content = content
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
 
     // Normalize whitespace (replace multiple spaces/newlines with single space)
     content = content.replace(/\s+/g, ' ');
@@ -195,13 +214,120 @@ function cleanNoteContent(content: string, type: string, mime: string): string {
     // Trim the content
     content = content.trim();
 
-    // Truncate if extremely long (optional, adjust limit as needed)
+    // Truncate if extremely long
     const MAX_CONTENT_LENGTH = 10000;
     if (content.length > MAX_CONTENT_LENGTH) {
         content = content.substring(0, MAX_CONTENT_LENGTH) + ' [content truncated]';
     }
 
     return content;
+}
+
+/**
+ * Extract content from different note types
+ */
+function extractStructuredContent(content: string, type: string, mime: string): string {
+    try {
+        if (!content) return '';
+
+        // Special handling based on note type
+        switch (type) {
+            case 'mindMap':
+            case 'relationMap':
+            case 'canvas':
+                if (mime === 'application/json') {
+                    const jsonContent = JSON.parse(content);
+
+                    if (type === 'canvas') {
+                        // Extract text elements from canvas
+                        if (jsonContent.elements && Array.isArray(jsonContent.elements)) {
+                            const texts = jsonContent.elements
+                                .filter((element: any) => element.type === 'text' && element.text)
+                                .map((element: any) => element.text);
+                            return texts.join('\n');
+                        }
+                    }
+                    else if (type === 'mindMap') {
+                        // Extract node text from mind map
+                        const extractMindMapNodes = (node: any): string[] => {
+                            let texts: string[] = [];
+                            if (node.text) {
+                                texts.push(node.text);
+                            }
+                            if (node.children && Array.isArray(node.children)) {
+                                for (const child of node.children) {
+                                    texts = texts.concat(extractMindMapNodes(child));
+                                }
+                            }
+                            return texts;
+                        };
+
+                        if (jsonContent.root) {
+                            return extractMindMapNodes(jsonContent.root).join('\n');
+                        }
+                    }
+                    else if (type === 'relationMap') {
+                        // Extract relation map entities and connections
+                        let result = '';
+
+                        if (jsonContent.notes && Array.isArray(jsonContent.notes)) {
+                            result += 'Notes: ' + jsonContent.notes
+                                .map((note: any) => note.title || note.name)
+                                .filter(Boolean)
+                                .join(', ') + '\n';
+                        }
+
+                        if (jsonContent.relations && Array.isArray(jsonContent.relations)) {
+                            result += 'Relations: ' + jsonContent.relations
+                                .map((rel: any) => {
+                                    const sourceNote = jsonContent.notes.find((n: any) => n.noteId === rel.sourceNoteId);
+                                    const targetNote = jsonContent.notes.find((n: any) => n.noteId === rel.targetNoteId);
+                                    const source = sourceNote ? (sourceNote.title || sourceNote.name) : 'unknown';
+                                    const target = targetNote ? (targetNote.title || targetNote.name) : 'unknown';
+                                    return `${source} → ${rel.name || ''} → ${target}`;
+                                })
+                                .join('; ');
+                        }
+
+                        return result;
+                    }
+                }
+                return JSON.stringify(content);
+
+            case 'mermaid':
+                // Return mermaid diagrams as-is (they're human-readable)
+                return content;
+
+            case 'geoMap':
+                if (mime === 'application/json') {
+                    const jsonContent = JSON.parse(content);
+                    let result = '';
+
+                    if (jsonContent.markers && Array.isArray(jsonContent.markers)) {
+                        result += jsonContent.markers
+                            .map((marker: any) => {
+                                return `Location: ${marker.title || ''} (${marker.lat}, ${marker.lng})${marker.description ? ' - ' + marker.description : ''}`;
+                            })
+                            .join('\n');
+                    }
+
+                    return result || JSON.stringify(content);
+                }
+                return JSON.stringify(content);
+
+            case 'file':
+            case 'image':
+                // For files and images, just return a placeholder
+                return `[${type} attachment]`;
+
+            default:
+                return content;
+        }
+    }
+    catch (error) {
+        console.error(`Error extracting content from ${type} note:`, error);
+        return content;
+    }
 }
 
 /**
@@ -282,12 +408,23 @@ export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbed
 
     // Get content
     let content = "";
-    if (note.type === 'text') {
-        content = String(await note.getContent());
-    } else if (note.type === 'code') {
-        content = String(await note.getContent());
-    } else if (note.type === 'image' || note.type === 'file') {
-        content = `[${note.type} attachment: ${note.mime}]`;
+
+    try {
+        // Get raw content from the note
+        const rawContent = String(await note.getContent() || "");
+
+        // Process the content based on note type to extract meaningful text
+        if (note.type === 'text' || note.type === 'code') {
+            content = rawContent;
+        } else if (['canvas', 'mindMap', 'relationMap', 'mermaid', 'geoMap'].includes(note.type)) {
+            // Process structured content types
+            content = extractStructuredContent(rawContent, note.type, note.mime);
+        } else if (note.type === 'image' || note.type === 'file') {
+            content = `[${note.type} attachment: ${note.mime}]`;
+        }
+    } catch (err) {
+        console.error(`Error getting content for note ${noteId}:`, err);
+        content = `[Error extracting content]`;
     }
 
     // Clean the content to remove HTML tags and normalize whitespace
