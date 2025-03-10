@@ -313,7 +313,12 @@ export default class LlmChatPanel extends BasicWidget {
             // Add click handler for better user experience
             sourceElement.querySelector('.source-link')?.addEventListener('click', (e) => {
                 e.preventDefault();
-                appContext.tabManager.openTabWithNoteWithHoisting(source.noteId);
+                e.stopPropagation();
+
+                // Open the note in a new tab but don't switch to it
+                appContext.tabManager.openTabWithNoteWithHoisting(source.noteId, { activate: false });
+
+                return false; // Additional measure to prevent the event from bubbling up
             });
 
             this.sourcesList.appendChild(sourceElement);
