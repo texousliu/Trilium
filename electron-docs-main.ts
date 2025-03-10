@@ -58,8 +58,7 @@ async function createImportZip() {
     });
 
     async function iterate(currentPath: string) {
-        console.log("Found ", currentPath);
-        for (const entry of await fs.readdir(currentPath, { withFileTypes: true })) {
+        for (const entry of await fs.readdir(path.join(destRootPath, currentPath), { withFileTypes: true })) {
             const entryPath = path.join(currentPath, entry.name);
 
             if (entry.isDirectory()) {
@@ -67,14 +66,14 @@ async function createImportZip() {
                 continue;
             }
 
-            const source = fsExtra.createReadStream(entryPath);
+            const source = fsExtra.createReadStream(path.join(destRootPath, entryPath));
             archive.append(source, {
-                name: entryPath
+                name: path.join(currentPath, entry.name)
             });
         }
     }
 
-    await iterate(destRootPath);
+    await iterate("/");
 
     const outputStream = fsExtra.createWriteStream("input.zip");
     archive.pipe(outputStream);
