@@ -299,72 +299,21 @@ export default class LlmChatPanel extends BasicWidget {
             const sourceElement = document.createElement('div');
             sourceElement.className = 'source-item p-2 mb-1 border rounded';
 
-            // Use the proper note URL format instead of "#"
-            // This creates a direct hyperlink to the note using the application's URL schema
+            // Create the direct link to the note
             sourceElement.innerHTML = `
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
                     <a href="#root/${source.noteId}"
                        data-note-id="${source.noteId}"
                        class="source-link text-truncate"
-                       style="max-width: 85%;"
                        title="Open note: ${source.title}">
                         <i class="bx bx-file"></i> ${source.title}
                     </a>
-                    <div class="source-actions">
-                        <button type="button" class="btn btn-sm btn-outline-secondary preview-button" title="Quick Preview">
-                            <i class="bx bx-show"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="source-preview mt-2 p-2 border-top" style="display: none; font-size: 0.85rem;"></div>`;
+                </div>`;
 
-            // Keep the click handler for better UX - this ensures the note opens in the right context
+            // Add click handler for better user experience
             sourceElement.querySelector('.source-link')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 appContext.tabManager.openTabWithNoteWithHoisting(source.noteId);
-            });
-
-            // Add preview functionality
-            sourceElement.querySelector('.preview-button')?.addEventListener('click', async () => {
-                const previewElement = sourceElement.querySelector('.source-preview') as HTMLElement;
-
-                if (previewElement.style.display === 'none') {
-                    // Show preview
-                    previewElement.style.display = 'block';
-
-                    // If we don't have a preview yet, load it
-                    if (!previewElement.innerHTML.trim()) {
-                        previewElement.innerHTML = '<div class="text-center"><i class="bx bx-loader-alt bx-spin"></i> Loading preview...</div>';
-
-                        try {
-                            // Fetch note content using the correct API endpoint
-                            const result = await server.get(`etapi/notes/${source.noteId}/content`);
-
-                            // For plain text or short content, display directly
-                            let previewContent = result as string;
-
-                            // If it's HTML, extract text or simplify
-                            if (typeof result === 'string' && result.trim().startsWith('<')) {
-                                const tempDiv = document.createElement('div');
-                                tempDiv.innerHTML = result;
-                                previewContent = tempDiv.textContent || tempDiv.innerText || result;
-                            }
-
-                            // Limit preview length
-                            const maxLength = 300;
-                            if (previewContent.length > maxLength) {
-                                previewContent = previewContent.substring(0, maxLength) + '...';
-                            }
-
-                            previewElement.innerHTML = `<div class="font-italic">${previewContent}</div>`;
-                        } catch (error) {
-                            previewElement.innerHTML = '<div class="text-danger">Error loading preview</div>';
-                        }
-                    }
-                } else {
-                    // Hide preview
-                    previewElement.style.display = 'none';
-                }
             });
 
             this.sourcesList.appendChild(sourceElement);
