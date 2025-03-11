@@ -10,7 +10,7 @@ import type { WriteStream } from "fs";
 import debounce from "./src/public/app/services/debounce.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
-const destRootPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
+const destRootPath = path.join("docs", "User Guide");
 
 async function startElectron() {
     await import("./electron-main.js");
