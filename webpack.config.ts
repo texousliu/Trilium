@@ -43,6 +43,32 @@ const config: Configuration = {
                 exclude: /node_modules/
             },
             {
+                test: /\.m?js$/,
+                resolve: {
+                    fullySpecified: false
+                }
+            },
+            {
+                // bootstrap CSS related configuration
+                test: /\.(css)$/,
+                use: [
+                    {
+                        loader: miniCssExtractPlugin.loader
+                    },
+                    {
+                        loader: "css-loader"
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            postcssOptions: {
+                                plugins: [autoprefixer]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
                 // bootstrap CSS related configuration
                 test: /\.(scss)$/,
                 use: [

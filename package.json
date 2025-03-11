@@ -70,7 +70,7 @@
   "dependencies": {
     "@braintree/sanitize-url": "7.1.1",
     "@electron/remote": "2.1.2",
-    "@excalidraw/excalidraw": "0.17.6",
+    "@excalidraw/excalidraw": "0.18.0",
     "@fullcalendar/core": "6.1.15",
     "@fullcalendar/daygrid": "6.1.15",
     "@fullcalendar/interaction": "6.1.15",
