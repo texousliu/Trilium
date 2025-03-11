@@ -278,6 +278,7 @@ function transactional<T>(func: (statement: Statement) => T) {
 
         return ret;
     } catch (e) {
+        console.warn("Got error ", e);
         const entityChangeIds = cls.getAndClearEntityChangeIds();
 
         if (entityChangeIds.length > 0) {
