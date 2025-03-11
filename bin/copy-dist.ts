@@ -30,6 +30,7 @@ try {
         "./package.json",
         "./LICENSE",
         "./README.md",
+        "./forge.config.cjs",
         "./src/views/",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json",
