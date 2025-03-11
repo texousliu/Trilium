@@ -48,6 +48,8 @@ function rewriteLanguageTag(source: string) {
         case "application-javascript-env-frontend":
         case "application-javascript-env-backend":
             return "javascript";
+        case "text-x-nginx-conf":
+            return "nginx";
         default:
             return source.split("-").at(-1);
     }
