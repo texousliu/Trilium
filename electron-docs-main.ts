@@ -67,6 +67,10 @@ function importData(input: Buffer) {
 
             const { runOnDemandChecks } = (await import("./src/services/consistency_checks.js")).default;
             await runOnDemandChecks(true);
+
+            becca.reset();
+            beccaLoader.load();
+
             resolve();
         });
     });
