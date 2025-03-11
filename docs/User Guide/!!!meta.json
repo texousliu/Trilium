@@ -4610,20 +4610,6 @@
                     ]
                 },
                 {
-                    "isClone": true,
-                    "noteId": "pOsGYCXsbNQG",
-                    "notePath": [
-                        "pOsGYCXsbNQG",
-                        "pOsGYCXsbNQG"
-                    ],
-                    "title": "User Guide",
-                    "prefix": null,
-                    "dataFileName": "User Guide.clone.md",
-                    "type": "text",
-                    "format": "markdown",
-                    "isExpanded": false
-                },
-                {
                     "isClone": false,
                     "noteId": "k2Gc17NbaAwb",
                     "notePath": [

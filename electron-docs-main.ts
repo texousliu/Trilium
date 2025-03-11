@@ -75,6 +75,10 @@ async function importData(input: Buffer) {
     const { importZip } = ((await import("./src/services/import/zip.js")).default);
     const context = new TaskContext("no-report");
     await importZip(context, input, note, { preserveIds: true });
+
+    const { runOnDemandChecks } = (await import("./src/services/consistency_checks.js")).default;
+    await runOnDemandChecks(true);
+
 }
 
 async function createImportZip() {
