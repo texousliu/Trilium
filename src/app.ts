@@ -30,6 +30,10 @@ sql_init.initializeDb();
 const { initializeEmbeddings } = await import("./services/llm/embeddings/init.js");
 await initializeEmbeddings();
 
+// Initialize the index service for LLM functionality
+const { default: indexService } = await import("./services/llm/index_service.js");
+await indexService.initialize().catch(e => console.error("Failed to initialize index service:", e));
+
 // view engine setup
 app.set("views", path.join(scriptDir, "views"));
 app.set("view engine", "ejs");

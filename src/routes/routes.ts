@@ -384,6 +384,7 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/embeddings/retry/:noteId", embeddingsRoute.retryFailedNote);
     apiRoute(PST, "/api/embeddings/retry-all-failed", embeddingsRoute.retryAllFailedNotes);
 
+    // LLM chat session management endpoints
     apiRoute(PST, "/api/llm/sessions", llmRoute.createSession);
     apiRoute(GET, "/api/llm/sessions", llmRoute.listSessions);
     apiRoute(GET, "/api/llm/sessions/:sessionId", llmRoute.getSession);
@@ -391,6 +392,16 @@ function register(app: express.Application) {
     apiRoute(DEL, "/api/llm/sessions/:sessionId", llmRoute.deleteSession);
     apiRoute(PST, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
     route(GET, "/api/llm/sessions/:sessionId/messages", [auth.checkApiAuth, csrfMiddleware], llmRoute.sendMessage, apiResultHandler);
+    
+    // LLM index management endpoints
+    apiRoute(GET, "/api/llm/index/stats", llmRoute.getIndexStats);
+    apiRoute(PST, "/api/llm/index/start", llmRoute.startIndexing);
+    apiRoute(GET, "/api/llm/index/failed", llmRoute.getFailedIndexes);
+    apiRoute(PST, "/api/llm/index/retry/:noteId", llmRoute.retryFailedIndex);
+    apiRoute(PST, "/api/llm/index/retry-all", llmRoute.retryAllFailedIndexes);
+    apiRoute(PST, "/api/llm/index/similar", llmRoute.findSimilarNotes);
+    apiRoute(PST, "/api/llm/index/context", llmRoute.generateQueryContext);
+    apiRoute(PST, "/api/llm/index/notes/:noteId", llmRoute.indexNote);
 
     // Ollama API endpoints
     route(PST, "/api/ollama/list-models", [auth.checkApiAuth, csrfMiddleware], ollamaRoute.listModels, apiResultHandler);

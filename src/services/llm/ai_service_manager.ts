@@ -6,6 +6,7 @@ import { OllamaService } from './providers/ollama_service.js';
 import log from '../log.js';
 import { ContextExtractor } from './context/index.js';
 import semanticContextService from './semantic_context_service.js';
+import indexService from './index_service.js';
 
 type ServiceProviders = 'openai' | 'anthropic' | 'ollama';
 
@@ -181,6 +182,14 @@ export class AIServiceManager {
     getSemanticContextService() {
         return semanticContextService;
     }
+    
+    /**
+     * Get the index service for managing knowledge base indexing
+     * @returns The index service instance
+     */
+    getIndexService() {
+        return indexService;
+    }
 }
 
 // Don't create singleton immediately, use a lazy-loading pattern
@@ -208,12 +217,15 @@ export default {
     async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
         return getInstance().generateChatCompletion(messages, options);
     },
-    // Add our new methods
+    // Context and index related methods
     getContextExtractor() {
         return getInstance().getContextExtractor();
     },
     getSemanticContextService() {
         return getInstance().getSemanticContextService();
+    },
+    getIndexService() {
+        return getInstance().getIndexService();
     }
 };
 

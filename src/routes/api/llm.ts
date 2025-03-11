@@ -11,6 +11,8 @@ import type { Message, ChatCompletionOptions } from "../../services/llm/ai_inter
 import * as aiServiceManagerModule from "../../services/llm/ai_service_manager.js";
 import triliumContextService from "../../services/llm/trilium_context_service.js";
 import sql from "../../services/sql.js";
+// Import the index service for knowledge base management
+import indexService from "../../services/llm/index_service.js";
 
 // LLM service constants
 export const LLM_CONSTANTS = {
@@ -885,11 +887,238 @@ async function sendMessage(req: Request, res: Response) {
     }
 }
 
+/**
+ * Get statistics about the knowledge base indexing
+ */
+async function getIndexStats(req: Request, res: Response) {
+    try {
+        if (!isDatabaseInitialized()) {
+            throw new Error('Database is not initialized yet');
+        }
+
+        const stats = await indexService.getIndexingStats();
+        return stats;
+    } catch (error: any) {
+        log.error(`Error getting index stats: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to get index stats: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * Start or update knowledge base indexing
+ */
+async function startIndexing(req: Request, res: Response) {
+    try {
+        if (!isDatabaseInitialized()) {
+            throw new Error('Database is not initialized yet');
+        }
+
+        const { force, batchSize } = req.body || {};
+        
+        let result;
+        if (batchSize) {
+            // Run a limited batch indexing
+            result = await indexService.runBatchIndexing(batchSize);
+            return {
+                success: result,
+                message: result ? `Batch indexing started with size ${batchSize}` : 'Indexing already in progress'
+            };
+        } else {
+            // Start full indexing
+            result = await indexService.startFullIndexing(force);
+            return {
+                success: result,
+                message: result ? 'Full indexing started' : 'Indexing already in progress or not needed'
+            };
+        }
+    } catch (error: any) {
+        log.error(`Error starting indexing: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to start indexing: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * Get failed indexing attempts
+ */
+async function getFailedIndexes(req: Request, res: Response) {
+    try {
+        if (!isDatabaseInitialized()) {
+            throw new Error('Database is not initialized yet');
+        }
+
+        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 100;
+        const failedNotes = await indexService.getFailedIndexes(limit);
+        
+        return {
+            count: failedNotes.length,
+            failedNotes
+        };
+    } catch (error: any) {
+        log.error(`Error getting failed indexes: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to get failed indexes: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * Retry failed indexing operation
+ */
+async function retryFailedIndex(req: Request, res: Response) {
+    try {
+        if (!isDatabaseInitialized()) {
+            throw new Error('Database is not initialized yet');
+        }
+
+        const { noteId } = req.params;
+        if (!noteId) {
+            throw new Error('Note ID is required');
+        }
+
+        const success = await indexService.retryFailedNote(noteId);
+        
+        return {
+            success,
+            message: success ? `Note ${noteId} queued for retry` : `Note ${noteId} not found in failed queue`
+        };
+    } catch (error: any) {
+        log.error(`Error retrying failed index: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to retry index: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * Retry all failed indexing operations
+ */
+async function retryAllFailedIndexes(req: Request, res: Response) {
+    try {
+        if (!isDatabaseInitialized()) {
+            throw new Error('Database is not initialized yet');
+        }
+
+        const count = await indexService.retryAllFailedNotes();
+        
+        return {
+            success: true,
+            count,
+            message: `${count} notes queued for retry`
+        };
+    } catch (error: any) {
+        log.error(`Error retrying all failed indexes: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to retry indexes: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * Find similar notes based on query
+ */
+async function findSimilarNotes(req: Request, res: Response) {
+    try {
+        if (!isDatabaseInitialized()) {
+            throw new Error('Database is not initialized yet');
+        }
+
+        const { query, contextNoteId, limit } = req.body || {};
+        
+        if (!query || typeof query !== 'string' || query.trim().length === 0) {
+            throw new Error('Query is required');
+        }
+
+        const similarNotes = await indexService.findSimilarNotes(
+            query,
+            contextNoteId,
+            limit || 10
+        );
+        
+        return {
+            count: similarNotes.length,
+            similarNotes
+        };
+    } catch (error: any) {
+        log.error(`Error finding similar notes: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to find similar notes: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * Generate context for an LLM query
+ */
+async function generateQueryContext(req: Request, res: Response) {
+    try {
+        if (!isDatabaseInitialized()) {
+            throw new Error('Database is not initialized yet');
+        }
+
+        const { query, contextNoteId, depth } = req.body || {};
+        
+        if (!query || typeof query !== 'string' || query.trim().length === 0) {
+            throw new Error('Query is required');
+        }
+
+        const context = await indexService.generateQueryContext(
+            query,
+            contextNoteId,
+            depth || 2
+        );
+        
+        return {
+            context,
+            length: context.length
+        };
+    } catch (error: any) {
+        log.error(`Error generating query context: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to generate query context: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * Index a specific note
+ */
+async function indexNote(req: Request, res: Response) {
+    try {
+        if (!isDatabaseInitialized()) {
+            throw new Error('Database is not initialized yet');
+        }
+
+        const { noteId } = req.params;
+        if (!noteId) {
+            throw new Error('Note ID is required');
+        }
+
+        // Check if note exists
+        const note = becca.getNote(noteId);
+        if (!note) {
+            throw new Error(`Note ${noteId} not found`);
+        }
+
+        const success = await indexService.generateNoteIndex(noteId);
+        
+        return {
+            success,
+            noteId,
+            noteTitle: note.title,
+            message: success ? `Note "${note.title}" indexed successfully` : `Failed to index note "${note.title}"`
+        };
+    } catch (error: any) {
+        log.error(`Error indexing note: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to index note: ${error.message || 'Unknown error'}`);
+    }
+}
+
 export default {
+    // Chat session management
     createSession,
     getSession,
     updateSession,
     listSessions,
     deleteSession,
-    sendMessage
+    sendMessage,
+    
+    // Knowledge base index management
+    getIndexStats,
+    startIndexing,
+    getFailedIndexes,
+    retryFailedIndex,
+    retryAllFailedIndexes,
+    findSimilarNotes,
+    generateQueryContext,
+    indexNote
 };
