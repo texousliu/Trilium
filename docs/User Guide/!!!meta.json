@@ -4177,7 +4177,16 @@
                             ],
                             "format": "markdown",
                             "dataFileName": "Canvas.md",
-                            "attachments": []
+                            "attachments": [
+                                {
+                                    "attachmentId": "DC9fvvootwwZ",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "Canvas_image.png"
+                                }
+                            ]
                         },
                         {
                             "isClone": false,
