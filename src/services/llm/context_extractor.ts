@@ -1,5 +1,6 @@
 import sql from '../sql.js';
 import sanitizeHtml from 'sanitize-html';
+import becca from '../../becca/becca.js';
 
 /**
  * Utility class for extracting context from notes to provide to AI models
@@ -10,19 +11,27 @@ export class ContextExtractor {
      * Get the content of a note
      */
     async getNoteContent(noteId: string): Promise<string | null> {
-        const note = await sql.getRow<{content: string, type: string, mime: string, title: string}>(
-            `SELECT note_contents.content, notes.type, notes.mime, notes.title
-             FROM notes
-             JOIN note_contents ON notes.noteId = note_contents.noteId
-             WHERE notes.noteId = ?`,
-            [noteId]
-        );
+        // Use Becca API to get note data
+        const note = becca.getNote(noteId);
 
         if (!note) {
             return null;
         }
 
-        return this.formatNoteContent(note.content, note.type, note.mime, note.title);
+        try {
+            // Get content using Becca API
+            const content = String(await note.getContent() || "");
+
+            return this.formatNoteContent(
+                content,
+                note.type,
+                note.mime,
+                note.title
+            );
+        } catch (error) {
+            console.error(`Error getting content for note ${noteId}:`, error);
+            return null;
+        }
     }
 
     /**
@@ -181,13 +190,27 @@ export class ContextExtractor {
      * Get a set of parent notes to provide hierarchical context
      */
     async getParentContext(noteId: string, maxDepth = 3): Promise<string> {
+        // Note: getParentNotes has already been updated to use Becca
         const parents = await this.getParentNotes(noteId, maxDepth);
         if (!parents.length) return '';
 
         let context = 'Here is the hierarchical context for the current note:\n\n';
 
-        for (const parent of parents) {
-            context += `- ${parent.title}\n`;
+        // Create a hierarchical view of the parents using indentation
+        // to show the proper parent-child relationship
+        let indentLevel = 0;
+        for (let i = 0; i < parents.length; i++) {
+            const parent = parents[i];
+            const indent = '  '.repeat(indentLevel);
+            context += `${indent}- ${parent.title}\n`;
+            indentLevel++;
+        }
+
+        // Now add the current note with proper indentation
+        const note = becca.getNote(noteId);
+        if (note) {
+            const indent = '  '.repeat(indentLevel);
+            context += `${indent}- ${note.title} (current note)\n`;
         }
 
         return context + '\n';
@@ -197,19 +220,31 @@ export class ContextExtractor {
      * Get child notes to provide additional context
      */
     async getChildContext(noteId: string, maxChildren = 5): Promise<string> {
-        const children = await sql.getRows<{noteId: string, title: string}>(
-            `SELECT noteId, title FROM notes
-             WHERE parentNoteId = ? AND isDeleted = 0
-             LIMIT ?`,
-            [noteId, maxChildren]
-        );
+        const note = becca.getNote(noteId);
 
-        if (!children.length) return '';
+        if (!note) {
+            return '';
+        }
+
+        // Use Becca API to get child notes
+        const childNotes = note.getChildNotes();
+
+        if (!childNotes || childNotes.length === 0) {
+            return '';
+        }
 
         let context = 'The current note has these child notes:\n\n';
 
-        for (const child of children) {
+        // Limit to maxChildren
+        const childrenToShow = childNotes.slice(0, maxChildren);
+
+        for (const child of childrenToShow) {
             context += `- ${child.title}\n`;
+        }
+
+        // If there are more children than we're showing, indicate that
+        if (childNotes.length > maxChildren) {
+            context += `\n(+ ${childNotes.length - maxChildren} more child notes)\n`;
         }
 
         return context + '\n';
@@ -219,22 +254,40 @@ export class ContextExtractor {
      * Get notes linked to this note
      */
     async getLinkedNotesContext(noteId: string, maxLinks = 5): Promise<string> {
-        const linkedNotes = await sql.getRows<{title: string}>(
-            `SELECT title FROM notes
-             WHERE noteId IN (
-                SELECT value FROM attributes
-                WHERE noteId = ? AND type = 'relation'
-                LIMIT ?
-             )`,
-            [noteId, maxLinks]
-        );
+        const note = becca.getNote(noteId);
 
-        if (!linkedNotes.length) return '';
+        if (!note) {
+            return '';
+        }
+
+        // Use Becca API to get relations
+        const relations = note.getRelations();
+
+        if (!relations || relations.length === 0) {
+            return '';
+        }
+
+        // Get the target notes from relations
+        const linkedNotes = relations
+            .map(relation => relation.targetNote)
+            .filter(note => note !== null && note !== undefined);
+
+        if (linkedNotes.length === 0) {
+            return '';
+        }
 
         let context = 'This note has relationships with these notes:\n\n';
 
-        for (const linked of linkedNotes) {
+        // Limit to maxLinks
+        const notesToShow = linkedNotes.slice(0, maxLinks);
+
+        for (const linked of notesToShow) {
             context += `- ${linked.title}\n`;
+        }
+
+        // If there are more linked notes than we're showing, indicate that
+        if (linkedNotes.length > maxLinks) {
+            context += `\n(+ ${linkedNotes.length - maxLinks} more linked notes)\n`;
         }
 
         return context + '\n';
@@ -669,27 +722,41 @@ export class ContextExtractor {
      */
     private async getParentNotes(noteId: string, maxDepth: number): Promise<{noteId: string, title: string}[]> {
         const parentNotes: {noteId: string, title: string}[] = [];
-        let currentNoteId = noteId;
+        const startNote = becca.getNote(noteId);
+
+        if (!startNote) {
+            return parentNotes;
+        }
+
+        // Use non-null assertion as we checked above
+        let currentNote: any = startNote;
 
         for (let i = 0; i < maxDepth; i++) {
-            const parent = await sql.getRow<{parentNoteId: string, title: string}>(
-                `SELECT branches.parentNoteId, notes.title
-                 FROM branches
-                 JOIN notes ON branches.parentNoteId = notes.noteId
-                 WHERE branches.noteId = ? AND branches.isDeleted = 0 LIMIT 1`,
-                [currentNoteId]
-            );
+            // Get parent branches (should be just one in most cases)
+            if (!currentNote) break;
 
-            if (!parent || parent.parentNoteId === 'root') {
+            const parentBranches: any[] = currentNote.getParentBranches();
+
+            if (!parentBranches || parentBranches.length === 0) {
+                break;
+            }
+
+            // Use the first parent branch
+            const branch: any = parentBranches[0];
+            if (!branch) break;
+
+            const parentNote: any = branch.getParentNote();
+
+            if (!parentNote || parentNote.noteId === 'root') {
                 break;
             }
 
             parentNotes.unshift({
-                noteId: parent.parentNoteId,
-                title: parent.title
+                noteId: parentNote.noteId,
+                title: parentNote.title
             });
 
-            currentNoteId = parent.parentNoteId;
+            currentNote = parentNote;
         }
 
         return parentNotes;

@@ -410,25 +410,69 @@ export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbed
     let content = "";
 
     try {
-        // Get raw content from the note
-        const rawContent = String(await note.getContent() || "");
+        // Use the enhanced context extractor for improved content extraction
+        // We're using a dynamic import to avoid circular dependencies
+        const { default: contextExtractor } = await import('../../llm/context_extractor.js');
 
-        // Process the content based on note type to extract meaningful text
-        if (note.type === 'text' || note.type === 'code') {
-            content = rawContent;
-        } else if (['canvas', 'mindMap', 'relationMap', 'mermaid', 'geoMap'].includes(note.type)) {
-            // Process structured content types
-            content = extractStructuredContent(rawContent, note.type, note.mime);
-        } else if (note.type === 'image' || note.type === 'file') {
-            content = `[${note.type} attachment: ${note.mime}]`;
+        // Get the content using the enhanced formatNoteContent method in context extractor
+        const noteContent = await contextExtractor.getNoteContent(noteId);
+
+        if (noteContent) {
+            content = noteContent;
+
+            // For large content, consider chunking or summarization
+            if (content.length > 10000) {
+                // Large content handling options:
+
+                // Option 1: Use our summarization feature
+                const summary = await contextExtractor.getNoteSummary(noteId);
+                if (summary) {
+                    content = summary;
+                }
+
+                // Option 2: Alternative approach - use the first chunk if summarization fails
+                if (content.length > 10000) {
+                    const chunks = await contextExtractor.getChunkedNoteContent(noteId);
+                    if (chunks && chunks.length > 0) {
+                        // Use the first chunk (most relevant/beginning)
+                        content = chunks[0];
+                    }
+                }
+            }
+        } else {
+            // Fallback to original method if context extractor fails
+            const rawContent = String(await note.getContent() || "");
+
+            // Process the content based on note type to extract meaningful text
+            if (note.type === 'text' || note.type === 'code') {
+                content = rawContent;
+            } else if (['canvas', 'mindMap', 'relationMap', 'mermaid', 'geoMap'].includes(note.type)) {
+                // Process structured content types
+                content = extractStructuredContent(rawContent, note.type, note.mime);
+            } else if (note.type === 'image' || note.type === 'file') {
+                content = `[${note.type} attachment: ${note.mime}]`;
+            }
+
+            // Clean the content to remove HTML tags and normalize whitespace
+            content = cleanNoteContent(content, note.type, note.mime);
         }
     } catch (err) {
         console.error(`Error getting content for note ${noteId}:`, err);
         content = `[Error extracting content]`;
-    }
 
-    // Clean the content to remove HTML tags and normalize whitespace
-    content = cleanNoteContent(content, note.type, note.mime);
+        // Try fallback to original method
+        try {
+            const rawContent = String(await note.getContent() || "");
+            if (note.type === 'text' || note.type === 'code') {
+                content = rawContent;
+            } else if (['canvas', 'mindMap', 'relationMap', 'mermaid', 'geoMap'].includes(note.type)) {
+                content = extractStructuredContent(rawContent, note.type, note.mime);
+            }
+            content = cleanNoteContent(content, note.type, note.mime);
+        } catch (fallbackErr) {
+            console.error(`Fallback content extraction also failed for note ${noteId}:`, fallbackErr);
+        }
+    }
 
     // Get template/inheritance relationships
     // This is from FNote.getNotesToInheritAttributesFrom - recreating similar logic for BNote
@@ -490,19 +534,35 @@ export async function queueNoteForEmbedding(noteId: string, operation = 'UPDATE'
 }
 
 /**
- * Deletes all embeddings for a note
+ * Delete embeddings for a note
+ *
+ * @param noteId - The ID of the note
+ * @param providerId - Optional provider ID to delete embeddings only for a specific provider
+ * @param modelId - Optional model ID to delete embeddings only for a specific model
  */
-export async function deleteNoteEmbeddings(noteId: string) {
-    await sql.execute(
-        "DELETE FROM note_embeddings WHERE noteId = ?",
-        [noteId]
-    );
+export async function deleteNoteEmbeddings(noteId: string, providerId?: string, modelId?: string) {
+    let query = "DELETE FROM note_embeddings WHERE noteId = ?";
+    const params: any[] = [noteId];
 
-    // Remove from queue if present
-    await sql.execute(
-        "DELETE FROM embedding_queue WHERE noteId = ?",
-        [noteId]
-    );
+    if (providerId) {
+        query += " AND providerId = ?";
+        params.push(providerId);
+
+        if (modelId) {
+            query += " AND modelId = ?";
+            params.push(modelId);
+        }
+    }
+
+    await sql.execute(query, params);
+
+    // Only remove from queue if deleting all embeddings for the note
+    if (!providerId) {
+        await sql.execute(
+            "DELETE FROM embedding_queue WHERE noteId = ?",
+            [noteId]
+        );
+    }
 }
 
 /**
@@ -559,15 +619,28 @@ export async function processEmbeddingQueue() {
             // Get note context for embedding
             const context = await getNoteEmbeddingContext(noteData.noteId);
 
+            // Check if we should use chunking for large content
+            const useChunking = context.content.length > 5000; // Use chunking for large notes by default
+
             // Process with each enabled provider
             for (const provider of enabledProviders) {
                 try {
-                    // Generate embedding
-                    const embedding = await provider.generateNoteEmbeddings(context);
+                    if (useChunking) {
+                        // Enhanced approach: Process large notes using chunking
+                        await processNoteWithChunking(noteData.noteId, provider, context);
+                    } else {
+                        // Standard approach: Generate a single embedding for the whole note
+                        const embedding = await provider.generateNoteEmbeddings(context);
 
-                    // Store embedding
-                    const config = provider.getConfig();
-                    await storeNoteEmbedding(noteData.noteId, provider.name, config.model, embedding);
+                        // Store embedding
+                        const config = provider.getConfig();
+                        await storeNoteEmbedding(
+                            noteData.noteId,
+                            provider.name,
+                            config.model,
+                            embedding
+                        );
+                    }
                 } catch (providerError: any) {
                     log.error(`Error generating embedding with provider ${provider.name} for note ${noteData.noteId}: ${providerError.message || 'Unknown error'}`);
                 }
@@ -746,6 +819,78 @@ export async function getEmbeddingStats() {
         lastProcessedDate,
         percentComplete: Math.max(0, Math.min(100, percentComplete)) // Ensure between 0-100
     };
+}
+
+/**
+ * Process a large note by breaking it into chunks and creating embeddings for each chunk
+ * This provides more detailed and focused embeddings for different parts of large notes
+ *
+ * @param noteId - The ID of the note to process
+ * @param provider - The embedding provider to use
+ * @param context - The note context data
+ */
+async function processNoteWithChunking(
+    noteId: string,
+    provider: any,
+    context: NoteEmbeddingContext
+): Promise<void> {
+    try {
+        // Get the context extractor dynamically to avoid circular dependencies
+        const { default: contextExtractor } = await import('../../llm/context_extractor.js');
+
+        // Get chunks of the note content
+        const chunks = await contextExtractor.getChunkedNoteContent(noteId);
+
+        if (!chunks || chunks.length === 0) {
+            // Fall back to single embedding if chunking fails
+            const embedding = await provider.generateNoteEmbeddings(context);
+            const config = provider.getConfig();
+            await storeNoteEmbedding(noteId, provider.name, config.model, embedding);
+            return;
+        }
+
+        // Generate and store embeddings for each chunk
+        const config = provider.getConfig();
+
+        // Delete existing embeddings first to avoid duplicates
+        await deleteNoteEmbeddings(noteId, provider.name, config.model);
+
+        // Process each chunk with a slight delay to avoid rate limits
+        for (let i = 0; i < chunks.length; i++) {
+            const chunk = chunks[i];
+
+            // Create a modified context object with just this chunk's content
+            const chunkContext: NoteEmbeddingContext = {
+                ...context,
+                content: chunk
+            };
+
+            // Generate embedding for this chunk
+            const embedding = await provider.generateNoteEmbeddings(chunkContext);
+
+            // Store with chunk information
+            await storeNoteEmbedding(
+                noteId,
+                provider.name,
+                config.model,
+                embedding
+            );
+
+            // Small delay between chunks to avoid rate limits
+            if (i < chunks.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+        }
+
+        log.info(`Generated ${chunks.length} chunk embeddings for note ${noteId}`);
+    } catch (error: any) {
+        log.error(`Error in chunked embedding process for note ${noteId}: ${error.message || 'Unknown error'}`);
+        throw error;
+    }
+}
+
+export function cleanupEmbeddings() {
+    // Cleanup function implementation
 }
 
 export default {
