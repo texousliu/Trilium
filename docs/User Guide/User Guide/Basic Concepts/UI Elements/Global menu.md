@@ -6,4 +6,4 @@ The position of the global menu differs based on which layout is selected in set
 
 |     |     |
 | --- | --- |
-| ![](1_Global%20menu_image.png)<br><br>The global menu in the vertical layout. | ![](Global%20menu_image.png)<br><br>The global menu in the horizontal layout. |
+| ![](Global%20menu_image.png)  <br>  <br>The global menu in the vertical layout. | ![](1_Global%20menu_image.png)  <br>  <br>The global menu in the horizontal layout. |

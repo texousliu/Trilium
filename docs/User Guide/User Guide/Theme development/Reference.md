@@ -63,7 +63,7 @@ It is possible to add particular styles that only apply to a given platform by u
 
 | Windows | macOS |
 | --- | --- |
-| ```<br>body.platform-win32 {<br>	background: red;<br>}<br>``` | ```<br>body.platform-darwin {<br>	background: red;<br>}<br>``` |
+| `<br>body.platform-win32 {<br> background: red;<br>}<br>` | `<br>body.platform-darwin {<br> background: red;<br>}<br>` |
 
 It is also possible to only apply a style if running under Electron (desktop application):
 

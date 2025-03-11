@@ -16,12 +16,12 @@ There are three types of lists supported by text notes:
 It possible to add content-level blocks such as headings, code blocks, tables within lists, as follows:
 
 |     |     |
-| --- | --- | 
-| ![](5_Lists_image.png) | First, create a list. |
-| ![](Lists_image.png) | Press Enter to create a new list item. |
-| ![](1_Lists_image.png) | Press Backspace to get rid of the bullet point. Notice the cursor position. |
-| ![](2_Lists_image.png) | At this point, insert any desired block-level item such as a code block. |
-| ![](3_Lists_image.png) | To continue with a new bullet point, press Enter until the cursor moves to a new blank position. |
-| ![](4_Lists_image.png) | Press Enter once more to create the new bullet. |
+| --- | --- |
+| ![](4_Lists_image.png) | First, create a list. |
+| ![](5_Lists_image.png) | Press Enter to create a new list item. |
+| ![](Lists_image.png) | Press Backspace to get rid of the bullet point. Notice the cursor position. |
+| ![](1_Lists_image.png) | At this point, insert any desired block-level item such as a code block. |
+| ![](2_Lists_image.png) | To continue with a new bullet point, press Enter until the cursor moves to a new blank position. |
+| ![](3_Lists_image.png) | Press Enter once more to create the new bullet. |
 
 The same principle applies to all three list types (bullet, numbered and to-do).

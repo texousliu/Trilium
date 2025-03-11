@@ -9,13 +9,13 @@ There are two types of note map:
 
 Shows [relations](Attributes.md) between notes:
 
-![](Note%20Map_image.png)
+![](1_Note%20Map_image.png)
 
 ## Tree Map
 
 Shows hierarchical map of notes:
 
-![](1_Note%20Map_image.png)
+![](Note%20Map_image.png)
 
 ## See also
 

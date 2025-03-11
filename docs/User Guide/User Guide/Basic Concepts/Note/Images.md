@@ -7,11 +7,11 @@ An image can be uploaded in the form of note's [attachment](Attachments.md) or a
 
 To add an image to the note, simply drag it from file explorer onto the note editor inside Trilium and the image will be uploaded.
 
-![](Images_image.png)
+![](1_Images_image.png)
 
 Alternatively you can click on block toolbar and then on "Insert image":
 
-![](1_Images_image.png)
+![](Images_image.png)
 
 You can also copy and paste an image from web - the image will be (asynchronously) downloaded and embedded.
 

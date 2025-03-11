@@ -17,7 +17,7 @@ port=8080
 
 You can override these values using environment variables:
 
-```sh
+```bash
 TRILIUM_NETWORK_HOST=0.0.0.0
 TRILIUM_NETWORK_PORT=9000
 ```

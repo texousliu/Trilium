@@ -28,13 +28,13 @@ To do so:
 5.  Press "Write Changes" in the main toolbar.
 6.  Close the application or close the database.
 
-![](6_Manually%20altering%20the%20data.png)
+![](5_Manually%20altering%20the%20data.png)
 
 ### Using the SQLite CLI
 
 First, start the SQLite 3 CLI by specifying the path to the database:
 
-```sh
+```
 sqlite3 ~/.local/share/trilium-data/document.db
 ```
 
