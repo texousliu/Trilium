@@ -76,7 +76,7 @@ import etapiBackupRoute from "../etapi/backup.js";
 
 import apiDocsRoute from "./api_docs.js";
 
-const MAX_ALLOWED_FILE_SIZE_MB = 100000;
+const MAX_ALLOWED_FILE_SIZE_MB = 250;
 const GET = "get",
     PST = "post",
     PUT = "put",
