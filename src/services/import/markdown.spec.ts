@@ -3,6 +3,35 @@ import { trimIndentation } from "../../../spec/support/utils.js";
 import markdownService from "./markdown.js";
 
 describe("markdown", () => {
+    it("rewrites language of known language tags", () => {
+        const conversionTable = {
+            "nginx": "language-text-x-nginx-conf",
+            "diff": "language-text-x-diff",
+            "javascript": "language-application-javascript-env-backend",
+            "css": "language-text-css"
+        };
+
+        for (const [ input, output ] of Object.entries(conversionTable)) {
+            const result = markdownService.renderToHtml(trimIndentation`\
+                \`\`\`${input}
+                Hi
+                \`\`\`
+            `, "title");
+            expect(result).toBe(trimIndentation`\
+                <pre><code class="${output}">Hi</code></pre>`);
+        }
+    });
+
+    it("rewrites language of unknown language tags", () => {
+        const result = markdownService.renderToHtml(trimIndentation`\
+            \`\`\`unknownlanguage
+            Hi
+            \`\`\`
+        `, "title");
+        expect(result).toBe(trimIndentation`\
+            <pre><code class="language-text-x-trilium-auto">Hi</code></pre>`);
+    });
+
     it("converts h1 heading", () => {
         const result = markdownService.renderToHtml(trimIndentation`\
             # Hello
@@ -18,28 +47,6 @@ describe("markdown", () => {
         `);
     });
 
-    it("rewrites language of known language tags", () => {
-        const result = markdownService.renderToHtml(trimIndentation`\
-            \`\`\`javascript
-            Hi
-            \`\`\`
-            \`\`\`css
-            there
-            \`\`\`
-        `, "title");
-        expect(result).toBe(trimIndentation`\
-            <pre><code class="language-application-javascript-env-backend">Hi</code></pre><pre><code class="language-text-css">there</code></pre>`);
-    });
-
-    it("rewrites language of unknown language tags", () => {
-        const result = markdownService.renderToHtml(trimIndentation`\
-            \`\`\`unknownlanguage
-            Hi
-            \`\`\`
-        `, "title");
-        expect(result).toBe(trimIndentation`\
-            <pre><code class="language-text-x-trilium-auto">Hi</code></pre>`);
-    });
 
     it("parses duplicate title with escape correctly", () => {
         const result = markdownService.renderToHtml(trimIndentation`\

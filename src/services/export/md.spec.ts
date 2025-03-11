@@ -7,22 +7,22 @@ describe("Markdown export", () => {
     it("exports correct language tag for known languages", () => {
         const conversionTable = {
             "language-text-x-nginx-conf": "nginx",
-            "language-x-diff": "diff",
+            "language-text-x-diff": "diff",
             "language-application-javascript-env-frontend": "javascript",
             "language-application-javascript-env-backend": "javascript"
         };
 
-        for (const [ a, b ] of Object.entries(conversionTable)) {
+        for (const [ input, output ] of Object.entries(conversionTable)) {
             const html = trimIndentation`\
                 <p>A diff:</p>
-                <pre><code class="${a}">Hello
+                <pre><code class="${input}">Hello
                 -world
                 +worldy
                 </code></pre>`;
             const expected = trimIndentation`\
                 A diff:
 
-                \`\`\`${b}
+                \`\`\`${output}
                 Hello
                 -world
                 +worldy
