@@ -9,7 +9,7 @@
                 "pOsGYCXsbNQG"
             ],
             "title": "User Guide",
-            "notePosition": 100,
+            "notePosition": 80,
             "prefix": null,
             "isExpanded": false,
             "type": "text",
@@ -2009,21 +2009,21 @@
                                     "name": "internalLink",
                                     "value": "IakOLONlIfGI",
                                     "isInheritable": false,
-                                    "position": 80
+                                    "position": 70
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
                                     "value": "ODY7qQn5m2FT",
                                     "isInheritable": false,
-                                    "position": 90
+                                    "position": 80
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
                                     "value": "CoFPLs3dRlXc",
                                     "isInheritable": false,
-                                    "position": 100
+                                    "position": 90
                                 },
                                 {
                                     "type": "label",
