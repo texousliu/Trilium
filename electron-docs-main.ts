@@ -78,17 +78,22 @@ function importData(input: Buffer) {
 }
 
 async function createImportZip() {
+    const inputFile = "input.zip";
     const archive = archiver("zip", {
         zlib: { level: 0 }
     });
 
     archive.directory(destRootPath, "/");
 
-    const outputStream = fsExtra.createWriteStream("input.zip");
+    const outputStream = fsExtra.createWriteStream(inputFile);
     archive.pipe(outputStream);
     await waitForEnd(archive, outputStream);
 
-    return await fsExtra.readFile("input.zip");
+    try {
+        return await fsExtra.readFile(inputFile);
+    } finally {
+        await fsExtra.rm(inputFile);
+    }
 }
 
 function waitForEnd(archive: Archiver, stream: WriteStream) {
