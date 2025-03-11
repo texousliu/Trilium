@@ -435,7 +435,16 @@
                             ],
                             "format": "markdown",
                             "dataFileName": "Relation Map.md",
-                            "attachments": []
+                            "attachments": [
+                                {
+                                    "attachmentId": "x92CIQzusTuc",
+                                    "title": "relation-map-dev-process-demo.gif",
+                                    "role": "image",
+                                    "mime": "image/gif",
+                                    "position": 10,
+                                    "dataFileName": "Relation Map_relation-map-.gif"
+                                }
+                            ]
                         },
                         {
                             "isClone": false,
@@ -6145,58 +6154,6 @@
                                     "mime": "image/jpg",
                                     "position": 10,
                                     "dataFileName": "Error logs_image.png"
-                                },
-                                {
-                                    "attachmentId": "w2hNrUKhJXot",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/jpg",
-                                    "position": 10,
-                                    "dataFileName": "1_Error logs_image.png"
-                                }
-                            ]
-                        },
-                        {
-                            "isClone": false,
-                            "noteId": "AFHqgh9XkIMO",
-                            "notePath": [
-                                "pOsGYCXsbNQG",
-                                "BgmBlOIl72jZ",
-                                "AFHqgh9XkIMO"
-                            ],
-                            "title": "\"TriliumNext Notes\" Not Opened",
-                            "notePosition": 40,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [],
-                            "format": "markdown",
-                            "dataFileName": "TriliumNext Notes Not Opened.md",
-                            "attachments": [
-                                {
-                                    "attachmentId": "QuuFBSQMTz05",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "TriliumNext Notes Not Open.png"
-                                },
-                                {
-                                    "attachmentId": "sC4ORfLsTFhF",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "1_TriliumNext Notes Not Open.png"
-                                },
-                                {
-                                    "attachmentId": "sSEXTY7mQ3Cx",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "2_TriliumNext Notes Not Open.png"
                                 }
                             ]
                         },
