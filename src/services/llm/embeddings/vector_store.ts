@@ -412,7 +412,8 @@ export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbed
     try {
         // Use the enhanced context extractor for improved content extraction
         // We're using a dynamic import to avoid circular dependencies
-        const { default: contextExtractor } = await import('../../llm/context_extractor.js');
+        const { ContextExtractor } = await import('../../llm/context/index.js');
+        const contextExtractor = new ContextExtractor();
 
         // Get the content using the enhanced formatNoteContent method in context extractor
         const noteContent = await contextExtractor.getNoteContent(noteId);
@@ -836,7 +837,8 @@ async function processNoteWithChunking(
 ): Promise<void> {
     try {
         // Get the context extractor dynamically to avoid circular dependencies
-        const { default: contextExtractor } = await import('../../llm/context_extractor.js');
+        const { ContextExtractor } = await import('../../llm/context/index.js');
+        const contextExtractor = new ContextExtractor();
 
         // Get chunks of the note content
         const chunks = await contextExtractor.getChunkedNoteContent(noteId);

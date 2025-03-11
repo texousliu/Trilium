@@ -1,7 +1,10 @@
 import type { Message, ChatCompletionOptions } from './ai_interface.js';
 import aiServiceManager from './ai_service_manager.js';
 import chatStorageService from './chat_storage_service.js';
-import contextExtractor from './context_extractor.js';
+import { ContextExtractor } from './context/index.js';
+
+// Create an instance of ContextExtractor for backward compatibility
+const contextExtractor = new ContextExtractor();
 
 export interface ChatSession {
     id: string;

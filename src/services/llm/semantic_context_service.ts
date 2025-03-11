@@ -1,4 +1,4 @@
-import contextExtractor from './context_extractor.js';
+import { ContextExtractor } from './context/index.js';
 import * as vectorStore from './embeddings/vector_store.js';
 import sql from '../sql.js';
 import { cosineSimilarity } from './embeddings/vector_store.js';
@@ -58,6 +58,9 @@ import options from '../options.js';
  * knowledge bases when working with limited-context LLMs.
  */
 class SemanticContextService {
+    // Create an instance of ContextExtractor for backward compatibility
+    private contextExtractor = new ContextExtractor();
+
     /**
      * Get the preferred embedding provider based on user settings
      * Tries to use the most appropriate provider in this order:
@@ -156,7 +159,7 @@ class SemanticContextService {
 
             if (!noteEmbedding) {
                 // If note doesn't have an embedding yet, get content and generate one
-                const content = await contextExtractor.getNoteContent(note.noteId);
+                const content = await this.contextExtractor.getNoteContent(note.noteId);
                 if (content && provider) {
                     try {
                         noteEmbedding = await provider.generateEmbeddings(content);
@@ -225,7 +228,7 @@ class SemanticContextService {
         const mostRelevantNotes = rankedNotes.slice(0, maxResults);
         const relevantContent = await Promise.all(
             mostRelevantNotes.map(async note => {
-                const content = await contextExtractor.getNoteContent(note.noteId);
+                const content = await this.contextExtractor.getNoteContent(note.noteId);
                 if (!content) return null;
 
                 // Format with relevance score and title
@@ -253,22 +256,22 @@ class SemanticContextService {
      */
     async getProgressiveContext(noteId: string, depth = 1): Promise<string> {
         // Start with the note content
-        const noteContent = await contextExtractor.getNoteContent(noteId);
+        const noteContent = await this.contextExtractor.getNoteContent(noteId);
         if (!noteContent) return 'Note not found';
 
         // If depth is 1, just return the note content
         if (depth <= 1) return noteContent;
 
         // Add parent context for depth >= 2
-        const parentContext = await contextExtractor.getParentContext(noteId);
+        const parentContext = await this.contextExtractor.getParentContext(noteId);
         if (depth <= 2) return `${parentContext}\n\n${noteContent}`;
 
         // Add child context for depth >= 3
-        const childContext = await contextExtractor.getChildContext(noteId);
+        const childContext = await this.contextExtractor.getChildContext(noteId);
         if (depth <= 3) return `${parentContext}\n\n${noteContent}\n\n${childContext}`;
 
         // Add linked notes for depth >= 4
-        const linkedContext = await contextExtractor.getLinkedNotesContext(noteId);
+        const linkedContext = await this.contextExtractor.getLinkedNotesContext(noteId);
         return `${parentContext}\n\n${noteContent}\n\n${childContext}\n\n${linkedContext}`;
     }
 

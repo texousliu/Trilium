@@ -4,7 +4,7 @@ import { OpenAIService } from './providers/openai_service.js';
 import { AnthropicService } from './providers/anthropic_service.js';
 import { OllamaService } from './providers/ollama_service.js';
 import log from '../log.js';
-import contextExtractor from './context_extractor.js';
+import { ContextExtractor } from './context/index.js';
 import semanticContextService from './semantic_context_service.js';
 
 type ServiceProviders = 'openai' | 'anthropic' | 'ollama';
@@ -216,3 +216,6 @@ export default {
         return getInstance().getSemanticContextService();
     }
 };
+
+// Create an instance of ContextExtractor for backward compatibility
+const contextExtractor = new ContextExtractor();
