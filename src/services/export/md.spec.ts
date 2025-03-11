@@ -98,4 +98,10 @@ describe("Markdown export", () => {
             ###### Heading 6`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
+
+    it("rewrites image URL with spaces", () => {
+        const html = `<img src="Hello world  .png"/>`;
+        const expected = `![](Hello%20world%20%20.png)`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
 });
