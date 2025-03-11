@@ -4,7 +4,7 @@
   "description": "Build your personal knowledge base with TriliumNext Notes",
   "version": "0.92.3-beta",
   "license": "AGPL-3.0-only",
-  "main": "./dist/electron-main.js",
+  "main": "./build/electron-main.js",
   "author": {
     "name": "TriliumNext Notes Team",
     "email": "contact@eliandoran.me",
