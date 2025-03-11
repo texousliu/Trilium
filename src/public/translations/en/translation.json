@@ -1161,6 +1161,7 @@
     "enable_auto_update_embeddings_description": "Automatically update embeddings when notes are modified",
     "auto_update_embeddings": "Auto-update Embeddings",
     "auto_update_embeddings_desc": "Automatically update embeddings when notes are modified",
+    "no_failed_embeddings": "No failed embeddings",
     "enable_automatic_indexing": "Automatic Indexing",
     "enable_automatic_indexing_description": "Periodically run indexing jobs in the background to maintain the knowledge base",
     "similarity_threshold": "Similarity Threshold",
@@ -1178,6 +1179,12 @@
     "reprocessing_embeddings": "Reprocessing...",
     "reprocess_started": "Embedding reprocessing started in the background",
     "reprocess_error": "Error starting embedding reprocessing",
+
+    "reprocess_index": "Rebuild Search Index",
+    "reprocess_index_description": "Rebuild the semantic search index structure for better query performance. This doesn't regenerate embeddings.",
+    "reprocessing_index": "Rebuilding...",
+    "reprocess_index_started": "Index rebuilding started in the background",
+    "reprocess_index_error": "Error rebuilding search index",
 
     "embedding_statistics": "Embedding Statistics",
     "total_notes": "Total Notes",

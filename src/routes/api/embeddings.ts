@@ -1,6 +1,7 @@
 import options from "../../services/options.js";
 import vectorStore from "../../services/llm/embeddings/vector_store.js";
 import providerManager from "../../services/llm/embeddings/providers.js";
+import indexService from "../../services/llm/index_service.js";
 import becca from "../../becca/becca.js";
 import type { Request, Response } from "express";
 import log from "../../services/log.js";
@@ -257,6 +258,27 @@ async function retryAllFailedNotes(req: Request, res: Response) {
     };
 }
 
+/**
+ * Manually trigger a rebuild of the search index
+ */
+async function rebuildIndex(req: Request, res: Response) {
+    // Start the index rebuilding operation in the background
+    setTimeout(async () => {
+        try {
+            await indexService.startFullIndexing(true);
+            log.info("Index rebuilding completed successfully");
+        } catch (error: any) {
+            log.error(`Error during background index rebuilding: ${error.message || "Unknown error"}`);
+        }
+    }, 0);
+
+    // Return the response data
+    return {
+        success: true,
+        message: "Index rebuilding started in the background"
+    };
+}
+
 export default {
     findSimilarNotes,
     searchByText,
@@ -267,5 +289,6 @@ export default {
     getEmbeddingStats,
     getFailedNotes,
     retryFailedNote,
-    retryAllFailedNotes
+    retryAllFailedNotes,
+    rebuildIndex
 };

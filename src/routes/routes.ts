@@ -383,6 +383,7 @@ function register(app: express.Application) {
     apiRoute(GET, "/api/embeddings/failed", embeddingsRoute.getFailedNotes);
     apiRoute(PST, "/api/embeddings/retry/:noteId", embeddingsRoute.retryFailedNote);
     apiRoute(PST, "/api/embeddings/retry-all-failed", embeddingsRoute.retryAllFailedNotes);
+    apiRoute(PST, "/api/embeddings/rebuild-index", embeddingsRoute.rebuildIndex);
 
     // LLM chat session management endpoints
     apiRoute(PST, "/api/llm/sessions", llmRoute.createSession);
@@ -392,7 +393,7 @@ function register(app: express.Application) {
     apiRoute(DEL, "/api/llm/sessions/:sessionId", llmRoute.deleteSession);
     apiRoute(PST, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
     route(GET, "/api/llm/sessions/:sessionId/messages", [auth.checkApiAuth, csrfMiddleware], llmRoute.sendMessage, apiResultHandler);
-    
+
     // LLM index management endpoints
     apiRoute(GET, "/api/llm/index/stats", llmRoute.getIndexStats);
     apiRoute(PST, "/api/llm/index/start", llmRoute.startIndexing);

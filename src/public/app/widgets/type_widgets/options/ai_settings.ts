@@ -239,6 +239,13 @@ export default class AiSettingsWidget extends OptionsWidget {
                 </div>
 
                 <div class="form-group">
+                    <button class="btn btn-sm btn-primary reprocess-index">
+                        ${t("ai_llm.reprocess_index")}
+                    </button>
+                    <div class="help-text">${t("ai_llm.reprocess_index_description")}</div>
+                </div>
+
+                <div class="form-group">
                     <label>${t("ai_llm.embedding_statistics")}</label>
                     <div class="embedding-stats-container">
                         <div class="embedding-stats">
@@ -458,6 +465,25 @@ export default class AiSettingsWidget extends OptionsWidget {
             } finally {
                 $embeddingReprocessAll.prop('disabled', false);
                 $embeddingReprocessAll.text(t("ai_llm.reprocess_all_embeddings"));
+            }
+        });
+
+        const $reprocessIndex = this.$widget.find('.reprocess-index');
+        $reprocessIndex.on('click', async () => {
+            $reprocessIndex.prop('disabled', true);
+            $reprocessIndex.text(t("ai_llm.reprocessing_index"));
+
+            try {
+                await server.post('embeddings/rebuild-index');
+                toastService.showMessage(t("ai_llm.reprocess_index_started"));
+                // Refresh stats after reprocessing starts
+                await this.refreshEmbeddingStats();
+            } catch (error) {
+                console.error("Error rebuilding index:", error);
+                toastService.showError(t("ai_llm.reprocess_index_error"));
+            } finally {
+                $reprocessIndex.prop('disabled', false);
+                $reprocessIndex.text(t("ai_llm.reprocess_index"));
             }
         });
 
