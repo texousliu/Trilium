@@ -539,31 +539,31 @@ export default class AiSettingsWidget extends OptionsWidget {
     optionsLoaded(options: OptionMap) {
         if (!this.$widget) return;
 
-        this.setCheckboxState(this.$widget.find('.ai-enabled'), options.aiEnabled);
-        this.setCheckboxState(this.$widget.find('.ollama-enabled'), options.ollamaEnabled);
+        this.setCheckboxState(this.$widget.find('.ai-enabled'), options.aiEnabled || 'false');
+        this.setCheckboxState(this.$widget.find('.ollama-enabled'), options.ollamaEnabled || 'false');
 
-        this.$widget.find('.ai-provider-precedence').val(options.aiProviderPrecedence);
-        this.$widget.find('.ai-temperature').val(options.aiTemperature);
-        this.$widget.find('.ai-system-prompt').val(options.aiSystemPrompt);
+        this.$widget.find('.ai-provider-precedence').val(options.aiProviderPrecedence || 'openai,anthropic,ollama');
+        this.$widget.find('.ai-temperature').val(options.aiTemperature || '0.7');
+        this.$widget.find('.ai-system-prompt').val(options.aiSystemPrompt || '');
 
-        this.$widget.find('.openai-api-key').val(options.openaiApiKey);
-        this.$widget.find('.openai-default-model').val(options.openaiDefaultModel);
-        this.$widget.find('.openai-base-url').val(options.openaiBaseUrl);
+        this.$widget.find('.openai-api-key').val(options.openaiApiKey || '');
+        this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || 'gpt-4o');
+        this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai.com/v1');
 
-        this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey);
-        this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel);
-        this.$widget.find('.anthropic-base-url').val(options.anthropicBaseUrl);
+        this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey || '');
+        this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel || 'claude-3-opus-20240229');
+        this.$widget.find('.anthropic-base-url').val(options.anthropicBaseUrl || 'https://api.anthropic.com/v1');
 
-        this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl);
-        this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel);
+        this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl || 'http://localhost:11434');
+        this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel || 'llama3');
         this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || 'nomic-embed-text');
 
         // Load embedding options
         this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
-        this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled);
-        this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize);
-        this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval);
-        this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension);
+        this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled || 'true');
+        this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
+        this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');
+        this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension || '1536');
 
         this.updateAiSectionVisibility();
     }

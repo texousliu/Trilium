@@ -1153,6 +1153,8 @@
     "refresh_models": "Refresh Models",
     "refreshing_models": "Refreshing...",
     "embedding_configuration": "Embeddings Configuration",
+    "embedding_default_provider": "Default Provider",
+    "embedding_default_provider_description": "Select the default provider used for generating note embeddings",
     "enable_auto_update_embeddings": "Auto-update Embeddings",
     "enable_auto_update_embeddings_description": "Automatically update embeddings when notes are modified",
     "embedding_batch_size": "Batch Size",
