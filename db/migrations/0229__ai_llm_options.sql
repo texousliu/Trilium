@@ -24,3 +24,6 @@ INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('aiSystemPr
 
 -- Embedding settings
 INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('embeddingsDefaultProvider', 'openai', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')); 
+INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('enableAutomaticIndexing', 'true', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('embeddingSimilarityThreshold', '0.65', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('maxNotesPerLlmQuery', '10', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')); 

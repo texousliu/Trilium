@@ -194,6 +194,26 @@ export default class AiSettingsWidget extends OptionsWidget {
                 </div>
 
                 <div class="form-group">
+                    <label>
+                        <input class="enable-automatic-indexing" type="checkbox">
+                        ${t("ai_llm.enable_automatic_indexing")}
+                    </label>
+                    <div class="help-text">${t("ai_llm.enable_automatic_indexing_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.similarity_threshold")}</label>
+                    <input class="embedding-similarity-threshold form-control" type="number" min="0" max="1" step="0.01">
+                    <div class="help-text">${t("ai_llm.similarity_threshold_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.max_notes_per_llm_query")}</label>
+                    <input class="max-notes-per-llm-query form-control" type="number" min="1" max="50">
+                    <div class="help-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
+                </div>
+
+                <div class="form-group">
                     <label>${t("ai_llm.embedding_batch_size")}</label>
                     <input class="embedding-batch-size form-control" type="number" min="1" max="50">
                     <div class="help-text">${t("ai_llm.embedding_batch_size_description")}</div>
@@ -248,7 +268,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                     <label>${t("ai_llm.failed_notes")}</label>
                     <div class="embedding-failed-notes-container">
                         <div class="embedding-failed-notes-list">
-                            <div class="text-muted small">${t("ai_llm.no_failed_embeddings")}</div>
+                            <div class="alert alert-info">${t("ai_llm.no_failed_embeddings")}</div>
                         </div>
                     </div>
                 </div>
@@ -387,6 +407,21 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.updateOption('embeddingAutoUpdateEnabled', $embeddingAutoUpdateEnabled.prop('checked') ? "true" : "false");
         });
 
+        const $enableAutomaticIndexing = this.$widget.find('.enable-automatic-indexing');
+        $enableAutomaticIndexing.on('change', async () => {
+            await this.updateOption('enableAutomaticIndexing', $enableAutomaticIndexing.prop('checked') ? "true" : "false");
+        });
+
+        const $embeddingSimilarityThreshold = this.$widget.find('.embedding-similarity-threshold');
+        $embeddingSimilarityThreshold.on('change', async () => {
+            await this.updateOption('embeddingSimilarityThreshold', $embeddingSimilarityThreshold.val() as string);
+        });
+
+        const $maxNotesPerLlmQuery = this.$widget.find('.max-notes-per-llm-query');
+        $maxNotesPerLlmQuery.on('change', async () => {
+            await this.updateOption('maxNotesPerLlmQuery', $maxNotesPerLlmQuery.val() as string);
+        });
+
         const $embeddingDefaultProvider = this.$widget.find('.embedding-default-provider');
         $embeddingDefaultProvider.on('change', async () => {
             await this.updateOption('embeddingsDefaultProvider', $embeddingDefaultProvider.val() as string);
@@ -466,6 +501,9 @@ export default class AiSettingsWidget extends OptionsWidget {
         // Load embedding options
         this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
         this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled || 'true');
+        this.setCheckboxState(this.$widget.find('.enable-automatic-indexing'), options.enableAutomaticIndexing || 'true');
+        this.$widget.find('.embedding-similarity-threshold').val(options.embeddingSimilarityThreshold || '0.65');
+        this.$widget.find('.max-notes-per-llm-query').val(options.maxNotesPerLlmQuery || '10');
         this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
         this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');
         this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension || '1536');
@@ -658,7 +696,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (!failedResult || !failedResult.failedNotes.length) {
             // Use consistent styling with the rest of the application
             this.$widget.find('.embedding-failed-notes-list').html(
-                `<div class="text-muted small">No failed embeddings</div>`
+                `<div class="alert alert-info">${t("ai_llm.no_failed_embeddings")}</div>`
             );
             return;
         }
