@@ -10,7 +10,8 @@ import type { WriteStream } from "fs";
 import debounce from "./src/public/app/services/debounce.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
-const destRootPath = path.join("docs", "User Guide");
+const markdownPath = path.join("docs", "User Guide");
+const htmlPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
 async function startElectron() {
     await import("./electron-main.js");
@@ -83,7 +84,7 @@ async function createImportZip() {
         zlib: { level: 0 }
     });
 
-    archive.directory(destRootPath, "/");
+    archive.directory(markdownPath, "/");
 
     const outputStream = fsExtra.createWriteStream(inputFile);
     archive.pipe(outputStream);
@@ -104,18 +105,18 @@ function waitForEnd(archive: Archiver, stream: WriteStream) {
 
 }
 
-async function exportData() {
+async function exportData(format: "html" | "markdown", outputPath: string) {
     const zipFilePath = "output.zip";
 
     const deferred = (await import("./src/services/utils.js")).deferred;
 
     try {
-        await fsExtra.remove(destRootPath);
-        await fsExtra.mkdir(destRootPath);
+        await fsExtra.remove(outputPath);
+        await fsExtra.mkdir(outputPath);
 
         // First export as zip.
         const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
-        await exportToZipFile(NOTE_ID_USER_GUIDE, "markdown", zipFilePath);
+        await exportToZipFile(NOTE_ID_USER_GUIDE, format, zipFilePath);
 
         const promise = deferred<void>()
         setTimeout(async () => {
@@ -124,7 +125,7 @@ async function exportData() {
             await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
                 // We ignore directories since they can appear out of order anyway.
                 if (!entry.fileName.endsWith("/")) {
-                    const destPath = path.join(destRootPath, entry.fileName);
+                    const destPath = path.join(outputPath, entry.fileName);
                     const fileContent = await readContent(zip, entry);
 
                     await fsExtra.mkdirs(path.dirname(destPath));
@@ -146,7 +147,7 @@ async function exportData() {
 }
 
 async function cleanUpMeta() {
-    const metaPath = path.join(destRootPath, "!!!meta.json");
+    const metaPath = path.join(markdownPath, "!!!meta.json");
     const meta = JSON.parse(await fs.readFile(metaPath, "utf-8")) as NoteMetaFile;
     for (const file of meta.files) {
         traverse(file);
@@ -165,9 +166,10 @@ async function cleanUpMeta() {
 
 async function registerHandlers() {
     const events = (await import("./src/services/events.js")).default;
-    const debouncer = debounce(() => {
+    const debouncer = debounce(async () => {
         console.log("Exporting data");
-        exportData();
+        await exportData("markdown", markdownPath);
+        await exportData("html", htmlPath);
     }, 10_000);;
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
