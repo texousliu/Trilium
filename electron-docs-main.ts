@@ -52,6 +52,16 @@ async function importData(input: Buffer) {
     const beccaLoader = ((await import("./src/becca/becca_loader.js")).default);
     const notes = ((await import("./src/services/notes.js")).default);
     beccaLoader.load();
+    const becca = ((await import("./src/becca/becca.js")).default);
+    const utils = ((await import("./src/services/utils.js")).default);
+    const eraseService = ((await import("./src/services/erase.js")).default);
+    const deleteId = utils.randomString(10);
+
+    const existingNote = becca.getNote(NOTE_ID_USER_GUIDE);
+    if (existingNote) {
+        existingNote.deleteNote(deleteId);
+    }
+    eraseService.eraseNotesWithDeleteId(deleteId);
 
     const { note } = notes.createNewNoteWithTarget("into", "none_root", {
         parentNoteId: "root",
