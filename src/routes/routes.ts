@@ -380,6 +380,9 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/embeddings/reprocess", embeddingsRoute.reprocessAllNotes);
     apiRoute(GET, "/api/embeddings/queue-status", embeddingsRoute.getQueueStatus);
     apiRoute(GET, "/api/embeddings/stats", embeddingsRoute.getEmbeddingStats);
+    apiRoute(GET, "/api/embeddings/failed", embeddingsRoute.getFailedNotes);
+    apiRoute(PST, "/api/embeddings/retry/:noteId", embeddingsRoute.retryFailedNote);
+    apiRoute(PST, "/api/embeddings/retry-all-failed", embeddingsRoute.retryAllFailedNotes);
 
     apiRoute(PST, "/api/llm/sessions", llmRoute.createSession);
     apiRoute(GET, "/api/llm/sessions", llmRoute.listSessions);

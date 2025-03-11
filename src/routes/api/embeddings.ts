@@ -203,6 +203,60 @@ async function getEmbeddingStats(req: Request, res: Response) {
     };
 }
 
+/**
+ * Get list of failed embedding notes
+ */
+async function getFailedNotes(req: Request, res: Response) {
+    const limit = parseInt(req.query.limit as string || '100', 10);
+    const failedNotes = await vectorStore.getFailedEmbeddingNotes(limit);
+
+    // No need to fetch note titles here anymore as they're already included in the response
+    return {
+        success: true,
+        failedNotes: failedNotes
+    };
+}
+
+/**
+ * Retry a specific failed note embedding
+ */
+async function retryFailedNote(req: Request, res: Response) {
+    const { noteId } = req.params;
+
+    if (!noteId) {
+        return [400, {
+            success: false,
+            message: "Note ID is required"
+        }];
+    }
+
+    const success = await vectorStore.retryFailedEmbedding(noteId);
+
+    if (!success) {
+        return [404, {
+            success: false,
+            message: "Failed note not found or note is not marked as failed"
+        }];
+    }
+
+    return {
+        success: true,
+        message: "Note queued for retry"
+    };
+}
+
+/**
+ * Retry all failed note embeddings
+ */
+async function retryAllFailedNotes(req: Request, res: Response) {
+    const count = await vectorStore.retryAllFailedEmbeddings();
+
+    return {
+        success: true,
+        message: `${count} failed notes queued for retry`
+    };
+}
+
 export default {
     findSimilarNotes,
     searchByText,
@@ -210,5 +264,8 @@ export default {
     updateProvider,
     reprocessAllNotes,
     getQueueStatus,
-    getEmbeddingStats
+    getEmbeddingStats,
+    getFailedNotes,
+    retryFailedNote,
+    retryAllFailedNotes
 };

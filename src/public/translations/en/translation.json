@@ -1123,6 +1123,8 @@
   },
   "ai_llm": {
     "title": "AI/LLM Integration",
+    "enable_ai": "Enable AI/LLM features",
+    "enable_ai_desc": "Enable AI features like note summarization, content generation, and other LLM capabilities",
     "enable_ai_features": "Enable AI/LLM features",
     "enable_ai_description": "Enable AI features like note summarization, content generation, and other LLM capabilities",
     "provider_configuration": "AI Provider Configuration",
@@ -1157,6 +1159,8 @@
     "embedding_default_provider_description": "Select the default provider used for generating note embeddings",
     "enable_auto_update_embeddings": "Auto-update Embeddings",
     "enable_auto_update_embeddings_description": "Automatically update embeddings when notes are modified",
+    "auto_update_embeddings": "Auto-update Embeddings",
+    "auto_update_embeddings_desc": "Automatically update embeddings when notes are modified",
     "embedding_batch_size": "Batch Size",
     "embedding_batch_size_description": "Number of notes to process in a single batch (1-50)",
     "embedding_update_interval": "Update Interval (ms)",

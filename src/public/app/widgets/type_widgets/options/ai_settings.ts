@@ -30,6 +30,21 @@ interface EmbeddingStats {
     }
 }
 
+// Interface for failed embedding notes
+interface FailedEmbeddingNotes {
+    success: boolean;
+    failedNotes: Array<{
+        noteId: string;
+        title?: string;
+        operation: string;
+        attempts: number;
+        lastAttempt: string;
+        error: string;
+        failureType: string;
+        chunks: number;
+    }>;
+}
+
 export default class AiSettingsWidget extends OptionsWidget {
     private statsRefreshInterval: NodeJS.Timeout | null = null;
     private readonly STATS_REFRESH_INTERVAL = 5000; // 5 seconds
@@ -227,6 +242,16 @@ export default class AiSettingsWidget extends OptionsWidget {
                         </div>
                     </div>
                 </div>
+
+                <!-- Failed embeddings section -->
+                <div class="form-group mt-4">
+                    <label>${t("ai_llm.failed_notes")}</label>
+                    <div class="embedding-failed-notes-container">
+                        <div class="embedding-failed-notes-list">
+                            <div class="text-muted small">${t("ai_llm.no_failed_embeddings")}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>`);
 
@@ -416,6 +441,54 @@ export default class AiSettingsWidget extends OptionsWidget {
         return this.$widget;
     }
 
+    optionsLoaded(options: OptionMap) {
+        if (!this.$widget) return;
+
+        this.setCheckboxState(this.$widget.find('.ai-enabled'), options.aiEnabled || 'false');
+        this.setCheckboxState(this.$widget.find('.ollama-enabled'), options.ollamaEnabled || 'false');
+
+        this.$widget.find('.ai-provider-precedence').val(options.aiProviderPrecedence || 'openai,anthropic,ollama');
+        this.$widget.find('.ai-temperature').val(options.aiTemperature || '0.7');
+        this.$widget.find('.ai-system-prompt').val(options.aiSystemPrompt || '');
+
+        this.$widget.find('.openai-api-key').val(options.openaiApiKey || '');
+        this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || 'gpt-4o');
+        this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai.com/v1');
+
+        this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey || '');
+        this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel || 'claude-3-opus-20240229');
+        this.$widget.find('.anthropic-base-url').val(options.anthropicBaseUrl || 'https://api.anthropic.com/v1');
+
+        this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl || 'http://localhost:11434');
+        this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel || 'llama3');
+        this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || 'nomic-embed-text');
+
+        // Load embedding options
+        this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
+        this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled || 'true');
+        this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
+        this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');
+        this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension || '1536');
+
+        this.updateAiSectionVisibility();
+    }
+
+    updateAiSectionVisibility() {
+        if (!this.$widget) return;
+
+        const aiEnabled = this.$widget.find('.ai-enabled').prop('checked');
+        this.$widget.find('.ai-providers-section').toggle(aiEnabled);
+        this.$widget.find('.ai-provider').toggle(aiEnabled);
+        this.$widget.find('.embedding-section').toggle(aiEnabled);
+
+        // Start or stop polling based on visibility
+        if (aiEnabled && this.$widget.find('.embedding-section').is(':visible')) {
+            this.startStatsPolling();
+        } else {
+            this.stopStatsPolling();
+        }
+    }
+
     /**
      * Start automatic polling for embedding statistics
      */
@@ -429,6 +502,9 @@ export default class AiSettingsWidget extends OptionsWidget {
             if (this.$widget && this.$widget.is(':visible') &&
                 this.$widget.find('.embedding-section').is(':visible')) {
                 await this.refreshEmbeddingStats(true);
+
+                // Also update failed embeddings list periodically
+                await this.updateFailedEmbeddingsList();
             }
         }, this.STATS_REFRESH_INTERVAL);
     }
@@ -440,6 +516,62 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (this.statsRefreshInterval) {
             clearInterval(this.statsRefreshInterval);
             this.statsRefreshInterval = null;
+        }
+    }
+
+    // Clean up when the widget is removed
+    cleanup() {
+        this.stopStatsPolling();
+        super.cleanup();
+    }
+
+    /**
+     * Get embedding stats from the server
+     */
+    async getEmbeddingStats(): Promise<EmbeddingStats | null> {
+        try {
+            return await server.get('embeddings/stats') as EmbeddingStats;
+        } catch (error) {
+            console.error('Error fetching embedding stats:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Get failed embedding notes from the server
+     */
+    async getFailedEmbeddingNotes(): Promise<FailedEmbeddingNotes | null> {
+        try {
+            return await server.get('embeddings/failed') as FailedEmbeddingNotes;
+        } catch (error) {
+            console.error('Error fetching failed embedding notes:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Retry a specific failed embedding
+     */
+    async retryFailedEmbedding(noteId: string): Promise<boolean> {
+        try {
+            const result = await server.post(`embeddings/retry/${noteId}`) as {success: boolean};
+            return result.success;
+        } catch (error) {
+            console.error('Error retrying failed embedding:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Retry all failed embeddings
+     */
+    async retryAllFailedEmbeddings(): Promise<boolean> {
+        try {
+            const result = await server.post('embeddings/retry-all-failed') as {success: boolean};
+            return result.success;
+        } catch (error) {
+            console.error('Error retrying all failed embeddings:', error);
+            return false;
         }
     }
 
@@ -455,7 +587,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                 $refreshButton.text(t("ai_llm.refreshing"));
             }
 
-            const response = await server.get<EmbeddingStats>('embeddings/stats');
+            const response = await this.getEmbeddingStats();
 
             if (response && response.success) {
                 const stats = response.stats;
@@ -498,6 +630,11 @@ export default class AiSettingsWidget extends OptionsWidget {
                     $progressBar.removeClass('progress-bar-striped progress-bar-animated bg-info');
                     $progressBar.addClass('bg-success');
                 }
+
+                // Update failed embeddings list if there are failures
+                if (stats.failedNotesCount > 0 && !silent) {
+                    await this.updateFailedEmbeddingsList();
+                }
             }
         } catch (error) {
             console.error("Error fetching embedding stats:", error);
@@ -514,57 +651,85 @@ export default class AiSettingsWidget extends OptionsWidget {
         }
     }
 
-    updateAiSectionVisibility() {
+    async updateFailedEmbeddingsList() {
         if (!this.$widget) return;
 
-        const aiEnabled = this.$widget.find('.ai-enabled').prop('checked');
-        this.$widget.find('.ai-providers-section').toggle(aiEnabled);
-        this.$widget.find('.ai-provider').toggle(aiEnabled);
-        this.$widget.find('.embedding-section').toggle(aiEnabled);
-
-        // Start or stop polling based on visibility
-        if (aiEnabled && this.$widget.find('.embedding-section').is(':visible')) {
-            this.startStatsPolling();
-        } else {
-            this.stopStatsPolling();
+        const failedResult = await this.getFailedEmbeddingNotes();
+        if (!failedResult || !failedResult.failedNotes.length) {
+            // Use consistent styling with the rest of the application
+            this.$widget.find('.embedding-failed-notes-list').html(
+                `<div class="text-muted small">No failed embeddings</div>`
+            );
+            return;
         }
-    }
 
-    // Clean up when the widget is removed
-    cleanup() {
-        this.stopStatsPolling();
-        super.cleanup();
-    }
+        const $failedHeader = $(`
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6>Failed Embeddings (${failedResult.failedNotes.length})</h6>
+                <button class="btn btn-sm btn-outline-primary retry-all-btn">Retry All Failed</button>
+            </div>
+        `);
 
-    optionsLoaded(options: OptionMap) {
-        if (!this.$widget) return;
+        const $failedList = $('<div class="list-group failed-list mb-3">');
 
-        this.setCheckboxState(this.$widget.find('.ai-enabled'), options.aiEnabled || 'false');
-        this.setCheckboxState(this.$widget.find('.ollama-enabled'), options.ollamaEnabled || 'false');
+        for (const note of failedResult.failedNotes) {
+            // Determine if this is a full note failure or just failed chunks
+            const isFullFailure = note.failureType === 'full';
+            const badgeClass = isFullFailure ? 'badge-danger' : 'badge-warning';
+            const badgeText = isFullFailure ? 'Full Note' : `${note.chunks} Chunks`;
 
-        this.$widget.find('.ai-provider-precedence').val(options.aiProviderPrecedence || 'openai,anthropic,ollama');
-        this.$widget.find('.ai-temperature').val(options.aiTemperature || '0.7');
-        this.$widget.find('.ai-system-prompt').val(options.aiSystemPrompt || '');
+            const $item = $(`
+                <div class="list-group-item list-group-item-action flex-column align-items-start p-2">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="mb-1">${note.title || note.noteId}</h6>
+                            <span class="badge ${badgeClass} mb-1">${badgeText}</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary retry-btn" data-note-id="${note.noteId}">Retry</button>
+                    </div>
+                    <div class="small text-muted">
+                        <div>Attempts: ${note.attempts}</div>
+                        <div>Last attempt: ${note.lastAttempt}</div>
+                        <div>Error: ${note.error}</div>
+                    </div>
+                </div>
+            `);
 
-        this.$widget.find('.openai-api-key').val(options.openaiApiKey || '');
-        this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || 'gpt-4o');
-        this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai.com/v1');
+            $failedList.append($item);
+        }
 
-        this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey || '');
-        this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel || 'claude-3-opus-20240229');
-        this.$widget.find('.anthropic-base-url').val(options.anthropicBaseUrl || 'https://api.anthropic.com/v1');
+        this.$widget.find('.embedding-failed-notes-list').empty().append($failedHeader, $failedList);
 
-        this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl || 'http://localhost:11434');
-        this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel || 'llama3');
-        this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || 'nomic-embed-text');
+        // Add event handlers using local variables to avoid 'this' issues
+        const self = this;
 
-        // Load embedding options
-        this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
-        this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled || 'true');
-        this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
-        this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');
-        this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension || '1536');
+        this.$widget.find('.retry-btn').on('click', async function() {
+            const noteId = $(this).data('note-id');
+            $(this).prop('disabled', true).text('Retrying...');
 
-        this.updateAiSectionVisibility();
+            const success = await self.retryFailedEmbedding(noteId);
+
+            if (success) {
+                toastService.showMessage("Note queued for retry");
+                await self.refreshEmbeddingStats();
+            } else {
+                toastService.showError("Failed to retry note");
+                $(this).prop('disabled', false).text('Retry');
+            }
+        });
+
+        this.$widget.find('.retry-all-btn').on('click', async function() {
+            $(this).prop('disabled', true).text('Retrying All...');
+
+            const success = await self.retryAllFailedEmbeddings();
+
+            if (success) {
+                toastService.showMessage("All failed notes queued for retry");
+                await self.refreshEmbeddingStats();
+            } else {
+                toastService.showError("Failed to retry notes");
+                $(this).prop('disabled', false).text('Retry All Failed');
+            }
+        });
     }
 }
