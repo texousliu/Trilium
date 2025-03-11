@@ -4,6 +4,8 @@ import { OpenAIService } from './providers/openai_service.js';
 import { AnthropicService } from './providers/anthropic_service.js';
 import { OllamaService } from './providers/ollama_service.js';
 import log from '../log.js';
+import contextExtractor from './context_extractor.js';
+import semanticContextService from './semantic_context_service.js';
 
 type ServiceProviders = 'openai' | 'anthropic' | 'ollama';
 
@@ -159,6 +161,26 @@ export class AIServiceManager {
         // If we get here, all providers failed
         throw new Error(`All AI providers failed: ${lastError?.message || 'Unknown error'}`);
     }
+
+    setupEventListeners() {
+        // Setup event listeners for AI services
+    }
+
+    /**
+     * Get the context extractor service
+     * @returns The context extractor instance
+     */
+    getContextExtractor() {
+        return contextExtractor;
+    }
+
+    /**
+     * Get the semantic context service for advanced context handling
+     * @returns The semantic context service instance
+     */
+    getSemanticContextService() {
+        return semanticContextService;
+    }
 }
 
 // Don't create singleton immediately, use a lazy-loading pattern
@@ -185,5 +207,12 @@ export default {
     },
     async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
         return getInstance().generateChatCompletion(messages, options);
+    },
+    // Add our new methods
+    getContextExtractor() {
+        return getInstance().getContextExtractor();
+    },
+    getSemanticContextService() {
+        return getInstance().getSemanticContextService();
     }
 };

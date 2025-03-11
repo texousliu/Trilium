@@ -152,10 +152,28 @@ export class ChatService {
 
     /**
      * Add context from the current note to the chat
+     *
+     * @param sessionId - The ID of the chat session
+     * @param noteId - The ID of the note to add context from
+     * @param useSmartContext - Whether to use smart context extraction (default: true)
+     * @returns The updated chat session
      */
-    async addNoteContext(sessionId: string, noteId: string): Promise<ChatSession> {
+    async addNoteContext(sessionId: string, noteId: string, useSmartContext = true): Promise<ChatSession> {
         const session = await this.getOrCreateSession(sessionId);
-        const context = await contextExtractor.getFullContext(noteId);
+
+        // Get the last user message to use as context for semantic search
+        const lastUserMessage = [...session.messages].reverse()
+            .find(msg => msg.role === 'user' && msg.content.length > 10)?.content || '';
+
+        let context;
+
+        if (useSmartContext && lastUserMessage) {
+            // Use smart context that considers the query for better relevance
+            context = await contextExtractor.getSmartContext(noteId, lastUserMessage);
+        } else {
+            // Fall back to full context if smart context is disabled or no query available
+            context = await contextExtractor.getFullContext(noteId);
+        }
 
         const contextMessage: Message = {
             role: 'user',
@@ -166,6 +184,61 @@ export class ChatService {
         await chatStorageService.updateChat(session.id, session.messages);
 
         return session;
+    }
+
+    /**
+     * Add semantically relevant context from a note based on a specific query
+     *
+     * @param sessionId - The ID of the chat session
+     * @param noteId - The ID of the note to add context from
+     * @param query - The specific query to find relevant information for
+     * @returns The updated chat session
+     */
+    async addSemanticNoteContext(sessionId: string, noteId: string, query: string): Promise<ChatSession> {
+        const session = await this.getOrCreateSession(sessionId);
+
+        // Use semantic context that considers the query for better relevance
+        const context = await contextExtractor.getSemanticContext(noteId, query);
+
+        const contextMessage: Message = {
+            role: 'user',
+            content: `Here is the relevant information from my notes based on my query "${query}":\n\n${context}\n\nPlease help me understand this information in relation to my query.`
+        };
+
+        session.messages.push(contextMessage);
+        await chatStorageService.updateChat(session.id, session.messages);
+
+        return session;
+    }
+
+    /**
+     * Send a context-aware message with automatically included semantic context from a note
+     * This method combines the query with relevant note context before sending to the AI
+     *
+     * @param sessionId - The ID of the chat session
+     * @param content - The user's message content
+     * @param noteId - The ID of the note to add context from
+     * @param options - Optional completion options
+     * @param streamCallback - Optional streaming callback
+     * @returns The updated chat session
+     */
+    async sendContextAwareMessage(
+        sessionId: string,
+        content: string,
+        noteId: string,
+        options?: ChatCompletionOptions,
+        streamCallback?: (content: string, isDone: boolean) => void
+    ): Promise<ChatSession> {
+        const session = await this.getOrCreateSession(sessionId);
+
+        // Get semantically relevant context based on the user's message
+        const context = await contextExtractor.getSmartContext(noteId, content);
+
+        // Combine the user's message with the relevant context
+        const enhancedContent = `${content}\n\nHere's relevant information from my notes that may help:\n\n${context}`;
+
+        // Send the enhanced message
+        return this.sendMessage(sessionId, enhancedContent, options, streamCallback);
     }
 
     /**
