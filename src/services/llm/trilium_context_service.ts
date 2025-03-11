@@ -346,10 +346,16 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                    "with general knowledge about Trilium or other topics you're interested in.";
         }
 
-        let context = `The following are relevant notes from your knowledge base that may help answer the query: "${query}"\n\n`;
+        let context = `I've found some relevant information in your notes that may help answer: "${query}"\n\n`;
 
-        sources.forEach((source, index) => {
-            context += `--- NOTE ${index + 1}: ${source.title} ---\n`;
+        sources.forEach((source) => {
+            // Use the note title as a meaningful heading
+            context += `### ${source.title}\n`;
+
+            // Add relationship context if available
+            if (source.parentTitle) {
+                context += `Part of: ${source.parentTitle}\n`;
+            }
 
             if (source.content) {
                 // Clean up HTML content before adding it to the context
@@ -369,8 +375,11 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             context += "\n";
         });
 
-        context += "--- END OF NOTES ---\n\n";
-        context += "Please use the information above to help answer the query. If the information doesn't contain what you need, just say so and use your general knowledge instead.";
+        // Add clear instructions about how to reference the notes
+        context += "When referring to information from these notes in your response, please cite them by their titles " +
+                  "(e.g., \"According to your note on [Title]...\") rather than using labels like \"Note 1\" or \"Note 2\".\n\n";
+
+        context += "If the information doesn't contain what you need, just say so and use your general knowledge instead.";
 
         return context;
     }

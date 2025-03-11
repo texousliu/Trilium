@@ -425,9 +425,9 @@ function buildContextFromNotes(sources: NoteSource[], query: string): string {
 
     const noteContexts = sources
         .filter(source => source.content) // Only include sources with content
-        .map((source, index) => {
-            // Format each note as a section in the context
-            return `[NOTE ${index + 1}: ${source.title}]\n${source.content || 'No content available'}`;
+        .map((source) => {
+            // Format each note with its title as a natural heading
+            return `### ${source.title}\n${source.content || 'No content available'}`;
         })
         .join('\n\n');
 
@@ -436,12 +436,14 @@ function buildContextFromNotes(sources: NoteSource[], query: string): string {
         return query || '';
     }
 
-    // Build a complete context prompt
-    return `I'll provide you with relevant notes from my knowledge base to help answer the question. Please use this information when responding:
+    // Build a complete context prompt with clearer instructions
+    return `I'll provide you with relevant information from my notes to help answer your question.
 
 ${noteContexts}
 
-Now, based on the above notes, please answer: ${query}`;
+When referring to information from these notes in your response, please cite them by their titles (e.g., "According to your note on [Title]...") rather than using labels like "Note 1" or "Note 2".
+
+Now, based on the above information, please answer: ${query}`;
 }
 
 /**
