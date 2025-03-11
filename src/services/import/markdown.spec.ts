@@ -40,4 +40,12 @@ describe("markdown", () => {
         expect(result).toBe(trimIndentation`\
             <pre><code class="language-text-x-trilium-auto">Hi</code></pre>`);
     });
+
+    it("parses duplicate title with escape correctly", () => {
+        const result = markdownService.renderToHtml(trimIndentation`\
+            # What's new
+            Hi there
+        `, "What's new")
+        expect(result).toBe(`\n<p>Hi there</p>\n`);
+    });
 });
