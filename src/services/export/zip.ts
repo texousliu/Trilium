@@ -182,7 +182,9 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
 
         const attachments = note.getAttachments();
-        meta.attachments = attachments.map((attachment) => {
+        meta.attachments = attachments
+            .toSorted((a, b) => ((a.attachmentId ?? "").localeCompare(b.attachmentId ?? "", "en") ?? 1))
+            .map((attachment) => {
             const attMeta: AttachmentMeta = {
                 attachmentId: attachment.attachmentId,
                 title: attachment.title,
