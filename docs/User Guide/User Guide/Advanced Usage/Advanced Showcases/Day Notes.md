@@ -5,13 +5,13 @@ For this, Trilium provides a concept of "day note". Trilium semi-automatically g
 
 Select an existing day note, and the menubar contains a calendar widget. Select any day to create a note for that day. 
 
-![](2_Day%20Notes_image.png)
+![](1_Day%20Notes_image.png)
 
 This pattern works well also because of [Cloning Notes](../../Basic%20Concepts/Note/Cloning%20Notes.md) functionality - note can appear in multiple places in the note tree, so besides appearing under day note, it can also be categorized into other notes.
 
 ## Demo
 
-![](1_Day%20Notes_image.png)
+![](Day%20Notes_image.png)
 
 You can see the structure of day notes appearing under "Journal" note - there's a note for the whole year 2017, under it, you have "12 - December" which then contains "18 - Monday". This is our "day note" which contains some text in its content and also has some child notes (some of them are from [Task manager](Task%20Manager.md)).
 

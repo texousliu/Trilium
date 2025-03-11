@@ -9,7 +9,7 @@ This is a basic example how you can create simple diagram using relation maps:
 
 And this is how you can create it:
 
-![](api/images/M6FjVwscqQJS/relation-map-dev-process-demo.)
+![](api/images/Y4LIZ7wFyxSo/relation-map-dev-process-demo.)
 
 We start completely from scratch by first creating new note called "Development process" and changing its type to "Relation map". After that we create new notes one by one and place them by clicking into the map. We also drag [relations](Attributes.md)between notes and name them. That's all!
 

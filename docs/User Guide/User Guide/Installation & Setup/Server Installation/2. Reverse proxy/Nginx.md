@@ -3,21 +3,21 @@ Configure Nginx proxy and HTTPS. The operating system here is Ubuntu 18.04.
 
 1.  Download Nginx and remove Apache2
 
-```bash
+```sh
 sudo apt-get install nginx
 sudo apt-get remove apache2
 ```
 
 1.  Create configure file
 
-```bash
+```sh
 cd /etc/nginx/conf.d
 vim default.conf
 ```
 
 1.  Fill the file with the context shown below, part of the setting show be changed. Then you can enjoy your web with HTTPS forced and proxy.
 
-```nginx
+```conf
 # This part is for proxy and HTTPS configure
 server {
     listen 443 ssl;

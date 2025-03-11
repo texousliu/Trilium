@@ -1,5 +1,5 @@
 # "TriliumNext Notes" Not Opened
-![](2_TriliumNext%20Notes%20Not%20Open.png)
+![](1_TriliumNext%20Notes%20Not%20Open.png)
 
 When running TriliumNext for the first time or updating to a newer version, macOS will prevent its execution.
 
@@ -13,4 +13,4 @@ To bypass this issue, follow these steps:
 
 |     |     |
 | --- | --- |
-| ![](TriliumNext%20Notes%20Not%20Open.png)  <br>  <br>The privacy settings in “System Settings”, showing the alert that TriliumNext was blocked. | ![](2_TriliumNext%20Notes%20Not%20Open.png)  <br>  <br>The confirmation screen to bypass the run restrictions. |
+| ![](2_TriliumNext%20Notes%20Not%20Open.png)  <br>  <br>The privacy settings in “System Settings”, showing the alert that TriliumNext was blocked. | ![](1_TriliumNext%20Notes%20Not%20Open.png)  <br>  <br>The confirmation screen to bypass the run restrictions. |

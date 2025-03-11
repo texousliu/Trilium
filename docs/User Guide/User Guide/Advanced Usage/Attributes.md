@@ -6,7 +6,7 @@ In Trilium, attributes are key-value pairs assigned to notes, providing addition
 
 These attributes play a crucial role in organizing, categorising, and enhancing the functionality of notes.
 
-![](1_Attributes_image.png)
+![](Attributes_image.png)
 
 ## Labels
 
