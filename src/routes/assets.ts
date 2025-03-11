@@ -50,8 +50,8 @@ async function register(app: express.Application) {
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));
     app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "..", "libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
-    app.use(`/node_modules/@excalidraw/excalidraw/dist/`, express.static(path.join(srcRoot, "..", "node_modules/@excalidraw/excalidraw/dist/")));
-    app.use(`/${assetPath}/node_modules/@excalidraw/excalidraw/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/@excalidraw/excalidraw/dist/")));
+    app.use(`/node_modules/@excalidraw/excalidraw/dist/fonts/`, express.static(path.join(srcRoot, "..", "node_modules/@excalidraw/excalidraw/dist/prod/fonts/")));
+    app.use(`/${assetPath}/node_modules/@excalidraw/excalidraw/dist/fonts/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/@excalidraw/excalidraw/dist/prod/fonts/")));
 
     // KaTeX
     app.use(`/${assetPath}/node_modules/katex/dist/katex.min.js`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/katex/dist/katex.min.js")));

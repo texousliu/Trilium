@@ -68,7 +68,7 @@ try {
     ]);
 
     const nodeModulesFolder = new Set([
-        "node_modules/@excalidraw/excalidraw/dist/",
+        "node_modules/@excalidraw/excalidraw/dist/fonts/",
         "node_modules/katex/dist/",
         "node_modules/dayjs/",
         "node_modules/boxicons/css/",
