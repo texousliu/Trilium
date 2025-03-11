@@ -8,7 +8,7 @@ This can be useful for a few things:
     *   we call such JavaScript code notes "scripts" - see [Scripts](Code%20Notes/Scripts.md)
 *   JSON, XML etc. can be used as storage for structured data (typically used in conjunction with scripting)
 
-![](Code Notes_image.png)
+![](Code%20Notes_image.png)
 
 ## Extra languages
 
@@ -18,4 +18,4 @@ Trilium supports syntax highlighting for many languages, but by default displays
 
 An alternative to the code note is a "code block" - feature of a text note which can add short snippets of code to the text editor. Starting with TriliumNext v0.90.12, the code blocks also support syntax highlighting.
 
-![](1_Code Notes_image.png)
+![](1_Code%20Notes_image.png)

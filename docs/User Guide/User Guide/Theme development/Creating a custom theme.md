@@ -5,15 +5,15 @@ Organization is an important aspect of managing a knowledge base. When developin
 
 As such, the first step is to create a new note to gather all the themes.
 
-![](4_Creating a custom theme_im.png)
+![](4_Creating%20a custom theme_im.png)
 
 ## Step 2. Create the theme
 
 |     |     |
 | --- | --- | 
-| ![](2_Creating a custom theme_im.png) | Themes are code notes with a special attribute. Start by creating a new code note. |
-| ![](Creating a custom theme_im.png) | Then change the note type to a CSS code. |
-| ![](5_Creating a custom theme_im.png) | In the _Owned Attributes_ section define the `#appTheme` attribute to point to any desired name. This is the name that will show up in the appearance section in settings. |
+| ![](2_Creating%20a%20custom%20theme_im.png) | Themes are code notes with a special attribute. Start by creating a new code note. |
+| ![](Creating%20a%20custom theme_im.png) | Then change the note type to a CSS code. |
+| ![](5_Creating%20a%20custom theme_im.png) | In the _Owned Attributes_ section define the `#appTheme` attribute to point to any desired name. This is the name that will show up in the appearance section in settings. |
 
 ## Step 3. Define the theme's CSS
 
@@ -31,11 +31,11 @@ To alter the different variables of the theme:
 
 Refresh the application (Ctrl+Shift+R is a good way to do so) and go to settings. You should see the newly created theme:
 
-![](1_Creating a custom theme_im.png)
+![](1_Creating%20a%20custom theme_im.png)
 
 Afterwards the application will refresh itself with the new theme:
 
-![](3_Creating a custom theme_im.png)
+![](3_Creating%20a%20custom theme_im.png)
 
 Do note that the theme will be based off of the legacy theme. To override that and base the theme on the new TriliumNext theme, see: [Theme base (legacy vs. next)](Customize%20the%20Next%20theme.md)
 

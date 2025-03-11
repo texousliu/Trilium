@@ -15,7 +15,7 @@ Attribute is always name-value pair where both name and value are strings.
 
 _Attribute definition_ specifies how should this value be interpreted - is it just string, or is it a date? Should we allow multiple values or note? And importantly, should we _promote_ the attribute or not?
 
-![](Promoted Attributes_image.png)
+![](Promoted%20Attributes_image.png)
 
 You can notice tag attribute definition. These "definition" attributes define how the "value" attributes should behave.
 

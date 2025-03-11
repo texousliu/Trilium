@@ -1,7 +1,7 @@
 # Customize the Next theme
 By default, any custom theme will be based on the legacy light theme. To use the TriliumNext theme instead, add the `#appThemeBase=next` attribute onto the existing theme. The `appTheme` attribute must also be present.
 
-![](Customize the Next theme_i.png)
+![](Customize%20the%20Next theme_i.png)
 
 The `appThemeBase` label can be set to one of the following values:
 

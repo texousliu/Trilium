@@ -3,8 +3,8 @@
 
 |     |     |     |
 | --- | --- | --- |  
-| 1   | ![](15_Geo map_image.png) | Right click on any note on the note tree and select _Insert child note_ → _Geo Map (beta)_. |
-| 2   | ![](10_Geo map_image.png) | By default the map will be empty and will show the entire world. |
+| 1   | ![](15_Geo%20map_image.png) | Right click on any note on the note tree and select _Insert child note_ → _Geo Map (beta)_. |
+| 2   | ![](10_Geo%20map_image.png) | By default the map will be empty and will show the entire world. |
 
 ## Repositioning the map
 
@@ -17,16 +17,16 @@ The position on the map and the zoom are saved inside the map note and restored 
 
 |     |     |     |
 | --- | --- | --- |  
-| 1   |     | To create a marker, first navigate to the desired point on the map. Then press the ![](11_Geo map_image.png)button on the top-right of the map.<br><br>If the button is not visible, make sure the button section is visible by pressing the chevron button ( ![](16_Geo map_image.png)) in the top-right of the map. |
-| 2   | ![](2_Geo map_image.png) | Once pressed, the map will enter in the insert mode, as illustrated by the notification.<br><br>Simply click the point on the map where to place the marker, or the Escape key to cancel. |
-| 3   | ![](18_Geo map_image.png) | Enter the name of the marker/note to be created. |
-| 4   | ![](13_Geo map_image.png) | Once confirmed, the marker will show up on the map and it will also be displayed as a child note of the map. |
+| 1   |     | To create a marker, first navigate to the desired point on the map. Then press the ![](11_Geo%20map_image.png)button on the top-right of the map.<br><br>If the button is not visible, make sure the button section is visible by pressing the chevron button ( ![](16_Geo%20map_image.png)) in the top-right of the map. |
+| 2   | ![](2_Geo%20map_image.png) | Once pressed, the map will enter in the insert mode, as illustrated by the notification.<br><br>Simply click the point on the map where to place the marker, or the Escape key to cancel. |
+| 3   | ![](18_Geo%20map_image.png) | Enter the name of the marker/note to be created. |
+| 4   | ![](13_Geo%20map_image.png) | Once confirmed, the marker will show up on the map and it will also be displayed as a child note of the map. |
 
 ## How the location of the markers is stored
 
 The location of a marker is stored in the `#geolocation` attribute of the child notes:
 
-![](Geo map_image.png)
+![](Geo%20map_image.png)
 
 This value can be added manually if needed. The value of the attribute is made up of the latitude and longitude separated by a comma.
 
@@ -66,9 +66,9 @@ The value of the attribute is made up of the latitude and longitude separated by
 
 |     |     |     |
 | --- | --- | --- |
-| 1   | ![](4_Geo map_image.png) | Go to Google Maps on the web and look for a desired location, right click on it and a context menu will show up.<br><br>Simply click on the first item displaying the coordinates and they will be copied to clipboard.<br><br>Then paste the value inside the text box into the `#geolocation` attribute of a child note of the map (don't forget to surround the value with a `"` character). |
-| 2   | ![](6_Geo map_image.png) | In Trilium, create a child note under the map. |
-| 3   | ![](17_Geo map_image.png) | And then go to Owned Attributes and type `#geolocation="`, then paste from the clipboard as-is and then add the ending `"` character. Press Enter to confirm and the map should now be updated to contain the new note. |
+| 1   | ![](4_Geo%20map_image.png) | Go to Google Maps on the web and look for a desired location, right click on it and a context menu will show up.<br><br>Simply click on the first item displaying the coordinates and they will be copied to clipboard.<br><br>Then paste the value inside the text box into the `#geolocation` attribute of a child note of the map (don't forget to surround the value with a `"` character). |
+| 2   | ![](6_Geo%20map_image.png) | In Trilium, create a child note under the map. |
+| 3   | ![](17_Geo%20map_image.png) | And then go to Owned Attributes and type `#geolocation="`, then paste from the clipboard as-is and then add the ending `"` character. Press Enter to confirm and the map should now be updated to contain the new note. |
 
 ### Adding from OpenStreetMap
 
@@ -76,9 +76,9 @@ Similarly to the Google Maps approach:
 
 |     |     |     |
 | --- | --- | --- |  
-| 1   | ![](5_Geo map_image.png) | Go to any location on openstreetmap.org and right click to bring up the context menu. Select the “Show address” item. |
-| 2   | ![](1_Geo map_image.png) | The address will be visible in the top-left of the screen, in the place of the search bar.<br><br>Select the coordinates and copy them into the clipboard. |
-| 3   | ![](9_Geo map_image.png) | Simply paste the value inside the text box into the `#geolocation` attribute of a child note of the map and then it should be displayed on the map. |
+| 1   | ![](5_Geo%20map_image.png) | Go to any location on openstreetmap.org and right click to bring up the context menu. Select the “Show address” item. |
+| 2   | ![](1_Geo%20map_image.png) | The address will be visible in the top-left of the screen, in the place of the search bar.<br><br>Select the coordinates and copy them into the clipboard. |
+| 3   | ![](9_Geo%20map_image.png) | Simply paste the value inside the text box into the `#geolocation` attribute of a child note of the map and then it should be displayed on the map. |
 
 ## Adding GPS tracks (.gpx)
 
@@ -86,13 +86,13 @@ Trilium has basic support for displaying GPS tracks on the geo map.
 
 |     |     |     |
 | --- | --- | --- |  
-| 1   | ![](14_Geo map_image.png) | To add a track, simply drag & drop a .gpx file inside the geo map in the note tree. |
-| 2   | ![](12_Geo map_image.png) | In order for the file to be recognized as a GPS track, it needs to show up as `application/gpx+xml` in the _File type_ field. |
-| 3   | ![](3_Geo map_image.png) | When going back to the map, the track should now be visible.<br><br>The start and end points of the track are indicated by the two blue markers. |
+| 1   | ![](14_Geo%20map_image.png) | To add a track, simply drag & drop a .gpx file inside the geo map in the note tree. |
+| 2   | ![](12_Geo%20map_image.png) | In order for the file to be recognized as a GPS track, it needs to show up as `application/gpx+xml` in the _File type_ field. |
+| 3   | ![](3_Geo%20map_image.png) | When going back to the map, the track should now be visible.<br><br>The start and end points of the track are indicated by the two blue markers. |
 
 ## Troubleshooting
 
-![](7_Geo map_image.png)
+![](7_Geo%20map_image.png)
 
 ### Grid-like artifacts on the map
 
