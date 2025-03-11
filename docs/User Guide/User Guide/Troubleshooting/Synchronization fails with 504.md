@@ -7,7 +7,7 @@ The solution is to increase the timeout at proxy level.
 
 Add the following to the configuration file:
 
-```conf
+```nginx
 proxy_connect_timeout 300;
 proxy_send_timeout 300;
 proxy_read_timeout 300;
