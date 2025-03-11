@@ -149,8 +149,12 @@ export async function findSimilarNotes(
     providerId: string,
     modelId: string,
     limit = 10,
-    threshold = 0.65  // Slightly lowered from 0.7 to account for relationship focus
+    threshold?: number  // Made optional to use constants
 ): Promise<{noteId: string, similarity: number}[]> {
+    // Import constants dynamically to avoid circular dependencies
+    const { LLM_CONSTANTS } = await import('../../../routes/api/llm.js');
+    // Use provided threshold or default from constants
+    const similarityThreshold = threshold ?? LLM_CONSTANTS.SIMILARITY.DEFAULT_THRESHOLD;
     // Get all embeddings for the given provider and model
     const rows = await sql.getRows(`
         SELECT embedId, noteId, providerId, modelId, dimension, embedding
@@ -175,7 +179,7 @@ export async function findSimilarNotes(
 
     // Filter by threshold and sort by similarity (highest first)
     return similarities
-        .filter(item => item.similarity >= threshold)
+        .filter(item => item.similarity >= similarityThreshold)
         .sort((a, b) => b.similarity - a.similarity)
         .slice(0, limit);
 }
@@ -183,7 +187,7 @@ export async function findSimilarNotes(
 /**
  * Clean note content by removing HTML tags and normalizing whitespace
  */
-function cleanNoteContent(content: string, type: string, mime: string): string {
+async function cleanNoteContent(content: string, type: string, mime: string): Promise<string> {
     if (!content) return '';
 
     // If it's HTML content, remove HTML tags
@@ -214,10 +218,11 @@ function cleanNoteContent(content: string, type: string, mime: string): string {
     // Trim the content
     content = content.trim();
 
+    // Import constants dynamically to avoid circular dependencies
+    const { LLM_CONSTANTS } = await import('../../../routes/api/llm.js');
     // Truncate if extremely long
-    const MAX_CONTENT_LENGTH = 10000;
-    if (content.length > MAX_CONTENT_LENGTH) {
-        content = content.substring(0, MAX_CONTENT_LENGTH) + ' [content truncated]';
+    if (content.length > LLM_CONSTANTS.CONTENT.MAX_TOTAL_CONTENT_LENGTH) {
+        content = content.substring(0, LLM_CONSTANTS.CONTENT.MAX_TOTAL_CONTENT_LENGTH) + ' [content truncated]';
     }
 
     return content;
@@ -455,7 +460,7 @@ export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbed
             }
 
             // Clean the content to remove HTML tags and normalize whitespace
-            content = cleanNoteContent(content, note.type, note.mime);
+            content = await cleanNoteContent(content, note.type, note.mime);
         }
     } catch (err) {
         console.error(`Error getting content for note ${noteId}:`, err);
@@ -469,7 +474,7 @@ export async function getNoteEmbeddingContext(noteId: string): Promise<NoteEmbed
             } else if (['canvas', 'mindMap', 'relationMap', 'mermaid', 'geoMap'].includes(note.type)) {
                 content = extractStructuredContent(rawContent, note.type, note.mime);
             }
-            content = cleanNoteContent(content, note.type, note.mime);
+            content = await cleanNoteContent(content, note.type, note.mime);
         } catch (fallbackErr) {
             console.error(`Fallback content extraction also failed for note ${noteId}:`, fallbackErr);
         }
@@ -968,17 +973,35 @@ async function processNoteWithChunking(
 ): Promise<void> {
     try {
         // Get the context extractor dynamically to avoid circular dependencies
-        const { ContextExtractor } = await import('../../llm/context/index.js');
+        const { ContextExtractor } = await import('../context/index.js');
         const contextExtractor = new ContextExtractor();
 
-        // Get chunks of the note content
-        const chunks = await contextExtractor.getChunkedNoteContent(noteId);
+        // Get note from becca
+        const note = becca.notes[noteId];
+        if (!note) {
+            throw new Error(`Note ${noteId} not found in Becca cache`);
+        }
+
+        // Use semantic chunking for better boundaries
+        const chunks = await contextExtractor.semanticChunking(
+            context.content,
+            note.title,
+            noteId,
+            {
+                // Adjust chunk size based on provider using constants
+                maxChunkSize: provider.name === 'ollama' ?
+                    (await import('../../../routes/api/llm.js')).LLM_CONSTANTS.CHUNKING.OLLAMA_SIZE :
+                    (await import('../../../routes/api/llm.js')).LLM_CONSTANTS.CHUNKING.DEFAULT_SIZE,
+                respectBoundaries: true
+            }
+        );
 
         if (!chunks || chunks.length === 0) {
             // Fall back to single embedding if chunking fails
-            const embedding = await provider.generateNoteEmbeddings(context);
+            const embedding = await provider.generateEmbeddings(context.content);
             const config = provider.getConfig();
             await storeNoteEmbedding(noteId, provider.name, config.model, embedding);
+            log.info(`Generated single embedding for note ${noteId} (${note.title}) since chunking failed`);
             return;
         }
 
@@ -993,23 +1016,19 @@ async function processNoteWithChunking(
         let failedChunks = 0;
         const totalChunks = chunks.length;
         const failedChunkDetails: {index: number, error: string}[] = [];
+        const retryQueue: {index: number, chunk: any}[] = [];
 
-        // Process each chunk with a slight delay to avoid rate limits
+        log.info(`Processing ${chunks.length} chunks for note ${noteId} (${note.title})`);
+
+        // Process each chunk with a delay based on provider to avoid rate limits
         for (let i = 0; i < chunks.length; i++) {
             const chunk = chunks[i];
-            const chunkId = `chunk_${i + 1}_of_${chunks.length}`;
-
             try {
-                // Create a modified context object with just this chunk's content
-                const chunkContext: NoteEmbeddingContext = {
-                    ...context,
-                    content: chunk
-                };
+                // Generate embedding for this chunk's content
+                const embedding = await provider.generateEmbeddings(chunk.content);
 
-                // Generate embedding for this chunk
-                const embedding = await provider.generateNoteEmbeddings(chunkContext);
-
-                // Store with chunk information
+                // Store with chunk information in a unique ID format
+                const chunkIdSuffix = `${i + 1}_of_${chunks.length}`;
                 await storeNoteEmbedding(
                     noteId,
                     provider.name,
@@ -1019,9 +1038,10 @@ async function processNoteWithChunking(
 
                 successfulChunks++;
 
-                // Small delay between chunks to avoid rate limits
+                // Small delay between chunks to avoid rate limits - longer for Ollama
                 if (i < chunks.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 100));
+                    await new Promise(resolve => setTimeout(resolve,
+                        provider.name === 'ollama' ? 500 : 100));
                 }
             } catch (error: any) {
                 // Track the failure for this specific chunk
@@ -1031,17 +1051,62 @@ async function processNoteWithChunking(
                     error: error.message || 'Unknown error'
                 });
 
-                log.error(`Error processing chunk ${chunkId} for note ${noteId}: ${error.message || 'Unknown error'}`);
+                // Add to retry queue
+                retryQueue.push({
+                    index: i,
+                    chunk: chunk
+                });
+
+                log.error(`Error processing chunk ${i + 1} for note ${noteId}: ${error.message || 'Unknown error'}`);
+            }
+        }
+
+        // Retry failed chunks with exponential backoff
+        if (retryQueue.length > 0 && retryQueue.length < chunks.length) {
+            log.info(`Retrying ${retryQueue.length} failed chunks for note ${noteId}`);
+
+            for (let j = 0; j < retryQueue.length; j++) {
+                const {index, chunk} = retryQueue[j];
+
+                try {
+                    // Wait longer for retries with exponential backoff
+                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(1.5, j)));
+
+                    // Retry the embedding
+                    const embedding = await provider.generateEmbeddings(chunk.content);
+
+                    // Store with unique ID that indicates it was a retry
+                    const chunkIdSuffix = `${index + 1}_of_${chunks.length}`;
+                    await storeNoteEmbedding(
+                        noteId,
+                        provider.name,
+                        config.model,
+                        embedding
+                    );
+
+                    // Update counters
+                    successfulChunks++;
+                    failedChunks--;
+
+                    // Remove from failedChunkDetails
+                    const detailIndex = failedChunkDetails.findIndex(d => d.index === index + 1);
+                    if (detailIndex >= 0) {
+                        failedChunkDetails.splice(detailIndex, 1);
+                    }
+                } catch (error: any) {
+                    log.error(`Retry failed for chunk ${index + 1} of note ${noteId}: ${error.message || 'Unknown error'}`);
+                    // Keep failure count as is
+                }
             }
         }
 
         // Log information about the processed chunks
         if (successfulChunks > 0) {
-            log.info(`Generated ${successfulChunks} chunk embeddings for note ${noteId}`);
+            log.info(`Generated ${successfulChunks} chunk embeddings for note ${noteId} (${note.title})`);
         }
 
         if (failedChunks > 0) {
-            log.info(`Failed to generate ${failedChunks} chunk embeddings for note ${noteId}`);
+            log.info(`Failed to generate ${failedChunks} chunk embeddings for note ${noteId} (${note.title})`);
         }
 
         // If no chunks were successfully processed, throw an error

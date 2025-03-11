@@ -49,26 +49,32 @@ export interface ChunkOptions {
 /**
  * Default options for chunking
  */
-const DEFAULT_CHUNK_OPTIONS: Required<ChunkOptions> = {
-    maxChunkSize: 1500,  // Characters per chunk
-    overlapSize: 100,    // Overlap between chunks
-    respectBoundaries: true,
-    includeMetadata: true,
-    metadata: {}
-};
+async function getDefaultChunkOptions(): Promise<Required<ChunkOptions>> {
+    // Import constants dynamically to avoid circular dependencies
+    const { LLM_CONSTANTS } = await import('../../../routes/api/llm.js');
+    
+    return {
+        maxChunkSize: LLM_CONSTANTS.CHUNKING.DEFAULT_SIZE,
+        overlapSize: LLM_CONSTANTS.CHUNKING.DEFAULT_OVERLAP,
+        respectBoundaries: true,
+        includeMetadata: true,
+        metadata: {}
+    };
+}
 
 /**
  * Chunk content into smaller pieces
  * Used for processing large documents and preparing them for LLMs
  */
-export function chunkContent(
+export async function chunkContent(
     content: string,
     title: string = '',
     noteId: string = '',
     options: ChunkOptions = {}
-): ContentChunk[] {
+): Promise<ContentChunk[]> {
     // Merge provided options with defaults
-    const config: Required<ChunkOptions> = { ...DEFAULT_CHUNK_OPTIONS, ...options };
+    const defaultOptions = await getDefaultChunkOptions();
+    const config: Required<ChunkOptions> = { ...defaultOptions, ...options };
 
     // If content is small enough, return as a single chunk
     if (content.length <= config.maxChunkSize) {
@@ -167,14 +173,15 @@ export function chunkContent(
 /**
  * Smarter chunking that tries to respect semantic boundaries like headers and sections
  */
-export function semanticChunking(
+export async function semanticChunking(
     content: string,
     title: string = '',
     noteId: string = '',
     options: ChunkOptions = {}
-): ContentChunk[] {
+): Promise<ContentChunk[]> {
     // Merge provided options with defaults
-    const config: Required<ChunkOptions> = { ...DEFAULT_CHUNK_OPTIONS, ...options };
+    const defaultOptions = await getDefaultChunkOptions();
+    const config: Required<ChunkOptions> = { ...defaultOptions, ...options };
 
     // If content is small enough, return as a single chunk
     if (content.length <= config.maxChunkSize) {
@@ -214,7 +221,7 @@ export function semanticChunking(
 
     // If no headers were found, fall back to regular chunking
     if (sections.length <= 1) {
-        return chunkContent(content, title, noteId, options);
+        return await chunkContent(content, title, noteId, options);
     }
 
     // Process each section
@@ -238,7 +245,7 @@ export function semanticChunking(
                 }
 
                 // Chunk this section separately
-                const sectionChunks = chunkContent(
+                const sectionChunks = await chunkContent(
                     section,
                     title,
                     noteId,

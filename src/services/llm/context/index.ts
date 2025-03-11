@@ -161,48 +161,48 @@ export class ContextExtractor {
     /**
      * Chunk content into smaller pieces
      */
-    static chunkContent(
+    static async chunkContent(
         content: string,
         title: string = '',
         noteId: string = '',
         options: ChunkOptions = {}
-    ): ContentChunk[] {
+    ): Promise<ContentChunk[]> {
         return chunkContent(content, title, noteId, options);
     }
 
     /**
      * Chunk content into smaller pieces - instance method
      */
-    chunkContent(
+    async chunkContent(
         content: string,
         title: string = '',
         noteId: string = '',
         options: ChunkOptions = {}
-    ): ContentChunk[] {
+    ): Promise<ContentChunk[]> {
         return ContextExtractor.chunkContent(content, title, noteId, options);
     }
 
     /**
      * Smarter chunking that respects semantic boundaries
      */
-    static semanticChunking(
+    static async semanticChunking(
         content: string,
         title: string = '',
         noteId: string = '',
         options: ChunkOptions = {}
-    ): ContentChunk[] {
+    ): Promise<ContentChunk[]> {
         return semanticChunking(content, title, noteId, options);
     }
 
     /**
      * Smarter chunking that respects semantic boundaries - instance method
      */
-    semanticChunking(
+    async semanticChunking(
         content: string,
         title: string = '',
         noteId: string = '',
         options: ChunkOptions = {}
-    ): ContentChunk[] {
+    ): Promise<ContentChunk[]> {
         return ContextExtractor.semanticChunking(content, title, noteId, options);
     }
 
@@ -572,7 +572,7 @@ export class ContextExtractor {
         if (!content) return [];
 
         // Use the new chunking functionality
-        const chunks = chunkContent(
+        const chunks = await ContextExtractor.chunkContent(
             content,
             '',
             noteId,
@@ -580,7 +580,7 @@ export class ContextExtractor {
         );
 
         // Convert to the old API format which was an array of strings
-        return chunks.map(chunk => chunk.content);
+        return (await chunks).map(chunk => chunk.content);
     }
 
     /**

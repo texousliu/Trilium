@@ -333,12 +333,9 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
     }
 
     /**
-     * Build a context string from relevant notes
-     * @param sources - Array of notes
-     * @param query - Original user query
-     * @returns Formatted context string
+     * Build context string from retrieved notes
      */
-    buildContextFromNotes(sources: any[], query: string): string {
+    async buildContextFromNotes(sources: any[], query: string): Promise<string> {
         if (!sources || sources.length === 0) {
             // Return a default context instead of empty string
             return "I am an AI assistant helping you with your Trilium notes. " +
@@ -348,13 +345,46 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
 
         let context = `I've found some relevant information in your notes that may help answer: "${query}"\n\n`;
 
+        // Sort sources by similarity if available to prioritize most relevant
+        if (sources[0] && sources[0].similarity !== undefined) {
+            sources = [...sources].sort((a, b) => (b.similarity || 0) - (a.similarity || 0));
+        }
+
+        // Get provider name to adjust context for different models
+        const providerId = this.provider?.name || 'default';
+        // Get approximate max length based on provider using constants
+        // Import the constants dynamically to avoid circular dependencies
+        const { LLM_CONSTANTS } = await import('../../routes/api/llm.js');
+        const maxTotalLength = providerId === 'ollama' ? LLM_CONSTANTS.CONTEXT_WINDOW.OLLAMA :
+                              providerId === 'openai' ? LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI :
+                              LLM_CONSTANTS.CONTEXT_WINDOW.ANTHROPIC;
+
+        // Track total context length to avoid oversized context
+        let currentLength = context.length;
+        const maxNoteContentLength = Math.min(LLM_CONSTANTS.CONTENT.MAX_NOTE_CONTENT_LENGTH,
+                                   Math.floor(maxTotalLength / Math.max(1, sources.length)));
+
         sources.forEach((source) => {
-            // Use the note title as a meaningful heading
-            context += `### ${source.title}\n`;
+            // Check if adding this source would exceed our total limit
+            if (currentLength >= maxTotalLength) return;
+
+            // Build source section
+            let sourceSection = `### ${source.title}\n`;
 
             // Add relationship context if available
             if (source.parentTitle) {
-                context += `Part of: ${source.parentTitle}\n`;
+                sourceSection += `Part of: ${source.parentTitle}\n`;
+            }
+
+            // Add attributes if available (for better context)
+            if (source.noteId) {
+                const note = becca.notes[source.noteId];
+                if (note) {
+                    const labels = note.getLabels();
+                    if (labels.length > 0) {
+                        sourceSection += `Labels: ${labels.map(l => `#${l.name}${l.value ? '=' + l.value : ''}`).join(' ')}\n`;
+                    }
+                }
             }
 
             if (source.content) {
@@ -362,17 +392,22 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                 let cleanContent = this.sanitizeNoteContent(source.content, source.type, source.mime);
 
                 // Truncate content if it's too long
-                const maxContentLength = 1000;
-                if (cleanContent.length > maxContentLength) {
-                    cleanContent = cleanContent.substring(0, maxContentLength) + " [content truncated due to length]";
+                if (cleanContent.length > maxNoteContentLength) {
+                    cleanContent = cleanContent.substring(0, maxNoteContentLength) + " [content truncated due to length]";
                 }
 
-                context += `${cleanContent}\n`;
+                sourceSection += `${cleanContent}\n`;
             } else {
-                context += "[This note doesn't contain textual content]\n";
+                sourceSection += "[This note doesn't contain textual content]\n";
             }
 
-            context += "\n";
+            sourceSection += "\n";
+
+            // Check if adding this section would exceed total length limit
+            if (currentLength + sourceSection.length <= maxTotalLength) {
+                context += sourceSection;
+                currentLength += sourceSection.length;
+            }
         });
 
         // Add clear instructions about how to reference the notes
@@ -475,7 +510,7 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             }
 
             // Step 3: Build context from the notes
-            const context = this.buildContextFromNotes(relevantNotes, userQuestion);
+            const context = await this.buildContextFromNotes(relevantNotes, userQuestion);
 
             return {
                 context,

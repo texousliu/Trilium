@@ -12,6 +12,62 @@ import * as aiServiceManagerModule from "../../services/llm/ai_service_manager.j
 import triliumContextService from "../../services/llm/trilium_context_service.js";
 import sql from "../../services/sql.js";
 
+// LLM service constants
+export const LLM_CONSTANTS = {
+    // Context window sizes (in characters)
+    CONTEXT_WINDOW: {
+        OLLAMA: 6000,
+        OPENAI: 12000,
+        ANTHROPIC: 15000,
+        DEFAULT: 6000
+    },
+
+    // Embedding dimensions (verify these with your actual models)
+    EMBEDDING_DIMENSIONS: {
+        OLLAMA: {
+            DEFAULT: 384,
+            NOMIC: 768,
+            MISTRAL: 1024
+        },
+        OPENAI: {
+            ADA: 1536,
+            DEFAULT: 1536
+        },
+        ANTHROPIC: {
+            CLAUDE: 1024,
+            DEFAULT: 1024
+        }
+    },
+
+    // Chunking parameters
+    CHUNKING: {
+        DEFAULT_SIZE: 1500,
+        OLLAMA_SIZE: 1000,
+        DEFAULT_OVERLAP: 100,
+        MAX_SIZE_FOR_SINGLE_EMBEDDING: 5000
+    },
+
+    // Search/similarity thresholds
+    SIMILARITY: {
+        DEFAULT_THRESHOLD: 0.65,
+        HIGH_THRESHOLD: 0.75,
+        LOW_THRESHOLD: 0.5
+    },
+
+    // Session management
+    SESSION: {
+        CLEANUP_INTERVAL_MS: 60 * 60 * 1000, // 1 hour
+        SESSION_EXPIRY_MS: 12 * 60 * 60 * 1000, // 12 hours
+        MAX_SESSION_MESSAGES: 10
+    },
+
+    // Content limits
+    CONTENT: {
+        MAX_NOTE_CONTENT_LENGTH: 1500,
+        MAX_TOTAL_CONTENT_LENGTH: 10000
+    }
+};
+
 // Define basic interfaces
 interface ChatMessage {
     role: 'user' | 'assistant' | 'system';
@@ -55,7 +111,7 @@ const sessions = new Map<string, ChatSession>();
 let cleanupInitialized = false;
 
 /**
- * Initialize the cleanup timer if not already running
+ * Initialize the session cleanup timer to remove old/inactive sessions
  * Only call this after database is initialized
  */
 function initializeCleanupTimer() {
@@ -63,18 +119,18 @@ function initializeCleanupTimer() {
         return;
     }
 
-    // Utility function to clean sessions older than 12 hours
+    // Clean sessions that have expired based on the constants
     function cleanupOldSessions() {
-        const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
+        const expiryTime = new Date(Date.now() - LLM_CONSTANTS.SESSION.SESSION_EXPIRY_MS);
         for (const [sessionId, session] of sessions.entries()) {
-            if (session.lastActive < twelveHoursAgo) {
+            if (session.lastActive < expiryTime) {
                 sessions.delete(sessionId);
             }
         }
     }
 
-    // Run cleanup every hour
-    setInterval(cleanupOldSessions, 60 * 60 * 1000);
+    // Run cleanup at the configured interval
+    setInterval(cleanupOldSessions, LLM_CONSTANTS.SESSION.CLEANUP_INTERVAL_MS);
     cleanupInitialized = true;
 }
 
@@ -563,10 +619,10 @@ async function sendMessage(req: Request, res: Response) {
                     content: context
                 };
 
-                // Format all messages for the AI
+                // Format all messages for the AI (advanced context case)
                 const aiMessages: Message[] = [
                     contextMessage,
-                    ...session.messages.slice(-10).map(msg => ({
+                    ...session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
                         role: msg.role,
                         content: msg.content
                     }))
@@ -699,10 +755,10 @@ async function sendMessage(req: Request, res: Response) {
                     content: context
                 };
 
-                // Format all messages for the AI
+                // Format all messages for the AI (original approach)
                 const aiMessages: Message[] = [
                     contextMessage,
-                    ...session.messages.slice(-10).map(msg => ({
+                    ...session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
                         role: msg.role,
                         content: msg.content
                     }))
