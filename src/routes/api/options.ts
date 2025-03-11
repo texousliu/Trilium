@@ -99,7 +99,8 @@ const ALLOWED_OPTIONS = new Set([
     "embeddingAutoUpdateEnabled",
     "embeddingBatchSize",
     "embeddingUpdateInterval",
-    "embeddingDefaultDimension"
+    "embeddingDefaultDimension",
+    "embeddingsDefaultProvider"
 ]);
 
 function getOptions() {
