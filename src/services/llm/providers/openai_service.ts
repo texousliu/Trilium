@@ -1,6 +1,6 @@
-import options from '../options.js';
-import { BaseAIService } from './base_ai_service.js';
-import type { ChatCompletionOptions, ChatResponse, Message } from './ai_interface.js';
+import options from '../../options.js';
+import { BaseAIService } from '../base_ai_service.js';
+import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
 
 export class OpenAIService extends BaseAIService {
     constructor() {

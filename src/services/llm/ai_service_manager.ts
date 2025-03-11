@@ -1,8 +1,8 @@
 import options from '../options.js';
 import type { AIService, ChatCompletionOptions, ChatResponse, Message } from './ai_interface.js';
-import { OpenAIService } from './openai_service.js';
-import { AnthropicService } from './anthropic_service.js';
-import { OllamaService } from './ollama_service.js';
+import { OpenAIService } from './providers/openai_service.js';
+import { AnthropicService } from './providers/anthropic_service.js';
+import { OllamaService } from './providers/ollama_service.js';
 import log from '../log.js';
 
 type ServiceProviders = 'openai' | 'anthropic' | 'ollama';
