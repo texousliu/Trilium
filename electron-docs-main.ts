@@ -161,6 +161,10 @@ async function registerHandlers() {
         exportData();
     }, 10_000);;
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
+        if (e.entityName === "options") {
+            return;
+        }
+
         console.log("Got entity changed ", e);
         debouncer();
     });
