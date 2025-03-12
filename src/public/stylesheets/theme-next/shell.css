@@ -2087,10 +2087,11 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     color: var(--modal-title-color);
 }
 
-/* Modal control buttons (close and help) */
+/* Modal and toast control buttons (close and help) */
 
 .modal .modal-header .btn-close,
-.modal .modal-header .help-button {
+.modal .modal-header .help-button,
+#toast-container .toast .toast-header .btn-close {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2109,11 +2110,13 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     cursor: default;
 }
 
-.modal .modal-header .btn-close {
+.modal .modal-header .btn-close,
+#toast-container .toast .toast-header .btn-close {
     --modal-control-button-hover-background: var(--modal-close-button-hover-background);
 }
 
-.modal .modal-header .btn-close::after {
+.modal .modal-header .btn-close::after,
+#toast-container .toast .toast-header .btn-close::after {
     content: "\ec8d";
     font-family: boxicons;
 }
@@ -2126,23 +2129,27 @@ div.promoted-attribute-cell .multiplicity:has(span) {
 }
 
 .modal .modal-header .btn-close:hover,
-.modal .modal-header .help-button:hover {
+.modal .modal-header .help-button:hover,
+#toast-container .toast .toast-header .btn-close:hover {
     background: var(--modal-control-button-hover-background);
     color: var(--modal-control-button-hover-color);
 }
 
 .modal .modal-header .btn-close:active,
-.modal .modal-header .help-button:active {
+.modal .modal-header .help-button:active,
+#toast-container .toast .toast-header .btn-close:active {
     transform: scale(.85);
 }
 
 .modal .modal-header .btn-close:focus,
-.modal .modal-header .help-button:focus {
+.modal .modal-header .help-button:focus,
+#toast-container .toast .toast-header .btn-close:focus {
     box-shadow: none !important;
 }
 
 .modal .modal-header .btn-close:focus-visible,
-.modal .modal-header .help-button:focus-visible {
+.modal .modal-header .help-button:focus-visible,
+#toast-container .toast .toast-header .btn-close:focus-visible {
     outline: 2px solid var(--input-focus-outline-color);
     outline-offset: 2px;
 }
