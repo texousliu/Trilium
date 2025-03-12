@@ -6,8 +6,8 @@
 import becca from '../../../becca/becca.js';
 import { getNoteContent, formatNoteContent, sanitizeHtmlContent } from './note_content.js';
 import { detectLanguage, extractCodeStructure } from './code_handlers.js';
-import { chunkContent, semanticChunking } from './chunking.js';
-import type { ContentChunk, ChunkOptions } from './chunking.js';
+import { chunkContent, semanticChunking } from './content_chunking.js';
+import type { ContentChunk, ChunkOptions } from './content_chunking.js';
 import { summarizeContent, extractKeyPoints } from './summarization.js';
 import { getParentNotes, getParentContext, getChildContext, getLinkedNotesContext } from './hierarchy.js';
 import { getSemanticContext } from './semantic_context.js';

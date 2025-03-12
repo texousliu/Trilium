@@ -19,6 +19,6 @@ export interface ChunkingOperations {
  * This function is implemented to break circular dependencies
  */
 export async function getChunkingOperations(): Promise<ChunkingOperations> {
-    const chunking = await import('./chunking.js');
+    const chunking = await import('./chunking_processor.js');
     return chunking;
 }
