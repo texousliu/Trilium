@@ -2,6 +2,11 @@ import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import options from "../../../services/options.js";
 import utils from "../../../services/utils.js";
 
+const TEXT_FORMATTING_GROUP = {
+    label: "Text formatting",
+    icon: "text"
+};
+
 export function buildConfig() {
     return {
         image: {
@@ -116,8 +121,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
                 "bold",
                 "italic",
                 {
-                    label: "Text formatting",
-                    icon: "text",
+                    ...TEXT_FORMATTING_GROUP,
                     items: ["underline", "strikethrough", "superscript", "subscript", "code", "kbd"]
                 },
                 "|",
@@ -159,10 +163,10 @@ function buildFloatingToolbar() {
                 "bold",
                 "italic",
                 "underline",
-                "strikethrough",
-                "superscript",
-                "subscript",
-                "kbd",
+                {
+                    ...TEXT_FORMATTING_GROUP,
+                    items: [ "strikethrough", "kbd", "superscript", "subscript" ]
+                },
                 "fontColor",
                 "fontBackgroundColor",
                 "code",
