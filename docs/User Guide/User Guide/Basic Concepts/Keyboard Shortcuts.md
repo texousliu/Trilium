@@ -54,8 +54,8 @@ Trilium uses CKEditor 5 for the [text notes](../Note%20Types/Text.md) and CodeMi
 *   `ALT-F10` - bring up inline formatting toolbar (arrow keys `<-`,`->` to navigate, `ENTER` to apply)
 *   `ALT-F10` - again to bring up block formatting toolbar
 *   `ENTER` in tree pane switches from tree pane into note title. Enter from note title switches focus to text editor. `CTRL+.` switches back from editor to tree pane.
-*   `CTRL+K` - create / edit [external link](Note/Links.md)
-*   `CTRL+L` - create [internal (note) link](Note/Links.md)
+*   `CTRL+K` - create / edit [external link](../Note%20Types/Text/Links.md)
+*   `CTRL+L` - create [internal (note) link](../Note%20Types/Text/Links.md)
 *   `ALT+T` - inserts current date and time at caret position
 *   `CTRL+.` - jump away from the editor to tree pane and scroll to current note
 

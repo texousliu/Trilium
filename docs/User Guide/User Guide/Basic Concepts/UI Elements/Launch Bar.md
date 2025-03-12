@@ -30,6 +30,11 @@ Similarly, to remove it from the launch bar, simply look for it in _Visible Laun
 
 Drag-and-drop the items in the tree in order to change their order. See [Note Tree](Note%20Tree.md) for more interaction options, including using keyboard shortcuts.
 
+## Customizing the launcher
+
+*   The icon of a launcher can be changed just like a normal note. See [Note Icons](../Note/Note%20Icons.md) for more information.
+*   The title of the launcher can also be changed.
+
 ### Resetting
 
 Resetting allows restoring the original configuration of Trilium for the launcher bar, or for a portion of it. Simply right click a launcher (or even the entire _Launch Bar_ section) and select _Reset_ to bring it back to the original state.
