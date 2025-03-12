@@ -105,4 +105,5 @@ try {
 
 } catch(err) {
     console.error("Error during copy:", err)
+    process.exit(1)
 }
