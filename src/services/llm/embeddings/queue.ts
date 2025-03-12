@@ -286,10 +286,10 @@ export async function processEmbeddingQueue() {
                 if (noteData.attempts + 1 >= 3) {
                     log.error(`Marked note ${noteData.noteId} as permanently failed after multiple embedding attempts`);
 
-                    // Set the failed flag and update the attempts
+                    // Set the failed flag but keep the actual attempts count
                     await sql.execute(`
                         UPDATE embedding_queue
-                        SET attempts = 999, failed = 1
+                        SET failed = 1
                         WHERE noteId = ?
                     `, [noteData.noteId]);
                 }
@@ -313,10 +313,10 @@ export async function processEmbeddingQueue() {
             if (noteData.attempts + 1 >= 3) {
                 log.error(`Marked note ${noteData.noteId} as permanently failed after multiple embedding attempts`);
 
-                // Set the failed flag and update the attempts
+                // Set the failed flag but keep the actual attempts count
                 await sql.execute(`
                     UPDATE embedding_queue
-                    SET attempts = 999, failed = 1
+                    SET failed = 1
                     WHERE noteId = ?
                 `, [noteData.noteId]);
             }

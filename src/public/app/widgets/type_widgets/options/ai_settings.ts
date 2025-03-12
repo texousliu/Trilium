@@ -42,6 +42,7 @@ interface FailedEmbeddingNotes {
         error: string;
         failureType: string;
         chunks: number;
+        isPermanent: boolean;
     }>;
 }
 
@@ -847,34 +848,61 @@ export default class AiSettingsWidget extends OptionsWidget {
             return;
         }
 
-        const $failedHeader = $(`
+        // Create header with count and retry all button
+        const $header = $(`
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6>Failed Embeddings (${failedResult.failedNotes.length})</h6>
-                <button class="btn btn-sm btn-outline-primary retry-all-btn">Retry All Failed</button>
+                <h6 class="mb-0">Failed Embeddings (${failedResult.failedNotes.length})</h6>
+                <button class="btn btn-sm btn-primary retry-all-btn">Retry All</button>
             </div>
         `);
 
-        const $failedList = $('<div class="list-group failed-list mb-3">');
+        // Create list container using the application's native note-list class
+        const $failedList = $('<div class="note-list mb-3">');
 
         for (const note of failedResult.failedNotes) {
             // Determine if this is a full note failure or just failed chunks
             const isFullFailure = note.failureType === 'full';
-            const badgeClass = isFullFailure ? 'badge-danger' : 'badge-warning';
-            const badgeText = isFullFailure ? 'Full Note' : `${note.chunks} Chunks`;
+            const isPermanentlyFailed = note.isPermanent === true;
 
+            // Use Bootstrap 4 badge classes
+            let badgeText = isFullFailure ? 'Full Note' : `Chunks Failed`;
+            let badgeClass = 'badge-warning';
+
+            if (isPermanentlyFailed) {
+                badgeClass = 'badge-danger';
+                if (isFullFailure) {
+                    badgeText = 'Permanently Failed';
+                } else {
+                    badgeText = 'Partially Failed';
+                }
+            }
+
+            // Use the application's note-list-item styling
             const $item = $(`
-                <div class="list-group-item list-group-item-action flex-column align-items-start p-2">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h6 class="mb-1">${note.title || note.noteId}</h6>
-                            <span class="badge ${badgeClass} mb-1">${badgeText}</span>
+                <div class="note-list-item">
+                    <div class="note-book-card p-2">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div>
+                                <div class="d-flex align-items-center">
+                                    <h6 class="mb-1">${note.title || note.noteId}</h6>
+                                    <span class="badge ${badgeClass} ml-2">${badgeText}</span>
+                                </div>
+                                <p class="text-muted mb-1 small">
+                                    ${isPermanentlyFailed ?
+                                      `<strong>Status:</strong> Permanently failed` :
+                                      `<strong>Attempts:</strong> ${note.attempts}`}
+                                    <br>
+                                    <strong>Last attempt:</strong> ${note.lastAttempt.substring(0, 19)}
+                                    <br>
+                                    <strong>Error:</strong> ${(note.error || 'Unknown error').substring(0, 100)}${(note.error && note.error.length > 100) ? '...' : ''}
+                                </p>
+                            </div>
+                            <div class="ml-2 align-self-center">
+                                <button class="btn btn-sm btn-outline-secondary retry-btn" data-note-id="${note.noteId}">
+                                    <i class="fas fa-redo-alt"></i> Retry
+                                </button>
+                            </div>
                         </div>
-                        <button class="btn btn-sm btn-outline-secondary retry-btn" data-note-id="${note.noteId}">Retry</button>
-                    </div>
-                    <div class="small text-muted">
-                        <div>Attempts: ${note.attempts}</div>
-                        <div>Last attempt: ${note.lastAttempt}</div>
-                        <div>Error: ${note.error}</div>
                     </div>
                 </div>
             `);
@@ -882,38 +910,67 @@ export default class AiSettingsWidget extends OptionsWidget {
             $failedList.append($item);
         }
 
-        this.$widget.find('.embedding-failed-notes-list').empty().append($failedHeader, $failedList);
+        // Add the header and list to the DOM (no card structure)
+        this.$widget.find('.embedding-failed-notes-list').empty().append($header, $failedList);
 
         // Add event handlers using local variables to avoid 'this' issues
         const self = this;
 
-        this.$widget.find('.retry-btn').on('click', async function() {
-            const noteId = $(this).data('note-id');
-            $(this).prop('disabled', true).text('Retrying...');
+        this.$widget.find('.retry-btn').on('click', async function(e) {
+            // Prevent default behavior
+            e.preventDefault();
+
+            const $button = $(this);
+            const noteId = $button.data('note-id');
+
+            // Show loading state
+            $button.prop('disabled', true)
+                .removeClass('btn-outline-secondary')
+                .addClass('btn-outline-secondary')
+                .html('<span class="fa fa-spin fa-spinner mr-1"></span>Retrying');
 
             const success = await self.retryFailedEmbedding(noteId);
 
             if (success) {
-                toastService.showMessage("Note queued for retry");
+                toastService.showMessage(t("ai_llm.note_queued_for_retry"));
                 await self.refreshEmbeddingStats();
             } else {
-                toastService.showError("Failed to retry note");
-                $(this).prop('disabled', false).text('Retry');
+                toastService.showError(t("ai_llm.failed_to_retry_note"));
+                $button.prop('disabled', false)
+                    .html('<i class="fas fa-redo-alt"></i> Retry');
             }
         });
 
-        this.$widget.find('.retry-all-btn').on('click', async function() {
-            $(this).prop('disabled', true).text('Retrying All...');
+        this.$widget.find('.retry-all-btn').on('click', async function(e) {
+            const $button = $(this);
+
+            // Show loading state
+            $button.prop('disabled', true)
+                .removeClass('btn-primary')
+                .addClass('btn-secondary')
+                .html('<span class="fa fa-spin fa-spinner mr-1"></span>Retrying All');
 
             const success = await self.retryAllFailedEmbeddings();
 
             if (success) {
-                toastService.showMessage("All failed notes queued for retry");
+                toastService.showMessage(t("ai_llm.all_notes_queued_for_retry"));
                 await self.refreshEmbeddingStats();
+
+                // Return button to original state after successful refresh
+                if (!$button.is(':disabled')) { // Check if button still exists
+                    $button.prop('disabled', false)
+                        .removeClass('btn-secondary')
+                        .addClass('btn-primary')
+                        .html('Retry All');
+                }
             } else {
-                toastService.showError("Failed to retry notes");
-                $(this).prop('disabled', false).text('Retry All Failed');
+                toastService.showError(t("ai_llm.failed_to_retry_all"));
+                $button.prop('disabled', false)
+                    .removeClass('btn-secondary')
+                    .addClass('btn-primary')
+                    .html('Retry All');
             }
         });
     }
 }
+

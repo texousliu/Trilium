@@ -1209,7 +1209,11 @@
     "refresh_stats": "Refresh Stats",
     "refreshing": "Refreshing...",
     "stats_error": "Error fetching embedding statistics",
-    "auto_refresh_notice": "Auto-refreshes every {{seconds}} seconds"
+    "auto_refresh_notice": "Auto-refreshes every {{seconds}} seconds",
+    "note_queued_for_retry": "Note queued for retry",
+    "failed_to_retry_note": "Failed to retry note",
+    "all_notes_queued_for_retry": "All failed notes queued for retry",
+    "failed_to_retry_all": "Failed to retry notes"
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",
