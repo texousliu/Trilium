@@ -1999,7 +1999,7 @@
 										"Vc8PjrjAGuOp",
 										"xYmIYSP6wE3F"
 									],
-									"title": "Launcher Bar",
+									"title": "Launch Bar",
 									"notePosition": 70,
 									"prefix": null,
 									"isExpanded": false,
@@ -2012,11 +2012,69 @@
 											"value": "bx bx-sidebar",
 											"isInheritable": false,
 											"position": 10
+										},
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "x3i7MxGccDuM",
+											"isInheritable": false,
+											"position": 30
+										},
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "oPVyFC7WL2Lp",
+											"isInheritable": false,
+											"position": 40
+										},
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "x0JgW8UqGXvq",
+											"isInheritable": false,
+											"position": 50
+										},
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "OR8WJ7Iz9K4U",
+											"isInheritable": false,
+											"position": 70
+										},
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "CdNpE2pqjmI6",
+											"isInheritable": false,
+											"position": 80
+										},
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "SynTBQiBsdYJ",
+											"isInheritable": false,
+											"position": 90
+										},
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "OFXdgB2nNk1F",
+											"isInheritable": false,
+											"position": 100
 										}
 									],
 									"format": "html",
-									"dataFileName": "Launcher Bar.html",
-									"attachments": []
+									"dataFileName": "Launch Bar.html",
+									"attachments": [
+										{
+											"attachmentId": "YsBMjK1g3jd1",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/jpg",
+											"position": 10,
+											"dataFileName": "Launch Bar_image.png"
+										}
+									]
 								},
 								{
 									"isClone": false,
@@ -2988,6 +3046,13 @@
 											"value": "note-hoisting",
 											"isInheritable": false,
 											"position": 30
+										},
+										{
+											"type": "label",
+											"name": "iconClass",
+											"value": "bx bxs-chevrons-up",
+											"isInheritable": false,
+											"position": 40
 										}
 									],
 									"format": "html",
