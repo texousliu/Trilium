@@ -1887,3 +1887,7 @@ footer.file-footer button {
 .right-pane-tab .tab-title .bx {
     font-size: 1.1em;
 }
+.ck-content .admonition {
+    box-shadow: var(--card-box-shadow);
+    padding: 1em;
+}
