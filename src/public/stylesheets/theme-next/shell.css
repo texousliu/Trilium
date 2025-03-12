@@ -1732,11 +1732,10 @@ div.bookmark-folder-widget .note-link .bx {
  */
 
  /* Button bar */
- .search-setting-table tbody:last-child div {
+ .search-definition-widget .search-setting-table tbody:last-child div {
     justify-content: flex-end !important;
     gap: 8px;
  }
-
 
 .search-result-widget-content .note-path .path-bracket {
     display: inline;
