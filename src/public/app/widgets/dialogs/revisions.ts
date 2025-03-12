@@ -248,7 +248,12 @@ export default class RevisionsDialog extends BasicWidget {
     renderContentButtons(revisionItem: RevisionItem) {
         this.$titleButtons.empty();
 
-        const $restoreRevisionButton = $(`<button class="btn btn-sm" type="button">${t("revisions.restore_button")}</button>`);
+        const $restoreRevisionButton = $(`
+            <button class="btn btn-sm" type="button">
+                <span class="bx bx-history"></span>
+                ${t("revisions.restore_button")}
+            </button>
+        `);
 
         $restoreRevisionButton.on("click", async () => {
             const text = t("revisions.confirm_restore");
@@ -262,7 +267,12 @@ export default class RevisionsDialog extends BasicWidget {
             }
         });
 
-        const $eraseRevisionButton = $(`<button class="btn btn-sm" type="button">${t("revisions.delete_button")}</button>`);
+        const $eraseRevisionButton = $(`
+            <button class="btn btn-sm" type="button">
+                <span class="bx bx-trash"></span>
+                ${t("revisions.delete_button")}
+            </button>
+        `);
 
         $eraseRevisionButton.on("click", async () => {
             const text = t("revisions.confirm_delete");
@@ -282,7 +292,12 @@ export default class RevisionsDialog extends BasicWidget {
 
         this.$titleButtons.append($eraseRevisionButton).append(" &nbsp; ");
 
-        const $downloadButton = $(`<button class="btn btn-sm btn-primary" type="button">${t("revisions.download_button")}</button>`);
+        const $downloadButton = $(`
+            <button class="btn btn-sm btn-primary" type="button">
+                <span class="bx bx-download"></span>
+                ${t("revisions.download_button")}
+            </button>
+        `);
 
         $downloadButton.on("click", () => openService.downloadRevision(revisionItem.noteId, revisionItem.revisionId));
 
