@@ -279,6 +279,18 @@ async function rebuildIndex(req: Request, res: Response) {
     };
 }
 
+/**
+ * Get the current index rebuild status
+ */
+async function getIndexRebuildStatus(req: Request, res: Response) {
+    const status = indexService.getIndexRebuildStatus();
+
+    return {
+        success: true,
+        status
+    };
+}
+
 export default {
     findSimilarNotes,
     searchByText,
@@ -290,5 +302,6 @@ export default {
     getFailedNotes,
     retryFailedNote,
     retryAllFailedNotes,
-    rebuildIndex
+    rebuildIndex,
+    getIndexRebuildStatus
 };

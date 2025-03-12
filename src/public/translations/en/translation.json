@@ -1186,6 +1186,11 @@
     "reprocess_index_started": "Index rebuilding started in the background",
     "reprocess_index_error": "Error rebuilding search index",
 
+    "index_rebuild_progress": "Index Rebuild Progress",
+    "index_rebuilding": "Rebuilding index ({{percentage}}%)",
+    "index_rebuild_complete": "Index rebuild complete",
+    "index_rebuild_status_error": "Error checking index rebuild status",
+
     "embedding_statistics": "Embedding Statistics",
     "total_notes": "Total Notes",
     "processed_notes": "Processed Notes",

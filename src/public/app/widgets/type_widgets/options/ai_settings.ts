@@ -47,6 +47,7 @@ interface FailedEmbeddingNotes {
 
 export default class AiSettingsWidget extends OptionsWidget {
     private statsRefreshInterval: NodeJS.Timeout | null = null;
+    private indexRebuildRefreshInterval: NodeJS.Timeout | null = null;
     private readonly STATS_REFRESH_INTERVAL = 5000; // 5 seconds
 
     doRender() {
@@ -243,6 +244,17 @@ export default class AiSettingsWidget extends OptionsWidget {
                         ${t("ai_llm.reprocess_index")}
                     </button>
                     <div class="help-text">${t("ai_llm.reprocess_index_description")}</div>
+
+                    <!-- Index rebuild progress tracking -->
+                    <div class="index-rebuild-progress-container mt-2" style="display: none;">
+                        <div class="mt-2">
+                            <strong>${t("ai_llm.index_rebuild_progress")}:</strong> <span class="index-rebuild-status-text">-</span>
+                        </div>
+                        <div class="progress mt-1" style="height: 10px;">
+                            <div class="progress-bar index-rebuild-progress" role="progressbar" style="width: 0%;"
+                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -476,7 +488,10 @@ export default class AiSettingsWidget extends OptionsWidget {
             try {
                 await server.post('embeddings/rebuild-index');
                 toastService.showMessage(t("ai_llm.reprocess_index_started"));
-                // Refresh stats after reprocessing starts
+                // Start tracking index rebuild progress
+                await this.refreshIndexRebuildStatus();
+
+                // Also refresh embedding stats since they'll update as embeddings are processed
                 await this.refreshEmbeddingStats();
             } catch (error) {
                 console.error("Error rebuilding index:", error);
@@ -567,6 +582,9 @@ export default class AiSettingsWidget extends OptionsWidget {
                 this.$widget.find('.embedding-section').is(':visible')) {
                 await this.refreshEmbeddingStats(true);
 
+                // Also check index rebuild status
+                await this.refreshIndexRebuildStatus(true);
+
                 // Also update failed embeddings list periodically
                 await this.updateFailedEmbeddingsList();
             }
@@ -580,6 +598,11 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (this.statsRefreshInterval) {
             clearInterval(this.statsRefreshInterval);
             this.statsRefreshInterval = null;
+        }
+
+        if (this.indexRebuildRefreshInterval) {
+            clearInterval(this.indexRebuildRefreshInterval);
+            this.indexRebuildRefreshInterval = null;
         }
     }
 
@@ -699,6 +722,11 @@ export default class AiSettingsWidget extends OptionsWidget {
                 if (stats.failedNotesCount > 0 && !silent) {
                     await this.updateFailedEmbeddingsList();
                 }
+
+                // Also check index rebuild status if not in silent mode
+                if (!silent) {
+                    await this.refreshIndexRebuildStatus(silent);
+                }
             }
         } catch (error) {
             console.error("Error fetching embedding stats:", error);
@@ -711,6 +739,83 @@ export default class AiSettingsWidget extends OptionsWidget {
                 const $refreshButton = this.$widget.find('.embedding-refresh-stats');
                 $refreshButton.prop('disabled', false);
                 $refreshButton.text(t("ai_llm.refresh_stats"));
+            }
+        }
+    }
+
+    /**
+     * Refresh the index rebuild status
+     */
+    async refreshIndexRebuildStatus(silent = false) {
+        if (!this.$widget) return;
+
+        try {
+            // Get the current status of index rebuilding
+            const response = await server.get('embeddings/index-rebuild-status') as {
+                success: boolean,
+                status: {
+                    inProgress: boolean,
+                    progress: number,
+                    total: number,
+                    current: number
+                }
+            };
+
+            if (response && response.success) {
+                const status = response.status;
+                const $progressContainer = this.$widget.find('.index-rebuild-progress-container');
+                const $progressBar = this.$widget.find('.index-rebuild-progress');
+                const $statusText = this.$widget.find('.index-rebuild-status-text');
+
+                // Only show the progress container if rebuild is in progress
+                if (status.inProgress) {
+                    $progressContainer.show();
+                } else if (status.progress === 100) {
+                    // Show for 10 seconds after completion, then hide
+                    $progressContainer.show();
+                    setTimeout(() => {
+                        $progressContainer.fadeOut('slow');
+                    }, 10000);
+                } else if (status.progress === 0) {
+                    // Hide if no rebuild has been started
+                    $progressContainer.hide();
+                }
+
+                // Update progress bar
+                $progressBar.css('width', `${status.progress}%`);
+                $progressBar.attr('aria-valuenow', status.progress.toString());
+                $progressBar.text(`${status.progress}%`);
+
+                // Update status text
+                if (status.inProgress) {
+                    $statusText.text(t("ai_llm.index_rebuilding", { percentage: status.progress }));
+
+                    // Apply animated style for active progress
+                    $progressBar.addClass('progress-bar-striped progress-bar-animated bg-info');
+                    $progressBar.removeClass('bg-success');
+                } else if (status.progress === 100) {
+                    $statusText.text(t("ai_llm.index_rebuild_complete"));
+
+                    // Apply success style for completed progress
+                    $progressBar.removeClass('progress-bar-striped progress-bar-animated bg-info');
+                    $progressBar.addClass('bg-success');
+                }
+
+                // Start a refresh interval if in progress
+                if (status.inProgress && !this.indexRebuildRefreshInterval) {
+                    this.indexRebuildRefreshInterval = setInterval(() => {
+                        this.refreshIndexRebuildStatus(true);
+                    }, this.STATS_REFRESH_INTERVAL);
+                } else if (!status.inProgress && this.indexRebuildRefreshInterval) {
+                    // Clear the interval if rebuild is complete
+                    clearInterval(this.indexRebuildRefreshInterval);
+                    this.indexRebuildRefreshInterval = null;
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching index rebuild status:", error);
+            if (!silent) {
+                toastService.showError(t("ai_llm.index_rebuild_status_error"));
             }
         }
     }

@@ -384,6 +384,7 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/embeddings/retry/:noteId", embeddingsRoute.retryFailedNote);
     apiRoute(PST, "/api/embeddings/retry-all-failed", embeddingsRoute.retryAllFailedNotes);
     apiRoute(PST, "/api/embeddings/rebuild-index", embeddingsRoute.rebuildIndex);
+    apiRoute(GET, "/api/embeddings/index-rebuild-status", embeddingsRoute.getIndexRebuildStatus);
 
     // LLM chat session management endpoints
     apiRoute(PST, "/api/llm/sessions", llmRoute.createSession);

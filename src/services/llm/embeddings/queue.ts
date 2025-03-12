@@ -8,6 +8,7 @@ import { getNoteEmbeddingContext } from "./content_processing.js";
 import { deleteNoteEmbeddings } from "./storage.js";
 import type { QueueItem } from "./types.js";
 import { getChunkingOperations } from "./chunking_interface.js";
+import indexService from '../index_service.js';
 
 /**
  * Queues a note for embedding update
@@ -176,6 +177,9 @@ export async function processEmbeddingQueue() {
         return;
     }
 
+    // Track successfully processed notes count for progress reporting
+    let processedCount = 0;
+
     for (const note of notes) {
         try {
             const noteData = note as unknown as QueueItem;
@@ -248,6 +252,8 @@ export async function processEmbeddingQueue() {
                     "DELETE FROM embedding_queue WHERE noteId = ?",
                     [noteData.noteId]
                 );
+                // Count as successfully processed
+                processedCount++;
             } else {
                 // If all providers failed, mark as failed but keep in queue
                 await sql.execute(`
@@ -285,5 +291,10 @@ export async function processEmbeddingQueue() {
                 log.error(`Marked note ${noteData.noteId} as permanently failed after multiple embedding attempts`);
             }
         }
+    }
+
+    // Update the index rebuild progress if any notes were processed
+    if (processedCount > 0) {
+        indexService.updateIndexRebuildProgress(processedCount);
     }
 }

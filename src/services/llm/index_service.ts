@@ -18,12 +18,19 @@ import { ContextExtractor } from "./context/index.js";
 import eventService from "../events.js";
 import type { NoteEmbeddingContext } from "./embeddings/embeddings_interface.js";
 import type { OptionDefinitions } from "../options_interface.js";
+import sql from "../sql.js";
 
 class IndexService {
     private initialized = false;
     private indexingInProgress = false;
     private contextExtractor = new ContextExtractor();
     private automaticIndexingInterval?: NodeJS.Timeout;
+
+    // Index rebuilding tracking
+    private indexRebuildInProgress = false;
+    private indexRebuildProgress = 0;
+    private indexRebuildTotal = 0;
+    private indexRebuildCurrent = 0;
 
     // Configuration
     private defaultQueryDepth = 2;
@@ -195,6 +202,13 @@ class IndexService {
 
         try {
             this.indexingInProgress = true;
+            this.indexRebuildInProgress = true;
+            this.indexRebuildProgress = 0;
+            this.indexRebuildCurrent = 0;
+
+            // Reset index rebuild progress
+            const totalNotes = await sql.getValue("SELECT COUNT(*) FROM notes WHERE isDeleted = 0") as number;
+            this.indexRebuildTotal = totalNotes;
 
             if (force) {
                 // Force reindexing of all notes
@@ -210,16 +224,53 @@ class IndexService {
                     log.info("Full indexing initiated");
                 } else {
                     log.info(`Skipping full indexing, already at ${stats.percentComplete}% completion`);
+                    this.indexRebuildInProgress = false;
+                    this.indexRebuildProgress = 100;
                 }
             }
 
             return true;
         } catch (error: any) {
             log.error(`Error starting full indexing: ${error.message || "Unknown error"}`);
+            this.indexRebuildInProgress = false;
             return false;
         } finally {
             this.indexingInProgress = false;
         }
+    }
+
+    /**
+     * Update index rebuild progress
+     * @param processed - Number of notes processed
+     */
+    updateIndexRebuildProgress(processed: number) {
+        if (!this.indexRebuildInProgress) return;
+
+        this.indexRebuildCurrent += processed;
+
+        if (this.indexRebuildTotal > 0) {
+            this.indexRebuildProgress = Math.min(
+                Math.round((this.indexRebuildCurrent / this.indexRebuildTotal) * 100),
+                100
+            );
+        }
+
+        if (this.indexRebuildCurrent >= this.indexRebuildTotal) {
+            this.indexRebuildInProgress = false;
+            this.indexRebuildProgress = 100;
+        }
+    }
+
+    /**
+     * Get the current index rebuild progress
+     */
+    getIndexRebuildStatus() {
+        return {
+            inProgress: this.indexRebuildInProgress,
+            progress: this.indexRebuildProgress,
+            total: this.indexRebuildTotal,
+            current: this.indexRebuildCurrent
+        };
     }
 
     /**
