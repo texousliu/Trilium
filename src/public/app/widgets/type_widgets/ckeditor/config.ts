@@ -96,9 +96,43 @@ export function buildConfig() {
             defaultProtocol: "https://",
             allowedProtocols: ALLOWED_PROTOCOLS
         },
+        style: {
+            definitions: buildStyleDefinitions()
+        },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"
     };
+}
+
+function buildStyleDefinitions() {
+    const element = "blockquote";
+    return [
+        {
+            name: "Note",
+            element,
+            classes: [ "admonition", "note" ]
+        },
+        {
+            name: "Tip",
+            element,
+            classes: [ "admonition", "tip" ]
+        },
+        {
+            name: "Important",
+            element,
+            classes: [ "admonition", "important" ]
+        },
+        {
+            name: "Caution",
+            element,
+            classes: [ "admonition", "caution" ]
+        },
+        {
+            name: "Warning",
+            element,
+            classes: [ "admonition", "warning" ]
+        }
+    ];
 }
 
 export function buildToolbarConfig(isClassicToolbar: boolean) {
@@ -115,6 +149,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
     return {
         toolbar: {
             items: [
+                "style",
                 "heading",
                 "fontSize",
                 "|",
@@ -180,6 +215,7 @@ function buildFloatingToolbar() {
         },
 
         blockToolbar: [
+            "style",
             "heading",
             "|",
             "bulletedList",

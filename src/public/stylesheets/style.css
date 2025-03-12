@@ -1706,3 +1706,8 @@ footer.file-footer {
 footer.file-footer button {
     margin: 5px;
 }
+
+.ck-content .admonition {
+    box-shadow: var(--card-box-shadow);
+    padding: 1em;
+}
