@@ -9,7 +9,8 @@ describe("Markdown export", () => {
             "language-text-x-nginx-conf": "nginx",
             "language-text-x-diff": "diff",
             "language-application-javascript-env-frontend": "javascript",
-            "language-application-javascript-env-backend": "javascript"
+            "language-application-javascript-env-backend": "javascript",
+            "language-text-x-asm-mips": "mips"
         };
 
         for (const [ input, output ] of Object.entries(conversionTable)) {

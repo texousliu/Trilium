@@ -98,6 +98,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "Markdown", mime: "text/x-markdown", highlightJs: "markdown", default: true },
     { title: "Mathematica", mime: "text/x-mathematica", highlightJs: "mathematica" },
     { title: "mbox", mime: "application/mbox" },
+    { title: "MIPS Assembler", mime: "text/x-asm-mips", highlightJs: "mipsasm" },
     { title: "mIRC", mime: "text/mirc" },
     { title: "Modelica", mime: "text/x-modelica" },
     { title: "MS SQL", mime: "text/x-mssql", highlightJs: "sql" },

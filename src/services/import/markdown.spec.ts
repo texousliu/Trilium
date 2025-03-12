@@ -8,7 +8,8 @@ describe("markdown", () => {
             "nginx": "language-text-x-nginx-conf",
             "diff": "language-text-x-diff",
             "javascript": "language-application-javascript-env-backend",
-            "css": "language-text-css"
+            "css": "language-text-css",
+            "mips": "language-text-x-asm-mips"
         };
 
         for (const [ input, output ] of Object.entries(conversionTable)) {
