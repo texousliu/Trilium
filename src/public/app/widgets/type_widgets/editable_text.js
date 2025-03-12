@@ -15,7 +15,7 @@ import options from "../../services/options.js";
 import toast from "../../services/toast.js";
 import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
-import { buildConfig, buildToolbarConfig } from "./ckeditor/toolbars.js";
+import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 
 const ENABLE_INSPECTOR = false;
 

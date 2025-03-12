@@ -15,7 +15,7 @@ import type { CommandData, EventData, EventListener, FilteredCommandNames } from
 import type { default as FAttribute, AttributeType } from "../../entities/fattribute.js";
 import type FNote from "../../entities/fnote.js";
 import { escapeQuotes } from "../../services/utils.js";
-import { buildConfig } from "../type_widgets/ckeditor/toolbars.js";
+import { buildConfig } from "../type_widgets/ckeditor/config.js";
 
 const HELP_TEXT = `
 <p>${t("attribute_editor.help_text_body1")}</p>
