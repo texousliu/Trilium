@@ -1667,6 +1667,126 @@
                             "children": [
                                 {
                                     "isClone": false,
+                                    "noteId": "x0JgW8UqGXvq",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Vc8PjrjAGuOp",
+                                        "x0JgW8UqGXvq"
+                                    ],
+                                    "title": "Vertical and horizontal layout",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "xYmIYSP6wE3F",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "oPVyFC7WL2Lp",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "Ms1nauBra7gq",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bxs-layout",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "x3i7MxGccDuM",
+                                            "isInheritable": false,
+                                            "position": 50
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "_lbSettings",
+                                            "isInheritable": false,
+                                            "position": 60
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Vertical and horizontal layout.md",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "7VlCImOtpKzK",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Vertical and horizontal la.png"
+                                        },
+                                        {
+                                            "attachmentId": "9sCZBqokn4vf",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "1_Vertical and horizontal la.png"
+                                        },
+                                        {
+                                            "attachmentId": "gw3DaUul5ccI",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "2_Vertical and horizontal la.png"
+                                        },
+                                        {
+                                            "attachmentId": "jhiE5DTkLOCK",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/jpg",
+                                            "position": 10,
+                                            "dataFileName": "3_Vertical and horizontal la.png"
+                                        },
+                                        {
+                                            "attachmentId": "JwO3rUNb9tyU",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/jpg",
+                                            "position": 10,
+                                            "dataFileName": "4_Vertical and horizontal la.png"
+                                        },
+                                        {
+                                            "attachmentId": "NVjM5z6IsNZf",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "5_Vertical and horizontal la.png"
+                                        },
+                                        {
+                                            "attachmentId": "Z2F8ipVjwugg",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "6_Vertical and horizontal la.png"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "isClone": false,
                                     "noteId": "x3i7MxGccDuM",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
@@ -1675,12 +1795,20 @@
                                         "x3i7MxGccDuM"
                                     ],
                                     "title": "Global menu",
-                                    "notePosition": 10,
+                                    "notePosition": 20,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "x0JgW8UqGXvq",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Global menu.md",
                                     "attachments": [
@@ -1699,6 +1827,14 @@
                                             "mime": "image/jpg",
                                             "position": 10,
                                             "dataFileName": "1_Global menu_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "rCnBqSyldhp9",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/jpg",
+                                            "position": 10,
+                                            "dataFileName": "2_Global menu_image.png"
                                         }
                                     ]
                                 },
@@ -1712,7 +1848,7 @@
                                         "BlN9DFI679QC"
                                     ],
                                     "title": "Ribbon",
-                                    "notePosition": 20,
+                                    "notePosition": 30,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1749,7 +1885,7 @@
                                         "4TIF1oA4VQRO"
                                     ],
                                     "title": "Options",
-                                    "notePosition": 40,
+                                    "notePosition": 50,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1777,7 +1913,7 @@
                                         "oPVyFC7WL2Lp"
                                     ],
                                     "title": "Note Tree",
-                                    "notePosition": 50,
+                                    "notePosition": 60,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1853,6 +1989,62 @@
                                             "dataFileName": "1_Note Tree_image.png"
                                         }
                                     ]
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "xYmIYSP6wE3F",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Vc8PjrjAGuOp",
+                                        "xYmIYSP6wE3F"
+                                    ],
+                                    "title": "Launcher Bar",
+                                    "notePosition": 70,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-sidebar",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Launcher Bar.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "Ms1nauBra7gq",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Vc8PjrjAGuOp",
+                                        "Ms1nauBra7gq"
+                                    ],
+                                    "title": "Quick search",
+                                    "notePosition": 80,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-search-alt-2",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Quick search.md",
+                                    "attachments": []
                                 }
                             ]
                         },

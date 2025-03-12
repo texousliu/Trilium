@@ -1,9 +1,8 @@
 # Global menu
-The position of the global menu differs based on which layout is selected in settings:
+The global menu configures the current window (zoom, keeping the window on top) and offers access to some more advanced options.
 
-*   For the vertical layout, the icon is in the top-left of the screen, in the form of the Trilium icon.
-*   For the horizontal layout, the icon is in the top-right of the screen, in form of a hamburger menu icon.
+![](2_Global%20menu_image.png)
 
-|     |     |
-| --- | --- |
-| ![](Global%20menu_image.png)  <br>  <br>The global menu in the vertical layout. | ![](1_Global%20menu_image.png)  <br>  <br>The global menu in the horizontal layout. |
+## Accessing the global menu
+
+See [Vertical and horizontal layout](Vertical%20and%20horizontal%20layout.md) since the position of the global menu is changed based on which layout has been selected.
