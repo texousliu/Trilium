@@ -174,6 +174,11 @@ function updateNoteEmbedding(remoteEC: EntityChange, remoteEntityRow: EntityRow 
     // Cast remoteEntityRow to include required embedding properties
     const typedRemoteEntityRow = remoteEntityRow as unknown as NoteEmbeddingRow;
 
+    // Convert embedding from base64 string to Buffer if needed
+    if (typedRemoteEntityRow.embedding && typeof typedRemoteEntityRow.embedding === "string") {
+        typedRemoteEntityRow.embedding = Buffer.from(typedRemoteEntityRow.embedding, "base64");
+    }
+
     const localEntityRow = sql.getRow<NoteEmbeddingRow>(`SELECT * FROM note_embeddings WHERE embedId = ?`, [remoteEC.entityId]);
 
     if (localEntityRow) {
