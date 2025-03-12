@@ -49,7 +49,7 @@ Only in desktop (electron build):
 
 ## Editing notes
 
-Trilium uses CKEditor 5 for the [text notes](../Note%20Types/Text.md) and CodeMirror 5 for [code notes](../Advanced%20Usage/Code%20Notes.md). Check the documentation of these projects to see all their built-in keyboard shortcuts.
+Trilium uses CKEditor 5 for the [text notes](../Note%20Types/Text.md) and CodeMirror 5 for [code notes](../Note%20Types/Code.md). Check the documentation of these projects to see all their built-in keyboard shortcuts.
 
 *   `ALT-F10` - bring up inline formatting toolbar (arrow keys `<-`,`->` to navigate, `ENTER` to apply)
 *   `ALT-F10` - again to bring up block formatting toolbar

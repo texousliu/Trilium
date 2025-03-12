@@ -1,5 +1,5 @@
 # Scripts
-Trilium supports creating [code notes](../Code%20Notes.md), i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with [Script API](Script%20API.md) provide extra functionality.
+Trilium supports creating [code notes](../Code.md), i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with [Script API](Script%20API.md) provide extra functionality.
 
 ## Scripting
 
@@ -12,7 +12,7 @@ So we have frontend and backend, each with their own set of responsibilities, bu
 
 ## Button use case
 
-Let's take a look at our demo script (shipped with default Trilium [database](../Database.md)) - Task manager. One of the things this script does is adding a button to the Trilium interface which will allow user to easily add new Task (TODO item).
+Let's take a look at our demo script (shipped with default Trilium [database](../../Advanced%20Usage/Database.md)) - Task manager. One of the things this script does is adding a button to the Trilium interface which will allow user to easily add new Task (TODO item).
 
 ![](../../Attachments/button-script.png)
 
@@ -37,13 +37,13 @@ So we have a script which will add the button to the toolbar. But how can we exe
 
 We need to execute it every time Trilium starts up, but we probably don't want to have to manually click on play button on every start up.
 
-The solution is marked by red circle at the bottom - this note has [label](../Attributes.md) `#run=frontendStartup` - this is one of the "system" labels which Trilium understands. As you might guess, this will cause all such labeled script notes to be executed once Trilium frontend starts up.
+The solution is marked by red circle at the bottom - this note has [label](../../Advanced%20Usage/Attributes.md) `#run=frontendStartup` - this is one of the "system" labels which Trilium understands. As you might guess, this will cause all such labeled script notes to be executed once Trilium frontend starts up.
 
 (`#run=frontendStartup` does not work for [Mobile frontend](../../Installation%20%26%20Setup/Mobile%20Frontend.md) - if you want to have scripts running there, give the script `#run=mobileStartup` label)
 
 ### More showcases
 
-You can see more scripting with explanation in [Advanced showcases](../Advanced%20Showcases.md)
+You can see more scripting with explanation in [Advanced showcases](../../Advanced%20Usage/Advanced%20Showcases.md)
 
 ## Events
 

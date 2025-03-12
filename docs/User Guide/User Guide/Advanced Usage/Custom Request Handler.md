@@ -1,11 +1,11 @@
 # Custom Request Handler
-Trilium provides a mechanism for [scripts](Code%20Notes/Scripts.md) to open a public REST endpoint. This opens a way for various integrations with other services - a simple example would be creating new note from Slack by issuing a slash command (e.g. `/trilium buy milk`).
+Trilium provides a mechanism for [scripts](../Note%20Types/Code/Scripts.md) to open a public REST endpoint. This opens a way for various integrations with other services - a simple example would be creating new note from Slack by issuing a slash command (e.g. `/trilium buy milk`).
 
 ## Create note from outside Trilium
 
 Let's take a look at an example. The goal is to provide a REST endpoint to which we can send title and content and Trilium will create a note.
 
-We'll start with creating a JavaScript backend [code note](Code%20Notes.md) containing:
+We'll start with creating a JavaScript backend [code note](../Note%20Types/Code.md) containing:
 
 ```
 const {req, res} = api;
@@ -53,7 +53,7 @@ Trilium will then find our code note created above and execute it. `api.req`, `a
 
 In the code note we check the request method and then use trivial authentication - keep in mind that these endpoints are by default totally unauthenticated, and you need to take care of this yourself.
 
-Once we pass these checks we will just create the desired note using [Script API](Code%20Notes/Script%20API.md).
+Once we pass these checks we will just create the desired note using [Script API](../Note%20Types/Code/Script%20API.md).
 
 ## Custom resource provider
 

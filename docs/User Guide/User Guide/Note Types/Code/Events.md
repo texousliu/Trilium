@@ -14,7 +14,7 @@ Global events are attached to the script note via label. Simply create e.g. "run
 
 ## Entity events
 
-Other events are bound to some entity, these are defined as [relations](../Attributes.md) - meaning that script is triggered only if note has this script attached to it through relations (or it can inherit it).
+Other events are bound to some entity, these are defined as [relations](../../Advanced%20Usage/Attributes.md) - meaning that script is triggered only if note has this script attached to it through relations (or it can inherit it).
 
 *   `runOnNoteCreation` - executes when note is created on backend
 *   `runOnNoteTitleChange` - executes when note title is changed (includes note creation as well)
