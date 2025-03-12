@@ -32,11 +32,11 @@ export async function getEmbeddingStats() {
     ) as number;
 
     const queuedNotesCount = await sql.getValue(
-        "SELECT COUNT(*) FROM embedding_queue"
+        "SELECT COUNT(*) FROM embedding_queue WHERE failed = 0"
     ) as number;
 
     const failedNotesCount = await sql.getValue(
-        "SELECT COUNT(*) FROM embedding_queue WHERE attempts > 0"
+        "SELECT COUNT(*) FROM embedding_queue WHERE failed = 1"
     ) as number;
 
     // Get the last processing time by checking the most recent embedding
@@ -60,7 +60,7 @@ export async function getEmbeddingStats() {
 
     // Calculate the percentage of notes that are properly embedded
     const percentComplete = totalNotesCount > 0
-        ? Math.round((upToDateEmbeddings / totalNotesCount) * 100)
+        ? Math.round((upToDateEmbeddings / (totalNotesCount - failedNotesCount)) * 100)
         : 0;
 
     return {
