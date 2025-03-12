@@ -14,6 +14,7 @@ import { applySingleBlockSyntaxHighlight, applySyntaxHighlight } from "./syntax_
 import { loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
 import renderDoc from "./doc_renderer.js";
+import { t } from "i18next";
 
 let idCounter = 1;
 
@@ -201,15 +202,15 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
         //       in attachment list
         const $downloadButton = $(`
             <button class="file-download btn btn-primary" type="button">
-                <span class='bx bx-download' ></span>
-                Download
+                <span class="bx bx-download"></span>
+                ${t("file_properties.download")}
             </button>
         `);
 
         const $openButton = $(`
             <button class="file-open btn btn-primary" type="button">
-                <span class='bx bx-link-external' ></span>
-                Open
+                <span class="bx bx-link-external"></span>
+                ${t("file_properties.open")}
             </button>
         `);
 
