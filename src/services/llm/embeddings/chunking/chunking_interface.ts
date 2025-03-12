@@ -1,4 +1,4 @@
-import type { NoteEmbeddingContext } from "./types.js";
+import type { NoteEmbeddingContext } from "../types.js";
 
 /**
  * Interface for chunking operations

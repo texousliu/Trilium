@@ -8,7 +8,7 @@ import * as queue from './queue.js';
 import * as events from './events.js';
 import * as stats from './stats.js';
 import * as indexOperations from './index_operations.js';
-import { getChunkingOperations } from './chunking_interface.js';
+import { getChunkingOperations } from './chunking/chunking_interface.js';
 import type { NoteEmbeddingContext } from './types.js';
 
 // Export types

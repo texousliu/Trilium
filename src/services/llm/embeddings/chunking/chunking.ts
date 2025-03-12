@@ -1,8 +1,8 @@
-import log from "../../../services/log.js";
-import dateUtils from "../../../services/date_utils.js";
-import sql from "../../../services/sql.js";
-import becca from "../../../becca/becca.js";
-import type { NoteEmbeddingContext } from "./types.js";
+import log from "../../../log.js";
+import dateUtils from "../../../date_utils.js";
+import sql from "../../../sql.js";
+import becca from "../../../../becca/becca.js";
+import type { NoteEmbeddingContext } from "../types.js";
 // Remove static imports that cause circular dependencies
 // import { storeNoteEmbedding, deleteNoteEmbeddings } from "./storage.js";
 
@@ -101,7 +101,7 @@ export async function processNoteWithChunking(
 
     try {
         // Get the context extractor dynamically to avoid circular dependencies
-        const { ContextExtractor } = await import('../context/index.js');
+        const { ContextExtractor } = await import('../../context/index.js');
         const contextExtractor = new ContextExtractor();
 
         // Get note from becca
@@ -118,8 +118,8 @@ export async function processNoteWithChunking(
             {
                 // Adjust chunk size based on provider using constants
                 maxChunkSize: provider.name === 'ollama' ?
-                    (await import('../../../routes/api/llm.js')).LLM_CONSTANTS.CHUNKING.OLLAMA_SIZE :
-                    (await import('../../../routes/api/llm.js')).LLM_CONSTANTS.CHUNKING.DEFAULT_SIZE,
+                    (await import('../../../../routes/api/llm.js')).LLM_CONSTANTS.CHUNKING.OLLAMA_SIZE :
+                    (await import('../../../../routes/api/llm.js')).LLM_CONSTANTS.CHUNKING.DEFAULT_SIZE,
                 respectBoundaries: true
             }
         );
@@ -130,7 +130,7 @@ export async function processNoteWithChunking(
             const config = provider.getConfig();
 
             // Use dynamic import instead of static import
-            const storage = await import('./storage.js');
+            const storage = await import('../storage.js');
             await storage.storeNoteEmbedding(noteId, provider.name, config.model, embedding);
 
             log.info(`Generated single embedding for note ${noteId} (${note.title}) since chunking failed`);
@@ -142,7 +142,7 @@ export async function processNoteWithChunking(
 
         // Delete existing embeddings first to avoid duplicates
         // Use dynamic import
-        const storage = await import('./storage.js');
+        const storage = await import('../storage.js');
         await storage.deleteNoteEmbeddings(noteId, provider.name, config.model);
 
         // Track successful and failed chunks in memory during this processing run
