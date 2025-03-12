@@ -122,7 +122,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
                 "italic",
                 {
                     ...TEXT_FORMATTING_GROUP,
-                    items: ["underline", "strikethrough", "superscript", "subscript", "code", "kbd"]
+                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "code", "kbd"]
                 },
                 "|",
                 "fontColor",
@@ -165,10 +165,12 @@ function buildFloatingToolbar() {
                 "underline",
                 {
                     ...TEXT_FORMATTING_GROUP,
-                    items: [ "strikethrough", "kbd", "superscript", "subscript" ]
+                    items: [ "strikethrough", "|", "superscript", "subscript", "|", "kbd" ]
                 },
+                "|",
                 "fontColor",
                 "fontBackgroundColor",
+                "|",
                 "code",
                 "link",
                 "removeFormat",
