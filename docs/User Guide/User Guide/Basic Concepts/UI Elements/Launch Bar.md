@@ -49,18 +49,17 @@ Right click either the _Available launchers_ or _Visible launchers_ sections and
     1.  Set the `target` promoted attribute to the note to navigate to.
     2.  Optionally, set `hoistedNote` to hoist a particular note. See [Note Hoisting](../Navigation/Note%20Hoisting.md) for more information.
     3.  Optionally, set a `keyboardShortcut` to trigger the launcher.
-    
 2.  **Script Launcher**  
     An advanced launcher which will run a script upon pressing. See [Scripts](../../Note%20Types/Code/Scripts.md) for more information.
     
     1.  Set `script` to point to the desired script to run.
     2.  Optionally, set a `keyboardShortcut` to trigger the launcher.
-    
 3.  **Custom Widget**
     
     Allows defining a custom widget to be rendered inside the launcher. See [Widget Basics](../../Developer%20Guides/Widget%20Basics.md) for more information.
     
 4.  **Spacers**  
     Launchers that create some distance between other launchers for better visual distinction.
+    
 
 Launchers are configured via predefined [Promoted Attributes](../../Advanced%20Usage/Attributes/Promoted%20Attributes.md).
