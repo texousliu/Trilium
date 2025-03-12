@@ -6,6 +6,52 @@ import type { NoteEmbeddingContext } from "./types.js";
 // Remove static imports that cause circular dependencies
 // import { storeNoteEmbedding, deleteNoteEmbeddings } from "./storage.js";
 
+// Define error categories for better handling
+const ERROR_CATEGORIES = {
+    // Temporary errors that should be retried
+    TEMPORARY: {
+        patterns: [
+            'timeout', 'connection', 'network', 'rate limit', 'try again',
+            'service unavailable', 'too many requests', 'server error',
+            'gateway', 'temporarily', 'overloaded'
+        ]
+    },
+    // Permanent errors that should not be retried
+    PERMANENT: {
+        patterns: [
+            'invalid request', 'invalid content', 'not found', 'unsupported model',
+            'invalid model', 'content policy', 'forbidden', 'unauthorized',
+            'token limit', 'context length', 'too long', 'content violation'
+        ]
+    }
+};
+
+/**
+ * Categorize an error as temporary or permanent based on its message
+ * @param errorMessage - The error message to categorize
+ * @returns 'temporary', 'permanent', or 'unknown'
+ */
+function categorizeError(errorMessage: string): 'temporary' | 'permanent' | 'unknown' {
+    const lowerCaseMessage = errorMessage.toLowerCase();
+
+    // Check for temporary error patterns
+    for (const pattern of ERROR_CATEGORIES.TEMPORARY.patterns) {
+        if (lowerCaseMessage.includes(pattern.toLowerCase())) {
+            return 'temporary';
+        }
+    }
+
+    // Check for permanent error patterns
+    for (const pattern of ERROR_CATEGORIES.PERMANENT.patterns) {
+        if (lowerCaseMessage.includes(pattern.toLowerCase())) {
+            return 'permanent';
+        }
+    }
+
+    // Default to unknown
+    return 'unknown';
+}
+
 /**
  * Process a large note by breaking it into chunks and creating embeddings for each chunk
  * This provides more detailed and focused embeddings for different parts of large notes
@@ -69,8 +115,20 @@ export async function processNoteWithChunking(
         let successfulChunks = 0;
         let failedChunks = 0;
         const totalChunks = chunks.length;
-        const failedChunkDetails: {index: number, error: string}[] = [];
-        const retryQueue: {index: number, chunk: any}[] = [];
+        const failedChunkDetails: {
+            index: number,
+            error: string,
+            category: 'temporary' | 'permanent' | 'unknown',
+            attempts: number
+        }[] = [];
+        const retryQueue: {
+            index: number,
+            chunk: any,
+            attempts: number
+        }[] = [];
+
+        // Maximum number of retry attempts per chunk
+        const MAX_CHUNK_RETRY_ATTEMPTS = 2;
 
         log.info(`Processing ${chunks.length} chunks for note ${noteId} (${note.title})`);
 
@@ -98,39 +156,55 @@ export async function processNoteWithChunking(
                         provider.name === 'ollama' ? 500 : 100));
                 }
             } catch (error: any) {
+                const errorMessage = error.message || 'Unknown error';
+                const errorCategory = categorizeError(errorMessage);
+
                 // Track the failure for this specific chunk
                 failedChunks++;
                 failedChunkDetails.push({
                     index: i + 1,
-                    error: error.message || 'Unknown error'
+                    error: errorMessage,
+                    category: errorCategory,
+                    attempts: 1
                 });
 
-                // Add to retry queue
-                retryQueue.push({
-                    index: i,
-                    chunk: chunk
-                });
+                // Only add to retry queue if not a permanent error
+                if (errorCategory !== 'permanent') {
+                    retryQueue.push({
+                        index: i,
+                        chunk: chunk,
+                        attempts: 1
+                    });
+                } else {
+                    log.info(`Chunk ${i + 1} for note ${noteId} has permanent error, skipping retries: ${errorMessage}`);
+                }
 
-                log.error(`Error processing chunk ${i + 1} for note ${noteId}: ${error.message || 'Unknown error'}`);
+                log.error(`Error processing chunk ${i + 1} for note ${noteId} (${errorCategory} error): ${errorMessage}`);
             }
         }
 
-        // Retry failed chunks with exponential backoff
+        // Retry failed chunks with exponential backoff, but only those that aren't permanent errors
         if (retryQueue.length > 0 && retryQueue.length < chunks.length) {
             log.info(`Retrying ${retryQueue.length} failed chunks for note ${noteId}`);
 
             for (let j = 0; j < retryQueue.length; j++) {
-                const {index, chunk} = retryQueue[j];
+                const item = retryQueue[j];
+
+                // Skip if we've already reached the max retry attempts for this chunk
+                if (item.attempts >= MAX_CHUNK_RETRY_ATTEMPTS) {
+                    log.info(`Skipping chunk ${item.index + 1} for note ${noteId} as it reached maximum retry attempts (${MAX_CHUNK_RETRY_ATTEMPTS})`);
+                    continue;
+                }
 
                 try {
                     // Wait longer for retries with exponential backoff
                     await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(1.5, j)));
 
                     // Retry the embedding
-                    const embedding = await provider.generateEmbeddings(chunk.content);
+                    const embedding = await provider.generateEmbeddings(item.chunk.content);
 
                     // Store with unique ID that indicates it was a retry
-                    const chunkIdSuffix = `${index + 1}_of_${chunks.length}`;
+                    const chunkIdSuffix = `${item.index + 1}_of_${chunks.length}`;
                     await storage.storeNoteEmbedding(
                         noteId,
                         provider.name,
@@ -143,13 +217,35 @@ export async function processNoteWithChunking(
                     failedChunks--;
 
                     // Remove from failedChunkDetails
-                    const detailIndex = failedChunkDetails.findIndex(d => d.index === index + 1);
+                    const detailIndex = failedChunkDetails.findIndex(d => d.index === item.index + 1);
                     if (detailIndex >= 0) {
                         failedChunkDetails.splice(detailIndex, 1);
                     }
+
+                    log.info(`Successfully retried chunk ${item.index + 1} for note ${noteId} on attempt ${item.attempts + 1}`);
                 } catch (error: any) {
-                    log.error(`Retry failed for chunk ${index + 1} of note ${noteId}: ${error.message || 'Unknown error'}`);
-                    // Keep failure count as is
+                    const errorMessage = error.message || 'Unknown error';
+                    const errorCategory = categorizeError(errorMessage);
+
+                    // Update failure record with new attempt count
+                    const detailIndex = failedChunkDetails.findIndex(d => d.index === item.index + 1);
+                    if (detailIndex >= 0) {
+                        failedChunkDetails[detailIndex].attempts++;
+                        failedChunkDetails[detailIndex].error = errorMessage;
+                        failedChunkDetails[detailIndex].category = errorCategory;
+                    }
+
+                    log.error(`Retry failed for chunk ${item.index + 1} of note ${noteId} (${errorCategory} error): ${errorMessage}`);
+
+                    // Add to retry queue again only if it's not a permanent error and hasn't reached the max attempts
+                    if (errorCategory !== 'permanent' && item.attempts + 1 < MAX_CHUNK_RETRY_ATTEMPTS) {
+                        // If we're still below MAX_CHUNK_RETRY_ATTEMPTS, we'll try again in the next cycle
+                        item.attempts++;
+                    } else if (errorCategory === 'permanent') {
+                        log.info(`Chunk ${item.index + 1} for note ${noteId} will not be retried further due to permanent error`);
+                    } else {
+                        log.info(`Chunk ${item.index + 1} for note ${noteId} reached maximum retry attempts (${MAX_CHUNK_RETRY_ATTEMPTS})`);
+                    }
                 }
             }
         }
@@ -160,19 +256,38 @@ export async function processNoteWithChunking(
         }
 
         if (failedChunks > 0) {
-            log.info(`Failed to generate ${failedChunks} chunk embeddings for note ${noteId} (${note.title})`);
+            // Count permanent vs temporary errors
+            const permanentErrors = failedChunkDetails.filter(d => d.category === 'permanent').length;
+            const temporaryErrors = failedChunkDetails.filter(d => d.category === 'temporary').length;
+            const unknownErrors = failedChunkDetails.filter(d => d.category === 'unknown').length;
+
+            log.info(`Failed to generate ${failedChunks} chunk embeddings for note ${noteId} (${note.title}). ` +
+                    `Permanent: ${permanentErrors}, Temporary: ${temporaryErrors}, Unknown: ${unknownErrors}`);
         }
 
         // If no chunks were successfully processed, throw an error
         // This will keep the note in the queue for another attempt
         if (successfulChunks === 0 && failedChunks > 0) {
-            throw new Error(`All ${failedChunks} chunks failed for note ${noteId}. First error: ${failedChunkDetails[0]?.error}`);
+            // Check if all failures are permanent
+            const allPermanent = failedChunkDetails.every(d => d.category === 'permanent');
+
+            if (allPermanent) {
+                throw new Error(`All ${failedChunks} chunks failed with permanent errors for note ${noteId}. First error: ${failedChunkDetails[0]?.error}`);
+            } else {
+                throw new Error(`All ${failedChunks} chunks failed for note ${noteId}. First error: ${failedChunkDetails[0]?.error}`);
+            }
         }
 
         // If some chunks failed but others succeeded, log a warning but consider the processing complete
         // The note will be removed from the queue, but we'll store error information
         if (failedChunks > 0 && successfulChunks > 0) {
-            const errorSummary = `Note processed partially: ${successfulChunks}/${totalChunks} chunks succeeded, ${failedChunks}/${totalChunks} failed`;
+            // Create detailed error summary
+            const permanentErrors = failedChunkDetails.filter(d => d.category === 'permanent').length;
+            const temporaryErrors = failedChunkDetails.filter(d => d.category === 'temporary').length;
+            const unknownErrors = failedChunkDetails.filter(d => d.category === 'unknown').length;
+
+            const errorSummary = `Note processed partially: ${successfulChunks}/${totalChunks} chunks succeeded, ` +
+                               `${failedChunks}/${totalChunks} failed (${permanentErrors} permanent, ${temporaryErrors} temporary, ${unknownErrors} unknown)`;
             log.info(errorSummary);
 
             // Store a summary in the error field of embedding_queue
