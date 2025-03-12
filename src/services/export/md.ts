@@ -30,6 +30,7 @@ function toMarkdown(content: string) {
         });
         // Filter is heavily based on: https://github.com/mixmark-io/turndown/issues/274#issuecomment-458730974
         instance.addRule("fencedCodeBlock", fencedCodeBlockFilter);
+        instance.addRule("img", buildImageFilter());
         instance.use(turndownPluginGfm.gfm);
     }
 
@@ -47,9 +48,55 @@ function rewriteLanguageTag(source: string) {
         case "application-javascript-env-frontend":
         case "application-javascript-env-backend":
             return "javascript";
+        case "text-x-nginx-conf":
+            return "nginx";
         default:
             return source.split("-").at(-1);
     }
+}
+
+// TODO: Remove once upstream delivers a fix for https://github.com/mixmark-io/turndown/issues/467.
+function buildImageFilter() {
+    const ESCAPE_PATTERNS = {
+        before: /([\\*`[\]_]|(?:^[-+>])|(?:^~~~)|(?:^#{1-6}))/g,
+        after: /((?:^\d+(?=\.)))/
+    }
+
+    const escapePattern = new RegExp('(?:' + ESCAPE_PATTERNS.before.source + '|' + ESCAPE_PATTERNS.after.source + ')', 'g');
+
+    function escapeMarkdown (content: string) {
+        return content.replace(escapePattern, function (match, before, after) {
+            return before ? '\\' + before : after + '\\'
+        })
+    }
+
+    function escapeLinkDestination(destination: string) {
+        return destination
+            .replace(/([()])/g, '\\$1')
+            .replace(/ /g, "%20");
+    }
+
+    function escapeLinkTitle (title: string) {
+        return title.replace(/"/g, '\\"')
+    }
+
+    function cleanAttribute (attribute: string) {
+        return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
+    }
+
+    const imageFilter: TurndownService.Rule = {
+        filter: "img",
+        replacement(content, node) {
+            const untypedNode = (node as any);
+            const alt = escapeMarkdown(cleanAttribute(untypedNode.getAttribute('alt')))
+            const src = escapeLinkDestination(untypedNode.getAttribute('src') || '')
+            const title = cleanAttribute(untypedNode.getAttribute('title'))
+            const titlePart = title ? ' "' + escapeLinkTitle(title) + '"' : ''
+
+            return src ? '![' + alt + ']' + '(' + src + titlePart + ')' : ''
+        }
+    };
+    return imageFilter;
 }
 
 export default {

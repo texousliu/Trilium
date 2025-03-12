@@ -13,6 +13,8 @@ import imageContextMenuService from "../menus/image_context_menu.js";
 import { applySingleBlockSyntaxHighlight, applySyntaxHighlight } from "./syntax_highlight.js";
 import { loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
+import renderDoc from "./doc_renderer.js";
+import { t } from "i18next";
 
 let idCounter = 1;
 
@@ -54,6 +56,9 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
         await renderService.render(entity, $content);
 
         $renderedContent.append($content);
+    } else if (type === "doc" && "noteId" in entity) {
+        const $content = await renderDoc(entity);
+        $renderedContent.html($content.html());
     } else if (!options.tooltip && type === "protectedSession") {
         const $button = $(`<button class="btn btn-sm"><span class="bx bx-log-in"></span> Enter protected session</button>`).on("click", protectedSessionService.enterProtectedSession);
 
@@ -195,8 +200,19 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
     if (entityType === "notes" && "noteId" in entity) {
         // TODO: we should make this available also for attachments, but there's a problem with "Open externally" support
         //       in attachment list
-        const $downloadButton = $('<button class="file-download btn btn-primary" type="button">Download</button>');
-        const $openButton = $('<button class="file-open btn btn-primary" type="button">Open</button>');
+        const $downloadButton = $(`
+            <button class="file-download btn btn-primary" type="button">
+                <span class="bx bx-download"></span>
+                ${t("file_properties.download")}
+            </button>
+        `);
+
+        const $openButton = $(`
+            <button class="file-open btn btn-primary" type="button">
+                <span class="bx bx-link-external"></span>
+                ${t("file_properties.open")}
+            </button>
+        `);
 
         $downloadButton.on("click", () => openService.downloadFileNote(entity.noteId));
         $openButton.on("click", () => openService.openNoteExternally(entity.noteId, entity.mime));

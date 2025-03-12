@@ -102,3 +102,45 @@ div.tn-tool-dialog {
     background: var(--hover-item-background-color);
     color: var(--hover-item-text-color);
 }
+
+/*
+ * Toasts
+ */
+
+#toast-container {
+    /* The vertical gap between toasts */
+    gap: 10px;
+}
+
+#toast-container .toast {
+    --bs-toast-padding-x: 12px;
+    --bs-border-radius: 8px;
+    --bs-toast-bg: var(--toast-background);
+    --bs-toast-color: var(--toast-text-color);
+    --modal-control-button-background: var(--toast-close-button-background);
+    --modal-control-button-color: var(--bs-toast-color);
+
+    display: flex;
+    flex-direction: row-reverse;
+    backdrop-filter: blur(6px);
+}
+
+#toast-container .toast .toast-header {
+    padding: 0 !important;
+    background: transparent !important;
+    border-bottom: none;
+}
+
+#toast-container .toast .toast-header strong {
+    /* The title of the toast is no longer displayed */
+    display: none;
+}
+
+#toast-container .toast .toast-header .btn-close {
+    margin: 0 var(--bs-toast-padding-x) 0 12px;
+
+}
+
+#toast-container .toast .toast-body {
+    flex-grow: 1;
+}

@@ -1060,7 +1060,7 @@ body.desktop .dropdown-submenu .dropdown-menu {
 .dropdown-item,
 body.mobile .dropdown-submenu .dropdown-toggle {
     padding: 2px 2px 2px 8px !important;
-    padding-inline-end: 16px;
+    padding-inline-end: 16px !important;
     /* Note: the right padding should also accommodate the submenu arrow. */
     border-radius: 6px;
     cursor: default !important;
@@ -1615,10 +1615,6 @@ div.bookmark-folder-widget .note-link .bx {
     border-bottom-color: var(--card-border-color);
 }
 
-.note-list-wrapper .note-book-card footer.file-footer {
-    border: 1px solid var(--card-border-color);
-}
-
 .note-list-wrapper .note-book-card .note-book-header .note-icon {
     font-size: 17px;
     vertical-align: text-bottom;
@@ -1731,6 +1727,12 @@ div.bookmark-folder-widget .note-link .bx {
  * Search
  */
 
+ /* Button bar */
+ .search-definition-widget .search-setting-table tbody:last-child div {
+    justify-content: flex-end !important;
+    gap: 8px;
+ }
+
 .search-result-widget-content .note-path .path-bracket {
     display: inline;
 }
@@ -1838,7 +1840,8 @@ div.bookmark-folder-widget .note-link .bx {
 }
 
 /* Keyboard shortcut */
-.help-dialog .help-cards kbd {
+.help-dialog .help-cards kbd,
+.ck-content kbd {
     box-shadow: var(--help-kbd-shortcut-shadow);
     margin: 0 4px;
     border: none;
@@ -2081,10 +2084,11 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     color: var(--modal-title-color);
 }
 
-/* Modal control buttons (close and help) */
+/* Modal and toast control buttons (close and help) */
 
 .modal .modal-header .btn-close,
-.modal .modal-header .help-button {
+.modal .modal-header .help-button,
+#toast-container .toast .toast-header .btn-close {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2103,11 +2107,13 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     cursor: default;
 }
 
-.modal .modal-header .btn-close {
+.modal .modal-header .btn-close,
+#toast-container .toast .toast-header .btn-close {
     --modal-control-button-hover-background: var(--modal-close-button-hover-background);
 }
 
-.modal .modal-header .btn-close::after {
+.modal .modal-header .btn-close::after,
+#toast-container .toast .toast-header .btn-close::after {
     content: "\ec8d";
     font-family: boxicons;
 }
@@ -2120,23 +2126,27 @@ div.promoted-attribute-cell .multiplicity:has(span) {
 }
 
 .modal .modal-header .btn-close:hover,
-.modal .modal-header .help-button:hover {
+.modal .modal-header .help-button:hover,
+#toast-container .toast .toast-header .btn-close:hover {
     background: var(--modal-control-button-hover-background);
     color: var(--modal-control-button-hover-color);
 }
 
 .modal .modal-header .btn-close:active,
-.modal .modal-header .help-button:active {
+.modal .modal-header .help-button:active,
+#toast-container .toast .toast-header .btn-close:active {
     transform: scale(.85);
 }
 
 .modal .modal-header .btn-close:focus,
-.modal .modal-header .help-button:focus {
+.modal .modal-header .help-button:focus,
+#toast-container .toast .toast-header .btn-close:focus {
     box-shadow: none !important;
 }
 
 .modal .modal-header .btn-close:focus-visible,
-.modal .modal-header .help-button:focus-visible {
+.modal .modal-header .help-button:focus-visible,
+#toast-container .toast .toast-header .btn-close:focus-visible {
     outline: 2px solid var(--input-focus-outline-color);
     outline-offset: 2px;
 }

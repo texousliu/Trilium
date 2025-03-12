@@ -68,7 +68,7 @@ try {
     ]);
 
     const nodeModulesFolder = new Set([
-        "node_modules/@excalidraw/excalidraw/dist/",
+        "node_modules/@excalidraw/excalidraw/dist/prod/fonts/",
         "node_modules/katex/dist/",
         "node_modules/dayjs/",
         "node_modules/boxicons/css/",
@@ -105,4 +105,5 @@ try {
 
 } catch(err) {
     console.error("Error during copy:", err)
+    process.exit(1)
 }

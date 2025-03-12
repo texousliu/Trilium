@@ -14,7 +14,6 @@ po-*/
 !test/**/*.db
 !integration-tests/db/document.db
 !integration-tests/db/config.ini
-!data-docs/document.db
 integration-tests/db/log
 integration-tests/db/sessions
 integration-tests/db/backup
@@ -43,3 +42,4 @@ data-docs/backup
 data-docs/log
 data-docs/session
 data-docs/session_secret.txt
+data-docs/document.*

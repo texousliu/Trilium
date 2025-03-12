@@ -3,12 +3,12 @@ import utils from "../../services/utils.js";
 import linkService from "../../services/link.js";
 import server from "../../services/server.js";
 import type FNote from "../../entities/fnote.js";
-import type { default as ExcalidrawLib } from "@excalidraw/excalidraw";
-import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/types/element/types.js";
-import type { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types/types.js";
+import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
+import type { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
 import type { JSX } from "react";
 import type React from "react";
 import type { Root } from "react-dom/client";
+import "@excalidraw/excalidraw/index.css";
 
 const TPL = `
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -123,7 +123,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
     private librarycache: LibraryItem[];
     private attachmentMetadata: AttachmentMetadata[];
     private themeStyle!: Theme;
-    private excalidrawLib!: typeof ExcalidrawLib;
+    private excalidrawLib!: typeof import("@excalidraw/excalidraw");
     private excalidrawApi!: ExcalidrawImperativeAPI;
     private excalidrawWrapperRef!: React.RefObject<HTMLElement | null>;
 
@@ -361,7 +361,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         const svgString = svg.outerHTML;
 
         const activeFiles: Record<string, BinaryFileData> = {};
-        elements.forEach((element) => {
+        // TODO: Used any where upstream typings appear to be broken.
+        elements.forEach((element: any) => {
             if ("fileId" in element && element.fileId) {
                 activeFiles[element.fileId] = files[element.fileId];
             }
@@ -386,7 +387,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
             // there's no separate method to get library items, so have to abuse this one
             const libraryItems = await this.excalidrawApi.updateLibrary({
-                libraryItems(currentLibraryItems) {
+                libraryItems() {
                     return [];
                 },
                 merge: true
@@ -395,7 +396,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             // excalidraw saves the library as a own state. the items are saved to libraryItems. then we compare the library right now with a libraryitemcache. The cache is filled when we first load the Library into the note.
             //We need the cache to delete old attachments later in the server.
 
-            const libraryItemsMissmatch = this.librarycache.filter((obj1) => !libraryItems.some((obj2) => obj1.id === obj2.id));
+            const libraryItemsMissmatch = this.librarycache.filter((obj1) => !libraryItems.some((obj2: LibraryItem) => obj1.id === obj2.id));
 
             // before we saved the metadata of the attachments in a cache. the title of the attachment is a combination of libraryitem  ´s ID und it´s name.
             // we compare the library items in the libraryitemmissmatch variable (this one saves all libraryitems that are different to the state right now. E.g. you delete 1 item, this item is saved as mismatch)

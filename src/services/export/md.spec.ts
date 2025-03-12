@@ -3,42 +3,35 @@ import markdownExportService from "./md.js";
 import { trimIndentation } from "../../../spec/support/utils.js";
 
 describe("Markdown export", () => {
-    it("trims language tag for code blocks", () => {
-        const html = trimIndentation`\
-            <p>A diff:</p>
-            <pre><code class="language-text-x-diff">Hello
-            -world
-            +worldy
-            </code></pre>`;
-        const expected = trimIndentation`\
-            A diff:
 
-            \`\`\`diff
-            Hello
-            -world
-            +worldy
+    it("exports correct language tag for known languages", () => {
+        const conversionTable = {
+            "language-text-x-nginx-conf": "nginx",
+            "language-text-x-diff": "diff",
+            "language-application-javascript-env-frontend": "javascript",
+            "language-application-javascript-env-backend": "javascript",
+            "language-text-x-asm-mips": "mips"
+        };
 
-            \`\`\``;
+        for (const [ input, output ] of Object.entries(conversionTable)) {
+            const html = trimIndentation`\
+                <p>A diff:</p>
+                <pre><code class="${input}">Hello
+                -world
+                +worldy
+                </code></pre>`;
+            const expected = trimIndentation`\
+                A diff:
 
-        expect(markdownExportService.toMarkdown(html)).toBe(expected);
-    });
+                \`\`\`${output}
+                Hello
+                -world
+                +worldy
 
-    it("rewrites frontend script JavaScript code block", () => {
-        const html = `<pre><code class="language-application-javascript-env-frontend">Hello</code></pre>`;
-        const expected = trimIndentation`\
-            \`\`\`javascript
-            Hello
-            \`\`\``;
-        expect(markdownExportService.toMarkdown(html)).toBe(expected);
-    });
+                \`\`\``;
 
-    it("rewrites backend script JavaScript code block", () => {
-        const html = `<pre><code class="language-application-javascript-env-backend">Hello</code></pre>`;
-        const expected = trimIndentation`\
-            \`\`\`javascript
-            Hello
-            \`\`\``;
-        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+            expect(markdownExportService.toMarkdown(html)).toBe(expected);
+        }
     });
 
     it("removes auto tag for code blocks", () => {
@@ -96,6 +89,12 @@ describe("Markdown export", () => {
             ##### Heading 5
 
             ###### Heading 6`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("rewrites image URL with spaces", () => {
+        const html = `<img src="Hello world  .png"/>`;
+        const expected = `![](Hello%20world%20%20.png)`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 });

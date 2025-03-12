@@ -1,3 +1,32 @@
+@container info-section (max-width: 800px) {
+    table, tbody, tr, td, th {
+        display: block;
+        padding: 0 !important;
+    }
+
+    tbody {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    tr {
+        flex-grow: 1;
+    }
+
+    tr:has(.file-buttons) {
+        width: 100%;
+    }
+
+    th {
+        font-size: .85em;
+    }
+
+    td {
+        margin-bottom: .5em;
+    }
+}
+
 /*
  * Promoted attributes
  */
@@ -5,6 +34,44 @@
 div.promoted-attributes-container {
     margin-top: 8px;
     margin-bottom: 8px;
+}
+
+/*
+ * File Properties and Note Info
+ */
+
+.note-info-widget-table th,
+.file-properties-widget .file-table th {
+    opacity: 0.65;
+    font-weight: 500;
+}
+
+/*
+ * File Properties
+ */
+
+.file-properties-widget {
+    container: info-section / inline-size;
+}
+
+.file-properties-widget .file-table {
+    margin: 12px;
+    width: unset;
+}
+
+.file-properties-widget td:has(.file-buttons) {
+    padding: 8px 0 0 0;
+}
+
+.file-properties-widget .file-buttons {
+    padding: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.file-properties-widget .file-buttons button {
+    white-space: nowrap;
 }
 
 /*
@@ -69,11 +136,6 @@ div.editability-dropdown a.dropdown-item {
  * Note info
  */
 
-.note-info-widget-table th {
-    opacity: 0.65;
-    font-weight: 500;
-}
-
 :root .note-info-widget-table button.calculate-button {
     min-width: 0;
     padding: 4px 10px !important;
@@ -82,31 +144,7 @@ div.editability-dropdown a.dropdown-item {
 
 /* Narrow width layout */
 .note-info-widget {
-    container: note-info / inline-size;
-}
-
-@container note-info (max-width: 800px) {
-    table, tbody, tr, td, th {
-        display: block;
-        padding: 0 !important;
-    }
-
-    tbody {
-        display: flex;
-        gap: 10px;
-    }
-
-    tr {
-        flex-grow: 1;
-    }
-
-    th {
-        font-size: .85em;
-    }
-
-    td {
-        margin-bottom: .5em;
-    }
+    container: info-section / inline-size;
 }
 
 /*

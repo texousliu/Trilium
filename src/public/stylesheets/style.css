@@ -980,8 +980,8 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 }
 
 .toast {
-    background-color: var(--accented-background-color) !important;
-    color: var(--main-text-color) !important;
+    --bs-toast-bg: var(--accented-background-color);
+    --bs-toast-color: var(--main-text-color);
     z-index: 9999999999 !important;
     pointer-events: all;
 }
