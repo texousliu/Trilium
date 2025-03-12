@@ -877,31 +877,34 @@ export default class AiSettingsWidget extends OptionsWidget {
                 }
             }
 
-            // Use the application's note-list-item styling
+            // Use the application's native note-list-item styling without custom font styles
             const $item = $(`
                 <div class="note-list-item">
                     <div class="note-book-card p-2">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div>
-                                <div class="d-flex align-items-center">
-                                    <h6 class="mb-1">${note.title || note.noteId}</h6>
-                                    <span class="badge ${badgeClass} ml-2">${badgeText}</span>
+                        <div class="note-book-content">
+                            <div class="note-book-title">
+                                <span class="note-title">${note.title || note.noteId}</span>
+                                <span class="badge ${badgeClass} ml-2">${badgeText}</span>
+                            </div>
+                            <div class="note-book-excerpt">
+                                <div class="note-detail-field">
+                                    <span class="note-detail-label">${isPermanentlyFailed ? 'Status:' : 'Attempts:'}</span>
+                                    <span class="note-detail-value">${isPermanentlyFailed ? 'Permanently failed' : note.attempts}</span>
                                 </div>
-                                <p class="text-muted mb-1 small">
-                                    ${isPermanentlyFailed ?
-                                      `<strong>Status:</strong> Permanently failed` :
-                                      `<strong>Attempts:</strong> ${note.attempts}`}
-                                    <br>
-                                    <strong>Last attempt:</strong> ${note.lastAttempt.substring(0, 19)}
-                                    <br>
-                                    <strong>Error:</strong> ${(note.error || 'Unknown error').substring(0, 100)}${(note.error && note.error.length > 100) ? '...' : ''}
-                                </p>
+                                <div class="note-detail-field">
+                                    <span class="note-detail-label">Last attempt:</span>
+                                    <span class="note-detail-value">${note.lastAttempt.substring(0, 19)}</span>
+                                </div>
+                                <div class="note-detail-field">
+                                    <span class="note-detail-label">Error:</span>
+                                    <span class="note-detail-value">${(note.error || 'Unknown error').substring(0, 100)}${(note.error && note.error.length > 100) ? '...' : ''}</span>
+                                </div>
                             </div>
-                            <div class="ml-2 align-self-center">
-                                <button class="btn btn-sm btn-outline-secondary retry-btn" data-note-id="${note.noteId}">
-                                    <i class="fas fa-redo-alt"></i> Retry
-                                </button>
-                            </div>
+                        </div>
+                        <div class="note-book-actions">
+                            <button class="btn btn-sm btn-outline-secondary retry-btn" data-note-id="${note.noteId}">
+                                <i class="fas fa-redo-alt"></i> Retry
+                            </button>
                         </div>
                     </div>
                 </div>
