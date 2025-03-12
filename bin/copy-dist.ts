@@ -32,6 +32,7 @@ try {
         "./README.md",
         "./forge.config.cjs",
         "./bin/tpl/",
+        "./bin/electron-forge/desktop.ejs",
         "./src/views/",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json",
