@@ -1181,14 +1181,14 @@
     "reprocess_error": "Error starting embedding reprocessing",
 
     "reprocess_index": "Rebuild Search Index",
-    "reprocess_index_description": "Rebuild the semantic search index structure for better query performance. This doesn't regenerate embeddings.",
+    "reprocess_index_description": "Optimize the search index for better performance. This uses existing embeddings without regenerating them (much faster than reprocessing all embeddings).",
     "reprocessing_index": "Rebuilding...",
-    "reprocess_index_started": "Index rebuilding started in the background",
+    "reprocess_index_started": "Search index optimization started in the background",
     "reprocess_index_error": "Error rebuilding search index",
 
     "index_rebuild_progress": "Index Rebuild Progress",
-    "index_rebuilding": "Rebuilding index ({{percentage}}%)",
-    "index_rebuild_complete": "Index rebuild complete",
+    "index_rebuilding": "Optimizing index ({{percentage}}%)",
+    "index_rebuild_complete": "Index optimization complete",
     "index_rebuild_status_error": "Error checking index rebuild status",
 
     "embedding_statistics": "Embedding Statistics",

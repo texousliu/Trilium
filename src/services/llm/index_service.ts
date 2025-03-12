@@ -207,25 +207,57 @@ class IndexService {
             this.indexRebuildCurrent = 0;
 
             // Reset index rebuild progress
-            const totalNotes = await sql.getValue("SELECT COUNT(*) FROM notes WHERE isDeleted = 0") as number;
-            this.indexRebuildTotal = totalNotes;
+            const totalEmbeddings = await sql.getValue("SELECT COUNT(*) FROM note_embeddings") as number;
 
-            if (force) {
-                // Force reindexing of all notes
+            if (totalEmbeddings === 0) {
+                // If there are no embeddings yet, we need to create them first
+                const totalNotes = await sql.getValue("SELECT COUNT(*) FROM notes WHERE isDeleted = 0") as number;
+                this.indexRebuildTotal = totalNotes;
+
+                log.info("No embeddings found, starting full embedding generation first");
                 await vectorStore.reprocessAllNotes();
-                log.info("Forced reindexing of all notes initiated");
+                log.info("Full embedding generation initiated");
             } else {
-                // Check current stats
-                const stats = await vectorStore.getEmbeddingStats();
+                // For index rebuild, use the number of embeddings as the total
+                this.indexRebuildTotal = totalEmbeddings;
 
-                // Only start indexing if we're below 90% completion
-                if (stats.percentComplete < 90) {
-                    await vectorStore.reprocessAllNotes();
-                    log.info("Full indexing initiated");
+                if (force) {
+                    // Use the new rebuildSearchIndex function that doesn't regenerate embeddings
+                    log.info("Starting forced index rebuild without regenerating embeddings");
+                    setTimeout(async () => {
+                        try {
+                            await vectorStore.rebuildSearchIndex();
+                            this.indexRebuildInProgress = false;
+                            this.indexRebuildProgress = 100;
+                            log.info("Index rebuild completed successfully");
+                        } catch (error: any) {
+                            log.error(`Error during index rebuild: ${error.message || "Unknown error"}`);
+                            this.indexRebuildInProgress = false;
+                        }
+                    }, 0);
                 } else {
-                    log.info(`Skipping full indexing, already at ${stats.percentComplete}% completion`);
-                    this.indexRebuildInProgress = false;
-                    this.indexRebuildProgress = 100;
+                    // Check current stats
+                    const stats = await vectorStore.getEmbeddingStats();
+
+                    // Only start indexing if we're below 90% completion or if embeddings exist but need optimization
+                    if (stats.percentComplete < 90) {
+                        log.info("Embedding coverage below 90%, starting full embedding generation");
+                        await vectorStore.reprocessAllNotes();
+                        log.info("Full embedding generation initiated");
+                    } else {
+                        log.info(`Embedding coverage at ${stats.percentComplete}%, starting index optimization`);
+                        setTimeout(async () => {
+                            try {
+                                await vectorStore.rebuildSearchIndex();
+                                this.indexRebuildInProgress = false;
+                                this.indexRebuildProgress = 100;
+                                log.info("Index optimization completed successfully");
+                            } catch (error: any) {
+                                log.error(`Error during index optimization: ${error.message || "Unknown error"}`);
+                                this.indexRebuildInProgress = false;
+                            }
+                        }, 0);
+                    }
                 }
             }
 

@@ -7,6 +7,7 @@ import * as queue from './queue.js';
 // import * as chunking from './chunking.js';
 import * as events from './events.js';
 import * as stats from './stats.js';
+import * as indexOperations from './index_operations.js';
 import { getChunkingOperations } from './chunking_interface.js';
 import type { NoteEmbeddingContext } from './types.js';
 
@@ -63,6 +64,10 @@ export const {
     cleanupEmbeddings
 } = stats;
 
+export const {
+    rebuildSearchIndex
+} = indexOperations;
+
 // Default export for backward compatibility
 export default {
     // Vector utils
@@ -97,5 +102,8 @@ export default {
     // Stats and maintenance
     getEmbeddingStats: stats.getEmbeddingStats,
     reprocessAllNotes: stats.reprocessAllNotes,
-    cleanupEmbeddings: stats.cleanupEmbeddings
+    cleanupEmbeddings: stats.cleanupEmbeddings,
+
+    // Index operations
+    rebuildSearchIndex: indexOperations.rebuildSearchIndex
 };
