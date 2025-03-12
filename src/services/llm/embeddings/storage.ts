@@ -4,6 +4,8 @@ import dateUtils from "../../../services/date_utils.js";
 import log from "../../../services/log.js";
 import { embeddingToBuffer, bufferToEmbedding, cosineSimilarity } from "./vector_utils.js";
 import type { EmbeddingResult } from "./types.js";
+import entityChangesService from "../../../services/entity_changes.js";
+import type { EntityChange } from "../../../services/entity_changes_interface.js";
 
 /**
  * Creates or updates an embedding for a note
@@ -21,20 +23,21 @@ export async function storeNoteEmbedding(
 
     // Check if an embedding already exists for this note and provider/model
     const existingEmbed = await getEmbeddingForNote(noteId, providerId, modelId);
+    let embedId;
 
     if (existingEmbed) {
         // Update existing embedding
+        embedId = existingEmbed.embedId;
         await sql.execute(`
             UPDATE note_embeddings
             SET embedding = ?, dimension = ?, version = version + 1,
                 dateModified = ?, utcDateModified = ?
             WHERE embedId = ?`,
-            [embeddingBlob, dimension, now, utcNow, existingEmbed.embedId]
+            [embeddingBlob, dimension, now, utcNow, embedId]
         );
-        return existingEmbed.embedId;
     } else {
         // Create new embedding
-        const embedId = randomString(16);
+        embedId = randomString(16);
         await sql.execute(`
             INSERT INTO note_embeddings
             (embedId, noteId, providerId, modelId, dimension, embedding,
@@ -43,8 +46,45 @@ export async function storeNoteEmbedding(
             [embedId, noteId, providerId, modelId, dimension, embeddingBlob,
              now, utcNow, now, utcNow]
         );
-        return embedId;
     }
+
+    // Create entity change record for syncing
+    interface EmbeddingRow {
+        embedId: string;
+        noteId: string;
+        providerId: string;
+        modelId: string;
+        dimension: number;
+        version: number;
+        dateCreated: string;
+        utcDateCreated: string;
+        dateModified: string;
+        utcDateModified: string;
+    }
+
+    const row = await sql.getRow<EmbeddingRow>(`
+        SELECT embedId, noteId, providerId, modelId, dimension, version,
+               dateCreated, utcDateCreated, dateModified, utcDateModified
+        FROM note_embeddings
+        WHERE embedId = ?`,
+        [embedId]
+    );
+
+    if (row) {
+        // Skip the actual embedding data for the hash since it's large
+        const ec: EntityChange = {
+            entityName: "note_embeddings",
+            entityId: embedId,
+            hash: `${row.noteId}|${row.providerId}|${row.modelId}|${row.dimension}|${row.version}|${row.utcDateModified}`,
+            utcDateChanged: row.utcDateModified,
+            isSynced: true,
+            isErased: false
+        };
+
+        entityChangesService.putEntityChange(ec);
+    }
+
+    return embedId;
 }
 
 /**
