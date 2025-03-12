@@ -118,7 +118,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
                 {
                     label: "Text formatting",
                     icon: "text",
-                    items: ["underline", "strikethrough", "superscript", "subscript", "code"]
+                    items: ["underline", "strikethrough", "superscript", "subscript", "code", "kbd"]
                 },
                 "|",
                 "fontColor",
@@ -162,6 +162,7 @@ function buildFloatingToolbar() {
                 "strikethrough",
                 "superscript",
                 "subscript",
+                "kbd",
                 "fontColor",
                 "fontBackgroundColor",
                 "code",
