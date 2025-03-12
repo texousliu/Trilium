@@ -1840,7 +1840,8 @@ div.bookmark-folder-widget .note-link .bx {
 }
 
 /* Keyboard shortcut */
-.help-dialog .help-cards kbd {
+.help-dialog .help-cards kbd,
+.ck-content kbd {
     box-shadow: var(--help-kbd-shortcut-shadow);
     margin: 0 4px;
     border: none;
