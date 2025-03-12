@@ -7,13 +7,29 @@ An image can be uploaded in the form of note's [attachment](Attachments.md) or a
 
 To add an image to the note, simply drag it from file explorer onto the note editor inside Trilium and the image will be uploaded.
 
-![](1_Images_image.png)
+![](10_Images_image.png)
 
 Alternatively you can click on block toolbar and then on "Insert image":
 
-![](Images_image.png)
+![](8_Images_image.png)
 
 You can also copy and paste an image from web - the image will be (asynchronously) downloaded and embedded.
+
+## Configuring the images
+
+Clicking on an image will reveal a popup with multiple options:  
+![](11_Images_image.png)
+
+### Alignment
+
+The first set of options configure the alignment are, in order:
+
+| Icon | Option | Preview | Description |
+| --- | --- | --- | --- |
+| ![](7_Images_image.png) | Inline | ![](2_Images_image.png) | As the name suggests, the name can be put inside a paragraph and moved around similarly as if it was a block of text. Use drag & drop or cut-paste to move it around. |
+| ![](12_Images_image.png) | Centered image | ![](3_Images_image.png) | The image will be displayed as a block and centered, not allowing text in either the left or right of it. |
+| ![](5_Images_image.png) | Wrap text | ![](9_Images_image.png) | The image will be displayed to the left or the right of the text. |
+| ![](Images_image.png) | Block align | ![](4_Images_image.png) | Similarly to _Centered image_, the image will be displayed as a block and aligned either to the left or to the right, but not allowing text to flow on either of its sides. |
 
 ## Compression
 
