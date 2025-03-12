@@ -289,6 +289,13 @@ export async function processEmbeddingQueue() {
             // This allows manual retries later
             if (noteData.attempts + 1 >= 3) {
                 log.error(`Marked note ${noteData.noteId} as permanently failed after multiple embedding attempts`);
+                
+                // Update the attempts to a very high number to indicate permanent failure
+                await sql.execute(`
+                    UPDATE embedding_queue 
+                    SET attempts = 999
+                    WHERE noteId = ?
+                `, [noteData.noteId]);
             }
         }
     }
