@@ -1749,7 +1749,7 @@
                                         "4TIF1oA4VQRO"
                                     ],
                                     "title": "Options",
-                                    "notePosition": 30,
+                                    "notePosition": 40,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1766,6 +1766,93 @@
                                     "format": "markdown",
                                     "dataFileName": "Options.md",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "oPVyFC7WL2Lp",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Vc8PjrjAGuOp",
+                                        "oPVyFC7WL2Lp"
+                                    ],
+                                    "title": "Note Tree",
+                                    "notePosition": 50,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/markdown",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "imageLink",
+                                            "value": "sLZ7Bcq9p8E9",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "imageLink",
+                                            "value": "qL7381ZG0lMK",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "A9Oc6YKKc65v",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "IakOLONlIfGI",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "tree-manipulation",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bxs-tree-alt",
+                                            "isInheritable": false,
+                                            "position": 50
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "ivYnonVFBxbQ",
+                                            "isInheritable": false,
+                                            "position": 60
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Note Tree.md",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "Bp5BCJRntpyt",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/jpg",
+                                            "position": 10,
+                                            "dataFileName": "Note Tree_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "DYf7wm3Yv6EC",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/jpg",
+                                            "position": 10,
+                                            "dataFileName": "1_Note Tree_image.png"
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -1778,7 +1865,7 @@
                                 "BFs8mudNFgCS"
                             ],
                             "title": "Note",
-                            "notePosition": 20,
+                            "notePosition": 40,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2471,7 +2558,7 @@
                                 "wArbEsdSae6g"
                             ],
                             "title": "Navigation",
-                            "notePosition": 30,
+                            "notePosition": 50,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2521,62 +2608,6 @@
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Tree Concepts.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "oPVyFC7WL2Lp",
-                                    "notePath": [
-                                        "pOsGYCXsbNQG",
-                                        "gh7bpGYxajRS",
-                                        "wArbEsdSae6g",
-                                        "oPVyFC7WL2Lp"
-                                    ],
-                                    "title": "Tree Manipulation",
-                                    "notePosition": 20,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/markdown",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "imageLink",
-                                            "value": "sLZ7Bcq9p8E9",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "imageLink",
-                                            "value": "qL7381ZG0lMK",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "A9Oc6YKKc65v",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "IakOLONlIfGI",
-                                            "isInheritable": false,
-                                            "position": 40
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "tree-manipulation",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Tree Manipulation.md",
                                     "attachments": []
                                 },
                                 {
@@ -2834,7 +2865,7 @@
                                 "A9Oc6YKKc65v"
                             ],
                             "title": "Keyboard Shortcuts",
-                            "notePosition": 40,
+                            "notePosition": 60,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2910,7 +2941,7 @@
                                 "Wy267RK4M69c"
                             ],
                             "title": "Themes",
-                            "notePosition": 60,
+                            "notePosition": 80,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -3021,7 +3052,7 @@
                                 "mHbBMPDPkVV5"
                             ],
                             "title": "Import & Export",
-                            "notePosition": 70,
+                            "notePosition": 90,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -3154,7 +3185,7 @@
                                 "rC3pL2aptaRE"
                             ],
                             "title": "Zen mode",
-                            "notePosition": 80,
+                            "notePosition": 100,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
