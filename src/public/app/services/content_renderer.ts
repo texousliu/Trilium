@@ -199,8 +199,19 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
     if (entityType === "notes" && "noteId" in entity) {
         // TODO: we should make this available also for attachments, but there's a problem with "Open externally" support
         //       in attachment list
-        const $downloadButton = $('<button class="file-download btn btn-primary" type="button">Download</button>');
-        const $openButton = $('<button class="file-open btn btn-primary" type="button">Open</button>');
+        const $downloadButton = $(`
+            <button class="file-download btn btn-primary" type="button">
+                <span class='bx bx-download' ></span>
+                Download
+            </button>
+        `);
+
+        const $openButton = $(`
+            <button class="file-open btn btn-primary" type="button">
+                <span class='bx bx-link-external' ></span>
+                Open
+            </button>
+        `);
 
         $downloadButton.on("click", () => openService.downloadFileNote(entity.noteId));
         $openButton.on("click", () => openService.openNoteExternally(entity.noteId, entity.mime));
