@@ -1,5 +1,5 @@
 import options from "../../services/options.js";
-import vectorStore from "../../services/llm/embeddings/vector_store.js";
+import vectorStore from "../../services/llm/embeddings/index.js";
 import providerManager from "../../services/llm/embeddings/providers.js";
 import indexService from "../../services/llm/index_service.js";
 import becca from "../../becca/becca.js";

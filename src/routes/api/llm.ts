@@ -4,7 +4,7 @@ import options from "../../services/options.js";
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 import becca from "../../becca/becca.js";
-import vectorStore from "../../services/llm/embeddings/vector_store.js";
+import vectorStore from "../../services/llm/embeddings/index.js";
 import providerManager from "../../services/llm/embeddings/providers.js";
 import type { Message, ChatCompletionOptions } from "../../services/llm/ai_interface.js";
 // Import this way to prevent immediate instantiation
@@ -914,7 +914,7 @@ async function startIndexing(req: Request, res: Response) {
         }
 
         const { force, batchSize } = req.body || {};
-        
+
         let result;
         if (batchSize) {
             // Run a limited batch indexing
@@ -948,7 +948,7 @@ async function getFailedIndexes(req: Request, res: Response) {
 
         const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 100;
         const failedNotes = await indexService.getFailedIndexes(limit);
-        
+
         return {
             count: failedNotes.length,
             failedNotes
@@ -974,7 +974,7 @@ async function retryFailedIndex(req: Request, res: Response) {
         }
 
         const success = await indexService.retryFailedNote(noteId);
-        
+
         return {
             success,
             message: success ? `Note ${noteId} queued for retry` : `Note ${noteId} not found in failed queue`
@@ -995,7 +995,7 @@ async function retryAllFailedIndexes(req: Request, res: Response) {
         }
 
         const count = await indexService.retryAllFailedNotes();
-        
+
         return {
             success: true,
             count,
@@ -1017,7 +1017,7 @@ async function findSimilarNotes(req: Request, res: Response) {
         }
 
         const { query, contextNoteId, limit } = req.body || {};
-        
+
         if (!query || typeof query !== 'string' || query.trim().length === 0) {
             throw new Error('Query is required');
         }
@@ -1027,7 +1027,7 @@ async function findSimilarNotes(req: Request, res: Response) {
             contextNoteId,
             limit || 10
         );
-        
+
         return {
             count: similarNotes.length,
             similarNotes
@@ -1048,7 +1048,7 @@ async function generateQueryContext(req: Request, res: Response) {
         }
 
         const { query, contextNoteId, depth } = req.body || {};
-        
+
         if (!query || typeof query !== 'string' || query.trim().length === 0) {
             throw new Error('Query is required');
         }
@@ -1058,7 +1058,7 @@ async function generateQueryContext(req: Request, res: Response) {
             contextNoteId,
             depth || 2
         );
-        
+
         return {
             context,
             length: context.length
@@ -1090,7 +1090,7 @@ async function indexNote(req: Request, res: Response) {
         }
 
         const success = await indexService.generateNoteIndex(noteId);
-        
+
         return {
             success,
             noteId,
@@ -1111,7 +1111,7 @@ export default {
     listSessions,
     deleteSession,
     sendMessage,
-    
+
     // Knowledge base index management
     getIndexStats,
     startIndexing,

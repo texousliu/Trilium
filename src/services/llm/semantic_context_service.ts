@@ -1,7 +1,7 @@
 import { ContextExtractor } from './context/index.js';
-import * as vectorStore from './embeddings/vector_store.js';
+import * as vectorStore from './embeddings/index.js';
 import sql from '../sql.js';
-import { cosineSimilarity } from './embeddings/vector_store.js';
+import { cosineSimilarity } from './embeddings/index.js';
 import log from '../log.js';
 import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './embeddings/providers.js';
 import options from '../options.js';

@@ -1,10 +1,10 @@
 import becca from "../../becca/becca.js";
-import vectorStore from "./embeddings/vector_store.js";
+import vectorStore from "./embeddings/index.js";
 import providerManager from "./embeddings/providers.js";
 import options from "../options.js";
 import log from "../log.js";
 import type { Message } from "./ai_interface.js";
-import { cosineSimilarity } from "./embeddings/vector_store.js";
+import { cosineSimilarity } from "./embeddings/index.js";
 import sanitizeHtml from "sanitize-html";
 
 /**

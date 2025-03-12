@@ -12,7 +12,7 @@
 import log from "../log.js";
 import options from "../options.js";
 import becca from "../../becca/becca.js";
-import vectorStore from "./embeddings/vector_store.js";
+import vectorStore from "./embeddings/index.js";
 import providerManager from "./embeddings/providers.js";
 import { ContextExtractor } from "./context/index.js";
 import eventService from "../events.js";

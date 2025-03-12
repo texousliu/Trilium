@@ -1,6 +1,6 @@
 import log from "../../log.js";
 import options from "../../options.js";
-import vectorStore from "./vector_store.js";
+import { initEmbeddings } from "./index.js";
 import providerManager from "./providers.js";
 
 /**
@@ -15,7 +15,7 @@ export async function initializeEmbeddings() {
 
         // Start the embedding system if AI is enabled
         if (await options.getOptionBool('aiEnabled')) {
-            await vectorStore.initEmbeddings();
+            await initEmbeddings();
             log.info("Embedding system initialized successfully.");
         } else {
             log.info("Embedding system disabled (AI features are turned off).");
