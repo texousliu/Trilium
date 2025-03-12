@@ -103,6 +103,10 @@
     --modal-footer-background: #ffffff08;
     --modal-footer-color: #ffffff7a;
 
+    --toast-background: #00000099;
+    --toast-text-color: white;
+    --toast-close-button-background: #ffffff33;
+
     --quick-search-background: #ffffff12;
     --quick-search-color: #ffffff52;
     --quick-search-hover-background: #ffffff1f;

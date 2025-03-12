@@ -107,12 +107,6 @@ div.tn-tool-dialog {
  * Toasts
  */
 
-:root {
-    --toast-background: #00000099;
-    --toast-text-color: white;
-    --toast-close-button-background: #ffffff33;
-}
-
 #toast-container {
     /* The vertical gap between toasts */
     gap: 10px;
