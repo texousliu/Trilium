@@ -157,6 +157,16 @@ export async function processEmbeddingQueue() {
         return;
     }
 
+    // Check if this instance should process embeddings
+    const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+    const isSyncServer = await indexService.isSyncServerForEmbeddings();
+    const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
+
+    if (!shouldProcessEmbeddings) {
+        // This instance is not configured to process embeddings
+        return;
+    }
+
     const batchSize = parseInt(await options.getOption('embeddingBatchSize') || '10', 10);
     const enabledProviders = await getEnabledEmbeddingProviders();
 

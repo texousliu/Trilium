@@ -72,6 +72,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     enableAutomaticIndexing: boolean;
     embeddingSimilarityThreshold: string;
     maxNotesPerLlmQuery: string;
+    embeddingGenerationLocation: string;
 
     lastSyncedPull: number;
     lastSyncedPush: number;

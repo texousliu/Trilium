@@ -57,9 +57,17 @@ class IndexService {
                 throw new Error("No embedding providers available");
             }
 
-            // Setup automatic indexing if enabled
-            if (await options.getOptionBool('embeddingAutoUpdate')) {
+            // Check if this instance should process embeddings
+            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+            const isSyncServer = await this.isSyncServerForEmbeddings();
+            const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
+
+            // Setup automatic indexing if enabled and this instance should process embeddings
+            if (await options.getOptionBool('embeddingAutoUpdate') && shouldProcessEmbeddings) {
                 this.setupAutomaticIndexing();
+                log.info(`Index service: Automatic indexing enabled, processing embeddings ${isSyncServer ? 'as sync server' : 'as client'}`);
+            } else if (await options.getOptionBool('embeddingAutoUpdate')) {
+                log.info("Index service: Automatic indexing enabled, but this instance is not configured to process embeddings");
             }
 
             // Listen for note changes to update index
@@ -78,32 +86,33 @@ class IndexService {
      */
     private setupEventListeners() {
         // Listen for note content changes
-        eventService.subscribe(eventService.NOTE_CONTENT_CHANGE, ({ entity }) => {
+        eventService.subscribe(eventService.NOTE_CONTENT_CHANGE, async ({ entity }) => {
             if (entity && entity.noteId) {
-                this.queueNoteForIndexing(entity.noteId);
+                // Always queue notes for indexing, but the actual processing will depend on configuration
+                await this.queueNoteForIndexing(entity.noteId);
             }
         });
 
         // Listen for new notes
-        eventService.subscribe(eventService.ENTITY_CREATED, ({ entityName, entity }) => {
+        eventService.subscribe(eventService.ENTITY_CREATED, async ({ entityName, entity }) => {
             if (entityName === "notes" && entity && entity.noteId) {
-                this.queueNoteForIndexing(entity.noteId);
+                await this.queueNoteForIndexing(entity.noteId);
             }
         });
 
         // Listen for note title changes
-        eventService.subscribe(eventService.NOTE_TITLE_CHANGED, ({ noteId }) => {
+        eventService.subscribe(eventService.NOTE_TITLE_CHANGED, async ({ noteId }) => {
             if (noteId) {
-                this.queueNoteForIndexing(noteId);
+                await this.queueNoteForIndexing(noteId);
             }
         });
 
         // Listen for changes in AI settings
-        eventService.subscribe(eventService.ENTITY_CHANGED, ({ entityName, entity }) => {
+        eventService.subscribe(eventService.ENTITY_CHANGED, async ({ entityName, entity }) => {
             if (entityName === "options" && entity && entity.name) {
                 if (entity.name.startsWith('ai') || entity.name.startsWith('embedding')) {
                     log.info("AI settings changed, updating index service configuration");
-                    this.updateConfiguration();
+                    await this.updateConfiguration();
                 }
             }
         });
@@ -122,6 +131,16 @@ class IndexService {
         this.automaticIndexingInterval = setInterval(async () => {
             try {
                 if (!this.indexingInProgress) {
+                    // Check if this instance should process embeddings
+                    const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+                    const isSyncServer = await this.isSyncServerForEmbeddings();
+                    const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
+
+                    if (!shouldProcessEmbeddings) {
+                        // This instance is not configured to process embeddings
+                        return;
+                    }
+
                     const stats = await vectorStore.getEmbeddingStats();
 
                     // Only run automatic indexing if we're below 95% completion
@@ -147,10 +166,20 @@ class IndexService {
             const intervalMs = parseInt(await options.getOption('embeddingUpdateInterval') || '3600000', 10);
             this.indexUpdateInterval = intervalMs;
 
+            // Check if this instance should process embeddings
+            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+            const isSyncServer = await this.isSyncServerForEmbeddings();
+            const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
+
             // Update automatic indexing setting
             const autoIndexing = await options.getOptionBool('embeddingAutoUpdate');
-            if (autoIndexing && !this.automaticIndexingInterval) {
+            if (autoIndexing && shouldProcessEmbeddings && !this.automaticIndexingInterval) {
                 this.setupAutomaticIndexing();
+                log.info(`Index service: Automatic indexing enabled, processing embeddings ${isSyncServer ? 'as sync server' : 'as client'}`);
+            } else if (autoIndexing && !shouldProcessEmbeddings && this.automaticIndexingInterval) {
+                clearInterval(this.automaticIndexingInterval);
+                this.automaticIndexingInterval = undefined;
+                log.info("Index service: Automatic indexing disabled for this instance based on configuration");
             } else if (!autoIndexing && this.automaticIndexingInterval) {
                 clearInterval(this.automaticIndexingInterval);
                 this.automaticIndexingInterval = undefined;
@@ -179,6 +208,8 @@ class IndexService {
         }
 
         try {
+            // Always queue notes for indexing, regardless of where embedding generation happens
+            // The actual processing will be determined when the queue is processed
             await vectorStore.queueNoteForEmbedding(noteId, 'UPDATE');
             return true;
         } catch (error: any) {
@@ -201,6 +232,17 @@ class IndexService {
         }
 
         try {
+            // Check if this instance should process embeddings
+            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+            const isSyncServer = await this.isSyncServerForEmbeddings();
+            const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
+
+            if (!shouldProcessEmbeddings) {
+                // This instance is not configured to process embeddings
+                log.info("Skipping full indexing as this instance is not configured to process embeddings");
+                return false;
+            }
+
             this.indexingInProgress = true;
             this.indexRebuildInProgress = true;
             this.indexRebuildProgress = 0;
@@ -320,6 +362,17 @@ class IndexService {
 
         try {
             this.indexingInProgress = true;
+
+            // Check if this instance should process embeddings
+            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+            const isSyncServer = await this.isSyncServerForEmbeddings();
+            const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
+
+            if (!shouldProcessEmbeddings) {
+                // This instance is not configured to process embeddings
+                log.info("Skipping batch indexing as this instance is not configured to process embeddings");
+                return false;
+            }
 
             // Process the embedding queue
             await vectorStore.processEmbeddingQueue();
@@ -619,6 +672,21 @@ class IndexService {
     }
 
     /**
+     * Check if this instance is a sync server and should generate embeddings
+     */
+    async isSyncServerForEmbeddings() {
+        // Check if this is a sync server (no syncServerHost means this is a sync server)
+        const syncServerHost = await options.getOption('syncServerHost');
+        const isSyncServer = !syncServerHost;
+
+        // Check if embedding generation should happen on the sync server
+        const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+        const shouldGenerateOnSyncServer = embeddingLocation === 'sync_server';
+
+        return isSyncServer && shouldGenerateOnSyncServer;
+    }
+
+    /**
      * Generate a comprehensive index entry for a note
      * This prepares all metadata and contexts for optimal LLM retrieval
      */
@@ -631,6 +699,21 @@ class IndexService {
             const note = becca.getNote(noteId);
             if (!note) {
                 throw new Error(`Note ${noteId} not found`);
+            }
+
+            // Check where embedding generation should happen
+            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+
+            // If embedding generation should happen on the sync server and we're not the sync server,
+            // just queue the note for embedding but don't generate it
+            const isSyncServer = await this.isSyncServerForEmbeddings();
+            const shouldSkipGeneration = embeddingLocation === 'sync_server' && !isSyncServer;
+
+            if (shouldSkipGeneration) {
+                // We're not the sync server, so just queue the note for embedding
+                // The sync server will handle the actual embedding generation
+                log.info(`Note ${noteId} queued for embedding generation on sync server`);
+                return true;
             }
 
             // Get complete note context for indexing

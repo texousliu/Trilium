@@ -187,6 +187,15 @@ export default class AiSettingsWidget extends OptionsWidget {
                 </div>
 
                 <div class="form-group">
+                    <label>${t("ai_llm.embedding_generation_location")}</label>
+                    <select class="embedding-generation-location form-control">
+                        <option value="client">${t("ai_llm.embedding_generation_location_client")}</option>
+                        <option value="sync_server">${t("ai_llm.embedding_generation_location_sync_server")}</option>
+                    </select>
+                    <div class="help-text">${t("ai_llm.embedding_generation_location_description")}</div>
+                </div>
+
+                <div class="form-group">
                     <label>
                         <input class="embedding-auto-update-enabled" type="checkbox">
                         ${t("ai_llm.enable_auto_update_embeddings")}
@@ -446,6 +455,11 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.updateOption('embeddingsDefaultProvider', $embeddingDefaultProvider.val() as string);
         });
 
+        const $embeddingGenerationLocation = this.$widget.find('.embedding-generation-location');
+        $embeddingGenerationLocation.on('change', async () => {
+            await this.updateOption('embeddingGenerationLocation', $embeddingGenerationLocation.val() as string);
+        });
+
         const $embeddingBatchSize = this.$widget.find('.embedding-batch-size');
         $embeddingBatchSize.on('change', async () => {
             await this.updateOption('embeddingBatchSize', $embeddingBatchSize.val() as string);
@@ -541,6 +555,7 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         // Load embedding options
         this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
+        this.$widget.find('.embedding-generation-location').val(options.embeddingGenerationLocation || 'client');
         this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled || 'true');
         this.setCheckboxState(this.$widget.find('.enable-automatic-indexing'), options.enableAutomaticIndexing || 'true');
         this.$widget.find('.embedding-similarity-threshold').val(options.embeddingSimilarityThreshold || '0.65');

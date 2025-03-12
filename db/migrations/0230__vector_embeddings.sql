@@ -53,3 +53,5 @@ INSERT INTO options (name, value, isSynced, utcDateModified)
 VALUES ('embeddingBatchSize', '10', 1, strftime('%Y-%m-%d %H:%M:%f', 'now'));
 INSERT INTO options (name, value, isSynced, utcDateModified) 
 VALUES ('embeddingDefaultDimension', '1536', 1, strftime('%Y-%m-%d %H:%M:%f', 'now')); 
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingGenerationLocation', 'client', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')); 
