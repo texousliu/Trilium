@@ -1,5 +1,5 @@
 # Read-Only Notes
-Both [text](../../Note%20Types/Text.md) and [code](../../Advanced%20Usage/Code%20Notes.md) notes in Trilium can be set to read-only. When a note is in read-only mode, it is presented to the user in a non-editable view, with the option to switch to editing mode if needed.
+Both [text](../../Note%20Types/Text.md) and [code](../../Note%20Types/Code.md) notes in Trilium can be set to read-only. When a note is in read-only mode, it is presented to the user in a non-editable view, with the option to switch to editing mode if needed.
 
 ## Setting Read-Only Mode with a Label
 

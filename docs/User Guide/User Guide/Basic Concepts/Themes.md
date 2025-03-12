@@ -9,7 +9,7 @@ Trilium comes with a couple pre-installed color themes, with the default being a
 
 Trilium supports custom user themes, allowing you to personalize the application's appearance. To create a custom theme, follow these steps:
 
-1.  **Create a CSS Code Note**: Start by creating a new [code note](../Advanced%20Usage/Code%20Notes.md) with the `CSS` type.
+1.  **Create a CSS Code Note**: Start by creating a new [code note](../Note%20Types/Code.md) with the `CSS` type.
 2.  **Annotate with** `**#appTheme**`: Add the [attribute](../Advanced%20Usage/Attributes.md) `#appTheme=my-theme-name` to your note, where `my-theme-name` is the name of your custom theme.
 3.  **Define Your Styles**: Write your custom CSS within the note. Below is an example of a custom theme:
 
@@ -95,7 +95,7 @@ In addition to full themes, Trilium allows for custom CSS that isn't tied to a t
 
 To use custom CSS:
 
-1.  **Create a CSS Code Note**: Create a new [code note](../Advanced%20Usage/Code%20Notes.md) with the `CSS` type.
+1.  **Create a CSS Code Note**: Create a new [code note](../Note%20Types/Code.md) with the `CSS` type.
 2.  **Add the** `**appCss**` **Label**: Annotate the note with the `#appCss` [label](../Advanced%20Usage/Attributes.md).
 3.  **Write Your CSS**: Add your custom CSS rules to the note.
 

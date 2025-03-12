@@ -15,7 +15,7 @@
       <div class="ck-content">
         <p>Task Manager is a <a href="../Attributes/Promoted%20Attributes.html">promoted attributes</a> and
           <a
-          href="../Code%20Notes/Scripts.html">scripts</a>showcase present in the <a href="../Database.html">demo notes</a>.</p>
+          href="../../Note%20Types/Code/Scripts.html">scripts</a>showcase present in the <a href="../Database.html">demo notes</a>.</p>
         
 <h2>Demo</h2>
 
@@ -42,8 +42,8 @@
 
         <p>Task template defines several <a href="../Attributes/Promoted%20Attributes.html">promoted attributes</a> -
           todoDate, doneDate, tags, location. Importantly it also defines <code>~runOnAttributeChange</code> relation
-          - <a href="../Code%20Notes/Events.html">event</a> handler which is run on
-          attribute change. This <a href="../Code%20Notes/Scripts.html">script</a> handles
+          - <a href="../../Note%20Types/Code/Events.html">event</a> handler which is
+          run on attribute change. This <a href="../../Note%20Types/Code/Scripts.html">script</a> handles
           when e.g. we fill out the doneDate attribute - meaning the task is done
           and should be moved to "Done" note and removed from TODO, locations and
           tags.</p>
@@ -74,7 +74,7 @@
 
         <p>In the demo screenshot above you may notice that TODO tasks are in red
           color and DONE tasks are green.</p>
-        <p>This is done by having this CSS <a href="../Code%20Notes.html">code note</a> which
+        <p>This is done by having this CSS <a href="../../Note%20Types/Code.html">code note</a> which
           defines extra CSS classes:</p>
 <pre><code class="language-text-x-trilium-auto">span.fancytree-node.todo .fancytree-title {
     color: red !important;
@@ -83,7 +83,7 @@
 span.fancytree-node.done .fancytree-title {
     color: green !important;
 }</code></pre>
-        <p>This <a href="../Code%20Notes.html">code note</a> has <code>#appCss</code> 
+        <p>This <a href="../../Note%20Types/Code.html">code note</a> has <code>#appCss</code> 
           <a
           href="../Attributes.html">label</a>which is recognized by Trilium on startup and loaded as CSS into
             the application.</p>

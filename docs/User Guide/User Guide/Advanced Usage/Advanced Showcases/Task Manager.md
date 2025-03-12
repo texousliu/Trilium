@@ -1,5 +1,5 @@
 # Task Manager
-Task Manager is a [promoted attributes](../Attributes/Promoted%20Attributes.md) and [scripts](../Code%20Notes/Scripts.md)showcase present in the [demo notes](../Database.md).
+Task Manager is a [promoted attributes](../Attributes/Promoted%20Attributes.md) and [scripts](../../Note%20Types/Code/Scripts.md)showcase present in the [demo notes](../Database.md).
 
 ## Demo
 
@@ -15,7 +15,7 @@ New tasks are created in the TODO note which has `~child:template` [relation](..
 
 ### Attributes
 
-Task template defines several [promoted attributes](../Attributes/Promoted%20Attributes.md) - todoDate, doneDate, tags, location. Importantly it also defines `~runOnAttributeChange` relation - [event](../Code%20Notes/Events.md) handler which is run on attribute change. This [script](../Code%20Notes/Scripts.md) handles when e.g. we fill out the doneDate attribute - meaning the task is done and should be moved to "Done" note and removed from TODO, locations and tags.
+Task template defines several [promoted attributes](../Attributes/Promoted%20Attributes.md) - todoDate, doneDate, tags, location. Importantly it also defines `~runOnAttributeChange` relation - [event](../../Note%20Types/Code/Events.md) handler which is run on attribute change. This [script](../../Note%20Types/Code/Scripts.md) handles when e.g. we fill out the doneDate attribute - meaning the task is done and should be moved to "Done" note and removed from TODO, locations and tags.
 
 ### New task button
 
@@ -46,7 +46,7 @@ api.addButtonToToolbar({
 
 In the demo screenshot above you may notice that TODO tasks are in red color and DONE tasks are green.
 
-This is done by having this CSS [code note](../Code%20Notes.md) which defines extra CSS classes:
+This is done by having this CSS [code note](../../Note%20Types/Code.md) which defines extra CSS classes:
 
 ```
 span.fancytree-node.todo .fancytree-title {
@@ -58,6 +58,6 @@ span.fancytree-node.done .fancytree-title {
 }
 ```
 
-This [code note](../Code%20Notes.md) has `#appCss` [label](../Attributes.md)which is recognized by Trilium on startup and loaded as CSS into the application.
+This [code note](../../Note%20Types/Code.md) has `#appCss` [label](../Attributes.md)which is recognized by Trilium on startup and loaded as CSS into the application.
 
 Second part of this functionality is based in event handler described above which assigns `#cssClass` label to the task to either "done" or "todo" based on the task status.

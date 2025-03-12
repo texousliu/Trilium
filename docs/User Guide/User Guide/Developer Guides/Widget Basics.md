@@ -85,7 +85,7 @@ After reloading Trilium, the button should now appear at the bottom left of the 
 
 ### Step 4: Adding User Interaction
 
-Let’s make the button interactive by showing a message when it’s clicked. We'll use the `api.showMessage` method from the [Script API](../Advanced%20Usage/Code%20Notes/Script%20API.md).
+Let’s make the button interactive by showing a message when it’s clicked. We'll use the `api.showMessage` method from the [Script API](../Note%20Types/Code/Script%20API.md).
 
 ```
 class MyWidget extends api.BasicWidget {

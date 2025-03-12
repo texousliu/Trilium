@@ -4,10 +4,10 @@ Note is a central entity in Trilium. Main attributes of note are title and conte
 ### Note types
 
 *   [text note](../Note%20Types/Text.md) - this is default note type which allows you to put rich text, images etc.
-*   [code note](../Advanced%20Usage/Code%20Notes.md) - some kind of formal code, typically programming language (e.g. JavaScript) or data structure (e.g. JSON)
+*   [code note](../Note%20Types/Code.md) - some kind of formal code, typically programming language (e.g. JavaScript) or data structure (e.g. JSON)
 *   [image note](https://github.com/TriliumNext/Notes/wiki/Images) - represents single image
 *   file note - represents uploaded file (e.g. docx MS Word document).
-*   render HTML note - this works as an output screen of attached [scripts](../Advanced%20Usage/Code%20Notes/Scripts.md)
+*   render HTML note - this works as an output screen of attached [scripts](../Note%20Types/Code/Scripts.md)
 *   [saved search](../Note%20Types/Saved%20Search.md) note - contains saved search query and dynamically displays result of the search as its sub-notes
 *   [relation map](../Advanced%20Usage/Relation%20Map.md) note - visualizes notes and their relations
 *   [book note](../Note%20Types/Book.md) - displays its children notes, useful for reading many short notes

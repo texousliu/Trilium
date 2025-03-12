@@ -13,7 +13,7 @@
        <h1 data-trilium-h1>Custom Request Handler</h1>
 
       <div class="ck-content">
-        <p>Trilium provides a mechanism for <a href="Code%20Notes/Scripts.html">scripts</a> to
+        <p>Trilium provides a mechanism for <a href="../Note%20Types/Code/Scripts.html">scripts</a> to
           open a public REST endpoint. This opens a way for various integrations
           with other services - a simple example would be creating new note from
           Slack by issuing a slash command (e.g. <code>/trilium buy milk</code>).</p>
@@ -22,7 +22,7 @@
 
         <p>Let's take a look at an example. The goal is to provide a REST endpoint
           to which we can send title and content and Trilium will create a note.</p>
-        <p>We'll start with creating a JavaScript backend <a href="Code%20Notes.html">code note</a> containing:</p>
+        <p>We'll start with creating a JavaScript backend <a href="../Note%20Types/Code.html">code note</a> containing:</p>
 <pre><code class="language-text-x-trilium-auto">const {req, res} = api;
 const {secret, title, content} = req.body;
 
@@ -74,7 +74,7 @@ Content-Type: application/json
           and you need to take care of this yourself.</p>
         <p>Once we pass these checks we will just create the desired note using
           <a
-          href="Code%20Notes/Script%20API.html">Script API</a>.</p>
+          href="../Note%20Types/Code/Script%20API.html">Script API</a>.</p>
         
 <h2>Custom resource provider</h2>
 
