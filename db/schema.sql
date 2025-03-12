@@ -158,7 +158,8 @@ CREATE TABLE IF NOT EXISTS "embedding_queue" (
     "priority" INTEGER NOT NULL DEFAULT 0,
     "attempts" INTEGER NOT NULL DEFAULT 0,
     "lastAttempt" TEXT NULL,
-    "error" TEXT NULL
+    "error" TEXT NULL,
+    "failed" INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS "embedding_providers" (
