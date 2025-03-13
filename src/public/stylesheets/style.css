@@ -1709,7 +1709,8 @@ footer.file-footer button {
 }
 
 body.desktop .ck-content .admonition {
-    border: 1px solid var(--card-border-color);
+    --accent-color: var(--card-border-color);
+    border: 1px solid var(--accent-color);
     box-shadow: var(--card-box-shadow);
     border-radius: 0.5em;
     padding: 1em;
@@ -1725,6 +1726,12 @@ body.desktop .ck-content .admonition::before {
     top: 1em;
     left: 1em;
 }
+
+body.desktop .ck-content .admonition.note { --accent-color: #69c7ff; }
+body.desktop .ck-content .admonition.tip { --accent-color: #40c025; }
+body.desktop .ck-content .admonition.important { --accent-color: #9839f7; }
+body.desktop .ck-content .admonition.caution { --accent-color: #ff2e2e; }
+body.desktop .ck-content .admonition.warning { --accent-color: #e2aa03; }
 
 body.desktop .ck-content .admonition.note::before { content: "\eb21"; }
 body.desktop .ck-content .admonition.tip::before { content: "\ea0d"; }
