@@ -32,7 +32,7 @@ import DatabaseAnonymizationOptions from "./options/advanced/database_anonymizat
 import BackendLogWidget from "./content/backend_log.js";
 import AttachmentErasureTimeoutOptions from "./options/other/attachment_erasure_timeout.js";
 import RibbonOptions from "./options/appearance/ribbon.js";
-import LocalizationOptions from "./options/appearance/i18n.js";
+import LocalizationOptions from "./options/i18n/i18n.js";
 import CodeBlockOptions from "./options/appearance/code_block.js";
 import EditorOptions from "./options/text_notes/editor.js";
 import ShareSettingsOptions from "./options/other/share_settings.js";
@@ -61,7 +61,7 @@ const TPL = `<div class="note-detail-content-widget note-detail-printable">
 </div>`;
 
 const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
-    _optionsAppearance: [LocalizationOptions, ThemeOptions, FontsOptions, CodeBlockOptions, ElectronIntegrationOptions, MaxContentWidthOptions, RibbonOptions],
+    _optionsAppearance: [ThemeOptions, FontsOptions, CodeBlockOptions, ElectronIntegrationOptions, MaxContentWidthOptions, RibbonOptions],
     _optionsShortcuts: [KeyboardShortcutsOptions],
     _optionsTextNotes: [EditorOptions, HeadingStyleOptions, TableOfContentsOptions, HighlightsListOptions, TextAutoReadOnlySizeOptions],
     _optionsCodeNotes: [CodeEditorOptions, CodeMimeTypesOptions, CodeAutoReadOnlySizeOptions],
@@ -82,7 +82,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
         HtmlImportTagsOptions,
         ShareSettingsOptions
     ],
-    _optionsLocalization: [ LanguageOptions ],
+    _optionsLocalization: [LocalizationOptions, LanguageOptions ],
     _optionsAdvanced: [DatabaseIntegrityCheckOptions, DatabaseAnonymizationOptions, AdvancedSyncOptions, VacuumDatabaseOptions],
     _backendLog: [BackendLogWidget]
 };
