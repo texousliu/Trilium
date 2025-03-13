@@ -1130,6 +1130,9 @@
     "description": "Automatic read-only note size is the size after which notes will be displayed in a read-only mode (for performance reasons).",
     "label": "Automatic read-only size (code notes)"
   },
+  "code-editor-options": {
+    "title": "Editor"
+  },
   "code_mime_types": {
     "title": "Available MIME types in the dropdown"
   },

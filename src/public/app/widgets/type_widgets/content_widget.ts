@@ -8,8 +8,7 @@ import HeadingStyleOptions from "./options/text_notes/heading_style.js";
 import TableOfContentsOptions from "./options/text_notes/table_of_contents.js";
 import HighlightsListOptions from "./options/text_notes/highlights_list.js";
 import TextAutoReadOnlySizeOptions from "./options/text_notes/text_auto_read_only_size.js";
-import VimKeyBindingsOptions from "./options/code_notes/vim_key_bindings.js";
-import WrapLinesOptions from "./options/code_notes/wrap_lines.js";
+import CodeEditorOptions from "./options/code_notes/code_editor.js";
 import CodeAutoReadOnlySizeOptions from "./options/code_notes/code_auto_read_only_size.js";
 import CodeMimeTypesOptions from "./options/code_notes/code_mime_types.js";
 import ImageOptions from "./options/images/images.js";
@@ -65,7 +64,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     _optionsAppearance: [LocalizationOptions, ThemeOptions, FontsOptions, CodeBlockOptions, ElectronIntegrationOptions, MaxContentWidthOptions, RibbonOptions],
     _optionsShortcuts: [KeyboardShortcutsOptions],
     _optionsTextNotes: [EditorOptions, HeadingStyleOptions, TableOfContentsOptions, HighlightsListOptions, TextAutoReadOnlySizeOptions],
-    _optionsCodeNotes: [VimKeyBindingsOptions, WrapLinesOptions, CodeAutoReadOnlySizeOptions, CodeMimeTypesOptions],
+    _optionsCodeNotes: [CodeEditorOptions, CodeMimeTypesOptions, CodeAutoReadOnlySizeOptions],
     _optionsImages: [ImageOptions],
     _optionsSpellcheck: [SpellcheckOptions],
     _optionsPassword: [PasswordOptions, ProtectedSessionTimeoutOptions],
