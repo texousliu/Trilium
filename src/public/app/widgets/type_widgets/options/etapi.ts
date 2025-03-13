@@ -118,7 +118,7 @@ export default class EtapiOptions extends OptionsWidget {
                     .append($("<td>").text(formatDateTime(token.utcDateCreated)))
                     .append(
                         $("<td>").append(
-                            $(`<span class="bx bx-pen token-table-button icon-action" title="${t("etapi.rename_token")}"></span>`).on("click", () => this.renameToken(token.etapiTokenId, token.name)),
+                            $(`<span class="bx bx-edit-alt token-table-button icon-action" title="${t("etapi.rename_token")}"></span>`).on("click", () => this.renameToken(token.etapiTokenId, token.name)),
                             $(`<span class="bx bx-trash token-table-button icon-action" title="${t("etapi.delete_token")}"></span>`).on("click", () => this.deleteToken(token.etapiTokenId, token.name))
                         )
                     )
