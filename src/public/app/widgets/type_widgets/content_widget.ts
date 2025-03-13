@@ -78,12 +78,12 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
         AttachmentErasureTimeoutOptions,
         RevisionsSnapshotIntervalOptions,
         RevisionSnapshotsLimitOptions,
-        NetworkConnectionsOptions,
         HtmlImportTagsOptions,
-        ShareSettingsOptions
+        ShareSettingsOptions,
+        NetworkConnectionsOptions
     ],
     _optionsLocalization: [LocalizationOptions, LanguageOptions ],
-    _optionsAdvanced: [DatabaseIntegrityCheckOptions, DatabaseAnonymizationOptions, AdvancedSyncOptions, VacuumDatabaseOptions],
+    _optionsAdvanced: [AdvancedSyncOptions, DatabaseIntegrityCheckOptions, DatabaseAnonymizationOptions, VacuumDatabaseOptions],
     _backendLog: [BackendLogWidget]
 };
 
