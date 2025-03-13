@@ -18,7 +18,10 @@ const TPL = `
       })}
     </p>
 
-    <button type="button" class="create-etapi-token btn btn-sm">${t("etapi.create_token")}</button>
+    <button type="button" class="create-etapi-token btn btn-sm">
+        <span class="bx bx-plus"></span>
+        ${t("etapi.create_token")}
+    </button>
 
     <hr />
 
