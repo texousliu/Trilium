@@ -1709,9 +1709,25 @@ footer.file-footer button {
 }
 
 body.desktop .ck-content .admonition {
+    border: 1px solid var(--card-border-color);
     box-shadow: var(--card-box-shadow);
     border-radius: 0.5em;
     padding: 1em;
     margin: 1.25em 0;
     margin-right: 14px;
+    position: relative;
+    padding-left: 2.5em;
 }
+
+body.desktop .ck-content .admonition::before {  
+    font-family: boxicons !important;
+    position: absolute;
+    top: 1em;
+    left: 1em;
+}
+
+body.desktop .ck-content .admonition.note::before { content: "\eb21"; }
+body.desktop .ck-content .admonition.tip::before { content: "\ea0d"; }
+body.desktop .ck-content .admonition.important::before { content: "\ea7c"; }
+body.desktop .ck-content .admonition.caution::before { content: "\eac7"; }
+body.desktop .ck-content .admonition.warning::before { content: "\eac5"; }
