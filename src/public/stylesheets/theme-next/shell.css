@@ -958,8 +958,27 @@ body.mobile .note-title {
     background: var(--main-background-color);
 }
 
+#right-pane div.card-header {
+    align-items: center;
+    border: 0;
+}
+
+#right-pane .card-header-title {
+    margin-top: 2px;
+    font-weight: 600;
+    font-size: .85em;
+    letter-spacing: .3pt;
+    color: var(--right-pane-heading-color);
+}
+
 #right-pane .card-header-buttons {
     align-items: center;
+    top: 0;
+}
+
+#right-pane .toc-widget,
+#right-pane .highlights-list-widget {
+    padding: 0 0 0 10px;
 }
 
 #right-pane .toc li,

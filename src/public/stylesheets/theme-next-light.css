@@ -132,6 +132,8 @@
     --protected-session-active-icon-color: #16b516;
     --sync-status-error-pulse-color: #ff5528;
 
+    --right-pane-heading-color: gray;
+
     --root-background: var(--left-pane-background-color);
 
     --gutter-color: transparent;
