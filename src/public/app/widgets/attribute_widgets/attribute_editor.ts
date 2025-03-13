@@ -179,7 +179,9 @@ const editorConfig = {
         "indentBlockShortcutPlugin",
         "removeFormatLinksPlugin",
         "Footnotes",
-        "Mermaid"
+        "Mermaid",
+        "Kbd",
+        "Admonition"
     ],
     toolbar: {
         items: []
