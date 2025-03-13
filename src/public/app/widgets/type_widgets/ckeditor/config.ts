@@ -105,7 +105,7 @@ export function buildConfig() {
 }
 
 function buildStyleDefinitions() {
-    const element = "blockquote";
+    const element = "p";
     return [
         {
             name: "Note",

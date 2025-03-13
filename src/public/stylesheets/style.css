@@ -1708,7 +1708,10 @@ footer.file-footer button {
     margin: 5px;
 }
 
-.ck-content .admonition {
+body.desktop .ck-content .admonition {
     box-shadow: var(--card-box-shadow);
+    border-radius: 0.5em;
     padding: 1em;
+    margin: 1.25em 0;
+    margin-right: 14px;
 }
