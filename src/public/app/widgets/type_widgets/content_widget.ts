@@ -61,16 +61,48 @@ const TPL = `<div class="note-detail-content-widget note-detail-printable">
 </div>`;
 
 const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
-    _optionsAppearance: [ThemeOptions, FontsOptions, CodeBlockOptions, ElectronIntegrationOptions, MaxContentWidthOptions, RibbonOptions],
-    _optionsShortcuts: [KeyboardShortcutsOptions],
-    _optionsTextNotes: [EditorOptions, HeadingStyleOptions, TableOfContentsOptions, HighlightsListOptions, TextAutoReadOnlySizeOptions],
-    _optionsCodeNotes: [CodeEditorOptions, CodeMimeTypesOptions, CodeAutoReadOnlySizeOptions],
-    _optionsImages: [ImageOptions],
-    _optionsSpellcheck: [SpellcheckOptions],
-    _optionsPassword: [PasswordOptions, ProtectedSessionTimeoutOptions],
-    _optionsEtapi: [EtapiOptions],
-    _optionsBackup: [BackupOptions],
-    _optionsSync: [SyncOptions],
+    _optionsAppearance: [
+        ThemeOptions,
+        FontsOptions,
+        CodeBlockOptions,
+        ElectronIntegrationOptions,
+        MaxContentWidthOptions,
+        RibbonOptions
+    ],
+    _optionsShortcuts: [
+        KeyboardShortcutsOptions
+    ],
+    _optionsTextNotes: [
+        EditorOptions,
+        HeadingStyleOptions,
+        TableOfContentsOptions,
+        HighlightsListOptions,
+        TextAutoReadOnlySizeOptions
+    ],
+    _optionsCodeNotes: [
+        CodeEditorOptions,
+        CodeMimeTypesOptions,
+        CodeAutoReadOnlySizeOptions
+    ],
+    _optionsImages: [
+        ImageOptions
+    ],
+    _optionsSpellcheck: [
+        SpellcheckOptions
+    ],
+    _optionsPassword: [
+        PasswordOptions,
+        ProtectedSessionTimeoutOptions
+    ],
+    _optionsEtapi: [
+        EtapiOptions
+    ],
+    _optionsBackup: [
+        BackupOptions
+    ],
+    _optionsSync: [
+        SyncOptions
+    ],
     _optionsOther: [
         SearchEngineOptions,
         TrayOptions,
@@ -82,9 +114,19 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
         ShareSettingsOptions,
         NetworkConnectionsOptions
     ],
-    _optionsLocalization: [LocalizationOptions, LanguageOptions ],
-    _optionsAdvanced: [AdvancedSyncOptions, DatabaseIntegrityCheckOptions, DatabaseAnonymizationOptions, VacuumDatabaseOptions],
-    _backendLog: [BackendLogWidget]
+    _optionsLocalization: [
+        LocalizationOptions,
+        LanguageOptions
+    ],
+    _optionsAdvanced: [
+        AdvancedSyncOptions,
+        DatabaseIntegrityCheckOptions,
+        DatabaseAnonymizationOptions,
+        VacuumDatabaseOptions
+    ],
+    _backendLog: [
+        BackendLogWidget
+    ]
 };
 
 export default class ContentWidgetTypeWidget extends TypeWidget {
