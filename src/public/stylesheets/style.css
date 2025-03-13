@@ -1721,6 +1721,7 @@ body.desktop .ck-content .admonition {
 }
 
 body.desktop .ck-content .admonition::before {  
+    color: var(--accent-color);
     font-family: boxicons !important;
     position: absolute;
     top: 1em;
