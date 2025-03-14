@@ -558,8 +558,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                     onLinkOpen,
                     UIOptions: {
                         canvasActions: {
-                            saveToActiveFile: false,
-                            saveAsImage: false
+                            saveToActiveFile: false
                         }
                     }
                 })
