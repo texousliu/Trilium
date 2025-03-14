@@ -11,8 +11,8 @@ describe( 'Math', () => {
 	let editorElement: HTMLDivElement, editor: ClassicEditor;
 
 	beforeEach( async () => {
-		editorElement = global.document.createElement( 'div' );
-		global.document.body.appendChild( editorElement );
+		editorElement = document.createElement( 'div' );
+		document.body.appendChild( editorElement );
 
 		return ClassicEditor
 			.create( editorElement, {

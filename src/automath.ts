@@ -57,7 +57,7 @@ export default class AutoMath extends Plugin {
 
 		editor.commands.get( 'undo' )?.on( 'execute', () => {
 			if ( this._timeoutId ) {
-				global.window.clearTimeout( this._timeoutId );
+				window.clearTimeout( this._timeoutId );
 				this._positionToInsert?.detach();
 
 				this._timeoutId = null;
@@ -104,7 +104,7 @@ export default class AutoMath extends Plugin {
 		this._positionToInsert = LivePosition.fromPosition( leftPosition );
 
 		// With timeout user can undo conversation if want use plain text
-		this._timeoutId = global.window.setTimeout( () => {
+		this._timeoutId = window.setTimeout( () => {
 			editor.model.change( writer => {
 				this._timeoutId = null;
 

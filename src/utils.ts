@@ -113,7 +113,7 @@ export async function renderEquation(
 				previewClassName,
 				el => {
 					// Fixme: MathJax typesetting cause occasionally math processing error without asynchronous call
-					global.window.setTimeout( () => {
+					window.setTimeout( () => {
 						renderMathJax2( equation, el, display );
 
 						// Move and scale after rendering
@@ -154,9 +154,9 @@ export async function renderEquation(
 	} else {
 		if ( lazyLoad != null ) {
 			try {
-				global.window.CKEDITOR_MATH_LAZY_LOAD ??= lazyLoad();
+				window.CKEDITOR_MATH_LAZY_LOAD ??= lazyLoad();
 				element.innerHTML = equation;
-				await global.window.CKEDITOR_MATH_LAZY_LOAD;
+				await window.CKEDITOR_MATH_LAZY_LOAD;
 				await renderEquation(
 					equation,
 					element,
@@ -293,20 +293,20 @@ function getPreviewElement(
 	previewUid: string,
 	previewClassName: Array<string>
 ) {
-	let previewEl = global.document.getElementById( previewUid );
+	let previewEl = document.getElementById( previewUid );
 	// Create if not found
 	if ( !previewEl ) {
-		previewEl = global.document.createElement( 'div' );
+		previewEl = document.createElement( 'div' );
 		previewEl.setAttribute( 'id', previewUid );
 		previewEl.classList.add( ...previewClassName );
 		previewEl.style.visibility = 'hidden';
-		global.document.body.appendChild( previewEl );
+		document.body.appendChild( previewEl );
 
 		let ticking = false;
 
 		const renderTransformation = () => {
 			if ( !ticking ) {
-				global.window.requestAnimationFrame( () => {
+				window.requestAnimationFrame( () => {
 					if ( previewEl ) {
 						moveElement( element, previewEl );
 						ticking = false;
@@ -318,8 +318,8 @@ function getPreviewElement(
 		};
 
 		// Create scroll listener for following
-		global.window.addEventListener( 'resize', renderTransformation );
-		global.window.addEventListener( 'scroll', renderTransformation );
+		window.addEventListener( 'resize', renderTransformation );
+		window.addEventListener( 'scroll', renderTransformation );
 	}
 	return previewEl;
 }
@@ -336,8 +336,8 @@ function moveAndScaleElement( parent: HTMLElement, child: HTMLElement ) {
 
 function moveElement( parent: HTMLElement, child: HTMLElement ) {
 	const domRect = parent.getBoundingClientRect();
-	const left = global.window.scrollX + domRect.left;
-	const top = global.window.scrollY + domRect.top;
+	const left = window.scrollX + domRect.left;
+	const top = window.scrollY + domRect.top;
 	child.style.position = 'absolute';
 	child.style.left = left + 'px';
 	child.style.top = top + 'px';

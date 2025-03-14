@@ -35,7 +35,7 @@ export default class AutoformatMath extends Plugin {
 				command.display = true;
 
 				// Wait until selection is removed.
-				global.window.setTimeout(
+				window.setTimeout(
 					() => {
 						const mathUIInstance = editor.plugins.get( 'MathUI' );
 						if ( mathUIInstance instanceof MathUI ) {

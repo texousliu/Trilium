@@ -44,7 +44,7 @@ export default class MathUI extends Plugin {
 		this.formView?.destroy();
 
 		// Destroy preview element
-		const previewEl = global.document.getElementById( this._previewUid );
+		const previewEl = document.getElementById( this._previewUid );
 		if ( previewEl ) {
 			previewEl.parentNode?.removeChild( previewEl );
 		}
@@ -149,7 +149,7 @@ export default class MathUI extends Plugin {
 		}
 
 		// Show preview element
-		const previewEl = global.document.getElementById( this._previewUid );
+		const previewEl = document.getElementById( this._previewUid );
 		if ( previewEl && this.formView.previewEnabled ) {
 			// Force refresh preview
 			this.formView.mathView?.updateMath();
@@ -194,7 +194,7 @@ export default class MathUI extends Plugin {
 			this._balloon.remove( this.formView );
 
 			// Hide preview element
-			const previewEl = global.document.getElementById( this._previewUid );
+			const previewEl = document.getElementById( this._previewUid );
 			if ( previewEl ) {
 				previewEl.style.visibility = 'hidden';
 			}
