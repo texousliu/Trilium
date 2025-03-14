@@ -65,7 +65,7 @@ CKEditor supports a markdown-like editing experience, recognising syntax and aut
 
 Complete documentation for this feature is available in the [CKEditor documentation](https://ckeditor.com/docs/ckeditor5/latest/features/autoformat.html).
 
-If autoformatting is not desirable, press `CTRL-Z` to revert the text to its original form.
+If autoformatting is not desirable, press <kbd>Ctrl</kbd> + <kbd>Z</kbd> to revert the text to its original form.
 
 Note: The use of `#` for Heading 1 is not supported because it is reserved for the title. Start with `##` for Heading 2. More information is available [here](https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#heading-levels).
 
