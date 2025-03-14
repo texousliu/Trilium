@@ -58,9 +58,7 @@ export default class MathEditing extends Plugin {
 		} );
 
 		schema.register( 'mathtex-display', {
-			allowWhere: '$block',
-			isInline: false,
-			isObject: true,
+			inheritAllFrom: '$blockObject',
 			allowAttributes: [ 'equation', 'type', 'display' ]
 		} );
 	}
