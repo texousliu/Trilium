@@ -1721,6 +1721,10 @@ body.desktop .ck-content .admonition {
     padding-left: 2.5em;
 }
 
+body.desktop .ck-content .admonition p:last-child {
+    margin-bottom: 0;
+}
+
 body.desktop .ck-content .admonition::before {  
     color: var(--accent-color);
     font-family: boxicons !important;
