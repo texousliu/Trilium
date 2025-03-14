@@ -14,15 +14,13 @@
 
       <div class="ck-content">
         <p>
-          <img src="6_Calendar View_image.png" alt="" />
+          <img src="6_Calendar View_image.png" alt="">
         </p>
         <p>The Calendar view of Book notes will display each child note in a calendar
           that has a start date and optionally an end date, as an event.</p>
         <p>Unlike other Book view types, the Calendar view also allows some kind
           of interaction, such as moving events around as well as creating new ones.</p>
-        
-<h2>Creating a calendar</h2>
-
+        <h2>Creating a calendar</h2>
         <table>
           <thead>
             <tr>
@@ -35,7 +33,7 @@
             <tr>
               <td>1</td>
               <td>
-                <img src="3_Calendar View_image.png" alt="" />
+                <img src="3_Calendar View_image.png" alt="">
               </td>
               <td>The Calendar View works only for Book note types. To create a new note,
                 right click on the note tree on the left and select Insert note after,
@@ -44,16 +42,14 @@
             <tr>
               <td>2</td>
               <td>
-                <img src="5_Calendar View_image.png" alt="" />
+                <img src="5_Calendar View_image.png" alt="">
               </td>
               <td>Once created, the “View type” of the Book needs changed to “Calendar”,
                 by selecting the “Book Properties” tab in the ribbon.</td>
             </tr>
           </tbody>
         </table>
-        
-<h2>Creating a new event/note</h2>
-
+        <h2>Creating a new event/note</h2>
         <ul>
           <li>Clicking on a day will create a new child note and assign it to that particular
             day.
@@ -64,20 +60,17 @@
           </li>
           <li>It's possible to drag across multiple days to set both the start and end
             date of a particular note.
-            <br />
-            <img src="Calendar View_image.png" alt="" />
+            <br>
+            <img src="Calendar View_image.png" alt="">
           </li>
           <li>Creating new notes from the calendar will respect the <code>~child:template</code> relation
             if set on the book note.</li>
         </ul>
-        
-<h2>Interacting with events</h2>
-
+        <h2>Interacting with events</h2>
         <ul>
           <li>Hovering the mouse over an event will display information about the note.
-            <br
-            />
-            <img src="11_Calendar View_image.png" alt="" />
+            <br>
+            <img src="11_Calendar View_image.png" alt="">
           </li>
           <li>Left clicking the event will go to that note. Middle clicking will open
             the note in a new tab and right click will offer more options including
@@ -86,9 +79,7 @@
           <li>The length of an event can be changed by placing the mouse to the right
             edge of the event and dragging the mouse around.</li>
         </ul>
-        
-<h2>Configuring the calendar</h2>
-
+        <h2>Configuring the calendar</h2>
         <p>The following attributes can be added to the book type:</p>
         <table>
           <thead>
@@ -120,9 +111,7 @@
         </table>
         <p>In addition, the first day of the week can be either Sunday or Monday
           and can be adjusted from the application settings.</p>
-        
-<h2>Configuring the calendar events</h2>
-
+        <h2>Configuring the calendar events</h2>
         <p>For each note of the calendar, the following attributes can be used:</p>
         <table>
           <thead>
@@ -177,15 +166,14 @@
               </td>
               <td>Allows displaying the value of one or more promoted attributes in the
                 calendar like this:
-                <img src="13_Calendar View_image.png" alt="" />
-                <br />
-                <br /><code>&lt;br&gt;#label:weight="promoted,number,single,precision=1"&lt;br&gt;#label:mood="promoted,alias=Mood,single,text"&lt;br&gt;#calendar:promotedAttributes="label:weight,label:mood" &lt;br&gt;</code> 
-                <br
-                />
-                <br />It can also be used with relations, case in which it will display the
+                <img src="13_Calendar View_image.png" alt="">
+                <br>
+                <br><code>&lt;br&gt;#label:weight="promoted,number,single,precision=1"&lt;br&gt;#label:mood="promoted,alias=Mood,single,text"&lt;br&gt;#calendar:promotedAttributes="label:weight,label:mood" &lt;br&gt;</code>
+                <br>
+                <br>It can also be used with relations, case in which it will display the
                 title of the target note:
-                <br />
-                <br /><code>&lt;br&gt;#relation:assignee="promoted,alias=Assignee,single,text"&lt;br&gt;#calendar:promotedAttributes="relation:assignee" &lt;br&gt;~assignee=@My assignee &lt;br&gt;</code>
+                <br>
+                <br><code>&lt;br&gt;#relation:assignee="promoted,alias=Assignee,single,text"&lt;br&gt;#calendar:promotedAttributes="relation:assignee" &lt;br&gt;~assignee=@My assignee &lt;br&gt;</code>
               </td>
             </tr>
             <tr>
@@ -204,28 +192,21 @@
             </tr>
           </tbody>
         </table>
-        
-<h2>How the calendar works</h2>
-
+        <h2>How the calendar works</h2>
         <p>
-          <img src="17_Calendar View_image.png" alt="" />The calendar displays all the child notes of the book that have a <code>#startDate</code>.
+          <img src="17_Calendar View_image.png" alt="">The calendar displays all the child notes of the book that have a <code>#startDate</code>.
           An <code>#endDate</code> can optionally be added.</p>
         <p>If editing the start date and end date from the note itself is desirable,
-          the following attributes can be added to the book note:</p>
-<pre><code class="language-text-x-trilium-auto">#viewType=calendar #label:startDate(inheritable)="promoted,alias=Start Date,single,date" #label:endDate(inheritable)="promoted,alias=End Date,single,date" #hidePromotedAttributes </code></pre>
+          the following attributes can be added to the book note:</p><pre><code class="language-text-x-trilium-auto">#viewType=calendar #label:startDate(inheritable)="promoted,alias=Start Date,single,date" #label:endDate(inheritable)="promoted,alias=End Date,single,date" #hidePromotedAttributes </code></pre>
         <p>This will result in:</p>
         <p>
-          <img src="14_Calendar View_image.png" alt="" />
+          <img src="14_Calendar View_image.png" alt="">
         </p>
         <p>When not used in a Journal, the calendar is recursive. That is, it will
           look for events not just in its child notes but also in the children of
           these child notes.</p>
-        
-<h2>Use-cases</h2>
-
-        
-<h3>Using with the Journal / calendar</h3>
-
+        <h2>Use-cases</h2>
+        <h3>Using with the Journal / calendar</h3>
         <p>It is possible to integrate the calendar view into the Journal with day
           notes. In order to do so change the note type of the Journal note (calendar
           root) to Book and then select the Calendar View.</p>
@@ -244,11 +225,9 @@
             will not be displayed.</li>
         </ul>
         <p>
-          <img src="12_Calendar View_image.png" alt="" />
+          <img src="12_Calendar View_image.png" alt="">
         </p>
-        
-<h3>Using a different attribute as event title</h3>
-
+        <h3>Using a different attribute as event title</h3>
         <p>By default, events are displayed on the calendar by their note title.
           However, it is possible to configure a different attribute to be displayed
           instead.</p>
@@ -267,17 +246,15 @@
           <tbody>
             <tr>
               <td>
-                <img src="7_Calendar View_image.png" alt="" />
+                <img src="7_Calendar View_image.png" alt="">
               </td>
               <td>
-                <img src="9_Calendar View_image.png" alt="" />
+                <img src="9_Calendar View_image.png" alt="">
               </td>
             </tr>
           </tbody>
         </table>
-        
-<h3>Using a relation attribute as event title</h3>
-
+        <h3>Using a relation attribute as event title</h3>
         <p>Similarly to using an attribute, use <code>#calendar:title</code> and set
           it to <code>~name</code> where <code>name</code> is the name of the relation
           to use.</p>
@@ -293,10 +270,10 @@
           <tbody>
             <tr>
               <td>
-                <img src="8_Calendar View_image.png" alt="" />
+                <img src="8_Calendar View_image.png" alt="">
               </td>
               <td>
-                <img src="10_Calendar View_image.png" alt="" />
+                <img src="10_Calendar View_image.png" alt="">
               </td>
             </tr>
           </tbody>
@@ -316,10 +293,10 @@
           <tbody>
             <tr>
               <td>
-                <img src="15_Calendar View_image.png" alt="" />
+                <img src="15_Calendar View_image.png" alt="">
               </td>
               <td>
-                <img src="2_Calendar View_image.png" alt="" />
+                <img src="2_Calendar View_image.png" alt="">
               </td>
             </tr>
           </tbody>

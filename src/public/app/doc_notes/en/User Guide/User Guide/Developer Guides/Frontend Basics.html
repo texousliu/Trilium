@@ -14,22 +14,17 @@
 
       <div class="ck-content">
         <h2>Frontend API</h2>
-
         <p>The frontend api supports two styles, regular scripts that are run with
           the current app and note context, and widgets that export an object to
           Trilium to be used in the UI. In both cases, the frontend api of Trilium
           is available to scripts running in the frontend context as global variable <code>api</code>.
           The members and methods of the api can be seen on the <a href="../Note%20Types/Code/Script%20API.html">Script API</a> page.</p>
-        
-<h2>Scripts</h2>
-
+        <h2>Scripts</h2>
         <p>Scripts don't have any special requirements. They can be run at will using
           the execute button in the UI or they can be configured to run at certain
           times using <a href="../Advanced%20Usage/Attributes.html">Attributes</a> on
           the note containing the script.</p>
-        
-<h3>Global Events</h3>
-
+        <h3>Global Events</h3>
         <p>This attribute is called <code>#run</code> and it can have any of the following
           values:</p>
         <ul>
@@ -39,9 +34,7 @@
           <li><code>hourly</code> - executes once an hour on backend.</li>
           <li><code>daily</code> - executes once a day on backend.</li>
         </ul>
-        
-<h3>Entity Events</h3>
-
+        <h3>Entity Events</h3>
         <p>These events are triggered by certain <a href="../Advanced%20Usage/Attributes.html">relations</a> to
           other notes. Meaning that the script is triggered only if the note has
           this script attached to it through relations (or it can inherit it).</p>
@@ -67,9 +60,7 @@
           <li><code>runOnAttributeChange</code> - executes when attribute is changed
             under this note.</li>
         </ul>
-        
-<h2>Widgets</h2>
-
+        <h2>Widgets</h2>
         <p>Conversely to scripts, widgets do have some specific requirements in order
           to work. A widget must:</p>
         <ul>
@@ -92,9 +83,7 @@
             </ul>
           </li>
         </ul>
-        
-<h3>parentWidget</h3>
-
+        <h3>parentWidget</h3>
         <ul>
           <li><code>left-pane</code> - This renders the widget on the left side of the
             screen where the note tree lives.</li>
@@ -105,9 +94,7 @@
           <li><code>right-pane</code> - This renders the widget to the right of any opened
             notes.</li>
         </ul>
-        
-<h3>Tutorial</h3>
-
+        <h3>Tutorial</h3>
         <p>For more information on building widgets, take a look at <a href="Widget%20Basics.html">Widget Basics</a>.</p>
       </div>
     </div>

@@ -18,9 +18,7 @@
           case is JavaScript code notes which can also be executed inside Trilium
           which can in conjunction with <a href="Script%20API.html">Script API</a> provide
           extra functionality.</p>
-        
-<h2>Scripting</h2>
-
+        <h2>Scripting</h2>
         <p>To go further I must explain basic architecture of Trilium - in its essence
           it is a classic web application - it has these two main components:</p>
         <ul>
@@ -33,15 +31,13 @@
           but their common feature is that they both run JavaScript code. Add to
           this the fact, that we're able to create JavaScript [[code notes]] and
           we're onto something.</p>
-        
-<h2>Button use case</h2>
-
+        <h2>Button use case</h2>
         <p>Let's take a look at our demo script (shipped with default Trilium <a href="../../Advanced%20Usage/Database.html">database</a>)
           - Task manager. One of the things this script does is adding a button to
           the Trilium interface which will allow user to easily add new Task (TODO
           item).</p>
         <p>
-          <img src="../../Attachments/button-script.png" alt="" />
+          <img src="../../Attachments/button-script.png" alt="">
         </p>
         <p>First take a look at the red circle all the way on the top - this what
           we want to achieve - new button in UI which will create new note representing
@@ -58,16 +54,12 @@
           <li>optional shortcut under which you can trigger the button</li>
           <li>most importantly "action" - what must happen when button is clicked</li>
         </ul>
-        
-<h3>Action handler</h3>
-
+        <h3>Action handler</h3>
         <p>Saving the note to the database is backend's responsibility, so we immediately
           pass control to the backend and ask it to create a note. Once this is done,
           we show the newly created note so that the user can set the task title
           and maybe some attributes.</p>
-        
-<h3>Script execution</h3>
-
+        <h3>Script execution</h3>
         <p>So we have a script which will add the button to the toolbar. But how
           can we execute it? One possibility is to click on "play" icon (marked by
           red circle). The problem with this is that this UI change is time bound
@@ -80,18 +72,12 @@
           Trilium frontend starts up.</p>
         <p>(<code>#run=frontendStartup</code> does not work for <a href="../../Installation%20%26%20Setup/Mobile%20Frontend.html">Mobile frontend</a> -
           if you want to have scripts running there, give the script <code>#run=mobileStartup</code> label)</p>
-        
-<h3>More showcases</h3>
-
+        <h3>More showcases</h3>
         <p>You can see more scripting with explanation in <a href="../../Advanced%20Usage/Advanced%20Showcases.html">Advanced showcases</a>
         </p>
-        
-<h2>Events</h2>
-
+        <h2>Events</h2>
         <p>See <a href="Events.html">Events</a>.</p>
-        
-<h2>Script API</h2>
-
+        <h2>Script API</h2>
         <p>See <a href="Script%20API.html">Script API</a>.</p>
       </div>
     </div>

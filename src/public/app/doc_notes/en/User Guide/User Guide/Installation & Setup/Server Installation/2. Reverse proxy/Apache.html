@@ -17,32 +17,27 @@
           you want to use for your Trilium server.</p>
         <ol>
           <li>
-            <p>Download docker image and create container</p>
-<pre><code class="language-text-x-trilium-auto"> docker pull triliumnext/notes:[VERSION]
+            <p>Download docker image and create container</p><pre><code class="language-text-x-trilium-auto"> docker pull triliumnext/notes:[VERSION]
  docker create --name trilium -t -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]</code></pre>
           </li>
           <li>
             <p>Configure Apache proxy and websocket proxy</p>
             <ol>
               <li>
-                <p>Enable apache proxy modules</p>
-<pre><code class="language-text-x-trilium-auto"> a2enmod ssl
+                <p>Enable apache proxy modules</p><pre><code class="language-text-x-trilium-auto"> a2enmod ssl
  a2enmod proxy
  a2enmod proxy_http
  a2enmod proxy_wstunnel</code></pre>
               </li>
               <li>
-                <p>Create a new let's encrypt certificate</p>
-<pre><code class="language-text-x-trilium-auto"> sudo certbot certonly -d trilium.mydomain.com</code></pre>
+                <p>Create a new let's encrypt certificate</p><pre><code class="language-text-x-trilium-auto"> sudo certbot certonly -d trilium.mydomain.com</code></pre>
                 <p>Choose standalone (2) and note the location of the created certificates
                   (typically /etc/letsencrypt/live/...)</p>
               </li>
               <li>
                 <p>Create a new virtual host file for apache (you may want to use <code>apachectl -S</code> to
-                  determine the server root location, mine is /etc/apache2)</p>
-<pre><code class="language-text-x-trilium-auto"> sudo nano /etc/apache2/sites-available/trilium.yourdomain.com.conf</code></pre>
-                <p>Paste (and customize) the following text into the configuration file</p>
-<pre><code class="language-text-x-trilium-auto"> 
+                  determine the server root location, mine is /etc/apache2)</p><pre><code class="language-text-x-trilium-auto"> sudo nano /etc/apache2/sites-available/trilium.yourdomain.com.conf</code></pre>
+                <p>Paste (and customize) the following text into the configuration file</p><pre><code class="language-text-x-trilium-auto"> 
      ServerName http://trilium.yourdomain.com
      RewriteEngine on
          RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,QSA,R=permanent]
@@ -76,8 +71,7 @@
             <ol>
               <li>
                 <p>Create a new empty file called <code>/lib/systemd/system/trilium.service</code> with
-                  the contents</p>
-<pre><code class="language-text-x-trilium-auto"> [Unit]
+                  the contents</p><pre><code class="language-text-x-trilium-auto"> [Unit]
  Description=Trilium Server
  Requires=docker.service
  After=docker.service
@@ -91,8 +85,7 @@
  WantedBy=local.target</code></pre>
               </li>
               <li>
-                <p>Install, enable and start service</p>
-<pre><code class="language-text-x-trilium-auto"> sudo systemctl daemon-reload
+                <p>Install, enable and start service</p><pre><code class="language-text-x-trilium-auto"> sudo systemctl daemon-reload
  sudo systemctl enable trilium.service
  sudo systemctl start trilium.service</code></pre>
               </li>

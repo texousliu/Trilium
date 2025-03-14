@@ -17,11 +17,8 @@
           the items that require update. When running behind a reverse proxy, the
           request can time out.</p>
         <p>The solution is to increase the timeout at proxy level.</p>
-        
-<h2>Nginx</h2>
-
-        <p>Add the following to the configuration file:</p>
-<pre><code class="language-text-x-nginx-conf">proxy_connect_timeout 300;
+        <h2>Nginx</h2>
+        <p>Add the following to the configuration file:</p><pre><code class="language-text-x-nginx-conf">proxy_connect_timeout 300;
 proxy_send_timeout 300;
 proxy_read_timeout 300;
 send_timeout 300;</code></pre>

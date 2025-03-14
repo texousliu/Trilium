@@ -9,9 +9,9 @@
 				"pOsGYCXsbNQG"
 			],
 			"title": "User Guide",
-			"notePosition": 90,
+			"notePosition": 110,
 			"prefix": null,
-			"isExpanded": true,
+			"isExpanded": false,
 			"type": "text",
 			"mime": "text/html",
 			"attributes": [],
@@ -3299,7 +3299,7 @@
 					"title": "Note Types",
 					"notePosition": 70,
 					"prefix": null,
-					"isExpanded": true,
+					"isExpanded": false,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [
@@ -3326,7 +3326,7 @@
 							"title": "Text",
 							"notePosition": 10,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/markdown",
 							"attributes": [
