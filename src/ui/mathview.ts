@@ -4,8 +4,8 @@ import { renderEquation } from '../utils';
 import type { Locale } from 'ckeditor5/src/utils';
 
 export default class MathView extends View {
-	public value: string;
-	public display: boolean;
+	public declare value: string;
+	public declare display: boolean;
 	public previewUid: string;
 	public previewClassName: Array<string>;
 	public katexRenderOptions: KatexOptions;
@@ -39,9 +39,7 @@ export default class MathView extends View {
 		this.previewClassName = previewClassName;
 
 		this.set( 'value', '' );
-		this.value = '';
 		this.set( 'display', false );
-		this.display = false;
 
 		this.on( 'change', () => {
 			if ( this.isRendered ) {
