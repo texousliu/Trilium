@@ -3525,7 +3525,7 @@
 									"dataFileName": "Content language & Right-to-le.html",
 									"attachments": [
 										{
-											"attachmentId": "RlBpP2KTDVIK",
+											"attachmentId": "bqLn4gFZdqfX",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/jpg",
@@ -3533,12 +3533,20 @@
 											"dataFileName": "Content language & Right-t.png"
 										},
 										{
+											"attachmentId": "RlBpP2KTDVIK",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/jpg",
+											"position": 10,
+											"dataFileName": "1_Content language & Right-t.png"
+										},
+										{
 											"attachmentId": "TlBagKsAj5ax",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
 											"position": 10,
-											"dataFileName": "1_Content language & Right-t.png"
+											"dataFileName": "2_Content language & Right-t.png"
 										},
 										{
 											"attachmentId": "U9e8SLUEALiR",
@@ -3546,7 +3554,7 @@
 											"role": "image",
 											"mime": "image/png",
 											"position": 10,
-											"dataFileName": "2_Content language & Right-t.png"
+											"dataFileName": "3_Content language & Right-t.png"
 										}
 									]
 								},
