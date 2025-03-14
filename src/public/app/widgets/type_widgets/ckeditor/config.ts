@@ -110,7 +110,7 @@ export function buildToolbarConfig(isClassicToolbar: boolean) {
     }
 }
 
-function buildClassicToolbar(multilineToolbar: boolean) {
+export function buildClassicToolbar(multilineToolbar: boolean) {
     // For nested toolbars, refer to https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/toolbar.html#grouping-toolbar-items-in-dropdowns-nested-toolbars.
     return {
         toolbar: {
@@ -156,7 +156,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
     };
 }
 
-function buildFloatingToolbar() {
+export function buildFloatingToolbar() {
     return {
         toolbar: {
             items: [
