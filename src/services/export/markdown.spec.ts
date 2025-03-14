@@ -97,4 +97,10 @@ describe("Markdown export", () => {
         const expected = `![](Hello%20world%20%20.png)`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
+
+    it("supports keyboard shortcuts", () => {
+        const html = "<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Delete</kbd>";
+        expect(markdownExportService.toMarkdown(html)).toBe(html);
+    });
+
 });

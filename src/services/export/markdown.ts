@@ -32,6 +32,7 @@ function toMarkdown(content: string) {
         instance.addRule("fencedCodeBlock", fencedCodeBlockFilter);
         instance.addRule("img", buildImageFilter());
         instance.use(turndownPluginGfm.gfm);
+        instance.keep([ "kbd" ]);
     }
 
     return instance.turndown(content);
