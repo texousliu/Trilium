@@ -56,4 +56,22 @@ describe("markdown", () => {
         `, "What's new")
         expect(result).toBe(`\n<p>Hi there</p>\n`);
     });
+
+    it("trims unnecessary whitespace", () => {
+        const input = `\
+## Heading 1
+
+Title
+
+\`\`\`
+code block 1
+second line 2
+\`\`\`
+`;
+        const expected = `\
+<h2>Heading 1</h2><p>Title</p><pre><code class="language-text-x-trilium-auto">code block 1
+second line 2</code></pre>`;
+        expect(markdownService.renderToHtml(input, "Troubleshooting")).toBe(expected);
+    });
+
 });

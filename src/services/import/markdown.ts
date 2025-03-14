@@ -1,6 +1,7 @@
 "use strict";
 
 import { parse, Renderer, type Tokens } from "marked";
+import { minify as minifyHtml } from "html-minifier";
 
 const renderer = new Renderer({ async: false });
 renderer.code = ({ text, lang, escaped }: Tokens.Code) => {
@@ -17,12 +18,19 @@ import importUtils from "./utils.js";
 import { getMimeTypeFromHighlightJs, MIME_TYPE_AUTO, normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
 
 function renderToHtml(content: string, title: string) {
-    const html = parse(content, {
+    let html = parse(content, {
         async: false,
         renderer: renderer
     }) as string;
-    const h1Handled = importUtils.handleH1(html, title); // h1 handling needs to come before sanitization
-    return htmlSanitizer.sanitize(h1Handled);
+
+    // h1 handling needs to come before sanitization
+    html = importUtils.handleH1(html, title);
+    html = htmlSanitizer.sanitize(html);
+    html = minifyHtml(html, {
+        collapseWhitespace: true
+    });
+
+    return html;
 }
 
 function getNormalizedMimeFromMarkdownLanguage(language: string | undefined) {
