@@ -89,4 +89,11 @@ describe("processNoteContent", () => {
         expect(importedNote.mime).toBe("text/html");
         expect(importedNote.getContent().toString()).toBe("<h2>Hello world</h2>\n<p>Plain text goes here.</p>\n");
     });
+
+    it("supports excalidraw note", async () => {
+        const { importedNote } = await testImport("New note.excalidraw", "application/json");
+        expect(importedNote.mime).toBe("application/json");
+        expect(importedNote.type).toBe("canvas");
+        expect(importedNote.title).toBe("New note");
+    });
 });
