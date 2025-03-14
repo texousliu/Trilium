@@ -26,11 +26,6 @@ const TPL = `
 
         .excalidraw-wrapper {
             height: 100%;
-        }
-
-        .excalidraw button[data-testid="json-export-button"] {
-            display: none !important;
-        }
 
         :root[dir="ltr"]
         .excalidraw
@@ -42,10 +37,6 @@ const TPL = `
         /* collaboration not possible so hide the button */
         .CollabButton {
             display: none !important;
-        }
-
-        button[data-testid='save-button'], button[data-testid='json-export-button'] {
-            display: none !important; /* these exports don't work, user should use import/export dialog */
         }
 
         .library-button {
@@ -558,7 +549,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                     onLinkOpen,
                     UIOptions: {
                         canvasActions: {
-                            saveToActiveFile: false
+                            saveToActiveFile: false,
+                            export: false
                         }
                     }
                 })
