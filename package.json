@@ -111,6 +111,7 @@
     "fs-extra": "11.3.0",
     "helmet": "8.0.0",
     "html": "1.0.0",
+    "html-minifier": "4.0.0",
     "html2plaintext": "2.1.4",
     "http-proxy-agent": "7.0.2",
     "https-proxy-agent": "7.0.6",
