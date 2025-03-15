@@ -40,12 +40,7 @@ describe("markdown", () => {
             # another one
             Hello, world
         `, "title");
-        expect(result).toBe(trimIndentation`\
-            <h2>Hello</h2>
-            <h2>world</h2>
-            <h2>another one</h2>
-            <p>Hello, world</p>
-        `);
+        expect(result).toBe(`<h2>Hello</h2><h2>world</h2><h2>another one</h2><p>Hello, world</p>`);
     });
 
 
@@ -54,7 +49,7 @@ describe("markdown", () => {
             # What's new
             Hi there
         `, "What's new")
-        expect(result).toBe(`\n<p>Hi there</p>\n`);
+        expect(result).toBe(`<p>Hi there</p>`);
     });
 
     it("trims unnecessary whitespace", () => {

@@ -87,7 +87,7 @@ describe("processNoteContent", () => {
     it("supports markdown note with UTF-16", async () => {
         const { importedNote } = await testImport("UTF-16LE Text Note.md", "text/markdown");
         expect(importedNote.mime).toBe("text/html");
-        expect(importedNote.getContent().toString()).toBe("<h2>Hello world</h2>\n<p>Plain text goes here.</p>\n");
+        expect(importedNote.getContent().toString()).toBe("<h2>Hello world</h2><p>Plain text goes here.</p>");
     });
 
     it("supports excalidraw note", async () => {

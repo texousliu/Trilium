@@ -131,6 +131,7 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
 function register(router: Router) {
     function renderNote(note: SNote, req: Request, res: Response) {
         if (!note) {
+            console.log("Unable to find note ", note);
             res.status(404).render("share/404");
             return;
         }
@@ -215,6 +216,7 @@ function register(router: Router) {
 
         const { shareId } = req.params;
 
+        console.log("Got share ", shareId, shaca.notes, shaca.aliasToNote);
         const note = shaca.aliasToNote[shareId] || shaca.notes[shareId];
 
         renderNote(note, req, res);
