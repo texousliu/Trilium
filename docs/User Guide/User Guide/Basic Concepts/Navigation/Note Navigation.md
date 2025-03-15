@@ -11,7 +11,7 @@ This works identically to browser backwards / forwards, it's actually using buil
 
 ## Jump to note
 
-This is useful to quickly find and view arbitrary note - click on `Jump to` button on the top or press `CTRL-J`. Then type part of the note name and autocomplete will help you pick the desired note.
+This is useful to quickly find and view arbitrary note - click on `Jump to` button on the top or press <kbd>Ctrl</kbd> + <kbd>J</kbd> . Then type part of the note name and autocomplete will help you pick the desired note.
 
 ![](../../Attachments/jump-to.gif)
 

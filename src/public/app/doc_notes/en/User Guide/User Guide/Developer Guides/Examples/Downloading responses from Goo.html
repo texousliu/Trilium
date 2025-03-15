@@ -19,9 +19,7 @@
         <p>Note that the link will be publicly accessible to everyone (however the
           link is in a hard-to-guess format such as <code>https://docs.google.com/spreadsheets/d/e/2PACX-1vTA8NU2_eZFhc8TFadCZPreBfvP7un8IHd6J0SchrLLw3ueGmntNZjwRmsH2ZRcp1pJYDAzMz1FmFaj/pub?output=csv</code>).
           Make sure you are not accidentally publishing sensitive information.</p>
-        
-<h2>Obtaining the CSV link</h2>
-
+        <h2>Obtaining the CSV link</h2>
         <ol>
           <li>Open the Google Forms in a browser.</li>
           <li>Select the “Responses” tab and click on “Link to Sheets”.</li>
@@ -31,11 +29,8 @@
             and instead of “Web page”, select “Comma-separated values (.csv)”.</li>
           <li>Copy the given link which will be used for the upcoming script.</li>
         </ol>
-        
-<h2>Creating the script</h2>
-
-        <p>Create a “JS Frontend” script:</p>
-<pre><code class="language-text-x-trilium-auto">const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTiwooLV2whjCSVa49dJ99p_G3_qhqHHRqttMjYCJVfLXVdTgUSNJu5K0rpqmaHYF2k7Vofi3o7gW82/pub?output=csv";
+        <h2>Creating the script</h2>
+        <p>Create a “JS Frontend” script:</p><pre><code class="language-text-x-trilium-auto">const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTiwooLV2whjCSVa49dJ99p_G3_qhqHHRqttMjYCJVfLXVdTgUSNJu5K0rpqmaHYF2k7Vofi3o7gW82/pub?output=csv";
 
 async function fetchData() {
     try {
@@ -50,8 +45,7 @@ const data = await fetchData();
 console.log(data);
 // Do something with the data.</code></pre>
         <p>Note that the data will be received as a string and there is no library
-          to do the CSV parsing for us. To do a very simple parsing of CSV:</p>
-<pre><code class="language-text-x-trilium-auto">const content = data
+          to do the CSV parsing for us. To do a very simple parsing of CSV:</p><pre><code class="language-text-x-trilium-auto">const content = data
 	.split("\n")
 	.slice(1)
 	.map((row) =&gt; row.split(","));</code></pre>

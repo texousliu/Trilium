@@ -12,7 +12,7 @@ This is essentially Trilium sources + node modules + node.js runtime packaged in
 
 The problem with above steps is that once you close the SSH connection, the Trilium process is terminated. To avoid that, you have two options:
 
-*   Kill it (with e.g. `CTRL-C`) and run again like this: `nohup ./trilium &`.
+*   Kill it (with e.g. <kbd>Ctrl</kbd> + <kbd>C</kbd>) and run again like this: `nohup ./trilium &`.
 *   Configure systemd to automatically run Trilium in the background on every boot
 
 ## Configure Trilium to auto-run on boot with systemd

@@ -5,28 +5,28 @@ It is also possible to configure most keyboard shortcuts in Options -> Keyboard 
 
 ## Note navigation
 
-*   `UP`, `DOWN` - go up/down in the list of notes, `CTRL-SHIFT-UP` and `CTRL-SHIFT-DOWN` work also from editor
-*   `LEFT`, `RIGHT` - collapse/expand node
-*   `ALT+LEFT`, `ALT+RIGHT` - go back / forwards in the history
-*   `CTRL+J` - show ["Jump to" dialog](Navigation/Note%20Navigation.md)
-*   `CTRL+.` - scroll to current note (useful when you scroll away from your note or your focus is currently in the editor)
-*   `BACKSPACE` - jumps to parent note
-*   `ALT+C` - collapse whole note tree
-*   `ALT+-` (alt with minus sign) - collapse subtree (if some subtree takes too much space on tree pane you can collapse it)
-*   you can define a [label](../Advanced%20Usage/Attributes.md) `#keyboardShortcut` with e.g. value `Ctrl+I`. Pressing this keyboard combination will then bring you to the note on which it is defined. Note that Trilium must be reloaded/restarted (Ctrl+R) for changes to be in effect.
+*   <kbd><span>↑</span></kbd>, <kbd><span>↓</span></kbd> - go up/down in the list of notes, <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd><span>↑</span></kbd> and <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd><span>↓</span></kbd>  work also from editor
+*   <kbd><span>←</span></kbd>, <kbd><span>→</span></kbd> - collapse/expand node
+*   <kbd>Alt</kbd> + <kbd><span>←</span></kbd>, <kbd>Alt</kbd> + <kbd><span>→</span></kbd> - go back / forwards in the history
+*   <kbd>Ctrl</kbd> + <kbd>J</kbd> - show ["Jump to" dialog](Navigation/Note%20Navigation.md)
+*   <kbd>Ctrl</kbd> + <kbd>.</kbd> - scroll to current note (useful when you scroll away from your note or your focus is currently in the editor)
+*   <kbd><span>Backspace</span></kbd> - jumps to parent note
+*   <kbd>Alt</kbd> + <kbd>C</kbd> - collapse whole note tree
+*   <kbd>Alt</kbd> + <kbd>-</kbd> (alt with minus sign) - collapse subtree (if some subtree takes too much space on tree pane you can collapse it)
+*   you can define a [label](../Advanced%20Usage/Attributes.md) `#keyboardShortcut` with e.g. value <kbd>Ctrl</kbd> + <kbd>I</kbd> . Pressing this keyboard combination will then bring you to the note on which it is defined. Note that Trilium must be reloaded/restarted (<kbd>Ctrl</kbd> + <kbd>R</kbd> ) for changes to be in effect.
 
 See demo of some of these features in [note navigation](Navigation/Note%20Navigation.md).
 
 ## Tabs
 
-*   `CTRL+click` - (or middle mouse click) on note link opens note in a new tab
+*   <kbd>Ctrl</kbd> + <kbd>🖱 Left click</kbd> - (or middle mouse click) on note link opens note in a new tab
 
 Only in desktop (electron build):
 
-*   `CTRL+T` - opens empty tab
-*   `CTRL+W` - closes active tab
-*   `CTRL+Tab` - activates next tab
-*   `CTRL+Shift+Tab` - activates previous tab
+*   <kbd>Ctrl</kbd> + <kbd>T</kbd> - opens empty tab
+*   <kbd>Ctrl</kbd> + <kbd>W</kbd> - closes active tab
+*   <kbd>Ctrl</kbd> + <kbd>Tab</kbd> - activates next tab
+*   <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Tab</kbd> - activates previous tab
 
 ## Creating notes
 
@@ -36,43 +36,43 @@ Only in desktop (electron build):
 
 ## Moving / cloning notes
 
-*   `CTRL+UP`, `CTRL+DOWN` - move note up/down in the note list
-*   `CTRL+LEFT` - move note up in the note tree
-*   `CTRL+RIGHT` - move note down in the note tree
-*   `SHIFT+UP`, `SHIFT+DOWN` - multi-select note above/below
-*   `CTRL+A` - select all notes in the current level
-*   `SHIFT+click` - multi select note which you clicked on
-*   `CTRL+C` - copies current note (or current selection) into clipboard (used for [cloning](Note/Cloning%20Notes.md)
-*   `CTRL+X` - cuts current (or current selection) note into clipboard (used for moving notes)
-*   `CTRL+V` - pastes note(s) as sub-note into current note (which is either move or clone depending on whether it was copied or cut into clipboard)
-*   `DEL` - delete note / sub-tree
+*   <kbd>Ctrl</kbd> + <kbd><span>↑</span></kbd> , Ctrl + <kbd><span>↓</span></kbd> - move note up/down in the note list
+*   <kbd>Ctrl</kbd> + <kbd><span>←</span></kbd> - move note up in the note tree
+*   <kbd>Ctrl</kbd>+<kbd><span>→</span></kbd> - move note down in the note tree
+*   <kbd>Shift</kbd>+<kbd><span>↑</span></kbd>, <kbd>Shift</kbd>`+`<kbd><span>↓</span></kbd> - multi-select note above/below
+*   <kbd>Ctrl</kbd>+<kbd>A</kbd> - select all notes in the current level
+*   <kbd>Shift</kbd>+<kbd>🖱 Left click</kbd> - multi select note which you clicked on
+*   <kbd>Ctrl</kbd>+<kbd>C</kbd> - copies current note (or current selection) into clipboard (used for [cloning](Note/Cloning%20Notes.md)
+*   <kbd>Ctrl</kbd>+<kbd>X</kbd> - cuts current (or current selection) note into clipboard (used for moving notes)
+*   <kbd>Ctrl</kbd>+<kbd>V</kbd> - pastes note(s) as sub-note into current note (which is either move or clone depending on whether it was copied or cut into clipboard)
+*   <kbd>Del</kbd> - delete note / sub-tree
 
 ## Editing notes
 
 Trilium uses CKEditor 5 for the [text notes](../Note%20Types/Text.md) and CodeMirror 5 for [code notes](../Note%20Types/Code.md). Check the documentation of these projects to see all their built-in keyboard shortcuts.
 
-*   `ALT-F10` - bring up inline formatting toolbar (arrow keys `<-`,`->` to navigate, `ENTER` to apply)
-*   `ALT-F10` - again to bring up block formatting toolbar
-*   `ENTER` in tree pane switches from tree pane into note title. Enter from note title switches focus to text editor. `CTRL+.` switches back from editor to tree pane.
-*   `CTRL+K` - create / edit [external link](../Note%20Types/Text/Links.md)
-*   `CTRL+L` - create [internal (note) link](../Note%20Types/Text/Links.md)
-*   `ALT+T` - inserts current date and time at caret position
-*   `CTRL+.` - jump away from the editor to tree pane and scroll to current note
+*   <kbd>Alt</kbd>\-<kbd>F10</kbd> - bring up inline formatting toolbar (arrow keys <kbd><span>←</span></kbd>,<kbd><span>→</span></kbd> to navigate, <kbd>Enter</kbd> to apply)
+*   <kbd>Alt</kbd>\-<kbd>F10</kbd> - again to bring up block formatting toolbar
+*   <kbd>Enter</kbd> in tree pane switches from tree pane into note title. Enter from note title switches focus to text editor. <kbd>Ctrl</kbd>+<kbd>.</kbd> switches back from editor to tree pane.
+*   <kbd>Ctrl</kbd>+<kbd>K</kbd> - create / edit [external link](../Note%20Types/Text/Links.md)
+*   <kbd>Ctrl</kbd>+<kbd>L</kbd> - create [internal (note) link](../Note%20Types/Text/Links.md)
+*   <kbd>Alt</kbd>+<kbd>T</kbd> - inserts current date and time at caret position
+*   <kbd>Ctrl</kbd>+<kbd>.</kbd> - jump away from the editor to tree pane and scroll to current note
 
 ## Runtime shortcuts
 
 These are hooked in Electron to be similar to native browser keyboard shortcuts.
 
-*   `F5`, `CTRL-R` - reloads trilium frontend
-*   `CTRL+SHIFT+I` - show developer tools
-*   `CTRL+F` - show search dialog
-*   `CTRL+-` - zoom out
-*   `CTRL+=` - zoom in
+*   <kbd>F5</kbd>, <kbd>Ctrl</kbd>\-<kbd>R</kbd> - reloads Trilium front-end
+*   <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> - show developer tools
+*   <kbd>Ctrl</kbd>+<kbd>F</kbd> - show search dialog
+*   <kbd>Ctrl</kbd>+<kbd>-</kbd> - zoom out
+*   <kbd>Ctrl</kbd>+<kbd>=</kbd> - zoom in
 
 ## Other
 
-*   `ALT+O` - show SQL console (use only if you know what you're doing)
-*   `ALT+M` - distraction-free mode - display only note editor, everything else is hidden
-*   `F11` - toggle full screen
-*   `CTRL+S` - toggle [search](Navigation/Search.md) form in tree pane
-*   `ALT+A` - show note [attributes](../Advanced%20Usage/Attributes.md) dialog
+*   <kbd>Alt</kbd>+<kbd>O</kbd> - show SQL console (use only if you know what you're doing)
+*   <kbd>Alt</kbd>+<kbd>M</kbd> - distraction-free mode - display only note editor, everything else is hidden
+*   <kbd>F11</kbd> - toggle full screen
+*   <kbd>Ctrl</kbd> + <kbd>S</kbd> - toggle [search](Navigation/Search.md) form in tree pane
+*   <kbd>Alt</kbd> +<kbd>A</kbd> - show note [attributes](../Advanced%20Usage/Attributes.md) dialog

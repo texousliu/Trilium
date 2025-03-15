@@ -13,9 +13,9 @@ export function getHelpHiddenSubtreeData() {
     const appDir = path.join(srcRoot, "public", isDev ? "app" : "app-dist");
     const helpDir = path.join(appDir, "doc_notes", "en", "User Guide");
     const metaFilePath = path.join(helpDir, "!!!meta.json");
-    const metaFileContent = JSON.parse(fs.readFileSync(metaFilePath).toString("utf-8"));
 
     try {
+        const metaFileContent = JSON.parse(fs.readFileSync(metaFilePath).toString("utf-8"));
         return parseNoteMetaFile(metaFileContent as NoteMetaFile);
     } catch (e) {
         console.warn(e);

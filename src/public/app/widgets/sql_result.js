@@ -7,12 +7,16 @@ const TPL = `
     .sql-result-widget {
         padding: 15px;
     }
+
+    .sql-console-result-container td {
+        white-space: preserve;
+    }
     </style>
-   
+
     <div class="sql-query-no-rows alert alert-info" style="display: none;">
         ${t("sql_result.no_rows")}
     </div>
-   
+
     <div class="sql-console-result-container"></div>
 </div>`;
 

@@ -17,13 +17,10 @@
           open a public REST endpoint. This opens a way for various integrations
           with other services - a simple example would be creating new note from
           Slack by issuing a slash command (e.g. <code>/trilium buy milk</code>).</p>
-        
-<h2>Create note from outside Trilium</h2>
-
+        <h2>Create note from outside Trilium</h2>
         <p>Let's take a look at an example. The goal is to provide a REST endpoint
           to which we can send title and content and Trilium will create a note.</p>
-        <p>We'll start with creating a JavaScript backend <a href="../Note%20Types/Code.html">code note</a> containing:</p>
-<pre><code class="language-text-x-trilium-auto">const {req, res} = api;
+        <p>We'll start with creating a JavaScript backend <a href="../Note%20Types/Code.html">code note</a> containing:</p><pre><code class="language-text-x-trilium-auto">const {req, res} = api;
 const {secret, title, content} = req.body;
 
 if (req.method == 'POST' &amp;&amp; secret === 'secret-password') {
@@ -47,11 +44,8 @@ else {
           <li>relation <code>~targetNote</code> pointing to a note where new notes should
             be saved</li>
         </ul>
-        
-<h3>Explanation</h3>
-
-        <p>Let's test this by using an HTTP client to send a request:</p>
-<pre><code class="language-text-x-trilium-auto">POST http://my.trilium.org/custom/create-note
+        <h3>Explanation</h3>
+        <p>Let's test this by using an HTTP client to send a request:</p><pre><code class="language-text-x-trilium-auto">POST http://my.trilium.org/custom/create-note
 Content-Type: application/json
 
 {
@@ -75,32 +69,23 @@ Content-Type: application/json
         <p>Once we pass these checks we will just create the desired note using
           <a
           href="../Note%20Types/Code/Script%20API.html">Script API</a>.</p>
-        
-<h2>Custom resource provider</h2>
-
+        <h2>Custom resource provider</h2>
         <p>Another common use case is that you want to just expose a file note -
           in such case you create label <code>customResourceProvider</code> (value
           is again path regex).</p>
         <p>For more information, see <a href="Custom%20Resource%20Providers.html">Custom Resource Providers</a>.</p>
-        
-<h2>Advanced concepts</h2>
-
+        <h2>Advanced concepts</h2>
         <p><code>api.req</code> and <code>api.res</code> are Express.js objects - you
           can always look into its <a href="https://expressjs.com/en/api.html">documentation</a> for
           details.</p>
-        
-<h3>Parameters</h3>
-
-        <p>REST request paths often contain parameters in the URL, e.g.:</p>
-<pre><code class="language-text-x-trilium-auto">http://my.trilium.org/custom/notes/123</code></pre>
+        <h3>Parameters</h3>
+        <p>REST request paths often contain parameters in the URL, e.g.:</p><pre><code class="language-text-x-trilium-auto">http://my.trilium.org/custom/notes/123</code></pre>
         <p>The last part is dynamic so the matching of the URL must also be dynamic
           - for this reason the matching is done with regular expressions. Following <code>customRequestHandler</code> value
-          would match it:</p>
-<pre><code class="language-text-x-trilium-auto">notes/([0-9]+)</code></pre>
+          would match it:</p><pre><code class="language-text-x-trilium-auto">notes/([0-9]+)</code></pre>
         <p>Additionally, this also defines a matching group with the use of parenthesis
           which then makes it easier to extract the value. The matched groups are
-          available in <code>api.pathParams</code>:</p>
-<pre><code class="language-text-x-trilium-auto">const noteId = api.pathParams[0];</code></pre>
+          available in <code>api.pathParams</code>:</p><pre><code class="language-text-x-trilium-auto">const noteId = api.pathParams[0];</code></pre>
         <p>Often you also need query params (as in e.g. <code>http://my.trilium.org/custom/notes?noteId=123</code>),
           you can get those with standard express <code>req.query.noteId</code>.</p>
       </div>

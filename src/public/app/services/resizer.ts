@@ -55,6 +55,7 @@ function setupRightPaneResizer() {
         rightInstance = Split(["#center-pane", "#right-pane"], {
             sizes: [100 - rightPaneWidth, rightPaneWidth],
             gutterSize: 5,
+            minSize: [ 300, 180 ],
             onDragEnd: (sizes) => options.save("rightPaneWidth", Math.round(sizes[1]))
         });
     }

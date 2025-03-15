@@ -110,7 +110,7 @@ export function buildToolbarConfig(isClassicToolbar: boolean) {
     }
 }
 
-function buildClassicToolbar(multilineToolbar: boolean) {
+export function buildClassicToolbar(multilineToolbar: boolean) {
     // For nested toolbars, refer to https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/toolbar.html#grouping-toolbar-items-in-dropdowns-nested-toolbars.
     return {
         toolbar: {
@@ -122,7 +122,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
                 "italic",
                 {
                     ...TEXT_FORMATTING_GROUP,
-                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "code", "kbd"]
+                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "kbd"]
                 },
                 "|",
                 "fontColor",
@@ -136,7 +136,10 @@ function buildClassicToolbar(multilineToolbar: boolean) {
                 "blockQuote",
                 "admonition",
                 "insertTable",
+                "|",
+                "code",
                 "codeBlock",
+                "|",
                 "footnote",
                 {
                     label: "Insert",
@@ -156,7 +159,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
     };
 }
 
-function buildFloatingToolbar() {
+export function buildFloatingToolbar() {
     return {
         toolbar: {
             items: [
