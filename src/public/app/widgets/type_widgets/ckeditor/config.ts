@@ -122,7 +122,7 @@ export function buildClassicToolbar(multilineToolbar: boolean) {
                 "italic",
                 {
                     ...TEXT_FORMATTING_GROUP,
-                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "code", "kbd"]
+                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "kbd"]
                 },
                 "|",
                 "fontColor",
@@ -136,7 +136,10 @@ export function buildClassicToolbar(multilineToolbar: boolean) {
                 "blockQuote",
                 "admonition",
                 "insertTable",
+                "|",
+                "code",
                 "codeBlock",
+                "|",
                 "footnote",
                 {
                     label: "Insert",
