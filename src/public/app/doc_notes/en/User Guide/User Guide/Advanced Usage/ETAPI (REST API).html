@@ -19,16 +19,12 @@
         <p><a href="https://github.com/Nriver/trilium-py">trilium-py</a> is a third-party
           Python implementation for ETAPI client, you can use Python to communicate
           with Trilium.</p>
-        
-<h2>Authentication</h2>
-
+        <h2>Authentication</h2>
         <p>All operations have to be authenticated using a token. You can get this
           token either from Options -&gt; ETAPI or programmatically using the <code>/auth/login</code> REST
-          call (see the <a href="https://github.com/TriliumNext/Notes/blob/master/src/etapi/etapi.openapi.yaml">spec</a>):</p>
-<pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
+          call (see the <a href="https://github.com/TriliumNext/Notes/blob/master/src/etapi/etapi.openapi.yaml">spec</a>):</p><pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
 Authorization: ETAPITOKEN</code></pre>
-        <p>Alternatively, since 0.56 you can also use basic auth format:</p>
-<pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
+        <p>Alternatively, since 0.56 you can also use basic auth format:</p><pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
 Authorization: Basic BATOKEN</code></pre>
         <ul>
           <li>Where <code>BATOKEN = BASE64(username + ':' + password)</code> - this is

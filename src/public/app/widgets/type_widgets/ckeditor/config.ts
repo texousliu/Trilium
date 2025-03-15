@@ -96,43 +96,9 @@ export function buildConfig() {
             defaultProtocol: "https://",
             allowedProtocols: ALLOWED_PROTOCOLS
         },
-        style: {
-            definitions: buildStyleDefinitions()
-        },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"
     };
-}
-
-function buildStyleDefinitions() {
-    const element = "blockquote";
-    return [
-        {
-            name: "Note",
-            element,
-            classes: [ "admonition", "note" ]
-        },
-        {
-            name: "Tip",
-            element,
-            classes: [ "admonition", "tip" ]
-        },
-        {
-            name: "Important",
-            element,
-            classes: [ "admonition", "important" ]
-        },
-        {
-            name: "Caution",
-            element,
-            classes: [ "admonition", "caution" ]
-        },
-        {
-            name: "Warning",
-            element,
-            classes: [ "admonition", "warning" ]
-        }
-    ];
 }
 
 export function buildToolbarConfig(isClassicToolbar: boolean) {
@@ -144,12 +110,11 @@ export function buildToolbarConfig(isClassicToolbar: boolean) {
     }
 }
 
-function buildClassicToolbar(multilineToolbar: boolean) {
+export function buildClassicToolbar(multilineToolbar: boolean) {
     // For nested toolbars, refer to https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/toolbar.html#grouping-toolbar-items-in-dropdowns-nested-toolbars.
     return {
         toolbar: {
             items: [
-                "style",
                 "heading",
                 "fontSize",
                 "|",
@@ -157,7 +122,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
                 "italic",
                 {
                     ...TEXT_FORMATTING_GROUP,
-                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "code", "kbd"]
+                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "kbd"]
                 },
                 "|",
                 "fontColor",
@@ -169,8 +134,12 @@ function buildClassicToolbar(multilineToolbar: boolean) {
                 "todoList",
                 "|",
                 "blockQuote",
+                "admonition",
                 "insertTable",
+                "|",
+                "code",
                 "codeBlock",
+                "|",
                 "footnote",
                 {
                     label: "Insert",
@@ -190,7 +159,7 @@ function buildClassicToolbar(multilineToolbar: boolean) {
     };
 }
 
-function buildFloatingToolbar() {
+export function buildFloatingToolbar() {
     return {
         toolbar: {
             items: [
@@ -215,7 +184,6 @@ function buildFloatingToolbar() {
         },
 
         blockToolbar: [
-            "style",
             "heading",
             "|",
             "bulletedList",
@@ -223,6 +191,7 @@ function buildFloatingToolbar() {
             "todoList",
             "|",
             "blockQuote",
+            "admonition",
             "codeBlock",
             "insertTable",
             "footnote",

@@ -74,6 +74,7 @@ module.exports = {
             config: {
                 options: {
                     ...baseLinuxMakerConfigOptions,
+                    desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
                     id: "com.triliumnext.notes",
                     runtimeVersion: "24.08",
                     base: "org.electronjs.Electron2.BaseApp",

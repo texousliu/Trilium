@@ -16,19 +16,16 @@
         <p>Configure Nginx proxy and HTTPS. The operating system here is Ubuntu 18.04.</p>
         <ol>
           <li>
-            <p>Download Nginx and remove Apache2</p>
-<pre><code class="language-text-x-trilium-auto">sudo apt-get install nginx
+            <p>Download Nginx and remove Apache2</p><pre><code class="language-text-x-trilium-auto">sudo apt-get install nginx
 sudo apt-get remove apache2</code></pre>
           </li>
           <li>
-            <p>Create configure file</p>
-<pre><code class="language-text-x-trilium-auto">cd /etc/nginx/conf.d
+            <p>Create configure file</p><pre><code class="language-text-x-trilium-auto">cd /etc/nginx/conf.d
 vim default.conf</code></pre>
           </li>
           <li>
             <p>Fill the file with the context shown below, part of the setting show be
-              changed. Then you can enjoy your web with HTTPS forced and proxy.</p>
-<pre><code class="language-text-x-trilium-auto"># This part is for proxy and HTTPS configure
+              changed. Then you can enjoy your web with HTTPS forced and proxy.</p><pre><code class="language-text-x-trilium-auto"># This part is for proxy and HTTPS configure
 server {
     listen 443 ssl;
     server_name trilium.example.net; #change trilium.example.net to your domain without HTTPS or HTTP.

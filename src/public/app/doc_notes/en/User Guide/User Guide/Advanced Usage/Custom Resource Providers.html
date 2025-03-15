@@ -17,9 +17,7 @@
           fonts, stylesheets) to be publicly accessible via a URL.</p>
         <p>A potential use case for this is to add embed a custom font alongside
           a theme.</p>
-        
-<h2>Steps for creating a custom resource provider</h2>
-
+        <h2>Steps for creating a custom resource provider</h2>
         <ol>
           <li>Import a file such as an image or a font into Trilium by drag &amp; drop.</li>
           <li>Select the file and go to the <em>Owned Attributes</em> section.</li>
@@ -40,13 +38,10 @@
             such as <code>hello/.*</code> which will be accessible via <code>/custom/hello/1</code>, <code>/custom/hello/2</code>, <code>/custom/hello/world</code>,
             etc.</li>
         </ul>
-        
-<h2>Using it in a theme</h2>
-
+        <h2>Using it in a theme</h2>
         <p>For example, if you have a custom font to be imported by the theme, first
           upload a font file into Trilium and assign it the <code>#customResourceProvider=fonts/myfont.ttf</code> attribute.</p>
-        <p>Then modify the theme CSS to point to:</p>
-<pre><code class="language-text-css">@font-face {
+        <p>Then modify the theme CSS to point to:</p><pre><code class="language-text-css">@font-face {
 	font-family: customFont;
 	src: url("/custom/fonts/myfont.ttf");
 }

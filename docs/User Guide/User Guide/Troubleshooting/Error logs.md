@@ -9,7 +9,7 @@ If you have trouble finding it the log files, there's also an in-app option in t
 
 ## Frontend logs
 
-To provide frontend logs, we need to open the Developer Console. Often the easiest way is to press `CTRL-SHIFT-I` which should work in most browsers (and desktop app). Make sure that the error producing action happened right before you copy&paste the errors, the console is cleared on app restart.
+To provide frontend logs, we need to open the Developer Console. Often the easiest way is to press <kbd>Ctrl</kbd>\-<kbd>Shift</kbd>\-<kbd>I</kbd> which should work in most browsers (and desktop app). Make sure that the error producing action happened right before you copy&paste the errors, the console is cleared on app restart.
 
 If that doesn't work, then:
 

@@ -25,16 +25,14 @@
         <p>Select an existing day note, and the menubar contains a calendar widget.
           Select any day to create a note for that day. </p>
         <p>
-          <img src="1_Day Notes_image.png" alt="" />
+          <img src="1_Day Notes_image.png" alt="">
         </p>
         <p>This pattern works well also because of <a href="../../Basic%20Concepts/Note/Cloning%20Notes.html">Cloning Notes</a> functionality
           - note can appear in multiple places in the note tree, so besides appearing
           under day note, it can also be categorized into other notes.</p>
-        
-<h2>Demo</h2>
-
+        <h2>Demo</h2>
         <p>
-          <img src="Day Notes_image.png" alt="" />
+          <img src="Day Notes_image.png" alt="">
         </p>
         <p>You can see the structure of day notes appearing under "Journal" note
           - there's a note for the whole year 2017, under it, you have "12 - December"
@@ -43,9 +41,7 @@
           from <a href="Task%20Manager.html">Task manager</a>).</p>
         <p>You can also notice how this day note has <a href="../Attributes/Promoted%20Attributes.html">promoted attribute</a> "weight"
           where you can track your daily weight. This data is then used in <a href="Weight%20Tracker.html">Weight tracker</a>.</p>
-        
-<h2>Templates</h2>
-
+        <h2>Templates</h2>
         <p>Trilium provides <a href="../Attributes/Template.html">template</a> functionality,
           and it could be used together with day notes.</p>
         <p>You can define one of the following relations on the root of the journal
@@ -59,9 +55,7 @@
           month or date, it will take a look at the root and attach a corresponding <code>~template</code> relation
           to the newly created role. Using this, you can e.g. create your daily template
           with e.g. checkboxes for daily routine etc.</p>
-        
-<h2>Date pattern</h2>
-
+        <h2>Date pattern</h2>
         <p>It's possible to customize the title of generated date notes by defining
           a <code>#datePattern</code> label on a root calendar note (identified by <code>#calendarRoot</code> label).
           Following are possible values:</p>
@@ -77,9 +71,7 @@
           <li><code>{ordinal}</code> is replaced with the ordinal date (e.g. 1st, 2nd,
             3rd) etc.</li>
         </ul>
-        
-<h2>Month pattern</h2>
-
+        <h2>Month pattern</h2>
         <p>It is also possible to customize the title of generated month notes through
           the <code>#monthPattern</code> attribute, much like <code>#datePattern</code>.
           The options are:</p>
@@ -94,9 +86,7 @@
         </ul>
         <p>The default is <code>{monthNumberPadded} - {month}</code>
         </p>
-        
-<h2>Implementation</h2>
-
+        <h2>Implementation</h2>
         <p>Trilium has some special support for day notes in the form of <a href="https://triliumnext.github.io/Notes/backend_api/BackendScriptApi.html">backend Script API</a> -
           see e.g. getDayNote() function.</p>
         <p>Day (and year, month) notes are created with a label - e.g. <code>#dateNote="2018-08-16"</code> this

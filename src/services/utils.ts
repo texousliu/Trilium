@@ -180,6 +180,7 @@ export function removeTextFileExtension(filePath: string) {
         case ".markdown":
         case ".html":
         case ".htm":
+        case ".excalidraw":
             return filePath.substring(0, filePath.length - extension.length);
         default:
             return filePath;

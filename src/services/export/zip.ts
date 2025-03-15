@@ -4,7 +4,7 @@ import html from "html";
 import dateUtils from "../date_utils.js";
 import path from "path";
 import mimeTypes from "mime-types";
-import mdService from "./md.js";
+import mdService from "./markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
 import { getContentDisposition, escapeHtml } from "../utils.js";
 import protectedSessionService from "../protected_session.js";

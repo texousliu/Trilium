@@ -174,12 +174,14 @@ const editorConfig = {
         "SelectAll",
         "IncludeNote",
         "CutToNote",
-        "Mathematics",
+        "Math",
         "AutoformatMath",
         "indentBlockShortcutPlugin",
         "removeFormatLinksPlugin",
         "Footnotes",
-        "Mermaid"
+        "Mermaid",
+        "Kbd",
+        "Admonition"
     ],
     toolbar: {
         items: []

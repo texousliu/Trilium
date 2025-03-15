@@ -13,7 +13,7 @@ Screenshot of the Zen Mode option in the global menu.
 
 The Zen Mode can be activated by accessing the global menu and selecting the “Zen Mode” option:
 
-Aside from the global menu, it's also possible to activate this mode by using a keyboard shortcut which is Alt+Z by default. Look for `toggleZenMode` in the shortcut configuration.
+Aside from the global menu, it's also possible to activate this mode by using a keyboard shortcut which is <kbd>Alt</kbd>+<kbd>Z</kbd> by default. Look for `toggleZenMode` in the shortcut configuration.
 
 Once Zen Mode is activated, all the UI elements of the application will be hidden away, including the global menu. In that case, the Zen Mode can be deactivated either by pressing the ![](Zen%20mode_image.png)icon in the top-right corner of the window or by pressing the keyboard combination again.
 
@@ -29,6 +29,6 @@ Screenshot of two notes side-by-side while Zen Mode is active, on Windows 11 wit
 
 ## Split windows and tabs
 
-Tabs are completely hidden, however it's still possible to use keyboard shortcuts such as `firstTab` (Ctrl+1 by default), `secondTab` (Ctrl+2 by default). There are also some newer shortcuts such as `activateNextTab` (Ctrl+Tab) or `activatePreviousTab` (Ctrl+Shift+Tab) that allow easy navigation, however make sure that they are configured properly in the settings.
+Tabs are completely hidden, however it's still possible to use keyboard shortcuts such as `firstTab` (<kbd>Ctrl</kbd>+<kbd>1</kbd> by default), `secondTab` (<kbd>Ctrl</kbd>+<kbd>2</kbd> by default). There are also some newer shortcuts such as `activateNextTab` (<kbd>Ctrl</kbd>+<kbd>Tab</kbd>) or `activatePreviousTab` (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd>) that allow easy navigation, however make sure that they are configured properly in the settings.
 
 For the split view of notes, there are no keyboard shortcuts at the time of writing, but it's still possible to have them in Zen Mode by creating the split while the Zen Mode is off and then reactivating it afterwards.
