@@ -1722,7 +1722,7 @@ footer.file-footer button {
     margin: 5px;
 }
 
-body.desktop .ck-content .admonition {
+body .ck-content .admonition {
     --accent-color: var(--card-border-color);
     border: 1px solid var(--accent-color);
     box-shadow: var(--card-box-shadow);
@@ -1735,11 +1735,11 @@ body.desktop .ck-content .admonition {
     padding-left: 2.5em;
 }
 
-body.desktop .ck-content .admonition p:last-child {
+.ck-content .admonition p:last-child {
     margin-bottom: 0;
 }
 
-body.desktop .ck-content .admonition::before {  
+.ck-content .admonition::before {  
     color: var(--accent-color);
     font-family: boxicons !important;
     position: absolute;
@@ -1747,14 +1747,14 @@ body.desktop .ck-content .admonition::before {
     left: 1em;
 }
 
-body.desktop .ck-content .admonition.note { --accent-color: #69c7ff; }
-body.desktop .ck-content .admonition.tip { --accent-color: #40c025; }
-body.desktop .ck-content .admonition.important { --accent-color: #9839f7; }
-body.desktop .ck-content .admonition.caution { --accent-color: #ff2e2e; }
-body.desktop .ck-content .admonition.warning { --accent-color: #e2aa03; }
+.ck-content .admonition.note { --accent-color: #69c7ff; }
+.ck-content .admonition.tip { --accent-color: #40c025; }
+.ck-content .admonition.important { --accent-color: #9839f7; }
+.ck-content .admonition.caution { --accent-color: #ff2e2e; }
+.ck-content .admonition.warning { --accent-color: #e2aa03; }
 
-body.desktop .ck-content .admonition.note::before { content: "\eb21"; }
-body.desktop .ck-content .admonition.tip::before { content: "\ea0d"; }
-body.desktop .ck-content .admonition.important::before { content: "\ea7c"; }
-body.desktop .ck-content .admonition.caution::before { content: "\eac7"; }
-body.desktop .ck-content .admonition.warning::before { content: "\eac5"; }
+.ck-content .admonition.note::before { content: "\eb21"; }
+.ck-content .admonition.tip::before { content: "\ea0d"; }
+.ck-content .admonition.important::before { content: "\ea7c"; }
+.ck-content .admonition.caution::before { content: "\eac7"; }
+.ck-content .admonition.warning::before { content: "\eac5"; }
