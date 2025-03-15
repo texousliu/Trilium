@@ -5,7 +5,6 @@
 .prettier*
 electron*
 entitlements.plist
-forge.config.cjs
 nodemon.json
 renovate.json
 trilium.iml
@@ -35,3 +34,9 @@ npm-debug.log
 
 # exceptions
 !/bin/copy-dist.ts
+
+# temporary exception to make copy-dist inside Docker build not fail
+# TriliumNextTODO: make copy-dist *not* requiring to copy this file for builds other than electron-forge
+!forge.config.cjs
+!/bin/tpl
+!/bin/electron-forge/desktop.ejs
