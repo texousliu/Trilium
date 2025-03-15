@@ -31,6 +31,7 @@ function toMarkdown(content: string) {
         // Filter is heavily based on: https://github.com/mixmark-io/turndown/issues/274#issuecomment-458730974
         instance.addRule("fencedCodeBlock", fencedCodeBlockFilter);
         instance.addRule("img", buildImageFilter());
+        instance.addRule("admonition", buildAdmonitionFilter());
         instance.use(turndownPluginGfm.gfm);
         instance.keep([ "kbd" ]);
     }
@@ -98,6 +99,57 @@ function buildImageFilter() {
         }
     };
     return imageFilter;
+}
+
+function buildAdmonitionFilter() {
+    const admonitionTypeMappings: Record<string, string> = {
+        note: "NOTE",
+        tip: "TIP",
+        important: "IMPORTANT",
+        caution: "CAUTION",
+        warning: "WARNING"
+    };
+
+    const defaultAdmonitionType = admonitionTypeMappings.note;
+
+    function parseAdmonitionType(_node: Node) {
+        if (!("getAttribute" in _node)) {
+            return defaultAdmonitionType;
+        }
+
+        const node = _node as Element;
+        const classList = node.getAttribute("class")?.split(" ") ?? [];
+
+        for (const className of classList) {
+            if (className === "admonition") {
+                continue;
+            }
+
+            const mappedType = admonitionTypeMappings[className];
+            if (mappedType) {
+                return mappedType;
+            }
+        }
+
+        return defaultAdmonitionType;
+    }
+
+    const admonitionFilter: TurndownService.Rule = {
+        filter(node, options) {
+            return node.nodeName === "ASIDE" && node.classList.contains("admonition");
+        },
+        replacement(content, node) {
+            // Parse the admonition type.
+            const admonitionType = parseAdmonitionType(node);
+
+            content = content.replace(/^\n+|\n+$/g, '');
+            content = content.replace(/^/gm, '> ');
+            content = `> [!${admonitionType}]\n` + content;
+
+            return "\n\n" + content + "\n\n";
+        }
+    }
+    return admonitionFilter;
 }
 
 export default {
