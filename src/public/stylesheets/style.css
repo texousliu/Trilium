@@ -1722,7 +1722,7 @@ footer.file-footer button {
     margin: 5px;
 }
 
-body .ck-content .admonition {
+.ck-content .admonition {
     --accent-color: var(--card-border-color);
     border: 1px solid var(--accent-color);
     box-shadow: var(--card-box-shadow);
