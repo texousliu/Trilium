@@ -7,7 +7,7 @@ import { t } from "./i18n.js";
 
 interface UploadFilesOptions {
     safeImport?: boolean;
-    shrinkImages: "true" | "false";
+    shrinkImages: boolean | "true" | "false";
     textImportedAsText?: boolean;
     codeImportedAsCode?: boolean;
     explodeArchives?: boolean;
