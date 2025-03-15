@@ -52,18 +52,22 @@ For each note of the calendar, the following attributes can be used:
 | `#calendar:color` | Similar to `#color`, but applies the color only for the event in the calendar and not for other places such as the note tree. |
 | `#iconClass` | If present, the icon of the note will be displayed to the left of the event title. |
 | `#calendar:title` | Changes the title of an event to point to an attribute of the note other than the title, either a label (e.g. `#assignee`) or a relation (e.g. `~for`). See _Advanced use-cases_ for more information. |
-| `#calendar:promotedAttributes` | Allows displaying the value of one or more promoted attributes in the calendar like this: ![](13_Calendar%20View_image.png)  <br>  <br>`<br>#label:weight="promoted,number,single,precision=1"<br>#label:mood="promoted,alias=Mood,single,text"<br>#calendar:promotedAttributes="label:weight,label:mood" <br>`  <br>  <br>It can also be used with relations, case in which it will display the title of the target note:  <br>  <br>`<br>#relation:assignee="promoted,alias=Assignee,single,text"<br>#calendar:promotedAttributes="relation:assignee" <br>~assignee=@My assignee <br>` |
-| `#calendar:startDate` | Allows using a different label to represent the start date, other than `#startDate` (e.g. `#expiryDate`). The label name must be prefixed with `#`. If the label is not defined for a note, the default will be used instead. |
-| `#calendar:endDate` | Allows using a different label to represent the start date, other than `#endDate`. The label name must be prefixed with `#`. If the label is not defined for a note, the default will be used instead. |
+| `#calendar:displayedAttributes` | Allows displaying the value of one or more attributes in the calendar like this: <br><br>![](13_Calendar%20View_image.png)<br><br>```<br>#weight="70"<br>#Mood="Good"<br>#calendar:displayedAttributes="weight,Mood"<br>```<br><br>It can also be used with relations, case in which it will display the title of the target note:<br><br>```<br>~assignee=@My assignee<br>#calendar:displayedAttributes="assignee"<br>``` |
+| `#calendar:startDate` | Allows using a different label to represent the start date, other than `startDate` (e.g. `expiryDate`). The label name **must not be** prefixed with `#`. If the label is not defined for a note, the default will be used instead. |
+| `#calendar:endDate` | Allows using a different label to represent the start date, other than `endDate`. The label name **must not be** prefixed with `#`. If the label is not defined for a note, the default will be used instead. |
 
 ## How the calendar works
 
-![](17_Calendar%20View_image.png)The calendar displays all the child notes of the book that have a `#startDate`. An `#endDate` can optionally be added.
+![](17_Calendar%20View_image.png)
+
+The calendar displays all the child notes of the book that have a `#startDate`. An `#endDate` can optionally be added.
 
 If editing the start date and end date from the note itself is desirable, the following attributes can be added to the book note:
 
 ```
-#viewType=calendar #label:startDate(inheritable)="promoted,alias=Start Date,single,date" #label:endDate(inheritable)="promoted,alias=End Date,single,date" #hidePromotedAttributes 
+#viewType=calendar #label:startDate(inheritable)="promoted,alias=Start Date,single,date"
+#label:endDate(inheritable)="promoted,alias=End Date,single,date"
+#hidePromotedAttributes 
 ```
 
 This will result in:
