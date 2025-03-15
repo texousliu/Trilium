@@ -2,6 +2,9 @@
 
 import { parse, Renderer, type Tokens } from "marked";
 
+/**
+ * Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
+ */
 class CustomMarkdownRenderer extends Renderer {
 
     heading(data: Tokens.Heading): string {
@@ -12,13 +15,23 @@ class CustomMarkdownRenderer extends Renderer {
         return super.paragraph(data).trimEnd();
     }
 
-    code({ text, lang, escaped }: Tokens.Code): string {
+    code({ text, lang }: Tokens.Code): string {
         if (!text) {
-                return "";
-            }
+            return "";
+        }
 
-            const ckEditorLanguage = getNormalizedMimeFromMarkdownLanguage(lang);
-            return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
+        const ckEditorLanguage = getNormalizedMimeFromMarkdownLanguage(lang);
+        return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
+    }
+
+    list(token: Tokens.List): string {
+        return super.list(token)
+            .replace("\n", "")  // we replace the first one only.
+            .trimEnd();
+    }
+
+    listitem(item: Tokens.ListItem): string {
+        return super.listitem(item).trimEnd();
     }
 
     blockquote({ tokens }: Tokens.Blockquote): string {
@@ -42,7 +55,6 @@ class CustomMarkdownRenderer extends Renderer {
 
 }
 
-// Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
 const renderer = new CustomMarkdownRenderer({ async: false });
 
 import htmlSanitizer from "../html_sanitizer.js";

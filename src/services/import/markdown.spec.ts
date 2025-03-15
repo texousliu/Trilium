@@ -62,10 +62,16 @@ Title
 code block 1
 second line 2
 \`\`\`
+
+* Hello
+* world
+
+1. Hello
+2. World
 `;
         const expected = `\
 <h2>Heading 1</h2><p>Title</p><pre><code class="language-text-x-trilium-auto">code block 1
-second line 2</code></pre>`;
+second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li><li>World</li></ol>`;
         expect(markdownService.renderToHtml(input, "Troubleshooting")).toBe(expected);
     });
 
