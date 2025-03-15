@@ -18,12 +18,11 @@
           own Kubernetes deployment.</p>
         <p>The recommended way is to use a Helm chart.</p>
         <h2>Root privileges</h2>
-        <blockquote>
-          <p>[!NOTE]
-            <br>The Trilium container at this time needs to be run with root privileges.
+        <aside class="admonition note">
+          <p>The Trilium container at this time needs to be run with root privileges.
             It will swap to UID and GID <code>1000:1000</code> to run the <code>node</code> process
             after execution though, so the main process doesn't run with root privileges.</p>
-        </blockquote>
+        </aside>
         <p>The Trilium docker container needs to be run with root privileges. The
           node process inside the container will be started with reduced privileges
           (uid:gid 1000:1000) after some initialization logic. Please make sure that

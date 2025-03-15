@@ -9,16 +9,11 @@
 
 1.  [Server installation](Installation%20%26%20Setup/Server%20Installation.md)
 2.  [Mobile frontend](Installation%20%26%20Setup/Mobile%20Frontend.md) (optional)
-3.  [![Deploy](Attachments/home-button.svg)](https://heroku.com/deploy?template=https://github.com/feilongfl/trilium-heroku) %%{WARNING}%%
-4.  [PikaPods managed hosting](https://www.pikapods.com/pods?run=trilium-next)
+3.  [PikaPods managed hosting](https://www.pikapods.com/pods?run=trilium-next)
 
-**Combination of server and desktop/laptop** - Install the application on both a server, for web access and data synchronization, and desktop instance(s). This allows all the data to be stored on the server and either accessed from the web browser, or the desktop application. The desktop application will sync and store the data locally so that it can be used when offline.
+**Combination of server and desktop/laptop** - Install the application on both a server, for web access and data synchronisation, and desktop instance(s). This allows all the data to be stored on the server and either accessed from the web browser, or the desktop application. The desktop application will sync and store the data locally so that it can be used when offline.
 
 1.  [Server installation](Installation%20%26%20Setup/Server%20Installation.md)
 2.  [Mobile frontend](Installation%20%26%20Setup/Mobile%20Frontend.md) (optional)
 3.  [Desktop installation](Installation%20%26%20Setup/Desktop%20Installation.md)
 4.  [Synchronization](Installation%20%26%20Setup/Synchronization.md)
-
-## Basic concepts
-
-1.  Understand [Note](Basic%20Concepts/Note.md)

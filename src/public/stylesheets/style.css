@@ -1733,6 +1733,7 @@ footer.file-footer button {
     margin-right: 14px;
     position: relative;
     padding-left: 2.5em;
+    overflow: hidden;
 }
 
 .ck-content .admonition p:last-child {

@@ -1,36 +1,61 @@
 "use strict";
 
 import { parse, Renderer, type Tokens } from "marked";
-import { minify as minifyHtml } from "html-minifier";
 
-// Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
-const renderer = new Renderer({ async: false });
-renderer.code = ({ text, lang, escaped }: Tokens.Code) => {
-    if (!text) {
-        return "";
+/**
+ * Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
+ */
+class CustomMarkdownRenderer extends Renderer {
+
+    heading(data: Tokens.Heading): string {
+        return super.heading(data).trimEnd();
     }
 
-    const ckEditorLanguage = getNormalizedMimeFromMarkdownLanguage(lang);
-    return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
-};
-renderer.blockquote = ({ tokens }: Tokens.Blockquote) => {
-    const body = renderer.parser.parse(tokens);
+    paragraph(data: Tokens.Paragraph): string {
+        return super.paragraph(data).trimEnd();
+    }
 
-    const admonitionMatch = /^<p>\[\!([A-Z]+)\]/.exec(body);
-    if (Array.isArray(admonitionMatch) && admonitionMatch.length === 2) {
-        const type = admonitionMatch[1].toLowerCase();
-
-        if (ADMONITION_TYPE_MAPPINGS[type]) {
-            const bodyWithoutHeader = body
-                .replace(/^<p>\[\!([A-Z]+)\]/, "<p>")
-                .replace(/^<p><\/p>/, ""); // Having a heading will generate an empty paragraph that we need to remove.
-
-            return `<aside class="admonition ${type}">\n${bodyWithoutHeader}</aside>\n`;
+    code({ text, lang }: Tokens.Code): string {
+        if (!text) {
+            return "";
         }
+
+        const ckEditorLanguage = getNormalizedMimeFromMarkdownLanguage(lang);
+        return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
     }
 
-    return `<blockquote>\n${body}</blockquote>\n`;
-};
+    list(token: Tokens.List): string {
+        return super.list(token)
+            .replace("\n", "")  // we replace the first one only.
+            .trimEnd();
+    }
+
+    listitem(item: Tokens.ListItem): string {
+        return super.listitem(item).trimEnd();
+    }
+
+    blockquote({ tokens }: Tokens.Blockquote): string {
+        const body = renderer.parser.parse(tokens);
+
+        const admonitionMatch = /^<p>\[\!([A-Z]+)\]/.exec(body);
+        if (Array.isArray(admonitionMatch) && admonitionMatch.length === 2) {
+            const type = admonitionMatch[1].toLowerCase();
+
+            if (ADMONITION_TYPE_MAPPINGS[type]) {
+                const bodyWithoutHeader = body
+                    .replace(/^<p>\[\!([A-Z]+)\]\s*/, "<p>")
+                    .replace(/^<p><\/p>/, ""); // Having a heading will generate an empty paragraph that we need to remove.
+
+                return `<aside class="admonition ${type}">${bodyWithoutHeader.trim()}</aside>`;
+            }
+        }
+
+        return `<blockquote>${body}</blockquote>`;
+    }
+
+}
+
+const renderer = new CustomMarkdownRenderer({ async: false });
 
 import htmlSanitizer from "../html_sanitizer.js";
 import importUtils from "./utils.js";
@@ -46,9 +71,6 @@ function renderToHtml(content: string, title: string) {
     // h1 handling needs to come before sanitization
     html = importUtils.handleH1(html, title);
     html = htmlSanitizer.sanitize(html);
-    html = minifyHtml(html, {
-        collapseWhitespace: true
-    });
 
     return html;
 }

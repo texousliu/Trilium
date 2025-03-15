@@ -9,9 +9,9 @@
 				"pOsGYCXsbNQG"
 			],
 			"title": "User Guide",
-			"notePosition": 110,
+			"notePosition": 10,
 			"prefix": null,
-			"isExpanded": false,
+			"isExpanded": true,
 			"type": "text",
 			"mime": "text/html",
 			"attributes": [],
@@ -1483,13 +1483,6 @@
 					"attributes": [
 						{
 							"type": "relation",
-							"name": "imageLink",
-							"value": "JXFeNgU8Xnp1",
-							"isInheritable": false,
-							"position": 10
-						},
-						{
-							"type": "relation",
 							"name": "internalLink",
 							"value": "poXkQfguuA0U",
 							"isInheritable": false,
@@ -1515,13 +1508,6 @@
 							"value": "cbkrhQjrkKrh",
 							"isInheritable": false,
 							"position": 50
-						},
-						{
-							"type": "relation",
-							"name": "internalLink",
-							"value": "BFs8mudNFgCS",
-							"isInheritable": false,
-							"position": 60
 						},
 						{
 							"type": "label",
@@ -1552,7 +1538,7 @@
 					"title": "Basic Concepts",
 					"notePosition": 60,
 					"prefix": null,
-					"isExpanded": false,
+					"isExpanded": true,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [
@@ -1647,13 +1633,6 @@
 											"value": "x3i7MxGccDuM",
 											"isInheritable": false,
 											"position": 40
-										},
-										{
-											"type": "relation",
-											"name": "internalLink",
-											"value": "_lbSettings",
-											"isInheritable": false,
-											"position": 50
 										},
 										{
 											"type": "label",
@@ -3073,7 +3052,7 @@
 							"title": "Import & Export",
 							"notePosition": 90,
 							"prefix": null,
-							"isExpanded": false,
+							"isExpanded": true,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [],
@@ -5554,7 +5533,7 @@
 					"title": "Installation & Setup",
 					"notePosition": 160,
 					"prefix": null,
-					"isExpanded": false,
+					"isExpanded": true,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [
@@ -5629,7 +5608,7 @@
 							"title": "Server Installation",
 							"notePosition": 20,
 							"prefix": null,
-							"isExpanded": false,
+							"isExpanded": true,
 							"type": "text",
 							"mime": "text/markdown",
 							"attributes": [
@@ -5742,7 +5721,7 @@
 									"title": "1. Installing the server",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": false,
+									"isExpanded": true,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [],
@@ -6553,6 +6532,13 @@
 							"value": "bx bx-question-mark",
 							"isInheritable": false,
 							"position": 40
+						},
+						{
+							"type": "relation",
+							"name": "internalLink",
+							"value": "wy8So3yZZlH9",
+							"isInheritable": false,
+							"position": 80
 						}
 					],
 					"format": "html",

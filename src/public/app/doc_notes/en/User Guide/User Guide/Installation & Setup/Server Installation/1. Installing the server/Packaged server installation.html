@@ -17,12 +17,10 @@
           into one 7z file.</p>
         <h2>Steps</h2>
         <ul>
-          <li>ssh into your server</li>
-          <li>use <code>wget</code> (or <code>curl</code> or whatever) to download latest
-            <a
-            href="https://github.com/TriliumNext/Notes/releases/latest">trilium-linux-x64-server-[VERSION].xz</a>%%{WARNING}%% (notice -server
-              suffix) on your server</li>
-          <li>unpack the archive, e.g. using <code>tar -xf -d trilium-linux-x64-server-[VERSION].tar.xz</code>
+          <li>SSH into your server</li>
+          <li>use <code>wget</code> (or <code>curl</code>) to download latest <code>TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz</code> (notice <code>-Server</code> suffix)
+            on your server.</li>
+          <li>unpack the archive, e.g. using <code>tar -xf -d TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz</code>
           </li>
           <li><code>cd trilium-linux-x64-server</code>
           </li>
@@ -41,7 +39,7 @@
         <h2>Configure Trilium to auto-run on boot with systemd</h2>
         <ul>
           <li>After downloading, extract and move Trilium:</li>
-        </ul><pre><code class="language-text-x-trilium-auto">tar -xvf trilium-linux-x64-server-[VERSION].tar.xz
+        </ul><pre><code class="language-text-x-trilium-auto">tar -xvf TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz
 sudo mv trilium-linux-x64-server /opt/trilium</code></pre>
         <ul>
           <li>Create the service:</li>
