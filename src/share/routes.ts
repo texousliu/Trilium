@@ -216,7 +216,6 @@ function register(router: Router) {
 
         const { shareId } = req.params;
 
-        console.log("Got share ", shareId, shaca.notes, shaca.aliasToNote);
         const note = shaca.aliasToNote[shareId] || shaca.notes[shareId];
 
         renderNote(note, req, res);

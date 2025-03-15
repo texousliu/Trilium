@@ -27,7 +27,7 @@ describe("Share API test", () => {
     it("requests password for password-protected share", async () => {
         await supertest(app)
             .get("/share/YjlPRj2E9fOV")
-            .expect(200)
+            .expect(401)
             .expect("WWW-Authenticate", 'Basic realm="User Visible Realm", charset="UTF-8"');
         expect(cannotSetHeadersCount).toBe(0);
     });
