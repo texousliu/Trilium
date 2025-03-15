@@ -140,7 +140,7 @@ const TPL = `
             <kbd data-command="toggleZenMode"></kbd>
         </li>
 
-        <div class="dropdown-divider"></div>
+        <div class="dropdown-divider desktop-only"></div>
 
         <li class="dropdown-item switch-to-mobile-version-button" data-trigger-command="switchToMobileVersion">
             <span class="bx bx-mobile"></span>

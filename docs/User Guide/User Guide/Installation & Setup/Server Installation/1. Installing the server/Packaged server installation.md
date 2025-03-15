@@ -3,16 +3,16 @@ This is essentially Trilium sources + node modules + node.js runtime packaged in
 
 ## Steps
 
-*   ssh into your server
-*   use `wget` (or `curl` or whatever) to download latest [trilium-linux-x64-server-\[VERSION\].xz](https://github.com/TriliumNext/Notes/releases/latest)%%{WARNING}%% (notice -server suffix) on your server
-*   unpack the archive, e.g. using `tar -xf -d trilium-linux-x64-server-[VERSION].tar.xz`
+*   SSH into your server
+*   use `wget` (or `curl`) to download latest `TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz` (notice `-Server` suffix) on your server.
+*   unpack the archive, e.g. using `tar -xf -d TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz`
 *   `cd trilium-linux-x64-server`
 *   `./trilium.sh`
 *   you can open the browser and open http://\[your-server-hostname\]:8080 and you should see Trilium initialization page
 
 The problem with above steps is that once you close the SSH connection, the Trilium process is terminated. To avoid that, you have two options:
 
-*   Kill it (with e.g. `CTRL-C`) and run again like this: `nohup ./trilium &`.
+*   Kill it (with e.g. <kbd>Ctrl</kbd> + <kbd>C</kbd>) and run again like this: `nohup ./trilium &`.
 *   Configure systemd to automatically run Trilium in the background on every boot
 
 ## Configure Trilium to auto-run on boot with systemd
@@ -20,7 +20,7 @@ The problem with above steps is that once you close the SSH connection, the Tril
 *   After downloading, extract and move Trilium:
 
 ```
-tar -xvf trilium-linux-x64-server-[VERSION].tar.xz
+tar -xvf TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz
 sudo mv trilium-linux-x64-server /opt/trilium
 ```
 

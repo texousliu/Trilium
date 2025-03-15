@@ -9,7 +9,7 @@
 				"pOsGYCXsbNQG"
 			],
 			"title": "User Guide",
-			"notePosition": 70,
+			"notePosition": 10,
 			"prefix": null,
 			"isExpanded": true,
 			"type": "text",
@@ -1483,13 +1483,6 @@
 					"attributes": [
 						{
 							"type": "relation",
-							"name": "imageLink",
-							"value": "JXFeNgU8Xnp1",
-							"isInheritable": false,
-							"position": 10
-						},
-						{
-							"type": "relation",
 							"name": "internalLink",
 							"value": "poXkQfguuA0U",
 							"isInheritable": false,
@@ -1515,13 +1508,6 @@
 							"value": "cbkrhQjrkKrh",
 							"isInheritable": false,
 							"position": 50
-						},
-						{
-							"type": "relation",
-							"name": "internalLink",
-							"value": "BFs8mudNFgCS",
-							"isInheritable": false,
-							"position": 60
 						},
 						{
 							"type": "label",
@@ -1552,7 +1538,7 @@
 					"title": "Basic Concepts",
 					"notePosition": 60,
 					"prefix": null,
-					"isExpanded": false,
+					"isExpanded": true,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [
@@ -1647,13 +1633,6 @@
 											"value": "x3i7MxGccDuM",
 											"isInheritable": false,
 											"position": 40
-										},
-										{
-											"type": "relation",
-											"name": "internalLink",
-											"value": "_lbSettings",
-											"isInheritable": false,
-											"position": 50
 										},
 										{
 											"type": "label",
@@ -3073,7 +3052,7 @@
 							"title": "Import & Export",
 							"notePosition": 90,
 							"prefix": null,
-							"isExpanded": false,
+							"isExpanded": true,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [],
@@ -3299,7 +3278,7 @@
 					"title": "Note Types",
 					"notePosition": 70,
 					"prefix": null,
-					"isExpanded": true,
+					"isExpanded": false,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [
@@ -3326,7 +3305,7 @@
 							"title": "Text",
 							"notePosition": 10,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/markdown",
 							"attributes": [
@@ -3525,7 +3504,7 @@
 									"dataFileName": "Content language & Right-to-le.html",
 									"attachments": [
 										{
-											"attachmentId": "RlBpP2KTDVIK",
+											"attachmentId": "bqLn4gFZdqfX",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/jpg",
@@ -3533,12 +3512,20 @@
 											"dataFileName": "Content language & Right-t.png"
 										},
 										{
+											"attachmentId": "RlBpP2KTDVIK",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/jpg",
+											"position": 10,
+											"dataFileName": "1_Content language & Right-t.png"
+										},
+										{
 											"attachmentId": "TlBagKsAj5ax",
 											"title": "image.png",
 											"role": "image",
 											"mime": "image/png",
 											"position": 10,
-											"dataFileName": "1_Content language & Right-t.png"
+											"dataFileName": "2_Content language & Right-t.png"
 										},
 										{
 											"attachmentId": "U9e8SLUEALiR",
@@ -3546,7 +3533,7 @@
 											"role": "image",
 											"mime": "image/png",
 											"position": 10,
-											"dataFileName": "2_Content language & Right-t.png"
+											"dataFileName": "3_Content language & Right-t.png"
 										}
 									]
 								},
@@ -5546,7 +5533,7 @@
 					"title": "Installation & Setup",
 					"notePosition": 160,
 					"prefix": null,
-					"isExpanded": false,
+					"isExpanded": true,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [
@@ -5621,7 +5608,7 @@
 							"title": "Server Installation",
 							"notePosition": 20,
 							"prefix": null,
-							"isExpanded": false,
+							"isExpanded": true,
 							"type": "text",
 							"mime": "text/markdown",
 							"attributes": [
@@ -5734,7 +5721,7 @@
 									"title": "1. Installing the server",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": false,
+									"isExpanded": true,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [],
@@ -6545,6 +6532,13 @@
 							"value": "bx bx-question-mark",
 							"isInheritable": false,
 							"position": 40
+						},
+						{
+							"type": "relation",
+							"name": "internalLink",
+							"value": "wy8So3yZZlH9",
+							"isInheritable": false,
+							"position": 80
 						}
 					],
 					"format": "html",

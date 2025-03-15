@@ -201,10 +201,10 @@ export default class RibbonContainer extends NoteContextAwareWidget {
 
                 if (refreshActiveTab) {
                     if (handleEventPromise) {
-                        handleEventPromise.then(() => (activeChild as any).focus()); // TODO: Base class
+                        handleEventPromise.then(() => (activeChild as any).focus?.()); // TODO: Base class
                     } else {
                         // TODO: Base class
-                        (activeChild as any)?.focus();
+                        (activeChild as any).focus?.();
                     }
                 }
             }

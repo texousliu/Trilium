@@ -23,24 +23,16 @@
           of unauthorized access, even if someone has obtained your password. It’s
           highly recommended for securing sensitive information stored in your notes.</p>
         <p>Warning! OpenID and TOTP cannot be both used at the same time!</p>
-        
-<h2>Log in with your Google Account with OpenID!</h2>
-
+        <h2>Log in with your Google Account with OpenID!</h2>
         <p>OpenID is a standardized way to let you log into websites using an account
           from another service, like Google, to verify your identity.</p>
-        
-<h2>Why Time-based One Time Passwords?</h2>
-
+        <h2>Why Time-based One Time Passwords?</h2>
         <p>TOTP (Time-Based One-Time Password) is a security feature that generates
           a unique, temporary code on your device, like a smartphone, which changes
           every 30 seconds. You use this code, along with your password, to log into
           your account, making it much harder for anyone else to access them.</p>
-        
-<h2>Setup</h2>
-
-        
-<h3>TOTP</h3>
-
+        <h2>Setup</h2>
+        <h3>TOTP</h3>
         <ol>
           <li>
             <p>Start Trilium Notes normally.</p>
@@ -57,8 +49,7 @@
           <li>
             <p>Set an environment variable "TOTP_SECRET" as the generated secret. Environment
               variables can be set with a .env file in the root directory, by defining
-              them in the command line, or with a docker container.</p>
-<pre><code class="language-text-x-trilium-auto"># .env in the project root directory
+              them in the command line, or with a docker container.</p><pre><code class="language-text-x-trilium-auto"># .env in the project root directory
 TOTP_ENABLED="true"
 TOTP_SECRET="secret"</code></pre><pre><code class="language-text-x-trilium-auto"># Terminal/CLI
 export TOTP_ENABLED="true"
@@ -84,9 +75,7 @@ docker run -p 8080:8080 -v ~/trilium-data:/home/node/trilium-data -e TOTP_ENABLE
             <p>Load the secret into an authentication app like google authenticator</p>
           </li>
         </ol>
-        
-<h3>OpenID</h3>
-
+        <h3>OpenID</h3>
         <p><em>Currently only compatible with Google. Other services like Authentik and Auth0 are planned on being added.</em>
         </p>
         <p>In order to setup OpenID, you will need to setup a authentication provider.
@@ -96,23 +85,16 @@ docker run -p 8080:8080 -v ~/trilium-data:/home/node/trilium-data -e TOTP_ENABLE
           and secret you obtained from google. Environment variables can be set with
           a .env file in the root directory, by defining them in the command line,
           or with a docker container.</p>
-        
-<h4>.env File</h4>
-
-<pre><code class="language-text-x-trilium-auto"># .env in the project root directory
+        <h4>.env File</h4><pre><code class="language-text-x-trilium-auto"># .env in the project root directory
 SSO_ENABLED="true"
 BASE_URL="http://localhost:8080"
 CLIENT_ID=
 SECRET=</code></pre>
-        <h4>Environment variable (linux)</h4>
-
-<pre><code class="language-text-x-trilium-auto">export SSO_ENABLED="true"
+        <h4>Environment variable (linux)</h4><pre><code class="language-text-x-trilium-auto">export SSO_ENABLED="true"
 export BASE_URL="http://localhost:8080"
 export CLIENT_ID=
 export SECRET=</code></pre>
-        <h4>Docker</h4>
-
-<pre><code class="language-text-x-trilium-auto">docker run -d -p 8080:8080 -v ~/trilium-data:/home/node/trilium-data -e SSO_ENABLED="true" -e BASE_URL="http://localhost:8080" -e CLIENT_ID= -e SECRET= triliumnext/notes:[VERSION]</code></pre>
+        <h4>Docker</h4><pre><code class="language-text-x-trilium-auto">docker run -d -p 8080:8080 -v ~/trilium-data:/home/node/trilium-data -e SSO_ENABLED="true" -e BASE_URL="http://localhost:8080" -e CLIENT_ID= -e SECRET= triliumnext/notes:[VERSION]</code></pre>
         <p>After you restart Trilium Notes, you will be redirected to Google's account
           selection page. Login to an account and Trilium Next will bind to that
           account, allowing you to login with it.</p>

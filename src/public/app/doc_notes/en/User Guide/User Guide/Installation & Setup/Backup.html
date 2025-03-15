@@ -30,9 +30,7 @@
         <p>Note that <a href="Synchronization.html">synchronization</a> provides also
           some backup capabilities by its nature of distributing the data to other
           computers.</p>
-        
-<h2>Restoring backup</h2>
-
+        <h2>Restoring backup</h2>
         <p>Let's assume you want to restore the weekly backup, here's how to do it:</p>
         <ul>
           <li>find <a href="Data%20directory.html">data directory</a> Trilium uses - easy
@@ -57,19 +55,15 @@
         <p>If you have configured sync then you need to do it across all members
           of the sync cluster, otherwise older version (restored backup) of the document
           will be detected and synced to the newer version.</p>
-        
-<h2>Disabling backup</h2>
-
+        <h2>Disabling backup</h2>
         <p>Although this is not recommended, it is possible to disable backup in <code>config.ini</code> in
-          the <a href="Data%20directory.html">data directory</a>:</p>
-<pre><code class="language-text-x-trilium-auto">[General]
+          the <a href="Data%20directory.html">data directory</a>:</p><pre><code class="language-text-x-trilium-auto">[General]
 ... some other configs
 # set to true to disable backups (e.g. because of limited space on server)
 noBackup=true</code></pre>
         <p>You can also review the <a href="../Advanced%20Usage/Configuration%20(config.ini%20or%20e.html">configuration</a> file
           to provide all <code>config.ini</code> values as environment variables instead.</p>
-        <p>See <a href="https://github.com/TriliumNext/Notes/blob/master/config-sample.ini">sample config</a>.
-          %%{WARNING}%%</p>
+        <p>See <a href="https://github.com/TriliumNext/Notes/blob/master/config-sample.ini">sample config</a>.</p>
       </div>
     </div>
   </body>

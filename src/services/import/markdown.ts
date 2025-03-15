@@ -2,27 +2,65 @@
 
 import { parse, Renderer, type Tokens } from "marked";
 
-const renderer = new Renderer({ async: false });
-renderer.code = ({ text, lang, escaped }: Tokens.Code) => {
-    if (!text) {
-        return "";
+class CustomMarkdownRenderer extends Renderer {
+
+    heading(data: Tokens.Heading): string {
+        return super.heading(data).trimEnd();
     }
 
-    const ckEditorLanguage = getNormalizedMimeFromMarkdownLanguage(lang);
-    return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
-};
+    paragraph(data: Tokens.Paragraph): string {
+        return super.paragraph(data).trimEnd();
+    }
+
+    code({ text, lang, escaped }: Tokens.Code): string {
+        if (!text) {
+                return "";
+            }
+
+            const ckEditorLanguage = getNormalizedMimeFromMarkdownLanguage(lang);
+            return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
+    }
+
+    blockquote({ tokens }: Tokens.Blockquote): string {
+        const body = renderer.parser.parse(tokens);
+
+        const admonitionMatch = /^<p>\[\!([A-Z]+)\]/.exec(body);
+        if (Array.isArray(admonitionMatch) && admonitionMatch.length === 2) {
+            const type = admonitionMatch[1].toLowerCase();
+
+            if (ADMONITION_TYPE_MAPPINGS[type]) {
+                const bodyWithoutHeader = body
+                    .replace(/^<p>\[\!([A-Z]+)\]/, "<p>")
+                    .replace(/^<p><\/p>/, ""); // Having a heading will generate an empty paragraph that we need to remove.
+
+                return `<aside class="admonition ${type}">\n${bodyWithoutHeader}</aside>\n`;
+            }
+        }
+
+        return `<blockquote>\n${body}</blockquote>\n`;
+    }
+
+}
+
+// Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
+const renderer = new CustomMarkdownRenderer({ async: false });
 
 import htmlSanitizer from "../html_sanitizer.js";
 import importUtils from "./utils.js";
 import { getMimeTypeFromHighlightJs, MIME_TYPE_AUTO, normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
+import { ADMONITION_TYPE_MAPPINGS } from "../export/markdown.js";
 
 function renderToHtml(content: string, title: string) {
-    const html = parse(content, {
+    let html = parse(content, {
         async: false,
         renderer: renderer
     }) as string;
-    const h1Handled = importUtils.handleH1(html, title); // h1 handling needs to come before sanitization
-    return htmlSanitizer.sanitize(h1Handled);
+
+    // h1 handling needs to come before sanitization
+    html = importUtils.handleH1(html, title);
+    html = htmlSanitizer.sanitize(html);
+
+    return html;
 }
 
 function getNormalizedMimeFromMarkdownLanguage(language: string | undefined) {

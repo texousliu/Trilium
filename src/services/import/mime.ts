@@ -67,7 +67,8 @@ const EXTENSION_TO_MIME = new Map<string, string>([
     [".rb", "text/x-ruby"],
     [".scala", "text/x-scala"],
     [".swift", "text/x-swift"],
-    [".ts", "text/x-typescript"]
+    [".ts", "text/x-typescript"],
+    [".excalidraw", "application/json"]
 ]);
 
 /** @returns false if MIME is not detected */

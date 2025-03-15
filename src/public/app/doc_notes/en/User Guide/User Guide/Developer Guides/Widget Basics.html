@@ -16,12 +16,9 @@
         <p>This guide will walk you through creating a basic widget inside Trilium.
           By following these steps, you'll learn how to build a simple UI element
           that interacts with the user.</p>
-        
-<h3>Step 1: The Basic Widget Structure</h3>
-
+        <h3>Step 1: The Basic Widget Structure</h3>
         <p>To start, we'll create the most basic widget possible. Here's a simple
-          example:</p>
-<pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
+          example:</p><pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
     get position() { return 1; }
     get parentWidget() { return "left-pane"; }
     
@@ -45,11 +42,8 @@ module.exports = new MyWidget();</code></pre>
           is found, the widget is functioning correctly. If <code>undefined</code> is
           returned, double-check that the <a href="../Basic%20Concepts/Note.html">note</a> has
           the <code>#widget</code>  <a href="../Advanced%20Usage/Attributes.html">attribute</a>.</p>
-        
-<h3>Step 2: Adding an UI Element</h3>
-
-        <p>Next, let's improve the widget by adding a button to it.</p>
-<pre><code class="language-text-x-trilium-auto">const template = ``;
+        <h3>Step 2: Adding an UI Element</h3>
+        <p>Next, let's improve the widget by adding a button to it.</p><pre><code class="language-text-x-trilium-auto">const template = ``;
 
 class MyWidget extends api.BasicWidget {
     get position() {return 1;}
@@ -64,16 +58,12 @@ class MyWidget extends api.BasicWidget {
 module.exports = new MyWidget();</code></pre>
         <p>After making this change, reload Trilium. You should now see a button
           in the top-left corner of the left pane.</p>
-        
-<h3>Step 3: Styling the Widget</h3>
-
+        <h3>Step 3: Styling the Widget</h3>
         <p>To make the button more visually appealing and position it correctly,
           we'll apply some custom styling. Trilium includes <a href="https://boxicons.com">Box Icons</a>,
           which we'll use to replace the button text with an icon. For example the <code>bx bxs-magic-wand</code> icon.</p>
-        <p>Here's the updated template:</p>
-<pre><code class="language-text-x-trilium-auto">const template = ``;</code></pre>
-        <p>Next, we'll adjust the button's position using CSS:</p>
-<pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
+        <p>Here's the updated template:</p><pre><code class="language-text-x-trilium-auto">const template = ``;</code></pre>
+        <p>Next, we'll adjust the button's position using CSS:</p><pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
     get position() { return 1; }
     get parentWidget() { return "left-pane"; }
     
@@ -92,12 +82,9 @@ module.exports = new MyWidget();</code></pre>
 module.exports = new MyWidget();</code></pre>
         <p>After reloading Trilium, the button should now appear at the bottom left
           of the left pane, alongside other action buttons.</p>
-        
-<h3>Step 4: Adding User Interaction</h3>
-
+        <h3>Step 4: Adding User Interaction</h3>
         <p>Let’s make the button interactive by showing a message when it’s clicked.
-          We'll use the <code>api.showMessage</code> method from the <a href="../Note%20Types/Code/Script%20API.html">Script API</a>.</p>
-<pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
+          We'll use the <code>api.showMessage</code> method from the <a href="../Note%20Types/Code/Script%20API.html">Script API</a>.</p><pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
     get position() { return 1; }
     get parentWidget() { return "left-pane"; }
     

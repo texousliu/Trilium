@@ -1,13 +1,13 @@
 # Search
 ## Local Search
 
-Local search allows you to search within the currently displayed note. To initiate a local search, press CTRL-F. If using a web browser, this will be handled by the browser's native search functionality. In the desktop (electron) version, a separate dialog will apear.
+Local search allows you to search within the currently displayed note. To initiate a local search, press <kbd>Ctrl</kbd> + <kbd>F</kbd>. If using a web browser, this will be handled by the browser's native search functionality. In the desktop (electron) version, a separate dialog will apear.
 
 ## Note Search
 
 Note search enables you to find notes by searching for text in the title, content, or [attributes](../../Advanced%20Usage/Attributes.md) of the notes. You also have the option to save your searches, which will create a special search note which is visible on your navigation tree and contains the search results as sub-items.
 
-To search for notes, click on the magnifying glass icon on the toolbar or press the `CTRL-S` keyboard [shortcut](../Keyboard%20Shortcuts.md).
+To search for notes, click on the magnifying glass icon on the toolbar or press the <kbd>Ctrl</kbd> + <kbd>S</kbd> keyboard [shortcut](../Keyboard%20Shortcuts.md).
 
 ### Simple Note Search Examples
 

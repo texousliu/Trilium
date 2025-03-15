@@ -24,7 +24,7 @@ If there's multiple clippings from the same page (and on the same day), then the
 **Extension is available from:**
 
 *   [Project release page](https://github.com/TriliumNext/web-clipper/releases) - .xpi for Firefox and .zip for Chromium based browsers.
-*   %%{WARNING}%% [Chrome Web Store](https://chromewebstore.google.com/detail/trilium-web-clipper/dfhgmnfclbebfobmblelddiejjcijbjm)
+*   [Chrome Web Store](https://chromewebstore.google.com/detail/trilium-web-clipper/dfhgmnfclbebfobmblelddiejjcijbjm)
 
 ## Configuration
 
