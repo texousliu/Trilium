@@ -15,4 +15,4 @@ After importing the ENEX file, go over the imported notes and resources to be su
 
 All resources (except for images) are created as note's attachments.
 
-HTML inside ENEX files is not exactly valid so some formatting maybe broken or lost. You can report major problems into [Trilium issue tracker](https://github.com/TriliumNext/Notes/issues). %%{WARNING}%%
+HTML inside ENEX files is not exactly valid so some formatting maybe broken or lost. You can report major problems into [Trilium issue tracker](https://github.com/TriliumNext/Notes/issues).
