@@ -231,6 +231,7 @@
     "knockout": "3.5.1",
     "lorem-ipsum": "2.0.8",
     "mini-css-extract-plugin": "2.9.2",
+    "node-abi": "4.2.0",
     "nodemon": "3.1.9",
     "postcss-loader": "8.1.1",
     "prettier": "3.5.3",
