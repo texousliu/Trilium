@@ -5,6 +5,7 @@ import importService from "../../services/import.js";
 import options from "../../services/options.js";
 import BasicWidget from "../basic_widget.js";
 import { Modal, Tooltip } from "bootstrap";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="upload-attachments-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -42,6 +43,15 @@ const TPL = `
 </div>`;
 
 export default class UploadAttachmentsDialog extends BasicWidget {
+
+    private parentNoteId: string | null;
+    private modal!: bootstrap.Modal;
+    private $form!: JQuery<HTMLElement>;
+    private $noteTitle!: JQuery<HTMLElement>;
+    private $fileUploadInput!: JQuery<HTMLInputElement>;
+    private $uploadButton!: JQuery<HTMLElement>;
+    private $shrinkImagesCheckbox!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -50,7 +60,7 @@ export default class UploadAttachmentsDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.modal = Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget[0]);
 
         this.$form = this.$widget.find(".upload-attachment-form");
         this.$noteTitle = this.$widget.find(".upload-attachment-note-title");
@@ -61,7 +71,9 @@ export default class UploadAttachmentsDialog extends BasicWidget {
         this.$form.on("submit", () => {
             // disabling so that import is not triggered again.
             this.$uploadButton.attr("disabled", "disabled");
-            this.uploadAttachments(this.parentNoteId);
+            if (this.parentNoteId) {
+                this.uploadAttachments(this.parentNoteId);
+            }
             return false;
         });
 
@@ -73,12 +85,12 @@ export default class UploadAttachmentsDialog extends BasicWidget {
             }
         });
 
-        Tooltip.getOrCreateInstance(this.$widget.find('[data-bs-toggle="tooltip"]'), {
+        Tooltip.getOrCreateInstance(this.$widget.find('[data-bs-toggle="tooltip"]')[0], {
             html: true
         });
     }
 
-    async showUploadAttachmentsDialogEvent({ noteId }) {
+    async showUploadAttachmentsDialogEvent({ noteId }: EventData<"showUploadAttachmentsDialog">) {
         this.parentNoteId = noteId;
 
         this.$fileUploadInput.val("").trigger("change"); // to trigger upload button disabling listener below
@@ -89,10 +101,12 @@ export default class UploadAttachmentsDialog extends BasicWidget {
         utils.openDialog(this.$widget);
     }
 
-    async uploadAttachments(parentNoteId) {
-        const files = Array.from(this.$fileUploadInput[0].files); // shallow copy since we're resetting the upload button below
+    async uploadAttachments(parentNoteId: string) {
+        const files = Array.from(this.$fileUploadInput[0].files ?? []); // shallow copy since we're resetting the upload button below
 
-        const boolToString = ($el) => ($el.is(":checked") ? "true" : "false");
+        function boolToString($el: JQuery<HTMLElement>): "true" | "false" {
+            return ($el.is(":checked") ? "true" : "false");
+        }
 
         const options = {
             shrinkImages: boolToString(this.$shrinkImagesCheckbox)

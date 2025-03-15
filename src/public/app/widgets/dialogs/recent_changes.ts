@@ -1,6 +1,6 @@
 import { formatDateTime } from "../../utils/formatters.js";
 import { t } from "../../services/i18n.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import BasicWidget from "../basic_widget.js";
 import dialogService from "../../services/dialog.js";
 import froca from "../../services/froca.js";
@@ -28,10 +28,23 @@ const TPL = `
     </div>
 </div>`;
 
+// TODO: Deduplicate with server.
+interface RecentChangesRow {
+    noteId: string;
+    date: string;
+}
+
 export default class RecentChangesDialog extends BasicWidget {
+
+    private ancestorNoteId?: string;
+
+    private modal!: bootstrap.Modal;
+    private $content!: JQuery<HTMLElement>;
+    private $eraseDeletedNotesNow!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
-        this.modal = Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget[0]);
 
         this.$content = this.$widget.find(".recent-changes-content");
         this.$eraseDeletedNotesNow = this.$widget.find(".erase-deleted-notes-now-button");
@@ -44,7 +57,7 @@ export default class RecentChangesDialog extends BasicWidget {
         });
     }
 
-    async showRecentChangesEvent({ ancestorNoteId }) {
+    async showRecentChangesEvent({ ancestorNoteId }: EventData<"showRecentChanges">) {
         this.ancestorNoteId = ancestorNoteId;
 
         await this.refresh();
@@ -57,7 +70,7 @@ export default class RecentChangesDialog extends BasicWidget {
             this.ancestorNoteId = hoistedNoteService.getHoistedNoteId();
         }
 
-        const recentChangesRows = await server.get(`recent-changes/${this.ancestorNoteId}`);
+        const recentChangesRows = await server.get<RecentChangesRow[]>(`recent-changes/${this.ancestorNoteId}`);
 
         // preload all notes into cache
         await froca.getNotes(
@@ -110,7 +123,7 @@ export default class RecentChangesDialog extends BasicWidget {
                     }
                 } else {
                     const note = await froca.getNote(change.noteId);
-                    const notePath = note.getBestNotePathString();
+                    const notePath = note?.getBestNotePathString();
 
                     if (notePath) {
                         $noteLink = await linkService.createLink(notePath, {
@@ -118,7 +131,7 @@ export default class RecentChangesDialog extends BasicWidget {
                             showNotePath: true
                         });
                     } else {
-                        $noteLink = $("<span>").text(note.title);
+                        $noteLink = $("<span>").text(note?.title ?? "");
                     }
                 }
 
@@ -131,9 +144,7 @@ export default class RecentChangesDialog extends BasicWidget {
                                 appContext.tabManager.getActiveContext().setNote(change.noteId);
                             }
                         })
-                        .addClass(() => {
-                            if (change.current_isDeleted) return "deleted-note";
-                        })
+                        .toggleClass("deleted-note", !!change.current_isDeleted)
                         .append($("<span>").text(formattedTime).attr("title", change.date))
                         .append($noteLink.addClass("note-title"))
                 );
@@ -143,7 +154,7 @@ export default class RecentChangesDialog extends BasicWidget {
         }
     }
 
-    groupByDate(rows) {
+    groupByDate(rows: RecentChangesRow[]) {
         const groupedByDate = new Map();
 
         for (const row of rows) {

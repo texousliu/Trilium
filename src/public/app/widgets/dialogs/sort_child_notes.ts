@@ -1,3 +1,4 @@
+import type { EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import server from "../../services/server.js";
 import utils from "../../services/utils.js";
@@ -79,6 +80,10 @@ const TPL = `<div class="sort-child-notes-dialog modal mx-auto" tabindex="-1" ro
 </div>`;
 
 export default class SortChildNotesDialog extends BasicWidget {
+
+    private parentNoteId?: string;
+    private $form!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
         this.$form = this.$widget.find(".sort-child-notes-form");
@@ -96,7 +101,7 @@ export default class SortChildNotesDialog extends BasicWidget {
         });
     }
 
-    async sortChildNotesEvent({ node }) {
+    async sortChildNotesEvent({ node }: EventData<"sortChildNotes">) {
         this.parentNoteId = node.data.noteId;
 
         utils.openDialog(this.$widget);

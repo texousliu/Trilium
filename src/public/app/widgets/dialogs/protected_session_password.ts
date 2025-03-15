@@ -27,14 +27,19 @@ const TPL = `
 </div>`;
 
 export default class ProtectedSessionPasswordDialog extends BasicWidget {
+
+    private modal!: bootstrap.Modal;
+    private $passwordForm!: JQuery<HTMLElement>;
+    private $passwordInput!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
-        this.modal = Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget[0]);
 
         this.$passwordForm = this.$widget.find(".protected-session-password-form");
         this.$passwordInput = this.$widget.find(".protected-session-password");
         this.$passwordForm.on("submit", () => {
-            const password = this.$passwordInput.val();
+            const password = String(this.$passwordInput.val());
             this.$passwordInput.val("");
 
             protectedSessionService.setupProtectedSession(password);
