@@ -202,7 +202,7 @@ function register(router: Router) {
         }
     }
 
-    router.get("/share/", (req, res, _next) => {
+    router.get("/share/", (req, res) => {
         if (req.path.substr(-1) !== "/") {
             res.redirect("../share/");
             return;
@@ -218,7 +218,7 @@ function register(router: Router) {
         renderNote(shaca.shareRootNote, req, res);
     });
 
-    router.get("/share/:shareId", (req, res, _next) => {
+    router.get("/share/:shareId", (req, res) => {
         shacaLoader.ensureLoad();
 
         const { shareId } = req.params;
@@ -228,7 +228,7 @@ function register(router: Router) {
         renderNote(note, req, res);
     });
 
-    router.get("/share/api/notes/:noteId", (req, res, _next) => {
+    router.get("/share/api/notes/:noteId", (req, res) => {
         shacaLoader.ensureLoad();
         let note: SNote | boolean;
 
@@ -241,7 +241,7 @@ function register(router: Router) {
         res.json(note.getPojo());
     });
 
-    router.get("/share/api/notes/:noteId/download", (req, res, _next) => {
+    router.get("/share/api/notes/:noteId/download", (req, res) => {
         shacaLoader.ensureLoad();
 
         let note: SNote | boolean;
@@ -263,7 +263,7 @@ function register(router: Router) {
     });
 
     // :filename is not used by trilium, but instead used for "save as" to assign a human-readable filename
-    router.get("/share/api/images/:noteId/:filename", (req, res, _next) => {
+    router.get("/share/api/images/:noteId/:filename", (req, res) => {
         shacaLoader.ensureLoad();
 
         let image: SNote | boolean;
@@ -289,7 +289,7 @@ function register(router: Router) {
     });
 
     // :filename is not used by trilium, but instead used for "save as" to assign a human-readable filename
-    router.get("/share/api/attachments/:attachmentId/image/:filename", (req, res, _next) => {
+    router.get("/share/api/attachments/:attachmentId/image/:filename", (req, res) => {
         shacaLoader.ensureLoad();
 
         let attachment: SAttachment | boolean;
@@ -307,7 +307,7 @@ function register(router: Router) {
         }
     });
 
-    router.get("/share/api/attachments/:attachmentId/download", (req, res, _next) => {
+    router.get("/share/api/attachments/:attachmentId/download", (req, res) => {
         shacaLoader.ensureLoad();
 
         let attachment: SAttachment | boolean;
@@ -329,7 +329,7 @@ function register(router: Router) {
     });
 
     // used for PDF viewing
-    router.get("/share/api/notes/:noteId/view", (req, res, _next) => {
+    router.get("/share/api/notes/:noteId/view", (req, res) => {
         shacaLoader.ensureLoad();
 
         let note: SNote | boolean;
@@ -347,7 +347,7 @@ function register(router: Router) {
     });
 
     // Used for searching, require noteId so we know the subTreeRoot
-    router.get("/share/api/notes", (req, res, _next) => {
+    router.get("/share/api/notes", (req, res) => {
         shacaLoader.ensureLoad();
 
         const ancestorNoteId = req.query.ancestorNoteId ?? "_share";
