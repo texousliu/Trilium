@@ -5,6 +5,17 @@ import turndownPluginGfm from "@joplin/turndown-plugin-gfm";
 
 let instance: TurndownService | null = null;
 
+// TODO: Move this to a dedicated file someday.
+export const ADMONITION_TYPE_MAPPINGS: Record<string, string> = {
+    note: "NOTE",
+    tip: "TIP",
+    important: "IMPORTANT",
+    caution: "CAUTION",
+    warning: "WARNING"
+};
+
+export const DEFAULT_ADMONITION_TYPE = ADMONITION_TYPE_MAPPINGS.note;
+
 const fencedCodeBlockFilter: TurndownService.Rule = {
     filter: function (node, options) {
         return options.codeBlockStyle === "fenced" && node.nodeName === "PRE" && node.firstChild !== null && node.firstChild.nodeName === "CODE";
@@ -102,19 +113,9 @@ function buildImageFilter() {
 }
 
 function buildAdmonitionFilter() {
-    const admonitionTypeMappings: Record<string, string> = {
-        note: "NOTE",
-        tip: "TIP",
-        important: "IMPORTANT",
-        caution: "CAUTION",
-        warning: "WARNING"
-    };
-
-    const defaultAdmonitionType = admonitionTypeMappings.note;
-
     function parseAdmonitionType(_node: Node) {
         if (!("getAttribute" in _node)) {
-            return defaultAdmonitionType;
+            return DEFAULT_ADMONITION_TYPE;
         }
 
         const node = _node as Element;
@@ -125,13 +126,13 @@ function buildAdmonitionFilter() {
                 continue;
             }
 
-            const mappedType = admonitionTypeMappings[className];
+            const mappedType = ADMONITION_TYPE_MAPPINGS[className];
             if (mappedType) {
                 return mappedType;
             }
         }
 
-        return defaultAdmonitionType;
+        return DEFAULT_ADMONITION_TYPE;
     }
 
     const admonitionFilter: TurndownService.Rule = {
