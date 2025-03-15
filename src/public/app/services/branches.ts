@@ -252,7 +252,7 @@ async function cloneNoteToBranch(childNoteId: string, parentBranchId: string, pr
     }
 }
 
-async function cloneNoteToParentNote(childNoteId: string, parentNoteId: string, prefix: string) {
+async function cloneNoteToParentNote(childNoteId: string, parentNoteId: string, prefix?: string) {
     const resp = await server.put<Response>(`notes/${childNoteId}/clone-to-note/${parentNoteId}`, {
         prefix: prefix
     });

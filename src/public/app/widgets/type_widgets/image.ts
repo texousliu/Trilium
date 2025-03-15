@@ -3,6 +3,8 @@ import TypeWidget from "./type_widget.js";
 import libraryLoader from "../../services/library_loader.js";
 import imageContextMenuService from "../../menus/image_context_menu.js";
 import imageService from "../../services/image.js";
+import type FNote from "../../entities/fnote.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="note-detail-image note-detail-printable">
@@ -10,11 +12,11 @@ const TPL = `
         .type-image .note-detail {
             height: 100%;
         }
-    
+
         .note-detail-image {
-            height: 100%; 
+            height: 100%;
         }
-        
+
         .note-detail-image-wrapper {
             position: relative;
             display: flex;
@@ -23,7 +25,7 @@ const TPL = `
             justify-content: center;
             height: 100%;
         }
-        
+
         .note-detail-image-view {
             display: block;
             width: auto;
@@ -39,6 +41,10 @@ const TPL = `
 </div>`;
 
 class ImageTypeWidget extends TypeWidget {
+
+    private $imageWrapper!: JQuery<HTMLElement>;
+    private $imageView!: JQuery<HTMLElement>;
+
     static getType() {
         return "image";
     }
@@ -61,11 +67,11 @@ class ImageTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         this.$imageView.prop("src", utils.createImageSrcUrl(note));
     }
 
-    copyImageReferenceToClipboardEvent({ ntxId }) {
+    copyImageReferenceToClipboardEvent({ ntxId }: EventData<"copyImageReferenceToClipboard">) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }
@@ -73,7 +79,7 @@ class ImageTypeWidget extends TypeWidget {
         imageService.copyImageReferenceToClipboard(this.$imageWrapper);
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
         }

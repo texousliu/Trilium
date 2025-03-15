@@ -1,6 +1,8 @@
 import renderService from "../../services/render.js";
 import TypeWidget from "./type_widget.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="note-detail-render note-detail-printable">
@@ -20,6 +22,10 @@ const TPL = `
 </div>`;
 
 export default class RenderTypeWidget extends TypeWidget {
+
+    private $noteDetailRenderHelp!: JQuery<HTMLElement>;
+    private $noteDetailRenderContent!: JQuery<HTMLElement>;
+
     static getType() {
         return "render";
     }
@@ -32,7 +38,7 @@ export default class RenderTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         this.$widget.show();
         this.$noteDetailRenderHelp.hide();
 
@@ -48,12 +54,12 @@ export default class RenderTypeWidget extends TypeWidget {
     }
 
     renderActiveNoteEvent() {
-        if (this.noteContext.isActive()) {
+        if (this.noteContext?.isActive()) {
             this.refresh();
         }
     }
 
-    async executeWithContentElementEvent({ resolve, ntxId }) {
+    async executeWithContentElementEvent({ resolve, ntxId }: EventData<"executeWithContentElement">) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }

@@ -3,6 +3,7 @@ import TypeWidget from "./type_widget.js";
 import appContext from "../../components/app_context.js";
 import searchService from "../../services/search.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
 
 const TPL = `
 <div class="note-detail-empty note-detail-printable">
@@ -13,7 +14,7 @@ const TPL = `
             flex-wrap: wrap;
             justify-content: space-evenly;
         }
-        
+
         .workspace-notes .workspace-note {
             width: 130px;
             text-align: center;
@@ -40,7 +41,7 @@ const TPL = `
         .empty-tab-search .input-clearer-button {
             border-bottom-right-radius: 0;
         }
-        
+
         .workspace-icon {
             text-align: center;
             font-size: 500%;
@@ -58,6 +59,11 @@ const TPL = `
 </div>`;
 
 export default class EmptyTypeWidget extends TypeWidget {
+
+    private $autoComplete!: JQuery<HTMLElement>;
+    private $results!: JQuery<HTMLElement>;
+    private $workspaceNotes!: JQuery<HTMLElement>;
+
     static getType() {
         return "empty";
     }
@@ -74,7 +80,7 @@ export default class EmptyTypeWidget extends TypeWidget {
                 hideGoToSelectedNoteButton: true,
                 allowCreatingNotes: true,
                 allowJumpToSearchNotes: true,
-                container: this.$results
+                container: this.$results[0]
             })
             .on("autocomplete:noteselected", function (event, suggestion, dataset) {
                 if (!suggestion.notePath) {
@@ -90,7 +96,7 @@ export default class EmptyTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         const workspaceNotes = await searchService.searchForNotes("#workspace #!template");
 
         this.$workspaceNotes.empty();

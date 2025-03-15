@@ -5,10 +5,15 @@ import utils from "../services/utils.js";
 import syncService from "../services/sync.js";
 import dialogService from "../services/dialog.js";
 import { t } from "../services/i18n.js";
+import type FNote from "../entities/fnote.js";
+import type { EventData } from "../components/app_context.js";
 
 export default class SharedSwitchWidget extends SwitchWidget {
+
     isEnabled() {
-        return super.isEnabled() && !["root", "_share", "_hidden"].includes(this.noteId) && !this.noteId.startsWith("_options");
+        return super.isEnabled()
+            && !["root", "_share", "_hidden"].includes(this.noteId ?? "")
+            && !this.noteId?.startsWith("_options");
     }
 
     doRender() {
@@ -25,19 +30,23 @@ export default class SharedSwitchWidget extends SwitchWidget {
     }
 
     async switchOn() {
+        if (!this.noteId) {
+            return;
+        }
+
         await branchService.cloneNoteToParentNote(this.noteId, "_share");
 
         syncService.syncNow(true);
     }
 
     async switchOff() {
-        const shareBranch = this.note.getParentBranches().find((b) => b.parentNoteId === "_share");
+        const shareBranch = this.note?.getParentBranches().find((b) => b.parentNoteId === "_share");
 
         if (!shareBranch) {
             return;
         }
 
-        if (this.note.getParentBranches().length === 1) {
+        if (this.note?.getParentBranches().length === 1) {
             if (!(await dialogService.confirm(t("shared_switch.shared-branch")))) {
                 return;
             }
@@ -48,7 +57,7 @@ export default class SharedSwitchWidget extends SwitchWidget {
         syncService.syncNow(true);
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         const isShared = note.hasAncestor("_share");
         const canBeUnshared = isShared && note.getParentBranches().find((b) => b.parentNoteId === "_share");
         const switchDisabled = isShared && !canBeUnshared;
@@ -64,7 +73,7 @@ export default class SharedSwitchWidget extends SwitchWidget {
         }
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.getBranchRows().find((b) => b.noteId === this.noteId)) {
             this.refresh();
         }

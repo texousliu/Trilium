@@ -1,6 +1,7 @@
 import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import server from "../services/server.js";
+import type FNote from "../entities/fnote.js";
 
 const TPL = `
 <div class="sql-table-schemas-widget">
@@ -38,7 +39,19 @@ const TPL = `
     <span class="sql-table-schemas"></span>
 </div>`;
 
+interface SchemaResponse {
+    name: string;
+    columns: {
+        name: string;
+        type: string;
+    }[];
+}
+
 export default class SqlTableSchemasWidget extends NoteContextAwareWidget {
+
+    private tableSchemasShown?: boolean;
+    private $sqlConsoleTableSchemas!: JQuery<HTMLElement>;
+
     isEnabled() {
         return this.note && this.note.mime === "text/x-sqlite;schema=trilium" && super.isEnabled();
     }
@@ -50,14 +63,14 @@ export default class SqlTableSchemasWidget extends NoteContextAwareWidget {
         this.$sqlConsoleTableSchemas = this.$widget.find(".sql-table-schemas");
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         if (this.tableSchemasShown) {
             return;
         }
 
         this.tableSchemasShown = true;
 
-        const tableSchema = await server.get("sql/schema");
+        const tableSchema = await server.get<SchemaResponse[]>("sql/schema");
 
         for (const table of tableSchema) {
             const $tableLink = $('<button class="btn">').text(table.name);
@@ -73,7 +86,6 @@ export default class SqlTableSchemasWidget extends NoteContextAwareWidget {
             $tableLink.tooltip({
                 html: true,
                 placement: "bottom",
-                boundary: "window",
                 title: $table[0].outerHTML,
                 sanitize: false
             });

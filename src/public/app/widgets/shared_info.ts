@@ -2,6 +2,8 @@ import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import options from "../services/options.js";
 import attributeService from "../services/attributes.js";
 import { t } from "../services/i18n.js";
+import type FNote from "../entities/fnote.js";
+import type { EventData } from "../components/app_context.js";
 
 const TPL = `
 <div class="shared-info-widget alert alert-warning use-tn-links">
@@ -18,8 +20,12 @@ const TPL = `
 </div>`;
 
 export default class SharedInfoWidget extends NoteContextAwareWidget {
+
+    private $sharedLink!: JQuery<HTMLElement>;
+    private $sharedText!: JQuery<HTMLElement>;
+
     isEnabled() {
-        return super.isEnabled() && this.noteId !== "_share" && this.note.hasAncestor("_share");
+        return super.isEnabled() && this.noteId !== "_share" && this.note?.hasAncestor("_share");
     }
 
     doRender() {
@@ -29,7 +35,7 @@ export default class SharedInfoWidget extends NoteContextAwareWidget {
         this.contentSized();
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         const syncServerHost = options.get("syncServerHost");
         let link;
 
@@ -53,7 +59,7 @@ export default class SharedInfoWidget extends NoteContextAwareWidget {
         this.$sharedLink.attr("href", link).text(link);
     }
 
-    getShareId(note) {
+    getShareId(note: FNote) {
         if (note.hasOwnedLabel("shareRoot")) {
             return "";
         }
@@ -61,8 +67,8 @@ export default class SharedInfoWidget extends NoteContextAwareWidget {
         return note.getOwnedLabelValue("shareAlias") || note.noteId;
     }
 
-    entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.getAttributeRows().find((attr) => attr.name.startsWith("_share") && attributeService.isAffecting(attr, this.note))) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.getAttributeRows().find((attr) => attr.name?.startsWith("_share") && attributeService.isAffecting(attr, this.note))) {
             this.refresh();
         } else if (loadResults.getBranchRows().find((branch) => branch.noteId === this.noteId)) {
             this.refresh();

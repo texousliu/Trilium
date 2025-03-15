@@ -3,6 +3,8 @@ import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import server from "../services/server.js";
 import fileWatcher from "../services/file_watcher.js";
 import dayjs from "dayjs";
+import type { EventData } from "../components/app_context.js";
+import type FNote from "../entities/fnote.js";
 
 const TPL = `
 <div class="dropdown watched-file-update-status-widget alert alert-warning">
@@ -12,21 +14,30 @@ const TPL = `
             contain: none;
         }
     </style>
-    
-    <p>${t("watched_file_update_status.file_last_modified", { count: "" })}</p> 
+
+    <p>${t("watched_file_update_status.file_last_modified")}</p>
 
     <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
         <button class="btn btn-sm file-upload-button">${t("watched_file_update_status.upload_modified_file")}</button>
-        
+
         <button class="btn btn-sm ignore-this-change-button">${t("watched_file_update_status.ignore_this_change")}</button>
     </div>
 </div>`;
 
 export default class WatchedFileUpdateStatusWidget extends NoteContextAwareWidget {
+
+    private $filePath!: JQuery<HTMLElement>;
+    private $fileLastModified!: JQuery<HTMLElement>;
+    private $fileUploadButton!: JQuery<HTMLElement>;
+    private $ignoreThisChangeButton!: JQuery<HTMLElement>;
+
     isEnabled() {
         const { entityType, entityId } = this.getEntity();
 
-        return super.isEnabled() && !!fileWatcher.getFileModificationStatus(entityType, entityId);
+        return super.isEnabled()
+            && !!entityType
+            && !!entityId
+            && !!fileWatcher.getFileModificationStatus(entityType, entityId);
     }
 
     doRender() {
@@ -43,7 +54,9 @@ export default class WatchedFileUpdateStatusWidget extends NoteContextAwareWidge
                 filePath: this.$filePath.text()
             });
 
-            fileWatcher.fileModificationUploaded(entityType, entityId);
+            if (entityType && entityId) {
+                fileWatcher.fileModificationUploaded(entityType, entityId);
+            }
             this.refresh();
         });
 
@@ -51,13 +64,18 @@ export default class WatchedFileUpdateStatusWidget extends NoteContextAwareWidge
         this.$ignoreThisChangeButton.on("click", () => {
             const { entityType, entityId } = this.getEntity();
 
-            fileWatcher.ignoreModification(entityType, entityId);
+            if (entityType && entityId) {
+                fileWatcher.ignoreModification(entityType, entityId);
+            }
             this.refresh();
         });
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         const { entityType, entityId } = this.getEntity();
+        if (!entityType || !entityId) {
+            return;
+        }
         const status = fileWatcher.getFileModificationStatus(entityType, entityId);
 
         this.$filePath.text(status.filePath);
@@ -71,7 +89,7 @@ export default class WatchedFileUpdateStatusWidget extends NoteContextAwareWidge
 
         const { viewScope } = this.noteContext;
 
-        if (viewScope.viewMode === "attachments" && viewScope.attachmentId) {
+        if (viewScope?.viewMode === "attachments" && viewScope.attachmentId) {
             return {
                 entityType: "attachments",
                 entityId: viewScope.attachmentId
@@ -84,7 +102,7 @@ export default class WatchedFileUpdateStatusWidget extends NoteContextAwareWidge
         }
     }
 
-    openedFileUpdatedEvent(data) {
+    openedFileUpdatedEvent(data: EventData<"openedFileUpdated">) {
         console.log(data);
         const { entityType, entityId } = this.getEntity();
 

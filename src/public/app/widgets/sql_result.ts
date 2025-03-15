@@ -1,3 +1,4 @@
+import type { EventData } from "../components/app_context.js";
 import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 
@@ -21,6 +22,10 @@ const TPL = `
 </div>`;
 
 export default class SqlResultWidget extends NoteContextAwareWidget {
+
+    private $resultContainer!: JQuery<HTMLElement>;
+    private $noRowsAlert!: JQuery<HTMLElement>;
+
     isEnabled() {
         return this.note && this.note.mime === "text/x-sqlite;schema=trilium" && super.isEnabled();
     }
@@ -32,7 +37,7 @@ export default class SqlResultWidget extends NoteContextAwareWidget {
         this.$noRowsAlert = this.$widget.find(".sql-query-no-rows");
     }
 
-    async sqlQueryResultsEvent({ ntxId, results }) {
+    async sqlQueryResultsEvent({ ntxId, results }: EventData<"sqlQueryResults">) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }
