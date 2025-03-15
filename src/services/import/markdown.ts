@@ -43,14 +43,14 @@ class CustomMarkdownRenderer extends Renderer {
 
             if (ADMONITION_TYPE_MAPPINGS[type]) {
                 const bodyWithoutHeader = body
-                    .replace(/^<p>\[\!([A-Z]+)\]/, "<p>")
+                    .replace(/^<p>\[\!([A-Z]+)\]\s*/, "<p>")
                     .replace(/^<p><\/p>/, ""); // Having a heading will generate an empty paragraph that we need to remove.
 
-                return `<aside class="admonition ${type}">\n${bodyWithoutHeader}</aside>\n`;
+                return `<aside class="admonition ${type}">${bodyWithoutHeader.trim()}</aside>`;
             }
         }
 
-        return `<blockquote>\n${body}</blockquote>\n`;
+        return `<blockquote>${body}</blockquote>`;
     }
 
 }

@@ -99,7 +99,7 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
 
             After`;
         const expected = `<p>Before</p><aside class="admonition note"><p>This is a note.</p></aside><aside class="admonition tip"><p>This is a tip.</p></aside><aside class="admonition important"><p>This is a very important information.</p></aside><aside class="admonition caution"><p>This is a caution.</p></aside><aside class="admonition warning"><h2>Title goes here</h2><p>This is a warning.</p></aside><p>After</p>`;
-        expect(markdownService.renderToHtml(input, "Title")).toBe(expected);
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
 });
