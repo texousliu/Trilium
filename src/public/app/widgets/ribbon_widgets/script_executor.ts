@@ -1,6 +1,7 @@
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
 
 const TPL = `
 <div class="script-runner-widget">
@@ -16,13 +17,17 @@ const TPL = `
     </style>
 
     <div class="execute-description"></div>
-    
+
     <div style="display: flex; justify-content: space-around">
         <button data-trigger-command="runActiveNote" class="execute-button btn btn-sm"></button>
     </div>
 </div>`;
 
 export default class ScriptExecutorWidget extends NoteContextAwareWidget {
+
+    private $executeButton!: JQuery<HTMLElement>;
+    private $executeDescription!: JQuery<HTMLElement>;
+
     isEnabled() {
         return (
             super.isEnabled() &&
@@ -33,7 +38,7 @@ export default class ScriptExecutorWidget extends NoteContextAwareWidget {
     }
 
     isTriliumSqlite() {
-        return this.note.mime === "text/x-sqlite;schema=trilium";
+        return this.note?.mime === "text/x-sqlite;schema=trilium";
     }
 
     getTitle() {
@@ -53,7 +58,7 @@ export default class ScriptExecutorWidget extends NoteContextAwareWidget {
         this.$executeDescription = this.$widget.find(".execute-description");
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         const executeTitle = note.getLabelValue("executeButton") || (this.isTriliumSqlite() ? t("script_executor.execute_query") : t("script_executor.execute_script"));
 
         this.$executeButton.text(executeTitle);

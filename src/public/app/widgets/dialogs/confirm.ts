@@ -28,7 +28,7 @@ const TPL = `
     </div>
 </div>`;
 
-type ConfirmDialogCallback = (val: false | ConfirmDialogOptions) => void;
+export type ConfirmDialogCallback = (val?: false | ConfirmDialogOptions) => void;
 
 export interface ConfirmDialogOptions {
     confirmed: boolean;

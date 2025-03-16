@@ -2,6 +2,7 @@ import { t } from "../../services/i18n.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import AttributeDetailWidget from "../attribute_widgets/attribute_detail.js";
 import AttributeEditorWidget from "../attribute_widgets/attribute_editor.js";
+import type { CommandListenerData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="attribute-list">
@@ -13,17 +14,22 @@ const TPL = `
             margin-bottom: 2px;
             position: relative;
         }
-        
+
         .attribute-list-editor p {
             margin: 0 !important;
         }
     </style>
-   
+
     <div class="attr-editor-placeholder"></div>
 </div>
 `;
 
 export default class OwnedAttributeListWidget extends NoteContextAwareWidget {
+
+    private attributeDetailWidget: AttributeDetailWidget;
+    private attributeEditorWidget: AttributeEditorWidget;
+    private $title!: JQuery<HTMLElement>;
+
     get name() {
         return "ownedAttributes";
     }
@@ -44,7 +50,7 @@ export default class OwnedAttributeListWidget extends NoteContextAwareWidget {
 
     getTitle() {
         return {
-            show: !this.note.isLaunchBarConfig(),
+            show: !this.note?.isLaunchBarConfig(),
             title: t("owned_attribute_list.owned_attributes"),
             icon: "bx bx-list-check"
         };
@@ -68,7 +74,7 @@ export default class OwnedAttributeListWidget extends NoteContextAwareWidget {
         await this.attributeEditorWidget.refresh();
     }
 
-    async updateAttributeListCommand({ attributes }) {
+    async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
         await this.attributeEditorWidget.updateAttributeList(attributes);
     }
 

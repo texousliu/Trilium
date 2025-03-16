@@ -25,6 +25,7 @@ import type { default as NoteContext, GetTextEditorCallback } from "./note_conte
 import type { ContextMenuEvent } from "../menus/context_menu.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.js";
+import type FAttribute from "../entities/fattribute.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -245,7 +246,7 @@ export type CommandMappings = {
 
     toggleZenMode: CommandData;
 
-    updateAttributeList: CommandData & { attributes: Attribute[] };
+    updateAttributeList: CommandData & { attributes: FAttribute[] };
     saveAttributes: CommandData;
     reloadAttributes: CommandData;
     refreshNoteList: CommandData & { noteId: string };
