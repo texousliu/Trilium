@@ -27,6 +27,7 @@
     margin: 1.25em 0;
     margin-right: 14px;
     position: relative;
+    overflow: hidden;
 }
 
 .ck-content .admonition p:last-child {

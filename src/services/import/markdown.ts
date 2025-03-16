@@ -2,6 +2,9 @@
 
 import { parse, Renderer, type Tokens } from "marked";
 
+/**
+ * Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
+ */
 class CustomMarkdownRenderer extends Renderer {
 
     heading(data: Tokens.Heading): string {
@@ -12,13 +15,28 @@ class CustomMarkdownRenderer extends Renderer {
         return super.paragraph(data).trimEnd();
     }
 
-    code({ text, lang, escaped }: Tokens.Code): string {
+    code({ text, lang }: Tokens.Code): string {
         if (!text) {
-                return "";
-            }
+            return "";
+        }
 
-            const ckEditorLanguage = getNormalizedMimeFromMarkdownLanguage(lang);
-            return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
+        const ckEditorLanguage = getNormalizedMimeFromMarkdownLanguage(lang);
+        return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
+    }
+
+    list(token: Tokens.List): string {
+        return super.list(token)
+            .replace("\n", "")  // we replace the first one only.
+            .trimEnd();
+    }
+
+    listitem(item: Tokens.ListItem): string {
+        return super.listitem(item).trimEnd();
+    }
+
+    image(token: Tokens.Image): string {
+        return super.image(token)
+            .replace(` alt=""`, "");
     }
 
     blockquote({ tokens }: Tokens.Blockquote): string {
@@ -30,19 +48,18 @@ class CustomMarkdownRenderer extends Renderer {
 
             if (ADMONITION_TYPE_MAPPINGS[type]) {
                 const bodyWithoutHeader = body
-                    .replace(/^<p>\[\!([A-Z]+)\]/, "<p>")
+                    .replace(/^<p>\[\!([A-Z]+)\]\s*/, "<p>")
                     .replace(/^<p><\/p>/, ""); // Having a heading will generate an empty paragraph that we need to remove.
 
-                return `<aside class="admonition ${type}">\n${bodyWithoutHeader}</aside>\n`;
+                return `<aside class="admonition ${type}">${bodyWithoutHeader.trim()}</aside>`;
             }
         }
 
-        return `<blockquote>\n${body}</blockquote>\n`;
+        return `<blockquote>${body}</blockquote>`;
     }
 
 }
 
-// Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
 const renderer = new CustomMarkdownRenderer({ async: false });
 
 import htmlSanitizer from "../html_sanitizer.js";
@@ -59,6 +76,9 @@ function renderToHtml(content: string, title: string) {
     // h1 handling needs to come before sanitization
     html = importUtils.handleH1(html, title);
     html = htmlSanitizer.sanitize(html);
+
+    // Remove slash for self-closing tags to match CKEditor's approach.
+    html = html.replace(/<(\w+)([^>]*)\s+\/>/g, "<$1$2>");
 
     return html;
 }

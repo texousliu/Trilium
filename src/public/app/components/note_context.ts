@@ -311,7 +311,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
     async getCodeEditor() {
         return this.timeout(
-            new Promise((resolve) =>
+            new Promise<CodeMirrorInstance>((resolve) =>
                 appContext.triggerCommand("executeWithCodeEditor", {
                     resolve,
                     ntxId: this.ntxId

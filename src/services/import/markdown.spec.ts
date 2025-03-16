@@ -62,10 +62,16 @@ Title
 code block 1
 second line 2
 \`\`\`
+
+* Hello
+* world
+
+1. Hello
+2. World
 `;
         const expected = `\
 <h2>Heading 1</h2><p>Title</p><pre><code class="language-text-x-trilium-auto">code block 1
-second line 2</code></pre>`;
+second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li><li>World</li></ol>`;
         expect(markdownService.renderToHtml(input, "Troubleshooting")).toBe(expected);
     });
 
@@ -93,7 +99,13 @@ second line 2</code></pre>`;
 
             After`;
         const expected = `<p>Before</p><aside class="admonition note"><p>This is a note.</p></aside><aside class="admonition tip"><p>This is a tip.</p></aside><aside class="admonition important"><p>This is a very important information.</p></aside><aside class="admonition caution"><p>This is a caution.</p></aside><aside class="admonition warning"><h2>Title goes here</h2><p>This is a warning.</p></aside><p>After</p>`;
-        expect(markdownService.renderToHtml(input, "Title")).toBe(expected);
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("imports images with same outcome as if inserted from CKEditor", () => {
+        const input = "![](api/attachments/YbkR3wt2zMcA/image/image)";
+        const expected = `<p><img src="api/attachments/YbkR3wt2zMcA/image/image"></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
 });

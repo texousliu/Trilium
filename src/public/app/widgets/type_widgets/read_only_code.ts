@@ -19,7 +19,6 @@ const TPL = `
 </div>`;
 
 export default class ReadOnlyCodeTypeWidget extends AbstractCodeTypeWidget {
-    $editor!: JQuery<HTMLElement>;
 
     static getType() {
         return "readOnlyCode";

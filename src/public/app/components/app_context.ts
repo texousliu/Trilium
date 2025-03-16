@@ -25,6 +25,7 @@ import type { default as NoteContext, GetTextEditorCallback } from "./note_conte
 import type { ContextMenuEvent } from "../menus/context_menu.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.js";
+import type FAttribute from "../entities/fattribute.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -177,7 +178,7 @@ export type CommandMappings = {
         ExecuteCommandData<TextEditor> & {
             callback?: GetTextEditorCallback;
         };
-    executeWithCodeEditor: CommandData & ExecuteCommandData<null>;
+    executeWithCodeEditor: CommandData & ExecuteCommandData<CodeMirrorInstance>;
     /**
      * Called upon when attempting to retrieve the content element of a {@link NoteContext}.
      * Generally should not be invoked manually, as it is used by {@link NoteContext.getContentElement}.
