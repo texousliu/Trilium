@@ -2,6 +2,7 @@ import log from "../../log.js";
 import options from "../../options.js";
 import { initEmbeddings } from "./index.js";
 import providerManager from "./providers.js";
+import sqlInit from "../../sql_init.js";
 
 /**
  * Initialize the embedding system
@@ -9,6 +10,12 @@ import providerManager from "./providers.js";
 export async function initializeEmbeddings() {
     try {
         log.info("Initializing embedding system...");
+
+        // Check if the database is initialized before proceeding
+        if (!sqlInit.isDbInitialized()) {
+            log.info("Skipping embedding system initialization as database is not initialized yet.");
+            return;
+        }
 
         // Initialize default embedding providers
         await providerManager.initializeDefaultProviders();

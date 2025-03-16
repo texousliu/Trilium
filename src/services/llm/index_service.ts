@@ -19,6 +19,7 @@ import eventService from "../events.js";
 import type { NoteEmbeddingContext } from "./embeddings/embeddings_interface.js";
 import type { OptionDefinitions } from "../options_interface.js";
 import sql from "../sql.js";
+import sqlInit from "../sql_init.js";
 
 class IndexService {
     private initialized = false;
@@ -45,6 +46,12 @@ class IndexService {
         if (this.initialized) return;
 
         try {
+            // Check if database is initialized before proceeding
+            if (!sqlInit.isDbInitialized()) {
+                log.info("Index service: Database not initialized yet, skipping initialization");
+                return;
+            }
+
             const aiEnabled = await options.getOptionBool('aiEnabled');
             if (!aiEnabled) {
                 log.info("Index service: AI features disabled, skipping initialization");
