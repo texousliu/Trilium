@@ -366,8 +366,9 @@ export default class CalendarView extends ViewMode {
         }
 
         for (const title of titles) {
+            startDate = (startTime ? `${startDate}T${startTime}:00` : startDate);
             if (!endDate) {
-                if (endTime) {
+                if (!endTime) {
                     endDate = startDate;
                 } else {
                     const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
@@ -377,7 +378,6 @@ export default class CalendarView extends ViewMode {
                 }
             }
 
-            startDate = (startTime ? `${startDate}T${startTime}:00` : startDate);
             endDate = (endTime ? `${endDate}T${endTime}:00` : endDate);
             const eventData: EventInput = {
                 title: title,
