@@ -575,6 +575,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.ai-providers-section').toggle(aiEnabled);
         this.$widget.find('.ai-provider').toggle(aiEnabled);
         this.$widget.find('.embedding-section').toggle(aiEnabled);
+        this.$widget.find('hr').toggle(aiEnabled);
 
         // Start or stop polling based on visibility
         if (aiEnabled && this.$widget.find('.embedding-section').is(':visible')) {
