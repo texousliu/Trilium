@@ -194,7 +194,12 @@ export default class CalendarView extends ViewMode {
         if (!startDate) {
             return;
         }
-        const endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
+        let endDate;
+        if (e.allDay) {
+            endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
+        } else {
+            endDate = CalendarView.#formatDateToLocalISO(e.end);
+        }
 
         // Handle start and end time.
         let startTime = null;
