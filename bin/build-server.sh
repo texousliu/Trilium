@@ -26,6 +26,12 @@ NODE_VERSION=22.14.0
 BUILD_DIR="./build"
 DIST_DIR="./dist"
 
+
+# Trigger the build
+echo "Build start"
+npm run build:prepare-dist
+echo "Build finished"
+
 ./bin/copy-trilium.sh
 
 NODE_FILENAME=node-v${NODE_VERSION}-linux-${ARCH}
