@@ -148,11 +148,17 @@ async function updateProvider(req: Request, res: Response) {
  * Manually trigger a reprocessing of all notes
  */
 async function reprocessAllNotes(req: Request, res: Response) {
+    // Import cls
+    const cls = (await import("../../services/cls.js")).default;
+
     // Start the reprocessing operation in the background
     setTimeout(async () => {
         try {
-            await vectorStore.reprocessAllNotes();
-            log.info("Embedding reprocessing completed successfully");
+            // Wrap the operation in cls.init to ensure proper context
+            cls.init(async () => {
+                await vectorStore.reprocessAllNotes();
+                log.info("Embedding reprocessing completed successfully");
+            });
         } catch (error: any) {
             log.error(`Error during background embedding reprocessing: ${error.message || "Unknown error"}`);
         }

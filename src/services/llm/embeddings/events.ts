@@ -1,7 +1,10 @@
-import eventService from "../../../services/events.js";
-import options from "../../../services/options.js";
+import sql from "../../../services/sql.js";
 import log from "../../../services/log.js";
-import { queueNoteForEmbedding, processEmbeddingQueue } from "./queue.js";
+import options from "../../../services/options.js";
+import cls from "../../../services/cls.js";
+import { processEmbeddingQueue, queueNoteForEmbedding } from "./queue.js";
+import eventService from "../../../services/events.js";
+import becca from "../../../becca/becca.js";
 
 /**
  * Setup event listeners for embedding-related events
@@ -51,7 +54,10 @@ export async function setupEmbeddingBackgroundProcessing() {
 
     setInterval(async () => {
         try {
-            await processEmbeddingQueue();
+            // Wrap in cls.init to ensure proper context
+            cls.init(async () => {
+                await processEmbeddingQueue();
+            });
         } catch (error: any) {
             log.error(`Error in background embedding processing: ${error.message || 'Unknown error'}`);
         }

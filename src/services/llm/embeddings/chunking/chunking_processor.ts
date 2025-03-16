@@ -2,6 +2,7 @@ import log from "../../../log.js";
 import dateUtils from "../../../date_utils.js";
 import sql from "../../../sql.js";
 import becca from "../../../../becca/becca.js";
+import cls from "../../../../services/cls.js";
 import type { NoteEmbeddingContext } from "../types.js";
 // Remove static imports that cause circular dependencies
 // import { storeNoteEmbedding, deleteNoteEmbeddings } from "./storage.js";
@@ -126,12 +127,14 @@ export async function processNoteWithChunking(
 
         if (!chunks || chunks.length === 0) {
             // Fall back to single embedding if chunking fails
-            const embedding = await provider.generateEmbeddings(context.content);
-            const config = provider.getConfig();
+            await cls.init(async () => {
+                const embedding = await provider.generateEmbeddings(context.content);
+                const config = provider.getConfig();
 
-            // Use dynamic import instead of static import
-            const storage = await import('../storage.js');
-            await storage.storeNoteEmbedding(noteId, provider.name, config.model, embedding);
+                // Use dynamic import instead of static import
+                const storage = await import('../storage.js');
+                await storage.storeNoteEmbedding(noteId, provider.name, config.model, embedding);
+            });
 
             log.info(`Generated single embedding for note ${noteId} (${note.title}) since chunking failed`);
             return;
@@ -187,20 +190,22 @@ export async function processNoteWithChunking(
             const chunk = chunks[i];
             try {
                 // Generate embedding for this chunk's content with a timeout
-                const embedding = await processChunkWithTimeout(
-                    provider,
-                    chunk,
-                    MAX_CHUNK_PROCESSING_TIME
-                );
+                await cls.init(async () => {
+                    const embedding = await processChunkWithTimeout(
+                        provider,
+                        chunk,
+                        MAX_CHUNK_PROCESSING_TIME
+                    );
 
-                // Store with chunk information in a unique ID format
-                const chunkIdSuffix = `${i + 1}_of_${chunks.length}`;
-                await storage.storeNoteEmbedding(
-                    noteId,
-                    provider.name,
-                    config.model,
-                    embedding
-                );
+                    // Store with chunk information in a unique ID format
+                    const chunkIdSuffix = `${i + 1}_of_${chunks.length}`;
+                    await storage.storeNoteEmbedding(
+                        noteId,
+                        provider.name,
+                        config.model,
+                        embedding
+                    );
+                });
 
                 successfulChunks++;
 
@@ -264,21 +269,24 @@ export async function processNoteWithChunking(
                     // Wait longer for retries with exponential backoff
                     await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(1.5, j)));
 
-                    // Retry the embedding with timeout
-                    const embedding = await processChunkWithTimeout(
-                        provider,
-                        item.chunk,
-                        MAX_CHUNK_PROCESSING_TIME
-                    );
+                    // Retry the embedding with timeout using cls.init
+                    await cls.init(async () => {
+                        const embedding = await processChunkWithTimeout(
+                            provider,
+                            item.chunk,
+                            MAX_CHUNK_PROCESSING_TIME
+                        );
 
-                    // Store with unique ID that indicates it was a retry
-                    const chunkIdSuffix = `${item.index + 1}_of_${chunks.length}`;
-                    await storage.storeNoteEmbedding(
-                        noteId,
-                        provider.name,
-                        config.model,
-                        embedding
-                    );
+                        // Store with unique ID that indicates it was a retry
+                        const chunkIdSuffix = `${item.index + 1}_of_${chunks.length}`;
+                        const storage = await import('../storage.js');
+                        await storage.storeNoteEmbedding(
+                            noteId,
+                            provider.name,
+                            config.model,
+                            embedding
+                        );
+                    });
 
                     // Update counters
                     successfulChunks++;

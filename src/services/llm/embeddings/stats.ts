@@ -1,5 +1,6 @@
 import sql from "../../../services/sql.js";
 import log from "../../../services/log.js";
+import cls from "../../../services/cls.js";
 import { queueNoteForEmbedding } from "./queue.js";
 
 /**
@@ -8,14 +9,19 @@ import { queueNoteForEmbedding } from "./queue.js";
 export async function reprocessAllNotes() {
     log.info("Queueing all notes for embedding updates");
 
+    // Get all non-deleted note IDs
     const noteIds = await sql.getColumn(
         "SELECT noteId FROM notes WHERE isDeleted = 0"
     );
 
     log.info(`Adding ${noteIds.length} notes to embedding queue`);
 
+    // Process each note ID within a cls context
     for (const noteId of noteIds) {
-        await queueNoteForEmbedding(noteId as string, 'UPDATE');
+        // Use cls.init to ensure proper context for each operation
+        await cls.init(async () => {
+            await queueNoteForEmbedding(noteId as string, 'UPDATE');
+        });
     }
 }
 
