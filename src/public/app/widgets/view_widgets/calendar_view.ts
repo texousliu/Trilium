@@ -1,4 +1,4 @@
-import type { Calendar, DateSelectArg, EventChangeArg, EventDropArg, EventInput, EventSourceFunc, EventSourceFuncArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
+import type { Calendar, DateSelectArg, DatesSetArg, EventChangeArg, EventDropArg, EventInput, EventSourceFunc, EventSourceFuncArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
 import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import type FNote from "../../entities/fnote.js";
@@ -12,6 +12,7 @@ import utils from "../../services/utils.js";
 import date_notes from "../../services/date_notes.js";
 import appContext from "../../components/app_context.js";
 import type { EventImpl } from "@fullcalendar/core/internal";
+import debounce, { type DebouncedFunction } from "debounce";
 
 const TPL = `
 <div class="calendar-view">
@@ -79,6 +80,13 @@ interface CreateChildResponse {
     };
 }
 
+const CALENDAR_VIEWS = [
+    "timeGridWeek",
+    "dayGridMonth",
+    "multiMonthYear",
+    "listMonth"
+]
+
 export default class CalendarView extends ViewMode {
 
     private $root: JQuery<HTMLElement>;
@@ -87,6 +95,8 @@ export default class CalendarView extends ViewMode {
     private parentNote: FNote;
     private calendar?: Calendar;
     private isCalendarRoot: boolean;
+    private lastView?: string;
+    private debouncedSaveView?: DebouncedFunction<() => void>;
 
     constructor(args: ViewModeArgs) {
         super(args);
@@ -124,9 +134,16 @@ export default class CalendarView extends ViewMode {
             eventBuilder = async (e: EventSourceFuncArg) => await this.#buildEventsForCalendar(e);
         }
 
+        // Parse user's initial view, if valid.
+        let initialView = "dayGridMonth";
+        const userInitialView = this.parentNote.getLabelValue("calendar:view");
+        if (userInitialView && CALENDAR_VIEWS.includes(userInitialView)) {
+            initialView = userInitialView;
+        }
+
         const calendar = new Calendar(this.$calendarContainer[0], {
             plugins,
-            initialView: "dayGridMonth",
+            initialView,
             events: eventBuilder,
             editable: isEditable,
             selectable: isEditable,
@@ -170,9 +187,10 @@ export default class CalendarView extends ViewMode {
                     appContext.tabManager.getActiveContext()?.setNote(note.noteId);
                 }
             },
+            datesSet: (e) => this.#onDatesSet(e),
             headerToolbar: {
                 start: "title",
-                end: "timeGridWeek,dayGridMonth,multiMonthYear,listMonth today prev,next"
+                end: `${CALENDAR_VIEWS.join(",")} today prev,next`
             }
         });
         calendar.render();
@@ -202,6 +220,24 @@ export default class CalendarView extends ViewMode {
             default:
                 return undefined;
         }
+    }
+
+    #onDatesSet(e: DatesSetArg) {
+        const currentView = e.view.type;
+        if (currentView === this.lastView) {
+            return;
+        }
+
+        if (!this.debouncedSaveView) {
+            this.debouncedSaveView = debounce(() => {
+                if (this.lastView) {
+                    attributes.setLabel(this.parentNote.noteId, "calendar:view", this.lastView);
+                }
+            }, 1_000);
+        }
+
+        this.debouncedSaveView();
+        this.lastView = currentView;
     }
 
     async #onCalendarSelection(e: DateSelectArg) {
@@ -310,7 +346,7 @@ export default class CalendarView extends ViewMode {
         }
 
         // Refresh calendar on attribute change.
-        if (loadResults.getAttributeRows().some((attribute) => attribute.noteId === this.parentNote.noteId && attribute.name?.startsWith("calendar:"))) {
+        if (loadResults.getAttributeRows().some((attribute) => attribute.noteId === this.parentNote.noteId && attribute.name?.startsWith("calendar:") && attribute.name !== "calendar:view")) {
             return true;
         }
 
