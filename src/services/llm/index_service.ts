@@ -70,10 +70,10 @@ class IndexService {
             const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
 
             // Setup automatic indexing if enabled and this instance should process embeddings
-            if (await options.getOptionBool('embeddingAutoUpdate') && shouldProcessEmbeddings) {
+            if (await options.getOptionBool('embeddingAutoUpdateEnabled') && shouldProcessEmbeddings) {
                 this.setupAutomaticIndexing();
                 log.info(`Index service: Automatic indexing enabled, processing embeddings ${isSyncServer ? 'as sync server' : 'as client'}`);
-            } else if (await options.getOptionBool('embeddingAutoUpdate')) {
+            } else if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {
                 log.info("Index service: Automatic indexing enabled, but this instance is not configured to process embeddings");
             }
 
@@ -179,7 +179,7 @@ class IndexService {
             const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
 
             // Update automatic indexing setting
-            const autoIndexing = await options.getOptionBool('embeddingAutoUpdate');
+            const autoIndexing = await options.getOptionBool('embeddingAutoUpdateEnabled');
             if (autoIndexing && shouldProcessEmbeddings && !this.automaticIndexingInterval) {
                 this.setupAutomaticIndexing();
                 log.info(`Index service: Automatic indexing enabled, processing embeddings ${isSyncServer ? 'as sync server' : 'as client'}`);

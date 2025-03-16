@@ -95,7 +95,6 @@ const ALLOWED_OPTIONS = new Set([
     "aiTemperature",
     "aiSystemPrompt",
     // Embedding options
-    "embeddingAutoUpdate",
     "embeddingAutoUpdateEnabled",
     "embeddingBatchSize",
     "embeddingUpdateInterval",

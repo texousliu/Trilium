@@ -67,7 +67,6 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     embeddingUpdateInterval: number;
     embeddingBatchSize: number;
     embeddingDefaultDimension: number;
-    embeddingAutoUpdate: boolean;
     embeddingsDefaultProvider: string;
     enableAutomaticIndexing: boolean;
     embeddingSimilarityThreshold: string;
