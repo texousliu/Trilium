@@ -171,10 +171,10 @@ const defaultOptions: DefaultOption[] = [
     // AI Options
     { name: "aiEnabled", value: "false", isSynced: true },
     { name: "openaiApiKey", value: "", isSynced: false },
-    { name: "openaiDefaultModel", value: "gpt-3.5-turbo", isSynced: true },
+    { name: "openaiDefaultModel", value: "gpt-4o", isSynced: true },
     { name: "openaiBaseUrl", value: "https://api.openai.com/v1", isSynced: true },
     { name: "anthropicApiKey", value: "", isSynced: false },
-    { name: "anthropicDefaultModel", value: "claude-3-haiku-20240307", isSynced: true },
+    { name: "anthropicDefaultModel", value: "claude-3-opus-20240229", isSynced: true },
     { name: "anthropicBaseUrl", value: "https://api.anthropic.com/v1", isSynced: true },
     { name: "ollamaEnabled", value: "false", isSynced: true },
     { name: "ollamaDefaultModel", value: "llama3", isSynced: true },
@@ -187,6 +187,13 @@ const defaultOptions: DefaultOption[] = [
     { name: "aiSystemPrompt", value: "", isSynced: true },
     { name: "aiProviderPrecedence", value: "openai,anthropic,ollama", isSynced: true },
     { name: "embeddingsDefaultProvider", value: "openai", isSynced: true },
+    { name: "enableAutomaticIndexing", value: "true", isSynced: true },
+    { name: "embeddingSimilarityThreshold", value: "0.65", isSynced: true },
+    { name: "maxNotesPerLlmQuery", value: "10", isSynced: true },
+    { name: "embeddingBatchSize", value: "10", isSynced: true },
+    { name: "embeddingUpdateInterval", value: "5000", isSynced: true },
+    { name: "embeddingDefaultDimension", value: "1536", isSynced: true },
+    { name: "embeddingGenerationLocation", value: "client", isSynced: true },
 ];
 
 /**

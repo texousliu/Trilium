@@ -19,9 +19,9 @@ export async function queueNoteForEmbedding(noteId: string, operation = 'UPDATE'
 
     // Check if note is already in queue and whether it's marked as permanently failed
     const queueInfo = await sql.getRow(
-        "SELECT 1 as exists, failed FROM embedding_queue WHERE noteId = ?",
+        "SELECT 1 as exists_flag, failed FROM embedding_queue WHERE noteId = ?",
         [noteId]
-    ) as {exists: number, failed: number} | null;
+    ) as {exists_flag: number, failed: number} | null;
 
     if (queueInfo) {
         // Only update if not permanently failed
