@@ -30,10 +30,17 @@ const TPL = `
 
     .calendar-container {
         height: 100%;
+        --fc-border-color: var(--main-border-color);
+        --fc-neutral-bg-color: var(--launcher-pane-background-color);
+        --fc-list-event-hover-bg-color: var(--left-pane-item-hover-background);
     }
 
     .calendar-container .fc-toolbar.fc-header-toolbar {
         margin-bottom: 0.5em;
+    }
+
+    .calendar-container .fc-list-sticky .fc-list-day > * {
+        z-index: 50;
     }
 
     body.desktop:not(.zen) .calendar-container .fc-toolbar.fc-header-toolbar {
@@ -103,6 +110,7 @@ export default class CalendarView extends ViewMode {
         const plugins: PluginDef[] = [];
         plugins.push((await import("@fullcalendar/daygrid")).default);
         plugins.push((await import("@fullcalendar/timegrid")).default);
+        plugins.push((await import("@fullcalendar/list")).default);
         if (isEditable || this.isCalendarRoot) {
             plugins.push((await import("@fullcalendar/interaction")).default);
         }
@@ -162,7 +170,7 @@ export default class CalendarView extends ViewMode {
             },
             headerToolbar: {
                 start: "title",
-                end: "dayGridMonth,timeGridWeek today prev,next"
+                end: "dayGridMonth,timeGridWeek,listMonth today prev,next"
             }
         });
         calendar.render();
