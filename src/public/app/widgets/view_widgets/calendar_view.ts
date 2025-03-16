@@ -127,6 +127,7 @@ export default class CalendarView extends ViewMode {
             weekNumbers: this.parentNote.hasAttribute("label", "calendar:weekNumbers"),
             locale: await CalendarView.#getLocale(),
             height: "100%",
+            nowIndicator: true,
             eventContent: (e) => {
                 let html = "";
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
