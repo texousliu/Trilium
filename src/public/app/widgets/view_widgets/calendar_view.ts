@@ -384,15 +384,15 @@ export default class CalendarView extends ViewMode {
         }
 
         for (const title of titles) {
+            if (endTime && !endDate) {
+                endDate = startDate;
+            }
+
             startDate = (startTime ? `${startDate}T${startTime}:00` : startDate);
-            if (!endDate) {
-                if (!endTime) {
-                    endDate = startDate;
-                } else {
-                    const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
-                    if (endDateOffset) {
-                        endDate = CalendarView.#formatDateToLocalISO(endDateOffset);
-                    }
+            if (!endDate && !startTime) {
+                const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
+                if (endDateOffset) {
+                    endDate = CalendarView.#formatDateToLocalISO(endDateOffset);
                 }
             }
 

@@ -169,7 +169,7 @@ describe("Promoted attributes", () => {
         const events = await CalendarView.buildEvents(noteIds);
 
         expect(events).toHaveLength(2);
-        expect(events[0]).toMatchObject({ title: "Note 1", start: "2025-05-05T13:30:00", end: "2025-05-05T13:30:00" });
+        expect(events[0]).toMatchObject({ title: "Note 1", start: "2025-05-05T13:30:00" });
         expect(events[1]).toMatchObject({ title: "Note 2", start: "2025-05-07T13:36:00", end: "2025-05-08" });
     });
 
