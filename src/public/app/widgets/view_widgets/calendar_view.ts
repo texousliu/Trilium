@@ -30,6 +30,7 @@ const TPL = `
 
     .calendar-container {
         height: 100%;
+        --fc-page-bg-color: var(--main-background-color);
         --fc-border-color: var(--main-border-color);
         --fc-neutral-bg-color: var(--launcher-pane-background-color);
         --fc-list-event-hover-bg-color: var(--left-pane-item-hover-background);
@@ -111,6 +112,7 @@ export default class CalendarView extends ViewMode {
         plugins.push((await import("@fullcalendar/daygrid")).default);
         plugins.push((await import("@fullcalendar/timegrid")).default);
         plugins.push((await import("@fullcalendar/list")).default);
+        plugins.push((await import("@fullcalendar/multimonth")).default);
         if (isEditable || this.isCalendarRoot) {
             plugins.push((await import("@fullcalendar/interaction")).default);
         }
@@ -170,7 +172,7 @@ export default class CalendarView extends ViewMode {
             },
             headerToolbar: {
                 start: "title",
-                end: "dayGridMonth,timeGridWeek,listMonth today prev,next"
+                end: "timeGridWeek,dayGridMonth,multiMonthYear,listMonth today prev,next"
             }
         });
         calendar.render();
