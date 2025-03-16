@@ -41,6 +41,37 @@ export const LLM_CONSTANTS = {
         }
     },
 
+    // Model-specific embedding dimensions for Ollama models
+    OLLAMA_MODEL_DIMENSIONS: {
+        "llama3": 4096,
+        "llama3.1": 4096,
+        "mistral": 4096,
+        "nomic": 768,
+        "mxbai": 1024,
+        "nomic-embed-text": 768,
+        "mxbai-embed-large": 1024,
+        "default": 384
+    },
+
+    // Model-specific context windows for Ollama models
+    OLLAMA_MODEL_CONTEXT_WINDOWS: {
+        "llama3": 8192,
+        "mistral": 8192,
+        "nomic": 32768,
+        "mxbai": 32768,
+        "nomic-embed-text": 32768,
+        "mxbai-embed-large": 32768,
+        "default": 4096
+    },
+
+    // Batch size configuration
+    BATCH_SIZE: {
+        OPENAI: 10,     // OpenAI can handle larger batches efficiently
+        ANTHROPIC: 5,   // More conservative for Anthropic
+        OLLAMA: 1,      // Ollama processes one at a time
+        DEFAULT: 5      // Conservative default
+    },
+
     // Chunking parameters
     CHUNKING: {
         DEFAULT_SIZE: 1500,

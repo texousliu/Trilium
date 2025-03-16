@@ -37,6 +37,14 @@ export interface NoteEmbeddingContext {
 }
 
 /**
+ * Information about an embedding model's capabilities
+ */
+export interface EmbeddingModelInfo {
+    dimension: number;
+    contextWindow: number;
+}
+
+/**
  * Configuration for how embeddings should be generated
  */
 export interface EmbeddingConfig {
@@ -46,6 +54,8 @@ export interface EmbeddingConfig {
     normalize?: boolean;
     batchSize?: number;
     contextWindowSize?: number;
+    apiKey?: string;
+    baseUrl?: string;
 }
 
 /**
