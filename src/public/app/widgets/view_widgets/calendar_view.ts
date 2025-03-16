@@ -472,7 +472,6 @@ export default class CalendarView extends ViewMode {
 
                     for (const targetNote of notesFromRelation) {
                         const targetCustomTitleValue = targetNote.getAttributeValue("label", "calendar:title");
-                        console.log("Parse custom title for ", targetNote.noteId, targetNote.getAttributes(), targetNote.getOwnedAttributes());
                         const targetTitles = await CalendarView.#parseCustomTitle(targetCustomTitleValue, targetNote, false);
                         titles.push(targetTitles.flat());
                     }
