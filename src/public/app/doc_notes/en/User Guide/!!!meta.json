@@ -4245,7 +4245,7 @@
 							"title": "Text",
 							"notePosition": 10,
 							"prefix": null,
-							"isExpanded": false,
+							"isExpanded": true,
 							"type": "text",
 							"mime": "text/markdown",
 							"attributes": [
@@ -4437,7 +4437,7 @@
 											"name": "iconClass",
 											"value": "bx bx-align-right",
 											"isInheritable": false,
-											"position": 20
+											"position": 10
 										}
 									],
 									"format": "html",
@@ -4474,6 +4474,14 @@
 											"mime": "image/png",
 											"position": 10,
 											"dataFileName": "3_Content language & Right-t.png"
+										},
+										{
+											"attachmentId": "xIGmhxc0vBlC",
+											"title": "image.png",
+											"role": "image",
+											"mime": "image/jpg",
+											"position": 10,
+											"dataFileName": "4_Content language & Right-t.png"
 										}
 									]
 								},
