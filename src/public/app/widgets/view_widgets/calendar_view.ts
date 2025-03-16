@@ -3,7 +3,6 @@ import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import type FNote from "../../entities/fnote.js";
 import server from "../../services/server.js";
-import ws from "../../services/ws.js";
 import { t } from "../../services/i18n.js";
 import options from "../../services/options.js";
 import dialogService from "../../services/dialog.js";
@@ -102,6 +101,7 @@ export default class CalendarView extends ViewMode {
         const { Calendar } = await import("@fullcalendar/core");
         const plugins: PluginDef[] = [];
         plugins.push((await import("@fullcalendar/daygrid")).default);
+        plugins.push((await import("@fullcalendar/timegrid")).default);
         if (isEditable || this.isCalendarRoot) {
             plugins.push((await import("@fullcalendar/interaction")).default);
         }
@@ -115,7 +115,7 @@ export default class CalendarView extends ViewMode {
 
         const calendar = new Calendar(this.$calendarContainer[0], {
             plugins,
-            initialView: "dayGridMonth",
+            initialView: "timeGridWeek",
             events: eventBuilder,
             editable: isEditable,
             selectable: isEditable,

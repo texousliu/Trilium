@@ -173,6 +173,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "7.7.0",
     "@electron/rebuild": "3.7.1",
     "@eslint/js": "9.22.0",
+    "@fullcalendar/timegrid": "6.1.15",
     "@playwright/test": "1.51.0",
     "@popperjs/core": "2.11.8",
     "@types/archiver": "6.0.3",
