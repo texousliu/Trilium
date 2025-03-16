@@ -102,4 +102,10 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("imports images with same outcome as if inserted from CKEditor", () => {
+        const input = "![](api/attachments/YbkR3wt2zMcA/image/image)";
+        const expected = `<p><img src="api/attachments/YbkR3wt2zMcA/image/image"></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });
