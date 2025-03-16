@@ -1,7 +1,7 @@
 "use strict";
 
 import BAttribute from "../../becca/entities/battribute.js";
-import { removeTextFileExtension, newEntityId, getNoteTitle, processStringOrBuffer } from "../../services/utils.js";
+import { removeTextFileExtension, newEntityId, getNoteTitle, processStringOrBuffer, unescapeHtml } from "../../services/utils.js";
 import log from "../../services/log.js";
 import noteService from "../../services/notes.js";
 import attributeService from "../../services/attributes.js";
@@ -109,11 +109,12 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
 
         let parent: NoteMeta | undefined = undefined;
 
-        for (const segment of pathSegments) {
+        for (let segment of pathSegments) {
             if (!cursor?.children?.length) {
                 return {};
             }
 
+            segment = unescapeHtml(segment);
             parent = cursor;
             if (parent.children) {
                 cursor = parent.children.find((file) => file.dataFileName === segment || file.dirFileName === segment);
