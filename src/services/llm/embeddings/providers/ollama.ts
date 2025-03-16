@@ -173,46 +173,77 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
      * Generate embeddings for a single text
      */
     async generateEmbeddings(text: string): Promise<Float32Array> {
-        try {
-            if (!text.trim()) {
-                return new Float32Array(this.config.dimension);
-            }
-
-            const modelName = this.config.model || "llama3";
-
-            // Ensure we have model info
-            const modelInfo = await this.getModelInfo(modelName);
-
-            // Trim text if it might exceed context window (rough character estimate)
-            // This is a simplistic approach - ideally we'd count tokens properly
-            const charLimit = modelInfo.contextWindow * 4; // Rough estimate: avg 4 chars per token
-            const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
-
-            const response = await axios.post(
-                `${this.baseUrl}/api/embeddings`,
-                {
-                    model: modelName,
-                    prompt: trimmedText,
-                    format: "json"
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    timeout: 30000 // Longer timeout for larger texts
-                }
-            );
-
-            if (response.data && Array.isArray(response.data.embedding)) {
-                return new Float32Array(response.data.embedding);
-            } else {
-                throw new Error("Unexpected response structure from Ollama API");
-            }
-        } catch (error: any) {
-            const errorMessage = error.response?.data?.error?.message || error.message || "Unknown error";
-            log.error(`Ollama embedding error: ${errorMessage}`);
-            throw new Error(`Ollama embedding error: ${errorMessage}`);
+        // Handle empty text
+        if (!text.trim()) {
+            return new Float32Array(this.config.dimension);
         }
+
+        // Configuration for retries
+        const maxRetries = 3;
+        let retryCount = 0;
+        let lastError: any = null;
+
+        while (retryCount <= maxRetries) {
+            try {
+                const modelName = this.config.model || "llama3";
+
+                // Ensure we have model info
+                const modelInfo = await this.getModelInfo(modelName);
+
+                // Trim text if it might exceed context window (rough character estimate)
+                // This is a simplistic approach - ideally we'd count tokens properly
+                const charLimit = modelInfo.contextWindow * 4; // Rough estimate: avg 4 chars per token
+                const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
+
+                const response = await axios.post(
+                    `${this.baseUrl}/api/embeddings`,
+                    {
+                        model: modelName,
+                        prompt: trimmedText,
+                        format: "json"
+                    },
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        timeout: 60000 // Increased timeout for larger texts (60 seconds)
+                    }
+                );
+
+                if (response.data && Array.isArray(response.data.embedding)) {
+                    // Success! Return the embedding
+                    return new Float32Array(response.data.embedding);
+                } else {
+                    throw new Error("Unexpected response structure from Ollama API");
+                }
+            } catch (error: any) {
+                lastError = error;
+                // Only retry on timeout or connection errors
+                const errorMessage = error.response?.data?.error?.message || error.message || "Unknown error";
+                const isTimeoutError = errorMessage.includes('timeout') ||
+                                     errorMessage.includes('socket hang up') ||
+                                     errorMessage.includes('ECONNREFUSED') ||
+                                     errorMessage.includes('ECONNRESET');
+
+                if (isTimeoutError && retryCount < maxRetries) {
+                    // Exponential backoff with jitter
+                    const delay = Math.min(Math.pow(2, retryCount) * 1000 + Math.random() * 1000, 15000);
+                    log.info(`Ollama embedding timeout, retrying in ${Math.round(delay/1000)}s (attempt ${retryCount + 1}/${maxRetries})`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    retryCount++;
+                } else {
+                    // Non-retryable error or max retries exceeded
+                    const errorMessage = error.response?.data?.error?.message || error.message || "Unknown error";
+                    log.error(`Ollama embedding error: ${errorMessage}`);
+                    throw new Error(`Ollama embedding error: ${errorMessage}`);
+                }
+            }
+        }
+
+        // If we get here, we've exceeded our retry limit
+        const errorMessage = lastError.response?.data?.error?.message || lastError.message || "Unknown error";
+        log.error(`Ollama embedding error after ${maxRetries} retries: ${errorMessage}`);
+        throw new Error(`Ollama embedding error after ${maxRetries} retries: ${errorMessage}`);
     }
 
     /**

@@ -34,7 +34,8 @@ const MAX_TOTAL_PROCESSING_TIME = 5 * 60 * 1000; // 5 minutes
 const MAX_CHUNK_RETRY_ATTEMPTS = 2;
 
 // Maximum time per chunk processing (to prevent individual chunks from hanging)
-const MAX_CHUNK_PROCESSING_TIME = 60 * 1000; // 1 minute
+const DEFAULT_MAX_CHUNK_PROCESSING_TIME = 60 * 1000; // 1 minute
+const OLLAMA_MAX_CHUNK_PROCESSING_TIME = 120 * 1000; // 2 minutes
 
 /**
  * Categorize an error as temporary or permanent based on its message
@@ -166,6 +167,11 @@ export async function processNoteWithChunking(
 
         log.info(`Processing ${chunks.length} chunks for note ${noteId} (${note.title})`);
 
+        // Get the current time to prevent duplicate processing from timeouts
+        const processingStartTime = Date.now();
+        const processingId = `${noteId}-${processingStartTime}`;
+        log.info(`Starting processing run ${processingId}`);
+
         // Process each chunk with a delay based on provider to avoid rate limits
         for (let i = 0; i < chunks.length; i++) {
             // Check if we've exceeded the overall time limit
@@ -194,7 +200,7 @@ export async function processNoteWithChunking(
                     const embedding = await processChunkWithTimeout(
                         provider,
                         chunk,
-                        MAX_CHUNK_PROCESSING_TIME
+                        provider.name === 'ollama' ? OLLAMA_MAX_CHUNK_PROCESSING_TIME : DEFAULT_MAX_CHUNK_PROCESSING_TIME
                     );
 
                     // Store with chunk information in a unique ID format
@@ -212,7 +218,7 @@ export async function processNoteWithChunking(
                 // Small delay between chunks to avoid rate limits - longer for Ollama
                 if (i < chunks.length - 1) {
                     await new Promise(resolve => setTimeout(resolve,
-                        provider.name === 'ollama' ? 500 : 100));
+                        provider.name === 'ollama' ? 2000 : 100));
                 }
             } catch (error: any) {
                 const errorMessage = error.message || 'Unknown error';
@@ -274,7 +280,7 @@ export async function processNoteWithChunking(
                         const embedding = await processChunkWithTimeout(
                             provider,
                             item.chunk,
-                            MAX_CHUNK_PROCESSING_TIME
+                            provider.name === 'ollama' ? OLLAMA_MAX_CHUNK_PROCESSING_TIME : DEFAULT_MAX_CHUNK_PROCESSING_TIME
                         );
 
                         // Store with unique ID that indicates it was a retry
@@ -335,7 +341,7 @@ export async function processNoteWithChunking(
 
         // Log information about the processed chunks
         if (successfulChunks > 0) {
-            log.info(`Generated ${successfulChunks} chunk embeddings for note ${noteId} (${note.title})`);
+            log.info(`[${processingId}] Generated ${successfulChunks} chunk embeddings for note ${noteId} (${note.title})`);
         }
 
         if (failedChunks > 0) {
@@ -344,7 +350,7 @@ export async function processNoteWithChunking(
             const temporaryErrors = failedChunkDetails.filter(d => d.category === 'temporary').length;
             const unknownErrors = failedChunkDetails.filter(d => d.category === 'unknown').length;
 
-            log.info(`Failed to generate ${failedChunks} chunk embeddings for note ${noteId} (${note.title}). ` +
+            log.info(`[${processingId}] Failed to generate ${failedChunks} chunk embeddings for note ${noteId} (${note.title}). ` +
                     `Permanent: ${permanentErrors}, Temporary: ${temporaryErrors}, Unknown: ${unknownErrors}`);
         }
 
@@ -394,7 +400,7 @@ export async function processNoteWithChunking(
 
         // Track total processing time
         const totalTime = Date.now() - startTime;
-        log.info(`Total processing time for note ${noteId}: ${totalTime}ms`);
+        log.info(`[${processingId}] Total processing time for note ${noteId}: ${totalTime}ms`);
 
     } catch (error: any) {
         log.error(`Error in chunked embedding process for note ${noteId}: ${error.message || 'Unknown error'}`);

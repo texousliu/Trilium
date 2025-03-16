@@ -10,6 +10,9 @@ import type { QueueItem } from "./types.js";
 import { getChunkingOperations } from "./chunking/chunking_interface.js";
 import indexService from '../index_service.js';
 
+// Track which notes are currently being processed
+const notesInProcess = new Set<string>();
+
 /**
  * Queues a note for embedding update
  */
@@ -19,11 +22,17 @@ export async function queueNoteForEmbedding(noteId: string, operation = 'UPDATE'
 
     // Check if note is already in queue and whether it's marked as permanently failed
     const queueInfo = await sql.getRow(
-        "SELECT 1 as exists_flag, failed FROM embedding_queue WHERE noteId = ?",
+        "SELECT 1 as exists_flag, failed, isProcessing FROM embedding_queue WHERE noteId = ?",
         [noteId]
-    ) as {exists_flag: number, failed: number} | null;
+    ) as {exists_flag: number, failed: number, isProcessing: number} | null;
 
     if (queueInfo) {
+        // If the note is currently being processed, don't change its status
+        if (queueInfo.isProcessing === 1) {
+            log.info(`Note ${noteId} is currently being processed, skipping queue update`);
+            return;
+        }
+
         // Only update if not permanently failed
         if (queueInfo.failed !== 1) {
             // Update existing queue entry but preserve the failed status
@@ -41,8 +50,8 @@ export async function queueNoteForEmbedding(noteId: string, operation = 'UPDATE'
         // Add new queue entry
         await sql.execute(`
             INSERT INTO embedding_queue
-            (noteId, operation, dateQueued, utcDateQueued, failed)
-            VALUES (?, ?, ?, ?, 0)`,
+            (noteId, operation, dateQueued, utcDateQueued, failed, isProcessing)
+            VALUES (?, ?, ?, ?, 0, 0)`,
             [noteId, operation, now, utcNow]
         );
     }
@@ -180,11 +189,11 @@ export async function processEmbeddingQueue() {
         return;
     }
 
-    // Get notes from queue (excluding failed ones)
+    // Get notes from queue (excluding failed ones and those being processed)
     const notes = await sql.getRows(`
         SELECT noteId, operation, attempts
         FROM embedding_queue
-        WHERE failed = 0
+        WHERE failed = 0 AND isProcessing = 0
         ORDER BY priority DESC, utcDateQueued ASC
         LIMIT ?`,
         [batchSize]
@@ -198,30 +207,47 @@ export async function processEmbeddingQueue() {
     let processedCount = 0;
 
     for (const note of notes) {
+        const noteData = note as unknown as QueueItem;
+        const noteId = noteData.noteId;
+
+        // Double-check that this note isn't already being processed
+        if (notesInProcess.has(noteId)) {
+            log.info(`Note ${noteId} is already being processed by another thread, skipping`);
+            continue;
+        }
+
         try {
-            const noteData = note as unknown as QueueItem;
+            // Mark the note as being processed
+            notesInProcess.add(noteId);
+            await sql.execute(
+                "UPDATE embedding_queue SET isProcessing = 1 WHERE noteId = ?",
+                [noteId]
+            );
 
             // Skip if note no longer exists
-            if (!becca.getNote(noteData.noteId)) {
+            if (!becca.getNote(noteId)) {
                 await sql.execute(
                     "DELETE FROM embedding_queue WHERE noteId = ?",
-                    [noteData.noteId]
+                    [noteId]
                 );
-                await deleteNoteEmbeddings(noteData.noteId);
+                await deleteNoteEmbeddings(noteId);
                 continue;
             }
 
             if (noteData.operation === 'DELETE') {
-                await deleteNoteEmbeddings(noteData.noteId);
+                await deleteNoteEmbeddings(noteId);
                 await sql.execute(
                     "DELETE FROM embedding_queue WHERE noteId = ?",
-                    [noteData.noteId]
+                    [noteId]
                 );
                 continue;
             }
 
+            // Log that we're starting to process this note
+            log.info(`Starting embedding generation for note ${noteId}`);
+
             // Get note context for embedding
-            const context = await getNoteEmbeddingContext(noteData.noteId);
+            const context = await getNoteEmbeddingContext(noteId);
 
             // Check if we should use chunking for large content
             const useChunking = context.content.length > 5000;
@@ -236,7 +262,7 @@ export async function processEmbeddingQueue() {
                     if (useChunking) {
                         // Process large notes using chunking
                         const chunkingOps = await getChunkingOperations();
-                        await chunkingOps.processNoteWithChunking(noteData.noteId, provider, context);
+                        await chunkingOps.processNoteWithChunking(noteId, provider, context);
                         allProvidersFailed = false;
                     } else {
                         // Standard approach: Generate a single embedding for the whole note
@@ -246,7 +272,7 @@ export async function processEmbeddingQueue() {
                         const config = provider.getConfig();
                         await import('./storage.js').then(storage => {
                             return storage.storeNoteEmbedding(
-                                noteData.noteId,
+                                noteId,
                                 provider.name,
                                 config.model,
                                 embedding
@@ -259,7 +285,7 @@ export async function processEmbeddingQueue() {
                 } catch (providerError: any) {
                     // This provider failed
                     allProvidersSucceeded = false;
-                    log.error(`Error generating embedding with provider ${provider.name} for note ${noteData.noteId}: ${providerError.message || 'Unknown error'}`);
+                    log.error(`Error generating embedding with provider ${provider.name} for note ${noteId}: ${providerError.message || 'Unknown error'}`);
                 }
             }
 
@@ -267,8 +293,10 @@ export async function processEmbeddingQueue() {
                 // At least one provider succeeded, remove from queue
                 await sql.execute(
                     "DELETE FROM embedding_queue WHERE noteId = ?",
-                    [noteData.noteId]
+                    [noteId]
                 );
+                log.info(`Successfully completed embedding processing for note ${noteId}`);
+
                 // Count as successfully processed
                 processedCount++;
             } else {
@@ -277,49 +305,52 @@ export async function processEmbeddingQueue() {
                     UPDATE embedding_queue
                     SET attempts = attempts + 1,
                         lastAttempt = ?,
-                        error = ?
+                        error = ?,
+                        isProcessing = 0
                     WHERE noteId = ?`,
-                    [dateUtils.utcNowDateTime(), "All providers failed to generate embeddings", noteData.noteId]
+                    [dateUtils.utcNowDateTime(), "All providers failed to generate embeddings", noteId]
                 );
 
                 // Mark as permanently failed if too many attempts
                 if (noteData.attempts + 1 >= 3) {
-                    log.error(`Marked note ${noteData.noteId} as permanently failed after multiple embedding attempts`);
+                    log.error(`Marked note ${noteId} as permanently failed after multiple embedding attempts`);
 
                     // Set the failed flag but keep the actual attempts count
                     await sql.execute(`
                         UPDATE embedding_queue
                         SET failed = 1
                         WHERE noteId = ?
-                    `, [noteData.noteId]);
+                    `, [noteId]);
                 }
             }
         } catch (error: any) {
-            const noteData = note as unknown as QueueItem;
-
             // Update attempt count and log error
             await sql.execute(`
                 UPDATE embedding_queue
                 SET attempts = attempts + 1,
                     lastAttempt = ?,
-                    error = ?
+                    error = ?,
+                    isProcessing = 0
                 WHERE noteId = ?`,
-                [dateUtils.utcNowDateTime(), error.message || 'Unknown error', noteData.noteId]
+                [dateUtils.utcNowDateTime(), error.message || 'Unknown error', noteId]
             );
 
-            log.error(`Error processing embedding for note ${noteData.noteId}: ${error.message || 'Unknown error'}`);
+            log.error(`Error processing embedding for note ${noteId}: ${error.message || 'Unknown error'}`);
 
             // Mark as permanently failed if too many attempts
             if (noteData.attempts + 1 >= 3) {
-                log.error(`Marked note ${noteData.noteId} as permanently failed after multiple embedding attempts`);
+                log.error(`Marked note ${noteId} as permanently failed after multiple embedding attempts`);
 
                 // Set the failed flag but keep the actual attempts count
                 await sql.execute(`
                     UPDATE embedding_queue
                     SET failed = 1
                     WHERE noteId = ?
-                `, [noteData.noteId]);
+                `, [noteId]);
             }
+        } finally {
+            // Always clean up the processing status in the in-memory set
+            notesInProcess.delete(noteId);
         }
     }
 

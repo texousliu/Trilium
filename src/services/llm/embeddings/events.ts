@@ -6,6 +6,9 @@ import { processEmbeddingQueue, queueNoteForEmbedding } from "./queue.js";
 import eventService from "../../../services/events.js";
 import becca from "../../../becca/becca.js";
 
+// Add mutex to prevent concurrent processing
+let isProcessingEmbeddings = false;
+
 /**
  * Setup event listeners for embedding-related events
  */
@@ -54,12 +57,23 @@ export async function setupEmbeddingBackgroundProcessing() {
 
     setInterval(async () => {
         try {
+            // Skip if already processing
+            if (isProcessingEmbeddings) {
+                return;
+            }
+
+            // Set mutex
+            isProcessingEmbeddings = true;
+
             // Wrap in cls.init to ensure proper context
             cls.init(async () => {
                 await processEmbeddingQueue();
             });
         } catch (error: any) {
             log.error(`Error in background embedding processing: ${error.message || 'Unknown error'}`);
+        } finally {
+            // Always release the mutex
+            isProcessingEmbeddings = false;
         }
     }, interval);
 }
