@@ -11,6 +11,7 @@ import type { EventData } from "../../components/app_context.js";
 import utils from "../../services/utils.js";
 import date_notes from "../../services/date_notes.js";
 import appContext from "../../components/app_context.js";
+import type { EventImpl } from "@fullcalendar/core/internal";
 
 const TPL = `
 <div class="calendar-view">
@@ -190,24 +191,13 @@ export default class CalendarView extends ViewMode {
 
     async #onCalendarSelection(e: DateSelectArg) {
         // Handle start and end date
-        const startDate = CalendarView.#formatDateToLocalISO(e.start);
+        const { startDate, endDate } = this.#parseStartEndDateFromEvent(e);
         if (!startDate) {
             return;
         }
-        let endDate;
-        if (e.allDay) {
-            endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
-        } else {
-            endDate = CalendarView.#formatDateToLocalISO(e.end);
-        }
 
         // Handle start and end time.
-        let startTime = null;
-        let endTime = null;
-        if (!e.allDay) {
-            startTime = CalendarView.#formatTimeToLocalISO(e.start);
-            endTime = CalendarView.#formatTimeToLocalISO(e.end);
-        }
+        const { startTime, endTime } = this.#parseStartEndTimeFromEvent(e);
 
         // Ask for the title
         const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
@@ -235,10 +225,37 @@ export default class CalendarView extends ViewMode {
         }
     }
 
+    #parseStartEndDateFromEvent(e: DateSelectArg | EventImpl) {
+        const startDate = CalendarView.#formatDateToLocalISO(e.start);
+        if (!startDate) {
+            return { startDate: null, endDate: null };
+        }
+        let endDate;
+        if (e.allDay) {
+            endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
+        } else {
+            endDate = CalendarView.#formatDateToLocalISO(e.end);
+        }
+        return { startDate, endDate };
+    }
+
+    #parseStartEndTimeFromEvent(e: DateSelectArg | EventImpl) {
+        let startTime = null;
+        let endTime = null;
+        if (!e.allDay) {
+            startTime = CalendarView.#formatTimeToLocalISO(e.start);
+            endTime = CalendarView.#formatTimeToLocalISO(e.end);
+        }
+
+        return { startTime, endTime };
+    }
+
     async #onEventMoved(e: EventChangeArg) {
-        const startDate = CalendarView.#formatDateToLocalISO(e.event.start);
-        // Fullcalendar end date is exclusive, not inclusive but we store it the other way around.
-        let endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.event.end, -1));
+        // Handle start and end date
+        let { startDate, endDate } = this.#parseStartEndDateFromEvent(e.event);
+        if (!startDate) {
+            return;
+        }
         const noteId = e.event.extendedProps.noteId;
 
         // Don't store the end date if it's empty.
@@ -254,11 +271,21 @@ export default class CalendarView extends ViewMode {
 
         // Since they can be customized via calendar:startDate=$foo and calendar:endDate=$bar we need to determine the
         // attributes to be effectively updated
-        const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value||"startDate"
-        const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value||"endDate"
+        const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value||"startDate";
+        const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value||"endDate";
 
         attributes.setAttribute(note, "label", startAttribute, startDate);
         attributes.setAttribute(note, "label", endAttribute, endDate);
+
+        // Update start time and end time if needed.
+        if (!e.event.allDay) {
+            const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startTime").shift()?.value||"startTime";
+            const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endTime").shift()?.value||"endTime";
+
+            const { startTime, endTime } = this.#parseStartEndTimeFromEvent(e.event);
+            attributes.setAttribute(note, "label", startAttribute, startTime);
+            attributes.setAttribute(note, "label", endAttribute, endTime);
+        }
     }
 
     onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
