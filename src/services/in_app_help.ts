@@ -25,15 +25,16 @@ export function getHelpHiddenSubtreeData() {
 
 function parseNoteMetaFile(noteMetaFile: NoteMetaFile): HiddenSubtreeItem[] {
     if (!noteMetaFile.files) {
+        console.log("No meta files");
         return [];
     }
 
     const metaRoot = noteMetaFile.files[0];
     const parsedMetaRoot = parseNoteMeta(metaRoot, "/" + (metaRoot.dirFileName ?? ""));
-    return parsedMetaRoot.children ?? [];
+    return parsedMetaRoot?.children ?? [];
 }
 
-export function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeItem {
+export function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSubtreeItem | null {
     let iconClass: string = "bx bx-file";
     const item: HiddenSubtreeItem = {
         id: `_help_${noteMeta.noteId}`,
@@ -62,6 +63,10 @@ export function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSu
                 value: attribute.value
             });
         }
+
+        if (attribute.name === "shareHiddenFromTree") {
+            return null;
+        }
     }
 
     // Handle text notes
@@ -84,7 +89,10 @@ export function parseNoteMeta(noteMeta: NoteMeta, docNameRoot: string): HiddenSu
         const children: HiddenSubtreeItem[] = [];
         for (const childMeta of noteMeta.children) {
             let newDocNameRoot = noteMeta.dirFileName ? `${docNameRoot}/${noteMeta.dirFileName}` : docNameRoot;
-            children.push(parseNoteMeta(childMeta, newDocNameRoot));
+            const item = parseNoteMeta(childMeta, newDocNameRoot);
+            if (item) {
+                children.push(item);
+            }
         }
 
         item.children = children;
