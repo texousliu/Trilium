@@ -28,3 +28,15 @@ INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('enableAuto
 INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('embeddingSimilarityThreshold', '0.65', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
 INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('maxNotesPerLlmQuery', '10', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')); 
 INSERT INTO options (name, value, isSynced, utcDateModified) VALUES ('embeddingBatchSize', '10', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')); 
+
+-- Add default embedding provider options
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingAutoUpdateEnabled', 'true', 1, strftime('%Y-%m-%d %H:%M:%f', 'now'));
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingUpdateInterval', '5000', 1, strftime('%Y-%m-%d %H:%M:%f', 'now')); -- 5 seconds
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingBatchSize', '10', 1, strftime('%Y-%m-%d %H:%M:%f', 'now'));
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingDefaultDimension', '1536', 1, strftime('%Y-%m-%d %H:%M:%f', 'now')); 
+INSERT INTO options (name, value, isSynced, utcDateModified) 
+VALUES ('embeddingGenerationLocation', 'client', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')); 

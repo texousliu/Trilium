@@ -44,15 +44,3 @@ CREATE TABLE IF NOT EXISTS "embedding_providers" (
     "dateModified" TEXT NOT NULL,
     "utcDateModified" TEXT NOT NULL
 );
-
--- Add default embedding provider options
-INSERT INTO options (name, value, isSynced, utcDateModified) 
-VALUES ('embeddingAutoUpdateEnabled', 'true', 1, strftime('%Y-%m-%d %H:%M:%f', 'now'));
-INSERT INTO options (name, value, isSynced, utcDateModified) 
-VALUES ('embeddingUpdateInterval', '5000', 1, strftime('%Y-%m-%d %H:%M:%f', 'now')); -- 5 seconds
-INSERT INTO options (name, value, isSynced, utcDateModified) 
-VALUES ('embeddingBatchSize', '10', 1, strftime('%Y-%m-%d %H:%M:%f', 'now'));
-INSERT INTO options (name, value, isSynced, utcDateModified) 
-VALUES ('embeddingDefaultDimension', '1536', 1, strftime('%Y-%m-%d %H:%M:%f', 'now')); 
-INSERT INTO options (name, value, isSynced, utcDateModified) 
-VALUES ('embeddingGenerationLocation', 'client', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')); 
