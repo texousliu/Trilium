@@ -2800,6 +2800,51 @@
                             "children": [
                                 {
                                     "isClone": false,
+                                    "noteId": "NwBbFdNZ9h7O",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "KSZ04uQ2D1St",
+                                        "iPIMuisry3hd",
+                                        "NwBbFdNZ9h7O"
+                                    ],
+                                    "title": "Admonitions",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-info-circle",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Admonitions.md",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "do36b54XpmIC",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Admonitions_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "hUwfwkRSDeLJ",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "1_Admonitions_image.png"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "isClone": false,
                                     "noteId": "QxEyIjRBizuC",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
@@ -2808,7 +2853,7 @@
                                         "QxEyIjRBizuC"
                                     ],
                                     "title": "Code blocks",
-                                    "notePosition": 10,
+                                    "notePosition": 20,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -2889,7 +2934,7 @@
                                         "veGu4faJErEM"
                                     ],
                                     "title": "Content language & Right-to-left support",
-                                    "notePosition": 20,
+                                    "notePosition": 30,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -2926,7 +2971,7 @@
                                         "UYuUB1ZekNQU"
                                     ],
                                     "title": "Formatting",
-                                    "notePosition": 30,
+                                    "notePosition": 40,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -2979,7 +3024,7 @@
                                         "nRhnJkTT8cPs"
                                     ],
                                     "title": "Formatting toolbar",
-                                    "notePosition": 40,
+                                    "notePosition": 50,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -3054,7 +3099,7 @@
                                         "mT0HEkOsz6i1"
                                     ],
                                     "title": "Images",
-                                    "notePosition": 50,
+                                    "notePosition": 60,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -3192,7 +3237,7 @@
                                         "QEAPj01N5f7w"
                                     ],
                                     "title": "Links",
-                                    "notePosition": 60,
+                                    "notePosition": 70,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -3248,7 +3293,7 @@
                                         "S6Xx8QIWTV66"
                                     ],
                                     "title": "Lists",
-                                    "notePosition": 70,
+                                    "notePosition": 80,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
