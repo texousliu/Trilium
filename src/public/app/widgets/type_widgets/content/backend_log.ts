@@ -21,7 +21,6 @@ const TPL = `<div style="height: 100%; display: flex; flex-direction: column;">
 
 export default class BackendLogWidget extends AbstractCodeTypeWidget {
 
-    private $editor!: JQuery<HTMLElement>;
     private $refreshBackendLog!: JQuery<HTMLElement>;
 
     doRender() {
@@ -45,7 +44,7 @@ export default class BackendLogWidget extends AbstractCodeTypeWidget {
     }
 
     async load() {
-        const content = await server.get("backend-log");
+        const content = await server.get<string>("backend-log");
         await this.initialized;
 
         this._update(

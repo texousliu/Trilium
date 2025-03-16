@@ -184,6 +184,48 @@ declare global {
         }
     };
 
+    var CodeMirror: {
+        (el: HTMLElement, opts: {
+            value: string;
+            viewportMargin: number;
+            indentUnit: number;
+            matchBrackets: boolean;
+            matchTags: { bothTags: boolean };
+            highlightSelectionMatches: {
+                showToken: boolean;
+                annotateScrollbar: boolean;
+            };
+            lineNumbers: boolean;
+            lineWrapping: boolean;
+        }): CodeMirrorInstance;
+        keyMap: {
+            default: Record<string, string>;
+        };
+        modeURL: string;
+        modeInfo: ModeInfo[];
+        findModeByMIME(mime: string): ModeInfo;
+        autoLoadMode(instance: CodeMirrorInstance, mode: string)
+    }
+
+    interface ModeInfo {
+        name: string;
+        mode: string;
+        mime: string;
+        mimes: string[];
+    }
+
+    interface CodeMirrorInstance {
+        getValue(): string;
+        setValue(val: string);
+        clearHistory();
+        setOption(name: string, value: string);
+        refresh();
+        focus();
+        setCursor(line: number, col: number);
+        lineCount(): number;
+        on(event: string, callback: () => void);
+    }
+
     var katex: {
         renderToString(text: string, opts: {
             throwOnError: boolean

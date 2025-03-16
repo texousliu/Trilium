@@ -42,10 +42,21 @@ const TPL = `
 
 const MAX_DISPLAYED_NOTES = 15;
 
+// TODO: Deduplicate with server.
+interface QuickSearchResponse {
+    searchResultNoteIds: string[];
+    error: string;
+}
+
 export default class QuickSearchWidget extends BasicWidget {
+
+    private dropdown!: bootstrap.Dropdown;
+    private $searchString!: JQuery<HTMLElement>;
+    private $dropdownMenu!: JQuery<HTMLElement>;
+
     doRender() {
         this.$widget = $(TPL);
-        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']"));
+        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0]);
 
         this.$searchString = this.$widget.find(".search-string");
         this.$dropdownMenu = this.$widget.find(".dropdown-menu");
@@ -88,7 +99,7 @@ export default class QuickSearchWidget extends BasicWidget {
     }
 
     async search() {
-        const searchString = this.$searchString.val().trim();
+        const searchString = String(this.$searchString.val())?.trim();
 
         if (!searchString) {
             this.dropdown.hide();
@@ -98,10 +109,10 @@ export default class QuickSearchWidget extends BasicWidget {
         this.$dropdownMenu.empty();
         this.$dropdownMenu.append(`<span class="dropdown-item disabled"><span class="bx bx-loader bx-spin"></span>${t("quick-search.searching")}</span>`);
 
-        const { searchResultNoteIds, error } = await server.get(`quick-search/${encodeURIComponent(searchString)}`);
+        const { searchResultNoteIds, error } = await server.get<QuickSearchResponse>(`quick-search/${encodeURIComponent(searchString)}`);
 
         if (error) {
-            let tooltip = new Tooltip(this.$searchString, {
+            let tooltip = new Tooltip(this.$searchString[0], {
                 trigger: "manual",
                 title: `Search error: ${error}`,
                 placement: "right"
@@ -164,7 +175,7 @@ export default class QuickSearchWidget extends BasicWidget {
         this.dropdown.hide();
 
         await appContext.triggerCommand("searchNotes", {
-            searchString: this.$searchString.val()
+            searchString: String(this.$searchString.val())
         });
     }
 

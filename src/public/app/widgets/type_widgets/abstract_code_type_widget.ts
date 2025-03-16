@@ -1,6 +1,7 @@
 import TypeWidget from "./type_widget.js";
 import libraryLoader from "../../services/library_loader.js";
 import options from "../../services/options.js";
+import type FNote from "../../entities/fnote.js";
 
 /**
  * An abstract {@link TypeWidget} which implements the CodeMirror editor, meant to be used as a parent for
@@ -16,6 +17,10 @@ import options from "../../services/options.js";
  * - Call `this._update(note, content)` in `#doRefresh(note)`.
  */
 export default class AbstractCodeTypeWidget extends TypeWidget {
+
+    protected $editor!: JQuery<HTMLElement>;
+    protected codeEditor!: CodeMirrorInstance;
+
     doRender() {
         this.initialized = this.#initEditor();
     }
@@ -28,8 +33,14 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
         delete CodeMirror.keyMap.default["Alt-Right"];
 
         CodeMirror.modeURL = `${window.glob.assetPath}/node_modules/codemirror/mode/%N/%N.js`;
-        CodeMirror.modeInfo.find((mode) => mode.name === "JavaScript").mimes.push(...["application/javascript;env=frontend", "application/javascript;env=backend"]);
-        CodeMirror.modeInfo.find((mode) => mode.name === "SQLite").mimes = ["text/x-sqlite", "text/x-sqlite;schema=trilium"];
+        const jsMode = CodeMirror.modeInfo.find((mode) => mode.name === "JavaScript");
+        if (jsMode) {
+            jsMode.mimes.push(...["application/javascript;env=frontend", "application/javascript;env=backend"]);
+        }
+        const sqlMode = CodeMirror.modeInfo.find((mode) => mode.name === "SQLite");
+        if (sqlMode) {
+            sqlMode.mimes = ["text/x-sqlite", "text/x-sqlite;schema=trilium"];
+        }
 
         this.codeEditor = CodeMirror(this.$editor[0], {
             value: "",
@@ -73,7 +84,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
      * @param {*} note the note that was changed.
      * @param {*} content the new content of the note.
      */
-    _update(note, content) {
+    _update(note: { mime: string }, content: string) {
         // CodeMirror breaks pretty badly on null, so even though it shouldn't happen (guarded by a consistency check)
         // we provide fallback
         this.codeEditor.setValue(content || "");

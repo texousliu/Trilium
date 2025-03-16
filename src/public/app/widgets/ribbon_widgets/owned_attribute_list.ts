@@ -3,6 +3,7 @@ import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import AttributeDetailWidget from "../attribute_widgets/attribute_detail.js";
 import AttributeEditorWidget from "../attribute_widgets/attribute_editor.js";
 import type { CommandListenerData } from "../../components/app_context.js";
+import type FAttribute from "../../entities/fattribute.js";
 
 const TPL = `
 <div class="attribute-list">
@@ -75,7 +76,8 @@ export default class OwnedAttributeListWidget extends NoteContextAwareWidget {
     }
 
     async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
-        await this.attributeEditorWidget.updateAttributeList(attributes);
+        // TODO: See why we need FAttribute[] and Attribute[]
+        await this.attributeEditorWidget.updateAttributeList(attributes as FAttribute[]);
     }
 
     focus() {

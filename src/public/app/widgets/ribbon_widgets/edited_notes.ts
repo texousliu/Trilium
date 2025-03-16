@@ -4,6 +4,7 @@ import froca from "../../services/froca.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import options from "../../services/options.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
 
 const TPL = `
 <div class="edited-notes-widget">
@@ -15,27 +16,39 @@ const TPL = `
             overflow: auto;
         }
     </style>
-    
+
     <div class="no-edited-notes-found">${t("edited_notes.no_edited_notes_found")}</div>
-    
+
     <div class="edited-notes-list"></div>
 </div>
 `;
 
+// TODO: Deduplicate with server.
+interface EditedNotesResponse {
+    noteId: string;
+    isDeleted: boolean;
+    title: string;
+    notePath: string[];
+}
+
 export default class EditedNotesWidget extends NoteContextAwareWidget {
+
+    private $list!: JQuery<HTMLElement>;
+    private $noneFound!: JQuery<HTMLElement>;
+
     get name() {
         return "editedNotes";
     }
 
     isEnabled() {
-        return super.isEnabled() && this.note.hasOwnedLabel("dateNote");
+        return super.isEnabled() && this.note?.hasOwnedLabel("dateNote");
     }
 
     getTitle() {
         return {
             show: this.isEnabled(),
             // promoted attributes have priority over edited notes
-            activate: (this.note.getPromotedDefinitionAttributes().length === 0 || !options.is("promotedAttributesOpenInRibbon")) && options.is("editedNotesOpenInRibbon"),
+            activate: (this.note?.getPromotedDefinitionAttributes().length === 0 || !options.is("promotedAttributesOpenInRibbon")) && options.is("editedNotesOpenInRibbon"),
             title: t("edited_notes.title"),
             icon: "bx bx-calendar-edit"
         };
@@ -48,8 +61,8 @@ export default class EditedNotesWidget extends NoteContextAwareWidget {
         this.$noneFound = this.$widget.find(".no-edited-notes-found");
     }
 
-    async refreshWithNote(note) {
-        let editedNotes = await server.get(`edited-notes/${note.getLabelValue("dateNote")}`);
+    async refreshWithNote(note: FNote) {
+        let editedNotes = await server.get<EditedNotesResponse[]>(`edited-notes/${note.getLabelValue("dateNote")}`);
 
         editedNotes = editedNotes.filter((n) => n.noteId !== note.noteId);
 

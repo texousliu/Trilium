@@ -177,7 +177,7 @@ export type CommandMappings = {
         ExecuteCommandData<TextEditor> & {
             callback?: GetTextEditorCallback;
         };
-    executeWithCodeEditor: CommandData & ExecuteCommandData<null>;
+    executeWithCodeEditor: CommandData & ExecuteCommandData<CodeMirrorInstance>;
     /**
      * Called upon when attempting to retrieve the content element of a {@link NoteContext}.
      * Generally should not be invoked manually, as it is used by {@link NoteContext.getContentElement}.
@@ -246,7 +246,7 @@ export type CommandMappings = {
 
     toggleZenMode: CommandData;
 
-    updateAttributeList: CommandData & { attributes: FAttribute[] };
+    updateAttributeList: CommandData & { attributes: Attribute[] };
     saveAttributes: CommandData;
     reloadAttributes: CommandData;
     refreshNoteList: CommandData & { noteId: string };
