@@ -277,7 +277,7 @@ export default class CalendarView extends ViewMode {
                 continue;
             }
 
-            events.push(await CalendarView.buildEvent(dateNote, startDate));
+            events.push(await CalendarView.buildEvent(dateNote, { startDate }));
 
             if (dateNote.hasChildren()) {
                 const childNoteIds = dateNote.getChildNoteIds();
@@ -292,7 +292,7 @@ export default class CalendarView extends ViewMode {
         const childNotes = await froca.getNotes(childNoteIds);
         for (const childNote of childNotes) {
             const startDate = childNoteToDateMapping[childNote.noteId];
-            const event = await CalendarView.buildEvent(childNote, startDate);
+            const event = await CalendarView.buildEvent(childNote, { startDate });
             events.push(event);
         }
 
@@ -318,7 +318,9 @@ export default class CalendarView extends ViewMode {
             }
 
             const endDate = CalendarView.#getCustomisableLabel(note, "endDate", "calendar:endDate");
-            events.push(await CalendarView.buildEvent(note, startDate, endDate));
+            const startTime = CalendarView.#getCustomisableLabel(note, "startTime", "calendar:startTime");
+            const endTime = CalendarView.#getCustomisableLabel(note, "endTime", "calendar:endTime");
+            events.push(await CalendarView.buildEvent(note, { startDate, endDate, startTime, endTime }));
         }
 
         return events.flat();
@@ -346,7 +348,12 @@ export default class CalendarView extends ViewMode {
         return note.getLabelValue(defaultLabelName);
     }
 
-    static async buildEvent(note: FNote, startDate: string, endDate?: string | null) {
+    static async buildEvent(note: FNote, { startDate, endDate, startTime, endTime }: {
+            startDate: string,
+            endDate?: string | null,
+            startTime?: string | null,
+            endTime?: string | null
+        }) {
         const customTitleAttributeName = note.getLabelValue("calendar:title");
         const titles = await CalendarView.#parseCustomTitle(customTitleAttributeName, note);
         const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
@@ -359,6 +366,19 @@ export default class CalendarView extends ViewMode {
         }
 
         for (const title of titles) {
+            if (!endDate) {
+                if (endTime) {
+                    endDate = startDate;
+                } else {
+                    const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
+                    if (endDateOffset) {
+                        endDate = CalendarView.#formatDateToLocalISO(endDateOffset);
+                    }
+                }
+            }
+
+            startDate = (startTime ? `${startDate}T${startTime}:00` : startDate);
+            endDate = (endTime ? `${endDate}T${endTime}:00` : endDate);
             const eventData: EventInput = {
                 title: title,
                 start: startDate,
@@ -368,10 +388,8 @@ export default class CalendarView extends ViewMode {
                 iconClass: note.getLabelValue("iconClass"),
                 promotedAttributes: displayedAttributesData
             };
-
-            const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
-            if (endDateOffset) {
-                eventData.end = CalendarView.#formatDateToLocalISO(endDateOffset);
+            if (endDate) {
+                eventData.end = endDate;
             }
             events.push(eventData);
         }
