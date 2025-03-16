@@ -1,5 +1,5 @@
 # Calendar View
-![](6_Calendar%20View_image.png)
+![](4_Calendar%20View_image.png)
 
 The Calendar view of Book notes will display each child note in a calendar that has a start date and optionally an end date, as an event.
 
@@ -9,8 +9,8 @@ Unlike other Book view types, the Calendar view also allows some kind of interac
 
 |     |     |     |
 | --- | --- | --- |
-| 1   | ![](3_Calendar%20View_image.png) | The Calendar View works only for Book note types. To create a new note, right click on the note tree on the left and select Insert note after, or Insert child note and then select _Book_. |
-| 2   | ![](5_Calendar%20View_image.png) | Once created, the “View type” of the Book needs changed to “Calendar”, by selecting the “Book Properties” tab in the ribbon. |
+| 1   | ![](2_Calendar%20View_image.png) | The Calendar View works only for Book note types. To create a new note, right click on the note tree on the left and select Insert note after, or Insert child note and then select _Book_. |
+| 2   | ![](3_Calendar%20View_image.png) | Once created, the “View type” of the Book needs changed to “Calendar”, by selecting the “Book Properties” tab in the ribbon. |
 
 ## Creating a new event/note
 
@@ -23,7 +23,7 @@ Unlike other Book view types, the Calendar view also allows some kind of interac
 ## Interacting with events
 
 *   Hovering the mouse over an event will display information about the note.  
-    ![](11_Calendar%20View_image.png)
+    ![](9_Calendar%20View_image.png)
 *   Left clicking the event will go to that note. Middle clicking will open the note in a new tab and right click will offer more options including opening the note in a new split or window.
 *   Drag and drop an event on the calendar to move it to another day.
 *   The length of an event can be changed by placing the mouse to the right edge of the event and dragging the mouse around.
@@ -52,13 +52,13 @@ For each note of the calendar, the following attributes can be used:
 | `#calendar:color` | Similar to `#color`, but applies the color only for the event in the calendar and not for other places such as the note tree. |
 | `#iconClass` | If present, the icon of the note will be displayed to the left of the event title. |
 | `#calendar:title` | Changes the title of an event to point to an attribute of the note other than the title, either a label (e.g. `#assignee`) or a relation (e.g. `~for`). See _Advanced use-cases_ for more information. |
-| `#calendar:displayedAttributes` | Allows displaying the value of one or more attributes in the calendar like this:   <br>  <br>![](13_Calendar%20View_image.png)  <br>  <br>`<br>#weight="70"<br>#Mood="Good"<br>#calendar:displayedAttributes="weight,Mood"<br>`  <br>  <br>It can also be used with relations, case in which it will display the title of the target note:  <br>  <br>`<br>~assignee=@My assignee<br>#calendar:displayedAttributes="assignee"<br>` |
+| `#calendar:displayedAttributes` | Allows displaying the value of one or more attributes in the calendar like this:   <br>  <br>![](11_Calendar%20View_image.png)  <br>  <br>`<br>#weight="70"<br>#Mood="Good"<br>#calendar:displayedAttributes="weight,Mood"<br>`  <br>  <br>It can also be used with relations, case in which it will display the title of the target note:  <br>  <br>`<br>~assignee=@My assignee<br>#calendar:displayedAttributes="assignee"<br>` |
 | `#calendar:startDate` | Allows using a different label to represent the start date, other than `startDate` (e.g. `expiryDate`). The label name **must not be** prefixed with `#`. If the label is not defined for a note, the default will be used instead. |
 | `#calendar:endDate` | Allows using a different label to represent the start date, other than `endDate`. The label name **must not be** prefixed with `#`. If the label is not defined for a note, the default will be used instead. |
 
 ## How the calendar works
 
-![](17_Calendar%20View_image.png)
+![](14_Calendar%20View_image.png)
 
 The calendar displays all the child notes of the book that have a `#startDate`. An `#endDate` can optionally be added.
 
@@ -72,7 +72,7 @@ If editing the start date and end date from the note itself is desirable, the fo
 
 This will result in:
 
-![](14_Calendar%20View_image.png)
+![](12_Calendar%20View_image.png)
 
 When not used in a Journal, the calendar is recursive. That is, it will look for events not just in its child notes but also in the children of these child notes.
 
@@ -89,7 +89,7 @@ Based on the `#calendarRoot` (or `#workspaceCalendarRoot`) attribute, the calend
 *   Clicking on the empty space on a date will automatically open that day's note or create it if it does not exist.
 *   Direct children of a day note will be displayed on the calendar despite not having a `dateNote` attribute. Children of the child notes will not be displayed.
 
-![](12_Calendar%20View_image.png)
+![](10_Calendar%20View_image.png)
 
 ### Using a different attribute as event title
 
@@ -99,7 +99,7 @@ To do so, assign `#calendar:title` to the child note (not the calendar/book note
 
 |     |     |
 | --- | --- |
-| ![](7_Calendar%20View_image.png) | ![](9_Calendar%20View_image.png) |
+| ![](5_Calendar%20View_image.png) | ![](7_Calendar%20View_image.png) |
 
 ### Using a relation attribute as event title
 
@@ -109,10 +109,10 @@ Moreover, if there are more relations of the same name, they will be displayed a
 
 |     |     |
 | --- | --- |
-| ![](8_Calendar%20View_image.png) | ![](10_Calendar%20View_image.png) |
+| ![](6_Calendar%20View_image.png) | ![](8_Calendar%20View_image.png) |
 
 Note that it's even possible to have a `#calendar:title` on the target note (e.g. “John Smith”) which will try to render an attribute of it. Note that it's not possible to use a relation here as well for safety reasons (an accidental recursion  of attributes could cause the application to loop infinitely).
 
 |     |     |
 | --- | --- |
-| ![](15_Calendar%20View_image.png) | ![](2_Calendar%20View_image.png) |
+| ![](13_Calendar%20View_image.png) | ![](1_Calendar%20View_image.png) |

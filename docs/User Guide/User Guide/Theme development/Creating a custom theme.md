@@ -11,7 +11,7 @@ As such, the first step is to create a new note to gather all the themes.
 
 |     |     |
 | --- | --- |
-| ![](5_Creating%20a%20custom%20theme_im.png) | Themes are code notes with a special attribute. Start by creating a new code note. |
+| ![](Creating%20a%20custom%20theme_im.png) | Themes are code notes with a special attribute. Start by creating a new code note. |
 | !\[\](Creating%20a%20custom theme\_im.png) | Then change the note type to a CSS code. |
 | !\[\](5\_Creating%20a%20custom theme\_im.png) | In the _Owned Attributes_ section define the `#appTheme` attribute to point to any desired name. This is the name that will show up in the appearance section in settings. |
 

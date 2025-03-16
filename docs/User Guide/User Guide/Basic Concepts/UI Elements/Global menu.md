@@ -1,7 +1,7 @@
 # Global menu
 The global menu configures the current window (zoom, keeping the window on top) and offers access to some more advanced options.
 
-![](2_Global%20menu_image.png)
+![](Global%20menu_image.png)
 
 ## Accessing the global menu
 
