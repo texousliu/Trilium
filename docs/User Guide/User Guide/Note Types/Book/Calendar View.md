@@ -32,11 +32,7 @@ Unlike other Book view types, the Calendar view also allows some kind of interac
 
 The following attributes can be added to the book type:
 
-| Name | Description |
-| --- | --- |
-| `#calendar:hideWeekends` | When present (regardless of value), it will hide Saturday and Sundays from the calendar. |
-| `#calendar:weekNumbers` | When present (regardless of value), it will show the number of the week on the calendar. |
-| `~child:template` | Defines the template for newly created notes in the calendar (via dragging or clicking). |
+<div class="joplin-table-wrapper"><table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td><code>#calendar:hideWeekends</code></td><td>When present (regardless of value), it will hide Saturday and Sundays from the calendar.</td></tr><tr><td><code>#calendar:weekNumbers</code></td><td>When present (regardless of value), it will show the number of the week on the calendar.</td></tr><tr><td><code>#calendar:view</code></td><td><p>Which view to display in the calendar:</p><ul><li><code>timeGridWeek</code> for the <em>week</em> view;</li><li><code>dayGridMonth</code> for the <em>month</em> view;</li><li><code>multiMonthYear</code> for the <em>year</em> view;</li><li><code>listMonth</code> for the <em>list</em> view.</li></ul><p>Any other value will be dismissed and the default view (month) will be used instead.</p><p>The value of this label is automatically updated when changing the view using the UI buttons.</p></td></tr><tr><td><code>~child:template</code></td><td>Defines the template for newly created notes in the calendar (via dragging or clicking).</td></tr></tbody></table></div>
 
 In addition, the first day of the week can be either Sunday or Monday and can be adjusted from the application settings.
 
@@ -48,13 +44,17 @@ For each note of the calendar, the following attributes can be used:
 | --- | --- |
 | `#startDate` | The date the event starts, which will display it in the calendar. The format is `YYYY-MM-DD` (year, month and day separated by a minus sign). |
 | `#endDate` | Similar to `startDate`, mentions the end date if the event spans across multiple days. The date is inclusive, so the end day is also considered. The attribute can be missing for single-day events. |
+| `#startTime` | The time the event starts at. If this value is missing, then the event is considered a full-day event. The format is `HH:MM` (hours in 24-hour format and minutes). |
+| `#endTime` | Similar to `startTime`, it mentions the time at which the event ends (in relation with `endDate` if present, or `startDate`). |
 | `#color` | Displays the event with a specified color (named such as `red`, `gray` or hex such as `#FF0000`). This will also change the color of the note in other places such as the note tree. |
 | `#calendar:color` | Similar to `#color`, but applies the color only for the event in the calendar and not for other places such as the note tree. |
 | `#iconClass` | If present, the icon of the note will be displayed to the left of the event title. |
 | `#calendar:title` | Changes the title of an event to point to an attribute of the note other than the title, either a label (e.g. `#assignee`) or a relation (e.g. `~for`). See _Advanced use-cases_ for more information. |
-| `#calendar:displayedAttributes` | Allows displaying the value of one or more attributes in the calendar like this:   <br>  <br>![](11_Calendar%20View_image.png)  <br>  <br>`<br>#weight="70"<br>#Mood="Good"<br>#calendar:displayedAttributes="weight,Mood"<br>`  <br>  <br>It can also be used with relations, case in which it will display the title of the target note:  <br>  <br>`<br>~assignee=@My assignee<br>#calendar:displayedAttributes="assignee"<br>` |
+| `#calendar:displayedAttributes` | Allows displaying the value of one or more attributes in the calendar like this:    <br>  <br>![](11_Calendar%20View_image.png)   <br>  <br>`#weight="70" #Mood="Good" #calendar:displayedAttributes="weight,Mood"`  <br>  <br>It can also be used with relations, case in which it will display the title of the target note:   <br>  <br>`~assignee=@My assignee #calendar:displayedAttributes="assignee"` |
 | `#calendar:startDate` | Allows using a different label to represent the start date, other than `startDate` (e.g. `expiryDate`). The label name **must not be** prefixed with `#`. If the label is not defined for a note, the default will be used instead. |
-| `#calendar:endDate` | Allows using a different label to represent the start date, other than `endDate`. The label name **must not be** prefixed with `#`. If the label is not defined for a note, the default will be used instead. |
+| `#calendar:endDate` | Similar to `#calendar:startDate`, allows changing the attribute which is being used to read the end date. |
+| `#calendar:startTime` | Similar to `#calendar:startDate`, allows changing the attribute which is being used to read the start time. |
+| `#calendar:endTime` | Similar to `#calendar:startDate`, allows changing the attribute which is being used to read the end time. |
 
 ## How the calendar works
 
