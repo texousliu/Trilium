@@ -72,11 +72,10 @@ export default function buildLaunchBarConfig() {
             id: "_lbLlmChat",
             title: t("hidden-subtree.llm-chat-title"),
             type: "launcher",
-            command: "showLlmChat",
             icon: "bx bx-bot",
+            builtinWidget: "llmChatLauncher",
             attributes: [
-                { type: "label", name: "desktopOnly" },
-                { type: "label", name: "launcherType", value: "command" }
+                { type: "label", name: "desktopOnly" }
             ]
         },
         { id: "_lbCalendar", ...sharedLaunchers.calendar },
