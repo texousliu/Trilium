@@ -15,6 +15,7 @@ function log(...args: any[]) {
 try {
 
     const assetsToCopy = new Set([
+        // copy node_module, to avoid downloading packages a 2nd time during pruning
         "./node_modules",
         "./images",
         "./libraries",
