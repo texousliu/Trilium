@@ -116,7 +116,7 @@ export default class CalendarView extends ViewMode {
 
         const calendar = new Calendar(this.$calendarContainer[0], {
             plugins,
-            initialView: "timeGridWeek",
+            initialView: "dayGridMonth",
             events: eventBuilder,
             editable: isEditable,
             selectable: isEditable,
@@ -159,6 +159,10 @@ export default class CalendarView extends ViewMode {
                 if (note) {
                     appContext.tabManager.getActiveContext()?.setNote(note.noteId);
                 }
+            },
+            headerToolbar: {
+                start: "title",
+                end: "dayGridMonth,timeGridWeek today prev,next"
             }
         });
         calendar.render();
