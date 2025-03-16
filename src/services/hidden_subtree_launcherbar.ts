@@ -47,17 +47,6 @@ export default function buildLaunchBarConfig() {
         { id: "_lbBackInHistory", ...sharedLaunchers.backInHistory },
         { id: "_lbForwardInHistory", ...sharedLaunchers.forwardInHistory },
         { id: "_lbBackendLog", title: t("hidden-subtree.backend-log-title"), type: "launcher", targetNoteId: "_backendLog", icon: "bx bx-terminal" },
-        {
-            id: "_lbAvailableLlmChat",
-            title: t("hidden-subtree.llm-chat-title"),
-            type: "launcher",
-            command: "showLlmChat",
-            icon: "bx bx-bot",
-            attributes: [
-                { type: "label", name: "desktopOnly" },
-                { type: "label", name: "launcherType", value: "command" }
-            ]
-        }
     ];
 
     const desktopVisibleLaunchers: HiddenSubtreeItem[] = [
