@@ -189,26 +189,44 @@ export default class CalendarView extends ViewMode {
     }
 
     async #onCalendarSelection(e: DateSelectArg) {
+        // Handle start and end date
         const startDate = CalendarView.#formatDateToLocalISO(e.start);
         if (!startDate) {
             return;
         }
-
         const endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
 
+        // Handle start and end time.
+        let startTime = null;
+        let endTime = null;
+        if (!e.allDay) {
+            startTime = CalendarView.#formatTimeToLocalISO(e.start);
+            endTime = CalendarView.#formatTimeToLocalISO(e.end);
+        }
+
+        // Ask for the title
         const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
         if (!title?.trim()) {
             return;
         }
 
+        // Create the note.
         const { note } = await server.post<CreateChildResponse>(`notes/${this.parentNote.noteId}/children?target=into`, {
             title,
             content: "",
             type: "text"
         });
+
+        // Set the attributes.
         attributes.setLabel(note.noteId, "startDate", startDate);
         if (endDate) {
             attributes.setLabel(note.noteId, "endDate", endDate);
+        }
+        if (startTime) {
+            attributes.setLabel(note.noteId, "startTime", startTime);
+        }
+        if (endTime) {
+            attributes.setLabel(note.noteId, "endTime", endTime);
         }
     }
 
@@ -443,6 +461,18 @@ export default class CalendarView extends ViewMode {
         const offset = date.getTimezoneOffset();
         const localDate = new Date(date.getTime() - offset * 60 * 1000);
         return localDate.toISOString().split("T")[0];
+    }
+
+    static #formatTimeToLocalISO(date: Date | null | undefined) {
+        if (!date) {
+            return undefined;
+        }
+
+        const offset = date.getTimezoneOffset();
+        const localDate = new Date(date.getTime() - offset * 60 * 1000);
+        return localDate.toISOString()
+            .split("T")[1]
+            .substring(0, 5);
     }
 
     static #offsetDate(date: Date | string | null | undefined, offset: number) {
