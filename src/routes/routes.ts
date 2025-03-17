@@ -62,6 +62,7 @@ import otherRoute from "./api/other.js";
 import shareRoutes from "../share/routes.js";
 import embeddingsRoute from "./api/embeddings.js";
 import ollamaRoute from "./api/ollama.js";
+import openaiRoute from "./api/openai.js";
 import llmRoute from "./api/llm.js";
 
 import etapiAuthRoutes from "../etapi/auth.js";
@@ -407,6 +408,9 @@ function register(app: express.Application) {
 
     // Ollama API endpoints
     route(PST, "/api/ollama/list-models", [auth.checkApiAuth, csrfMiddleware], ollamaRoute.listModels, apiResultHandler);
+
+    // OpenAI API endpoints
+    route(PST, "/api/openai/list-models", [auth.checkApiAuth, csrfMiddleware], openaiRoute.listModels, apiResultHandler);
 
     // API Documentation
     apiDocsRoute.register(app);

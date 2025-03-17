@@ -46,6 +46,20 @@ interface FailedEmbeddingNotes {
     }>;
 }
 
+interface OpenAIModelResponse {
+    success: boolean;
+    chatModels: Array<{
+        id: string;
+        name: string;
+        type: string;
+    }>;
+    embeddingModels: Array<{
+        id: string;
+        name: string;
+        type: string;
+    }>;
+}
+
 export default class AiSettingsWidget extends OptionsWidget {
     private statsRefreshInterval: NodeJS.Timeout | null = null;
     private indexRebuildRefreshInterval: NodeJS.Timeout | null = null;
@@ -141,92 +155,116 @@ export default class AiSettingsWidget extends OptionsWidget {
         <div class="options-section">
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-openai" role="tabpanel" aria-labelledby="nav-openai-tab">
-                    <div class="ai-provider">
-                        <h5>${t("ai_llm.openai_configuration")}</h5>
-
-                        <div class="form-group">
-                            <label>${t("ai_llm.api_key")}</label>
-                            <input class="openai-api-key form-control" type="password">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>${t("ai_llm.openai_settings")}</h5>
                         </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>${t("ai_llm.api_key")}</label>
+                                <input type="password" class="openai-api-key form-control" autocomplete="off" />
+                                <div class="form-text">${t("ai_llm.openai_api_key_description")}</div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>${t("ai_llm.default_model")}</label>
-                            <input class="openai-default-model form-control" type="text">
-                            <div class="form-text">${t("ai_llm.openai_model_description")}</div>
-                        </div>
+                            <div class="form-group">
+                                <label>${t("ai_llm.url")}</label>
+                                <input type="text" class="openai-base-url form-control" />
+                                <div class="form-text">${t("ai_llm.openai_url_description")}</div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>${t("ai_llm.base_url")}</label>
-                            <input class="openai-base-url form-control" type="text">
-                            <div class="form-text">${t("ai_llm.openai_url_description")}</div>
-                        </div>
+                            <div class="form-group">
+                                <label>${t("ai_llm.model")}</label>
+                                <select class="openai-default-model form-control">
+                                    <option value="gpt-4o">GPT-4o (recommended)</option>
+                                    <option value="gpt-4">GPT-4</option>
+                                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                </select>
+                                <div class="form-text">${t("ai_llm.openai_model_description")}</div>
+                                <button class="btn btn-sm btn-outline-secondary refresh-openai-models">${t("ai_llm.refresh_models")}</button>
+                            </div>
 
-                        <div class="form-group">
-                            <label>${t("ai_llm.embedding_model")}</label>
-                            <select class="openai-embedding-model form-control">
-                                <option value="text-embedding-3-small">text-embedding-3-small (recommended)</option>
-                                <option value="text-embedding-3-large">text-embedding-3-large</option>
-                                <option value="text-embedding-ada-002">text-embedding-ada-002 (legacy)</option>
-                            </select>
-                            <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
+                            <div class="form-group">
+                                <label>${t("ai_llm.embedding_model")}</label>
+                                <select class="openai-embedding-model form-control">
+                                    <option value="text-embedding-3-small">text-embedding-3-small (recommended)</option>
+                                    <option value="text-embedding-3-large">text-embedding-3-large</option>
+                                    <option value="text-embedding-ada-002">text-embedding-ada-002 (legacy)</option>
+                                </select>
+                                <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-anthropic" role="tabpanel" aria-labelledby="nav-anthropic-tab">
-                    <div class="ai-provider">
-                        <h5>${t("ai_llm.anthropic_configuration")}</h5>
-
-                        <div class="form-group">
-                            <label>${t("ai_llm.api_key")}</label>
-                            <input class="anthropic-api-key form-control" type="password">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>${t("ai_llm.anthropic_configuration")}</h5>
                         </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>${t("ai_llm.api_key")}</label>
+                                <input type="password" class="anthropic-api-key form-control" autocomplete="off">
+                                <div class="form-text">${t("ai_llm.anthropic_api_key_description")}</div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>${t("ai_llm.default_model")}</label>
-                            <input class="anthropic-default-model form-control" type="text">
-                            <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
-                        </div>
+                            <div class="form-group">
+                                <label>${t("ai_llm.url")}</label>
+                                <input type="text" class="anthropic-base-url form-control">
+                                <div class="form-text">${t("ai_llm.anthropic_url_description")}</div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>${t("ai_llm.base_url")}</label>
-                            <input class="anthropic-base-url form-control" type="text">
-                            <div class="form-text">${t("ai_llm.anthropic_url_description")}</div>
+                            <div class="form-group">
+                                <label>${t("ai_llm.model")}</label>
+                                <select class="anthropic-default-model form-control">
+                                    <option value="claude-3-opus-20240229">Claude 3 Opus (recommended)</option>
+                                    <option value="claude-3-sonnet-20240229">Claude 3 Sonnet</option>
+                                    <option value="claude-3-haiku-20240307">Claude 3 Haiku</option>
+                                </select>
+                                <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-ollama" role="tabpanel" aria-labelledby="nav-ollama-tab">
-                    <div class="ai-provider">
-                        <h5>${t("ai_llm.ollama_configuration")}</h5>
-
-                        <div class="form-group">
-                            <label class="tn-checkbox">
-                                <input class="ollama-enabled form-check-input" type="checkbox">
-                                ${t("ai_llm.enable_ollama")}
-                            </label>
-                            <div class="form-text">${t("ai_llm.enable_ollama_description")}</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>${t("ai_llm.ollama_configuration")}</h5>
                         </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="tn-checkbox">
+                                    <input class="ollama-enabled form-check-input" type="checkbox">
+                                    ${t("ai_llm.enable_ollama")}
+                                </label>
+                                <div class="form-text">${t("ai_llm.enable_ollama_description")}</div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>${t("ai_llm.ollama_url")}</label>
-                            <input class="ollama-base-url form-control" type="text">
-                            <div class="form-text">${t("ai_llm.ollama_url_description")}</div>
-                        </div>
+                            <div class="form-group">
+                                <label>${t("ai_llm.url")}</label>
+                                <input class="ollama-base-url form-control" type="text">
+                                <div class="form-text">${t("ai_llm.ollama_url_description")}</div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>${t("ai_llm.ollama_model")}</label>
-                            <input class="ollama-default-model form-control" type="text">
-                            <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
-                        </div>
+                            <div class="form-group">
+                                <label>${t("ai_llm.model")}</label>
+                                <select class="ollama-default-model form-control">
+                                    <option value="llama3">llama3 (recommended)</option>
+                                    <option value="mistral">mistral</option>
+                                    <option value="phi3">phi3</option>
+                                </select>
+                                <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>${t("ai_llm.ollama_embedding_model")}</label>
-                            <select class="ollama-embedding-model form-control">
-                                <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
-                                <option value="mxbai-embed-large">mxbai-embed-large</option>
-                                <option value="llama3">llama3</option>
-                            </select>
-                            <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
-                            <button class="btn btn-sm btn-outline-secondary refresh-models">${t("ai_llm.refresh_models")}</button>
+                            <div class="form-group">
+                                <label>${t("ai_llm.embedding_model")}</label>
+                                <select class="ollama-embedding-model form-control">
+                                    <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
+                                    <option value="mxbai-embed-large">mxbai-embed-large</option>
+                                    <option value="llama3">llama3</option>
+                                </select>
+                                <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
+                                <button class="btn btn-sm btn-outline-secondary refresh-models">${t("ai_llm.refresh_models")}</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -448,34 +486,140 @@ export default class AiSettingsWidget extends OptionsWidget {
                         $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
                     });
 
-                    // Add separator if we have both types
                     if (embeddingModels.length > 0) {
-                        $embedModelSelect.append(`<option disabled>───────────</option>`);
+                        // Add separator if we have embedding models
+                        $embedModelSelect.append(`<option disabled>─────────────</option>`);
                     }
 
-                    // Add other models (LLMs can also generate embeddings)
-                    const otherModels = response.models.filter(model =>
+                    // Then add general models which can be used for embeddings too
+                    const generalModels = response.models.filter(model =>
                         !model.name.includes('embed') && !model.name.includes('bert'));
 
-                    otherModels.forEach(model => {
+                    generalModels.forEach(model => {
                         $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
                     });
 
-                    // Restore previous selection if possible
+                    // Try to restore the previously selected value
                     if (currentValue) {
                         $embedModelSelect.val(currentValue);
+                        // If the value doesn't exist anymore, select the first option
+                        if (!$embedModelSelect.val()) {
+                            $embedModelSelect.prop('selectedIndex', 0);
+                        }
                     }
 
-                    toastService.showMessage("Models refreshed successfully");
+                    // Also update the LLM model dropdown
+                    const $modelSelect = this.$widget.find('.ollama-default-model');
+                    const currentModelValue = $modelSelect.val();
+
+                    // Clear existing options
+                    $modelSelect.empty();
+
+                    // Sort models by name to make them easier to find
+                    const sortedModels = [...response.models].sort((a, b) => a.name.localeCompare(b.name));
+
+                    // Add all models to the dropdown
+                    sortedModels.forEach(model => {
+                        $modelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                    });
+
+                    // Try to restore the previously selected value
+                    if (currentModelValue) {
+                        $modelSelect.val(currentModelValue);
+                        // If the value doesn't exist anymore, select the first option
+                        if (!$modelSelect.val()) {
+                            $modelSelect.prop('selectedIndex', 0);
+                        }
+                    }
+
+                    toastService.showMessage(`${response.models.length} Ollama models found.`);
                 } else {
-                    toastService.showError("No models found from Ollama server");
+                    toastService.showError(`No Ollama models found. Please check if Ollama is running.`);
                 }
-            } catch (error: any) {
-                console.error("Error refreshing Ollama models:", error);
-                toastService.showError(`Error refreshing models: ${error.message || 'Unknown error'}`);
+            } catch (e) {
+                console.error(`Error fetching Ollama models:`, e);
+                toastService.showError(`Error fetching Ollama models: ${e}`);
             } finally {
                 $refreshModels.prop('disabled', false);
-                $refreshModels.text(t("ai_llm.refresh_models"));
+                $refreshModels.html(`<span class="bx bx-refresh"></span>`);
+            }
+        });
+
+        // OpenAI models refresh button
+        const $refreshOpenAIModels = this.$widget.find('.refresh-openai-models');
+        $refreshOpenAIModels.on('click', async () => {
+            $refreshOpenAIModels.prop('disabled', true);
+            $refreshOpenAIModels.html(`<i class="spinner-border spinner-border-sm"></i>`);
+
+            try {
+                const openaiBaseUrl = this.$widget.find('.openai-base-url').val() as string;
+                const response = await server.post<OpenAIModelResponse>('openai/list-models', { baseUrl: openaiBaseUrl });
+
+                if (response && response.success) {
+                    // Update the chat models dropdown
+                    if (response.chatModels?.length > 0) {
+                        const $chatModelSelect = this.$widget.find('.openai-default-model');
+                        const currentChatValue = $chatModelSelect.val();
+
+                        // Clear existing options
+                        $chatModelSelect.empty();
+
+                        // Sort models by name
+                        const sortedChatModels = [...response.chatModels].sort((a, b) => a.name.localeCompare(b.name));
+
+                        // Add models to the dropdown
+                        sortedChatModels.forEach(model => {
+                            $chatModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
+                        });
+
+                        // Try to restore the previously selected value
+                        if (currentChatValue) {
+                            $chatModelSelect.val(currentChatValue);
+                            // If the value doesn't exist anymore, select the first option
+                            if (!$chatModelSelect.val()) {
+                                $chatModelSelect.prop('selectedIndex', 0);
+                            }
+                        }
+                    }
+
+                    // Update the embedding models dropdown
+                    if (response.embeddingModels?.length > 0) {
+                        const $embedModelSelect = this.$widget.find('.openai-embedding-model');
+                        const currentEmbedValue = $embedModelSelect.val();
+
+                        // Clear existing options
+                        $embedModelSelect.empty();
+
+                        // Sort models by name
+                        const sortedEmbedModels = [...response.embeddingModels].sort((a, b) => a.name.localeCompare(b.name));
+
+                        // Add models to the dropdown
+                        sortedEmbedModels.forEach(model => {
+                            $embedModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
+                        });
+
+                        // Try to restore the previously selected value
+                        if (currentEmbedValue) {
+                            $embedModelSelect.val(currentEmbedValue);
+                            // If the value doesn't exist anymore, select the first option
+                            if (!$embedModelSelect.val()) {
+                                $embedModelSelect.prop('selectedIndex', 0);
+                            }
+                        }
+                    }
+
+                    // Show success message
+                    const totalModels = (response.chatModels?.length || 0) + (response.embeddingModels?.length || 0);
+                    toastService.showMessage(`${totalModels} OpenAI models found.`);
+                } else {
+                    toastService.showError(`No OpenAI models found. Please check your API key and settings.`);
+                }
+            } catch (e) {
+                console.error(`Error fetching OpenAI models:`, e);
+                toastService.showError(`Error fetching OpenAI models: ${e}`);
+            } finally {
+                $refreshOpenAIModels.prop('disabled', false);
+                $refreshOpenAIModels.html(`<span class="bx bx-refresh"></span>`);
             }
         });
 
