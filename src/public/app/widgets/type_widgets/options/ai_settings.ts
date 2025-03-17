@@ -305,47 +305,47 @@ export default class AiSettingsWidget extends OptionsWidget {
                 <input type="hidden" class="embedding-provider-precedence" value="">
                 <div class="embedding-precedence-container">
                     <div class="alert alert-info mb-2">${t("ai_llm.drag_providers_to_reorder")}</div>
-                    <div class="card mb-3">
-                        <div class="card-header">
+                    <div class="standard-list-container mb-3">
+                        <div class="standard-list-header">
                             <strong>${t("ai_llm.active_providers")}</strong>
                         </div>
-                        <ul class="list-group list-group-flush embedding-provider-sortable">
-                            <li class="list-group-item d-flex align-items-center" data-provider="openai">
+                        <ul class="standard-list-item-list embedding-provider-sortable">
+                            <li class="standard-list-item d-flex align-items-center" data-provider="openai">
                                 <span class="bx bx-menu handle me-2"></span>
                                 <strong class="flex-grow-1">OpenAI</strong>
-                                <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                                <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
                                     <span class="bx bx-x"></span>
                                 </button>
                             </li>
-                            <li class="list-group-item d-flex align-items-center" data-provider="ollama">
+                            <li class="standard-list-item d-flex align-items-center" data-provider="ollama">
                                 <span class="bx bx-menu handle me-2"></span>
                                 <strong class="flex-grow-1">Ollama</strong>
-                                <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                                <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
                                     <span class="bx bx-x"></span>
                                 </button>
                             </li>
-                            <li class="list-group-item d-flex align-items-center" data-provider="anthropic">
+                            <li class="standard-list-item d-flex align-items-center" data-provider="anthropic">
                                 <span class="bx bx-menu handle me-2"></span>
                                 <strong class="flex-grow-1">Anthropic</strong>
-                                <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                                <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
                                     <span class="bx bx-x"></span>
                                 </button>
                             </li>
-                            <li class="list-group-item d-flex align-items-center" data-provider="local">
+                            <li class="standard-list-item d-flex align-items-center" data-provider="local">
                                 <span class="bx bx-menu handle me-2"></span>
                                 <strong class="flex-grow-1">Local</strong>
-                                <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                                <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
                                     <span class="bx bx-x"></span>
                                 </button>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="card disabled-providers-container" style="display: none;">
-                        <div class="card-header">
+                    <div class="standard-list-container disabled-providers-container" style="display: none;">
+                        <div class="standard-list-header">
                             <strong>${t("ai_llm.disabled_providers")}</strong>
                         </div>
-                        <ul class="list-group list-group-flush embedding-provider-disabled">
+                        <ul class="standard-list-item-list embedding-provider-disabled">
                             <!-- Disabled providers will be added here dynamically -->
                         </ul>
                     </div>
@@ -883,9 +883,9 @@ export default class AiSettingsWidget extends OptionsWidget {
 
             // Create a new item for the disabled list
             const $disabledItem = $(`
-                <li class="list-group-item d-flex align-items-center" data-provider="${provider}">
+                <li class="standard-list-item d-flex align-items-center" data-provider="${provider}">
                     <strong class="flex-grow-1">${providerName}</strong>
-                    <button class="btn btn-sm btn-outline-success restore-provider" title="${t("ai_llm.restore_provider")}">
+                    <button class="icon-action restore-provider" title="${t("ai_llm.restore_provider")}">
                         <span class="bx bx-plus"></span>
                     </button>
                 </li>
@@ -912,10 +912,10 @@ export default class AiSettingsWidget extends OptionsWidget {
 
                 // Create a new item for the active list
                 const $activeItem = $(`
-                    <li class="list-group-item d-flex align-items-center" data-provider="${provider}">
+                    <li class="standard-list-item d-flex align-items-center" data-provider="${provider}">
                         <span class="bx bx-menu handle me-2"></span>
                         <strong class="flex-grow-1">${providerName}</strong>
-                        <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                        <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
                             <span class="bx bx-x"></span>
                         </button>
                     </li>
@@ -1054,35 +1054,34 @@ export default class AiSettingsWidget extends OptionsWidget {
             this.startStatsPolling();
         }, 500);
 
+        // Add minimal styles for the sortable lists
+        if (!$('#embedding-sortable-styles').length) {
+            $('head').append(`
+                <style id="embedding-sortable-styles">
+                    /* Basic drag functionality styles */
+                    .embedding-provider-sortable .handle {
+                        cursor: grab;
+                    }
+                    .standard-list-item-list li {
+                        cursor: grab;
+                    }
+                    .standard-list-item-list li.dragging {
+                        opacity: 0.7;
+                    }
+                    .standard-list-item-list li.drag-over {
+                        border-width: 2px !important;
+                        border-style: dashed !important;
+                    }
+                </style>
+            `);
+        }
+
         return this.$widget;
     }
 
     async optionsLoaded(options: OptionMap) {
         // Call the ancestor method with the options to store them
         super.optionsLoaded(options);
-
-        // Add CSS styles for the sortable list
-        // We add this here to ensure it's only added once
-        if (!$('#embedding-sortable-styles').length) {
-            $('head').append(`
-                <style id="embedding-sortable-styles">
-                    .embedding-provider-sortable .handle {
-                        cursor: grab;
-                    }
-                    .embedding-provider-sortable li {
-                        cursor: grab;
-                        transition: background-color 0.2s;
-                    }
-                    .embedding-provider-sortable li.dragging {
-                        opacity: 0.5;
-                        background-color: #f8f9fa;
-                    }
-                    .embedding-provider-sortable li.drag-over {
-                        border: 2px dashed #007bff;
-                    }
-                </style>
-            `);
-        }
 
         // Set values from options to UI components
         if (!this.$widget) return;
