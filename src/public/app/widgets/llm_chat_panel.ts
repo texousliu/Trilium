@@ -6,6 +6,7 @@ import utils from "../services/utils.js";
 import { t } from "../services/i18n.js";
 import libraryLoader from "../services/library_loader.js";
 import { applySyntaxHighlight } from "../services/syntax_highlight.js";
+import options from "../services/options.js";
 
 // Import the LLM Chat CSS
 (async function() {
@@ -32,12 +33,16 @@ export default class LlmChatPanel extends BasicWidget {
     private loadingIndicator!: HTMLElement;
     private sourcesList!: HTMLElement;
     private useAdvancedContextCheckbox!: HTMLInputElement;
+    private validationWarning!: HTMLElement;
     private sessionId: string | null = null;
     private currentNoteId: string | null = null;
 
     doRender() {
         this.$widget = $(`
             <div class="note-context-chat h-100 w-100 d-flex flex-column">
+                <!-- Add provider validation warning alert -->
+                <div class="provider-validation-warning alert alert-warning m-2" style="display: none;"></div>
+
                 <div class="note-context-chat-container flex-grow-1 overflow-auto p-3">
                     <div class="note-context-chat-messages"></div>
                     <div class="loading-indicator" style="display: none;">
@@ -92,6 +97,7 @@ export default class LlmChatPanel extends BasicWidget {
         this.loadingIndicator = element.querySelector('.loading-indicator') as HTMLElement;
         this.sourcesList = element.querySelector('.sources-list') as HTMLElement;
         this.useAdvancedContextCheckbox = element.querySelector('.use-advanced-context-checkbox') as HTMLInputElement;
+        this.validationWarning = element.querySelector('.provider-validation-warning') as HTMLElement;
 
         this.initializeEventListeners();
 
@@ -106,6 +112,9 @@ export default class LlmChatPanel extends BasicWidget {
             return;
         }
 
+        // Check for any provider validation issues when refreshing
+        await this.validateEmbeddingProviders();
+
         // Get current note context if needed
         this.currentNoteId = appContext.tabManager.getActiveContext()?.note?.noteId || null;
 
@@ -116,6 +125,9 @@ export default class LlmChatPanel extends BasicWidget {
     }
 
     private async createChatSession() {
+        // Check for validation issues first
+        await this.validateEmbeddingProviders();
+
         try {
             const resp = await server.post<SessionResponse>('llm/sessions', {
                 title: 'Note Chat'
@@ -135,6 +147,10 @@ export default class LlmChatPanel extends BasicWidget {
             return;
         }
 
+        // Check for provider validation issues before sending
+        await this.validateEmbeddingProviders();
+
+        // Add user message to the chat
         this.addMessageToChat('user', content);
         this.noteContextChatInput.value = '';
         this.showLoadingIndicator();
@@ -412,5 +428,95 @@ export default class LlmChatPanel extends BasicWidget {
         });
 
         return processedContent;
+    }
+
+    /**
+     * Validate embedding providers configuration
+     * Check if there are issues with the embedding providers that might affect LLM functionality
+     */
+    async validateEmbeddingProviders() {
+        try {
+            // Check if AI is enabled
+            const aiEnabled = options.is('aiEnabled');
+            if (!aiEnabled) {
+                this.validationWarning.style.display = 'none';
+                return;
+            }
+
+            // Get the default embedding provider
+            const defaultProvider = options.get('embeddingsDefaultProvider') || 'openai';
+
+            // Get provider precedence
+            const precedenceStr = options.get('aiProviderPrecedence') || 'openai,anthropic,ollama';
+            let precedenceList: string[] = [];
+
+            if (precedenceStr) {
+                if (precedenceStr.startsWith('[') && precedenceStr.endsWith(']')) {
+                    precedenceList = JSON.parse(precedenceStr);
+                } else if (precedenceStr.includes(',')) {
+                    precedenceList = precedenceStr.split(',').map(p => p.trim());
+                } else {
+                    precedenceList = [precedenceStr];
+                }
+            }
+
+            // Get enabled providers - this is a simplification since we don't have direct DB access
+            // We'll determine enabled status based on the presence of keys or settings
+            const enabledProviders: string[] = [];
+
+            // OpenAI is enabled if API key is set
+            const openaiKey = options.get('openaiApiKey');
+            if (openaiKey) {
+                enabledProviders.push('openai');
+            }
+
+            // Anthropic is enabled if API key is set
+            const anthropicKey = options.get('anthropicApiKey');
+            if (anthropicKey) {
+                enabledProviders.push('anthropic');
+            }
+
+            // Ollama is enabled if the setting is true
+            const ollamaEnabled = options.is('ollamaEnabled');
+            if (ollamaEnabled) {
+                enabledProviders.push('ollama');
+            }
+
+            // Local is always available
+            enabledProviders.push('local');
+
+            // Perform validation checks
+            const defaultInPrecedence = precedenceList.includes(defaultProvider);
+            const defaultIsEnabled = enabledProviders.includes(defaultProvider);
+            const allPrecedenceEnabled = precedenceList.every((p: string) => enabledProviders.includes(p));
+
+            // Show warning if there are issues
+            if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled) {
+                let message = 'There are issues with your AI provider configuration:';
+
+                if (!defaultInPrecedence) {
+                    message += `<br>• The default embedding provider "${defaultProvider}" is not in your provider precedence list.`;
+                }
+
+                if (!defaultIsEnabled) {
+                    message += `<br>• The default embedding provider "${defaultProvider}" is not enabled.`;
+                }
+
+                if (!allPrecedenceEnabled) {
+                    const disabledProviders = precedenceList.filter((p: string) => !enabledProviders.includes(p));
+                    message += `<br>• The following providers in your precedence list are not enabled: ${disabledProviders.join(', ')}.`;
+                }
+
+                message += '<br><br>Please check your AI settings.';
+
+                this.validationWarning.innerHTML = message;
+                this.validationWarning.style.display = 'block';
+            } else {
+                this.validationWarning.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error validating embedding providers:', error);
+            this.validationWarning.style.display = 'none';
+        }
     }
 }
