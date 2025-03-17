@@ -301,6 +301,59 @@ export default class AiSettingsWidget extends OptionsWidget {
             </div>
 
             <div class="form-group">
+                <label>${t("ai_llm.embedding_provider_precedence")}</label>
+                <input type="hidden" class="embedding-provider-precedence" value="">
+                <div class="embedding-precedence-container">
+                    <div class="alert alert-info mb-2">${t("ai_llm.drag_providers_to_reorder")}</div>
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>${t("ai_llm.active_providers")}</strong>
+                        </div>
+                        <ul class="list-group list-group-flush embedding-provider-sortable">
+                            <li class="list-group-item d-flex align-items-center" data-provider="openai">
+                                <span class="bx bx-menu handle me-2"></span>
+                                <strong class="flex-grow-1">OpenAI</strong>
+                                <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                                    <span class="bx bx-x"></span>
+                                </button>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center" data-provider="ollama">
+                                <span class="bx bx-menu handle me-2"></span>
+                                <strong class="flex-grow-1">Ollama</strong>
+                                <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                                    <span class="bx bx-x"></span>
+                                </button>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center" data-provider="anthropic">
+                                <span class="bx bx-menu handle me-2"></span>
+                                <strong class="flex-grow-1">Anthropic</strong>
+                                <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                                    <span class="bx bx-x"></span>
+                                </button>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center" data-provider="local">
+                                <span class="bx bx-menu handle me-2"></span>
+                                <strong class="flex-grow-1">Local</strong>
+                                <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                                    <span class="bx bx-x"></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card disabled-providers-container" style="display: none;">
+                        <div class="card-header">
+                            <strong>${t("ai_llm.disabled_providers")}</strong>
+                        </div>
+                        <ul class="list-group list-group-flush embedding-provider-disabled">
+                            <!-- Disabled providers will be added here dynamically -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-text">${t("ai_llm.embedding_provider_precedence_description")}</div>
+            </div>
+
+            <div class="form-group">
                 <label>${t("ai_llm.embedding_generation_location")}</label>
                 <select class="embedding-generation-location form-control">
                     <option value="client">${t("ai_llm.embedding_generation_location_client")}</option>
@@ -723,6 +776,211 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.displayValidationWarnings();
         });
 
+        const $embeddingProviderPrecedence = this.$widget.find('.embedding-provider-precedence');
+        $embeddingProviderPrecedence.on('change', async () => {
+            await this.updateOption('embeddingProviderPrecedence', $embeddingProviderPrecedence.val() as string);
+            // Display validation warnings after changing precedence list
+            await this.displayValidationWarnings();
+        });
+
+        // Set up sortable behavior for the embedding provider precedence list
+        const $sortableList = this.$widget.find('.embedding-provider-sortable');
+
+        // Track the item being dragged
+        let draggedItem: HTMLElement | null = null;
+
+        // Store a reference to this for use in callbacks
+        const self = this;
+
+        // Function to update the hidden input with current order
+        const updatePrecedenceValue = () => {
+            const providers = $sortableList.find('li').map(function() {
+                return $(this).data('provider');
+            }).get().join(',');
+
+            $embeddingProviderPrecedence.val(providers);
+            // Trigger the change event to save the option
+            $embeddingProviderPrecedence.trigger('change');
+
+            // Show/hide the disabled providers container
+            const $disabledContainer = self.$widget.find('.disabled-providers-container');
+            const hasDisabledProviders = self.$widget.find('.embedding-provider-disabled li').length > 0;
+            $disabledContainer.toggle(hasDisabledProviders);
+        };
+
+        // Setup drag handlers for a list item
+        const setupDragHandlers = ($item: JQuery) => {
+            // Start dragging
+            $item.on('dragstart', function(e: JQuery.DragStartEvent) {
+                draggedItem = this;
+                setTimeout(() => $(this).addClass('dragging'), 0);
+                // Set data for drag operation
+                e.originalEvent?.dataTransfer?.setData('text/plain', '');
+            });
+
+            // End dragging
+            $item.on('dragend', function() {
+                $(this).removeClass('dragging');
+                draggedItem = null;
+                // Update the precedence value when dragging ends
+                updatePrecedenceValue();
+            });
+
+            // Dragging over an item
+            $item.on('dragover', function(e: JQuery.DragOverEvent) {
+                e.preventDefault();
+                if (!draggedItem || this === draggedItem) return;
+
+                $(this).addClass('drag-over');
+            });
+
+            // Leaving an item
+            $item.on('dragleave', function() {
+                $(this).removeClass('drag-over');
+            });
+
+            // Dropping on an item
+            $item.on('drop', function(e: JQuery.DropEvent) {
+                e.preventDefault();
+                $(this).removeClass('drag-over');
+
+                if (!draggedItem || this === draggedItem) return;
+
+                // Get the positions of the dragged item and drop target
+                const allItems = Array.from($sortableList.find('li').get()) as HTMLElement[];
+                const draggedIndex = allItems.indexOf(draggedItem as HTMLElement);
+                const dropIndex = allItems.indexOf(this as HTMLElement);
+
+                if (draggedIndex < dropIndex) {
+                    // Insert after
+                    $(this).after(draggedItem);
+                } else {
+                    // Insert before
+                    $(this).before(draggedItem);
+                }
+
+                // Update the precedence value after reordering
+                updatePrecedenceValue();
+            });
+        };
+
+        // Make all list items draggable
+        const $listItems = $sortableList.find('li');
+        $listItems.attr('draggable', 'true');
+        $listItems.each((_, item) => {
+            setupDragHandlers($(item));
+        });
+
+        // Handle remove provider button clicks
+        this.$widget.find('.remove-provider').on('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const $button = $(e.currentTarget);
+            const $item = $button.closest('li');
+            const provider = $item.data('provider');
+            const providerName = $item.find('strong').text();
+
+            // Create a new item for the disabled list
+            const $disabledItem = $(`
+                <li class="list-group-item d-flex align-items-center" data-provider="${provider}">
+                    <strong class="flex-grow-1">${providerName}</strong>
+                    <button class="btn btn-sm btn-outline-success restore-provider" title="${t("ai_llm.restore_provider")}">
+                        <span class="bx bx-plus"></span>
+                    </button>
+                </li>
+            `);
+
+            // Add to disabled list
+            this.$widget.find('.embedding-provider-disabled').append($disabledItem);
+
+            // Remove from active list
+            $item.remove();
+
+            // Update the hidden input value
+            updatePrecedenceValue();
+
+            // Add restore button handler
+            $disabledItem.find('.restore-provider').on('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const $restoreButton = $(e.currentTarget);
+                const $disabledItem = $restoreButton.closest('li');
+                const provider = $disabledItem.data('provider');
+                const providerName = $disabledItem.find('strong').text();
+
+                // Create a new item for the active list
+                const $activeItem = $(`
+                    <li class="list-group-item d-flex align-items-center" data-provider="${provider}">
+                        <span class="bx bx-menu handle me-2"></span>
+                        <strong class="flex-grow-1">${providerName}</strong>
+                        <button class="btn btn-sm btn-outline-danger remove-provider" title="${t("ai_llm.remove_provider")}">
+                            <span class="bx bx-x"></span>
+                        </button>
+                    </li>
+                `);
+
+                // Make draggable
+                $activeItem.attr('draggable', 'true');
+                setupDragHandlers($activeItem);
+
+                // Add remove button handler
+                $activeItem.find('.remove-provider').on('click', function(e) {
+                    $(this).closest('li').find('.remove-provider').trigger('click');
+                });
+
+                // Add to active list
+                $sortableList.append($activeItem);
+
+                // Remove from disabled list
+                $disabledItem.remove();
+
+                // Update the hidden input value
+                updatePrecedenceValue();
+            });
+        });
+
+        // Initialize by setting the value based on current order
+        updatePrecedenceValue();
+
+        // Process the saved preference value
+        const initializeProviderOrder = () => {
+            // Get the current value
+            const savedValue = $embeddingProviderPrecedence.val() as string;
+            if (!savedValue) return;
+
+            // Get all available providers
+            const allProviders = ['openai', 'anthropic', 'ollama', 'local'];
+            const savedProviders = savedValue.split(',');
+
+            // Find disabled providers (providers in allProviders but not in savedProviders)
+            const disabledProviders = allProviders.filter(p => !savedProviders.includes(p));
+
+            // Move saved providers to the end in the correct order
+            savedProviders.forEach(provider => {
+                const $item = $sortableList.find(`li[data-provider="${provider}"]`);
+                if ($item.length) {
+                    $sortableList.append($item); // Move to the end in the correct order
+                }
+            });
+
+            // Move disabled providers to the disabled list
+            disabledProviders.forEach(provider => {
+                const $item = $sortableList.find(`li[data-provider="${provider}"]`);
+                if ($item.length) {
+                    // Simulate clicking the remove button
+                    $item.find('.remove-provider').trigger('click');
+                }
+            });
+
+            // Update the value again after reordering
+            updatePrecedenceValue();
+        };
+
+        // Initialize provider order
+        initializeProviderOrder();
+
         const $embeddingGenerationLocation = this.$widget.find('.embedding-generation-location');
         $embeddingGenerationLocation.on('change', async () => {
             await this.updateOption('embeddingGenerationLocation', $embeddingGenerationLocation.val() as string);
@@ -799,36 +1057,67 @@ export default class AiSettingsWidget extends OptionsWidget {
         return this.$widget;
     }
 
-    optionsLoaded(options: OptionMap) {
+    async optionsLoaded(options: OptionMap) {
+        // Call the ancestor method with the options to store them
+        super.optionsLoaded(options);
+
+        // Add CSS styles for the sortable list
+        // We add this here to ensure it's only added once
+        if (!$('#embedding-sortable-styles').length) {
+            $('head').append(`
+                <style id="embedding-sortable-styles">
+                    .embedding-provider-sortable .handle {
+                        cursor: grab;
+                    }
+                    .embedding-provider-sortable li {
+                        cursor: grab;
+                        transition: background-color 0.2s;
+                    }
+                    .embedding-provider-sortable li.dragging {
+                        opacity: 0.5;
+                        background-color: #f8f9fa;
+                    }
+                    .embedding-provider-sortable li.drag-over {
+                        border: 2px dashed #007bff;
+                    }
+                </style>
+            `);
+        }
+
+        // Set values from options to UI components
         if (!this.$widget) return;
 
-        this.setCheckboxState(this.$widget.find('.ai-enabled'), options.aiEnabled || 'false');
-        this.setCheckboxState(this.$widget.find('.ollama-enabled'), options.ollamaEnabled || 'false');
-
+        // AI Section
+        this.$widget.find('.ai-enabled').prop('checked', options.aiEnabled !== 'false');
         this.$widget.find('.ai-provider-precedence').val(options.aiProviderPrecedence || 'openai,anthropic,ollama');
         this.$widget.find('.ai-system-prompt').val(options.aiSystemPrompt || '');
         this.$widget.find('.ai-temperature').val(options.aiTemperature || '0.7');
 
+        // OpenAI Section
         this.$widget.find('.openai-api-key').val(options.openaiApiKey || '');
         this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || 'gpt-4o');
         this.$widget.find('.openai-embedding-model').val(options.openaiEmbeddingModel || 'text-embedding-3-small');
         this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai.com/v1');
 
+        // Anthropic Section
         this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey || '');
         this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel || 'claude-3-opus-20240229');
         this.$widget.find('.anthropic-base-url').val(options.anthropicBaseUrl || 'https://api.anthropic.com/v1');
 
+        // Ollama Section
+        this.$widget.find('.ollama-enabled').prop('checked', options.ollamaEnabled !== 'false');
         this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl || 'http://localhost:11434');
         this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel || 'llama3');
         this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || 'nomic-embed-text');
 
-        // Load embedding options
-        this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
-        this.$widget.find('.embedding-generation-location').val(options.embeddingGenerationLocation || 'client');
-        this.setCheckboxState(this.$widget.find('.embedding-auto-update-enabled'), options.embeddingAutoUpdateEnabled || 'true');
-        this.setCheckboxState(this.$widget.find('.enable-automatic-indexing'), options.enableAutomaticIndexing || 'true');
+        // Embedding Section
+        this.$widget.find('.embedding-auto-update-enabled').prop('checked', options.embeddingAutoUpdateEnabled !== 'false');
+        this.$widget.find('.enable-automatic-indexing').prop('checked', options.enableAutomaticIndexing !== 'false');
         this.$widget.find('.embedding-similarity-threshold').val(options.embeddingSimilarityThreshold || '0.65');
         this.$widget.find('.max-notes-per-llm-query').val(options.maxNotesPerLlmQuery || '10');
+        this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
+        this.$widget.find('.embedding-provider-precedence').val(options.embeddingProviderPrecedence || 'openai,ollama,anthropic');
+        this.$widget.find('.embedding-generation-location').val(options.embeddingGenerationLocation || 'client');
         this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
         this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');
         this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension || '1536');
@@ -1172,11 +1461,6 @@ export default class AiSettingsWidget extends OptionsWidget {
                                     <span class="note-detail-value">${(note.error || 'Unknown error').substring(0, 100)}${(note.error && note.error.length > 100) ? '...' : ''}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="note-book-actions">
-                            <button class="btn btn-sm btn-outline-secondary retry-btn" data-note-id="${note.noteId}">
-                                <i class="fas fa-redo-alt"></i> Retry
-                            </button>
                         </div>
                     </div>
                 </div>

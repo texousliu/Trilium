@@ -189,6 +189,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "aiSystemPrompt", value: "", isSynced: true },
     { name: "aiProviderPrecedence", value: "openai,anthropic,ollama", isSynced: true },
     { name: "embeddingsDefaultProvider", value: "openai", isSynced: true },
+    { name: "embeddingProviderPrecedence", value: "openai,ollama,anthropic", isSynced: true },
     { name: "enableAutomaticIndexing", value: "true", isSynced: true },
     { name: "embeddingSimilarityThreshold", value: "0.65", isSynced: true },
     { name: "maxNotesPerLlmQuery", value: "10", isSynced: true },
