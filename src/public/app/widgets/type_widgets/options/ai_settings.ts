@@ -56,6 +56,9 @@ export default class AiSettingsWidget extends OptionsWidget {
         <div class="options-section">
             <h4>${t("ai_llm.title")}</h4>
 
+            <!-- Add warning alert div -->
+            <div class="provider-validation-warning alert alert-warning" style="display: none;"></div>
+
             <div class="form-group">
                 <label class="tn-checkbox">
                     <input class="ai-enabled form-check-input" type="checkbox">
@@ -335,6 +338,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         $aiEnabled.on('change', async () => {
             await this.updateOption('aiEnabled', $aiEnabled.prop('checked') ? "true" : "false");
             this.updateAiSectionVisibility();
+            // Display validation warnings when AI is enabled/disabled
+            await this.displayValidationWarnings();
         });
 
         const $ollamaEnabled = this.$widget.find('.ollama-enabled');
@@ -345,6 +350,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         const $aiProviderPrecedence = this.$widget.find('.ai-provider-precedence');
         $aiProviderPrecedence.on('change', async () => {
             await this.updateOption('aiProviderPrecedence', $aiProviderPrecedence.val() as string);
+            // Display validation warnings after changing precedence list
+            await this.displayValidationWarnings();
         });
 
         const $aiTemperature = this.$widget.find('.ai-temperature');
@@ -481,6 +488,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         const $embeddingDefaultProvider = this.$widget.find('.embedding-default-provider');
         $embeddingDefaultProvider.on('change', async () => {
             await this.updateOption('embeddingsDefaultProvider', $embeddingDefaultProvider.val() as string);
+            // Display validation warnings after changing default provider
+            await this.displayValidationWarnings();
         });
 
         const $embeddingGenerationLocation = this.$widget.find('.embedding-generation-location');
@@ -593,6 +602,9 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension || '1536');
 
         this.updateAiSectionVisibility();
+
+        // Call displayValidationWarnings instead of directly calling validateEmbeddingProviders
+        this.displayValidationWarnings();
     }
 
     updateAiSectionVisibility() {
@@ -1002,6 +1014,100 @@ export default class AiSettingsWidget extends OptionsWidget {
                     .html('Retry All');
             }
         });
+    }
+
+    // Replace displayValidationWarnings method with client-side implementation
+    async displayValidationWarnings() {
+        if (!this.$widget) return;
+
+        const $warningDiv = this.$widget.find('.provider-validation-warning');
+
+        try {
+            // Get required data from current settings
+            const aiEnabled = this.$widget.find('.ai-enabled').prop('checked');
+
+            // If AI isn't enabled, don't show warnings
+            if (!aiEnabled) {
+                $warningDiv.hide();
+                return;
+            }
+
+            // Get default embedding provider
+            const defaultProvider = this.$widget.find('.embedding-default-provider').val() as string;
+
+            // Get provider precedence
+            const precedenceStr = this.$widget.find('.ai-provider-precedence').val() as string;
+            let precedenceList: string[] = [];
+
+            if (precedenceStr) {
+                if (precedenceStr.startsWith('[') && precedenceStr.endsWith(']')) {
+                    precedenceList = JSON.parse(precedenceStr);
+                } else if (precedenceStr.includes(',')) {
+                    precedenceList = precedenceStr.split(',').map(p => p.trim());
+                } else {
+                    precedenceList = [precedenceStr];
+                }
+            }
+
+            // Get enabled providers
+            // Since we don't have direct access to DB from client, we'll use the UI state
+            // This is an approximation - enabled providers are generally those with API keys or enabled state
+            const enabledProviders: string[] = [];
+
+            // OpenAI is enabled if API key is set
+            const openaiKey = this.$widget.find('.openai-api-key').val() as string;
+            if (openaiKey) {
+                enabledProviders.push('openai');
+            }
+
+            // Anthropic is enabled if API key is set
+            const anthropicKey = this.$widget.find('.anthropic-api-key').val() as string;
+            if (anthropicKey) {
+                enabledProviders.push('anthropic');
+            }
+
+            // Ollama is enabled if checkbox is checked
+            const ollamaEnabled = this.$widget.find('.ollama-enabled').prop('checked');
+            if (ollamaEnabled) {
+                enabledProviders.push('ollama');
+            }
+
+            // Local is always available
+            enabledProviders.push('local');
+
+            // Perform validation checks
+            const defaultInPrecedence = precedenceList.includes(defaultProvider);
+            const defaultIsEnabled = enabledProviders.includes(defaultProvider);
+            const allPrecedenceEnabled = precedenceList.every(p => enabledProviders.includes(p));
+
+            // Build warning message if there are issues
+            if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled) {
+                let message = 'There are issues with your AI provider configuration:';
+
+                if (!defaultInPrecedence) {
+                    message += `<br>• The default embedding provider "${defaultProvider}" is not in your provider precedence list.`;
+                }
+
+                if (!defaultIsEnabled) {
+                    message += `<br>• The default embedding provider "${defaultProvider}" is not enabled.`;
+                }
+
+                if (!allPrecedenceEnabled) {
+                    const disabledProviders = precedenceList.filter(p => !enabledProviders.includes(p));
+                    message += `<br>• The following providers in your precedence list are not enabled: ${disabledProviders.join(', ')}.`;
+                }
+
+                message += '<br><br>Please check your AI settings.';
+
+                $warningDiv.html(message);
+                $warningDiv.show();
+            } else {
+                $warningDiv.hide();
+            }
+        } catch (error) {
+            console.error('Error validating embedding providers:', error);
+            $warningDiv.hide();
+        }
     }
 }
 

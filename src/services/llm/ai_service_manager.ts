@@ -7,6 +7,7 @@ import log from '../log.js';
 import { ContextExtractor } from './context/index.js';
 import semanticContextService from './semantic_context_service.js';
 import indexService from './index_service.js';
+import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './embeddings/providers.js';
 
 type ServiceProviders = 'openai' | 'anthropic' | 'ollama';
 
@@ -50,8 +51,13 @@ export class AIServiceManager {
                     if (customOrder.startsWith('[') && customOrder.endsWith(']')) {
                         parsed = JSON.parse(customOrder);
                     } else if (typeof customOrder === 'string') {
-                        // If it's a simple string (like "ollama"), convert to single-item array
-                        parsed = [customOrder];
+                        // If it's a string with commas, split it
+                        if (customOrder.includes(',')) {
+                            parsed = customOrder.split(',').map(p => p.trim());
+                        } else {
+                            // If it's a simple string (like "ollama"), convert to single-item array
+                            parsed = [customOrder];
+                        }
                     } else {
                         // Fallback to default
                         parsed = defaultOrder;
@@ -74,12 +80,97 @@ export class AIServiceManager {
             }
 
             this.initialized = true;
+
+            // Remove the validateEmbeddingProviders call since we now do validation on the client
+            // this.validateEmbeddingProviders();
+
             return true;
         } catch (error) {
             // If options table doesn't exist yet, use defaults
             // This happens during initial database creation
             this.providerOrder = ['openai', 'anthropic', 'ollama'];
             return false;
+        }
+    }
+
+    /**
+     * Validate embedding providers configuration
+     * - Check if embedding default provider is in provider precedence list
+     * - Check if all providers in precedence list and default provider are enabled
+     *
+     * @returns A warning message if there are issues, or null if everything is fine
+     */
+    async validateEmbeddingProviders(): Promise<string | null> {
+        try {
+            // Check if AI is enabled, if not, skip validation
+            const aiEnabled = await options.getOptionBool('aiEnabled');
+            if (!aiEnabled) {
+                return null;
+            }
+
+            // Get default embedding provider
+            const defaultProviderName = await options.getOption('embeddingsDefaultProvider') || 'openai';
+
+            // Parse provider precedence list (similar to updateProviderOrder)
+            let precedenceList: string[] = [];
+            const precedenceOption = await options.getOption('aiProviderPrecedence');
+
+            if (precedenceOption) {
+                if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
+                    precedenceList = JSON.parse(precedenceOption);
+                } else if (typeof precedenceOption === 'string') {
+                    if (precedenceOption.includes(',')) {
+                        precedenceList = precedenceOption.split(',').map(p => p.trim());
+                    } else {
+                        precedenceList = [precedenceOption];
+                    }
+                }
+            }
+
+            // Get enabled providers
+            const enabledProviders = await getEnabledEmbeddingProviders();
+            const enabledProviderNames = enabledProviders.map(p => p.name);
+
+            // Check if default provider is in precedence list
+            const defaultInPrecedence = precedenceList.includes(defaultProviderName);
+
+            // Check if default provider is enabled
+            const defaultIsEnabled = enabledProviderNames.includes(defaultProviderName);
+
+            // Check if all providers in precedence list are enabled
+            const allPrecedenceEnabled = precedenceList.every(p =>
+                enabledProviderNames.includes(p) || p === 'local');
+
+            // Return warning message if there are issues
+            if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled) {
+                let message = 'There are issues with your AI provider configuration:';
+
+                if (!defaultInPrecedence) {
+                    message += `\n• The default embedding provider "${defaultProviderName}" is not in your provider precedence list.`;
+                }
+
+                if (!defaultIsEnabled) {
+                    message += `\n• The default embedding provider "${defaultProviderName}" is not enabled.`;
+                }
+
+                if (!allPrecedenceEnabled) {
+                    const disabledProviders = precedenceList.filter(p =>
+                        !enabledProviderNames.includes(p) && p !== 'local');
+                    message += `\n• The following providers in your precedence list are not enabled: ${disabledProviders.join(', ')}.`;
+                }
+
+                message += '\n\nPlease check your AI settings.';
+
+                // Log warning to console
+                log.error('AI Provider Configuration Warning: ' + message);
+
+                return message;
+            }
+
+            return null;
+        } catch (error) {
+            log.error(`Error validating embedding providers: ${error}`);
+            return null;
         }
     }
 
@@ -182,7 +273,7 @@ export class AIServiceManager {
     getSemanticContextService() {
         return semanticContextService;
     }
-    
+
     /**
      * Get the index service for managing knowledge base indexing
      * @returns The index service instance
@@ -216,6 +307,10 @@ export default {
     },
     async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
         return getInstance().generateChatCompletion(messages, options);
+    },
+    // Add validateEmbeddingProviders method
+    async validateEmbeddingProviders(): Promise<string | null> {
+        return getInstance().validateEmbeddingProviders();
     },
     // Context and index related methods
     getContextExtractor() {
