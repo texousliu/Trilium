@@ -176,6 +176,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "openaiBaseUrl", value: "https://api.openai.com/v1", isSynced: true },
     { name: "anthropicApiKey", value: "", isSynced: false },
     { name: "anthropicDefaultModel", value: "claude-3-opus-20240229", isSynced: true },
+    { name: "anthropicEmbeddingModel", value: "", isSynced: true },
     { name: "anthropicBaseUrl", value: "https://api.anthropic.com/v1", isSynced: true },
     { name: "ollamaEnabled", value: "false", isSynced: true },
     { name: "ollamaDefaultModel", value: "llama3", isSynced: true },

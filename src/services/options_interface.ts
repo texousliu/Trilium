@@ -57,6 +57,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     openaiBaseUrl: string;
     anthropicApiKey: string;
     anthropicDefaultModel: string;
+    anthropicEmbeddingModel: string;
     anthropicBaseUrl: string;
     ollamaEnabled: boolean;
     ollamaBaseUrl: string;

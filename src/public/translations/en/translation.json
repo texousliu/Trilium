@@ -1149,6 +1149,7 @@
     "openai_url_description": "Default: https://api.openai.com/v1",
     "anthropic_configuration": "Anthropic Configuration",
     "anthropic_model_description": "Examples: claude-3-opus-20240229, claude-3-sonnet-20240229",
+    "anthropic_embedding_model_description": "Anthropic embedding model (not available yet)",
     "anthropic_url_description": "Default: https://api.anthropic.com/v1",
     "ollama_configuration": "Ollama Configuration",
     "enable_ollama": "Enable Ollama",

@@ -60,6 +60,20 @@ interface OpenAIModelResponse {
     }>;
 }
 
+interface AnthropicModelResponse {
+    success: boolean;
+    chatModels: Array<{
+        id: string;
+        name: string;
+        type: string;
+    }>;
+    embeddingModels: Array<{
+        id: string;
+        name: string;
+        type: string;
+    }>;
+}
+
 export default class AiSettingsWidget extends OptionsWidget {
     private statsRefreshInterval: NodeJS.Timeout | null = null;
     private indexRebuildRefreshInterval: NodeJS.Timeout | null = null;
@@ -221,6 +235,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                                     <option value="claude-3-haiku-20240307">Claude 3 Haiku</option>
                                 </select>
                                 <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
+                                <button class="btn btn-sm btn-outline-secondary refresh-anthropic-models">${t("ai_llm.refresh_models")}</button>
                             </div>
                         </div>
                     </div>
@@ -620,6 +635,63 @@ export default class AiSettingsWidget extends OptionsWidget {
             } finally {
                 $refreshOpenAIModels.prop('disabled', false);
                 $refreshOpenAIModels.html(`<span class="bx bx-refresh"></span>`);
+            }
+        });
+
+        // Anthropic models refresh button
+        const $refreshAnthropicModels = this.$widget.find('.refresh-anthropic-models');
+        $refreshAnthropicModels.on('click', async () => {
+            $refreshAnthropicModels.prop('disabled', true);
+            $refreshAnthropicModels.html(`<i class="spinner-border spinner-border-sm"></i>`);
+
+            try {
+                const anthropicBaseUrl = this.$widget.find('.anthropic-base-url').val() as string;
+                const response = await server.post<AnthropicModelResponse>('anthropic/list-models', { baseUrl: anthropicBaseUrl });
+
+                if (response && response.success) {
+                    // Update the chat models dropdown
+                    if (response.chatModels?.length > 0) {
+                        const $chatModelSelect = this.$widget.find('.anthropic-default-model');
+                        const currentChatValue = $chatModelSelect.val();
+
+                        // Clear existing options
+                        $chatModelSelect.empty();
+
+                        // Sort models by name
+                        const sortedChatModels = [...response.chatModels].sort((a, b) => a.name.localeCompare(b.name));
+
+                        // Add models to the dropdown
+                        sortedChatModels.forEach(model => {
+                            $chatModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
+                        });
+
+                        // Try to restore the previously selected value
+                        if (currentChatValue) {
+                            $chatModelSelect.val(currentChatValue);
+                            // If the value doesn't exist anymore, select the first option
+                            if (!$chatModelSelect.val()) {
+                                $chatModelSelect.prop('selectedIndex', 0);
+                            }
+                        }
+                    }
+
+                    // Handle embedding models if they exist
+                    if (response.embeddingModels?.length > 0) {
+                        toastService.showMessage(`Found ${response.embeddingModels.length} Anthropic embedding models.`);
+                    }
+
+                    // Show success message
+                    const totalModels = (response.chatModels?.length || 0) + (response.embeddingModels?.length || 0);
+                    toastService.showMessage(`${totalModels} Anthropic models found.`);
+                } else {
+                    toastService.showError(`No Anthropic models found. Please check your API key and settings.`);
+                }
+            } catch (e) {
+                console.error(`Error fetching Anthropic models:`, e);
+                toastService.showError(`Error fetching Anthropic models: ${e}`);
+            } finally {
+                $refreshAnthropicModels.prop('disabled', false);
+                $refreshAnthropicModels.html(`<span class="bx bx-refresh"></span>`);
             }
         });
 

@@ -87,6 +87,7 @@ const ALLOWED_OPTIONS = new Set([
     "openaiBaseUrl",
     "anthropicApiKey",
     "anthropicDefaultModel",
+    "anthropicEmbeddingModel",
     "anthropicBaseUrl",
     "ollamaEnabled",
     "ollamaBaseUrl",

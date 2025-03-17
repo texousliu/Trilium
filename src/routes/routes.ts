@@ -63,6 +63,7 @@ import shareRoutes from "../share/routes.js";
 import embeddingsRoute from "./api/embeddings.js";
 import ollamaRoute from "./api/ollama.js";
 import openaiRoute from "./api/openai.js";
+import anthropicRoute from "./api/anthropic.js";
 import llmRoute from "./api/llm.js";
 
 import etapiAuthRoutes from "../etapi/auth.js";
@@ -411,6 +412,9 @@ function register(app: express.Application) {
 
     // OpenAI API endpoints
     route(PST, "/api/openai/list-models", [auth.checkApiAuth, csrfMiddleware], openaiRoute.listModels, apiResultHandler);
+
+    // Anthropic API endpoints
+    route(PST, "/api/anthropic/list-models", [auth.checkApiAuth, csrfMiddleware], anthropicRoute.listModels, apiResultHandler);
 
     // API Documentation
     apiDocsRoute.register(app);
