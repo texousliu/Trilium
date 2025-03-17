@@ -57,11 +57,11 @@ export default class AiSettingsWidget extends OptionsWidget {
             <h4>${t("ai_llm.title")}</h4>
 
             <div class="form-group">
-                <label>
-                    <input class="ai-enabled" type="checkbox">
+                <label class="tn-checkbox">
+                    <input class="ai-enabled form-check-input" type="checkbox">
                     ${t("ai_llm.enable_ai_features")}
                 </label>
-                <div class="help-text">${t("ai_llm.enable_ai_description")}</div>
+                <div class="form-text">${t("ai_llm.enable_ai_description")}</div>
             </div>
         </div>
 
@@ -145,11 +145,11 @@ export default class AiSettingsWidget extends OptionsWidget {
                         <h5>${t("ai_llm.ollama_configuration")}</h5>
 
                         <div class="form-group">
-                            <label>
-                                <input class="ollama-enabled" type="checkbox">
+                            <label class="tn-checkbox">
+                                <input class="ollama-enabled form-check-input" type="checkbox">
                                 ${t("ai_llm.enable_ollama")}
                             </label>
-                            <div class="help-text">${t("ai_llm.enable_ollama_description")}</div>
+                            <div class="form-text">${t("ai_llm.enable_ollama_description")}</div>
                         </div>
 
                         <div class="form-group">
@@ -203,19 +203,19 @@ export default class AiSettingsWidget extends OptionsWidget {
             </div>
 
             <div class="form-group">
-                <label>
-                    <input class="embedding-auto-update-enabled" type="checkbox">
+                <label class="tn-checkbox">
+                    <input class="embedding-auto-update-enabled form-check-input" type="checkbox">
                     ${t("ai_llm.enable_auto_update_embeddings")}
                 </label>
-                <div class="help-text">${t("ai_llm.enable_auto_update_embeddings_description")}</div>
+                <div class="form-text">${t("ai_llm.enable_auto_update_embeddings_description")}</div>
             </div>
 
             <div class="form-group">
-                <label>
-                    <input class="enable-automatic-indexing" type="checkbox">
+                <label class="tn-checkbox">
+                    <input class="enable-automatic-indexing form-check-input" type="checkbox">
                     ${t("ai_llm.enable_automatic_indexing")}
                 </label>
-                <div class="help-text">${t("ai_llm.enable_automatic_indexing_description")}</div>
+                <div class="form-text">${t("ai_llm.enable_automatic_indexing_description")}</div>
             </div>
 
             <div class="form-group">
