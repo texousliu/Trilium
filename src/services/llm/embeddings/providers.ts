@@ -224,7 +224,7 @@ export async function initializeDefaultProviders() {
         // Register OpenAI provider if API key is configured
         const openaiApiKey = await options.getOption('openaiApiKey');
         if (openaiApiKey) {
-            const openaiModel = await options.getOption('openaiDefaultModel') || 'text-embedding-3-small';
+            const openaiModel = await options.getOption('openaiEmbeddingModel') || 'text-embedding-3-small';
             const openaiBaseUrl = await options.getOption('openaiBaseUrl') || 'https://api.openai.com/v1';
 
             registerEmbeddingProvider(new OpenAIEmbeddingProvider({

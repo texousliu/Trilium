@@ -172,6 +172,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "aiEnabled", value: "false", isSynced: true },
     { name: "openaiApiKey", value: "", isSynced: false },
     { name: "openaiDefaultModel", value: "gpt-4o", isSynced: true },
+    { name: "openaiEmbeddingModel", value: "text-embedding-3-small", isSynced: true },
     { name: "openaiBaseUrl", value: "https://api.openai.com/v1", isSynced: true },
     { name: "anthropicApiKey", value: "", isSynced: false },
     { name: "anthropicDefaultModel", value: "claude-3-opus-20240229", isSynced: true },

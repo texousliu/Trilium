@@ -83,6 +83,7 @@ const ALLOWED_OPTIONS = new Set([
     "aiEnabled",
     "openaiApiKey",
     "openaiDefaultModel",
+    "openaiEmbeddingModel",
     "openaiBaseUrl",
     "anthropicApiKey",
     "anthropicDefaultModel",

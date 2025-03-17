@@ -48,8 +48,12 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
 
     // AI/LLM integration options
     aiEnabled: boolean;
+    aiProvider: string;
+    aiSystemPrompt: string;
+    aiTemperature: string;
     openaiApiKey: string;
     openaiDefaultModel: string;
+    openaiEmbeddingModel: string;
     openaiBaseUrl: string;
     anthropicApiKey: string;
     anthropicDefaultModel: string;
@@ -58,9 +62,8 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     ollamaBaseUrl: string;
     ollamaDefaultModel: string;
     ollamaEmbeddingModel: string;
+    codeOpenAiModel: string;
     aiProviderPrecedence: string;
-    aiTemperature: string;
-    aiSystemPrompt: string;
 
     // Embedding-related options
     embeddingAutoUpdateEnabled: boolean;

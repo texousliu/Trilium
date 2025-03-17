@@ -160,6 +160,16 @@ export default class AiSettingsWidget extends OptionsWidget {
                             <input class="openai-base-url form-control" type="text">
                             <div class="form-text">${t("ai_llm.openai_url_description")}</div>
                         </div>
+
+                        <div class="form-group">
+                            <label>${t("ai_llm.embedding_model")}</label>
+                            <select class="openai-embedding-model form-control">
+                                <option value="text-embedding-3-small">text-embedding-3-small (recommended)</option>
+                                <option value="text-embedding-3-large">text-embedding-3-large</option>
+                                <option value="text-embedding-ada-002">text-embedding-ada-002 (legacy)</option>
+                            </select>
+                            <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-anthropic" role="tabpanel" aria-labelledby="nav-anthropic-tab">
@@ -374,6 +384,11 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.updateOption('openaiDefaultModel', $openaiDefaultModel.val() as string);
         });
 
+        const $openaiEmbeddingModel = this.$widget.find('.openai-embedding-model');
+        $openaiEmbeddingModel.on('change', async () => {
+            await this.updateOption('openaiEmbeddingModel', $openaiEmbeddingModel.val() as string);
+        });
+
         const $openaiBaseUrl = this.$widget.find('.openai-base-url');
         $openaiBaseUrl.on('change', async () => {
             await this.updateOption('openaiBaseUrl', $openaiBaseUrl.val() as string);
@@ -575,11 +590,12 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.setCheckboxState(this.$widget.find('.ollama-enabled'), options.ollamaEnabled || 'false');
 
         this.$widget.find('.ai-provider-precedence').val(options.aiProviderPrecedence || 'openai,anthropic,ollama');
-        this.$widget.find('.ai-temperature').val(options.aiTemperature || '0.7');
         this.$widget.find('.ai-system-prompt').val(options.aiSystemPrompt || '');
+        this.$widget.find('.ai-temperature').val(options.aiTemperature || '0.7');
 
         this.$widget.find('.openai-api-key').val(options.openaiApiKey || '');
         this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || 'gpt-4o');
+        this.$widget.find('.openai-embedding-model').val(options.openaiEmbeddingModel || 'text-embedding-3-small');
         this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai.com/v1');
 
         this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey || '');
