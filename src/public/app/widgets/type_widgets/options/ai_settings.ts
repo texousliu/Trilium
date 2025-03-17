@@ -65,6 +65,47 @@ export default class AiSettingsWidget extends OptionsWidget {
             </div>
         </div>
 
+        <div class="options-section">
+            <h4>${t("ai_llm.embedding_statistics")}</h4>
+            <div class="embedding-stats-container">
+                <div class="embedding-stats">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div><strong>${t("ai_llm.processed_notes")}:</strong> <span class="embedding-processed-notes">-</span></div>
+                            <div><strong>${t("ai_llm.total_notes")}:</strong> <span class="embedding-total-notes">-</span></div>
+                            <div><strong>${t("ai_llm.progress")}:</strong> <span class="embedding-status-text">-</span></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div><strong>${t("ai_llm.queued_notes")}:</strong> <span class="embedding-queued-notes">-</span></div>
+                            <div><strong>${t("ai_llm.failed_notes")}:</strong> <span class="embedding-failed-notes">-</span></div>
+                            <div><strong>${t("ai_llm.last_processed")}:</strong> <span class="embedding-last-processed">-</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress mt-1" style="height: 10px;">
+                    <div class="progress-bar embedding-progress" role="progressbar" style="width: 0%;"
+                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <div class="mt-2">
+                    <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats">
+                        ${t("ai_llm.refresh_stats")}
+                    </button>
+                </div>
+            </div>
+
+            <hr/>
+            <!-- Failed embeddings section -->
+            <h5>${t("ai_llm.failed_notes")}</h4>
+            <div class="form-group mt-4">
+                <div class="embedding-failed-notes-container">
+                    <div class="embedding-failed-notes-list">
+                        <div class="alert alert-info">${t("ai_llm.no_failed_embeddings")}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="ai-providers-section options-section">
             <h4>${t("ai_llm.provider_configuration")}</h4>
 
@@ -288,45 +329,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="options-section">
-            <h4>${t("ai_llm.embedding_statistics")}</h4>
-            <div class="embedding-stats-container">
-                <div class="embedding-stats">
-                    <div><strong>${t("ai_llm.total_notes")}:</strong> <span class="embedding-total-notes">-</span></div>
-                    <div><strong>${t("ai_llm.processed_notes")}:</strong> <span class="embedding-processed-notes">-</span></div>
-                    <div><strong>${t("ai_llm.queued_notes")}:</strong> <span class="embedding-queued-notes">-</span></div>
-                    <div><strong>${t("ai_llm.failed_notes")}:</strong> <span class="embedding-failed-notes">-</span></div>
-                    <div><strong>${t("ai_llm.last_processed")}:</strong> <span class="embedding-last-processed">-</span></div>
-                    <div class="mt-2">
-                        <strong>${t("ai_llm.progress")}:</strong> <span class="embedding-status-text">-</span>
-                    </div>
-                    <div class="progress mt-1" style="height: 10px;">
-                        <div class="progress-bar embedding-progress" role="progressbar" style="width: 0%;"
-                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats">
-                        ${t("ai_llm.refresh_stats")}
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Failed embeddings section -->
-        <div class="options-section">
-            <h4>${t("ai_llm.failed_notes")}</h4>
-            <div class="form-group mt-4">
-                <div class="embedding-failed-notes-container">
-                    <div class="embedding-failed-notes-list">
-                        <div class="alert alert-info">${t("ai_llm.no_failed_embeddings")}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        `);
+        </div>`);
 
         const $aiEnabled = this.$widget.find('.ai-enabled');
         $aiEnabled.on('change', async () => {
