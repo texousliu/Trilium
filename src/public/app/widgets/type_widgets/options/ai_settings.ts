@@ -63,33 +63,31 @@ export default class AiSettingsWidget extends OptionsWidget {
                 </label>
                 <div class="help-text">${t("ai_llm.enable_ai_description")}</div>
             </div>
+        </div>
 
-            <hr />
+        <div class="ai-providers-section options-section">
+            <h4>${t("ai_llm.provider_configuration")}</h4>
 
-            <div class="ai-providers-section">
-                <h5>${t("ai_llm.provider_configuration")}</h5>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.provider_precedence")}</label>
-                    <input class="ai-provider-precedence form-control" type="text">
-                    <div class="help-text">${t("ai_llm.provider_precedence_description")}</div>
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.temperature")}</label>
-                    <input class="ai-temperature form-control" type="number" min="0" max="2" step="0.1">
-                    <div class="help-text">${t("ai_llm.temperature_description")}</div>
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.system_prompt")}</label>
-                    <textarea class="ai-system-prompt form-control" rows="3"></textarea>
-                    <div class="help-text">${t("ai_llm.system_prompt_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>${t("ai_llm.provider_precedence")}</label>
+                <input class="ai-provider-precedence form-control" type="text">
+                <div class="help-text">${t("ai_llm.provider_precedence_description")}</div>
             </div>
 
-            <hr />
+            <div class="form-group">
+                <label>${t("ai_llm.temperature")}</label>
+                <input class="ai-temperature form-control" type="number" min="0" max="2" step="0.1">
+                <div class="help-text">${t("ai_llm.temperature_description")}</div>
+            </div>
 
+            <div class="form-group">
+                <label>${t("ai_llm.system_prompt")}</label>
+                <textarea class="ai-system-prompt form-control" rows="3"></textarea>
+                <div class="help-text">${t("ai_llm.system_prompt_description")}</div>
+            </div>
+        </div>
+
+        <div class="options-section">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-openai-tab" data-bs-toggle="tab" data-bs-target="#nav-openai" type="button" role="tab" aria-controls="nav-openai" aria-selected="true">OpenAI</button>
@@ -179,137 +177,140 @@ export default class AiSettingsWidget extends OptionsWidget {
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="embedding-section">
-                <h5>${t("ai_llm.embedding_configuration")}</h5>
+        <div class="embedding-section options-section">
+            <h4>${t("ai_llm.embedding_configuration")}</h4>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.embedding_default_provider")}</label>
-                    <select class="embedding-default-provider form-control">
-                        <option value="openai">OpenAI</option>
-                        <option value="anthropic">Anthropic</option>
-                        <option value="ollama">Ollama</option>
-                        <option value="local">Local</option>
-                    </select>
-                    <div class="help-text">${t("ai_llm.embedding_default_provider_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>${t("ai_llm.embedding_default_provider")}</label>
+                <select class="embedding-default-provider form-control">
+                    <option value="openai">OpenAI</option>
+                    <option value="anthropic">Anthropic</option>
+                    <option value="ollama">Ollama</option>
+                    <option value="local">Local</option>
+                </select>
+                <div class="help-text">${t("ai_llm.embedding_default_provider_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.embedding_generation_location")}</label>
-                    <select class="embedding-generation-location form-control">
-                        <option value="client">${t("ai_llm.embedding_generation_location_client")}</option>
-                        <option value="sync_server">${t("ai_llm.embedding_generation_location_sync_server")}</option>
-                    </select>
-                    <div class="help-text">${t("ai_llm.embedding_generation_location_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>${t("ai_llm.embedding_generation_location")}</label>
+                <select class="embedding-generation-location form-control">
+                    <option value="client">${t("ai_llm.embedding_generation_location_client")}</option>
+                    <option value="sync_server">${t("ai_llm.embedding_generation_location_sync_server")}</option>
+                </select>
+                <div class="help-text">${t("ai_llm.embedding_generation_location_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <label>
-                        <input class="embedding-auto-update-enabled" type="checkbox">
-                        ${t("ai_llm.enable_auto_update_embeddings")}
-                    </label>
-                    <div class="help-text">${t("ai_llm.enable_auto_update_embeddings_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>
+                    <input class="embedding-auto-update-enabled" type="checkbox">
+                    ${t("ai_llm.enable_auto_update_embeddings")}
+                </label>
+                <div class="help-text">${t("ai_llm.enable_auto_update_embeddings_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <label>
-                        <input class="enable-automatic-indexing" type="checkbox">
-                        ${t("ai_llm.enable_automatic_indexing")}
-                    </label>
-                    <div class="help-text">${t("ai_llm.enable_automatic_indexing_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>
+                    <input class="enable-automatic-indexing" type="checkbox">
+                    ${t("ai_llm.enable_automatic_indexing")}
+                </label>
+                <div class="help-text">${t("ai_llm.enable_automatic_indexing_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.similarity_threshold")}</label>
-                    <input class="embedding-similarity-threshold form-control" type="number" min="0" max="1" step="0.01">
-                    <div class="help-text">${t("ai_llm.similarity_threshold_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>${t("ai_llm.similarity_threshold")}</label>
+                <input class="embedding-similarity-threshold form-control" type="number" min="0" max="1" step="0.01">
+                <div class="help-text">${t("ai_llm.similarity_threshold_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.max_notes_per_llm_query")}</label>
-                    <input class="max-notes-per-llm-query form-control" type="number" min="1" max="50">
-                    <div class="help-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>${t("ai_llm.max_notes_per_llm_query")}</label>
+                <input class="max-notes-per-llm-query form-control" type="number" min="1" max="50">
+                <div class="help-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.embedding_batch_size")}</label>
-                    <input class="embedding-batch-size form-control" type="number" min="1" max="50">
-                    <div class="help-text">${t("ai_llm.embedding_batch_size_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>${t("ai_llm.embedding_batch_size")}</label>
+                <input class="embedding-batch-size form-control" type="number" min="1" max="50">
+                <div class="help-text">${t("ai_llm.embedding_batch_size_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.embedding_update_interval")}</label>
-                    <input class="embedding-update-interval form-control" type="number" min="1000" step="1000">
-                    <div class="help-text">${t("ai_llm.embedding_update_interval_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>${t("ai_llm.embedding_update_interval")}</label>
+                <input class="embedding-update-interval form-control" type="number" min="1000" step="1000">
+                <div class="help-text">${t("ai_llm.embedding_update_interval_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.embedding_default_dimension")}</label>
-                    <input class="embedding-default-dimension form-control" type="number" min="128">
-                    <div class="help-text">${t("ai_llm.embedding_default_dimension_description")}</div>
-                </div>
+            <div class="form-group">
+                <label>${t("ai_llm.embedding_default_dimension")}</label>
+                <input class="embedding-default-dimension form-control" type="number" min="128">
+                <div class="help-text">${t("ai_llm.embedding_default_dimension_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <button class="btn btn-sm btn-primary embedding-reprocess-all">
-                        ${t("ai_llm.reprocess_all_embeddings")}
-                    </button>
-                    <div class="help-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
-                </div>
+            <div class="form-group">
+                <button class="btn btn-sm btn-primary embedding-reprocess-all">
+                    ${t("ai_llm.reprocess_all_embeddings")}
+                </button>
+                <div class="help-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
+            </div>
 
-                <div class="form-group">
-                    <button class="btn btn-sm btn-primary reprocess-index">
-                        ${t("ai_llm.reprocess_index")}
-                    </button>
-                    <div class="help-text">${t("ai_llm.reprocess_index_description")}</div>
+            <div class="form-group">
+                <button class="btn btn-sm btn-primary reprocess-index">
+                    ${t("ai_llm.reprocess_index")}
+                </button>
+                <div class="help-text">${t("ai_llm.reprocess_index_description")}</div>
 
-                    <!-- Index rebuild progress tracking -->
-                    <div class="index-rebuild-progress-container mt-2" style="display: none;">
-                        <div class="mt-2">
-                            <strong>${t("ai_llm.index_rebuild_progress")}:</strong> <span class="index-rebuild-status-text">-</span>
-                        </div>
-                        <div class="progress mt-1" style="height: 10px;">
-                            <div class="progress-bar index-rebuild-progress" role="progressbar" style="width: 0%;"
-                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                        </div>
+                <!-- Index rebuild progress tracking -->
+                <div class="index-rebuild-progress-container mt-2" style="display: none;">
+                    <div class="mt-2">
+                        <strong>${t("ai_llm.index_rebuild_progress")}:</strong> <span class="index-rebuild-status-text">-</span>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.embedding_statistics")}</label>
-                    <div class="embedding-stats-container">
-                        <div class="embedding-stats">
-                            <div><strong>${t("ai_llm.total_notes")}:</strong> <span class="embedding-total-notes">-</span></div>
-                            <div><strong>${t("ai_llm.processed_notes")}:</strong> <span class="embedding-processed-notes">-</span></div>
-                            <div><strong>${t("ai_llm.queued_notes")}:</strong> <span class="embedding-queued-notes">-</span></div>
-                            <div><strong>${t("ai_llm.failed_notes")}:</strong> <span class="embedding-failed-notes">-</span></div>
-                            <div><strong>${t("ai_llm.last_processed")}:</strong> <span class="embedding-last-processed">-</span></div>
-                            <div class="mt-2">
-                                <strong>${t("ai_llm.progress")}:</strong> <span class="embedding-status-text">-</span>
-                            </div>
-                            <div class="progress mt-1" style="height: 10px;">
-                                <div class="progress-bar embedding-progress" role="progressbar" style="width: 0%;"
-                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats">
-                                ${t("ai_llm.refresh_stats")}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Failed embeddings section -->
-                <div class="form-group mt-4">
-                    <label>${t("ai_llm.failed_notes")}</label>
-                    <div class="embedding-failed-notes-container">
-                        <div class="embedding-failed-notes-list">
-                            <div class="alert alert-info">${t("ai_llm.no_failed_embeddings")}</div>
-                        </div>
+                    <div class="progress mt-1" style="height: 10px;">
+                        <div class="progress-bar index-rebuild-progress" role="progressbar" style="width: 0%;"
+                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                     </div>
                 </div>
             </div>
-        </div>`);
+        </div>
+
+        <div class="options-section">
+            <h4>${t("ai_llm.embedding_statistics")}</h4>
+            <div class="embedding-stats-container">
+                <div class="embedding-stats">
+                    <div><strong>${t("ai_llm.total_notes")}:</strong> <span class="embedding-total-notes">-</span></div>
+                    <div><strong>${t("ai_llm.processed_notes")}:</strong> <span class="embedding-processed-notes">-</span></div>
+                    <div><strong>${t("ai_llm.queued_notes")}:</strong> <span class="embedding-queued-notes">-</span></div>
+                    <div><strong>${t("ai_llm.failed_notes")}:</strong> <span class="embedding-failed-notes">-</span></div>
+                    <div><strong>${t("ai_llm.last_processed")}:</strong> <span class="embedding-last-processed">-</span></div>
+                    <div class="mt-2">
+                        <strong>${t("ai_llm.progress")}:</strong> <span class="embedding-status-text">-</span>
+                    </div>
+                    <div class="progress mt-1" style="height: 10px;">
+                        <div class="progress-bar embedding-progress" role="progressbar" style="width: 0%;"
+                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats">
+                        ${t("ai_llm.refresh_stats")}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Failed embeddings section -->
+        <div class="options-section">
+            <h4>${t("ai_llm.failed_notes")}</h4>
+            <div class="form-group mt-4">
+                <div class="embedding-failed-notes-container">
+                    <div class="embedding-failed-notes-list">
+                        <div class="alert alert-info">${t("ai_llm.no_failed_embeddings")}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `);
 
         const $aiEnabled = this.$widget.find('.ai-enabled');
         $aiEnabled.on('change', async () => {
