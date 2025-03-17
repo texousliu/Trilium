@@ -218,57 +218,73 @@ export default class AiSettingsWidget extends OptionsWidget {
                 <div class="form-text">${t("ai_llm.enable_automatic_indexing_description")}</div>
             </div>
 
-            <div class="form-group">
-                <label>${t("ai_llm.similarity_threshold")}</label>
-                <input class="embedding-similarity-threshold form-control" type="number" min="0" max="1" step="0.01">
-                <div class="form-text">${t("ai_llm.similarity_threshold_description")}</div>
-            </div>
+            <hr />
 
-            <div class="form-group">
-                <label>${t("ai_llm.max_notes_per_llm_query")}</label>
-                <input class="max-notes-per-llm-query form-control" type="number" min="1" max="50">
-                <div class="form-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label>${t("ai_llm.embedding_batch_size")}</label>
-                <input class="embedding-batch-size form-control" type="number" min="1" max="50">
-                <div class="form-text">${t("ai_llm.embedding_batch_size_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label>${t("ai_llm.embedding_update_interval")}</label>
-                <input class="embedding-update-interval form-control" type="number" min="1000" step="1000">
-                <div class="form-text">${t("ai_llm.embedding_update_interval_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label>${t("ai_llm.embedding_default_dimension")}</label>
-                <input class="embedding-default-dimension form-control" type="number" min="128">
-                <div class="form-text">${t("ai_llm.embedding_default_dimension_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <button class="btn btn-sm btn-primary embedding-reprocess-all">
-                    ${t("ai_llm.reprocess_all_embeddings")}
-                </button>
-                <div class="form-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <button class="btn btn-sm btn-primary reprocess-index">
-                    ${t("ai_llm.reprocess_index")}
-                </button>
-                <div class="form-text">${t("ai_llm.reprocess_index_description")}</div>
-
-                <!-- Index rebuild progress tracking -->
-                <div class="index-rebuild-progress-container mt-2" style="display: none;">
-                    <div class="mt-2">
-                        <strong>${t("ai_llm.index_rebuild_progress")}:</strong> <span class="index-rebuild-status-text">-</span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>${t("ai_llm.similarity_threshold")}</label>
+                        <input class="embedding-similarity-threshold form-control" type="number" min="0" max="1" step="0.01">
+                        <div class="form-text">${t("ai_llm.similarity_threshold_description")}</div>
                     </div>
-                    <div class="progress mt-1" style="height: 10px;">
-                        <div class="progress-bar index-rebuild-progress" role="progressbar" style="width: 0%;"
-                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.embedding_batch_size")}</label>
+                        <input class="embedding-batch-size form-control" type="number" min="1" max="50">
+                        <div class="form-text">${t("ai_llm.embedding_batch_size_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.embedding_default_dimension")}</label>
+                        <input class="embedding-default-dimension form-control" type="number" min="128">
+                        <div class="form-text">${t("ai_llm.embedding_default_dimension_description")}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>${t("ai_llm.max_notes_per_llm_query")}</label>
+                        <input class="max-notes-per-llm-query form-control" type="number" min="1" max="50">
+                        <div class="form-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.embedding_update_interval")}</label>
+                        <input class="embedding-update-interval form-control" type="number" min="1000" step="1000">
+                        <div class="form-text">${t("ai_llm.embedding_update_interval_description")}</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button class="btn btn-sm btn-primary embedding-reprocess-all">
+                            ${t("ai_llm.reprocess_all_embeddings")}
+                        </button>
+                        <div class="form-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button class="btn btn-sm btn-primary reprocess-index">
+                            ${t("ai_llm.reprocess_index")}
+                        </button>
+                        <div class="form-text">${t("ai_llm.reprocess_index_description")}</div>
+
+                        <!-- Index rebuild progress tracking -->
+                        <div class="index-rebuild-progress-container mt-2" style="display: none;">
+                            <div class="mt-2">
+                                <strong>${t("ai_llm.index_rebuild_progress")}:</strong> <span class="index-rebuild-status-text">-</span>
+                            </div>
+                            <div class="progress mt-1" style="height: 10px;">
+                                <div class="progress-bar index-rebuild-progress" role="progressbar" style="width: 0%;"
+                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
