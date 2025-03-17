@@ -101,7 +101,12 @@ const ALLOWED_OPTIONS = new Set([
     "embeddingBatchSize",
     "embeddingUpdateInterval",
     "embeddingDefaultDimension",
-    "embeddingsDefaultProvider"
+    "embeddingsDefaultProvider",
+    "embeddingProviderPrecedence",
+    "embeddingSimilarityThreshold",
+    "maxNotesPerLlmQuery",
+    "enableAutomaticIndexing",
+    "embeddingGenerationLocation"
 ]);
 
 function getOptions() {
