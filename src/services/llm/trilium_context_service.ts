@@ -50,19 +50,20 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
 
         this.initPromise = (async () => {
             try {
-                const providerId = await options.getOption('embeddingsDefaultProvider') || 'openai';
+                // Get user's configured provider or fallback to ollama
+                const providerId = await options.getOption('embeddingsDefaultProvider') || 'ollama';
                 this.provider = providerManager.getEmbeddingProvider(providerId);
 
-                // If specified provider not found, try openai as a fallback
-                if (!this.provider && providerId !== 'openai') {
-                    log.info(`Embedding provider ${providerId} not found, trying openai as fallback`);
-                    this.provider = providerManager.getEmbeddingProvider('openai');
+                // If specified provider not found, try ollama as first fallback for self-hosted usage
+                if (!this.provider && providerId !== 'ollama') {
+                    log.info(`Embedding provider ${providerId} not found, trying ollama as fallback`);
+                    this.provider = providerManager.getEmbeddingProvider('ollama');
                 }
 
-                // If openai not found, try ollama as a second fallback
-                if (!this.provider && providerId !== 'ollama') {
-                    log.info(`Embedding provider openai not found, trying ollama as fallback`);
-                    this.provider = providerManager.getEmbeddingProvider('ollama');
+                // If ollama not found, try openai as a second fallback
+                if (!this.provider && providerId !== 'openai') {
+                    log.info(`Embedding provider ollama not found, trying openai as fallback`);
+                    this.provider = providerManager.getEmbeddingProvider('openai');
                 }
 
                 // Final fallback to local provider which should always exist
