@@ -1167,6 +1167,8 @@
     "embedding_default_provider_description": "Select the default provider used for generating note embeddings",
     "embedding_provider_precedence": "Embedding Provider Precedence",
     "embedding_provider_precedence_description": "Comma-separated list of providers in order of precedence for embeddings search (e.g., 'openai,ollama,anthropic')",
+    "embedding_dimension_strategy": "Dimension Strategy",
+    "embedding_dimension_strategy_description": "Choose how to handle different embedding dimensions between providers. 'Adapt' is faster but less accurate, 'Regenerate' is more accurate but requires API calls.",
     "drag_providers_to_reorder": "Drag providers up or down to set your preferred order for embedding searches",
     "active_providers": "Active Providers",
     "disabled_providers": "Disabled Providers",
