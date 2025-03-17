@@ -29,7 +29,7 @@ class TriliumContextService {
 
     // Configuration
     private cacheExpiryMs = 5 * 60 * 1000; // 5 minutes
-    private metaPrompt = `You are an AI assistant that decides what information needs to be retrieved from a knowledge base to answer the user's question.
+    private metaPrompt = `You are an AI assistant that decides what information needs to be retrieved from a user's knowledge base called TriliumNext Notes to answer the user's question.
 Given the user's question, generate 3-5 specific search queries that would help find relevant information.
 Each query should be focused on a different aspect of the question.
 Format your answer as a JSON array of strings, with each string being a search query.
@@ -127,28 +127,74 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             const responseText = response.text; // Extract the text from the response object
 
             try {
-                // Parse the JSON response
-                const jsonStr = responseText.trim().replace(/```json|```/g, '').trim();
-                const queries = JSON.parse(jsonStr);
+                // Remove code blocks, quotes, and clean up the response text
+                let jsonStr = responseText
+                    .replace(/```(?:json)?|```/g, '') // Remove code block markers
+                    .replace(/[\u201C\u201D]/g, '"')  // Replace smart quotes with straight quotes
+                    .trim();
 
-                if (Array.isArray(queries) && queries.length > 0) {
-                    return queries;
-                } else {
-                    throw new Error("Invalid response format");
+                // Check if the text might contain a JSON array (has square brackets)
+                if (jsonStr.includes('[') && jsonStr.includes(']')) {
+                    // Extract just the array part if there's explanatory text
+                    const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
+                    if (arrayMatch) {
+                        jsonStr = arrayMatch[0];
+                    }
+
+                    // Try to parse the JSON
+                    try {
+                        const queries = JSON.parse(jsonStr);
+                        if (Array.isArray(queries) && queries.length > 0) {
+                            return queries.map(q => typeof q === 'string' ? q : String(q)).filter(Boolean);
+                        }
+                    } catch (innerError) {
+                        // If parsing fails, log it and continue to the fallback
+                        log.info(`JSON parse error: ${innerError}. Will use fallback parsing for: ${jsonStr}`);
+                    }
                 }
-            } catch (parseError) {
-                // Fallback: if JSON parsing fails, try to extract queries line by line
+
+                // Fallback 1: Try to extract an array manually by splitting on commas between quotes
+                if (jsonStr.includes('[') && jsonStr.includes(']')) {
+                    const arrayContent = jsonStr.substring(
+                        jsonStr.indexOf('[') + 1,
+                        jsonStr.lastIndexOf(']')
+                    );
+
+                    // Use regex to match quoted strings, handling escaped quotes
+                    const stringMatches = arrayContent.match(/"((?:\\.|[^"\\])*)"/g);
+                    if (stringMatches && stringMatches.length > 0) {
+                        return stringMatches
+                            .map((m: string) => m.substring(1, m.length - 1)) // Remove surrounding quotes
+                            .filter((s: string) => s.length > 0);
+                    }
+                }
+
+                // Fallback 2: Extract queries line by line
                 const lines = responseText.split('\n')
                     .map((line: string) => line.trim())
-                    .filter((line: string) => line.length > 0 && !line.startsWith('```'));
+                    .filter((line: string) =>
+                        line.length > 0 &&
+                        !line.startsWith('```') &&
+                        !line.match(/^\d+\.?\s*$/) && // Skip numbered list markers alone
+                        !line.match(/^\[|\]$/) // Skip lines that are just brackets
+                    );
 
                 if (lines.length > 0) {
-                    return lines.map((line: string) => line.replace(/^["'\d\.\-\s]+/, '').trim());
+                    // Remove numbering, quotes and other list markers from each line
+                    return lines.map((line: string) => {
+                        return line
+                            .replace(/^\d+\.?\s*/, '') // Remove numbered list markers (1., 2., etc)
+                            .replace(/^[-*•]\s*/, '')  // Remove bullet list markers
+                            .replace(/^["']|["']$/g, '') // Remove surrounding quotes
+                            .trim();
+                    }).filter((s: string) => s.length > 0);
                 }
-
-                // If all else fails, just use the original question
-                return [userQuestion];
+            } catch (parseError) {
+                log.error(`Error parsing search queries: ${parseError}`);
             }
+
+            // If all else fails, just use the original question
+            return [userQuestion];
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             log.error(`Error generating search queries: ${errorMessage}`);
@@ -195,10 +241,14 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             // Set to keep track of note IDs we've seen to avoid duplicates
             const seenNoteIds = new Set<string>();
 
+            // Log the provider and model being used
+            log.info(`Searching with embedding provider: ${this.provider.name}, model: ${this.provider.getConfig().model}`);
+
             // Process each query
             for (const query of queries) {
                 // Get embeddings for this query using the correct method name
                 const queryEmbedding = await this.provider.generateEmbeddings(query);
+                log.info(`Generated embedding for query: "${query}" (${queryEmbedding.length} dimensions)`);
 
                 // Find notes similar to this query
                 let results;
@@ -209,6 +259,7 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                         contextNoteId,
                         Math.min(limit, 5) // Limit per query
                     );
+                    log.info(`Found ${results.length} notes within branch context for query: "${query}"`);
                 } else {
                     // Search all notes
                     results = await vectorStore.findSimilarNotes(
@@ -218,6 +269,7 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                         Math.min(limit, 5), // Limit per query
                         0.5 // Lower threshold to get more diverse results
                     );
+                    log.info(`Found ${results.length} notes in vector store for query: "${query}"`);
                 }
 
                 // Process results
@@ -245,6 +297,8 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             const sortedResults = allResults
                 .sort((a, b) => b.similarity - a.similarity)
                 .slice(0, limit);
+
+            log.info(`Total unique relevant notes found across all queries: ${sortedResults.length}`);
 
             // Cache the results
             this.recentQueriesCache.set(cacheKey, {
@@ -362,21 +416,32 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                    "with general knowledge about Trilium or other topics you're interested in.";
         }
 
-        let context = `I've found some relevant information in your notes that may help answer: "${query}"\n\n`;
+        // Get provider name to adjust context for different models
+        const providerId = this.provider?.name || 'default';
+
+        // Import the constants dynamically to avoid circular dependencies
+        const { LLM_CONSTANTS } = await import('../../routes/api/llm.js');
+
+        // Get appropriate context size and format based on provider
+        const maxTotalLength =
+            providerId === 'openai' ? LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI :
+            providerId === 'anthropic' ? LLM_CONSTANTS.CONTEXT_WINDOW.ANTHROPIC :
+            providerId === 'ollama' ? LLM_CONSTANTS.CONTEXT_WINDOW.OLLAMA :
+            LLM_CONSTANTS.CONTEXT_WINDOW.DEFAULT;
+
+        // Use a format appropriate for the model family
+        // Anthropic has a specific system message format that works better with certain structures
+        const isAnthropicFormat = providerId === 'anthropic';
+
+        // Start with different headers based on provider
+        let context = isAnthropicFormat
+            ? `I'm your AI assistant helping with your Trilium notes database. For your query: "${query}", I found these relevant notes:\n\n`
+            : `I've found some relevant information in your notes that may help answer: "${query}"\n\n`;
 
         // Sort sources by similarity if available to prioritize most relevant
         if (sources[0] && sources[0].similarity !== undefined) {
             sources = [...sources].sort((a, b) => (b.similarity || 0) - (a.similarity || 0));
         }
-
-        // Get provider name to adjust context for different models
-        const providerId = this.provider?.name || 'default';
-        // Get approximate max length based on provider using constants
-        // Import the constants dynamically to avoid circular dependencies
-        const { LLM_CONSTANTS } = await import('../../routes/api/llm.js');
-        const maxTotalLength = providerId === 'ollama' ? LLM_CONSTANTS.CONTEXT_WINDOW.OLLAMA :
-                              providerId === 'openai' ? LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI :
-                              LLM_CONSTANTS.CONTEXT_WINDOW.ANTHROPIC;
 
         // Track total context length to avoid oversized context
         let currentLength = context.length;
@@ -387,7 +452,7 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             // Check if adding this source would exceed our total limit
             if (currentLength >= maxTotalLength) return;
 
-            // Build source section
+            // Build source section with formatting appropriate for the provider
             let sourceSection = `### ${source.title}\n`;
 
             // Add relationship context if available
@@ -429,11 +494,16 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             }
         });
 
-        // Add clear instructions about how to reference the notes
-        context += "When referring to information from these notes in your response, please cite them by their titles " +
-                  "(e.g., \"According to your note on [Title]...\") rather than using labels like \"Note 1\" or \"Note 2\".\n\n";
-
-        context += "If the information doesn't contain what you need, just say so and use your general knowledge instead.";
+        // Add provider-specific instructions
+        if (isAnthropicFormat) {
+            context += "When you refer to any information from these notes, cite the note title explicitly (e.g., \"According to the note [Title]...\"). " +
+                      "If the provided notes don't answer the query fully, acknowledge that and then use your general knowledge to help.\n\n" +
+                      "Be concise but thorough in your responses.";
+        } else {
+            context += "When referring to information from these notes in your response, please cite them by their titles " +
+                      "(e.g., \"According to your note on [Title]...\") rather than using labels like \"Note 1\" or \"Note 2\".\n\n" +
+                      "If the information doesn't contain what you need, just say so and use your general knowledge instead.";
+        }
 
         return context;
     }
