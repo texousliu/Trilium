@@ -2,35 +2,54 @@
 // uses for highlighting matches, use the same one on CodeMirror
 // for consistency
 import utils from "../services/utils.js";
+import type FindWidget from "./find.js";
 
 const FIND_RESULT_SELECTED_CSS_CLASSNAME = "ck-find-result_selected";
 const FIND_RESULT_CSS_CLASSNAME = "ck-find-result";
 
+// TODO: Deduplicate.
+interface Match {
+    className: string;
+    clear(): void;
+    find(): {
+        from: number;
+        to: number;
+    };
+}
+
 export default class FindInCode {
-    constructor(parent) {
-        /** @property {FindWidget} */
+
+    private parent: FindWidget;
+    private findResult?: Match[] | null;
+
+    constructor(parent: FindWidget) {
         this.parent = parent;
     }
 
     async getCodeEditor() {
-        return this.parent.noteContext.getCodeEditor();
+        return this.parent.noteContext?.getCodeEditor();
     }
 
-    async performFind(searchTerm, matchCase, wholeWord) {
-        let findResult = null;
+    async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
+        let findResult: Match[] | null = null;
         let totalFound = 0;
         let currentFound = -1;
 
         // See https://codemirror.net/addon/search/searchcursor.js for tips
         const codeEditor = await this.getCodeEditor();
+        if (!codeEditor) {
+            return;
+        }
+
         const doc = codeEditor.doc;
         const text = doc.getValue();
 
         // Clear all markers
-        if (this.findResult != null) {
+        if (this.findResult) {
             codeEditor.operation(() => {
-                for (let i = 0; i < this.findResult.length; ++i) {
-                    const marker = this.findResult[i];
+                const findResult = this.findResult as Match[];
+                for (let i = 0; i < findResult.length; ++i) {
+                    const marker = findResult[i];
                     marker.clear();
                 }
             });
@@ -49,7 +68,7 @@ export default class FindInCode {
             const re = new RegExp(wholeWordChar + searchTerm + wholeWordChar, "g" + (matchCase ? "" : "i"));
             let curLine = 0;
             let curChar = 0;
-            let curMatch = null;
+            let curMatch: RegExpExecArray | null = null;
             findResult = [];
             // All those markText take several seconds on e.g., this ~500-line
             // script, batch them inside an operation, so they become
@@ -73,7 +92,7 @@ export default class FindInCode {
                         let toPos = { line: curLine, ch: curChar + curMatch[0].length };
                         // or css = "color: #f3"
                         let marker = doc.markText(fromPos, toPos, { className: FIND_RESULT_CSS_CLASSNAME });
-                        findResult.push(marker);
+                        findResult?.push(marker);
 
                         // Set the first match beyond the cursor as the current match
                         if (currentFound === -1) {
@@ -99,7 +118,7 @@ export default class FindInCode {
         this.findResult = findResult;
 
         // Calculate curfound if not already, highlight it as selected
-        if (totalFound > 0) {
+        if (findResult && totalFound > 0) {
             currentFound = Math.max(0, currentFound);
             let marker = findResult[currentFound];
             let pos = marker.find();
@@ -114,8 +133,12 @@ export default class FindInCode {
         };
     }
 
-    async findNext(direction, currentFound, nextFound) {
+    async findNext(direction: number, currentFound: number, nextFound: number) {
         const codeEditor = await this.getCodeEditor();
+        if (!codeEditor || !this.findResult) {
+            return;
+        }
+
         const doc = codeEditor.doc;
 
         //
@@ -137,18 +160,23 @@ export default class FindInCode {
         codeEditor.scrollIntoView(pos.from);
     }
 
-    async findBoxClosed(totalFound, currentFound) {
+    async findBoxClosed(totalFound: number, currentFound: number) {
         const codeEditor = await this.getCodeEditor();
 
-        if (totalFound > 0) {
+        if (codeEditor && totalFound > 0) {
             const doc = codeEditor.doc;
-            const pos = this.findResult[currentFound].find();
+            const pos = this.findResult?.[currentFound].find();
             // Note setting the selection sets the cursor to
             // the end of the selection and scrolls it into
             // view
-            doc.setSelection(pos.from, pos.to);
+            if (pos) {
+                doc.setSelection(pos.from, pos.to);
+            }
             // Clear all markers
             codeEditor.operation(() => {
+                if (!this.findResult) {
+                    return;
+                }
                 for (let i = 0; i < this.findResult.length; ++i) {
                     let marker = this.findResult[i];
                     marker.clear();
@@ -157,9 +185,9 @@ export default class FindInCode {
         }
         this.findResult = null;
 
-        codeEditor.focus();
+        codeEditor?.focus();
     }
-    async replace(replaceText) {
+    async replace(replaceText: string) {
         // this.findResult may be undefined and null
         if (!this.findResult || this.findResult.length === 0) {
             return;
@@ -178,8 +206,10 @@ export default class FindInCode {
             let marker = this.findResult[currentFound];
             let pos = marker.find();
             const codeEditor = await this.getCodeEditor();
-            const doc = codeEditor.doc;
-            doc.replaceRange(replaceText, pos.from, pos.to);
+            const doc = codeEditor?.doc;
+            if (doc) {
+                doc.replaceRange(replaceText, pos.from, pos.to);
+            }
             marker.clear();
 
             let nextFound;
@@ -194,17 +224,21 @@ export default class FindInCode {
             }
         }
     }
-    async replaceAll(replaceText) {
+    async replaceAll(replaceText: string) {
         if (!this.findResult || this.findResult.length === 0) {
             return;
         }
         const codeEditor = await this.getCodeEditor();
-        const doc = codeEditor.doc;
-        codeEditor.operation(() => {
+        const doc = codeEditor?.doc;
+        codeEditor?.operation(() => {
+            if (!this.findResult) {
+                return;
+            }
+
             for (let currentFound = 0; currentFound < this.findResult.length; currentFound++) {
                 let marker = this.findResult[currentFound];
                 let pos = marker.find();
-                doc.replaceRange(replaceText, pos.from, pos.to);
+                doc?.replaceRange(replaceText, pos.from, pos.to);
                 marker.clear();
             }
         });

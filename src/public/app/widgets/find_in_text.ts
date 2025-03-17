@@ -1,14 +1,29 @@
+import type FindWidget from "./find.js";
+
+// TODO: Deduplicate.
+interface Match {
+    className: string;
+    clear(): void;
+    find(): {
+        from: number;
+        to: number;
+    };
+}
+
 export default class FindInText {
-    constructor(parent) {
-        /** @property {FindWidget} */
+
+    private parent: FindWidget;
+    private findResult?: Match[] | null;
+
+    constructor(parent: FindWidget) {
         this.parent = parent;
     }
 
     async getTextEditor() {
-        return this.parent.noteContext.getTextEditor();
+        return this.parent?.noteContext?.getTextEditor();
     }
 
-    async performFind(searchTerm, matchCase, wholeWord) {
+    async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
         // Do this even if the searchTerm is empty so the markers are cleared and
         // the counters updated
         const textEditor = await this.getTextEditor();
@@ -54,7 +69,7 @@ export default class FindInText {
             // XXX Do this accessing the private data?
             // See https://github.com/ckeditor/ckeditor5/blob/b95e2faf817262ac0e1e21993d9c0bde3f1be594/packages/ckeditor5-find-and-replace/src/findnextcommand.js
             for (let i = 0; i < currentFound; ++i) {
-                textEditor.execute("findNext", searchTerm);
+                textEditor?.execute("findNext", searchTerm);
             }
         }
 
@@ -64,7 +79,7 @@ export default class FindInText {
         };
     }
 
-    async findNext(direction, currentFound, nextFound) {
+    async findNext(direction: number, currentFound: number, nextFound: number) {
         const textEditor = await this.getTextEditor();
 
         // There are no parameters for findNext/findPrev
@@ -72,20 +87,23 @@ export default class FindInText {
         // curFound wrap around above assumes findNext and
         // findPrevious wraparound, which is what they do
         if (direction > 0) {
-            textEditor.execute("findNext");
+            textEditor?.execute("findNext");
         } else {
-            textEditor.execute("findPrevious");
+            textEditor?.execute("findPrevious");
         }
     }
 
-    async findBoxClosed(totalFound, currentFound) {
+    async findBoxClosed(totalFound: number, currentFound: number) {
         const textEditor = await this.getTextEditor();
+        if (!textEditor) {
+            return;
+        }
 
         if (totalFound > 0) {
             // Clear the markers and set the caret to the
             // current occurrence
             const model = textEditor.model;
-            const range = this.findResult.results.get(currentFound).marker.getRange();
+            const range = this.findResult?.results?.get(currentFound).marker.getRange();
             // From
             // https://github.com/ckeditor/ckeditor5/blob/b95e2faf817262ac0e1e21993d9c0bde3f1be594/packages/ckeditor5-find-and-replace/src/findandreplace.js#L92
             // XXX Roll our own since already done for codeEditor and
@@ -104,17 +122,17 @@ export default class FindInText {
         textEditor.focus();
     }
 
-    async replace(replaceText) {
+    async replace(replaceText: string) {
         if (this.editingState !== undefined && this.editingState.highlightedResult !== null) {
             const textEditor = await this.getTextEditor();
-            textEditor.execute("replace", replaceText, this.editingState.highlightedResult);
+            textEditor?.execute("replace", replaceText, this.editingState.highlightedResult);
         }
     }
 
-    async replaceAll(replaceText) {
+    async replaceAll(replaceText: string) {
         if (this.editingState !== undefined && this.editingState.results.length > 0) {
             const textEditor = await this.getTextEditor();
-            textEditor.execute("replaceAll", replaceText, this.editingState.results);
+            textEditor?.execute("replaceAll", replaceText, this.editingState.results);
         }
     }
 }

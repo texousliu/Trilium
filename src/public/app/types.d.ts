@@ -95,7 +95,11 @@ declare global {
             className: string;
             separateWordSearch: boolean;
             caseSensitive: boolean;
-        })
+            done: () => void;
+        });
+        unmark(opts?: {
+            done: () => void;
+        });
     }
 
     interface JQueryStatic {
@@ -221,9 +225,23 @@ declare global {
         setOption(name: string, value: string);
         refresh();
         focus();
+        getCursor(): { line: number, col: number, ch: number };
         setCursor(line: number, col: number);
         lineCount(): number;
         on(event: string, callback: () => void);
+        operation(callback: () => void);
+        scrollIntoView(pos: number);
+        doc: {
+            getValue(): string;
+            markText(
+                from: { line: number, ch: number } | number,
+                to: { line: number, ch: number } | number,
+                opts: {
+                    className: string
+                });
+            setSelection(from: number, to: number);
+            replaceRange(text: string, from: number, to: number);
+        }
     }
 
     var katex: {
@@ -260,6 +278,7 @@ declare global {
                 getRoot(): TextEditorElement;
                 selection: {
                     getFirstPosition(): undefined | TextPosition;
+                    getLastPosition(): undefined | TextPosition;
                 }
             },
             change(cb: (writer: Writer) => void)
@@ -283,13 +302,16 @@ declare global {
                         }
                     };
                 }
-                change(cb: (writer: Writer) => void)
+                change(cb: (writer: Writer) => void);
+                scrollToTheSelection(): void;
             }
         },
         getData(): string;
         setData(data: string): void;
         getSelectedHtml(): string;
         removeSelection(): void;
+        execute(action: string, ...args: unknown[]): void;
+        focus(): void;
         sourceElement: HTMLElement;
     }
 
