@@ -543,6 +543,27 @@ class IndexService {
             const embedding = await provider.generateEmbeddings(query);
             log.info(`Generated embedding for query: "${query}" (${embedding.length} dimensions)`);
 
+            // Store query text in a global cache for possible regeneration with different providers
+            // Use a type declaration to avoid TypeScript errors
+            interface CustomGlobal {
+                recentEmbeddingQueries?: Record<string, string>;
+            }
+            const globalWithCache = global as unknown as CustomGlobal;
+
+            if (!globalWithCache.recentEmbeddingQueries) {
+                globalWithCache.recentEmbeddingQueries = {};
+            }
+
+            // Use a substring of the embedding as a key (full embedding is too large)
+            const embeddingKey = embedding.toString().substring(0, 100);
+            globalWithCache.recentEmbeddingQueries[embeddingKey] = query;
+
+            // Limit cache size to prevent memory leaks (keep max 50 recent queries)
+            const keys = Object.keys(globalWithCache.recentEmbeddingQueries);
+            if (keys.length > 50) {
+                delete globalWithCache.recentEmbeddingQueries[keys[0]];
+            }
+
             // Get Note IDs to search, optionally filtered by branch
             let similarNotes = [];
 

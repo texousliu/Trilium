@@ -77,6 +77,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     embeddingSimilarityThreshold: string;
     maxNotesPerLlmQuery: string;
     embeddingGenerationLocation: string;
+    embeddingDimensionStrategy: string; // 'adapt' or 'regenerate'
 
     lastSyncedPull: number;
     lastSyncedPush: number;

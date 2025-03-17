@@ -341,6 +341,15 @@ export default class AiSettingsWidget extends OptionsWidget {
             </div>
 
             <div class="form-group">
+                <label>${t("ai_llm.embedding_dimension_strategy")}</label>
+                <select class="embedding-dimension-strategy form-control">
+                    <option value="adapt">Adapt dimensions (faster)</option>
+                    <option value="regenerate">Regenerate embeddings (more accurate)</option>
+                </select>
+                <div class="form-text">${t("ai_llm.embedding_dimension_strategy_description") || "Choose how to handle different embedding dimensions between providers. 'Adapt' is faster but less accurate, 'Regenerate' is more accurate but requires API calls."}</div>
+            </div>
+
+            <div class="form-group">
                 <label>${t("ai_llm.embedding_provider_precedence")}</label>
                 <input type="hidden" class="embedding-provider-precedence" value="">
                 <div class="embedding-precedence-container">
@@ -812,6 +821,11 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.displayValidationWarnings();
         });
 
+        const $embeddingDimensionStrategy = this.$widget.find('.embedding-dimension-strategy');
+        $embeddingDimensionStrategy.on('change', async () => {
+            await this.updateOption('embeddingDimensionStrategy', $embeddingDimensionStrategy.val() as string);
+        });
+
         const $embeddingProviderPrecedence = this.$widget.find('.embedding-provider-precedence');
         $embeddingProviderPrecedence.on('change', async () => {
             await this.updateOption('embeddingProviderPrecedence', $embeddingProviderPrecedence.val() as string);
@@ -1151,7 +1165,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.embedding-similarity-threshold').val(options.embeddingSimilarityThreshold || '0.65');
         this.$widget.find('.max-notes-per-llm-query').val(options.maxNotesPerLlmQuery || '10');
         this.$widget.find('.embedding-default-provider').val(options.embeddingsDefaultProvider || 'openai');
-        this.$widget.find('.embedding-provider-precedence').val(options.embeddingProviderPrecedence || 'openai,ollama,anthropic');
+        this.$widget.find('.embedding-provider-precedence').val(options.embeddingProviderPrecedence || 'openai,ollama');
+        this.$widget.find('.embedding-dimension-strategy').val(options.embeddingDimensionStrategy || 'adapt');
         this.$widget.find('.embedding-generation-location').val(options.embeddingGenerationLocation || 'client');
         this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
         this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');

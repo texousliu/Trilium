@@ -106,7 +106,8 @@ const ALLOWED_OPTIONS = new Set([
     "embeddingSimilarityThreshold",
     "maxNotesPerLlmQuery",
     "enableAutomaticIndexing",
-    "embeddingGenerationLocation"
+    "embeddingGenerationLocation",
+    "embeddingDimensionStrategy"
 ]);
 
 function getOptions() {
