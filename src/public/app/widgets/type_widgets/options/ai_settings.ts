@@ -90,88 +90,95 @@ export default class AiSettingsWidget extends OptionsWidget {
 
             <hr />
 
-            <div class="ai-provider">
-                <h5>${t("ai_llm.openai_configuration")}</h5>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.api_key")}</label>
-                    <input class="openai-api-key form-control" type="password">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-openai-tab" data-bs-toggle="tab" data-bs-target="#nav-openai" type="button" role="tab" aria-controls="nav-openai" aria-selected="true">OpenAI</button>
+                    <button class="nav-link" id="nav-anthropic-tab" data-bs-toggle="tab" data-bs-target="#nav-anthropic" type="button" role="tab" aria-controls="nav-anthropic" aria-selected="false">Anthropic</button>
+                    <button class="nav-link" id="nav-ollama-tab" data-bs-toggle="tab" data-bs-target="#nav-ollama" type="button" role="tab" aria-controls="nav-ollama" aria-selected="false">Ollama</button>
                 </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-openai" role="tabpanel" aria-labelledby="nav-openai-tab">
+                    <div class="ai-provider">
+                        <h5>${t("ai_llm.openai_configuration")}</h5>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.default_model")}</label>
-                    <input class="openai-default-model form-control" type="text">
-                    <div class="help-text">${t("ai_llm.openai_model_description")}</div>
+                        <div class="form-group">
+                            <label>${t("ai_llm.api_key")}</label>
+                            <input class="openai-api-key form-control" type="password">
+                        </div>
+
+                        <div class="form-group">
+                            <label>${t("ai_llm.default_model")}</label>
+                            <input class="openai-default-model form-control" type="text">
+                            <div class="help-text">${t("ai_llm.openai_model_description")}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>${t("ai_llm.base_url")}</label>
+                            <input class="openai-base-url form-control" type="text">
+                            <div class="help-text">${t("ai_llm.openai_url_description")}</div>
+                        </div>
+                    </div>
                 </div>
+                <div class="tab-pane fade" id="nav-anthropic" role="tabpanel" aria-labelledby="nav-anthropic-tab">
+                    <div class="ai-provider">
+                        <h5>${t("ai_llm.anthropic_configuration")}</h5>
 
-                <div class="form-group">
-                    <label>${t("ai_llm.base_url")}</label>
-                    <input class="openai-base-url form-control" type="text">
-                    <div class="help-text">${t("ai_llm.openai_url_description")}</div>
+                        <div class="form-group">
+                            <label>${t("ai_llm.api_key")}</label>
+                            <input class="anthropic-api-key form-control" type="password">
+                        </div>
+
+                        <div class="form-group">
+                            <label>${t("ai_llm.default_model")}</label>
+                            <input class="anthropic-default-model form-control" type="text">
+                            <div class="help-text">${t("ai_llm.anthropic_model_description")}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>${t("ai_llm.base_url")}</label>
+                            <input class="anthropic-base-url form-control" type="text">
+                            <div class="help-text">${t("ai_llm.anthropic_url_description")}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-ollama" role="tabpanel" aria-labelledby="nav-ollama-tab">
+                    <div class="ai-provider">
+                        <h5>${t("ai_llm.ollama_configuration")}</h5>
+
+                        <div class="form-group">
+                            <label>
+                                <input class="ollama-enabled" type="checkbox">
+                                ${t("ai_llm.enable_ollama")}
+                            </label>
+                            <div class="help-text">${t("ai_llm.enable_ollama_description")}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>${t("ai_llm.ollama_url")}</label>
+                            <input class="ollama-base-url form-control" type="text">
+                            <div class="help-text">${t("ai_llm.ollama_url_description")}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>${t("ai_llm.ollama_model")}</label>
+                            <input class="ollama-default-model form-control" type="text">
+                            <div class="help-text">${t("ai_llm.ollama_model_description")}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>${t("ai_llm.ollama_embedding_model")}</label>
+                            <select class="ollama-embedding-model form-control">
+                                <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
+                                <option value="mxbai-embed-large">mxbai-embed-large</option>
+                                <option value="llama3">llama3</option>
+                            </select>
+                            <div class="help-text">${t("ai_llm.ollama_embedding_model_description")}</div>
+                            <button class="btn btn-sm btn-outline-secondary refresh-models">${t("ai_llm.refresh_models")}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <hr />
-
-            <div class="ai-provider">
-                <h5>${t("ai_llm.anthropic_configuration")}</h5>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.api_key")}</label>
-                    <input class="anthropic-api-key form-control" type="password">
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.default_model")}</label>
-                    <input class="anthropic-default-model form-control" type="text">
-                    <div class="help-text">${t("ai_llm.anthropic_model_description")}</div>
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.base_url")}</label>
-                    <input class="anthropic-base-url form-control" type="text">
-                    <div class="help-text">${t("ai_llm.anthropic_url_description")}</div>
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="ai-provider">
-                <h5>${t("ai_llm.ollama_configuration")}</h5>
-
-                <div class="form-group">
-                    <label>
-                        <input class="ollama-enabled" type="checkbox">
-                        ${t("ai_llm.enable_ollama")}
-                    </label>
-                    <div class="help-text">${t("ai_llm.enable_ollama_description")}</div>
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.ollama_url")}</label>
-                    <input class="ollama-base-url form-control" type="text">
-                    <div class="help-text">${t("ai_llm.ollama_url_description")}</div>
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.ollama_model")}</label>
-                    <input class="ollama-default-model form-control" type="text">
-                    <div class="help-text">${t("ai_llm.ollama_model_description")}</div>
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.ollama_embedding_model")}</label>
-                    <select class="ollama-embedding-model form-control">
-                        <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
-                        <option value="mxbai-embed-large">mxbai-embed-large</option>
-                        <option value="llama3">llama3</option>
-                    </select>
-                    <div class="help-text">${t("ai_llm.ollama_embedding_model_description")}</div>
-                    <button class="btn btn-sm btn-outline-secondary refresh-models">${t("ai_llm.refresh_models")}</button>
-                </div>
-            </div>
-
-            <hr />
 
             <div class="embedding-section">
                 <h5>${t("ai_llm.embedding_configuration")}</h5>
