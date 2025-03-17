@@ -71,19 +71,19 @@ export default class AiSettingsWidget extends OptionsWidget {
             <div class="form-group">
                 <label>${t("ai_llm.provider_precedence")}</label>
                 <input class="ai-provider-precedence form-control" type="text">
-                <div class="help-text">${t("ai_llm.provider_precedence_description")}</div>
+                <div class="form-text">${t("ai_llm.provider_precedence_description")}</div>
             </div>
 
             <div class="form-group">
                 <label>${t("ai_llm.temperature")}</label>
                 <input class="ai-temperature form-control" type="number" min="0" max="2" step="0.1">
-                <div class="help-text">${t("ai_llm.temperature_description")}</div>
+                <div class="form-text">${t("ai_llm.temperature_description")}</div>
             </div>
 
             <div class="form-group">
                 <label>${t("ai_llm.system_prompt")}</label>
                 <textarea class="ai-system-prompt form-control" rows="3"></textarea>
-                <div class="help-text">${t("ai_llm.system_prompt_description")}</div>
+                <div class="form-text">${t("ai_llm.system_prompt_description")}</div>
             </div>
         </div>
 
@@ -108,13 +108,13 @@ export default class AiSettingsWidget extends OptionsWidget {
                         <div class="form-group">
                             <label>${t("ai_llm.default_model")}</label>
                             <input class="openai-default-model form-control" type="text">
-                            <div class="help-text">${t("ai_llm.openai_model_description")}</div>
+                            <div class="form-text">${t("ai_llm.openai_model_description")}</div>
                         </div>
 
                         <div class="form-group">
                             <label>${t("ai_llm.base_url")}</label>
                             <input class="openai-base-url form-control" type="text">
-                            <div class="help-text">${t("ai_llm.openai_url_description")}</div>
+                            <div class="form-text">${t("ai_llm.openai_url_description")}</div>
                         </div>
                     </div>
                 </div>
@@ -130,13 +130,13 @@ export default class AiSettingsWidget extends OptionsWidget {
                         <div class="form-group">
                             <label>${t("ai_llm.default_model")}</label>
                             <input class="anthropic-default-model form-control" type="text">
-                            <div class="help-text">${t("ai_llm.anthropic_model_description")}</div>
+                            <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
                         </div>
 
                         <div class="form-group">
                             <label>${t("ai_llm.base_url")}</label>
                             <input class="anthropic-base-url form-control" type="text">
-                            <div class="help-text">${t("ai_llm.anthropic_url_description")}</div>
+                            <div class="form-text">${t("ai_llm.anthropic_url_description")}</div>
                         </div>
                     </div>
                 </div>
@@ -155,13 +155,13 @@ export default class AiSettingsWidget extends OptionsWidget {
                         <div class="form-group">
                             <label>${t("ai_llm.ollama_url")}</label>
                             <input class="ollama-base-url form-control" type="text">
-                            <div class="help-text">${t("ai_llm.ollama_url_description")}</div>
+                            <div class="form-text">${t("ai_llm.ollama_url_description")}</div>
                         </div>
 
                         <div class="form-group">
                             <label>${t("ai_llm.ollama_model")}</label>
                             <input class="ollama-default-model form-control" type="text">
-                            <div class="help-text">${t("ai_llm.ollama_model_description")}</div>
+                            <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
                         </div>
 
                         <div class="form-group">
@@ -171,7 +171,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                                 <option value="mxbai-embed-large">mxbai-embed-large</option>
                                 <option value="llama3">llama3</option>
                             </select>
-                            <div class="help-text">${t("ai_llm.ollama_embedding_model_description")}</div>
+                            <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
                             <button class="btn btn-sm btn-outline-secondary refresh-models">${t("ai_llm.refresh_models")}</button>
                         </div>
                     </div>
@@ -190,7 +190,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                     <option value="ollama">Ollama</option>
                     <option value="local">Local</option>
                 </select>
-                <div class="help-text">${t("ai_llm.embedding_default_provider_description")}</div>
+                <div class="form-text">${t("ai_llm.embedding_default_provider_description")}</div>
             </div>
 
             <div class="form-group">
@@ -199,7 +199,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                     <option value="client">${t("ai_llm.embedding_generation_location_client")}</option>
                     <option value="sync_server">${t("ai_llm.embedding_generation_location_sync_server")}</option>
                 </select>
-                <div class="help-text">${t("ai_llm.embedding_generation_location_description")}</div>
+                <div class="form-text">${t("ai_llm.embedding_generation_location_description")}</div>
             </div>
 
             <div class="form-group">
@@ -221,45 +221,45 @@ export default class AiSettingsWidget extends OptionsWidget {
             <div class="form-group">
                 <label>${t("ai_llm.similarity_threshold")}</label>
                 <input class="embedding-similarity-threshold form-control" type="number" min="0" max="1" step="0.01">
-                <div class="help-text">${t("ai_llm.similarity_threshold_description")}</div>
+                <div class="form-text">${t("ai_llm.similarity_threshold_description")}</div>
             </div>
 
             <div class="form-group">
                 <label>${t("ai_llm.max_notes_per_llm_query")}</label>
                 <input class="max-notes-per-llm-query form-control" type="number" min="1" max="50">
-                <div class="help-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
+                <div class="form-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
             </div>
 
             <div class="form-group">
                 <label>${t("ai_llm.embedding_batch_size")}</label>
                 <input class="embedding-batch-size form-control" type="number" min="1" max="50">
-                <div class="help-text">${t("ai_llm.embedding_batch_size_description")}</div>
+                <div class="form-text">${t("ai_llm.embedding_batch_size_description")}</div>
             </div>
 
             <div class="form-group">
                 <label>${t("ai_llm.embedding_update_interval")}</label>
                 <input class="embedding-update-interval form-control" type="number" min="1000" step="1000">
-                <div class="help-text">${t("ai_llm.embedding_update_interval_description")}</div>
+                <div class="form-text">${t("ai_llm.embedding_update_interval_description")}</div>
             </div>
 
             <div class="form-group">
                 <label>${t("ai_llm.embedding_default_dimension")}</label>
                 <input class="embedding-default-dimension form-control" type="number" min="128">
-                <div class="help-text">${t("ai_llm.embedding_default_dimension_description")}</div>
+                <div class="form-text">${t("ai_llm.embedding_default_dimension_description")}</div>
             </div>
 
             <div class="form-group">
                 <button class="btn btn-sm btn-primary embedding-reprocess-all">
                     ${t("ai_llm.reprocess_all_embeddings")}
                 </button>
-                <div class="help-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
+                <div class="form-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
             </div>
 
             <div class="form-group">
                 <button class="btn btn-sm btn-primary reprocess-index">
                     ${t("ai_llm.reprocess_index")}
                 </button>
-                <div class="help-text">${t("ai_llm.reprocess_index_description")}</div>
+                <div class="form-text">${t("ai_llm.reprocess_index_description")}</div>
 
                 <!-- Index rebuild progress tracking -->
                 <div class="index-rebuild-progress-container mt-2" style="display: none;">
