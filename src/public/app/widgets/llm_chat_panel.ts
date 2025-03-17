@@ -40,8 +40,8 @@ export default class LlmChatPanel extends BasicWidget {
     doRender() {
         this.$widget = $(`
             <div class="note-context-chat h-100 w-100 d-flex flex-column">
-                <!-- Add provider validation warning alert -->
-                <div class="provider-validation-warning alert alert-warning m-2" style="display: none;"></div>
+                <!-- Move validation warning outside the card with better styling -->
+                <div class="provider-validation-warning alert alert-warning m-2 border-left border-warning" style="display: none; padding-left: 15px; border-left: 4px solid #ffc107; background-color: rgba(255, 248, 230, 0.9); font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"></div>
 
                 <div class="note-context-chat-container flex-grow-1 overflow-auto p-3">
                     <div class="note-context-chat-messages"></div>
@@ -98,6 +98,15 @@ export default class LlmChatPanel extends BasicWidget {
         this.sourcesList = element.querySelector('.sources-list') as HTMLElement;
         this.useAdvancedContextCheckbox = element.querySelector('.use-advanced-context-checkbox') as HTMLInputElement;
         this.validationWarning = element.querySelector('.provider-validation-warning') as HTMLElement;
+
+        // Set up event delegation for the settings link
+        this.validationWarning.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            if (target.classList.contains('settings-link') || target.closest('.settings-link')) {
+                console.log('Settings link clicked, navigating to AI settings URL');
+                window.location.href = '#root/_hidden/_options/_optionsAi';
+            }
+        });
 
         this.initializeEventListeners();
 
@@ -492,23 +501,27 @@ export default class LlmChatPanel extends BasicWidget {
 
             // Show warning if there are issues
             if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled) {
-                let message = 'There are issues with your AI provider configuration:';
+                let message = '<i class="bx bx-error-circle me-2"></i><strong>AI Provider Configuration Issues</strong>';
+
+                message += '<ul class="mb-1 ps-4">';
 
                 if (!defaultInPrecedence) {
-                    message += `<br>• The default embedding provider "${defaultProvider}" is not in your provider precedence list.`;
+                    message += `<li>The default embedding provider "${defaultProvider}" is not in your provider precedence list.</li>`;
                 }
 
                 if (!defaultIsEnabled) {
-                    message += `<br>• The default embedding provider "${defaultProvider}" is not enabled.`;
+                    message += `<li>The default embedding provider "${defaultProvider}" is not enabled.</li>`;
                 }
 
                 if (!allPrecedenceEnabled) {
                     const disabledProviders = precedenceList.filter((p: string) => !enabledProviders.includes(p));
-                    message += `<br>• The following providers in your precedence list are not enabled: ${disabledProviders.join(', ')}.`;
+                    message += `<li>The following providers in your precedence list are not enabled: ${disabledProviders.join(', ')}.</li>`;
                 }
 
-                message += '<br><br>Please check your AI settings.';
+                message += '</ul>';
+                message += '<div class="mt-2"><a href="javascript:" class="settings-link btn btn-sm btn-outline-secondary"><i class="bx bx-cog me-1"></i>Open AI Settings</a></div>';
 
+                // Update HTML content - no need to attach event listeners here anymore
                 this.validationWarning.innerHTML = message;
                 this.validationWarning.style.display = 'block';
             } else {
