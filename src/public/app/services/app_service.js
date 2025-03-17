@@ -13,7 +13,7 @@ function initComponents() {
 }
 
 function addChatTab() {
-    if (!options.getOptionBool('llmEnabled')) {
+    if (!options.getOptionBool('aiEnabled')) {
         return;
     }
 

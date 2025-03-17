@@ -61,7 +61,7 @@ export default class ChatWidget extends TabAwareWidget {
     }
 
     isEnabled() {
-        return options.getOptionBool('llmEnabled');
+        return options.getOptionBool('aiEnabled');
     }
 
     doRender() {
