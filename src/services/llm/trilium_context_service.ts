@@ -50,15 +50,33 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
 
         this.initPromise = (async () => {
             try {
-                const providerId = await options.getOption('embeddingsDefaultProvider') || 'ollama';
+                const providerId = await options.getOption('embeddingsDefaultProvider') || 'openai';
                 this.provider = providerManager.getEmbeddingProvider(providerId);
 
+                // If specified provider not found, try openai as a fallback
+                if (!this.provider && providerId !== 'openai') {
+                    log.info(`Embedding provider ${providerId} not found, trying openai as fallback`);
+                    this.provider = providerManager.getEmbeddingProvider('openai');
+                }
+
+                // If openai not found, try ollama as a second fallback
+                if (!this.provider && providerId !== 'ollama') {
+                    log.info(`Embedding provider openai not found, trying ollama as fallback`);
+                    this.provider = providerManager.getEmbeddingProvider('ollama');
+                }
+
+                // Final fallback to local provider which should always exist
                 if (!this.provider) {
-                    throw new Error(`Embedding provider ${providerId} not found`);
+                    log.info(`No embedding provider found, falling back to local provider`);
+                    this.provider = providerManager.getEmbeddingProvider('local');
+                }
+
+                if (!this.provider) {
+                    throw new Error(`No embedding provider available. Could not initialize context service.`);
                 }
 
                 this.initialized = true;
-                log.info(`Trilium context service initialized with provider: ${providerId}`);
+                log.info(`Trilium context service initialized with provider: ${this.provider.name}`);
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 log.error(`Failed to initialize Trilium context service: ${errorMessage}`);

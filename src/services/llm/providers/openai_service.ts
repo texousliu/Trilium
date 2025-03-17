@@ -17,7 +17,7 @@ export class OpenAIService extends BaseAIService {
         }
 
         const apiKey = options.getOption('openaiApiKey');
-        const baseUrl = options.getOption('openaiBaseUrl') || 'https://api.openai.com';
+        const baseUrl = options.getOption('openaiBaseUrl') || 'https://api.openai.com/v1';
         const model = opts.model || options.getOption('openaiDefaultModel') || 'gpt-3.5-turbo';
         const temperature = opts.temperature !== undefined
             ? opts.temperature
@@ -32,7 +32,11 @@ export class OpenAIService extends BaseAIService {
             : [{ role: 'system', content: systemPrompt }, ...messages];
 
         try {
-            const endpoint = `${baseUrl.replace(/\/+$/, '')}/v1/chat/completions`;
+            // Fix endpoint construction - ensure we don't double up on /v1
+            const normalizedBaseUrl = baseUrl.replace(/\/+$/, '');
+            const endpoint = normalizedBaseUrl.includes('/v1')
+                ? `${normalizedBaseUrl}/chat/completions`
+                : `${normalizedBaseUrl}/v1/chat/completions`;
 
             const response = await fetch(endpoint, {
                 method: 'POST',
