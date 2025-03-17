@@ -490,16 +490,61 @@ class IndexService {
         }
 
         try {
+            // Get all enabled embedding providers
             const providers = await providerManager.getEnabledEmbeddingProviders();
             if (!providers || providers.length === 0) {
                 throw new Error("No embedding providers available");
             }
 
-            // Use the first enabled provider
-            const provider = providers[0];
+            // Get the embedding provider precedence
+            const options = (await import('../options.js')).default;
+            let preferredProviders: string[] = [];
+
+            const embeddingPrecedence = await options.getOption('embeddingProviderPrecedence');
+            let provider;
+
+            if (embeddingPrecedence) {
+                // Parse the precedence string
+                if (embeddingPrecedence.startsWith('[') && embeddingPrecedence.endsWith(']')) {
+                    preferredProviders = JSON.parse(embeddingPrecedence);
+                } else if (typeof embeddingPrecedence === 'string') {
+                    if (embeddingPrecedence.includes(',')) {
+                        preferredProviders = embeddingPrecedence.split(',').map(p => p.trim());
+                    } else {
+                        preferredProviders = [embeddingPrecedence];
+                    }
+                }
+
+                // Find first enabled provider by precedence order
+                for (const providerName of preferredProviders) {
+                    const matchedProvider = providers.find(p => p.name === providerName);
+                    if (matchedProvider) {
+                        provider = matchedProvider;
+                        break;
+                    }
+                }
+
+                // If no match found, use first available
+                if (!provider && providers.length > 0) {
+                    provider = providers[0];
+                }
+            } else {
+                // Default to first available provider
+                provider = providers[0];
+            }
+
+            if (!provider) {
+                throw new Error("No suitable embedding provider found");
+            }
+
+            log.info(`Searching with embedding provider: ${provider.name}, model: ${provider.getConfig().model}`);
 
             // Generate embedding for the query
             const embedding = await provider.generateEmbeddings(query);
+            log.info(`Generated embedding for query: "${query}" (${embedding.length} dimensions)`);
+
+            // Get Note IDs to search, optionally filtered by branch
+            let similarNotes = [];
 
             // Check if we need to restrict search to a specific branch
             if (contextNoteId) {
@@ -525,7 +570,6 @@ class IndexService {
                 collectNoteIds(contextNoteId);
 
                 // Get embeddings for all notes in the branch
-                const similarNotes = [];
                 const config = provider.getConfig();
 
                 for (const noteId of branchNoteIds) {
@@ -557,7 +601,7 @@ class IndexService {
             } else {
                 // Search across all notes
                 const config = provider.getConfig();
-                const similarNotes = await vectorStore.findSimilarNotes(
+                similarNotes = await vectorStore.findSimilarNotes(
                     embedding,
                     provider.name,
                     config.model,
