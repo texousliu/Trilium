@@ -201,9 +201,10 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         <nav class="options-section-tabs">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-openai-tab" data-bs-toggle="tab" data-bs-target="#nav-openai" type="button" role="tab" aria-controls="nav-openai" aria-selected="true">OpenAI</button>
-                <button class="nav-link" id="nav-anthropic-tab" data-bs-toggle="tab" data-bs-target="#nav-anthropic" type="button" role="tab" aria-controls="nav-anthropic" aria-selected="false">Anthropic</button>
-                <button class="nav-link" id="nav-ollama-tab" data-bs-toggle="tab" data-bs-target="#nav-ollama" type="button" role="tab" aria-controls="nav-ollama" aria-selected="false">Ollama</button>
+                <button class="nav-link active" id="nav-openai-tab" data-bs-toggle="tab" data-bs-target="#nav-openai" type="button" role="tab" aria-controls="nav-openai" aria-selected="true">${t("ai_llm.openai_tab")}</button>
+                <button class="nav-link" id="nav-anthropic-tab" data-bs-toggle="tab" data-bs-target="#nav-anthropic" type="button" role="tab" aria-controls="nav-anthropic" aria-selected="false">${t("ai_llm.anthropic_tab")}</button>
+                <button class="nav-link" id="nav-voyage-tab" data-bs-toggle="tab" data-bs-target="#nav-voyage" type="button" role="tab" aria-controls="nav-voyage" aria-selected="false">${t("ai_llm.voyage_tab")}</button>
+                <button class="nav-link" id="nav-ollama-tab" data-bs-toggle="tab" data-bs-target="#nav-ollama" type="button" role="tab" aria-controls="nav-ollama" aria-selected="false">${t("ai_llm.ollama_tab")}</button>
             </div>
         </nav>
         <div class="options-section">
@@ -280,6 +281,29 @@ export default class AiSettingsWidget extends OptionsWidget {
                         </div>
                     </div>
                 </div>
+                <div class="tab-pane fade" id="nav-voyage" role="tabpanel" aria-labelledby="nav-voyage-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>${t("ai_llm.voyage_configuration")}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>${t("ai_llm.api_key")}</label>
+                                <input type="password" class="voyage-api-key form-control" autocomplete="off">
+                                <div class="form-text">${t("ai_llm.voyage_api_key_description")}</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>${t("ai_llm.embedding_model")}</label>
+                                <select class="voyage-embedding-model form-control">
+                                    <option value="voyage-2">voyage-2 (recommended)</option>
+                                    <option value="voyage-large-2">voyage-large-2</option>
+                                </select>
+                                <div class="form-text">${t("ai_llm.voyage_embedding_model_description")}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="tab-pane fade" id="nav-ollama" role="tabpanel" aria-labelledby="nav-ollama-tab">
                     <div class="card">
                         <div class="card-header">
@@ -333,7 +357,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                 <label>${t("ai_llm.embedding_default_provider")}</label>
                 <select class="embedding-default-provider form-control">
                     <option value="openai">OpenAI</option>
-                    <option value="anthropic">Anthropic</option>
+                    <option value="voyage">Voyage AI</option>
                     <option value="ollama">Ollama</option>
                     <option value="local">Local</option>
                 </select>
@@ -366,16 +390,16 @@ export default class AiSettingsWidget extends OptionsWidget {
                                     <span class="bx bx-x"></span>
                                 </button>
                             </li>
-                            <li class="standard-list-item d-flex align-items-center" data-provider="ollama">
+                            <li class="standard-list-item d-flex align-items-center" data-provider="voyage">
                                 <span class="bx bx-menu handle me-2"></span>
-                                <strong class="flex-grow-1">Ollama</strong>
+                                <strong class="flex-grow-1">Voyage AI</strong>
                                 <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
                                     <span class="bx bx-x"></span>
                                 </button>
                             </li>
-                            <li class="standard-list-item d-flex align-items-center" data-provider="anthropic">
+                            <li class="standard-list-item d-flex align-items-center" data-provider="ollama">
                                 <span class="bx bx-menu handle me-2"></span>
-                                <strong class="flex-grow-1">Anthropic</strong>
+                                <strong class="flex-grow-1">Ollama</strong>
                                 <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
                                     <span class="bx bx-x"></span>
                                 </button>
@@ -558,6 +582,16 @@ export default class AiSettingsWidget extends OptionsWidget {
         const $anthropicBaseUrl = this.$widget.find('.anthropic-base-url');
         $anthropicBaseUrl.on('change', async () => {
             await this.updateOption('anthropicBaseUrl', $anthropicBaseUrl.val() as string);
+        });
+
+        const $voyageApiKey = this.$widget.find('.voyage-api-key');
+        $voyageApiKey.on('change', async () => {
+            await this.updateOption('voyageApiKey', $voyageApiKey.val() as string);
+        });
+
+        const $voyageEmbeddingModel = this.$widget.find('.voyage-embedding-model');
+        $voyageEmbeddingModel.on('change', async () => {
+            await this.updateOption('voyageEmbeddingModel', $voyageEmbeddingModel.val() as string);
         });
 
         const $ollamaBaseUrl = this.$widget.find('.ollama-base-url');
@@ -1001,7 +1035,7 @@ export default class AiSettingsWidget extends OptionsWidget {
             if (!savedValue) return;
 
             // Get all available providers
-            const allProviders = ['openai', 'anthropic', 'ollama', 'local'];
+            const allProviders = ['openai', 'voyage', 'anthropic', 'ollama', 'local'];
             const savedProviders = savedValue.split(',');
 
             // Find disabled providers (providers in allProviders but not in savedProviders)
@@ -1152,6 +1186,10 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey || '');
         this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel || 'claude-3-opus-20240229');
         this.$widget.find('.anthropic-base-url').val(options.anthropicBaseUrl || 'https://api.anthropic.com/v1');
+
+        // Voyage Section
+        this.$widget.find('.voyage-api-key').val(options.voyageApiKey || '');
+        this.$widget.find('.voyage-embedding-model').val(options.voyageEmbeddingModel || 'voyage-2');
 
         // Ollama Section
         this.$widget.find('.ollama-enabled').prop('checked', options.ollamaEnabled !== 'false');
@@ -1847,7 +1885,7 @@ export default class AiSettingsWidget extends OptionsWidget {
             if (!savedValue) return;
 
             // Get all available providers
-            const allProviders = ['openai', 'anthropic', 'ollama'];
+            const allProviders = ['openai', 'voyage', 'anthropic', 'ollama'];
             const savedProviders = savedValue.split(',');
 
             // Find disabled providers (providers in allProviders but not in savedProviders)

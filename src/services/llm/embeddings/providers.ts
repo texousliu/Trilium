@@ -6,7 +6,8 @@ import { randomString } from "../../utils.js";
 import type { EmbeddingProvider, EmbeddingConfig } from "./embeddings_interface.js";
 import { OpenAIEmbeddingProvider } from "./providers/openai.js";
 import { OllamaEmbeddingProvider } from "./providers/ollama.js";
-import { AnthropicEmbeddingProvider } from "./providers/anthropic.js";
+import { VoyageEmbeddingProvider } from "./providers/voyage.js";
+import type { OptionDefinitions } from "../../options_interface.js";
 
 /**
  * Simple local embedding provider implementation
@@ -250,29 +251,29 @@ export async function initializeDefaultProviders() {
             }
         }
 
-        // Register Anthropic provider if API key is configured
-        const anthropicApiKey = await options.getOption('anthropicApiKey');
-        if (anthropicApiKey) {
-            const anthropicModel = await options.getOption('anthropicDefaultModel') || 'claude-3-haiku-20240307';
-            const anthropicBaseUrl = await options.getOption('anthropicBaseUrl') || 'https://api.anthropic.com/v1';
+        // Register Voyage provider if API key is configured
+        const voyageApiKey = await options.getOption('voyageApiKey' as any);
+        if (voyageApiKey) {
+            const voyageModel = await options.getOption('voyageEmbeddingModel') || 'voyage-2';
+            const voyageBaseUrl = 'https://api.voyageai.com/v1';
 
-            registerEmbeddingProvider(new AnthropicEmbeddingProvider({
-                model: anthropicModel,
-                dimension: 1024, // Anthropic's embedding dimension
+            registerEmbeddingProvider(new VoyageEmbeddingProvider({
+                model: voyageModel,
+                dimension: 1024, // Voyage's embedding dimension
                 type: 'float32',
-                apiKey: anthropicApiKey,
-                baseUrl: anthropicBaseUrl
+                apiKey: voyageApiKey,
+                baseUrl: voyageBaseUrl
             }));
 
-            // Create Anthropic provider config if it doesn't exist
-            const existingAnthropic = await sql.getRow(
+            // Create Voyage provider config if it doesn't exist
+            const existingVoyage = await sql.getRow(
                 "SELECT * FROM embedding_providers WHERE name = ?",
-                ['anthropic']
+                ['voyage']
             );
 
-            if (!existingAnthropic) {
-                await createEmbeddingProviderConfig('anthropic', {
-                    model: anthropicModel,
+            if (!existingVoyage) {
+                await createEmbeddingProviderConfig('voyage', {
+                    model: voyageModel,
                     dimension: 1024,
                     type: 'float32'
                 }, true, 75);

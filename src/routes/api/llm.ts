@@ -21,6 +21,7 @@ export const LLM_CONSTANTS = {
         OLLAMA: 6000,
         OPENAI: 12000,
         ANTHROPIC: 15000,
+        VOYAGE: 12000,
         DEFAULT: 6000
     },
 
@@ -37,6 +38,9 @@ export const LLM_CONSTANTS = {
         },
         ANTHROPIC: {
             CLAUDE: 1024,
+            DEFAULT: 1024
+        },
+        VOYAGE: {
             DEFAULT: 1024
         }
     },
