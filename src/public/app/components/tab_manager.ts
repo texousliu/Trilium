@@ -550,9 +550,7 @@ export default class TabManager extends Component {
     }
 
     async closeActiveTabCommand() {
-        if (this.activeNtxId) {
-            await this.removeNoteContext(this.activeNtxId);
-        }
+        await this.removeNoteContext(this.activeNtxId);
     }
 
     beforeUnloadEvent(): boolean {
@@ -566,15 +564,13 @@ export default class TabManager extends Component {
 
     async closeAllTabsCommand() {
         for (const ntxIdToRemove of this.mainNoteContexts.map((nc) => nc.ntxId)) {
-            if (ntxIdToRemove) {
-                await this.removeNoteContext(ntxIdToRemove);
-            }
+            await this.removeNoteContext(ntxIdToRemove);
         }
     }
 
     async closeOtherTabsCommand({ ntxId }: { ntxId: string }) {
         for (const ntxIdToRemove of this.mainNoteContexts.map((nc) => nc.ntxId)) {
-            if (ntxIdToRemove && ntxIdToRemove !== ntxId) {
+            if (ntxIdToRemove !== ntxId) {
                 await this.removeNoteContext(ntxIdToRemove);
             }
         }
@@ -587,9 +583,7 @@ export default class TabManager extends Component {
         if (index !== -1) {
             const idsToRemove = ntxIds.slice(index + 1);
             for (const ntxIdToRemove of idsToRemove) {
-                if (ntxIdToRemove) {
-                    await this.removeNoteContext(ntxIdToRemove);
-                }
+                await this.removeNoteContext(ntxIdToRemove);
             }
         }
     }
