@@ -419,13 +419,13 @@ export default class TabRowWidget extends BasicWidget {
     closeActiveTabCommand({ $el }: CommandListenerData<"closeActiveTab">) {
         const ntxId = $el.closest(".note-tab").attr("data-ntx-id");
 
-        appContext.tabManager.removeNoteContext(ntxId);
+        appContext.tabManager.removeNoteContext(ntxId ?? null);
     }
 
     setTabCloseEvent($tab: JQuery<HTMLElement>) {
         $tab.on("mousedown", (e) => {
             if (e.which === 2) {
-                appContext.tabManager.removeNoteContext($tab.attr("data-ntx-id"));
+                appContext.tabManager.removeNoteContext($tab.attr("data-ntx-id") ?? null);
 
                 return true; // event has been handled
             }

@@ -87,7 +87,10 @@ export default class EmptyTypeWidget extends TypeWidget {
                     return false;
                 }
 
-                appContext.tabManager.getActiveContext().setNote(suggestion.notePath);
+                const activeContext = appContext.tabManager.getActiveContext();
+                if (activeContext) {
+                    activeContext.setNote(suggestion.notePath);
+                }
             });
 
         this.$workspaceNotes = this.$widget.find(".workspace-notes");
