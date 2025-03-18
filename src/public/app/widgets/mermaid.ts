@@ -116,6 +116,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         } catch (e: any) {
             console.warn(e);
             this.#cleanUpZoom();
+            this.$display.empty();
             this.$errorMessage.text(e.message);
             this.$errorContainer.show();
         }
