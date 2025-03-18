@@ -41,6 +41,8 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     private $errorContainer!: JQuery<HTMLElement>;
     private $errorMessage!: JQuery<HTMLElement>;
     private dirtyAttachment?: boolean;
+    private zoomHandler?: () => void;
+    private zoomInstance?: SvgPanZoom.Instance;
 
     isEnabled() {
         return super.isEnabled() && this.note?.type === "mermaid" && this.note.isContentAvailable() && this.noteContext?.viewScope?.viewMode === "default";
@@ -55,6 +57,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     }
 
     async refreshWithNote(note: FNote) {
+        this.cleanup();
         this.$errorContainer.hide();
 
         await libraryLoader.requireLibrary(libraryLoader.MERMAID);
@@ -94,14 +97,41 @@ export default class MermaidWidget extends NoteContextAwareWidget {
 
             // Enable pan to zoom.
             import("svg-pan-zoom").then(svgPanZoom => {
-                svgPanZoom.default($svg[0], {
-                    controlIconsEnabled: true
+                const zoom = svgPanZoom.default($svg[0], {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true
                 });
+
+                this.zoomHandler = () => {
+                    zoom.resize();
+                    zoom.fit();
+                    zoom.center();
+                };
+                $(window).on("resize", this.zoomHandler);
             });
         } catch (e: any) {
             console.warn(e);
             this.$errorMessage.text(e.message);
             this.$errorContainer.show();
+        }
+    }
+
+    cleanup() {
+        super.cleanup();
+        if (this.zoomHandler) {
+            $(window).off("resize", this.zoomHandler);
+            this.zoomHandler = undefined;
+        }
+        this.zoomInstance?.destroy();
+    }
+
+    toggleInt(show: boolean | null | undefined): void {
+        super.toggleInt(show);
+
+        if (!show) {
+            this.cleanup();
         }
     }
 
