@@ -539,6 +539,10 @@ export default class AiSettingsWidget extends OptionsWidget {
         // Set up provider precedence drag-and-drop functionality
         this.setupProviderPrecedence();
 
+        // Initialize provider orders
+        this.initializeAiProviderOrder();
+        this.initializeEmbeddingProviderOrder();
+
         const $aiTemperature = this.$widget.find('.ai-temperature');
         $aiTemperature.on('change', async () => {
             await this.updateOption('aiTemperature', $aiTemperature.val() as string);
@@ -996,7 +1000,7 @@ export default class AiSettingsWidget extends OptionsWidget {
 
                 // Create a new item for the active list
                 const $activeItem = $(`
-                    <li class="standard-list-item d-flex align-items-center" data-provider="${provider}">
+                    <li class="standard-list-item d-flex align-items-center" data-provider="${provider}" draggable="true">
                         <span class="bx bx-menu handle me-2"></span>
                         <strong class="flex-grow-1">${providerName}</strong>
                         <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
@@ -1028,42 +1032,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         // Initialize by setting the value based on current order
         updatePrecedenceValue();
 
-        // Process the saved preference value
-        const initializeProviderOrder = () => {
-            // Get the current value
-            const savedValue = $embeddingProviderPrecedence.val() as string;
-            if (!savedValue) return;
-
-            // Get all available providers
-            const allProviders = ['openai', 'voyage', 'anthropic', 'ollama', 'local'];
-            const savedProviders = savedValue.split(',');
-
-            // Find disabled providers (providers in allProviders but not in savedProviders)
-            const disabledProviders = allProviders.filter(p => !savedProviders.includes(p));
-
-            // Move saved providers to the end in the correct order
-            savedProviders.forEach(provider => {
-                const $item = $sortableList.find(`li[data-provider="${provider}"]`);
-                if ($item.length) {
-                    $sortableList.append($item); // Move to the end in the correct order
-                }
-            });
-
-            // Move disabled providers to the disabled list
-            disabledProviders.forEach(provider => {
-                const $item = $sortableList.find(`li[data-provider="${provider}"]`);
-                if ($item.length) {
-                    // Simulate clicking the remove button
-                    $item.find('.remove-provider').trigger('click');
-                }
-            });
-
-            // Update the value again after reordering
-            updatePrecedenceValue();
-        };
-
-        // Initialize provider order
-        initializeProviderOrder();
+        // Call our new initializeEmbeddingProviderOrder method
+        this.initializeEmbeddingProviderOrder();
 
         const $embeddingGenerationLocation = this.$widget.find('.embedding-generation-location');
         $embeddingGenerationLocation.on('change', async () => {
@@ -1209,6 +1179,10 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
         this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');
         this.$widget.find('.embedding-default-dimension').val(options.embeddingDefaultDimension || '1536');
+
+        // Make sure to initialize provider orders after options are loaded
+        this.initializeAiProviderOrder();
+        this.initializeEmbeddingProviderOrder();
 
         this.updateAiSectionVisibility();
 
@@ -1720,97 +1694,462 @@ export default class AiSettingsWidget extends OptionsWidget {
     setupProviderPrecedence() {
         if (!this.$widget) return;
 
+        // Setup event handlers for AI provider buttons
+        this.setupAiProviderRemoveHandlers();
+
+        // Setup drag handlers for all AI provider items
+        const $aiSortableList = this.$widget.find('.provider-sortable');
+        const $aiListItems = $aiSortableList.find('li');
+        $aiListItems.attr('draggable', 'true');
+        $aiListItems.each((_, item) => {
+            this.setupAiItemDragHandlers($(item));
+        });
+
+        // Setup event handlers for embedding provider buttons
+        this.setupEmbeddingProviderRemoveHandlers();
+
+        // Setup drag handlers for all embedding provider items
+        const $embeddingSortableList = this.$widget.find('.embedding-provider-sortable');
+        const $embeddingListItems = $embeddingSortableList.find('li');
+        $embeddingListItems.attr('draggable', 'true');
+        $embeddingListItems.each((_, item) => {
+            this.setupEmbeddingItemDragHandlers($(item));
+        });
+    }
+
+    /**
+     * Setup event handlers for embedding provider remove buttons
+     */
+    setupEmbeddingProviderRemoveHandlers() {
+        if (!this.$widget) return;
+
+        const self = this;
+        const $embeddingProviderPrecedence = this.$widget.find('.embedding-provider-precedence');
+        const $embeddingSortableList = this.$widget.find('.embedding-provider-sortable');
+
+        // Remove any existing handlers to prevent duplicates
+        this.$widget.find('.remove-provider').off('click');
+
+        // Add remove button click handler to all provider items
+        this.$widget.find('.remove-provider').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const $button = $(this);
+            const $item = $button.closest('li');
+            const provider = $item.data('provider');
+            const providerName = $item.find('strong').text();
+
+            // Create a new item for the disabled list
+            const $disabledItem = $(`
+                <li class="standard-list-item d-flex align-items-center" data-provider="${provider}">
+                    <strong class="flex-grow-1">${providerName}</strong>
+                    <button class="icon-action restore-provider" title="${t("ai_llm.restore_provider")}">
+                        <span class="bx bx-plus"></span>
+                    </button>
+                </li>
+            `);
+
+            // Add to disabled list
+            self.$widget.find('.embedding-provider-disabled').append($disabledItem);
+
+            // Remove from active list
+            $item.remove();
+
+            // Setup restore handler
+            self.setupEmbeddingProviderRestoreHandler($disabledItem);
+
+            // Update the hidden input value based on current order
+            const providers = $embeddingSortableList.find('li').map(function() {
+                return $(this).data('provider');
+            }).get().join(',');
+
+            $embeddingProviderPrecedence.val(providers);
+            // Trigger the change event to save the option
+            $embeddingProviderPrecedence.trigger('change');
+
+            // Show/hide the disabled providers container
+            const $disabledContainer = self.$widget.find('.disabled-providers-container');
+            const hasDisabledProviders = self.$widget.find('.embedding-provider-disabled li').length > 0;
+            $disabledContainer.toggle(hasDisabledProviders);
+        });
+    }
+
+    /**
+     * Setup restore button handler for disabled embedding providers
+     */
+    setupEmbeddingProviderRestoreHandler($disabledItem: JQuery) {
+        if (!this.$widget) return;
+
+        const self = this;
+        const $embeddingProviderPrecedence = this.$widget.find('.embedding-provider-precedence');
+        const $embeddingSortableList = this.$widget.find('.embedding-provider-sortable');
+
+        $disabledItem.find('.restore-provider').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const $button = $(this);
+            const $disabledItem = $button.closest('li');
+            const provider = $disabledItem.data('provider');
+            const providerName = $disabledItem.find('strong').text();
+
+            // Create a new item for the active list
+            const $activeItem = $(`
+                <li class="standard-list-item d-flex align-items-center" data-provider="${provider}" draggable="true">
+                    <span class="bx bx-menu handle me-2"></span>
+                    <strong class="flex-grow-1">${providerName}</strong>
+                    <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
+                        <span class="bx bx-x"></span>
+                    </button>
+                </li>
+            `);
+
+            // Add to active list
+            $embeddingSortableList.append($activeItem);
+
+            // Remove from disabled list
+            $disabledItem.remove();
+
+            // Setup drag handlers for the new item
+            self.setupEmbeddingItemDragHandlers($activeItem);
+
+            // Setup remove button handler
+            $activeItem.find('.remove-provider').on('click', function() {
+                $(this).closest('li').find('.remove-provider').trigger('click');
+            });
+
+            // Update the hidden input value based on current order
+            const providers = $embeddingSortableList.find('li').map(function() {
+                return $(this).data('provider');
+            }).get().join(',');
+
+            $embeddingProviderPrecedence.val(providers);
+            // Trigger the change event to save the option
+            $embeddingProviderPrecedence.trigger('change');
+
+            // Show/hide the disabled providers container
+            const $disabledContainer = self.$widget.find('.disabled-providers-container');
+            const hasDisabledProviders = self.$widget.find('.embedding-provider-disabled li').length > 0;
+            $disabledContainer.toggle(hasDisabledProviders);
+        });
+    }
+
+    /**
+     * Setup drag handlers for an embedding provider list item
+     */
+    setupEmbeddingItemDragHandlers($item: JQuery) {
+        if (!this.$widget) return;
+
+        const self = this;
+        const $embeddingProviderPrecedence = this.$widget.find('.embedding-provider-precedence');
+        const $embeddingSortableList = this.$widget.find('.embedding-provider-sortable');
+
+        // Setup dragstart handler
+        $item.on('dragstart', function(e: JQuery.DragStartEvent) {
+            $(this).addClass('dragging');
+            e.originalEvent?.dataTransfer?.setData('text/plain', '');
+        });
+
+        // Setup dragend handler
+        $item.on('dragend', function() {
+            $(this).removeClass('dragging');
+
+            // Update the hidden input value
+            const providers = $embeddingSortableList.find('li').map(function() {
+                return $(this).data('provider');
+            }).get().join(',');
+
+            $embeddingProviderPrecedence.val(providers);
+            $embeddingProviderPrecedence.trigger('change');
+        });
+
+        // Setup dragover handler
+        $item.on('dragover', function(e: JQuery.DragOverEvent) {
+            e.preventDefault();
+            const draggingItem = self.$widget?.find('.dragging');
+            if (!draggingItem?.length || this === draggingItem.get(0)) return;
+
+            $(this).addClass('drag-over');
+        });
+
+        // Setup dragleave handler
+        $item.on('dragleave', function() {
+            $(this).removeClass('drag-over');
+        });
+
+        // Setup drop handler
+        $item.on('drop', function(e: JQuery.DropEvent) {
+            e.preventDefault();
+            $(this).removeClass('drag-over');
+
+            const draggingItem = self.$widget?.find('.dragging');
+            if (!draggingItem?.length || this === draggingItem.get(0)) return;
+
+            // Get positions - fixed to handle type errors
+            const $this = $(this);
+            const allItems = Array.from($embeddingSortableList.find('li').get());
+            const draggedIndex = allItems.findIndex(item => $(item).is(draggingItem));
+            const dropIndex = allItems.findIndex(item => $(item).is($this));
+
+            if (draggedIndex >= 0 && dropIndex >= 0) {
+                if (draggedIndex < dropIndex) {
+                    // Insert after
+                    $this.after(draggingItem);
+                } else {
+                    // Insert before
+                    $this.before(draggingItem);
+                }
+
+                // Update precedence
+                const providers = $embeddingSortableList.find('li').map(function() {
+                    return $(this).data('provider');
+                }).get().join(',');
+
+                $embeddingProviderPrecedence.val(providers);
+                $embeddingProviderPrecedence.trigger('change');
+            }
+        });
+    }
+
+    /**
+     * Initialize the embedding provider precedence order based on saved values
+     */
+    initializeEmbeddingProviderOrder() {
+        if (!this.$widget) return;
+
+        const $embeddingProviderPrecedence = this.$widget.find('.embedding-provider-precedence');
+        const $sortableList = this.$widget.find('.embedding-provider-sortable');
+
+        // Get the current value
+        const savedValue = $embeddingProviderPrecedence.val() as string;
+        if (!savedValue) return;
+
+        // Get all available providers
+        const allProviders = ['openai', 'voyage', 'ollama', 'local'];
+        const savedProviders = savedValue.split(',');
+
+        // Clear all items from the disabled list first to avoid duplicates
+        this.$widget.find('.embedding-provider-disabled').empty();
+
+        // Find disabled providers (providers in allProviders but not in savedProviders)
+        const disabledProviders = allProviders.filter(p => !savedProviders.includes(p));
+
+        // Move saved providers to the end in the correct order
+        savedProviders.forEach(provider => {
+            const $item = $sortableList.find(`li[data-provider="${provider}"]`);
+            if ($item.length) {
+                $sortableList.append($item); // Move to the end in the correct order
+            }
+        });
+
+        // Setup remove click handlers first to ensure they work when simulating clicks
+        this.setupEmbeddingProviderRemoveHandlers();
+
+        // Move disabled providers to the disabled list
+        disabledProviders.forEach(provider => {
+            const $item = $sortableList.find(`li[data-provider="${provider}"]`);
+            if ($item.length) {
+                // Simulate clicking the remove button to move it to the disabled list
+                $item.find('.remove-provider').trigger('click');
+            } else {
+                // If it's not in the active list already, manually create it in the disabled list
+                const providerName = this.getProviderDisplayName(provider);
+                const $disabledItem = $(`
+                    <li class="standard-list-item d-flex align-items-center" data-provider="${provider}">
+                        <strong class="flex-grow-1">${providerName}</strong>
+                        <button class="icon-action restore-provider" title="${t("ai_llm.restore_provider")}">
+                            <span class="bx bx-plus"></span>
+                        </button>
+                    </li>
+                `);
+                this.$widget.find('.embedding-provider-disabled').append($disabledItem);
+
+                // Add restore button handler
+                this.setupEmbeddingProviderRestoreHandler($disabledItem);
+            }
+        });
+
+        // Show/hide the disabled providers container
+        const $disabledContainer = this.$widget.find('.disabled-providers-container');
+        const hasDisabledProviders = this.$widget.find('.embedding-provider-disabled li').length > 0;
+        $disabledContainer.toggle(hasDisabledProviders);
+    }
+
+    /**
+     * Setup drag handlers for an AI provider list item
+     */
+    setupAiItemDragHandlers($item: JQuery) {
+        if (!this.$widget) return;
+
+        const self = this;
         const $aiProviderPrecedence = this.$widget.find('.ai-provider-precedence');
         const $aiSortableList = this.$widget.find('.provider-sortable');
 
-        // Track the item being dragged
-        let aiDraggedItem: HTMLElement | null = null;
+        // Setup dragstart handler
+        $item.on('dragstart', function(e: JQuery.DragStartEvent) {
+            $(this).addClass('dragging');
+            e.originalEvent?.dataTransfer?.setData('text/plain', '');
+        });
 
-        // Function to update the hidden input with current order
-        const updateAiPrecedenceValue = () => {
+        // Setup dragend handler
+        $item.on('dragend', function() {
+            $(this).removeClass('dragging');
+
+            // Update the hidden input value
             const providers = $aiSortableList.find('li').map(function() {
                 return $(this).data('provider');
             }).get().join(',');
 
             $aiProviderPrecedence.val(providers);
-            // Trigger the change event to save the option
             $aiProviderPrecedence.trigger('change');
-
-            // Show/hide the disabled providers container
-            const $disabledContainer = this.$widget.find('.disabled-ai-providers-container');
-            const hasDisabledProviders = this.$widget.find('.provider-disabled li').length > 0;
-            $disabledContainer.toggle(hasDisabledProviders);
-        };
-
-        // Setup drag handlers for a list item
-        const setupAiDragHandlers = ($item: JQuery) => {
-            // Start dragging
-            $item.on('dragstart', function(e: JQuery.DragStartEvent) {
-                aiDraggedItem = this;
-                setTimeout(() => $(this).addClass('dragging'), 0);
-                // Set data for drag operation
-                e.originalEvent?.dataTransfer?.setData('text/plain', '');
-            });
-
-            // End dragging
-            $item.on('dragend', function() {
-                $(this).removeClass('dragging');
-                aiDraggedItem = null;
-                // Update the precedence value when dragging ends
-                updateAiPrecedenceValue();
-            });
-
-            // Dragging over an item
-            $item.on('dragover', function(e: JQuery.DragOverEvent) {
-                e.preventDefault();
-                if (!aiDraggedItem || this === aiDraggedItem) return;
-
-                $(this).addClass('drag-over');
-            });
-
-            // Leaving an item
-            $item.on('dragleave', function() {
-                $(this).removeClass('drag-over');
-            });
-
-            // Dropping on an item
-            $item.on('drop', function(e: JQuery.DropEvent) {
-                e.preventDefault();
-                $(this).removeClass('drag-over');
-
-                if (!aiDraggedItem || this === aiDraggedItem) return;
-
-                // Get the positions of the dragged item and drop target
-                const allItems = Array.from($aiSortableList.find('li').get()) as HTMLElement[];
-                const draggedIndex = allItems.indexOf(aiDraggedItem as HTMLElement);
-                const dropIndex = allItems.indexOf(this as HTMLElement);
-
-                if (draggedIndex < dropIndex) {
-                    // Insert after
-                    $(this).after(aiDraggedItem);
-                } else {
-                    // Insert before
-                    $(this).before(aiDraggedItem);
-                }
-
-                // Update the precedence value after reordering
-                updateAiPrecedenceValue();
-            });
-        };
-
-        // Make all list items draggable
-        const $aiListItems = $aiSortableList.find('li');
-        $aiListItems.attr('draggable', 'true');
-        $aiListItems.each((_, item) => {
-            setupAiDragHandlers($(item));
         });
 
-        // Handle remove provider button clicks
-        this.$widget.find('.remove-ai-provider').on('click', (e) => {
+        // Setup dragover handler
+        $item.on('dragover', function(e: JQuery.DragOverEvent) {
+            e.preventDefault();
+            const draggingItem = self.$widget?.find('.dragging');
+            if (!draggingItem?.length || this === draggingItem.get(0)) return;
+
+            $(this).addClass('drag-over');
+        });
+
+        // Setup dragleave handler
+        $item.on('dragleave', function() {
+            $(this).removeClass('drag-over');
+        });
+
+        // Setup drop handler
+        $item.on('drop', function(e: JQuery.DropEvent) {
+            e.preventDefault();
+            $(this).removeClass('drag-over');
+
+            const draggingItem = self.$widget?.find('.dragging');
+            if (!draggingItem?.length || this === draggingItem.get(0)) return;
+
+            // Get positions - fixed to handle type errors
+            const $this = $(this);
+            const allItems = Array.from($aiSortableList.find('li').get());
+            const draggedIndex = allItems.findIndex(item => $(item).is(draggingItem));
+            const dropIndex = allItems.findIndex(item => $(item).is($this));
+
+            if (draggedIndex >= 0 && dropIndex >= 0) {
+                if (draggedIndex < dropIndex) {
+                    // Insert after
+                    $this.after(draggingItem);
+                } else {
+                    // Insert before
+                    $this.before(draggingItem);
+                }
+
+                // Update precedence
+                const providers = $aiSortableList.find('li').map(function() {
+                    return $(this).data('provider');
+                }).get().join(',');
+
+                $aiProviderPrecedence.val(providers);
+                $aiProviderPrecedence.trigger('change');
+            }
+        });
+    }
+
+    /**
+     * Initialize the AI provider precedence order based on saved values
+     */
+    initializeAiProviderOrder() {
+        if (!this.$widget) return;
+
+        const $aiProviderPrecedence = this.$widget.find('.ai-provider-precedence');
+        const $aiSortableList = this.$widget.find('.provider-sortable');
+
+        // Get the current value
+        const savedValue = $aiProviderPrecedence.val() as string;
+        if (!savedValue) return;
+
+        // Get all available providers
+        const allProviders = ['openai', 'anthropic', 'ollama', 'voyage'];
+        const savedProviders = savedValue.split(',');
+
+        // Clear all items from the disabled list first to avoid duplicates
+        this.$widget.find('.provider-disabled').empty();
+
+        // Find disabled providers (providers in allProviders but not in savedProviders)
+        const disabledProviders = allProviders.filter(p => !savedProviders.includes(p));
+
+        // Move saved providers to the end in the correct order
+        savedProviders.forEach(provider => {
+            const $item = $aiSortableList.find(`li[data-provider="${provider}"]`);
+            if ($item.length) {
+                $aiSortableList.append($item); // Move to the end in the correct order
+            }
+        });
+
+        // Setup remove click handlers first to ensure they work when simulating clicks
+        this.setupAiProviderRemoveHandlers();
+
+        // Move disabled providers to the disabled list
+        disabledProviders.forEach(provider => {
+            const $item = $aiSortableList.find(`li[data-provider="${provider}"]`);
+            if ($item.length) {
+                // Simulate clicking the remove button to move it to the disabled list
+                $item.find('.remove-ai-provider').trigger('click');
+            } else {
+                // If it's not in the active list already, manually create it in the disabled list
+                const providerName = this.getProviderDisplayName(provider);
+                const $disabledItem = $(`
+                    <li class="standard-list-item d-flex align-items-center" data-provider="${provider}">
+                        <strong class="flex-grow-1">${providerName}</strong>
+                        <button class="icon-action restore-ai-provider" title="${t("ai_llm.restore_provider")}">
+                            <span class="bx bx-plus"></span>
+                        </button>
+                    </li>
+                `);
+                this.$widget.find('.provider-disabled').append($disabledItem);
+
+                // Add restore button handler
+                this.setupAiProviderRestoreHandler($disabledItem);
+            }
+        });
+
+        // Show/hide the disabled providers container
+        const $disabledContainer = this.$widget.find('.disabled-ai-providers-container');
+        const hasDisabledProviders = this.$widget.find('.provider-disabled li').length > 0;
+        $disabledContainer.toggle(hasDisabledProviders);
+    }
+
+    /**
+     * Helper to get display name for providers
+     */
+    getProviderDisplayName(provider: string): string {
+        switch(provider) {
+            case 'openai': return 'OpenAI';
+            case 'anthropic': return 'Anthropic';
+            case 'ollama': return 'Ollama';
+            case 'voyage': return 'Voyage';
+            case 'local': return 'Local';
+            default: return provider.charAt(0).toUpperCase() + provider.slice(1);
+        }
+    }
+
+    /**
+     * Setup event handlers for AI provider remove buttons
+     */
+    setupAiProviderRemoveHandlers() {
+        if (!this.$widget) return;
+
+        const self = this;
+        const $aiProviderPrecedence = this.$widget.find('.ai-provider-precedence');
+        const $aiSortableList = this.$widget.find('.provider-sortable');
+
+        // Remove any existing handlers to prevent duplicates
+        this.$widget.find('.remove-ai-provider').off('click');
+
+        // Add remove button click handler to all provider items
+        this.$widget.find('.remove-ai-provider').on('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            const $button = $(e.currentTarget);
+            const $button = $(this);
             const $item = $button.closest('li');
             const provider = $item.data('provider');
             const providerName = $item.find('strong').text();
@@ -1826,94 +2165,89 @@ export default class AiSettingsWidget extends OptionsWidget {
             `);
 
             // Add to disabled list
-            this.$widget.find('.provider-disabled').append($disabledItem);
+            self.$widget.find('.provider-disabled').append($disabledItem);
 
             // Remove from active list
             $item.remove();
 
-            // Update the hidden input value
-            updateAiPrecedenceValue();
+            // Setup restore handler
+            self.setupAiProviderRestoreHandler($disabledItem);
 
-            // Add restore button handler
-            $disabledItem.find('.restore-ai-provider').on('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+            // Update the hidden input value based on current order
+            const providers = $aiSortableList.find('li').map(function() {
+                return $(this).data('provider');
+            }).get().join(',');
 
-                const $restoreButton = $(e.currentTarget);
-                const $disabledItem = $restoreButton.closest('li');
-                const provider = $disabledItem.data('provider');
-                const providerName = $disabledItem.find('strong').text();
+            $aiProviderPrecedence.val(providers);
+            // Trigger the change event to save the option
+            $aiProviderPrecedence.trigger('change');
 
-                // Create a new item for the active list
-                const $activeItem = $(`
-                    <li class="standard-list-item d-flex align-items-center" data-provider="${provider}">
-                        <span class="bx bx-menu handle me-2"></span>
-                        <strong class="flex-grow-1">${providerName}</strong>
-                        <button class="icon-action remove-ai-provider" title="${t("ai_llm.remove_provider")}">
-                            <span class="bx bx-x"></span>
-                        </button>
-                    </li>
-                `);
-
-                // Make draggable
-                $activeItem.attr('draggable', 'true');
-                setupAiDragHandlers($activeItem);
-
-                // Add remove button handler
-                $activeItem.find('.remove-ai-provider').on('click', function(e) {
-                    $(this).closest('li').find('.remove-ai-provider').trigger('click');
-                });
-
-                // Add to active list
-                $aiSortableList.append($activeItem);
-
-                // Remove from disabled list
-                $disabledItem.remove();
-
-                // Update the hidden input value
-                updateAiPrecedenceValue();
-            });
+            // Show/hide the disabled providers container
+            const $disabledContainer = self.$widget.find('.disabled-ai-providers-container');
+            const hasDisabledProviders = self.$widget.find('.provider-disabled li').length > 0;
+            $disabledContainer.toggle(hasDisabledProviders);
         });
-
-        // Initialize by setting the value based on current order
-        updateAiPrecedenceValue();
-
-        // Process the saved preference value
-        const initializeAiProviderOrder = () => {
-            // Get the current value
-            const savedValue = $aiProviderPrecedence.val() as string;
-            if (!savedValue) return;
-
-            // Get all available providers
-            const allProviders = ['openai', 'voyage', 'anthropic', 'ollama'];
-            const savedProviders = savedValue.split(',');
-
-            // Find disabled providers (providers in allProviders but not in savedProviders)
-            const disabledProviders = allProviders.filter(p => !savedProviders.includes(p));
-
-            // Move saved providers to the end in the correct order
-            savedProviders.forEach(provider => {
-                const $item = $aiSortableList.find(`li[data-provider="${provider}"]`);
-                if ($item.length) {
-                    $aiSortableList.append($item); // Move to the end in the correct order
-                }
-            });
-
-            // Move disabled providers to the disabled list
-            disabledProviders.forEach(provider => {
-                const $item = $aiSortableList.find(`li[data-provider="${provider}"]`);
-                if ($item.length) {
-                    // Simulate clicking the remove button
-                    $item.find('.remove-ai-provider').trigger('click');
-                }
-            });
-
-            // Update the value again after reordering
-            updateAiPrecedenceValue();
-        };
-
-        // Initialize provider order
-        initializeAiProviderOrder();
     }
+
+    /**
+     * Setup restore button handler for disabled AI providers
+     */
+    setupAiProviderRestoreHandler($disabledItem: JQuery) {
+        if (!this.$widget) return;
+
+        const self = this;
+        const $aiProviderPrecedence = this.$widget.find('.ai-provider-precedence');
+        const $aiSortableList = this.$widget.find('.provider-sortable');
+
+        $disabledItem.find('.restore-ai-provider').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const $button = $(this);
+            const $disabledItem = $button.closest('li');
+            const provider = $disabledItem.data('provider');
+            const providerName = $disabledItem.find('strong').text();
+
+            // Create a new item for the active list
+            const $activeItem = $(`
+                <li class="standard-list-item d-flex align-items-center" data-provider="${provider}" draggable="true">
+                    <span class="bx bx-menu handle me-2"></span>
+                    <strong class="flex-grow-1">${providerName}</strong>
+                    <button class="icon-action remove-ai-provider" title="${t("ai_llm.remove_provider")}">
+                        <span class="bx bx-x"></span>
+                    </button>
+                </li>
+            `);
+
+            // Add to active list
+            $aiSortableList.append($activeItem);
+
+            // Remove from disabled list
+            $disabledItem.remove();
+
+            // Setup drag handlers for the new item
+            self.setupAiItemDragHandlers($activeItem);
+
+            // Setup remove button handler
+            $activeItem.find('.remove-ai-provider').on('click', function() {
+                $(this).closest('li').find('.remove-ai-provider').trigger('click');
+            });
+
+            // Update the hidden input value based on current order
+            const providers = $aiSortableList.find('li').map(function() {
+                return $(this).data('provider');
+            }).get().join(',');
+
+            $aiProviderPrecedence.val(providers);
+            // Trigger the change event to save the option
+            $aiProviderPrecedence.trigger('change');
+
+            // Show/hide the disabled providers container
+            const $disabledContainer = self.$widget.find('.disabled-ai-providers-container');
+            const hasDisabledProviders = self.$widget.find('.provider-disabled li').length > 0;
+            $disabledContainer.toggle(hasDisabledProviders);
+        });
+    }
+
 }
 
