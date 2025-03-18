@@ -54,6 +54,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     private zoomHandler?: () => void;
     private zoomInstance?: SvgPanZoom.Instance;
     private splitInstance?: Split.Instance;
+    private lastNote?: FNote;
 
     isEnabled() {
         return super.isEnabled() && this.note?.type === "mermaid" && this.note.isContentAvailable() && this.noteContext?.viewScope?.viewMode === "default";
@@ -107,28 +108,17 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             $svg.attr("width", "100%").attr("height", "100%");
 
             // Enable pan to zoom.
-            import("svg-pan-zoom").then(svgPanZoom => {
-                const zoom = svgPanZoom.default($svg[0], {
-                    zoomEnabled: true,
-                    controlIconsEnabled: true,
-                    fit: true,
-                    center: true
-                });
-
-                this.zoomHandler = () => {
-                    zoom.resize();
-                    zoom.fit();
-                    zoom.center();
-                };
-                $(window).on("resize", this.zoomHandler);
-            });
+            const isSameNote = (this.lastNote === note);
+            this.#setupPanZoom($svg[0], isSameNote);
         } catch (e: any) {
             console.warn(e);
+            this.#cleanUpZoom();
             this.$errorMessage.text(e.message);
             this.$errorContainer.show();
         }
 
         this.#setupResizer();
+        this.lastNote = note;
     }
 
     cleanup() {
@@ -137,7 +127,13 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             $(window).off("resize", this.zoomHandler);
             this.zoomHandler = undefined;
         }
-        this.zoomInstance?.destroy();
+    }
+
+    #cleanUpZoom() {
+        if (this.zoomInstance) {
+            this.zoomInstance.destroy();
+            this.zoomInstance = undefined;
+        }
     }
 
     toggleInt(show: boolean | null | undefined): void {
@@ -161,6 +157,44 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         await loadElkIfNeeded(content);
         const { svg } = await mermaid.mermaidAPI.render(`mermaid-graph-${idCounter}`, content);
         return postprocessMermaidSvg(svg);
+    }
+
+    async #setupPanZoom(svgEl: SVGElement, isSameNote: boolean) {
+        // Clean up
+        let pan = null;
+        let zoom = null;
+        if (this.zoomInstance) {
+            // Store pan and zoom for same note, when the user is editing the note.
+            if (isSameNote && this.zoomInstance) {
+                pan = this.zoomInstance.getPan();
+                zoom = this.zoomInstance.getZoom();
+            }
+            this.#cleanUpZoom();
+        }
+
+        const svgPanZoom = (await import("svg-pan-zoom")).default;
+        const zoomInstance = svgPanZoom(svgEl, {
+            zoomEnabled: true,
+            controlIconsEnabled: true
+        });
+
+        if (pan && zoom) {
+            // Restore the pan and zoom.
+            zoomInstance.zoom(zoom);
+            zoomInstance.pan(pan);
+        } else {
+            // New instance, reposition properly.
+            zoomInstance.center();
+            zoomInstance.fit();
+        }
+
+        this.zoomHandler = () => {
+            zoomInstance.resize();
+            zoomInstance.fit();
+            zoomInstance.center();
+        };
+        this.zoomInstance = zoomInstance;
+        $(window).on("resize", this.zoomHandler);
     }
 
     #setupResizer() {
