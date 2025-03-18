@@ -71,8 +71,6 @@ export default class MermaidWidget extends NoteContextAwareWidget {
 
         this.$display.empty();
 
-        const wheelZoomLoaded = libraryLoader.requireLibrary(libraryLoader.WHEEL_ZOOM);
-
         this.$errorContainer.hide();
 
         try {
@@ -93,15 +91,17 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             }
 
             this.$display.html(svg);
-
-            await wheelZoomLoaded;
-
             this.$display.attr("id", `mermaid-render-${idCounter}`);
 
-            WZoom.create(`#mermaid-render-${idCounter}`, {
-                maxScale: 50,
-                speed: 1.3,
-                zoomOnClick: false
+            // Fit the image to bounds.
+            const $svg = this.$display.find("svg");
+            $svg.attr("width", "100%").attr("height", "100%");
+
+            // Enable pan to zoom.
+            import("svg-pan-zoom").then(svgPanZoom => {
+                svgPanZoom.default($svg[0], {
+                    controlIconsEnabled: true
+                });
             });
         } catch (e: any) {
             console.warn(e);
