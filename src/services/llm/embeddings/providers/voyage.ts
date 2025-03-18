@@ -2,6 +2,7 @@ import axios from "axios";
 import log from "../../../log.js";
 import { BaseEmbeddingProvider } from "../base_embeddings.js";
 import type { EmbeddingConfig, EmbeddingModelInfo } from "../embeddings_interface.js";
+import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../../../routes/api/llm.js";
 
 // Voyage model context window sizes - as of current API version
@@ -68,7 +69,8 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
 
             return {
                 dimension,
-                contextWindow
+                contextWindow,
+                guaranteesNormalization: true // Voyage embeddings are typically normalized
             };
         } catch (error) {
             log.info(`Could not determine capabilities for Voyage AI model ${modelName}: ${error}`);
@@ -96,7 +98,8 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                 // Use known dimension
                 const modelInfo: EmbeddingModelInfo = {
                     dimension: knownDimension,
-                    contextWindow
+                    contextWindow,
+                    guaranteesNormalization: true // Voyage embeddings are typically normalized
                 };
 
                 this.modelInfoCache.set(modelName, modelInfo);
@@ -109,28 +112,41 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                 const testEmbedding = await this.generateEmbeddings("Test");
                 const dimension = testEmbedding.length;
 
-                const modelInfo: EmbeddingModelInfo = {
-                    dimension,
-                    contextWindow
-                };
-
-                this.modelInfoCache.set(modelName, modelInfo);
-                this.config.dimension = dimension;
-
-                log.info(`Detected Voyage AI model ${modelName} with dimension ${dimension} (context: ${contextWindow})`);
-                return modelInfo;
+                // Set model info based on the model name, detected dimension, and reasonable defaults
+                if (modelName.includes('voyage-2')) {
+                    return {
+                        dimension: dimension || 1024,
+                        contextWindow: 4096,
+                        guaranteesNormalization: true // Voyage-2 embeddings are normalized
+                    };
+                } else if (modelName.includes('voyage-lite-02')) {
+                    return {
+                        dimension: dimension || 768,
+                        contextWindow: 4096,
+                        guaranteesNormalization: true // Voyage-lite embeddings are normalized
+                    };
+                } else {
+                    // Default for other Voyage models
+                    return {
+                        dimension: dimension || 1024,
+                        contextWindow: 4096,
+                        guaranteesNormalization: true // Assuming all Voyage embeddings are normalized
+                    };
+                }
             }
         } catch (error: any) {
-            // If detection fails, use defaults
-            const dimension = 1024; // Default for Voyage models
+            log.info(`Could not fetch model info from Voyage AI API: ${error.message}. Using defaults.`);
 
-            log.info(`Using default parameters for Voyage AI model ${modelName}: dimension ${dimension}, context ${contextWindow}`);
+            // Use default parameters if everything else fails
+            const defaultModelInfo: EmbeddingModelInfo = {
+                dimension: 1024, // Default for Voyage models
+                contextWindow: 8192,
+                guaranteesNormalization: true // Voyage embeddings are typically normalized
+            };
 
-            const modelInfo: EmbeddingModelInfo = { dimension, contextWindow };
-            this.modelInfoCache.set(modelName, modelInfo);
-            this.config.dimension = dimension;
-
-            return modelInfo;
+            this.modelInfoCache.set(modelName, defaultModelInfo);
+            this.config.dimension = defaultModelInfo.dimension;
+            return defaultModelInfo;
         }
     }
 
@@ -250,5 +266,13 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             log.error(`Voyage AI batch embedding error: ${errorMessage}`);
             throw new Error(`Voyage AI batch embedding error: ${errorMessage}`);
         }
+    }
+
+    /**
+     * Returns the normalization status for Voyage embeddings
+     * Voyage embeddings are generally normalized by the API
+     */
+    getNormalizationStatus(): NormalizationStatus {
+        return NormalizationStatus.GUARANTEED;
     }
 }

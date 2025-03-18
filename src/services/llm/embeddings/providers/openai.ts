@@ -2,6 +2,7 @@ import axios from "axios";
 import log from "../../../log.js";
 import { BaseEmbeddingProvider } from "../base_embeddings.js";
 import type { EmbeddingConfig, EmbeddingModelInfo } from "../embeddings_interface.js";
+import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../../../routes/api/llm.js";
 
 /**
@@ -105,7 +106,8 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
 
                 return {
                     dimension,
-                    contextWindow
+                    contextWindow,
+                    guaranteesNormalization: true // OpenAI embeddings are normalized to unit length
                 };
             }
         } catch (error: any) {
@@ -141,7 +143,11 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             // Use default context window
             let contextWindow = LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI;
 
-            const modelInfo: EmbeddingModelInfo = { dimension, contextWindow };
+            const modelInfo: EmbeddingModelInfo = {
+                dimension,
+                contextWindow,
+                guaranteesNormalization: true // OpenAI embeddings are normalized to unit length
+            };
             this.modelInfoCache.set(modelName, modelInfo);
             this.config.dimension = dimension;
 
@@ -154,7 +160,11 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
 
             log.info(`Using default parameters for OpenAI model ${modelName}: dimension ${dimension}, context ${contextWindow}`);
 
-            const modelInfo: EmbeddingModelInfo = { dimension, contextWindow };
+            const modelInfo: EmbeddingModelInfo = {
+                dimension,
+                contextWindow,
+                guaranteesNormalization: true // OpenAI embeddings are normalized to unit length
+            };
             this.modelInfoCache.set(modelName, modelInfo);
             this.config.dimension = dimension;
 
@@ -287,5 +297,13 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             log.error(`OpenAI batch embedding error: ${errorMessage}`);
             throw new Error(`OpenAI batch embedding error: ${errorMessage}`);
         }
+    }
+
+    /**
+     * Returns the normalization status for OpenAI embeddings
+     * OpenAI embeddings are guaranteed to be normalized to unit length
+     */
+    getNormalizationStatus(): NormalizationStatus {
+        return NormalizationStatus.GUARANTEED;
     }
 }

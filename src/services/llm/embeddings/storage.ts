@@ -112,6 +112,26 @@ export async function getEmbeddingForNote(noteId: string, providerId: string, mo
     };
 }
 
+// Create an interface that represents the embedding row from the database
+interface EmbeddingRow {
+    embedId: string;
+    noteId: string;
+    providerId: string;
+    modelId: string;
+    dimension: number;
+    embedding: Buffer;
+    title?: string;
+    type?: string;
+    mime?: string;
+    isDeleted?: number;
+}
+
+// Interface for enhanced embedding with query model information
+interface EnhancedEmbeddingRow extends EmbeddingRow {
+    queryProviderId: string;
+    queryModelId: string;
+}
+
 /**
  * Finds similar notes based on vector similarity
  */
@@ -122,7 +142,7 @@ export async function findSimilarNotes(
     limit = 10,
     threshold?: number,  // Made optional to use constants
     useFallback = true   // Whether to try other providers if no embeddings found
-): Promise<{noteId: string, similarity: number}[]> {
+): Promise<{noteId: string, similarity: number, contentType?: string}[]> {
     // Import constants dynamically to avoid circular dependencies
     const llmModule = await import('../../../routes/api/llm.js');
     // Use a default threshold of 0.65 if not provided
@@ -138,11 +158,30 @@ export async function findSimilarNotes(
             FROM note_embeddings ne
             JOIN notes n ON ne.noteId = n.noteId
             WHERE ne.providerId = ? AND ne.modelId = ? AND n.isDeleted = 0
-        `, [providerId, modelId]);
+        `, [providerId, modelId]) as EmbeddingRow[];
 
         if (embeddings && embeddings.length > 0) {
             log.info(`Found ${embeddings.length} embeddings for provider ${providerId}, model ${modelId}`);
-            return await processEmbeddings(embedding, embeddings, actualThreshold, limit);
+
+            // Add query model information to each embedding for cross-model comparison
+            const enhancedEmbeddings: EnhancedEmbeddingRow[] = embeddings.map(e => {
+                return {
+                    embedId: e.embedId,
+                    noteId: e.noteId,
+                    providerId: e.providerId,
+                    modelId: e.modelId,
+                    dimension: e.dimension,
+                    embedding: e.embedding,
+                    title: e.title,
+                    type: e.type,
+                    mime: e.mime,
+                    isDeleted: e.isDeleted,
+                    queryProviderId: providerId,
+                    queryModelId: modelId
+                };
+            });
+
+            return await processEmbeddings(embedding, enhancedEmbeddings, actualThreshold, limit);
         }
 
         // If no embeddings found and fallback is allowed, try other providers
@@ -195,10 +234,28 @@ export async function findSimilarNotes(
                             FROM note_embeddings ne
                             JOIN notes n ON ne.noteId = n.noteId
                             WHERE ne.providerId = ? AND ne.modelId = ? AND n.isDeleted = 0
-                        `, [bestAlternative.providerId, bestAlternative.modelId]);
+                        `, [bestAlternative.providerId, bestAlternative.modelId]) as EmbeddingRow[];
 
                         if (alternativeEmbeddings && alternativeEmbeddings.length > 0) {
-                            return await processEmbeddings(embedding, alternativeEmbeddings, actualThreshold, limit);
+                            // Add query model information to each embedding for cross-model comparison
+                            const enhancedEmbeddings: EnhancedEmbeddingRow[] = alternativeEmbeddings.map(e => {
+                                return {
+                                    embedId: e.embedId,
+                                    noteId: e.noteId,
+                                    providerId: e.providerId,
+                                    modelId: e.modelId,
+                                    dimension: e.dimension,
+                                    embedding: e.embedding,
+                                    title: e.title,
+                                    type: e.type,
+                                    mime: e.mime,
+                                    isDeleted: e.isDeleted,
+                                    queryProviderId: providerId,
+                                    queryModelId: modelId
+                                };
+                            });
+
+                            return await processEmbeddings(embedding, enhancedEmbeddings, actualThreshold, limit);
                         }
                     }
                 } else {
@@ -256,24 +313,71 @@ export async function findSimilarNotes(
 
 // Helper function to process embeddings and calculate similarities
 async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[], threshold: number, limit: number) {
-    const { enhancedCosineSimilarity, bufferToEmbedding } = await import('./vector_utils.js');
+    const {
+        enhancedCosineSimilarity,
+        bufferToEmbedding,
+        ContentType,
+        PerformanceProfile,
+        detectContentType,
+        vectorDebugConfig
+    } = await import('./vector_utils.js');
+
+    // Enable debug logging temporarily for testing content-aware adaptation
+    const originalDebugEnabled = vectorDebugConfig.enabled;
+    const originalLogLevel = vectorDebugConfig.logLevel;
+    vectorDebugConfig.enabled = true;
+    vectorDebugConfig.logLevel = 'debug';
+    vectorDebugConfig.recordStats = true;
+
     const similarities = [];
 
-    for (const e of embeddings) {
-        const embVector = bufferToEmbedding(e.embedding, e.dimension);
-        const similarity = enhancedCosineSimilarity(queryEmbedding, embVector);
+    try {
+        for (const e of embeddings) {
+            const embVector = bufferToEmbedding(e.embedding, e.dimension);
 
-        if (similarity >= threshold) {
-            similarities.push({
-                noteId: e.noteId,
-                similarity: similarity
-            });
+            // Detect content type from mime type if available
+            let contentType = ContentType.GENERAL_TEXT;
+            if (e.mime) {
+                contentType = detectContentType(e.mime);
+                console.log(`Note ID: ${e.noteId}, Mime: ${e.mime}, Detected content type: ${contentType}`);
+            }
+
+            // Select performance profile based on embedding size and use case
+            // For most similarity searches, BALANCED is a good default
+            const performanceProfile = PerformanceProfile.BALANCED;
+
+            // Determine if this is cross-model comparison
+            const isCrossModel = e.providerId !== e.queryProviderId || e.modelId !== e.queryModelId;
+
+            // Calculate similarity with content-aware parameters
+            const similarity = enhancedCosineSimilarity(
+                queryEmbedding,
+                embVector,
+                true, // normalize vectors to ensure consistent comparison
+                e.queryModelId,  // source model ID
+                e.modelId,       // target model ID
+                contentType,     // content-specific padding strategy
+                performanceProfile
+            );
+
+            if (similarity >= threshold) {
+                similarities.push({
+                    noteId: e.noteId,
+                    similarity: similarity,
+                    contentType: contentType.toString()
+                });
+            }
         }
-    }
 
-    return similarities
-        .sort((a, b) => b.similarity - a.similarity)
-        .slice(0, limit);
+        return similarities
+            .sort((a, b) => b.similarity - a.similarity)
+            .slice(0, limit);
+    } finally {
+        // Restore original debug settings
+        vectorDebugConfig.enabled = originalDebugEnabled;
+        vectorDebugConfig.logLevel = originalLogLevel;
+        vectorDebugConfig.recordStats = false;
+    }
 }
 
 /**

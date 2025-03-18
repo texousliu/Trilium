@@ -42,6 +42,35 @@ export interface NoteEmbeddingContext {
 export interface EmbeddingModelInfo {
     dimension: number;
     contextWindow: number;
+    /**
+     * Whether the model guarantees normalized vectors (unit length)
+     */
+    guaranteesNormalization: boolean;
+}
+
+/**
+ * Normalization status of a provider's embeddings
+ */
+export enum NormalizationStatus {
+    /**
+     * Provider guarantees all embeddings are normalized to unit vectors
+     */
+    GUARANTEED = 'guaranteed',
+
+    /**
+     * Provider does not guarantee normalization, but embeddings are usually normalized
+     */
+    USUALLY = 'usually',
+
+    /**
+     * Provider does not guarantee normalization, embeddings must be normalized before use
+     */
+    NEVER = 'never',
+
+    /**
+     * Normalization status is unknown and should be checked at runtime
+     */
+    UNKNOWN = 'unknown'
 }
 
 /**
@@ -51,7 +80,16 @@ export interface EmbeddingConfig {
     model: string;
     dimension: number;
     type: 'float32' | 'float64';
+    /**
+     * Whether embeddings should be normalized before use
+     * If true, normalization will always be applied
+     * If false, normalization depends on provider's status
+     */
     normalize?: boolean;
+    /**
+     * The normalization status of this provider
+     */
+    normalizationStatus?: NormalizationStatus;
     batchSize?: number;
     contextWindowSize?: number;
     apiKey?: string;
@@ -64,6 +102,17 @@ export interface EmbeddingConfig {
 export interface EmbeddingProvider {
     name: string;
     getConfig(): EmbeddingConfig;
+
+    /**
+     * Returns information about the normalization status of this provider
+     */
+    getNormalizationStatus(): NormalizationStatus;
+
+    /**
+     * Verify that embeddings are properly normalized
+     * @returns true if embeddings are properly normalized
+     */
+    verifyNormalization?(sample?: Float32Array): Promise<boolean>;
 
     /**
      * Generate embeddings for a single piece of text

@@ -4,6 +4,7 @@ import sql from "../../sql.js";
 import dateUtils from "../../date_utils.js";
 import { randomString } from "../../utils.js";
 import type { EmbeddingProvider, EmbeddingConfig } from "./embeddings_interface.js";
+import { NormalizationStatus } from "./embeddings_interface.js";
 import { OpenAIEmbeddingProvider } from "./providers/openai.js";
 import { OllamaEmbeddingProvider } from "./providers/ollama.js";
 import { VoyageEmbeddingProvider } from "./providers/voyage.js";
@@ -23,6 +24,14 @@ class SimpleLocalEmbeddingProvider implements EmbeddingProvider {
 
     getConfig(): EmbeddingConfig {
         return this.config;
+    }
+
+    /**
+     * Returns the normalization status of the local provider
+     * Local provider does not guarantee normalization
+     */
+    getNormalizationStatus(): NormalizationStatus {
+        return NormalizationStatus.NEVER; // Simple embedding does not normalize vectors
     }
 
     async generateEmbeddings(text: string): Promise<Float32Array> {

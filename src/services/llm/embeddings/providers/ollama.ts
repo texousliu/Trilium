@@ -2,6 +2,7 @@ import axios from "axios";
 import log from "../../../log.js";
 import { BaseEmbeddingProvider } from "../base_embeddings.js";
 import type { EmbeddingConfig, EmbeddingModelInfo } from "../embeddings_interface.js";
+import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../../../routes/api/llm.js";
 
 /**
@@ -63,7 +64,8 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
 
                 return {
                     dimension: embeddingDimension || 0, // We'll detect this separately if not provided
-                    contextWindow: contextWindow
+                    contextWindow: contextWindow,
+                    guaranteesNormalization: false // Ollama models don't guarantee normalized embeddings
                 };
             }
         } catch (error: any) {
@@ -113,7 +115,11 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
             const contextWindow = (LLM_CONSTANTS.OLLAMA_MODEL_CONTEXT_WINDOWS as Record<string, number>)[baseModelName] ||
                                 (LLM_CONSTANTS.OLLAMA_MODEL_CONTEXT_WINDOWS as Record<string, number>).default;
 
-            const modelInfo: EmbeddingModelInfo = { dimension, contextWindow };
+            const modelInfo: EmbeddingModelInfo = {
+                dimension,
+                contextWindow,
+                guaranteesNormalization: false // Ollama models don't guarantee normalized embeddings
+            };
             this.modelInfoCache.set(modelName, modelInfo);
             this.config.dimension = dimension;
 
@@ -131,7 +137,11 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
 
             log.info(`Using default parameters for model ${modelName}: dimension ${dimension}, context ${contextWindow}`);
 
-            const modelInfo: EmbeddingModelInfo = { dimension, contextWindow };
+            const modelInfo: EmbeddingModelInfo = {
+                dimension,
+                contextWindow,
+                guaranteesNormalization: false // Ollama models don't guarantee normalized embeddings
+            };
             this.modelInfoCache.set(modelName, modelInfo);
             this.config.dimension = dimension;
 
@@ -301,5 +311,13 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
             log.error(`Ollama batch embedding error: ${errorMessage}`);
             throw new Error(`Ollama batch embedding error: ${errorMessage}`);
         }
+    }
+
+    /**
+     * Returns the normalization status for Ollama embeddings
+     * Ollama embeddings are not guaranteed to be normalized
+     */
+    getNormalizationStatus(): NormalizationStatus {
+        return NormalizationStatus.NEVER; // Be conservative and always normalize
     }
 }

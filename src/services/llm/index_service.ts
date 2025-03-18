@@ -565,7 +565,7 @@ class IndexService {
             }
 
             // Get Note IDs to search, optionally filtered by branch
-            let similarNotes = [];
+            let similarNotes: { noteId: string; title: string; similarity: number; contentType?: string }[] = [];
 
             // Check if we need to restrict search to a specific branch
             if (contextNoteId) {
@@ -593,6 +593,9 @@ class IndexService {
                 // Get embeddings for all notes in the branch
                 const config = provider.getConfig();
 
+                // Import the ContentType detection from vector utils
+                const { ContentType, detectContentType, cosineSimilarity } = await import('./embeddings/vector_utils.js');
+
                 for (const noteId of branchNoteIds) {
                     const noteEmbedding = await vectorStore.getEmbeddingForNote(
                         noteId,
@@ -601,14 +604,29 @@ class IndexService {
                     );
 
                     if (noteEmbedding) {
-                        const similarity = vectorStore.cosineSimilarity(embedding, noteEmbedding.embedding);
-                        if (similarity >= this.defaultSimilarityThreshold) {
-                            const note = becca.getNote(noteId);
-                            if (note) {
+                        // Get the note to determine its content type
+                        const note = becca.getNote(noteId);
+                        if (note) {
+                            // Detect content type from mime type
+                            const contentType = detectContentType(note.mime, '');
+
+                            // Use content-aware similarity calculation
+                            const similarity = cosineSimilarity(
+                                embedding,
+                                noteEmbedding.embedding,
+                                true, // normalize
+                                config.model, // source model
+                                noteEmbedding.providerId, // target model (use providerId)
+                                contentType, // content type for padding strategy
+                                undefined // use default BALANCED performance profile
+                            );
+
+                            if (similarity >= this.defaultSimilarityThreshold) {
                                 similarNotes.push({
                                     noteId,
                                     title: note.title,
-                                    similarity
+                                    similarity,
+                                    contentType: contentType.toString()
                                 });
                             }
                         }
@@ -622,7 +640,7 @@ class IndexService {
             } else {
                 // Search across all notes
                 const config = provider.getConfig();
-                similarNotes = await vectorStore.findSimilarNotes(
+                const results = await vectorStore.findSimilarNotes(
                     embedding,
                     provider.name,
                     config.model,
@@ -631,14 +649,17 @@ class IndexService {
                 );
 
                 // Enhance results with note titles
-                return similarNotes.map(result => {
+                similarNotes = results.map(result => {
                     const note = becca.getNote(result.noteId);
                     return {
                         noteId: result.noteId,
                         title: note ? note.title : 'Unknown Note',
-                        similarity: result.similarity
+                        similarity: result.similarity,
+                        contentType: result.contentType
                     };
                 });
+
+                return similarNotes;
             }
         } catch (error: any) {
             log.error(`Error finding similar notes: ${error.message || "Unknown error"}`);

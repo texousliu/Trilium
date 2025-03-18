@@ -1,4 +1,5 @@
 import type { EmbeddingProvider, EmbeddingConfig, NoteEmbeddingContext } from './embeddings_interface.js';
+import { NormalizationStatus } from './embeddings_interface.js';
 import log from "../../log.js";
 import { LLM_CONSTANTS } from "../../../routes/api/llm.js";
 import options from "../../options.js";
@@ -21,6 +22,15 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
 
     getConfig(): EmbeddingConfig {
         return { ...this.config };
+    }
+
+    /**
+     * Get the normalization status of this provider
+     * Default implementation returns the status from config if available,
+     * otherwise returns UNKNOWN status
+     */
+    getNormalizationStatus(): NormalizationStatus {
+        return this.config.normalizationStatus || NormalizationStatus.UNKNOWN;
     }
 
     getDimension(): number {
