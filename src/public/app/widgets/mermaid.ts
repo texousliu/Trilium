@@ -6,16 +6,25 @@ import utils from "../services/utils.js";
 import { loadElkIfNeeded, postprocessMermaidSvg } from "../services/mermaid.js";
 import type FNote from "../entities/fnote.js";
 import type { EventData } from "../components/app_context.js";
+import ScrollingContainer from "./containers/scrolling_container.js";
+import Split from "split.js";
 
 const TPL = `<div class="mermaid-widget">
     <style>
         .mermaid-widget {
-            flex-grow: 2;
             overflow: auto;
+        }
+
+        body.mobile .mermaid-widget {
             min-height: 200px;
+            flex-grow: 2;
+            flex-basis: 0;
             border-bottom: 1px solid var(--main-border-color);
             margin-bottom: 10px;
-            flex-basis: 0;
+        }
+
+        body.desktop .mermaid-widget + .gutter {
+            border-bottom: 1px solid var(--main-border-color);
         }
 
         .mermaid-render {
@@ -43,6 +52,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     private dirtyAttachment?: boolean;
     private zoomHandler?: () => void;
     private zoomInstance?: SvgPanZoom.Instance;
+    private splitInstance?: Split.Instance;
 
     isEnabled() {
         return super.isEnabled() && this.note?.type === "mermaid" && this.note.isContentAvailable() && this.noteContext?.viewScope?.viewMode === "default";
@@ -116,6 +126,8 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             this.$errorMessage.text(e.message);
             this.$errorContainer.show();
         }
+
+        this.#setupResizer();
     }
 
     cleanup() {
@@ -148,6 +160,28 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         await loadElkIfNeeded(content);
         const { svg } = await mermaid.mermaidAPI.render(`mermaid-graph-${idCounter}`, content);
         return postprocessMermaidSvg(svg);
+    }
+
+    #setupResizer() {
+        if (!utils.isDesktop()) {
+            return;
+        }
+
+        const selfEl = this.$widget;
+        const scrollingContainer = this.parent?.children.find((ch) => ch instanceof ScrollingContainer)?.$widget;
+
+        if (!selfEl.length || !scrollingContainer?.length) {
+            return;
+        }
+
+        if (!this.splitInstance) {
+            this.splitInstance = Split([ selfEl[0], scrollingContainer[0] ], {
+                sizes: [ 50, 50 ],
+                direction: "vertical",
+                gutterSize: 5,
+                onDragEnd: () => this.zoomHandler?.()
+            });
+        }
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
