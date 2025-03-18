@@ -98,8 +98,7 @@ export default class TabManager extends Component {
                     ntxId: parsedFromUrl.ntxId,
                     active: true,
                     hoistedNoteId: parsedFromUrl.hoistedNoteId || "root",
-                    viewScope: parsedFromUrl.viewScope || {},
-                    mainNtxId: null
+                    viewScope: parsedFromUrl.viewScope || {}
                 });
             } else if (!filteredNoteContexts.find((tab: NoteContextState) => tab.active)) {
                 filteredNoteContexts[0].active = true;
@@ -279,10 +278,7 @@ export default class TabManager extends Component {
     }
 
     async openInNewTab(targetNoteId: string, hoistedNoteId: string | null = null) {
-        const noteContext = await this.openEmptyTab(
-            null,
-            hoistedNoteId || this.getActiveContext()?.hoistedNoteId
-        );
+        const noteContext = await this.openEmptyTab(null, hoistedNoteId || this.getActiveContext()?.hoistedNoteId);
 
         await noteContext.setNote(targetNoteId);
     }
