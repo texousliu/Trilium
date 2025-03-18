@@ -69,6 +69,8 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     }
 
     async refreshWithNote(note: FNote) {
+        const isSameNote = (this.lastNote === note);
+
         this.cleanup();
         this.$errorContainer.hide();
 
@@ -79,7 +81,9 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             ...(getMermaidConfig() as any)
         });
 
-        this.$display.empty();
+        if (!isSameNote) {
+            this.$display.empty();
+        }
 
         this.$errorContainer.hide();
 
@@ -108,7 +112,6 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             $svg.attr("width", "100%").attr("height", "100%");
 
             // Enable pan to zoom.
-            const isSameNote = (this.lastNote === note);
             this.#setupPanZoom($svg[0], isSameNote);
         } catch (e: any) {
             console.warn(e);
