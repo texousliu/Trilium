@@ -322,12 +322,13 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
         vectorDebugConfig
     } = await import('./vector_utils.js');
 
-    // Enable debug logging temporarily for testing content-aware adaptation
+    // Store original debug settings but keep debug disabled
     const originalDebugEnabled = vectorDebugConfig.enabled;
     const originalLogLevel = vectorDebugConfig.logLevel;
-    vectorDebugConfig.enabled = true;
-    vectorDebugConfig.logLevel = 'debug';
-    vectorDebugConfig.recordStats = true;
+
+    // Keep debug disabled for normal operation
+    vectorDebugConfig.enabled = false;
+    vectorDebugConfig.recordStats = false;
 
     const similarities = [];
 
@@ -339,7 +340,7 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
             let contentType = ContentType.GENERAL_TEXT;
             if (e.mime) {
                 contentType = detectContentType(e.mime);
-                console.log(`Note ID: ${e.noteId}, Mime: ${e.mime}, Detected content type: ${contentType}`);
+                // Debug logging removed to avoid console spam
             }
 
             // Select performance profile based on embedding size and use case
@@ -376,7 +377,6 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
         // Restore original debug settings
         vectorDebugConfig.enabled = originalDebugEnabled;
         vectorDebugConfig.logLevel = originalLogLevel;
-        vectorDebugConfig.recordStats = false;
     }
 }
 
