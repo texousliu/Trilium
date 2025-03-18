@@ -8,6 +8,7 @@ import type FNote from "../entities/fnote.js";
 import type { EventData } from "../components/app_context.js";
 import ScrollingContainer from "./containers/scrolling_container.js";
 import Split from "split.js";
+import { DEFAULT_GUTTER_SIZE } from "../services/resizer.js";
 
 const TPL = `<div class="mermaid-widget">
     <style>
@@ -178,7 +179,7 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             this.splitInstance = Split([ selfEl[0], scrollingContainer[0] ], {
                 sizes: [ 50, 50 ],
                 direction: "vertical",
-                gutterSize: 5,
+                gutterSize: DEFAULT_GUTTER_SIZE,
                 onDragEnd: () => this.zoomHandler?.()
             });
         }
