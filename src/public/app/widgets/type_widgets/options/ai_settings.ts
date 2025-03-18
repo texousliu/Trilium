@@ -367,10 +367,10 @@ export default class AiSettingsWidget extends OptionsWidget {
             <div class="form-group">
                 <label>${t("ai_llm.embedding_dimension_strategy")}</label>
                 <select class="embedding-dimension-strategy form-control">
-                    <option value="adapt">Adapt dimensions (faster)</option>
-                    <option value="regenerate">Regenerate embeddings (more accurate)</option>
+                    <option value="native">Use native dimensions (preserves information)</option>
+                    <option value="regenerate">Regenerate embeddings (most accurate)</option>
                 </select>
-                <div class="form-text">${t("ai_llm.embedding_dimension_strategy_description") || "Choose how to handle different embedding dimensions between providers. 'Adapt' is faster but less accurate, 'Regenerate' is more accurate but requires API calls."}</div>
+                <div class="form-text">${t("ai_llm.embedding_dimension_strategy_description")}</div>
             </div>
 
             <div class="form-group">

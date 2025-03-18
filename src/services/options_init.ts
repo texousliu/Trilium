@@ -191,7 +191,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "aiProviderPrecedence", value: "openai,anthropic,ollama", isSynced: true },
     { name: "embeddingsDefaultProvider", value: "openai", isSynced: true },
     { name: "embeddingProviderPrecedence", value: "openai,voyage,ollama", isSynced: true },
-    { name: "embeddingDimensionStrategy", value: "adapt", isSynced: true },
+    { name: "embeddingDimensionStrategy", value: "native", isSynced: true },
     { name: "enableAutomaticIndexing", value: "true", isSynced: true },
     { name: "embeddingSimilarityThreshold", value: "0.65", isSynced: true },
     { name: "maxNotesPerLlmQuery", value: "10", isSynced: true },

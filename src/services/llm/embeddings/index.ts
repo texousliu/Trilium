@@ -18,7 +18,10 @@ export * from './types.js';
 export const {
     cosineSimilarity,
     embeddingToBuffer,
-    bufferToEmbedding
+    bufferToEmbedding,
+    adaptEmbeddingDimensions,
+    enhancedCosineSimilarity,
+    selectOptimalEmbedding
 } = vectorUtils;
 
 export const {

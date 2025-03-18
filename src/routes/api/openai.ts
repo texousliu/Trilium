@@ -73,3 +73,4 @@ async function listModels(req: Request, res: Response) {
 export default {
     listModels
 };
+

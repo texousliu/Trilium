@@ -2,7 +2,7 @@ import sql from "../../sql.js";
 import { randomString } from "../../../services/utils.js";
 import dateUtils from "../../../services/date_utils.js";
 import log from "../../log.js";
-import { embeddingToBuffer, bufferToEmbedding, cosineSimilarity } from "./vector_utils.js";
+import { embeddingToBuffer, bufferToEmbedding, cosineSimilarity, enhancedCosineSimilarity, selectOptimalEmbedding, adaptEmbeddingDimensions } from "./vector_utils.js";
 import type { EmbeddingResult } from "./types.js";
 import entityChangesService from "../../../services/entity_changes.js";
 import type { EntityChange } from "../../../services/entity_changes_interface.js";
@@ -124,237 +124,156 @@ export async function findSimilarNotes(
     useFallback = true   // Whether to try other providers if no embeddings found
 ): Promise<{noteId: string, similarity: number}[]> {
     // Import constants dynamically to avoid circular dependencies
-    const { LLM_CONSTANTS } = await import('../../../routes/api/llm.js');
-    // Use provided threshold or default from constants
-    const similarityThreshold = threshold ?? LLM_CONSTANTS.SIMILARITY.DEFAULT_THRESHOLD;
+    const llmModule = await import('../../../routes/api/llm.js');
+    // Use a default threshold of 0.65 if not provided
+    const actualThreshold = threshold || 0.65;
 
-    // Add logging for debugging
-    log.info(`Finding similar notes for provider: ${providerId}, model: ${modelId}`);
+    try {
+        log.info(`Finding similar notes with provider: ${providerId}, model: ${modelId}, dimension: ${embedding.length}, threshold: ${actualThreshold}`);
 
-    // Get all embeddings for the given provider and model
-    const rows = await sql.getRows(`
-        SELECT embedId, noteId, providerId, modelId, dimension, embedding
-        FROM note_embeddings
-        WHERE providerId = ? AND modelId = ?`,
-        [providerId, modelId]
-    );
+        // First try to find embeddings for the exact provider and model
+        const embeddings = await sql.getRows(`
+            SELECT ne.embedId, ne.noteId, ne.providerId, ne.modelId, ne.dimension, ne.embedding,
+                 n.isDeleted, n.title, n.type, n.mime
+            FROM note_embeddings ne
+            JOIN notes n ON ne.noteId = n.noteId
+            WHERE ne.providerId = ? AND ne.modelId = ? AND n.isDeleted = 0
+        `, [providerId, modelId]);
 
-    log.info(`Found ${rows.length} embeddings in database for provider: ${providerId}, model: ${modelId}`);
-
-    // If no embeddings found for this provider/model and fallback is enabled
-    if (rows.length === 0 && useFallback) {
-        log.info(`No embeddings found for ${providerId}/${modelId}. Attempting fallback...`);
-
-        // Define type for available embeddings
-        interface EmbeddingMetadata {
-            providerId: string;
-            modelId: string;
-            count: number;
-            dimension: number;
+        if (embeddings && embeddings.length > 0) {
+            log.info(`Found ${embeddings.length} embeddings for provider ${providerId}, model ${modelId}`);
+            return await processEmbeddings(embedding, embeddings, actualThreshold, limit);
         }
 
-        // Get all available embedding providers and models with dimensions
-        const availableEmbeddings = await sql.getRows(`
-            SELECT DISTINCT providerId, modelId, COUNT(*) as count, dimension
-            FROM note_embeddings
-            GROUP BY providerId, modelId
-            ORDER BY count DESC`
-        ) as EmbeddingMetadata[];
+        // If no embeddings found and fallback is allowed, try other providers
+        if (useFallback) {
+            log.info(`No embeddings found for ${providerId}/${modelId}, trying fallback providers`);
 
-        if (availableEmbeddings.length > 0) {
-            log.info(`Available embeddings: ${JSON.stringify(availableEmbeddings.map(e => ({
-                providerId: e.providerId,
-                modelId: e.modelId,
-                count: e.count,
-                dimension: e.dimension
-            })))}`);
-
-            // Import the AIServiceManager to get provider precedence
-            const { default: aiManager } = await import('../ai_service_manager.js');
-
-            // Import vector utils for dimension adaptation
-            const { adaptEmbeddingDimensions } = await import('./vector_utils.js');
-
-            // Get user dimension strategy preference
-            const options = (await import('../../options.js')).default;
-            const dimensionStrategy = await options.getOption('embeddingDimensionStrategy') || 'adapt';
-            log.info(`Using embedding dimension strategy: ${dimensionStrategy}`);
-
-            // Get providers in user-defined precedence order
-            const availableProviderIds = availableEmbeddings.map(e => e.providerId);
-
-            // Get dedicated embedding provider precedence from options
-            let preferredProviders: string[] = [];
-
-            const embeddingPrecedence = await options.getOption('embeddingProviderPrecedence');
-
-            if (embeddingPrecedence) {
-                // Parse the precedence string (similar to aiProviderPrecedence parsing)
-                if (embeddingPrecedence.startsWith('[') && embeddingPrecedence.endsWith(']')) {
-                    preferredProviders = JSON.parse(embeddingPrecedence);
-                } else if (typeof embeddingPrecedence === 'string') {
-                    if (embeddingPrecedence.includes(',')) {
-                        preferredProviders = embeddingPrecedence.split(',').map(p => p.trim());
-                    } else {
-                        preferredProviders = [embeddingPrecedence];
-                    }
-                }
-            } else {
-                // Fall back to the AI provider precedence if embedding-specific one isn't set
-                // Get the AIServiceManager instance to access its properties
-                const aiManagerInstance = aiManager.getInstance();
-
-                // @ts-ignore - Accessing private property
-                preferredProviders = aiManagerInstance.providerOrder || ['openai', 'anthropic', 'ollama'];
+            // Define the type for embedding metadata
+            interface EmbeddingMetadata {
+                providerId: string;
+                modelId: string;
+                count: number;
+                dimension: number;
             }
 
-            log.info(`Embedding provider precedence order: ${preferredProviders.join(', ')}`);
+            // Get all available embedding metadata
+            const availableEmbeddings = await sql.getRows(`
+                SELECT DISTINCT providerId, modelId, COUNT(*) as count, dimension
+                FROM note_embeddings
+                GROUP BY providerId, modelId
+                ORDER BY dimension DESC, count DESC
+            `) as EmbeddingMetadata[];
 
-            // Try each provider in order of precedence
-            for (const provider of preferredProviders) {
-                // Skip the original provider we already tried
-                if (provider === providerId) continue;
+            if (availableEmbeddings.length > 0) {
+                log.info(`Available embeddings: ${JSON.stringify(availableEmbeddings.map(e => ({
+                    providerId: e.providerId,
+                    modelId: e.modelId,
+                    count: e.count,
+                    dimension: e.dimension
+                })))}`);
 
-                // Skip providers that don't have embeddings
-                if (!availableProviderIds.includes(provider)) continue;
+                // Import the vector utils
+                const { selectOptimalEmbedding } = await import('./vector_utils.js');
 
-                // Find the model with the most embeddings for this provider
-                const providerEmbeddings = availableEmbeddings.filter(e => e.providerId === provider);
+                // Get user dimension strategy preference
+                const options = (await import('../../options.js')).default;
+                const dimensionStrategy = await options.getOption('embeddingDimensionStrategy') || 'native';
+                log.info(`Using embedding dimension strategy: ${dimensionStrategy}`);
 
-                if (providerEmbeddings.length > 0) {
-                    // Use the model with the most embeddings
-                    const bestModel = providerEmbeddings.sort((a, b) => b.count - a.count)[0];
-                    log.info(`Found fallback provider: ${provider}, model: ${bestModel.modelId}, dimension: ${bestModel.dimension}`);
+                // Find the best alternative based on highest dimension for 'native' strategy
+                if (dimensionStrategy === 'native') {
+                    const bestAlternative = selectOptimalEmbedding(availableEmbeddings);
 
-                    if (dimensionStrategy === 'adapt') {
-                        // Dimension adaptation strategy (simple truncation/padding)
-                        const adaptedEmbedding = adaptEmbeddingDimensions(embedding, bestModel.dimension);
-                        log.info(`Adapted query embedding from dimension ${embedding.length} to ${adaptedEmbedding.length}`);
+                    if (bestAlternative) {
+                        log.info(`Using highest-dimension fallback: ${bestAlternative.providerId}/${bestAlternative.modelId} (${bestAlternative.dimension}D)`);
 
-                        // Use the adapted embedding with the fallback provider
-                        return findSimilarNotes(
-                            adaptedEmbedding,
-                            provider,
-                            bestModel.modelId,
-                            limit,
-                            threshold,
-                            false // Prevent infinite recursion
-                        );
+                        // Get embeddings for this provider/model
+                        const alternativeEmbeddings = await sql.getRows(`
+                            SELECT ne.embedId, ne.noteId, ne.providerId, ne.modelId, ne.dimension, ne.embedding,
+                                n.isDeleted, n.title, n.type, n.mime
+                            FROM note_embeddings ne
+                            JOIN notes n ON ne.noteId = n.noteId
+                            WHERE ne.providerId = ? AND ne.modelId = ? AND n.isDeleted = 0
+                        `, [bestAlternative.providerId, bestAlternative.modelId]);
+
+                        if (alternativeEmbeddings && alternativeEmbeddings.length > 0) {
+                            return await processEmbeddings(embedding, alternativeEmbeddings, actualThreshold, limit);
+                        }
                     }
-                    else if (dimensionStrategy === 'regenerate') {
-                        // Regeneration strategy (regenerate embedding with fallback provider)
-                        try {
-                            // Import provider manager to get a provider instance
-                            const { default: providerManager } = await import('./providers.js');
-                            const providerInstance = providerManager.getEmbeddingProvider(provider);
+                } else {
+                    // Use dedicated embedding provider precedence from options for other strategies
+                    let preferredProviders: string[] = [];
+                    const embeddingPrecedence = await options.getOption('embeddingProviderPrecedence');
 
-                            if (providerInstance) {
-                                // Try to get the original query text
-                                // This is a challenge - ideally we would have the original query
-                                // For now, we'll use a global cache to store recent queries
-                                interface CustomGlobal {
-                                    recentEmbeddingQueries?: Record<string, string>;
-                                }
-                                const globalWithCache = global as unknown as CustomGlobal;
-                                const recentQueries = globalWithCache.recentEmbeddingQueries || {};
-                                const embeddingKey = embedding.toString().substring(0, 100);
-                                const originalQuery = recentQueries[embeddingKey];
-
-                                if (originalQuery) {
-                                    log.info(`Found original query "${originalQuery}" for regeneration with ${provider}`);
-
-                                    // Configure the model
-                                    const config = providerInstance.getConfig();
-                                    config.model = bestModel.modelId;
-
-                                    // Generate a new embedding with the fallback provider
-                                    const newEmbedding = await providerInstance.generateEmbeddings(originalQuery);
-                                    log.info(`Successfully regenerated embedding with provider ${provider}/${bestModel.modelId} (dimension: ${newEmbedding.length})`);
-
-                                    // Now try finding similar notes with the new embedding
-                                    return findSimilarNotes(
-                                        newEmbedding,
-                                        provider,
-                                        bestModel.modelId,
-                                        limit,
-                                        threshold,
-                                        false // Prevent infinite recursion
-                                    );
-                                } else {
-                                    log.info(`Original query not found for regeneration, falling back to adaptation`);
-                                    // Fall back to adaptation if we can't find the original query
-                                    const adaptedEmbedding = adaptEmbeddingDimensions(embedding, bestModel.dimension);
-                                    return findSimilarNotes(
-                                        adaptedEmbedding,
-                                        provider,
-                                        bestModel.modelId,
-                                        limit,
-                                        threshold,
-                                        false
-                                    );
-                                }
+                    if (embeddingPrecedence) {
+                        // For "comma,separated,values"
+                        if (embeddingPrecedence.includes(',')) {
+                            preferredProviders = embeddingPrecedence.split(',').map(p => p.trim());
+                        }
+                        // For JSON array ["value1", "value2"]
+                        else if (embeddingPrecedence.startsWith('[') && embeddingPrecedence.endsWith(']')) {
+                            try {
+                                preferredProviders = JSON.parse(embeddingPrecedence);
+                            } catch (e) {
+                                log.error(`Error parsing embedding precedence: ${e}`);
+                                preferredProviders = [embeddingPrecedence]; // Fallback to using as single value
                             }
-                        } catch (err: any) {
-                            log.error(`Error regenerating embedding: ${err.message}`);
-                            // Fall back to adaptation on error
-                            const adaptedEmbedding = adaptEmbeddingDimensions(embedding, bestModel.dimension);
-                            return findSimilarNotes(
-                                adaptedEmbedding,
-                                provider,
-                                bestModel.modelId,
-                                limit,
-                                threshold,
-                                false
-                            );
+                        }
+                        // For a single value
+                        else {
+                            preferredProviders = [embeddingPrecedence];
+                        }
+                    }
+
+                    log.info(`Using provider precedence: ${preferredProviders.join(', ')}`);
+
+                    // Try providers in precedence order
+                    for (const provider of preferredProviders) {
+                        const providerEmbeddings = availableEmbeddings.filter(e => e.providerId === provider);
+
+                        if (providerEmbeddings.length > 0) {
+                            // Choose the model with the most embeddings
+                            const bestModel = providerEmbeddings.sort((a, b) => b.count - a.count)[0];
+                            log.info(`Found fallback provider: ${provider}, model: ${bestModel.modelId}, dimension: ${bestModel.dimension}`);
+
+                            // The 'regenerate' strategy would go here if needed
+                            // We're no longer supporting the 'adapt' strategy
                         }
                     }
                 }
             }
 
-            log.error(`No suitable fallback providers found. Current embedding dimension: ${embedding.length}`);
-            log.info(`Available embeddings: ${JSON.stringify(availableEmbeddings.map(e => ({
-                providerId: e.providerId,
-                modelId: e.modelId,
-                dimension: e.dimension,
-                count: e.count
-            })))}`);
-        } else {
-            log.info(`No embeddings found in the database at all. You need to generate embeddings first.`);
+            log.info('No suitable fallback embeddings found, returning empty results');
         }
 
         return [];
-    } else if (rows.length === 0) {
-        // No embeddings found and fallback disabled
-        log.info(`No embeddings found for ${providerId}/${modelId} and fallback is disabled.`);
+    } catch (error) {
+        log.error(`Error finding similar notes: ${error}`);
         return [];
     }
+}
 
-    // Calculate similarity for each embedding
+// Helper function to process embeddings and calculate similarities
+async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[], threshold: number, limit: number) {
+    const { enhancedCosineSimilarity, bufferToEmbedding } = await import('./vector_utils.js');
     const similarities = [];
-    for (const row of rows) {
-        const rowData = row as any;
-        const rowEmbedding = bufferToEmbedding(rowData.embedding, rowData.dimension);
 
-        try {
-            // cosineSimilarity will automatically adapt dimensions if needed
-            const similarity = cosineSimilarity(embedding, rowEmbedding);
+    for (const e of embeddings) {
+        const embVector = bufferToEmbedding(e.embedding, e.dimension);
+        const similarity = enhancedCosineSimilarity(queryEmbedding, embVector);
+
+        if (similarity >= threshold) {
             similarities.push({
-                noteId: rowData.noteId,
-                similarity
+                noteId: e.noteId,
+                similarity: similarity
             });
-        } catch (err: any) {
-            log.error(`Error calculating similarity for note ${rowData.noteId}: ${err.message}`);
         }
     }
 
-    // Filter by threshold and sort by similarity (highest first)
-    const results = similarities
-        .filter(item => item.similarity >= similarityThreshold)
+    return similarities
         .sort((a, b) => b.similarity - a.similarity)
         .slice(0, limit);
-
-    log.info(`Returning ${results.length} similar notes with similarity >= ${similarityThreshold}`);
-    return results;
 }
 
 /**

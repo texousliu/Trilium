@@ -1,13 +1,38 @@
 /**
  * Computes the cosine similarity between two vectors
- * If dimensions don't match, automatically adapts the first vector to match the second
+ * If dimensions don't match, automatically adapts using the enhanced approach
  */
 export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
-    // If dimensions don't match, adapt 'a' to match 'b'
-    if (a.length !== b.length) {
-        a = adaptEmbeddingDimensions(a, b.length);
+    // Use the enhanced approach that preserves more information
+    return enhancedCosineSimilarity(a, b);
+}
+
+/**
+ * Enhanced cosine similarity that adaptively handles different dimensions
+ * Instead of truncating larger embeddings, it pads smaller ones to preserve information
+ */
+export function enhancedCosineSimilarity(a: Float32Array, b: Float32Array): number {
+    // If dimensions match, use standard calculation
+    if (a.length === b.length) {
+        return standardCosineSimilarity(a, b);
     }
 
+    // Always adapt smaller embedding to larger one to preserve maximum information
+    if (a.length > b.length) {
+        // Pad b to match a's dimensions
+        const adaptedB = adaptEmbeddingDimensions(b, a.length);
+        return standardCosineSimilarity(a, adaptedB);
+    } else {
+        // Pad a to match b's dimensions
+        const adaptedA = adaptEmbeddingDimensions(a, b.length);
+        return standardCosineSimilarity(adaptedA, b);
+    }
+}
+
+/**
+ * Standard cosine similarity for same-dimension vectors
+ */
+function standardCosineSimilarity(a: Float32Array, b: Float32Array): number {
     let dotProduct = 0;
     let aMagnitude = 0;
     let bMagnitude = 0;
@@ -26,6 +51,27 @@ export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
     }
 
     return dotProduct / (aMagnitude * bMagnitude);
+}
+
+/**
+ * Identifies the optimal embedding when multiple are available
+ * Prioritizes higher-dimensional embeddings as they contain more information
+ */
+export function selectOptimalEmbedding(embeddings: Array<{
+    providerId: string;
+    modelId: string;
+    dimension: number;
+    count?: number;
+}>): {providerId: string; modelId: string; dimension: number} | null {
+    if (!embeddings || embeddings.length === 0) return null;
+
+    // First prioritize by dimension (higher is better)
+    let optimal = embeddings.reduce((best, current) =>
+        current.dimension > best.dimension ? current : best,
+        embeddings[0]
+    );
+
+    return optimal;
 }
 
 /**
