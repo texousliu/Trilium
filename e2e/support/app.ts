@@ -75,6 +75,8 @@ export default class App {
      */
     async closeAllTabs() {
         await this.triggerCommand("closeAllTabs");
+        // Page in Playwright is not updated somehow, need to click on the tab to make sure it's rendered
+        await this.getTab(0).click();
     }
 
     /**
