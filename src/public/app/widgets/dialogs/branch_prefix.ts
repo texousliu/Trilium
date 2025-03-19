@@ -8,8 +8,6 @@ import appContext from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import { Modal } from "bootstrap";
 
-let branchId;
-
 const TPL = `<div class="branch-prefix-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <form class="branch-prefix-form">
@@ -25,7 +23,7 @@ const TPL = `<div class="branch-prefix-dialog modal fade mx-auto" tabindex="-1" 
 
                         <div class="input-group">
                             <input class="branch-prefix-input form-control">
-                            <div class="branch-prefix-note-title input-group-text"></div>                            
+                            <div class="branch-prefix-note-title input-group-text"></div>
                         </div>
                     </div>
                 </div>
@@ -38,61 +36,70 @@ const TPL = `<div class="branch-prefix-dialog modal fade mx-auto" tabindex="-1" 
 </div>`;
 
 export default class BranchPrefixDialog extends BasicWidget {
-    doRender() {
+    private modal!: Modal;
+    private $form!: JQuery<HTMLElement>;
+    private $treePrefixInput!: JQuery<HTMLElement>;
+    private $noteTitle!: JQuery<HTMLElement>;
+    private branchId: string | null = null;
+
+    doRender(): void {
         this.$widget = $(TPL);
-        this.modal = Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget[0]);
         this.$form = this.$widget.find(".branch-prefix-form");
         this.$treePrefixInput = this.$widget.find(".branch-prefix-input");
         this.$noteTitle = this.$widget.find(".branch-prefix-note-title");
 
         this.$form.on("submit", () => {
             this.savePrefix();
-
             return false;
         });
 
         this.$widget.on("shown.bs.modal", () => this.$treePrefixInput.trigger("focus"));
     }
 
-    async refresh(notePath) {
+    async refresh(notePath: string) {
         const { noteId, parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(notePath);
 
         if (!noteId || !parentNoteId) {
             return;
         }
 
-        branchId = await froca.getBranchId(parentNoteId, noteId);
-        const branch = froca.getBranch(branchId);
+        const newBranchId = await froca.getBranchId(parentNoteId, noteId);
+        if (!newBranchId) {
+            return;
+        }
+        this.branchId = newBranchId;
 
+        const branch = froca.getBranch(this.branchId);
         if (!branch || branch.noteId === "root") {
             return;
         }
 
         const parentNote = await froca.getNote(branch.parentNoteId);
-
-        if (parentNote.type === "search") {
+        if (!parentNote || parentNote.type === "search") {
             return;
         }
 
-        this.$treePrefixInput.val(branch.prefix);
+        this.$treePrefixInput.val(branch.prefix || "");
 
         const noteTitle = await treeService.getNoteTitle(noteId);
-
         this.$noteTitle.text(` - ${noteTitle}`);
     }
 
     async editBranchPrefixEvent() {
         const notePath = appContext.tabManager.getActiveContextNotePath();
+        if (!notePath) {
+            return;
+        }
 
         await this.refresh(notePath);
-
         utils.openDialog(this.$widget);
     }
 
     async savePrefix() {
         const prefix = this.$treePrefixInput.val();
 
-        await server.put(`branches/${branchId}/set-prefix`, { prefix: prefix });
+        await server.put(`branches/${this.branchId}/set-prefix`, { prefix: prefix });
 
         this.modal.hide();
 
