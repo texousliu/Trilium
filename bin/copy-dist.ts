@@ -41,7 +41,8 @@ try {
         "./src/public/robots.txt",
         "./src/public/fonts",
         "./src/public/stylesheets",
-        "./src/public/translations"
+        "./src/public/translations",
+        "./packages/turndown-plugin-gfm/src"
     ]);
 
     for (const asset of assetsToCopy) {
