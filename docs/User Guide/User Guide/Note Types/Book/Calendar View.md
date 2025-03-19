@@ -3,6 +3,13 @@
 
 The Calendar view of Book notes will display each child note in a calendar that has a start date and optionally an end date, as an event.
 
+The Calendar view has multiple display modes:
+
+*   Week view, where all the 7 days of the week (or 5 if the weekends are hidden) are displayed in columns. This mode allows entering and displaying time-specific events, not just all-day events.
+*   Month view, where the entire month is displayed and all-day events can be inserted. Both time-specific events and all-day events are listed.
+*   Year view, which displays the entire year for quick reference.
+*   List view, which displays all the events of a given month in sequence.
+
 Unlike other Book view types, the Calendar view also allows some kind of interaction, such as moving events around as well as creating new ones.
 
 ## Creating a calendar
