@@ -6,6 +6,7 @@ import branchService from "../../services/branches.js";
 import treeService from "../../services/tree.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="move-to-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -39,6 +40,12 @@ const TPL = `
 </div>`;
 
 export default class MoveToDialog extends BasicWidget {
+
+    private movedBranchIds: string[] | null;
+    private $form!: JQuery<HTMLElement>;
+    private $noteAutoComplete!: JQuery<HTMLElement>;
+    private $noteList!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -58,7 +65,13 @@ export default class MoveToDialog extends BasicWidget {
                 this.$widget.modal("hide");
 
                 const { noteId, parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(notePath);
-                froca.getBranchId(parentNoteId, noteId).then((branchId) => this.moveNotesTo(branchId));
+                if (parentNoteId) {
+                    froca.getBranchId(parentNoteId, noteId).then((branchId) => {
+                        if (branchId) {
+                            this.moveNotesTo(branchId);
+                        }
+                    });
+                }
             } else {
                 logError(t("move_to.error_no_path"));
             }
@@ -67,7 +80,7 @@ export default class MoveToDialog extends BasicWidget {
         });
     }
 
-    async moveBranchIdsToEvent({ branchIds }) {
+    async moveBranchIdsToEvent({ branchIds }: EventData<"moveBranchIdsTo">) {
         this.movedBranchIds = branchIds;
 
         utils.openDialog(this.$widget);
@@ -78,7 +91,14 @@ export default class MoveToDialog extends BasicWidget {
 
         for (const branchId of this.movedBranchIds) {
             const branch = froca.getBranch(branchId);
+            if (!branch) {
+                continue;
+            }
+
             const note = await froca.getNote(branch.noteId);
+            if (!note) {
+                continue;
+            }
 
             this.$noteList.append($("<li>").text(note.title));
         }
@@ -87,12 +107,14 @@ export default class MoveToDialog extends BasicWidget {
         noteAutocompleteService.showRecentNotes(this.$noteAutoComplete);
     }
 
-    async moveNotesTo(parentBranchId) {
-        await branchService.moveToParentNote(this.movedBranchIds, parentBranchId);
+    async moveNotesTo(parentBranchId: string) {
+        if (this.movedBranchIds) {
+            await branchService.moveToParentNote(this.movedBranchIds, parentBranchId);
+        }
 
         const parentBranch = froca.getBranch(parentBranchId);
-        const parentNote = await parentBranch.getNote();
+        const parentNote = await parentBranch?.getNote();
 
-        toastService.showMessage(`${t("move_to.move_success_message")} ${parentNote.title}`);
+        toastService.showMessage(`${t("move_to.move_success_message")} ${parentNote?.title}`);
     }
 }
