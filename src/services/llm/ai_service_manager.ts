@@ -268,16 +268,6 @@ export class AIServiceManager {
     }
 
     /**
-     * Get the semantic context service for enhanced context management
-     * @deprecated Use getContextService() instead
-     * @returns The semantic context service instance
-     */
-    getSemanticContextService(): SemanticContextService {
-        log.info('getSemanticContextService is deprecated, use getContextService instead');
-        return contextService as unknown as SemanticContextService;
-    }
-
-    /**
      * Get the context service for advanced context management
      * @returns The context service instance
      */
@@ -465,9 +455,6 @@ export default {
     // Context and index related methods
     getContextExtractor() {
         return getInstance().getContextExtractor();
-    },
-    getSemanticContextService(): SemanticContextService {
-        return getInstance().getSemanticContextService();
     },
     getContextService() {
         return getInstance().getContextService();
