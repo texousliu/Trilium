@@ -134,8 +134,8 @@
     --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.1);
     --launcher-pane-horiz-background-color: #fafafa;
     --launcher-pane-horiz-button-hover-color: black;
-    --launcher-pane-horiz-button-hover-background: white;
-    --launcher-pane-horiz-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, 0.075);
+    --launcher-pane-horiz-button-hover-background: var(--icon-button-hover-background);
+    --launcher-pane-horiz-button-hover-shadow: unset;
 
     --protected-session-active-icon-color: #16b516;
     --sync-status-error-pulse-color: #ff5528;
