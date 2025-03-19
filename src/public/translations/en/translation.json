@@ -1843,6 +1843,9 @@
     "sources": "Sources",
     "start_indexing": "Start Indexing",
     "use_advanced_context": "Use Advanced Context",
-    "use_enhanced_context": "Use Enhanced Note Context"
+    "use_enhanced_context": "Use Enhanced Note Context",
+    "processing": {
+      "common": "Processing..."
+    }
   }
 }

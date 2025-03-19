@@ -50,7 +50,7 @@ export default class LlmChatPanel extends BasicWidget {
                         <div class="spinner-border spinner-border-sm text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
-                        <span class="ms-2">${t('common.processing')}...</span>
+                        <span class="ms-2">${t('ai.processing.common')}...</span>
                     </div>
                 </div>
 
