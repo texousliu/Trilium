@@ -283,6 +283,7 @@ declare global {
                     getLastPosition(): undefined | TextPosition;
                 }
             },
+            insertContent(modelFragment: any, selection: any);
             change(cb: (writer: Writer) => void)
         },
         editing: {
@@ -310,6 +311,12 @@ declare global {
         },
         plugins: {
             get(command: string)
+        },
+        data: {
+            processor: {
+                toView(html: string);
+            };
+            toModel(viewFeragment: any);
         },
         getData(): string;
         setData(data: string): void;
