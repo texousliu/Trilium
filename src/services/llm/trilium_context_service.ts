@@ -77,6 +77,15 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                     throw new Error(`No embedding provider available. Could not initialize context service.`);
                 }
 
+                // Initialize agent tools to ensure they're ready
+                try {
+                    await aiServiceManager.getInstance().initializeAgentTools();
+                    log.info("Agent tools initialized for use with TriliumContextService");
+                } catch (toolError) {
+                    log.error(`Error initializing agent tools: ${toolError}`);
+                    // Continue even if agent tools fail to initialize
+                }
+
                 this.initialized = true;
                 log.info(`Trilium context service initialized with provider: ${this.provider.name}`);
             } catch (error: unknown) {
@@ -549,17 +558,16 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
     }
 
     /**
-     * Process a user query with the Trilium-specific approach:
-     * 1. Generate search queries from the original question
-     * 2. Find relevant notes using those queries
-     * 3. Build a context string from the relevant notes
-     *
-     * @param userQuestion - The user's original question
-     * @param llmService - The LLM service to use
-     * @param contextNoteId - Optional note ID to restrict search to
-     * @returns Object with context and notes
+     * Process a user query to find relevant context in Trilium notes
      */
-    async processQuery(userQuestion: string, llmService: any, contextNoteId: string | null = null) {
+    async processQuery(
+        userQuestion: string,
+        llmService: any,
+        contextNoteId: string | null = null,
+        showThinking: boolean = false
+    ) {
+        log.info(`Processing query with: question="${userQuestion.substring(0, 50)}...", noteId=${contextNoteId}, showThinking=${showThinking}`);
+
         if (!this.initialized) {
             try {
                 await this.initialize();
@@ -602,8 +610,28 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
             // Step 3: Build context from the notes
             const context = await this.buildContextFromNotes(relevantNotes, userQuestion);
 
+            // Step 4: Add agent tools context with thinking process if requested
+            let enhancedContext = context;
+            try {
+                // Get agent tools context using either the specific note or the most relevant notes
+                const agentContext = await this.getAgentToolsContext(
+                    contextNoteId || (relevantNotes[0]?.noteId || ""),
+                    userQuestion,
+                    showThinking,
+                    relevantNotes // Pass all relevant notes for context
+                );
+
+                if (agentContext) {
+                    enhancedContext = `${context}\n\n${agentContext}`;
+                    log.info(`Added agent tools context (${agentContext.length} characters)`);
+                }
+            } catch (error) {
+                log.error(`Error getting agent tools context: ${error}`);
+                // Continue with just the basic context
+            }
+
             return {
-                context,
+                context: enhancedContext,
                 notes: relevantNotes,
                 queries: searchQueries
             };
@@ -628,31 +656,57 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
      * 3. Query decomposition planning
      * 4. Contextual thinking visualization
      *
-     * @param noteId The current note being viewed
+     * @param noteId The current note being viewed (or most relevant note)
      * @param query The user's query
      * @param showThinking Whether to include the agent's thinking process
+     * @param relevantNotes Optional array of relevant notes from vector search
      * @returns Enhanced context string
      */
-    async getAgentToolsContext(noteId: string, query: string, showThinking: boolean = false): Promise<string> {
+    async getAgentToolsContext(
+        noteId: string,
+        query: string,
+        showThinking: boolean = false,
+        relevantNotes: Array<any> = []
+    ): Promise<string> {
+        log.info(`Getting agent tools context: noteId=${noteId}, query="${query.substring(0, 50)}...", showThinking=${showThinking}, relevantNotesCount=${relevantNotes.length}`);
+
         try {
             const agentTools = aiServiceManager.getAgentTools();
             let context = "";
 
             // 1. Get vector search results related to the query
             try {
-                const vectorSearchTool = agentTools.getVectorSearchTool();
-                const searchResults = await vectorSearchTool.searchNotes(query, {
-                    parentNoteId: noteId,
-                    maxResults: 5
-                });
-
-                if (searchResults.length > 0) {
+                // If we already have relevant notes from vector search, use those
+                if (relevantNotes && relevantNotes.length > 0) {
+                    log.info(`Using ${relevantNotes.length} provided relevant notes instead of running vector search again`);
                     context += "## Related Information\n\n";
-                    for (const result of searchResults) {
+
+                    for (const result of relevantNotes.slice(0, 5)) {
                         context += `### ${result.title}\n`;
-                        context += `${result.contentPreview}\n\n`;
+                        // Use the content if available, otherwise get a preview
+                        const contentPreview = result.content
+                            ? this.sanitizeNoteContent(result.content).substring(0, 300) + "..."
+                            : result.contentPreview || "[No preview available]";
+
+                        context += `${contentPreview}\n\n`;
                     }
                     context += "\n";
+                } else {
+                    // Run vector search if we don't have relevant notes
+                    const vectorSearchTool = agentTools.getVectorSearchTool();
+                    const searchResults = await vectorSearchTool.searchNotes(query, {
+                        parentNoteId: noteId,
+                        maxResults: 5
+                    });
+
+                    if (searchResults.length > 0) {
+                        context += "## Related Information\n\n";
+                        for (const result of searchResults) {
+                            context += `### ${result.title}\n`;
+                            context += `${result.contentPreview}\n\n`;
+                        }
+                        context += "\n";
+                    }
                 }
             } catch (error: any) {
                 log.error(`Error getting vector search context: ${error.message}`);
@@ -694,55 +748,114 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
 
             // 4. Show thinking process if enabled
             if (showThinking) {
+                log.info("Showing thinking process - creating visual reasoning steps");
                 try {
                     const thinkingTool = agentTools.getContextualThinkingTool();
                     const thinkingId = thinkingTool.startThinking(query);
+                    log.info(`Started thinking process with ID: ${thinkingId}`);
 
-                    // Add a thinking step to demonstrate the feature
-                    // In a real implementation, the LLM would add these steps
+                    // Add initial thinking steps
                     thinkingTool.addThinkingStep(
-                        "Analyzing the query to understand what information is needed",
+                        "Analyzing the user's query to understand the information needs",
                         "observation",
                         { confidence: 1.0 }
                     );
 
-                    // Add sample thinking for the context
+                    // Add query exploration steps
                     const parentId = thinkingTool.addThinkingStep(
-                        "Looking for related notes in the knowledge base",
+                        "Exploring knowledge base to find relevant information",
                         "hypothesis",
                         { confidence: 0.9 }
                     );
 
-                    if (parentId) {
-                        // Use the VectorSearchTool to find relevant notes
-                        const vectorSearchTool = aiServiceManager.getVectorSearchTool();
-                        const searchResults = await vectorSearchTool.searchNotes(query, {
-                            parentNoteId: parentId,
-                            maxResults: 5
-                        });
+                    // Add information about relevant notes if available
+                    if (relevantNotes && relevantNotes.length > 0) {
+                        const noteTitles = relevantNotes.slice(0, 5).map(n => n.title).join(", ");
+                        thinkingTool.addThinkingStep(
+                            `Found ${relevantNotes.length} potentially relevant notes through semantic search, including: ${noteTitles}`,
+                            "evidence",
+                            { confidence: 0.85, parentId: parentId || undefined }
+                        );
+                    }
 
-                        if (searchResults.length > 0) {
-                            context += "## Related Information\n\n";
-                            for (const result of searchResults) {
-                                context += `### ${result.title}\n`;
-                                context += `${result.contentPreview}\n\n`;
+                    // Add step about note hierarchy if a specific note is being viewed
+                    if (noteId && noteId !== "") {
+                        try {
+                            const navigatorTool = agentTools.getNoteNavigatorTool();
+
+                            // Get parent notes since we don't have getNoteHierarchyInfo
+                            const parents = navigatorTool.getParentNotes(noteId);
+
+                            if (parents && parents.length > 0) {
+                                const parentInfo = parents.map(p => p.title).join(" > ");
+                                thinkingTool.addThinkingStep(
+                                    `Identified note hierarchy context: ${parentInfo}`,
+                                    "evidence",
+                                    { confidence: 0.9, parentId: parentId || undefined }
+                                );
                             }
-                            context += "\n";
+                        } catch (error) {
+                            log.error(`Error getting note hierarchy: ${error}`);
                         }
                     }
 
+                    // Add query decomposition if it's a complex query
+                    try {
+                        const decompositionTool = agentTools.getQueryDecompositionTool();
+                        const complexity = decompositionTool.assessQueryComplexity(query);
+
+                        if (complexity > 4) {
+                            thinkingTool.addThinkingStep(
+                                `This is a ${complexity > 7 ? "very complex" : "moderately complex"} query (complexity: ${complexity}/10)`,
+                                "observation",
+                                { confidence: 0.8 }
+                            );
+
+                            const decomposed = decompositionTool.decomposeQuery(query);
+                            if (decomposed.subQueries.length > 1) {
+                                const decompId = thinkingTool.addThinkingStep(
+                                    "Breaking down query into sub-questions to address systematically",
+                                    "hypothesis",
+                                    { confidence: 0.85 }
+                                );
+
+                                for (const sq of decomposed.subQueries) {
+                                    thinkingTool.addThinkingStep(
+                                        `Subquery: ${sq.text} - ${sq.reason}`,
+                                        "evidence",
+                                        { confidence: 0.8, parentId: decompId || undefined }
+                                    );
+                                }
+                            }
+                        } else {
+                            thinkingTool.addThinkingStep(
+                                `This is a straightforward query (complexity: ${complexity}/10) that can be addressed directly`,
+                                "observation",
+                                { confidence: 0.9 }
+                            );
+                        }
+                    } catch (error) {
+                        log.error(`Error in query decomposition: ${error}`);
+                    }
+
+                    // Add final conclusions
                     thinkingTool.addThinkingStep(
-                        "The most relevant information appears to be in the current note and its semantic neighborhood",
+                        "Ready to formulate response based on available information and query understanding",
                         "conclusion",
-                        { confidence: 0.85 }
+                        { confidence: 0.95 }
                     );
 
-                    // Complete the thinking and add it to context
+                    // Complete the thinking process and add the visualization to context
                     thinkingTool.completeThinking(thinkingId);
-                    context += "## Thinking Process\n\n";
-                    context += thinkingTool.getThinkingSummary(thinkingId) + "\n\n";
+                    const visualization = thinkingTool.visualizeThinking(thinkingId);
+
+                    if (visualization) {
+                        context += "## Reasoning Process\n\n";
+                        context += visualization + "\n\n";
+                        log.info(`Added thinking visualization to context (${visualization.length} characters)`);
+                    }
                 } catch (error: any) {
-                    log.error(`Error generating thinking process: ${error.message}`);
+                    log.error(`Error creating thinking visualization: ${error.message}`);
                 }
             }
 

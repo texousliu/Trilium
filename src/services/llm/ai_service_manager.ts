@@ -1,5 +1,5 @@
 import options from '../options.js';
-import type { AIService, ChatCompletionOptions, ChatResponse, Message } from './ai_interface.js';
+import type { AIService, ChatCompletionOptions, ChatResponse, Message, SemanticContextService } from './ai_interface.js';
 import { OpenAIService } from './providers/openai_service.js';
 import { AnthropicService } from './providers/anthropic_service.js';
 import { OllamaService } from './providers/ollama_service.js';
@@ -271,8 +271,8 @@ export class AIServiceManager {
      * Get the semantic context service for advanced context handling
      * @returns The semantic context service instance
      */
-    getSemanticContextService() {
-        return semanticContextService;
+    getSemanticContextService(): SemanticContextService {
+        return semanticContextService as unknown as SemanticContextService;
     }
 
     /**
@@ -439,7 +439,7 @@ export default {
     getContextExtractor() {
         return getInstance().getContextExtractor();
     },
-    getSemanticContextService() {
+    getSemanticContextService(): SemanticContextService {
         return getInstance().getSemanticContextService();
     },
     getIndexService() {

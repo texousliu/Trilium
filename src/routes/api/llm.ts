@@ -545,18 +545,26 @@ Now, based on the above information, please answer: ${query}`;
 async function sendMessage(req: Request, res: Response) {
     try {
         // Extract parameters differently based on the request method
-        let content, useAdvancedContext, sessionId;
+        let content, useAdvancedContext, showThinking, sessionId;
 
         if (req.method === 'POST') {
             // For POST requests, get content from the request body
             const requestBody = req.body || {};
             content = requestBody.content;
             useAdvancedContext = requestBody.useAdvancedContext || false;
+            showThinking = requestBody.showThinking || false;
+
+            // Add logging for POST requests
+            log.info(`LLM POST message: sessionId=${req.params.sessionId}, useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, contentLength=${content ? content.length : 0}`);
         } else if (req.method === 'GET') {
             // For GET (streaming) requests, get format from query params
             // The content should have been sent in a previous POST request
             useAdvancedContext = req.query.useAdvancedContext === 'true';
+            showThinking = req.query.showThinking === 'true';
             content = ''; // We don't need content for GET requests
+
+            // Add logging for GET requests
+            log.info(`LLM GET stream: sessionId=${req.params.sessionId}, useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}`);
         }
 
         // Get sessionId from URL params since it's part of the route
@@ -644,7 +652,16 @@ async function sendMessage(req: Request, res: Response) {
             if (useAdvancedContext) {
                 // Use the Trilium-specific approach
                 const contextNoteId = session.noteContext || null;
-                const results = await triliumContextService.processQuery(messageContent, service, contextNoteId);
+
+                // Log that we're calling triliumContextService with the parameters
+                log.info(`Using enhanced context with: noteId=${contextNoteId}, showThinking=${showThinking}`);
+
+                const results = await triliumContextService.processQuery(
+                    messageContent,
+                    service,
+                    contextNoteId,
+                    showThinking  // Pass the showThinking parameter
+                );
 
                 // Get the generated context
                 const context = results.context;

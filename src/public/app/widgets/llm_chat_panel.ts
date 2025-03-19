@@ -33,6 +33,7 @@ export default class LlmChatPanel extends BasicWidget {
     private loadingIndicator!: HTMLElement;
     private sourcesList!: HTMLElement;
     private useAdvancedContextCheckbox!: HTMLInputElement;
+    private showThinkingCheckbox!: HTMLInputElement;
     private validationWarning!: HTMLElement;
     private sessionId: string | null = null;
     private currentNoteId: string | null = null;
@@ -63,15 +64,19 @@ export default class LlmChatPanel extends BasicWidget {
 
                 <form class="note-context-chat-form d-flex flex-column border-top p-2">
                     <div class="d-flex mb-2 align-items-center context-option-container">
-                        <div class="form-check form-switch">
+                        <div class="form-check form-switch me-3">
                             <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useEnhancedContext" checked>
-                            <label class="form-check-label" for="useEnhancedContext">
+                            <label class="form-check-label" for="useEnhancedContext" title="${t('ai.enhanced_context_description')}">
                                 ${t('ai.use_enhanced_context')}
+                                <i class="bx bx-info-circle ms-1 small text-muted"></i>
                             </label>
                         </div>
-                        <div class="ms-2 small text-muted">
-                            <i class="bx bx-info-circle"></i>
-                            <span>${t('ai.enhanced_context_description')}</span>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input show-thinking-checkbox" type="checkbox" id="showThinking">
+                            <label class="form-check-label" for="showThinking" title="${t('ai.show_thinking_description')}">
+                                ${t('ai.show_thinking')}
+                                <i class="bx bx-info-circle ms-1 small text-muted"></i>
+                            </label>
                         </div>
                     </div>
                     <div class="d-flex chat-input-container">
@@ -97,6 +102,7 @@ export default class LlmChatPanel extends BasicWidget {
         this.loadingIndicator = element.querySelector('.loading-indicator') as HTMLElement;
         this.sourcesList = element.querySelector('.sources-list') as HTMLElement;
         this.useAdvancedContextCheckbox = element.querySelector('.use-advanced-context-checkbox') as HTMLInputElement;
+        this.showThinkingCheckbox = element.querySelector('.show-thinking-checkbox') as HTMLInputElement;
         this.validationWarning = element.querySelector('.provider-validation-warning') as HTMLElement;
 
         // Set up event delegation for the settings link
@@ -167,12 +173,17 @@ export default class LlmChatPanel extends BasicWidget {
 
         try {
             const useAdvancedContext = this.useAdvancedContextCheckbox.checked;
+            const showThinking = this.showThinkingCheckbox.checked;
+
+            // Add logging to verify parameters
+            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}`);
 
             // Create the message parameters
             const messageParams = {
                 content,
                 contextNoteId: this.currentNoteId,
-                useAdvancedContext
+                useAdvancedContext,
+                showThinking
             };
 
             // First, send the message via POST request
@@ -192,7 +203,7 @@ export default class LlmChatPanel extends BasicWidget {
             }
 
             // Then set up streaming via EventSource
-            const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&useAdvancedContext=${useAdvancedContext}`;
+            const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&useAdvancedContext=${useAdvancedContext}&showThinking=${showThinking}`;
             const source = new EventSource(streamUrl);
 
             let assistantResponse = '';
@@ -415,9 +426,24 @@ export default class LlmChatPanel extends BasicWidget {
     private formatMarkdown(content: string): string {
         if (!content) return '';
 
-        // First, extract code blocks to protect them from other replacements
+        // Check if content contains HTML sections for thinking visualization
+        if (content.includes('<div class="thinking-process">') ||
+            content.includes('<div class=\'thinking-process\'>')) {
+            console.log('Detected thinking process visualization in response');
+            // For content with HTML thinking visualizations, we need to protect them
+        }
+
+        // First, extract HTML thinking visualization to protect it from replacements
+        const thinkingBlocks: string[] = [];
+        let processedContent = content.replace(/<div class=['"](thinking-process|reasoning-process)['"][\s\S]*?<\/div>/g, (match) => {
+            const placeholder = `__THINKING_BLOCK_${thinkingBlocks.length}__`;
+            thinkingBlocks.push(match);
+            return placeholder;
+        });
+
+        // Then extract code blocks to protect them from other replacements
         const codeBlocks: string[] = [];
-        let processedContent = content.replace(/```(\w+)?\n([\s\S]+?)\n```/gs, (match, language, code) => {
+        processedContent = processedContent.replace(/```(\w+)?\n([\s\S]+?)\n```/gs, (match, language, code) => {
             const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
             const languageClass = language ? ` language-${language}` : '';
             codeBlocks.push(`<pre class="code${languageClass}"><code>${code}</code></pre>`);
@@ -434,6 +460,11 @@ export default class LlmChatPanel extends BasicWidget {
         // Restore code blocks
         codeBlocks.forEach((block, index) => {
             processedContent = processedContent.replace(`__CODE_BLOCK_${index}__`, block);
+        });
+
+        // Restore thinking visualization blocks
+        thinkingBlocks.forEach((block, index) => {
+            processedContent = processedContent.replace(`__THINKING_BLOCK_${index}__`, block);
         });
 
         return processedContent;

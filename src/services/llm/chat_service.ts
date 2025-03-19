@@ -215,15 +215,7 @@ export class ChatService {
     }
 
     /**
-     * Send a context-aware message with automatically included semantic context from a note
-     * This method combines the query with relevant note context before sending to the AI
-     *
-     * @param sessionId - The ID of the chat session
-     * @param content - The user's message content
-     * @param noteId - The ID of the note to add context from
-     * @param options - Optional completion options
-     * @param streamCallback - Optional streaming callback
-     * @returns The updated chat session
+     * Send a message with enhanced semantic note context
      */
     async sendContextAwareMessage(
         sessionId: string,
@@ -234,14 +226,102 @@ export class ChatService {
     ): Promise<ChatSession> {
         const session = await this.getOrCreateSession(sessionId);
 
-        // Get semantically relevant context based on the user's message
-        const context = await contextExtractor.getSmartContext(noteId, content);
+        // Add user message
+        const userMessage: Message = {
+            role: 'user',
+            content
+        };
 
-        // Combine the user's message with the relevant context
-        const enhancedContent = `${content}\n\nHere's relevant information from my notes that may help:\n\n${context}`;
+        session.messages.push(userMessage);
+        session.isStreaming = true;
 
-        // Send the enhanced message
-        return this.sendMessage(sessionId, enhancedContent, options, streamCallback);
+        // Set up streaming if callback provided
+        if (streamCallback) {
+            this.streamingCallbacks.set(session.id, streamCallback);
+        }
+
+        try {
+            // Immediately save the user message
+            await chatStorageService.updateChat(session.id, session.messages);
+
+            // Get the Trilium Context Service for enhanced context
+            const contextService = aiServiceManager.getSemanticContextService();
+
+            // Get showThinking option if it exists
+            const showThinking = options?.showThinking === true;
+
+            // Get enhanced context for this note and query
+            const enhancedContext = await contextService.getAgentToolsContext(
+                noteId,
+                content,
+                showThinking
+            );
+
+            // Prepend a system message with context
+            const systemMessage: Message = {
+                role: 'system',
+                content: `You are an AI assistant helping with Trilium Notes. Use this context to answer the user's question:\n\n${enhancedContext}`
+            };
+
+            // Create messages array with system message
+            const messagesWithContext = [systemMessage, ...session.messages];
+
+            // Generate AI response
+            const response = await aiServiceManager.generateChatCompletion(
+                messagesWithContext,
+                options
+            );
+
+            // Add assistant message
+            const assistantMessage: Message = {
+                role: 'assistant',
+                content: response.text
+            };
+
+            session.messages.push(assistantMessage);
+            session.isStreaming = false;
+
+            // Save the complete conversation (without system message)
+            await chatStorageService.updateChat(session.id, session.messages);
+
+            // If first message, update the title
+            if (session.messages.length <= 2 && (!session.title || session.title === 'New Chat')) {
+                const title = this.generateTitleFromMessages(session.messages);
+                session.title = title;
+                await chatStorageService.updateChat(session.id, session.messages, title);
+            }
+
+            // Notify streaming is complete
+            if (streamCallback) {
+                streamCallback(response.text, true);
+                this.streamingCallbacks.delete(session.id);
+            }
+
+            return session;
+
+        } catch (error: any) {
+            session.isStreaming = false;
+            console.error('Error in context-aware chat:', error);
+
+            // Add error message
+            const errorMessage: Message = {
+                role: 'assistant',
+                content: `Error: Failed to generate response with note context. ${error.message || 'Please try again.'}`
+            };
+
+            session.messages.push(errorMessage);
+
+            // Save the conversation with error
+            await chatStorageService.updateChat(session.id, session.messages);
+
+            // Notify streaming is complete with error
+            if (streamCallback) {
+                streamCallback(errorMessage.content, true);
+                this.streamingCallbacks.delete(session.id);
+            }
+
+            return session;
+        }
     }
 
     /**

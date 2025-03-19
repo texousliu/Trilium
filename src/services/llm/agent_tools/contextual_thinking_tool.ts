@@ -13,7 +13,8 @@
  * - Show how different sources of evidence are weighed
  */
 
-import log from '../../log.js';
+import log from "../../log.js";
+import aiServiceManager from "../ai_service_manager.js";
 
 /**
  * Represents a single reasoning step taken by the agent
@@ -159,117 +160,79 @@ export class ContextualThinkingTool {
   }
 
   /**
-   * Generate a user-friendly HTML representation of the thinking process
+   * Visualize the thinking process as HTML for display in the UI
    *
-   * @param processId The ID of the process to visualize
-   * @returns HTML string representing the thinking process
+   * @param thinkingId The ID of the thinking process to visualize
+   * @returns HTML representation of the thinking process
    */
-  visualizeThinking(processId: string): string {
-    const process = this.getThinkingProcess(processId);
+  visualizeThinking(thinkingId: string): string {
+    log.info(`Visualizing thinking process: thinkingId=${thinkingId}`);
+
+    const process = this.getThinkingProcess(thinkingId);
     if (!process) {
-      return `<div class="thinking-error">Thinking process ${processId} not found</div>`;
+      log.info(`No thinking process found for id: ${thinkingId}`);
+      return "<div class='thinking-process'>No thinking process found</div>";
     }
 
-    let html = `
-      <div class="thinking-process">
-        <div class="thinking-header">
-          <h3>Thinking Process for: "${process.query}"</h3>
-          <div class="thinking-metadata">
-            <span>Status: ${process.status}</span>
-            <span>Steps: ${process.steps.length}</span>
-            <span>Time: ${this.formatDuration(process.startTime, process.endTime || Date.now())}</span>
-          </div>
-        </div>
-        <div class="thinking-steps">
-    `;
+    log.info(`Found thinking process with ${process.steps.length} steps for query: "${process.query.substring(0, 50)}..."`);
 
-    // Find root steps (those without parents)
-    const rootSteps = process.steps.filter(step => !step.parentId);
+    let html = "<div class='thinking-process'>";
+    html += `<h4>Thinking Process</h4>`;
 
-    // Recursively render the thinking tree
-    for (const rootStep of rootSteps) {
-      html += this.renderStepTree(rootStep, process.steps);
+    for (const step of process.steps) {
+      html += `<div class='thinking-step ${step.type || ""}'>`;
+
+      // Add an icon based on step type
+      const icon = this.getStepIcon(step.type);
+      html += `<span class='bx ${icon}'></span> `;
+
+      // Add the step content
+      html += step.content;
+
+      // Show confidence if available
+      if (step.metadata?.confidence) {
+        const confidence = Math.round((step.metadata.confidence as number) * 100);
+        html += ` <span class='thinking-confidence'>(Confidence: ${confidence}%)</span>`;
+      }
+
+      html += `</div>`;
     }
 
-    html += `
-        </div>
-      </div>
-    `;
-
+    html += "</div>";
     return html;
   }
 
   /**
-   * Generate a concise text representation of the thinking process
-   * that can be displayed inline in the chat for transparency
-   *
-   * @param processId The ID of the process to summarize
-   * @returns Text summary of the reasoning process
+   * Get an appropriate icon for a thinking step type
    */
-  getThinkingSummary(processId?: string): string {
-    const id = processId || this.activeProcId;
-    if (!id || !this.processes[id]) {
+  private getStepIcon(type: string): string {
+    switch (type) {
+      case 'observation':
+        return 'bx-search';
+      case 'hypothesis':
+        return 'bx-bulb';
+      case 'evidence':
+        return 'bx-list-check';
+      case 'conclusion':
+        return 'bx-check-circle';
+      default:
+        return 'bx-message-square-dots';
+    }
+  }
+
+  /**
+   * Get a plain text summary of the thinking process
+   *
+   * @param thinkingId The ID of the thinking process to summarize
+   * @returns Text summary of the thinking process
+   */
+  getThinkingSummary(thinkingId: string): string {
+    const process = this.getThinkingProcess(thinkingId);
+    if (!process) {
       return "No thinking process available.";
     }
 
-    const process = this.processes[id];
-    let summary = `Thinking about: "${process.query}"\n\n`;
-
-    // Group steps by type
-    const stepsByType: Record<string, ThinkingStep[]> = {};
-    for (const step of process.steps) {
-      if (!stepsByType[step.type]) {
-        stepsByType[step.type] = [];
-      }
-      stepsByType[step.type].push(step);
-    }
-
-    // Show observations first
-    if (stepsByType['observation'] && stepsByType['observation'].length > 0) {
-      summary += "🔍 Observations:\n";
-      for (const step of stepsByType['observation'].slice(0, 3)) {
-        summary += `- ${step.content}\n`;
-      }
-      if (stepsByType['observation'].length > 3) {
-        summary += `- ...and ${stepsByType['observation'].length - 3} more observations\n`;
-      }
-      summary += "\n";
-    }
-
-    // Show questions the agent asked itself
-    if (stepsByType['question'] && stepsByType['question'].length > 0) {
-      summary += "❓ Questions considered:\n";
-      for (const step of stepsByType['question'].slice(0, 3)) {
-        summary += `- ${step.content}\n`;
-      }
-      if (stepsByType['question'].length > 3) {
-        summary += `- ...and ${stepsByType['question'].length - 3} more questions\n`;
-      }
-      summary += "\n";
-    }
-
-    // Show evidence
-    if (stepsByType['evidence'] && stepsByType['evidence'].length > 0) {
-      summary += "📋 Evidence found:\n";
-      for (const step of stepsByType['evidence'].slice(0, 3)) {
-        summary += `- ${step.content}\n`;
-      }
-      if (stepsByType['evidence'].length > 3) {
-        summary += `- ...and ${stepsByType['evidence'].length - 3} more pieces of evidence\n`;
-      }
-      summary += "\n";
-    }
-
-    // Show conclusions
-    if (stepsByType['conclusion'] && stepsByType['conclusion'].length > 0) {
-      summary += "✅ Conclusions:\n";
-      for (const step of stepsByType['conclusion']) {
-        const confidence = step.confidence ? ` (${Math.round(step.confidence * 100)}% confidence)` : '';
-        summary += `- ${step.content}${confidence}\n`;
-      }
-    }
-
-    return summary;
+    return this.visualizeThinking(thinkingId);
   }
 
   /**
