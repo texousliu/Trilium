@@ -7,6 +7,8 @@ import branchService from "../../services/branches.js";
 import appContext from "../../components/app_context.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
+import type { EventData } from "../../components/app_context.js";
+
 
 const TPL = `
 <div class="clone-to-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -48,10 +50,14 @@ const TPL = `
 </div>`;
 
 export default class CloneToDialog extends BasicWidget {
+    private $form!: JQuery<HTMLElement>;
+    private $noteAutoComplete!: JQuery<HTMLElement>;
+    private $clonePrefix!: JQuery<HTMLElement>;
+    private $noteList!: JQuery<HTMLElement>;
+    private clonedNoteIds: string[] | null = null;
+
     constructor() {
         super();
-
-        this.clonedNoteIds = null;
     }
 
     doRender() {
@@ -66,7 +72,6 @@ export default class CloneToDialog extends BasicWidget {
 
             if (notePath) {
                 this.$widget.modal("hide");
-
                 this.cloneNotesTo(notePath);
             } else {
                 logError(t("clone_to.no_path_to_clone_to"));
@@ -76,9 +81,9 @@ export default class CloneToDialog extends BasicWidget {
         });
     }
 
-    async cloneNoteIdsToEvent({ noteIds }) {
+    async cloneNoteIdsToEvent({ noteIds }: EventData<"cloneNoteIdsTo">) {
         if (!noteIds || noteIds.length === 0) {
-            noteIds = [appContext.tabManager.getActiveContextNoteId()];
+            noteIds = [appContext.tabManager.getActiveContextNoteId() ?? ""];
         }
 
         this.clonedNoteIds = [];
@@ -90,14 +95,14 @@ export default class CloneToDialog extends BasicWidget {
         }
 
         utils.openDialog(this.$widget);
-
         this.$noteAutoComplete.val("").trigger("focus");
-
         this.$noteList.empty();
 
         for (const noteId of this.clonedNoteIds) {
             const note = await froca.getNote(noteId);
-
+            if (!note) {
+                continue;
+            }
             this.$noteList.append($("<li>").text(note.title));
         }
 
@@ -105,15 +110,29 @@ export default class CloneToDialog extends BasicWidget {
         noteAutocompleteService.showRecentNotes(this.$noteAutoComplete);
     }
 
-    async cloneNotesTo(notePath) {
+    async cloneNotesTo(notePath: string) {
         const { noteId, parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(notePath);
+        if (!noteId || !parentNoteId) {
+            return;
+        }
+
         const targetBranchId = await froca.getBranchId(parentNoteId, noteId);
+        if (!targetBranchId || !this.clonedNoteIds) {
+            return;
+        }
 
         for (const cloneNoteId of this.clonedNoteIds) {
-            await branchService.cloneNoteToBranch(cloneNoteId, targetBranchId, this.$clonePrefix.val());
+            await branchService.cloneNoteToBranch(cloneNoteId, targetBranchId, this.$clonePrefix.val() as string);
 
             const clonedNote = await froca.getNote(cloneNoteId);
-            const targetNote = await froca.getBranch(targetBranchId).getNote();
+            const targetBranch = froca.getBranch(targetBranchId);
+            if (!clonedNote || !targetBranch) {
+                continue;
+            }
+            const targetNote = await targetBranch.getNote();
+            if (!targetNote) {
+                continue;
+            }
 
             toastService.showMessage(t("clone_to.note_cloned", { clonedTitle: clonedNote.title, targetTitle: targetNote.title }));
         }

@@ -173,9 +173,9 @@ export type CommandMappings = {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void;
     };
     executeWithTextEditor: CommandData &
-        ExecuteCommandData<TextEditor> & {
-            callback?: GetTextEditorCallback;
-        };
+    ExecuteCommandData<TextEditor> & {
+        callback?: GetTextEditorCallback;
+    };
     executeWithCodeEditor: CommandData & ExecuteCommandData<CodeMirrorInstance>;
     /**
      * Called upon when attempting to retrieve the content element of a {@link NoteContext}.
@@ -363,6 +363,12 @@ type EventMappings = {
     showAddLinkDialog: {
         textTypeWidget: EditableTextTypeWidget;
         text: string;
+    };
+    openBulkActionsDialog: {
+        selectedOrActiveNoteIds: string[];
+    };
+    cloneNoteIdsTo: {
+        noteIds: string[];
     };
 };
 
