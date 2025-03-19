@@ -6,6 +6,7 @@ import log from "../log.js";
 import type { Message } from "./ai_interface.js";
 import { cosineSimilarity } from "./embeddings/index.js";
 import sanitizeHtml from "sanitize-html";
+import aiServiceManager from "./ai_service_manager.js";
 
 /**
  * TriliumContextService provides intelligent context management for working with large knowledge bases
@@ -615,6 +616,140 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
                 notes: [],
                 queries: [userQuestion]
             };
+        }
+    }
+
+    /**
+     * Enhance LLM context with agent tools
+     *
+     * This adds context from agent tools such as:
+     * 1. Vector search results relevant to the query
+     * 2. Note hierarchy information
+     * 3. Query decomposition planning
+     * 4. Contextual thinking visualization
+     *
+     * @param noteId The current note being viewed
+     * @param query The user's query
+     * @param showThinking Whether to include the agent's thinking process
+     * @returns Enhanced context string
+     */
+    async getAgentToolsContext(noteId: string, query: string, showThinking: boolean = false): Promise<string> {
+        try {
+            const agentTools = aiServiceManager.getAgentTools();
+            let context = "";
+
+            // 1. Get vector search results related to the query
+            try {
+                const vectorSearchTool = agentTools.getVectorSearchTool();
+                const searchResults = await vectorSearchTool.searchNotes(query, {
+                    parentNoteId: noteId,
+                    maxResults: 5
+                });
+
+                if (searchResults.length > 0) {
+                    context += "## Related Information\n\n";
+                    for (const result of searchResults) {
+                        context += `### ${result.title}\n`;
+                        context += `${result.contentPreview}\n\n`;
+                    }
+                    context += "\n";
+                }
+            } catch (error: any) {
+                log.error(`Error getting vector search context: ${error.message}`);
+            }
+
+            // 2. Get note structure context
+            try {
+                const navigatorTool = agentTools.getNoteNavigatorTool();
+                const noteContext = navigatorTool.getNoteContextDescription(noteId);
+
+                if (noteContext) {
+                    context += "## Current Note Context\n\n";
+                    context += noteContext + "\n\n";
+                }
+            } catch (error: any) {
+                log.error(`Error getting note structure context: ${error.message}`);
+            }
+
+            // 3. Use query decomposition if it's a complex query
+            try {
+                const decompositionTool = agentTools.getQueryDecompositionTool();
+                const complexity = decompositionTool.assessQueryComplexity(query);
+
+                if (complexity > 5) { // Only for fairly complex queries
+                    const decomposed = decompositionTool.decomposeQuery(query);
+
+                    if (decomposed.subQueries.length > 1) {
+                        context += "## Query Analysis\n\n";
+                        context += `This is a complex query (complexity: ${complexity}/10). It can be broken down into:\n\n`;
+
+                        for (const sq of decomposed.subQueries) {
+                            context += `- ${sq.text}\n  Reason: ${sq.reason}\n\n`;
+                        }
+                    }
+                }
+            } catch (error: any) {
+                log.error(`Error decomposing query: ${error.message}`);
+            }
+
+            // 4. Show thinking process if enabled
+            if (showThinking) {
+                try {
+                    const thinkingTool = agentTools.getContextualThinkingTool();
+                    const thinkingId = thinkingTool.startThinking(query);
+
+                    // Add a thinking step to demonstrate the feature
+                    // In a real implementation, the LLM would add these steps
+                    thinkingTool.addThinkingStep(
+                        "Analyzing the query to understand what information is needed",
+                        "observation",
+                        { confidence: 1.0 }
+                    );
+
+                    // Add sample thinking for the context
+                    const parentId = thinkingTool.addThinkingStep(
+                        "Looking for related notes in the knowledge base",
+                        "hypothesis",
+                        { confidence: 0.9 }
+                    );
+
+                    if (parentId) {
+                        // Use the VectorSearchTool to find relevant notes
+                        const vectorSearchTool = aiServiceManager.getVectorSearchTool();
+                        const searchResults = await vectorSearchTool.searchNotes(query, {
+                            parentNoteId: parentId,
+                            maxResults: 5
+                        });
+
+                        if (searchResults.length > 0) {
+                            context += "## Related Information\n\n";
+                            for (const result of searchResults) {
+                                context += `### ${result.title}\n`;
+                                context += `${result.contentPreview}\n\n`;
+                            }
+                            context += "\n";
+                        }
+                    }
+
+                    thinkingTool.addThinkingStep(
+                        "The most relevant information appears to be in the current note and its semantic neighborhood",
+                        "conclusion",
+                        { confidence: 0.85 }
+                    );
+
+                    // Complete the thinking and add it to context
+                    thinkingTool.completeThinking(thinkingId);
+                    context += "## Thinking Process\n\n";
+                    context += thinkingTool.getThinkingSummary(thinkingId) + "\n\n";
+                } catch (error: any) {
+                    log.error(`Error generating thinking process: ${error.message}`);
+                }
+            }
+
+            return context;
+        } catch (error: any) {
+            log.error(`Error getting agent tools context: ${error.message}`);
+            return "";
         }
     }
 }

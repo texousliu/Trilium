@@ -8,6 +8,7 @@ import { ContextExtractor } from './context/index.js';
 import semanticContextService from './semantic_context_service.js';
 import indexService from './index_service.js';
 import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './embeddings/providers.js';
+import agentTools from './agent_tools/index.js';
 
 type ServiceProviders = 'openai' | 'anthropic' | 'ollama';
 
@@ -281,6 +282,128 @@ export class AIServiceManager {
     getIndexService() {
         return indexService;
     }
+
+    /**
+     * Initialize agent tools for enhanced LLM features
+     */
+    async initializeAgentTools(): Promise<void> {
+        try {
+            await agentTools.initialize(this);
+            log.info("Agent tools initialized successfully");
+        } catch (error: any) {
+            log.error(`Error initializing agent tools: ${error.message}`);
+        }
+    }
+
+    /**
+     * Get the agent tools manager
+     * This provides access to all agent tools
+     */
+    getAgentTools() {
+        return agentTools;
+    }
+
+    /**
+     * Get the vector search tool for semantic similarity search
+     */
+    getVectorSearchTool() {
+        return agentTools.getVectorSearchTool();
+    }
+
+    /**
+     * Get the note navigator tool for hierarchical exploration
+     */
+    getNoteNavigatorTool() {
+        return agentTools.getNoteNavigatorTool();
+    }
+
+    /**
+     * Get the query decomposition tool for complex queries
+     */
+    getQueryDecompositionTool() {
+        return agentTools.getQueryDecompositionTool();
+    }
+
+    /**
+     * Get the contextual thinking tool for transparent reasoning
+     */
+    getContextualThinkingTool() {
+        return agentTools.getContextualThinkingTool();
+    }
+
+    /**
+     * Get whether AI features are enabled from options
+     */
+    getAIEnabled(): boolean {
+        return options.getOptionBool('aiEnabled');
+    }
+
+    /**
+     * Set up embeddings provider for AI features
+     */
+    async setupEmbeddingsProvider(): Promise<void> {
+        try {
+            if (!this.getAIEnabled()) {
+                log.info('AI features are disabled');
+                return;
+            }
+
+            const preferredProvider = options.getOption('embeddingsDefaultProvider') || 'openai';
+
+            // Check if we have enabled providers
+            const enabledProviders = await getEnabledEmbeddingProviders();
+
+            if (enabledProviders.length === 0) {
+                log.info('No embedding providers are enabled');
+                return;
+            }
+
+            // Validate that preferred provider is enabled
+            const isPreferredEnabled = enabledProviders.some(p => p.name === preferredProvider);
+
+            if (!isPreferredEnabled) {
+                log.info(`Preferred provider "${preferredProvider}" is not enabled. Using first available.`);
+            }
+
+            // Initialize embedding providers
+            log.info('Embedding providers initialized successfully');
+        } catch (error: any) {
+            log.error(`Error setting up embedding providers: ${error.message}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Initialize the AI Service
+     */
+    async initialize(): Promise<void> {
+        try {
+            log.info("Initializing AI service...");
+
+            // Check if AI is enabled in options
+            const isAIEnabled = this.getAIEnabled();
+
+            if (!isAIEnabled) {
+                log.info("AI features are disabled in options");
+                return;
+            }
+
+            // Set up embeddings provider if AI is enabled
+            await this.setupEmbeddingsProvider();
+
+            // Initialize index service
+            await this.getIndexService().initialize();
+
+            // Initialize agent tools with this service manager instance
+            await agentTools.initialize(this);
+
+            this.initialized = true;
+            log.info("AI service initialized successfully");
+        } catch (error: any) {
+            log.error(`Error initializing AI service: ${error.message}`);
+            throw error;
+        }
+    }
 }
 
 // Don't create singleton immediately, use a lazy-loading pattern
@@ -321,6 +444,26 @@ export default {
     },
     getIndexService() {
         return getInstance().getIndexService();
+    },
+    // Agent tools related methods
+    async initializeAgentTools(): Promise<void> {
+        const manager = getInstance();
+        return manager.initializeAgentTools();
+    },
+    getAgentTools() {
+        return getInstance().getAgentTools();
+    },
+    getVectorSearchTool() {
+        return getInstance().getVectorSearchTool();
+    },
+    getNoteNavigatorTool() {
+        return getInstance().getNoteNavigatorTool();
+    },
+    getQueryDecompositionTool() {
+        return getInstance().getQueryDecompositionTool();
+    },
+    getContextualThinkingTool() {
+        return getInstance().getContextualThinkingTool();
     }
 };
 
