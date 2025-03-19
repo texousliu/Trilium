@@ -42,7 +42,7 @@ export default class BranchPrefixDialog extends BasicWidget {
     private $noteTitle!: JQuery<HTMLElement>;
     private branchId: string | null = null;
 
-    doRender(): void {
+    doRender() {
         this.$widget = $(TPL);
         this.modal = Modal.getOrCreateInstance(this.$widget[0]);
         this.$form = this.$widget.find(".branch-prefix-form");
