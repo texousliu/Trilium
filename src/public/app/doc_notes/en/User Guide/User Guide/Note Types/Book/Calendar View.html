@@ -82,7 +82,7 @@
         <ul>
           <li>Hovering the mouse over an event will display information about the note.
             <br>
-            <img src="9_Calendar View_image.png">
+            <img src="7_Calendar View_image.png">
           </li>
           <li>Left clicking the event will go to that note. Middle clicking will open
             the note in a new tab and right click will offer more options including
@@ -93,53 +93,55 @@
         </ul>
         <h2>Configuring the calendar</h2>
         <p>The following attributes can be added to the book type:</p>
-        <figure class="table">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>#calendar:hideWeekends</code>
-                </td>
-                <td>When present (regardless of value), it will hide Saturday and Sundays
-                  from the calendar.</td>
-              </tr>
-              <tr>
-                <td><code>#calendar:weekNumbers</code>
-                </td>
-                <td>When present (regardless of value), it will show the number of the week
-                  on the calendar.</td>
-              </tr>
-              <tr>
-                <td><code>#calendar:view</code>
-                </td>
-                <td>
-                  <p>Which view to display in the calendar:</p>
-                  <ul>
-                    <li><code>timeGridWeek</code> for the <em>week</em> view;</li>
-                    <li><code>dayGridMonth</code> for the <em>month</em> view;</li>
-                    <li><code>multiMonthYear</code> for the <em>year</em> view;</li>
-                    <li><code>listMonth</code> for the <em>list</em> view.</li>
-                  </ul>
-                  <p>Any other value will be dismissed and the default view (month) will be
-                    used instead.</p>
-                  <p>The value of this label is automatically updated when changing the view
-                    using the UI buttons.</p>
-                </td>
-              </tr>
-              <tr>
-                <td><code>~child:template</code>
-                </td>
-                <td>Defines the template for newly created notes in the calendar (via dragging
-                  or clicking).</td>
-              </tr>
-            </tbody>
-          </table>
-        </figure>
+        <div>
+          <figure class="table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>#calendar:hideWeekends</code>
+                  </td>
+                  <td>When present (regardless of value), it will hide Saturday and Sundays
+                    from the calendar.</td>
+                </tr>
+                <tr>
+                  <td><code>#calendar:weekNumbers</code>
+                  </td>
+                  <td>When present (regardless of value), it will show the number of the week
+                    on the calendar.</td>
+                </tr>
+                <tr>
+                  <td><code>#calendar:view</code>
+                  </td>
+                  <td>
+                    <p>Which view to display in the calendar:</p>
+                    <ul>
+                      <li><code>timeGridWeek</code> for the <em>week</em> view;</li>
+                      <li><code>dayGridMonth</code> for the <em>month</em> view;</li>
+                      <li><code>multiMonthYear</code> for the <em>year</em> view;</li>
+                      <li><code>listMonth</code> for the <em>list</em> view.</li>
+                    </ul>
+                    <p>Any other value will be dismissed and the default view (month) will be
+                      used instead.</p>
+                    <p>The value of this label is automatically updated when changing the view
+                      using the UI buttons.</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>~child:template</code>
+                  </td>
+                  <td>Defines the template for newly created notes in the calendar (via dragging
+                    or clicking).</td>
+                </tr>
+              </tbody>
+            </table>
+          </figure>
+        </div>
         <p>In addition, the first day of the week can be either Sunday or Monday
           and can be adjusted from the application settings.</p>
         <h2>Configuring the calendar events</h2>
@@ -204,22 +206,22 @@
                 <td><code>#calendar:title</code>
                 </td>
                 <td>Changes the title of an event to point to an attribute of the note other
-                  than the title, either a label (e.g. <code>#assignee</code>) or a relation
-                  (e.g. <code>~for</code>). See <em>Advanced use-cases</em> for more information.</td>
+                  than the title, can either a label or a relation (without the <code>#</code> or <code>~</code> symbol).
+                  See <em>Use-cases</em> for more information.</td>
               </tr>
               <tr>
                 <td><code>#calendar:displayedAttributes</code>
                 </td>
                 <td>Allows displaying the value of one or more attributes in the calendar
-                  like this:&nbsp;&nbsp;
+                  like this:&nbsp;&nbsp;&nbsp;
                   <br>
                   <br>
-                  <img src="11_Calendar View_image.png">&nbsp;
+                  <img src="9_Calendar View_image.png">&nbsp;
                   <br>
-                  <br><code>#weight="70" #Mood="Good" #calendar:displayedAttributes="weight,Mood"</code>
+                  <br><code>#weight="70" #Mood="Good" #calendar:displayedAttributes="weight,Mood"</code>&nbsp;
                   <br>
                   <br>It can also be used with relations, case in which it will display the
-                  title of the target note:&nbsp;
+                  title of the target note:&nbsp;&nbsp;
                   <br>
                   <br><code>~assignee=@My assignee #calendar:displayedAttributes="assignee"</code>
                 </td>
@@ -254,7 +256,7 @@
           </figure>
           <h2>How the calendar works</h2>
           <p>
-            <img src="14_Calendar View_image.png">
+            <img src="11_Calendar View_image.png">
           </p>
           <p>The calendar displays all the child notes of the book that have a <code>#startDate</code>.
             An <code>#endDate</code> can optionally be added.</p>
@@ -264,7 +266,7 @@
 #hidePromotedAttributes </code></pre>
           <p>This will result in:</p>
           <p>
-            <img src="12_Calendar View_image.png">
+            <img src="10_Calendar View_image.png">
           </p>
           <p>When not used in a Journal, the calendar is recursive. That is, it will
             look for events not just in its child notes but also in the children of
@@ -289,18 +291,19 @@
               will not be displayed.</li>
           </ul>
           <p>
-            <img src="10_Calendar View_image.png">
+            <img src="8_Calendar View_image.png">
           </p>
           <h3>Using a different attribute as event title</h3>
           <p>By default, events are displayed on the calendar by their note title.
             However, it is possible to configure a different attribute to be displayed
             instead.</p>
           <p>To do so, assign <code>#calendar:title</code> to the child note (not the
-            calendar/book note), with the value being <code>#name</code> where <code>name</code> can
-            be any label. The attribute can also come through inheritance such as a
-            template attribute. If the note does not have the requested label, the
-            title of the note will be used instead.</p>
-          <figure class="table">
+            calendar/book note), with the value being <code>name</code> where <code>name</code> can
+            be any label (make not to add the <code>#</code> prefix). The attribute can
+            also come through inheritance such as a template attribute. If the note
+            does not have the requested label, the title of the note will be used instead.</p>
+          <figure
+          class="table">
             <table>
               <thead>
                 <tr>
@@ -310,67 +313,64 @@
               </thead>
               <tbody>
                 <tr>
+                  <td><pre><code class="language-text-x-trilium-auto">#startDate=2025-02-11 #endDate=2025-02-13 #name="My vacation" #calendar:title="name"</code></pre>
+                  </td>
                   <td>
                     <img src="5_Calendar View_image.png">
                   </td>
-                  <td>
-                    <img src="7_Calendar View_image.png">
-                  </td>
                 </tr>
               </tbody>
             </table>
-          </figure>
-          <h3>Using a relation attribute as event title</h3>
-          <p>Similarly to using an attribute, use <code>#calendar:title</code> and set
-            it to <code>~name</code> where <code>name</code> is the name of the relation
-            to use.</p>
-          <p>Moreover, if there are more relations of the same name, they will be displayed
-            as multiple events coming from the same note.</p>
-          <figure class="table">
-            <table>
-              <thead>
-                <tr>
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <img src="6_Calendar View_image.png">
-                  </td>
-                  <td>
-                    <img src="8_Calendar View_image.png">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </figure>
-          <p>Note that it's even possible to have a <code>#calendar:title</code> on the
-            target note (e.g. “John Smith”) which will try to render an attribute of
-            it. Note that it's not possible to use a relation here as well for safety
-            reasons (an accidental recursion &nbsp;of attributes could cause the application
-            to loop infinitely).</p>
-          <figure class="table">
-            <table>
-              <thead>
-                <tr>
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <img src="13_Calendar View_image.png">
-                  </td>
-                  <td>
-                    <img src="1_Calendar View_image.png">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </figure>
+            </figure>
+            <h3>Using a relation attribute as event title</h3>
+            <p>Similarly to using an attribute, use <code>#calendar:title</code> and set
+              it to <code>name</code> where <code>name</code> is the name of the relation
+              to use.</p>
+            <p>Moreover, if there are more relations of the same name, they will be displayed
+              as multiple events coming from the same note.</p>
+            <figure class="table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>#startDate=2025-02-14 #endDate=2025-02-15 ~for=@John Smith ~for=@Jane Doe #calendar:title="for"</code>
+                    </td>
+                    <td>
+                      <img src="6_Calendar View_image.png">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </figure>
+            <p>Note that it's even possible to have a <code>#calendar:title</code> on the
+              target note (e.g. “John Smith”) which will try to render an attribute of
+              it. Note that it's not possible to use a relation here as well for safety
+              reasons (an accidental recursion &nbsp;of attributes could cause the application
+              to loop infinitely).</p>
+            <figure class="table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>#calendar:title="shortName" #shortName="John S."</code>
+                    </td>
+                    <td>
+                      <img src="1_Calendar View_image.png">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </figure>
       </div>
     </div>
   </body>
