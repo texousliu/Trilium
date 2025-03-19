@@ -1,3 +1,4 @@
+import type { FindResult } from "./find.js";
 import type FindWidget from "./find.js";
 
 // TODO: Deduplicate.
@@ -13,7 +14,8 @@ interface Match {
 export default class FindInText {
 
     private parent: FindWidget;
-    private findResult?: Match[] | null;
+    private findResult?: CKFindResult | null;
+    private editingState?: EditingState;
 
     constructor(parent: FindWidget) {
         this.parent = parent;
@@ -23,10 +25,14 @@ export default class FindInText {
         return this.parent?.noteContext?.getTextEditor();
     }
 
-    async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
+    async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean): Promise<FindResult> {
         // Do this even if the searchTerm is empty so the markers are cleared and
         // the counters updated
         const textEditor = await this.getTextEditor();
+        if (!textEditor) {
+            return { currentFound: 0, totalFound: 0 };
+        }
+
         const model = textEditor.model;
         let findResult = null;
         let totalFound = 0;
@@ -46,14 +52,14 @@ export default class FindInText {
             // let m = text.match(re);
             // totalFound = m ? m.length : 0;
             const options = { matchCase: matchCase, wholeWords: wholeWord };
-            findResult = textEditor.execute("find", searchTerm, options);
+            findResult = textEditor.execute<CKFindResult>("find", searchTerm, options);
             totalFound = findResult.results.length;
             // Find the result beyond the cursor
             const cursorPos = model.document.selection.getLastPosition();
             for (let i = 0; i < findResult.results.length; ++i) {
                 const marker = findResult.results.get(i).marker;
                 const fromPos = marker.getStart();
-                if (fromPos.compareWith(cursorPos) !== "before") {
+                if (cursorPos && fromPos.compareWith(cursorPos) !== "before") {
                     currentFound = i;
                     break;
                 }
@@ -111,9 +117,11 @@ export default class FindInText {
             let findAndReplaceEditing = textEditor.plugins.get("FindAndReplaceEditing");
             findAndReplaceEditing.state.clear(model);
             findAndReplaceEditing.stop();
-            model.change((writer) => {
-                writer.setSelection(range, 0);
-            });
+            if (range) {
+                model.change((writer) => {
+                    writer.setSelection(range, 0);
+                });
+            }
             textEditor.editing.view.scrollToTheSelection();
         }
 

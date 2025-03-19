@@ -9,9 +9,15 @@ import attributeService from "../services/attributes.js";
 import FindInText from "./find_in_text.js";
 import FindInCode from "./find_in_code.js";
 import FindInHtml from "./find_in_html.js";
+import type { EventData } from "../components/app_context.js";
 
 const findWidgetDelayMillis = 200;
 const waitForEnter = findWidgetDelayMillis < 0;
+
+export interface FindResult {
+    totalFound: number;
+    currentFound: number;
+}
 
 // tabIndex=-1 on the checkbox labels is necessary, so when clicking on the label,
 // the focusout handler is called with relatedTarget equal to the label instead
@@ -92,6 +98,28 @@ const TPL = `
 </div>`;
 
 export default class FindWidget extends NoteContextAwareWidget {
+
+    private searchTerm: string | null;
+
+    private textHandler: FindInText;
+    private codeHandler: FindInCode;
+    private htmlHandler: FindInHtml;
+    private handler?: FindInText | FindInCode | FindInHtml;
+    private timeoutId?: number | null;
+
+    private $input!: JQuery<HTMLElement>;
+    private $currentFound!: JQuery<HTMLElement>;
+    private $totalFound!: JQuery<HTMLElement>;
+    private $caseSensitiveCheckbox!: JQuery<HTMLElement>;
+    private $matchWordsCheckbox!: JQuery<HTMLElement>;
+    private $previousButton!: JQuery<HTMLElement>;
+    private $nextButton!: JQuery<HTMLElement>;
+    private $closeButton!: JQuery<HTMLElement>;
+    private $replaceWidgetBox!: JQuery<HTMLElement>;
+    private $replaceTextInput!: JQuery<HTMLElement>;
+    private $replaceAllButton!: JQuery<HTMLElement>;
+    private $replaceButton!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -160,24 +188,24 @@ export default class FindWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (!["text", "code", "render"].includes(this.note.type)) {
+        if (!["text", "code", "render"].includes(this.note?.type ?? "")) {
             return;
         }
 
         this.handler = await this.getHandler();
 
-        const isReadOnly = await this.noteContext.isReadOnly();
+        const isReadOnly = await this.noteContext?.isReadOnly();
 
         let selectedText = "";
-        if (this.note.type === "code" && !isReadOnly) {
+        if (this.note?.type === "code" && !isReadOnly && this.noteContext) {
             const codeEditor = await this.noteContext.getCodeEditor();
             selectedText = codeEditor.getSelection();
         } else {
-            selectedText = window.getSelection().toString() || "";
+            selectedText = window.getSelection()?.toString() || "";
         }
         this.$widget.show();
         this.$input.focus();
-        if (["text", "code"].includes(this.note.type) && !isReadOnly) {
+        if (["text", "code"].includes(this.note?.type ?? "") && !isReadOnly) {
             this.$replaceWidgetBox.show();
         } else {
             this.$replaceWidgetBox.hide();
@@ -208,16 +236,16 @@ export default class FindWidget extends NoteContextAwareWidget {
     }
 
     async getHandler() {
-        if (this.note.type === "render") {
+        if (this.note?.type === "render") {
             return this.htmlHandler;
         }
 
-        const readOnly = await this.noteContext.isReadOnly();
+        const readOnly = await this.noteContext?.isReadOnly();
 
         if (readOnly) {
             return this.htmlHandler;
         } else {
-            return this.note.type === "code" ? this.codeHandler : this.textHandler;
+            return this.note?.type === "code" ? this.codeHandler : this.textHandler;
         }
     }
 
@@ -228,7 +256,7 @@ export default class FindWidget extends NoteContextAwareWidget {
         if (!waitForEnter) {
             // Clear the previous timeout if any, it's ok if timeoutId is
             // null or undefined
-            clearTimeout(this.timeoutId);
+            clearTimeout(this.timeoutId as unknown as NodeJS.Timeout); // TODO: Fix once client is separated from Node.js types.
 
             // Defer the search a few millis so the search doesn't start
             // immediately, as this can cause search word typing lag with
@@ -237,15 +265,14 @@ export default class FindWidget extends NoteContextAwareWidget {
             this.timeoutId = setTimeout(async () => {
                 this.timeoutId = null;
                 await this.performFind();
-            }, findWidgetDelayMillis);
+            }, findWidgetDelayMillis) as unknown as number; // TODO: Fix once client is separated from Node.js types.
         }
     }
 
     /**
      * @param direction +1 for next, -1 for previous
-     * @returns {Promise<void>}
      */
-    async findNext(direction) {
+    async findNext(direction: 1 | -1) {
         if (this.$totalFound.text() == "?") {
             await this.performFind();
             return;
@@ -268,17 +295,17 @@ export default class FindWidget extends NoteContextAwareWidget {
 
             this.$currentFound.text(nextFound + 1);
 
-            await this.handler.findNext(direction, currentFound, nextFound);
+            await this.handler?.findNext(direction, currentFound, nextFound);
         }
     }
 
     /** Perform the find and highlight the find results. */
     async performFind() {
-        const searchTerm = this.$input.val();
+        const searchTerm = String(this.$input.val());
         const matchCase = this.$caseSensitiveCheckbox.prop("checked");
         const wholeWord = this.$matchWordsCheckbox.prop("checked");
 
-        const { totalFound, currentFound } = await this.handler.performFind(searchTerm, matchCase, wholeWord);
+        const { totalFound, currentFound } = await this.handler?.performFind(searchTerm, matchCase, wholeWord);
 
         this.$totalFound.text(totalFound);
         this.$currentFound.text(currentFound);
@@ -297,28 +324,34 @@ export default class FindWidget extends NoteContextAwareWidget {
 
             this.searchTerm = null;
 
-            await this.handler.findBoxClosed(totalFound, currentFound);
+            await this.handler?.findBoxClosed(totalFound, currentFound);
         }
     }
 
     async replace() {
-        const replaceText = this.$replaceTextInput.val();
-        await this.handler.replace(replaceText);
+        const replaceText = String(this.$replaceTextInput.val());
+        if (this.handler && "replace" in this.handler) {
+            await this.handler.replace(replaceText);
+        }
     }
 
     async replaceAll() {
-        const replaceText = this.$replaceTextInput.val();
-        await this.handler.replaceAll(replaceText);
+        const replaceText = String(this.$replaceTextInput.val());
+        if (this.handler && "replace" in this.handler) {
+            await this.handler.replaceAll(replaceText);
+        }
     }
 
     isEnabled() {
-        return super.isEnabled() && ["text", "code", "render"].includes(this.note.type);
+        return super.isEnabled() && ["text", "code", "render"].includes(this.note?.type ?? "");
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
-        if (loadResults.isNoteContentReloaded(this.noteId)) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (this.noteId && loadResults.isNoteContentReloaded(this.noteId)) {
             this.$totalFound.text("?");
-        } else if (loadResults.getAttributeRows().find((attr) => attr.type === "label" && attr.name.toLowerCase().includes("readonly") && attributeService.isAffecting(attr, this.note))) {
+        } else if (loadResults.getAttributeRows().find((attr) => attr.type === "label"
+                && (attr.name?.toLowerCase() ?? "").includes("readonly")
+                && attributeService.isAffecting(attr, this.note))) {
             this.closeSearch();
         }
     }
