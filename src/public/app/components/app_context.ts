@@ -364,6 +364,9 @@ type EventMappings = {
         textTypeWidget: EditableTextTypeWidget;
         text: string;
     };
+    showIncludeDialog: {
+        textTypeWidget: EditableTextTypeWidget;
+    };
     openBulkActionsDialog: {
         selectedOrActiveNoteIds: string[];
     };
