@@ -162,7 +162,7 @@ async function createMainWindow(app: App) {
             if (mainWindow.isMinimized()) {
                 mainWindow.restore();
             }
-
+            mainWindow.show(); 
             mainWindow.focus();
         }
     });
