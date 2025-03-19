@@ -26,11 +26,15 @@
 
     --left-pane-item-selected-shadow-size: 2px;
 
-    --launcher-pane-size: 58px;
-    --launcher-pane-horizontal-size: 54px;
-    --launcher-pane-horizontal-icon-size: 20px;
-    --launcher-pane-button-margin: 6px;
-    --launcher-pane-button-gap: 3px;
+    --launcher-pane-vert-size: 58px;
+    --launcher-pane-vert-icon-size: 150%;
+    --launcher-pane-vert-button-margin: 6px;
+    --launcher-pane-vert-button-gap: 3px;
+
+    --launcher-pane-horiz-size: 54px;
+    --launcher-pane-horiz-icon-size: 20px;
+    --launcher-pane-horiz-button-margin: 6px;
+    --launcher-pane-horiz-button-gap: 3px;
 
     --tree-actions-toolbar-horizontal-margin: 8px;
     --tree-actions-toolbar-vertical-margin: 8px;

@@ -26,9 +26,7 @@ body {
 }
 
 body.layout-horizontal {
-    --launcher-pane-background-color: var(--launcher-pane-horizontal-background-color);
-    --launcher-pane-size: var(--launcher-pane-horizontal-size);
-    --active-tab-background-color: var(--launcher-pane-background-color);
+    --active-tab-background-color: var(--launcher-pane-horiz-background-color);
     --active-tab-hover-background-color: var(--active-tab-background-color);
     --new-tab-button-background: transparent;
     --tab-bar-height: 44px;
@@ -42,16 +40,19 @@ body.mobile {
 
 /* #region Mica */
 body.background-effects.platform-win32 {
-    --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.15);
-    --launcher-pane-background-color: rgba(255, 255, 255, 0.7);
     --tab-background-color: transparent;
     --new-tab-button-background: transparent;
-    --active-tab-background-color: var(--launcher-pane-background-color);
+    --active-tab-background-color: var(--launcher-pane-background-color); /* TODO: fix */
     --background-material: tabbed;
 }
 
+body.background-effects.platform-win32 #launcher-pane {
+    --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.15);
+    --launcher-pane-background-color: rgba(255, 255, 255, 0.7);
+}
+
 @media (prefers-color-scheme: dark) {
-    body.background-effects.platform-win32 {
+    body.background-effects.platform-win32 #launcher-pane {
         --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
         --launcher-pane-background-color: rgba(255, 255, 255, 0.09);
     }
@@ -59,9 +60,12 @@ body.background-effects.platform-win32 {
 
 body.background-effects.platform-win32.layout-vertical {
     --left-pane-background-color: transparent;
-    --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
     --left-pane-item-hover-background: rgba(127, 127, 127, 0.05);
     --background-material: mica;
+}
+
+body.background-effects.platform-win32.layout-vertical #launcher-pane {
+    --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
 }
 
 body.background-effects.platform-win32,
@@ -141,18 +145,42 @@ body.layout-horizontal > .horizontal {
 }
 
 #launcher-pane.vertical {
+    --launcher-pane-border-color: unset;
+    --launcher-pane-background-color: var(--launcher-pane-vert-background-color);
+    --launcher-pane-text-color: var(--launcher-pane-vert-text-color);
+    --launcher-pane-button-hover-color: var(--launcher-pane-vert-button-hover-color);
+    --launcher-pane-button-hover-background: var(--launcher-pane-vert-button-hover-background);
+    --launcher-pane-button-hover-shadow: var(--launcher-pane-vert-button-hover-shadow);
+
+    --launcher-pane-size: var(--launcher-pane-vert-size);
+    --launcher-pane-icon-size: var(--launcher-pane-vert-icon-size);
+    --launcher-pane-button-margin: var(--launcher-pane-vert-button-margin);
+    --launcher-pane-button-gap: var(--launcher-pane-vert-button-gap);
+
     width: var(--launcher-pane-size) !important;
     padding-bottom: var(--launcher-pane-button-gap);
 }
 
 #launcher-pane.horizontal {
+    --launcher-pane-border-color: var(--launcher-pane-horiz-border-color);
+    --launcher-pane-background-color: var(--launcher-pane-horiz-background-color);
+    --launcher-pane-text-color: var(--launcher-pane-horiz-text-color);
+    --launcher-pane-button-hover-color: var(--launcher-pane-horiz-button-hover-color);
+    --launcher-pane-button-hover-background: var(--launcher-pane-horiz-button-hover-background);
+    --launcher-pane-button-hover-shadow: var(--launcher-pane-horiz-button-hover-shadow);
+
+    --launcher-pane-size: var(--launcher-pane-horiz-size);
+    --launcher-pane-icon-size: var(--launcher-pane-horiz-icon-size);
+    --launcher-pane-button-margin: var(--launcher-pane-horiz-button-margin);
+    --launcher-pane-button-gap: var(--launcher-pane-horiz-button-gap);
+
     height: var(--launcher-pane-size) !important;
     align-items: center;
 }
 
 @media (max-width: 991px) {
     #mobile-bottom-bar {
-        background: var(--launcher-pane-background-color);
+        background: var(--launcher-pane-horiz-background-color);
     }
 
     body.mobile #launcher-pane {
@@ -163,7 +191,7 @@ body.layout-horizontal > .horizontal {
 @media (min-width: 992px) {
     #launcher-pane.horizontal {
         border-top: unset;
-        border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
+        border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
     }
 }
 
@@ -213,6 +241,10 @@ body.layout-horizontal > .horizontal {
     align-items: center;
 }
 
+#launcher-pane .launcher-button {
+    font-size: var(--launcher-pane-icon-size) !important;
+}
+
 #launcher-pane.vertical .spacer {
     width: var(--launcher-pane-size);
 }
@@ -251,10 +283,6 @@ body.layout-horizontal > .horizontal {
 #launcher-pane .sync-status-disconnected-with-changes {
     --pulse-color: var(--sync-status-error-pulse-color);
     animation: sync-status-pulse 1s ease-in-out alternate-reverse infinite;
-}
-
-#launcher-pane.horizontal .launcher-button {
-    font-size: var(--launcher-pane-horizontal-icon-size);
 }
 
 #launcher-pane .global-menu-button {
@@ -711,7 +739,7 @@ body.layout-horizontal .tab-row-container .note-tab[active]:before {
     top: var(--tab-height);
     right: calc(100% - 1px);
     height: 1px;
-    border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
 }
 
 body.layout-horizontal .tab-row-container .note-tab[active]:after {
@@ -723,7 +751,7 @@ body.layout-horizontal .tab-row-container .note-tab[active]:after {
     right: 0;
     width: 100vw;
     height: 1px;
-    border-bottom: 1px solid var(--launcher-pane-horizontal-border-color);
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
 }
 /* #endregion */
 
@@ -757,7 +785,7 @@ body.desktop:not(.background-effects.platform-win32) #root-widget.horizontal-lay
 }
 
 #root-widget.horizontal-layout .tab-row-widget .note-tab[active] .note-tab-wrapper {
-    border: 1px solid var(--launcher-pane-horizontal-border-color);
+    border: 1px solid var(--launcher-pane-horiz-border-color);
     border-bottom-color: transparent;
 }
 
