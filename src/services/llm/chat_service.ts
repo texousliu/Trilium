@@ -168,10 +168,10 @@ export class ChatService {
 
         if (useSmartContext && lastUserMessage) {
             // Use smart context that considers the query for better relevance
-            context = await contextExtractor.getSmartContext(noteId, lastUserMessage);
+            context = await aiServiceManager.getContextExtractor().getSmartContext(noteId, lastUserMessage);
         } else {
             // Fall back to full context if smart context is disabled or no query available
-            context = await contextExtractor.getFullContext(noteId);
+            context = await aiServiceManager.getContextExtractor().getFullContext(noteId);
         }
 
         const contextMessage: Message = {
