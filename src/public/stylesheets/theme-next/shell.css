@@ -247,11 +247,13 @@ body.layout-horizontal > .horizontal {
     font-size: var(--launcher-pane-icon-size) !important;
 }
 
-#launcher-pane .launcher-button:focus {
+#launcher-pane .launcher-button:focus,
+#launcher-pane .global-menu button:focus {
     outline: none;
 }
 
-#launcher-pane .launcher-button:focus-visible {
+#launcher-pane .launcher-button:focus-visible,
+#launcher-pane .global-menu button:focus-visible {
     outline: 2px solid var(--launcher-pane-button-focus-outline-color);
 }
 
