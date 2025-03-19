@@ -371,6 +371,9 @@ type EventMappings = {
     openBulkActionsDialog: {
         selectedOrActiveNoteIds: string[];
     };
+    cloneNoteIdsTo: {
+        noteIds: string[];
+    };
 
 };
 
