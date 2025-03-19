@@ -227,6 +227,7 @@ declare global {
         focus();
         getCursor(): { line: number, col: number, ch: number };
         setCursor(line: number, col: number);
+        getSelection(): string;
         lineCount(): number;
         on(event: string, callback: () => void);
         operation(callback: () => void);
@@ -254,7 +255,7 @@ declare global {
     interface Writer {
         setAttribute(name: string, value: string, el: TextEditorElement);
         createPositionAt(el: TextEditorElement, opt?: "end");
-        setSelection(pos: number);
+        setSelection(pos: number, pos?: number);
     }
     interface TextNode {
         previousSibling?: TextNode;
@@ -270,6 +271,7 @@ declare global {
     interface TextPosition {
         textNode: TextNode;
         offset: number;
+        compareWith(pos: TextPosition): string;
     }
     interface TextEditor {
         model: {
@@ -306,13 +308,32 @@ declare global {
                 scrollToTheSelection(): void;
             }
         },
+        plugins: {
+            get(command: string)
+        },
         getData(): string;
         setData(data: string): void;
         getSelectedHtml(): string;
         removeSelection(): void;
-        execute(action: string, ...args: unknown[]): void;
+        execute<T>(action: string, ...args: unknown[]): T;
         focus(): void;
         sourceElement: HTMLElement;
+    }
+
+    interface EditingState {
+        highlightedResult: string;
+        results: unknown[];
+    }
+
+    interface CKFindResult {
+        results: {
+            get(number): {
+                marker: {
+                    getStart(): TextPosition;
+                    getRange(): number;
+                };
+            }
+        } & [];
     }
 
     interface MentionItem {

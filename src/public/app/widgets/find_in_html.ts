@@ -5,6 +5,7 @@ import libraryLoader from "../services/library_loader.js";
 import utils from "../services/utils.js";
 import appContext from "../components/app_context.js";
 import type FindWidget from "./find.js";
+import type { FindResult } from "./find.js";
 
 const FIND_RESULT_SELECTED_CSS_CLASSNAME = "ck-find-result_selected";
 const FIND_RESULT_CSS_CLASSNAME = "ck-find-result";
@@ -29,7 +30,7 @@ export default class FindInHtml {
         const wholeWordChar = wholeWord ? "\\b" : "";
         const regExp = new RegExp(wholeWordChar + utils.escapeRegExp(searchTerm) + wholeWordChar, matchCase ? "g" : "gi");
 
-        return new Promise((res) => {
+        return new Promise<FindResult>((res) => {
             $content?.unmark({
                 done: () => {
                     $content.markRegExp(regExp, {
