@@ -253,8 +253,15 @@ body.layout-horizontal > .horizontal {
 }
 
 #launcher-pane .launcher-button:focus-visible,
-#launcher-pane .global-menu button:focus-visible {
+#launcher-pane.horizontal .global-menu button:focus-visible {
     outline: 2px solid var(--launcher-pane-button-focus-outline-color);
+}
+
+#launcher-pane.vertical .global-menu button:focus-visible svg {
+    outline-offset: 4px;
+    outline: 2px solid var(--launcher-pane-button-focus-outline-color);
+    border-radius: 4px;
+    overflow: visible;
 }
 
 #launcher-pane.vertical .spacer {
