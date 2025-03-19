@@ -1406,9 +1406,11 @@ body .calendar-dropdown-widget .calendar-body a:hover {
 }
 
 .jump-to-note-dialog .modal-content {
+    --bs-modal-header-padding-x: 0;
+
     box-shadow: 0 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
     border: 1px solid var(--dropdown-border-color);
-    padding: 32px;
+    padding: 20px;
     border-radius: 8px;
 }
 
