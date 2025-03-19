@@ -49,75 +49,89 @@ export class ContextualThinkingTool {
   private processes: Record<string, ThinkingProcess> = {};
 
   /**
-   * Start a new thinking process for a given query
+   * Start a new thinking process for a query
    *
-   * @param query The user query that initiated the thinking process
-   * @returns The ID of the new thinking process
+   * @param query The user's query
+   * @returns The created thinking process ID
    */
   startThinking(query: string): string {
-    const id = this.generateProcessId();
+    const thinkingId = `thinking_${Date.now()}_${ContextualThinkingTool.thinkingCounter++}`;
 
-    this.processes[id] = {
-      id,
+    log.info(`Starting thinking process: ${thinkingId} for query "${query.substring(0, 50)}..."`);
+
+    this.processes[thinkingId] = {
+      id: thinkingId,
       query,
       steps: [],
       status: 'in_progress',
       startTime: Date.now()
     };
 
-    this.activeProcId = id;
-    return id;
+    // Set as active process
+    this.activeProcId = thinkingId;
+
+    // Initialize with some starter thinking steps
+    this.addThinkingStep(thinkingId, {
+      type: 'observation',
+      content: `Starting analysis of the query: "${query}"`
+    });
+
+    this.addThinkingStep(thinkingId, {
+      type: 'question',
+      content: `What are the key components of this query that need to be addressed?`
+    });
+
+    this.addThinkingStep(thinkingId, {
+      type: 'observation',
+      content: `Breaking down the query to understand its requirements and context.`
+    });
+
+    return thinkingId;
   }
 
   /**
-   * Add a thinking step to the current active process
+   * Add a thinking step to a process
    *
-   * @param content The content of the thinking step
-   * @param type The type of thinking step
-   * @param options Additional options for the step
-   * @returns The ID of the new step
+   * @param processId The ID of the process to add to
+   * @param step The thinking step to add
+   * @returns The ID of the added step
    */
   addThinkingStep(
-    content: string,
-    type: ThinkingStep['type'],
-    options: {
-      confidence?: number;
-      sources?: string[];
-      parentId?: string;
-      metadata?: Record<string, any>;
-    } = {}
-  ): string | null {
-    if (!this.activeProcId || !this.processes[this.activeProcId]) {
-      log.error("No active thinking process to add step to");
-      return null;
+    processId: string,
+    step: Omit<ThinkingStep, 'id'>,
+    parentId?: string
+  ): string {
+    const process = this.processes[processId];
+
+    if (!process) {
+      throw new Error(`Thinking process ${processId} not found`);
     }
 
-    const stepId = this.generateStepId();
-    const step: ThinkingStep = {
-      id: stepId,
-      content,
-      type,
-      ...options
+    // Create full step with ID
+    const fullStep: ThinkingStep = {
+      id: `step_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
+      ...step,
+      parentId
     };
 
-    // Add to parent's children if a parent is specified
-    if (options.parentId) {
-      const parentIdx = this.processes[this.activeProcId].steps.findIndex(
-        s => s.id === options.parentId
-      );
+    // Add to process steps
+    process.steps.push(fullStep);
 
-      if (parentIdx >= 0) {
-        const parent = this.processes[this.activeProcId].steps[parentIdx];
-        if (!parent.children) {
-          parent.children = [];
+    // If this step has a parent, update the parent's children list
+    if (parentId) {
+      const parentStep = process.steps.find(s => s.id === parentId);
+      if (parentStep) {
+        if (!parentStep.children) {
+          parentStep.children = [];
         }
-        parent.children.push(stepId);
-        this.processes[this.activeProcId].steps[parentIdx] = parent;
+        parentStep.children.push(fullStep.id);
       }
     }
 
-    this.processes[this.activeProcId].steps.push(step);
-    return stepId;
+    // Log the step addition with more detail
+    log.info(`Added thinking step to process ${processId}: [${step.type}] ${step.content.substring(0, 100)}...`);
+
+    return fullStep.id;
   }
 
   /**
@@ -177,25 +191,71 @@ export class ContextualThinkingTool {
     log.info(`Found thinking process with ${process.steps.length} steps for query: "${process.query.substring(0, 50)}..."`);
 
     let html = "<div class='thinking-process'>";
-    html += `<h4>Thinking Process</h4>`;
+    html += `<h4>Reasoning Process</h4>`;
+    html += `<div class='thinking-query'>${process.query}</div>`;
 
-    for (const step of process.steps) {
-      html += `<div class='thinking-step ${step.type || ""}'>`;
+    // Show overall time taken for the thinking process
+    const duration = process.endTime ?
+      Math.round((process.endTime - process.startTime) / 1000) :
+      Math.round((Date.now() - process.startTime) / 1000);
+
+    html += `<div class='thinking-meta'>Analysis took ${duration} seconds</div>`;
+
+    // Create a more structured visualization with indentation for parent-child relationships
+    const renderStep = (step: ThinkingStep, level: number = 0) => {
+      const indent = level * 20; // 20px indentation per level
+
+      let stepHtml = `<div class='thinking-step ${step.type || ""}' style='margin-left: ${indent}px'>`;
 
       // Add an icon based on step type
       const icon = this.getStepIcon(step.type);
-      html += `<span class='bx ${icon}'></span> `;
+      stepHtml += `<span class='bx ${icon}'></span> `;
 
       // Add the step content
-      html += step.content;
+      stepHtml += step.content;
 
       // Show confidence if available
       if (step.metadata?.confidence) {
         const confidence = Math.round((step.metadata.confidence as number) * 100);
-        html += ` <span class='thinking-confidence'>(Confidence: ${confidence}%)</span>`;
+        stepHtml += ` <span class='thinking-confidence'>(Confidence: ${confidence}%)</span>`;
       }
 
-      html += `</div>`;
+      // Show sources if available
+      if (step.sources && step.sources.length > 0) {
+        stepHtml += `<div class='thinking-sources'>Sources: ${step.sources.join(', ')}</div>`;
+      }
+
+      stepHtml += `</div>`;
+
+      return stepHtml;
+    };
+
+    // Helper function to render a step and all its children recursively
+    const renderStepWithChildren = (stepId: string, level: number = 0) => {
+      const step = process.steps.find(s => s.id === stepId);
+      if (!step) return '';
+
+      let html = renderStep(step, level);
+
+      if (step.children && step.children.length > 0) {
+        for (const childId of step.children) {
+          html += renderStepWithChildren(childId, level + 1);
+        }
+      }
+
+      return html;
+    };
+
+    // Render top-level steps and their children
+    const topLevelSteps = process.steps.filter(s => !s.parentId);
+    for (const step of topLevelSteps) {
+      html += renderStep(step);
+
+      if (step.children && step.children.length > 0) {
+        for (const childId of step.children) {
+          html += renderStepWithChildren(childId, 1);
+        }
+      }
     }
 
     html += "</div>";
@@ -232,7 +292,61 @@ export class ContextualThinkingTool {
       return "No thinking process available.";
     }
 
-    return this.visualizeThinking(thinkingId);
+    let summary = `## Reasoning Process for Query: "${process.query}"\n\n`;
+
+    // Group steps by type for better organization
+    const observations = process.steps.filter(s => s.type === 'observation');
+    const questions = process.steps.filter(s => s.type === 'question');
+    const hypotheses = process.steps.filter(s => s.type === 'hypothesis');
+    const evidence = process.steps.filter(s => s.type === 'evidence');
+    const conclusions = process.steps.filter(s => s.type === 'conclusion');
+
+    // Add observations
+    if (observations.length > 0) {
+      summary += "### Observations:\n";
+      observations.forEach(step => {
+        summary += `- ${step.content}\n`;
+      });
+      summary += "\n";
+    }
+
+    // Add questions
+    if (questions.length > 0) {
+      summary += "### Questions Considered:\n";
+      questions.forEach(step => {
+        summary += `- ${step.content}\n`;
+      });
+      summary += "\n";
+    }
+
+    // Add hypotheses
+    if (hypotheses.length > 0) {
+      summary += "### Hypotheses:\n";
+      hypotheses.forEach(step => {
+        summary += `- ${step.content}\n`;
+      });
+      summary += "\n";
+    }
+
+    // Add evidence
+    if (evidence.length > 0) {
+      summary += "### Evidence Gathered:\n";
+      evidence.forEach(step => {
+        summary += `- ${step.content}\n`;
+      });
+      summary += "\n";
+    }
+
+    // Add conclusions
+    if (conclusions.length > 0) {
+      summary += "### Conclusions:\n";
+      conclusions.forEach(step => {
+        summary += `- ${step.content}\n`;
+      });
+      summary += "\n";
+    }
+
+    return summary;
   }
 
   /**

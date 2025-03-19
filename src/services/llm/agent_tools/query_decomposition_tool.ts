@@ -41,11 +41,17 @@ export class QueryDecompositionTool {
    */
   decomposeQuery(query: string, context?: string): DecomposedQuery {
     try {
+      // Log the decomposition attempt for tracking
+      log.info(`Decomposing query: "${query.substring(0, 100)}..."`);
+
       // Assess query complexity to determine if decomposition is needed
       const complexity = this.assessQueryComplexity(query);
+      log.info(`Query complexity assessment: ${complexity}/10`);
 
       // For simple queries, just return the original as a single sub-query
-      if (complexity < 3) {
+      // Use a lower threshold (2 instead of 3) to decompose more queries
+      if (complexity < 2) {
+        log.info(`Query is simple (complexity ${complexity}), returning as single sub-query`);
         return {
           originalQuery: query,
           subQueries: [{
@@ -61,6 +67,12 @@ export class QueryDecompositionTool {
 
       // For complex queries, perform decomposition
       const subQueries = this.createSubQueries(query, context);
+      log.info(`Decomposed query into ${subQueries.length} sub-queries`);
+
+      // Log the sub-queries for better visibility
+      subQueries.forEach((sq, index) => {
+        log.info(`Sub-query ${index + 1}: "${sq.text}" - Reason: ${sq.reason}`);
+      });
 
       return {
         originalQuery: query,
@@ -248,9 +260,18 @@ export class QueryDecompositionTool {
   private createSubQueries(query: string, context?: string): SubQuery[] {
     const subQueries: SubQuery[] = [];
 
-    // Simple heuristics for breaking down the query
-    // In a real implementation, this would be much more sophisticated,
-    // using natural language understanding to identify different intents
+    // Use context to enhance sub-query generation if available
+    if (context) {
+      log.info(`Using context to enhance sub-query generation`);
+
+      // Add context-specific questions
+      subQueries.push({
+        id: this.generateSubQueryId(),
+        text: `What key information in the current note relates to: "${query}"?`,
+        reason: 'Identifying directly relevant information in the current context',
+        isAnswered: false
+      });
+    }
 
     // 1. Look for multiple question marks
     const questionSplit = query.split(/\?/).filter(q => q.trim().length > 0);
@@ -266,6 +287,15 @@ export class QueryDecompositionTool {
           isAnswered: false
         });
       }
+
+      // Also add a synthesis question
+      subQueries.push({
+        id: this.generateSubQueryId(),
+        text: `How do the answers to these questions relate to each other in the context of the original query?`,
+        reason: 'Synthesizing information from multiple questions',
+        isAnswered: false
+      });
+
       return subQueries;
     }
 
@@ -305,8 +335,22 @@ export class QueryDecompositionTool {
 
             subQueries.push({
               id: this.generateSubQueryId(),
-              text: `What are the main differences and similarities between ${item1} and ${item2}?`,
-              reason: 'Direct comparison after understanding each item',
+              text: `What are the main differences between ${item1} and ${item2}?`,
+              reason: 'Understanding key differences',
+              isAnswered: false
+            });
+
+            subQueries.push({
+              id: this.generateSubQueryId(),
+              text: `What are the main similarities between ${item1} and ${item2}?`,
+              reason: 'Understanding key similarities',
+              isAnswered: false
+            });
+
+            subQueries.push({
+              id: this.generateSubQueryId(),
+              text: `What practical implications do these differences and similarities have?`,
+              reason: 'Understanding practical significance of the comparison',
               isAnswered: false
             });
 
@@ -317,7 +361,8 @@ export class QueryDecompositionTool {
     }
 
     // 3. For complex questions without clear separation, create topic-based sub-queries
-    if (query.length > 100) {
+    // Lowered the threshold to process more queries this way
+    if (query.length > 50) {
       // Extract potential key topics from the query
       const words = query.toLowerCase().split(/\W+/).filter(w =>
         w.length > 3 &&
@@ -333,7 +378,7 @@ export class QueryDecompositionTool {
       // Get top frequent words
       const topWords = Object.entries(wordFrequency)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 3)
+        .slice(0, 4) // Increased from 3 to 4
         .map(entry => entry[0]);
 
       if (topWords.length > 0) {
@@ -345,15 +390,37 @@ export class QueryDecompositionTool {
           isAnswered: false
         });
 
-        // Create relationship sub-query if multiple top words
-        if (topWords.length > 1) {
+        // Add individual queries for each key topic
+        topWords.forEach(word => {
           subQueries.push({
             id: this.generateSubQueryId(),
-            text: `How do ${topWords.join(' and ')} relate to each other?`,
-            reason: 'Understanding relationships between key topics',
+            text: `What specific details about "${word}" are most relevant to the query?`,
+            reason: `Detailed exploration of the "${word}" concept`,
             isAnswered: false
           });
+        });
+
+        // Create relationship sub-query if multiple top words
+        if (topWords.length > 1) {
+          for (let i = 0; i < topWords.length; i++) {
+            for (let j = i + 1; j < topWords.length; j++) {
+              subQueries.push({
+                id: this.generateSubQueryId(),
+                text: `How do ${topWords[i]} and ${topWords[j]} relate to each other?`,
+                reason: `Understanding relationship between ${topWords[i]} and ${topWords[j]}`,
+                isAnswered: false
+              });
+            }
+          }
         }
+
+        // Add a "what else" query to ensure comprehensive coverage
+        subQueries.push({
+          id: this.generateSubQueryId(),
+          text: `What other important aspects should be considered about this topic that might not be immediately obvious?`,
+          reason: 'Exploring non-obvious but relevant information',
+          isAnswered: false
+        });
 
         // Add the original query as the final synthesizing question
         subQueries.push({
@@ -368,10 +435,26 @@ export class QueryDecompositionTool {
     }
 
     // Fallback: If we can't meaningfully decompose, just use the original query
+    // But also add some generic exploration questions
     subQueries.push({
       id: this.generateSubQueryId(),
       text: query,
-      reason: 'Question treated as a single unit',
+      reason: 'Primary question',
+      isAnswered: false
+    });
+
+    // Add generic exploration questions even for "simple" queries
+    subQueries.push({
+      id: this.generateSubQueryId(),
+      text: `What background information is helpful to understand this query better?`,
+      reason: 'Gathering background context',
+      isAnswered: false
+    });
+
+    subQueries.push({
+      id: this.generateSubQueryId(),
+      text: `What related concepts might be important to consider?`,
+      reason: 'Exploring related concepts',
       isAnswered: false
     });
 

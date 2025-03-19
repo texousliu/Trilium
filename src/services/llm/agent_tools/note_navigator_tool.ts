@@ -41,6 +41,15 @@ export interface NoteHierarchyLevel {
   children?: NoteHierarchyLevel[];
 }
 
+interface NoteStructure {
+  noteId: string;
+  title: string;
+  type: string;
+  childCount: number;
+  attributes: Array<{name: string, value: string}>;
+  parentPath: Array<{title: string, noteId: string}>;
+}
+
 export class NoteNavigatorTool {
   private maxPathLength: number = 20;
   private maxBreadth: number = 100;
@@ -109,45 +118,6 @@ export class NoteNavigatorTool {
       }).sort((a, b) => a.notePath.length - b.notePath.length); // Sort by path length, shortest first
     } catch (error: any) {
       log.error(`Error getting note paths: ${error.message}`);
-      return [];
-    }
-  }
-
-  /**
-   * Get the parent notes of a given note
-   */
-  getParentNotes(noteId: string): NoteInfo[] {
-    try {
-      const note = becca.notes[noteId];
-      if (!note || !note.parents) {
-        return [];
-      }
-
-      return note.parents
-        .map(parent => this.getNoteInfo(parent.noteId))
-        .filter((info): info is NoteInfo => info !== null);
-    } catch (error: any) {
-      log.error(`Error getting parent notes: ${error.message}`);
-      return [];
-    }
-  }
-
-  /**
-   * Get the children notes of a given note
-   */
-  getChildNotes(noteId: string, maxChildren: number = this.maxBreadth): NoteInfo[] {
-    try {
-      const note = becca.notes[noteId];
-      if (!note || !note.children) {
-        return [];
-      }
-
-      return note.children
-        .slice(0, maxChildren)
-        .map(child => this.getNoteInfo(child.noteId))
-        .filter((info): info is NoteInfo => info !== null);
-    } catch (error: any) {
-      log.error(`Error getting child notes: ${error.message}`);
       return [];
     }
   }
@@ -349,7 +319,7 @@ export class NoteNavigatorTool {
   /**
    * Get clones of a note (if any)
    */
-  getNoteClones(noteId: string): NoteInfo[] {
+  async getNoteClones(noteId: string): Promise<NoteInfo[]> {
     try {
       const note = becca.notes[noteId];
       if (!note) {
@@ -362,7 +332,10 @@ export class NoteNavigatorTool {
       }
 
       // Return parent notes, which represent different contexts for this note
-      return this.getParentNotes(noteId);
+      const parents = await this.getParentNotes(noteId);
+      return parents
+        .map(parent => this.getNoteInfo(parent.noteId))
+        .filter((info): info is NoteInfo => info !== null);
     } catch (error: any) {
       log.error(`Error getting note clones: ${error.message}`);
       return [];
@@ -373,7 +346,7 @@ export class NoteNavigatorTool {
    * Generate a readable overview of a note's position in the hierarchy
    * This is useful for the LLM to understand the context of a note
    */
-  getNoteContextDescription(noteId: string): string {
+  async getNoteContextDescription(noteId: string): Promise<string> {
     try {
       const note = becca.notes[noteId];
       if (!note) {
@@ -409,8 +382,9 @@ export class NoteNavigatorTool {
         result += `Path: ${path.notePathTitles.join(' > ')}\n`;
       }
 
-      // Children info
-      const children = this.getChildNotes(noteId, 5);
+      // Children info using the async function
+      const children = await this.getChildNotes(noteId, 5);
+
       if (children.length > 0) {
         result += `\nContains ${note.children.length} child notes`;
         if (children.length < note.children.length) {
@@ -419,7 +393,7 @@ export class NoteNavigatorTool {
         result += `:\n`;
 
         for (const child of children) {
-          result += `- ${child.title} (${child.type})\n`;
+          result += `- ${child.title}\n`;
         }
 
         if (children.length < note.children.length) {
@@ -456,6 +430,185 @@ export class NoteNavigatorTool {
     } catch (error: any) {
       log.error(`Error getting note context: ${error.message}`);
       return "Error generating note context description.";
+    }
+  }
+
+  /**
+   * Get the structure of a note including its hierarchy and attributes
+   *
+   * @param noteId The ID of the note to get structure for
+   * @returns Structure information about the note
+   */
+  async getNoteStructure(noteId: string): Promise<NoteStructure> {
+    try {
+      log.info(`Getting note structure for note ${noteId}`);
+
+      // Get the note from becca
+      const note = becca.notes[noteId];
+
+      if (!note) {
+        throw new Error(`Note ${noteId} not found`);
+      }
+
+      // Get child notes count
+      const childCount = note.children.length;
+
+      // Get attributes
+      const attributes = note.getAttributes().map(attr => ({
+        name: attr.name,
+        value: attr.value
+      }));
+
+      // Build parent path
+      const parentPath: Array<{title: string, noteId: string}> = [];
+      let current = note.parents[0]; // Get first parent
+
+      while (current && current.noteId !== 'root') {
+        parentPath.unshift({
+          title: current.title,
+          noteId: current.noteId
+        });
+
+        current = current.parents[0];
+      }
+
+      return {
+        noteId: note.noteId,
+        title: note.title,
+        type: note.type,
+        childCount,
+        attributes,
+        parentPath
+      };
+    } catch (error) {
+      log.error(`Error getting note structure: ${error}`);
+      // Return a minimal structure with empty arrays to avoid null errors
+      return {
+        noteId,
+        title: 'Unknown',
+        type: 'unknown',
+        childCount: 0,
+        attributes: [],
+        parentPath: []
+      };
+    }
+  }
+
+  /**
+   * Get child notes of a specified note
+   */
+  async getChildNotes(noteId: string, limit: number = 10): Promise<Array<{noteId: string, title: string}>> {
+    try {
+      const note = becca.notes[noteId];
+
+      if (!note) {
+        throw new Error(`Note ${noteId} not found`);
+      }
+
+      return note.children
+        .slice(0, limit)
+        .map(child => ({
+          noteId: child.noteId,
+          title: child.title
+        }));
+    } catch (error) {
+      log.error(`Error getting child notes: ${error}`);
+      return [];
+    }
+  }
+
+  /**
+   * Get parent notes of a specified note
+   */
+  async getParentNotes(noteId: string): Promise<Array<{noteId: string, title: string}>> {
+    try {
+      const note = becca.notes[noteId];
+
+      if (!note) {
+        throw new Error(`Note ${noteId} not found`);
+      }
+
+      return note.parents.map(parent => ({
+        noteId: parent.noteId,
+        title: parent.title
+      }));
+    } catch (error) {
+      log.error(`Error getting parent notes: ${error}`);
+      return [];
+    }
+  }
+
+  /**
+   * Find notes linked to/from the specified note
+   */
+  async getLinkedNotes(noteId: string, limit: number = 10): Promise<Array<{noteId: string, title: string, direction: 'from'|'to'}>> {
+    try {
+      const note = becca.notes[noteId];
+
+      if (!note) {
+        throw new Error(`Note ${noteId} not found`);
+      }
+
+      // Links from this note to others
+      const outboundLinks = note.getRelations()
+        .slice(0, Math.floor(limit / 2))
+        .map(relation => ({
+          noteId: relation.targetNoteId || '', // Ensure noteId is never undefined
+          title: relation.name,
+          direction: 'to' as const
+        }))
+        .filter(link => link.noteId !== ''); // Filter out any with empty noteId
+
+      // Links from other notes to this one
+      const inboundLinks: Array<{noteId: string, title: string, direction: 'from'}> = [];
+
+      // Find all notes that have relations pointing to this note
+      for (const relatedNoteId in becca.notes) {
+        const relatedNote = becca.notes[relatedNoteId];
+        if (relatedNote && !relatedNote.isDeleted) {
+          const relations = relatedNote.getRelations();
+          for (const relation of relations) {
+            if (relation.targetNoteId === noteId) {
+              inboundLinks.push({
+                noteId: relatedNote.noteId,
+                title: relation.name,
+                direction: 'from'
+              });
+
+              // Break if we've found enough inbound links
+              if (inboundLinks.length >= Math.floor(limit / 2)) {
+                break;
+              }
+            }
+          }
+
+          // Break if we've found enough inbound links
+          if (inboundLinks.length >= Math.floor(limit / 2)) {
+            break;
+          }
+        }
+      }
+
+      return [...outboundLinks, ...inboundLinks.slice(0, Math.floor(limit / 2))];
+    } catch (error) {
+      log.error(`Error getting linked notes: ${error}`);
+      return [];
+    }
+  }
+
+  /**
+   * Get the full path of a note from root
+   */
+  async getNotePath(noteId: string): Promise<string> {
+    try {
+      const structure = await this.getNoteStructure(noteId);
+      const path = structure.parentPath.map(p => p.title);
+      path.push(structure.title);
+
+      return path.join(' > ');
+    } catch (error) {
+      log.error(`Error getting note path: ${error}`);
+      return 'Unknown path';
     }
   }
 }

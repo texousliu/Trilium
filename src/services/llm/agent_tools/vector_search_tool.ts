@@ -13,6 +13,7 @@
  */
 
 import log from '../../log.js';
+import type { ContextService } from '../context/modules/context_service.js';
 
 // Define interface for context service to avoid circular imports
 interface IContextService {
@@ -48,6 +49,12 @@ export interface ChunkSearchResultItem {
   parentId?: string;
 }
 
+export interface VectorSearchOptions {
+  limit?: number;
+  threshold?: number;
+  includeContent?: boolean;
+}
+
 export class VectorSearchTool {
   private contextService: IContextService | null = null;
   private maxResults: number = 5;
@@ -62,6 +69,77 @@ export class VectorSearchTool {
   setContextService(contextService: IContextService): void {
     this.contextService = contextService;
     log.info('Context service set in VectorSearchTool');
+  }
+
+  /**
+   * Perform a vector search for related notes
+   */
+  async search(
+    query: string,
+    contextNoteId?: string,
+    searchOptions: VectorSearchOptions = {}
+  ): Promise<VectorSearchResult[]> {
+    if (!this.contextService) {
+      throw new Error("Context service not set, call setContextService() first");
+    }
+
+    try {
+      // Set more aggressive defaults to return more content
+      const options = {
+        limit: searchOptions.limit || 15, // Increased from default (likely 5 or 10)
+        threshold: searchOptions.threshold || 0.5, // Lower threshold to include more results (likely 0.65 or 0.7 before)
+        includeContent: searchOptions.includeContent !== undefined ? searchOptions.includeContent : true,
+        ...searchOptions
+      };
+
+      log.info(`Vector search: "${query.substring(0, 50)}..." with limit=${options.limit}, threshold=${options.threshold}`);
+
+      // Check if contextService is set again to satisfy TypeScript
+      if (!this.contextService) {
+        throw new Error("Context service not set, call setContextService() first");
+      }
+
+      // Use contextService methods instead of direct imports
+      const results = await this.contextService.findRelevantNotesMultiQuery(
+        [query],
+        contextNoteId || null,
+        options.limit
+      );
+
+      // Log the number of results
+      log.info(`Vector search found ${results.length} relevant notes`);
+
+      // Include more content from each note to provide richer context
+      if (options.includeContent) {
+        // Get full context for each note rather than summaries
+        for (let i = 0; i < results.length; i++) {
+          const result = results[i];
+          try {
+            // Use contextService instead of direct import
+            if (this.contextService && 'processQuery' in this.contextService) {
+              const contextResult = await this.contextService.processQuery(
+                `Provide details about the note: ${result.title}`,
+                null,
+                result.noteId,
+                false
+              );
+
+              if (contextResult && contextResult.context) {
+                // Use more of the content, up to 2000 chars
+                result.content = contextResult.context.substring(0, 2000);
+              }
+            }
+          } catch (error) {
+            log.error(`Error getting content for note ${result.noteId}: ${error}`);
+          }
+        }
+      }
+
+      return results;
+    } catch (error) {
+      log.error(`Vector search error: ${error}`);
+      return [];
+    }
   }
 
   /**

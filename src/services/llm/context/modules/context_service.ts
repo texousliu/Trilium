@@ -197,15 +197,222 @@ export class ContextService {
         relevantNotes: Array<any> = []
     ): Promise<string> {
         try {
-            return await aiServiceManager.getInstance().getAgentToolsContext(
-                noteId,
-                query,
-                showThinking,
-                relevantNotes
-            );
+            log.info(`Building enhanced agent tools context for query: "${query.substring(0, 50)}...", noteId=${noteId}, showThinking=${showThinking}`);
+
+            // Make sure agent tools are initialized
+            const agentManager = aiServiceManager.getInstance();
+
+            // Initialize all tools if not already done
+            if (!agentManager.getAgentTools().isInitialized()) {
+                await agentManager.initializeAgentTools();
+                log.info("Agent tools initialized on-demand in getAgentToolsContext");
+            }
+
+            // Get all agent tools
+            const vectorSearchTool = agentManager.getVectorSearchTool();
+            const noteNavigatorTool = agentManager.getNoteNavigatorTool();
+            const queryDecompositionTool = agentManager.getQueryDecompositionTool();
+            const contextualThinkingTool = agentManager.getContextualThinkingTool();
+
+            // Step 1: Start a thinking process
+            const thinkingId = contextualThinkingTool.startThinking(query);
+            contextualThinkingTool.addThinkingStep(thinkingId, {
+                type: 'observation',
+                content: `Analyzing query: "${query}" for note ID: ${noteId}`
+            });
+
+            // Step 2: Decompose the query into sub-questions
+            const decomposedQuery = queryDecompositionTool.decomposeQuery(query);
+            contextualThinkingTool.addThinkingStep(thinkingId, {
+                type: 'observation',
+                content: `Query complexity: ${decomposedQuery.complexity}/10. Decomposed into ${decomposedQuery.subQueries.length} sub-queries.`
+            });
+
+            // Log each sub-query as a thinking step
+            for (const subQuery of decomposedQuery.subQueries) {
+                contextualThinkingTool.addThinkingStep(thinkingId, {
+                    type: 'question',
+                    content: subQuery.text,
+                    metadata: {
+                        reason: subQuery.reason
+                    }
+                });
+            }
+
+            // Step 3: Use vector search to find related content
+            // Use an aggressive search with lower threshold to get more results
+            const searchOptions = {
+                threshold: 0.5,  // Lower threshold to include more matches
+                limit: 15        // Get more results
+            };
+
+            const vectorSearchPromises = [];
+
+            // Search for each sub-query that isn't just the original query
+            for (const subQuery of decomposedQuery.subQueries.filter(sq => sq.text !== query)) {
+                vectorSearchPromises.push(
+                    vectorSearchTool.search(subQuery.text, noteId, searchOptions)
+                        .then(results => {
+                            return {
+                                query: subQuery.text,
+                                results
+                            };
+                        })
+                );
+            }
+
+            // Wait for all searches to complete
+            const searchResults = await Promise.all(vectorSearchPromises);
+
+            // Record the search results in thinking steps
+            let totalResults = 0;
+            for (const result of searchResults) {
+                totalResults += result.results.length;
+
+                if (result.results.length > 0) {
+                    const stepId = contextualThinkingTool.addThinkingStep(thinkingId, {
+                        type: 'evidence',
+                        content: `Found ${result.results.length} relevant notes for sub-query: "${result.query}"`,
+                        metadata: {
+                            searchQuery: result.query
+                        }
+                    });
+
+                    // Add top results as children
+                    for (const note of result.results.slice(0, 3)) {
+                        contextualThinkingTool.addThinkingStep(thinkingId, {
+                            type: 'evidence',
+                            content: `Note "${note.title}" (similarity: ${Math.round(note.similarity * 100)}%) contains relevant information`,
+                            metadata: {
+                                noteId: note.noteId,
+                                similarity: note.similarity
+                            }
+                        }, stepId);
+                    }
+                } else {
+                    contextualThinkingTool.addThinkingStep(thinkingId, {
+                        type: 'observation',
+                        content: `No notes found for sub-query: "${result.query}"`,
+                        metadata: {
+                            searchQuery: result.query
+                        }
+                    });
+                }
+            }
+
+            // Step 4: Get note structure information
+            try {
+                const noteStructure = await noteNavigatorTool.getNoteStructure(noteId);
+
+                contextualThinkingTool.addThinkingStep(thinkingId, {
+                    type: 'observation',
+                    content: `Note structure: ${noteStructure.childCount} child notes, ${noteStructure.attributes.length} attributes, ${noteStructure.parentPath.length} levels in hierarchy`,
+                    metadata: {
+                        structure: noteStructure
+                    }
+                });
+
+                // Add information about parent path
+                if (noteStructure.parentPath.length > 0) {
+                    const parentPathStr = noteStructure.parentPath.map((p: {title: string, noteId: string}) => p.title).join(' > ');
+                    contextualThinkingTool.addThinkingStep(thinkingId, {
+                        type: 'observation',
+                        content: `Note hierarchy: ${parentPathStr}`,
+                        metadata: {
+                            parentPath: noteStructure.parentPath
+                        }
+                    });
+                }
+            } catch (error) {
+                log.error(`Error getting note structure: ${error}`);
+                contextualThinkingTool.addThinkingStep(thinkingId, {
+                    type: 'observation',
+                    content: `Unable to retrieve note structure information: ${error}`
+                });
+            }
+
+            // Step 5: Conclude thinking process
+            contextualThinkingTool.addThinkingStep(thinkingId, {
+                type: 'conclusion',
+                content: `Analysis complete. Found ${totalResults} relevant notes across ${searchResults.length} search queries.`,
+                metadata: {
+                    totalResults,
+                    queryCount: searchResults.length
+                }
+            });
+
+            // Complete the thinking process
+            contextualThinkingTool.completeThinking(thinkingId);
+
+            // Step 6: Build the context string combining all the information
+            let agentContext = '';
+
+            // Add note structure information
+            try {
+                const noteStructure = await noteNavigatorTool.getNoteStructure(noteId);
+                agentContext += `## Current Note Context\n`;
+                agentContext += `- Note Title: ${noteStructure.title}\n`;
+
+                if (noteStructure.parentPath.length > 0) {
+                    const parentPathStr = noteStructure.parentPath.map((p: {title: string, noteId: string}) => p.title).join(' > ');
+                    agentContext += `- Location: ${parentPathStr}\n`;
+                }
+
+                if (noteStructure.attributes.length > 0) {
+                    agentContext += `- Attributes: ${noteStructure.attributes.map((a: {name: string, value: string}) => `${a.name}=${a.value}`).join(', ')}\n`;
+                }
+
+                if (noteStructure.childCount > 0) {
+                    agentContext += `- Contains ${noteStructure.childCount} child notes\n`;
+                }
+
+                agentContext += `\n`;
+            } catch (error) {
+                log.error(`Error adding note structure to context: ${error}`);
+            }
+
+            // Add most relevant notes from search results
+            const allSearchResults = searchResults.flatMap(r => r.results);
+
+            // Deduplicate results by noteId
+            const uniqueResults = new Map();
+            for (const result of allSearchResults) {
+                if (!uniqueResults.has(result.noteId) || uniqueResults.get(result.noteId).similarity < result.similarity) {
+                    uniqueResults.set(result.noteId, result);
+                }
+            }
+
+            // Sort by similarity
+            const sortedResults = Array.from(uniqueResults.values())
+                .sort((a, b) => b.similarity - a.similarity)
+                .slice(0, 10);  // Get top 10 unique results
+
+            if (sortedResults.length > 0) {
+                agentContext += `## Relevant Information\n`;
+
+                for (const result of sortedResults) {
+                    agentContext += `### ${result.title}\n`;
+
+                    if (result.content) {
+                        // Limit content to 500 chars per note to avoid token explosion
+                        agentContext += `${result.content.substring(0, 500)}${result.content.length > 500 ? '...' : ''}\n\n`;
+                    }
+                }
+            }
+
+            // Add thinking process if requested
+            if (showThinking) {
+                agentContext += `\n## Reasoning Process\n`;
+                agentContext += contextualThinkingTool.getThinkingSummary(thinkingId);
+            }
+
+            // Log stats about the context
+            log.info(`Agent tools context built: ${agentContext.length} chars, ${agentContext.split('\n').length} lines`);
+
+            return agentContext;
         } catch (error) {
             log.error(`Error getting agent tools context: ${error}`);
-            return '';
+            return `Error generating enhanced context: ${error}`;
         }
     }
 
@@ -271,8 +478,19 @@ export class ContextService {
                 return '';
             }
 
+            // Convert parent notes from {id, title} to {noteId, title} for consistency
+            const normalizedRelatedNotes = allRelatedNotes.map(note => {
+                return {
+                    noteId: 'id' in note ? note.id : note.noteId,
+                    title: note.title
+                };
+            });
+
             // Rank notes by relevance to query
-            const rankedNotes = await semanticSearch.rankNotesByRelevance(allRelatedNotes, userQuery);
+            const rankedNotes = await semanticSearch.rankNotesByRelevance(
+                normalizedRelatedNotes as Array<{noteId: string, title: string}>,
+                userQuery
+            );
 
             // Get content for the top N most relevant notes
             const mostRelevantNotes = rankedNotes.slice(0, maxResults);

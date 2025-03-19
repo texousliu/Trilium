@@ -1836,7 +1836,6 @@
     "note_chat": "Note Chat",
     "notes_indexed": "{{ count }} note indexed",
     "notes_indexed_plural": "{{ count }} notes indexed",
-    "processing": "Processing",
     "reset_embeddings": "Reset Embeddings",
     "show_thinking": "Show Thinking",
     "show_thinking_description": "Reveals the reasoning process used to generate responses",

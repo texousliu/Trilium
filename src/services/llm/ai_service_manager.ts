@@ -414,12 +414,19 @@ export class AIServiceManager {
         showThinking: boolean = false,
         relevantNotes: Array<any> = []
     ): Promise<string> {
-        return contextService.getAgentToolsContext(
-            noteId,
-            query,
-            showThinking,
-            relevantNotes
-        );
+        // Just use the context service directly
+        try {
+            const cs = (await import('./context/modules/context_service.js')).default;
+            return cs.getAgentToolsContext(
+                noteId,
+                query,
+                showThinking,
+                relevantNotes
+            );
+        } catch (error) {
+            log.error(`Error in AIServiceManager.getAgentToolsContext: ${error}`);
+            return `Error generating enhanced context: ${error}`;
+        }
     }
 }
 
