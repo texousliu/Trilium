@@ -12,13 +12,13 @@ const TPL = `
 </button>
 `;
 
-const byNoteType: Record<Exclude<NoteType, "book">, string | null> = {
+export const byNoteType: Record<Exclude<NoteType, "book">, string | null> = {
     canvas: null,
     code: null,
     contentWidget: null,
     doc: null,
     file: null,
-    geoMap: "foPEtsL51pD2",
+    geoMap: "81SGnPGMk7Xc",
     image: null,
     launcher: null,
     mermaid: null,
@@ -31,10 +31,10 @@ const byNoteType: Record<Exclude<NoteType, "book">, string | null> = {
     webView: null
 };
 
-const byBookType: Record<ViewTypeOptions, string | null> = {
+export const byBookType: Record<ViewTypeOptions, string | null> = {
     list: null,
     grid: null,
-    calendar: "fDGg7QcJg3Xm"
+    calendar: "xWbu3jpNWapp"
 };
 
 export default class ContextualHelpButton extends NoteContextAwareWidget {
