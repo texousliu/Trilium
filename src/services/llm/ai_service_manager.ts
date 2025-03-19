@@ -5,7 +5,7 @@ import { AnthropicService } from './providers/anthropic_service.js';
 import { OllamaService } from './providers/ollama_service.js';
 import log from '../log.js';
 import { ContextExtractor } from './context/index.js';
-import semanticContextService from './semantic_context_service.js';
+import contextService from './context_service.js';
 import indexService from './index_service.js';
 import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './embeddings/providers.js';
 import agentTools from './agent_tools/index.js';
@@ -268,11 +268,21 @@ export class AIServiceManager {
     }
 
     /**
-     * Get the semantic context service for advanced context handling
+     * Get the semantic context service for enhanced context management
+     * @deprecated Use getContextService() instead
      * @returns The semantic context service instance
      */
     getSemanticContextService(): SemanticContextService {
-        return semanticContextService as unknown as SemanticContextService;
+        log.info('getSemanticContextService is deprecated, use getContextService instead');
+        return contextService as unknown as SemanticContextService;
+    }
+
+    /**
+     * Get the context service for advanced context management
+     * @returns The context service instance
+     */
+    getContextService() {
+        return contextService;
     }
 
     /**
@@ -404,6 +414,23 @@ export class AIServiceManager {
             throw error;
         }
     }
+
+    /**
+     * Get context enhanced with agent tools
+     */
+    async getAgentToolsContext(
+        noteId: string,
+        query: string,
+        showThinking: boolean = false,
+        relevantNotes: Array<any> = []
+    ): Promise<string> {
+        return contextService.getAgentToolsContext(
+            noteId,
+            query,
+            showThinking,
+            relevantNotes
+        );
+    }
 }
 
 // Don't create singleton immediately, use a lazy-loading pattern
@@ -442,6 +469,9 @@ export default {
     getSemanticContextService(): SemanticContextService {
         return getInstance().getSemanticContextService();
     },
+    getContextService() {
+        return getInstance().getContextService();
+    },
     getIndexService() {
         return getInstance().getIndexService();
     },
@@ -464,6 +494,19 @@ export default {
     },
     getContextualThinkingTool() {
         return getInstance().getContextualThinkingTool();
+    },
+    async getAgentToolsContext(
+        noteId: string,
+        query: string,
+        showThinking: boolean = false,
+        relevantNotes: Array<any> = []
+    ): Promise<string> {
+        return getInstance().getAgentToolsContext(
+            noteId,
+            query,
+            showThinking,
+            relevantNotes
+        );
     }
 };
 

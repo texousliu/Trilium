@@ -11,7 +11,7 @@ import { QueryDecompositionTool } from './query_decomposition_tool.js';
 import { ContextualThinkingTool } from './contextual_thinking_tool.js';
 
 // Import services needed for initialization
-import SemanticContextService from '../semantic_context_service.js';
+import contextService from '../context_service.js';
 import aiServiceManager from '../ai_service_manager.js';
 import log from '../../log.js';
 
@@ -43,15 +43,14 @@ export class AgentToolsManager {
       this.queryDecompositionTool = new QueryDecompositionTool();
       this.contextualThinkingTool = new ContextualThinkingTool();
 
-      // Get semantic context service and set it in the vector search tool
-      const semanticContext = aiServiceManager.getSemanticContextService();
-      this.vectorSearchTool.setSemanticContext(semanticContext);
+      // Set context service in the vector search tool
+      this.vectorSearchTool.setContextService(contextService);
 
       this.initialized = true;
       log.info("LLM agent tools initialized successfully");
-    } catch (error: any) {
-      log.error(`Failed to initialize LLM agent tools: ${error.message}`);
-      throw new Error(`Agent tools initialization failed: ${error.message}`);
+    } catch (error) {
+      log.error(`Failed to initialize agent tools: ${error}`);
+      throw error;
     }
   }
 

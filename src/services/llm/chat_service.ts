@@ -1,10 +1,6 @@
 import type { Message, ChatCompletionOptions } from './ai_interface.js';
 import aiServiceManager from './ai_service_manager.js';
 import chatStorageService from './chat_storage_service.js';
-import { ContextExtractor } from './context/index.js';
-
-// Create an instance of ContextExtractor for backward compatibility
-const contextExtractor = new ContextExtractor();
 
 export interface ChatSession {
     id: string;
@@ -201,7 +197,8 @@ export class ChatService {
         const session = await this.getOrCreateSession(sessionId);
 
         // Use semantic context that considers the query for better relevance
-        const context = await contextExtractor.getSemanticContext(noteId, query);
+        const contextService = aiServiceManager.getContextService();
+        const context = await contextService.getSemanticContext(noteId, query);
 
         const contextMessage: Message = {
             role: 'user',
@@ -245,7 +242,7 @@ export class ChatService {
             await chatStorageService.updateChat(session.id, session.messages);
 
             // Get the Trilium Context Service for enhanced context
-            const contextService = aiServiceManager.getSemanticContextService();
+            const contextService = aiServiceManager.getContextService();
 
             // Get showThinking option if it exists
             const showThinking = options?.showThinking === true;

@@ -467,16 +467,15 @@ export class ContextExtractor {
      */
     static async getProgressiveContext(noteId: string, depth = 1): Promise<string> {
         try {
-            // This requires the semantic context service to be available
-            // We're using a dynamic import to avoid circular dependencies
+            // Use the new context service
             const { default: aiServiceManager } = await import('../ai_service_manager.js');
-            const semanticContext = aiServiceManager.getInstance().getSemanticContextService();
+            const contextService = aiServiceManager.getInstance().getContextService();
 
-            if (!semanticContext) {
+            if (!contextService) {
                 return ContextExtractor.extractContext(noteId);
             }
 
-            return await semanticContext.getProgressiveContext(noteId, depth);
+            return await contextService.getProgressiveContext(noteId, depth);
         } catch (error) {
             // Fall back to regular context if progressive loading fails
             console.error('Error in progressive context loading:', error);
@@ -501,16 +500,15 @@ export class ContextExtractor {
      */
     static async getSmartContext(noteId: string, query: string): Promise<string> {
         try {
-            // This requires the semantic context service to be available
-            // We're using a dynamic import to avoid circular dependencies
+            // Use the new context service
             const { default: aiServiceManager } = await import('../ai_service_manager.js');
-            const semanticContext = aiServiceManager.getInstance().getSemanticContextService();
+            const contextService = aiServiceManager.getInstance().getContextService();
 
-            if (!semanticContext) {
+            if (!contextService) {
                 return ContextExtractor.extractContext(noteId);
             }
 
-            return await semanticContext.getSmartContext(noteId, query);
+            return await contextService.getSmartContext(noteId, query);
         } catch (error) {
             // Fall back to regular context if smart context fails
             console.error('Error in smart context selection:', error);

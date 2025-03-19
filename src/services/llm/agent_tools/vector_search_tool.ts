@@ -14,10 +14,10 @@
 
 import log from '../../log.js';
 
-// Define interface for semantic context service to avoid circular imports
-interface ISemanticContextService {
-  semanticSearch(query: string, options: any): Promise<any[]>;
-  semanticSearchChunks(query: string, options: any): Promise<any[]>;
+// Define interface for context service to avoid circular imports
+interface IContextService {
+  findRelevantNotesMultiQuery(queries: string[], contextNoteId: string | null, limit: number): Promise<any[]>;
+  processQuery(userQuestion: string, llmService: any, contextNoteId: string | null, showThinking: boolean): Promise<any>;
 }
 
 export interface VectorSearchResult {
@@ -49,22 +49,23 @@ export interface ChunkSearchResultItem {
 }
 
 export class VectorSearchTool {
-  private semanticContext: ISemanticContextService | null = null;
+  private contextService: IContextService | null = null;
   private maxResults: number = 5;
 
   constructor() {
-    // The semantic context will be set later via setSemanticContext
+    // Initialization is done by setting context service
   }
 
   /**
-   * Set the semantic context service instance
+   * Set the context service for performing vector searches
    */
-  setSemanticContext(semanticContext: ISemanticContextService): void {
-    this.semanticContext = semanticContext;
+  setContextService(contextService: IContextService): void {
+    this.contextService = contextService;
+    log.info('Context service set in VectorSearchTool');
   }
 
   /**
-   * Search for notes semantically related to a query
+   * Search for notes that are semantically related to the query
    */
   async searchNotes(query: string, options: {
     parentNoteId?: string,
@@ -72,47 +73,44 @@ export class VectorSearchTool {
     similarityThreshold?: number
   } = {}): Promise<VectorSearchResult[]> {
     try {
-      if (!this.semanticContext) {
-        throw new Error("Semantic context service not set. Call setSemanticContext() first.");
-      }
-
-      if (!query || query.trim().length === 0) {
+      // Validate contextService is set
+      if (!this.contextService) {
+        log.error('Context service not set in VectorSearchTool');
         return [];
       }
 
+      // Set defaults
       const maxResults = options.maxResults || this.maxResults;
-      const similarityThreshold = options.similarityThreshold || 0.65; // Default threshold
-      const parentNoteId = options.parentNoteId; // Optional filtering by parent
+      const parentNoteId = options.parentNoteId || null;
 
-      // Search notes using the semantic context service
-      const results = await this.semanticContext.semanticSearch(query, {
-        maxResults,
-        similarityThreshold,
-        ancestorNoteId: parentNoteId
-      });
+      // Use multi-query approach for more robust results
+      const queries = [query];
+      const results = await this.contextService.findRelevantNotesMultiQuery(
+        queries,
+        parentNoteId,
+        maxResults
+      );
 
-      if (!results || results.length === 0) {
-        return [];
-      }
-
-      // Transform results to the tool's format
-      return results.map((result: SearchResultItem) => ({
+      // Format results to match the expected interface
+      return results.map(result => ({
         noteId: result.noteId,
-        title: result.noteTitle,
-        contentPreview: result.contentPreview,
+        title: result.title,
+        contentPreview: result.content ?
+          (result.content.length > 200 ?
+            result.content.substring(0, 200) + '...' :
+            result.content)
+          : 'No content available',
         similarity: result.similarity,
-        parentId: result.parentId,
-        dateCreated: result.dateCreated,
-        dateModified: result.dateModified
+        parentId: result.parentId
       }));
-    } catch (error: any) {
-      log.error(`Error in vector search: ${error.message}`);
+    } catch (error) {
+      log.error(`Error in vector search: ${error}`);
       return [];
     }
   }
 
   /**
-   * Search for content chunks within notes that are semantically related to a query
+   * Search for content chunks that are semantically related to the query
    */
   async searchContentChunks(query: string, options: {
     noteId?: string,
@@ -120,39 +118,15 @@ export class VectorSearchTool {
     similarityThreshold?: number
   } = {}): Promise<VectorSearchResult[]> {
     try {
-      if (!this.semanticContext) {
-        throw new Error("Semantic context service not set. Call setSemanticContext() first.");
-      }
-
-      if (!query || query.trim().length === 0) {
-        return [];
-      }
-
-      const maxResults = options.maxResults || this.maxResults;
-      const similarityThreshold = options.similarityThreshold || 0.70; // Higher threshold for chunks
-      const noteId = options.noteId; // Optional filtering by specific note
-
-      // Search content chunks using the semantic context service
-      const results = await this.semanticContext.semanticSearchChunks(query, {
-        maxResults,
-        similarityThreshold,
-        noteId
+      // For now, use the same implementation as searchNotes,
+      // but in the future we'll implement chunk-based search
+      return this.searchNotes(query, {
+        parentNoteId: options.noteId,
+        maxResults: options.maxResults,
+        similarityThreshold: options.similarityThreshold
       });
-
-      if (!results || results.length === 0) {
-        return [];
-      }
-
-      // Transform results to the tool's format
-      return results.map((result: ChunkSearchResultItem) => ({
-        noteId: result.noteId,
-        title: result.noteTitle,
-        contentPreview: result.chunk, // Use the chunk content as preview
-        similarity: result.similarity,
-        parentId: result.parentId
-      }));
-    } catch (error: any) {
-      log.error(`Error in content chunk search: ${error.message}`);
+    } catch (error) {
+      log.error(`Error in vector chunk search: ${error}`);
       return [];
     }
   }

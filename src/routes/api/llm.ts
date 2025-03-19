@@ -9,7 +9,7 @@ import providerManager from "../../services/llm/embeddings/providers.js";
 import type { Message, ChatCompletionOptions } from "../../services/llm/ai_interface.js";
 // Import this way to prevent immediate instantiation
 import * as aiServiceManagerModule from "../../services/llm/ai_service_manager.js";
-import triliumContextService from "../../services/llm/trilium_context_service.js";
+import contextService from "../../services/llm/context_service.js";
 import sql from "../../services/sql.js";
 // Import the index service for knowledge base management
 import indexService from "../../services/llm/index_service.js";
@@ -653,14 +653,14 @@ async function sendMessage(req: Request, res: Response) {
                 // Use the Trilium-specific approach
                 const contextNoteId = session.noteContext || null;
 
-                // Log that we're calling triliumContextService with the parameters
+                // Log that we're calling contextService with the parameters
                 log.info(`Using enhanced context with: noteId=${contextNoteId}, showThinking=${showThinking}`);
 
-                const results = await triliumContextService.processQuery(
+                const results = await contextService.processQuery(
                     messageContent,
                     service,
                     contextNoteId,
-                    showThinking  // Pass the showThinking parameter
+                    showThinking
                 );
 
                 // Get the generated context
