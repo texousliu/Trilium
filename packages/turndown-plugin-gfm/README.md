@@ -1,13 +1,5 @@
 # turndown-plugin-gfm
 
-* * *
-
-**IMPORTANT: This package is now hosted there: https://github.com/laurent22/joplin/tree/dev/packages/turndown-plugin-gfm**
-
-It can be installed using `npm install --save @joplin/turndown-plugin-gfm`
-
-* * *
-
 A [Turndown](https://github.com/domchristie/turndown) plugin which adds GitHub Flavored Markdown extensions.
 
 This is a fork of the original [turndown-plugin-gfm](https://github.com/domchristie/turndown-plugin-gfm) for use with [Joplin](https://github.com/laurent22/joplin). The changes are:
@@ -25,15 +17,15 @@ This is a fork of the original [turndown-plugin-gfm](https://github.com/domchris
 npm:
 
 ```
-npm install joplin-turndown-plugin-gfm
+npm install @joplin/turndown-plugin-gfm
 ```
 
 ## Usage
 
 ```js
 // For Node.js
-var TurndownService = require('turndown')
-var turndownPluginGfm = require('joplin-turndown-plugin-gfm')
+var TurndownService = require('@joplin/turndown')
+var turndownPluginGfm = require('@joplin/turndown-plugin-gfm')
 
 var gfm = turndownPluginGfm.gfm
 var turndownService = new TurndownService()
@@ -51,9 +43,20 @@ turndown-plugin-gfm is a suite of plugins which can be applied individually. The
 So for example, if you only wish to convert tables:
 
 ```js
-var tables = require('turndown-plugin-gfm').tables
+var tables = require('@joplin/turndown-plugin-gfm').tables
 var turndownService = new TurndownService()
 turndownService.use(tables)
+```
+
+### Typescript
+
+To use this in a typescript project, add this to a `declarations.d.ts` file, as described in https://www.npmjs.com/package/@joplin/turndown, and then add:
+
+```ts
+declare module "@joplin/turndown-plugin-gfm" {
+  export const gfm: any;
+  // Add other named exports if necessary
+}
 ```
 
 ## License
