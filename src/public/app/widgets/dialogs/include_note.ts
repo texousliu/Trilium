@@ -5,6 +5,8 @@ import utils from "../../services/utils.js";
 import froca from "../../services/froca.js";
 import BasicWidget from "../basic_widget.js";
 import { Modal } from "bootstrap";
+import type { EventData } from "../../components/app_context.js";
+import type EditableTextTypeWidget from "../type_widgets/editable_text.js";
 
 const TPL = `
 <div class="include-note-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -53,9 +55,15 @@ const TPL = `
 </div>`;
 
 export default class IncludeNoteDialog extends BasicWidget {
+
+    private modal!: bootstrap.Modal;
+    private $form!: JQuery<HTMLElement>;
+    private $autoComplete!: JQuery<HTMLElement>;
+    private textTypeWidget?: EditableTextTypeWidget;
+
     doRender() {
         this.$widget = $(TPL);
-        this.modal = Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget[0]);
         this.$form = this.$widget.find(".include-note-form");
         this.$autoComplete = this.$widget.find(".include-note-autocomplete");
         this.$form.on("submit", () => {
@@ -72,7 +80,7 @@ export default class IncludeNoteDialog extends BasicWidget {
         });
     }
 
-    async showIncludeNoteDialogEvent({ textTypeWidget }) {
+    async showIncludeNoteDialogEvent({ textTypeWidget }: EventData<"showIncludeDialog">) {
         this.textTypeWidget = textTypeWidget;
         await this.refresh();
         utils.openDialog(this.$widget);
@@ -80,7 +88,7 @@ export default class IncludeNoteDialog extends BasicWidget {
         this.$autoComplete.trigger("focus").trigger("select"); // to be able to quickly remove entered text
     }
 
-    async refresh(widget) {
+    async refresh() {
         this.$autoComplete.val("");
         noteAutocompleteService.initNoteAutocomplete(this.$autoComplete, {
             hideGoToSelectedNoteButton: true,
@@ -89,17 +97,20 @@ export default class IncludeNoteDialog extends BasicWidget {
         noteAutocompleteService.showRecentNotes(this.$autoComplete);
     }
 
-    async includeNote(notePath) {
+    async includeNote(notePath: string) {
         const noteId = treeService.getNoteIdFromUrl(notePath);
+        if (!noteId) {
+            return;
+        }
         const note = await froca.getNote(noteId);
         const boxSize = $("input[name='include-note-box-size']:checked").val();
 
-        if (["image", "canvas", "mermaid"].includes(note.type)) {
+        if (["image", "canvas", "mermaid"].includes(note?.type ?? "")) {
             // there's no benefit to use insert note functionlity for images,
             // so we'll just add an IMG tag
-            this.textTypeWidget.addImage(noteId);
+            this.textTypeWidget?.addImage(noteId);
         } else {
-            this.textTypeWidget.addIncludeNote(noteId, boxSize);
+            this.textTypeWidget?.addIncludeNote(noteId, boxSize);
         }
     }
 }
