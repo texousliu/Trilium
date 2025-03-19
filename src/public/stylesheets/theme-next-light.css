@@ -130,12 +130,14 @@
     --launcher-pane-vert-button-hover-color: black;
     --launcher-pane-vert-button-hover-background: white;
     --launcher-pane-vert-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, 0.075);
+    --launcher-pane-vert-button-focus-outline-color: var(--input-focus-outline-color);
 
     --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.1);
     --launcher-pane-horiz-background-color: #fafafa;
     --launcher-pane-horiz-button-hover-color: black;
     --launcher-pane-horiz-button-hover-background: var(--icon-button-hover-background);
     --launcher-pane-horiz-button-hover-shadow: unset;
+    --launcher-pane-horiz-button-focus-outline-color: var(--input-focus-outline-color);
 
     --protected-session-active-icon-color: #16b516;
     --sync-status-error-pulse-color: #ff5528;

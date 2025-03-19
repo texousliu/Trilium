@@ -151,6 +151,7 @@ body.layout-horizontal > .horizontal {
     --launcher-pane-button-hover-color: var(--launcher-pane-vert-button-hover-color);
     --launcher-pane-button-hover-background: var(--launcher-pane-vert-button-hover-background);
     --launcher-pane-button-hover-shadow: var(--launcher-pane-vert-button-hover-shadow);
+    --launcher-pane-button-focus-outline-color: var(--launcher-pane-vert-button-focus-outline-color);
 
     --launcher-pane-size: var(--launcher-pane-vert-size);
     --launcher-pane-icon-size: var(--launcher-pane-vert-icon-size);
@@ -168,6 +169,7 @@ body.layout-horizontal > .horizontal {
     --launcher-pane-button-hover-color: var(--launcher-pane-horiz-button-hover-color);
     --launcher-pane-button-hover-background: var(--launcher-pane-horiz-button-hover-background);
     --launcher-pane-button-hover-shadow: var(--launcher-pane-horiz-button-hover-shadow);
+    --launcher-pane-button-focus-outline-color: var(--launcher-pane-horiz-button-focus-outline-color);
 
     --launcher-pane-size: var(--launcher-pane-horiz-size);
     --launcher-pane-icon-size: var(--launcher-pane-horiz-icon-size);
@@ -243,6 +245,14 @@ body.layout-horizontal > .horizontal {
 
 #launcher-pane .launcher-button {
     font-size: var(--launcher-pane-icon-size) !important;
+}
+
+#launcher-pane .launcher-button:focus {
+    outline: none;
+}
+
+#launcher-pane .launcher-button:focus-visible {
+    outline: 2px solid var(--launcher-pane-button-focus-outline-color);
 }
 
 #launcher-pane.vertical .spacer {
