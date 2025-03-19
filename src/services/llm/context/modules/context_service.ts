@@ -147,22 +147,24 @@ export class ContextService {
 
             // Step 4: Add agent tools context with thinking process if requested
             let enhancedContext = context;
-            if (contextNoteId) {
-                try {
-                    const agentContext = await this.getAgentToolsContext(
-                        contextNoteId,
-                        userQuestion,
-                        showThinking,
-                        relevantNotes
-                    );
+            try {
+                // Pass 'root' as the default noteId when no specific note is selected
+                const noteIdToUse = contextNoteId || 'root';
+                log.info(`Calling getAgentToolsContext with noteId=${noteIdToUse}, showThinking=${showThinking}`);
 
-                    if (agentContext) {
-                        enhancedContext = enhancedContext + "\n\n" + agentContext;
-                    }
-                } catch (error) {
-                    log.error(`Error getting agent tools context: ${error}`);
-                    // Continue with the basic context
+                const agentContext = await this.getAgentToolsContext(
+                    noteIdToUse,
+                    userQuestion,
+                    showThinking,
+                    relevantNotes
+                );
+
+                if (agentContext) {
+                    enhancedContext = enhancedContext + "\n\n" + agentContext;
                 }
+            } catch (error) {
+                log.error(`Error getting agent tools context: ${error}`);
+                // Continue with the basic context
             }
 
             return {
@@ -402,8 +404,13 @@ export class ContextService {
 
             // Add thinking process if requested
             if (showThinking) {
+                log.info(`Including thinking process in context (showThinking=true)`);
                 agentContext += `\n## Reasoning Process\n`;
-                agentContext += contextualThinkingTool.getThinkingSummary(thinkingId);
+                const thinkingSummary = contextualThinkingTool.getThinkingSummary(thinkingId);
+                log.info(`Thinking summary length: ${thinkingSummary.length} characters`);
+                agentContext += thinkingSummary;
+            } else {
+                log.info(`Skipping thinking process in context (showThinking=false)`);
             }
 
             // Log stats about the context

@@ -443,11 +443,32 @@ export class NoteNavigatorTool {
     try {
       log.info(`Getting note structure for note ${noteId}`);
 
+      // Special handling for 'root' or other special notes
+      if (noteId === 'root' || !noteId) {
+        log.info('Using root as the special note for structure');
+        return {
+          noteId: 'root',
+          title: 'Root',
+          type: 'root',
+          childCount: 0, // We don't know how many direct children root has
+          attributes: [],
+          parentPath: []
+        };
+      }
+
       // Get the note from becca
       const note = becca.notes[noteId];
 
       if (!note) {
-        throw new Error(`Note ${noteId} not found`);
+        log.error(`Note ${noteId} not found in becca.notes`);
+        return {
+          noteId,
+          title: 'Unknown',
+          type: 'unknown',
+          childCount: 0,
+          attributes: [],
+          parentPath: []
+        };
       }
 
       // Get child notes count
