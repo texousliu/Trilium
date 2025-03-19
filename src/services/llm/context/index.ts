@@ -10,7 +10,33 @@ import { chunkContent, semanticChunking } from './content_chunking.js';
 import type { ContentChunk, ChunkOptions } from './content_chunking.js';
 import { summarizeContent, extractKeyPoints } from './summarization.js';
 import { getParentNotes, getParentContext, getChildContext, getLinkedNotesContext } from './hierarchy.js';
-import { getSemanticContext } from './semantic_context.js';
+
+/**
+ * Get semantic context
+ * This is now a wrapper that redirects to the new context service
+ * @param noteId - The ID of the note to get context for
+ * @param options - Options for semantic context
+ * @returns Semantic context string
+ */
+async function getSemanticContext(
+    noteId: string,
+    options: { maxSimilarNotes?: number } = {}
+): Promise<string> {
+    // Use the context service
+    try {
+        const { default: aiServiceManager } = await import('../ai_service_manager.js');
+        const contextService = aiServiceManager.getInstance().getContextService();
+
+        if (!contextService) {
+            return "Semantic context service not available.";
+        }
+
+        return await contextService.getSemanticContext(noteId, "", options.maxSimilarNotes || 5);
+    } catch (error) {
+        console.error("Error getting semantic context:", error);
+        return "Error retrieving semantic context.";
+    }
+}
 
 /**
  * Options for context extraction
@@ -332,20 +358,16 @@ export class ContextExtractor {
 
     /**
      * Get semantic context
+     * This is now a wrapper that redirects to the new context service
+     * @param noteId - The ID of the note to get context for
+     * @param options - Options for semantic context
+     * @returns Semantic context string
      */
     static async getSemanticContext(
         noteId: string,
-        maxSimilarNotesOrQuery: number | string = 5
+        options: { maxSimilarNotes?: number } = {}
     ): Promise<string> {
-        // Handle both the new (number) and old (string query) parameter types
-        if (typeof maxSimilarNotesOrQuery === 'string') {
-            // Old API: The second parameter was a query string
-            // For backward compatibility, we'll still accept this
-            return getSemanticContext(noteId, { maxSimilarNotes: 5 });
-        } else {
-            // New API: The second parameter is maxSimilarNotes
-            return getSemanticContext(noteId, { maxSimilarNotes: maxSimilarNotesOrQuery });
-        }
+        return getSemanticContext(noteId, options);
     }
 
     /**
@@ -353,9 +375,9 @@ export class ContextExtractor {
      */
     async getSemanticContext(
         noteId: string,
-        maxSimilarNotesOrQuery: number | string = 5
+        options: { maxSimilarNotes?: number } = {}
     ): Promise<string> {
-        return ContextExtractor.getSemanticContext(noteId, maxSimilarNotesOrQuery);
+        return ContextExtractor.getSemanticContext(noteId, options);
     }
 
     /**
@@ -436,7 +458,7 @@ export class ContextExtractor {
         if (config.includeSimilar) {
             const semanticContext = await ContextExtractor.getSemanticContext(
                 noteId,
-                config.maxSimilarNotes
+                { maxSimilarNotes: config.maxSimilarNotes }
             );
 
             if (semanticContext && !semanticContext.includes("No semantically similar notes found.")) {
