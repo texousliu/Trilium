@@ -1,6 +1,7 @@
 import type { Message, ChatCompletionOptions } from './ai_interface.js';
 import aiServiceManager from './ai_service_manager.js';
 import chatStorageService from './chat_storage_service.js';
+import log from '../log.js';
 
 export interface ChatSession {
     id: string;
@@ -246,6 +247,9 @@ export class ChatService {
 
             // Get showThinking option if it exists
             const showThinking = options?.showThinking === true;
+
+            log.info(`Processing LLM message: "${content.substring(0, 100)}..."`);
+            log.info(`Using enhanced context with: noteId=${noteId}, showThinking=${showThinking}`);
 
             // Get enhanced context for this note and query
             const enhancedContext = await contextService.getAgentToolsContext(

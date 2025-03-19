@@ -111,22 +111,19 @@ export class VectorSearchTool {
 
       // Include more content from each note to provide richer context
       if (options.includeContent) {
-        // Get full context for each note rather than summaries
+        // IMPORTANT: Get content directly without recursive processQuery calls
+        // This prevents infinite loops where one search triggers another
         for (let i = 0; i < results.length; i++) {
           const result = results[i];
           try {
-            // Use contextService instead of direct import
-            if (this.contextService && 'processQuery' in this.contextService) {
-              const contextResult = await this.contextService.processQuery(
-                `Provide details about the note: ${result.title}`,
-                null,
-                result.noteId,
-                false
-              );
-
-              if (contextResult && contextResult.context) {
-                // Use more of the content, up to 2000 chars
-                result.content = contextResult.context.substring(0, 2000);
+            // Get content directly from note content service
+            if (!result.content) {
+              const noteContent = await import('../context/note_content.js');
+              const content = await noteContent.getNoteContent(result.noteId);
+              if (content) {
+                // Add content directly without recursive calls
+                result.content = content.substring(0, 2000); // Limit to 2000 chars
+                log.info(`Added direct content for note ${result.noteId}, length: ${result.content.length} chars`);
               }
             }
           } catch (error) {

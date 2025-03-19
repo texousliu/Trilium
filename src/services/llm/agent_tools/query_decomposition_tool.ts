@@ -271,213 +271,142 @@ export class QueryDecompositionTool {
     /**
      * Generate a unique ID for a sub-query
      */
-    private generateSubQueryId(): string {
-        return `sq_${Date.now()}_${QueryDecompositionTool.queryCounter++}`;
+    generateSubQueryId(): string {
+        return `sq_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
     }
 
     /**
-     * Create sub-queries based on the original query and optional context
+     * Create sub-queries based on the original query
      */
-    private createSubQueries(query: string, context?: string): SubQuery[] {
+    createSubQueries(query: string, context?: string): SubQuery[] {
+        // Simple rules to create sub-queries based on query content
         const subQueries: SubQuery[] = [];
 
-        // Use context to enhance sub-query generation if available
-        if (context) {
-            log.info(`Using context to enhance sub-query generation`);
-
-            // Add context-specific questions
-            subQueries.push({
+        // Avoid creating subqueries that start with "Provide details about" or similar
+        // as these have been causing recursive loops
+        if (query.toLowerCase().includes("provide details about") ||
+            query.toLowerCase().includes("information related to")) {
+            log.info(`Avoiding recursive subqueries for query "${query.substring(0, 50)}..."`);
+            return [{
                 id: this.generateSubQueryId(),
-                text: `What key information in the current note relates to: "${query}"?`,
-                reason: 'Identifying directly relevant information in the current context',
+                text: query,
+                reason: 'Direct analysis of note details',
                 isAnswered: false
-            });
+            }];
         }
 
-        // 1. Look for multiple question marks
-        const questionSplit = query.split(/\?/).filter(q => q.trim().length > 0);
+        // First, add the original query as a sub-query (always)
+        subQueries.push({
+            id: this.generateSubQueryId(),
+            text: query,
+            reason: 'Original query',
+            isAnswered: false
+        });
 
-        if (questionSplit.length > 1) {
-            // Multiple distinct questions detected
-            for (let i = 0; i < questionSplit.length; i++) {
-                const text = questionSplit[i].trim() + '?';
-                subQueries.push({
-                    id: this.generateSubQueryId(),
-                    text,
-                    reason: `Separate question ${i + 1} detected in the original query`,
-                    isAnswered: false
-                });
-            }
+        // Check for "compare", "difference", "versus" to identify comparison questions
+        if (
+            query.toLowerCase().includes('compare') ||
+            query.toLowerCase().includes('difference between') ||
+            query.toLowerCase().includes(' vs ') ||
+            query.toLowerCase().includes('versus')
+        ) {
+            // Extract entities to compare (simplified approach)
+            const entities = this.extractEntitiesForComparison(query);
 
-            // Also add a synthesis question
-            subQueries.push({
-                id: this.generateSubQueryId(),
-                text: `How do the answers to these questions relate to each other in the context of the original query?`,
-                reason: 'Synthesizing information from multiple questions',
-                isAnswered: false
-            });
-
-            return subQueries;
-        }
-
-        // 2. Look for "and", "or", etc. connecting potentially separate questions
-        const conjunctions = [
-            { regex: /\b(compare|versus|vs\.?|difference between|similarities between)\b/i, label: 'comparison' },
-            { regex: /\b(list|enumerate)\b/i, label: 'listing' },
-            { regex: /\b(analyze|examine|investigate|explore)\b/i, label: 'analysis' },
-            { regex: /\b(explain|why)\b/i, label: 'explanation' },
-            { regex: /\b(how to|steps to|process of)\b/i, label: 'procedure' }
-        ];
-
-        // Check for comparison queries - these often need multiple sub-queries
-        for (const conj of conjunctions) {
-            if (conj.regex.test(query)) {
-                if (conj.label === 'comparison') {
-                    // For comparisons, we need to research each item, then compare them
-                    const comparisonMatch = query.match(/\b(compare|versus|vs\.?|difference between|similarities between)\s+(.+?)\s+(and|with|to)\s+(.+?)(\?|$)/i);
-
-                    if (comparisonMatch) {
-                        const item1 = comparisonMatch[2].trim();
-                        const item2 = comparisonMatch[4].trim();
-
-                        subQueries.push({
-                            id: this.generateSubQueryId(),
-                            text: `What are the key characteristics of ${item1}?`,
-                            reason: `Need to understand ${item1} for the comparison`,
-                            isAnswered: false
-                        });
-
-                        subQueries.push({
-                            id: this.generateSubQueryId(),
-                            text: `What are the key characteristics of ${item2}?`,
-                            reason: `Need to understand ${item2} for the comparison`,
-                            isAnswered: false
-                        });
-
-                        subQueries.push({
-                            id: this.generateSubQueryId(),
-                            text: `What are the main differences between ${item1} and ${item2}?`,
-                            reason: 'Understanding key differences',
-                            isAnswered: false
-                        });
-
-                        subQueries.push({
-                            id: this.generateSubQueryId(),
-                            text: `What are the main similarities between ${item1} and ${item2}?`,
-                            reason: 'Understanding key similarities',
-                            isAnswered: false
-                        });
-
-                        subQueries.push({
-                            id: this.generateSubQueryId(),
-                            text: `What practical implications do these differences and similarities have?`,
-                            reason: 'Understanding practical significance of the comparison',
-                            isAnswered: false
-                        });
-
-                        return subQueries;
-                    }
-                }
-            }
-        }
-
-        // 3. For complex questions without clear separation, create topic-based sub-queries
-        // Lowered the threshold to process more queries this way
-        if (query.length > 50) {
-            // Extract potential key topics from the query
-            const words = query.toLowerCase().split(/\W+/).filter(w =>
-                w.length > 3 &&
-                !['what', 'when', 'where', 'which', 'with', 'would', 'could', 'should', 'have', 'this', 'that', 'there', 'their'].includes(w)
-            );
-
-            // Count word frequencies
-            const wordFrequency: Record<string, number> = {};
-            for (const word of words) {
-                wordFrequency[word] = (wordFrequency[word] || 0) + 1;
-            }
-
-            // Get top frequent words
-            const topWords = Object.entries(wordFrequency)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 4) // Increased from 3 to 4
-                .map(entry => entry[0]);
-
-            if (topWords.length > 0) {
-                // Create factual sub-query
-                subQueries.push({
-                    id: this.generateSubQueryId(),
-                    text: `What are the key facts about ${topWords.join(' and ')} relevant to this question?`,
-                    reason: 'Gathering basic information about main topics',
-                    isAnswered: false
-                });
-
-                // Add individual queries for each key topic
-                topWords.forEach(word => {
+            if (entities.length >= 2) {
+                // Add sub-queries for each entity
+                entities.forEach(entity => {
                     subQueries.push({
                         id: this.generateSubQueryId(),
-                        text: `What specific details about "${word}" are most relevant to the query?`,
-                        reason: `Detailed exploration of the "${word}" concept`,
+                        text: `What are the key characteristics of ${entity}?`,
+                        reason: `Getting details about "${entity}" for comparison`,
                         isAnswered: false
                     });
                 });
 
-                // Create relationship sub-query if multiple top words
-                if (topWords.length > 1) {
-                    for (let i = 0; i < topWords.length; i++) {
-                        for (let j = i + 1; j < topWords.length; j++) {
-                            subQueries.push({
-                                id: this.generateSubQueryId(),
-                                text: `How do ${topWords[i]} and ${topWords[j]} relate to each other?`,
-                                reason: `Understanding relationship between ${topWords[i]} and ${topWords[j]}`,
-                                isAnswered: false
-                            });
-                        }
-                    }
-                }
-
-                // Add a "what else" query to ensure comprehensive coverage
+                // Add explicit comparison sub-query
                 subQueries.push({
                     id: this.generateSubQueryId(),
-                    text: `What other important aspects should be considered about this topic that might not be immediately obvious?`,
-                    reason: 'Exploring non-obvious but relevant information',
+                    text: `How do ${entities.join(' and ')} compare in terms of their primary features?`,
+                    reason: 'Direct comparison of the entities',
                     isAnswered: false
                 });
-
-                // Add the original query as the final synthesizing question
-                subQueries.push({
-                    id: this.generateSubQueryId(),
-                    text: query,
-                    reason: 'Original question to be answered after gathering information',
-                    isAnswered: false
-                });
-
-                return subQueries;
             }
         }
+        // Check for "how to" questions
+        else if (query.toLowerCase().includes('how to ')) {
+            const topic = query.replace(/how to /i, '').trim();
 
-        // Fallback: If we can't meaningfully decompose, just use the original query
-        // But also add some generic exploration questions
-        subQueries.push({
-            id: this.generateSubQueryId(),
-            text: query,
-            reason: 'Primary question',
-            isAnswered: false
-        });
+            subQueries.push({
+                id: this.generateSubQueryId(),
+                text: `What are the steps to ${topic}?`,
+                reason: 'Finding procedural information',
+                isAnswered: false
+            });
 
-        // Add generic exploration questions even for "simple" queries
-        subQueries.push({
-            id: this.generateSubQueryId(),
-            text: `What background information is helpful to understand this query better?`,
-            reason: 'Gathering background context',
-            isAnswered: false
-        });
+            subQueries.push({
+                id: this.generateSubQueryId(),
+                text: `What are common challenges or pitfalls when trying to ${topic}?`,
+                reason: 'Identifying potential difficulties',
+                isAnswered: false
+            });
+        }
+        // Check for "why" questions
+        else if (query.toLowerCase().startsWith('why ')) {
+            const topic = query.replace(/why /i, '').trim();
 
-        subQueries.push({
-            id: this.generateSubQueryId(),
-            text: `What related concepts might be important to consider?`,
-            reason: 'Exploring related concepts',
-            isAnswered: false
-        });
+            subQueries.push({
+                id: this.generateSubQueryId(),
+                text: `What are the causes of ${topic}?`,
+                reason: 'Identifying causes',
+                isAnswered: false
+            });
+
+            subQueries.push({
+                id: this.generateSubQueryId(),
+                text: `What evidence supports explanations for ${topic}?`,
+                reason: 'Finding supporting evidence',
+                isAnswered: false
+            });
+        }
+        // Handle "what is" questions
+        else if (query.toLowerCase().startsWith('what is ') || query.toLowerCase().startsWith('what are ')) {
+            const topic = query.replace(/what (is|are) /i, '').trim().replace(/\?$/, '');
+
+            subQueries.push({
+                id: this.generateSubQueryId(),
+                text: `Definition of ${topic}`,
+                reason: 'Getting basic definition',
+                isAnswered: false
+            });
+
+            subQueries.push({
+                id: this.generateSubQueryId(),
+                text: `Examples of ${topic}`,
+                reason: 'Finding examples',
+                isAnswered: false
+            });
+        }
+
+        // If no specific sub-queries were added (beyond the original),
+        // generate generic exploratory sub-queries
+        if (subQueries.length <= 1) {
+            // Extract main entities/concepts from the query
+            const concepts = this.extractMainConcepts(query);
+
+            concepts.forEach(concept => {
+                // Don't create recursive or self-referential queries
+                if (!concept.toLowerCase().includes('provide details') &&
+                    !concept.toLowerCase().includes('information related')) {
+                    subQueries.push({
+                        id: this.generateSubQueryId(),
+                        text: `Key information about ${concept}`,
+                        reason: `Finding information about "${concept}"`,
+                        isAnswered: false
+                    });
+                }
+            });
+        }
 
         return subQueries;
     }
@@ -488,6 +417,104 @@ export class QueryDecompositionTool {
     private truncateText(text: string, maxLength: number): string {
         if (text.length <= maxLength) return text;
         return text.substring(0, maxLength - 3) + '...';
+    }
+
+    /**
+     * Extract entities for comparison from a query
+     *
+     * @param query The query to extract entities from
+     * @returns Array of entity strings
+     */
+    extractEntitiesForComparison(query: string): string[] {
+        // Try to match patterns like "compare X and Y" or "difference between X and Y"
+        const comparePattern = /\b(?:compare|difference between|similarities between)\s+([^,]+?)\s+(?:and|with|to)\s+([^,\?\.]+)/i;
+        const vsPattern = /\b([^,]+?)\s+(?:vs\.?|versus)\s+([^,\?\.]+)/i;
+
+        let match = query.match(comparePattern) || query.match(vsPattern);
+
+        if (match) {
+            return [match[1].trim(), match[2].trim()];
+        }
+
+        // If no pattern match, try to extract noun phrases
+        const words = query.split(/\s+/);
+        const potentialEntities = [];
+        let currentPhrase = '';
+
+        for (const word of words) {
+            // Skip common words that are unlikely to be part of entity names
+            if (/^(the|of|and|or|vs|versus|between|comparison|compared|to|with|what|is|are|how|why|when|which)$/i.test(word)) {
+                if (currentPhrase.trim()) {
+                    potentialEntities.push(currentPhrase.trim());
+                    currentPhrase = '';
+                }
+                continue;
+            }
+
+            currentPhrase += word + ' ';
+        }
+
+        if (currentPhrase.trim()) {
+            potentialEntities.push(currentPhrase.trim());
+        }
+
+        return potentialEntities.slice(0, 2); // Return at most 2 entities
+    }
+
+    /**
+     * Extract main concepts from a query
+     *
+     * @param query The query to extract concepts from
+     * @returns Array of concept strings
+     */
+    extractMainConcepts(query: string): string[] {
+        // Remove question words and common stop words
+        const cleanedQuery = query.replace(/what|is|are|how|why|when|which|the|of|and|or|to|with|in|on|by/gi, ' ');
+
+        // Split into words and filter out short words
+        const words = cleanedQuery.split(/\s+/).filter(word => word.length > 3);
+
+        // Count word frequency
+        const wordCounts: Record<string, number> = {};
+        for (const word of words) {
+            wordCounts[word.toLowerCase()] = (wordCounts[word.toLowerCase()] || 0) + 1;
+        }
+
+        // Sort by frequency
+        const sortedWords = Object.entries(wordCounts)
+            .sort((a, b) => b[1] - a[1])
+            .map(entry => entry[0]);
+
+        // Try to build meaningful phrases around top words
+        const conceptPhrases: string[] = [];
+
+        if (sortedWords.length === 0) {
+            // Fallback if no significant words found
+            return [query.trim()];
+        }
+
+        // Use the top 2-3 words to form concepts
+        for (let i = 0; i < Math.min(sortedWords.length, 3); i++) {
+            const word = sortedWords[i];
+
+            // Try to find the word in the original query and extract a small phrase around it
+            const wordIndex = query.toLowerCase().indexOf(word);
+            if (wordIndex >= 0) {
+                // Extract a window of text around the word (3 words before and after)
+                const start = Math.max(0, query.lastIndexOf(' ', wordIndex - 15) + 1);
+                const end = Math.min(query.length, query.indexOf(' ', wordIndex + word.length + 15));
+
+                if (end > start) {
+                    conceptPhrases.push(query.substring(start, end).trim());
+                } else {
+                    conceptPhrases.push(word);
+                }
+            } else {
+                conceptPhrases.push(word);
+            }
+        }
+
+        return conceptPhrases;
     }
 }
 
