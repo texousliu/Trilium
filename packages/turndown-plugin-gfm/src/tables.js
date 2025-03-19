@@ -221,6 +221,7 @@ const tableShouldBeHtml = (tableNode, options) => {
     'H6',
     'HR',
     'BLOCKQUOTE',
+    'PRE'
   ];
 
   // In general we should leave as HTML tables that include other tables. The
