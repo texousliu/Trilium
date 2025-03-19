@@ -115,7 +115,10 @@ export default class RecentChangesDialog extends BasicWidget {
 
                                     await ws.waitForMaxKnownEntityChangeId();
 
-                                    appContext.tabManager.getActiveContext().setNote(change.noteId);
+                                    const activeContext = appContext.tabManager.getActiveContext();
+                                    if (activeContext) {
+                                        activeContext.setNote(change.noteId);
+                                    }
                                 }
                             });
 
@@ -141,7 +144,10 @@ export default class RecentChangesDialog extends BasicWidget {
                             // Skip clicks on the link or deleted notes
                             if (e.target?.nodeName !== "A" && !change.current_isDeleted) {
                                 // Open the current note
-                                appContext.tabManager.getActiveContext().setNote(change.noteId);
+                                const activeContext = appContext.tabManager.getActiveContext();
+                                if (activeContext) {
+                                    activeContext.setNote(change.noteId);
+                                }
                             }
                         })
                         .toggleClass("deleted-note", !!change.current_isDeleted)
