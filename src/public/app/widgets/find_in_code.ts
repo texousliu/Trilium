@@ -38,7 +38,7 @@ export default class FindInCode {
         // See https://codemirror.net/addon/search/searchcursor.js for tips
         const codeEditor = await this.getCodeEditor();
         if (!codeEditor) {
-            return;
+            return { totalFound: 0, currentFound: 0 };
         }
 
         const doc = codeEditor.doc;

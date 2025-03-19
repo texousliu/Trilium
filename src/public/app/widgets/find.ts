@@ -305,7 +305,10 @@ export default class FindWidget extends NoteContextAwareWidget {
         const matchCase = this.$caseSensitiveCheckbox.prop("checked");
         const wholeWord = this.$matchWordsCheckbox.prop("checked");
 
-        const { totalFound, currentFound } = await this.handler?.performFind(searchTerm, matchCase, wholeWord);
+        if (!this.handler) {
+            return;
+        }
+        const { totalFound, currentFound } = await this.handler.performFind(searchTerm, matchCase, wholeWord);
 
         this.$totalFound.text(totalFound);
         this.$currentFound.text(currentFound);

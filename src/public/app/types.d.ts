@@ -95,7 +95,7 @@ declare global {
             className: string;
             separateWordSearch: boolean;
             caseSensitive: boolean;
-            done: () => void;
+            done?: () => void;
         });
         unmark(opts?: {
             done: () => void;
