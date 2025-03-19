@@ -81,24 +81,7 @@ rules.table = {
     // Only convert tables that can result in valid Markdown
     // Other tables are kept as HTML using `keep` (see below).
     if (tableShouldBeHtml(node, options_)) {
-      let html = node.outerHTML;
-      let divParent = nodeParentDiv(node)
-      // Make table in HTML format horizontally scrollable by give table a div parent, so the width of the table is limited to the screen width.
-	    // see https://github.com/laurent22/joplin/pull/10161
-      // test cases:
-      // packages/app-cli/tests/html_to_md/preserve_nested_tables.html
-      // packages/app-cli/tests/html_to_md/table_with_blockquote.html
-      // packages/app-cli/tests/html_to_md/table_with_code_1.html
-      // packages/app-cli/tests/html_to_md/table_with_code_2.html
-      // packages/app-cli/tests/html_to_md/table_with_code_3.html
-      // packages/app-cli/tests/html_to_md/table_with_heading.html
-      // packages/app-cli/tests/html_to_md/table_with_hr.html
-      // packages/app-cli/tests/html_to_md/table_with_list.html
-      if (divParent === null || !divParent.classList.contains('joplin-table-wrapper')){
-        return `\n\n<div class="joplin-table-wrapper">${html}</div>\n\n`;
-      } else {
-        return html
-      }
+      return node.outerHTML;
     } else {
       if (tableShouldBeSkipped(node)) return content;
 
