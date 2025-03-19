@@ -5,6 +5,8 @@ import utils from "../../services/utils.js";
 import server from "../../services/server.js";
 import toastService from "../../services/toast.js";
 import { t } from "../../services/i18n.js";
+import type { EventData } from "../../components/app_context.js";
+
 
 const TPL = `
 <div class="bulk-actions-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -67,6 +69,13 @@ const TPL = `
 </div>`;
 
 export default class BulkActionsDialog extends BasicWidget {
+    private $includeDescendants!: JQuery<HTMLElement>;
+    private $affectedNoteCount!: JQuery<HTMLElement>;
+    private $availableActionList!: JQuery<HTMLElement>;
+    private $existingActionList!: JQuery<HTMLElement>;
+    private $executeButton!: JQuery<HTMLElement>;
+    private selectedOrActiveNoteIds: string[] | null = null;
+
     doRender() {
         this.$widget = $(TPL);
         this.$includeDescendants = this.$widget.find(".include-descendants");
@@ -79,9 +88,11 @@ export default class BulkActionsDialog extends BasicWidget {
 
         this.$widget.on("click", "[data-action-add]", async (event) => {
             const actionName = $(event.target).attr("data-action-add");
+            if (!actionName) {
+                return;
+            }
 
             await bulkActionService.addAction("_bulkAction", actionName);
-
             await this.refresh();
         });
 
@@ -93,7 +104,6 @@ export default class BulkActionsDialog extends BasicWidget {
             });
 
             toastService.showMessage(t("bulk_actions.bulk_actions_executed"), 3000);
-
             utils.closeActiveDialog();
         });
     }
@@ -101,21 +111,28 @@ export default class BulkActionsDialog extends BasicWidget {
     async refresh() {
         this.renderAvailableActions();
 
+        if (!this.selectedOrActiveNoteIds) {
+            return;
+        }
+
         const { affectedNoteCount } = await server.post("bulk-action/affected-notes", {
             noteIds: this.selectedOrActiveNoteIds,
             includeDescendants: this.$includeDescendants.is(":checked")
-        });
+        }) as { affectedNoteCount: number };
 
         this.$affectedNoteCount.text(affectedNoteCount);
 
         const bulkActionNote = await froca.getNote("_bulkAction");
+        if (!bulkActionNote) {
+            return;
+        }
 
         const actions = bulkActionService.parseActions(bulkActionNote);
 
         this.$existingActionList.empty();
 
         if (actions.length > 0) {
-            this.$existingActionList.append(...actions.map((action) => action.render()));
+            this.$existingActionList.append(...actions.map((action) => action.render()).filter((action) => action !== null));
         } else {
             this.$existingActionList.append($("<p>").text(t("bulk_actions.none_yet")));
         }
@@ -138,7 +155,7 @@ export default class BulkActionsDialog extends BasicWidget {
         }
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         // only refreshing deleted attrs, otherwise components update themselves
         if (loadResults.getAttributeRows().find((row) => row.type === "label" && row.name === "action" && row.noteId === "_bulkAction" && row.isDeleted)) {
             // this may be triggered from e.g., sync without open widget, then no need to refresh the widget
@@ -148,12 +165,11 @@ export default class BulkActionsDialog extends BasicWidget {
         }
     }
 
-    async openBulkActionsDialogEvent({ selectedOrActiveNoteIds }) {
+    async openBulkActionsDialogEvent({ selectedOrActiveNoteIds }: EventData<"openBulkActionsDialog">) {
         this.selectedOrActiveNoteIds = selectedOrActiveNoteIds;
         this.$includeDescendants.prop("checked", false);
 
         await this.refresh();
-
         utils.openDialog(this.$widget);
     }
 }

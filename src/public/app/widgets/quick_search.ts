@@ -140,13 +140,19 @@ export default class QuickSearchWidget extends BasicWidget {
 
                 if (!e.target || e.target.nodeName !== "A") {
                     // click on the link is handled by link handling, but we want the whole item clickable
-                    appContext.tabManager.getActiveContext().setNote(note.noteId);
+                    const activeContext = appContext.tabManager.getActiveContext();
+                    if (activeContext) {
+                        activeContext.setNote(note.noteId);
+                    }
                 }
             });
             shortcutService.bindElShortcut($link, "return", () => {
                 this.dropdown.hide();
 
-                appContext.tabManager.getActiveContext().setNote(note.noteId);
+                const activeContext = appContext.tabManager.getActiveContext();
+                if (activeContext) {
+                    activeContext.setNote(note.noteId);
+                }
             });
 
             this.$dropdownMenu.append($link);

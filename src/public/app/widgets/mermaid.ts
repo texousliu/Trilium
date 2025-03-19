@@ -6,27 +6,32 @@ import utils from "../services/utils.js";
 import { loadElkIfNeeded, postprocessMermaidSvg } from "../services/mermaid.js";
 import type FNote from "../entities/fnote.js";
 import type { EventData } from "../components/app_context.js";
+import ScrollingContainer from "./containers/scrolling_container.js";
+import Split from "split.js";
+import { DEFAULT_GUTTER_SIZE } from "../services/resizer.js";
 
 const TPL = `<div class="mermaid-widget">
     <style>
         .mermaid-widget {
-            flex-grow: 2;
             overflow: auto;
+        }
+
+        body.mobile .mermaid-widget {
             min-height: 200px;
-            border-bottom: 1px solid var(--main-border-color);
-            padding: 20px;
-            margin-bottom: 10px;
+            flex-grow: 2;
             flex-basis: 0;
+            border-bottom: 1px solid var(--main-border-color);
+            margin-bottom: 10px;
+        }
+
+        body.desktop .mermaid-widget + .gutter {
+            border-bottom: 1px solid var(--main-border-color);
         }
 
         .mermaid-render {
             overflow: auto;
             height: 100%;
             text-align: center;
-        }
-
-        .mermaid-render svg {
-            width: 95%; /* https://github.com/zadam/trilium/issues/4340 */
         }
     </style>
 
@@ -46,6 +51,10 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     private $errorContainer!: JQuery<HTMLElement>;
     private $errorMessage!: JQuery<HTMLElement>;
     private dirtyAttachment?: boolean;
+    private zoomHandler?: () => void;
+    private zoomInstance?: SvgPanZoom.Instance;
+    private splitInstance?: Split.Instance;
+    private lastNote?: FNote;
 
     isEnabled() {
         return super.isEnabled() && this.note?.type === "mermaid" && this.note.isContentAvailable() && this.noteContext?.viewScope?.viewMode === "default";
@@ -60,6 +69,9 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     }
 
     async refreshWithNote(note: FNote) {
+        const isSameNote = (this.lastNote === note);
+
+        this.cleanup();
         this.$errorContainer.hide();
 
         await libraryLoader.requireLibrary(libraryLoader.MERMAID);
@@ -69,9 +81,9 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             ...(getMermaidConfig() as any)
         });
 
-        this.$display.empty();
-
-        const wheelZoomLoaded = libraryLoader.requireLibrary(libraryLoader.WHEEL_ZOOM);
+        if (!isSameNote) {
+            this.$display.empty();
+        }
 
         this.$errorContainer.hide();
 
@@ -93,20 +105,46 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             }
 
             this.$display.html(svg);
-
-            await wheelZoomLoaded;
-
             this.$display.attr("id", `mermaid-render-${idCounter}`);
 
-            WZoom.create(`#mermaid-render-${idCounter}`, {
-                maxScale: 50,
-                speed: 1.3,
-                zoomOnClick: false
-            });
+            // Fit the image to bounds.
+            const $svg = this.$display.find("svg");
+            $svg.attr("width", "100%").attr("height", "100%");
+
+            // Enable pan to zoom.
+            this.#setupPanZoom($svg[0], isSameNote);
         } catch (e: any) {
             console.warn(e);
+            this.#cleanUpZoom();
+            this.$display.empty();
             this.$errorMessage.text(e.message);
             this.$errorContainer.show();
+        }
+
+        this.#setupResizer();
+        this.lastNote = note;
+    }
+
+    cleanup() {
+        super.cleanup();
+        if (this.zoomHandler) {
+            $(window).off("resize", this.zoomHandler);
+            this.zoomHandler = undefined;
+        }
+    }
+
+    #cleanUpZoom() {
+        if (this.zoomInstance) {
+            this.zoomInstance.destroy();
+            this.zoomInstance = undefined;
+        }
+    }
+
+    toggleInt(show: boolean | null | undefined): void {
+        super.toggleInt(show);
+
+        if (!show) {
+            this.cleanup();
         }
     }
 
@@ -123,6 +161,66 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         await loadElkIfNeeded(content);
         const { svg } = await mermaid.mermaidAPI.render(`mermaid-graph-${idCounter}`, content);
         return postprocessMermaidSvg(svg);
+    }
+
+    async #setupPanZoom(svgEl: SVGElement, isSameNote: boolean) {
+        // Clean up
+        let pan = null;
+        let zoom = null;
+        if (this.zoomInstance) {
+            // Store pan and zoom for same note, when the user is editing the note.
+            if (isSameNote && this.zoomInstance) {
+                pan = this.zoomInstance.getPan();
+                zoom = this.zoomInstance.getZoom();
+            }
+            this.#cleanUpZoom();
+        }
+
+        const svgPanZoom = (await import("svg-pan-zoom")).default;
+        const zoomInstance = svgPanZoom(svgEl, {
+            zoomEnabled: true,
+            controlIconsEnabled: true
+        });
+
+        if (pan && zoom) {
+            // Restore the pan and zoom.
+            zoomInstance.zoom(zoom);
+            zoomInstance.pan(pan);
+        } else {
+            // New instance, reposition properly.
+            zoomInstance.center();
+            zoomInstance.fit();
+        }
+
+        this.zoomHandler = () => {
+            zoomInstance.resize();
+            zoomInstance.fit();
+            zoomInstance.center();
+        };
+        this.zoomInstance = zoomInstance;
+        $(window).on("resize", this.zoomHandler);
+    }
+
+    #setupResizer() {
+        if (!utils.isDesktop()) {
+            return;
+        }
+
+        const selfEl = this.$widget;
+        const scrollingContainer = this.parent?.children.find((ch) => ch instanceof ScrollingContainer)?.$widget;
+
+        if (!selfEl.length || !scrollingContainer?.length) {
+            return;
+        }
+
+        if (!this.splitInstance) {
+            this.splitInstance = Split([ selfEl[0], scrollingContainer[0] ], {
+                sizes: [ 50, 50 ],
+                direction: "vertical",
+                gutterSize: DEFAULT_GUTTER_SIZE,
+                onDragEnd: () => this.zoomHandler?.()
+            });
+        }
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
