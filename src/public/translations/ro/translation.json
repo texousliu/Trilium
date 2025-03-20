@@ -1220,6 +1220,7 @@
   },
   "table_of_contents": {
     "description": "Tabela de conținut va apărea în notițele de tip text atunci când notița are un număr de titluri mai mare decât cel definit. Acest număr se poate personaliza:",
+    "unit": "titluri",
     "disable_info": "De asemenea se poate dezactiva tabela de conținut setând o valoare foarte mare.",
     "shortcut_info": "Se poate configura și o scurtatură pentru a comuta rapid vizibilitatea panoului din dreapta (inclusiv tabela de conținut) în Opțiuni -> Scurtături (denumirea „toggleRightPane”).",
     "title": "Tabelă de conținut"

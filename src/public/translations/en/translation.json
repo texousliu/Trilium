@@ -1224,6 +1224,7 @@
   "table_of_contents": {
     "title": "Table of Contents",
     "description": "Table of contents will appear in text notes when the note has more than a defined number of headings. You can customize this number:",
+    "unit": "headings",
     "disable_info": "You can also use this option to effectively disable TOC by setting a very high number.",
     "shortcut_info": "You can configure a keyboard shortcut for quickly toggling the right pane (including TOC) in the Options -> Shortcuts (name 'toggleRightPane')."
   },
