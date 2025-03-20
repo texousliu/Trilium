@@ -1487,7 +1487,8 @@
     "erase_excess_revision_snapshots_prompt": "Reviziile excesive au fost șterse.",
     "note_revisions_snapshot_limit_description": "Limita numărului de revizii se referă la numărul maxim de revizii pentru fiecare notiță. -1 reprezintă nicio limită, 0 înseamnă ștergerea tuturor reviziilor. Se poate seta valoarea individual pentru o notiță prin eticheta #versioningLimit.",
     "note_revisions_snapshot_limit_title": "Limita de revizii a notițelor",
-    "snapshot_number_limit_label": "Numărul maxim de revizii pentru notițe:"
+    "snapshot_number_limit_label": "Numărul maxim de revizii pentru notițe:",
+    "snapshot_number_limit_unit": "revizii"
   },
   "search_result": {
     "no_notes_found": "Nu au fost găsite notițe pentru parametrii de căutare dați.",

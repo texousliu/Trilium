@@ -12,7 +12,10 @@ const TPL = `
 
     <div class="form-group">
         <label>${t("revisions_snapshot_limit.snapshot_number_limit_label")}</label>
-        <input class="revision-snapshot-number-limit form-control options-number-input" type="number" min="-1">
+        <div class="input-group">
+            <input class="revision-snapshot-number-limit form-control options-number-input" type="number" min="-1">
+            <span class="input-group-text">${t("revisions_snapshot_limit.snapshot_number_limit_unit")}</span>
+        </div>
     </div>
 
     <button class="erase-excess-revision-snapshots-now-button btn btn-sm">
