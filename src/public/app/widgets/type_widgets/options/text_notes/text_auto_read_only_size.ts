@@ -10,7 +10,10 @@ const TPL = `
 
     <div class="form-group">
         <label for="auto-readonly-size-text">${t("text_auto_read_only_size.label")}</label>
-        <input id="auto-readonly-size-text" class="auto-readonly-size-text form-control options-number-input" type="number" min="0">
+        <div class="input-group">
+            <input id="auto-readonly-size-text" class="auto-readonly-size-text form-control options-number-input" type="number" min="0">
+            <span class="input-group-text">${t("text_auto_read_only_size.unit")}</span>
+        </div>
     </div>
 </div>`;
 

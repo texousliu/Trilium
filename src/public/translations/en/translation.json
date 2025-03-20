@@ -1231,7 +1231,8 @@
   "text_auto_read_only_size": {
     "title": "Automatic Read-Only Size",
     "description": "Automatic read-only note size is the size after which notes will be displayed in a read-only mode (for performance reasons).",
-    "label": "Automatic read-only size (text notes)"
+    "label": "Automatic read-only size (text notes)",
+    "unit": "characters"
   },
   "i18n": {
     "title": "Localization",
