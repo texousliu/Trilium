@@ -371,3 +371,9 @@
     padding: 0 8px;
     color: var(--help-code-color);
 }
+
+/* DELETE NOTE PREVIEW */
+
+.delete-notes-list .note-path {
+    padding-left: 8px;
+}

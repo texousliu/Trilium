@@ -1,7 +1,103 @@
 /*
- * Settings
+ * LOG IN
  */
-:root {
+
+ .login-page {
+    display: flex; /* Note: the login page contents is hidden before this property is applied  */
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-page > div {
+    padding-top: 0 !important;
+    padding-bottom: 20vh;
+}
+
+.login-page h1 {
+    margin-bottom: .5em;
+    font-weight: 300;
+    color: var(--muted-text-color);
+}
+
+.login-page .form-group {
+    margin-top: 8px;
+}
+
+.login-page .alert {
+    margin: 0;
+    border: unset;
+    padding: 8px 0 0 0;
+    font-size: .85em;
+    color: var(--dropdown-item-icon-destructive-color) !important;
+}
+
+/* 
+ * SEARCH
+ */
+
+ /* Button bar */
+ .search-definition-widget .search-setting-table tbody:last-child div {
+    justify-content: flex-end !important;
+    gap: 8px;
+ }
+
+.search-result-widget-content .note-path .path-bracket {
+    display: inline;
+}
+
+.search-result-widget-content .note-path {
+    opacity: 0.75;
+    font-weight: normal;
+}
+
+/*
+ * SQL CONSOLE
+ */
+
+/* Table buttons */
+
+.sql-table-schemas-widget .sql-table-schemas button {
+    --color: var(--main-text-color);
+    --background: var(--card-background-color);
+
+    display: inline-block;
+    box-shadow: 2px 2px 2px var(--card-shadow-color);
+    margin-top: 4px;
+    vertical-align: baseline;
+    border: unset;
+    border-radius: 12px;
+    padding: 2px 12px;
+    background: var(--background) !important;
+    color: var(--color) !important;
+    line-height: unset;
+    cursor: help;
+}
+
+.sql-table-schemas-widget .sql-table-schemas button:hover,
+.sql-table-schemas-widget .sql-table-schemas button:active,
+.sql-table-schemas-widget .sql-table-schemas button:focus-visible {
+    --background: var(--card-background-press-color);
+    --color: var(--main-text-color);
+}
+
+/* Tooltip */
+
+.tooltip .table-schema {
+    font-family: var(--monospace-font-family);
+    font-size: .85em;
+}
+
+/* Data type */
+.tooltip .table-schema td:nth-child(2) {
+    color: var(--muted-text-color);
+}
+
+/*
+ * OPTIONS PAGES
+ */
+ 
+ :root {
     --options-card-min-width: 500px;
     --options-card-max-width: 900px;
     --options-card-padding: 17px;
