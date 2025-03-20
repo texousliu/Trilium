@@ -7,6 +7,7 @@ import server from "./services/server.ts";
 import library_loader, { Library } from "./services/library_loader.ts";
 import type { init } from "i18next";
 import type { lint } from "./services/eslint.ts";
+import type { RelationType } from "./widgets/type_widgets/relation_map.ts";
 
 interface ElectronProcess {
     type: string;
@@ -362,5 +363,46 @@ declare global {
             }) => void;
             minimumCharacters: number;
         }[];
+    }
+
+    /*
+     * jsPlumb
+     */
+    var jsPlumb: typeof import("jsplumb").jsPlumb;
+    type jsPlumbInstance = import("jsplumb").jsPlumbInstance;
+    type OverlaySpec = typeof import("jsplumb").OverlaySpec;
+    type ConnectionMadeEventInfo = typeof import("jsplumb").ConnectionMadeEventInfo;
+
+    /*
+     * Panzoom
+     */
+
+    function panzoom(el: HTMLElement, opts: {
+        maxZoom: number,
+        minZoom: number,
+        smoothScroll: false,
+        filterKey: (e: { altKey: boolean }, dx: number, dy: number, dz: number) => void;
+    });
+
+    interface PanZoom {
+        zoomTo(x: number, y: number, scale: number);
+        moveTo(x: number, y: number);
+        on(event: string, callback: () => void);
+        getTransform(): unknown;
+        dispose(): void;
+    }
+}
+
+module "jsplumb" {
+    interface Connection {
+        canvas: HTMLCanvasElement;
+    }
+
+    interface Overlay {
+        setLabel(label: string);
+    }
+
+    interface ConnectParams {
+        type: RelationType;
     }
 }
