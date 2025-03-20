@@ -385,3 +385,14 @@ div.tn-tool-dialog {
 .delete-notes-list .note-path {
     padding-left: 8px;
 }
+
+/*
+ * ATTRIBUTE DETAIL DIALOG
+ */
+
+/* Labels */
+.attr-edit-table th {
+    padding-right: 12px;
+    font-weight: normal;
+    white-space: nowrap;
+}
