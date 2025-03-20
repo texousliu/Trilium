@@ -38,7 +38,10 @@ const TPL = `
 
         <div class="form-group">
             <label>${t("images.jpeg_quality_description")}</label>
-            <input class="image-jpeg-quality form-control options-number-input" min="10" max="100" type="number">
+            <div class="input-group">
+                <input class="image-jpeg-quality form-control options-number-input" min="10" max="100" type="number">
+                <span class="input-group-text">%</span>
+            </div>
         </div>
     </div>
 </div>
