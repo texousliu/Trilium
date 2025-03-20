@@ -75,11 +75,14 @@ export class ContextFormatter {
                     content = this.sanitizeNoteContent(source.content, source.type, source.mime);
                 } else {
                     sourcesSkipped++;
+                    log.info(`Skipping note with no content: ${source.title || 'Untitled'}`);
                     continue; // Skip invalid sources
                 }
 
-                if (!content || content.trim().length === 0) {
+                // Skip if content is empty or just whitespace/minimal
+                if (!content || content.trim().length <= 10) {
                     sourcesSkipped++;
+                    log.info(`Skipping note with minimal content: ${source.title || 'Untitled'}`);
                     continue;
                 }
 

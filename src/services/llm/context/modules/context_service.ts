@@ -133,8 +133,18 @@ export class ContextService {
 
                 // Convert map to array and limit to top results
                 relevantNotes = Array.from(allResults.values())
+                    .filter(note => {
+                        // Filter out notes with no content or very minimal content (less than 10 chars)
+                        const hasContent = note.content && note.content.trim().length > 10;
+                        if (!hasContent) {
+                            log.info(`Filtering out empty/minimal note: "${note.title}" (${note.noteId})`);
+                        }
+                        return hasContent;
+                    })
                     .sort((a, b) => b.similarity - a.similarity)
                     .slice(0, 20); // Increased from 8 to 20 notes
+
+                log.info(`After filtering out empty notes, ${relevantNotes.length} relevant notes remain`);
             } catch (error) {
                 log.error(`Error finding relevant notes: ${error}`);
                 // Continue with empty notes list
@@ -406,9 +416,17 @@ export class ContextService {
 
             // Convert the combined Map to an array and sort by similarity
             const combinedNotes = Array.from(allNotes.values())
+                .filter(note => {
+                    // Filter out notes with no content or very minimal content
+                    const hasContent = note.content && note.content.trim().length > 10;
+                    if (!hasContent) {
+                        log.info(`Filtering out empty/minimal note from combined results: "${note.title}" (${note.noteId})`);
+                    }
+                    return hasContent;
+                })
                 .sort((a, b) => b.similarity - a.similarity);
 
-            log.info(`Combined ${relevantNotes.length} notes from initial search with ${vectorSearchNotes.length} notes from vector search, resulting in ${combinedNotes.length} unique notes`);
+            log.info(`Combined ${relevantNotes.length} notes from initial search with ${vectorSearchNotes.length} notes from vector search, resulting in ${combinedNotes.length} unique notes after filtering out empty notes`);
 
             // Filter for Qu-related notes
             const quNotes = combinedNotes.filter(result =>

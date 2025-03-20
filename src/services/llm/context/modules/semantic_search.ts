@@ -165,22 +165,47 @@ export class SemanticSearch {
                     // Get note content
                     const content = await this.contextExtractor.getNoteContent(result.noteId);
 
+                    // Adjust similarity score based on content quality
+                    let adjustedSimilarity = result.similarity;
+
+                    // Penalize notes with empty or minimal content
+                    if (!content || content.trim().length <= 10) {
+                        // Reduce similarity by 80% for empty/minimal notes
+                        adjustedSimilarity *= 0.2;
+                        log.info(`Adjusting similarity for empty/minimal note "${note.title}" from ${Math.round(result.similarity * 100)}% to ${Math.round(adjustedSimilarity * 100)}%`);
+                    }
+                    // Slightly boost notes with substantial content
+                    else if (content.length > 100) {
+                        // Small boost of 10% for notes with substantial content
+                        adjustedSimilarity = Math.min(1.0, adjustedSimilarity * 1.1);
+                    }
+
                     return {
                         noteId: result.noteId,
                         title: note.title,
                         content,
-                        similarity: result.similarity
+                        similarity: adjustedSimilarity
                     };
                 })
             );
 
             // Filter out null results
-            const filteredResults = enrichedResults.filter(Boolean) as {
+            const filteredResults = enrichedResults.filter(result => {
+                // Filter out null results and notes with empty or minimal content
+                if (!result) return false;
+
+                // Instead of hard filtering by content length, now we use an adjusted
+                // similarity score, but we can still filter extremely low scores
+                return result.similarity > 0.2;
+            }) as {
                 noteId: string,
                 title: string,
                 content: string | null,
                 similarity: number
             }[];
+
+            // Sort results by adjusted similarity
+            filteredResults.sort((a, b) => b.similarity - a.similarity);
 
             // Cache results
             cacheManager.storeQueryResults(cacheKey, filteredResults);
@@ -224,48 +249,17 @@ export class SemanticSearch {
             const model = provider.getConfig().model || '';
             const providerName = provider.name;
 
-            // Check if vectorStore has the findSimilarNotesInSet method
-            if (typeof vectorStore.findSimilarNotesInSet === 'function') {
-                // Use the dedicated method if available
-                return await vectorStore.findSimilarNotesInSet(
-                    embedding,
-                    noteIds,
-                    providerName,
-                    model,
-                    limit
-                );
-            }
-
-            // Fallback: Manually search through the notes in the subtree
-            const similarities: {noteId: string, similarity: number}[] = [];
-
-            for (const noteId of noteIds) {
-                try {
-                    const noteEmbedding = await vectorStore.getEmbeddingForNote(
-                        noteId,
-                        providerName,
-                        model
-                    );
-
-                    if (noteEmbedding && noteEmbedding.embedding) {
-                        const similarity = cosineSimilarity(embedding, noteEmbedding.embedding);
-                        if (similarity > 0.5) { // Apply a similarity threshold
-                            similarities.push({
-                                noteId,
-                                similarity
-                            });
-                        }
-                    }
-                } catch (error) {
-                    // Skip notes that don't have embeddings
-                    continue;
-                }
-            }
-
-            // Sort by similarity and return top results
-            return similarities
-                .sort((a, b) => b.similarity - a.similarity)
-                .slice(0, limit);
+            // Use vectorStore to find similar notes within this subset
+            // Ideally we'd have a method to find within a specific set, but we'll use the general findSimilarNotes
+            return await vectorStore.findSimilarNotes(
+                embedding,
+                providerName,
+                model,
+                limit
+            ).then(results => {
+                // Filter to only include notes within our noteIds set
+                return results.filter(result => noteIds.includes(result.noteId));
+            });
         } catch (error) {
             log.error(`Error finding notes in branch: ${error}`);
             return [];
