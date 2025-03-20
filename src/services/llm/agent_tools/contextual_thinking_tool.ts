@@ -15,6 +15,7 @@
 
 import log from "../../log.js";
 import aiServiceManager from "../ai_service_manager.js";
+import { AGENT_TOOL_PROMPTS } from '../llm_prompt_constants.js';
 
 /**
  * Represents a single reasoning step taken by the agent
@@ -73,17 +74,17 @@ export class ContextualThinkingTool {
         // Initialize with some starter thinking steps
         this.addThinkingStep(thinkingId, {
             type: 'observation',
-            content: `Starting analysis of the query: "${query}"`
+            content: AGENT_TOOL_PROMPTS.CONTEXTUAL_THINKING.STARTING_ANALYSIS(query)
         });
 
         this.addThinkingStep(thinkingId, {
             type: 'question',
-            content: `What are the key components of this query that need to be addressed?`
+            content: AGENT_TOOL_PROMPTS.CONTEXTUAL_THINKING.KEY_COMPONENTS
         });
 
         this.addThinkingStep(thinkingId, {
             type: 'observation',
-            content: `Breaking down the query to understand its requirements and context.`
+            content: AGENT_TOOL_PROMPTS.CONTEXTUAL_THINKING.BREAKING_DOWN
         });
 
         return thinkingId;

@@ -13,6 +13,7 @@
  */
 
 import log from '../../log.js';
+import { AGENT_TOOL_PROMPTS } from '../llm_prompt_constants.js';
 
 export interface SubQuery {
     id: string;
@@ -66,7 +67,7 @@ export class QueryDecompositionTool {
                 const mainSubQuery = {
                     id: this.generateSubQueryId(),
                     text: query,
-                    reason: 'Direct question that can be answered without decomposition',
+                    reason: AGENT_TOOL_PROMPTS.QUERY_DECOMPOSITION.SUB_QUERY_DIRECT,
                     isAnswered: false
                 };
 
@@ -74,7 +75,7 @@ export class QueryDecompositionTool {
                 const genericQuery = {
                     id: this.generateSubQueryId(),
                     text: `Information related to ${query}`,
-                    reason: "Generic exploration to find related content",
+                    reason: AGENT_TOOL_PROMPTS.QUERY_DECOMPOSITION.SUB_QUERY_GENERIC,
                     isAnswered: false
                 };
 
@@ -110,7 +111,7 @@ export class QueryDecompositionTool {
                 subQueries: [{
                     id: this.generateSubQueryId(),
                     text: query,
-                    reason: 'Error in decomposition, treating as simple query',
+                    reason: AGENT_TOOL_PROMPTS.QUERY_DECOMPOSITION.SUB_QUERY_ERROR,
                     isAnswered: false
                 }],
                 status: 'pending',
@@ -290,7 +291,7 @@ export class QueryDecompositionTool {
             return [{
                 id: this.generateSubQueryId(),
                 text: query,
-                reason: 'Direct analysis of note details',
+                reason: AGENT_TOOL_PROMPTS.QUERY_DECOMPOSITION.SUB_QUERY_DIRECT_ANALYSIS,
                 isAnswered: false
             }];
         }
@@ -299,7 +300,7 @@ export class QueryDecompositionTool {
         subQueries.push({
             id: this.generateSubQueryId(),
             text: query,
-            reason: 'Original query',
+            reason: AGENT_TOOL_PROMPTS.QUERY_DECOMPOSITION.ORIGINAL_QUERY,
             isAnswered: false
         });
 

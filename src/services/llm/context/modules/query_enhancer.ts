@@ -1,17 +1,14 @@
 import log from '../../../log.js';
 import cacheManager from './cache_manager.js';
 import type { Message } from '../../ai_interface.js';
+import { CONTEXT_PROMPTS } from '../../llm_prompt_constants.js';
 
 /**
  * Provides utilities for enhancing queries and generating search queries
  */
 export class QueryEnhancer {
-    // Default meta-prompt for query enhancement
-    private metaPrompt = `You are an AI assistant that decides what information needs to be retrieved from a user's knowledge base called TriliumNext Notes to answer the user's question.
-Given the user's question, generate 3-5 specific search queries that would help find relevant information.
-Each query should be focused on a different aspect of the question.
-Format your answer as a JSON array of strings, with each string being a search query.
-Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
+    // Use the centralized query enhancer prompt
+    private metaPrompt = CONTEXT_PROMPTS.QUERY_ENHANCER;
 
     /**
      * Generate search queries to find relevant information for the user question

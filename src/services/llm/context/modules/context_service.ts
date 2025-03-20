@@ -6,6 +6,7 @@ import queryEnhancer from './query_enhancer.js';
 import contextFormatter from './context_formatter.js';
 import aiServiceManager from '../../ai_service_manager.js';
 import { ContextExtractor } from '../index.js';
+import { CONTEXT_PROMPTS } from '../../llm_prompt_constants.js';
 
 /**
  * Main context service that integrates all context-related functionality
@@ -84,8 +85,7 @@ export class ContextService {
                 log.error(`Failed to initialize ContextService: ${error}`);
                 // Return a fallback response if initialization fails
                 return {
-                    context: "I am an AI assistant helping you with your Trilium notes. " +
-                             "I'll try to assist you with general knowledge about your query.",
+                    context: CONTEXT_PROMPTS.NO_NOTES_CONTEXT,
                     notes: [],
                     queries: [userQuestion]
                 };
@@ -175,8 +175,7 @@ export class ContextService {
         } catch (error) {
             log.error(`Error processing query: ${error}`);
             return {
-                context: "I am an AI assistant helping you with your Trilium notes. " +
-                         "I'll try to assist you with general knowledge about your query.",
+                context: CONTEXT_PROMPTS.NO_NOTES_CONTEXT,
                 notes: [],
                 queries: [userQuestion]
             };

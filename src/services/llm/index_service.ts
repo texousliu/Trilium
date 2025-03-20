@@ -20,6 +20,7 @@ import type { NoteEmbeddingContext } from "./embeddings/embeddings_interface.js"
 import type { OptionDefinitions } from "../options_interface.js";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
+import { CONTEXT_PROMPTS } from './llm_prompt_constants.js';
 
 class IndexService {
     private initialized = false;
@@ -691,7 +692,7 @@ class IndexService {
             );
 
             if (similarNotes.length === 0) {
-                return "I'm an AI assistant helping with your Trilium notes. I couldn't find specific notes related to your query, but I'll try to assist based on general knowledge.";
+                return CONTEXT_PROMPTS.INDEX_NO_NOTES_CONTEXT;
             }
 
             // Build context from the similar notes

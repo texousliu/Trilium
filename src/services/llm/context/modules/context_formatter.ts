@@ -1,5 +1,6 @@
 import sanitizeHtml from 'sanitize-html';
 import log from '../../../log.js';
+import { CONTEXT_PROMPTS } from '../../llm_prompt_constants.js';
 
 // Constants for context window sizes, defines in-module to avoid circular dependencies
 const CONTEXT_WINDOW = {
@@ -23,10 +24,8 @@ export class ContextFormatter {
      */
     async buildContextFromNotes(sources: any[], query: string, providerId: string = 'default'): Promise<string> {
         if (!sources || sources.length === 0) {
-            // Return a default context instead of empty string
-            return "I am an AI assistant helping you with your Trilium notes. " +
-                   "I couldn't find any specific notes related to your query, but I'll try to assist you " +
-                   "with general knowledge about Trilium or other topics you're interested in.";
+            // Return a default context from constants instead of empty string
+            return CONTEXT_PROMPTS.NO_NOTES_CONTEXT;
         }
 
         try {
@@ -42,8 +41,8 @@ export class ContextFormatter {
 
             // Start with different headers based on provider
             let context = isAnthropicFormat
-                ? `I'm your AI assistant helping with your Trilium notes database. For your query: "${query}", I found these relevant notes:\n\n`
-                : `I've found some relevant information in your notes that may help answer: "${query}"\n\n`;
+                ? CONTEXT_PROMPTS.CONTEXT_HEADERS.ANTHROPIC(query)
+                : CONTEXT_PROMPTS.CONTEXT_HEADERS.DEFAULT(query);
 
             // Sort sources by similarity if available to prioritize most relevant
             if (sources[0] && sources[0].similarity !== undefined) {
@@ -97,8 +96,8 @@ export class ContextFormatter {
 
             // Add closing to provide instructions to the AI
             const closing = isAnthropicFormat
-                ? "\n\nPlease use this information to answer the user's query. If the notes don't contain enough information, you can use your general knowledge as well."
-                : "\n\nBased on this information from the user's notes, please provide a helpful response.";
+                ? CONTEXT_PROMPTS.CONTEXT_CLOSINGS.ANTHROPIC
+                : CONTEXT_PROMPTS.CONTEXT_CLOSINGS.DEFAULT;
 
             // Check if adding the closing would exceed our limit
             if (totalSize + closing.length <= maxTotalLength) {
@@ -108,7 +107,7 @@ export class ContextFormatter {
             return context;
         } catch (error) {
             log.error(`Error building context from notes: ${error}`);
-            return "I'm your AI assistant helping with your Trilium notes. I'll try to answer based on what I know.";
+            return CONTEXT_PROMPTS.ERROR_FALLBACK_CONTEXT;
         }
     }
 

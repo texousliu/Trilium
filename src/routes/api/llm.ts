@@ -13,6 +13,7 @@ import contextService from "../../services/llm/context_service.js";
 import sql from "../../services/sql.js";
 // Import the index service for knowledge base management
 import indexService from "../../services/llm/index_service.js";
+import { CONTEXT_PROMPTS } from '../../services/llm/llm_prompt_constants.js';
 
 // LLM service constants
 export const LLM_CONSTANTS = {
@@ -504,7 +505,7 @@ async function findRelevantNotes(content: string, contextNoteId: string | null =
 }
 
 /**
- * Build context from notes
+ * Build a prompt with context from relevant notes
  */
 function buildContextFromNotes(sources: NoteSource[], query: string): string {
     console.log("Building context from notes with query:", query);
@@ -529,14 +530,10 @@ function buildContextFromNotes(sources: NoteSource[], query: string): string {
         return query || '';
     }
 
-    // Build a complete context prompt with clearer instructions
-    return `I'll provide you with relevant information from my notes to help answer your question.
-
-${noteContexts}
-
-When referring to information from these notes in your response, please cite them by their titles (e.g., "According to your note on [Title]...") rather than using labels like "Note 1" or "Note 2".
-
-Now, based on the above information, please answer: ${query}`;
+    // Use the template from the constants file, replacing placeholders
+    return CONTEXT_PROMPTS.CONTEXT_NOTES_WRAPPER
+        .replace('{noteContexts}', noteContexts)
+        .replace('{query}', query);
 }
 
 /**
