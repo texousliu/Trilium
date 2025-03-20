@@ -5,7 +5,7 @@ The recommended way is to use a Helm chart.
 
 ## Root privileges
 
-> \[!NOTE\]  
+> [!NOTE]
 > The Trilium container at this time needs to be run with root privileges. It will swap to UID and GID `1000:1000` to run the `node` process after execution though, so the main process doesn't run with root privileges.
 
 The Trilium docker container needs to be run with root privileges. The node process inside the container will be started with reduced privileges (uid:gid 1000:1000) after some initialization logic. Please make sure that you don't use a security context (PodSecurityContext) which changes the user ID. To use a different uid:gid for file storage and the application, please use the `USER_UID` & `USER_GID` environment variables.

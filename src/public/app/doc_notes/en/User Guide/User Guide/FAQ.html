@@ -13,27 +13,16 @@
        <h1 data-trilium-h1>FAQ</h1>
 
       <div class="ck-content">
-        <h2>Mac OS support</h2>
-        <p>Originally, desktop builds of Trilium Notes has been available for Windows
-          &amp; Linux, but there has been a considerable demand for macOS build.</p>
-        <p>So I made one, but I underestimated the differences and specifics of Mac
-          platform which seems to require special handling in several places. My
-          lack of knowledge and frankly willingness to learn &amp; code Mac specific
-          functionality resulted in a current state where <a href="https://github.com/TriliumNext/Notes/issues/511">Trilium does not integrate well into the OS</a> </p>
-        <p>%%{WARNING}%%.</p>
-        <p>macOS build is from now on considered "unsupported". I will strive to
-          keep it fundamentally functional, but I won't work on Mac specific features
-          or integrations. Note that this is more of an acknowledgment of an existing
-          state rather than sudden change of direction.</p>
-        <p>Of course, PRs are welcome.</p>
-        <h2>Translation / localization support</h2>
-        <p>Trilium is currently available only in English. Translation to other languages
-          is not planned in the near/medium term because it brings a significant
-          maintenance overhead. This decision might be revisited once Trilium stabilizes
-          into a more mature product.</p>
-        <p>For Chinese, there's an unofficial fork <a href="https://github.com/Nriver/trilium-translation">here</a>.
-          Use at your own risk.</p>
-        <h2>Multi user support</h2>
+        <h2>macOS support</h2>
+        <p>Originally, Trilium Notes considered the macOS build unsupported. TriliumNext
+          commits to make the experience on macOS as good as possible.</p>
+        <p>if you find any platform-specific issues, feel free to <a href="Troubleshooting/Reporting%20issues.html">report them</a>.</p>
+        <h2>Translation / localisation support</h2>
+        <p>The original Trilium Notes application did not support multiple languages.
+          Since we believe that internationalisation is a core part of an application,
+          we have added support for it.</p>
+        <p>Contributions to translations are welcome.</p>
+        <h2>Multi-user support</h2>
         <p>Common request is to allow multiple users collaborate, share notes etc.
           So far I'm resisting this because of these reasons:</p>
         <ul>
@@ -68,10 +57,7 @@
         <p>These general purpose sync apps are not suitable to sync database files
           which are open and being worked on by another application. The result is
           that they will corrupt the database file, resulting in data loss and this
-          message in the Trilium logs:</p>
-        <blockquote>
-          <p>SqliteError: database disk image is malformed</p>
-        </blockquote>
+          message in the Trilium logs:</p><pre><code class="language-text-x-trilium-auto">SqliteError: database disk image is malformed</code></pre>
         <p>The only supported way to sync Trilium's data across the network is to
           use a <a href="Installation%20%26%20Setup/Synchronization.html">sync/web server</a>.</p>
         <h2>Why database instead of flat files?</h2>

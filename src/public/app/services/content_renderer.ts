@@ -40,7 +40,7 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
 
     const $renderedContent = $('<div class="rendered-content">');
 
-    if (type === "text") {
+    if (type === "text" || type === "book") {
         await renderText(entity, $renderedContent);
     } else if (type === "code") {
         await renderCode(entity, $renderedContent);

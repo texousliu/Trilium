@@ -6,15 +6,15 @@ import appContext from "../components/app_context.js";
 import { t } from "./i18n.js";
 
 interface UploadFilesOptions {
-    safeImport: boolean;
-    shrinkImages: boolean;
-    textImportedAsText: boolean;
-    codeImportedAsCode: boolean;
-    explodeArchives: boolean;
-    replaceUnderscoresWithSpaces: boolean;
+    safeImport?: boolean;
+    shrinkImages: boolean | "true" | "false";
+    textImportedAsText?: boolean;
+    codeImportedAsCode?: boolean;
+    explodeArchives?: boolean;
+    replaceUnderscoresWithSpaces?: boolean;
 }
 
-export async function uploadFiles(entityType: string, parentNoteId: string, files: string[], options: UploadFilesOptions) {
+export async function uploadFiles(entityType: string, parentNoteId: string, files: string[] | File[], options: UploadFilesOptions) {
     if (!["notes", "attachments"].includes(entityType)) {
         throw new Error(`Unrecognized import entity type '${entityType}'.`);
     }

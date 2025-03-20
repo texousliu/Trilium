@@ -131,7 +131,7 @@ export default class SwitchWidget extends NoteContextAwareWidget {
     protected switchOffName = "";
     protected switchOffTooltip = "";
 
-    private disabledTooltip = "";
+    protected disabledTooltip = "";
 
     private currentState = false;
 

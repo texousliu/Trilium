@@ -18,7 +18,7 @@ Let's assume you want to restore the weekly backup, here's how to do it:
 
 *   find [data directory](Data%20directory.md) Trilium uses - easy way is to open "About Trilium Notes" from "Menu" in upper left corner and looking at "data directory"
     *   I'll refer to `~/trilium-data` as data directory from now on
-*   find `~/trilium-data/backup/backup-weekly.db` - this is the [document](#root/xjSsCcvVZf6H)backup
+*   find `~/trilium-data/backup/backup-weekly.db` - this is the [document](#root/xjSsCcvVZf6H) backup
 *   at this point stop/kill Trilium
 *   delete `~/trilium-data/document.db`, `~/trilium-data/document.db-wal` and `~/trilium-data/document.db-shm` (latter two files are auto generated)
 *   copy and rename this `~/trilium-data/backup/backup-weekly.db` to `~/trilium-data/document.db`
@@ -40,4 +40,4 @@ noBackup=true
 
 You can also review the [configuration](../Advanced%20Usage/Configuration%20\(config.ini%20or%20e.md) file to provide all `config.ini` values as environment variables instead.
 
-See [sample config](https://github.com/TriliumNext/Notes/blob/master/config-sample.ini). %%{WARNING}%%
+See [sample config](https://github.com/TriliumNext/Notes/blob/master/config-sample.ini).
