@@ -74,7 +74,7 @@ declare global {
 
     interface AutoCompleteArg {
         displayKey: "name" | "value" | "notePathTitle";
-        cache: boolean;
+        cache?: boolean;
         source: (term: string, cb: AutoCompleteCallback) => void,
         templates?: {
             suggestion: (suggestion: Suggestion) => string | undefined
