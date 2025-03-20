@@ -1090,7 +1090,8 @@
   "max_content_width": {
     "title": "Content Width",
     "default_description": "Trilium by default limits max content width to improve readability for maximized screens on wide screens.",
-    "max_width_label": "Max content width in pixels",
+    "max_width_label": "Max content width",
+    "max_width_unit": "pixels",
     "apply_changes_description": "To apply content width changes, click on",
     "reload_button": "reload frontend",
     "reload_description": "changes from appearance options"
@@ -1245,7 +1246,8 @@
   "code_auto_read_only_size": {
     "title": "Automatic Read-Only Size",
     "description": "Automatic read-only note size is the size after which notes will be displayed in a read-only mode (for performance reasons).",
-    "label": "Automatic read-only size (code notes)"
+    "label": "Automatic read-only size (code notes)",
+    "unit": "characters"
   },
   "code-editor-options": {
     "title": "Editor"
@@ -1266,7 +1268,8 @@
     "download_images_automatically": "Download images automatically for offline use.",
     "download_images_description": "Pasted HTML can contain references to online images, Trilium will find those references and download the images so that they are available offline.",
     "enable_image_compression": "Enable image compression",
-    "max_image_dimensions": "Max width / height of an image in pixels (image will be resized if it exceeds this setting).",
+    "max_image_dimensions": "Max width / height of an image (image will be resized if it exceeds this setting).",
+    "max_image_dimensions_unit": "pixels",
     "jpeg_quality_description": "JPEG quality (10 - worst quality, 100 - best quality, 50 - 85 is recommended)"
   },
   "attachment_erasure_timeout": {
@@ -1298,6 +1301,7 @@
     "note_revisions_snapshot_limit_title": "Note Revision Snapshot Limit",
     "note_revisions_snapshot_limit_description": "The note revision snapshot number limit refers to the maximum number of revisions that can be saved for each note. Where -1 means no limit, 0 means delete all revisions. You can set the maximum revisions for a single note through the #versioningLimit label.",
     "snapshot_number_limit_label": "Note revision snapshot number limit:",
+    "snapshot_number_limit_unit": "snapshots",
     "erase_excess_revision_snapshots": "Erase excess revision snapshots now",
     "erase_excess_revision_snapshots_prompt": "Excess revision snapshots have been erased."
   },
@@ -1340,13 +1344,15 @@
   "table_of_contents": {
     "title": "Table of Contents",
     "description": "Table of contents will appear in text notes when the note has more than a defined number of headings. You can customize this number:",
+    "unit": "headings",
     "disable_info": "You can also use this option to effectively disable TOC by setting a very high number.",
     "shortcut_info": "You can configure a keyboard shortcut for quickly toggling the right pane (including TOC) in the Options -> Shortcuts (name 'toggleRightPane')."
   },
   "text_auto_read_only_size": {
     "title": "Automatic Read-Only Size",
     "description": "Automatic read-only note size is the size after which notes will be displayed in a read-only mode (for performance reasons).",
-    "label": "Automatic read-only size (text notes)"
+    "label": "Automatic read-only size (text notes)",
+    "unit": "characters"
   },
   "i18n": {
     "title": "Localization",
@@ -1446,7 +1452,8 @@
   "sync_2": {
     "config_title": "Sync Configuration",
     "server_address": "Server instance address",
-    "timeout": "Sync timeout (milliseconds)",
+    "timeout": "Sync timeout",
+    "timeout_unit": "milliseconds",
     "proxy_label": "Sync proxy server (optional)",
     "note": "Note",
     "note_description": "If you leave the proxy setting blank, the system proxy will be used (applies to desktop/electron build only).",
