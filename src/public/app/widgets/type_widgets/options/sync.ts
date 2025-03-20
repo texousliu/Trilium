@@ -16,10 +16,10 @@ const TPL = `
 
         <div class="form-group">
             <label for="sync-server-timeout">${t("sync_2.timeout")}</label>
-            <div class="input-group">
+            <label class="input-group tn-number-unit-pair">
                 <input id="sync-server-timeout" class="sync-server-timeout form-control" min="1" max="10000000" type="number" style="text-align: left;">
                 <span class="input-group-text">${t("sync_2.timeout_unit")}</span>
-            </div>
+            </label>
         </div>
 
         <div class="form-group">

@@ -9,10 +9,10 @@ const TPL = `
     ${t("table_of_contents.description")}
 
     <div class="form-group">
-        <div class="input-group">
+        <label class="input-group tn-number-unit-pair">
             <input type="number" class="min-toc-headings form-control options-number-input options-number-input" min="0" max="9999999999999999" step="1" />
             <span class="input-group-text">${t("table_of_contents.unit")}</span>
-        </div>
+        </label>
     </div>
 
     <p class="form-text">${t("table_of_contents.disable_info")}</p>

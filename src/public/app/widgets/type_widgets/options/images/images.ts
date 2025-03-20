@@ -30,18 +30,18 @@ const TPL = `
     <div class="image-compression-enabled-wraper">
         <div class="form-group">
             <label>${t("images.max_image_dimensions")}</label>
-            <div class="input-group">
+            <label class="input-group tn-number-unit-pair">
                 <input class="image-max-width-height form-control options-number-input" type="number" min="1">
                 <span class="input-group-text">${t("images.max_image_dimensions_unit")}</span>
-            </div>
+            </label>
         </div>
 
         <div class="form-group">
             <label>${t("images.jpeg_quality_description")}</label>
-            <div class="input-group">
+            <label class="input-group tn-number-unit-pair">
                 <input class="image-jpeg-quality form-control options-number-input" min="10" max="100" type="number">
                 <span class="input-group-text">%</span>
-            </div>
+            </label>
         </div>
     </div>
 </div>
