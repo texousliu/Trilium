@@ -1,5 +1,5 @@
 import TypeWidget from "./type_widget.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import froca from "../../services/froca.js";
 import linkService from "../../services/link.js";
 import contentRenderer from "../../services/content_renderer.js";
@@ -13,7 +13,7 @@ export default class AbstractTextTypeWidget extends TypeWidget {
         this.refreshCodeBlockOptions();
     }
 
-    setupImageOpening(singleClickOpens) {
+    setupImageOpening(singleClickOpens: boolean) {
         this.$widget.on("dblclick", "img", (e) => this.openImageInCurrentTab($(e.target)));
 
         this.$widget.on("click", "img", (e) => {
@@ -29,27 +29,27 @@ export default class AbstractTextTypeWidget extends TypeWidget {
         });
     }
 
-    async openImageInCurrentTab($img) {
-        const { noteId, viewScope } = await this.parseFromImage($img);
+    async openImageInCurrentTab($img: JQuery<HTMLElement>) {
+        const parsedImage  = await this.parseFromImage($img);
 
-        if (noteId) {
-            appContext.tabManager.getActiveContext().setNote(noteId, { viewScope });
+        if (parsedImage) {
+            appContext.tabManager.getActiveContext()?.setNote(parsedImage.noteId, { viewScope: parsedImage.viewScope });
         } else {
             window.open($img.prop("src"), "_blank");
         }
     }
 
-    async openImageInNewTab($img) {
-        const { noteId, viewScope } = await this.parseFromImage($img);
+    async openImageInNewTab($img: JQuery<HTMLElement>) {
+        const parsedImage = await this.parseFromImage($img);
 
-        if (noteId) {
-            appContext.tabManager.openTabWithNoteWithHoisting(noteId, { viewScope });
+        if (parsedImage) {
+            appContext.tabManager.openTabWithNoteWithHoisting(parsedImage.noteId, { viewScope: parsedImage.viewScope });
         } else {
             window.open($img.prop("src"), "_blank");
         }
     }
 
-    async parseFromImage($img) {
+    async parseFromImage($img: JQuery<HTMLElement>) {
         const imgSrc = $img.prop("src");
 
         const imageNoteMatch = imgSrc.match(/\/api\/images\/([A-Za-z0-9_]+)\//);
@@ -66,7 +66,7 @@ export default class AbstractTextTypeWidget extends TypeWidget {
             const attachment = await froca.getAttachment(attachmentId);
 
             return {
-                noteId: attachment.ownerId,
+                noteId: attachment?.ownerId,
                 viewScope: {
                     viewMode: "attachments",
                     attachmentId: attachmentId
@@ -77,7 +77,7 @@ export default class AbstractTextTypeWidget extends TypeWidget {
         return null;
     }
 
-    async loadIncludedNote(noteId, $el) {
+    async loadIncludedNote(noteId: string, $el: JQuery<HTMLElement>) {
         const note = await froca.getNote(noteId);
 
         if (note) {
@@ -97,11 +97,11 @@ export default class AbstractTextTypeWidget extends TypeWidget {
         }
     }
 
-    async loadReferenceLinkTitle($el, href = null) {
+    async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null = null) {
         await linkService.loadReferenceLinkTitle($el, href);
     }
 
-    refreshIncludedNote($container, noteId) {
+    refreshIncludedNote($container: JQuery<HTMLElement>, noteId: string) {
         if ($container) {
             $container.find(`section[data-note-id="${noteId}"]`).each((_, el) => {
                 this.loadIncludedNote(noteId, $(el));
@@ -114,7 +114,7 @@ export default class AbstractTextTypeWidget extends TypeWidget {
         this.$widget.toggleClass("word-wrap", wordWrap);
     }
 
-    async entitiesReloadedEvent({ loadResults }) {
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isOptionReloaded("codeBlockWordWrap")) {
             this.refreshCodeBlockOptions();
         }
