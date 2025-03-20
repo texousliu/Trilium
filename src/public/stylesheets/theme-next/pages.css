@@ -227,22 +227,6 @@ div.note-detail-empty {
     font-size: .85em;
 }
 
-/* Appeareance */
-
-.main-font-size-input-group,
-.tree-font-size-input-group,
-.detail-font-size-input-group,
-.monospace-font-size-input-group {
-    width: fit-content;
-}
-
-#main-font-size,
-#tree-font-size,
-#detail-font-size,
-#monospace-font-size {
-    width: 8ch !important;
-}
-
 /* Shortcuts */
 
 .note-detail-content-widget-content:has(.shortcuts-options-section) {
