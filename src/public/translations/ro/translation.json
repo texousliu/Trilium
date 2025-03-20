@@ -698,7 +698,8 @@
     "enable_image_compression": "Activează compresia imaginilor",
     "images_section_title": "Imagini",
     "jpeg_quality_description": "Calitatea JPEG (10 - cea mai slabă calitate, 100 - cea mai bună calitate, se recomandă între 50 și 85)",
-    "max_image_dimensions": "Lungimea/lățimea maximă a unei imagini în pixeli (imaginea va fi redimensionată dacă depășește acest prag)."
+    "max_image_dimensions": "Lungimea/lățimea maximă a unei imagini (imaginea va fi redimensionată dacă depășește acest prag).",
+    "max_image_dimensions_unit": "pixeli"
   },
   "import": {
     "chooseImportFile": "Selectați fișierul de importat",

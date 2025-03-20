@@ -1151,7 +1151,8 @@
     "download_images_automatically": "Download images automatically for offline use.",
     "download_images_description": "Pasted HTML can contain references to online images, Trilium will find those references and download the images so that they are available offline.",
     "enable_image_compression": "Enable image compression",
-    "max_image_dimensions": "Max width / height of an image in pixels (image will be resized if it exceeds this setting).",
+    "max_image_dimensions": "Max width / height of an image (image will be resized if it exceeds this setting).",
+    "max_image_dimensions_unit": "pixels",
     "jpeg_quality_description": "JPEG quality (10 - worst quality, 100 - best quality, 50 - 85 is recommended)"
   },
   "attachment_erasure_timeout": {

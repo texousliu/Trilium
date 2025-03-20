@@ -30,7 +30,10 @@ const TPL = `
     <div class="image-compression-enabled-wraper">
         <div class="form-group">
             <label>${t("images.max_image_dimensions")}</label>
-            <input class="image-max-width-height form-control options-number-input" type="number" min="1">
+            <div class="input-group">
+                <input class="image-max-width-height form-control options-number-input" type="number" min="1">
+                <span class="input-group-text">${t("images.max_image_dimensions_unit")}</span>
+            </div>
         </div>
 
         <div class="form-group">
