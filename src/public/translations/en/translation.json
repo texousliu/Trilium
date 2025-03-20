@@ -1334,7 +1334,8 @@
   "sync_2": {
     "config_title": "Sync Configuration",
     "server_address": "Server instance address",
-    "timeout": "Sync timeout (milliseconds)",
+    "timeout": "Sync timeout",
+    "timeout_unit": "milliseconds",
     "proxy_label": "Sync proxy server (optional)",
     "note": "Note",
     "note_description": "If you leave the proxy setting blank, the system proxy will be used (applies to desktop/electron build only).",
