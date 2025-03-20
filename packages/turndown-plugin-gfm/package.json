@@ -32,6 +32,7 @@
     "type": "git",
     "url": "https://github.com/laurent22/joplin-turndown-plugin-gfm.git"
   },
+  "type": "module",
   "scripts": {
     "build-all": "npm run build-cjs && npm run build-es && npm run build-iife",
     "build": "rollup -c config/rollup.config.cjs.js",
