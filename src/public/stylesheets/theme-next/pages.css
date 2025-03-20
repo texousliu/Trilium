@@ -94,6 +94,14 @@
 }
 
 /*
+ * NOTE MAP
+ */
+
+ .note-detail-note-map .fixnodes-type-switcher .tn-tool-button.toggled {
+    color: var(--tab-close-button-hover-background);
+}
+
+/*
  * OPTIONS PAGES
  */
  
