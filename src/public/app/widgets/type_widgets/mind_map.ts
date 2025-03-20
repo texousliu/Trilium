@@ -5,6 +5,9 @@ import nodeMenu from "@mind-elixir/node-menu";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 
+// allow node-menu plugin css to be bundled by webpack
+import "@mind-elixir/node-menu/dist/style.css";
+
 const NEW_TOPIC_NAME = "";
 
 const TPL = `
