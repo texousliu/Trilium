@@ -1090,7 +1090,8 @@
   "max_content_width": {
     "title": "Content Width",
     "default_description": "Trilium by default limits max content width to improve readability for maximized screens on wide screens.",
-    "max_width_label": "Max content width in pixels",
+    "max_width_label": "Max content width",
+    "max_width_unit": "pixels",
     "apply_changes_description": "To apply content width changes, click on",
     "reload_button": "reload frontend",
     "reload_description": "changes from appearance options"

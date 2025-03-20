@@ -772,7 +772,8 @@
   "max_content_width": {
     "apply_changes_description": "Pentru a aplica schimbările de lățime a conținutului, dați click pe",
     "default_description": "În mod implicit Trilium limitează lățimea conținutului pentru a îmbunătăți lizibilitatea pentru ferestrele maximizate pe ecrane late.",
-    "max_width_label": "Lungimea maximă a conținutului în pixeli",
+    "max_width_label": "Lungimea maximă a conținutului",
+    "max_width_unit": "pixeli",
     "reload_button": "reîncarcă interfața",
     "reload_description": "schimbări din opțiunile de afișare",
     "title": "Lățime conținut"
