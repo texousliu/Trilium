@@ -7,6 +7,7 @@ import contextFormatter from './context_formatter.js';
 import aiServiceManager from '../../ai_service_manager.js';
 import { ContextExtractor } from '../index.js';
 import { CONTEXT_PROMPTS } from '../../prompts/llm_prompt_constants.js';
+import becca from '../../../../becca/becca.js';
 
 /**
  * Main context service that integrates all context-related functionality
@@ -455,6 +456,51 @@ export class ContextService {
                     for (const note of finalNotes) {
                         agentContext += `### ${note.title}\n`;
 
+                        // Add relationship information for the note
+                        try {
+                            const noteObj = becca.getNote(note.noteId);
+                            if (noteObj) {
+                                // Get parent notes
+                                const parentNotes = noteObj.getParentNotes();
+                                if (parentNotes && parentNotes.length > 0) {
+                                    agentContext += `**Parent notes:** ${parentNotes.map((p: any) => p.title).join(', ')}\n`;
+                                }
+
+                                // Get child notes
+                                const childNotes = noteObj.getChildNotes();
+                                if (childNotes && childNotes.length > 0) {
+                                    agentContext += `**Child notes:** ${childNotes.map((c: any) => c.title).join(', ')}\n`;
+                                }
+
+                                // Get attributes
+                                const attributes = noteObj.getAttributes();
+                                if (attributes && attributes.length > 0) {
+                                    const filteredAttrs = attributes.filter((a: any) => !a.name.startsWith('_')); // Filter out system attributes
+                                    if (filteredAttrs.length > 0) {
+                                        agentContext += `**Attributes:** ${filteredAttrs.map((a: any) => `${a.name}=${a.value}`).join(', ')}\n`;
+                                    }
+                                }
+
+                                // Get backlinks/related notes through relation attributes
+                                const relationAttrs = attributes?.filter((a: any) =>
+                                    a.name.startsWith('relation:') ||
+                                    a.name.startsWith('label:')
+                                );
+
+                                if (relationAttrs && relationAttrs.length > 0) {
+                                    agentContext += `**Relationships:** ${relationAttrs.map((a: any) => {
+                                        const targetNote = becca.getNote(a.value);
+                                        const targetTitle = targetNote ? targetNote.title : a.value;
+                                        return `${a.name.substring(a.name.indexOf(':') + 1)} → ${targetTitle}`;
+                                    }).join(', ')}\n`;
+                                }
+                            }
+                        } catch (error) {
+                            log.error(`Error getting relationship info for note ${note.noteId}: ${error}`);
+                        }
+
+                        agentContext += '\n';
+
                         if (note.content) {
                             // Extract relevant content instead of just taking first 2000 chars
                             const relevantContent = await this.extractRelevantContent(note.content, query, 2000);
@@ -473,6 +519,51 @@ export class ContextService {
 
                     for (const note of finalNotes) {
                         agentContext += `### ${note.title}\n`;
+
+                        // Add relationship information for the note
+                        try {
+                            const noteObj = becca.getNote(note.noteId);
+                            if (noteObj) {
+                                // Get parent notes
+                                const parentNotes = noteObj.getParentNotes();
+                                if (parentNotes && parentNotes.length > 0) {
+                                    agentContext += `**Parent notes:** ${parentNotes.map((p: any) => p.title).join(', ')}\n`;
+                                }
+
+                                // Get child notes
+                                const childNotes = noteObj.getChildNotes();
+                                if (childNotes && childNotes.length > 0) {
+                                    agentContext += `**Child notes:** ${childNotes.map((c: any) => c.title).join(', ')}\n`;
+                                }
+
+                                // Get attributes
+                                const attributes = noteObj.getAttributes();
+                                if (attributes && attributes.length > 0) {
+                                    const filteredAttrs = attributes.filter((a: any) => !a.name.startsWith('_')); // Filter out system attributes
+                                    if (filteredAttrs.length > 0) {
+                                        agentContext += `**Attributes:** ${filteredAttrs.map((a: any) => `${a.name}=${a.value}`).join(', ')}\n`;
+                                    }
+                                }
+
+                                // Get backlinks/related notes through relation attributes
+                                const relationAttrs = attributes?.filter((a: any) =>
+                                    a.name.startsWith('relation:') ||
+                                    a.name.startsWith('label:')
+                                );
+
+                                if (relationAttrs && relationAttrs.length > 0) {
+                                    agentContext += `**Relationships:** ${relationAttrs.map((a: any) => {
+                                        const targetNote = becca.getNote(a.value);
+                                        const targetTitle = targetNote ? targetNote.title : a.value;
+                                        return `${a.name.substring(a.name.indexOf(':') + 1)} → ${targetTitle}`;
+                                    }).join(', ')}\n`;
+                                }
+                            }
+                        } catch (error) {
+                            log.error(`Error getting relationship info for note ${note.noteId}: ${error}`);
+                        }
+
+                        agentContext += '\n';
 
                         if (note.content) {
                             // Extract relevant content instead of just taking first 2000 chars

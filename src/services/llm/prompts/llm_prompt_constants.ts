@@ -41,6 +41,7 @@ export const CONTEXT_PROMPTS = {
         `You are an AI assistant that decides what information needs to be retrieved from a user's knowledge base called TriliumNext Notes to answer the user's question.
 Given the user's question, generate 3-5 specific search queries that would help find relevant information.
 Each query should be focused on a different aspect of the question.
+Avoid generating queries that are too broad, vague, or about a user's entire Note database, and make sure they are relevant to the user's question.
 Format your answer as a JSON array of strings, with each string being a search query.
 Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`,
 
