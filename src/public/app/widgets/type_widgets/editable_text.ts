@@ -16,14 +16,15 @@ import toast from "../../services/toast.js";
 import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
+import type FNote from "../../entities/fnote.js";
 
 const ENABLE_INSPECTOR = false;
 
-const mentionSetup = {
+const mentionSetup: MentionConfig = {
     feeds: [
         {
             marker: "@",
-            feed: (queryText) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+            feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
             itemRenderer: (item) => {
                 const itemElement = document.createElement("button");
 
@@ -118,6 +119,12 @@ function buildListOfLanguages() {
  * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
  */
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
+
+    private contentLanguage?: string | null;
+    private watchdog!: CKWatchdog;
+
+    private $editor!: JQuery<HTMLElement>;
+
     static getType() {
         return "editableText";
     }
@@ -195,7 +202,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 }
             };
 
-            const contentLanguage = this.note.getLabelValue("language");
+            const contentLanguage = this.note?.getLabelValue("language");
             if (contentLanguage) {
                 finalConfig.language = {
                     ui: (typeof finalConfig.language === "string" ? finalConfig.language : "en"),
@@ -277,7 +284,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         const blob = await note.getBlob();
 
         await this.spacedUpdate.allowUpdateWithoutChange(async () => {
@@ -334,7 +341,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.addTextToEditor(dateString);
     }
 
-    async addLinkToEditor(linkHref, linkTitle) {
+    async addLinkToEditor(linkHref: string, linkTitle: string) {
         await this.initialized;
 
         this.watchdog.editor.model.change((writer) => {
@@ -343,7 +350,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    async addTextToEditor(text) {
+    async addTextToEditor(text: string) {
         await this.initialized;
 
         this.watchdog.editor.model.change((writer) => {

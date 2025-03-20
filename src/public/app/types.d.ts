@@ -176,17 +176,50 @@ declare global {
         }>
     };
 
+    interface CKCodeBlockLanguage {
+        language: string;
+        label: string;
+    }
+
+    interface CKWatchdog {
+        constructor(editorClass: CKEditorInstance, opts: {
+            minimumNonErrorTimePeriod: number;
+            crashNumberLimit: number,
+            saveInterval: number
+        });
+        on(event: string, callback: () => void);
+        state: string;
+        crashes: unknown[];
+        editor: TextEditor;
+        setCreator(callback: (elementOrData, editorConfig) => void);
+        create(el: HTMLElement, opts: {
+            placeholder: string,
+            mention: MentionConfig,
+            codeBlock: {
+                languages: CKCodeBlockLanguage[]
+            },
+            math: {
+                engine: string,
+                outputType: string,
+                lazyLoad: () => Promise<void>,
+                forceOutputType: boolean,
+                enablePreview: boolean
+            },
+            mermaid: {
+                lazyLoad: () => Promise<void>,
+                config: MermaidConfig
+            }
+        });
+    }
+
     var CKEditor: {
-        BalloonEditor: {
-            create(el: HTMLElement, config: {
-                removePlugins?: string[];
-                toolbar: {
-                    items: any[];
-                },
-                placeholder: string;
-                mention: MentionConfig
-            })
-        }
+        BalloonEditor: CKEditorInstance;
+        DecoupledEditor: CKEditorInstance;
+        EditorWatchdog: typeof CKWatchdog;
+    };
+
+    var CKEditorInspector: {
+        attach(editor: TextEditor);
     };
 
     var CodeMirror: {
@@ -257,6 +290,7 @@ declare global {
         setAttribute(name: string, value: string, el: TextEditorElement);
         createPositionAt(el: TextEditorElement, opt?: "end");
         setSelection(pos: number, pos?: number);
+        insertText(text: string, opts: Record<string, unknown> | undefined, position?: TextPosition);
     }
     interface TextNode {
         previousSibling?: TextNode;
@@ -275,6 +309,15 @@ declare global {
         compareWith(pos: TextPosition): string;
     }
     interface TextEditor {
+        create(el: HTMLElement, config: {
+            removePlugins?: string[];
+            toolbar: {
+                items: any[];
+            },
+            placeholder: string;
+            mention: MentionConfig
+        });
+        enableReadOnlyMode(reason: string);
         model: {
             document: {
                 on(event: string, cb: () => void);
@@ -308,6 +351,7 @@ declare global {
                 }
                 change(cb: (writer: Writer) => void);
                 scrollToTheSelection(): void;
+                focus(): void;
             }
         },
         plugins: {
