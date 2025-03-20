@@ -7,12 +7,32 @@
  * Prompts are organized by their usage context (e.g., service, feature, etc.)
  */
 
-// Base system prompt used when no custom prompt is provided
-export const DEFAULT_SYSTEM_PROMPT =
-    "You are a helpful assistant embedded in the Trilium Notes application. " +
-    "You can help users with their notes, answer questions, and provide information. " +
-    "Keep your responses concise and helpful. " +
-    "You're currently chatting with the user about their notes.";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Load system prompt from markdown file
+const loadSystemPrompt = (): string => {
+    try {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+
+        const promptPath = path.join(__dirname, 'base_system_prompt.md');
+        const promptContent = fs.readFileSync(promptPath, 'utf8');
+        // Strip the markdown title if needed
+        return promptContent.replace(/^# TriliumNext Base System Prompt\n+/, '');
+    } catch (error) {
+        console.error('Failed to load system prompt from file:', error);
+        // Return fallback prompt if file can't be loaded
+        return "You are a helpful assistant embedded in the TriliumNext Notes application. " +
+            "You can help users with their notes, answer questions, and provide information. " +
+            "Keep your responses concise and helpful. " +
+            "You're currently chatting with the user about their notes.";
+    }
+};
+
+// Base system prompt loaded from markdown file
+export const DEFAULT_SYSTEM_PROMPT = loadSystemPrompt();
 
 // Context-specific prompts
 export const CONTEXT_PROMPTS = {
