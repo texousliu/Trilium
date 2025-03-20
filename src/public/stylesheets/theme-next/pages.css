@@ -236,6 +236,13 @@ div.note-detail-empty {
     width: fit-content;
 }
 
+#main-font-size,
+#tree-font-size,
+#detail-font-size,
+#monospace-font-size {
+    width: 8ch !important;
+}
+
 /* Shortcuts */
 
 .note-detail-content-widget-content:has(.shortcuts-options-section) {
