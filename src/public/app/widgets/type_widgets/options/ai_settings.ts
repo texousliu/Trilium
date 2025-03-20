@@ -1366,6 +1366,9 @@ export default class AiSettingsWidget extends OptionsWidget {
                 if (!silent) {
                     await this.refreshIndexRebuildStatus(silent);
                 }
+
+                // Update validation warnings as embeddings status may have changed
+                await this.displayValidationWarnings();
             }
         } catch (error) {
             console.error("Error fetching embedding stats:", error);
@@ -1599,6 +1602,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (!this.$widget) return;
 
         const $warningDiv = this.$widget.find('.provider-validation-warning');
+        let hasWarnings = false;
+        let message = 'There are issues with your AI provider configuration:';
 
         try {
             // Get required data from current settings
@@ -1658,9 +1663,9 @@ export default class AiSettingsWidget extends OptionsWidget {
             const defaultIsEnabled = enabledProviders.includes(defaultProvider);
             const allPrecedenceEnabled = precedenceList.every(p => enabledProviders.includes(p));
 
-            // Build warning message if there are issues
+            // Check for provider configuration issues
             if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled) {
-                let message = 'There are issues with your AI provider configuration:';
+                hasWarnings = true;
 
                 if (!defaultInPrecedence) {
                     message += `<br>• The default embedding provider "${defaultProvider}" is not in your provider precedence list.`;
@@ -1674,9 +1679,19 @@ export default class AiSettingsWidget extends OptionsWidget {
                     const disabledProviders = precedenceList.filter(p => !enabledProviders.includes(p));
                     message += `<br>• The following providers in your precedence list are not enabled: ${disabledProviders.join(', ')}.`;
                 }
+            }
 
+            // Check if embeddings are still being processed
+            const queuedNotes = parseInt(this.$widget.find('.embedding-queued-notes').text(), 10);
+            if (!isNaN(queuedNotes) && queuedNotes > 0) {
+                hasWarnings = true;
+                message += `<br>• There are currently ${queuedNotes} notes in the embedding processing queue.`;
+                message += ` Some AI features may produce incomplete results until processing completes.`;
+            }
+
+            // Show warning message if there are any issues
+            if (hasWarnings) {
                 message += '<br><br>Please check your AI settings.';
-
                 $warningDiv.html(message);
                 $warningDiv.show();
             } else {

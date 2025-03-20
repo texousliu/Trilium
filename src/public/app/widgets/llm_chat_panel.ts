@@ -530,8 +530,23 @@ export default class LlmChatPanel extends BasicWidget {
             const defaultIsEnabled = enabledProviders.includes(defaultProvider);
             const allPrecedenceEnabled = precedenceList.every((p: string) => enabledProviders.includes(p));
 
+            // Get embedding queue status
+            const embeddingStats = await server.get('embeddings/stats') as {
+                success: boolean,
+                stats: {
+                    totalNotesCount: number;
+                    embeddedNotesCount: number;
+                    queuedNotesCount: number;
+                    failedNotesCount: number;
+                    lastProcessedDate: string | null;
+                    percentComplete: number;
+                }
+            };
+            const queuedNotes = embeddingStats?.stats?.queuedNotesCount || 0;
+            const hasEmbeddingsInQueue = queuedNotes > 0;
+
             // Show warning if there are issues
-            if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled) {
+            if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled || hasEmbeddingsInQueue) {
                 let message = '<i class="bx bx-error-circle me-2"></i><strong>AI Provider Configuration Issues</strong>';
 
                 message += '<ul class="mb-1 ps-4">';
@@ -547,6 +562,10 @@ export default class LlmChatPanel extends BasicWidget {
                 if (!allPrecedenceEnabled) {
                     const disabledProviders = precedenceList.filter((p: string) => !enabledProviders.includes(p));
                     message += `<li>The following providers in your precedence list are not enabled: ${disabledProviders.join(', ')}.</li>`;
+                }
+
+                if (hasEmbeddingsInQueue) {
+                    message += `<li>Currently processing embeddings for ${queuedNotes} notes. Some AI features may produce incomplete results until processing completes.</li>`;
                 }
 
                 message += '</ul>';
