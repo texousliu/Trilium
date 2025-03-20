@@ -353,7 +353,8 @@
   "code_auto_read_only_size": {
     "description": "Marchează pragul în care o notiță de o anumită dimensiune va fi afișată în mod de citire (pentru motive de performanță).",
     "label": "Pragul de dimensiune pentru setarea modului de citire automat (la notițe de cod)",
-    "title": "Pragul de mod de citire automat"
+    "title": "Pragul de mod de citire automat",
+    "unit": "caractere"
   },
   "code_buttons": {
     "execute_button_title": "Execută scriptul",
