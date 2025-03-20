@@ -1,10 +1,11 @@
 import utils, { escapeQuotes } from "../../services/utils.js";
 import treeService from "../../services/tree.js";
-import importService from "../../services/import.js";
+import importService, { type UploadFilesOptions } from "../../services/import.js";
 import options from "../../services/options.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
 import { Modal, Tooltip } from "bootstrap";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="import-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -79,6 +80,20 @@ const TPL = `
 </div>`;
 
 export default class ImportDialog extends BasicWidget {
+
+    private parentNoteId: string | null;
+
+    private $form!: JQuery<HTMLElement>;
+    private $noteTitle!: JQuery<HTMLElement>;
+    private $fileUploadInput!: JQuery<HTMLInputElement>;
+    private $importButton!: JQuery<HTMLElement>;
+    private $safeImportCheckbox!: JQuery<HTMLElement>;
+    private $shrinkImagesCheckbox!: JQuery<HTMLElement>;
+    private $textImportedAsTextCheckbox!: JQuery<HTMLElement>;
+    private $codeImportedAsCodeCheckbox!: JQuery<HTMLElement>;
+    private $explodeArchivesCheckbox!: JQuery<HTMLElement>;
+    private $replaceUnderscoresWithSpacesCheckbox!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -87,7 +102,7 @@ export default class ImportDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        Modal.getOrCreateInstance(this.$widget);
+        Modal.getOrCreateInstance(this.$widget[0]);
 
         this.$form = this.$widget.find(".import-form");
         this.$noteTitle = this.$widget.find(".import-note-title");
@@ -104,7 +119,9 @@ export default class ImportDialog extends BasicWidget {
             // disabling so that import is not triggered again.
             this.$importButton.attr("disabled", "disabled");
 
-            this.importIntoNote(this.parentNoteId);
+            if (this.parentNoteId) {
+                this.importIntoNote(this.parentNoteId);
+            }
 
             return false;
         });
@@ -124,7 +141,7 @@ export default class ImportDialog extends BasicWidget {
         });
     }
 
-    async showImportDialogEvent({ noteId }) {
+    async showImportDialogEvent({ noteId }: EventData<"showImportDialog">) {
         this.parentNoteId = noteId;
 
         this.$fileUploadInput.val("").trigger("change"); // to trigger Import button disabling listener below
@@ -141,12 +158,12 @@ export default class ImportDialog extends BasicWidget {
         utils.openDialog(this.$widget);
     }
 
-    async importIntoNote(parentNoteId) {
-        const files = Array.from(this.$fileUploadInput[0].files); // shallow copy since we're resetting the upload button below
+    async importIntoNote(parentNoteId: string) {
+        const files = Array.from(this.$fileUploadInput[0].files ?? []); // shallow copy since we're resetting the upload button below
 
-        const boolToString = ($el) => ($el.is(":checked") ? "true" : "false");
+        const boolToString = ($el: JQuery<HTMLElement>) => ($el.is(":checked") ? "true" : "false");
 
-        const options = {
+        const options: UploadFilesOptions = {
             safeImport: boolToString(this.$safeImportCheckbox),
             shrinkImages: boolToString(this.$shrinkImagesCheckbox),
             textImportedAsText: boolToString(this.$textImportedAsTextCheckbox),

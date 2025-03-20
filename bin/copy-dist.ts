@@ -68,7 +68,6 @@ try {
         "node_modules/katex/dist/contrib/mhchem.min.js",
         "node_modules/katex/dist/contrib/auto-render.min.js",
         "node_modules/@highlightjs/cdn-assets/highlight.min.js",
-        "node_modules/@mind-elixir/node-menu/dist/node-menu.umd.cjs"
     ]);
 
     const nodeModulesFolder = new Set([
@@ -94,7 +93,6 @@ try {
         "node_modules/codemirror/addon/",
         "node_modules/codemirror/mode/",
         "node_modules/codemirror/keymap/",
-        "node_modules/mind-elixir/dist/",
         "node_modules/@highlightjs/cdn-assets/languages",
         "node_modules/@highlightjs/cdn-assets/styles",
         "node_modules/leaflet/dist"
