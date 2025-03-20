@@ -20,7 +20,7 @@ import type { NoteEmbeddingContext } from "./embeddings/embeddings_interface.js"
 import type { OptionDefinitions } from "../options_interface.js";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
-import { CONTEXT_PROMPTS } from './llm_prompt_constants.js';
+import { CONTEXT_PROMPTS } from './prompts/llm_prompt_constants.js';
 
 class IndexService {
     private initialized = false;

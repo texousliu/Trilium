@@ -13,7 +13,7 @@ import contextService from "../../services/llm/context_service.js";
 import sql from "../../services/sql.js";
 // Import the index service for knowledge base management
 import indexService from "../../services/llm/index_service.js";
-import { CONTEXT_PROMPTS } from '../../services/llm/llm_prompt_constants.js';
+import { CONTEXT_PROMPTS } from '../../services/llm/prompts/llm_prompt_constants.js';
 
 // LLM service constants
 export const LLM_CONSTANTS = {

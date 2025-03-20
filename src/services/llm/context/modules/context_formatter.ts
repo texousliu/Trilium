@@ -1,6 +1,6 @@
 import sanitizeHtml from 'sanitize-html';
 import log from '../../../log.js';
-import { CONTEXT_PROMPTS } from '../../llm_prompt_constants.js';
+import { CONTEXT_PROMPTS } from '../../prompts/llm_prompt_constants.js';
 
 // Constants for context window sizes, defines in-module to avoid circular dependencies
 const CONTEXT_WINDOW = {

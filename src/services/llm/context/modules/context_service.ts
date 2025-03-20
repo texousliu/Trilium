@@ -6,7 +6,7 @@ import queryEnhancer from './query_enhancer.js';
 import contextFormatter from './context_formatter.js';
 import aiServiceManager from '../../ai_service_manager.js';
 import { ContextExtractor } from '../index.js';
-import { CONTEXT_PROMPTS } from '../../llm_prompt_constants.js';
+import { CONTEXT_PROMPTS } from '../../prompts/llm_prompt_constants.js';
 
 /**
  * Main context service that integrates all context-related functionality

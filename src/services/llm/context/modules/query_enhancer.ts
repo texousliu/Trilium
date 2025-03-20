@@ -1,7 +1,7 @@
 import log from '../../../log.js';
 import cacheManager from './cache_manager.js';
 import type { Message } from '../../ai_interface.js';
-import { CONTEXT_PROMPTS } from '../../llm_prompt_constants.js';
+import { CONTEXT_PROMPTS } from '../../prompts/llm_prompt_constants.js';
 
 /**
  * Provides utilities for enhancing queries and generating search queries
