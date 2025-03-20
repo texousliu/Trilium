@@ -36,6 +36,10 @@ export class ContextFormatter {
                 providerId === 'ollama' ? CONTEXT_WINDOW.OLLAMA :
                 CONTEXT_WINDOW.DEFAULT;
 
+            // DEBUG: Log context window size
+            log.info(`Context window for provider ${providerId}: ${maxTotalLength} chars`);
+            log.info(`Building context from ${sources.length} sources for query: "${query.substring(0, 50)}..."`);
+
             // Use a format appropriate for the model family
             const isAnthropicFormat = providerId === 'anthropic';
 
@@ -47,24 +51,35 @@ export class ContextFormatter {
             // Sort sources by similarity if available to prioritize most relevant
             if (sources[0] && sources[0].similarity !== undefined) {
                 sources = [...sources].sort((a, b) => (b.similarity || 0) - (a.similarity || 0));
+                // DEBUG: Log sorting information
+                log.info(`Sources sorted by similarity. Top sources: ${sources.slice(0, 3).map(s => s.title || 'Untitled').join(', ')}`);
             }
 
             // Track total size to avoid exceeding model context window
             let totalSize = context.length;
             const formattedSources: string[] = [];
 
+            // DEBUG: Track stats for logging
+            let sourcesProcessed = 0;
+            let sourcesIncluded = 0;
+            let sourcesSkipped = 0;
+            let sourcesExceededLimit = 0;
+
             // Process each source
             for (const source of sources) {
+                sourcesProcessed++;
                 let content = '';
                 if (typeof source === 'string') {
                     content = source;
                 } else if (source.content) {
                     content = this.sanitizeNoteContent(source.content, source.type, source.mime);
                 } else {
+                    sourcesSkipped++;
                     continue; // Skip invalid sources
                 }
 
                 if (!content || content.trim().length === 0) {
+                    sourcesSkipped++;
                     continue;
                 }
 
@@ -75,6 +90,7 @@ export class ContextFormatter {
 
                 // Check if adding this would exceed our size limit
                 if (totalSize + formattedSource.length > maxTotalLength) {
+                    sourcesExceededLimit++;
                     // If this is the first source, include a truncated version
                     if (formattedSources.length === 0) {
                         const availableSpace = maxTotalLength - totalSize - 100; // Buffer for closing text
@@ -82,6 +98,9 @@ export class ContextFormatter {
                             const truncatedContent = `### ${title}\n${content.substring(0, availableSpace)}...\n`;
                             formattedSources.push(truncatedContent);
                             totalSize += truncatedContent.length;
+                            sourcesIncluded++;
+                            // DEBUG: Log truncation
+                            log.info(`Truncated first source "${title}" to fit in context window. Used ${truncatedContent.length} of ${formattedSource.length} chars`);
                         }
                     }
                     break;
@@ -89,7 +108,12 @@ export class ContextFormatter {
 
                 formattedSources.push(formattedSource);
                 totalSize += formattedSource.length;
+                sourcesIncluded++;
             }
+
+            // DEBUG: Log sources stats
+            log.info(`Context building stats: processed ${sourcesProcessed}/${sources.length} sources, included ${sourcesIncluded}, skipped ${sourcesSkipped}, exceeded limit ${sourcesExceededLimit}`);
+            log.info(`Context size so far: ${totalSize}/${maxTotalLength} chars (${(totalSize/maxTotalLength*100).toFixed(2)}% of limit)`);
 
             // Add the formatted sources to the context
             context += formattedSources.join('\n');
@@ -103,6 +127,9 @@ export class ContextFormatter {
             if (totalSize + closing.length <= maxTotalLength) {
                 context += closing;
             }
+
+            // DEBUG: Log final context size
+            log.info(`Final context: ${context.length} chars, ${formattedSources.length} sources included`);
 
             return context;
         } catch (error) {

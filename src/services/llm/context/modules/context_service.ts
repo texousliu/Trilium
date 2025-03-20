@@ -134,7 +134,7 @@ export class ContextService {
                 // Convert map to array and limit to top results
                 relevantNotes = Array.from(allResults.values())
                     .sort((a, b) => b.similarity - a.similarity)
-                    .slice(0, 8); // Get top 8 notes
+                    .slice(0, 20); // Increased from 8 to 20 notes
             } catch (error) {
                 log.error(`Error finding relevant notes: ${error}`);
                 // Continue with empty notes list
@@ -144,6 +144,9 @@ export class ContextService {
             const provider = await providerManager.getPreferredEmbeddingProvider();
             const providerId = provider?.name || 'default';
             const context = await contextFormatter.buildContextFromNotes(relevantNotes, userQuestion, providerId);
+
+            // DEBUG: Log the initial context built from notes
+            log.info(`Initial context from buildContextFromNotes: ${context.length} chars, starting with: "${context.substring(0, 150)}..."`);
 
             // Step 4: Add agent tools context with thinking process if requested
             let enhancedContext = context;
@@ -162,6 +165,9 @@ export class ContextService {
                 if (agentContext) {
                     enhancedContext = enhancedContext + "\n\n" + agentContext;
                 }
+
+                // DEBUG: Log the final combined context
+                log.info(`FINAL COMBINED CONTEXT: ${enhancedContext.length} chars, with content structure: ${this.summarizeContextStructure(enhancedContext)}`);
             } catch (error) {
                 log.error(`Error getting agent tools context: ${error}`);
                 // Continue with the basic context
@@ -372,31 +378,89 @@ export class ContextService {
                 log.error(`Error adding note structure to context: ${error}`);
             }
 
-            // Add most relevant notes from search results
-            const allSearchResults = searchResults.flatMap(r => r.results);
+            // Combine the notes from both searches - the initial relevantNotes and from vector search
+            // Start with a Map to deduplicate by noteId
+            const allNotes = new Map<string, any>();
 
-            // Deduplicate results by noteId
-            const uniqueResults = new Map();
-            for (const result of allSearchResults) {
-                if (!uniqueResults.has(result.noteId) || uniqueResults.get(result.noteId).similarity < result.similarity) {
-                    uniqueResults.set(result.noteId, result);
+            // Add notes from the initial search in processQuery (relevantNotes parameter)
+            if (relevantNotes && relevantNotes.length > 0) {
+                log.info(`Adding ${relevantNotes.length} notes from initial search to combined results`);
+                for (const note of relevantNotes) {
+                    if (note.noteId) {
+                        allNotes.set(note.noteId, note);
+                    }
                 }
             }
 
-            // Sort by similarity
-            const sortedResults = Array.from(uniqueResults.values())
-                .sort((a, b) => b.similarity - a.similarity)
-                .slice(0, 10);  // Get top 10 unique results
+            // Add notes from vector search of sub-queries
+            const vectorSearchNotes = searchResults.flatMap(r => r.results);
+            if (vectorSearchNotes.length > 0) {
+                log.info(`Adding ${vectorSearchNotes.length} notes from vector search to combined results`);
+                for (const note of vectorSearchNotes) {
+                    // If note already exists, keep the one with higher similarity
+                    if (!allNotes.has(note.noteId) || note.similarity > allNotes.get(note.noteId).similarity) {
+                        allNotes.set(note.noteId, note);
+                    }
+                }
+            }
 
-            if (sortedResults.length > 0) {
-                agentContext += `## Relevant Information\n`;
+            // Convert the combined Map to an array and sort by similarity
+            const combinedNotes = Array.from(allNotes.values())
+                .sort((a, b) => b.similarity - a.similarity);
 
-                for (const result of sortedResults) {
-                    agentContext += `### ${result.title}\n`;
+            log.info(`Combined ${relevantNotes.length} notes from initial search with ${vectorSearchNotes.length} notes from vector search, resulting in ${combinedNotes.length} unique notes`);
 
-                    if (result.content) {
-                        // Limit content to 500 chars per note to avoid token explosion
-                        agentContext += `${result.content.substring(0, 500)}${result.content.length > 500 ? '...' : ''}\n\n`;
+            // Filter for Qu-related notes
+            const quNotes = combinedNotes.filter(result =>
+                result.title.toLowerCase().includes('qu') ||
+                (result.content && result.content.toLowerCase().includes('qu'))
+            );
+
+            if (quNotes.length > 0) {
+                log.info(`Found ${quNotes.length} Qu-related notes out of ${combinedNotes.length} total notes`);
+                quNotes.forEach((note, idx) => {
+                    if (idx < 3) { // Log just a sample to avoid log spam
+                        log.info(`Qu note ${idx+1}: "${note.title}" (similarity: ${Math.round(note.similarity * 100)}%), content length: ${note.content ? note.content.length : 0} chars`);
+                    }
+                });
+
+                // Prioritize Qu notes first, then other notes by similarity
+                const nonQuNotes = combinedNotes.filter(note => !quNotes.includes(note));
+                const finalNotes = [...quNotes, ...nonQuNotes].slice(0, 30); // Take top 30 prioritized notes
+
+                log.info(`Selected ${finalNotes.length} notes for context, with ${quNotes.length} Qu-related notes prioritized`);
+
+                // Add the selected notes to the context
+                if (finalNotes.length > 0) {
+                    agentContext += `## Relevant Information\n`;
+
+                    for (const note of finalNotes) {
+                        agentContext += `### ${note.title}\n`;
+
+                        if (note.content) {
+                            // Extract relevant content instead of just taking first 2000 chars
+                            const relevantContent = await this.extractRelevantContent(note.content, query, 2000);
+                            agentContext += `${relevantContent}\n\n`;
+                        }
+                    }
+                }
+            } else {
+                log.info(`No Qu-related notes found among the ${combinedNotes.length} combined notes`);
+
+                // Just take the top notes by similarity
+                const finalNotes = combinedNotes.slice(0, 30); // Take top 30 notes
+
+                if (finalNotes.length > 0) {
+                    agentContext += `## Relevant Information\n`;
+
+                    for (const note of finalNotes) {
+                        agentContext += `### ${note.title}\n`;
+
+                        if (note.content) {
+                            // Extract relevant content instead of just taking first 2000 chars
+                            const relevantContent = await this.extractRelevantContent(note.content, query, 2000);
+                            agentContext += `${relevantContent}\n\n`;
+                        }
                     }
                 }
             }
@@ -415,11 +479,45 @@ export class ContextService {
             // Log stats about the context
             log.info(`Agent tools context built: ${agentContext.length} chars, ${agentContext.split('\n').length} lines`);
 
+            // DEBUG: Log more detailed information about the agent tools context content
+            log.info(`Agent tools context content structure: ${this.summarizeContextStructure(agentContext)}`);
+            if (agentContext.length < 1000) {
+                log.info(`Agent tools context full content (short): ${agentContext}`);
+            } else {
+                log.info(`Agent tools context first 500 chars: ${agentContext.substring(0, 500)}...`);
+                log.info(`Agent tools context last 500 chars: ${agentContext.substring(agentContext.length - 500)}`);
+            }
+
             return agentContext;
         } catch (error) {
             log.error(`Error getting agent tools context: ${error}`);
             return `Error generating enhanced context: ${error}`;
         }
+    }
+
+    /**
+     * Summarize the structure of a context string for debugging
+     * @param context - The context string to summarize
+     * @returns A summary of the context structure
+     */
+    private summarizeContextStructure(context: string): string {
+        if (!context) return "Empty context";
+
+        // Count sections and headers
+        const sections = context.split('##').length - 1;
+        const subSections = context.split('###').length - 1;
+
+        // Count notes referenced
+        const noteMatches = context.match(/### [^\n]+/g);
+        const noteCount = noteMatches ? noteMatches.length : 0;
+
+        // Extract note titles if present
+        let noteTitles = "";
+        if (noteMatches && noteMatches.length > 0) {
+            noteTitles = ` Note titles: ${noteMatches.slice(0, 3).map(m => m.substring(4)).join(', ')}${noteMatches.length > 3 ? '...' : ''}`;
+        }
+
+        return `${sections} main sections, ${subSections} subsections, ${noteCount} notes referenced.${noteTitles}`;
     }
 
     /**
@@ -585,6 +683,104 @@ export class ContextService {
      */
     clearCaches(): void {
         cacheManager.clearAllCaches();
+    }
+
+    /**
+     * Extract the most relevant portions from a note's content
+     * @param content - The full note content
+     * @param query - The user's query
+     * @param maxChars - Maximum characters to include
+     * @returns The most relevant content sections
+     */
+    private async extractRelevantContent(content: string, query: string, maxChars: number = 2000): Promise<string> {
+        if (!content || content.length <= maxChars) {
+            return content; // Return full content if it's already short enough
+        }
+
+        try {
+            // Get the vector search tool for relevance calculation
+            const agentManager = aiServiceManager.getInstance();
+            const vectorSearchTool = agentManager.getVectorSearchTool();
+
+            // Split content into chunks of reasonable size (300-500 chars with overlap)
+            const chunkSize = 400;
+            const overlap = 100;
+            const chunks: string[] = [];
+
+            for (let i = 0; i < content.length; i += (chunkSize - overlap)) {
+                const end = Math.min(i + chunkSize, content.length);
+                chunks.push(content.substring(i, end));
+                if (end === content.length) break;
+            }
+
+            log.info(`Split note content into ${chunks.length} chunks for relevance extraction`);
+
+            // Get embedding provider from service
+            const provider = await providerManager.getPreferredEmbeddingProvider();
+            if (!provider) {
+                throw new Error("No embedding provider available");
+            }
+
+            // Get embeddings for the query and all chunks
+            const queryEmbedding = await provider.createEmbedding(query);
+
+            // Process chunks in smaller batches to avoid overwhelming the provider
+            const batchSize = 5;
+            const chunkEmbeddings = [];
+
+            for (let i = 0; i < chunks.length; i += batchSize) {
+                const batch = chunks.slice(i, i + batchSize);
+                const batchEmbeddings = await Promise.all(
+                    batch.map(chunk => provider.createEmbedding(chunk))
+                );
+                chunkEmbeddings.push(...batchEmbeddings);
+            }
+
+            // Calculate similarity between query and each chunk
+            const similarities: Array<{index: number, similarity: number, content: string}> =
+                chunkEmbeddings.map((embedding, index) => {
+                    const similarity = provider.calculateSimilarity(queryEmbedding, embedding);
+                    return { index, similarity, content: chunks[index] };
+                });
+
+            // Sort chunks by similarity (most relevant first)
+            similarities.sort((a, b) => b.similarity - a.similarity);
+
+            // DEBUG: Log some info about the top chunks
+            log.info(`Top 3 most relevant chunks for query "${query.substring(0, 30)}..." (out of ${chunks.length} total):`);
+            similarities.slice(0, 3).forEach((chunk, idx) => {
+                log.info(`  Chunk ${idx+1}: Similarity ${Math.round(chunk.similarity * 100)}%, Content: "${chunk.content.substring(0, 50)}..."`);
+            });
+
+            // Take the most relevant chunks up to maxChars
+            let result = '';
+            let totalChars = 0;
+            let chunksIncluded = 0;
+
+            for (const chunk of similarities) {
+                if (totalChars + chunk.content.length > maxChars) {
+                    // If adding full chunk would exceed limit, add as much as possible
+                    const remainingSpace = maxChars - totalChars;
+                    if (remainingSpace > 100) { // Only add if we can include something meaningful
+                        result += `\n...\n${chunk.content.substring(0, remainingSpace)}...`;
+                        log.info(`  Added partial chunk with similarity ${Math.round(chunk.similarity * 100)}% (${remainingSpace} chars)`);
+                    }
+                    break;
+                }
+
+                if (result.length > 0) result += '\n...\n';
+                result += chunk.content;
+                totalChars += chunk.content.length;
+                chunksIncluded++;
+            }
+
+            log.info(`Extracted ${totalChars} chars of relevant content from ${content.length} chars total (${chunksIncluded} chunks included)`);
+            return result;
+        } catch (error) {
+            log.error(`Error extracting relevant content: ${error}`);
+            // Fallback to simple truncation if extraction fails
+            return content.substring(0, maxChars) + '...';
+        }
     }
 }
 

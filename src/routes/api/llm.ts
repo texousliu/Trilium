@@ -670,6 +670,12 @@ async function sendMessage(req: Request, res: Response) {
                     content: context
                 };
 
+                // DEBUG: Log context details before sending to LLM
+                log.info(`CONTEXT BEING SENT TO LLM: ${context.length} chars`);
+                log.info(`Context begins with: "${context.substring(0, 200)}..."`);
+                log.info(`Context ends with: "...${context.substring(context.length - 200)}"`);
+                log.info(`Number of notes included: ${sourceNotes.length}`);
+
                 // Format all messages for the AI (advanced context case)
                 const aiMessages: Message[] = [
                     contextMessage,
@@ -678,6 +684,12 @@ async function sendMessage(req: Request, res: Response) {
                         content: msg.content
                     }))
                 ];
+
+                // DEBUG: Log message structure being sent to LLM
+                log.info(`Message structure being sent to LLM: ${aiMessages.length} messages total`);
+                aiMessages.forEach((msg, idx) => {
+                    log.info(`Message ${idx}: role=${msg.role}, content length=${msg.content.length} chars, begins with: "${msg.content.substring(0, 50)}..."`);
+                });
 
                 // Configure chat options from session metadata
                 const chatOptions: ChatCompletionOptions = {
