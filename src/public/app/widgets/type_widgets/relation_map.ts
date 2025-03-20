@@ -1,6 +1,5 @@
 import server from "../../services/server.js";
 import linkService from "../../services/link.js";
-import libraryLoader from "../../services/library_loader.js";
 import contextMenu from "../../menus/context_menu.js";
 import toastService from "../../services/toast.js";
 import attributeAutocompleteService from "../../services/attribute_autocomplete.js";
@@ -11,6 +10,25 @@ import froca from "../../services/froca.js";
 import dialogService from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
+import type { ConnectionMadeEventInfo, jsPlumbInstance, OverlaySpec } from "jsplumb";
+import "../../../stylesheets/relation_map.css";
+
+declare module "jsplumb" {
+
+    interface Connection {
+        canvas: HTMLCanvasElement;
+        getType(): string;
+        bind(event: string, callback: (obj: unknown, event: MouseEvent) => void): void;
+    }
+
+    interface Overlay {
+        setLabel(label: string): void;
+    }
+
+    interface ConnectParams {
+        type: RelationType;
+    }
+}
 
 const uniDirectionalOverlays: OverlaySpec[] = [
     [
@@ -206,9 +224,9 @@ export default class RelationMapTypeWidget extends TypeWidget {
         this.$widget.on("dragover", (ev) => ev.preventDefault());
 
         this.initialized = new Promise(async (res) => {
-            await libraryLoader.requireLibrary(libraryLoader.RELATION_MAP);
-            // TODO: Remove once we port to webpack.
-            (jsPlumb as unknown as jsPlumbInstance).ready(res);
+            // Weird typecast is needed probably due to bad typings in the module itself.
+            const jsPlumb = (await import("jsplumb")).default.jsPlumb as unknown as jsPlumbInstance;
+            jsPlumb.ready(res);
         });
 
         super.doRender();
@@ -298,9 +316,9 @@ export default class RelationMapTypeWidget extends TypeWidget {
     async doRefresh(note: FNote) {
         await this.loadMapData();
 
-        this.initJsPlumbInstance();
+        await this.initJsPlumbInstance();
 
-        this.initPanZoom();
+        await this.initPanZoom();
 
         this.loadNotesAndRelations();
     }
@@ -385,16 +403,19 @@ export default class RelationMapTypeWidget extends TypeWidget {
         });
     }
 
-    initPanZoom() {
+    async initPanZoom() {
         if (this.pzInstance) {
             return;
         }
 
+        const panzoom = (await import("panzoom")).default;
         this.pzInstance = panzoom(this.$relationMapContainer[0], {
             maxZoom: 2,
             minZoom: 0.3,
             smoothScroll: false,
-            filterKey: function (e, dx, dy, dz) {
+
+            //@ts-expect-error Upstream incorrectly mentions no arguments.
+            filterKey: function (e: KeyboardEvent) {
                 // if ALT is pressed, then panzoom should bubble the event up
                 // this is to preserve ALT-LEFT, ALT-RIGHT navigation working
                 return e.altKey;
@@ -448,13 +469,14 @@ export default class RelationMapTypeWidget extends TypeWidget {
         }
     }
 
-    initJsPlumbInstance() {
+    async initJsPlumbInstance() {
         if (this.jsPlumbInstance) {
             this.cleanup();
 
             return;
         }
 
+        const jsPlumb = (await import("jsplumb")).default.jsPlumb;
         this.jsPlumbInstance = jsPlumb.getInstance({
             Endpoint: ["Dot", { radius: 2 }],
             Connector: "StateMachine",

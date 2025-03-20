@@ -366,14 +366,6 @@ declare global {
     }
 
     /*
-     * jsPlumb
-     */
-    var jsPlumb: typeof import("jsplumb").jsPlumb;
-    type jsPlumbInstance = import("jsplumb").jsPlumbInstance;
-    type OverlaySpec = typeof import("jsplumb").OverlaySpec;
-    type ConnectionMadeEventInfo = typeof import("jsplumb").ConnectionMadeEventInfo;
-
-    /*
      * Panzoom
      */
 
@@ -390,19 +382,5 @@ declare global {
         on(event: string, callback: () => void);
         getTransform(): unknown;
         dispose(): void;
-    }
-}
-
-module "jsplumb" {
-    interface Connection {
-        canvas: HTMLCanvasElement;
-    }
-
-    interface Overlay {
-        setLabel(label: string);
-    }
-
-    interface ConnectParams {
-        type: RelationType;
     }
 }

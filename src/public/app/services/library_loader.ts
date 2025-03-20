@@ -42,11 +42,6 @@ const CODE_MIRROR: Library = {
     css: ["node_modules/codemirror/lib/codemirror.css", "node_modules/codemirror/addon/lint/lint.css"]
 };
 
-const RELATION_MAP: Library = {
-    js: ["node_modules/jsplumb/dist/js/jsplumb.min.js", "node_modules/panzoom/dist/panzoom.min.js"],
-    css: ["stylesheets/relation_map.css"]
-};
-
 const CALENDAR_WIDGET: Library = {
     css: ["stylesheets/calendar.css"]
 };
@@ -183,7 +178,6 @@ export default {
     loadHighlightingTheme,
     CKEDITOR,
     CODE_MIRROR,
-    RELATION_MAP,
     CALENDAR_WIDGET,
     KATEX,
     WHEEL_ZOOM,
