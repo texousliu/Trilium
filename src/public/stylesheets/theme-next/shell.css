@@ -1445,10 +1445,19 @@ div.floating-buttons-children .close-floating-buttons:has(.close-floating-button
     position: absolute;
 }
 
-/* Code buttons */
+/* Code, relation map buttons */
 
-.floating-buttons .code-buttons-widget {
+.floating-buttons .code-buttons-widget,
+.floating-buttons .relation-map-buttons {
     gap: 0;
+}
+
+/* Individual icon position / size corrections */
+
+/* Table of contents */
+.floating-buttons .bx-spreadsheet::before {
+    /* Note: since the icon is rotated, a positive top margin will actually shift the icon upwards */
+    margin-top: .1em;
 }
 
 /* The highlight animation */
