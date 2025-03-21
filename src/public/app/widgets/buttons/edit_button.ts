@@ -15,7 +15,7 @@ export default class EditButton extends OnClickButtonWidget {
     constructor() {
         super();
 
-        this.icon("bx-edit-alt")
+        this.icon("bx-pencil")
             .title(t("edit_button.edit_this_note"))
             .titlePlacement("bottom")
             .onClick((widget) => {
