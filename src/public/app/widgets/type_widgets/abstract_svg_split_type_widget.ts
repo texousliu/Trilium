@@ -120,7 +120,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
 
     buildSplitExtraOptions(): Split.Options {
         return {
-            onDragEnd: () => this.zoomHandler?.()
+            onDrag: () => this.zoomHandler?.()
         }
     }
 
