@@ -1,9 +1,9 @@
 import type { MermaidConfig } from "mermaid";
-import library_loader from "../../services/library_loader.js";
 import { loadElkIfNeeded, postprocessMermaidSvg } from "../../services/mermaid.js";
 import AbstractSvgSplitTypeWidget from "./abstract_svg_split_type_widget.js";
 
 let idCounter = 1;
+let registeredErrorReporter = false;
 
 export class MermaidTypeWidget extends AbstractSvgSplitTypeWidget {
 
@@ -14,18 +14,28 @@ export class MermaidTypeWidget extends AbstractSvgSplitTypeWidget {
     async renderSvg(content: string) {
         const mermaid = (await import("mermaid")).default;
         await loadElkIfNeeded(mermaid, content);
+        if (!registeredErrorReporter) {
+            (await import("./linters/mermaid.js")).default();
+            registeredErrorReporter = true;
+        }
 
-        mermaid.mermaidAPI.initialize({
+        mermaid.initialize({
             startOnLoad: false,
-            ...(getMermaidConfig() as any)
+            ...(getMermaidConfig() as any),
         });
 
         idCounter++;
-        const { svg } = await mermaid.mermaidAPI.render(`mermaid-graph-${idCounter}`, content);
-        return postprocessMermaidSvg(svg);
+        try {
+            const { svg } = await mermaid.render(`mermaid-graph-${idCounter}`, content);
+            return postprocessMermaidSvg(svg);
+        } catch (e) {
+            console.warn(JSON.stringify(e));
+            return "";
+        }
     }
 
 }
+
 
 export function getMermaidConfig(): MermaidConfig {
     const documentStyle = window.getComputedStyle(document.documentElement);

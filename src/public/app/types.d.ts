@@ -207,6 +207,8 @@ declare global {
         modeInfo: ModeInfo[];
         findModeByMIME(mime: string): ModeInfo;
         autoLoadMode(instance: CodeMirrorInstance, mode: string)
+        registerHelper(type: string, filter: string | null, callback: (text: string, options: object) => unknown);
+        Pos(line: number, col: number);
     }
 
     interface ModeInfo {
