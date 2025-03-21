@@ -1303,7 +1303,7 @@ div.promoted-attribute-cell .multiplicity:has(span) {
  */
 
  /* Floating buttons container */
-.floating-buttons-children {
+div#center-pane .floating-buttons-children {
     opacity: 1;
     overflow: hidden;
     transform-origin: right;
@@ -1316,7 +1316,7 @@ div.promoted-attribute-cell .multiplicity:has(span) {
 }
 
  /* Floating buttons container (collapsed) */
-.floating-buttons-children.temporarily-hidden {
+ div#center-pane .floating-buttons-children.temporarily-hidden {
     display: flex !important;
     opacity: 0;
     transform: scaleX(0);
