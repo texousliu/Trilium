@@ -41,12 +41,12 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
 
         const blob = await note?.getBlob();
         const content = blob?.content || "";
-        this.refreshPreview(content);
+        this.refreshPreview(content, true);
     }
 
     getData(): { content: string; } {
         const data = super.getData();
-        this.refreshPreview(data.content);
+        this.refreshPreview(data.content, false);
         return data;
     }
 
@@ -54,12 +54,13 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
      * Triggers an update of the preview pane with the provided content.
      *
      * @param content the content that will be passed to `renderSvg` for rendering. It is not the SVG content.
+     * @param recenter `true` to reposition the pan/zoom to fit the image and to center it.
      */
-    async refreshPreview(content: string) {
+    async refreshPreview(content: string, recenter: boolean) {
         if (this.note) {
             const svg = await this.renderSvg(content);
             this.$renderContainer.html(svg);
-            await this.#setupPanZoom();
+            await this.#setupPanZoom(!recenter);
         }
     }
 
@@ -78,11 +79,14 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
      */
     abstract renderSvg(content: string): Promise<string>;
 
-    async #setupPanZoom() {
+    /**
+     * @param preservePanZoom `true` to keep the pan/zoom settings of the previous image, or `false` to re-center it.
+     */
+    async #setupPanZoom(preservePanZoom: boolean) {
         // Clean up
         let pan = null;
         let zoom = null;
-        if (this.zoomInstance) {
+        if (preservePanZoom && this.zoomInstance) {
             // Store pan and zoom for same note, when the user is editing the note.
             pan = this.zoomInstance.getPan();
             zoom = this.zoomInstance.getZoom();
@@ -106,7 +110,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
             controlIconsEnabled: true
         });
 
-        if (pan && zoom) {
+        if (preservePanZoom && pan && zoom) {
             // Restore the pan and zoom.
             zoomInstance.zoom(zoom);
             zoomInstance.pan(pan);
