@@ -1,5 +1,5 @@
 import library_loader from "../../services/library_loader.js";
-import { postprocessMermaidSvg } from "../../services/mermaid.js";
+import { loadElkIfNeeded, postprocessMermaidSvg } from "../../services/mermaid.js";
 import AbstractSvgSplitTypeWidget from "./abstract_svg_split_type_widget.js";
 
 let idCounter = 1;
@@ -12,6 +12,7 @@ export class MermaidTypeWidget extends AbstractSvgSplitTypeWidget {
 
     async renderSvg(content: string) {
         await library_loader.requireLibrary(library_loader.MERMAID);
+        await loadElkIfNeeded(content);
 
         mermaid.mermaidAPI.initialize({
             startOnLoad: false,
