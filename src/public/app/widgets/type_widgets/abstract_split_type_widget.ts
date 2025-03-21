@@ -7,8 +7,13 @@ import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
 
 const TPL = `\
 <div class="note-detail-split note-detail-printable split-horizontal">
-    <div class="note-detail-split-editor"></div>
-    <div class="note-detail-split-preview"></div>
+    <div class="note-detail-split-first-col">
+        <div class="note-detail-split-editor"></div>
+        <div class="note-detail-error-container alert alert-warning hidden-ext"></div>
+    </div>
+    <div class="note-detail-split-second-col">
+        <div class="note-detail-split-preview"></div>
+    </div>
 
     <style>
         .note-detail-split {
@@ -16,19 +21,37 @@ const TPL = `\
             height: 100%;
         }
 
+        .note-detail-split-first-col {
+            display: flex;
+        }
+
         .note-detail-split .note-detail-split-editor {
             width: 100%;
+            flex-grow: 1;
+        }
+
+        .note-detail-split .note-detail-error-container {
+            font-family: var(--monospace-font-family);
+            margin: 0.1em;
         }
 
         /* Horizontal layout */
 
-        .note-detail-split.split-horizontal > .note-detail-split-preview {
+        .note-detail-split.split-horizontal > .note-detail-split-second-col {
             border-left: 1px solid var(--main-border-color);
         }
 
         .note-detail-split.split-horizontal > div {
             height: 100%;
             width: 50%;
+        }
+
+        .note-detail-split.split-horizontal .note-detail-split-preview {
+            height: 100%;
+        }
+
+        .note-detail-split-first-col {
+            flex-direction: column;
         }
 
         /* Vertical layout */
@@ -50,7 +73,10 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     private splitInstance?: Split.Instance;
 
     protected $preview!: JQuery<HTMLElement>;
+    private $firstCol!: JQuery<HTMLElement>;
+    private $secondCol!: JQuery<HTMLElement>;
     private $editor!: JQuery<HTMLElement>;
+    private $errorContainer!: JQuery<HTMLElement>;
     private editorTypeWidget: EditableCodeTypeWidget;
 
     constructor() {
@@ -62,9 +88,12 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     doRender(): void {
         this.$widget = $(TPL);
 
+        this.$firstCol = this.$widget.find(".note-detail-split-first-col");
+        this.$secondCol = this.$widget.find(".note-detail-split-second-col");
         this.$preview = this.$widget.find(".note-detail-split-preview");
         this.$editor = this.$widget.find(".note-detail-split-editor");
         this.$editor.append(this.editorTypeWidget.render());
+        this.$errorContainer = this.$widget.find(".note-detail-error-container");
         this.#setupResizer();
 
         super.doRender();
@@ -91,7 +120,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         }
 
         this.splitInstance?.destroy();
-        this.splitInstance = Split([ this.$preview[0], this.$editor[0] ], {
+        this.splitInstance = Split([ this.$firstCol[0], this.$secondCol[0] ], {
             sizes: [ 50, 50 ],
             direction: "horizontal",
             gutterSize: DEFAULT_GUTTER_SIZE,
@@ -106,6 +135,11 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
      */
     buildSplitExtraOptions(): Split.Options {
         return {};
+    }
+
+    setError(message: string | null | undefined) {
+        this.$errorContainer.toggleClass("hidden-ext", !message);
+        this.$errorContainer.text(message ?? "");
     }
 
     getData() {

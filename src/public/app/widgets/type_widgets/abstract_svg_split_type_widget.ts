@@ -65,7 +65,18 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
             return;
         }
 
-        const svg = await this.renderSvg(content);
+        let svg: string = "";
+        try {
+            svg = await this.renderSvg(content);
+        } catch (e: unknown) {
+            // Rendering failed.
+            this.setError((e as Error)?.message);
+            return;
+        }
+
+        // Rendering was succesful.
+        this.setError(null);
+
         if (svg === this.svg) {
             return;
         }

@@ -25,13 +25,8 @@ export class MermaidTypeWidget extends AbstractSvgSplitTypeWidget {
         });
 
         idCounter++;
-        try {
-            const { svg } = await mermaid.render(`mermaid-graph-${idCounter}`, content);
-            return postprocessMermaidSvg(svg);
-        } catch (e) {
-            console.warn(JSON.stringify(e));
-            return "";
-        }
+        const { svg } = await mermaid.render(`mermaid-graph-${idCounter}`, content);
+        return postprocessMermaidSvg(svg);
     }
 
 }
