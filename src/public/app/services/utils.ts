@@ -411,7 +411,11 @@ async function openInAppHelp($button: JQuery<HTMLElement>) {
     if (inAppHelpPage) {
         // Dynamic import to avoid import issues in tests.
         const appContext = (await import("../components/app_context.js")).default;
-        const subContexts = appContext.tabManager.getActiveContext().getSubContexts();
+        const activeContext = appContext.tabManager.getActiveContext();
+        if (!activeContext) {
+            return;
+        }
+        const subContexts = activeContext.getSubContexts();
         const targetNote = `_help_${inAppHelpPage}`;
         const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
         const viewScope: ViewScope = {

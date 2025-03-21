@@ -220,6 +220,7 @@ input::selection,
     border-radius: 6px;
     padding-right: 8px;
     color: var(--quick-search-color);
+    flex-wrap: nowrap;
 }
 
 .input-group:hover {
@@ -300,6 +301,24 @@ input::selection,
 
 .input-group .input-group-text:not(button):not(a):not(.bx) {
     font-style: italic;
+}
+
+/*
+    Numeric input with measurement unit as a sufix
+
+    <label class="input-group tn-number-unit-pair">
+        <input ... >
+        <span class="input-group-text">meters</span>
+    </label>
+*/
+
+label.input-group.tn-number-unit-pair {
+    width: fit-content;
+}
+
+label.input-group.tn-number-unit-pair input {
+    width: 120px !important;
+    padding-inline-end: 0;
 }
 
 /* Combo box-like dropdown buttons */
