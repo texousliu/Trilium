@@ -33,6 +33,11 @@ const TPL = `<div class="mermaid-widget">
             height: 100%;
             text-align: center;
         }
+
+        .mermaid-render svg {
+            max-width: 100% !important;
+            width: 100%;
+        }
     </style>
 
     <div class="mermaid-error alert alert-warning">
