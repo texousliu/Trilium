@@ -1,5 +1,7 @@
+import type { EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import server from "../../services/server.js";
+import utils from "../../services/utils.js";
 import AbstractSplitTypeWidget from "./abstract_split_type_widget.js";
 
 /**
@@ -157,6 +159,14 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
             this.zoomInstance.destroy();
             this.zoomInstance = undefined;
         }
+    }
+
+    async exportSvgEvent({ ntxId }: EventData<"exportSvg">) {
+        if (!this.isNoteContext(ntxId) || this.note?.type !== "mermaid" || !this.svg) {
+            return;
+        }
+
+        utils.downloadSvg(this.note.title, this.svg);
     }
 
 }
