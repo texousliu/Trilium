@@ -76,7 +76,6 @@ try {
         "node_modules/dayjs/",
         "node_modules/boxicons/css/",
         "node_modules/boxicons/fonts/",
-        "node_modules/mermaid/dist/",
         "node_modules/jquery/dist/",
         "node_modules/jquery-hotkeys/",
         "node_modules/split.js/dist/",

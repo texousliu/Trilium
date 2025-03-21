@@ -13,10 +13,10 @@ import dialogService from "../../services/dialog.js";
 import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
-import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
+import { getMermaidConfig } from "./mermaid.js";
 
 const ENABLE_INSPECTOR = false;
 
@@ -279,7 +279,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 enablePreview: true // Enable preview view
             },
             mermaid: {
-                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.MERMAID),
+                lazyLoad: async () => (await import("mermaid")).default, // FIXME
                 config: getMermaidConfig()
             }
         });

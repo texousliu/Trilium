@@ -1,3 +1,4 @@
+import type { MermaidConfig } from "mermaid";
 import library_loader from "../../services/library_loader.js";
 import { loadElkIfNeeded, postprocessMermaidSvg } from "../../services/mermaid.js";
 import AbstractSvgSplitTypeWidget from "./abstract_svg_split_type_widget.js";
@@ -11,8 +12,8 @@ export class MermaidTypeWidget extends AbstractSvgSplitTypeWidget {
     }
 
     async renderSvg(content: string) {
-        await library_loader.requireLibrary(library_loader.MERMAID);
-        await loadElkIfNeeded(content);
+        const mermaid = (await import("mermaid")).default;
+        await loadElkIfNeeded(mermaid, content);
 
         mermaid.mermaidAPI.initialize({
             startOnLoad: false,
@@ -28,19 +29,18 @@ export class MermaidTypeWidget extends AbstractSvgSplitTypeWidget {
 
 export function getMermaidConfig(): MermaidConfig {
     const documentStyle = window.getComputedStyle(document.documentElement);
-    const mermaidTheme = documentStyle.getPropertyValue("--mermaid-theme");
+    const mermaidTheme = documentStyle.getPropertyValue("--mermaid-theme") as "default";
 
     return {
-        theme: mermaidTheme.trim(),
+        theme: mermaidTheme.trim() as "default",
         securityLevel: "antiscript",
-        // TODO: Are all these options correct?
-        flow: { useMaxWidth: false },
+        flowchart: { useMaxWidth: false },
         sequence: { useMaxWidth: false },
         gantt: { useMaxWidth: false },
         class: { useMaxWidth: false },
         state: { useMaxWidth: false },
         pie: { useMaxWidth: true },
         journey: { useMaxWidth: false },
-        git: { useMaxWidth: false }
+        gitGraph: { useMaxWidth: false }
     };
 }

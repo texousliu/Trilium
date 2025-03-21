@@ -8,6 +8,7 @@ import library_loader, { Library } from "./services/library_loader.ts";
 import type { init } from "i18next";
 import type { lint } from "./services/eslint.ts";
 import type { RelationType } from "./widgets/type_widgets/relation_map.ts";
+import type { Mermaid } from "mermaid";
 
 interface ElectronProcess {
     type: string;
@@ -138,45 +139,6 @@ declare global {
             zoomOnClick: boolean
         })
     };
-    interface MermaidApi {
-        initialize(opts: {
-            startOnLoad: boolean,
-            theme: string,
-            securityLevel: "antiscript"
-        }): void;
-        render(selector: string, data: string);
-    }
-    interface MermaidLoader {
-
-    }
-    interface MermaidChartConfig {
-        useMaxWidth: boolean;
-    }
-    interface MermaidConfig {
-        theme: string;
-        securityLevel: "antiscript",
-        flow: MermaidChartConfig;
-        sequence: MermaidChartConfig;
-        gantt: MermaidChartConfig;
-        class: MermaidChartConfig;
-        state: MermaidChartConfig;
-        pie: MermaidChartConfig;
-        journey: MermaidChartConfig;
-        git: MermaidChartConfig;
-    }
-    var mermaid: {
-        mermaidAPI: MermaidApi;
-        registerLayoutLoaders(loader: MermaidLoader);
-        init(config: MermaidConfig, el: HTMLElement | JQuery<HTMLElement>);
-        parse(content: string, opts: {
-            suppressErrors: true
-        }): Promise<{
-            config: {
-                layout: string;
-            }
-        }>
-    };
-
     interface CKCodeBlockLanguage {
         language: string;
         label: string;
@@ -207,7 +169,7 @@ declare global {
                 enablePreview: boolean
             },
             mermaid: {
-                lazyLoad: () => Promise<void>,
+                lazyLoad: () => Promise<Mermaid>,
                 config: MermaidConfig
             }
         });

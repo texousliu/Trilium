@@ -64,8 +64,6 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/node_modules/boxicons/css/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/boxicons/css/")));
     app.use(`/${assetPath}/node_modules/boxicons/fonts/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/boxicons/fonts/")));
 
-    app.use(`/${assetPath}/node_modules/mermaid/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/mermaid/dist/")));
-
     app.use(`/${assetPath}/node_modules/jquery/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/jquery/dist/")));
 
     app.use(`/${assetPath}/node_modules/jquery-hotkeys/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/jquery-hotkeys/")));

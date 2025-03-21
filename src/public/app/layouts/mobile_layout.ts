@@ -16,7 +16,6 @@ import RelationMapButtons from "../widgets/floating_buttons/relation_map_buttons
 import SvgExportButton from "../widgets/floating_buttons/svg_export_button.js";
 import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
 import HideFloatingButtonsButton from "../widgets/floating_buttons/hide_floating_buttons_button.js";
-import MermaidWidget from "../widgets/mermaid.js";
 import NoteListWidget from "../widgets/note_list.js";
 import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
@@ -165,7 +164,6 @@ export default class MobileLayout {
                                     .child(new BacklinksWidget())
                                     .child(new HideFloatingButtonsButton())
                             )
-                            .child(new MermaidWidget())
                             .child(new PromotedAttributesWidget())
                             .child(
                                 new ScrollingContainer()

@@ -1,10 +1,10 @@
 import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
 import libraryLoader from "../../services/library_loader.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
-import { getMermaidConfig } from "../mermaid.js";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 import { getLocaleById } from "../../services/i18n.js";
+import { getMermaidConfig } from "./mermaid.js";
 
 const TPL = `
 <div class="note-detail-readonly-text note-detail-printable">
@@ -141,8 +141,8 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         });
 
         // Initialize mermaid
-        await libraryLoader.requireLibrary(libraryLoader.MERMAID);
-        mermaid.init(getMermaidConfig(), this.$content.find(".mermaid-diagram"));
+        const mermaid = (await import("mermaid")).default;
+        mermaid.init(getMermaidConfig(), this.$content.find(".mermaid-diagram")[0]);
     }
 
     async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {

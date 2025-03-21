@@ -7,6 +7,7 @@ import AbstractSplitTypeWidget from "./abstract_split_type_widget.js";
  * This adds the following functionality:
  *
  * - Automatic handling of the preview when content or the note changes.
+ * - Built-in pan and zoom functionality with automatic re-centering.
  *
  */
 export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTypeWidget {

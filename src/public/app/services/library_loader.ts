@@ -55,10 +55,6 @@ const WHEEL_ZOOM: Library = {
     js: ["node_modules/vanilla-js-wheel-zoom/dist/wheel-zoom.min.js"]
 };
 
-const MERMAID: Library = {
-    js: ["node_modules/mermaid/dist/mermaid.min.js"]
-};
-
 const MARKJS: Library = {
     js: ["node_modules/mark.js/dist/jquery.mark.es6.min.js"]
 };
@@ -181,7 +177,6 @@ export default {
     CALENDAR_WIDGET,
     KATEX,
     WHEEL_ZOOM,
-    MERMAID,
     MARKJS,
     HIGHLIGHT_JS,
     LEAFLET

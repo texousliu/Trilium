@@ -1,3 +1,5 @@
+import type { Mermaid } from "mermaid";
+
 let elkLoaded = false;
 
 /**
@@ -9,7 +11,7 @@ let elkLoaded = false;
  *
  * @param mermaidContent the plain text of the mermaid diagram, potentially including a frontmatter.
  */
-export async function loadElkIfNeeded(mermaidContent: string) {
+export async function loadElkIfNeeded(mermaid: Mermaid, mermaidContent: string) {
     if (elkLoaded) {
         // Exit immediately since the ELK library is already loaded.
         return;
@@ -18,7 +20,7 @@ export async function loadElkIfNeeded(mermaidContent: string) {
     const parsedContent = await mermaid.parse(mermaidContent, {
         suppressErrors: true
     });
-    if (parsedContent?.config?.layout === "elk") {
+    if (parsedContent && parsedContent.config?.layout === "elk") {
         elkLoaded = true;
         mermaid.registerLayoutLoaders((await import("@mermaid-js/layout-elk")).default);
     }
