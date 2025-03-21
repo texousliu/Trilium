@@ -1,15 +1,32 @@
-import type { EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import EditableCodeTypeWidget from "./editable_code.js";
 import TypeWidget from "./type_widget.js";
 
 const TPL = `\
-<div class="note-detail-split-editor note-detail-printable">
+<div class="note-detail-split note-detail-printable split-horizontal">
     <div class="note-detail-split-preview">
+        Preview goes here.
     </div>
 
     <div class="note-detail-split-editor">
     </div>
+
+    <style>
+        .note-detail-split {
+            display: flex;
+            height: 100%;
+        }
+
+        .note-detail-split.split-horizontal > div {
+            height: 100%;
+            width: 50%;
+        }
+
+        .note-detail-split .note-detail-split-editor {
+            width: 100%;
+        }
+
+    </style>
 </div>
 `;
 
@@ -26,7 +43,6 @@ export default class SplitTypeEditor extends TypeWidget {
     }
 
     doRender(): void {
-        console.log("Render");
         this.$widget = $(TPL);
 
         this.$preview = this.$widget.find(".note-detail-split-preview");
@@ -40,7 +56,6 @@ export default class SplitTypeEditor extends TypeWidget {
         await this.editorTypeWidget.initialized;
 
         if (note) {
-            console.log("Refresh with ", note);
             this.editorTypeWidget.noteContext = this.noteContext;
             this.editorTypeWidget.spacedUpdate = this.spacedUpdate;
             this.editorTypeWidget.doRefresh(note);

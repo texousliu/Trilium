@@ -40,7 +40,6 @@ import EditButton from "../widgets/buttons/edit_button.js";
 import EditedNotesWidget from "../widgets/ribbon_widgets/edited_notes.js";
 import ShowTocWidgetButton from "../widgets/buttons/show_toc_widget_button.js";
 import ShowHighlightsListWidgetButton from "../widgets/buttons/show_highlights_list_widget_button.js";
-import MermaidWidget from "../widgets/mermaid.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
 import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
@@ -215,7 +214,6 @@ export default class DesktopLayout {
                                                                 .child(new ContextualHelpButton())
                                                                 .child(new HideFloatingButtonsButton())
                                                         )
-                                                        .child(new MermaidWidget())
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
