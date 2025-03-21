@@ -103,7 +103,7 @@ export default class IncludeNoteDialog extends BasicWidget {
             return;
         }
         const note = await froca.getNote(noteId);
-        const boxSize = $("input[name='include-note-box-size']:checked").val();
+        const boxSize = $("input[name='include-note-box-size']:checked").val() as string;
 
         if (["image", "canvas", "mermaid"].includes(note?.type ?? "")) {
             // there's no benefit to use insert note functionlity for images,

@@ -368,7 +368,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.addTextToEditor(text);
     }
 
-    async addLink(notePath: string, linkTitle: string, externalLink: boolean = false) {
+    async addLink(notePath: string, linkTitle: string | null, externalLink: boolean = false) {
         await this.initialized;
 
         if (linkTitle) {
@@ -459,7 +459,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.triggerCommand("showIncludeNoteDialog", { textTypeWidget: this });
     }
 
-    addIncludeNote(noteId: string, boxSize: string) {
+    addIncludeNote(noteId: string, boxSize?: string) {
         this.watchdog.editor.model.change((writer) => {
             // Insert <includeNote>*</includeNote> at the current selection position
             // in a way that will result in creating a valid model structure

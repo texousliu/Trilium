@@ -301,7 +301,7 @@ declare global {
         });
         removeMarker(name: string);
         createRange(start: number, end: number): Range;
-        createElement(type: string, opts: Record<string, string>);
+        createElement(type: string, opts: Record<string, string | null | undefined>);
     }
     interface TextNode {
         previousSibling?: TextNode;
