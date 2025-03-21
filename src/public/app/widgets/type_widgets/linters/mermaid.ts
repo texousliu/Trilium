@@ -16,28 +16,38 @@ interface MermaidParseError extends Error {
 }
 
 export default function registerErrorReporter() {
-    CodeMirror.registerHelper("lint", null, (async (text, options) => {
-        if (!text.trim()) {
-            return [];
-        }
+    CodeMirror.registerHelper("lint", null, validateMermaid);
+}
 
-        try {
-            await mermaid.parse(text);
-        } catch (e: unknown) {
-            console.warn("Got validation error", JSON.stringify(e));
-
-            const mermaidError = (e as MermaidParseError);
-            const loc = mermaidError.hash.loc;
-            return [
-                {
-                    message: mermaidError.message,
-                    severity: "error",
-                    from: CodeMirror.Pos(loc.first_line - 1, loc.first_column - 1),
-                    to: CodeMirror.Pos(loc.last_line - 1, loc.last_column - 1)
-                }
-            ];
-        }
-
+export async function validateMermaid(text: string) {
+    if (!text.trim()) {
         return [];
-    }));
+    }
+
+    try {
+        await mermaid.parse(text);
+    } catch (e: unknown) {
+        console.warn("Got validation error", JSON.stringify(e));
+
+        const mermaidError = (e as MermaidParseError);
+        const loc = mermaidError.hash.loc;
+        let firstCol = loc.first_column;
+        let lastCol = loc.last_column;
+
+        if (firstCol !== 0 && lastCol !== 0) {
+            firstCol = lastCol + 1;
+            lastCol = firstCol + 1;
+        }
+
+        return [
+            {
+                message: mermaidError.message,
+                severity: "error",
+                from: CodeMirror.Pos(loc.first_line - 1, firstCol),
+                to: CodeMirror.Pos(loc.last_line - 1, lastCol)
+            }
+        ];
+    }
+
+    return [];
 }
