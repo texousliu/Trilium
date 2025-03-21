@@ -193,6 +193,8 @@ export type CommandMappings = {
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     showUploadAttachmentsDialog: CommandData & { noteId: string };
+    showIncludeNoteDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
+    showAddLinkDialog: CommandData & { textTypeWidget: EditableTextTypeWidget, text: string };
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;

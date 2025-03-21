@@ -210,6 +210,7 @@ declare global {
                 config: MermaidConfig
             }
         });
+        destroy();
     }
 
     var CKEditor: {
@@ -287,18 +288,20 @@ declare global {
 
     interface Range {
         toJSON(): object;
+        getItems(): TextNode[];
     }
     interface Writer {
         setAttribute(name: string, value: string, el: CKNode);
         createPositionAt(el: CKNode, opt?: "end" | number);
         setSelection(pos: number, pos?: number);
-        insertText(text: string, opts: Record<string, unknown> | undefined, position?: TextPosition);
+        insertText(text: string, opts: Record<string, unknown> | undefined | TextPosition, position?: TextPosition);
         addMarker(name: string, opts: {
             range: Range;
             usingOperation: boolean;
         });
         removeMarker(name: string);
         createRange(start: number, end: number): Range;
+        createElement(type: string, opts: Record<string, string>);
     }
     interface TextNode {
         previousSibling?: TextNode;
@@ -347,6 +350,17 @@ declare global {
         };
     }
 
+    interface CKEvent {
+        stop(): void;
+    }
+
+    interface PluginEventData {
+        title: string;
+        message: {
+            message: string;
+        };
+    }
+
     interface TextEditor {
         create(el: HTMLElement, config: {
             removePlugins?: string[];
@@ -365,6 +379,11 @@ declare global {
                 selection: {
                     getFirstPosition(): undefined | TextPosition;
                     getLastPosition(): undefined | TextPosition;
+                    getSelectedElement(): CKNode;
+                    hasAttribute(attribute: string): boolean;
+                    getAttribute(attribute: string): string;
+                    getFirstRange(): Range;
+                    isCollapsed: boolean;
                 };
                 differ: {
                     getChanges(): {
@@ -378,15 +397,13 @@ declare global {
                     }[];
                 }
             },
-            insertContent(modelFragment: any, selection: any);
+            insertContent(modelFragment: any, selection?: any);
             change(cb: (writer: Writer) => void)
         },
         editing: {
             view: {
                 document: {
-                    on(event: string, cb: (event: {
-                        stop();
-                    }, data: {
+                    on(event: string, cb: (event: CKEvent, data: {
                         preventDefault();
                     }) => void, opts?: {
                         priority: "high"

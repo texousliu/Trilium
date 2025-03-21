@@ -8,7 +8,7 @@ import froca from "../../services/froca.js";
 import noteCreateService from "../../services/note_create.js";
 import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
 import link from "../../services/link.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import dialogService from "../../services/dialog.js";
 import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
@@ -216,7 +216,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const editor = await editorClass.create(elementOrData, finalConfig);
 
             const notificationsPlugin = editor.plugins.get("Notification");
-            notificationsPlugin.on("show:warning", (evt, data) => {
+            notificationsPlugin.on("show:warning", (evt: CKEvent, data: PluginEventData) => {
                 const title = data.title;
                 const message = data.message.message;
 
@@ -253,6 +253,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             editor.model.document.on("change:data", () => this.spacedUpdate.scheduleUpdate());
 
             if (glob.isDev && ENABLE_INSPECTOR) {
+                //@ts-expect-error TODO: Check if this still works.
                 await import(/* webpackIgnore: true */ "../../../libraries/ckeditor/inspector.js");
                 CKEditorInspector.attach(editor);
             }
@@ -288,8 +289,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         const blob = await note.getBlob();
 
         await this.spacedUpdate.allowUpdateWithoutChange(async () => {
-            const data = blob.content || "";
-            const newContentLanguage = this.note.getLabelValue("language");
+            const data = blob?.content || "";
+            const newContentLanguage = this.note?.getLabelValue("language");
             if (this.contentLanguage !== newContentLanguage) {
                 await this.reinitialize(data);
             } else {
@@ -359,7 +360,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    addTextToActiveEditorEvent({ text }) {
+    addTextToActiveEditorEvent({ text }: EventData<"addTextToActiveEditor">) {
         if (!this.isActive()) {
             return;
         }
@@ -367,7 +368,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.addTextToEditor(text);
     }
 
-    async addLink(notePath, linkTitle, externalLink = false) {
+    async addLink(notePath: string, linkTitle: string, externalLink: boolean = false) {
         await this.initialized;
 
         if (linkTitle) {
@@ -391,7 +392,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         return !selection.isCollapsed;
     }
 
-    async executeWithTextEditorEvent({ callback, resolve, ntxId }) {
+    async executeWithTextEditorEvent({ callback, resolve, ntxId }: EventData<"executeWithTextEditor">) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }
@@ -435,7 +436,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const notePath = selectedElement.getAttribute("notePath");
 
             if (notePath) {
-                await appContext.tabManager.getActiveContext().setNote(notePath);
+                await appContext.tabManager.getActiveContext()?.setNote(notePath);
                 return;
             }
         }
@@ -448,7 +449,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         const notePath = link.getNotePathFromUrl(selectedLinkUrl);
 
         if (notePath) {
-            await appContext.tabManager.getActiveContext().setNote(notePath);
+            await appContext.tabManager.getActiveContext()?.setNote(notePath);
         } else {
             window.open(selectedLinkUrl, "_blank");
         }
@@ -458,7 +459,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.triggerCommand("showIncludeNoteDialog", { textTypeWidget: this });
     }
 
-    addIncludeNote(noteId, boxSize) {
+    addIncludeNote(noteId: string, boxSize: string) {
         this.watchdog.editor.model.change((writer) => {
             // Insert <includeNote>*</includeNote> at the current selection position
             // in a way that will result in creating a valid model structure
@@ -471,8 +472,11 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    async addImage(noteId) {
+    async addImage(noteId: string) {
         const note = await froca.getNote(noteId);
+        if (!note) {
+            return;
+        }
 
         this.watchdog.editor.model.change((writer) => {
             const encodedTitle = encodeURIComponent(note.title);
@@ -482,24 +486,28 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    async createNoteForReferenceLink(title) {
+    async createNoteForReferenceLink(title: string) {
+        if (!this.notePath) {
+            return;
+        }
+
         const resp = await noteCreateService.createNoteWithTypePrompt(this.notePath, {
             activate: false,
             title: title
         });
 
-        if (!resp) {
+        if (!resp || !resp.note) {
             return;
         }
 
         return resp.note.getBestNotePathString();
     }
 
-    async refreshIncludedNoteEvent({ noteId }) {
+    async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {
         this.refreshIncludedNote(this.$editor, noteId);
     }
 
-    async reinitialize(data) {
+    async reinitialize(data: string) {
         if (!this.watchdog) {
             return;
         }
