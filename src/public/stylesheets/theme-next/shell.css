@@ -1356,7 +1356,7 @@ div.floating-buttons .show-floating-buttons-button {
     height: var(--floating-button-show-hide-button-size);
     padding: 0;
     border: 0;
-    font-size: calc(var(--floating-button-show-hide-button-size) * .75);
+    font-size: calc(var(--floating-button-show-hide-button-size) * .8);
 }
 
 div.floating-buttons .show-floating-buttons-button {
@@ -1364,11 +1364,19 @@ div.floating-buttons .show-floating-buttons-button {
     background: var(--left-pane-item-action-button-background);
     color: var(--left-pane-item-action-button-color);
     backdrop-filter: blur(10px);
+    animation: floating-buttons-show-hide-button-animation 400ms ease-out;
 }
 
-div.floating-buttons-children .close-floating-buttons-button::before,
-div.floating-buttons .show-floating-buttons-button::before {
-    content: "\eab4";
+@keyframes floating-buttons-show-hide-button-animation {
+    from {
+        transform: rotate(180deg);
+    } to {
+        transform: rotate(0);
+    }
+}
+
+div.floating-buttons-children:not(.temporarily-hidden) .close-floating-buttons-button {
+    animation: floating-buttons-show-hide-button-animation 400ms ease-out;
 }
 
 div.floating-buttons-children .close-floating-buttons-button {
