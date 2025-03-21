@@ -39,9 +39,14 @@ export async function validateMermaid(text: string) {
             firstCol = 0;
         }
 
+        let messageLines = mermaidError.message.split("\n");
+        if (messageLines.length >= 4) {
+            messageLines = messageLines.slice(3);
+        }
+
         return [
             {
-                message: mermaidError.message,
+                message: messageLines.join("\n"),
                 severity: "error",
                 from: CodeMirror.Pos(loc.first_line - 1, firstCol),
                 to: CodeMirror.Pos(loc.last_line - 1, lastCol)

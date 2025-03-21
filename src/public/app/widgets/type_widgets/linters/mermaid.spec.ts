@@ -17,12 +17,11 @@ describe("Mermaid linter", () => {
         `;
 
         const result = await validateMermaid(input);
-        expect(result.length).toBe(1);
-        expect(result[0].message).toSatisfy((v: string) => v.includes("Expecting 'SPACE'"));
-        expect(result[0]).toMatchObject({
+        expect(result).toMatchObject([{
+            message: "Expecting 'SPACE', 'NL', 'SD', got 'ID'",
             from: { line: 0, col: 0 },
             to: { line: 0, col: 1 }
-        });
+        }]);
     });
 
     it("reports correctly basic arrow missing in diagram", async () => {
@@ -35,11 +34,10 @@ describe("Mermaid linter", () => {
         `;
 
         const result = await validateMermaid(input);
-        expect(result.length).toBe(1);
-        expect(result[0].message).toSatisfy((v: string) => v.includes("Expecting 'ARROW_DELIMITER'"));
-        expect(result[0]).toMatchObject({
+        expect(result).toMatchObject([{
+            message: "Expecting 'ARROW_DELIMITER', got 'MINUS'",
             from: { line: 3, col: 8 },
             to: { line: 3, col: 9 }
-        });
+        }]);
     });
 });
