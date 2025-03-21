@@ -25,7 +25,7 @@ const HIGHLIGHT_MAX_BLOCK_COUNT = 500;
 
 const tag = "SyntaxHighlightWidget";
 const debugLevels = ["error", "warn", "info", "log", "debug"];
-const debugLevel = debugLevels.indexOf("debug");
+const debugLevel = debugLevels.indexOf("warn");
 
 let warn = function (...args: unknown[]) {};
 if (debugLevel >= debugLevels.indexOf("warn")) {
