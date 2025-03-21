@@ -12,10 +12,14 @@ import AbstractSplitTypeWidget from "./abstract_split_type_widget.js";
 export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTypeWidget {
 
     private $renderContainer!: JQuery<HTMLElement>;
+    private zoomHandler?: () => void;
+    private zoomInstance?: SvgPanZoom.Instance;
 
     doRender(): void {
         super.doRender();
-        this.$renderContainer = $(`<div class="render-container"></div>`);
+        this.$renderContainer = $(`<div>`)
+            .addClass("render-container")
+            .css("height", "100%");
         this.$preview.append(this.$renderContainer);
     }
 
@@ -42,7 +46,13 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
         if (this.note) {
             const svg = await this.renderSvg(content);
             this.$renderContainer.html(svg);
+            await this.#setupPanZoom();
         }
+    }
+
+    cleanup(): void {
+        this.#cleanUpZoom();
+        super.cleanup();
     }
 
     /**
@@ -53,5 +63,59 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
      * @param content the content of the note, in plain text.
      */
     abstract renderSvg(content: string): Promise<string>;
+
+    async #setupPanZoom() {
+        // Clean up
+        let pan = null;
+        let zoom = null;
+        if (this.zoomInstance) {
+            // Store pan and zoom for same note, when the user is editing the note.
+            pan = this.zoomInstance.getPan();
+            zoom = this.zoomInstance.getZoom();
+            this.#cleanUpZoom();
+        }
+
+        const $svgEl = this.$renderContainer.find("svg");
+
+        // Fit the image to bounds
+        $svgEl.attr("width", "100%")
+            .attr("height", "100%")
+            .css("max-width", "100%");
+
+        if (!$svgEl.length) {
+            return;
+        }
+
+        const svgPanZoom = (await import("svg-pan-zoom")).default;
+        const zoomInstance = svgPanZoom($svgEl[0], {
+            zoomEnabled: true,
+            controlIconsEnabled: true
+        });
+
+        if (pan && zoom) {
+            // Restore the pan and zoom.
+            zoomInstance.zoom(zoom);
+            zoomInstance.pan(pan);
+        } else {
+            // New instance, reposition properly.
+            zoomInstance.center();
+            zoomInstance.fit();
+        }
+
+        this.zoomHandler = () => {
+            zoomInstance.resize();
+            zoomInstance.fit();
+            zoomInstance.center();
+        };
+        this.zoomInstance = zoomInstance;
+        $(window).on("resize", this.zoomHandler);
+    }
+
+    #cleanUpZoom() {
+        if (this.zoomInstance) {
+            this.zoomInstance.destroy();
+            this.zoomInstance = undefined;
+        }
+    }
 
 }
