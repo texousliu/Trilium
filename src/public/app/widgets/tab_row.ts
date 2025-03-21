@@ -4,7 +4,7 @@ import BasicWidget from "./basic_widget.js";
 import contextMenu from "../menus/context_menu.js";
 import utils from "../services/utils.js";
 import keyboardActionService from "../services/keyboard_actions.js";
-import appContext, { type CommandListenerData, type EventData } from "../components/app_context.js";
+import appContext, { type CommandNames, type CommandListenerData, type EventData } from "../components/app_context.js";
 import froca from "../services/froca.js";
 import attributeService from "../services/attributes.js";
 import type NoteContext from "../components/note_context.js";
@@ -268,7 +268,7 @@ export default class TabRowWidget extends BasicWidget {
 
             const ntxId = $(e.target).closest(".note-tab").attr("data-ntx-id");
 
-            contextMenu.show({
+            contextMenu.show<CommandNames>({
                 x: e.pageX,
                 y: e.pageY,
                 items: [

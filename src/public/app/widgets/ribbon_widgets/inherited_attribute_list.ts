@@ -3,6 +3,8 @@ import AttributeDetailWidget from "../attribute_widgets/attribute_detail.js";
 import attributeRenderer from "../../services/attribute_renderer.js";
 import attributeService from "../../services/attributes.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="inherited-attributes-widget">
@@ -10,7 +12,7 @@ const TPL = `
     .inherited-attributes-widget {
         position: relative;
     }
-    
+
     .inherited-attributes-container {
         color: var(--muted-text-color);
         max-height: 200px;
@@ -23,6 +25,11 @@ const TPL = `
 </div>`;
 
 export default class InheritedAttributesWidget extends NoteContextAwareWidget {
+
+    private attributeDetailWidget: AttributeDetailWidget;
+
+    private $container!: JQuery<HTMLElement>;
+
     get name() {
         return "inheritedAttributes";
     }
@@ -34,7 +41,6 @@ export default class InheritedAttributesWidget extends NoteContextAwareWidget {
     constructor() {
         super();
 
-        /** @type {AttributeDetailWidget} */
         this.attributeDetailWidget = new AttributeDetailWidget().contentSized().setParent(this);
 
         this.child(this.attributeDetailWidget);
@@ -42,7 +48,7 @@ export default class InheritedAttributesWidget extends NoteContextAwareWidget {
 
     getTitle() {
         return {
-            show: !this.note.isLaunchBarConfig(),
+            show: !this.note?.isLaunchBarConfig(),
             title: t("inherited_attribute_list.title"),
             icon: "bx bx-list-plus"
         };
@@ -56,7 +62,7 @@ export default class InheritedAttributesWidget extends NoteContextAwareWidget {
         this.$widget.append(this.attributeDetailWidget.render());
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.$container.empty();
 
         const inheritedAttributes = this.getInheritedAttributes(note);
@@ -90,7 +96,7 @@ export default class InheritedAttributesWidget extends NoteContextAwareWidget {
         }
     }
 
-    getInheritedAttributes(note) {
+    getInheritedAttributes(note: FNote) {
         const attrs = note.getAttributes().filter((attr) => attr.noteId !== this.noteId);
 
         attrs.sort((a, b) => {
@@ -105,7 +111,7 @@ export default class InheritedAttributesWidget extends NoteContextAwareWidget {
         return attrs;
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.getAttributeRows(this.componentId).find((attr) => attributeService.isAffecting(attr, this.note))) {
             this.refresh();
         }

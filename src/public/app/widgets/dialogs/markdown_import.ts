@@ -27,7 +27,17 @@ const TPL = `
     </div>
 </div>`;
 
+interface RenderMarkdownResponse {
+    htmlContent: string;
+}
+
 export default class MarkdownImportDialog extends BasicWidget {
+
+    private lastOpenedTs: number;
+    private modal!: bootstrap.Modal;
+    private $importTextarea!: JQuery<HTMLElement>;
+    private $importButton!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -36,7 +46,7 @@ export default class MarkdownImportDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.modal = Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget[0]);
         this.$importTextarea = this.$widget.find(".markdown-import-textarea");
         this.$importButton = this.$widget.find(".markdown-import-button");
 
@@ -47,10 +57,13 @@ export default class MarkdownImportDialog extends BasicWidget {
         shortcutService.bindElShortcut(this.$widget, "ctrl+return", () => this.sendForm());
     }
 
-    async convertMarkdownToHtml(markdownContent) {
-        const { htmlContent } = await server.post("other/render-markdown", { markdownContent });
+    async convertMarkdownToHtml(markdownContent: string) {
+        const { htmlContent } = await server.post<RenderMarkdownResponse>("other/render-markdown", { markdownContent });
 
-        const textEditor = await appContext.tabManager.getActiveContext().getTextEditor();
+        const textEditor = await appContext.tabManager.getActiveContext()?.getTextEditor();
+        if (!textEditor) {
+            return;
+        }
 
         const viewFragment = textEditor.data.processor.toView(htmlContent);
         const modelFragment = textEditor.data.toModel(viewFragment);
@@ -80,7 +93,7 @@ export default class MarkdownImportDialog extends BasicWidget {
     }
 
     async sendForm() {
-        const text = this.$importTextarea.val();
+        const text = String(this.$importTextarea.val());
 
         this.modal.hide();
 
