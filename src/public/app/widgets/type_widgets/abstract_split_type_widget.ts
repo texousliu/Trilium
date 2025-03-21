@@ -7,8 +7,8 @@ import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
 
 const TPL = `\
 <div class="note-detail-split note-detail-printable split-horizontal">
-    <div class="note-detail-split-preview"></div>
     <div class="note-detail-split-editor"></div>
+    <div class="note-detail-split-preview"></div>
 
     <style>
         .note-detail-split {
@@ -22,7 +22,7 @@ const TPL = `\
 
         /* Horizontal layout */
 
-        .note-detail-split.split-horizontal > .note-detail-split-editor {
+        .note-detail-split.split-horizontal > .note-detail-split-preview {
             border-left: 1px solid var(--main-border-color);
         }
 
