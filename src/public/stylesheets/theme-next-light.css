@@ -167,6 +167,14 @@
     --promoted-attribute-card-background-color: var(--card-background-color);
     --promoted-attribute-card-shadow-color: #00000033;
 
+    --floating-button-shadow-color: #0000001f;
+    --floating-button-background-color: #e4e4e4cc;
+    --floating-button-color: var(--button-text-color);
+    --floating-button-hover-background: #00000017;
+    --floating-button-hover-color: black;
+    --floating-button-hide-button-background: gray;
+    --floating-button-separator-color: #ffffffd1;
+
     --new-tab-button-background: #d8d8d8;
     --new-tab-button-color: #3a3a3a;
     --new-tab-button-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
