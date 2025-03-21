@@ -88,13 +88,18 @@ import utils from "../services/utils.js";
 import GeoMapButtons from "../widgets/floating_buttons/geo_map_button.js";
 import ContextualHelpButton from "../widgets/floating_buttons/help_button.js";
 import CloseZenButton from "../widgets/close_zen_button.js";
+import type { AppContext } from "./../components/app_context.js";
+import type { WidgetsByParent } from "../services/bundle.js";
 
 export default class DesktopLayout {
-    constructor(customWidgets) {
+
+    private customWidgets: WidgetsByParent;
+
+    constructor(customWidgets: WidgetsByParent) {
         this.customWidgets = customWidgets;
     }
 
-    getRootWidget(appContext) {
+    getRootWidget(appContext: AppContext) {
         appContext.noteTreeWidget = new NoteTreeWidget();
 
         const launcherPaneIsHorizontal = options.get("layoutOrientation") === "horizontal";
@@ -267,7 +272,7 @@ export default class DesktopLayout {
             .child(new CloseZenButton());
     }
 
-    #buildLauncherPane(isHorizontal) {
+    #buildLauncherPane(isHorizontal: boolean) {
         let launcherPane;
 
         if (isHorizontal) {

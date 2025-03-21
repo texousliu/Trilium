@@ -404,7 +404,7 @@ type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType 
  */
 export type FilteredCommandNames<T extends CommandData> = keyof Pick<CommandMappings, FilterByValueType<CommandMappings, T>>;
 
-class AppContext extends Component {
+export class AppContext extends Component {
     isMainWindow: boolean;
     components: Component[];
     beforeUnloadListeners: WeakRef<BeforeUploadListener>[];

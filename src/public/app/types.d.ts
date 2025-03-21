@@ -47,6 +47,7 @@ interface CustomGlobals {
     TRILIUM_SAFE_MODE: boolean;
     platform?: typeof process.platform;
     linter: typeof lint;
+    hasNativeTitleBar: boolean;
 }
 
 type RequireMethod = (moduleName: string) => any;
