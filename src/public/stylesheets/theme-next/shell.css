@@ -1464,14 +1464,17 @@ div.floating-buttons-children .close-floating-buttons:has(.close-floating-button
 
 @keyframes floating-button-highlight {
     from {
-        opacity: .25;
+        background: var(--floating-button-background);
+        color: var(--floating-button-color);
     } to {
-        opacity: 1;
+        background: var(--floating-button-hover-background);
+        color: var(--floating-button-hover-color);
     }
 }
 
 .floating-buttons .bx-tada {
-    animation: floating-button-highlight 300ms linear alternate-reverse infinite;
+    /* The class is applied for 1700ms */
+    animation: floating-button-highlight 425ms ease-in-out alternate infinite;
 }
 
 .floating-buttons .bx-tada::before {
