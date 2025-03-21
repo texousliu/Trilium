@@ -241,7 +241,7 @@
     "sass": "1.86.0",
     "sass-loader": "16.0.5",
     "split.js": "1.6.5",
-    "supertest": "7.0.0",
+    "supertest": "7.1.0",
     "svg-pan-zoom": "3.6.2",
     "swagger-jsdoc": "6.2.8",
     "ts-loader": "9.5.2",
