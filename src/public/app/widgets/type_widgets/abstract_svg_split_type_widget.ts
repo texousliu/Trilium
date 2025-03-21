@@ -12,8 +12,19 @@ import AbstractSplitTypeWidget from "./abstract_split_type_widget.js";
 export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTypeWidget {
 
     private $renderContainer!: JQuery<HTMLElement>;
-    private zoomHandler?: () => void;
+    private zoomHandler: () => void;
     private zoomInstance?: SvgPanZoom.Instance;
+
+    constructor() {
+        super();
+        this.zoomHandler = () => {
+            if (this.zoomInstance) {
+                this.zoomInstance.resize();
+                this.zoomInstance.fit();
+                this.zoomInstance.center();
+            }
+        }
+    }
 
     doRender(): void {
         super.doRender();
@@ -21,6 +32,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
             .addClass("render-container")
             .css("height", "100%");
         this.$preview.append(this.$renderContainer);
+        $(window).on("resize", this.zoomHandler);
     }
 
     async doRefresh(note: FNote | null | undefined) {
@@ -52,6 +64,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
 
     cleanup(): void {
         this.#cleanUpZoom();
+        $(window).off("resize", this.zoomHandler);
         super.cleanup();
     }
 
@@ -102,13 +115,13 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
             zoomInstance.fit();
         }
 
-        this.zoomHandler = () => {
-            zoomInstance.resize();
-            zoomInstance.fit();
-            zoomInstance.center();
-        };
         this.zoomInstance = zoomInstance;
-        $(window).on("resize", this.zoomHandler);
+    }
+
+    buildSplitExtraOptions(): Split.Options {
+        return {
+            onDragEnd: () => this.zoomHandler?.()
+        }
     }
 
     #cleanUpZoom() {

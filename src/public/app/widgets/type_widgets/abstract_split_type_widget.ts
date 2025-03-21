@@ -43,7 +43,7 @@ const TPL = `\
  *
  * Features:
  *
- * - The two panes are resizeable via a split, on desktop.
+ * - The two panes are resizeable via a split, on desktop. The split can be optionally customized via {@link buildSplitExtraOptions}.
  */
 export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
@@ -95,8 +95,17 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
             sizes: [ 50, 50 ],
             direction: "horizontal",
             gutterSize: DEFAULT_GUTTER_SIZE,
-            // onDragEnd: () => this.zoomHandler?.()
+            ...this.buildSplitExtraOptions()
         });
+    }
+
+    /**
+     * Called upon when the split between the preview and content pane is initialized. Can be used to add additional listeners if needed.
+     *
+     * @returns the additional split options.
+     */
+    buildSplitExtraOptions(): Split.Options {
+        return {};
     }
 
     getData() {
