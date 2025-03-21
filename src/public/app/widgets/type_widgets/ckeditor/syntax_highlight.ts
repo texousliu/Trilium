@@ -12,7 +12,7 @@ import library_loader from "../../../services/library_loader.js";
 import mime_types from "../../../services/mime_types.js";
 import { isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 
-export async function initSyntaxHighlighting(editor) {
+export async function initSyntaxHighlighting(editor: TextEditor) {
     if (!isSyntaxHighlightEnabled) {
         return;
     }
@@ -25,39 +25,38 @@ const HIGHLIGHT_MAX_BLOCK_COUNT = 500;
 
 const tag = "SyntaxHighlightWidget";
 const debugLevels = ["error", "warn", "info", "log", "debug"];
-const debugLevel = "debug";
+const debugLevel = debugLevels.indexOf("debug");
 
-let warn = function () {};
+let warn = function (...args: unknown[]) {};
 if (debugLevel >= debugLevels.indexOf("warn")) {
     warn = console.warn.bind(console, tag + ": ");
 }
 
-let info = function () {};
+let info = function (...args: unknown[]) {};
 if (debugLevel >= debugLevels.indexOf("info")) {
     info = console.info.bind(console, tag + ": ");
 }
 
-let log = function () {};
+let log = function (...args: unknown[]) {};
 if (debugLevel >= debugLevels.indexOf("log")) {
     log = console.log.bind(console, tag + ": ");
 }
 
-let dbg = function () {};
+let dbg = function (...args: unknown[]) {};
 if (debugLevel >= debugLevels.indexOf("debug")) {
     dbg = console.debug.bind(console, tag + ": ");
 }
 
-function assert(e, msg) {
+function assert(e: boolean, msg?: string) {
     console.assert(e, tag + ": " + msg);
 }
 
 // TODO: Should this be scoped to note?
 let markerCounter = 0;
 
-function initTextEditor(textEditor) {
+function initTextEditor(textEditor: TextEditor) {
     log("initTextEditor");
 
-    let widget = this;
     const document = textEditor.model.document;
 
     // Create a conversion from model to view that converts
@@ -100,7 +99,7 @@ function initTextEditor(textEditor) {
         // See
         // https://github.com/ckeditor/ckeditor5/blob/b53d2a4b49679b072f4ae781ac094e7e831cfb14/packages/ckeditor5-block-quote/src/blockquoteediting.js#L54
         const changes = document.differ.getChanges();
-        let dirtyCodeBlocks = new Set();
+        let dirtyCodeBlocks = new Set<CKNode>();
 
         for (const change of changes) {
             dbg("change " + JSON.stringify(change));
@@ -151,7 +150,7 @@ function initTextEditor(textEditor) {
  *     the formatting would be stored with the note and it would need a
  *     way to remove that formatting when editing back the note.
  */
-function highlightCodeBlock(codeBlock, writer) {
+function highlightCodeBlock(codeBlock: CKNode, writer: Writer) {
     log("highlighting codeblock " + JSON.stringify(codeBlock.toJSON()));
     const model = codeBlock.root.document.model;
 
@@ -291,16 +290,16 @@ function highlightCodeBlock(codeBlock, writer) {
             iHtml = html.indexOf(">", iHtml) + 1;
 
             // push the span
-            let posStart = writer.createPositionAt(codeBlock, child.startOffset + iChildText);
+            let posStart = writer.createPositionAt(codeBlock, (child?.startOffset ?? 0) + iChildText);
             spanStack.push({ className: className, posStart: posStart });
         } else if (html[iHtml] == "<" && html[iHtml + 1] == "/") {
             // Done with this span, pop the span and mark the range
             iHtml = html.indexOf(">", iHtml + 1) + 1;
 
             let stackTop = spanStack.pop();
-            let posStart = stackTop.posStart;
-            let className = stackTop.className;
-            let posEnd = writer.createPositionAt(codeBlock, child.startOffset + iChildText);
+            let posStart = stackTop?.posStart;
+            let className = stackTop?.className;
+            let posEnd = writer.createPositionAt(codeBlock, (child?.startOffset ?? 0) + iChildText);
             let range = writer.createRange(posStart, posEnd);
             let markerName = "hljs:" + className + ":" + markerCounter;
             // Use an incrementing number for the uniqueId, random of

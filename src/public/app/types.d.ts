@@ -285,12 +285,20 @@ declare global {
         });
     }
 
-    type TextEditorElement = {};
+    interface Range {
+        toJSON(): object;
+    }
     interface Writer {
-        setAttribute(name: string, value: string, el: TextEditorElement);
-        createPositionAt(el: TextEditorElement, opt?: "end");
+        setAttribute(name: string, value: string, el: CKNode);
+        createPositionAt(el: CKNode, opt?: "end" | number);
         setSelection(pos: number, pos?: number);
         insertText(text: string, opts: Record<string, unknown> | undefined, position?: TextPosition);
+        addMarker(name: string, opts: {
+            range: Range;
+            usingOperation: boolean;
+        });
+        removeMarker(name: string);
+        createRange(start: number, end: number): Range;
     }
     interface TextNode {
         previousSibling?: TextNode;
@@ -308,6 +316,37 @@ declare global {
         offset: number;
         compareWith(pos: TextPosition): string;
     }
+
+    interface TextRange {
+
+    }
+
+    interface Marker {
+        name: string;
+    }
+
+    interface CKNode {
+        name: string;
+        childCount: number;
+        isEmpty: boolean;
+        toJSON(): object;
+        is(type: string, name?: string);
+        getAttribute(name: string): string;
+        getChild(index: number): CKNode;
+        data: string;
+        startOffset: number;
+        root: {
+            document: {
+                model: {
+                    createRangeIn(el: CKNode): TextRange;
+                    markers: {
+                        getMarkersIntersectingRange(range: TextRange): Marker[];
+                    }
+                }
+            }
+        };
+    }
+
     interface TextEditor {
         create(el: HTMLElement, config: {
             removePlugins?: string[];
@@ -321,10 +360,22 @@ declare global {
         model: {
             document: {
                 on(event: string, cb: () => void);
-                getRoot(): TextEditorElement;
+                getRoot(): CKNode;
+                registerPostFixer(callback: (writer: Writer) => boolean);
                 selection: {
                     getFirstPosition(): undefined | TextPosition;
                     getLastPosition(): undefined | TextPosition;
+                };
+                differ: {
+                    getChanges(): {
+                        type: string;
+                        name: string;
+                        position: {
+                            nodeAfter: CKNode;
+                            parent: CKNode;
+                            toJSON(): Object;
+                        }
+                    }[];
                 }
             },
             insertContent(modelFragment: any, selection: any);
@@ -340,7 +391,7 @@ declare global {
                     }) => void, opts?: {
                         priority: "high"
                     });
-                    getRoot(): TextEditorElement
+                    getRoot(): CKNode
                 },
                 domRoots: {
                     values: () => {
@@ -363,6 +414,16 @@ declare global {
             };
             toModel(viewFeragment: any);
         },
+        conversion: {
+            for(filter: string): {
+                markerToHighlight(data: {
+                    model: string;
+                    view: (data: {
+                        markerName: string;
+                    }) => void;
+                })
+            }
+        }
         getData(): string;
         setData(data: string): void;
         getSelectedHtml(): string;
