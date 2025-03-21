@@ -1,4 +1,5 @@
 import type FNote from "../../entities/fnote.js";
+import server from "../../services/server.js";
 import AbstractSplitTypeWidget from "./abstract_split_type_widget.js";
 
 /**
@@ -15,6 +16,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
     private $renderContainer!: JQuery<HTMLElement>;
     private zoomHandler: () => void;
     private zoomInstance?: SvgPanZoom.Instance;
+    private svg?: string;
 
     constructor() {
         super();
@@ -41,12 +43,12 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
 
         const blob = await note?.getBlob();
         const content = blob?.content || "";
-        this.refreshPreview(content, true);
+        this.onContentChanged(content, true);
     }
 
     getData(): { content: string; } {
         const data = super.getData();
-        this.refreshPreview(data.content, false);
+        this.onContentChanged(data.content, false);
         return data;
     }
 
@@ -56,12 +58,33 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
      * @param content the content that will be passed to `renderSvg` for rendering. It is not the SVG content.
      * @param recenter `true` to reposition the pan/zoom to fit the image and to center it.
      */
-    async refreshPreview(content: string, recenter: boolean) {
-        if (this.note) {
-            const svg = await this.renderSvg(content);
-            this.$renderContainer.html(svg);
-            await this.#setupPanZoom(!recenter);
+    async onContentChanged(content: string, recenter: boolean) {
+        if (!this.note) {
+            return;
         }
+
+        const svg = await this.renderSvg(content);
+        if (svg === this.svg) {
+            return;
+        }
+
+        this.svg = svg;
+
+        this.$renderContainer.html(svg);
+        await this.#setupPanZoom(!recenter);
+        this.#saveSvg();
+    }
+
+    #saveSvg() {
+        const payload = {
+            role: "image",
+            title: "mermaid-export.svg",
+            mime: "image/svg+xml",
+            content: this.svg,
+            position: 0
+        };
+
+        server.post(`notes/${this.noteId}/attachments?matchBy=title`, payload);
     }
 
     cleanup(): void {
