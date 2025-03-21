@@ -31,12 +31,12 @@ export async function validateMermaid(text: string) {
 
         const mermaidError = (e as MermaidParseError);
         const loc = mermaidError.hash.loc;
-        let firstCol = loc.first_column;
-        let lastCol = loc.last_column;
 
-        if (firstCol !== 0 && lastCol !== 0) {
-            firstCol = lastCol + 1;
-            lastCol = firstCol + 1;
+        let firstCol = loc.first_column + 1;
+        let lastCol = loc.last_column + 1;
+
+        if (firstCol === 1 && lastCol === 1) {
+            firstCol = 0;
         }
 
         return [
