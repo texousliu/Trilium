@@ -6,9 +6,6 @@ import utils from "../services/utils.js";
 import { loadElkIfNeeded, postprocessMermaidSvg } from "../services/mermaid.js";
 import type FNote from "../entities/fnote.js";
 import type { EventData } from "../components/app_context.js";
-import ScrollingContainer from "./containers/scrolling_container.js";
-import Split from "split.js";
-import { DEFAULT_GUTTER_SIZE } from "../services/resizer.js";
 
 const TPL = `<div class="mermaid-widget">
     <style>
@@ -58,7 +55,6 @@ export default class MermaidWidget extends NoteContextAwareWidget {
     private dirtyAttachment?: boolean;
     private zoomHandler?: () => void;
     private zoomInstance?: SvgPanZoom.Instance;
-    private splitInstance?: Split.Instance;
     private lastNote?: FNote;
 
     isEnabled() {
@@ -126,7 +122,6 @@ export default class MermaidWidget extends NoteContextAwareWidget {
             this.$errorContainer.show();
         }
 
-        this.#setupResizer();
         this.lastNote = note;
     }
 
@@ -204,28 +199,6 @@ export default class MermaidWidget extends NoteContextAwareWidget {
         };
         this.zoomInstance = zoomInstance;
         $(window).on("resize", this.zoomHandler);
-    }
-
-    #setupResizer() {
-        if (!utils.isDesktop()) {
-            return;
-        }
-
-        const selfEl = this.$widget;
-        const scrollingContainer = this.parent?.children.find((ch) => ch instanceof ScrollingContainer)?.$widget;
-
-        if (!selfEl.length || !scrollingContainer?.length) {
-            return;
-        }
-
-        if (!this.splitInstance) {
-            this.splitInstance = Split([ selfEl[0], scrollingContainer[0] ], {
-                sizes: [ 50, 50 ],
-                direction: "vertical",
-                gutterSize: DEFAULT_GUTTER_SIZE,
-                onDragEnd: () => this.zoomHandler?.()
-            });
-        }
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
