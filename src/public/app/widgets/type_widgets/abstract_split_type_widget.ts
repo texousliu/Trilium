@@ -7,12 +7,8 @@ import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
 
 const TPL = `\
 <div class="note-detail-split note-detail-printable split-horizontal">
-    <div class="note-detail-split-preview">
-        Preview goes here.
-    </div>
-
-    <div class="note-detail-split-editor">
-    </div>
+    <div class="note-detail-split-preview"></div>
+    <div class="note-detail-split-editor"></div>
 
     <style>
         .note-detail-split {
@@ -49,11 +45,11 @@ const TPL = `\
  *
  * - The two panes are resizeable via a split, on desktop.
  */
-export default class SplitTypeEditor extends TypeWidget {
+export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     private splitInstance?: Split.Instance;
 
-    private $preview!: JQuery<HTMLElement>;
+    protected $preview!: JQuery<HTMLElement>;
     private $editor!: JQuery<HTMLElement>;
     private editorTypeWidget: EditableCodeTypeWidget;
 
