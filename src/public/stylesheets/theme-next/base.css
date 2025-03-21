@@ -3,7 +3,6 @@
 @import url(./dialogs.css);
 @import url(./pages.css);
 @import url(./ribbon.css);
-@import url(./notes/empty.css);
 @import url(./notes/text.css);
 
 @font-face {
@@ -53,6 +52,11 @@
     --new-tab-button-size: 24px;
 
     --center-pane-border-radius: 10px;
+
+    --floating-button-height: 34px;
+    --floating-button-width: 40px;
+    --floating-button-icon-size: 20px;
+    --floating-button-show-hide-button-size: 26px;
 
     --menu-padding-size: 8px;
     --menu-item-icon-vert-offset: -2px;

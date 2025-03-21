@@ -36,21 +36,19 @@ body.mobile {
 
 /* #region Mica */
 body.background-effects.platform-win32 {
+    --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.15);
+    --launcher-pane-horiz-background-color: rgba(255, 255, 255, 0.7);
+    --launcher-pane-vert-background-color: rgba(255, 255, 255, 0.055);
     --tab-background-color: transparent;
     --new-tab-button-background: transparent;
-    --active-tab-background-color: var(--launcher-pane-background-color); /* TODO: fix */
+    --active-tab-background-color: var(--launcher-pane-horiz-background-color);
     --background-material: tabbed;
-}
-
-body.background-effects.platform-win32 #launcher-pane {
-    --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.15);
-    --launcher-pane-background-color: rgba(255, 255, 255, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {
     body.background-effects.platform-win32 #launcher-pane {
-        --launcher-pane-horizontal-border-color: rgba(0, 0, 0, 0.5);
-        --launcher-pane-background-color: rgba(255, 255, 255, 0.09);
+        --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.5);
+        --launcher-pane-horiz-background-color: rgba(255, 255, 255, 0.09);
     }
 }
 
@@ -58,10 +56,6 @@ body.background-effects.platform-win32.layout-vertical {
     --left-pane-background-color: transparent;
     --left-pane-item-hover-background: rgba(127, 127, 127, 0.05);
     --background-material: mica;
-}
-
-body.background-effects.platform-win32.layout-vertical #launcher-pane {
-    --launcher-pane-background-color: rgba(255, 255, 255, 0.055);
 }
 
 body.background-effects.platform-win32,
@@ -1302,6 +1296,252 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     margin-left: 8px;
     margin-right: calc(var(--pa-card-padding-left) - var(--pa-card-padding-right));
     font-size: 0; /* Prevent whitespaces creating a gap between buttons */
+}
+
+/*
+ * Floating buttons
+ */
+
+ /* Floating buttons container */
+.floating-buttons-children {
+    opacity: 1;
+    overflow: hidden;
+    transform-origin: right;
+    box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
+    background: var(--floating-button-background-color);
+    backdrop-filter: blur(10px) saturate(6);
+    border-radius: 8px;
+    transition: transform 250ms ease-out,
+                opacity 250ms ease-out;
+}
+
+ /* Floating buttons container (collapsed) */
+.floating-buttons-children.temporarily-hidden {
+    display: flex !important;
+    opacity: 0;
+    transform: scaleX(0);
+    pointer-events: none;
+}
+
+/* Floating buttons */
+
+.floating-buttons-children > * {
+    margin: 0 !important;
+}
+
+div.floating-buttons-children > button,
+div.floating-buttons-children .floating-button {
+    width: var(--floating-button-width);
+    height: var(--floating-button-height);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    font-size: var(--floating-button-icon-size);
+    align-items: center;
+    color: var(--floating-button-color);
+}
+
+div.floating-buttons-children > button:hover,
+div.floating-buttons-children .floating-button:hover {
+    background: var(--floating-button-hover-background);
+    color: var(--floating-button-hover-color);
+}
+
+ /* Show / hide buttons */
+
+div.floating-buttons-children .close-floating-buttons-button,
+div.floating-buttons .show-floating-buttons-button {
+    margin-top: calc((var(--floating-button-height) - var(--floating-button-show-hide-button-size)) / 2);
+    width: var(--floating-button-show-hide-button-size);
+    height: var(--floating-button-show-hide-button-size);
+    padding: 0;
+    border: 0;
+    font-size: calc(var(--floating-button-show-hide-button-size) * .8);
+}
+
+div.floating-buttons .show-floating-buttons-button {
+    box-shadow: 0 2px 4px var(--left-pane-background-color);
+    background: var(--left-pane-item-action-button-background);
+    color: var(--left-pane-item-action-button-color);
+    backdrop-filter: blur(10px);
+    animation: floating-buttons-show-hide-button-animation 400ms ease-out;
+}
+
+@keyframes floating-buttons-show-hide-button-animation {
+    from {
+        transform: rotate(180deg);
+    } to {
+        transform: rotate(0);
+    }
+}
+
+div.floating-buttons-children:not(.temporarily-hidden) .close-floating-buttons-button {
+    animation: floating-buttons-show-hide-button-animation 400ms ease-out;
+}
+
+div.floating-buttons-children .close-floating-buttons-button {
+    color: var(--floating-button-hide-button-background);
+    border-radius: 0;
+}
+
+div.floating-buttons-children .close-floating-buttons {
+    border-left: 2px solid var(--floating-button-separator-color);
+}
+
+div.floating-buttons-children .close-floating-buttons:has(.close-floating-buttons-button:hover) {
+    background: var(--floating-button-hover-background);
+}
+
+div.floating-buttons-children .close-floating-buttons {
+    margin-left: 0 !important;
+}
+
+/* Backlink count */
+
+.floating-buttons .backlinks-ticker {
+    height: 100%;
+    padding: 0 10px;
+    border-radius: 0;
+    border-left: 2px solid var(--floating-button-separator-color);
+    border-right: 2px solid var(--floating-button-separator-color);
+    background: transparent;
+    user-select: none;
+}
+
+.floating-buttons .backlinks-ticker:has(.backlinks-count:hover) {
+    background: var(--floating-button-hover-background);
+}
+
+/* Copy image reference */
+
+.floating-buttons .copy-image-reference-button .hidden-image-copy {
+    /* Take out of the the hidden image from flexbox to prevent the layout being affected */
+    position: absolute;
+}
+
+/* Code buttons */
+
+.floating-buttons .code-buttons-widget {
+    gap: 0;
+}
+
+/* The highlight animation */
+
+@keyframes floating-button-highlight {
+    from {
+        opacity: .25;
+    } to {
+        opacity: 1;
+    }
+}
+
+.floating-buttons .bx-tada {
+    animation: floating-button-highlight 300ms linear alternate-reverse infinite;
+}
+
+.floating-buttons .bx-tada::before {
+    font-size: var(--floating-button-icon-size);
+}
+
+/*
+ * Find and replace bar
+ */
+
+ .find-replace-widget {
+    container-type: inline-size;
+    border-top: 3px solid var(--root-background) !important;
+}
+
+.find-replace-widget > div {
+    padding: 8px;
+}
+
+.find-replace-widget > div + div {
+    padding-top: 0;
+}
+
+div.find-replace-widget div.find-widget-found-wrapper > span {
+    min-width: 50px;
+    font-style: normal;
+    font-weight: normal;
+}
+
+/* The up / down buttons of the "Find in text" input */
+.find-replace-widget .input-group button {
+    font-size: 1.3em;
+}
+
+.find-replace-widget .form-check {
+    padding-left: 0;
+    white-space: nowrap;
+}
+
+.find-replace-widget .form-check .form-check-input {
+    margin-left: 0;
+}
+
+/* Narrow version */
+@container (max-width: 600px) {
+    .find-replace-widget > *,
+    .find-replace-widget input,
+    .find-replace-widget button.btn.btn-sm {
+        font-size: .9em;
+    }
+
+    .find-widget-box {
+        position: relative;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .find-widget-box,
+    .replace-widget-box {
+        padding-right: 3em !important;
+    }
+
+    .find-widget-close-button {
+        position: absolute;
+        top: .85em;
+        right: .5em;
+    }
+
+    .find-widget-box > * {
+        margin: unset !important;
+    }
+
+    div.find-widget-search-term-input-group {
+        margin-bottom: 8px;
+        max-width: unset;
+        width: 100%;
+    }
+
+    .find-widget-found-wrapper,
+    .find-widget-found-wrapper > span {
+        min-width: 0 !important;
+    }
+
+    .find-widget-spacer {
+        display: none;
+    }
+
+    .form-check {
+        min-height: unset;
+        margin-bottom: unset;
+    }
+
+    .replace-widget-box {
+        gap: 8px;
+    }
+
+    .replace-widget-box > * {
+        margin-right: unset !important;
+    }
+
+    div.replace-widget-box button.btn.btn-sm {
+        min-width: unset;
+        white-space: nowrap;
+    }
 }
 
 /*
