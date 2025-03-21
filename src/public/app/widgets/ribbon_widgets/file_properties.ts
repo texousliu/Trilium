@@ -5,6 +5,7 @@ import openService from "../../services/open.js";
 import utils from "../../services/utils.js";
 import protectedSessionHolder from "../../services/protected_session_holder.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
 
 const TPL = `
 <div class="file-properties-widget">
@@ -66,6 +67,16 @@ const TPL = `
 </div>`;
 
 export default class FilePropertiesWidget extends NoteContextAwareWidget {
+
+    private $fileNoteId!: JQuery<HTMLElement>;
+    private $fileName!: JQuery<HTMLElement>;
+    private $fileType!: JQuery<HTMLElement>;
+    private $fileSize!: JQuery<HTMLElement>;
+    private $downloadButton!: JQuery<HTMLElement>;
+    private $openButton!: JQuery<HTMLElement>;
+    private $uploadNewRevisionButton!: JQuery<HTMLElement>;
+    private $uploadNewRevisionInput!: JQuery<HTMLFormElement>;
+
     get name() {
         return "fileProperties";
     }
@@ -99,8 +110,8 @@ export default class FilePropertiesWidget extends NoteContextAwareWidget {
         this.$uploadNewRevisionButton = this.$widget.find(".file-upload-new-revision");
         this.$uploadNewRevisionInput = this.$widget.find(".file-upload-new-revision-input");
 
-        this.$downloadButton.on("click", () => openService.downloadFileNote(this.noteId));
-        this.$openButton.on("click", () => openService.openNoteExternally(this.noteId, this.note.mime));
+        this.$downloadButton.on("click", () => this.noteId && openService.downloadFileNote(this.noteId));
+        this.$openButton.on("click", () => this.noteId && this.note && openService.openNoteExternally(this.noteId, this.note.mime));
 
         this.$uploadNewRevisionButton.on("click", () => {
             this.$uploadNewRevisionInput.trigger("click");
@@ -122,8 +133,12 @@ export default class FilePropertiesWidget extends NoteContextAwareWidget {
         });
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.$widget.show();
+
+        if (!this.note) {
+            return;
+        }
 
         this.$fileNoteId.text(note.noteId);
         this.$fileName.text(note.getLabelValue("originalFileName") || "?");
@@ -131,7 +146,7 @@ export default class FilePropertiesWidget extends NoteContextAwareWidget {
 
         const blob = await this.note.getBlob();
 
-        this.$fileSize.text(utils.formatSize(blob.contentLength));
+        this.$fileSize.text(utils.formatSize(blob?.contentLength ?? 0));
 
         // open doesn't work for protected notes since it works through a browser which isn't in protected session
         this.$openButton.toggle(!note.isProtected);

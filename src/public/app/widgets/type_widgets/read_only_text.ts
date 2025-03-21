@@ -114,7 +114,9 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         this.$content.find("section").each((_, el) => {
             const noteId = $(el).attr("data-note-id");
 
-            this.loadIncludedNote(noteId, $(el));
+            if (noteId) {
+                this.loadIncludedNote(noteId, $(el));
+            }
         });
 
         if (this.$content.find("span.math-tex").length > 0) {

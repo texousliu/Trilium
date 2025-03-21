@@ -28,6 +28,13 @@ const TPL = `<div class="jump-to-note-dialog modal mx-auto" tabindex="-1" role="
 const KEEP_LAST_SEARCH_FOR_X_SECONDS = 120;
 
 export default class JumpToNoteDialog extends BasicWidget {
+
+    private lastOpenedTs: number;
+    private modal!: bootstrap.Modal;
+    private $autoComplete!: JQuery<HTMLElement>;
+    private $results!: JQuery<HTMLElement>;
+    private $showInFullTextButton!: JQuery<HTMLElement>;
+
     constructor() {
         super();
 
@@ -36,7 +43,7 @@ export default class JumpToNoteDialog extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.modal = Modal.getOrCreateInstance(this.$widget);
+        this.modal = Modal.getOrCreateInstance(this.$widget[0]);
 
         this.$autoComplete = this.$widget.find(".jump-to-note-autocomplete");
         this.$results = this.$widget.find(".jump-to-note-results");
@@ -54,17 +61,17 @@ export default class JumpToNoteDialog extends BasicWidget {
 
                 function reposition() {
                     const offset = 100;
-                    const modalHeight = window.visualViewport.height - offset;
-                    const safeAreaInsetBottom = window.visualViewport.height - window.innerHeight;
+                    const modalHeight = (window.visualViewport?.height ?? 0) - offset;
+                    const safeAreaInsetBottom = (window.visualViewport?.height ?? 0) - window.innerHeight;
                     el.style.height = `${modalHeight}px`;
-                    el.style.bottom = `${window.visualViewport.height - modalHeight - safeAreaInsetBottom - offset}px`;
+                    el.style.bottom = `${(window.visualViewport?.height ?? 0) - modalHeight - safeAreaInsetBottom - offset}px`;
                 }
 
                 this.$autoComplete.on("focus", () => {
                     reposition();
                 });
 
-                window.visualViewport.addEventListener("resize", () => {
+                window.visualViewport?.addEventListener("resize", () => {
                     reposition();
                 });
 
@@ -84,7 +91,7 @@ export default class JumpToNoteDialog extends BasicWidget {
                 allowCreatingNotes: true,
                 hideGoToSelectedNoteButton: true,
                 allowJumpToSearchNotes: true,
-                container: this.$results
+                container: this.$results[0]
             })
             // clear any event listener added in previous invocation of this function
             .off("autocomplete:noteselected")
@@ -93,7 +100,7 @@ export default class JumpToNoteDialog extends BasicWidget {
                     return false;
                 }
 
-                appContext.tabManager.getActiveContext().setNote(suggestion.notePath);
+                appContext.tabManager.getActiveContext()?.setNote(suggestion.notePath);
             });
 
         // if you open the Jump To dialog soon after using it previously, it can often mean that you
@@ -112,15 +119,14 @@ export default class JumpToNoteDialog extends BasicWidget {
         }
     }
 
-    showInFullText(e) {
+    showInFullText(e: JQuery.TriggeredEvent) {
         // stop from propagating upwards (dangerous, especially with ctrl+enter executable javascript notes)
         e.preventDefault();
         e.stopPropagation();
 
-        const searchString = this.$autoComplete.val();
+        const searchString = String(this.$autoComplete.val());
 
         this.triggerCommand("searchNotes", { searchString });
-
         this.modal.hide();
     }
 }
