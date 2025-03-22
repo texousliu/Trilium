@@ -96,4 +96,13 @@ describe("processNoteContent", () => {
         expect(importedNote.type).toBe("canvas");
         expect(importedNote.title).toBe("New note");
     });
+
+    it("supports mermaid note", async () => {
+        const { importedNote } = await testImport("New note.mermaid", "application/json");
+        expect(importedNote).toMatchObject({
+            mime: "text/vnd.mermaid",
+            type: "mermaid",
+            title: "New note"
+        });
+    });
 });

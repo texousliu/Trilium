@@ -181,6 +181,7 @@ export function removeTextFileExtension(filePath: string) {
         case ".html":
         case ".htm":
         case ".excalidraw":
+        case ".mermaid":
             return filePath.substring(0, filePath.length - extension.length);
         default:
             return filePath;
