@@ -65,6 +65,10 @@ export function mapByNoteType(note: BNote, content: string | Buffer<ArrayBufferL
         payload = content;
         extension = "excalidraw";
         mime = "application/json";
+    } else if (note.type === "mermaid") {
+        payload = content;
+        extension = "mermaid";
+        mime = "text/vnd.mermaid";
     } else if (note.type === "relationMap" || note.type === "search") {
         payload = content;
         extension = "json";
