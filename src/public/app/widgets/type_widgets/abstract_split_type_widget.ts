@@ -28,6 +28,7 @@ const TPL = `\
 
         .note-detail-split-editor-col {
             display: flex;
+            flex-direction: column;
         }
 
         .note-detail-split-preview-col {
@@ -67,10 +68,6 @@ const TPL = `\
 
         .note-detail-split.split-horizontal .note-detail-split-preview {
             height: 100%;
-        }
-
-        .note-detail-split.split-horizontal .note-detail-split-editor-col {
-            flex-direction: column;
         }
 
         /* Vertical layout */
