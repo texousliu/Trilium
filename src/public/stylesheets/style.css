@@ -1778,6 +1778,11 @@ footer.file-footer button {
     left: 10px;
 }
 
+.content-floating-buttons.bottom-right {
+    bottom: 10px;
+    right: 10px;
+}
+
 .content-floating-buttons button.bx {
     font-size: 130%;
     padding: 1px 10px 1px 10px;

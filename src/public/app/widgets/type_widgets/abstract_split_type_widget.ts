@@ -7,6 +7,7 @@ import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
 import options from "../../services/options.js";
 import type SwitchSplitOrientationButton from "../floating_buttons/switch_layout_button.js";
 import type { EventData } from "../../components/app_context.js";
+import type OnClickButtonWidget from "../buttons/onclick_button.js";
 
 const TPL = `\
 <div class="note-detail-split note-detail-printable">
@@ -16,6 +17,7 @@ const TPL = `\
     </div>
     <div class="note-detail-split-preview-col">
         <div class="note-detail-split-preview"></div>
+        <div class="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group"></div>
     </div>
 
     <style>
@@ -26,6 +28,10 @@ const TPL = `\
 
         .note-detail-split-editor-col {
             display: flex;
+        }
+
+        .note-detail-split-preview-col {
+            position: relative;
         }
 
         .note-detail-split .note-detail-split-editor {
@@ -53,7 +59,8 @@ const TPL = `\
             border-left: 1px solid var(--main-border-color);
         }
 
-        .note-detail-split.split-horizontal > div {
+        .note-detail-split.split-horizontal > .note-detail-split-editor-col,
+        .note-detail-split.split-horizontal > .note-detail-split-preview-col {
             height: 100%;
             width: 50%;
         }
@@ -72,7 +79,8 @@ const TPL = `\
             flex-direction: column;
         }
 
-        .note-detail-split.split-vertical > div {
+        .note-detail-split.split-vertical > .note-detail-split-editor-col,
+        .note-detail-split.split-vertical > .note-detail-split-preview-col {
             width: 100%;
             height: 50%;
         }
@@ -126,13 +134,29 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     doRender(): void {
         this.$widget = $(TPL);
 
-        this.$editorCol = this.$widget.find(".note-detail-split-editor-col");
+        // Preview pane
         this.$previewCol = this.$widget.find(".note-detail-split-preview-col");
         this.$preview = this.$widget.find(".note-detail-split-preview");
+
+        // Editor pane
+        this.$editorCol = this.$widget.find(".note-detail-split-editor-col");
         this.$editor = this.$widget.find(".note-detail-split-editor");
         this.$editor.append(this.editorTypeWidget.render());
         this.$errorContainer = this.$widget.find(".note-detail-error-container");
         this.#adjustLayoutOrientation();
+
+        // Preview pane buttons
+        const $previewButtons = this.$previewCol.find(".preview-buttons");
+        const previewButtons = this.buildPreviewButtons();
+        $previewButtons.toggle(previewButtons.length > 0);
+        for (const previewButton of previewButtons) {
+            const $button = previewButton.render();
+            $button.removeClass("button-widget")
+                .addClass("btn")
+                .addClass("tn-tool-button");
+            $previewButtons.append($button);
+            previewButton.refreshIcon();
+        }
 
         super.doRender();
     }
@@ -213,6 +237,10 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         return {
             lineWrapping: false
         };
+    }
+
+    buildPreviewButtons(): OnClickButtonWidget[] {
+        return [];
     }
 
     setError(message: string | null | undefined) {
