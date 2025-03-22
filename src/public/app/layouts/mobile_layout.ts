@@ -11,7 +11,7 @@ import ProtectedSessionPasswordDialog from "../widgets/dialogs/protected_session
 import ConfirmDialog from "../widgets/dialogs/confirm.js";
 import FilePropertiesWidget from "../widgets/ribbon_widgets/file_properties.js";
 import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
-import EditButton from "../widgets/buttons/edit_button.js";
+import EditButton from "../widgets/floating_buttons/edit_button.js";
 import RelationMapButtons from "../widgets/floating_buttons/relation_map_buttons.js";
 import SvgExportButton from "../widgets/floating_buttons/svg_export_button.js";
 import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
