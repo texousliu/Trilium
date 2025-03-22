@@ -43,6 +43,8 @@ const TPL = `\
         .note-detail-split .note-detail-error-container {
             font-family: var(--monospace-font-family);
             margin: 0.1em;
+            white-space: pre-wrap;
+            font-size: 0.85em;
         }
 
         .note-detail-split .note-detail-split-preview {
