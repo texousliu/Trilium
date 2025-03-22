@@ -46,7 +46,7 @@ export default class ScriptExecutorWidget extends NoteContextAwareWidget {
             show: this.isEnabled(),
             activate: true,
             title: this.isTriliumSqlite() ? t("script_executor.query") : t("script_executor.script"),
-            icon: "bx bx-run"
+            icon: "bx bx-play"
         };
     }
 

@@ -1303,20 +1303,20 @@ div.promoted-attribute-cell .multiplicity:has(span) {
  */
 
  /* Floating buttons container */
-.floating-buttons-children {
+div#center-pane .floating-buttons-children {
     opacity: 1;
     overflow: hidden;
     transform-origin: right;
     box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
     background: var(--floating-button-background-color);
     backdrop-filter: blur(10px) saturate(6);
-    border-radius: 8px;
+    border-radius: 6px;
     transition: transform 250ms ease-out,
                 opacity 250ms ease-out;
 }
 
  /* Floating buttons container (collapsed) */
-.floating-buttons-children.temporarily-hidden {
+ div#center-pane .floating-buttons-children.temporarily-hidden {
     display: flex !important;
     opacity: 0;
     transform: scaleX(0);
@@ -1347,7 +1347,20 @@ div.floating-buttons-children .floating-button:hover {
     color: var(--floating-button-hover-color);
 }
 
- /* Show / hide buttons */
+div.floating-buttons-children > button:active,
+div.floating-buttons-children .floating-button:active {
+    font-size: calc(var(--floating-button-icon-size) * 0.85);
+}
+
+ /* "Show / hide floating buttons" buttons */
+
+ @keyframes floating-buttons-show-hide-button-animation {
+    from {
+        transform: rotate(180deg);
+    } to {
+        transform: rotate(0);
+    }
+}
 
 div.floating-buttons-children .close-floating-buttons-button,
 div.floating-buttons .show-floating-buttons-button {
@@ -1359,41 +1372,56 @@ div.floating-buttons .show-floating-buttons-button {
     font-size: calc(var(--floating-button-show-hide-button-size) * .8);
 }
 
+div.floating-buttons-children .close-floating-buttons-button:active,
+div.floating-buttons .show-floating-buttons-button:active {
+    font-size: calc(var(--floating-button-show-hide-button-size) * .65);
+    background: transparent!important;
+}
+
+div.floating-buttons-children .close-floating-buttons-button::before,
+div.floating-buttons .show-floating-buttons-button::before {
+    display: block;
+}
+
+/* "Show buttons" button */
+
 div.floating-buttons .show-floating-buttons-button {
-    box-shadow: 0 2px 4px var(--left-pane-background-color);
-    background: var(--left-pane-item-action-button-background);
-    color: var(--left-pane-item-action-button-color);
+    box-shadow: var(--floating-button-show-button-shadow);
+    background: var(--floating-button-show-button-background);
+    color: var(--floating-button-show-button-color);
     backdrop-filter: blur(10px);
+}
+
+div.floating-buttons .show-floating-buttons-button::before {
     animation: floating-buttons-show-hide-button-animation 400ms ease-out;
 }
-
-@keyframes floating-buttons-show-hide-button-animation {
-    from {
-        transform: rotate(180deg);
-    } to {
-        transform: rotate(0);
-    }
+ 
+div.floating-buttons .show-floating-buttons-button:hover,
+div.floating-buttons .show-floating-buttons-button:active {
+    box-shadow: var(--floating-button-show-button-hover-shadow);
+    background: var(--floating-button-show-button-hover-background) !important;
+    color: var(--floating-button-show-button-color) !important;
 }
 
-div.floating-buttons-children:not(.temporarily-hidden) .close-floating-buttons-button {
+/* "Hide buttons" button */
+
+div.floating-buttons-children:not(.temporarily-hidden) .close-floating-buttons-button::before {
     animation: floating-buttons-show-hide-button-animation 400ms ease-out;
 }
 
 div.floating-buttons-children .close-floating-buttons-button {
-    color: var(--floating-button-hide-button-background);
     border-radius: 0;
 }
 
 div.floating-buttons-children .close-floating-buttons {
-    border-left: 2px solid var(--floating-button-separator-color);
+    margin-left: 0 !important;
+    background: var(--floating-button-hide-button-background);
+    color: var(--floating-button-hide-button-color);
 }
 
 div.floating-buttons-children .close-floating-buttons:has(.close-floating-buttons-button:hover) {
     background: var(--floating-button-hover-background);
-}
-
-div.floating-buttons-children .close-floating-buttons {
-    margin-left: 0 !important;
+    color: var(--floating-button-hover-color);
 }
 
 /* Backlink count */
@@ -1402,8 +1430,6 @@ div.floating-buttons-children .close-floating-buttons {
     height: 100%;
     padding: 0 10px;
     border-radius: 0;
-    border-left: 2px solid var(--floating-button-separator-color);
-    border-right: 2px solid var(--floating-button-separator-color);
     background: transparent;
     user-select: none;
 }
@@ -1419,24 +1445,36 @@ div.floating-buttons-children .close-floating-buttons {
     position: absolute;
 }
 
-/* Code buttons */
+/* Code, relation map buttons */
 
-.floating-buttons .code-buttons-widget {
+.floating-buttons .code-buttons-widget,
+.floating-buttons .relation-map-buttons {
     gap: 0;
+}
+
+/* Individual icon position / size corrections */
+
+/* Table of contents */
+.floating-buttons .bx-spreadsheet::before {
+    /* Note: since the icon is rotated, a positive top margin will actually shift the icon upwards */
+    margin-top: .1em;
 }
 
 /* The highlight animation */
 
 @keyframes floating-button-highlight {
     from {
-        opacity: .25;
+        background: var(--floating-button-background);
+        color: var(--floating-button-color);
     } to {
-        opacity: 1;
+        background: var(--floating-button-hover-background);
+        color: var(--floating-button-hover-color);
     }
 }
 
 .floating-buttons .bx-tada {
-    animation: floating-button-highlight 300ms linear alternate-reverse infinite;
+    /* The class is applied for 1700ms */
+    animation: floating-button-highlight 425ms ease-in-out alternate infinite;
 }
 
 .floating-buttons .bx-tada::before {

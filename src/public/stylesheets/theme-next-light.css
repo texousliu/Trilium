@@ -167,13 +167,18 @@
     --promoted-attribute-card-background-color: var(--card-background-color);
     --promoted-attribute-card-shadow-color: #00000033;
 
-    --floating-button-shadow-color: #0000001f;
-    --floating-button-background-color: #e4e4e4cc;
-    --floating-button-color: var(--button-text-color);
+    --floating-button-shadow-color: #00000042;
+    --floating-button-background-color: #eaeaeacc;
+    --floating-button-color: #454545;
     --floating-button-hover-background: #00000017;
     --floating-button-hover-color: black;
-    --floating-button-hide-button-background: gray;
-    --floating-button-separator-color: #c0c0c0d1;
+    --floating-button-show-button-background: var(--left-pane-item-action-button-background);
+    --floating-button-show-button-color: var(--left-pane-item-action-button-color);
+    --floating-button-show-button-shadow: none;
+    --floating-button-show-button-hover-background: var(--left-pane-item-action-button-hover-background);
+    --floating-button-show-button-hover-shadow: 0 2px 4px #00000068;
+    --floating-button-hide-button-background: #0000000d;
+    --floating-button-hide-button-color: gray;
 
     --new-tab-button-background: #d8d8d8;
     --new-tab-button-color: #3a3a3a;

@@ -179,8 +179,13 @@
     --floating-button-color: var(--button-text-color);
     --floating-button-hover-background: #ffffff20;
     --floating-button-hover-color: white;
-    --floating-button-hide-button-background: gray;
-    --floating-button-separator-color: #00000080;
+    --floating-button-show-button-background: var(--left-pane-item-action-button-background);
+    --floating-button-show-button-color: var(--left-pane-item-action-button-color);
+    --floating-button-show-button-shadow: none;
+    --floating-button-show-button-hover-background: var(--left-pane-item-action-button-hover-background);
+    --floating-button-show-button-hover-shadow: 0 2px 4px #0000007b;
+    --floating-button-hide-button-background: #00000029;
+    --floating-button-hide-button-color: #ffffff63;
 
     --right-pane-item-hover-background: #ffffff26;
     --right-pane-item-hover-color: white;
