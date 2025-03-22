@@ -142,7 +142,10 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
 
         // Initialize mermaid
         const mermaid = (await import("mermaid")).default;
-        mermaid.init(getMermaidConfig(), this.$content.find(".mermaid-diagram")[0]);
+        mermaid.initialize(getMermaidConfig());
+        mermaid.run({
+            nodes: this.$content.find(".mermaid-diagram")
+        });
     }
 
     async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {
