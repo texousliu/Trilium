@@ -1,10 +1,21 @@
-import { NoteRow } from "../../../becca/entities/rows.js";
-import { AttributeType } from "../entities/fattribute.js";
-import { EntityChange } from "../server_types.js";
+import type { AttachmentRow } from "../../../becca/entities/rows.js";
+import type { AttributeType } from "../entities/fattribute.js";
+import type { EntityChange } from "../server_types.js";
 
-interface BranchRow {
+// TODO: Deduplicate with server.
+
+interface NoteRow {
+    isDeleted?: boolean;
+}
+
+// TODO: Deduplicate with BranchRow from `rows.ts`/
+export interface BranchRow {
+    noteId?: string;
     branchId: string;
     componentId: string;
+    parentNoteId?: string;
+    isDeleted?: boolean;
+    isExpanded?: boolean;
 }
 
 export interface AttributeRow {
@@ -29,8 +40,6 @@ interface ContentNoteIdToComponentIdRow {
     componentId: string;
 }
 
-interface AttachmentRow {}
-
 interface OptionRow {}
 
 interface NoteReorderingRow {}
@@ -41,13 +50,13 @@ interface ContentNoteIdToComponentIdRow {
 }
 
 type EntityRowMappings = {
-    "notes": NoteRow,
-    "branches": BranchRow,
-    "attributes": AttributeRow,
-    "options": OptionRow,
-    "revisions": RevisionRow,
-    "note_reordering": NoteReorderingRow
-}
+    notes: NoteRow;
+    branches: BranchRow;
+    attributes: AttributeRow;
+    options: OptionRow;
+    revisions: RevisionRow;
+    note_reordering: NoteReorderingRow;
+};
 
 export type EntityRowNames = keyof EntityRowMappings;
 
@@ -66,7 +75,7 @@ export default class LoadResults {
     constructor(entityChanges: EntityChange[]) {
         const entities: Record<string, Record<string, any>> = {};
 
-        for (const {entityId, entityName, entity} of entityChanges) {
+        for (const { entityId, entityName, entity } of entityChanges) {
             if (entity) {
                 entities[entityName] = entities[entityName] || [];
                 entities[entityName][entityId] = entity;
@@ -93,7 +102,7 @@ export default class LoadResults {
     }
 
     getEntityRow<T extends EntityRowNames>(entityName: T, entityId: string): EntityRowMappings[T] {
-        return (this.entities[entityName]?.[entityId]);
+        return this.entities[entityName]?.[entityId];
     }
 
     addNote(noteId: string, componentId?: string | null) {
@@ -113,13 +122,11 @@ export default class LoadResults {
     }
 
     addBranch(branchId: string, componentId: string) {
-        this.branchRows.push({branchId, componentId});
+        this.branchRows.push({ branchId, componentId });
     }
 
     getBranchRows() {
-        return this.branchRows
-            .map(row => this.getEntityRow("branches", row.branchId))
-            .filter(branch => !!branch);
+        return this.branchRows.map((row) => this.getEntityRow("branches", row.branchId)).filter((branch) => !!branch);
     }
 
     addNoteReordering(parentNoteId: string, componentId: string) {
@@ -131,47 +138,47 @@ export default class LoadResults {
     }
 
     addAttribute(attributeId: string, componentId: string) {
-        this.attributeRows.push({attributeId, componentId});
+        this.attributeRows.push({ attributeId, componentId });
     }
 
-    getAttributeRows(componentId = 'none'): AttributeRow[] {
+    getAttributeRows(componentId = "none"): AttributeRow[] {
         return this.attributeRows
-            .filter(row => row.componentId !== componentId)
-            .map(row => this.getEntityRow("attributes", row.attributeId))
-            .filter(attr => !!attr) as AttributeRow[];
+            .filter((row) => row.componentId !== componentId)
+            .map((row) => this.getEntityRow("attributes", row.attributeId))
+            .filter((attr) => !!attr) as AttributeRow[];
     }
 
     addRevision(revisionId: string, noteId?: string, componentId?: string | null) {
-        this.revisionRows.push({revisionId, noteId, componentId});
+        this.revisionRows.push({ revisionId, noteId, componentId });
     }
 
     hasRevisionForNote(noteId: string) {
-        return !!this.revisionRows.find(row => row.noteId === noteId);
+        return !!this.revisionRows.find((row) => row.noteId === noteId);
     }
 
     getNoteIds() {
         return Object.keys(this.noteIdToComponentId);
     }
 
-    isNoteReloaded(noteId: string, componentId = null) {
+    isNoteReloaded(noteId: string | undefined | null, componentId: string | null = null) {
         if (!noteId) {
             return false;
         }
 
         const componentIds = this.noteIdToComponentId[noteId];
-        return componentIds && componentIds.find(sId => sId !== componentId) !== undefined;
+        return componentIds && componentIds.find((sId) => sId !== componentId) !== undefined;
     }
 
     addNoteContent(noteId: string, componentId: string) {
-        this.contentNoteIdToComponentId.push({noteId, componentId});
+        this.contentNoteIdToComponentId.push({ noteId, componentId });
     }
 
-    isNoteContentReloaded(noteId: string, componentId: string) {
+    isNoteContentReloaded(noteId: string, componentId?: string) {
         if (!noteId) {
             return false;
         }
 
-        return this.contentNoteIdToComponentId.find(l => l.noteId === noteId && l.componentId !== componentId);
+        return this.contentNoteIdToComponentId.find((l) => l.noteId === noteId && l.componentId !== componentId);
     }
 
     addOption(name: string) {
@@ -199,25 +206,23 @@ export default class LoadResults {
      *          notably changes in note itself should not have any effect on attributes
      */
     hasAttributeRelatedChanges() {
-        return this.branchRows.length > 0
-            || this.attributeRows.length > 0;
+        return this.branchRows.length > 0 || this.attributeRows.length > 0;
     }
 
     isEmpty() {
-        return Object.keys(this.noteIdToComponentId).length === 0
-            && this.branchRows.length === 0
-            && this.attributeRows.length === 0
-            && this.noteReorderings.length === 0
-            && this.revisionRows.length === 0
-            && this.contentNoteIdToComponentId.length === 0
-            && this.optionNames.length === 0
-            && this.attachmentRows.length === 0;
+        return (
+            Object.keys(this.noteIdToComponentId).length === 0 &&
+            this.branchRows.length === 0 &&
+            this.attributeRows.length === 0 &&
+            this.noteReorderings.length === 0 &&
+            this.revisionRows.length === 0 &&
+            this.contentNoteIdToComponentId.length === 0 &&
+            this.optionNames.length === 0 &&
+            this.attachmentRows.length === 0
+        );
     }
 
     isEmptyForTree() {
-        return Object.keys(this.noteIdToComponentId).length === 0
-            && this.branchRows.length === 0
-            && this.attributeRows.length === 0
-            && this.noteReorderings.length === 0;
+        return Object.keys(this.noteIdToComponentId).length === 0 && this.branchRows.length === 0 && this.attributeRows.length === 0 && this.noteReorderings.length === 0;
     }
 }

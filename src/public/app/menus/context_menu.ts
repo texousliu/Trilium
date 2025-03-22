@@ -1,19 +1,22 @@
-import { CommandNames } from '../components/app_context.js';
-import keyboardActionService from '../services/keyboard_actions.js';
+import keyboardActionService from "../services/keyboard_actions.js";
+import note_tooltip from "../services/note_tooltip.js";
+import utils from "../services/utils.js";
 
-interface ContextMenuOptions<T extends CommandNames> {
+interface ContextMenuOptions<T> {
     x: number;
     y: number;
     orientation?: "left";
     selectMenuItemHandler: MenuHandler<T>;
     items: MenuItem<T>[];
+    /** On mobile, if set to `true` then the context menu is shown near the element. If `false` (default), then the context menu is shown at the bottom of the screen. */
+    forcePositionOnMobile?: boolean;
 }
 
 interface MenuSeparatorItem {
-    title: "----"
+    title: "----";
 }
 
-export interface MenuCommandItem<T extends CommandNames> {
+export interface MenuCommandItem<T> {
     title: string;
     command?: T;
     type?: string;
@@ -26,31 +29,45 @@ export interface MenuCommandItem<T extends CommandNames> {
     spellingSuggestion?: string;
 }
 
-export type MenuItem<T extends CommandNames> = MenuCommandItem<T> | MenuSeparatorItem;
-export type MenuHandler<T extends CommandNames> = (item: MenuCommandItem<T>, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
+export type MenuItem<T> = MenuCommandItem<T> | MenuSeparatorItem;
+export type MenuHandler<T> = (item: MenuCommandItem<T>, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
+export type ContextMenuEvent = PointerEvent | MouseEvent | JQuery.ContextMenuEvent;
 
 class ContextMenu {
-
-    private $widget!: JQuery<HTMLElement>;
+    private $widget: JQuery<HTMLElement>;
+    private $cover: JQuery<HTMLElement>;
     private dateContextMenuOpenedMs: number;
     private options?: ContextMenuOptions<any>;
+    private isMobile: boolean;
 
     constructor() {
         this.$widget = $("#context-menu-container");
+        this.$cover = $("#context-menu-cover");
         this.$widget.addClass("dropend");
         this.dateContextMenuOpenedMs = 0;
+        this.isMobile = utils.isMobile();
 
-        $(document).on('click', () => this.hide());
+        if (this.isMobile) {
+            this.$cover.on("click", () => this.hide());
+        } else {
+            $(document).on("click", (e) => this.hide());
+        }
     }
 
-    async show<T extends CommandNames>(options: ContextMenuOptions<T>) {
+    async show<T>(options: ContextMenuOptions<T>) {
         this.options = options;
+
+        note_tooltip.dismissAllTooltips();
 
         if (this.$widget.hasClass("show")) {
             // The menu is already visible. Hide the menu then open it again
             // at the new location to re-trigger the opening animation.
             await this.hide();
         }
+
+        this.$widget.toggleClass("mobile-bottom-menu", !this.options.forcePositionOnMobile);
+        this.$cover.addClass("show");
+        $("body").addClass("context-menu-shown");
 
         this.$widget.empty();
 
@@ -90,7 +107,7 @@ class ContextMenu {
             top = this.options.y - CONTEXT_MENU_OFFSET;
         }
 
-        if (this.options.orientation === 'left' && contextMenuWidth) {
+        if (this.options.orientation === "left" && contextMenuWidth) {
             if (this.options.x + CONTEXT_MENU_OFFSET > clientWidth - CONTEXT_MENU_PADDING) {
                 // Overflow: right
                 left = clientWidth - contextMenuWidth - CONTEXT_MENU_OFFSET;
@@ -112,11 +129,13 @@ class ContextMenu {
             }
         }
 
-        this.$widget.css({
-            display: "block",
-            top: top,
-            left: left
-        }).addClass("show");
+        this.$widget
+            .css({
+                display: "block",
+                top: top,
+                left: left
+            })
+            .addClass("show");
     }
 
     addItems($parent: JQuery<HTMLElement>, items: MenuItem<any>[]) {
@@ -125,7 +144,7 @@ class ContextMenu {
                 continue;
             }
 
-            if (item.title === '----') {
+            if (item.title === "----") {
                 $parent.append($("<div>").addClass("dropdown-divider"));
             } else {
                 const $icon = $("<span>");
@@ -148,13 +167,22 @@ class ContextMenu {
                 const $item = $("<li>")
                     .addClass("dropdown-item")
                     .append($link)
-                    .on('contextmenu', e => false)
+                    .on("contextmenu", (e) => false)
                     // important to use mousedown instead of click since the former does not change focus
                     // (especially important for focused text for spell check)
-                    .on('mousedown', e => {
+                    .on("mousedown", (e) => {
                         e.stopPropagation();
 
-                        if (e.which !== 1) { // only left click triggers menu items
+                        if (e.which !== 1) {
+                            // only left click triggers menu items
+                            return false;
+                        }
+
+                        if (this.isMobile && "items" in item && item.items) {
+                            const $item = $(e.target).closest(".dropdown-item");
+
+                            $item.toggleClass("submenu-open");
+                            $item.find("ul.dropdown-menu").toggleClass("show");
                             return false;
                         }
 
@@ -200,7 +228,9 @@ class ContextMenu {
             // see https://github.com/zadam/trilium/pull/3805 for details
             await timeout(100);
             this.$widget.removeClass("show");
-            this.$widget.hide()
+            this.$cover.removeClass("show");
+            $("body").removeClass("context-menu-shown");
+            this.$widget.hide();
         }
     }
 }

@@ -1,12 +1,23 @@
-import toastService, { ToastOptions } from "./toast.js";
+import toastService, { type ToastOptions } from "./toast.js";
 import server from "./server.js";
 import ws from "./ws.js";
 import utils from "./utils.js";
 import appContext from "../components/app_context.js";
 import { t } from "./i18n.js";
 
-export async function uploadFiles(entityType: string, parentNoteId: string, files: string[], options: Record<string, string | Blob>) {
-    if (!['notes', 'attachments'].includes(entityType)) {
+type BooleanLike = boolean | "true" | "false";
+
+export interface UploadFilesOptions {
+    safeImport?: BooleanLike;
+    shrinkImages: BooleanLike;
+    textImportedAsText?: BooleanLike;
+    codeImportedAsCode?: BooleanLike;
+    explodeArchives?: BooleanLike;
+    replaceUnderscoresWithSpaces?: BooleanLike;
+}
+
+export async function uploadFiles(entityType: string, parentNoteId: string, files: string[] | File[], options: UploadFilesOptions) {
+    if (!["notes", "attachments"].includes(entityType)) {
         throw new Error(`Unrecognized import entity type '${entityType}'.`);
     }
 
@@ -21,26 +32,26 @@ export async function uploadFiles(entityType: string, parentNoteId: string, file
         counter++;
 
         const formData = new FormData();
-        formData.append('upload', file);
-        formData.append('taskId', taskId);
-        formData.append('last', counter === files.length ? "true" : "false");
+        formData.append("upload", file);
+        formData.append("taskId", taskId);
+        formData.append("last", counter === files.length ? "true" : "false");
 
         for (const key in options) {
-            formData.append(key, options[key]);
+            formData.append(key, (options as any)[key]);
         }
 
         await $.ajax({
             url: `${window.glob.baseApiUrl}notes/${parentNoteId}/${entityType}-import`,
             headers: await server.getHeaders(),
             data: formData,
-            dataType: 'json',
-            type: 'POST',
+            dataType: "json",
+            type: "POST",
             timeout: 60 * 60 * 1000,
             error: function (xhr) {
                 toastService.showError(t("import.failed", { message: xhr.responseText }));
             },
             contentType: false, // NEEDED, DON'T REMOVE THIS
-            processData: false, // NEEDED, DON'T REMOVE THIS
+            processData: false // NEEDED, DON'T REMOVE THIS
         });
     }
 }
@@ -54,48 +65,48 @@ function makeToast(id: string, message: string): ToastOptions {
     };
 }
 
-ws.subscribeToMessages(async message => {
-    if (message.taskType !== 'importNotes') {
+ws.subscribeToMessages(async (message) => {
+    if (message.taskType !== "importNotes") {
         return;
     }
 
-    if (message.type === 'taskError') {
+    if (message.type === "taskError") {
         toastService.closePersistent(message.taskId);
         toastService.showError(message.message);
-    } else if (message.type === 'taskProgressCount') {
+    } else if (message.type === "taskProgressCount") {
         toastService.showPersistent(makeToast(message.taskId, t("import.in-progress", { progress: message.progressCount })));
-    } else if (message.type === 'taskSucceeded') {
+    } else if (message.type === "taskSucceeded") {
         const toast = makeToast(message.taskId, t("import.successful"));
         toast.closeAfter = 5000;
 
         toastService.showPersistent(toast);
 
         if (message.result.importedNoteId) {
-            await appContext.tabManager.getActiveContext().setNote(message.result.importedNoteId);
+            await appContext.tabManager.getActiveContext()?.setNote(message.result.importedNoteId);
         }
     }
 });
 
-ws.subscribeToMessages(async message => {
-    if (message.taskType !== 'importAttachments') {
+ws.subscribeToMessages(async (message) => {
+    if (message.taskType !== "importAttachments") {
         return;
     }
 
-    if (message.type === 'taskError') {
+    if (message.type === "taskError") {
         toastService.closePersistent(message.taskId);
         toastService.showError(message.message);
-    } else if (message.type === 'taskProgressCount') {
+    } else if (message.type === "taskProgressCount") {
         toastService.showPersistent(makeToast(message.taskId, t("import.in-progress", { progress: message.progressCount })));
-    } else if (message.type === 'taskSucceeded') {
+    } else if (message.type === "taskSucceeded") {
         const toast = makeToast(message.taskId, t("import.successful"));
         toast.closeAfter = 5000;
 
         toastService.showPersistent(toast);
 
         if (message.result.parentNoteId) {
-            await appContext.tabManager.getActiveContext().setNote(message.result.importedNoteId, {
+            await appContext.tabManager.getActiveContext()?.setNote(message.result.importedNoteId, {
                 viewScope: {
-                    viewMode: 'attachments'
+                    viewMode: "attachments"
                 }
             });
         }

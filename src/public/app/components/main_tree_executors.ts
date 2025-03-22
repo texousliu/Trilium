@@ -1,4 +1,4 @@
-import appContext from "./app_context.js";
+import appContext, { type EventData } from "./app_context.js";
 import noteCreateService from "../services/note_create.js";
 import treeService from "../services/tree.js";
 import hoistedNoteService from "../services/hoisted_note.js";
@@ -14,24 +14,20 @@ export default class MainTreeExecutors extends Component {
         return appContext.noteTreeWidget;
     }
 
-    async cloneNotesToCommand() {
+    async cloneNotesToCommand({ selectedOrActiveNoteIds }: EventData<"cloneNotesTo">) {
         if (!this.tree) {
             return;
         }
 
-        const selectedOrActiveNoteIds = this.tree.getSelectedOrActiveNodes().map(node => node.data.noteId);
-
-        this.triggerCommand('cloneNoteIdsTo', {noteIds: selectedOrActiveNoteIds});
+        this.triggerCommand("cloneNoteIdsTo", { noteIds: selectedOrActiveNoteIds });
     }
 
-    async moveNotesToCommand() {
+    async moveNotesToCommand({ selectedOrActiveBranchIds }: EventData<"moveNotesTo">) {
         if (!this.tree) {
             return;
         }
 
-        const selectedOrActiveBranchIds = this.tree.getSelectedOrActiveNodes().map(node => node.data.branchId);
-
-        this.triggerCommand('moveBranchIdsTo', {branchIds: selectedOrActiveBranchIds});
+        this.triggerCommand("moveBranchIdsTo", { branchIds: selectedOrActiveBranchIds });
     }
 
     async createNoteIntoCommand() {
@@ -61,12 +57,12 @@ export default class MainTreeExecutors extends Component {
         const parentNotePath = treeService.getNotePath(node.getParent());
         const isProtected = treeService.getParentProtectedStatus(node);
 
-        if (node.data.noteId === 'root' || node.data.noteId === hoistedNoteService.getHoistedNoteId()) {
+        if (node.data.noteId === "root" || node.data.noteId === hoistedNoteService.getHoistedNoteId()) {
             return;
         }
 
         await noteCreateService.createNote(parentNotePath, {
-            target: 'after',
+            target: "after",
             targetBranchId: node.data.branchId,
             isProtected: isProtected,
             saveSelection: false
