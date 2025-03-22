@@ -2,65 +2,75 @@ import server from "../../../services/server.js";
 import toastService from "../../../services/toast.js";
 import OptionsWidget from "./options_widget.js";
 import type { OptionMap } from "../../../../../services/options_interface.js";
+import { t } from "../../../services/i18n.js";
 
 const TPL = `
 <div class="options-section">
-    <h4 class="">What is Multi-Factor Authentication?</h4>
-    <i>
-        Multi-Factor Authentication (MFA) adds an extra layer of security to your account. Instead
-            of just entering a password to log in, MFA requires you to provide one or more additional
-            pieces of evidence to verify your identity. This way, even if someone gets hold of your
-            password, they still can't access your account without the second piece of information.
-            It's like adding an extra lock to your door, making it much harder for anyone else to
-            break in.</i>
+    <h4>${t("multi_factor_authentication.title")}</h4>
+    <p class="form-text">${t("multi_factor_authentication.description")}</p>
 </div>
 
 <div class="options-section">
-    <h4>OAuth/OpenID</h4>
-    <span><i>OpenID is a standardized way to let you log into websites using an account from another service, like Google, to verify your identity.</i></span>
-    <div>
-        <label>
-        <b>OAuth/OpenID Enabled</b>
-        </label>
-        <input type="checkbox" class="oauth-enabled-checkbox" disabled="true" />
-        <span class="env-oauth-enabled" role="alert" style="font-weight: bold; color: red !important;" > </span>
+    <h4>${t("multi_factor_authentication.oauth_title")}</h4>
+
+    <div class="form-group row">
+        <div class="col-md-6 side-checkbox">
+            <label class="form-check tn-checkbox">
+                <input type="checkbox" class="oauth-enabled-checkbox form-check-input" disabled />
+                <b>${t("multi_factor_authentication.oauth_enabled")}</b>
+            </label>
+        </div>
     </div>
-    <div>
-        <span> <b>User Account: </b></span><span class="user-account-name"> Not logged in! </span>
+
+    <div class="alert alert-warning env-oauth-enabled" role="alert" style="font-weight: bold; color: red !important;"></div>
+
+    <div class="col-md-6">
+        <span><b>User Account: </b></span><span class="user-account-name"> Not logged in!</span>
         <br>
-        <span><b> User Email: </b></span><span class="user-account-email"> Not logged in!</span>
+        <span><b>User Email: </b></span><span class="user-account-email"> Not logged in!</span>
     </div>
+
+    <p class="form-text">${t("multi_factor_authentication.oauth_description")}</p>
 </div>
 
 <div class="options-section">
-    <h4>Time-based One-Time Password</h4>
-    <div>
-        <label>
-        <b>TOTP Enabled</b>
-        </label>
-        <input type="checkbox" class="totp-enabled" disabled="true" />
-        <span class="env-totp-enabled" role="alert" style="font-weight: bold; color: red !important;" > </span>
+    <h4>${t("multi_factor_authentication.totp_title")}</h4>
+
+    <div class="form-group row">
+        <div class="col-md-6 side-checkbox">
+            <label class="form-check tn-checkbox">
+                <input type="checkbox" class="totp-enabled form-check-input" disabled />
+                <b>${t("multi_factor_authentication.totp_enabled")}</b>
+            </label>
+        </div>
     </div>
-    <div>
-        <span><i>TOTP (Time-Based One-Time Password) is a security feature that generates a unique, temporary
-        code which changes every 30 seconds. You use this code, along with your password to log into your
-        account, making it much harder for anyone else to access it.</i></span>
-    </div>
+
+    <div class="alert alert-warning env-totp-enabled" role="alert" style="font-weight: bold; color: red !important;"></div>
+
+    <p class="form-text">${t("multi_factor_authentication.totp_description")}</p>
 </div>
 
 <div class="options-section">
-    <h4> Generate TOTP Secret </h4>
-    <span class="totp-secret" > TOTP Secret Key </span>
+    <h4>${t("multi_factor_authentication.totp_secret_title")}</h4>
+
+    <div class="form-group">
+        <div class="totp-secret">${t("multi_factor_authentication.totp_secret_description")}</div>
+    </div>
+
+    <button class="regenerate-totp btn btn-primary"> ${t("multi_factor_authentication.totp_secret_generate")} </button>
+</div>
+
+<div class="options-section">
+    <h4>${t("multi_factor_authentication.recovery_keys_title")}</h4>
+
+    <p class="form-text">${t("multi_factor_authentication.recovery_keys_description")}</p>
+
+    <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+        ${t("multi_factor_authentication.recovery_keys_description_warning")}
+    </div>
+
     <br>
-    <button class="regenerate-totp"> Generate TOTP Secret </button>
-</div>
 
-<div class="options-section">
-    <h4> Single Sign-on Recovery Keys </h4>
-    <span ><i>Single sign-on recovery keys are used to login in the event you cannot access your Authenticator codes. Keep them somewhere safe and secure. </i></span>
-    <br><br>
-    <span class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">After a recovery key is used it cannot be used again.</span>
-    <br><br>
     <table style="border: 0px solid white">
         <tbody>
             <tr>
@@ -85,8 +95,10 @@ const TPL = `
             </tr>
         </tbody>
     </table>
+
     <br>
-    <button class="generate-recovery-code" disabled="true"> Generate Recovery Keys </button>
+
+    <button class="generate-recovery-code btn btn-primary" disabled="true"> Generate Recovery Keys </button>
 </div>
 `;
 
@@ -199,7 +211,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                 if (result.email) this.$UserAccountEmail.text(result.email);
             } else {
                 this.$envEnabledOAuth.text(
-                    "set SSO_ENABLED as environment variable to 'true' to enable (Requires restart)"
+                    "Set SSO_ENABLED as environment variable to 'true' to enable (Requires restart)"
                 );
             }
         });
