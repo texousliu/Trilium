@@ -40,6 +40,10 @@ const TPL = `\
             flex-grow: 1;
         }
 
+        .note-detail-split .note-detail-split-editor .note-detail-code {
+            contain: size !important;
+        }
+
         .note-detail-split .note-detail-error-container {
             font-family: var(--monospace-font-family);
             margin: 5px;
@@ -184,7 +188,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         }
 
         // Vertical vs horizontal layout
-        const layoutOrientation = options.get("splitEditorOrientation") ?? "horizontal";
+        const layoutOrientation = (!utils.isMobile() ? options.get("splitEditorOrientation") ?? "horizontal" : "vertical");
         if (this.layoutOrientation === layoutOrientation && this.isReadOnly === isReadOnly) {
             return;
         }

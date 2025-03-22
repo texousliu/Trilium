@@ -1724,5 +1724,8 @@
   "toggle_read_only_button": {
     "unlock-editing": "Unlock editing",
     "lock-editing": "Lock editing"
+  },
+  "png_export_button": {
+    "button_title": "Export diagram as PNG"
   }
 }
