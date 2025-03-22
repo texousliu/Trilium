@@ -35,6 +35,14 @@ const TPL = `\
             margin: 0.1em;
         }
 
+        .note-detail-split .note-detail-split-preview {
+            transition: opacity 250ms ease-in-out;
+        }
+
+        .note-detail-split .note-detail-split-preview.on-error {
+            opacity: 0.5;
+        }
+
         /* Horizontal layout */
 
         .note-detail-split.split-horizontal > .note-detail-split-second-col {
@@ -139,6 +147,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     setError(message: string | null | undefined) {
         this.$errorContainer.toggleClass("hidden-ext", !message);
+        this.$preview.toggleClass("on-error", !!message);
         this.$errorContainer.text(message ?? "");
     }
 
