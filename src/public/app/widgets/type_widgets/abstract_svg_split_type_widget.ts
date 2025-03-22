@@ -50,11 +50,20 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
         const blob = await note?.getBlob();
         const content = blob?.content || "";
         this.onContentChanged(content, true);
+
+        // Save the SVG when entering a note only when it does not have an attachment.
+        this.note?.getAttachments().then((attachments) => {
+            const attachmentName = `${this.attachmentName}.svg`;
+            if (!attachments.find((a) => a.title === attachmentName)) {
+                this.#saveSvg();
+            }
+        });
     }
 
     getData(): { content: string; } {
         const data = super.getData();
         this.onContentChanged(data.content, false);
+        this.#saveSvg();
         return data;
     }
 
@@ -89,7 +98,6 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
 
         this.$renderContainer.html(svg);
         await this.#setupPanZoom(!recenter);
-        this.#saveSvg();
     }
 
     #saveSvg() {
