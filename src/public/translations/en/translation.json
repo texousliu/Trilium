@@ -1707,5 +1707,9 @@
   "switch_layout_button": {
     "title_vertical": "Move editing pane to the bottom",
     "title_horizontal": "Move editing pane to the left"
+  },
+  "toggle_read_only_button": {
+    "unlock-editing": "Unlock editing",
+    "lock-editing": "Lock editing"
   }
 }
