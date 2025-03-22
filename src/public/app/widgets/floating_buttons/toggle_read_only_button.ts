@@ -39,7 +39,9 @@ export default class ToggleReadOnlyButton extends OnClickButtonWidget {
     }
 
     isEnabled() {
-        return super.isEnabled() && this.note?.type === "mermaid";
+        return super.isEnabled()
+            && this.note?.type === "mermaid"
+            && this.noteContext?.viewScope?.viewMode === "default";
     }
 
 }
