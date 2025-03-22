@@ -40,6 +40,10 @@ const TPL = `\
             flex-grow: 1;
         }
 
+        .note-detail-split .note-detail-split-editor .note-detail-code {
+            contain: size !important;
+        }
+
         .note-detail-split .note-detail-error-container {
             font-family: var(--monospace-font-family);
             margin: 5px;
