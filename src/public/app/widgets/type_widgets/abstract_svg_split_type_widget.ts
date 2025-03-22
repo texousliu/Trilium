@@ -217,4 +217,12 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
         utils.downloadSvg(this.note.title, this.svg);
     }
 
+    async exportPngEvent({ ntxId }: EventData<"exportPng">) {
+        if (!this.isNoteContext(ntxId) || this.note?.type !== "mermaid" || !this.svg) {
+            return;
+        }
+
+        utils.downloadSvgAsPng(this.note.title, this.svg);
+    }
+
 }

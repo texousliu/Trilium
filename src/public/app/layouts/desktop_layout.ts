@@ -91,6 +91,7 @@ import type { AppContext } from "./../components/app_context.js";
 import type { WidgetsByParent } from "../services/bundle.js";
 import SwitchSplitOrientationButton from "../widgets/floating_buttons/switch_layout_button.js";
 import ToggleReadOnlyButton from "../widgets/floating_buttons/toggle_read_only_button.js";
+import PngExportButton from "../widgets/floating_buttons/png_export_button.js";
 
 export default class DesktopLayout {
 
@@ -214,6 +215,7 @@ export default class DesktopLayout {
                                                                 .child(new GeoMapButtons())
                                                                 .child(new CopyImageReferenceButton())
                                                                 .child(new SvgExportButton())
+                                                                .child(new PngExportButton())
                                                                 .child(new BacklinksWidget())
                                                                 .child(new ContextualHelpButton())
                                                                 .child(new HideFloatingButtonsButton())
