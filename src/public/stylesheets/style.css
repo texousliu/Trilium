@@ -1722,7 +1722,7 @@ footer.file-footer button {
     margin: 5px;
 }
 
-.ck-content .admonition {
+.admonition {
     --accent-color: var(--card-border-color);
     border: 1px solid var(--accent-color);
     box-shadow: var(--card-box-shadow);
@@ -1735,11 +1735,11 @@ footer.file-footer button {
     overflow: hidden;
 }
 
-.ck-content .admonition p:last-child {
+.admonition p:last-child {
     margin-bottom: 0;
 }
 
-.ck-content .admonition::before {  
+.admonition::before {  
     color: var(--accent-color);
     font-family: boxicons !important;
     position: absolute;
@@ -1747,14 +1747,43 @@ footer.file-footer button {
     left: 1em;
 }
 
-.ck-content .admonition.note { --accent-color: #69c7ff; }
-.ck-content .admonition.tip { --accent-color: #40c025; }
-.ck-content .admonition.important { --accent-color: #9839f7; }
-.ck-content .admonition.caution { --accent-color: #ff2e2e; }
-.ck-content .admonition.warning { --accent-color: #e2aa03; }
+.admonition.note { --accent-color: #69c7ff; }
+.admonition.tip { --accent-color: #40c025; }
+.admonition.important { --accent-color: #9839f7; }
+.admonition.caution { --accent-color: #ff2e2e; }
+.admonition.warning { --accent-color: #e2aa03; }
 
-.ck-content .admonition.note::before { content: "\eb21"; }
-.ck-content .admonition.tip::before { content: "\ea0d"; }
-.ck-content .admonition.important::before { content: "\ea7c"; }
-.ck-content .admonition.caution::before { content: "\eac7"; }
-.ck-content .admonition.warning::before { content: "\eac5"; }
+.admonition.note::before { content: "\eb21"; }
+.admonition.tip::before { content: "\ea0d"; }
+.admonition.important::before { content: "\ea7c"; }
+.admonition.caution::before { content: "\eac7"; }
+.admonition.warning::before { content: "\eac5"; }
+
+/*
+ * In-content floating buttons
+ */
+
+.content-floating-buttons {
+    position: absolute;
+    z-index: 10; /* should be below dropdown (note actions) */
+}
+
+.content-floating-buttons.top-left {
+    top: 10px;
+    left: 10px;
+}
+
+.content-floating-buttons.bottom-left {
+    bottom: 10px;
+    left: 10px;
+}
+
+.content-floating-buttons.bottom-right {
+    bottom: 10px;
+    right: 10px;
+}
+
+.content-floating-buttons button.bx {
+    font-size: 130%;
+    padding: 1px 10px 1px 10px;
+}
