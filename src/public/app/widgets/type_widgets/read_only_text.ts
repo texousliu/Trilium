@@ -4,7 +4,7 @@ import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 import { getLocaleById } from "../../services/i18n.js";
-import { getMermaidConfig } from "./mermaid.js";
+import { getMermaidConfig } from "../../services/mermaid.js";
 
 const TPL = `
 <div class="note-detail-readonly-text note-detail-printable">
