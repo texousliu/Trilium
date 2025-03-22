@@ -153,8 +153,9 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
             return;
         }
 
-        this.$widget.toggleClass("split-horizontal", layoutOrientation === "horizontal");
-        this.$widget.toggleClass("split-vertical", layoutOrientation === "vertical");
+        this.$widget
+            .toggleClass("split-horizontal", layoutOrientation === "horizontal")
+            .toggleClass("split-vertical", layoutOrientation === "vertical");
         this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
         this.#setupResizer();
     }
