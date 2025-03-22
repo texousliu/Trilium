@@ -15,7 +15,7 @@ export class MermaidTypeWidget extends AbstractSvgSplitTypeWidget {
         const mermaid = (await import("mermaid")).default;
         await loadElkIfNeeded(mermaid, content);
         if (!registeredErrorReporter) {
-            (await import("./linters/mermaid.js")).default();
+            // (await import("./linters/mermaid.js")).default();
             registeredErrorReporter = true;
         }
 
