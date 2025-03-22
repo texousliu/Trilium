@@ -76,12 +76,6 @@ import etapiBackupRoute from "../etapi/backup.js";
 import apiDocsRoute from "./api_docs.js";
 
 
-const csrfMiddleware = csurf({
-    cookie: {
-        path: ""       // empty, so cookie is valid only for the current path
-    }
-});
-
 const MAX_ALLOWED_FILE_SIZE_MB = 250;
 const GET = "get",
     PST = "post",
