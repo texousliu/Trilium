@@ -38,7 +38,7 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         super.doRender();
     }
 
-    getExtraOpts() {
+    getExtraOpts(): Partial<CodeMirrorOpts> {
         return {
             keyMap: options.is("vimKeymapEnabled") ? "vim" : "default",
             lint: true,

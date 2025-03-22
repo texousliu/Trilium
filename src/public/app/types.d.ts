@@ -186,20 +186,28 @@ declare global {
         attach(editor: TextEditor);
     };
 
+    interface CodeMirrorOpts {
+        value: string;
+        viewportMargin: number;
+        indentUnit: number;
+        matchBrackets: boolean;
+        matchTags: { bothTags: boolean };
+        highlightSelectionMatches: {
+            showToken: boolean;
+            annotateScrollbar: boolean;
+        };
+        lineNumbers: boolean;
+        lineWrapping: boolean;
+        keyMap: "vim" | "default";
+        lint: boolean;
+        gutters: string[];
+        tabindex: number;
+        dragDrop: boolean;
+        placeholder: string;
+    }
+
     var CodeMirror: {
-        (el: HTMLElement, opts: {
-            value: string;
-            viewportMargin: number;
-            indentUnit: number;
-            matchBrackets: boolean;
-            matchTags: { bothTags: boolean };
-            highlightSelectionMatches: {
-                showToken: boolean;
-                annotateScrollbar: boolean;
-            };
-            lineNumbers: boolean;
-            lineWrapping: boolean;
-        }): CodeMirrorInstance;
+        (el: HTMLElement, opts: CodeMirrorOpts): CodeMirrorInstance;
         keyMap: {
             default: Record<string, string>;
         };

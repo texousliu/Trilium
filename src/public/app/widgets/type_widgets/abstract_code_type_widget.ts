@@ -64,7 +64,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
      *
      * @returns the extra options to be passed to the CodeMirror constructor.
      */
-    getExtraOpts() {
+    getExtraOpts(): Partial<CodeMirrorOpts> {
         return {};
     }
 

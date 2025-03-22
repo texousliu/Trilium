@@ -92,6 +92,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         super();
         this.editorTypeWidget = new EditableCodeTypeWidget();
         this.editorTypeWidget.isEnabled = () => true;
+        this.editorTypeWidget.getExtraOpts = this.buildEditorExtraOptions;
     }
 
     doRender(): void {
@@ -139,11 +140,18 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     /**
      * Called upon when the split between the preview and content pane is initialized. Can be used to add additional listeners if needed.
-     *
-     * @returns the additional split options.
      */
     buildSplitExtraOptions(): Split.Options {
         return {};
+    }
+
+    /**
+     * Called upon when the code editor is being initialized. Can be used to add additional options to the editor.
+     */
+    buildEditorExtraOptions(): Partial<CodeMirrorOpts> {
+        return {
+            lineWrapping: false
+        };
     }
 
     setError(message: string | null | undefined) {
