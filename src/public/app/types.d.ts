@@ -204,6 +204,7 @@ declare global {
         tabindex: number;
         dragDrop: boolean;
         placeholder: string;
+        readOnly: boolean;
     }
 
     var CodeMirror: {
