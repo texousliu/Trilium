@@ -136,6 +136,9 @@ const defaultOptions: DefaultOption[] = [
     { name: 'userSubjectIdentifierSaved', value: 'false', isSynced: true },
     { name: 'oAuthEnabled', value: 'false', isSynced: true },
 
+    // Appearance
+    { name: "splitEditorOrientation", value: "horizontal", isSynced: true },
+
     // Internationalization
     { name: "locale", value: "en", isSynced: true },
     { name: "firstDayOfWeek", value: "1", isSynced: true },
