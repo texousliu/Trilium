@@ -1,4 +1,4 @@
-import OnClickButtonWidget from "./onclick_button.js";
+import OnClickButtonWidget from "../buttons/onclick_button.js";
 import appContext from "../../components/app_context.js";
 import attributeService from "../../services/attributes.js";
 import protectedSessionHolder from "../../services/protected_session_holder.js";

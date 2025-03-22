@@ -36,7 +36,7 @@ import NoteMapRibbonWidget from "../widgets/ribbon_widgets/note_map.js";
 import NotePathsWidget from "../widgets/ribbon_widgets/note_paths.js";
 import SimilarNotesWidget from "../widgets/ribbon_widgets/similar_notes.js";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
-import EditButton from "../widgets/buttons/edit_button.js";
+import EditButton from "../widgets/floating_buttons/edit_button.js";
 import EditedNotesWidget from "../widgets/ribbon_widgets/edited_notes.js";
 import ShowTocWidgetButton from "../widgets/buttons/show_toc_widget_button.js";
 import ShowHighlightsListWidgetButton from "../widgets/buttons/show_highlights_list_widget_button.js";
