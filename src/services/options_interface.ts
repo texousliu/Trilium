@@ -45,11 +45,16 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     passwordVerificationSalt: string;
     passwordDerivedKeySalt: string;
     encryptedDataKey: string;
+    hoistedNoteId: string;
+
+    // Multi-Factor Authentication
     totpEnabled: boolean;
     encryptedRecoveryCodes: boolean;
     userSubjectIdentifierSaved: boolean;
     oAuthEnabled: boolean;
-    hoistedNoteId: string;
+    recoveryCodeInitialVector: string;
+    recoveryCodeSecurityKey: string;
+    recoveryCodesEncrypted: string;
 
     lastSyncedPull: number;
     lastSyncedPush: number;
