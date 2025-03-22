@@ -15,6 +15,7 @@ export default class SwitchSplitOrientationButton extends NoteContextAwareWidget
         return super.isEnabled()
             && ["mermaid"].includes(this.note?.type ?? "")
             && this.note?.isContentAvailable()
+            && !this.note?.hasLabel("readOnly")
             && this.noteContext?.viewScope?.viewMode === "default";
     }
 
