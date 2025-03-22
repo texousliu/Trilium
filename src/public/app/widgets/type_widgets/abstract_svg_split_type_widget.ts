@@ -81,22 +81,21 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
         let svg: string = "";
         try {
             svg = await this.renderSvg(content);
+
+            // Rendering was succesful.
+            this.setError(null);
+
+            if (svg === this.svg) {
+                return;
+            }
+
+            this.svg = svg;
+            this.$renderContainer.html(svg);
         } catch (e: unknown) {
             // Rendering failed.
             this.setError((e as Error)?.message);
-            return;
         }
 
-        // Rendering was succesful.
-        this.setError(null);
-
-        if (svg === this.svg) {
-            return;
-        }
-
-        this.svg = svg;
-
-        this.$renderContainer.html(svg);
         await this.#setupPanZoom(!recenter);
     }
 
@@ -169,6 +168,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
             zoomInstance.pan(pan);
         } else {
             // New instance, reposition properly.
+            zoomInstance.resize();
             zoomInstance.center();
             zoomInstance.fit();
         }
