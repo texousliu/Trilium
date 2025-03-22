@@ -4,9 +4,11 @@ import EditableCodeTypeWidget from "./editable_code.js";
 import TypeWidget from "./type_widget.js";
 import Split from "split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
+import options from "../../services/options.js";
+import type SwitchSplitOrientationButton from "../floating_buttons/switch_layout_button.js";
 
 const TPL = `\
-<div class="note-detail-split note-detail-printable split-horizontal">
+<div class="note-detail-split note-detail-printable">
     <div class="note-detail-split-first-col">
         <div class="note-detail-split-editor"></div>
         <div class="note-detail-error-container alert alert-warning hidden-ext"></div>
@@ -37,6 +39,7 @@ const TPL = `\
 
         .note-detail-split .note-detail-split-preview {
             transition: opacity 250ms ease-in-out;
+            height: 100%;
         }
 
         .note-detail-split .note-detail-split-preview.on-error {
@@ -58,13 +61,28 @@ const TPL = `\
             height: 100%;
         }
 
-        .note-detail-split-first-col {
+        .note-detail-split.split-horizontal .note-detail-split-first-col {
             flex-direction: column;
         }
 
         /* Vertical layout */
 
+        .note-detail-split.split-vertical {
+            flex-direction: column;
+        }
 
+        .note-detail-split.split-vertical > div {
+            width: 100%;
+            height: 50%;
+        }
+
+        .note-detail-split.split-vertical > .note-detail-split-first-col {
+            border-top: 1px solid var(--main-border-color);
+        }
+
+        .note-detail-split.split-vertical .note-detail-split-second-col {
+            order: -1;
+        }
     </style>
 </div>
 `;
@@ -76,6 +94,7 @@ const TPL = `\
  *
  * - The two panes are resizeable via a split, on desktop. The split can be optionally customized via {@link buildSplitExtraOptions}.
  * - Can display errors to the user via {@link setError}.
+ * - Horizontal or vertical orientation for the editor/preview split, adjustable via {@link SwitchSplitOrientationButton}.
  */
 export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
@@ -87,6 +106,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     private $editor!: JQuery<HTMLElement>;
     private $errorContainer!: JQuery<HTMLElement>;
     private editorTypeWidget: EditableCodeTypeWidget;
+    private layoutOrientation!: "horizontal" | "vertical";
 
     constructor() {
         super();
@@ -97,6 +117,10 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     doRender(): void {
         this.$widget = $(TPL);
+
+        const layoutOrientation = options.get("splitEditorOrientation") ?? "horizontal";
+        this.$widget.addClass(`split-${layoutOrientation}`);
+        this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
 
         this.$firstCol = this.$widget.find(".note-detail-split-first-col");
         this.$secondCol = this.$widget.find(".note-detail-split-second-col");
@@ -132,7 +156,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         this.splitInstance?.destroy();
         this.splitInstance = Split([ this.$firstCol[0], this.$secondCol[0] ], {
             sizes: [ 50, 50 ],
-            direction: "horizontal",
+            direction: this.layoutOrientation,
             gutterSize: DEFAULT_GUTTER_SIZE,
             ...this.buildSplitExtraOptions()
         });
@@ -163,4 +187,5 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     getData() {
         return this.editorTypeWidget.getData();
     }
+
 }
