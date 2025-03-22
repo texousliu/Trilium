@@ -10,11 +10,11 @@ import type { EventData } from "../../components/app_context.js";
 
 const TPL = `\
 <div class="note-detail-split note-detail-printable">
-    <div class="note-detail-split-first-col">
+    <div class="note-detail-split-editor-col">
         <div class="note-detail-split-editor"></div>
         <div class="note-detail-error-container alert alert-warning hidden-ext"></div>
     </div>
-    <div class="note-detail-split-second-col">
+    <div class="note-detail-split-preview-col">
         <div class="note-detail-split-preview"></div>
     </div>
 
@@ -24,7 +24,7 @@ const TPL = `\
             height: 100%;
         }
 
-        .note-detail-split-first-col {
+        .note-detail-split-editor-col {
             display: flex;
         }
 
@@ -49,7 +49,7 @@ const TPL = `\
 
         /* Horizontal layout */
 
-        .note-detail-split.split-horizontal > .note-detail-split-second-col {
+        .note-detail-split.split-horizontal > .note-detail-split-preview-col {
             border-left: 1px solid var(--main-border-color);
         }
 
@@ -62,7 +62,7 @@ const TPL = `\
             height: 100%;
         }
 
-        .note-detail-split.split-horizontal .note-detail-split-first-col {
+        .note-detail-split.split-horizontal .note-detail-split-editor-col {
             flex-direction: column;
         }
 
@@ -77,12 +77,18 @@ const TPL = `\
             height: 50%;
         }
 
-        .note-detail-split.split-vertical > .note-detail-split-first-col {
+        .note-detail-split.split-vertical > .note-detail-split-editor-col {
             border-top: 1px solid var(--main-border-color);
         }
 
-        .note-detail-split.split-vertical .note-detail-split-second-col {
+        .note-detail-split.split-vertical .note-detail-split-preview-col {
             order: -1;
+        }
+
+        /* Read-only view */
+
+        .note-detail-split.split-read-only .note-detail-split-preview-col {
+            width: 100%;
         }
     </style>
 </div>
@@ -102,12 +108,13 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     private splitInstance?: Split.Instance;
 
     protected $preview!: JQuery<HTMLElement>;
-    private $firstCol!: JQuery<HTMLElement>;
-    private $secondCol!: JQuery<HTMLElement>;
+    private $editorCol!: JQuery<HTMLElement>;
+    private $previewCol!: JQuery<HTMLElement>;
     private $editor!: JQuery<HTMLElement>;
     private $errorContainer!: JQuery<HTMLElement>;
     private editorTypeWidget: EditableCodeTypeWidget;
     private layoutOrientation?: "horizontal" | "vertical";
+    private isReadOnly?: boolean;
 
     constructor() {
         super();
@@ -119,8 +126,8 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     doRender(): void {
         this.$widget = $(TPL);
 
-        this.$firstCol = this.$widget.find(".note-detail-split-first-col");
-        this.$secondCol = this.$widget.find(".note-detail-split-second-col");
+        this.$editorCol = this.$widget.find(".note-detail-split-editor-col");
+        this.$previewCol = this.$widget.find(".note-detail-split-preview-col");
         this.$preview = this.$widget.find(".note-detail-split-preview");
         this.$editor = this.$widget.find(".note-detail-split-editor");
         this.$editor.append(this.editorTypeWidget.render());
@@ -138,9 +145,8 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     async doRefresh(note: FNote | null | undefined) {
         this.#adjustLayoutOrientation();
 
-        await this.editorTypeWidget.initialized;
-
-        if (note) {
+        if (note && !this.isReadOnly) {
+            await this.editorTypeWidget.initialized;
             this.editorTypeWidget.noteContext = this.noteContext;
             this.editorTypeWidget.spacedUpdate = this.spacedUpdate;
             this.editorTypeWidget.doRefresh(note);
@@ -148,15 +154,24 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     }
 
     #adjustLayoutOrientation() {
+        // Read-only
+        const isReadOnly = this.note?.hasLabel("readOnly");
+        if (this.isReadOnly !== isReadOnly) {
+            this.$editorCol.toggle(!isReadOnly);
+        }
+
+        // Vertical vs horizontal layout
         const layoutOrientation = options.get("splitEditorOrientation") ?? "horizontal";
-        if (this.layoutOrientation === layoutOrientation) {
+        if (this.layoutOrientation === layoutOrientation && this.isReadOnly === isReadOnly) {
             return;
         }
 
         this.$widget
-            .toggleClass("split-horizontal", layoutOrientation === "horizontal")
-            .toggleClass("split-vertical", layoutOrientation === "vertical");
+            .toggleClass("split-horizontal", !isReadOnly && layoutOrientation === "horizontal")
+            .toggleClass("split-vertical", !isReadOnly && layoutOrientation === "vertical")
+            .toggleClass("split-read-only", isReadOnly);
         this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
+        this.isReadOnly = isReadOnly;
         this.#setupResizer();
     }
 
@@ -165,18 +180,23 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
             return;
         }
 
-        let elements = [ this.$firstCol[0], this.$secondCol[0] ];
+        let elements = [ this.$editorCol[0], this.$previewCol[0] ];
         if (this.layoutOrientation === "vertical") {
             elements.reverse();
         }
 
         this.splitInstance?.destroy();
-        this.splitInstance = Split(elements, {
-            sizes: [ 50, 50 ],
-            direction: this.layoutOrientation,
-            gutterSize: DEFAULT_GUTTER_SIZE,
-            ...this.buildSplitExtraOptions()
-        });
+
+        if (!this.isReadOnly) {
+            this.splitInstance = Split(elements, {
+                sizes: [ 50, 50 ],
+                direction: this.layoutOrientation,
+                gutterSize: DEFAULT_GUTTER_SIZE,
+                ...this.buildSplitExtraOptions()
+            });
+        } else {
+            this.splitInstance = undefined;
+        }
     }
 
     /**
