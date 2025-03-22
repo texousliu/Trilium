@@ -6,6 +6,7 @@ import Split from "split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
 import options from "../../services/options.js";
 import type SwitchSplitOrientationButton from "../floating_buttons/switch_layout_button.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `\
 <div class="note-detail-split note-detail-printable">
@@ -106,7 +107,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     private $editor!: JQuery<HTMLElement>;
     private $errorContainer!: JQuery<HTMLElement>;
     private editorTypeWidget: EditableCodeTypeWidget;
-    private layoutOrientation!: "horizontal" | "vertical";
+    private layoutOrientation?: "horizontal" | "vertical";
 
     constructor() {
         super();
@@ -118,17 +119,13 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     doRender(): void {
         this.$widget = $(TPL);
 
-        const layoutOrientation = options.get("splitEditorOrientation") ?? "horizontal";
-        this.$widget.addClass(`split-${layoutOrientation}`);
-        this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
-
         this.$firstCol = this.$widget.find(".note-detail-split-first-col");
         this.$secondCol = this.$widget.find(".note-detail-split-second-col");
         this.$preview = this.$widget.find(".note-detail-split-preview");
         this.$editor = this.$widget.find(".note-detail-split-editor");
         this.$editor.append(this.editorTypeWidget.render());
         this.$errorContainer = this.$widget.find(".note-detail-error-container");
-        this.#setupResizer();
+        this.#adjustLayoutOrientation();
 
         super.doRender();
     }
@@ -139,6 +136,8 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: FNote | null | undefined) {
+        this.#adjustLayoutOrientation();
+
         await this.editorTypeWidget.initialized;
 
         if (note) {
@@ -146,6 +145,18 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
             this.editorTypeWidget.spacedUpdate = this.spacedUpdate;
             this.editorTypeWidget.doRefresh(note);
         }
+    }
+
+    #adjustLayoutOrientation() {
+        const layoutOrientation = options.get("splitEditorOrientation") ?? "horizontal";
+        if (this.layoutOrientation === layoutOrientation) {
+            return;
+        }
+
+        this.$widget.toggleClass("split-horizontal", layoutOrientation === "horizontal");
+        this.$widget.toggleClass("split-vertical", layoutOrientation === "vertical");
+        this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
+        this.#setupResizer();
     }
 
     #setupResizer() {
@@ -186,6 +197,12 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     getData() {
         return this.editorTypeWidget.getData();
+    }
+
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.isOptionReloaded("splitEditorOrientation")) {
+            this.refresh();
+        }
     }
 
 }
