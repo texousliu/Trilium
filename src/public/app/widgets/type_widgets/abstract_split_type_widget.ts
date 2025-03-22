@@ -165,8 +165,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     }
 
     cleanup(): void {
-        this.splitInstance?.destroy();
-        this.splitInstance = undefined;
+        this.#destroyResizer();
     }
 
     async doRefresh(note: FNote | null | undefined) {
@@ -189,17 +188,19 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
         // Vertical vs horizontal layout
         const layoutOrientation = (!utils.isMobile() ? options.get("splitEditorOrientation") ?? "horizontal" : "vertical");
-        if (this.layoutOrientation === layoutOrientation && this.isReadOnly === isReadOnly) {
-            return;
+        if (this.layoutOrientation !== layoutOrientation || this.isReadOnly !== isReadOnly) {
+            this.$widget
+                .toggleClass("split-horizontal", !isReadOnly && layoutOrientation === "horizontal")
+                .toggleClass("split-vertical", !isReadOnly && layoutOrientation === "vertical")
+                .toggleClass("split-read-only", isReadOnly);
+            this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
+            this.isReadOnly = isReadOnly;
+            this.#destroyResizer();
         }
 
-        this.$widget
-            .toggleClass("split-horizontal", !isReadOnly && layoutOrientation === "horizontal")
-            .toggleClass("split-vertical", !isReadOnly && layoutOrientation === "vertical")
-            .toggleClass("split-read-only", isReadOnly);
-        this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
-        this.isReadOnly = isReadOnly;
-        this.#setupResizer();
+        if (!this.splitInstance) {
+            this.#setupResizer();
+        }
     }
 
     #setupResizer() {
@@ -224,6 +225,11 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         } else {
             this.splitInstance = undefined;
         }
+    }
+
+    #destroyResizer() {
+        this.splitInstance?.destroy();
+        this.splitInstance = undefined;
     }
 
     /**
