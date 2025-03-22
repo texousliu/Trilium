@@ -287,9 +287,9 @@ export default class MermaidEditing extends Plugin {
 	 */
 	async _renderMermaid( domElement ) {
 		if (!window.mermaid && typeof this._config?.lazyLoad === "function") {
-			await this._config.lazyLoad();
+			this.mermaid = await this._config.lazyLoad();
 		}
 
-		mermaid.init( this._config.config, domElement );
+		this.mermaid.init( this._config.config, domElement );
 	}
 }
