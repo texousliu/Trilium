@@ -13,7 +13,7 @@ const TPL = `\
 <div class="note-detail-split note-detail-printable">
     <div class="note-detail-split-editor-col">
         <div class="note-detail-split-editor"></div>
-        <div class="note-detail-error-container alert alert-warning hidden-ext"></div>
+        <div class="admonition caution note-detail-error-container hidden-ext"></div>
     </div>
     <div class="note-detail-split-preview-col">
         <div class="note-detail-split-preview"></div>
@@ -42,7 +42,7 @@ const TPL = `\
 
         .note-detail-split .note-detail-error-container {
             font-family: var(--monospace-font-family);
-            margin: 0.1em;
+            margin: 5px;
             white-space: pre-wrap;
             font-size: 0.85em;
         }
