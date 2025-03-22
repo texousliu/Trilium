@@ -11,6 +11,10 @@ export class MermaidTypeWidget extends AbstractSvgSplitTypeWidget {
         return "mermaid";
     }
 
+    get attachmentName(): string {
+        return "mermaid-export";
+    }
+
     async renderSvg(content: string) {
         const mermaid = (await import("mermaid")).default;
         await loadElkIfNeeded(mermaid, content);

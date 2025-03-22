@@ -75,6 +75,7 @@ const TPL = `\
  * Features:
  *
  * - The two panes are resizeable via a split, on desktop. The split can be optionally customized via {@link buildSplitExtraOptions}.
+ * - Can display errors to the user via {@link setError}.
  */
 export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 

@@ -9,8 +9,10 @@ import AbstractSplitTypeWidget from "./abstract_split_type_widget.js";
  *
  * This adds the following functionality:
  *
- * - Automatic handling of the preview when content or the note changes.
+ * - Automatic handling of the preview when content or the note changes via {@link renderSvg}.
  * - Built-in pan and zoom functionality with automatic re-centering.
+ * - Automatically displays errors to the user if {@link renderSvg} failed.
+ * - Automatically saves the SVG attachment.
  *
  */
 export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTypeWidget {
@@ -91,7 +93,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
     #saveSvg() {
         const payload = {
             role: "image",
-            title: "mermaid-export.svg",
+            title: `${this.attachmentName}.svg`,
             mime: "image/svg+xml",
             content: this.svg,
             position: 0
@@ -114,6 +116,11 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
      * @param content the content of the note, in plain text.
      */
     abstract renderSvg(content: string): Promise<string>;
+
+    /**
+     * Called to obtain the name of the note attachment (without .svg extension) that will be used for storing the preview.
+     */
+    abstract get attachmentName(): string;
 
     /**
      * @param preservePanZoom `true` to keep the pan/zoom settings of the previous image, or `false` to re-center it.
