@@ -1758,3 +1758,27 @@ footer.file-footer button {
 .ck-content .admonition.important::before { content: "\ea7c"; }
 .ck-content .admonition.caution::before { content: "\eac7"; }
 .ck-content .admonition.warning::before { content: "\eac5"; }
+
+/*
+ * In-content floating buttons
+ */
+
+.content-floating-buttons {
+    position: absolute;
+    z-index: 10; /* should be below dropdown (note actions) */
+}
+
+.content-floating-buttons.top-left {
+    top: 10px;
+    left: 10px;
+}
+
+.content-floating-buttons.bottom-left {
+    bottom: 10px;
+    left: 10px;
+}
+
+.content-floating-buttons button.bx {
+    font-size: 130%;
+    padding: 1px 10px 1px 10px;
+}
