@@ -164,8 +164,13 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
             return;
         }
 
+        let elements = [ this.$firstCol[0], this.$secondCol[0] ];
+        if (this.layoutOrientation === "vertical") {
+            elements.reverse();
+        }
+
         this.splitInstance?.destroy();
-        this.splitInstance = Split([ this.$firstCol[0], this.$secondCol[0] ], {
+        this.splitInstance = Split(elements, {
             sizes: [ 50, 50 ],
             direction: this.layoutOrientation,
             gutterSize: DEFAULT_GUTTER_SIZE,
