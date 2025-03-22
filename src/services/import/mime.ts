@@ -70,7 +70,8 @@ const EXTENSION_TO_MIME = new Map<string, string>([
     [".swift", "text/x-swift"],
     [".ts", "text/x-typescript"],
     [".excalidraw", "application/json"],
-    [".mermaid", "text/vnd.mermaid"]
+    [".mermaid", "text/vnd.mermaid"],
+    [".mmd", "text/vnd.mermaid"]
 ]);
 
 /** @returns false if MIME is not detected */
