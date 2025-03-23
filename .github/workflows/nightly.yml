@@ -25,6 +25,7 @@ jobs:
           - name: windows
             image: windows-latest
             extension: [exe, zip]
+            forge_platform: win32
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4

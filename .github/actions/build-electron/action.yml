@@ -11,6 +11,8 @@ inputs:
   extension:
     description: "Platform specific extensions to copy in the output: dmg, deb, rpm, exe, zip"
     required: true
+  forge_platform:
+    required: true
 
 runs:
   using: composite
@@ -78,18 +80,9 @@ runs:
         APPLE_ID: ${{ env.APPLE_ID }}
         APPLE_ID_PASSWORD: ${{ env.APPLE_ID_PASSWORD }}
       run: |
-        # Map OS names to Electron Forge platform names
-        if [ "${{ inputs.os }}" = "macos" ]; then
-          PLATFORM="darwin"
-        elif [ "${{ inputs.os }}" = "windows" ]; then
-          PLATFORM="win32"
-        else
-          PLATFORM="${{ inputs.os }}"
-        fi
-
         npm run electron-forge:make -- \
           --arch=${{ inputs.arch }} \
-          --platform=$PLATFORM
+          --platform=${{ inputs.forge_platform }}
 
     # Add DMG signing step
     - name: Sign DMG
