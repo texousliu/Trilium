@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - .github/actions/build-electron/*
+  push:
 env:
   GITHUB_UPLOAD_URL: https://uploads.github.com/repos/TriliumNext/Notes/releases/179589950/assets{?name,label}
   GITHUB_RELEASE_ID: 179589950
@@ -19,14 +20,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [x64, arm64]
+        arch: [x64]
         os:
-          - name: macos
-            image: macos-latest
-            extension: [dmg, zip]
-          - name: linux
-            image: ubuntu-latest
-            extension: [deb, rpm, zip, flatpak]
           - name: windows
             image: windows-latest
             extension: [exe, zip]
