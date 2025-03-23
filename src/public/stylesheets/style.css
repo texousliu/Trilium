@@ -1315,6 +1315,12 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 /* Mobile, phone mode */
+
+#detail-container {
+    max-height: 100%;
+    position: relative;
+}
+
 @media (max-width: 991px) {
     body.mobile #launcher-pane .dropdown.global-menu > .dropdown-menu.show,
     body.mobile #launcher-container .dropdown > .dropdown-menu.show {
@@ -1352,6 +1358,10 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         transition: transform 250ms ease-in-out;
         background: var(--main-background-color);
         z-index: 2000;
+    }
+
+    #detail-container {
+        width: 100%;
     }
 
     #mobile-sidebar-container.show #mobile-sidebar-wrapper {
