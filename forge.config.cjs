@@ -129,7 +129,20 @@ module.exports = {
             name: "@electron-forge/plugin-auto-unpack-natives",
             config: {}
         }
-    ]
+    ],
+    hooks: {
+        postMake(_, makeResults) {
+            const outputDir = path.join(__dirname, "upload");
+            fs.mkdirp(outputDir);
+            for (const makeResult of makeResults) {
+                for (const artifactPath of makeResult.artifacts) {
+                    const outputPath = path.join(outputDir, path.basename(artifactPath));
+                    console.log(`[Artifact] ${artifactPath} -> ${outputPath}`);
+                    fs.copyFile(artifactPath, outputPath);
+                }
+            }
+        }
+    }
 };
 
 function getExtraResourcesForPlatform() {
