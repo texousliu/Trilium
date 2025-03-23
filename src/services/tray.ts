@@ -106,6 +106,12 @@ function updateTrayMenu() {
         }
     }
 
+    function openNewWindow() {
+        if (lastFocusedWindow){
+            lastFocusedWindow.webContents.send("globalShortcut", "openNewWindow");
+        }
+    }
+
     function triggerKeyboardAction(actionName: KeyboardActionNames) {
         if (lastFocusedWindow){
             lastFocusedWindow.webContents.send("globalShortcut", actionName);
@@ -214,7 +220,7 @@ function updateTrayMenu() {
             label: t("tray.open_new_window"),
             type: "normal",
             icon: getIconPath("new-window"),
-            click: () => triggerKeyboardAction("openNewWindow")
+            click: () => openNewWindow()
         },
         {
             label: t("tray.new-note"),
