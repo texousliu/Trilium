@@ -34,6 +34,7 @@ try {
         "./forge.config.cjs",
         "./bin/tpl/",
         "./bin/electron-forge/desktop.ejs",
+        "./bin/electron-forge/sign-windows.cjs",
         "./src/views/",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json",
