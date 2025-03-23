@@ -21,6 +21,7 @@ function copyNodeModuleFileOrFolder(source: string) {
 try {
 
     const assetsToCopy = new Set([
+        "./node_modules",
         "./images",
         "./libraries",
         "./translations",
