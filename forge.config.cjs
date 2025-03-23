@@ -132,7 +132,7 @@ module.exports = {
     ],
     hooks: {
         postMake(_, makeResults) {
-            const outputDir = path.join(__dirname, "upload");
+            const outputDir = path.join(__dirname, "..", "upload");
             fs.mkdirp(outputDir);
             for (const makeResult of makeResults) {
                 for (const artifactPath of makeResult.artifacts) {
