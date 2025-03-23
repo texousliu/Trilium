@@ -18,7 +18,7 @@ const TPL = `
     </style>
 
     <button data-trigger-command="runActiveNote" class="execute-button floating-button btn" title="${t("code_buttons.execute_button_title")}">
-        <span class="bx bx-run"></span>
+        <span class="bx bx-play"></span>
     </button>
 
     <button class="trilium-api-docs-button floating-button btn" title="${t("code_buttons.trilium_api_docs_button_title")}">
@@ -85,7 +85,7 @@ export default class CodeButtonsWidget extends NoteContextAwareWidget {
         this.$openTriliumApiDocsButton.toggle(note.mime.startsWith("application/javascript;env="));
     }
 
-    async noteTypeMimeChangedEvent({ noteId }: EventData<"noteTypeMimeChangedEvent">) {
+    async noteTypeMimeChangedEvent({ noteId }: EventData<"noteTypeMimeChanged">) {
         if (this.isNote(noteId)) {
             await this.refresh();
         }

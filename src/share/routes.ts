@@ -138,6 +138,7 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
 function register(router: Router) {
     function renderNote(note: SNote, req: Request, res: Response) {
         if (!note) {
+            console.log("Unable to find note ", note);
             res.status(404).render("share/404");
             return;
         }

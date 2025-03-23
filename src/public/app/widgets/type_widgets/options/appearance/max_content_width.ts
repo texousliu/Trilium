@@ -14,7 +14,10 @@ const TPL = `
     <div class="form-group row">
         <div class="col-md-6">
             <label for="max-content-width">${t("max_content_width.max_width_label")}</label>
-            <input id="max-content-width" type="number" min="${MIN_VALUE}" step="10" class="max-content-width form-control options-number-input">
+            <label class="input-group tn-number-unit-pair">
+                <input id="max-content-width" type="number" min="${MIN_VALUE}" step="10" class="max-content-width form-control options-number-input">
+                <span class="input-group-text">${t("max_content_width.max_width_unit")}</span>
+            </label>
         </div>
     </div>
 

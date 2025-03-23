@@ -23,12 +23,12 @@
         </p>
         <p><strong>Note:</strong> Trilium's Docker container requires root privileges
           to operate correctly.</p>
-        <blockquote>
-          <p>[!WARNING] If you're using a SMB/CIFS share or folder as your Trilium
-            data directory, <a href="https://github.com/TriliumNext/Notes/issues/415#issuecomment-2344824400">you'll need</a> to
-            add the mount options of <code>nobrl</code> and <code>noperm</code> when mounting
-            your SMB share.</p>
-        </blockquote>
+        <aside class="admonition warning">
+          <p>If you're using a SMB/CIFS share or folder as your Trilium data directory,
+            <a
+            href="https://github.com/TriliumNext/Notes/issues/415#issuecomment-2344824400">you'll need</a>to add the mount options of <code>nobrl</code> and <code>noperm</code> when
+              mounting your SMB share.</p>
+        </aside>
         <h2>Running with Docker Compose</h2>
         <h3>Grab the latest docker-compose.yml:</h3><pre><code class="language-text-x-trilium-auto">wget https://raw.githubusercontent.com/TriliumNext/Notes/master/docker-compose.yml</code></pre>
         <p>Optionally, edit the <code>docker-compose.yml</code> file to configure the

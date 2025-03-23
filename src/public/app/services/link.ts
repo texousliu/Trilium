@@ -252,7 +252,7 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
     };
 }
 
-function goToLink(evt: MouseEvent | JQuery.ClickEvent) {
+function goToLink(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent) {
     const $link = $(evt.target as any).closest("a,.block-link");
     const hrefLink = $link.attr("href") || $link.attr("data-href");
 
@@ -288,11 +288,15 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
 
             const noteContext = ntxId ? appContext.tabManager.getNoteContextById(ntxId) : appContext.tabManager.getActiveContext();
 
-            noteContext.setNote(notePath, { viewScope }).then(() => {
-                if (noteContext !== appContext.tabManager.getActiveContext()) {
-                    appContext.tabManager.activateNoteContext(noteContext.ntxId);
-                }
-            });
+            if (noteContext) {
+                noteContext.setNote(notePath, { viewScope }).then(() => {
+                    if (noteContext !== appContext.tabManager.getActiveContext()) {
+                        appContext.tabManager.activateNoteContext(noteContext.ntxId);
+                    }
+                });
+            } else {
+                appContext.tabManager.openContextWithNote(notePath, { viewScope, activate: true });
+            }
         }
     } else if (hrefLink) {
         const withinEditLink = $link?.hasClass("ck-link-actions__preview");

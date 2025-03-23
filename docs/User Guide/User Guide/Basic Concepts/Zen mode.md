@@ -1,11 +1,11 @@
 # Zen mode
-![](6_Zen%20mode_image.png)
+![](3_Zen%20mode_image.png)
 
 Screenshot of Zen Mode activated on a Windows 11 system with native title bar off and background effects on.
 
 When Zen Mode is activated (pictured on the side), most of the user interface of Trilium is hidden away in order to be able to focus on the content, whether it's for reading or writing.
 
-![](5_Zen%20mode_image.png)
+![](2_Zen%20mode_image.png)
 
 Screenshot of the Zen Mode option in the global menu.
 
@@ -23,7 +23,7 @@ Do note that, by design, activating or deactivating the Zen Mode applies only to
 
 If “Native title bar” is activated, then the operating system's default title bar can be used to drag the window around. If deactivated, the window can still be moved by dragging the mouse across the top part of the window where the note titles are.
 
-![](3_Zen%20mode_image.png)
+![](1_Zen%20mode_image.png)
 
 Screenshot of two notes side-by-side while Zen Mode is active, on Windows 11 with background effects off.
 

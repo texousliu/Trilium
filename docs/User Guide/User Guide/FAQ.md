@@ -1,23 +1,17 @@
 # FAQ
-## Mac OS support
+## macOS support
 
-Originally, desktop builds of Trilium Notes has been available for Windows & Linux, but there has been a considerable demand for macOS build.
+Originally, Trilium Notes considered the macOS build unsupported. TriliumNext commits to make the experience on macOS as good as possible.
 
-So I made one, but I underestimated the differences and specifics of Mac platform which seems to require special handling in several places. My lack of knowledge and frankly willingness to learn & code Mac specific functionality resulted in a current state where [Trilium does not integrate well into the OS](https://github.com/TriliumNext/Notes/issues/511) 
+if you find any platform-specific issues, feel free to [report them](Troubleshooting/Reporting%20issues.md).
 
-%%{WARNING}%%.
+## Translation / localisation support
 
-macOS build is from now on considered "unsupported". I will strive to keep it fundamentally functional, but I won't work on Mac specific features or integrations. Note that this is more of an acknowledgment of an existing state rather than sudden change of direction.
+The original Trilium Notes application did not support multiple languages. Since we believe that internationalisation is a core part of an application, we have added support for it.
 
-Of course, PRs are welcome.
+Contributions to translations are welcome.
 
-## Translation / localization support
-
-Trilium is currently available only in English. Translation to other languages is not planned in the near/medium term because it brings a significant maintenance overhead. This decision might be revisited once Trilium stabilizes into a more mature product.
-
-For Chinese, there's an unofficial fork [here](https://github.com/Nriver/trilium-translation). Use at your own risk.
-
-## Multi user support
+## Multi-user support
 
 Common request is to allow multiple users collaborate, share notes etc. So far I'm resisting this because of these reasons:
 
@@ -41,7 +35,9 @@ No.
 
 These general purpose sync apps are not suitable to sync database files which are open and being worked on by another application. The result is that they will corrupt the database file, resulting in data loss and this message in the Trilium logs:
 
-> SqliteError: database disk image is malformed
+```
+SqliteError: database disk image is malformed
+```
 
 The only supported way to sync Trilium's data across the network is to use a [sync/web server](Installation%20%26%20Setup/Synchronization.md).
 

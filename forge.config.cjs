@@ -11,6 +11,9 @@ const baseLinuxMakerConfigOptions = {
 };
 
 module.exports = {
+    // we run electron-forge inside the ./build folder,
+    // to have it output to ./dist, we need to go up a directory first
+    outDir: "../dist",
     packagerConfig: {
         executableName: "trilium",
         name: APP_NAME,
@@ -71,7 +74,6 @@ module.exports = {
             config: {
                 options: {
                     ...baseLinuxMakerConfigOptions,
-                    desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
                     id: "com.triliumnext.notes",
                     runtimeVersion: "24.08",
                     base: "org.electronjs.Electron2.BaseApp",
@@ -131,7 +133,7 @@ module.exports = {
 };
 
 function getExtraResourcesForPlatform() {
-    const resources = ["./bin/tpl/anonymize-database.sql"];
+    const resources = [];
 
     const getScriptRessources = () => {
         const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
