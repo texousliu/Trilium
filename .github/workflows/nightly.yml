@@ -33,7 +33,6 @@ jobs:
         with:
           node-version: 20
       - name: Install dependencies
-        shell: bash
         run: npm ci
       - name: Update nightly version
         run: npm run chore:ci-update-nightly-version
