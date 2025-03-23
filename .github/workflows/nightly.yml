@@ -63,3 +63,10 @@ jobs:
           files: upload/*.*
           tag_name: nightly
           name: Nightly Build
+
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          name: TriliumNextNotes ${{ matrix.os.name }} ${{ matrix.arch }}.zip
+          path: upload
