@@ -62,36 +62,3 @@ jobs:
           files: upload/*.*
           tag_name: nightly
           name: Nightly Build
-
-  nightly-server:
-    name: Deploy server nightly
-    strategy:
-      fail-fast: false
-      matrix:
-        arch: [x64, arm64]
-        include:
-          - arch: x64
-            runs-on: ubuntu-latest
-          - arch: arm64
-            runs-on: ubuntu-24.04-arm
-    runs-on: ${{ matrix.runs-on }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run the build
-        uses: ./.github/actions/build-server
-        with:
-          os: linux
-          arch: ${{ matrix.arch }}
-
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        if: ${{ github.event_name != 'pull_request' }}
-        with:
-          make_latest: false
-          prerelease: true
-          draft: false
-          fail_on_unmatched_files: true
-          files: upload/*.*
-          tag_name: nightly
-          name: Nightly Build
