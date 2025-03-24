@@ -142,47 +142,7 @@ export default class AiSettingsWidget extends OptionsWidget {
 
             <div class="form-group">
                 <label>${t("ai_llm.provider_precedence")}</label>
-                <input type="hidden" class="ai-provider-precedence" value="">
-                <div class="provider-precedence-container">
-                    <div class="alert alert-info mb-2">${t("ai_llm.drag_providers_to_reorder")}</div>
-                    <div class="standard-list-container mb-3">
-                        <div class="standard-list-header">
-                            <strong>${t("ai_llm.active_providers")}</strong>
-                        </div>
-                        <ul class="standard-list-item-list provider-sortable">
-                            <li class="standard-list-item d-flex align-items-center" data-provider="openai">
-                                <span class="bx bx-menu handle me-2"></span>
-                                <strong class="flex-grow-1">OpenAI</strong>
-                                <button class="icon-action remove-ai-provider" title="${t("ai_llm.remove_provider")}">
-                                    <span class="bx bx-x"></span>
-                                </button>
-                            </li>
-                            <li class="standard-list-item d-flex align-items-center" data-provider="anthropic">
-                                <span class="bx bx-menu handle me-2"></span>
-                                <strong class="flex-grow-1">Anthropic</strong>
-                                <button class="icon-action remove-ai-provider" title="${t("ai_llm.remove_provider")}">
-                                    <span class="bx bx-x"></span>
-                                </button>
-                            </li>
-                            <li class="standard-list-item d-flex align-items-center" data-provider="ollama">
-                                <span class="bx bx-menu handle me-2"></span>
-                                <strong class="flex-grow-1">Ollama</strong>
-                                <button class="icon-action remove-ai-provider" title="${t("ai_llm.remove_provider")}">
-                                    <span class="bx bx-x"></span>
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="standard-list-container disabled-ai-providers-container" style="display: none;">
-                        <div class="standard-list-header">
-                            <strong>${t("ai_llm.disabled_providers")}</strong>
-                        </div>
-                        <ul class="standard-list-item-list provider-disabled">
-                            <!-- Disabled providers will be added here dynamically -->
-                        </ul>
-                    </div>
-                </div>
+                <input type="text" class="ai-provider-precedence form-control" placeholder="openai,anthropic,ollama">
                 <div class="form-text">${t("ai_llm.provider_precedence_description")}</div>
             </div>
 
@@ -375,47 +335,7 @@ export default class AiSettingsWidget extends OptionsWidget {
 
             <div class="form-group">
                 <label>${t("ai_llm.embedding_provider_precedence")}</label>
-                <input type="hidden" class="embedding-provider-precedence" value="">
-                <div class="embedding-precedence-container">
-                    <div class="alert alert-info mb-2">${t("ai_llm.drag_providers_to_reorder")}</div>
-                    <div class="standard-list-container mb-3">
-                        <div class="standard-list-header">
-                            <strong>${t("ai_llm.active_providers")}</strong>
-                        </div>
-                        <ul class="standard-list-item-list embedding-provider-sortable">
-                            <li class="standard-list-item d-flex align-items-center" data-provider="openai">
-                                <span class="bx bx-menu handle me-2"></span>
-                                <strong class="flex-grow-1">OpenAI</strong>
-                                <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
-                                    <span class="bx bx-x"></span>
-                                </button>
-                            </li>
-                            <li class="standard-list-item d-flex align-items-center" data-provider="voyage">
-                                <span class="bx bx-menu handle me-2"></span>
-                                <strong class="flex-grow-1">Voyage AI</strong>
-                                <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
-                                    <span class="bx bx-x"></span>
-                                </button>
-                            </li>
-                            <li class="standard-list-item d-flex align-items-center" data-provider="ollama">
-                                <span class="bx bx-menu handle me-2"></span>
-                                <strong class="flex-grow-1">Ollama</strong>
-                                <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
-                                    <span class="bx bx-x"></span>
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="standard-list-container disabled-providers-container" style="display: none;">
-                        <div class="standard-list-header">
-                            <strong>${t("ai_llm.disabled_providers")}</strong>
-                        </div>
-                        <ul class="standard-list-item-list embedding-provider-disabled">
-                            <!-- Disabled providers will be added here dynamically -->
-                        </ul>
-                    </div>
-                </div>
+                <input type="text" class="embedding-provider-precedence form-control" placeholder="openai,voyage,ollama">
                 <div class="form-text">${t("ai_llm.embedding_provider_precedence_description")}</div>
             </div>
 
@@ -536,12 +456,8 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.displayValidationWarnings();
         });
 
-        // Set up provider precedence drag-and-drop functionality
-        this.setupProviderPrecedence();
-
         // Initialize provider orders
         this.initializeAiProviderOrder();
-        this.initializeEmbeddingProviderOrder();
 
         const $aiTemperature = this.$widget.find('.ai-temperature');
         $aiTemperature.on('change', async () => {
