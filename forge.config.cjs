@@ -10,6 +10,9 @@ const baseLinuxMakerConfigOptions = {
   desktopTemplate: path.resolve(path.join(BIN_PATH, "desktop.ejs")),
   categories: ["Office", "Utility"]
 };
+const windowsSignConfiguration = {
+    hookModulePath: path.join(BIN_PATH, "sign-windows.cjs")
+}
 
 module.exports = {
     // we run electron-forge inside the ./build folder,
@@ -27,9 +30,7 @@ module.exports = {
             appleIdPassword: process.env.APPLE_ID_PASSWORD,
             teamId: process.env.APPLE_TEAM_ID
         },
-        windowsSign: {
-            hookModulePath: path.join(BIN_PATH, "sign-windows.cjs")
-        },
+        windowsSign: windowsSignConfiguration,
         extraResource: [
             // All resources should stay in Resources directory for macOS
             ...(process.platform === "darwin" ? [] : extraResourcesForPlatform),
@@ -110,9 +111,7 @@ module.exports = {
                 iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
                 setupIcon: "./images/app-icons/win/setup.ico",
                 loadingGif: "./images/app-icons/win/setup-banner.gif",
-                windowsSign: {
-                    hookModulePath: path.join(BIN_PATH, "sign-windows.cjs")
-                }
+                windowsSign: windowsSignConfiguration
             }
         },
         {
