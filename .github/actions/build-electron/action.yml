@@ -79,6 +79,7 @@ runs:
         APPLE_TEAM_ID: ${{ env.APPLE_TEAM_ID }}
         APPLE_ID: ${{ env.APPLE_ID }}
         APPLE_ID_PASSWORD: ${{ env.APPLE_ID_PASSWORD }}
+        WINDOWS_SIGN_EXECUTABLE: ${{ env.WINDOWS_SIGN_EXECUTABLE }}
       run: |
         npm run electron-forge:make -- \
           --arch=${{ inputs.arch }} \
