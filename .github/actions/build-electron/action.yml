@@ -12,6 +12,7 @@ inputs:
     description: "Which shell to use"
     required: true
   forge_platform:
+    description: "The --platform to pass to Electron Forge"
     required: true
 
 runs:
