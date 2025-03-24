@@ -1305,6 +1305,7 @@ div.promoted-attribute-cell .multiplicity:has(span) {
  /* Floating buttons container */
 div#center-pane .floating-buttons-children {
     opacity: 1;
+    min-height: var(--floating-button-height);
     transform-origin: right;
     box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
     background: var(--floating-button-background-color);
