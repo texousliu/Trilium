@@ -19,13 +19,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [x64]
+        arch: [x64, arm64]
         os:
+          - name: macos
+            image: macos-latest
+            extension: [dmg, zip]
+            shell: bash
+            forge_platform: darwin
+          - name: linux
+            image: ubuntu-latest
+            extension: [deb, rpm, zip, flatpak]
+            shell: bash
+            forge_platform: linux
           - name: windows
-            image: win-signing
+            image: windows-latest
             extension: [exe, zip]
-            forge_platform: win32
             shell: cmd
+            forge_platform: win32
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4
