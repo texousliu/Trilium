@@ -802,9 +802,13 @@ export default class AiSettingsWidget extends OptionsWidget {
                 return $(this).data('provider');
             }).get().join(',');
 
-            $embeddingProviderPrecedence.val(providers);
-            // Trigger the change event to save the option
-            $embeddingProviderPrecedence.trigger('change');
+            // Only update if we have providers or if the current value isn't empty
+            // This prevents setting an empty string when all providers are removed
+            if (providers || $embeddingProviderPrecedence.val()) {
+                $embeddingProviderPrecedence.val(providers);
+                // Trigger the change event to save the option
+                $embeddingProviderPrecedence.trigger('change');
+            }
 
             // Show/hide the disabled providers container
             const $disabledContainer = self.$widget.find('.disabled-providers-container');
@@ -1695,9 +1699,13 @@ export default class AiSettingsWidget extends OptionsWidget {
                 return $(this).data('provider');
             }).get().join(',');
 
-            $embeddingProviderPrecedence.val(providers);
-            // Trigger the change event to save the option
-            $embeddingProviderPrecedence.trigger('change');
+            // Only update if we have providers or if the current value isn't empty
+            // This prevents setting an empty string when all providers are removed
+            if (providers || $embeddingProviderPrecedence.val()) {
+                $embeddingProviderPrecedence.val(providers);
+                // Trigger the change event to save the option
+                $embeddingProviderPrecedence.trigger('change');
+            }
 
             // Show/hide the disabled providers container
             const $disabledContainer = self.$widget.find('.disabled-providers-container');
@@ -1755,9 +1763,13 @@ export default class AiSettingsWidget extends OptionsWidget {
                 return $(this).data('provider');
             }).get().join(',');
 
-            $embeddingProviderPrecedence.val(providers);
-            // Trigger the change event to save the option
-            $embeddingProviderPrecedence.trigger('change');
+            // Only update if we have providers or if the current value isn't empty
+            // This prevents setting an empty string when all providers are removed
+            if (providers || $embeddingProviderPrecedence.val()) {
+                $embeddingProviderPrecedence.val(providers);
+                // Trigger the change event to save the option
+                $embeddingProviderPrecedence.trigger('change');
+            }
 
             // Show/hide the disabled providers container
             const $disabledContainer = self.$widget.find('.disabled-providers-container');
@@ -1791,8 +1803,12 @@ export default class AiSettingsWidget extends OptionsWidget {
                 return $(this).data('provider');
             }).get().join(',');
 
-            $embeddingProviderPrecedence.val(providers);
-            $embeddingProviderPrecedence.trigger('change');
+            // Only update if we have providers or if the current value isn't empty
+            // This prevents setting an empty string when all providers are removed
+            if (providers || $embeddingProviderPrecedence.val()) {
+                $embeddingProviderPrecedence.val(providers);
+                $embeddingProviderPrecedence.trigger('change');
+            }
         });
 
         // Setup dragover handler
@@ -1837,8 +1853,12 @@ export default class AiSettingsWidget extends OptionsWidget {
                     return $(this).data('provider');
                 }).get().join(',');
 
-                $embeddingProviderPrecedence.val(providers);
-                $embeddingProviderPrecedence.trigger('change');
+                // Only update if we have providers or if the current value isn't empty
+                // This prevents setting an empty string when all providers are removed
+                if (providers || $embeddingProviderPrecedence.val()) {
+                    $embeddingProviderPrecedence.val(providers);
+                    $embeddingProviderPrecedence.trigger('change');
+                }
             }
         });
     }
