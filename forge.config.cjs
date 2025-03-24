@@ -143,11 +143,18 @@ module.exports = {
             for (const makeResult of makeResults) {
                 for (const artifactPath of makeResult.artifacts) {
                     // Ignore certain artifacts.
-                    const fileName = path.basename(artifactPath);
-                    if (fileName === "RELEASES" || path.extname(fileName) === ".nupkg") {
+                    let fileName = path.basename(artifactPath);
+                    const extension = path.extname(fileName);
+                    if (fileName === "RELEASES" || extension === ".nupkg") {
                         continue;
                     }
 
+                    // Override the extension for the CI.
+                    const { TRILIUM_ARTIFACT_NAME_HINT } = process.env;
+                    if (TRILIUM_ARTIFACT_NAME_HINT) {
+                        fileName = TRILIUM_ARTIFACT_NAME_HINT + extension;
+                    }
+        
                     const outputPath = path.join(outputDir, fileName);
                     console.log(`[Artifact] ${artifactPath} -> ${outputPath}`);
                     fs.copyFile(artifactPath, outputPath);
