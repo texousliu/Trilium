@@ -96,17 +96,16 @@ export async function getEnabledEmbeddingProviders(): Promise<EmbeddingProvider[
         return [];
     }
 
-    // Get enabled providers from database
-    const enabledProviders = await sql.getRows(`
+    // Get providers from database ordered by priority
+    const dbProviders = await sql.getRows(`
         SELECT providerId, name, config
         FROM embedding_providers
-        WHERE isEnabled = 1
         ORDER BY priority DESC`
     );
 
     const result: EmbeddingProvider[] = [];
 
-    for (const row of enabledProviders) {
+    for (const row of dbProviders) {
         const rowData = row as any;
         const provider = providers.get(rowData.name);
 
@@ -127,7 +126,6 @@ export async function getEnabledEmbeddingProviders(): Promise<EmbeddingProvider[
 export async function createEmbeddingProviderConfig(
     name: string,
     config: EmbeddingConfig,
-    isEnabled = false,
     priority = 0
 ): Promise<string> {
     const providerId = randomString(16);
@@ -136,10 +134,10 @@ export async function createEmbeddingProviderConfig(
 
     await sql.execute(`
         INSERT INTO embedding_providers
-        (providerId, name, isEnabled, priority, config,
+        (providerId, name, priority, config,
          dateCreated, utcDateCreated, dateModified, utcDateModified)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [providerId, name, isEnabled ? 1 : 0, priority, JSON.stringify(config),
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [providerId, name, priority, JSON.stringify(config),
          now, utcNow, now, utcNow]
     );
 
@@ -151,7 +149,6 @@ export async function createEmbeddingProviderConfig(
  */
 export async function updateEmbeddingProviderConfig(
     providerId: string,
-    isEnabled?: boolean,
     priority?: number,
     config?: EmbeddingConfig
 ): Promise<boolean> {
@@ -171,11 +168,6 @@ export async function updateEmbeddingProviderConfig(
     // Build update query parts
     const updates = [];
     const params: any[] = [];
-
-    if (isEnabled !== undefined) {
-        updates.push("isEnabled = ?");
-        params.push(isEnabled ? 1 : 0);
-    }
 
     if (priority !== undefined) {
         updates.push("priority = ?");
@@ -256,7 +248,7 @@ export async function initializeDefaultProviders() {
                     model: openaiModel,
                     dimension: 1536,
                     type: 'float32'
-                }, true, 100);
+                }, 100);
             }
         }
 
@@ -285,7 +277,7 @@ export async function initializeDefaultProviders() {
                     model: voyageModel,
                     dimension: 1024,
                     type: 'float32'
-                }, true, 75);
+                }, 75);
             }
         }
 
@@ -322,7 +314,7 @@ export async function initializeDefaultProviders() {
                         model: embeddingModel,
                         dimension: ollamaProvider.getDimension(),
                         type: 'float32'
-                    }, true, 50);
+                    }, 50);
                 }
             } catch (error: any) {
                 log.error(`Error initializing Ollama embedding provider: ${error.message || 'Unknown error'}`);
@@ -347,7 +339,7 @@ export async function initializeDefaultProviders() {
                 model: 'local',
                 dimension: 384,
                 type: 'float32'
-            }, true, 10);
+            }, 10);
         }
     } catch (error: any) {
         log.error(`Error initializing default embedding providers: ${error.message || 'Unknown error'}`);
