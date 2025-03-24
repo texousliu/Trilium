@@ -109,7 +109,10 @@ module.exports = {
             config: {
                 iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
                 setupIcon: "./images/app-icons/win/setup.ico",
-                loadingGif: "./images/app-icons/win/setup-banner.gif"
+                loadingGif: "./images/app-icons/win/setup-banner.gif",
+                windowsSign: {
+                    hookModulePath: path.join(BIN_PATH, "sign-windows.cjs")
+                }
             }
         },
         {
