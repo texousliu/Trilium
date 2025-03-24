@@ -66,6 +66,9 @@ class SimpleLocalEmbeddingProvider implements EmbeddingProvider {
 
 const providers = new Map<string, EmbeddingProvider>();
 
+// Cache to track which provider errors have been logged
+const loggedProviderErrors = new Set<string>();
+
 /**
  * Register a new embedding provider
  */
@@ -112,8 +115,11 @@ export async function getEnabledEmbeddingProviders(): Promise<EmbeddingProvider[
         if (provider) {
             result.push(provider);
         } else {
-            // Use error instead of warn if warn is not available
-            log.error(`Enabled embedding provider ${rowData.name} not found in registered providers`);
+            // Only log error if we haven't logged it before for this provider
+            if (!loggedProviderErrors.has(rowData.name)) {
+                log.error(`Enabled embedding provider ${rowData.name} not found in registered providers`);
+                loggedProviderErrors.add(rowData.name);
+            }
         }
     }
 
