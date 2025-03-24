@@ -10,9 +10,9 @@ const baseLinuxMakerConfigOptions = {
   desktopTemplate: path.resolve(path.join(BIN_PATH, "desktop.ejs")),
   categories: ["Office", "Utility"]
 };
-const windowsSignConfiguration = {
+const windowsSignConfiguration = process.env.WINDOWS_SIGN_EXECUTABLE ? {
     hookModulePath: path.join(BIN_PATH, "sign-windows.cjs")
-}
+} : undefined;
 
 module.exports = {
     // we run electron-forge inside the ./build folder,
