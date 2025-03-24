@@ -1874,6 +1874,7 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         // Get the current value
         const savedValue = $embeddingProviderPrecedence.val() as string;
+        // If no saved value, don't proceed with initialization to avoid triggering the "empty" change
         if (!savedValue) return;
 
         // Get all available providers
