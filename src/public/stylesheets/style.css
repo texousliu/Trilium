@@ -1797,3 +1797,10 @@ footer.file-footer button {
     font-size: 130%;
     padding: 1px 10px 1px 10px;
 }
+
+/* Customized icons */
+
+.bx-tn-toc::before {
+    content: "\ec24";
+    transform: rotate(180deg);
+}
