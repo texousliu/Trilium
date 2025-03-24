@@ -8,9 +8,6 @@ inputs:
   arch:
     description: "The architecture to build for: x64, arm64"
     required: true
-  extension:
-    description: "Platform specific extensions to copy in the output: dmg, deb, rpm, exe, zip"
-    required: true
   shell:
     description: "Which shell to use"
     required: true
