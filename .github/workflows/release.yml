@@ -42,7 +42,6 @@ jobs:
         with:
           os: ${{ matrix.os.name }}
           arch: ${{ matrix.arch }}
-          extension: ${{ join(matrix.os.extension, ' ') }}
           shell: ${{ matrix.os.shell }}
           forge_platform: ${{ matrix.os.forge_platform }}
         env:
