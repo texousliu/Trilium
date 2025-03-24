@@ -1436,7 +1436,7 @@ div.floating-buttons-children .close-floating-buttons:has(.close-floating-button
 
 /* Backlink count */
 
-.floating-buttons .backlinks-ticker {
+.backlinks-widget .backlinks-ticker {
     height: 100%;
     padding: 0 10px;
     border-radius: 0;
@@ -1444,8 +1444,17 @@ div.floating-buttons-children .close-floating-buttons:has(.close-floating-button
     user-select: none;
 }
 
-.floating-buttons .backlinks-widget:hover {
+.backlinks-widget .backlinks-ticker:hover {
     background: var(--floating-button-hover-background);
+}
+
+.backlinks-widget .backlinks-items {
+    --menu-padding-size: 20px;
+}
+
+/* TODO: Restyle the path */
+.backlinks-widget .backlinks-items .note-path {
+    padding-inline-start: 8px;
 }
 
 /* Copy image reference */

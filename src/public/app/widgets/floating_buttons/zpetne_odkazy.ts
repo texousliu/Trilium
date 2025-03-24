@@ -61,7 +61,7 @@ const TPL = `
         <span class="backlinks-count"></span>
     </div>
 
-    <div class="backlinks-items" style="display: none;"></div>
+    <div class="backlinks-items dropdown-menu" style="display: none;"></div>
 </div>
 `;
 
