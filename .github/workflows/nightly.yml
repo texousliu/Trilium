@@ -67,5 +67,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ github.event_name == 'pull_request' }}
         with:
-          name: TriliumNextNotes ${{ matrix.os.name }} ${{ matrix.arch }}.zip
+          name: TriliumNextNotes ${{ matrix.os.name }} ${{ matrix.arch }}
           path: upload
