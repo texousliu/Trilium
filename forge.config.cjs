@@ -142,7 +142,13 @@ module.exports = {
             fs.mkdirp(outputDir);
             for (const makeResult of makeResults) {
                 for (const artifactPath of makeResult.artifacts) {
-                    const outputPath = path.join(outputDir, path.basename(artifactPath));
+                    // Ignore certain artifacts.
+                    const fileName = path.basename(artifactPath);
+                    if (fileName === "RELEASES" || path.extname(fileName) === ".nupkg") {
+                        continue;
+                    }
+
+                    const outputPath = path.join(outputDir, fileName);
                     console.log(`[Artifact] ${artifactPath} -> ${outputPath}`);
                     fs.copyFile(artifactPath, outputPath);
                 }
