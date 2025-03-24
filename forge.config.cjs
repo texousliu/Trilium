@@ -2,11 +2,12 @@ const path = require("path");
 const fs = require("fs-extra");
 
 const APP_NAME = "TriliumNext Notes";
+const BIN_PATH = path.normalize("./bin/electron-forge");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
   icon: "./images/app-icons/png/128x128.png",
-  desktopTemplate: path.resolve("./bin/electron-forge/desktop.ejs"),
+  desktopTemplate: path.resolve(path.join(BIN_PATH, desktop.ejs)),
   categories: ["Office", "Utility"]
 };
 
@@ -27,7 +28,7 @@ module.exports = {
             teamId: process.env.APPLE_TEAM_ID
         },
         windowsSign: {
-            hookModulePath: "bin\\sign-windows.cjs"
+            hookModulePath: path.join(BIN_PATH, "sign-windows.cjs")
         },
         extraResource: [
             // All resources should stay in Resources directory for macOS
