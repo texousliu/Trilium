@@ -24,12 +24,15 @@ jobs:
           - name: macos
             image: macos-latest
             extension: [dmg, zip]
+            shell: bash
           - name: linux
             image: ubuntu-latest
             extension: [deb, rpm, zip, flatpak]
+            shell: bash
           - name: windows
             image: windows-latest
             extension: [exe, zip]
+            shell: cmd
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4
@@ -43,6 +46,7 @@ jobs:
           os: ${{ matrix.os.name }}
           arch: ${{ matrix.arch }}
           extension: ${{ matrix.os.extension }}
+          shell: ${{ matrix.os.shell }}
         env:
           APPLE_APP_CERTIFICATE_BASE64: ${{ secrets.APPLE_APP_CERTIFICATE_BASE64 }}
           APPLE_APP_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_APP_CERTIFICATE_PASSWORD }}

@@ -25,6 +25,7 @@ jobs:
             image: win-signing
             extension: [exe, zip]
             forge_platform: win32
+            shell: cmd
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +43,7 @@ jobs:
           os: ${{ matrix.os.name }}
           arch: ${{ matrix.arch }}
           extension: ${{ join(matrix.os.extension, ' ') }}
+          shell: ${{ matrix.os.shell }}
         env:
           APPLE_APP_CERTIFICATE_BASE64: ${{ secrets.APPLE_APP_CERTIFICATE_BASE64 }}
           APPLE_APP_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_APP_CERTIFICATE_PASSWORD }}

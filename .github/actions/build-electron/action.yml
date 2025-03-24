@@ -11,6 +11,9 @@ inputs:
   extension:
     description: "Platform specific extensions to copy in the output: dmg, deb, rpm, exe, zip"
     required: true
+  shell:
+    description: "Which shell to use"
+    required: true
   forge_platform:
     required: true
 
@@ -40,21 +43,21 @@ runs:
 
     - name: Verify certificates
       if: inputs.os == 'macos'
-      shell: cmd
+      shell: ${{ inputs.shell }}
       run: |
         echo "Available signing identities:"
         security find-identity -v -p codesigning build.keychain
 
     - name: Set up Python and other macOS dependencies
       if: ${{ inputs.os == 'macos' }}
-      shell: cmd
+      shell: ${{ inputs.shell }}
       run: |
         brew install python-setuptools
         brew install create-dmg
 
     - name: Install dependencies for RPM and Flatpak package building
       if: ${{ inputs.os == 'linux' }}
-      shell: cmd
+      shell: ${{ inputs.shell }}
       run: |
         sudo apt-get update && sudo apt-get install rpm flatpak-builder elfutils
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -64,16 +67,16 @@ runs:
 
     # Build setup
     - name: Install dependencies
-      shell: cmd
+      shell: ${{ inputs.shell }}
       run: npm ci
 
     - name: Update build info
-      shell: cmd
+      shell: ${{ inputs.shell }}
       run: npm run chore:update-build-info
 
     # Critical debugging configuration
     - name: Run electron-forge build with enhanced logging
-      shell: cmd
+      shell: ${{ inputs.shell }}
       env:
         # Pass through required environment variables for signing and notarization
         APPLE_TEAM_ID: ${{ env.APPLE_TEAM_ID }}
@@ -88,7 +91,7 @@ runs:
     # Add DMG signing step
     - name: Sign DMG
       if: inputs.os == 'macos'
-      shell: cmd
+      shell: ${{ inputs.shell }}
       run: |
         echo "Signing DMG file..."
         dmg_file=$(find ./dist -name "*.dmg" -print -quit)
@@ -113,7 +116,7 @@ runs:
 
     - name: Verify code signing
       if: inputs.os == 'macos'
-      shell: cmd
+      shell: ${{ inputs.shell }}
       run: |
         echo "Verifying code signing for all artifacts..."
 
