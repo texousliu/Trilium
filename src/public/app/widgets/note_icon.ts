@@ -134,6 +134,7 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
 
     async refreshWithNote(note: FNote) {
         this.$icon.removeClass().addClass(`${note.getIcon()} note-icon`);
+        this.$icon.prop("disabled", !!(this.noteContext?.viewScope?.viewMode !== "default"));
         this.dropdown.hide();
     }
 
