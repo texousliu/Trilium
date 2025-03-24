@@ -44,6 +44,7 @@ jobs:
           arch: ${{ matrix.arch }}
           extension: ${{ join(matrix.os.extension, ' ') }}
           shell: ${{ matrix.os.shell }}
+          forge_platform: ${{ matrix.os.forge_platform }}
         env:
           APPLE_APP_CERTIFICATE_BASE64: ${{ secrets.APPLE_APP_CERTIFICATE_BASE64 }}
           APPLE_APP_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_APP_CERTIFICATE_PASSWORD }}

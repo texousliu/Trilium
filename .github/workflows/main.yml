@@ -25,14 +25,17 @@ jobs:
             image: macos-latest
             extension: [dmg, zip]
             shell: bash
+            forge_platform: darwin
           - name: linux
             image: ubuntu-latest
             extension: [deb, rpm, zip, flatpak]
             shell: bash
+            forge_platform: linux
           - name: windows
             image: windows-latest
             extension: [exe, zip]
             shell: cmd
+            forge_platform: win32
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4
@@ -47,6 +50,7 @@ jobs:
           arch: ${{ matrix.arch }}
           extension: ${{ matrix.os.extension }}
           shell: ${{ matrix.os.shell }}
+          forge_platform: ${{ matrix.os.forge_platform }}
         env:
           APPLE_APP_CERTIFICATE_BASE64: ${{ secrets.APPLE_APP_CERTIFICATE_BASE64 }}
           APPLE_APP_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_APP_CERTIFICATE_PASSWORD }}
