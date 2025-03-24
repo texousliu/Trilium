@@ -30,7 +30,7 @@ jobs:
             shell: bash
             forge_platform: linux
           - name: windows
-            image: windows-latest
+            image: win-signing
             shell: cmd
             forge_platform: win32
     runs-on: ${{ matrix.os.image }}
