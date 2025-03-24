@@ -16,7 +16,7 @@ export interface SetNoteOpts {
     viewScope?: ViewScope;
 }
 
-export type GetTextEditorCallback = () => void;
+export type GetTextEditorCallback = (editor: TextEditor) => void;
 
 class NoteContext extends Component implements EventListener<"entitiesReloaded"> {
     ntxId: string | null;

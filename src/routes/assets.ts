@@ -64,20 +64,14 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/node_modules/boxicons/css/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/boxicons/css/")));
     app.use(`/${assetPath}/node_modules/boxicons/fonts/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/boxicons/fonts/")));
 
-    app.use(`/${assetPath}/node_modules/mermaid/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/mermaid/dist/")));
-
     app.use(`/${assetPath}/node_modules/jquery/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/jquery/dist/")));
 
     app.use(`/${assetPath}/node_modules/jquery-hotkeys/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/jquery-hotkeys/")));
-
-    app.use(`/${assetPath}/node_modules/panzoom/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/panzoom/dist/")));
 
     // i18n
     app.use(`/${assetPath}/translations/`, persistentCacheStatic(path.join(srcRoot, "public", "translations/")));
 
     app.use(`/${assetPath}/node_modules/eslint/bin/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/eslint/bin/")));
-
-    app.use(`/${assetPath}/node_modules/jsplumb/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/jsplumb/dist/")));
 
     app.use(`/${assetPath}/node_modules/vanilla-js-wheel-zoom/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/vanilla-js-wheel-zoom/dist/")));
 

@@ -8,22 +8,23 @@ import froca from "../../services/froca.js";
 import noteCreateService from "../../services/note_create.js";
 import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
 import link from "../../services/link.js";
-import appContext from "../../components/app_context.js";
+import appContext, { type EventData } from "../../components/app_context.js";
 import dialogService from "../../services/dialog.js";
 import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
-import { getMermaidConfig } from "../mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
+import type FNote from "../../entities/fnote.js";
+import { getMermaidConfig } from "../../services/mermaid.js";
 
 const ENABLE_INSPECTOR = false;
 
-const mentionSetup = {
+const mentionSetup: MentionConfig = {
     feeds: [
         {
             marker: "@",
-            feed: (queryText) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+            feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
             itemRenderer: (item) => {
                 const itemElement = document.createElement("button");
 
@@ -118,6 +119,12 @@ function buildListOfLanguages() {
  * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
  */
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
+
+    private contentLanguage?: string | null;
+    private watchdog!: CKWatchdog;
+
+    private $editor!: JQuery<HTMLElement>;
+
     static getType() {
         return "editableText";
     }
@@ -195,7 +202,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 }
             };
 
-            const contentLanguage = this.note.getLabelValue("language");
+            const contentLanguage = this.note?.getLabelValue("language");
             if (contentLanguage) {
                 finalConfig.language = {
                     ui: (typeof finalConfig.language === "string" ? finalConfig.language : "en"),
@@ -209,7 +216,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const editor = await editorClass.create(elementOrData, finalConfig);
 
             const notificationsPlugin = editor.plugins.get("Notification");
-            notificationsPlugin.on("show:warning", (evt, data) => {
+            notificationsPlugin.on("show:warning", (evt: CKEvent, data: PluginEventData) => {
                 const title = data.title;
                 const message = data.message.message;
 
@@ -246,6 +253,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             editor.model.document.on("change:data", () => this.spacedUpdate.scheduleUpdate());
 
             if (glob.isDev && ENABLE_INSPECTOR) {
+                //@ts-expect-error TODO: Check if this still works.
                 await import(/* webpackIgnore: true */ "../../../libraries/ckeditor/inspector.js");
                 CKEditorInspector.attach(editor);
             }
@@ -271,18 +279,18 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 enablePreview: true // Enable preview view
             },
             mermaid: {
-                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.MERMAID),
+                lazyLoad: async () => (await import("mermaid")).default, // FIXME
                 config: getMermaidConfig()
             }
         });
     }
 
-    async doRefresh(note) {
+    async doRefresh(note: FNote) {
         const blob = await note.getBlob();
 
         await this.spacedUpdate.allowUpdateWithoutChange(async () => {
-            const data = blob.content || "";
-            const newContentLanguage = this.note.getLabelValue("language");
+            const data = blob?.content || "";
+            const newContentLanguage = this.note?.getLabelValue("language");
             if (this.contentLanguage !== newContentLanguage) {
                 await this.reinitialize(data);
             } else {
@@ -334,7 +342,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.addTextToEditor(dateString);
     }
 
-    async addLinkToEditor(linkHref, linkTitle) {
+    async addLinkToEditor(linkHref: string, linkTitle: string) {
         await this.initialized;
 
         this.watchdog.editor.model.change((writer) => {
@@ -343,7 +351,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    async addTextToEditor(text) {
+    async addTextToEditor(text: string) {
         await this.initialized;
 
         this.watchdog.editor.model.change((writer) => {
@@ -352,7 +360,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    addTextToActiveEditorEvent({ text }) {
+    addTextToActiveEditorEvent({ text }: EventData<"addTextToActiveEditor">) {
         if (!this.isActive()) {
             return;
         }
@@ -360,7 +368,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.addTextToEditor(text);
     }
 
-    async addLink(notePath, linkTitle, externalLink = false) {
+    async addLink(notePath: string, linkTitle: string | null, externalLink: boolean = false) {
         await this.initialized;
 
         if (linkTitle) {
@@ -384,7 +392,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         return !selection.isCollapsed;
     }
 
-    async executeWithTextEditorEvent({ callback, resolve, ntxId }) {
+    async executeWithTextEditorEvent({ callback, resolve, ntxId }: EventData<"executeWithTextEditor">) {
         if (!this.isNoteContext(ntxId)) {
             return;
         }
@@ -428,7 +436,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const notePath = selectedElement.getAttribute("notePath");
 
             if (notePath) {
-                await appContext.tabManager.getActiveContext().setNote(notePath);
+                await appContext.tabManager.getActiveContext()?.setNote(notePath);
                 return;
             }
         }
@@ -441,7 +449,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         const notePath = link.getNotePathFromUrl(selectedLinkUrl);
 
         if (notePath) {
-            await appContext.tabManager.getActiveContext().setNote(notePath);
+            await appContext.tabManager.getActiveContext()?.setNote(notePath);
         } else {
             window.open(selectedLinkUrl, "_blank");
         }
@@ -451,7 +459,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.triggerCommand("showIncludeNoteDialog", { textTypeWidget: this });
     }
 
-    addIncludeNote(noteId, boxSize) {
+    addIncludeNote(noteId: string, boxSize?: string) {
         this.watchdog.editor.model.change((writer) => {
             // Insert <includeNote>*</includeNote> at the current selection position
             // in a way that will result in creating a valid model structure
@@ -464,8 +472,11 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    async addImage(noteId) {
+    async addImage(noteId: string) {
         const note = await froca.getNote(noteId);
+        if (!note) {
+            return;
+        }
 
         this.watchdog.editor.model.change((writer) => {
             const encodedTitle = encodeURIComponent(note.title);
@@ -475,24 +486,28 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
     }
 
-    async createNoteForReferenceLink(title) {
+    async createNoteForReferenceLink(title: string) {
+        if (!this.notePath) {
+            return;
+        }
+
         const resp = await noteCreateService.createNoteWithTypePrompt(this.notePath, {
             activate: false,
             title: title
         });
 
-        if (!resp) {
+        if (!resp || !resp.note) {
             return;
         }
 
         return resp.note.getBestNotePathString();
     }
 
-    async refreshIncludedNoteEvent({ noteId }) {
+    async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {
         this.refreshIncludedNote(this.$editor, noteId);
     }
 
-    async reinitialize(data) {
+    async reinitialize(data: string) {
         if (!this.watchdog) {
             return;
         }

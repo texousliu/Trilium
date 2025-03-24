@@ -4,6 +4,7 @@ import toastService from "../../services/toast.js";
 import openService from "../../services/open.js";
 import utils from "../../services/utils.js";
 import { t } from "../../services/i18n.js";
+import type FNote from "../../entities/fnote.js";
 
 const TPL = `
 <div class="image-properties">
@@ -50,6 +51,16 @@ const TPL = `
 </div>`;
 
 export default class ImagePropertiesWidget extends NoteContextAwareWidget {
+
+    private $copyReferenceToClipboardButton!: JQuery<HTMLElement>;
+    private $uploadNewRevisionButton!: JQuery<HTMLElement>;
+    private $uploadNewRevisionInput!: JQuery<HTMLFormElement>;
+    private $fileName!: JQuery<HTMLElement>;
+    private $fileType!: JQuery<HTMLElement>;
+    private $fileSize!: JQuery<HTMLElement>;
+    private $openButton!: JQuery<HTMLElement>;
+    private $imageDownloadButton!: JQuery<HTMLElement>;
+
     get name() {
         return "imageProperties";
     }
@@ -76,7 +87,7 @@ export default class ImagePropertiesWidget extends NoteContextAwareWidget {
         this.contentSized();
 
         this.$copyReferenceToClipboardButton = this.$widget.find(".image-copy-reference-to-clipboard");
-        this.$copyReferenceToClipboardButton.on("click", () => this.triggerEvent(`copyImageReferenceToClipboard`, { ntxId: this.noteContext.ntxId }));
+        this.$copyReferenceToClipboardButton.on("click", () => this.triggerEvent(`copyImageReferenceToClipboard`, { ntxId: this.noteContext?.ntxId }));
 
         this.$uploadNewRevisionButton = this.$widget.find(".image-upload-new-revision");
         this.$uploadNewRevisionInput = this.$widget.find(".image-upload-new-revision-input");
@@ -86,10 +97,10 @@ export default class ImagePropertiesWidget extends NoteContextAwareWidget {
         this.$fileSize = this.$widget.find(".image-filesize");
 
         this.$openButton = this.$widget.find(".image-open");
-        this.$openButton.on("click", () => openService.openNoteExternally(this.noteId, this.note.mime));
+        this.$openButton.on("click", () => this.noteId && this.note && openService.openNoteExternally(this.noteId, this.note.mime));
 
         this.$imageDownloadButton = this.$widget.find(".image-download");
-        this.$imageDownloadButton.on("click", () => openService.downloadFileNote(this.noteId));
+        this.$imageDownloadButton.on("click", () => this.noteId && openService.downloadFileNote(this.noteId));
 
         this.$uploadNewRevisionButton.on("click", () => {
             this.$uploadNewRevisionInput.trigger("click");
@@ -113,13 +124,13 @@ export default class ImagePropertiesWidget extends NoteContextAwareWidget {
         });
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.$widget.show();
 
-        const blob = await this.note.getBlob();
+        const blob = await this.note?.getBlob();
 
         this.$fileName.text(note.getLabelValue("originalFileName") || "?");
-        this.$fileSize.text(utils.formatSize(blob.contentLength));
+        this.$fileSize.text(utils.formatSize(blob?.contentLength ?? 0));
         this.$fileType.text(note.mime);
     }
 }

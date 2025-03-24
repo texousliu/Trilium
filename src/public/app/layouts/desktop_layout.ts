@@ -36,11 +36,10 @@ import NoteMapRibbonWidget from "../widgets/ribbon_widgets/note_map.js";
 import NotePathsWidget from "../widgets/ribbon_widgets/note_paths.js";
 import SimilarNotesWidget from "../widgets/ribbon_widgets/similar_notes.js";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
-import EditButton from "../widgets/buttons/edit_button.js";
+import EditButton from "../widgets/floating_buttons/edit_button.js";
 import EditedNotesWidget from "../widgets/ribbon_widgets/edited_notes.js";
 import ShowTocWidgetButton from "../widgets/buttons/show_toc_widget_button.js";
 import ShowHighlightsListWidgetButton from "../widgets/buttons/show_highlights_list_widget_button.js";
-import MermaidWidget from "../widgets/mermaid.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
 import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
@@ -89,13 +88,21 @@ import GeoMapButtons from "../widgets/floating_buttons/geo_map_button.js";
 import ContextualHelpButton from "../widgets/floating_buttons/help_button.js";
 import CloseZenButton from "../widgets/close_zen_button.js";
 import rightPaneTabManager from "../services/right_pane_tab_manager.js";
+import type { AppContext } from "./../components/app_context.js";
+import type { WidgetsByParent } from "../services/bundle.js";
+import SwitchSplitOrientationButton from "../widgets/floating_buttons/switch_layout_button.js";
+import ToggleReadOnlyButton from "../widgets/floating_buttons/toggle_read_only_button.js";
+import PngExportButton from "../widgets/floating_buttons/png_export_button.js";
 
 export default class DesktopLayout {
-    constructor(customWidgets) {
+
+    private customWidgets: WidgetsByParent;
+
+    constructor(customWidgets: WidgetsByParent) {
         this.customWidgets = customWidgets;
     }
 
-    getRootWidget(appContext) {
+    getRootWidget(appContext: AppContext) {
         appContext.noteTreeWidget = new NoteTreeWidget();
 
         // Initialize the right pane tab manager after widget render
@@ -209,6 +216,8 @@ export default class DesktopLayout {
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(
                                                             new FloatingButtons()
+                                                                .child(new SwitchSplitOrientationButton())
+                                                                .child(new ToggleReadOnlyButton())
                                                                 .child(new EditButton())
                                                                 .child(new ShowTocWidgetButton())
                                                                 .child(new ShowHighlightsListWidgetButton())
@@ -217,11 +226,11 @@ export default class DesktopLayout {
                                                                 .child(new GeoMapButtons())
                                                                 .child(new CopyImageReferenceButton())
                                                                 .child(new SvgExportButton())
+                                                                .child(new PngExportButton())
                                                                 .child(new BacklinksWidget())
                                                                 .child(new ContextualHelpButton())
                                                                 .child(new HideFloatingButtonsButton())
                                                         )
-                                                        .child(new MermaidWidget())
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
@@ -293,7 +302,7 @@ export default class DesktopLayout {
             .child(new CloseZenButton());
     }
 
-    #buildLauncherPane(isHorizontal) {
+    #buildLauncherPane(isHorizontal: boolean) {
         let launcherPane;
 
         if (isHorizontal) {

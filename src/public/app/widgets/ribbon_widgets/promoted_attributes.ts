@@ -7,6 +7,10 @@ import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import attributeService from "../../services/attributes.js";
 import options from "../../services/options.js";
 import utils from "../../services/utils.js";
+import type FNote from "../../entities/fnote.js";
+import type { Attribute } from "../../services/attribute_parser.js";
+import type FAttribute from "../../entities/fattribute.js";
+import type { EventData } from "../../components/app_context.js";
 
 const TPL = `
 <div class="promoted-attributes-widget">
@@ -60,12 +64,20 @@ const TPL = `
     <div class="promoted-attributes-container"></div>
 </div>`;
 
+// TODO: Deduplicate
+interface AttributeResult {
+    attributeId: string;
+}
+
 /**
  * This widget is quite special because it's used in the desktop ribbon, but in mobile outside of ribbon.
  * This works without many issues (apart from autocomplete), but it should be kept in mind when changing things
  * and testing.
  */
 export default class PromotedAttributesWidget extends NoteContextAwareWidget {
+
+    private $container!: JQuery<HTMLElement>;
+
     get name() {
         return "promotedAttributes";
     }
@@ -80,7 +92,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         this.$container = this.$widget.find(".promoted-attributes-container");
     }
 
-    getTitle(note) {
+    getTitle(note: FNote) {
         const promotedDefAttrs = note.getPromotedDefinitionAttributes();
 
         if (promotedDefAttrs.length === 0) {
@@ -95,7 +107,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         };
     }
 
-    async refreshWithNote(note) {
+    async refreshWithNote(note: FNote) {
         this.$container.empty();
 
         const promotedDefAttrs = note.getPromotedDefinitionAttributes();
@@ -116,7 +128,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             const valueType = definitionAttr.name.startsWith("label:") ? "label" : "relation";
             const valueName = definitionAttr.name.substr(valueType.length + 1);
 
-            let valueAttrs = ownedAttributes.filter((el) => el.name === valueName && el.type === valueType);
+            let valueAttrs = ownedAttributes.filter((el) => el.name === valueName && el.type === valueType) as Attribute[];
 
             if (valueAttrs.length === 0) {
                 valueAttrs.push({
@@ -134,7 +146,9 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             for (const valueAttr of valueAttrs) {
                 const $cell = await this.createPromotedAttributeCell(definitionAttr, valueAttr, valueName);
 
-                $cells.push($cell);
+                if ($cell) {
+                    $cells.push($cell);
+                }
             }
         }
 
@@ -144,14 +158,14 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         this.toggleInt(true);
     }
 
-    async createPromotedAttributeCell(definitionAttr, valueAttr, valueName) {
+    async createPromotedAttributeCell(definitionAttr: FAttribute, valueAttr: Attribute, valueName: string) {
         const definition = definitionAttr.getDefinition();
         const id = `value-${valueAttr.attributeId}`;
 
         const $input = $("<input>")
             .prop("tabindex", 200 + definitionAttr.position)
             .prop("id", id)
-            .attr("data-attribute-id", valueAttr.noteId === this.noteId ? valueAttr.attributeId : "") // if not owned, we'll force creation of a new attribute instead of updating the inherited one
+            .attr("data-attribute-id", valueAttr.noteId === this.noteId ? valueAttr.attributeId ?? "" : "") // if not owned, we'll force creation of a new attribute instead of updating the inherited one
             .attr("data-attribute-type", valueAttr.type)
             .attr("data-attribute-name", valueAttr.name)
             .prop("value", valueAttr.value)
@@ -161,7 +175,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             .on("change", (event) => this.promotedAttributeChanged(event));
 
         const $actionCell = $("<div>");
-        const $multiplicityCell = $("<td>").addClass("multiplicity").attr("nowrap", true);
+        const $multiplicityCell = $("<td>").addClass("multiplicity").attr("nowrap", "true");
 
         const $wrapper = $('<div class="promoted-attribute-cell">')
             .append(
@@ -180,12 +194,12 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                 // autocomplete for label values is just nice to have, mobile can keep labels editable without autocomplete
                 if (utils.isDesktop()) {
                     // no need to await for this, can be done asynchronously
-                    server.get(`attribute-values/${encodeURIComponent(valueAttr.name)}`).then((attributeValues) => {
-                        if (attributeValues.length === 0) {
+                    server.get<string[]>(`attribute-values/${encodeURIComponent(valueAttr.name)}`).then((_attributeValues) => {
+                        if (_attributeValues.length === 0) {
                             return;
                         }
 
-                        attributeValues = attributeValues.map((attribute) => ({ value: attribute }));
+                        const attributeValues = _attributeValues.map((attribute) => ({ value: attribute }));
 
                         $input.autocomplete(
                             {
@@ -245,11 +259,11 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                 const $openButton = $("<span>")
                     .addClass("input-group-text open-external-link-button bx bx-window-open")
                     .prop("title", t("promoted_attributes.open_external_link"))
-                    .on("click", () => window.open($input.val(), "_blank"));
+                    .on("click", () => window.open($input.val() as string, "_blank"));
 
                 $input.after($openButton);
             } else {
-                ws.logError(t("promoted_attributes.unknown_label_type", { type: definitionAttr.labelType }));
+                ws.logError(t("promoted_attributes.unknown_label_type", { type: definition.labelType }));
             }
         } else if (valueAttr.type === "relation") {
             if (valueAttr.value) {
@@ -290,9 +304,11 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                         valueName
                     );
 
-                    $wrapper.after($new);
+                    if ($new) {
+                        $wrapper.after($new);
 
-                    $new.find("input").trigger("focus");
+                        $new.find("input").trigger("focus");
+                    }
                 });
 
             const $removeButton = $("<span>")
@@ -320,7 +336,9 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                             valueName
                         );
 
-                        $wrapper.after($new);
+                        if ($new) {
+                            $wrapper.after($new);
+                        }
                     }
 
                     $wrapper.remove();
@@ -332,7 +350,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         return $wrapper;
     }
 
-    async promotedAttributeChanged(event) {
+    async promotedAttributeChanged(event: JQuery.TriggeredEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) {
         const $attr = $(event.target);
 
         let value;
@@ -347,7 +365,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             value = $attr.val();
         }
 
-        const result = await server.put(
+        const result = await server.put<AttributeResult>(
             `notes/${this.noteId}/attribute`,
             {
                 attributeId: $attr.attr("data-attribute-id"),
@@ -365,7 +383,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         this.$widget.find(".promoted-attribute-input:first").focus();
     }
 
-    entitiesReloadedEvent({ loadResults }) {
+    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.getAttributeRows(this.componentId).find((attr) => attributeService.isAffecting(attr, this.note))) {
             this.refresh();
         }

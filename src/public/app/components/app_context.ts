@@ -194,6 +194,8 @@ export type CommandMappings = {
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     showUploadAttachmentsDialog: CommandData & { noteId: string };
+    showIncludeNoteDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
+    showAddLinkDialog: CommandData & { textTypeWidget: EditableTextTypeWidget, text: string };
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;
@@ -342,9 +344,8 @@ type EventMappings = {
     noteContextRemoved: {
         ntxIds: string[];
     };
-    exportSvg: {
-        ntxId: string | null | undefined;
-    };
+    exportSvg: { ntxId: string | null | undefined; };
+    exportPng: { ntxId: string | null | undefined; };
     geoMapCreateChildNote: {
         ntxId: string | null | undefined; // TODO: deduplicate ntxId
     };
@@ -364,6 +365,9 @@ type EventMappings = {
     showAddLinkDialog: {
         textTypeWidget: EditableTextTypeWidget;
         text: string;
+    };
+    showIncludeDialog: {
+        textTypeWidget: EditableTextTypeWidget;
     };
     openBulkActionsDialog: {
         selectedOrActiveNoteIds: string[];
@@ -400,7 +404,7 @@ type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType 
  */
 export type FilteredCommandNames<T extends CommandData> = keyof Pick<CommandMappings, FilterByValueType<CommandMappings, T>>;
 
-class AppContext extends Component {
+export class AppContext extends Component {
     isMainWindow: boolean;
     components: Component[];
     beforeUnloadListeners: WeakRef<BeforeUploadListener>[];

@@ -36,6 +36,7 @@ import utils from "../services/utils.js";
 import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
 import LlmChatTypeWidget from "./type_widgets/llm_chat.js";
+import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
 
 const TPL = `
 <div class="note-detail">
@@ -74,7 +75,10 @@ const typeWidgetClasses = {
     attachmentList: AttachmentListTypeWidget,
     mindMap: MindMapWidget,
     geoMap: GeoMapTypeWidget,
-    llmChat: LlmChatTypeWidget
+    llmChat: LlmChatTypeWidget,
+
+    // Split type editors
+    mermaid: MermaidTypeWidget
 };
 
 /**
@@ -82,7 +86,7 @@ const typeWidgetClasses = {
  * for protected session or attachment information.
  */
 type ExtendedNoteType =
-    | Exclude<NoteType, "mermaid" | "launcher" | "text" | "code">
+    | Exclude<NoteType, "launcher" | "text" | "code">
     | "empty"
     | "readOnlyCode"
     | "readOnlyText"
@@ -196,7 +200,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         // https://github.com/zadam/trilium/issues/2522
         const isBackendNote = this.noteContext?.noteId === "_backendLog";
         const isSqlNote = this.mime === "text/x-sqlite;schema=trilium";
-        const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "geoMap"].includes(this.type ?? "");
+        const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "geoMap", "mermaid"].includes(this.type ?? "");
         const isFullHeight = (!this.noteContext?.hasNoteList() && isFullHeightNoteType && !isSqlNote)
             || this.noteContext?.viewScope?.viewMode === "attachments"
             || isBackendNote;
@@ -235,7 +239,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             resultingType = "readOnlyCode";
         } else if (type === "text") {
             resultingType = "editableText";
-        } else if (type === "code" || type === "mermaid") {
+        } else if (type === "code") {
             resultingType = "editableCode";
         } else if (type === "launcher") {
             resultingType = "doc";

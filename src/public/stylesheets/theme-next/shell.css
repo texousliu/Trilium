@@ -1299,6 +1299,201 @@ div.promoted-attribute-cell .multiplicity:has(span) {
 }
 
 /*
+ * Floating buttons
+ */
+
+ /* Floating buttons container */
+div#center-pane .floating-buttons-children {
+    opacity: 1;
+    min-height: var(--floating-button-height);
+    transform-origin: right;
+    box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
+    background: var(--floating-button-background-color);
+    backdrop-filter: blur(10px) saturate(6);
+    border-radius: 6px;
+    transition: transform 250ms ease-out,
+                opacity 250ms ease-out;
+}
+
+ /* Floating buttons container (collapsed) */
+ div#center-pane .floating-buttons-children.temporarily-hidden {
+    display: flex !important;
+    opacity: 0;
+    transform: scaleX(0);
+    pointer-events: none;
+}
+
+/* Floating buttons */
+
+.floating-buttons-children {
+    --border-radius-size: 6px;
+}
+
+.floating-buttons-children > * {
+    margin: 0 !important;
+}
+
+div.floating-buttons-children > button,
+div.floating-buttons-children .floating-button {
+    width: var(--floating-button-width);
+    height: var(--floating-button-height);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    font-size: var(--floating-button-icon-size);
+    align-items: center;
+    color: var(--floating-button-color);
+}
+
+div.floating-buttons-children > button:hover,
+div.floating-buttons-children .floating-button:hover {
+    background: var(--floating-button-hover-background);
+    color: var(--floating-button-hover-color);
+}
+
+div.floating-buttons-children > button:active,
+div.floating-buttons-children .floating-button:active {
+    font-size: calc(var(--floating-button-icon-size) * 0.85);
+}
+
+/* The first visible floating button */
+div.floating-buttons-children > *:nth-child(1 of .visible) {
+    --border-radius: var(--border-radius-size) 0 0 var(--border-radius-size);
+    border-radius: var(--border-radius);
+}
+
+ /* "Show / hide floating buttons" buttons */
+
+ @keyframes floating-buttons-show-hide-button-animation {
+    from {
+        transform: rotate(180deg);
+    } to {
+        transform: rotate(0);
+    }
+}
+
+div.floating-buttons-children .close-floating-buttons-button,
+div.floating-buttons .show-floating-buttons-button {
+    margin-top: calc((var(--floating-button-height) - var(--floating-button-show-hide-button-size)) / 2);
+    width: var(--floating-button-show-hide-button-size);
+    height: var(--floating-button-show-hide-button-size);
+    padding: 0;
+    border: 0;
+    font-size: calc(var(--floating-button-show-hide-button-size) * .8);
+}
+
+div.floating-buttons-children .close-floating-buttons-button:active,
+div.floating-buttons .show-floating-buttons-button:active {
+    font-size: calc(var(--floating-button-show-hide-button-size) * .65);
+    background: transparent!important;
+}
+
+div.floating-buttons-children .close-floating-buttons-button::before,
+div.floating-buttons .show-floating-buttons-button::before {
+    display: block;
+}
+
+/* "Show buttons" button */
+
+div.floating-buttons .show-floating-buttons-button {
+    box-shadow: var(--floating-button-show-button-shadow);
+    background: var(--floating-button-show-button-background);
+    color: var(--floating-button-show-button-color);
+    backdrop-filter: blur(10px);
+}
+
+div.floating-buttons .show-floating-buttons-button::before {
+    animation: floating-buttons-show-hide-button-animation 400ms ease-out;
+}
+ 
+div.floating-buttons .show-floating-buttons-button:hover,
+div.floating-buttons .show-floating-buttons-button:active {
+    box-shadow: var(--floating-button-show-button-hover-shadow);
+    background: var(--floating-button-show-button-hover-background) !important;
+    color: var(--floating-button-show-button-color) !important;
+}
+
+/* "Hide buttons" button */
+
+div.floating-buttons-children:not(.temporarily-hidden) .close-floating-buttons-button::before {
+    animation: floating-buttons-show-hide-button-animation 400ms ease-out;
+}
+
+div.floating-buttons-children .close-floating-buttons {
+    border-radius: 0 var(--border-radius-size) var(--border-radius-size) 0;
+    overflow: hidden;
+}
+
+div.floating-buttons-children .close-floating-buttons {
+    margin-left: 0 !important;
+    background: var(--floating-button-hide-button-background);
+    color: var(--floating-button-hide-button-color);
+}
+
+div.floating-buttons-children .close-floating-buttons:has(.close-floating-buttons-button:hover) {
+    background: var(--floating-button-hover-background);
+    color: var(--floating-button-hover-color);
+}
+
+/* Backlink count */
+
+.backlinks-widget .backlinks-ticker {
+    height: 100%;
+    padding: 0 10px;
+    border-radius: var(--border-radius);
+    background: transparent;
+    user-select: none;
+}
+
+.backlinks-widget .backlinks-ticker:hover {
+    background: var(--floating-button-hover-background);
+}
+
+.backlinks-widget .backlinks-items {
+    --menu-padding-size: 20px;
+}
+
+/* TODO: Restyle the path */
+.backlinks-widget .backlinks-items .note-path {
+    padding-inline-start: 8px;
+}
+
+/* Copy image reference */
+
+.floating-buttons .copy-image-reference-button .hidden-image-copy {
+    /* Take out of the the hidden image from flexbox to prevent the layout being affected */
+    position: absolute;
+}
+
+/* Code, relation map buttons */
+
+.floating-buttons .code-buttons-widget,
+.floating-buttons .relation-map-buttons {
+    gap: 0;
+}
+
+/* The highlight animation */
+
+@keyframes floating-button-highlight {
+    from {
+        background: var(--floating-button-background);
+        color: var(--floating-button-color);
+    } to {
+        background: var(--floating-button-hover-background);
+        color: var(--floating-button-hover-color);
+    }
+}
+
+.floating-buttons .bx-tada {
+    /* The class is applied for 1700ms */
+    animation: floating-button-highlight 425ms ease-in-out alternate infinite;
+}
+
+.floating-buttons .bx-tada::before {
+    font-size: var(--floating-button-icon-size);
+}
+
+/*
  * Find and replace bar
  */
 

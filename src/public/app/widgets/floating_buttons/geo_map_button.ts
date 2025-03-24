@@ -16,7 +16,7 @@ const TPL = `\
     </style>
 
     <button type="button"
-        class="geo-map-create-child-note floating-button btn bx bx-folder-plus"
+        class="geo-map-create-child-note floating-button btn bx bx-plus-circle"
         title="${t("geo-map.create-child-note-title")}" />
 </div>`;
 
