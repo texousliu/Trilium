@@ -1439,7 +1439,7 @@ div.floating-buttons-children .close-floating-buttons:has(.close-floating-button
 .backlinks-widget .backlinks-ticker {
     height: 100%;
     padding: 0 10px;
-    border-radius: 0;
+    border-radius: var(--border-radius);
     background: transparent;
     user-select: none;
 }
