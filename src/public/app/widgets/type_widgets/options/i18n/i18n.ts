@@ -15,7 +15,7 @@ const TPL = `
             <select id="locale-select" class="locale-select form-select"></select>
         </div>
 
-        <div class="option-row">
+        <div class="option-row electron-only">
             <label for="formatting-locale-select">${t("i18n.formatting-locale")}</label>
             <select id="formatting-locale-select" class="formatting-locale-select form-select"></select>
         </div>
