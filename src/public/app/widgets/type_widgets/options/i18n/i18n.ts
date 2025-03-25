@@ -56,6 +56,10 @@ export default class LocalizationOptions extends OptionsWidget {
         });
 
         this.$formattingLocaleSelect = this.$widget.find(".formatting-locale-select");
+        this.$formattingLocaleSelect.on("change", async () => {
+            const newLocale = this.$formattingLocaleSelect.val();
+            await server.put(`options/formattingLocale/${newLocale}`);
+        });
 
         this.$widget.find(`input[name="first-day-of-week"]`).on("change", () => {
             const firstDayOfWeek = String(this.$widget.find(`input[name="first-day-of-week"]:checked`).val());
@@ -84,6 +88,7 @@ export default class LocalizationOptions extends OptionsWidget {
         for (const locale of allLocales.filter(l => l.electronLocale)) {
             this.$formattingLocaleSelect.append(buildLocaleItem(locale));
         }
+        this.$formattingLocaleSelect.val(options.formattingLocale);
 
         this.$widget.find(`input[name="first-day-of-week"][value="${options.firstDayOfWeek}"]`)
                     .prop("checked", "true");
