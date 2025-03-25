@@ -579,11 +579,7 @@ table.promoted-attributes-in-tooltip th {
 
 .tooltip {
     font-size: var(--main-font-size) !important;
-    /*
-        TODO: Investigate the purpose of this
-        z-index: calc(var(--ck-z-panel) - 1) !important;
-    */
-    z-index: 3000;
+    z-index: calc(var(--ck-z-panel) - 1) !important;
 }
 
 .tooltip-trigger {
@@ -1796,4 +1792,11 @@ footer.file-footer button {
 .content-floating-buttons button.bx {
     font-size: 130%;
     padding: 1px 10px 1px 10px;
+}
+
+/* Customized icons */
+
+.bx-tn-toc::before {
+    content: "\ec24";
+    transform: rotate(180deg);
 }
