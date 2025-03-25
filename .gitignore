@@ -38,7 +38,6 @@ images/app-icons/mac/*.png
 /playwright/.cache/
 /playwright/.auth/
 
-.env
 data-docs/backup
 data-docs/log
 data-docs/session
