@@ -3,9 +3,6 @@ import sessionFileStore from "session-file-store";
 import sessionSecret from "../services/session_secret.js";
 import dataDir from "../services/data_dir.js";
 import config from "../services/config.js";
-import totp from "../services/totp.js";
-import open_id from "../services/open_id.js";
-import type { Request, Response, NextFunction } from "express";
 
 const FileStore = sessionFileStore(session);
 
@@ -25,35 +22,4 @@ const sessionParser = session({
     })
 });
 
-const checkAuthState = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.session.loggedIn || req.path === '/login') {
-        return next();
-    }
-
-    const currentTotpStatus = totp.isTotpEnabled();
-    const currentSsoStatus = open_id.isOpenIDEnabled();
-
-    const lastAuthState = req.session.lastAuthState || {
-        totpEnabled: false,
-        ssoEnabled: false
-    };
-
-    if (lastAuthState.totpEnabled !== currentTotpStatus ||
-        lastAuthState.ssoEnabled !== currentSsoStatus) {
-        req.session.destroy((err) => {
-            if (err) {
-                console.error('Error destroying session:', err);
-            }
-            res.redirect('/login');
-        });
-        return;
-    }
-
-    next();
-};
-
-export default function (req: Request, res: Response, next: NextFunction) {
-    sessionParser(req, res, () => {
-        checkAuthState(req, res, next);
-    });
-}
+export default sessionParser;

@@ -7,6 +7,7 @@ import compression from "compression";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sessionParser from "./routes/session_parser.js";
+import checkAuthState from "./routes/auth_check.js";
 import utils from "./services/utils.js";
 import assets from "./routes/assets.js";
 import routes from "./routes/routes.js";
@@ -61,6 +62,7 @@ app.use(`/manifest.webmanifest`, express.static(path.join(scriptDir, "public/man
 app.use(`/robots.txt`, express.static(path.join(scriptDir, "public/robots.txt")));
 app.use(`/icon.png`, express.static(path.join(scriptDir, "public/icon.png")));
 app.use(sessionParser);
+app.use(checkAuthState);
 app.use(favicon(`${scriptDir}/../images/app-icons/icon.ico`));
 
 // Check if TOTP is enabled and validate TOTP secret is set
