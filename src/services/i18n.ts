@@ -25,27 +25,33 @@ const LOCALES: Locale[] = [
     },
     {
         id: "de",
-        name: "Deutsch"
+        name: "Deutsch",
+        electronLocale: "de"
     },
     {
         id: "es",
-        name: "Español"
+        name: "Español",
+        electronLocale: "es"
     },
     {
         id: "fr",
-        name: "Français"
+        name: "Français",
+        electronLocale: "fr"
     },
     {
         id: "cn",
-        name: "简体中文"
+        name: "简体中文",
+        electronLocale: "zh_CN"
     },
     {
         id: "tw",
-        name: "繁體中文"
+        name: "繁體中文",
+        electronLocale: "zh_TW"
     },
     {
         id: "ro",
-        name: "Română"
+        name: "Română",
+        electronLocale: "ro"
     },
 
     /*
