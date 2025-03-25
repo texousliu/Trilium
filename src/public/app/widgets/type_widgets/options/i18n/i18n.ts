@@ -71,23 +71,23 @@ export default class LocalizationOptions extends OptionsWidget {
     async optionsLoaded(options: OptionMap) {
         const allLocales = getAvailableLocales();
 
-        function buildLocaleItem(locale: Locale) {
+        function buildLocaleItem(locale: Locale, value: string) {
             return $("<option>")
-                .attr("value", locale.id)
+                .attr("value", value)
                 .text(locale.name)
         }
 
         // Build list of UI locales.
         this.$localeSelect.empty();
         for (const locale of allLocales.filter(l => !l.contentOnly)) {
-            this.$localeSelect.append(buildLocaleItem(locale));
+            this.$localeSelect.append(buildLocaleItem(locale, locale.id));
         }
         this.$localeSelect.val(options.locale);
 
         // Build list of Electron locales.
         this.$formattingLocaleSelect.empty();
         for (const locale of allLocales.filter(l => l.electronLocale)) {
-            this.$formattingLocaleSelect.append(buildLocaleItem(locale));
+            this.$formattingLocaleSelect.append(buildLocaleItem(locale, locale.electronLocale as string));
         }
         this.$formattingLocaleSelect.val(options.formattingLocale);
 
