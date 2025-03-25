@@ -41,19 +41,15 @@
                 </div>
             <% } %>
 
-            <% if (failedAuth) { %>
+            <% if ( wrongPassword ) { %>
                 <div class="alert alert-warning">
                     <%= t("login.incorrect-password") %>
                 </div>
             <% } %>
-            <% if (failedAuth) { %>
-                <% if( totpEnabled ) { %>
+            <% if ( totpEnabled ) { %>
+                <% if( wrongTotp ) { %>
                     <div class="alert alert-warning">
                         <%= t("login.incorrect-totp") %>
-                    </div>
-                <% }else{ %>
-                    <div class="alert alert-warning">
-                        <%= t("login.incorrect-password") %>
                     </div>
                 <% } %>
             <% } %>

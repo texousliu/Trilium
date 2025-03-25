@@ -18,7 +18,8 @@ function loginPage(req: Request, res: Response) {
         res.redirect('/authenticate');
     } else {
         res.render('login', {
-            failedAuth: false,
+            wrongPassword: false,
+            wrongTotp: false,
             totpEnabled: totp.isTotpEnabled(),
             assetPath: assetPath,
             appPath: appPath,
@@ -69,38 +70,40 @@ function login(req: Request, res: Response) {
     const submittedPassword = req.body.password;
     const submittedTotp = req.body.token;
 
-    if (verifyPassword(submittedPassword)) {
-        if (totp.isTotpEnabled()) {
-            if (!verifyTOTP(submittedTotp)) {
-                sendLoginError(req, res);
-                return;
-            }
+    // 首先验证密码
+    if (!verifyPassword(submittedPassword)) {
+        sendLoginError(req, res, 'password');
+        return;
+    }
+
+    // 如果密码正确且启用了 TOTP，验证 TOTP
+    if (totp.isTotpEnabled()) {
+        if (!verifyTOTP(submittedTotp)) {
+            sendLoginError(req, res, 'totp');
+            return;
+        }
+    }
+
+    const rememberMe = req.body.rememberMe;
+
+    req.session.regenerate(() => {
+        if (rememberMe) {
+            req.session.cookie.maxAge = 21 * 24 * 3600000;  // 3 weeks
+        } else {
+            // unset default maxAge set by sessionParser
+            // Cookie becomes non-persistent and expires after current browser session (e.g. when browser is closed)
+            req.session.cookie.maxAge = undefined;
         }
 
-        const rememberMe = req.body.rememberMe;
+        // 记录当前的认证状态
+        req.session.lastAuthState = {
+            totpEnabled: totp.isTotpEnabled(),
+            ssoEnabled: open_id.isOpenIDEnabled()
+        };
 
-        req.session.regenerate(() => {
-            if (rememberMe) {
-                req.session.cookie.maxAge = 21 * 24 * 3600000;  // 3 weeks
-            } else {
-                // unset default maxAge set by sessionParser
-                // Cookie becomes non-persistent and expires after current browser session (e.g. when browser is closed)
-                req.session.cookie.maxAge = undefined;
-            }
-
-            // 记录当前的认证状态
-            req.session.lastAuthState = {
-                totpEnabled: totp.isTotpEnabled(),
-                ssoEnabled: open_id.isOpenIDEnabled()
-            };
-
-            req.session.loggedIn = true;
-            res.redirect('.');
-        });
-    }
-    else {
-        sendLoginError(req, res);
-    }
+        req.session.loggedIn = true;
+        res.redirect('.');
+    });
 }
 
 function verifyTOTP(submittedToken: string) {
@@ -119,17 +122,18 @@ function verifyPassword(submittedPassword: string) {
     return guess_hashed.equals(hashed_password);
 }
 
-function sendLoginError(req: Request, res: Response) {
+function sendLoginError(req: Request, res: Response, errorType: 'password' | 'totp' = 'password') {
     // note that logged IP address is usually meaningless since the traffic should come from a reverse proxy
     if (totp.isTotpEnabled()) {
-        log.info(`WARNING: Wrong password or TOTP from ${req.ip}, rejecting.`);
+        log.info(`WARNING: Wrong ${errorType} from ${req.ip}, rejecting.`);
     } else {
         log.info(`WARNING: Wrong password from ${req.ip}, rejecting.`);
     }
 
-    res.status(401).render('login', {
-        failedAuth: true,
-        totpEnabled: optionService.getOption('totpEnabled') && totp.checkForTotSecret(),
+    res.render('login', {
+        wrongPassword: errorType === 'password',
+        wrongTotp: errorType === 'totp',
+        totpEnabled: totp.isTotpEnabled(),
         assetPath: assetPath,
         appPath: appPath,
     });
