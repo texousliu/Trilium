@@ -63,7 +63,7 @@ app.use(`/icon.png`, express.static(path.join(scriptDir, "public/icon.png")));
 app.use(sessionParser);
 app.use(favicon(`${scriptDir}/../images/app-icons/icon.ico`));
 
-// Check if TOTP is enabled and validate the secret
+// Check if TOTP is enabled and validate TOTP secret is set
 totp.isTotpEnabled();
 
 if (openID.checkOpenIDRequirements())

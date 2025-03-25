@@ -1,5 +1,3 @@
-"use strict";
-
 import utils from "../services/utils.js";
 import optionService from "../services/options.js";
 import myScryptService from "../services/encryption/my_scrypt.js";
@@ -68,12 +66,12 @@ function setPassword(req: Request, res: Response) {
 }
 
 function login(req: Request, res: Response) {
-    const guessedPassword = req.body.password;
-    const guessedTotp = req.body.token;
+    const submittedPassword = req.body.password;
+    const submittedTotp = req.body.token;
 
-    if (verifyPassword(guessedPassword)) {
+    if (verifyPassword(submittedPassword)) {
         if (totp.isTotpEnabled()) {
-            if (!verifyTOTP(guessedTotp)) {
+            if (!verifyTOTP(submittedTotp)) {
                 sendLoginError(req, res);
                 return;
             }
@@ -99,18 +97,18 @@ function login(req: Request, res: Response) {
     }
 }
 
-function verifyTOTP(guessedToken: string) {
-    if (totp.validateTOTP(guessedToken)) return true;
+function verifyTOTP(submittedToken: string) {
+    if (totp.validateTOTP(submittedToken)) return true;
 
-    const recoveryCodeValidates = recoveryCodeService.verifyRecoveryCode(guessedToken);
+    const recoveryCodeValidates = recoveryCodeService.verifyRecoveryCode(submittedToken);
 
     return recoveryCodeValidates;
 }
 
-function verifyPassword(guessedPassword: string) {
+function verifyPassword(submittedPassword: string) {
     const hashed_password = utils.fromBase64(optionService.getOption("passwordVerificationHash"));
 
-    const guess_hashed = myScryptService.getVerificationHash(guessedPassword);
+    const guess_hashed = myScryptService.getVerificationHash(submittedPassword);
 
     return guess_hashed.equals(hashed_password);
 }
@@ -127,6 +125,7 @@ function sendLoginError(req: Request, res: Response) {
         failedAuth: true,
         totpEnabled: optionService.getOption('totpEnabled') && totp.checkForTotSecret(),
         assetPath: assetPath,
+        appPath: appPath,
     });
 }
 
