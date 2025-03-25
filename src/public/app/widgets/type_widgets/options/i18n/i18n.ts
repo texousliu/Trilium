@@ -34,6 +34,10 @@ const TPL = `
                 </label>
             </div>
         </div>
+
+        <div class="option-row centered">
+            <button class="btn btn-secondary btn-micro restart-app-button">${t("electron_integration.restart-app-button")}</button>
+        </div>
     </div>
 
     <style>
@@ -56,6 +60,10 @@ const TPL = `
         .locale-options-container .option-row:last-of-type {
             border-bottom: unset;
         }
+
+        .locale-options-container .option-row.centered {
+            justify-content: center;
+        }
     </style>
 </div>
 `;
@@ -72,20 +80,19 @@ export default class LocalizationOptions extends OptionsWidget {
         this.$localeSelect.on("change", async () => {
             const newLocale = this.$localeSelect.val();
             await server.put(`options/locale/${newLocale}`);
-            utils.reloadFrontendApp("locale change");
         });
 
         this.$formattingLocaleSelect = this.$widget.find(".formatting-locale-select");
         this.$formattingLocaleSelect.on("change", async () => {
             const newLocale = this.$formattingLocaleSelect.val();
             await server.put(`options/formattingLocale/${newLocale}`);
-            utils.restartDesktopApp();
         });
 
         this.$widget.find(`input[name="first-day-of-week"]`).on("change", () => {
             const firstDayOfWeek = String(this.$widget.find(`input[name="first-day-of-week"]:checked`).val());
             this.updateOption("firstDayOfWeek", firstDayOfWeek);
         });
+        this.$widget.find(".restart-app-button").on("click", utils.restartDesktopApp);
     }
 
     async optionsLoaded(options: OptionMap) {
