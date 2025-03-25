@@ -1,4 +1,4 @@
-import OpenIDError from "../errors/open_id_error.js";
+import OpenIDError from "../errors/mfa_error.js";
 import type { NextFunction, Request, Response } from "express";
 import openIDEncryption from "./encryption/open_id_encryption.js";
 import sqlInit from "./sql_init.js";
@@ -37,18 +37,20 @@ function clearSavedUser() {
 }
 
 function checkOpenIDRequirements() {
-    if (config.MultiFactorAuthentication.totpEnabled) {
-        throw new OpenIDError("Cannot enable both OpenID and TOTP!");
-    }
+    if (config.MultiFactorAuthentication.ssoEnabled) {
+        if (config.MultiFactorAuthentication.totpEnabled) {
+            throw new OpenIDError("Cannot enable both OpenID and TOTP!");
+        }
 
-    if (config.MultiFactorAuthentication.oauthBaseUrl === "") {
-        throw new OpenIDError("oauthBaseUrl is undefined!");
-    }
-    if (config.MultiFactorAuthentication.oauthClientId === "") {
-        throw new OpenIDError("oauthClientId is undefined!");
-    }
-    if (config.MultiFactorAuthentication.oauthClientSecret === "") {
-        throw new OpenIDError("oauthClientSecret is undefined!");
+        if (config.MultiFactorAuthentication.oauthBaseUrl === "") {
+            throw new OpenIDError("oauthBaseUrl is undefined!");
+        }
+        if (config.MultiFactorAuthentication.oauthClientId === "") {
+            throw new OpenIDError("oauthClientId is undefined!");
+        }
+        if (config.MultiFactorAuthentication.oauthClientSecret === "") {
+            throw new OpenIDError("oauthClientSecret is undefined!");
+        }
     }
 
     return config.MultiFactorAuthentication.ssoEnabled;

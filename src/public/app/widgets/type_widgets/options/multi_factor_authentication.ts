@@ -205,8 +205,11 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                 this.$oAuthEnabledCheckbox.prop("checked", result.enabled);
                 if (result.name) this.$UserAccountName.text(result.name);
                 if (result.email) this.$UserAccountEmail.text(result.email);
+
+                this.$envEnabledOAuth.hide();
             } else {
                 this.$envEnabledOAuth.text(t("multi_factor_authentication.oauth_enable_description"));
+                this.$envEnabledOAuth.show();
             }
         });
 
@@ -215,6 +218,8 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                 this.$totpEnabled.prop("checked", result.message);
                 this.$authenticatorCode.prop("disabled", !result.message);
                 this.$generateRecoveryCodeButton.prop("disabled", !result.message);
+
+                this.$envEnabledTOTP.hide();
             } else {
                 this.$totpEnabled.prop("checked", false);
                 this.$totpEnabled.prop("disabled", true);
@@ -222,6 +227,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                 this.$generateRecoveryCodeButton.prop("disabled", true);
 
                 this.$envEnabledTOTP.text(t("multi_factor_authentication.totp_enable_description"));
+                this.$envEnabledTOTP.show();
             }
         });
         this.$protectedSessionTimeout.val(Number(options.protectedSessionTimeout));

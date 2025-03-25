@@ -2,7 +2,7 @@ import { generateSecret } from 'time2fa';
 import config from '../../services/config.js';
 
 function generateTOTPSecret() {
-    return { success: 'true', message: generateSecret() };
+    return { success: true, message: generateSecret() };
 }
 
 function getTotpEnabled() {

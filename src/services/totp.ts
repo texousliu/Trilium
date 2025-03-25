@@ -1,37 +1,30 @@
-'use strict';
+import { Totp } from 'time2fa';
+import config from './config.js';
+import MFAError from '../errors/mfa_error.js';
 
-import {Totp} from 'time2fa';
 
 function isTotpEnabled() {
-    if (process.env.TOTP_ENABLED === undefined) {
-        return false;
+    if (config.MultiFactorAuthentication.totpEnabled && config.MultiFactorAuthentication.totpSecret === "") {
+        throw new MFAError("TOTP secret is not set!");
     }
-    if (process.env.TOTP_SECRET === undefined) {
-        return false;
-    }
-    if (process.env.TOTP_ENABLED.toLocaleLowerCase() !== 'true') {
-        return false;
-    }
-
-    return true;
+    return config.MultiFactorAuthentication.totpEnabled;
 }
 
 function getTotpSecret() {
-    return process.env.TOTP_SECRET;
+    return config.MultiFactorAuthentication.totpSecret;
 }
 
 function checkForTotSecret() {
-    if (process.env.TOTP_SECRET !== undefined) return true;
-    else return false;
+    return config.MultiFactorAuthentication.totpSecret === "" ? false : true;
 }
 
 function validateTOTP(guessedPasscode: string) {
-    if (process.env.TOTP_SECRET === undefined) return false;
+    if (config.MultiFactorAuthentication.totpSecret === "") return false;
 
     try {
         const valid = Totp.validate({
             passcode: guessedPasscode,
-            secret: process.env.TOTP_SECRET.trim()
+            secret: config.MultiFactorAuthentication.totpSecret.trim()
         });
         return valid;
     } catch (e) {
@@ -41,7 +34,7 @@ function validateTOTP(guessedPasscode: string) {
 
 export default {
     isTotpEnabled,
-    getTotpSecret, 
-    checkForTotSecret, 
+    getTotpSecret,
+    checkForTotSecret,
     validateTOTP
 };

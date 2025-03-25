@@ -14,6 +14,7 @@ import custom from "./routes/custom.js";
 import error_handlers from "./routes/error_handlers.js";
 import { startScheduledCleanup } from "./services/erase.js";
 import sql_init from "./services/sql_init.js";
+import totp from "./services/totp.js";
 import oidc from "express-openid-connect";
 import openID from "./services/open_id.js";
 import { t } from "i18next";
@@ -61,6 +62,9 @@ app.use(`/robots.txt`, express.static(path.join(scriptDir, "public/robots.txt"))
 app.use(`/icon.png`, express.static(path.join(scriptDir, "public/icon.png")));
 app.use(sessionParser);
 app.use(favicon(`${scriptDir}/../images/app-icons/icon.ico`));
+
+// Check if TOTP is enabled and validate the secret
+totp.isTotpEnabled();
 
 if (openID.checkOpenIDRequirements())
     app.use(oidc.auth(openID.generateOAuthConfig()));
