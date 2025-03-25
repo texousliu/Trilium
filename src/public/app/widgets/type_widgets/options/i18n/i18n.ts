@@ -3,6 +3,7 @@ import server from "../../../../services/server.js";
 import utils from "../../../../services/utils.js";
 import { getAvailableLocales, t } from "../../../../services/i18n.js";
 import type { OptionMap } from "../../../../../../services/options_interface.js";
+import type { Locale } from "../../../../../../services/i18n.js";
 
 const TPL = `
 <div class="options-section">
@@ -14,6 +15,13 @@ const TPL = `
             <select id="locale-select" class="locale-select form-select"></select>
         </div>
 
+        <div class="col-6">
+            <label for="formatting-locale-select">${t("i18n.formatting-locale")}</label>
+            <select id="formatting-locale-select" class="formatting-locale-select form-select"></select>
+        </div>
+    </div>
+
+    <div class="form-group row">
         <div class="col-6">
             <label id="first-day-of-week-label">${t("i18n.first-day-of-the-week")}</label>
             <div role="group" aria-labelledby="first-day-of-week-label" style="margin-top: .33em;">
@@ -35,6 +43,7 @@ const TPL = `
 export default class LocalizationOptions extends OptionsWidget {
 
     private $localeSelect!: JQuery<HTMLElement>;
+    private $formattingLocaleSelect!: JQuery<HTMLElement>;
 
     doRender() {
         this.$widget = $(TPL);
@@ -46,6 +55,8 @@ export default class LocalizationOptions extends OptionsWidget {
             utils.reloadFrontendApp("locale change");
         });
 
+        this.$formattingLocaleSelect = this.$widget.find(".formatting-locale-select");
+
         this.$widget.find(`input[name="first-day-of-week"]`).on("change", () => {
             const firstDayOfWeek = String(this.$widget.find(`input[name="first-day-of-week"]:checked`).val());
             this.updateOption("firstDayOfWeek", firstDayOfWeek);
@@ -53,14 +64,27 @@ export default class LocalizationOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        const availableLocales = getAvailableLocales().filter(l => !l.contentOnly);
-        this.$localeSelect.empty();
+        const allLocales = getAvailableLocales();
 
-        for (const locale of availableLocales) {
-            this.$localeSelect.append($("<option>").attr("value", locale.id).text(locale.name));
+        function buildLocaleItem(locale: Locale) {
+            return $("<option>")
+                .attr("value", locale.id)
+                .text(locale.name)
         }
 
+        // Build list of UI locales.
+        this.$localeSelect.empty();
+        for (const locale of allLocales.filter(l => !l.contentOnly)) {
+            this.$localeSelect.append(buildLocaleItem(locale));
+        }
         this.$localeSelect.val(options.locale);
+
+        // Build list of Electron locales.
+        this.$formattingLocaleSelect.empty();
+        for (const locale of allLocales.filter(l => l.electronLocale)) {
+            this.$formattingLocaleSelect.append(buildLocaleItem(locale));
+        }
+
         this.$widget.find(`input[name="first-day-of-week"][value="${options.firstDayOfWeek}"]`)
                     .prop("checked", "true");
     }
