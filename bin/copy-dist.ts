@@ -28,6 +28,7 @@ try {
         "./README.md",
         "./forge.config.cjs",
         "./bin/tpl/",
+        "./bin/cleanupNodeModules.ts",
         "./bin/electron-forge/desktop.ejs",
         "./bin/electron-forge/sign-windows.cjs",
         "./src/views/",
@@ -59,46 +60,12 @@ try {
     console.log("Copying complete!")
 
     // TriliumNextTODO: for Docker this needs to run separately *after* build-stage
-    console.log("Pruning npm packages...")
-    execSync(`npm ci --omit=dev --prefix ${DEST_DIR}`);
-
-    cleanupNodeModules();
+    // Disable for now, because this messes with electron-forge as well
+    //console.log("Pruning npm packages...")
+    //execSync(`npm ci --omit=dev --prefix ${DEST_DIR}`);
 
 } catch(err) {
     console.error("Error during copy:", err)
     process.exit(1)
-}
-function cleanupNodeModules() {
-    const nodeDir = fs.readdirSync(path.join(DEST_DIR, "./node_modules"), { recursive: true, withFileTypes: true });
-
-    const filterableDirs = new Set([
-        "demo",
-        "demos",
-        "doc",
-        "docs",
-        "example",
-        "examples",
-        "test",
-        "tests"
-    ]);
-
-    nodeDir
-        .filter(el => el.isDirectory() && filterableDirs.has(el.name))
-        .map(el => path.join(DEST_DIR, el.parentPath, el.name))
-        .forEach(dir => fs.removeSync(dir));
-
-
-    // Delete unnecessary files based on file extension
-    const filterableFileExt = new Set([
-        "ts",
-        "map"
-    ])
-
-    nodeDir
-        // TriliumNextTODO: check if we can improve this naive file ext matching
-        .filter(el => el.isFile() && filterableFileExt.has(el.name.split(".").at(-1) || ""))
-        .map(file => path.join(DEST_DIR, file.parentPath, file.name))
-        .forEach(file => fs.removeSync(file));
-
 }
 

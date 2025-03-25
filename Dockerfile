@@ -18,6 +18,7 @@ RUN npm ci && \
       /usr/src/app/build \
       /tmp/node-compile-cache
 
+#TODO: run cleanupNodeModules script
 #TODO: improve node_modules handling in copy-dist/Dockerfile -> remove duplicated work
 #      currently copy-dist will copy certain node_module folders, but in the Dockerfile we delete them again (to keep image size down),
 #      as we install necessary dependencies in runtime buildstage anyways
