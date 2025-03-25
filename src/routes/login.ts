@@ -88,6 +88,12 @@ function login(req: Request, res: Response) {
                 req.session.cookie.maxAge = undefined;
             }
 
+            // 记录当前的认证状态
+            req.session.lastAuthState = {
+                totpEnabled: totp.isTotpEnabled(),
+                ssoEnabled: open_id.isOpenIDEnabled()
+            };
+
             req.session.loggedIn = true;
             res.redirect('.');
         });
