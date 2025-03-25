@@ -18,12 +18,12 @@ function checkForTotSecret() {
     return config.MultiFactorAuthentication.totpSecret === "" ? false : true;
 }
 
-function validateTOTP(guessedPasscode: string) {
+function validateTOTP(submittedPasscode: string) {
     if (config.MultiFactorAuthentication.totpSecret === "") return false;
 
     try {
         const valid = Totp.validate({
-            passcode: guessedPasscode,
+            passcode: submittedPasscode,
             secret: config.MultiFactorAuthentication.totpSecret.trim()
         });
         return valid;

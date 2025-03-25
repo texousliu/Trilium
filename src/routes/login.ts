@@ -68,7 +68,7 @@ function setPassword(req: Request, res: Response) {
 
 function login(req: Request, res: Response) {
     const submittedPassword = req.body.password;
-    const submittedTotp = req.body.token;
+    const submittedTotpToken = req.body.totpToken;
 
     // 首先验证密码
     if (!verifyPassword(submittedPassword)) {
@@ -78,7 +78,7 @@ function login(req: Request, res: Response) {
 
     // 如果密码正确且启用了 TOTP，验证 TOTP
     if (totp.isTotpEnabled()) {
-        if (!verifyTOTP(submittedTotp)) {
+        if (!verifyTOTP(submittedTotpToken)) {
             sendLoginError(req, res, 'totp');
             return;
         }
@@ -106,10 +106,10 @@ function login(req: Request, res: Response) {
     });
 }
 
-function verifyTOTP(submittedToken: string) {
-    if (totp.validateTOTP(submittedToken)) return true;
+function verifyTOTP(submittedTotpToken: string) {
+    if (totp.validateTOTP(submittedTotpToken)) return true;
 
-    const recoveryCodeValidates = recoveryCodeService.verifyRecoveryCode(submittedToken);
+    const recoveryCodeValidates = recoveryCodeService.verifyRecoveryCode(submittedTotpToken);
 
     return recoveryCodeValidates;
 }
