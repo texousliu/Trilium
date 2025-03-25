@@ -59,6 +59,7 @@ export default class LocalizationOptions extends OptionsWidget {
         this.$formattingLocaleSelect.on("change", async () => {
             const newLocale = this.$formattingLocaleSelect.val();
             await server.put(`options/formattingLocale/${newLocale}`);
+            utils.restartDesktopApp();
         });
 
         this.$widget.find(`input[name="first-day-of-week"]`).on("change", () => {
