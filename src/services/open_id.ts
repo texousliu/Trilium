@@ -5,6 +5,8 @@ import sqlInit from "./sql_init.js";
 import options from "./options.js";
 import type { Session } from "express-openid-connect";
 import sql from "./sql.js";
+import config from "./config.js";
+
 
 function isOpenIDEnabled() {
     return checkOpenIDRequirements();
@@ -35,28 +37,21 @@ function clearSavedUser() {
 }
 
 function checkOpenIDRequirements() {
-    if (process.env.SSO_ENABLED === undefined) {
-        return false;
-    }
-    if (process.env.SSO_ENABLED.toLocaleLowerCase() !== "true") {
-        return false;
-    }
-
-    if (process.env.TOTP_ENABLED?.toLocaleLowerCase() === "true") {
+    if (config.MultiFactorAuthentication.totpEnabled) {
         throw new OpenIDError("Cannot enable both OpenID and TOTP!");
     }
 
-    if (process.env.BASE_URL === undefined) {
-        throw new OpenIDError("BASE_URL is undefined in .env!");
+    if (config.MultiFactorAuthentication.oauthBaseUrl === "") {
+        throw new OpenIDError("oauthBaseUrl is undefined!");
     }
-    if (process.env.CLIENT_ID === undefined) {
-        throw new OpenIDError("CLIENT_ID is undefined in .env!");
+    if (config.MultiFactorAuthentication.oauthClientId === "") {
+        throw new OpenIDError("oauthClientId is undefined!");
     }
-    if (process.env.SECRET === undefined) {
-        throw new OpenIDError("SECRET is undefined in .env!");
+    if (config.MultiFactorAuthentication.oauthClientSecret === "") {
+        throw new OpenIDError("oauthClientSecret is undefined!");
     }
 
-    return true;
+    return config.MultiFactorAuthentication.ssoEnabled;
 }
 
 function getOAuthStatus() {
@@ -112,11 +107,11 @@ function generateOAuthConfig() {
     const authConfig = {
         authRequired: true,
         auth0Logout: false,
-        baseURL: process.env.BASE_URL,
-        clientID: process.env.CLIENT_ID,
+        baseURL: config.MultiFactorAuthentication.oauthBaseUrl,
+        clientID: config.MultiFactorAuthentication.oauthClientId,
         issuerBaseURL: "https://accounts.google.com/.well-known/openid-configuration",
-        secret: process.env.SECRET,
-        clientSecret: process.env.SECRET,
+        secret: config.MultiFactorAuthentication.oauthClientSecret,
+        clientSecret: config.MultiFactorAuthentication.oauthClientSecret,
         authorizationParams: {
             response_type: "code",
             scope: "openid profile email",

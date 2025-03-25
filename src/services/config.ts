@@ -110,22 +110,22 @@ const config: TriliumConfig = {
 
     MultiFactorAuthentication: {
         totpEnabled:
-            envToBoolean(process.env.TRILIUM_TOTPENABLED) || iniConfig?.MultiFactorAuthentication?.totpEnabled || false,
+            envToBoolean(process.env.TRILIUM_TOTP_ENABLED) || iniConfig?.MultiFactorAuthentication?.totpEnabled || false,
 
         totpSecret:
-            process.env.TRILIUM_TOTPSECRET || iniConfig?.MultiFactorAuthentication?.totpSecret || "",
+            process.env.TRILIUM_TOTP_SECRET || iniConfig?.MultiFactorAuthentication?.totpSecret || "",
 
         ssoEnabled:
             envToBoolean(process.env.TRILIUM_SSO_ENABLED) || iniConfig?.MultiFactorAuthentication?.ssoEnabled || false,
 
         oauthBaseUrl:
-            process.env.TRILIUM_OAUTH_BASEURL || iniConfig?.MultiFactorAuthentication?.oauthBaseUrl || "",
+            process.env.TRILIUM_OAUTH_BASE_URL || iniConfig?.MultiFactorAuthentication?.oauthBaseUrl || "",
 
         oauthClientId:
-            process.env.TRILIUM_OAUTH_CLIENTID || iniConfig?.MultiFactorAuthentication?.oauthClientId || "",
+            process.env.TRILIUM_OAUTH_CLIENT_ID || iniConfig?.MultiFactorAuthentication?.oauthClientId || "",
 
         oauthClientSecret:
-            process.env.TRILIUM_OAUTH_CLIENTSECRET || iniConfig?.MultiFactorAuthentication?.oauthClientSecret || ""
+            process.env.TRILIUM_OAUTH_CLIENT_SECRET || iniConfig?.MultiFactorAuthentication?.oauthClientSecret || ""
     }
 };
 
