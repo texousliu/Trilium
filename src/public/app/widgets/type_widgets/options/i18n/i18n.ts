@@ -9,22 +9,20 @@ const TPL = `
 <div class="options-section">
     <h4>${t("i18n.title")}</h4>
 
-    <div class="form-group row">
-        <div class="col-6">
+    <div class="locale-options-container">
+        <div class="option-row">
             <label for="locale-select">${t("i18n.language")}</label>
             <select id="locale-select" class="locale-select form-select"></select>
         </div>
 
-        <div class="col-6">
+        <div class="option-row">
             <label for="formatting-locale-select">${t("i18n.formatting-locale")}</label>
             <select id="formatting-locale-select" class="formatting-locale-select form-select"></select>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <div class="col-6">
+        <div class="option-row">
             <label id="first-day-of-week-label">${t("i18n.first-day-of-the-week")}</label>
-            <div role="group" aria-labelledby="first-day-of-week-label" style="margin-top: .33em;">
+            <div role="group" aria-labelledby="first-day-of-week-label">
                 <label class="tn-radio">
                     <input name="first-day-of-week" type="radio" value="0" />
                     ${t("i18n.sunday")}
@@ -37,6 +35,28 @@ const TPL = `
             </div>
         </div>
     </div>
+
+    <style>
+        .locale-options-container .option-row {
+            border-bottom: 1px solid var(--main-border-color);
+            display: flex;
+            align-items: center;
+            padding: 0.5em 0;
+        }
+
+        .locale-options-container .option-row > label {
+            width: 40%;
+            margin-bottom: 0 !important;
+        }
+
+        .locale-options-container .option-row > select {
+            width: 60%;
+        }
+
+        .locale-options-container .option-row:last-of-type {
+            border-bottom: unset;
+        }
+    </style>
 </div>
 `;
 
