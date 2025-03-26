@@ -7,7 +7,7 @@ import log from '../log.js';
 import { ContextExtractor } from './context/index.js';
 import contextService from './context_service.js';
 import indexService from './index_service.js';
-import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './embeddings/providers.js';
+import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './providers/providers.js';
 import agentTools from './agent_tools/index.js';
 
 type ServiceProviders = 'openai' | 'anthropic' | 'ollama';

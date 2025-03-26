@@ -1,6 +1,6 @@
 import options from '../../../options.js';
 import log from '../../../log.js';
-import { getEmbeddingProvider, getEnabledEmbeddingProviders } from '../../embeddings/providers.js';
+import { getEmbeddingProvider, getEnabledEmbeddingProviders } from '../../providers/providers.js';
 
 /**
  * Manages embedding providers for context services

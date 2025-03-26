@@ -3,11 +3,11 @@ import log from "../../log.js";
 import sql from "../../sql.js";
 import dateUtils from "../../date_utils.js";
 import { randomString } from "../../utils.js";
-import type { EmbeddingProvider, EmbeddingConfig } from "./embeddings_interface.js";
-import { NormalizationStatus } from "./embeddings_interface.js";
-import { OpenAIEmbeddingProvider } from "./providers/openai.js";
-import { OllamaEmbeddingProvider } from "./providers/ollama.js";
-import { VoyageEmbeddingProvider } from "./providers/voyage.js";
+import type { EmbeddingProvider, EmbeddingConfig } from "../embeddings/embeddings_interface.js";
+import { NormalizationStatus } from "../embeddings/embeddings_interface.js";
+import { OpenAIEmbeddingProvider } from "../embeddings/providers/openai.js";
+import { OllamaEmbeddingProvider } from "../embeddings/providers/ollama.js";
+import { VoyageEmbeddingProvider } from "../embeddings/providers/voyage.js";
 import type { OptionDefinitions } from "../../options_interface.js";
 
 /**

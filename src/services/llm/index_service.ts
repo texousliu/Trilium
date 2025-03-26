@@ -13,7 +13,7 @@ import log from "../log.js";
 import options from "../options.js";
 import becca from "../../becca/becca.js";
 import vectorStore from "./embeddings/index.js";
-import providerManager from "./embeddings/providers.js";
+import providerManager from "./providers/providers.js";
 import { ContextExtractor } from "./context/index.js";
 import eventService from "../events.js";
 import type { NoteEmbeddingContext } from "./embeddings/embeddings_interface.js";

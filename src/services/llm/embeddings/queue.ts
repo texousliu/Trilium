@@ -3,7 +3,7 @@ import dateUtils from "../../../services/date_utils.js";
 import log from "../../../services/log.js";
 import becca from "../../../becca/becca.js";
 import options from "../../../services/options.js";
-import { getEnabledEmbeddingProviders } from "./providers.js";
+import { getEnabledEmbeddingProviders } from "../providers/providers.js";
 import { getNoteEmbeddingContext } from "./content_processing.js";
 import { deleteNoteEmbeddings } from "./storage.js";
 import type { QueueItem } from "./types.js";

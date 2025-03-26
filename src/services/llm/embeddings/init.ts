@@ -1,7 +1,7 @@
 import log from "../../log.js";
 import options from "../../options.js";
 import { initEmbeddings } from "./index.js";
-import providerManager from "./providers.js";
+import providerManager from "../providers/providers.js";
 import sqlInit from "../../sql_init.js";
 import sql from "../../sql.js";
 

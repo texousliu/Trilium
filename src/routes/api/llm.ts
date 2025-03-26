@@ -5,7 +5,7 @@ import options from "../../services/options.js";
 import { v4 as uuidv4 } from 'uuid';
 import becca from "../../becca/becca.js";
 import vectorStore from "../../services/llm/embeddings/index.js";
-import providerManager from "../../services/llm/embeddings/providers.js";
+import providerManager from "../../services/llm/providers/providers.js";
 import type { Message, ChatCompletionOptions } from "../../services/llm/ai_interface.js";
 // Import this way to prevent immediate instantiation
 import * as aiServiceManagerModule from "../../services/llm/ai_service_manager.js";
