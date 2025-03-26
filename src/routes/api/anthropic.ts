@@ -20,7 +20,58 @@ interface AnthropicModel {
 }
 
 /**
- * List available models from Anthropic
+ * @swagger
+ * /api/anthropic/models:
+ *   post:
+ *     summary: List available models from Anthropic
+ *     operationId: anthropic-list-models
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               baseUrl:
+ *                 type: string
+ *                 description: Optional custom Anthropic API base URL
+ *     responses:
+ *       '200':
+ *         description: List of available Anthropic models
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 chatModels:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       type:
+ *                         type: string
+ *                 embeddingModels:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       type:
+ *                         type: string
+ *       '500':
+ *         description: Error listing models
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function listModels(req: Request, res: Response) {
     try {

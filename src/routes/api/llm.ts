@@ -203,7 +203,57 @@ function safelyUseAIManager(): boolean {
 }
 
 /**
- * Create a new LLM chat session
+ * @swagger
+ * /api/llm/sessions:
+ *   post:
+ *     summary: Create a new LLM chat session
+ *     operationId: llm-create-session
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Title for the chat session
+ *               systemPrompt:
+ *                 type: string
+ *                 description: System message to set the behavior of the assistant
+ *               temperature:
+ *                 type: number
+ *                 description: Temperature parameter for the LLM (0.0-1.0)
+ *               maxTokens:
+ *                 type: integer
+ *                 description: Maximum tokens to generate in responses
+ *               model:
+ *                 type: string
+ *                 description: Specific model to use (depends on provider)
+ *               provider:
+ *                 type: string
+ *                 description: LLM provider to use (e.g., 'openai', 'anthropic', 'ollama')
+ *               contextNoteId:
+ *                 type: string
+ *                 description: Note ID to use as context for the session
+ *     responses:
+ *       '200':
+ *         description: Successfully created session
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 sessionId:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function createSession(req: Request, res: Response) {
     try {
@@ -254,7 +304,53 @@ async function createSession(req: Request, res: Response) {
 }
 
 /**
- * Get session details
+ * @swagger
+ * /api/llm/sessions/{sessionId}:
+ *   get:
+ *     summary: Retrieve a specific chat session by ID
+ *     operationId: llm-get-session
+ *     parameters:
+ *       - name: sessionId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Chat session details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 messages:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       role:
+ *                         type: string
+ *                         enum: [user, assistant, system]
+ *                       content:
+ *                         type: string
+ *                       timestamp:
+ *                         type: string
+ *                         format: date-time
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 lastActive:
+ *                   type: string
+ *                   format: date-time
+ *       '404':
+ *         description: Session not found
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function getSession(req: Request, res: Response) {
     try {
@@ -282,7 +378,65 @@ async function getSession(req: Request, res: Response) {
 }
 
 /**
- * Update session properties
+ * @swagger
+ * /api/llm/sessions/{sessionId}:
+ *   put:
+ *     summary: Update a chat session's settings
+ *     operationId: llm-update-session
+ *     parameters:
+ *       - name: sessionId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Updated title for the session
+ *               systemPrompt:
+ *                 type: string
+ *                 description: Updated system prompt
+ *               temperature:
+ *                 type: number
+ *                 description: Updated temperature setting
+ *               maxTokens:
+ *                 type: integer
+ *                 description: Updated maximum tokens setting
+ *               model:
+ *                 type: string
+ *                 description: Updated model selection
+ *               provider:
+ *                 type: string
+ *                 description: Updated provider selection
+ *               contextNoteId:
+ *                 type: string
+ *                 description: Updated note ID for context
+ *     responses:
+ *       '200':
+ *         description: Session successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       '404':
+ *         description: Session not found
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function updateSession(req: Request, res: Response) {
     try {
@@ -336,7 +490,36 @@ async function updateSession(req: Request, res: Response) {
 }
 
 /**
- * List active sessions
+ * @swagger
+ * /api/llm/sessions:
+ *   get:
+ *     summary: List all chat sessions
+ *     operationId: llm-list-sessions
+ *     responses:
+ *       '200':
+ *         description: List of chat sessions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   title:
+ *                     type: string
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   lastActive:
+ *                     type: string
+ *                     format: date-time
+ *                   messageCount:
+ *                     type: integer
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function listSessions(req: Request, res: Response) {
     try {
@@ -361,7 +544,25 @@ async function listSessions(req: Request, res: Response) {
 }
 
 /**
- * Delete a session
+ * @swagger
+ * /api/llm/sessions/{sessionId}:
+ *   delete:
+ *     summary: Delete a chat session
+ *     operationId: llm-delete-session
+ *     parameters:
+ *       - name: sessionId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Session successfully deleted
+ *       '404':
+ *         description: Session not found
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function deleteSession(req: Request, res: Response) {
     try {
@@ -537,7 +738,75 @@ function buildContextFromNotes(sources: NoteSource[], query: string): string {
 }
 
 /**
- * Send a message to the AI
+ * @swagger
+ * /api/llm/sessions/{sessionId}/messages:
+ *   post:
+ *     summary: Send a message to an LLM and get a response
+ *     operationId: llm-send-message
+ *     parameters:
+ *       - name: sessionId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 description: The user message to send to the LLM
+ *               options:
+ *                 type: object
+ *                 description: Optional parameters for this specific message
+ *                 properties:
+ *                   temperature:
+ *                     type: number
+ *                   maxTokens:
+ *                     type: integer
+ *                   model:
+ *                     type: string
+ *                   provider:
+ *                     type: string
+ *               includeContext:
+ *                 type: boolean
+ *                 description: Whether to include relevant notes as context
+ *               useNoteContext:
+ *                 type: boolean
+ *                 description: Whether to use the session's context note
+ *     responses:
+ *       '200':
+ *         description: LLM response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 response:
+ *                   type: string
+ *                 sources:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       noteId:
+ *                         type: string
+ *                       title:
+ *                         type: string
+ *                       similarity:
+ *                         type: number
+ *                 sessionId:
+ *                   type: string
+ *       '404':
+ *         description: Session not found
+ *       '500':
+ *         description: Error processing request
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function sendMessage(req: Request, res: Response) {
     try {
@@ -949,7 +1218,31 @@ async function sendMessage(req: Request, res: Response) {
 }
 
 /**
- * Get statistics about the knowledge base indexing
+ * @swagger
+ * /api/llm/index/stats:
+ *   get:
+ *     summary: Get statistics about the vector index
+ *     operationId: llm-index-stats
+ *     responses:
+ *       '200':
+ *         description: Vector index statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalEmbeddings:
+ *                   type: integer
+ *                 totalIndexedNotes:
+ *                   type: integer
+ *                 lastIndexed:
+ *                   type: string
+ *                   format: date-time
+ *                 embeddingProvider:
+ *                   type: string
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function getIndexStats(req: Request, res: Response) {
     try {
@@ -966,7 +1259,39 @@ async function getIndexStats(req: Request, res: Response) {
 }
 
 /**
- * Start or update knowledge base indexing
+ * @swagger
+ * /api/llm/index/start:
+ *   post:
+ *     summary: Start or restart the indexing process
+ *     operationId: llm-start-indexing
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               forceReindex:
+ *                 type: boolean
+ *                 description: Whether to force reindexing of all notes
+ *               branchId:
+ *                 type: string
+ *                 description: Optional branch ID to limit indexing scope
+ *     responses:
+ *       '200':
+ *         description: Indexing process started
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 notesToIndex:
+ *                   type: integer
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function startIndexing(req: Request, res: Response) {
     try {
@@ -999,7 +1324,33 @@ async function startIndexing(req: Request, res: Response) {
 }
 
 /**
- * Get failed indexing attempts
+ * @swagger
+ * /api/llm/index/failed:
+ *   get:
+ *     summary: Get list of notes that failed to be indexed
+ *     operationId: llm-failed-indexes
+ *     responses:
+ *       '200':
+ *         description: List of failed note indexes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   noteId:
+ *                     type: string
+ *                   title:
+ *                     type: string
+ *                   error:
+ *                     type: string
+ *                   timestamp:
+ *                     type: string
+ *                     format: date-time
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function getFailedIndexes(req: Request, res: Response) {
     try {
@@ -1021,7 +1372,34 @@ async function getFailedIndexes(req: Request, res: Response) {
 }
 
 /**
- * Retry failed indexing operation
+ * @swagger
+ * /api/llm/index/failed/{noteId}/retry:
+ *   post:
+ *     summary: Retry indexing a specific failed note
+ *     operationId: llm-retry-failed-index
+ *     parameters:
+ *       - name: noteId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Retry process started
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       '404':
+ *         description: Failed note not found
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function retryFailedIndex(req: Request, res: Response) {
     try {
@@ -1047,7 +1425,28 @@ async function retryFailedIndex(req: Request, res: Response) {
 }
 
 /**
- * Retry all failed indexing operations
+ * @swagger
+ * /api/llm/index/failed/retry-all:
+ *   post:
+ *     summary: Retry indexing all failed notes
+ *     operationId: llm-retry-all-failed
+ *     responses:
+ *       '200':
+ *         description: Retry process started for all failed notes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 count:
+ *                   type: integer
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function retryAllFailedIndexes(req: Request, res: Response) {
     try {
@@ -1069,7 +1468,48 @@ async function retryAllFailedIndexes(req: Request, res: Response) {
 }
 
 /**
- * Find similar notes based on query
+ * @swagger
+ * /api/llm/similar:
+ *   post:
+ *     summary: Find notes similar to the provided content
+ *     operationId: llm-find-similar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: Content to find similar notes for
+ *               limit:
+ *                 type: integer
+ *                 description: Maximum number of results to return
+ *               threshold:
+ *                 type: number
+ *                 description: Similarity threshold (0.0-1.0)
+ *     responses:
+ *       '200':
+ *         description: List of similar notes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   noteId:
+ *                     type: string
+ *                   title:
+ *                     type: string
+ *                   similarity:
+ *                     type: number
+ *                   branchId:
+ *                     type: string
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function findSimilarNotes(req: Request, res: Response) {
     try {
@@ -1100,7 +1540,51 @@ async function findSimilarNotes(req: Request, res: Response) {
 }
 
 /**
- * Generate context for an LLM query
+ * @swagger
+ * /api/llm/generate-context:
+ *   post:
+ *     summary: Generate context from similar notes for a query
+ *     operationId: llm-generate-context
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               query:
+ *                 type: string
+ *                 description: Query to generate context for
+ *               limit:
+ *                 type: integer
+ *                 description: Maximum number of notes to include
+ *               contextNoteId:
+ *                 type: string
+ *                 description: Optional note ID to provide additional context
+ *     responses:
+ *       '200':
+ *         description: Generated context and sources
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 context:
+ *                   type: string
+ *                 sources:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       noteId:
+ *                         type: string
+ *                       title:
+ *                         type: string
+ *                       similarity:
+ *                         type: number
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function generateQueryContext(req: Request, res: Response) {
     try {
@@ -1131,7 +1615,44 @@ async function generateQueryContext(req: Request, res: Response) {
 }
 
 /**
- * Index a specific note
+ * @swagger
+ * /api/llm/index/note/{noteId}:
+ *   post:
+ *     summary: Index or reindex a specific note
+ *     operationId: llm-index-note
+ *     parameters:
+ *       - name: noteId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               force:
+ *                 type: boolean
+ *                 description: Whether to force reindexing even if already indexed
+ *     responses:
+ *       '200':
+ *         description: Note indexing result
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       '404':
+ *         description: Note not found
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function indexNote(req: Request, res: Response) {
     try {

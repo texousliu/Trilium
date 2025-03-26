@@ -4,7 +4,58 @@ import log from "../../services/log.js";
 import type { Request, Response } from "express";
 
 /**
- * List available models from OpenAI
+ * @swagger
+ * /api/openai/models:
+ *   post:
+ *     summary: List available models from OpenAI
+ *     operationId: openai-list-models
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               baseUrl:
+ *                 type: string
+ *                 description: Optional custom OpenAI API base URL
+ *     responses:
+ *       '200':
+ *         description: List of available OpenAI models
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 chatModels:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       type:
+ *                         type: string
+ *                 embeddingModels:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       type:
+ *                         type: string
+ *       '500':
+ *         description: Error listing models
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function listModels(req: Request, res: Response) {
     try {

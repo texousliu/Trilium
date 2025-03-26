@@ -4,7 +4,40 @@ import log from "../../services/log.js";
 import type { Request, Response } from "express";
 
 /**
- * List available models from Ollama
+ * @swagger
+ * /api/ollama/models:
+ *   post:
+ *     summary: List available models from Ollama
+ *     operationId: ollama-list-models
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               baseUrl:
+ *                 type: string
+ *                 description: Optional custom Ollama API base URL
+ *     responses:
+ *       '200':
+ *         description: List of available Ollama models
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 models:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       '500':
+ *         description: Error listing models
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
  */
 async function listModels(req: Request, res: Response) {
     try {
