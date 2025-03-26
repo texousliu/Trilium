@@ -1319,7 +1319,7 @@
     "oauth_user_email": "User Email:",
     "oauth_user_not_logged_in": "Not logged in!",
     "oauth_description": "OpenID is a standardized way to let you log into websites using an account from another service, like Google, to verify your identity.",
-    "totp_title": "Time-based One-Time Password",
+    "totp_title": "Time-based One-Time Password (TOTP)",
     "totp_enabled": "TOTP Enabled",
     "totp_enable_description": "Set totpEnabled in config file or TRILIUM_TOTP_ENABLED environment variable to true to enable (Requires restart)",
     "totp_description": "TOTP (Time-Based One-Time Password) is a security feature that generates a unique, temporary code which changes every 30 seconds. You use this code, along with your password to log into your account, making it much harder for anyone else to access it.",

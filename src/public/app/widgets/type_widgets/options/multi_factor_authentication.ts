@@ -57,7 +57,7 @@ const TPL = `
         <div class="totp-secret">${t("multi_factor_authentication.totp_secret_description")}</div>
     </div>
 
-    <button class="regenerate-totp btn btn-primary"> ${t("multi_factor_authentication.totp_secret_generate")} </button>
+    <button class="generate-totp btn btn-primary"> ${t("multi_factor_authentication.totp_secret_generate")} </button>
 </div>
 
 <div class="options-section">
@@ -98,7 +98,7 @@ const TPL = `
 
     <br>
 
-    <button class="generate-recovery-code btn btn-primary" disabled="true"> Generate Recovery Keys </button>
+    <button class="generate-recovery-code btn btn-primary" disabled="true"> ${t("multi_factor_authentication.recovery_keys_generate")} </button>
 </div>
 `;
 
@@ -121,10 +121,9 @@ interface RecoveryKeysResponse {
 }
 
 export default class MultiFactorAuthenticationOptions extends OptionsWidget {
-    private $regenerateTotpButton!: JQuery<HTMLElement>;
+    private $generateTotpButton!: JQuery<HTMLElement>;
     private $totpEnabled!: JQuery<HTMLElement>;
     private $totpSecret!: JQuery<HTMLElement>;
-    private $authenticatorCode!: JQuery<HTMLElement>;
     private $generateRecoveryCodeButton!: JQuery<HTMLElement>;
     private $oAuthEnabledCheckbox!: JQuery<HTMLElement>;
     private $UserAccountName!: JQuery<HTMLElement>;
@@ -137,10 +136,9 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
 
-        this.$regenerateTotpButton = this.$widget.find(".regenerate-totp");
+        this.$generateTotpButton = this.$widget.find(".generate-totp");
         this.$totpEnabled = this.$widget.find(".totp-enabled");
         this.$totpSecret = this.$widget.find(".totp-secret");
-        this.$authenticatorCode = this.$widget.find(".authenticator-code");
         this.$generateRecoveryCodeButton = this.$widget.find(".generate-recovery-code");
         this.$oAuthEnabledCheckbox = this.$widget.find(".oauth-enabled-checkbox");
         this.$UserAccountName = this.$widget.find(".user-account-name");
@@ -157,7 +155,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             await this.setRecoveryKeys();
         });
 
-        this.$regenerateTotpButton.on("click", async () => {
+        this.$generateTotpButton.on("click", async () => {
             await this.generateKey();
         });
 
@@ -249,14 +247,14 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         server.get<TOTPStatus>("totp/status").then((result) => {
             if (result.enabled) {
                 this.$totpEnabled.prop("checked", result.message);
-                this.$authenticatorCode.prop("disabled", !result.message);
+                this.$generateTotpButton.prop("disabled", !result.message);
                 this.$generateRecoveryCodeButton.prop("disabled", !result.message);
 
                 this.$envEnabledTOTP.hide();
             } else {
                 this.$totpEnabled.prop("checked", false);
                 this.$totpEnabled.prop("disabled", true);
-                this.$authenticatorCode.prop("disabled", true);
+                this.$generateTotpButton.prop("disabled", true);
                 this.$generateRecoveryCodeButton.prop("disabled", true);
 
                 this.$envEnabledTOTP.text(t("multi_factor_authentication.totp_enable_description"));
