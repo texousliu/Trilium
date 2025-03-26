@@ -9,7 +9,23 @@ import config from "./config.js";
 
 
 function isOpenIDEnabled() {
-    return checkOpenIDRequirements();
+    if (config.MultiFactorAuthentication.ssoEnabled) {
+        if (config.MultiFactorAuthentication.totpEnabled) {
+            throw new OpenIDError("Cannot enable both OpenID and TOTP!");
+        }
+
+        if (config.MultiFactorAuthentication.oauthBaseUrl === "") {
+            throw new OpenIDError("oauthBaseUrl is undefined!");
+        }
+        if (config.MultiFactorAuthentication.oauthClientId === "") {
+            throw new OpenIDError("oauthClientId is undefined!");
+        }
+        if (config.MultiFactorAuthentication.oauthClientSecret === "") {
+            throw new OpenIDError("oauthClientSecret is undefined!");
+        }
+    }
+
+    return config.MultiFactorAuthentication.ssoEnabled;
 }
 
 function isUserSaved() {
@@ -34,26 +50,6 @@ function clearSavedUser() {
         success: true,
         message: "Account data removed."
     };
-}
-
-function checkOpenIDRequirements() {
-    if (config.MultiFactorAuthentication.ssoEnabled) {
-        if (config.MultiFactorAuthentication.totpEnabled) {
-            throw new OpenIDError("Cannot enable both OpenID and TOTP!");
-        }
-
-        if (config.MultiFactorAuthentication.oauthBaseUrl === "") {
-            throw new OpenIDError("oauthBaseUrl is undefined!");
-        }
-        if (config.MultiFactorAuthentication.oauthClientId === "") {
-            throw new OpenIDError("oauthClientId is undefined!");
-        }
-        if (config.MultiFactorAuthentication.oauthClientSecret === "") {
-            throw new OpenIDError("oauthClientSecret is undefined!");
-        }
-    }
-
-    return config.MultiFactorAuthentication.ssoEnabled;
 }
 
 function getOAuthStatus() {
@@ -145,7 +141,6 @@ export default {
     getOAuthStatus,
     isOpenIDEnabled,
     clearSavedUser,
-    checkOpenIDRequirements,
     isTokenValid,
     isUserSaved,
 };

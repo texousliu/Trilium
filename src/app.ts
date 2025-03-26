@@ -61,7 +61,7 @@ app.use(`/icon.png`, express.static(path.join(scriptDir, "public/icon.png")));
 app.use(sessionParser);
 app.use(favicon(`${scriptDir}/../images/app-icons/icon.ico`));
 
-if (openID.checkOpenIDRequirements())
+if (openID.isOpenIDEnabled())
     app.use(auth(openID.generateOAuthConfig()));
 
 await assets.register(app);
