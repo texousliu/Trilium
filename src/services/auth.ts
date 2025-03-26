@@ -7,7 +7,6 @@ import config from "./config.js";
 import passwordService from "./encryption/password.js";
 import totp from "./totp.js";
 import openID from "./open_id.js";
-import openIDEncryption from './encryption/open_id_encryption.js';
 import options from "./options.js";
 import attributes from "./attributes.js";
 import type { NextFunction, Request, Response } from "express";
@@ -21,6 +20,9 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
 
     if (!sqlInit.isDbInitialized()) {
         res.redirect('setup');
+    } else if (isElectron) {
+        next();
+        return;
     } else if (currentTotpStatus !== lastAuthState.totpEnabled || currentSsoStatus !== lastAuthState.ssoEnabled) {
         req.session.destroy((err) => {
             if (err) console.error('Error destroying session:', err);
@@ -34,7 +36,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
         }
         res.redirect('/login');
         return;
-    } else if (!req.session.loggedIn && !isElectron && !noAuthentication) {
+    } else if (!req.session.loggedIn && !noAuthentication) {
         const redirectToShare = options.getOptionBool("redirectBareDomain");
         if (redirectToShare) {
             // Check if any note has the #shareRoot label
