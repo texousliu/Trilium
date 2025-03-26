@@ -2,6 +2,7 @@ import type { Message, ChatCompletionOptions } from './ai_interface.js';
 import aiServiceManager from './ai_service_manager.js';
 import chatStorageService from './chat_storage_service.js';
 import log from '../log.js';
+import { CONTEXT_PROMPTS } from './constants/llm_prompt_constants.js';
 
 export interface ChatSession {
     id: string;
@@ -132,7 +133,10 @@ export class ChatService {
             // Add error message so user knows something went wrong
             const errorMessage: Message = {
                 role: 'assistant',
-                content: `Error: Failed to generate response. ${error.message || 'Please check AI settings and try again.'}`
+                content: CONTEXT_PROMPTS.ERROR_MESSAGES.GENERAL_ERROR.replace(
+                    '{errorMessage}',
+                    error.message || 'Please check AI settings and try again.'
+                )
             };
 
             session.messages.push(errorMessage);
@@ -177,7 +181,7 @@ export class ChatService {
 
         const contextMessage: Message = {
             role: 'user',
-            content: `Here is the content of the note I want to discuss:\n\n${context}\n\nPlease help me with this information.`
+            content: CONTEXT_PROMPTS.NOTE_CONTEXT_PROMPT.replace('{context}', context)
         };
 
         session.messages.push(contextMessage);
@@ -203,7 +207,9 @@ export class ChatService {
 
         const contextMessage: Message = {
             role: 'user',
-            content: `Here is the relevant information from my notes based on my query "${query}":\n\n${context}\n\nPlease help me understand this information in relation to my query.`
+            content: CONTEXT_PROMPTS.SEMANTIC_NOTE_CONTEXT_PROMPT
+                .replace('{query}', query)
+                .replace('{context}', context)
         };
 
         session.messages.push(contextMessage);
@@ -261,7 +267,10 @@ export class ChatService {
             // Prepend a system message with context
             const systemMessage: Message = {
                 role: 'system',
-                content: `You are an AI assistant helping with Trilium Notes. Use this context to answer the user's question:\n\n${enhancedContext}`
+                content: CONTEXT_PROMPTS.CONTEXT_AWARE_SYSTEM_PROMPT.replace(
+                    '{enhancedContext}',
+                    enhancedContext
+                )
             };
 
             // Create messages array with system message
@@ -307,7 +316,10 @@ export class ChatService {
             // Add error message
             const errorMessage: Message = {
                 role: 'assistant',
-                content: `Error: Failed to generate response with note context. ${error.message || 'Please try again.'}`
+                content: CONTEXT_PROMPTS.ERROR_MESSAGES.CONTEXT_ERROR.replace(
+                    '{errorMessage}',
+                    error.message || 'Please try again.'
+                )
             };
 
             session.messages.push(errorMessage);

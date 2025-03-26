@@ -83,7 +83,32 @@ Now, based on the above information, please answer: {query}`,
 
     // Context for index service
     INDEX_NO_NOTES_CONTEXT:
-        "I'm an AI assistant helping with your Trilium notes. I couldn't find specific notes related to your query, but I'll try to assist based on general knowledge."
+        "I'm an AI assistant helping with your Trilium notes. I couldn't find specific notes related to your query, but I'll try to assist based on general knowledge.",
+
+    // Prompt for adding note context to chat
+    NOTE_CONTEXT_PROMPT: `Here is the content of the note I want to discuss:
+
+{context}
+
+Please help me with this information.`,
+
+    // Prompt for adding semantic note context to chat
+    SEMANTIC_NOTE_CONTEXT_PROMPT: `Here is the relevant information from my notes based on my query "{query}":
+
+{context}
+
+Please help me understand this information in relation to my query.`,
+
+    // System message prompt for context-aware chat
+    CONTEXT_AWARE_SYSTEM_PROMPT: `You are an AI assistant helping with Trilium Notes. Use this context to answer the user's question:
+
+{enhancedContext}`,
+
+    // Error messages
+    ERROR_MESSAGES: {
+        GENERAL_ERROR: `Error: Failed to generate response. {errorMessage}`,
+        CONTEXT_ERROR: `Error: Failed to generate response with note context. {errorMessage}`
+    }
 };
 
 // Agent tool prompts
