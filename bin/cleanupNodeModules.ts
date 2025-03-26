@@ -68,14 +68,6 @@ function cleanupNodeModules(basePath: string) {
         'build/node_modules/boxicons/iconjar',
         'build/node_modules/@jimp/plugin-print/fonts',
         'build/node_modules/jimp/dist/browser'
-        // "node_modules/@excalidraw/excalidraw/dist/dev",
-        // "node_modules/jimp/browser",
-        // "node_modules/@jimp/plugin-print/fonts",
-        // "node_modules/jimp/dist/browser",
-        // "node_modules/jimp/fonts",
-        // "node_modules/boxicons/svg",
-        // "node_modules/boxicons/node_modules/react",
-        // "node_modules/mermaid/dist/mermaid.js"
     ]);
 
     nodeModulesContent
