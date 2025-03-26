@@ -718,3 +718,15 @@ input[type="range"] {
 ::-webkit-scrollbar-button:horizontal {
     width: var(--scrollbar-start-end-gap);
 }
+
+/*
+ * Firefox scrollbars
+ *
+ * Unsupported features: --scrollbar-thumb-thickness, --scrollbar-thumb-hover-thickness,
+ *                        --scrollbar-start-end-gap, --scrollbar-thumb-color-hover.
+ */
+
+:root {
+    scrollbar-color: var(--scrollbar-thumb-color) transparent;
+    scrollbar-width: var(--scrollbar-thickness);
+}
