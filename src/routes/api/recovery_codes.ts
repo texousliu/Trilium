@@ -15,8 +15,7 @@ function veryifyRecoveryCode(req: Request) {
 
 function checkForRecoveryKeys() {
     return {
-        success
-            : true, keysExist: recovery_codes.isRecoveryCodeSet()
+        success: true, keysExist: recovery_codes.isRecoveryCodeSet()
     };
 }
 
