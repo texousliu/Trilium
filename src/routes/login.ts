@@ -7,18 +7,17 @@ import assetPath from "../services/asset_path.js";
 import appPath from "../services/app_path.js";
 import ValidationError from "../errors/validation_error.js";
 import type { Request, Response } from 'express';
-import recoveryCodeService from '../services/encryption/recovery_codes.js';
-import openIDService from '../services/open_id.js';
-import openIDEncryption from '../services/encryption/open_id_encryption.js';
 import totp from '../services/totp.js';
-import open_id from '../services/open_id.js';
+import recoveryCodeService from '../services/encryption/recovery_codes.js';
+import openID from '../services/open_id.js';
+import openIDEncryption from '../services/encryption/open_id_encryption.js';
 
 function loginPage(req: Request, res: Response) {
     res.render('login', {
         wrongPassword: false,
         wrongTotp: false,
         totpEnabled: totp.isTotpEnabled(),
-        ssoEnabled: open_id.isOpenIDEnabled(),
+        ssoEnabled: openID.isOpenIDEnabled(),
         assetPath: assetPath,
         appPath: appPath,
     });
@@ -64,6 +63,11 @@ function setPassword(req: Request, res: Response) {
 }
 
 function login(req: Request, res: Response) {
+    if (openID.isOpenIDEnabled()) {
+        res.oidc.login({ returnTo: '/' });
+        return;
+    }
+
     const submittedPassword = req.body.password;
     const submittedTotpToken = req.body.totpToken;
 
@@ -92,7 +96,7 @@ function login(req: Request, res: Response) {
 
         req.session.lastAuthState = {
             totpEnabled: totp.isTotpEnabled(),
-            ssoEnabled: open_id.isOpenIDEnabled()
+            ssoEnabled: openID.isOpenIDEnabled()
         };
 
         req.session.loggedIn = true;
@@ -128,7 +132,7 @@ function sendLoginError(req: Request, res: Response, errorType: 'password' | 'to
         wrongPassword: errorType === 'password',
         wrongTotp: errorType === 'totp',
         totpEnabled: totp.isTotpEnabled(),
-        ssoEnabled: open_id.isOpenIDEnabled(),
+        ssoEnabled: openID.isOpenIDEnabled(),
         assetPath: assetPath,
         appPath: appPath,
     });
@@ -138,7 +142,7 @@ function logout(req: Request, res: Response) {
     req.session.regenerate(() => {
         req.session.loggedIn = false;
 
-        if (openIDService.isOpenIDEnabled() && openIDEncryption.isSubjectIdentifierSaved()) {
+        if (openID.isOpenIDEnabled() && openIDEncryption.isSubjectIdentifierSaved()) {
             res.oidc.logout({ returnTo: '/authenticate' });
         } else res.redirect('login');
 

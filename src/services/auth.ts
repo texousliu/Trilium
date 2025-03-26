@@ -6,8 +6,8 @@ import passwordEncryptionService from "./encryption/password_encryption.js";
 import config from "./config.js";
 import passwordService from "./encryption/password.js";
 import totp from "./totp.js";
-import open_id from "./open_id.js";
-import open_id_encryption from './encryption/open_id_encryption.js';
+import openID from "./open_id.js";
+import openIDEncryption from './encryption/open_id_encryption.js';
 import options from "./options.js";
 import attributes from "./attributes.js";
 import type { NextFunction, Request, Response } from "express";
@@ -16,7 +16,7 @@ const noAuthentication = config.General && config.General.noAuthentication === t
 
 function checkAuth(req: Request, res: Response, next: NextFunction) {
     const currentTotpStatus = totp.isTotpEnabled();
-    const currentSsoStatus = open_id.isOpenIDEnabled();
+    const currentSsoStatus = openID.isOpenIDEnabled();
     const lastAuthState = req.session.lastAuthState || { totpEnabled: false, ssoEnabled: false };
 
     if (!sqlInit.isDbInitialized()) {
@@ -27,10 +27,10 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
             res.redirect('/login');
         });
         return;
-    } else if (open_id.isOpenIDEnabled()) {
+    } else if (openID.isOpenIDEnabled()) {
         if (
             req.oidc.isAuthenticated() &&
-            open_id_encryption.verifyOpenIDSubjectIdentifier(req.oidc.user?.sub)
+            openIDEncryption.verifyOpenIDSubjectIdentifier(req.oidc.user?.sub)
         ) {
             req.session.loggedIn = true;
             next();
