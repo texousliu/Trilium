@@ -17,7 +17,7 @@ const loadSystemPrompt = (): string => {
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
 
-        const promptPath = path.join(__dirname, 'base_system_prompt.md');
+        const promptPath = path.join(__dirname, '../prompts/base_system_prompt.md');
         const promptContent = fs.readFileSync(promptPath, 'utf8');
         // Strip the markdown title if needed
         return promptContent.replace(/^# TriliumNext Base System Prompt\n+/, '');
