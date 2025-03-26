@@ -15,7 +15,7 @@
 
 import log from "../../log.js";
 import aiServiceManager from "../ai_service_manager.js";
-import { AGENT_TOOL_PROMPTS } from '../prompts/llm_prompt_constants.js';
+import { AGENT_TOOL_PROMPTS } from '../constants/llm_prompt_constants.js';
 
 /**
  * Represents a single reasoning step taken by the agent

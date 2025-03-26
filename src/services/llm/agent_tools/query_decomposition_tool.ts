@@ -13,7 +13,7 @@
  */
 
 import log from '../../log.js';
-import { AGENT_TOOL_PROMPTS } from '../prompts/llm_prompt_constants.js';
+import { AGENT_TOOL_PROMPTS } from '../constants/llm_prompt_constants.js';
 
 export interface SubQuery {
     id: string;

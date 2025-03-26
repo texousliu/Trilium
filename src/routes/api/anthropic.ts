@@ -2,6 +2,7 @@ import axios from 'axios';
 import options from "../../services/options.js";
 import log from "../../services/log.js";
 import type { Request, Response } from "express";
+import { PROVIDER_CONSTANTS } from '../../services/llm/constants/provider_constants.js';
 
 // Map of simplified model names to full model names with versions
 const MODEL_MAPPING: Record<string, string> = {
@@ -26,7 +27,7 @@ async function listModels(req: Request, res: Response) {
         const { baseUrl } = req.body;
 
         // Use provided base URL or default from options, and ensure correct formatting
-        let anthropicBaseUrl = baseUrl || await options.getOption('anthropicBaseUrl') || 'https://api.anthropic.com';
+        let anthropicBaseUrl = baseUrl || await options.getOption('anthropicBaseUrl') || PROVIDER_CONSTANTS.ANTHROPIC.BASE_URL;
         // Ensure base URL doesn't already include '/v1' and is properly formatted
         anthropicBaseUrl = anthropicBaseUrl.replace(/\/+$/, '').replace(/\/v1$/, '');
 
@@ -43,8 +44,8 @@ async function listModels(req: Request, res: Response) {
             headers: {
                 'Content-Type': 'application/json',
                 'X-Api-Key': apiKey,
-                'anthropic-version': '2023-06-01',
-                'anthropic-beta': 'messages-2023-12-15'
+                'anthropic-version': PROVIDER_CONSTANTS.ANTHROPIC.API_VERSION,
+                'anthropic-beta': PROVIDER_CONSTANTS.ANTHROPIC.BETA_VERSION
             },
             timeout: 10000
         });
@@ -77,12 +78,12 @@ async function listModels(req: Request, res: Response) {
             });
 
         // Also include known models that might not be returned by the API
-        for (const [simpleName, fullName] of Object.entries(MODEL_MAPPING)) {
+        for (const model of PROVIDER_CONSTANTS.ANTHROPIC.AVAILABLE_MODELS) {
             // Check if this model is already in our list
-            if (!chatModels.some((m: AnthropicModel) => m.id === fullName)) {
+            if (!chatModels.some((m: AnthropicModel) => m.id === model.id)) {
                 chatModels.push({
-                    id: fullName,
-                    name: simpleName,
+                    id: model.id,
+                    name: model.name,
                     type: 'chat'
                 });
             }

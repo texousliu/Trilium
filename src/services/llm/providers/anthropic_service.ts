@@ -1,6 +1,7 @@
 import options from '../../options.js';
 import { BaseAIService } from '../base_ai_service.js';
 import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
+import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
 
 export class AnthropicService extends BaseAIService {
     // Map of simplified model names to full model names with versions
@@ -25,14 +26,8 @@ export class AnthropicService extends BaseAIService {
         }
 
         const apiKey = options.getOption('anthropicApiKey');
-        const baseUrl = options.getOption('anthropicBaseUrl') || 'https://api.anthropic.com';
-        let model = opts.model || options.getOption('anthropicDefaultModel') || 'claude-3-haiku-20240307';
-
-        // Apply model name mapping if needed
-        if (AnthropicService.MODEL_MAPPING[model]) {
-            model = AnthropicService.MODEL_MAPPING[model];
-            console.log(`Mapped model name to: ${model}`);
-        }
+        const baseUrl = options.getOption('anthropicBaseUrl') || PROVIDER_CONSTANTS.ANTHROPIC.BASE_URL;
+        const model = opts.model || options.getOption('anthropicDefaultModel') || PROVIDER_CONSTANTS.ANTHROPIC.DEFAULT_MODEL;
 
         const temperature = opts.temperature !== undefined
             ? opts.temperature
@@ -56,8 +51,8 @@ export class AnthropicService extends BaseAIService {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Api-Key': apiKey,
-                    'anthropic-version': '2023-06-01',
-                    'anthropic-beta': 'messages-2023-12-15'
+                    'anthropic-version': PROVIDER_CONSTANTS.ANTHROPIC.API_VERSION,
+                    'anthropic-beta': PROVIDER_CONSTANTS.ANTHROPIC.BETA_VERSION
                 },
                 body: JSON.stringify({
                     model,

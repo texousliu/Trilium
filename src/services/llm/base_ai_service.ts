@@ -1,6 +1,6 @@
 import options from '../options.js';
 import type { AIService, ChatCompletionOptions, ChatResponse, Message } from './ai_interface.js';
-import { DEFAULT_SYSTEM_PROMPT } from './prompts/llm_prompt_constants.js';
+import { DEFAULT_SYSTEM_PROMPT } from './constants/llm_prompt_constants.js';
 
 export abstract class BaseAIService implements AIService {
     protected name: string;
