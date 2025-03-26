@@ -1,6 +1,12 @@
 import fs from "fs-extra";
 import path from "path";
 
+/**
+ * Example usage with node >= v22:
+ *    node --experimental-strip-types bin/cleanupNodeModules.ts /path/to/build/folder
+ * Example usage with tsx:
+ *    tsx bin/cleanupNodeModules.ts /path/to/build/folder
+ */
 function main() {
     if (process.argv.length !== 3) {
         console.error("More than one path was supplied as argument. Aborting.");
@@ -13,8 +19,9 @@ function main() {
         console.error(`Supplied path '${basePath}' does not exist. Aborting.`)
         process.exit(1);
     }
-
+    console.log(`Starting node_modules pruning in '${basePath}'...`)
     cleanupNodeModules(basePath);
+    console.log("Successfully pruned node_modules.")
 }
 
 function cleanupNodeModules(basePath: string) {
