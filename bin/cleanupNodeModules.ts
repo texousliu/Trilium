@@ -1,30 +1,43 @@
 import fs from "fs-extra";
 import path from "path";
+import type { Dirent } from "fs-extra";
+import { execSync } from "node:child_process";
 
 /**
  * Example usage with node >= v22:
- *    node --experimental-strip-types bin/cleanupNodeModules.ts /path/to/build/folder
+ *    node --experimental-strip-types bin/cleanupNodeModules.ts /path/to/build/folder [--skip-prune-dev-deps]
  * Example usage with tsx:
- *    tsx bin/cleanupNodeModules.ts /path/to/build/folder
+ *    tsx bin/cleanupNodeModules.ts /path/to/build/folder [--skip-prune-dev-deps]
  */
 function main() {
-    if (process.argv.length !== 3) {
-        console.error("More than one path was supplied as argument. Aborting.");
+
+    if (process.argv.length > 4 || process.argv.length < 3) {
+        console.error("Usage: cleanupNodeModules.ts [path-to-build-folder] [--skip-prune-dev-deps]");
         process.exit(1);
     }
 
     const basePath = process.argv[2];
+    const pruneDevDeps = process.argv[3] !== "--skip-prune-dev-deps";
 
     if (!fs.existsSync(basePath)) {
-        console.error(`Supplied path '${basePath}' does not exist. Aborting.`)
+        console.error(`Supplied path '${basePath}' does not exist. Aborting.`);
         process.exit(1);
     }
-    console.log(`Starting node_modules pruning in '${basePath}'...`)
-    cleanupNodeModules(basePath);
-    console.log("Successfully pruned node_modules.")
+
+    console.log(`Starting pruning of node_modules ${!pruneDevDeps ? '(skipping npm pruning)' : ''} in '${basePath}'...`);
+    cleanupNodeModules(basePath, pruneDevDeps);
+    console.log("Successfully pruned node_modules.");
 }
 
-function cleanupNodeModules(basePath: string) {
+function cleanupNodeModules(basePath: string, pruneDevDeps: boolean = true) {
+
+    // This needs to run for the server and Docker build,
+    // but needs to be skipped for electron-forge: its
+    // built-in pruning takes care of it already
+    if (pruneDevDeps) {
+        execSync(`npm ci --omit=dev --prefix ${basePath}`);
+    }
+
     const nodeModulesDirPath = path.join(basePath, "node_modules");
     const nodeModulesContent = fs.readdirSync(nodeModulesDirPath, { recursive: true, withFileTypes: true });
     //const libDir = fs.readdirSync(path.join(basePath, "./libraries"), { recursive: true, withFileTypes: true });
@@ -82,6 +95,7 @@ function cleanupNodeModules(basePath: string) {
         .forEach(dir => removeDirent(dir))
 }
 
+
 function removeDirent(el: Dirent) {
     const elementToDelete = path.join(el.parentPath, el.name);
     fs.removeSync(elementToDelete);
@@ -89,7 +103,6 @@ function removeDirent(el: Dirent) {
     if (process.env.VERBOSE) {
         console.log(`Deleted ${elementToDelete}`);
     }
-
 
 }
 

@@ -1,6 +1,5 @@
 import fs from "fs-extra";
 import path from "path";
-import { execSync } from "node:child_process";
 
 const DEST_DIR = "./build";
 
@@ -58,11 +57,6 @@ try {
     }
 
     console.log("Copying complete!")
-
-    // TriliumNextTODO: for Docker this needs to run separately *after* build-stage
-    // Disable for now, because this messes with electron-forge as well
-    //console.log("Pruning npm packages...")
-    //execSync(`npm ci --omit=dev --prefix ${DEST_DIR}`);
 
 } catch(err) {
     console.error("Error during copy:", err)

@@ -40,6 +40,7 @@ COPY --from=builder /usr/src/app ./
 
 RUN sed -i "/electron/d" package.json && \
     npm ci --omit=dev && \
+    node --experimental-strip-types ./bin/cleanupNodeModules.ts . --skip-prune-dev-deps && \
     npm cache clean --force && \
     rm -rf /tmp/node-compile-cache
 

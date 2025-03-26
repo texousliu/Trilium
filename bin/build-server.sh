@@ -33,6 +33,7 @@ echo "Build start"
 npm run build:prepare-dist
 echo "Build finished"
 
+# pruning of unnecessary files and devDeps in node_modules
 node --experimental-strip-types $CLEANUP_SCRIPT $BUILD_DIR
 
 NODE_FILENAME=node-v${NODE_VERSION}-linux-${ARCH}
