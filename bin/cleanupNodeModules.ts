@@ -45,7 +45,7 @@ function cleanupNodeModules(basePath: string) {
 
     nodeModulesContent
         .filter(el => el.isDirectory() && filterableDirs.has(el.name))
-        .forEach(dir => fs.removeSync(path.join(dir.parentPath, dir.name)));
+        .forEach(dir => removeDirent(dir));
 
     /**
      * Delete unnecessary files based on file extension
@@ -59,7 +59,7 @@ function cleanupNodeModules(basePath: string) {
     nodeModulesContent
         // TriliumNextTODO: check if we can improve this naive file ext matching, without introducing any additional dependency
         .filter(el => el.isFile() && filterableFileExt.has(el.name.split(".").at(-1) || ""))
-        .forEach(file => fs.removeSync(path.join(file.parentPath, file.name)));
+        .forEach(dir => removeDirent(dir));
 
 
     /**
@@ -79,7 +79,17 @@ function cleanupNodeModules(basePath: string) {
 
     nodeModulesContent
         .filter(el => el.isDirectory() && extraFoldersDelete.has(path.join(el.parentPath, el.name)))
-        .forEach(dir => fs.removeSync(path.join(dir.parentPath, dir.name)))
+        .forEach(dir => removeDirent(dir))
+}
+
+function removeDirent(el: Dirent) {
+    const elementToDelete = path.join(el.parentPath, el.name);
+    fs.removeSync(elementToDelete);
+
+    if (process.env.VERBOSE) {
+        console.log(`Deleted ${elementToDelete}`);
+    }
+
 
 }
 
