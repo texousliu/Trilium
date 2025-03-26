@@ -6,7 +6,7 @@ import { embeddingToBuffer, bufferToEmbedding, cosineSimilarity, enhancedCosineS
 import type { EmbeddingResult } from "./types.js";
 import entityChangesService from "../../../services/entity_changes.js";
 import type { EntityChange } from "../../../services/entity_changes_interface.js";
-
+import { EMBEDDING_CONSTANTS } from "../constants/embedding_constants.js";
 /**
  * Creates or updates an embedding for a note
  */
@@ -330,6 +330,109 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
     vectorDebugConfig.enabled = false;
     vectorDebugConfig.recordStats = false;
 
+    const options = (await import('../../options.js')).default;
+
+    // Define weighting factors with defaults that can be overridden by settings
+    interface SimilarityWeights {
+        exactTitleMatch: number;
+        titleContainsQuery: number;
+        partialTitleMatch: number;
+        // Add more weights as needed - examples:
+        sameType?: number;
+        attributeMatch?: number;
+        recentlyCreated?: number;
+        recentlyModified?: number;
+    }
+
+    // Default weights that match our previous hardcoded values
+    const defaultWeights: SimilarityWeights = {
+        exactTitleMatch: 0.3,
+        titleContainsQuery: 0.2,
+        partialTitleMatch: 0.1,
+        sameType: 0.05,
+        attributeMatch: 0.05,
+        recentlyCreated: 0.05,
+        recentlyModified: 0.05
+    };
+
+    // Get weights from options if they exist
+    const weights: SimilarityWeights = { ...defaultWeights };
+    try {
+        const customWeightsJSON = EMBEDDING_CONSTANTS;
+        if (customWeightsJSON) {
+            try {
+                const customWeights = EMBEDDING_CONSTANTS;
+                // Override defaults with any custom weights
+                Object.assign(weights, customWeights);
+                log.info(`Using custom similarity weights: ${JSON.stringify(weights)}`);
+            } catch (e) {
+                log.error(`Error parsing custom similarity weights: ${e}`);
+            }
+        }
+    } catch (e) {
+        // Use defaults if no custom weights
+    }
+
+    /**
+     * Calculate similarity bonuses based on various factors
+     */
+    function calculateSimilarityBonuses(
+        embedding: any,
+        note: any,
+        queryText: string,
+        weights: SimilarityWeights
+    ): { bonuses: Record<string, number>, totalBonus: number } {
+        const bonuses: Record<string, number> = {};
+
+        // Skip if we don't have query text
+        if (!queryText || !note.title) {
+            return { bonuses, totalBonus: 0 };
+        }
+
+        const titleLower = note.title.toLowerCase();
+        const queryLower = queryText.toLowerCase();
+
+        // 1. Exact title match
+        if (titleLower === queryLower) {
+            bonuses.exactTitleMatch = weights.exactTitleMatch;
+        }
+        // 2. Title contains the entire query
+        else if (titleLower.includes(queryLower)) {
+            bonuses.titleContainsQuery = weights.titleContainsQuery;
+        }
+        // 3. Partial term matching
+        else {
+            // Split query into terms and check if title contains them
+            const queryTerms = queryLower.split(/\s+/).filter((term: string) => term.length > 2);
+            let matchCount = 0;
+
+            for (const term of queryTerms) {
+                if (titleLower.includes(term)) {
+                    matchCount++;
+                }
+            }
+
+            if (matchCount > 0 && queryTerms.length > 0) {
+                // Calculate proportion of matching terms and apply a scaled bonus
+                const matchProportion = matchCount / queryTerms.length;
+                bonuses.partialTitleMatch = weights.partialTitleMatch * matchProportion;
+            }
+        }
+
+        // 4. Add more factors as needed here
+        // Example: Same note type bonus
+        // if (note.type && weights.sameType) {
+        //     // Note: This would need to be compared with the query context to be meaningful
+        //     // For now, this is a placeholder for demonstration
+        //     bonuses.sameType = weights.sameType;
+        // }
+
+        // Calculate total bonus
+        const totalBonus = Object.values(bonuses).reduce((sum, bonus) => sum + bonus, 0);
+
+        return { bonuses, totalBonus };
+    }
+
     const similarities = [];
 
     try {
@@ -367,45 +470,25 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
                 performanceProfile
             );
 
-            // Apply title match bonus if we have both a query and title
-            if (queryText && e.title) {
-                const titleLower = e.title.toLowerCase();
-                const queryLower = queryText.toLowerCase();
+            // Calculate and apply similarity bonuses
+            const { bonuses, totalBonus } = calculateSimilarityBonuses(
+                queryEmbedding,
+                e,
+                queryText,
+                weights
+            );
 
-                // Check for exact title match (case insensitive)
-                if (titleLower === queryLower) {
-                    // Add a large bonus for exact title match
-                    similarity += 0.3;
-                    log.info(`Added 0.3 exact title match bonus for note "${e.title}" (${e.noteId})`);
-                }
-                // Check for title containing the entire query as a substring
-                else if (titleLower.includes(queryLower)) {
-                    // Add a significant bonus for title containing the whole query
-                    similarity += 0.2;
-                    log.info(`Added 0.2 title contains query bonus for note "${e.title}" (${e.noteId})`);
-                }
-                // Check for query terms appearing in the title
-                else {
-                    // Split query into terms and check if title contains them
-                    const queryTerms = queryLower.split(/\s+/).filter((term: string) => term.length > 2);
-                    let matchCount = 0;
+            if (totalBonus > 0) {
+                similarity += totalBonus;
 
-                    for (const term of queryTerms) {
-                        if (titleLower.includes(term)) {
-                            matchCount++;
-                        }
-                    }
+                // Log significant bonuses for debugging
+                const significantBonuses = Object.entries(bonuses)
+                    .filter(([_, value]) => value >= 0.05)
+                    .map(([key, value]) => `${key}: +${value.toFixed(2)}`)
+                    .join(', ');
 
-                    if (matchCount > 0 && queryTerms.length > 0) {
-                        // Calculate proportion of matching terms and apply a scaled bonus
-                        const matchProportion = matchCount / queryTerms.length;
-                        const bonus = 0.1 * matchProportion;
-                        similarity += bonus;
-
-                        if (bonus >= 0.05) {
-                            log.info(`Added ${bonus.toFixed(2)} partial title match bonus for note "${e.title}" (${e.noteId})`);
-                        }
-                    }
+                if (significantBonuses) {
+                    log.info(`Added bonuses for note "${e.title}" (${e.noteId}): ${significantBonuses}`);
                 }
 
                 // Cap similarity at 1.0 to maintain expected range
@@ -416,7 +499,9 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
                 similarities.push({
                     noteId: e.noteId,
                     similarity: similarity,
-                    contentType: contentType.toString()
+                    contentType: contentType.toString(),
+                    // Optionally include bonuses for debugging/analysis
+                    // bonuses: bonuses
                 });
             }
         }
