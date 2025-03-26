@@ -693,9 +693,10 @@ input[type="range"] {
     --s-gradient-p2: calc(var(--s-gradient-p1) + var(--s-thumb-thickness));
 
     border: none !important;
-    background: linear-gradient(var(--s-gradient-angle), transparent, transparent var(--s-gradient-p1),
-                                       var(--s-thumb-color) 0px, var(--s-thumb-color) var(--s-gradient-p2),
-                                       transparent 0) !important;
+    background: linear-gradient(var(--s-gradient-angle),
+                                transparent, transparent var(--s-gradient-p1),
+                                var(--s-thumb-color) 0px, var(--s-thumb-color) var(--s-gradient-p2),
+                                transparent 0) !important;
 
     border-radius: calc(var(--scrollbar-thickness) / 2) !important;
 }
@@ -705,8 +706,8 @@ input[type="range"] {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-   --s-thumb-thickness: var(--scrollbar-thumb-hover-thickness);
-   --s-thumb-color: var(--scrollbar-thumb-color-hover);
+    --s-thumb-thickness: var(--scrollbar-thumb-hover-thickness);
+    --s-thumb-color: var(--scrollbar-thumb-color-hover);
 }
 
 /* Scrollbar's increment/decrement buttons (repurposed as a scrollbar start/end gap) */
@@ -723,7 +724,7 @@ input[type="range"] {
  * Firefox scrollbars
  *
  * Unsupported features: --scrollbar-thumb-thickness, --scrollbar-thumb-hover-thickness,
- *                        --scrollbar-start-end-gap, --scrollbar-thumb-color-hover.
+ *                       --scrollbar-start-end-gap, --scrollbar-thumb-color-hover.
  */
 
 :root {
