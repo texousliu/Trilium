@@ -36,7 +36,7 @@ jobs:
       - name: Set up node & dependencies
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Run the build
         uses: ./.github/actions/build-electron
         with:
