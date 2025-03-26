@@ -64,7 +64,13 @@ function setPassword(req: Request, res: Response) {
 
 function login(req: Request, res: Response) {
     if (openID.isOpenIDEnabled()) {
-        res.oidc.login({ returnTo: '/' });
+        res.oidc.login({
+            returnTo: '/',
+            authorizationParams: {
+                prompt: 'consent',
+                access_type: 'offline'
+            }
+        });
         return;
     }
 

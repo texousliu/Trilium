@@ -103,33 +103,45 @@ function generateOAuthConfig() {
     };
 
     const authConfig = {
-        authRequired: true,
+        authRequired: false,
         auth0Logout: false,
         baseURL: config.MultiFactorAuthentication.oauthBaseUrl,
         clientID: config.MultiFactorAuthentication.oauthClientId,
-        issuerBaseURL: "https://accounts.google.com/.well-known/openid-configuration",
+        issuerBaseURL: "https://accounts.google.com",
         secret: config.MultiFactorAuthentication.oauthClientSecret,
         clientSecret: config.MultiFactorAuthentication.oauthClientSecret,
         authorizationParams: {
             response_type: "code",
             scope: "openid profile email",
+            access_type: "offline",
+            prompt: "consent",
+            state: "random_state_" + Math.random().toString(36).substring(2)
         },
         routes: authRoutes,
-        idpLogout: false,
+        idpLogout: true,
         logoutParams: logoutParams,
         afterCallback: async (req: Request, res: Response, session: Session) => {
             if (!sqlInit.isDbInitialized()) return session;
 
-            if (isUserSaved()) return session;
-
-            if (req.oidc.user === undefined) {
+            if (!req.oidc.user) {
                 console.log("user invalid!");
-            } else {
-                openIDEncryption.saveUser(
-                    req.oidc.user.sub.toString(),
-                    req.oidc.user.name.toString(),
-                    req.oidc.user.email.toString());
+                return session;
             }
+
+            // 保存用户信息
+            openIDEncryption.saveUser(
+                req.oidc.user.sub.toString(),
+                req.oidc.user.name.toString(),
+                req.oidc.user.email.toString()
+            );
+
+            // 设置登录状态
+            req.session.loggedIn = true;
+            req.session.lastAuthState = {
+                totpEnabled: false,
+                ssoEnabled: true
+            };
+
             return session;
         },
     };

@@ -28,16 +28,12 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
         });
         return;
     } else if (openID.isOpenIDEnabled()) {
-        if (
-            req.oidc.isAuthenticated() &&
-            openIDEncryption.verifyOpenIDSubjectIdentifier(req.oidc.user?.sub)
-        ) {
-            req.session.loggedIn = true;
+        if (req.oidc?.isAuthenticated() && req.session.loggedIn) {
             next();
-        } else {
-            req.session.loggedIn = false;
-            res.oidc.login({});
+            return;
         }
+        res.redirect('/login');
+        return;
     } else if (!req.session.loggedIn && !isElectron && !noAuthentication) {
         const redirectToShare = options.getOptionBool("redirectBareDomain");
         if (redirectToShare) {
