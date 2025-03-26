@@ -668,7 +668,7 @@ input[type="range"] {
 :root {
     --scrollbar-thickness: 10px;
     --scrollbar-thumb-thickness: 3px;
-    --scrollbar-thumb-hover-thickness: 8px;
+    --scrollbar-thumb-hover-thickness: 6px;
     --scrollbar-start-end-gap: 8px;
 }
 
