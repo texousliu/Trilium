@@ -14,18 +14,14 @@ import totp from '../services/totp.js';
 import open_id from '../services/open_id.js';
 
 function loginPage(req: Request, res: Response) {
-    if (open_id.isOpenIDEnabled()) {
-        res.redirect('/authenticate');
-    } else {
-        res.render('login', {
-            wrongPassword: false,
-            wrongTotp: false,
-            totpEnabled: totp.isTotpEnabled(),
-            ssoEnabled: open_id.isOpenIDEnabled(),
-            assetPath: assetPath,
-            appPath: appPath,
-        });
-    }
+    res.render('login', {
+        wrongPassword: false,
+        wrongTotp: false,
+        totpEnabled: totp.isTotpEnabled(),
+        ssoEnabled: open_id.isOpenIDEnabled(),
+        assetPath: assetPath,
+        appPath: appPath,
+    });
 }
 
 function setPasswordPage(req: Request, res: Response) {
