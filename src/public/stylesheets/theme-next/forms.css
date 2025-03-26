@@ -731,3 +731,12 @@ input[type="range"] {
     scrollbar-color: var(--scrollbar-thumb-color) transparent;
     scrollbar-width: var(--scrollbar-thickness);
 }
+
+@supports selector(::-webkit-scrollbar) {
+    /* Prevent the scrollbar-color and scrollbar-width properties to override the custom styles
+     * defined using ::-webkit-scrollbar. */
+    :root {
+        scrollbar-color: unset;
+        scrollbar-width: unset;
+    }
+}
