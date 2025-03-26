@@ -333,6 +333,12 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
     const similarities = [];
 
     try {
+        // Try to extract the original query text if it was added to the metadata
+        // This will help us determine title matches
+        const queryText = queryEmbedding.hasOwnProperty('originalQuery')
+            ? (queryEmbedding as any).originalQuery
+            : '';
+
         for (const e of embeddings) {
             const embVector = bufferToEmbedding(e.embedding, e.dimension);
 
@@ -351,7 +357,7 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
             const isCrossModel = e.providerId !== e.queryProviderId || e.modelId !== e.queryModelId;
 
             // Calculate similarity with content-aware parameters
-            const similarity = enhancedCosineSimilarity(
+            let similarity = enhancedCosineSimilarity(
                 queryEmbedding,
                 embVector,
                 true, // normalize vectors to ensure consistent comparison
@@ -360,6 +366,51 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
                 contentType,     // content-specific padding strategy
                 performanceProfile
             );
+
+            // Apply title match bonus if we have both a query and title
+            if (queryText && e.title) {
+                const titleLower = e.title.toLowerCase();
+                const queryLower = queryText.toLowerCase();
+
+                // Check for exact title match (case insensitive)
+                if (titleLower === queryLower) {
+                    // Add a large bonus for exact title match
+                    similarity += 0.3;
+                    log.info(`Added 0.3 exact title match bonus for note "${e.title}" (${e.noteId})`);
+                }
+                // Check for title containing the entire query as a substring
+                else if (titleLower.includes(queryLower)) {
+                    // Add a significant bonus for title containing the whole query
+                    similarity += 0.2;
+                    log.info(`Added 0.2 title contains query bonus for note "${e.title}" (${e.noteId})`);
+                }
+                // Check for query terms appearing in the title
+                else {
+                    // Split query into terms and check if title contains them
+                    const queryTerms = queryLower.split(/\s+/).filter((term: string) => term.length > 2);
+                    let matchCount = 0;
+
+                    for (const term of queryTerms) {
+                        if (titleLower.includes(term)) {
+                            matchCount++;
+                        }
+                    }
+
+                    if (matchCount > 0 && queryTerms.length > 0) {
+                        // Calculate proportion of matching terms and apply a scaled bonus
+                        const matchProportion = matchCount / queryTerms.length;
+                        const bonus = 0.1 * matchProportion;
+                        similarity += bonus;
+
+                        if (bonus >= 0.05) {
+                            log.info(`Added ${bonus.toFixed(2)} partial title match bonus for note "${e.title}" (${e.noteId})`);
+                        }
+                    }
+                }
+
+                // Cap similarity at 1.0 to maintain expected range
+                similarity = Math.min(similarity, 1.0);
+            }
 
             if (similarity >= threshold) {
                 similarities.push({

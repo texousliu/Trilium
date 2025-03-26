@@ -544,6 +544,15 @@ class IndexService {
             const embedding = await provider.generateEmbeddings(query);
             log.info(`Generated embedding for query: "${query}" (${embedding.length} dimensions)`);
 
+            // Add the original query as a property to the embedding
+            // This is used for title matching in the vector search
+            Object.defineProperty(embedding, 'originalQuery', {
+                value: query,
+                writable: false,
+                enumerable: true,
+                configurable: false
+            });
+
             // Store query text in a global cache for possible regeneration with different providers
             // Use a type declaration to avoid TypeScript errors
             interface CustomGlobal {

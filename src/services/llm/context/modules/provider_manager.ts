@@ -87,7 +87,22 @@ export class ProviderManager {
                 log.error('No embedding provider available');
                 return null;
             }
-            return await provider.generateEmbeddings(query);
+
+            // Generate the embedding
+            const embedding = await provider.generateEmbeddings(query);
+
+            if (embedding) {
+                // Add the original query as a property to the embedding
+                // This is used for title matching in the vector search
+                Object.defineProperty(embedding, 'originalQuery', {
+                    value: query,
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                });
+            }
+
+            return embedding;
         } catch (error) {
             log.error(`Error generating query embedding: ${error}`);
             return null;
