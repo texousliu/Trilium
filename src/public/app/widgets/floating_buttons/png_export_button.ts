@@ -11,7 +11,7 @@ const TPL = `
 
 export default class PngExportButton extends NoteContextAwareWidget {
     isEnabled() {
-        return super.isEnabled() && ["mermaid"].includes(this.note?.type ?? "") && this.note?.isContentAvailable() && this.noteContext?.viewScope?.viewMode === "default";
+        return super.isEnabled() && ["mermaid", "mindMap"].includes(this.note?.type ?? "") && this.note?.isContentAvailable() && this.noteContext?.viewScope?.viewMode === "default";
     }
 
     doRender() {
