@@ -342,7 +342,7 @@ async function updateProvider(req: Request, res: Response) {
     const { isEnabled, priority, config } = req.body;
 
     const success = await providerManager.updateEmbeddingProviderConfig(
-        providerId, isEnabled, priority, config
+        providerId, isEnabled, priority
     );
 
     if (!success) {
