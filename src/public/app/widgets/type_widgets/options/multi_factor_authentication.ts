@@ -115,9 +115,9 @@ interface TOTPStatus {
 
 interface RecoveryKeysResponse {
     success: boolean;
-    recoveryCodes?: string[];
+    recoveryCodes?: string;
     keysExist?: boolean;
-    usedRecoveryCodes?: string[];
+    usedRecoveryCodes?: string;
 }
 
 export default class MultiFactorAuthenticationOptions extends OptionsWidget {
@@ -183,10 +183,43 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         }
     }
 
-    private keyFiller(values: string[]) {
-        const keys = values.join(",").split(",");
-        for (let i = 0; i < keys.length; i++) {
-            this.$recoveryKeys[i].text(keys[i]);
+    async displayRecoveryKeys() {
+        const result = await server.get<RecoveryKeysResponse>("totp_recovery/enabled");
+        if (!result.success) {
+            this.fillKeys(t("multi_factor_authentication.recovery_keys_error"));
+            return;
+        }
+
+        if (!result.keysExist) {
+            this.fillKeys(t("multi_factor_authentication.recovery_keys_no_key_set"));
+            this.$generateRecoveryCodeButton.text(t("multi_factor_authentication.recovery_keys_generate"));
+            return;
+        }
+
+        const usedResult = await server.get<RecoveryKeysResponse>("totp_recovery/used");
+        if (usedResult.usedRecoveryCodes) {
+            this.keyFiller(usedResult.usedRecoveryCodes);
+            this.$generateRecoveryCodeButton.text(t("multi_factor_authentication.recovery_keys_regenerate"));
+        } else {
+            this.fillKeys(t("multi_factor_authentication.recovery_keys_no_key_set"));
+        }
+    }
+
+    private keyFiller(values: string) {
+        const keys = values.split(',').slice(0, 8);
+
+        this.fillKeys("");
+
+        keys.forEach((key, index) => {
+            if (index < 8 && key && typeof key === 'string') {
+                this.$recoveryKeys[index].text(key.trim());
+            }
+        });
+    }
+
+    private fillKeys(message: string) {
+        for (let i = 0; i < 8; i++) {
+            this.$recoveryKeys[i].text(message);
         }
     }
 
@@ -231,25 +264,5 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             }
         });
         this.$protectedSessionTimeout.val(Number(options.protectedSessionTimeout));
-    }
-
-    async displayRecoveryKeys() {
-        const result = await server.get<RecoveryKeysResponse>("totp_recovery/enabled");
-        if (!result.success) {
-            this.keyFiller(Array(8).fill(t("multi_factor_authentication.recovery_keys_error")));
-            return;
-        }
-
-        if (!result.keysExist) {
-            this.keyFiller(Array(8).fill(t("multi_factor_authentication.recovery_keys_no_key_set")));
-            this.$generateRecoveryCodeButton.text(t("multi_factor_authentication.recovery_keys_generate"));
-            return;
-        }
-
-        const usedResult = await server.get<RecoveryKeysResponse>("totp_recovery/used");
-        if (usedResult.usedRecoveryCodes) {
-            this.keyFiller(usedResult.usedRecoveryCodes);
-            this.$generateRecoveryCodeButton.text(t("multi_factor_authentication.recovery_keys_regenerate"));
-        }
     }
 }
