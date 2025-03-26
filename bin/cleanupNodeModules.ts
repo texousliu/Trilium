@@ -67,6 +67,7 @@ function cleanupNodeModules(basePath: string) {
      * TODO: check if we want removeSync to throw an error, if path does not exist anymore -> currently it will silently fail
      */
     const extraFoldersDelete = new Set([
+        path.join(nodeModulesDirPath, ".bin"),
         path.join(nodeModulesDirPath, "@excalidraw", "excalidraw", "dist", "dev"),
         path.join(nodeModulesDirPath, "boxicons", "svg"),
         path.join(nodeModulesDirPath, "boxicons", "node_modules"),
