@@ -1302,6 +1302,7 @@
   "multi_factor_authentication": {
     "title": "多因素认证",
     "description": "多因素认证（MFA）为您的账户添加了额外的安全层。除了输入密码登录外，MFA还要求您提供一个或多个额外的验证信息来验证您的身份。这样，即使有人获得了您的密码，没有第二个验证信息他们也无法访问您的账户。这就像给您的门添加了一把额外的锁，让他人更难闯入。",
+    "electron_disabled": "当前桌面版本不支持多因素认证。",
     "oauth_title": "OAuth/OpenID 认证",
     "oauth_enabled": "OAuth/OpenID 已启用",
     "oauth_enable_description": "在配置文件中设置 ssoEnabled 或环境变量 TRILIUM_SSO_ENABLED 为 true 以启用（需要重启）",

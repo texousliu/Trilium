@@ -3,8 +3,9 @@ import toastService from "../../../services/toast.js";
 import OptionsWidget from "./options_widget.js";
 import type { OptionMap } from "../../../../../services/options_interface.js";
 import { t } from "../../../services/i18n.js";
+import utils from "../../../services/utils.js";
 
-const TPL = `
+const TPL_WEB = `
 <div class="options-section">
     <h4>${t("multi_factor_authentication.title")}</h4>
     <p class="form-text">${t("multi_factor_authentication.description")}</p>
@@ -102,6 +103,13 @@ const TPL = `
 </div>
 `;
 
+const TPL_ELECTRON = `
+<div class="options-section">
+    <h4>${t("multi_factor_authentication.title")}</h4>
+    <p class="form-text">${t("multi_factor_authentication.electron_disabled")}</p>
+</div>
+`;
+
 interface OAuthStatus {
     enabled: boolean;
     name?: string;
@@ -134,37 +142,40 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     private $protectedSessionTimeout!: JQuery<HTMLElement>;
 
     doRender() {
-        this.$widget = $(TPL);
+        const template = utils.isElectron() ? TPL_ELECTRON : TPL_WEB;
+        this.$widget = $(template);
 
-        this.$generateTotpButton = this.$widget.find(".generate-totp");
-        this.$totpEnabled = this.$widget.find(".totp-enabled");
-        this.$totpSecret = this.$widget.find(".totp-secret");
-        this.$generateRecoveryCodeButton = this.$widget.find(".generate-recovery-code");
-        this.$oAuthEnabledCheckbox = this.$widget.find(".oauth-enabled-checkbox");
-        this.$UserAccountName = this.$widget.find(".user-account-name");
-        this.$UserAccountEmail = this.$widget.find(".user-account-email");
-        this.$envEnabledTOTP = this.$widget.find(".env-totp-enabled");
-        this.$envEnabledOAuth = this.$widget.find(".env-oauth-enabled");
+        if (!utils.isElectron()) {
+            this.$generateTotpButton = this.$widget.find(".generate-totp");
+            this.$totpEnabled = this.$widget.find(".totp-enabled");
+            this.$totpSecret = this.$widget.find(".totp-secret");
+            this.$generateRecoveryCodeButton = this.$widget.find(".generate-recovery-code");
+            this.$oAuthEnabledCheckbox = this.$widget.find(".oauth-enabled-checkbox");
+            this.$UserAccountName = this.$widget.find(".user-account-name");
+            this.$UserAccountEmail = this.$widget.find(".user-account-email");
+            this.$envEnabledTOTP = this.$widget.find(".env-totp-enabled");
+            this.$envEnabledOAuth = this.$widget.find(".env-oauth-enabled");
 
-        this.$recoveryKeys = [];
-        for (let i = 0; i < 8; i++) {
-            this.$recoveryKeys.push(this.$widget.find(".key_" + i));
+            this.$recoveryKeys = [];
+            for (let i = 0; i < 8; i++) {
+                this.$recoveryKeys.push(this.$widget.find(".key_" + i));
+            }
+
+            this.$generateRecoveryCodeButton.on("click", async () => {
+                await this.setRecoveryKeys();
+            });
+
+            this.$generateTotpButton.on("click", async () => {
+                await this.generateKey();
+            });
+
+            this.$protectedSessionTimeout = this.$widget.find(".protected-session-timeout-in-seconds");
+            this.$protectedSessionTimeout.on("change", () => {
+                this.updateOption("protectedSessionTimeout", this.$protectedSessionTimeout.val());
+            });
+
+            this.displayRecoveryKeys();
         }
-
-        this.$generateRecoveryCodeButton.on("click", async () => {
-            await this.setRecoveryKeys();
-        });
-
-        this.$generateTotpButton.on("click", async () => {
-            await this.generateKey();
-        });
-
-        this.$protectedSessionTimeout = this.$widget.find(".protected-session-timeout-in-seconds");
-        this.$protectedSessionTimeout.on("change", () => {
-            this.updateOption("protectedSessionTimeout", this.$protectedSessionTimeout.val());
-        });
-
-        this.displayRecoveryKeys();
     }
 
     async setRecoveryKeys() {
@@ -231,36 +242,38 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     }
 
     optionsLoaded(options: OptionMap) {
-        server.get<OAuthStatus>("oauth/status").then((result) => {
-            if (result.enabled) {
-                this.$oAuthEnabledCheckbox.prop("checked", result.enabled);
-                if (result.name) this.$UserAccountName.text(result.name);
-                if (result.email) this.$UserAccountEmail.text(result.email);
+        if (!utils.isElectron()) {
+            server.get<OAuthStatus>("oauth/status").then((result) => {
+                if (result.enabled) {
+                    this.$oAuthEnabledCheckbox.prop("checked", result.enabled);
+                    if (result.name) this.$UserAccountName.text(result.name);
+                    if (result.email) this.$UserAccountEmail.text(result.email);
 
-                this.$envEnabledOAuth.hide();
-            } else {
-                this.$envEnabledOAuth.text(t("multi_factor_authentication.oauth_enable_description"));
-                this.$envEnabledOAuth.show();
-            }
-        });
+                    this.$envEnabledOAuth.hide();
+                } else {
+                    this.$envEnabledOAuth.text(t("multi_factor_authentication.oauth_enable_description"));
+                    this.$envEnabledOAuth.show();
+                }
+            });
 
-        server.get<TOTPStatus>("totp/status").then((result) => {
-            if (result.enabled) {
-                this.$totpEnabled.prop("checked", result.message);
-                this.$generateTotpButton.prop("disabled", !result.message);
-                this.$generateRecoveryCodeButton.prop("disabled", !result.message);
+            server.get<TOTPStatus>("totp/status").then((result) => {
+                if (result.enabled) {
+                    this.$totpEnabled.prop("checked", result.message);
+                    this.$generateTotpButton.prop("disabled", !result.message);
+                    this.$generateRecoveryCodeButton.prop("disabled", !result.message);
 
-                this.$envEnabledTOTP.hide();
-            } else {
-                this.$totpEnabled.prop("checked", false);
-                this.$totpEnabled.prop("disabled", true);
-                this.$generateTotpButton.prop("disabled", true);
-                this.$generateRecoveryCodeButton.prop("disabled", true);
+                    this.$envEnabledTOTP.hide();
+                } else {
+                    this.$totpEnabled.prop("checked", false);
+                    this.$totpEnabled.prop("disabled", true);
+                    this.$generateTotpButton.prop("disabled", true);
+                    this.$generateRecoveryCodeButton.prop("disabled", true);
 
-                this.$envEnabledTOTP.text(t("multi_factor_authentication.totp_enable_description"));
-                this.$envEnabledTOTP.show();
-            }
-        });
-        this.$protectedSessionTimeout.val(Number(options.protectedSessionTimeout));
+                    this.$envEnabledTOTP.text(t("multi_factor_authentication.totp_enable_description"));
+                    this.$envEnabledTOTP.show();
+                }
+            });
+            this.$protectedSessionTimeout.val(Number(options.protectedSessionTimeout));
+        }
     }
 }
