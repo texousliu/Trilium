@@ -1,6 +1,7 @@
 import options from '../../options.js';
 import { BaseAIService } from '../base_ai_service.js';
 import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
+import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
 
 export class OllamaService extends BaseAIService {
     constructor() {
@@ -18,8 +19,8 @@ export class OllamaService extends BaseAIService {
             throw new Error('Ollama service is not available. Check Ollama settings.');
         }
 
-        const baseUrl = options.getOption('ollamaBaseUrl') || 'http://localhost:11434';
-        const model = opts.model || options.getOption('ollamaDefaultModel') || 'llama2';
+        const baseUrl = options.getOption('ollamaBaseUrl') || PROVIDER_CONSTANTS.OLLAMA.BASE_URL;
+        const model = opts.model || options.getOption('ollamaDefaultModel') || PROVIDER_CONSTANTS.OLLAMA.DEFAULT_MODEL;
         const temperature = opts.temperature !== undefined
             ? opts.temperature
             : parseFloat(options.getOption('aiTemperature') || '0.7');

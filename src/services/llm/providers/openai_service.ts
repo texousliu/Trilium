@@ -1,6 +1,7 @@
 import options from '../../options.js';
 import { BaseAIService } from '../base_ai_service.js';
 import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
+import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
 
 export class OpenAIService extends BaseAIService {
     constructor() {
@@ -17,8 +18,8 @@ export class OpenAIService extends BaseAIService {
         }
 
         const apiKey = options.getOption('openaiApiKey');
-        const baseUrl = options.getOption('openaiBaseUrl') || 'https://api.openai.com/v1';
-        const model = opts.model || options.getOption('openaiDefaultModel') || 'gpt-3.5-turbo';
+        const baseUrl = options.getOption('openaiBaseUrl') || PROVIDER_CONSTANTS.OPENAI.BASE_URL;
+        const model = opts.model || options.getOption('openaiDefaultModel') || PROVIDER_CONSTANTS.OPENAI.DEFAULT_MODEL;
         const temperature = opts.temperature !== undefined
             ? opts.temperature
             : parseFloat(options.getOption('aiTemperature') || '0.7');
