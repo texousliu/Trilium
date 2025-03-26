@@ -21,6 +21,7 @@ function loginPage(req: Request, res: Response) {
             wrongPassword: false,
             wrongTotp: false,
             totpEnabled: totp.isTotpEnabled(),
+            ssoEnabled: open_id.isOpenIDEnabled(),
             assetPath: assetPath,
             appPath: appPath,
         });
@@ -70,13 +71,11 @@ function login(req: Request, res: Response) {
     const submittedPassword = req.body.password;
     const submittedTotpToken = req.body.totpToken;
 
-    // 首先验证密码
     if (!verifyPassword(submittedPassword)) {
         sendLoginError(req, res, 'password');
         return;
     }
 
-    // 如果密码正确且启用了 TOTP，验证 TOTP
     if (totp.isTotpEnabled()) {
         if (!verifyTOTP(submittedTotpToken)) {
             sendLoginError(req, res, 'totp');
@@ -95,7 +94,6 @@ function login(req: Request, res: Response) {
             req.session.cookie.maxAge = undefined;
         }
 
-        // 记录当前的认证状态
         req.session.lastAuthState = {
             totpEnabled: totp.isTotpEnabled(),
             ssoEnabled: open_id.isOpenIDEnabled()
@@ -134,6 +132,7 @@ function sendLoginError(req: Request, res: Response, errorType: 'password' | 'to
         wrongPassword: errorType === 'password',
         wrongTotp: errorType === 'totp',
         totpEnabled: totp.isTotpEnabled(),
+        ssoEnabled: open_id.isOpenIDEnabled(),
         assetPath: assetPath,
         appPath: appPath,
     });

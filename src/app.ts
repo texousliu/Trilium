@@ -7,7 +7,6 @@ import compression from "compression";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sessionParser from "./routes/session_parser.js";
-import checkAuthState from "./routes/auth_check.js";
 import utils from "./services/utils.js";
 import assets from "./routes/assets.js";
 import routes from "./routes/routes.js";
@@ -15,8 +14,7 @@ import custom from "./routes/custom.js";
 import error_handlers from "./routes/error_handlers.js";
 import { startScheduledCleanup } from "./services/erase.js";
 import sql_init from "./services/sql_init.js";
-import totp from "./services/totp.js";
-import oidc from "express-openid-connect";
+import { auth } from "express-openid-connect";
 import openID from "./services/open_id.js";
 import { t } from "i18next";
 
@@ -26,7 +24,6 @@ await import("./becca/becca_loader.js");
 const app = express();
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
-
 
 // Initialize DB
 sql_init.initializeDb();
@@ -62,14 +59,10 @@ app.use(`/manifest.webmanifest`, express.static(path.join(scriptDir, "public/man
 app.use(`/robots.txt`, express.static(path.join(scriptDir, "public/robots.txt")));
 app.use(`/icon.png`, express.static(path.join(scriptDir, "public/icon.png")));
 app.use(sessionParser);
-app.use(checkAuthState);
 app.use(favicon(`${scriptDir}/../images/app-icons/icon.ico`));
 
-// Check if TOTP is enabled and validate TOTP secret is set
-totp.isTotpEnabled();
-
 if (openID.checkOpenIDRequirements())
-    app.use(oidc.auth(openID.generateOAuthConfig()));
+    app.use(auth(openID.generateOAuthConfig()));
 
 await assets.register(app);
 routes.register(app);

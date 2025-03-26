@@ -1,5 +1,3 @@
-"use strict";
-
 import etapiTokenService from "./etapi_tokens.js";
 import log from "./log.js";
 import sqlInit from "./sql_init.js";
@@ -7,7 +5,8 @@ import { isElectron } from "./utils.js";
 import passwordEncryptionService from "./encryption/password_encryption.js";
 import config from "./config.js";
 import passwordService from "./encryption/password.js";
-import openID from './open_id.js';
+import totp from "./totp.js";
+import open_id from "./open_id.js";
 import open_id_encryption from './encryption/open_id_encryption.js';
 import options from "./options.js";
 import attributes from "./attributes.js";
@@ -16,9 +15,19 @@ import type { NextFunction, Request, Response } from "express";
 const noAuthentication = config.General && config.General.noAuthentication === true;
 
 function checkAuth(req: Request, res: Response, next: NextFunction) {
+    const currentTotpStatus = totp.isTotpEnabled();
+    const currentSsoStatus = open_id.isOpenIDEnabled();
+    const lastAuthState = req.session.lastAuthState || { totpEnabled: false, ssoEnabled: false };
+
     if (!sqlInit.isDbInitialized()) {
         res.redirect('setup');
-    } else if (openID.checkOpenIDRequirements()) {
+    } else if (currentTotpStatus !== lastAuthState.totpEnabled || currentSsoStatus !== lastAuthState.ssoEnabled) {
+        req.session.destroy((err) => {
+            if (err) console.error('Error destroying session:', err);
+            res.redirect('/login');
+        });
+        return;
+    } else if (open_id.isOpenIDEnabled()) {
         if (
             req.oidc.isAuthenticated() &&
             open_id_encryption.verifyOpenIDSubjectIdentifier(req.oidc.user?.sub)
