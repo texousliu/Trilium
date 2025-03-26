@@ -18,7 +18,8 @@ function main() {
 }
 
 function cleanupNodeModules(basePath: string) {
-    const nodeModulesContent = fs.readdirSync(path.join(basePath, "./node_modules"), { recursive: true, withFileTypes: true });
+    const nodeModulesDirPath = path.join(basePath, "node_modules");
+    const nodeModulesContent = fs.readdirSync(nodeModulesDirPath, { recursive: true, withFileTypes: true });
     //const libDir = fs.readdirSync(path.join(basePath, "./libraries"), { recursive: true, withFileTypes: true });
 
     /**
@@ -39,7 +40,6 @@ function cleanupNodeModules(basePath: string) {
         .filter(el => el.isDirectory() && filterableDirs.has(el.name))
         .forEach(dir => fs.removeSync(path.join(dir.parentPath, dir.name)));
 
-
     /**
      * Delete unnecessary files based on file extension
      * TODO filter out useless (README).md files
@@ -57,17 +57,16 @@ function cleanupNodeModules(basePath: string) {
 
     /**
      * Delete specific unnecessary folders
-     * TODO: use basePath
      * TODO: check if we want removeSync to throw an error, if path does not exist anymore -> currently it will silently fail
      */
     const extraFoldersDelete = new Set([
-        'build/node_modules/@excalidraw/excalidraw/dist/dev',
-        'build/node_modules/boxicons/svg',
-        'build/node_modules/boxicons/node_modules',
-        'build/node_modules/boxicons/src',
-        'build/node_modules/boxicons/iconjar',
-        'build/node_modules/@jimp/plugin-print/fonts',
-        'build/node_modules/jimp/dist/browser'
+        path.join(nodeModulesDirPath, "@excalidraw", "excalidraw", "dist", "dev"),
+        path.join(nodeModulesDirPath, "boxicons", "svg"),
+        path.join(nodeModulesDirPath, "boxicons", "node_modules"),
+        path.join(nodeModulesDirPath, "boxicons", "src"),
+        path.join(nodeModulesDirPath, "boxicons", "iconjar"),
+        path.join(nodeModulesDirPath, "@jimp", "plugin-print", "fonts"),
+        path.join(nodeModulesDirPath, "jimp", "dist", "browser") // missing "@" in front of jimp is not a typo here
     ]);
 
     nodeModulesContent
