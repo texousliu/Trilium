@@ -18,7 +18,7 @@ function main() {
 }
 
 function cleanupNodeModules(basePath: string) {
-    const nodeDir = fs.readdirSync(path.join(basePath, "./node_modules"), { recursive: true, withFileTypes: true });
+    const nodeModulesContent = fs.readdirSync(path.join(basePath, "./node_modules"), { recursive: true, withFileTypes: true });
     //const libDir = fs.readdirSync(path.join(basePath, "./libraries"), { recursive: true, withFileTypes: true });
 
     /**
@@ -35,7 +35,7 @@ function cleanupNodeModules(basePath: string) {
         "tests"
     ]);
 
-    nodeDir
+    nodeModulesContent
         .filter(el => el.isDirectory() && filterableDirs.has(el.name))
         .forEach(dir => fs.removeSync(path.join(dir.parentPath, dir.name)));
 
@@ -49,7 +49,7 @@ function cleanupNodeModules(basePath: string) {
         "map"
     ]);
 
-    nodeDir
+    nodeModulesContent
         // TriliumNextTODO: check if we can improve this naive file ext matching, without introducing any additional dependency
         .filter(el => el.isFile() && filterableFileExt.has(el.name.split(".").at(-1) || ""))
         .forEach(file => fs.removeSync(path.join(file.parentPath, file.name)));
@@ -78,7 +78,7 @@ function cleanupNodeModules(basePath: string) {
         // "node_modules/mermaid/dist/mermaid.js"
     ]);
 
-    nodeDir
+    nodeModulesContent
         .filter(el => el.isDirectory() && extraFoldersDelete.has(path.join(el.parentPath, el.name)))
         .forEach(dir => fs.removeSync(path.join(dir.parentPath, dir.name)))
 
