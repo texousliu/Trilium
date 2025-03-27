@@ -33,7 +33,7 @@ const config: Configuration = {
                 {
                     context: "node_modules/@excalidraw/excalidraw/dist/prod/fonts/",
                     from: "**/*",
-                    to: "fonts/excalidraw/"
+                    to: "excalidraw/fonts/"
                 }
             ]
         })
