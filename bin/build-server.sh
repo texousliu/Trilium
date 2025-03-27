@@ -25,8 +25,16 @@ NODE_VERSION=22.14.0
 
 BUILD_DIR="./build"
 DIST_DIR="./dist"
+CLEANUP_SCRIPT="./bin/cleanupNodeModules.ts"
 
-./bin/copy-trilium.sh
+
+# Trigger the build
+echo "Build start"
+npm run build:prepare-dist
+echo "Build finished"
+
+# pruning of unnecessary files and devDeps in node_modules
+node --experimental-strip-types $CLEANUP_SCRIPT $BUILD_DIR
 
 NODE_FILENAME=node-v${NODE_VERSION}-linux-${ARCH}
 
