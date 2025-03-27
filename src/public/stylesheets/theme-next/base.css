@@ -95,8 +95,8 @@
     font-size: 0.9rem !important;
 }
 
-.dropdown-menu::-webkit-scrollbar-track {
-    background: var(--menu-background-color);
+.dropdown-menu {
+    --scrollbar-background-color: var(--menu-background-color);
 }
 
 body.mobile .dropdown-menu {
