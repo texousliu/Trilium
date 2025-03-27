@@ -36,9 +36,9 @@ RUN sed -i "/electron/d" package.json && \
     npm ci --omit=dev && \
     node --experimental-strip-types ./bin/cleanupNodeModules.ts . --skip-prune-dev-deps && \
     npm cache clean --force && \
-    rm -rf \ 
+    rm -rf \
       /tmp/node-compile-cache \
-      ./bin/cleanupNodeModules.ts
+      /usr/src/app/bin/cleanupNodeModules.ts
 
 # Add application user
 RUN adduser -s /bin/false node; exit 0
