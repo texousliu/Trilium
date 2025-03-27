@@ -707,7 +707,7 @@ input[type="range"] {
 
 ::-webkit-scrollbar-thumb:hover {
     --s-thumb-thickness: var(--scrollbar-thumb-hover-thickness);
-    --s-thumb-color: var(--scrollbar-thumb-color-hover);
+    --s-thumb-color: var(--scrollbar-thumb-hover-color);
 }
 
 /* Scrollbar's increment/decrement buttons (repurposed as a scrollbar start/end gap) */
@@ -724,7 +724,7 @@ input[type="range"] {
  * Firefox scrollbars
  *
  * Unsupported features: --scrollbar-thumb-thickness, --scrollbar-thumb-hover-thickness,
- *                       --scrollbar-start-end-gap, --scrollbar-thumb-color-hover.
+ *                       --scrollbar-start-end-gap, --scrollbar-thumb-hover-color.
  */
 
 :root {
