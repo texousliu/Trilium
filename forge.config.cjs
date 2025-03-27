@@ -47,7 +47,7 @@ module.exports = {
                 try {
                     const cleanupNodeModulesScript = path.join(buildPath, "bin", "cleanupNodeModules.ts");
                     // we don't have access to any devDeps like 'tsx' here, so use the built-in '--experimental-strip-types' flag instead
-                    const command = `node --experimental-strip-types ${cleanupNodeModulesScript} '${buildPath}' --skip-prune-dev-deps`;
+                    const command = `node --experimental-strip-types ${cleanupNodeModulesScript} "${buildPath}" --skip-prune-dev-deps`;
                     // execSync throws, if above returns any non-zero exit code
                     execSync(command);
                     callback()
