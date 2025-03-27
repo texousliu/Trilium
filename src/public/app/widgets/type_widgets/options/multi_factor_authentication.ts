@@ -9,97 +9,124 @@ const TPL_WEB = `
 <div class="options-section">
     <h4>${t("multi_factor_authentication.title")}</h4>
     <p class="form-text">${t("multi_factor_authentication.description")}</p>
-</div>
-
-<div class="options-section">
-    <h4>${t("multi_factor_authentication.oauth_title")}</h4>
 
     <div class="form-group row">
         <div class="col-md-6 side-checkbox">
             <label class="form-check tn-checkbox">
-                <input type="checkbox" class="oauth-enabled-checkbox form-check-input" disabled />
-                <b>${t("multi_factor_authentication.oauth_enabled")}</b>
+                <input type="checkbox" class="mfa-enabled-checkbox form-check-input" checked/>
+                ${t("multi_factor_authentication.mfa_enabled")}
             </label>
         </div>
     </div>
 
-    <div class="alert alert-warning env-oauth-enabled" role="alert" style="font-weight: bold; color: red !important;"></div>
+    <div class="mfa-options" style="display: none;">
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label class="form-label"><b>${t("multi_factor_authentication.mfa_method")}</b></label>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input auth-method-radio" name="mfaMethod" value="totp" checked />
+                    <label class="form-check-label">${t("multi_factor_authentication.totp_title")}</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input auth-method-radio" name="mfaMethod" value="oauth" />
+                    <label class="form-check-label">${t("multi_factor_authentication.oauth_title")}</label>
+                </div>
+            </div>
+        </div>
 
-    <div class="col-md-6">
-        <span><b>${t("multi_factor_authentication.oauth_user_account")}</b></span><span class="user-account-name"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
-        <br>
-        <span><b>${t("multi_factor_authentication.oauth_user_email")}</b></span><span class="user-account-email"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
-    </div>
+        <div class="totp-options" style="display: none;">
+            <div class="form-group row">
+                <div class="col-md-6 side-checkbox">
+                    <label class="form-check tn-checkbox">
+                        <input type="checkbox" class="totp-enabled form-check-input" disabled />
+                        <b>${t("multi_factor_authentication.totp_enabled")}</b>
+                    </label>
+                </div>
+            </div>
 
-    <p class="form-text">${t("multi_factor_authentication.oauth_description")}</p>
-</div>
+            <div class="alert alert-warning env-totp-enabled" role="alert" style="font-weight: bold; color: red !important;"></div>
 
-<div class="options-section">
-    <h4>${t("multi_factor_authentication.totp_title")}</h4>
+            <p class="form-text">${t("multi_factor_authentication.totp_description")}</p>
 
-    <div class="form-group row">
-        <div class="col-md-6 side-checkbox">
-            <label class="form-check tn-checkbox">
-                <input type="checkbox" class="totp-enabled form-check-input" disabled />
-                <b>${t("multi_factor_authentication.totp_enabled")}</b>
-            </label>
+            <div class="form-group">
+                <div class="totp-secret">${t("multi_factor_authentication.totp_secret_description")}</div>
+            </div>
+
+            <button class="generate-totp btn btn-primary"> ${t("multi_factor_authentication.totp_secret_generate")} </button>
+
+            <div class="options-section">
+                <h4>${t("multi_factor_authentication.totp_secret_title")}</h4>
+
+                <div class="form-group">
+                    <div class="totp-secret">${t("multi_factor_authentication.totp_secret_description")}</div>
+                </div>
+
+                <button class="generate-totp btn btn-primary"> ${t("multi_factor_authentication.totp_secret_generate")} </button>
+            </div>
+
+            <div class="options-section">
+                <h4>${t("multi_factor_authentication.recovery_keys_title")}</h4>
+
+                <p class="form-text">${t("multi_factor_authentication.recovery_keys_description")}</p>
+
+                <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+                    ${t("multi_factor_authentication.recovery_keys_description_warning")}
+                </div>
+
+                <br>
+
+                <table style="border: 0px solid white">
+                    <tbody>
+                        <tr>
+                            <td class="key_0"></td>
+                            <td style="width: 20px" />
+                            <td class="key_1"></td>
+                        </tr>
+                        <tr>
+                            <td class="key_2"></td>
+                            <td />
+                            <td class="key_3"></td>
+                        </tr>
+                        <tr>
+                            <td class="key_4"></td>
+                            <td />
+                            <td class="key_5"></td>
+                        </tr>
+                        <tr>
+                            <td class="key_6"></td>
+                            <td />
+                            <td class="key_7"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br>
+
+                <button class="generate-recovery-code btn btn-primary" disabled="true"> ${t("multi_factor_authentication.recovery_keys_generate")} </button>
+            </div>
+        </div>
+
+        <div class="oauth-options" style="display: none;">
+            <div class="form-group row">
+                <div class="col-md-6 side-checkbox">
+                    <label class="form-check tn-checkbox">
+                        <input type="checkbox" class="oauth-enabled-checkbox form-check-input" disabled />
+                        <b>${t("multi_factor_authentication.oauth_enabled")}</b>
+                    </label>
+                </div>
+            </div>
+
+            <div class="alert alert-warning env-oauth-enabled" role="alert" style="font-weight: bold; color: red !important;"></div>
+
+            <div class="col-md-6">
+                <span><b>${t("multi_factor_authentication.oauth_user_account")}</b></span><span class="user-account-name"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
+                <br>
+                <span><b>${t("multi_factor_authentication.oauth_user_email")}</b></span><span class="user-account-email"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
+            </div>
+
+            <p class="form-text">${t("multi_factor_authentication.oauth_description")}</p>
         </div>
     </div>
-
-    <div class="alert alert-warning env-totp-enabled" role="alert" style="font-weight: bold; color: red !important;"></div>
-
-    <p class="form-text">${t("multi_factor_authentication.totp_description")}</p>
-</div>
-
-<div class="options-section">
-    <h4>${t("multi_factor_authentication.totp_secret_title")}</h4>
-
-    <div class="form-group">
-        <div class="totp-secret">${t("multi_factor_authentication.totp_secret_description")}</div>
-    </div>
-
-    <button class="generate-totp btn btn-primary"> ${t("multi_factor_authentication.totp_secret_generate")} </button>
-</div>
-
-<div class="options-section">
-    <h4>${t("multi_factor_authentication.recovery_keys_title")}</h4>
-
-    <p class="form-text">${t("multi_factor_authentication.recovery_keys_description")}</p>
-
-    <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
-        ${t("multi_factor_authentication.recovery_keys_description_warning")}
-    </div>
-
-    <br>
-
-    <table style="border: 0px solid white">
-        <tbody>
-            <tr>
-                <td class="key_0"></td>
-                <td style="width: 20px" />
-                <td class="key_1"></td>
-            </tr>
-            <tr>
-                <td class="key_2"></td>
-                <td />
-                <td class="key_3"></td>
-            </tr>
-            <tr>
-                <td class="key_4"></td>
-                <td />
-                <td class="key_5"></td>
-            </tr>
-            <tr>
-                <td class="key_6"></td>
-                <td />
-                <td class="key_7"></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <br>
-
-    <button class="generate-recovery-code btn btn-primary" disabled="true"> ${t("multi_factor_authentication.recovery_keys_generate")} </button>
 </div>
 `;
 
@@ -140,12 +167,23 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     private $envEnabledOAuth!: JQuery<HTMLElement>;
     private $recoveryKeys: JQuery<HTMLElement>[] = [];
     private $protectedSessionTimeout!: JQuery<HTMLElement>;
+    private $mfaEnabledCheckbox!: JQuery<HTMLElement>;
+    private $mfaOptions!: JQuery<HTMLElement>;
+    private $authMethodRadios!: JQuery<HTMLElement>;
+    private $totpOptions!: JQuery<HTMLElement>;
+    private $oauthOptions!: JQuery<HTMLElement>;
 
     doRender() {
         const template = utils.isElectron() ? TPL_ELECTRON : TPL_WEB;
         this.$widget = $(template);
 
         if (!utils.isElectron()) {
+            this.$mfaEnabledCheckbox = this.$widget.find(".mfa-enabled-checkbox");
+            this.$mfaOptions = this.$widget.find(".mfa-options");
+            this.$authMethodRadios = this.$widget.find(".auth-method-radio");
+            this.$totpOptions = this.$widget.find(".totp-options");
+            this.$oauthOptions = this.$widget.find(".oauth-options");
+
             this.$generateTotpButton = this.$widget.find(".generate-totp");
             this.$totpEnabled = this.$widget.find(".totp-enabled");
             this.$totpSecret = this.$widget.find(".totp-secret");
@@ -175,6 +213,20 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             });
 
             this.displayRecoveryKeys();
+
+            this.$mfaEnabledCheckbox.on("change", () => {
+                this.$mfaOptions.toggle(this.$mfaEnabledCheckbox.is(":checked"));
+                if (!this.$mfaEnabledCheckbox.is(":checked")) {
+                    this.$totpOptions.hide();
+                    this.$oauthOptions.hide();
+                }
+            });
+
+            this.$authMethodRadios.on("change", () => {
+                const selectedMethod = this.$authMethodRadios.filter(":checked").val();
+                this.$totpOptions.toggle(selectedMethod === "totp");
+                this.$oauthOptions.toggle(selectedMethod === "oauth");
+            });
         }
     }
 
