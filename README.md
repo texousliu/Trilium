@@ -79,10 +79,11 @@ xattr -c "/path/to/Trilium Next.app"
 
 ### Mobile
 
-To use TriliumNext on a mobile device:
+To use TriliumNext on a mobile device, you can use a mobile web browser to access the mobile interface of a server installation (see below).
 
-* Use a mobile web browser to access the mobile interface of a server installation (see below)
-* Use of a mobile app is not yet supported ([see here](https://github.com/TriliumNext/Notes/issues/72)) to track mobile improvements.
+If you prefer a native Android app, you can use [TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid). Report bugs and missing features at [their repository](https://github.com/FliegendeWurst/TriliumDroid).
+
+See issue https://github.com/TriliumNext/Notes/issues/72 for more information on mobile app support.
 
 ### Server
 
@@ -107,7 +108,7 @@ npm run server:start
 
 ### Documentation
 
-Head on over to our [Docs repo](https://github.com/TriliumNext/Docs)
+We are currently transitioning to a new documentation mechanism, please check back later.
 
 ## 👏 Shoutouts
 
