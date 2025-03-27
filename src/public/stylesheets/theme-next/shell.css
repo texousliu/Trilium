@@ -897,19 +897,20 @@ body.layout-horizontal .tab-row-container {
     padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
 }
 
+/* Define extra drag areas for Electron windows */
 body.layout-horizontal .tab-row-container,
 body.layout-vertical .tab-row-widget,
 body.layout-vertical #left-pane .quick-search {
     -webkit-app-region: drag;
 }
 
+/* Limit the drag area for the previous elements to include just to the element itself
+   and not its descendants also */
 body.layout-horizontal .tab-row-container > *,
 body.layout-vertical .tab-row-widget > *,
 body.layout-vertical #left-pane .quick-search > * {
-    -webkit-app-region: no-drag; /* Limit the drag area only for the parent element */
+    -webkit-app-region: no-drag;
 }
-
-
 
 body.layout-horizontal .tab-row-widget-container {
     margin-top: 0;
