@@ -130,8 +130,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         this.SCENE_VERSION_INITIAL = -1; // -1 indicates that it is fresh. excalidraw scene version is always >0
         this.SCENE_VERSION_ERROR = -2; // -2 indicates error
 
-        // ensure that assets are loaded from trilium
-        // TODO:
+        // currently required by excalidraw, in order to allows self-hosting fonts locally.
+        // this avoids making excalidraw load the fonts from an external CDN.
         (window as any).EXCALIDRAW_ASSET_PATH = `${window.location.origin}/${asset_path}/app-dist/excalidraw/`;
 
         // temporary vars
