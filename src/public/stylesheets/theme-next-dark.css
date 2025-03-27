@@ -192,8 +192,8 @@
 
     --scrollbar-thumb-color: #fdfdfd5c;
     --scrollbar-thumb-hover-color: #ffffff7d;
+    --scrollbar-background-color: transparent;
     --scrollbar-border-color: unset; /* Deprecated */
-    --scrollbar-background-color: unset; /* Deprecated */
 
     --link-color: lightskyblue;
 

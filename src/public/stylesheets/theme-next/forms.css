@@ -674,6 +674,10 @@ input[type="range"] {
 
 /* Scrollbar's body */
 
+::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-background-color);
+}
+
 ::-webkit-scrollbar:vertical {
     width: var(--scrollbar-thickness) !important;
 }
