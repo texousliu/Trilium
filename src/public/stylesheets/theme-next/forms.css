@@ -714,7 +714,9 @@ input[type="range"] {
     --s-thumb-color: var(--scrollbar-thumb-hover-color);
 }
 
-/* Scrollbar's increment/decrement buttons (repurposed as a scrollbar start/end gap) */
+/* Scrollbar's increment/decrement buttons (repurposed as a scrollbar start/end gap).
+ * This gap is useful also to avoid breaking the rounded corners of a container when a
+ * custom scrollbar background color is used. */
 
 ::-webkit-scrollbar-button:vertical {
     height: var(--scrollbar-start-end-gap);
