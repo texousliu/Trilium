@@ -2,6 +2,7 @@ import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
 import linkService from "../../services/link.js";
 import server from "../../services/server.js";
+import asset_path from "../../../../services/asset_path.js";
 import type FNote from "../../entities/fnote.js";
 import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
 import type { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
@@ -131,7 +132,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
         // ensure that assets are loaded from trilium
         // TODO:
-        (window as any).EXCALIDRAW_ASSET_PATH = `${window.location.origin}/node_modules/@excalidraw/excalidraw/dist/`;
+        (window as any).EXCALIDRAW_ASSET_PATH = `${window.location.origin}/${asset_path}/app-dist/excalidraw/`;
 
         // temporary vars
         this.currentNoteId = "";
