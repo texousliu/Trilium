@@ -898,12 +898,14 @@ body.layout-horizontal .tab-row-container {
 }
 
 body.layout-horizontal .tab-row-container,
-body.layout-vertical .tab-row-widget {
+body.layout-vertical .tab-row-widget,
+body.layout-vertical #left-pane .quick-search {
     -webkit-app-region: drag;
 }
 
 body.layout-horizontal .tab-row-container > *,
-body.layout-vertical .tab-row-widget > * {
+body.layout-vertical .tab-row-widget > *,
+body.layout-vertical #left-pane .quick-search > * {
     -webkit-app-region: no-drag; /* Limit the drag area only for the parent element */
 }
 
