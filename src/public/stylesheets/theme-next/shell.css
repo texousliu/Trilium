@@ -46,7 +46,7 @@ body.background-effects.platform-win32 {
 }
 
 @media (prefers-color-scheme: dark) {
-    body.background-effects.platform-win32 #launcher-pane {
+    body.background-effects.platform-win32 {
         --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.5);
         --launcher-pane-horiz-background-color: rgba(255, 255, 255, 0.09);
     }
