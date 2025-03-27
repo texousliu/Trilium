@@ -5,6 +5,9 @@ on:
     - cron: "0 2 * * *" # run at 2 AM UTC
   # This can be used to allow manually triggering nightlies from the web interface
   workflow_dispatch:
+  push:
+    branches:
+      - renovate/electron-forge*
   pull_request:
     paths:
       - .github/actions/build-electron/*
