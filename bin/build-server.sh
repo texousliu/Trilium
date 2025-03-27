@@ -45,7 +45,9 @@ mv $NODE_FILENAME node
 cd ..
 
 
-rm -r $BUILD_DIR/node/lib/node_modules/npm \
+rm -r $BUILD_DIR/node/lib/node_modules/{npm,corepack} \
+    $BUILD_DIR/node/bin/{npm,npx,corepack} \
+    $BUILD_DIR/node/CHANGELOG.md \
     $BUILD_DIR/node/include/node \
     $BUILD_DIR/node_modules/electron* \
     $BUILD_DIR/electron*.{js,map}
