@@ -108,7 +108,8 @@ npm run server:start
 
 ### Documentation
 
-We are currently transitioning to a new documentation mechanism, please check back later.
+We are currently transitioning to a new documentation mechanism.
+Meanwhile you can still view the [archived Docs repository](https://github.com/TriliumNext/Docs).
 
 ## 👏 Shoutouts
 
