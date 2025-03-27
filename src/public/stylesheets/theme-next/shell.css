@@ -895,12 +895,19 @@ body.layout-vertical.electron.platform-darwin .tab-row-container {
 
 body.layout-horizontal .tab-row-container {
     padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
+}
+
+body.layout-horizontal .tab-row-container,
+body.layout-vertical .tab-row-widget {
     -webkit-app-region: drag;
 }
 
-body.layout-horizontal .tab-row-container > * {
+body.layout-horizontal .tab-row-container > *,
+body.layout-vertical .tab-row-widget > * {
     -webkit-app-region: no-drag; /* Limit the drag area only for the parent element */
 }
+
+
 
 body.layout-horizontal .tab-row-widget-container {
     margin-top: 0;
