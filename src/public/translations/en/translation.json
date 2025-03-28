@@ -1334,7 +1334,7 @@
     "recovery_keys_regenerate": "Regenerate Recovery Codes",
     "oauth_title": "OAuth/OpenID",
     "oauth_description": "OpenID is a standardized way to let you log into websites using an account from another service, like Google, to verify your identity. Follow these <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">instructions</a> to setup an OpenID service through google.",
-    "oauth_description_warning": "To enable OAuth/OpenID, you need to set the OAuth/OpenID base URL, client ID and client secret in the config.ini file.",
+    "oauth_description_warning": "To enable OAuth/OpenID, you need to set the OAuth/OpenID base URL, client ID and client secret in the config.ini file and restart the application.",
     "oauth_missing_vars": "Missing variables: ",
     "oauth_user_account": "User Account:",
     "oauth_user_email": "User Email:",
