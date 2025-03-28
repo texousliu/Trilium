@@ -956,8 +956,8 @@ async function sendMessage(req: Request, res: Response) {
                 log.info(`Context ends with: "...${context.substring(context.length - 200)}"`);
                 log.info(`Number of notes included: ${sourceNotes.length}`);
 
-                // Get messages with context properly formatted for the specific LLM provider
-                const aiMessages = contextService.buildMessagesWithContext(
+                // Format messages for the LLM using the proper context
+                const aiMessages = await contextService.buildMessagesWithContext(
                     session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
                         role: msg.role,
                         content: msg.content
@@ -1104,7 +1104,7 @@ async function sendMessage(req: Request, res: Response) {
                 const context = buildContextFromNotes(relevantNotes, messageContent);
 
                 // Get messages with context properly formatted for the specific LLM provider
-                const aiMessages = contextService.buildMessagesWithContext(
+                const aiMessages = await contextService.buildMessagesWithContext(
                     session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
                         role: msg.role,
                         content: msg.content

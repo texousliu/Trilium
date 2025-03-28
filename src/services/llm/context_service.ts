@@ -11,6 +11,7 @@ import { ContextExtractor } from './context/index.js';
 import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 import type { Message } from './ai_interface.js';
 import type { LLMServiceInterface } from './interfaces/agent_tool_interfaces.js';
+import { MessageFormatterFactory } from './interfaces/message_formatter.js';
 
 /**
  * Main Context Service for Trilium Notes
@@ -189,72 +190,62 @@ class TriliumContextService {
     }
 
     /**
-     * Build messages with proper context for an LLM-enhanced chat
+     * Builds messages with context for LLM service
+     * This takes a set of messages and adds context in the appropriate format for each LLM provider
+     *
+     * @param messages Array of messages to enhance with context
+     * @param context The context to add (built from relevant notes)
+     * @param llmService The LLM service to format messages for
+     * @returns Promise resolving to the messages array with context properly integrated
      */
-    buildMessagesWithContext(messages: Message[], context: string, llmService: LLMServiceInterface): Message[] {
-        // For simple conversations just add context to the system message
+    async buildMessagesWithContext(
+        messages: Message[],
+        context: string,
+        llmService: LLMServiceInterface
+    ): Promise<Message[]> {
         try {
             if (!messages || messages.length === 0) {
-                return [{ role: 'system', content: context }];
+                log.info('No messages provided to buildMessagesWithContext');
+                return [];
             }
 
-            const result: Message[] = [];
-            let hasSystemMessage = false;
-
-            // First pass: identify if there's a system message
-            for (const msg of messages) {
-                if (msg.role === 'system') {
-                    hasSystemMessage = true;
-                    break;
-                }
+            if (!context || context.trim() === '') {
+                log.info('No context provided to buildMessagesWithContext, returning original messages');
+                return messages;
             }
 
-            // If we have a system message, prepend context to it
-            // Otherwise create a new system message with the context
-            if (hasSystemMessage) {
-                for (const msg of messages) {
-                    if (msg.role === 'system') {
-                        // For Ollama, use a cleaner approach with just one system message
-                        if (llmService.constructor.name === 'OllamaService') {
-                            // If this is the first system message we've seen,
-                            // add context to it, otherwise skip (Ollama handles multiple
-                            // system messages poorly)
-                            if (result.findIndex(m => m.role === 'system') === -1) {
-                                result.push({
-                                    role: 'system',
-                                    content: `${context}\n\n${msg.content}`
-                                });
-                            }
-                        } else {
-                            // For other providers, include all system messages
-                            result.push({
-                                role: 'system',
-                                content: msg.content.includes(context) ?
-                                    msg.content : // Avoid duplicate context
-                                    `${context}\n\n${msg.content}`
-                            });
-                        }
-                    } else {
-                        result.push(msg);
-                    }
-                }
+            // Get the provider name, handling service classes and raw provider names
+            let providerName: string;
+            if (typeof llmService === 'string') {
+                // If llmService is a string, assume it's the provider name
+                providerName = llmService;
+            } else if (llmService.constructor && llmService.constructor.name) {
+                // Extract provider name from service class name (e.g., OllamaService -> ollama)
+                providerName = llmService.constructor.name.replace('Service', '').toLowerCase();
             } else {
-                // No system message found, prepend one with the context
-                result.push({ role: 'system', content: context });
-                // Add all the original messages
-                result.push(...messages);
+                // Fallback to default
+                providerName = 'default';
             }
 
-            return result;
+            log.info(`Using formatter for provider: ${providerName}`);
+
+            // Get the appropriate formatter for this provider
+            const formatter = MessageFormatterFactory.getFormatter(providerName);
+
+            // Format messages with context using the provider-specific formatter
+            const formattedMessages = formatter.formatMessages(
+                messages,
+                undefined, // No system prompt override - use what's in the messages
+                context
+            );
+
+            log.info(`Formatted ${messages.length} messages into ${formattedMessages.length} messages for ${providerName}`);
+
+            return formattedMessages;
         } catch (error) {
             log.error(`Error building messages with context: ${error}`);
-
-            // Fallback: prepend a system message with context
-            const safeMessages = Array.isArray(messages) ? messages : [];
-            return [
-                { role: 'system', content: context },
-                ...safeMessages.filter(msg => msg.role !== 'system')
-            ];
+            // Fallback to original messages in case of error
+            return messages;
         }
     }
 }

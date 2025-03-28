@@ -265,10 +265,10 @@ export class ChatService {
             );
 
             // Create messages array with context using the improved method
-            const messagesWithContext = contextService.buildMessagesWithContext(
+            const messagesWithContext = await contextService.buildMessagesWithContext(
                 session.messages,
                 enhancedContext,
-                aiServiceManager.getService() // Get the default service
+                aiServiceManager.getService()
             );
 
             // Generate AI response
