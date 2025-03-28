@@ -46,7 +46,7 @@ body.background-effects.platform-win32 {
 }
 
 @media (prefers-color-scheme: dark) {
-    body.background-effects.platform-win32 #launcher-pane {
+    body.background-effects.platform-win32 {
         --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.5);
         --launcher-pane-horiz-background-color: rgba(255, 255, 255, 0.09);
     }
@@ -895,6 +895,21 @@ body.layout-vertical.electron.platform-darwin .tab-row-container {
 
 body.layout-horizontal .tab-row-container {
     padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
+}
+
+/* Define extra drag areas for Electron windows */
+body.layout-horizontal .tab-row-container,
+body.layout-vertical .tab-row-widget,
+body.layout-vertical #left-pane .quick-search {
+    -webkit-app-region: drag;
+}
+
+/* Limit the drag area for the previous elements to include just to the element itself
+   and not its descendants also */
+body.layout-horizontal .tab-row-container > *,
+body.layout-vertical .tab-row-widget > *,
+body.layout-vertical #left-pane .quick-search > * {
+    -webkit-app-region: no-drag;
 }
 
 body.layout-horizontal .tab-row-widget-container {

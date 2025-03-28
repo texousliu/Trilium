@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs-extra");
+const { execSync } = require("child_process");
 
 const APP_NAME = "TriliumNext Notes";
 const BIN_PATH = path.normalize("./bin/electron-forge");
@@ -38,6 +39,22 @@ module.exports = {
             // These always go in Resources
             "translations/",
             "node_modules/@highlightjs/cdn-assets/styles"
+        ],
+        afterPrune: [
+            (buildPath, _electronVersion, _platform, _arch, callback) => {
+                // buildPath is a temporary directory that electron-packager creates - it's in the form of
+                // /tmp/electron-packager/tmp-SjJl0s/resources/app
+                try {
+                    const cleanupNodeModulesScript = path.join(buildPath, "bin", "cleanupNodeModules.ts");
+                    // we don't have access to any devDeps like 'tsx' here, so use the built-in '--experimental-strip-types' flag instead
+                    const command = `node --experimental-strip-types ${cleanupNodeModulesScript} "${buildPath}" --skip-prune-dev-deps`;
+                    // execSync throws, if above returns any non-zero exit code
+                    execSync(command);
+                    callback()
+                } catch(err) {
+                    callback(err)
+                }
+            }
         ],
         afterComplete: [
             (buildPath, _electronVersion, platform, _arch, callback) => {
