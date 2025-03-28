@@ -10,9 +10,15 @@ import indexService from './index_service.js';
 import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './providers/providers.js';
 import agentTools from './agent_tools/index.js';
 
-type ServiceProviders = 'openai' | 'anthropic' | 'ollama';
+// Import interfaces
+import type {
+  ServiceProviders,
+  IAIServiceManager,
+  ProviderMetadata
+} from './interfaces/ai_service_interfaces.js';
+import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 
-export class AIServiceManager {
+export class AIServiceManager implements IAIServiceManager {
     private services: Record<ServiceProviders, AIService> = {
         openai: new OpenAIService(),
         anthropic: new AnthropicService(),
@@ -406,27 +412,95 @@ export class AIServiceManager {
     }
 
     /**
-     * Get context enhanced with agent tools
+     * Get context from agent tools
      */
     async getAgentToolsContext(
         noteId: string,
         query: string,
         showThinking: boolean = false,
-        relevantNotes: Array<any> = []
+        relevantNotes: NoteSearchResult[] = []
     ): Promise<string> {
-        // Just use the context service directly
         try {
-            const cs = (await import('./context/modules/context_service.js')).default;
-            return cs.getAgentToolsContext(
-                noteId,
-                query,
-                showThinking,
-                relevantNotes
-            );
+            if (!this.getAIEnabled()) {
+                return '';
+            }
+
+            await this.initializeAgentTools();
+            return await contextService.getAgentToolsContext(noteId, query, showThinking);
         } catch (error) {
-            log.error(`Error in AIServiceManager.getAgentToolsContext: ${error}`);
-            return `Error generating enhanced context: ${error}`;
+            log.error(`Error getting agent tools context: ${error}`);
+            return '';
         }
+    }
+
+    /**
+     * Get AI service for the given provider
+     */
+    getService(provider?: string): AIService {
+        this.ensureInitialized();
+
+        // If provider is specified, try to use it
+        if (provider && this.services[provider as ServiceProviders]?.isAvailable()) {
+            return this.services[provider as ServiceProviders];
+        }
+
+        // Otherwise, use the first available provider in the configured order
+        for (const providerName of this.providerOrder) {
+            const service = this.services[providerName];
+            if (service.isAvailable()) {
+                return service;
+            }
+        }
+
+        // If no provider is available, use first one anyway (it will throw an error)
+        // This allows us to show a proper error message rather than "provider not found"
+        return this.services[this.providerOrder[0]];
+    }
+
+    /**
+     * Get the preferred provider based on configuration
+     */
+    getPreferredProvider(): string {
+        this.ensureInitialized();
+
+        // Return the first available provider in the order
+        for (const providerName of this.providerOrder) {
+            if (this.services[providerName].isAvailable()) {
+                return providerName;
+            }
+        }
+
+        // Return the first provider as fallback
+        return this.providerOrder[0];
+    }
+
+    /**
+     * Check if a specific provider is available
+     */
+    isProviderAvailable(provider: string): boolean {
+        return this.services[provider as ServiceProviders]?.isAvailable() ?? false;
+    }
+
+    /**
+     * Get metadata about a provider
+     */
+    getProviderMetadata(provider: string): ProviderMetadata | null {
+        const service = this.services[provider as ServiceProviders];
+        if (!service) {
+            return null;
+        }
+
+        return {
+            name: provider,
+            capabilities: {
+                chat: true,
+                embeddings: provider !== 'anthropic', // Anthropic doesn't have embeddings
+                streaming: true,
+                functionCalling: provider === 'openai' // Only OpenAI has function calling
+            },
+            models: ['default'], // Placeholder, could be populated from the service
+            defaultModel: 'default'
+        };
     }
 }
 
@@ -493,7 +567,7 @@ export default {
         noteId: string,
         query: string,
         showThinking: boolean = false,
-        relevantNotes: Array<any> = []
+        relevantNotes: NoteSearchResult[] = []
     ): Promise<string> {
         return getInstance().getAgentToolsContext(
             noteId,
@@ -501,6 +575,19 @@ export default {
             showThinking,
             relevantNotes
         );
+    },
+    // New methods
+    getService(provider?: string): AIService {
+        return getInstance().getService(provider);
+    },
+    getPreferredProvider(): string {
+        return getInstance().getPreferredProvider();
+    },
+    isProviderAvailable(provider: string): boolean {
+        return getInstance().isProviderAvailable(provider);
+    },
+    getProviderMetadata(provider: string): ProviderMetadata | null {
+        return getInstance().getProviderMetadata(provider);
     }
 };
 

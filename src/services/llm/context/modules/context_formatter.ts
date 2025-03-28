@@ -1,6 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 import log from '../../../log.js';
 import { CONTEXT_PROMPTS } from '../../constants/llm_prompt_constants.js';
+import type { IContextFormatter, NoteSearchResult } from '../../interfaces/context_interfaces.js';
 
 // Constants for context window sizes, defines in-module to avoid circular dependencies
 const CONTEXT_WINDOW = {
@@ -11,20 +12,23 @@ const CONTEXT_WINDOW = {
 };
 
 /**
- * Provides utilities for formatting context for LLM consumption
+ * Formats context data for LLM consumption
+ *
+ * This service is responsible for formatting note data into a structured
+ * format that can be efficiently processed by the LLM.
  */
-export class ContextFormatter {
+export class ContextFormatter implements IContextFormatter {
     /**
-     * Build context string from retrieved notes
+     * Build a structured context string from note sources
      *
-     * @param sources - Array of notes or content sources
-     * @param query - The original user query
-     * @param providerId - The LLM provider to format for
+     * @param sources Array of note data with content and metadata
+     * @param query The user's query for context
+     * @param providerId Optional provider ID to customize formatting
      * @returns Formatted context string
      */
-    async buildContextFromNotes(sources: any[], query: string, providerId: string = 'default'): Promise<string> {
+    async buildContextFromNotes(sources: NoteSearchResult[], query: string, providerId: string = 'default'): Promise<string> {
         if (!sources || sources.length === 0) {
-            // Return a default context from constants instead of empty string
+            log.info('No sources provided to context formatter');
             return CONTEXT_PROMPTS.NO_NOTES_CONTEXT;
         }
 
@@ -38,13 +42,13 @@ export class ContextFormatter {
 
             // DEBUG: Log context window size
             log.info(`Context window for provider ${providerId}: ${maxTotalLength} chars`);
-            log.info(`Building context from ${sources.length} sources for query: "${query.substring(0, 50)}..."`);
+            log.info(`Formatting context from ${sources.length} sources for query: "${query.substring(0, 50)}..."`);
 
             // Use a format appropriate for the model family
             const isAnthropicFormat = providerId === 'anthropic';
 
             // Start with different headers based on provider
-            let context = isAnthropicFormat
+            let formattedContext = isAnthropicFormat
                 ? CONTEXT_PROMPTS.CONTEXT_HEADERS.ANTHROPIC(query)
                 : CONTEXT_PROMPTS.CONTEXT_HEADERS.DEFAULT(query);
 
@@ -56,7 +60,7 @@ export class ContextFormatter {
             }
 
             // Track total size to avoid exceeding model context window
-            let totalSize = context.length;
+            let totalSize = formattedContext.length;
             const formattedSources: string[] = [];
 
             // DEBUG: Track stats for logging
@@ -119,7 +123,7 @@ export class ContextFormatter {
             log.info(`Context size so far: ${totalSize}/${maxTotalLength} chars (${(totalSize/maxTotalLength*100).toFixed(2)}% of limit)`);
 
             // Add the formatted sources to the context
-            context += formattedSources.join('\n');
+            formattedContext += formattedSources.join('\n');
 
             // Add closing to provide instructions to the AI
             const closing = isAnthropicFormat
@@ -128,13 +132,13 @@ export class ContextFormatter {
 
             // Check if adding the closing would exceed our limit
             if (totalSize + closing.length <= maxTotalLength) {
-                context += closing;
+                formattedContext += closing;
             }
 
             // DEBUG: Log final context size
-            log.info(`Final context: ${context.length} chars, ${formattedSources.length} sources included`);
+            log.info(`Final context: ${formattedContext.length} chars, ${formattedSources.length} sources included`);
 
-            return context;
+            return formattedContext;
         } catch (error) {
             log.error(`Error building context from notes: ${error}`);
             return CONTEXT_PROMPTS.ERROR_FALLBACK_CONTEXT;

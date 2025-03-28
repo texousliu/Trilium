@@ -15,10 +15,20 @@ import contextService from '../context_service.js';
 import aiServiceManager from '../ai_service_manager.js';
 import log from '../../log.js';
 
+// Import interfaces
+import type {
+  IAgentToolsManager,
+  LLMServiceInterface,
+  IVectorSearchTool,
+  INoteNavigatorTool,
+  IQueryDecompositionTool,
+  IContextualThinkingTool
+} from '../interfaces/agent_tool_interfaces.js';
+
 /**
  * Manages all agent tools and provides a unified interface for the LLM agent
  */
-export class AgentToolsManager {
+export class AgentToolsManager implements IAgentToolsManager {
   private vectorSearchTool: VectorSearchTool | null = null;
   private noteNavigatorTool: NoteNavigatorTool | null = null;
   private queryDecompositionTool: QueryDecompositionTool | null = null;
@@ -29,7 +39,7 @@ export class AgentToolsManager {
     // Initialize tools only when requested to avoid circular dependencies
   }
 
-  async initialize(aiServiceManager: any): Promise<void> {
+  async initialize(aiServiceManager: LLMServiceInterface): Promise<void> {
     try {
       if (this.initialized) {
         return;
@@ -68,17 +78,17 @@ export class AgentToolsManager {
     }
 
     return {
-      vectorSearch: this.vectorSearchTool,
-      noteNavigator: this.noteNavigatorTool,
-      queryDecomposition: this.queryDecompositionTool,
-      contextualThinking: this.contextualThinkingTool
+      vectorSearch: this.vectorSearchTool as IVectorSearchTool,
+      noteNavigator: this.noteNavigatorTool as INoteNavigatorTool,
+      queryDecomposition: this.queryDecompositionTool as IQueryDecompositionTool,
+      contextualThinking: this.contextualThinkingTool as IContextualThinkingTool
     };
   }
 
   /**
    * Get the vector search tool
    */
-  getVectorSearchTool(): VectorSearchTool {
+  getVectorSearchTool(): IVectorSearchTool {
     if (!this.initialized || !this.vectorSearchTool) {
       throw new Error("Vector search tool not initialized");
     }
@@ -88,7 +98,7 @@ export class AgentToolsManager {
   /**
    * Get the note structure navigator tool
    */
-  getNoteNavigatorTool(): NoteNavigatorTool {
+  getNoteNavigatorTool(): INoteNavigatorTool {
     if (!this.initialized || !this.noteNavigatorTool) {
       throw new Error("Note navigator tool not initialized");
     }
@@ -98,7 +108,7 @@ export class AgentToolsManager {
   /**
    * Get the query decomposition tool
    */
-  getQueryDecompositionTool(): QueryDecompositionTool {
+  getQueryDecompositionTool(): IQueryDecompositionTool {
     if (!this.initialized || !this.queryDecompositionTool) {
       throw new Error("Query decomposition tool not initialized");
     }
@@ -108,7 +118,7 @@ export class AgentToolsManager {
   /**
    * Get the contextual thinking tool
    */
-  getContextualThinkingTool(): ContextualThinkingTool {
+  getContextualThinkingTool(): IContextualThinkingTool {
     if (!this.initialized || !this.contextualThinkingTool) {
       throw new Error("Contextual thinking tool not initialized");
     }

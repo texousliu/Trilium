@@ -1,21 +1,16 @@
 import log from '../../../log.js';
+import type { ICacheManager, CachedNoteData, CachedQueryResults } from '../../interfaces/context_interfaces.js';
 
 /**
  * Manages caching for context services
  * Provides a centralized caching system to avoid redundant operations
  */
-export class CacheManager {
+export class CacheManager implements ICacheManager {
     // Cache for recently used context to avoid repeated embedding lookups
-    private noteDataCache = new Map<string, {
-        timestamp: number,
-        data: any
-    }>();
+    private noteDataCache = new Map<string, CachedNoteData<unknown>>();
 
     // Cache for recently used queries
-    private queryCache = new Map<string, {
-        timestamp: number,
-        results: any
-    }>();
+    private queryCache = new Map<string, CachedQueryResults<unknown>>();
 
     // Default cache expiry (5 minutes)
     private defaultCacheExpiryMs = 5 * 60 * 1000;
@@ -57,13 +52,13 @@ export class CacheManager {
     /**
      * Get cached note data
      */
-    getNoteData(noteId: string, type: string): any | null {
+    getNoteData<T>(noteId: string, type: string): T | null {
         const key = `${noteId}:${type}`;
         const cached = this.noteDataCache.get(key);
 
         if (cached && Date.now() - cached.timestamp < this.defaultCacheExpiryMs) {
             log.info(`Cache hit for note data: ${key}`);
-            return cached.data;
+            return cached.data as T;
         }
 
         return null;
@@ -72,7 +67,7 @@ export class CacheManager {
     /**
      * Store note data in cache
      */
-    storeNoteData(noteId: string, type: string, data: any): void {
+    storeNoteData<T>(noteId: string, type: string, data: T): void {
         const key = `${noteId}:${type}`;
         this.noteDataCache.set(key, {
             timestamp: Date.now(),
@@ -84,13 +79,13 @@ export class CacheManager {
     /**
      * Get cached query results
      */
-    getQueryResults(query: string, contextNoteId: string | null = null): any | null {
+    getQueryResults<T>(query: string, contextNoteId: string | null = null): T | null {
         const key = JSON.stringify({ query, contextNoteId });
         const cached = this.queryCache.get(key);
 
         if (cached && Date.now() - cached.timestamp < this.defaultCacheExpiryMs) {
             log.info(`Cache hit for query: ${query}`);
-            return cached.results;
+            return cached.results as T;
         }
 
         return null;
@@ -99,7 +94,7 @@ export class CacheManager {
     /**
      * Store query results in cache
      */
-    storeQueryResults(query: string, results: any, contextNoteId: string | null = null): void {
+    storeQueryResults<T>(query: string, results: T, contextNoteId: string | null = null): void {
         const key = JSON.stringify({ query, contextNoteId });
         this.queryCache.set(key, {
             timestamp: Date.now(),
