@@ -105,16 +105,6 @@ export default class DesktopLayout {
     getRootWidget(appContext: AppContext) {
         appContext.noteTreeWidget = new NoteTreeWidget();
 
-        // Initialize the right pane tab manager after widget render
-        setTimeout(() => {
-            const $tabContainer = $("#right-pane-tab-container");
-            const $contentContainer = $("#right-pane-content-container");
-
-            if ($tabContainer.length && $contentContainer.length) {
-                rightPaneTabManager.init($tabContainer, $contentContainer);
-            }
-        }, 500);
-
         const launcherPaneIsHorizontal = options.get("layoutOrientation") === "horizontal";
         const launcherPane = this.#buildLauncherPane(launcherPaneIsHorizontal);
         const isElectron = utils.isElectron();

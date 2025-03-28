@@ -28,16 +28,6 @@ bundleService.getWidgetBundlesByParent().then(async (widgetBundles) => {
         });
         console.error("Critical error occured", e);
     });
-
-    // Initialize right pane tab manager after layout is loaded
-    setTimeout(() => {
-        const $tabContainer = $("#right-pane-tab-container");
-        const $contentContainer = $("#right-pane-content-container");
-
-        if ($tabContainer.length && $contentContainer.length) {
-            rightPaneTabManager.init($tabContainer, $contentContainer);
-        }
-    }, 1000);
 });
 
 glob.setupGlobs();
