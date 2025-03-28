@@ -6,6 +6,7 @@ import appContext from "../components/app_context.js";
 import type FindWidget from "./find.js";
 import type { FindResult } from "./find.js";
 import 'mark.js';
+import 'mark.js/dist/jquery.mark.es6.min.js';
 
 const FIND_RESULT_SELECTED_CSS_CLASSNAME = "ck-find-result_selected";
 const FIND_RESULT_CSS_CLASSNAME = "ck-find-result";

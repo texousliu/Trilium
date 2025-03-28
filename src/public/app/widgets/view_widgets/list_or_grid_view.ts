@@ -7,6 +7,7 @@ import utils from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import 'mark.js';
+import 'mark.js/dist/jquery.mark.es6.min.js';
 
 const TPL = `
 <div class="note-list">
