@@ -63,23 +63,7 @@ export default class LlmChatPanel extends BasicWidget {
                 </div>
 
                 <form class="note-context-chat-form d-flex flex-column border-top p-2">
-                    <div class="d-flex mb-2 align-items-center context-option-container">
-                        <div class="form-check form-switch me-3">
-                            <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useEnhancedContext" checked>
-                            <label class="form-check-label" for="useEnhancedContext" title="${t('ai.enhanced_context_description')}">
-                                ${t('ai.use_enhanced_context')}
-                                <i class="bx bx-info-circle ms-1 small text-muted"></i>
-                            </label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input show-thinking-checkbox" type="checkbox" id="showThinking">
-                            <label class="form-check-label" for="showThinking" title="${t('ai.show_thinking_description')}">
-                                ${t('ai.show_thinking')}
-                                <i class="bx bx-info-circle ms-1 small text-muted"></i>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="d-flex chat-input-container">
+                    <div class="d-flex chat-input-container mb-2">
                         <textarea
                             class="form-control note-context-chat-input"
                             placeholder="${t('ai.enter_message')}"
@@ -88,6 +72,23 @@ export default class LlmChatPanel extends BasicWidget {
                         <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2 d-flex align-items-center justify-content-center">
                             <i class="bx bx-send"></i>
                         </button>
+                    </div>
+                    <div class="d-flex align-items-center context-option-container mt-1 justify-content-end">
+                        <small class="text-muted me-auto fst-italic">Options:</small>
+                        <div class="form-check form-switch me-3 small">
+                            <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useEnhancedContext" checked>
+                            <label class="form-check-label small" for="useEnhancedContext" title="${t('ai.enhanced_context_description')}">
+                                ${t('ai.use_enhanced_context')}
+                                <i class="bx bx-info-circle small text-muted"></i>
+                            </label>
+                        </div>
+                        <div class="form-check form-switch small">
+                            <input class="form-check-input show-thinking-checkbox" type="checkbox" id="showThinking">
+                            <label class="form-check-label small" for="showThinking" title="${t('ai.show_thinking_description')}">
+                                ${t('ai.show_thinking')}
+                                <i class="bx bx-info-circle small text-muted"></i>
+                            </label>
+                        </div>
                     </div>
                 </form>
             </div>
