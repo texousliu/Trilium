@@ -42,10 +42,6 @@ const CODE_MIRROR: Library = {
     css: ["node_modules/codemirror/lib/codemirror.css", "node_modules/codemirror/addon/lint/lint.css"]
 };
 
-const CALENDAR_WIDGET: Library = {
-    css: ["stylesheets/calendar.css"]
-};
-
 const KATEX: Library = {
     js: ["node_modules/katex/dist/katex.min.js", "node_modules/katex/dist/contrib/mhchem.min.js", "node_modules/katex/dist/contrib/auto-render.min.js"],
     css: ["node_modules/katex/dist/katex.min.css"]
@@ -162,7 +158,6 @@ export default {
     loadHighlightingTheme,
     CKEDITOR,
     CODE_MIRROR,
-    CALENDAR_WIDGET,
     KATEX,
     HIGHLIGHT_JS
 };
