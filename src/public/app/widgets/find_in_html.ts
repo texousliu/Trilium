@@ -5,8 +5,6 @@ import utils from "../services/utils.js";
 import appContext from "../components/app_context.js";
 import type FindWidget from "./find.js";
 import type { FindResult } from "./find.js";
-import 'mark.js';
-import 'mark.js/dist/jquery.mark.es6.min.js';
 
 const FIND_RESULT_SELECTED_CSS_CLASSNAME = "ck-find-result_selected";
 const FIND_RESULT_CSS_CLASSNAME = "ck-find-result";
@@ -24,6 +22,8 @@ export default class FindInHtml {
     }
 
     async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
+        await import("script-loader!mark.js/dist/jquery.mark.min.js");
+
         const $content = await this.parent?.noteContext?.getContentElement();
 
         const wholeWordChar = wholeWord ? "\\b" : "";

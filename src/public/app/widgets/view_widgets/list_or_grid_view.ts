@@ -6,8 +6,6 @@ import treeService from "../../services/tree.js";
 import utils from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
-import 'mark.js';
-import 'mark.js/dist/jquery.mark.es6.min.js';
 
 const TPL = `
 <div class="note-list">
@@ -217,6 +215,8 @@ class ListOrGridView extends ViewMode {
 
         const highlightedTokens = this.parentNote.highlightedTokens || [];
         if (highlightedTokens.length > 0) {
+            await import("script-loader!mark.js/dist/jquery.mark.min.js");
+
             const regex = highlightedTokens.map((token) => utils.escapeRegExp(token)).join("|");
 
             this.highlightRegex = new RegExp(regex, "gi");
@@ -268,12 +268,12 @@ class ListOrGridView extends ViewMode {
                     i === this.page
                         ? $("<span>").text(i).css("text-decoration", "underline").css("font-weight", "bold")
                         : $('<a href="javascript:">')
-                              .text(i)
-                              .attr("title", `Page of ${startIndex} - ${endIndex}`)
-                              .on("click", () => {
-                                  this.page = i;
-                                  this.renderList();
-                              }),
+                            .text(i)
+                            .attr("title", `Page of ${startIndex} - ${endIndex}`)
+                            .on("click", () => {
+                                this.page = i;
+                                this.renderList();
+                            }),
                     " &nbsp; "
                 );
             } else if (lastPrinted) {
