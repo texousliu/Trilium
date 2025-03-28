@@ -84,6 +84,7 @@ export type CommandMappings = {
     showLaunchBarSubtree: CommandData;
     showRevisions: CommandData;
     showLlmChat: CommandData;
+    createAiChat: CommandData;
     showOptions: CommandData & {
         section: string;
     };

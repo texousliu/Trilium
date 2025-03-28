@@ -53,7 +53,7 @@ export interface HiddenSubtreeItem {
         | "protectedSession"
         | "calendar"
         | "quickSearch"
-        | "llmChatLauncher";
+        | "aiChatLauncher";
     command?: keyof typeof Command;
 }
 
@@ -64,7 +64,7 @@ enum Command {
     createNoteIntoInbox,
     showRecentChanges,
     showOptions,
-    showLlmChat
+    createAiChat
 }
 
 /*

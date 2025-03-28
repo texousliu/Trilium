@@ -1550,7 +1550,8 @@
     "widget": "Widget",
     "confirm-change": "It is not recommended to change note type when note content is not empty. Do you want to continue anyway?",
     "geo-map": "Geo Map",
-    "beta-feature": "Beta"
+    "beta-feature": "Beta",
+    "ai-chat": "AI Chat"
   },
   "protect_note": {
     "toggle-on": "Protect the note",
@@ -1826,7 +1827,12 @@
     "confirm_delete_embeddings": "Are you sure you want to delete all AI embeddings? This will remove all semantic search capabilities until notes are reindexed, which can take a significant amount of time.",
     "empty_key_warning": "Warning: Empty API key. You need to configure your API key in settings.",
     "enable_ai": "Enable AI Features",
-    "enhanced_context_description": "Uses semantic search to find relevant information across your notes",
+    "name": "AI",
+    "openai": "OpenAI",
+    "use_enhanced_context": "Use enhanced context",
+    "enhanced_context_description": "Provides the AI with more context from the note and its related notes for better responses",
+    "show_thinking": "Show thinking",
+    "show_thinking_description": "Show the AI's chain of thought process",
     "enter_message": "Enter your message...",
     "error_contacting_provider": "Error contacting AI provider. Please check your settings and internet connection.",
     "error_generating_response": "Error generating AI response",
@@ -1842,15 +1848,17 @@
     "notes_indexed": "{{ count }} note indexed",
     "notes_indexed_plural": "{{ count }} notes indexed",
     "reset_embeddings": "Reset Embeddings",
-    "show_thinking": "Show Thinking",
-    "show_thinking_description": "Reveals the reasoning process used to generate responses",
     "sources": "Sources",
     "start_indexing": "Start Indexing",
     "use_advanced_context": "Use Advanced Context",
-    "use_enhanced_context": "Use Enhanced Note Context",
     "processing": {
-      "common": "Processing..."
-    }
+      "common": "Processing...",
+      "thinking": "Thinking...",
+      "loading": "Loading...",
+      "generating": "Generating..."
+    },
+    "create_new_ai_chat": "Create new AI Chat"
+
   },
   "switch_layout_button": {
     "title_vertical": "Move editing pane to the bottom",

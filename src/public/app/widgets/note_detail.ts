@@ -35,8 +35,8 @@ import GeoMapTypeWidget from "./type_widgets/geo_map.js";
 import utils from "../services/utils.js";
 import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
-import LlmChatTypeWidget from "./type_widgets/llm_chat.js";
 import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
+import AiChatTypeWidget from "./type_widgets/ai_chat.js";
 
 const TPL = `
 <div class="note-detail">
@@ -75,7 +75,7 @@ const typeWidgetClasses = {
     attachmentList: AttachmentListTypeWidget,
     mindMap: MindMapWidget,
     geoMap: GeoMapTypeWidget,
-    llmChat: LlmChatTypeWidget,
+    aiChat: AiChatTypeWidget,
 
     // Split type editors
     mermaid: MermaidTypeWidget
@@ -95,7 +95,7 @@ type ExtendedNoteType =
     | "attachmentDetail"
     | "attachmentList"
     | "protectedSession"
-    | "llmChat";
+    | "aiChat";
 
 export default class NoteDetailWidget extends NoteContextAwareWidget {
 
@@ -228,9 +228,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
         if (viewScope?.viewMode === "source") {
             resultingType = "readOnlyCode";
-        } else if (viewScope?.viewMode === "llmChat") {
-            // Special handling for our LLM Chat view mode
-            resultingType = "llmChat"; // This will need to be added to the ExtendedNoteType
         } else if (viewScope && viewScope.viewMode === "attachments") {
             resultingType = viewScope.attachmentId ? "attachmentDetail" : "attachmentList";
         } else if (type === "text" && (await this.noteContext?.isReadOnly())) {

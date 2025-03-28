@@ -3,12 +3,12 @@ import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
 import CommandButtonWidget from "./command_button.js";
 
-export default class LlmChatButton extends CommandButtonWidget {
+export default class AiChatButton extends CommandButtonWidget {
 
     constructor(note: FNote) {
         super();
 
-        this.command("showLlmChat")
+        this.command("createAiChat")
             .title(() => note.title)
             .icon(() => note.getIcon())
             .class("launcher-button");
@@ -23,5 +23,4 @@ export default class LlmChatButton extends CommandButtonWidget {
             this.refresh();
         }
     }
-
 }

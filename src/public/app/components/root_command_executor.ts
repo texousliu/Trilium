@@ -9,10 +9,9 @@ import froca from "../services/froca.js";
 import utils from "../services/utils.js";
 import LlmChatPanel from "../widgets/llm_chat_panel.js";
 import toastService from "../services/toast.js";
+import noteCreateService from "../services/note_create.js";
 
 export default class RootCommandExecutor extends Component {
-    private llmChatPanel: any = null;
-
     editReadOnlyNoteCommand() {
         const noteContext = appContext.tabManager.getActiveContext();
         if (noteContext?.viewScope) {
@@ -231,22 +230,39 @@ export default class RootCommandExecutor extends Component {
         }
     }
 
-    async showLlmChatCommand() {
-        console.log("showLlmChatCommand triggered");
-        toastService.showMessage("Opening LLM Chat...");
-
+    async createAiChatCommand() {
         try {
-            // We'll use the Note Map approach - open a known note ID that corresponds to the LLM chat panel
-            await appContext.tabManager.openTabWithNoteWithHoisting("_globalNoteMap", {
-                activate: true,
-                viewScope: {
-                    viewMode: "llmChat" // We'll need to handle this custom view mode elsewhere
-                }
+            // Create a new AI Chat note
+            const parentNoteId = appContext.tabManager.getActiveContextNotePath();
+
+            if (!parentNoteId) {
+                toastService.showError("No active note to create AI Chat under");
+                return;
+            }
+
+            const result = await noteCreateService.createNote(parentNoteId, {
+                title: "New AI Chat",
+                type: "aiChat",
+                content: JSON.stringify({
+                    messages: [],
+                    title: "New AI Chat"
+                })
             });
+
+            if (!result.note) {
+                toastService.showError("Failed to create AI Chat note");
+                return;
+            }
+
+            await appContext.tabManager.openTabWithNoteWithHoisting(result.note.noteId, {
+                activate: true
+            });
+
+            toastService.showMessage("Created new AI Chat note");
         }
         catch (e) {
-            console.error("Error opening LLM Chat:", e);
-            toastService.showError("Failed to open LLM Chat: " + (e as Error).message);
+            console.error("Error creating AI Chat note:", e);
+            toastService.showError("Failed to create AI Chat note: " + (e as Error).message);
         }
     }
 }
