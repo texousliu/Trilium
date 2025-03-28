@@ -288,27 +288,159 @@ export class OllamaService extends BaseAIService {
     }
 
     /**
+     * Clean up HTML and other problematic content before sending to Ollama
+     */
+    private cleanContextContent(content: string): string {
+        if (!content) return '';
+
+        try {
+            // First fix potential encoding issues
+            let sanitized = content
+                // Fix common encoding issues with quotes and special characters
+                .replace(/Γ\u00c2[\u00a3\u00a5]/g, '"')  // Fix broken quote chars
+                .replace(/[\u00A0-\u9999]/g, match => {
+                    try {
+                        return encodeURIComponent(match).replace(/%/g, '');
+                    } catch (e) {
+                        return '';
+                    }
+                });
+
+            // Replace common HTML tags with markdown or plain text equivalents
+            sanitized = sanitized
+                // Remove HTML divs, spans, etc.
+                .replace(/<\/?div[^>]*>/g, '')
+                .replace(/<\/?span[^>]*>/g, '')
+                .replace(/<\/?p[^>]*>/g, '\n')
+                // Convert headers
+                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n')
+                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n')
+                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n')
+                // Convert lists
+                .replace(/<\/?ul[^>]*>/g, '')
+                .replace(/<\/?ol[^>]*>/g, '')
+                .replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n')
+                // Convert links
+                .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+                // Convert code blocks
+                .replace(/<pre[^>]*><code[^>]*>(.*?)<\/code><\/pre>/gis, '```\n$1\n```')
+                .replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`')
+                // Convert emphasis
+                .replace(/<\/?strong[^>]*>/g, '**')
+                .replace(/<\/?em[^>]*>/g, '*')
+                // Remove figure tags
+                .replace(/<\/?figure[^>]*>/g, '')
+                // Remove all other HTML tags
+                .replace(/<[^>]*>/g, '')
+                // Fix double line breaks
+                .replace(/\n\s*\n\s*\n/g, '\n\n')
+                // Fix HTML entities
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&')
+                .replace(/&quot;/g, '"')
+                // Final clean whitespace
+                .replace(/\s+/g, ' ')
+                .replace(/\n\s+/g, '\n')
+                .trim();
+
+            return sanitized;
+        } catch (error) {
+            console.error("Error cleaning context content:", error);
+            return content; // Return original if cleaning fails
+        }
+    }
+
+    /**
      * Format messages for the Ollama API
      */
     private formatMessages(messages: Message[], systemPrompt: string): OllamaMessage[] {
         const formattedMessages: OllamaMessage[] = [];
+        const MAX_SYSTEM_CONTENT_LENGTH = 4000;
 
-        // Add system message if provided
-        if (systemPrompt) {
+        // First identify user and system messages
+        const systemMessages = messages.filter(msg => msg.role === 'system');
+        const userMessages = messages.filter(msg => msg.role === 'user' || msg.role === 'assistant');
+
+        // In the case of Ollama, we need to ensure context is properly integrated
+        // The key insight is that simply including it in a system message doesn't work well
+
+        // Check if we have context (typically in the first system message)
+        let hasContext = false;
+        let contextContent = '';
+
+        if (systemMessages.length > 0) {
+            const potentialContext = systemMessages[0].content;
+            if (potentialContext && potentialContext.includes('# Context for your query')) {
+                hasContext = true;
+                contextContent = this.cleanContextContent(potentialContext);
+            }
+        }
+
+        // Create base system message with instructions
+        let basePrompt = systemPrompt ||
+            "You are an AI assistant integrated into TriliumNext Notes. " +
+            "Focus on helping users find information in their notes and answering questions based on their knowledge base. " +
+            "Be concise, informative, and direct when responding to queries.";
+
+        // If we have context, inject it differently - prepend it to the user's first question
+        if (hasContext && userMessages.length > 0) {
+            // Create initial system message with just the base prompt
             formattedMessages.push({
                 role: 'system',
-                content: systemPrompt
+                content: basePrompt
             });
+
+            // For user messages, inject context into the first user message
+            let injectedContext = false;
+
+            for (let i = 0; i < userMessages.length; i++) {
+                const msg = userMessages[i];
+
+                if (msg.role === 'user' && !injectedContext) {
+                    // Format the context in a way Ollama can't ignore
+                    const formattedContext =
+                        "I need you to answer based on the following information from my notes:\n\n" +
+                        "-----BEGIN MY NOTES-----\n" +
+                        contextContent +
+                        "\n-----END MY NOTES-----\n\n" +
+                        "Based on these notes, please answer: " + msg.content;
+
+                    formattedMessages.push({
+                        role: 'user',
+                        content: formattedContext
+                    });
+
+                    injectedContext = true;
+                } else {
+                    formattedMessages.push({
+                        role: msg.role,
+                        content: msg.content
+                    });
+                }
+            }
+        } else {
+            // No context or empty context case
+            // Add system message (with system prompt)
+            if (systemPrompt) {
+                formattedMessages.push({
+                    role: 'system',
+                    content: systemPrompt
+                });
+            }
+
+            // Add all user and assistant messages as-is
+            for (const msg of userMessages) {
+                formattedMessages.push({
+                    role: msg.role,
+                    content: msg.content
+                });
+            }
         }
 
-        // Add all messages
-        for (const msg of messages) {
-            // Ollama's API accepts 'user', 'assistant', and 'system' roles
-            formattedMessages.push({
-                role: msg.role,
-                content: msg.content
-            });
-        }
+        console.log(`Formatted ${messages.length} messages into ${formattedMessages.length} messages for Ollama`);
+        console.log(`Context detected: ${hasContext ? 'Yes' : 'No'}`);
 
         return formattedMessages;
     }

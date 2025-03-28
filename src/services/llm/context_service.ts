@@ -9,6 +9,8 @@ import log from '../log.js';
 import contextService from './context/modules/context_service.js';
 import { ContextExtractor } from './context/index.js';
 import type { NoteSearchResult } from './interfaces/context_interfaces.js';
+import type { Message } from './ai_interface.js';
+import type { LLMServiceInterface } from './interfaces/agent_tool_interfaces.js';
 
 /**
  * Main Context Service for Trilium Notes
@@ -184,6 +186,76 @@ class TriliumContextService {
      */
     clearCaches(): void {
         return contextService.clearCaches();
+    }
+
+    /**
+     * Build messages with proper context for an LLM-enhanced chat
+     */
+    buildMessagesWithContext(messages: Message[], context: string, llmService: LLMServiceInterface): Message[] {
+        // For simple conversations just add context to the system message
+        try {
+            if (!messages || messages.length === 0) {
+                return [{ role: 'system', content: context }];
+            }
+
+            const result: Message[] = [];
+            let hasSystemMessage = false;
+
+            // First pass: identify if there's a system message
+            for (const msg of messages) {
+                if (msg.role === 'system') {
+                    hasSystemMessage = true;
+                    break;
+                }
+            }
+
+            // If we have a system message, prepend context to it
+            // Otherwise create a new system message with the context
+            if (hasSystemMessage) {
+                for (const msg of messages) {
+                    if (msg.role === 'system') {
+                        // For Ollama, use a cleaner approach with just one system message
+                        if (llmService.constructor.name === 'OllamaService') {
+                            // If this is the first system message we've seen,
+                            // add context to it, otherwise skip (Ollama handles multiple
+                            // system messages poorly)
+                            if (result.findIndex(m => m.role === 'system') === -1) {
+                                result.push({
+                                    role: 'system',
+                                    content: `${context}\n\n${msg.content}`
+                                });
+                            }
+                        } else {
+                            // For other providers, include all system messages
+                            result.push({
+                                role: 'system',
+                                content: msg.content.includes(context) ?
+                                    msg.content : // Avoid duplicate context
+                                    `${context}\n\n${msg.content}`
+                            });
+                        }
+                    } else {
+                        result.push(msg);
+                    }
+                }
+            } else {
+                // No system message found, prepend one with the context
+                result.push({ role: 'system', content: context });
+                // Add all the original messages
+                result.push(...messages);
+            }
+
+            return result;
+        } catch (error) {
+            log.error(`Error building messages with context: ${error}`);
+
+            // Fallback: prepend a system message with context
+            const safeMessages = Array.isArray(messages) ? messages : [];
+            return [
+                { role: 'system', content: context },
+                ...safeMessages.filter(msg => msg.role !== 'system')
+            ];
+        }
     }
 }
 

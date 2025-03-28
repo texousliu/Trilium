@@ -19,7 +19,7 @@ import { CONTEXT_PROMPTS } from '../../services/llm/constants/llm_prompt_constan
 export const LLM_CONSTANTS = {
     // Context window sizes (in characters)
     CONTEXT_WINDOW: {
-        OLLAMA: 6000,
+        OLLAMA: 8000,
         OPENAI: 12000,
         ANTHROPIC: 15000,
         VOYAGE: 12000,
@@ -61,6 +61,8 @@ export const LLM_CONSTANTS = {
     // Model-specific context windows for Ollama models
     OLLAMA_MODEL_CONTEXT_WINDOWS: {
         "llama3": 8192,
+        "llama3.1": 8192,
+        "llama3.2": 8192,
         "mistral": 8192,
         "nomic": 32768,
         "mxbai": 32768,
@@ -954,20 +956,32 @@ async function sendMessage(req: Request, res: Response) {
                 log.info(`Context ends with: "...${context.substring(context.length - 200)}"`);
                 log.info(`Number of notes included: ${sourceNotes.length}`);
 
-                // Format all messages for the AI (advanced context case)
-                const aiMessages: Message[] = [
-                    contextMessage,
-                    ...session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
+                // Get messages with context properly formatted for the specific LLM provider
+                const aiMessages = contextService.buildMessagesWithContext(
+                    session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
                         role: msg.role,
                         content: msg.content
-                    }))
-                ];
+                    })),
+                    context,
+                    service
+                );
+
+                // Add enhanced debug logging
+                if (service.constructor.name === 'OllamaService') {
+                    // Log condensed version of the context so we can see if it's being properly formatted
+                    console.log(`Sending context to Ollama with length: ${context.length} chars`);
+                    console.log(`Context first 200 chars: ${context.substring(0, 200).replace(/\n/g, '\\n')}...`);
+                    console.log(`Context last 200 chars: ${context.substring(context.length - 200).replace(/\n/g, '\\n')}...`);
+
+                    // Log the first user message to verify context injection is working
+                    const userMsg = aiMessages.find(m => m.role === 'user');
+                    if (userMsg) {
+                        console.log(`First user message (first 200 chars): ${userMsg.content.substring(0, 200).replace(/\n/g, '\\n')}...`);
+                    }
+                }
 
                 // DEBUG: Log message structure being sent to LLM
                 log.info(`Message structure being sent to LLM: ${aiMessages.length} messages total`);
-                aiMessages.forEach((msg, idx) => {
-                    log.info(`Message ${idx}: role=${msg.role}, content length=${msg.content.length} chars, begins with: "${msg.content.substring(0, 50)}..."`);
-                });
 
                 // Configure chat options from session metadata
                 const chatOptions: ChatCompletionOptions = {
@@ -1089,20 +1103,15 @@ async function sendMessage(req: Request, res: Response) {
                 // Build context from relevant notes
                 const context = buildContextFromNotes(relevantNotes, messageContent);
 
-                // Add system message with the context
-                const contextMessage: Message = {
-                    role: 'system',
-                    content: context
-                };
-
-                // Format all messages for the AI (original approach)
-                const aiMessages: Message[] = [
-                    contextMessage,
-                    ...session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
+                // Get messages with context properly formatted for the specific LLM provider
+                const aiMessages = contextService.buildMessagesWithContext(
+                    session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
                         role: msg.role,
                         content: msg.content
-                    }))
-                ];
+                    })),
+                    context,
+                    service
+                );
 
                 // Configure chat options from session metadata
                 const chatOptions: ChatCompletionOptions = {

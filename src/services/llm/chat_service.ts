@@ -264,17 +264,12 @@ export class ChatService {
                 showThinking
             );
 
-            // Prepend a system message with context
-            const systemMessage: Message = {
-                role: 'system',
-                content: CONTEXT_PROMPTS.CONTEXT_AWARE_SYSTEM_PROMPT.replace(
-                    '{enhancedContext}',
-                    enhancedContext
-                )
-            };
-
-            // Create messages array with system message
-            const messagesWithContext = [systemMessage, ...session.messages];
+            // Create messages array with context using the improved method
+            const messagesWithContext = contextService.buildMessagesWithContext(
+                session.messages,
+                enhancedContext,
+                aiServiceManager.getService() // Get the default service
+            );
 
             // Generate AI response
             const response = await aiServiceManager.generateChatCompletion(

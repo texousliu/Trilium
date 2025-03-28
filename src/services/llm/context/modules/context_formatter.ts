@@ -7,7 +7,7 @@ import type { IContextFormatter, NoteSearchResult } from '../../interfaces/conte
 const CONTEXT_WINDOW = {
     OPENAI: 16000,
     ANTHROPIC: 100000,
-    OLLAMA: 8000,
+    OLLAMA: 4000,  // Reduced to avoid issues
     DEFAULT: 4000
 };
 
@@ -42,20 +42,25 @@ export class ContextFormatter implements IContextFormatter {
 
             // DEBUG: Log context window size
             log.info(`Context window for provider ${providerId}: ${maxTotalLength} chars`);
-            log.info(`Formatting context from ${sources.length} sources for query: "${query.substring(0, 50)}..."`);
+            log.info(`Building context from notes with query: ${query}`);
+            log.info(`Sources length: ${sources.length}`);
 
-            // Use a format appropriate for the model family
-            const isAnthropicFormat = providerId === 'anthropic';
+            // Use provider-specific formatting
+            let formattedContext = '';
 
-            // Start with different headers based on provider
-            let formattedContext = isAnthropicFormat
-                ? CONTEXT_PROMPTS.CONTEXT_HEADERS.ANTHROPIC(query)
-                : CONTEXT_PROMPTS.CONTEXT_HEADERS.DEFAULT(query);
+            if (providerId === 'ollama') {
+                // For Ollama, use a much simpler plain text format that's less prone to encoding issues
+                formattedContext = `# Context for your query: "${query}"\n\n`;
+            } else if (providerId === 'anthropic') {
+                formattedContext = CONTEXT_PROMPTS.CONTEXT_HEADERS.ANTHROPIC(query);
+            } else {
+                formattedContext = CONTEXT_PROMPTS.CONTEXT_HEADERS.DEFAULT(query);
+            }
 
             // Sort sources by similarity if available to prioritize most relevant
             if (sources[0] && sources[0].similarity !== undefined) {
                 sources = [...sources].sort((a, b) => (b.similarity || 0) - (a.similarity || 0));
-                // DEBUG: Log sorting information
+                // Log sorting information
                 log.info(`Sources sorted by similarity. Top sources: ${sources.slice(0, 3).map(s => s.title || 'Untitled').join(', ')}`);
             }
 
@@ -63,7 +68,7 @@ export class ContextFormatter implements IContextFormatter {
             let totalSize = formattedContext.length;
             const formattedSources: string[] = [];
 
-            // DEBUG: Track stats for logging
+            // Track stats for logging
             let sourcesProcessed = 0;
             let sourcesIncluded = 0;
             let sourcesSkipped = 0;
@@ -73,10 +78,18 @@ export class ContextFormatter implements IContextFormatter {
             for (const source of sources) {
                 sourcesProcessed++;
                 let content = '';
+                let title = 'Untitled Note';
+
                 if (typeof source === 'string') {
                     content = source;
                 } else if (source.content) {
-                    content = this.sanitizeNoteContent(source.content, source.type, source.mime);
+                    // For Ollama, use a more aggressive sanitization to avoid encoding issues
+                    if (providerId === 'ollama') {
+                        content = this.sanitizeForOllama(source.content);
+                    } else {
+                        content = this.sanitizeNoteContent(source.content, source.type, source.mime);
+                    }
+                    title = source.title || title;
                 } else {
                     sourcesSkipped++;
                     log.info(`Skipping note with no content: ${source.title || 'Untitled'}`);
@@ -86,14 +99,18 @@ export class ContextFormatter implements IContextFormatter {
                 // Skip if content is empty or just whitespace/minimal
                 if (!content || content.trim().length <= 10) {
                     sourcesSkipped++;
-                    log.info(`Skipping note with minimal content: ${source.title || 'Untitled'}`);
+                    log.info(`Skipping note with minimal content: ${title}`);
                     continue;
                 }
 
-                // Format source with title if available
-                const title = source.title || 'Untitled Note';
-                const noteId = source.noteId || '';
-                const formattedSource = `### ${title}\n${content}\n`;
+                // Format source with title - use simple format for Ollama
+                let formattedSource = '';
+                if (providerId === 'ollama') {
+                    // For Ollama, use a simpler format and plain ASCII
+                    formattedSource = `## ${title}\n${content}\n\n`;
+                } else {
+                    formattedSource = `### ${title}\n${content}\n\n`;
+                }
 
                 // Check if adding this would exceed our size limit
                 if (totalSize + formattedSource.length > maxTotalLength) {
@@ -102,12 +119,13 @@ export class ContextFormatter implements IContextFormatter {
                     if (formattedSources.length === 0) {
                         const availableSpace = maxTotalLength - totalSize - 100; // Buffer for closing text
                         if (availableSpace > 200) { // Only if we have reasonable space
-                            const truncatedContent = `### ${title}\n${content.substring(0, availableSpace)}...\n`;
+                            const truncatedContent = providerId === 'ollama' ?
+                                `## ${title}\n${content.substring(0, availableSpace)}...\n\n` :
+                                `### ${title}\n${content.substring(0, availableSpace)}...\n\n`;
                             formattedSources.push(truncatedContent);
                             totalSize += truncatedContent.length;
                             sourcesIncluded++;
-                            // DEBUG: Log truncation
-                            log.info(`Truncated first source "${title}" to fit in context window. Used ${truncatedContent.length} of ${formattedSource.length} chars`);
+                            log.info(`Truncated first source "${title}" to fit in context window`);
                         }
                     }
                     break;
@@ -118,24 +136,29 @@ export class ContextFormatter implements IContextFormatter {
                 sourcesIncluded++;
             }
 
-            // DEBUG: Log sources stats
+            // Log sources stats
             log.info(`Context building stats: processed ${sourcesProcessed}/${sources.length} sources, included ${sourcesIncluded}, skipped ${sourcesSkipped}, exceeded limit ${sourcesExceededLimit}`);
             log.info(`Context size so far: ${totalSize}/${maxTotalLength} chars (${(totalSize/maxTotalLength*100).toFixed(2)}% of limit)`);
 
             // Add the formatted sources to the context
-            formattedContext += formattedSources.join('\n');
+            formattedContext += formattedSources.join('');
 
-            // Add closing to provide instructions to the AI
-            const closing = isAnthropicFormat
-                ? CONTEXT_PROMPTS.CONTEXT_CLOSINGS.ANTHROPIC
-                : CONTEXT_PROMPTS.CONTEXT_CLOSINGS.DEFAULT;
+            // Add closing to provide instructions to the AI - use simpler version for Ollama
+            let closing = '';
+            if (providerId === 'ollama') {
+                closing = '\n\nPlease use the information above to answer the query and keep your response concise.';
+            } else if (providerId === 'anthropic') {
+                closing = CONTEXT_PROMPTS.CONTEXT_CLOSINGS.ANTHROPIC;
+            } else {
+                closing = CONTEXT_PROMPTS.CONTEXT_CLOSINGS.DEFAULT;
+            }
 
             // Check if adding the closing would exceed our limit
             if (totalSize + closing.length <= maxTotalLength) {
                 formattedContext += closing;
             }
 
-            // DEBUG: Log final context size
+            // Log final context size
             log.info(`Final context: ${formattedContext.length} chars, ${formattedSources.length} sources included`);
 
             return formattedContext;
@@ -161,18 +184,52 @@ export class ContextFormatter implements IContextFormatter {
         try {
             // If it's HTML content, sanitize it
             if (mime === 'text/html' || type === 'text') {
-                // Use sanitize-html to convert HTML to plain text
-                const sanitized = sanitizeHtml(content, {
+                // First, try to preserve some structure by converting to markdown-like format
+                const contentWithMarkdown = content
+                    // Convert headers
+                    .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n')
+                    .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n')
+                    .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n')
+                    .replace(/<h4[^>]*>(.*?)<\/h4>/gi, '#### $1\n')
+                    .replace(/<h5[^>]*>(.*?)<\/h5>/gi, '##### $1\n')
+                    // Convert lists
+                    .replace(/<\/?ul[^>]*>/g, '\n')
+                    .replace(/<\/?ol[^>]*>/g, '\n')
+                    .replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n')
+                    // Convert links
+                    .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+                    // Convert code blocks
+                    .replace(/<pre[^>]*><code[^>]*>(.*?)<\/code><\/pre>/gis, '```\n$1\n```')
+                    .replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`')
+                    // Convert emphasis
+                    .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
+                    .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
+                    .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
+                    .replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*')
+                    // Handle paragraphs better
+                    .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
+                    // Handle line breaks
+                    .replace(/<br\s*\/?>/gi, '\n');
+
+                // Then use sanitize-html to remove remaining HTML
+                const sanitized = sanitizeHtml(contentWithMarkdown, {
                     allowedTags: [], // No tags allowed (strip all HTML)
                     allowedAttributes: {}, // No attributes allowed
                     textFilter: function(text) {
                         return text
                             .replace(/&nbsp;/g, ' ')
+                            .replace(/&lt;/g, '<')
+                            .replace(/&gt;/g, '>')
+                            .replace(/&amp;/g, '&')
+                            .replace(/&quot;/g, '"')
                             .replace(/\n\s*\n\s*\n/g, '\n\n'); // Replace multiple blank lines with just one
                     }
                 });
 
-                return sanitized.trim();
+                // Remove unnecessary whitespace while preserving meaningful structure
+                return sanitized
+                    .replace(/\n{3,}/g, '\n\n')  // no more than 2 consecutive newlines
+                    .trim();
             }
 
             // If it's code, keep formatting but limit size
@@ -189,6 +246,46 @@ export class ContextFormatter implements IContextFormatter {
         } catch (error) {
             log.error(`Error sanitizing note content: ${error}`);
             return content; // Return original content if sanitization fails
+        }
+    }
+
+    /**
+     * Special sanitization for Ollama that removes all non-ASCII characters
+     * and simplifies formatting to avoid encoding issues
+     */
+    sanitizeForOllama(content: string): string {
+        if (!content) {
+            return '';
+        }
+
+        try {
+            // First remove any HTML
+            let plaintext = sanitizeHtml(content, {
+                allowedTags: [],
+                allowedAttributes: {},
+                textFilter: (text) => text
+            });
+
+            // Then aggressively sanitize to plain ASCII and simple formatting
+            plaintext = plaintext
+                // Replace common problematic quotes with simple ASCII quotes
+                .replace(/[""]/g, '"')
+                .replace(/['']/g, "'")
+                // Replace other common Unicode characters
+                .replace(/[–—]/g, '-')
+                .replace(/[•]/g, '*')
+                .replace(/[…]/g, '...')
+                // Strip all non-ASCII characters
+                .replace(/[^\x00-\x7F]/g, '')
+                // Normalize whitespace
+                .replace(/\s+/g, ' ')
+                .replace(/\n\s+/g, '\n')
+                .trim();
+
+            return plaintext;
+        } catch (error) {
+            log.error(`Error sanitizing note content for Ollama: ${error}`);
+            return ''; // Return empty if sanitization fails
         }
     }
 }
