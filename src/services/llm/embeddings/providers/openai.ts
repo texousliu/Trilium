@@ -1,9 +1,10 @@
 import axios from "axios";
 import log from "../../../log.js";
 import { BaseEmbeddingProvider } from "../base_embeddings.js";
-import type { EmbeddingConfig, EmbeddingModelInfo } from "../embeddings_interface.js";
+import type { EmbeddingConfig } from "../embeddings_interface.js";
 import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../constants/provider_constants.js";
+import type { EmbeddingModelInfo } from "../../interfaces/embedding_interfaces.js";
 
 /**
  * OpenAI embedding provider implementation
@@ -27,7 +28,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             // Update the config dimension
             this.config.dimension = modelInfo.dimension;
 
-            log.info(`OpenAI model ${modelName} initialized with dimension ${this.config.dimension} and context window ${modelInfo.contextWindow}`);
+            log.info(`OpenAI model ${modelName} initialized with dimension ${this.config.dimension} and context window ${modelInfo.contextWidth}`);
         } catch (error: any) {
             log.error(`Error initializing OpenAI provider: ${error.message}`);
         }
@@ -105,9 +106,10 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
                 log.info(`Fetched OpenAI model info for ${modelName}: context window ${contextWindow}, dimension ${dimension}`);
 
                 return {
+                    name: modelName,
                     dimension,
-                    contextWindow,
-                    guaranteesNormalization: true // OpenAI embeddings are normalized to unit length
+                    contextWidth: contextWindow,
+                    type: 'float32'
                 };
             }
         } catch (error: any) {
@@ -123,7 +125,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
     async getModelInfo(modelName: string): Promise<EmbeddingModelInfo> {
         // Check cache first
         if (this.modelInfoCache.has(modelName)) {
-            return this.modelInfoCache.get(modelName);
+            return this.modelInfoCache.get(modelName)!;
         }
 
         // Try to fetch model capabilities from API
@@ -144,9 +146,10 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             let contextWindow = LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI;
 
             const modelInfo: EmbeddingModelInfo = {
+                name: modelName,
                 dimension,
-                contextWindow,
-                guaranteesNormalization: true // OpenAI embeddings are normalized to unit length
+                contextWidth: contextWindow,
+                type: 'float32'
             };
             this.modelInfoCache.set(modelName, modelInfo);
             this.config.dimension = dimension;
@@ -161,9 +164,10 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             log.info(`Using default parameters for OpenAI model ${modelName}: dimension ${dimension}, context ${contextWindow}`);
 
             const modelInfo: EmbeddingModelInfo = {
+                name: modelName,
                 dimension,
-                contextWindow,
-                guaranteesNormalization: true // OpenAI embeddings are normalized to unit length
+                contextWidth: contextWindow,
+                type: 'float32'
             };
             this.modelInfoCache.set(modelName, modelInfo);
             this.config.dimension = dimension;
