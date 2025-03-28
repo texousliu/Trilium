@@ -13,9 +13,9 @@ Screenshot of the Zen Mode option in the global menu.
 
 The Zen Mode can be activated by accessing the global menu and selecting the “Zen Mode” option:
 
-Aside from the global menu, it's also possible to activate this mode by using a keyboard shortcut which is <kbd>Alt</kbd>+<kbd>Z</kbd> by default. Look for `toggleZenMode` in the shortcut configuration.
+Aside from the global menu, it's also possible to activate this mode by using a keyboard shortcut (which is <kbd>F9</kbd> since TriliumNext 0.92.5 and <kbd>Alt</kbd>+<kbd>Z</kbd> for older versions). Look for `toggleZenMode` in the shortcut configuration.
 
-Once Zen Mode is activated, all the UI elements of the application will be hidden away, including the global menu. In that case, the Zen Mode can be deactivated either by pressing the ![](Zen%20mode_image.png)icon in the top-right corner of the window or by pressing the keyboard combination again.
+Once Zen Mode is activated, all the UI elements of the application will be hidden away, including the global menu. In that case, the Zen Mode can be deactivated either by pressing the ![](Zen%20mode_image.png) icon in the top-right corner of the window or by pressing the keyboard combination again.
 
 Do note that, by design, activating or deactivating the Zen Mode applies only to the current window. Restarting the application will also disable the Zen Mode.
 
