@@ -7,6 +7,7 @@ import { t } from "../services/i18n.js";
 import libraryLoader from "../services/library_loader.js";
 import { applySyntaxHighlight } from "../services/syntax_highlight.js";
 import options from "../services/options.js";
+import { marked } from "marked";
 
 // Import the LLM Chat CSS
 (async function() {
@@ -429,13 +430,6 @@ export default class LlmChatPanel extends BasicWidget {
     private formatMarkdown(content: string): string {
         if (!content) return '';
 
-        // Check if content contains HTML sections for thinking visualization
-        if (content.includes('<div class="thinking-process">') ||
-            content.includes('<div class=\'thinking-process\'>')) {
-            console.log('Detected thinking process visualization in response');
-            // For content with HTML thinking visualizations, we need to protect them
-        }
-
         // First, extract HTML thinking visualization to protect it from replacements
         const thinkingBlocks: string[] = [];
         let processedContent = content.replace(/<div class=['"](thinking-process|reasoning-process)['"][\s\S]*?<\/div>/g, (match) => {
@@ -444,26 +438,21 @@ export default class LlmChatPanel extends BasicWidget {
             return placeholder;
         });
 
-        // Then extract code blocks to protect them from other replacements
-        const codeBlocks: string[] = [];
-        processedContent = processedContent.replace(/```(\w+)?\n([\s\S]+?)\n```/gs, (match, language, code) => {
-            const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
-            const languageClass = language ? ` language-${language}` : '';
-            codeBlocks.push(`<pre class="code${languageClass}"><code>${code}</code></pre>`);
-            return placeholder;
+        // Use marked library to parse the markdown
+        const markedContent = marked(processedContent, {
+            breaks: true,   // Convert line breaks to <br>
+            gfm: true,      // Enable GitHub Flavored Markdown
+            silent: true    // Ignore errors
         });
 
-        // Apply other markdown formatting
-        processedContent = processedContent
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.*?)\*/g, '<em>$1</em>')
-            .replace(/`([^`]+)`/g, '<code>$1</code>')
-            .replace(/\n/g, '<br>');
-
-        // Restore code blocks
-        codeBlocks.forEach((block, index) => {
-            processedContent = processedContent.replace(`__CODE_BLOCK_${index}__`, block);
-        });
+        // Handle potential promise (though it shouldn't be with our options)
+        if (typeof markedContent === 'string') {
+            processedContent = markedContent;
+        } else {
+            console.warn('Marked returned a promise unexpectedly');
+            // Use the original content as fallback
+            processedContent = content;
+        }
 
         // Restore thinking visualization blocks
         thinkingBlocks.forEach((block, index) => {
