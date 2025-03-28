@@ -317,8 +317,8 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                     this.$oauthWarning.show();
                     if (result.missingVars && result.missingVars.length > 0) {
                         this.$missingVars.show();
-                        const missingVarsList = result.missingVars.map(v => `"${v}"`).join(", ");
-                        this.$missingVars.html(`${t("multi_factor_authentication.oauth_missing_vars")}: ${missingVarsList}`);
+                        const missingVarsList = result.missingVars.map(v => `"${v}"`);
+                        this.$missingVars.html(t("multi_factor_authentication.oauth_missing_vars", { variables: missingVarsList.join(", ") }));
                     }
                 }
             });
