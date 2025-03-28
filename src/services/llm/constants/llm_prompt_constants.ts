@@ -133,12 +133,114 @@ export const AGENT_TOOL_PROMPTS = {
 // Provider-specific prompt modifiers
 export const PROVIDER_PROMPTS = {
     ANTHROPIC: {
-        // Any Anthropic Claude-specific prompt modifications would go here
+        // Anthropic Claude-specific prompt formatting
+        SYSTEM_WITH_CONTEXT: (context: string) =>
+            `<instructions>
+${DEFAULT_SYSTEM_PROMPT}
+
+Use the following information from the user's notes to answer their questions:
+
+<user_notes>
+${context}
+</user_notes>
+
+When responding:
+- Focus on the most relevant information from the notes
+- Be concise and direct in your answers
+- If quoting from notes, mention which note it's from
+- If the notes don't contain relevant information, say so clearly
+</instructions>`,
+
+        INSTRUCTIONS_WRAPPER: (instructions: string) =>
+            `<instructions>\n${instructions}\n</instructions>`,
+
+        ACKNOWLEDGMENT: "I understand. I'll follow those instructions.",
+        CONTEXT_ACKNOWLEDGMENT: "I'll help you with your notes based on the context provided.",
+        CONTEXT_QUERY_ACKNOWLEDGMENT: "I'll help you with your notes based on the context provided. What would you like to know?"
     },
+
     OPENAI: {
-        // Any OpenAI-specific prompt modifications would go here
+        // OpenAI-specific prompt formatting
+        SYSTEM_WITH_CONTEXT: (context: string) =>
+            `You are an AI assistant integrated into TriliumNext Notes.
+Use the following information from the user's notes to answer their questions:
+
+${context}
+
+Focus on relevant information from these notes when answering.
+Be concise and informative in your responses.`
     },
+
     OLLAMA: {
-        // Any Ollama-specific prompt modifications would go here
+        // Ollama-specific prompt formatting
+        CONTEXT_INJECTION: (context: string, query: string) =>
+            `Here's information from my notes to help answer the question:
+
+${context}
+
+Based on this information, please answer: ${query}`
+    },
+
+    // Common prompts across providers
+    COMMON: {
+        DEFAULT_ASSISTANT_INTRO: "You are an AI assistant integrated into TriliumNext Notes. Focus on helping users find information in their notes and answering questions based on their knowledge base. Be concise, informative, and direct when responding to queries."
+    }
+};
+
+// Constants for formatting context and messages
+export const FORMATTING_PROMPTS = {
+    // Headers for context formatting
+    CONTEXT_HEADERS: {
+        SIMPLE: (query: string) => `I'm searching for information about: ${query}\n\nHere are the most relevant notes from my knowledge base:`,
+        DETAILED: (query: string) => `I'm searching for information about: "${query}"\n\nHere are the most relevant notes from my personal knowledge base:`
+    },
+
+    // Closing text for context formatting
+    CONTEXT_CLOSERS: {
+        SIMPLE: `End of notes. Please use this information to answer my question comprehensively.`,
+        DETAILED: `End of context information. Please use only the above notes to answer my question as comprehensively as possible.`
+    },
+
+    // Dividers used in context formatting
+    DIVIDERS: {
+        NOTE_SECTION: `------ NOTE INFORMATION ------`,
+        CONTENT_SECTION: `------ CONTEXT INFORMATION ------`,
+        NOTE_START: `# Note: `,
+        CONTENT_START: `Content: `
+    },
+
+    HTML_ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'code', 'pre']
+};
+
+// Prompt templates for chat service
+export const CHAT_PROMPTS = {
+    // Introduction messages for new chats
+    INTRODUCTIONS: {
+        NEW_CHAT: "Welcome to TriliumNext AI Assistant. How can I help you with your notes today?",
+        SEMANTIC_SEARCH: "I'll search through your notes for relevant information. What would you like to know?"
+    },
+
+    // Placeholders for various chat scenarios
+    PLACEHOLDERS: {
+        NO_CONTEXT: "I don't have any specific note context yet. Would you like me to search your notes for something specific?",
+        WAITING_FOR_QUERY: "Awaiting your question..."
+    }
+};
+
+// Error messages and fallbacks
+export const ERROR_PROMPTS = {
+    // User-facing error messages
+    USER_ERRORS: {
+        GENERAL_ERROR: "I encountered an error processing your request. Please try again or rephrase your question.",
+        CONTEXT_ERROR: "I couldn't retrieve context from your notes. Please check your query or try a different question.",
+        NETWORK_ERROR: "There was a network error connecting to the AI service. Please check your connection and try again.",
+        RATE_LIMIT: "The AI service is currently experiencing high demand. Please try again in a moment."
+    },
+
+    // Internal error handling
+    INTERNAL_ERRORS: {
+        CONTEXT_PROCESSING: "Error processing context data",
+        MESSAGE_FORMATTING: "Error formatting messages for LLM",
+        RESPONSE_PARSING: "Error parsing LLM response"
     }
 };

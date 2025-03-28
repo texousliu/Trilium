@@ -1,6 +1,6 @@
 import sanitizeHtml from 'sanitize-html';
 import log from '../../../log.js';
-import { CONTEXT_PROMPTS } from '../../constants/llm_prompt_constants.js';
+import { CONTEXT_PROMPTS, FORMATTING_PROMPTS } from '../../constants/llm_prompt_constants.js';
 import type { IContextFormatter, NoteSearchResult } from '../../interfaces/context_interfaces.js';
 
 // Constants for context window sizes, defines in-module to avoid circular dependencies
@@ -50,7 +50,7 @@ export class ContextFormatter implements IContextFormatter {
 
             if (providerId === 'ollama') {
                 // For Ollama, use a much simpler plain text format that's less prone to encoding issues
-                formattedContext = `# Context for your query: "${query}"\n\n`;
+                formattedContext = FORMATTING_PROMPTS.CONTEXT_HEADERS.SIMPLE(query);
             } else if (providerId === 'anthropic') {
                 formattedContext = CONTEXT_PROMPTS.CONTEXT_HEADERS.ANTHROPIC(query);
             } else {
@@ -107,7 +107,7 @@ export class ContextFormatter implements IContextFormatter {
                 let formattedSource = '';
                 if (providerId === 'ollama') {
                     // For Ollama, use a simpler format and plain ASCII
-                    formattedSource = `## ${title}\n${content}\n\n`;
+                    formattedSource = `${FORMATTING_PROMPTS.DIVIDERS.NOTE_START}${title}\n${content}\n\n`;
                 } else {
                     formattedSource = `### ${title}\n${content}\n\n`;
                 }
@@ -146,7 +146,7 @@ export class ContextFormatter implements IContextFormatter {
             // Add closing to provide instructions to the AI - use simpler version for Ollama
             let closing = '';
             if (providerId === 'ollama') {
-                closing = '\n\nPlease use the information above to answer the query and keep your response concise.';
+                closing = `\n\n${FORMATTING_PROMPTS.CONTEXT_CLOSERS.SIMPLE}`;
             } else if (providerId === 'anthropic') {
                 closing = CONTEXT_PROMPTS.CONTEXT_CLOSINGS.ANTHROPIC;
             } else {

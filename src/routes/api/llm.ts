@@ -13,7 +13,7 @@ import contextService from "../../services/llm/context_service.js";
 import sql from "../../services/sql.js";
 // Import the index service for knowledge base management
 import indexService from "../../services/llm/index_service.js";
-import { CONTEXT_PROMPTS } from '../../services/llm/constants/llm_prompt_constants.js';
+import { CONTEXT_PROMPTS, ERROR_PROMPTS, FORMATTING_PROMPTS } from '../../services/llm/constants/llm_prompt_constants.js';
 
 // LLM service constants
 export const LLM_CONSTANTS = {
@@ -951,10 +951,9 @@ async function sendMessage(req: Request, res: Response) {
                 };
 
                 // DEBUG: Log context details before sending to LLM
-                log.info(`CONTEXT BEING SENT TO LLM: ${context.length} chars`);
-                log.info(`Context begins with: "${context.substring(0, 200)}..."`);
-                log.info(`Context ends with: "...${context.substring(context.length - 200)}"`);
-                log.info(`Number of notes included: ${sourceNotes.length}`);
+                log.info(`${FORMATTING_PROMPTS.DIVIDERS.CONTENT_SECTION} Context begins with: "${context.substring(0, 200)}..."`);
+                log.info(`${FORMATTING_PROMPTS.DIVIDERS.CONTENT_SECTION} Context ends with: "...${context.substring(context.length - 200)}"`);
+                log.info(`${FORMATTING_PROMPTS.DIVIDERS.NOTE_SECTION} Number of notes included: ${sourceNotes.length}`);
 
                 // Format messages for the LLM using the proper context
                 const aiMessages = await contextService.buildMessagesWithContext(
@@ -1228,8 +1227,10 @@ async function sendMessage(req: Request, res: Response) {
             };
         }
     } catch (error: any) {
-        log.error(`Error sending message to LLM: ${error.message}`);
-        throw new Error(`Failed to send message: ${error.message}`);
+        log.error(`Error in LLM query processing: ${error}`);
+        return {
+            error: ERROR_PROMPTS.USER_ERRORS.GENERAL_ERROR
+        };
     }
 }
 

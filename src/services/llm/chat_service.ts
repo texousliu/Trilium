@@ -2,7 +2,7 @@ import type { Message, ChatCompletionOptions } from './ai_interface.js';
 import aiServiceManager from './ai_service_manager.js';
 import chatStorageService from './chat_storage_service.js';
 import log from '../log.js';
-import { CONTEXT_PROMPTS } from './constants/llm_prompt_constants.js';
+import { CONTEXT_PROMPTS, ERROR_PROMPTS } from './constants/llm_prompt_constants.js';
 
 export interface ChatSession {
     id: string;
@@ -133,10 +133,7 @@ export class ChatService {
             // Add error message so user knows something went wrong
             const errorMessage: Message = {
                 role: 'assistant',
-                content: CONTEXT_PROMPTS.ERROR_MESSAGES.GENERAL_ERROR.replace(
-                    '{errorMessage}',
-                    error.message || 'Please check AI settings and try again.'
-                )
+                content: ERROR_PROMPTS.USER_ERRORS.GENERAL_ERROR
             };
 
             session.messages.push(errorMessage);
@@ -311,10 +308,7 @@ export class ChatService {
             // Add error message
             const errorMessage: Message = {
                 role: 'assistant',
-                content: CONTEXT_PROMPTS.ERROR_MESSAGES.CONTEXT_ERROR.replace(
-                    '{errorMessage}',
-                    error.message || 'Please try again.'
-                )
+                content: ERROR_PROMPTS.USER_ERRORS.CONTEXT_ERROR
             };
 
             session.messages.push(errorMessage);

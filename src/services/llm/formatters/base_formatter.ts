@@ -1,7 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 import type { Message } from '../ai_interface.js';
 import type { MessageFormatter } from '../interfaces/message_formatter.js';
-import { DEFAULT_SYSTEM_PROMPT } from '../constants/llm_prompt_constants.js';
+import { DEFAULT_SYSTEM_PROMPT, PROVIDER_PROMPTS } from '../constants/llm_prompt_constants.js';
 
 /**
  * Base formatter with common functionality for all providers
@@ -25,7 +25,7 @@ export abstract class BaseMessageFormatter implements MessageFormatter {
      * Uses the default prompt from constants
      */
     protected getDefaultSystemPrompt(systemPrompt?: string): string {
-        return systemPrompt || DEFAULT_SYSTEM_PROMPT;
+        return systemPrompt || DEFAULT_SYSTEM_PROMPT || PROVIDER_PROMPTS.COMMON.DEFAULT_ASSISTANT_INTRO;
     }
 
     /**

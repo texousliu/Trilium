@@ -1,6 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 import type { Message } from '../ai_interface.js';
 import { BaseMessageFormatter } from './base_formatter.js';
+import { PROVIDER_PROMPTS, FORMATTING_PROMPTS } from '../constants/llm_prompt_constants.js';
 
 /**
  * OpenAI-specific message formatter
@@ -26,12 +27,9 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
         // If we have explicit context, format it properly
         if (context) {
             // For OpenAI, it's best to put context in the system message
-            const formattedContext =
-                "You are an AI assistant integrated into TriliumNext Notes. " +
-                "Use the following information from the user's notes to answer their questions:\n\n" +
-                this.cleanContextContent(context) +
-                "\n\nFocus on relevant information from these notes when answering. " +
-                "Be concise and informative in your responses.";
+            const formattedContext = PROVIDER_PROMPTS.OPENAI.SYSTEM_WITH_CONTEXT(
+                this.cleanContextContent(context)
+            );
 
             // Add as system message
             formattedMessages.push({
@@ -87,7 +85,7 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
         try {
             // Convert HTML to Markdown for better readability
             const cleaned = sanitizeHtml(content, {
-                allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'code', 'pre'],
+                allowedTags: FORMATTING_PROMPTS.HTML_ALLOWED_TAGS,
                 allowedAttributes: {
                     'a': ['href']
                 },

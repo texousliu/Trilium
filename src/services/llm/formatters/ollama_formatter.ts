@@ -1,6 +1,7 @@
 import type { Message } from '../ai_interface.js';
 import { BaseMessageFormatter } from './base_formatter.js';
 import sanitizeHtml from 'sanitize-html';
+import { PROVIDER_PROMPTS, FORMATTING_PROMPTS } from '../constants/llm_prompt_constants.js';
 
 /**
  * Ollama-specific message formatter
@@ -23,8 +24,8 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
         const systemMessages = messages.filter(msg => msg.role === 'system');
         const userMessages = messages.filter(msg => msg.role === 'user' || msg.role === 'assistant');
 
-        // Create base system message with instructions
-        const basePrompt = this.getDefaultSystemPrompt(systemPrompt);
+        // Create base system message with instructions or use default
+        const basePrompt = systemPrompt || PROVIDER_PROMPTS.COMMON.DEFAULT_ASSISTANT_INTRO;
 
         // Always add a system message with the base prompt
         formattedMessages.push({
@@ -42,10 +43,10 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
                 if (msg.role === 'user' && !injectedContext) {
                     // Simple context injection directly in the user's message
                     const cleanedContext = this.cleanContextContent(context);
-                    const formattedContext =
-                        "Here's information from my notes to help answer the question:\n\n" +
-                        cleanedContext +
-                        "\n\nBased on this information, please answer: " + msg.content;
+                    const formattedContext = PROVIDER_PROMPTS.OLLAMA.CONTEXT_INJECTION(
+                        cleanedContext,
+                        msg.content
+                    );
 
                     formattedMessages.push({
                         role: 'user',

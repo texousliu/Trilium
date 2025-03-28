@@ -1,6 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 import type { Message } from '../ai_interface.js';
 import { BaseMessageFormatter } from './base_formatter.js';
+import { PROVIDER_PROMPTS } from '../constants/llm_prompt_constants.js';
 
 /**
  * Anthropic-specific message formatter
@@ -27,18 +28,9 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
         // 1. If explicit context is provided, we format it with XML tags
         if (context) {
             // Build the system message with context
-            const baseInstructions = this.getDefaultSystemPrompt(systemPrompt);
-
-            const formattedContext =
-                `<instructions>\n${baseInstructions}\n\n` +
-                `Use the following information from the user's notes to answer their questions:\n\n` +
-                `<user_notes>\n${this.cleanContextContent(context)}\n</user_notes>\n\n` +
-                `When responding:\n` +
-                `- Focus on the most relevant information from the notes\n` +
-                `- Be concise and direct in your answers\n` +
-                `- If quoting from notes, mention which note it's from\n` +
-                `- If the notes don't contain relevant information, say so clearly\n` +
-                `</instructions>`;
+            const formattedContext = PROVIDER_PROMPTS.ANTHROPIC.SYSTEM_WITH_CONTEXT(
+                this.cleanContextContent(context)
+            );
 
             // If there's at least one user message, add the context to the first one
             if (userAssistantMessages.length > 0 && userAssistantMessages[0].role === 'user') {
@@ -51,7 +43,7 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
                 // Add system response acknowledgment
                 formattedMessages.push({
                     role: 'assistant',
-                    content: "I'll help you with your notes based on the context provided."
+                    content: PROVIDER_PROMPTS.ANTHROPIC.CONTEXT_ACKNOWLEDGMENT
                 });
 
                 // Add remaining messages
@@ -68,7 +60,7 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
 
                 formattedMessages.push({
                     role: 'assistant',
-                    content: "I'll help you with your notes based on the context provided. What would you like to know?"
+                    content: PROVIDER_PROMPTS.ANTHROPIC.CONTEXT_QUERY_ACKNOWLEDGMENT
                 });
 
                 // Add any existing assistant messages if they exist
@@ -84,8 +76,9 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
             const systemMessages = messages.filter(msg => msg.role === 'system');
 
             // Build system content with XML tags
-            const systemContent =
-                `<instructions>\n${systemMessages.map(msg => this.cleanContextContent(msg.content)).join('\n\n')}\n</instructions>`;
+            const systemContent = PROVIDER_PROMPTS.ANTHROPIC.INSTRUCTIONS_WRAPPER(
+                systemMessages.map(msg => this.cleanContextContent(msg.content)).join('\n\n')
+            );
 
             // Add as first user message
             formattedMessages.push({
@@ -96,7 +89,7 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
             // Add assistant acknowledgment
             formattedMessages.push({
                 role: 'assistant',
-                content: "I understand. I'll follow those instructions."
+                content: PROVIDER_PROMPTS.ANTHROPIC.ACKNOWLEDGMENT
             });
 
             // Add remaining user/assistant messages
@@ -109,13 +102,13 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
             // Add as first user message with XML tags
             formattedMessages.push({
                 role: 'user',
-                content: `<instructions>\n${systemPrompt}\n</instructions>`
+                content: PROVIDER_PROMPTS.ANTHROPIC.INSTRUCTIONS_WRAPPER(systemPrompt)
             });
 
             // Add assistant acknowledgment
             formattedMessages.push({
                 role: 'assistant',
-                content: "I understand. I'll follow those instructions."
+                content: PROVIDER_PROMPTS.ANTHROPIC.ACKNOWLEDGMENT
             });
 
             // Add all other messages
@@ -128,13 +121,13 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
             // Add default system prompt with XML tags
             formattedMessages.push({
                 role: 'user',
-                content: `<instructions>\n${this.getDefaultSystemPrompt()}\n</instructions>`
+                content: PROVIDER_PROMPTS.ANTHROPIC.INSTRUCTIONS_WRAPPER(this.getDefaultSystemPrompt())
             });
 
             // Add assistant acknowledgment
             formattedMessages.push({
                 role: 'assistant',
-                content: "I understand. I'll follow those instructions."
+                content: PROVIDER_PROMPTS.ANTHROPIC.ACKNOWLEDGMENT
             });
 
             // Add all user messages
