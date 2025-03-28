@@ -39,16 +39,14 @@ const TPL_WEB = `
             <hr />
 
             <h5>${t("multi_factor_authentication.totp_secret_title")}</h5>
-            <br />
-            <div class="alert alert-warning no-totp-secret" role="alert" style="font-weight: bold; color: red !important;">
+            <div class="admonition note no-totp-secret" role="alert">
                 ${t("multi_factor_authentication.no_totp_secret_warning")}
             </div>
 
-            <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+            <div class="admonition warning" role="alert">
                 ${t("multi_factor_authentication.totp_secret_description_warning")}
             </div>
 
-            <br />
             <button class="generate-totp btn btn-primary">
                 ${t("multi_factor_authentication.totp_secret_generate")}
             </button>
@@ -57,12 +55,9 @@ const TPL_WEB = `
 
             <h5>${t("multi_factor_authentication.recovery_keys_title")}</h5>
             <p class="form-text">${t("multi_factor_authentication.recovery_keys_description")}</p>
-            <br />
-            <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+            <div class="admonition caution">
                 ${t("multi_factor_authentication.recovery_keys_description_warning")}
             </div>
-
-            <br>
 
             <table style="border: 0px solid white">
                 <tbody>
@@ -96,10 +91,10 @@ const TPL_WEB = `
 
         <div class="oauth-options" style="display: none;">
             <p class="form-text">${t("multi_factor_authentication.oauth_description")}</p>
-            <div class="alert alert-warning oauth-warning" role="alert" style="font-weight: bold; color: red !important;">
+            <div class="admonition note oauth-warning" role="alert">
                 ${t("multi_factor_authentication.oauth_description_warning")}
             </div>
-            <div class="alert alert-warning missing-vars" role="alert" style="font-weight: bold; color: red !important; display: none;"></div>
+            <div class="admonition caution missing-vars" role="alert" style="display: none;"></div>
             <hr />
             <div class="col-md-6">
                 <span><b>${t("multi_factor_authentication.oauth_user_account")}</b></span><span class="user-account-name">${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
