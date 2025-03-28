@@ -87,8 +87,6 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/node_modules/codemirror/keymap/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/codemirror/keymap/")));
 
     app.use(`/${assetPath}/node_modules/@highlightjs/cdn-assets/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/@highlightjs/cdn-assets/")));
-
-    app.use(`/${assetPath}/node_modules/leaflet/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/leaflet/dist/")));
 }
 
 export default {
