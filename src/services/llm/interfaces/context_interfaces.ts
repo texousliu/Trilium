@@ -32,7 +32,7 @@ export interface ICacheManager {
 export interface NoteSearchResult {
   noteId: string;
   title: string;
-  content?: string;
+  content?: string | null;
   type?: string;
   mime?: string;
   similarity: number;

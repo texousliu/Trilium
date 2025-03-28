@@ -1,23 +1,48 @@
-import type { EmbeddingProvider, EmbeddingConfig, NoteEmbeddingContext } from './embeddings_interface.js';
 import { NormalizationStatus } from './embeddings_interface.js';
+import type { NoteEmbeddingContext } from './embeddings_interface.js';
 import log from "../../log.js";
 import { LLM_CONSTANTS } from "../../../routes/api/llm.js";
 import options from "../../options.js";
+import { isBatchSizeError as checkBatchSizeError } from '../interfaces/error_interfaces.js';
+import type { EmbeddingModelInfo } from '../interfaces/embedding_interfaces.js';
+
+export interface EmbeddingConfig {
+    model: string;
+    dimension: number;
+    type: string;
+    apiKey?: string;
+    baseUrl?: string;
+    batchSize?: number;
+    contextWidth?: number;
+    normalizationStatus?: NormalizationStatus;
+}
 
 /**
- * Base class that implements common functionality for embedding providers
+ * Base class for embedding providers that implements common functionality
  */
-export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
-    name: string = "base";
-    protected config: EmbeddingConfig;
+export abstract class BaseEmbeddingProvider {
+    protected model: string;
+    protected dimension: number;
+    protected type: string;
+    protected maxBatchSize: number = 100;
     protected apiKey?: string;
     protected baseUrl: string;
-    protected modelInfoCache = new Map<string, any>();
+    protected name: string = 'base';
+    protected modelInfoCache = new Map<string, EmbeddingModelInfo>();
+    protected config: EmbeddingConfig;
 
     constructor(config: EmbeddingConfig) {
-        this.config = config;
+        this.model = config.model;
+        this.dimension = config.dimension;
+        this.type = config.type;
         this.apiKey = config.apiKey;
-        this.baseUrl = config.baseUrl || "";
+        this.baseUrl = config.baseUrl || '';
+        this.config = config;
+
+        // If batch size is specified, use it as maxBatchSize
+        if (config.batchSize) {
+            this.maxBatchSize = config.batchSize;
+        }
     }
 
     getConfig(): EmbeddingConfig {
@@ -79,12 +104,12 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
      * Process a batch of texts with adaptive handling
      * This method will try to process the batch and reduce batch size if encountering errors
      */
-    protected async processWithAdaptiveBatch<T>(
+    protected async processWithAdaptiveBatch<T, R>(
         items: T[],
-        processFn: (batch: T[]) => Promise<any[]>,
-        isBatchSizeError: (error: any) => boolean
-    ): Promise<any[]> {
-        const results: any[] = [];
+        processFn: (batch: T[]) => Promise<R[]>,
+        isBatchSizeError: (error: unknown) => boolean
+    ): Promise<R[]> {
+        const results: R[] = [];
         const failures: { index: number, error: string }[] = [];
         let currentBatchSize = await this.getBatchSize();
         let lastError: Error | null = null;
@@ -99,9 +124,9 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
                 results.push(...batchResults);
                 i += batch.length;
             }
-            catch (error: any) {
-                lastError = error;
-                const errorMessage = error.message || 'Unknown error';
+            catch (error) {
+                lastError = error as Error;
+                const errorMessage = (lastError as Error).message || 'Unknown error';
 
                 // Check if this is a batch size related error
                 if (isBatchSizeError(error) && currentBatchSize > 1) {
@@ -142,17 +167,8 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
      * Detect if an error is related to batch size limits
      * Override in provider-specific implementations
      */
-    protected isBatchSizeError(error: any): boolean {
-        const errorMessage = error?.message || '';
-        const batchSizeErrorPatterns = [
-            'batch size', 'too many items', 'too many inputs',
-            'input too large', 'payload too large', 'context length',
-            'token limit', 'rate limit', 'request too large'
-        ];
-
-        return batchSizeErrorPatterns.some(pattern =>
-            errorMessage.toLowerCase().includes(pattern.toLowerCase())
-        );
+    protected isBatchSizeError(error: unknown): boolean {
+        return checkBatchSizeError(error);
     }
 
     /**
@@ -173,11 +189,11 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
                     );
                     return batchResults;
                 },
-                this.isBatchSizeError
+                this.isBatchSizeError.bind(this)
             );
         }
-        catch (error: any) {
-            const errorMessage = error.message || "Unknown error";
+        catch (error) {
+            const errorMessage = (error as Error).message || "Unknown error";
             log.error(`Batch embedding error for provider ${this.name}: ${errorMessage}`);
             throw new Error(`${this.name} batch embedding error: ${errorMessage}`);
         }
@@ -208,11 +224,11 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
                     );
                     return batchResults;
                 },
-                this.isBatchSizeError
+                this.isBatchSizeError.bind(this)
             );
         }
-        catch (error: any) {
-            const errorMessage = error.message || "Unknown error";
+        catch (error) {
+            const errorMessage = (error as Error).message || "Unknown error";
             log.error(`Batch note embedding error for provider ${this.name}: ${errorMessage}`);
             throw new Error(`${this.name} batch note embedding error: ${errorMessage}`);
         }
@@ -356,5 +372,67 @@ export abstract class BaseEmbeddingProvider implements EmbeddingProvider {
         result += `Content: ${context.content}`;
 
         return result;
+    }
+
+    /**
+     * Process a batch of items with automatic retries and batch size adjustment
+     */
+    protected async processBatchWithRetries<T>(
+        items: T[],
+        processFn: (batch: T[]) => Promise<Float32Array[]>,
+        isBatchSizeError: (error: unknown) => boolean = this.isBatchSizeError.bind(this)
+    ): Promise<Float32Array[]> {
+        const results: Float32Array[] = [];
+        const failures: { index: number, error: string }[] = [];
+        let currentBatchSize = await this.getBatchSize();
+        let lastError: Error | null = null;
+
+        // Process items in batches
+        for (let i = 0; i < items.length;) {
+            const batch = items.slice(i, i + currentBatchSize);
+
+            try {
+                // Process the current batch
+                const batchResults = await processFn(batch);
+                results.push(...batchResults);
+                i += batch.length;
+            }
+            catch (error) {
+                lastError = error as Error;
+                const errorMessage = lastError.message || 'Unknown error';
+
+                // Check if this is a batch size related error
+                if (isBatchSizeError(error) && currentBatchSize > 1) {
+                    // Reduce batch size and retry
+                    const newBatchSize = Math.max(1, Math.floor(currentBatchSize / 2));
+                    console.warn(`Batch size error detected, reducing batch size from ${currentBatchSize} to ${newBatchSize}: ${errorMessage}`);
+                    currentBatchSize = newBatchSize;
+                }
+                else if (currentBatchSize === 1) {
+                    // If we're already at batch size 1, we can't reduce further, so log the error and skip this item
+                    console.error(`Error processing item at index ${i} with batch size 1: ${errorMessage}`);
+                    failures.push({ index: i, error: errorMessage });
+                    i++; // Move to the next item
+                }
+                else {
+                    // For other errors, retry with a smaller batch size as a precaution
+                    const newBatchSize = Math.max(1, Math.floor(currentBatchSize / 2));
+                    console.warn(`Error processing batch, reducing batch size from ${currentBatchSize} to ${newBatchSize} as a precaution: ${errorMessage}`);
+                    currentBatchSize = newBatchSize;
+                }
+            }
+        }
+
+        // If all items failed and we have a last error, throw it
+        if (results.length === 0 && failures.length > 0 && lastError) {
+            throw lastError;
+        }
+
+        // If some items failed but others succeeded, log the summary
+        if (failures.length > 0) {
+            console.warn(`Processed ${results.length} items successfully, but ${failures.length} items failed`);
+        }
+
+        return results;
     }
 }

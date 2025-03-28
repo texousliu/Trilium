@@ -3,6 +3,11 @@ import { BaseAIService } from '../base_ai_service.js';
 import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
 import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
 
+interface AnthropicMessage {
+    role: string;
+    content: string;
+}
+
 export class AnthropicService extends BaseAIService {
     // Map of simplified model names to full model names with versions
     private static MODEL_MAPPING: Record<string, string> = {
@@ -87,25 +92,31 @@ export class AnthropicService extends BaseAIService {
         }
     }
 
-    private formatMessages(messages: Message[], systemPrompt: string): { messages: any[], system: string } {
-        // Extract system messages
-        const systemMessages = messages.filter(m => m.role === 'system');
-        const nonSystemMessages = messages.filter(m => m.role !== 'system');
+    /**
+     * Format messages for the Anthropic API
+     */
+    private formatMessages(messages: Message[], systemPrompt: string): { messages: AnthropicMessage[], system: string } {
+        const formattedMessages: AnthropicMessage[] = [];
 
-        // Combine all system messages with our default
-        const combinedSystemPrompt = [systemPrompt]
-            .concat(systemMessages.map(m => m.content))
-            .join('\n\n');
+        // Extract the system message if present
+        let sysPrompt = systemPrompt;
 
-        // Format remaining messages for Anthropic's API
-        const formattedMessages = nonSystemMessages.map(m => ({
-            role: m.role === 'user' ? 'user' : 'assistant',
-            content: m.content
-        }));
+        // Process each message
+        for (const msg of messages) {
+            if (msg.role === 'system') {
+                // Anthropic handles system messages separately
+                sysPrompt = msg.content;
+            } else {
+                formattedMessages.push({
+                    role: msg.role,
+                    content: msg.content
+                });
+            }
+        }
 
         return {
             messages: formattedMessages,
-            system: combinedSystemPrompt
+            system: sysPrompt
         };
     }
 }

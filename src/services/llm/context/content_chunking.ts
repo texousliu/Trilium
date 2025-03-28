@@ -12,7 +12,7 @@ export interface ContentChunk {
     noteId?: string;
     title?: string;
     path?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
 }
 
 /**
@@ -43,7 +43,7 @@ export interface ChunkOptions {
     /**
      * Additional information to include in chunk metadata
      */
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
 }
 
 /**
@@ -52,7 +52,7 @@ export interface ChunkOptions {
 async function getDefaultChunkOptions(): Promise<Required<ChunkOptions>> {
     // Import constants dynamically to avoid circular dependencies
     const { LLM_CONSTANTS } = await import('../../../routes/api/llm.js');
-    
+
     return {
         maxChunkSize: LLM_CONSTANTS.CHUNKING.DEFAULT_SIZE,
         overlapSize: LLM_CONSTANTS.CHUNKING.DEFAULT_OVERLAP,
@@ -292,4 +292,12 @@ export async function semanticChunking(
     }
 
     return chunks;
+}
+
+export interface NoteChunk {
+    noteId: string;
+    title: string;
+    content: string;
+    type?: string;
+    metadata?: Record<string, unknown>;
 }

@@ -2,11 +2,13 @@ import log from '../../../log.js';
 import cacheManager from './cache_manager.js';
 import type { Message } from '../../ai_interface.js';
 import { CONTEXT_PROMPTS } from '../../constants/llm_prompt_constants.js';
+import type { LLMServiceInterface } from '../../interfaces/agent_tool_interfaces.js';
+import type { IQueryEnhancer } from '../../interfaces/context_interfaces.js';
 
 /**
  * Provides utilities for enhancing queries and generating search queries
  */
-export class QueryEnhancer {
+export class QueryEnhancer implements IQueryEnhancer {
     // Use the centralized query enhancer prompt
     private metaPrompt = CONTEXT_PROMPTS.QUERY_ENHANCER;
 
@@ -17,11 +19,15 @@ export class QueryEnhancer {
      * @param llmService - The LLM service to use for generating queries
      * @returns Array of search queries
      */
-    async generateSearchQueries(userQuestion: string, llmService: any): Promise<string[]> {
+    async generateSearchQueries(userQuestion: string, llmService: LLMServiceInterface): Promise<string[]> {
+        if (!userQuestion || userQuestion.trim() === '') {
+            return []; // Return empty array for empty input
+        }
+
         try {
-            // Check cache first
-            const cached = cacheManager.getQueryResults(`searchQueries:${userQuestion}`);
-            if (cached) {
+            // Check cache with proper type checking
+            const cached = cacheManager.getQueryResults<string[]>(`searchQueries:${userQuestion}`);
+            if (cached && Array.isArray(cached)) {
                 return cached;
             }
 
@@ -120,7 +126,6 @@ export class QueryEnhancer {
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             log.error(`Error generating search queries: ${errorMessage}`);
-            // Fallback to just using the original question
             return [userQuestion];
         }
     }

@@ -28,7 +28,7 @@ export interface ThinkingStep {
     sources?: string[];
     parentId?: string;
     children?: string[];
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
 }
 
 /**

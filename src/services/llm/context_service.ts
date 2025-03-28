@@ -8,6 +8,7 @@
 import log from '../log.js';
 import contextService from './context/modules/context_service.js';
 import { ContextExtractor } from './context/index.js';
+import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 
 /**
  * Main Context Service for Trilium Notes
@@ -84,7 +85,7 @@ class TriliumContextService {
      * @param query - The original user query
      * @returns Formatted context string
      */
-    async buildContextFromNotes(sources: any[], query: string): Promise<string> {
+    async buildContextFromNotes(sources: NoteSearchResult[], query: string): Promise<string> {
         const provider = await (await import('./context/modules/provider_manager.js')).default.getPreferredEmbeddingProvider();
         const providerId = provider?.name || 'default';
         return (await import('./context/modules/context_formatter.js')).default.buildContextFromNotes(sources, query, providerId);

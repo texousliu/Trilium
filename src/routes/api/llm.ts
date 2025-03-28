@@ -931,7 +931,16 @@ async function sendMessage(req: Request, res: Response) {
 
                 // Get the generated context
                 const context = results.context;
-                sourceNotes = results.notes;
+                // Convert from NoteSearchResult to NoteSource
+                sourceNotes = results.sources.map(source => ({
+                    noteId: source.noteId,
+                    title: source.title,
+                    content: source.content || undefined, // Convert null to undefined
+                    similarity: source.similarity
+                }));
+
+                // Build context from relevant notes
+                const contextFromNotes = buildContextFromNotes(sourceNotes, messageContent);
 
                 // Add system message with the context
                 const contextMessage: Message = {
@@ -1063,8 +1072,7 @@ async function sendMessage(req: Request, res: Response) {
                         sources: sourceNotes.map(note => ({
                             noteId: note.noteId,
                             title: note.title,
-                            similarity: note.similarity,
-                            branchId: note.branchId
+                            similarity: note.similarity
                         }))
                     };
                 }
@@ -1198,8 +1206,7 @@ async function sendMessage(req: Request, res: Response) {
                         sources: sourceNotes.map(note => ({
                             noteId: note.noteId,
                             title: note.title,
-                            similarity: note.similarity,
-                            branchId: note.branchId
+                            similarity: note.similarity
                         }))
                     };
                 }

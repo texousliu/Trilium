@@ -3,6 +3,11 @@ import { BaseAIService } from '../base_ai_service.js';
 import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
 import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
 
+interface OllamaMessage {
+    role: string;
+    content: string;
+}
+
 export class OllamaService extends BaseAIService {
     constructor() {
         super('Ollama');
@@ -282,42 +287,29 @@ export class OllamaService extends BaseAIService {
         }
     }
 
-    private formatMessages(messages: Message[], systemPrompt: string): any[] {
-        console.log("Input messages for formatting:", JSON.stringify(messages, null, 2));
+    /**
+     * Format messages for the Ollama API
+     */
+    private formatMessages(messages: Message[], systemPrompt: string): OllamaMessage[] {
+        const formattedMessages: OllamaMessage[] = [];
 
-        // Check if there are any messages with empty content
-        const emptyMessages = messages.filter(msg => !msg.content || msg.content === "Empty message");
-        if (emptyMessages.length > 0) {
-            console.warn("Found messages with empty content:", emptyMessages);
-        }
-
-        // Add system message if it doesn't exist
-        const hasSystemMessage = messages.some(m => m.role === 'system');
-        let resultMessages = [...messages];
-
-        if (!hasSystemMessage && systemPrompt) {
-            resultMessages.unshift({
+        // Add system message if provided
+        if (systemPrompt) {
+            formattedMessages.push({
                 role: 'system',
                 content: systemPrompt
             });
         }
 
-        // Validate each message has content
-        resultMessages = resultMessages.map(msg => {
-            // Ensure each message has a valid content
-            if (!msg.content || typeof msg.content !== 'string') {
-                console.warn(`Message with role ${msg.role} has invalid content:`, msg.content);
-                return {
-                    ...msg,
-                    content: msg.content || "Empty message"
-                };
-            }
-            return msg;
-        });
+        // Add all messages
+        for (const msg of messages) {
+            // Ollama's API accepts 'user', 'assistant', and 'system' roles
+            formattedMessages.push({
+                role: msg.role,
+                content: msg.content
+            });
+        }
 
-        console.log("Formatted messages for Ollama:", JSON.stringify(resultMessages, null, 2));
-
-        // Ollama uses the same format as OpenAI for messages
-        return resultMessages;
+        return formattedMessages;
     }
 }

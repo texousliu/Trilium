@@ -8,6 +8,8 @@ import aiServiceManager from '../../ai_service_manager.js';
 import { ContextExtractor } from '../index.js';
 import { CONTEXT_PROMPTS } from '../../constants/llm_prompt_constants.js';
 import becca from '../../../../becca/becca.js';
+import type { NoteSearchResult } from '../../interfaces/context_interfaces.js';
+import type { LLMServiceInterface } from '../../interfaces/agent_tool_interfaces.js';
 
 /**
  * Main context service that integrates all context-related functionality
@@ -73,10 +75,10 @@ export class ContextService {
      */
     async processQuery(
         userQuestion: string,
-        llmService: any,
+        llmService: LLMServiceInterface,
         contextNoteId: string | null = null,
         showThinking: boolean = false
-    ) {
+    ): Promise<{ context: string; sources: NoteSearchResult[]; thinking?: string }> {
         log.info(`Processing query with: question="${userQuestion.substring(0, 50)}...", noteId=${contextNoteId}, showThinking=${showThinking}`);
 
         if (!this.initialized) {
@@ -87,8 +89,8 @@ export class ContextService {
                 // Return a fallback response if initialization fails
                 return {
                     context: CONTEXT_PROMPTS.NO_NOTES_CONTEXT,
-                    notes: [],
-                    queries: [userQuestion]
+                    sources: [],
+                    thinking: undefined
                 };
             }
         }
@@ -105,10 +107,10 @@ export class ContextService {
             log.info(`Generated search queries: ${JSON.stringify(searchQueries)}`);
 
             // Step 2: Find relevant notes using multi-query approach
-            let relevantNotes: any[] = [];
+            let relevantNotes: NoteSearchResult[] = [];
             try {
                 // Find notes for each query and combine results
-                const allResults: Map<string, any> = new Map();
+                const allResults: Map<string, NoteSearchResult> = new Map();
 
                 for (const query of searchQueries) {
                     const results = await semanticSearch.findRelevantNotes(
@@ -124,7 +126,7 @@ export class ContextService {
                         } else {
                             // If note already exists, update similarity to max of both values
                             const existing = allResults.get(result.noteId);
-                            if (result.similarity > existing.similarity) {
+                            if (existing && result.similarity > existing.similarity) {
                                 existing.similarity = result.similarity;
                                 allResults.set(result.noteId, existing);
                             }
@@ -186,15 +188,15 @@ export class ContextService {
 
             return {
                 context: enhancedContext,
-                notes: relevantNotes,
-                queries: searchQueries
+                sources: relevantNotes,
+                thinking: showThinking ? this.summarizeContextStructure(enhancedContext) : undefined
             };
         } catch (error) {
             log.error(`Error processing query: ${error}`);
             return {
                 context: CONTEXT_PROMPTS.NO_NOTES_CONTEXT,
-                notes: [],
-                queries: [userQuestion]
+                sources: [],
+                thinking: undefined
             };
         }
     }
@@ -212,7 +214,7 @@ export class ContextService {
         noteId: string,
         query: string,
         showThinking: boolean = false,
-        relevantNotes: Array<any> = []
+        relevantNotes: NoteSearchResult[] = []
     ): Promise<string> {
         try {
             log.info(`Building enhanced agent tools context for query: "${query.substring(0, 50)}...", noteId=${noteId}, showThinking=${showThinking}`);
@@ -391,7 +393,7 @@ export class ContextService {
 
             // Combine the notes from both searches - the initial relevantNotes and from vector search
             // Start with a Map to deduplicate by noteId
-            const allNotes = new Map<string, any>();
+            const allNotes = new Map<string, NoteSearchResult>();
 
             // Add notes from the initial search in processQuery (relevantNotes parameter)
             if (relevantNotes && relevantNotes.length > 0) {
@@ -409,7 +411,10 @@ export class ContextService {
                 log.info(`Adding ${vectorSearchNotes.length} notes from vector search to combined results`);
                 for (const note of vectorSearchNotes) {
                     // If note already exists, keep the one with higher similarity
-                    if (!allNotes.has(note.noteId) || note.similarity > allNotes.get(note.noteId).similarity) {
+                    const existing = allNotes.get(note.noteId);
+                    if (existing && note.similarity > existing.similarity) {
+                        existing.similarity = note.similarity;
+                    } else {
                         allNotes.set(note.noteId, note);
                     }
                 }
@@ -831,7 +836,7 @@ export class ContextService {
             }
 
             // Get embeddings for the query and all chunks
-            const queryEmbedding = await provider.createEmbedding(query);
+            const queryEmbedding = await provider.generateEmbeddings(query);
 
             // Process chunks in smaller batches to avoid overwhelming the provider
             const batchSize = 5;
@@ -840,7 +845,7 @@ export class ContextService {
             for (let i = 0; i < chunks.length; i += batchSize) {
                 const batch = chunks.slice(i, i + batchSize);
                 const batchEmbeddings = await Promise.all(
-                    batch.map(chunk => provider.createEmbedding(chunk))
+                    batch.map(chunk => provider.generateEmbeddings(chunk))
                 );
                 chunkEmbeddings.push(...batchEmbeddings);
             }
@@ -848,7 +853,8 @@ export class ContextService {
             // Calculate similarity between query and each chunk
             const similarities: Array<{index: number, similarity: number, content: string}> =
                 chunkEmbeddings.map((embedding, index) => {
-                    const similarity = provider.calculateSimilarity(queryEmbedding, embedding);
+                    // Calculate cosine similarity manually since the method doesn't exist
+                    const similarity = this.calculateCosineSimilarity(queryEmbedding, embedding);
                     return { index, similarity, content: chunks[index] };
                 });
 
@@ -890,6 +896,28 @@ export class ContextService {
             // Fallback to simple truncation if extraction fails
             return content.substring(0, maxChars) + '...';
         }
+    }
+
+    /**
+     * Calculate cosine similarity between two vectors
+     * @param vec1 - First vector
+     * @param vec2 - Second vector
+     * @returns Cosine similarity between the two vectors
+     */
+    private calculateCosineSimilarity(vec1: number[], vec2: number[]): number {
+        let dotProduct = 0;
+        let norm1 = 0;
+        let norm2 = 0;
+
+        for (let i = 0; i < vec1.length; i++) {
+            dotProduct += vec1[i] * vec2[i];
+            norm1 += vec1[i] * vec1[i];
+            norm2 += vec2[i] * vec2[i];
+        }
+
+        const magnitude = Math.sqrt(norm1) * Math.sqrt(norm2);
+        if (magnitude === 0) return 0;
+        return dotProduct / magnitude;
     }
 }
 
