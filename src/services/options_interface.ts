@@ -49,10 +49,10 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     hoistedNoteId: string;
 
     // Multi-Factor Authentication
-    totpEnabled: boolean;
+    mfaEnabled: boolean;
+    mfaMethod: string;
     encryptedRecoveryCodes: boolean;
     userSubjectIdentifierSaved: boolean;
-    oAuthEnabled: boolean;
     recoveryCodeInitialVector: string;
     recoveryCodeSecurityKey: string;
     recoveryCodesEncrypted: string;

@@ -13,39 +13,26 @@ const TPL_WEB = `
     <div class="form-group row">
         <div class="col-md-6 side-checkbox">
             <label class="form-check tn-checkbox">
-                <input type="checkbox" class="mfa-enabled-checkbox form-check-input" checked/>
+                <input type="checkbox" class="mfa-enabled-checkbox form-check-input" />
                 ${t("multi_factor_authentication.mfa_enabled")}
             </label>
         </div>
     </div>
 
     <div class="mfa-options" style="display: none;">
-        <div class="form-group row">
-            <div class="col-md-6">
-                <label class="form-label"><b>${t("multi_factor_authentication.mfa_method")}</b></label>
-                <div class="form-check">
-                    <input type="radio" class="form-check-input auth-method-radio" name="mfaMethod" value="totp" checked />
-                    <label class="form-check-label">${t("multi_factor_authentication.totp_title")}</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" class="form-check-input auth-method-radio" name="mfaMethod" value="oauth" />
-                    <label class="form-check-label">${t("multi_factor_authentication.oauth_title")}</label>
-                </div>
-            </div>
+        <label class="form-label"><b>${t("multi_factor_authentication.mfa_method")}</b></label>
+        <div role="group">
+            <label class="tn-radio">
+                <input class="mfa-method-radio" type="radio" name="mfaMethod" value="totp" />
+                <b>${t("multi_factor_authentication.totp_title")}</b>
+            </label>
+            <label class="tn-radio">
+                <input class="mfa-method-radio" type="radio" name="mfaMethod" value="oauth" />
+                <b>${t("multi_factor_authentication.oauth_title")}</b>
+            </label>
         </div>
 
         <div class="totp-options" style="display: none;">
-            <div class="form-group row">
-                <div class="col-md-6 side-checkbox">
-                    <label class="form-check tn-checkbox">
-                        <input type="checkbox" class="totp-enabled form-check-input" disabled />
-                        <b>${t("multi_factor_authentication.totp_enabled")}</b>
-                    </label>
-                </div>
-            </div>
-
-            <div class="alert alert-warning env-totp-enabled" role="alert" style="font-weight: bold; color: red !important;"></div>
-
             <p class="form-text">${t("multi_factor_authentication.totp_description")}</p>
 
             <div class="form-group">
@@ -107,17 +94,6 @@ const TPL_WEB = `
         </div>
 
         <div class="oauth-options" style="display: none;">
-            <div class="form-group row">
-                <div class="col-md-6 side-checkbox">
-                    <label class="form-check tn-checkbox">
-                        <input type="checkbox" class="oauth-enabled-checkbox form-check-input" disabled />
-                        <b>${t("multi_factor_authentication.oauth_enabled")}</b>
-                    </label>
-                </div>
-            </div>
-
-            <div class="alert alert-warning env-oauth-enabled" role="alert" style="font-weight: bold; color: red !important;"></div>
-
             <div class="col-md-6">
                 <span><b>${t("multi_factor_authentication.oauth_user_account")}</b></span><span class="user-account-name"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
                 <br>
@@ -157,10 +133,8 @@ interface RecoveryKeysResponse {
 
 export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     private $generateTotpButton!: JQuery<HTMLElement>;
-    private $totpEnabled!: JQuery<HTMLElement>;
     private $totpSecret!: JQuery<HTMLElement>;
     private $generateRecoveryCodeButton!: JQuery<HTMLElement>;
-    private $oAuthEnabledCheckbox!: JQuery<HTMLElement>;
     private $UserAccountName!: JQuery<HTMLElement>;
     private $UserAccountEmail!: JQuery<HTMLElement>;
     private $envEnabledTOTP!: JQuery<HTMLElement>;
@@ -169,7 +143,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     private $protectedSessionTimeout!: JQuery<HTMLElement>;
     private $mfaEnabledCheckbox!: JQuery<HTMLElement>;
     private $mfaOptions!: JQuery<HTMLElement>;
-    private $authMethodRadios!: JQuery<HTMLElement>;
+    private $mfaMethodRadios!: JQuery<HTMLElement>;
     private $totpOptions!: JQuery<HTMLElement>;
     private $oauthOptions!: JQuery<HTMLElement>;
 
@@ -180,15 +154,13 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         if (!utils.isElectron()) {
             this.$mfaEnabledCheckbox = this.$widget.find(".mfa-enabled-checkbox");
             this.$mfaOptions = this.$widget.find(".mfa-options");
-            this.$authMethodRadios = this.$widget.find(".auth-method-radio");
+            this.$mfaMethodRadios = this.$widget.find(".mfa-method-radio");
             this.$totpOptions = this.$widget.find(".totp-options");
             this.$oauthOptions = this.$widget.find(".oauth-options");
 
             this.$generateTotpButton = this.$widget.find(".generate-totp");
-            this.$totpEnabled = this.$widget.find(".totp-enabled");
             this.$totpSecret = this.$widget.find(".totp-secret");
             this.$generateRecoveryCodeButton = this.$widget.find(".generate-recovery-code");
-            this.$oAuthEnabledCheckbox = this.$widget.find(".oauth-enabled-checkbox");
             this.$UserAccountName = this.$widget.find(".user-account-name");
             this.$UserAccountEmail = this.$widget.find(".user-account-email");
             this.$envEnabledTOTP = this.$widget.find(".env-totp-enabled");
@@ -215,17 +187,24 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             this.displayRecoveryKeys();
 
             this.$mfaEnabledCheckbox.on("change", () => {
-                this.$mfaOptions.toggle(this.$mfaEnabledCheckbox.is(":checked"));
-                if (!this.$mfaEnabledCheckbox.is(":checked")) {
+                const isChecked = this.$mfaEnabledCheckbox.is(":checked");
+                this.$mfaOptions.toggle(isChecked);
+                if (!isChecked) {
                     this.$totpOptions.hide();
                     this.$oauthOptions.hide();
+                } else {
+                    this.$mfaMethodRadios.filter('[value="totp"]').prop("checked", true);
+                    this.$totpOptions.show();
+                    this.$oauthOptions.hide();
                 }
+                this.updateCheckboxOption("mfaEnabled", this.$mfaEnabledCheckbox);
             });
 
-            this.$authMethodRadios.on("change", () => {
-                const selectedMethod = this.$authMethodRadios.filter(":checked").val();
+            this.$mfaMethodRadios.on("change", () => {
+                const selectedMethod = this.$mfaMethodRadios.filter(":checked").val();
                 this.$totpOptions.toggle(selectedMethod === "totp");
                 this.$oauthOptions.toggle(selectedMethod === "oauth");
+                this.updateOption("mfaMethod", selectedMethod);
             });
         }
     }
@@ -295,9 +274,21 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
 
     optionsLoaded(options: OptionMap) {
         if (!utils.isElectron()) {
+            this.$mfaEnabledCheckbox.prop("checked", options.mfaEnabled === "true");
+
+            this.$mfaOptions.toggle(options.mfaEnabled === "true");
+            if (options.mfaEnabled === "true") {
+                const savedMethod = options.mfaMethod || "totp";
+                this.$mfaMethodRadios.filter(`[value="${savedMethod}"]`).prop("checked", true);
+                this.$totpOptions.toggle(savedMethod === "totp");
+                this.$oauthOptions.toggle(savedMethod === "oauth");
+            } else {
+                this.$totpOptions.hide();
+                this.$oauthOptions.hide();
+            }
+
             server.get<OAuthStatus>("oauth/status").then((result) => {
                 if (result.enabled) {
-                    this.$oAuthEnabledCheckbox.prop("checked", result.enabled);
                     if (result.name) this.$UserAccountName.text(result.name);
                     if (result.email) this.$UserAccountEmail.text(result.email);
 
@@ -310,14 +301,11 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
 
             server.get<TOTPStatus>("totp/status").then((result) => {
                 if (result.enabled) {
-                    this.$totpEnabled.prop("checked", result.message);
                     this.$generateTotpButton.prop("disabled", !result.message);
                     this.$generateRecoveryCodeButton.prop("disabled", !result.message);
 
                     this.$envEnabledTOTP.hide();
                 } else {
-                    this.$totpEnabled.prop("checked", false);
-                    this.$totpEnabled.prop("disabled", true);
                     this.$generateTotpButton.prop("disabled", true);
                     this.$generateRecoveryCodeButton.prop("disabled", true);
 

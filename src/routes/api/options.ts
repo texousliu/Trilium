@@ -80,7 +80,9 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "allowedHtmlTags",
     "redirectBareDomain",
     "showLoginInShareTheme",
-    "splitEditorOrientation"
+    "splitEditorOrientation",
+    "mfaEnabled",
+    "mfaMethod"
 ]);
 
 function getOptions() {
