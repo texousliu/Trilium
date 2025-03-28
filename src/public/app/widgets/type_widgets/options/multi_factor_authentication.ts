@@ -91,13 +91,17 @@ const TPL_WEB = `
         </div>
 
         <div class="oauth-options" style="display: none;">
+            <p class="form-text">${t("multi_factor_authentication.oauth_description")}</p>
+            <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+                ${t("multi_factor_authentication.oauth_description_warning")}
+            </div>
+            <div class="alert alert-warning missing-vars" role="alert" style="font-weight: bold; color: red !important; display: none;"></div>
+            <hr />
             <div class="col-md-6">
                 <span><b>${t("multi_factor_authentication.oauth_user_account")}</b></span><span class="user-account-name"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
                 <br>
                 <span><b>${t("multi_factor_authentication.oauth_user_email")}</b></span><span class="user-account-email"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
             </div>
-
-            <p class="form-text">${t("multi_factor_authentication.oauth_description")}</p>
         </div>
     </div>
 </div>
@@ -114,6 +118,7 @@ interface OAuthStatus {
     enabled: boolean;
     name?: string;
     email?: string;
+    missingVars?: string[];
 }
 
 interface TOTPStatus {
@@ -128,17 +133,17 @@ interface RecoveryKeysResponse {
 }
 
 export default class MultiFactorAuthenticationOptions extends OptionsWidget {
-    private $generateTotpButton!: JQuery<HTMLElement>;
-    private $generateRecoveryCodeButton!: JQuery<HTMLElement>;
-    private $UserAccountName!: JQuery<HTMLElement>;
-    private $UserAccountEmail!: JQuery<HTMLElement>;
-    private $recoveryKeys: JQuery<HTMLElement>[] = [];
-    private $protectedSessionTimeout!: JQuery<HTMLElement>;
     private $mfaEnabledCheckbox!: JQuery<HTMLElement>;
     private $mfaOptions!: JQuery<HTMLElement>;
     private $mfaMethodRadios!: JQuery<HTMLElement>;
     private $totpOptions!: JQuery<HTMLElement>;
+    private $generateTotpButton!: JQuery<HTMLElement>;
+    private $generateRecoveryCodeButton!: JQuery<HTMLElement>;
+    private $recoveryKeys: JQuery<HTMLElement>[] = [];
     private $oauthOptions!: JQuery<HTMLElement>;
+    private $UserAccountName!: JQuery<HTMLElement>;
+    private $UserAccountEmail!: JQuery<HTMLElement>;
+    private $missingVars!: JQuery<HTMLElement>;
 
     doRender() {
         const template = utils.isElectron() ? TPL_ELECTRON : TPL_WEB;
@@ -155,6 +160,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             this.$oauthOptions = this.$widget.find(".oauth-options");
             this.$UserAccountName = this.$widget.find(".user-account-name");
             this.$UserAccountEmail = this.$widget.find(".user-account-email");
+            this.$missingVars = this.$widget.find(".missing-vars");
 
             this.$recoveryKeys = [];
             for (let i = 0; i < 8; i++) {
@@ -167,11 +173,6 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
 
             this.$generateTotpButton.on("click", async () => {
                 await this.generateKey();
-            });
-
-            this.$protectedSessionTimeout = this.$widget.find(".protected-session-timeout-in-seconds");
-            this.$protectedSessionTimeout.on("change", () => {
-                this.updateOption("protectedSessionTimeout", this.$protectedSessionTimeout.val());
             });
 
             this.displayRecoveryKeys();
@@ -305,6 +306,15 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                 if (result.enabled) {
                     if (result.name) this.$UserAccountName.text(result.name);
                     if (result.email) this.$UserAccountEmail.text(result.email);
+                    this.$missingVars.hide();
+                } else {
+                    this.$UserAccountName.text(t("multi_factor_authentication.oauth_user_not_logged_in"));
+                    this.$UserAccountEmail.text(t("multi_factor_authentication.oauth_user_not_logged_in"));
+                    if (result.missingVars && result.missingVars.length > 0) {
+                        this.$missingVars.show();
+                        const missingVarsList = result.missingVars.map(v => `"${v}"`).join(", ");
+                        this.$missingVars.html(`${t("multi_factor_authentication.oauth_missing_vars")}: ${missingVarsList}`);
+                    }
                 }
             });
 
@@ -313,7 +323,6 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                     this.$generateTotpButton.text(t("multi_factor_authentication.totp_secret_regenerate"));
                 }
             });
-            this.$protectedSessionTimeout.val(Number(options.protectedSessionTimeout));
         }
     }
 }
