@@ -73,8 +73,6 @@ async function register(app: express.Application) {
 
     app.use(`/${assetPath}/node_modules/eslint/bin/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/eslint/bin/")));
 
-    app.use(`/${assetPath}/node_modules/vanilla-js-wheel-zoom/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/vanilla-js-wheel-zoom/dist/")));
-
     app.use(`/${assetPath}/node_modules/mark.js/dist/`, persistentCacheStatic(path.join(srcRoot, "..", "node_modules/mark.js/dist/")));
 
     // Deprecated, https://www.npmjs.com/package/autocomplete.js?activeTab=readme
