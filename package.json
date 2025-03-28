@@ -221,7 +221,7 @@
     "cross-env": "7.0.3",
     "css-loader": "7.1.2",
     "dprint": "0.49.1",
-    "electron": "35.0.3",
+    "electron": "35.1.2",
     "eslint": "9.23.0",
     "esm": "3.2.25",
     "globals": "16.0.0",
