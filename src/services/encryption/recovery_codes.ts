@@ -23,6 +23,7 @@ function setRecoveryCodes(recoveryCodes: string) {
     });
     return false;
 }
+
 function getRecoveryCodes() {
     if (!isRecoveryCodeSet()) {
         return Array(8).fill("Keys not set")
@@ -67,7 +68,7 @@ function verifyRecoveryCode(recoveryCodeGuess: string) {
 }
 
 function getUsedRecoveryCodes() {
-    if (!isRecoveryCodeSet()){
+    if (!isRecoveryCodeSet()) {
         return Array(8).fill("Recovery code not set")
     }
 
