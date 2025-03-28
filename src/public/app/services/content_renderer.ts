@@ -150,7 +150,7 @@ function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLE
     $renderedContent.append($img);
 
     if (options.imageHasZoom) {
-        setTimeout(() => {
+        const initZoom = async () => {
             const element = document.querySelector(`#${$img.attr("id")}`);
             if (element) {
                 WheelZoom.create(`#${$img.attr("id")}`, {
@@ -158,8 +158,11 @@ function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLE
                     speed: 1.3,
                     zoomOnClick: false
                 });
+            } else {
+                requestAnimationFrame(initZoom);
             }
-        }, 0);
+        };
+        initZoom();
     }
 
     imageContextMenuService.setupContextMenu($img);

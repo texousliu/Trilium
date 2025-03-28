@@ -54,7 +54,7 @@ class ImageTypeWidget extends TypeWidget {
         this.$imageWrapper = this.$widget.find(".note-detail-image-wrapper");
         this.$imageView = this.$widget.find(".note-detail-image-view").attr("id", `image-view-${utils.randomString(10)}`);
 
-        setTimeout(() => {
+        const initZoom = async () => {
             const element = document.querySelector(`#${this.$imageView.attr("id")}`);
             if (element) {
                 WheelZoom.create(`#${this.$imageView.attr("id")}`, {
@@ -62,8 +62,11 @@ class ImageTypeWidget extends TypeWidget {
                     speed: 1.3,
                     zoomOnClick: false
                 });
+            } else {
+                requestAnimationFrame(initZoom);
             }
-        }, 0);
+        };
+        initZoom();
 
         imageContextMenuService.setupContextMenu(this.$imageView);
 
