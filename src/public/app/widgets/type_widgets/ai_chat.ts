@@ -3,10 +3,12 @@ import LlmChatPanel from "../llm_chat_panel.js";
 import { type EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import server from "../../services/server.js";
+import toastService from "../../services/toast.js";
 
 export default class AiChatTypeWidget extends TypeWidget {
     private llmChatPanel: LlmChatPanel;
     private isInitialized: boolean = false;
+    private initPromise: Promise<void> | null = null;
 
     constructor() {
         super();
@@ -25,28 +27,51 @@ export default class AiChatTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: FNote | null | undefined) {
-        // Initialize the chat panel if not already done
-        if (!this.isInitialized) {
-            console.log("Initializing AI Chat Panel for note:", note?.noteId);
-            await this.llmChatPanel.refresh();
-            this.isInitialized = true;
-        }
-
-        // If this is a newly created note, we can initialize the content
-        if (note) {
-            try {
-                const content = await note.getContent();
-                // Check if content is empty
-                if (!content || content === '{}') {
-                    // Initialize with empty chat history
-                    await this.saveData({
-                        messages: [],
-                        title: note.title
-                    });
-                }
-            } catch (e) {
-                console.error("Error initializing AI Chat note content:", e);
+        try {
+            // If we're already initializing, wait for that to complete
+            if (this.initPromise) {
+                await this.initPromise;
+                return;
             }
+
+            // Only initialize once
+            if (!this.isInitialized) {
+                console.log("Initializing AI Chat Panel for note:", note?.noteId);
+
+                // Create a promise to track initialization
+                this.initPromise = (async () => {
+                    try {
+                        await this.llmChatPanel.refresh();
+                        this.isInitialized = true;
+                    } catch (e) {
+                        console.error("Error initializing LlmChatPanel:", e);
+                        toastService.showError("Failed to initialize chat panel. Try reloading.");
+                    }
+                })();
+
+                await this.initPromise;
+                this.initPromise = null;
+            }
+
+            // If this is a newly created note, we can initialize the content
+            if (note) {
+                try {
+                    const content = await note.getContent();
+                    // Check if content is empty
+                    if (!content || content === '{}') {
+                        // Initialize with empty chat history
+                        await this.saveData({
+                            messages: [],
+                            title: note.title
+                        });
+                    }
+                } catch (e) {
+                    console.error("Error initializing AI Chat note content:", e);
+                }
+            }
+        } catch (e) {
+            console.error("Error in doRefresh:", e);
+            toastService.showError("Error refreshing chat. Please try again.");
         }
     }
 
@@ -55,10 +80,23 @@ export default class AiChatTypeWidget extends TypeWidget {
     }
 
     async activeContextChangedEvent(data: EventData<"activeContextChanged">) {
-        // Only refresh when this becomes active and we're not initialized yet
-        if (this.isActive() && !this.isInitialized) {
-            await this.llmChatPanel.refresh();
-            this.isInitialized = true;
+        // Only initialize if this becomes active and we're not initialized yet
+        if (this.isActive() && !this.isInitialized && !this.initPromise) {
+            try {
+                this.initPromise = (async () => {
+                    try {
+                        await this.llmChatPanel.refresh();
+                        this.isInitialized = true;
+                    } catch (e) {
+                        console.error("Error initializing LlmChatPanel:", e);
+                    }
+                })();
+
+                await this.initPromise;
+                this.initPromise = null;
+            } catch (e) {
+                console.error("Error in activeContextChangedEvent:", e);
+            }
         }
     }
 
@@ -74,6 +112,7 @@ export default class AiChatTypeWidget extends TypeWidget {
             });
         } catch (e) {
             console.error("Error saving AI Chat data:", e);
+            toastService.showError("Failed to save chat data");
         }
     }
 

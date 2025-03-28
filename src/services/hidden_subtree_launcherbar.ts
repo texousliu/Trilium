@@ -70,10 +70,10 @@ export default function buildLaunchBarConfig() {
         { id: "_lbNoteMap", title: t("hidden-subtree.note-map-title"), type: "launcher", targetNoteId: "_globalNoteMap", icon: "bx bxs-network-chart" },
         {
             id: "_lbLlmChat",
-            title: t("hidden-subtree.ai-chat-title"),
+            title: t("hidden-subtree.llm-chat-title"),
             type: "launcher",
+            command: "createAiChat",
             icon: "bx bx-bot",
-            builtinWidget: "aiChatLauncher",
             attributes: [
                 { type: "label", name: "desktopOnly" }
             ]
