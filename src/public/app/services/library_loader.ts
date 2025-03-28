@@ -51,10 +51,6 @@ const KATEX: Library = {
     css: ["node_modules/katex/dist/katex.min.css"]
 };
 
-const WHEEL_ZOOM: Library = {
-    js: ["node_modules/vanilla-js-wheel-zoom/dist/wheel-zoom.min.js"]
-};
-
 const MARKJS: Library = {
     js: ["node_modules/mark.js/dist/jquery.mark.es6.min.js"]
 };
@@ -176,7 +172,6 @@ export default {
     CODE_MIRROR,
     CALENDAR_WIDGET,
     KATEX,
-    WHEEL_ZOOM,
     MARKJS,
     HIGHLIGHT_JS,
     LEAFLET

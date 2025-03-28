@@ -132,13 +132,6 @@ declare global {
     var renderMathInElement: (element: HTMLElement, options: {
         trust: boolean;
     }) => void;
-    var WZoom = {
-        create(selector: string, opts: {
-            maxScale: number;
-            speed: number;
-            zoomOnClick: boolean
-        })
-    };
     interface CKCodeBlockLanguage {
         language: string;
         label: string;
