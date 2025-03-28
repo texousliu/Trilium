@@ -1,4 +1,4 @@
-class MFAError {
+class OpenIDrror {
     message: string;
 
     constructor(message: string) {
@@ -6,4 +6,4 @@ class MFAError {
     }
 }
 
-export default MFAError;
+export default OpenIDrror;

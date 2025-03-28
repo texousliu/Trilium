@@ -1,4 +1,4 @@
-import OpenIDError from "../errors/mfa_error.js";
+import OpenIDError from "../errors/open_id_error.js";
 import type { NextFunction, Request, Response } from "express";
 import openIDEncryption from "./encryption/open_id_encryption.js";
 import sqlInit from "./sql_init.js";

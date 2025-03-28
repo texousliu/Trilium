@@ -3,7 +3,7 @@ import utils from "../utils.js";
 import dataEncryptionService from "./data_encryption.js";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
-import OpenIDError from "../../errors/mfa_error.js";
+import OpenIDError from "../../errors/open_id_error.js";
 
 function saveUser(subjectIdentifier: string, name: string, email: string) {
     if (isUserSaved()) return false;
