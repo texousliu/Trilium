@@ -96,7 +96,7 @@ const TPL_WEB = `
 
         <div class="oauth-options" style="display: none;">
             <p class="form-text">${t("multi_factor_authentication.oauth_description")}</p>
-            <div class="alert alert-warning missing-vars" role="alert" style="font-weight: bold; color: red !important;">
+            <div class="alert alert-warning oauth-warning" role="alert" style="font-weight: bold; color: red !important;">
                 ${t("multi_factor_authentication.oauth_description_warning")}
             </div>
             <div class="alert alert-warning missing-vars" role="alert" style="font-weight: bold; color: red !important; display: none;"></div>
@@ -148,6 +148,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     private $oauthOptions!: JQuery<HTMLElement>;
     private $UserAccountName!: JQuery<HTMLElement>;
     private $UserAccountEmail!: JQuery<HTMLElement>;
+    private $oauthWarning!: JQuery<HTMLElement>;
     private $missingVars!: JQuery<HTMLElement>;
 
     doRender() {
@@ -166,6 +167,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             this.$oauthOptions = this.$widget.find(".oauth-options");
             this.$UserAccountName = this.$widget.find(".user-account-name");
             this.$UserAccountEmail = this.$widget.find(".user-account-email");
+            this.$oauthWarning = this.$widget.find(".oauth-warning");
             this.$missingVars = this.$widget.find(".missing-vars");
 
             this.$recoveryKeys = [];
@@ -312,10 +314,12 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                 if (result.enabled) {
                     if (result.name) this.$UserAccountName.text(result.name);
                     if (result.email) this.$UserAccountEmail.text(result.email);
+                    this.$oauthWarning.hide();
                     this.$missingVars.hide();
                 } else {
                     this.$UserAccountName.text(t("multi_factor_authentication.oauth_user_not_logged_in"));
                     this.$UserAccountEmail.text(t("multi_factor_authentication.oauth_user_not_logged_in"));
+                    this.$oauthWarning.show();
                     if (result.missingVars && result.missingVars.length > 0) {
                         this.$missingVars.show();
                         const missingVarsList = result.missingVars.map(v => `"${v}"`).join(", ");
