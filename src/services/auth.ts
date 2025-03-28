@@ -31,7 +31,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
             res.redirect('/login');
         });
         return;
-    } else if (openID.isOpenIDEnabled()) {
+    } else if (currentSsoStatus) {
         if (req.oidc?.isAuthenticated() && req.session.loggedIn) {
             next();
             return;
