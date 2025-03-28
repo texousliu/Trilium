@@ -4,6 +4,7 @@ import OptionsWidget from "./options_widget.js";
 import type { OptionMap } from "../../../../../services/options_interface.js";
 import { t } from "../../../services/i18n.js";
 import utils from "../../../services/utils.js";
+import dialogService from "../../../services/dialog.js";
 
 const TPL_WEB = `
 <div class="options-section">
@@ -39,6 +40,11 @@ const TPL_WEB = `
 
             <h5>${t("multi_factor_authentication.totp_secret_title")}</h5>
             <br />
+            <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+                ${t("multi_factor_authentication.totp_secret_description_warning")}
+            </div>
+
+            <br />
             <button class="generate-totp btn btn-primary">
                 ${t("multi_factor_authentication.totp_secret_generate")}
             </button>
@@ -47,7 +53,7 @@ const TPL_WEB = `
 
             <h5>${t("multi_factor_authentication.recovery_keys_title")}</h5>
             <p class="form-text">${t("multi_factor_authentication.recovery_keys_description")}</p>
-
+            <br />
             <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
                 ${t("multi_factor_authentication.recovery_keys_description_warning")}
             </div>
@@ -112,7 +118,6 @@ interface OAuthStatus {
 
 interface TOTPStatus {
     set: boolean;
-    message: boolean;
 }
 
 interface RecoveryKeysResponse {
@@ -124,12 +129,9 @@ interface RecoveryKeysResponse {
 
 export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     private $generateTotpButton!: JQuery<HTMLElement>;
-    private $totpSecret!: JQuery<HTMLElement>;
     private $generateRecoveryCodeButton!: JQuery<HTMLElement>;
     private $UserAccountName!: JQuery<HTMLElement>;
     private $UserAccountEmail!: JQuery<HTMLElement>;
-    private $envEnabledTOTP!: JQuery<HTMLElement>;
-    private $envEnabledOAuth!: JQuery<HTMLElement>;
     private $recoveryKeys: JQuery<HTMLElement>[] = [];
     private $protectedSessionTimeout!: JQuery<HTMLElement>;
     private $mfaEnabledCheckbox!: JQuery<HTMLElement>;
@@ -147,15 +149,12 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             this.$mfaOptions = this.$widget.find(".mfa-options");
             this.$mfaMethodRadios = this.$widget.find(".mfa-method-radio");
             this.$totpOptions = this.$widget.find(".totp-options");
-            this.$oauthOptions = this.$widget.find(".oauth-options");
-
             this.$generateTotpButton = this.$widget.find(".generate-totp");
-            this.$totpSecret = this.$widget.find(".totp-secret");
             this.$generateRecoveryCodeButton = this.$widget.find(".generate-recovery-code");
+
+            this.$oauthOptions = this.$widget.find(".oauth-options");
             this.$UserAccountName = this.$widget.find(".user-account-name");
             this.$UserAccountEmail = this.$widget.find(".user-account-email");
-            this.$envEnabledTOTP = this.$widget.find(".env-totp-enabled");
-            this.$envEnabledOAuth = this.$widget.find(".env-oauth-enabled");
 
             this.$recoveryKeys = [];
             for (let i = 0; i < 8; i++) {
@@ -255,9 +254,33 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     }
 
     async generateKey() {
+        const totpStatus = await server.get<TOTPStatus>("totp/status");
+
+        if (totpStatus.set) {
+            const confirmed = await dialogService.confirm(t("multi_factor_authentication.totp_secret_regenerate_confirm"));
+
+            if (!confirmed) {
+                return;
+            }
+        }
+
         const result = await server.get<{ success: boolean; message: string }>("totp/generate");
+
         if (result.success) {
-            this.$totpSecret.text(result.message);
+            await dialogService.prompt({
+                title: t("multi_factor_authentication.totp_secret_generated"),
+                message: t("multi_factor_authentication.totp_secret_warning"),
+                defaultValue: result.message,
+                shown: ({ $answer }) => {
+                    if ($answer) {
+                        $answer.prop('readonly', true);
+                    }
+                }
+            });
+
+            this.$generateTotpButton.text(t("multi_factor_authentication.totp_secret_regenerate"));
+
+            await this.setRecoveryKeys();
         } else {
             toastService.showError(result.message);
         }
@@ -278,17 +301,12 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                 this.$oauthOptions.hide();
             }
 
-            // server.get<OAuthStatus>("oauth/status").then((result) => {
-            //     if (result.enabled) {
-            //         if (result.name) this.$UserAccountName.text(result.name);
-            //         if (result.email) this.$UserAccountEmail.text(result.email);
-
-            //         this.$envEnabledOAuth.hide();
-            //     } else {
-            //         this.$envEnabledOAuth.text(t("multi_factor_authentication.oauth_enable_description"));
-            //         this.$envEnabledOAuth.show();
-            //     }
-            // });
+            server.get<OAuthStatus>("oauth/status").then((result) => {
+                if (result.enabled) {
+                    if (result.name) this.$UserAccountName.text(result.name);
+                    if (result.email) this.$UserAccountEmail.text(result.email);
+                }
+            });
 
             server.get<TOTPStatus>("totp/status").then((result) => {
                 if (result.set) {
