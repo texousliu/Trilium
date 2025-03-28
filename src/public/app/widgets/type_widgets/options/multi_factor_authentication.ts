@@ -111,7 +111,7 @@ interface OAuthStatus {
 }
 
 interface TOTPStatus {
-    enabled: boolean;
+    set: boolean;
     message: boolean;
 }
 
@@ -278,30 +278,21 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
                 this.$oauthOptions.hide();
             }
 
-            server.get<OAuthStatus>("oauth/status").then((result) => {
-                if (result.enabled) {
-                    if (result.name) this.$UserAccountName.text(result.name);
-                    if (result.email) this.$UserAccountEmail.text(result.email);
+            // server.get<OAuthStatus>("oauth/status").then((result) => {
+            //     if (result.enabled) {
+            //         if (result.name) this.$UserAccountName.text(result.name);
+            //         if (result.email) this.$UserAccountEmail.text(result.email);
 
-                    this.$envEnabledOAuth.hide();
-                } else {
-                    this.$envEnabledOAuth.text(t("multi_factor_authentication.oauth_enable_description"));
-                    this.$envEnabledOAuth.show();
-                }
-            });
+            //         this.$envEnabledOAuth.hide();
+            //     } else {
+            //         this.$envEnabledOAuth.text(t("multi_factor_authentication.oauth_enable_description"));
+            //         this.$envEnabledOAuth.show();
+            //     }
+            // });
 
             server.get<TOTPStatus>("totp/status").then((result) => {
-                if (result.enabled) {
-                    this.$generateTotpButton.prop("disabled", !result.message);
-                    this.$generateRecoveryCodeButton.prop("disabled", !result.message);
-
-                    this.$envEnabledTOTP.hide();
-                } else {
-                    this.$generateTotpButton.prop("disabled", true);
-                    this.$generateRecoveryCodeButton.prop("disabled", true);
-
-                    this.$envEnabledTOTP.text(t("multi_factor_authentication.totp_enable_description"));
-                    this.$envEnabledTOTP.show();
+                if (result.set) {
+                    this.$generateTotpButton.text(t("multi_factor_authentication.totp_secret_regenerate"));
                 }
             });
             this.$protectedSessionTimeout.val(Number(options.protectedSessionTimeout));

@@ -1,20 +1,15 @@
-import { generateSecret } from 'time2fa';
-import config from '../../services/config.js';
+import totpService from '../../services/totp.js';
 
 function generateTOTPSecret() {
-    return { success: true, message: generateSecret() };
-}
-
-function getTotpEnabled() {
-    return config.MultiFactorAuthentication.totpEnabled;
+    return totpService.createSecret();
 }
 
 function getTOTPStatus() {
-    return { success: true, message: getTotpEnabled(), enabled: getTotpEnabled() };
+    return { success: true, message: totpService.isTotpEnabled(), set: totpService.checkForTotpSecret() };
 }
 
 function getSecret() {
-    return config.MultiFactorAuthentication.totpSecret;
+    return totpService.getTotpSecret();
 }
 
 export default {

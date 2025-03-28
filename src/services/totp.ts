@@ -1,40 +1,64 @@
-import { Totp } from 'time2fa';
-import config from './config.js';
-import MFAError from '../errors/mfa_error.js';
+import { Totp, generateSecret } from 'time2fa';
+import options from './options.js';
+import totpEncryptionService from './encryption/totp_encryption.js';
 
+function isTotpEnabled(): boolean {
+    return options.getOption('mfaEnabled') === "true" && options.getOption('mfaMethod') === "totp";
+}
 
-function isTotpEnabled() {
-    if (config.MultiFactorAuthentication.totpEnabled && config.MultiFactorAuthentication.totpSecret === "") {
-        throw new MFAError("TOTP secret is not set!");
+function createSecret(): { success: boolean; message?: string } {
+    try {
+        const secret = generateSecret();
+
+        totpEncryptionService.setTotpSecret(secret);
+
+        return {
+            success: true,
+            message: secret
+        };
+    } catch (e) {
+        console.error('Failed to create TOTP secret:', e);
+        return {
+            success: false,
+            message: e instanceof Error ? e.message : 'Unknown error occurred'
+        };
     }
-    return config.MultiFactorAuthentication.totpEnabled;
 }
 
-function getTotpSecret() {
-    return config.MultiFactorAuthentication.totpSecret;
+function getTotpSecret(): string | null {
+    return totpEncryptionService.getTotpSecret();
 }
 
-function checkForTotSecret() {
-    return config.MultiFactorAuthentication.totpSecret === "" ? false : true;
+function checkForTotpSecret(): boolean {
+    return totpEncryptionService.isTotpSecretSet();
 }
 
-function validateTOTP(submittedPasscode: string) {
-    if (config.MultiFactorAuthentication.totpSecret === "") return false;
+function validateTOTP(submittedPasscode: string): boolean {
+    const secret = getTotpSecret();
+    if (!secret) return false;
 
     try {
-        const valid = Totp.validate({
+        return Totp.validate({
             passcode: submittedPasscode,
-            secret: config.MultiFactorAuthentication.totpSecret.trim()
+            secret: secret.trim()
         });
-        return valid;
     } catch (e) {
+        console.error('Failed to validate TOTP:', e);
         return false;
     }
 }
 
+function resetTotp(): void {
+    totpEncryptionService.resetTotpSecret();
+    options.setOption('mfaEnabled', 'false');
+    options.setOption('mfaMethod', '');
+}
+
 export default {
     isTotpEnabled,
+    createSecret,
     getTotpSecret,
-    checkForTotSecret,
-    validateTOTP
+    checkForTotpSecret,
+    validateTOTP,
+    resetTotp
 };
