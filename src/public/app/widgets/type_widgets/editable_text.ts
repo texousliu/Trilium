@@ -47,6 +47,11 @@ const TPL = `
         height: 100%;
     }
 
+    /* Workaround for #1327 */
+    body.desktop.electron .note-detail-editable-text {
+        letter-spacing: -0.01px;
+    }
+
     body.mobile .note-detail-editable-text {
         padding-left: 4px;
     }
