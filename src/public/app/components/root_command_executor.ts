@@ -232,15 +232,10 @@ export default class RootCommandExecutor extends Component {
 
     async createAiChatCommand() {
         try {
-            // Create a new AI Chat note
-            const parentNoteId = appContext.tabManager.getActiveContextNotePath();
+            // Create a new AI Chat note at the root level
+            const rootNoteId = "root";
 
-            if (!parentNoteId) {
-                toastService.showError("No active note to create AI Chat under");
-                return;
-            }
-
-            const result = await noteCreateService.createNote(parentNoteId, {
+            const result = await noteCreateService.createNote(rootNoteId, {
                 title: "New AI Chat",
                 type: "aiChat",
                 content: JSON.stringify({
