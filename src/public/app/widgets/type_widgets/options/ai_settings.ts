@@ -60,6 +60,7 @@ interface OpenAIModelResponse {
     }>;
 }
 
+// After all interfaces, before class definition, add the TPL constant
 interface AnthropicModelResponse {
     success: boolean;
     chatModels: Array<{
@@ -74,367 +75,369 @@ interface AnthropicModelResponse {
     }>;
 }
 
+const TPL = `
+<div class="options-section">
+    <h4>${t("ai_llm.title")}</h4>
+
+    <!-- Add warning alert div -->
+    <div class="provider-validation-warning alert alert-warning" style="display: none;"></div>
+
+    <div class="form-group">
+        <label class="tn-checkbox">
+            <input class="ai-enabled form-check-input" type="checkbox">
+            ${t("ai_llm.enable_ai_features")}
+        </label>
+        <div class="form-text">${t("ai_llm.enable_ai_description")}</div>
+    </div>
+</div>
+
+<div class="options-section">
+    <h4>${t("ai_llm.embedding_statistics")}</h4>
+    <div class="embedding-stats-container">
+        <div class="embedding-stats">
+            <div class="row">
+                <div class="col-md-6">
+                    <div><strong>${t("ai_llm.processed_notes")}:</strong> <span class="embedding-processed-notes">-</span></div>
+                    <div><strong>${t("ai_llm.total_notes")}:</strong> <span class="embedding-total-notes">-</span></div>
+                    <div><strong>${t("ai_llm.progress")}:</strong> <span class="embedding-status-text">-</span></div>
+                </div>
+
+                <div class="col-md-6">
+                    <div><strong>${t("ai_llm.queued_notes")}:</strong> <span class="embedding-queued-notes">-</span></div>
+                    <div><strong>${t("ai_llm.failed_notes")}:</strong> <span class="embedding-failed-notes">-</span></div>
+                    <div><strong>${t("ai_llm.last_processed")}:</strong> <span class="embedding-last-processed">-</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="progress mt-1" style="height: 10px;">
+            <div class="progress-bar embedding-progress" role="progressbar" style="width: 0%;"
+                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+        </div>
+        <div class="mt-2">
+            <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats">
+                ${t("ai_llm.refresh_stats")}
+            </button>
+        </div>
+    </div>
+
+    <hr/>
+    <!-- Failed embeddings section -->
+    <h5>${t("ai_llm.failed_notes")}</h4>
+    <div class="form-group mt-4">
+        <div class="embedding-failed-notes-container">
+            <div class="embedding-failed-notes-list">
+                <div class="alert alert-info">${t("ai_llm.no_failed_embeddings")}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ai-providers-section options-section">
+    <h4>${t("ai_llm.provider_configuration")}</h4>
+
+    <div class="form-group">
+        <label>${t("ai_llm.provider_precedence")}</label>
+        <input type="text" class="ai-provider-precedence form-control" placeholder="openai,anthropic,ollama">
+        <div class="form-text">${t("ai_llm.provider_precedence_description")}</div>
+    </div>
+
+    <div class="form-group">
+        <label>${t("ai_llm.temperature")}</label>
+        <input class="ai-temperature form-control" type="number" min="0" max="2" step="0.1">
+        <div class="form-text">${t("ai_llm.temperature_description")}</div>
+    </div>
+
+    <div class="form-group">
+        <label>${t("ai_llm.system_prompt")}</label>
+        <textarea class="ai-system-prompt form-control" rows="3"></textarea>
+        <div class="form-text">${t("ai_llm.system_prompt_description")}</div>
+    </div>
+</div>
+
+<nav class="options-section-tabs">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-openai-tab" data-bs-toggle="tab" data-bs-target="#nav-openai" type="button" role="tab" aria-controls="nav-openai" aria-selected="true">${t("ai_llm.openai_tab")}</button>
+        <button class="nav-link" id="nav-anthropic-tab" data-bs-toggle="tab" data-bs-target="#nav-anthropic" type="button" role="tab" aria-controls="nav-anthropic" aria-selected="false">${t("ai_llm.anthropic_tab")}</button>
+        <button class="nav-link" id="nav-voyage-tab" data-bs-toggle="tab" data-bs-target="#nav-voyage" type="button" role="tab" aria-controls="nav-voyage" aria-selected="false">${t("ai_llm.voyage_tab")}</button>
+        <button class="nav-link" id="nav-ollama-tab" data-bs-toggle="tab" data-bs-target="#nav-ollama" type="button" role="tab" aria-controls="nav-ollama" aria-selected="false">${t("ai_llm.ollama_tab")}</button>
+    </div>
+</nav>
+<div class="options-section">
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-openai" role="tabpanel" aria-labelledby="nav-openai-tab">
+            <div class="card">
+                <div class="card-header">
+                    <h5>${t("ai_llm.openai_settings")}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>${t("ai_llm.api_key")}</label>
+                        <input type="password" class="openai-api-key form-control" autocomplete="off" />
+                        <div class="form-text">${t("ai_llm.openai_api_key_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.url")}</label>
+                        <input type="text" class="openai-base-url form-control" />
+                        <div class="form-text">${t("ai_llm.openai_url_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.model")}</label>
+                        <select class="openai-default-model form-control">
+                            <option value="gpt-4o">GPT-4o (recommended)</option>
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        </select>
+                        <div class="form-text">${t("ai_llm.openai_model_description")}</div>
+                        <button class="btn btn-sm btn-outline-secondary refresh-openai-models">${t("ai_llm.refresh_models")}</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.embedding_model")}</label>
+                        <select class="openai-embedding-model form-control">
+                            <option value="text-embedding-3-small">text-embedding-3-small (recommended)</option>
+                            <option value="text-embedding-3-large">text-embedding-3-large</option>
+                            <option value="text-embedding-ada-002">text-embedding-ada-002 (legacy)</option>
+                        </select>
+                        <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-anthropic" role="tabpanel" aria-labelledby="nav-anthropic-tab">
+            <div class="card">
+                <div class="card-header">
+                    <h5>${t("ai_llm.anthropic_configuration")}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>${t("ai_llm.api_key")}</label>
+                        <input type="password" class="anthropic-api-key form-control" autocomplete="off">
+                        <div class="form-text">${t("ai_llm.anthropic_api_key_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.url")}</label>
+                        <input type="text" class="anthropic-base-url form-control">
+                        <div class="form-text">${t("ai_llm.anthropic_url_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.model")}</label>
+                        <select class="anthropic-default-model form-control">
+                            <option value="claude-3-opus-20240229">Claude 3 Opus (recommended)</option>
+                            <option value="claude-3-sonnet-20240229">Claude 3 Sonnet</option>
+                            <option value="claude-3-haiku-20240307">Claude 3 Haiku</option>
+                        </select>
+                        <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
+                        <button class="btn btn-sm btn-outline-secondary refresh-anthropic-models">${t("ai_llm.refresh_models")}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-voyage" role="tabpanel" aria-labelledby="nav-voyage-tab">
+            <div class="card">
+                <div class="card-header">
+                    <h5>${t("ai_llm.voyage_configuration")}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>${t("ai_llm.api_key")}</label>
+                        <input type="password" class="voyage-api-key form-control" autocomplete="off">
+                        <div class="form-text">${t("ai_llm.voyage_api_key_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.embedding_model")}</label>
+                        <select class="voyage-embedding-model form-control">
+                            <option value="voyage-2">voyage-2 (recommended)</option>
+                            <option value="voyage-large-2">voyage-large-2</option>
+                        </select>
+                        <div class="form-text">${t("ai_llm.voyage_embedding_model_description")}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-ollama" role="tabpanel" aria-labelledby="nav-ollama-tab">
+            <div class="card">
+                <div class="card-header">
+                    <h5>${t("ai_llm.ollama_configuration")}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="tn-checkbox">
+                            <input class="ollama-enabled form-check-input" type="checkbox">
+                            ${t("ai_llm.enable_ollama")}
+                        </label>
+                        <div class="form-text">${t("ai_llm.enable_ollama_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.url")}</label>
+                        <input class="ollama-base-url form-control" type="text">
+                        <div class="form-text">${t("ai_llm.ollama_url_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.model")}</label>
+                        <select class="ollama-default-model form-control">
+                            <option value="llama3">llama3 (recommended)</option>
+                            <option value="mistral">mistral</option>
+                            <option value="phi3">phi3</option>
+                        </select>
+                        <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${t("ai_llm.embedding_model")}</label>
+                        <select class="ollama-embedding-model form-control">
+                            <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
+                            <option value="mxbai-embed-large">mxbai-embed-large</option>
+                            <option value="llama3">llama3</option>
+                        </select>
+                        <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
+                        <button class="btn btn-sm btn-outline-secondary refresh-models">${t("ai_llm.refresh_models")}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="embedding-section options-section">
+    <h4>${t("ai_llm.embedding_configuration")}</h4>
+
+    <div class="form-group">
+        <label>${t("ai_llm.embedding_default_provider")}</label>
+        <select class="embedding-default-provider form-control">
+            <option value="openai">OpenAI</option>
+            <option value="voyage">Voyage AI</option>
+            <option value="ollama">Ollama</option>
+            <option value="local">Local</option>
+        </select>
+        <div class="form-text">${t("ai_llm.embedding_default_provider_description")}</div>
+    </div>
+
+    <div class="form-group">
+        <label>${t("ai_llm.embedding_dimension_strategy")}</label>
+        <select class="embedding-dimension-strategy form-control">
+            <option value="native">Use native dimensions (preserves information)</option>
+            <option value="regenerate">Regenerate embeddings (most accurate)</option>
+        </select>
+        <div class="form-text">${t("ai_llm.embedding_dimension_strategy_description")}</div>
+    </div>
+
+    <div class="form-group">
+        <label>${t("ai_llm.embedding_provider_precedence")}</label>
+        <input type="text" class="embedding-provider-precedence form-control" placeholder="openai,voyage,ollama">
+        <div class="form-text">${t("ai_llm.embedding_provider_precedence_description")}</div>
+    </div>
+
+    <div class="form-group">
+        <label>${t("ai_llm.embedding_generation_location")}</label>
+        <select class="embedding-generation-location form-control">
+            <option value="client">${t("ai_llm.embedding_generation_location_client")}</option>
+            <option value="sync_server">${t("ai_llm.embedding_generation_location_sync_server")}</option>
+        </select>
+        <div class="form-text">${t("ai_llm.embedding_generation_location_description")}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="tn-checkbox">
+            <input class="embedding-auto-update-enabled form-check-input" type="checkbox">
+            ${t("ai_llm.enable_auto_update_embeddings")}
+        </label>
+        <div class="form-text">${t("ai_llm.enable_auto_update_embeddings_description")}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="tn-checkbox">
+            <input class="enable-automatic-indexing form-check-input" type="checkbox">
+            ${t("ai_llm.enable_automatic_indexing")}
+        </label>
+        <div class="form-text">${t("ai_llm.enable_automatic_indexing_description")}</div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>${t("ai_llm.similarity_threshold")}</label>
+                <input class="embedding-similarity-threshold form-control" type="number" min="0" max="1" step="0.01">
+                <div class="form-text">${t("ai_llm.similarity_threshold_description")}</div>
+            </div>
+
+            <div class="form-group">
+                <label>${t("ai_llm.embedding_batch_size")}</label>
+                <input class="embedding-batch-size form-control" type="number" min="1" max="50">
+                <div class="form-text">${t("ai_llm.embedding_batch_size_description")}</div>
+            </div>
+
+            <div class="form-group">
+                <label>${t("ai_llm.embedding_default_dimension")}</label>
+                <input class="embedding-default-dimension form-control" type="number" min="128">
+                <div class="form-text">${t("ai_llm.embedding_default_dimension_description")}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>${t("ai_llm.max_notes_per_llm_query")}</label>
+                <input class="max-notes-per-llm-query form-control" type="number" min="1" max="50">
+                <div class="form-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
+            </div>
+
+            <div class="form-group">
+                <label>${t("ai_llm.embedding_update_interval")}</label>
+                <input class="embedding-update-interval form-control" type="number" min="1000" step="1000">
+                <div class="form-text">${t("ai_llm.embedding_update_interval_description")}</div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <button class="btn btn-sm btn-primary embedding-reprocess-all">
+                    ${t("ai_llm.reprocess_all_embeddings")}
+                </button>
+                <div class="form-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <button class="btn btn-sm btn-primary reprocess-index">
+                    ${t("ai_llm.reprocess_index")}
+                </button>
+                <div class="form-text">${t("ai_llm.reprocess_index_description")}</div>
+
+                <!-- Index rebuild progress tracking -->
+                <div class="index-rebuild-progress-container mt-2" style="display: none;">
+                    <div class="mt-2">
+                        <strong>${t("ai_llm.index_rebuild_progress")}:</strong> <span class="index-rebuild-status-text">-</span>
+                    </div>
+                    <div class="progress mt-1" style="height: 10px;">
+                        <div class="progress-bar index-rebuild-progress" role="progressbar" style="width: 0%;"
+                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`;
+
 export default class AiSettingsWidget extends OptionsWidget {
     private statsRefreshInterval: NodeJS.Timeout | null = null;
     private indexRebuildRefreshInterval: NodeJS.Timeout | null = null;
     private readonly STATS_REFRESH_INTERVAL = 5000; // 5 seconds
 
     doRender() {
-        this.$widget = $(`
-        <div class="options-section">
-            <h4>${t("ai_llm.title")}</h4>
-
-            <!-- Add warning alert div -->
-            <div class="provider-validation-warning alert alert-warning" style="display: none;"></div>
-
-            <div class="form-group">
-                <label class="tn-checkbox">
-                    <input class="ai-enabled form-check-input" type="checkbox">
-                    ${t("ai_llm.enable_ai_features")}
-                </label>
-                <div class="form-text">${t("ai_llm.enable_ai_description")}</div>
-            </div>
-        </div>
-
-        <div class="options-section">
-            <h4>${t("ai_llm.embedding_statistics")}</h4>
-            <div class="embedding-stats-container">
-                <div class="embedding-stats">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div><strong>${t("ai_llm.processed_notes")}:</strong> <span class="embedding-processed-notes">-</span></div>
-                            <div><strong>${t("ai_llm.total_notes")}:</strong> <span class="embedding-total-notes">-</span></div>
-                            <div><strong>${t("ai_llm.progress")}:</strong> <span class="embedding-status-text">-</span></div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div><strong>${t("ai_llm.queued_notes")}:</strong> <span class="embedding-queued-notes">-</span></div>
-                            <div><strong>${t("ai_llm.failed_notes")}:</strong> <span class="embedding-failed-notes">-</span></div>
-                            <div><strong>${t("ai_llm.last_processed")}:</strong> <span class="embedding-last-processed">-</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="progress mt-1" style="height: 10px;">
-                    <div class="progress-bar embedding-progress" role="progressbar" style="width: 0%;"
-                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                </div>
-                <div class="mt-2">
-                    <button class="btn btn-sm btn-outline-secondary embedding-refresh-stats">
-                        ${t("ai_llm.refresh_stats")}
-                    </button>
-                </div>
-            </div>
-
-            <hr/>
-            <!-- Failed embeddings section -->
-            <h5>${t("ai_llm.failed_notes")}</h4>
-            <div class="form-group mt-4">
-                <div class="embedding-failed-notes-container">
-                    <div class="embedding-failed-notes-list">
-                        <div class="alert alert-info">${t("ai_llm.no_failed_embeddings")}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="ai-providers-section options-section">
-            <h4>${t("ai_llm.provider_configuration")}</h4>
-
-            <div class="form-group">
-                <label>${t("ai_llm.provider_precedence")}</label>
-                <input type="text" class="ai-provider-precedence form-control" placeholder="openai,anthropic,ollama">
-                <div class="form-text">${t("ai_llm.provider_precedence_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label>${t("ai_llm.temperature")}</label>
-                <input class="ai-temperature form-control" type="number" min="0" max="2" step="0.1">
-                <div class="form-text">${t("ai_llm.temperature_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label>${t("ai_llm.system_prompt")}</label>
-                <textarea class="ai-system-prompt form-control" rows="3"></textarea>
-                <div class="form-text">${t("ai_llm.system_prompt_description")}</div>
-            </div>
-        </div>
-
-        <nav class="options-section-tabs">
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-openai-tab" data-bs-toggle="tab" data-bs-target="#nav-openai" type="button" role="tab" aria-controls="nav-openai" aria-selected="true">${t("ai_llm.openai_tab")}</button>
-                <button class="nav-link" id="nav-anthropic-tab" data-bs-toggle="tab" data-bs-target="#nav-anthropic" type="button" role="tab" aria-controls="nav-anthropic" aria-selected="false">${t("ai_llm.anthropic_tab")}</button>
-                <button class="nav-link" id="nav-voyage-tab" data-bs-toggle="tab" data-bs-target="#nav-voyage" type="button" role="tab" aria-controls="nav-voyage" aria-selected="false">${t("ai_llm.voyage_tab")}</button>
-                <button class="nav-link" id="nav-ollama-tab" data-bs-toggle="tab" data-bs-target="#nav-ollama" type="button" role="tab" aria-controls="nav-ollama" aria-selected="false">${t("ai_llm.ollama_tab")}</button>
-            </div>
-        </nav>
-        <div class="options-section">
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-openai" role="tabpanel" aria-labelledby="nav-openai-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>${t("ai_llm.openai_settings")}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>${t("ai_llm.api_key")}</label>
-                                <input type="password" class="openai-api-key form-control" autocomplete="off" />
-                                <div class="form-text">${t("ai_llm.openai_api_key_description")}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.url")}</label>
-                                <input type="text" class="openai-base-url form-control" />
-                                <div class="form-text">${t("ai_llm.openai_url_description")}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.model")}</label>
-                                <select class="openai-default-model form-control">
-                                    <option value="gpt-4o">GPT-4o (recommended)</option>
-                                    <option value="gpt-4">GPT-4</option>
-                                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                                </select>
-                                <div class="form-text">${t("ai_llm.openai_model_description")}</div>
-                                <button class="btn btn-sm btn-outline-secondary refresh-openai-models">${t("ai_llm.refresh_models")}</button>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.embedding_model")}</label>
-                                <select class="openai-embedding-model form-control">
-                                    <option value="text-embedding-3-small">text-embedding-3-small (recommended)</option>
-                                    <option value="text-embedding-3-large">text-embedding-3-large</option>
-                                    <option value="text-embedding-ada-002">text-embedding-ada-002 (legacy)</option>
-                                </select>
-                                <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="nav-anthropic" role="tabpanel" aria-labelledby="nav-anthropic-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>${t("ai_llm.anthropic_configuration")}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>${t("ai_llm.api_key")}</label>
-                                <input type="password" class="anthropic-api-key form-control" autocomplete="off">
-                                <div class="form-text">${t("ai_llm.anthropic_api_key_description")}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.url")}</label>
-                                <input type="text" class="anthropic-base-url form-control">
-                                <div class="form-text">${t("ai_llm.anthropic_url_description")}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.model")}</label>
-                                <select class="anthropic-default-model form-control">
-                                    <option value="claude-3-opus-20240229">Claude 3 Opus (recommended)</option>
-                                    <option value="claude-3-sonnet-20240229">Claude 3 Sonnet</option>
-                                    <option value="claude-3-haiku-20240307">Claude 3 Haiku</option>
-                                </select>
-                                <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
-                                <button class="btn btn-sm btn-outline-secondary refresh-anthropic-models">${t("ai_llm.refresh_models")}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="nav-voyage" role="tabpanel" aria-labelledby="nav-voyage-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>${t("ai_llm.voyage_configuration")}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>${t("ai_llm.api_key")}</label>
-                                <input type="password" class="voyage-api-key form-control" autocomplete="off">
-                                <div class="form-text">${t("ai_llm.voyage_api_key_description")}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.embedding_model")}</label>
-                                <select class="voyage-embedding-model form-control">
-                                    <option value="voyage-2">voyage-2 (recommended)</option>
-                                    <option value="voyage-large-2">voyage-large-2</option>
-                                </select>
-                                <div class="form-text">${t("ai_llm.voyage_embedding_model_description")}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="nav-ollama" role="tabpanel" aria-labelledby="nav-ollama-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>${t("ai_llm.ollama_configuration")}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="tn-checkbox">
-                                    <input class="ollama-enabled form-check-input" type="checkbox">
-                                    ${t("ai_llm.enable_ollama")}
-                                </label>
-                                <div class="form-text">${t("ai_llm.enable_ollama_description")}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.url")}</label>
-                                <input class="ollama-base-url form-control" type="text">
-                                <div class="form-text">${t("ai_llm.ollama_url_description")}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.model")}</label>
-                                <select class="ollama-default-model form-control">
-                                    <option value="llama3">llama3 (recommended)</option>
-                                    <option value="mistral">mistral</option>
-                                    <option value="phi3">phi3</option>
-                                </select>
-                                <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${t("ai_llm.embedding_model")}</label>
-                                <select class="ollama-embedding-model form-control">
-                                    <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
-                                    <option value="mxbai-embed-large">mxbai-embed-large</option>
-                                    <option value="llama3">llama3</option>
-                                </select>
-                                <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
-                                <button class="btn btn-sm btn-outline-secondary refresh-models">${t("ai_llm.refresh_models")}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="embedding-section options-section">
-            <h4>${t("ai_llm.embedding_configuration")}</h4>
-
-            <div class="form-group">
-                <label>${t("ai_llm.embedding_default_provider")}</label>
-                <select class="embedding-default-provider form-control">
-                    <option value="openai">OpenAI</option>
-                    <option value="voyage">Voyage AI</option>
-                    <option value="ollama">Ollama</option>
-                    <option value="local">Local</option>
-                </select>
-                <div class="form-text">${t("ai_llm.embedding_default_provider_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label>${t("ai_llm.embedding_dimension_strategy")}</label>
-                <select class="embedding-dimension-strategy form-control">
-                    <option value="native">Use native dimensions (preserves information)</option>
-                    <option value="regenerate">Regenerate embeddings (most accurate)</option>
-                </select>
-                <div class="form-text">${t("ai_llm.embedding_dimension_strategy_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label>${t("ai_llm.embedding_provider_precedence")}</label>
-                <input type="text" class="embedding-provider-precedence form-control" placeholder="openai,voyage,ollama">
-                <div class="form-text">${t("ai_llm.embedding_provider_precedence_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label>${t("ai_llm.embedding_generation_location")}</label>
-                <select class="embedding-generation-location form-control">
-                    <option value="client">${t("ai_llm.embedding_generation_location_client")}</option>
-                    <option value="sync_server">${t("ai_llm.embedding_generation_location_sync_server")}</option>
-                </select>
-                <div class="form-text">${t("ai_llm.embedding_generation_location_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label class="tn-checkbox">
-                    <input class="embedding-auto-update-enabled form-check-input" type="checkbox">
-                    ${t("ai_llm.enable_auto_update_embeddings")}
-                </label>
-                <div class="form-text">${t("ai_llm.enable_auto_update_embeddings_description")}</div>
-            </div>
-
-            <div class="form-group">
-                <label class="tn-checkbox">
-                    <input class="enable-automatic-indexing form-check-input" type="checkbox">
-                    ${t("ai_llm.enable_automatic_indexing")}
-                </label>
-                <div class="form-text">${t("ai_llm.enable_automatic_indexing_description")}</div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>${t("ai_llm.similarity_threshold")}</label>
-                        <input class="embedding-similarity-threshold form-control" type="number" min="0" max="1" step="0.01">
-                        <div class="form-text">${t("ai_llm.similarity_threshold_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.embedding_batch_size")}</label>
-                        <input class="embedding-batch-size form-control" type="number" min="1" max="50">
-                        <div class="form-text">${t("ai_llm.embedding_batch_size_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.embedding_default_dimension")}</label>
-                        <input class="embedding-default-dimension form-control" type="number" min="128">
-                        <div class="form-text">${t("ai_llm.embedding_default_dimension_description")}</div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>${t("ai_llm.max_notes_per_llm_query")}</label>
-                        <input class="max-notes-per-llm-query form-control" type="number" min="1" max="50">
-                        <div class="form-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.embedding_update_interval")}</label>
-                        <input class="embedding-update-interval form-control" type="number" min="1000" step="1000">
-                        <div class="form-text">${t("ai_llm.embedding_update_interval_description")}</div>
-                    </div>
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <button class="btn btn-sm btn-primary embedding-reprocess-all">
-                            ${t("ai_llm.reprocess_all_embeddings")}
-                        </button>
-                        <div class="form-text">${t("ai_llm.reprocess_all_embeddings_description")}</div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <button class="btn btn-sm btn-primary reprocess-index">
-                            ${t("ai_llm.reprocess_index")}
-                        </button>
-                        <div class="form-text">${t("ai_llm.reprocess_index_description")}</div>
-
-                        <!-- Index rebuild progress tracking -->
-                        <div class="index-rebuild-progress-container mt-2" style="display: none;">
-                            <div class="mt-2">
-                                <strong>${t("ai_llm.index_rebuild_progress")}:</strong> <span class="index-rebuild-status-text">-</span>
-                            </div>
-                            <div class="progress mt-1" style="height: 10px;">
-                                <div class="progress-bar index-rebuild-progress" role="progressbar" style="width: 0%;"
-                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>`);
+        this.$widget = $(TPL);
 
         const $aiEnabled = this.$widget.find('.ai-enabled');
         $aiEnabled.on('change', async () => {
