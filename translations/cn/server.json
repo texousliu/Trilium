@@ -240,13 +240,15 @@
     "images-title": "图片",
     "spellcheck-title": "拼写检查",
     "password-title": "密码",
+    "multi-factor-authentication-title": "多因素认证",
     "etapi-title": "ETAPI",
     "backup-title": "备份",
     "sync-title": "同步",
     "other": "其他",
     "advanced-title": "高级",
     "visible-launchers-title": "可见启动器",
-    "user-guide": "用户指南"
+    "user-guide": "用户指南",
+    "localization": "语言和区域"
   },
   "notes": {
     "new-note": "新建笔记",
