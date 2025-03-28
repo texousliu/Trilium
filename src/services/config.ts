@@ -1,5 +1,3 @@
-"use strict";
-
 import ini from "ini";
 import fs from "fs";
 import dataDir from "./data_dir.js";
@@ -42,9 +40,6 @@ export interface TriliumConfig {
         syncProxy: string;
     };
     MultiFactorAuthentication: {
-        totpEnabled: boolean;
-        totpSecret: string;
-        ssoEnabled: boolean;
         oauthBaseUrl: string;
         oauthClientId: string;
         oauthClientSecret: string;
@@ -109,15 +104,6 @@ const config: TriliumConfig = {
     },
 
     MultiFactorAuthentication: {
-        totpEnabled:
-            envToBoolean(process.env.TRILIUM_TOTP_ENABLED) || iniConfig?.MultiFactorAuthentication?.totpEnabled || false,
-
-        totpSecret:
-            process.env.TRILIUM_TOTP_SECRET || iniConfig?.MultiFactorAuthentication?.totpSecret || "",
-
-        ssoEnabled:
-            envToBoolean(process.env.TRILIUM_SSO_ENABLED) || iniConfig?.MultiFactorAuthentication?.ssoEnabled || false,
-
         oauthBaseUrl:
             process.env.TRILIUM_OAUTH_BASE_URL || iniConfig?.MultiFactorAuthentication?.oauthBaseUrl || "",
 
