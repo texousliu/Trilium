@@ -149,7 +149,7 @@ function logout(req: Request, res: Response) {
         req.session.loggedIn = false;
 
         if (openID.isOpenIDEnabled() && openIDEncryption.isSubjectIdentifierSaved()) {
-            res.oidc.logout({ returnTo: '/authenticate' });
+            res.oidc.logout({ returnTo: '/' });
         } else res.redirect('login');
 
         res.sendStatus(200);
