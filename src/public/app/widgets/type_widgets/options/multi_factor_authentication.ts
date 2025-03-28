@@ -40,6 +40,10 @@ const TPL_WEB = `
 
             <h5>${t("multi_factor_authentication.totp_secret_title")}</h5>
             <br />
+            <div class="alert alert-warning no-totp-secret" role="alert" style="font-weight: bold; color: red !important;">
+                ${t("multi_factor_authentication.no_totp_secret_warning")}
+            </div>
+
             <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
                 ${t("multi_factor_authentication.totp_secret_description_warning")}
             </div>
@@ -92,15 +96,15 @@ const TPL_WEB = `
 
         <div class="oauth-options" style="display: none;">
             <p class="form-text">${t("multi_factor_authentication.oauth_description")}</p>
-            <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+            <div class="alert alert-warning missing-vars" role="alert" style="font-weight: bold; color: red !important;">
                 ${t("multi_factor_authentication.oauth_description_warning")}
             </div>
             <div class="alert alert-warning missing-vars" role="alert" style="font-weight: bold; color: red !important; display: none;"></div>
             <hr />
             <div class="col-md-6">
-                <span><b>${t("multi_factor_authentication.oauth_user_account")}</b></span><span class="user-account-name"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
+                <span><b>${t("multi_factor_authentication.oauth_user_account")}</b></span><span class="user-account-name">${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
                 <br>
-                <span><b>${t("multi_factor_authentication.oauth_user_email")}</b></span><span class="user-account-email"> ${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
+                <span><b>${t("multi_factor_authentication.oauth_user_email")}</b></span><span class="user-account-email">${t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
             </div>
         </div>
     </div>
@@ -137,6 +141,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     private $mfaOptions!: JQuery<HTMLElement>;
     private $mfaMethodRadios!: JQuery<HTMLElement>;
     private $totpOptions!: JQuery<HTMLElement>;
+    private $noTotpSecretWarning!: JQuery<HTMLElement>;
     private $generateTotpButton!: JQuery<HTMLElement>;
     private $generateRecoveryCodeButton!: JQuery<HTMLElement>;
     private $recoveryKeys: JQuery<HTMLElement>[] = [];
@@ -154,6 +159,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             this.$mfaOptions = this.$widget.find(".mfa-options");
             this.$mfaMethodRadios = this.$widget.find(".mfa-method-radio");
             this.$totpOptions = this.$widget.find(".totp-options");
+            this.$noTotpSecretWarning = this.$widget.find(".no-totp-secret");
             this.$generateTotpButton = this.$widget.find(".generate-totp");
             this.$generateRecoveryCodeButton = this.$widget.find(".generate-recovery-code");
 
@@ -321,6 +327,9 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
             server.get<TOTPStatus>("totp/status").then((result) => {
                 if (result.set) {
                     this.$generateTotpButton.text(t("multi_factor_authentication.totp_secret_regenerate"));
+                    this.$noTotpSecretWarning.hide();
+                } else {
+                    this.$noTotpSecretWarning.show();
                 }
             });
         }
