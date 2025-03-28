@@ -2,6 +2,7 @@ import sanitizeHtml from 'sanitize-html';
 import type { Message } from '../ai_interface.js';
 import { BaseMessageFormatter } from './base_formatter.js';
 import { PROVIDER_PROMPTS, FORMATTING_PROMPTS } from '../constants/llm_prompt_constants.js';
+import { LLM_CONSTANTS } from '../constants/provider_constants.js';
 
 /**
  * OpenAI-specific message formatter
@@ -12,7 +13,7 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
      * Maximum recommended context length for OpenAI
      * Based on GPT-4 context window size
      */
-    private static MAX_CONTEXT_LENGTH = 16000;
+    private static MAX_CONTEXT_LENGTH = LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI;
 
     /**
      * Format messages for the OpenAI API

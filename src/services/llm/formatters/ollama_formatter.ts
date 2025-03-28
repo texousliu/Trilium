@@ -2,6 +2,7 @@ import type { Message } from '../ai_interface.js';
 import { BaseMessageFormatter } from './base_formatter.js';
 import sanitizeHtml from 'sanitize-html';
 import { PROVIDER_PROMPTS, FORMATTING_PROMPTS } from '../constants/llm_prompt_constants.js';
+import { LLM_CONSTANTS } from '../constants/provider_constants.js';
 
 /**
  * Ollama-specific message formatter
@@ -12,7 +13,7 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
      * Maximum recommended context length for Ollama
      * Smaller than other providers due to Ollama's handling of context
      */
-    private static MAX_CONTEXT_LENGTH = 4000;
+    private static MAX_CONTEXT_LENGTH = LLM_CONSTANTS.CONTEXT_WINDOW.OLLAMA;
 
     /**
      * Format messages for the Ollama API

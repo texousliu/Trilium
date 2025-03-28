@@ -3,7 +3,7 @@ import log from "../../../log.js";
 import { BaseEmbeddingProvider } from "../base_embeddings.js";
 import type { EmbeddingConfig, EmbeddingModelInfo } from "../embeddings_interface.js";
 import { NormalizationStatus } from "../embeddings_interface.js";
-import { LLM_CONSTANTS } from "../../../../routes/api/llm.js";
+import { LLM_CONSTANTS } from "../../constants/provider_constants.js";
 
 // Voyage model context window sizes - as of current API version
 const VOYAGE_MODEL_CONTEXT_WINDOWS: Record<string, number> = {

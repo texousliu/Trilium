@@ -2,6 +2,7 @@ import sanitizeHtml from 'sanitize-html';
 import type { Message } from '../ai_interface.js';
 import { BaseMessageFormatter } from './base_formatter.js';
 import { PROVIDER_PROMPTS } from '../constants/llm_prompt_constants.js';
+import { LLM_CONSTANTS } from '../constants/provider_constants.js';
 
 /**
  * Anthropic-specific message formatter
@@ -12,7 +13,7 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
      * Maximum recommended context length for Anthropic models
      * Claude has a very large context window
      */
-    private static MAX_CONTEXT_LENGTH = 100000;
+    private static MAX_CONTEXT_LENGTH = LLM_CONSTANTS.CONTEXT_WINDOW.ANTHROPIC;
 
     /**
      * Format messages for the Anthropic API

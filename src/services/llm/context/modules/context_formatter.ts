@@ -1,15 +1,16 @@
 import sanitizeHtml from 'sanitize-html';
 import log from '../../../log.js';
 import { CONTEXT_PROMPTS, FORMATTING_PROMPTS } from '../../constants/llm_prompt_constants.js';
+import { LLM_CONSTANTS } from '../../constants/provider_constants.js';
 import type { IContextFormatter, NoteSearchResult } from '../../interfaces/context_interfaces.js';
 
-// Constants for context window sizes, defines in-module to avoid circular dependencies
-const CONTEXT_WINDOW = {
-    OPENAI: 16000,
-    ANTHROPIC: 100000,
-    OLLAMA: 4000,  // Reduced to avoid issues
-    DEFAULT: 4000
-};
+// Use constants from the centralized file
+// const CONTEXT_WINDOW = {
+//     OPENAI: 16000,
+//     ANTHROPIC: 100000,
+//     OLLAMA: 4000,  // Reduced to avoid issues
+//     DEFAULT: 4000
+// };
 
 /**
  * Formats context data for LLM consumption
@@ -35,10 +36,10 @@ export class ContextFormatter implements IContextFormatter {
         try {
             // Get appropriate context size based on provider
             const maxTotalLength =
-                providerId === 'openai' ? CONTEXT_WINDOW.OPENAI :
-                providerId === 'anthropic' ? CONTEXT_WINDOW.ANTHROPIC :
-                providerId === 'ollama' ? CONTEXT_WINDOW.OLLAMA :
-                CONTEXT_WINDOW.DEFAULT;
+                providerId === 'openai' ? LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI :
+                providerId === 'anthropic' ? LLM_CONSTANTS.CONTEXT_WINDOW.ANTHROPIC :
+                providerId === 'ollama' ? LLM_CONSTANTS.CONTEXT_WINDOW.OLLAMA :
+                LLM_CONSTANTS.CONTEXT_WINDOW.DEFAULT;
 
             // DEBUG: Log context window size
             log.info(`Context window for provider ${providerId}: ${maxTotalLength} chars`);

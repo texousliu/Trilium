@@ -1,7 +1,7 @@
 import { NormalizationStatus } from './embeddings_interface.js';
 import type { NoteEmbeddingContext } from './embeddings_interface.js';
 import log from "../../log.js";
-import { LLM_CONSTANTS } from "../../../routes/api/llm.js";
+import { LLM_CONSTANTS } from "../constants/provider_constants.js";
 import options from "../../options.js";
 import { isBatchSizeError as checkBatchSizeError } from '../interfaces/error_interfaces.js';
 import type { EmbeddingModelInfo } from '../interfaces/embedding_interfaces.js';
