@@ -307,6 +307,7 @@ button kbd {
     background-color: var(--menu-background-color) !important;
     user-select: none;
     -webkit-user-select: none;
+    --bs-dropdown-zindex: 999;
 }
 
 body.desktop .dropdown-menu {

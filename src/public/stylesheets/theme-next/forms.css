@@ -668,11 +668,15 @@ input[type="range"] {
 :root {
     --scrollbar-thickness: 10px;
     --scrollbar-thumb-thickness: 3px;
-    --scrollbar-thumb-hover-thickness: 8px;
+    --scrollbar-thumb-hover-thickness: 6px;
     --scrollbar-start-end-gap: 8px;
 }
 
 /* Scrollbar's body */
+
+::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-background-color);
+}
 
 ::-webkit-scrollbar:vertical {
     width: var(--scrollbar-thickness) !important;
@@ -707,10 +711,12 @@ input[type="range"] {
 
 ::-webkit-scrollbar-thumb:hover {
     --s-thumb-thickness: var(--scrollbar-thumb-hover-thickness);
-    --s-thumb-color: var(--scrollbar-thumb-color-hover);
+    --s-thumb-color: var(--scrollbar-thumb-hover-color);
 }
 
-/* Scrollbar's increment/decrement buttons (repurposed as a scrollbar start/end gap) */
+/* Scrollbar's increment/decrement buttons (repurposed as a scrollbar start/end gap).
+ * This gap is useful also to avoid breaking the rounded corners of a container when a
+ * custom scrollbar background color is used. */
 
 ::-webkit-scrollbar-button:vertical {
     height: var(--scrollbar-start-end-gap);
@@ -724,10 +730,19 @@ input[type="range"] {
  * Firefox scrollbars
  *
  * Unsupported features: --scrollbar-thumb-thickness, --scrollbar-thumb-hover-thickness,
- *                       --scrollbar-start-end-gap, --scrollbar-thumb-color-hover.
+ *                       --scrollbar-start-end-gap, --scrollbar-thumb-hover-color.
  */
 
 :root {
     scrollbar-color: var(--scrollbar-thumb-color) transparent;
     scrollbar-width: var(--scrollbar-thickness);
+}
+
+@supports selector(::-webkit-scrollbar) {
+    /* Prevent the scrollbar-color and scrollbar-width properties to override the custom styles
+     * defined using ::-webkit-scrollbar. */
+    :root {
+        scrollbar-color: unset;
+        scrollbar-width: unset;
+    }
 }
