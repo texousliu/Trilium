@@ -13,6 +13,61 @@ import options from "../services/options.js";
     await libraryLoader.requireCss('stylesheets/llm_chat.css');
 })();
 
+const TPL = `
+<div class="note-context-chat h-100 w-100 d-flex flex-column">
+    <!-- Move validation warning outside the card with better styling -->
+    <div class="provider-validation-warning alert alert-warning m-2 border-left border-warning" style="display: none; padding-left: 15px; border-left: 4px solid #ffc107; background-color: rgba(255, 248, 230, 0.9); font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"></div>
+
+    <div class="note-context-chat-container flex-grow-1 overflow-auto p-3">
+        <div class="note-context-chat-messages"></div>
+        <div class="loading-indicator" style="display: none;">
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <span class="ms-2">${t('ai.processing.common')}...</span>
+        </div>
+    </div>
+
+    <div class="sources-container p-2 border-top" style="display: none;">
+        <h6 class="m-0 p-1 d-flex align-items-center">
+            <i class="bx bx-link-alt me-1"></i> ${t('ai.sources')}
+            <span class="badge bg-primary rounded-pill ms-2 sources-count"></span>
+        </h6>
+        <div class="sources-list mt-2"></div>
+    </div>
+
+    <form class="note-context-chat-form d-flex flex-column border-top p-2">
+        <div class="d-flex chat-input-container mb-2">
+            <textarea
+                class="form-control note-context-chat-input"
+                placeholder="${t('ai.enter_message')}"
+                rows="2"
+            ></textarea>
+            <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2 d-flex align-items-center justify-content-center">
+                <i class="bx bx-send"></i>
+            </button>
+        </div>
+        <div class="d-flex align-items-center context-option-container mt-1 justify-content-end">
+            <small class="text-muted me-auto fst-italic">Options:</small>
+            <div class="form-check form-switch me-3 small">
+                <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useEnhancedContext" checked>
+                <label class="form-check-label small" for="useEnhancedContext" title="${t('ai.enhanced_context_description')}">
+                    ${t('ai.use_enhanced_context')}
+                    <i class="bx bx-info-circle small text-muted"></i>
+                </label>
+            </div>
+            <div class="form-check form-switch small">
+                <input class="form-check-input show-thinking-checkbox" type="checkbox" id="showThinking">
+                <label class="form-check-label small" for="showThinking" title="${t('ai.show_thinking_description')}">
+                    ${t('ai.show_thinking')}
+                    <i class="bx bx-info-circle small text-muted"></i>
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
+`;
+
 interface ChatResponse {
     id: string;
     messages: Array<{role: string; content: string}>;
@@ -39,60 +94,7 @@ export default class LlmChatPanel extends BasicWidget {
     private currentNoteId: string | null = null;
 
     doRender() {
-        this.$widget = $(`
-            <div class="note-context-chat h-100 w-100 d-flex flex-column">
-                <!-- Move validation warning outside the card with better styling -->
-                <div class="provider-validation-warning alert alert-warning m-2 border-left border-warning" style="display: none; padding-left: 15px; border-left: 4px solid #ffc107; background-color: rgba(255, 248, 230, 0.9); font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"></div>
-
-                <div class="note-context-chat-container flex-grow-1 overflow-auto p-3">
-                    <div class="note-context-chat-messages"></div>
-                    <div class="loading-indicator" style="display: none;">
-                        <div class="spinner-border spinner-border-sm text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <span class="ms-2">${t('ai.processing.common')}...</span>
-                    </div>
-                </div>
-
-                <div class="sources-container p-2 border-top" style="display: none;">
-                    <h6 class="m-0 p-1 d-flex align-items-center">
-                        <i class="bx bx-link-alt me-1"></i> ${t('ai.sources')}
-                        <span class="badge bg-primary rounded-pill ms-2 sources-count"></span>
-                    </h6>
-                    <div class="sources-list mt-2"></div>
-                </div>
-
-                <form class="note-context-chat-form d-flex flex-column border-top p-2">
-                    <div class="d-flex chat-input-container mb-2">
-                        <textarea
-                            class="form-control note-context-chat-input"
-                            placeholder="${t('ai.enter_message')}"
-                            rows="2"
-                        ></textarea>
-                        <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2 d-flex align-items-center justify-content-center">
-                            <i class="bx bx-send"></i>
-                        </button>
-                    </div>
-                    <div class="d-flex align-items-center context-option-container mt-1 justify-content-end">
-                        <small class="text-muted me-auto fst-italic">Options:</small>
-                        <div class="form-check form-switch me-3 small">
-                            <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useEnhancedContext" checked>
-                            <label class="form-check-label small" for="useEnhancedContext" title="${t('ai.enhanced_context_description')}">
-                                ${t('ai.use_enhanced_context')}
-                                <i class="bx bx-info-circle small text-muted"></i>
-                            </label>
-                        </div>
-                        <div class="form-check form-switch small">
-                            <input class="form-check-input show-thinking-checkbox" type="checkbox" id="showThinking">
-                            <label class="form-check-label small" for="showThinking" title="${t('ai.show_thinking_description')}">
-                                ${t('ai.show_thinking')}
-                                <i class="bx bx-info-circle small text-muted"></i>
-                            </label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        `);
+        this.$widget = $(TPL);
 
         const element = this.$widget[0];
         this.noteContextChatMessages = element.querySelector('.note-context-chat-messages') as HTMLElement;
