@@ -14,13 +14,15 @@ import type { NextFunction, Request, Response } from "express";
 const noAuthentication = config.General && config.General.noAuthentication === true;
 
 function checkAuth(req: Request, res: Response, next: NextFunction) {
+    if (!sqlInit.isDbInitialized()) {
+        res.redirect('setup');
+    }
+
     const currentTotpStatus = totp.isTotpEnabled();
     const currentSsoStatus = openID.isOpenIDEnabled();
     const lastAuthState = req.session.lastAuthState || { totpEnabled: false, ssoEnabled: false };
 
-    if (!sqlInit.isDbInitialized()) {
-        res.redirect('setup');
-    } else if (isElectron) {
+    if (isElectron) {
         next();
         return;
     } else if (currentTotpStatus !== lastAuthState.totpEnabled || currentSsoStatus !== lastAuthState.ssoEnabled) {
