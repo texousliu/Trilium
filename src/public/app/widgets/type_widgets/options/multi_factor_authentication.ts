@@ -10,14 +10,14 @@ const TPL_WEB = `
     <h4>${t("multi_factor_authentication.title")}</h4>
     <p class="form-text">${t("multi_factor_authentication.description")}</p>
 
-    <div class="form-group row">
-        <div class="col-md-6 side-checkbox">
-            <label class="form-check tn-checkbox">
-                <input type="checkbox" class="mfa-enabled-checkbox form-check-input" />
-                ${t("multi_factor_authentication.mfa_enabled")}
-            </label>
-        </div>
+    <div class="col-md-6 side-checkbox">
+        <label class="form-check tn-checkbox">
+            <input type="checkbox" class="mfa-enabled-checkbox form-check-input" />
+            ${t("multi_factor_authentication.mfa_enabled")}
+        </label>
     </div>
+
+    <hr />
 
     <div class="mfa-options" style="display: none;">
         <label class="form-label"><b>${t("multi_factor_authentication.mfa_method")}</b></label>
@@ -35,62 +35,53 @@ const TPL_WEB = `
         <div class="totp-options" style="display: none;">
             <p class="form-text">${t("multi_factor_authentication.totp_description")}</p>
 
-            <div class="form-group">
-                <div class="totp-secret">${t("multi_factor_authentication.totp_secret_description")}</div>
+            <hr />
+
+            <h5>${t("multi_factor_authentication.totp_secret_title")}</h5>
+            <br />
+            <button class="generate-totp btn btn-primary">
+                ${t("multi_factor_authentication.totp_secret_generate")}
+            </button>
+
+            <hr />
+
+            <h5>${t("multi_factor_authentication.recovery_keys_title")}</h5>
+            <p class="form-text">${t("multi_factor_authentication.recovery_keys_description")}</p>
+
+            <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
+                ${t("multi_factor_authentication.recovery_keys_description_warning")}
             </div>
 
-            <button class="generate-totp btn btn-primary"> ${t("multi_factor_authentication.totp_secret_generate")} </button>
+            <br>
 
-            <div class="options-section">
-                <h4>${t("multi_factor_authentication.totp_secret_title")}</h4>
+            <table style="border: 0px solid white">
+                <tbody>
+                    <tr>
+                        <td class="key_0"></td>
+                        <td style="width: 20px" />
+                        <td class="key_1"></td>
+                    </tr>
+                    <tr>
+                        <td class="key_2"></td>
+                        <td />
+                        <td class="key_3"></td>
+                    </tr>
+                    <tr>
+                        <td class="key_4"></td>
+                        <td />
+                        <td class="key_5"></td>
+                    </tr>
+                    <tr>
+                        <td class="key_6"></td>
+                        <td />
+                        <td class="key_7"></td>
+                    </tr>
+                </tbody>
+            </table>
 
-                <div class="form-group">
-                    <div class="totp-secret">${t("multi_factor_authentication.totp_secret_description")}</div>
-                </div>
+            <br>
 
-                <button class="generate-totp btn btn-primary"> ${t("multi_factor_authentication.totp_secret_generate")} </button>
-            </div>
-
-            <div class="options-section">
-                <h4>${t("multi_factor_authentication.recovery_keys_title")}</h4>
-
-                <p class="form-text">${t("multi_factor_authentication.recovery_keys_description")}</p>
-
-                <div class="alert alert-warning" role="alert" style="font-weight: bold; color: red !important;">
-                    ${t("multi_factor_authentication.recovery_keys_description_warning")}
-                </div>
-
-                <br>
-
-                <table style="border: 0px solid white">
-                    <tbody>
-                        <tr>
-                            <td class="key_0"></td>
-                            <td style="width: 20px" />
-                            <td class="key_1"></td>
-                        </tr>
-                        <tr>
-                            <td class="key_2"></td>
-                            <td />
-                            <td class="key_3"></td>
-                        </tr>
-                        <tr>
-                            <td class="key_4"></td>
-                            <td />
-                            <td class="key_5"></td>
-                        </tr>
-                        <tr>
-                            <td class="key_6"></td>
-                            <td />
-                            <td class="key_7"></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <br>
-
-                <button class="generate-recovery-code btn btn-primary" disabled="true"> ${t("multi_factor_authentication.recovery_keys_generate")} </button>
-            </div>
+            <button class="generate-recovery-code btn btn-primary"> ${t("multi_factor_authentication.recovery_keys_generate")} </button>
         </div>
 
         <div class="oauth-options" style="display: none;">
