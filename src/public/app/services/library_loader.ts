@@ -51,10 +51,6 @@ const KATEX: Library = {
     css: ["node_modules/katex/dist/katex.min.css"]
 };
 
-const MARKJS: Library = {
-    js: ["node_modules/mark.js/dist/jquery.mark.es6.min.js"]
-};
-
 const HIGHLIGHT_JS: Library = {
     js: () => {
         const mimeTypes = mimeTypesService.getMimeTypes();
@@ -172,7 +168,6 @@ export default {
     CODE_MIRROR,
     CALENDAR_WIDGET,
     KATEX,
-    MARKJS,
     HIGHLIGHT_JS,
     LEAFLET
 };

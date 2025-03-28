@@ -2,11 +2,11 @@ import linkService from "../../services/link.js";
 import contentRenderer from "../../services/content_renderer.js";
 import froca from "../../services/froca.js";
 import attributeRenderer from "../../services/attribute_renderer.js";
-import libraryLoader from "../../services/library_loader.js";
 import treeService from "../../services/tree.js";
 import utils from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
+import 'mark.js';
 
 const TPL = `
 <div class="note-list">
@@ -216,8 +216,6 @@ class ListOrGridView extends ViewMode {
 
         const highlightedTokens = this.parentNote.highlightedTokens || [];
         if (highlightedTokens.length > 0) {
-            await libraryLoader.requireLibrary(libraryLoader.MARKJS);
-
             const regex = highlightedTokens.map((token) => utils.escapeRegExp(token)).join("|");
 
             this.highlightRegex = new RegExp(regex, "gi");
