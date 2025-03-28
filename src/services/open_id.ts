@@ -22,7 +22,7 @@ function checkOpenIDConfig() {
 }
 
 function isOpenIDEnabled() {
-    return checkOpenIDConfig().length > 0 ? false : true;
+    return !(checkOpenIDConfig().length > 0) && options.getOption('mfaMethod') === 'oauth';
 }
 
 function isUserSaved() {
