@@ -350,11 +350,13 @@ export default class HighlightsListWidget extends RightPanelWidget {
             }
         }
 
-        if (targetElement) {
+        if (targetElement && targetElement[itemIndex]) {
             targetElement[itemIndex].scrollIntoView({
                 behavior: "smooth",
                 block: "center"
             });
+        } else {
+            console.warn("Unable to find the target element in the highlights list.");
         }
     }
 
