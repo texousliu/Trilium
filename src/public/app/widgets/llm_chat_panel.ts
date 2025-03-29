@@ -93,6 +93,11 @@ export default class LlmChatPanel extends BasicWidget {
     private validationWarning!: HTMLElement;
     private sessionId: string | null = null;
     private currentNoteId: string | null = null;
+    
+    // Callbacks for data persistence
+    private onSaveData: ((data: any) => Promise<void>) | null = null;
+    private onGetData: (() => Promise<any>) | null = null;
+    private messages: Array<{role: string; content: string; timestamp?: Date}> = [];
 
     doRender() {
         this.$widget = $(TPL);
@@ -126,6 +131,77 @@ export default class LlmChatPanel extends BasicWidget {
         return this.$widget;
     }
 
+    /**
+     * Set the callbacks for data persistence
+     */
+    setDataCallbacks(
+        saveDataCallback: (data: any) => Promise<void>,
+        getDataCallback: () => Promise<any>
+    ) {
+        this.onSaveData = saveDataCallback;
+        this.onGetData = getDataCallback;
+    }
+    
+    /**
+     * Load saved chat data from the note
+     */
+    async loadSavedData() {
+        if (!this.onGetData) {
+            console.log("No getData callback available");
+            return;
+        }
+        
+        try {
+            const data = await this.onGetData();
+            console.log("Loaded chat data:", data);
+            
+            if (data && data.messages && Array.isArray(data.messages)) {
+                // Clear existing messages in the UI
+                this.noteContextChatMessages.innerHTML = '';
+                this.messages = [];
+                
+                // Add each message to the UI
+                data.messages.forEach((message: {role: string; content: string}) => {
+                    if (message.role === 'user' || message.role === 'assistant') {
+                        this.addMessageToChat(message.role, message.content);
+                        // Track messages in our local array too
+                        this.messages.push(message);
+                    }
+                });
+                
+                // Scroll to bottom
+                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+                
+                return true;
+            }
+        } catch (e) {
+            console.error("Error loading saved chat data:", e);
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Save the current chat data to the note
+     */
+    async saveCurrentData() {
+        if (!this.onSaveData) {
+            console.log("No saveData callback available");
+            return;
+        }
+        
+        try {
+            await this.onSaveData({
+                messages: this.messages,
+                lastUpdated: new Date()
+            });
+            return true;
+        } catch (e) {
+            console.error("Error saving chat data:", e);
+            return false;
+        }
+    }
+
     async refresh() {
         if (!this.isVisible()) {
             return;
@@ -136,8 +212,12 @@ export default class LlmChatPanel extends BasicWidget {
 
         // Get current note context if needed
         this.currentNoteId = appContext.tabManager.getActiveContext()?.note?.noteId || null;
-
-        if (!this.sessionId) {
+        
+        // Try to load saved data
+        const hasSavedData = await this.loadSavedData();
+        
+        // Only create a new session if we don't have saved data
+        if (!this.sessionId || !hasSavedData) {
             // Create a new chat session
             await this.createChatSession();
         }
@@ -171,6 +251,19 @@ export default class LlmChatPanel extends BasicWidget {
 
         // Add user message to the chat
         this.addMessageToChat('user', content);
+        
+        // Add to our local message array too
+        this.messages.push({
+            role: 'user',
+            content,
+            timestamp: new Date()
+        });
+        
+        // Save to note
+        this.saveCurrentData().catch(err => {
+            console.error("Failed to save user message to note:", err);
+        });
+        
         this.noteContextChatInput.value = '';
         this.showLoadingIndicator();
         this.hideSources();
@@ -196,6 +289,18 @@ export default class LlmChatPanel extends BasicWidget {
             // If the POST request returned content directly, display it
             if (postResponse && postResponse.content) {
                 this.addMessageToChat('assistant', postResponse.content);
+                
+                // Add to our local message array too
+                this.messages.push({
+                    role: 'assistant',
+                    content: postResponse.content,
+                    timestamp: new Date()
+                });
+                
+                // Save to note
+                this.saveCurrentData().catch(err => {
+                    console.error("Failed to save assistant response to note:", err);
+                });
 
                 // If there are sources, show them
                 if (postResponse.sources && postResponse.sources.length > 0) {
@@ -220,7 +325,21 @@ export default class LlmChatPanel extends BasicWidget {
                     // If we haven't received any content after a reasonable timeout (10 seconds),
                     // add a fallback message and close the stream
                     this.hideLoadingIndicator();
-                    this.addMessageToChat('assistant', 'I\'m having trouble generating a response right now. Please try again later.');
+                    const errorMessage = 'I\'m having trouble generating a response right now. Please try again later.';
+                    this.addMessageToChat('assistant', errorMessage);
+                    
+                    // Add to our local message array too
+                    this.messages.push({
+                        role: 'assistant',
+                        content: errorMessage,
+                        timestamp: new Date()
+                    });
+                    
+                    // Save to note
+                    this.saveCurrentData().catch(err => {
+                        console.error("Failed to save assistant error response to note:", err);
+                    });
+                    
                     source.close();
                 }
             }, 10000);
@@ -240,7 +359,32 @@ export default class LlmChatPanel extends BasicWidget {
                     // If we didn't receive any content but the stream completed normally,
                     // display a message to the user
                     if (!receivedAnyContent) {
-                        this.addMessageToChat('assistant', 'I processed your request, but I don\'t have any specific information to share at the moment.');
+                        const defaultMessage = 'I processed your request, but I don\'t have any specific information to share at the moment.';
+                        this.addMessageToChat('assistant', defaultMessage);
+                        
+                        // Add to our local message array too
+                        this.messages.push({
+                            role: 'assistant',
+                            content: defaultMessage,
+                            timestamp: new Date()
+                        });
+                        
+                        // Save to note
+                        this.saveCurrentData().catch(err => {
+                            console.error("Failed to save assistant response to note:", err);
+                        });
+                    } else if (assistantResponse) {
+                        // Save the completed streaming response to the message array
+                        this.messages.push({
+                            role: 'assistant',
+                            content: assistantResponse,
+                            timestamp: new Date()
+                        });
+                        
+                        // Save to note
+                        this.saveCurrentData().catch(err => {
+                            console.error("Failed to save assistant response to note:", err);
+                        });
                     }
                     return;
                 }
@@ -293,7 +437,20 @@ export default class LlmChatPanel extends BasicWidget {
 
                 // Only show error message if we haven't received any content yet
                 if (!receivedAnyContent) {
-                    this.addMessageToChat('assistant', 'Error connecting to the LLM service. Please try again.');
+                    const connectionError = 'Error connecting to the LLM service. Please try again.';
+                    this.addMessageToChat('assistant', connectionError);
+                    
+                    // Add to our local message array too
+                    this.messages.push({
+                        role: 'assistant',
+                        content: connectionError,
+                        timestamp: new Date()
+                    });
+                    
+                    // Save to note
+                    this.saveCurrentData().catch(err => {
+                        console.error("Failed to save connection error to note:", err);
+                    });
                 }
             };
 

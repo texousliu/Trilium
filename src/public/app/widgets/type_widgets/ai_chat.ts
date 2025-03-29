@@ -13,6 +13,12 @@ export default class AiChatTypeWidget extends TypeWidget {
     constructor() {
         super();
         this.llmChatPanel = new LlmChatPanel();
+        
+        // Connect the data callbacks
+        this.llmChatPanel.setDataCallbacks(
+            (data) => this.saveData(data),
+            () => this.getData()
+        );
     }
 
     static getType() {
@@ -38,9 +44,30 @@ export default class AiChatTypeWidget extends TypeWidget {
             if (!this.isInitialized) {
                 console.log("Initializing AI Chat Panel for note:", note?.noteId);
 
+                // Initialize the note content first
+                if (note) {
+                    try {
+                        const content = await note.getContent();
+                        // Check if content is empty
+                        if (!content || content === '{}') {
+                            // Initialize with empty chat history
+                            await this.saveData({
+                                messages: [],
+                                title: note.title
+                            });
+                            console.log("Initialized empty chat history for new note");
+                        } else {
+                            console.log("Note already has content, will load in LlmChatPanel.refresh()");
+                        }
+                    } catch (e) {
+                        console.error("Error initializing AI Chat note content:", e);
+                    }
+                }
+
                 // Create a promise to track initialization
                 this.initPromise = (async () => {
                     try {
+                        // This will load saved data via the getData callback
                         await this.llmChatPanel.refresh();
                         this.isInitialized = true;
                     } catch (e) {
@@ -51,23 +78,6 @@ export default class AiChatTypeWidget extends TypeWidget {
 
                 await this.initPromise;
                 this.initPromise = null;
-            }
-
-            // If this is a newly created note, we can initialize the content
-            if (note) {
-                try {
-                    const content = await note.getContent();
-                    // Check if content is empty
-                    if (!content || content === '{}') {
-                        // Initialize with empty chat history
-                        await this.saveData({
-                            messages: [],
-                            title: note.title
-                        });
-                    }
-                } catch (e) {
-                    console.error("Error initializing AI Chat note content:", e);
-                }
             }
         } catch (e) {
             console.error("Error in doRefresh:", e);
@@ -107,7 +117,7 @@ export default class AiChatTypeWidget extends TypeWidget {
         }
 
         try {
-            await server.put(`notes/${this.note.noteId}/content`, {
+            await server.put(`notes/${this.note.noteId}/data`, {
                 content: JSON.stringify(data, null, 2)
             });
         } catch (e) {
