@@ -1,8 +1,9 @@
 import type { Message, ChatCompletionOptions } from './ai_interface.js';
-import aiServiceManager from './ai_service_manager.js';
 import chatStorageService from './chat_storage_service.js';
 import log from '../log.js';
 import { CONTEXT_PROMPTS, ERROR_PROMPTS } from './constants/llm_prompt_constants.js';
+import { ChatPipeline } from './pipeline/chat_pipeline.js';
+import type { ChatPipelineConfig, StreamCallback } from './pipeline/interfaces.js';
 
 export interface ChatSession {
     id: string;
@@ -13,11 +14,44 @@ export interface ChatSession {
 }
 
 /**
+ * Chat pipeline configurations for different use cases
+ */
+const PIPELINE_CONFIGS: Record<string, Partial<ChatPipelineConfig>> = {
+    default: {
+        enableStreaming: true,
+        enableMetrics: true
+    },
+    agent: {
+        enableStreaming: true,
+        enableMetrics: true,
+        maxToolCallIterations: 5
+    },
+    performance: {
+        enableStreaming: false,
+        enableMetrics: true
+    }
+};
+
+/**
  * Service for managing chat interactions and history
  */
 export class ChatService {
     private activeSessions: Map<string, ChatSession> = new Map();
-    private streamingCallbacks: Map<string, (content: string, isDone: boolean) => void> = new Map();
+    private pipelines: Map<string, ChatPipeline> = new Map();
+
+    constructor() {
+        // Initialize pipelines
+        Object.entries(PIPELINE_CONFIGS).forEach(([name, config]) => {
+            this.pipelines.set(name, new ChatPipeline(config));
+        });
+    }
+
+    /**
+     * Get a pipeline by name, or the default one
+     */
+    private getPipeline(name: string = 'default'): ChatPipeline {
+        return this.pipelines.get(name) || this.pipelines.get('default')!;
+    }
 
     /**
      * Create a new chat session
@@ -70,7 +104,7 @@ export class ChatService {
         sessionId: string,
         content: string,
         options?: ChatCompletionOptions,
-        streamCallback?: (content: string, isDone: boolean) => void
+        streamCallback?: StreamCallback
     ): Promise<ChatSession> {
         const session = await this.getOrCreateSession(sessionId);
 
@@ -83,20 +117,23 @@ export class ChatService {
         session.messages.push(userMessage);
         session.isStreaming = true;
 
-        // Set up streaming if callback provided
-        if (streamCallback) {
-            this.streamingCallbacks.set(session.id, streamCallback);
-        }
-
         try {
             // Immediately save the user message
             await chatStorageService.updateChat(session.id, session.messages);
 
-            // Generate AI response
-            const response = await aiServiceManager.generateChatCompletion(
-                session.messages,
-                options || session.options
-            );
+            // Log message processing
+            log.info(`Processing message: "${content.substring(0, 100)}..."`);
+
+            // Select pipeline to use
+            const pipeline = this.getPipeline();
+
+            // Execute the pipeline
+            const response = await pipeline.execute({
+                messages: session.messages,
+                options: options || session.options,
+                query: content,
+                streamCallback
+            });
 
             // Add assistant message
             const assistantMessage: Message = {
@@ -111,17 +148,10 @@ export class ChatService {
             await chatStorageService.updateChat(session.id, session.messages);
 
             // If first message, update the title based on content
-            if (session.messages.length <= 2 && !session.title) {
-                // Extract a title from the conversation
+            if (session.messages.length <= 2 && (!session.title || session.title === 'New Chat')) {
                 const title = this.generateTitleFromMessages(session.messages);
                 session.title = title;
                 await chatStorageService.updateChat(session.id, session.messages, title);
-            }
-
-            // Notify streaming is complete
-            if (streamCallback) {
-                streamCallback(response.text, true);
-                this.streamingCallbacks.delete(session.id);
             }
 
             return session;
@@ -130,7 +160,7 @@ export class ChatService {
             session.isStreaming = false;
             console.error('Error in AI chat:', error);
 
-            // Add error message so user knows something went wrong
+            // Add error message
             const errorMessage: Message = {
                 role: 'assistant',
                 content: ERROR_PROMPTS.USER_ERRORS.GENERAL_ERROR
@@ -141,10 +171,100 @@ export class ChatService {
             // Save the conversation with error
             await chatStorageService.updateChat(session.id, session.messages);
 
-            // Notify streaming is complete with error
+            // Notify streaming error if callback provided
             if (streamCallback) {
                 streamCallback(errorMessage.content, true);
-                this.streamingCallbacks.delete(session.id);
+            }
+
+            return session;
+        }
+    }
+
+    /**
+     * Send a message with context from a specific note
+     */
+    async sendContextAwareMessage(
+        sessionId: string,
+        content: string,
+        noteId: string,
+        options?: ChatCompletionOptions,
+        streamCallback?: StreamCallback
+    ): Promise<ChatSession> {
+        const session = await this.getOrCreateSession(sessionId);
+
+        // Add user message
+        const userMessage: Message = {
+            role: 'user',
+            content
+        };
+
+        session.messages.push(userMessage);
+        session.isStreaming = true;
+
+        try {
+            // Immediately save the user message
+            await chatStorageService.updateChat(session.id, session.messages);
+
+            // Log message processing
+            log.info(`Processing context-aware message: "${content.substring(0, 100)}..."`);
+            log.info(`Using context from note: ${noteId}`);
+
+            // Get showThinking option if it exists
+            const showThinking = options?.showThinking === true;
+
+            // Select appropriate pipeline based on whether agent tools are needed
+            const pipelineType = showThinking ? 'agent' : 'default';
+            const pipeline = this.getPipeline(pipelineType);
+
+            // Execute the pipeline with note context
+            const response = await pipeline.execute({
+                messages: session.messages,
+                options: options || session.options,
+                noteId,
+                query: content,
+                showThinking,
+                streamCallback
+            });
+
+            // Add assistant message
+            const assistantMessage: Message = {
+                role: 'assistant',
+                content: response.text
+            };
+
+            session.messages.push(assistantMessage);
+            session.isStreaming = false;
+
+            // Save the complete conversation
+            await chatStorageService.updateChat(session.id, session.messages);
+
+            // If first message, update the title
+            if (session.messages.length <= 2 && (!session.title || session.title === 'New Chat')) {
+                const title = this.generateTitleFromMessages(session.messages);
+                session.title = title;
+                await chatStorageService.updateChat(session.id, session.messages, title);
+            }
+
+            return session;
+
+        } catch (error: any) {
+            session.isStreaming = false;
+            console.error('Error in context-aware chat:', error);
+
+            // Add error message
+            const errorMessage: Message = {
+                role: 'assistant',
+                content: ERROR_PROMPTS.USER_ERRORS.CONTEXT_ERROR
+            };
+
+            session.messages.push(errorMessage);
+
+            // Save the conversation with error
+            await chatStorageService.updateChat(session.id, session.messages);
+
+            // Notify streaming error if callback provided
+            if (streamCallback) {
+                streamCallback(errorMessage.content, true);
             }
 
             return session;
@@ -166,19 +286,17 @@ export class ChatService {
         const lastUserMessage = [...session.messages].reverse()
             .find(msg => msg.role === 'user' && msg.content.length > 10)?.content || '';
 
-        let context;
-
-        if (useSmartContext && lastUserMessage) {
-            // Use smart context that considers the query for better relevance
-            context = await aiServiceManager.getContextExtractor().getSmartContext(noteId, lastUserMessage);
-        } else {
-            // Fall back to full context if smart context is disabled or no query available
-            context = await aiServiceManager.getContextExtractor().getFullContext(noteId);
-        }
+        // Use the context extraction stage from the pipeline
+        const pipeline = this.getPipeline();
+        const contextResult = await pipeline.stages.contextExtraction.execute({
+            noteId,
+            query: lastUserMessage,
+            useSmartContext
+        });
 
         const contextMessage: Message = {
             role: 'user',
-            content: CONTEXT_PROMPTS.NOTE_CONTEXT_PROMPT.replace('{context}', context)
+            content: CONTEXT_PROMPTS.NOTE_CONTEXT_PROMPT.replace('{context}', contextResult.context)
         };
 
         session.messages.push(contextMessage);
@@ -198,132 +316,24 @@ export class ChatService {
     async addSemanticNoteContext(sessionId: string, noteId: string, query: string): Promise<ChatSession> {
         const session = await this.getOrCreateSession(sessionId);
 
-        // Use semantic context that considers the query for better relevance
-        const contextService = aiServiceManager.getContextService();
-        const context = await contextService.getSemanticContext(noteId, query);
+        // Use the semantic context extraction stage from the pipeline
+        const pipeline = this.getPipeline();
+        const contextResult = await pipeline.stages.semanticContextExtraction.execute({
+            noteId,
+            query
+        });
 
         const contextMessage: Message = {
             role: 'user',
             content: CONTEXT_PROMPTS.SEMANTIC_NOTE_CONTEXT_PROMPT
                 .replace('{query}', query)
-                .replace('{context}', context)
+                .replace('{context}', contextResult.context)
         };
 
         session.messages.push(contextMessage);
         await chatStorageService.updateChat(session.id, session.messages);
 
         return session;
-    }
-
-    /**
-     * Send a message with enhanced semantic note context
-     */
-    async sendContextAwareMessage(
-        sessionId: string,
-        content: string,
-        noteId: string,
-        options?: ChatCompletionOptions,
-        streamCallback?: (content: string, isDone: boolean) => void
-    ): Promise<ChatSession> {
-        const session = await this.getOrCreateSession(sessionId);
-
-        // Add user message
-        const userMessage: Message = {
-            role: 'user',
-            content
-        };
-
-        session.messages.push(userMessage);
-        session.isStreaming = true;
-
-        // Set up streaming if callback provided
-        if (streamCallback) {
-            this.streamingCallbacks.set(session.id, streamCallback);
-        }
-
-        try {
-            // Immediately save the user message
-            await chatStorageService.updateChat(session.id, session.messages);
-
-            // Get the Trilium Context Service for enhanced context
-            const contextService = aiServiceManager.getContextService();
-
-            // Get showThinking option if it exists
-            const showThinking = options?.showThinking === true;
-
-            log.info(`Processing LLM message: "${content.substring(0, 100)}..."`);
-            log.info(`Using enhanced context with: noteId=${noteId}, showThinking=${showThinking}`);
-
-            // Get enhanced context for this note and query
-            const enhancedContext = await contextService.getAgentToolsContext(
-                noteId,
-                content,
-                showThinking
-            );
-
-            // Create messages array with context using the improved method
-            const messagesWithContext = await contextService.buildMessagesWithContext(
-                session.messages,
-                enhancedContext,
-                aiServiceManager.getService()
-            );
-
-            // Generate AI response
-            const response = await aiServiceManager.generateChatCompletion(
-                messagesWithContext,
-                options
-            );
-
-            // Add assistant message
-            const assistantMessage: Message = {
-                role: 'assistant',
-                content: response.text
-            };
-
-            session.messages.push(assistantMessage);
-            session.isStreaming = false;
-
-            // Save the complete conversation (without system message)
-            await chatStorageService.updateChat(session.id, session.messages);
-
-            // If first message, update the title
-            if (session.messages.length <= 2 && (!session.title || session.title === 'New Chat')) {
-                const title = this.generateTitleFromMessages(session.messages);
-                session.title = title;
-                await chatStorageService.updateChat(session.id, session.messages, title);
-            }
-
-            // Notify streaming is complete
-            if (streamCallback) {
-                streamCallback(response.text, true);
-                this.streamingCallbacks.delete(session.id);
-            }
-
-            return session;
-
-        } catch (error: any) {
-            session.isStreaming = false;
-            console.error('Error in context-aware chat:', error);
-
-            // Add error message
-            const errorMessage: Message = {
-                role: 'assistant',
-                content: ERROR_PROMPTS.USER_ERRORS.CONTEXT_ERROR
-            };
-
-            session.messages.push(errorMessage);
-
-            // Save the conversation with error
-            await chatStorageService.updateChat(session.id, session.messages);
-
-            // Notify streaming is complete with error
-            if (streamCallback) {
-                streamCallback(errorMessage.content, true);
-                this.streamingCallbacks.delete(session.id);
-            }
-
-            return session;
-        }
     }
 
     /**
@@ -345,8 +355,23 @@ export class ChatService {
      */
     async deleteSession(sessionId: string): Promise<boolean> {
         this.activeSessions.delete(sessionId);
-        this.streamingCallbacks.delete(sessionId);
         return chatStorageService.deleteChat(sessionId);
+    }
+
+    /**
+     * Get pipeline performance metrics
+     */
+    getPipelineMetrics(pipelineType: string = 'default'): any {
+        const pipeline = this.getPipeline(pipelineType);
+        return pipeline.getMetrics();
+    }
+    
+    /**
+     * Reset pipeline metrics
+     */
+    resetPipelineMetrics(pipelineType: string = 'default'): void {
+        const pipeline = this.getPipeline(pipelineType);
+        pipeline.resetMetrics();
     }
 
     /**
