@@ -1400,6 +1400,193 @@
                             "format": "html",
                             "dataFileName": "Bulk actions.html",
                             "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "4FahAwuGTAwC",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "tC7s2alapj8V",
+                                "4FahAwuGTAwC"
+                            ],
+                            "title": "Note source",
+                            "notePosition": 160,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "KSZ04uQ2D1St",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "_optionsTextNotes",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "_optionsCodeNotes",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "MI26XDLSAlCD",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "81SGnPGMk7Xc",
+                                    "isInheritable": false,
+                                    "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "grjYqerjn243",
+                                    "isInheritable": false,
+                                    "position": 60
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "gBbsAeiuUxI5",
+                                    "isInheritable": false,
+                                    "position": 70
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "N4IDkixaDG9C",
+                                    "isInheritable": false,
+                                    "position": 80
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "H0mM1lTxF9JI",
+                                    "isInheritable": false,
+                                    "position": 90
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Wxt3vVlxlYLi",
+                                    "isInheritable": false,
+                                    "position": 100
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "8YBEPzcpUgxw",
+                                    "isInheritable": false,
+                                    "position": 110
+                                }
+                            ],
+                            "format": "html",
+                            "dataFileName": "Note source.html",
+                            "attachments": [
+                                {
+                                    "attachmentId": "Ud3rPUVJpRWJ",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "Note source_image.png"
+                                }
+                            ]
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "1YeN2MzFUluU",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "tC7s2alapj8V",
+                                "1YeN2MzFUluU"
+                            ],
+                            "title": "Technologies used",
+                            "notePosition": 170,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [],
+                            "format": "html",
+                            "attachments": [],
+                            "dirFileName": "Technologies used",
+                            "children": [
+                                {
+                                    "isClone": false,
+                                    "noteId": "MI26XDLSAlCD",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "tC7s2alapj8V",
+                                        "1YeN2MzFUluU",
+                                        "MI26XDLSAlCD"
+                                    ],
+                                    "title": "CKEditor",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [],
+                                    "format": "html",
+                                    "dataFileName": "CKEditor.html",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "N4IDkixaDG9C",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "tC7s2alapj8V",
+                                        "1YeN2MzFUluU",
+                                        "N4IDkixaDG9C"
+                                    ],
+                                    "title": "MindElixir",
+                                    "notePosition": 20,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [],
+                                    "format": "html",
+                                    "dataFileName": "MindElixir.html",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "H0mM1lTxF9JI",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "tC7s2alapj8V",
+                                        "1YeN2MzFUluU",
+                                        "H0mM1lTxF9JI"
+                                    ],
+                                    "title": "Excalidraw",
+                                    "notePosition": 30,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [],
+                                    "format": "html",
+                                    "dataFileName": "Excalidraw.html",
+                                    "attachments": []
+                                }
+                            ]
                         }
                     ]
                 },
@@ -2802,6 +2989,64 @@
                                     "format": "html",
                                     "dataFileName": "Quick search.html",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "8YBEPzcpUgxw",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Vc8PjrjAGuOp",
+                                        "8YBEPzcpUgxw"
+                                    ],
+                                    "title": "Note buttons",
+                                    "notePosition": 90,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "BlN9DFI679QC",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "vZWERwf8U3nx",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "4FahAwuGTAwC",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "0vhv7lsOLy82",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "html",
+                                    "dataFileName": "Note buttons.html",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "iln72O2Xo8zy",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Note buttons_image.png"
+                                        }
+                                    ]
                                 }
                             ]
                         },
