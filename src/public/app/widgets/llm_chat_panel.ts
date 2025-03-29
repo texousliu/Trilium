@@ -125,9 +125,9 @@ export default class LlmChatPanel extends BasicWidget {
 
         this.initializeEventListeners();
 
-        // Create a session when first loaded
-        this.createChatSession();
-
+        // Don't create a session here - wait for refresh
+        // This prevents the wrong session from being created for the wrong note
+        
         return this.$widget;
     }
 
@@ -153,7 +153,12 @@ export default class LlmChatPanel extends BasicWidget {
         
         try {
             const data = await this.onGetData();
-            console.log("Loaded chat data:", data);
+            console.log(`Loading chat data for noteId: ${this.currentNoteId}`, data);
+            
+            // Make sure we're loading data for the correct note
+            if (data && data.noteId && data.noteId !== this.currentNoteId) {
+                console.warn(`Data noteId ${data.noteId} doesn't match current noteId ${this.currentNoteId}`);
+            }
             
             if (data && data.messages && Array.isArray(data.messages)) {
                 // Clear existing messages in the UI
@@ -171,11 +176,12 @@ export default class LlmChatPanel extends BasicWidget {
                 
                 // Scroll to bottom
                 this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+                console.log(`Successfully loaded ${data.messages.length} messages for noteId: ${this.currentNoteId}`);
                 
                 return true;
             }
         } catch (e) {
-            console.error("Error loading saved chat data:", e);
+            console.error(`Error loading saved chat data for noteId: ${this.currentNoteId}:`, e);
         }
         
         return false;
@@ -191,13 +197,16 @@ export default class LlmChatPanel extends BasicWidget {
         }
         
         try {
+            // Include the current note ID for tracking purposes
             await this.onSaveData({
                 messages: this.messages,
-                lastUpdated: new Date()
+                lastUpdated: new Date(),
+                noteId: this.currentNoteId // Include the note ID to help with debugging
             });
+            console.log(`Saved chat data for noteId: ${this.currentNoteId} with ${this.messages.length} messages`);
             return true;
         } catch (e) {
-            console.error("Error saving chat data:", e);
+            console.error(`Error saving chat data for noteId: ${this.currentNoteId}:`, e);
             return false;
         }
     }
@@ -211,12 +220,26 @@ export default class LlmChatPanel extends BasicWidget {
         await this.validateEmbeddingProviders();
 
         // Get current note context if needed
-        this.currentNoteId = appContext.tabManager.getActiveContext()?.note?.noteId || null;
+        const currentActiveNoteId = appContext.tabManager.getActiveContext()?.note?.noteId || null;
         
-        // Try to load saved data
+        // If we're switching to a different note, we need to reset
+        if (this.currentNoteId !== currentActiveNoteId) {
+            console.log(`Note ID changed from ${this.currentNoteId} to ${currentActiveNoteId}, resetting chat panel`);
+            
+            // Reset the UI and data
+            this.noteContextChatMessages.innerHTML = '';
+            this.messages = [];
+            this.sessionId = null;
+            this.hideSources(); // Hide any sources from previous note
+            
+            // Update our current noteId
+            this.currentNoteId = currentActiveNoteId;
+        }
+        
+        // Always try to load saved data for the current note
         const hasSavedData = await this.loadSavedData();
         
-        // Only create a new session if we don't have saved data
+        // Only create a new session if we don't have a session or saved data
         if (!this.sessionId || !hasSavedData) {
             // Create a new chat session
             await this.createChatSession();
