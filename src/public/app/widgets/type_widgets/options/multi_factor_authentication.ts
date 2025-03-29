@@ -126,9 +126,9 @@ interface TOTPStatus {
 
 interface RecoveryKeysResponse {
     success: boolean;
-    recoveryCodes?: string;
+    recoveryCodes?: string[];
     keysExist?: boolean;
-    usedRecoveryCodes?: string;
+    usedRecoveryCodes?: string[];
 }
 
 export default class MultiFactorAuthenticationOptions extends OptionsWidget {
@@ -231,6 +231,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         }
 
         const usedResult = await server.get<RecoveryKeysResponse>("totp_recovery/used");
+
         if (usedResult.usedRecoveryCodes) {
             this.keyFiller(usedResult.usedRecoveryCodes);
             this.$generateRecoveryCodeButton.text(t("multi_factor_authentication.recovery_keys_regenerate"));
@@ -239,14 +240,19 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
         }
     }
 
-    private keyFiller(values: string) {
-        const keys = values.split(',').slice(0, 8);
-
+    private keyFiller(values: string[]) {
         this.fillKeys("");
 
-        keys.forEach((key, index) => {
-            if (index < 8 && key && typeof key === 'string') {
-                this.$recoveryKeys[index].text(key.trim());
+        values.forEach((key, index) => {
+            if (typeof key === 'string') {
+                const date = new Date(key.replace(/\//g, '-'));
+                if (isNaN(date.getTime())) {
+                    this.$recoveryKeys[index].text(key);
+                } else {
+                    this.$recoveryKeys[index].text(t("multi_factor_authentication.recovery_keys_used", { date: key.replace(/\//g, '-') }));
+                }
+            } else {
+                this.$recoveryKeys[index].text(t("multi_factor_authentication.recovery_keys_unused", { index: key }));
             }
         });
     }

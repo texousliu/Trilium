@@ -1,5 +1,3 @@
-'use strict';
-
 import sql from '../sql.js';
 import optionService from '../options.js';
 import crypto from 'crypto';
@@ -26,7 +24,7 @@ function setRecoveryCodes(recoveryCodes: string) {
 
 function getRecoveryCodes() {
     if (!isRecoveryCodeSet()) {
-        return Array(8).fill("Keys not set")
+        return []
     }
 
     return sql.transactional(() => {
@@ -67,25 +65,9 @@ function verifyRecoveryCode(recoveryCodeGuess: string) {
     return loginSuccess;
 }
 
-function getUsedRecoveryCodes() {
-    if (!isRecoveryCodeSet()) {
-        return Array(8).fill("Recovery code not set")
-    }
-
-    const dateRegex = RegExp(/^\d{4}\/\d{2}\/\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/gm);
-    const recoveryCodes = getRecoveryCodes();
-    const usedStatus: string[] = [];
-
-    recoveryCodes.forEach((recoveryKey: string) => {
-        if (dateRegex.test(recoveryKey)) usedStatus.push('Used: ' + recoveryKey);
-        else usedStatus.push('Recovery code ' + recoveryCodes.indexOf(recoveryKey) + ' is unused');
-    });
-    return usedStatus;
-}
-
 export default {
     setRecoveryCodes,
+    getRecoveryCodes,
     verifyRecoveryCode,
-    getUsedRecoveryCodes,
     isRecoveryCodeSet
 };
