@@ -66,7 +66,10 @@ const config: Configuration = {
                         loader: miniCssExtractPlugin.loader
                     },
                     {
-                        loader: "css-loader"
+                        loader: "css-loader",
+                        options: {
+                            esModule: true
+                        }
                     },
                     {
                         loader: "postcss-loader",
@@ -109,6 +112,9 @@ const config: Configuration = {
             ".js": [".js", ".ts"],
             ".cjs": [".cjs", ".cts"],
             ".mjs": [".mjs", ".mts"]
+        },
+        alias: {
+            stylesheets: path.resolve(rootDir, "src/public/stylesheets")
         }
     },
     devtool: "nosources-source-map",
