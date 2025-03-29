@@ -198,7 +198,7 @@
     "@types/react": "18.3.20",
     "@types/react-dom": "18.3.5",
     "@types/safe-compare": "1.1.2",
-    "@types/sanitize-html": "2.13.0",
+    "@types/sanitize-html": "2.15.0",
     "@types/sax": "1.2.7",
     "@types/serve-favicon": "2.5.7",
     "@types/session-file-store": "1.2.5",
