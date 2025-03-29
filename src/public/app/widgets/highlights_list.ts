@@ -203,7 +203,7 @@ export default class HighlightsListWidget extends RightPanelWidget {
         // matches a span containing color
         const regex2 = /<span[^>]*style\s*=\s*[^>]*[^-]color:[^>]*?>[\s\S]*?<\/span>/gi;
         // match italics
-        const regex3 = /<i>[\s\S]*?<\/i>/gi;
+        const regex3 = /(<i>[\s\S]*?<\/i>|<em>[\s\S]*?<\/em>)/gi;
         // match bold
         const regex4 = /<strong>[\s\S]*?<\/strong>/gi;
         // match underline
