@@ -1521,8 +1521,24 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "KSZ04uQ2D1St",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bxs-component",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
+                            "dataFileName": "Technologies used.md",
                             "attachments": [],
                             "dirFileName": "Technologies used",
                             "children": [
@@ -1541,7 +1557,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "iPIMuisry3hd",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "CKEditor.md",
                                     "attachments": []
@@ -1561,7 +1585,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "gBbsAeiuUxI5",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "MindElixir.md",
                                     "attachments": []
@@ -1581,9 +1613,45 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "grjYqerjn243",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Excalidraw.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "MQHyy2dIFgxS",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "tC7s2alapj8V",
+                                        "1YeN2MzFUluU",
+                                        "MQHyy2dIFgxS"
+                                    ],
+                                    "title": "Leaflet",
+                                    "notePosition": 40,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "81SGnPGMk7Xc",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Leaflet.md",
                                     "attachments": []
                                 }
                             ]
