@@ -1243,6 +1243,11 @@
     "first-day-of-the-week": "First day of the week",
     "sunday": "Sunday",
     "monday": "Monday",
+    "first-week-of-the-year": "First week of the year",
+    "first-week-contains-first-day": "First week contains first day of the year",
+    "first-week-contains-first-thursday": "First week contains first Thursday of the year",
+    "first-week-has-minimum-days": "First week has minimum days",
+    "min-days-in-first-week": "Minimum days in first week",
     "formatting-locale": "Date & number format"
   },
   "backup": {

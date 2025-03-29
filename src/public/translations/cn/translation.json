@@ -1232,7 +1232,13 @@
     "language": "语言",
     "first-day-of-the-week": "一周的第一天",
     "sunday": "周日",
-    "monday": "周一"
+    "monday": "周一",
+    "first-week-of-the-year": "一年的第一周",
+    "first-week-contains-first-day": "第一周包含一年的第一天",
+    "first-week-contains-first-thursday": "第一周包含一年的第一个周四",
+    "first-week-has-minimum-days": "第一周有最小天数",
+    "min-days-in-first-week": "第一周的最小天数",
+    "formatting-locale": "日期和数字格式"
   },
   "backup": {
     "automatic_backup": "自动备份",
