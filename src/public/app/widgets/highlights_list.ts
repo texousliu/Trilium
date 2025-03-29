@@ -222,6 +222,7 @@ export default class HighlightsListWidget extends RightPanelWidget {
         }
         if (optionsHighlightsList.includes("italic")) {
             findSubStr += `,i:not(section.include-note i)`;
+            findSubStr += `,em:not(section.include-note em)`;
             combinedRegexStr += `|${regex3.source}`;
         }
         if (optionsHighlightsList.includes("bold")) {
@@ -288,7 +289,8 @@ export default class HighlightsListWidget extends RightPanelWidget {
         }
         return {
             $highlightsList,
-            hlLiCount
+            hlLiCount,
+            findSubStr
         };
     }
 
