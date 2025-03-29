@@ -9,7 +9,7 @@
                 "pOsGYCXsbNQG"
             ],
             "title": "User Guide",
-			"notePosition": 130,
+            "notePosition": 1,
             "prefix": null,
             "isExpanded": false,
             "type": "text",
@@ -8107,16 +8107,19 @@
         {
             "noImport": true,
             "dataFileName": "navigation.html",
+            "notePosition": 1,
             "isExpanded": false
         },
         {
             "noImport": true,
             "dataFileName": "index.html",
+            "notePosition": 1,
             "isExpanded": false
         },
         {
             "noImport": true,
             "dataFileName": "style.css",
+            "notePosition": 1,
             "isExpanded": false
         }
     ]
