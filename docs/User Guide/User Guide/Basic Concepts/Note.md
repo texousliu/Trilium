@@ -9,7 +9,7 @@ Note is a central entity in Trilium. Main attributes of note are title and conte
 *   file note - represents uploaded file (e.g. docx MS Word document).
 *   render HTML note - this works as an output screen of attached [scripts](../Note%20Types/Code/Scripts.md)
 *   [saved search](../Note%20Types/Saved%20Search.md) note - contains saved search query and dynamically displays result of the search as its sub-notes
-*   [relation map](../Advanced%20Usage/Relation%20Map.md) note - visualizes notes and their relations
+*   [relation map](../Note%20Types/Relation%20Map.md) note - visualizes notes and their relations
 *   [book note](../Note%20Types/Book.md) - displays its children notes, useful for reading many short notes
 *   mermaid - create diagrams and flowcharts using [mermaid.js ↗](https://github.com/mermaid-js/mermaid)
 *   [canvas note](#root/fKYGY3OOo5d1) - allows hand drawn notes and basic diagraming on an infinite canvas using [excalidraw ↗](https://github.com/excalidraw/excalidraw)

@@ -53,5 +53,5 @@ More detailed answer:
 *   filesystems make a distinction between directory and file while there's intentionally no such difference in Trilium
 *   files are stored in no particular order and user can't change this
 *   Trilium allows storing note [attributes](Advanced%20Usage/Attributes.md) which could be represented in extended user attributes but their support differs greatly among different filesystems / operating systems
-*   Trilium makes links / relations between different notes which can be quickly retrieved / navigated (e.g. for [note map](Advanced%20Usage/Note%20Map.md)). There's no such support in file systems which means these would have to be stored in some kind of side-car files (mini-databases).
+*   Trilium makes links / relations between different notes which can be quickly retrieved / navigated (e.g. for [note map](Advanced%20Usage/Note%20Map%20\(Link%20map%2C%20Tree%20map\).md)). There's no such support in file systems which means these would have to be stored in some kind of side-car files (mini-databases).
 *   Filesystems are generally not transactional. While this is not completely required for a note-taking application, having transactions make it way easier to keep notes and their metadata in predictable and consistent state.
