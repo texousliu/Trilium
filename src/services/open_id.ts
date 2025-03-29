@@ -126,14 +126,12 @@ function generateOAuthConfig() {
                 return session;
             }
 
-            // 保存用户信息
             openIDEncryption.saveUser(
                 req.oidc.user.sub.toString(),
                 req.oidc.user.name.toString(),
                 req.oidc.user.email.toString()
             );
 
-            // 设置登录状态
             req.session.loggedIn = true;
             req.session.lastAuthState = {
                 totpEnabled: false,

@@ -3,7 +3,7 @@ import utils from "../utils.js";
 import dataEncryptionService from "./data_encryption.js";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
-import OpenIDError from "../../errors/open_id_error.js";
+import OpenIdError from "../../errors/open_id_error.js";
 
 function saveUser(subjectIdentifier: string, name: string, email: string) {
     if (isUserSaved()) return false;
@@ -15,8 +15,8 @@ function saveUser(subjectIdentifier: string, name: string, email: string) {
         subjectIdentifier,
         verificationSalt
     );
-    if (verificationHash === undefined) {
-        throw new OpenIDError("Verification hash undefined!")
+    if (!verificationHash) {
+        throw new OpenIdError("Verification hash undefined!")
     }
 
     const userIDEncryptedDataKey = setDataKey(
@@ -25,8 +25,8 @@ function saveUser(subjectIdentifier: string, name: string, email: string) {
         verificationSalt
     );
 
-    if (userIDEncryptedDataKey === undefined || userIDEncryptedDataKey === null) {
-        console.log("USERID ENCRYPTED DATA KEY NULL");
+    if (!userIDEncryptedDataKey) {
+        console.error("UserID encrypted data key null");
         return undefined;
     }
 
@@ -35,7 +35,7 @@ function saveUser(subjectIdentifier: string, name: string, email: string) {
         userIDVerificationHash: utils.toBase64(verificationHash),
         salt: verificationSalt,
         derivedKey: derivedKeySalt,
-        userIDEcnryptedDataKey: userIDEncryptedDataKey,
+        userIDEncryptedDataKey: userIDEncryptedDataKey,
         isSetup: "true",
         username: name,
         email: email
@@ -46,7 +46,7 @@ function saveUser(subjectIdentifier: string, name: string, email: string) {
 }
 
 function isSubjectIdentifierSaved() {
-    const value = sql.getValue("SELECT userIDEcnryptedDataKey FROM user_data;");
+    const value = sql.getValue("SELECT userIDEncryptedDataKey FROM user_data;");
     if (value === undefined || value === null || value === "") return false;
     return true;
 }
@@ -58,7 +58,7 @@ function isUserSaved() {
 
 function verifyOpenIDSubjectIdentifier(subjectIdentifier: string) {
     if (!sqlInit.isDbInitialized()) {
-        throw new OpenIDError("Database not initialized!");
+        throw new OpenIdError("Database not initialized!");
     }
 
     if (isUserSaved()) {
@@ -100,7 +100,7 @@ function setDataKey(
         myScryptService.getSubjectIdentifierDerivedKey(subjectIdentifier, salt);
 
     if (subjectIdentifierDerivedKey === undefined) {
-        console.log("SOMETHING WENT WRONG SAVING USER ID DERIVED KEY");
+        console.error("SOMETHING WENT WRONG SAVING USER ID DERIVED KEY");
         return undefined;
     }
     const newEncryptedDataKey = dataEncryptionService.encrypt(
@@ -116,16 +116,16 @@ function getDataKey(subjectIdentifier: string) {
         myScryptService.getSubjectIdentifierDerivedKey(subjectIdentifier);
 
     const encryptedDataKey = sql.getValue(
-        "SELECT userIDEcnryptedDataKey FROM user_data"
+        "SELECT userIDEncryptedDataKey FROM user_data"
     );
 
-    if (encryptedDataKey === undefined || encryptedDataKey === null) {
-        console.log("Encrypted data key empty!");
+    if (!encryptedDataKey) {
+        console.error("Encrypted data key empty!");
         return undefined;
     }
 
-    if (subjectIdentifierDerivedKey === undefined) {
-        console.log("SOMETHING WENT WRONG SAVING USER ID DERIVED KEY");
+    if (!subjectIdentifierDerivedKey) {
+        console.error("SOMETHING WENT WRONG SAVING USER ID DERIVED KEY");
         return undefined;
     }
     const decryptedDataKey = dataEncryptionService.decrypt(

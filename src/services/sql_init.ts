@@ -52,7 +52,7 @@ async function initDbConnection() {
         tmpID INT,
         username TEXT,
         email TEXT,
-        userIDEcnryptedDataKey TEXT,
+        userIDEncryptedDataKey TEXT,
         userIDVerificationHash TEXT,
         salt TEXT,
         derivedKey TEXT,

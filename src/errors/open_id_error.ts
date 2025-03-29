@@ -1,4 +1,4 @@
-class OpenIDrror {
+class OpenIdError {
     message: string;
 
     constructor(message: string) {
@@ -6,4 +6,4 @@ class OpenIDrror {
     }
 }
 
-export default OpenIDrror;
+export default OpenIdError;

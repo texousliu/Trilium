@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS "user_data"
     tmpID INT,
     username TEXT,
     email TEXT,
-    userIDEcnryptedDataKey TEXT,
+    userIDEncryptedDataKey TEXT,
     userIDVerificationHash TEXT,
     salt TEXT,
     derivedKey TEXT,

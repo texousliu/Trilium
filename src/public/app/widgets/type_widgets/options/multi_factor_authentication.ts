@@ -6,7 +6,7 @@ import { t } from "../../../services/i18n.js";
 import utils from "../../../services/utils.js";
 import dialogService from "../../../services/dialog.js";
 
-const TPL_WEB = `
+const TPL = `
 <div class="options-section">
     <h4>${t("multi_factor_authentication.title")}</h4>
     <p class="form-text">${t("multi_factor_authentication.description")}</p>
@@ -147,7 +147,7 @@ export default class MultiFactorAuthenticationOptions extends OptionsWidget {
     private $missingVars!: JQuery<HTMLElement>;
 
     doRender() {
-        const template = utils.isElectron() ? TPL_ELECTRON : TPL_WEB;
+        const template = utils.isElectron() ? TPL_ELECTRON : TPL;
         this.$widget = $(template);
 
         if (!utils.isElectron()) {
