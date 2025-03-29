@@ -57,7 +57,7 @@ function getNoteTitleAndIcon(childNoteId: string, parentNoteId?: string) {
     }
 
     const title = childNote.getTitleOrProtected();
-    const icon = childNote.getLabelValue("iconClass");
+    const icon = childNote.getIcon();
 
     const branch = parentNote ? becca.getBranchFromChildAndParent(childNote.noteId, parentNote.noteId) : null;
 
