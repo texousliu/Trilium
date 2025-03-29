@@ -9,7 +9,7 @@ When you run Trilium for the first time, it will generate a new database contain
 *   [Day Notes](Advanced%20Showcases/Day%20Notes.md)
 *   [Weight Tracker](Advanced%20Showcases/Weight%20Tracker.md)
 *   [Task Manager](Advanced%20Showcases/Task%20Manager.md)
-*   [Custom CSS Themes](../Basic%20Concepts/Themes.md)
+*   [Custom CSS Themes](../Basic%20Concepts%20and%20Features/Themes.md)
 
 ### Restoring Demo Notes
 

@@ -1,5 +1,5 @@
 # Relation Map
-Relation map is a type of [Note](../Basic%20Concepts/Note.md) which visualizes notes and their [relations](../Advanced%20Usage/Attributes.md). See an example:
+Relation map is a type of [Note](../Basic%20Concepts%20and%20Features/Notes.md) which visualizes notes and their [relations](../Advanced%20Usage/Attributes.md). See an example:
 
 ## Development process demo
 

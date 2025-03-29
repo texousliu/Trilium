@@ -7,7 +7,7 @@ Select an existing day note, and the menubar contains a calendar widget. Select 
 
 ![](1_Day%20Notes_image.png)
 
-This pattern works well also because of [Cloning Notes](../../Basic%20Concepts/Note/Cloning%20Notes.md) functionality - note can appear in multiple places in the note tree, so besides appearing under day note, it can also be categorized into other notes.
+This pattern works well also because of [Cloning Notes](../../Basic%20Concepts%20and%20Features/Notes/Cloning%20Notes.md) functionality - note can appear in multiple places in the note tree, so besides appearing under day note, it can also be categorized into other notes.
 
 ## Demo
 
