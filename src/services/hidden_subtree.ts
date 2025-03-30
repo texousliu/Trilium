@@ -14,7 +14,7 @@ import buildLaunchBarConfig from "./hidden_subtree_launcherbar.js";
 const LBTPL_ROOT = "_lbTplRoot";
 const LBTPL_BASE = "_lbTplBase";
 const LBTPL_HEADER = "_lbTplHeader";
-const LBTPL_NOTE = "_lbTplLauncherNote";
+const LBTPL_NOTE_LAUNCHER = "_lbTplLauncherNote";
 const LBTPL_WIDGET = "_lbTplLauncherWidget";
 const LBTPL_COMMAND = "_lbTplLauncherCommand";
 const LBTPL_SCRIPT = "_lbTplLauncherScript";
@@ -160,7 +160,7 @@ function buildHiddenSubtreeDefinition(helpSubtree: HiddenSubtreeItem[]): HiddenS
                         ]
                     },
                     {
-                        id: LBTPL_NOTE,
+                        id: LBTPL_NOTE_LAUNCHER,
                         title: t("hidden-subtree.note-launcher-title"),
                         type: "doc",
                         attributes: [
@@ -381,7 +381,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
 
             attrs.push({ type: "label", name: "builtinWidget", value: item.builtinWidget });
         } else if (item.targetNoteId) {
-            attrs.push({ type: "relation", name: "template", value: LBTPL_NOTE });
+            attrs.push({ type: "relation", name: "template", value: LBTPL_NOTE_LAUNCHER });
             attrs.push({ type: "relation", name: "target", value: item.targetNoteId });
         } else {
             throw new Error(`No action defined for launcher ${JSON.stringify(item)}`);
@@ -446,7 +446,7 @@ export default {
     LBTPL_ROOT,
     LBTPL_BASE,
     LBTPL_COMMAND,
-    LBTPL_NOTE,
+    LBTPL_NOTE_LAUNCHER,
     LBTPL_WIDGET,
     LBTPL_SCRIPT,
     LBTPL_SPACER,
