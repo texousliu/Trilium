@@ -143,13 +143,14 @@ async function exportData(format: "html" | "markdown", outputPath: string) {
         }
     }
 
-    await cleanUpMeta();
+    await cleanUpMeta(outputPath);
 }
 
-async function cleanUpMeta() {
-    const metaPath = path.join(markdownPath, "!!!meta.json");
+async function cleanUpMeta(outputPath: string) {
+    const metaPath = path.join(outputPath, "!!!meta.json");
     const meta = JSON.parse(await fs.readFile(metaPath, "utf-8")) as NoteMetaFile;
     for (const file of meta.files) {
+        file.notePosition = 1;
         traverse(file);
     }
 

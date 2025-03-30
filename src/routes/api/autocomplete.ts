@@ -67,14 +67,14 @@ function getRecentNotes(activeNoteId: string) {
     return recentNotes.map((rn) => {
         const notePathArray = rn.notePath.split("/");
 
-        const noteTitle = beccaService.getNoteTitle(notePathArray[notePathArray.length - 1]);
+        const { title, icon } = beccaService.getNoteTitleAndIcon(notePathArray[notePathArray.length - 1]);
         const notePathTitle = beccaService.getNoteTitleForPath(notePathArray);
 
         return {
             notePath: rn.notePath,
-            noteTitle,
+            noteTitle: title,
             notePathTitle,
-            highlightedNotePathTitle: utils.escapeHtml(notePathTitle)
+            highlightedNotePathTitle: `<span class="${icon ?? "bx bx-note"}"></span> ${notePathTitle}`
         };
     });
 }

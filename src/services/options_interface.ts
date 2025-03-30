@@ -48,6 +48,18 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     encryptedDataKey: string;
     hoistedNoteId: string;
 
+    // Multi-Factor Authentication
+    mfaEnabled: boolean;
+    mfaMethod: string;
+    totpEncryptionSalt: string;
+    totpEncryptedSecret: string;
+    totpVerificationHash: string;
+    encryptedRecoveryCodes: boolean;
+    userSubjectIdentifierSaved: boolean;
+    recoveryCodeInitialVector: string;
+    recoveryCodeSecurityKey: string;
+    recoveryCodesEncrypted: string;
+
     lastSyncedPull: number;
     lastSyncedPush: number;
     revisionSnapshotTimeInterval: number;
