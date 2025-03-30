@@ -1,6 +1,6 @@
 import server from "../../../services/server.js";
-import { t } from "../../../services/i18n.js";
 import AbstractCodeTypeWidget from "../abstract_code_type_widget.js";
+import type { EventData } from "../../../components/app_context.js";
 
 const TPL = `<div style="height: 100%; display: flex; flex-direction: column;">
     <style>
@@ -9,14 +9,11 @@ const TPL = `<div style="height: 100%; display: flex; flex-direction: column;">
             width: 100%;
             border: none;
             resize: none;
+            margin-bottom: 0;
         }
     </style>
 
-    <pre class="backend-log-editor"></pre>
-
-    <div style="display: flex; justify-content: space-around; margin-top: 10px;">
-        <button class="refresh-backend-log-button btn btn-primary">${t("backend_log.refresh")}</button>
-    </div>
+    <pre class="backend-log-editor"></pre
 </div>`;
 
 export default class BackendLogWidget extends AbstractCodeTypeWidget {
@@ -27,13 +24,18 @@ export default class BackendLogWidget extends AbstractCodeTypeWidget {
         super.doRender();
         this.$widget = $(TPL);
         this.$editor = this.$widget.find(".backend-log-editor");
-
-        this.$refreshBackendLog = this.$widget.find(".refresh-backend-log-button");
-        this.$refreshBackendLog.on("click", () => this.load());
     }
 
     async refresh() {
         await this.load();
+    }
+
+    async refreshDataEvent({ ntxId }: EventData<"refreshData">) {
+        if (ntxId !== this.noteContext?.ntxId) {
+            return;
+        }
+
+        this.refresh();
     }
 
     getExtraOpts(): Partial<CodeMirrorOpts> {
@@ -55,4 +57,5 @@ export default class BackendLogWidget extends AbstractCodeTypeWidget {
         this.show();
         this.scrollToEnd();
     }
+
 }
