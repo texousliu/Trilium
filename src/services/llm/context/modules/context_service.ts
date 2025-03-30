@@ -10,6 +10,7 @@ import { CONTEXT_PROMPTS } from '../../constants/llm_prompt_constants.js';
 import becca from '../../../../becca/becca.js';
 import type { NoteSearchResult } from '../../interfaces/context_interfaces.js';
 import type { LLMServiceInterface } from '../../interfaces/agent_tool_interfaces.js';
+import type { Message } from '../../ai_interface.js';
 
 /**
  * Main context service that integrates all context-related functionality
@@ -635,14 +636,20 @@ export class ContextService {
     }
 
     /**
-     * Get semantic context for a note and query
+     * Get semantic context based on query
      *
-     * @param noteId - The base note ID
-     * @param userQuery - The user's query
-     * @param maxResults - Maximum number of results to include
-     * @returns Formatted context string
+     * @param noteId - Note ID to start from
+     * @param userQuery - User query for context
+     * @param maxResults - Maximum number of results
+     * @param messages - Optional conversation messages to adjust context size
+     * @returns Formatted context
      */
-    async getSemanticContext(noteId: string, userQuery: string, maxResults: number = 5): Promise<string> {
+    async getSemanticContext(
+        noteId: string,
+        userQuery: string,
+        maxResults: number = 5,
+        messages: Message[] = []
+    ): Promise<string> {
         if (!this.initialized) {
             await this.initialize();
         }
@@ -712,24 +719,39 @@ export class ContextService {
 
             // Get content for the top N most relevant notes
             const mostRelevantNotes = rankedNotes.slice(0, maxResults);
-            const relevantContent = await Promise.all(
+
+            // Get relevant search results to pass to context formatter
+            const searchResults = await Promise.all(
                 mostRelevantNotes.map(async note => {
                     const content = await this.contextExtractor.getNoteContent(note.noteId);
                     if (!content) return null;
 
-                    // Format with relevance score and title
-                    return `### ${note.title} (Relevance: ${Math.round(note.relevance * 100)}%)\n\n${content}`;
+                    // Create a properly typed NoteSearchResult object
+                    return {
+                        noteId: note.noteId,
+                        title: note.title,
+                        content,
+                        similarity: note.relevance
+                    };
                 })
             );
 
+            // Filter out nulls and empty content
+            const validResults: NoteSearchResult[] = searchResults
+                .filter(result => result !== null && result.content && result.content.trim().length > 0)
+                .map(result => result as NoteSearchResult);
+
             // If no content retrieved, return empty string
-            if (!relevantContent.filter(Boolean).length) {
+            if (validResults.length === 0) {
                 return '';
             }
 
-            return `# Relevant Context\n\nThe following notes are most relevant to your query:\n\n${
-                relevantContent.filter(Boolean).join('\n\n---\n\n')
-            }`;
+            // Get the provider information for formatting
+            const provider = await providerManager.getPreferredEmbeddingProvider();
+            const providerId = provider?.name || 'default';
+
+            // Format the context with the context formatter (which handles adjusting for conversation size)
+            return contextFormatter.buildContextFromNotes(validResults, userQuery, providerId, messages);
         } catch (error) {
             log.error(`Error getting semantic context: ${error}`);
             return '';

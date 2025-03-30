@@ -3,6 +3,9 @@ import log from '../../../log.js';
 import { CONTEXT_PROMPTS, FORMATTING_PROMPTS } from '../../constants/llm_prompt_constants.js';
 import { LLM_CONSTANTS } from '../../constants/provider_constants.js';
 import type { IContextFormatter, NoteSearchResult } from '../../interfaces/context_interfaces.js';
+import modelCapabilitiesService from '../../model_capabilities_service.js';
+import { calculateAvailableContextSize } from '../../interfaces/model_capabilities.js';
+import type { Message } from '../../ai_interface.js';
 
 // Use constants from the centralized file
 // const CONTEXT_WINDOW = {
@@ -20,26 +23,46 @@ import type { IContextFormatter, NoteSearchResult } from '../../interfaces/conte
  */
 export class ContextFormatter implements IContextFormatter {
     /**
-     * Build a structured context string from note sources
+     * Build formatted context from a list of note search results
      *
      * @param sources Array of note data with content and metadata
      * @param query The user's query for context
      * @param providerId Optional provider ID to customize formatting
+     * @param messages Optional conversation messages to adjust context size
      * @returns Formatted context string
      */
-    async buildContextFromNotes(sources: NoteSearchResult[], query: string, providerId: string = 'default'): Promise<string> {
+    async buildContextFromNotes(
+        sources: NoteSearchResult[],
+        query: string,
+        providerId: string = 'default',
+        messages: Message[] = []
+    ): Promise<string> {
         if (!sources || sources.length === 0) {
             log.info('No sources provided to context formatter');
             return CONTEXT_PROMPTS.NO_NOTES_CONTEXT;
         }
 
         try {
-            // Get appropriate context size based on provider
-            const maxTotalLength =
+            // Get model name from provider
+            let modelName = providerId;
+
+            // Look up model capabilities
+            const modelCapabilities = await modelCapabilitiesService.getModelCapabilities(modelName);
+
+            // Calculate available context size for this conversation
+            const availableContextSize = calculateAvailableContextSize(
+                modelCapabilities,
+                messages,
+                3 // Expected additional turns
+            );
+
+            // Use the calculated size or fall back to constants
+            const maxTotalLength = availableContextSize || (
                 providerId === 'openai' ? LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI :
                 providerId === 'anthropic' ? LLM_CONSTANTS.CONTEXT_WINDOW.ANTHROPIC :
                 providerId === 'ollama' ? LLM_CONSTANTS.CONTEXT_WINDOW.OLLAMA :
-                LLM_CONSTANTS.CONTEXT_WINDOW.DEFAULT;
+                LLM_CONSTANTS.CONTEXT_WINDOW.DEFAULT
+            );
 
             // DEBUG: Log context window size
             log.info(`Context window for provider ${providerId}: ${maxTotalLength} chars`);

@@ -69,7 +69,7 @@ export interface SemanticContextService {
     /**
      * Retrieve semantic context based on relevance to user query
      */
-    getSemanticContext(noteId: string, userQuery: string, maxResults?: number): Promise<string>;
+    getSemanticContext(noteId: string, userQuery: string, maxResults?: number, messages?: Message[]): Promise<string>;
 
     /**
      * Get progressive context based on depth

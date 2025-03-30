@@ -15,12 +15,12 @@ export interface ChatPipelineConfig {
      * Whether to enable streaming support
      */
     enableStreaming: boolean;
-    
+
     /**
      * Whether to enable performance metrics
      */
     enableMetrics: boolean;
-    
+
     /**
      * Maximum number of tool call iterations
      */
@@ -84,6 +84,7 @@ export interface SemanticContextExtractionInput extends PipelineInput {
     noteId: string;
     query: string;
     maxResults?: number;
+    messages?: Message[];
 }
 
 /**

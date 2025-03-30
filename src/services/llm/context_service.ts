@@ -154,10 +154,11 @@ class TriliumContextService {
      * @param noteId - The note ID
      * @param userQuery - The user's query
      * @param maxResults - Maximum results to include
+     * @param messages - Optional conversation messages to adjust context size
      * @returns Formatted context string
      */
-    async getSemanticContext(noteId: string, userQuery: string, maxResults = 5): Promise<string> {
-        return contextService.getSemanticContext(noteId, userQuery, maxResults);
+    async getSemanticContext(noteId: string, userQuery: string, maxResults = 5, messages: Message[] = []): Promise<string> {
+        return contextService.getSemanticContext(noteId, userQuery, maxResults, messages);
     }
 
     /**

@@ -15,11 +15,11 @@ export class SemanticContextExtractionStage extends BasePipelineStage<SemanticCo
      * Extract semantic context based on a query
      */
     protected async process(input: SemanticContextExtractionInput): Promise<{ context: string }> {
-        const { noteId, query, maxResults = 5 } = input;
+        const { noteId, query, maxResults = 5, messages = [] } = input;
         log.info(`Extracting semantic context from note ${noteId}, query: ${query?.substring(0, 50)}...`);
 
         const contextService = aiServiceManager.getContextService();
-        const context = await contextService.getSemanticContext(noteId, query, maxResults);
+        const context = await contextService.getSemanticContext(noteId, query, maxResults, messages);
 
         return { context };
     }

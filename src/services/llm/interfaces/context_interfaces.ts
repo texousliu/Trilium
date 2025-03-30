@@ -46,7 +46,12 @@ export interface NoteSearchResult {
  * Interface for context formatter
  */
 export interface IContextFormatter {
-  buildContextFromNotes(sources: NoteSearchResult[], query: string, providerId?: string): Promise<string>;
+  buildContextFromNotes(
+    sources: NoteSearchResult[],
+    query: string,
+    providerId?: string,
+    messages?: Array<{role: string, content: string}>
+  ): Promise<string>;
 }
 
 /**

@@ -106,7 +106,8 @@ export class ChatPipeline {
                     // Get semantic context for regular queries
                     const semanticContext = await this.stages.semanticContextExtraction.execute({
                         noteId: input.noteId,
-                        query: input.query
+                        query: input.query,
+                        messages: input.messages
                     });
                     context = semanticContext.context;
                     this.updateStageMetrics('semanticContextExtraction', contextStartTime);
@@ -136,10 +137,10 @@ export class ChatPipeline {
             const llmStartTime = Date.now();
 
             // Setup streaming handler if streaming is enabled and callback provided
-            const enableStreaming = this.config.enableStreaming && 
+            const enableStreaming = this.config.enableStreaming &&
                                   modelSelection.options.stream !== false &&
                                   typeof streamCallback === 'function';
-            
+
             if (enableStreaming) {
                 // Make sure stream is enabled in options
                 modelSelection.options.stream = true;
@@ -157,10 +158,10 @@ export class ChatPipeline {
                 await completion.response.stream(async (chunk: StreamChunk) => {
                     // Process the chunk text
                     const processedChunk = await this.processStreamChunk(chunk, input.options);
-                    
+
                     // Accumulate text for final response
                     accumulatedText += processedChunk.text;
-                    
+
                     // Forward to callback
                     await streamCallback!(processedChunk.text, processedChunk.done);
                 });
@@ -182,12 +183,12 @@ export class ChatPipeline {
 
             const endTime = Date.now();
             const executionTime = endTime - startTime;
-            
+
             // Update overall average execution time
-            this.metrics.averageExecutionTime = 
+            this.metrics.averageExecutionTime =
                 (this.metrics.averageExecutionTime * (this.metrics.totalExecutions - 1) + executionTime) /
                 this.metrics.totalExecutions;
-                
+
             log.info(`Chat pipeline completed in ${executionTime}ms`);
 
             return finalResponse;
@@ -235,12 +236,12 @@ export class ChatPipeline {
      */
     private updateStageMetrics(stageName: string, startTime: number) {
         if (!this.config.enableMetrics) return;
-        
+
         const executionTime = Date.now() - startTime;
         const metrics = this.metrics.stageMetrics[stageName];
-        
+
         metrics.totalExecutions++;
-        metrics.averageExecutionTime = 
+        metrics.averageExecutionTime =
             (metrics.averageExecutionTime * (metrics.totalExecutions - 1) + executionTime) /
             metrics.totalExecutions;
     }
@@ -258,7 +259,7 @@ export class ChatPipeline {
     resetMetrics(): void {
         this.metrics.totalExecutions = 0;
         this.metrics.averageExecutionTime = 0;
-        
+
         Object.keys(this.metrics.stageMetrics).forEach(stageName => {
             this.metrics.stageMetrics[stageName] = {
                 totalExecutions: 0,
