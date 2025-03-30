@@ -11,7 +11,6 @@ import remoteMain from "@electron/remote/main/index.js";
 import { BrowserWindow, shell, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
 import { dialog, ipcMain } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
-import tray from "./tray.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -29,14 +28,14 @@ function trackWindowFocus(win: BrowserWindow) {
         allWindows = allWindows.filter(w => !w.isDestroyed() && w !== win);
         allWindows.push(win);
         if (!optionService.getOptionBool("disableTray")) {
-            tray.updateTrayMenu();
+            ipcMain.emit("reload-tray");
         }
     });
 
     win.on("closed", () => {
         allWindows = allWindows.filter(w => !w.isDestroyed());
         if (!optionService.getOptionBool("disableTray")) {
-            tray.updateTrayMenu();
+            ipcMain.emit("reload-tray");
         }
     });
 }
@@ -326,7 +325,7 @@ function getLastFocusedWindow() {
     return allWindows.length > 0 ? allWindows[allWindows.length - 1] : null;
 }
 
-function getAllWindows(){
+function getAllWindows() {
     return allWindows;
 }
 
