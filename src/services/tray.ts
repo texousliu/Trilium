@@ -95,6 +95,9 @@ function updateWindowVisibilityMap(allWindows: BrowserWindow[]) {
 
 
 function updateTrayMenu() {
+    if (!tray) {
+        return;
+    }
     const lastFocusedWindow = windowService.getLastFocusedWindow();
     const allWindows = windowService.getAllWindows();
     updateWindowVisibilityMap(allWindows);
@@ -299,6 +302,5 @@ function createTray() {
 }
 
 export default {
-    createTray,
-    updateTrayMenu
+    createTray
 };
