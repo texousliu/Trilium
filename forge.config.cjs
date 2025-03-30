@@ -156,7 +156,7 @@ module.exports = {
     hooks: {
         postMake(_, makeResults) {
             const outputDir = path.join(__dirname, "..", "upload");
-            fs.mkdirp(outputDir);
+            fs.mkdirpSync(outputDir);
             for (const makeResult of makeResults) {
                 for (const artifactPath of makeResult.artifacts) {
                     // Ignore certain artifacts.
@@ -174,7 +174,7 @@ module.exports = {
         
                     const outputPath = path.join(outputDir, fileName);
                     console.log(`[Artifact] ${artifactPath} -> ${outputPath}`);
-                    fs.copyFile(artifactPath, outputPath);
+                    fs.copyFileSync(artifactPath, outputPath);
                 }
             }
         }
