@@ -13,7 +13,7 @@ export default class AiChatTypeWidget extends TypeWidget {
     constructor() {
         super();
         this.llmChatPanel = new LlmChatPanel();
-        
+
         // Connect the data callbacks
         this.llmChatPanel.setDataCallbacks(
             (data) => this.saveData(data),
@@ -35,19 +35,19 @@ export default class AiChatTypeWidget extends TypeWidget {
     // Override the refreshWithNote method to ensure we get note changes
     async refreshWithNote(note: FNote | null | undefined) {
         console.log("refreshWithNote called for note:", note?.noteId);
-        
+
         // Always force a refresh when the note changes
         if (this.note?.noteId !== note?.noteId) {
             console.log(`Note ID changed from ${this.note?.noteId} to ${note?.noteId}, forcing reset`);
             this.isInitialized = false;
             this.initPromise = null;
-            
+
             // Force refresh the chat panel with the new note
             if (note) {
-                this.llmChatPanel.currentNoteId = note.noteId;
+                this.llmChatPanel.setCurrentNoteId(note.noteId);
             }
         }
-        
+
         // Continue with regular doRefresh
         await this.doRefresh(note);
     }
@@ -55,7 +55,7 @@ export default class AiChatTypeWidget extends TypeWidget {
     async doRefresh(note: FNote | null | undefined) {
         try {
             console.log("doRefresh called for note:", note?.noteId);
-            
+
             // If we're already initializing, wait for that to complete
             if (this.initPromise) {
                 await this.initPromise;
@@ -91,9 +91,9 @@ export default class AiChatTypeWidget extends TypeWidget {
                 this.initPromise = (async () => {
                     try {
                         // Reset the UI before refreshing
-                        this.llmChatPanel.noteContextChatMessages.innerHTML = '';
-                        this.llmChatPanel.messages = [];
-                        
+                        this.llmChatPanel.clearNoteContextChatMessages();
+                        this.llmChatPanel.setMessages([]);
+
                         // This will load saved data via the getData callback
                         await this.llmChatPanel.refresh();
                         this.isInitialized = true;
@@ -118,21 +118,21 @@ export default class AiChatTypeWidget extends TypeWidget {
 
     async noteSwitched() {
         console.log("Note switched to:", this.noteId);
-        
+
         // Force a full reset when switching notes
         this.isInitialized = false;
         this.initPromise = null;
-        
+
         if (this.note) {
             // Update the chat panel with the new note ID before refreshing
-            this.llmChatPanel.currentNoteId = this.note.noteId;
-            
+            this.llmChatPanel.setCurrentNoteId(this.note.noteId);
+
             // Reset the chat panel UI
-            this.llmChatPanel.noteContextChatMessages.innerHTML = '';
-            this.llmChatPanel.messages = [];
-            this.llmChatPanel.sessionId = null;
+            this.llmChatPanel.clearNoteContextChatMessages();
+            this.llmChatPanel.setMessages([]);
+            this.llmChatPanel.setSessionId(null);
         }
-        
+
         // Call the parent method to refresh
         await super.noteSwitched();
     }
@@ -141,25 +141,25 @@ export default class AiChatTypeWidget extends TypeWidget {
         if (!this.isActive()) {
             return;
         }
-        
+
         console.log("Active context changed, refreshing AI Chat Panel");
-        
+
         // Always refresh when we become active - this ensures we load the correct note data
         try {
             // Reset initialization flag to force a refresh
             this.isInitialized = false;
-            
+
             // Make sure the chat panel has the current note ID
             if (this.note) {
-                this.llmChatPanel.currentNoteId = this.note.noteId;
+                this.llmChatPanel.setCurrentNoteId(this.note.noteId);
             }
-            
+
             this.initPromise = (async () => {
                 try {
                     // Reset the UI before refreshing
-                    this.llmChatPanel.noteContextChatMessages.innerHTML = '';
-                    this.llmChatPanel.messages = [];
-                    
+                    this.llmChatPanel.clearNoteContextChatMessages();
+                    this.llmChatPanel.setMessages([]);
+
                     await this.llmChatPanel.refresh();
                     this.isInitialized = true;
                 } catch (e) {

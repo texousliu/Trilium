@@ -99,6 +99,39 @@ export default class LlmChatPanel extends BasicWidget {
     private onGetData: (() => Promise<any>) | null = null;
     private messages: Array<{role: string; content: string; timestamp?: Date}> = [];
 
+    // Public getters and setters for private properties
+    public getCurrentNoteId(): string | null {
+        return this.currentNoteId;
+    }
+
+    public setCurrentNoteId(noteId: string | null): void {
+        this.currentNoteId = noteId;
+    }
+
+    public getMessages(): Array<{role: string; content: string; timestamp?: Date}> {
+        return this.messages;
+    }
+
+    public setMessages(messages: Array<{role: string; content: string; timestamp?: Date}>): void {
+        this.messages = messages;
+    }
+
+    public getSessionId(): string | null {
+        return this.sessionId;
+    }
+
+    public setSessionId(sessionId: string | null): void {
+        this.sessionId = sessionId;
+    }
+
+    public getNoteContextChatMessages(): HTMLElement {
+        return this.noteContextChatMessages;
+    }
+
+    public clearNoteContextChatMessages(): void {
+        this.noteContextChatMessages.innerHTML = '';
+    }
+
     doRender() {
         this.$widget = $(TPL);
 
