@@ -29,7 +29,7 @@ const DROPDOWN_TPL = `
 <div class="calendar-dropdown-widget">
     <style>
         .calendar-dropdown-widget {
-            width: 350px;
+            width: 380px;
         }
     </style>
 
@@ -59,10 +59,13 @@ const DROPDOWN_TPL = `
         </div>
     </div>
 
-    <div class="calendar-week">
+    <div class="calendar-container">
+        <div class="calendar-week-numbers"></div>
+        <div class="calendar-main">
+            <div class="calendar-week"></div>
+            <div class="calendar-body" data-calendar-area="month"></div>
+        </div>
     </div>
-
-    <div class="calendar-body" data-calendar-area="month"></div>
 </div>`;
 
 const DAYS_OF_WEEK = [t("calendar.sun"), t("calendar.mon"), t("calendar.tue"), t("calendar.wed"), t("calendar.thu"), t("calendar.fri"), t("calendar.sat")];
@@ -71,9 +74,15 @@ interface DateNotesForMonth {
     [date: string]: string;
 }
 
+interface WeekCalculationOptions {
+    firstWeekType: number;
+    minDaysInFirstWeek: number;
+}
+
 export default class CalendarWidget extends RightDropdownButtonWidget {
     private $month!: JQuery<HTMLElement>;
     private $weekHeader!: JQuery<HTMLElement>;
+    private $weekNumbers!: JQuery<HTMLElement>;
     private $monthSelect!: JQuery<HTMLElement>;
     private $yearSelect!: JQuery<HTMLElement>;
     private $next!: JQuery<HTMLElement>;
@@ -82,6 +91,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     private $previousYear!: JQuery<HTMLElement>;
     private monthDropdown!: Dropdown;
     private firstDayOfWeek!: number;
+    private weekCalculationOptions!: WeekCalculationOptions;
     private activeDate: Date | null = null;
     private todaysDate!: Date;
     private date!: Date;
@@ -95,8 +105,10 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
         this.$month = this.$dropdownContent.find('[data-calendar-area="month"]');
         this.$weekHeader = this.$dropdownContent.find(".calendar-week");
+        this.$weekNumbers = this.$dropdownContent.find(".calendar-week-numbers");
 
         this.manageFirstDayOfWeek();
+        this.initWeekCalculation();
 
         // Month navigation
         this.$monthSelect = this.$dropdownContent.find('[data-calendar-input="month"]');
@@ -187,6 +199,52 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         this.$weekHeader.html(localeDaysOfWeek.map((el) => `<span>${el}</span>`).join(''));
     }
 
+    initWeekCalculation() {
+        this.weekCalculationOptions = {
+            firstWeekType: options.getInt("firstWeekOfYear") || 0,
+            minDaysInFirstWeek: options.getInt("minDaysInFirstWeek") || 4
+        };
+    }
+
+    getWeekNumber(date: Date): number {
+        const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+
+        const year = utcDate.getUTCFullYear();
+        const jan1 = new Date(Date.UTC(year, 0, 1));
+        const jan1Day = jan1.getUTCDay();
+
+        let firstWeekStart = new Date(jan1);
+
+        let dayOffset = (jan1Day - this.firstDayOfWeek + 7) % 7;
+        firstWeekStart.setUTCDate(firstWeekStart.getUTCDate() - dayOffset);
+
+        switch (this.weekCalculationOptions.firstWeekType) {
+            case 1: {
+                const thursday = new Date(firstWeekStart);
+                const day = thursday.getUTCDay();
+                const offset = (4 - day + 7) % 7;
+                thursday.setUTCDate(thursday.getUTCDate() + offset);
+                if (thursday.getUTCFullYear() < year) {
+                    firstWeekStart.setUTCDate(firstWeekStart.getUTCDate() + 7);
+                }
+                break;
+            }
+            case 2: {
+                const daysInFirstWeek = 7 - dayOffset;
+                if (daysInFirstWeek < this.weekCalculationOptions.minDaysInFirstWeek) {
+                    firstWeekStart.setUTCDate(firstWeekStart.getUTCDate() + 7);
+                }
+                break;
+            }
+            // case 0 is default: week containing Jan 1
+        }
+
+        const diffMillis = utcDate.getTime() - firstWeekStart.getTime();
+        const diffDays = Math.floor(diffMillis / (24 * 60 * 60 * 1000));
+
+        return Math.floor(diffDays / 7) + 1;
+    }
+
     async dropdownShown() {
         this.init(appContext.tabManager.getActiveContextNote()?.getOwnedLabelValue("dateNote") ?? null);
     }
@@ -246,13 +304,19 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     async createMonth() {
-        const month = utils.formatDateISO(this.date).substr(0, 7);
+        const month = utils.formatDateISO(this.date).substring(0, 7);
         const dateNotesForMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${month}`);
 
         this.$month.empty();
+        this.$weekNumbers.empty();
 
         const currentMonth = this.date.getMonth();
+        const weekNumbers: Set<number> = new Set();
+
         while (this.date.getMonth() === currentMonth) {
+            const safeDate = new Date(Date.UTC(this.date.getFullYear(), this.date.getMonth(), this.date.getDate()));
+            weekNumbers.add(this.getWeekNumber(safeDate));
+
             const $day = this.createDay(dateNotesForMonth, this.date.getDate(), this.date.getDay());
 
             this.$month.append($day);
@@ -265,14 +329,24 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
         this.$monthSelect.text(MONTHS[this.date.getMonth()]);
         this.$yearSelect.val(this.date.getFullYear());
+
+        for (const weekNumber of weekNumbers) {
+            const $weekNumber = $("<div>")
+                .addClass("calendar-week-number")
+                .text(weekNumber);
+            this.$weekNumbers.append($weekNumber);
+        }
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (!loadResults.getOptionNames().includes("firstDayOfWeek")) {
+        if (!loadResults.getOptionNames().includes("firstDayOfWeek") &&
+            !loadResults.getOptionNames().includes("firstWeekOfYear") &&
+            !loadResults.getOptionNames().includes("minDaysInFirstWeek")) {
             return;
         }
 
         this.manageFirstDayOfWeek();
+        this.initWeekCalculation();
         this.createMonth();
     }
 }
