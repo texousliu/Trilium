@@ -1,6 +1,7 @@
 import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
 import { initializeTranslations } from "./src/services/i18n.js";
 import debounce from "./src/public/app/services/debounce.js";
+import fs from "fs/promises";
 
 const DEMO_ZIP_PATH = "db/demo.zip";
 
@@ -19,7 +20,10 @@ async function registerHandlers() {
         console.log("Exporting data");
         eraseService.eraseUnusedAttachmentsNow();
         await exportData();
-        await extractZip(DEMO_ZIP_PATH, "demo");
+
+        const outputDir = "demo";
+        await fs.rmdir(outputDir, { recursive: true }).catch(() => {});
+        await extractZip(DEMO_ZIP_PATH, outputDir);
     }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
