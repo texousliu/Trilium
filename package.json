@@ -38,7 +38,7 @@
     "electron:switch": "electron-rebuild",
     "docs:edit": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-docs TRILIUM_ENV=dev TRILIUM_PORT=37741 electron ./electron-docs-main.ts .",
     "docs:edit-nix": "electron-rebuild --version 33.3.1 && cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-docs TRILIUM_PORT=37741 TRILIUM_ENV=dev nix-shell -p electron_33 --run \"electron ./electron-docs-main.ts .\"",
-    "demo:edit": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-demo TRILIUM_ENV=dev TRILIUM_PORT=37741 electron ./electron-edit-demo.ts .",
+    "demo:edit": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-demo TRILIUM_ENV=dev TRILIUM_INTEGRATION_TEST=memory-no-store TRILIUM_PORT=37741 electron ./electron-edit-demo.ts .",
     "electron-forge:start": "npm run build:prepare-dist && cd ./build && electron-forge start",
     "electron-forge:make": "npm run build:prepare-dist && cross-env DEBUG=electron-windows-installer:* electron-forge make ./build",
     "electron-forge:package": "npm run build:prepare-dist && cd ./build && electron-forge package",
