@@ -69,8 +69,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
 
             return {
                 dimension,
-                contextWindow,
-                guaranteesNormalization: true, // Voyage embeddings are typically normalized
+                contextWidth: contextWindow,
                 name: modelName,
                 type: 'float32'
             };
@@ -86,12 +85,12 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
     async getModelInfo(modelName: string): Promise<EmbeddingModelInfo> {
         // Check cache first
         if (this.modelInfoCache.has(modelName)) {
-            return this.modelInfoCache.get(modelName);
+            return this.modelInfoCache.get(modelName)!;
         }
 
         // Try to determine model capabilities
         const capabilities = await this.fetchModelCapabilities(modelName);
-        const contextWindow = capabilities?.contextWindow || 8192; // Default context window for Voyage
+        const contextWindow = capabilities?.contextWidth || 8192; // Default context window for Voyage
         const knownDimension = capabilities?.dimension || 1024; // Default dimension for Voyage models
 
         // For Voyage, we can use known dimensions or detect with a test call
@@ -100,8 +99,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                 // Use known dimension
                 const modelInfo: EmbeddingModelInfo = {
                     dimension: knownDimension,
-                    contextWindow,
-                    guaranteesNormalization: true, // Voyage embeddings are typically normalized
+                    contextWidth: contextWindow,
                     name: modelName,
                     type: 'float32'
                 };
@@ -120,16 +118,14 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                 if (modelName.includes('voyage-2')) {
                     return {
                         dimension: dimension || 1024,
-                        contextWindow: 4096,
-                        guaranteesNormalization: true, // Voyage-2 embeddings are normalized
+                        contextWidth: 4096,
                         name: modelName,
                         type: 'float32'
                     };
                 } else if (modelName.includes('voyage-lite-02')) {
                     return {
                         dimension: dimension || 768,
-                        contextWindow: 4096,
-                        guaranteesNormalization: true, // Voyage-lite embeddings are normalized
+                        contextWidth: 4096,
                         name: modelName,
                         type: 'float32'
                     };
@@ -137,8 +133,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                     // Default for other Voyage models
                     return {
                         dimension: dimension || 1024,
-                        contextWindow: 4096,
-                        guaranteesNormalization: true, // Assuming all Voyage embeddings are normalized
+                        contextWidth: 4096,
                         name: modelName,
                         type: 'float32'
                     };
@@ -150,8 +145,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             // Use default parameters if everything else fails
             const defaultModelInfo: EmbeddingModelInfo = {
                 dimension: 1024, // Default for Voyage models
-                contextWindow: 8192,
-                guaranteesNormalization: true, // Voyage embeddings are typically normalized
+                contextWidth: 8192,
                 name: modelName,
                 type: 'float32'
             };
@@ -176,7 +170,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             const modelInfo = await this.getModelInfo(modelName);
 
             // Trim text if it might exceed context window (rough character estimate)
-            const charLimit = modelInfo.contextWindow * 4; // Rough estimate: avg 4 chars per token
+            const charLimit = (modelInfo.contextWidth || 4096) * 4; // Rough estimate: avg 4 chars per token
             const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
 
             const response = await fetch(`${this.baseUrl}/embeddings`, {
