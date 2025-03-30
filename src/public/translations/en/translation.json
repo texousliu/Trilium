@@ -1879,6 +1879,12 @@
     "sources": "Sources",
     "start_indexing": "Start Indexing",
     "use_advanced_context": "Use Advanced Context",
+    "chat": {
+      "root_note_title": "AI Chats",
+      "root_note_content": "This note contains your saved AI chat conversations.",
+      "new_chat_title": "New Chat",
+      "create_new_ai_chat": "Create new AI Chat"
+    },
     "processing": {
       "common": "Processing...",
       "thinking": "Thinking...",

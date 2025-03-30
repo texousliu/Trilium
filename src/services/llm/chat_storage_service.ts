@@ -2,6 +2,7 @@ import notes from '../notes.js';
 import sql from '../sql.js';
 import attributes from '../attributes.js';
 import type { Message } from './ai_interface.js';
+import { t } from 'i18next';
 
 interface StoredChat {
     id: string;
@@ -38,9 +39,9 @@ export class ChatStorageService {
         // Create root note for chats
         const { note } = notes.createNewNote({
             parentNoteId: 'root',
-            title: 'AI Chats',
+            title: t('ai.chat.root_note_title'),
             type: 'text',
-            content: 'This note contains your saved AI chat conversations.'
+            content: t('ai.chat.root_note_content')
         });
 
         attributes.createLabel(
@@ -61,7 +62,7 @@ export class ChatStorageService {
 
         const { note } = notes.createNewNote({
             parentNoteId: rootNoteId,
-            title: title || 'New Chat ' + now.toLocaleString(),
+            title: title || t('ai.chat.new_chat_title') + ' ' + now.toLocaleString(),
             type: ChatStorageService.CHAT_TYPE,
             mime: ChatStorageService.CHAT_MIME,
             content: JSON.stringify({
@@ -79,7 +80,7 @@ export class ChatStorageService {
 
         return {
             id: note.noteId,
-            title: title || 'New Chat ' + now.toLocaleString(),
+            title: title || t('ai.chat.new_chat_title') + ' ' + now.toLocaleString(),
             messages,
             noteId: note.noteId,
             createdAt: now,
