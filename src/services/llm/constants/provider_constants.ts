@@ -4,8 +4,29 @@ export const PROVIDER_CONSTANTS = {
         BETA_VERSION: 'messages-2023-12-15',
         BASE_URL: 'https://api.anthropic.com',
         DEFAULT_MODEL: 'claude-3-haiku-20240307',
+        // Model mapping for simplified model names to their full versions
+        MODEL_MAPPING: {
+            'claude-3.7-sonnet': 'claude-3-7-sonnet-20240620',
+            'claude-3.5-haiku': 'claude-3-5-haiku-20240307',
+            'claude-3-opus': 'claude-3-opus-20240229',
+            'claude-3-sonnet': 'claude-3-sonnet-20240229',
+            'claude-3-haiku': 'claude-3-haiku-20240307',
+            'claude-2': 'claude-2.1'
+        },
         // These are the currently available models from Anthropic
         AVAILABLE_MODELS: [
+            {
+                id: 'claude-3-7-sonnet-20240620',
+                name: 'Claude 3.7 Sonnet',
+                description: 'Most intelligent model with hybrid reasoning capabilities',
+                maxTokens: 4096
+            },
+            {
+                id: 'claude-3-5-haiku-20240307',
+                name: 'Claude 3.5 Haiku',
+                description: 'Improved version of Haiku with better performance',
+                maxTokens: 4096
+            },
             {
                 id: 'claude-3-opus-20240229',
                 name: 'Claude 3 Opus',

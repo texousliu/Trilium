@@ -9,14 +9,6 @@ interface AnthropicMessage {
 }
 
 export class AnthropicService extends BaseAIService {
-    // Map of simplified model names to full model names with versions
-    private static MODEL_MAPPING: Record<string, string> = {
-        'claude-3-opus': 'claude-3-opus-20240229',
-        'claude-3-sonnet': 'claude-3-sonnet-20240229',
-        'claude-3-haiku': 'claude-3-haiku-20240307',
-        'claude-2': 'claude-2.1'
-    };
-
     constructor() {
         super('Anthropic');
     }

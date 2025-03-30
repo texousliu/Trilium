@@ -4,14 +4,6 @@ import log from "../../services/log.js";
 import type { Request, Response } from "express";
 import { PROVIDER_CONSTANTS } from '../../services/llm/constants/provider_constants.js';
 
-// Map of simplified model names to full model names with versions
-const MODEL_MAPPING: Record<string, string> = {
-    'claude-3-opus': 'claude-3-opus-20240229',
-    'claude-3-sonnet': 'claude-3-sonnet-20240229',
-    'claude-3-haiku': 'claude-3-haiku-20240307',
-    'claude-2': 'claude-2.1'
-};
-
 // Interface for Anthropic model entries
 interface AnthropicModel {
     id: string;
