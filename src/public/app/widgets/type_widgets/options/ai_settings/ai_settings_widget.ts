@@ -328,7 +328,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                 // Update status text
                 let statusText;
                 if (stats.queuedNotesCount > 0) {
-                    statusText = t("ai_llm.processing");
+                    statusText = t("ai_llm.processing", { percentage: progressPercent });
                 } else if (stats.embeddedNotesCount === 0) {
                     statusText = t("ai_llm.not_started");
                 } else if (stats.embeddedNotesCount === stats.totalNotesCount) {
@@ -340,7 +340,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                         this.indexRebuildRefreshInterval = null;
                     }
                 } else {
-                    statusText = t("ai_llm.partial");
+                    statusText = t("ai_llm.partial", { percentage: progressPercent });
                 }
 
                 this.$widget.find('.embedding-status-text').text(statusText);

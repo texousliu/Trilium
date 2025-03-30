@@ -224,7 +224,7 @@ export async function processEmbeddingQueue() {
 
         // Double-check that this note isn't already being processed
         if (notesInProcess.has(noteId)) {
-            log.info(`Note ${noteId} is already being processed by another thread, skipping`);
+            //log.info(`Note ${noteId} is already being processed by another thread, skipping`);
             continue;
         }
 
