@@ -1,4 +1,3 @@
-import axios from "axios";
 import log from "../../../log.js";
 import { BaseEmbeddingProvider } from "../base_embeddings.js";
 import type { EmbeddingConfig } from "../embeddings_interface.js";
@@ -41,17 +40,23 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
     private async fetchModelCapabilities(modelName: string): Promise<EmbeddingModelInfo | null> {
         try {
             // First try the /api/show endpoint which has detailed model information
-            const showResponse = await axios.get(
-                `${this.baseUrl}/api/show`,
-                {
-                    params: { name: modelName },
-                    headers: { "Content-Type": "application/json" },
-                    timeout: 10000
-                }
-            );
+            const url = new URL(`${this.baseUrl}/api/show`);
+            url.searchParams.append('name', modelName);
+            
+            const showResponse = await fetch(url, {
+                method: 'GET',
+                headers: { "Content-Type": "application/json" },
+                signal: AbortSignal.timeout(10000)
+            });
 
-            if (showResponse.data && showResponse.data.parameters) {
-                const params = showResponse.data.parameters;
+            if (!showResponse.ok) {
+                throw new Error(`HTTP error! status: ${showResponse.status}`);
+            }
+            
+            const data = await showResponse.json();
+            
+            if (data && data.parameters) {
+                const params = data.parameters;
                 // Extract context length from parameters (different models might use different parameter names)
                 const contextWindow = params.context_length ||
                                      params.num_ctx ||
@@ -157,20 +162,24 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
      * Detect embedding dimension by making a test API call
      */
     private async detectEmbeddingDimension(modelName: string): Promise<number> {
-        const testResponse = await axios.post(
-            `${this.baseUrl}/api/embeddings`,
-            {
+        const testResponse = await fetch(`${this.baseUrl}/api/embeddings`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
                 model: modelName,
                 prompt: "Test"
-            },
-            {
-                headers: { "Content-Type": "application/json" },
-                timeout: 10000
-            }
-        );
+            }),
+            signal: AbortSignal.timeout(10000)
+        });
 
-        if (testResponse.data && Array.isArray(testResponse.data.embedding)) {
-            return testResponse.data.embedding.length;
+        if (!testResponse.ok) {
+            throw new Error(`HTTP error! status: ${testResponse.status}`);
+        }
+        
+        const data = await testResponse.json();
+        
+        if (data && Array.isArray(data.embedding)) {
+            return data.embedding.length;
         } else {
             throw new Error("Could not detect embedding dimensions");
         }
@@ -209,35 +218,39 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
                 const charLimit = (modelInfo.contextWidth || 4096) * 4; // Rough estimate: avg 4 chars per token
                 const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
 
-                const response = await axios.post(
-                    `${this.baseUrl}/api/embeddings`,
-                    {
+                const response = await fetch(`${this.baseUrl}/api/embeddings`, {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
                         model: modelName,
                         prompt: trimmedText,
                         format: "json"
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        timeout: 60000 // Increased timeout for larger texts (60 seconds)
-                    }
-                );
+                    }),
+                    signal: AbortSignal.timeout(60000) // Increased timeout for larger texts (60 seconds)
+                });
 
-                if (response.data && Array.isArray(response.data.embedding)) {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data && Array.isArray(data.embedding)) {
                     // Success! Return the embedding
-                    return new Float32Array(response.data.embedding);
+                    return new Float32Array(data.embedding);
                 } else {
                     throw new Error("Unexpected response structure from Ollama API");
                 }
             } catch (error: any) {
                 lastError = error;
                 // Only retry on timeout or connection errors
-                const errorMessage = error.response?.data?.error?.message || error.message || "Unknown error";
+                const errorMessage = error.message || "Unknown error";
                 const isTimeoutError = errorMessage.includes('timeout') ||
                                      errorMessage.includes('socket hang up') ||
                                      errorMessage.includes('ECONNREFUSED') ||
-                                     errorMessage.includes('ECONNRESET');
+                                     errorMessage.includes('ECONNRESET') ||
+                                     errorMessage.includes('AbortError') ||
+                                     errorMessage.includes('NetworkError');
 
                 if (isTimeoutError && retryCount < maxRetries) {
                     // Exponential backoff with jitter
@@ -247,7 +260,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
                     retryCount++;
                 } else {
                     // Non-retryable error or max retries exceeded
-                    const errorMessage = error.response?.data?.error?.message || error.message || "Unknown error";
+                    const errorMessage = error.message || "Unknown error";
                     log.error(`Ollama embedding error: ${errorMessage}`);
                     throw new Error(`Ollama embedding error: ${errorMessage}`);
                 }
@@ -255,7 +268,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
         }
 
         // If we get here, we've exceeded our retry limit
-        const errorMessage = lastError.response?.data?.error?.message || lastError.message || "Unknown error";
+        const errorMessage = lastError.message || "Unknown error";
         log.error(`Ollama embedding error after ${maxRetries} retries: ${errorMessage}`);
         throw new Error(`Ollama embedding error after ${maxRetries} retries: ${errorMessage}`);
     }

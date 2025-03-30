@@ -1,4 +1,3 @@
-import axios from "axios";
 import log from "../../../log.js";
 import { BaseEmbeddingProvider } from "../base_embeddings.js";
 import type { EmbeddingConfig } from "../embeddings_interface.js";
@@ -44,36 +43,40 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
 
         try {
             // First try to get model details from the models API
-            const response = await axios.get(
-                `${this.baseUrl}/models/${modelName}`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${this.apiKey}`,
-                        "Content-Type": "application/json"
-                    },
-                    timeout: 10000
-                }
-            );
+            const response = await fetch(`${this.baseUrl}/models/${modelName}`, {
+                method: 'GET',
+                headers: {
+                    "Authorization": `Bearer ${this.apiKey}`,
+                    "Content-Type": "application/json"
+                },
+                signal: AbortSignal.timeout(10000)
+            });
 
-            if (response.data) {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data) {
                 // Different model families may have different ways of exposing context window
                 let contextWindow = 0;
                 let dimension = 0;
 
                 // Extract context window if available
-                if (response.data.context_window) {
-                    contextWindow = response.data.context_window;
-                } else if (response.data.limits && response.data.limits.context_window) {
-                    contextWindow = response.data.limits.context_window;
-                } else if (response.data.limits && response.data.limits.context_length) {
-                    contextWindow = response.data.limits.context_length;
+                if (data.context_window) {
+                    contextWindow = data.context_window;
+                } else if (data.limits && data.limits.context_window) {
+                    contextWindow = data.limits.context_window;
+                } else if (data.limits && data.limits.context_length) {
+                    contextWindow = data.limits.context_length;
                 }
 
                 // Extract embedding dimensions if available
-                if (response.data.dimensions) {
-                    dimension = response.data.dimensions;
-                } else if (response.data.embedding_dimension) {
-                    dimension = response.data.embedding_dimension;
+                if (data.dimensions) {
+                    dimension = data.dimensions;
+                } else if (data.embedding_dimension) {
+                    dimension = data.embedding_dimension;
                 }
 
                 // If we didn't get all the info, use defaults for missing values
@@ -185,28 +188,32 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
                 return new Float32Array(this.config.dimension);
             }
 
-            const response = await axios.post(
-                `${this.baseUrl}/embeddings`,
-                {
+            const response = await fetch(`${this.baseUrl}/embeddings`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.apiKey}`
+                },
+                body: JSON.stringify({
                     input: text,
                     model: this.config.model || "text-embedding-3-small",
                     encoding_format: "float"
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${this.apiKey}`
-                    }
-                }
-            );
+                })
+            });
 
-            if (response.data && response.data.data && response.data.data[0] && response.data.data[0].embedding) {
-                return new Float32Array(response.data.data[0].embedding);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data && data.data && data.data[0] && data.data[0].embedding) {
+                return new Float32Array(data.data[0].embedding);
             } else {
                 throw new Error("Unexpected response structure from OpenAI API");
             }
         } catch (error: any) {
-            const errorMessage = error.response?.data?.error?.message || error.message || "Unknown error";
+            const errorMessage = error.message || "Unknown error";
             log.error(`OpenAI embedding error: ${errorMessage}`);
             throw new Error(`OpenAI embedding error: ${errorMessage}`);
         }
@@ -216,7 +223,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
      * More specific implementation of batch size error detection for OpenAI
      */
     protected isBatchSizeError(error: any): boolean {
-        const errorMessage = error?.message || error?.response?.data?.error?.message || '';
+        const errorMessage = error?.message || '';
         const openAIBatchSizeErrorPatterns = [
             'batch size', 'too many inputs', 'context length exceeded',
             'maximum context length', 'token limit', 'rate limit exceeded',
@@ -236,24 +243,28 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             return [];
         }
 
-        const response = await axios.post(
-            `${this.baseUrl}/embeddings`,
-            {
+        const response = await fetch(`${this.baseUrl}/embeddings`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.apiKey}`
+            },
+            body: JSON.stringify({
                 input: texts,
                 model: this.config.model || "text-embedding-3-small",
                 encoding_format: "float"
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.apiKey}`
-                }
-            }
-        );
+            })
+        });
 
-        if (response.data && response.data.data) {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data && data.data) {
             // Sort the embeddings by index to ensure they match the input order
-            const sortedEmbeddings = response.data.data
+            const sortedEmbeddings = data.data
                 .sort((a: any, b: any) => a.index - b.index)
                 .map((item: any) => new Float32Array(item.embedding));
 

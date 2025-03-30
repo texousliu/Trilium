@@ -1,9 +1,9 @@
-import axios from "axios";
 import log from "../../../log.js";
 import { BaseEmbeddingProvider } from "../base_embeddings.js";
-import type { EmbeddingConfig, EmbeddingModelInfo } from "../embeddings_interface.js";
+import type { EmbeddingConfig } from "../embeddings_interface.js";
 import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../constants/provider_constants.js";
+import type { EmbeddingModelInfo } from "../../interfaces/embedding_interfaces.js";
 
 // Voyage model context window sizes - as of current API version
 const VOYAGE_MODEL_CONTEXT_WINDOWS: Record<string, number> = {
@@ -46,7 +46,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             // Update the config dimension
             this.config.dimension = modelInfo.dimension;
 
-            log.info(`Voyage AI model ${modelName} initialized with dimension ${this.config.dimension} and context window ${modelInfo.contextWindow}`);
+            log.info(`Voyage AI model ${modelName} initialized with dimension ${this.config.dimension} and context window ${modelInfo.contextWidth}`);
         } catch (error: any) {
             log.error(`Error initializing Voyage AI provider: ${error.message}`);
         }
@@ -70,7 +70,9 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             return {
                 dimension,
                 contextWindow,
-                guaranteesNormalization: true // Voyage embeddings are typically normalized
+                guaranteesNormalization: true, // Voyage embeddings are typically normalized
+                name: modelName,
+                type: 'float32'
             };
         } catch (error) {
             log.info(`Could not determine capabilities for Voyage AI model ${modelName}: ${error}`);
@@ -99,7 +101,9 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                 const modelInfo: EmbeddingModelInfo = {
                     dimension: knownDimension,
                     contextWindow,
-                    guaranteesNormalization: true // Voyage embeddings are typically normalized
+                    guaranteesNormalization: true, // Voyage embeddings are typically normalized
+                    name: modelName,
+                    type: 'float32'
                 };
 
                 this.modelInfoCache.set(modelName, modelInfo);
@@ -117,20 +121,26 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                     return {
                         dimension: dimension || 1024,
                         contextWindow: 4096,
-                        guaranteesNormalization: true // Voyage-2 embeddings are normalized
+                        guaranteesNormalization: true, // Voyage-2 embeddings are normalized
+                        name: modelName,
+                        type: 'float32'
                     };
                 } else if (modelName.includes('voyage-lite-02')) {
                     return {
                         dimension: dimension || 768,
                         contextWindow: 4096,
-                        guaranteesNormalization: true // Voyage-lite embeddings are normalized
+                        guaranteesNormalization: true, // Voyage-lite embeddings are normalized
+                        name: modelName,
+                        type: 'float32'
                     };
                 } else {
                     // Default for other Voyage models
                     return {
                         dimension: dimension || 1024,
                         contextWindow: 4096,
-                        guaranteesNormalization: true // Assuming all Voyage embeddings are normalized
+                        guaranteesNormalization: true, // Assuming all Voyage embeddings are normalized
+                        name: modelName,
+                        type: 'float32'
                     };
                 }
             }
@@ -141,7 +151,9 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             const defaultModelInfo: EmbeddingModelInfo = {
                 dimension: 1024, // Default for Voyage models
                 contextWindow: 8192,
-                guaranteesNormalization: true // Voyage embeddings are typically normalized
+                guaranteesNormalization: true, // Voyage embeddings are typically normalized
+                name: modelName,
+                type: 'float32'
             };
 
             this.modelInfoCache.set(modelName, defaultModelInfo);
@@ -167,29 +179,33 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             const charLimit = modelInfo.contextWindow * 4; // Rough estimate: avg 4 chars per token
             const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
 
-            const response = await axios.post(
-                `${this.baseUrl}/embeddings`,
-                {
+            const response = await fetch(`${this.baseUrl}/embeddings`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.apiKey}`
+                },
+                body: JSON.stringify({
                     model: modelName,
                     input: trimmedText,
                     input_type: "text",
                     truncation: true
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${this.apiKey}`
-                    }
-                }
-            );
+                })
+            });
 
-            if (response.data && response.data.data && response.data.data[0] && response.data.data[0].embedding) {
-                return new Float32Array(response.data.data[0].embedding);
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `HTTP error ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data && data.data && data.data[0] && data.data[0].embedding) {
+                return new Float32Array(data.data[0].embedding);
             } else {
                 throw new Error("Unexpected response structure from Voyage AI API");
             }
         } catch (error: any) {
-            const errorMessage = error.response?.data?.error?.message || error.message || "Unknown error";
+            const errorMessage = error.message || "Unknown error";
             log.error(`Voyage AI embedding error: ${errorMessage}`);
             throw new Error(`Voyage AI embedding error: ${errorMessage}`);
         }
@@ -199,7 +215,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
      * More specific implementation of batch size error detection for Voyage AI
      */
     protected isBatchSizeError(error: any): boolean {
-        const errorMessage = error?.message || error?.response?.data?.error?.message || '';
+        const errorMessage = error?.message || '';
         const voyageBatchSizeErrorPatterns = [
             'batch size', 'too many inputs', 'context length exceeded',
             'token limit', 'rate limit', 'limit exceeded',
@@ -234,24 +250,28 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                     // Filter out empty texts
                     const validBatch = batch.map(text => text.trim() || " ");
 
-                    const response = await axios.post(
-                        `${this.baseUrl}/embeddings`,
-                        {
+                    const response = await fetch(`${this.baseUrl}/embeddings`, {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${this.apiKey}`
+                        },
+                        body: JSON.stringify({
                             model: modelName,
                             input: validBatch,
                             input_type: "text",
                             truncation: true
-                        },
-                        {
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Authorization": `Bearer ${this.apiKey}`
-                            }
-                        }
-                    );
+                        })
+                    });
 
-                    if (response.data && response.data.data && Array.isArray(response.data.data)) {
-                        return response.data.data.map((item: any) =>
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.error?.message || `HTTP error ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    if (data && data.data && Array.isArray(data.data)) {
+                        return data.data.map((item: any) =>
                             new Float32Array(item.embedding || [])
                         );
                     } else {
