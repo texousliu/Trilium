@@ -1,7 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import { TPL } from "./template.js";
 import { t } from "../../../../services/i18n.js";
-import type { FilterOptionsByType, OptionMap } from "../../../../../../services/options_interface.js";
+import type { OptionDefinitions, OptionMap } from "../../../../../../services/options_interface.js";
 import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
 import type { EmbeddingStats, FailedEmbeddingNotes } from "./interfaces.js";
@@ -30,106 +30,64 @@ export default class AiSettingsWidget extends OptionsWidget {
     }
 
     /**
+     * Helper method to set up a change event handler for an option
+     * @param selector The jQuery selector for the element
+     * @param optionName The name of the option to update
+     * @param validateAfter Whether to run validation after the update
+     * @param isCheckbox Whether the element is a checkbox
+     */
+    setupChangeHandler(selector: string, optionName: keyof OptionDefinitions, validateAfter: boolean = false, isCheckbox: boolean = false) {
+        if (!this.$widget) return;
+        
+        const $element = this.$widget.find(selector);
+        $element.on('change', async () => {
+            let value: string;
+            
+            if (isCheckbox) {
+                value = $element.prop('checked') ? 'true' : 'false';
+            } else {
+                value = $element.val() as string;
+            }
+            
+            await this.updateOption(optionName, value);
+            
+            if (validateAfter) {
+                await this.displayValidationWarnings();
+            }
+        });
+    }
+
+    /**
      * Set up all event handlers for options
      */
     setupEventHandlers() {
         if (!this.$widget) return;
 
-        // AI Enabled checkbox
-        const $aiEnabled = this.$widget.find('.ai-enabled');
-        $aiEnabled.on('change', async () => {
-            await this.updateOption('aiEnabled', $aiEnabled.prop('checked') ? 'true' : 'false');
-            // Display validation warnings after changing aiEnabled
-            await this.displayValidationWarnings();
-        });
-
-        // Provider precedence
-        const $aiProviderPrecedence = this.$widget.find('.ai-provider-precedence');
-        $aiProviderPrecedence.on('change', async () => {
-            await this.updateOption('aiProviderPrecedence', $aiProviderPrecedence.val() as string);
-            // Display validation warnings after changing precedence list
-            await this.displayValidationWarnings();
-        });
-
-        // Temperature
-        const $aiTemperature = this.$widget.find('.ai-temperature');
-        $aiTemperature.on('change', async () => {
-            await this.updateOption('aiTemperature', $aiTemperature.val() as string);
-        });
-
-        // System prompt
-        const $aiSystemPrompt = this.$widget.find('.ai-system-prompt');
-        $aiSystemPrompt.on('change', async () => {
-            await this.updateOption('aiSystemPrompt', $aiSystemPrompt.val() as string);
-        });
-
+        // Core AI options
+        this.setupChangeHandler('.ai-enabled', 'aiEnabled', true, true);
+        this.setupChangeHandler('.ai-provider-precedence', 'aiProviderPrecedence', true);
+        this.setupChangeHandler('.ai-temperature', 'aiTemperature');
+        this.setupChangeHandler('.ai-system-prompt', 'aiSystemPrompt');
+        
         // OpenAI options
-        const $openaiApiKey = this.$widget.find('.openai-api-key');
-        $openaiApiKey.on('change', async () => {
-            await this.updateOption('openaiApiKey', $openaiApiKey.val() as string);
-            // Display validation warnings after changing API key
-            await this.displayValidationWarnings();
-        });
-
-        const $openaiBaseUrl = this.$widget.find('.openai-base-url');
-        $openaiBaseUrl.on('change', async () => {
-            await this.updateOption('openaiBaseUrl', $openaiBaseUrl.val() as string);
-            // Display validation warnings after changing URL
-            await this.displayValidationWarnings();
-        });
-
-        const $openaiDefaultModel = this.$widget.find('.openai-default-model');
-        $openaiDefaultModel.on('change', async () => {
-            await this.updateOption('openaiDefaultModel', $openaiDefaultModel.val() as string);
-        });
-
-        const $openaiEmbeddingModel = this.$widget.find('.openai-embedding-model');
-        $openaiEmbeddingModel.on('change', async () => {
-            await this.updateOption('openaiEmbeddingModel', $openaiEmbeddingModel.val() as string);
-        });
-
+        this.setupChangeHandler('.openai-api-key', 'openaiApiKey', true);
+        this.setupChangeHandler('.openai-base-url', 'openaiBaseUrl', true);
+        this.setupChangeHandler('.openai-default-model', 'openaiDefaultModel');
+        this.setupChangeHandler('.openai-embedding-model', 'openaiEmbeddingModel');
+        
         // Anthropic options
-        const $anthropicApiKey = this.$widget.find('.anthropic-api-key');
-        $anthropicApiKey.on('change', async () => {
-            await this.updateOption('anthropicApiKey', $anthropicApiKey.val() as string);
-            // Display validation warnings after changing API key
-            await this.displayValidationWarnings();
-        });
-
-        const $anthropicDefaultModel = this.$widget.find('.anthropic-default-model');
-        $anthropicDefaultModel.on('change', async () => {
-            await this.updateOption('anthropicDefaultModel', $anthropicDefaultModel.val() as string);
-        });
-
-        const $anthropicBaseUrl = this.$widget.find('.anthropic-base-url');
-        $anthropicBaseUrl.on('change', async () => {
-            await this.updateOption('anthropicBaseUrl', $anthropicBaseUrl.val() as string);
-        });
-
-        const $voyageApiKey = this.$widget.find('.voyage-api-key');
-        $voyageApiKey.on('change', async () => {
-            await this.updateOption('voyageApiKey', $voyageApiKey.val() as string);
-        });
-
-        const $voyageEmbeddingModel = this.$widget.find('.voyage-embedding-model');
-        $voyageEmbeddingModel.on('change', async () => {
-            await this.updateOption('voyageEmbeddingModel', $voyageEmbeddingModel.val() as string);
-        });
-
-        const $ollamaBaseUrl = this.$widget.find('.ollama-base-url');
-        $ollamaBaseUrl.on('change', async () => {
-            await this.updateOption('ollamaBaseUrl', $ollamaBaseUrl.val() as string);
-        });
-
-        const $ollamaDefaultModel = this.$widget.find('.ollama-default-model');
-        $ollamaDefaultModel.on('change', async () => {
-            await this.updateOption('ollamaDefaultModel', $ollamaDefaultModel.val() as string);
-        });
-
-        const $ollamaEmbeddingModel = this.$widget.find('.ollama-embedding-model');
-        $ollamaEmbeddingModel.on('change', async () => {
-            await this.updateOption('ollamaEmbeddingModel', $ollamaEmbeddingModel.val() as string);
-        });
+        this.setupChangeHandler('.anthropic-api-key', 'anthropicApiKey', true);
+        this.setupChangeHandler('.anthropic-default-model', 'anthropicDefaultModel');
+        this.setupChangeHandler('.anthropic-base-url', 'anthropicBaseUrl');
+        
+        // Voyage options
+        this.setupChangeHandler('.voyage-api-key', 'voyageApiKey');
+        this.setupChangeHandler('.voyage-embedding-model', 'voyageEmbeddingModel');
+        
+        // Ollama options
+        this.setupChangeHandler('.ollama-base-url', 'ollamaBaseUrl');
+        this.setupChangeHandler('.ollama-default-model', 'ollamaDefaultModel');
+        this.setupChangeHandler('.ollama-embedding-model', 'ollamaEmbeddingModel');
 
         const $refreshModels = this.$widget.find('.refresh-models');
         $refreshModels.on('click', async () => {
@@ -170,44 +128,13 @@ export default class AiSettingsWidget extends OptionsWidget {
         });
 
         // Embedding options event handlers
-        const $embeddingAutoUpdateEnabled = this.$widget.find('.embedding-auto-update-enabled');
-        $embeddingAutoUpdateEnabled.on('change', async () => {
-            await this.updateOption('embeddingAutoUpdateEnabled', $embeddingAutoUpdateEnabled.prop('checked') ? "true" : "false");
-        });
-
-        const $enableAutomaticIndexing = this.$widget.find('.enable-automatic-indexing');
-        $enableAutomaticIndexing.on('change', async () => {
-            await this.updateOption('enableAutomaticIndexing', $enableAutomaticIndexing.prop('checked') ? "true" : "false");
-        });
-
-        const $embeddingSimilarityThreshold = this.$widget.find('.embedding-similarity-threshold');
-        $embeddingSimilarityThreshold.on('change', async () => {
-            await this.updateOption('embeddingSimilarityThreshold', $embeddingSimilarityThreshold.val() as string);
-        });
-
-        const $maxNotesPerLlmQuery = this.$widget.find('.max-notes-per-llm-query');
-        $maxNotesPerLlmQuery.on('change', async () => {
-            await this.updateOption('maxNotesPerLlmQuery', $maxNotesPerLlmQuery.val() as string);
-        });
-
-        const $embeddingDefaultProvider = this.$widget.find('.embedding-default-provider');
-        $embeddingDefaultProvider.on('change', async () => {
-            await this.updateOption('embeddingsDefaultProvider', $embeddingDefaultProvider.val() as string);
-            // Display validation warnings after changing default provider
-            await this.displayValidationWarnings();
-        });
-
-        const $embeddingDimensionStrategy = this.$widget.find('.embedding-dimension-strategy');
-        $embeddingDimensionStrategy.on('change', async () => {
-            await this.updateOption('embeddingDimensionStrategy', $embeddingDimensionStrategy.val() as string);
-        });
-
-        const $embeddingProviderPrecedence = this.$widget.find('.embedding-provider-precedence');
-        $embeddingProviderPrecedence.on('change', async () => {
-            await this.updateOption('embeddingProviderPrecedence', $embeddingProviderPrecedence.val() as string);
-            // Display validation warnings after changing precedence list
-            await this.displayValidationWarnings();
-        });
+        this.setupChangeHandler('.embedding-auto-update-enabled', 'embeddingAutoUpdateEnabled', false, true);
+        this.setupChangeHandler('.enable-automatic-indexing', 'enableAutomaticIndexing', false, true);
+        this.setupChangeHandler('.embedding-similarity-threshold', 'embeddingSimilarityThreshold');
+        this.setupChangeHandler('.max-notes-per-llm-query', 'maxNotesPerLlmQuery');
+        this.setupChangeHandler('.embedding-default-provider', 'embeddingsDefaultProvider', true);
+        this.setupChangeHandler('.embedding-dimension-strategy', 'embeddingDimensionStrategy');
+        this.setupChangeHandler('.embedding-provider-precedence', 'embeddingProviderPrecedence', true);
 
         // Set up sortable behavior for the embedding provider precedence list
         this.setupEmbeddingProviderSortable();
