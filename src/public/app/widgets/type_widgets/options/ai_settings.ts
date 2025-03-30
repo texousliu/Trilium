@@ -433,6 +433,189 @@ const TPL = `
 
 export default class AiSettingsWidget extends OptionsWidget {
     private ollamaModelsRefreshed = false;
+    private openaiModelsRefreshed = false;
+    private anthropicModelsRefreshed = false;
+    
+    /**
+     * Refreshes the list of OpenAI models
+     * @param showLoading Whether to show loading indicators and toasts
+     * @returns Promise that resolves when the refresh is complete
+     */
+    async refreshOpenAIModels(showLoading: boolean): Promise<void> {
+        if (!this.$widget) return;
+        
+        const $refreshOpenAIModels = this.$widget.find('.refresh-openai-models');
+        
+        // If we've already refreshed and we're not forcing a refresh, don't do it again
+        if (this.openaiModelsRefreshed && !showLoading) {
+            return;
+        }
+        
+        if (showLoading) {
+            $refreshOpenAIModels.prop('disabled', true);
+            $refreshOpenAIModels.html(`<i class="spinner-border spinner-border-sm"></i>`);
+        }
+
+        try {
+            const openaiBaseUrl = this.$widget.find('.openai-base-url').val() as string;
+            const response = await server.post<OpenAIModelResponse>('openai/list-models', { baseUrl: openaiBaseUrl });
+
+            if (response && response.success) {
+                // Update the chat models dropdown
+                if (response.chatModels?.length > 0) {
+                    const $chatModelSelect = this.$widget.find('.openai-default-model');
+                    const currentChatValue = $chatModelSelect.val();
+
+                    // Clear existing options
+                    $chatModelSelect.empty();
+
+                    // Sort models by name
+                    const sortedChatModels = [...response.chatModels].sort((a, b) => a.name.localeCompare(b.name));
+
+                    // Add models to the dropdown
+                    sortedChatModels.forEach(model => {
+                        $chatModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
+                    });
+
+                    // Try to restore the previously selected value
+                    if (currentChatValue) {
+                        $chatModelSelect.val(currentChatValue);
+                        // If the value doesn't exist anymore, select the first option
+                        if (!$chatModelSelect.val()) {
+                            $chatModelSelect.prop('selectedIndex', 0);
+                        }
+                    }
+                }
+
+                // Update the embedding models dropdown
+                if (response.embeddingModels?.length > 0) {
+                    const $embedModelSelect = this.$widget.find('.openai-embedding-model');
+                    const currentEmbedValue = $embedModelSelect.val();
+
+                    // Clear existing options
+                    $embedModelSelect.empty();
+
+                    // Sort models by name
+                    const sortedEmbedModels = [...response.embeddingModels].sort((a, b) => a.name.localeCompare(b.name));
+
+                    // Add models to the dropdown
+                    sortedEmbedModels.forEach(model => {
+                        $embedModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
+                    });
+
+                    // Try to restore the previously selected value
+                    if (currentEmbedValue) {
+                        $embedModelSelect.val(currentEmbedValue);
+                        // If the value doesn't exist anymore, select the first option
+                        if (!$embedModelSelect.val()) {
+                            $embedModelSelect.prop('selectedIndex', 0);
+                        }
+                    }
+                }
+
+                if (showLoading) {
+                    // Show success message
+                    const totalModels = (response.chatModels?.length || 0) + (response.embeddingModels?.length || 0);
+                    toastService.showMessage(`${totalModels} OpenAI models found.`);
+                }
+                
+                // Mark that we've refreshed the models
+                this.openaiModelsRefreshed = true;
+            } else if (showLoading) {
+                toastService.showError(`No OpenAI models found. Please check your API key and settings.`);
+            }
+        } catch (e) {
+            console.error(`Error fetching OpenAI models:`, e);
+            if (showLoading) {
+                toastService.showError(`Error fetching OpenAI models: ${e}`);
+            }
+        } finally {
+            if (showLoading) {
+                $refreshOpenAIModels.prop('disabled', false);
+                $refreshOpenAIModels.html(`<span class="bx bx-refresh"></span>`);
+            }
+        }
+    }
+    
+    /**
+     * Refreshes the list of Anthropic models
+     * @param showLoading Whether to show loading indicators and toasts
+     * @returns Promise that resolves when the refresh is complete
+     */
+    async refreshAnthropicModels(showLoading: boolean): Promise<void> {
+        if (!this.$widget) return;
+        
+        const $refreshAnthropicModels = this.$widget.find('.refresh-anthropic-models');
+        
+        // If we've already refreshed and we're not forcing a refresh, don't do it again
+        if (this.anthropicModelsRefreshed && !showLoading) {
+            return;
+        }
+        
+        if (showLoading) {
+            $refreshAnthropicModels.prop('disabled', true);
+            $refreshAnthropicModels.html(`<i class="spinner-border spinner-border-sm"></i>`);
+        }
+
+        try {
+            const anthropicBaseUrl = this.$widget.find('.anthropic-base-url').val() as string;
+            const response = await server.post<AnthropicModelResponse>('anthropic/list-models', { baseUrl: anthropicBaseUrl });
+
+            if (response && response.success) {
+                // Update the chat models dropdown
+                if (response.chatModels?.length > 0) {
+                    const $chatModelSelect = this.$widget.find('.anthropic-default-model');
+                    const currentChatValue = $chatModelSelect.val();
+
+                    // Clear existing options
+                    $chatModelSelect.empty();
+
+                    // Sort models by name
+                    const sortedChatModels = [...response.chatModels].sort((a, b) => a.name.localeCompare(b.name));
+
+                    // Add models to the dropdown
+                    sortedChatModels.forEach(model => {
+                        $chatModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
+                    });
+
+                    // Try to restore the previously selected value
+                    if (currentChatValue) {
+                        $chatModelSelect.val(currentChatValue);
+                        // If the value doesn't exist anymore, select the first option
+                        if (!$chatModelSelect.val()) {
+                            $chatModelSelect.prop('selectedIndex', 0);
+                        }
+                    }
+                }
+
+                // Handle embedding models if they exist
+                if (response.embeddingModels?.length > 0 && showLoading) {
+                    toastService.showMessage(`Found ${response.embeddingModels.length} Anthropic embedding models.`);
+                }
+
+                if (showLoading) {
+                    // Show success message
+                    const totalModels = (response.chatModels?.length || 0) + (response.embeddingModels?.length || 0);
+                    toastService.showMessage(`${totalModels} Anthropic models found.`);
+                }
+                
+                // Mark that we've refreshed the models
+                this.anthropicModelsRefreshed = true;
+            } else if (showLoading) {
+                toastService.showError(`No Anthropic models found. Please check your API key and settings.`);
+            }
+        } catch (e) {
+            console.error(`Error fetching Anthropic models:`, e);
+            if (showLoading) {
+                toastService.showError(`Error fetching Anthropic models: ${e}`);
+            }
+        } finally {
+            if (showLoading) {
+                $refreshAnthropicModels.prop('disabled', false);
+                $refreshAnthropicModels.html(`<span class="bx bx-refresh"></span>`);
+            }
+        }
+    }
     
     /**
      * Refreshes the list of Ollama models
@@ -655,136 +838,27 @@ export default class AiSettingsWidget extends OptionsWidget {
         // OpenAI models refresh button
         const $refreshOpenAIModels = this.$widget.find('.refresh-openai-models');
         $refreshOpenAIModels.on('click', async () => {
-            $refreshOpenAIModels.prop('disabled', true);
-            $refreshOpenAIModels.html(`<i class="spinner-border spinner-border-sm"></i>`);
-
-            try {
-                const openaiBaseUrl = this.$widget.find('.openai-base-url').val() as string;
-                const response = await server.post<OpenAIModelResponse>('openai/list-models', { baseUrl: openaiBaseUrl });
-
-                if (response && response.success) {
-                    // Update the chat models dropdown
-                    if (response.chatModels?.length > 0) {
-                        const $chatModelSelect = this.$widget.find('.openai-default-model');
-                        const currentChatValue = $chatModelSelect.val();
-
-                        // Clear existing options
-                        $chatModelSelect.empty();
-
-                        // Sort models by name
-                        const sortedChatModels = [...response.chatModels].sort((a, b) => a.name.localeCompare(b.name));
-
-                        // Add models to the dropdown
-                        sortedChatModels.forEach(model => {
-                            $chatModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
-                        });
-
-                        // Try to restore the previously selected value
-                        if (currentChatValue) {
-                            $chatModelSelect.val(currentChatValue);
-                            // If the value doesn't exist anymore, select the first option
-                            if (!$chatModelSelect.val()) {
-                                $chatModelSelect.prop('selectedIndex', 0);
-                            }
-                        }
-                    }
-
-                    // Update the embedding models dropdown
-                    if (response.embeddingModels?.length > 0) {
-                        const $embedModelSelect = this.$widget.find('.openai-embedding-model');
-                        const currentEmbedValue = $embedModelSelect.val();
-
-                        // Clear existing options
-                        $embedModelSelect.empty();
-
-                        // Sort models by name
-                        const sortedEmbedModels = [...response.embeddingModels].sort((a, b) => a.name.localeCompare(b.name));
-
-                        // Add models to the dropdown
-                        sortedEmbedModels.forEach(model => {
-                            $embedModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
-                        });
-
-                        // Try to restore the previously selected value
-                        if (currentEmbedValue) {
-                            $embedModelSelect.val(currentEmbedValue);
-                            // If the value doesn't exist anymore, select the first option
-                            if (!$embedModelSelect.val()) {
-                                $embedModelSelect.prop('selectedIndex', 0);
-                            }
-                        }
-                    }
-
-                    // Show success message
-                    const totalModels = (response.chatModels?.length || 0) + (response.embeddingModels?.length || 0);
-                    toastService.showMessage(`${totalModels} OpenAI models found.`);
-                } else {
-                    toastService.showError(`No OpenAI models found. Please check your API key and settings.`);
-                }
-            } catch (e) {
-                console.error(`Error fetching OpenAI models:`, e);
-                toastService.showError(`Error fetching OpenAI models: ${e}`);
-            } finally {
-                $refreshOpenAIModels.prop('disabled', false);
-                $refreshOpenAIModels.html(`<span class="bx bx-refresh"></span>`);
-            }
+            await this.refreshOpenAIModels(true);
+        });
+        
+        // Add tab change handler for OpenAI tab
+        const $openaiTab = this.$widget.find('#nav-openai-tab');
+        $openaiTab.on('shown.bs.tab', async () => {
+            // Only refresh the models if we haven't done it before
+            await this.refreshOpenAIModels(false);
         });
 
         // Anthropic models refresh button
         const $refreshAnthropicModels = this.$widget.find('.refresh-anthropic-models');
         $refreshAnthropicModels.on('click', async () => {
-            $refreshAnthropicModels.prop('disabled', true);
-            $refreshAnthropicModels.html(`<i class="spinner-border spinner-border-sm"></i>`);
-
-            try {
-                const anthropicBaseUrl = this.$widget.find('.anthropic-base-url').val() as string;
-                const response = await server.post<AnthropicModelResponse>('anthropic/list-models', { baseUrl: anthropicBaseUrl });
-
-                if (response && response.success) {
-                    // Update the chat models dropdown
-                    if (response.chatModels?.length > 0) {
-                        const $chatModelSelect = this.$widget.find('.anthropic-default-model');
-                        const currentChatValue = $chatModelSelect.val();
-
-                        // Clear existing options
-                        $chatModelSelect.empty();
-
-                        // Sort models by name
-                        const sortedChatModels = [...response.chatModels].sort((a, b) => a.name.localeCompare(b.name));
-
-                        // Add models to the dropdown
-                        sortedChatModels.forEach(model => {
-                            $chatModelSelect.append(`<option value="${model.id}">${model.name}</option>`);
-                        });
-
-                        // Try to restore the previously selected value
-                        if (currentChatValue) {
-                            $chatModelSelect.val(currentChatValue);
-                            // If the value doesn't exist anymore, select the first option
-                            if (!$chatModelSelect.val()) {
-                                $chatModelSelect.prop('selectedIndex', 0);
-                            }
-                        }
-                    }
-
-                    // Handle embedding models if they exist
-                    if (response.embeddingModels?.length > 0) {
-                        toastService.showMessage(`Found ${response.embeddingModels.length} Anthropic embedding models.`);
-                    }
-
-                    // Show success message
-                    const totalModels = (response.chatModels?.length || 0) + (response.embeddingModels?.length || 0);
-                    toastService.showMessage(`${totalModels} Anthropic models found.`);
-                } else {
-                    toastService.showError(`No Anthropic models found. Please check your API key and settings.`);
-                }
-            } catch (e) {
-                console.error(`Error fetching Anthropic models:`, e);
-                toastService.showError(`Error fetching Anthropic models: ${e}`);
-            } finally {
-                $refreshAnthropicModels.prop('disabled', false);
-                $refreshAnthropicModels.html(`<span class="bx bx-refresh"></span>`);
-            }
+            await this.refreshAnthropicModels(true);
+        });
+        
+        // Add tab change handler for Anthropic tab
+        const $anthropicTab = this.$widget.find('#nav-anthropic-tab');
+        $anthropicTab.on('shown.bs.tab', async () => {
+            // Only refresh the models if we haven't done it before
+            await this.refreshAnthropicModels(false);
         });
 
         // Embedding options event handlers
