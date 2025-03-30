@@ -4,6 +4,7 @@ import sql from "../../../sql.js";
 import becca from "../../../../becca/becca.js";
 import cls from "../../../../services/cls.js";
 import type { NoteEmbeddingContext } from "../types.js";
+import { LLM_CONSTANTS } from "../../../llm/constants/provider_constants.js";
 // Remove static imports that cause circular dependencies
 // import { storeNoteEmbedding, deleteNoteEmbeddings } from "./storage.js";
 
@@ -120,8 +121,8 @@ export async function processNoteWithChunking(
             {
                 // Adjust chunk size based on provider using constants
                 maxChunkSize: provider.name === 'ollama' ?
-                    (await import('../../../llm/constants/provider_constants.js')).LLM_CONSTANTS.CHUNKING.OLLAMA_SIZE :
-                    (await import('../../../llm/constants/provider_constants.js')).LLM_CONSTANTS.CHUNKING.DEFAULT_SIZE,
+                    LLM_CONSTANTS.CHUNKING.OLLAMA_SIZE :
+                    LLM_CONSTANTS.CHUNKING.DEFAULT_SIZE,
                 respectBoundaries: true
             }
         );

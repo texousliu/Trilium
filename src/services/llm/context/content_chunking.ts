@@ -50,8 +50,8 @@ export interface ChunkOptions {
  * Default options for chunking
  */
 async function getDefaultChunkOptions(): Promise<Required<ChunkOptions>> {
-    // Import constants dynamically to avoid circular dependencies
-    const { LLM_CONSTANTS } = await import('../../../routes/api/llm.js');
+    // Import constants directly
+    const { LLM_CONSTANTS } = await import('../constants/provider_constants.js');
 
     return {
         maxChunkSize: LLM_CONSTANTS.CHUNKING.DEFAULT_SIZE,

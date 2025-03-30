@@ -37,8 +37,8 @@ export async function cleanNoteContent(content: string, type: string, mime: stri
     // Trim the content
     content = content.trim();
 
-    // Import constants dynamically to avoid circular dependencies
-    const { LLM_CONSTANTS } = await import('../../../routes/api/llm.js');
+    // Import constants directly
+    const { LLM_CONSTANTS } = await import('../constants/provider_constants.js');
     // Truncate if extremely long
     if (content.length > LLM_CONSTANTS.CONTENT.MAX_TOTAL_CONTENT_LENGTH) {
         content = content.substring(0, LLM_CONSTANTS.CONTENT.MAX_TOTAL_CONTENT_LENGTH) + ' [content truncated]';
