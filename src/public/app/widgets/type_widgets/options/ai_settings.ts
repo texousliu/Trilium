@@ -432,6 +432,114 @@ const TPL = `
 </div>`;
 
 export default class AiSettingsWidget extends OptionsWidget {
+    private ollamaModelsRefreshed = false;
+    
+    /**
+     * Refreshes the list of Ollama models
+     * @param showLoading Whether to show loading indicators and toasts
+     * @returns Promise that resolves when the refresh is complete
+     */
+    async refreshOllamaModels(showLoading: boolean): Promise<void> {
+        if (!this.$widget) return;
+        
+        const $refreshModels = this.$widget.find('.refresh-models');
+        
+        // If we've already refreshed and we're not forcing a refresh, don't do it again
+        if (this.ollamaModelsRefreshed && !showLoading) {
+            return;
+        }
+        
+        if (showLoading) {
+            $refreshModels.prop('disabled', true);
+            $refreshModels.text(t("ai_llm.refreshing_models"));
+        }
+
+        try {
+            const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
+            const response = await server.post<OllamaModelResponse>('ollama/list-models', { baseUrl: ollamaBaseUrl });
+
+            if (response && response.success && response.models && response.models.length > 0) {
+                const $embedModelSelect = this.$widget.find('.ollama-embedding-model');
+                const currentValue = $embedModelSelect.val();
+
+                // Clear existing options
+                $embedModelSelect.empty();
+
+                // Add embedding-specific models first
+                const embeddingModels = response.models.filter(model =>
+                    model.name.includes('embed') || model.name.includes('bert'));
+
+                embeddingModels.forEach(model => {
+                    $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                });
+
+                if (embeddingModels.length > 0) {
+                    // Add separator if we have embedding models
+                    $embedModelSelect.append(`<option disabled>─────────────</option>`);
+                }
+
+                // Then add general models which can be used for embeddings too
+                const generalModels = response.models.filter(model =>
+                    !model.name.includes('embed') && !model.name.includes('bert'));
+
+                generalModels.forEach(model => {
+                    $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                });
+
+                // Try to restore the previously selected value
+                if (currentValue) {
+                    $embedModelSelect.val(currentValue);
+                    // If the value doesn't exist anymore, select the first option
+                    if (!$embedModelSelect.val()) {
+                        $embedModelSelect.prop('selectedIndex', 0);
+                    }
+                }
+
+                // Also update the LLM model dropdown
+                const $modelSelect = this.$widget.find('.ollama-default-model');
+                const currentModelValue = $modelSelect.val();
+
+                // Clear existing options
+                $modelSelect.empty();
+
+                // Sort models by name to make them easier to find
+                const sortedModels = [...response.models].sort((a, b) => a.name.localeCompare(b.name));
+
+                // Add all models to the dropdown
+                sortedModels.forEach(model => {
+                    $modelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                });
+
+                // Try to restore the previously selected value
+                if (currentModelValue) {
+                    $modelSelect.val(currentModelValue);
+                    // If the value doesn't exist anymore, select the first option
+                    if (!$modelSelect.val()) {
+                        $modelSelect.prop('selectedIndex', 0);
+                    }
+                }
+
+                if (showLoading) {
+                    toastService.showMessage(`${response.models.length} Ollama models found.`);
+                }
+                
+                // Mark that we've refreshed the models
+                this.ollamaModelsRefreshed = true;
+            } else if (showLoading) {
+                toastService.showError(`No Ollama models found. Please check if Ollama is running.`);
+            }
+        } catch (e) {
+            console.error(`Error fetching Ollama models:`, e);
+            if (showLoading) {
+                toastService.showError(`Error fetching Ollama models: ${e}`);
+            }
+        } finally {
+            if (showLoading) {
+                $refreshModels.prop('disabled', false);
+                $refreshModels.html(`<span class="bx bx-refresh"></span>`);
+            }
+        }
+    }
     private statsRefreshInterval: NodeJS.Timeout | null = null;
     private indexRebuildRefreshInterval: NodeJS.Timeout | null = null;
     private readonly STATS_REFRESH_INTERVAL = 5000; // 5 seconds
@@ -534,85 +642,14 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         const $refreshModels = this.$widget.find('.refresh-models');
         $refreshModels.on('click', async () => {
-            $refreshModels.prop('disabled', true);
-            $refreshModels.text(t("ai_llm.refreshing_models"));
-
-            try {
-                const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
-                const response = await server.post<OllamaModelResponse>('ollama/list-models', { baseUrl: ollamaBaseUrl });
-
-                if (response && response.success && response.models && response.models.length > 0) {
-                    const $embedModelSelect = this.$widget.find('.ollama-embedding-model');
-                    const currentValue = $embedModelSelect.val();
-
-                    // Clear existing options
-                    $embedModelSelect.empty();
-
-                    // Add embedding-specific models first
-                    const embeddingModels = response.models.filter(model =>
-                        model.name.includes('embed') || model.name.includes('bert'));
-
-                    embeddingModels.forEach(model => {
-                        $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
-                    });
-
-                    if (embeddingModels.length > 0) {
-                        // Add separator if we have embedding models
-                        $embedModelSelect.append(`<option disabled>─────────────</option>`);
-                    }
-
-                    // Then add general models which can be used for embeddings too
-                    const generalModels = response.models.filter(model =>
-                        !model.name.includes('embed') && !model.name.includes('bert'));
-
-                    generalModels.forEach(model => {
-                        $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
-                    });
-
-                    // Try to restore the previously selected value
-                    if (currentValue) {
-                        $embedModelSelect.val(currentValue);
-                        // If the value doesn't exist anymore, select the first option
-                        if (!$embedModelSelect.val()) {
-                            $embedModelSelect.prop('selectedIndex', 0);
-                        }
-                    }
-
-                    // Also update the LLM model dropdown
-                    const $modelSelect = this.$widget.find('.ollama-default-model');
-                    const currentModelValue = $modelSelect.val();
-
-                    // Clear existing options
-                    $modelSelect.empty();
-
-                    // Sort models by name to make them easier to find
-                    const sortedModels = [...response.models].sort((a, b) => a.name.localeCompare(b.name));
-
-                    // Add all models to the dropdown
-                    sortedModels.forEach(model => {
-                        $modelSelect.append(`<option value="${model.name}">${model.name}</option>`);
-                    });
-
-                    // Try to restore the previously selected value
-                    if (currentModelValue) {
-                        $modelSelect.val(currentModelValue);
-                        // If the value doesn't exist anymore, select the first option
-                        if (!$modelSelect.val()) {
-                            $modelSelect.prop('selectedIndex', 0);
-                        }
-                    }
-
-                    toastService.showMessage(`${response.models.length} Ollama models found.`);
-                } else {
-                    toastService.showError(`No Ollama models found. Please check if Ollama is running.`);
-                }
-            } catch (e) {
-                console.error(`Error fetching Ollama models:`, e);
-                toastService.showError(`Error fetching Ollama models: ${e}`);
-            } finally {
-                $refreshModels.prop('disabled', false);
-                $refreshModels.html(`<span class="bx bx-refresh"></span>`);
-            }
+            await this.refreshOllamaModels(true);
+        });
+        
+        // Add tab change handler for Ollama tab
+        const $ollamaTab = this.$widget.find('#nav-ollama-tab');
+        $ollamaTab.on('shown.bs.tab', async () => {
+            // Only refresh the models if we haven't done it before
+            await this.refreshOllamaModels(false);
         });
 
         // OpenAI models refresh button
