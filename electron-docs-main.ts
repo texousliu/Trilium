@@ -7,7 +7,7 @@ import { initializeTranslations } from "./src/services/i18n.js";
 import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
 import debounce from "./src/public/app/services/debounce.js";
-import { importData, initializeDatabase, startElectron } from "./electron-utils.js";
+import { extractZip, importData, initializeDatabase, startElectron } from "./electron-utils.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
 const markdownPath = path.join("docs", "User Guide");
@@ -52,8 +52,6 @@ function waitForEnd(archive: Archiver, stream: WriteStream) {
 async function exportData(format: "html" | "markdown", outputPath: string) {
     const zipFilePath = "output.zip";
 
-    const deferred = (await import("./src/services/utils.js")).deferred;
-
     try {
         await fsExtra.remove(outputPath);
         await fsExtra.mkdir(outputPath);
@@ -61,26 +59,7 @@ async function exportData(format: "html" | "markdown", outputPath: string) {
         // First export as zip.
         const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
         await exportToZipFile(NOTE_ID_USER_GUIDE, format, zipFilePath);
-
-        const promise = deferred<void>()
-        setTimeout(async () => {
-            // Then extract the zip.
-            const { readZipFile, readContent } = (await import("./src/services/import/zip.js"));
-            await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
-                // We ignore directories since they can appear out of order anyway.
-                if (!entry.fileName.endsWith("/")) {
-                    const destPath = path.join(outputPath, entry.fileName);
-                    const fileContent = await readContent(zip, entry);
-
-                    await fsExtra.mkdirs(path.dirname(destPath));
-                    await fs.writeFile(destPath, fileContent);
-                }
-
-                zip.readEntry();
-            });
-            promise.resolve();
-        }, 1000);
-        await promise;
+        await extractZip(zipFilePath, outputPath);
     } finally {
         if (await fsExtra.exists(zipFilePath)) {
             await fsExtra.rm(zipFilePath);

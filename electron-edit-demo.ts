@@ -1,4 +1,4 @@
-import { importData, initializeDatabase, startElectron } from "./electron-utils.js";
+import { extractZip, importData, initializeDatabase, startElectron } from "./electron-utils.js";
 import { initializeTranslations } from "./src/services/i18n.js";
 import fs from "fs";
 import debounce from "./src/public/app/services/debounce.js";
@@ -24,7 +24,8 @@ async function registerHandlers() {
         console.log("Exporting data");
         eraseService.eraseUnusedAttachmentsNow();
         await exportData();
-    }, 10_000);;
+        await extractZip(DEMO_ZIP_PATH, "demo");
+    }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
             return;
