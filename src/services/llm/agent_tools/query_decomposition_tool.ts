@@ -14,6 +14,7 @@
 
 import log from '../../log.js';
 import { AGENT_TOOL_PROMPTS } from '../constants/llm_prompt_constants.js';
+import { QUERY_DECOMPOSITION_STRINGS } from '../constants/query_decomposition_constants.js';
 
 export interface SubQuery {
     id: string;
@@ -43,10 +44,10 @@ export class QueryDecompositionTool {
     decomposeQuery(query: string, context?: string): DecomposedQuery {
         try {
             // Log the decomposition attempt for tracking
-            log.info(`Decomposing query: "${query.substring(0, 100)}..."`);
+            log.info(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.DECOMPOSING_QUERY(query));
 
             if (!query || query.trim().length === 0) {
-                log.info("Query decomposition called with empty query");
+                log.info(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.EMPTY_QUERY);
                 return {
                     originalQuery: query,
                     subQueries: [],
@@ -57,12 +58,12 @@ export class QueryDecompositionTool {
 
             // Assess query complexity to determine if decomposition is needed
             const complexity = this.assessQueryComplexity(query);
-            log.info(`Query complexity assessment: ${complexity}/10`);
+            log.info(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.COMPLEXITY_ASSESSMENT(complexity));
 
             // For simple queries, just return the original as a single sub-query
             // Use a lower threshold (2 instead of 3) to decompose more queries
             if (complexity < 2) {
-                log.info(`Query is simple (complexity ${complexity}), returning as single sub-query`);
+                log.info(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.SIMPLE_QUERY(complexity));
 
                 const mainSubQuery = {
                     id: this.generateSubQueryId(),
@@ -74,7 +75,7 @@ export class QueryDecompositionTool {
                 // Still add a generic exploration query to get some related content
                 const genericQuery = {
                     id: this.generateSubQueryId(),
-                    text: `Information related to ${query}`,
+                    text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.INFORMATION_RELATED(query),
                     reason: AGENT_TOOL_PROMPTS.QUERY_DECOMPOSITION.SUB_QUERY_GENERIC,
                     isAnswered: false
                 };
@@ -89,11 +90,11 @@ export class QueryDecompositionTool {
 
             // For complex queries, perform decomposition
             const subQueries = this.createSubQueries(query, context);
-            log.info(`Decomposed query into ${subQueries.length} sub-queries`);
+            log.info(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.DECOMPOSED_INTO(subQueries.length));
 
             // Log the sub-queries for better visibility
             subQueries.forEach((sq, index) => {
-                log.info(`Sub-query ${index + 1}: "${sq.text}" - Reason: ${sq.reason}`);
+                log.info(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.SUB_QUERY_LOG(index, sq.text, sq.reason));
             });
 
             return {
@@ -103,7 +104,7 @@ export class QueryDecompositionTool {
                 complexity
             };
         } catch (error: any) {
-            log.error(`Error decomposing query: ${error.message}`);
+            log.error(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.ERROR_DECOMPOSING(error.message));
 
             // Fallback to treating it as a simple query
             return {
@@ -164,7 +165,7 @@ export class QueryDecompositionTool {
         try {
             // Ensure all sub-queries are answered
             if (!decomposedQuery.subQueries.every(sq => sq.isAnswered)) {
-                return "Cannot synthesize answer - not all sub-queries have been answered.";
+                return QUERY_DECOMPOSITION_STRINGS.SYNTHESIS_TEMPLATES.CANNOT_SYNTHESIZE;
             }
 
             // For simple queries with just one sub-query, return the answer directly
@@ -173,12 +174,12 @@ export class QueryDecompositionTool {
             }
 
             // For complex queries, build a structured response that references each sub-answer
-            let synthesized = `Answer to: "${decomposedQuery.originalQuery}"\n\n`;
+            let synthesized = QUERY_DECOMPOSITION_STRINGS.SYNTHESIS_TEMPLATES.ANSWER_TO(decomposedQuery.originalQuery);
 
             // Group by themes if there are many sub-queries
             if (decomposedQuery.subQueries.length > 3) {
                 // Here we would ideally group related sub-queries, but for now we'll just present them in order
-                synthesized += "Based on the information gathered:\n\n";
+                synthesized += QUERY_DECOMPOSITION_STRINGS.SYNTHESIS_TEMPLATES.BASED_ON_INFORMATION;
 
                 for (const sq of decomposedQuery.subQueries) {
                     synthesized += `${sq.answer}\n\n`;
@@ -192,8 +193,8 @@ export class QueryDecompositionTool {
 
             return synthesized.trim();
         } catch (error: any) {
-            log.error(`Error synthesizing answer: ${error.message}`);
-            return "Error synthesizing the final answer.";
+            log.error(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.ERROR_SYNTHESIZING(error.message));
+            return QUERY_DECOMPOSITION_STRINGS.SYNTHESIS_TEMPLATES.ERROR_SYNTHESIZING;
         }
     }
 
@@ -207,12 +208,12 @@ export class QueryDecompositionTool {
         const answeredCount = decomposedQuery.subQueries.filter(sq => sq.isAnswered).length;
         const totalCount = decomposedQuery.subQueries.length;
 
-        let status = `Progress: ${answeredCount}/${totalCount} sub-queries answered\n\n`;
+        let status = QUERY_DECOMPOSITION_STRINGS.STATUS_TEMPLATES.PROGRESS(answeredCount, totalCount);
 
         for (const sq of decomposedQuery.subQueries) {
-            status += `${sq.isAnswered ? '✓' : '○'} ${sq.text}\n`;
+            status += `${sq.isAnswered ? QUERY_DECOMPOSITION_STRINGS.STATUS_TEMPLATES.ANSWERED_MARKER : QUERY_DECOMPOSITION_STRINGS.STATUS_TEMPLATES.UNANSWERED_MARKER} ${sq.text}\n`;
             if (sq.isAnswered) {
-                status += `   Answer: ${this.truncateText(sq.answer || "", 100)}\n`;
+                status += `${QUERY_DECOMPOSITION_STRINGS.STATUS_TEMPLATES.ANSWER_PREFIX}${this.truncateText(sq.answer || "", 100)}\n`;
             }
         }
 
@@ -231,8 +232,7 @@ export class QueryDecompositionTool {
         const questionMarkCount = (query.match(/\?/g) || []).length;
 
         // Count potential sub-questions based on question words
-        const questionWords = ['what', 'how', 'why', 'where', 'when', 'who', 'which'];
-        const questionWordMatches = questionWords.map(word => {
+        const questionWordMatches = QUERY_DECOMPOSITION_STRINGS.QUESTION_WORDS.map(word => {
             const regex = new RegExp(`\\b${word}\\b`, 'gi');
             return (query.match(regex) || []).length;
         });
@@ -240,11 +240,15 @@ export class QueryDecompositionTool {
         const questionWordCount = questionWordMatches.reduce((sum, count) => sum + count, 0);
 
         // Look for conjunctions which might join multiple questions
-        const conjunctionCount = (query.match(/\b(and|or|but|as well as)\b/gi) || []).length;
+        const conjunctionPattern = new RegExp(`\\b(${QUERY_DECOMPOSITION_STRINGS.CONJUNCTIONS.join('|')})\\b`, 'gi');
+        const conjunctionCount = (query.match(conjunctionPattern) || []).length;
 
         // Look for complex requirements
-        const comparisonCount = (query.match(/\b(compare|versus|vs|difference|similarities?)\b/gi) || []).length;
-        const analysisCount = (query.match(/\b(analyze|examine|investigate|explore|explain|discuss)\b/gi) || []).length;
+        const comparisonPattern = new RegExp(`\\b(${QUERY_DECOMPOSITION_STRINGS.COMPARISON_TERMS.join('|')})\\b`, 'gi');
+        const comparisonCount = (query.match(comparisonPattern) || []).length;
+
+        const analysisPattern = new RegExp(`\\b(${QUERY_DECOMPOSITION_STRINGS.ANALYSIS_TERMS.join('|')})\\b`, 'gi');
+        const analysisCount = (query.match(analysisPattern) || []).length;
 
         // Calculate base complexity
         let complexity = 1;
@@ -285,9 +289,9 @@ export class QueryDecompositionTool {
 
         // Avoid creating subqueries that start with "Provide details about" or similar
         // as these have been causing recursive loops
-        if (query.toLowerCase().includes("provide details about") ||
-            query.toLowerCase().includes("information related to")) {
-            log.info(`Avoiding recursive subqueries for query "${query.substring(0, 50)}..."`);
+        if (query.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.PROVIDE_DETAILS_ABOUT) ||
+            query.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.INFORMATION_RELATED_TO)) {
+            log.info(QUERY_DECOMPOSITION_STRINGS.LOG_MESSAGES.AVOIDING_RECURSIVE(query));
             return [{
                 id: this.generateSubQueryId(),
                 text: query,
@@ -306,10 +310,10 @@ export class QueryDecompositionTool {
 
         // Check for "compare", "difference", "versus" to identify comparison questions
         if (
-            query.toLowerCase().includes('compare') ||
-            query.toLowerCase().includes('difference between') ||
-            query.toLowerCase().includes(' vs ') ||
-            query.toLowerCase().includes('versus')
+            query.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.COMPARE) ||
+            query.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.DIFFERENCE_BETWEEN) ||
+            query.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.VS) ||
+            query.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.VERSUS)
         ) {
             // Extract entities to compare (simplified approach)
             const entities = this.extractEntitiesForComparison(query);
@@ -319,8 +323,8 @@ export class QueryDecompositionTool {
                 entities.forEach(entity => {
                     subQueries.push({
                         id: this.generateSubQueryId(),
-                        text: `What are the key characteristics of ${entity}?`,
-                        reason: `Getting details about "${entity}" for comparison`,
+                        text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.KEY_CHARACTERISTICS(entity),
+                        reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.GETTING_DETAILS(entity),
                         isAnswered: false
                     });
                 });
@@ -328,63 +332,64 @@ export class QueryDecompositionTool {
                 // Add explicit comparison sub-query
                 subQueries.push({
                     id: this.generateSubQueryId(),
-                    text: `How do ${entities.join(' and ')} compare in terms of their primary features?`,
-                    reason: 'Direct comparison of the entities',
+                    text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.COMPARISON_FEATURES(entities),
+                    reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.DIRECT_COMPARISON,
                     isAnswered: false
                 });
             }
         }
         // Check for "how to" questions
-        else if (query.toLowerCase().includes('how to ')) {
+        else if (query.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.HOW_TO)) {
             const topic = query.replace(/how to /i, '').trim();
 
             subQueries.push({
                 id: this.generateSubQueryId(),
-                text: `What are the steps to ${topic}?`,
-                reason: 'Finding procedural information',
+                text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.STEPS_TO(topic),
+                reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.FINDING_PROCEDURAL,
                 isAnswered: false
             });
 
             subQueries.push({
                 id: this.generateSubQueryId(),
-                text: `What are common challenges or pitfalls when trying to ${topic}?`,
-                reason: 'Identifying potential difficulties',
+                text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.CHALLENGES(topic),
+                reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.IDENTIFYING_DIFFICULTIES,
                 isAnswered: false
             });
         }
         // Check for "why" questions
-        else if (query.toLowerCase().startsWith('why ')) {
+        else if (query.toLowerCase().startsWith(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.WHY)) {
             const topic = query.replace(/why /i, '').trim();
 
             subQueries.push({
                 id: this.generateSubQueryId(),
-                text: `What are the causes of ${topic}?`,
-                reason: 'Identifying causes',
+                text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.CAUSES(topic),
+                reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.IDENTIFYING_CAUSES,
                 isAnswered: false
             });
 
             subQueries.push({
                 id: this.generateSubQueryId(),
-                text: `What evidence supports explanations for ${topic}?`,
-                reason: 'Finding supporting evidence',
+                text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.EVIDENCE(topic),
+                reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.FINDING_EVIDENCE,
                 isAnswered: false
             });
         }
         // Handle "what is" questions
-        else if (query.toLowerCase().startsWith('what is ') || query.toLowerCase().startsWith('what are ')) {
+        else if (query.toLowerCase().startsWith(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.WHAT_IS) ||
+                 query.toLowerCase().startsWith(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.WHAT_ARE)) {
             const topic = query.replace(/what (is|are) /i, '').trim().replace(/\?$/, '');
 
             subQueries.push({
                 id: this.generateSubQueryId(),
-                text: `Definition of ${topic}`,
-                reason: 'Getting basic definition',
+                text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.DEFINITION(topic),
+                reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.GETTING_DEFINITION,
                 isAnswered: false
             });
 
             subQueries.push({
                 id: this.generateSubQueryId(),
-                text: `Examples of ${topic}`,
-                reason: 'Finding examples',
+                text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.EXAMPLES(topic),
+                reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.FINDING_EXAMPLES,
                 isAnswered: false
             });
         }
@@ -397,12 +402,12 @@ export class QueryDecompositionTool {
 
             concepts.forEach(concept => {
                 // Don't create recursive or self-referential queries
-                if (!concept.toLowerCase().includes('provide details') &&
-                    !concept.toLowerCase().includes('information related')) {
+                if (!concept.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.PROVIDE_DETAILS_ABOUT) &&
+                    !concept.toLowerCase().includes(QUERY_DECOMPOSITION_STRINGS.QUERY_PATTERNS.INFORMATION_RELATED_TO)) {
                     subQueries.push({
                         id: this.generateSubQueryId(),
-                        text: `Key information about ${concept}`,
-                        reason: `Finding information about "${concept}"`,
+                        text: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_TEMPLATES.KEY_INFORMATION(concept),
+                        reason: QUERY_DECOMPOSITION_STRINGS.SUB_QUERY_REASONS.FINDING_INFORMATION(concept),
                         isAnswered: false
                     });
                 }
@@ -444,7 +449,8 @@ export class QueryDecompositionTool {
 
         for (const word of words) {
             // Skip common words that are unlikely to be part of entity names
-            if (/^(the|of|and|or|vs|versus|between|comparison|compared|to|with|what|is|are|how|why|when|which)$/i.test(word)) {
+            const stopWordsPattern = new RegExp(`^(${QUERY_DECOMPOSITION_STRINGS.STOP_WORDS.join('|')})$`, 'i');
+            if (stopWordsPattern.test(word)) {
                 if (currentPhrase.trim()) {
                     potentialEntities.push(currentPhrase.trim());
                     currentPhrase = '';
@@ -470,7 +476,8 @@ export class QueryDecompositionTool {
      */
     extractMainConcepts(query: string): string[] {
         // Remove question words and common stop words
-        const cleanedQuery = query.replace(/what|is|are|how|why|when|which|the|of|and|or|to|with|in|on|by/gi, ' ');
+        const stopWordsPattern = new RegExp(QUERY_DECOMPOSITION_STRINGS.STOP_WORDS.join('|'), 'gi');
+        const cleanedQuery = query.replace(stopWordsPattern, ' ');
 
         // Split into words and filter out short words
         const words = cleanedQuery.split(/\s+/).filter(word => word.length > 3);
