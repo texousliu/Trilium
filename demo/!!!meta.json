@@ -22,15 +22,61 @@
 			"children": [
 				{
 					"isClone": false,
+					"noteId": "b2Cw0wRZwhGF",
+					"notePath": [
+						"demo",
+						"b2Cw0wRZwhGF"
+					],
+					"title": "Journal",
+					"notePosition": 10,
+					"prefix": null,
+					"isExpanded": true,
+					"type": "book",
+					"mime": "",
+					"attributes": [
+						{
+							"type": "label",
+							"name": "calendarRoot",
+							"value": "",
+							"isInheritable": false,
+							"position": 10
+						},
+						{
+							"type": "label",
+							"name": "iconClass",
+							"value": "bx bx-calendar",
+							"isInheritable": false,
+							"position": 20
+						},
+						{
+							"type": "label",
+							"name": "viewType",
+							"value": "calendar",
+							"isInheritable": false,
+							"position": 30
+						},
+						{
+							"type": "label",
+							"name": "calendar:view",
+							"value": "dayGridMonth",
+							"isInheritable": false,
+							"position": 40
+						}
+					],
+					"dataFileName": "Journal.dat",
+					"attachments": []
+				},
+				{
+					"isClone": false,
 					"noteId": "a7yCTKQIErXa",
 					"notePath": [
 						"demo",
 						"a7yCTKQIErXa"
 					],
 					"title": "Trilium Demo",
-					"notePosition": 10,
+					"notePosition": 20,
 					"prefix": null,
-					"isExpanded": true,
+					"isExpanded": false,
 					"type": "text",
 					"mime": "text/html",
 					"attributes": [
@@ -396,31 +442,24 @@
 							"attributes": [
 								{
 									"type": "label",
-									"name": "calendarRoot",
-									"value": "",
-									"isInheritable": false,
-									"position": 10
-								},
-								{
-									"type": "label",
 									"name": "sorted",
 									"value": "",
 									"isInheritable": false,
-									"position": 20
+									"position": 10
 								},
 								{
 									"type": "relation",
 									"name": "child:child:child:template",
 									"value": "5eodYKrtOg6v",
 									"isInheritable": false,
-									"position": 30
+									"position": 20
 								},
 								{
 									"type": "label",
 									"name": "iconClass",
 									"value": "bx bx-calendar",
 									"isInheritable": false,
-									"position": 40
+									"position": 30
 								}
 							],
 							"format": "html",
