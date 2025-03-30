@@ -56,6 +56,10 @@ const TPL = `<div class="note-detail-content-widget note-detail-printable">
             padding: 15px;
             height: 100%;
         }
+
+        .note-detail.full-height .note-detail-content-widget-content {
+            padding: 0;
+        }
     </style>
 
     <div class="note-detail-content-widget-content"></div>
