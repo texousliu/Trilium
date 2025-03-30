@@ -256,5 +256,8 @@
     "webpack": "5.98.0",
     "webpack-cli": "6.0.1",
     "webpack-dev-middleware": "7.4.2"
+  },
+  "optionalDependencies": {
+    "appdmg": "0.6.6"
   }
 }
