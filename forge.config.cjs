@@ -169,7 +169,7 @@ module.exports = {
                     // Override the extension for the CI.
                     const { TRILIUM_ARTIFACT_NAME_HINT } = process.env;
                     if (TRILIUM_ARTIFACT_NAME_HINT) {
-                        fileName = TRILIUM_ARTIFACT_NAME_HINT + extension;
+                        fileName = TRILIUM_ARTIFACT_NAME_HINT.replaceAll("/", "-") + extension;
                     }
         
                     const outputPath = path.join(outputDir, fileName);
