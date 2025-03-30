@@ -54,6 +54,8 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
     static #getUrlToOpen(note: FNote | null | undefined) {
         if (note && note.type !== "book" && byNoteType[note.type]) {
             return byNoteType[note.type];
+        } else if (note?.hasLabel("calendarRoot")) {
+            return "l0tKav7yLHGF";
         } else if (note && note.type === "book") {
             return byBookType[note.getAttributeValue("label", "viewType") as ViewTypeOptions ?? ""]
         }
