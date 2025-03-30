@@ -93,7 +93,7 @@ export default class LlmChatPanel extends BasicWidget {
     private validationWarning!: HTMLElement;
     private sessionId: string | null = null;
     private currentNoteId: string | null = null;
-    
+
     // Callbacks for data persistence
     private onSaveData: ((data: any) => Promise<void>) | null = null;
     private onGetData: (() => Promise<any>) | null = null;
@@ -127,7 +127,7 @@ export default class LlmChatPanel extends BasicWidget {
 
         // Don't create a session here - wait for refresh
         // This prevents the wrong session from being created for the wrong note
-        
+
         return this.$widget;
     }
 
@@ -141,7 +141,7 @@ export default class LlmChatPanel extends BasicWidget {
         this.onSaveData = saveDataCallback;
         this.onGetData = getDataCallback;
     }
-    
+
     /**
      * Load saved chat data from the note
      */
@@ -150,21 +150,21 @@ export default class LlmChatPanel extends BasicWidget {
             console.log("No getData callback available");
             return;
         }
-        
+
         try {
             const data = await this.onGetData();
             console.log(`Loading chat data for noteId: ${this.currentNoteId}`, data);
-            
+
             // Make sure we're loading data for the correct note
             if (data && data.noteId && data.noteId !== this.currentNoteId) {
                 console.warn(`Data noteId ${data.noteId} doesn't match current noteId ${this.currentNoteId}`);
             }
-            
+
             if (data && data.messages && Array.isArray(data.messages)) {
                 // Clear existing messages in the UI
                 this.noteContextChatMessages.innerHTML = '';
                 this.messages = [];
-                
+
                 // Add each message to the UI
                 data.messages.forEach((message: {role: string; content: string}) => {
                     if (message.role === 'user' || message.role === 'assistant') {
@@ -173,20 +173,20 @@ export default class LlmChatPanel extends BasicWidget {
                         this.messages.push(message);
                     }
                 });
-                
+
                 // Scroll to bottom
                 this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
                 console.log(`Successfully loaded ${data.messages.length} messages for noteId: ${this.currentNoteId}`);
-                
+
                 return true;
             }
         } catch (e) {
             console.error(`Error loading saved chat data for noteId: ${this.currentNoteId}:`, e);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Save the current chat data to the note
      */
@@ -195,7 +195,7 @@ export default class LlmChatPanel extends BasicWidget {
             console.log("No saveData callback available");
             return;
         }
-        
+
         try {
             // Include the current note ID for tracking purposes
             await this.onSaveData({
@@ -221,24 +221,24 @@ export default class LlmChatPanel extends BasicWidget {
 
         // Get current note context if needed
         const currentActiveNoteId = appContext.tabManager.getActiveContext()?.note?.noteId || null;
-        
+
         // If we're switching to a different note, we need to reset
         if (this.currentNoteId !== currentActiveNoteId) {
             console.log(`Note ID changed from ${this.currentNoteId} to ${currentActiveNoteId}, resetting chat panel`);
-            
+
             // Reset the UI and data
             this.noteContextChatMessages.innerHTML = '';
             this.messages = [];
             this.sessionId = null;
             this.hideSources(); // Hide any sources from previous note
-            
+
             // Update our current noteId
             this.currentNoteId = currentActiveNoteId;
         }
-        
+
         // Always try to load saved data for the current note
         const hasSavedData = await this.loadSavedData();
-        
+
         // Only create a new session if we don't have a session or saved data
         if (!this.sessionId || !hasSavedData) {
             // Create a new chat session
@@ -264,6 +264,9 @@ export default class LlmChatPanel extends BasicWidget {
         }
     }
 
+    /**
+     * Handle sending a user message to the LLM service
+     */
     private async sendMessage(content: string) {
         if (!content.trim() || !this.sessionId) {
             return;
@@ -272,21 +275,10 @@ export default class LlmChatPanel extends BasicWidget {
         // Check for provider validation issues before sending
         await this.validateEmbeddingProviders();
 
-        // Add user message to the chat
-        this.addMessageToChat('user', content);
-        
-        // Add to our local message array too
-        this.messages.push({
-            role: 'user',
-            content,
-            timestamp: new Date()
-        });
-        
-        // Save to note
-        this.saveCurrentData().catch(err => {
-            console.error("Failed to save user message to note:", err);
-        });
-        
+        // Process the user message
+        await this.processUserMessage(content);
+
+        // Clear input and show loading state
         this.noteContextChatInput.value = '';
         this.showLoadingIndicator();
         this.hideSources();
@@ -306,181 +298,258 @@ export default class LlmChatPanel extends BasicWidget {
                 showThinking
             };
 
-            // First, send the message via POST request
-            const postResponse = await server.post<any>(`llm/sessions/${this.sessionId}/messages`, messageParams);
+            // First try to get a direct response
+            const handled = await this.handleDirectResponse(messageParams);
+            if (handled) return;
 
-            // If the POST request returned content directly, display it
-            if (postResponse && postResponse.content) {
-                this.addMessageToChat('assistant', postResponse.content);
-                
-                // Add to our local message array too
-                this.messages.push({
-                    role: 'assistant',
-                    content: postResponse.content,
-                    timestamp: new Date()
-                });
-                
-                // Save to note
-                this.saveCurrentData().catch(err => {
-                    console.error("Failed to save assistant response to note:", err);
-                });
+            // If no direct response, set up streaming
+            await this.setupStreamingResponse(messageParams);
+        } catch (error) {
+            this.handleError(error as Error);
+        }
+    }
 
-                // If there are sources, show them
-                if (postResponse.sources && postResponse.sources.length > 0) {
-                    this.showSources(postResponse.sources);
-                }
+    /**
+     * Process a new user message - add to UI and save
+     */
+    private async processUserMessage(content: string) {
+        // Add user message to the chat UI
+        this.addMessageToChat('user', content);
 
-                this.hideLoadingIndicator();
-                return;
+        // Add to our local message array too
+        this.messages.push({
+            role: 'user',
+            content,
+            timestamp: new Date()
+        });
+
+        // Save to note
+        this.saveCurrentData().catch(err => {
+            console.error("Failed to save user message to note:", err);
+        });
+    }
+
+    /**
+     * Try to get a direct response from the server
+     * @returns true if response was handled, false if streaming should be used
+     */
+    private async handleDirectResponse(messageParams: any): Promise<boolean> {
+        // Send the message via POST request
+        const postResponse = await server.post<any>(`llm/sessions/${this.sessionId}/messages`, messageParams);
+
+        // If the POST request returned content directly, display it
+        if (postResponse && postResponse.content) {
+            this.processAssistantResponse(postResponse.content);
+
+            // If there are sources, show them
+            if (postResponse.sources && postResponse.sources.length > 0) {
+                this.showSources(postResponse.sources);
             }
 
-            // Then set up streaming via EventSource
-            const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&useAdvancedContext=${useAdvancedContext}&showThinking=${showThinking}`;
-            const source = new EventSource(streamUrl);
+            this.hideLoadingIndicator();
+            return true;
+        }
 
-            let assistantResponse = '';
-            let receivedAnyContent = false;
-            let timeoutId: number | null = null;
+        return false;
+    }
 
-            // Set a timeout to handle case where streaming doesn't work properly
-            timeoutId = window.setTimeout(() => {
-                if (!receivedAnyContent) {
-                    // If we haven't received any content after a reasonable timeout (10 seconds),
-                    // add a fallback message and close the stream
-                    this.hideLoadingIndicator();
-                    const errorMessage = 'I\'m having trouble generating a response right now. Please try again later.';
-                    this.addMessageToChat('assistant', errorMessage);
-                    
-                    // Add to our local message array too
-                    this.messages.push({
-                        role: 'assistant',
-                        content: errorMessage,
-                        timestamp: new Date()
-                    });
-                    
-                    // Save to note
-                    this.saveCurrentData().catch(err => {
-                        console.error("Failed to save assistant error response to note:", err);
-                    });
-                    
-                    source.close();
-                }
-            }, 10000);
+    /**
+     * Process an assistant response - add to UI and save
+     */
+    private async processAssistantResponse(content: string) {
+        // Add the response to the chat UI
+        this.addMessageToChat('assistant', content);
 
-            // Handle streaming response
-            source.onmessage = (event) => {
-                if (event.data === '[DONE]') {
-                    // Stream completed
-                    source.close();
-                    this.hideLoadingIndicator();
+        // Add to our local message array too
+        this.messages.push({
+            role: 'assistant',
+            content,
+            timestamp: new Date()
+        });
 
-                    // Clear the timeout since we're done
-                    if (timeoutId !== null) {
-                        window.clearTimeout(timeoutId);
-                    }
+        // Save to note
+        this.saveCurrentData().catch(err => {
+            console.error("Failed to save assistant response to note:", err);
+        });
+    }
 
-                    // If we didn't receive any content but the stream completed normally,
-                    // display a message to the user
-                    if (!receivedAnyContent) {
-                        const defaultMessage = 'I processed your request, but I don\'t have any specific information to share at the moment.';
-                        this.addMessageToChat('assistant', defaultMessage);
-                        
-                        // Add to our local message array too
-                        this.messages.push({
-                            role: 'assistant',
-                            content: defaultMessage,
-                            timestamp: new Date()
-                        });
-                        
-                        // Save to note
-                        this.saveCurrentData().catch(err => {
-                            console.error("Failed to save assistant response to note:", err);
-                        });
-                    } else if (assistantResponse) {
-                        // Save the completed streaming response to the message array
-                        this.messages.push({
-                            role: 'assistant',
-                            content: assistantResponse,
-                            timestamp: new Date()
-                        });
-                        
-                        // Save to note
-                        this.saveCurrentData().catch(err => {
-                            console.error("Failed to save assistant response to note:", err);
-                        });
-                    }
-                    return;
-                }
+    /**
+     * Set up streaming response from the server
+     */
+    private async setupStreamingResponse(messageParams: any) {
+        const useAdvancedContext = messageParams.useAdvancedContext;
+        const showThinking = messageParams.showThinking;
 
-                try {
-                    const data = JSON.parse(event.data);
-                    console.log("Received streaming data:", data); // Debug log
+        // Set up streaming via EventSource
+        const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&useAdvancedContext=${useAdvancedContext}&showThinking=${showThinking}`;
+        const source = new EventSource(streamUrl);
 
-                    // Handle both content and error cases
-                    if (data.content) {
-                        receivedAnyContent = true;
-                        assistantResponse += data.content;
+        let assistantResponse = '';
+        let receivedAnyContent = false;
+        let timeoutId: number | null = null;
 
-                        // Update the UI with the accumulated response
-                        const assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
-                        if (assistantElement) {
-                            assistantElement.innerHTML = this.formatMarkdown(assistantResponse);
-                            // Apply syntax highlighting to any code blocks in the updated content
-                            applySyntaxHighlight($(assistantElement as HTMLElement));
-                        } else {
-                            this.addMessageToChat('assistant', assistantResponse);
-                        }
-                    } else if (data.error) {
-                        // Handle error message
-                        this.hideLoadingIndicator();
-                        this.addMessageToChat('assistant', `Error: ${data.error}`);
-                        receivedAnyContent = true;
-                        source.close();
+        // Set up timeout for streaming response
+        timeoutId = this.setupStreamingTimeout(source);
 
-                        if (timeoutId !== null) {
-                            window.clearTimeout(timeoutId);
-                        }
-                    }
+        // Handle streaming response
+        source.onmessage = (event) => this.handleStreamingMessage(
+            event,
+            source,
+            timeoutId,
+            assistantResponse,
+            receivedAnyContent
+        );
 
-                    // Scroll to the bottom
-                    this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
-                } catch (e) {
-                    console.error('Error parsing SSE message:', e, 'Raw data:', event.data);
-                }
-            };
+        // Handle streaming errors
+        source.onerror = () => this.handleStreamingError(
+            source,
+            timeoutId,
+            receivedAnyContent
+        );
+    }
 
-            source.onerror = () => {
-                source.close();
+    /**
+     * Set up timeout for streaming response
+     * @returns Timeout ID for the created timeout
+     */
+    private setupStreamingTimeout(source: EventSource): number {
+        // Set a timeout to handle case where streaming doesn't work properly
+        return window.setTimeout(() => {
+            // If we haven't received any content after a reasonable timeout (10 seconds),
+            // add a fallback message and close the stream
+            this.hideLoadingIndicator();
+            const errorMessage = 'I\'m having trouble generating a response right now. Please try again later.';
+            this.processAssistantResponse(errorMessage);
+            source.close();
+        }, 10000);
+    }
+
+    /**
+     * Handle messages from the streaming response
+     */
+    private handleStreamingMessage(
+        event: MessageEvent,
+        source: EventSource,
+        timeoutId: number | null,
+        assistantResponse: string,
+        receivedAnyContent: boolean
+    ) {
+        if (event.data === '[DONE]') {
+            this.handleStreamingComplete(source, timeoutId, receivedAnyContent, assistantResponse);
+            return;
+        }
+
+        try {
+            const data = JSON.parse(event.data);
+            console.log("Received streaming data:", data); // Debug log
+
+            // Handle both content and error cases
+            if (data.content) {
+                receivedAnyContent = true;
+                assistantResponse += data.content;
+
+                // Update the UI with the accumulated response
+                this.updateStreamingUI(assistantResponse);
+            } else if (data.error) {
+                // Handle error message
                 this.hideLoadingIndicator();
+                this.addMessageToChat('assistant', `Error: ${data.error}`);
+                receivedAnyContent = true;
+                source.close();
 
-                // Clear the timeout if there was an error
                 if (timeoutId !== null) {
                     window.clearTimeout(timeoutId);
                 }
+            }
 
-                // Only show error message if we haven't received any content yet
-                if (!receivedAnyContent) {
-                    const connectionError = 'Error connecting to the LLM service. Please try again.';
-                    this.addMessageToChat('assistant', connectionError);
-                    
-                    // Add to our local message array too
-                    this.messages.push({
-                        role: 'assistant',
-                        content: connectionError,
-                        timestamp: new Date()
-                    });
-                    
-                    // Save to note
-                    this.saveCurrentData().catch(err => {
-                        console.error("Failed to save connection error to note:", err);
-                    });
-                }
-            };
-
-        } catch (error) {
-            this.hideLoadingIndicator();
-            toastService.showError('Error sending message: ' + (error as Error).message);
+            // Scroll to the bottom
+            this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+        } catch (e) {
+            console.error('Error parsing SSE message:', e, 'Raw data:', event.data);
         }
+    }
+
+    /**
+     * Update the UI with streaming content as it arrives
+     */
+    private updateStreamingUI(assistantResponse: string) {
+        const assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
+        if (assistantElement) {
+            assistantElement.innerHTML = this.formatMarkdown(assistantResponse);
+            // Apply syntax highlighting to any code blocks in the updated content
+            applySyntaxHighlight($(assistantElement as HTMLElement));
+        } else {
+            this.addMessageToChat('assistant', assistantResponse);
+        }
+    }
+
+    /**
+     * Handle completion of streaming response
+     */
+    private handleStreamingComplete(
+        source: EventSource,
+        timeoutId: number | null,
+        receivedAnyContent: boolean,
+        assistantResponse: string
+    ) {
+        // Stream completed
+        source.close();
+        this.hideLoadingIndicator();
+
+        // Clear the timeout since we're done
+        if (timeoutId !== null) {
+            window.clearTimeout(timeoutId);
+        }
+
+        // If we didn't receive any content but the stream completed normally,
+        // display a message to the user
+        if (!receivedAnyContent) {
+            const defaultMessage = 'I processed your request, but I don\'t have any specific information to share at the moment.';
+            this.processAssistantResponse(defaultMessage);
+        } else if (assistantResponse) {
+            // Save the completed streaming response to the message array
+            this.messages.push({
+                role: 'assistant',
+                content: assistantResponse,
+                timestamp: new Date()
+            });
+
+            // Save to note
+            this.saveCurrentData().catch(err => {
+                console.error("Failed to save assistant response to note:", err);
+            });
+        }
+    }
+
+    /**
+     * Handle errors during streaming response
+     */
+    private handleStreamingError(
+        source: EventSource,
+        timeoutId: number | null,
+        receivedAnyContent: boolean
+    ) {
+        source.close();
+        this.hideLoadingIndicator();
+
+        // Clear the timeout if there was an error
+        if (timeoutId !== null) {
+            window.clearTimeout(timeoutId);
+        }
+
+        // Only show error message if we haven't received any content yet
+        if (!receivedAnyContent) {
+            const connectionError = 'Error connecting to the LLM service. Please try again.';
+            this.processAssistantResponse(connectionError);
+        }
+    }
+
+    /**
+     * Handle general errors in the send message flow
+     */
+    private handleError(error: Error) {
+        this.hideLoadingIndicator();
+        toastService.showError('Error sending message: ' + error.message);
     }
 
     private addMessageToChat(role: 'user' | 'assistant', content: string) {

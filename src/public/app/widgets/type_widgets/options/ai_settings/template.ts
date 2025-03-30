@@ -269,7 +269,15 @@ export const TPL = `
         <div class="form-text">${t("ai_llm.embedding_auto_update_enabled_description")}</div>
     </div>
 
-    <!-- Rebuild index button with counter -->
+    <!-- Recreate embeddings button -->
+    <div class="form-group mt-3">
+        <button class="btn btn-outline-primary recreate-embeddings">
+            ${t("ai_llm.recreate_embeddings")}
+        </button>
+        <div class="form-text">${t("ai_llm.recreate_embeddings_description")}</div>
+    </div>
+    
+    <!-- Rebuild index button -->
     <div class="form-group mt-3">
         <button class="btn btn-outline-primary rebuild-embeddings-index">
             ${t("ai_llm.rebuild_index")}

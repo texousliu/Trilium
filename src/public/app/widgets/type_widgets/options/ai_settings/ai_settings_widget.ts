@@ -145,11 +145,28 @@ export default class AiSettingsWidget extends OptionsWidget {
             await this.fetchFailedEmbeddingNotes();
         });
 
+        // Recreate embeddings button
+        const $recreateEmbeddings = this.$widget.find('.recreate-embeddings');
+        $recreateEmbeddings.on('click', async () => {
+            if (confirm(t("ai_llm.recreate_embeddings_confirm") || "Are you sure you want to recreate all embeddings? This may take a long time.")) {
+                try {
+                    await server.post('embeddings/reprocess');
+                    toastService.showMessage(t("ai_llm.recreate_embeddings_started"));
+                    
+                    // Start progress polling
+                    this.pollIndexRebuildProgress();
+                } catch (e) {
+                    console.error('Error starting embeddings regeneration:', e);
+                    toastService.showError(t("ai_llm.recreate_embeddings_error"));
+                }
+            }
+        });
+        
         // Rebuild index button
         const $rebuildIndex = this.$widget.find('.rebuild-embeddings-index');
         $rebuildIndex.on('click', async () => {
             try {
-                await server.post('embeddings/rebuild');
+                await server.post('embeddings/rebuild-index');
                 toastService.showMessage(t("ai_llm.rebuild_index_started"));
 
                 // Start progress polling
@@ -340,7 +357,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (!this.$widget) return;
 
         try {
-            const response = await server.get<FailedEmbeddingNotes>('embeddings/failed-notes');
+            const response = await server.get<FailedEmbeddingNotes>('embeddings/failed');
 
             if (response && response.success) {
                 const failedNotes = response.failedNotes || [];
