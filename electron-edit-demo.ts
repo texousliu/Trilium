@@ -1,17 +1,12 @@
-import { extractZip, importData, initializeDatabase, startElectron } from "./electron-utils.js";
+import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
 import { initializeTranslations } from "./src/services/i18n.js";
-import fs from "fs";
 import debounce from "./src/public/app/services/debounce.js";
 
-const DEMO_NOTE_ID = "demo";
 const DEMO_ZIP_PATH = "db/demo.zip";
 
 async function main() {
     await initializeTranslations();
     await initializeDatabase();
-
-    const demoBuffer = fs.readFileSync(DEMO_ZIP_PATH);
-    await importData(demoBuffer, DEMO_NOTE_ID, "Demo", "The sub-children of this note are automatically synced.");
 
     await startElectron();
     await registerHandlers();
@@ -38,7 +33,7 @@ async function registerHandlers() {
 
 async function exportData() {
     const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
-    await exportToZipFile(DEMO_NOTE_ID, "html", DEMO_ZIP_PATH);
+    await exportToZipFile("root", "html", DEMO_ZIP_PATH);
 }
 
 await main();
