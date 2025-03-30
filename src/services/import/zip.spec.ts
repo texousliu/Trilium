@@ -3,13 +3,14 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import zip from "./zip.js";
+import zip, { removeTriliumTags } from "./zip.js";
 import becca from "../../becca/becca.js";
 import BNote from "../../becca/entities/bnote.js";
 import TaskContext from "../task_context.js";
 import cls from "../cls.js";
 import sql_init from "../sql_init.js";
 import { initializeTranslations } from "../i18n.js";
+import { trimIndentation } from "../../../spec/support/utils.js";
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 
 async function testImport(fileName: string) {
@@ -60,5 +61,25 @@ describe("processNoteContent", () => {
         const { rootNote, importedNote } = await testImport("IREN.Reports.Q2.FY25.Results_files.zip");
         const htmlNote = rootNote.children.find((ch) => ch.title === "IREN Reports Q2 FY25 Results");
         expect(htmlNote?.getContent().toString().substring(0, 4)).toEqual("<div");
+    });
+});
+
+describe("removeTriliumTags", () => {
+    it("removes <h1> tags from HTML", () => {
+        const output = removeTriliumTags(trimIndentation`\
+            <h1 data-trilium-h1>21 - Thursday</h1>
+            <p>Hello world</p>
+        `);
+        const expected = `\n<p>Hello world</p>\n`;
+        expect(output).toEqual(expected);
+    });
+
+    it("removes <title> tags from HTML", () => {
+        const output = removeTriliumTags(trimIndentation`\
+            <title data-trilium-title>21 - Thursday</title>
+            <p>Hello world</p>
+        `);
+        const expected = `\n<p>Hello world</p>\n`;
+        expect(output).toEqual(expected);
     });
 });

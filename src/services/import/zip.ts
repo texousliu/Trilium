@@ -385,15 +385,6 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
         return content;
     }
 
-    function removeTriliumTags(content: string) {
-        const tagsToRemove = ["<h1 data-trilium-h1>([^<]*)<\/h1>", "<title data-trilium-title>([^<]*)<\/title>"];
-        for (const tag of tagsToRemove) {
-            let re = new RegExp(tag, "gi");
-            content = content.replace(re, "");
-        }
-        return content;
-    }
-
     function processNoteContent(noteMeta: NoteMeta | undefined, type: string, mime: string, content: string | Buffer, noteTitle: string, filePath: string) {
         if ((noteMeta?.format === "markdown" || (!noteMeta && taskContext.data?.textImportedAsText && ["text/markdown", "text/x-markdown", "text/mdx"].includes(mime))) && typeof content === "string") {
             content = markdownService.renderToHtml(content, noteTitle);
@@ -663,6 +654,17 @@ function resolveNoteType(type: string | undefined): NoteType {
     } else {
         return "text";
     }
+}
+
+export function removeTriliumTags(content: string) {
+    const tagsToRemove = [
+        "<h1 data-trilium-h1>([^<]*)<\/h1>",
+        "<title data-trilium-title>([^<]*)<\/title>"];
+    for (const tag of tagsToRemove) {
+        let re = new RegExp(tag, "gi");
+        content = content.replace(re, "");
+    }
+    return content;
 }
 
 export default {
