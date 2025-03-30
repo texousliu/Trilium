@@ -277,50 +277,9 @@ export const TPL = `
         <div class="form-text">${t("ai_llm.rebuild_index_description")}</div>
     </div>
 
-    <!-- Provider order container -->
+    <!-- Note about embedding provider precedence -->
     <div class="form-group mt-3">
-        <h5>${t("ai_llm.provider_order")}</h5>
-        <div class="form-text">${t("ai_llm.provider_order_description")}</div>
-        
-        <div class="provider-order-container">
-            <ul class="embedding-provider-sortable standard-list mt-2">
-                <li class="standard-list-item d-flex align-items-center" data-provider="openai" draggable="true">
-                    <span class="drag-handle bx bx-dots-vertical-rounded me-2"></span>
-                    <strong class="flex-grow-1">OpenAI</strong>
-                    <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
-                        <span class="bx bx-x"></span>
-                    </button>
-                </li>
-                <li class="standard-list-item d-flex align-items-center" data-provider="voyage" draggable="true">
-                    <span class="drag-handle bx bx-dots-vertical-rounded me-2"></span>
-                    <strong class="flex-grow-1">Voyage</strong>
-                    <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
-                        <span class="bx bx-x"></span>
-                    </button>
-                </li>
-                <li class="standard-list-item d-flex align-items-center" data-provider="ollama" draggable="true">
-                    <span class="drag-handle bx bx-dots-vertical-rounded me-2"></span>
-                    <strong class="flex-grow-1">Ollama</strong>
-                    <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
-                        <span class="bx bx-x"></span>
-                    </button>
-                </li>
-                <li class="standard-list-item d-flex align-items-center" data-provider="local" draggable="true">
-                    <span class="drag-handle bx bx-dots-vertical-rounded me-2"></span>
-                    <strong class="flex-grow-1">Local</strong>
-                    <button class="icon-action remove-provider" title="${t("ai_llm.remove_provider")}">
-                        <span class="bx bx-x"></span>
-                    </button>
-                </li>
-            </ul>
-        </div>
-        
-        <!-- Disabled providers container -->
-        <div class="disabled-providers-container" style="display: none;">
-            <h6 class="mt-3">${t("ai_llm.disabled_providers")}</h6>
-            <ul class="embedding-provider-disabled standard-list mt-2">
-                <!-- Disabled providers will be added here -->
-            </ul>
-        </div>
+        <h5>${t("ai_llm.embedding_providers_order")}</h5>
+        <div class="form-text mt-2">${t("ai_llm.embedding_providers_order_description")}</div>
     </div>
 </div>`;
