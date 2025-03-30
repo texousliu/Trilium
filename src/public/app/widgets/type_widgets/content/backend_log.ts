@@ -38,7 +38,6 @@ export default class BackendLogWidget extends AbstractCodeTypeWidget {
 
     getExtraOpts(): Partial<CodeMirrorOpts> {
         return {
-            lineWrapping: false,
             readOnly: true
         };
     }
