@@ -8,7 +8,7 @@
 			"notePath": [
 				"demo"
 			],
-			"title": "User Guide",
+			"title": "Demo",
 			"notePosition": 10,
 			"prefix": null,
 			"isExpanded": true,
@@ -16,9 +16,9 @@
 			"mime": "text/html",
 			"attributes": [],
 			"format": "html",
-			"dataFileName": "User Guide.html",
+			"dataFileName": "Demo.html",
 			"attachments": [],
-			"dirFileName": "User Guide",
+			"dirFileName": "Demo",
 			"children": [
 				{
 					"isClone": false,

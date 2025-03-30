@@ -11,7 +11,7 @@ async function main() {
     await initializeDatabase();
 
     const demoBuffer = fs.readFileSync(DEMO_ZIP_PATH);
-    await importData(demoBuffer, DEMO_NOTE_ID);
+    await importData(demoBuffer, DEMO_NOTE_ID, "Demo", "The sub-children of this note are automatically synced.");
 
     await startElectron();
     await registerHandlers();

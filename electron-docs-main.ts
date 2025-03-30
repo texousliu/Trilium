@@ -17,7 +17,7 @@ async function main() {
     await initializeTranslations();
     const zipBuffer = await createImportZip();
     await initializeDatabase();
-    await importData(zipBuffer, NOTE_ID_USER_GUIDE);
+    await importData(zipBuffer, NOTE_ID_USER_GUIDE, "User Guide", "The sub-children of this note are automatically synced.");
     await startElectron();
     await registerHandlers();
 }

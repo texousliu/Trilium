@@ -17,7 +17,7 @@ export async function startElectron() {
     await import("./electron-main.js");
 }
 
-export function importData(input: Buffer, rootId: string) {
+export function importData(input: Buffer, rootId: string, rootTitle: string, rootContent: string) {
     return new Promise<void>((resolve, reject) => {
         cls.init(async () => {
             const beccaLoader = ((await import("./src/becca/becca_loader.js")).default);
@@ -37,8 +37,8 @@ export function importData(input: Buffer, rootId: string) {
             const { note } = notes.createNewNoteWithTarget("into", "none_root", {
                 parentNoteId: "root",
                 noteId: rootId,
-                title: "User Guide",
-                content: "The sub-children of this note are automatically synced.",
+                title: rootTitle,
+                content: rootContent,
                 type: "text"
             });
 
