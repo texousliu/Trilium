@@ -82,4 +82,37 @@ describe("removeTriliumTags", () => {
         const expected = `\n<p>Hello world</p>\n`;
         expect(output).toEqual(expected);
     });
+
+    it("removes ckeditor tags from HTML", () => {
+        const output = removeTriliumTags(trimIndentation`\
+            <body>
+                <div class="content">
+                    <h1 data-trilium-h1>21 - Thursday</h1>
+
+                    <div class="ck-content">
+                    <p>TODO:</p>
+                    <ul class="todo-list">
+                        <li>
+                        <label class="todo-list__label">
+                            <input type="checkbox" disabled="disabled"><span class="todo-list__label__description">&nbsp;&nbsp;</span>
+                        </label>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+            </body>
+        `).split("\n").filter((l) => l.trim()).join("\n");
+        const expected = trimIndentation`\
+            <body>
+                    <p>TODO:</p>
+                    <ul class="todo-list">
+                        <li>
+                        <label class="todo-list__label">
+                            <input type="checkbox" disabled="disabled"><span class="todo-list__label__description">&nbsp;&nbsp;</span>
+                        </label>
+                        </li>
+                    </ul>
+            </body>`;
+        expect(output).toEqual(expected);
+    });
 });

@@ -659,11 +659,17 @@ function resolveNoteType(type: string | undefined): NoteType {
 export function removeTriliumTags(content: string) {
     const tagsToRemove = [
         "<h1 data-trilium-h1>([^<]*)<\/h1>",
-        "<title data-trilium-title>([^<]*)<\/title>"];
+        "<title data-trilium-title>([^<]*)<\/title>"
+    ];
     for (const tag of tagsToRemove) {
         let re = new RegExp(tag, "gi");
         content = content.replace(re, "");
     }
+
+    // Remove ckeditor tags
+    content = content.replace(/<div class="ck-content">(.*)<\/div>/gms, "$1");
+    content = content.replace(/<div class="content">(.*)<\/div>/gms, "$1");
+
     return content;
 }
 
