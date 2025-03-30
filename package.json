@@ -2,7 +2,7 @@
   "name": "trilium",
   "productName": "TriliumNext Notes",
   "description": "Build your personal knowledge base with TriliumNext Notes",
-  "version": "0.92.4",
+  "version": "0.92.5",
   "license": "AGPL-3.0-only",
   "main": "./electron-main.js",
   "author": {
