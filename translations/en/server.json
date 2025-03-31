@@ -98,10 +98,12 @@
   "login": {
     "title": "Login",
     "heading": "Trilium Login",
+    "incorrect-totp": "TOTP is incorrect. Please try again.",
     "incorrect-password": "Password is incorrect. Please try again.",
     "password": "Password",
     "remember-me": "Remember me",
-    "button": "Login"
+    "button": "Login",
+    "sign_in_with_google": "Sign in with Google"
   },
   "set_password": {
     "title": "Set Password",
@@ -239,6 +241,7 @@
     "images-title": "Images",
     "spellcheck-title": "Spellcheck",
     "password-title": "Password",
+    "multi-factor-authentication-title": "MFA",
     "etapi-title": "ETAPI",
     "backup-title": "Backup",
     "sync-title": "Sync",

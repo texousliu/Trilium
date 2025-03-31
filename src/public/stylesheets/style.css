@@ -49,6 +49,7 @@ body {
     --tab-bar-height: 40px;
 }
 
+body.desktop .mobile-only,
 body.mobile .desktop-only,
 body:not(.electron) .electron-only {
     display: none !important;
@@ -307,6 +308,7 @@ button kbd {
     background-color: var(--menu-background-color) !important;
     user-select: none;
     -webkit-user-select: none;
+    --bs-dropdown-zindex: 999;
 }
 
 body.desktop .dropdown-menu {

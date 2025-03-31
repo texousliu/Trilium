@@ -238,8 +238,12 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
         }
     }
 
-    if (!notePath.match(/^[_a-z0-9]{4,}(\/[_a-z0-9]{4,})*$/i)) {
+    if (searchString) {
         return { searchString }
+    }
+
+    if (!notePath.match(/^[_a-z0-9]{4,}(\/[_a-z0-9]{4,})*$/i)) {
+        return {};
     }
 
     return {

@@ -376,6 +376,7 @@ type EventMappings = {
     cloneNoteIdsTo: {
         noteIds: string[];
     };
+    refreshData: { ntxId: string | null | undefined };
 };
 
 export type EventListener<T extends EventNames> = {

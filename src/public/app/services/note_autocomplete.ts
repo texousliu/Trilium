@@ -70,9 +70,14 @@ async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void
     }
 
     const activeNoteId = appContext.tabManager.getActiveContextNoteId();
+    const length = term.trim().length;
 
-    let results: Suggestion[] = await server.get<Suggestion[]>(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${fastSearch}`);
-    if (term.trim().length >= 1 && options.allowCreatingNotes) {
+    let results: Suggestion[] = [];
+    if (length >= 3) {
+        results = await server.get<Suggestion[]>(`autocomplete?query=${encodeURIComponent(term)}&activeNoteId=${activeNoteId}&fastSearch=${fastSearch}`);
+    }
+
+    if (length >= 1 && options.allowCreatingNotes) {
         results = [
             {
                 action: "create-note",
@@ -83,7 +88,7 @@ async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void
         ].concat(results);
     }
 
-    if (term.trim().length >= 1 && options.allowJumpToSearchNotes) {
+    if (length >= 1 && options.allowJumpToSearchNotes) {
         results = results.concat([
             {
                 action: "search-notes",

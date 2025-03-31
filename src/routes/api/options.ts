@@ -80,6 +80,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "allowedHtmlTags",
     "redirectBareDomain",
     "showLoginInShareTheme",
+
     // AI/LLM integration options
     "aiEnabled",
     "openaiApiKey",
@@ -98,6 +99,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "aiProviderPrecedence",
     "aiTemperature",
     "aiSystemPrompt",
+
     // Embedding options
     "embeddingAutoUpdateEnabled",
     "embeddingBatchSize",
@@ -110,7 +112,9 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "enableAutomaticIndexing",
     "embeddingGenerationLocation",
     "embeddingDimensionStrategy",
-    "splitEditorOrientation"
+    "splitEditorOrientation",
+    "mfaEnabled",
+    "mfaMethod"
 ]);
 
 function getOptions() {
