@@ -132,7 +132,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     firstDayOfWeek: number;
     languages: string;
     textNoteEditorMultilineToolbar: boolean;
-    backgroundEffects: string;
+    backgroundEffects: boolean;
     redirectBareDomain: boolean;
     showLoginInShareTheme: boolean;
     initialized: string;
