@@ -47,6 +47,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     passwordDerivedKeySalt: string;
     encryptedDataKey: string;
     hoistedNoteId: string;
+    isPasswordSet: boolean;
 
     // AI/LLM integration options
     aiEnabled: boolean;
@@ -134,6 +135,14 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     backgroundEffects: string;
     redirectBareDomain: boolean;
     showLoginInShareTheme: boolean;
+    initialized: string;
+    lastSyncedPull: string;
+    lastSyncedPush: string;
+    autoFixConsistencyIssues: boolean;
+    hideArchivedNotes_main: boolean;
+    debugModeEnabled: boolean;
+    encryptedRecoveryCodes: string;
+    userSubjectIdentifierSaved: boolean;
 }
 
 export type OptionNames = keyof OptionDefinitions;
