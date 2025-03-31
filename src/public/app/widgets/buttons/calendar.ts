@@ -312,11 +312,14 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
     private getNextMonthDays(lastDayOfWeek: number): Date[] {
         const nextMonthFirstDay = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 1);
-        const nextMonthDays = [];
-        for (let i = 0; i < (6 - lastDayOfWeek); i++) {
-            nextMonthDays.push(new Date(nextMonthFirstDay.getFullYear(), nextMonthFirstDay.getMonth(), i + 1));
+        const dates = [];
+
+        // Get dates from next month
+        for (let i = 0; i < 7 - lastDayOfWeek; i++) {
+            dates.push(new Date(nextMonthFirstDay.getFullYear(), nextMonthFirstDay.getMonth(), i + 1));
         }
-        return nextMonthDays;
+
+        return dates;
     }
 
     async createMonth() {
@@ -340,12 +343,9 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             this.$month.append($weekNumber);
 
             dates.forEach(date => {
-                const tempDate = this.date;
-                this.date = date;
                 const $day = this.createDay(dateNotesForPrevMonth, date.getDate(), date.getDay());
                 $day.addClass('calendar-date-prev-month');
                 this.$month.append($day);
-                this.date = tempDate;
             });
         }
 
@@ -356,7 +356,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             const safeDate = new Date(Date.UTC(this.date.getFullYear(), this.date.getMonth(), this.date.getDate()));
             const weekNumber = this.getWeekNumber(safeDate);
 
-            // Add week number if it's first day of week or first day of month
+            // Add week number if it's first day of week
             if (this.date.getDay() === this.firstDayOfWeek) {
                 const $weekNumber = this.createWeekNumber(weekNumber);
                 this.$month.append($weekNumber);
@@ -367,6 +367,24 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
             this.date.setDate(this.date.getDate() + 1);
         }
+
+        // Add dates from next month
+        const lastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
+        const lastDayOfWeek = lastDay.getDay();
+        if (lastDayOfWeek !== 7) {
+            const dates = this.getNextMonthDays(lastDayOfWeek);
+
+            const nextMonth = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 1);
+            const nextMonthStr = utils.formatDateISO(nextMonth).substring(0, 7);
+            const dateNotesForNextMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${nextMonthStr}`);
+
+            dates.forEach(date => {
+                const $day = this.createDay(dateNotesForNextMonth, date.getDate(), date.getDay());
+                $day.addClass('calendar-date-next-month');
+                this.$month.append($day);
+            });
+        }
+
         // while loop trips over and day is at 30/31, bring it back
         this.date.setDate(1);
         this.date.setMonth(this.date.getMonth() - 1);
