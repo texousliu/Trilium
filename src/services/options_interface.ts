@@ -77,78 +77,61 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     embeddingsDefaultProvider: string;
     embeddingProviderPrecedence: string;
     enableAutomaticIndexing: boolean;
-    embeddingSimilarityThreshold: string;
-    maxNotesPerLlmQuery: string;
     embeddingGenerationLocation: string;
-    embeddingDimensionStrategy: string; // 'adapt' or 'regenerate'
-    // Multi-Factor Authentication
+    embeddingDimensionStrategy: string;
+    embeddingSimilarityThreshold: number;
+    maxNotesPerLlmQuery: number;
+    splitEditorOrientation: string;
+
+    // MFA options
     mfaEnabled: boolean;
     mfaMethod: string;
-    totpEncryptionSalt: string;
-    totpEncryptedSecret: string;
-    totpVerificationHash: string;
-    encryptedRecoveryCodes: boolean;
-    userSubjectIdentifierSaved: boolean;
-    recoveryCodeInitialVector: string;
-    recoveryCodeSecurityKey: string;
-    recoveryCodesEncrypted: string;
 
-    lastSyncedPull: number;
-    lastSyncedPush: number;
-    revisionSnapshotTimeInterval: number;
-    revisionSnapshotTimeIntervalTimeScale: number;
-    revisionSnapshotNumberLimit: number;
+    // Additional options
+    eraseEntitiesAfterTimeInSeconds: number;
+    eraseEntitiesAfterTimeScale: string;
     protectedSessionTimeout: number;
-    protectedSessionTimeoutTimeScale: number;
+    protectedSessionTimeoutTimeScale: string;
+    revisionSnapshotTimeInterval: number;
+    revisionSnapshotTimeIntervalTimeScale: string;
+    revisionSnapshotNumberLimit: number;
     zoomFactor: number;
+    codeBlockWordWrap: boolean;
     mainFontSize: number;
     treeFontSize: number;
     detailFontSize: number;
     monospaceFontSize: number;
+    vimKeymapEnabled: boolean;
+    codeLineWrapEnabled: boolean;
+    spellCheckEnabled: boolean;
     imageMaxWidthHeight: number;
     imageJpegQuality: number;
     leftPaneWidth: number;
     rightPaneWidth: number;
-    eraseEntitiesAfterTimeInSeconds: number;
-    eraseEntitiesAfterTimeScale: number;
-    autoReadonlySizeText: number;
-    autoReadonlySizeCode: number;
-    maxContentWidth: number;
-    minTocHeadings: number;
-    eraseUnusedAttachmentsAfterSeconds: number;
-    eraseUnusedAttachmentsAfterTimeScale: number;
-    firstDayOfWeek: number;
-    languages: string;
-
-    // Appearance
-    splitEditorOrientation: "horziontal" | "vertical";
-
-    initialized: boolean;
-    isPasswordSet: boolean;
-    overrideThemeFonts: boolean;
-    spellCheckEnabled: boolean;
-    autoFixConsistencyIssues: boolean;
-    vimKeymapEnabled: boolean;
-    codeLineWrapEnabled: boolean;
     leftPaneVisible: boolean;
     rightPaneVisible: boolean;
     nativeTitleBarVisible: boolean;
-    hideArchivedNotes_main: boolean;
-    debugModeEnabled: boolean;
     autoCollapseNoteTree: boolean;
+    autoReadonlySizeText: number;
+    autoReadonlySizeCode: number;
+    overrideThemeFonts: boolean;
     dailyBackupEnabled: boolean;
     weeklyBackupEnabled: boolean;
     monthlyBackupEnabled: boolean;
+    maxContentWidth: number;
     compressImages: boolean;
     downloadImagesAutomatically: boolean;
+    minTocHeadings: number;
     checkForUpdates: boolean;
     disableTray: boolean;
+    eraseUnusedAttachmentsAfterSeconds: number;
+    eraseUnusedAttachmentsAfterTimeScale: string;
     promotedAttributesOpenInRibbon: boolean;
     editedNotesOpenInRibbon: boolean;
-    codeBlockWordWrap: boolean;
+    firstDayOfWeek: number;
+    languages: string;
     textNoteEditorMultilineToolbar: boolean;
-    backgroundEffects: boolean;
-    // Share settings
+    backgroundEffects: string;
     redirectBareDomain: boolean;
     showLoginInShareTheme: boolean;
 }
