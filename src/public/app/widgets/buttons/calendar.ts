@@ -318,23 +318,23 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     private getPrevMonthDays(firstDayOfWeek: number): { weekNumber: number, dates: Date[] } {
-        const prevMonthLastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
+        const prevMonthLastDay = dayjs(this.date).subtract(1, 'month').endOf('month');
         const daysToAdd = (firstDayOfWeek - this.firstDayOfWeek + 7) % 7;
         const dates = [];
 
-        const firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
-        const weekNumber = this.getWeekNumber(firstDay);
+        const firstDay = dayjs(this.date).startOf('month');
+        const weekNumber = this.getWeekNumber(firstDay.toDate());
 
         // Get dates from previous month
         for (let i = daysToAdd - 1; i >= 0; i--) {
-            dates.push(new Date(prevMonthLastDay.getFullYear(), prevMonthLastDay.getMonth(), prevMonthLastDay.getDate() - i));
+            dates.push(prevMonthLastDay.subtract(i, 'day').toDate());
         }
 
         return { weekNumber, dates };
     }
 
     private getNextMonthDays(lastDayOfWeek: number): Date[] {
-        const nextMonthFirstDay = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 1);
+        const nextMonthFirstDay = dayjs(this.date).add(1, 'month').startOf('month');
         const dates = [];
 
         const lastDayOfUserWeek = (this.firstDayOfWeek + 6) % 7;
@@ -342,7 +342,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
         // Get dates from next month
         for (let i = 0; i < daysToAdd; i++) {
-            dates.push(new Date(nextMonthFirstDay.getFullYear(), nextMonthFirstDay.getMonth(), i + 1));
+            dates.push(nextMonthFirstDay.add(i, 'day').toDate());
         }
 
         return dates;
