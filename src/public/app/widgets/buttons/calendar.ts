@@ -346,9 +346,12 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             this.$month.append($weekNumber);
 
             dates.forEach(date => {
+                const tempDate = this.date;
+                this.date = date;
                 const $day = this.createDay(dateNotesForPrevMonth, date.getDate(), date.getDay());
                 $day.addClass('calendar-date-prev-month');
                 this.$month.append($day);
+                this.date = tempDate;
             });
         }
 
@@ -383,9 +386,12 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             const dateNotesForNextMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${nextMonthStr}`);
 
             dates.forEach(date => {
+                const tempDate = this.date;
+                this.date = date;
                 const $day = this.createDay(dateNotesForNextMonth, date.getDate(), date.getDay());
                 $day.addClass('calendar-date-next-month');
                 this.$month.append($day);
+                this.date = tempDate;
             });
         }
 
