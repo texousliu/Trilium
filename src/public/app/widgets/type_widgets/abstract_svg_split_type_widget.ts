@@ -2,7 +2,9 @@ import type { EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import { t } from "../../services/i18n.js";
 import server from "../../services/server.js";
+import toast from "../../services/toast.js";
 import utils from "../../services/utils.js";
+import ws from "../../services/ws.js";
 import OnClickButtonWidget from "../buttons/onclick_button.js";
 import AbstractSplitTypeWidget from "./abstract_split_type_widget.js";
 
@@ -218,11 +220,18 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
     }
 
     async exportPngEvent({ ntxId }: EventData<"exportPng">) {
+        console.log("Export to PNG", this.noteContext?.noteId, ntxId, this.svg);
         if (!this.isNoteContext(ntxId) || this.note?.type !== "mermaid" || !this.svg) {
+            console.log("Return");
             return;
         }
 
-        utils.downloadSvgAsPng(this.note.title, this.svg);
+        try {
+            await utils.downloadSvgAsPng(this.note.title, this.svg);
+        } catch (e) {
+            console.warn(e);
+            toast.showError(t("svg.export_to_png"));
+        }
     }
 
 }

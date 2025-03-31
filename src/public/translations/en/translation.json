@@ -1746,5 +1746,8 @@
   },
   "png_export_button": {
     "button_title": "Export diagram as PNG"
+  },
+  "svg": {
+    "export_to_png": "The diagram could not be exported to PNG."
   }
 }
