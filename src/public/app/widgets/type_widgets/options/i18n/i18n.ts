@@ -64,6 +64,12 @@ const TPL = `
             </select>
         </div>
 
+        <p class="form-text">${t("i18n.first-week-info")}</p>
+
+        <div class="admonition warning" role="alert">
+            ${t("i18n.first-week-warning")}
+        </div>
+
         <div class="option-row centered">
             <button class="btn btn-secondary btn-micro restart-app-button">${t("electron_integration.restart-app-button")}</button>
         </div>

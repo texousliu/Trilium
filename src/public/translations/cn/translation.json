@@ -1238,6 +1238,8 @@
     "first-week-contains-first-thursday": "第一周包含一年的第一个周四",
     "first-week-has-minimum-days": "第一周有最小天数",
     "min-days-in-first-week": "第一周的最小天数",
+    "first-week-info": "第一周包含一年的第一个周四，基于 <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> 标准。",
+    "first-week-warning": "更改第一周选项可能会导致与现有周笔记重复，已创建的周笔记将不会相应更新。",
     "formatting-locale": "日期和数字格式"
   },
   "backup": {

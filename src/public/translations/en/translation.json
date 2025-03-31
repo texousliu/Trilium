@@ -1248,6 +1248,8 @@
     "first-week-contains-first-thursday": "First week contains first Thursday of the year",
     "first-week-has-minimum-days": "First week has minimum days",
     "min-days-in-first-week": "Minimum days in first week",
+    "first-week-info": "First week contains first Thursday of the year is based on <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> standard.",
+    "first-week-warning": "Changing first week options may cause duplicate with existing Week Notes and the existing Week Notes will not be updated accordingly.",
     "formatting-locale": "Date & number format"
   },
   "backup": {
