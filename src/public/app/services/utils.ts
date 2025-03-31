@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import { Modal } from "bootstrap";
 import type { ViewScope } from "./link.js";
 
+const SVG_MIME = "image/svg+xml";
+
 function reloadFrontendApp(reason?: string) {
     if (reason) {
         logInfo(`Frontend app reload: ${reason}`);
@@ -654,27 +656,23 @@ function triggerDownload(fileName: string, dataUrl: string) {
  */
 function downloadSvgAsPng(nameWithoutExtension: string, svgContent: string) {
     return new Promise<void>((resolve, reject) => {
-        const mime = "image/svg+xml";
-
         // First, we need to determine the width and the height from the input SVG.
-        const svgDocument = (new DOMParser()).parseFromString(svgContent, mime);
-        const width = svgDocument.documentElement?.getAttribute("width");
-        const height = svgDocument.documentElement?.getAttribute("height");
-
-        if (!width || !height) {
+        const result = getSizeFromSvg(svgContent);
+        if (!result) {
             reject();
             return;
         }
 
         // Convert the image to a blob.
+        const { width, height } = result;
         const svgBlob = new Blob([ svgContent ], {
-            type: mime
+            type: SVG_MIME
         })
 
         // Create an image element and load the SVG.
         const imageEl = new Image();
-        imageEl.width = parseFloat(width);
-        imageEl.height = parseFloat(height);
+        imageEl.width = width;
+        imageEl.height = height;
         imageEl.onload = () => {
             try {
                 // Draw the image with a canvas.
@@ -702,6 +700,34 @@ function downloadSvgAsPng(nameWithoutExtension: string, svgContent: string) {
         };
         imageEl.src = URL.createObjectURL(svgBlob);
     });
+}
+
+export function getSizeFromSvg(svgContent: string) {
+    const svgDocument = (new DOMParser()).parseFromString(svgContent, SVG_MIME);
+
+    // Try to use width & height attributes if available.
+    let width = svgDocument.documentElement?.getAttribute("width");
+    let height = svgDocument.documentElement?.getAttribute("height");
+
+    // If not, use the viewbox.
+    if (!width || !height) {
+        const viewBox = svgDocument.documentElement?.getAttribute("viewBox");
+        if (viewBox) {
+            const viewBoxParts = viewBox.split(" ");
+            width = viewBoxParts[2];
+            height = viewBoxParts[3];
+        }
+    }
+
+    if (width && height) {
+        return {
+            width: parseFloat(width),
+            height: parseFloat(height)
+        }
+    } else {
+        console.warn("SVG export error", svgDocument.documentElement);
+        return null;
+    }
 }
 
 /**
