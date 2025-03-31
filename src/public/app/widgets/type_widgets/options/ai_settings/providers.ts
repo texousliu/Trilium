@@ -1,10 +1,53 @@
 import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
 import { t } from "../../../../services/i18n.js";
+import options from "../../../../services/options.js";
 import { OpenAIModelResponse, AnthropicModelResponse, OllamaModelResponse } from "./interfaces.js";
 
 export class ProviderService {
-    constructor(private $widget: JQuery<HTMLElement>) {}
+    constructor(private $widget: JQuery<HTMLElement>) {
+        // Initialize Voyage models (since they don't have a dynamic refresh yet)
+        this.initializeVoyageModels();
+    }
+    
+    /**
+     * Initialize Voyage models with default values and ensure proper selection
+     */
+    private initializeVoyageModels() {
+        setTimeout(() => {
+            const $voyageModelSelect = this.$widget.find('.voyage-embedding-model');
+            if ($voyageModelSelect.length > 0) {
+                const currentValue = $voyageModelSelect.val();
+                this.ensureSelectedValue($voyageModelSelect, currentValue, 'voyageEmbeddingModel');
+            }
+        }, 100); // Small delay to ensure the widget is fully initialized
+    }
+    
+    /**
+     * Ensures the dropdown has the correct value set, prioritizing:
+     * 1. Current UI value if present
+     * 2. Value from database options if available
+     * 3. Falling back to first option if neither is available
+     */
+    private ensureSelectedValue($select: JQuery<HTMLElement>, currentValue: string | number | string[] | undefined | null, optionName: string) {
+        if (currentValue) {
+            $select.val(currentValue);
+            // If the value doesn't exist anymore, select the first option
+            if (!$select.val()) {
+                $select.prop('selectedIndex', 0);
+            }
+        } else {
+            // If no current value exists in the dropdown but there's a default in the database
+            const savedModel = options.get(optionName);
+            if (savedModel) {
+                $select.val(savedModel);
+                // If the saved model isn't in the dropdown, select the first option
+                if (!$select.val()) {
+                    $select.prop('selectedIndex', 0);
+                }
+            }
+        }
+    }
 
     /**
      * Refreshes the list of OpenAI models
@@ -49,13 +92,7 @@ export class ProviderService {
                     });
 
                     // Try to restore the previously selected value
-                    if (currentChatValue) {
-                        $chatModelSelect.val(currentChatValue);
-                        // If the value doesn't exist anymore, select the first option
-                        if (!$chatModelSelect.val()) {
-                            $chatModelSelect.prop('selectedIndex', 0);
-                        }
-                    }
+                    this.ensureSelectedValue($chatModelSelect, currentChatValue, 'openaiDefaultModel');
                 }
 
                 // Update the embedding models dropdown
@@ -75,13 +112,7 @@ export class ProviderService {
                     });
 
                     // Try to restore the previously selected value
-                    if (currentEmbedValue) {
-                        $embedModelSelect.val(currentEmbedValue);
-                        // If the value doesn't exist anymore, select the first option
-                        if (!$embedModelSelect.val()) {
-                            $embedModelSelect.prop('selectedIndex', 0);
-                        }
-                    }
+                    this.ensureSelectedValue($embedModelSelect, currentEmbedValue, 'openaiEmbeddingModel');
                 }
 
                 if (showLoading) {
@@ -153,13 +184,7 @@ export class ProviderService {
                     });
 
                     // Try to restore the previously selected value
-                    if (currentChatValue) {
-                        $chatModelSelect.val(currentChatValue);
-                        // If the value doesn't exist anymore, select the first option
-                        if (!$chatModelSelect.val()) {
-                            $chatModelSelect.prop('selectedIndex', 0);
-                        }
-                    }
+                    this.ensureSelectedValue($chatModelSelect, currentChatValue, 'anthropicDefaultModel');
                 }
 
                 // Handle embedding models if they exist
@@ -247,13 +272,7 @@ export class ProviderService {
                 });
 
                 // Try to restore the previously selected value
-                if (currentValue) {
-                    $embedModelSelect.val(currentValue);
-                    // If the value doesn't exist anymore, select the first option
-                    if (!$embedModelSelect.val()) {
-                        $embedModelSelect.prop('selectedIndex', 0);
-                    }
-                }
+                this.ensureSelectedValue($embedModelSelect, currentValue, 'ollamaEmbeddingModel');
 
                 // Also update the LLM model dropdown
                 const $modelSelect = this.$widget.find('.ollama-default-model');
@@ -271,13 +290,7 @@ export class ProviderService {
                 });
 
                 // Try to restore the previously selected value
-                if (currentModelValue) {
-                    $modelSelect.val(currentModelValue);
-                    // If the value doesn't exist anymore, select the first option
-                    if (!$modelSelect.val()) {
-                        $modelSelect.prop('selectedIndex', 0);
-                    }
-                }
+                this.ensureSelectedValue($modelSelect, currentModelValue, 'ollamaDefaultModel');
 
                 if (showLoading) {
                     toastService.showMessage(`${response.models.length} Ollama models found.`);
