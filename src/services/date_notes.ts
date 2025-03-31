@@ -1,5 +1,3 @@
-"use strict";
-
 import noteService from "./notes.js";
 import attributeService from "./attributes.js";
 import dateUtils from "./date_utils.js";
@@ -80,7 +78,7 @@ function getRootCalendarNote(): BNote {
 function getYearNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     const rootNote = _rootNote || getRootCalendarNote();
 
-    const yearStr = dateStr.trim().substr(0, 4);
+    const yearStr = dateStr.trim().substring(0, 4);
 
     let yearNote = searchService.findFirstNoteWithQuery(`#${YEAR_LABEL}="${yearStr}"`, new SearchContext({ ancestorNoteId: rootNote.noteId }));
 
@@ -119,8 +117,8 @@ function getMonthNoteTitle(rootNote: BNote, monthNumber: string, dateObj: Date) 
 function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     const rootNote = _rootNote || getRootCalendarNote();
 
-    const monthStr = dateStr.substr(0, 7);
-    const monthNumber = dateStr.substr(5, 2);
+    const monthStr = dateStr.substring(0, 7);
+    const monthNumber = dateStr.substring(5, 2);
 
     let monthNote = searchService.findFirstNoteWithQuery(`#${MONTH_LABEL}="${monthStr}"`, new SearchContext({ ancestorNoteId: rootNote.noteId }));
 
@@ -159,8 +157,8 @@ function getDayNoteTitle(rootNote: BNote, dayNumber: string, dateObj: Date) {
         .replace(/{dayInMonthPadded}/g, dayNumber)
         .replace(/{isoDate}/g, dateUtils.utcDateStr(dateObj))
         .replace(/{weekDay}/g, weekDay)
-        .replace(/{weekDay3}/g, weekDay.substr(0, 3))
-        .replace(/{weekDay2}/g, weekDay.substr(0, 2));
+        .replace(/{weekDay3}/g, weekDay.substring(0, 3))
+        .replace(/{weekDay2}/g, weekDay.substring(0, 2));
 }
 
 /** produces 1st, 2nd, 3rd, 4th, 21st, 31st for 1, 2, 3, 4, 21, 31 */
@@ -174,7 +172,7 @@ function ordinal(dayNumber: number) {
 function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     const rootNote = _rootNote || getRootCalendarNote();
 
-    dateStr = dateStr.trim().substr(0, 10);
+    dateStr = dateStr.trim().substring(0, 10);
 
     let dateNote = searchService.findFirstNoteWithQuery(`#${DATE_LABEL}="${dateStr}"`, new SearchContext({ ancestorNoteId: rootNote.noteId }));
 
@@ -183,7 +181,7 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     }
 
     const monthNote = getMonthNote(dateStr, rootNote);
-    const dayNumber = dateStr.substr(8, 2);
+    const dayNumber = dateStr.substring(8, 2);
 
     const dateObj = dateUtils.parseLocalDate(dateStr);
 
@@ -192,7 +190,7 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     sql.transactional(() => {
         dateNote = createNote(monthNote, noteTitle);
 
-        attributeService.createLabel(dateNote.noteId, DATE_LABEL, dateStr.substr(0, 10));
+        attributeService.createLabel(dateNote.noteId, DATE_LABEL, dateStr.substring(0, 10));
 
         const dateTemplateAttr = rootNote.getOwnedAttribute("relation", "dateTemplate");
 
