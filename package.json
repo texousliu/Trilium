@@ -2,7 +2,7 @@
   "name": "trilium",
   "productName": "TriliumNext Notes",
   "description": "Build your personal knowledge base with TriliumNext Notes",
-  "version": "0.92.4",
+  "version": "0.92.5-beta",
   "license": "AGPL-3.0-only",
   "main": "./electron-main.js",
   "author": {
@@ -38,6 +38,7 @@
     "electron:switch": "electron-rebuild",
     "docs:edit": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-docs TRILIUM_ENV=dev TRILIUM_PORT=37741 electron ./electron-docs-main.ts .",
     "docs:edit-nix": "electron-rebuild --version 33.3.1 && cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-docs TRILIUM_PORT=37741 TRILIUM_ENV=dev nix-shell -p electron_33 --run \"electron ./electron-docs-main.ts .\"",
+    "demo:edit": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-demo TRILIUM_ENV=dev TRILIUM_INTEGRATION_TEST=memory-no-store TRILIUM_PORT=37741 electron ./electron-edit-demo.ts .",
     "electron-forge:start": "npm run build:prepare-dist && cd ./build && electron-forge start",
     "electron-forge:make": "npm run build:prepare-dist && cross-env DEBUG=electron-windows-installer:* electron-forge make ./build",
     "electron-forge:package": "npm run build:prepare-dist && cd ./build && electron-forge package",
@@ -218,8 +219,7 @@
     "bootstrap": "5.3.3",
     "copy-webpack-plugin": "13.0.0",
     "cross-env": "7.0.3",
-    "css-loader": "7.1.2",
-    "dprint": "0.49.1",
+    "css-loader": "7.1.2",    
     "electron": "35.1.2",
     "eslint": "9.23.0",
     "esm": "3.2.25",
@@ -230,7 +230,7 @@
     "knockout": "3.5.1",
     "lorem-ipsum": "2.0.8",
     "mark.js": "8.11.1",
-    "mind-elixir": "4.4.3",
+    "mind-elixir": "4.5.0",
     "mini-css-extract-plugin": "2.9.2",
     "nodemon": "3.1.9",
     "postcss-loader": "8.1.1",
@@ -256,5 +256,9 @@
     "webpack": "5.98.0",
     "webpack-cli": "6.0.1",
     "webpack-dev-middleware": "7.4.2"
+  },
+  "optionalDependencies": {
+    "appdmg": "0.6.6",
+    "dprint": "0.49.1"
   }
 }

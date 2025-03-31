@@ -31,6 +31,7 @@ import TabRowWidget from "../widgets/tab_row.js";
 import JumpToNoteDialog from "../widgets/dialogs/jump_to_note.js";
 import RecentChangesDialog from "../widgets/dialogs/recent_changes.js";
 import PromptDialog from "../widgets/dialogs/prompt.js";
+import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 
 const MOBILE_CSS = `
 <style>
@@ -154,6 +155,7 @@ export default class MobileLayout {
                             .child(new SharedInfoWidget())
                             .child(
                                 new FloatingButtons()
+                                    .child(new RefreshButton())
                                     .child(new EditButton())
                                     .child(new RelationMapButtons())
                                     .child(new SvgExportButton())

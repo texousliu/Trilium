@@ -156,7 +156,7 @@ module.exports = {
     hooks: {
         postMake(_, makeResults) {
             const outputDir = path.join(__dirname, "..", "upload");
-            fs.mkdirp(outputDir);
+            fs.mkdirpSync(outputDir);
             for (const makeResult of makeResults) {
                 for (const artifactPath of makeResult.artifacts) {
                     // Ignore certain artifacts.
@@ -169,12 +169,12 @@ module.exports = {
                     // Override the extension for the CI.
                     const { TRILIUM_ARTIFACT_NAME_HINT } = process.env;
                     if (TRILIUM_ARTIFACT_NAME_HINT) {
-                        fileName = TRILIUM_ARTIFACT_NAME_HINT + extension;
+                        fileName = TRILIUM_ARTIFACT_NAME_HINT.replaceAll("/", "-") + extension;
                     }
         
                     const outputPath = path.join(outputDir, fileName);
                     console.log(`[Artifact] ${artifactPath} -> ${outputPath}`);
-                    fs.copyFile(artifactPath, outputPath);
+                    fs.copyFileSync(artifactPath, outputPath);
                 }
             }
         }

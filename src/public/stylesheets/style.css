@@ -49,6 +49,7 @@ body {
     --tab-bar-height: 40px;
 }
 
+body.desktop .mobile-only,
 body.mobile .desktop-only,
 body:not(.electron) .electron-only {
     display: none !important;
