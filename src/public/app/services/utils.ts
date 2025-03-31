@@ -650,47 +650,58 @@ function triggerDownload(fileName: string, dataUrl: string) {
  *
  * @param nameWithoutExtension the name of the file. The .png suffix is automatically added to it.
  * @param svgContent the content of the SVG file download.
- * @returns `true` if the operation succeeded (width/height present), or `false` if the download was not triggered.
+ * @returns a promise which resolves if the operation was successful, or rejects if it failed (permissions issue or some other issue).
  */
 function downloadSvgAsPng(nameWithoutExtension: string, svgContent: string) {
-    const mime = "image/svg+xml";
+    return new Promise<void>((resolve, reject) => {
+        const mime = "image/svg+xml";
 
-    // First, we need to determine the width and the height from the input SVG.
-    const svgDocument = (new DOMParser()).parseFromString(svgContent, mime);
-    const width = svgDocument.documentElement?.getAttribute("width");
-    const height = svgDocument.documentElement?.getAttribute("height");
+        // First, we need to determine the width and the height from the input SVG.
+        const svgDocument = (new DOMParser()).parseFromString(svgContent, mime);
+        const width = svgDocument.documentElement?.getAttribute("width");
+        const height = svgDocument.documentElement?.getAttribute("height");
 
-    if (!width || !height) {
-        return false;
-    }
+        if (!width || !height) {
+            reject();
+            return;
+        }
 
-    // Convert the image to a blob.
-    const svgBlob = new Blob([ svgContent ], {
-        type: mime
-    })
+        // Convert the image to a blob.
+        const svgBlob = new Blob([ svgContent ], {
+            type: mime
+        })
 
-    // Create an image element and load the SVG.
-    const imageEl = new Image();
-    imageEl.width = parseFloat(width);
-    imageEl.height = parseFloat(height);
-    imageEl.src = URL.createObjectURL(svgBlob);
-    imageEl.onload = () => {
-        // Draw the image with a canvas.
-        const canvasEl = document.createElement("canvas");
-        canvasEl.width = imageEl.width;
-        canvasEl.height = imageEl.height;
-        document.body.appendChild(canvasEl);
+        // Create an image element and load the SVG.
+        const imageEl = new Image();
+        imageEl.width = parseFloat(width);
+        imageEl.height = parseFloat(height);
+        imageEl.onload = () => {
+            try {
+                // Draw the image with a canvas.
+                const canvasEl = document.createElement("canvas");
+                canvasEl.width = imageEl.width;
+                canvasEl.height = imageEl.height;
+                document.body.appendChild(canvasEl);
 
-        const ctx = canvasEl.getContext("2d");
-        ctx?.drawImage(imageEl, 0, 0);
-        URL.revokeObjectURL(imageEl.src);
+                const ctx = canvasEl.getContext("2d");
+                if (!ctx) {
+                    reject();
+                }
 
-        const imgUri = canvasEl.toDataURL("image/png")
-        triggerDownload(`${nameWithoutExtension}.png`, imgUri);
-        document.body.removeChild(canvasEl);
-    };
+                ctx?.drawImage(imageEl, 0, 0);
+                URL.revokeObjectURL(imageEl.src);
 
-    return true;
+                const imgUri = canvasEl.toDataURL("image/png")
+                triggerDownload(`${nameWithoutExtension}.png`, imgUri);
+                document.body.removeChild(canvasEl);
+                resolve();
+            } catch (e) {
+                console.warn(e);
+                reject();
+            }
+        };
+        imageEl.src = URL.createObjectURL(svgBlob);
+    });
 }
 
 /**
