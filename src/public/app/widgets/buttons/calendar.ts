@@ -252,7 +252,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         this.createMonth();
     }
 
-    createDay(dateNotesForMonth: DateNotesForMonth, num: number, day: number) {
+    createDay(dateNotesForMonth: DateNotesForMonth, num: number) {
         const $newDay = $("<a>").addClass("calendar-date").attr("data-calendar-date", utils.formatDateISO(this.date));
         const $date = $("<span>").html(String(num));
 
@@ -348,7 +348,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             dates.forEach(date => {
                 const tempDate = this.date;
                 this.date = date;
-                const $day = this.createDay(dateNotesForPrevMonth, date.getDate(), date.getDay());
+                const $day = this.createDay(dateNotesForPrevMonth, date.getDate());
                 $day.addClass('calendar-date-prev-month');
                 this.$month.append($day);
                 this.date = tempDate;
@@ -368,7 +368,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
                 this.$month.append($weekNumber);
             }
 
-            const $day = this.createDay(dateNotesForMonth, this.date.getDate(), this.date.getDay());
+            const $day = this.createDay(dateNotesForMonth, this.date.getDate());
             this.$month.append($day);
 
             this.date.setDate(this.date.getDate() + 1);
@@ -388,7 +388,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             dates.forEach(date => {
                 const tempDate = this.date;
                 this.date = date;
-                const $day = this.createDay(dateNotesForNextMonth, date.getDate(), date.getDay());
+                const $day = this.createDay(dateNotesForNextMonth, date.getDate());
                 $day.addClass('calendar-date-next-month');
                 this.$month.append($day);
                 this.date = tempDate;
