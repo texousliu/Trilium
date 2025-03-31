@@ -94,6 +94,7 @@
 }
 
 .calendar-dropdown-widget .calendar-week-number {
+    color: var(--muted-text-color) !important;
     position: relative;
 }
 

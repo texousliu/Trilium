@@ -287,8 +287,8 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     createWeekNumber(weekNumber: number) {
-        const weekNumberText = 'W' + String(weekNumber).padStart(2, '0');
-        const $newWeekNumber = $("<a>").addClass("calendar-date calendar-week-number").attr("data-calendar-week-number", weekNumberText);
+        const weekNumberText = String(weekNumber);
+        const $newWeekNumber = $("<a>").addClass("calendar-date calendar-week-number").attr("data-calendar-week-number", 'W' + weekNumberText.padStart(2, '0'));
         const $weekNumber = $("<span>").html(weekNumberText);
 
         $newWeekNumber.append($weekNumber);
