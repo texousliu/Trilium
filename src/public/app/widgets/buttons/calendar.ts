@@ -286,6 +286,15 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         return $newDay;
     }
 
+    createWeekNumber(weekNumber: number) {
+        const weekNumberText = 'W' + String(weekNumber).padStart(2, '0');
+        const $newWeekNumber = $("<a>").addClass("calendar-date calendar-week-number").attr("data-calendar-week-number", weekNumberText);
+        const $weekNumber = $("<span>").html(weekNumberText);
+
+        $newWeekNumber.append($weekNumber);
+        return $newWeekNumber;
+    }
+
     isEqual(a: Date, b: Date | null) {
         if ((!a && b) || (a && !b)) {
             return false;
@@ -311,11 +320,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
             // Add week number if it's first day of week or first day of month
             if (this.date.getDay() === this.firstDayOfWeek || this.date.getDate() === 1) {
-                const weekNumberText = 'W' + String(weekNumber).padStart(2, '0');
-                const $weekNumber = $("<a>")
-                    .addClass("calendar-date calendar-week-number")
-                    .attr("data-calendar-week-number", weekNumberText)
-                    .html(`<span>${weekNumberText}</span>`);
+                const $weekNumber = this.createWeekNumber(weekNumber);
                 this.$month.append($weekNumber);
             }
 
