@@ -117,9 +117,12 @@ export default class LocalizationOptions extends OptionsWidget {
 
     private $localeSelect!: JQuery<HTMLElement>;
     private $formattingLocaleSelect!: JQuery<HTMLElement>;
+    private $minDaysRow!: JQuery<HTMLElement>;
 
     doRender() {
         this.$widget = $(TPL);
+
+        this.$minDaysRow = this.$widget.find(".min-days-row");
 
         this.$localeSelect = this.$widget.find(".locale-select");
         this.$localeSelect.on("change", async () => {
@@ -141,20 +144,19 @@ export default class LocalizationOptions extends OptionsWidget {
         this.$widget.find('input[name="first-week-of-year"]').on('change', (e) => {
             const target = e.target as HTMLInputElement;
             const value = parseInt(target.value);
-            const $minDaysRow = this.$widget.find('.min-days-row');
 
             if (value === 2) {
-                $minDaysRow.show();
+                this.$minDaysRow.show();
             } else {
-                $minDaysRow.hide();
+                this.$minDaysRow.hide();
             }
 
             this.updateOption("firstWeekOfYear", value);
         });
 
         const currentValue = this.$widget.find('input[name="first-week-of-year"]:checked').val();
-        if (currentValue === "2") {
-            this.$widget.find('.min-days-row').show();
+        if (currentValue === 2) {
+            this.$minDaysRow.show();
         }
 
         this.$widget.find("#min-days-in-first-week").on("change", () => {
@@ -191,9 +193,13 @@ export default class LocalizationOptions extends OptionsWidget {
         this.$widget.find(`input[name="first-day-of-week"][value="${options.firstDayOfWeek}"]`)
             .prop("checked", "true");
 
-        this.$widget.find(`input[name="first-week-of-year"][value="${options.firstWeekOfYear || '0'}"]`)
+        this.$widget.find(`input[name="first-week-of-year"][value="${options.firstWeekOfYear}"]`)
             .prop("checked", "true");
 
-        this.$widget.find("#min-days-in-first-week").val(options.minDaysInFirstWeek || "4");
+        if (parseInt(options.firstWeekOfYear) === 2) {
+            this.$minDaysRow.show();
+        }
+
+        this.$widget.find("#min-days-in-first-week").val(options.minDaysInFirstWeek);
     }
 }
