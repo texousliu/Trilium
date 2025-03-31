@@ -55,7 +55,7 @@ const TPL = `
             </div>
         </div>
 
-        <div class="option-row">
+        <div class="option-row min-days-row" style="display: none;">
             <label for="min-days-in-first-week">${t("i18n.min-days-in-first-week")}</label>
             <select id="min-days-in-first-week" class="form-select">
                 ${Array.from({length: 7}, (_, i) => i + 1)
@@ -132,10 +132,22 @@ export default class LocalizationOptions extends OptionsWidget {
             this.updateOption("firstDayOfWeek", firstDayOfWeek);
         });
 
-        this.$widget.find(`input[name="first-week-of-year"]`).on("change", () => {
-            const firstWeekOfYear = String(this.$widget.find(`input[name="first-week-of-year"]:checked`).val());
-            this.updateOption("firstWeekOfYear", firstWeekOfYear);
+        this.$widget.find('input[name="first-week-of-year"]').on('change', (e) => {
+            const target = e.target as HTMLInputElement;
+            const value = parseInt(target.value);
+            const $minDaysRow = this.$widget.find('.min-days-row');
+
+            if (value === 2) {
+                $minDaysRow.show();
+            } else {
+                $minDaysRow.hide();
+            }
         });
+
+        const currentValue = this.$widget.find('input[name="first-week-of-year"]:checked').val();
+        if (currentValue === "2") {
+            this.$widget.find('.min-days-row').show();
+        }
 
         this.$widget.find("#min-days-in-first-week").on("change", () => {
             const minDays = String(this.$widget.find("#min-days-in-first-week").val());
