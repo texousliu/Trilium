@@ -146,3 +146,17 @@
 .calendar-dropdown-widget .calendar-date:not(.calendar-date-active) {
     cursor: pointer;
 }
+
+.calendar-dropdown-widget .calendar-date-prev-month,
+.calendar-dropdown-widget .calendar-date-next-month {
+    color: var(--muted-text-color);
+    opacity: 0.6;
+}
+
+.calendar-dropdown-widget .calendar-date-prev-month:hover,
+.calendar-dropdown-widget .calendar-date-next-month:hover {
+    opacity: 1;
+    background-color: var(--hover-item-background-color);
+    color: var(--hover-item-text-color);
+    text-decoration: underline;
+}

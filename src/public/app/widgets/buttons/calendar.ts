@@ -256,17 +256,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         const $newDay = $("<a>").addClass("calendar-date").attr("data-calendar-date", utils.formatDateISO(this.date));
         const $date = $("<span>").html(String(num));
 
-        // if it's the first day of the month
-        if (num === 1) {
-            // 0  1  2  3  4  5  6
-            // Su Mo Tu We Th Fr Sa
-            // 1  2  3  4  5  6  0
-            // Mo Tu We Th Fr Sa Su
-            let dayOffset = day - this.firstDayOfWeek;
-            if (dayOffset < 0) dayOffset = 7 + dayOffset;
-            $newDay.css("marginLeft", dayOffset * 12.5 + "%");
-        }
-
         const dateNoteId = dateNotesForMonth[utils.formatDateISO(this.date)];
 
         if (dateNoteId) {
@@ -305,11 +294,60 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
     }
 
+    private getPrevMonthDays(firstDayOfWeek: number): { weekNumber: number, dates: Date[] } {
+        const prevMonthLastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
+        const daysToAdd = (firstDayOfWeek - this.firstDayOfWeek + 7) % 7;
+        const dates = [];
+
+        const firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+        const weekNumber = this.getWeekNumber(firstDay);
+
+        // Get dates from previous month
+        for (let i = daysToAdd - 1; i >= 0; i--) {
+            dates.push(new Date(prevMonthLastDay.getFullYear(), prevMonthLastDay.getMonth(), prevMonthLastDay.getDate() - i));
+        }
+
+        return { weekNumber, dates };
+    }
+
+    private getNextMonthDays(lastDayOfWeek: number): Date[] {
+        const nextMonthFirstDay = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 1);
+        const nextMonthDays = [];
+        for (let i = 0; i < (6 - lastDayOfWeek); i++) {
+            nextMonthDays.push(new Date(nextMonthFirstDay.getFullYear(), nextMonthFirstDay.getMonth(), i + 1));
+        }
+        return nextMonthDays;
+    }
+
     async createMonth() {
         const month = utils.formatDateISO(this.date).substring(0, 7);
         const dateNotesForMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${month}`);
 
         this.$month.empty();
+
+        const firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+        const firstDayOfWeek = firstDay.getDay();
+
+        // Add dates from previous month
+        if (firstDayOfWeek !== this.firstDayOfWeek) {
+            const { weekNumber, dates } = this.getPrevMonthDays(firstDayOfWeek);
+
+            const prevMonth = new Date(this.date.getFullYear(), this.date.getMonth() - 1, 1);
+            const prevMonthStr = utils.formatDateISO(prevMonth).substring(0, 7);
+            const dateNotesForPrevMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${prevMonthStr}`);
+
+            const $weekNumber = this.createWeekNumber(weekNumber);
+            this.$month.append($weekNumber);
+
+            dates.forEach(date => {
+                const tempDate = this.date;
+                this.date = date;
+                const $day = this.createDay(dateNotesForPrevMonth, date.getDate(), date.getDay());
+                $day.addClass('calendar-date-prev-month');
+                this.$month.append($day);
+                this.date = tempDate;
+            });
+        }
 
         const currentMonth = this.date.getMonth();
 
@@ -319,13 +357,12 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             const weekNumber = this.getWeekNumber(safeDate);
 
             // Add week number if it's first day of week or first day of month
-            if (this.date.getDay() === this.firstDayOfWeek || this.date.getDate() === 1) {
+            if (this.date.getDay() === this.firstDayOfWeek) {
                 const $weekNumber = this.createWeekNumber(weekNumber);
                 this.$month.append($weekNumber);
             }
 
             const $day = this.createDay(dateNotesForMonth, this.date.getDate(), this.date.getDay());
-
             this.$month.append($day);
 
             this.date.setDate(this.date.getDate() + 1);
