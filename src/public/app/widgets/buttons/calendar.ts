@@ -204,42 +204,62 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     getWeekNumber(date: Date): number {
-        const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+        const year = dayjs(date).year();
+        const jan1 = dayjs().year(year).month(0).date(1);
+        const jan1Day = jan1.day();
 
-        const year = utcDate.getUTCFullYear();
-        const jan1 = new Date(Date.UTC(year, 0, 1));
-        const jan1Day = jan1.getUTCDay();
+        let firstWeekStart = jan1.clone();
 
-        let firstWeekStart = new Date(jan1);
-
-        let dayOffset = (jan1Day - this.firstDayOfWeek + 7) % 7;
-        firstWeekStart.setUTCDate(firstWeekStart.getUTCDate() - dayOffset);
+        let dayOffset;
+        if (jan1Day < this.firstDayOfWeek) {
+            dayOffset = jan1Day + (7 - this.firstDayOfWeek);
+        } else {
+            dayOffset = jan1Day - this.firstDayOfWeek;
+        }
+        firstWeekStart = firstWeekStart.subtract(dayOffset, 'day');
 
         switch (this.weekCalculationOptions.firstWeekType) {
+            // case 0 is default: week containing Jan 1
             case 1: {
-                const thursday = new Date(firstWeekStart);
-                const day = thursday.getUTCDay();
+                let thursday = firstWeekStart.clone();
+                const day = thursday.day();
                 const offset = (4 - day + 7) % 7;
-                thursday.setUTCDate(thursday.getUTCDate() + offset);
-                if (thursday.getUTCFullYear() < year) {
-                    firstWeekStart.setUTCDate(firstWeekStart.getUTCDate() + 7);
+                thursday = thursday.add(offset, 'day');
+                if (thursday.year() < year) {
+                    firstWeekStart = firstWeekStart.add(7, 'day');
                 }
                 break;
             }
             case 2: {
                 const daysInFirstWeek = 7 - dayOffset;
                 if (daysInFirstWeek < this.weekCalculationOptions.minDaysInFirstWeek) {
-                    firstWeekStart.setUTCDate(firstWeekStart.getUTCDate() + 7);
+                    firstWeekStart = firstWeekStart.add(7, 'day');
                 }
                 break;
             }
-            // case 0 is default: week containing Jan 1
         }
 
-        const diffMillis = utcDate.getTime() - firstWeekStart.getTime();
-        const diffDays = Math.floor(diffMillis / (24 * 60 * 60 * 1000));
+        const diffDays = dayjs(date).diff(firstWeekStart, 'day') + 1;
+        const weekNumber = Math.floor(diffDays / 7) + 1;
 
-        return Math.floor(diffDays / 7) + 1;
+        // Check if the week number is less than 0, which means the date is in the previous year
+        if (weekNumber <= 0) {
+            const prevYearLastWeek = this.getWeekNumber(dayjs(date).subtract(1, 'year').endOf('year').toDate());
+            return prevYearLastWeek;
+        }
+
+        // Check if it's the last week of December
+        if (dayjs(date).month() === 11) { // December
+            const lastDayOfYear = dayjs().year(year).month(11).date(31);
+            const lastWeekStart = lastDayOfYear.subtract((lastDayOfYear.day() - this.firstDayOfWeek + 7) % 7, 'day');
+
+            if (this.isEqual(date, lastWeekStart.toDate())) {
+                const nextYearFirstWeek = this.getWeekNumber(lastDayOfYear.add(1, 'day').toDate());
+                return nextYearFirstWeek;
+            }
+        }
+
+        return weekNumber;
     }
 
     async dropdownShown() {
@@ -294,7 +314,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
         if (!b) return false;
 
-        return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+        return dayjs(a).isSame(dayjs(b), 'day');
     }
 
     private getPrevMonthDays(firstDayOfWeek: number): { weekNumber: number, dates: Date[] } {
