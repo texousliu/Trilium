@@ -29,7 +29,7 @@ const DROPDOWN_TPL = `
 <div class="calendar-dropdown-widget">
     <style>
         .calendar-dropdown-widget {
-            width: 380px;
+            width: 400px;
         }
     </style>
 
@@ -59,13 +59,8 @@ const DROPDOWN_TPL = `
         </div>
     </div>
 
-    <div class="calendar-container">
-        <div class="calendar-week-numbers"></div>
-        <div class="calendar-main">
-            <div class="calendar-week"></div>
-            <div class="calendar-body" data-calendar-area="month"></div>
-        </div>
-    </div>
+    <div class="calendar-week"></div>
+    <div class="calendar-body" data-calendar-area="month"></div>
 </div>`;
 
 const DAYS_OF_WEEK = [t("calendar.sun"), t("calendar.mon"), t("calendar.tue"), t("calendar.wed"), t("calendar.thu"), t("calendar.fri"), t("calendar.sat")];
@@ -82,7 +77,6 @@ interface WeekCalculationOptions {
 export default class CalendarWidget extends RightDropdownButtonWidget {
     private $month!: JQuery<HTMLElement>;
     private $weekHeader!: JQuery<HTMLElement>;
-    private $weekNumbers!: JQuery<HTMLElement>;
     private $monthSelect!: JQuery<HTMLElement>;
     private $yearSelect!: JQuery<HTMLElement>;
     private $next!: JQuery<HTMLElement>;
@@ -105,7 +99,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
         this.$month = this.$dropdownContent.find('[data-calendar-area="month"]');
         this.$weekHeader = this.$dropdownContent.find(".calendar-week");
-        this.$weekNumbers = this.$dropdownContent.find(".calendar-week-numbers");
 
         this.manageFirstDayOfWeek();
         this.initWeekCalculation();
@@ -195,7 +188,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         // Generate the list of days of the week taking into consideration the user's selected first day of week.
         let localeDaysOfWeek = [...DAYS_OF_WEEK];
         const daysToBeAddedAtEnd = localeDaysOfWeek.splice(0, this.firstDayOfWeek);
-        localeDaysOfWeek = [...localeDaysOfWeek, ...daysToBeAddedAtEnd];
+        localeDaysOfWeek = ['', ...localeDaysOfWeek, ...daysToBeAddedAtEnd];
         this.$weekHeader.html(localeDaysOfWeek.map((el) => `<span>${el}</span>`).join(''));
     }
 
@@ -271,7 +264,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             // Mo Tu We Th Fr Sa Su
             let dayOffset = day - this.firstDayOfWeek;
             if (dayOffset < 0) dayOffset = 7 + dayOffset;
-            $newDay.css("marginLeft", dayOffset * 14.28 + "%");
+            $newDay.css("marginLeft", dayOffset * 12.5 + "%");
         }
 
         const dateNoteId = dateNotesForMonth[utils.formatDateISO(this.date)];
@@ -308,14 +301,23 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         const dateNotesForMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${month}`);
 
         this.$month.empty();
-        this.$weekNumbers.empty();
 
         const currentMonth = this.date.getMonth();
-        const weekNumbers: Set<number> = new Set();
 
         while (this.date.getMonth() === currentMonth) {
+            // this is to avoid issues with summer/winter time
             const safeDate = new Date(Date.UTC(this.date.getFullYear(), this.date.getMonth(), this.date.getDate()));
-            weekNumbers.add(this.getWeekNumber(safeDate));
+            const weekNumber = this.getWeekNumber(safeDate);
+
+            // Add week number if it's first day of week or first day of month
+            if (this.date.getDay() === this.firstDayOfWeek || this.date.getDate() === 1) {
+                const weekNumberText = 'W' + String(weekNumber).padStart(2, '0');
+                const $weekNumber = $("<a>")
+                    .addClass("calendar-date calendar-week-number")
+                    .attr("data-calendar-week-number", weekNumberText)
+                    .html(`<span>${weekNumberText}</span>`);
+                this.$month.append($weekNumber);
+            }
 
             const $day = this.createDay(dateNotesForMonth, this.date.getDate(), this.date.getDay());
 
@@ -329,13 +331,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
         this.$monthSelect.text(MONTHS[this.date.getMonth()]);
         this.$yearSelect.val(this.date.getFullYear());
-
-        for (const weekNumber of weekNumbers) {
-            const $weekNumber = $("<div>")
-                .addClass("calendar-week-number")
-                .text(weekNumber);
-            this.$weekNumbers.append($weekNumber);
-        }
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {

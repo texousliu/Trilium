@@ -71,32 +71,6 @@
     /* Disable the dropdown arrow */
 }
 
-.calendar-container {
-    display: flex;
-}
-
-.calendar-dropdown-widget .calendar-week-numbers {
-    width: 30px;
-    border-right: 1px solid var(--main-border-color);
-    padding-right: 5px;
-    margin-right: 5px;
-    padding-top: 2.4rem;
-}
-
-.calendar-dropdown-widget .calendar-week-number {
-    /* height: 2.4rem; */
-    /* line-height: 2.4rem; */
-    text-align: center;
-    color: var(--muted-text-color);
-    font-size: 0.9em;
-}
-
-.calendar-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
 .calendar-dropdown-widget .calendar-week {
     display: flex;
     flex-wrap: wrap;
@@ -104,10 +78,10 @@
 
 .calendar-dropdown-widget .calendar-week span {
     flex-direction: column;
-    flex: 0 0 14.28%;
+    flex: 0 0 12.5%;
     font-size: 1rem;
     font-weight: bold;
-    max-width: 14.28%;
+    max-width: 12.5%;
     padding-top: 5px;
     padding-bottom: 5px;
     text-align: center;
@@ -119,13 +93,28 @@
     flex-wrap: wrap;
 }
 
+.calendar-dropdown-widget .calendar-week-number {
+    position: relative;
+}
+
+.calendar-dropdown-widget .calendar-week-number::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--main-border-color);
+    z-index: 2;
+}
+
 .calendar-dropdown-widget .calendar-date {
     align-items: center;
     color: var(--main-text-color);
     display: flex;
     flex-direction: column;
-    flex: 0 0 14.28%;
-    max-width: 14.28%;
+    flex: 0 0 12.5%;
+    max-width: 12.5%;
     padding: 0.4rem 0;
     font-size: 120%;
 }
