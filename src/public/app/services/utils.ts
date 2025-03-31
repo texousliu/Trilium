@@ -665,14 +665,12 @@ function downloadSvgAsPng(nameWithoutExtension: string, svgContent: string) {
 
         // Convert the image to a blob.
         const { width, height } = result;
-        const svgBlob = new Blob([ svgContent ], {
-            type: SVG_MIME
-        })
 
         // Create an image element and load the SVG.
         const imageEl = new Image();
         imageEl.width = width;
         imageEl.height = height;
+        imageEl.crossOrigin = "anonymous";
         imageEl.onload = () => {
             try {
                 // Draw the image with a canvas.
@@ -687,7 +685,6 @@ function downloadSvgAsPng(nameWithoutExtension: string, svgContent: string) {
                 }
 
                 ctx?.drawImage(imageEl, 0, 0);
-                URL.revokeObjectURL(imageEl.src);
 
                 const imgUri = canvasEl.toDataURL("image/png")
                 triggerDownload(`${nameWithoutExtension}.png`, imgUri);
@@ -698,7 +695,8 @@ function downloadSvgAsPng(nameWithoutExtension: string, svgContent: string) {
                 reject();
             }
         };
-        imageEl.src = URL.createObjectURL(svgBlob);
+        imageEl.onerror = (e) => reject(e);
+        imageEl.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgContent)}`;
     });
 }
 
