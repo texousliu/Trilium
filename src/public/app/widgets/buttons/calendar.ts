@@ -8,7 +8,11 @@ import toastService from "../../services/toast.js";
 import options from "../../services/options.js";
 import { Dropdown } from "bootstrap";
 import type { EventData } from "../../components/app_context.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
 import "../../../stylesheets/calendar.css";
+
+dayjs.extend(utc);
 
 const MONTHS = [
     t("calendar.january"),
@@ -114,18 +118,18 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             const target = e.target as HTMLElement;
             const value = target.dataset.value;
             if (value) {
-                this.date.setMonth(parseInt(value));
+                this.date = dayjs(this.date).month(parseInt(value)).toDate();
                 this.createMonth();
             }
         });
         this.$next = this.$dropdownContent.find('[data-calendar-toggle="next"]');
         this.$next.on("click", () => {
-            this.date.setMonth(this.date.getMonth() + 1);
+            this.date = dayjs(this.date).add(1, 'month').toDate();
             this.createMonth();
         });
         this.$previous = this.$dropdownContent.find('[data-calendar-toggle="previous"]');
         this.$previous.on("click", () => {
-            this.date.setMonth(this.date.getMonth() - 1);
+            this.date = dayjs(this.date).subtract(1, 'month').toDate();
             this.createMonth();
         });
 
@@ -133,17 +137,17 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         this.$yearSelect = this.$dropdownContent.find('[data-calendar-input="year"]');
         this.$yearSelect.on("input", (e) => {
             const target = e.target as HTMLInputElement;
-            this.date.setFullYear(parseInt(target.value));
+            this.date = dayjs(this.date).year(parseInt(target.value)).toDate();
             this.createMonth();
         });
         this.$nextYear = this.$dropdownContent.find('[data-calendar-toggle="nextYear"]');
         this.$nextYear.on("click", () => {
-            this.date.setFullYear(this.date.getFullYear() + 1);
+            this.date = dayjs(this.date).add(1, 'year').toDate();
             this.createMonth();
         });
         this.$previousYear = this.$dropdownContent.find('[data-calendar-toggle="previousYear"]');
         this.$previousYear.on("click", () => {
-            this.date.setFullYear(this.date.getFullYear() - 1);
+            this.date = dayjs(this.date).subtract(1, 'year').toDate();
             this.createMonth();
         });
 
@@ -244,10 +248,9 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
     init(activeDate: string | null) {
         // attaching time fixes local timezone handling
-        this.activeDate = activeDate ? new Date(`${activeDate}T12:00:00`) : null;
-        this.todaysDate = new Date();
-        this.date = new Date((this.activeDate || this.todaysDate).getTime());
-        this.date.setDate(1);
+        this.activeDate = activeDate ? dayjs(`${activeDate}T12:00:00`).toDate() : null;
+        this.todaysDate = dayjs().toDate();
+        this.date = dayjs(this.activeDate || this.todaysDate).startOf('month').toDate();
 
         this.createMonth();
     }
@@ -326,21 +329,20 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     async createMonth() {
-        const month = utils.formatDateISO(this.date).substring(0, 7);
+        const month = dayjs(this.date).format('YYYY-MM');
         const dateNotesForMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${month}`);
 
         this.$month.empty();
 
-        const firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
-        const firstDayOfWeek = firstDay.getDay();
+        const firstDay = dayjs(this.date).startOf('month');
+        const firstDayOfWeek = firstDay.day();
 
         // Add dates from previous month
         if (firstDayOfWeek !== this.firstDayOfWeek) {
             const { weekNumber, dates } = this.getPrevMonthDays(firstDayOfWeek);
 
-            const prevMonth = new Date(this.date.getFullYear(), this.date.getMonth() - 1, 1);
-            const prevMonthStr = utils.formatDateISO(prevMonth).substring(0, 7);
-            const dateNotesForPrevMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${prevMonthStr}`);
+            const prevMonth = dayjs(this.date).subtract(1, 'month').format('YYYY-MM');
+            const dateNotesForPrevMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${prevMonth}`);
 
             const $weekNumber = this.createWeekNumber(weekNumber);
             this.$month.append($weekNumber);
@@ -348,7 +350,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             dates.forEach(date => {
                 const tempDate = this.date;
                 this.date = date;
-                const $day = this.createDay(dateNotesForPrevMonth, date.getDate());
+                const $day = this.createDay(dateNotesForPrevMonth, dayjs(date).date());
                 $day.addClass('calendar-date-prev-month');
                 this.$month.append($day);
                 this.date = tempDate;
@@ -358,9 +360,8 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         const currentMonth = this.date.getMonth();
 
         while (this.date.getMonth() === currentMonth) {
-            // this is to avoid issues with summer/winter time
-            const safeDate = new Date(Date.UTC(this.date.getFullYear(), this.date.getMonth(), this.date.getDate()));
-            const weekNumber = this.getWeekNumber(safeDate);
+            // Using UTC to avoid issues with summer/winter time
+            const weekNumber = this.getWeekNumber(dayjs(this.date).utc().toDate());
 
             // Add week number if it's first day of week
             if (this.date.getDay() === this.firstDayOfWeek) {
@@ -371,33 +372,30 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             const $day = this.createDay(dateNotesForMonth, this.date.getDate());
             this.$month.append($day);
 
-            this.date.setDate(this.date.getDate() + 1);
+            this.date = dayjs(this.date).add(1, 'day').toDate();
         }
+        // while loop trips over and day is at 30/31, bring it back
+        this.date = dayjs(this.date).startOf('month').subtract(1, 'month').toDate();
 
         // Add dates from next month
-        const lastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
-        const lastDayOfWeek = lastDay.getDay();
+        const lastDayOfMonth = dayjs(this.date).endOf('month').toDate();
+        const lastDayOfWeek = lastDayOfMonth.getDay();
         const lastDayOfUserWeek = (this.firstDayOfWeek + 6) % 7;
         if (lastDayOfWeek !== lastDayOfUserWeek) {
             const dates = this.getNextMonthDays(lastDayOfWeek);
 
-            const nextMonth = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 1);
-            const nextMonthStr = utils.formatDateISO(nextMonth).substring(0, 7);
-            const dateNotesForNextMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${nextMonthStr}`);
+            const nextMonth = dayjs(this.date).add(1, 'month').format('YYYY-MM');
+            const dateNotesForNextMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${nextMonth}`);
 
             dates.forEach(date => {
                 const tempDate = this.date;
                 this.date = date;
-                const $day = this.createDay(dateNotesForNextMonth, date.getDate());
+                const $day = this.createDay(dateNotesForNextMonth, dayjs(date).date());
                 $day.addClass('calendar-date-next-month');
                 this.$month.append($day);
                 this.date = tempDate;
             });
         }
-
-        // while loop trips over and day is at 30/31, bring it back
-        this.date.setDate(1);
-        this.date.setMonth(this.date.getMonth() - 1);
 
         this.$monthSelect.text(MONTHS[this.date.getMonth()]);
         this.$yearSelect.val(this.date.getFullYear());
