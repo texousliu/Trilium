@@ -58,9 +58,9 @@ const TPL = `
         <div class="option-row min-days-row" style="display: none;">
             <label for="min-days-in-first-week">${t("i18n.min-days-in-first-week")}</label>
             <select id="min-days-in-first-week" class="form-select">
-                ${Array.from({length: 7}, (_, i) => i + 1)
-                    .map(num => `<option value="${num}">${num}</option>`)
-                    .join('')}
+                ${Array.from({ length: 7 }, (_, i) => i + 1)
+        .map(num => `<option value="${num}">${num}</option>`)
+        .join('')}
             </select>
         </div>
 
@@ -148,6 +148,8 @@ export default class LocalizationOptions extends OptionsWidget {
             } else {
                 $minDaysRow.hide();
             }
+
+            this.updateOption("firstWeekOfYear", value);
         });
 
         const currentValue = this.$widget.find('input[name="first-week-of-year"]:checked').val();
@@ -156,7 +158,7 @@ export default class LocalizationOptions extends OptionsWidget {
         }
 
         this.$widget.find("#min-days-in-first-week").on("change", () => {
-            const minDays = String(this.$widget.find("#min-days-in-first-week").val());
+            const minDays = this.$widget.find("#min-days-in-first-week").val();
             this.updateOption("minDaysInFirstWeek", minDays);
         });
 
