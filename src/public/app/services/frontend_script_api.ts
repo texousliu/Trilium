@@ -363,7 +363,7 @@ interface Api {
      *
      * @param date - e.g. "2019-04-29"
      */
-    getWeekNote: typeof dateNotesService.getWeekNote;
+    getWeekFirstDayNote: typeof dateNotesService.getWeekFirstDayNote;
 
     /**
      * Returns month-note. If it doesn't exist, it is automatically created.
@@ -651,7 +651,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
 
     this.getTodayNote = dateNotesService.getTodayNote;
     this.getDayNote = dateNotesService.getDayNote;
-    this.getWeekNote = dateNotesService.getWeekNote;
+    this.getWeekFirstDayNote = dateNotesService.getWeekFirstDayNote;
     this.getMonthNote = dateNotesService.getMonthNote;
     this.getYearNote = dateNotesService.getYearNote;
 

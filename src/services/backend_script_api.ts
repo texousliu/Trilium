@@ -239,7 +239,7 @@ interface Api {
      * @param date in YYYY-MM-DD format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
      */
-    getWeekNote(
+    getWeekFirstDayNote(
         date: string,
         options: {
             // TODO: Deduplicate type with date_notes.ts once ES modules are added.
@@ -552,7 +552,7 @@ function BackendScriptApi(this: Api, currentNote: BNote, apiParams: ApiParams) {
     this.getRootCalendarNote = dateNoteService.getRootCalendarNote;
     this.getDayNote = dateNoteService.getDayNote;
     this.getTodayNote = dateNoteService.getTodayNote;
-    this.getWeekNote = dateNoteService.getWeekNote;
+    this.getWeekFirstDayNote = dateNoteService.getWeekFirstDayNote;
     this.getMonthNote = dateNoteService.getMonthNote;
     this.getYearNote = dateNoteService.getYearNote;
 

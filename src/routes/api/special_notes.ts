@@ -15,8 +15,8 @@ function getDayNote(req: Request) {
     return dateNoteService.getDayNote(req.params.date);
 }
 
-function getWeekNote(req: Request) {
-    return dateNoteService.getWeekNote(req.params.date);
+function getWeekFirstDayNote(req: Request) {
+    return dateNoteService.getWeekFirstDayNote(req.params.date);
 }
 
 function getMonthNote(req: Request) {
@@ -101,7 +101,7 @@ function createOrUpdateScriptLauncherFromApi(req: Request) {
 export default {
     getInboxNote,
     getDayNote,
-    getWeekNote,
+    getWeekFirstDayNote,
     getMonthNote,
     getYearNote,
     getDayNotesForMonth,

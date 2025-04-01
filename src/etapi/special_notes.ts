@@ -46,7 +46,7 @@ function register(router: Router) {
             throw getDateInvalidError(date);
         }
 
-        const note = dateNotesService.getWeekNote(date);
+        const note = dateNotesService.getWeekFirstDayNote(date);
         res.json(mappers.mapNoteToPojo(note));
     });
 

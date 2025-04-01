@@ -12,6 +12,7 @@ import { t } from "i18next";
 const CALENDAR_ROOT_LABEL = "calendarRoot";
 const YEAR_LABEL = "yearNote";
 const MONTH_LABEL = "monthNote";
+const WEEK_LABEL = "weekNote";
 const DATE_LABEL = "dateNote";
 
 const WEEKDAY_TRANSLATION_IDS = ["weekdays.sunday", "weekdays.monday", "weekdays.tuesday", "weekdays.wednesday", "weekdays.thursday", "weekdays.friday", "weekdays.saturday", "weekdays.sunday"];
@@ -225,7 +226,7 @@ interface WeekNoteOpts {
     startOfTheWeek?: StartOfWeek;
 }
 
-function getWeekNote(dateStr: string, options: WeekNoteOpts = {}, rootNote: BNote | null = null) {
+function getWeekFirstDayNote(dateStr: string, options: WeekNoteOpts = {}, rootNote: BNote | null = null) {
     const startOfTheWeek = options.startOfTheWeek || "monday";
 
     const dateObj = getStartOfTheWeek(dateUtils.parseLocalDate(dateStr), startOfTheWeek);
@@ -239,7 +240,7 @@ export default {
     getRootCalendarNote,
     getYearNote,
     getMonthNote,
-    getWeekNote,
+    getWeekFirstDayNote,
     getDayNote,
     getTodayNote
 };
