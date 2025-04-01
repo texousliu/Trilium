@@ -6,7 +6,7 @@ import stylistic from "@stylistic/eslint-plugin";
 // Go to https://eslint.style/rules/default/${rule_without_prefix} to check the rule details
 const stylisticRules = {
     "@stylistic/indent": [ "error", 4 ],
-    "@stylistic/quotes": [ "error", "double" ],
+    "@stylistic/quotes": [ "error", "double", { avoidEscape: true, allowTemplateLiterals: "always" } ],
     "@stylistic/semi": [ "error", "always" ],
     "@stylistic/quote-props": [ "error", "consistent-as-needed" ],
     "@stylistic/max-len": [ "error", { code: 200 } ],
