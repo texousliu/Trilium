@@ -1,6 +1,5 @@
 import noteService from "./notes.js";
 import attributeService from "./attributes.js";
-import dateUtils from "./date_utils.js";
 import sql from "./sql.js";
 import protectedSessionService from "./protected_session.js";
 import searchService from "../services/search/services/search.js";
@@ -108,14 +107,14 @@ function getYearNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     return yearNote as unknown as BNote;
 }
 
-function getMonthNoteTitle(rootNote: BNote, monthNumber: string, dateObj: Date) {
+function getMonthNoteTitle(rootNote: BNote, monthNumber: string, dateObj: Dayjs) {
     const pattern = rootNote.getOwnedLabelValue("monthPattern") || "{monthNumberPadded} - {month}";
-    const monthName = t(MONTH_TRANSLATION_IDS[dateObj.getMonth()]);
+    const monthName = t(MONTH_TRANSLATION_IDS[dateObj.month()]);
 
     return pattern
         .replace(/{shortMonth3}/g, monthName.slice(0, 3))
         .replace(/{shortMonth4}/g, monthName.slice(0, 4))
-        .replace(/{isoMonth}/g, dateUtils.utcDateStr(dateObj).slice(0, 7))
+        .replace(/{isoMonth}/g, dateObj.format('YYYY-MM'))
         .replace(/{monthNumberPadded}/g, monthNumber)
         .replace(/{month}/g, monthName);
 }
@@ -132,9 +131,7 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
         return monthNote;
     }
 
-    const dateObj = dateUtils.parseLocalDate(dateStr);
-
-    const noteTitle = getMonthNoteTitle(rootNote, monthNumber, dateObj);
+    const noteTitle = getMonthNoteTitle(rootNote, monthNumber, dayjs(dateStr));
 
     const yearNote = getYearNote(dateStr, rootNote);
 
@@ -154,14 +151,14 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     return monthNote as unknown as BNote;
 }
 
-function getDayNoteTitle(rootNote: BNote, dayNumber: string, dateObj: Date) {
+function getDayNoteTitle(rootNote: BNote, dayNumber: string, dateObj: Dayjs) {
     const pattern = rootNote.getOwnedLabelValue("datePattern") || "{dayInMonthPadded} - {weekDay}";
-    const weekDay = t(WEEKDAY_TRANSLATION_IDS[dateObj.getDay()]);
+    const weekDay = t(WEEKDAY_TRANSLATION_IDS[dateObj.day()]);
 
     return pattern
         .replace(/{ordinal}/g, ordinal(parseInt(dayNumber)))
         .replace(/{dayInMonthPadded}/g, dayNumber)
-        .replace(/{isoDate}/g, dateUtils.utcDateStr(dateObj))
+        .replace(/{isoDate}/g, dateObj.format('YYYY-MM-DD'))
         .replace(/{weekDay}/g, weekDay)
         .replace(/{weekDay3}/g, weekDay.substring(0, 3))
         .replace(/{weekDay2}/g, weekDay.substring(0, 2));
@@ -196,9 +193,7 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
 
     const dayNumber = dateStr.substring(8, 10);
 
-    const dateObj = dateUtils.parseLocalDate(dateStr);
-
-    const noteTitle = getDayNoteTitle(rootNote, dayNumber, dateObj);
+    const noteTitle = getDayNoteTitle(rootNote, dayNumber, dayjs(dateStr));
 
     sql.transactional(() => {
         dateNote = createNote(dateParentNote as BNote, noteTitle);
@@ -216,23 +211,20 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
 }
 
 function getTodayNote(rootNote: BNote | null = null) {
-    return getDayNote(dateUtils.localNowDate(), rootNote);
+    return getDayNote(dayjs().format('YYYY-MM-DD'), rootNote);
 }
 
-function getWeekStartDate(date: Date, startOfWeek: string): Date {
-    const day = date.getDay();
+function getWeekStartDate(date: Dayjs): Dayjs {
+    const day = date.day();
     let diff;
 
-    if (startOfWeek === "monday") {
-        diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-    } else if (startOfWeek === "sunday") {
-        diff = date.getDate() - day;
-    } else {
-        throw new Error(`Unrecognized start of the week ${startOfWeek}`);
+    if (optionService.getOption("firstDayOfWeek") === "0") { // Sunday
+        diff = date.date() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+    } else { // Monday
+        diff = date.date() - day;
     }
 
-    const startDate = new Date(date);
-    startDate.setDate(diff);
+    const startDate = date.clone().date(diff);
     return startDate;
 }
 
@@ -307,13 +299,8 @@ function getWeekNumberStr(date: Dayjs): string {
 }
 
 function getWeekFirstDayNote(dateStr: string, rootNote: BNote | null = null) {
-    const startOfWeek = optionService.getOption("firstDayOfWeek") === '0' ? 'sunday' : 'monday';
-
-    const dateObj = getWeekStartDate(dateUtils.parseLocalDate(dateStr), startOfWeek);
-
-    dateStr = dateUtils.utcDateTimeStr(dateObj);
-
-    return getDayNote(dateStr, rootNote);
+    const weekStartDate = getWeekStartDate(dayjs(dateStr));
+    return getDayNote(weekStartDate.format('YYYY-MM-DD'), rootNote);
 }
 
 function checkWeekNoteEnabled(rootNote: BNote) {
@@ -349,18 +336,16 @@ function getWeekNote(weekStr: string, _rootNote: BNote | null = null): BNote | n
     const year = parseInt(yearStr);
     const weekNumber = parseInt(weekNumStr);
 
-    const firstDayOfYear = new Date(year, 0, 1);
-    const weekStartDate = new Date(firstDayOfYear);
-    weekStartDate.setDate(firstDayOfYear.getDate() + (weekNumber - 1) * 7);
+    const firstDayOfYear = dayjs().year(year).month(0).date(1);
+    const weekStartDate = firstDayOfYear.add(weekNumber - 1, 'week');
 
-    const startDate = getWeekStartDate(weekStartDate, optionService.getOption("firstDayOfWeek") === '0' ? 'sunday' : 'monday');
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6);
+    const startDate = getWeekStartDate(weekStartDate);
+    const endDate = dayjs(startDate).add(6, 'day');
 
-    const startMonth = startDate.getMonth();
-    const endMonth = endDate.getMonth();
+    const startMonth = startDate.month();
+    const endMonth = endDate.month();
 
-    const monthNote = getMonthNote(dateUtils.utcDateStr(startDate), rootNote);
+    const monthNote = getMonthNote(startDate.format('YYYY-MM-DD'), rootNote);
     const noteTitle = getWeekNoteTitle(rootNote, weekNumber);
 
     sql.transactional(() => {
@@ -377,7 +362,7 @@ function getWeekNote(weekStr: string, _rootNote: BNote | null = null): BNote | n
 
         // If the week spans different months, clone the week note in the other month as well
         if (startMonth !== endMonth) {
-            const secondMonthNote = getMonthNote(dateUtils.utcDateStr(endDate), rootNote);
+            const secondMonthNote = getMonthNote(endDate.format('YYYY-MM-DD'), rootNote);
             cloningService.cloneNoteToParentNote(weekNote.noteId, secondMonthNote.noteId);
         }
     });
