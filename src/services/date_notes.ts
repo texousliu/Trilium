@@ -7,6 +7,7 @@ import searchService from "../services/search/services/search.js";
 import SearchContext from "../services/search/search_context.js";
 import hoistedNoteService from "./hoisted_note.js";
 import type BNote from "../becca/entities/bnote.js";
+import optionService from "./options.js";
 import { t } from "i18next";
 
 const CALENDAR_ROOT_LABEL = "calendarRoot";
@@ -31,8 +32,6 @@ const MONTH_TRANSLATION_IDS = [
     "months.november",
     "months.december"
 ];
-
-type StartOfWeek = "monday" | "sunday";
 
 function createNote(parentNote: BNote, noteTitle: string) {
     return noteService.createNewNote({
@@ -207,36 +206,24 @@ function getTodayNote(rootNote: BNote | null = null) {
     return getDayNote(dateUtils.localNowDate(), rootNote);
 }
 
-function getStartOfTheWeek(date: Date, startOfTheWeek: StartOfWeek) {
-    const day = date.getDay();
-    let diff;
+function getWeekFirstDayNote(dateStr: string, rootNote: BNote | null = null) {
+    const startOfWeek = optionService.getOption("firstDayOfWeek") === '0' ? 'sunday' : 'monday';
 
-    if (startOfTheWeek === "monday") {
-        diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-    } else if (startOfTheWeek === "sunday") {
-        diff = date.getDate() - day;
-    } else {
-        throw new Error(`Unrecognized start of the week ${startOfTheWeek}`);
-    }
-
-    return new Date(date.setDate(diff));
-}
-
-interface WeekNoteOpts {
-    startOfTheWeek?: StartOfWeek;
-}
-
-function getWeekFirstDayNote(dateStr: string, options: WeekNoteOpts = {}, rootNote: BNote | null = null) {
-    const startOfTheWeek = options.startOfTheWeek || "monday";
-
-    const dateObj = getStartOfTheWeek(dateUtils.parseLocalDate(dateStr), startOfTheWeek);
+    const dateObj = getWeekStartDate(dateUtils.parseLocalDate(dateStr), startOfWeek);
 
     dateStr = dateUtils.utcDateTimeStr(dateObj);
 
     return getDayNote(dateStr, rootNote);
 }
 
-function getWeekStartDate(date: Date, startOfWeek: StartOfWeek): Date {
+function checkWeekNoteEnabled(rootNote: BNote) {
+    if (!rootNote.hasLabel('enableWeekNote')) {
+        return false;
+    }
+    return true;
+}
+
+function getWeekStartDate(date: Date, startOfWeek: string): Date {
     const day = date.getDay();
     let diff;
 
@@ -260,9 +247,9 @@ function getWeekNoteTitle(rootNote: BNote, weekNumber: number) {
         .replace(/{weekNumber}/g, weekNumber.toString());
 }
 
-function getWeekNote(weekStr: string, options: WeekNoteOpts = {}, _rootNote: BNote | null = null): BNote | null {
+function getWeekNote(weekStr: string, _rootNote: BNote | null = null): BNote | null {
     const rootNote = _rootNote || getRootCalendarNote();
-    if (!rootNote.hasLabel('enableWeekNote')) {
+    if (!checkWeekNoteEnabled(rootNote)) {
         return null;
     }
 
@@ -283,7 +270,7 @@ function getWeekNote(weekStr: string, options: WeekNoteOpts = {}, _rootNote: BNo
     const weekStartDate = new Date(firstDayOfYear);
     weekStartDate.setDate(firstDayOfYear.getDate() + (weekNumber - 1) * 7);
 
-    const startDate = getWeekStartDate(weekStartDate, options.startOfTheWeek || "monday");
+    const startDate = getWeekStartDate(weekStartDate, optionService.getOption("firstDayOfWeek") === '0' ? 'sunday' : 'monday');
     const monthNote = getMonthNote(dateUtils.utcDateStr(startDate), rootNote);
 
     const noteTitle = getWeekNoteTitle(rootNote, weekNumber);
