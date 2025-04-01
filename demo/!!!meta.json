@@ -115,13 +115,6 @@
 							"position": 50
 						},
 						{
-							"type": "relation",
-							"name": "includeNoteLink",
-							"value": "CN3CCLggUqf4",
-							"isInheritable": false,
-							"position": 60
-						},
-						{
 							"type": "label",
 							"name": "iconClass",
 							"value": "bx bx-book-reader",
@@ -2026,7 +2019,7 @@
 											"title": "Epics",
 											"notePosition": 30,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [],
@@ -2049,7 +2042,7 @@
 													"title": "Christmas",
 													"notePosition": 0,
 													"prefix": null,
-													"isExpanded": true,
+													"isExpanded": false,
 													"type": "text",
 													"mime": "text/html",
 													"attributes": [],
@@ -2119,7 +2112,7 @@
 															"title": "Shopping",
 															"notePosition": 20,
 															"prefix": null,
-															"isExpanded": true,
+															"isExpanded": false,
 															"type": "text",
 															"mime": "text/html",
 															"attributes": [],
@@ -2231,7 +2224,7 @@
 							"title": "Tech",
 							"notePosition": 40,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [
@@ -2699,501 +2692,779 @@
 						},
 						{
 							"isClone": false,
-							"noteId": "P1OnNHRhFn9u",
+							"noteId": "k7rcoITZRsi6",
 							"notePath": [
 								"root",
 								"Fb7eMY46lT6k",
-								"P1OnNHRhFn9u"
+								"k7rcoITZRsi6"
 							],
-							"title": "Canvas note",
+							"title": "Note Types",
 							"notePosition": 60,
 							"prefix": null,
 							"isExpanded": true,
-							"type": "canvas",
-							"mime": "application/json",
-							"attributes": [],
-							"dataFileName": "Canvas note.json",
-							"attachments": [
+							"type": "text",
+							"mime": "text/html",
+							"attributes": [
 								{
-									"attachmentId": "LrYmWTdvBYpX",
-									"title": "canvas-export.svg",
-									"role": "image",
-									"mime": "image/svg+xml",
-									"position": 0,
-									"dataFileName": "Canvas note_canvas-export.svg"
-								}
-							]
-						},
-						{
-							"isClone": false,
-							"noteId": "CN3CCLggUqf4",
-							"notePath": [
-								"root",
-								"Fb7eMY46lT6k",
-								"CN3CCLggUqf4"
-							],
-							"title": "Mind map",
-							"notePosition": 70,
-							"prefix": null,
-							"isExpanded": false,
-							"type": "mindMap",
-							"mime": "application/json",
-							"attributes": [],
-							"dataFileName": "Mind map.json",
-							"attachments": [
-								{
-									"attachmentId": "xKxyCN02w5d2",
-									"title": "mindmap-export.svg",
-									"role": "image",
-									"mime": "image/svg+xml",
-									"position": 0,
-									"dataFileName": "Mind map_mindmap-export.svg"
+									"type": "label",
+									"name": "iconClass",
+									"value": "bx bx-file",
+									"isInheritable": false,
+									"position": 10
 								}
 							],
-							"dirFileName": "Mind map",
+							"format": "html",
+							"attachments": [],
+							"dirFileName": "Note Types",
 							"children": [
 								{
 									"isClone": false,
-									"noteId": "cLIqMYiMy7v9",
+									"noteId": "P1OnNHRhFn9u",
 									"notePath": [
 										"root",
 										"Fb7eMY46lT6k",
-										"CN3CCLggUqf4",
-										"cLIqMYiMy7v9"
+										"k7rcoITZRsi6",
+										"P1OnNHRhFn9u"
 									],
-									"title": "new note",
+									"title": "Canvas",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": false,
-									"type": "mindMap",
+									"isExpanded": true,
+									"type": "canvas",
 									"mime": "application/json",
 									"attributes": [],
-									"dataFileName": "new note.json",
+									"dataFileName": "Canvas.json",
+									"attachments": [
+										{
+											"attachmentId": "LrYmWTdvBYpX",
+											"title": "canvas-export.svg",
+											"role": "image",
+											"mime": "image/svg+xml",
+											"position": 0,
+											"dataFileName": "Canvas_canvas-export.svg"
+										}
+									]
+								},
+								{
+									"isClone": false,
+									"noteId": "lZlMer9EkwF8",
+									"notePath": [
+										"root",
+										"Fb7eMY46lT6k",
+										"k7rcoITZRsi6",
+										"lZlMer9EkwF8"
+									],
+									"title": "Mermaid Diagrams",
+									"notePosition": 20,
+									"prefix": null,
+									"isExpanded": false,
+									"type": "book",
+									"mime": "",
+									"attributes": [
+										{
+											"type": "label",
+											"name": "iconClass",
+											"value": "bx bx-selection",
+											"isInheritable": false,
+											"position": 10
+										}
+									],
 									"attachments": [],
-									"dirFileName": "new note",
+									"dirFileName": "Mermaid Diagrams",
 									"children": [
 										{
 											"isClone": false,
-											"noteId": "nyo567lPZRFc",
+											"noteId": "DALQSU4fng4F",
 											"notePath": [
 												"root",
 												"Fb7eMY46lT6k",
-												"CN3CCLggUqf4",
-												"cLIqMYiMy7v9",
-												"nyo567lPZRFc"
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"DALQSU4fng4F"
 											],
-											"title": "new note",
+											"title": "Flow",
 											"notePosition": 10,
 											"prefix": null,
 											"isExpanded": false,
-											"type": "mindMap",
-											"mime": "application/json",
+											"type": "mermaid",
+											"mime": "text/mermaid",
 											"attributes": [],
-											"dataFileName": "new note.json",
-											"attachments": []
+											"dataFileName": "Flow.txt",
+											"attachments": [
+												{
+													"attachmentId": "6u2TW8zweuBN",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Flow_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "g7rjYwoleBlR",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"g7rjYwoleBlR"
+											],
+											"title": "Flow (ELK)",
+											"notePosition": 11,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/mermaid",
+											"attributes": [],
+											"dataFileName": "Flow (ELK).txt",
+											"attachments": [
+												{
+													"attachmentId": "9TKNS3IHYYQq",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Flow (ELK)_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "t73XNJNTTwQp",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"t73XNJNTTwQp"
+											],
+											"title": "Sequence",
+											"notePosition": 20,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/mermaid",
+											"attributes": [],
+											"dataFileName": "Sequence.txt",
+											"attachments": [
+												{
+													"attachmentId": "XfWi1TqleVbL",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Sequence_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "6wdYxWSVuXof",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"6wdYxWSVuXof"
+											],
+											"title": "Gantt",
+											"notePosition": 30,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/plain",
+											"attributes": [],
+											"dataFileName": "Gantt.txt",
+											"attachments": [
+												{
+													"attachmentId": "zCjOBL5UP9ii",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Gantt_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "WKL3yssKyoth",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"WKL3yssKyoth"
+											],
+											"title": "Class",
+											"notePosition": 40,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/plain",
+											"attributes": [],
+											"dataFileName": "Class.txt",
+											"attachments": [
+												{
+													"attachmentId": "sRADq0QJpaYr",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Class_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "v9TM7cCXBILP",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"v9TM7cCXBILP"
+											],
+											"title": "State",
+											"notePosition": 50,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/plain",
+											"attributes": [],
+											"dataFileName": "State.txt",
+											"attachments": [
+												{
+													"attachmentId": "NhPv2lQln1g4",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "State_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "1EDhd9QJyulq",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"1EDhd9QJyulq"
+											],
+											"title": "Mind Map",
+											"notePosition": 60,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/mermaid",
+											"attributes": [],
+											"dataFileName": "Mind Map.txt",
+											"attachments": [
+												{
+													"attachmentId": "Q8EircLk65HH",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Mind Map_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "n32hpxSA2fP8",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"n32hpxSA2fP8"
+											],
+											"title": "Pie",
+											"notePosition": 70,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/plain",
+											"attributes": [],
+											"dataFileName": "Pie.txt",
+											"attachments": [
+												{
+													"attachmentId": "6xhRWdFidyIg",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Pie_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "T0QEYaEv7PmE",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"T0QEYaEv7PmE"
+											],
+											"title": "Journey",
+											"notePosition": 80,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/plain",
+											"attributes": [],
+											"dataFileName": "Journey.txt",
+											"attachments": [
+												{
+													"attachmentId": "sxLqDNmjlbK4",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Journey_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "P9QvwWzLZnXJ",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"P9QvwWzLZnXJ"
+											],
+											"title": "Git",
+											"notePosition": 90,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/plain",
+											"attributes": [],
+											"dataFileName": "Git.txt",
+											"attachments": [
+												{
+													"attachmentId": "tIoCBIaY50Jm",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Git_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "19O4nsY7dkPt",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"19O4nsY7dkPt"
+											],
+											"title": "Entity Relationship",
+											"notePosition": 100,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/plain",
+											"attributes": [],
+											"dataFileName": "Entity Relationship.txt",
+											"attachments": [
+												{
+													"attachmentId": "AyKZhKQIE5w9",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Entity Relationship_mermai.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "2izpY6SPbmhp",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"2izpY6SPbmhp"
+											],
+											"title": "Bar chart",
+											"notePosition": 110,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/mermaid",
+											"attributes": [],
+											"dataFileName": "Bar chart.txt",
+											"attachments": [
+												{
+													"attachmentId": "r1wMURlU52l8",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "Bar chart_mermaid-export.svg"
+												}
+											]
+										},
+										{
+											"isClone": false,
+											"noteId": "hwx0dffwqIGg",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"lZlMer9EkwF8",
+												"hwx0dffwqIGg"
+											],
+											"title": "C4",
+											"notePosition": 120,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "mermaid",
+											"mime": "text/plain",
+											"attributes": [],
+											"dataFileName": "C4.txt",
+											"attachments": [
+												{
+													"attachmentId": "6v2qO6zsygVC",
+													"title": "mermaid-export.svg",
+													"role": "image",
+													"mime": "image/svg+xml",
+													"position": 10,
+													"dataFileName": "C4_mermaid-export.svg"
+												}
+											]
 										}
 									]
 								},
 								{
 									"isClone": false,
-									"noteId": "0k0PGp04a9AN",
+									"noteId": "CN3CCLggUqf4",
 									"notePath": [
 										"root",
 										"Fb7eMY46lT6k",
-										"CN3CCLggUqf4",
-										"0k0PGp04a9AN"
+										"k7rcoITZRsi6",
+										"CN3CCLggUqf4"
 									],
-									"title": "new note",
-									"notePosition": 20,
+									"title": "Mind Map",
+									"notePosition": 30,
 									"prefix": null,
-									"isExpanded": false,
+									"isExpanded": true,
 									"type": "mindMap",
 									"mime": "application/json",
 									"attributes": [],
-									"dataFileName": "1_new note.json",
-									"attachments": []
-								}
-							]
-						},
-						{
-							"isClone": false,
-							"noteId": "lZlMer9EkwF8",
-							"notePath": [
-								"root",
-								"Fb7eMY46lT6k",
-								"lZlMer9EkwF8"
-							],
-							"title": "Mermaid Diagrams",
-							"notePosition": 90,
-							"prefix": null,
-							"isExpanded": false,
-							"type": "book",
-							"mime": "",
-							"attributes": [],
-							"attachments": [],
-							"dirFileName": "Mermaid Diagrams",
-							"children": [
-								{
-									"isClone": false,
-									"noteId": "DALQSU4fng4F",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"DALQSU4fng4F"
-									],
-									"title": "Flow",
-									"notePosition": 10,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/mermaid",
-									"attributes": [],
-									"dataFileName": "Flow.txt",
+									"dataFileName": "Mind Map.json",
 									"attachments": [
 										{
-											"attachmentId": "6u2TW8zweuBN",
-											"title": "mermaid-export.svg",
+											"attachmentId": "xKxyCN02w5d2",
+											"title": "mindmap-export.svg",
 											"role": "image",
 											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Flow_mermaid-export.svg"
+											"position": 0,
+											"dataFileName": "Mind Map_mindmap-export.svg"
 										}
 									]
 								},
 								{
 									"isClone": false,
-									"noteId": "g7rjYwoleBlR",
+									"noteId": "OdCVNGzsvWuv",
 									"notePath": [
 										"root",
 										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"g7rjYwoleBlR"
+										"k7rcoITZRsi6",
+										"OdCVNGzsvWuv"
 									],
-									"title": "Flow (ELK)",
-									"notePosition": 11,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/mermaid",
-									"attributes": [],
-									"dataFileName": "Flow (ELK).txt",
-									"attachments": [
-										{
-											"attachmentId": "9TKNS3IHYYQq",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Flow (ELK)_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "t73XNJNTTwQp",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"t73XNJNTTwQp"
-									],
-									"title": "Sequence",
-									"notePosition": 20,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/mermaid",
-									"attributes": [],
-									"dataFileName": "Sequence.txt",
-									"attachments": [
-										{
-											"attachmentId": "XfWi1TqleVbL",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Sequence_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "6wdYxWSVuXof",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"6wdYxWSVuXof"
-									],
-									"title": "Gantt",
-									"notePosition": 30,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/plain",
-									"attributes": [],
-									"dataFileName": "Gantt.txt",
-									"attachments": [
-										{
-											"attachmentId": "zCjOBL5UP9ii",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Gantt_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "WKL3yssKyoth",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"WKL3yssKyoth"
-									],
-									"title": "Class",
+									"title": "Geo Map (The Seven Wonders of the World)",
 									"notePosition": 40,
 									"prefix": null,
 									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/plain",
-									"attributes": [],
-									"dataFileName": "Class.txt",
-									"attachments": [
+									"type": "geoMap",
+									"mime": "application/json",
+									"attributes": [
 										{
-											"attachmentId": "sRADq0QJpaYr",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Class_mermaid-export.svg"
+											"type": "label",
+											"name": "label:geolocation",
+											"value": "promoted,alias=Geolocation,single,text",
+											"isInheritable": true,
+											"position": 10
+										},
+										{
+											"type": "label",
+											"name": "hidePromotedAttributes",
+											"value": "",
+											"isInheritable": false,
+											"position": 20
 										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "v9TM7cCXBILP",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"v9TM7cCXBILP"
 									],
-									"title": "State",
-									"notePosition": 50,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/plain",
-									"attributes": [],
-									"dataFileName": "State.txt",
-									"attachments": [
+									"dataFileName": "Geo Map (The Seven Wonders of .json",
+									"attachments": [],
+									"dirFileName": "Geo Map (The Seven Wonders of the World)",
+									"children": [
 										{
-											"attachmentId": "NhPv2lQln1g4",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "State_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "1EDhd9QJyulq",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"1EDhd9QJyulq"
-									],
-									"title": "Mind Map",
-									"notePosition": 60,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/mermaid",
-									"attributes": [],
-									"dataFileName": "Mind Map.txt",
-									"attachments": [
+											"isClone": false,
+											"noteId": "IdHyf4rlLmlO",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"OdCVNGzsvWuv",
+												"IdHyf4rlLmlO"
+											],
+											"title": "The Colosseum, Rome, Italy",
+											"notePosition": 10,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "text",
+											"mime": "text/html",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "geolocation",
+													"value": "41.89024211851462, 12.492263083403595",
+													"isInheritable": false,
+													"position": 20
+												},
+												{
+													"type": "label",
+													"name": "iconClass",
+													"value": "bx bx-circle",
+													"isInheritable": false,
+													"position": 30
+												}
+											],
+											"format": "html",
+											"dataFileName": "The Colosseum, Rome, Italy.html",
+											"attachments": []
+										},
 										{
-											"attachmentId": "Q8EircLk65HH",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Mind Map_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "n32hpxSA2fP8",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"n32hpxSA2fP8"
-									],
-									"title": "Pie",
-									"notePosition": 70,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/plain",
-									"attributes": [],
-									"dataFileName": "Pie.txt",
-									"attachments": [
+											"isClone": false,
+											"noteId": "Wyp6vjVo0vuV",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"OdCVNGzsvWuv",
+												"Wyp6vjVo0vuV"
+											],
+											"title": "The Great Wall of China",
+											"notePosition": 20,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "text",
+											"mime": "text/html",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "geolocation",
+													"value": "40.431907671437244, 116.57035343915216",
+													"isInheritable": false,
+													"position": 20
+												},
+												{
+													"type": "label",
+													"name": "iconClass",
+													"value": "bx bx-selection",
+													"isInheritable": false,
+													"position": 30
+												}
+											],
+											"format": "html",
+											"dataFileName": "The Great Wall of China.html",
+											"attachments": []
+										},
 										{
-											"attachmentId": "6xhRWdFidyIg",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Pie_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "T0QEYaEv7PmE",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"T0QEYaEv7PmE"
-									],
-									"title": "Journey",
-									"notePosition": 80,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/plain",
-									"attributes": [],
-									"dataFileName": "Journey.txt",
-									"attachments": [
+											"isClone": false,
+											"noteId": "VsO5E97Y2mPy",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"OdCVNGzsvWuv",
+												"VsO5E97Y2mPy"
+											],
+											"title": "The Taj Mahal, India",
+											"notePosition": 30,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "text",
+											"mime": "text/html",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "geolocation",
+													"value": "27.175173410074475, 78.04213146744753",
+													"isInheritable": false,
+													"position": 20
+												},
+												{
+													"type": "label",
+													"name": "iconClass",
+													"value": "bx bx-arch",
+													"isInheritable": false,
+													"position": 30
+												}
+											],
+											"format": "html",
+											"dataFileName": "The Taj Mahal, India.html",
+											"attachments": []
+										},
 										{
-											"attachmentId": "sxLqDNmjlbK4",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Journey_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "P9QvwWzLZnXJ",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"P9QvwWzLZnXJ"
-									],
-									"title": "Git",
-									"notePosition": 90,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/plain",
-									"attributes": [],
-									"dataFileName": "Git.txt",
-									"attachments": [
+											"isClone": false,
+											"noteId": "8nRYOMoDdWs3",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"OdCVNGzsvWuv",
+												"8nRYOMoDdWs3"
+											],
+											"title": "Christ the Redeemer, Brazil",
+											"notePosition": 40,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "text",
+											"mime": "text/html",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "geolocation",
+													"value": "-22.951993968508837, -43.21044464113274",
+													"isInheritable": false,
+													"position": 20
+												},
+												{
+													"type": "label",
+													"name": "iconClass",
+													"value": "bx bx-church",
+													"isInheritable": false,
+													"position": 30
+												}
+											],
+											"format": "html",
+											"dataFileName": "Christ the Redeemer, Brazil.html",
+											"attachments": []
+										},
 										{
-											"attachmentId": "tIoCBIaY50Jm",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Git_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "19O4nsY7dkPt",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"19O4nsY7dkPt"
-									],
-									"title": "Entity Relationship",
-									"notePosition": 100,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/plain",
-									"attributes": [],
-									"dataFileName": "Entity Relationship.txt",
-									"attachments": [
+											"isClone": false,
+											"noteId": "nZxMTxkP8AQ4",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"OdCVNGzsvWuv",
+												"nZxMTxkP8AQ4"
+											],
+											"title": "Machu Picchu, Peru",
+											"notePosition": 50,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "text",
+											"mime": "text/html",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "geolocation",
+													"value": "-13.163198787170078, -72.54528356174288",
+													"isInheritable": false,
+													"position": 20
+												},
+												{
+													"type": "label",
+													"name": "iconClass",
+													"value": "bx bxs-castle",
+													"isInheritable": false,
+													"position": 30
+												}
+											],
+											"format": "html",
+											"dataFileName": "Machu Picchu, Peru.html",
+											"attachments": []
+										},
 										{
-											"attachmentId": "AyKZhKQIE5w9",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Entity Relationship_mermai.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "2izpY6SPbmhp",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"2izpY6SPbmhp"
-									],
-									"title": "Bar chart",
-									"notePosition": 110,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/mermaid",
-									"attributes": [],
-									"dataFileName": "Bar chart.txt",
-									"attachments": [
+											"isClone": false,
+											"noteId": "DtMcvaYKen9C",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"OdCVNGzsvWuv",
+												"DtMcvaYKen9C"
+											],
+											"title": "Chichén Itzá, Mexico",
+											"notePosition": 60,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "text",
+											"mime": "text/html",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "geolocation",
+													"value": "20.678882007143176, -88.56836961554815",
+													"isInheritable": false,
+													"position": 20
+												},
+												{
+													"type": "label",
+													"name": "iconClass",
+													"value": "bx bxs-component",
+													"isInheritable": false,
+													"position": 30
+												}
+											],
+											"format": "html",
+											"dataFileName": "Chichén Itzá, Mexico.html",
+											"attachments": []
+										},
 										{
-											"attachmentId": "r1wMURlU52l8",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "Bar chart_mermaid-export.svg"
-										}
-									]
-								},
-								{
-									"isClone": false,
-									"noteId": "hwx0dffwqIGg",
-									"notePath": [
-										"root",
-										"Fb7eMY46lT6k",
-										"lZlMer9EkwF8",
-										"hwx0dffwqIGg"
-									],
-									"title": "C4",
-									"notePosition": 120,
-									"prefix": null,
-									"isExpanded": false,
-									"type": "mermaid",
-									"mime": "text/plain",
-									"attributes": [],
-									"dataFileName": "C4.txt",
-									"attachments": [
-										{
-											"attachmentId": "6v2qO6zsygVC",
-											"title": "mermaid-export.svg",
-											"role": "image",
-											"mime": "image/svg+xml",
-											"position": 10,
-											"dataFileName": "C4_mermaid-export.svg"
+											"isClone": false,
+											"noteId": "ZkR3GvsSQ0Xe",
+											"notePath": [
+												"root",
+												"Fb7eMY46lT6k",
+												"k7rcoITZRsi6",
+												"OdCVNGzsvWuv",
+												"ZkR3GvsSQ0Xe"
+											],
+											"title": "Petra, Jordan",
+											"notePosition": 70,
+											"prefix": null,
+											"isExpanded": false,
+											"type": "text",
+											"mime": "text/html",
+											"attributes": [
+												{
+													"type": "label",
+													"name": "geolocation",
+													"value": "30.32084750671952, 35.481009100454926",
+													"isInheritable": false,
+													"position": 20
+												},
+												{
+													"type": "label",
+													"name": "iconClass",
+													"value": "bx bxs-castle",
+													"isInheritable": false,
+													"position": 30
+												}
+											],
+											"format": "html",
+											"dataFileName": "Petra, Jordan.html",
+											"attachments": []
 										}
 									]
 								}
@@ -3208,7 +3479,7 @@
 								"L2NrzQACw0in"
 							],
 							"title": "Books",
-							"notePosition": 120,
+							"notePosition": 130,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
@@ -3404,7 +3675,7 @@
 								"EBROzsTV1jh4"
 							],
 							"title": "Work",
-							"notePosition": 140,
+							"notePosition": 150,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
@@ -3493,7 +3764,7 @@
 								"6RKJSJ65qIn5"
 							],
 							"title": "Steel Blue",
-							"notePosition": 150,
+							"notePosition": 160,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "code",
@@ -3604,7 +3875,7 @@
 								"G8k9CPUVtDeE"
 							],
 							"title": "Scripting examples",
-							"notePosition": 340,
+							"notePosition": 350,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
