@@ -112,17 +112,65 @@ function getQuarterNumberStr(date: Dayjs) {
     return `${date.year()}-Q${Math.floor(date.month() / 3) + 1}`;
 }
 
-function getQuarterNoteTitle(rootNote: BNote, quarterNumber: number) {
-    const pattern = rootNote.getOwnedLabelValue("quarterPattern") || "Quarter {quarterNumber}";
+/** produces 1st, 2nd, 3rd, 4th, 21st, 31st for 1, 2, 3, 4, 21, 31 */
+function ordinal(dayNumber: number) {
+    const suffixes = ["th", "st", "nd", "rd"];
+    const suffix = suffixes[(dayNumber - 20) % 10] || suffixes[dayNumber] || suffixes[0];
+    return `${dayNumber}${suffix}`;
+}
 
-    return pattern
-        .replace(/{quarterNumber}/g, quarterNumber.toString());
+type TimeUnit = 'year' | 'quarter' | 'month' | 'week' | 'day';
+
+function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs, number?: number) {
+    const patterns = {
+        year: rootNote.getOwnedLabelValue("yearPattern") || "{year}",
+        quarter: rootNote.getOwnedLabelValue("quarterPattern") || "Quarter {quarterNumber}",
+        month: rootNote.getOwnedLabelValue("monthPattern") || "{monthNumberPadded} - {month}",
+        week: rootNote.getOwnedLabelValue("weekPattern") || "Week {weekNumber}",
+        day: rootNote.getOwnedLabelValue("datePattern") || "{dayInMonthPadded} - {weekDay}"
+    };
+
+    const pattern = patterns[timeUnit];
+    const monthName = t(MONTH_TRANSLATION_IDS[dateObj.month()]);
+    const weekDay = t(WEEKDAY_TRANSLATION_IDS[dateObj.day()]);
+
+    const replacements: Record<string, string> = {
+        // Common date formats
+        '{year}': dateObj.format('YYYY'),
+        '{isoDate}': dateObj.format('YYYY-MM-DD'),
+        '{isoMonth}': dateObj.format('YYYY-MM'),
+
+        // Month related
+        '{monthNumberPadded}': number?.toString() || '',
+        '{month}': monthName,
+        '{shortMonth3}': monthName.slice(0, 3),
+        '{shortMonth4}': monthName.slice(0, 4),
+
+        // Quarter related
+        '{quarterNumber}': number?.toString() || '',
+
+        // Week related
+        '{weekNumber}': number?.toString() || '',
+
+        // Day related
+        '{dayInMonthPadded}': number?.toString() || '',
+        '{ordinal}': ordinal(number as number),
+        '{weekDay}': weekDay,
+        '{weekDay3}': weekDay.substring(0, 3),
+        '{weekDay2}': weekDay.substring(0, 2)
+    };
+
+    return Object.entries(replacements).reduce(
+        (title, [key, value]) => title.replace(new RegExp(key, 'g'), value),
+        pattern
+    );
 }
 
 function getQuarterNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     const rootNote = _rootNote || getRootCalendarNote();
 
     const quarterStr = getQuarterNumberStr(dayjs(dateStr));
+    const quarterNumber = parseInt(quarterStr.substring(6, 7));
 
     let quarterNote = searchService.findFirstNoteWithQuery(`#${QUARTER_LABEL}="${quarterStr}"`, new SearchContext({ ancestorNoteId: rootNote.noteId }));
 
@@ -131,7 +179,7 @@ function getQuarterNote(dateStr: string, _rootNote: BNote | null = null): BNote 
     }
 
     const yearNote = getYearNote(dateStr, rootNote);
-    const noteTitle = getQuarterNoteTitle(rootNote, parseInt(quarterStr.substring(6, 7)));
+    const noteTitle = getJournalNoteTitle(rootNote, 'quarter', dayjs(dateStr), quarterNumber);
 
     sql.transactional(() => {
         quarterNote = createNote(yearNote, noteTitle);
@@ -147,18 +195,6 @@ function getQuarterNote(dateStr: string, _rootNote: BNote | null = null): BNote 
     });
 
     return quarterNote as unknown as BNote;
-}
-
-function getMonthNoteTitle(rootNote: BNote, monthNumber: string, dateObj: Dayjs) {
-    const pattern = rootNote.getOwnedLabelValue("monthPattern") || "{monthNumberPadded} - {month}";
-    const monthName = t(MONTH_TRANSLATION_IDS[dateObj.month()]);
-
-    return pattern
-        .replace(/{shortMonth3}/g, monthName.slice(0, 3))
-        .replace(/{shortMonth4}/g, monthName.slice(0, 4))
-        .replace(/{isoMonth}/g, dateObj.format('YYYY-MM'))
-        .replace(/{monthNumberPadded}/g, monthNumber)
-        .replace(/{month}/g, monthName);
 }
 
 function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
@@ -181,7 +217,7 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
         monthParentNote = getYearNote(dateStr, rootNote);
     }
 
-    const noteTitle = getMonthNoteTitle(rootNote, monthNumber, dayjs(dateStr));
+    const noteTitle = getJournalNoteTitle(rootNote, 'month', dayjs(dateStr), parseInt(monthNumber));
 
     sql.transactional(() => {
         monthNote = createNote(monthParentNote, noteTitle);
@@ -197,27 +233,6 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     });
 
     return monthNote as unknown as BNote;
-}
-
-function getDayNoteTitle(rootNote: BNote, dayNumber: string, dateObj: Dayjs) {
-    const pattern = rootNote.getOwnedLabelValue("datePattern") || "{dayInMonthPadded} - {weekDay}";
-    const weekDay = t(WEEKDAY_TRANSLATION_IDS[dateObj.day()]);
-
-    return pattern
-        .replace(/{ordinal}/g, ordinal(parseInt(dayNumber)))
-        .replace(/{dayInMonthPadded}/g, dayNumber)
-        .replace(/{isoDate}/g, dateObj.format('YYYY-MM-DD'))
-        .replace(/{weekDay}/g, weekDay)
-        .replace(/{weekDay3}/g, weekDay.substring(0, 3))
-        .replace(/{weekDay2}/g, weekDay.substring(0, 2));
-}
-
-/** produces 1st, 2nd, 3rd, 4th, 21st, 31st for 1, 2, 3, 4, 21, 31 */
-function ordinal(dayNumber: number) {
-    const suffixes = ["th", "st", "nd", "rd"];
-    const suffix = suffixes[(dayNumber - 20) % 10] || suffixes[dayNumber] || suffixes[0];
-
-    return `${dayNumber}${suffix}`;
 }
 
 function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
@@ -240,8 +255,7 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     }
 
     const dayNumber = dateStr.substring(8, 10);
-
-    const noteTitle = getDayNoteTitle(rootNote, dayNumber, dayjs(dateStr));
+    const noteTitle = getJournalNoteTitle(rootNote, 'day', dayjs(dateStr), parseInt(dayNumber));
 
     sql.transactional(() => {
         dateNote = createNote(dateParentNote as BNote, noteTitle);
@@ -380,13 +394,10 @@ function getWeekNote(weekStr: string, _rootNote: BNote | null = null): BNote | n
     }
 
     const [yearStr, weekNumStr] = weekStr.trim().split('-W');
-
-    const year = parseInt(yearStr);
     const weekNumber = parseInt(weekNumStr);
 
-    const firstDayOfYear = dayjs().year(year).month(0).date(1);
+    const firstDayOfYear = dayjs().year(parseInt(yearStr)).month(0).date(1);
     const weekStartDate = firstDayOfYear.add(weekNumber - 1, 'week');
-
     const startDate = getWeekStartDate(weekStartDate);
     const endDate = dayjs(startDate).add(6, 'day');
 
@@ -394,7 +405,7 @@ function getWeekNote(weekStr: string, _rootNote: BNote | null = null): BNote | n
     const endMonth = endDate.month();
 
     const monthNote = getMonthNote(startDate.format('YYYY-MM-DD'), rootNote);
-    const noteTitle = getWeekNoteTitle(rootNote, weekNumber);
+    const noteTitle = getJournalNoteTitle(rootNote, 'week', startDate, weekNumber);
 
     sql.transactional(() => {
         weekNote = createNote(monthNote, noteTitle);
