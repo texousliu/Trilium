@@ -25,6 +25,7 @@
 .no-print *,
 .tab-row-container,
 .tab-row-widget,
+.title-bar-buttons,
 #launcher-pane,
 #left-pane,
 #center-pane > *:not(.split-note-container-widget),
