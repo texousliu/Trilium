@@ -95,6 +95,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     private todaysDate!: Dayjs;
     private date!: Dayjs;
     private weekNoteEnable: boolean = false;
+    private weekNotes: string[] = [];
 
     constructor(title: string = "", icon: string = "") {
         super(title, icon, DROPDOWN_TPL);
@@ -309,6 +310,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
     async dropdownShown() {
         await this.getWeekNoteEnable();
+        this.weekNotes = await server.get<string[]>(`attribute-values/weekNote`);
         this.init(appContext.tabManager.getActiveContextNote()?.getOwnedLabelValue("dateNote") ?? null);
     }
 
@@ -351,6 +353,12 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         if (this.weekNoteEnable) {
             // Utilize the hover effect of calendar-date
             $newWeekNumber = $("<a>").addClass("calendar-date");
+
+            if (this.weekNotes.includes(weekNoteId)) {
+                $newWeekNumber.addClass("calendar-date-exists");
+                $newWeekNumber.attr("data-href", `#root/${weekNoteId}`);
+            }
+
         } else {
             $newWeekNumber = $("<span>").addClass("calendar-week-number-disabled");
         }
