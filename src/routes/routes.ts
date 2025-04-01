@@ -1,5 +1,3 @@
-"use strict";
-
 import { isElectron, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import multer from "multer";
 import log from "../services/log.js";
@@ -307,7 +305,8 @@ function register(app: express.Application) {
 
     apiRoute(GET, "/api/special-notes/inbox/:date", specialNotesRoute.getInboxNote);
     apiRoute(GET, "/api/special-notes/days/:date", specialNotesRoute.getDayNote);
-    apiRoute(GET, "/api/special-notes/weeks/:date", specialNotesRoute.getWeekFirstDayNote);
+    apiRoute(GET, "/api/special-notes/week-first-day/:date", specialNotesRoute.getWeekFirstDayNote);
+    apiRoute(GET, "/api/special-notes/weeks/:week", specialNotesRoute.getWeekNote);
     apiRoute(GET, "/api/special-notes/months/:month", specialNotesRoute.getMonthNote);
     apiRoute(GET, "/api/special-notes/years/:year", specialNotesRoute.getYearNote);
     apiRoute(GET, "/api/special-notes/notes-for-month/:month", specialNotesRoute.getDayNotesForMonth);

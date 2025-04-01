@@ -23,11 +23,19 @@ async function getDayNote(date: string) {
 }
 
 async function getWeekFirstDayNote(date: string) {
-    const note = await server.get<FNoteRow>(`special-notes/weeks/${date}`, "date-note");
+    const note = await server.get<FNoteRow>(`special-notes/week-first-day/${date}`, "date-note");
 
     await ws.waitForMaxKnownEntityChangeId();
 
     return await froca.getNote(note.noteId);
+}
+
+async function getWeekNote(week: string) {
+    const note = await server.get<FNoteRow>(`special-notes/weeks/${week}`, "date-note");
+
+    await ws.waitForMaxKnownEntityChangeId();
+
+    return await froca.getNote(note?.noteId);
 }
 
 async function getMonthNote(month: string) {
@@ -67,6 +75,7 @@ export default {
     getTodayNote,
     getDayNote,
     getWeekFirstDayNote,
+    getWeekNote,
     getMonthNote,
     getYearNote,
     createSqlConsole,
