@@ -241,11 +241,6 @@ interface Api {
      */
     getWeekFirstDayNote(
         date: string,
-        options: {
-            // TODO: Deduplicate type with date_notes.ts once ES modules are added.
-            /** either "monday" (default) or "sunday" */
-            startOfTheWeek: "monday" | "sunday";
-        },
         rootNote: BNote
     ): BNote | null;
 

@@ -12,6 +12,7 @@ import { t } from "i18next";
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
+import cloningService from "./cloning.js";
 
 dayjs.extend(isSameOrAfter);
 
@@ -353,8 +354,13 @@ function getWeekNote(weekStr: string, _rootNote: BNote | null = null): BNote | n
     weekStartDate.setDate(firstDayOfYear.getDate() + (weekNumber - 1) * 7);
 
     const startDate = getWeekStartDate(weekStartDate, optionService.getOption("firstDayOfWeek") === '0' ? 'sunday' : 'monday');
-    const monthNote = getMonthNote(dateUtils.utcDateStr(startDate), rootNote);
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 6);
 
+    const startMonth = startDate.getMonth();
+    const endMonth = endDate.getMonth();
+
+    const monthNote = getMonthNote(dateUtils.utcDateStr(startDate), rootNote);
     const noteTitle = getWeekNoteTitle(rootNote, weekNumber);
 
     sql.transactional(() => {
@@ -367,6 +373,12 @@ function getWeekNote(weekStr: string, _rootNote: BNote | null = null): BNote | n
 
         if (weekTemplateAttr) {
             attributeService.createRelation(weekNote.noteId, "template", weekTemplateAttr.value);
+        }
+
+        // If the week spans different months, clone the week note in the other month as well
+        if (startMonth !== endMonth) {
+            const secondMonthNote = getMonthNote(dateUtils.utcDateStr(endDate), rootNote);
+            cloningService.cloneNoteToParentNote(weekNote.noteId, secondMonthNote.noteId);
         }
     });
 
