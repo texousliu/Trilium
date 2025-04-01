@@ -36,6 +36,8 @@ export default [
     { type: "label", name: "workspaceSearchHome" },
     { type: "label", name: "sqlConsoleHome" },
     { type: "label", name: "datePattern" },
+    { type: "label", name: "weekPattern" },
+    { type: "label", name: "enableWeekNote" },
     { type: "label", name: "monthPattern" },
     { type: "label", name: "pageSize" },
     { type: "label", name: "viewType" },

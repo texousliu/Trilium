@@ -1,5 +1,3 @@
-"use strict";
-
 import dateNoteService from "../../services/date_notes.js";
 import sql from "../../services/sql.js";
 import cls from "../../services/cls.js";
@@ -17,6 +15,10 @@ function getDayNote(req: Request) {
 
 function getWeekFirstDayNote(req: Request) {
     return dateNoteService.getWeekFirstDayNote(req.params.date);
+}
+
+function getWeekNote(req: Request) {
+    return dateNoteService.getWeekNote(req.params.week);
 }
 
 function getMonthNote(req: Request) {
@@ -102,6 +104,7 @@ export default {
     getInboxNote,
     getDayNote,
     getWeekFirstDayNote,
+    getWeekNote,
     getMonthNote,
     getYearNote,
     getDayNotesForMonth,

@@ -236,10 +236,81 @@ function getWeekFirstDayNote(dateStr: string, options: WeekNoteOpts = {}, rootNo
     return getDayNote(dateStr, rootNote);
 }
 
+function getWeekStartDate(date: Date, startOfWeek: StartOfWeek): Date {
+    const day = date.getDay();
+    let diff;
+
+    if (startOfWeek === "monday") {
+        diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+    } else if (startOfWeek === "sunday") {
+        diff = date.getDate() - day;
+    } else {
+        throw new Error(`Unrecognized start of the week ${startOfWeek}`);
+    }
+
+    const startDate = new Date(date);
+    startDate.setDate(diff);
+    return startDate;
+}
+
+function getWeekNoteTitle(rootNote: BNote, weekNumber: number) {
+    const pattern = rootNote.getOwnedLabelValue("weekPattern") || "Week {weekNumber}";
+
+    return pattern
+        .replace(/{weekNumber}/g, weekNumber.toString());
+}
+
+function getWeekNote(weekStr: string, options: WeekNoteOpts = {}, _rootNote: BNote | null = null): BNote | null {
+    const rootNote = _rootNote || getRootCalendarNote();
+    if (!rootNote.hasLabel('enableWeekNote')) {
+        return null;
+    }
+
+    weekStr = weekStr.trim().substring(0, 8);
+
+    let weekNote = searchService.findFirstNoteWithQuery(`#${WEEK_LABEL}="${weekStr}"`, new SearchContext({ ancestorNoteId: rootNote.noteId }));
+
+    if (weekNote) {
+        return weekNote;
+    }
+
+    const [yearStr, weekNumStr] = weekStr.trim().split('-W');
+
+    const year = parseInt(yearStr);
+    const weekNumber = parseInt(weekNumStr);
+
+    const firstDayOfYear = new Date(year, 0, 1);
+    const weekStartDate = new Date(firstDayOfYear);
+    weekStartDate.setDate(firstDayOfYear.getDate() + (weekNumber - 1) * 7);
+
+    const startDate = getWeekStartDate(weekStartDate, options.startOfTheWeek || "monday");
+    const monthNote = getMonthNote(dateUtils.utcDateStr(startDate), rootNote);
+
+    const noteTitle = getWeekNoteTitle(rootNote, weekNumber);
+
+    sql.transactional(() => {
+        weekNote = createNote(monthNote, noteTitle);
+
+        attributeService.createLabel(weekNote.noteId, WEEK_LABEL, weekStr);
+        attributeService.createLabel(weekNote.noteId, "sorted");
+
+        const weekTemplateAttr = rootNote.getOwnedAttribute("relation", "weekTemplate");
+        console.log("weekTemplateAttr", weekTemplateAttr);
+
+        if (weekTemplateAttr) {
+            console.log("weekTemplateAttr.value", weekTemplateAttr.value);
+            attributeService.createRelation(weekNote.noteId, "template", weekTemplateAttr.value);
+        }
+    });
+
+    return weekNote as unknown as BNote;
+}
+
 export default {
     getRootCalendarNote,
     getYearNote,
     getMonthNote,
+    getWeekNote,
     getWeekFirstDayNote,
     getDayNote,
     getTodayNote
