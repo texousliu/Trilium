@@ -248,6 +248,18 @@ export const TPL = `
     </div>
 
     <div class="form-group">
+        <label>${t("ai_llm.embedding_batch_size")}</label>
+        <input class="embedding-batch-size form-control" type="number" min="1" max="100" step="1">
+        <div class="form-text">${t("ai_llm.embedding_batch_size_description")}</div>
+    </div>
+
+    <div class="form-group">
+        <label>${t("ai_llm.embedding_update_interval")}</label>
+        <input class="embedding-update-interval form-control" type="number" min="100" max="60000" step="100">
+        <div class="form-text">${t("ai_llm.embedding_update_interval_description")}</div>
+    </div>
+
+    <div class="form-group">
         <label>${t("ai_llm.max_notes_per_llm_query")}</label>
         <input class="max-notes-per-llm-query form-control" type="number" min="1" max="20" step="1">
         <div class="form-text">${t("ai_llm.max_notes_per_llm_query_description")}</div>
@@ -276,7 +288,7 @@ export const TPL = `
         </button>
         <div class="form-text">${t("ai_llm.recreate_embeddings_description")}</div>
     </div>
-    
+
     <!-- Rebuild index button -->
     <div class="form-group mt-3">
         <button class="btn btn-outline-primary rebuild-embeddings-index">

@@ -134,6 +134,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.setupChangeHandler('.max-notes-per-llm-query', 'maxNotesPerLlmQuery');
         this.setupChangeHandler('.embedding-provider-precedence', 'embeddingProviderPrecedence', true);
         this.setupChangeHandler('.embedding-dimension-strategy', 'embeddingDimensionStrategy');
+        this.setupChangeHandler('.embedding-batch-size', 'embeddingBatchSize');
+        this.setupChangeHandler('.embedding-update-interval', 'embeddingUpdateInterval');
 
         // No sortable behavior needed anymore
 
@@ -486,6 +488,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.embedding-similarity-threshold').val(options.embeddingSimilarityThreshold || '0.75');
         this.$widget.find('.max-notes-per-llm-query').val(options.maxNotesPerLlmQuery || '3');
         this.$widget.find('.embedding-dimension-strategy').val(options.embeddingDimensionStrategy || 'auto');
+        this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
+        this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');
 
         // Display validation warnings
         this.displayValidationWarnings();
