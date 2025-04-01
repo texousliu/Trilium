@@ -239,10 +239,15 @@ interface Api {
      * @param date in YYYY-MM-DD format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
      */
-    getWeekFirstDayNote(
-        date: string,
-        rootNote: BNote
-    ): BNote | null;
+    getWeekFirstDayNote(date: string, rootNote: BNote): BNote | null;
+
+    /**
+     * Returns week note for given date. If such a note doesn't exist, it is created.
+     *
+     * @param date in YYYY-MM-DD format
+     * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
+     */
+    getWeekNote(date: string, rootNote: BNote): BNote | null;
 
     /**
      * Returns month note for given date. If such a note doesn't exist, it is created.
@@ -251,6 +256,14 @@ interface Api {
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
      */
     getMonthNote(date: string, rootNote: BNote): BNote | null;
+
+    /**
+     * Returns quarter note for given date. If such a note doesn't exist, it is created.
+     *
+     * @param date in YYYY-MM format
+     * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
+     */
+    getQuarterNote(date: string, rootNote: BNote): BNote | null;
 
     /**
      * Returns year note for given year. If such a note doesn't exist, it is created.
@@ -548,7 +561,9 @@ function BackendScriptApi(this: Api, currentNote: BNote, apiParams: ApiParams) {
     this.getDayNote = dateNoteService.getDayNote;
     this.getTodayNote = dateNoteService.getTodayNote;
     this.getWeekFirstDayNote = dateNoteService.getWeekFirstDayNote;
+    this.getWeekNote = dateNoteService.getWeekNote;
     this.getMonthNote = dateNoteService.getMonthNote;
+    this.getQuarterNote = dateNoteService.getQuarterNote;
     this.getYearNote = dateNoteService.getYearNote;
 
     this.sortNotes = (parentNoteId, sortConfig = {}) => treeService.sortNotes(parentNoteId, sortConfig.sortBy || "title", !!sortConfig.reverse, !!sortConfig.foldersFirst);
@@ -680,5 +695,5 @@ function BackendScriptApi(this: Api, currentNote: BNote, apiParams: ApiParams) {
 }
 
 export default BackendScriptApi as any as {
-    new (currentNote: BNote, apiParams: ApiParams): Api;
+    new(currentNote: BNote, apiParams: ApiParams): Api;
 };

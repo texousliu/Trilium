@@ -418,6 +418,7 @@ function getTodayNote(rootNote: BNote | null = null) {
 export default {
     getRootCalendarNote,
     getYearNote,
+    getQuarterNote,
     getMonthNote,
     getWeekNote,
     getWeekFirstDayNote,
