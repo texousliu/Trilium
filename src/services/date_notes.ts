@@ -166,11 +166,10 @@ function getQuarterNumberStr(date: Dayjs) {
     return `${date.year()}-Q${Math.floor(date.month() / 3) + 1}`;
 }
 
-function getQuarterNote(dateStr: string, _rootNote: BNote | null = null): BNote {
+function getQuarterNote(quarterStr: string, _rootNote: BNote | null = null): BNote {
     const rootNote = _rootNote || getRootCalendarNote();
 
-    const quarterStr = getQuarterNumberStr(dayjs(dateStr));
-    const quarterNumber = parseInt(quarterStr.substring(6, 7));
+    quarterStr = quarterStr.trim().substring(0, 7);
 
     let quarterNote = searchService.findFirstNoteWithQuery(`#${QUARTER_LABEL}="${quarterStr}"`, new SearchContext({ ancestorNoteId: rootNote.noteId }));
 
@@ -178,8 +177,13 @@ function getQuarterNote(dateStr: string, _rootNote: BNote | null = null): BNote 
         return quarterNote;
     }
 
-    const yearNote = getYearNote(dateStr, rootNote);
-    const noteTitle = getJournalNoteTitle(rootNote, 'quarter', dayjs(dateStr), quarterNumber);
+    const [yearStr, quarterNumberStr] = quarterStr.trim().split('-Q');
+    const quarterNumber = parseInt(quarterNumberStr);
+    const firstMonth = (quarterNumber - 1) * 3;
+    const quarterStartDate = dayjs().year(parseInt(yearStr)).month(firstMonth).date(1);
+
+    const yearNote = getYearNote(yearStr, rootNote);
+    const noteTitle = getJournalNoteTitle(rootNote, 'quarter', quarterStartDate, quarterNumber);
 
     sql.transactional(() => {
         quarterNote = createNote(yearNote, noteTitle);
@@ -212,7 +216,7 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     let monthParentNote;
 
     if (rootNote.hasLabel('enableQuarterNote')) {
-        monthParentNote = getQuarterNote(dateStr, rootNote);
+        monthParentNote = getQuarterNote(getQuarterNumberStr(dayjs(dateStr)), rootNote);
     } else {
         monthParentNote = getYearNote(dateStr, rootNote);
     }
