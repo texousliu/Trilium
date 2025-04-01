@@ -790,9 +790,9 @@ export default class LlmChatPanel extends BasicWidget {
                 enabledProviders.push('anthropic');
             }
 
-            // Ollama is enabled if the setting is true
-            const ollamaEnabled = options.is('ollamaEnabled');
-            if (ollamaEnabled) {
+            // Ollama is enabled if base URL is set
+            const ollamaBaseUrl = options.get('ollamaBaseUrl');
+            if (ollamaBaseUrl) {
                 enabledProviders.push('ollama');
             }
 

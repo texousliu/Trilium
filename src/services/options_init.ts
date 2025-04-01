@@ -189,7 +189,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "anthropicBaseUrl", value: "https://api.anthropic.com/v1", isSynced: true },
     { name: "ollamaEnabled", value: "false", isSynced: true },
     { name: "ollamaDefaultModel", value: "llama3", isSynced: true },
-    { name: "ollamaBaseUrl", value: "http://localhost:11434", isSynced: true },
+    { name: "ollamaBaseUrl", value: "", isSynced: true },
     { name: "ollamaEmbeddingModel", value: "nomic-embed-text", isSynced: true },
     { name: "embeddingAutoUpdateEnabled", value: "true", isSynced: true },
 

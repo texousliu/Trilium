@@ -287,10 +287,9 @@ export async function initializeDefaultProviders() {
             }
         }
 
-        // Register Ollama provider if enabled
-        if (await options.getOptionBool('ollamaEnabled')) {
-            const ollamaBaseUrl = await options.getOption('ollamaBaseUrl') || 'http://localhost:11434';
-
+        // Register Ollama provider if base URL is configured
+        const ollamaBaseUrl = await options.getOption('ollamaBaseUrl');
+        if (ollamaBaseUrl) {
             // Use specific embedding models if available
             const embeddingModel = await options.getOption('ollamaEmbeddingModel') || 'nomic-embed-text';
 
