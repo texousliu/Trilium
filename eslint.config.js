@@ -1,5 +1,20 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import stylistic from "@stylistic/eslint-plugin";
+
+
+// Go to https://eslint.style/rules/default/${rule_without_prefix} to check the rule details
+const stylisticRules = {
+    "@stylistic/indent": [ "error", 4 ],
+    "@stylistic/quotes": [ "error", "double" ],
+    "@stylistic/semi": [ "error", "always" ],
+    "@stylistic/quote-props": [ "error", "consistent-as-needed" ],
+    "@stylistic/max-len": [ "error", { code: 200 } ],
+    "@stylistic/comma-dangle": [ "error", "never" ],
+    "@stylistic/linebreak-style": [ "error", "unix" ],
+    "@stylistic/array-bracket-spacing": [ "error", "always" ],
+    "@stylistic/object-curly-spacing": [ "error", "always" ]
+};
 
 export default tseslint.config(
     eslint.configs.recommended,
@@ -17,6 +32,9 @@ export default tseslint.config(
         }
     },
     {
+        plugins: {
+            "@stylistic": stylistic
+        },
         rules: {
             // add rule overrides here
             "no-undef": "off",
@@ -27,7 +45,8 @@ export default tseslint.config(
                     "argsIgnorePattern": "^_",
                     "varsIgnorePattern": "^_",
                 }
-            ]
+            ],
+            ...stylisticRules
         }
     },
     {
