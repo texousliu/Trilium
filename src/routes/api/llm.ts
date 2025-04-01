@@ -1144,39 +1144,34 @@ async function sendMessage(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/llm/index/stats:
+ * /api/llm/indexes/stats:
  *   get:
- *     summary: Get statistics about the vector index
+ *     summary: Get stats about the LLM knowledge base indexing status
  *     operationId: llm-index-stats
  *     responses:
  *       '200':
- *         description: Vector index statistics
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 totalEmbeddings:
- *                   type: integer
- *                 totalIndexedNotes:
- *                   type: integer
- *                 lastIndexed:
- *                   type: string
- *                   format: date-time
- *                 embeddingProvider:
- *                   type: string
+ *         description: Index stats successfully retrieved
  *     security:
  *       - session: []
  *     tags: ["llm"]
  */
 async function getIndexStats(req: Request, res: Response) {
     try {
-        if (!isDatabaseInitialized()) {
-            throw new Error('Database is not initialized yet');
+        // Check if AI is enabled
+        const aiEnabled = await options.getOptionBool('aiEnabled');
+        if (!aiEnabled) {
+            return {
+                success: false,
+                message: "AI features are disabled"
+            };
         }
 
+        // Return indexing stats
         const stats = await indexService.getIndexingStats();
-        return stats;
+        return {
+            success: true,
+            ...stats
+        };
     } catch (error: any) {
         log.error(`Error getting index stats: ${error.message || 'Unknown error'}`);
         throw new Error(`Failed to get index stats: ${error.message || 'Unknown error'}`);
@@ -1185,372 +1180,10 @@ async function getIndexStats(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/llm/index/start:
+ * /api/llm/indexes:
  *   post:
- *     summary: Start or restart the indexing process
+ *     summary: Start or continue indexing the knowledge base
  *     operationId: llm-start-indexing
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               forceReindex:
- *                 type: boolean
- *                 description: Whether to force reindexing of all notes
- *               branchId:
- *                 type: string
- *                 description: Optional branch ID to limit indexing scope
- *     responses:
- *       '200':
- *         description: Indexing process started
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 notesToIndex:
- *                   type: integer
- *     security:
- *       - session: []
- *     tags: ["llm"]
- */
-async function startIndexing(req: Request, res: Response) {
-    try {
-        if (!isDatabaseInitialized()) {
-            throw new Error('Database is not initialized yet');
-        }
-
-        const { force, batchSize } = req.body || {};
-
-        let result;
-        if (batchSize) {
-            // Run a limited batch indexing
-            result = await indexService.runBatchIndexing(batchSize);
-            return {
-                success: result,
-                message: result ? `Batch indexing started with size ${batchSize}` : 'Indexing already in progress'
-            };
-        } else {
-            // Start full indexing
-            result = await indexService.startFullIndexing(force);
-            return {
-                success: result,
-                message: result ? 'Full indexing started' : 'Indexing already in progress or not needed'
-            };
-        }
-    } catch (error: any) {
-        log.error(`Error starting indexing: ${error.message || 'Unknown error'}`);
-        throw new Error(`Failed to start indexing: ${error.message || 'Unknown error'}`);
-    }
-}
-
-/**
- * @swagger
- * /api/llm/index/failed:
- *   get:
- *     summary: Get list of notes that failed to be indexed
- *     operationId: llm-failed-indexes
- *     responses:
- *       '200':
- *         description: List of failed note indexes
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   noteId:
- *                     type: string
- *                   title:
- *                     type: string
- *                   error:
- *                     type: string
- *                   timestamp:
- *                     type: string
- *                     format: date-time
- *     security:
- *       - session: []
- *     tags: ["llm"]
- */
-async function getFailedIndexes(req: Request, res: Response) {
-    try {
-        if (!isDatabaseInitialized()) {
-            throw new Error('Database is not initialized yet');
-        }
-
-        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 100;
-        const failedNotes = await indexService.getFailedIndexes(limit);
-
-        return {
-            count: failedNotes.length,
-            failedNotes
-        };
-    } catch (error: any) {
-        log.error(`Error getting failed indexes: ${error.message || 'Unknown error'}`);
-        throw new Error(`Failed to get failed indexes: ${error.message || 'Unknown error'}`);
-    }
-}
-
-/**
- * @swagger
- * /api/llm/index/failed/{noteId}/retry:
- *   post:
- *     summary: Retry indexing a specific failed note
- *     operationId: llm-retry-failed-index
- *     parameters:
- *       - name: noteId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Retry process started
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *       '404':
- *         description: Failed note not found
- *     security:
- *       - session: []
- *     tags: ["llm"]
- */
-async function retryFailedIndex(req: Request, res: Response) {
-    try {
-        if (!isDatabaseInitialized()) {
-            throw new Error('Database is not initialized yet');
-        }
-
-        const { noteId } = req.params;
-        if (!noteId) {
-            throw new Error('Note ID is required');
-        }
-
-        const success = await indexService.retryFailedNote(noteId);
-
-        return {
-            success,
-            message: success ? `Note ${noteId} queued for retry` : `Note ${noteId} not found in failed queue`
-        };
-    } catch (error: any) {
-        log.error(`Error retrying failed index: ${error.message || 'Unknown error'}`);
-        throw new Error(`Failed to retry index: ${error.message || 'Unknown error'}`);
-    }
-}
-
-/**
- * @swagger
- * /api/llm/index/failed/retry-all:
- *   post:
- *     summary: Retry indexing all failed notes
- *     operationId: llm-retry-all-failed
- *     responses:
- *       '200':
- *         description: Retry process started for all failed notes
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 count:
- *                   type: integer
- *     security:
- *       - session: []
- *     tags: ["llm"]
- */
-async function retryAllFailedIndexes(req: Request, res: Response) {
-    try {
-        if (!isDatabaseInitialized()) {
-            throw new Error('Database is not initialized yet');
-        }
-
-        const count = await indexService.retryAllFailedNotes();
-
-        return {
-            success: true,
-            count,
-            message: `${count} notes queued for retry`
-        };
-    } catch (error: any) {
-        log.error(`Error retrying all failed indexes: ${error.message || 'Unknown error'}`);
-        throw new Error(`Failed to retry indexes: ${error.message || 'Unknown error'}`);
-    }
-}
-
-/**
- * @swagger
- * /api/llm/similar:
- *   post:
- *     summary: Find notes similar to the provided content
- *     operationId: llm-find-similar
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: Content to find similar notes for
- *               limit:
- *                 type: integer
- *                 description: Maximum number of results to return
- *               threshold:
- *                 type: number
- *                 description: Similarity threshold (0.0-1.0)
- *     responses:
- *       '200':
- *         description: List of similar notes
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   noteId:
- *                     type: string
- *                   title:
- *                     type: string
- *                   similarity:
- *                     type: number
- *                   branchId:
- *                     type: string
- *     security:
- *       - session: []
- *     tags: ["llm"]
- */
-async function findSimilarNotes(req: Request, res: Response) {
-    try {
-        if (!isDatabaseInitialized()) {
-            throw new Error('Database is not initialized yet');
-        }
-
-        const { query, contextNoteId, limit } = req.body || {};
-
-        if (!query || typeof query !== 'string' || query.trim().length === 0) {
-            throw new Error('Query is required');
-        }
-
-        const similarNotes = await indexService.findSimilarNotes(
-            query,
-            contextNoteId,
-            limit || 10
-        );
-
-        return {
-            count: similarNotes.length,
-            similarNotes
-        };
-    } catch (error: any) {
-        log.error(`Error finding similar notes: ${error.message || 'Unknown error'}`);
-        throw new Error(`Failed to find similar notes: ${error.message || 'Unknown error'}`);
-    }
-}
-
-/**
- * @swagger
- * /api/llm/generate-context:
- *   post:
- *     summary: Generate context from similar notes for a query
- *     operationId: llm-generate-context
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               query:
- *                 type: string
- *                 description: Query to generate context for
- *               limit:
- *                 type: integer
- *                 description: Maximum number of notes to include
- *               contextNoteId:
- *                 type: string
- *                 description: Optional note ID to provide additional context
- *     responses:
- *       '200':
- *         description: Generated context and sources
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 context:
- *                   type: string
- *                 sources:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       noteId:
- *                         type: string
- *                       title:
- *                         type: string
- *                       similarity:
- *                         type: number
- *     security:
- *       - session: []
- *     tags: ["llm"]
- */
-async function generateQueryContext(req: Request, res: Response) {
-    try {
-        if (!isDatabaseInitialized()) {
-            throw new Error('Database is not initialized yet');
-        }
-
-        const { query, contextNoteId, depth } = req.body || {};
-
-        if (!query || typeof query !== 'string' || query.trim().length === 0) {
-            throw new Error('Query is required');
-        }
-
-        const context = await indexService.generateQueryContext(
-            query,
-            contextNoteId,
-            depth || 2
-        );
-
-        return {
-            context,
-            length: context.length
-        };
-    } catch (error: any) {
-        log.error(`Error generating query context: ${error.message || 'Unknown error'}`);
-        throw new Error(`Failed to generate query context: ${error.message || 'Unknown error'}`);
-    }
-}
-
-/**
- * @swagger
- * /api/llm/index/note/{noteId}:
- *   post:
- *     summary: Index or reindex a specific note
- *     operationId: llm-index-note
- *     parameters:
- *       - name: noteId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
  *     requestBody:
  *       required: false
  *       content:
@@ -1560,49 +1193,343 @@ async function generateQueryContext(req: Request, res: Response) {
  *             properties:
  *               force:
  *                 type: boolean
- *                 description: Whether to force reindexing even if already indexed
+ *                 description: Whether to force reindexing of all notes
  *     responses:
  *       '200':
- *         description: Note indexing result
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *       '404':
- *         description: Note not found
+ *         description: Indexing started successfully
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function startIndexing(req: Request, res: Response) {
+    try {
+        // Check if AI is enabled
+        const aiEnabled = await options.getOptionBool('aiEnabled');
+        if (!aiEnabled) {
+            return {
+                success: false,
+                message: "AI features are disabled"
+            };
+        }
+
+        const { force = false } = req.body;
+
+        // Start indexing
+        await indexService.startFullIndexing(force);
+
+        return {
+            success: true,
+            message: "Indexing started"
+        };
+    } catch (error: any) {
+        log.error(`Error starting indexing: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to start indexing: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * @swagger
+ * /api/llm/indexes/failed:
+ *   get:
+ *     summary: Get list of notes that failed to index
+ *     operationId: llm-failed-indexes
+ *     parameters:
+ *       - name: limit
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 100
+ *     responses:
+ *       '200':
+ *         description: Failed indexes successfully retrieved
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function getFailedIndexes(req: Request, res: Response) {
+    try {
+        // Check if AI is enabled
+        const aiEnabled = await options.getOptionBool('aiEnabled');
+        if (!aiEnabled) {
+            return {
+                success: false,
+                message: "AI features are disabled"
+            };
+        }
+
+        const limit = parseInt(req.query.limit as string || "100", 10);
+
+        // Get failed indexes
+        const failed = await indexService.getFailedIndexes(limit);
+
+        return {
+            success: true,
+            failed
+        };
+    } catch (error: any) {
+        log.error(`Error getting failed indexes: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to get failed indexes: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * @swagger
+ * /api/llm/indexes/notes/{noteId}:
+ *   put:
+ *     summary: Retry indexing a specific note that previously failed
+ *     operationId: llm-retry-index
+ *     parameters:
+ *       - name: noteId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Index retry successfully initiated
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function retryFailedIndex(req: Request, res: Response) {
+    try {
+        // Check if AI is enabled
+        const aiEnabled = await options.getOptionBool('aiEnabled');
+        if (!aiEnabled) {
+            return {
+                success: false,
+                message: "AI features are disabled"
+            };
+        }
+
+        const { noteId } = req.params;
+
+        // Retry indexing the note
+        const result = await indexService.retryFailedNote(noteId);
+
+        return {
+            success: true,
+            message: result ? "Note queued for indexing" : "Failed to queue note for indexing"
+        };
+    } catch (error: any) {
+        log.error(`Error retrying failed index: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to retry index: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * @swagger
+ * /api/llm/indexes/failed:
+ *   put:
+ *     summary: Retry indexing all failed notes
+ *     operationId: llm-retry-all-indexes
+ *     responses:
+ *       '200':
+ *         description: Retry of all failed indexes successfully initiated
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function retryAllFailedIndexes(req: Request, res: Response) {
+    try {
+        // Check if AI is enabled
+        const aiEnabled = await options.getOptionBool('aiEnabled');
+        if (!aiEnabled) {
+            return {
+                success: false,
+                message: "AI features are disabled"
+            };
+        }
+
+        // Retry all failed notes
+        const count = await indexService.retryAllFailedNotes();
+
+        return {
+            success: true,
+            message: `${count} notes queued for reprocessing`
+        };
+    } catch (error: any) {
+        log.error(`Error retrying all failed indexes: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to retry all indexes: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * @swagger
+ * /api/llm/indexes/notes/similar:
+ *   get:
+ *     summary: Find notes similar to a query string
+ *     operationId: llm-find-similar-notes
+ *     parameters:
+ *       - name: query
+ *         in: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: contextNoteId
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *     responses:
+ *       '200':
+ *         description: Similar notes found successfully
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function findSimilarNotes(req: Request, res: Response) {
+    try {
+        // Check if AI is enabled
+        const aiEnabled = await options.getOptionBool('aiEnabled');
+        if (!aiEnabled) {
+            return {
+                success: false,
+                message: "AI features are disabled"
+            };
+        }
+
+        const query = req.query.query as string;
+        const contextNoteId = req.query.contextNoteId as string | undefined;
+        const limit = parseInt(req.query.limit as string || "5", 10);
+
+        if (!query) {
+            return {
+                success: false,
+                message: "Query is required"
+            };
+        }
+
+        // Find similar notes
+        const similar = await indexService.findSimilarNotes(query, contextNoteId, limit);
+
+        return {
+            success: true,
+            similar
+        };
+    } catch (error: any) {
+        log.error(`Error finding similar notes: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to find similar notes: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * @swagger
+ * /api/llm/indexes/context:
+ *   get:
+ *     summary: Generate context for an LLM query based on the knowledge base
+ *     operationId: llm-generate-context
+ *     parameters:
+ *       - name: query
+ *         in: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: contextNoteId
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - name: depth
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 2
+ *     responses:
+ *       '200':
+ *         description: Context generated successfully
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function generateQueryContext(req: Request, res: Response) {
+    try {
+        // Check if AI is enabled
+        const aiEnabled = await options.getOptionBool('aiEnabled');
+        if (!aiEnabled) {
+            return {
+                success: false,
+                message: "AI features are disabled"
+            };
+        }
+
+        const query = req.query.query as string;
+        const contextNoteId = req.query.contextNoteId as string | undefined;
+        const depth = parseInt(req.query.depth as string || "2", 10);
+
+        if (!query) {
+            return {
+                success: false,
+                message: "Query is required"
+            };
+        }
+
+        // Generate context
+        const context = await indexService.generateQueryContext(query, contextNoteId, depth);
+
+        return {
+            success: true,
+            context
+        };
+    } catch (error: any) {
+        log.error(`Error generating query context: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to generate query context: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * @swagger
+ * /api/llm/indexes/notes/{noteId}:
+ *   post:
+ *     summary: Index a specific note for LLM knowledge base
+ *     operationId: llm-index-note
+ *     parameters:
+ *       - name: noteId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Note indexed successfully
  *     security:
  *       - session: []
  *     tags: ["llm"]
  */
 async function indexNote(req: Request, res: Response) {
     try {
-        if (!isDatabaseInitialized()) {
-            throw new Error('Database is not initialized yet');
+        // Check if AI is enabled
+        const aiEnabled = await options.getOptionBool('aiEnabled');
+        if (!aiEnabled) {
+            return {
+                success: false,
+                message: "AI features are disabled"
+            };
         }
 
         const { noteId } = req.params;
+
         if (!noteId) {
-            throw new Error('Note ID is required');
+            return {
+                success: false,
+                message: "Note ID is required"
+            };
         }
 
-        // Check if note exists
-        const note = becca.getNote(noteId);
-        if (!note) {
-            throw new Error(`Note ${noteId} not found`);
-        }
-
-        const success = await indexService.generateNoteIndex(noteId);
+        // Index the note
+        const result = await indexService.generateNoteIndex(noteId);
 
         return {
-            success,
-            noteId,
-            noteTitle: note.title,
-            message: success ? `Note "${note.title}" indexed successfully` : `Failed to index note "${note.title}"`
+            success: true,
+            message: result ? "Note indexed successfully" : "Failed to index note"
         };
     } catch (error: any) {
         log.error(`Error indexing note: ${error.message || 'Unknown error'}`);

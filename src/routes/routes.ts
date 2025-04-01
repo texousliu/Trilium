@@ -414,24 +414,20 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
     apiRoute(GET, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
 
-    // LLM index management endpoints
-    apiRoute(GET, "/api/llm/index/stats", llmRoute.getIndexStats);
-    apiRoute(PST, "/api/llm/index/start", llmRoute.startIndexing);
-    apiRoute(GET, "/api/llm/index/failed", llmRoute.getFailedIndexes);
-    apiRoute(PST, "/api/llm/index/retry/:noteId", llmRoute.retryFailedIndex);
-    apiRoute(PST, "/api/llm/index/retry-all", llmRoute.retryAllFailedIndexes);
-    apiRoute(PST, "/api/llm/index/similar", llmRoute.findSimilarNotes);
-    apiRoute(PST, "/api/llm/index/context", llmRoute.generateQueryContext);
-    apiRoute(PST, "/api/llm/index/notes/:noteId", llmRoute.indexNote);
+    // LLM index management endpoints - reorganized for REST principles
+    apiRoute(GET, "/api/llm/indexes/stats", llmRoute.getIndexStats);
+    apiRoute(PST, "/api/llm/indexes", llmRoute.startIndexing); // Create index process
+    apiRoute(GET, "/api/llm/indexes/failed", llmRoute.getFailedIndexes);
+    apiRoute(PUT, "/api/llm/indexes/notes/:noteId", llmRoute.retryFailedIndex); // Update index for note
+    apiRoute(PUT, "/api/llm/indexes/failed", llmRoute.retryAllFailedIndexes); // Update all failed indexes
+    apiRoute(GET, "/api/llm/indexes/notes/similar", llmRoute.findSimilarNotes); // Get similar notes
+    apiRoute(GET, "/api/llm/indexes/context", llmRoute.generateQueryContext); // Get context
+    apiRoute(PST, "/api/llm/indexes/notes/:noteId", llmRoute.indexNote); // Create index for specific note
 
-    // Ollama API endpoints
-    apiRoute(PST, "/api/ollama/list-models", ollamaRoute.listModels);
-
-    // OpenAI API endpoints
-    apiRoute(PST, "/api/openai/list-models", openaiRoute.listModels);
-
-    // Anthropic API endpoints
-    apiRoute(PST, "/api/anthropic/list-models", anthropicRoute.listModels);
+    // LLM provider endpoints - moved under /api/llm/providers hierarchy
+    apiRoute(GET, "/api/llm/providers/ollama/models", ollamaRoute.listModels);
+    apiRoute(GET, "/api/llm/providers/openai/models", openaiRoute.listModels);
+    apiRoute(GET, "/api/llm/providers/anthropic/models", anthropicRoute.listModels);
 
     // API Documentation
     apiDocsRoute.register(app);

@@ -2,14 +2,14 @@ import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
 import { t } from "../../../../services/i18n.js";
 import options from "../../../../services/options.js";
-import { OpenAIModelResponse, AnthropicModelResponse, OllamaModelResponse } from "./interfaces.js";
+import type { OpenAIModelResponse, AnthropicModelResponse, OllamaModelResponse } from "./interfaces.js";
 
 export class ProviderService {
     constructor(private $widget: JQuery<HTMLElement>) {
         // Initialize Voyage models (since they don't have a dynamic refresh yet)
         this.initializeVoyageModels();
     }
-    
+
     /**
      * Initialize Voyage models with default values and ensure proper selection
      */
@@ -22,7 +22,7 @@ export class ProviderService {
             }
         }, 100); // Small delay to ensure the widget is fully initialized
     }
-    
+
     /**
      * Ensures the dropdown has the correct value set, prioritizing:
      * 1. Current UI value if present
@@ -57,14 +57,14 @@ export class ProviderService {
      */
     async refreshOpenAIModels(showLoading: boolean, openaiModelsRefreshed: boolean): Promise<boolean> {
         if (!this.$widget) return false;
-        
+
         const $refreshOpenAIModels = this.$widget.find('.refresh-openai-models');
-        
+
         // If we've already refreshed and we're not forcing a refresh, don't do it again
         if (openaiModelsRefreshed && !showLoading) {
             return openaiModelsRefreshed;
         }
-        
+
         if (showLoading) {
             $refreshOpenAIModels.prop('disabled', true);
             $refreshOpenAIModels.html(`<i class="spinner-border spinner-border-sm"></i>`);
@@ -72,7 +72,7 @@ export class ProviderService {
 
         try {
             const openaiBaseUrl = this.$widget.find('.openai-base-url').val() as string;
-            const response = await server.post<OpenAIModelResponse>('openai/list-models', { baseUrl: openaiBaseUrl });
+            const response = await server.get<OpenAIModelResponse>(`llm/providers/openai/models?baseUrl=${encodeURIComponent(openaiBaseUrl)}`);
 
             if (response && response.success) {
                 // Update the chat models dropdown
@@ -120,12 +120,12 @@ export class ProviderService {
                     const totalModels = (response.chatModels?.length || 0) + (response.embeddingModels?.length || 0);
                     toastService.showMessage(`${totalModels} OpenAI models found.`);
                 }
-                
+
                 return true;
             } else if (showLoading) {
                 toastService.showError(`No OpenAI models found. Please check your API key and settings.`);
             }
-            
+
             return openaiModelsRefreshed;
         } catch (e) {
             console.error(`Error fetching OpenAI models:`, e);
@@ -140,7 +140,7 @@ export class ProviderService {
             }
         }
     }
-    
+
     /**
      * Refreshes the list of Anthropic models
      * @param showLoading Whether to show loading indicators and toasts
@@ -149,14 +149,14 @@ export class ProviderService {
      */
     async refreshAnthropicModels(showLoading: boolean, anthropicModelsRefreshed: boolean): Promise<boolean> {
         if (!this.$widget) return false;
-        
+
         const $refreshAnthropicModels = this.$widget.find('.refresh-anthropic-models');
-        
+
         // If we've already refreshed and we're not forcing a refresh, don't do it again
         if (anthropicModelsRefreshed && !showLoading) {
             return anthropicModelsRefreshed;
         }
-        
+
         if (showLoading) {
             $refreshAnthropicModels.prop('disabled', true);
             $refreshAnthropicModels.html(`<i class="spinner-border spinner-border-sm"></i>`);
@@ -164,7 +164,7 @@ export class ProviderService {
 
         try {
             const anthropicBaseUrl = this.$widget.find('.anthropic-base-url').val() as string;
-            const response = await server.post<AnthropicModelResponse>('anthropic/list-models', { baseUrl: anthropicBaseUrl });
+            const response = await server.get<AnthropicModelResponse>(`llm/providers/anthropic/models?baseUrl=${encodeURIComponent(anthropicBaseUrl)}`);
 
             if (response && response.success) {
                 // Update the chat models dropdown
@@ -197,12 +197,12 @@ export class ProviderService {
                     const totalModels = (response.chatModels?.length || 0) + (response.embeddingModels?.length || 0);
                     toastService.showMessage(`${totalModels} Anthropic models found.`);
                 }
-                
+
                 return true;
             } else if (showLoading) {
                 toastService.showError(`No Anthropic models found. Please check your API key and settings.`);
             }
-            
+
             return anthropicModelsRefreshed;
         } catch (e) {
             console.error(`Error fetching Anthropic models:`, e);
@@ -217,7 +217,7 @@ export class ProviderService {
             }
         }
     }
-    
+
     /**
      * Refreshes the list of Ollama models
      * @param showLoading Whether to show loading indicators and toasts
@@ -226,14 +226,14 @@ export class ProviderService {
      */
     async refreshOllamaModels(showLoading: boolean, ollamaModelsRefreshed: boolean): Promise<boolean> {
         if (!this.$widget) return false;
-        
+
         const $refreshModels = this.$widget.find('.refresh-models');
-        
+
         // If we've already refreshed and we're not forcing a refresh, don't do it again
         if (ollamaModelsRefreshed && !showLoading) {
             return ollamaModelsRefreshed;
         }
-        
+
         if (showLoading) {
             $refreshModels.prop('disabled', true);
             $refreshModels.text(t("ai_llm.refreshing_models"));
@@ -241,7 +241,7 @@ export class ProviderService {
 
         try {
             const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
-            const response = await server.post<OllamaModelResponse>('ollama/list-models', { baseUrl: ollamaBaseUrl });
+            const response = await server.get<OllamaModelResponse>(`llm/providers/ollama/models?baseUrl=${encodeURIComponent(ollamaBaseUrl)}`);
 
             if (response && response.success && response.models && response.models.length > 0) {
                 const $embedModelSelect = this.$widget.find('.ollama-embedding-model');
@@ -295,12 +295,12 @@ export class ProviderService {
                 if (showLoading) {
                     toastService.showMessage(`${response.models.length} Ollama models found.`);
                 }
-                
+
                 return true;
             } else if (showLoading) {
                 toastService.showError(`No Ollama models found. Please check if Ollama is running.`);
             }
-            
+
             return ollamaModelsRefreshed;
         } catch (e) {
             console.error(`Error fetching Ollama models:`, e);

@@ -5,20 +5,17 @@ import type { Request, Response } from "express";
 
 /**
  * @swagger
- * /api/ollama/models:
- *   post:
+ * /api/llm/providers/ollama/models:
+ *   get:
  *     summary: List available models from Ollama
  *     operationId: ollama-list-models
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               baseUrl:
- *                 type: string
- *                 description: Optional custom Ollama API base URL
+ *     parameters:
+ *       - name: baseUrl
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Optional custom Ollama API base URL
  *     responses:
  *       '200':
  *         description: List of available Ollama models
@@ -41,13 +38,10 @@ import type { Request, Response } from "express";
  */
 async function listModels(req: Request, res: Response) {
     try {
-        const { baseUrl } = req.body;
-
-        // Use provided base URL or default from options
-        const ollamaBaseUrl = baseUrl || await options.getOption('ollamaBaseUrl') || 'http://localhost:11434';
+        const baseUrl = req.query.baseUrl as string || await options.getOption('ollamaBaseUrl') || 'http://localhost:11434';
 
         // Call Ollama API to get models
-        const response = await axios.get(`${ollamaBaseUrl}/api/tags?format=json`, {
+        const response = await axios.get(`${baseUrl}/api/tags?format=json`, {
             headers: { 'Content-Type': 'application/json' },
             timeout: 10000
         });
