@@ -98,7 +98,7 @@ export async function getParentContext(
     }
 
     if (!context) {
-        return HIERARCHY_STRINGS.PARENT_CONTEXT.NO_PARENT_CONTEXT();
+        return HIERARCHY_STRINGS.PARENT_CONTEXT.NO_PARENT_CONTEXT;
     }
 
     return context;
@@ -123,7 +123,7 @@ export async function getChildContext(
         const childNotes = note.getChildNotes();
 
         if (!childNotes || childNotes.length === 0) {
-            return HIERARCHY_STRINGS.CHILD_CONTEXT.NO_CHILD_NOTES();
+            return HIERARCHY_STRINGS.CHILD_CONTEXT.NO_CHILD_NOTES;
         }
 
         let context = `${HIERARCHY_STRINGS.CHILD_CONTEXT.CHILD_NOTES_HEADER(childNotes.length)}\n`;
@@ -146,7 +146,7 @@ export async function getChildContext(
                         .replace(/\n/g, ' ');
 
                     if (truncatedContent) {
-                        context += `  ${HIERARCHY_STRINGS.CHILD_CONTEXT.CHILD_SUMMARY_PREFIX()}${truncatedContent}${truncatedContent.length >= 100 ? '...' : ''}\n`;
+                        context += `  ${HIERARCHY_STRINGS.CHILD_CONTEXT.CHILD_SUMMARY_PREFIX}${truncatedContent}${truncatedContent.length >= 100 ? '...' : ''}\n`;
                     }
                 } catch (e) {
                     // Silently skip content errors
@@ -162,7 +162,7 @@ export async function getChildContext(
         return context;
     } catch (error) {
         console.error(`Error getting child context for ${noteId}:`, error);
-        return HIERARCHY_STRINGS.CHILD_CONTEXT.ERROR_RETRIEVING();
+        return HIERARCHY_STRINGS.CHILD_CONTEXT.ERROR_RETRIEVING;
     }
 }
 
@@ -184,7 +184,7 @@ export async function getLinkedNotesContext(
         const relations = note.getRelations();
 
         if (!relations || relations.length === 0) {
-            return HIERARCHY_STRINGS.LINKED_NOTES.NO_LINKED_NOTES();
+            return HIERARCHY_STRINGS.LINKED_NOTES.NO_LINKED_NOTES;
         }
 
         // Get incoming relations as well
@@ -202,7 +202,7 @@ export async function getLinkedNotesContext(
             for (const relation of limitedRelations) {
                 const targetNote = becca.getNote(relation.value || "");
                 if (targetNote) {
-                    const relationName = relation.name || HIERARCHY_STRINGS.LINKED_NOTES.DEFAULT_RELATION();
+                    const relationName = relation.name || HIERARCHY_STRINGS.LINKED_NOTES.DEFAULT_RELATION;
                     context += `- ${relationName} → ${targetNote.title}\n`;
                 }
             }
@@ -225,7 +225,7 @@ export async function getLinkedNotesContext(
             for (const relation of limitedIncoming) {
                 const sourceNote = becca.getNote(relation.value || "");
                 if (sourceNote) {
-                    const relationName = relation.name || HIERARCHY_STRINGS.LINKED_NOTES.DEFAULT_RELATION();
+                    const relationName = relation.name || HIERARCHY_STRINGS.LINKED_NOTES.DEFAULT_RELATION;
                     context += `- ${sourceNote.title} → ${relationName}\n`;
                 }
             }
@@ -236,9 +236,9 @@ export async function getLinkedNotesContext(
             }
         }
 
-        return context || HIERARCHY_STRINGS.LINKED_NOTES.NO_LINKED_NOTES();
+        return context || HIERARCHY_STRINGS.LINKED_NOTES.NO_LINKED_NOTES;
     } catch (error) {
         console.error(`Error getting linked notes context for ${noteId}:`, error);
-        return HIERARCHY_STRINGS.LINKED_NOTES.ERROR_RETRIEVING();
+        return HIERARCHY_STRINGS.LINKED_NOTES.ERROR_RETRIEVING;
     }
 }
