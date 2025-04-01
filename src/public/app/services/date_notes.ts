@@ -46,6 +46,14 @@ async function getMonthNote(month: string) {
     return await froca.getNote(note.noteId);
 }
 
+async function getQuarterNote(quarter: string) {
+    const note = await server.get<FNoteRow>(`special-notes/quarters/${quarter}`, "date-note");
+
+    await ws.waitForMaxKnownEntityChangeId();
+
+    return await froca.getNote(note.noteId);
+}
+
 async function getYearNote(year: string) {
     const note = await server.get<FNoteRow>(`special-notes/years/${year}`, "date-note");
 
@@ -76,6 +84,7 @@ export default {
     getDayNote,
     getWeekFirstDayNote,
     getWeekNote,
+    getQuarterNote,
     getMonthNote,
     getYearNote,
     createSqlConsole,

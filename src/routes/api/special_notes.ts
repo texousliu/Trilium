@@ -25,6 +25,10 @@ function getMonthNote(req: Request) {
     return dateNoteService.getMonthNote(req.params.month);
 }
 
+function getQuarterNote(req: Request) {
+    return dateNoteService.getQuarterNote(req.params.quarter);
+}
+
 function getYearNote(req: Request) {
     return dateNoteService.getYearNote(req.params.year);
 }
@@ -106,6 +110,7 @@ export default {
     getWeekFirstDayNote,
     getWeekNote,
     getMonthNote,
+    getQuarterNote,
     getYearNote,
     getDayNotesForMonth,
     createSqlConsole,

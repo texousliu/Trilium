@@ -308,6 +308,7 @@ function register(app: express.Application) {
     apiRoute(GET, "/api/special-notes/week-first-day/:date", specialNotesRoute.getWeekFirstDayNote);
     apiRoute(GET, "/api/special-notes/weeks/:week", specialNotesRoute.getWeekNote);
     apiRoute(GET, "/api/special-notes/months/:month", specialNotesRoute.getMonthNote);
+    apiRoute(GET, "/api/special-notes/quarters/:quarter", specialNotesRoute.getQuarterNote);
     apiRoute(GET, "/api/special-notes/years/:year", specialNotesRoute.getYearNote);
     apiRoute(GET, "/api/special-notes/notes-for-month/:month", specialNotesRoute.getDayNotesForMonth);
     apiRoute(PST, "/api/special-notes/sql-console", specialNotesRoute.createSqlConsole);

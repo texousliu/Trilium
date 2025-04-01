@@ -366,11 +366,27 @@ interface Api {
     getWeekFirstDayNote: typeof dateNotesService.getWeekFirstDayNote;
 
     /**
+     * Returns week note for given date. If such a note doesn't exist, it is automatically created.
+     *
+     * @param date in YYYY-MM-DD format
+     * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
+     */
+    getWeekNote: typeof dateNotesService.getWeekNote;
+
+    /**
      * Returns month-note. If it doesn't exist, it is automatically created.
      *
      * @param month - e.g. "2019-04"
      */
     getMonthNote: typeof dateNotesService.getMonthNote;
+
+    /**
+     * Returns quarter note for given date. If such a note doesn't exist, it is automatically created.
+     *
+     * @param date in YYYY-MM format
+     * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
+     */
+    getQuarterNote: typeof dateNotesService.getQuarterNote;
 
     /**
      * Returns year-note. If it doesn't exist, it is automatically created.
@@ -652,7 +668,9 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
     this.getTodayNote = dateNotesService.getTodayNote;
     this.getDayNote = dateNotesService.getDayNote;
     this.getWeekFirstDayNote = dateNotesService.getWeekFirstDayNote;
+    this.getWeekNote = dateNotesService.getWeekNote;
     this.getMonthNote = dateNotesService.getMonthNote;
+    this.getQuarterNote = dateNotesService.getQuarterNote;
     this.getYearNote = dateNotesService.getYearNote;
 
     this.setHoistedNoteId = (noteId) => {
