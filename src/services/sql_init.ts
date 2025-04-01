@@ -21,7 +21,7 @@ import backup from "./backup.js";
 const dbReady = deferred<void>();
 
 function schemaExists() {
-    return !!sql.getValue(`SELECT name FROM sqlite_master
+    return !!sql.getValue(/*sql*/`SELECT name FROM sqlite_master
                                 WHERE type = 'table' AND name = 'options'`);
 }
 

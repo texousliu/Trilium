@@ -83,7 +83,7 @@ function getRecentNotes(activeNoteId: string) {
 // Get the total number of notes
 function getNotesCount(req: Request) {
     const notesCount = sql.getRow(
-        `SELECT COUNT(*) AS count FROM notes WHERE isDeleted = 0;`,
+        /*sql*/`SELECT COUNT(*) AS count FROM notes WHERE isDeleted = 0;`,
     ) as { count: number };
     return notesCount.count;
 }
