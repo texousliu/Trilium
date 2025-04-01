@@ -13,7 +13,8 @@ const stylisticRules = {
     "@stylistic/comma-dangle": [ "error", "never" ],
     "@stylistic/linebreak-style": [ "error", "unix" ],
     "@stylistic/array-bracket-spacing": [ "error", "always" ],
-    "@stylistic/object-curly-spacing": [ "error", "always" ]
+    "@stylistic/object-curly-spacing": [ "error", "always" ],
+    "@stylistic/padded-blocks": [ "error", { classes: "always" } ]
 };
 
 export default tseslint.config(
