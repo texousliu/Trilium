@@ -15,6 +15,7 @@ import "../../../stylesheets/calendar.css";
 
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter);
+
 const MONTHS = [
     t("calendar.january"),
     t("calendar.febuary"),

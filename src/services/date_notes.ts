@@ -9,6 +9,11 @@ import hoistedNoteService from "./hoisted_note.js";
 import type BNote from "../becca/entities/bnote.js";
 import optionService from "./options.js";
 import { t } from "i18next";
+import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
+
+dayjs.extend(isSameOrAfter);
 
 const CALENDAR_ROOT_LABEL = "calendarRoot";
 const YEAR_LABEL = "yearNote";
@@ -180,7 +185,14 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
         return dateNote;
     }
 
-    const monthNote = getMonthNote(dateStr, rootNote);
+    let dateParentNote;
+
+    if (checkWeekNoteEnabled(rootNote)) {
+        dateParentNote = getWeekNote(getWeekNumberStr(dayjs(dateStr)), rootNote);
+    } else {
+        dateParentNote = getMonthNote(dateStr, rootNote);
+    }
+
     const dayNumber = dateStr.substring(8, 10);
 
     const dateObj = dateUtils.parseLocalDate(dateStr);
@@ -188,7 +200,7 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     const noteTitle = getDayNoteTitle(rootNote, dayNumber, dateObj);
 
     sql.transactional(() => {
-        dateNote = createNote(monthNote, noteTitle);
+        dateNote = createNote(dateParentNote as BNote, noteTitle);
 
         attributeService.createLabel(dateNote.noteId, DATE_LABEL, dateStr.substring(0, 10));
 
@@ -206,23 +218,6 @@ function getTodayNote(rootNote: BNote | null = null) {
     return getDayNote(dateUtils.localNowDate(), rootNote);
 }
 
-function getWeekFirstDayNote(dateStr: string, rootNote: BNote | null = null) {
-    const startOfWeek = optionService.getOption("firstDayOfWeek") === '0' ? 'sunday' : 'monday';
-
-    const dateObj = getWeekStartDate(dateUtils.parseLocalDate(dateStr), startOfWeek);
-
-    dateStr = dateUtils.utcDateTimeStr(dateObj);
-
-    return getDayNote(dateStr, rootNote);
-}
-
-function checkWeekNoteEnabled(rootNote: BNote) {
-    if (!rootNote.hasLabel('enableWeekNote')) {
-        return false;
-    }
-    return true;
-}
-
 function getWeekStartDate(date: Date, startOfWeek: string): Date {
     const day = date.getDay();
     let diff;
@@ -238,6 +233,93 @@ function getWeekStartDate(date: Date, startOfWeek: string): Date {
     const startDate = new Date(date);
     startDate.setDate(diff);
     return startDate;
+}
+
+// TODO: Duplicated with getWeekNumber in src/public/app/widgets/buttons/calendar.ts
+// Maybe can be merged later in monorepo setup
+function getWeekNumberStr(date: Dayjs): string {
+    const year = date.year();
+    const dayOfWeek = (day: number) => (day - parseInt(optionService.getOption("firstDayOfWeek")) + 7) % 7;
+
+    // Get first day of the year and adjust to first week start
+    const jan1 = date.clone().year(year).month(0).date(1);
+    const jan1Weekday = jan1.day();
+    const dayOffset = dayOfWeek(jan1Weekday);
+    let firstWeekStart = jan1.clone().subtract(dayOffset, 'day');
+
+    // Adjust based on week rule
+    switch (parseInt(optionService.getOption("firstWeekOfYear"))) {
+        case 1: { // ISO 8601: first week contains Thursday
+            const thursday = firstWeekStart.clone().add(3, 'day'); // Monday + 3 = Thursday
+            if (thursday.year() < year) {
+                firstWeekStart = firstWeekStart.add(7, 'day');
+            }
+            break;
+        }
+        case 2: { // minDaysInFirstWeek rule
+            const daysInFirstWeek = 7 - dayOffset;
+            if (daysInFirstWeek < parseInt(optionService.getOption("minDaysInFirstWeek"))) {
+                firstWeekStart = firstWeekStart.add(7, 'day');
+            }
+            break;
+        }
+        // default case 0: week containing Jan 1 → already handled
+    }
+
+    const diffDays = date.startOf('day').diff(firstWeekStart.startOf('day'), 'day');
+    const weekNumber = Math.floor(diffDays / 7) + 1;
+
+    // Handle case when date is before first week start → belongs to last week of previous year
+    if (weekNumber <= 0) {
+        return getWeekNumberStr(date.subtract(1, 'day'));
+    }
+
+    // Handle case when date belongs to first week of next year
+    const nextYear = year + 1;
+    const jan1Next = date.clone().year(nextYear).month(0).date(1);
+    const jan1WeekdayNext = jan1Next.day();
+    const offsetNext = dayOfWeek(jan1WeekdayNext);
+    let nextYearWeekStart = jan1Next.clone().subtract(offsetNext, 'day');
+
+    switch (parseInt(optionService.getOption("firstWeekOfYear"))) {
+        case 1: {
+            const thursday = nextYearWeekStart.clone().add(3, 'day');
+            if (thursday.year() < nextYear) {
+                nextYearWeekStart = nextYearWeekStart.add(7, 'day');
+            }
+            break;
+        }
+        case 2: {
+            const daysInFirstWeek = 7 - offsetNext;
+            if (daysInFirstWeek < parseInt(optionService.getOption("minDaysInFirstWeek"))) {
+                nextYearWeekStart = nextYearWeekStart.add(7, 'day');
+            }
+            break;
+        }
+    }
+
+    if (date.isSameOrAfter(nextYearWeekStart)) {
+        return `${nextYear}-W01`;
+    }
+
+    return `${year}-W${weekNumber.toString().padStart(2, '0')}`;
+}
+
+function getWeekFirstDayNote(dateStr: string, rootNote: BNote | null = null) {
+    const startOfWeek = optionService.getOption("firstDayOfWeek") === '0' ? 'sunday' : 'monday';
+
+    const dateObj = getWeekStartDate(dateUtils.parseLocalDate(dateStr), startOfWeek);
+
+    dateStr = dateUtils.utcDateTimeStr(dateObj);
+
+    return getDayNote(dateStr, rootNote);
+}
+
+function checkWeekNoteEnabled(rootNote: BNote) {
+    if (!rootNote.hasLabel('enableWeekNote')) {
+        return false;
+    }
+    return true;
 }
 
 function getWeekNoteTitle(rootNote: BNote, weekNumber: number) {
@@ -282,10 +364,8 @@ function getWeekNote(weekStr: string, _rootNote: BNote | null = null): BNote | n
         attributeService.createLabel(weekNote.noteId, "sorted");
 
         const weekTemplateAttr = rootNote.getOwnedAttribute("relation", "weekTemplate");
-        console.log("weekTemplateAttr", weekTemplateAttr);
 
         if (weekTemplateAttr) {
-            console.log("weekTemplateAttr.value", weekTemplateAttr.value);
             attributeService.createRelation(weekNote.noteId, "template", weekTemplateAttr.value);
         }
     });
