@@ -5,7 +5,7 @@ import keyboardActionService from "../../services/keyboard_actions.js";
 import options from "../../services/options.js";
 import AbstractCodeTypeWidget from "./abstract_code_type_widget.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-code note-detail-printable">
     <style>
     .note-detail-code {

@@ -9,7 +9,7 @@ import server from "../../services/server.js";
 import froca from "../../services/froca.js";
 import type FNote from "../../entities/fnote.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="backlinks-widget has-overflow">
     <style>
         .backlinks-widget {

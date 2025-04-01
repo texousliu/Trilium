@@ -12,7 +12,7 @@ import type FNote from "../entities/fnote.js";
 
 const esc = utils.escapeHtml;
 
-const TPL = `<div class="note-map-widget">
+const TPL = /*html*/`<div class="note-map-widget">
     <style>
         .note-detail-note-map {
             height: 100%;

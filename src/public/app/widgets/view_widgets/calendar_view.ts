@@ -14,7 +14,7 @@ import appContext from "../../components/app_context.js";
 import type { EventImpl } from "@fullcalendar/core/internal";
 import debounce, { type DebouncedFunction } from "debounce";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="calendar-view">
     <style>
     .calendar-view {

@@ -8,7 +8,7 @@ import { Modal } from "bootstrap";
 import type { EventData } from "../../components/app_context.js";
 import type EditableTextTypeWidget from "../type_widgets/editable_text.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="include-note-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

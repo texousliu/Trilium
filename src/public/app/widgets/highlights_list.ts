@@ -14,7 +14,7 @@ import appContext, { type EventData } from "../components/app_context.js";
 import libraryLoader from "../services/library_loader.js";
 import type FNote from "../entities/fnote.js";
 
-const TPL = `<div class="highlights-list-widget">
+const TPL = /*html*/`<div class="highlights-list-widget">
     <style>
         .highlights-list-widget {
             padding: 10px;

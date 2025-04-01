@@ -4,7 +4,7 @@ import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
 import type { OptionMap } from "../../../../../../services/options_interface.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("revisions_snapshot_limit.note_revisions_snapshot_limit_title")}</h4>
 

@@ -7,7 +7,7 @@ import type { EventData } from "../components/app_context.js";
 import type { Icon } from "./icon_list.js";
 import { Dropdown } from "bootstrap";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-icon-widget dropdown">
     <style>
     .note-icon-widget {

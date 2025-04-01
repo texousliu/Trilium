@@ -7,7 +7,7 @@ import shortcutService from "../../services/shortcuts.js";
 import server from "../../services/server.js";
 import { Modal } from "bootstrap";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="markdown-import-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

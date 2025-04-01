@@ -6,7 +6,7 @@ import type { EventData } from "../../components/app_context.js";
 import { getLocaleById } from "../../services/i18n.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-readonly-text note-detail-printable">
     <style>
     /* h1 should not be used at all since semantically that's a note title */

@@ -37,7 +37,7 @@ const mentionSetup: MentionConfig = {
     ]
 };
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-editable-text note-detail-printable">
     <style>
     .note-detail-editable-text {

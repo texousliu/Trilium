@@ -2,7 +2,7 @@ import type { EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import AbstractCodeTypeWidget from "./abstract_code_type_widget.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-readonly-code note-detail-printable">
     <style>
     .note-detail-readonly-code {

@@ -4,7 +4,7 @@ import contextMenu from "../menus/context_menu.js";
 import appContext, { type CommandNames } from "../components/app_context.js";
 import utils from "../services/utils.js";
 
-const TPL = `<div class="spacer"></div>`;
+const TPL = /*html*/`<div class="spacer"></div>`;
 
 export default class SpacerWidget extends BasicWidget {
     private baseSize: number;

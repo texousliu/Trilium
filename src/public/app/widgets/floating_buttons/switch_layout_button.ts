@@ -3,7 +3,7 @@ import { t } from "../../services/i18n.js";
 import options from "../../services/options.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
-const TPL = `
+const TPL = /*html*/`
 <button type="button"
     class="switch-layout-button">
     <span class="bx"></span>

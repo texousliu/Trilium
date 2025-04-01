@@ -6,7 +6,7 @@ import utils from "../../services/utils.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="image-properties">
     <div style="display: flex; justify-content: space-evenly; margin: 10px;">
         <span>
