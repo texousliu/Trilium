@@ -132,9 +132,8 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.setupChangeHandler('.enable-automatic-indexing', 'enableAutomaticIndexing', false, true);
         this.setupChangeHandler('.embedding-similarity-threshold', 'embeddingSimilarityThreshold');
         this.setupChangeHandler('.max-notes-per-llm-query', 'maxNotesPerLlmQuery');
-        this.setupChangeHandler('.embedding-default-provider', 'embeddingsDefaultProvider', true);
-        this.setupChangeHandler('.embedding-dimension-strategy', 'embeddingDimensionStrategy');
         this.setupChangeHandler('.embedding-provider-precedence', 'embeddingProviderPrecedence', true);
+        this.setupChangeHandler('.embedding-dimension-strategy', 'embeddingDimensionStrategy');
 
         // No sortable behavior needed anymore
 

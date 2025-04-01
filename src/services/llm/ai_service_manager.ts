@@ -115,9 +115,6 @@ export class AIServiceManager implements IAIServiceManager {
                 return null;
             }
 
-            // Get default embedding provider
-            const defaultProviderName = await options.getOption('embeddingsDefaultProvider') || 'openai';
-
             // Parse provider precedence list (similar to updateProviderOrder)
             let precedenceList: string[] = [];
             const precedenceOption = await options.getOption('aiProviderPrecedence');
@@ -138,27 +135,13 @@ export class AIServiceManager implements IAIServiceManager {
             const enabledProviders = await getEnabledEmbeddingProviders();
             const enabledProviderNames = enabledProviders.map(p => p.name);
 
-            // Check if default provider is in precedence list
-            const defaultInPrecedence = precedenceList.includes(defaultProviderName);
-
-            // Check if default provider is enabled
-            const defaultIsEnabled = enabledProviderNames.includes(defaultProviderName);
-
             // Check if all providers in precedence list are enabled
             const allPrecedenceEnabled = precedenceList.every(p =>
                 enabledProviderNames.includes(p) || p === 'local');
 
             // Return warning message if there are issues
-            if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled) {
+            if (!allPrecedenceEnabled) {
                 let message = 'There are issues with your AI provider configuration:';
-
-                if (!defaultInPrecedence) {
-                    message += `\n• The default embedding provider "${defaultProviderName}" is not in your provider precedence list.`;
-                }
-
-                if (!defaultIsEnabled) {
-                    message += `\n• The default embedding provider "${defaultProviderName}" is not enabled.`;
-                }
 
                 if (!allPrecedenceEnabled) {
                     const disabledProviders = precedenceList.filter(p =>
@@ -354,7 +337,21 @@ export class AIServiceManager implements IAIServiceManager {
                 return;
             }
 
-            const preferredProvider = options.getOption('embeddingsDefaultProvider') || 'openai';
+            // Get provider precedence list
+            const precedenceOption = await options.getOption('embeddingProviderPrecedence');
+            let precedenceList: string[] = [];
+
+            if (precedenceOption) {
+                if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
+                    precedenceList = JSON.parse(precedenceOption);
+                } else if (typeof precedenceOption === 'string') {
+                    if (precedenceOption.includes(',')) {
+                        precedenceList = precedenceOption.split(',').map(p => p.trim());
+                    } else {
+                        precedenceList = [precedenceOption];
+                    }
+                }
+            }
 
             // Check if we have enabled providers
             const enabledProviders = await getEnabledEmbeddingProviders();
@@ -362,13 +359,6 @@ export class AIServiceManager implements IAIServiceManager {
             if (enabledProviders.length === 0) {
                 log.info('No embedding providers are enabled');
                 return;
-            }
-
-            // Validate that preferred provider is enabled
-            const isPreferredEnabled = enabledProviders.some(p => p.name === preferredProvider);
-
-            if (!isPreferredEnabled) {
-                log.info(`Preferred provider "${preferredProvider}" is not enabled. Using first available.`);
             }
 
             // Initialize embedding providers

@@ -20,44 +20,32 @@ export class ProviderManager {
      */
     async getPreferredEmbeddingProvider(): Promise<any> {
         try {
-            // First try user's configured default provider
-            const providerId = await options.getOption('embeddingsDefaultProvider');
-            if (providerId) {
+            // Try to get providers based on precedence list
+            const precedenceOption = await options.getOption('embeddingProviderPrecedence');
+            let precedenceList: string[] = [];
+
+            if (precedenceOption) {
+                if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
+                    precedenceList = JSON.parse(precedenceOption);
+                } else if (typeof precedenceOption === 'string') {
+                    if (precedenceOption.includes(',')) {
+                        precedenceList = precedenceOption.split(',').map(p => p.trim());
+                    } else {
+                        precedenceList = [precedenceOption];
+                    }
+                }
+            }
+
+            // Try each provider in the precedence list
+            for (const providerId of precedenceList) {
                 const provider = await getEmbeddingProvider(providerId);
                 if (provider) {
-                    log.info(`Using configured embedding provider: ${providerId}`);
+                    log.info(`Using embedding provider from precedence list: ${providerId}`);
                     return provider;
                 }
             }
 
-            // Then try OpenAI
-            const openaiKey = await options.getOption('openaiApiKey');
-            if (openaiKey) {
-                const provider = await getEmbeddingProvider('openai');
-                if (provider) {
-                    log.info('Using OpenAI embeddings provider');
-                    return provider;
-                }
-            }
-
-            // Try Anthropic
-            const anthropicKey = await options.getOption('anthropicApiKey');
-            if (anthropicKey) {
-                const provider = await getEmbeddingProvider('anthropic');
-                if (provider) {
-                    log.info('Using Anthropic embeddings provider');
-                    return provider;
-                }
-            }
-
-            // Try Ollama
-            const provider = await getEmbeddingProvider('ollama');
-            if (provider) {
-                log.info('Using Ollama embeddings provider');
-                return provider;
-            }
-
-            // If no preferred providers, get any enabled provider
+            // If no provider from precedence list is available, try any enabled provider
             const providers = await getEnabledEmbeddingProviders();
             if (providers.length > 0) {
                 log.info(`Using available embedding provider: ${providers[0].name}`);

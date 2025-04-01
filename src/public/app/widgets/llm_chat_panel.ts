@@ -757,9 +757,6 @@ export default class LlmChatPanel extends BasicWidget {
                 return;
             }
 
-            // Get the default embedding provider
-            const defaultProvider = options.get('embeddingsDefaultProvider') || 'openai';
-
             // Get provider precedence
             const precedenceStr = options.get('aiProviderPrecedence') || 'openai,anthropic,ollama';
             let precedenceList: string[] = [];
@@ -800,8 +797,6 @@ export default class LlmChatPanel extends BasicWidget {
             enabledProviders.push('local');
 
             // Perform validation checks
-            const defaultInPrecedence = precedenceList.includes(defaultProvider);
-            const defaultIsEnabled = enabledProviders.includes(defaultProvider);
             const allPrecedenceEnabled = precedenceList.every((p: string) => enabledProviders.includes(p));
 
             // Get embedding queue status
@@ -820,18 +815,10 @@ export default class LlmChatPanel extends BasicWidget {
             const hasEmbeddingsInQueue = queuedNotes > 0;
 
             // Show warning if there are issues
-            if (!defaultInPrecedence || !defaultIsEnabled || !allPrecedenceEnabled || hasEmbeddingsInQueue) {
+            if (!allPrecedenceEnabled || hasEmbeddingsInQueue) {
                 let message = '<i class="bx bx-error-circle me-2"></i><strong>AI Provider Configuration Issues</strong>';
 
                 message += '<ul class="mb-1 ps-4">';
-
-                if (!defaultInPrecedence) {
-                    message += `<li>The default embedding provider "${defaultProvider}" is not in your provider precedence list.</li>`;
-                }
-
-                if (!defaultIsEnabled) {
-                    message += `<li>The default embedding provider "${defaultProvider}" is not enabled.</li>`;
-                }
 
                 if (!allPrecedenceEnabled) {
                     const disabledProviders = precedenceList.filter((p: string) => !enabledProviders.includes(p));
