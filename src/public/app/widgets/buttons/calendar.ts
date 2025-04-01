@@ -10,6 +10,7 @@ import type { EventData } from "../../components/app_context.js";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
+import type BAttribute from "../../../../becca/entities/battribute.js";
 import "../../../stylesheets/calendar.css";
 
 dayjs.extend(utc);
@@ -93,6 +94,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     private activeDate: Dayjs | null = null;
     private todaysDate!: Dayjs;
     private date!: Dayjs;
+    private weekNoteEnable: boolean = false;
 
     constructor(title: string = "", icon: string = "") {
         super(title, icon, DROPDOWN_TPL);
@@ -168,6 +170,27 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             ev.stopPropagation();
         });
 
+        this.$dropdownContent.on("click", ".calendar-week-number", async (ev) => {
+            if (!this.weekNoteEnable) {
+                return;
+            }
+
+            const week = $(ev.target).closest(".calendar-week-number").attr("data-calendar-week-number");
+
+            if (week) {
+                const note = await dateNoteService.getWeekNote(week);
+
+                if (note) {
+                    appContext.tabManager.getActiveContext()?.setNote(note.noteId);
+                    this.dropdown?.hide();
+                } else {
+                    toastService.showError(t("calendar.cannot_find_week_note"));
+                }
+            }
+
+            ev.stopPropagation();
+        });
+
         // Handle click events for the entire calendar widget
         this.$dropdownContent.on("click", (e) => {
             const $target = $(e.target);
@@ -184,6 +207,19 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             // Prevent dismissing the calendar popup by clicking on an empty space inside it.
             e.stopPropagation();
         });
+    }
+
+    private async getWeekNoteEnable() {
+        const noteId = await server.get<string[]>(`search/${encodeURIComponent('#calendarRoot')}`);
+        const noteAttributes = await server.get<BAttribute[]>(`notes/${noteId}/attributes`);
+
+        for (const attribute of noteAttributes) {
+            if (attribute.name === 'enableWeekNote') {
+                this.weekNoteEnable = true;
+                return
+            }
+        }
+        this.weekNoteEnable = false;
     }
 
     manageFirstDayOfWeek() {
@@ -272,6 +308,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     async dropdownShown() {
+        await this.getWeekNoteEnable();
         this.init(appContext.tabManager.getActiveContextNote()?.getOwnedLabelValue("dateNote") ?? null);
     }
 
@@ -308,11 +345,18 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     createWeekNumber(weekNumber: number) {
-        const weekNumberText = String(weekNumber);
-        const $newWeekNumber = $("<a>").addClass("calendar-date calendar-week-number").attr("data-calendar-week-number", 'W' + weekNumberText.padStart(2, '0'));
-        const $weekNumber = $("<span>").html(weekNumberText);
+        const weekNoteId = this.date.local().format('YYYY-') + 'W' + String(weekNumber).padStart(2, '0');
 
-        $newWeekNumber.append($weekNumber);
+        let $newWeekNumber;
+        if (this.weekNoteEnable) {
+            // Utilize the hover effect of calendar-date
+            $newWeekNumber = $("<a>").addClass("calendar-date");
+        } else {
+            $newWeekNumber = $("<span>").addClass("calendar-week-number-disabled");
+        }
+        $newWeekNumber.addClass("calendar-week-number").attr("data-calendar-week-number", weekNoteId);
+        $newWeekNumber.append($("<span>").html(String(weekNumber)));
+
         return $newWeekNumber;
     }
 
