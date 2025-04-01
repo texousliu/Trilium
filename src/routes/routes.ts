@@ -391,20 +391,6 @@ function register(app: express.Application) {
     etapiSpecRoute.register(router);
     etapiBackupRoute.register(router);
 
-    // Embeddings API endpoints
-    apiRoute(GET, "/api/embeddings/similar/:noteId", embeddingsRoute.findSimilarNotes);
-    apiRoute(PST, "/api/embeddings/search", embeddingsRoute.searchByText);
-    apiRoute(GET, "/api/embeddings/providers", embeddingsRoute.getProviders);
-    apiRoute(PATCH, "/api/embeddings/providers/:providerId", embeddingsRoute.updateProvider);
-    apiRoute(PST, "/api/embeddings/reprocess", embeddingsRoute.reprocessAllNotes);
-    apiRoute(GET, "/api/embeddings/queue-status", embeddingsRoute.getQueueStatus);
-    apiRoute(GET, "/api/embeddings/stats", embeddingsRoute.getEmbeddingStats);
-    apiRoute(GET, "/api/embeddings/failed", embeddingsRoute.getFailedNotes);
-    apiRoute(PST, "/api/embeddings/retry/:noteId", embeddingsRoute.retryFailedNote);
-    apiRoute(PST, "/api/embeddings/retry-all-failed", embeddingsRoute.retryAllFailedNotes);
-    apiRoute(PST, "/api/embeddings/rebuild-index", embeddingsRoute.rebuildIndex);
-    apiRoute(GET, "/api/embeddings/index-rebuild-status", embeddingsRoute.getIndexRebuildStatus);
-
     // LLM chat session management endpoints
     apiRoute(PST, "/api/llm/sessions", llmRoute.createSession);
     apiRoute(GET, "/api/llm/sessions", llmRoute.listSessions);
@@ -423,6 +409,20 @@ function register(app: express.Application) {
     apiRoute(GET, "/api/llm/indexes/notes/similar", llmRoute.findSimilarNotes); // Get similar notes
     apiRoute(GET, "/api/llm/indexes/context", llmRoute.generateQueryContext); // Get context
     apiRoute(PST, "/api/llm/indexes/notes/:noteId", llmRoute.indexNote); // Create index for specific note
+
+    // LLM embeddings endpoints
+    apiRoute(GET, "/api/llm/embeddings/similar/:noteId", embeddingsRoute.findSimilarNotes);
+    apiRoute(PST, "/api/llm/embeddings/search", embeddingsRoute.searchByText);
+    apiRoute(GET, "/api/llm/embeddings/providers", embeddingsRoute.getProviders);
+    apiRoute(PATCH, "/api/llm/embeddings/providers/:providerId", embeddingsRoute.updateProvider);
+    apiRoute(PST, "/api/llm/embeddings/reprocess", embeddingsRoute.reprocessAllNotes);
+    apiRoute(GET, "/api/llm/embeddings/queue-status", embeddingsRoute.getQueueStatus);
+    apiRoute(GET, "/api/llm/embeddings/stats", embeddingsRoute.getEmbeddingStats);
+    apiRoute(GET, "/api/llm/embeddings/failed", embeddingsRoute.getFailedNotes);
+    apiRoute(PST, "/api/llm/embeddings/retry/:noteId", embeddingsRoute.retryFailedNote);
+    apiRoute(PST, "/api/llm/embeddings/retry-all-failed", embeddingsRoute.retryAllFailedNotes);
+    apiRoute(PST, "/api/llm/embeddings/rebuild-index", embeddingsRoute.rebuildIndex);
+    apiRoute(GET, "/api/llm/embeddings/index-rebuild-status", embeddingsRoute.getIndexRebuildStatus);
 
     // LLM provider endpoints - moved under /api/llm/providers hierarchy
     apiRoute(GET, "/api/llm/providers/ollama/models", ollamaRoute.listModels);

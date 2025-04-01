@@ -9,7 +9,7 @@ import sql from "../../services/sql.js";
 
 /**
  * @swagger
- * /api/embeddings/similar/{noteId}:
+ * /api/llm/embeddings/similar/{noteId}:
  *   get:
  *     summary: Find similar notes based on a given note ID
  *     operationId: embeddings-similar-by-note
@@ -139,7 +139,7 @@ async function findSimilarNotes(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/search:
+ * /api/llm/embeddings/search:
  *   post:
  *     summary: Search for notes similar to provided text
  *     operationId: embeddings-search-by-text
@@ -250,7 +250,7 @@ async function searchByText(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/providers:
+ * /api/llm/embeddings/providers:
  *   get:
  *     summary: Get available embedding providers
  *     operationId: embeddings-get-providers
@@ -294,7 +294,7 @@ async function getProviders(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/providers/{providerId}:
+ * /api/llm/embeddings/providers/{providerId}:
  *   patch:
  *     summary: Update embedding provider configuration
  *     operationId: embeddings-update-provider
@@ -304,7 +304,7 @@ async function getProviders(req: Request, res: Response) {
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the embedding provider to update
+ *         description: Provider ID to update
  *     requestBody:
  *       required: true
  *       content:
@@ -312,18 +312,18 @@ async function getProviders(req: Request, res: Response) {
  *           schema:
  *             type: object
  *             properties:
- *               isEnabled:
+ *               enabled:
  *                 type: boolean
- *                 description: Whether the provider is enabled
+ *                 description: Whether provider is enabled
  *               priority:
  *                 type: integer
- *                 description: Priority level for the provider
+ *                 description: Priority order (lower is higher priority)
  *               config:
  *                 type: object
  *                 description: Provider-specific configuration
  *     responses:
  *       '200':
- *         description: Provider successfully updated
+ *         description: Provider updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -331,8 +331,8 @@ async function getProviders(req: Request, res: Response) {
  *               properties:
  *                 success:
  *                   type: boolean
- *       '404':
- *         description: Provider not found
+ *       '400':
+ *         description: Invalid provider ID or configuration
  *     security:
  *       - session: []
  *     tags: ["llm"]
@@ -359,13 +359,29 @@ async function updateProvider(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/reprocess:
+ * /api/llm/embeddings/reprocess:
  *   post:
- *     summary: Reprocess all notes for embedding generation
+ *     summary: Reprocess embeddings for all notes
  *     operationId: embeddings-reprocess-all
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               providerId:
+ *                 type: string
+ *                 description: Provider ID to use for reprocessing
+ *               modelId:
+ *                 type: string
+ *                 description: Model ID to use for reprocessing
+ *               forceReprocess:
+ *                 type: boolean
+ *                 description: Whether to reprocess notes that already have embeddings
  *     responses:
  *       '200':
- *         description: Reprocessing started successfully
+ *         description: Reprocessing started
  *         content:
  *           application/json:
  *             schema:
@@ -373,8 +389,12 @@ async function updateProvider(req: Request, res: Response) {
  *               properties:
  *                 success:
  *                   type: boolean
+ *                 jobId:
+ *                   type: string
  *                 message:
  *                   type: string
+ *       '400':
+ *         description: Invalid provider ID or configuration
  *     security:
  *       - session: []
  *     tags: ["llm"]
@@ -405,10 +425,17 @@ async function reprocessAllNotes(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/queue-status:
+ * /api/llm/embeddings/queue-status:
  *   get:
- *     summary: Get status of the embedding generation queue
+ *     summary: Get status of the embedding processing queue
  *     operationId: embeddings-queue-status
+ *     parameters:
+ *       - name: jobId
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Optional job ID to get status for a specific processing job
  *     responses:
  *       '200':
  *         description: Queue status information
@@ -420,17 +447,14 @@ async function reprocessAllNotes(req: Request, res: Response) {
  *                 success:
  *                   type: boolean
  *                 status:
+ *                   type: string
+ *                   enum: [idle, processing, paused]
+ *                 progress:
+ *                   type: number
+ *                   format: float
+ *                   description: Progress percentage (0-100)
+ *                 details:
  *                   type: object
- *                   properties:
- *                     queueCount:
- *                       type: integer
- *                       description: Number of items in the queue
- *                     failedCount:
- *                       type: integer
- *                       description: Number of failed embedding attempts
- *                     totalEmbeddingsCount:
- *                       type: integer
- *                       description: Total number of generated embeddings
  *     security:
  *       - session: []
  *     tags: ["llm"]
@@ -461,7 +485,7 @@ async function getQueueStatus(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/stats:
+ * /api/llm/embeddings/stats:
  *   get:
  *     summary: Get embedding statistics
  *     operationId: embeddings-stats
@@ -502,13 +526,13 @@ async function getEmbeddingStats(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/failed:
+ * /api/llm/embeddings/failed:
  *   get:
  *     summary: Get list of notes that failed embedding generation
  *     operationId: embeddings-failed-notes
  *     responses:
  *       '200':
- *         description: List of failed embedding notes
+ *         description: List of failed notes
  *         content:
  *           application/json:
  *             schema:
@@ -527,9 +551,7 @@ async function getEmbeddingStats(req: Request, res: Response) {
  *                         type: string
  *                       error:
  *                         type: string
- *                       attempts:
- *                         type: integer
- *                       lastAttempt:
+ *                       failedAt:
  *                         type: string
  *                         format: date-time
  *     security:
@@ -549,9 +571,9 @@ async function getFailedNotes(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/retry/{noteId}:
+ * /api/llm/embeddings/retry/{noteId}:
  *   post:
- *     summary: Retry embedding generation for a failed note
+ *     summary: Retry generating embeddings for a failed note
  *     operationId: embeddings-retry-note
  *     parameters:
  *       - name: noteId
@@ -559,10 +581,22 @@ async function getFailedNotes(req: Request, res: Response) {
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the note to retry embedding
+ *         description: Note ID to retry
+ *       - name: providerId
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Provider ID to use (defaults to configured default)
+ *       - name: modelId
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Model ID to use (defaults to provider default)
  *     responses:
  *       '200':
- *         description: Retry operation result
+ *         description: Retry result
  *         content:
  *           application/json:
  *             schema:
@@ -572,8 +606,10 @@ async function getFailedNotes(req: Request, res: Response) {
  *                   type: boolean
  *                 message:
  *                   type: string
+ *       '400':
+ *         description: Invalid request
  *       '404':
- *         description: Note not found or not in failed state
+ *         description: Note not found
  *     security:
  *       - session: []
  *     tags: ["llm"]
@@ -605,13 +641,26 @@ async function retryFailedNote(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/retry-all-failed:
+ * /api/llm/embeddings/retry-all-failed:
  *   post:
- *     summary: Retry embedding generation for all failed notes
+ *     summary: Retry generating embeddings for all failed notes
  *     operationId: embeddings-retry-all-failed
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               providerId:
+ *                 type: string
+ *                 description: Provider ID to use (defaults to configured default)
+ *               modelId:
+ *                 type: string
+ *                 description: Model ID to use (defaults to provider default)
  *     responses:
  *       '200':
- *         description: Retry operation started
+ *         description: Retry started
  *         content:
  *           application/json:
  *             schema:
@@ -621,9 +670,8 @@ async function retryFailedNote(req: Request, res: Response) {
  *                   type: boolean
  *                 message:
  *                   type: string
- *                 count:
- *                   type: integer
- *                   description: Number of notes queued for retry
+ *                 jobId:
+ *                   type: string
  *     security:
  *       - session: []
  *     tags: ["llm"]
@@ -639,26 +687,13 @@ async function retryAllFailedNotes(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/rebuild-index:
+ * /api/llm/embeddings/rebuild-index:
  *   post:
- *     summary: Rebuild the embedding vector index
+ *     summary: Rebuild the vector store index
  *     operationId: embeddings-rebuild-index
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               provider:
- *                 type: string
- *                 description: Specific provider to rebuild index for
- *               force:
- *                 type: boolean
- *                 description: Force rebuild even if not necessary
  *     responses:
  *       '200':
- *         description: Index rebuild operation started
+ *         description: Rebuild started
  *         content:
  *           application/json:
  *             schema:
@@ -670,7 +705,6 @@ async function retryAllFailedNotes(req: Request, res: Response) {
  *                   type: string
  *                 jobId:
  *                   type: string
- *                   description: ID of the rebuild job for status tracking
  *     security:
  *       - session: []
  *     tags: ["llm"]
@@ -695,7 +729,7 @@ async function rebuildIndex(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/embeddings/index-rebuild-status:
+ * /api/llm/embeddings/index-rebuild-status:
  *   get:
  *     summary: Get status of the vector index rebuild operation
  *     operationId: embeddings-rebuild-status

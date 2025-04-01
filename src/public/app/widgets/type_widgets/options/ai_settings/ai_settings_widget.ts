@@ -38,19 +38,19 @@ export default class AiSettingsWidget extends OptionsWidget {
      */
     setupChangeHandler(selector: string, optionName: keyof OptionDefinitions, validateAfter: boolean = false, isCheckbox: boolean = false) {
         if (!this.$widget) return;
-        
+
         const $element = this.$widget.find(selector);
         $element.on('change', async () => {
             let value: string;
-            
+
             if (isCheckbox) {
                 value = $element.prop('checked') ? 'true' : 'false';
             } else {
                 value = $element.val() as string;
             }
-            
+
             await this.updateOption(optionName, value);
-            
+
             if (validateAfter) {
                 await this.displayValidationWarnings();
             }
@@ -68,22 +68,22 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.setupChangeHandler('.ai-provider-precedence', 'aiProviderPrecedence', true);
         this.setupChangeHandler('.ai-temperature', 'aiTemperature');
         this.setupChangeHandler('.ai-system-prompt', 'aiSystemPrompt');
-        
+
         // OpenAI options
         this.setupChangeHandler('.openai-api-key', 'openaiApiKey', true);
         this.setupChangeHandler('.openai-base-url', 'openaiBaseUrl', true);
         this.setupChangeHandler('.openai-default-model', 'openaiDefaultModel');
         this.setupChangeHandler('.openai-embedding-model', 'openaiEmbeddingModel');
-        
+
         // Anthropic options
         this.setupChangeHandler('.anthropic-api-key', 'anthropicApiKey', true);
         this.setupChangeHandler('.anthropic-default-model', 'anthropicDefaultModel');
         this.setupChangeHandler('.anthropic-base-url', 'anthropicBaseUrl');
-        
+
         // Voyage options
         this.setupChangeHandler('.voyage-api-key', 'voyageApiKey');
         this.setupChangeHandler('.voyage-embedding-model', 'voyageEmbeddingModel');
-        
+
         // Ollama options
         this.setupChangeHandler('.ollama-base-url', 'ollamaBaseUrl');
         this.setupChangeHandler('.ollama-default-model', 'ollamaDefaultModel');
@@ -150,9 +150,9 @@ export default class AiSettingsWidget extends OptionsWidget {
         $recreateEmbeddings.on('click', async () => {
             if (confirm(t("ai_llm.recreate_embeddings_confirm") || "Are you sure you want to recreate all embeddings? This may take a long time.")) {
                 try {
-                    await server.post('embeddings/reprocess');
+                    await server.post('llm/embeddings/reprocess');
                     toastService.showMessage(t("ai_llm.recreate_embeddings_started"));
-                    
+
                     // Start progress polling
                     this.pollIndexRebuildProgress();
                 } catch (e) {
@@ -161,12 +161,12 @@ export default class AiSettingsWidget extends OptionsWidget {
                 }
             }
         });
-        
+
         // Rebuild index button
         const $rebuildIndex = this.$widget.find('.rebuild-embeddings-index');
         $rebuildIndex.on('click', async () => {
             try {
-                await server.post('embeddings/rebuild-index');
+                await server.post('llm/embeddings/rebuild-index');
                 toastService.showMessage(t("ai_llm.rebuild_index_started"));
 
                 // Start progress polling
@@ -300,7 +300,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (!this.$widget) return;
 
         try {
-            const response = await server.get<EmbeddingStats>('embeddings/stats');
+            const response = await server.get<EmbeddingStats>('llm/embeddings/stats');
 
             if (response && response.success) {
                 const stats = response.stats;
@@ -357,7 +357,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (!this.$widget) return;
 
         try {
-            const response = await server.get<FailedEmbeddingNotes>('embeddings/failed');
+            const response = await server.get<FailedEmbeddingNotes>('llm/embeddings/failed');
 
             if (response && response.success) {
                 const failedNotes = response.failedNotes || [];
@@ -412,7 +412,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                 $failedNotesList.find('.retry-embedding').on('click', async function() {
                     const noteId = $(this).closest('tr').data('note-id');
                     try {
-                        await server.post('embeddings/retry', { noteId });
+                        await server.post('llm/embeddings/retry', { noteId });
                         toastService.showMessage(t("ai_llm.retry_queued"));
                         // Remove this row or update status
                         $(this).closest('tr').remove();
