@@ -9,7 +9,7 @@ import type { EmbeddingModelInfo } from '../interfaces/embedding_interfaces.js';
 export interface EmbeddingConfig {
     model: string;
     dimension: number;
-    type: string;
+    type: 'float32' | 'float64';
     apiKey?: string;
     baseUrl?: string;
     batchSize?: number;
@@ -23,7 +23,7 @@ export interface EmbeddingConfig {
 export abstract class BaseEmbeddingProvider {
     protected model: string;
     protected dimension: number;
-    protected type: string;
+    protected type: 'float32' | 'float64';
     protected maxBatchSize: number = 100;
     protected apiKey?: string;
     protected baseUrl: string;
