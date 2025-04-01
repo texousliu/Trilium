@@ -39,6 +39,8 @@ export default [
     { type: "label", name: "weekPattern" },
     { type: "label", name: "enableWeekNote" },
     { type: "label", name: "monthPattern" },
+    { type: "label", name: "quarterPattern" },
+    { type: "label", name: "enableQuarterNote" },
     { type: "label", name: "pageSize" },
     { type: "label", name: "viewType" },
     { type: "label", name: "mapRootNoteId" },

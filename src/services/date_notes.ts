@@ -17,6 +17,7 @@ dayjs.extend(isSameOrAfter);
 
 const CALENDAR_ROOT_LABEL = "calendarRoot";
 const YEAR_LABEL = "yearNote";
+const QUARTER_LABEL = "quarterNote";
 const MONTH_LABEL = "monthNote";
 const WEEK_LABEL = "weekNote";
 const DATE_LABEL = "dateNote";
@@ -107,6 +108,47 @@ function getYearNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     return yearNote as unknown as BNote;
 }
 
+function getQuarterNumberStr(date: Dayjs) {
+    return `${date.year()}-Q${Math.floor(date.month() / 3) + 1}`;
+}
+
+function getQuarterNoteTitle(rootNote: BNote, quarterNumber: number) {
+    const pattern = rootNote.getOwnedLabelValue("quarterPattern") || "Quarter {quarterNumber}";
+
+    return pattern
+        .replace(/{quarterNumber}/g, quarterNumber.toString());
+}
+
+function getQuarterNote(dateStr: string, _rootNote: BNote | null = null): BNote {
+    const rootNote = _rootNote || getRootCalendarNote();
+
+    const quarterStr = getQuarterNumberStr(dayjs(dateStr));
+
+    let quarterNote = searchService.findFirstNoteWithQuery(`#${QUARTER_LABEL}="${quarterStr}"`, new SearchContext({ ancestorNoteId: rootNote.noteId }));
+
+    if (quarterNote) {
+        return quarterNote;
+    }
+
+    const yearNote = getYearNote(dateStr, rootNote);
+    const noteTitle = getQuarterNoteTitle(rootNote, parseInt(quarterStr.substring(6, 7)));
+
+    sql.transactional(() => {
+        quarterNote = createNote(yearNote, noteTitle);
+
+        attributeService.createLabel(quarterNote.noteId, QUARTER_LABEL, quarterStr);
+        attributeService.createLabel(quarterNote.noteId, "sorted");
+
+        const quarterTemplateAttr = rootNote.getOwnedAttribute("relation", "quarterTemplate");
+
+        if (quarterTemplateAttr) {
+            attributeService.createRelation(quarterNote.noteId, "template", quarterTemplateAttr.value);
+        }
+    });
+
+    return quarterNote as unknown as BNote;
+}
+
 function getMonthNoteTitle(rootNote: BNote, monthNumber: string, dateObj: Dayjs) {
     const pattern = rootNote.getOwnedLabelValue("monthPattern") || "{monthNumberPadded} - {month}";
     const monthName = t(MONTH_TRANSLATION_IDS[dateObj.month()]);
@@ -131,12 +173,18 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
         return monthNote;
     }
 
+    let monthParentNote;
+
+    if (rootNote.hasLabel('enableQuarterNote')) {
+        monthParentNote = getQuarterNote(dateStr, rootNote);
+    } else {
+        monthParentNote = getYearNote(dateStr, rootNote);
+    }
+
     const noteTitle = getMonthNoteTitle(rootNote, monthNumber, dayjs(dateStr));
 
-    const yearNote = getYearNote(dateStr, rootNote);
-
     sql.transactional(() => {
-        monthNote = createNote(yearNote, noteTitle);
+        monthNote = createNote(monthParentNote, noteTitle);
 
         attributeService.createLabel(monthNote.noteId, MONTH_LABEL, monthStr);
         attributeService.createLabel(monthNote.noteId, "sorted");
