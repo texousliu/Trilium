@@ -34,6 +34,28 @@ const loadSystemPrompt = (): string => {
 // Base system prompt loaded from markdown file
 export const DEFAULT_SYSTEM_PROMPT = loadSystemPrompt();
 
+/**
+ * System prompts for different use cases
+ */
+export const SYSTEM_PROMPTS = {
+    DEFAULT_SYSTEM_PROMPT:
+        "You are an intelligent AI assistant for Trilium Notes, a hierarchical note-taking application. " +
+        "Help the user with their notes, knowledge management, and questions. " +
+        "When referencing their notes, be clear about which note you're referring to. " +
+        "Be concise but thorough in your responses.",
+
+    AGENT_TOOLS_PROMPT:
+        "You are an intelligent AI assistant for Trilium Notes with access to special tools. " +
+        "You can use these tools to search through the user's notes and find relevant information. " +
+        "Always be helpful, accurate, and respect the user's privacy and security.",
+
+    CONTEXT_AWARE_PROMPT:
+        "You are an intelligent AI assistant for Trilium Notes. " +
+        "You have access to the context from the user's notes. " +
+        "Use this context to provide accurate and helpful responses. " +
+        "Be specific when referencing information from their notes."
+};
+
 // Context-specific prompts
 export const CONTEXT_PROMPTS = {
     // Query enhancer prompt for generating better search terms
@@ -108,7 +130,11 @@ Please help me understand this information in relation to my query.`,
     ERROR_MESSAGES: {
         GENERAL_ERROR: `Error: Failed to generate response. {errorMessage}`,
         CONTEXT_ERROR: `Error: Failed to generate response with note context. {errorMessage}`
-    }
+    },
+
+    // Merged from JS file
+    AGENT_TOOLS_CONTEXT_PROMPT:
+        "You have access to the following tools to help answer the user's question: {tools}"
 };
 
 // Agent tool prompts
@@ -234,7 +260,12 @@ export const ERROR_PROMPTS = {
         GENERAL_ERROR: "I encountered an error processing your request. Please try again or rephrase your question.",
         CONTEXT_ERROR: "I couldn't retrieve context from your notes. Please check your query or try a different question.",
         NETWORK_ERROR: "There was a network error connecting to the AI service. Please check your connection and try again.",
-        RATE_LIMIT: "The AI service is currently experiencing high demand. Please try again in a moment."
+        RATE_LIMIT: "The AI service is currently experiencing high demand. Please try again in a moment.",
+
+        // Merged from JS file
+        PROVIDER_ERROR:
+            "I'm sorry, but there seems to be an issue with the AI service provider. " +
+            "Please check your connection and API settings, or try again later."
     },
 
     // Internal error handling
@@ -242,5 +273,14 @@ export const ERROR_PROMPTS = {
         CONTEXT_PROCESSING: "Error processing context data",
         MESSAGE_FORMATTING: "Error formatting messages for LLM",
         RESPONSE_PARSING: "Error parsing LLM response"
+    },
+
+    // Merged from JS file
+    SYSTEM_ERRORS: {
+        NO_PROVIDER_AVAILABLE:
+            "No AI provider is available. Please check your AI settings and ensure at least one provider is configured properly.",
+
+        UNAUTHORIZED:
+            "The AI provider returned an authorization error. Please check your API key settings."
     }
 };
