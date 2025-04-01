@@ -48,6 +48,20 @@ function ordinal(dayNumber: number) {
 
 type TimeUnit = 'year' | 'quarter' | 'month' | 'week' | 'day';
 
+const baseReplacements = {
+    year: ['year'],
+    quarter: ['quarterNumber'],
+    month: ['isoMonth', 'monthNumberPadded', 'month', 'shortMonth3', 'shortMonth4'],
+    week: ['weekNumber'],
+    day: ['isoDate', 'dayInMonthPadded', 'ordinal', 'weekDay', 'weekDay3', 'weekDay2']
+};
+
+function getTimeUnitReplacements(timeUnit: TimeUnit): string[] {
+    const units: TimeUnit[] = ['year', 'quarter', 'month', 'week', 'day'];
+    const index = units.indexOf(timeUnit);
+    return units.slice(0, index + 1).flatMap(unit => baseReplacements[unit]);
+}
+
 function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs, number?: number) {
     const patterns = {
         year: rootNote.getOwnedLabelValue("yearPattern") || "{year}",
@@ -61,7 +75,7 @@ function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs
     const monthName = t(MONTH_TRANSLATION_IDS[dateObj.month()]);
     const weekDay = t(WEEKDAY_TRANSLATION_IDS[dateObj.day()]);
 
-    const replacements: Record<string, string> = {
+    const allReplacements: Record<string, string> = {
         // Common date formats
         '{year}': dateObj.format('YYYY'),
         '{isoDate}': dateObj.format('YYYY-MM-DD'),
@@ -87,7 +101,15 @@ function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs
         '{weekDay2}': weekDay.substring(0, 2)
     };
 
-    return Object.entries(replacements).reduce(
+    const allowedReplacements = Object.entries(allReplacements).reduce((acc, [key, value]) => {
+        const replacementKey = key.slice(1, -1);
+        if (getTimeUnitReplacements(timeUnit).includes(replacementKey)) {
+            acc[key] = value;
+        }
+        return acc;
+    }, {} as Record<string, string>);
+
+    return Object.entries(allowedReplacements).reduce(
         (title, [key, value]) => title.replace(new RegExp(key, 'g'), value),
         pattern
     );
