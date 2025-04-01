@@ -1,6 +1,5 @@
 import server from "./server.js";
 import appContext from "../components/app_context.js";
-import utils from "./utils.js";
 import noteCreateService from "./note_create.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
@@ -12,12 +11,11 @@ const SELECTED_EXTERNAL_LINK_KEY = "data-external-link";
 
 // To prevent search lag when there are a large number of notes, set a delay based on the number of notes to avoid jitter.
 const notesCount = await server.get<number>(`autocomplete/notesCount`);
-console.log(notesCount);
 let debounceTimeoutId: ReturnType<typeof setTimeout>;
 
 function getSearchDelay(notesCount: number): number {
-    const maxNotes = 20000; 
-    const maxDelay = 1000;  
+    const maxNotes = 20000;
+    const maxDelay = 1000;
     const delay = Math.min(maxDelay, (notesCount / maxNotes) * maxDelay);
     return delay;
 }
@@ -168,10 +166,10 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
     // Used to track whether the user is performing character composition with an input method (such as Chinese Pinyin, Japanese, Korean, etc.) and to avoid triggering a search during the composition process.
     let isComposingInput = false;
     $el.on("compositionstart", () => {
-        isComposingInput = true; 
+        isComposingInput = true;
     });
     $el.on("compositionend", () => {
-        isComposingInput = false; 
+        isComposingInput = false;
     });
 
     $el.addClass("note-autocomplete-input");
@@ -253,8 +251,8 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
                             return;
                         }
                         autocompleteSource(term, cb, options);
-                    }, searchDelay); 
-                    
+                    }, searchDelay);
+
                     if (searchDelay === 0) {
                         searchDelay = getSearchDelay(notesCount);
                     }
