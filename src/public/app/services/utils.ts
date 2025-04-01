@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import { Modal } from "bootstrap";
 import type { ViewScope } from "./link.js";
 
+const SVG_MIME = "image/svg+xml";
+
 function reloadFrontendApp(reason?: string) {
     if (reason) {
         logInfo(`Frontend app reload: ${reason}`);
@@ -650,47 +652,80 @@ function triggerDownload(fileName: string, dataUrl: string) {
  *
  * @param nameWithoutExtension the name of the file. The .png suffix is automatically added to it.
  * @param svgContent the content of the SVG file download.
- * @returns `true` if the operation succeeded (width/height present), or `false` if the download was not triggered.
+ * @returns a promise which resolves if the operation was successful, or rejects if it failed (permissions issue or some other issue).
  */
 function downloadSvgAsPng(nameWithoutExtension: string, svgContent: string) {
-    const mime = "image/svg+xml";
+    return new Promise<void>((resolve, reject) => {
+        // First, we need to determine the width and the height from the input SVG.
+        const result = getSizeFromSvg(svgContent);
+        if (!result) {
+            reject();
+            return;
+        }
 
-    // First, we need to determine the width and the height from the input SVG.
-    const svgDocument = (new DOMParser()).parseFromString(svgContent, mime);
-    const width = svgDocument.documentElement?.getAttribute("width");
-    const height = svgDocument.documentElement?.getAttribute("height");
+        // Convert the image to a blob.
+        const { width, height } = result;
 
+        // Create an image element and load the SVG.
+        const imageEl = new Image();
+        imageEl.width = width;
+        imageEl.height = height;
+        imageEl.crossOrigin = "anonymous";
+        imageEl.onload = () => {
+            try {
+                // Draw the image with a canvas.
+                const canvasEl = document.createElement("canvas");
+                canvasEl.width = imageEl.width;
+                canvasEl.height = imageEl.height;
+                document.body.appendChild(canvasEl);
+
+                const ctx = canvasEl.getContext("2d");
+                if (!ctx) {
+                    reject();
+                }
+
+                ctx?.drawImage(imageEl, 0, 0);
+
+                const imgUri = canvasEl.toDataURL("image/png")
+                triggerDownload(`${nameWithoutExtension}.png`, imgUri);
+                document.body.removeChild(canvasEl);
+                resolve();
+            } catch (e) {
+                console.warn(e);
+                reject();
+            }
+        };
+        imageEl.onerror = (e) => reject(e);
+        imageEl.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgContent)}`;
+    });
+}
+
+export function getSizeFromSvg(svgContent: string) {
+    const svgDocument = (new DOMParser()).parseFromString(svgContent, SVG_MIME);
+
+    // Try to use width & height attributes if available.
+    let width = svgDocument.documentElement?.getAttribute("width");
+    let height = svgDocument.documentElement?.getAttribute("height");
+
+    // If not, use the viewbox.
     if (!width || !height) {
-        return false;
+        const viewBox = svgDocument.documentElement?.getAttribute("viewBox");
+        if (viewBox) {
+            const viewBoxParts = viewBox.split(" ");
+            width = viewBoxParts[2];
+            height = viewBoxParts[3];
+        }
     }
 
-    // Convert the image to a blob.
-    const svgBlob = new Blob([ svgContent ], {
-        type: mime
-    })
-
-    // Create an image element and load the SVG.
-    const imageEl = new Image();
-    imageEl.width = parseFloat(width);
-    imageEl.height = parseFloat(height);
-    imageEl.src = URL.createObjectURL(svgBlob);
-    imageEl.onload = () => {
-        // Draw the image with a canvas.
-        const canvasEl = document.createElement("canvas");
-        canvasEl.width = imageEl.width;
-        canvasEl.height = imageEl.height;
-        document.body.appendChild(canvasEl);
-
-        const ctx = canvasEl.getContext("2d");
-        ctx?.drawImage(imageEl, 0, 0);
-        URL.revokeObjectURL(imageEl.src);
-
-        const imgUri = canvasEl.toDataURL("image/png")
-        triggerDownload(`${nameWithoutExtension}.png`, imgUri);
-        document.body.removeChild(canvasEl);
-    };
-
-    return true;
+    if (width && height) {
+        return {
+            width: parseFloat(width),
+            height: parseFloat(height)
+        }
+    } else {
+        console.warn("SVG export error", svgDocument.documentElement);
+        return null;
+    }
 }
 
 /**
