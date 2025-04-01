@@ -53,7 +53,7 @@ export function setupEmbeddingEventListeners() {
  * Setup background processing of the embedding queue
  */
 export async function setupEmbeddingBackgroundProcessing() {
-    const interval = parseInt(await options.getOption('embeddingUpdateInterval') || '5000', 10);
+    const interval = parseInt(await options.getOption('embeddingUpdateInterval') || '200', 10);
 
     setInterval(async () => {
         try {
