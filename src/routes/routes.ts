@@ -273,6 +273,7 @@ function register(app: express.Application) {
     route(PST, "/api/setup/sync-seed", [auth.checkAppNotInitialized], setupApiRoute.saveSyncSeed, apiResultHandler, false);
 
     apiRoute(GET, "/api/autocomplete", autocompleteApiRoute.getAutocomplete);
+    apiRoute(GET, "/api/autocomplete/notesCount", autocompleteApiRoute.getNotesCount);
     apiRoute(GET, "/api/quick-search/:searchString", searchRoute.quickSearch);
     apiRoute(GET, "/api/search-note/:noteId", searchRoute.searchFromNote);
     apiRoute(PST, "/api/search-and-execute-note/:noteId", searchRoute.searchAndExecute);
@@ -361,7 +362,6 @@ function register(app: express.Application) {
     apiRoute(GET, "/api/similar-notes/:noteId", similarNotesRoute.getSimilarNotes);
     apiRoute(GET, "/api/backend-log", backendLogRoute.getBackendLog);
     apiRoute(GET, "/api/stats/note-size/:noteId", statsRoute.getNoteSize);
-    apiRoute(GET, "/api/stats/notesCount", statsRoute.getNotesCount);
     apiRoute(GET, "/api/stats/subtree-size/:noteId", statsRoute.getSubtreeSize);
     apiRoute(PST, "/api/delete-notes-preview", notesApiRoute.getDeleteNotesPreview);
     route(GET, "/api/fonts", [auth.checkApiAuthOrElectron], fontsRoute.getFontCss);

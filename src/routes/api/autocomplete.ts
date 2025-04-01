@@ -8,6 +8,7 @@ import cls from "../../services/cls.js";
 import becca from "../../becca/becca.js";
 import type { Request } from "express";
 import ValidationError from "../../errors/validation_error.js";
+import sql from "../../services/sql.js";
 
 function getAutocomplete(req: Request) {
     if (typeof req.query.query !== "string") {
@@ -79,6 +80,15 @@ function getRecentNotes(activeNoteId: string) {
     });
 }
 
+// Get the total number of notes
+function getNotesCount(req: Request) {
+    const notesCount = sql.getRow(
+        `SELECT COUNT(*) AS count FROM notes WHERE isDeleted = 0;`,
+    ) as { count: number };
+    return notesCount.count;
+}
+
 export default {
-    getAutocomplete
+    getAutocomplete,
+    getNotesCount
 };
