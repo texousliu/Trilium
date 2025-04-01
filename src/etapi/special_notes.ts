@@ -5,6 +5,8 @@ import mappers from "./mappers.js";
 import type { Router } from "express";
 
 const getDateInvalidError = (date: string) => new eu.EtapiError(400, "DATE_INVALID", `Date "${date}" is not valid.`);
+const getWeekInvalidError = (week: string) => new eu.EtapiError(400, "WEEK_INVALID", `Week "${week}" is not valid.`);
+const getWeekNotFoundError = (week: string) => new eu.EtapiError(404, "WEEK_NOT_FOUND", `Week "${week}" not found. Check if week note is enabled.`);
 const getMonthInvalidError = (month: string) => new eu.EtapiError(400, "MONTH_INVALID", `Month "${month}" is not valid.`);
 const getYearInvalidError = (year: string) => new eu.EtapiError(400, "YEAR_INVALID", `Year "${year}" is not valid.`);
 
@@ -14,6 +16,13 @@ function isValidDate(date: string) {
     }
 
     return !!Date.parse(date);
+}
+
+function isValidWeek(week: string) {
+    if (!/[0-9]{4}-W[0-9]{2}/.test(week)) {
+        return false;
+    }
+    return true;
 }
 
 function register(router: Router) {
@@ -39,7 +48,7 @@ function register(router: Router) {
         res.json(mappers.mapNoteToPojo(note));
     });
 
-    eu.route(router, "get", "/etapi/calendar/weeks/:date", (req, res, next) => {
+    eu.route(router, "get", "/etapi/calendar/week-first-day/:date", (req, res, next) => {
         const { date } = req.params;
 
         if (!isValidDate(date)) {
@@ -47,6 +56,22 @@ function register(router: Router) {
         }
 
         const note = dateNotesService.getWeekFirstDayNote(date);
+        res.json(mappers.mapNoteToPojo(note));
+    });
+
+    eu.route(router, "get", "/etapi/calendar/weeks/:week", (req, res, next) => {
+        const { week } = req.params;
+
+        if (!isValidWeek(week)) {
+            throw getWeekInvalidError(week);
+        }
+
+        const note = dateNotesService.getWeekNote(week);
+
+        if (!note) {
+            throw getWeekNotFoundError(week);
+        }
+
         res.json(mappers.mapNoteToPojo(note));
     });
 
