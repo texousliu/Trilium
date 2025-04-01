@@ -154,7 +154,7 @@
 							"title": "Inbox",
 							"notePosition": 10,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [
@@ -223,7 +223,7 @@
 									"title": "The Last Question",
 									"notePosition": 20,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [],
@@ -275,7 +275,7 @@
 							"title": "Formatting examples",
 							"notePosition": 20,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "book",
 							"mime": "",
 							"attributes": [],
@@ -442,7 +442,7 @@
 							"title": "Journal",
 							"notePosition": 30,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [
@@ -485,7 +485,7 @@
 									"title": "2021",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [
@@ -528,7 +528,7 @@
 											"title": "11 - November",
 											"notePosition": 10,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [
@@ -572,7 +572,7 @@
 													"title": "28 - Tuesday",
 													"notePosition": 10,
 													"prefix": null,
-													"isExpanded": true,
+													"isExpanded": false,
 													"type": "text",
 													"mime": "text/html",
 													"attributes": [
@@ -611,7 +611,7 @@
 															"title": "Phone call about work project",
 															"notePosition": 0,
 															"prefix": null,
-															"isExpanded": false,
+															"isExpanded": true,
 															"type": "text",
 															"mime": "text/html",
 															"attributes": [],
@@ -682,7 +682,7 @@
 											"title": "12 - December",
 											"notePosition": 20,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [
@@ -726,7 +726,7 @@
 													"title": "18 - Monday",
 													"notePosition": 10,
 													"prefix": null,
-													"isExpanded": true,
+													"isExpanded": false,
 													"type": "text",
 													"mime": "text/html",
 													"attributes": [
@@ -1343,7 +1343,7 @@
 													"title": "19 - Tuesday",
 													"notePosition": 20,
 													"prefix": null,
-													"isExpanded": true,
+													"isExpanded": false,
 													"type": "text",
 													"mime": "text/html",
 													"attributes": [
@@ -1493,7 +1493,7 @@
 													"title": "21 - Thursday",
 													"notePosition": 40,
 													"prefix": null,
-													"isExpanded": true,
+													"isExpanded": false,
 													"type": "text",
 													"mime": "text/html",
 													"attributes": [
@@ -1586,7 +1586,7 @@
 													"title": "22 - Friday",
 													"notePosition": 50,
 													"prefix": null,
-													"isExpanded": true,
+													"isExpanded": false,
 													"type": "text",
 													"mime": "text/html",
 													"attributes": [
@@ -1786,7 +1786,7 @@
 													"title": "24 - Sunday - Christmas Eve!",
 													"notePosition": 70,
 													"prefix": null,
-													"isExpanded": true,
+													"isExpanded": false,
 													"type": "text",
 													"mime": "text/html",
 													"attributes": [
@@ -2234,7 +2234,15 @@
 							"isExpanded": true,
 							"type": "text",
 							"mime": "text/html",
-							"attributes": [],
+							"attributes": [
+								{
+									"type": "label",
+									"name": "iconClass",
+									"value": "bx bx-desktop",
+									"isInheritable": false,
+									"position": 10
+								}
+							],
 							"format": "html",
 							"dataFileName": "Tech.html",
 							"attachments": [],
@@ -2252,10 +2260,18 @@
 									"title": "Security",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
-									"attributes": [],
+									"attributes": [
+										{
+											"type": "label",
+											"name": "iconClass",
+											"value": "bx bx-lock-alt",
+											"isInheritable": false,
+											"position": 10
+										}
+									],
 									"format": "html",
 									"attachments": [],
 									"dirFileName": "Security",
@@ -2290,10 +2306,18 @@
 									"title": "Linux",
 									"notePosition": 20,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
-									"attributes": [],
+									"attributes": [
+										{
+											"type": "label",
+											"name": "iconClass",
+											"value": "bx bxl-tux",
+											"isInheritable": false,
+											"position": 10
+										}
+									],
 									"format": "html",
 									"attachments": [],
 									"dirFileName": "Linux",
@@ -2400,7 +2424,7 @@
 											"title": "Ubuntu",
 											"notePosition": 20,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [],
@@ -2447,10 +2471,18 @@
 									"title": "Programming",
 									"notePosition": 30,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
-									"attributes": [],
+									"attributes": [
+										{
+											"type": "label",
+											"name": "iconClass",
+											"value": "bx bx-code-alt",
+											"isInheritable": false,
+											"position": 10
+										}
+									],
 									"format": "html",
 									"attachments": [],
 									"dirFileName": "Programming",
@@ -2471,7 +2503,15 @@
 											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
-											"attributes": [],
+											"attributes": [
+												{
+													"type": "label",
+													"name": "iconClass",
+													"value": "bx bxl-java",
+													"isInheritable": false,
+													"position": 10
+												}
+											],
 											"format": "html",
 											"dataFileName": "Java.html",
 											"attachments": []
@@ -2503,15 +2543,23 @@
 										"HGcABfDS6a51",
 										"B16t4MPcxaAs"
 									],
-									"title": "node.js",
+									"title": "Node.js",
 									"notePosition": 40,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "book",
 									"mime": "text/html",
-									"attributes": [],
+									"attributes": [
+										{
+											"type": "label",
+											"name": "iconClass",
+											"value": "bx bxl-nodejs",
+											"isInheritable": false,
+											"position": 10
+										}
+									],
 									"attachments": [],
-									"dirFileName": "node.js",
+									"dirFileName": "Node.js",
 									"children": [
 										{
 											"isClone": false,
@@ -2547,7 +2595,7 @@
 											"title": "Overview",
 											"notePosition": 10,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [],
@@ -3162,7 +3210,7 @@
 							"title": "Books",
 							"notePosition": 120,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [
@@ -3224,7 +3272,7 @@
 									"title": "Book template",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [
@@ -3311,7 +3359,7 @@
 									"title": "Reviews",
 									"notePosition": 20,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [
@@ -3358,10 +3406,18 @@
 							"title": "Work",
 							"notePosition": 140,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
-							"attributes": [],
+							"attributes": [
+								{
+									"type": "label",
+									"name": "iconClass",
+									"value": "bx bx-briefcase-alt",
+									"isInheritable": false,
+									"position": 10
+								}
+							],
 							"format": "html",
 							"attachments": [],
 							"dirFileName": "Work",
@@ -3398,7 +3454,7 @@
 									"title": "Processes",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": false,
+									"isExpanded": true,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [],
@@ -3439,7 +3495,7 @@
 							"title": "Steel Blue",
 							"notePosition": 150,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "code",
 							"mime": "text/css",
 							"attributes": [
@@ -3550,7 +3606,7 @@
 							"title": "Scripting examples",
 							"notePosition": 340,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [
@@ -3578,7 +3634,7 @@
 									"title": "Task manager",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": true,
+									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [
@@ -4025,7 +4081,7 @@
 											"title": "Done",
 											"notePosition": 20,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [
@@ -4281,7 +4337,7 @@
 											"title": "TODO",
 											"notePosition": 30,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [
@@ -4398,7 +4454,7 @@
 											"title": "Implementation",
 											"notePosition": 40,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [
@@ -4604,7 +4660,7 @@
 											"title": "Tags",
 											"notePosition": 50,
 											"prefix": null,
-											"isExpanded": true,
+											"isExpanded": false,
 											"type": "text",
 											"mime": "text/html",
 											"attributes": [
