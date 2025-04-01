@@ -27,6 +27,7 @@
 .tab-row-widget,
 #launcher-pane,
 #left-pane,
+#center-pane > *:not(.split-note-container-widget),
 #right-pane,
 .title-row .note-icon-widget,
 .title-row .button-widget,
