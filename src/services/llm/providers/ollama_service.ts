@@ -48,10 +48,30 @@ export class OllamaService extends BaseAIService {
         const systemPrompt = this.getSystemPrompt(opts.systemPrompt || options.getOption('aiSystemPrompt'));
 
         try {
-            // Use the formatter to prepare messages
-            const formattedMessages = this.formatter.formatMessages(messages, systemPrompt);
+            // Determine whether to use the formatter or send messages directly
+            let messagesToSend: Message[];
 
-            console.log(`Sending to Ollama with formatted messages:`, JSON.stringify(formattedMessages, null, 2));
+            if (opts.bypassFormatter) {
+                // Bypass the formatter entirely - use messages as is
+                messagesToSend = [...messages];
+                console.log(`Bypassing formatter for Ollama request with ${messages.length} messages`);
+            } else {
+                // Use the formatter to prepare messages
+                messagesToSend = this.formatter.formatMessages(
+                    messages,
+                    systemPrompt,
+                    undefined, // context
+                    opts.preserveSystemPrompt
+                );
+                console.log(`Sending to Ollama with formatted messages:`, JSON.stringify(messagesToSend, null, 2));
+            }
+
+            // Check if this is a request that expects JSON response
+            const expectsJsonResponse = opts.expectsJsonResponse || false;
+
+            if (expectsJsonResponse) {
+                console.log(`Request expects JSON response, adding response_format parameter`);
+            }
 
             const response = await fetch(`${apiBase}/api/chat`, {
                 method: 'POST',
@@ -60,9 +80,11 @@ export class OllamaService extends BaseAIService {
                 },
                 body: JSON.stringify({
                     model,
-                    messages: formattedMessages,
+                    messages: messagesToSend,
                     options: {
-                        temperature
+                        temperature,
+                        // Add response_format for requests that expect JSON
+                        ...(expectsJsonResponse ? { response_format: { type: "json_object" } } : {})
                     },
                     stream: false
                 })

@@ -23,6 +23,9 @@ export interface ChatCompletionOptions {
     presencePenalty?: number;
     showThinking?: boolean;
     systemPrompt?: string;
+    preserveSystemPrompt?: boolean; // Whether to preserve existing system message
+    bypassFormatter?: boolean; // Whether to bypass the message formatter entirely
+    expectsJsonResponse?: boolean; // Whether this request expects a JSON response
     stream?: boolean; // Whether to stream the response
 }
 

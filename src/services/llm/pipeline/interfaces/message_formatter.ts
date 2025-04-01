@@ -9,9 +9,10 @@ export interface MessageFormatter {
      * @param messages Original messages
      * @param systemPrompt Optional system prompt to override
      * @param context Optional context to include
+     * @param preserveSystemPrompt Optional flag to preserve existing system prompt
      * @returns Formatted messages optimized for the specific provider
      */
-    formatMessages(messages: Message[], systemPrompt?: string, context?: string): Message[];
+    formatMessages(messages: Message[], systemPrompt?: string, context?: string, preserveSystemPrompt?: boolean): Message[];
 }
 
 /**
@@ -22,15 +23,15 @@ export abstract class BaseMessageFormatter implements MessageFormatter {
      * Format messages with system prompt and context
      * Each provider should override this method with their specific formatting strategy
      */
-    abstract formatMessages(messages: Message[], systemPrompt?: string, context?: string): Message[];
-    
+    abstract formatMessages(messages: Message[], systemPrompt?: string, context?: string, preserveSystemPrompt?: boolean): Message[];
+
     /**
      * Helper method to extract existing system message from messages
      */
     protected getSystemMessage(messages: Message[]): Message | undefined {
         return messages.find(msg => msg.role === 'system');
     }
-    
+
     /**
      * Helper method to create a copy of messages without system message
      */
@@ -44,22 +45,26 @@ export abstract class BaseMessageFormatter implements MessageFormatter {
  * Optimizes message format for OpenAI models (GPT-3.5, GPT-4, etc.)
  */
 export class OpenAIMessageFormatter extends BaseMessageFormatter {
-    formatMessages(messages: Message[], systemPrompt?: string, context?: string): Message[] {
+    formatMessages(messages: Message[], systemPrompt?: string, context?: string, preserveSystemPrompt?: boolean): Message[] {
         const formattedMessages: Message[] = [];
-        
+
         // OpenAI performs best with system message first, then context as a separate system message
         // or appended to the original system message
-        
+
         // Handle system message
         const existingSystem = this.getSystemMessage(messages);
-        if (systemPrompt || existingSystem) {
+
+        if (preserveSystemPrompt && existingSystem) {
+            // Use the existing system message
+            formattedMessages.push(existingSystem);
+        } else if (systemPrompt || existingSystem) {
             const systemContent = systemPrompt || existingSystem?.content || '';
             formattedMessages.push({
                 role: 'system',
                 content: systemContent
             });
         }
-        
+
         // Add context as a system message with clear instruction
         if (context) {
             formattedMessages.push({
@@ -67,10 +72,10 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
                 content: `Please use the following context to respond to the user's messages:\n\n${context}`
             });
         }
-        
+
         // Add remaining messages (excluding system)
         formattedMessages.push(...this.getMessagesWithoutSystem(messages));
-        
+
         return formattedMessages;
     }
 }
@@ -80,24 +85,26 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
  * Optimizes message format for Claude models
  */
 export class AnthropicMessageFormatter extends BaseMessageFormatter {
-    formatMessages(messages: Message[], systemPrompt?: string, context?: string): Message[] {
+    formatMessages(messages: Message[], systemPrompt?: string, context?: string, preserveSystemPrompt?: boolean): Message[] {
         const formattedMessages: Message[] = [];
-        
+
         // Anthropic performs best with a specific XML-like format for context and system instructions
-        
+
         // Create system message with combined prompt and context if any
         let systemContent = '';
         const existingSystem = this.getSystemMessage(messages);
-        
-        if (systemPrompt || existingSystem) {
+
+        if (preserveSystemPrompt && existingSystem) {
+            systemContent = existingSystem.content;
+        } else if (systemPrompt || existingSystem) {
             systemContent = systemPrompt || existingSystem?.content || '';
         }
-        
+
         // For Claude, wrap context in XML tags for clear separation
         if (context) {
             systemContent += `\n\n<context>\n${context}\n</context>`;
         }
-        
+
         // Add system message if we have content
         if (systemContent) {
             formattedMessages.push({
@@ -105,10 +112,10 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
                 content: systemContent
             });
         }
-        
+
         // Add remaining messages (excluding system)
         formattedMessages.push(...this.getMessagesWithoutSystem(messages));
-        
+
         return formattedMessages;
     }
 }
@@ -118,25 +125,25 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
  * Optimizes message format for open-source models
  */
 export class OllamaMessageFormatter extends BaseMessageFormatter {
-    formatMessages(messages: Message[], systemPrompt?: string, context?: string): Message[] {
+    formatMessages(messages: Message[], systemPrompt?: string, context?: string, preserveSystemPrompt?: boolean): Message[] {
         const formattedMessages: Message[] = [];
-        
+
         // Ollama format is closer to raw prompting and typically works better with
         // context embedded in system prompt rather than as separate messages
-        
+
         // Build comprehensive system prompt
         let systemContent = '';
         const existingSystem = this.getSystemMessage(messages);
-        
+
         if (systemPrompt || existingSystem) {
             systemContent = systemPrompt || existingSystem?.content || '';
         }
-        
+
         // Add context to system prompt
         if (context) {
             systemContent += `\n\nReference information:\n${context}`;
         }
-        
+
         // Add system message if we have content
         if (systemContent) {
             formattedMessages.push({
@@ -144,10 +151,10 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
                 content: systemContent
             });
         }
-        
+
         // Add remaining messages (excluding system)
         formattedMessages.push(...this.getMessagesWithoutSystem(messages));
-        
+
         return formattedMessages;
     }
 }
@@ -156,19 +163,22 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
  * Default message formatter when provider is unknown
  */
 export class DefaultMessageFormatter extends BaseMessageFormatter {
-    formatMessages(messages: Message[], systemPrompt?: string, context?: string): Message[] {
+    formatMessages(messages: Message[], systemPrompt?: string, context?: string, preserveSystemPrompt?: boolean): Message[] {
         const formattedMessages: Message[] = [];
-        
+
         // Handle system message
         const existingSystem = this.getSystemMessage(messages);
-        if (systemPrompt || existingSystem) {
+
+        if (preserveSystemPrompt && existingSystem) {
+            formattedMessages.push(existingSystem);
+        } else if (systemPrompt || existingSystem) {
             const systemContent = systemPrompt || existingSystem?.content || '';
             formattedMessages.push({
                 role: 'system',
                 content: systemContent
             });
         }
-        
+
         // Add context as a user message
         if (context) {
             formattedMessages.push({
@@ -176,10 +186,10 @@ export class DefaultMessageFormatter extends BaseMessageFormatter {
                 content: `Here is context to help you answer my questions: ${context}`
             });
         }
-        
+
         // Add user/assistant messages
         formattedMessages.push(...this.getMessagesWithoutSystem(messages));
-        
+
         return formattedMessages;
     }
 }
@@ -194,7 +204,7 @@ export class MessageFormatterFactory {
         ollama: new OllamaMessageFormatter(),
         default: new DefaultMessageFormatter()
     };
-    
+
     /**
      * Get the appropriate formatter for a provider
      * @param provider Provider name
@@ -203,7 +213,7 @@ export class MessageFormatterFactory {
     static getFormatter(provider: string): MessageFormatter {
         return this.formatters[provider] || this.formatters.default;
     }
-    
+
     /**
      * Register a custom formatter for a provider
      * @param provider Provider name

@@ -4,6 +4,7 @@ import type { Message } from '../../ai_interface.js';
 import { CONTEXT_PROMPTS } from '../../constants/llm_prompt_constants.js';
 import type { LLMServiceInterface } from '../../interfaces/agent_tool_interfaces.js';
 import type { IQueryEnhancer } from '../../interfaces/context_interfaces.js';
+import JsonExtractor from '../../utils/json_extractor.js';
 
 /**
  * Provides utilities for enhancing queries and generating search queries
@@ -11,6 +12,15 @@ import type { IQueryEnhancer } from '../../interfaces/context_interfaces.js';
 export class QueryEnhancer implements IQueryEnhancer {
     // Use the centralized query enhancer prompt
     private metaPrompt = CONTEXT_PROMPTS.QUERY_ENHANCER;
+
+    /**
+     * Get enhanced prompt with JSON formatting instructions
+     */
+    private getEnhancedPrompt(): string {
+        return `${this.metaPrompt}
+IMPORTANT: You must respond with valid JSON arrays. Always include commas between array elements.
+Format your answer as a valid JSON array without markdown code blocks, like this: ["item1", "item2", "item3"]`;
+    }
 
     /**
      * Generate search queries to find relevant information for the user question
@@ -32,95 +42,38 @@ export class QueryEnhancer implements IQueryEnhancer {
             }
 
             const messages: Message[] = [
-                { role: "system", content: this.metaPrompt },
+                { role: "system", content: this.getEnhancedPrompt() },
                 { role: "user", content: userQuestion }
             ];
 
             const options = {
                 temperature: 0.3,
-                maxTokens: 300
+                maxTokens: 300,
+                bypassFormatter: true, // Completely bypass formatter for query enhancement
+                expectsJsonResponse: true // Explicitly request JSON-formatted response
             };
 
             // Get the response from the LLM
             const response = await llmService.generateChatCompletion(messages, options);
             const responseText = response.text; // Extract the text from the response object
 
-            try {
-                // Remove code blocks, quotes, and clean up the response text
-                let jsonStr = responseText
-                    .replace(/```(?:json)?|```/g, '') // Remove code block markers
-                    .replace(/[\u201C\u201D]/g, '"')  // Replace smart quotes with straight quotes
-                    .trim();
+            // Use the JsonExtractor to parse the response
+            const queries = JsonExtractor.extract<string[]>(responseText, {
+                extractArrays: true,
+                minStringLength: 3,
+                applyFixes: true,
+                useFallbacks: true
+            });
 
-                // Check if the text might contain a JSON array (has square brackets)
-                if (jsonStr.includes('[') && jsonStr.includes(']')) {
-                    // Extract just the array part if there's explanatory text
-                    const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
-                    if (arrayMatch) {
-                        jsonStr = arrayMatch[0];
-                    }
-
-                    // Try to parse the JSON
-                    try {
-                        const queries = JSON.parse(jsonStr);
-                        if (Array.isArray(queries) && queries.length > 0) {
-                            const result = queries.map(q => typeof q === 'string' ? q : String(q)).filter(Boolean);
-                            cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
-                            return result;
-                        }
-                    } catch (innerError) {
-                        // If parsing fails, log it and continue to the fallback
-                        log.info(`JSON parse error: ${innerError}. Will use fallback parsing for: ${jsonStr}`);
-                    }
-                }
-
-                // Fallback 1: Try to extract an array manually by splitting on commas between quotes
-                if (jsonStr.includes('[') && jsonStr.includes(']')) {
-                    const arrayContent = jsonStr.substring(
-                        jsonStr.indexOf('[') + 1,
-                        jsonStr.lastIndexOf(']')
-                    );
-
-                    // Use regex to match quoted strings, handling escaped quotes
-                    const stringMatches = arrayContent.match(/"((?:\\.|[^"\\])*)"/g);
-                    if (stringMatches && stringMatches.length > 0) {
-                        const result = stringMatches
-                            .map((m: string) => m.substring(1, m.length - 1)) // Remove surrounding quotes
-                            .filter((s: string) => s.length > 0);
-                        cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
-                        return result;
-                    }
-                }
-
-                // Fallback 2: Extract queries line by line
-                const lines = responseText.split('\n')
-                    .map((line: string) => line.trim())
-                    .filter((line: string) =>
-                        line.length > 0 &&
-                        !line.startsWith('```') &&
-                        !line.match(/^\d+\.?\s*$/) && // Skip numbered list markers alone
-                        !line.match(/^\[|\]$/) // Skip lines that are just brackets
-                    );
-
-                if (lines.length > 0) {
-                    // Remove numbering, quotes and other list markers from each line
-                    const result = lines.map((line: string) => {
-                        return line
-                            .replace(/^\d+\.?\s*/, '') // Remove numbered list markers (1., 2., etc)
-                            .replace(/^[-*•]\s*/, '')  // Remove bullet list markers
-                            .replace(/^["']|["']$/g, '') // Remove surrounding quotes
-                            .trim();
-                    }).filter((s: string) => s.length > 0);
-
-                    cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
-                    return result;
-                }
-            } catch (parseError) {
-                log.error(`Error parsing search queries: ${parseError}`);
+            if (queries && queries.length > 0) {
+                log.info(`Extracted ${queries.length} queries using JsonExtractor`);
+                cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, queries);
+                return queries;
             }
 
             // If all else fails, just use the original question
             const fallback = [userQuestion];
+            log.info(`No queries extracted, using fallback: "${userQuestion}"`);
             cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, fallback);
             return fallback;
         } catch (error: unknown) {

@@ -23,22 +23,30 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
 
     /**
      * Format messages for the Ollama API
+     * @param messages Messages to format
+     * @param systemPrompt Optional system prompt to use
+     * @param context Optional context to include
+     * @param preserveSystemPrompt When true, preserves existing system messages rather than replacing them
      */
-    formatMessages(messages: Message[], systemPrompt?: string, context?: string): Message[] {
+    formatMessages(messages: Message[], systemPrompt?: string, context?: string, preserveSystemPrompt?: boolean): Message[] {
         const formattedMessages: Message[] = [];
 
         // First identify user and system messages
         const systemMessages = messages.filter(msg => msg.role === 'system');
         const userMessages = messages.filter(msg => msg.role === 'user' || msg.role === 'assistant');
 
-        // Create base system message with instructions or use default
-        const basePrompt = systemPrompt || PROVIDER_PROMPTS.COMMON.DEFAULT_ASSISTANT_INTRO;
-
-        // Always add a system message with the base prompt
-        formattedMessages.push({
-            role: 'system',
-            content: basePrompt
-        });
+        // Determine if we should preserve the existing system message
+        if (preserveSystemPrompt && systemMessages.length > 0) {
+            // Preserve the existing system message
+            formattedMessages.push(systemMessages[0]);
+        } else {
+            // Use provided systemPrompt or default
+            const basePrompt = systemPrompt || PROVIDER_PROMPTS.COMMON.DEFAULT_ASSISTANT_INTRO;
+            formattedMessages.push({
+                role: 'system',
+                content: basePrompt
+            });
+        }
 
         // If we have context, inject it into the first user message
         if (context && userMessages.length > 0) {
