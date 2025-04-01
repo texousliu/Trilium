@@ -412,7 +412,7 @@ function register(app: express.Application) {
     apiRoute(PATCH, "/api/llm/sessions/:sessionId", llmRoute.updateSession);
     apiRoute(DEL, "/api/llm/sessions/:sessionId", llmRoute.deleteSession);
     apiRoute(PST, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
-    route(GET, "/api/llm/sessions/:sessionId/messages", [auth.checkApiAuth, csrfMiddleware], llmRoute.sendMessage, apiResultHandler);
+    apiRoute(GET, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
 
     // LLM index management endpoints
     apiRoute(GET, "/api/llm/index/stats", llmRoute.getIndexStats);
@@ -425,13 +425,13 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/llm/index/notes/:noteId", llmRoute.indexNote);
 
     // Ollama API endpoints
-    route(PST, "/api/ollama/list-models", [auth.checkApiAuth, csrfMiddleware], ollamaRoute.listModels, apiResultHandler);
+    apiRoute(PST, "/api/ollama/list-models", ollamaRoute.listModels);
 
     // OpenAI API endpoints
-    route(PST, "/api/openai/list-models", [auth.checkApiAuth, csrfMiddleware], openaiRoute.listModels, apiResultHandler);
+    apiRoute(PST, "/api/openai/list-models", openaiRoute.listModels);
 
     // Anthropic API endpoints
-    route(PST, "/api/anthropic/list-models", [auth.checkApiAuth, csrfMiddleware], anthropicRoute.listModels, apiResultHandler);
+    apiRoute(PST, "/api/anthropic/list-models", anthropicRoute.listModels);
 
     // API Documentation
     apiDocsRoute.register(app);
