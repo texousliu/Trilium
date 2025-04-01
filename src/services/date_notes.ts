@@ -119,7 +119,7 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     const rootNote = _rootNote || getRootCalendarNote();
 
     const monthStr = dateStr.substring(0, 7);
-    const monthNumber = dateStr.substring(5, 2);
+    const monthNumber = dateStr.substring(5, 7);
 
     let monthNote = searchService.findFirstNoteWithQuery(`#${MONTH_LABEL}="${monthStr}"`, new SearchContext({ ancestorNoteId: rootNote.noteId }));
 
@@ -182,7 +182,7 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
     }
 
     const monthNote = getMonthNote(dateStr, rootNote);
-    const dayNumber = dateStr.substring(8, 2);
+    const dayNumber = dateStr.substring(8, 10);
 
     const dateObj = dateUtils.parseLocalDate(dateStr);
 
