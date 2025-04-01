@@ -1,5 +1,6 @@
 import becca from '../../../becca/becca.js';
 import { sanitizeHtmlContent } from './note_content.js';
+import { HIERARCHY_STRINGS } from '../constants/hierarchy_constants.js';
 
 /**
  * Get a list of parent notes for a given note
@@ -89,15 +90,15 @@ export async function getParentContext(
         if (context) {
             // If we have parent context, add the current note with proper indentation
             indentation = "  ".repeat(1); // One level deeper than parents
-            context += `${indentation}> ${note.title} (current note)\n`;
+            context += `${indentation}> ${HIERARCHY_STRINGS.PARENT_CONTEXT.CURRENT_NOTE(note.title)}\n`;
         } else {
             // If no parents, just add the current note
-            context += `> ${note.title} (current note)\n`;
+            context += `> ${HIERARCHY_STRINGS.PARENT_CONTEXT.CURRENT_NOTE(note.title)}\n`;
         }
     }
 
     if (!context) {
-        return "No parent context available.";
+        return HIERARCHY_STRINGS.PARENT_CONTEXT.NO_PARENT_CONTEXT();
     }
 
     return context;
@@ -122,10 +123,10 @@ export async function getChildContext(
         const childNotes = note.getChildNotes();
 
         if (!childNotes || childNotes.length === 0) {
-            return "No child notes.";
+            return HIERARCHY_STRINGS.CHILD_CONTEXT.NO_CHILD_NOTES();
         }
 
-        let context = `Child notes (${childNotes.length} total):\n`;
+        let context = `${HIERARCHY_STRINGS.CHILD_CONTEXT.CHILD_NOTES_HEADER(childNotes.length)}\n`;
 
         // Limit the number of children included in context
         const limitedChildren = childNotes.slice(0, maxChildren);
@@ -145,7 +146,7 @@ export async function getChildContext(
                         .replace(/\n/g, ' ');
 
                     if (truncatedContent) {
-                        context += `  Summary: ${truncatedContent}${truncatedContent.length >= 100 ? '...' : ''}\n`;
+                        context += `  ${HIERARCHY_STRINGS.CHILD_CONTEXT.CHILD_SUMMARY_PREFIX()}${truncatedContent}${truncatedContent.length >= 100 ? '...' : ''}\n`;
                     }
                 } catch (e) {
                     // Silently skip content errors
@@ -155,13 +156,13 @@ export async function getChildContext(
 
         // Add note about truncation if needed
         if (childNotes.length > maxChildren) {
-            context += `... and ${childNotes.length - maxChildren} more child notes not shown\n`;
+            context += `${HIERARCHY_STRINGS.CHILD_CONTEXT.MORE_CHILDREN(childNotes.length - maxChildren)}\n`;
         }
 
         return context;
     } catch (error) {
         console.error(`Error getting child context for ${noteId}:`, error);
-        return "Error retrieving child notes.";
+        return HIERARCHY_STRINGS.CHILD_CONTEXT.ERROR_RETRIEVING();
     }
 }
 
@@ -183,7 +184,7 @@ export async function getLinkedNotesContext(
         const relations = note.getRelations();
 
         if (!relations || relations.length === 0) {
-            return "No linked notes.";
+            return HIERARCHY_STRINGS.LINKED_NOTES.NO_LINKED_NOTES();
         }
 
         // Get incoming relations as well
@@ -193,7 +194,7 @@ export async function getLinkedNotesContext(
 
         // Handle outgoing relations
         if (relations.length > 0) {
-            context += `Outgoing relations (${relations.length} total):\n`;
+            context += `${HIERARCHY_STRINGS.LINKED_NOTES.OUTGOING_RELATIONS_HEADER(relations.length)}\n`;
 
             // Limit the number of relations included in context
             const limitedRelations = relations.slice(0, maxRelations);
@@ -201,14 +202,14 @@ export async function getLinkedNotesContext(
             for (const relation of limitedRelations) {
                 const targetNote = becca.getNote(relation.value || "");
                 if (targetNote) {
-                    const relationName = relation.name || 'relates to';
+                    const relationName = relation.name || HIERARCHY_STRINGS.LINKED_NOTES.DEFAULT_RELATION();
                     context += `- ${relationName} → ${targetNote.title}\n`;
                 }
             }
 
             // Add note about truncation if needed
             if (relations.length > maxRelations) {
-                context += `... and ${relations.length - maxRelations} more outgoing relations not shown\n`;
+                context += `${HIERARCHY_STRINGS.LINKED_NOTES.MORE_OUTGOING(relations.length - maxRelations)}\n`;
             }
         }
 
@@ -216,7 +217,7 @@ export async function getLinkedNotesContext(
         if (incomingRelations && incomingRelations.length > 0) {
             if (context) context += "\n";
 
-            context += `Incoming relations (${incomingRelations.length} total):\n`;
+            context += `${HIERARCHY_STRINGS.LINKED_NOTES.INCOMING_RELATIONS_HEADER(incomingRelations.length)}\n`;
 
             // Limit the number of relations included in context
             const limitedIncoming = incomingRelations.slice(0, maxRelations);
@@ -224,20 +225,20 @@ export async function getLinkedNotesContext(
             for (const relation of limitedIncoming) {
                 const sourceNote = becca.getNote(relation.value || "");
                 if (sourceNote) {
-                    const relationName = relation.name || 'relates to';
+                    const relationName = relation.name || HIERARCHY_STRINGS.LINKED_NOTES.DEFAULT_RELATION();
                     context += `- ${sourceNote.title} → ${relationName}\n`;
                 }
             }
 
             // Add note about truncation if needed
             if (incomingRelations.length > maxRelations) {
-                context += `... and ${incomingRelations.length - maxRelations} more incoming relations not shown\n`;
+                context += `${HIERARCHY_STRINGS.LINKED_NOTES.MORE_INCOMING(incomingRelations.length - maxRelations)}\n`;
             }
         }
 
-        return context || "No linked notes.";
+        return context || HIERARCHY_STRINGS.LINKED_NOTES.NO_LINKED_NOTES();
     } catch (error) {
         console.error(`Error getting linked notes context for ${noteId}:`, error);
-        return "Error retrieving linked notes.";
+        return HIERARCHY_STRINGS.LINKED_NOTES.ERROR_RETRIEVING();
     }
 }

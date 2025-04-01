@@ -196,6 +196,24 @@
     "theme_group_light": "Light themes",
     "theme_group_dark": "Dark themes"
   },
+  "llm": {
+    "hierarchy": {
+      "no_parent_context": "No parent context available.",
+      "current_note": "{{title}} (current note)",
+      "no_child_notes": "No child notes.",
+      "child_notes_header": "Child notes ({{count}} total)",
+      "child_summary_prefix": "Summary: ",
+      "more_children": "... and {{count}} more child notes not shown",
+      "error_retrieving_children": "Error retrieving child notes.",
+      "no_linked_notes": "No linked notes.",
+      "outgoing_relations_header": "Outgoing relations ({{count}} total)",
+      "incoming_relations_header": "Incoming relations ({{count}} total)",
+      "default_relation": "relates to",
+      "more_outgoing": "... and {{count}} more outgoing relations not shown",
+      "more_incoming": "... and {{count}} more incoming relations not shown",
+      "error_retrieving_linked": "Error retrieving linked notes."
+    }
+  },
   "test_sync": {
     "not-configured": "Sync server host is not configured. Please configure sync first.",
     "successful": "Sync server handshake has been successful, sync has been started."
