@@ -1124,6 +1124,7 @@
   },
   "ai_llm": {
     "embeddings_configuration": "Embeddings Configuration",
+    "not_started": "Not started",
     "title": "AI & Embedding Settings",
     "embedding_statistics": "Embedding Statistics",
     "processed_notes": "Processed Notes",
