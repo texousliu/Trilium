@@ -805,7 +805,7 @@ export default class LlmChatPanel extends BasicWidget {
             const allPrecedenceEnabled = precedenceList.every((p: string) => enabledProviders.includes(p));
 
             // Get embedding queue status
-            const embeddingStats = await server.get('embeddings/stats') as {
+            const embeddingStats = await server.get('llm/embeddings/stats') as {
                 success: boolean,
                 stats: {
                     totalNotesCount: number;

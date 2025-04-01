@@ -3,6 +3,13 @@ import type { Message } from '../ai_interface.js';
 import { BaseMessageFormatter } from './base_formatter.js';
 import { PROVIDER_PROMPTS, FORMATTING_PROMPTS } from '../constants/llm_prompt_constants.js';
 import { LLM_CONSTANTS } from '../constants/provider_constants.js';
+import {
+    HTML_ALLOWED_TAGS,
+    HTML_ALLOWED_ATTRIBUTES,
+    HTML_TO_MARKDOWN_PATTERNS,
+    HTML_ENTITY_REPLACEMENTS,
+    FORMATTER_LOGS
+} from '../constants/formatter_constants.js';
 
 /**
  * OpenAI-specific message formatter
@@ -72,7 +79,7 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
             });
         }
 
-        console.log(`OpenAI formatter: ${messages.length} messages → ${formattedMessages.length} messages`);
+        console.log(FORMATTER_LOGS.OPENAI.PROCESSED(messages.length, formattedMessages.length));
         return formattedMessages;
     }
 
@@ -86,58 +93,24 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
         try {
             // Convert HTML to Markdown for better readability
             const cleaned = sanitizeHtml(content, {
-                allowedTags: FORMATTING_PROMPTS.HTML_ALLOWED_TAGS,
-                allowedAttributes: {
-                    'a': ['href']
-                },
-                transformTags: {
-                    'h1': 'h2',
-                    'h2': 'h3',
-                    'div': 'p',
-                    'span': 'span'
-                }
+                allowedTags: HTML_ALLOWED_TAGS.STANDARD,
+                allowedAttributes: HTML_ALLOWED_ATTRIBUTES.STANDARD
             });
 
-            // Process inline elements to markdown with simpler approach
-            let markdown = cleaned
-                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n')
-                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n')
-                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n')
-                .replace(/<h4[^>]*>(.*?)<\/h4>/gi, '#### $1\n')
-                .replace(/<h5[^>]*>(.*?)<\/h5>/gi, '##### $1\n')
-                .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
-                .replace(/<br[^>]*>/gi, '\n')
-                .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
-                .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
-                .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
-                .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
-                .replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*')
-                .replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`')
-                .replace(/<pre[^>]*>(.*?)<\/pre>/gi, '```\n$1\n```')
-                // Clean up any remaining HTML tags
-                .replace(/<[^>]*>/g, '')
-                // Clean up excessive newlines
-                .replace(/\n{3,}/g, '\n\n');
+            // Apply all HTML to Markdown patterns
+            let markdown = cleaned;
+            for (const pattern of Object.values(HTML_TO_MARKDOWN_PATTERNS)) {
+                markdown = markdown.replace(pattern.pattern, pattern.replacement);
+            }
 
             // Fix common HTML entities
-            markdown = markdown
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&amp;/g, '&')
-                .replace(/&quot;/g, '"')
-                .replace(/&#39;/g, "'")
-                .replace(/&ldquo;/g, '"')
-                .replace(/&rdquo;/g, '"')
-                .replace(/&lsquo;/g, "'")
-                .replace(/&rsquo;/g, "'")
-                .replace(/&mdash;/g, '—')
-                .replace(/&ndash;/g, '–')
-                .replace(/&hellip;/g, '…');
+            for (const pattern of Object.values(HTML_ENTITY_REPLACEMENTS)) {
+                markdown = markdown.replace(pattern.pattern, pattern.replacement);
+            }
 
             return markdown.trim();
         } catch (error) {
-            console.error("Error cleaning content for OpenAI:", error);
+            console.error(FORMATTER_LOGS.ERROR.CONTEXT_CLEANING("OpenAI"), error);
             return content; // Return original if cleaning fails
         }
     }

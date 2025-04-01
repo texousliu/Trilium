@@ -3,6 +3,12 @@ import { BaseMessageFormatter } from './base_formatter.js';
 import sanitizeHtml from 'sanitize-html';
 import { PROVIDER_PROMPTS, FORMATTING_PROMPTS } from '../constants/llm_prompt_constants.js';
 import { LLM_CONSTANTS } from '../constants/provider_constants.js';
+import {
+    HTML_ALLOWED_TAGS,
+    HTML_ALLOWED_ATTRIBUTES,
+    OLLAMA_CLEANING,
+    FORMATTER_LOGS
+} from '../constants/formatter_constants.js';
 
 /**
  * Ollama-specific message formatter
@@ -66,7 +72,7 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
             }
         }
 
-        console.log(`Ollama formatter processed ${messages.length} messages into ${formattedMessages.length} messages`);
+        console.log(FORMATTER_LOGS.OLLAMA.PROCESSED(messages.length, formattedMessages.length));
 
         return formattedMessages;
     }
@@ -85,30 +91,20 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
             // Then apply Ollama-specific aggressive cleaning
             // Remove any remaining HTML using sanitizeHtml
             let plaintext = sanitizeHtml(sanitized, {
-                allowedTags: [],
-                allowedAttributes: {},
+                allowedTags: HTML_ALLOWED_TAGS.NONE,
+                allowedAttributes: HTML_ALLOWED_ATTRIBUTES.NONE,
                 textFilter: (text) => text
             });
 
-            // Then aggressively sanitize to plain ASCII and simple formatting
-            plaintext = plaintext
-                // Replace common problematic quotes with simple ASCII quotes
-                .replace(/[""]/g, '"')
-                .replace(/['']/g, "'")
-                // Replace other common Unicode characters
-                .replace(/[–—]/g, '-')
-                .replace(/[•]/g, '*')
-                .replace(/[…]/g, '...')
-                // Strip all non-ASCII characters
-                .replace(/[^\x00-\x7F]/g, '')
-                // Normalize whitespace
-                .replace(/\s+/g, ' ')
-                .replace(/\n\s+/g, '\n')
-                .trim();
+            // Apply all Ollama-specific cleaning patterns
+            const ollamaPatterns = OLLAMA_CLEANING;
+            for (const pattern of Object.values(ollamaPatterns)) {
+                plaintext = plaintext.replace(pattern.pattern, pattern.replacement);
+            }
 
-            return plaintext;
+            return plaintext.trim();
         } catch (error) {
-            console.error("Error cleaning context content for Ollama:", error);
+            console.error(FORMATTER_LOGS.ERROR.CONTEXT_CLEANING("Ollama"), error);
             return content; // Return original if cleaning fails
         }
     }

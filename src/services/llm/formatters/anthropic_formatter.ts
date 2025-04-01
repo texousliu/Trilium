@@ -3,6 +3,13 @@ import type { Message } from '../ai_interface.js';
 import { BaseMessageFormatter } from './base_formatter.js';
 import { PROVIDER_PROMPTS } from '../constants/llm_prompt_constants.js';
 import { LLM_CONSTANTS } from '../constants/provider_constants.js';
+import {
+    HTML_ALLOWED_TAGS,
+    HTML_ALLOWED_ATTRIBUTES,
+    FORMATTER_LOGS,
+    HTML_TO_MARKDOWN_PATTERNS,
+    HTML_ENTITY_REPLACEMENTS
+} from '../constants/formatter_constants.js';
 
 /**
  * Anthropic-specific message formatter
@@ -144,7 +151,7 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
             }
         }
 
-        console.log(`Anthropic formatter: ${messages.length} messages → ${formattedMessages.length} messages`);
+        console.log(FORMATTER_LOGS.ANTHROPIC.PROCESSED(messages.length, formattedMessages.length));
         return formattedMessages;
     }
 
@@ -158,52 +165,31 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
         try {
             // Convert HTML to a Claude-friendly format
             const cleaned = sanitizeHtml(content, {
-                allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'code', 'pre'],
-                allowedAttributes: {
-                    'a': ['href']
-                }
+                allowedTags: HTML_ALLOWED_TAGS.STANDARD,
+                allowedAttributes: HTML_ALLOWED_ATTRIBUTES.STANDARD
             });
 
             // Convert to markdown but preserve some structure
-            let markdown = cleaned
-                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n')
-                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n')
-                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n')
-                .replace(/<h4[^>]*>(.*?)<\/h4>/gi, '#### $1\n')
-                .replace(/<h5[^>]*>(.*?)<\/h5>/gi, '##### $1\n')
-                .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
-                .replace(/<br[^>]*>/gi, '\n')
-                .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
-                .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
-                .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
-                .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
-                .replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*')
-                .replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`')
-                .replace(/<pre[^>]*>(.*?)<\/pre>/gi, '```\n$1\n```')
-                // Process lists
-                .replace(/<ul[^>]*>(.*?)<\/ul>/gs, (match, content) => {
-                    return content.replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n');
-                })
-                .replace(/<ol[^>]*>(.*?)<\/ol>/gs, (match, content) => {
-                    let index = 1;
-                    return content.replace(/<li[^>]*>(.*?)<\/li>/gi, (m: string, item: string) => {
-                        return `${index++}. ${item}\n`;
-                    });
-                })
-                // Clean up any remaining HTML tags
-                .replace(/<[^>]*>/g, '')
-                // Clean up excessive newlines
-                .replace(/\n{3,}/g, '\n\n')
-                // Fix common HTML entities
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&amp;/g, '&')
-                .replace(/&quot;/g, '"');
+            let markdown = cleaned;
+
+            // Apply all standard HTML to Markdown patterns
+            const patterns = HTML_TO_MARKDOWN_PATTERNS;
+            for (const pattern of Object.values(patterns)) {
+                markdown = markdown.replace(pattern.pattern, pattern.replacement);
+            }
+
+            // Process lists - use the parent class method
+            markdown = this.processListItems(markdown);
+
+            // Fix common HTML entities
+            const entityPatterns = HTML_ENTITY_REPLACEMENTS;
+            for (const pattern of Object.values(entityPatterns)) {
+                markdown = markdown.replace(pattern.pattern, pattern.replacement);
+            }
 
             return markdown.trim();
         } catch (error) {
-            console.error("Error cleaning content for Anthropic:", error);
+            console.error(FORMATTER_LOGS.ERROR.CONTEXT_CLEANING("Anthropic"), error);
             return content; // Return original if cleaning fails
         }
     }

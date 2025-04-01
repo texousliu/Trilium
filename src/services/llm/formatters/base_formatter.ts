@@ -2,6 +2,15 @@ import sanitizeHtml from 'sanitize-html';
 import type { Message } from '../ai_interface.js';
 import type { MessageFormatter } from '../interfaces/message_formatter.js';
 import { DEFAULT_SYSTEM_PROMPT, PROVIDER_PROMPTS } from '../constants/llm_prompt_constants.js';
+import {
+    HTML_ALLOWED_TAGS,
+    HTML_ALLOWED_ATTRIBUTES,
+    HTML_TRANSFORMS,
+    HTML_TO_MARKDOWN_PATTERNS,
+    HTML_ENTITY_REPLACEMENTS,
+    ENCODING_FIXES,
+    FORMATTER_LOGS
+} from '../constants/formatter_constants.js';
 
 /**
  * Base formatter with common functionality for all providers
@@ -41,61 +50,32 @@ export abstract class BaseMessageFormatter implements MessageFormatter {
 
             // Convert HTML to markdown for better readability
             const cleaned = sanitizeHtml(fixedContent, {
-                allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'code', 'pre'],
-                allowedAttributes: {
-                    'a': ['href']
-                },
-                transformTags: {
-                    'h1': 'h2',
-                    'h2': 'h3',
-                    'div': 'p',
-                    'span': 'span'
-                }
+                allowedTags: HTML_ALLOWED_TAGS.STANDARD,
+                allowedAttributes: HTML_ALLOWED_ATTRIBUTES.STANDARD,
+                transformTags: HTML_TRANSFORMS.STANDARD
             });
 
             // Process inline elements to markdown
-            let markdown = cleaned
-                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n')
-                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n')
-                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n')
-                .replace(/<h4[^>]*>(.*?)<\/h4>/gi, '#### $1\n')
-                .replace(/<h5[^>]*>(.*?)<\/h5>/gi, '##### $1\n')
-                .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
-                .replace(/<br[^>]*>/gi, '\n')
-                .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
-                .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
-                .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
-                .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
-                .replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*')
-                .replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`')
-                .replace(/<pre[^>]*>(.*?)<\/pre>/gi, '```\n$1\n```')
-                // Clean up any remaining HTML tags
-                .replace(/<[^>]*>/g, '')
-                // Clean up excessive newlines
-                .replace(/\n{3,}/g, '\n\n');
+            let markdown = cleaned;
+
+            // Apply all HTML to Markdown patterns
+            const patterns = HTML_TO_MARKDOWN_PATTERNS;
+            for (const pattern of Object.values(patterns)) {
+                markdown = markdown.replace(pattern.pattern, pattern.replacement);
+            }
 
             // Process list items
             markdown = this.processListItems(markdown);
 
             // Fix common HTML entities
-            markdown = markdown
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&amp;/g, '&')
-                .replace(/&quot;/g, '"')
-                .replace(/&#39;/g, "'")
-                .replace(/&ldquo;/g, '"')
-                .replace(/&rdquo;/g, '"')
-                .replace(/&lsquo;/g, "'")
-                .replace(/&rsquo;/g, "'")
-                .replace(/&mdash;/g, '—')
-                .replace(/&ndash;/g, '–')
-                .replace(/&hellip;/g, '…');
+            const entityPatterns = HTML_ENTITY_REPLACEMENTS;
+            for (const pattern of Object.values(entityPatterns)) {
+                markdown = markdown.replace(pattern.pattern, pattern.replacement);
+            }
 
             return markdown.trim();
         } catch (error) {
-            console.error("Error cleaning context content:", error);
+            console.error(FORMATTER_LOGS.ERROR.CONTEXT_CLEANING("Base"), error);
             return content; // Return original if cleaning fails
         }
     }
@@ -133,28 +113,18 @@ export abstract class BaseMessageFormatter implements MessageFormatter {
 
         try {
             // Fix common encoding issues
-            return content
-                // Fix broken quote characters
-                .replace(/Γ\u00c2[\u00a3\u00a5]/g, '"')
-                // Fix other common broken unicode
-                .replace(/[\u{0080}-\u{FFFF}]/gu, (match) => {
-                    // Some common replacements
-                    const replacements: Record<string, string> = {
-                        '\u00A0': ' ',  // Non-breaking space
-                        '\u2018': "'",  // Left single quote
-                        '\u2019': "'",  // Right single quote
-                        '\u201C': '"',  // Left double quote
-                        '\u201D': '"',  // Right double quote
-                        '\u2013': '-',  // En dash
-                        '\u2014': '--', // Em dash
-                        '\u2022': '*',  // Bullet
-                        '\u2026': '...' // Ellipsis
-                    };
+            let fixed = content.replace(ENCODING_FIXES.BROKEN_QUOTES.pattern, ENCODING_FIXES.BROKEN_QUOTES.replacement);
 
-                    return replacements[match] || match;
-                });
+            // Fix other common broken unicode
+            fixed = fixed.replace(/[\u{0080}-\u{FFFF}]/gu, (match) => {
+                // Use replacements from constants
+                const replacements = ENCODING_FIXES.UNICODE_REPLACEMENTS;
+                return replacements[match as keyof typeof replacements] || match;
+            });
+
+            return fixed;
         } catch (error) {
-            console.error('Error fixing encoding issues:', error);
+            console.error(FORMATTER_LOGS.ERROR.ENCODING, error);
             return content; // Return original if fixing fails
         }
     }
