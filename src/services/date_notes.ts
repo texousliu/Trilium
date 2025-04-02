@@ -11,9 +11,11 @@ import { t } from "i18next";
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
+import quarterOfYear from "dayjs/plugin/quarterOfYear.js";
 import cloningService from "./cloning.js";
 
 dayjs.extend(isSameOrAfter);
+dayjs.extend(quarterOfYear);
 
 const CALENDAR_ROOT_LABEL = "calendarRoot";
 const YEAR_LABEL = "yearNote";
@@ -191,7 +193,7 @@ function getYearNote(dateStr: string, _rootNote: BNote | null = null): BNote {
 }
 
 function getQuarterNumberStr(date: Dayjs) {
-    return `${date.year()}-Q${Math.floor(date.month() / 3) + 1}`;
+    return `${date.year()}-Q${date.quarter()}`;
 }
 
 function getQuarterNote(quarterStr: string, _rootNote: BNote | null = null): BNote {
