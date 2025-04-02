@@ -170,6 +170,10 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
     });
     $el.on("compositionend", () => {
         isComposingInput = false;
+        const searchString = $el.autocomplete("val") as unknown as string;
+        $el.autocomplete("val", "");
+        $el.setSelectedNotePath("");
+        $el.autocomplete("val", searchString);
     });
 
     $el.addClass("note-autocomplete-input");
