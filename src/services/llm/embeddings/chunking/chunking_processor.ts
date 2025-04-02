@@ -5,8 +5,6 @@ import becca from "../../../../becca/becca.js";
 import cls from "../../../../services/cls.js";
 import type { NoteEmbeddingContext } from "../types.js";
 import { LLM_CONSTANTS } from "../../../llm/constants/provider_constants.js";
-// Remove static imports that cause circular dependencies
-// import { storeNoteEmbedding, deleteNoteEmbeddings } from "./storage.js";
 
 // Define error categories for better handling
 const ERROR_CATEGORIES = {
