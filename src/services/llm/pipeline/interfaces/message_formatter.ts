@@ -1,4 +1,5 @@
 import type { Message } from '../../ai_interface.js';
+import { MESSAGE_FORMATTER_TEMPLATES, PROVIDER_IDENTIFIERS } from '../../constants/formatter_constants.js';
 
 /**
  * Interface for message formatters that handle provider-specific message formatting
@@ -69,7 +70,7 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
         if (context) {
             formattedMessages.push({
                 role: 'system',
-                content: `Please use the following context to respond to the user's messages:\n\n${context}`
+                content: MESSAGE_FORMATTER_TEMPLATES.OPENAI.CONTEXT_INSTRUCTION + context
             });
         }
 
@@ -102,7 +103,7 @@ export class AnthropicMessageFormatter extends BaseMessageFormatter {
 
         // For Claude, wrap context in XML tags for clear separation
         if (context) {
-            systemContent += `\n\n<context>\n${context}\n</context>`;
+            systemContent += MESSAGE_FORMATTER_TEMPLATES.ANTHROPIC.CONTEXT_START + context + MESSAGE_FORMATTER_TEMPLATES.ANTHROPIC.CONTEXT_END;
         }
 
         // Add system message if we have content
@@ -141,7 +142,7 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
 
         // Add context to system prompt
         if (context) {
-            systemContent += `\n\nReference information:\n${context}`;
+            systemContent += MESSAGE_FORMATTER_TEMPLATES.OLLAMA.REFERENCE_INFORMATION + context;
         }
 
         // Add system message if we have content
@@ -183,7 +184,7 @@ export class DefaultMessageFormatter extends BaseMessageFormatter {
         if (context) {
             formattedMessages.push({
                 role: 'user',
-                content: `Here is context to help you answer my questions: ${context}`
+                content: MESSAGE_FORMATTER_TEMPLATES.DEFAULT.CONTEXT_INSTRUCTION + context
             });
         }
 
@@ -199,10 +200,10 @@ export class DefaultMessageFormatter extends BaseMessageFormatter {
  */
 export class MessageFormatterFactory {
     private static formatters: Record<string, MessageFormatter> = {
-        openai: new OpenAIMessageFormatter(),
-        anthropic: new AnthropicMessageFormatter(),
-        ollama: new OllamaMessageFormatter(),
-        default: new DefaultMessageFormatter()
+        [PROVIDER_IDENTIFIERS.OPENAI]: new OpenAIMessageFormatter(),
+        [PROVIDER_IDENTIFIERS.ANTHROPIC]: new AnthropicMessageFormatter(),
+        [PROVIDER_IDENTIFIERS.OLLAMA]: new OllamaMessageFormatter(),
+        [PROVIDER_IDENTIFIERS.DEFAULT]: new DefaultMessageFormatter()
     };
 
     /**
@@ -211,7 +212,7 @@ export class MessageFormatterFactory {
      * @returns Message formatter for that provider
      */
     static getFormatter(provider: string): MessageFormatter {
-        return this.formatters[provider] || this.formatters.default;
+        return this.formatters[provider] || this.formatters[PROVIDER_IDENTIFIERS.DEFAULT];
     }
 
     /**

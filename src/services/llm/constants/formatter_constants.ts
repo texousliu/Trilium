@@ -157,3 +157,47 @@ export const FORMATTER_LOGS = {
         ENCODING: 'Error fixing encoding issues:'
     }
 };
+
+/**
+ * Message formatter text templates
+ */
+export const MESSAGE_FORMATTER_TEMPLATES = {
+    /**
+     * OpenAI-specific message templates
+     */
+    OPENAI: {
+        CONTEXT_INSTRUCTION: 'Please use the following context to respond to the user\'s messages:\n\n'
+    },
+
+    /**
+     * Anthropic-specific message templates
+     */
+    ANTHROPIC: {
+        CONTEXT_START: '\n\n<context>\n',
+        CONTEXT_END: '\n</context>'
+    },
+
+    /**
+     * Ollama-specific message templates
+     */
+    OLLAMA: {
+        REFERENCE_INFORMATION: '\n\nReference information:\n'
+    },
+
+    /**
+     * Default formatter message templates
+     */
+    DEFAULT: {
+        CONTEXT_INSTRUCTION: 'Here is context to help you answer my questions: '
+    }
+};
+
+/**
+ * Provider identifier constants
+ */
+export const PROVIDER_IDENTIFIERS = {
+    OPENAI: 'openai',
+    ANTHROPIC: 'anthropic',
+    OLLAMA: 'ollama',
+    DEFAULT: 'default'
+};
