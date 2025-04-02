@@ -17,9 +17,6 @@ export default tseslint.config(
         }
     },
     {
-        plugins: {
-            "@stylistic": stylistic
-        },
         rules: {
             // add rule overrides here
             "no-undef": "off",
