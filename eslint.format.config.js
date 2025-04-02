@@ -11,7 +11,7 @@ export const stylisticRules = {
     "@stylistic/quotes": [ "error", "double", { avoidEscape: true, allowTemplateLiterals: "always" } ],
     "@stylistic/semi": [ "error", "always" ],
     "@stylistic/quote-props": [ "error", "consistent-as-needed" ],
-    "@stylistic/max-len": [ "error", { code: 200 } ],
+    "@stylistic/max-len": [ "error", { code: 100 } ],
     "@stylistic/comma-dangle": [ "error", "never" ],
     "@stylistic/linebreak-style": [ "error", "unix" ],
     "@stylistic/array-bracket-spacing": [ "error", "always" ],
