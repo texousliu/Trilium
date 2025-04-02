@@ -257,9 +257,12 @@ function getIcon() {
 
 async function createSetupWindow() {
     const { BrowserWindow } = await import("electron"); // should not be statically imported
+    const width = 750;
+    const height = 650;
     setupWindow = new BrowserWindow({
-        width: 800,
-        height: 800,
+        width,
+        height,
+        resizable: false,
         title: "TriliumNext Notes Setup",
         icon: getIcon(),
         webPreferences: {
