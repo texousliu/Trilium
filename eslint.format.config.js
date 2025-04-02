@@ -1,4 +1,5 @@
 import stylistic from "@stylistic/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
 
 // eslint config just for formatting rules
 // potentially to be merged with the linting rules into one single config,
@@ -20,6 +21,10 @@ export const stylisticRules = {
 
 export default [
     {
+        files: [ "**/*.{js,ts,mjs,cjs}" ],
+        languageOptions: {
+            parser: tsParser
+        },
         plugins: {
             "@stylistic": stylistic
         },
