@@ -7,7 +7,7 @@ import { initializeTranslations } from "./src/services/i18n.js";
 import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
 import debounce from "./src/public/app/services/debounce.js";
-import { extractZip, importData, initializeDatabase, startElectron } from "./electron-utils.js";
+import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
 const markdownPath = path.join("docs", "User Guide");
@@ -16,8 +16,7 @@ const htmlPath = path.join("src", "public", "app", "doc_notes", "en", "User Guid
 async function main() {
     await initializeTranslations();
     const zipBuffer = await createImportZip();
-    await initializeDatabase();
-    await importData(zipBuffer, NOTE_ID_USER_GUIDE, "User Guide", "The sub-children of this note are automatically synced.");
+    await initializeDatabase(zipBuffer);
     await startElectron();
     await registerHandlers();
 }
