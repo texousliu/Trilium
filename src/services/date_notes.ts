@@ -50,7 +50,7 @@ const baseReplacements = {
     quarter: ['quarterNumber', 'shortQuarter'],
     month: ['isoMonth', 'monthNumber', 'monthNumberPadded', 'month', 'shortMonth3', 'shortMonth4'],
     week: ['weekNumber', 'weekNumberPadded', 'shortWeek', 'shortWeek3'],
-    day: ['isoDate', 'dayInMonthPadded', 'ordinal', 'weekDay', 'weekDay3', 'weekDay2']
+    day: ['isoDate', 'dateNumber', 'dateNumberPadded', 'ordinal', 'weekDay', 'weekDay3', 'weekDay2']
 };
 
 function getTimeUnitReplacements(timeUnit: TimeUnit): string[] {
@@ -65,7 +65,7 @@ function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs
         quarter: rootNote.getOwnedLabelValue("quarterPattern") || t('quarterNumber'),
         month: rootNote.getOwnedLabelValue("monthPattern") || "{monthNumberPadded} - {month}",
         week: rootNote.getOwnedLabelValue("weekPattern") || t('weekdayNumber'),
-        day: rootNote.getOwnedLabelValue("datePattern") || "{dayInMonthPadded} - {weekDay}"
+        day: rootNote.getOwnedLabelValue("datePattern") || "{dateNumberPadded} - {weekDay}"
     };
 
     const pattern = patterns[timeUnit];
@@ -76,10 +76,9 @@ function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs
     const allReplacements: Record<string, string> = {
         // Common date formats
         '{year}': dateObj.format('YYYY'),
-        '{isoDate}': dateObj.format('YYYY-MM-DD'),
-        '{isoMonth}': dateObj.format('YYYY-MM'),
 
         // Month related
+        '{isoMonth}': dateObj.format('YYYY-MM'),
         '{monthNumber}': numberStr,
         '{monthNumberPadded}': numberStr.padStart(2, '0'),
         '{month}': monthName,
@@ -97,7 +96,9 @@ function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs
         '{shortWeek3}': `W${numberStr.padStart(2, '0')}`,
 
         // Day related
-        '{dayInMonthPadded}': numberStr.padStart(2, '0'),
+        '{isoDate}': dateObj.format('YYYY-MM-DD'),
+        '{dateNumber}': numberStr,
+        '{dateNumberPadded}': numberStr.padStart(2, '0'),
         '{ordinal}': dateObj.format('Do'),
         '{weekDay}': weekDay,
         '{weekDay3}': weekDay.substring(0, 3),
