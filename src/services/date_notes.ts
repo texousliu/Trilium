@@ -12,10 +12,12 @@ import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
 import quarterOfYear from "dayjs/plugin/quarterOfYear.js";
+import advancedFormat from "dayjs/plugin/advancedFormat.js";
 import cloningService from "./cloning.js";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(quarterOfYear);
+dayjs.extend(advancedFormat);
 
 const CALENDAR_ROOT_LABEL = "calendarRoot";
 const YEAR_LABEL = "yearNote";
@@ -40,13 +42,6 @@ const MONTH_TRANSLATION_IDS = [
     "months.november",
     "months.december"
 ];
-
-/** produces 1st, 2nd, 3rd, 4th, 21st, 31st for 1, 2, 3, 4, 21, 31 */
-function ordinal(dayNumber: number) {
-    const suffixes = ["th", "st", "nd", "rd"];
-    const suffix = suffixes[(dayNumber - 20) % 10] || suffixes[dayNumber] || suffixes[0];
-    return `${dayNumber}${suffix}`;
-}
 
 type TimeUnit = 'year' | 'quarter' | 'month' | 'week' | 'day';
 
@@ -103,7 +98,7 @@ function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs
 
         // Day related
         '{dayInMonthPadded}': numberStr.padStart(2, '0'),
-        '{ordinal}': ordinal(number),
+        '{ordinal}': dateObj.format('Do'),
         '{weekDay}': weekDay,
         '{weekDay3}': weekDay.substring(0, 3),
         '{weekDay2}': weekDay.substring(0, 2)
