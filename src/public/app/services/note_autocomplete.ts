@@ -172,7 +172,6 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
         isComposingInput = false;
         const searchString = $el.autocomplete("val") as unknown as string;
         $el.autocomplete("val", "");
-        $el.setSelectedNotePath("");
         $el.autocomplete("val", searchString);
     });
 
