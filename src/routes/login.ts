@@ -150,9 +150,9 @@ function logout(req: Request, res: Response) {
 
         if (openID.isOpenIDEnabled() && openIDEncryption.isSubjectIdentifierSaved()) {
             res.oidc.logout({ returnTo: '/' });
-        } else res.redirect('login');
+        }
 
-        res.sendStatus(200);
+        res.redirect('login');
     });
 }
 
