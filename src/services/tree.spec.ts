@@ -61,7 +61,7 @@ describe("Tree", () => {
             rootNote.child(note(String(i)));
         }
 
-        const expectedOrder = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        const expectedOrder = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ];
 
         // Sort a few times to ensure that the resulting order is the same.
         for (let i = 0; i < 5; i++) {
