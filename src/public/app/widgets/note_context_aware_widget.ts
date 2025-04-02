@@ -82,7 +82,6 @@ class NoteContextAwareWidget extends BasicWidget {
     async refreshWithNote(note: FNote | null | undefined) {}
 
     async noteSwitchedEvent({ noteContext, notePath }: EventData<"noteSwitched">) {
-        this.noteContext = noteContext;
         // if notePath does not match, then the noteContext has been switched to another note in the meantime
         if (noteContext.notePath === notePath) {
             await this.noteSwitched();

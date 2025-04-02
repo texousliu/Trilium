@@ -57,3 +57,28 @@ test("Can drag tab to new window", async ({ page, context }) => {
     const popupApp = new App(popup, context);
     await expect(popupApp.getActiveTab()).toHaveText(NOTE_TITLE);
 });
+
+test("Tabs are restored in right order", async ({ page, context }) => {
+    const app = new App(page, context);
+    await app.goto();
+
+    // Open three tabs.
+    await app.closeAllTabs();
+    await app.goToNoteInNewTab("Code notes");
+    await app.addNewTab();
+    await app.goToNoteInNewTab("Text notes");
+    await app.addNewTab();
+    await app.goToNoteInNewTab("Mermaid");
+
+    // Select the mid one.
+    await app.getTab(1).click();
+
+    // Refresh the page and check the order.
+    await app.goto( { preserveTabs: true });
+    await expect(app.getTab(0)).toContainText("Code notes");
+    await expect(app.getTab(1)).toContainText("Text notes");
+    await expect(app.getTab(2)).toContainText("Mermaid");
+
+    // Check the note tree has the right active node.
+    await expect(app.noteTreeActiveNote).toContainText("Text notes");
+});
