@@ -50,9 +50,9 @@ type TimeUnit = 'year' | 'quarter' | 'month' | 'week' | 'day';
 
 const baseReplacements = {
     year: ['year'],
-    quarter: ['quarterNumber'],
-    month: ['isoMonth', 'monthNumberPadded', 'month', 'shortMonth3', 'shortMonth4'],
-    week: ['weekNumber'],
+    quarter: ['quarterNumber', 'shortQuarter'],
+    month: ['isoMonth', 'monthNumber', 'monthNumberPadded', 'month', 'shortMonth3', 'shortMonth4'],
+    week: ['weekNumber', 'weekNumberPadded', 'shortWeek', 'shortWeek3'],
     day: ['isoDate', 'dayInMonthPadded', 'ordinal', 'weekDay', 'weekDay3', 'weekDay2']
 };
 
@@ -62,7 +62,7 @@ function getTimeUnitReplacements(timeUnit: TimeUnit): string[] {
     return units.slice(0, index + 1).flatMap(unit => baseReplacements[unit]);
 }
 
-function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs, number?: number) {
+function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs, number: number) {
     const patterns = {
         year: rootNote.getOwnedLabelValue("yearPattern") || "{year}",
         quarter: rootNote.getOwnedLabelValue("quarterPattern") || "Quarter {quarterNumber}",
@@ -74,6 +74,7 @@ function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs
     const pattern = patterns[timeUnit];
     const monthName = t(MONTH_TRANSLATION_IDS[dateObj.month()]);
     const weekDay = t(WEEKDAY_TRANSLATION_IDS[dateObj.day()]);
+    const numberStr = number.toString();
 
     const allReplacements: Record<string, string> = {
         // Common date formats
@@ -82,20 +83,25 @@ function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs
         '{isoMonth}': dateObj.format('YYYY-MM'),
 
         // Month related
-        '{monthNumberPadded}': number?.toString() || '',
+        '{monthNumber}': numberStr,
+        '{monthNumberPadded}': numberStr.padStart(2, '0'),
         '{month}': monthName,
         '{shortMonth3}': monthName.slice(0, 3),
         '{shortMonth4}': monthName.slice(0, 4),
 
         // Quarter related
-        '{quarterNumber}': number?.toString() || '',
+        '{quarterNumber}': numberStr,
+        '{shortQuarter}': `Q${numberStr}`,
 
         // Week related
-        '{weekNumber}': number?.toString() || '',
+        '{weekNumber}': numberStr,
+        '{weekNumberPadded}': numberStr.padStart(2, '0'),
+        '{shortWeek}': `W${numberStr}`,
+        '{shortWeek3}': `W${numberStr.padStart(2, '0')}`,
 
         // Day related
-        '{dayInMonthPadded}': number?.toString() || '',
-        '{ordinal}': ordinal(number as number),
+        '{dayInMonthPadded}': numberStr.padStart(2, '0'),
+        '{ordinal}': ordinal(number),
         '{weekDay}': weekDay,
         '{weekDay3}': weekDay.substring(0, 3),
         '{weekDay2}': weekDay.substring(0, 2)
