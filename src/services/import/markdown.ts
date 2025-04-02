@@ -82,7 +82,7 @@ function renderToHtml(content: string, title: string) {
 
     // h1 handling needs to come before sanitization
     html = importUtils.handleH1(html, title);
-    // html = htmlSanitizer.sanitize(html);
+    html = htmlSanitizer.sanitize(html);
 
     // Remove slash for self-closing tags to match CKEditor's approach.
     html = html.replace(/<(\w+)([^>]*)\s+\/>/g, "<$1$2>");
