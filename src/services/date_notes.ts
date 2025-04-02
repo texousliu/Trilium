@@ -62,9 +62,9 @@ function getTimeUnitReplacements(timeUnit: TimeUnit): string[] {
 function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs, number: number) {
     const patterns = {
         year: rootNote.getOwnedLabelValue("yearPattern") || "{year}",
-        quarter: rootNote.getOwnedLabelValue("quarterPattern") || "Quarter {quarterNumber}",
+        quarter: rootNote.getOwnedLabelValue("quarterPattern") || t('quarterNumber'),
         month: rootNote.getOwnedLabelValue("monthPattern") || "{monthNumberPadded} - {month}",
-        week: rootNote.getOwnedLabelValue("weekPattern") || "Week {weekNumber}",
+        week: rootNote.getOwnedLabelValue("weekPattern") || t('weekdayNumber'),
         day: rootNote.getOwnedLabelValue("datePattern") || "{dayInMonthPadded} - {weekDay}"
     };
 
