@@ -1288,6 +1288,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     border: none;
     color: var(--launcher-pane-text-color);
     background-color: var(--launcher-pane-background-color);
+    flex-shrink: 0;
 }
 
 #launcher-pane.vertical .launcher-button {

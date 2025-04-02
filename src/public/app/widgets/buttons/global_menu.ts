@@ -11,6 +11,7 @@ const TPL = /*html*/`
     .global-menu {
         width: 53px;
         height: 53px;
+        flex-shrink: 0;
     }
 
     .global-menu .dropdown-menu {
