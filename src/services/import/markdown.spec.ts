@@ -127,4 +127,10 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("does not escape unneeded characters", () => {
+        const input = `It's important to note that these examples are not natively supported by Trilium out of the box; instead, they demonstrate what you can build within Trilium.`;
+        const expected = `<p>It's important to note that these examples are not natively supported by Trilium out of the box; instead, they demonstrate what you can build within Trilium.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });

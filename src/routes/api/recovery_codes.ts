@@ -7,7 +7,7 @@ function setRecoveryCodes(req: Request) {
     return { success: success, message: 'Recovery codes set!' };
 }
 
-function veryifyRecoveryCode(req: Request) {
+function verifyRecoveryCode(req: Request) {
     const success = recovery_codes.verifyRecoveryCode(req.body.recovery_code_guess);
 
     return { success: success };
@@ -59,7 +59,7 @@ function getUsedRecoveryCodes() {
 export default {
     setRecoveryCodes,
     generateRecoveryCodes,
-    veryifyRecoveryCode,
+    verifyRecoveryCode,
     checkForRecoveryKeys,
     getUsedRecoveryCodes
 };

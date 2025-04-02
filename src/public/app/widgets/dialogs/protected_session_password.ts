@@ -16,7 +16,7 @@ const TPL = /*html*/`
             <form class="protected-session-password-form">
                 <div class="modal-body">
                     <label for="protected-session-password" class="col-form-label">${t("protected_session_password.form_label")}</label>
-                    <input id="protected-session-password" class="form-control protected-session-password" type="password">
+                    <input id="protected-session-password" class="form-control protected-session-password" type="password" autocomplete="current-password">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary">${t("protected_session_password.start_button")}</button>

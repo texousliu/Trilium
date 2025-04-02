@@ -1177,6 +1177,10 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     left: calc(-100% + 10px);
 }
 
+.right-dropdown-widget {
+    flex-shrink: 0;
+}
+
 #launcher-pane.horizontal .right-dropdown-widget {
     width: 53px;
 }
@@ -1288,6 +1292,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     border: none;
     color: var(--launcher-pane-text-color);
     background-color: var(--launcher-pane-background-color);
+    flex-shrink: 0;
 }
 
 #launcher-pane.vertical .launcher-button {
@@ -1302,6 +1307,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
 #launcher-pane.horizontal .quick-search {
     width: 350px;
+    min-width: 150px;
 }
 
 #launcher-pane .icon-action:hover {

@@ -15,7 +15,7 @@ Note that some information is also stored as [Attachments](../Attachments). For
 
 Here's part of the HTML representation of this note, as it's stored in the database (but prettified).
 
-```html
+```
 <h2>
 	Understanding the source code of the different notes
 </h2>

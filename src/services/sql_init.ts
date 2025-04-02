@@ -64,13 +64,19 @@ async function initDbConnection() {
     dbReady.resolve();
 }
 
-async function createInitialDatabase(preserveIds?: boolean) {
+/**
+ * Applies the database schema, creating the necessary tables and importing the demo content.
+ *
+ * @param preserveIds `true` if the note IDs from the meta file should be preserved, or `false` to generate new ones (normal behaviour).
+ * @param customDbBuffer a custom database buffer to use, otherwise the default demo one is going to be used.
+ */
+async function createInitialDatabase(preserveIds?: boolean, customDbBuffer?: Buffer) {
     if (isDbInitialized()) {
         throw new Error("DB is already initialized");
     }
 
     const schema = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/schema.sql`, "utf-8");
-    const demoFile = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/demo.zip`);
+    const demoFile = customDbBuffer ?? fs.readFileSync(`${resourceDir.DB_INIT_DIR}/demo.zip`);
 
     let rootNote!: BNote;
 
