@@ -77,16 +77,16 @@ function login(req: Request, res: Response) {
     const submittedPassword = req.body.password;
     const submittedTotpToken = req.body.totpToken;
 
-    if (!verifyPassword(submittedPassword)) {
-        sendLoginError(req, res, 'password');
-        return;
-    }
-
     if (totp.isTotpEnabled()) {
         if (!verifyTOTP(submittedTotpToken)) {
             sendLoginError(req, res, 'totp');
             return;
         }
+    }
+
+    if (!verifyPassword(submittedPassword)) {
+        sendLoginError(req, res, 'password');
+        return;
     }
 
     const rememberMe = req.body.rememberMe;
