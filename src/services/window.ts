@@ -156,6 +156,8 @@ async function createMainWindow(app: App) {
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
+        minWidth: 500,
+        minHeight: 400,
         title: "TriliumNext Notes",
         webPreferences: {
             nodeIntegration: true,
@@ -185,7 +187,7 @@ async function createMainWindow(app: App) {
             if (lastFocusedWindow.isMinimized()) {
                 lastFocusedWindow.restore();
             }
-            lastFocusedWindow.show(); 
+            lastFocusedWindow.show();
             lastFocusedWindow.focus();
         }
     });
