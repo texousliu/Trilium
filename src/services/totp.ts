@@ -3,8 +3,8 @@ import options from './options.js';
 import totpEncryptionService from './encryption/totp_encryption.js';
 
 function isTotpEnabled(): boolean {
-    return options.getOption('mfaEnabled') === "true" &&
-        options.getOption('mfaMethod') === "totp" &&
+    return options.getOptionOrNull('mfaEnabled') === "true" &&
+        options.getOptionOrNull('mfaMethod') === "totp" &&
         totpEncryptionService.isTotpSecretSet();
 }
 
