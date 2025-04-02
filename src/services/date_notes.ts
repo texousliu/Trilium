@@ -453,5 +453,8 @@ export default {
     getWeekNote,
     getWeekFirstDayNote,
     getDayNote,
-    getTodayNote
+    getTodayNote,
+    getJournalNoteTitle,
+    getWeekStartDate,
+    getWeekNumberStr
 };
