@@ -14,8 +14,11 @@ export default class App {
 
     readonly tabBar: Locator;
     readonly noteTree: Locator;
+    readonly noteTreeHoistedNote: Locator;
     readonly launcherBar: Locator;
     readonly currentNoteSplit: Locator;
+    readonly currentNoteSplitTitle: Locator;
+    readonly currentNoteSplitContent: Locator;
     readonly sidebar: Locator;
 
     constructor(page: Page, context: BrowserContext) {
@@ -24,8 +27,11 @@ export default class App {
 
         this.tabBar = page.locator(".tab-row-widget-container");
         this.noteTree = page.locator(".tree-wrapper");
+        this.noteTreeHoistedNote = this.noteTree.locator(".fancytree-node", { has: page.locator(".unhoist-button") });
         this.launcherBar = page.locator("#launcher-container");
         this.currentNoteSplit = page.locator(".note-split:not(.hidden-ext)");
+        this.currentNoteSplitTitle = this.currentNoteSplit.locator(".note-title");
+        this.currentNoteSplitContent = this.currentNoteSplit.locator(".note-detail-printable.visible");
         this.sidebar = page.locator("#right-pane");
     }
 
