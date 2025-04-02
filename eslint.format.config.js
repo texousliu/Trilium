@@ -32,6 +32,7 @@ export default [
             "build/*",
             "dist/*",
             "docs/*",
+            "demo/*",
             "libraries/*",
             // TriliumNextTODO: check if we want to format packages here as well - for now skipping it
             "packages/*",

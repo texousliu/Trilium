@@ -38,6 +38,7 @@ export default tseslint.config(
             "build/*",
             "dist/*",
             "docs/*",
+            "demo/*",
             "libraries/*",
             "src/public/app-dist/*",
             "src/public/app/doc_notes/*"
