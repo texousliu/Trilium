@@ -8,7 +8,7 @@ import shortcutService from "../services/shortcuts.js";
 import { t } from "../services/i18n.js";
 import { Dropdown, Tooltip } from "bootstrap";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="quick-search input-group input-group-sm">
   <style>
     .quick-search {

@@ -12,7 +12,7 @@ import shortcutService from "../../services/shortcuts.js";
 import appContext from "../../components/app_context.js";
 import type { Attribute } from "../../services/attribute_parser.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="attr-detail tn-tool-dialog">
     <style>
         .attr-detail {

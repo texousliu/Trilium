@@ -6,7 +6,7 @@ import { t } from "../../../services/i18n.js";
 import utils from "../../../services/utils.js";
 import dialogService from "../../../services/dialog.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("multi_factor_authentication.title")}</h4>
     <p class="form-text">${t("multi_factor_authentication.description")}</p>

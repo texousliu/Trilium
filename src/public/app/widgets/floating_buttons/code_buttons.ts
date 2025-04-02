@@ -8,7 +8,7 @@ import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
 import type FNote from "../../entities/fnote.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="code-buttons-widget">
     <style>
         .code-buttons-widget {

@@ -6,7 +6,7 @@ import BasicWidget from "../basic_widget.js";
 import shortcutService from "../../services/shortcuts.js";
 import { Modal } from "bootstrap";
 
-const TPL = `<div class="jump-to-note-dialog modal mx-auto" tabindex="-1" role="dialog">
+const TPL = /*html*/`<div class="jump-to-note-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

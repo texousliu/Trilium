@@ -44,7 +44,7 @@ import LanguageOptions from "./options/i18n/language.js";
 import type { EventData, EventNames } from "../../components/app_context.js";
 import type BasicWidget from "../basic_widget.js";
 
-const TPL = `<div class="note-detail-content-widget note-detail-printable">
+const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
         .type-contentWidget .note-detail {
             height: 100%;

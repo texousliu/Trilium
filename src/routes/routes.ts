@@ -271,6 +271,7 @@ function register(app: express.Application) {
     route(PST, "/api/setup/sync-seed", [auth.checkAppNotInitialized], setupApiRoute.saveSyncSeed, apiResultHandler, false);
 
     apiRoute(GET, "/api/autocomplete", autocompleteApiRoute.getAutocomplete);
+    apiRoute(GET, "/api/autocomplete/notesCount", autocompleteApiRoute.getNotesCount);
     apiRoute(GET, "/api/quick-search/:searchString", searchRoute.quickSearch);
     apiRoute(GET, "/api/search-note/:noteId", searchRoute.searchFromNote);
     apiRoute(PST, "/api/search-and-execute-note/:noteId", searchRoute.searchAndExecute);

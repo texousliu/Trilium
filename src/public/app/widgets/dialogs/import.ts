@@ -7,7 +7,7 @@ import { t } from "../../services/i18n.js";
 import { Modal, Tooltip } from "bootstrap";
 import type { EventData } from "../../components/app_context.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="import-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

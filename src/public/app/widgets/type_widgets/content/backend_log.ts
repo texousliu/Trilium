@@ -2,7 +2,7 @@ import server from "../../../services/server.js";
 import AbstractCodeTypeWidget from "../abstract_code_type_widget.js";
 import type { EventData } from "../../../components/app_context.js";
 
-const TPL = `<div style="height: 100%; display: flex; flex-direction: column;">
+const TPL = /*html*/`<div style="height: 100%; display: flex; flex-direction: column;">
     <style>
         .backend-log-editor {
             flex-grow: 1;
