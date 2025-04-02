@@ -8,7 +8,7 @@ export async function initializeDatabase() {
 
     cls.init(() => {
         if (!sqlInit.isDbInitialized()) {
-            sqlInit.createInitialDatabase();
+            sqlInit.createInitialDatabase(true);
         }
     });
 }

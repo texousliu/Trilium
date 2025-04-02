@@ -95,7 +95,7 @@ class SNote extends AbstractShacaEntity {
     }
 
     getContent(silentNotFoundError = false) {
-        const row = sql.getRow<Pick<Blob, "content">>(`SELECT content FROM blobs WHERE blobId = ?`, [this.blobId]);
+        const row = sql.getRow<Pick<Blob, "content">>(/*sql*/`SELECT content FROM blobs WHERE blobId = ?`, [this.blobId]);
 
         if (!row) {
             if (silentNotFoundError) {

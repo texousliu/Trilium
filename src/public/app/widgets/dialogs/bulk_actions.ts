@@ -8,7 +8,7 @@ import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
 
 
-const TPL = `
+const TPL = /*html*/`
 <div class="bulk-actions-dialog modal mx-auto" tabindex="-1" role="dialog">
     <style>
         .bulk-actions-dialog .modal-body h4:not(:first-child) {

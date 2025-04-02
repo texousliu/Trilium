@@ -595,7 +595,7 @@ body a.tn-link:visited,
     box-shadow: 0 0 0 0 var(--background);
     border-radius: 4px;
     background: var(--background);
-    color: currentColor;
+    color: var(--link-color);
     font-weight: normal;
     text-decoration: underline;
 

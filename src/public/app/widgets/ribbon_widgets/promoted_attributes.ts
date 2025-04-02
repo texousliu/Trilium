@@ -12,7 +12,7 @@ import type { Attribute } from "../../services/attribute_parser.js";
 import type FAttribute from "../../entities/fattribute.js";
 import type { EventData } from "../../components/app_context.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="promoted-attributes-widget">
     <style>
     body.mobile .promoted-attributes-widget {

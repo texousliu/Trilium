@@ -6,7 +6,7 @@ import type FNote from "../../entities/fnote.js";
 import type { NotePathRecord } from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-paths-widget">
     <style>
     .note-paths-widget {

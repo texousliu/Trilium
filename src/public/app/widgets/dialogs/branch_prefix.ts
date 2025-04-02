@@ -8,7 +8,7 @@ import appContext from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import { Modal } from "bootstrap";
 
-const TPL = `<div class="branch-prefix-dialog modal fade mx-auto" tabindex="-1" role="dialog">
+const TPL = /*html*/`<div class="branch-prefix-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <form class="branch-prefix-form">
             <div class="modal-content">

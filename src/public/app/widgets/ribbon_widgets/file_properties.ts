@@ -7,7 +7,7 @@ import protectedSessionHolder from "../../services/protected_session_holder.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="file-properties-widget">
     <style>
         .file-table {

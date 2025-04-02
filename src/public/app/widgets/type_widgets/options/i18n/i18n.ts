@@ -5,7 +5,7 @@ import { getAvailableLocales, t } from "../../../../services/i18n.js";
 import type { OptionMap } from "../../../../../../services/options_interface.js";
 import type { Locale } from "../../../../../../services/i18n.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("i18n.title")}</h4>
 

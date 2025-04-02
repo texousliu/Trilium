@@ -6,7 +6,7 @@ import options from "../../services/options.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="edited-notes-widget">
     <style>
         .edited-notes-widget {

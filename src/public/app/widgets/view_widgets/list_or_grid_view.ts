@@ -7,7 +7,7 @@ import utils from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-list">
     <style>
     .note-list {

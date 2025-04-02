@@ -21,7 +21,7 @@ import backup from "./backup.js";
 const dbReady = deferred<void>();
 
 function schemaExists() {
-    return !!sql.getValue(`SELECT name FROM sqlite_master
+    return !!sql.getValue(/*sql*/`SELECT name FROM sqlite_master
                                 WHERE type = 'table' AND name = 'options'`);
 }
 
@@ -64,7 +64,7 @@ async function initDbConnection() {
     dbReady.resolve();
 }
 
-async function createInitialDatabase() {
+async function createInitialDatabase(preserveIds?: boolean) {
     if (isDbInitialized()) {
         throw new Error("DB is already initialized");
     }
@@ -112,7 +112,9 @@ async function createInitialDatabase() {
 
     const dummyTaskContext = new TaskContext("no-progress-reporting", "import", false);
 
-    await zipImportService.importZip(dummyTaskContext, demoFile, rootNote);
+    await zipImportService.importZip(dummyTaskContext, demoFile, rootNote, {
+        preserveIds
+    });
 
     sql.transactional(() => {
         // this needs to happen after ZIP import,

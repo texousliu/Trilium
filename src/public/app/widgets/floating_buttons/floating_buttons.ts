@@ -11,7 +11,7 @@ import type BasicWidget from "../basic_widget.js";
  * properly handle rounded corners, as defined by the --border-radius CSS variable.
  */
 
-const TPL = `
+const TPL = /*html*/`
 <div class="floating-buttons no-print">
     <style>
         .floating-buttons {

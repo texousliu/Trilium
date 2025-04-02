@@ -11,7 +11,7 @@ import type React from "react";
 import type { Root } from "react-dom/client";
 import "@excalidraw/excalidraw/index.css";
 
-const TPL = `
+const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
         <style>
         .excalidraw .App-menu_top .buttonList {

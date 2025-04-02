@@ -6,7 +6,7 @@ import type { ViewScope } from "../../services/link.js";
 import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
-const TPL = `
+const TPL = /*html*/`
 <button class="open-contextual-help-button" title="${t("help-button.title")}">
     <span class="bx bx-help-circle"></span>
 </button>
