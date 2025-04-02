@@ -131,9 +131,9 @@ export class ContextFormatter implements IContextFormatter {
                 let formattedSource = '';
                 if (providerId === 'ollama') {
                     // For Ollama, use a simpler format and plain ASCII
-                    formattedSource = `${FORMATTING_PROMPTS.DIVIDERS.NOTE_START}${title}\n${content}\n\n`;
+                    formattedSource = `<note>\n${FORMATTING_PROMPTS.DIVIDERS.NOTE_START}${title}\n${content}\n</note>\n\n`;
                 } else {
-                    formattedSource = `### ${title}\n${content}\n\n`;
+                    formattedSource = `<note>\n### ${title}\n${content}\n</note>\n\n`;
                 }
 
                 // Check if adding this would exceed our size limit
@@ -144,8 +144,8 @@ export class ContextFormatter implements IContextFormatter {
                         const availableSpace = maxTotalLength - totalSize - 100; // Buffer for closing text
                         if (availableSpace > 200) { // Only if we have reasonable space
                             const truncatedContent = providerId === 'ollama' ?
-                                `## ${title}\n${content.substring(0, availableSpace)}...\n\n` :
-                                `### ${title}\n${content.substring(0, availableSpace)}...\n\n`;
+                                `<note>\n## ${title}\n${content.substring(0, availableSpace)}...\n</note>\n\n` :
+                                `<note>\n### ${title}\n${content.substring(0, availableSpace)}...\n</note>\n\n`;
                             formattedSources.push(truncatedContent);
                             totalSize += truncatedContent.length;
                             sourcesIncluded++;
@@ -184,6 +184,10 @@ export class ContextFormatter implements IContextFormatter {
 
             // Log final context size
             log.info(`Final context: ${formattedContext.length} chars, ${formattedSources.length} sources included`);
+
+            // DEBUG: Log a sample of the formatted context to verify <note> tags are present
+            log.info(`Context sample (first 500 chars): ${formattedContext.substring(0, 500).replace(/\n/g, '\\n')}`);
+            log.info(`Context sample (last 500 chars): ${formattedContext.substring(Math.max(0, formattedContext.length - 500)).replace(/\n/g, '\\n')}`);
 
             return formattedContext;
         } catch (error) {

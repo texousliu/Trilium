@@ -58,10 +58,18 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
                 if (msg.role === 'user' && !injectedContext) {
                     // Simple context injection directly in the user's message
                     const cleanedContext = this.cleanContextContent(context);
+
+                    // DEBUG: Log the context before and after cleaning
+                    console.log(`[OllamaFormatter] Context (first 500 chars): ${context.substring(0, 500).replace(/\n/g, '\\n')}...`);
+                    console.log(`[OllamaFormatter] Cleaned context (first 500 chars): ${cleanedContext.substring(0, 500).replace(/\n/g, '\\n')}...`);
+
                     const formattedContext = PROVIDER_PROMPTS.OLLAMA.CONTEXT_INJECTION(
                         cleanedContext,
                         msg.content
                     );
+
+                    // DEBUG: Log the final formatted context
+                    console.log(`[OllamaFormatter] Formatted context (first 500 chars): ${formattedContext.substring(0, 500).replace(/\n/g, '\\n')}...`);
 
                     formattedMessages.push({
                         role: 'user',
@@ -87,17 +95,50 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
 
     /**
      * Clean up HTML and other problematic content before sending to Ollama
-     * Ollama needs a more aggressive cleaning than other models
+     * Ollama needs a more aggressive cleaning than other models,
+     * but we want to preserve our XML tags for context
      */
     override cleanContextContent(content: string): string {
         if (!content) return '';
 
         try {
+            // Store our XML tags so we can restore them after cleaning
+            const noteTagsRegex = /<\/?note>/g;
+            const notesTagsRegex = /<\/?notes>/g;
+            const queryTagsRegex = /<\/?query>[^<]*<\/query>/g;
+
+            // Capture tags to restore later
+            const noteTags = content.match(noteTagsRegex) || [];
+            const noteTagPositions: number[] = [];
+            let match;
+            const regex = /<\/?note>/g;
+            while ((match = regex.exec(content)) !== null) {
+                noteTagPositions.push(match.index);
+            }
+
+            // Remember the notes tags
+            const notesTagsMatch = content.match(notesTagsRegex) || [];
+            const notesTagPositions: number[] = [];
+            while ((match = notesTagsRegex.exec(content)) !== null) {
+                notesTagPositions.push(match.index);
+            }
+
+            // Remember the query tags
+            const queryTagsMatch = content.match(queryTagsRegex) || [];
+
+            // Temporarily replace XML tags with markers that won't be affected by sanitization
+            let modified = content
+                .replace(/<note>/g, '[NOTE_START]')
+                .replace(/<\/note>/g, '[NOTE_END]')
+                .replace(/<notes>/g, '[NOTES_START]')
+                .replace(/<\/notes>/g, '[NOTES_END]')
+                .replace(/<query>(.*?)<\/query>/g, '[QUERY]$1[/QUERY]');
+
             // First use the parent class to do standard cleaning
-            let sanitized = super.cleanContextContent(content);
+            let sanitized = super.cleanContextContent(modified);
 
             // Then apply Ollama-specific aggressive cleaning
-            // Remove any remaining HTML using sanitizeHtml
+            // Remove any remaining HTML using sanitizeHtml while keeping our markers
             let plaintext = sanitizeHtml(sanitized, {
                 allowedTags: HTML_ALLOWED_TAGS.NONE,
                 allowedAttributes: HTML_ALLOWED_ATTRIBUTES.NONE,
@@ -109,6 +150,14 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
             for (const pattern of Object.values(ollamaPatterns)) {
                 plaintext = plaintext.replace(pattern.pattern, pattern.replacement);
             }
+
+            // Restore our XML tags
+            plaintext = plaintext
+                .replace(/\[NOTE_START\]/g, '<note>')
+                .replace(/\[NOTE_END\]/g, '</note>')
+                .replace(/\[NOTES_START\]/g, '<notes>')
+                .replace(/\[NOTES_END\]/g, '</notes>')
+                .replace(/\[QUERY\](.*?)\[\/QUERY\]/g, '<query>$1</query>');
 
             return plaintext.trim();
         } catch (error) {

@@ -631,8 +631,8 @@ function buildContextFromNotes(sources: NoteSource[], query: string): string {
     const noteContexts = sources
         .filter(source => source.content) // Only include sources with content
         .map((source) => {
-            // Format each note with its title as a natural heading
-            return `### ${source.title}\n${source.content || 'No content available'}`;
+            // Format each note with its title as a natural heading and wrap in <note> tags
+            return `<note>\n### ${source.title}\n${source.content || 'No content available'}\n</note>`;
         })
         .join('\n\n');
 

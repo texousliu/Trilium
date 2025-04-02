@@ -71,11 +71,13 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`,
     CONTEXT_NOTES_WRAPPER:
         `I'll provide you with relevant information from my notes to help answer your question.
 
+<notes>
 {noteContexts}
+</notes>
 
 When referring to information from these notes in your response, please cite them by their titles (e.g., "According to your note on [Title]...") rather than using labels like "Note 1" or "Note 2".
 
-Now, based on the above information, please answer: {query}`,
+Now, based on the above information, please answer: <query>{query}</query>`,
 
     // Default fallback when no notes are found
     NO_NOTES_CONTEXT:
@@ -90,17 +92,17 @@ Now, based on the above information, please answer: {query}`,
     // Headers for context (by provider)
     CONTEXT_HEADERS: {
         ANTHROPIC: (query: string) =>
-            `I'm your AI assistant helping with your Trilium notes database. For your query: "${query}", I found these relevant notes:\n\n`,
+            `I'm your AI assistant helping with your Trilium notes database. For your query: "<query>${query}</query>", I found these relevant <notes>`,
         DEFAULT: (query: string) =>
-            `I've found some relevant information in your notes that may help answer: "${query}"\n\n`
+            `I've found some relevant information in your notes that may help answer: "<query>${query}</query>"\n\n<notes>`
     },
 
     // Closings for context (by provider)
     CONTEXT_CLOSINGS: {
         ANTHROPIC:
-            "\n\nPlease use this information to answer the user's query. If the notes don't contain enough information, you can use your general knowledge as well.",
+            "</notes>\n\nPlease use this information to answer the user's query. If the notes don't contain enough information, you can use your general knowledge as well.",
         DEFAULT:
-            "\n\nBased on this information from the user's notes, please provide a helpful response."
+            "</notes>\n\nBased on this information from the user's notes, please provide a helpful response."
     },
 
     // Context for index service
@@ -110,21 +112,27 @@ Now, based on the above information, please answer: {query}`,
     // Prompt for adding note context to chat
     NOTE_CONTEXT_PROMPT: `Here is the content of the note I want to discuss:
 
+<note_content>
 {context}
+</note_content>
 
 Please help me with this information.`,
 
     // Prompt for adding semantic note context to chat
-    SEMANTIC_NOTE_CONTEXT_PROMPT: `Here is the relevant information from my notes based on my query "{query}":
+    SEMANTIC_NOTE_CONTEXT_PROMPT: `Here is the relevant information from my notes based on my query "<query>{query}</query>":
 
+<notes_context>
 {context}
+</notes_context>
 
 Please help me understand this information in relation to my query.`,
 
     // System message prompt for context-aware chat
     CONTEXT_AWARE_SYSTEM_PROMPT: `You are an AI assistant helping with Trilium Notes. Use this context to answer the user's question:
 
-{enhancedContext}`,
+<enhanced_context>
+{enhancedContext}
+</enhanced_context>`,
 
     // Error messages
     ERROR_MESSAGES: {
@@ -134,25 +142,25 @@ Please help me understand this information in relation to my query.`,
 
     // Merged from JS file
     AGENT_TOOLS_CONTEXT_PROMPT:
-        "You have access to the following tools to help answer the user's question: {tools}"
+        "You have access to the following tools to help answer the user's question: <tools>{tools}</tools>"
 };
 
 // Agent tool prompts
 export const AGENT_TOOL_PROMPTS = {
     // Prompts for query decomposition
     QUERY_DECOMPOSITION: {
-        SUB_QUERY_DIRECT: 'Direct question that can be answered without decomposition',
-        SUB_QUERY_GENERIC: 'Generic exploration to find related content',
-        SUB_QUERY_ERROR: 'Error in decomposition, treating as simple query',
-        SUB_QUERY_DIRECT_ANALYSIS: 'Direct analysis of note details',
-        ORIGINAL_QUERY: 'Original query'
+        SUB_QUERY_DIRECT: '<query_type>Direct question that can be answered without decomposition</query_type>',
+        SUB_QUERY_GENERIC: '<query_type>Generic exploration to find related content</query_type>',
+        SUB_QUERY_ERROR: '<query_type>Error in decomposition, treating as simple query</query_type>',
+        SUB_QUERY_DIRECT_ANALYSIS: '<query_type>Direct analysis of note details</query_type>',
+        ORIGINAL_QUERY: '<query_type>Original query</query_type>'
     },
 
     // Prompts for contextual thinking tool
     CONTEXTUAL_THINKING: {
-        STARTING_ANALYSIS: (query: string) => `Starting analysis of the query: "${query}"`,
-        KEY_COMPONENTS: 'What are the key components of this query that need to be addressed?',
-        BREAKING_DOWN: 'Breaking down the query to understand its requirements and context.'
+        STARTING_ANALYSIS: (query: string) => `Starting analysis of the query: "<query>${query}</query>"`,
+        KEY_COMPONENTS: '<analysis>What are the key components of this query that need to be addressed?</analysis>',
+        BREAKING_DOWN: '<analysis>Breaking down the query to understand its requirements and context.</analysis>'
     }
 };
 
@@ -188,13 +196,17 @@ When responding:
     OPENAI: {
         // OpenAI-specific prompt formatting
         SYSTEM_WITH_CONTEXT: (context: string) =>
-            `You are an AI assistant integrated into TriliumNext Notes.
+            `<system_prompt>
+You are an AI assistant integrated into TriliumNext Notes.
 Use the following information from the user's notes to answer their questions:
 
+<user_notes>
 ${context}
+</user_notes>
 
 Focus on relevant information from these notes when answering.
-Be concise and informative in your responses.`
+Be concise and informative in your responses.
+</system_prompt>`
     },
 
     OLLAMA: {
@@ -204,12 +216,12 @@ Be concise and informative in your responses.`
 
 ${context}
 
-Based on this information, please answer: ${query}`
+Based on this information, please answer: <query>${query}</query>`
     },
 
     // Common prompts across providers
     COMMON: {
-        DEFAULT_ASSISTANT_INTRO: "You are an AI assistant integrated into TriliumNext Notes. Focus on helping users find information in their notes and answering questions based on their knowledge base. Be concise, informative, and direct when responding to queries."
+        DEFAULT_ASSISTANT_INTRO: "<assistant_role>You are an AI assistant integrated into TriliumNext Notes. Focus on helping users find information in their notes and answering questions based on their knowledge base. Be concise, informative, and direct when responding to queries.</assistant_role>"
     }
 };
 
@@ -217,14 +229,14 @@ Based on this information, please answer: ${query}`
 export const FORMATTING_PROMPTS = {
     // Headers for context formatting
     CONTEXT_HEADERS: {
-        SIMPLE: (query: string) => `I'm searching for information about: ${query}\n\nHere are the most relevant notes from my knowledge base:`,
-        DETAILED: (query: string) => `I'm searching for information about: "${query}"\n\nHere are the most relevant notes from my personal knowledge base:`
+        SIMPLE: (query: string) => `I'm searching for information about: <query>${query}</query>\n\n<notes>Here are the most relevant notes from my knowledge base:`,
+        DETAILED: (query: string) => `I'm searching for information about: "<query>${query}</query>"\n\n<notes>Here are the most relevant notes from my personal knowledge base:`
     },
 
     // Closing text for context formatting
     CONTEXT_CLOSERS: {
-        SIMPLE: `End of notes. Please use this information to answer my question comprehensively.`,
-        DETAILED: `End of context information. Please use only the above notes to answer my question as comprehensively as possible.`
+        SIMPLE: `</notes>\nEnd of notes. Please use this information to answer my question comprehensively.`,
+        DETAILED: `</notes>\nEnd of context information. Please use only the above notes to answer my question as comprehensively as possible.`
     },
 
     // Dividers used in context formatting
@@ -242,14 +254,14 @@ export const FORMATTING_PROMPTS = {
 export const CHAT_PROMPTS = {
     // Introduction messages for new chats
     INTRODUCTIONS: {
-        NEW_CHAT: "Welcome to TriliumNext AI Assistant. How can I help you with your notes today?",
-        SEMANTIC_SEARCH: "I'll search through your notes for relevant information. What would you like to know?"
+        NEW_CHAT: "<greeting>Welcome to TriliumNext AI Assistant. How can I help you with your notes today?</greeting>",
+        SEMANTIC_SEARCH: "<instruction>I'll search through your notes for relevant information. What would you like to know?</instruction>"
     },
 
     // Placeholders for various chat scenarios
     PLACEHOLDERS: {
-        NO_CONTEXT: "I don't have any specific note context yet. Would you like me to search your notes for something specific?",
-        WAITING_FOR_QUERY: "Awaiting your question..."
+        NO_CONTEXT: "<status>I don't have any specific note context yet. Would you like me to search your notes for something specific?</status>",
+        WAITING_FOR_QUERY: "<prompt>Awaiting your question...</prompt>"
     }
 };
 
