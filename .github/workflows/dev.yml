@@ -15,7 +15,73 @@ env:
   IMAGE_NAME: ${{ github.repository_owner }}/notes
   TEST_TAG: ${{ github.repository_owner }}/notes:test
 
+permissions:
+  pull-requests: write  # for PR comments
+
 jobs:
+  report-electron-size:
+    name: Report Electron size
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Set up node & dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Run the build
+        uses: ./.github/actions/build-electron
+        with:
+          os: linux
+          arch: x64
+          shell: bash
+          forge_platform: linux
+
+      - name: Run the Electron size report
+        uses: ./.github/actions/report-size
+        with:
+          paths: 'upload/**/*'
+          onlyDiff: 'true'
+          branch: 'develop'
+          header: 'Electron size report'
+          unit: "MB"
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
+  report-server-size:
+    name: Report server size
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Set up node & dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Run the build
+        uses: ./.github/actions/build-server
+        with:
+          os: linux
+          arch: x64
+
+      - name: Run the server size report
+        uses: ./.github/actions/report-size
+        with:
+          paths: 'upload/**/*'
+          onlyDiff: 'true'
+          branch: 'develop'
+          header: 'Server size report'
+          unit: "MB"
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
+
   test_dev:
     name: Test development
     runs-on: ubuntu-latest
