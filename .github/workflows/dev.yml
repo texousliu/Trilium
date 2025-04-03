@@ -49,7 +49,6 @@ jobs:
           onlyDiff: 'true'
           branch: 'develop'
           header: 'Electron size report'
-          unit: 'MB'
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
   test_dev:
