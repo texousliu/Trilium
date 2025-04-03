@@ -4743,6 +4743,14 @@
                                     "dataFileName": "10_Geo map_image.png"
                                 },
                                 {
+                                    "attachmentId": "IeXU8SLZU7Oz",
+                                    "title": "image.jpg",
+                                    "role": "image",
+                                    "mime": "image/jpg",
+                                    "position": 10,
+                                    "dataFileName": "Geo map_image.jpg"
+                                },
+                                {
                                     "attachmentId": "Mx2xwNIk76ZS",
                                     "title": "image.png",
                                     "role": "image",
@@ -5111,6 +5119,62 @@
                             "format": "markdown",
                             "dataFileName": "Creating a custom theme.md",
                             "attachments": [
+                                {
+                                    "attachmentId": "3kOhtnQHT9w0",
+                                    "title": "5_Creating%20a%20custom%20theme_im.png",
+                                    "role": "image",
+                                    "mime": "image/jpg",
+                                    "position": 10,
+                                    "dataFileName": "Creating a custom theme_5_.png"
+                                },
+                                {
+                                    "attachmentId": "7M6PnFYlxR2t",
+                                    "title": "3_Creating a custom theme_im.png",
+                                    "role": "image",
+                                    "mime": "image/jpg",
+                                    "position": 10,
+                                    "dataFileName": "Creating a custom theme_3_.png"
+                                },
+                                {
+                                    "attachmentId": "hJc5fBNfSLoY",
+                                    "title": "Creating a custom theme_im.png",
+                                    "role": "image",
+                                    "mime": "image/jpg",
+                                    "position": 10,
+                                    "dataFileName": "Creating a custom theme_Cr.png"
+                                },
+                                {
+                                    "attachmentId": "j3OaGihW6eg3",
+                                    "title": "1_Creating a custom theme_im.png",
+                                    "role": "image",
+                                    "mime": "image/jpg",
+                                    "position": 10,
+                                    "dataFileName": "Creating a custom theme_1_.png"
+                                },
+                                {
+                                    "attachmentId": "LCQ6zvUbvXQr",
+                                    "title": "4_Creating a custom theme_im.png",
+                                    "role": "image",
+                                    "mime": "image/jpg",
+                                    "position": 10,
+                                    "dataFileName": "Creating a custom theme_4_.png"
+                                },
+                                {
+                                    "attachmentId": "mY5EGlN7TO6I",
+                                    "title": "5_Creating a custom theme_im.png",
+                                    "role": "image",
+                                    "mime": "image/jpg",
+                                    "position": 10,
+                                    "dataFileName": "1_Creating a custom theme_5_.png"
+                                },
+                                {
+                                    "attachmentId": "TMHEj1M3XFGO",
+                                    "title": "2_Creating a custom theme_im.png",
+                                    "role": "image",
+                                    "mime": "image/jpg",
+                                    "position": 10,
+                                    "dataFileName": "Creating a custom theme_2_.png"
+                                },
                                 {
                                     "attachmentId": "yJVfT7rjp4tI",
                                     "title": "image.png",
@@ -6887,28 +6951,28 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "KSZ04uQ2D1St",
+                                    "value": "_optionsTextNotes",
                                     "isInheritable": false,
                                     "position": 10
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "_optionsTextNotes",
+                                    "value": "_optionsCodeNotes",
                                     "isInheritable": false,
                                     "position": 20
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "MI26XDLSAlCD",
+                                    "value": "KSZ04uQ2D1St",
                                     "isInheritable": false,
                                     "position": 30
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "_optionsCodeNotes",
+                                    "value": "MI26XDLSAlCD",
                                     "isInheritable": false,
                                     "position": 40
                                 },
