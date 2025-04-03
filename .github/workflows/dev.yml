@@ -15,6 +15,9 @@ env:
   IMAGE_NAME: ${{ github.repository_owner }}/notes
   TEST_TAG: ${{ github.repository_owner }}/notes:test
 
+permissions:
+  pull-requests: write  # for PR comments
+
 jobs:
   report-electron-size:
     name: Report Electron size
