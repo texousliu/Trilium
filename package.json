@@ -239,7 +239,7 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "rimraf": "6.0.1",
-    "sass": "1.86.1",
+    "sass": "1.86.2",
     "sass-loader": "16.0.5",
     "script-loader": "0.7.2",
     "split.js": "1.6.5",
