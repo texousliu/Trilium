@@ -49,7 +49,7 @@ jobs:
           onlyDiff: 'true'
           branch: 'develop'
           header: 'Size report'
-          append: true
+          size: "MB"
           ghToken: ${{ secrets.GITHUB_TOKEN }}
   report-server-size:
     name: Report server size
@@ -80,6 +80,7 @@ jobs:
           branch: 'develop'
           header: 'Size report'
           append: true
+          size: "MB"
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
   test_dev:
