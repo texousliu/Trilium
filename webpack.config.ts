@@ -34,6 +34,11 @@ const config: Configuration = {
                     context: "node_modules/@excalidraw/excalidraw/dist/prod/fonts/",
                     from: "**/*",
                     to: "excalidraw/fonts/"
+                },
+                {
+                    context: "node_modules/leaflet/dist/images/",
+                    from: "**/*",
+                    to: "leaflet/images/"
                 }
             ]
         })

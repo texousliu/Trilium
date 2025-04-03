@@ -260,8 +260,8 @@ export default class GeoMapTypeWidget extends TypeWidget {
     #buildIcon(bxIconClass: string, colorClass: string, title: string) {
         return this.L.divIcon({
             html: `\
-                <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
-                <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
+                <img class="icon" src="${asset_path}/app-dist/leaflet/images/marker-icon.png" />
+                <img class="icon-shadow" src="${asset_path}/app-dist/leaflet/images/marker-shadow.png" />
                 <span class="bx ${bxIconClass} ${colorClass}"></span>
                 <span class="title-label">${title}</span>`,
             iconSize: [25, 41],
