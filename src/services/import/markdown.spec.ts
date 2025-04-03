@@ -133,4 +133,16 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("preserves &nbsp;", () => {
+        const input = `Hello&nbsp;world.`;
+        const expected = /*html*/`<p>Hello&nbsp;world.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("converts non-breaking space character to &nbsp;", () => {
+        const input = `Hello\u00a0world.`;
+        const expected = /*html*/`<p>Hello&nbsp;world.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });

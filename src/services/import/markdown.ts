@@ -87,6 +87,9 @@ function renderToHtml(content: string, title: string) {
     // Remove slash for self-closing tags to match CKEditor's approach.
     html = html.replace(/<(\w+)([^>]*)\s+\/>/g, "<$1$2>");
 
+    // Normalize non-breaking spaces to entity.
+    html = html.replaceAll("\u00a0", "&nbsp;");
+
     return html;
 }
 

@@ -226,4 +226,16 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
+    it("converts &nbsp; to character", () => {
+        const html = /*html*/`<p>Hello&nbsp;world.</p>`;
+        const expected = `Hello\u00a0world.`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("preserves non-breaking space character", () => {
+        const html = /*html*/`<p>Hello\u00adworld.</p>`;
+        const expected = `Hello\u00adworld.`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
 });
