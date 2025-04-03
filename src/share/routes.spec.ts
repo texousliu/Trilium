@@ -13,7 +13,7 @@ describe("Share API test", () => {
         initializeTranslations();
         app = (await import("../app.js")).default;
         app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-            const [errMessage] = safeExtractMessageAndStackFromError(err)
+            const [ errMessage ] = safeExtractMessageAndStackFromError(err);
             if (errMessage.includes("Cannot set headers after they are sent to the client")) {
                 cannotSetHeadersCount++;
             }
