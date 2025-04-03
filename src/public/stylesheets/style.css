@@ -1474,6 +1474,11 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 #launcher-pane {
     color: var(--launcher-pane-text-color);
     background-color: var(--launcher-pane-background-color);
+    position: relative;
+}
+
+#launcher-pane .right-dropdown-widget {
+    position: static;
 }
 
 #right-pane {
