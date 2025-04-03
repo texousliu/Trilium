@@ -48,8 +48,8 @@ jobs:
           paths: 'upload/**/*'
           onlyDiff: 'true'
           branch: 'develop'
-          header: 'Size report'
-          size: "MB"
+          header: 'Electron size report'
+          unit: "MB"
           ghToken: ${{ secrets.GITHUB_TOKEN }}
   report-server-size:
     name: Report server size
@@ -78,9 +78,8 @@ jobs:
           paths: 'upload/**/*'
           onlyDiff: 'true'
           branch: 'develop'
-          header: 'Size report'
-          append: true
-          size: "MB"
+          header: 'Server size report'
+          unit: "MB"
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
   test_dev:
