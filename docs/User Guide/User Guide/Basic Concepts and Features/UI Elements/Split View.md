@@ -11,3 +11,14 @@ In Trilium, is possible to work with two or more notes side-by-side.
 *   When at least one split is open, press the ![](https://file+.vscode-resource.vscode-cdn.net/home/elian/UI%20Elements/3_Split%20View_image.png)![](Split%20View_3_Split%20View_im.png) button next to it to close it.
 *   Use the ![](Split%20View_4_Split%20View_im.png)![](https://file+.vscode-resource.vscode-cdn.net/home/elian/UI%20Elements/4_Split%20View_image.png) or the ![](Split%20View_1_Split%20View_im.png)![](https://file+.vscode-resource.vscode-cdn.net/home/elian/UI%20Elements/1_Split%20View_image.png) button to move around the splits.
 *   Each [tab](Tabs.md) has its own split view configuration (e.g. one tab can have two notes in a split view, whereas the others are one-note views).
+    *   The tab will indicate only the title of the main note (the first one in the list).
+
+## Splits and the note tree & hoisting
+
+Clicking on the content of a split will focus that split. While focused, the [Note Tree](Note%20Tree.md) will also indicate the note that is being edited.
+
+It is possible for each of the splits to have their own [Note Hoisting](../Navigation/Note%20Hoisting.md).
+
+When a new split is created, it will share the same note hoisting as the previous one. An easy solution to this is to simply hoist the notes after the split is created.
+
+This is generally quite useful for reorganizing notes from one place to the other, by hoisting the old place in the first split and hoisting the new place to the second one. This will allow easy cut and paste without the tree jumping around from switching between notes.
