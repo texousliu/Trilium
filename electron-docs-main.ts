@@ -28,9 +28,9 @@ async function main() {
 
 async function setOptions() {
     const optionsService = (await import("./src/services/options.js")).default;
-    optionsService.setOption("eraseUnusedAttachmentsAfterSeconds", 600);
+    optionsService.setOption("eraseUnusedAttachmentsAfterSeconds", 10);
     optionsService.setOption("eraseUnusedAttachmentsAfterTimeScale", 60);
-    optionsService.setOption("compressImages", false);
+    optionsService.setOption("compressImages", "false");
 }
 
 async function createImportZip() {

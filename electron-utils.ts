@@ -3,13 +3,15 @@ import fs from "fs/promises";
 import fsExtra from "fs-extra";
 import path from "path";
 
-export async function initializeDatabase(customDbBuffer?: Buffer) {
-    const sqlInit = (await import("./src/services/sql_init.js")).default;
-
-    cls.init(() => {
-        if (!sqlInit.isDbInitialized()) {
-            sqlInit.createInitialDatabase(true, customDbBuffer);
-        }
+export function initializeDatabase(customDbBuffer?: Buffer) {
+    return new Promise<void>(async (resolve) => {
+        const sqlInit = (await import("./src/services/sql_init.js")).default;
+        cls.init(async () => {
+            if (!sqlInit.isDbInitialized()) {
+                await sqlInit.createInitialDatabase(true, customDbBuffer);
+            }
+            resolve();
+        });
     });
 }
 
