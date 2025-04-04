@@ -5,7 +5,7 @@ Generally, the Note ID is a 12-character long alphanumeric sequence (including b
 
 ## How does the import/export affect the note IDs
 
-When notes are exported, their note ID is kept in the metadata of the export. However when they are imported back in, a new note ID is generated for all the notes. This also includes other entities that are part of the import/export process such as [Attachments](../Basic%20Concepts%20and%20Features/Notes/Attachments.md).
+When notes are exported, their note ID is kept in the metadata of the export. However when they are imported back in, a new note ID is generated for all the notes. This also includes other entities that are part of the import/export process such as <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Attachments.md">Attachments</a>.
 
 ## Note collisions
 

@@ -5,7 +5,7 @@ The _File_ note type can be used to attach various external files such as images
 
 Since these files come from an external source, it is not possible to create a _File_ note type directly:
 
-*   Drag a file into the [Note Tree](../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md).
+*   Drag a file into the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>.
 *   Right click a note and select _Import into note_ and point it to one of the supported files.
 
 ## Supported file types
@@ -42,7 +42,7 @@ Interaction:
 Video files can be added in as well. The file is streamed directly, so when accessing the note from a server it doesn't have to download the entire video to start playing it.
 
 > [!CAUTION]
-> Although Trilium offers support for videos, it is generally not meant to be used with very large files. Uploading large videos will cause the [Database](../Advanced%20Usage/Database.md) to balloon as well as the any [Backup](../Installation%20%26%20Setup/Backup.md) of it. In addition to that, there might be slowdowns when first uploading the files. Otherwise, a large database should not impact the general performance of Trilium significantly.
+> Although Trilium offers support for videos, it is generally not meant to be used with very large files. Uploading large videos will cause the <a class="reference-link" href="../Advanced%20Usage/Database.md">Database</a> to balloon as well as the any <a class="reference-link" href="../Installation%20%26%20Setup/Backup.md">Backup</a> of it. In addition to that, there might be slowdowns when first uploading the files. Otherwise, a large database should not impact the general performance of Trilium significantly.
 
 ### Audio
 
@@ -63,7 +63,7 @@ Interactions:
 
 Files that are identified as containing text will show a preview of their content. One common use case for this type of file is to embed text files whose content is not necessarily of interest to the user, such as third-party libraries or generated content, that can then be downloaded if needed.
 
-Note that generally text files will be [imported](../Basic%20Concepts%20and%20Features/Import%20%26%20Export) as either [Text](Text.md) or [Code](Code.md) notes. To bypass this behavior and create a _File_ note type, use the _Import into note_ feature and uncheck _Import HTML, Markdown and TXT as text notes_, as well as _Import recognized code files as code notes_. 
+Note that generally text files will be [imported](../Basic%20Concepts%20and%20Features/Import%20%26%20Export) as either <a class="reference-link" href="Text.md">Text</a> or <a class="reference-link" href="Code.md">Code</a> notes. To bypass this behavior and create a _File_ note type, use the _Import into note_ feature and uncheck _Import HTML, Markdown and TXT as text notes_, as well as _Import recognized code files as code notes_. 
 
 Since one of the use cases for having files instead of notes is to display large files, the content preview is limited to a relatively small amount of characters. To view the full file, consider opening it in an external application.
 
@@ -75,7 +75,7 @@ If the file could not be identified as any of the supported file types from abov
 
 ## Interaction
 
-*   Regardless of the file type, a series of buttons will be displayed in the _Image_ or _File_ tab in the [Ribbon](../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md).
+*   Regardless of the file type, a series of buttons will be displayed in the _Image_ or _File_ tab in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>.
     *   _Download_, which will download the file for local use.
     *   _Open_, will will open the file with the system-default application.
     *   Upload new revision to replace the file with a new one.
@@ -84,6 +84,6 @@ If the file could not be identified as any of the supported file types from abov
 
 ## Relation with other notes
 
-*   Files are also displayed in the [Note List](../Basic%20Concepts%20and%20Features/Notes/Note%20List.md) based on their type:![](6_File_image.png)
-*   Non-image files can be embedded into text notes as read-only widgets via the [Include Note](Text/Include%20Note.md) functionality.
-*   Image files can be embedded into text notes like normal images via [Image references](Text/Images/Image%20references.md).
+*   Files are also displayed in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> based on their type:![](6_File_image.png)
+*   Non-image files can be embedded into text notes as read-only widgets via the <a class="reference-link" href="Text/Include%20Note.md">Include Note</a> functionality.
+*   Image files can be embedded into text notes like normal images via <a class="reference-link" href="Text/Images/Image%20references.md">Image references</a>.

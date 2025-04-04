@@ -6,7 +6,7 @@ When a note has one or more child notes, they will be listed at the end of the n
 By default, the notes will be displayed in a grid, however there are also some other view types available.
 
 > [!TIP]
-> Generally the view type can only be changed in a [Book](../../Note%20Types/Book.md) note from the [Ribbon](../UI%20Elements/Ribbon.md), but it can also be changed manually on any type of note using the `#viewType` attribute.
+> Generally the view type can only be changed in a <a class="reference-link" href="../../Note%20Types/Book.md">Book</a> note from the <a class="reference-link" href="../UI%20Elements/Ribbon.md">Ribbon</a>, but it can also be changed manually on any type of note using the `#viewType` attribute.
 
 ### Grid view
 
@@ -14,9 +14,9 @@ By default, the notes will be displayed in a grid, however there are also some o
 
 This view presents the child notes in a grid format, allowing for a more visual navigation experience.
 
-*   For [Text](../../Note%20Types/Text.md) note, the text can be slighly scrollable via the mouse wheel to reveal more context.
-*   For [Code](../../Note%20Types/Code.md) notes, syntax highlighting is applied.
-*   For [File](../../Note%20Types/File.md) notes, a preview is made available for audio, video and PDF notes.
+*   For <a class="reference-link" href="../../Note%20Types/Text.md">Text</a> notes, the text can be slighly scrollable via the mouse wheel to reveal more context.
+*   For <a class="reference-link" href="../../Note%20Types/Code.md">Code</a> notes, syntax highlighting is applied.
+*   For <a class="reference-link" href="../../Note%20Types/File.md">File</a> notes, a preview is made available for audio, video and PDF notes.
 *   If the note does not have a content, a list of its child notes will be displayed instead.
 
 This is the default view type.
@@ -31,4 +31,4 @@ In the list view mode, each note is displayed in a single row with only the titl
 
 ![](2_Note%20List_image.png)
 
-In the calendar view, child notes are represented as events, with a start date and optionally an end date. The view also has interaction support such as moving or creating new events. See [Calendar View](Note%20List/Calendar%20View.md) for more information.
+In the calendar view, child notes are represented as events, with a start date and optionally an end date. The view also has interaction support such as moving or creating new events. See <a class="reference-link" href="Note%20List/Calendar%20View.md">Calendar View</a> for more information.

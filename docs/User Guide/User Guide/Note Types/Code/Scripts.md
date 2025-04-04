@@ -12,7 +12,7 @@ So we have frontend and backend, each with their own set of responsibilities, bu
 
 ## Use cases
 
-*   [A button launcher button](Scripts/New%20Task%20launcher%20button.md)
+*   <a class="reference-link" href="Scripts/New%20Task%20launcher%20button.md">"New Task" launcher button</a>
 
 ## Action handler
 
@@ -30,12 +30,12 @@ The solution is marked by red circle at the bottom - this note has [label](../..
 
 ## More showcases
 
-You can see more scripting with explanation in [Advanced showcases](../../Advanced%20Usage/Advanced%20Showcases.md)
+You can see more scripting with explanation in <a class="reference-link" href="../../Advanced%20Usage/Advanced%20Showcases.md">Advanced Showcases</a>.
 
 ## Events
 
-See [Events](Events.md).
+See <a class="reference-link" href="Events.md">Events</a>.
 
 ## Script API
 
-See [Script API](Script%20API.md).
+See <a class="reference-link" href="Script%20API.md">Script API</a>.

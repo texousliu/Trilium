@@ -1,10 +1,10 @@
 # "New Task" launcher button
-In this example we are going to extend the functionality of the [Task Manager](../../../Advanced%20Usage/Advanced%20Showcases/Task%20Manager.md) showcase (which comes by default with Trilium) by adding a button in the [Launch Bar](../../../Basic%20Concepts%20and%20Features/UI%20Elements/Launch%20Bar.md)  (![](New%20Task%20launcher%20button_i.png)) to create a new task automatically and open it.
+In this example we are going to extend the functionality of <a class="reference-link" href="../../../Advanced%20Usage/Advanced%20Showcases/Task%20Manager.md">Task Manager</a> showcase (which comes by default with Trilium) by adding a button in the <a class="reference-link" href="../../../Basic%20Concepts%20and%20Features/UI%20Elements/Launch%20Bar.md">Launch Bar</a>  (![](New%20Task%20launcher%20button_i.png)) to create a new task automatically and open it.
 
 ## Creating the note
 
-1.  First, create a new [Code](../../Code.md) note type with the _JS frontend_ language.
-2.  Define the `#run=frontendStartup` label in [Attributes](../../../Advanced%20Usage/Attributes.md).
+1.  First, create a new <a class="reference-link" href="../../Code.md">Code</a> note type with the _JS frontend_ language.
+2.  Define the `#run=frontendStartup` label in <a class="reference-link" href="../../../Advanced%20Usage/Attributes.md">Attributes</a>.
 
 ## Content of the script
 
@@ -34,7 +34,7 @@ Since we set the script to be run on start-up, all we need to do is to [refresh 
 
 ## Understanding how the script works
 
-<table class="ck-table-resized"><colgroup><col style="width:53.57%;"><col style="width:46.43%;"></colgroup><tbody><tr><td><pre><code class="language-application-javascript-env-frontend">api.addButtonToToolbar({
+<table class="ck-table-resized"><colgroup><col style="width:50%;"><col style="width:50%;"></colgroup><tbody><tr><td><pre><code class="language-application-javascript-env-frontend">api.addButtonToToolbar({
 	title: "New task",
     icon: "task",
     shortcut: "alt+n",

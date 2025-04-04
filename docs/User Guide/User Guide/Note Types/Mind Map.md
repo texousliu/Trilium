@@ -19,6 +19,6 @@ The mindmap allows for easy jotting down of ideas and storing them in a hierarch
 *   To select one or more notes, drag and drop across the map.
 *   Right click the node to bring a contextual menu with options such as creating new nodes, focusing on a particular notes or creating links between them.
 *   Use the buttons at the top-left to change the positioning of the nodes relative to the root node (to the left, to the right, or to both sides).
-*   In the [Floating buttons](../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md) area:
+*   In the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md">Floating buttons</a> area:
     *   An [image reference](Text/Images/Image%20references.md) can be copied, to paste the mind map in a text note.
     *   The diagram can be exported either as SVG (vectorial) or PNG (raster).

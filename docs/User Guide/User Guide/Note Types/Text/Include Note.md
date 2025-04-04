@@ -3,4 +3,4 @@ Text notes can "include" another note as a read-only widget. This can be useful 
 
 ## Including a note
 
-In the [Formatting toolbar](Formatting%20toolbar.md), look for the ![](Include%20Note_image.png) button. There is also a keyboard shortcut defined for it but it is not allocated by default.
+In the <a class="reference-link" href="Formatting%20toolbar.md">Formatting toolbar</a>, look for the ![](Include%20Note_image.png) button. There is also a keyboard shortcut defined for it but it is not allocated by default.
