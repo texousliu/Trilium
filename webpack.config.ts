@@ -121,6 +121,11 @@ const config: Configuration = {
             stylesheets: path.resolve(rootDir, "src/public/stylesheets")
         }
     },
+    stats: {
+        all: false,
+        assets: true,
+        groupAssetsByChunk: true
+    },
     devtool: "nosources-source-map",
     target: "electron-renderer"
 };

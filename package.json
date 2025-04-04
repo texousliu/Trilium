@@ -46,6 +46,7 @@
     "docs:build-frontend": "rimraf ./docs/frontend_api && jsdoc -c jsdoc-conf.json -d ./docs/frontend_api src/public/app/entities/*.js src/public/app/services/frontend_script_api.js src/public/app/widgets/basic_widget.js src/public/app/widgets/note_context_aware_widget.js src/public/app/widgets/right_panel_widget.js",
     "docs:build": "npm run docs:build-backend && npm run docs:build-frontend",
     "build:webpack": "tsx node_modules/webpack/bin/webpack.js -c webpack.config.ts --progress",
+    "build:webpack-stats": "tsx node_modules/webpack/bin/webpack.js -c webpack.config.ts --profile --json=webpack-stats.json",
     "build:ts": "tsc -p tsconfig.build.json",
     "build:clean": "rimraf ./dist ./build",
     "build:prepare-dist": "npm run build:clean && npm run build:ts && npm run build:webpack && tsx ./bin/copy-dist.ts",

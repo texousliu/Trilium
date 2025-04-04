@@ -45,3 +45,6 @@ data-docs/log
 data-docs/session
 data-docs/session_secret.txt
 data-docs/document.*
+
+# Webpack
+webpack-stats.json
