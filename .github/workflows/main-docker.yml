@@ -133,7 +133,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update build info
-        shell: ${{ inputs.shell }}
         run: npm run chore:update-build-info
 
       - name: Docker meta
