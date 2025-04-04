@@ -1428,6 +1428,80 @@
                                 },
                                 {
                                     "isClone": false,
+                                    "noteId": "3seOhtN8uLIY",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Vc8PjrjAGuOp",
+                                        "3seOhtN8uLIY"
+                                    ],
+                                    "title": "Tabs",
+                                    "notePosition": 50,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-dock-top",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "luNhaphA37EO",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "x0JgW8UqGXvq",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "oPVyFC7WL2Lp",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "html",
+                                    "dataFileName": "Tabs.html",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "b4aCeUxoyA9k",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Tabs_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "bSaBdT5sH1S7",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "1_Tabs_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "HffqAHhqe69i",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "2_Tabs_image.png"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "isClone": false,
                                     "noteId": "xYmIYSP6wE3F",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
@@ -1436,7 +1510,7 @@
                                         "xYmIYSP6wE3F"
                                     ],
                                     "title": "Launch Bar",
-                                    "notePosition": 80,
+                                    "notePosition": 90,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1529,7 +1603,7 @@
                                         "Ms1nauBra7gq"
                                     ],
                                     "title": "Quick search",
-                                    "notePosition": 90,
+                                    "notePosition": 100,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1557,7 +1631,7 @@
                                         "8YBEPzcpUgxw"
                                     ],
                                     "title": "Note buttons",
-                                    "notePosition": 100,
+                                    "notePosition": 110,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1622,7 +1696,7 @@
                                         "4TIF1oA4VQRO"
                                     ],
                                     "title": "Options",
-                                    "notePosition": 110,
+                                    "notePosition": 120,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1650,7 +1724,7 @@
                                         "luNhaphA37EO"
                                     ],
                                     "title": "Split View",
-                                    "notePosition": 120,
+                                    "notePosition": 130,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -1662,6 +1736,13 @@
                                             "value": "bx bx-dock-right",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "3seOhtN8uLIY",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "html",
