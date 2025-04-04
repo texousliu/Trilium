@@ -18,4 +18,4 @@ config:
 
 | With ELK off | With ELK on |
 | --- | --- |
-| ![](Mermaid%20Diagrams/ELK%20off.txt) | ![](Mermaid%20Diagrams/ELK%20on.txt) |
+| ![](Mermaid%20Diagrams_ELK%20off.svg) | ![](Mermaid%20Diagrams_ELK%20on.svg) |

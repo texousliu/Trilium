@@ -4772,20 +4772,6 @@
                             "mime": "text/html",
                             "attributes": [
                                 {
-                                    "type": "relation",
-                                    "name": "imageLink",
-                                    "value": "r44dpvA1xFu8",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "imageLink",
-                                    "value": "opAFABmyb3CU",
-                                    "isInheritable": false,
-                                    "position": 20
-                                },
-                                {
                                     "type": "label",
                                     "name": "shareAlias",
                                     "value": "mermaid-diagrams",
@@ -4802,7 +4788,24 @@
                             ],
                             "format": "html",
                             "dataFileName": "Mermaid Diagrams.html",
-                            "attachments": [],
+                            "attachments": [
+                                {
+                                    "attachmentId": "0giz1mqLMRDs",
+                                    "title": "ELK off.svg",
+                                    "role": "image",
+                                    "mime": "image/svg+xml",
+                                    "position": 10,
+                                    "dataFileName": "Mermaid Diagrams_ELK off.svg"
+                                },
+                                {
+                                    "attachmentId": "IKxo3tblVDHq",
+                                    "title": "ELK on.svg",
+                                    "role": "image",
+                                    "mime": "image/svg+xml",
+                                    "position": 10,
+                                    "dataFileName": "Mermaid Diagrams_ELK on.svg"
+                                }
+                            ],
                             "dirFileName": "Mermaid Diagrams",
                             "children": [
                                 {
