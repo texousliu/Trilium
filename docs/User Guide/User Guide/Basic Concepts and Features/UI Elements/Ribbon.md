@@ -15,7 +15,7 @@ If you are using the _Fixed_ formatting toolbar, all the formatting buttons for 
 
 ### Basic Properties
 
-*   _**Note type**_ allows changing the [note type](../../Note%20Types) of a note.
+*   _**Note type**_ allows changing the [note type](../../Note%20Types.md) of a note.
     *   Generally this is desirable only if the note is empty.
     *   As a more advanced use, it's possible to change the note type in order to modify the [source code](../../Advanced%20Usage/Note%20source.md) of a note.
 *   _**Protect the note**_ toggles whether the current note is encrypted and accessible only by entering the protected session. See [Protected Notes](../Notes/Protected%20Notes.md) for more information.
@@ -55,7 +55,7 @@ This section lists all the notes that are similar to the current one. See [Simi
 This section displays information about the current note:
 
 *   The [internal ID](../../Advanced%20Usage/Note%20ID.md) of the note.
-*   The [type of the note](../../Note%20Types), as well as its MIME type (used mostly for exporting notes).
+*   The [type of the note](../../Note%20Types.md), as well as its MIME type (used mostly for exporting notes).
 *   The created and modification dates.
 *   The estimated size of the note in the [Database](../../Advanced%20Usage/Database.md), as well as its children count and size.
 

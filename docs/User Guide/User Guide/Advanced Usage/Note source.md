@@ -1,7 +1,7 @@
 # Note source
 ## Understanding the source code of the different notes
 
-Internally, the structure of the content of each note is different based on the [Note Types](../Note%20Types).
+Internally, the structure of the content of each note is different based on the [Note Types](../Note%20Types.md).
 
 For example:
 
@@ -21,7 +21,7 @@ Here's part of the HTML representation of this note, as it's stored in the datab
 </h2>
 <p>
 	Internally, the structure of the content of each note is different based on the&nbsp;
-	<a class="reference-link" href="../Note%20Types">
+	<a class="reference-link" href="../Note%20Types.md">
 		Note Types
 	</a>
 	.
