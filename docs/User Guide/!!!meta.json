@@ -5246,11 +5246,34 @@
                                     "value": "bx bx-sitemap",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "XpOYSgsLkTJy",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "0Ofbk1aSuVRu",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",
                             "dataFileName": "Mind Map.md",
-                            "attachments": []
+                            "attachments": [
+                                {
+                                    "attachmentId": "Od9jIuQHijXH",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "Mind Map_image.png"
+                                }
+                            ]
                         },
                         {
                             "isClone": false,
