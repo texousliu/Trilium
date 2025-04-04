@@ -1,12 +1,44 @@
 # Read-Only Notes
-Both [text](../../Note%20Types/Text.md) and [code](../../Note%20Types/Code.md) notes in Trilium can be set to read-only. When a note is in read-only mode, it is presented to the user in a non-editable view, with the option to switch to editing mode if needed.
+Some note types such as [Text](../../Note%20Types/Text.md) and [Code](../../Note%20Types/Code.md) notes in Trilium can be set to read-only. When a note is in read-only mode, it is presented to the user in a non-editable view, with the option to switch to editing mode if needed.
 
-## Setting Read-Only Mode with a Label
-
-To set a note as read-only, add the `readOnly` [label](../../Advanced%20Usage/Attributes.md) to the note.
-
-## Automatic Read-Only Mode
+## Automatic read-only mode
 
 For optimization purposes, Trilium will automatically set very large notes to read-only. Displaying such lengthy notes in editing mode can slow down performance, especially when editing is unnecessary.
 
-If you want to ensure that a specific note remains editable regardless of its size, you can add the `autoReadOnlyDisabled` [label](../../Advanced%20Usage/Attributes.md) to the note.
+This behavior can be disabled on a per-note basis, by following the instructions of the next section.
+
+In addition, it's possible to change the number of characters at which the automatic read-only mode will trigger in [Options](../UI%20Elements/Options.md) by going to the options for [Text](../../Note%20Types/Text.md) and [Code](../../Note%20Types/Code.md) notes.
+
+## Changing a note's read-only behavior
+
+Via the [Ribbon](../UI%20Elements/Ribbon.md), by going to the _Basic Properties_ tab and looking for the _Editable_ selection. The following options are possible:
+
+*   **Auto**  
+    This is the default behavior in which the note will be editable by default, unless it becomes large enough to trigger read-only mode.
+    
+*   **Read-only**  
+    The note will be always marked as read-only, regardless of its size. Nevertheless, it's still possible to temporarily edit the note if needed. This is generally useful for notes that are not prone to change.
+    
+*   **Always Editable**  
+    This option will bypass the automatic read-only activation for this particular note. It's useful for large notes that are frequently edited.
+
+If the _Editable_ section is missing from the ribbon, then the note type does not support read-only mode.
+
+### Manually setting the options
+
+Apart from using the ribbon as previously mentioned, it's also possible to use [labels](../../Advanced%20Usage/Attributes.md) to change the behavior:
+
+*   To set as read-only, apply the `readOnly` label to the note.
+*   To disable automatic read-only (always editable), apply the `autoReadOnlyDisabled` label.
+
+## Temporarily editing a read-only note
+
+When accessing a read-only note, it's possible to temporarily edit it by using the ![](Read-Only%20Notes_image.png) button in the [Floating buttons](../UI%20Elements/Floating%20buttons.md) area.
+
+When pressed, the note will become editable but will become read-only again after navigating to a different note.
+
+## Special read-only behavior
+
+Some note types have a special behavior based on whether the read-only mode is enabled:
+
+*   [Mermaid Diagrams](#root/rswjxUmAz64R/aOI0RYfC3wic/ObWG9tSNscDb) will hide the Mermaid source code and display the diagram preview in full-size. In this case, the read-only mode can be easily toggled on or off via a dedicated button in the [Floating buttons](../UI%20Elements/Floating%20buttons.md) area.

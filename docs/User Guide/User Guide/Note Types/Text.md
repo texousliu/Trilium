@@ -13,14 +13,7 @@ The Trilium text note interface does not display toolbars or formatting options 
 
 ## Read-Only vs. Editing Mode
 
-Text notes are usually opened in edit mode. However, they may open in read-only mode under the following circumstances:
-
-*   The note is long and would take time to load, so it is opened in read-only mode by default for quicker access.
-*   The note has a `readOnly` [label](../Advanced%20Usage/Attributes.md).
-
-In both cases, it is possible to switch back to editable mode using the ![](Text_bx-edit-alt.svg)button at top right of page.
-
-For more information, see [Read-Only Notes](../Basic%20Concepts%20and%20Features/Notes/Read-Only%20Notes.md).
+Text notes are usually opened in edit mode. However, they may open in read-only mode if the note is too big or the note is explicitly marked as read-only. For more information, see [Read-Only Notes](../Basic%20Concepts%20and%20Features/Notes/Read-Only%20Notes.md).
 
 ## General Formatting
 
