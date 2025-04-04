@@ -8,11 +8,13 @@ import dialogService from "../../services/dialog.js";
 import type { EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import attributes from "../../services/attributes.js";
-import asset_path from "../../../../services/asset_path.js";
 import openContextMenu from "./geo_map_context_menu.js";
 import link from "../../services/link.js";
 import note_tooltip from "../../services/note_tooltip.js";
 import appContext from "../../components/app_context.js";
+
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
 
 const TPL = /*html*/`\
 <div class="note-detail-geo-map note-detail-printable">
@@ -259,9 +261,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     #buildIcon(bxIconClass: string, colorClass: string, title: string) {
         return this.L.divIcon({
-            html: `\
-                <img class="icon" src="${asset_path}/app-dist/leaflet/images/marker-icon.png" />
-                <img class="icon-shadow" src="${asset_path}/app-dist/leaflet/images/marker-shadow.png" />
+            html: /*html*/`\
+                <img class="icon" src="${markerIcon}" />
+                <img class="icon-shadow" src="${markerIconShadow}" />
                 <span class="bx ${bxIconClass} ${colorClass}"></span>
                 <span class="title-label">${title}</span>`,
             iconSize: [25, 41],
