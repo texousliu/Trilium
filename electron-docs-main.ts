@@ -103,6 +103,7 @@ async function registerHandlers() {
     const events = (await import("./src/services/events.js")).default;
     const eraseService = (await import("./src/services/erase.js")).default;
     const debouncer = debounce(async () => {
+        eraseService.eraseUnusedAttachmentsNow();
         await exportData("markdown", markdownPath);
         await exportData("html", htmlPath);
     }, 10_000);
