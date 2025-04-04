@@ -1639,6 +1639,75 @@
                                     "format": "html",
                                     "dataFileName": "Options.html",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "luNhaphA37EO",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Vc8PjrjAGuOp",
+                                        "luNhaphA37EO"
+                                    ],
+                                    "title": "Split View",
+                                    "notePosition": 120,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-dock-right",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
+                                    "format": "html",
+                                    "dataFileName": "Split View.html",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "9plNhrKyZaXM",
+                                            "title": "3_Split View_image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Split View_3_Split View_im.png"
+                                        },
+                                        {
+                                            "attachmentId": "Lk0PrljxWYRp",
+                                            "title": "4_Split View_image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Split View_4_Split View_im.png"
+                                        },
+                                        {
+                                            "attachmentId": "Lt1OZVfsht6I",
+                                            "title": "Split View_image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Split View_Split View_imag.png"
+                                        },
+                                        {
+                                            "attachmentId": "qm9Dn3TD1w4k",
+                                            "title": "2_Split View_image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Split View_2_Split View_im.png"
+                                        },
+                                        {
+                                            "attachmentId": "UFITv6o2d4QN",
+                                            "title": "1_Split View_image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Split View_1_Split View_im.png"
+                                        }
+                                    ]
                                 }
                             ]
                         },
