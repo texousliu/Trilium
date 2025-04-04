@@ -12,7 +12,7 @@ By default, the notes will be displayed in a grid, however there are also some o
 
 ![](1_Note%20List_image.png)
 
-The title and a short snippet of the content of the note will be displayed in a grid format.
+This view presents the child notes in a grid format, allowing for a more visual navigation experience.
 
 *   For [Text](../../Note%20Types/Text.md) note, the text can be slighly scrollable via the mouse wheel to reveal more context.
 *   For [Code](../../Note%20Types/Code.md) notes, syntax highlighting is applied.
@@ -31,4 +31,4 @@ In the list view mode, each note is displayed in a single row with only the titl
 
 ![](2_Note%20List_image.png)
 
-In the calendar view, child notes are represented as events, with a start date and optionally an end date. The view also has interaction support such as moving or creating new events. See [Calendar View](../../Note%20Types/Book/Calendar%20View.md) for more information.
+In the calendar view, child notes are represented as events, with a start date and optionally an end date. The view also has interaction support such as moving or creating new events. See [Calendar View](Note%20List/Calendar%20View.md) for more information.

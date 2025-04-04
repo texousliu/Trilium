@@ -7,14 +7,8 @@ In the example above, the "node.js" note on the left panel contains several chil
 
 ## Features
 
-### Linear Display
-
 The Book Note format compiles the contents of all child notes into one continuous view. This makes it ideal for reading extensive information broken into smaller, manageable segments.
 
-### Grid View Option
+It uses the [Note List](../Basic%20Concepts%20and%20Features/Notes/Note%20List.md) mechanism to display the child notes, allowing the use of any of the view types (grid, list, calendar).
 
-Trilium also offers a "Grid View" option within the Book Note properties. This view presents the child notes in a grid format, allowing for a more visual navigation experience.
-
-![](Book_image.png)
-
-Switching between these views can be easily managed through the Book Note's settings (or `viewType` attribute), allowing users to choose the format that best suits their reading or navigation preferences.
+To adjust the view type, see the dedicated _Book_ tab in the [Ribbon](../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md).
