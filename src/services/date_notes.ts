@@ -28,7 +28,11 @@ const MONTH_LABEL = "monthNote";
 const WEEK_LABEL = "weekNote";
 const DATE_LABEL = "dateNote";
 
-const WEEKDAY_TRANSLATION_IDS = [ "weekdays.sunday", "weekdays.monday", "weekdays.tuesday", "weekdays.wednesday", "weekdays.thursday", "weekdays.friday", "weekdays.saturday", "weekdays.sunday" ];
+const WEEKDAY_TRANSLATION_IDS = [
+    "weekdays.sunday", "weekdays.monday", "weekdays.tuesday",
+    "weekdays.wednesday", "weekdays.thursday", "weekdays.friday",
+    "weekdays.saturday", "weekdays.sunday"
+];
 
 const MONTH_TRANSLATION_IDS = [
     "months.january",
@@ -50,9 +54,11 @@ type TimeUnit = "year" | "quarter" | "month" | "week" | "day";
 const baseReplacements = {
     year: [ "year" ],
     quarter: [ "quarterNumber", "shortQuarter" ],
-    month: [ "isoMonth", "monthNumber", "monthNumberPadded", "month", "shortMonth3", "shortMonth4" ],
+    month: [ "isoMonth", "monthNumber", "monthNumberPadded",
+        "month", "shortMonth3", "shortMonth4" ],
     week: [ "weekNumber", "weekNumberPadded", "shortWeek", "shortWeek3" ],
-    day: [ "isoDate", "dateNumber", "dateNumberPadded", "ordinal", "weekDay", "weekDay3", "weekDay2" ]
+    day: [ "isoDate", "dateNumber", "dateNumberPadded",
+        "ordinal", "weekDay", "weekDay3", "weekDay2" ]
 };
 
 function getTimeUnitReplacements(timeUnit: TimeUnit): string[] {
@@ -78,7 +84,12 @@ async function ordinal(date: Dayjs, lng: string) {
     return dayjs(date).locale(dayjsLocale).format("Do");
 }
 
-async function getJournalNoteTitle(rootNote: BNote, timeUnit: TimeUnit, dateObj: Dayjs, number: number) {
+async function getJournalNoteTitle(
+    rootNote: BNote,
+    timeUnit: TimeUnit,
+    dateObj: Dayjs,
+    number: number
+) {
     const patterns = {
         year: rootNote.getOwnedLabelValue("yearPattern") || "{year}",
         quarter: rootNote.getOwnedLabelValue("quarterPattern") || t("quarterNumber"),
@@ -144,7 +155,8 @@ function createNote(parentNote: BNote, noteTitle: string) {
         parentNoteId: parentNote.noteId,
         title: noteTitle,
         content: "",
-        isProtected: parentNote.isProtected && protectedSessionService.isProtectedSessionAvailable(),
+        isProtected: parentNote.isProtected &&
+         protectedSessionService.isProtectedSessionAvailable(),
         type: "text"
     }).note;
 }
@@ -155,7 +167,9 @@ function getRootCalendarNote(): BNote {
     const workspaceNote = hoistedNoteService.getWorkspaceNote();
 
     if (!workspaceNote || !workspaceNote.isRoot()) {
-        rootNote = searchService.findFirstNoteWithQuery("#workspaceCalendarRoot", new searchContext({ ignoreHoistedNote: false }));
+        rootNote = searchService.findFirstNoteWithQuery(
+            "#workspaceCalendarRoot", new searchContext({ ignoreHoistedNote: false })
+        );
     }
 
     if (!rootNote) {
@@ -186,7 +200,9 @@ function getYearNote(dateStr: string, _rootNote: BNote | null = null): BNote {
 
     const yearStr = dateStr.trim().substring(0, 4);
 
-    let yearNote = searchService.findFirstNoteWithQuery(`#${YEAR_LABEL}="${yearStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId }));
+    let yearNote = searchService.findFirstNoteWithQuery(
+        `#${YEAR_LABEL}="${yearStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId })
+    );
 
     if (yearNote) {
         return yearNote;
@@ -217,7 +233,9 @@ async function getQuarterNote(quarterStr: string, _rootNote: BNote | null = null
 
     quarterStr = quarterStr.trim().substring(0, 7);
 
-    let quarterNote = searchService.findFirstNoteWithQuery(`#${QUARTER_LABEL}="${quarterStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId }));
+    let quarterNote = searchService.findFirstNoteWithQuery(
+        `#${QUARTER_LABEL}="${quarterStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId })
+    );
 
     if (quarterNote) {
         return quarterNote;
@@ -229,7 +247,9 @@ async function getQuarterNote(quarterStr: string, _rootNote: BNote | null = null
     const quarterStartDate = dayjs().year(parseInt(yearStr)).month(firstMonth).date(1);
 
     const yearNote = getYearNote(yearStr, rootNote);
-    const noteTitle = await getJournalNoteTitle(rootNote, "quarter", quarterStartDate, quarterNumber);
+    const noteTitle = await getJournalNoteTitle(
+        rootNote, "quarter", quarterStartDate, quarterNumber
+    );
 
     sql.transactional(() => {
         quarterNote = createNote(yearNote, noteTitle);
@@ -240,7 +260,9 @@ async function getQuarterNote(quarterStr: string, _rootNote: BNote | null = null
         const quarterTemplateAttr = rootNote.getOwnedAttribute("relation", "quarterTemplate");
 
         if (quarterTemplateAttr) {
-            attributeService.createRelation(quarterNote.noteId, "template", quarterTemplateAttr.value);
+            attributeService.createRelation(
+                quarterNote.noteId, "template", quarterTemplateAttr.value
+            );
         }
     });
 
@@ -253,7 +275,9 @@ async function getMonthNote(dateStr: string, _rootNote: BNote | null = null): Pr
     const monthStr = dateStr.substring(0, 7);
     const monthNumber = dateStr.substring(5, 7);
 
-    let monthNote = searchService.findFirstNoteWithQuery(`#${MONTH_LABEL}="${monthStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId }));
+    let monthNote = searchService.findFirstNoteWithQuery(
+        `#${MONTH_LABEL}="${monthStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId })
+    );
 
     if (monthNote) {
         return monthNote;
@@ -267,7 +291,9 @@ async function getMonthNote(dateStr: string, _rootNote: BNote | null = null): Pr
         monthParentNote = getYearNote(dateStr, rootNote);
     }
 
-    const noteTitle = await getJournalNoteTitle(rootNote, "month", dayjs(dateStr), parseInt(monthNumber));
+    const noteTitle = await getJournalNoteTitle(
+        rootNote, "month", dayjs(dateStr), parseInt(monthNumber)
+    );
 
     sql.transactional(() => {
         monthNote = createNote(monthParentNote, noteTitle);
@@ -303,7 +329,8 @@ function getWeekStartDate(date: Dayjs): Dayjs {
 // Maybe can be merged later in monorepo setup
 function getWeekNumberStr(date: Dayjs): string {
     const year = date.year();
-    const dayOfWeek = (day: number) => (day - parseInt(optionService.getOption("firstDayOfWeek")) + 7) % 7;
+    const dayOfWeek = (day: number) =>
+        (day - parseInt(optionService.getOption("firstDayOfWeek")) + 7) % 7;
 
     // Get first day of the year and adjust to first week start
     const jan1 = date.clone().year(year).month(0).date(1);
@@ -382,7 +409,9 @@ async function getWeekNote(weekStr: string, _rootNote: BNote | null = null): Pro
 
     weekStr = weekStr.trim().substring(0, 8);
 
-    let weekNote = searchService.findFirstNoteWithQuery(`#${WEEK_LABEL}="${weekStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId }));
+    let weekNote = searchService.findFirstNoteWithQuery(
+        `#${WEEK_LABEL}="${weekStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId })
+    );
 
     if (weekNote) {
         return weekNote;
@@ -429,7 +458,9 @@ async function getDayNote(dateStr: string, _rootNote: BNote | null = null): Prom
 
     dateStr = dateStr.trim().substring(0, 10);
 
-    let dateNote = searchService.findFirstNoteWithQuery(`#${DATE_LABEL}="${dateStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId }));
+    let dateNote = searchService.findFirstNoteWithQuery(
+        `#${DATE_LABEL}="${dateStr}"`, new searchContext({ ancestorNoteId: rootNote.noteId })
+    );
 
     if (dateNote) {
         return dateNote;
@@ -444,7 +475,9 @@ async function getDayNote(dateStr: string, _rootNote: BNote | null = null): Prom
     }
 
     const dayNumber = dateStr.substring(8, 10);
-    const noteTitle = await getJournalNoteTitle(rootNote, "day", dayjs(dateStr), parseInt(dayNumber));
+    const noteTitle = await getJournalNoteTitle(
+        rootNote, "day", dayjs(dateStr), parseInt(dayNumber)
+    );
 
     sql.transactional(() => {
         dateNote = createNote(dateParentNote as BNote, noteTitle);
