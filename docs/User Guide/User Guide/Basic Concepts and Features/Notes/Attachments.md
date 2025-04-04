@@ -6,3 +6,7 @@ This can be especially useful to include dependencies for your [scripts](../../N
 Each note exclusively owns its attachments, meaning attachments cannot be shared or linked from one note to another. If an attachment link is copied to a different note, the attachment itself is duplicated, and the copies are managed independently thereafter.
 
 Attachments, especially image files, are the recommended method for embedding visuals in notes. It is important to link image attachments within the text of the owning note; otherwise, they will be automatically deleted after a configurable timeout period if not referenced.
+
+## Attachment previews
+
+Attachments share the same content preview for images, videos, PDFs, etc. as the [File](../../Note%20Types/File.md) note type.
