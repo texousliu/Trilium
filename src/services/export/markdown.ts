@@ -162,9 +162,9 @@ function buildInlineLinkFilter(): Rule {
     return {
         filter: function (node, options) {
             return (
-            options.linkStyle === 'inlined' &&
-            node.nodeName === 'A' &&
-            !!node.getAttribute('href')
+                options.linkStyle === 'inlined' &&
+                node.nodeName === 'A' &&
+                !!node.getAttribute('href')
             )
         },
 
@@ -178,9 +178,9 @@ function buildInlineLinkFilter(): Rule {
 
             // Otherwise treat as normal.
             // TODO: Call super() somehow instead of duplicating the implementation.
-            var href = node.getAttribute('href')
+            let href = node.getAttribute('href')
             if (href) href = href.replace(/([()])/g, '\\$1')
-            var title = cleanAttribute(node.getAttribute('title'))
+            let title = cleanAttribute(node.getAttribute('title'))
             if (title) title = ' "' + title.replace(/"/g, '\\"') + '"'
             return '[' + content + '](' + href + title + ')'
         }
