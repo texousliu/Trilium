@@ -5,7 +5,7 @@ Organization is an important aspect of managing a knowledge base. When developin
 
 As such, the first step is to create a new note to gather all the themes.
 
-![](1_Creating%20a%20custom%20theme_5_.png)
+![](Creating%20a%20custom%20theme_5_.png)
 
 ## Step 2. Create the theme
 

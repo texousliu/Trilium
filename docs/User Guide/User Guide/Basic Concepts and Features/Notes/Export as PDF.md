@@ -17,7 +17,7 @@ Note that if you are using Linux with the GNOME desktop environment, sometimes t
 
 To solve this, you can change the recommended application for PDFs via this command line. First, list the available applications via `gio mime application/pdf` and then set the desired one. For example to use GNOME's Evince:
 
-```sh
+```
 gio mime application/pdf
 ```
 
