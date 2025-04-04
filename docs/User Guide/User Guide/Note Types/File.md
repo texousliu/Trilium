@@ -82,8 +82,8 @@ If the file could not be identified as any of the supported file types from abov
 *   It is **not** possible to change the note type of a _File_ note.
 *   Convert into an [attachment](../Basic%20Concepts%20and%20Features/Notes/Attachments.md) from the [note menu](../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20buttons.md).
 
-## Note list
+## Relation with other notes
 
-Files are also displayed in the [Note List](../Basic%20Concepts%20and%20Features/Notes/Note%20List.md) based on their type:
-
-![](6_File_image.png)
+*   Files are also displayed in the [Note List](../Basic%20Concepts%20and%20Features/Notes/Note%20List.md) based on their type:![](6_File_image.png)
+*   Non-image files can be embedded into text notes as read-only widgets via the [Include Note](Text/Include%20Note.md) functionality.
+*   Image files can be embedded into text notes like normal images via [Image references](Text/Images/Image%20references.md).

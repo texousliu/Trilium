@@ -4594,6 +4594,13 @@
                                                     "value": "s8alTXmpFR61",
                                                     "isInheritable": false,
                                                     "position": 70
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bxs-file-image",
+                                                    "isInheritable": false,
+                                                    "position": 80
                                                 }
                                             ],
                                             "format": "markdown",
@@ -4621,6 +4628,43 @@
                                 },
                                 {
                                     "isClone": false,
+                                    "noteId": "nBAXQFj20hS1",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "KSZ04uQ2D1St",
+                                        "iPIMuisry3hd",
+                                        "nBAXQFj20hS1"
+                                    ],
+                                    "title": "Include Note",
+                                    "notePosition": 60,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "nRhnJkTT8cPs",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Include Note.md",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "GoLuBbQUYIQE",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Include Note_image.png"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "isClone": false,
                                     "noteId": "QEAPj01N5f7w",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
@@ -4629,7 +4673,7 @@
                                         "QEAPj01N5f7w"
                                     ],
                                     "title": "Links",
-                                    "notePosition": 60,
+                                    "notePosition": 70,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -4685,7 +4729,7 @@
                                         "S6Xx8QIWTV66"
                                     ],
                                     "title": "Lists",
-                                    "notePosition": 70,
+                                    "notePosition": 80,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5931,6 +5975,13 @@
                                     "value": "0ESUbbAxVnoK",
                                     "isInheritable": false,
                                     "position": 120
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "nBAXQFj20hS1",
+                                    "isInheritable": false,
+                                    "position": 130
                                 }
                             ],
                             "format": "markdown",
