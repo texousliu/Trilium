@@ -23,6 +23,7 @@ It's possible to switch between the two layouts at any time by pressing the ![](
     *   The preview can be moved around by holding the left mouse button and dragging.
     *   Zooming can also be done by using the scroll wheel.
     *   The zoom and position on the preview will remain fixed as the diagram changes, to be able to work more easily with large diagrams.
+*   The size of the source/preview panes can be adjusted by hovering over the border between them and dragging it with the mouse.
 *   In the [Floating buttons](../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md) area:
     *   The source/preview can be laid out left-right or bottom-top via the _Move editing pane to the left / bottom_ option.
     *   Press _Lock editing_ to automatically mark the note as read-only. In this mode, the code pane is hidden and the diagram is displayed full-size. Similarly, press _Unlock editing_ to mark a read-only note as editable.
