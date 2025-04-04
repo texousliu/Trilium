@@ -68,7 +68,7 @@ export interface ExecuteCommandData<T> extends CommandData {
 
 export interface NoteSwitchedContext {
     noteContext: NoteContext;
-    notePath: string | null;
+    notePath: string | null | undefined;
 }
 
 /**
@@ -329,7 +329,7 @@ type EventMappings = {
         ntxId: string | null;
     };
     contextsReopened: {
-        ntxId: string;
+        ntxId?: string;
         mainNtxId: string | null;
         tabPosition: number;
         afterNtxId?: string;
