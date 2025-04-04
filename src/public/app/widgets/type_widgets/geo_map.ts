@@ -124,10 +124,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     doRender() {
+        super.doRender();
+
         this.$widget = $(TPL);
         this.$widget.append(this.geoMapWidget.render());
-
-        super.doRender();
     }
 
     async #onMapInitialized(L: Leaflet) {
@@ -141,6 +141,11 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         // Restore markers.
         await this.#reloadMarkers();
+
+        // This fixes an issue with the map appearing cut off at the beginning, due to the container not being properly attached
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
 
         const updateFn = () => this.spacedUpdate.scheduleUpdate();
         map.on("moveend", updateFn);
