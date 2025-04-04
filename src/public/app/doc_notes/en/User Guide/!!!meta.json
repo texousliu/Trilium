@@ -1803,6 +1803,86 @@
                                             "dataFileName": "Split View_1_Split View_im.png"
                                         }
                                     ]
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "XpOYSgsLkTJy",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Vc8PjrjAGuOp",
+                                        "XpOYSgsLkTJy"
+                                    ],
+                                    "title": "Floating buttons",
+                                    "notePosition": 150,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-rectangle",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "BlN9DFI679QC",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "s1aBHPd79XYj",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "grjYqerjn243",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "iPIMuisry3hd",
+                                            "isInheritable": false,
+                                            "position": 50
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "CoFPLs3dRlXc",
+                                            "isInheritable": false,
+                                            "position": 60
+                                        }
+                                    ],
+                                    "format": "html",
+                                    "dataFileName": "Floating buttons.html",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "drdKIHK5GzfU",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Floating buttons_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "FNh39vXBEZxT",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "1_Floating buttons_image.png"
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -4060,6 +4140,98 @@
                                             "position": 10,
                                             "dataFileName": "10_Images_image.png"
                                         }
+                                    ],
+                                    "dirFileName": "Images",
+                                    "children": [
+                                        {
+                                            "isClone": false,
+                                            "noteId": "0Ofbk1aSuVRu",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "KSZ04uQ2D1St",
+                                                "iPIMuisry3hd",
+                                                "mT0HEkOsz6i1",
+                                                "0Ofbk1aSuVRu"
+                                            ],
+                                            "title": "Image references",
+                                            "notePosition": 10,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "s1aBHPd79XYj",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "gBbsAeiuUxI5",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "iPIMuisry3hd",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "XpOYSgsLkTJy",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "grjYqerjn243",
+                                                    "isInheritable": false,
+                                                    "position": 60
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "s8alTXmpFR61",
+                                                    "isInheritable": false,
+                                                    "position": 70
+                                                }
+                                            ],
+                                            "format": "html",
+                                            "dataFileName": "Image references.html",
+                                            "attachments": [
+                                                {
+                                                    "attachmentId": "6OgYPJ60Uz76",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "Image references_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "72VNSgANtMVT",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "1_Image references_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "kXBghrixmV2J",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "2_Image references_image.png"
+                                                }
+                                            ]
+                                        }
                                     ]
                                 },
                                 {
@@ -4913,6 +5085,20 @@
                                     "value": "bx bx-selection",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "XpOYSgsLkTJy",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "0Ofbk1aSuVRu",
+                                    "isInheritable": false,
+                                    "position": 40
                                 }
                             ],
                             "format": "html",
@@ -4927,69 +5113,82 @@
                                     "dataFileName": "Mermaid Diagrams_ELK off.svg"
                                 },
                                 {
+                                    "attachmentId": "EN4DhmgiSH6t",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "Mermaid Diagrams_image.png"
+                                },
+                                {
+                                    "attachmentId": "if9nzuWHt5KP",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "1_Mermaid Diagrams_image.png"
+                                },
+                                {
                                     "attachmentId": "IKxo3tblVDHq",
                                     "title": "ELK on.svg",
                                     "role": "image",
                                     "mime": "image/svg+xml",
                                     "position": 10,
                                     "dataFileName": "Mermaid Diagrams_ELK on.svg"
+                                },
+                                {
+                                    "attachmentId": "TpPwoCFIePXm",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "2_Mermaid Diagrams_image.png"
                                 }
                             ],
                             "dirFileName": "Mermaid Diagrams",
                             "children": [
                                 {
                                     "isClone": false,
-                                    "noteId": "opAFABmyb3CU",
+                                    "noteId": "RH6yLjjWJHof",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
                                         "KSZ04uQ2D1St",
                                         "s1aBHPd79XYj",
-                                        "opAFABmyb3CU"
+                                        "RH6yLjjWJHof"
                                     ],
-                                    "title": "ELK on",
-                                    "notePosition": 10,
+                                    "title": "ELK layout",
+                                    "notePosition": 30,
                                     "prefix": null,
                                     "isExpanded": false,
-                                    "type": "mermaid",
-                                    "mime": "text/plain",
-                                    "attributes": [],
-                                    "dataFileName": "ELK on.txt",
-                                    "attachments": [
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
                                         {
-                                            "attachmentId": "biyznKlYQ7my",
-                                            "title": "mermaid-export.svg",
-                                            "role": "image",
-                                            "mime": "image/svg+xml",
-                                            "position": 10,
-                                            "dataFileName": "ELK on_mermaid-export.svg"
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bxs-network-chart",
+                                            "isInheritable": false,
+                                            "position": 10
                                         }
-                                    ]
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "r44dpvA1xFu8",
-                                    "notePath": [
-                                        "pOsGYCXsbNQG",
-                                        "KSZ04uQ2D1St",
-                                        "s1aBHPd79XYj",
-                                        "r44dpvA1xFu8"
                                     ],
-                                    "title": "ELK off",
-                                    "notePosition": 20,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "mermaid",
-                                    "mime": "text/plain",
-                                    "attributes": [],
-                                    "dataFileName": "ELK off.txt",
+                                    "format": "html",
+                                    "dataFileName": "ELK layout.html",
                                     "attachments": [
                                         {
-                                            "attachmentId": "rQI7SXljnpJM",
-                                            "title": "mermaid-export.svg",
+                                            "attachmentId": "DOY5C5S4vCs7",
+                                            "title": "ELK off.svg",
                                             "role": "image",
                                             "mime": "image/svg+xml",
                                             "position": 10,
-                                            "dataFileName": "ELK off_mermaid-export.svg"
+                                            "dataFileName": "ELK layout_ELK off.svg"
+                                        },
+                                        {
+                                            "attachmentId": "E1ysxcfkmGBZ",
+                                            "title": "ELK on.svg",
+                                            "role": "image",
+                                            "mime": "image/svg+xml",
+                                            "position": 10,
+                                            "dataFileName": "ELK layout_ELK on.svg"
                                         }
                                     ]
                                 }
@@ -5004,7 +5203,7 @@
                                 "grjYqerjn243"
                             ],
                             "title": "Canvas",
-                            "notePosition": 160,
+                            "notePosition": 170,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -5040,7 +5239,7 @@
                                 "1vHRoWCEjj0L"
                             ],
                             "title": "Web View",
-                            "notePosition": 170,
+                            "notePosition": 180,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -5067,7 +5266,7 @@
                                 "gBbsAeiuUxI5"
                             ],
                             "title": "Mind Map",
-                            "notePosition": 180,
+                            "notePosition": 190,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -5094,7 +5293,7 @@
                                 "81SGnPGMk7Xc"
                             ],
                             "title": "Geo map",
-                            "notePosition": 190,
+                            "notePosition": 200,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
