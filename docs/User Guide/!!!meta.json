@@ -3815,14 +3815,6 @@
                                     "mime": "image/jpg",
                                     "position": 10,
                                     "dataFileName": "Text_image.png"
-                                },
-                                {
-                                    "attachmentId": "yGknq3nsWpef",
-                                    "title": "bx-edit-alt.svg",
-                                    "role": "image",
-                                    "mime": "image/svg+xml",
-                                    "position": 10,
-                                    "dataFileName": "Text_bx-edit-alt.svg"
                                 }
                             ],
                             "dirFileName": "Text",
@@ -8109,6 +8101,13 @@
                                     "value": "bx bx-hash",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "0vhv7lsOLy82",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
