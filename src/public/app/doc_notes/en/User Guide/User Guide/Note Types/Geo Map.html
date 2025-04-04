@@ -57,8 +57,13 @@
         <p>The position on the map and the zoom are saved inside the map note and
           restored when visiting again the note.</p>
         <h2>Adding a marker using the map</h2>
-        <figure class="table">
-          <table>
+        <figure class="table" style="width:163.53%;">
+          <table class="ck-table-resized">
+            <colgroup>
+              <col style="width:1.69%;">
+                <col style="width:66.49%;">
+                  <col style="width:31.82%;">
+            </colgroup>
             <thead>
               <tr>
                 <th>&nbsp;</th>
@@ -69,19 +74,21 @@
             <tbody>
               <tr>
                 <td>1</td>
-                <td>&nbsp;</td>
-                <td>To create a marker, first navigate to the desired point on the map. Then
+                <td colspan="2">To create a marker, first navigate to the desired point on the map. Then
                   press the
-                  <img src="16_Geo Map_image.png">button on the top-right of the map.&nbsp;&nbsp;&nbsp;
+                  <img src="12_Geo Map_image.png" width="18" height="18">button in the&nbsp;<a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.html">Floating buttons</a>&nbsp;(top-right)
+                  area.
                   <br>
                   <br>If the button is not visible, make sure the button section is visible
                   by pressing the chevron button (
-                  <img src="2_Geo Map_image.png">) in the top-right of the map.</td>
+                  <img src="19_Geo Map_image.png" width="11"
+                  height="10">) in the top-right of the map.</td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>
-                  <img src="3_Geo Map_image.png">
+                  <img class="image_resized" style="aspect-ratio:1730/416;width:100%;" src="3_Geo Map_image.png"
+                  width="1730" height="416">
                 </td>
                 <td>Once pressed, the map will enter in the insert mode, as illustrated by
                   the notification.&nbsp;&nbsp;&nbsp;
@@ -92,14 +99,16 @@
               <tr>
                 <td>3</td>
                 <td>
-                  <img src="9_Geo Map_image.png">
+                  <img class="image_resized" style="aspect-ratio:1586/404;width:100%;" src="9_Geo Map_image.png"
+                  width="1586" height="404">
                 </td>
                 <td>Enter the name of the marker/note to be created.</td>
               </tr>
               <tr>
                 <td>4</td>
                 <td>
-                  <img src="17_Geo Map_image.png">
+                  <img class="image_resized" style="aspect-ratio:1696/608;width:99.95%;"
+                  src="18_Geo Map_image.png" width="1696" height="608">
                 </td>
                 <td>Once confirmed, the marker will show up on the map and it will also be
                   displayed as a child note of the map.</td>
@@ -111,7 +120,7 @@
         <p>The location of a marker is stored in the <code>#geolocation</code> attribute
           of the child notes:</p>
         <p>
-          <img src="18_Geo Map_image.png">
+          <img src="20_Geo Map_image.png">
         </p>
         <p>This value can be added manually if needed. The value of the attribute
           is made up of the latitude and longitude separated by a comma.</p>
@@ -169,7 +178,7 @@
               <tr>
                 <td>1</td>
                 <td>
-                  <img src="13_Geo Map_image.png">
+                  <img src="14_Geo Map_image.png">
                 </td>
                 <td>Go to Google Maps on the web and look for a desired location, right click
                   on it and a context menu will show up.&nbsp;&nbsp;&nbsp;
@@ -190,7 +199,7 @@
               <tr>
                 <td>3</td>
                 <td>
-                  <img src="12_Geo Map_image.png">
+                  <img src="13_Geo Map_image.png">
                 </td>
                 <td>And then go to Owned Attributes and type <code>#geolocation="</code>, then
                   paste from the clipboard as-is and then add the ending <code>"</code> character.
@@ -265,7 +274,7 @@
               <tr>
                 <td>2</td>
                 <td>
-                  <img src="15_Geo Map_image.png">
+                  <img src="16_Geo Map_image.png">
                 </td>
                 <td>In order for the file to be recognized as a GPS track, it needs to show
                   up as <code>application/gpx+xml</code> in the <em>File type</em> field.</td>
@@ -284,7 +293,7 @@
           </figure>
           <h2>Troubleshooting</h2>
           <p>
-            <img src="14_Geo Map_image.png">
+            <img src="15_Geo Map_image.png">
           </p>
           <h3>Grid-like artifacts on the map</h3>
           <p>This occurs if the application is not at 100% zoom which causes the pixels

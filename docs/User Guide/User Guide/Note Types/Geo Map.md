@@ -21,16 +21,16 @@ The position on the map and the zoom are saved inside the map note and restored 
 
 |     |     |     |
 | --- | --- | --- |
-| 1   |     | To create a marker, first navigate to the desired point on the map. Then press the ![](16_Geo%20Map_image.png)button on the top-right of the map.     <br>  <br>If the button is not visible, make sure the button section is visible by pressing the chevron button ( ![](2_Geo%20Map_image.png)) in the top-right of the map. |
+| 1   | To create a marker, first navigate to the desired point on the map. Then press the ![](12_Geo%20Map_image.png) button in the [Floating buttons](../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md) (top-right) area.  <br>  <br>If the button is not visible, make sure the button section is visible by pressing the chevron button (![](19_Geo%20Map_image.png)) in the top-right of the map. |     |
 | 2   | ![](3_Geo%20Map_image.png) | Once pressed, the map will enter in the insert mode, as illustrated by the notification.     <br>  <br>Simply click the point on the map where to place the marker, or the Escape key to cancel. |
 | 3   | ![](9_Geo%20Map_image.png) | Enter the name of the marker/note to be created. |
-| 4   | ![](17_Geo%20Map_image.png) | Once confirmed, the marker will show up on the map and it will also be displayed as a child note of the map. |
+| 4   | ![](18_Geo%20Map_image.png) | Once confirmed, the marker will show up on the map and it will also be displayed as a child note of the map. |
 
 ## How the location of the markers is stored
 
 The location of a marker is stored in the `#geolocation` attribute of the child notes:
 
-![](18_Geo%20Map_image.png)
+![](20_Geo%20Map_image.png)
 
 This value can be added manually if needed. The value of the attribute is made up of the latitude and longitude separated by a comma.
 
@@ -70,9 +70,9 @@ The value of the attribute is made up of the latitude and longitude separated by
 
 |     |     |     |
 | --- | --- | --- |
-| 1   | ![](13_Geo%20Map_image.png) | Go to Google Maps on the web and look for a desired location, right click on it and a context menu will show up.     <br>  <br>Simply click on the first item displaying the coordinates and they will be copied to clipboard.     <br>  <br>Then paste the value inside the text box into the `#geolocation` attribute of a child note of the map (don't forget to surround the value with a `"` character). |
+| 1   | ![](14_Geo%20Map_image.png) | Go to Google Maps on the web and look for a desired location, right click on it and a context menu will show up.     <br>  <br>Simply click on the first item displaying the coordinates and they will be copied to clipboard.     <br>  <br>Then paste the value inside the text box into the `#geolocation` attribute of a child note of the map (don't forget to surround the value with a `"` character). |
 | 2   | ![](5_Geo%20Map_image.png) | In Trilium, create a child note under the map. |
-| 3   | ![](12_Geo%20Map_image.png) | And then go to Owned Attributes and type `#geolocation="`, then paste from the clipboard as-is and then add the ending `"` character. Press Enter to confirm and the map should now be updated to contain the new note. |
+| 3   | ![](13_Geo%20Map_image.png) | And then go to Owned Attributes and type `#geolocation="`, then paste from the clipboard as-is and then add the ending `"` character. Press Enter to confirm and the map should now be updated to contain the new note. |
 
 ### Adding from OpenStreetMap
 
@@ -91,12 +91,12 @@ Trilium has basic support for displaying GPS tracks on the geo map.
 |     |     |     |
 | --- | --- | --- |
 | 1   | ![](4_Geo%20Map_image.png) | To add a track, simply drag & drop a .gpx file inside the geo map in the note tree. |
-| 2   | ![](15_Geo%20Map_image.png) | In order for the file to be recognized as a GPS track, it needs to show up as `application/gpx+xml` in the _File type_ field. |
+| 2   | ![](16_Geo%20Map_image.png) | In order for the file to be recognized as a GPS track, it needs to show up as `application/gpx+xml` in the _File type_ field. |
 | 3   | ![](7_Geo%20Map_image.png) | When going back to the map, the track should now be visible.     <br>  <br>The start and end points of the track are indicated by the two blue markers. |
 
 ## Troubleshooting
 
-![](14_Geo%20Map_image.png)
+![](15_Geo%20Map_image.png)
 
 ### Grid-like artifacts on the map
 
