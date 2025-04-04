@@ -224,14 +224,14 @@ interface Api {
      * @param date in YYYY-MM-DD format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
      */
-    getDayNote(date: string, rootNote?: BNote): BNote | null;
+    getDayNote(date: string, rootNote?: BNote): Promise<BNote | null>;
 
     /**
      * Returns today's day note. If such note doesn't exist, it is created.
      *
      * @param rootNote specify calendar root note, normally leave empty to use the default calendar
      */
-    getTodayNote(rootNote?: BNote): BNote | null;
+    getTodayNote(rootNote?: BNote): Promise<BNote | null>;
 
     /**
      * Returns note for the first date of the week of the given date.
@@ -239,7 +239,7 @@ interface Api {
      * @param date in YYYY-MM-DD format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
      */
-    getWeekFirstDayNote(date: string, rootNote: BNote): BNote | null;
+    getWeekFirstDayNote(date: string, rootNote: BNote): Promise<BNote | null>;
 
     /**
      * Returns week note for given date. If such a note doesn't exist, it is created.
@@ -247,7 +247,7 @@ interface Api {
      * @param date in YYYY-MM-DD format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
      */
-    getWeekNote(date: string, rootNote: BNote): BNote | null;
+    getWeekNote(date: string, rootNote: BNote): Promise<BNote | null>;
 
     /**
      * Returns month note for given date. If such a note doesn't exist, it is created.
@@ -255,7 +255,7 @@ interface Api {
      * @param date in YYYY-MM format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
      */
-    getMonthNote(date: string, rootNote: BNote): BNote | null;
+    getMonthNote(date: string, rootNote: BNote): Promise<BNote | null>;
 
     /**
      * Returns quarter note for given date. If such a note doesn't exist, it is created.
@@ -263,7 +263,7 @@ interface Api {
      * @param date in YYYY-MM format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
      */
-    getQuarterNote(date: string, rootNote: BNote): BNote | null;
+    getQuarterNote(date: string, rootNote: BNote): Promise<BNote | null>;
 
     /**
      * Returns year note for given year. If such a note doesn't exist, it is created.

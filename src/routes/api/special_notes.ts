@@ -64,8 +64,8 @@ function getDayNotesForMonth(req: Request) {
     }
 }
 
-function saveSqlConsole(req: Request) {
-    return specialNotesService.saveSqlConsole(req.body.sqlConsoleNoteId);
+async function saveSqlConsole(req: Request) {
+    return await specialNotesService.saveSqlConsole(req.body.sqlConsoleNoteId);
 }
 
 function createSqlConsole() {
