@@ -64,17 +64,6 @@ class CustomMarkdownRenderer extends Renderer {
         return `<blockquote>${body}</blockquote>`;
     }
 
-    link(data: Tokens.Link): string {
-        let html = super.link(data);
-
-        // Rewrite local/relative links back to reference links.
-        if (data.href.indexOf("://") === -1) {
-            html = html.replace(/^<a /, `<a class="reference-link" `);
-        }
-
-        return html;
-    }
-
 }
 
 const renderer = new CustomMarkdownRenderer({ async: false });

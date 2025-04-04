@@ -151,8 +151,14 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
-    it("imports back to reference links", () => {
+    it("does not touch relative links", () => {
         const input = `[Canvas](../../Canvas.html)`;
+        const expected = /*html*/`<p><a href="../../Canvas.html">Canvas</a></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("imports back to reference links", () => {
+        const input = `<a class="reference-link" href="../../Canvas.html">Canvas</a>`;
         const expected = /*html*/`<p><a class="reference-link" href="../../Canvas.html">Canvas</a></p>`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });

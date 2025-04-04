@@ -238,9 +238,15 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
-    it("exports reference links as normal links", () => {
+    it("exports normal links verbatim", () => {
+        const html = /*html*/`<p><a href="https://www.google.com">Google</a></p>`;
+        const expected = `[Google](https://www.google.com)`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("exports reference links verbatim", () => {
         const html = /*html*/`<p><a class="reference-link" href="../../Canvas.html">Canvas</a></p>`;
-        const expected = `[Canvas](../../Canvas.html)`;
+        const expected = `<a class="reference-link" href="../../Canvas.html">Canvas</a>`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 

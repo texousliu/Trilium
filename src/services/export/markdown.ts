@@ -1,7 +1,8 @@
 "use strict";
 
-import TurndownService from "turndown";
+import TurndownService, { type Rule } from "turndown";
 import { gfm } from "../../../packages/turndown-plugin-gfm/src/gfm.js";
+import type { DOMElement } from "react";
 
 let instance: TurndownService | null = null;
 
@@ -43,6 +44,7 @@ function toMarkdown(content: string) {
         instance.addRule("fencedCodeBlock", fencedCodeBlockFilter);
         instance.addRule("img", buildImageFilter());
         instance.addRule("admonition", buildAdmonitionFilter());
+        instance.addRule("inlineLink", buildInlineLinkFilter());
         instance.use(gfm);
         instance.keep([ "kbd" ]);
     }
@@ -91,10 +93,6 @@ function buildImageFilter() {
 
     function escapeLinkTitle (title: string) {
         return title.replace(/"/g, '\\"')
-    }
-
-    function cleanAttribute (attribute: string) {
-        return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
     }
 
     const imageFilter: TurndownService.Rule = {
@@ -151,6 +149,48 @@ function buildAdmonitionFilter() {
         }
     }
     return admonitionFilter;
+}
+
+/**
+ * Variation of the original ruleset: https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js.
+ *
+ * Detects if the URL is a Trilium reference link and returns it verbatim if that's the case.
+ *
+ * @returns
+ */
+function buildInlineLinkFilter(): Rule {
+    return {
+        filter: function (node, options) {
+            return (
+            options.linkStyle === 'inlined' &&
+            node.nodeName === 'A' &&
+            !!node.getAttribute('href')
+            )
+        },
+
+        replacement: function (content, _node) {
+            const node = _node as HTMLElement;
+
+            // Return reference links verbatim.
+            if (node.classList.contains("reference-link")) {
+                return node.outerHTML;
+            }
+
+            // Otherwise treat as normal.
+            // TODO: Call super() somehow instead of duplicating the implementation.
+            var href = node.getAttribute('href')
+            if (href) href = href.replace(/([()])/g, '\\$1')
+            var title = cleanAttribute(node.getAttribute('title'))
+            if (title) title = ' "' + title.replace(/"/g, '\\"') + '"'
+            return '[' + content + '](' + href + title + ')'
+        }
+    }
+}
+
+// Taken from upstream since it's not exposed.
+// https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js
+function cleanAttribute(attribute: string | null | undefined) {
+    return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
 }
 
 export default {
