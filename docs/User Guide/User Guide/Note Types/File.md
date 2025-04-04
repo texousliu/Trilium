@@ -86,4 +86,4 @@ If the file could not be identified as any of the supported file types from abov
 
 Files are also displayed in the [Note List](../Basic%20Concepts%20and%20Features/Notes/Note%20List.md) based on their type:
 
-![](8_File_image.png)
+![](6_File_image.png)
