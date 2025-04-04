@@ -10,8 +10,8 @@ COPY . .
 RUN npm ci && \
     npm run build:prepare-dist && \
     npm cache clean --force && \
-    rm -rf dist/node_modules && \
-    mv dist/* \
+    rm -rf build/node_modules && \
+    mv build/* \
       start-docker.sh \
       /usr/src/app/ && \
     rm -rf \
@@ -39,8 +39,11 @@ COPY --from=builder /usr/src/app ./
 
 RUN sed -i "/electron/d" package.json && \
     npm ci --omit=dev && \
+    node --experimental-strip-types ./bin/cleanupNodeModules.ts . --skip-prune-dev-deps && \
     npm cache clean --force && \
-    rm -rf /tmp/node-compile-cache
+    rm -rf \
+      /tmp/node-compile-cache \
+      /usr/src/app/bin/cleanupNodeModules.ts
 
 # Configure container
 EXPOSE 8080

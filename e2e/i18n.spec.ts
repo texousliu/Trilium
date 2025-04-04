@@ -26,7 +26,7 @@ test("Displays translations in Settings", async ({ page, context }) => {
     await app.goto();
     await app.closeAllTabs();
     await app.goToSettings();
-    await app.noteTree.getByText("Appearance").click();
+    await app.noteTree.getByText("Language & Region").click();
 
     await expect(app.currentNoteSplit).toContainText("Localization");
     await expect(app.currentNoteSplit).toContainText("Language");
@@ -38,16 +38,20 @@ test("User can change language from settings", async ({ page, context }) => {
 
     await app.closeAllTabs();
     await app.goToSettings();
-    await app.noteTree.getByText("Appearance").click();
+    await app.noteTree.getByText("Language & Region").click();
 
     // Check that the default value (English) is set.
-    await expect(app.currentNoteSplit).toContainText("Theme");
+    await expect(app.currentNoteSplit).toContainText("First day of the week");
     const languageCombobox = app.currentNoteSplit.getByRole("combobox").first();
     await expect(languageCombobox).toHaveValue("en");
 
     // Select Chinese and ensure the translation is set.
     await languageCombobox.selectOption("cn");
-    await expect(app.currentNoteSplit).toContainText("主题", { timeout: 15000 });
+
+    // Press the refresh button.
+    await app.currentNoteSplit.getByRole("button", { name: "Restart the application" }).click();
+
+    await expect(app.currentNoteSplit).toContainText("一周的第一天", { timeout: 15000 });
     await expect(languageCombobox).toHaveValue("cn");
 
     // Select English again.

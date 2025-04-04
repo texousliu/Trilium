@@ -15,7 +15,7 @@ import log from "../services/log.js";
 import type SNote from "./shaca/entities/snote.js";
 import type SBranch from "./shaca/entities/sbranch.js";
 import type SAttachment from "./shaca/entities/sattachment.js";
-import utils from "../services/utils.js";
+import utils, { safeExtractMessageAndStackFromError } from "../services/utils.js";
 import options from "../services/options.js";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
@@ -115,7 +115,14 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
         svgString = content;
     } else {
         // backwards compatibility, before attachments, the SVG was stored in the main note content as a separate key
-        const contentSvg = image.getJsonContentSafely()?.svg;
+        const possibleSvgContent = image.getJsonContentSafely();
+
+        const contentSvg = (typeof possibleSvgContent === "object"
+            && possibleSvgContent !== null
+            && "svg" in possibleSvgContent
+            && typeof possibleSvgContent.svg === "string")
+            ? possibleSvgContent.svg
+            : null;
 
         if (contentSvg) {
             svgString = contentSvg;
@@ -131,6 +138,7 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
 function register(router: Router) {
     function renderNote(note: SNote, req: Request, res: Response) {
         if (!note) {
+            console.log("Unable to find note ", note);
             res.status(404).render("share/404");
             return;
         }
@@ -183,8 +191,9 @@ function register(router: Router) {
                         res.send(ejsResult);
                         useDefaultView = false; // Rendering went okay, don't use default view
                     }
-                } catch (e: any) {
-                    log.error(`Rendering user provided share template (${templateId}) threw exception ${e.message} with stacktrace: ${e.stack}`);
+                } catch (e: unknown) {
+                    const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
+                    log.error(`Rendering user provided share template (${templateId}) threw exception ${errMessage} with stacktrace: ${errStack}`);
                 }
             }
         }
@@ -194,7 +203,7 @@ function register(router: Router) {
         }
     }
 
-    let sharePath = options.getOption("sharePath") || '/share';
+    const sharePath = options.getOption("sharePath") || '/share';
 
     // Handle root path specially
     if (sharePath === '/') {
@@ -382,7 +391,6 @@ function register(router: Router) {
         shacaLoader.ensureLoad();
 
         const ancestorNoteId = req.query.ancestorNoteId ?? "_share";
-        let note;
 
         if (typeof ancestorNoteId !== "string") {
             res.status(400).json({ message: "'ancestorNoteId' parameter is mandatory." });
@@ -390,7 +398,7 @@ function register(router: Router) {
         }
 
         // This will automatically return if no ancestorNoteId is provided and there is no shareIndex
-        if (!(note = checkNoteAccess(ancestorNoteId, req, res))) {
+        if (!checkNoteAccess(ancestorNoteId, req, res)) {
             return;
         }
 

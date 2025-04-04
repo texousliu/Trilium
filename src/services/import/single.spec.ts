@@ -87,6 +87,31 @@ describe("processNoteContent", () => {
     it("supports markdown note with UTF-16", async () => {
         const { importedNote } = await testImport("UTF-16LE Text Note.md", "text/markdown");
         expect(importedNote.mime).toBe("text/html");
-        expect(importedNote.getContent().toString()).toBe("<h2>Hello world</h2>\n<p>Plain text goes here.</p>\n");
+        expect(importedNote.getContent().toString()).toBe("<h2>Hello world</h2><p>Plain text goes here.</p>");
+    });
+
+    it("supports excalidraw note", async () => {
+        const { importedNote } = await testImport("New note.excalidraw", "application/json");
+        expect(importedNote.mime).toBe("application/json");
+        expect(importedNote.type).toBe("canvas");
+        expect(importedNote.title).toBe("New note");
+    });
+
+    it("imports .mermaid as mermaid note", async () => {
+        const { importedNote } = await testImport("New note.mermaid", "application/json");
+        expect(importedNote).toMatchObject({
+            mime: "text/vnd.mermaid",
+            type: "mermaid",
+            title: "New note"
+        });
+    });
+
+    it("imports .mmd as mermaid note", async () => {
+        const { importedNote } = await testImport("New note.mmd", "application/json");
+        expect(importedNote).toMatchObject({
+            mime: "text/vnd.mermaid",
+            type: "mermaid",
+            title: "New note"
+        });
     });
 });

@@ -5,7 +5,7 @@ import utils from "../../services/utils.js";
 import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="attachment-list note-detail-printable">
     <style>
         .attachment-list {
@@ -59,18 +59,22 @@ export default class AttachmentListTypeWidget extends TypeWidget {
         const noteLink = await linkService.createLink(this.noteId); // do separately to avoid race condition between empty() and .append()
         noteLink.addClass("use-tn-links");
 
+        const $uploadButton = $(`
+            <button class="btn btn-sm">
+                <span class="bx bx-folder-open"></span>
+                ${t("attachment_list.upload_attachments")}
+            </button>
+        `);
+
+        $uploadButton.on("click", () => {
+            if (this.noteId) {
+                this.triggerCommand("showUploadAttachmentsDialog", { noteId: this.noteId });
+            }
+        })
+
         this.$linksWrapper.empty().append(
             $("<div>").append(t("attachment_list.owning_note"), noteLink),
-            $(`<div class="attachment-actions-toolbar">`).append(
-                $('<button class="btn btn-sm">')
-                    .text(t("attachment_list.upload_attachments"))
-                    .on("click", () => {
-                        if (this.noteId) {
-                            this.triggerCommand("showUploadAttachmentsDialog", { noteId: this.noteId });
-                        }
-                    }),
-                $helpButton
-            )
+            $(`<div class="attachment-actions-toolbar">`).append($uploadButton, $helpButton)
         );
 
         this.$list.empty();

@@ -1,9 +1,8 @@
-import type { Calendar, DateSelectArg, EventChangeArg, EventDropArg, EventInput, EventSourceFunc, EventSourceFuncArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
+import type { Calendar, DateSelectArg, DatesSetArg, EventChangeArg, EventDropArg, EventInput, EventSourceFunc, EventSourceFuncArg, EventSourceInput, PluginDef } from "@fullcalendar/core";
 import froca from "../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import type FNote from "../../entities/fnote.js";
 import server from "../../services/server.js";
-import ws from "../../services/ws.js";
 import { t } from "../../services/i18n.js";
 import options from "../../services/options.js";
 import dialogService from "../../services/dialog.js";
@@ -12,8 +11,10 @@ import type { EventData } from "../../components/app_context.js";
 import utils from "../../services/utils.js";
 import date_notes from "../../services/date_notes.js";
 import appContext from "../../components/app_context.js";
+import type { EventImpl } from "@fullcalendar/core/internal";
+import debounce, { type DebouncedFunction } from "debounce";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="calendar-view">
     <style>
     .calendar-view {
@@ -30,10 +31,18 @@ const TPL = `
 
     .calendar-container {
         height: 100%;
+        --fc-page-bg-color: var(--main-background-color);
+        --fc-border-color: var(--main-border-color);
+        --fc-neutral-bg-color: var(--launcher-pane-background-color);
+        --fc-list-event-hover-bg-color: var(--left-pane-item-hover-background);
     }
 
     .calendar-container .fc-toolbar.fc-header-toolbar {
         margin-bottom: 0.5em;
+    }
+
+    .calendar-container .fc-list-sticky .fc-list-day > * {
+        z-index: 50;
     }
 
     body.desktop:not(.zen) .calendar-container .fc-toolbar.fc-header-toolbar {
@@ -71,6 +80,13 @@ interface CreateChildResponse {
     };
 }
 
+const CALENDAR_VIEWS = [
+    "timeGridWeek",
+    "dayGridMonth",
+    "multiMonthYear",
+    "listMonth"
+]
+
 export default class CalendarView extends ViewMode {
 
     private $root: JQuery<HTMLElement>;
@@ -79,6 +95,8 @@ export default class CalendarView extends ViewMode {
     private parentNote: FNote;
     private calendar?: Calendar;
     private isCalendarRoot: boolean;
+    private lastView?: string;
+    private debouncedSaveView?: DebouncedFunction<() => void>;
 
     constructor(args: ViewModeArgs) {
         super(args);
@@ -102,6 +120,9 @@ export default class CalendarView extends ViewMode {
         const { Calendar } = await import("@fullcalendar/core");
         const plugins: PluginDef[] = [];
         plugins.push((await import("@fullcalendar/daygrid")).default);
+        plugins.push((await import("@fullcalendar/timegrid")).default);
+        plugins.push((await import("@fullcalendar/list")).default);
+        plugins.push((await import("@fullcalendar/multimonth")).default);
         if (isEditable || this.isCalendarRoot) {
             plugins.push((await import("@fullcalendar/interaction")).default);
         }
@@ -113,9 +134,16 @@ export default class CalendarView extends ViewMode {
             eventBuilder = async (e: EventSourceFuncArg) => await this.#buildEventsForCalendar(e);
         }
 
+        // Parse user's initial view, if valid.
+        let initialView = "dayGridMonth";
+        const userInitialView = this.parentNote.getLabelValue("calendar:view");
+        if (userInitialView && CALENDAR_VIEWS.includes(userInitialView)) {
+            initialView = userInitialView;
+        }
+
         const calendar = new Calendar(this.$calendarContainer[0], {
             plugins,
-            initialView: "dayGridMonth",
+            initialView,
             events: eventBuilder,
             editable: isEditable,
             selectable: isEditable,
@@ -126,6 +154,7 @@ export default class CalendarView extends ViewMode {
             weekNumbers: this.parentNote.hasAttribute("label", "calendar:weekNumbers"),
             locale: await CalendarView.#getLocale(),
             height: "100%",
+            nowIndicator: true,
             eventContent: (e) => {
                 let html = "";
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
@@ -138,7 +167,7 @@ export default class CalendarView extends ViewMode {
 
                 // Promoted attributes
                 if (promotedAttributes) {
-                    for (const [name, value] of Object.entries(promotedAttributes)) {
+                    for (const [name, value] of promotedAttributes) {
                         html += `\
                         <div class="promoted-attribute">
                             <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
@@ -157,6 +186,11 @@ export default class CalendarView extends ViewMode {
                 if (note) {
                     appContext.tabManager.getActiveContext()?.setNote(note.noteId);
                 }
+            },
+            datesSet: (e) => this.#onDatesSet(e),
+            headerToolbar: {
+                start: "title",
+                end: `${CALENDAR_VIEWS.join(",")} today prev,next`
             }
         });
         calendar.render();
@@ -188,34 +222,91 @@ export default class CalendarView extends ViewMode {
         }
     }
 
+    #onDatesSet(e: DatesSetArg) {
+        const currentView = e.view.type;
+        if (currentView === this.lastView) {
+            return;
+        }
+
+        if (!this.debouncedSaveView) {
+            this.debouncedSaveView = debounce(() => {
+                if (this.lastView) {
+                    attributes.setLabel(this.parentNote.noteId, "calendar:view", this.lastView);
+                }
+            }, 1_000);
+        }
+
+        this.debouncedSaveView();
+        this.lastView = currentView;
+    }
+
     async #onCalendarSelection(e: DateSelectArg) {
-        const startDate = CalendarView.#formatDateToLocalISO(e.start);
+        // Handle start and end date
+        const { startDate, endDate } = this.#parseStartEndDateFromEvent(e);
         if (!startDate) {
             return;
         }
 
-        const endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
+        // Handle start and end time.
+        const { startTime, endTime } = this.#parseStartEndTimeFromEvent(e);
 
+        // Ask for the title
         const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
         if (!title?.trim()) {
             return;
         }
 
+        // Create the note.
         const { note } = await server.post<CreateChildResponse>(`notes/${this.parentNote.noteId}/children?target=into`, {
             title,
             content: "",
             type: "text"
         });
+
+        // Set the attributes.
         attributes.setLabel(note.noteId, "startDate", startDate);
         if (endDate) {
             attributes.setLabel(note.noteId, "endDate", endDate);
         }
+        if (startTime) {
+            attributes.setLabel(note.noteId, "startTime", startTime);
+        }
+        if (endTime) {
+            attributes.setLabel(note.noteId, "endTime", endTime);
+        }
+    }
+
+    #parseStartEndDateFromEvent(e: DateSelectArg | EventImpl) {
+        const startDate = CalendarView.#formatDateToLocalISO(e.start);
+        if (!startDate) {
+            return { startDate: null, endDate: null };
+        }
+        let endDate;
+        if (e.allDay) {
+            endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
+        } else {
+            endDate = CalendarView.#formatDateToLocalISO(e.end);
+        }
+        return { startDate, endDate };
+    }
+
+    #parseStartEndTimeFromEvent(e: DateSelectArg | EventImpl) {
+        let startTime = null;
+        let endTime = null;
+        if (!e.allDay) {
+            startTime = CalendarView.#formatTimeToLocalISO(e.start);
+            endTime = CalendarView.#formatTimeToLocalISO(e.end);
+        }
+
+        return { startTime, endTime };
     }
 
     async #onEventMoved(e: EventChangeArg) {
-        const startDate = CalendarView.#formatDateToLocalISO(e.event.start);
-        // Fullcalendar end date is exclusive, not inclusive but we store it the other way around.
-        let endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.event.end, -1));
+        // Handle start and end date
+        let { startDate, endDate } = this.#parseStartEndDateFromEvent(e.event);
+        if (!startDate) {
+            return;
+        }
         const noteId = e.event.extendedProps.noteId;
 
         // Don't store the end date if it's empty.
@@ -229,8 +320,23 @@ export default class CalendarView extends ViewMode {
             return;
         }
 
-        attributes.setAttribute(note, "label", "startDate", startDate);
-        attributes.setAttribute(note, "label", "endDate", endDate);
+        // Since they can be customized via calendar:startDate=$foo and calendar:endDate=$bar we need to determine the
+        // attributes to be effectively updated
+        const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value||"startDate";
+        const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value||"endDate";
+
+        attributes.setAttribute(note, "label", startAttribute, startDate);
+        attributes.setAttribute(note, "label", endAttribute, endDate);
+
+        // Update start time and end time if needed.
+        if (!e.event.allDay) {
+            const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startTime").shift()?.value||"startTime";
+            const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endTime").shift()?.value||"endTime";
+
+            const { startTime, endTime } = this.#parseStartEndTimeFromEvent(e.event);
+            attributes.setAttribute(note, "label", startAttribute, startTime);
+            attributes.setAttribute(note, "label", endAttribute, endTime);
+        }
     }
 
     onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
@@ -240,7 +346,7 @@ export default class CalendarView extends ViewMode {
         }
 
         // Refresh calendar on attribute change.
-        if (loadResults.getAttributeRows().some((attribute) => attribute.noteId === this.parentNote.noteId && attribute.name?.startsWith("calendar:"))) {
+        if (loadResults.getAttributeRows().some((attribute) => attribute.noteId === this.parentNote.noteId && attribute.name?.startsWith("calendar:") && attribute.name !== "calendar:view")) {
             return true;
         }
 
@@ -272,7 +378,7 @@ export default class CalendarView extends ViewMode {
                 continue;
             }
 
-            events.push(await CalendarView.buildEvent(dateNote, startDate));
+            events.push(await CalendarView.buildEvent(dateNote, { startDate }));
 
             if (dateNote.hasChildren()) {
                 const childNoteIds = dateNote.getChildNoteIds();
@@ -287,7 +393,7 @@ export default class CalendarView extends ViewMode {
         const childNotes = await froca.getNotes(childNoteIds);
         for (const childNote of childNotes) {
             const startDate = childNoteToDateMapping[childNote.noteId];
-            const event = await CalendarView.buildEvent(childNote, startDate);
+            const event = await CalendarView.buildEvent(childNote, { startDate });
             events.push(event);
         }
 
@@ -313,7 +419,9 @@ export default class CalendarView extends ViewMode {
             }
 
             const endDate = CalendarView.#getCustomisableLabel(note, "endDate", "calendar:endDate");
-            events.push(await CalendarView.buildEvent(note, startDate, endDate));
+            const startTime = CalendarView.#getCustomisableLabel(note, "startTime", "calendar:startTime");
+            const endTime = CalendarView.#getCustomisableLabel(note, "endTime", "calendar:endTime");
+            events.push(await CalendarView.buildEvent(note, { startDate, endDate, startTime, endTime }));
         }
 
         return events.flat();
@@ -321,7 +429,7 @@ export default class CalendarView extends ViewMode {
 
     /**
      * Allows the user to customize the attribute from which to obtain a particular value. For example, if `customLabelNameAttribute` is `calendar:startDate`
-     * and `defaultLabelName` is `startDate` and the note at hand has `#calendar:startDate=#myStartDate #myStartDate=2025-02-26` then the value returned will
+     * and `defaultLabelName` is `startDate` and the note at hand has `#calendar:startDate=myStartDate #myStartDate=2025-02-26` then the value returned will
      * be `2025-02-26`. If there is no custom attribute value, then the value of the default attribute is returned instead (e.g. `#startDate`).
      *
      * @param note the note from which to read the values.
@@ -331,8 +439,8 @@ export default class CalendarView extends ViewMode {
      */
     static #getCustomisableLabel(note: FNote, defaultLabelName: string, customLabelNameAttribute: string) {
         const customAttributeName = note.getLabelValue(customLabelNameAttribute);
-        if (customAttributeName?.startsWith("#")) {
-            const customValue = note.getLabelValue(customAttributeName.substring(1));
+        if (customAttributeName) {
+            const customValue = note.getLabelValue(customAttributeName);
             if (customValue) {
                 return customValue;
             }
@@ -341,19 +449,37 @@ export default class CalendarView extends ViewMode {
         return note.getLabelValue(defaultLabelName);
     }
 
-    static async buildEvent(note: FNote, startDate: string, endDate?: string | null) {
-        const customTitle = note.getLabelValue("calendar:title");
-        const titles = await CalendarView.#parseCustomTitle(customTitle, note);
+    static async buildEvent(note: FNote, { startDate, endDate, startTime, endTime }: {
+            startDate: string,
+            endDate?: string | null,
+            startTime?: string | null,
+            endTime?: string | null
+        }) {
+        const customTitleAttributeName = note.getLabelValue("calendar:title");
+        const titles = await CalendarView.#parseCustomTitle(customTitleAttributeName, note);
         const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
         const events: EventInput[] = [];
 
-        const calendarPromotedAttributes = note.getLabelValue("calendar:promotedAttributes");
-        let promotedAttributesData = null;
-        if (calendarPromotedAttributes) {
-            promotedAttributesData = await this.#buildPromotedAttributes(note, calendarPromotedAttributes);
+        const calendarDisplayedAttributes = note.getLabelValue("calendar:displayedAttributes")?.split(",");
+        let displayedAttributesData: Array<[string, string]> | null = null;
+        if (calendarDisplayedAttributes) {
+            displayedAttributesData = await this.#buildDisplayedAttributes(note, calendarDisplayedAttributes);
         }
 
         for (const title of titles) {
+            if (startTime && endTime && !endDate) {
+                endDate = startDate;
+            }
+
+            startDate = (startTime ? `${startDate}T${startTime}:00` : startDate);
+            if (!startTime) {
+                const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
+                if (endDateOffset) {
+                    endDate = CalendarView.#formatDateToLocalISO(endDateOffset);
+                }
+            }
+
+            endDate = (endTime ? `${endDate}T${endTime}:00` : endDate);
             const eventData: EventInput = {
                 title: title,
                 start: startDate,
@@ -361,60 +487,35 @@ export default class CalendarView extends ViewMode {
                 noteId: note.noteId,
                 color: color ?? undefined,
                 iconClass: note.getLabelValue("iconClass"),
-                promotedAttributes: promotedAttributesData
+                promotedAttributes: displayedAttributesData
             };
-
-            const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
-            if (endDateOffset) {
-                eventData.end = CalendarView.#formatDateToLocalISO(endDateOffset);
+            if (endDate) {
+                eventData.end = endDate;
             }
             events.push(eventData);
         }
         return events;
     }
 
-    static async #buildPromotedAttributes(note: FNote, calendarPromotedAttributes: string) {
-        const promotedAttributeNames = calendarPromotedAttributes.split(",");
-        const filteredPromotedAttributes = note.getPromotedDefinitionAttributes().filter((attr) => promotedAttributeNames.includes(attr.name));
-        const result: Record<string, string> = {};
+    static async #buildDisplayedAttributes(note: FNote, calendarDisplayedAttributes: string[]) {
+        const filteredDisplayedAttributes = note.getAttributes().filter((attr): boolean => calendarDisplayedAttributes.includes(attr.name))
+        const result: Array<[string, string]> = [];
 
-        for (const promotedAttribute of filteredPromotedAttributes) {
-            const [type, name] = promotedAttribute.name.split(":", 2);
-            const definition = promotedAttribute.getDefinition();
-
-            if (definition.multiplicity !== "single") {
-                // TODO: Add support for multiple definitions.
-                continue;
-            }
-
-            let value: string | undefined | null = null;
-
-            if (type === "label" && note.hasLabel(name)) {
-                value = note.getLabelValue(name);
-            } else if (type === "relation" && note.hasRelation(name)) {
-                const targetNote = await note.getRelationTarget(name);
-                value = targetNote?.title;
-            }
-
-            const friendlyName = definition.promotedAlias ?? name;
-            if (friendlyName && value) {
-                result[friendlyName] = value;
-            }
+        for (const attribute of filteredDisplayedAttributes) {
+            if (attribute.type === "label") result.push([attribute.name, attribute.value]);
+            else result.push([attribute.name, (await attribute.getTargetNote())?.title || ""])
         }
 
         return result;
     }
 
-    static async #parseCustomTitle(customTitleValue: string | null, note: FNote, allowRelations = true): Promise<string[]> {
-        if (customTitleValue) {
-            const attributeName = customTitleValue.substring(1);
-            if (customTitleValue.startsWith("#")) {
-                const labelValue = note.getAttributeValue("label", attributeName);
-                if (labelValue) {
-                    return [labelValue];
-                }
-            } else if (allowRelations && customTitleValue.startsWith("~")) {
-                const relations = note.getRelations(attributeName);
+    static async #parseCustomTitle(customTitlettributeName: string | null, note: FNote, allowRelations = true): Promise<string[]> {
+        if (customTitlettributeName) {
+            const labelValue = note.getAttributeValue("label", customTitlettributeName);
+            if (labelValue) return [labelValue];
+
+            if (allowRelations) {
+                const relations = note.getRelations(customTitlettributeName);
                 if (relations.length > 0) {
                     const noteIds = relations.map((r) => r.targetNoteId);
                     const notesFromRelation = await froca.getNotes(noteIds);
@@ -422,7 +523,6 @@ export default class CalendarView extends ViewMode {
 
                     for (const targetNote of notesFromRelation) {
                         const targetCustomTitleValue = targetNote.getAttributeValue("label", "calendar:title");
-                        console.log("Parse custom title for ", targetNote.noteId, targetNote.getAttributes(), targetNote.getOwnedAttributes());
                         const targetTitles = await CalendarView.#parseCustomTitle(targetCustomTitleValue, targetNote, false);
                         titles.push(targetTitles.flat());
                     }
@@ -443,6 +543,18 @@ export default class CalendarView extends ViewMode {
         const offset = date.getTimezoneOffset();
         const localDate = new Date(date.getTime() - offset * 60 * 1000);
         return localDate.toISOString().split("T")[0];
+    }
+
+    static #formatTimeToLocalISO(date: Date | null | undefined) {
+        if (!date) {
+            return undefined;
+        }
+
+        const offset = date.getTimezoneOffset();
+        const localDate = new Date(date.getTime() - offset * 60 * 1000);
+        return localDate.toISOString()
+            .split("T")[1]
+            .substring(0, 5);
     }
 
     static #offsetDate(date: Date | string | null | undefined, offset: number) {

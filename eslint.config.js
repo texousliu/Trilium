@@ -24,10 +24,11 @@ export default tseslint.config(
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 {
-                    "argsIgnorePattern": "^_",
-                    "varsIgnorePattern": "^_",
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_"
                 }
-            ]
+            ],
+            "sort-imports": [ "error", { ignoreCase: false } ]
         }
     },
     {
@@ -35,6 +36,7 @@ export default tseslint.config(
             "build/*",
             "dist/*",
             "docs/*",
+            "demo/*",
             "libraries/*",
             "src/public/app-dist/*",
             "src/public/app/doc_notes/*"

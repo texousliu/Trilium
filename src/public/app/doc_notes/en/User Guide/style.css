@@ -17,6 +17,32 @@
     margin: 0 !important;
 }
 
+.admonition {
+    --accent-color: var(--card-border-color);
+    border: 1px solid var(--accent-color);
+    box-shadow: var(--card-box-shadow);
+    background: var(--card-background-color);
+    border-radius: 0.5em;
+    padding: 1em;
+    margin: 1.25em 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.admonition p:last-child {
+    margin-bottom: 0;
+}
+
+.admonition p, h2 {
+    margin-top: 0;
+}
+
+.admonition.note { --accent-color: #69c7ff; }
+.admonition.tip { --accent-color: #40c025; }
+.admonition.important { --accent-color: #9839f7; }
+.admonition.caution { --accent-color: #ff2e2e; }
+.admonition.warning { --accent-color: #e2aa03; }
+
 /*
  * CKEditor 5 (v41.0.0) content styles.
  * Generated on Fri, 26 Jan 2024 10:23:49 GMT.

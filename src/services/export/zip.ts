@@ -4,7 +4,7 @@ import html from "html";
 import dateUtils from "../date_utils.js";
 import path from "path";
 import mimeTypes from "mime-types";
-import mdService from "./md.js";
+import mdService from "./markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
 import { getContentDisposition, escapeHtml } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
@@ -182,7 +182,9 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
 
         const attachments = note.getAttachments();
-        meta.attachments = attachments.map((attachment) => {
+        meta.attachments = attachments
+            .toSorted((a, b) => ((a.attachmentId ?? "").localeCompare(b.attachmentId ?? "", "en") ?? 1))
+            .map((attachment) => {
             const attMeta: AttachmentMeta = {
                 attachmentId: attachment.attachmentId,
                 title: attachment.title,

@@ -20,6 +20,8 @@ let statementCache: Record<string, Statement> = {};
 function buildDatabase() {
     if (process.env.TRILIUM_INTEGRATION_TEST === "memory") {
         return buildIntegrationTestDatabase();
+    } else if (process.env.TRILIUM_INTEGRATION_TEST === "memory-no-store") {
+        return new Database(":memory:");
     }
 
     return new Database(dataDir.DOCUMENT_PATH);
@@ -278,6 +280,7 @@ function transactional<T>(func: (statement: Statement) => T) {
 
         return ret;
     } catch (e) {
+        console.warn("Got error ", e);
         const entityChangeIds = cls.getAndClearEntityChangeIds();
 
         if (entityChangeIds.length > 0) {
