@@ -145,4 +145,16 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("supports normal links", () => {
+        const input = `[Google](https://www.google.com)`;
+        const expected = /*html*/`<p><a href="https://www.google.com">Google</a></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("imports back to reference links", () => {
+        const input = `[Canvas](../../Canvas.html)`;
+        const expected = /*html*/`<p><a class="reference-link" href="../../Canvas.html">Canvas</a></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });

@@ -238,4 +238,10 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
+    it("exports reference links as normal links", () => {
+        const html = /*html*/`<p><a class="reference-link" href="../../Canvas.html">Canvas</a></p>`;
+        const expected = `[Canvas](../../Canvas.html)`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
 });
