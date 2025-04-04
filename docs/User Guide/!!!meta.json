@@ -4643,13 +4643,6 @@
                                     "attributes": [
                                         {
                                             "type": "relation",
-                                            "name": "imageLink",
-                                            "value": "DVJl4l3T8EG2",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
                                             "name": "internalLink",
                                             "value": "6f9hih2hXXZk",
                                             "isInheritable": false,
@@ -4661,13 +4654,6 @@
                                             "value": "GLks18SNjxmC",
                                             "isInheritable": false,
                                             "position": 30
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "wX4HbRucYSDD",
-                                            "isInheritable": false,
-                                            "position": 40
                                         },
                                         {
                                             "type": "relation",
@@ -4703,11 +4689,108 @@
                                             "value": "scripts",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "TjLYAo3JMO8X",
+                                            "isInheritable": false,
+                                            "position": 90
                                         }
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Scripts.md",
-                                    "attachments": []
+                                    "attachments": [],
+                                    "dirFileName": "Scripts",
+                                    "children": [
+                                        {
+                                            "isClone": false,
+                                            "noteId": "TjLYAo3JMO8X",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "KSZ04uQ2D1St",
+                                                "6f9hih2hXXZk",
+                                                "CdNpE2pqjmI6",
+                                                "TjLYAo3JMO8X"
+                                            ],
+                                            "title": "\"New Task\" launcher button",
+                                            "notePosition": 20,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "xYjQUYhpbUEW",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "xYmIYSP6wE3F",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "6f9hih2hXXZk",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "zEY4DaJG4YT5",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "yIhgI5H7A2Sm",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "m1lbrzyKDaRB",
+                                                    "isInheritable": false,
+                                                    "position": 60
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "s8alTXmpFR61",
+                                                    "isInheritable": false,
+                                                    "position": 70
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-task",
+                                                    "isInheritable": false,
+                                                    "position": 80
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "New Task launcher button.md",
+                                            "attachments": [
+                                                {
+                                                    "attachmentId": "9C2JA6tdtRpN",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "New Task launcher button_i.png"
+                                                }
+                                            ]
+                                        }
+                                    ]
                                 },
                                 {
                                     "isClone": false,
