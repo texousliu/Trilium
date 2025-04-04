@@ -1,5 +1,5 @@
 # Leaflet
-Leaflet is the library behind [Geo map](../../Note%20Types/Geo%20map.md) notes.
+Leaflet is the library behind [Geo map](../../Note%20Types/Geo%20Map.md) notes.
 
 ## Plugins
 

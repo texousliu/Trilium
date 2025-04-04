@@ -7,7 +7,7 @@ For example:
 
 *   [Text Notes](#root/_hidden/_options/_optionsTextNotes) are represented internally as HTML, using the [CKEditor](Technologies%20used/CKEditor.md) representation. Note that due to the custom plugins, some HTML elements are specific to Trilium only, for example the admonitions.
 *   [Code Notes](#root/_hidden/_options/_optionsCodeNotes) are plain text and are represented internally as-is.
-*   [Geo map](../Note%20Types/Geo%20map.md) notes contain only minimal information (viewport, zoom) as a JSON.
+*   [Geo map](../Note%20Types/Geo%20Map.md) notes contain only minimal information (viewport, zoom) as a JSON.
 *   [Canvas](../Note%20Types/Canvas.md) notes are represented as JSON, with Trilium's own information alongside with [Excalidraw](Technologies%20used/Excalidraw.md)'s internal JSON representation format.
 *   [Mind Map](../Note%20Types/Mind%20Map.md) notes are represented as JSON, with the internal format of [MindElixir](Technologies%20used/MindElixir.md).
 

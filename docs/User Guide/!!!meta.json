@@ -1873,14 +1873,6 @@
                                             "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "Floating buttons_image.png"
-                                        },
-                                        {
-                                            "attachmentId": "FNh39vXBEZxT",
-                                            "title": "image.png",
-                                            "role": "image",
-                                            "mime": "image/png",
-                                            "position": 10,
-                                            "dataFileName": "1_Floating buttons_image.png"
                                         }
                                     ]
                                 }
@@ -4221,14 +4213,6 @@
                                                     "mime": "image/png",
                                                     "position": 10,
                                                     "dataFileName": "1_Image references_image.png"
-                                                },
-                                                {
-                                                    "attachmentId": "kXBghrixmV2J",
-                                                    "title": "image.png",
-                                                    "role": "image",
-                                                    "mime": "image/png",
-                                                    "position": 10,
-                                                    "dataFileName": "2_Image references_image.png"
                                                 }
                                             ]
                                         }
@@ -5105,14 +5089,6 @@
                             "dataFileName": "Mermaid Diagrams.md",
                             "attachments": [
                                 {
-                                    "attachmentId": "0giz1mqLMRDs",
-                                    "title": "ELK off.svg",
-                                    "role": "image",
-                                    "mime": "image/svg+xml",
-                                    "position": 10,
-                                    "dataFileName": "Mermaid Diagrams_ELK off.svg"
-                                },
-                                {
                                     "attachmentId": "EN4DhmgiSH6t",
                                     "title": "image.png",
                                     "role": "image",
@@ -5127,14 +5103,6 @@
                                     "mime": "image/png",
                                     "position": 10,
                                     "dataFileName": "1_Mermaid Diagrams_image.png"
-                                },
-                                {
-                                    "attachmentId": "IKxo3tblVDHq",
-                                    "title": "ELK on.svg",
-                                    "role": "image",
-                                    "mime": "image/svg+xml",
-                                    "position": 10,
-                                    "dataFileName": "Mermaid Diagrams_ELK on.svg"
                                 },
                                 {
                                     "attachmentId": "TpPwoCFIePXm",
@@ -5292,7 +5260,7 @@
                                 "KSZ04uQ2D1St",
                                 "81SGnPGMk7Xc"
                             ],
-                            "title": "Geo map",
+                            "title": "Geo Map",
                             "notePosition": 200,
                             "prefix": null,
                             "isExpanded": false,
@@ -5308,7 +5276,7 @@
                                 }
                             ],
                             "format": "markdown",
-                            "dataFileName": "Geo map.md",
+                            "dataFileName": "Geo Map.md",
                             "attachments": [
                                 {
                                     "attachmentId": "1f07O0Z25ZRr",
@@ -5316,7 +5284,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "Geo map_image.png"
+                                    "dataFileName": "Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "3oh61qhNLu7D",
@@ -5324,7 +5292,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "1_Geo map_image.png"
+                                    "dataFileName": "1_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "6wUkw5RWE39e",
@@ -5332,7 +5300,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "2_Geo map_image.png"
+                                    "dataFileName": "2_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "aCSNn9QlgHFi",
@@ -5340,7 +5308,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "3_Geo map_image.png"
+                                    "dataFileName": "3_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "aCuXZY7WV4li",
@@ -5348,7 +5316,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "4_Geo map_image.png"
+                                    "dataFileName": "4_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "agH6yREFgsoU",
@@ -5356,7 +5324,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "5_Geo map_image.png"
+                                    "dataFileName": "5_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "AHyDUM6R5HeG",
@@ -5364,7 +5332,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "6_Geo map_image.png"
+                                    "dataFileName": "6_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "CcjWLhE3KKfv",
@@ -5372,7 +5340,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "7_Geo map_image.png"
+                                    "dataFileName": "7_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "DapDey8gMiFc",
@@ -5380,7 +5348,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "8_Geo map_image.png"
+                                    "dataFileName": "8_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "fQy8R1vxKhwN",
@@ -5388,7 +5356,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "9_Geo map_image.png"
+                                    "dataFileName": "9_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "gJ4Yz80jxcbn",
@@ -5396,7 +5364,15 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "10_Geo map_image.png"
+                                    "dataFileName": "10_Geo Map_image.png"
+                                },
+                                {
+                                    "attachmentId": "I39BinT2gsN9",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "11_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "IeXU8SLZU7Oz",
@@ -5404,7 +5380,7 @@
                                     "role": "image",
                                     "mime": "image/jpg",
                                     "position": 10,
-                                    "dataFileName": "Geo map_image.jpg"
+                                    "dataFileName": "Geo Map_image.jpg"
                                 },
                                 {
                                     "attachmentId": "Mx2xwNIk76ZS",
@@ -5412,7 +5388,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "11_Geo map_image.png"
+                                    "dataFileName": "12_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "oaahbsMRbqd2",
@@ -5420,7 +5396,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "12_Geo map_image.png"
+                                    "dataFileName": "13_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "pGf1p74KKGU4",
@@ -5428,7 +5404,7 @@
                                     "role": "image",
                                     "mime": "image/jpg",
                                     "position": 10,
-                                    "dataFileName": "13_Geo map_image.png"
+                                    "dataFileName": "14_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "tfa1TRUatWEh",
@@ -5436,7 +5412,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "14_Geo map_image.png"
+                                    "dataFileName": "15_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "USbvJ38T4AKA",
@@ -5444,7 +5420,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "15_Geo map_image.png"
+                                    "dataFileName": "16_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "x6yBLIsY2LSv",
@@ -5452,7 +5428,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "16_Geo map_image.png"
+                                    "dataFileName": "17_Geo Map_image.png"
                                 },
                                 {
                                     "attachmentId": "ZvTlu9WMd37z",
@@ -5460,7 +5436,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "17_Geo map_image.png"
+                                    "dataFileName": "18_Geo Map_image.png"
                                 }
                             ]
                         }
