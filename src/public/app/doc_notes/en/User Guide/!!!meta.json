@@ -3235,11 +3235,27 @@
                                             "value": "bx bx-bar-chart",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "BlN9DFI679QC",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "html",
                                     "dataFileName": "Similar Notes.html",
-                                    "attachments": []
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "0JOeCYHahqJS",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Similar Notes_image.png"
+                                        }
+                                    ]
                                 }
                             ]
                         },
