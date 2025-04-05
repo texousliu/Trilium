@@ -149,7 +149,8 @@ function sanitize(dirtyHtml: string) {
         allowedTags,
         allowedAttributes: {
             "*": ["class", "style", "title", "src", "href", "hash", "disabled", "align", "alt", "center", "data-*"],
-            input: ["type", "checked"]
+            input: ["type", "checked"],
+            img: ["width", "height"]
         },
         allowedStyles: {
             "*": {
@@ -160,6 +161,9 @@ function sanitize(dirtyHtml: string) {
                 float: [/^\s*(left|right|none)\s*$/],
                 width: sizeRegex,
                 height: sizeRegex
+            },
+            img: {
+                "aspect-ratio": [ /^\d+\/\d+$/ ],
             },
             table: {
                 "border-color": colorRegex,
