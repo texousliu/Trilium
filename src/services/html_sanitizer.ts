@@ -175,8 +175,12 @@ function sanitize(dirtyHtml: string) {
                 border: [
                     /^\s*\d+(?:px|em|%)\s*(none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset)\s*(#(0x)?[0-9a-fA-F]+|rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)|hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\))\s*$/
                 ]
+            },
+            col: {
+                width: sizeRegex
             }
         },
+        selfClosing: [ "img", "br", "hr", "area", "base", "basefont", "input", "link", "meta", "col" ],
         allowedSchemes: ALLOWED_PROTOCOLS,
         nonTextTags: ["head"],
         transformTags

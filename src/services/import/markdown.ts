@@ -100,7 +100,7 @@ function renderToHtml(content: string, title: string) {
     html = htmlSanitizer.sanitize(html);
 
     // Add a trailing semicolon to CSS styles.
-    html = html.replaceAll(/(<(img|figure).*?style=".*?)"/g, "$1;\"");
+    html = html.replaceAll(/(<(img|figure|col).*?style=".*?)"/g, "$1;\"");
 
     // Remove slash for self-closing tags to match CKEditor's approach.
     html = html.replace(/<(\w+)([^>]*)\s+\/>/g, "<$1$2>");
