@@ -1,5 +1,5 @@
 # Backup
-Trilium supports simple backup scheme where it saves copy of the [document](#root/xjSsCcvVZf6H) on these events:
+Trilium supports simple backup scheme where it saves copy of the <a class="reference-link" href="../Advanced%20Usage/Database.md">Database</a> on these events:
 
 *   once a day
 *   once a week
@@ -8,9 +8,9 @@ Trilium supports simple backup scheme where it saves copy of the [document](#roo
 
 So in total you'll have at most 4 backups from different points in time which should protect you from various problems. These backups are stored by default in `backup` directory placed in the [data directory](Data%20directory.md).
 
-This is only very basic backup solution, and you're encouraged to add some better backup solution - e.g. backing up the [document](#root/xjSsCcvVZf6H) to cloud / different computer etc.
+This is only very basic backup solution, and you're encouraged to add some better backup solution - e.g. backing up the <a class="reference-link" href="../Advanced%20Usage/Database.md">Database</a> to cloud / different computer etc.
 
-Note that [synchronization](Synchronization.md) provides also some backup capabilities by its nature of distributing the data to other computers.
+Note that <a class="reference-link" href="Synchronization.md">Synchronization</a> provides also some backup capabilities by its nature of distributing the data to other computers.
 
 ## Restoring backup
 
@@ -18,7 +18,7 @@ Let's assume you want to restore the weekly backup, here's how to do it:
 
 *   find [data directory](Data%20directory.md) Trilium uses - easy way is to open "About Trilium Notes" from "Menu" in upper left corner and looking at "data directory"
     *   I'll refer to `~/trilium-data` as data directory from now on
-*   find `~/trilium-data/backup/backup-weekly.db` - this is the [document](#root/xjSsCcvVZf6H) backup
+*   find `~/trilium-data/backup/backup-weekly.db` - this is the <a class="reference-link" href="../Advanced%20Usage/Database.md">Database</a> backup
 *   at this point stop/kill Trilium
 *   delete `~/trilium-data/document.db`, `~/trilium-data/document.db-wal` and `~/trilium-data/document.db-shm` (latter two files are auto generated)
 *   copy and rename this `~/trilium-data/backup/backup-weekly.db` to `~/trilium-data/document.db`

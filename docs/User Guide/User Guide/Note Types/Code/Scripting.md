@@ -1,5 +1,5 @@
-# Scripts
-Trilium supports creating [code notes](../Code.md), i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with [Script API](Script%20API.md) provide extra functionality.
+# Scripting
+Trilium supports creating <a class="reference-link" href="../Code.md">Code</a> notes, i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with <a class="reference-link" href="Script%20API.md">Script API</a> provide extra functionality.
 
 ## Scripting
 
@@ -12,7 +12,7 @@ So we have frontend and backend, each with their own set of responsibilities, bu
 
 ## Use cases
 
-*   <a class="reference-link" href="Scripts/New%20Task%20launcher%20button.md">"New Task" launcher button</a>
+*   <a class="reference-link" href="Scripting/New%20Task%20launcher%20button.md">"New Task" launcher button</a>
 
 ## Action handler
 

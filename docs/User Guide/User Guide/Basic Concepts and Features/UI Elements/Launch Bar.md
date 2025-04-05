@@ -50,7 +50,7 @@ Right click either the _Available launchers_ or _Visible launchers_ sections and
     2.  Optionally, set `hoistedNote` to hoist a particular note. See [Note Hoisting](../Navigation/Note%20Hoisting.md) for more information.
     3.  Optionally, set a `keyboardShortcut` to trigger the launcher.
 2.  **Script Launcher**  
-    An advanced launcher which will run a script upon pressing. See [Scripts](../../Note%20Types/Code/Scripts.md) for more information.
+    An advanced launcher which will run a script upon pressing. See [Scripts](../../Note%20Types/Code/Scripting.md) for more information.
     
     1.  Set `script` to point to the desired script to run.
     2.  Optionally, set a `keyboardShortcut` to trigger the launcher.

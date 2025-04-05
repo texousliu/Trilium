@@ -31,4 +31,4 @@ Trilium decides automatically whether to use mobile or desktop frontend. If this
 
 ## Scripting
 
-You can alter the behavior with [scripts](../Note%20Types/Code/Scripts.md) just like for normal frontend. For script notes to be executed, they need to have labeled `#run=mobileStartup`.
+You can alter the behavior with [scripts](../Note%20Types/Code/Scripting.md) just like for normal frontend. For script notes to be executed, they need to have labeled `#run=mobileStartup`.

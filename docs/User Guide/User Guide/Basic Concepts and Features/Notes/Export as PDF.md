@@ -23,11 +23,11 @@ gio mime application/pdf
 
 ## Reporting issues with the rendering
 
-Should you encounter any visual issues in the resulting PDF file (e.g. a table does not fit properly, there is cut off text, etc.) feel free to [report the issue](#root/OeKBfN6JbMIq/jRV1MPt4mNSP/hrC6xn7hnDq5). In this case, it's best to offer a sample note (click on the ![](1_Export%20as%20PDF_image.png) button, select Export note → This note and all of its descendants → HTML in ZIP archive). Make sure not to accidentally leak any personal information.
+Should you encounter any visual issues in the resulting PDF file (e.g. a table does not fit properly, there is cut off text, etc.) feel free to [report the issue](../../Troubleshooting/Reporting%20issues.md). In this case, it's best to offer a sample note (click on the ![](1_Export%20as%20PDF_image.png) button, select Export note → This note and all of its descendants → HTML in ZIP archive). Make sure not to accidentally leak any personal information.
 
 ## Landscape mode
 
-When exporting to PDF, there are no customizable settings such as page orientation, size, etc. However, it is possible to specify a given note to be printed as a PDF in landscape mode by adding the `#printLandscape` attribute to it (see [\[missing note\]](#root/9QRytp0ZYFIf/PnO38wN0ffOA)).
+When exporting to PDF, there are no customizable settings such as page orientation, size, etc. However, it is possible to specify a given note to be printed as a PDF in landscape mode by adding the `#printLandscape` attribute to it (see <a class="reference-link" href="../../Advanced%20Usage/Attributes.md">Attributes</a>).
 
 ## Page size
 
@@ -35,4 +35,4 @@ By default, the resulting PDF will be in Letter format. It is possible to adjust
 
 ## Keyboard shortcut
 
-It's possible to trigger the export to PDF from the keyboard by going to _Keyboard shortcuts_ and assigning a key combination for the `exportAsPdf` action.
+It's possible to trigger the export to PDF from the keyboard by going to _Keyboard shortcuts_ in <a class="reference-link" href="../UI%20Elements/Options.md">Options</a> and assigning a key combination for the `exportAsPdf` action.

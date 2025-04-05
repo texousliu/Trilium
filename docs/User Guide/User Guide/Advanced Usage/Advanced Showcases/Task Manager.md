@@ -1,5 +1,5 @@
 # Task Manager
-Task Manager is a [promoted attributes](../Attributes/Promoted%20Attributes.md) and [scripts](../../Note%20Types/Code/Scripts.md)showcase present in the [demo notes](../Database.md).
+Task Manager is a [promoted attributes](../Attributes/Promoted%20Attributes.md) and [scripts](../../Note%20Types/Code/Scripting.md)showcase present in the [demo notes](../Database.md).
 
 ## Demo
 
@@ -15,7 +15,7 @@ New tasks are created in the TODO note which has `~child:template` [relation](..
 
 ### Attributes
 
-Task template defines several [promoted attributes](../Attributes/Promoted%20Attributes.md) - todoDate, doneDate, tags, location. Importantly it also defines `~runOnAttributeChange` relation - [event](../../Note%20Types/Code/Events.md) handler which is run on attribute change. This [script](../../Note%20Types/Code/Scripts.md) handles when e.g. we fill out the doneDate attribute - meaning the task is done and should be moved to "Done" note and removed from TODO, locations and tags.
+Task template defines several [promoted attributes](../Attributes/Promoted%20Attributes.md) - todoDate, doneDate, tags, location. Importantly it also defines `~runOnAttributeChange` relation - [event](../../Note%20Types/Code/Events.md) handler which is run on attribute change. This [script](../../Note%20Types/Code/Scripting.md) handles when e.g. we fill out the doneDate attribute - meaning the task is done and should be moved to "Done" note and removed from TODO, locations and tags.
 
 ### New task button
 

@@ -83,7 +83,7 @@ If you make changes to your theme, press <kbd>Ctrl</kbd> + <kbd>R</kbd> to reloa
 
 Custom themes can be exported as `.tar` archives, which can be shared with other users. However, be cautious when importing themes from untrusted sources, as they may contain executable scripts that could pose security risks.
 
-An example user theme, _Steel Blue_, is available in the [demo document](#root/xjSsCcvVZf6H).
+An example user theme, _Steel Blue_, is available in the demo document.
 
 ![Steel Blue Theme](../Attachments/steel-blue.png)
 
@@ -95,7 +95,7 @@ In addition to full themes, Trilium allows for custom CSS that isn't tied to a t
 
 To use custom CSS:
 
-1.  **Create a CSS Code Note**: Create a new [code note](../Note%20Types/Code.md) with the `CSS` type.
+1.  **Create a CSS Code Note**: Create a new <a class="reference-link" href="../Note%20Types/Code.md">Code</a> note with the `CSS` type.
 2.  **Add the** `appCss` **Label**: Annotate the note with the `#appCss` [label](../Advanced%20Usage/Attributes.md).
 3.  **Write Your CSS**: Add your custom CSS rules to the note.
 
