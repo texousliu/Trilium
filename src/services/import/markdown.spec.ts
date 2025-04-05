@@ -202,4 +202,10 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(html, "Title")).toStrictEqual(html);
     });
 
+    it("generates strike-through text", () => {
+        const input = `~~Hello~~ world.`;
+        const expected = /*html*/`<p><del>Hello</del> world.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });
