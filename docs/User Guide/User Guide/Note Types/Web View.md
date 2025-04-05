@@ -1,7 +1,7 @@
 # Web View
 ## Configuration
 
-A webview needs to know which URL to render, and it can be provided by setting the `webViewSrc` attribute, such as:
+A webview needs to know which URL to render, and it can be provided by setting the `webViewSrc` [label](../Advanced%20Usage/Attributes.md), such as:
 
 ```
 #webViewSrc="https://www.wikipedia.org"

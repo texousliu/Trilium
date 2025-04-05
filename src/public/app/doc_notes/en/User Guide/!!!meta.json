@@ -571,26 +571,6 @@
                                     "format": "html",
                                     "dataFileName": "Multi-Factor Authentication.html",
                                     "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "KaM3TfD7mP78",
-                                    "notePath": [
-                                        "pOsGYCXsbNQG",
-                                        "Otzi9La2YAUX",
-                                        "WOcw2SLH6tbX",
-                                        "KaM3TfD7mP78"
-                                    ],
-                                    "title": "Reverse proxy setup",
-                                    "notePosition": 120,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [],
-                                    "format": "html",
-                                    "dataFileName": "Reverse proxy setup.html",
-                                    "attachments": []
                                 }
                             ]
                         },
@@ -5704,6 +5684,13 @@
                                     "value": "bx bx-globe-alt",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "zEY4DaJG4YT5",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "html",
