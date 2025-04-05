@@ -46,6 +46,7 @@ function toMarkdown(content: string) {
         instance.addRule("admonition", buildAdmonitionFilter());
         instance.addRule("inlineLink", buildInlineLinkFilter());
         instance.addRule("figure", buildFigureFilter());
+        instance.addRule("math", buildMathFilter());
         instance.use(gfm);
         instance.keep([ "kbd" ]);
     }
@@ -203,6 +204,23 @@ function buildFigureFilter(): Rule {
         },
         replacement(content, node) {
             return (node as HTMLElement).outerHTML;
+        }
+    }
+}
+
+function buildMathFilter(): Rule {
+    return {
+        filter(node) {
+            return node.nodeName === "SPAN" && node.classList.contains("math-tex");
+        },
+        replacement(content) {
+            // Inline math
+            if (content.startsWith("(") && content.endsWith(")")) {
+                return `$${content.substring(1, content.length - 1)}$`;
+            }
+
+            // Unknown.
+            return content;
         }
     }
 }

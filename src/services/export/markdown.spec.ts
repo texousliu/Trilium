@@ -279,4 +279,10 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
+    it("converts inline math expressions to proper Markdown syntax", () => {
+        const html = /*html*/`<p>The equation is&nbsp;<span class="math-tex">\(e=mc^{2}\)</span>.</p>`;
+        const expected = `The equation is\u00a0$e=mc^{2}$.`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
 });
