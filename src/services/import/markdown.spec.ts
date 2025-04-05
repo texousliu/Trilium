@@ -175,4 +175,14 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("preserves escaped math expressions", () => {
+        const scenarios = [
+            "\\$\\$\sqrt{x^{2}+1}\\$\\$",
+            "The equation is \\$e=mc^{2}\\$."
+        ];
+        for (const scenario of scenarios) {
+            expect(markdownService.renderToHtml(scenario, "Title")).toStrictEqual(`<p>${scenario}</p>`);
+        }
+    });
+
 });

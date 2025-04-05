@@ -16,11 +16,11 @@ class CustomMarkdownRenderer extends Renderer {
 
         if (text.includes("$")) {
             // Display math
-            text = text.replaceAll(/\$\$(.+)\$\$/g,
+            text = text.replaceAll(/(?<!\\)\$\$(.+)\$\$/g,
                 `<span class="math-tex">\\\[$1\\\]</span>`);
 
             // Inline math
-            text = text.replaceAll(/\$(.+)\$/g,
+            text = text.replaceAll(/(?<!\\)\$(.+)\$/g,
                 `<span class="math-tex">\\\($1\\\)</span>`);
         }
 
@@ -87,6 +87,9 @@ import { ADMONITION_TYPE_MAPPINGS } from "../export/markdown.js";
 import utils from "../utils.js";
 
 function renderToHtml(content: string, title: string) {
+    // Double-escape slashes in math expression because they are otherwise consumed by the parser somewhere.
+    content = content.replaceAll("\\$", "\\\\$");
+
     let html = parse(content, {
         async: false,
         renderer: renderer
