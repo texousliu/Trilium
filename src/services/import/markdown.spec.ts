@@ -165,7 +165,7 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
 
     it("preserves figures", () => {
         const input = `<figure class="image"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`;
-        const expected = /*html*/`<figure class="image"><img style="aspect-ratio:991/403" src="Jump to Note_image.png" width="991" height="403"></figure>`;
+        const expected = /*html*/`<figure class="image"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
