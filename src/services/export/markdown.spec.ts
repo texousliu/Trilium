@@ -267,12 +267,12 @@ describe("Markdown export", () => {
 
     it("preserves figures", () => {
         const html = /*html*/trimIndentation`\
-              <figure class="image">
+              <figure class="image" style="width:53.44%;">
                 <img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991"
                 height="403">
               </figure>
         `;
-        const expected = `<figure class="image"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`;
+        const expected = `<figure class="image" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 

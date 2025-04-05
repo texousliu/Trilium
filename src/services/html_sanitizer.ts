@@ -142,7 +142,7 @@ function sanitize(dirtyHtml: string) {
     }
 
     const colorRegex = [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/, /^hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/];
-    const sizeRegex = [/^\d+(?:px|em|%)$/];
+    const sizeRegex = [/^\d+\.?\d*(?:px|em|%)$/];
 
     // to minimize document changes, compress H
     return sanitizeHtml(dirtyHtml, {

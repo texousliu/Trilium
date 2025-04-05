@@ -164,9 +164,14 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
     });
 
     it("preserves figures", () => {
-        const input = `<figure class="image image-style-align-center image_resized" style="width:50%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`;
-        const expected = /*html*/`<figure class="image image-style-align-center image_resized" style="width:50%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`;
-        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+        const scenarios = [
+            /*html*/`<figure class="image image-style-align-center image_resized" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`,
+            /*html*/`<figure class="image image-style-align-center image_resized" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`
+        ];
+
+        for (const scenario of scenarios) {
+            expect(markdownService.renderToHtml(scenario, "Title")).toStrictEqual(scenario);
+        }
     });
 
     it("converts inline math expressions into Mathtex format", () => {

@@ -2,7 +2,6 @@
 
 import TurndownService, { type Rule } from "turndown";
 import { gfm } from "../../../packages/turndown-plugin-gfm/src/gfm.js";
-import type { DOMElement } from "react";
 
 let instance: TurndownService | null = null;
 
