@@ -1,5 +1,5 @@
 # Floating buttons
-![](Floating%20buttons_image.png)
+<figure class="image image-style-align-center"><img style="aspect-ratio:893/144;" src="Floating buttons_image.png" width="893" height="144"></figure>
 
 Depending on the current note, a panel will appear near the top-right of the note, right underneath the <a class="reference-link" href="Ribbon.md">Ribbon</a>. These buttons offer additional interaction that is specific to that particular note.
 

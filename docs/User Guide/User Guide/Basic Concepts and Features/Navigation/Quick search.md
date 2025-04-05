@@ -1,5 +1,5 @@
 # Quick search
-![](Quick%20search_image.png)
+<figure class="image image-style-align-center"><img style="aspect-ratio:659/256;" src="Quick search_image.png" width="659" height="256"></figure>
 
 The _Quick search_ function does a full-text search (that is, it searches through the content of notes and not just the title of a note) and displays the result in an easy-to-access manner.
 

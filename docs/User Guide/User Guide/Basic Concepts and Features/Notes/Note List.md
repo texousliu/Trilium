@@ -10,7 +10,7 @@ By default, the notes will be displayed in a grid, however there are also some o
 
 ### Grid view
 
-![](1_Note%20List_image.png)
+<figure class="image image-style-align-center"><img style="aspect-ratio:1025/655;" src="1_Note List_image.png" width="1025" height="655"></figure>
 
 This view presents the child notes in a grid format, allowing for a more visual navigation experience.
 
@@ -23,12 +23,12 @@ This is the default view type.
 
 ### List view
 
-![](Note%20List_image.png)
+<figure class="image image-style-align-center"><img style="aspect-ratio:1013/526;" src="Note List_image.png" width="1013" height="526"></figure>
 
 In the list view mode, each note is displayed in a single row with only the title and the icon of the note being visible by the default. By pressing the expand button it's possible to view the content of the note, as well as the children of the note (recursively).
 
 ### Calendar view
 
-![](2_Note%20List_image.png)
+<figure class="image image-style-align-center"><img style="aspect-ratio:1090/598;" src="2_Note List_image.png" width="1090" height="598"></figure>
 
 In the calendar view, child notes are represented as events, with a start date and optionally an end date. The view also has interaction support such as moving or creating new events. See <a class="reference-link" href="Note%20List/Calendar%20View.md">Calendar View</a> for more information.

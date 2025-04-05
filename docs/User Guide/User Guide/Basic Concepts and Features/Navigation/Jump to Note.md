@@ -1,5 +1,5 @@
 # Jump to Note
-![](Jump%20to%20Note_image.png)
+<figure class="image image-style-align-center"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>
 
 The _Jump to Note_ function allows easy navigation between notes by searching for their title. In addition to that, it can also trigger a full search or create notes.
 

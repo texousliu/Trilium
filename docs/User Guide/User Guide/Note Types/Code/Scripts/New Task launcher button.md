@@ -34,7 +34,7 @@ Since we set the script to be run on start-up, all we need to do is to [refresh 
 
 ## Understanding how the script works
 
-<table class="ck-table-resized"><colgroup><col style="width:50%;"><col style="width:50%;"></colgroup><tbody><tr><td><pre><code class="language-application-javascript-env-frontend">api.addButtonToToolbar({
+<table class="ck-table-resized"><colgroup><col><col></colgroup><tbody><tr><td><pre><code class="language-application-javascript-env-frontend">api.addButtonToToolbar({
 	title: "New task",
     icon: "task",
     shortcut: "alt+n",

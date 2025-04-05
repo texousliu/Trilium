@@ -1,5 +1,5 @@
 # Mind Map
-![](Mind%20Map_image.png)
+<figure class="image image-style-align-center"><img style="aspect-ratio:892/675;" src="Mind Map_image.png" width="892" height="675"></figure>
 
 The mindmap allows for easy jotting down of ideas and storing them in a hierarchical fashion.
 

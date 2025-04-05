@@ -1,5 +1,5 @@
 # Options
-![](Options_image.png)
+<figure class="image image-style-align-center"><img style="aspect-ratio:1189/709;" src="Options_image.png" width="1189" height="709"></figure>
 
 The Options section allows the configuration of the TriliumNext client and server.
 
