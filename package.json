@@ -173,7 +173,7 @@
     "@popperjs/core": "2.11.8",
     "@stylistic/eslint-plugin": "4.2.0",
     "@types/archiver": "6.0.3",
-    "@types/better-sqlite3": "7.6.12",
+    "@types/better-sqlite3": "7.6.13",
     "@types/bootstrap": "5.2.10",
     "@types/cheerio": "0.22.35",
     "@types/cls-hooked": "4.3.9",
