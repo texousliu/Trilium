@@ -1931,8 +1931,8 @@
       "loading": "Loading...",
       "generating": "Generating..."
     },
-    "create_new_ai_chat": "Create new AI Chat"
-
+    "create_new_ai_chat": "Create new AI Chat",
+    "configuration_warnings": "There are some issues with your AI configuration. Please check your settings."
   },
   "switch_layout_button": {
     "title_vertical": "Move editing pane to the bottom",
