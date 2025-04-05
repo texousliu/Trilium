@@ -97,7 +97,15 @@ function buildImageFilter() {
 
     const imageFilter: TurndownService.Rule = {
         filter: "img",
-        replacement(content, node) {
+        replacement(content, _node) {
+            const node = _node as HTMLElement;
+
+            // Preserve image verbatim if it has a width or height attribute.
+            if (node.hasAttribute("width") || node.hasAttribute("height")) {
+                return node.outerHTML;
+            }
+
+            // TODO: Deduplicate with upstream.
             const untypedNode = (node as any);
             const alt = escapeMarkdown(cleanAttribute(untypedNode.getAttribute('alt')))
             const src = escapeLinkDestination(untypedNode.getAttribute('src') || '')

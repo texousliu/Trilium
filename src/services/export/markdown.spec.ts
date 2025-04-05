@@ -250,4 +250,22 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
+    it("converts image if it has no custom properties", () => {
+        const html = /*html*/`<p><img src="Include Note_image.png"></p>`;
+        const expected = `![](Include%20Note_image.png)`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("preserves image verbatim if it has a width or height attribute", () => {
+        const scenarios = [
+            `<img src="Include Note_image.png" width="16" height="16">`,
+            `<img src="Include Note_image.png" width="16">`,
+            `<img src="Include Note_image.png" height="16">`
+        ];
+        for (const expected of scenarios) {
+            const html = /*html*/`<p>${expected}</p>`;
+            expect(markdownExportService.toMarkdown(html)).toBe(expected);
+        }
+    });
+
 });
