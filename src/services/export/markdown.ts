@@ -219,6 +219,11 @@ function buildMathFilter(): Rule {
                 return `$${content.substring(1, content.length - 1)}$`;
             }
 
+            // Display math
+            if (content.startsWith("\\[") && content.endsWith("\\]")) {
+                return `$$${content.substring(2, content.length - 2)}$$`;
+            }
+
             // Unknown.
             return content;
         }
