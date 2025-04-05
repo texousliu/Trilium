@@ -10,7 +10,7 @@ To create a new note of a different type, head to the <a class="reference-link"
 *   _Insert note after_, to put the new note underneath the one selected.
 *   _Insert child note_, to insert the note as a child of the selected note.
 
-![](Note%20Types_image.png)
+<img src="Note Types_image.png" width="613" height="529">
 
 ## Creating a new note of a different type via add link or new tab
 

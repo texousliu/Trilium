@@ -5,11 +5,11 @@ In Trilium, is possible to work with two or more notes side-by-side.
 
 ## **Interactions**
 
-*   Press the ![](Split%20View_Split%20View_imag.png) button to the right of a note's title to open a new split to the right of it.
+*   Press the <img src="Split View_Split View_imag.png" width="16" height="16"> button to the right of a note's title to open a new split to the right of it.
     *   It is possible to have as many splits as desired, simply press again the button.
     *   Only horizontal splits are possible, vertical or drag & dropping is not supported.
 *   When at least one split is open, press the ![](Split%20View_3_Split%20View_im.png) button next to it to close it.
-*   Use the ![](Split%20View_4_Split%20View_im.png) or the ![](Split%20View_1_Split%20View_im.png) button to move around the splits.
+*   Use the <img src="Split View_4_Split View_im.png" width="7" height="10"> or the <img src="Split View_1_Split View_im.png" width="7" height="10"> button to move around the splits.
 *   Each [tab](Tabs.md) has its own split view configuration (e.g. one tab can have two notes in a split view, whereas the others are one-note views).
     *   The tab will indicate only the title of the main note (the first one in the list).
 

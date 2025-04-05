@@ -12,7 +12,7 @@ Since these files come from an external source, it is not possible to create a _
 
 ### PDFs
 
-![](File_image.png)
+<img src="File_image.png" width="933" height="666">
 
 PDFs can be browsed directly from Trilium.
 
@@ -29,15 +29,15 @@ Interaction:
 
 ### Images
 
-![](4_File_image.png)
+<img src="4_File_image.png" width="879" height="766">
 
 Interaction:
 
-*   _Copy reference to clipboard_, for embedding the image within [Text](Text.md) notes. See [Image references](Text/Images/Image%20references.md) for more information.
+*   _Copy reference to clipboard_, for embedding the image within <a class="reference-link" href="Text.md">Text</a> notes. See <a class="reference-link" href="Text/Images/Image%20references.md">Image references</a> for more information.
 
 ### Videos
 
-![](1_File_image.png)
+<img src="1_File_image.png" width="854" height="700">
 
 Video files can be added in as well. The file is streamed directly, so when accessing the note from a server it doesn't have to download the entire video to start playing it.
 
@@ -46,7 +46,7 @@ Video files can be added in as well. The file is streamed directly, so when acce
 
 ### Audio
 
-![](3_File_image.png)
+<img src="3_File_image.png" width="850" height="243">
 
 Adding a supported audio file will reveal a basic audio player that can be used to play it.
 
@@ -59,7 +59,7 @@ Interactions:
 
 ### Text files
 
-![](2_File_image.png)
+<img src="2_File_image.png" width="926" height="347">
 
 Files that are identified as containing text will show a preview of their content. One common use case for this type of file is to embed text files whose content is not necessarily of interest to the user, such as third-party libraries or generated content, that can then be downloaded if needed.
 
@@ -69,7 +69,7 @@ Since one of the use cases for having files instead of notes is to display large
 
 ### Unknown file types
 
-![](5_File_image.png)
+<img src="5_File_image.png" width="532" height="240">
 
 If the file could not be identified as any of the supported file types from above, it will be treated as an unknown file. In this case, all the default interactions will be available such as downloading or opening the file externally, but there will be no preview of the content.
 
@@ -84,6 +84,6 @@ If the file could not be identified as any of the supported file types from abov
 
 ## Relation with other notes
 
-*   Files are also displayed in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> based on their type:![](6_File_image.png)
+*   Files are also displayed in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> based on their type:<img src="6_File_image.png" width="853" height="315">
 *   Non-image files can be embedded into text notes as read-only widgets via the <a class="reference-link" href="Text/Include%20Note.md">Include Note</a> functionality.
 *   Image files can be embedded into text notes like normal images via <a class="reference-link" href="Text/Images/Image%20references.md">Image references</a>.
