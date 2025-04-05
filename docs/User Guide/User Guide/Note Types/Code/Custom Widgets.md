@@ -10,7 +10,7 @@ Positions are:
 
 ## Example - word count widget
 
-Create a code note of type JS frontend and **give it a** `**#widget**` **label**.
+Create a code note of type JS frontend and **give it a** `#widget` **label**.
 
 ```
 /*
