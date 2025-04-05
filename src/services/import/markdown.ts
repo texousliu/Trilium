@@ -12,7 +12,13 @@ class CustomMarkdownRenderer extends Renderer {
     }
 
     paragraph(data: Tokens.Paragraph): string {
-        return super.paragraph(data).trimEnd();
+        let text = super.paragraph(data).trimEnd();
+
+        // Display math
+        text = text.replaceAll(/\$\$(.+)\$\$/g,
+            `<span class="math-tex">\\\[$1\\\]</span>`);
+
+        return text;
     }
 
     code({ text, lang }: Tokens.Code): string {
