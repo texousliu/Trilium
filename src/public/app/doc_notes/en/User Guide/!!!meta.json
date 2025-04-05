@@ -1715,13 +1715,6 @@
                                             "value": "bx bx-cog",
                                             "isInheritable": false,
                                             "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "_options",
-                                            "isInheritable": false,
-                                            "position": 60
                                         }
                                     ],
                                     "format": "html",
