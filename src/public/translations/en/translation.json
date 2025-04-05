@@ -1888,7 +1888,12 @@
     "api_key": "API Key",
     "api_key_tooltip": "API key for accessing the service",
     "confirm_delete_embeddings": "Are you sure you want to delete all AI embeddings? This will remove all semantic search capabilities until notes are reindexed, which can take a significant amount of time.",
-    "empty_key_warning": "Warning: Empty API key. You need to configure your API key in settings.",
+    "empty_key_warning": {
+      "anthropic": "Anthropic API key is empty. Please enter a valid API key.",
+      "openai": "OpenAI API key is empty. Please enter a valid API key.",
+      "voyage": "Voyage API key is empty. Please enter a valid API key.",
+      "ollama": "Ollama API key is empty. Please enter a valid API key."
+    },
     "enable_ai": "Enable AI Features",
     "name": "AI",
     "openai": "OpenAI",

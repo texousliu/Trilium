@@ -202,7 +202,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (providerPrecedence.includes('openai')) {
             const openaiApiKey = this.$widget.find('.openai-api-key').val();
             if (!openaiApiKey) {
-                openaiWarnings.push(t("ai_llm.warning_openai_missing_api_key"));
+                openaiWarnings.push(t("ai_llm.empty_key_warning.openai"));
             }
         }
 
@@ -211,7 +211,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (providerPrecedence.includes('anthropic')) {
             const anthropicApiKey = this.$widget.find('.anthropic-api-key').val();
             if (!anthropicApiKey) {
-                anthropicWarnings.push(t("ai_llm.warning_anthropic_missing_api_key"));
+                anthropicWarnings.push(t("ai_llm.empty_key_warning.anthropic"));
             }
         }
 
@@ -220,7 +220,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (providerPrecedence.includes('voyage')) {
             const voyageApiKey = this.$widget.find('.voyage-api-key').val();
             if (!voyageApiKey) {
-                voyageWarnings.push(t("ai_llm.warning_voyage_missing_api_key"));
+                voyageWarnings.push(t("ai_llm.empty_key_warning.voyage"));
             }
         }
 
