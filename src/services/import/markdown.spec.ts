@@ -165,7 +165,7 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
 
     it("converts inline math expressions into Mathtex format", () => {
         const input = `The equation is\u00a0$e=mc^{2}$.`;
-        const expected = /*html*/`<p>The equation is&nbsp;<span class="math-tex">\(e=mc^{2}\)</span>.</p>`;
+        const expected = /*html*/`<p>The equation is&nbsp;<span class="math-tex">\\(e=mc^{2}\\)</span>.</p>`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
