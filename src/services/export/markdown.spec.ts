@@ -176,10 +176,7 @@ describe("Markdown export", () => {
             > [!IMPORTANT]
             > This is a very important information.
             >${space}
-            > |     |     |
-            > | --- | --- |
-            > | 1   | 2   |
-            > | 3   | 4   |
+            > <figure class="table"><table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table></figure>
 
             > [!CAUTION]
             > This is a caution.
