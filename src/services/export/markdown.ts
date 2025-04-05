@@ -45,6 +45,7 @@ function toMarkdown(content: string) {
         instance.addRule("img", buildImageFilter());
         instance.addRule("admonition", buildAdmonitionFilter());
         instance.addRule("inlineLink", buildInlineLinkFilter());
+        instance.addRule("figure", buildFigureFilter());
         instance.use(gfm);
         instance.keep([ "kbd" ]);
     }
@@ -191,6 +192,17 @@ function buildInlineLinkFilter(): Rule {
             let title = cleanAttribute(node.getAttribute('title'))
             if (title) title = ' "' + title.replace(/"/g, '\\"') + '"'
             return '[' + content + '](' + href + title + ')'
+        }
+    }
+}
+
+function buildFigureFilter(): Rule {
+    return {
+        filter(node, options) {
+            return node.nodeName === 'FIGURE'
+        },
+        replacement(content, node) {
+            return (node as HTMLElement).outerHTML;
         }
     }
 }
