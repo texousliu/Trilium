@@ -215,13 +215,13 @@ function buildMathFilter(): Rule {
         },
         replacement(content) {
             // Inline math
-            if (content.startsWith("(") && content.endsWith(")")) {
-                return `$${content.substring(1, content.length - 1)}$`;
+            if (content.startsWith("\\\\(") && content.endsWith("\\\\)")) {
+                return `$${content.substring(3, content.length - 3)}$`;
             }
 
             // Display math
-            if (content.startsWith("\\[") && content.endsWith("\\]")) {
-                return `$$${content.substring(2, content.length - 2)}$$`;
+            if (content.startsWith(String.raw`\\\[`) && content.endsWith(String.raw`\\\]`)) {
+                return `$$${content.substring(4, content.length - 4)}$$`;
             }
 
             // Unknown.

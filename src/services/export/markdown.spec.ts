@@ -280,13 +280,13 @@ describe("Markdown export", () => {
     });
 
     it("converts inline math expressions into proper Markdown syntax", () => {
-        const html = /*html*/`<p>The equation is&nbsp;<span class="math-tex">\(e=mc^{2}\)</span>.</p>`;
+        const html = /*html*/`<p>The equation is&nbsp;<span class="math-tex">\\(e=mc^{2}\\)</span>.</p>`;
         const expected = `The equation is\u00a0$e=mc^{2}$.`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
     it("converts display math expressions into proper Markdown syntax", () => {
-        const html = /*html*/`<span class="math-tex">\[\sqrt{x^{2}+1}\]</span>`;
+        const html = /*html*/`<span class="math-tex">\\[\sqrt{x^{2}+1}\\]</span>`;
         const expected = `$$\sqrt{x^{2}+1}$$`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
