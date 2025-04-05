@@ -14,13 +14,15 @@ class CustomMarkdownRenderer extends Renderer {
     paragraph(data: Tokens.Paragraph): string {
         let text = super.paragraph(data).trimEnd();
 
-        // Display math
-        text = text.replaceAll(/\$\$(.+)\$\$/g,
-            `<span class="math-tex">\\\[$1\\\]</span>`);
+        if (text.includes("$")) {
+            // Display math
+            text = text.replaceAll(/\$\$(.+)\$\$/g,
+                `<span class="math-tex">\\\[$1\\\]</span>`);
 
-        // Inline math
-        text = text.replaceAll(/\$(.+)\$/g,
-            `<span class="math-tex">\\\($1\\\)</span>`);
+            // Inline math
+            text = text.replaceAll(/\$(.+)\$/g,
+                `<span class="math-tex">\\\($1\\\)</span>`);
+        }
 
         return text;
     }
