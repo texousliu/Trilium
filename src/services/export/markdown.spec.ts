@@ -176,10 +176,7 @@ describe("Markdown export", () => {
             > [!IMPORTANT]
             > This is a very important information.
             >${space}
-            > |     |     |
-            > | --- | --- |
-            > | 1   | 2   |
-            > | 3   | 4   |
+            > <figure class="table"><table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table></figure>
 
             > [!CAUTION]
             > This is a caution.
@@ -276,6 +273,18 @@ describe("Markdown export", () => {
               </figure>
         `;
         const expected = `<figure class="image"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("converts inline math expressions into proper Markdown syntax", () => {
+        const html = /*html*/`<p>The equation is&nbsp;<span class="math-tex">\\(e=mc^{2}\\)</span>.</p>`;
+        const expected = `The equation is\u00a0$e=mc^{2}$.`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("converts display math expressions into proper Markdown syntax", () => {
+        const html = /*html*/`<span class="math-tex">\\[\sqrt{x^{2}+1}\\]</span>`;
+        const expected = `$$\sqrt{x^{2}+1}$$`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
