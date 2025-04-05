@@ -164,6 +164,8 @@ function sanitize(dirtyHtml: string) {
             },
             img: {
                 "aspect-ratio": [ /^\d+\/\d+$/ ],
+                width: sizeRegex,
+                height: sizeRegex
             },
             table: {
                 "border-color": colorRegex,

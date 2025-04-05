@@ -163,10 +163,11 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
-    it("preserves figures", () => {
+    it("preserves figures and images with sizes", () => {
         const scenarios = [
             /*html*/`<figure class="image image-style-align-center image_resized" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`,
-            /*html*/`<figure class="image image-style-align-center image_resized" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`
+            /*html*/`<figure class="image image-style-align-center image_resized" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`,
+            /*html*/`<img class="image_resized" style="aspect-ratio:853/315;width:50%;" src="6_File_image.png" width="853" height="315">`
         ];
 
         for (const scenario of scenarios) {

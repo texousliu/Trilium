@@ -255,9 +255,10 @@ describe("Markdown export", () => {
 
     it("preserves image verbatim if it has a width or height attribute", () => {
         const scenarios = [
-            `<img src="Include Note_image.png" width="16" height="16">`,
-            `<img src="Include Note_image.png" width="16">`,
-            `<img src="Include Note_image.png" height="16">`
+            /*html*/`<img src="Include Note_image.png" width="16" height="16">`,
+            /*html*/`<img src="Include Note_image.png" width="16">`,
+            /*html*/`<img src="Include Note_image.png" height="16">`,
+            /*html*/`<img class="image_resized" style="aspect-ratio:853/315;width:50%;" src="6_File_image.png" width="853" height="315">`
         ];
         for (const expected of scenarios) {
             const html = /*html*/`<p>${expected}</p>`;
