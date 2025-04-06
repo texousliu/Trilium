@@ -3,7 +3,6 @@ import type { ModelSelectionInput } from '../interfaces.js';
 import type { ChatCompletionOptions } from '../../ai_interface.js';
 import log from '../../../log.js';
 import options from '../../../options.js';
-
 /**
  * Pipeline stage for selecting the appropriate LLM model
  */
@@ -11,7 +10,6 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
     constructor() {
         super('ModelSelection');
     }
-
     /**
      * Select the appropriate model based on input complexity
      */
@@ -27,8 +25,44 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             return { options: updatedOptions };
         }
 
-        // Get default model from options
-        const defaultModel = await options.getOption('aiDefaultModel') || 'openai:gpt-3.5-turbo';
+        // Get default model based on provider precedence
+        let defaultModel = 'openai:gpt-3.5-turbo'; // Fallback default
+
+        try {
+            // Get provider precedence list
+            const providerPrecedence = await options.getOption('aiProviderPrecedence');
+            if (providerPrecedence) {
+                // Parse provider precedence list
+                let providers = [];
+                if (providerPrecedence.includes(',')) {
+                    providers = providerPrecedence.split(',').map(p => p.trim());
+                } else if (providerPrecedence.startsWith('[') && providerPrecedence.endsWith(']')) {
+                    providers = JSON.parse(providerPrecedence);
+                } else {
+                    providers = [providerPrecedence];
+                }
+
+                // Check for first available provider
+                if (providers.length > 0) {
+                    const firstProvider = providers[0];
+
+                    // Get provider-specific default model
+                    if (firstProvider === 'openai') {
+                        const model = await options.getOption('openaiDefaultModel');
+                        if (model) defaultModel = `openai:${model}`;
+                    } else if (firstProvider === 'anthropic') {
+                        const model = await options.getOption('anthropicDefaultModel');
+                        if (model) defaultModel = `anthropic:${model}`;
+                    } else if (firstProvider === 'ollama') {
+                        const model = await options.getOption('ollamaDefaultModel');
+                        if (model) defaultModel = `ollama:${model}`;
+                    }
+                }
+            }
+        } catch (error) {
+            // If any error occurs, use the fallback default
+            log.error(`Error determining default model: ${error}`);
+        }
 
         // Determine query complexity
         let queryComplexity = 'low';
@@ -56,22 +90,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             queryComplexity = contentLength > 10000 ? 'high' : 'medium';
         }
 
-        // Select model based on complexity
-        if (queryComplexity === 'high') {
-            // Use more powerful model for complex queries
-            const advancedModel = await options.getOption('aiAdvancedModel') || 'openai:gpt-4-turbo';
-            updatedOptions.model = advancedModel;
-            // May also increase context window and reduce temperature for complex tasks
-            if (!updatedOptions.temperature) updatedOptions.temperature = 0.3;
-        } else if (queryComplexity === 'medium') {
-            // Use standard model with moderate settings
-            updatedOptions.model = defaultModel;
-            if (!updatedOptions.temperature) updatedOptions.temperature = 0.5;
-        } else {
-            // Use default model with standard settings for simple queries
-            updatedOptions.model = defaultModel;
-            if (!updatedOptions.temperature) updatedOptions.temperature = 0.7;
-        }
+        updatedOptions.model = defaultModel;
 
         log.info(`Selected model: ${updatedOptions.model} for query complexity: ${queryComplexity}`);
         return { options: updatedOptions };

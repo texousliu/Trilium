@@ -31,7 +31,7 @@ export class SemanticSearch {
         const cacheKey = `rank:${userQuery}:${notes.map(n => n.noteId).join(',')}`;
         const cached = cacheManager.getNoteData('', cacheKey);
         if (cached) {
-            return cached;
+            return cached as Array<{noteId: string, title: string, relevance: number}>;
         }
 
         const queryEmbedding = await providerManager.generateQueryEmbedding(userQuery);
@@ -122,7 +122,7 @@ export class SemanticSearch {
             const cacheKey = `find:${query}:${contextNoteId || 'all'}:${limit}`;
             const cached = cacheManager.getQueryResults(cacheKey);
             if (cached) {
-                return cached;
+                return cached as Array<{noteId: string, title: string, content: string | null, similarity: number}>;
             }
 
             // Get embedding for query
