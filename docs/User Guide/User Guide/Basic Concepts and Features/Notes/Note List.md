@@ -1,6 +1,10 @@
 # Note List
 When a note has one or more child notes, they will be listed at the end of the note for easy navigation.
 
+## Hide the note list for a given note
+
+If the note list is not desireable for a particular note, simply apply the `hideChildrenOverview` [label](../../Advanced%20Usage/Attributes.md).
+
 ## View types
 
 By default, the notes will be displayed in a grid, however there are also some other view types available.
