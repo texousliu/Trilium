@@ -147,7 +147,7 @@
 							"title": "Inbox",
 							"notePosition": 10,
 							"prefix": null,
-							"isExpanded": false,
+							"isExpanded": true,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [
@@ -219,7 +219,22 @@
 									"isExpanded": false,
 									"type": "text",
 									"mime": "text/html",
-									"attributes": [],
+									"attributes": [
+										{
+											"type": "relation",
+											"name": "includeNoteLink",
+											"value": "ZWCYra81yOFO",
+											"isInheritable": false,
+											"position": 10
+										},
+										{
+											"type": "relation",
+											"name": "internalLink",
+											"value": "_help_nBAXQFj20hS1",
+											"isInheritable": false,
+											"position": 20
+										}
+									],
 									"format": "html",
 									"dataFileName": "The Last Question.html",
 									"attachments": [],

@@ -103,6 +103,10 @@ const config: Configuration = {
                         loader: "sass-loader"
                     }
                 ]
+            },
+            {
+                test: /\.(png)$/i,
+                type: 'asset/resource'
             }
         ]
     },
@@ -116,6 +120,11 @@ const config: Configuration = {
         alias: {
             stylesheets: path.resolve(rootDir, "src/public/stylesheets")
         }
+    },
+    stats: {
+        all: false,
+        assets: true,
+        groupAssetsByChunk: true
     },
     devtool: "nosources-source-map",
     target: "electron-renderer"

@@ -5,7 +5,7 @@ This can be useful for a few things:
 
 *   computer programmers can store code snippets as notes with syntax highlighting
 *   JavaScript code notes can be executed inside Trilium for some extra functionality
-    *   we call such JavaScript code notes "scripts" - see [Scripts](Code/Scripts.md)
+    *   we call such JavaScript code notes "scripts" - see [Scripts](Code/Scripting.md)
 *   JSON, XML etc. can be used as storage for structured data (typically used in conjunction with scripting)
 
 For shorter snippets of code that can be embedded in [Text](Text.md) notes, see [Code blocks](Text/Developer-specific%20formatting/Code%20blocks.md).

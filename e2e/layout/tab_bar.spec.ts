@@ -100,3 +100,20 @@ test("Empty tabs are cleared out", async ({ page, context }) => {
     // Expect no empty tabs.
     expect(await app.tabBar.locator(".note-tab-wrapper").count()).toBe(1);
 });
+
+test("Search works when dismissing a tab", async ({ page, context }) => {
+    const app = new App(page, context);
+    await app.goto();
+
+    await app.goToNoteInNewTab("Table of contents");
+    await app.openAndClickNoteActionMenu("Search in note");
+    await expect(app.findAndReplaceWidget).toBeVisible();
+    app.findAndReplaceWidget.locator(".find-widget-close-button").click();
+
+    await app.addNewTab();
+    await app.goToNoteInNewTab("Sample mindmap");
+
+    await app.getTab(0).click();
+    await app.openAndClickNoteActionMenu("Search in note");
+    await expect(app.findAndReplaceWidget).toBeVisible();
+});

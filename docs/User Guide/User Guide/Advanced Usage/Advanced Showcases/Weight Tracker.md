@@ -7,7 +7,7 @@ By adding `weight` as a [promoted attribute](../Attributes/Promoted%20Attributes
 
 ## Implementation
 
-The `Weight Tracker` note in the screenshot above is of the type `Render Note`. That type of note doesn't have any useful content itself. Instead it is a placeholder where a [script](../../Note%20Types/Code/Scripts.md) can render its output.
+The `Weight Tracker` note in the screenshot above is of the type `Render Note`. That type of note doesn't have any useful content itself. Instead it is a placeholder where a [script](../../Note%20Types/Code/Scripting.md) can render its output.
 
 Scripts for `Render Notes` are defined in a [relation](../Attributes.md) called `~renderNote`. In this example, it's the `Weight Tracker`'s child `Implementation`. The Implementation consists of two [code notes](../../Note%20Types/Code.md) that contain some HTML and JavaScript respectively, which load all the notes with a `weight` attribute and display their values in a chart.
 

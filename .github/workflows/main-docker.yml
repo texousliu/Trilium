@@ -132,8 +132,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Update build info
-        shell: ${{ inputs.shell }}
         run: npm run chore:update-build-info
 
       - name: Docker meta

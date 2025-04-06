@@ -80,8 +80,8 @@ async function backupNow(name: string) {
             fs.mkdirSync(dataDir.BACKUP_DIR, 0o700);
         }
 
+        log.info("Creating backup...");
         await sql.copyDatabase(backupFile);
-
         log.info(`Created backup at ${backupFile}`);
 
         return backupFile;

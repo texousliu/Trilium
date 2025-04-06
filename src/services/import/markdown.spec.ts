@@ -133,4 +133,79 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("preserves &nbsp;", () => {
+        const input = `Hello&nbsp;world.`;
+        const expected = /*html*/`<p>Hello&nbsp;world.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("converts non-breaking space character to &nbsp;", () => {
+        const input = `Hello\u00a0world.`;
+        const expected = /*html*/`<p>Hello&nbsp;world.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("supports normal links", () => {
+        const input = `[Google](https://www.google.com)`;
+        const expected = /*html*/`<p><a href="https://www.google.com">Google</a></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("does not touch relative links", () => {
+        const input = `[Canvas](../../Canvas.html)`;
+        const expected = /*html*/`<p><a href="../../Canvas.html">Canvas</a></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("imports back to reference links", () => {
+        const input = `<a class="reference-link" href="../../Canvas.html">Canvas</a>`;
+        const expected = /*html*/`<p><a class="reference-link" href="../../Canvas.html">Canvas</a></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("preserves figures and images with sizes", () => {
+        const scenarios = [
+            /*html*/`<figure class="image image-style-align-center image_resized" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`,
+            /*html*/`<figure class="image image-style-align-center image_resized" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`,
+            /*html*/`<img class="image_resized" style="aspect-ratio:853/315;width:50%;" src="6_File_image.png" width="853" height="315">`
+        ];
+
+        for (const scenario of scenarios) {
+            expect(markdownService.renderToHtml(scenario, "Title")).toStrictEqual(scenario);
+        }
+    });
+
+    it("converts inline math expressions into Mathtex format", () => {
+        const input = `The equation is\u00a0$e=mc^{2}$.`;
+        const expected = /*html*/`<p>The equation is&nbsp;<span class="math-tex">\\(e=mc^{2}\\)</span>.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("converts display math expressions into Mathtex format", () => {
+        const input = `$$\sqrt{x^{2}+1}$$`;
+        const expected = /*html*/`<p><span class="math-tex">\\[\sqrt{x^{2}+1}\\]</span></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("preserves escaped math expressions", () => {
+        const scenarios = [
+            "\\$\\$\sqrt{x^{2}+1}\\$\\$",
+            "The equation is \\$e=mc^{2}\\$."
+        ];
+        for (const scenario of scenarios) {
+            expect(markdownService.renderToHtml(scenario, "Title")).toStrictEqual(`<p>${scenario}</p>`);
+        }
+    });
+
+    it("preserves table with column widths", () => {
+        const html = /*html*/`<figure class="table" style="width:100%;"><table class="ck-table-resized"><colgroup><col style="width:2.77%;"><col style="width:33.42%;"><col style="width:63.81%;"></colgroup><thead><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr></thead><tbody><tr><td>1</td><td><img class="image_resized" style="aspect-ratio:562/454;width:100%;" src="1_Geo Map_image.png" width="562" height="454"></td><td>Go to any location on openstreetmap.org and right click to bring up the context menu. Select the “Show address” item.</td></tr><tr><td>2</td><td><img class="image_resized" style="aspect-ratio:696/480;width:100%;" src="Geo Map_image.png" width="696" height="480"></td><td>The address will be visible in the top-left of the screen, in the place of the search bar.&nbsp;&nbsp;&nbsp;&nbsp;<br><br>Select the coordinates and copy them into the clipboard.</td></tr><tr><td>3</td><td><img class="image_resized" style="aspect-ratio:640/276;width:100%;" src="5_Geo Map_image.png" width="640" height="276"></td><td>Simply paste the value inside the text box into the <code>#geolocation</code> attribute of a child note of the map and then it should be displayed on the map.</td></tr></tbody></table></figure>`;
+        expect(markdownService.renderToHtml(html, "Title")).toStrictEqual(html);
+    });
+
+    it("generates strike-through text", () => {
+        const input = `~~Hello~~ world.`;
+        const expected = /*html*/`<p><del>Hello</del> world.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });

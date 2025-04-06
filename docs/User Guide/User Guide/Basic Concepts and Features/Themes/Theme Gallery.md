@@ -5,25 +5,7 @@ These are user-created themes which were made publicly available:
 
 These themes may or may not be compatible with the latest versions of TriliumNext and are based on the original/legacy theme.
 
-| Theme | Author |
-| --- | --- |
-| [Midnight](https://github.com/tobealive/trilium-midnight-theme) | [tobealive](https://github.com/tobealive) |
-| [EOTE](https://github.com/tobealive/trilum-eote-theme) | [tobealive](https://github.com/tobealive) |
-| [Trilium Themes](https://github.com/Abourass/TriliumThemes) | [Abourass](https://github.com/Abourass) |
-| [MaterialDark](https://github.com/ZMonk91/Material-Dark-Trilium) | [ZMonk91](https://github.com/ZMonk91) |
-| [lightslategray](https://github.com/jaroet/trilium-theme-lightslategray) | [jaroet](https://github.com/jaroet) |
-| [melon-4](https://github.com/raphwriter/trilium-theme-melon) | [raphwriter](https://github.com/raphwriter) |
-| [Neon\_Dark](https://github.com/Engr-AllanG/trilium-themes) | [Engr-AllanG](https://github.com/Engr-AllanG) |
-| [Coder\_Dark](https://github.com/Engr-AllanG/trilium-themes) | [Engr-AllanG](https://github.com/Engr-AllanG) |
-| [velvet](https://github.com/idelem/trilium-theme-velvet) | [idelem](https://github.com/idelem) |
-| [Dark Plus](https://github.com/SADAVA/trilium-notes-theme-dark-plus) | [SADAVA](https://github.com/SADAVA) |
-| [Solarized](https://github.com/WKSu/trilium-solarized-theme) | [WKSu](https://github.com/WKSu) |
-| [Nord](https://github.com/en3r0/Trilium-Nord-Theme) | [en3r0](https://github.com/en3r0) |
-| [Bear Note Light](https://github.com/AllanZyne/trilium-bear-theme) | [AllanZyne](https://github.com/AllanZyne) |
-| [Bear Note Dark](https://github.com/AllanZyne/trilium-bear-theme) | [AllanZyne](https://github.com/AllanZyne) |
-| [Miku Hatsune](https://github.com/Sebiann/miku-hatsune-trilium-theme) | [Sebiann](https://github.com/Sebiann) |
-| [Midnight](https://github.com/cwilliams5/Midnight-Trilium-Dark-Mode) | [cwilliams5](https://github.com/cwilliams5) |
-| [Blue](https://github.com/SiriusXT/trilium-theme-blue) (light) | [SiriusXT](https://github.com/SiriusXT) |
-| [Blue](https://github.com/SiriusXT/trilium-theme-blue) (dark) | [SiriusXT](https://github.com/SiriusXT) |
+<figure class="table"><table><thead><tr><th>Theme</th><th>Author</th></tr></thead><tbody><tr><td><a href="https://github.com/tobealive/trilium-midnight-theme">Midnight</a></td><td><a href="https://github.com/tobealive">tobealive</a></td></tr><tr><td><a href="https://github.com/tobealive/trilum-eote-theme">EOTE</a></td><td><a href="https://github.com/tobealive">tobealive</a></td></tr><tr><td><a href="https://github.com/Abourass/TriliumThemes">Trilium Themes</a></td><td><a href="https://github.com/Abourass">Abourass</a></td></tr><tr><td><a href="https://github.com/ZMonk91/Material-Dark-Trilium">MaterialDark</a></td><td><a href="https://github.com/ZMonk91">ZMonk91</a></td></tr><tr><td><a href="https://github.com/jaroet/trilium-theme-lightslategray">lightslategray</a></td><td><a href="https://github.com/jaroet">jaroet</a></td></tr><tr><td><a href="https://github.com/raphwriter/trilium-theme-melon">melon-4</a></td><td><a href="https://github.com/raphwriter">raphwriter</a></td></tr><tr><td><a href="https://github.com/Engr-AllanG/trilium-themes">Neon_Dark</a></td><td><a href="https://github.com/Engr-AllanG">Engr-AllanG</a></td></tr><tr><td><a href="https://github.com/Engr-AllanG/trilium-themes">Coder_Dark</a></td><td><a href="https://github.com/Engr-AllanG">Engr-AllanG</a></td></tr><tr><td><a href="https://github.com/idelem/trilium-theme-velvet">velvet</a></td><td><a href="https://github.com/idelem">idelem</a></td></tr><tr><td><a href="https://github.com/SADAVA/trilium-notes-theme-dark-plus">Dark Plus</a></td><td><a href="https://github.com/SADAVA">SADAVA</a></td></tr><tr><td><a href="https://github.com/WKSu/trilium-solarized-theme">Solarized</a></td><td><a href="https://github.com/WKSu">WKSu</a></td></tr><tr><td><a href="https://github.com/en3r0/Trilium-Nord-Theme">Nord</a></td><td><a href="https://github.com/en3r0">en3r0</a></td></tr><tr><td><a href="https://github.com/AllanZyne/trilium-bear-theme">Bear Note Light</a></td><td><a href="https://github.com/AllanZyne">AllanZyne</a></td></tr><tr><td><a href="https://github.com/AllanZyne/trilium-bear-theme">Bear Note Dark</a></td><td><a href="https://github.com/AllanZyne">AllanZyne</a></td></tr><tr><td><a href="https://github.com/Sebiann/miku-hatsune-trilium-theme">Miku Hatsune</a></td><td><a href="https://github.com/Sebiann">Sebiann</a></td></tr><tr><td><a href="https://github.com/cwilliams5/Midnight-Trilium-Dark-Mode">Midnight</a></td><td><a href="https://github.com/cwilliams5">cwilliams5</a></td></tr><tr><td><a href="https://github.com/SiriusXT/trilium-theme-blue">Blue</a> (light)</td><td><a href="https://github.com/SiriusXT">SiriusXT</a></td></tr><tr><td><a href="https://github.com/SiriusXT/trilium-theme-blue">Blue</a> (dark)</td><td><a href="https://github.com/SiriusXT">SiriusXT</a></td></tr></tbody></table></figure>
 
-If you would like to add your theme to this gallery, write a new post in [👐 Show and tell](https://github.com/TriliumNext/Notes/discussions/categories/show-and-tell).
+> [!TIP]
+> If you would like to add your theme to this gallery, write a new post in [👐 Show and tell](https://github.com/TriliumNext/Notes/discussions/categories/show-and-tell).

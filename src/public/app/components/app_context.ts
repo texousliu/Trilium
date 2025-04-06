@@ -66,6 +66,11 @@ export interface ExecuteCommandData<T> extends CommandData {
     resolve: (data: T) => void;
 }
 
+export interface NoteSwitchedContext {
+    noteContext: NoteContext;
+    notePath: string | null | undefined;
+}
+
 /**
  * The keys represent the different commands that can be triggered via {@link AppContext#triggerCommand} (first argument), and the values represent the data or arguments definition of the given command. All data for commands must extend {@link CommandData}.
  */
@@ -122,7 +127,11 @@ export type CommandMappings = {
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
     enterProtectedSession: CommandData;
-
+    noteContextReorder: CommandData & {
+        ntxIdsInOrder: string[];
+        oldMainNtxId?: string | null;
+        newMainNtxId?: string | null;
+    };
     openInTab: ContextMenuCommandData;
     openNoteInSplit: ContextMenuCommandData;
     toggleNoteHoisting: ContextMenuCommandData;
@@ -294,14 +303,8 @@ type EventMappings = {
     beforeNoteContextRemove: {
         ntxIds: string[];
     };
-    noteSwitched: {
-        noteContext: NoteContext;
-        notePath?: string | null;
-    };
-    noteSwitchedAndActivated: {
-        noteContext: NoteContext;
-        notePath: string;
-    };
+    noteSwitched: NoteSwitchedContext;
+    noteSwitchedAndActivated: NoteSwitchedContext;
     setNoteContext: {
         noteContext: NoteContext;
     };
@@ -326,8 +329,10 @@ type EventMappings = {
         ntxId: string | null;
     };
     contextsReopened: {
+        ntxId?: string;
         mainNtxId: string | null;
         tabPosition: number;
+        afterNtxId?: string;
     };
     noteDetailRefreshed: {
         ntxId?: string | null;

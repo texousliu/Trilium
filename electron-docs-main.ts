@@ -8,6 +8,7 @@ import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
 import debounce from "./src/public/app/services/debounce.js";
 import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
+import cls from "./src/services/cls.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
 const markdownPath = path.join("docs", "User Guide");
@@ -17,8 +18,19 @@ async function main() {
     await initializeTranslations();
     const zipBuffer = await createImportZip();
     await initializeDatabase(zipBuffer);
+
     await startElectron();
-    await registerHandlers();
+    cls.init(() => setOptions());
+
+    // Wait for the import to be finished and the application to be loaded before we listen to changes.
+    setTimeout(() => registerHandlers(), 10_000);
+}
+
+async function setOptions() {
+    const optionsService = (await import("./src/services/options.js")).default;
+    optionsService.setOption("eraseUnusedAttachmentsAfterSeconds", 10);
+    optionsService.setOption("eraseUnusedAttachmentsAfterTimeScale", 60);
+    optionsService.setOption("compressImages", "false");
 }
 
 async function createImportZip() {
@@ -91,11 +103,10 @@ async function registerHandlers() {
     const events = (await import("./src/services/events.js")).default;
     const eraseService = (await import("./src/services/erase.js")).default;
     const debouncer = debounce(async () => {
-        console.log("Exporting data");
         eraseService.eraseUnusedAttachmentsNow();
         await exportData("markdown", markdownPath);
         await exportData("html", htmlPath);
-    }, 10_000);;
+    }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
             return;

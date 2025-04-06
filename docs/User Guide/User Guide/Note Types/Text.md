@@ -13,14 +13,7 @@ The Trilium text note interface does not display toolbars or formatting options 
 
 ## Read-Only vs. Editing Mode
 
-Text notes are usually opened in edit mode. However, they may open in read-only mode under the following circumstances:
-
-*   The note is long and would take time to load, so it is opened in read-only mode by default for quicker access.
-*   The note has a `readOnly` [label](../Advanced%20Usage/Attributes.md).
-
-In both cases, it is possible to switch back to editable mode using the ![](Text_bx-edit-alt.svg)button at top right of page.
-
-For more information, see [Read-Only Notes](../Basic%20Concepts%20and%20Features/Notes/Read-Only%20Notes.md).
+Text notes are usually opened in edit mode. However, they may open in read-only mode if the note is too big or the note is explicitly marked as read-only. For more information, see [Read-Only Notes](../Basic%20Concepts%20and%20Features/Notes/Read-Only%20Notes.md).
 
 ## General Formatting
 
@@ -80,9 +73,3 @@ When editing a document that becomes too large, you can split it into sub-notes:
 3.  Paste the content from the clipboard into the sub-note.
 
 Trilium can automate this process. Select some text within the note, and in the selection toolbar, click the scissors icon for the "cut & pasted selection to sub-note" action. The heading is automatically detected and the new sub-note is named accordingly. You can also assign a keyboard shortcut for this action. This functionality is available through the block toolbar icon.
-
-## Including a Note
-
-Text notes can "include" another note as a read only widget. This can be useful for e.g. including a dynamically generated chart (from scripts & "render HTML" note) or other more advanced use cases.
-
-This functionality is available in the block toolbar icon.

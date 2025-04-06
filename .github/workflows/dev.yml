@@ -110,8 +110,9 @@ jobs:
       - test_dev
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
       - name: Update build info
-        shell: ${{ inputs.shell }}
         run: npm run chore:update-build-info
       - uses: docker/setup-buildx-action@v3
       - uses: docker/build-push-action@v6
@@ -133,8 +134,10 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Update build info
-        shell: ${{ inputs.shell }}
         run: npm run chore:update-build-info
 
       - name: Set IMAGE_NAME to lowercase

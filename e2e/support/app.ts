@@ -107,6 +107,30 @@ export default class App {
     }
 
     /**
+     * Opens the note context menu by clicking on it, looks for the item with the given text and clicks it.
+     *
+     * Assertions are put in place to make sure the menu is open and closed after the click.
+     * @param itemToFind the text of the item to find in the menu.
+     */
+    async openAndClickNoteActionMenu(itemToFind: string) {
+        const noteActionsButton = this.currentNoteSplit.locator(".note-actions");
+        await noteActionsButton.click();
+
+        const dropdownMenu = noteActionsButton.locator(".dropdown-menu");
+        await this.page.waitForTimeout(100);
+        await expect(dropdownMenu).toBeVisible();
+        dropdownMenu.getByText(itemToFind).click();
+        await expect(dropdownMenu).not.toBeVisible();
+    }
+
+    /**
+     * Obtains the locator to the find and replace widget, if it's being displayed.
+     */
+    get findAndReplaceWidget() {
+        return this.page.locator(".component.visible.find-replace-widget");
+    }
+
+    /**
      * Executes any Trilium command on the client.
      * @param command the command to send.
      */
