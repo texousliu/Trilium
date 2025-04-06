@@ -4689,7 +4689,7 @@
                                         "mT0HEkOsz6i1"
                                     ],
                                     "title": "Images",
-                                    "notePosition": 60,
+                                    "notePosition": 70,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -4918,7 +4918,7 @@
                                         "nBAXQFj20hS1"
                                     ],
                                     "title": "Include Note",
-                                    "notePosition": 70,
+                                    "notePosition": 80,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -4955,7 +4955,7 @@
                                         "QEAPj01N5f7w"
                                     ],
                                     "title": "Links",
-                                    "notePosition": 80,
+                                    "notePosition": 90,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5014,7 +5014,7 @@
                                         "S6Xx8QIWTV66"
                                     ],
                                     "title": "Lists",
-                                    "notePosition": 90,
+                                    "notePosition": 100,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
