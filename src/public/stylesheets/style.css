@@ -23,6 +23,7 @@
     --submenu-opening-delay: 300ms;
     --launcher-pane-size: 53px;
     --mobile-bottom-offset: calc(env(safe-area-inset-bottom) * 0.75);
+    --bs-body-color: var(--main-text-color);
 }
 
 html {
