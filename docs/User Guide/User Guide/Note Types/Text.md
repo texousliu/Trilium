@@ -64,4 +64,4 @@ Note: The use of `#` for Heading 1 is not supported because it is reserved for t
 
 Trilium provides math support through [KaTeX](https://katex.org/).
 
-<figure class="image image_resized" style="height:auto;width:auto;"><img style="aspect-ratio:812/585;" src="Text_math.gif" width="812" height="585"></figure>
+<figure class="image image_resized"><img style="aspect-ratio:812/585;" src="Text_math.gif" width="812" height="585"></figure>
