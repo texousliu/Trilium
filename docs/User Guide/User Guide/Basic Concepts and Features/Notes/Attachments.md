@@ -1,7 +1,7 @@
 # Attachments
 A [note](../Notes.md) in Trilium can _own_ one or more attachments, which can be either images or files. These attachments can be displayed or linked within the note that owns them.
 
-This can be especially useful to include dependencies for your [scripts](../../Note%20Types/Code/Scripting.md). The <a class="reference-link" href="../../Advanced%20Usage/Advanced%20Showcases/Weight%20Tracker.md">Weight Tracker</a> shows how to use [chartjs](https://chartjs.org/) which is attached to the script note.
+This can be especially useful to include dependencies for your [scripts](../../Scripting.md). The <a class="reference-link" href="../../Advanced%20Usage/Advanced%20Showcases/Weight%20Tracker.md">Weight Tracker</a> shows how to use [chartjs](https://chartjs.org/) which is attached to the script note.
 
 Each note exclusively owns its attachments, meaning attachments cannot be shared or linked from one note to another. If an attachment link is copied to a different note, the attachment itself is duplicated, and the copies are managed independently thereafter.
 

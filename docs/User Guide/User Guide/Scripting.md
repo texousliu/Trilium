@@ -1,5 +1,5 @@
 # Scripting
-Trilium supports creating <a class="reference-link" href="../Code.md">Code</a> notes, i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with <a class="reference-link" href="Script%20API.md">Script API</a> provide extra functionality.
+Trilium supports creating <a class="reference-link" href="Note%20Types/Code.md">Code</a> notes, i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with <a class="reference-link" href="Note%20Types/Code/Script%20API.md">Script API</a> provide extra functionality.
 
 ## Scripting
 
@@ -12,7 +12,7 @@ So we have frontend and backend, each with their own set of responsibilities, bu
 
 ## Use cases
 
-*   <a class="reference-link" href="Scripting/New%20Task%20launcher%20button.md">"New Task" launcher button</a>
+*   <a class="reference-link" href="Scripting/Examples/New%20Task%20launcher%20button.md">"New Task" launcher button</a>
 
 ## Action handler
 
@@ -24,18 +24,18 @@ So we have a script which will add the button to the toolbar. But how can we exe
 
 We need to execute it every time Trilium starts up, but we probably don't want to have to manually click on play button on every start up.
 
-The solution is marked by red circle at the bottom - this note has [label](../../Advanced%20Usage/Attributes.md) `#run=frontendStartup` - this is one of the "system" labels which Trilium understands. As you might guess, this will cause all such labeled script notes to be executed once Trilium frontend starts up.
+The solution is marked by red circle at the bottom - this note has [label](Advanced%20Usage/Attributes.md) `#run=frontendStartup` - this is one of the "system" labels which Trilium understands. As you might guess, this will cause all such labeled script notes to be executed once Trilium frontend starts up.
 
-(`#run=frontendStartup` does not work for [Mobile frontend](../../Installation%20%26%20Setup/Mobile%20Frontend.md) - if you want to have scripts running there, give the script `#run=mobileStartup` label)
+(`#run=frontendStartup` does not work for [Mobile frontend](Installation%20%26%20Setup/Mobile%20Frontend.md) - if you want to have scripts running there, give the script `#run=mobileStartup` label)
 
 ## More showcases
 
-You can see more scripting with explanation in <a class="reference-link" href="../../Advanced%20Usage/Advanced%20Showcases.md">Advanced Showcases</a>.
+You can see more scripting with explanation in <a class="reference-link" href="Advanced%20Usage/Advanced%20Showcases.md">Advanced Showcases</a>.
 
 ## Events
 
-See <a class="reference-link" href="Events.md">Events</a>.
+See <a class="reference-link" href="Note%20Types/Code/Events.md">Events</a>.
 
 ## Script API
 
-See <a class="reference-link" href="Script%20API.md">Script API</a>.
+See <a class="reference-link" href="Note%20Types/Code/Script%20API.md">Script API</a>.

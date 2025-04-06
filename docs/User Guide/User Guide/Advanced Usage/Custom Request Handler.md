@@ -1,5 +1,5 @@
 # Custom Request Handler
-Trilium provides a mechanism for [scripts](../Note%20Types/Code/Scripting.md) to open a public REST endpoint. This opens a way for various integrations with other services - a simple example would be creating new note from Slack by issuing a slash command (e.g. `/trilium buy milk`).
+Trilium provides a mechanism for [scripts](../Scripting.md) to open a public REST endpoint. This opens a way for various integrations with other services - a simple example would be creating new note from Slack by issuing a slash command (e.g. `/trilium buy milk`).
 
 ## Create note from outside Trilium
 

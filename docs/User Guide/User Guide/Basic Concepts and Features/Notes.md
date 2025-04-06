@@ -5,7 +5,7 @@ Note is a central entity in Trilium. Main attributes of note are title and conte
 
 The main note type is a rich-text note type called <a class="reference-link" href="../Note%20Types/Text.md">Text</a>. For diagrams and drawing there is <a class="reference-link" href="../Note%20Types/Canvas.md">Canvas</a> and <a class="reference-link" href="../Note%20Types/Mermaid%20Diagrams.md">Mermaid Diagrams</a>.
 
-There are also more complex note types such as <a class="reference-link" href="../Note%20Types/Saved%20Search.md">Saved Search</a>, <a class="reference-link" href="../Note%20Types/Render%20Note.md">Render Note</a> that usually go hand-in-hand with <a class="reference-link" href="../Note%20Types/Code/Scripting.md">Scripting</a>.
+There are also more complex note types such as <a class="reference-link" href="../Note%20Types/Saved%20Search.md">Saved Search</a>, <a class="reference-link" href="../Note%20Types/Render%20Note.md">Render Note</a> that usually go hand-in-hand with <a class="reference-link" href="../Scripting.md">Scripting</a>.
 
 In Trilium there's no specific "folder" note type. Any note can have children and thus be a folder.
 
