@@ -8,9 +8,8 @@ import * as aiServiceManagerModule from "./ai_service_manager.js";
 import becca from "../../becca/becca.js";
 import vectorStore from "./embeddings/index.js";
 import providerManager from "./providers/providers.js";
-// @ts-ignore
-import { v4 as uuidv4 } from 'uuid';
 import options from "../../services/options.js";
+import { randomString } from "../utils.js";
 
 // Define interfaces for the REST API
 export interface NoteSource {
@@ -715,7 +714,7 @@ class RestChatService {
             const options: any = req.body || {};
             const title = options.title || 'Chat Session';
 
-            const sessionId = uuidv4();
+            const sessionId = randomString(16);
             const now = new Date();
 
             // Initial system message if provided
