@@ -1,6 +1,11 @@
+import type { ToolCall } from './tools/tool_interfaces.js';
+
 export interface Message {
-    role: 'user' | 'assistant' | 'system';
+    role: 'user' | 'assistant' | 'system' | 'tool';
     content: string;
+    name?: string;
+    tool_call_id?: string;
+    tool_calls?: ToolCall[] | any[];
 }
 
 // Interface for streaming response chunks
@@ -27,6 +32,8 @@ export interface ChatCompletionOptions {
     bypassFormatter?: boolean; // Whether to bypass the message formatter entirely
     expectsJsonResponse?: boolean; // Whether this request expects a JSON response
     stream?: boolean; // Whether to stream the response
+    enableTools?: boolean; // Whether to enable tool calling
+    tools?: any[]; // Tools to provide to the LLM
 }
 
 export interface ChatResponse {
@@ -40,6 +47,8 @@ export interface ChatResponse {
     };
     // Stream handler - only present when streaming is enabled
     stream?: (callback: (chunk: StreamChunk) => Promise<void> | void) => Promise<string>;
+    // Tool calls from the LLM
+    tool_calls?: ToolCall[] | any[];
 }
 
 export interface AIService {

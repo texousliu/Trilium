@@ -608,6 +608,56 @@ class RestChatService {
         try {
             // Use the correct method name: generateChatCompletion
             const response = await service.generateChatCompletion(aiMessages, chatOptions);
+            
+            // Check for tool calls in the response
+            if (response.tool_calls && response.tool_calls.length > 0) {
+                log.info(`========== STREAMING TOOL CALLS DETECTED ==========`);
+                log.info(`Response contains ${response.tool_calls.length} tool calls, executing them...`);
+                
+                try {
+                    // Execute the tools
+                    const toolResults = await this.executeToolCalls(response);
+                    
+                    // Make a follow-up request with the tool results
+                    const toolMessages = [...aiMessages, {
+                        role: 'assistant',
+                        content: response.text || '',
+                        tool_calls: response.tool_calls
+                    }, ...toolResults];
+                    
+                    log.info(`Making follow-up request with ${toolResults.length} tool results`);
+                    
+                    // Send partial response to let the client know tools are being processed
+                    if (!res.writableEnded) {
+                        res.write(`data: ${JSON.stringify({ content: "Processing tools... " })}\n\n`);
+                    }
+                    
+                    // Use non-streaming for the follow-up to get a complete response
+                    const followUpOptions = {...chatOptions, stream: false, enableTools: false}; // Prevent infinite loops
+                    const followUpResponse = await service.generateChatCompletion(toolMessages, followUpOptions);
+                    
+                    messageContent = followUpResponse.text || "";
+                    
+                    // Send the complete response as a single chunk
+                    if (!res.writableEnded) {
+                        res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
+                        res.write('data: [DONE]\n\n');
+                        res.end();
+                    }
+                    
+                    // Store the full response for the session
+                    session.messages.push({
+                        role: 'assistant',
+                        content: messageContent,
+                        timestamp: new Date()
+                    });
+                    
+                    return; // Skip the rest of the processing
+                } catch (toolError) {
+                    log.error(`Error executing tools: ${toolError}`);
+                    // Continue with normal streaming response as fallback
+                }
+            }
 
             // Handle streaming if the response includes a stream method
             if (response.stream) {
@@ -665,6 +715,113 @@ class RestChatService {
                 }
             }
         }
+    }
+    
+    /**
+     * Execute tool calls from the LLM response
+     * @param response The LLM response containing tool calls
+     */
+    private async executeToolCalls(response: any): Promise<Message[]> {
+        if (!response.tool_calls || response.tool_calls.length === 0) {
+            return [];
+        }
+        
+        log.info(`Executing ${response.tool_calls.length} tool calls from REST chat service`);
+        
+        // Import tool registry directly to avoid circular dependencies
+        const toolRegistry = (await import('./tools/tool_registry.js')).default;
+        
+        // Check if tools are available
+        const availableTools = toolRegistry.getAllTools();
+        if (availableTools.length === 0) {
+            log.error('No tools available in registry for execution');
+            
+            // Try to initialize tools
+            try {
+                const toolInitializer = await import('./tools/tool_initializer.js');
+                await toolInitializer.default.initializeTools();
+                log.info(`Initialized ${toolRegistry.getAllTools().length} tools`);
+            } catch (error) {
+                log.error(`Failed to initialize tools: ${error}`);
+                throw new Error('Tool execution failed: No tools available');
+            }
+        }
+        
+        // Execute each tool call and collect results
+        const toolResults = await Promise.all(response.tool_calls.map(async (toolCall: any) => {
+            try {
+                log.info(`Executing tool: ${toolCall.function.name}, ID: ${toolCall.id || 'unknown'}`);
+                
+                // Get the tool from registry
+                const tool = toolRegistry.getTool(toolCall.function.name);
+                if (!tool) {
+                    throw new Error(`Tool not found: ${toolCall.function.name}`);
+                }
+                
+                // Parse arguments
+                let args;
+                if (typeof toolCall.function.arguments === 'string') {
+                    try {
+                        args = JSON.parse(toolCall.function.arguments);
+                    } catch (e) {
+                        log.error(`Failed to parse tool arguments: ${e.message}`);
+                        
+                        // Try cleanup and retry
+                        try {
+                            const cleaned = toolCall.function.arguments
+                                .replace(/^['"]|['"]$/g, '') // Remove surrounding quotes
+                                .replace(/\\"/g, '"')        // Replace escaped quotes
+                                .replace(/([{,])\s*'([^']+)'\s*:/g, '$1"$2":') // Replace single quotes around property names
+                                .replace(/([{,])\s*(\w+)\s*:/g, '$1"$2":');    // Add quotes around unquoted property names
+                            
+                            args = JSON.parse(cleaned);
+                        } catch (cleanErr) {
+                            // If all parsing fails, use as-is
+                            args = { text: toolCall.function.arguments };
+                        }
+                    }
+                } else {
+                    args = toolCall.function.arguments;
+                }
+                
+                // Log what we're about to execute
+                log.info(`Executing tool with arguments: ${JSON.stringify(args)}`);
+                
+                // Execute the tool and get result
+                const startTime = Date.now();
+                const result = await tool.execute(args);
+                const executionTime = Date.now() - startTime;
+                
+                log.info(`Tool execution completed in ${executionTime}ms`);
+                
+                // Log the result
+                const resultPreview = typeof result === 'string' 
+                    ? result.substring(0, 100) + (result.length > 100 ? '...' : '')
+                    : JSON.stringify(result).substring(0, 100) + '...';
+                log.info(`Tool result: ${resultPreview}`);
+                
+                // Format result as a proper message
+                return {
+                    role: 'tool',
+                    content: typeof result === 'string' ? result : JSON.stringify(result),
+                    name: toolCall.function.name,
+                    tool_call_id: toolCall.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+                };
+            } catch (error: any) {
+                log.error(`Error executing tool ${toolCall.function.name}: ${error.message}`);
+                
+                // Return error as tool result
+                return {
+                    role: 'tool',
+                    content: `Error: ${error.message}`,
+                    name: toolCall.function.name,
+                    tool_call_id: toolCall.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+                };
+            }
+        }));
+        
+        log.info(`Completed execution of ${toolResults.length} tools`);
+        return toolResults;
     }
 
     /**

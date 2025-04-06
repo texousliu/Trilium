@@ -10,11 +10,16 @@
  * - Extract multiple intents from a single question
  * - Create a multi-stage research plan
  * - Track progress through complex information gathering
+ * 
+ * Integration with pipeline architecture:
+ * - Can use pipeline stages when available
+ * - Falls back to direct methods when needed
  */
 
 import log from '../../log.js';
 import { AGENT_TOOL_PROMPTS } from '../constants/llm_prompt_constants.js';
 import { QUERY_DECOMPOSITION_STRINGS } from '../constants/query_decomposition_constants.js';
+import aiServiceManager from '../ai_service_manager.js';
 
 export interface SubQuery {
     id: string;

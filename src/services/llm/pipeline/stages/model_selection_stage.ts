@@ -27,6 +27,39 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
 
         // Get default model based on provider precedence
         let defaultModel = 'openai:gpt-3.5-turbo'; // Fallback default
+        
+        // Enable tools by default unless explicitly disabled
+        updatedOptions.enableTools = updatedOptions.enableTools !== false;
+        
+        // Add tools if not already provided
+        if (updatedOptions.enableTools && (!updatedOptions.tools || updatedOptions.tools.length === 0)) {
+            try {
+                // Import tool registry and fetch tool definitions
+                const toolRegistry = (await import('../../tools/tool_registry.js')).default;
+                const toolDefinitions = toolRegistry.getAllToolDefinitions();
+                
+                if (toolDefinitions.length > 0) {
+                    updatedOptions.tools = toolDefinitions;
+                    log.info(`Added ${toolDefinitions.length} tools to options`);
+                } else {
+                    // Try to initialize tools
+                    log.info('No tools found in registry, trying to initialize them');
+                    try {
+                        const toolInitializer = await import('../../tools/tool_initializer.js');
+                        await toolInitializer.default.initializeTools();
+                        
+                        // Try again after initialization
+                        const reinitToolDefinitions = toolRegistry.getAllToolDefinitions();
+                        updatedOptions.tools = reinitToolDefinitions;
+                        log.info(`After initialization, added ${reinitToolDefinitions.length} tools to options`);
+                    } catch (initError: any) {
+                        log.error(`Failed to initialize tools: ${initError.message}`);
+                    }
+                }
+            } catch (error: any) {
+                log.error(`Error loading tools: ${error.message}`);
+            }
+        }
 
         try {
             // Get provider precedence list
@@ -55,7 +88,25 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
                         if (model) defaultModel = `anthropic:${model}`;
                     } else if (firstProvider === 'ollama') {
                         const model = await options.getOption('ollamaDefaultModel');
-                        if (model) defaultModel = `ollama:${model}`;
+                        if (model) {
+                            defaultModel = `ollama:${model}`;
+                            
+                            // Special configuration for Ollama
+                            // Since Ollama models have different requirements for tool calling,
+                            // configure based on the model being used
+                            const modelLower = model.toLowerCase();
+                            
+                            if (modelLower.includes('llama3') || 
+                                modelLower.includes('mistral') || 
+                                modelLower.includes('dolphin') ||
+                                modelLower.includes('neural') || 
+                                modelLower.includes('mist') ||
+                                modelLower.includes('wizard')) {
+                                // These models are known to support tool calling
+                                log.info(`Using Ollama model ${model} with tool calling support`);
+                                updatedOptions.enableTools = true;
+                            }
+                        }
                     }
                 }
             }

@@ -107,6 +107,73 @@ class TriliumContextService {
         contextNoteId: string | null = null,
         limit = 10
     ): Promise<any[]> {
+        try {
+            // Use the VectorSearchStage for all searches to ensure consistency
+            const VectorSearchStage = (await import('./pipeline/stages/vector_search_stage.js')).VectorSearchStage;
+            const vectorSearchStage = new VectorSearchStage();
+            
+            const allResults: Map<string, any> = new Map();
+            log.info(`Finding relevant notes for ${queries.length} queries in context ${contextNoteId || 'global'}`);
+
+            // Process each query in parallel using Promise.all for better performance
+            const searchPromises = queries.map(query => 
+                vectorSearchStage.execute({
+                    query,
+                    noteId: contextNoteId,
+                    options: {
+                        maxResults: Math.ceil(limit / queries.length), // Distribute limit among queries
+                        useEnhancedQueries: false, // Don't enhance the queries here, as they're already enhanced
+                        threshold: 0.5 // Lower threshold to get more diverse results
+                    }
+                })
+            );
+
+            const searchResults = await Promise.all(searchPromises);
+            
+            // Combine all results
+            for (let i = 0; i < searchResults.length; i++) {
+                const results = searchResults[i].searchResults;
+                log.info(`Query "${queries[i].substring(0, 30)}..." returned ${results.length} results`);
+                
+                // Combine results, avoiding duplicates
+                for (const result of results) {
+                    if (!allResults.has(result.noteId)) {
+                        allResults.set(result.noteId, result);
+                    } else {
+                        // If note already exists, update similarity to max of both values
+                        const existing = allResults.get(result.noteId);
+                        if (result.similarity > existing.similarity) {
+                            existing.similarity = result.similarity;
+                            allResults.set(result.noteId, existing);
+                        }
+                    }
+                }
+            }
+
+            // Convert map to array and limit to top results
+            const finalResults = Array.from(allResults.values())
+                .sort((a, b) => b.similarity - a.similarity)
+                .slice(0, limit);
+                
+            log.info(`Combined ${queries.length} queries into ${finalResults.length} final results`);
+            return finalResults;
+        } catch (error) {
+            log.error(`Error in findRelevantNotesMultiQuery: ${error}`);
+            // Fall back to legacy approach if the new approach fails
+            return this.findRelevantNotesMultiQueryLegacy(queries, contextNoteId, limit);
+        }
+    }
+    
+    /**
+     * Legacy implementation of multi-query search (for fallback)
+     * @private
+     */
+    private async findRelevantNotesMultiQueryLegacy(
+        queries: string[],
+        contextNoteId: string | null = null,
+        limit = 10
+    ): Promise<any[]> {
+        log.info(`Using legacy findRelevantNotesMultiQuery implementation for ${queries.length} queries`);
         const allResults: Map<string, any> = new Map();
 
         for (const query of queries) {

@@ -9,6 +9,7 @@ import {
     OLLAMA_CLEANING,
     FORMATTER_LOGS
 } from '../constants/formatter_constants.js';
+import log from '../../log.js';
 
 /**
  * Ollama-specific message formatter
@@ -31,14 +32,33 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
     formatMessages(messages: Message[], systemPrompt?: string, context?: string, preserveSystemPrompt?: boolean): Message[] {
         const formattedMessages: Message[] = [];
 
-        // First identify user and system messages
+        // Log the input messages with all their properties
+        log.info(`Ollama formatter received ${messages.length} messages`);
+        messages.forEach((msg, index) => {
+            const msgKeys = Object.keys(msg);
+            log.info(`Message ${index} - role: ${msg.role}, keys: ${msgKeys.join(', ')}, content length: ${msg.content.length}`);
+            
+            // Log special properties if present
+            if (msg.tool_calls) {
+                log.info(`Message ${index} has ${msg.tool_calls.length} tool_calls`);
+            }
+            if (msg.tool_call_id) {
+                log.info(`Message ${index} has tool_call_id: ${msg.tool_call_id}`);
+            }
+            if (msg.name) {
+                log.info(`Message ${index} has name: ${msg.name}`);
+            }
+        });
+
+        // First identify user, system, and tool messages
         const systemMessages = messages.filter(msg => msg.role === 'system');
-        const userMessages = messages.filter(msg => msg.role === 'user' || msg.role === 'assistant');
+        const nonSystemMessages = messages.filter(msg => msg.role !== 'system');
 
         // Determine if we should preserve the existing system message
         if (preserveSystemPrompt && systemMessages.length > 0) {
             // Preserve the existing system message
             formattedMessages.push(systemMessages[0]);
+            log.info(`Preserving existing system message: ${systemMessages[0].content.substring(0, 50)}...`);
         } else {
             // Use provided systemPrompt or default
             const basePrompt = systemPrompt || PROVIDER_PROMPTS.COMMON.DEFAULT_ASSISTANT_INTRO;
@@ -46,49 +66,78 @@ export class OllamaMessageFormatter extends BaseMessageFormatter {
                 role: 'system',
                 content: basePrompt
             });
+            log.info(`Using new system message: ${basePrompt.substring(0, 50)}...`);
         }
 
         // If we have context, inject it into the first user message
-        if (context && userMessages.length > 0) {
+        if (context && nonSystemMessages.length > 0) {
             let injectedContext = false;
 
-            for (let i = 0; i < userMessages.length; i++) {
-                const msg = userMessages[i];
+            for (let i = 0; i < nonSystemMessages.length; i++) {
+                const msg = nonSystemMessages[i];
 
                 if (msg.role === 'user' && !injectedContext) {
                     // Simple context injection directly in the user's message
                     const cleanedContext = this.cleanContextContent(context);
-
-                    // DEBUG: Log the context before and after cleaning
-                    console.log(`[OllamaFormatter] Context (first 500 chars): ${context.substring(0, 500).replace(/\n/g, '\\n')}...`);
-                    console.log(`[OllamaFormatter] Cleaned context (first 500 chars): ${cleanedContext.substring(0, 500).replace(/\n/g, '\\n')}...`);
+                    log.info(`Injecting context (${cleanedContext.length} chars) into user message`);
 
                     const formattedContext = PROVIDER_PROMPTS.OLLAMA.CONTEXT_INJECTION(
                         cleanedContext,
                         msg.content
                     );
 
-                    // DEBUG: Log the final formatted context
-                    console.log(`[OllamaFormatter] Formatted context (first 500 chars): ${formattedContext.substring(0, 500).replace(/\n/g, '\\n')}...`);
+                    // Log what properties we're preserving
+                    const msgKeys = Object.keys(msg);
+                    const preservedKeys = msgKeys.filter(key => key !== 'role' && key !== 'content');
+                    log.info(`Preserving additional properties in user message: ${preservedKeys.join(', ')}`);
 
-                    formattedMessages.push({
-                        role: 'user',
-                        content: formattedContext
-                    });
+                    // Create a new message with all original properties, but updated content
+                    const newMessage = {
+                        ...msg, // Copy all properties
+                        content: formattedContext // Override content with injected context
+                    };
+                    
+                    formattedMessages.push(newMessage);
+                    log.info(`Created user message with context, final keys: ${Object.keys(newMessage).join(', ')}`);
 
                     injectedContext = true;
                 } else {
-                    formattedMessages.push(msg);
+                    // For other messages, preserve all properties including any tool-related ones
+                    log.info(`Preserving message with role ${msg.role}, keys: ${Object.keys(msg).join(', ')}`);
+                    
+                    formattedMessages.push({
+                        ...msg // Copy all properties
+                    });
                 }
             }
         } else {
             // No context, just add all messages as-is
-            for (const msg of userMessages) {
-                formattedMessages.push(msg);
+            // Make sure to preserve all properties including tool_calls, tool_call_id, etc.
+            for (const msg of nonSystemMessages) {
+                log.info(`Adding message with role ${msg.role} without context injection, keys: ${Object.keys(msg).join(', ')}`);
+                formattedMessages.push({
+                    ...msg // Copy all properties
+                });
             }
         }
 
-        console.log(FORMATTER_LOGS.OLLAMA.PROCESSED(messages.length, formattedMessages.length));
+        // Log the final formatted messages
+        log.info(`Ollama formatter produced ${formattedMessages.length} formatted messages`);
+        formattedMessages.forEach((msg, index) => {
+            const msgKeys = Object.keys(msg);
+            log.info(`Formatted message ${index} - role: ${msg.role}, keys: ${msgKeys.join(', ')}, content length: ${msg.content.length}`);
+            
+            // Log special properties if present
+            if (msg.tool_calls) {
+                log.info(`Formatted message ${index} has ${msg.tool_calls.length} tool_calls`);
+            }
+            if (msg.tool_call_id) {
+                log.info(`Formatted message ${index} has tool_call_id: ${msg.tool_call_id}`);
+            }
+            if (msg.name) {
+                log.info(`Formatted message ${index} has name: ${msg.name}`);
+            }
+        });
 
         return formattedMessages;
     }

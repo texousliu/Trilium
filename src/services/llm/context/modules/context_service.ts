@@ -97,29 +97,61 @@ export class ContextService {
         }
 
         try {
-            // Step 1: Generate search queries
+            // Step 1: Generate search queries (skip if tool calling might be enabled)
             let searchQueries: string[];
-            try {
-                searchQueries = await queryEnhancer.generateSearchQueries(userQuestion, llmService);
-            } catch (error) {
-                log.error(`Error generating search queries, using fallback: ${error}`);
-                searchQueries = [userQuestion]; // Fallback to using the original question
+            
+            // Check if llmService has tool calling enabled
+            const isToolsEnabled = llmService && 
+                typeof llmService === 'object' && 
+                'constructor' in llmService && 
+                llmService.constructor.name === 'OllamaService';
+                
+            if (isToolsEnabled) {
+                // Skip query generation if tools might be used to avoid race conditions
+                log.info(`Skipping query enhancement for potential tool-enabled service: ${llmService.constructor.name}`);
+                searchQueries = [userQuestion]; // Use simple fallback
+            } else {
+                try {
+                    searchQueries = await queryEnhancer.generateSearchQueries(userQuestion, llmService);
+                } catch (error) {
+                    log.error(`Error generating search queries, using fallback: ${error}`);
+                    searchQueries = [userQuestion]; // Fallback to using the original question
+                }
             }
+            
             log.info(`Generated search queries: ${JSON.stringify(searchQueries)}`);
 
-            // Step 2: Find relevant notes using multi-query approach
+            // Step 2: Find relevant notes using the pipeline's VectorSearchStage
             let relevantNotes: NoteSearchResult[] = [];
             try {
-                // Find notes for each query and combine results
+                log.info(`Using VectorSearchStage pipeline component to find relevant notes`);
+                
+                // Create or import the vector search stage
+                const VectorSearchStage = (await import('../../pipeline/stages/vector_search_stage.js')).VectorSearchStage;
+                const vectorSearchStage = new VectorSearchStage();
+                
+                // Use multi-query approach through the pipeline
                 const allResults: Map<string, NoteSearchResult> = new Map();
-
+                
+                // Process searches using the pipeline stage
                 for (const query of searchQueries) {
-                    const results = await semanticSearch.findRelevantNotes(
+                    log.info(`Executing pipeline vector search for query: "${query.substring(0, 50)}..."`);
+                    
+                    // Use the pipeline stage directly
+                    const result = await vectorSearchStage.execute({
                         query,
-                        contextNoteId,
-                        5 // Limit per query
-                    );
-
+                        noteId: contextNoteId,
+                        options: {
+                            maxResults: 5, // Limit per query
+                            useEnhancedQueries: false, // Don't enhance these - we already have enhanced queries
+                            threshold: 0.6,
+                            llmService // Pass the LLM service for potential use
+                        }
+                    });
+                    
+                    const results = result.searchResults;
+                    log.info(`Pipeline vector search found ${results.length} results for query "${query.substring(0, 50)}..."`);
+                    
                     // Combine results, avoiding duplicates
                     for (const result of results) {
                         if (!allResults.has(result.noteId)) {

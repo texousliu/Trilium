@@ -562,6 +562,69 @@ export class ContextExtractor {
     }
 
     /**
+     * Get note hierarchy information in a formatted string
+     * @param noteId - The ID of the note to get hierarchy information for
+     * @returns Formatted string with note hierarchy information
+     */
+    static async getNoteHierarchyInfo(noteId: string): Promise<string> {
+        const note = becca.getNote(noteId);
+        if (!note) return 'Note not found';
+
+        let info = `**Title**: ${note.title}\n`;
+        
+        // Add attributes if any
+        const attributes = note.getAttributes();
+        if (attributes && attributes.length > 0) {
+            const relevantAttrs = attributes.filter(attr => !attr.name.startsWith('_'));
+            if (relevantAttrs.length > 0) {
+                info += `**Attributes**: ${relevantAttrs.map(attr => `${attr.name}=${attr.value}`).join(', ')}\n`;
+            }
+        }
+        
+        // Add parent path
+        const parents = await ContextExtractor.getParentNotes(noteId);
+        if (parents && parents.length > 0) {
+            const path = parents.map(p => p.title).join(' > ');
+            info += `**Path**: ${path}\n`;
+        }
+        
+        // Add child count
+        const childNotes = note.getChildNotes();
+        if (childNotes && childNotes.length > 0) {
+            info += `**Child notes**: ${childNotes.length}\n`;
+            
+            // List first few child notes
+            const childList = childNotes.slice(0, 5).map(child => child.title).join(', ');
+            if (childList) {
+                info += `**Examples**: ${childList}${childNotes.length > 5 ? '...' : ''}\n`;
+            }
+        }
+        
+        // Add note type
+        if (note.type) {
+            info += `**Type**: ${note.type}\n`;
+        }
+        
+        // Add creation/modification dates
+        if (note.utcDateCreated) {
+            info += `**Created**: ${new Date(note.utcDateCreated).toLocaleString()}\n`;
+        }
+        
+        if (note.utcDateModified) {
+            info += `**Modified**: ${new Date(note.utcDateModified).toLocaleString()}\n`;
+        }
+        
+        return info;
+    }
+    
+    /**
+     * Get note hierarchy information - instance method
+     */
+    async getNoteHierarchyInfo(noteId: string): Promise<string> {
+        return ContextExtractor.getNoteHierarchyInfo(noteId);
+    }
+
+    /**
      * Get note summary - for backward compatibility
      */
     static async getNoteSummary(noteId: string, maxLength = 5000): Promise<string> {

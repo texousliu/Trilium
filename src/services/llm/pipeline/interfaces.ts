@@ -1,4 +1,5 @@
 import type { Message, ChatCompletionOptions, ChatResponse, StreamChunk } from '../ai_interface.js';
+import type { LLMServiceInterface } from '../interfaces/agent_tool_interfaces.js';
 
 /**
  * Base interface for pipeline input
@@ -59,6 +60,25 @@ export interface ChatPipelineInput extends PipelineInput {
     query?: string;
     showThinking?: boolean;
     streamCallback?: StreamCallback;
+}
+
+/**
+ * Options for vector search operations
+ */
+export interface VectorSearchOptions {
+    maxResults?: number;
+    useEnhancedQueries?: boolean;
+    threshold?: number;
+    llmService?: LLMServiceInterface;
+}
+
+/**
+ * Input for vector search pipeline stage
+ */
+export interface VectorSearchInput extends PipelineInput {
+    query: string;
+    noteId?: string | null;
+    options?: VectorSearchOptions;
 }
 
 /**
@@ -130,6 +150,7 @@ export interface ToolExecutionInput extends PipelineInput {
     response: ChatResponse;
     messages: Message[];
     options?: ChatCompletionOptions;
+    maxIterations?: number;
 }
 
 /**

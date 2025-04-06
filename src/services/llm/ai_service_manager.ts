@@ -392,6 +392,11 @@ export class AIServiceManager implements IAIServiceManager {
 
             // Initialize agent tools with this service manager instance
             await agentTools.initialize(this);
+            
+            // Initialize LLM tools - this is the single place where tools are initialized
+            const toolInitializer = await import('./tools/tool_initializer.js');
+            await toolInitializer.default.initializeTools();
+            log.info("LLM tools initialized successfully");
 
             this.initialized = true;
             log.info("AI service initialized successfully");

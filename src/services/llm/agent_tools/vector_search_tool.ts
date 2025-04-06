@@ -13,13 +13,8 @@
  */
 
 import log from '../../log.js';
+import { VectorSearchStage } from '../pipeline/stages/vector_search_stage.js';
 import type { ContextService } from '../context/modules/context_service.js';
-
-// Define interface for context service to avoid circular imports
-interface IContextService {
-  findRelevantNotesMultiQuery(queries: string[], contextNoteId: string | null, limit: number): Promise<any[]>;
-  processQuery(userQuestion: string, llmService: any, contextNoteId: string | null, showThinking: boolean): Promise<any>;
-}
 
 export interface VectorSearchResult {
   noteId: string;
@@ -56,17 +51,20 @@ export interface VectorSearchOptions {
 }
 
 export class VectorSearchTool {
-  private contextService: IContextService | null = null;
+  private contextService: any = null;
   private maxResults: number = 5;
+  private vectorSearchStage: VectorSearchStage;
 
   constructor() {
-    // Initialization is done by setting context service
+    // Initialize the vector search stage
+    this.vectorSearchStage = new VectorSearchStage();
+    log.info('VectorSearchTool initialized with VectorSearchStage pipeline component');
   }
 
   /**
    * Set the context service for performing vector searches
    */
-  setContextService(contextService: IContextService): void {
+  setContextService(contextService: any): void {
     this.contextService = contextService;
     log.info('Context service set in VectorSearchTool');
   }
@@ -79,49 +77,42 @@ export class VectorSearchTool {
     contextNoteId?: string,
     searchOptions: VectorSearchOptions = {}
   ): Promise<VectorSearchResult[]> {
-    if (!this.contextService) {
-      throw new Error("Context service not set, call setContextService() first");
-    }
-
     try {
       // Set more aggressive defaults to return more content
       const options = {
-        limit: searchOptions.limit || 15, // Increased from default (likely 5 or 10)
-        threshold: searchOptions.threshold || 0.5, // Lower threshold to include more results (likely 0.65 or 0.7 before)
+        maxResults: searchOptions.limit || 15, // Increased from default
+        threshold: searchOptions.threshold || 0.5, // Lower threshold to include more results
+        useEnhancedQueries: true, // Enable query enhancement by default
         includeContent: searchOptions.includeContent !== undefined ? searchOptions.includeContent : true,
         ...searchOptions
       };
 
-      log.info(`Vector search: "${query.substring(0, 50)}..." with limit=${options.limit}, threshold=${options.threshold}`);
+      log.info(`Vector search: "${query.substring(0, 50)}..." with limit=${options.maxResults}, threshold=${options.threshold}`);
 
-      // Check if contextService is set again to satisfy TypeScript
-      if (!this.contextService) {
-        throw new Error("Context service not set, call setContextService() first");
-      }
+      // Use the pipeline stage for vector search
+      const result = await this.vectorSearchStage.execute({
+        query,
+        noteId: contextNoteId || null,
+        options: {
+          maxResults: options.maxResults,
+          threshold: options.threshold,
+          useEnhancedQueries: options.useEnhancedQueries
+        }
+      });
+      
+      const searchResults = result.searchResults;
+      log.info(`Vector search found ${searchResults.length} relevant notes via pipeline`);
 
-      // Use contextService methods instead of direct imports
-      const results = await this.contextService.findRelevantNotesMultiQuery(
-        [query],
-        contextNoteId || null,
-        options.limit
-      );
-
-      // Log the number of results
-      log.info(`Vector search found ${results.length} relevant notes`);
-
-      // Include more content from each note to provide richer context
+      // If includeContent is true but we're missing content for some notes, fetch it
       if (options.includeContent) {
-        // IMPORTANT: Get content directly without recursive processQuery calls
-        // This prevents infinite loops where one search triggers another
-        for (let i = 0; i < results.length; i++) {
-          const result = results[i];
+        for (let i = 0; i < searchResults.length; i++) {
+          const result = searchResults[i];
           try {
-            // Get content directly from note content service
+            // Get content if missing
             if (!result.content) {
               const noteContent = await import('../context/note_content.js');
               const content = await noteContent.getNoteContent(result.noteId);
               if (content) {
-                // Add content directly without recursive calls
                 result.content = content.substring(0, 2000); // Limit to 2000 chars
                 log.info(`Added direct content for note ${result.noteId}, length: ${result.content.length} chars`);
               }
@@ -132,7 +123,18 @@ export class VectorSearchTool {
         }
       }
 
-      return results;
+      // Format results to match the expected VectorSearchResult interface
+      return searchResults.map(note => ({
+        noteId: note.noteId,
+        title: note.title,
+        contentPreview: note.content 
+          ? note.content.length > 200
+            ? note.content.substring(0, 200) + '...'
+            : note.content
+          : 'No content available',
+        similarity: note.similarity,
+        parentId: note.parentId
+      }));
     } catch (error) {
       log.error(`Vector search error: ${error}`);
       return [];
@@ -148,26 +150,24 @@ export class VectorSearchTool {
     similarityThreshold?: number
   } = {}): Promise<VectorSearchResult[]> {
     try {
-      // Validate contextService is set
-      if (!this.contextService) {
-        log.error('Context service not set in VectorSearchTool');
-        return [];
-      }
-
       // Set defaults
       const maxResults = options.maxResults || this.maxResults;
+      const threshold = options.similarityThreshold || 0.6;
       const parentNoteId = options.parentNoteId || null;
 
-      // Use multi-query approach for more robust results
-      const queries = [query];
-      const results = await this.contextService.findRelevantNotesMultiQuery(
-        queries,
-        parentNoteId,
-        maxResults
-      );
+      // Use the pipeline for consistent search behavior
+      const result = await this.vectorSearchStage.execute({
+        query,
+        noteId: parentNoteId,
+        options: {
+          maxResults,
+          threshold,
+          useEnhancedQueries: true
+        }
+      });
 
       // Format results to match the expected interface
-      return results.map(result => ({
+      return result.searchResults.map(result => ({
         noteId: result.noteId,
         title: result.title,
         contentPreview: result.content ?
