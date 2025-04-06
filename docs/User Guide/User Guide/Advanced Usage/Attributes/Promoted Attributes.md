@@ -1,7 +1,7 @@
 # Promoted Attributes
 Promoted attributes are [attributes](../Attributes.md) which are considered important and thus are "promoted" onto the main note UI. See example below:
 
-![](../../Attachments/promoted-attributes.png)
+![](Promoted%20Attributes_promot.png)
 
 You can see the note having kind of form with several fields. Each of these is just regular attribute, the only difference is that they appear on the note itself.
 

@@ -4,7 +4,7 @@ import OptionsWidget from "./options_widget.js";
 import { t } from "../../../services/i18n.js";
 import type { OptionMap } from "../../../../../services/options_interface.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="options-section">
     <h4 style="margin-top: 0px;">${t("sync_2.config_title")}</h4>
 

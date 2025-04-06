@@ -1,27 +1,27 @@
 # Note source
 ## Understanding the source code of the different notes
 
-Internally, the structure of the content of each note is different based on the [Note Types](../Note%20Types).
+Internally, the structure of the content of each note is different based on the <a class="reference-link" href="../Note%20Types.md">Note Types</a>.
 
 For example:
 
-*   [Text Notes](#root/_hidden/_options/_optionsTextNotes) are represented internally as HTML, using the [CKEditor](Technologies%20used/CKEditor.md) representation. Note that due to the custom plugins, some HTML elements are specific to Trilium only, for example the admonitions.
-*   [Code Notes](#root/_hidden/_options/_optionsCodeNotes) are plain text and are represented internally as-is.
-*   [Geo map](../Note%20Types/Geo%20map.md) notes contain only minimal information (viewport, zoom) as a JSON.
-*   [Canvas](../Note%20Types/Canvas.md) notes are represented as JSON, with Trilium's own information alongside with [Excalidraw](Technologies%20used/Excalidraw.md)'s internal JSON representation format.
-*   [Mind Map](../Note%20Types/Mind%20Map.md) notes are represented as JSON, with the internal format of [MindElixir](Technologies%20used/MindElixir.md).
+*   <a class="reference-link" href="../Note%20Types/Text.md">Text</a> notes are represented internally as HTML, using the <a class="reference-link" href="Technologies%20used/CKEditor.md">CKEditor</a> representation. Note that due to the custom plugins, some HTML elements are specific to Trilium only, for example the admonitions.
+*   <a class="reference-link" href="../Note%20Types/Code.md">Code</a> notes are plain text and are represented internally as-is.
+*   <a class="reference-link" href="../Note%20Types/Geo%20Map.md">Geo Map</a> notes contain only minimal information (viewport, zoom) as a JSON.
+*   <a class="reference-link" href="../Note%20Types/Canvas.md">Canvas</a> notes are represented as JSON, with Trilium's own information alongside with <a class="reference-link" href="Technologies%20used/Excalidraw.md">Excalidraw</a>'s internal JSON representation format.
+*   <a class="reference-link" href="../Note%20Types/Mind%20Map.md">Mind Map</a> notes are represented as JSON, with the internal format of <a class="reference-link" href="Technologies%20used/MindElixir.md">MindElixir</a>.
 
-Note that some information is also stored as [Attachments](../Attachments). For example [Canvas](../Note%20Types/Canvas.md) notes use the attachments feature to store the custom libraries, and alongside with [Mind Map](../Note%20Types/Mind%20Map.md) and other similar note types it stores an SVG representation of the content for use in other features such as including in other notes, shared notes, etc.
+Note that some information is also stored as <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Attachments.md">Attachments</a>. For example <a class="reference-link" href="../Note%20Types/Canvas.md">Canvas</a> notes use the attachments feature to store the custom libraries, and alongside with <a class="reference-link" href="../Note%20Types/Mind%20Map.md">Mind Map</a> and other similar note types it stores an SVG representation of the content for use in other features such as including in other notes, shared notes, etc.
 
 Here's part of the HTML representation of this note, as it's stored in the database (but prettified).
 
-```html
+```
 <h2>
 	Understanding the source code of the different notes
 </h2>
 <p>
 	Internally, the structure of the content of each note is different based on the&nbsp;
-	<a class="reference-link" href="../Note%20Types">
+	<a class="reference-link" href="../Note%20Types.md">
 		Note Types
 	</a>
 	.
@@ -30,7 +30,7 @@ Here's part of the HTML representation of this note, as it's stored in the datab
 
 ## Viewing the source code
 
-It is possible to view the source code of a note by pressing the contextual menu in [Note buttons](../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20buttons.md) and selecting _Note source_.
+It is possible to view the source code of a note by pressing the contextual menu in <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20buttons.md">Note buttons</a> and selecting _Note source_.
 
 ![](Note%20source_image.png)
 

@@ -50,7 +50,7 @@ const FONT_FAMILIES: FontGroup[] = [
     }
 ];
 
-const TPL = `
+const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("fonts.fonts")}</h4>
 

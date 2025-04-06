@@ -1108,12 +1108,12 @@ class BNote extends AbstractBeccaEntity<BNote> {
         // given that we're always fetching attachments only for a specific note, we might just do it always
 
         const query = opts.includeContentLength
-            ? `SELECT attachments.*, LENGTH(blobs.content) AS contentLength
+            ? /*sql*/`SELECT attachments.*, LENGTH(blobs.content) AS contentLength
                 FROM attachments
                 JOIN blobs USING (blobId)
                 WHERE ownerId = ? AND isDeleted = 0
                 ORDER BY position`
-            : `SELECT * FROM attachments WHERE ownerId = ? AND isDeleted = 0 ORDER BY position`;
+            : /*sql*/`SELECT * FROM attachments WHERE ownerId = ? AND isDeleted = 0 ORDER BY position`;
 
         return sql.getRows<AttachmentRow>(query, [this.noteId]).map((row) => new BAttachment(row));
     }
@@ -1122,11 +1122,11 @@ class BNote extends AbstractBeccaEntity<BNote> {
         opts.includeContentLength = !!opts.includeContentLength;
 
         const query = opts.includeContentLength
-            ? `SELECT attachments.*, LENGTH(blobs.content) AS contentLength
+            ? /*sql*/`SELECT attachments.*, LENGTH(blobs.content) AS contentLength
                 FROM attachments
                 JOIN blobs USING (blobId)
                 WHERE ownerId = ? AND attachmentId = ? AND isDeleted = 0`
-            : `SELECT * FROM attachments WHERE ownerId = ? AND attachmentId = ? AND isDeleted = 0`;
+            : /*sql*/`SELECT * FROM attachments WHERE ownerId = ? AND attachmentId = ? AND isDeleted = 0`;
 
         return sql.getRows<AttachmentRow>(query, [this.noteId, attachmentId]).map((row) => new BAttachment(row))[0];
     }

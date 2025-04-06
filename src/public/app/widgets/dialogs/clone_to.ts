@@ -10,7 +10,7 @@ import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
 
 
-const TPL = `
+const TPL = /*html*/`
 <div class="clone-to-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" style="max-width: 1000px" role="document">
         <div class="modal-content">

@@ -28,7 +28,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
     } else if (currentTotpStatus !== lastAuthState.totpEnabled || currentSsoStatus !== lastAuthState.ssoEnabled) {
         req.session.destroy((err) => {
             if (err) console.error('Error destroying session:', err);
-            res.redirect('/login');
+            res.redirect('login');
         });
         return;
     } else if (currentSsoStatus) {
@@ -36,7 +36,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
             next();
             return;
         }
-        res.redirect('/login');
+        res.redirect('login');
         return;
     } else if (!req.session.loggedIn && !noAuthentication) {
         const redirectToShare = options.getOptionBool("redirectBareDomain");

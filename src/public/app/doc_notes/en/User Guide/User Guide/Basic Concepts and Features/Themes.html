@@ -19,7 +19,7 @@
           navigate to the Options menu (accessible via the app icon in the top-left
           corner), select the Appearance tab, and choose your preferred theme.</p>
         <p>
-          <img src="../Attachments/dark-theme.png" alt="Dark Theme">
+          <img src="Themes_dark-theme.png" alt="Dark Theme">
         </p>
         <h2>Creating Custom CSS Themes</h2>
         <p>Trilium supports custom user themes, allowing you to personalize the application's
@@ -27,7 +27,7 @@
         <ol>
           <li><strong>Create a CSS Code Note</strong>: Start by creating a new <a href="../Note%20Types/Code.html">code note</a> with
             the <code>CSS</code> type.</li>
-          <li><strong>Annotate with</strong>  <code>**#appTheme**</code>: Add the <a href="../Advanced%20Usage/Attributes.html">attribute</a>  <code>#appTheme=my-theme-name</code> to
+          <li><strong>Annotate with</strong>  <code>#appTheme</code>: Add the <a href="../Advanced%20Usage/Attributes.html">attribute</a>  <code>#appTheme=my-theme-name</code> to
             your note, where <code>my-theme-name</code> is the name of your custom theme.</li>
           <li><strong>Define Your Styles</strong>: Write your custom CSS within the
             note. Below is an example of a custom theme:</li>
@@ -99,9 +99,9 @@ body .CodeMirror {
           shared with other users. However, be cautious when importing themes from
           untrusted sources, as they may contain executable scripts that could pose
           security risks.</p>
-        <p>An example user theme, <em>Steel Blue</em>, is available in the <a href="#root/xjSsCcvVZf6H">demo document</a>.</p>
+        <p>An example user theme, <em>Steel Blue</em>, is available in the demo document.</p>
         <p>
-          <img src="../Attachments/steel-blue.png" alt="Steel Blue Theme">
+          <img src="Themes_steel-blue.png" alt="Steel Blue Theme">
         </p>
         <h3>Using Custom CSS for Specific Purposes</h3>
         <p>In addition to full themes, Trilium allows for custom CSS that isn't tied
@@ -111,10 +111,10 @@ body .CodeMirror {
         <h3>Applying Custom CSS</h3>
         <p>To use custom CSS:</p>
         <ol>
-          <li><strong>Create a CSS Code Note</strong>: Create a new <a href="../Note%20Types/Code.html">code note</a> with
-            the <code>CSS</code> type.</li>
-          <li><strong>Add the</strong>  <code>**appCss**</code>  <strong>Label</strong>:
-            Annotate the note with the <code>#appCss</code>  <a href="../Advanced%20Usage/Attributes.html">label</a>.</li>
+          <li><strong>Create a CSS Code Note</strong>: Create a new&nbsp;<a class="reference-link"
+            href="../Note%20Types/Code.html">Code</a>&nbsp;note with the <code>CSS</code> type.</li>
+          <li><strong>Add the</strong>  <code>appCss</code>  <strong>Label</strong>: Annotate
+            the note with the <code>#appCss</code>  <a href="../Advanced%20Usage/Attributes.html">label</a>.</li>
           <li><strong>Write Your CSS</strong>: Add your custom CSS rules to the note.</li>
         </ol>
         <p>For example:</p><pre><code class="language-text-x-trilium-auto">/* Custom CSS to style specific elements */
@@ -131,10 +131,10 @@ body .CodeMirror {
         <h3>Styling Specific Notes in the Tree</h3>
         <p>To apply specific styles to certain notes in the tree:</p>
         <ul>
-          <li><strong>Use the</strong>  <code>**cssClass**</code>  <strong>Attribute</strong>:
+          <li><strong>Use the</strong>  <code>cssClass</code>  <strong>Attribute</strong>:
             Add the <code>cssClass</code>  <a href="../Advanced%20Usage/Attributes.html">attribute</a> to
             a note, and assign it a value representing the desired CSS class.</li>
-          <li><strong>Define an</strong>  <code>**iconClass**</code>: You can also define
+          <li><strong>Define an</strong>  <code>iconClass</code>: You can also define
             a custom icon for a note using the <code>iconClass</code> attribute, selecting
             from <a href="https://boxicons.com">Box Icons</a> or your own custom classes.</li>
         </ul>
@@ -143,7 +143,7 @@ body .CodeMirror {
         <h3>User-Provided Themes</h3>
         <p>A gallery of user-created themes is available, showcasing the variety
           of customizations that the Trilium community has developed. For more information,
-          visit the <a href="Themes/Theme%20Gallery.html">Theme Gallery</a>.</p>
+          check the&nbsp;<a class="reference-link" href="Themes/Theme%20Gallery.html">Theme Gallery</a>.</p>
         <h3>Asset Path Management</h3>
         <p>When referencing built-in assets like images in your custom themes or
           CSS, you can avoid hardcoding version numbers by using the <code>vX</code> alias.

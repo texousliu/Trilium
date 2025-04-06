@@ -7,7 +7,7 @@ Trilium Notes supports importing Markdown restricted to the [CommonMark specific
 
 If you want to import just a chunk of markdown from clipboard, you can do it from editor block menu:
 
-![](../../Attachments/markdown-inline-import.gif)
+![](Markdown_markdown-inline-i.gif)
 
 ### File import
 
@@ -20,7 +20,7 @@ You can also import Markdown files from files:
 
 \[\[gifs/markdown-file-import.gif\]\]
 
-![](../../Attachments/markdown-file-import.gif)
+![](Markdown_markdown-file-imp.gif)
 
 ## Export
 
@@ -28,13 +28,13 @@ You can also import Markdown files from files:
 
 You can export whole subtree to ZIP archive which will have directory structured modelled after subtree structure:
 
-![](../../Attachments/markdown-export-subtree.gif)
+![](Markdown_markdown-export-s.gif)
 
 ### Single note export
 
 If you want to export just single note without its subtree, you can do it from Note actions menu:
 
-![](../../Attachments/markdown-export-note.gif)
+![](Markdown_markdown-export-n.gif)
 
 ### Exporting protected notes
 

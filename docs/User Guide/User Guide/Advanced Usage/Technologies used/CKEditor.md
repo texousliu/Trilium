@@ -21,7 +21,7 @@ Trilium makes use of such features:
 
 *   The math feature is added by a version of [isaul32/ckeditor5-math: Math feature for CKEditor 5.](https://github.com/isaul32/ckeditor5-math) modified by us to fit our needs.
 *   We also make use of modified upstream plugins such as [ckeditor/ckeditor5-mermaid](https://github.com/ckeditor/ckeditor5-mermaid) to allow inline Mermaid code.
-*   [mlewand/ckeditor5-keyboard-marker: Plugin adds support for the keyboard input element (<kbd>) to CKEditor 5.](https://github.com/mlewand/ckeditor5-keyboard-marker)
+*   [mlewand/ckeditor5-keyboard-marker: Plugin adds support for the keyboard input element (`<kbd>`) to CKEditor 5.](https://github.com/mlewand/ckeditor5-keyboard-marker)
 *   A modified version of [ThomasAitken/ckeditor5-footnotes: Footnotes plugin for CKEditor5](https://github.com/ThomasAitken/ckeditor5-footnotes) to allow footnotes.
 
 Apart from that, Trilium also has its own set of specific plugins such as:

@@ -17,7 +17,7 @@ Common request is to allow multiple users collaborate, share notes etc. So far I
 
 *   it's a huge feature, or rather a Pandora's box of collaboration features like user management, permissions, conflict resolution, real-time editing of a note by multiple people etc. This would be a huge amount of work. Trilium Notes is project made mostly by one person in free time and that's unlikely to change in the future.
 *   given its size it would probably pivot the attention away from my main focus which is a personal note-taking
-*   the assumption that only single person has access to the app simplifies many things, or just outright makes them possible. In multi-user app, our [scripting](Note%20Types/Code/Scripts.md)support would be a XSS security hole, while with the single user assumption it's an endless customizable tool.
+*   the assumption that only single person has access to the app simplifies many things, or just outright makes them possible. In multi-user app, our [scripting](Scripting.md)support would be a XSS security hole, while with the single user assumption it's an endless customizable tool.
 
 ## How to open multiple documents in one Trilium instance
 

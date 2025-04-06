@@ -6,7 +6,7 @@ import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 import WheelZoom from 'vanilla-js-wheel-zoom';
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-image note-detail-printable">
     <style>
         .type-image .note-detail {

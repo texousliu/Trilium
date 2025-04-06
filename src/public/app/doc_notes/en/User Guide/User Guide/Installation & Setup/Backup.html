@@ -13,8 +13,9 @@
        <h1 data-trilium-h1>Backup</h1>
 
       <div class="ck-content">
-        <p>Trilium supports simple backup scheme where it saves copy of the <a href="#root/xjSsCcvVZf6H">document</a> on
-          these events:</p>
+        <p>Trilium supports simple backup scheme where it saves copy of the&nbsp;
+          <a
+          class="reference-link" href="../Advanced%20Usage/Database.html">Database</a>&nbsp;on these events:</p>
         <ul>
           <li>once a day</li>
           <li>once a week</li>
@@ -25,11 +26,12 @@
           which should protect you from various problems. These backups are stored
           by default in <code>backup</code> directory placed in the <a href="Data%20directory.html">data directory</a>.</p>
         <p>This is only very basic backup solution, and you're encouraged to add
-          some better backup solution - e.g. backing up the <a href="#root/xjSsCcvVZf6H">document</a> to
-          cloud / different computer etc.</p>
-        <p>Note that <a href="Synchronization.html">synchronization</a> provides also
-          some backup capabilities by its nature of distributing the data to other
-          computers.</p>
+          some better backup solution - e.g. backing up the&nbsp;<a class="reference-link"
+          href="../Advanced%20Usage/Database.html">Database</a>&nbsp;to cloud / different
+          computer etc.</p>
+        <p>Note that&nbsp;<a class="reference-link" href="Synchronization.html">Synchronization</a>&nbsp;provides
+          also some backup capabilities by its nature of distributing the data to
+          other computers.</p>
         <h2>Restoring backup</h2>
         <p>Let's assume you want to restore the weekly backup, here's how to do it:</p>
         <ul>
@@ -40,9 +42,9 @@
               <li>I'll refer to <code>~/trilium-data</code> as data directory from now on</li>
             </ul>
           </li>
-          <li>find <code>~/trilium-data/backup/backup-weekly.db</code> - this is the
+          <li>find <code>~/trilium-data/backup/backup-weekly.db</code> - this is the&nbsp;
             <a
-            href="#root/xjSsCcvVZf6H">document</a>backup</li>
+            class="reference-link" href="../Advanced%20Usage/Database.html">Database</a>&nbsp;backup</li>
           <li>at this point stop/kill Trilium</li>
           <li>delete <code>~/trilium-data/document.db</code>, <code>~/trilium-data/document.db-wal</code> and <code>~/trilium-data/document.db-shm</code> (latter
             two files are auto generated)</li>

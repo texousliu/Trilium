@@ -12,7 +12,19 @@ class CustomMarkdownRenderer extends Renderer {
     }
 
     paragraph(data: Tokens.Paragraph): string {
-        return super.paragraph(data).trimEnd();
+        let text = super.paragraph(data).trimEnd();
+
+        if (text.includes("$")) {
+            // Display math
+            text = text.replaceAll(/(?<!\\)\$\$(.+)\$\$/g,
+                `<span class="math-tex">\\\[$1\\\]</span>`);
+
+            // Inline math
+            text = text.replaceAll(/(?<!\\)\$(.+)\$/g,
+                `<span class="math-tex">\\\($1\\\)</span>`);
+        }
+
+        return text;
     }
 
     code({ text, lang }: Tokens.Code): string {
@@ -75,6 +87,9 @@ import { ADMONITION_TYPE_MAPPINGS } from "../export/markdown.js";
 import utils from "../utils.js";
 
 function renderToHtml(content: string, title: string) {
+    // Double-escape slashes in math expression because they are otherwise consumed by the parser somewhere.
+    content = content.replaceAll("\\$", "\\\\$");
+
     let html = parse(content, {
         async: false,
         renderer: renderer
@@ -82,10 +97,16 @@ function renderToHtml(content: string, title: string) {
 
     // h1 handling needs to come before sanitization
     html = importUtils.handleH1(html, title);
-    // html = htmlSanitizer.sanitize(html);
+    html = htmlSanitizer.sanitize(html);
+
+    // Add a trailing semicolon to CSS styles.
+    html = html.replaceAll(/(<(img|figure|col).*?style=".*?)"/g, "$1;\"");
 
     // Remove slash for self-closing tags to match CKEditor's approach.
     html = html.replace(/<(\w+)([^>]*)\s+\/>/g, "<$1$2>");
+
+    // Normalize non-breaking spaces to entity.
+    html = html.replaceAll("\u00a0", "&nbsp;");
 
     return html;
 }

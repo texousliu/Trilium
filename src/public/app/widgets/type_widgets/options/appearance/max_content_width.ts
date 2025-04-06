@@ -5,7 +5,7 @@ import type { OptionMap } from "../../../../../../services/options_interface.js"
 
 const MIN_VALUE = 640;
 
-const TPL = `
+const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("max_content_width.title")}</h4>
 

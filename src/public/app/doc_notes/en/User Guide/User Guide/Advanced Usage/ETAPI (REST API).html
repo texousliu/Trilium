@@ -39,22 +39,14 @@ Authorization: Basic BATOKEN</code></pre>
         <p>Basic Auth is meant to be used with tools which support only basic auth.</p>
         <h2>Interaction using Bash scripts</h2>
         <p>It is possible to write simple Bash scripts to interact with Trilium.
-          As an example, here's how to obtain the HTML content of a note:</p><pre><code class="language-text-x-sh">#!/usr/bin/env bash
-
-
+          As an example, here's how to obtain the HTML content of a note:</p><pre><code class="language-text-x-trilium-auto">#!/usr/bin/env bash
 
 # Configuration
-
 TOKEN=z1vA4fkGxjOR_ZXLrZeqHEFOv65yV3882iFCRtNIK9k9iWrHliITNSLQ=
-
 SERVER=http://localhost:8080
 
-
-
 # Download a note by ID
-
 NOTE_ID="i6ra4ZshJhgN"
-
 curl "$SERVER/etapi/notes/$NOTE_ID/content" -H "Authorization: $TOKEN" </code></pre>
         <p>Make sure to replace the values of:</p>
         <ul>

@@ -131,7 +131,7 @@ function register(app: express.Application) {
     apiRoute(GET, '/api/oauth/validate', openID.isTokenValid);
 
     apiRoute(PST, '/api/totp_recovery/set', recoveryCodes.setRecoveryCodes);
-    apiRoute(PST, '/api/totp_recovery/verify', recoveryCodes.veryifyRecoveryCode);
+    apiRoute(PST, '/api/totp_recovery/verify', recoveryCodes.verifyRecoveryCode);
     apiRoute(GET, '/api/totp_recovery/generate', recoveryCodes.generateRecoveryCodes);
     apiRoute(GET, '/api/totp_recovery/enabled', recoveryCodes.checkForRecoveryKeys);
     apiRoute(GET, '/api/totp_recovery/used', recoveryCodes.getUsedRecoveryCodes);
@@ -278,6 +278,7 @@ function register(app: express.Application) {
     route(PST, "/api/setup/sync-seed", [auth.checkAppNotInitialized], setupApiRoute.saveSyncSeed, apiResultHandler, false);
 
     apiRoute(GET, "/api/autocomplete", autocompleteApiRoute.getAutocomplete);
+    apiRoute(GET, "/api/autocomplete/notesCount", autocompleteApiRoute.getNotesCount);
     apiRoute(GET, "/api/quick-search/:searchString", searchRoute.quickSearch);
     apiRoute(GET, "/api/search-note/:noteId", searchRoute.searchFromNote);
     apiRoute(PST, "/api/search-and-execute-note/:noteId", searchRoute.searchAndExecute);

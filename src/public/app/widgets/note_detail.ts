@@ -38,7 +38,7 @@ import type TypeWidget from "./type_widgets/type_widget.js";
 import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
 import AiChatTypeWidget from "./type_widgets/ai_chat.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail">
     <style>
     .note-detail {

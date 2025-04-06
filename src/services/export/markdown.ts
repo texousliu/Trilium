@@ -1,6 +1,6 @@
 "use strict";
 
-import TurndownService from "turndown";
+import TurndownService, { type Rule } from "turndown";
 import { gfm } from "../../../packages/turndown-plugin-gfm/src/gfm.js";
 
 let instance: TurndownService | null = null;
@@ -43,6 +43,9 @@ function toMarkdown(content: string) {
         instance.addRule("fencedCodeBlock", fencedCodeBlockFilter);
         instance.addRule("img", buildImageFilter());
         instance.addRule("admonition", buildAdmonitionFilter());
+        instance.addRule("inlineLink", buildInlineLinkFilter());
+        instance.addRule("figure", buildFigureFilter());
+        instance.addRule("math", buildMathFilter());
         instance.use(gfm);
         instance.keep([ "kbd" ]);
     }
@@ -93,13 +96,17 @@ function buildImageFilter() {
         return title.replace(/"/g, '\\"')
     }
 
-    function cleanAttribute (attribute: string) {
-        return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
-    }
-
     const imageFilter: TurndownService.Rule = {
         filter: "img",
-        replacement(content, node) {
+        replacement(content, _node) {
+            const node = _node as HTMLElement;
+
+            // Preserve image verbatim if it has a width or height attribute.
+            if (node.hasAttribute("width") || node.hasAttribute("height")) {
+                return node.outerHTML;
+            }
+
+            // TODO: Deduplicate with upstream.
             const untypedNode = (node as any);
             const alt = escapeMarkdown(cleanAttribute(untypedNode.getAttribute('alt')))
             const src = escapeLinkDestination(untypedNode.getAttribute('src') || '')
@@ -151,6 +158,81 @@ function buildAdmonitionFilter() {
         }
     }
     return admonitionFilter;
+}
+
+/**
+ * Variation of the original ruleset: https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js.
+ *
+ * Detects if the URL is a Trilium reference link and returns it verbatim if that's the case.
+ *
+ * @returns
+ */
+function buildInlineLinkFilter(): Rule {
+    return {
+        filter: function (node, options) {
+            return (
+                options.linkStyle === 'inlined' &&
+                node.nodeName === 'A' &&
+                !!node.getAttribute('href')
+            )
+        },
+
+        replacement: function (content, _node) {
+            const node = _node as HTMLElement;
+
+            // Return reference links verbatim.
+            if (node.classList.contains("reference-link")) {
+                return node.outerHTML;
+            }
+
+            // Otherwise treat as normal.
+            // TODO: Call super() somehow instead of duplicating the implementation.
+            let href = node.getAttribute('href')
+            if (href) href = href.replace(/([()])/g, '\\$1')
+            let title = cleanAttribute(node.getAttribute('title'))
+            if (title) title = ' "' + title.replace(/"/g, '\\"') + '"'
+            return '[' + content + '](' + href + title + ')'
+        }
+    }
+}
+
+function buildFigureFilter(): Rule {
+    return {
+        filter(node, options) {
+            return node.nodeName === 'FIGURE'
+        },
+        replacement(content, node) {
+            return (node as HTMLElement).outerHTML;
+        }
+    }
+}
+
+function buildMathFilter(): Rule {
+    return {
+        filter(node) {
+            return node.nodeName === "SPAN" && node.classList.contains("math-tex");
+        },
+        replacement(content) {
+            // Inline math
+            if (content.startsWith("\\\\(") && content.endsWith("\\\\)")) {
+                return `$${content.substring(3, content.length - 3)}$`;
+            }
+
+            // Display math
+            if (content.startsWith(String.raw`\\\[`) && content.endsWith(String.raw`\\\]`)) {
+                return `$$${content.substring(4, content.length - 4)}$$`;
+            }
+
+            // Unknown.
+            return content;
+        }
+    }
+}
+
+// Taken from upstream since it's not exposed.
+// https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js
+function cleanAttribute(attribute: string | null | undefined) {
+    return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
 }
 
 export default {

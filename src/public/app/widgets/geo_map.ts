@@ -3,7 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 
-const TPL = `\
+const TPL = /*html*/`\
 <div class="geo-map-widget">
     <style>
         .note-detail-geo-map,

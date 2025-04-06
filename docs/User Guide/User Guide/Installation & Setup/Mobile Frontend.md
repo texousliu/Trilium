@@ -9,11 +9,11 @@ Note that this is not an Android/iOS app, this is just mobile friendly web page 
 
 ### Mobile phone
 
-![](../Attachments/mobile-smartphone.png)
+![](Mobile%20Frontend_mobile-sma.png)
 
 ### Tablet
 
-![](../Attachments/mobile-tablet.png)
+![](Mobile%20Frontend_mobile-tab.png)
 
 ## Limitations
 
@@ -31,4 +31,4 @@ Trilium decides automatically whether to use mobile or desktop frontend. If this
 
 ## Scripting
 
-You can alter the behavior with [scripts](../Note%20Types/Code/Scripts.md) just like for normal frontend. For script notes to be executed, they need to have labeled `#run=mobileStartup`.
+You can alter the behavior with [scripts](../Scripting.md) just like for normal frontend. For script notes to be executed, they need to have labeled `#run=mobileStartup`.

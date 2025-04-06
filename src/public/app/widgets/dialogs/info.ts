@@ -5,7 +5,7 @@ import BasicWidget from "../basic_widget.js";
 import { Modal } from "bootstrap";
 import type { ConfirmDialogCallback } from "./confirm.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="info-dialog modal mx-auto" tabindex="-1" role="dialog" style="z-index: 2000;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

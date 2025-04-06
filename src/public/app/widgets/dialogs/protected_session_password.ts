@@ -4,7 +4,7 @@ import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { Modal } from "bootstrap";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="protected-session-password-dialog modal mx-auto" data-backdrop="false" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -16,7 +16,7 @@ const TPL = `
             <form class="protected-session-password-form">
                 <div class="modal-body">
                     <label for="protected-session-password" class="col-form-label">${t("protected_session_password.form_label")}</label>
-                    <input id="protected-session-password" class="form-control protected-session-password" type="password">
+                    <input id="protected-session-password" class="form-control protected-session-password" type="password" autocomplete="current-password">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary">${t("protected_session_password.start_button")}</button>

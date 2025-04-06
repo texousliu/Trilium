@@ -35,7 +35,7 @@ Basic Auth is meant to be used with tools which support only basic auth.
 
 It is possible to write simple Bash scripts to interact with Trilium. As an example, here's how to obtain the HTML content of a note:
 
-```sh
+```
 #!/usr/bin/env bash
 
 # Configuration

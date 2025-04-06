@@ -75,7 +75,7 @@ export default class TabManager extends Component {
 
             const filteredNoteContexts = noteContextsToOpen.filter((openTab: NoteContextState) => {
                 const noteId = treeService.getNoteIdFromUrl(openTab.notePath);
-                if (noteId && !(noteId in froca.notes)) {
+                if (!noteId || !(noteId in froca.notes)) {
                     // note doesn't exist so don't try to open tab for it
                     return false;
                 }

@@ -156,6 +156,8 @@ async function createMainWindow(app: App) {
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
+        minWidth: 500,
+        minHeight: 400,
         title: "TriliumNext Notes",
         webPreferences: {
             nodeIntegration: true,
@@ -185,7 +187,7 @@ async function createMainWindow(app: App) {
             if (lastFocusedWindow.isMinimized()) {
                 lastFocusedWindow.restore();
             }
-            lastFocusedWindow.show(); 
+            lastFocusedWindow.show();
             lastFocusedWindow.focus();
         }
     });
@@ -255,9 +257,12 @@ function getIcon() {
 
 async function createSetupWindow() {
     const { BrowserWindow } = await import("electron"); // should not be statically imported
+    const width = 750;
+    const height = 650;
     setupWindow = new BrowserWindow({
-        width: 800,
-        height: 800,
+        width,
+        height,
+        resizable: false,
         title: "TriliumNext Notes Setup",
         icon: getIcon(),
         webPreferences: {

@@ -3,6 +3,8 @@
     "lokalise.i18n-ally",
     "editorconfig.editorconfig",
     "vitest.explorer",
-    "ms-playwright.playwright"
+    "ms-playwright.playwright",
+    "tobermory.es6-string-html",
+    "dbaeumer.vscode-eslint"
   ]
 }

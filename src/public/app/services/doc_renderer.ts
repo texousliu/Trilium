@@ -14,8 +14,10 @@ export default function renderDoc(note: FNote) {
                 // fallback to english doc if no translation available
                 if (status === "error") {
                     const fallbackUrl = getUrl(docName, "en");
-                    $content.load(fallbackUrl, () => processContent(fallbackUrl, $content));
-                    resolve($content);
+                    $content.load(fallbackUrl, () => {
+                        processContent(fallbackUrl, $content)
+                        resolve($content);
+                    });
                     return;
                 }
 

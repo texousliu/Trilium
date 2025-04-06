@@ -7,7 +7,7 @@ import type { Suggestion } from "../../services/note_autocomplete.js";
 import type { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 import type { EventData } from "../../components/app_context.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="add-link-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" style="max-width: 1000px" role="document">
         <div class="modal-content">

@@ -25,8 +25,6 @@ electronDl({ saveAs: true });
 electron.app.commandLine.appendSwitch("enable-experimental-web-platform-features");
 electron.app.commandLine.appendSwitch("lang", options.getOptionOrNull("formattingLocale") ?? "en");
 
-electron.app.userAgentFallback = `${electron.app.getName()} ${electron.app.getVersion()}`;
-
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.

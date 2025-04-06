@@ -43,7 +43,7 @@ So now the "Bash" subtree appears on multiple locations in the hierarchy. Both t
 
 ### Demo
 
-![](../../Attachments/create-clone.gif)
+![](Cloning%20Notes_create-clone.gif)
 
 In the demo, you can see how a clone can be created using the context menu. It's possible to do this also using the Add Link dialog or with <kbd>Ctrl</kbd>+<kbd>C</kbd> and <kbd>Ctrl</kbd>+<kbd>V</kbd> [keyboard shortcuts](../Keyboard%20Shortcuts.md).
 

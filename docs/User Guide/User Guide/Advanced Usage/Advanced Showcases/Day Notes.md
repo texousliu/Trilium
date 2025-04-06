@@ -19,7 +19,7 @@ You can also notice how this day note has [promoted attribute](../Attributes/Pro
 
 ## Templates
 
-Trilium provides [template](../Attributes/Template.md) functionality, and it could be used together with day notes.
+Trilium provides [template](../Templates.md) functionality, and it could be used together with day notes.
 
 You can define one of the following relations on the root of the journal (identified by `#calendarRoot` label):
 

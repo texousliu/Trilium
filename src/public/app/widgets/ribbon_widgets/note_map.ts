@@ -2,7 +2,7 @@ import NoteContextAwareWidget from "../note_context_aware_widget.js";
 import NoteMapWidget from "../note_map.js";
 import { t } from "../../services/i18n.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-map-ribbon-widget">
     <style>
         .note-map-ribbon-widget {
