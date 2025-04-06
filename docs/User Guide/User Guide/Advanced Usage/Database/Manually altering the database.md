@@ -7,7 +7,7 @@ If you are doing any advanced development or troubleshooting where you manually 
 
 The SQL Console is Trilium's built-in database editor.
 
-See [SQL Console](Manually%20altering%20the%20database/SQL%20Console.md).
+See <a class="reference-link" href="Manually%20altering%20the%20database/SQL%20Console.md">SQL Console</a>.
 
 ## Externally modifying the database
 
