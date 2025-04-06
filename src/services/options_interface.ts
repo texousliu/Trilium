@@ -87,6 +87,14 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     // MFA options
     mfaEnabled: boolean;
     mfaMethod: string;
+    totpEncryptionSalt: string;
+    totpEncryptedSecret: string;
+    totpVerificationHash: string;
+    encryptedRecoveryCodes: boolean;
+    userSubjectIdentifierSaved: boolean;
+    recoveryCodeInitialVector: string;
+    recoveryCodeSecurityKey: string;
+    recoveryCodesEncrypted: string;
 
     // Additional options
     eraseEntitiesAfterTimeInSeconds: number;
@@ -141,8 +149,6 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     autoFixConsistencyIssues: boolean;
     hideArchivedNotes_main: boolean;
     debugModeEnabled: boolean;
-    encryptedRecoveryCodes: string;
-    userSubjectIdentifierSaved: boolean;
 }
 
 export type OptionNames = keyof OptionDefinitions;
