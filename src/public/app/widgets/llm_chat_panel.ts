@@ -25,13 +25,13 @@ const TPL = `
             <div class="spinner-border spinner-border-sm text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <span class="ms-2">${t('ai.processing.common')}...</span>
+            <span class="ms-2">${t('ai_llm.agent.processing')}...</span>
         </div>
     </div>
 
     <div class="sources-container p-2 border-top" style="display: none;">
         <h6 class="m-0 p-1 d-flex align-items-center">
-            <i class="bx bx-link-alt me-1"></i> ${t('ai.sources')}
+            <i class="bx bx-link-alt me-1"></i> ${t('ai_llm.sources')}
             <span class="badge bg-primary rounded-pill ms-2 sources-count"></span>
         </h6>
         <div class="sources-list mt-2"></div>
@@ -41,7 +41,7 @@ const TPL = `
         <div class="d-flex chat-input-container mb-2">
             <textarea
                 class="form-control note-context-chat-input"
-                placeholder="${t('ai.enter_message')}"
+                placeholder="${t('ai_llm.enter_message')}"
                 rows="2"
             ></textarea>
             <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2 d-flex align-items-center justify-content-center">
@@ -53,14 +53,14 @@ const TPL = `
             <div class="form-check form-switch me-3 small">
                 <input class="form-check-input use-advanced-context-checkbox" type="checkbox" id="useEnhancedContext" checked>
                 <label class="form-check-label small" for="useEnhancedContext" title="${t('ai.enhanced_context_description')}">
-                    ${t('ai.use_enhanced_context')}
+                    ${t('ai_llm.use_enhanced_context')}
                     <i class="bx bx-info-circle small text-muted"></i>
                 </label>
             </div>
             <div class="form-check form-switch small">
                 <input class="form-check-input show-thinking-checkbox" type="checkbox" id="showThinking">
                 <label class="form-check-label small" for="showThinking" title="${t('ai.show_thinking_description')}">
-                    ${t('ai.show_thinking')}
+                    ${t('ai_llm.show_thinking')}
                     <i class="bx bx-info-circle small text-muted"></i>
                 </label>
             </div>

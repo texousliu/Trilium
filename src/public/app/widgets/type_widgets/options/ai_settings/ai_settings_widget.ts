@@ -229,7 +229,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (providerPrecedence.includes('ollama')) {
             const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val();
             if (!ollamaBaseUrl) {
-                ollamaWarnings.push(t("ai_llm.warning_ollama_missing_url"));
+                ollamaWarnings.push(t("ai_llm.ollama_no_url"));
             }
         }
 
@@ -241,15 +241,15 @@ export default class AiSettingsWidget extends OptionsWidget {
             const embeddingProviderPrecedence = (this.$widget.find('.embedding-provider-precedence').val() as string || '').split(',');
 
             if (embeddingProviderPrecedence.includes('openai') && !this.$widget.find('.openai-api-key').val()) {
-                embeddingWarnings.push(t("ai_llm.warning_openai_embedding_missing_api_key"));
+                embeddingWarnings.push(t("ai_llm.empty_key_warning.openai"));
             }
 
             if (embeddingProviderPrecedence.includes('voyage') && !this.$widget.find('.voyage-api-key').val()) {
-                embeddingWarnings.push(t("ai_llm.warning_voyage_embedding_missing_api_key"));
+                embeddingWarnings.push(t("ai_llm.empty_key_warning.voyage"));
             }
 
             if (embeddingProviderPrecedence.includes('ollama') && !this.$widget.find('.ollama-base-url').val()) {
-                embeddingWarnings.push(t("ai_llm.warning_ollama_embedding_missing_url"));
+                embeddingWarnings.push(t("ai_llm.empty_key_warning.ollama"));
             }
         }
 
@@ -329,7 +329,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                 // Update status text
                 let statusText;
                 if (stats.queuedNotesCount > 0) {
-                    statusText = t("ai_llm.processing", { percentage: progressPercent });
+                    statusText = t("ai_llm.agent.processing", { percentage: progressPercent });
                 } else if (stats.embeddedNotesCount === 0) {
                     statusText = t("ai_llm.not_started");
                 } else if (stats.embeddedNotesCount === stats.totalNotesCount) {
@@ -463,7 +463,7 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         // OpenAI Section
         this.$widget.find('.openai-api-key').val(options.openaiApiKey || '');
-        this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai.com/v1');
+        this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai_llm.com/v1');
         this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || 'gpt-4o');
         this.$widget.find('.openai-embedding-model').val(options.openaiEmbeddingModel || 'text-embedding-3-small');
 
