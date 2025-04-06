@@ -49,50 +49,6 @@ export function detectLanguage(content: string, mime: string): string {
         }
     }
 
-    // For performance, limit the amount of code we pass to highlight.js
-    // Use a maximum of ~10KB of code for detection
-    const MAX_SAMPLE_SIZE = 10240;
-    const codeSample = content.length > MAX_SAMPLE_SIZE
-        ? content.substring(0, MAX_SAMPLE_SIZE)
-        : content;
-
-    try {
-        // Browser environment
-        if (typeof window !== 'undefined' && window.hljs) {
-            const result = window.hljs.highlightAuto(codeSample);
-            if (result && result.language) {
-                return result.language;
-            }
-        }
-        // Node.js environment
-        else if (typeof process !== 'undefined' && process.versions && process.versions.node) {
-            // Only load highlight.js if we haven't already
-            if (!hljs) {
-                try {
-                    // We need to dynamically require highlight.js
-                    // Using a try/catch since it might not be available
-                    hljs = require('@highlightjs/cdn-assets/highlight.min.js');
-                } catch (e) {
-                    try {
-                        // Try alternative path
-                        hljs = require('highlight.js');
-                    } catch (e2) {
-                        console.debug("highlight.js not available in this environment, falling back to regex detection");
-                    }
-                }
-            }
-
-            if (hljs && typeof hljs.highlightAuto === 'function') {
-                const result = hljs.highlightAuto(codeSample);
-                if (result && result.language) {
-                    return result.language;
-                }
-            }
-        }
-    } catch (e) {
-        console.debug("Error using highlight.js for language detection:", e);
-    }
-
     // Fallback to regex-based detection if highlight.js is not available or fails
     // Check for common language patterns in the first few lines
     const firstLines = content.split('\n').slice(0, 10).join('\n');
