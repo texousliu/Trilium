@@ -18,7 +18,7 @@ This method is used when you already have a desktop instance of Trilium and want
 1.  **Server Deployment**: Ensure your server instance is deployed but uninitialized.
 2.  **Desktop Configuration**: Open your desktop instance, navigate to Options -> Sync tab -> Sync configuration, and set the "Server instance address" to your sync server's address. Click Save.
 
-![screenshot of the sync settings options modal](../Attachments/sync-config.png)
+![screenshot of the sync settings options modal](Synchronization_sync-confi.png)
 
 1.  **Testing Sync**: Click the "Test sync" button to verify the connection to the sync server. If successful, the client will start pushing all data to the server instance. This process may take some time, but you can continue using Trilium. Periodically check the server instance to confirm when the sync is complete. Once finished, you should see the login screen on the server.
 
@@ -29,12 +29,12 @@ This method is used when you already have a sync server and want to configure a 
 1.  **Desktop Setup**: Follow the [desktop installation page](Desktop%20Installation.md).
 2.  **Initial Configuration**: When prompted, choose the option to set up sync with a sync server.
 
-![screenshot of the sync from server setup page](../Attachments/sync-init.png)
+![screenshot of the sync from server setup page](Synchronization_sync-init.png)
 
 1.  **Server Details**: Configure the Trilium server address and enter the correct username and password for authentication.
 2.  **Finish Setup**: Click the "Finish setup" button. If successful, you will see the following screen:
 
-![screenshot of the sync page](../Attachments/sync-in-progress.png)
+![screenshot of the sync page](Synchronization_sync-in-pr.png)
 
 Once synchronization is complete, you will be automatically redirected to the Trilium application.
 

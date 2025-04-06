@@ -3,7 +3,7 @@
 
 Trilium comes with a couple pre-installed color themes, with the default being a light theme. To switch to a dark theme or any other available theme, navigate to the Options menu (accessible via the app icon in the top-left corner), select the Appearance tab, and choose your preferred theme.
 
-![Dark Theme](../Attachments/dark-theme.png)
+![Dark Theme](Themes_dark-theme.png)
 
 ## Creating Custom CSS Themes
 
@@ -85,7 +85,7 @@ Custom themes can be exported as `.tar` archives, which can be shared with other
 
 An example user theme, _Steel Blue_, is available in the demo document.
 
-![Steel Blue Theme](../Attachments/steel-blue.png)
+![Steel Blue Theme](Themes_steel-blue.png)
 
 ### Using Custom CSS for Specific Purposes
 

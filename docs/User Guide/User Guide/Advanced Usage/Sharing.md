@@ -9,18 +9,18 @@ To use the sharing feature, you must have a [server installation](../Installatio
 
 1.  **Enable Sharing**: To share a note, toggle the `Shared` switch within the note's interface. Once sharing is enabled, an URL will appear, which you can click to access the shared note.
     
-    ![Share Note](../Attachments/share-single-note.png)
+    ![Share Note](Sharing_share-single-note.png)
     
 2.  **Access the Shared Note**: The link provided will open the note in your browser. If your server is not configured with a public IP, the URL will refer to `localhost (127.0.0.1)`.
     
-    ![Shared Note Example](../Attachments/share-single-note-web.png)
+    ![Shared Note Example](Sharing_share-single-note-.png)
     
 
 ## Sharing a Note Subtree
 
 When you share a note, you actually share the entire subtree of notes beneath it. If the note has child notes, they will also be included in the shared content. For example, sharing the "Formatting" subtree will display a page with basic navigation for exploring all the notes within that subtree.
 
-![Shared Subtree Example](../Attachments/share-multiple-notes-web.png)
+![Shared Subtree Example](Sharing_share-multiple-not.png)
 
 ## Viewing All Shared Notes
 
@@ -71,7 +71,7 @@ Shared notes typically have URLs like `http://domain.tld/share/knvU8aJy4dJ7`, wh
 
 All shared notes are grouped under an automatically managed "Shared Notes" section. From here, you can view, share, or unshare notes by moving or cloning them within this section.
 
-![Shared Notes List](../Attachments/shared-list.png)
+![Shared Notes List](Sharing_shared-list.png)
 
 ### Setting a Custom Favicon
 

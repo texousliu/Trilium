@@ -9,11 +9,11 @@ Note that this is not an Android/iOS app, this is just mobile friendly web page 
 
 ### Mobile phone
 
-![](../Attachments/mobile-smartphone.png)
+![](Mobile%20Frontend_mobile-sma.png)
 
 ### Tablet
 
-![](../Attachments/mobile-tablet.png)
+![](Mobile%20Frontend_mobile-tab.png)
 
 ## Limitations
 

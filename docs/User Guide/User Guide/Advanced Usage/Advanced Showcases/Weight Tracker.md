@@ -3,7 +3,7 @@
 
 The `Weight Tracker` is a [Script API](../../Note%20Types/Code/Script%20API.md) showcase present in the [demo notes](../Database.md).
 
-By adding `weight` as a [promoted attribute](../Attributes/Promoted%20Attributes.md) in the [template](../Attributes/Template.md) from which [day notes](Day%20Notes.md) are created, you can aggregate the data and plot weight change over time.
+By adding `weight` as a [promoted attribute](../Attributes/Promoted%20Attributes.md) in the [template](../Templates.md) from which [day notes](Day%20Notes.md) are created, you can aggregate the data and plot weight change over time.
 
 ## Implementation
 

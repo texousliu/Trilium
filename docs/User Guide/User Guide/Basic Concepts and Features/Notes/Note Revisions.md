@@ -17,4 +17,4 @@ You can click the **Erase excess revision snapshots now** button to apply the ch
 
 Note revisions can be accessed through the button on the right of ribbon toolbar.
 
-![](../../Attachments/note-revisions.png)
+![](Note%20Revisions_note-revisi.png)
