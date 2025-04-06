@@ -27,4 +27,4 @@ You can automatize the date assignment by assigning a label `#titleTemplate="${n
 
 Second variable injected is [parentNote](https://triliumnext.github.io/Notes/backend_api/BNote.html), an example could be `#titleTemplate="${parentNote.getLabelValue('authorName')}'s literary works"`.
 
-See also \[\[[template](Attributes/Template.md)\]\] which provides similar capabilities, including default note's content.
+See also \[\[[template](Templates.md)\]\] which provides similar capabilities, including default note's content.

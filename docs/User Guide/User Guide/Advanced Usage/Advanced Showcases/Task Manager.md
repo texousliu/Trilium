@@ -3,7 +3,7 @@ Task Manager is a [promoted attributes](../Attributes/Promoted%20Attributes.md) 
 
 ## Demo
 
-![](../../Attachments/task-manager.png)
+![](Task%20Manager_task-manager.png)
 
 Task Manager manages outstanding (TODO) tasks and finished tasks (non-empty doneDate attribute). Outstanding tasks are further categorized by location and arbitrary tags - whenever you change tag attribute in the task note, this task is then automatically moved to appropriate location.
 

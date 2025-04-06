@@ -1,7 +1,7 @@
 # Saved Search
 Trilium allows you to save common searches as notes within the note tree. The search results will appear as sub-notes under these "saved search" notes. Here is an example of how it works:
 
-![save-search](../Attachments/saved-search-image.gif)
+<figure class="image image_resized image-style-align-center" style="width:50%;"><img style="aspect-ratio:812/585;" src="Saved Search_saved-search.gif" width="812" height="585"></figure>
 
 ## Location
 
