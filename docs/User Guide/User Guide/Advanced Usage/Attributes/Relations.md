@@ -1,6 +1,11 @@
 # Relations
 A relation is similar to a [label](Labels.md), but instead of having a text value it refers to another note.
 
+## Common use cases
+
+*   **Metadata Relationships**: For example, linking a book note to an author note.
+*   **Scripting**: Attaching scripts to events or conditions related to the note.
+
 ## Creating a relation using the visual editor
 
 1.  Go to the _Owned Attributes_ section in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>.

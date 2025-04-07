@@ -1,6 +1,12 @@
 # Labels
 A label is an [attribute](../Attributes.md) of a note which has a name and optionally a value. 
 
+## Common use cases
+
+*   **Metadata**: Assign labels with optional values for categorization, such as `#year=1999`, `#genre="sci-fi"`, or `#author="Neal Stephenson"`.
+*   **Configuration**: Labels can configure advanced features or settings (see reference below).
+*   **Scripts and Plugins**: Used to tag notes with special metadata, such as the "weight" attribute in the <a class="reference-link" href="../Advanced%20Showcases/Weight%20Tracker.md">Weight Tracker</a>.
+
 ## Creating a label using the visual editor
 
 1.  Go to the _Owned Attributes_ section in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>.

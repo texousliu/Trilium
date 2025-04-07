@@ -10,24 +10,13 @@ These attributes play a crucial role in organizing, categorising, and enhancing 
 
 ## Labels
 
-Labels in Trilium can be used for a variety of purposes:
-
-*   **Metadata**: Assign labels with optional values for categorization, such as `#year=1999`, `#genre="sci-fi"`, or `#author="Neal Stephenson"`
-*   **Configuration**: Labels can configure advanced features or settings
-*   **Scripts and Plugins**: Used to tag notes with special metadata, such as the "weight" attribute in the <a class="reference-link" href="Advanced%20Showcases/Weight%20Tracker.md">Weight Tracker</a>.
-
-Labels are also searchable, enhancing note retrieval.
+Labels in Trilium can be used for a variety of purposes, such as storing metadata or configuring the behaviour of notes. Labels are also searchable, enhancing note retrieval.
 
 For more information, including predefined labels, see <a class="reference-link" href="Attributes/Labels.md">Labels</a>.
 
 ## Relations
 
-Relations define connections between notes, similar to links.
-
-Uses:
-
-*   **Metadata Relationships**: For example, linking a book note to an author note
-*   **Scripting**: Attaching scripts to events or conditions related to the note
+Relations define connections between notes, similar to links. These can be used for metadata and scripting purposes.
 
 For more information, including a list of predefined relations, see <a class="reference-link" href="Attributes/Relations.md">Relations</a>.
 

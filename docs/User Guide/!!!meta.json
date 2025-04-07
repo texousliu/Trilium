@@ -6697,13 +6697,6 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "R7abl2fc6Mxi",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
                                     "value": "OFXdgB2nNk1F",
                                     "isInheritable": false,
                                     "position": 20
@@ -6990,6 +6983,13 @@
                                             "value": "xWbu3jpNWapp",
                                             "isInheritable": false,
                                             "position": 320
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "R7abl2fc6Mxi",
+                                            "isInheritable": false,
+                                            "position": 330
                                         }
                                     ],
                                     "format": "markdown",
