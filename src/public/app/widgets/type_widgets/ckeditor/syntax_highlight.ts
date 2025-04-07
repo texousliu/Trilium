@@ -101,10 +101,30 @@ function initTextEditor(textEditor: TextEditor) {
         const changes = document.differ.getChanges();
         let dirtyCodeBlocks = new Set<CKNode>();
 
+        function lookForCodeBlocks(node: CKNode) {
+            for (const child of node._children) {
+                if (child.is("element", "paragraph")) {
+                    continue;
+                }
+
+                if (child.is("element", "codeBlock")) {
+                    dirtyCodeBlocks.add(child);
+                } else if (child.childCount > 0) {
+                    lookForCodeBlocks(child);
+                }
+            }
+        }
+
         for (const change of changes) {
             dbg("change " + JSON.stringify(change));
 
-            if (change.type == "insert" && change.name == "codeBlock") {
+            if (change.name !== "paragraph" && change.name !== "codeBlock" && change.position.nodeAfter?.childCount > 0) {
+                /*
+                 * We need to look for code blocks recursively, as they can be placed within a <div> due to
+                 * general HTML support or normally underneath other elements such as tables, blockquotes, etc.
+                 */
+                lookForCodeBlocks(change.position.nodeAfter);
+            } else if (change.type == "insert" && change.name == "codeBlock") {
                 // A new code block was inserted
                 const codeBlock = change.position.nodeAfter;
                 // Even if it's a new codeblock, it needs dirtying in case

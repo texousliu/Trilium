@@ -296,6 +296,7 @@ declare global {
     }
 
     interface CKNode {
+        _children: CKNode[];
         name: string;
         childCount: number;
         isEmpty: boolean;
