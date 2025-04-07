@@ -168,10 +168,10 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         this.#destroyResizer();
     }
 
-    async doRefresh(note: FNote | null | undefined) {
+    async doRefresh(note: FNote) {
         this.#adjustLayoutOrientation();
 
-        if (note && !this.isReadOnly) {
+        if (!this.isReadOnly) {
             await this.editorTypeWidget.initialized;
             this.editorTypeWidget.noteContext = this.noteContext;
             this.editorTypeWidget.spacedUpdate = this.spacedUpdate;

@@ -20,7 +20,7 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         return super.doRender();
     }
 
-    doRefresh(note: FNote | null | undefined): void | Promise<void> {}
+    doRefresh(note: FNote): void | Promise<void> {}
 
     async refresh() {
         const thisWidgetType = (this.constructor as any).getType();
@@ -33,7 +33,9 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         } else {
             this.toggleInt(true);
 
-            await this.doRefresh(this.note);
+            if (this.note) {
+                await this.doRefresh(this.note);
+            }
 
             this.triggerEvent("noteDetailRefreshed", { ntxId: this.noteContext?.ntxId });
         }

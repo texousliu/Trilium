@@ -45,9 +45,6 @@ export default class AttachmentListTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: Parameters<TypeWidget["doRefresh"]>[0]) {
-        // TriliumNextTODO: do we need to handle an undefined/null note?
-        if (!note) return false;
-
         const $helpButton = $(`
             <button class="attachment-help-button icon-action bx bx-help-circle"
                      type="button" data-help-page="attachments.html"
