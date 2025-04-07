@@ -1,11 +1,13 @@
 # Attribute Inheritance
+Inheritance refers to the process of having a [label](Labels.md) or a [relation](Relations.md) shared across multiple notes, generally in parent-child relations (or anywhere if using templates).
+
 ## 1\. Standard Inheritance
 
 In Trilium, attributes can be automatically inherited by child notes if they have the `isInheritable` flag set to `true`. This means the attribute (a key-value pair) is applied to the note and all its descendants.
 
-### Example Use Case
+To make an attribute inheritable, simply use the visual editor for <a class="reference-link" href="Labels.md">Labels</a> or <a class="reference-link" href="Relations.md">Relations</a>. Alternatively, the attribute can be manually defined where `#myLabel=value` becomes `#myLabel(inheritable)=value` when inheritable.
 
-The `archived` label can be set to be inheritable, allowing you to hide a whole subtree of notes from searches and other dialogs by applying this label at the top level.
+As an example, the `archived` label can be set to be inheritable, allowing you to hide a whole subtree of notes from searches and other dialogs by applying this label at the top level.
 
 ## 2\. Copying Inheritance
 

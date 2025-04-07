@@ -5,15 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../../../style.css">
     <base target="_parent">
-    <title data-trilium-title>Attribute Reference</title>
+    <title data-trilium-title>Labels</title>
   </head>
   
   <body>
     <div class="content">
-       <h1 data-trilium-h1>Attribute Reference</h1>
+       <h1 data-trilium-h1>Labels</h1>
 
       <div class="ck-content">
-        <h2>Labels</h2>
+        <p>A label is an <a href="../Attributes.html">attribute</a> of a note which
+          has a name and optionally a value.&nbsp;</p>
+        <h2>Creating a label using the visual editor</h2>
+        <ol>
+          <li>Go to the <em>Owned Attributes</em> section in the&nbsp;<a class="reference-link"
+            href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.html">Ribbon</a>.</li>
+          <li>Press the + button (<em>Add new attribute</em>) to the right.</li>
+          <li>Select <em>Add new label</em> for the relation.</li>
+        </ol>
+        <aside class="admonition tip">
+          <p>If you prefer keyboard shortcuts, press <kbd>Alt</kbd>+<kbd>L</kbd> while
+            focused on a note or in the <em>Owned Attributes</em> section to display
+            the visual editor.</p>
+        </aside>
+        <p>While in the visual editor:</p>
+        <ul>
+          <li>Set the desired name</li>
+          <li>Optionally, set the value of the label. Labels can exist without a value.</li>
+          <li>Check <em>Inheritable</em> if the label should be inherited by the child
+            notes as well. See&nbsp;<a class="reference-link" href="Attribute%20Inheritance.html">Attribute Inheritance</a>&nbsp;for
+            more information.</li>
+        </ul>
+        <h2>Creating a label manually</h2>
+        <p>In the <em>Owned Attributes</em> section in the&nbsp;<a class="reference-link"
+          href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.html">Ribbon</a>:</p>
+        <ul>
+          <li>To create a label called <code>myLabel</code> with no value, simply type <code>#myLabel</code>.</li>
+          <li>To create a label called <code>myLabel</code> with a value <code>value</code>,
+            simply type <code>#myLabel=value</code>.</li>
+          <li>If the value contains spaces, then the text must be quoted: <code>#myLabel="Hello world"</code>.</li>
+          <li>If the string contains quotes (regardless of whether it has spaces), then
+            the text must be quoted with apostrophes instead: <code>#myLabel='Hello "world"'</code>.</li>
+          <li>To create an inheritable label called <code>myLabel</code>, simply write <code>#myLabel(inheritable)</code> for
+            no value or <code>#myLabel(inheritable)=value</code> if there is a value.</li>
+        </ul>
+        <h2>Predefined labels</h2>
+        <p>This is a list of labels that Trilium natively supports.</p>
         <aside class="admonition tip">
           <p>Some labels presented here end with a <code>*</code>. That means that there
             are multiple labels with the same prefix, consult the specific page linked
@@ -348,88 +384,6 @@
                 <td>Sets the view of child notes (e.g. grid or list). See&nbsp;<a class="reference-link"
                   href="../../Basic%20Concepts%20and%20Features/Notes/Note%20List.html">Note List</a>&nbsp;for
                   more information.</td>
-              </tr>
-            </tbody>
-          </table>
-        </figure>
-        <h2>Relations</h2>
-        <aside class="admonition tip">
-          <p>Some relations presented here end with a <code>*</code>. That means that
-            there are multiple relations with the same prefix, consult the specific
-            page linked in the description of that relation for more information.</p>
-        </aside>
-        <figure class="table" style="width:100%;">
-          <table class="ck-table-resized">
-            <colgroup>
-              <col style="width:33.95%;">
-                <col style="width:66.05%;">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Label</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>runOn*</code>
-                </td>
-                <td>See&nbsp;<a class="reference-link" href="../../Scripting/Events.html">Events</a>
-                </td>
-              </tr>
-              <tr>
-                <td><code>template</code>
-                </td>
-                <td>note's attributes will be inherited even without a parent-child relationship,
-                  note's content and subtree will be added to instance notes if empty. See
-                  documentation for details.</td>
-              </tr>
-              <tr>
-                <td><code>inherit</code>
-                </td>
-                <td>note's attributes will be inherited even without a parent-child relationship.
-                  See&nbsp;<a class="reference-link" href="../Templates.html">Templates</a>&nbsp;for
-                  a similar concept. See&nbsp;<a class="reference-link" href="Attribute%20Inheritance.html">Attribute Inheritance</a>&nbsp;in
-                  the documentation.</td>
-              </tr>
-              <tr>
-                <td><code>renderNote</code>
-                </td>
-                <td>notes of type&nbsp;<a class="reference-link" href="../../Note%20Types/Render%20Note.html">Render Note</a>&nbsp;will
-                  be rendered using a code note (HTML or script) and it is necessary to point
-                  using this relation to which note should be rendered</td>
-              </tr>
-              <tr>
-                <td><code>widget_relation</code>
-                </td>
-                <td>target of this relation will be executed and rendered as a widget in the
-                  sidebar</td>
-              </tr>
-              <tr>
-                <td><code>shareCss</code>
-                </td>
-                <td>CSS note which will be injected into the share page. CSS note must be
-                  in the shared sub-tree as well. Consider using <code>share_hidden_from_tree</code> and <code>share_omit_default_css</code> as
-                  well.</td>
-              </tr>
-              <tr>
-                <td><code>shareJs</code>
-                </td>
-                <td>JavaScript note which will be injected into the share page. JS note must
-                  be in the shared sub-tree as well. Consider using <code>share_hidden_from_tree</code>.</td>
-              </tr>
-              <tr>
-                <td><code>shareTemplate</code>
-                </td>
-                <td>Embedded JavaScript note that will be used as the template for displaying
-                  the shared note. Falls back to the default template. Consider using <code>share_hidden_from_tree</code>.</td>
-              </tr>
-              <tr>
-                <td><code>shareFavicon</code>
-                </td>
-                <td>Favicon note to be set in the shared page. Typically you want to set it
-                  to share root and make it inheritable. Favicon note must be in the shared
-                  sub-tree as well. Consider using <code>share_hidden_from_tree</code>.</td>
               </tr>
             </tbody>
           </table>

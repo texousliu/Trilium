@@ -1,12 +1,12 @@
 # Attributes
 In Trilium, attributes are key-value pairs assigned to notes, providing additional metadata or functionality. There are two primary types of attributes:
 
-1.  **Labels**: Simple key-value text records
-2.  **Relations**: Named links to other notes
+1.  <a class="reference-link" href="Attributes/Labels.md">Labels</a>: Simple key-value text records
+2.  <a class="reference-link" href="Attributes/Relations.md">Relations</a>: Named links to other notes
 
 These attributes play a crucial role in organizing, categorising, and enhancing the functionality of notes.
 
-![](Attributes_image.png)
+<figure class="image"><img style="aspect-ratio:1071/146;" src="Attributes_image.png" width="1071" height="146"></figure>
 
 ## Labels
 
@@ -18,26 +18,22 @@ Labels in Trilium can be used for a variety of purposes:
 
 Labels are also searchable, enhancing note retrieval.
 
-### Common Labels for Advanced Configuration
-
-See the corresponding section in <a class="reference-link" href="Attributes/Attribute%20Reference.md">Attribute Reference</a> for a comprehensive list of attributes.
+For more information, including predefined labels, see <a class="reference-link" href="Attributes/Labels.md">Labels</a>.
 
 ## Relations
 
 Relations define connections between notes, similar to links.
 
-### Uses
+Uses:
 
 *   **Metadata Relationships**: For example, linking a book note to an author note
 *   **Scripting**: Attaching scripts to events or conditions related to the note
 
-### Common Relations
-
-See the corresponding section in <a class="reference-link" href="Attributes/Attribute%20Reference.md">Attribute Reference</a> for a comprehensive list of relations.
+For more information, including a list of predefined relations, see <a class="reference-link" href="Attributes/Relations.md">Relations</a>.
 
 ## Multiplicity
 
-Attributes in Trilium can be "multivalued", meaning multiple attributes with the same name can coexist.
+Attributes in Trilium can be "multi-valued", meaning multiple attributes with the same name can co-exist.
 
 ## Attribute Definitions and Promoted Attributes
 
