@@ -1,9 +1,9 @@
 # Labels
-A label is an [attribute](../Attributes.md) of a note which has a name and optionally a value. 
+A label is an [attribute](../Attributes.md) of a note which has a name and optionally a value.
 
 ## Common use cases
 
-*   **Metadata**: Assign labels with optional values for categorization, such as `#year=1999`, `#genre="sci-fi"`, or `#author="Neal Stephenson"`.
+*   **Metadata for personal use**: Assign labels with optional values for categorization, such as `#year=1999`, `#genre="sci-fi"`, or `#author="Neal Stephenson"`. This can be combined with <a class="reference-link" href="Promoted%20Attributes.md">Promoted Attributes</a> to make their display more user-friendly.
 *   **Configuration**: Labels can configure advanced features or settings (see reference below).
 *   **Scripts and Plugins**: Used to tag notes with special metadata, such as the "weight" attribute in the <a class="reference-link" href="../Advanced%20Showcases/Weight%20Tracker.md">Weight Tracker</a>.
 

@@ -29,26 +29,37 @@
         <p>As an example, the <code>archived</code> label can be set to be inheritable,
           allowing you to hide a whole subtree of notes from searches and other dialogs
           by applying this label at the top level.</p>
+        <p>Standard inheritance forces all the notes that are children (and sub-children)
+          of a note to have that particular label or relation. If there is a need
+          to have some notes not inherit one of the labels, then <em>copying inheritance</em> or <em>template inheritance</em> needs
+          to be used instead.</p>
         <h2>Copying Inheritance</h2>
         <p>Copying inheritance differs from standard inheritance by using a <code>child:</code> prefix
           in the attribute name. This prefix causes new child notes to automatically
           receive specific attributes from the parent note. These attributes are
           independent of the parent and will persist even if the note is moved elsewhere.</p>
-        <h3>How to Use</h3>
-        <ul>
-          <li><strong>Syntax:</strong>  <code>#child:attributeName</code>
-          </li>
-          <li><strong>Chained Inheritance:</strong> You can chain this inheritance, such
-            as <code>#child:child:attributeName</code>, where each child down the hierarchy
-            receives the appropriate attribute.</li>
-        </ul>
-        <h3>Example</h3>
         <p>If a parent note has the label <code>#child:exampleAttribute</code>, all
-          newly created child notes will inherit the <code>#exampleAttribute</code> label.
+          newly created child notes (one level deep) will inherit the <code>#exampleAttribute</code> label.
           This can be useful for setting default properties for notes in a specific
           section.</p>
+        <p>Similarly, for relations use <code>~child:myRelation</code>.</p>
+        <p>Due to the way it's designed, copying inheritance cannot be used to cascade
+          infinitely within a hierarchy. For that use case, consider using either
+          standard inheritance or templates.</p>
+        <h3>Chained inheritance</h3>
+        <p>It is possible to define labels across multiple levels of depth. For example, <code>#child:child:child:foo</code> applied
+          to a root note would create:</p>
+        <ul>
+          <li><code>#child:child:foo</code> on the first-level children.</li>
+          <li><code>#child:foo</code> on the second-level children.</li>
+          <li><code>#foo</code> on the third-level children.</li>
+        </ul>
+        <p>Similarly, use <code>~child:child:child:foo</code> if dealing with relations.</p>
+        <p>Do note that same as simple copying inheritance, the changes will not
+          apply retroactively to existing notes in the hierarchy, it will only apply
+          to the newly created notes.</p>
         <h2>Template Inheritance</h2>
-        <p>Attributes can also be inherited from <a href="../Templates.html">templates</a>.
+        <p>Attributes can also be inherited from&nbsp;<a class="reference-link" href="../Templates.html">Templates</a>.
           When a new note is created using a template, it inherits the attributes
           defined in that template. This is particularly useful for maintaining consistency
           across notes that follow a similar structure or function.</p>

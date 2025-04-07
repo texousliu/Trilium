@@ -3,7 +3,9 @@ A relation is similar to a [label](Labels.md), but instead of having a text valu
 
 ## Common use cases
 
-*   **Metadata Relationships**: For example, linking a book note to an author note.
+*   **Metadata Relationships for personal use**: For example, linking a book note to an author note.  
+    This can be combined with <a class="reference-link" href="Promoted%20Attributes.md">Promoted Attributes</a> to make their display more user-friendly.
+*   **Configuration**: For configuring some notes such as <a class="reference-link" href="../../Note%20Types/Render%20Note.md">Render Note</a>, or configuring <a class="reference-link" href="../Sharing.md">Sharing</a> or <a class="reference-link" href="../Templates.md">Templates</a> (see the list below).
 *   **Scripting**: Attaching scripts to events or conditions related to the note.
 
 ## Creating a relation using the visual editor
