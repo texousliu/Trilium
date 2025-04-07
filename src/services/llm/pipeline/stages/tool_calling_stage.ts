@@ -22,25 +22,29 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
      */
     protected async process(input: ToolExecutionInput): Promise<{ response: ChatResponse, needsFollowUp: boolean, messages: Message[] }> {
         const { response, messages, options } = input;
-        
+
+        log.info(`========== TOOL CALLING STAGE ENTRY ==========`);
+        log.info(`Response provider: ${response.provider}, model: ${response.model || 'unknown'}`);
+
         // Check if the response has tool calls
         if (!response.tool_calls || response.tool_calls.length === 0) {
             // No tool calls, return original response and messages
             log.info(`No tool calls detected in response from provider: ${response.provider}`);
+            log.info(`===== EXITING TOOL CALLING STAGE: No tool_calls =====`);
             return { response, needsFollowUp: false, messages };
         }
 
         log.info(`LLM requested ${response.tool_calls.length} tool calls from provider: ${response.provider}`);
-        
+
         // Log response details for debugging
         if (response.text) {
             log.info(`Response text: "${response.text.substring(0, 200)}${response.text.length > 200 ? '...' : ''}"`);
         }
-        
+
         // Check if the registry has any tools
         const availableTools = toolRegistry.getAllTools();
         log.info(`Available tools in registry: ${availableTools.length}`);
-        
+
         if (availableTools.length === 0) {
             log.error(`No tools available in registry, cannot execute tool calls`);
             // Try to initialize tools as a recovery step
@@ -53,10 +57,10 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 log.error(`Failed to initialize tools in recovery step: ${error.message}`);
             }
         }
-        
+
         // Create a copy of messages to add the assistant message with tool calls
         const updatedMessages = [...messages];
-        
+
         // Add the assistant message with the tool calls
         updatedMessages.push({
             role: 'assistant',
@@ -65,38 +69,44 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         });
 
         // Execute each tool call and add results to messages
-        const toolResults = await Promise.all(response.tool_calls.map(async (toolCall) => {
+        log.info(`========== STARTING TOOL EXECUTION ==========`);
+        const toolResults = await Promise.all(response.tool_calls.map(async (toolCall, index) => {
             try {
-                log.info(`Tool call received - Name: ${toolCall.function.name}, ID: ${toolCall.id || 'unknown'}`);
-                
+                log.info(`Tool call ${index + 1} received - Name: ${toolCall.function.name}, ID: ${toolCall.id || 'unknown'}`);
+
                 // Log parameters
-                const argsStr = typeof toolCall.function.arguments === 'string' 
-                    ? toolCall.function.arguments 
+                const argsStr = typeof toolCall.function.arguments === 'string'
+                    ? toolCall.function.arguments
                     : JSON.stringify(toolCall.function.arguments);
                 log.info(`Tool parameters: ${argsStr}`);
-                
+
                 // Get the tool from registry
                 const tool = toolRegistry.getTool(toolCall.function.name);
-                
+
                 if (!tool) {
+                    log.error(`Tool not found in registry: ${toolCall.function.name}`);
+                    log.info(`Available tools: ${availableTools.map(t => t.definition.function.name).join(', ')}`);
                     throw new Error(`Tool not found: ${toolCall.function.name}`);
                 }
-                
+
+                log.info(`Tool found in registry: ${toolCall.function.name}`);
+
                 // Parse arguments (handle both string and object formats)
                 let args;
                 // At this stage, arguments should already be processed by the provider-specific service
                 // But we still need to handle different formats just in case
                 if (typeof toolCall.function.arguments === 'string') {
                     log.info(`Received string arguments in tool calling stage: ${toolCall.function.arguments.substring(0, 50)}...`);
-                    
+
                     try {
                         // Try to parse as JSON first
                         args = JSON.parse(toolCall.function.arguments);
                         log.info(`Parsed JSON arguments: ${Object.keys(args).join(', ')}`);
-                    } catch (e) {
+                    } catch (e: unknown) {
                         // If it's not valid JSON, try to check if it's a stringified object with quotes
-                        log.info(`Failed to parse arguments as JSON, trying alternative parsing: ${e.message}`);
-                        
+                        const errorMessage = e instanceof Error ? e.message : String(e);
+                        log.info(`Failed to parse arguments as JSON, trying alternative parsing: ${errorMessage}`);
+
                         // Sometimes LLMs return stringified JSON with escaped quotes or incorrect quotes
                         // Try to clean it up
                         try {
@@ -105,13 +115,14 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                                 .replace(/\\"/g, '"')        // Replace escaped quotes
                                 .replace(/([{,])\s*'([^']+)'\s*:/g, '$1"$2":') // Replace single quotes around property names
                                 .replace(/([{,])\s*(\w+)\s*:/g, '$1"$2":');    // Add quotes around unquoted property names
-                                
+
                             log.info(`Cleaned argument string: ${cleaned}`);
                             args = JSON.parse(cleaned);
                             log.info(`Successfully parsed cleaned arguments: ${Object.keys(args).join(', ')}`);
-                        } catch (cleanError) {
+                        } catch (cleanError: unknown) {
                             // If all parsing fails, treat it as a text argument
-                            log.info(`Failed to parse cleaned arguments: ${cleanError.message}`);
+                            const cleanErrorMessage = cleanError instanceof Error ? cleanError.message : String(cleanError);
+                            log.info(`Failed to parse cleaned arguments: ${cleanErrorMessage}`);
                             args = { text: toolCall.function.arguments };
                             log.info(`Using text argument: ${args.text.substring(0, 50)}...`);
                         }
@@ -121,12 +132,12 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     args = toolCall.function.arguments;
                     log.info(`Using object arguments with keys: ${Object.keys(args).join(', ')}`);
                 }
-                
+
                 // Execute the tool
                 log.info(`================ EXECUTING TOOL: ${toolCall.function.name} ================`);
                 log.info(`Tool parameters: ${Object.keys(args).join(', ')}`);
                 log.info(`Parameters values: ${Object.entries(args).map(([k, v]) => `${k}=${typeof v === 'string' ? v : JSON.stringify(v)}`).join(', ')}`);
-                
+
                 const executionStart = Date.now();
                 let result;
                 try {
@@ -139,13 +150,14 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     log.error(`================ TOOL EXECUTION FAILED in ${executionTime}ms: ${execError.message} ================`);
                     throw execError;
                 }
-                
+
                 // Log execution result
-                const resultSummary = typeof result === 'string' 
-                    ? `${result.substring(0, 100)}...` 
+                const resultSummary = typeof result === 'string'
+                    ? `${result.substring(0, 100)}...`
                     : `Object with keys: ${Object.keys(result).join(', ')}`;
+                const executionTime = Date.now() - executionStart;
                 log.info(`Tool execution completed in ${executionTime}ms - Result: ${resultSummary}`);
-                
+
                 // Return result with tool call ID
                 return {
                     toolCallId: toolCall.id,
@@ -154,7 +166,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 };
             } catch (error: any) {
                 log.error(`Error executing tool ${toolCall.function.name}: ${error.message || String(error)}`);
-                
+
                 // Return error message as result
                 return {
                     toolCallId: toolCall.id,
@@ -163,12 +175,12 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 };
             }
         }));
-        
+
         // Add tool results as messages
         toolResults.forEach(result => {
             // Format the result content based on type
             let content: string;
-            
+
             if (typeof result.result === 'string') {
                 content = result.result;
                 log.info(`Tool returned string result (${content.length} chars)`);
@@ -182,9 +194,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     log.info(`Failed to stringify object result: ${error}`);
                 }
             }
-                
+
             log.info(`Adding tool result message - Tool: ${result.name}, ID: ${result.toolCallId || 'unknown'}, Length: ${content.length}`);
-            
+
             // Create a properly formatted tool response message
             updatedMessages.push({
                 role: 'tool',
@@ -192,21 +204,21 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 name: result.name,
                 tool_call_id: result.toolCallId
             });
-            
+
             // Log a sample of the content for debugging
             const contentPreview = content.substring(0, 100) + (content.length > 100 ? '...' : '');
             log.info(`Tool result preview: ${contentPreview}`);
         });
-        
+
         log.info(`Added ${toolResults.length} tool results to conversation`);
-        
+
         // If we have tool results, we need a follow-up call to the LLM
         const needsFollowUp = toolResults.length > 0;
-        
+
         if (needsFollowUp) {
             log.info(`Tool execution complete, LLM follow-up required with ${updatedMessages.length} messages`);
         }
-        
+
         return {
             response,
             needsFollowUp,

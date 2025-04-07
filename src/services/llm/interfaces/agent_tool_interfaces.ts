@@ -19,6 +19,13 @@ export interface LLMServiceInterface {
     stream?: boolean;
     systemPrompt?: string;
   }): Promise<ChatResponse>;
+
+  /**
+   * Generate search queries by decomposing a complex query into simpler ones
+   * @param query The original user query to decompose
+   * @returns An array of decomposed search queries
+   */
+  generateSearchQueries?(query: string): Promise<string[]>;
 }
 
 /**

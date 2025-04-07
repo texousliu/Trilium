@@ -4,7 +4,7 @@ import type { Message, ChatCompletionOptions } from "./ai_interface.js";
 import contextService from "./context_service.js";
 import { LLM_CONSTANTS } from './constants/provider_constants.js';
 import { ERROR_PROMPTS } from './constants/llm_prompt_constants.js';
-import * as aiServiceManagerModule from "./ai_service_manager.js";
+import aiServiceManagerImport from "./ai_service_manager.js";
 import becca from "../../becca/becca.js";
 import vectorStore from "./embeddings/index.js";
 import providerManager from "./providers/providers.js";
@@ -94,7 +94,7 @@ class RestChatService {
 
         // Try to access the manager - will create instance only if needed
         try {
-            const aiManager = aiServiceManagerModule.default;
+            const aiManager = aiServiceManagerImport.getInstance();
 
             if (!aiManager) {
                 log.info("AI check failed: AI manager module is not available");
@@ -315,7 +315,7 @@ class RestChatService {
                 log.info("AI services are not available - checking for specific issues");
 
                 try {
-                    const aiManager = aiServiceManagerModule.default;
+                    const aiManager = aiServiceManagerImport.getInstance();
 
                     if (!aiManager) {
                         log.error("AI service manager is not initialized");
@@ -341,7 +341,7 @@ class RestChatService {
             }
 
             // Get the AI service manager
-            const aiServiceManager = aiServiceManagerModule.default.getInstance();
+            const aiServiceManager = aiServiceManagerImport.getInstance();
 
             // Get the default service - just use the first available one
             const availableProviders = aiServiceManager.getAvailableProviders();
@@ -468,6 +468,9 @@ class RestChatService {
         // Use the Trilium-specific approach
         const contextNoteId = session.noteContext || null;
 
+        // Ensure tools are initialized to prevent tool execution issues
+        await this.ensureToolsInitialized();
+
         // Log that we're calling contextService with the parameters
         log.info(`Using enhanced context with: noteId=${contextNoteId}, showThinking=${showThinking}`);
 
@@ -506,23 +509,67 @@ class RestChatService {
             temperature: session.metadata.temperature || 0.7,
             maxTokens: session.metadata.maxTokens,
             model: session.metadata.model,
-            stream: isStreamingRequest ? true : undefined
+            stream: isStreamingRequest ? true : undefined,
+            enableTools: true  // Explicitly enable tools
         };
 
-        // Process based on whether this is a streaming request
+        // Add a note indicating we're explicitly enabling tools
+        log.info(`Advanced context flow: explicitly enabling tools in chat options`);
+
+        // Process streaming responses differently
         if (isStreamingRequest) {
+            // Handle streaming using the existing method
             await this.handleStreamingResponse(res, aiMessages, chatOptions, service, session);
         } else {
-            // Non-streaming approach for POST requests
+            // For non-streaming requests, generate a completion synchronously
             const response = await service.generateChatCompletion(aiMessages, chatOptions);
-            const aiResponse = response.text; // Extract the text from the response
 
-            // Store the assistant's response in the session
-            session.messages.push({
-                role: 'assistant',
-                content: aiResponse,
-                timestamp: new Date()
-            });
+            // Check if the response contains tool calls
+            if (response.tool_calls && response.tool_calls.length > 0) {
+                log.info(`Advanced context non-streaming: detected ${response.tool_calls.length} tool calls in response`);
+                log.info(`Tool calls details: ${JSON.stringify(response.tool_calls)}`);
+
+                try {
+                    // Execute the tools
+                    const toolResults = await this.executeToolCalls(response);
+                    log.info(`Successfully executed ${toolResults.length} tool calls in advanced context flow`);
+
+                    // Build updated messages with tool results
+                    const toolMessages = [...aiMessages, {
+                        role: 'assistant',
+                        content: response.text || '',
+                        tool_calls: response.tool_calls
+                    }, ...toolResults];
+
+                    // Make a follow-up request with the tool results
+                    log.info(`Making follow-up request with ${toolResults.length} tool results`);
+                    const followUpOptions = {...chatOptions, enableTools: false}; // Disable tools for follow-up
+                    const followUpResponse = await service.generateChatCompletion(toolMessages, followUpOptions);
+
+                    // Update the session with the final response
+                    session.messages.push({
+                        role: 'assistant',
+                        content: followUpResponse.text || '',
+                        timestamp: new Date()
+                    });
+                } catch (toolError: any) {
+                    log.error(`Error executing tools in advanced context: ${toolError.message}`);
+
+                    // Add error response to session
+                    session.messages.push({
+                        role: 'assistant',
+                        content: `Error executing tools: ${toolError.message}`,
+                        timestamp: new Date()
+                    });
+                }
+            } else {
+                // No tool calls, just add the response to the session
+                session.messages.push({
+                    role: 'assistant',
+                    content: response.text || '',
+                    timestamp: new Date()
+                });
+            }
         }
 
         return sourceNotes;
@@ -608,50 +655,57 @@ class RestChatService {
         try {
             // Use the correct method name: generateChatCompletion
             const response = await service.generateChatCompletion(aiMessages, chatOptions);
-            
+
             // Check for tool calls in the response
             if (response.tool_calls && response.tool_calls.length > 0) {
                 log.info(`========== STREAMING TOOL CALLS DETECTED ==========`);
                 log.info(`Response contains ${response.tool_calls.length} tool calls, executing them...`);
-                
+                log.info(`CRITICAL CHECK: Tool execution is supposed to happen in the pipeline, not directly here.`);
+                log.info(`If tools are being executed here instead of in the pipeline, this may be a flow issue.`);
+                log.info(`Response came from provider: ${response.provider || 'unknown'}, model: ${response.model || 'unknown'}`);
+
                 try {
+                    log.info(`========== STREAMING TOOL EXECUTION PATH ==========`);
+                    log.info(`About to execute tools in streaming path (this is separate from pipeline tool execution)`);
+
                     // Execute the tools
                     const toolResults = await this.executeToolCalls(response);
-                    
+                    log.info(`Successfully executed ${toolResults.length} tool calls in streaming path`);
+
                     // Make a follow-up request with the tool results
                     const toolMessages = [...aiMessages, {
                         role: 'assistant',
                         content: response.text || '',
                         tool_calls: response.tool_calls
                     }, ...toolResults];
-                    
+
                     log.info(`Making follow-up request with ${toolResults.length} tool results`);
-                    
+
                     // Send partial response to let the client know tools are being processed
                     if (!res.writableEnded) {
                         res.write(`data: ${JSON.stringify({ content: "Processing tools... " })}\n\n`);
                     }
-                    
+
                     // Use non-streaming for the follow-up to get a complete response
                     const followUpOptions = {...chatOptions, stream: false, enableTools: false}; // Prevent infinite loops
                     const followUpResponse = await service.generateChatCompletion(toolMessages, followUpOptions);
-                    
+
                     messageContent = followUpResponse.text || "";
-                    
+
                     // Send the complete response as a single chunk
                     if (!res.writableEnded) {
                         res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
                         res.write('data: [DONE]\n\n');
                         res.end();
                     }
-                    
+
                     // Store the full response for the session
                     session.messages.push({
                         role: 'assistant',
                         content: messageContent,
                         timestamp: new Date()
                     });
-                    
+
                     return; // Skip the rest of the processing
                 } catch (toolError) {
                     log.error(`Error executing tools: ${toolError}`);
@@ -716,48 +770,55 @@ class RestChatService {
             }
         }
     }
-    
+
     /**
      * Execute tool calls from the LLM response
      * @param response The LLM response containing tool calls
      */
     private async executeToolCalls(response: any): Promise<Message[]> {
+        log.info(`========== REST SERVICE TOOL EXECUTION FLOW ==========`);
+        log.info(`Entered executeToolCalls method in REST chat service`);
+
         if (!response.tool_calls || response.tool_calls.length === 0) {
+            log.info(`No tool calls to execute, returning early`);
             return [];
         }
-        
+
         log.info(`Executing ${response.tool_calls.length} tool calls from REST chat service`);
-        
+
         // Import tool registry directly to avoid circular dependencies
         const toolRegistry = (await import('./tools/tool_registry.js')).default;
-        
+
         // Check if tools are available
         const availableTools = toolRegistry.getAllTools();
+        log.info(`Available tools in registry: ${availableTools.length}`);
+
         if (availableTools.length === 0) {
             log.error('No tools available in registry for execution');
-            
+
             // Try to initialize tools
             try {
                 const toolInitializer = await import('./tools/tool_initializer.js');
                 await toolInitializer.default.initializeTools();
                 log.info(`Initialized ${toolRegistry.getAllTools().length} tools`);
-            } catch (error) {
-                log.error(`Failed to initialize tools: ${error}`);
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                log.error(`Failed to initialize tools: ${errorMessage}`);
                 throw new Error('Tool execution failed: No tools available');
             }
         }
-        
+
         // Execute each tool call and collect results
         const toolResults = await Promise.all(response.tool_calls.map(async (toolCall: any) => {
             try {
                 log.info(`Executing tool: ${toolCall.function.name}, ID: ${toolCall.id || 'unknown'}`);
-                
+
                 // Get the tool from registry
                 const tool = toolRegistry.getTool(toolCall.function.name);
                 if (!tool) {
                     throw new Error(`Tool not found: ${toolCall.function.name}`);
                 }
-                
+
                 // Parse arguments
                 let args;
                 if (typeof toolCall.function.arguments === 'string') {
@@ -765,7 +826,7 @@ class RestChatService {
                         args = JSON.parse(toolCall.function.arguments);
                     } catch (e) {
                         log.error(`Failed to parse tool arguments: ${e.message}`);
-                        
+
                         // Try cleanup and retry
                         try {
                             const cleaned = toolCall.function.arguments
@@ -773,7 +834,7 @@ class RestChatService {
                                 .replace(/\\"/g, '"')        // Replace escaped quotes
                                 .replace(/([{,])\s*'([^']+)'\s*:/g, '$1"$2":') // Replace single quotes around property names
                                 .replace(/([{,])\s*(\w+)\s*:/g, '$1"$2":');    // Add quotes around unquoted property names
-                            
+
                             args = JSON.parse(cleaned);
                         } catch (cleanErr) {
                             // If all parsing fails, use as-is
@@ -783,23 +844,23 @@ class RestChatService {
                 } else {
                     args = toolCall.function.arguments;
                 }
-                
+
                 // Log what we're about to execute
                 log.info(`Executing tool with arguments: ${JSON.stringify(args)}`);
-                
+
                 // Execute the tool and get result
                 const startTime = Date.now();
                 const result = await tool.execute(args);
                 const executionTime = Date.now() - startTime;
-                
+
                 log.info(`Tool execution completed in ${executionTime}ms`);
-                
+
                 // Log the result
-                const resultPreview = typeof result === 'string' 
+                const resultPreview = typeof result === 'string'
                     ? result.substring(0, 100) + (result.length > 100 ? '...' : '')
                     : JSON.stringify(result).substring(0, 100) + '...';
                 log.info(`Tool result: ${resultPreview}`);
-                
+
                 // Format result as a proper message
                 return {
                     role: 'tool',
@@ -809,7 +870,7 @@ class RestChatService {
                 };
             } catch (error: any) {
                 log.error(`Error executing tool ${toolCall.function.name}: ${error.message}`);
-                
+
                 // Return error as tool result
                 return {
                     role: 'tool',
@@ -819,7 +880,7 @@ class RestChatService {
                 };
             }
         }));
-        
+
         log.info(`Completed execution of ${toolResults.length} tools`);
         return toolResults;
     }
@@ -1040,6 +1101,33 @@ class RestChatService {
         } catch (error: any) {
             log.error(`Error deleting LLM session: ${error.message || 'Unknown error'}`);
             throw new Error(`Failed to delete session: ${error.message || 'Unknown error'}`);
+        }
+    }
+
+    /**
+     * Ensure that LLM tools are properly initialized
+     * This helps prevent issues with tool execution
+     */
+    private async ensureToolsInitialized(): Promise<void> {
+        try {
+            log.info("Initializing LLM agent tools...");
+
+            // Initialize LLM tools without depending on aiServiceManager
+            const toolInitializer = await import('./tools/tool_initializer.js');
+            await toolInitializer.default.initializeTools();
+
+            // Get the tool registry to check if tools were initialized
+            const toolRegistry = (await import('./tools/tool_registry.js')).default;
+            const tools = toolRegistry.getAllTools();
+            log.info(`LLM tools initialized successfully: ${tools.length} tools available`);
+
+            // Log available tools
+            if (tools.length > 0) {
+                log.info(`Available tools: ${tools.map(t => t.definition.function.name).join(', ')}`);
+            }
+        } catch (error: any) {
+            log.error(`Error initializing LLM tools: ${error.message}`);
+            // Don't throw, just log the error to prevent breaking the pipeline
         }
     }
 }

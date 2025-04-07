@@ -1,9 +1,21 @@
-import type { Message, ChatCompletionOptions } from './ai_interface.js';
+import type { Message, ChatCompletionOptions, ChatResponse } from './ai_interface.js';
 import chatStorageService from './chat_storage_service.js';
 import log from '../log.js';
 import { CONTEXT_PROMPTS, ERROR_PROMPTS } from './constants/llm_prompt_constants.js';
 import { ChatPipeline } from './pipeline/chat_pipeline.js';
 import type { ChatPipelineConfig, StreamCallback } from './pipeline/interfaces.js';
+import aiServiceManager from './ai_service_manager.js';
+import type { ChatPipelineInput } from './pipeline/interfaces.js';
+
+// Update the ChatCompletionOptions interface to include the missing properties
+// TODO fix
+declare module './ai_interface.js' {
+    interface ChatCompletionOptions {
+        pipeline?: string;
+        noteId?: string;
+        useAdvancedContext?: boolean;
+    }
+}
 
 export interface ChatSession {
     id: string;
@@ -365,7 +377,7 @@ export class ChatService {
         const pipeline = this.getPipeline(pipelineType);
         return pipeline.getMetrics();
     }
-    
+
     /**
      * Reset pipeline metrics
      */
@@ -397,6 +409,60 @@ export class ChatService {
 
         // Take first 30 chars if too long
         return firstLine.substring(0, 27) + '...';
+    }
+
+    /**
+     * Generate a chat completion with a sequence of messages
+     * @param messages Messages array to send to the AI provider
+     * @param options Chat completion options
+     */
+    async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
+        log.info(`========== CHAT SERVICE FLOW CHECK ==========`);
+        log.info(`Entered generateChatCompletion in ChatService`);
+        log.info(`Using pipeline for chat completion: ${this.getPipeline(options.pipeline).constructor.name}`);
+        log.info(`Tool support enabled: ${options.enableTools !== false}`);
+
+        try {
+            // Get AI service
+            const service = await aiServiceManager.getService();
+            if (!service) {
+                throw new Error('No AI service available');
+            }
+
+            log.info(`Using AI service: ${service.getName()}`);
+
+            // Prepare query extraction
+            const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
+            const query = lastUserMessage ? lastUserMessage.content : undefined;
+
+            // For advanced context processing, use the pipeline
+            if (options.useAdvancedContext && query) {
+                log.info(`Using chat pipeline for advanced context with query: ${query.substring(0, 50)}...`);
+
+                // Create a pipeline input with the query and messages
+                const pipelineInput: ChatPipelineInput = {
+                    messages,
+                    options,
+                    query,
+                    noteId: options.noteId
+                };
+
+                // Execute the pipeline
+                const pipeline = this.getPipeline(options.pipeline);
+                const response = await pipeline.execute(pipelineInput);
+                log.info(`Pipeline execution complete, response contains tools: ${response.tool_calls ? 'yes' : 'no'}`);
+                if (response.tool_calls) {
+                    log.info(`Tool calls in pipeline response: ${response.tool_calls.length}`);
+                }
+                return response;
+            }
+
+            // If not using advanced context, use direct service call
+            return await service.generateChatCompletion(messages, options);
+        } catch (error: any) {
+            console.error('Error in generateChatCompletion:', error);
+            throw error;
+        }
     }
 }
 

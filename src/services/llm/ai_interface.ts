@@ -34,6 +34,7 @@ export interface ChatCompletionOptions {
     stream?: boolean; // Whether to stream the response
     enableTools?: boolean; // Whether to enable tool calling
     tools?: any[]; // Tools to provide to the LLM
+    useAdvancedContext?: boolean; // Whether to use advanced context enrichment
 }
 
 export interface ChatResponse {
