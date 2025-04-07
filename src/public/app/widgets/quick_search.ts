@@ -56,7 +56,11 @@ export default class QuickSearchWidget extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0]);
+        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0], {
+            popperConfig: {
+                strategy: "fixed"
+            }
+        });
 
         this.$searchString = this.$widget.find(".search-string");
         this.$dropdownMenu = this.$widget.find(".dropdown-menu");
