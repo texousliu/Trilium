@@ -26,6 +26,8 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         log.info(`========== TOOL CALLING STAGE ENTRY ==========`);
         log.info(`Response provider: ${response.provider}, model: ${response.model || 'unknown'}`);
 
+        log.info(`LLM requested ${response.tool_calls?.length || 0} tool calls from provider: ${response.provider}`);
+
         // Check if the response has tool calls
         if (!response.tool_calls || response.tool_calls.length === 0) {
             // No tool calls, return original response and messages
@@ -33,8 +35,6 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             log.info(`===== EXITING TOOL CALLING STAGE: No tool_calls =====`);
             return { response, needsFollowUp: false, messages };
         }
-
-        log.info(`LLM requested ${response.tool_calls.length} tool calls from provider: ${response.provider}`);
 
         // Log response details for debugging
         if (response.text) {
@@ -44,6 +44,12 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         // Check if the registry has any tools
         const availableTools = toolRegistry.getAllTools();
         log.info(`Available tools in registry: ${availableTools.length}`);
+
+        // Log available tools for debugging
+        if (availableTools.length > 0) {
+            const availableToolNames = availableTools.map(t => t.definition.function.name).join(', ');
+            log.info(`Available tools: ${availableToolNames}`);
+        }
 
         if (availableTools.length === 0) {
             log.error(`No tools available in registry, cannot execute tool calls`);
@@ -70,8 +76,12 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
         // Execute each tool call and add results to messages
         log.info(`========== STARTING TOOL EXECUTION ==========`);
+        log.info(`Executing ${response.tool_calls.length} tool calls in parallel`);
+
+        const executionStartTime = Date.now();
         const toolResults = await Promise.all(response.tool_calls.map(async (toolCall, index) => {
             try {
+                log.info(`========== TOOL CALL ${index + 1} OF ${response.tool_calls.length} ==========`);
                 log.info(`Tool call ${index + 1} received - Name: ${toolCall.function.name}, ID: ${toolCall.id || 'unknown'}`);
 
                 // Log parameters
@@ -175,6 +185,10 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 };
             }
         }));
+
+        const totalExecutionTime = Date.now() - executionStartTime;
+        log.info(`========== TOOL EXECUTION COMPLETE ==========`);
+        log.info(`Completed execution of ${toolResults.length} tools in ${totalExecutionTime}ms`);
 
         // Add tool results as messages
         toolResults.forEach(result => {

@@ -530,28 +530,78 @@ class RestChatService {
                 log.info(`Tool calls details: ${JSON.stringify(response.tool_calls)}`);
 
                 try {
-                    // Execute the tools
-                    const toolResults = await this.executeToolCalls(response);
-                    log.info(`Successfully executed ${toolResults.length} tool calls in advanced context flow`);
+                    let currentMessages = [...aiMessages];
+                    let hasMoreToolCalls = true;
+                    let iterationCount = 0;
+                    const MAX_ITERATIONS = 3; // Prevent infinite loops
 
-                    // Build updated messages with tool results
-                    const toolMessages = [...aiMessages, {
+                    // Add initial assistant response with tool calls
+                    currentMessages.push({
                         role: 'assistant',
                         content: response.text || '',
                         tool_calls: response.tool_calls
-                    }, ...toolResults];
-
-                    // Make a follow-up request with the tool results
-                    log.info(`Making follow-up request with ${toolResults.length} tool results`);
-                    const followUpOptions = {...chatOptions, enableTools: false}; // Disable tools for follow-up
-                    const followUpResponse = await service.generateChatCompletion(toolMessages, followUpOptions);
-
-                    // Update the session with the final response
-                    session.messages.push({
-                        role: 'assistant',
-                        content: followUpResponse.text || '',
-                        timestamp: new Date()
                     });
+
+                    while (hasMoreToolCalls && iterationCount < MAX_ITERATIONS) {
+                        iterationCount++;
+                        log.info(`Tool iteration ${iterationCount}/${MAX_ITERATIONS}`);
+
+                        // Execute the tools
+                        const toolResults = await this.executeToolCalls(response);
+                        log.info(`Successfully executed ${toolResults.length} tool calls in iteration ${iterationCount}`);
+
+                        // Add tool results to messages
+                        currentMessages = [...currentMessages, ...toolResults];
+
+                        // Make a follow-up request with the tool results
+                        log.info(`Making follow-up request with ${toolResults.length} tool results`);
+                        const followUpOptions = {...chatOptions, enableTools: iterationCount < MAX_ITERATIONS}; // Enable tools for follow-up but limit iterations
+                        const followUpResponse = await service.generateChatCompletion(currentMessages, followUpOptions);
+
+                        // Check if the follow-up response has more tool calls
+                        if (followUpResponse.tool_calls && followUpResponse.tool_calls.length > 0) {
+                            log.info(`Follow-up response has ${followUpResponse.tool_calls.length} more tool calls`);
+
+                            // Add this response to messages for next iteration
+                            currentMessages.push({
+                                role: 'assistant',
+                                content: followUpResponse.text || '',
+                                tool_calls: followUpResponse.tool_calls
+                            });
+
+                            // Update response for next iteration
+                            response.tool_calls = followUpResponse.tool_calls;
+                        } else {
+                            // No more tool calls, add final response and break loop
+                            log.info(`No more tool calls in follow-up response`);
+                            hasMoreToolCalls = false;
+
+                            // Update the session with the final response
+                            session.messages.push({
+                                role: 'assistant',
+                                content: followUpResponse.text || '',
+                                timestamp: new Date()
+                            });
+                        }
+                    }
+
+                    // If we reached the max iterations, add the last response
+                    if (iterationCount >= MAX_ITERATIONS && hasMoreToolCalls) {
+                        log.info(`Reached maximum tool iteration limit of ${MAX_ITERATIONS}`);
+
+                        // Get the last response we received
+                        const lastResponse = currentMessages
+                            .filter(msg => msg.role === 'assistant')
+                            .pop();
+
+                        if (lastResponse) {
+                            session.messages.push({
+                                role: 'assistant',
+                                content: lastResponse.content || '',
+                                timestamp: new Date()
+                            });
+                        }
+                    }
                 } catch (toolError: any) {
                     log.error(`Error executing tools in advanced context: ${toolError.message}`);
 
