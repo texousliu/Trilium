@@ -20,41 +20,6 @@ Labels are also searchable, enhancing note retrieval.
 
 ### Common Labels for Advanced Configuration
 
-*   `disableVersioning`: Disables automatic versioning, ideal for large, unimportant notes like script libraries
-*   `versioningLimit`: Used to limit the number of revisions for a single note
-*   `calendarRoot`: Marks the note as the root for [day notes](Advanced%20Showcases/Day%20Notes.md). Only one note should carry this label
-*   `archived`: Hides notes from default search results and dialogs
-*   `excludeFromExport`: Excludes notes and their subtrees from export operations
-*   `run`: Specifies events to trigger scripts (e.g., `frontendStartup`, `hourly`)
-*   `runAtHour`: Defines specific hours for scripts to run, used with `#run=hourly`
-*   `disableInclusion`: Prevents a script from being included in parent script executions
-*   `sorted`: Automatically sorts child notes alphabetically by title
-*   `top`: Keeps the note at the top of its parent's list, useful with `sorted`
-*   `hidePromotedAttributes`: Hides certain attributes in the note's display
-*   `readOnly`: Sets the note to read-only mode, applicable to text and code notes
-*   `autoReadOnlyDisabled`: Disables automatic read-only mode for large notes
-*   `appCss`: Marks CSS notes used to modify Trilium’s appearance
-*   `appTheme`: Marks full CSS themes available in Trilium's options
-*   `cssClass`: Adds a CSS class to the note's representation in the tree
-*   `iconClass`: Adds a CSS class to the note's icon, useful for distinguishing notes visually. See <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20Icons.md">Note Icons</a>.
-*   `pageSize`: Specifies the number of items per page in note listings
-*   `customRequestHandler` **and** `customResourceProvider`: Refer to <a class="reference-link" href="Custom%20Request%20Handler.md">Custom Request Handler</a>
-*   `widget`: Marks a note as a custom widget, added to Trilium's component tree
-*   `workspace` **and related attributes**: See <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Navigation/Workspace.md">Workspace</a> for more details
-*   `searchHome`: Specifies the parent for new search notes
-*   `inbox`: Designates a default location for new notes created via the sidebar
-*   `sqlConsoleHome`: Default location for SQL console notes
-*   `bookmarked` **and** `bookmarkFolder`: See <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Navigation/Bookmarks.md">Bookmarks</a>
-*   `share:[…]`: See <a class="reference-link" href="Sharing.md">Sharing</a>
-*   `keyboardShortcut`: Assigns a keyboard shortcut to open the note
-*   `displayRelations` **and** `hideRelations`: Manages the display of note relations
-*   `titleTemplate`: See <a class="reference-link" href="Default%20Note%20Title.md">Default Note Title</a>
-*   `template`: Makes the note available as a template
-*   `toc`: Controls the visibility of the table of contents
-*   `color`: Defines the color of the note in the tree and links
-*   `hideChildrenOverview`: Hides child notes in the parent note's editor
-*   `viewType`: Sets the view of child notes (grid or list)
-
 ## Relations
 
 Relations define connections between notes, similar to links.
