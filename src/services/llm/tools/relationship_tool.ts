@@ -194,23 +194,27 @@ export class RelationshipTool implements ToolHandler {
             }
 
             // Get incoming relationships (where this note is the target)
-            const incomingNotes = becca.findNotesWithRelation(sourceNote.noteId);
+            // Since becca.findNotesWithRelation doesn't exist, use attributes to find notes with relation
             const incomingRelations = [];
 
-            for (const sourceOfRelation of incomingNotes) {
-                const incomingAttributes = sourceOfRelation.getOwnedAttributes()
-                    .filter((attr: any) => attr.type === 'relation' && attr.value === sourceNote.noteId);
+            // Find all attributes of type relation that point to this note
+            const relationAttributes = sourceNote.getTargetRelations();
 
-                for (const attr of incomingAttributes) {
-                    incomingRelations.push({
-                        relationName: attr.name,
-                        sourceNoteId: sourceOfRelation.noteId,
-                        sourceTitle: sourceOfRelation.title
-                    });
-                }
+            for (const attr of relationAttributes) {
+                if (attr.type === 'relation') {
+                    const sourceOfRelation = attr.getNote();
 
-                if (incomingRelations.length >= limit) {
-                    break;
+                    if (sourceOfRelation && !sourceOfRelation.isDeleted) {
+                        incomingRelations.push({
+                            relationName: attr.name,
+                            sourceNoteId: sourceOfRelation.noteId,
+                            sourceTitle: sourceOfRelation.title
+                        });
+
+                        if (incomingRelations.length >= limit) {
+                            break;
+                        }
+                    }
                 }
             }
 

@@ -41,7 +41,10 @@ Format your answer as a valid JSON array without markdown code blocks, like this
                 return cached;
             }
 
-            const messages: Message[] = [
+            const messages: Array<{
+                role: 'user' | 'assistant' | 'system';
+                content: string;
+            }> = [
                 { role: "system", content: this.getEnhancedPrompt() },
                 { role: "user", content: userQuestion }
             ];

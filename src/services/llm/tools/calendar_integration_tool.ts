@@ -221,13 +221,14 @@ export class CalendarIntegrationTool implements ToolHandler {
 
             // Create the new note
             const createStartTime = Date.now();
-            const noteId = await notes.createNewNote({
+            const result = notes.createNewNote({
                 parentNoteId: parent.noteId,
                 title: title,
                 content: content,
-                type: 'text',
+                type: 'text' as const,
                 mime: 'text/html'
             });
+            const noteId = result.note.noteId;
             const createDuration = Date.now() - createStartTime;
 
             if (!noteId) {

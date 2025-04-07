@@ -76,12 +76,12 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
         // Execute each tool call and add results to messages
         log.info(`========== STARTING TOOL EXECUTION ==========`);
-        log.info(`Executing ${response.tool_calls.length} tool calls in parallel`);
+        log.info(`Executing ${response.tool_calls?.length || 0} tool calls in parallel`);
 
         const executionStartTime = Date.now();
-        const toolResults = await Promise.all(response.tool_calls.map(async (toolCall, index) => {
+        const toolResults = await Promise.all((response.tool_calls || []).map(async (toolCall, index) => {
             try {
-                log.info(`========== TOOL CALL ${index + 1} OF ${response.tool_calls.length} ==========`);
+                log.info(`========== TOOL CALL ${index + 1} OF ${response.tool_calls?.length || 0} ==========`);
                 log.info(`Tool call ${index + 1} received - Name: ${toolCall.function.name}, ID: ${toolCall.id || 'unknown'}`);
 
                 // Log parameters

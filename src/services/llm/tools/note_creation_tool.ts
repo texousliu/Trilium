@@ -8,6 +8,7 @@ import type { Tool, ToolHandler } from './tool_interfaces.js';
 import log from '../../log.js';
 import becca from '../../../becca/becca.js';
 import notes from '../../notes.js';
+import attributes from '../../attributes.js';
 
 /**
  * Definition of the note creation tool
@@ -43,20 +44,7 @@ export const noteCreationToolDefinition: Tool = {
                 },
                 attributes: {
                     type: 'array',
-                    description: 'Array of attributes to set on the note (e.g., [{"name":"#tag"}, {"name":"priority", "value":"high"}])',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            name: {
-                                type: 'string',
-                                description: 'Name of the attribute'
-                            },
-                            value: {
-                                type: 'string',
-                                description: 'Value of the attribute (if applicable)'
-                            }
-                        }
-                    }
+                    description: 'Array of attributes to set on the note (e.g., [{"name":"#tag"}, {"name":"priority", "value":"high"}])'
                 }
             },
             required: ['title', 'content']
@@ -87,7 +75,7 @@ export class NoteCreationTool implements ToolHandler {
             log.info(`Executing create_note tool - Title: "${title}", Type: ${type}, ParentNoteId: ${parentNoteId || 'root'}`);
 
             // Validate parent note exists if specified
-            let parent;
+            let parent = null;
             if (parentNoteId) {
                 parent = becca.notes[parentNoteId];
                 if (!parent) {
@@ -96,6 +84,11 @@ export class NoteCreationTool implements ToolHandler {
             } else {
                 // Use root note if no parent specified
                 parent = becca.getNote('root');
+            }
+
+            // Make sure we have a valid parent at this point
+            if (!parent) {
+                return 'Error: Failed to get a valid parent note. Root note may not be accessible.';
             }
 
             // Determine the appropriate mime type
@@ -122,13 +115,14 @@ export class NoteCreationTool implements ToolHandler {
 
             // Create the note
             const createStartTime = Date.now();
-            const noteId = await notes.createNewNote({
+            const result = notes.createNewNote({
                 parentNoteId: parent.noteId,
                 title: title,
                 content: content,
-                type: type,
+                type: type as any, // Cast as any since not all string values may match the exact NoteType union
                 mime: noteMime
             });
+            const noteId = result.note.noteId;
             const createDuration = Date.now() - createStartTime;
 
             if (!noteId) {
@@ -145,7 +139,18 @@ export class NoteCreationTool implements ToolHandler {
                     if (!attr.name) continue;
 
                     const attrStartTime = Date.now();
-                    await notes.createAttribute(noteId, attr.name, attr.value || '');
+                    // Use createLabel for label attributes
+                    if (attr.name.startsWith('#') || attr.name.startsWith('~')) {
+                        await attributes.createLabel(noteId, attr.name.substring(1), attr.value || '');
+                    } else {
+                        // Use createRelation for relation attributes if value looks like a note ID
+                        if (attr.value && attr.value.match(/^[a-zA-Z0-9_]{12}$/)) {
+                            await attributes.createRelation(noteId, attr.name, attr.value);
+                        } else {
+                            // Default to label for other attributes
+                            await attributes.createLabel(noteId, attr.name, attr.value || '');
+                        }
+                    }
                     const attrDuration = Date.now() - attrStartTime;
 
                     log.info(`Added attribute ${attr.name}=${attr.value || ''} in ${attrDuration}ms`);

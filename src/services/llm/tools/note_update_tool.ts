@@ -7,6 +7,7 @@
 import type { Tool, ToolHandler } from './tool_interfaces.js';
 import log from '../../log.js';
 import becca from '../../../becca/becca.js';
+import notes from '../../notes.js';
 
 /**
  * Definition of the note update tool
@@ -79,7 +80,10 @@ export class NoteUpdateTool implements ToolHandler {
                 const titleStartTime = Date.now();
 
                 try {
-                    await note.setTitle(title);
+                    // Update the note title by setting it and saving
+                    note.title = title;
+                    note.save();
+
                     const titleDuration = Date.now() - titleStartTime;
                     log.info(`Updated note title to "${title}" in ${titleDuration}ms`);
                     titleUpdateResult = `Title updated from "${note.title}" to "${title}"`;

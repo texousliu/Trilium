@@ -116,7 +116,7 @@ export class AttributeManagerTool implements ToolHandler {
                     }
 
                     // Create the attribute
-                    await attributes.createAttribute(noteId, attributeName, value);
+                    await attributes.createLabel(noteId, attributeName, value);
                     const duration = Date.now() - startTime;
 
                     log.info(`Added attribute ${attributeName}=${value || ''} in ${duration}ms`);
@@ -153,7 +153,18 @@ export class AttributeManagerTool implements ToolHandler {
 
                     // Remove all matching attributes
                     for (const attr of attributesToRemove) {
-                        await attributes.deleteAttribute(attr.attributeId);
+                        // Delete attribute by recreating it with isDeleted flag
+                        const attrToDelete = {
+                            attributeId: attr.attributeId,
+                            noteId: attr.noteId,
+                            type: attr.type,
+                            name: attr.name,
+                            value: attr.value,
+                            isDeleted: true,
+                            position: attr.position,
+                            utcDateModified: new Date().toISOString()
+                        };
+                        await attributes.createAttribute(attrToDelete);
                     }
 
                     const duration = Date.now() - startTime;
@@ -195,7 +206,18 @@ export class AttributeManagerTool implements ToolHandler {
 
                     // Update all matching attributes
                     for (const attr of attributesToUpdate) {
-                        await attributes.updateAttributeValue(attr.attributeId, attributeValue);
+                        // Update by recreating with the same ID but new value
+                        const attrToUpdate = {
+                            attributeId: attr.attributeId,
+                            noteId: attr.noteId,
+                            type: attr.type,
+                            name: attr.name,
+                            value: attributeValue,
+                            isDeleted: false,
+                            position: attr.position,
+                            utcDateModified: new Date().toISOString()
+                        };
+                        await attributes.createAttribute(attrToUpdate);
                     }
 
                     const duration = Date.now() - startTime;

@@ -88,22 +88,22 @@ export class ContentExtractionTool implements ToolHandler {
             const extractedContent: any = {};
 
             if (extractionType === 'lists' || extractionType === 'all') {
-                extractedContent.lists = this.extractLists(content);
+                extractedContent.lists = this.extractLists(typeof content === 'string' ? content : content.toString());
                 log.info(`Extracted ${extractedContent.lists.length} lists`);
             }
 
             if (extractionType === 'tables' || extractionType === 'all') {
-                extractedContent.tables = this.extractTables(content);
+                extractedContent.tables = this.extractTables(typeof content === 'string' ? content : content.toString());
                 log.info(`Extracted ${extractedContent.tables.length} tables`);
             }
 
             if (extractionType === 'headings' || extractionType === 'all') {
-                extractedContent.headings = this.extractHeadings(content);
+                extractedContent.headings = this.extractHeadings(typeof content === 'string' ? content : content.toString());
                 log.info(`Extracted ${extractedContent.headings.length} headings`);
             }
 
             if (extractionType === 'codeBlocks' || extractionType === 'all') {
-                extractedContent.codeBlocks = this.extractCodeBlocks(content);
+                extractedContent.codeBlocks = this.extractCodeBlocks(typeof content === 'string' ? content : content.toString());
                 log.info(`Extracted ${extractedContent.codeBlocks.length} code blocks`);
             }
 
@@ -315,46 +315,42 @@ export class ContentExtractionTool implements ToolHandler {
     private filterContentByQuery(content: any, query: string): void {
         const lowerQuery = query.toLowerCase();
 
-        // Filter lists
         if (content.lists) {
-            content.lists = content.lists.filter(list => {
-                // Keep the list if any item matches the query
-                return list.items.some(item => item.toLowerCase().includes(lowerQuery));
+            content.lists = content.lists.filter((list: { type: string; items: string[] }) => {
+                // Check if any item in the list contains the query
+                return list.items.some((item: string) => item.toLowerCase().includes(lowerQuery));
             });
 
             // Also filter individual items in each list
-            content.lists.forEach(list => {
-                list.items = list.items.filter(item => item.toLowerCase().includes(lowerQuery));
+            content.lists.forEach((list: { type: string; items: string[] }) => {
+                list.items = list.items.filter((item: string) => item.toLowerCase().includes(lowerQuery));
             });
         }
 
-        // Filter headings
         if (content.headings) {
-            content.headings = content.headings.filter(heading =>
+            content.headings = content.headings.filter((heading: { level: number; text: string }) =>
                 heading.text.toLowerCase().includes(lowerQuery)
             );
         }
 
-        // Filter tables
         if (content.tables) {
-            content.tables = content.tables.filter(table => {
-                // Check headers
-                const headerMatch = table.headers.some(header =>
+            content.tables = content.tables.filter((table: { headers: string[]; rows: string[][] }) => {
+                // Check if any header contains the query
+                const headerMatch = table.headers.some((header: string) =>
                     header.toLowerCase().includes(lowerQuery)
                 );
 
-                // Check cells
-                const cellMatch = table.rows.some(row =>
-                    row.some(cell => cell.toLowerCase().includes(lowerQuery))
+                // Check if any cell in any row contains the query
+                const cellMatch = table.rows.some((row: string[]) =>
+                    row.some((cell: string) => cell.toLowerCase().includes(lowerQuery))
                 );
 
                 return headerMatch || cellMatch;
             });
         }
 
-        // Filter code blocks
         if (content.codeBlocks) {
-            content.codeBlocks = content.codeBlocks.filter(block =>
+            content.codeBlocks = content.codeBlocks.filter((block: { language?: string; code: string }) =>
                 block.code.toLowerCase().includes(lowerQuery)
             );
         }

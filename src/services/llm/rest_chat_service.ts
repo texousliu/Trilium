@@ -874,8 +874,8 @@ class RestChatService {
                 if (typeof toolCall.function.arguments === 'string') {
                     try {
                         args = JSON.parse(toolCall.function.arguments);
-                    } catch (e) {
-                        log.error(`Failed to parse tool arguments: ${e.message}`);
+                    } catch (e: unknown) {
+                        log.error(`Failed to parse tool arguments: ${e instanceof Error ? e.message : String(e)}`);
 
                         // Try cleanup and retry
                         try {

@@ -34,12 +34,12 @@ export class SemanticContextExtractionStage extends BasePipelineStage<SemanticCo
                     maxResults,
                     useEnhancedQueries: true,
                     threshold: 0.6,
-                    llmService: null // Will use default service
+                    llmService: undefined // Let the vectorSearchStage use the default service
                 }
             });
 
             log.info(`Vector search found ${vectorSearchResult.searchResults.length} relevant notes`);
-            
+
             // If no results, return empty context
             if (vectorSearchResult.searchResults.length === 0) {
                 log.info(`No relevant notes found for context extraction`);
@@ -49,10 +49,10 @@ export class SemanticContextExtractionStage extends BasePipelineStage<SemanticCo
             // Step 2: Format search results into a context string
             const provider = await providerManager.getPreferredEmbeddingProvider();
             const providerId = provider?.name || 'default';
-            
+
             const context = await contextFormatter.buildContextFromNotes(
-                vectorSearchResult.searchResults, 
-                query, 
+                vectorSearchResult.searchResults,
+                query,
                 providerId,
                 messages
             );
