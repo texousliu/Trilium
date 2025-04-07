@@ -8,7 +8,7 @@ import { ContextExtractor } from './context/index.js';
 import contextService from './context_service.js';
 import indexService from './index_service.js';
 import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './providers/providers.js';
-import agentTools from './agent_tools/index.js';
+import agentTools from './context_extractors/index.js';
 
 // Import interfaces
 import type {
@@ -392,7 +392,7 @@ export class AIServiceManager implements IAIServiceManager {
 
             // Initialize agent tools with this service manager instance
             await agentTools.initialize(this);
-            
+
             // Initialize LLM tools - this is the single place where tools are initialized
             const toolInitializer = await import('./tools/tool_initializer.js');
             await toolInitializer.default.initializeTools();

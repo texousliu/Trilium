@@ -1,8 +1,8 @@
 import type { ChatResponse } from '../ai_interface.js';
-import type { VectorSearchResult } from '../agent_tools/vector_search_tool.js';
-import type { NoteInfo, NotePathInfo, NoteHierarchyLevel } from '../agent_tools/note_navigator_tool.js';
-import type { DecomposedQuery, SubQuery } from '../agent_tools/query_decomposition_tool.js';
-import type { ThinkingProcess, ThinkingStep } from '../agent_tools/contextual_thinking_tool.js';
+import type { VectorSearchResult } from '../context_extractors/vector_search_tool.js';
+import type { NoteInfo, NotePathInfo, NoteHierarchyLevel } from '../context_extractors/note_navigator_tool.js';
+import type { DecomposedQuery, SubQuery } from '../context_extractors/query_decomposition_tool.js';
+import type { ThinkingProcess, ThinkingStep } from '../context_extractors/contextual_thinking_tool.js';
 import type BAttribute from '../../../becca/entities/battribute.js';
 
 /**
