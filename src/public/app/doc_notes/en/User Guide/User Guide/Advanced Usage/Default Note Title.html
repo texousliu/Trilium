@@ -42,23 +42,31 @@
         <p>The value of <code>#titleTemplate</code> is evaluated at the point of note's
           creation as a JavaScript string, which means it can be enriched with the
           help of JS string interpolation with dynamic data.</p>
-        <p>As an example, imagine you collect server outage incidents and write some
-          notes. It looks like this:</p>
+        <p>Second variable injected is <code>parentNote</code> which gives access to
+          the parent <a href="../Scripting/Script%20API/Frontend%20API/FNote.html"><code>FNote</code></a>.</p>
+        <p>See also&nbsp;<a class="reference-link" href="Templates.html">Templates</a>&nbsp;which
+          provides similar capabilities, including default note's content.</p>
+        <h3>Examples</h3>
         <ul>
-          <li>Incidents
+          <li>Imagine you collect server outage incidents and write some notes. It looks
+            like this:
             <ul>
-              <li>2022-05-09: System crash</li>
-              <li>2022-05-15: Backup delay</li>
+              <li>Incidents
+                <ul>
+                  <li>2022-05-09: System crash</li>
+                  <li>2022-05-15: Backup delay</li>
+                </ul>
+              </li>
+              <li>You can automatize the date assignment by assigning a label <code>#titleTemplate="${now.format('YYYY-MM-DD')}: "</code> to
+                the parent note "Incidents". Whenever a new child note is created, the
+                title template is evaluated with the injected <a href="https://day.js.org/docs/en/display/format">now</a> object.</li>
             </ul>
           </li>
+          <li>To use a parent's attribute in the title of new notes: <code>#titleTemplate="${parentNote.getLabelValue('authorName')}'s literary works"</code>
+          </li>
+          <li>To mirror the parent's note title: <code>${parentNote.title}</code>
+          </li>
         </ul>
-        <p>You can automatize the date assignment by assigning a label <code>#titleTemplate="${now.format('YYYY-MM-DD')}: "</code> to
-          the parent note "Incidents". Whenever a new child note is created, the
-          title template is evaluated with the injected <a href="https://day.js.org/docs/en/display/format">now</a> object.</p>
-        <p>Second variable injected is <a href="https://triliumnext.github.io/Notes/backend_api/BNote.html">parentNote</a>,
-          an example could be <code>#titleTemplate="${parentNote.getLabelValue('authorName')}'s literary works"</code>.</p>
-        <p>See also [[<a href="Templates.html">template</a>]] which provides similar
-          capabilities, including default note's content.</p>
       </div>
     </div>
   </body>

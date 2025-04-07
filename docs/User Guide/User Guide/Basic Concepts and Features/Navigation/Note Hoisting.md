@@ -5,4 +5,4 @@ Hoisting is a standard outliner feature which allows you to focus on (or "zoom i
 
 In addition to showing only this subtree, this also narrows both full text search and [“jump to note”](Note%20Navigation.md) to just notes present in hoisted subtree.
 
-See also [Workspace](Workspace.md) which extends this feature.
+See also [Workspace](Workspaces.md) which extends this feature.

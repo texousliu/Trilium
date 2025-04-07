@@ -22,10 +22,10 @@ module.exports = new MyWidget();
 To implement this widget:
 
 1.  Create a new `JS Frontend` note in Trilium and paste in the code above.
-2.  Assign the `#widget` [attribute](../Advanced%20Usage/Attributes.md) to the [note](../Basic%20Concepts%20and%20Features/Notes.md).
+2.  Assign the `#widget` [attribute](../../Advanced%20Usage/Attributes.md) to the [note](../../Basic%20Concepts%20and%20Features/Notes.md).
 3.  Restart Trilium or reload the window.
 
-To verify that the widget is working, open the developer tools (`Cmd` + `Shift` + `I`) and run `document.querySelector("#my-widget")`. If the element is found, the widget is functioning correctly. If `undefined` is returned, double-check that the [note](../Basic%20Concepts%20and%20Features/Notes.md) has the `#widget` [attribute](../Advanced%20Usage/Attributes.md).
+To verify that the widget is working, open the developer tools (`Cmd` + `Shift` + `I`) and run `document.querySelector("#my-widget")`. If the element is found, the widget is functioning correctly. If `undefined` is returned, double-check that the [note](../../Basic%20Concepts%20and%20Features/Notes.md) has the `#widget` [attribute](../../Advanced%20Usage/Attributes.md).
 
 ### Step 2: Adding an UI Element
 
@@ -85,7 +85,7 @@ After reloading Trilium, the button should now appear at the bottom left of the 
 
 ### Step 4: Adding User Interaction
 
-Let’s make the button interactive by showing a message when it’s clicked. We'll use the `api.showMessage` method from the [Script API](../Note%20Types/Code/Script%20API.md).
+Let’s make the button interactive by showing a message when it’s clicked. We'll use the `api.showMessage` method from the [Script API](../Script%20API.md).
 
 ```
 class MyWidget extends api.BasicWidget {

@@ -1,8 +1,8 @@
 # Word count widget
 > [!TIP]
-> This widget is also present in new installations in the <a class="reference-link" href="../../../Advanced%20Usage/Database/Demo%20Notes.md">Demo Notes</a>.
+> This widget is also present in new installations in the <a class="reference-link" href="../../Advanced%20Usage/Database/Demo%20Notes.md">Demo Notes</a>.
 
-Create a <a class="reference-link" href="../../Code.md">Code</a> note of type JS frontend and **give it a** `#widget` **label**.
+Create a <a class="reference-link" href="../../Note%20Types/Code.md">Code</a> note of type JS frontend and **give it a** `#widget` **label**.
 
 ```
 /*
@@ -82,7 +82,7 @@ class WordCountWidget extends api.NoteContextAwareWidget {
 module.exports = new WordCountWidget();
 ```
 
-After you make changes it is necessary to [restart Trilium](../../../Troubleshooting/Refreshing%20the%20application.md) so that the layout can be rebuilt.
+After you make changes it is necessary to [restart Trilium](../../Troubleshooting/Refreshing%20the%20application.md) so that the layout can be rebuilt.
 
 At the bottom of the note you can see the resulting widget:
 

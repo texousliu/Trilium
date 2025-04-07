@@ -20,6 +20,8 @@ Labels are also searchable, enhancing note retrieval.
 
 ### Common Labels for Advanced Configuration
 
+See the corresponding section in <a class="reference-link" href="Attributes/Attribute%20Reference.md">Attribute Reference</a> for a comprehensive list of attributes.
+
 ## Relations
 
 Relations define connections between notes, similar to links.
@@ -31,8 +33,7 @@ Relations define connections between notes, similar to links.
 
 ### Common Relations
 
-*   **Event-based Relations**: Such as `runOnNoteCreation` or `runOnNoteChange`, which trigger scripts on specific actions
-*   **Other Relations**: Include `template`, `renderNote`, `widget`, and sharing-related relations
+See the corresponding section in <a class="reference-link" href="Attributes/Attribute%20Reference.md">Attribute Reference</a> for a comprehensive list of relations.
 
 ## Multiplicity
 
