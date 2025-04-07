@@ -137,6 +137,12 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     ]
 };
 
+/**
+ * Type widget that displays one or more widgets based on the type of note, generally used for options and other interactive notes such as the backend log.
+ *
+ * One important aspect is that, like its parent {@link TypeWidget}, the content widgets don't receive all events by default and they must be manually added
+ * to the propagation list in {@link TypeWidget.handleEventInChildren}.
+ */
 export default class ContentWidgetTypeWidget extends TypeWidget {
     private $content!: JQuery<HTMLElement>;
     private widget?: BasicWidget;
@@ -175,14 +181,6 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
         } else {
             this.$content.append(t("content_widget.unknown_widget", { id: note.noteId }));
         }
-    }
-
-    async handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>) {
-        if (this.widget && this.widget.handleEvent) {
-            return this.widget.handleEvent(name, data);
-        }
-
-        return super.handleEventInChildren(name, data);
     }
 
 }

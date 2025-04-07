@@ -4,6 +4,9 @@ import type FNote from "../../entities/fnote.js";
 import type NoteDetailWidget from "../note_detail.js";
 import type SpacedUpdate from "../../services/spaced_update.js";
 
+/**
+ * The base class for all the note types.
+ */
 export default abstract class TypeWidget extends NoteContextAwareWidget {
 
     spacedUpdate!: SpacedUpdate;
@@ -17,7 +20,7 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         return super.doRender();
     }
 
-    doRefresh(note: FNote | null | undefined) {}
+    doRefresh(note: FNote | null | undefined): void | Promise<void> {}
 
     async refresh() {
         const thisWidgetType = (this.constructor as any).getType();
@@ -61,12 +64,20 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         }
     }
 
-    // events should be propagated manually to the children widgets
+    /**
+     * {@inheritdoc}
+     *
+     * By default:
+     *
+     * - `activeContextChanged` is intercepted and converted to a `setNoteContext` event to avoid `refresh()`.
+     * - `entitiesReloaded` and `refreshData` are passed as-is.
+     * - any other event is not passed to the children.
+     */
     handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>) {
         if (["activeContextChanged", "setNoteContext"].includes(name)) {
             // won't trigger .refresh();
             return super.handleEventInChildren("setNoteContext", data as EventData<"activeContextChanged">);
-        } else if (name === "entitiesReloaded") {
+        } else if (name === "entitiesReloaded" || name === "refreshData") {
             return super.handleEventInChildren(name, data);
         } else {
             return Promise.resolve();
