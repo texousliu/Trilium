@@ -3,6 +3,7 @@ import appContext, { type EventData, type EventNames } from "../../components/ap
 import type FNote from "../../entities/fnote.js";
 import type NoteDetailWidget from "../note_detail.js";
 import type SpacedUpdate from "../../services/spaced_update.js";
+import type EmptyTypeWidget from "./empty.js";
 
 /**
  * The base class for all the note types.
@@ -33,8 +34,12 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         } else {
             this.toggleInt(true);
 
-            if (this.note) {
+            // Avoid passing nullable this.note down to doRefresh().
+            if (thisWidgetType !== "empty" && this.note) {
                 await this.doRefresh(this.note);
+            } else if (thisWidgetType === "empty") {
+                // EmptyTypeWidget is a special case, since it's used for a new tab where there's no note.
+                await (this as unknown as EmptyTypeWidget).doRefresh();
             }
 
             this.triggerEvent("noteDetailRefreshed", { ntxId: this.noteContext?.ntxId });
