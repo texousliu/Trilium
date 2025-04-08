@@ -155,7 +155,31 @@ export default class CalendarView extends ViewMode {
             locale: await CalendarView.#getLocale(),
             height: "100%",
             nowIndicator: true,
-            eventContent: this.#buildEventContent,
+            eventDidMount: (e) => {
+                const { iconClass, promotedAttributes } = e.event.extendedProps;
+
+                // Append promoted attributes to the end of the event container.
+                if (promotedAttributes) {
+                    let promotedAttributesHtml = "";
+                    for (const [name, value] of promotedAttributes) {
+                        promotedAttributesHtml = /*html*/`\
+                        <div class="promoted-attribute">
+                            <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
+                        </div>`;
+                    }
+
+                    let mainContainer;
+                    switch (e.view.type) {
+                        case "timeGridWeek":
+                            mainContainer = e.el.querySelector(".fc-event-main");
+                            break;
+                        case "listMonth":
+                            mainContainer = e.el.querySelector(".fc-list-event-title");
+                            break;
+                    }
+                    $(mainContainer ?? e.el).append($(promotedAttributesHtml));
+                }
+            },
             dateClick: async (e) => {
                 if (!this.isCalendarRoot) {
                     return;
@@ -176,29 +200,6 @@ export default class CalendarView extends ViewMode {
         this.calendar = calendar;
 
         return this.$root;
-    }
-
-    #buildEventContent(e: EventDropArg) {
-        let html = "";
-        const { iconClass, promotedAttributes } = e.event.extendedProps;
-
-        // Title and icon
-        if (iconClass) {
-            html += `<span class="${iconClass}"></span> `;
-        }
-        html += utils.escapeHtml(e.event.title);
-
-        // Promoted attributes
-        if (promotedAttributes) {
-            for (const [name, value] of promotedAttributes) {
-                html += `\
-                <div class="promoted-attribute">
-                    <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
-                </div>`;
-            }
-        }
-
-        return { html };
     }
 
     static async #getLocale() {
