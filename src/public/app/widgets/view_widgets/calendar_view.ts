@@ -65,6 +65,7 @@ const TPL = /*html*/`
     .calendar-container .promoted-attribute {
         font-size: 0.85em;
         opacity: 0.85;
+        overflow: hidden;
     }
     </style>
 
@@ -155,27 +156,54 @@ export default class CalendarView extends ViewMode {
             locale: await CalendarView.#getLocale(),
             height: "100%",
             nowIndicator: true,
-            eventContent: (e) => {
-                let html = "";
+            eventDidMount: (e) => {
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
 
-                // Title and icon
+                // Prepend the icon to the title, if any.
                 if (iconClass) {
-                    html += `<span class="${iconClass}"></span> `;
-                }
-                html += utils.escapeHtml(e.event.title);
+                    let titleContainer;
+                    switch (e.view.type) {
+                        case "timeGridWeek":
+                        case "dayGridMonth":
+                            titleContainer = e.el.querySelector(".fc-event-title");
+                            break;
+                        case "multiMonthYear":
+                            break;
+                        case "listMonth":
+                            titleContainer = e.el.querySelector(".fc-list-event-title a");
+                            break;
+                    }
 
-                // Promoted attributes
+                    if (titleContainer) {
+                        const icon = /*html*/`<span class="${iconClass}"></span> `;
+                        titleContainer.insertAdjacentHTML("afterbegin", icon);
+                    }
+                }
+
+                // Append promoted attributes to the end of the event container.
                 if (promotedAttributes) {
+                    let promotedAttributesHtml = "";
                     for (const [name, value] of promotedAttributes) {
-                        html += `\
+                        promotedAttributesHtml = /*html*/`\
                         <div class="promoted-attribute">
                             <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
                         </div>`;
                     }
-                }
 
-                return { html };
+                    let mainContainer;
+                    switch (e.view.type) {
+                        case "timeGridWeek":
+                        case "dayGridMonth":
+                            mainContainer = e.el.querySelector(".fc-event-main");
+                            break;
+                        case "multiMonthYear":
+                            break;
+                        case "listMonth":
+                            mainContainer = e.el.querySelector(".fc-list-event-title");
+                            break;
+                    }
+                    $(mainContainer ?? e.el).append($(promotedAttributesHtml));
+                }
             },
             dateClick: async (e) => {
                 if (!this.isCalendarRoot) {

@@ -23,7 +23,7 @@ Tree structure of notes can resemble file system - but compared to that notes in
 
 When you delete a note in Trilium, it is actually only marked for deletion (soft-delete) - the actual content, title, attributes etc. are not deleted, only hidden.
 
-Within (by default) 7 days, it is possible to undelete these soft-deleted notes - open Recent Changes dialog, and you will see a list of all modified notes including the deleted ones. Notes available for undeletion have a link to do so. This is kind of "trash can" functionality known from e.g. Windows.
+Within (by default) 7 days, it is possible to undelete these soft-deleted notes - open the <a class="reference-link" href="UI%20Elements/Recent%20Changes.md">Recent Changes</a> dialog, and you will see a list of all modified notes including the deleted ones. Notes available for undeletion have a link to do so. This is kind of "trash can" functionality known from e.g. Windows.
 
 Clicking an undelete will recover the note, it's content and attributes - note should be just as before being deleted. This action will also undelete note's children which have been deleted in the same action.
 
@@ -33,4 +33,4 @@ After the 7 days (configurable) the notes will be "erased" - their title, conten
 
 ## See also
 
-*   [Read-only note](Notes/Read-Only%20Notes.md)
+*   <a class="reference-link" href="Notes/Read-Only%20Notes.md">Read-Only Notes</a>

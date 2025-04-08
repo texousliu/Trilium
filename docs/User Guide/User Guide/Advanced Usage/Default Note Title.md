@@ -17,14 +17,16 @@ And all children of "2022 Books" will be created with initial title "\[Author na
 
 The value of `#titleTemplate` is evaluated at the point of note's creation as a JavaScript string, which means it can be enriched with the help of JS string interpolation with dynamic data.
 
-As an example, imagine you collect server outage incidents and write some notes. It looks like this:
+Second variable injected is `parentNote` which gives access to the parent [`FNote`](../Scripting/Script%20API/Frontend%20API/FNote.md).
 
-*   Incidents
-    *   2022-05-09: System crash
-    *   2022-05-15: Backup delay
+See also <a class="reference-link" href="Templates.md">Templates</a> which provides similar capabilities, including default note's content.
 
-You can automatize the date assignment by assigning a label `#titleTemplate="${now.format('YYYY-MM-DD')}: "` to the parent note "Incidents". Whenever a new child note is created, the title template is evaluated with the injected [now](https://day.js.org/docs/en/display/format) object.
+### Examples
 
-Second variable injected is [parentNote](https://triliumnext.github.io/Notes/backend_api/BNote.html), an example could be `#titleTemplate="${parentNote.getLabelValue('authorName')}'s literary works"`.
-
-See also \[\[[template](Templates.md)\]\] which provides similar capabilities, including default note's content.
+*   Imagine you collect server outage incidents and write some notes. It looks like this:
+    *   Incidents
+        *   2022-05-09: System crash
+        *   2022-05-15: Backup delay
+    *   You can automatize the date assignment by assigning a label `#titleTemplate="${now.format('YYYY-MM-DD')}: "` to the parent note "Incidents". Whenever a new child note is created, the title template is evaluated with the injected [now](https://day.js.org/docs/en/display/format) object.
+*   To use a parent's attribute in the title of new notes: `#titleTemplate="${parentNote.getLabelValue('authorName')}'s literary works"`
+*   To mirror the parent's note title: `${parentNote.title}`

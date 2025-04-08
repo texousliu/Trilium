@@ -1,7 +1,14 @@
 # Sorting Notes
-## Sorting Notes
+## Manual sorting
 
-You can sort notes by right-clicking the parent note in the note tree and selecting Advanced -> Sort notes by ... This will sort existing notes, but will not automatically sort future notes added to this parent note
+You can sort notes by right-clicking the parent note in the <a class="reference-link" href="../UI%20Elements/Note%20Tree.md">Note Tree</a> and selecting Advanced -> Sort notes by ... This will sort existing notes, but will not automatically sort future notes added to this parent note.
+
+The sorting dialog allows:
+
+*   Sorting by title, creation or modification date.
+*   Changing sorting direction can also be adjusted (ascending or descending).
+*   Ensuring folders are displayed at the top.
+*   Natural sort, based on the sorting rules of a particular language.
 
 ## Automatic/Permanent Sorting
 

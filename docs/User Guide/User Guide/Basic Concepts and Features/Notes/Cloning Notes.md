@@ -51,10 +51,6 @@ As seen in the demo, you can view the list of all available clones in the "Note 
 
 Titles of cloned notes in the tree view have an asterisk to the right to easily see that the note is also placed into some other location.
 
-## Prefix
-
-Since notes can be categorized into multiple places, it's recommended to choose a generalized name that fits into all locations instead of something more specific to avoid confusion. In some cases this isn't possible so Trilium provides "branch prefixes", which is shown before the note name in the tree and as such provides a specific kind of context. The prefix is location specific, so it's displayed only in the tree pane.
-
 ## Deleting notes/clones
 
 With clones, it might not be immediately obvious how deleting works.

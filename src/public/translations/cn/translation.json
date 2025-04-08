@@ -555,7 +555,6 @@
     "to": "到",
     "target_note": "目标笔记",
     "on_all_matched_notes": "在所有匹配的笔记上",
-    "create_given_relation": "如果笔记还没有关系，则创建给定关系",
     "change_target_note": "或更改现有关系的目标笔记",
     "update_relation_target": "更新关系目标"
   },

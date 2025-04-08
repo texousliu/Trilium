@@ -30,7 +30,6 @@ const TPL = /*html*/`
                 <p>${t("update_relation_target.on_all_matched_notes")}:</p>
 
                 <ul style="margin-bottom: 0;">
-                    <li>${t("update_relation_target.create_given_relation")}</li>
                     <li>${t("update_relation_target.change_target_note")}</li>
                 </ul>
             </div>

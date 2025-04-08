@@ -17,7 +17,8 @@
           documents. This feature is particularly useful for publishing content directly
           from your Trilium notes, making it accessible to others online.</p>
         <h2>Prerequisites</h2>
-        <p>To use the sharing feature, you must have a <a href="../Installation%20%26%20Setup/Server%20Installation.html">server installation</a> of
+        <p>To use the sharing feature, you must have a&nbsp;<a class="reference-link"
+          href="../Installation%20%26%20Setup/Server%20Installation.html">Server Installation</a>&nbsp;of
           Trilium. This is necessary because the notes will be hosted from the server.</p>
         <h2>How to Share a Note</h2>
         <ol>
@@ -64,10 +65,11 @@
         <p>The default shared page is basic in design, but you can customize it using
           your own CSS:</p>
         <ul>
-          <li><strong>Custom CSS</strong>: Link a CSS <a href="../Note%20Types/Code.html">code note</a> to
-            the shared page by adding a <code>~shareCss</code> relation to the note.
-            If you want this style to apply to the entire subtree, make the label inheritable.
-            You can hide the CSS code note from the tree navigation by adding the <code>#shareHiddenFromTree</code> label.</li>
+          <li><strong>Custom CSS</strong>: Link a CSS&nbsp;<a class="reference-link"
+            href="../Note%20Types/Code.html">Code</a>&nbsp;note to the shared page
+            by adding a <code>~shareCss</code> relation to the note. If you want this
+            style to apply to the entire subtree, make the label inheritable. You can
+            hide the CSS code note from the tree navigation by adding the <code>#shareHiddenFromTree</code> label.</li>
           <li><strong>Omitting Default CSS</strong>: For extensive styling changes,
             use the <code>#shareOmitDefaultCss</code> label to avoid conflicts with Trilium's
             <a
@@ -112,16 +114,6 @@ for (const attr of parentNote.attributes) {
           making it easier to use Trilium as a fully-fledged website. Consider combining
           this with the <code>#shareIndex</code> label, which will display a list of
           all shared notes.</p>
-        <h2>Additional Options</h2>
-        <ul>
-          <li><strong>Raw Note Sharing</strong>: Use the <code>#shareRaw</code> label
-            to share a note without any HTML wrapper.</li>
-          <li><strong>Disallow Robot Indexing</strong>: Add the <code>#shareDisallowRobotIndexing</code> label
-            to prevent search engines from indexing the shared page by including a <code>noindex, follow</code> meta
-            tag and <code>X-Robots-Tag: noindex</code> header.</li>
-          <li><strong>Shared Notes Index</strong>: For text notes with the <code>#shareIndex</code> label,
-            the content will display a list of all shared note roots.</li>
-        </ul>
         <h2>Limitations</h2>
         <p>While the sharing feature is powerful, it has some limitations:</p>
         <ul>
@@ -135,6 +127,84 @@ for (const attr of parentNote.attributes) {
           <li><strong>Include Notes</strong>: Not supported.</li>
         </ul>
         <p>Some of these limitations may be addressed in future updates.</p>
+        <h2>Attribute reference</h2>
+        <figure class="table">
+          <table>
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>shareHiddenFromTree</code>
+                </td>
+                <td>this note is hidden from left navigation tree, but still accessible with
+                  its URL</td>
+              </tr>
+              <tr>
+                <td><code>shareExternalLink</code>
+                </td>
+                <td>note will act as a link to an external website in the share tree</td>
+              </tr>
+              <tr>
+                <td><code>shareAlias</code>
+                </td>
+                <td>define an alias using which the note will be available under <code>https://your_trilium_host/share/[your_alias]</code>
+                </td>
+              </tr>
+              <tr>
+                <td><code>shareOmitDefaultCss</code>
+                </td>
+                <td>default share page CSS will be omitted. Use when you make extensive styling
+                  changes.</td>
+              </tr>
+              <tr>
+                <td><code>shareRoot</code>
+                </td>
+                <td>marks note which is served on /share root.</td>
+              </tr>
+              <tr>
+                <td><code>shareDescription</code>
+                </td>
+                <td>define text to be added to the HTML meta tag for description</td>
+              </tr>
+              <tr>
+                <td><code>shareRaw</code>
+                </td>
+                <td>Note will be served in its raw format, without HTML wrapper. See also&nbsp;
+                  <a
+                  class="reference-link" href="Sharing/Serving%20directly%20the%20content%20o.html">Serving directly the content of a note</a>&nbsp;for an alternative method
+                    without setting an attribute.</td>
+              </tr>
+              <tr>
+                <td><code>shareDisallowRobotIndexing</code>
+                </td>
+                <td>
+                  <p>Indicates to web crawlers that the page should not be indexed of this
+                    note by:</p>
+                  <ul>
+                    <li>Setting the <code>X-Robots-Tag: noindex</code> HTTP header.</li>
+                    <li>Setting the <code>noindex, follow</code> meta tag.</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><code>shareCredentials</code>
+                </td>
+                <td>require credentials to access this shared note. Value is expected to be
+                  in format <code>username:password</code>. Don't forget to make this inheritable
+                  to apply to child-notes/images.</td>
+              </tr>
+              <tr>
+                <td><code>shareIndex</code>
+                </td>
+                <td>Note with this label will list all roots of shared notes.</td>
+              </tr>
+            </tbody>
+          </table>
+        </figure>
       </div>
     </div>
   </body>

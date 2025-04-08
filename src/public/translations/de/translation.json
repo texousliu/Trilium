@@ -555,7 +555,6 @@
     "to": "zu",
     "target_note": "Zielnotiz",
     "on_all_matched_notes": "Auf allen übereinstimmenden Notizen",
-    "create_given_relation": "Erstelle die gegebene Beziehung, wenn die Notiz noch keine hat",
     "change_target_note": "oder ändere die Zielnotiz der bestehenden Beziehung",
     "update_relation_target": "Beziehungsziel aktualisieren"
   },

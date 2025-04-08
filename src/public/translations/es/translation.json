@@ -555,7 +555,6 @@
     "to": "a",
     "target_note": "nota de destino",
     "on_all_matched_notes": "En todas las notas coincidentes",
-    "create_given_relation": "crear una relación dada si la nota aún no tiene una",
     "change_target_note": "o cambiar la nota de destino de la relación existente",
     "update_relation_target": "Actualizar destino de relación"
   },

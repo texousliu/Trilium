@@ -1,5 +1,5 @@
 # Scripting
-Trilium supports creating <a class="reference-link" href="Note%20Types/Code.md">Code</a> notes, i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with <a class="reference-link" href="Note%20Types/Code/Script%20API.md">Script API</a> provide extra functionality.
+Trilium supports creating <a class="reference-link" href="Note%20Types/Code.md">Code</a> notes, i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with <a class="reference-link" href="Scripting/Script%20API.md">Script API</a> provide extra functionality.
 
 ## Scripting
 
@@ -34,8 +34,8 @@ You can see more scripting with explanation in <a class="reference-link" href="
 
 ## Events
 
-See <a class="reference-link" href="Note%20Types/Code/Events.md">Events</a>.
+See <a class="reference-link" href="Scripting/Events.md">Events</a>.
 
 ## Script API
 
-See <a class="reference-link" href="Note%20Types/Code/Script%20API.md">Script API</a>.
+See <a class="reference-link" href="Scripting/Script%20API.md">Script API</a>.
