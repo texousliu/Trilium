@@ -1285,8 +1285,7 @@
   },
   "update_relation_target": {
     "allowed_characters": "Sunt permise doar caractere alfanumerice, underline și două puncte.",
-    "change_target_note": "sau schimbă notița-țintă a unei relații existente",
-    "create_given_relation": "crează relația dată dacă notița nu are încă una",
+    "change_target_note": "schimbă notița-țintă a unei relații existente",
     "on_all_matched_notes": "Pentru toate notițele găsite:",
     "relation_name": "denumirea relației",
     "target_note": "notița destinație",
