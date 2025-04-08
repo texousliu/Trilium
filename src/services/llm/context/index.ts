@@ -31,7 +31,14 @@ async function getSemanticContext(
             return "Semantic context service not available.";
         }
 
-        return await contextService.getSemanticContext(noteId, "", options.maxSimilarNotes || 5);
+        // Get an LLM service
+        const llmService = aiServiceManager.getInstance().getService();
+
+        const result = await contextService.processQuery("", llmService, {
+            maxResults: options.maxSimilarNotes || 5,
+            contextNoteId: noteId
+        });
+        return result.context;
     } catch (error) {
         console.error("Error getting semantic context:", error);
         return "Error retrieving semantic context.";
@@ -489,15 +496,26 @@ export class ContextExtractor {
      */
     static async getProgressiveContext(noteId: string, depth = 1): Promise<string> {
         try {
-            // Use the new context service
             const { default: aiServiceManager } = await import('../ai_service_manager.js');
             const contextService = aiServiceManager.getInstance().getContextService();
 
             if (!contextService) {
-                return ContextExtractor.extractContext(noteId);
+                return "Context service not available.";
             }
 
-            return await contextService.getProgressiveContext(noteId, depth);
+            const results = await contextService.findRelevantNotes(
+                "", // Empty query to get general context
+                noteId,
+                { maxResults: depth * 5 }
+            );
+
+            // Format the results
+            let contextText = `Progressive context for note (depth ${depth}):\n\n`;
+            results.forEach((note, index) => {
+                contextText += `[${index + 1}] ${note.title}\n${note.content || 'No content'}\n\n`;
+            });
+
+            return contextText;
         } catch (error) {
             // Fall back to regular context if progressive loading fails
             console.error('Error in progressive context loading:', error);
@@ -522,15 +540,21 @@ export class ContextExtractor {
      */
     static async getSmartContext(noteId: string, query: string): Promise<string> {
         try {
-            // Use the new context service
             const { default: aiServiceManager } = await import('../ai_service_manager.js');
             const contextService = aiServiceManager.getInstance().getContextService();
+            const llmService = aiServiceManager.getInstance().getService();
 
             if (!contextService) {
-                return ContextExtractor.extractContext(noteId);
+                return "Context service not available.";
             }
 
-            return await contextService.getSmartContext(noteId, query);
+            const result = await contextService.processQuery(
+                query,
+                llmService,
+                { contextNoteId: noteId }
+            );
+
+            return result.context;
         } catch (error) {
             // Fall back to regular context if smart context fails
             console.error('Error in smart context selection:', error);
@@ -571,7 +595,7 @@ export class ContextExtractor {
         if (!note) return 'Note not found';
 
         let info = `**Title**: ${note.title}\n`;
-        
+
         // Add attributes if any
         const attributes = note.getAttributes();
         if (attributes && attributes.length > 0) {
@@ -580,43 +604,43 @@ export class ContextExtractor {
                 info += `**Attributes**: ${relevantAttrs.map(attr => `${attr.name}=${attr.value}`).join(', ')}\n`;
             }
         }
-        
+
         // Add parent path
         const parents = await ContextExtractor.getParentNotes(noteId);
         if (parents && parents.length > 0) {
             const path = parents.map(p => p.title).join(' > ');
             info += `**Path**: ${path}\n`;
         }
-        
+
         // Add child count
         const childNotes = note.getChildNotes();
         if (childNotes && childNotes.length > 0) {
             info += `**Child notes**: ${childNotes.length}\n`;
-            
+
             // List first few child notes
             const childList = childNotes.slice(0, 5).map(child => child.title).join(', ');
             if (childList) {
                 info += `**Examples**: ${childList}${childNotes.length > 5 ? '...' : ''}\n`;
             }
         }
-        
+
         // Add note type
         if (note.type) {
             info += `**Type**: ${note.type}\n`;
         }
-        
+
         // Add creation/modification dates
         if (note.utcDateCreated) {
             info += `**Created**: ${new Date(note.utcDateCreated).toLocaleString()}\n`;
         }
-        
+
         if (note.utcDateModified) {
             info += `**Modified**: ${new Date(note.utcDateModified).toLocaleString()}\n`;
         }
-        
+
         return info;
     }
-    
+
     /**
      * Get note hierarchy information - instance method
      */

@@ -1,82 +1,108 @@
 /**
- * Agent Tools Index
+ * Context Extractors Module
  *
- * This file exports all available agent tools for use by the LLM.
- * Tools are prioritized in order of importance/impact.
+ * Provides tools for extracting context from notes, files, and other sources.
  */
 
-import { VectorSearchTool } from './vector_search_tool.js';
+import { ContextualThinkingTool } from './contextual_thinking_tool.js';
 import { NoteNavigatorTool } from './note_navigator_tool.js';
 import { QueryDecompositionTool } from './query_decomposition_tool.js';
-import { ContextualThinkingTool } from './contextual_thinking_tool.js';
+import { VectorSearchTool } from './vector_search_tool.js';
 
 // Import services needed for initialization
-import contextService from '../context_service.js';
-import aiServiceManager from '../ai_service_manager.js';
+import contextService from '../context/services/context_service.js';
 import log from '../../log.js';
 
 // Import interfaces
 import type {
-  IAgentToolsManager,
-  LLMServiceInterface,
-  IVectorSearchTool,
+  IContextualThinkingTool,
   INoteNavigatorTool,
   IQueryDecompositionTool,
-  IContextualThinkingTool
+  IVectorSearchTool
 } from '../interfaces/agent_tool_interfaces.js';
 
 /**
- * Manages all agent tools and provides a unified interface for the LLM agent
+ * Agent Tools Manager
+ *
+ * Manages and provides access to all available agent tools.
  */
-export class AgentToolsManager implements IAgentToolsManager {
+class AgentToolsManager {
   private vectorSearchTool: VectorSearchTool | null = null;
   private noteNavigatorTool: NoteNavigatorTool | null = null;
   private queryDecompositionTool: QueryDecompositionTool | null = null;
   private contextualThinkingTool: ContextualThinkingTool | null = null;
   private initialized = false;
 
-  constructor() {
-    // Initialize tools only when requested to avoid circular dependencies
-  }
+  /**
+   * Initialize all tools
+   */
+  async initialize(forceInit = false): Promise<void> {
+    if (this.initialized && !forceInit) {
+      return;
+    }
 
-  async initialize(aiServiceManager: LLMServiceInterface): Promise<void> {
     try {
-      if (this.initialized) {
-        return;
+      log.info("Initializing agent tools");
+
+      // Initialize the context service first
+      try {
+        await contextService.initialize();
+      } catch (error) {
+        log.error(`Error initializing context service: ${error}`);
+        // Continue anyway, some tools might work without the context service
       }
 
-      log.info("Initializing LLM agent tools...");
-
-      // Create tools
+      // Create tool instances
       this.vectorSearchTool = new VectorSearchTool();
       this.noteNavigatorTool = new NoteNavigatorTool();
       this.queryDecompositionTool = new QueryDecompositionTool();
       this.contextualThinkingTool = new ContextualThinkingTool();
 
       // Set context service in the vector search tool
-      this.vectorSearchTool.setContextService(contextService);
+      if (this.vectorSearchTool) {
+        this.vectorSearchTool.setContextService(contextService);
+      }
 
       this.initialized = true;
-      log.info("LLM agent tools initialized successfully");
+      log.info("Agent tools initialized successfully");
     } catch (error) {
       log.error(`Failed to initialize agent tools: ${error}`);
       throw error;
     }
   }
 
-  isInitialized(): boolean {
-    return this.initialized;
+  /**
+   * Get all available tools
+   */
+  getAllTools() {
+    return [
+      {
+        name: "vector_search",
+        description: "Searches your notes for semantically similar content",
+        function: this.vectorSearchTool?.search.bind(this.vectorSearchTool)
+      },
+      {
+        name: "navigate_to_note",
+        description: "Navigates to a specific note",
+        function: this.noteNavigatorTool?.getNoteInfo.bind(this.noteNavigatorTool)
+      },
+      {
+        name: "decompose_query",
+        description: "Breaks down a complex query into simpler sub-queries",
+        function: this.queryDecompositionTool?.decomposeQuery.bind(this.queryDecompositionTool)
+      },
+      {
+        name: "contextual_thinking",
+        description: "Provides structured thinking about a problem using available context",
+        function: this.contextualThinkingTool?.startThinking.bind(this.contextualThinkingTool)
+      }
+    ].filter(tool => tool.function !== undefined);
   }
 
   /**
-   * Get all available agent tools
-   * @returns Object containing all initialized tools
+   * Get all tool objects (for direct access)
    */
-  getAllTools() {
-    if (!this.initialized) {
-      throw new Error("Agent tools not initialized. Call initialize() first.");
-    }
-
+  getTools() {
     return {
       vectorSearch: this.vectorSearchTool as IVectorSearchTool,
       noteNavigator: this.noteNavigatorTool as INoteNavigatorTool,
@@ -84,53 +110,13 @@ export class AgentToolsManager implements IAgentToolsManager {
       contextualThinking: this.contextualThinkingTool as IContextualThinkingTool
     };
   }
-
-  /**
-   * Get the vector search tool
-   */
-  getVectorSearchTool(): IVectorSearchTool {
-    if (!this.initialized || !this.vectorSearchTool) {
-      throw new Error("Vector search tool not initialized");
-    }
-    return this.vectorSearchTool;
-  }
-
-  /**
-   * Get the note structure navigator tool
-   */
-  getNoteNavigatorTool(): INoteNavigatorTool {
-    if (!this.initialized || !this.noteNavigatorTool) {
-      throw new Error("Note navigator tool not initialized");
-    }
-    return this.noteNavigatorTool;
-  }
-
-  /**
-   * Get the query decomposition tool
-   */
-  getQueryDecompositionTool(): IQueryDecompositionTool {
-    if (!this.initialized || !this.queryDecompositionTool) {
-      throw new Error("Query decomposition tool not initialized");
-    }
-    return this.queryDecompositionTool;
-  }
-
-  /**
-   * Get the contextual thinking tool
-   */
-  getContextualThinkingTool(): IContextualThinkingTool {
-    if (!this.initialized || !this.contextualThinkingTool) {
-      throw new Error("Contextual thinking tool not initialized");
-    }
-    return this.contextualThinkingTool;
-  }
 }
 
-// Export a singleton instance
+// Create and export singleton instance
 const agentTools = new AgentToolsManager();
 export default agentTools;
 
-// Also export individual tool classes for direct use if needed
+// Export all tools for direct import if needed
 export {
   VectorSearchTool,
   NoteNavigatorTool,

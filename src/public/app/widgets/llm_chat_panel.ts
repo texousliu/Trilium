@@ -176,72 +176,82 @@ export default class LlmChatPanel extends BasicWidget {
     }
 
     /**
-     * Load saved chat data from the note
-     */
-    async loadSavedData() {
-        if (!this.onGetData) {
-            console.log("No getData callback available");
-            return;
-        }
-
-        try {
-            const data = await this.onGetData();
-            console.log(`Loading chat data for noteId: ${this.currentNoteId}`, data);
-
-            // Make sure we're loading data for the correct note
-            if (data && data.noteId && data.noteId !== this.currentNoteId) {
-                console.warn(`Data noteId ${data.noteId} doesn't match current noteId ${this.currentNoteId}`);
-            }
-
-            if (data && data.messages && Array.isArray(data.messages)) {
-                // Clear existing messages in the UI
-                this.noteContextChatMessages.innerHTML = '';
-                this.messages = [];
-
-                // Add each message to the UI
-                data.messages.forEach((message: {role: string; content: string}) => {
-                    if (message.role === 'user' || message.role === 'assistant') {
-                        this.addMessageToChat(message.role, message.content);
-                        // Track messages in our local array too
-                        this.messages.push(message);
-                    }
-                });
-
-                // Scroll to bottom
-                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
-                console.log(`Successfully loaded ${data.messages.length} messages for noteId: ${this.currentNoteId}`);
-
-                return true;
-            }
-        } catch (e) {
-            console.error(`Error loading saved chat data for noteId: ${this.currentNoteId}:`, e);
-        }
-
-        return false;
-    }
-
-    /**
-     * Save the current chat data to the note
+     * Save current chat data to the note attribute
      */
     async saveCurrentData() {
         if (!this.onSaveData) {
-            console.log("No saveData callback available");
             return;
         }
 
         try {
-            // Include the current note ID for tracking purposes
-            await this.onSaveData({
+            const dataToSave = {
                 messages: this.messages,
-                lastUpdated: new Date(),
-                noteId: this.currentNoteId // Include the note ID to help with debugging
-            });
-            console.log(`Saved chat data for noteId: ${this.currentNoteId} with ${this.messages.length} messages`);
-            return true;
-        } catch (e) {
-            console.error(`Error saving chat data for noteId: ${this.currentNoteId}:`, e);
+                sessionId: this.sessionId
+            };
+
+            console.log(`Saving chat data with sessionId: ${this.sessionId}`);
+
+            await this.onSaveData(dataToSave);
+        } catch (error) {
+            console.error('Failed to save chat data', error);
+        }
+    }
+
+    /**
+     * Load saved chat data from the note attribute
+     */
+    async loadSavedData(): Promise<boolean> {
+        if (!this.onGetData) {
             return false;
         }
+
+        try {
+            const savedData = await this.onGetData();
+
+            if (savedData?.messages?.length > 0) {
+                // Load messages
+                this.messages = savedData.messages;
+
+                // Clear and rebuild the chat UI
+                this.noteContextChatMessages.innerHTML = '';
+
+                this.messages.forEach(message => {
+                    const role = message.role as 'user' | 'assistant';
+                    this.addMessageToChat(role, message.content);
+                });
+
+                // Load session ID if available
+                if (savedData.sessionId) {
+                    try {
+                        // Verify the session still exists
+                        const sessionCheck = await server.get<any>(`llm/sessions/${savedData.sessionId}`);
+
+                        if (sessionCheck && sessionCheck.id) {
+                            console.log(`Restored session ${savedData.sessionId}`);
+                            this.sessionId = savedData.sessionId;
+                        } else {
+                            console.log(`Saved session ${savedData.sessionId} not found, will create new one`);
+                            this.sessionId = null;
+                            await this.createChatSession();
+                        }
+                    } catch (error) {
+                        console.log(`Error checking saved session ${savedData.sessionId}, will create new one`);
+                        this.sessionId = null;
+                        await this.createChatSession();
+                    }
+                } else {
+                    // No saved session ID, create a new one
+                    this.sessionId = null;
+                    await this.createChatSession();
+                }
+
+                return true;
+            }
+        } catch (error) {
+            console.error('Failed to load saved chat data', error);
+        }
+
+        return false;
     }
 
     async refresh() {
@@ -301,12 +311,37 @@ export default class LlmChatPanel extends BasicWidget {
      * Handle sending a user message to the LLM service
      */
     private async sendMessage(content: string) {
-        if (!content.trim() || !this.sessionId) {
+        if (!content.trim()) {
             return;
         }
 
         // Check for provider validation issues before sending
         await this.validateEmbeddingProviders();
+
+        // Make sure we have a valid session
+        if (!this.sessionId) {
+            // If no session ID, create a new session
+            await this.createChatSession();
+
+            if (!this.sessionId) {
+                // If still no session ID, show error and return
+                console.error("Failed to create chat session");
+                toastService.showError("Failed to create chat session");
+                return;
+            }
+        } else {
+            // Verify the session exists on the server
+            try {
+                const sessionCheck = await server.get<any>(`llm/sessions/${this.sessionId}`);
+                if (!sessionCheck || !sessionCheck.id) {
+                    console.log(`Session ${this.sessionId} not found, creating a new one`);
+                    await this.createChatSession();
+                }
+            } catch (error) {
+                console.log(`Error checking session ${this.sessionId}, creating a new one`);
+                await this.createChatSession();
+            }
+        }
 
         // Process the user message
         await this.processUserMessage(content);
@@ -321,7 +356,7 @@ export default class LlmChatPanel extends BasicWidget {
             const showThinking = this.showThinkingCheckbox.checked;
 
             // Add logging to verify parameters
-            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}`);
+            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.sessionId}`);
 
             // Create the message parameters
             const messageParams = {

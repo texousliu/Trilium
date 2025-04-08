@@ -32,11 +32,12 @@ export interface ICacheManager {
 export interface NoteSearchResult {
   noteId: string;
   title: string;
-  content?: string | null;
-  type?: string;
-  mime?: string;
+  content: string | null;
   similarity: number;
   parentId?: string;
+  parentPath?: string;
+  type?: string;
+  mime?: string;
   parentTitle?: string;
   dateCreated?: string;
   dateModified?: string;
@@ -58,17 +59,8 @@ export interface IContextFormatter {
  * Interface for query enhancer
  */
 export interface IQueryEnhancer {
-  generateSearchQueries(userQuestion: string, llmService: {
-    generateChatCompletion: (messages: Array<{
-      role: 'user' | 'assistant' | 'system';
-      content: string;
-    }>, options?: {
-      temperature?: number;
-      maxTokens?: number;
-    }) => Promise<{
-      text: string;
-    }>;
-  }): Promise<string[]>;
+  generateSearchQueries(question: string, llmService: any): Promise<string[]>;
+  estimateQueryComplexity(query: string): number;
 }
 
 /**
@@ -96,4 +88,26 @@ export interface NoteChunk {
 export interface IContentChunker {
   chunkContent(content: string, metadata?: Record<string, unknown>): ContentChunk[];
   chunkNoteContent(noteId: string, content: string, title: string): Promise<NoteChunk[]>;
+}
+
+/**
+ * Interface for context service
+ */
+export interface IContextService {
+  initialize(): Promise<void>;
+  processQuery(
+    userQuestion: string,
+    llmService: any,
+    contextNoteId?: string | null,
+    showThinking?: boolean
+  ): Promise<{ context: string; sources: NoteSearchResult[]; thinking?: string }>;
+  findRelevantNotes(
+    query: string,
+    contextNoteId?: string | null,
+    options?: {
+      maxResults?: number;
+      summarize?: boolean;
+      llmService?: any;
+    }
+  ): Promise<NoteSearchResult[]>;
 }

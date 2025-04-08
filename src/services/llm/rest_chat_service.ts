@@ -1,15 +1,18 @@
 import log from "../log.js";
 import type { Request, Response } from "express";
 import type { Message, ChatCompletionOptions } from "./ai_interface.js";
-import contextService from "./context_service.js";
+import contextService from "./context/services/context_service.js";
 import { LLM_CONSTANTS } from './constants/provider_constants.js';
 import { ERROR_PROMPTS } from './constants/llm_prompt_constants.js';
-import aiServiceManagerImport from "./ai_service_manager.js";
 import becca from "../../becca/becca.js";
 import vectorStore from "./embeddings/index.js";
 import providerManager from "./providers/providers.js";
 import options from "../../services/options.js";
 import { randomString } from "../utils.js";
+import type { LLMServiceInterface } from './interfaces/agent_tool_interfaces.js';
+import { AIServiceManager } from "./ai_service_manager.js";
+import { ChatPipeline } from "./pipeline/chat_pipeline.js";
+import type { ChatPipelineInput } from "./pipeline/interfaces.js";
 
 // Define interfaces for the REST API
 export interface NoteSource {
@@ -42,6 +45,37 @@ const sessions = new Map<string, ChatSession>();
 
 // Flag to track if cleanup timer has been initialized
 let cleanupInitialized = false;
+
+// For message formatting - simple implementation to avoid dependency
+const formatMessages = {
+    getFormatter(providerName: string) {
+        return {
+            formatMessages(messages: Message[], systemPrompt?: string, context?: string): Message[] {
+                // Simple implementation that works for most providers
+                const formattedMessages: Message[] = [];
+
+                // Add system message if context or systemPrompt is provided
+                if (context || systemPrompt) {
+                    formattedMessages.push({
+                        role: 'system',
+                        content: systemPrompt || (context ? `Use the following context to answer the query: ${context}` : '')
+                    });
+                }
+
+                // Add all other messages
+                for (const message of messages) {
+                    if (message.role === 'system' && formattedMessages.some(m => m.role === 'system')) {
+                        // Skip duplicate system messages
+                        continue;
+                    }
+                    formattedMessages.push(message);
+                }
+
+                return formattedMessages;
+            }
+        };
+    }
+};
 
 /**
  * Service to handle chat API interactions
@@ -94,7 +128,8 @@ class RestChatService {
 
         // Try to access the manager - will create instance only if needed
         try {
-            const aiManager = aiServiceManagerImport.getInstance();
+            // Create local instance to avoid circular references
+            const aiManager = new AIServiceManager();
 
             if (!aiManager) {
                 log.info("AI check failed: AI manager module is not available");
@@ -278,12 +313,36 @@ class RestChatService {
                 throw new Error('Content cannot be empty');
             }
 
-            // Get session
+            // Check if session exists, create one if not
+            let session: ChatSession;
             if (!sessionId || !sessions.has(sessionId)) {
-                throw new Error('Session not found');
+                if (req.method === 'GET') {
+                    // For GET requests, we must have an existing session
+                    throw new Error('Session not found');
+                }
+
+                // For POST requests, we can create a new session automatically
+                log.info(`Session ${sessionId} not found, creating a new one automatically`);
+                const now = new Date();
+                session = {
+                    id: sessionId || randomString(16),
+                    title: 'Auto-created Session',
+                    messages: [],
+                    createdAt: now,
+                    lastActive: now,
+                    metadata: {
+                        temperature: 0.7,
+                        maxTokens: undefined,
+                        model: undefined,
+                        provider: undefined
+                    }
+                };
+                sessions.set(session.id, session);
+                log.info(`Created new session with ID: ${session.id}`);
+            } else {
+                session = sessions.get(sessionId)!;
             }
 
-            const session = sessions.get(sessionId)!;
             session.lastActive = new Date();
 
             // For POST requests, store the user message
@@ -315,7 +374,8 @@ class RestChatService {
                 log.info("AI services are not available - checking for specific issues");
 
                 try {
-                    const aiManager = aiServiceManagerImport.getInstance();
+                    // Create a direct instance to avoid circular references
+                    const aiManager = new AIServiceManager();
 
                     if (!aiManager) {
                         log.error("AI service manager is not initialized");
@@ -340,11 +400,11 @@ class RestChatService {
                 };
             }
 
-            // Get the AI service manager
-            const aiServiceManager = aiServiceManagerImport.getInstance();
+            // Create direct instance to avoid circular references
+            const aiManager = new AIServiceManager();
 
             // Get the default service - just use the first available one
-            const availableProviders = aiServiceManager.getAvailableProviders();
+            const availableProviders = aiManager.getAvailableProviders();
 
             if (availableProviders.length === 0) {
                 log.error("No AI providers are available after manager check");
@@ -360,7 +420,7 @@ class RestChatService {
             // We know the manager has a 'services' property from our code inspection,
             // but TypeScript doesn't know that from the interface.
             // This is a workaround to access it
-            const service = (aiServiceManager as any).services[providerName];
+            const service = (aiManager as any).services[providerName];
 
             if (!service) {
                 log.error(`AI service for provider ${providerName} not found`);
@@ -369,87 +429,69 @@ class RestChatService {
                 };
             }
 
-            // Information to return to the client
-            let aiResponse = '';
-            let sourceNotes: NoteSource[] = [];
+            // Initialize tools
+            log.info("Initializing LLM agent tools...");
+            // Ensure tools are initialized to prevent tool execution issues
+            await this.ensureToolsInitialized();
 
-            // Check if this is a streaming request
-            const isStreamingRequest = req.method === 'GET' && req.query.format === 'stream';
+            // Create and use the chat pipeline instead of direct processing
+            const pipeline = new ChatPipeline({
+                enableStreaming: req.method === 'GET',
+                enableMetrics: true,
+                maxToolCallIterations: 5
+            });
 
-            // For POST requests, we need to process the message
-            // For GET (streaming) requests, we use the latest user message from the session
-            if (req.method === 'POST' || isStreamingRequest) {
-                // Get the latest user message for context
-                const latestUserMessage = session.messages
-                    .filter(msg => msg.role === 'user')
-                    .pop();
+            log.info("Executing chat pipeline...");
 
-                if (!latestUserMessage && req.method === 'GET') {
-                    throw new Error('No user message found in session');
-                }
-
-                // Use the latest message content for GET requests
-                const messageContent = req.method === 'POST' ? content : latestUserMessage!.content;
-
-                try {
-                    // If Advanced Context is enabled, we use the improved method
-                    if (useAdvancedContext) {
-                        sourceNotes = await this.processAdvancedContext(
-                            messageContent,
-                            session,
-                            service,
-                            isStreamingRequest,
-                            res,
-                            showThinking
-                        );
-                    } else {
-                        sourceNotes = await this.processStandardContext(
-                            messageContent,
-                            session,
-                            service,
-                            isStreamingRequest,
-                            res
-                        );
+            // Prepare the pipeline input
+            const pipelineInput: ChatPipelineInput = {
+                messages: session.messages.map(msg => ({
+                    role: msg.role as 'user' | 'assistant' | 'system',
+                    content: msg.content
+                })),
+                query: content,
+                noteId: session.noteContext ?? undefined,
+                showThinking: showThinking,
+                options: {
+                    useAdvancedContext: useAdvancedContext,
+                    systemPrompt: session.messages.find(m => m.role === 'system')?.content,
+                    temperature: session.metadata.temperature,
+                    maxTokens: session.metadata.maxTokens,
+                    model: session.metadata.model
+                },
+                streamCallback: req.method === 'GET' ? (data, done) => {
+                    res.write(`data: ${JSON.stringify({ content: data, done })}\n\n`);
+                    if (done) {
+                        res.end();
                     }
-
-                    // For streaming requests we don't return anything as we've already sent the response
-                    if (isStreamingRequest) {
-                        return null;
-                    }
-
-                    // For POST requests, return the response
-                    if (req.method === 'POST') {
-                        // Get the latest assistant message for the response
-                        const latestAssistantMessage = session.messages
-                            .filter(msg => msg.role === 'assistant')
-                            .pop();
-
-                        return {
-                            content: latestAssistantMessage?.content || '',
-                            sources: sourceNotes.map(note => ({
-                                noteId: note.noteId,
-                                title: note.title,
-                                similarity: note.similarity
-                            }))
-                        };
-                    }
-                } catch (processingError: any) {
-                    log.error(`Error processing message: ${processingError}`);
-                    return {
-                        error: `Error processing your request: ${processingError.message}`
-                    };
-                }
-            }
-
-            // If it's not a POST or streaming GET request, return the session's message history
-            return {
-                id: session.id,
-                messages: session.messages
+                } : undefined
             };
-        } catch (error: any) {
-            log.error(`Error in LLM query processing: ${error}`);
+
+            // Execute the pipeline
+            const response = await pipeline.execute(pipelineInput);
+
+            // Handle the response
+            if (req.method === 'POST') {
+                // Add assistant message to session
+                session.messages.push({
+                    role: 'assistant',
+                    content: response.text || '',
+                    timestamp: new Date()
+                });
+
+                // Return the response
+                return {
+                    content: response.text || '',
+                    sources: (response as any).sources || []
+                };
+            } else {
+                // For streaming requests, we've already sent the response
+                return null;
+            }
+        } catch (processingError: any) {
+            log.error(`Error processing message: ${processingError}`);
             return {
-                error: ERROR_PROMPTS.USER_ERRORS.GENERAL_ERROR
+                error: `Error processing your request: ${processingError.message}`
             };
         }
     }
@@ -474,11 +516,14 @@ class RestChatService {
         // Log that we're calling contextService with the parameters
         log.info(`Using enhanced context with: noteId=${contextNoteId}, showThinking=${showThinking}`);
 
+        // Correct parameters for contextService.processQuery
         const results = await contextService.processQuery(
             messageContent,
             service,
-            contextNoteId,
-            showThinking
+            {
+                contextNoteId,
+                showThinking
+            }
         );
 
         // Get the generated context
@@ -492,7 +537,7 @@ class RestChatService {
         }));
 
         // Format messages for the LLM using the proper context
-        const aiMessages = await contextService.buildMessagesWithContext(
+        const aiMessages = await this.buildMessagesWithContext(
             session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
                 role: msg.role,
                 content: msg.content
@@ -646,7 +691,7 @@ class RestChatService {
         const context = this.buildContextFromNotes(relevantNotes, messageContent);
 
         // Get messages with context properly formatted for the specific LLM provider
-        const aiMessages = await contextService.buildMessagesWithContext(
+        const aiMessages = await this.buildMessagesWithContext(
             session.messages.slice(-LLM_CONSTANTS.SESSION.MAX_SESSION_MESSAGES).map(msg => ({
                 role: msg.role,
                 content: msg.content
@@ -850,7 +895,8 @@ class RestChatService {
             try {
                 const toolInitializer = await import('./tools/tool_initializer.js');
                 await toolInitializer.default.initializeTools();
-                log.info(`Initialized ${toolRegistry.getAllTools().length} tools`);
+                const tools = toolRegistry.getAllTools();
+                log.info(`Successfully registered ${tools.length} LLM tools: ${tools.map(t => t.definition.function.name).join(', ')}`);
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 log.error(`Failed to initialize tools: ${errorMessage}`);
@@ -1155,29 +1201,89 @@ class RestChatService {
     }
 
     /**
-     * Ensure that LLM tools are properly initialized
-     * This helps prevent issues with tool execution
+     * Ensure LLM tools are initialized
      */
-    private async ensureToolsInitialized(): Promise<void> {
+    private async ensureToolsInitialized() {
         try {
-            log.info("Initializing LLM agent tools...");
+            log.info("Initializing LLM tools...");
 
-            // Initialize LLM tools without depending on aiServiceManager
-            const toolInitializer = await import('./tools/tool_initializer.js');
-            await toolInitializer.default.initializeTools();
-
-            // Get the tool registry to check if tools were initialized
+            // Import tool initializer and registry
+            const toolInitializer = (await import('./tools/tool_initializer.js')).default;
             const toolRegistry = (await import('./tools/tool_registry.js')).default;
-            const tools = toolRegistry.getAllTools();
-            log.info(`LLM tools initialized successfully: ${tools.length} tools available`);
 
-            // Log available tools
-            if (tools.length > 0) {
-                log.info(`Available tools: ${tools.map(t => t.definition.function.name).join(', ')}`);
+            // Check if tools are already initialized
+            const registeredTools = toolRegistry.getAllTools();
+
+            if (registeredTools.length === 0) {
+                // Initialize tools if none are registered
+                await toolInitializer.initializeTools();
+                const tools = toolRegistry.getAllTools();
+                log.info(`Successfully registered ${tools.length} LLM tools: ${tools.map(t => t.definition.function.name).join(', ')}`);
+            } else {
+                log.info(`LLM tools already initialized: ${registeredTools.length} tools available`);
             }
-        } catch (error: any) {
-            log.error(`Error initializing LLM tools: ${error.message}`);
-            // Don't throw, just log the error to prevent breaking the pipeline
+
+            // Get all available tools for logging
+            const availableTools = toolRegistry.getAllTools().map(t => t.definition.function.name);
+            log.info(`Available tools: ${availableTools.join(', ')}`);
+
+            log.info("LLM tools initialized successfully: " + availableTools.length + " tools available");
+            return true;
+        } catch (error) {
+            log.error(`Failed to initialize LLM tools: ${error}`);
+            return false;
+        }
+    }
+
+    // Function to build messages with context
+    private async buildMessagesWithContext(
+        messages: Message[],
+        context: string,
+        llmService: LLMServiceInterface
+    ): Promise<Message[]> {
+        try {
+            if (!messages || messages.length === 0) {
+                log.info('No messages provided to buildMessagesWithContext');
+                return [];
+            }
+
+            if (!context || context.trim() === '') {
+                log.info('No context provided to buildMessagesWithContext, returning original messages');
+                return messages;
+            }
+
+            // Get the provider name, handling service classes and raw provider names
+            let providerName: string;
+            if (typeof llmService === 'string') {
+                // If llmService is a string, assume it's the provider name
+                providerName = llmService;
+            } else if (llmService.constructor && llmService.constructor.name) {
+                // Extract provider name from service class name (e.g., OllamaService -> ollama)
+                providerName = llmService.constructor.name.replace('Service', '').toLowerCase();
+            } else {
+                // Fallback to default
+                providerName = 'default';
+            }
+
+            log.info(`Using formatter for provider: ${providerName}`);
+
+            // Get the appropriate formatter for this provider
+            const formatter = formatMessages.getFormatter(providerName);
+
+            // Format messages with context using the provider-specific formatter
+            const formattedMessages = formatter.formatMessages(
+                messages,
+                undefined, // No system prompt override - use what's in the messages
+                context
+            );
+
+            log.info(`Formatted ${messages.length} messages into ${formattedMessages.length} messages for ${providerName}`);
+
+            return formattedMessages;
+        } catch (error) {
+            log.error(`Error building messages with context: ${error}`);
+            // Fallback to original messages in case of error
+            return messages;
         }
     }
 }

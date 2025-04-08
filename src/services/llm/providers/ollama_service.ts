@@ -57,7 +57,14 @@ export class OllamaService extends BaseAIService {
         }
 
         const apiBase = options.getOption('ollamaBaseUrl');
-        const model = opts.model || options.getOption('ollamaDefaultModel') || 'llama3';
+
+        // Get the model name and strip the "ollama:" prefix if it exists
+        let model = opts.model || options.getOption('ollamaDefaultModel') || 'llama3';
+        if (model.startsWith('ollama:')) {
+            model = model.substring(7); // Remove the "ollama:" prefix
+            log.info(`Stripped 'ollama:' prefix from model name, using: ${model}`);
+        }
+
         const temperature = opts.temperature !== undefined
             ? opts.temperature
             : parseFloat(options.getOption('aiTemperature') || '0.7');

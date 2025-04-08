@@ -7,14 +7,12 @@
  * - Extracting relevant sections from notes
  * - Providing relevant context for LLM to generate accurate responses
  *
- * The tool uses embeddings to find notes with similar semantic meaning,
- * allowing the LLM to find relevant information even when exact keywords
- * are not present.
+ * Updated to use the consolidated VectorSearchService
  */
 
 import log from '../../log.js';
-import { VectorSearchStage } from '../pipeline/stages/vector_search_stage.js';
-import type { ContextService } from '../context/modules/context_service.js';
+import type { ContextService } from '../context/services/context_service.js';
+import vectorSearchService from '../context/services/vector_search_service.js';
 
 export interface VectorSearchResult {
   noteId: string;
@@ -36,29 +34,19 @@ export interface SearchResultItem {
   dateModified?: string;
 }
 
-export interface ChunkSearchResultItem {
-  noteId: string;
-  noteTitle: string;
-  chunk: string;
-  similarity: number;
-  parentId?: string;
-}
-
 export interface VectorSearchOptions {
   limit?: number;
   threshold?: number;
   includeContent?: boolean;
+  summarize?: boolean;
 }
 
 export class VectorSearchTool {
   private contextService: any = null;
   private maxResults: number = 5;
-  private vectorSearchStage: VectorSearchStage;
 
   constructor() {
-    // Initialize the vector search stage
-    this.vectorSearchStage = new VectorSearchStage();
-    log.info('VectorSearchTool initialized with VectorSearchStage pipeline component');
+    log.info('VectorSearchTool initialized using consolidated VectorSearchService');
   }
 
   /**
@@ -82,52 +70,31 @@ export class VectorSearchTool {
       const options = {
         maxResults: searchOptions.limit || 15, // Increased from default
         threshold: searchOptions.threshold || 0.5, // Lower threshold to include more results
-        useEnhancedQueries: true, // Enable query enhancement by default
         includeContent: searchOptions.includeContent !== undefined ? searchOptions.includeContent : true,
+        summarizeContent: searchOptions.summarize || false,
         ...searchOptions
       };
 
       log.info(`Vector search: "${query.substring(0, 50)}..." with limit=${options.maxResults}, threshold=${options.threshold}`);
 
-      // Use the pipeline stage for vector search
-      const result = await this.vectorSearchStage.execute({
+      // Use the consolidated vector search service
+      const searchResults = await vectorSearchService.findRelevantNotes(
         query,
-        noteId: contextNoteId || null,
-        options: {
+        contextNoteId || null,
+        {
           maxResults: options.maxResults,
           threshold: options.threshold,
-          useEnhancedQueries: options.useEnhancedQueries
+          summarizeContent: options.summarizeContent
         }
-      });
-      
-      const searchResults = result.searchResults;
-      log.info(`Vector search found ${searchResults.length} relevant notes via pipeline`);
+      );
 
-      // If includeContent is true but we're missing content for some notes, fetch it
-      if (options.includeContent) {
-        for (let i = 0; i < searchResults.length; i++) {
-          const result = searchResults[i];
-          try {
-            // Get content if missing
-            if (!result.content) {
-              const noteContent = await import('../context/note_content.js');
-              const content = await noteContent.getNoteContent(result.noteId);
-              if (content) {
-                result.content = content.substring(0, 2000); // Limit to 2000 chars
-                log.info(`Added direct content for note ${result.noteId}, length: ${result.content.length} chars`);
-              }
-            }
-          } catch (error) {
-            log.error(`Error getting content for note ${result.noteId}: ${error}`);
-          }
-        }
-      }
+      log.info(`Vector search found ${searchResults.length} relevant notes`);
 
       // Format results to match the expected VectorSearchResult interface
       return searchResults.map(note => ({
         noteId: note.noteId,
         title: note.title,
-        contentPreview: note.content 
+        contentPreview: note.content
           ? note.content.length > 200
             ? note.content.substring(0, 200) + '...'
             : note.content
@@ -147,27 +114,29 @@ export class VectorSearchTool {
   async searchNotes(query: string, options: {
     parentNoteId?: string,
     maxResults?: number,
-    similarityThreshold?: number
+    similarityThreshold?: number,
+    summarize?: boolean
   } = {}): Promise<VectorSearchResult[]> {
     try {
       // Set defaults
       const maxResults = options.maxResults || this.maxResults;
       const threshold = options.similarityThreshold || 0.6;
       const parentNoteId = options.parentNoteId || null;
+      const summarize = options.summarize || false;
 
-      // Use the pipeline for consistent search behavior
-      const result = await this.vectorSearchStage.execute({
+      // Use the consolidated vector search service
+      const results = await vectorSearchService.findRelevantNotes(
         query,
-        noteId: parentNoteId,
-        options: {
+        parentNoteId,
+        {
           maxResults,
           threshold,
-          useEnhancedQueries: true
+          summarizeContent: summarize
         }
-      });
+      );
 
       // Format results to match the expected interface
-      return result.searchResults.map(result => ({
+      return results.map(result => ({
         noteId: result.noteId,
         title: result.title,
         contentPreview: result.content ?
@@ -190,7 +159,8 @@ export class VectorSearchTool {
   async searchContentChunks(query: string, options: {
     noteId?: string,
     maxResults?: number,
-    similarityThreshold?: number
+    similarityThreshold?: number,
+    summarize?: boolean
   } = {}): Promise<VectorSearchResult[]> {
     try {
       // For now, use the same implementation as searchNotes,
@@ -198,7 +168,8 @@ export class VectorSearchTool {
       return this.searchNotes(query, {
         parentNoteId: options.noteId,
         maxResults: options.maxResults,
-        similarityThreshold: options.similarityThreshold
+        similarityThreshold: options.similarityThreshold,
+        summarize: options.summarize
       });
     } catch (error) {
       log.error(`Error in vector chunk search: ${error}`);
@@ -231,4 +202,4 @@ export class VectorSearchTool {
   }
 }
 
-export default VectorSearchTool;
+export default new VectorSearchTool();

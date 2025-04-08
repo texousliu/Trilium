@@ -1,14 +1,14 @@
 import options from '../options.js';
-import type { AIService, ChatCompletionOptions, ChatResponse, Message, SemanticContextService } from './ai_interface.js';
-import { OpenAIService } from './providers/openai_service.js';
+import type { AIService, ChatCompletionOptions, ChatResponse, Message } from './ai_interface.js';
 import { AnthropicService } from './providers/anthropic_service.js';
-import { OllamaService } from './providers/ollama_service.js';
-import log from '../log.js';
 import { ContextExtractor } from './context/index.js';
-import contextService from './context_service.js';
-import indexService from './index_service.js';
-import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './providers/providers.js';
 import agentTools from './context_extractors/index.js';
+import contextService from './context/services/context_service.js';
+import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './providers/providers.js';
+import indexService from './index_service.js';
+import log from '../log.js';
+import { OllamaService } from './providers/ollama_service.js';
+import { OpenAIService } from './providers/openai_service.js';
 
 // Import interfaces
 import type {
@@ -277,7 +277,7 @@ export class AIServiceManager implements IAIServiceManager {
      */
     async initializeAgentTools(): Promise<void> {
         try {
-            await agentTools.initialize(this);
+            await agentTools.initialize(true);
             log.info("Agent tools initialized successfully");
         } catch (error: any) {
             log.error(`Error initializing agent tools: ${error.message}`);
@@ -296,28 +296,32 @@ export class AIServiceManager implements IAIServiceManager {
      * Get the vector search tool for semantic similarity search
      */
     getVectorSearchTool() {
-        return agentTools.getVectorSearchTool();
+        const tools = agentTools.getTools();
+        return tools.vectorSearch;
     }
 
     /**
      * Get the note navigator tool for hierarchical exploration
      */
     getNoteNavigatorTool() {
-        return agentTools.getNoteNavigatorTool();
+        const tools = agentTools.getTools();
+        return tools.noteNavigator;
     }
 
     /**
      * Get the query decomposition tool for complex queries
      */
     getQueryDecompositionTool() {
-        return agentTools.getQueryDecompositionTool();
+        const tools = agentTools.getTools();
+        return tools.queryDecomposition;
     }
 
     /**
      * Get the contextual thinking tool for transparent reasoning
      */
     getContextualThinkingTool() {
-        return agentTools.getContextualThinkingTool();
+        const tools = agentTools.getTools();
+        return tools.contextualThinking;
     }
 
     /**
@@ -391,7 +395,7 @@ export class AIServiceManager implements IAIServiceManager {
             await this.getIndexService().initialize();
 
             // Initialize agent tools with this service manager instance
-            await agentTools.initialize(this);
+            await agentTools.initialize(true);
 
             // Initialize LLM tools - this is the single place where tools are initialized
             const toolInitializer = await import('./tools/tool_initializer.js');
@@ -407,24 +411,95 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Get context from agent tools
+     * Get description of available agent tools
+     */
+    async getAgentToolsDescription(): Promise<string> {
+        try {
+            // Get all available tools
+            const tools = agentTools.getAllTools();
+
+            if (!tools || tools.length === 0) {
+                return "";
+            }
+
+            // Format tool descriptions
+            const toolDescriptions = tools.map(tool =>
+                `- ${tool.name}: ${tool.description}`
+            ).join('\n');
+
+            return `Available tools:\n${toolDescriptions}`;
+        } catch (error) {
+            log.error(`Error getting agent tools description: ${error}`);
+            return "";
+        }
+    }
+
+    /**
+     * Get agent tools context for a specific note
+     * This context enriches LLM prompts with tools that can interact with Trilium
+     *
+     * @param noteId - The note ID
+     * @param query - The user's query
+     * @param showThinking - Whether to show LLM's thinking process
+     * @param relevantNotes - Optional notes already found to be relevant
+     * @returns Enhanced context with agent tools information
      */
     async getAgentToolsContext(
         noteId: string,
         query: string,
         showThinking: boolean = false,
-        relevantNotes: NoteSearchResult[] = []
+        relevantNotes: Array<any> = []
     ): Promise<string> {
         try {
-            if (!this.getAIEnabled()) {
-                return '';
+            // Create agent tools message
+            const toolsMessage = await this.getAgentToolsDescription();
+
+            // Initialize and use the agent tools
+            await this.initializeAgentTools();
+
+            // If we have notes that were already found to be relevant, use them directly
+            let contextNotes = relevantNotes;
+
+            // If no notes provided, find relevant ones
+            if (!contextNotes || contextNotes.length === 0) {
+                try {
+                    // Get the default LLM service for context enhancement
+                    const provider = this.getPreferredProvider();
+                    const llmService = this.getService(provider);
+
+                    // Find relevant notes
+                    contextNotes = await contextService.findRelevantNotes(
+                        query,
+                        noteId,
+                        {
+                            maxResults: 5,
+                            summarize: true,
+                            llmService
+                        }
+                    );
+
+                    log.info(`Found ${contextNotes.length} relevant notes for context`);
+                } catch (error) {
+                    log.error(`Failed to find relevant notes: ${error}`);
+                    // Continue without context notes
+                    contextNotes = [];
+                }
             }
 
-            await this.initializeAgentTools();
-            return await contextService.getAgentToolsContext(noteId, query, showThinking);
+            // Format notes into context string if we have any
+            let contextStr = "";
+            if (contextNotes && contextNotes.length > 0) {
+                contextStr = "\n\nRelevant context:\n";
+                contextNotes.forEach((note, index) => {
+                    contextStr += `[${index + 1}] "${note.title}"\n${note.content || 'No content available'}\n\n`;
+                });
+            }
+
+            // Combine tool message with context
+            return toolsMessage + contextStr;
         } catch (error) {
             log.error(`Error getting agent tools context: ${error}`);
-            return '';
+            return "";
         }
     }
 
@@ -562,7 +637,7 @@ export default {
         noteId: string,
         query: string,
         showThinking: boolean = false,
-        relevantNotes: NoteSearchResult[] = []
+        relevantNotes: Array<any> = []
     ): Promise<string> {
         return getInstance().getAgentToolsContext(
             noteId,

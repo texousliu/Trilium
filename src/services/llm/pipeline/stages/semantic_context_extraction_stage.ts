@@ -5,6 +5,8 @@ import log from '../../../log.js';
 import { VectorSearchStage } from './vector_search_stage.js';
 import contextFormatter from '../../context/modules/context_formatter.js';
 import providerManager from '../../context/modules/provider_manager.js';
+import type { NoteSearchResult } from '../../interfaces/context_interfaces.js';
+import type { Message } from '../../ai_interface.js';
 
 /**
  * Pipeline stage for extracting semantic context from notes

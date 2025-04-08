@@ -4,30 +4,69 @@ import aiServiceManager from '../../ai_service_manager.js';
 import log from '../../../log.js';
 
 /**
+ * Context Extraction Pipeline Stage
+ */
+
+export interface ContextExtractionOutput {
+    context: string;
+    noteId: string;
+    query: string;
+}
+
+/**
  * Pipeline stage for extracting context from notes
  */
-export class ContextExtractionStage extends BasePipelineStage<ContextExtractionInput, { context: string }> {
+export class ContextExtractionStage {
     constructor() {
-        super('ContextExtraction');
+        log.info('ContextExtractionStage initialized');
     }
 
     /**
-     * Extract context from a note
+     * Execute the context extraction stage
      */
-    protected async process(input: ContextExtractionInput): Promise<{ context: string }> {
-        const { noteId, query, useSmartContext = true } = input;
-        log.info(`Extracting context from note ${noteId}, query: ${query?.substring(0, 50)}...`);
+    async execute(input: ContextExtractionInput): Promise<ContextExtractionOutput> {
+        return this.process(input);
+    }
 
-        let context: string;
+    /**
+     * Process the input and extract context
+     */
+    protected async process(input: ContextExtractionInput): Promise<ContextExtractionOutput> {
+        const { useSmartContext = true } = input;
+        const noteId = input.noteId || 'global';
+        const query = input.query || '';
 
-        if (useSmartContext && query) {
-            // Use smart context that considers the query for better relevance
-            context = await aiServiceManager.getContextService().getSmartContext(noteId, query);
-        } else {
-            // Fall back to full context if smart context is disabled or no query available
-            context = await aiServiceManager.getContextExtractor().getFullContext(noteId);
+        log.info(`ContextExtractionStage: Extracting context for noteId=${noteId}, query="${query.substring(0, 30)}..."`);
+
+        try {
+            let context = '';
+
+            // Get enhanced context from the context service
+            const contextService = aiServiceManager.getContextService();
+            const llmService = aiServiceManager.getService();
+
+            if (contextService) {
+                // Use unified context service to get smart context
+                context = await contextService.processQuery(
+                    query,
+                    llmService,
+                    { contextNoteId: noteId }
+                ).then(result => result.context);
+
+                log.info(`ContextExtractionStage: Generated enhanced context (${context.length} chars)`);
+            } else {
+                log.info('ContextExtractionStage: Context service not available, using default context');
+            }
+
+            return {
+                context,
+                noteId,
+                query
+            };
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            log.error(`ContextExtractionStage: Error extracting context: ${errorMessage}`);
+            throw error;
         }
-
-        return { context };
     }
 }
