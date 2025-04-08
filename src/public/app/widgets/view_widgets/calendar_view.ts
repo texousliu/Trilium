@@ -155,28 +155,7 @@ export default class CalendarView extends ViewMode {
             locale: await CalendarView.#getLocale(),
             height: "100%",
             nowIndicator: true,
-            eventContent: (e) => {
-                let html = "";
-                const { iconClass, promotedAttributes } = e.event.extendedProps;
-
-                // Title and icon
-                if (iconClass) {
-                    html += `<span class="${iconClass}"></span> `;
-                }
-                html += utils.escapeHtml(e.event.title);
-
-                // Promoted attributes
-                if (promotedAttributes) {
-                    for (const [name, value] of promotedAttributes) {
-                        html += `\
-                        <div class="promoted-attribute">
-                            <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
-                        </div>`;
-                    }
-                }
-
-                return { html };
-            },
+            eventContent: this.#buildEventContent,
             dateClick: async (e) => {
                 if (!this.isCalendarRoot) {
                     return;
@@ -197,6 +176,29 @@ export default class CalendarView extends ViewMode {
         this.calendar = calendar;
 
         return this.$root;
+    }
+
+    #buildEventContent(e: EventDropArg) {
+        let html = "";
+        const { iconClass, promotedAttributes } = e.event.extendedProps;
+
+        // Title and icon
+        if (iconClass) {
+            html += `<span class="${iconClass}"></span> `;
+        }
+        html += utils.escapeHtml(e.event.title);
+
+        // Promoted attributes
+        if (promotedAttributes) {
+            for (const [name, value] of promotedAttributes) {
+                html += `\
+                <div class="promoted-attribute">
+                    <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
+                </div>`;
+            }
+        }
+
+        return { html };
     }
 
     static async #getLocale() {
