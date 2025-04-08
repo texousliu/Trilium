@@ -200,9 +200,23 @@ export class OllamaService extends BaseAIService {
                 });
             }
 
-            // Log full request body (this will create large logs but is helpful for debugging)
+            // Log full request body (with improved logging for debug purposes)
             const requestStr = JSON.stringify(requestBody);
-            log.info(`Full Ollama request (truncated): ${requestStr.substring(0, 1000)}...`);
+            log.info(`========== FULL OLLAMA REQUEST ==========`);
+
+            // Log request in manageable chunks
+            const maxChunkSize = 4000;
+            if (requestStr.length > maxChunkSize) {
+                let i = 0;
+                while (i < requestStr.length) {
+                    const chunk = requestStr.substring(i, i + maxChunkSize);
+                    log.info(`Request part ${Math.floor(i/maxChunkSize) + 1}/${Math.ceil(requestStr.length/maxChunkSize)}: ${chunk}`);
+                    i += maxChunkSize;
+                }
+            } else {
+                log.info(`Full request: ${requestStr}`);
+            }
+            log.info(`========== END FULL OLLAMA REQUEST ==========`);
             log.info(`========== END OLLAMA REQUEST ==========`);
 
             // Make API request
