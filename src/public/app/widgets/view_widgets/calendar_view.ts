@@ -65,6 +65,7 @@ const TPL = /*html*/`
     .calendar-container .promoted-attribute {
         font-size: 0.85em;
         opacity: 0.85;
+        overflow: hidden;
     }
     </style>
 
@@ -192,7 +193,10 @@ export default class CalendarView extends ViewMode {
                     let mainContainer;
                     switch (e.view.type) {
                         case "timeGridWeek":
+                        case "dayGridMonth":
                             mainContainer = e.el.querySelector(".fc-event-main");
+                            break;
+                        case "multiMonthYear":
                             break;
                         case "listMonth":
                             mainContainer = e.el.querySelector(".fc-list-event-title");
