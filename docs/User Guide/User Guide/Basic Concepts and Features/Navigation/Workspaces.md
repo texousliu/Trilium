@@ -4,12 +4,14 @@ Workspace is a concept built up on top of [note hoisting](Note%20Hoisting.md). I
 So far workspace consists of these features:
 
 *   [note hoisting](Note%20Hoisting.md) - you can "zoom" into a workspace subtree to focus only on the relevant notes
+    
 *   easy entering of workspace: 
     
     ![](1_Workspaces_image.png)
     
 *   visual identification of workspace in tabs:  
     ![](Workspaces_image.png)
+    
 
 ### Configuration
 
