@@ -1,5 +1,6 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 export default tseslint.config(
     eslint.configs.recommended,
@@ -17,6 +18,11 @@ export default tseslint.config(
         }
     },
     {
+        plugins: {
+            "simple-import-sort": simpleImportSort
+        }
+    },
+    {
         rules: {
             // add rule overrides here
             "no-undef": "off",
@@ -28,7 +34,8 @@ export default tseslint.config(
                     varsIgnorePattern: "^_"
                 }
             ],
-            "sort-imports": [ "error", { ignoreCase: false } ]
+            "simple-import-sort/imports": "error",
+            "simple-import-sort/exports": "error"
         }
     },
     {
