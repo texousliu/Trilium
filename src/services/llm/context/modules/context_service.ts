@@ -99,13 +99,13 @@ export class ContextService {
         try {
             // Step 1: Generate search queries (skip if tool calling might be enabled)
             let searchQueries: string[];
-            
+
             // Check if llmService has tool calling enabled
-            const isToolsEnabled = llmService && 
-                typeof llmService === 'object' && 
-                'constructor' in llmService && 
+            const isToolsEnabled = llmService &&
+                typeof llmService === 'object' &&
+                'constructor' in llmService &&
                 llmService.constructor.name === 'OllamaService';
-                
+
             if (isToolsEnabled) {
                 // Skip query generation if tools might be used to avoid race conditions
                 log.info(`Skipping query enhancement for potential tool-enabled service: ${llmService.constructor.name}`);
@@ -118,25 +118,25 @@ export class ContextService {
                     searchQueries = [userQuestion]; // Fallback to using the original question
                 }
             }
-            
+
             log.info(`Generated search queries: ${JSON.stringify(searchQueries)}`);
 
             // Step 2: Find relevant notes using the pipeline's VectorSearchStage
             let relevantNotes: NoteSearchResult[] = [];
             try {
                 log.info(`Using VectorSearchStage pipeline component to find relevant notes`);
-                
+
                 // Create or import the vector search stage
                 const VectorSearchStage = (await import('../../pipeline/stages/vector_search_stage.js')).VectorSearchStage;
                 const vectorSearchStage = new VectorSearchStage();
-                
+
                 // Use multi-query approach through the pipeline
                 const allResults: Map<string, NoteSearchResult> = new Map();
-                
+
                 // Process searches using the pipeline stage
                 for (const query of searchQueries) {
                     log.info(`Executing pipeline vector search for query: "${query.substring(0, 50)}..."`);
-                    
+
                     // Use the pipeline stage directly
                     const result = await vectorSearchStage.execute({
                         query,
@@ -148,10 +148,10 @@ export class ContextService {
                             llmService // Pass the LLM service for potential use
                         }
                     });
-                    
+
                     const results = result.searchResults;
                     log.info(`Pipeline vector search found ${results.length} results for query "${query.substring(0, 50)}..."`);
-                    
+
                     // Combine results, avoiding duplicates
                     for (const result of results) {
                         if (!allResults.has(result.noteId)) {
@@ -458,6 +458,7 @@ export class ContextService {
                 .filter(note => {
                     // Filter out notes with no content or very minimal content
                     const hasContent = note.content && note.content.trim().length > 10;
+                    log.info(`Note "${note.title}" (${note.noteId}) has content: ${hasContent} and content length: ${note.content ? note.content.length : 0} chars`);
                     if (!hasContent) {
                         log.info(`Filtering out empty/minimal note from combined results: "${note.title}" (${note.noteId})`);
                     }
@@ -467,150 +468,68 @@ export class ContextService {
 
             log.info(`Combined ${relevantNotes.length} notes from initial search with ${vectorSearchNotes.length} notes from vector search, resulting in ${combinedNotes.length} unique notes after filtering out empty notes`);
 
-            // Filter for Qu-related notes
-            const quNotes = combinedNotes.filter(result =>
-                result.title.toLowerCase().includes('qu') ||
-                (result.content && result.content.toLowerCase().includes('qu'))
-            );
+            // Just take the top notes by similarity
+            const finalNotes = combinedNotes.slice(0, 30); // Take top 30 notes
 
-            if (quNotes.length > 0) {
-                log.info(`Found ${quNotes.length} Qu-related notes out of ${combinedNotes.length} total notes`);
-                quNotes.forEach((note, idx) => {
-                    if (idx < 3) { // Log just a sample to avoid log spam
-                        log.info(`Qu note ${idx+1}: "${note.title}" (similarity: ${Math.round(note.similarity * 100)}%), content length: ${note.content ? note.content.length : 0} chars`);
-                    }
-                });
+            if (finalNotes.length > 0) {
+                agentContext += `## Relevant Information\n`;
 
-                // Prioritize Qu notes first, then other notes by similarity
-                const nonQuNotes = combinedNotes.filter(note => !quNotes.includes(note));
-                const finalNotes = [...quNotes, ...nonQuNotes].slice(0, 30); // Take top 30 prioritized notes
+                for (const note of finalNotes) {
+                    agentContext += `### ${note.title}\n`;
 
-                log.info(`Selected ${finalNotes.length} notes for context, with ${quNotes.length} Qu-related notes prioritized`);
+                    // Add relationship information for the note
+                    try {
+                        const noteObj = becca.getNote(note.noteId);
+                        if (noteObj) {
+                            // Get parent notes
+                            const parentNotes = noteObj.getParentNotes();
+                            if (parentNotes && parentNotes.length > 0) {
+                                agentContext += `**Parent notes:** ${parentNotes.map((p: any) => p.title).join(', ')}\n`;
+                            }
 
-                // Add the selected notes to the context
-                if (finalNotes.length > 0) {
-                    agentContext += `## Relevant Information\n`;
+                            // Get child notes
+                            const childNotes = noteObj.getChildNotes();
+                            if (childNotes && childNotes.length > 0) {
+                                agentContext += `**Child notes:** ${childNotes.map((c: any) => c.title).join(', ')}\n`;
+                            }
 
-                    for (const note of finalNotes) {
-                        agentContext += `### ${note.title}\n`;
-
-                        // Add relationship information for the note
-                        try {
-                            const noteObj = becca.getNote(note.noteId);
-                            if (noteObj) {
-                                // Get parent notes
-                                const parentNotes = noteObj.getParentNotes();
-                                if (parentNotes && parentNotes.length > 0) {
-                                    agentContext += `**Parent notes:** ${parentNotes.map((p: any) => p.title).join(', ')}\n`;
-                                }
-
-                                // Get child notes
-                                const childNotes = noteObj.getChildNotes();
-                                if (childNotes && childNotes.length > 0) {
-                                    agentContext += `**Child notes:** ${childNotes.map((c: any) => c.title).join(', ')}\n`;
-                                }
-
-                                // Get attributes
-                                const attributes = noteObj.getAttributes();
-                                if (attributes && attributes.length > 0) {
-                                    const filteredAttrs = attributes.filter((a: any) => !a.name.startsWith('_')); // Filter out system attributes
-                                    if (filteredAttrs.length > 0) {
-                                        agentContext += `**Attributes:** ${filteredAttrs.map((a: any) => `${a.name}=${a.value}`).join(', ')}\n`;
-                                    }
-                                }
-
-                                // Get backlinks/related notes through relation attributes
-                                const relationAttrs = attributes?.filter((a: any) =>
-                                    a.name.startsWith('relation:') ||
-                                    a.name.startsWith('label:')
-                                );
-
-                                if (relationAttrs && relationAttrs.length > 0) {
-                                    agentContext += `**Relationships:** ${relationAttrs.map((a: any) => {
-                                        const targetNote = becca.getNote(a.value);
-                                        const targetTitle = targetNote ? targetNote.title : a.value;
-                                        return `${a.name.substring(a.name.indexOf(':') + 1)} → ${targetTitle}`;
-                                    }).join(', ')}\n`;
+                            // Get attributes
+                            const attributes = noteObj.getAttributes();
+                            if (attributes && attributes.length > 0) {
+                                const filteredAttrs = attributes.filter((a: any) => !a.name.startsWith('_')); // Filter out system attributes
+                                if (filteredAttrs.length > 0) {
+                                    agentContext += `**Attributes:** ${filteredAttrs.map((a: any) => `${a.name}=${a.value}`).join(', ')}\n`;
                                 }
                             }
-                        } catch (error) {
-                            log.error(`Error getting relationship info for note ${note.noteId}: ${error}`);
-                        }
 
-                        agentContext += '\n';
+                            // Get backlinks/related notes through relation attributes
+                            const relationAttrs = attributes?.filter((a: any) =>
+                                a.name.startsWith('relation:') ||
+                                a.name.startsWith('label:')
+                            );
 
-                        if (note.content) {
-                            // Extract relevant content instead of just taking first 2000 chars
-                            const relevantContent = await this.extractRelevantContent(note.content, query, 2000);
-                            agentContext += `${relevantContent}\n\n`;
-                        }
-                    }
-                }
-            } else {
-                log.info(`No Qu-related notes found among the ${combinedNotes.length} combined notes`);
-
-                // Just take the top notes by similarity
-                const finalNotes = combinedNotes.slice(0, 30); // Take top 30 notes
-
-                if (finalNotes.length > 0) {
-                    agentContext += `## Relevant Information\n`;
-
-                    for (const note of finalNotes) {
-                        agentContext += `### ${note.title}\n`;
-
-                        // Add relationship information for the note
-                        try {
-                            const noteObj = becca.getNote(note.noteId);
-                            if (noteObj) {
-                                // Get parent notes
-                                const parentNotes = noteObj.getParentNotes();
-                                if (parentNotes && parentNotes.length > 0) {
-                                    agentContext += `**Parent notes:** ${parentNotes.map((p: any) => p.title).join(', ')}\n`;
-                                }
-
-                                // Get child notes
-                                const childNotes = noteObj.getChildNotes();
-                                if (childNotes && childNotes.length > 0) {
-                                    agentContext += `**Child notes:** ${childNotes.map((c: any) => c.title).join(', ')}\n`;
-                                }
-
-                                // Get attributes
-                                const attributes = noteObj.getAttributes();
-                                if (attributes && attributes.length > 0) {
-                                    const filteredAttrs = attributes.filter((a: any) => !a.name.startsWith('_')); // Filter out system attributes
-                                    if (filteredAttrs.length > 0) {
-                                        agentContext += `**Attributes:** ${filteredAttrs.map((a: any) => `${a.name}=${a.value}`).join(', ')}\n`;
-                                    }
-                                }
-
-                                // Get backlinks/related notes through relation attributes
-                                const relationAttrs = attributes?.filter((a: any) =>
-                                    a.name.startsWith('relation:') ||
-                                    a.name.startsWith('label:')
-                                );
-
-                                if (relationAttrs && relationAttrs.length > 0) {
-                                    agentContext += `**Relationships:** ${relationAttrs.map((a: any) => {
-                                        const targetNote = becca.getNote(a.value);
-                                        const targetTitle = targetNote ? targetNote.title : a.value;
-                                        return `${a.name.substring(a.name.indexOf(':') + 1)} → ${targetTitle}`;
-                                    }).join(', ')}\n`;
-                                }
+                            if (relationAttrs && relationAttrs.length > 0) {
+                                agentContext += `**Relationships:** ${relationAttrs.map((a: any) => {
+                                    const targetNote = becca.getNote(a.value);
+                                    const targetTitle = targetNote ? targetNote.title : a.value;
+                                    return `${a.name.substring(a.name.indexOf(':') + 1)} → ${targetTitle}`;
+                                }).join(', ')}\n`;
                             }
-                        } catch (error) {
-                            log.error(`Error getting relationship info for note ${note.noteId}: ${error}`);
                         }
+                    } catch (error) {
+                        log.error(`Error getting relationship info for note ${note.noteId}: ${error}`);
+                    }
 
-                        agentContext += '\n';
+                    agentContext += '\n';
 
-                        if (note.content) {
-                            // Extract relevant content instead of just taking first 2000 chars
-                            const relevantContent = await this.extractRelevantContent(note.content, query, 2000);
-                            agentContext += `${relevantContent}\n\n`;
-                        }
+                    if (note.content) {
+                        // Extract relevant content instead of just taking first 2000 chars
+                        const relevantContent = await this.extractRelevantContent(note.content, query, 2000);
+                        agentContext += `${relevantContent}\n\n`;
                     }
                 }
             }
+
 
             // Add thinking process if requested
             if (showThinking) {
