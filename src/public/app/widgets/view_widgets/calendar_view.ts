@@ -158,6 +158,27 @@ export default class CalendarView extends ViewMode {
             eventDidMount: (e) => {
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
 
+                // Prepend the icon to the title, if any.
+                if (iconClass) {
+                    let titleContainer;
+                    switch (e.view.type) {
+                        case "timeGridWeek":
+                        case "dayGridMonth":
+                            titleContainer = e.el.querySelector(".fc-event-title");
+                            break;
+                        case "multiMonthYear":
+                            break;
+                        case "listMonth":
+                            titleContainer = e.el.querySelector(".fc-list-event-title a");
+                            break;
+                    }
+
+                    if (titleContainer) {
+                        const icon = /*html*/`<span class="${iconClass}"></span> `;
+                        titleContainer.insertAdjacentHTML("afterbegin", icon);
+                    }
+                }
+
                 // Append promoted attributes to the end of the event container.
                 if (promotedAttributes) {
                     let promotedAttributesHtml = "";
