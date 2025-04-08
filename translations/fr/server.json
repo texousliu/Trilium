@@ -249,7 +249,7 @@
   "notes": {
     "new-note": "Nouvelle note",
     "duplicate-note-suffix": "(dup)",
-    "duplicate-note-title": "{{ noteTitle }} {{ duplicateNoteSuffix }}"
+    "duplicate-note-title": "{{- noteTitle }} {{ duplicateNoteSuffix }}"
   },
   "backend_log": {
     "log-does-not-exist": "Le fichier journal '{{ fileName }}' n'existe pas (encore).",

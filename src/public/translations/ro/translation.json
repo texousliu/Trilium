@@ -1648,7 +1648,7 @@
   },
   "notes": {
     "duplicate-note-suffix": "(dupl.)",
-    "duplicate-note-title": "{{ noteTitle }} {{ duplicateNoteSuffix }}"
+    "duplicate-note-title": "{{- noteTitle }} {{ duplicateNoteSuffix }}"
   },
   "geo-map-context": {
     "open-location": "Deschide locația",
