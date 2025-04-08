@@ -357,8 +357,8 @@ declare global {
                     getChanges(): {
                         type: string;
                         name: string;
-                        position: {
-                            nodeAfter: CKNode;
+                        position?: {
+                            nodeAfter?: CKNode;
                             parent: CKNode;
                             toJSON(): Object;
                         }

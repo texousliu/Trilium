@@ -118,7 +118,7 @@ function initTextEditor(textEditor: TextEditor) {
         for (const change of changes) {
             dbg("change " + JSON.stringify(change));
 
-            if (change.name !== "paragraph" && change.name !== "codeBlock" && change.position.nodeAfter?.childCount > 0) {
+            if (change.name !== "paragraph" && change.name !== "codeBlock" && change?.position?.nodeAfter && change.position.nodeAfter.childCount > 0) {
                 /*
                  * We need to look for code blocks recursively, as they can be placed within a <div> due to
                  * general HTML support or normally underneath other elements such as tables, blockquotes, etc.
@@ -126,20 +126,22 @@ function initTextEditor(textEditor: TextEditor) {
                 lookForCodeBlocks(change.position.nodeAfter);
             } else if (change.type == "insert" && change.name == "codeBlock") {
                 // A new code block was inserted
-                const codeBlock = change.position.nodeAfter;
+                const codeBlock = change.position?.nodeAfter;
                 // Even if it's a new codeblock, it needs dirtying in case
                 // it already has children, like when pasting one or more
                 // full codeblocks, undoing a delete, changing the language,
                 // etc (the postfixer won't get later changes for those).
-                log("dirtying inserted codeBlock " + JSON.stringify(codeBlock.toJSON()));
-                dirtyCodeBlocks.add(codeBlock);
-            } else if (change.type == "remove" && change.name == "codeBlock") {
+                if (codeBlock) {
+                    log("dirtying inserted codeBlock " + JSON.stringify(codeBlock.toJSON()));
+                    dirtyCodeBlocks.add(codeBlock);
+                }
+            } else if (change.type == "remove" && change.name == "codeBlock" && change.position) {
                 // An existing codeblock was removed, do nothing. Note the
                 // node is no longer in the editor so the codeblock cannot
                 // be inspected here. No need to dirty the codeblock since
                 // it has been removed
                 log("removing codeBlock at path " + JSON.stringify(change.position.toJSON()));
-            } else if ((change.type == "remove" || change.type == "insert") && change.position.parent.is("element", "codeBlock")) {
+            } else if ((change.type == "remove" || change.type == "insert") && change?.position?.parent.is("element", "codeBlock")) {
                 // Text was added or removed from the codeblock, force a
                 // highlight
                 const codeBlock = change.position.parent;
