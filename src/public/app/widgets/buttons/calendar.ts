@@ -213,6 +213,10 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
     private async getWeekNoteEnable() {
         const noteId = await server.get<string[]>(`search/${encodeURIComponent('#calendarRoot')}`);
+        if (noteId.length === 0) {
+            this.weekNoteEnable = false;
+            return;
+        }
         const noteAttributes = await server.get<BAttribute[]>(`notes/${noteId}/attributes`);
 
         for (const attribute of noteAttributes) {
