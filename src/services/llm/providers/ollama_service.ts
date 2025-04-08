@@ -99,6 +99,8 @@ export class OllamaService extends BaseAIService {
                 messages: messagesToSend,
                 options: {
                     temperature,
+                    // Add num_ctx parameter based on model capabilities
+                    num_ctx: await this.getModelContextWindowTokens(model),
                     // Add response_format for requests that expect JSON
                     ...(expectsJsonResponse ? { response_format: { type: "json_object" } } : {})
                 },
@@ -383,6 +385,32 @@ export class OllamaService extends BaseAIService {
         } catch (error: any) {
             log.error(`Ollama service error: ${error.message || String(error)}`);
             throw error;
+        }
+    }
+
+    /**
+     * Gets the context window size in tokens for a given model
+     * @param modelName The name of the model
+     * @returns The context window size in tokens
+     */
+    private async getModelContextWindowTokens(modelName: string): Promise<number> {
+        try {
+            // Import model capabilities service
+            const modelCapabilitiesService = (await import('../model_capabilities_service.js')).default;
+
+            // Get model capabilities
+            const modelCapabilities = await modelCapabilitiesService.getModelCapabilities(modelName);
+
+            // Get context window tokens with a default fallback
+            const contextWindowTokens = modelCapabilities.contextWindowTokens || 8192;
+
+            log.info(`Using context window size for ${modelName}: ${contextWindowTokens} tokens`);
+
+            return contextWindowTokens;
+        } catch (error: any) {
+            // Log error but provide a reasonable default
+            log.error(`Error getting model context window: ${error.message}`);
+            return 8192; // Default to 8192 tokens if there's an error
         }
     }
 }
