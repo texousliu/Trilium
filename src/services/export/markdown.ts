@@ -208,19 +208,28 @@ function buildFigureFilter(): Rule {
 }
 
 function buildMathFilter(): Rule {
+    const MATH_INLINE_PREFIX = "\\(";
+    const MATH_INLINE_SUFFIX = "\\)";
+
+    const MATH_DISPLAY_PREFIX = "\\[";
+    const MATH_DISPLAY_SUFFIX = "\\]";
+
     return {
         filter(node) {
             return node.nodeName === "SPAN" && node.classList.contains("math-tex");
         },
-        replacement(content) {
+        replacement(_, node) {
+            // We have to use the raw HTML text, otherwise the content is escaped too much.
+            const content = (node as HTMLElement).innerText;
+
             // Inline math
-            if (content.startsWith("\\\\(") && content.endsWith("\\\\)")) {
-                return `$${content.substring(3, content.length - 3)}$`;
+            if (content.startsWith(MATH_INLINE_PREFIX) && content.endsWith(MATH_INLINE_SUFFIX)) {
+                return `$${content.substring(MATH_INLINE_PREFIX.length, content.length - MATH_INLINE_SUFFIX.length)}$`;
             }
 
             // Display math
-            if (content.startsWith(String.raw`\\\[`) && content.endsWith(String.raw`\\\]`)) {
-                return `$$${content.substring(4, content.length - 4)}$$`;
+            if (content.startsWith(MATH_DISPLAY_PREFIX) && content.endsWith(MATH_DISPLAY_SUFFIX)) {
+                return `$$${content.substring(MATH_DISPLAY_PREFIX.length, content.length - MATH_DISPLAY_SUFFIX.length)}$$`;
             }
 
             // Unknown.
