@@ -1,7 +1,7 @@
 # Note Tree
 This page explains how to manipulate the note tree in TriliumNext, focusing on moving notes.
 
-![](1_Note%20Tree_image.png)
+![](Note%20Tree_image.png)
 
 ## Drag and Drop
 
@@ -22,12 +22,4 @@ You can easily rearrange the note tree by dragging and dropping notes, as demons
 
 You can also move notes using the familiar cut and paste functions available in the context menu, or with the associated keyboard [shortcuts](../Keyboard%20Shortcuts.md): `CTRL-C` ( [copy](../Notes/Cloning%20Notes.md)), <kbd>Ctrl</kbd> + <kbd>X</kbd> (cut) and <kbd>Ctrl</kbd> + <kbd>V</kbd> (paste).
 
-## Multiple selection
-
-It is possible to select multiple notes at one time.
-
-To do so, first select the note to start the selection with. Then hold Shift and click on the note to end the selection with. All the notes between the start and the end note will be selected as well.
-
-![](Note%20Tree_image.png)
-
-In the right-click menu, operations such as Cut, Copy, Move to, Clone to or Delete will apply to all the selected notes. It is also possible to apply <a class="reference-link" href="../../Advanced%20Usage/Bulk%20Actions.md">Bulk actions</a> to them. The rest of the options will not be available and will appear disabled in the menu.
+See <a class="reference-link" href="Note%20Tree/Note%20tree%20contextual%20menu.md">Note Tree Menu</a> for more information.

@@ -1,0 +1,171 @@
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../../../style.css">
+    <base target="_parent">
+    <title data-trilium-title>Note tree contextual menu</title>
+  </head>
+  
+  <body>
+    <div class="content">
+       <h1 data-trilium-h1>Note tree contextual menu</h1>
+
+      <div class="ck-content">
+        <figure class="image image-style-align-right">
+          <img style="aspect-ratio:372/760;" src="Note tree contextual menu_.png"
+          width="372" height="760">
+        </figure>
+        <p>The <em>note tree menu</em> can be accessed by right-clicking in the&nbsp;
+          <a
+          class="reference-link" href="../Note%20Tree.html">Note Tree</a>.</p>
+        <h2>Interaction</h2>
+        <p>The contextual menu can operate:</p>
+        <ul>
+          <li>On a single note, by right clicking it in the note tree.</li>
+          <li>On multiple notes, by selecting them first. See&nbsp;<a class="reference-link"
+            href="Multiple%20selection.html">Multiple selection</a>&nbsp;on how to
+            do so.
+            <ul>
+              <li>When right clicking, do note that usually the note being right clicked
+                is also included in the affected notes, regardless of whether it was selected
+                or not.</li>
+            </ul>
+          </li>
+        </ul>
+        <h2>Available options</h2>
+        <aside class="admonition note">
+          <p>When multiple notes are selected, only a subset of notes will be active.
+            The ones that do support multiple notes will mention this in the list below.</p>
+        </aside>
+        <ul>
+          <li><strong>Open in a new tab</strong>
+            <ul>
+              <li>Will open a single note in a new <a href="../Tabs.html">tab</a>.</li>
+            </ul>
+          </li>
+          <li><strong>Open in a new split</strong>
+            <ul>
+              <li>Will open a split to the right with the given note within the current
+                tab.</li>
+            </ul>
+          </li>
+          <li><strong>Hoist note</strong>
+            <ul>
+              <li>Will focus the note tree on this note. See&nbsp;<a class="reference-link"
+                href="../../Navigation/Note%20Hoisting.html">Note Hoisting</a>&nbsp;for
+                more information.</li>
+            </ul>
+          </li>
+          <li><strong>Insert note after</strong>
+            <ul>
+              <li>Allows easy creation of a note with a specified <a href="../../../Note%20Types.html">note type</a>.</li>
+              <li><a class="reference-link" href="../../../Advanced%20Usage/Templates.html">Templates</a>&nbsp;will
+                also be present (if any) at the end of the list.</li>
+              <li>The note will be added on the same level of hierarchy as the note selected.</li>
+            </ul>
+          </li>
+          <li><strong>Insert child note</strong>
+            <ul>
+              <li>Same as <em>Insert note after</em>, but the note will be created as a child
+                of the selected note.</li>
+            </ul>
+          </li>
+          <li><strong>Protect subtree</strong>
+            <ul>
+              <li>Will mark this note and all of its descendents as protected. See&nbsp;
+                <a
+                class="reference-link" href="../../Notes/Protected%20Notes.html">Protected Notes</a>&nbsp;for more information.</li>
+            </ul>
+          </li>
+          <li><strong>Unprotect subtree</strong>
+            <ul>
+              <li>Will unprotect this note and all of its descendents.</li>
+            </ul>
+          </li>
+          <li><strong>Cut</strong>
+            <ul>
+              <li>Will place the given notes in clipboard.</li>
+              <li>Use one of the two paste functions (or the keyboard shortcuts) to move
+                them to the desired location.</li>
+            </ul>
+          </li>
+          <li><strong>Copy / clone</strong>
+            <ul>
+              <li>Will place the given notes in clipboard.</li>
+              <li>Use one of the two paste functions (or the keyboard shortcuts) to copy
+                them to the desired location.</li>
+              <li>Note that the copy function here works according to the&nbsp;<a class="reference-link"
+                href="../../Notes/Cloning%20Notes.html">Cloning Notes</a>&nbsp;functionality
+                (i.e. the note itself will be present in two locations at once, and editing
+                it in one place will edit it everywhere).</li>
+              <li>To simply create a duplicate note that can be modified independently,
+                look for <em>Duplicate subtree</em>.</li>
+            </ul>
+          </li>
+          <li><strong>Paste into</strong>
+            <ul>
+              <li>If there are any notes in clipboard, they will be pasted as child notes
+                to the right-clicked one.</li>
+            </ul>
+          </li>
+          <li><strong>Paste after</strong>
+            <ul>
+              <li>If there are any notes in clipboard, they will be pasted underneath the
+                right-clicked one.</li>
+            </ul>
+          </li>
+          <li><strong>Move to…</strong>
+            <ul>
+              <li>Will display a modal to specify where to move the desired notes.</li>
+            </ul>
+          </li>
+          <li><strong>Clone to…</strong>
+            <ul>
+              <li>Will display a modal to specify where to <a href="../../Notes/Cloning%20Notes.html">clone</a> the
+                desired notes.</li>
+            </ul>
+          </li>
+          <li><strong>Delete</strong>
+            <ul>
+              <li>Will delete the given notes, asking for confirmation first.</li>
+              <li>In the dialog, the following options can be configured:
+                <ul>
+                  <li><em>Delete also all clones</em> to ensure that the note will be deleted
+                    everywhere if it has been placed into multiple locations (see&nbsp;<a class="reference-link"
+                    href="../../Notes/Cloning%20Notes.html">Cloning Notes</a>).</li>
+                  <li><em>Erase notes permanently</em> will ensure that the note cannot be recovered
+                    from&nbsp;<a class="reference-link" href="../Recent%20Changes.html">Recent Changes</a>.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><strong>Import into note</strong>
+            <ul>
+              <li>Opens the <a href="../../Import%20%26%20Export">import</a> dialog and places
+                the imported notes as child notes of the selected one.</li>
+            </ul>
+          </li>
+          <li><strong>Export</strong>
+            <ul>
+              <li>Opens the <a href="../../Import%20%26%20Export">export</a> dialog for the
+                selected notes.</li>
+            </ul>
+          </li>
+          <li><strong>Search in subtree</strong>
+            <ul>
+              <li>Opens a full&nbsp;<a class="reference-link" href="../../Navigation/Search.html">Search</a>&nbsp;with
+                it preconfigured to only look into this note and its descendants (the <em>Ancestor</em> field).</li>
+            </ul>
+          </li>
+        </ul>
+        <h2>Advanced options</h2>
+        <p>To access this options, first look for the <em>Advanced</em> option in the
+          contextual menu to reveal a sub-menu with:</p>
+        <p>&nbsp;</p>
+      </div>
+    </div>
+  </body>
+
+</html>

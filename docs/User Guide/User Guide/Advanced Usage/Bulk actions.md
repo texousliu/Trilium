@@ -5,9 +5,9 @@ The _Bulk Actions_ dialog makes it easy to apply changes to multiple notes at on
 
 ## Interaction
 
-*   The first step is to select the notes in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>:
-    *   It's possible to apply bulk actions to a single note (and potentially its child notes) simply by clicking on it (with a left click or a right click).
-    *   To select a range of notes, select the start note, hold <kbd>Shift</kbd> and select the end note. The selected notes will appear highlighted in the note tree.
+*   The first step is to select the notes in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>. It's possible to apply bulk actions to:
+    *   A single note (and potentially its child notes) simply by clicking on it (with a left click or a right click).
+    *   Multiple notes. See <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree/Multiple%20selection.md">Multiple selection</a> on how to do so.
 *   Right click in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a> and select _Advanced_ → _Apply bulk actions_.
 *   By default, only the selected notes will be affected. To also include all the descendants of the notes, check _Include descendants of the selected notes_. The number of affected notes at the top of the dialog will update to reflect the change.
 *   Click on which action to apply from the _Available actions_ section. A detailed description of each is available in the next section.
