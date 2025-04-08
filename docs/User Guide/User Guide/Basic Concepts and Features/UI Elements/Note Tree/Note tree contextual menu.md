@@ -1,5 +1,5 @@
 # Note tree contextual menu
-<figure class="image image-style-align-right"><img style="aspect-ratio:372/760;" src="Note tree contextual menu_.png" width="372" height="760"></figure>
+<figure class="image image-style-align-right"><img style="aspect-ratio:372/760;" src="1_Note tree contextual menu_.png" width="372" height="760"></figure>
 
 The _note tree menu_ can be accessed by right-clicking in the <a class="reference-link" href="../Note%20Tree.md">Note Tree</a>.
 
@@ -62,4 +62,33 @@ The contextual menu can operate:
 
 ## Advanced options
 
-To access this options, first look for the _Advanced_ option in the contextual menu to reveal a sub-menu with:
+<figure class="image image-style-align-right"><img style="aspect-ratio:289/355;" src="Note tree contextual menu_.png" width="289" height="355"></figure>
+
+The advanced options menu offers some of the less frequently used actions for notes.
+
+To access these options, first look for the _Advanced_ option in the contextual menu to reveal a sub-menu with:
+
+*   **Apply bulk actions**
+    *   Opens the <a class="reference-link" href="../../../Advanced%20Usage/Bulk%20Actions.md">Bulk Actions</a> dialog, to apply actions such as adding labels or moving notes to multiple notes at once (see <a class="reference-link" href="Multiple%20selection.md">Multiple selection</a>).
+*   **Edit branch prefix**
+    *   Opens a dialog to assign a name to be able to distinguish [clones](../../Notes/Cloning%20Notes.md), see <a class="reference-link" href="../../Notes/Cloning%20Notes/Branch%20prefix.md">Branch prefix</a> for more information.
+*   **Convert to attachment**
+    *   Converts the selected notes to <a class="reference-link" href="../../Notes/Attachments.md">Attachments</a> of their parent notes.
+    *   This functional is most useful when dealing with image <a class="reference-link" href="../../../Note%20Types/File.md">File</a> notes that were imported from an external source or an older version of Trilium.
+*   **Duplicate subtree**
+    *   Creates a copy of the note and its descendants.
+    *   This process is different from <a class="reference-link" href="../../Notes/Cloning%20Notes.md">Cloning Notes</a> since the duplicated note can be edited independently from the original.
+    *   An alternative to this, if done regularly, would be <a class="reference-link" href="../../../Advanced%20Usage/Templates.md">Templates</a>.
+*   **Expand subtree**
+    *   Expands all the child notes in the <a class="reference-link" href="../Note%20Tree.md">Note Tree</a>.
+*   **Collapse subtree**
+    *   Collapses all the child notes in the note tree.
+*   **Sort by…**
+    *   Opens a dialog to sort all the child notes of the selected note.
+    *   The sorting is done only once, there is an automatic sorting mechanism as well that can be set using <a class="reference-link" href="../../../Advanced%20Usage/Attributes.md">Attributes</a>.
+    *   See <a class="reference-link" href="../../Notes/Sorting%20Notes.md">Sorting Notes</a> for more information.
+*   **Copy note path to clipboard**
+    *   Copies a URL fragment representing the full path to this branch for a note, such as `#root/Hb2E70L7HPuf/4sRFgMZhYFts/2IVuShedRJ3U/LJVMvKXOFv7n`.
+    *   The URL to manually create <a class="reference-link" href="../../../Note%20Types/Text/Links.md">Links</a> within notes, or for note <a class="reference-link" href="../../Navigation">Navigation</a>.
+*   **Recent changes in subtree**
+    *   This will open <a class="reference-link" href="../Recent%20Changes.md">Recent Changes</a>, but filtered to only the changes related to this note or one of its descendants.
