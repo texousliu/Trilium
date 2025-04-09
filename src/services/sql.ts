@@ -278,7 +278,7 @@ function transactional<T>(func: (statement: Statement) => T) {
             ws.sendTransactionEntityChangesToAllClients();
         }
 
-        return ret;
+        return ret as T;
     } catch (e) {
         console.warn("Got error ", e);
         const entityChangeIds = cls.getAndClearEntityChangeIds();

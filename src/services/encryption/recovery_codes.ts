@@ -27,7 +27,7 @@ function getRecoveryCodes() {
         return []
     }
 
-    return sql.transactional(() => {
+    return sql.transactional<string[]>(() => {
         const iv = Buffer.from(optionService.getOption('recoveryCodeInitialVector'), 'hex');
         const securityKey = Buffer.from(optionService.getOption('recoveryCodeSecurityKey'), 'hex');
         const encryptedRecoveryCodes = optionService.getOption('recoveryCodesEncrypted');
@@ -41,7 +41,7 @@ function getRecoveryCodes() {
 }
 
 function removeRecoveryCode(usedCode: string) {
-    const oldCodes: string[] = getRecoveryCodes();
+    const oldCodes = getRecoveryCodes();
     const today = new Date();
     oldCodes[oldCodes.indexOf(usedCode)] = today.toJSON().replace(/-/g, '/');
     setRecoveryCodes(oldCodes.toString());
@@ -55,7 +55,7 @@ function verifyRecoveryCode(recoveryCodeGuess: string) {
 
     const recoveryCodes = getRecoveryCodes();
     let loginSuccess = false;
-    recoveryCodes.forEach((recoveryCode: string) => {
+    recoveryCodes.forEach((recoveryCode) => {
         if (recoveryCodeGuess === recoveryCode) {
             removeRecoveryCode(recoveryCode);
             loginSuccess = true;
