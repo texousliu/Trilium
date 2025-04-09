@@ -1,7 +1,7 @@
-import axios from 'axios';
 import options from "../../services/options.js";
 import log from "../../services/log.js";
 import type { Request, Response } from "express";
+import { Ollama } from "ollama";
 
 /**
  * @swagger
@@ -40,19 +40,16 @@ async function listModels(req: Request, res: Response) {
     try {
         const baseUrl = req.query.baseUrl as string || await options.getOption('ollamaBaseUrl') || 'http://localhost:11434';
 
-        // Call Ollama API to get models
-        const response = await axios.get(`${baseUrl}/api/tags?format=json`, {
-            headers: { 'Content-Type': 'application/json' },
-            timeout: 10000
-        });
+        // Create Ollama client
+        const ollama = new Ollama({ host: baseUrl });
+        
+        // Call Ollama API to get models using the official client
+        const response = await ollama.list();
 
         // Return the models list
-        const models = response.data.models || [];
-
-        // Important: don't use "return res.send()" - just return the data
         return {
             success: true,
-            models: models
+            models: response.models || []
         };
     } catch (error: any) {
         log.error(`Error listing Ollama models: ${error.message || 'Unknown error'}`);

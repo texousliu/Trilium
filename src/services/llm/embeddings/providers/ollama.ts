@@ -4,15 +4,27 @@ import type { EmbeddingConfig } from "../embeddings_interface.js";
 import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../constants/provider_constants.js";
 import type { EmbeddingModelInfo } from "../../interfaces/embedding_interfaces.js";
+import { Ollama } from "ollama";
 
 /**
- * Ollama embedding provider implementation
+ * Ollama embedding provider implementation using the official Ollama client
  */
 export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
     name = "ollama";
+    private client: Ollama | null = null;
 
     constructor(config: EmbeddingConfig) {
         super(config);
+    }
+
+    /**
+     * Get the Ollama client instance
+     */
+    private getClient(): Ollama {
+        if (!this.client) {
+            this.client = new Ollama({ host: this.baseUrl });
+        }
+        return this.client;
     }
 
     /**
@@ -39,24 +51,13 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
      */
     private async fetchModelCapabilities(modelName: string): Promise<EmbeddingModelInfo | null> {
         try {
-            // First try the /api/show endpoint which has detailed model information
-            const url = new URL(`${this.baseUrl}/api/show`);
-            url.searchParams.append('name', modelName);
+            const client = this.getClient();
+            
+            // Get model info using the client's show method
+            const modelData = await client.show({ model: modelName });
 
-            const showResponse = await fetch(url, {
-                method: 'GET',
-                headers: { "Content-Type": "application/json" },
-                signal: AbortSignal.timeout(10000)
-            });
-
-            if (!showResponse.ok) {
-                throw new Error(`HTTP error! status: ${showResponse.status}`);
-            }
-
-            const data = await showResponse.json();
-
-            if (data && data.parameters) {
-                const params = data.parameters;
+            if (modelData && modelData.parameters) {
+                const params = modelData.parameters as any;
                 // Extract context length from parameters (different models might use different parameter names)
                 const contextWindow = params.context_length ||
                                      params.num_ctx ||
@@ -66,7 +67,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
                 // Some models might provide embedding dimensions
                 const embeddingDimension = params.embedding_length || params.dim || null;
 
-                log.info(`Fetched Ollama model info from API for ${modelName}: context window ${contextWindow}`);
+                log.info(`Fetched Ollama model info for ${modelName}: context window ${contextWindow}`);
 
                 return {
                     name: modelName,
@@ -76,7 +77,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
                 };
             }
         } catch (error: any) {
-            log.info(`Could not fetch model info from Ollama show API: ${error.message}. Will try embedding test.`);
+            log.info(`Could not fetch model info from Ollama API: ${error.message}. Will try embedding test.`);
             // We'll fall back to embedding test if this fails
         }
 
@@ -162,26 +163,20 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
      * Detect embedding dimension by making a test API call
      */
     private async detectEmbeddingDimension(modelName: string): Promise<number> {
-        const testResponse = await fetch(`${this.baseUrl}/api/embeddings`, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
+        try {
+            const client = this.getClient();
+            const embedResponse = await client.embeddings({
                 model: modelName,
                 prompt: "Test"
-            }),
-            signal: AbortSignal.timeout(10000)
-        });
-
-        if (!testResponse.ok) {
-            throw new Error(`HTTP error! status: ${testResponse.status}`);
-        }
-
-        const data = await testResponse.json();
-
-        if (data && Array.isArray(data.embedding)) {
-            return data.embedding.length;
-        } else {
-            throw new Error("Could not detect embedding dimensions");
+            });
+            
+            if (embedResponse && Array.isArray(embedResponse.embedding)) {
+                return embedResponse.embedding.length;
+            } else {
+                throw new Error("Could not detect embedding dimensions");
+            }
+        } catch (error) {
+            throw new Error(`Failed to detect embedding dimensions: ${error}`);
         }
     }
 
@@ -218,26 +213,15 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
                 const charLimit = (modelInfo.contextWidth || 8192) * 4; // Rough estimate: avg 4 chars per token
                 const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
 
-                const response = await fetch(`${this.baseUrl}/api/embeddings`, {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        model: modelName,
-                        prompt: trimmedText,
-                        format: "json"
-                    }),
-                    signal: AbortSignal.timeout(60000) // Increased timeout for larger texts (60 seconds)
+                const client = this.getClient();
+                const response = await client.embeddings({
+                    model: modelName,
+                    prompt: trimmedText
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data && Array.isArray(data.embedding)) {
+                if (response && Array.isArray(response.embedding)) {
                     // Success! Return the embedding
-                    return new Float32Array(data.embedding);
+                    return new Float32Array(response.embedding);
                 } else {
                     throw new Error("Unexpected response structure from Ollama API");
                 }

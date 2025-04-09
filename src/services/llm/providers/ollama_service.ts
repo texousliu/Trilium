@@ -1,45 +1,13 @@
 import options from '../../options.js';
 import { BaseAIService } from '../base_ai_service.js';
 import type { Message, ChatCompletionOptions, ChatResponse } from '../ai_interface.js';
-import sanitizeHtml from 'sanitize-html';
 import { OllamaMessageFormatter } from '../formatters/ollama_formatter.js';
 import log from '../../log.js';
 import type { ToolCall } from '../tools/tool_interfaces.js';
 import toolRegistry from '../tools/tool_registry.js';
 import type { OllamaOptions } from './provider_options.js';
 import { getOllamaOptions } from './providers.js';
-
-interface OllamaFunctionArguments {
-    [key: string]: any;
-}
-
-interface OllamaFunctionCall {
-    function: {
-        name: string;
-        arguments: OllamaFunctionArguments | string;
-    };
-    id?: string;
-}
-
-interface OllamaMessage {
-    role: string;
-    content: string;
-    tool_calls?: OllamaFunctionCall[];
-}
-
-interface OllamaResponse {
-    model: string;
-    created_at: string;
-    message: OllamaMessage;
-    done: boolean;
-    done_reason?: string;
-    total_duration: number;
-    load_duration: number;
-    prompt_eval_count: number;
-    prompt_eval_duration: number;
-    eval_count: number;
-    eval_duration: number;
-}
+import { Ollama, type ChatRequest, type ChatResponse as OllamaChatResponse } from 'ollama';
 
 // Add an interface for tool execution feedback status
 interface ToolExecutionStatus {
@@ -52,6 +20,7 @@ interface ToolExecutionStatus {
 
 export class OllamaService extends BaseAIService {
     private formatter: OllamaMessageFormatter;
+    private client: Ollama | null = null;
 
     constructor() {
         super('Ollama');
@@ -60,6 +29,17 @@ export class OllamaService extends BaseAIService {
 
     isAvailable(): boolean {
         return super.isAvailable() && !!options.getOption('ollamaBaseUrl');
+    }
+
+    private getClient(): Ollama {
+        if (!this.client) {
+            const baseUrl = options.getOption('ollamaBaseUrl');
+            if (!baseUrl) {
+                throw new Error('Ollama base URL is not configured');
+            }
+            this.client = new Ollama({ host: baseUrl });
+        }
+        return this.client;
     }
 
     async generateChatCompletion(messages: Message[], opts: ChatCompletionOptions = {}): Promise<ChatResponse> {
@@ -108,79 +88,39 @@ export class OllamaService extends BaseAIService {
                 log.info(`Sending to Ollama with formatted messages: ${messagesToSend.length}`);
             }
 
-            // Build request body base
-            const requestBody: any = {
-                model: providerOptions.model,
-                messages: messagesToSend
-            };
-
-            // Debug logging for stream option
-            log.info(`Stream option in providerOptions: ${providerOptions.stream}`);
-            log.info(`Stream option type: ${typeof providerOptions.stream}`);
-
-            // Handle streaming in a way that respects the provided option but ensures consistency:
-            // - If explicitly true, set to true
-            // - If explicitly false, set to false
-            // - If undefined, default to false unless we have a streamCallback
-            if (providerOptions.stream !== undefined) {
-                // Explicit value provided - respect it
-                requestBody.stream = providerOptions.stream === true;
-                log.info(`Stream explicitly provided in options, set to: ${requestBody.stream}`);
-            } else if (opts.streamCallback) {
-                // No explicit value but we have a stream callback - enable streaming
-                requestBody.stream = true;
-                log.info(`Stream not explicitly set but streamCallback provided, enabling streaming`);
-            } else {
-                // Default to false
-                requestBody.stream = false;
-                log.info(`Stream not explicitly set and no streamCallback, defaulting to false`);
-            }
+            // Log request details
+            log.info(`========== OLLAMA API REQUEST ==========`);
+            log.info(`Model: ${providerOptions.model}, Messages: ${messagesToSend.length}`);
+            log.info(`Stream: ${opts.streamCallback ? true : false}`);
             
-            // Log additional information about the streaming context
-            log.info(`Streaming context: Will stream to client: ${typeof opts.streamCallback === 'function'}`);
-            
-            // If we have a streaming callback but the stream flag isn't set for some reason, warn about it
-            if (typeof opts.streamCallback === 'function' && !requestBody.stream) {
-                log.info(`WARNING: Stream callback provided but stream=false in request. This may cause streaming issues.`);
-            }
-
-            // Add options object if provided
-            if (providerOptions.options) {
-                requestBody.options = { ...providerOptions.options };
-            }
-
-            // Add tools if enabled
+            // Get tools if enabled
+            let tools = [];
             if (providerOptions.enableTools !== false) {
-                // Use provided tools or get from registry
                 try {
-                    requestBody.tools = providerOptions.tools && providerOptions.tools.length > 0
+                    tools = providerOptions.tools && providerOptions.tools.length > 0
                         ? providerOptions.tools
                         : toolRegistry.getAllToolDefinitions();
 
                     // Handle empty tools array
-                    if (requestBody.tools.length === 0) {
+                    if (tools.length === 0) {
                         log.info('No tools found, attempting to initialize tools...');
                         const toolInitializer = await import('../tools/tool_initializer.js');
                         await toolInitializer.default.initializeTools();
-                        requestBody.tools = toolRegistry.getAllToolDefinitions();
-                        log.info(`After initialization: ${requestBody.tools.length} tools available`);
+                        tools = toolRegistry.getAllToolDefinitions();
+                        log.info(`After initialization: ${tools.length} tools available`);
+                    }
+
+                    if (tools.length > 0) {
+                        log.info(`Sending ${tools.length} tool definitions to Ollama`);
                     }
                 } catch (error: any) {
                     log.error(`Error preparing tools: ${error.message || String(error)}`);
-                    requestBody.tools = []; // Empty fallback
+                    tools = []; // Empty fallback
                 }
             }
 
-            // Log request details
-            log.info(`========== OLLAMA API REQUEST ==========`);
-            log.info(`Model: ${requestBody.model}, Messages: ${requestBody.messages.length}, Tools: ${requestBody.tools ? requestBody.tools.length : 0}`);
-            log.info(`Stream: ${requestBody.stream || false}, JSON response expected: ${providerOptions.expectsJsonResponse}`);
-            if (requestBody.options) {
-                log.info(`Options: ${JSON.stringify(requestBody.options)}`);
-            }
-
             // Check message structure and log detailed information about each message
-            requestBody.messages.forEach((msg: any, index: number) => {
+            messagesToSend.forEach((msg: any, index: number) => {
                 const keys = Object.keys(msg);
                 log.info(`Message ${index}, Role: ${msg.role}, Keys: ${keys.join(', ')}`);
 
@@ -194,16 +134,7 @@ export class OllamaService extends BaseAIService {
 
                 // Log tool-related details
                 if (keys.includes('tool_calls')) {
-                    log.info(`Message ${index} has ${msg.tool_calls.length} tool calls:`);
-                    msg.tool_calls.forEach((call: any, callIdx: number) => {
-                        log.info(`  Tool call ${callIdx}: ${call.function?.name || 'unknown'}, ID: ${call.id || 'unspecified'}`);
-                        if (call.function?.arguments) {
-                            const argsPreview = typeof call.function.arguments === 'string'
-                                ? call.function.arguments.substring(0, 100)
-                                : JSON.stringify(call.function.arguments).substring(0, 100);
-                            log.info(`    Arguments: ${argsPreview}...`);
-                        }
-                    });
+                    log.info(`Message ${index} has ${msg.tool_calls.length} tool calls`);
                 }
 
                 if (keys.includes('tool_call_id')) {
@@ -215,241 +146,168 @@ export class OllamaService extends BaseAIService {
                 }
             });
 
-            // Log tool definitions
-            if (requestBody.tools && requestBody.tools.length > 0) {
-                log.info(`Sending ${requestBody.tools.length} tool definitions:`);
-                requestBody.tools.forEach((tool: any, toolIdx: number) => {
-                    log.info(`  Tool ${toolIdx}: ${tool.function?.name || 'unnamed'}`);
-                    if (tool.function?.description) {
-                        log.info(`    Description: ${tool.function.description.substring(0, 100)}...`);
-                    }
-                    if (tool.function?.parameters) {
-                        const paramNames = tool.function.parameters.properties
-                            ? Object.keys(tool.function.parameters.properties)
-                            : [];
-                        log.info(`    Parameters: ${paramNames.join(', ')}`);
-                    }
-                });
-            }
-
-            // Log full request body (with improved logging for debug purposes)
-            const requestStr = JSON.stringify(requestBody);
-            log.info(`========== FULL OLLAMA REQUEST ==========`);
-
-            // Log request in manageable chunks
-            log.info(`Full request: ${requestStr}`);
-            log.info(`========== END FULL OLLAMA REQUEST ==========`);
-
-            // Send the request
-            const response = await fetch(`${providerOptions.baseUrl}/api/chat`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
-            });
-
-            if (!response.ok) {
-                const errorBody = await response.text();
-                log.error(`Ollama API error: ${response.status} ${response.statusText} - ${errorBody}`);
-                throw new Error(`Ollama API error: ${response.status} ${response.statusText}`);
-            }
-
-            const data: OllamaResponse = await response.json();
-
-            // Log response details
-            log.info(`========== OLLAMA API RESPONSE ==========`);
-            log.info(`Model: ${data.model}, Content length: ${data.message.content.length} chars`);
-            log.info(`Tokens: ${data.prompt_eval_count} prompt, ${data.eval_count} completion, ${data.prompt_eval_count + data.eval_count} total`);
-            log.info(`Duration: ${data.total_duration}ns total, ${data.prompt_eval_duration}ns prompt, ${data.eval_duration}ns completion`);
-            log.info(`Done: ${data.done}, Reason: ${data.done_reason || 'not specified'}`);
-
-            // Log content preview
-            const contentPreview = data.message.content && data.message.content.length > 300
-                ? `${data.message.content.substring(0, 300)}...`
-                : data.message.content;
-            log.info(`Response content: ${contentPreview}`);
-
-            // Log the full raw response for debugging
-            log.info(`========== FULL OLLAMA RESPONSE ==========`);
-            log.info(`Raw response object: ${JSON.stringify(data)}`);
-
-            // Handle the response and extract tool calls if present
-            const chatResponse: ChatResponse = {
-                text: data.message.content,
-                model: data.model,
-                provider: this.getName(),
-                usage: {
-                    promptTokens: data.prompt_eval_count,
-                    completionTokens: data.eval_count,
-                    totalTokens: data.prompt_eval_count + data.eval_count
+            // Get client instance
+            const client = this.getClient();
+            
+            // Convert our message format to Ollama's format
+            const convertedMessages = messagesToSend.map(msg => {
+                const converted: any = {
+                    role: msg.role,
+                    content: msg.content
+                };
+                
+                if (msg.tool_calls) {
+                    converted.tool_calls = msg.tool_calls.map(tc => {
+                        // For Ollama, arguments must be an object, not a string
+                        let processedArgs = tc.function.arguments;
+                        
+                        // If arguments is a string, try to parse it as JSON
+                        if (typeof processedArgs === 'string') {
+                            try {
+                                processedArgs = JSON.parse(processedArgs);
+                            } catch (e) {
+                                // If parsing fails, create an object with a single property
+                                log.info(`Could not parse tool arguments as JSON: ${e}`);
+                                processedArgs = { raw: processedArgs };
+                            }
+                        }
+                        
+                        return {
+                            id: tc.id,
+                            function: {
+                                name: tc.function.name,
+                                arguments: processedArgs
+                            }
+                        };
+                    });
                 }
+                
+                if (msg.tool_call_id) {
+                    converted.tool_call_id = msg.tool_call_id;
+                }
+                
+                if (msg.name) {
+                    converted.name = msg.name;
+                }
+                
+                return converted;
+            });
+            
+            // Prepare base request options
+            const baseRequestOptions = {
+                model: providerOptions.model,
+                messages: convertedMessages,
+                options: providerOptions.options,
+                // Add tools if available
+                tools: tools.length > 0 ? tools : undefined
             };
 
-            // Add tool calls if present
-            if (data.message.tool_calls && data.message.tool_calls.length > 0) {
-                log.info(`========== OLLAMA TOOL CALLS DETECTED ==========`);
-                log.info(`Ollama response includes ${data.message.tool_calls.length} tool calls`);
-
-                // Log detailed information about each tool call
-                const transformedToolCalls: ToolCall[] = [];
-
-                // Log detailed information about the tool calls in the response
-                log.info(`========== OLLAMA TOOL CALLS IN RESPONSE ==========`);
-                data.message.tool_calls.forEach((toolCall, index) => {
-                    log.info(`Tool call ${index + 1}:`);
-                    log.info(`  Name: ${toolCall.function?.name || 'unknown'}`);
-                    log.info(`  ID: ${toolCall.id || `auto-${index + 1}`}`);
-
-                    // Generate a unique ID if none is provided
-                    const id = toolCall.id || `tool-call-${Date.now()}-${index}`;
-
-                    // Handle arguments based on their type
-                    let processedArguments: Record<string, any> | string;
-
-                    if (typeof toolCall.function.arguments === 'string') {
-                        // Log raw string arguments in full for debugging
-                        log.info(`  Raw string arguments: ${toolCall.function.arguments}`);
-
-                        // Try to parse JSON string arguments
-                        try {
-                            processedArguments = JSON.parse(toolCall.function.arguments);
-                            log.info(`  Successfully parsed arguments to object with keys: ${Object.keys(processedArguments).join(', ')}`);
-                            log.info(`  Parsed argument values:`);
-                            Object.entries(processedArguments).forEach(([key, value]) => {
-                                const valuePreview = typeof value === 'string'
-                                    ? (value.length > 100 ? `${value.substring(0, 100)}...` : value)
-                                    : JSON.stringify(value);
-                                log.info(`    ${key}: ${valuePreview}`);
-                            });
-                        } catch (e: unknown) {
-                            // If parsing fails, keep as string and log the error
-                            processedArguments = toolCall.function.arguments;
-                            const errorMessage = e instanceof Error ? e.message : String(e);
-                            log.info(`  Could not parse arguments as JSON: ${errorMessage}`);
-                            log.info(`  Keeping as string: ${processedArguments.substring(0, 200)}${processedArguments.length > 200 ? '...' : ''}`);
-
-                            // Try to clean and parse again with more aggressive methods
-                            try {
-                                const cleaned = toolCall.function.arguments
-                                    .replace(/^['"]|['"]$/g, '') // Remove surrounding quotes
-                                    .replace(/\\"/g, '"')        // Replace escaped quotes
-                                    .replace(/([{,])\s*'([^']+)'\s*:/g, '$1"$2":') // Replace single quotes around property names
-                                    .replace(/([{,])\s*(\w+)\s*:/g, '$1"$2":');    // Add quotes around unquoted property names
-
-                                log.info(`  Attempting to parse cleaned argument: ${cleaned}`);
-                                const reparseArg = JSON.parse(cleaned);
-                                log.info(`  Successfully parsed cleaned argument with keys: ${Object.keys(reparseArg).join(', ')}`);
-                                // Use reparsed arguments if successful
-                                processedArguments = reparseArg;
-                            } catch (cleanErr: unknown) {
-                                const cleanErrMessage = cleanErr instanceof Error ? cleanErr.message : String(cleanErr);
-                                log.info(`  Failed to parse cleaned arguments: ${cleanErrMessage}`);
-                            }
-                        }
-                    } else {
-                        // If it's already an object, use it directly and log details
-                        processedArguments = toolCall.function.arguments;
-                        log.info(`  Object arguments with keys: ${Object.keys(processedArguments).join(', ')}`);
-                        log.info(`  Argument values:`);
-                        Object.entries(processedArguments).forEach(([key, value]) => {
-                            const valuePreview = typeof value === 'string'
-                                ? (value.length > 100 ? `${value.substring(0, 100)}...` : value)
-                                : JSON.stringify(value);
-                            log.info(`    ${key}: ${valuePreview}`);
-                        });
+            // Handle streaming
+            if (opts.streamCallback) {
+                let responseText = '';
+                let responseToolCalls: any[] = [];
+                
+                log.info(`Using streaming mode with Ollama client`);
+                
+                let streamResponse: OllamaChatResponse | null = null;
+                
+                // Create streaming request
+                const streamingRequest = {
+                    ...baseRequestOptions,
+                    stream: true as const // Use const assertion to fix the type
+                };
+                
+                // Get the async iterator
+                const streamIterator = await client.chat(streamingRequest);
+                
+                // Process each chunk
+                for await (const chunk of streamIterator) {
+                    // Save the last chunk for final stats
+                    streamResponse = chunk;
+                    
+                    // Accumulate text
+                    if (chunk.message?.content) {
+                        responseText += chunk.message.content;
                     }
-
-                    // If arguments are still empty or invalid, create a default argument
-                    if (!processedArguments ||
-                        (typeof processedArguments === 'object' && Object.keys(processedArguments).length === 0)) {
-                        log.info(`  Empty or invalid arguments for tool ${toolCall.function.name}, creating default`);
-
-                        // Get tool definition to determine required parameters
-                        const allToolDefs = toolRegistry.getAllToolDefinitions();
-                        const toolDef = allToolDefs.find(t => t.function?.name === toolCall.function.name);
-
-                        if (toolDef && toolDef.function && toolDef.function.parameters) {
-                            const params = toolDef.function.parameters;
-                            processedArguments = {};
-
-                            // Create default values for required parameters
-                            if (params.required && Array.isArray(params.required)) {
-                                params.required.forEach((param: string) => {
-                                    // Extract text from the response to use as default value
-                                    const defaultValue = data.message.content?.includes(param)
-                                        ? extractValueFromText(data.message.content, param)
-                                        : "default";
-
-                                    (processedArguments as Record<string, any>)[param] = defaultValue;
-                                    log.info(`    Added default value for required param ${param}: ${defaultValue}`);
-                                });
-                            }
-                        }
+                    
+                    // Check for tool calls
+                    if (chunk.message?.tool_calls && chunk.message.tool_calls.length > 0) {
+                        responseToolCalls = [...chunk.message.tool_calls];
                     }
-
-                    // Convert to our standard ToolCall format
-                    transformedToolCalls.push({
-                        id,
-                        type: 'function',
-                        function: {
-                            name: toolCall.function.name,
-                            arguments: processedArguments
-                        }
-                    });
-                });
-
-                // Add transformed tool calls to response
-                chatResponse.tool_calls = transformedToolCalls;
-                log.info(`Transformed ${transformedToolCalls.length} tool calls for execution`);
-                log.info(`Tool calls after transformation: ${JSON.stringify(chatResponse.tool_calls)}`);
-
-                // Ensure tool_calls is properly exposed and formatted
-                // This is to make sure the pipeline can detect and execute the tools
-                if (transformedToolCalls.length > 0) {
-                    // Make sure the tool_calls are exposed in the exact format expected by pipeline
-                    chatResponse.tool_calls = transformedToolCalls.map(tc => ({
-                        id: tc.id,
-                        type: 'function',
-                        function: {
-                            name: tc.function.name,
-                            arguments: tc.function.arguments
-                        }
-                    }));
-
-                    // If the content is empty, use a placeholder to avoid issues
-                    if (!chatResponse.text) {
-                        chatResponse.text = "Processing your request...";
+                    
+                    // Call the callback with the current chunk content
+                    if (opts.streamCallback) {
+                        // Original callback expects text content, isDone flag, and optional original chunk
+                        opts.streamCallback(
+                            chunk.message?.content || '', 
+                            !!chunk.done, 
+                            chunk
+                        );
                     }
-
-                    log.info(`Final tool_calls format for pipeline: ${JSON.stringify(chatResponse.tool_calls)}`);
                 }
-                log.info(`========== END OLLAMA TOOL CALLS ==========`);
+                
+                // Create the final response after streaming is complete
+                return {
+                    text: responseText,
+                    model: providerOptions.model,
+                    provider: this.getName(),
+                    tool_calls: this.transformToolCalls(responseToolCalls),
+                    usage: {
+                        promptTokens: streamResponse?.prompt_eval_count || 0,
+                        completionTokens: streamResponse?.eval_count || 0,
+                        totalTokens: (streamResponse?.prompt_eval_count || 0) + (streamResponse?.eval_count || 0)
+                    }
+                };
             } else {
-                log.info(`========== NO OLLAMA TOOL CALLS DETECTED ==========`);
-                log.info(`Checking raw message response format: ${JSON.stringify(data.message)}`);
-
-                // Attempt to analyze the response to see if it contains tool call intent
-                const responseText = data.message.content || '';
-                if (responseText.includes('search_notes') ||
-                    responseText.includes('create_note') ||
-                    responseText.includes('function') ||
-                    responseText.includes('tool')) {
-                    log.info(`Response may contain tool call intent but isn't formatted properly`);
-                    log.info(`Content that might indicate tool call intent: ${responseText.substring(0, 500)}`);
+                // Non-streaming request
+                log.info(`Using non-streaming mode with Ollama client`);
+                
+                // Create non-streaming request
+                const nonStreamingRequest = {
+                    ...baseRequestOptions,
+                    stream: false as const // Use const assertion for type safety
+                };
+                
+                const response = await client.chat(nonStreamingRequest);
+                
+                // Log response details
+                log.info(`========== OLLAMA API RESPONSE ==========`);
+                log.info(`Model: ${response.model}, Content length: ${response.message?.content?.length || 0} chars`);
+                log.info(`Tokens: ${response.prompt_eval_count || 0} prompt, ${response.eval_count || 0} completion, ${(response.prompt_eval_count || 0) + (response.eval_count || 0)} total`);
+                
+                // Log content preview
+                const contentPreview = response.message?.content && response.message.content.length > 300
+                    ? `${response.message.content.substring(0, 300)}...`
+                    : response.message?.content || '';
+                log.info(`Response content: ${contentPreview}`);
+                
+                // Handle the response and extract tool calls if present
+                const chatResponse: ChatResponse = {
+                    text: response.message?.content || '',
+                    model: response.model || providerOptions.model,
+                    provider: this.getName(),
+                    usage: {
+                        promptTokens: response.prompt_eval_count || 0,
+                        completionTokens: response.eval_count || 0,
+                        totalTokens: (response.prompt_eval_count || 0) + (response.eval_count || 0)
+                    }
+                };
+                
+                // Add tool calls if present
+                if (response.message?.tool_calls && response.message.tool_calls.length > 0) {
+                    log.info(`Ollama response includes ${response.message.tool_calls.length} tool calls`);
+                    chatResponse.tool_calls = this.transformToolCalls(response.message.tool_calls);
+                    log.info(`Transformed tool calls: ${JSON.stringify(chatResponse.tool_calls)}`);
                 }
+                
+                log.info(`========== END OLLAMA RESPONSE ==========`);
+                return chatResponse;
             }
-
-            log.info(`========== END OLLAMA RESPONSE ==========`);
-            return chatResponse;
         } catch (error: any) {
             // Enhanced error handling with detailed diagnostics
             log.error(`Ollama service error: ${error.message || String(error)}`);
             if (error.stack) {
                 log.error(`Error stack trace: ${error.stack}`);
-            }
-
-            if (error.message && error.message.includes('Cannot read properties of null')) {
-                log.error('Tool registry connection issue detected. Tool may not be properly registered or available.');
-                log.error('Check tool registry initialization and tool availability before execution.');
             }
 
             // Propagate the original error
@@ -458,29 +316,39 @@ export class OllamaService extends BaseAIService {
     }
 
     /**
-     * Gets the context window size in tokens for a given model
-     * @param modelName The name of the model
-     * @returns The context window size in tokens
+     * Transform Ollama tool calls to the standard format expected by the pipeline
      */
-    private async getModelContextWindowTokens(modelName: string): Promise<number> {
-        try {
-            // Import model capabilities service
-            const modelCapabilitiesService = (await import('../model_capabilities_service.js')).default;
-
-            // Get model capabilities
-            const modelCapabilities = await modelCapabilitiesService.getModelCapabilities(modelName);
-
-            // Get context window tokens with a default fallback
-            const contextWindowTokens = modelCapabilities.contextWindowTokens || 8192;
-
-            log.info(`Using context window size for ${modelName}: ${contextWindowTokens} tokens`);
-
-            return contextWindowTokens;
-        } catch (error: any) {
-            // Log error but provide a reasonable default
-            log.error(`Error getting model context window: ${error.message}`);
-            return 8192; // Default to 8192 tokens if there's an error
+    private transformToolCalls(toolCalls: any[] | undefined): ToolCall[] {
+        if (!toolCalls || !Array.isArray(toolCalls) || toolCalls.length === 0) {
+            return [];
         }
+        
+        return toolCalls.map((toolCall, index) => {
+            // Generate a unique ID if none is provided
+            const id = toolCall.id || `tool-call-${Date.now()}-${index}`;
+            
+            // Handle arguments based on their type
+            let processedArguments: Record<string, any> | string = toolCall.function?.arguments || {};
+            
+            if (typeof processedArguments === 'string') {
+                try {
+                    processedArguments = JSON.parse(processedArguments);
+                } catch (error) {
+                    // If we can't parse as JSON, create a simple object
+                    log.info(`Could not parse tool arguments as JSON in transformToolCalls: ${error}`);
+                    processedArguments = { raw: processedArguments };
+                }
+            }
+            
+            return {
+                id,
+                type: 'function',
+                function: {
+                    name: toolCall.function?.name || '',
+                    arguments: processedArguments
+                }
+            };
+        });
     }
 
     /**
@@ -525,28 +393,4 @@ export class OllamaService extends BaseAIService {
         log.info(`Added tool execution feedback: ${toolExecutionStatus.length} statuses`);
         return updatedMessages;
     }
-}
-
-/**
- * Simple utility to extract a value from text based on a parameter name
- * @param text The text to search in
- * @param param The parameter name to look for
- * @returns Extracted value or default
- */
-function extractValueFromText(text: string, param: string): string {
-    // Simple regex to find "param: value" or "param = value" or "param value" patterns
-    const patterns = [
-        new RegExp(`${param}[\\s]*:[\\s]*["']?([^"',\\s]+)["']?`, 'i'),
-        new RegExp(`${param}[\\s]*=[\\s]*["']?([^"',\\s]+)["']?`, 'i'),
-        new RegExp(`${param}[\\s]+["']?([^"',\\s]+)["']?`, 'i')
-    ];
-
-    for (const pattern of patterns) {
-        const match = text.match(pattern);
-        if (match && match[1]) {
-            return match[1];
-        }
-    }
-
-    return "default_value";
 }

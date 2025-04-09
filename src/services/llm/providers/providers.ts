@@ -566,24 +566,28 @@ export async function getOllamaOptions(
 }
 
 /**
- * Get context window size for Ollama model
+ * Get context window size for Ollama model using the official client
  */
 async function getOllamaModelContextWindow(modelName: string): Promise<number> {
     try {
         const baseUrl = options.getOption('ollamaBaseUrl');
+        
+        if (!baseUrl) {
+            throw new Error('Ollama base URL is not configured');
+        }
+        
+        // Use the official Ollama client
+        const { Ollama } = await import('ollama');
+        const client = new Ollama({ host: baseUrl });
 
         // Try to get model information from Ollama API
-        const response = await fetch(`${baseUrl}/api/show`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: modelName })
-        });
+        const modelData = await client.show({ model: modelName });
 
-        if (response.ok) {
-            const data = await response.json();
-            // Get context window from model parameters
-            if (data && data.parameters && data.parameters.num_ctx) {
-                return data.parameters.num_ctx;
+        // Get context window from model parameters
+        if (modelData && modelData.parameters) {
+            const params = modelData.parameters as any;
+            if (params.num_ctx) {
+                return params.num_ctx;
             }
         }
 
