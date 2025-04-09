@@ -366,12 +366,19 @@ export default class LlmChatPanel extends BasicWidget {
                 showThinking
             };
 
-            // First try to get a direct response
-            const handled = await this.handleDirectResponse(messageParams);
-            if (handled) return;
+            // First try to use streaming (preferred method)
+            try {
+                await this.setupStreamingResponse(messageParams);
+            } catch (streamingError) {
+                console.warn("Streaming request failed, falling back to direct response:", streamingError);
 
-            // If no direct response, set up streaming
-            await this.setupStreamingResponse(messageParams);
+                // If streaming fails, fall back to direct response
+                const handled = await this.handleDirectResponse(messageParams);
+                if (!handled) {
+                    // If neither method works, show an error
+                    throw new Error("Failed to get response from server");
+                }
+            }
         } catch (error) {
             this.handleError(error as Error);
         }
@@ -402,23 +409,28 @@ export default class LlmChatPanel extends BasicWidget {
      * @returns true if response was handled, false if streaming should be used
      */
     private async handleDirectResponse(messageParams: any): Promise<boolean> {
-        // Send the message via POST request
-        const postResponse = await server.post<any>(`llm/sessions/${this.sessionId}/messages`, messageParams);
+        try {
+            // Send the message via POST request
+            const postResponse = await server.post<any>(`llm/sessions/${this.sessionId}/messages`, messageParams);
 
-        // If the POST request returned content directly, display it
-        if (postResponse && postResponse.content) {
-            this.processAssistantResponse(postResponse.content);
+            // If the POST request returned content directly, display it
+            if (postResponse && postResponse.content) {
+                this.processAssistantResponse(postResponse.content);
 
-            // If there are sources, show them
-            if (postResponse.sources && postResponse.sources.length > 0) {
-                this.showSources(postResponse.sources);
+                // If there are sources, show them
+                if (postResponse.sources && postResponse.sources.length > 0) {
+                    this.showSources(postResponse.sources);
+                }
+
+                this.hideLoadingIndicator();
+                return true;
             }
 
-            this.hideLoadingIndicator();
-            return true;
+            return false;
+        } catch (error) {
+            console.error("Error with direct response:", error);
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -444,36 +456,85 @@ export default class LlmChatPanel extends BasicWidget {
     /**
      * Set up streaming response from the server
      */
-    private async setupStreamingResponse(messageParams: any) {
+    private async setupStreamingResponse(messageParams: any): Promise<void> {
         const useAdvancedContext = messageParams.useAdvancedContext;
         const showThinking = messageParams.showThinking;
 
         // Set up streaming via EventSource
         const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&useAdvancedContext=${useAdvancedContext}&showThinking=${showThinking}`;
-        const source = new EventSource(streamUrl);
 
-        let assistantResponse = '';
-        let receivedAnyContent = false;
-        let timeoutId: number | null = null;
+        return new Promise((resolve, reject) => {
+            const source = new EventSource(streamUrl);
+            let assistantResponse = '';
+            let receivedAnyContent = false;
+            let timeoutId: number | null = null;
 
-        // Set up timeout for streaming response
-        timeoutId = this.setupStreamingTimeout(source);
+            // Set up timeout for streaming response
+            timeoutId = this.setupStreamingTimeout(source);
 
-        // Handle streaming response
-        source.onmessage = (event) => this.handleStreamingMessage(
-            event,
-            source,
-            timeoutId,
-            assistantResponse,
-            receivedAnyContent
-        );
+            // Handle streaming response
+            source.onmessage = (event) => {
+                try {
+                    if (event.data === '[DONE]') {
+                        // Stream completed successfully
+                        this.handleStreamingComplete(source, timeoutId, receivedAnyContent, assistantResponse);
+                        resolve();
+                        return;
+                    }
 
-        // Handle streaming errors
-        source.onerror = () => this.handleStreamingError(
-            source,
-            timeoutId,
-            receivedAnyContent
-        );
+                    const data = JSON.parse(event.data);
+                    console.log("Received streaming data:", data);
+
+                    // Handle both content and error cases
+                    if (data.content) {
+                        receivedAnyContent = true;
+                        assistantResponse += data.content;
+
+                        // Update the UI with the accumulated response
+                        this.updateStreamingUI(assistantResponse);
+                    } else if (data.error) {
+                        // Handle error message
+                        this.hideLoadingIndicator();
+                        this.addMessageToChat('assistant', `Error: ${data.error}`);
+
+                        if (timeoutId !== null) {
+                            window.clearTimeout(timeoutId);
+                        }
+
+                        source.close();
+                        reject(new Error(data.error));
+                        return;
+                    }
+
+                    // Scroll to the bottom
+                    this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+                } catch (e) {
+                    console.error('Error parsing SSE message:', e, 'Raw data:', event.data);
+                    reject(e);
+                }
+            };
+
+            // Handle streaming errors
+            source.onerror = (err) => {
+                console.error("EventSource error:", err);
+                source.close();
+                this.hideLoadingIndicator();
+
+                // Clear the timeout if there was an error
+                if (timeoutId !== null) {
+                    window.clearTimeout(timeoutId);
+                }
+
+                // Only reject if we haven't received any content yet
+                if (!receivedAnyContent) {
+                    reject(new Error('Error connecting to the LLM streaming service'));
+                } else {
+                    // If we've already received some content, consider it a successful but incomplete response
+                    this.handleStreamingComplete(source, timeoutId, receivedAnyContent, assistantResponse);
+                    resolve();
+                }
+            };
+        });
     }
 
     /**
@@ -490,51 +551,6 @@ export default class LlmChatPanel extends BasicWidget {
             this.processAssistantResponse(errorMessage);
             source.close();
         }, 10000);
-    }
-
-    /**
-     * Handle messages from the streaming response
-     */
-    private handleStreamingMessage(
-        event: MessageEvent,
-        source: EventSource,
-        timeoutId: number | null,
-        assistantResponse: string,
-        receivedAnyContent: boolean
-    ) {
-        if (event.data === '[DONE]') {
-            this.handleStreamingComplete(source, timeoutId, receivedAnyContent, assistantResponse);
-            return;
-        }
-
-        try {
-            const data = JSON.parse(event.data);
-            console.log("Received streaming data:", data); // Debug log
-
-            // Handle both content and error cases
-            if (data.content) {
-                receivedAnyContent = true;
-                assistantResponse += data.content;
-
-                // Update the UI with the accumulated response
-                this.updateStreamingUI(assistantResponse);
-            } else if (data.error) {
-                // Handle error message
-                this.hideLoadingIndicator();
-                this.addMessageToChat('assistant', `Error: ${data.error}`);
-                receivedAnyContent = true;
-                source.close();
-
-                if (timeoutId !== null) {
-                    window.clearTimeout(timeoutId);
-                }
-            }
-
-            // Scroll to the bottom
-            this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
-        } catch (e) {
-            console.error('Error parsing SSE message:', e, 'Raw data:', event.data);
-        }
     }
 
     /**
@@ -607,8 +623,9 @@ export default class LlmChatPanel extends BasicWidget {
 
         // Only show error message if we haven't received any content yet
         if (!receivedAnyContent) {
-            const connectionError = 'Error connecting to the LLM service. Please try again.';
-            this.processAssistantResponse(connectionError);
+            // Instead of automatically showing the error message in the chat,
+            // throw an error so the parent function can handle the fallback
+            throw new Error('Error connecting to the LLM streaming service');
         }
     }
 
