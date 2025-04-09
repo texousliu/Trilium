@@ -2,6 +2,9 @@ import options from '../../options.js';
 import { BaseAIService } from '../base_ai_service.js';
 import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
 import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
+import type { AnthropicOptions } from './provider_options.js';
+import { getAnthropicOptions } from './providers.js';
+import log from '../../log.js';
 
 interface AnthropicMessage {
     role: string;
@@ -22,42 +25,67 @@ export class AnthropicService extends BaseAIService {
             throw new Error('Anthropic service is not available. Check API key and AI settings.');
         }
 
-        const apiKey = options.getOption('anthropicApiKey');
-        const baseUrl = options.getOption('anthropicBaseUrl') || PROVIDER_CONSTANTS.ANTHROPIC.BASE_URL;
-        const model = opts.model || options.getOption('anthropicDefaultModel') || PROVIDER_CONSTANTS.ANTHROPIC.DEFAULT_MODEL;
+        // Get provider-specific options from the central provider manager
+        const providerOptions = getAnthropicOptions(opts);
 
-        const temperature = opts.temperature !== undefined
-            ? opts.temperature
-            : parseFloat(options.getOption('aiTemperature') || '0.7');
+        // Log provider metadata if available
+        if (providerOptions.providerMetadata) {
+            log.info(`Using model ${providerOptions.model} from provider ${providerOptions.providerMetadata.provider}`);
 
-        const systemPrompt = this.getSystemPrompt(opts.systemPrompt || options.getOption('aiSystemPrompt'));
+            // Log capabilities if available
+            const capabilities = providerOptions.providerMetadata.capabilities;
+            if (capabilities) {
+                log.info(`Model capabilities: ${JSON.stringify(capabilities)}`);
+            }
+        }
+
+        const systemPrompt = this.getSystemPrompt(providerOptions.systemPrompt || options.getOption('aiSystemPrompt'));
 
         // Format for Anthropic's API
         const formattedMessages = this.formatMessages(messages, systemPrompt);
 
+        // Store the formatted messages in the provider options for future reference
+        providerOptions.formattedMessages = formattedMessages;
+
         try {
             // Ensure base URL doesn't already include '/v1' and build the complete endpoint
-            const cleanBaseUrl = baseUrl.replace(/\/+$/, '').replace(/\/v1$/, '');
+            const cleanBaseUrl = providerOptions.baseUrl.replace(/\/+$/, '').replace(/\/v1$/, '');
             const endpoint = `${cleanBaseUrl}/v1/messages`;
 
             console.log(`Anthropic API endpoint: ${endpoint}`);
-            console.log(`Using model: ${model}`);
+            console.log(`Using model: ${providerOptions.model}`);
+
+            // Create request body directly from provider options
+            const requestBody: any = {
+                model: providerOptions.model,
+                messages: formattedMessages.messages,
+                system: formattedMessages.system,
+            };
+
+            // Extract API parameters from provider options
+            const apiParams = {
+                temperature: providerOptions.temperature,
+                max_tokens: providerOptions.max_tokens,
+                stream: providerOptions.stream,
+                top_p: providerOptions.top_p
+            };
+
+            // Merge API parameters, filtering out undefined values
+            Object.entries(apiParams).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    requestBody[key] = value;
+                }
+            });
 
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Api-Key': apiKey,
-                    'anthropic-version': PROVIDER_CONSTANTS.ANTHROPIC.API_VERSION,
-                    'anthropic-beta': PROVIDER_CONSTANTS.ANTHROPIC.BETA_VERSION
+                    'X-Api-Key': providerOptions.apiKey,
+                    'anthropic-version': providerOptions.apiVersion || PROVIDER_CONSTANTS.ANTHROPIC.API_VERSION,
+                    'anthropic-beta': providerOptions.betaVersion || PROVIDER_CONSTANTS.ANTHROPIC.BETA_VERSION
                 },
-                body: JSON.stringify({
-                    model,
-                    messages: formattedMessages.messages,
-                    system: formattedMessages.system,
-                    temperature,
-                    max_tokens: opts.maxTokens || 4000,
-                })
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {

@@ -2,6 +2,8 @@ import options from '../../options.js';
 import { BaseAIService } from '../base_ai_service.js';
 import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
 import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
+import type { OpenAIOptions } from './provider_options.js';
+import { getOpenAIOptions } from './providers.js';
 
 export class OpenAIService extends BaseAIService {
     constructor() {
@@ -17,14 +19,10 @@ export class OpenAIService extends BaseAIService {
             throw new Error('OpenAI service is not available. Check API key and AI settings.');
         }
 
-        const apiKey = options.getOption('openaiApiKey');
-        const baseUrl = options.getOption('openaiBaseUrl') || PROVIDER_CONSTANTS.OPENAI.BASE_URL;
-        const model = opts.model || options.getOption('openaiDefaultModel') || PROVIDER_CONSTANTS.OPENAI.DEFAULT_MODEL;
-        const temperature = opts.temperature !== undefined
-            ? opts.temperature
-            : parseFloat(options.getOption('aiTemperature') || '0.7');
+        // Get provider-specific options from the central provider manager
+        const providerOptions = getOpenAIOptions(opts);
 
-        const systemPrompt = this.getSystemPrompt(opts.systemPrompt || options.getOption('aiSystemPrompt'));
+        const systemPrompt = this.getSystemPrompt(providerOptions.systemPrompt || options.getOption('aiSystemPrompt'));
 
         // Ensure we have a system message
         const systemMessageExists = messages.some(m => m.role === 'system');
@@ -34,23 +32,52 @@ export class OpenAIService extends BaseAIService {
 
         try {
             // Fix endpoint construction - ensure we don't double up on /v1
-            const normalizedBaseUrl = baseUrl.replace(/\/+$/, '');
+            const normalizedBaseUrl = providerOptions.baseUrl.replace(/\/+$/, '');
             const endpoint = normalizedBaseUrl.includes('/v1')
                 ? `${normalizedBaseUrl}/chat/completions`
                 : `${normalizedBaseUrl}/v1/chat/completions`;
+
+            // Create request body directly from provider options
+            const requestBody: any = {
+                model: providerOptions.model,
+                messages: messagesWithSystem,
+            };
+
+            // Extract API parameters from provider options
+            const apiParams = {
+                temperature: providerOptions.temperature,
+                max_tokens: providerOptions.max_tokens,
+                stream: providerOptions.stream,
+                top_p: providerOptions.top_p,
+                frequency_penalty: providerOptions.frequency_penalty,
+                presence_penalty: providerOptions.presence_penalty
+            };
+
+
+
+            // Merge API parameters, filtering out undefined values
+            Object.entries(apiParams).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    requestBody[key] = value;
+                }
+            });
+
+            // Add tools if enabled
+            if (providerOptions.enableTools && providerOptions.tools && providerOptions.tools.length > 0) {
+                requestBody.tools = providerOptions.tools;
+            }
+
+            if (providerOptions.tool_choice) {
+                requestBody.tool_choice = providerOptions.tool_choice;
+            }
 
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
+                    'Authorization': `Bearer ${providerOptions.apiKey}`
                 },
-                body: JSON.stringify({
-                    model,
-                    messages: messagesWithSystem,
-                    temperature,
-                    max_tokens: opts.maxTokens,
-                })
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {
@@ -68,7 +95,8 @@ export class OpenAIService extends BaseAIService {
                     promptTokens: data.usage?.prompt_tokens,
                     completionTokens: data.usage?.completion_tokens,
                     totalTokens: data.usage?.total_tokens
-                }
+                },
+                tool_calls: data.choices[0].message.tool_calls
             };
         } catch (error) {
             console.error('OpenAI service error:', error);

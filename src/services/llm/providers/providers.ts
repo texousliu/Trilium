@@ -9,6 +9,14 @@ import { OpenAIEmbeddingProvider } from "../embeddings/providers/openai.js";
 import { OllamaEmbeddingProvider } from "../embeddings/providers/ollama.js";
 import { VoyageEmbeddingProvider } from "../embeddings/providers/voyage.js";
 import type { OptionDefinitions } from "../../options_interface.js";
+import type { ChatCompletionOptions } from '../ai_interface.js';
+import type { OpenAIOptions, AnthropicOptions, OllamaOptions, ModelMetadata } from './provider_options.js';
+import {
+    createOpenAIOptions,
+    createAnthropicOptions,
+    createOllamaOptions
+} from './provider_options.js';
+import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
 
 /**
  * Simple local embedding provider implementation
@@ -362,3 +370,238 @@ export default {
     getEmbeddingProviderConfigs,
     initializeDefaultProviders
 };
+
+/**
+ * Get OpenAI provider options from chat options and configuration
+ * Updated to use provider metadata approach
+ */
+export function getOpenAIOptions(
+    opts: ChatCompletionOptions = {}
+): OpenAIOptions {
+    try {
+        const apiKey = options.getOption('openaiApiKey');
+        if (!apiKey) {
+            throw new Error('OpenAI API key is not configured');
+        }
+
+        const baseUrl = options.getOption('openaiBaseUrl') || PROVIDER_CONSTANTS.OPENAI.BASE_URL;
+        const modelName = opts.model || options.getOption('openaiDefaultModel') || PROVIDER_CONSTANTS.OPENAI.DEFAULT_MODEL;
+
+        // Create provider metadata
+        const providerMetadata: ModelMetadata = {
+            provider: 'openai',
+            modelId: modelName,
+            displayName: modelName,
+            capabilities: {
+                supportsTools: modelName.includes('gpt-4') || modelName.includes('gpt-3.5-turbo'),
+                supportsVision: modelName.includes('vision') || modelName.includes('gpt-4-turbo') || modelName.includes('gpt-4o'),
+                supportsStreaming: true
+            }
+        };
+
+        // Get temperature from options or global setting
+        const temperature = opts.temperature !== undefined
+            ? opts.temperature
+            : parseFloat(options.getOption('aiTemperature') || '0.7');
+
+        return {
+            // Connection settings
+            apiKey,
+            baseUrl,
+
+            // Provider metadata
+            providerMetadata,
+
+            // API parameters
+            model: modelName,
+            temperature,
+            max_tokens: opts.maxTokens,
+            stream: opts.stream,
+            top_p: opts.topP,
+            frequency_penalty: opts.frequencyPenalty,
+            presence_penalty: opts.presencePenalty,
+            tools: opts.tools,
+
+            // Internal configuration
+            systemPrompt: opts.systemPrompt,
+            enableTools: opts.enableTools,
+        };
+    } catch (error) {
+        log.error(`Error creating OpenAI provider options: ${error}`);
+        throw error;
+    }
+}
+
+/**
+ * Get Anthropic provider options from chat options and configuration
+ * Updated to use provider metadata approach
+ */
+export function getAnthropicOptions(
+    opts: ChatCompletionOptions = {}
+): AnthropicOptions {
+    try {
+        const apiKey = options.getOption('anthropicApiKey');
+        if (!apiKey) {
+            throw new Error('Anthropic API key is not configured');
+        }
+
+        const baseUrl = options.getOption('anthropicBaseUrl') || PROVIDER_CONSTANTS.ANTHROPIC.BASE_URL;
+        const modelName = opts.model || options.getOption('anthropicDefaultModel') || PROVIDER_CONSTANTS.ANTHROPIC.DEFAULT_MODEL;
+
+        // Create provider metadata
+        const providerMetadata: ModelMetadata = {
+            provider: 'anthropic',
+            modelId: modelName,
+            displayName: modelName,
+            capabilities: {
+                supportsTools: modelName.includes('claude-3') || modelName.includes('claude-3.5'),
+                supportsVision: modelName.includes('claude-3') || modelName.includes('claude-3.5'),
+                supportsStreaming: true,
+                // Anthropic models typically have large context windows
+                contextWindow: modelName.includes('claude-3-opus') ? 200000 :
+                               modelName.includes('claude-3-sonnet') ? 180000 :
+                               modelName.includes('claude-3.5-sonnet') ? 200000 : 100000
+            }
+        };
+
+        // Get temperature from options or global setting
+        const temperature = opts.temperature !== undefined
+            ? opts.temperature
+            : parseFloat(options.getOption('aiTemperature') || '0.7');
+
+        return {
+            // Connection settings
+            apiKey,
+            baseUrl,
+            apiVersion: PROVIDER_CONSTANTS.ANTHROPIC.API_VERSION,
+            betaVersion: PROVIDER_CONSTANTS.ANTHROPIC.BETA_VERSION,
+
+            // Provider metadata
+            providerMetadata,
+
+            // API parameters
+            model: modelName,
+            temperature,
+            max_tokens: opts.maxTokens,
+            stream: opts.stream,
+            top_p: opts.topP,
+
+            // Internal configuration
+            systemPrompt: opts.systemPrompt
+        };
+    } catch (error) {
+        log.error(`Error creating Anthropic provider options: ${error}`);
+        throw error;
+    }
+}
+
+/**
+ * Get Ollama provider options from chat options and configuration
+ * This implementation cleanly separates provider information from model names
+ */
+export async function getOllamaOptions(
+    opts: ChatCompletionOptions = {},
+    contextWindow?: number
+): Promise<OllamaOptions> {
+    try {
+        const baseUrl = options.getOption('ollamaBaseUrl');
+        if (!baseUrl) {
+            throw new Error('Ollama API URL is not configured');
+        }
+
+        // Get the model name - no prefix handling needed now
+        let modelName = opts.model || options.getOption('ollamaDefaultModel') || 'llama3';
+
+        // Create provider metadata
+        const providerMetadata: ModelMetadata = {
+            provider: 'ollama',
+            modelId: modelName,
+            capabilities: {
+                supportsTools: true,
+                supportsStreaming: true
+            }
+        };
+
+        // Get temperature from options or global setting
+        const temperature = opts.temperature !== undefined
+            ? opts.temperature
+            : parseFloat(options.getOption('aiTemperature') || '0.7');
+
+        // Use provided context window or get from model if not specified
+        const modelContextWindow = contextWindow || await getOllamaModelContextWindow(modelName);
+
+        // Update capabilities with context window information
+        providerMetadata.capabilities!.contextWindow = modelContextWindow;
+
+        return {
+            // Connection settings
+            baseUrl,
+
+            // Provider metadata
+            providerMetadata,
+
+            // API parameters
+            model: modelName,  // Clean model name without provider prefix
+            stream: opts.stream,
+            options: {
+                temperature: opts.temperature,
+                num_ctx: modelContextWindow,
+                num_predict: opts.maxTokens,
+                response_format: opts.expectsJsonResponse ? { type: "json_object" } : undefined
+            },
+            tools: opts.tools,
+
+            // Internal configuration
+            systemPrompt: opts.systemPrompt,
+            enableTools: opts.enableTools,
+            bypassFormatter: opts.bypassFormatter,
+            preserveSystemPrompt: opts.preserveSystemPrompt,
+            expectsJsonResponse: opts.expectsJsonResponse,
+            toolExecutionStatus: opts.toolExecutionStatus,
+        };
+    } catch (error) {
+        log.error(`Error creating Ollama provider options: ${error}`);
+        throw error;
+    }
+}
+
+/**
+ * Get context window size for Ollama model
+ */
+async function getOllamaModelContextWindow(modelName: string): Promise<number> {
+    try {
+        const baseUrl = options.getOption('ollamaBaseUrl');
+
+        // Try to get model information from Ollama API
+        const response = await fetch(`${baseUrl}/api/show`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: modelName })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // Get context window from model parameters
+            if (data && data.parameters && data.parameters.num_ctx) {
+                return data.parameters.num_ctx;
+            }
+        }
+
+        // Default context sizes by model family if we couldn't get specific info
+        if (modelName.includes('llama3')) {
+            return 8192;
+        } else if (modelName.includes('llama2')) {
+            return 4096;
+        } else if (modelName.includes('mistral') || modelName.includes('mixtral')) {
+            return 8192;
+        } else if (modelName.includes('gemma')) {
+            return 8192;
+        }
+
+        // Return a reasonable default
+        return 4096;
+    } catch (error) {
+        log.info(`Error getting context window for model ${modelName}: ${error}`);
+        return 4096; // Default fallback
+    }
+}

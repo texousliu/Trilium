@@ -6,6 +6,8 @@ import { OllamaMessageFormatter } from '../formatters/ollama_formatter.js';
 import log from '../../log.js';
 import type { ToolCall } from '../tools/tool_interfaces.js';
 import toolRegistry from '../tools/tool_registry.js';
+import type { OllamaOptions } from './provider_options.js';
+import { getOllamaOptions } from './providers.js';
 
 interface OllamaFunctionArguments {
     [key: string]: any;
@@ -65,32 +67,33 @@ export class OllamaService extends BaseAIService {
             throw new Error('Ollama service is not available. Check API URL in settings.');
         }
 
-        const apiBase = options.getOption('ollamaBaseUrl');
+        // Get provider-specific options from the central provider manager
+        const providerOptions = await getOllamaOptions(opts);
 
-        // Get the model name and strip the "ollama:" prefix if it exists
-        let model = opts.model || options.getOption('ollamaDefaultModel') || 'llama3';
-        if (model.startsWith('ollama:')) {
-            model = model.substring(7); // Remove the "ollama:" prefix
-            log.info(`Stripped 'ollama:' prefix from model name, using: ${model}`);
+        // Log provider metadata if available
+        if (providerOptions.providerMetadata) {
+            log.info(`Using model ${providerOptions.model} from provider ${providerOptions.providerMetadata.provider}`);
+
+            // Log capabilities if available
+            const capabilities = providerOptions.providerMetadata.capabilities;
+            if (capabilities) {
+                log.info(`Model capabilities: ${JSON.stringify(capabilities)}`);
+            }
         }
 
-        const temperature = opts.temperature !== undefined
-            ? opts.temperature
-            : parseFloat(options.getOption('aiTemperature') || '0.7');
-
-        const systemPrompt = this.getSystemPrompt(opts.systemPrompt || options.getOption('aiSystemPrompt'));
+        const systemPrompt = this.getSystemPrompt(providerOptions.systemPrompt || options.getOption('aiSystemPrompt'));
 
         try {
             // Check if we should add tool execution feedback
-            if (opts.toolExecutionStatus && Array.isArray(opts.toolExecutionStatus) && opts.toolExecutionStatus.length > 0) {
+            if (providerOptions.toolExecutionStatus && Array.isArray(providerOptions.toolExecutionStatus) && providerOptions.toolExecutionStatus.length > 0) {
                 log.info(`Adding tool execution feedback to messages`);
-                messages = this.addToolExecutionFeedback(messages, opts.toolExecutionStatus);
+                messages = this.addToolExecutionFeedback(messages, providerOptions.toolExecutionStatus);
             }
 
             // Determine whether to use the formatter or send messages directly
             let messagesToSend: Message[];
 
-            if (opts.bypassFormatter) {
+            if (providerOptions.bypassFormatter) {
                 // Bypass the formatter entirely - use messages as is
                 messagesToSend = [...messages];
                 log.info(`Bypassing formatter for Ollama request with ${messages.length} messages`);
@@ -100,69 +103,58 @@ export class OllamaService extends BaseAIService {
                     messages,
                     systemPrompt,
                     undefined, // context
-                    opts.preserveSystemPrompt
+                    providerOptions.preserveSystemPrompt
                 );
                 log.info(`Sending to Ollama with formatted messages: ${messagesToSend.length}`);
             }
 
-            // Check if this is a request that expects JSON response
-            const expectsJsonResponse = opts.expectsJsonResponse || false;
-
-            // Build request body
+            // Build request body base
             const requestBody: any = {
-                model,
-                messages: messagesToSend,
-                options: {
-                    temperature,
-                    // Add num_ctx parameter based on model capabilities
-                    num_ctx: await this.getModelContextWindowTokens(model),
-                    // Add response_format for requests that expect JSON
-                    ...(expectsJsonResponse ? { response_format: { type: "json_object" } } : {})
-                },
-                stream: false
+                model: providerOptions.model,
+                messages: messagesToSend
             };
 
-            // Add tools if enabled - put them at the top level for Ollama
-            if (opts.enableTools !== false) {
-                // Get tools from registry if not provided in options
-                if (!opts.tools || opts.tools.length === 0) {
-                    try {
-                        // Get tool definitions from registry
-                        const tools = toolRegistry.getAllToolDefinitions();
-                        requestBody.tools = tools;
-                        log.info(`Adding ${tools.length} tools to request`);
 
-                        // If no tools found, reinitialize
-                        if (tools.length === 0) {
-                            log.info('No tools found in registry, re-initializing...');
-                            try {
-                                const toolInitializer = await import('../tools/tool_initializer.js');
-                                await toolInitializer.default.initializeTools();
-
-                                // Try again
-                                requestBody.tools = toolRegistry.getAllToolDefinitions();
-                                log.info(`After re-initialization: ${requestBody.tools.length} tools available`);
-                            } catch (err: any) {
-                                log.error(`Failed to re-initialize tools: ${err.message}`);
-                            }
-                        }
-                    } catch (error: any) {
-                        log.error(`Error getting tools: ${error.message || String(error)}`);
-                        // Create default empty tools array if we couldn't load the tools
-                        requestBody.tools = [];
-                    }
-                } else {
-                    requestBody.tools = opts.tools;
-                }
-                log.info(`Adding ${requestBody.tools.length} tools to Ollama request`);
-            } else {
-                log.info('Tools are explicitly disabled for this request');
+            log.info(`Stream: ${providerOptions.stream}`);
+            // Stream is a top-level option
+            if (providerOptions.stream !== undefined) {
+                requestBody.stream = providerOptions.stream;
             }
 
-            // Log key request details
+            // Add options object if provided
+            if (providerOptions.options) {
+                requestBody.options = { ...providerOptions.options };
+            }
+
+            // Add tools if enabled
+            if (providerOptions.enableTools !== false) {
+                // Use provided tools or get from registry
+                try {
+                    requestBody.tools = providerOptions.tools && providerOptions.tools.length > 0
+                        ? providerOptions.tools
+                        : toolRegistry.getAllToolDefinitions();
+
+                    // Handle empty tools array
+                    if (requestBody.tools.length === 0) {
+                        log.info('No tools found, attempting to initialize tools...');
+                        const toolInitializer = await import('../tools/tool_initializer.js');
+                        await toolInitializer.default.initializeTools();
+                        requestBody.tools = toolRegistry.getAllToolDefinitions();
+                        log.info(`After initialization: ${requestBody.tools.length} tools available`);
+                    }
+                } catch (error: any) {
+                    log.error(`Error preparing tools: ${error.message || String(error)}`);
+                    requestBody.tools = []; // Empty fallback
+                }
+            }
+
+            // Log request details
             log.info(`========== OLLAMA API REQUEST ==========`);
             log.info(`Model: ${requestBody.model}, Messages: ${requestBody.messages.length}, Tools: ${requestBody.tools ? requestBody.tools.length : 0}`);
-            log.info(`Temperature: ${temperature}, Stream: ${requestBody.stream}, JSON response expected: ${expectsJsonResponse}`);
+            log.info(`Stream: ${requestBody.stream || false}, JSON response expected: ${providerOptions.expectsJsonResponse}`);
+            if (requestBody.options) {
+                log.info(`Options: ${JSON.stringify(requestBody.options)}`);
+            }
 
             // Check message structure and log detailed information about each message
             requestBody.messages.forEach((msg: any, index: number) => {
@@ -222,26 +214,13 @@ export class OllamaService extends BaseAIService {
             log.info(`========== FULL OLLAMA REQUEST ==========`);
 
             // Log request in manageable chunks
-            const maxChunkSize = 4000;
-            if (requestStr.length > maxChunkSize) {
-                let i = 0;
-                while (i < requestStr.length) {
-                    const chunk = requestStr.substring(i, i + maxChunkSize);
-                    log.info(`Request part ${Math.floor(i/maxChunkSize) + 1}/${Math.ceil(requestStr.length/maxChunkSize)}: ${chunk}`);
-                    i += maxChunkSize;
-                }
-            } else {
-                log.info(`Full request: ${requestStr}`);
-            }
+            log.info(`Full request: ${requestStr}`);
             log.info(`========== END FULL OLLAMA REQUEST ==========`);
-            log.info(`========== END OLLAMA REQUEST ==========`);
 
-            // Make API request
-            const response = await fetch(`${apiBase}/api/chat`, {
+            // Send the request
+            const response = await fetch(`${providerOptions.baseUrl}/api/chat`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody)
             });
 
