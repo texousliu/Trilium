@@ -19,37 +19,37 @@ export const PROVIDER_CONSTANTS = {
                 id: 'claude-3-7-sonnet-20240620',
                 name: 'Claude 3.7 Sonnet',
                 description: 'Most intelligent model with hybrid reasoning capabilities',
-                maxTokens: 4096
+                maxTokens: 8192
             },
             {
                 id: 'claude-3-5-haiku-20240307',
                 name: 'Claude 3.5 Haiku',
                 description: 'Improved version of Haiku with better performance',
-                maxTokens: 4096
+                maxTokens: 8192
             },
             {
                 id: 'claude-3-opus-20240229',
                 name: 'Claude 3 Opus',
                 description: 'Most capable model for highly complex tasks',
-                maxTokens: 4096
+                maxTokens: 8192
             },
             {
                 id: 'claude-3-sonnet-20240229',
                 name: 'Claude 3 Sonnet',
                 description: 'Ideal balance of intelligence and speed',
-                maxTokens: 4096
+                maxTokens: 8192
             },
             {
                 id: 'claude-3-haiku-20240307',
                 name: 'Claude 3 Haiku',
                 description: 'Fastest and most compact model',
-                maxTokens: 4096
+                maxTokens: 8192
             },
             {
                 id: 'claude-2.1',
                 name: 'Claude 2.1',
                 description: 'Previous generation model',
-                maxTokens: 4096
+                maxTokens: 8192
             }
         ]
     },
@@ -86,7 +86,7 @@ export const PROVIDER_CONSTANTS = {
                 id: 'gpt-3.5-turbo',
                 name: 'GPT-3.5 Turbo',
                 description: 'Fast and efficient model for most tasks',
-                maxTokens: 4096
+                maxTokens: 8192
             }
         ]
     },
@@ -100,14 +100,14 @@ export const PROVIDER_CONSTANTS = {
             OVERLAP: 200
         },
         MODEL_DIMENSIONS: {
-            default: 4096,
-            llama2: 4096,
-            mixtral: 4096,
-            'mistral': 4096
+            default: 8192,
+            llama2: 8192,
+            mixtral: 8192,
+            'mistral': 8192
         },
         MODEL_CONTEXT_WINDOWS: {
             default: 8192,
-            llama2: 4096,
+            llama2: 8192,
             mixtral: 8192,
             'mistral': 8192
         }
@@ -147,9 +147,9 @@ export const LLM_CONSTANTS = {
 
     // Model-specific embedding dimensions for Ollama models
     OLLAMA_MODEL_DIMENSIONS: {
-        "llama3": 4096,
-        "llama3.1": 4096,
-        "mistral": 4096,
+        "llama3": 8192,
+        "llama3.1": 8192,
+        "mistral": 8192,
         "nomic": 768,
         "mxbai": 1024,
         "nomic-embed-text": 768,
@@ -167,7 +167,7 @@ export const LLM_CONSTANTS = {
         "mxbai": 32768,
         "nomic-embed-text": 32768,
         "mxbai-embed-large": 32768,
-        "default": 4096
+        "default": 8192
     },
 
     // Batch size configuration

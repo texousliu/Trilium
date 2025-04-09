@@ -42,7 +42,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
             // First try the /api/show endpoint which has detailed model information
             const url = new URL(`${this.baseUrl}/api/show`);
             url.searchParams.append('name', modelName);
-            
+
             const showResponse = await fetch(url, {
                 method: 'GET',
                 headers: { "Content-Type": "application/json" },
@@ -52,9 +52,9 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
             if (!showResponse.ok) {
                 throw new Error(`HTTP error! status: ${showResponse.status}`);
             }
-            
+
             const data = await showResponse.json();
-            
+
             if (data && data.parameters) {
                 const params = data.parameters;
                 // Extract context length from parameters (different models might use different parameter names)
@@ -175,9 +175,9 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
         if (!testResponse.ok) {
             throw new Error(`HTTP error! status: ${testResponse.status}`);
         }
-        
+
         const data = await testResponse.json();
-        
+
         if (data && Array.isArray(data.embedding)) {
             return data.embedding.length;
         } else {
@@ -215,7 +215,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
 
                 // Trim text if it might exceed context window (rough character estimate)
                 // This is a simplistic approach - ideally we'd count tokens properly
-                const charLimit = (modelInfo.contextWidth || 4096) * 4; // Rough estimate: avg 4 chars per token
+                const charLimit = (modelInfo.contextWidth || 8192) * 4; // Rough estimate: avg 4 chars per token
                 const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
 
                 const response = await fetch(`${this.baseUrl}/api/embeddings`, {
@@ -232,9 +232,9 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
+
                 const data = await response.json();
-                
+
                 if (data && Array.isArray(data.embedding)) {
                     // Success! Return the embedding
                     return new Float32Array(data.embedding);

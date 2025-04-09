@@ -17,7 +17,7 @@ export interface ModelCapabilities {
  * Default model capabilities for unknown models
  */
 export const DEFAULT_MODEL_CAPABILITIES: ModelCapabilities = {
-    contextWindowTokens: 4096,
+    contextWindowTokens: 8192,
     contextWindowChars: 16000,  // ~4 chars per token estimate
     maxCompletionTokens: 1024,
     hasFunctionCalling: false,
@@ -32,7 +32,7 @@ export const DEFAULT_MODEL_CAPABILITIES: ModelCapabilities = {
 export const MODEL_CAPABILITIES: Record<string, Partial<ModelCapabilities>> = {
     // OpenAI models
     'gpt-3.5-turbo': {
-        contextWindowTokens: 4096,
+        contextWindowTokens: 8192,
         contextWindowChars: 16000,
         hasFunctionCalling: true
     },
@@ -95,7 +95,7 @@ export const MODEL_CAPABILITIES: Record<string, Partial<ModelCapabilities>> = {
         contextWindowChars: 32000
     },
     'llama2': {
-        contextWindowTokens: 4096,
+        contextWindowTokens: 8192,
         contextWindowChars: 16000
     }
 };

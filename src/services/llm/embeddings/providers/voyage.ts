@@ -118,14 +118,14 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                 if (modelName.includes('voyage-2')) {
                     return {
                         dimension: dimension || 1024,
-                        contextWidth: 4096,
+                        contextWidth: 8192,
                         name: modelName,
                         type: 'float32'
                     };
                 } else if (modelName.includes('voyage-lite-02')) {
                     return {
                         dimension: dimension || 768,
-                        contextWidth: 4096,
+                        contextWidth: 8192,
                         name: modelName,
                         type: 'float32'
                     };
@@ -133,7 +133,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                     // Default for other Voyage models
                     return {
                         dimension: dimension || 1024,
-                        contextWidth: 4096,
+                        contextWidth: 8192,
                         name: modelName,
                         type: 'float32'
                     };
@@ -170,7 +170,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             const modelInfo = await this.getModelInfo(modelName);
 
             // Trim text if it might exceed context window (rough character estimate)
-            const charLimit = (modelInfo.contextWidth || 4096) * 4; // Rough estimate: avg 4 chars per token
+            const charLimit = (modelInfo.contextWidth || 8192) * 4; // Rough estimate: avg 4 chars per token
             const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
 
             const response = await fetch(`${this.baseUrl}/embeddings`, {
