@@ -457,7 +457,8 @@ class RestChatService {
                     systemPrompt: session.messages.find(m => m.role === 'system')?.content,
                     temperature: session.metadata.temperature,
                     maxTokens: session.metadata.maxTokens,
-                    model: session.metadata.model
+                    model: session.metadata.model,
+                    stream: req.method === 'GET' ? true : undefined  // Explicitly set stream: true for GET requests
                 },
                 streamCallback: req.method === 'GET' ? (data, done) => {
                     res.write(`data: ${JSON.stringify({ content: data, done })}\n\n`);

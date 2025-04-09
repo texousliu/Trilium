@@ -1,8 +1,10 @@
 import { BasePipelineStage } from '../pipeline_stage.js';
 import type { ModelSelectionInput } from '../interfaces.js';
 import type { ChatCompletionOptions } from '../../ai_interface.js';
+import type { ModelMetadata } from '../../providers/provider_options.js';
 import log from '../../../log.js';
 import options from '../../../options.js';
+import aiServiceManager from '../../ai_service_manager.js';
 /**
  * Pipeline stage for selecting the appropriate LLM model
  */
@@ -21,12 +23,21 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
 
         // If model already specified, don't override it
         if (updatedOptions.model) {
-            log.info(`Using explicitly specified model: ${updatedOptions.model}`);
+            // Check if the model has a provider prefix, which indicates legacy format
+            const modelParts = this.parseModelIdentifier(updatedOptions.model);
+
+            if (modelParts.provider) {
+                // Add provider metadata for backward compatibility
+                this.addProviderMetadata(updatedOptions, modelParts.provider, modelParts.model);
+                // Update the model to be just the model name without provider prefix
+                updatedOptions.model = modelParts.model;
+                log.info(`Using explicitly specified model: ${modelParts.model} from provider: ${modelParts.provider}`);
+            } else {
+                log.info(`Using explicitly specified model: ${updatedOptions.model}`);
+            }
+
             return { options: updatedOptions };
         }
-
-        // Get default model based on provider precedence
-        let defaultModel = 'openai:gpt-3.5-turbo'; // Fallback default
 
         // Enable tools by default unless explicitly disabled
         updatedOptions.enableTools = updatedOptions.enableTools !== false;
@@ -61,6 +72,10 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             }
         }
 
+        // Get default provider and model based on precedence
+        let defaultProvider = 'openai';
+        let defaultModelName = 'gpt-3.5-turbo';
+
         try {
             // Get provider precedence list
             const providerPrecedence = await options.getOption('aiProviderPrecedence');
@@ -78,18 +93,19 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
                 // Check for first available provider
                 if (providers.length > 0) {
                     const firstProvider = providers[0];
+                    defaultProvider = firstProvider;
 
                     // Get provider-specific default model
                     if (firstProvider === 'openai') {
                         const model = await options.getOption('openaiDefaultModel');
-                        if (model) defaultModel = `openai:${model}`;
+                        if (model) defaultModelName = model;
                     } else if (firstProvider === 'anthropic') {
                         const model = await options.getOption('anthropicDefaultModel');
-                        if (model) defaultModel = `anthropic:${model}`;
+                        if (model) defaultModelName = model;
                     } else if (firstProvider === 'ollama') {
                         const model = await options.getOption('ollamaDefaultModel');
                         if (model) {
-                            defaultModel = `ollama:${model}`;
+                            defaultModelName = model;
 
                             // Enable tools for all Ollama models
                             // The Ollama API will handle models that don't support tool calling
@@ -130,9 +146,125 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             queryComplexity = contentLength > 10000 ? 'high' : 'medium';
         }
 
-        updatedOptions.model = defaultModel;
+        // Set the model and add provider metadata
+        updatedOptions.model = defaultModelName;
+        this.addProviderMetadata(updatedOptions, defaultProvider, defaultModelName);
 
-        log.info(`Selected model: ${updatedOptions.model} for query complexity: ${queryComplexity}`);
+        log.info(`Selected model: ${defaultModelName} from provider: ${defaultProvider} for query complexity: ${queryComplexity}`);
         return { options: updatedOptions };
+    }
+
+    /**
+     * Helper to parse model identifier with provider prefix
+     * Handles legacy format "provider:model"
+     */
+    private parseModelIdentifier(modelId: string): { provider?: string, model: string } {
+        if (!modelId) return { model: '' };
+
+        const parts = modelId.split(':');
+        if (parts.length === 1) {
+            // No provider prefix
+            return { model: modelId };
+        } else {
+            // Extract provider and model
+            const provider = parts[0];
+            const model = parts.slice(1).join(':'); // Handle model names that might include :
+            return { provider, model };
+        }
+    }
+
+    /**
+     * Add provider metadata to the options based on model name
+     */
+    private addProviderMetadata(options: ChatCompletionOptions, provider: string, modelName: string): void {
+        // Check if we already have providerMetadata
+        if (options.providerMetadata) {
+            // If providerMetadata exists but not modelId, add the model name
+            if (!options.providerMetadata.modelId && modelName) {
+                options.providerMetadata.modelId = modelName;
+            }
+            return;
+        }
+
+        // If no provider could be determined, try to use precedence
+        let selectedProvider = provider;
+        if (!selectedProvider) {
+            // List of providers in precedence order
+            const providerPrecedence = ['anthropic', 'openai', 'ollama'];
+
+            // Find the first available provider
+            for (const p of providerPrecedence) {
+                if (aiServiceManager.isProviderAvailable(p)) {
+                    selectedProvider = p;
+                    break;
+                }
+            }
+        }
+
+        // Set the provider metadata in the options
+        if (selectedProvider) {
+            // Ensure the provider is one of the valid types
+            const validProvider = selectedProvider as 'openai' | 'anthropic' | 'ollama' | 'local';
+
+            options.providerMetadata = {
+                provider: validProvider,
+                modelId: modelName
+            };
+
+            // For backward compatibility, ensure model name is set without prefix
+            if (options.model && options.model.includes(':')) {
+                options.model = modelName || options.model.split(':')[1];
+            }
+
+            log.info(`Set provider metadata: provider=${selectedProvider}, model=${modelName}`);
+        }
+    }
+
+    /**
+     * Determine model based on provider precedence
+     */
+    private determineDefaultModel(input: ModelSelectionInput): string {
+        const providerPrecedence = ['anthropic', 'openai', 'ollama'];
+
+        // Use only providers that are available
+        const availableProviders = providerPrecedence.filter(provider =>
+            aiServiceManager.isProviderAvailable(provider));
+
+        if (availableProviders.length === 0) {
+            throw new Error('No AI providers are available');
+        }
+
+        // Get the first available provider and its default model
+        const defaultProvider = availableProviders[0] as 'openai' | 'anthropic' | 'ollama' | 'local';
+        let defaultModel = 'gpt-3.5-turbo'; // Default fallback
+
+        // Set provider metadata
+        if (!input.options.providerMetadata) {
+            input.options.providerMetadata = {
+                provider: defaultProvider,
+                modelId: defaultModel
+            };
+        }
+
+        log.info(`Selected default model ${defaultModel} from provider ${defaultProvider}`);
+        return defaultModel;
+    }
+
+    /**
+     * Get estimated context window for Ollama models
+     */
+    private getOllamaContextWindow(model: string): number {
+        // Estimate based on model family
+        if (model.includes('llama3')) {
+            return 8192;
+        } else if (model.includes('llama2')) {
+            return 4096;
+        } else if (model.includes('mistral') || model.includes('mixtral')) {
+            return 8192;
+        } else if (model.includes('gemma')) {
+            return 8192;
+        } else {
+            return 4096; // Default fallback
+        }
     }
 }

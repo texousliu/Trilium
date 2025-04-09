@@ -1,4 +1,5 @@
 import type { ToolCall } from './tools/tool_interfaces.js';
+import type { ModelMetadata } from './providers/provider_options.js';
 
 export interface Message {
     role: 'user' | 'assistant' | 'system' | 'tool';
@@ -36,6 +37,7 @@ export interface ChatCompletionOptions {
     tools?: any[]; // Tools to provide to the LLM
     useAdvancedContext?: boolean; // Whether to use advanced context enrichment
     toolExecutionStatus?: any[]; // Status information about executed tools for feedback
+    providerMetadata?: ModelMetadata; // Metadata about the provider and model capabilities
 }
 
 export interface ChatResponse {
