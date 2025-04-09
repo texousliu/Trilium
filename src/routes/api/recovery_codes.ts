@@ -20,16 +20,7 @@ function checkForRecoveryKeys() {
 }
 
 function generateRecoveryCodes() {
-    const recoveryKeys = [
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64')
-    ];
+    const recoveryKeys = Array.from({ length: 8 }, () => randomBytes(16).toString('base64'));
 
     recovery_codes.setRecoveryCodes(recoveryKeys.join(','));
 
