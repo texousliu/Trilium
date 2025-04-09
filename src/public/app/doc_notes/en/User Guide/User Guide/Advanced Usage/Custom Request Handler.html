@@ -13,14 +13,14 @@
        <h1 data-trilium-h1>Custom Request Handler</h1>
 
       <div class="ck-content">
-        <p>Trilium provides a mechanism for <a href="../Scripting.html">scripts</a> to
+        <p>Trilium provides a mechanism for <a href="#root/_help_CdNpE2pqjmI6">scripts</a> to
           open a public REST endpoint. This opens a way for various integrations
           with other services - a simple example would be creating new note from
           Slack by issuing a slash command (e.g. <code>/trilium buy milk</code>).</p>
         <h2>Create note from outside Trilium</h2>
         <p>Let's take a look at an example. The goal is to provide a REST endpoint
           to which we can send title and content and Trilium will create a note.</p>
-        <p>We'll start with creating a JavaScript backend <a href="../Note%20Types/Code.html">code note</a> containing:</p><pre><code class="language-text-x-trilium-auto">const {req, res} = api;
+        <p>We'll start with creating a JavaScript backend <a href="#root/_help_6f9hih2hXXZk">code note</a> containing:</p><pre><code class="language-text-x-trilium-auto">const {req, res} = api;
 const {secret, title, content} = req.body;
 
 if (req.method == 'POST' &amp;&amp; secret === 'secret-password') {
@@ -55,7 +55,7 @@ Content-Type: application/json
 }+++++++++++++++++++++++++++++++++++++++++++++++</code></pre>
         <p>Notice the <code>/custom</code> part in the request path - Trilium considers
           any request with this prefix as "custom" and tries to find a matching handler
-          by looking at all notes which have <code>customRequestHandler</code>  <a href="Attributes.html">label</a>.
+          by looking at all notes which have <code>customRequestHandler</code>  <a href="#root/_help_zEY4DaJG4YT5">label</a>.
           Value of this label then contains a regular expression which will match
           the request path (in our case trivial regex "create-note").</p>
         <p>Trilium will then find our code note created above and execute it. <code>api.req</code>, <code>api.res</code> are
@@ -68,12 +68,12 @@ Content-Type: application/json
           and you need to take care of this yourself.</p>
         <p>Once we pass these checks we will just create the desired note using
           <a
-          href="../Scripting/Script%20API.html">Script API</a>.</p>
+          href="#root/_help_GLks18SNjxmC">Script API</a>.</p>
         <h2>Custom resource provider</h2>
         <p>Another common use case is that you want to just expose a file note -
           in such case you create label <code>customResourceProvider</code> (value
           is again path regex).</p>
-        <p>For more information, see&nbsp;<a href="Custom%20Resource%20Providers.html">Custom Resource Providers</a>.</p>
+        <p>For more information, see&nbsp;<a href="#root/_help_d3fAXQ2diepH">Custom Resource Providers</a>.</p>
         <h2>Advanced concepts</h2>
         <p><code>api.req</code> and <code>api.res</code> are Express.js objects - you
           can always look into its <a href="https://expressjs.com/en/api.html">documentation</a> for

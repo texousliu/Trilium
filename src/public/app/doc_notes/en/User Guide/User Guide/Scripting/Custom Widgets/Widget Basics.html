@@ -33,15 +33,15 @@ module.exports = new MyWidget();</code></pre>
         <ol>
           <li>Create a new <code>JS Frontend</code> note in Trilium and paste in the code
             above.</li>
-          <li>Assign the <code>#widget</code>  <a href="../../Advanced%20Usage/Attributes.html">attribute</a> to
-            the <a href="../../Basic%20Concepts%20and%20Features/Notes.html">note</a>.</li>
+          <li>Assign the <code>#widget</code>  <a href="#root/_help_zEY4DaJG4YT5">attribute</a> to
+            the <a href="#root/_help_BFs8mudNFgCS">note</a>.</li>
           <li>Restart Trilium or reload the window.</li>
         </ol>
         <p>To verify that the widget is working, open the developer tools (<code>Cmd</code> + <code>Shift</code> + <code>I</code>)
           and run <code>document.querySelector("#my-widget")</code>. If the element
           is found, the widget is functioning correctly. If <code>undefined</code> is
-          returned, double-check that the <a href="../../Basic%20Concepts%20and%20Features/Notes.html">note</a> has
-          the <code>#widget</code>  <a href="../../Advanced%20Usage/Attributes.html">attribute</a>.</p>
+          returned, double-check that the <a href="#root/_help_BFs8mudNFgCS">note</a> has
+          the <code>#widget</code>  <a href="#root/_help_zEY4DaJG4YT5">attribute</a>.</p>
         <h3>Step 2: Adding an UI Element</h3>
         <p>Next, let's improve the widget by adding a button to it.</p><pre><code class="language-text-x-trilium-auto">const template = ``;
 
@@ -84,7 +84,7 @@ module.exports = new MyWidget();</code></pre>
           of the left pane, alongside other action buttons.</p>
         <h3>Step 4: Adding User Interaction</h3>
         <p>Let’s make the button interactive by showing a message when it’s clicked.
-          We'll use the <code>api.showMessage</code> method from the <a href="../Script%20API.html">Script API</a>.</p><pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
+          We'll use the <code>api.showMessage</code> method from the <a href="#root/_help_GLks18SNjxmC">Script API</a>.</p><pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
     get position() { return 1; }
     get parentWidget() { return "left-pane"; }
     
