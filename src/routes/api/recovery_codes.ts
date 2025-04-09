@@ -47,7 +47,7 @@ function getUsedRecoveryCodes() {
 
     recoveryCodes.forEach((recoveryKey: string) => {
         if (dateRegex.test(recoveryKey)) usedStatus.push(recoveryKey);
-        else usedStatus.push(recoveryCodes.indexOf(recoveryKey));
+        else usedStatus.push(String(recoveryCodes.indexOf(recoveryKey)));
     });
 
     return {
