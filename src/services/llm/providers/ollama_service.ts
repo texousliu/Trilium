@@ -246,10 +246,14 @@ export class OllamaService extends BaseAIService {
             log.info(`Done: ${data.done}, Reason: ${data.done_reason || 'not specified'}`);
 
             // Log content preview
-            const contentPreview = data.message.content.length > 300
+            const contentPreview = data.message.content && data.message.content.length > 300
                 ? `${data.message.content.substring(0, 300)}...`
                 : data.message.content;
             log.info(`Response content: ${contentPreview}`);
+
+            // Log the full raw response for debugging
+            log.info(`========== FULL OLLAMA RESPONSE ==========`);
+            log.info(`Raw response object: ${JSON.stringify(data)}`);
 
             // Handle the response and extract tool calls if present
             const chatResponse: ChatResponse = {
@@ -317,6 +321,8 @@ export class OllamaService extends BaseAIService {
                                 log.info(`  Attempting to parse cleaned argument: ${cleaned}`);
                                 const reparseArg = JSON.parse(cleaned);
                                 log.info(`  Successfully parsed cleaned argument with keys: ${Object.keys(reparseArg).join(', ')}`);
+                                // Use reparsed arguments if successful
+                                processedArguments = reparseArg;
                             } catch (cleanErr: unknown) {
                                 const cleanErrMessage = cleanErr instanceof Error ? cleanErr.message : String(cleanErr);
                                 log.info(`  Failed to parse cleaned arguments: ${cleanErrMessage}`);
@@ -335,6 +341,34 @@ export class OllamaService extends BaseAIService {
                         });
                     }
 
+                    // If arguments are still empty or invalid, create a default argument
+                    if (!processedArguments ||
+                        (typeof processedArguments === 'object' && Object.keys(processedArguments).length === 0)) {
+                        log.info(`  Empty or invalid arguments for tool ${toolCall.function.name}, creating default`);
+
+                        // Get tool definition to determine required parameters
+                        const allToolDefs = toolRegistry.getAllToolDefinitions();
+                        const toolDef = allToolDefs.find(t => t.function?.name === toolCall.function.name);
+
+                        if (toolDef && toolDef.function && toolDef.function.parameters) {
+                            const params = toolDef.function.parameters;
+                            processedArguments = {};
+
+                            // Create default values for required parameters
+                            if (params.required && Array.isArray(params.required)) {
+                                params.required.forEach((param: string) => {
+                                    // Extract text from the response to use as default value
+                                    const defaultValue = data.message.content?.includes(param)
+                                        ? extractValueFromText(data.message.content, param)
+                                        : "default";
+
+                                    (processedArguments as Record<string, any>)[param] = defaultValue;
+                                    log.info(`    Added default value for required param ${param}: ${defaultValue}`);
+                                });
+                            }
+                        }
+                    }
+
                     // Convert to our standard ToolCall format
                     transformedToolCalls.push({
                         id,
@@ -350,9 +384,6 @@ export class OllamaService extends BaseAIService {
                 chatResponse.tool_calls = transformedToolCalls;
                 log.info(`Transformed ${transformedToolCalls.length} tool calls for execution`);
                 log.info(`Tool calls after transformation: ${JSON.stringify(chatResponse.tool_calls)}`);
-
-                // CRITICAL: Explicitly mark response for tool execution
-                log.info(`CRITICAL: Explicitly marking response for tool execution`);
 
                 // Ensure tool_calls is properly exposed and formatted
                 // This is to make sure the pipeline can detect and execute the tools
@@ -378,12 +409,33 @@ export class OllamaService extends BaseAIService {
             } else {
                 log.info(`========== NO OLLAMA TOOL CALLS DETECTED ==========`);
                 log.info(`Checking raw message response format: ${JSON.stringify(data.message)}`);
+
+                // Attempt to analyze the response to see if it contains tool call intent
+                const responseText = data.message.content || '';
+                if (responseText.includes('search_notes') ||
+                    responseText.includes('create_note') ||
+                    responseText.includes('function') ||
+                    responseText.includes('tool')) {
+                    log.info(`Response may contain tool call intent but isn't formatted properly`);
+                    log.info(`Content that might indicate tool call intent: ${responseText.substring(0, 500)}`);
+                }
             }
 
             log.info(`========== END OLLAMA RESPONSE ==========`);
             return chatResponse;
         } catch (error: any) {
+            // Enhanced error handling with detailed diagnostics
             log.error(`Ollama service error: ${error.message || String(error)}`);
+            if (error.stack) {
+                log.error(`Error stack trace: ${error.stack}`);
+            }
+
+            if (error.message && error.message.includes('Cannot read properties of null')) {
+                log.error('Tool registry connection issue detected. Tool may not be properly registered or available.');
+                log.error('Check tool registry initialization and tool availability before execution.');
+            }
+
+            // Propagate the original error
             throw error;
         }
     }
@@ -413,4 +465,28 @@ export class OllamaService extends BaseAIService {
             return 8192; // Default to 8192 tokens if there's an error
         }
     }
+}
+
+/**
+ * Simple utility to extract a value from text based on a parameter name
+ * @param text The text to search in
+ * @param param The parameter name to look for
+ * @returns Extracted value or default
+ */
+function extractValueFromText(text: string, param: string): string {
+    // Simple regex to find "param: value" or "param = value" or "param value" patterns
+    const patterns = [
+        new RegExp(`${param}[\\s]*:[\\s]*["']?([^"',\\s]+)["']?`, 'i'),
+        new RegExp(`${param}[\\s]*=[\\s]*["']?([^"',\\s]+)["']?`, 'i'),
+        new RegExp(`${param}[\\s]+["']?([^"',\\s]+)["']?`, 'i')
+    ];
+
+    for (const pattern of patterns) {
+        const match = text.match(pattern);
+        if (match && match[1]) {
+            return match[1];
+        }
+    }
+
+    return "default_value";
 }
