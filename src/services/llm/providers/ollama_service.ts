@@ -118,17 +118,30 @@ export class OllamaService extends BaseAIService {
             log.info(`Stream option in providerOptions: ${providerOptions.stream}`);
             log.info(`Stream option type: ${typeof providerOptions.stream}`);
 
-            // Stream is a top-level option - ALWAYS set it explicitly to ensure consistency
-            // This is critical for ensuring streaming works properly
-            requestBody.stream = providerOptions.stream === true;
-            log.info(`Set requestBody.stream to boolean: ${requestBody.stream}`);
+            // Handle streaming in a way that respects the provided option but ensures consistency:
+            // - If explicitly true, set to true
+            // - If explicitly false, set to false
+            // - If undefined, default to false unless we have a streamCallback
+            if (providerOptions.stream !== undefined) {
+                // Explicit value provided - respect it
+                requestBody.stream = providerOptions.stream === true;
+                log.info(`Stream explicitly provided in options, set to: ${requestBody.stream}`);
+            } else if (opts.streamCallback) {
+                // No explicit value but we have a stream callback - enable streaming
+                requestBody.stream = true;
+                log.info(`Stream not explicitly set but streamCallback provided, enabling streaming`);
+            } else {
+                // Default to false
+                requestBody.stream = false;
+                log.info(`Stream not explicitly set and no streamCallback, defaulting to false`);
+            }
             
             // Log additional information about the streaming context
             log.info(`Streaming context: Will stream to client: ${typeof opts.streamCallback === 'function'}`);
             
             // If we have a streaming callback but the stream flag isn't set for some reason, warn about it
             if (typeof opts.streamCallback === 'function' && !requestBody.stream) {
-                log.warn(`WARNING: Stream callback provided but stream=false in request. This may cause streaming issues.`);
+                log.info(`WARNING: Stream callback provided but stream=false in request. This may cause streaming issues.`);
             }
 
             // Add options object if provided

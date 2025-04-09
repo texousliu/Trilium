@@ -236,26 +236,36 @@ export class ChatPipeline {
             log.info(`[ChatPipeline] Request type info - Format: ${input.format || 'not specified'}, Options from pipelineInput: ${JSON.stringify({stream: input.options?.stream})}`);
             log.info(`[ChatPipeline] Stream settings - config.enableStreaming: ${streamEnabledInConfig}, format parameter: ${input.format}, modelSelection.options.stream: ${modelSelection.options.stream}, streamCallback available: ${streamCallbackAvailable}`);
             
-            // IMPORTANT: Different behavior for GET vs POST requests:
-            // - For GET requests with streamCallback available: Always enable streaming
-            // - For POST requests: Use streaming options but don't actually stream (since we can't stream back to client)
+            // IMPORTANT: Respect the existing stream option but with special handling for callbacks:
+            // 1. If a stream callback is available, streaming MUST be enabled for it to work
+            // 2. Otherwise, preserve the original stream setting from input options
+            
+            // First, determine what the stream value should be based on various factors:
+            let shouldEnableStream = modelSelection.options.stream;
+            
             if (streamCallbackAvailable) {
-                // If a stream callback is available (GET requests), we can stream the response
-                modelSelection.options.stream = true;
-                log.info(`[ChatPipeline] Stream callback available, setting stream=true for real-time streaming`);
+                // If we have a stream callback, we NEED to enable streaming
+                // This is critical for GET requests with EventSource
+                shouldEnableStream = true;
+                log.info(`[ChatPipeline] Stream callback available, enabling streaming`);
+            } else if (streamRequestedInOptions) {
+                // Stream was explicitly requested in options, honor that setting
+                log.info(`[ChatPipeline] Stream explicitly requested in options: ${streamRequestedInOptions}`);
+                shouldEnableStream = streamRequestedInOptions;
+            } else if (streamFormatRequested) {
+                // Format=stream parameter indicates streaming was requested
+                log.info(`[ChatPipeline] Stream format requested in parameters`);
+                shouldEnableStream = true;
             } else {
-                // For POST requests, preserve the stream flag as-is from input options
-                // This ensures LLM request format is consistent across both GET and POST
-                if (streamRequestedInOptions) {
-                    log.info(`[ChatPipeline] No stream callback but stream requested in options, preserving stream=true`);
-                } else {
-                    log.info(`[ChatPipeline] No stream callback and no stream in options, setting stream=false`);
-                    modelSelection.options.stream = false;
-                }
+                // No explicit streaming indicators, use config default
+                log.info(`[ChatPipeline] No explicit stream settings, using config default: ${streamEnabledInConfig}`);
+                shouldEnableStream = streamEnabledInConfig;
             }
             
-            log.info(`[ChatPipeline] Final modelSelection.options.stream = ${modelSelection.options.stream}`);
-            log.info(`[ChatPipeline] Will actual streaming occur? ${streamCallbackAvailable && modelSelection.options.stream}`);
+            // Set the final stream option
+            modelSelection.options.stream = shouldEnableStream;
+            
+            log.info(`[ChatPipeline] Final streaming decision: stream=${shouldEnableStream}, will stream to client=${streamCallbackAvailable && shouldEnableStream}`);
             
 
             // STAGE 5 & 6: Handle LLM completion and tool execution loop
@@ -268,8 +278,9 @@ export class ChatPipeline {
             this.updateStageMetrics('llmCompletion', llmStartTime);
             log.info(`Received LLM response from model: ${completion.response.model}, provider: ${completion.response.provider}`);
 
-            // Handle streaming if enabled and available
-            if (enableStreaming && completion.response.stream && streamCallback) {
+            // Handle streaming if enabled and available 
+            // Use shouldEnableStream variable which contains our streaming decision
+            if (shouldEnableStream && completion.response.stream && streamCallback) {
                 // Setup stream handler that passes chunks through response processing
                 await completion.response.stream(async (chunk: StreamChunk) => {
                     // Process the chunk text
@@ -278,8 +289,8 @@ export class ChatPipeline {
                     // Accumulate text for final response
                     accumulatedText += processedChunk.text;
 
-                    // Forward to callback
-                    await streamCallback!(processedChunk.text, processedChunk.done);
+                    // Forward to callback with original chunk data in case it contains additional information
+                    await streamCallback!(processedChunk.text, processedChunk.done, chunk);
                 });
             }
 
@@ -323,7 +334,7 @@ export class ChatPipeline {
                 });
 
                 // Keep track of whether we're in a streaming response
-                const isStreaming = enableStreaming && streamCallback;
+                const isStreaming = shouldEnableStream && streamCallback;
                 let streamingPaused = false;
 
                 // If streaming was enabled, send an update to the user

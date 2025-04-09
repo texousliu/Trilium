@@ -47,8 +47,11 @@ export interface StageMetrics {
 
 /**
  * Callback for handling stream chunks
+ * @param text The text chunk to append to the UI
+ * @param isDone Whether this is the final chunk
+ * @param originalChunk The original chunk with all metadata for custom handling
  */
-export type StreamCallback = (text: string, isDone: boolean) => Promise<void> | void;
+export type StreamCallback = (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void;
 
 /**
  * Common input for all chat-related pipeline stages
@@ -151,6 +154,7 @@ export interface ToolExecutionInput extends PipelineInput {
     messages: Message[];
     options: ChatCompletionOptions;
     maxIterations?: number;
+    streamCallback?: StreamCallback;
 }
 
 /**

@@ -458,12 +458,22 @@ class RestChatService {
                     temperature: session.metadata.temperature,
                     maxTokens: session.metadata.maxTokens,
                     model: session.metadata.model,
-                    // Always set stream to true for all request types to ensure consistency
-                    // This ensures the pipeline always knows streaming is supported, even for POST requests
-                    stream: true
+                    // Set stream based on request type, but ensure it's explicitly a boolean value
+                    // GET requests or format=stream parameter indicates streaming should be used
+                    stream: !!(req.method === 'GET' || req.query.format === 'stream')
                 },
-                streamCallback: req.method === 'GET' ? (data, done) => {
-                    res.write(`data: ${JSON.stringify({ content: data, done })}\n\n`);
+                streamCallback: req.method === 'GET' ? (data, done, rawChunk) => {
+                    // Prepare response data - include both the content and raw chunk data if available
+                    const responseData: any = { content: data, done };
+                    
+                    // If there's tool execution information, add it to the response
+                    if (rawChunk && rawChunk.toolExecution) {
+                        responseData.toolExecution = rawChunk.toolExecution;
+                    }
+                    
+                    // Send the data as a JSON event
+                    res.write(`data: ${JSON.stringify(responseData)}\n\n`);
+                    
                     if (done) {
                         res.end();
                     }

@@ -1,7 +1,7 @@
-import { BasePipelineStage } from '../pipeline_stage.js';
-import type { ToolExecutionInput } from '../interfaces.js';
-import log from '../../../log.js';
 import type { ChatResponse, Message } from '../../ai_interface.js';
+import log from '../../../log.js';
+import type { StreamCallback, ToolExecutionInput } from '../interfaces.js';
+import { BasePipelineStage } from '../pipeline_stage.js';
 import toolRegistry from '../../tools/tool_registry.js';
 
 /**
@@ -21,7 +21,8 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
      * Process the LLM response and execute any tool calls
      */
     protected async process(input: ToolExecutionInput): Promise<{ response: ChatResponse, needsFollowUp: boolean, messages: Message[] }> {
-        const { response, messages, options } = input;
+        const { response, messages } = input;
+        const streamCallback = input.streamCallback as StreamCallback;
 
         log.info(`========== TOOL CALLING STAGE ENTRY ==========`);
         log.info(`Response provider: ${response.provider}, model: ${response.model || 'unknown'}`);
@@ -148,6 +149,21 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 log.info(`Tool parameters: ${Object.keys(args).join(', ')}`);
                 log.info(`Parameters values: ${Object.entries(args).map(([k, v]) => `${k}=${typeof v === 'string' ? v : JSON.stringify(v)}`).join(', ')}`);
 
+                // Emit tool start event if streaming is enabled
+                if (streamCallback) {
+                    const toolExecutionData = {
+                        action: 'start',
+                        tool: toolCall.function.name,
+                        args: args
+                    };
+                    
+                    // Don't wait for this to complete, but log any errors
+                    const callbackResult = streamCallback('', false, { toolExecution: toolExecutionData });
+                    if (callbackResult instanceof Promise) {
+                        callbackResult.catch((e: Error) => log.error(`Error sending tool execution start event: ${e.message}`));
+                    }
+                }
+
                 const executionStart = Date.now();
                 let result;
                 try {
@@ -155,9 +171,40 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     result = await tool.execute(args);
                     const executionTime = Date.now() - executionStart;
                     log.info(`================ TOOL EXECUTION COMPLETED in ${executionTime}ms ================`);
+                    
+                    // Emit tool completion event if streaming is enabled
+                    if (streamCallback) {
+                        const toolExecutionData = {
+                            action: 'complete',
+                            tool: toolCall.function.name,
+                            result: result
+                        };
+                        
+                        // Don't wait for this to complete, but log any errors
+                        const callbackResult = streamCallback('', false, { toolExecution: toolExecutionData });
+                        if (callbackResult instanceof Promise) {
+                            callbackResult.catch((e: Error) => log.error(`Error sending tool execution complete event: ${e.message}`));
+                        }
+                    }
                 } catch (execError: any) {
                     const executionTime = Date.now() - executionStart;
                     log.error(`================ TOOL EXECUTION FAILED in ${executionTime}ms: ${execError.message} ================`);
+                    
+                    // Emit tool error event if streaming is enabled
+                    if (streamCallback) {
+                        const toolExecutionData = {
+                            action: 'error',
+                            tool: toolCall.function.name,
+                            error: execError.message || String(execError)
+                        };
+                        
+                        // Don't wait for this to complete, but log any errors
+                        const callbackResult = streamCallback('', false, { toolExecution: toolExecutionData });
+                        if (callbackResult instanceof Promise) {
+                            callbackResult.catch((e: Error) => log.error(`Error sending tool execution error event: ${e.message}`));
+                        }
+                    }
+                    
                     throw execError;
                 }
 
@@ -176,6 +223,22 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 };
             } catch (error: any) {
                 log.error(`Error executing tool ${toolCall.function.name}: ${error.message || String(error)}`);
+
+                // Emit tool error event if not already handled in the try/catch above
+                // and if streaming is enabled
+                if (streamCallback && error.name !== "ExecutionError") {
+                    const toolExecutionData = {
+                        action: 'error',
+                        tool: toolCall.function.name,
+                        error: error.message || String(error)
+                    };
+                    
+                    // Don't wait for this to complete, but log any errors
+                    const callbackResult = streamCallback('', false, { toolExecution: toolExecutionData });
+                    if (callbackResult instanceof Promise) {
+                        callbackResult.catch((e: Error) => log.error(`Error sending tool execution error event: ${e.message}`));
+                    }
+                }
 
                 // Return error message as result
                 return {

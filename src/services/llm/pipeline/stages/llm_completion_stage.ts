@@ -31,11 +31,16 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
         // Create a deep copy of options to avoid modifying the original
         const updatedOptions: ChatCompletionOptions = JSON.parse(JSON.stringify(options));
 
-        // IMPORTANT: Ensure stream property is explicitly set to a boolean value
-        // This is critical to ensure consistent behavior across all providers
-        updatedOptions.stream = options.stream === true;
-
-        log.info(`[LLMCompletionStage] Explicitly set stream option to boolean: ${updatedOptions.stream}`);
+        // IMPORTANT: Handle stream option carefully:
+        // 1. If it's undefined, leave it undefined (provider will use defaults)
+        // 2. If explicitly set to true/false, ensure it's a proper boolean
+        if (options.stream !== undefined) {
+            updatedOptions.stream = options.stream === true;
+            log.info(`[LLMCompletionStage] Stream explicitly provided in options, set to: ${updatedOptions.stream}`);
+        } else {
+            // If undefined, leave it undefined so provider can use its default behavior
+            log.info(`[LLMCompletionStage] Stream option not explicitly set, leaving as undefined`);
+        }
 
         // If this is a direct (non-stream) call to Ollama but has the stream flag,
         // ensure we set additional metadata to maintain proper state

@@ -50,6 +50,7 @@ export interface ChatCompletionOptions {
     useAdvancedContext?: boolean; // Whether to use advanced context enrichment
     toolExecutionStatus?: any[]; // Status information about executed tools for feedback
     providerMetadata?: ModelMetadata; // Metadata about the provider and model capabilities
+    streamCallback?: (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void; // Callback for streaming
 }
 
 export interface ChatResponse {

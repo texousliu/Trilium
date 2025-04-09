@@ -142,7 +142,7 @@ export class ChatService {
             // Execute the pipeline
             const response = await pipeline.execute({
                 messages: session.messages,
-                options: options || session.options,
+                options: options || session.options || {},
                 query: content,
                 streamCallback
             });
@@ -231,7 +231,7 @@ export class ChatService {
             // Execute the pipeline with note context
             const response = await pipeline.execute({
                 messages: session.messages,
-                options: options || session.options,
+                options: options || session.options || {},
                 noteId,
                 query: content,
                 showThinking,

@@ -25,7 +25,17 @@ const TPL = `
             <div class="spinner-border spinner-border-sm text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <span class="ms-2">${t('ai_llm.agent.processing')}...</span>
+            <span class="ms-2">${t('ai_llm.agent.processing')}</span>
+            <div class="tool-execution-info mt-2" style="display: none;">
+                <!-- Tool execution status will be shown here -->
+                <div class="tool-execution-status small p-2 bg-light rounded" style="max-height: 150px; overflow-y: auto;">
+                    <div class="d-flex align-items-center">
+                        <i class="bx bx-code-block text-primary me-2"></i>
+                        <span class="fw-bold">Tool Execution:</span>
+                    </div>
+                    <div class="tool-execution-steps ps-3 pt-1"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -87,6 +97,8 @@ export default class LlmChatPanel extends BasicWidget {
     private noteContextChatSendButton!: HTMLButtonElement;
     private chatContainer!: HTMLElement;
     private loadingIndicator!: HTMLElement;
+    private toolExecutionInfo!: HTMLElement;
+    private toolExecutionSteps!: HTMLElement;
     private sourcesList!: HTMLElement;
     private useAdvancedContextCheckbox!: HTMLInputElement;
     private showThinkingCheckbox!: HTMLInputElement;
@@ -142,6 +154,8 @@ export default class LlmChatPanel extends BasicWidget {
         this.noteContextChatSendButton = element.querySelector('.note-context-chat-send-button') as HTMLButtonElement;
         this.chatContainer = element.querySelector('.note-context-chat-container') as HTMLElement;
         this.loadingIndicator = element.querySelector('.loading-indicator') as HTMLElement;
+        this.toolExecutionInfo = element.querySelector('.tool-execution-info') as HTMLElement;
+        this.toolExecutionSteps = element.querySelector('.tool-execution-steps') as HTMLElement;
         this.sourcesList = element.querySelector('.sources-list') as HTMLElement;
         this.useAdvancedContextCheckbox = element.querySelector('.use-advanced-context-checkbox') as HTMLInputElement;
         this.showThinkingCheckbox = element.querySelector('.show-thinking-checkbox') as HTMLInputElement;
@@ -498,6 +512,12 @@ export default class LlmChatPanel extends BasicWidget {
 
                         // Update the UI with the accumulated response
                         this.updateStreamingUI(assistantResponse);
+                    } else if (data.toolExecution) {
+                        // Handle tool execution info
+                        this.showToolExecutionInfo(data.toolExecution);
+                        // When tool execution info is received, also show the loading indicator
+                        // in case it's not already visible
+                        this.loadingIndicator.style.display = 'flex';
                     } else if (data.error) {
                         // Handle error message
                         this.hideLoadingIndicator();
@@ -736,10 +756,156 @@ export default class LlmChatPanel extends BasicWidget {
 
     private showLoadingIndicator() {
         this.loadingIndicator.style.display = 'flex';
+        // Reset the tool execution area when starting a new request, but keep it visible
+        // We'll make it visible when we get our first tool execution event
+        this.toolExecutionInfo.style.display = 'none';
+        this.toolExecutionSteps.innerHTML = '';
     }
 
     private hideLoadingIndicator() {
         this.loadingIndicator.style.display = 'none';
+        this.toolExecutionInfo.style.display = 'none';
+    }
+    
+    /**
+     * Show tool execution information in the UI
+     */
+    private showToolExecutionInfo(toolExecutionData: any) {
+        // Make sure tool execution info section is visible
+        this.toolExecutionInfo.style.display = 'block';
+        
+        // Create a new step element to show the tool being executed
+        const stepElement = document.createElement('div');
+        stepElement.className = 'tool-step my-1';
+        
+        // Basic styling for the step
+        let stepHtml = '';
+        
+        if (toolExecutionData.action === 'start') {
+            // Tool execution starting
+            stepHtml = `
+                <div class="d-flex align-items-center">
+                    <i class="bx bx-play-circle text-primary me-1"></i>
+                    <span class="fw-bold">${this.escapeHtml(toolExecutionData.tool || 'Unknown tool')}</span>
+                </div>
+                <div class="tool-args small text-muted ps-3">
+                    ${this.formatToolArgs(toolExecutionData.args || {})}
+                </div>
+            `;
+        } else if (toolExecutionData.action === 'complete') {
+            // Tool execution completed
+            const resultPreview = this.formatToolResult(toolExecutionData.result);
+            stepHtml = `
+                <div class="d-flex align-items-center">
+                    <i class="bx bx-check-circle text-success me-1"></i>
+                    <span>${this.escapeHtml(toolExecutionData.tool || 'Unknown tool')} completed</span>
+                </div>
+                ${resultPreview ? `<div class="tool-result small ps-3 text-muted">${resultPreview}</div>` : ''}
+            `;
+        } else if (toolExecutionData.action === 'error') {
+            // Tool execution error
+            stepHtml = `
+                <div class="d-flex align-items-center">
+                    <i class="bx bx-error-circle text-danger me-1"></i>
+                    <span class="text-danger">${this.escapeHtml(toolExecutionData.tool || 'Unknown tool')} error</span>
+                </div>
+                <div class="tool-error small text-danger ps-3">
+                    ${this.escapeHtml(toolExecutionData.error || 'Unknown error')}
+                </div>
+            `;
+        }
+        
+        stepElement.innerHTML = stepHtml;
+        this.toolExecutionSteps.appendChild(stepElement);
+        
+        // Scroll to bottom of tool execution steps
+        this.toolExecutionSteps.scrollTop = this.toolExecutionSteps.scrollHeight;
+    }
+    
+    /**
+     * Format tool arguments for display
+     */
+    private formatToolArgs(args: any): string {
+        if (!args || typeof args !== 'object') return '';
+        
+        return Object.entries(args)
+            .map(([key, value]) => {
+                // Format the value based on its type
+                let displayValue;
+                if (typeof value === 'string') {
+                    displayValue = value.length > 50 ? `"${value.substring(0, 47)}..."` : `"${value}"`;
+                } else if (value === null) {
+                    displayValue = 'null';
+                } else if (Array.isArray(value)) {
+                    displayValue = '[...]'; // Simplified array representation
+                } else if (typeof value === 'object') {
+                    displayValue = '{...}'; // Simplified object representation
+                } else {
+                    displayValue = String(value);
+                }
+                
+                return `<span class="text-primary">${this.escapeHtml(key)}</span>: ${this.escapeHtml(displayValue)}`;
+            })
+            .join(', ');
+    }
+    
+    /**
+     * Format tool results for display
+     */
+    private formatToolResult(result: any): string {
+        if (result === undefined || result === null) return '';
+        
+        // Try to format as JSON if it's an object
+        if (typeof result === 'object') {
+            try {
+                // Get a preview of structured data
+                const entries = Object.entries(result);
+                if (entries.length === 0) return 'Empty result';
+                
+                // Just show first 2 key-value pairs if there are many
+                const preview = entries.slice(0, 2).map(([key, val]) => {
+                    let valPreview;
+                    if (typeof val === 'string') {
+                        valPreview = val.length > 30 ? `"${val.substring(0, 27)}..."` : `"${val}"`;
+                    } else if (Array.isArray(val)) {
+                        valPreview = `[${val.length} items]`;
+                    } else if (typeof val === 'object' && val !== null) {
+                        valPreview = '{...}';
+                    } else {
+                        valPreview = String(val);
+                    }
+                    return `${key}: ${valPreview}`;
+                }).join(', ');
+                
+                return entries.length > 2 ? `${preview}, ... (${entries.length} properties)` : preview;
+            } catch (e) {
+                return String(result).substring(0, 100) + (String(result).length > 100 ? '...' : '');
+            }
+        }
+        
+        // For string results
+        if (typeof result === 'string') {
+            return result.length > 100 ? result.substring(0, 97) + '...' : result;
+        }
+        
+        // Default formatting
+        return String(result).substring(0, 100) + (String(result).length > 100 ? '...' : '');
+    }
+    
+    /**
+     * Simple HTML escaping for safer content display
+     */
+    private escapeHtml(text: string): string {
+        if (typeof text !== 'string') {
+            text = String(text || '');
+        }
+        
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
     }
 
     private initializeEventListeners() {
