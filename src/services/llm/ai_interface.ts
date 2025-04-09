@@ -35,6 +35,7 @@ export interface ChatCompletionOptions {
     enableTools?: boolean; // Whether to enable tool calling
     tools?: any[]; // Tools to provide to the LLM
     useAdvancedContext?: boolean; // Whether to use advanced context enrichment
+    toolExecutionStatus?: any[]; // Status information about executed tools for feedback
 }
 
 export interface ChatResponse {

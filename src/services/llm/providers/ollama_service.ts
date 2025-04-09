@@ -39,6 +39,15 @@ interface OllamaResponse {
     eval_duration: number;
 }
 
+// Add an interface for tool execution feedback status
+interface ToolExecutionStatus {
+    toolCallId: string;
+    name: string;
+    success: boolean;
+    result: string;
+    error?: string;
+}
+
 export class OllamaService extends BaseAIService {
     private formatter: OllamaMessageFormatter;
 
@@ -72,6 +81,12 @@ export class OllamaService extends BaseAIService {
         const systemPrompt = this.getSystemPrompt(opts.systemPrompt || options.getOption('aiSystemPrompt'));
 
         try {
+            // Check if we should add tool execution feedback
+            if (opts.toolExecutionStatus && Array.isArray(opts.toolExecutionStatus) && opts.toolExecutionStatus.length > 0) {
+                log.info(`Adding tool execution feedback to messages`);
+                messages = this.addToolExecutionFeedback(messages, opts.toolExecutionStatus);
+            }
+
             // Determine whether to use the formatter or send messages directly
             let messagesToSend: Message[];
 
@@ -464,6 +479,49 @@ export class OllamaService extends BaseAIService {
             log.error(`Error getting model context window: ${error.message}`);
             return 8192; // Default to 8192 tokens if there's an error
         }
+    }
+
+    /**
+     * Adds a system message with feedback about tool execution status
+     * @param messages The current message array
+     * @param toolExecutionStatus Array of tool execution status objects
+     * @returns Updated message array with feedback
+     */
+    private addToolExecutionFeedback(messages: Message[], toolExecutionStatus: ToolExecutionStatus[]): Message[] {
+        if (!toolExecutionStatus || toolExecutionStatus.length === 0) {
+            return messages;
+        }
+
+        // Create a copy of the messages
+        const updatedMessages = [...messages];
+
+        // Create a feedback message that explains what happened with each tool call
+        let feedbackContent = `Tool execution feedback:\n\n`;
+
+        toolExecutionStatus.forEach((status, index) => {
+            // Add status for each tool
+            const statusText = status.success ? 'successfully executed' : 'failed to execute';
+            const toolName = status.name || 'unknown tool';
+
+            feedbackContent += `Tool call ${index + 1} (${toolName}): ${statusText}\n`;
+
+            // Add error information if available and tool failed
+            if (!status.success && status.error) {
+                feedbackContent += `Error: ${status.error}\n`;
+                feedbackContent += `Please fix this issue in your next response or try a different approach.\n`;
+            }
+
+            feedbackContent += `\n`;
+        });
+
+        // Add feedback message to the conversation
+        updatedMessages.push({
+            role: 'system',
+            content: feedbackContent
+        });
+
+        log.info(`Added tool execution feedback: ${toolExecutionStatus.length} statuses`);
+        return updatedMessages;
     }
 }
 

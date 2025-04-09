@@ -367,6 +367,29 @@ export class ChatPipeline {
                                 await streamCallback('[Generating response with tool results...]\n\n', false);
                             }
 
+                            // Extract tool execution status information for Ollama feedback
+                            let toolExecutionStatus;
+
+                            if (currentResponse.provider === 'Ollama') {
+                                // Collect tool execution status from the tool results
+                                toolExecutionStatus = toolResultMessages.map(msg => {
+                                    // Determine if this was a successful tool call
+                                    const isError = msg.content.startsWith('Error:');
+                                    return {
+                                        toolCallId: msg.tool_call_id || '',
+                                        name: msg.name || 'unknown',
+                                        success: !isError,
+                                        result: msg.content,
+                                        error: isError ? msg.content.substring(7) : undefined
+                                    };
+                                });
+
+                                log.info(`Created tool execution status for Ollama: ${toolExecutionStatus.length} entries`);
+                                toolExecutionStatus.forEach((status, idx) => {
+                                    log.info(`Tool status ${idx + 1}: ${status.name} - ${status.success ? 'success' : 'failed'}`);
+                                });
+                            }
+
                             // Generate a new completion with the updated messages
                             const followUpStartTime = Date.now();
                             const followUpCompletion = await this.stages.llmCompletion.execute({
@@ -376,7 +399,9 @@ export class ChatPipeline {
                                     // Ensure tool support is still enabled for follow-up requests
                                     enableTools: true,
                                     // Disable streaming during tool execution follow-ups
-                                    stream: false
+                                    stream: false,
+                                    // Add tool execution status for Ollama provider
+                                    ...(currentResponse.provider === 'Ollama' ? { toolExecutionStatus } : {})
                                 }
                             });
                             this.updateStageMetrics('llmCompletion', followUpStartTime);
@@ -418,10 +443,31 @@ export class ChatPipeline {
                             await streamCallback(`[Tool execution error: ${error.message || 'unknown error'}]\n\n`, false);
                         }
 
+                        // For Ollama, create tool execution status with the error
+                        let toolExecutionStatus;
+                        if (currentResponse.provider === 'Ollama' && currentResponse.tool_calls) {
+                            // We need to create error statuses for all tool calls that failed
+                            toolExecutionStatus = currentResponse.tool_calls.map(toolCall => {
+                                return {
+                                    toolCallId: toolCall.id || '',
+                                    name: toolCall.function?.name || 'unknown',
+                                    success: false,
+                                    result: `Error: ${error.message || 'unknown error'}`,
+                                    error: error.message || 'unknown error'
+                                };
+                            });
+
+                            log.info(`Created error tool execution status for Ollama: ${toolExecutionStatus.length} entries`);
+                        }
+
                         // Make a follow-up request to the LLM with the error information
                         const errorFollowUpCompletion = await this.stages.llmCompletion.execute({
                             messages: currentMessages,
-                            options: modelSelection.options
+                            options: {
+                                ...modelSelection.options,
+                                // For Ollama, include tool execution status
+                                ...(currentResponse.provider === 'Ollama' ? { toolExecutionStatus } : {})
+                            }
                         });
 
                         // Update current response and break the tool loop
@@ -445,12 +491,31 @@ export class ChatPipeline {
                         await streamCallback(`[Reached maximum of ${maxToolCallIterations} tool calls. Finalizing response...]\n\n`, false);
                     }
 
+                    // For Ollama, create a status about reaching max iterations
+                    let toolExecutionStatus;
+                    if (currentResponse.provider === 'Ollama' && currentResponse.tool_calls) {
+                        // Create a special status message about max iterations
+                        toolExecutionStatus = [
+                            {
+                                toolCallId: 'max-iterations',
+                                name: 'system',
+                                success: false,
+                                result: `Maximum tool call iterations (${maxToolCallIterations}) reached.`,
+                                error: `Reached the maximum number of allowed tool calls (${maxToolCallIterations}). Please provide a final response with the information gathered so far.`
+                            }
+                        ];
+
+                        log.info(`Created max iterations status for Ollama`);
+                    }
+
                     // Make a final request to get a summary response
                     const finalFollowUpCompletion = await this.stages.llmCompletion.execute({
                         messages: currentMessages,
                         options: {
                             ...modelSelection.options,
-                            enableTools: false // Disable tools for the final response
+                            enableTools: false, // Disable tools for the final response
+                            // For Ollama, include tool execution status
+                            ...(currentResponse.provider === 'Ollama' ? { toolExecutionStatus } : {})
                         }
                     });
 
