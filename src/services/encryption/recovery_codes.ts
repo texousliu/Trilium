@@ -1,6 +1,6 @@
-import sql from '../sql.js';
-import optionService from '../options.js';
 import crypto from 'crypto';
+import optionService from '../options.js';
+import sql from '../sql.js';
 
 function isRecoveryCodeSet() {
     return optionService.getOptionBool('encryptedRecoveryCodes');
@@ -10,7 +10,7 @@ function setRecoveryCodes(recoveryCodes: string) {
     const iv = crypto.randomBytes(16);
     const securityKey = crypto.randomBytes(32);
     const cipher = crypto.createCipheriv('aes-256-cbc', securityKey, iv);
-    let encryptedRecoveryCodes = cipher.update(recoveryCodes, 'utf-8', 'hex');
+    const encryptedRecoveryCodes = cipher.update(recoveryCodes, 'utf-8', 'hex');
 
     sql.transactional(() => {
         optionService.setOption('recoveryCodeInitialVector', iv.toString('hex'));
@@ -54,7 +54,7 @@ function verifyRecoveryCode(recoveryCodeGuess: string) {
     }
 
     const recoveryCodes = getRecoveryCodes();
-    var loginSuccess = false;
+    let loginSuccess = false;
     recoveryCodes.forEach((recoveryCode: string) => {
         if (recoveryCodeGuess === recoveryCode) {
             removeRecoveryCode(recoveryCode);
