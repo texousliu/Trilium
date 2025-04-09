@@ -3527,7 +3527,16 @@
                                     ],
                                     "format": "html",
                                     "dataFileName": "Search.html",
-                                    "attachments": []
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "WkhcA4FN7sGX",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Search_image.png"
+                                        }
+                                    ]
                                 },
                                 {
                                     "isClone": false,
@@ -3746,6 +3755,71 @@
                                             "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "Similar Notes_image.png"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "McngOG2jbUWX",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "wArbEsdSae6g",
+                                        "McngOG2jbUWX"
+                                    ],
+                                    "title": "Search in note",
+                                    "notePosition": 110,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-search-alt-2",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "8YBEPzcpUgxw",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "6f9hih2hXXZk",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "iPIMuisry3hd",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "MI26XDLSAlCD",
+                                            "isInheritable": false,
+                                            "position": 50
+                                        }
+                                    ],
+                                    "format": "html",
+                                    "dataFileName": "Search in note.html",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "vEq0g2DHEh3O",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Search in note_image.png"
                                         }
                                     ]
                                 }

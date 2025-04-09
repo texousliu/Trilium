@@ -1,7 +1,5 @@
 # Search
-## Local Search
-
-Local search allows you to search within the currently displayed note. To initiate a local search, press <kbd>Ctrl</kbd> + <kbd>F</kbd>. If using a web browser, this will be handled by the browser's native search functionality. In the desktop (electron) version, a separate dialog will apear.
+<figure class="image"><img style="aspect-ratio:987/725;" src="Search_image.png" width="987" height="725"></figure>
 
 ## Note Search
 
