@@ -55,7 +55,7 @@ export type StreamCallback = (text: string, isDone: boolean) => Promise<void> | 
  */
 export interface ChatPipelineInput extends PipelineInput {
     messages: Message[];
-    options?: ChatCompletionOptions;
+    options: ChatCompletionOptions;
     noteId?: string;
     query?: string;
     showThinking?: boolean;
@@ -114,14 +114,14 @@ export interface MessagePreparationInput extends PipelineInput {
     messages: Message[];
     context?: string;
     systemPrompt?: string;
-    options?: ChatCompletionOptions;
+    options: ChatCompletionOptions;
 }
 
 /**
  * Interface for the pipeline stage that performs model selection
  */
 export interface ModelSelectionInput extends PipelineInput {
-    options?: ChatCompletionOptions;
+    options: ChatCompletionOptions;
     query?: string;
     contentLength?: number;
 }
@@ -131,7 +131,7 @@ export interface ModelSelectionInput extends PipelineInput {
  */
 export interface LLMCompletionInput extends PipelineInput {
     messages: Message[];
-    options?: ChatCompletionOptions;
+    options: ChatCompletionOptions;
     provider?: string;
 }
 
@@ -140,7 +140,7 @@ export interface LLMCompletionInput extends PipelineInput {
  */
 export interface ResponseProcessingInput extends PipelineInput {
     response: ChatResponse;
-    options?: ChatCompletionOptions;
+    options: ChatCompletionOptions;
 }
 
 /**
@@ -149,7 +149,7 @@ export interface ResponseProcessingInput extends PipelineInput {
 export interface ToolExecutionInput extends PipelineInput {
     response: ChatResponse;
     messages: Message[];
-    options?: ChatCompletionOptions;
+    options: ChatCompletionOptions;
     maxIterations?: number;
 }
 
