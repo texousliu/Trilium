@@ -1,23 +1,35 @@
 import options from '../../options.js';
 import { BaseAIService } from '../base_ai_service.js';
-import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
+import type { ChatCompletionOptions, ChatResponse, Message, StreamChunk } from '../ai_interface.js';
 import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
 import type { AnthropicOptions } from './provider_options.js';
 import { getAnthropicOptions } from './providers.js';
 import log from '../../log.js';
-
-interface AnthropicMessage {
-    role: string;
-    content: string;
-}
+import Anthropic from '@anthropic-ai/sdk';
 
 export class AnthropicService extends BaseAIService {
+    private client: any = null;
+
     constructor() {
         super('Anthropic');
     }
 
     isAvailable(): boolean {
         return super.isAvailable() && !!options.getOption('anthropicApiKey');
+    }
+
+    private getClient(apiKey: string, baseUrl: string, apiVersion?: string, betaVersion?: string): any {
+        if (!this.client) {
+            this.client = new Anthropic({
+                apiKey,
+                baseURL: baseUrl,
+                defaultHeaders: {
+                    'anthropic-version': apiVersion || PROVIDER_CONSTANTS.ANTHROPIC.API_VERSION,
+                    'anthropic-beta': betaVersion || PROVIDER_CONSTANTS.ANTHROPIC.BETA_VERSION
+                }
+            });
+        }
+        return this.client;
     }
 
     async generateChatCompletion(messages: Message[], opts: ChatCompletionOptions = {}): Promise<ChatResponse> {
@@ -39,104 +51,163 @@ export class AnthropicService extends BaseAIService {
             }
         }
 
+        // Get system prompt
         const systemPrompt = this.getSystemPrompt(providerOptions.systemPrompt || options.getOption('aiSystemPrompt'));
 
-        // Format for Anthropic's API
-        const formattedMessages = this.formatMessages(messages, systemPrompt);
-
-        // Store the formatted messages in the provider options for future reference
-        providerOptions.formattedMessages = formattedMessages;
+        // Format messages for Anthropic's API
+        const anthropicMessages = this.formatMessages(messages);
 
         try {
-            // Ensure base URL doesn't already include '/v1' and build the complete endpoint
-            const cleanBaseUrl = providerOptions.baseUrl.replace(/\/+$/, '').replace(/\/v1$/, '');
-            const endpoint = `${cleanBaseUrl}/v1/messages`;
+            // Initialize the Anthropic client
+            const client = this.getClient(
+                providerOptions.apiKey,
+                providerOptions.baseUrl,
+                providerOptions.apiVersion,
+                providerOptions.betaVersion
+            );
 
-            console.log(`Anthropic API endpoint: ${endpoint}`);
-            console.log(`Using model: ${providerOptions.model}`);
+            log.info(`Using Anthropic API with model: ${providerOptions.model}`);
 
-            // Create request body directly from provider options
-            const requestBody: any = {
+            // Configure request parameters
+            const requestParams = {
                 model: providerOptions.model,
-                messages: formattedMessages.messages,
-                system: formattedMessages.system,
-            };
-
-            // Extract API parameters from provider options
-            const apiParams = {
+                messages: anthropicMessages,
+                system: systemPrompt,
+                max_tokens: providerOptions.max_tokens || 4096,
                 temperature: providerOptions.temperature,
-                max_tokens: providerOptions.max_tokens,
-                stream: providerOptions.stream,
-                top_p: providerOptions.top_p
+                top_p: providerOptions.top_p,
+                stream: !!providerOptions.stream
             };
 
-            // Merge API parameters, filtering out undefined values
-            Object.entries(apiParams).forEach(([key, value]) => {
-                if (value !== undefined) {
-                    requestBody[key] = value;
-                }
-            });
+            // Handle streaming responses
+            if (providerOptions.stream) {
+                return this.handleStreamingResponse(client, requestParams, opts, providerOptions);
+            } else {
+                // Non-streaming request
+                const response = await client.messages.create(requestParams);
 
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Api-Key': providerOptions.apiKey,
-                    'anthropic-version': providerOptions.apiVersion || PROVIDER_CONSTANTS.ANTHROPIC.API_VERSION,
-                    'anthropic-beta': providerOptions.betaVersion || PROVIDER_CONSTANTS.ANTHROPIC.BETA_VERSION
-                },
-                body: JSON.stringify(requestBody)
-            });
+                // Get the assistant's response text from the content blocks
+                const textContent = response.content
+                    .filter((block: any) => block.type === 'text')
+                    .map((block: any) => block.text)
+                    .join('');
 
-            if (!response.ok) {
-                const errorBody = await response.text();
-                console.error(`Anthropic API error (${response.status}): ${errorBody}`);
-                throw new Error(`Anthropic API error: ${response.status} ${response.statusText} - ${errorBody}`);
+                return {
+                    text: textContent,
+                    model: response.model,
+                    provider: this.getName(),
+                    usage: {
+                        // Anthropic provides token counts in the response
+                        promptTokens: response.usage?.input_tokens,
+                        completionTokens: response.usage?.output_tokens,
+                        totalTokens: (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0)
+                    }
+                };
             }
-
-            const data = await response.json();
-
-            return {
-                text: data.content[0].text,
-                model: data.model,
-                provider: this.getName(),
-                usage: {
-                    // Anthropic doesn't provide token usage in the same format as OpenAI
-                    // but we can still estimate based on input/output length
-                    totalTokens: data.usage?.input_tokens + data.usage?.output_tokens
-                }
-            };
         } catch (error) {
-            console.error('Anthropic service error:', error);
+            log.error(`Anthropic service error: ${error}`);
             throw error;
         }
     }
 
     /**
+     * Handle streaming response from Anthropic
+     */
+    private async handleStreamingResponse(
+        client: any,
+        params: any,
+        opts: ChatCompletionOptions,
+        providerOptions: AnthropicOptions
+    ): Promise<ChatResponse> {
+        let completeText = '';
+
+        // Create a function that will return a Promise that resolves with the final text
+        const streamHandler = async (callback: (chunk: StreamChunk) => Promise<void> | void): Promise<string> => {
+            try {
+                const streamResponse = await client.messages.create({
+                    ...params,
+                    stream: true
+                });
+
+                for await (const chunk of streamResponse) {
+                    if (chunk.type === 'content_block_delta' && chunk.delta?.type === 'text_delta') {
+                        const text = chunk.delta.text || '';
+                        completeText += text;
+                        
+                        // Call the callback with the chunk
+                        await callback({
+                            text,
+                            done: false,
+                            usage: {} // Usage stats not available in chunks
+                        });
+                    }
+                }
+
+                // Signal completion
+                await callback({
+                    text: '',
+                    done: true,
+                    usage: {
+                        // We don't have token usage information in streaming mode from the chunks
+                        totalTokens: completeText.length / 4 // Rough estimate
+                    }
+                });
+
+                return completeText;
+            } catch (error) {
+                log.error(`Error in Anthropic streaming: ${error}`);
+                throw error;
+            }
+        };
+
+        // If a stream callback was provided in the options, set up immediate streaming
+        if (opts.streamCallback) {
+            // Start streaming in the background
+            void streamHandler(async (chunk) => {
+                if (opts.streamCallback) {
+                    await opts.streamCallback(chunk.text, chunk.done);
+                }
+            });
+        }
+
+        return {
+            text: completeText, // This will be empty initially until streaming completes
+            model: providerOptions.model,
+            provider: this.getName(),
+            stream: streamHandler,
+            usage: {
+                // We don't have token counts initially with streaming
+                totalTokens: 0
+            }
+        };
+    }
+
+    /**
      * Format messages for the Anthropic API
      */
-    private formatMessages(messages: Message[], systemPrompt: string): { messages: AnthropicMessage[], system: string } {
-        const formattedMessages: AnthropicMessage[] = [];
-
-        // Extract the system message if present
-        let sysPrompt = systemPrompt;
+    private formatMessages(messages: Message[]): any[] {
+        const anthropicMessages: any[] = [];
 
         // Process each message
         for (const msg of messages) {
             if (msg.role === 'system') {
-                // Anthropic handles system messages separately
-                sysPrompt = msg.content;
-            } else {
-                formattedMessages.push({
+                // System messages are handled separately in the API call
+                continue;
+            } else if (msg.role === 'user' || msg.role === 'assistant') {
+                // Convert to Anthropic format
+                anthropicMessages.push({
                     role: msg.role,
+                    content: msg.content
+                });
+            } else if (msg.role === 'tool') {
+                // Tool response messages - typically follow a tool call from the assistant
+                anthropicMessages.push({
+                    role: 'user',
                     content: msg.content
                 });
             }
         }
 
-        return {
-            messages: formattedMessages,
-            system: sysPrompt
-        };
+        return anthropicMessages;
     }
 }

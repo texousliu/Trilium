@@ -1,8 +1,8 @@
-import axios from 'axios';
 import options from "../../services/options.js";
 import log from "../../services/log.js";
 import type { Request, Response } from "express";
 import { PROVIDER_CONSTANTS } from '../../services/llm/constants/provider_constants.js';
+import Anthropic from '@anthropic-ai/sdk';
 
 // Interface for Anthropic model entries
 interface AnthropicModel {
@@ -69,10 +69,10 @@ async function listModels(req: Request, res: Response) {
     try {
         const { baseUrl } = req.body;
 
-        // Use provided base URL or default from options, and ensure correct formatting
-        let anthropicBaseUrl = baseUrl || await options.getOption('anthropicBaseUrl') || PROVIDER_CONSTANTS.ANTHROPIC.BASE_URL;
-        // Ensure base URL doesn't already include '/v1' and is properly formatted
-        anthropicBaseUrl = anthropicBaseUrl.replace(/\/+$/, '').replace(/\/v1$/, '');
+        // Use provided base URL or default from options
+        const anthropicBaseUrl = baseUrl || 
+            await options.getOption('anthropicBaseUrl') || 
+            PROVIDER_CONSTANTS.ANTHROPIC.BASE_URL;
 
         const apiKey = await options.getOption('anthropicApiKey');
 
@@ -80,32 +80,34 @@ async function listModels(req: Request, res: Response) {
             throw new Error('Anthropic API key is not configured');
         }
 
-        log.info(`Listing models from Anthropic API at: ${anthropicBaseUrl}/v1/models`);
+        log.info(`Listing models from Anthropic API using the SDK`);
 
-        // Call Anthropic API to get models
-        const response = await axios.get(`${anthropicBaseUrl}/v1/models`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Api-Key': apiKey,
+        // Initialize the Anthropic client with the SDK
+        const client = new Anthropic({
+            apiKey,
+            baseURL: anthropicBaseUrl,
+            defaultHeaders: {
                 'anthropic-version': PROVIDER_CONSTANTS.ANTHROPIC.API_VERSION,
                 'anthropic-beta': PROVIDER_CONSTANTS.ANTHROPIC.BETA_VERSION
-            },
-            timeout: 10000
+            }
         });
 
+        // Use the SDK's built-in models listing
+        const response = await client.models.list();
+
         // Process the models
-        const allModels = response.data.models || [];
+        const allModels = response.data || [];
 
         // Log available models
-        log.info(`Found ${allModels.length} models from Anthropic: ${allModels.map((m: any) => m.id).join(', ')}`);
+        log.info(`Found ${allModels.length} models from Anthropic: ${allModels.map(m => m.id).join(', ')}`);
 
         // Separate models into chat models and embedding models
         const chatModels = allModels
-            .filter((model: any) =>
+            .filter(model => 
                 // Claude models are for chat
                 model.id.includes('claude')
             )
-            .map((model: any) => {
+            .map(model => {
                 // Get a simplified name for display purposes
                 let displayName = model.id;
                 // Try to simplify the model name by removing version suffixes
@@ -134,11 +136,11 @@ async function listModels(req: Request, res: Response) {
 
         // Note: Anthropic might not have embedding models yet, but we'll include this for future compatibility
         const embeddingModels = allModels
-            .filter((model: any) =>
+            .filter(model =>
                 // If Anthropic releases embedding models, they'd likely include 'embed' in the name
                 model.id.includes('embed')
             )
-            .map((model: any) => ({
+            .map(model => ({
                 id: model.id,
                 name: model.id,
                 type: 'embedding'
