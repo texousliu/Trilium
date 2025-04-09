@@ -1,6 +1,6 @@
 import { BasePipelineStage } from '../pipeline_stage.js';
 import type { LLMCompletionInput } from '../interfaces.js';
-import type { ChatResponse } from '../../ai_interface.js';
+import type { ChatCompletionOptions, ChatResponse } from '../../ai_interface.js';
 import aiServiceManager from '../../ai_service_manager.js';
 import toolRegistry from '../../tools/tool_registry.js';
 import log from '../../../log.js';
@@ -19,8 +19,35 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
     protected async process(input: LLMCompletionInput): Promise<{ response: ChatResponse }> {
         const { messages, options, provider } = input;
 
-        // Create a copy of options to avoid modifying the original
-        const updatedOptions = { ...options };
+        // Log input options, particularly focusing on the stream option
+        log.info(`[LLMCompletionStage] Input options: ${JSON.stringify({
+            model: options.model,
+            provider,
+            stream: options.stream,
+            enableTools: options.enableTools
+        })}`);
+        log.info(`[LLMCompletionStage] Stream option in input: ${options.stream}, type: ${typeof options.stream}`);
+
+        // Create a deep copy of options to avoid modifying the original
+        const updatedOptions: ChatCompletionOptions = JSON.parse(JSON.stringify(options));
+
+        // IMPORTANT: Ensure stream property is explicitly set to a boolean value
+        // This is critical to ensure consistent behavior across all providers
+        updatedOptions.stream = options.stream === true;
+
+        log.info(`[LLMCompletionStage] Explicitly set stream option to boolean: ${updatedOptions.stream}`);
+
+        // If this is a direct (non-stream) call to Ollama but has the stream flag,
+        // ensure we set additional metadata to maintain proper state
+        if (updatedOptions.stream && !provider && updatedOptions.providerMetadata?.provider === 'ollama') {
+            log.info(`[LLMCompletionStage] This is an Ollama request with stream=true, ensuring provider config is consistent`);
+        }
+
+        log.info(`[LLMCompletionStage] Copied options: ${JSON.stringify({
+            model: updatedOptions.model,
+            stream: updatedOptions.stream,
+            enableTools: updatedOptions.enableTools
+        })}`);
 
         // Check if tools should be enabled
         if (updatedOptions.enableTools !== false) {
@@ -48,15 +75,22 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
         }
 
         log.info(`Generating LLM completion, provider: ${selectedProvider || 'auto'}, model: ${updatedOptions?.model || 'default'}`);
+        log.info(`[LLMCompletionStage] Options before service call: ${JSON.stringify({
+            model: updatedOptions.model,
+            stream: updatedOptions.stream,
+            enableTools: updatedOptions.enableTools
+        })}`);
 
         // If provider is specified (either explicit or from metadata), use that specific provider
         if (selectedProvider && aiServiceManager.isProviderAvailable(selectedProvider)) {
             const service = aiServiceManager.getService(selectedProvider);
+            log.info(`[LLMCompletionStage] Using specific service for ${selectedProvider}, stream option: ${updatedOptions.stream}`);
             const response = await service.generateChatCompletion(messages, updatedOptions);
             return { response };
         }
 
         // Otherwise use the service manager to select an available provider
+        log.info(`[LLMCompletionStage] Using auto-selected service, stream option: ${updatedOptions.stream}`);
         const response = await aiServiceManager.generateChatCompletion(messages, updatedOptions);
         return { response };
     }

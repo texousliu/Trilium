@@ -458,7 +458,9 @@ class RestChatService {
                     temperature: session.metadata.temperature,
                     maxTokens: session.metadata.maxTokens,
                     model: session.metadata.model,
-                    stream: req.method === 'GET' ? true : undefined  // Explicitly set stream: true for GET requests
+                    // Always set stream to true for all request types to ensure consistency
+                    // This ensures the pipeline always knows streaming is supported, even for POST requests
+                    stream: true
                 },
                 streamCallback: req.method === 'GET' ? (data, done) => {
                     res.write(`data: ${JSON.stringify({ content: data, done })}\n\n`);

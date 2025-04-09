@@ -197,6 +197,13 @@ export class AIServiceManager implements IAIServiceManager {
     async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
         this.ensureInitialized();
 
+        log.info(`[AIServiceManager] generateChatCompletion called with options: ${JSON.stringify({
+            model: options.model,
+            stream: options.stream,
+            enableTools: options.enableTools
+        })}`);
+        log.info(`[AIServiceManager] Stream option type: ${typeof options.stream}`);
+
         if (!messages || messages.length === 0) {
             throw new Error('No messages provided for chat completion');
         }
@@ -219,6 +226,7 @@ export class AIServiceManager implements IAIServiceManager {
             if (availableProviders.includes(providerName as ServiceProviders)) {
                 try {
                     const modifiedOptions = { ...options, model: modelName };
+                    log.info(`[AIServiceManager] Using provider ${providerName} from model prefix with modifiedOptions.stream: ${modifiedOptions.stream}`);
                     return await this.services[providerName as ServiceProviders].generateChatCompletion(messages, modifiedOptions);
                 } catch (error) {
                     log.error(`Error with specified provider ${providerName}: ${error}`);
@@ -232,6 +240,7 @@ export class AIServiceManager implements IAIServiceManager {
 
         for (const provider of sortedProviders) {
             try {
+                log.info(`[AIServiceManager] Trying provider ${provider} with options.stream: ${options.stream}`);
                 return await this.services[provider].generateChatCompletion(messages, options);
             } catch (error) {
                 log.error(`Error with provider ${provider}: ${error}`);

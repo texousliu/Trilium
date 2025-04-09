@@ -114,11 +114,21 @@ export class OllamaService extends BaseAIService {
                 messages: messagesToSend
             };
 
+            // Debug logging for stream option
+            log.info(`Stream option in providerOptions: ${providerOptions.stream}`);
+            log.info(`Stream option type: ${typeof providerOptions.stream}`);
 
-            log.info(`Stream: ${providerOptions.stream}`);
-            // Stream is a top-level option
-            if (providerOptions.stream !== undefined) {
-                requestBody.stream = providerOptions.stream;
+            // Stream is a top-level option - ALWAYS set it explicitly to ensure consistency
+            // This is critical for ensuring streaming works properly
+            requestBody.stream = providerOptions.stream === true;
+            log.info(`Set requestBody.stream to boolean: ${requestBody.stream}`);
+            
+            // Log additional information about the streaming context
+            log.info(`Streaming context: Will stream to client: ${typeof opts.streamCallback === 'function'}`);
+            
+            // If we have a streaming callback but the stream flag isn't set for some reason, warn about it
+            if (typeof opts.streamCallback === 'function' && !requestBody.stream) {
+                log.warn(`WARNING: Stream callback provided but stream=false in request. This may cause streaming issues.`);
             }
 
             // Add options object if provided

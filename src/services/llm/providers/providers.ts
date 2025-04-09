@@ -542,7 +542,7 @@ export async function getOllamaOptions(
 
             // API parameters
             model: modelName,  // Clean model name without provider prefix
-            stream: opts.stream,
+            stream: opts.stream !== undefined ? opts.stream : true, // Default to true if not specified
             options: {
                 temperature: opts.temperature,
                 num_ctx: modelContextWindow,

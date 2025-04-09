@@ -20,6 +20,18 @@ export interface StreamChunk {
     };
 }
 
+/**
+ * Options for chat completion requests
+ * 
+ * Key properties:
+ * - stream: If true, the response will be streamed
+ * - model: Model name to use
+ * - provider: Provider to use (openai, anthropic, ollama, etc.)
+ * - enableTools: If true, enables tool support
+ * 
+ * The stream option is particularly important and should be consistently handled
+ * throughout the pipeline. It should be explicitly set to true or false.
+ */
 export interface ChatCompletionOptions {
     model?: string;
     temperature?: number;

@@ -227,14 +227,36 @@ export class ChatPipeline {
             log.info(`Prepared ${preparedMessages.messages.length} messages for LLM, tools enabled: ${useTools}`);
 
             // Setup streaming handler if streaming is enabled and callback provided
-            const enableStreaming = this.config.enableStreaming &&
-                                  modelSelection.options.stream !== false &&
-                                  typeof streamCallback === 'function';
-
-            if (enableStreaming) {
-                // Make sure stream is enabled in options
+            // Check if streaming should be enabled based on several conditions
+            const streamEnabledInConfig = this.config.enableStreaming;
+            const streamFormatRequested = input.format === 'stream';
+            const streamRequestedInOptions = modelSelection.options.stream === true;
+            const streamCallbackAvailable = typeof streamCallback === 'function';
+            
+            log.info(`[ChatPipeline] Request type info - Format: ${input.format || 'not specified'}, Options from pipelineInput: ${JSON.stringify({stream: input.options?.stream})}`);
+            log.info(`[ChatPipeline] Stream settings - config.enableStreaming: ${streamEnabledInConfig}, format parameter: ${input.format}, modelSelection.options.stream: ${modelSelection.options.stream}, streamCallback available: ${streamCallbackAvailable}`);
+            
+            // IMPORTANT: Different behavior for GET vs POST requests:
+            // - For GET requests with streamCallback available: Always enable streaming
+            // - For POST requests: Use streaming options but don't actually stream (since we can't stream back to client)
+            if (streamCallbackAvailable) {
+                // If a stream callback is available (GET requests), we can stream the response
                 modelSelection.options.stream = true;
+                log.info(`[ChatPipeline] Stream callback available, setting stream=true for real-time streaming`);
+            } else {
+                // For POST requests, preserve the stream flag as-is from input options
+                // This ensures LLM request format is consistent across both GET and POST
+                if (streamRequestedInOptions) {
+                    log.info(`[ChatPipeline] No stream callback but stream requested in options, preserving stream=true`);
+                } else {
+                    log.info(`[ChatPipeline] No stream callback and no stream in options, setting stream=false`);
+                    modelSelection.options.stream = false;
+                }
             }
+            
+            log.info(`[ChatPipeline] Final modelSelection.options.stream = ${modelSelection.options.stream}`);
+            log.info(`[ChatPipeline] Will actual streaming occur? ${streamCallbackAvailable && modelSelection.options.stream}`);
+            
 
             // STAGE 5 & 6: Handle LLM completion and tool execution loop
             log.info(`========== STAGE 5: LLM COMPLETION ==========`);

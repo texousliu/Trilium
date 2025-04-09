@@ -410,8 +410,14 @@ export default class LlmChatPanel extends BasicWidget {
      */
     private async handleDirectResponse(messageParams: any): Promise<boolean> {
         try {
-            // Send the message via POST request
-            const postResponse = await server.post<any>(`llm/sessions/${this.sessionId}/messages`, messageParams);
+            // Add format parameter to maintain consistency with the streaming GET request
+            const postParams = {
+                ...messageParams,
+                format: 'stream'  // Match the format parameter used in the GET streaming request
+            };
+
+            // Send the message via POST request with the updated params
+            const postResponse = await server.post<any>(`llm/sessions/${this.sessionId}/messages`, postParams);
 
             // If the POST request returned content directly, display it
             if (postResponse && postResponse.content) {
@@ -460,8 +466,8 @@ export default class LlmChatPanel extends BasicWidget {
         const useAdvancedContext = messageParams.useAdvancedContext;
         const showThinking = messageParams.showThinking;
 
-        // Set up streaming via EventSource
-        const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&useAdvancedContext=${useAdvancedContext}&showThinking=${showThinking}`;
+        // Set up streaming via EventSource - explicitly add stream=true parameter to ensure consistency
+        const streamUrl = `./api/llm/sessions/${this.sessionId}/messages?format=stream&stream=true&useAdvancedContext=${useAdvancedContext}&showThinking=${showThinking}`;
 
         return new Promise((resolve, reject) => {
             const source = new EventSource(streamUrl);

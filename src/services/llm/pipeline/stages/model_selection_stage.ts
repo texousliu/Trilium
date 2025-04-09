@@ -18,8 +18,20 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
     protected async process(input: ModelSelectionInput): Promise<{ options: ChatCompletionOptions }> {
         const { options: inputOptions, query, contentLength } = input;
 
+        // Log input options
+        log.info(`[ModelSelectionStage] Input options: ${JSON.stringify({
+            model: inputOptions?.model,
+            stream: inputOptions?.stream,
+            enableTools: inputOptions?.enableTools
+        })}`);
+        log.info(`[ModelSelectionStage] Stream option in input: ${inputOptions?.stream}, type: ${typeof inputOptions?.stream}`);
+
         // Start with provided options or create a new object
         const updatedOptions: ChatCompletionOptions = { ...(inputOptions || {}) };
+        
+        // Preserve the stream option exactly as it was provided, including undefined state
+        // This is critical for ensuring the stream option propagates correctly down the pipeline
+        log.info(`[ModelSelectionStage] After copy, stream: ${updatedOptions.stream}, type: ${typeof updatedOptions.stream}`);
 
         // If model already specified, don't override it
         if (updatedOptions.model) {
@@ -36,6 +48,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
                 log.info(`Using explicitly specified model: ${updatedOptions.model}`);
             }
 
+            log.info(`[ModelSelectionStage] Returning early with stream: ${updatedOptions.stream}`);
             return { options: updatedOptions };
         }
 
@@ -151,6 +164,13 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
         this.addProviderMetadata(updatedOptions, defaultProvider, defaultModelName);
 
         log.info(`Selected model: ${defaultModelName} from provider: ${defaultProvider} for query complexity: ${queryComplexity}`);
+        log.info(`[ModelSelectionStage] Final options: ${JSON.stringify({
+            model: updatedOptions.model,
+            stream: updatedOptions.stream,
+            provider: defaultProvider,
+            enableTools: updatedOptions.enableTools
+        })}`);
+
         return { options: updatedOptions };
     }
 
