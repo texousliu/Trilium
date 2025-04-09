@@ -9,10 +9,24 @@ export interface Message {
     tool_calls?: ToolCall[] | any[];
 }
 
-// Interface for streaming response chunks
+/**
+ * Interface for streaming response chunks
+ * 
+ * This is the standardized format for all streaming chunks across
+ * different providers (OpenAI, Anthropic, Ollama, etc.).
+ * The original provider-specific chunks are available through
+ * the extended interface in the stream_manager.
+ * 
+ * See STREAMING.md for complete documentation on streaming usage.
+ */
 export interface StreamChunk {
+    /** The text content in this chunk (may be empty for status updates) */
     text: string;
+    
+    /** Whether this is the final chunk in the stream */
     done: boolean;
+    
+    /** Optional token usage statistics (rarely available in streaming mode) */
     usage?: {
         promptTokens?: number;
         completionTokens?: number;
@@ -31,6 +45,12 @@ export interface StreamChunk {
  * 
  * The stream option is particularly important and should be consistently handled
  * throughout the pipeline. It should be explicitly set to true or false.
+ * 
+ * Streaming supports two approaches:
+ * 1. Callback-based: Provide a streamCallback to receive chunks directly
+ * 2. API-based: Use the stream property in the response to process chunks
+ * 
+ * See STREAMING.md for complete documentation on streaming usage.
  */
 export interface ChatCompletionOptions {
     model?: string;
@@ -44,27 +64,79 @@ export interface ChatCompletionOptions {
     preserveSystemPrompt?: boolean; // Whether to preserve existing system message
     bypassFormatter?: boolean; // Whether to bypass the message formatter entirely
     expectsJsonResponse?: boolean; // Whether this request expects a JSON response
-    stream?: boolean; // Whether to stream the response
+    
+    /**
+     * Whether to stream the response
+     * When true, response will be delivered incrementally via either:
+     * - The streamCallback if provided
+     * - The stream property in the response object
+     */
+    stream?: boolean;
+    
+    /**
+     * Optional callback function for streaming responses
+     * When provided along with stream:true, this function will be called
+     * for each chunk of the response.
+     * 
+     * @param text The text content in this chunk
+     * @param isDone Whether this is the final chunk
+     * @param originalChunk Optional original provider-specific chunk for advanced usage
+     */
+    streamCallback?: (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void;
+    
     enableTools?: boolean; // Whether to enable tool calling
     tools?: any[]; // Tools to provide to the LLM
     useAdvancedContext?: boolean; // Whether to use advanced context enrichment
     toolExecutionStatus?: any[]; // Status information about executed tools for feedback
     providerMetadata?: ModelMetadata; // Metadata about the provider and model capabilities
-    streamCallback?: (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void; // Callback for streaming
 }
 
+/**
+ * Response from a chat completion request
+ * 
+ * When streaming is used, the behavior depends on how streaming was requested:
+ * 
+ * 1. With streamCallback: The text field contains the complete response
+ *    collected from all chunks, and the stream property is not present.
+ * 
+ * 2. Without streamCallback: The text field is initially empty, and the
+ *    stream property provides a function to process chunks and collect
+ *    the complete response.
+ * 
+ * See STREAMING.md for complete documentation on streaming usage.
+ */
 export interface ChatResponse {
+    /** 
+     * The complete text response. 
+     * If streaming was used with streamCallback, this contains the collected response.
+     * If streaming was used without streamCallback, this is initially empty.
+     */
     text: string;
+    
+    /** The model that generated the response */
     model: string;
+    
+    /** The provider that served the request (openai, anthropic, ollama, etc.) */
     provider: string;
+    
+    /** Token usage statistics (may not be available when streaming) */
     usage?: {
         promptTokens?: number;
         completionTokens?: number;
         totalTokens?: number;
     };
-    // Stream handler - only present when streaming is enabled
+    
+    /**
+     * Stream processor function - only present when streaming is enabled
+     * without a streamCallback. When called with a chunk processor function,
+     * it returns a Promise that resolves to the complete response text.
+     * 
+     * @param callback Function to process each chunk of the stream
+     * @returns Promise resolving to the complete text after stream processing
+     */
     stream?: (callback: (chunk: StreamChunk) => Promise<void> | void) => Promise<string>;
-    // Tool calls from the LLM
+    
+    /** Tool calls from the LLM (if tools were used and the model supports them) */
     tool_calls?: ToolCall[] | any[];
 }
 
