@@ -4,15 +4,30 @@ import type { EmbeddingConfig } from "../embeddings_interface.js";
 import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../constants/provider_constants.js";
 import type { EmbeddingModelInfo } from "../../interfaces/embedding_interfaces.js";
+import OpenAI from "openai";
 
 /**
- * OpenAI embedding provider implementation
+ * OpenAI embedding provider implementation using the official SDK
  */
 export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
     name = "openai";
+    private client: OpenAI | null = null;
 
     constructor(config: EmbeddingConfig) {
         super(config);
+        this.initClient();
+    }
+
+    /**
+     * Initialize the OpenAI client
+     */
+    private initClient() {
+        if (this.apiKey) {
+            this.client = new OpenAI({
+                apiKey: this.apiKey,
+                baseURL: this.baseUrl
+            });
+        }
     }
 
     /**
@@ -21,6 +36,11 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
     async initialize(): Promise<void> {
         const modelName = this.config.model || "text-embedding-3-small";
         try {
+            // Initialize client if needed
+            if (!this.client && this.apiKey) {
+                this.initClient();
+            }
+            
             // Detect model capabilities
             const modelInfo = await this.getModelInfo(modelName);
 
@@ -37,46 +57,35 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
      * Fetch model information from the OpenAI API
      */
     private async fetchModelCapabilities(modelName: string): Promise<EmbeddingModelInfo | null> {
-        if (!this.apiKey) {
+        if (!this.client) {
             return null;
         }
 
         try {
-            // First try to get model details from the models API
-            const response = await fetch(`${this.baseUrl}/models/${modelName}`, {
-                method: 'GET',
-                headers: {
-                    "Authorization": `Bearer ${this.apiKey}`,
-                    "Content-Type": "application/json"
-                },
-                signal: AbortSignal.timeout(10000)
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            // Get model details using the SDK
+            const model = await this.client.models.retrieve(modelName);
             
-            const data = await response.json();
-            
-            if (data) {
+            if (model) {
                 // Different model families may have different ways of exposing context window
                 let contextWindow = 0;
                 let dimension = 0;
 
-                // Extract context window if available
-                if (data.context_window) {
-                    contextWindow = data.context_window;
-                } else if (data.limits && data.limits.context_window) {
-                    contextWindow = data.limits.context_window;
-                } else if (data.limits && data.limits.context_length) {
-                    contextWindow = data.limits.context_length;
+                // Extract context window if available from the response
+                const modelData = model as any;
+                
+                if (modelData.context_window) {
+                    contextWindow = modelData.context_window;
+                } else if (modelData.limits && modelData.limits.context_window) {
+                    contextWindow = modelData.limits.context_window;
+                } else if (modelData.limits && modelData.limits.context_length) {
+                    contextWindow = modelData.limits.context_length;
                 }
 
                 // Extract embedding dimensions if available
-                if (data.dimensions) {
-                    dimension = data.dimensions;
-                } else if (data.embedding_dimension) {
-                    dimension = data.embedding_dimension;
+                if (modelData.dimensions) {
+                    dimension = modelData.dimensions;
+                } else if (modelData.embedding_dimension) {
+                    dimension = modelData.embedding_dimension;
                 }
 
                 // If we didn't get all the info, use defaults for missing values
@@ -188,27 +197,21 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
                 return new Float32Array(this.config.dimension);
             }
 
-            const response = await fetch(`${this.baseUrl}/embeddings`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.apiKey}`
-                },
-                body: JSON.stringify({
-                    input: text,
-                    model: this.config.model || "text-embedding-3-small",
-                    encoding_format: "float"
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            if (!this.client) {
+                this.initClient();
+                if (!this.client) {
+                    throw new Error("OpenAI client initialization failed");
+                }
             }
+
+            const response = await this.client.embeddings.create({
+                model: this.config.model || "text-embedding-3-small",
+                input: text,
+                encoding_format: "float"
+            });
             
-            const data = await response.json();
-            
-            if (data && data.data && data.data[0] && data.data[0].embedding) {
-                return new Float32Array(data.data[0].embedding);
+            if (response && response.data && response.data[0] && response.data[0].embedding) {
+                return new Float32Array(response.data[0].embedding);
             } else {
                 throw new Error("Unexpected response structure from OpenAI API");
             }
@@ -243,30 +246,24 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             return [];
         }
 
-        const response = await fetch(`${this.baseUrl}/embeddings`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${this.apiKey}`
-            },
-            body: JSON.stringify({
-                input: texts,
-                model: this.config.model || "text-embedding-3-small",
-                encoding_format: "float"
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        if (!this.client) {
+            this.initClient();
+            if (!this.client) {
+                throw new Error("OpenAI client initialization failed");
+            }
         }
+
+        const response = await this.client.embeddings.create({
+            model: this.config.model || "text-embedding-3-small",
+            input: texts,
+            encoding_format: "float"
+        });
         
-        const data = await response.json();
-        
-        if (data && data.data) {
+        if (response && response.data) {
             // Sort the embeddings by index to ensure they match the input order
-            const sortedEmbeddings = data.data
-                .sort((a: any, b: any) => a.index - b.index)
-                .map((item: any) => new Float32Array(item.embedding));
+            const sortedEmbeddings = response.data
+                .sort((a, b) => a.index - b.index)
+                .map(item => new Float32Array(item.embedding));
 
             return sortedEmbeddings;
         } else {

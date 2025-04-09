@@ -1,7 +1,6 @@
 import type { Message } from "../ai_interface.js";
 // These imports need to be added for the factory to work
 import { OpenAIMessageFormatter } from "../formatters/openai_formatter.js";
-import { AnthropicMessageFormatter } from "../formatters/anthropic_formatter.js";
 import { OllamaMessageFormatter } from "../formatters/ollama_formatter.js";
 
 /**
@@ -76,7 +75,8 @@ export class MessageFormatterFactory {
                 this.formatters[providerKey] = new OpenAIMessageFormatter();
                 break;
             case 'anthropic':
-                this.formatters[providerKey] = new AnthropicMessageFormatter();
+                console.warn('Anthropic formatter not available, using OpenAI formatter as fallback');
+                this.formatters[providerKey] = new OpenAIMessageFormatter();
                 break;
             case 'ollama':
                 this.formatters[providerKey] = new OllamaMessageFormatter();

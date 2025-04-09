@@ -1,7 +1,7 @@
-import axios from 'axios';
 import options from "../../services/options.js";
 import log from "../../services/log.js";
 import type { Request, Response } from "express";
+import OpenAI from "openai";
 
 /**
  * @swagger
@@ -69,39 +69,39 @@ async function listModels(req: Request, res: Response) {
             throw new Error('OpenAI API key is not configured');
         }
 
-        // Call OpenAI API to get models
-        const response = await axios.get(`${openaiBaseUrl}/models`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            timeout: 10000
+        // Initialize OpenAI client with the API key and base URL
+        const openai = new OpenAI({
+            apiKey,
+            baseURL: openaiBaseUrl
         });
 
+        // Call OpenAI API to get models using the SDK
+        const response = await openai.models.list();
+
         // Filter and categorize models
-        const allModels = response.data.data || [];
+        const allModels = response.data || [];
 
         // Separate models into chat models and embedding models
         const chatModels = allModels
-            .filter((model: any) =>
+            .filter((model) =>
                 // Include GPT models for chat
                 model.id.includes('gpt') ||
                 // Include Claude models via Azure OpenAI
                 model.id.includes('claude')
             )
-            .map((model: any) => ({
+            .map((model) => ({
                 id: model.id,
                 name: model.id,
                 type: 'chat'
             }));
 
         const embeddingModels = allModels
-            .filter((model: any) =>
+            .filter((model) =>
                 // Only include embedding-specific models
                 model.id.includes('embedding') ||
                 model.id.includes('embed')
             )
-            .map((model: any) => ({
+            .map((model) => ({
                 id: model.id,
                 name: model.id,
                 type: 'embedding'

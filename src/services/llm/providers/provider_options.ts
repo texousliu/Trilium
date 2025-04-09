@@ -53,6 +53,8 @@ export interface OpenAIOptions extends ProviderConfig {
 
   // Internal control flags (not sent directly to API)
   enableTools?: boolean;
+  // Streaming callback handler
+  streamCallback?: (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void;
 }
 
 /**
@@ -76,6 +78,8 @@ export interface AnthropicOptions extends ProviderConfig {
 
   // Internal parameters (not sent directly to API)
   formattedMessages?: { messages: any[], system: string };
+  // Streaming callback handler
+  streamCallback?: (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void;
 }
 
 /**
@@ -105,6 +109,8 @@ export interface OllamaOptions extends ProviderConfig {
   preserveSystemPrompt?: boolean;
   expectsJsonResponse?: boolean;
   toolExecutionStatus?: any[];
+  // Streaming callback handler
+  streamCallback?: (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void;
 }
 
 /**
@@ -134,6 +140,10 @@ export function createOpenAIOptions(
     // Internal configuration
     systemPrompt: opts.systemPrompt,
     enableTools: opts.enableTools,
+    // Pass through streaming callback
+    streamCallback: opts.streamCallback,
+    // Include provider metadata
+    providerMetadata: opts.providerMetadata,
   };
 }
 
@@ -164,6 +174,10 @@ export function createAnthropicOptions(
 
     // Internal configuration
     systemPrompt: opts.systemPrompt,
+    // Pass through streaming callback
+    streamCallback: opts.streamCallback,
+    // Include provider metadata
+    providerMetadata: opts.providerMetadata,
   };
 }
 
@@ -198,5 +212,9 @@ export function createOllamaOptions(
     preserveSystemPrompt: opts.preserveSystemPrompt,
     expectsJsonResponse: opts.expectsJsonResponse,
     toolExecutionStatus: opts.toolExecutionStatus,
+    // Pass through streaming callback
+    streamCallback: opts.streamCallback,
+    // Include provider metadata
+    providerMetadata: opts.providerMetadata,
   };
 }
