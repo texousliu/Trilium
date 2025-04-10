@@ -5,7 +5,7 @@ Organization is an important aspect of managing a knowledge base. When developin
 
 As such, the first step is to create a new note to gather all the themes.
 
-![](1_Creating%20a%20custom%20theme_5_.png)
+![](Creating%20a%20custom%20theme_5_.png)
 
 ## Step 2. Create the theme
 
@@ -41,6 +41,6 @@ Do note that the theme will be based off of the legacy theme. To override that a
 
 ## Step 5. Making changes
 
-Simply go back to the note and change according to needs. To apply the changes to the current window, press Ctrl+Shift+R to refresh.
+Simply go back to the note and change according to needs. To apply the changes to the current window, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R </kbd> to refresh.
 
 It's a good idea to keep two windows, one for editing and the other one for previewing the changes.

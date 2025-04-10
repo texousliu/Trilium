@@ -174,6 +174,7 @@
     "saturday": "Saturday",
     "sunday": "Sunday"
   },
+  "weekdayNumber": "Week {weekNumber}",
   "months": {
     "january": "January",
     "february": "February",
@@ -188,6 +189,7 @@
     "november": "November",
     "december": "December"
   },
+  "quarterNumber": "Quarter {quarterNumber}",
   "special_notes": {
     "search_prefix": "Search:"
   },
@@ -253,7 +255,7 @@
   "notes": {
     "new-note": "New note",
     "duplicate-note-suffix": "(dup)",
-    "duplicate-note-title": "{{ noteTitle }} {{ duplicateNoteSuffix }}"
+    "duplicate-note-title": "{{- noteTitle }} {{ duplicateNoteSuffix }}"
   },
   "backend_log": {
     "log-does-not-exist": "The backend log file '{{ fileName }}' does not exist (yet).",

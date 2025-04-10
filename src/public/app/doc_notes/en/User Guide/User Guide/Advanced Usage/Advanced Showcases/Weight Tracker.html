@@ -16,19 +16,19 @@
         <p>
           <img src="Weight Tracker_image.png">
         </p>
-        <p>The <code>Weight Tracker</code> is a <a href="../../Note%20Types/Code/Script%20API.html">Script API</a> showcase
-          present in the <a href="../Database.html">demo notes</a>.</p>
-        <p>By adding <code>weight</code> as a <a href="../Attributes/Promoted%20Attributes.html">promoted attribute</a> in
-          the <a href="../Attributes/Template.html">template</a> from which <a href="Day%20Notes.html">day notes</a> are
+        <p>The <code>Weight Tracker</code> is a <a href="#root/_help_GLks18SNjxmC">Script API</a> showcase
+          present in the <a href="#root/_help_wX4HbRucYSDD">demo notes</a>.</p>
+        <p>By adding <code>weight</code> as a <a href="#root/_help_OFXdgB2nNk1F">promoted attribute</a> in
+          the <a href="#root/_help_KC1HB96bqqHX">template</a> from which <a href="#root/_help_l0tKav7yLHGF">day notes</a> are
           created, you can aggregate the data and plot weight change over time.</p>
         <h2>Implementation</h2>
         <p>The <code>Weight Tracker</code> note in the screenshot above is of the type <code>Render Note</code>.
           That type of note doesn't have any useful content itself. Instead it is
-          a placeholder where a <a href="../../Note%20Types/Code/Scripts.html">script</a> can
-          render its output.</p>
-        <p>Scripts for <code>Render Notes</code> are defined in a <a href="../Attributes.html">relation</a> called <code>~renderNote</code>.
+          a placeholder where a <a href="#root/_help_CdNpE2pqjmI6">script</a> can render
+          its output.</p>
+        <p>Scripts for <code>Render Notes</code> are defined in a <a href="#root/_help_zEY4DaJG4YT5">relation</a> called <code>~renderNote</code>.
           In this example, it's the <code>Weight Tracker</code>'s child <code>Implementation</code>.
-          The Implementation consists of two <a href="../../Note%20Types/Code.html">code notes</a> that
+          The Implementation consists of two <a href="#root/_help_6f9hih2hXXZk">code notes</a> that
           contain some HTML and JavaScript respectively, which load all the notes
           with a <code>weight</code> attribute and display their values in a chart.</p>
         <p>To actually render the chart, we're using a third party library called
@@ -36,7 +36,7 @@
           href="https://www.chartjs.org/">chart.js</a>which is imported as an attachment, since it's not built into
             Trilium.</p>
         <h3>Code</h3>
-        <p>Here's the content of the script which is placed in a <a href="../../Note%20Types/Code.html">code note</a> of
+        <p>Here's the content of the script which is placed in a <a href="#root/_help_6f9hih2hXXZk">code note</a> of
           type <code>JS Frontend</code>:</p><pre><code class="language-text-x-trilium-auto">async function getChartData() {
     const days = await api.runOnBackend(async () =&gt; {
         const notes = api.getNotesWithLabel('weight');

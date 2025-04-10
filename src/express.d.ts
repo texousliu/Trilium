@@ -20,6 +20,8 @@ export declare module "express-serve-static-core" {
             "trilium-component-id"?: string;
             "trilium-local-now-datetime"?: string;
             "trilium-hoisted-note-id"?: string;
+
+            "user-agent"?: string;
         };
     }
 }

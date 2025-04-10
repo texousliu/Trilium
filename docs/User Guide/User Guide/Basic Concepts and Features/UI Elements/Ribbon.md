@@ -15,7 +15,7 @@ If you are using the _Fixed_ formatting toolbar, all the formatting buttons for 
 
 ### Basic Properties
 
-*   _**Note type**_ allows changing the [note type](../../Note%20Types) of a note.
+*   _**Note type**_ allows changing the [note type](../../Note%20Types.md) of a note.
     *   Generally this is desirable only if the note is empty.
     *   As a more advanced use, it's possible to change the note type in order to modify the [source code](../../Advanced%20Usage/Note%20source.md) of a note.
 *   _**Protect the note**_ toggles whether the current note is encrypted and accessible only by entering the protected session. See [Protected Notes](../Notes/Protected%20Notes.md) for more information.
@@ -25,7 +25,7 @@ If you are using the _Fixed_ formatting toolbar, all the formatting buttons for 
     *   Is always editable, regardless of its size.
 *   _**Bookmark**_ toggles the display of the current note into the [Launch Bar](Launch%20Bar.md) for easy access. See [Bookmarks](../Navigation/Bookmarks.md) for more information.
 *   _**Shared**_ toggles whether the current note is publicly accessible if you have a [server instance](../../Installation%20%26%20Setup/Server%20Installation.md) set up. See [Sharing](../../Advanced%20Usage/Sharing.md) for more information.
-*   _**Template**_ toggles whether the current note is considered a template and can be used to easily create notes with the same content. See [Template](../../Advanced%20Usage/Attributes/Template.md) for more information.
+*   _**Template**_ toggles whether the current note is considered a template and can be used to easily create notes with the same content. See [Template](../../Advanced%20Usage/Templates.md) for more information.
 *   _**Language**_ changes the main language of the current note, mostly useful for spell checking or right-to-left support. See [Content language & Right-to-left support](../../Note%20Types/Text/Content%20language%20%26%20Right-to-le.md) for more information.
 
 ### Owned Attributes
@@ -55,10 +55,12 @@ This section lists all the notes that are similar to the current one. See [Simi
 This section displays information about the current note:
 
 *   The [internal ID](../../Advanced%20Usage/Note%20ID.md) of the note.
-*   The [type of the note](../../Note%20Types), as well as its MIME type (used mostly for exporting notes).
+*   The [type of the note](../../Note%20Types.md), as well as its MIME type (used mostly for exporting notes).
 *   The created and modification dates.
 *   The estimated size of the note in the [Database](../../Advanced%20Usage/Database.md), as well as its children count and size.
 
 ### Edited notes
 
 This section pops automatically when entering a [day note](../../Advanced%20Usage/Advanced%20Showcases/Day%20Notes.md) and shows the notes that were edited that day.
+
+It is possible to disable this behavior from settings, by going to <a class="reference-link" href="#root/_hidden/_options/_optionsAppearance">Appearance</a> settings and looking for the _Ribbon widgets_ section.

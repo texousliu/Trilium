@@ -5,7 +5,7 @@ External link is general web link targeting some external web resource - e.g. [h
 
 External links are done through CKEditor native links. To create an external link, select text and press <kbd>Ctrl</kbd> + <kbd>K</kbd> or wait for the "balloon" to appear and click link icon there.
 
-![](../../Attachments/create-external-link.gif)
+![](Links_create-external-link.gif)
 
 You can follow external link by either double clicking (will open new tab/window) it or right clicking on them and choosing "Open in new tab".
 
@@ -18,7 +18,7 @@ In the dialog you can see radio button to choose from different types of linking
 *   link title mirrors the note's current title - this is sometimes also called "reference link". Title of such links cannot be changed, instead it is always mirroring the title of linked note. This way the link title is never outdated
 *   link title can be changed arbitrarily - this is the traditional hyperlink - you link to a particular note and can choose the link title
 
-![](../../Attachments/create-link-to-note.gif)
+![](Links_create-link-to-note.gif)
 
 You can follow the note link by double clicking it.
 

@@ -43,17 +43,13 @@ So now the "Bash" subtree appears on multiple locations in the hierarchy. Both t
 
 ### Demo
 
-![](../../Attachments/create-clone.gif)
+![](Cloning%20Notes_create-clone.gif)
 
 In the demo, you can see how a clone can be created using the context menu. It's possible to do this also using the Add Link dialog or with <kbd>Ctrl</kbd>+<kbd>C</kbd> and <kbd>Ctrl</kbd>+<kbd>V</kbd> [keyboard shortcuts](../Keyboard%20Shortcuts.md).
 
 As seen in the demo, you can view the list of all available clones in the "Note Paths" tab in the Ribbon toolbar.
 
 Titles of cloned notes in the tree view have an asterisk to the right to easily see that the note is also placed into some other location.
-
-## Prefix
-
-Since notes can be categorized into multiple places, it's recommended to choose a generalized name that fits into all locations instead of something more specific to avoid confusion. In some cases this isn't possible so Trilium provides "branch prefixes", which is shown before the note name in the tree and as such provides a specific kind of context. The prefix is location specific, so it's displayed only in the tree pane.
 
 ## Deleting notes/clones
 

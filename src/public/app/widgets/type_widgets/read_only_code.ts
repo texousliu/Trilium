@@ -32,9 +32,9 @@ export default class ReadOnlyCodeTypeWidget extends AbstractCodeTypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note: FNote | null | undefined) {
+    async doRefresh(note: FNote) {
         const blob = await this.note?.getBlob();
-        if (!blob || !note) return false;
+        if (!blob) return;
 
         const isFormattable = note.type === "text" && this.noteContext?.viewScope?.viewMode === "source";
         const content = isFormattable ? this.format(blob.content) : blob.content;

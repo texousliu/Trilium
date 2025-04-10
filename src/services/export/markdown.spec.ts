@@ -176,10 +176,7 @@ describe("Markdown export", () => {
             > [!IMPORTANT]
             > This is a very important information.
             >${space}
-            > |     |     |
-            > | --- | --- |
-            > | 1   | 2   |
-            > | 3   | 4   |
+            > <figure class="table"><table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table></figure>
 
             > [!CAUTION]
             > This is a caution.
@@ -235,6 +232,60 @@ describe("Markdown export", () => {
     it("preserves non-breaking space character", () => {
         const html = /*html*/`<p>Hello\u00adworld.</p>`;
         const expected = `Hello\u00adworld.`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("exports normal links verbatim", () => {
+        const html = /*html*/`<p><a href="https://www.google.com">Google</a></p>`;
+        const expected = `[Google](https://www.google.com)`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("exports reference links verbatim", () => {
+        const html = /*html*/`<p><a class="reference-link" href="../../Canvas.html">Canvas</a></p>`;
+        const expected = `<a class="reference-link" href="../../Canvas.html">Canvas</a>`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("converts image if it has no custom properties", () => {
+        const html = /*html*/`<p><img src="Include Note_image.png"></p>`;
+        const expected = `![](Include%20Note_image.png)`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("preserves image verbatim if it has a width or height attribute", () => {
+        const scenarios = [
+            /*html*/`<img src="Include Note_image.png" width="16" height="16">`,
+            /*html*/`<img src="Include Note_image.png" width="16">`,
+            /*html*/`<img src="Include Note_image.png" height="16">`,
+            /*html*/`<img class="image_resized" style="aspect-ratio:853/315;width:50%;" src="6_File_image.png" width="853" height="315">`
+        ];
+        for (const expected of scenarios) {
+            const html = /*html*/`<p>${expected}</p>`;
+            expect(markdownExportService.toMarkdown(html)).toBe(expected);
+        }
+    });
+
+    it("preserves figures", () => {
+        const html = /*html*/trimIndentation`\
+              <figure class="image" style="width:53.44%;">
+                <img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991"
+                height="403">
+              </figure>
+        `;
+        const expected = `<figure class="image" style="width:53.44%;"><img style="aspect-ratio:991/403;" src="Jump to Note_image.png" width="991" height="403"></figure>`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("converts inline math expressions into proper Markdown syntax", () => {
+        const html = /*html*/String.raw`<span class="math-tex">\(H(X, Y) = \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 \frac{1}{p(x_i, y_j)} = - \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 p(x_i, y_j) \frac{\text{bits}}{\text{symbol}}\)</span></span>`;
+        const expected = String.raw`$H(X, Y) = \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 \frac{1}{p(x_i, y_j)} = - \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 p(x_i, y_j) \frac{\text{bits}}{\text{symbol}}$`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("converts display math expressions into proper Markdown syntax", () => {
+        const html = /*html*/String.raw`<span class="math-tex">\[H(X, Y) = \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 \frac{1}{p(x_i, y_j)} = - \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 p(x_i, y_j) \frac{\text{bits}}{\text{symbol}}\]</span></span>`;
+        const expected = String.raw`$$H(X, Y) = \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 \frac{1}{p(x_i, y_j)} = - \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 p(x_i, y_j) \frac{\text{bits}}{\text{symbol}}$$`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 

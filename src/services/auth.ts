@@ -39,8 +39,12 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
         res.redirect('login');
         return;
     } else if (!req.session.loggedIn && !noAuthentication) {
-        const redirectToShare = options.getOptionBool("redirectBareDomain");
-        if (redirectToShare) {
+
+        // cannot use options.getOptionBool currently => it will throw an error on new installations
+        // TriliumNextTODO: look into potentially creating an getOptionBoolOrNull instead
+        const hasRedirectBareDomain = options.getOptionOrNull("redirectBareDomain") === "true";
+
+        if (hasRedirectBareDomain) {
             // Check if any note has the #shareRoot label
             const shareRootNotes = attributes.getNotesWithLabel("shareRoot");
             if (shareRootNotes.length === 0) {
@@ -51,14 +55,14 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
 
             // Get the configured share path
             const sharePath = options.getOption("sharePath") || '/share';
-            
+
             // Check if we're already at the share path to prevent redirect loops
             if (req.path === sharePath || req.path.startsWith(`${sharePath}/`)) {
                 log.info(`checkAuth: Already at share path, skipping redirect. Path: ${req.path}, SharePath: ${sharePath}`);
                 next();
                 return;
             }
-            
+
             // Redirect to the share path
             log.info(`checkAuth: Redirecting to share path. From: ${req.path}, To: ${sharePath}`);
             res.redirect(`${sharePath}/`);
@@ -86,11 +90,11 @@ function checkCleanUrl(req: Request, res: Response, next: NextFunction) {
         const path = req.path.substring(1);
 
         // Skip processing for known routes, empty paths, and paths that already start with sharePath
-        if (!path || 
-            path === 'login' || 
-            path === 'setup' || 
+        if (!path ||
+            path === 'login' ||
+            path === 'setup' ||
             path.startsWith('api/') ||
-            req.path === sharePath || 
+            req.path === sharePath ||
             req.path.startsWith(`${sharePath}/`)) {
             log.info(`checkCleanUrl: Skipping redirect. Path: ${req.path}, SharePath: ${sharePath}`);
             next();
@@ -122,6 +126,8 @@ function checkApiAuth(req: Request, res: Response, next: NextFunction) {
         next();
     }
 }
+
+
 
 // for electron things which need network stuff
 //  currently, we're doing that for file upload because handling form data seems to be difficult

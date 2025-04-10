@@ -23,6 +23,7 @@
     --submenu-opening-delay: 300ms;
     --launcher-pane-size: 53px;
     --mobile-bottom-offset: calc(env(safe-area-inset-bottom) * 0.75);
+    --bs-body-color: var(--main-text-color);
 }
 
 html {
@@ -62,6 +63,10 @@ body.mobile.context-menu-shown * {
 
 body.mobile #root-widget {
     padding-top: env(safe-area-inset-top);
+}
+
+body.mobile #root-widget.virtual-keyboard-opened #mobile-bottom-bar {
+    display: none !important;
 }
 
 #mobile-bottom-bar {

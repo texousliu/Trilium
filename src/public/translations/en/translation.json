@@ -555,8 +555,7 @@
     "to": "to",
     "target_note": "target note",
     "on_all_matched_notes": "On all matched notes",
-    "create_given_relation": "create given relation if note doesn't have one yet",
-    "change_target_note": "or change target note of the existing relation",
+    "change_target_note": "change target note of the existing relation",
     "update_relation_target": "Update relation target"
   },
   "attachments_actions": {
@@ -589,6 +588,7 @@
     "sat": "Sat",
     "sun": "Sun",
     "cannot_find_day_note": "Cannot find day note",
+    "cannot_find_week_note": "Cannot find week note",
     "january": "January",
     "febuary": "February",
     "march": "March",
@@ -1242,6 +1242,13 @@
     "first-day-of-the-week": "First day of the week",
     "sunday": "Sunday",
     "monday": "Monday",
+    "first-week-of-the-year": "First week of the year",
+    "first-week-contains-first-day": "First week contains first day of the year",
+    "first-week-contains-first-thursday": "First week contains first Thursday of the year",
+    "first-week-has-minimum-days": "First week has minimum days",
+    "min-days-in-first-week": "Minimum days in first week",
+    "first-week-info": "First week contains first Thursday of the year is based on <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> standard.",
+    "first-week-warning": "Changing first week options may cause duplicate with existing Week Notes and the existing Week Notes will not be updated accordingly.",
     "formatting-locale": "Date & number format"
   },
   "backup": {

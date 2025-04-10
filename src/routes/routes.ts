@@ -1,5 +1,3 @@
-"use strict";
-
 import { isElectron, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import multer from "multer";
 import log from "../services/log.js";
@@ -240,7 +238,7 @@ function register(app: express.Application) {
 
     apiRoute(GET, "/api/options", optionsApiRoute.getOptions);
     // FIXME: possibly change to sending value in the body to avoid host of HTTP server issues with slashes
-    apiRoute(PUT, "/api/options/:name/:value*", optionsApiRoute.updateOption);
+    apiRoute(PUT, "/api/options/:name/:value", optionsApiRoute.updateOption);
     apiRoute(PUT, "/api/options", optionsApiRoute.updateOptions);
     apiRoute(GET, "/api/options/user-themes", optionsApiRoute.getUserThemes);
     apiRoute(GET, "/api/options/codeblock-themes", optionsApiRoute.getSyntaxHighlightingThemes);
@@ -310,8 +308,10 @@ function register(app: express.Application) {
 
     apiRoute(GET, "/api/special-notes/inbox/:date", specialNotesRoute.getInboxNote);
     apiRoute(GET, "/api/special-notes/days/:date", specialNotesRoute.getDayNote);
-    apiRoute(GET, "/api/special-notes/weeks/:date", specialNotesRoute.getWeekNote);
+    apiRoute(GET, "/api/special-notes/week-first-day/:date", specialNotesRoute.getWeekFirstDayNote);
+    apiRoute(GET, "/api/special-notes/weeks/:week", specialNotesRoute.getWeekNote);
     apiRoute(GET, "/api/special-notes/months/:month", specialNotesRoute.getMonthNote);
+    apiRoute(GET, "/api/special-notes/quarters/:quarter", specialNotesRoute.getQuarterNote);
     apiRoute(GET, "/api/special-notes/years/:year", specialNotesRoute.getYearNote);
     apiRoute(GET, "/api/special-notes/notes-for-month/:month", specialNotesRoute.getDayNotesForMonth);
     apiRoute(PST, "/api/special-notes/sql-console", specialNotesRoute.createSqlConsole);

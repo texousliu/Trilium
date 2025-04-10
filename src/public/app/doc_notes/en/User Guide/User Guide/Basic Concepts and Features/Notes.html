@@ -16,30 +16,15 @@
         <p>Note is a central entity in Trilium. Main attributes of note are title
           and content.</p>
         <h3>Note types</h3>
-        <ul>
-          <li><a href="../Note%20Types/Text.html">text note</a> - this is default note
-            type which allows you to put rich text, images etc.</li>
-          <li><a href="../Note%20Types/Code.html">code note</a> - some kind of formal
-            code, typically programming language (e.g. JavaScript) or data structure
-            (e.g. JSON)</li>
-          <li><a href="https://github.com/TriliumNext/Notes/wiki/Images">image note</a> -
-            represents single image</li>
-          <li>file note - represents uploaded file (e.g. docx MS Word document).</li>
-          <li>render HTML note - this works as an output screen of attached <a href="../Note%20Types/Code/Scripts.html">scripts</a>
-          </li>
-          <li><a href="../Note%20Types/Saved%20Search.html">saved search</a> note - contains
-            saved search query and dynamically displays result of the search as its
-            sub-notes</li>
-          <li><a href="../Note%20Types/Relation%20Map.html">relation map</a> note - visualizes
-            notes and their relations</li>
-          <li><a href="../Note%20Types/Book.html">book note</a> - displays its children
-            notes, useful for reading many short notes</li>
-          <li>mermaid - create diagrams and flowcharts using <a href="https://github.com/mermaid-js/mermaid">mermaid.js ↗</a>
-          </li>
-          <li><a href="#root/fKYGY3OOo5d1">canvas note</a> - allows hand drawn notes
-            and basic diagraming on an infinite canvas using <a href="https://github.com/excalidraw/excalidraw">excalidraw ↗</a>
-          </li>
-        </ul>
+        <p>The main note type is a rich-text note type called&nbsp;<a class="reference-link"
+          href="#root/_help_iPIMuisry3hd">Text</a>. For diagrams and drawing there
+          is&nbsp;<a class="reference-link" href="#root/_help_grjYqerjn243">Canvas</a>&nbsp;and&nbsp;
+          <a
+          class="reference-link" href="#root/_help_s1aBHPd79XYj">Mermaid Diagrams</a>.</p>
+        <p>There are also more complex note types such as&nbsp;<a class="reference-link"
+          href="#root/_help_m523cpzocqaD">Saved Search</a>,&nbsp;<a class="reference-link"
+          href="#root/_help_HcABDtFCkbFN">Render Note</a>&nbsp;that usually go hand-in-hand
+          with&nbsp;<a class="reference-link" href="#root/_help_CdNpE2pqjmI6">Scripting</a>.</p>
         <p>In Trilium there's no specific "folder" note type. Any note can have children
           and thus be a folder.</p>
         <h3>Root note</h3>
@@ -47,7 +32,8 @@
           tree. All other notes are placed below it in the structure.</p>
         <h3>Tree structure</h3>
         <p>Importantly, note itself doesn't carry information on its placement in
-          note tree. See <a href="Notes/Cloning%20Notes.html">cloning</a> for details.</p>
+          note tree. See&nbsp;<a class="reference-link" href="#root/_help_IakOLONlIfGI">Cloning Notes</a>&nbsp;for
+          details.</p>
         <p>Tree structure of notes can resemble file system - but compared to that
           notes in Trilium can act as both file and directory - meaning that note
           can both have its own content and have children. "Leaf note" is a note
@@ -57,10 +43,10 @@
           (soft-delete) - the actual content, title, attributes etc. are not deleted,
           only hidden.</p>
         <p>Within (by default) 7 days, it is possible to undelete these soft-deleted
-          notes - open Recent Changes dialog, and you will see a list of all modified
-          notes including the deleted ones. Notes available for undeletion have a
-          link to do so. This is kind of "trash can" functionality known from e.g.
-          Windows.</p>
+          notes - open the&nbsp;<a class="reference-link" href="#root/_help_r5JGHN99bVKn">Recent Changes</a>&nbsp;dialog,
+          and you will see a list of all modified notes including the deleted ones.
+          Notes available for undeletion have a link to do so. This is kind of "trash
+          can" functionality known from e.g. Windows.</p>
         <p>Clicking an undelete will recover the note, it's content and attributes
           - note should be just as before being deleted. This action will also undelete
           note's children which have been deleted in the same action.</p>
@@ -70,10 +56,11 @@
           - the solution is then undelete in the reverse order of your deletion.</p>
         <p>After the 7 days (configurable) the notes will be "erased" - their title,
           content, revisions and attributes will be erased, and it will not be possible
-          anymore to recover them (unless you restore <a href="../Installation%20%26%20Setup/Backup.html">backup</a>).</p>
+          anymore to recover them (unless you restore a&nbsp;<a class="reference-link"
+          href="#root/_help_ODY7qQn5m2FT">Backup</a>).</p>
         <h2>See also</h2>
         <ul>
-          <li><a href="Notes/Read-Only%20Notes.html">Read-only note</a>
+          <li><a class="reference-link" href="#root/_help_CoFPLs3dRlXc">Read-Only Notes</a>
           </li>
         </ul>
       </div>

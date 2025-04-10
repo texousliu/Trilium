@@ -72,6 +72,8 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "locale",
     "formattingLocale",
     "firstDayOfWeek",
+    "firstWeekOfYear",
+    "minDaysInFirstWeek",
     "languages",
     "textNoteEditorType",
     "textNoteEditorMultilineToolbar",

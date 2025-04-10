@@ -555,7 +555,6 @@
     "to": "vers",
     "target_note": "note cible",
     "on_all_matched_notes": "Pour toutes les notes correspondantes",
-    "create_given_relation": "créer une relation donnée si la note ne la possède pas encore",
     "change_target_note": "ou changer la note cible de la relation existante",
     "update_relation_target": "Mettre à jour la cible de la relation"
   },
