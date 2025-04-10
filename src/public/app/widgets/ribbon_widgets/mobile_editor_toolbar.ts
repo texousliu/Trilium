@@ -28,6 +28,7 @@ const TPL = /*html*/`\
 
     .classic-toolbar-widget::-webkit-scrollbar {
         height: 0 !important;
+        width: 0 !important;
     }
 
     .classic-toolbar-widget.dropdown-active {
