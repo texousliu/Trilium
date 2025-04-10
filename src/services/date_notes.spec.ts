@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
 import dayjs from "dayjs";
+import i18next from "i18next";
+import { beforeAll,describe, expect, it, vi } from 'vitest';
+
 import type BNote from "../becca/entities/bnote.js";
 import dateNotesService from "./date_notes.js";
-import i18next from "i18next";
 
 // Mock becca_loader
 vi.mock("../becca/becca_loader.js", () => ({
@@ -53,32 +54,32 @@ describe("date_notes", () => {
     describe("getJournalNoteTitle", () => {
         const testDate = dayjs("2025-03-15"); // Saturday
 
-        it("should generate year note title", () => {
-            const title = dateNotesService.getJournalNoteTitle(mockRootNote, "year", testDate, 2025);
+        it("should generate year note title", async () => {
+            const title = await dateNotesService.getJournalNoteTitle(mockRootNote, "year", testDate, 2025);
             expect(title).toBe("2025");
         });
 
-        it("should generate quarter note title", () => {
-            const title = dateNotesService.getJournalNoteTitle(mockRootNote, "quarter", testDate, 1);
+        it("should generate quarter note title", async () => {
+            const title = await dateNotesService.getJournalNoteTitle(mockRootNote, "quarter", testDate, 1);
             expect(title).toBe("Quarter 1");
         });
 
-        it("should generate month note title", () => {
-            const title = dateNotesService.getJournalNoteTitle(mockRootNote, "month", testDate, 3);
+        it("should generate month note title", async () => {
+            const title = await dateNotesService.getJournalNoteTitle(mockRootNote, "month", testDate, 3);
             expect(title).toBe("03 - March");
         });
 
-        it("should generate week note title", () => {
-            const title = dateNotesService.getJournalNoteTitle(mockRootNote, "week", testDate, 11);
+        it("should generate week note title", async () => {
+            const title = await dateNotesService.getJournalNoteTitle(mockRootNote, "week", testDate, 11);
             expect(title).toBe("Week 11");
         });
 
-        it("should generate day note title", () => {
-            const title = dateNotesService.getJournalNoteTitle(mockRootNote, "day", testDate, 15);
+        it("should generate day note title", async () => {
+            const title = await dateNotesService.getJournalNoteTitle(mockRootNote, "day", testDate, 15);
             expect(title).toBe("15 - Saturday");
         });
 
-        it("should respect custom patterns", () => {
+        it("should respect custom patterns", async () => {
             const customRootNote = {
                 getOwnedLabelValue: (key: string) => {
                     const patterns: Record<string, string> = {
@@ -94,19 +95,19 @@ describe("date_notes", () => {
 
             const testDate = dayjs("2025-03-01"); // Saturday
 
-            const yearTitle = dateNotesService.getJournalNoteTitle(customRootNote, "year", testDate, 2025);
+            const yearTitle = await dateNotesService.getJournalNoteTitle(customRootNote, "year", testDate, 2025);
             expect(yearTitle).toBe("2025");
 
-            const quarterTitle = dateNotesService.getJournalNoteTitle(customRootNote, "quarter", testDate, 1);
+            const quarterTitle = await dateNotesService.getJournalNoteTitle(customRootNote, "quarter", testDate, 1);
             expect(quarterTitle).toBe("1 Q1");
 
-            const monthTitle = dateNotesService.getJournalNoteTitle(customRootNote, "month", testDate, 3);
+            const monthTitle = await dateNotesService.getJournalNoteTitle(customRootNote, "month", testDate, 3);
             expect(monthTitle).toBe("2025-03 3 03 March Mar Marc");
 
-            const weekTitle = dateNotesService.getJournalNoteTitle(customRootNote, "week", testDate, 9);
+            const weekTitle = await dateNotesService.getJournalNoteTitle(customRootNote, "week", testDate, 9);
             expect(weekTitle).toBe("9 09 W9 W09");
 
-            const dayTitle = dateNotesService.getJournalNoteTitle(customRootNote, "day", testDate, 1);
+            const dayTitle = await dateNotesService.getJournalNoteTitle(customRootNote, "day", testDate, 1);
             expect(dayTitle).toBe("2025-03-01 1 01 1st Saturday Sat Sa");
         });
     });
