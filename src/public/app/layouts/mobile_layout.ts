@@ -22,7 +22,6 @@ import LauncherContainer from "../widgets/containers/launcher_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
-import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 import AboutDialog from "../widgets/dialogs/about.js";
 import HelpDialog from "../widgets/dialogs/help.js";
@@ -32,6 +31,7 @@ import JumpToNoteDialog from "../widgets/dialogs/jump_to_note.js";
 import RecentChangesDialog from "../widgets/dialogs/recent_changes.js";
 import PromptDialog from "../widgets/dialogs/prompt.js";
 import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
+import MobileEditorToolbar from "../widgets/ribbon_widgets/mobile_editor_toolbar.js";
 
 const MOBILE_CSS = `
 <style>
@@ -182,7 +182,7 @@ export default class MobileLayout {
                     .child(new TabRowWidget().css("height", "40px"))
                     .child(new FlexContainer("row").class("horizontal").css("height", "53px").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true)).id("launcher-pane"))
             )
-            .child(new ClassicEditorToolbar())
+            .child(new MobileEditorToolbar())
             .child(new AboutDialog())
             .child(new HelpDialog())
             .child(new RecentChangesDialog())
