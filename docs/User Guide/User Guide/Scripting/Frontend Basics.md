@@ -1,7 +1,7 @@
 # Frontend Basics
 ## Frontend API
 
-The frontend api supports two styles, regular scripts that are run with the current app and note context, and widgets that export an object to Trilium to be used in the UI. In both cases, the frontend api of Trilium is available to scripts running in the frontend context as global variable `api`. The members and methods of the api can be seen on the [Script API](../Note%20Types/Code/Script%20API.md) page.
+The frontend api supports two styles, regular scripts that are run with the current app and note context, and widgets that export an object to Trilium to be used in the UI. In both cases, the frontend api of Trilium is available to scripts running in the frontend context as global variable `api`. The members and methods of the api can be seen on the [Script API](Script%20API.md) page.
 
 ## Scripts
 
@@ -54,4 +54,4 @@ Conversely to scripts, widgets do have some specific requirements in order to wo
 
 ### Tutorial
 
-For more information on building widgets, take a look at [Widget Basics](Widget%20Basics.md).
+For more information on building widgets, take a look at [Widget Basics](Custom%20Widgets/Widget%20Basics.md).

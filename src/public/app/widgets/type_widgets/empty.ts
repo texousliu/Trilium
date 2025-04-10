@@ -99,7 +99,7 @@ export default class EmptyTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note: FNote) {
+    async doRefresh() {
         const workspaceNotes = await searchService.searchForNotes("#workspace #!template");
 
         this.$workspaceNotes.empty();

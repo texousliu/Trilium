@@ -555,8 +555,7 @@
     "to": "to",
     "target_note": "target note",
     "on_all_matched_notes": "On all matched notes",
-    "create_given_relation": "create given relation if note doesn't have one yet",
-    "change_target_note": "or change target note of the existing relation",
+    "change_target_note": "change target note of the existing relation",
     "update_relation_target": "Update relation target"
   },
   "attachments_actions": {

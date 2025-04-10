@@ -3,7 +3,7 @@ Trilium allows you to share selected notes as **publicly accessible** read-only 
 
 ## Prerequisites
 
-To use the sharing feature, you must have a [server installation](../Installation%20%26%20Setup/Server%20Installation.md) of Trilium. This is necessary because the notes will be hosted from the server.
+To use the sharing feature, you must have a <a class="reference-link" href="../Installation%20%26%20Setup/Server%20Installation.md">Server Installation</a> of Trilium. This is necessary because the notes will be hosted from the server.
 
 ## How to Share a Note
 
@@ -40,7 +40,7 @@ To protect shared notes with a username and password, you can use the `#shareCre
 
 The default shared page is basic in design, but you can customize it using your own CSS:
 
-*   **Custom CSS**: Link a CSS [code note](../Note%20Types/Code.md) to the shared page by adding a `~shareCss` relation to the note. If you want this style to apply to the entire subtree, make the label inheritable. You can hide the CSS code note from the tree navigation by adding the `#shareHiddenFromTree` label.
+*   **Custom CSS**: Link a CSS <a class="reference-link" href="../Note%20Types/Code.md">Code</a> note to the shared page by adding a `~shareCss` relation to the note. If you want this style to apply to the entire subtree, make the label inheritable. You can hide the CSS code note from the tree navigation by adding the `#shareHiddenFromTree` label.
 *   **Omitting Default CSS**: For extensive styling changes, use the `#shareOmitDefaultCss` label to avoid conflicts with Trilium's [default stylesheet](../Basic%20Concepts%20and%20Features/Themes.md).
 
 ### Adding JavaScript
@@ -81,12 +81,6 @@ To customize the favicon for your shared pages, create a relation `~shareFavicon
 
 You can designate a specific note or folder as the root of your shared content by adding the `#shareRoot` label. This note will be linked when visiting `[http://domain.tld/share](http://domain/share)`, making it easier to use Trilium as a fully-fledged website. Consider combining this with the `#shareIndex` label, which will display a list of all shared notes.
 
-## Additional Options
-
-*   **Raw Note Sharing**: Use the `#shareRaw` label to share a note without any HTML wrapper.
-*   **Disallow Robot Indexing**: Add the `#shareDisallowRobotIndexing` label to prevent search engines from indexing the shared page by including a `noindex, follow` meta tag and `X-Robots-Tag: noindex` header.
-*   **Shared Notes Index**: For text notes with the `#shareIndex` label, the content will display a list of all shared note roots.
-
 ## Limitations
 
 While the sharing feature is powerful, it has some limitations:
@@ -99,3 +93,7 @@ While the sharing feature is powerful, it has some limitations:
 *   **Include Notes**: Not supported.
 
 Some of these limitations may be addressed in future updates.
+
+## Attribute reference
+
+<figure class="table"><table><thead><tr><th>Attribute</th><th>Description</th></tr></thead><tbody><tr><td><code>shareHiddenFromTree</code></td><td>this note is hidden from left navigation tree, but still accessible with its URL</td></tr><tr><td><code>shareExternalLink</code></td><td>note will act as a link to an external website in the share tree</td></tr><tr><td><code>shareAlias</code></td><td>define an alias using which the note will be available under <code>https://your_trilium_host/share/[your_alias]</code></td></tr><tr><td><code>shareOmitDefaultCss</code></td><td>default share page CSS will be omitted. Use when you make extensive styling changes.</td></tr><tr><td><code>shareRoot</code></td><td>marks note which is served on /share root.</td></tr><tr><td><code>shareDescription</code></td><td>define text to be added to the HTML meta tag for description</td></tr><tr><td><code>shareRaw</code></td><td>Note will be served in its raw format, without HTML wrapper. See also&nbsp;<a class="reference-link" href="Sharing/Serving%20directly%20the%20content%20o.md">Serving directly the content of a note</a>&nbsp;for an alternative method without setting an attribute.</td></tr><tr><td><code>shareDisallowRobotIndexing</code></td><td><p>Indicates to web crawlers that the page should not be indexed of this note by:</p><ul><li>Setting the <code>X-Robots-Tag: noindex</code> HTTP header.</li><li>Setting the <code>noindex, follow</code> meta tag.</li></ul></td></tr><tr><td><code>shareCredentials</code></td><td>require credentials to access this shared note. Value is expected to be in format <code>username:password</code>. Don't forget to make this inheritable to apply to child-notes/images.</td></tr><tr><td><code>shareIndex</code></td><td>Note with this label will list all roots of shared notes.</td></tr></tbody></table></figure>

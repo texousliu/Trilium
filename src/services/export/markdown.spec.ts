@@ -278,14 +278,14 @@ describe("Markdown export", () => {
     });
 
     it("converts inline math expressions into proper Markdown syntax", () => {
-        const html = /*html*/`<p>The equation is&nbsp;<span class="math-tex">\\(e=mc^{2}\\)</span>.</p>`;
-        const expected = `The equation is\u00a0$e=mc^{2}$.`;
+        const html = /*html*/String.raw`<span class="math-tex">\(H(X, Y) = \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 \frac{1}{p(x_i, y_j)} = - \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 p(x_i, y_j) \frac{\text{bits}}{\text{symbol}}\)</span></span>`;
+        const expected = String.raw`$H(X, Y) = \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 \frac{1}{p(x_i, y_j)} = - \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 p(x_i, y_j) \frac{\text{bits}}{\text{symbol}}$`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
     it("converts display math expressions into proper Markdown syntax", () => {
-        const html = /*html*/`<span class="math-tex">\\[\sqrt{x^{2}+1}\\]</span>`;
-        const expected = `$$\sqrt{x^{2}+1}$$`;
+        const html = /*html*/String.raw`<span class="math-tex">\[H(X, Y) = \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 \frac{1}{p(x_i, y_j)} = - \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 p(x_i, y_j) \frac{\text{bits}}{\text{symbol}}\]</span></span>`;
+        const expected = String.raw`$$H(X, Y) = \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 \frac{1}{p(x_i, y_j)} = - \sum_{i=1}^{M} \sum_{j=1}^{L} p(x_i, y_j) \log_2 p(x_i, y_j) \frac{\text{bits}}{\text{symbol}}$$`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 

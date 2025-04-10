@@ -1,6 +1,6 @@
-import sql from '../sql.js';
-import optionService from '../options.js';
 import crypto from 'crypto';
+import optionService from '../options.js';
+import sql from '../sql.js';
 
 function isRecoveryCodeSet() {
     return optionService.getOptionBool('encryptedRecoveryCodes');
@@ -10,7 +10,7 @@ function setRecoveryCodes(recoveryCodes: string) {
     const iv = crypto.randomBytes(16);
     const securityKey = crypto.randomBytes(32);
     const cipher = crypto.createCipheriv('aes-256-cbc', securityKey, iv);
-    let encryptedRecoveryCodes = cipher.update(recoveryCodes, 'utf-8', 'hex');
+    const encryptedRecoveryCodes = cipher.update(recoveryCodes, 'utf-8', 'hex');
 
     sql.transactional(() => {
         optionService.setOption('recoveryCodeInitialVector', iv.toString('hex'));
@@ -27,7 +27,7 @@ function getRecoveryCodes() {
         return []
     }
 
-    return sql.transactional(() => {
+    return sql.transactional<string[]>(() => {
         const iv = Buffer.from(optionService.getOption('recoveryCodeInitialVector'), 'hex');
         const securityKey = Buffer.from(optionService.getOption('recoveryCodeSecurityKey'), 'hex');
         const encryptedRecoveryCodes = optionService.getOption('recoveryCodesEncrypted');
@@ -41,7 +41,7 @@ function getRecoveryCodes() {
 }
 
 function removeRecoveryCode(usedCode: string) {
-    const oldCodes: string[] = getRecoveryCodes();
+    const oldCodes = getRecoveryCodes();
     const today = new Date();
     oldCodes[oldCodes.indexOf(usedCode)] = today.toJSON().replace(/-/g, '/');
     setRecoveryCodes(oldCodes.toString());
@@ -54,8 +54,8 @@ function verifyRecoveryCode(recoveryCodeGuess: string) {
     }
 
     const recoveryCodes = getRecoveryCodes();
-    var loginSuccess = false;
-    recoveryCodes.forEach((recoveryCode: string) => {
+    let loginSuccess = false;
+    recoveryCodes.forEach((recoveryCode) => {
         if (recoveryCodeGuess === recoveryCode) {
             removeRecoveryCode(recoveryCode);
             loginSuccess = true;

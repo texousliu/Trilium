@@ -296,6 +296,7 @@ declare global {
     }
 
     interface CKNode {
+        _children: CKNode[];
         name: string;
         childCount: number;
         isEmpty: boolean;
@@ -356,8 +357,8 @@ declare global {
                     getChanges(): {
                         type: string;
                         name: string;
-                        position: {
-                            nodeAfter: CKNode;
+                        position?: {
+                            nodeAfter?: CKNode;
                             parent: CKNode;
                             toJSON(): Object;
                         }

@@ -252,6 +252,23 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
                 if (utils.isMobile()) {
                     $classicToolbarWidget.addClass("visible");
+
+                    // Reposition all dropdowns to point upwards instead of downwards.
+                    // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
+                    const toolbarView = editor.ui.view.toolbar;
+                    for (const item of toolbarView.items) {
+                        if (!("panelView" in item)) {
+                            continue;
+                        }
+
+                        item.on("change:isOpen", () => {
+                            if ( !item.isOpen ) {
+                                return;
+                            }
+
+                            item.panelView.position = item.panelView.position.replace("s", "n");
+                        });
+                    }
                 }
             }
 

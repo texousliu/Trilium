@@ -14,17 +14,16 @@
 
       <div class="ck-content">
         <p>In this example we are going to extend the functionality of&nbsp;<a class="reference-link"
-          href="../../Advanced%20Usage/Advanced%20Showcases/Task%20Manager.html">Task Manager</a>&nbsp;showcase
-          (which comes by default with Trilium) by adding a button in the&nbsp;
-          <a
-          class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Launch%20Bar.html">Launch Bar</a>&nbsp; (
-            <img src="New Task launcher button_i.png">) to create a new task automatically and open it.</p>
+          href="#root/_help_xYjQUYhpbUEW">Task Manager</a>&nbsp;showcase (which comes
+          by default with Trilium) by adding a button in the&nbsp;<a class="reference-link"
+          href="#root/_help_xYmIYSP6wE3F">Launch Bar</a>&nbsp; (
+          <img src="New Task launcher button_i.png">) to create a new task automatically and open it.</p>
         <h2>Creating the note</h2>
         <ol>
-          <li>First, create a new&nbsp;<a class="reference-link" href="../../Note%20Types/Code.html">Code</a>&nbsp;note
+          <li>First, create a new&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;note
             type with the <em>JS frontend</em> language.</li>
           <li>Define the <code>#run=frontendStartup</code> label in&nbsp;<a class="reference-link"
-            href="../../Advanced%20Usage/Attributes.html">Attributes</a>.</li>
+            href="#root/_help_zEY4DaJG4YT5">Attributes</a>.</li>
         </ol>
         <h2>Content of the script</h2>
         <p>Copy-paste the following script:</p><pre><code class="language-application-javascript-env-backend">api.addButtonToToolbar({
@@ -45,7 +44,7 @@
         <h2>Testing the functionality</h2>
         <p>Since we set the script to be run on start-up, all we need to do is to
           <a
-          href="../../Troubleshooting/Refreshing%20the%20application.html">refresh the application</a>.</p>
+          href="#root/_help_s8alTXmpFR61">refresh the application</a>.</p>
         <h2>Understanding how the script works</h2>
         <table class="ck-table-resized">
           <colgroup>
@@ -64,8 +63,8 @@
 });</code></pre>
               </td>
               <td>
-                <p>This uses the <a href="../Frontend%20Basics.html">Front-end API</a> to create
-                  a icon in the&nbsp;<a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Launch%20Bar.html">Launch Bar</a>,
+                <p>This uses the <a href="#root/_help_yIhgI5H7A2Sm">Front-end API</a> to create
+                  a icon in the&nbsp;<a class="reference-link" href="#root/_help_xYmIYSP6wE3F">Launch Bar</a>,
                   by specifying:</p>
                 <ul>
                   <li>A title</li>
@@ -99,8 +98,8 @@
               </td>
               <td>
                 <ul>
-                  <li>Here we identify a note with the <a href="../../Advanced%20Usage/Attributes.html">label</a>  <code>#taskTodoRoot</code>.
-                    This is how the&nbsp;<a class="reference-link" href="../../Advanced%20Usage/Advanced%20Showcases/Task%20Manager.html">Task Manager</a>&nbsp;showcase
+                  <li>Here we identify a note with the <a href="#root/_help_zEY4DaJG4YT5">label</a>  <code>#taskTodoRoot</code>.
+                    This is how the&nbsp;<a class="reference-link" href="#root/_help_xYjQUYhpbUEW">Task Manager</a>&nbsp;showcase
                     knows where to place all the different tasks.</li>
                   <li>Normally this might return a <code>null</code> value if no such note could
                     be identified, but error handling is outside the scope of this example.&nbsp;</li>
@@ -133,9 +132,8 @@
               </td>
               <td>
                 <ul>
-                  <li>Since we know the <a href="../../Advanced%20Usage/Note%20ID.html">ID</a> of
-                    the newly created note, all we have to do now is to show this note to the
-                    user.</li>
+                  <li>Since we know the <a href="#root/_help_m1lbrzyKDaRB">ID</a> of the newly
+                    created note, all we have to do now is to show this note to the user.</li>
                 </ul>
               </td>
             </tr>

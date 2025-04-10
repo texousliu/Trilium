@@ -46,7 +46,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
         $(window).on("resize", this.zoomHandler);
     }
 
-    async doRefresh(note: FNote | null | undefined) {
+    async doRefresh(note: FNote) {
         super.doRefresh(note);
 
         const blob = await note?.getBlob();
