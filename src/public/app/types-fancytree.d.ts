@@ -969,7 +969,7 @@ declare namespace Fancytree {
             /**
              * Callback(targetNode, data), return true, to enable dnd drop
              */
-            dragEnter?: ((targetNode: FancytreeNode, data: any) => void) | undefined;
+            dragEnter?: ((targetNode: FancytreeNode) => void) | undefined;
             /**
              * Events (drag over)
              */
