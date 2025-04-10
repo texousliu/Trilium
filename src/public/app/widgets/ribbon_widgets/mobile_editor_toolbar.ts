@@ -26,9 +26,6 @@ const TPL = /*html*/`\
     body.mobile .classic-toolbar-widget.visible {
         display: flex;
         align-items: flex-end;
-        position: absolute;
-        left: 0;
-        right: 0;
         overflow-x: auto;
         overscroll-behavior: none;
         z-index: 500;
@@ -37,19 +34,6 @@ const TPL = /*html*/`\
 
     body.mobile .classic-toolbar-widget.visible::-webkit-scrollbar {
         height: 3px;
-    }
-
-    @media (max-width: 991px) {
-        body.mobile .classic-toolbar-widget.visible {
-            bottom: calc(var(--tab-bar-height) + var(--launcher-pane-height) + var(--mobile-bottom-offset));
-        }
-    }
-
-    @media (min-width: 991px) {
-        body.mobile .classic-toolbar-widget.visible {
-            bottom: 0;
-            left: 25%;
-        }
     }
 
     body.mobile .classic-toolbar-widget.dropdown-active {
@@ -94,10 +78,6 @@ export default class MobileEditorToolbar extends NoteContextAwareWidget {
         this.$widget = $(TPL);
         this.contentSized();
 
-        // The virtual keyboard obscures the editing toolbar so we have to reposition by calculating the height of the keyboard.
-        window.visualViewport?.addEventListener("resize", () => this.#adjustPosition());
-        window.addEventListener("scroll", () => this.#adjustPosition());
-
         // Observe when a dropdown is expanded to apply a style that allows the dropdown to be visible, since we can't have the element both visible and the toolbar scrollable.
         this.observer.disconnect();
         this.observer.observe(this.$widget[0], {
@@ -109,15 +89,6 @@ export default class MobileEditorToolbar extends NoteContextAwareWidget {
     #onDropdownStateChanged(e: MutationRecord[]) {
         const dropdownActive = e.map((e) => (e.target as any).ariaExpanded === "true").reduce((acc, e) => acc && e);
         this.$widget[0].classList.toggle("dropdown-active", dropdownActive);
-    }
-
-    #adjustPosition() {
-        let bottom = window.innerHeight - (window.visualViewport?.height || 0);
-
-        // When the keyboard is not visible, align it to the launcher bar instead.
-        bottom = Math.max(bottom, document.getElementById("mobile-bottom-bar")?.offsetHeight || 0);
-
-        this.$widget.css("bottom", `${bottom}px`);
     }
 
     async #shouldDisplay() {
