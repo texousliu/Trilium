@@ -122,7 +122,6 @@ export default class MobileLayout {
     getRootWidget(appContext: typeof AppContext) {
         return new RootContainer(true)
             .setParent(appContext)
-            .class("horizontal-layout")
             .cssBlock(MOBILE_CSS)
             .child(new FlexContainer("column").id("mobile-sidebar-container"))
             .child(
