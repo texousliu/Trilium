@@ -39,7 +39,9 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
         res.redirect('login');
         return;
     } else if (!req.session.loggedIn && !noAuthentication) {
-        const redirectToShare = options.getOptionBool("redirectBareDomain");
+
+        const redirectToShare = hasRedirectBareDomain();
+
         if (redirectToShare) {
             // Check if any note has the #shareRoot label
             const shareRootNotes = attributes.getNotesWithLabel("shareRoot");
@@ -51,6 +53,18 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
         res.redirect(redirectToShare ? "share" : "login");
     } else {
         next();
+    }
+}
+
+
+// avoid receiving an error, on a new installation, when the DB is not initialized yet
+// => getOptionBool uses getOption, which throws an error if the option name is not found
+// TriliumNextTODO: potentially refactor getOptionBool instead
+function hasRedirectBareDomain() {
+    try {
+        return options.getOptionBool("redirectBareDomain");
+    } catch(e) {
+        return false;
     }
 }
 
