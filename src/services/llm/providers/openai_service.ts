@@ -70,103 +70,61 @@ export class OpenAIService extends BaseAIService {
             if (providerOptions.stream) {
                 params.stream = true;
                 
+                // Get stream from OpenAI SDK
                 const stream = await client.chat.completions.create(params);
-                let fullText = '';
                 
-                // If a direct callback is provided, use it
-                if (providerOptions.streamCallback) {
-                    // Process the stream with the callback
-                    try {
-                        // The stream is an AsyncIterable
-                        if (Symbol.asyncIterator in stream) {
-                            for await (const chunk of stream as AsyncIterable<OpenAI.Chat.ChatCompletionChunk>) {
-                                const content = chunk.choices[0]?.delta?.content || '';
-                                if (content) {
-                                    fullText += content;
-                                    await providerOptions.streamCallback(content, false, chunk);
-                                }
-                                
-                                // If this is the last chunk
-                                if (chunk.choices[0]?.finish_reason) {
-                                    await providerOptions.streamCallback('', true, chunk);
-                                }
-                            }
-                        } else {
-                            console.error('Stream is not iterable, falling back to non-streaming response');
-                            
-                            // If we get a non-streaming response somehow
-                            if ('choices' in stream) {
-                                const content = stream.choices[0]?.message?.content || '';
-                                fullText = content;
-                                if (providerOptions.streamCallback) {
-                                    await providerOptions.streamCallback(content, true, stream);
-                                }
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Error processing stream:', error);
-                        throw error;
-                    }
-                    
-                    return {
-                        text: fullText,
-                        model: params.model,
-                        provider: this.getName(),
-                        usage: {} // Usage stats aren't available with streaming
-                    };
-                } else {
-                    // Use the more flexible stream interface
-                    return {
-                        text: '', // Initial empty text, will be filled by stream processing
-                        model: params.model,
-                        provider: this.getName(),
-                        usage: {}, // Usage stats aren't available with streaming
-                        stream: async (callback) => {
-                            let completeText = '';
-                            
-                            try {
-                                // The stream is an AsyncIterable
-                                if (Symbol.asyncIterator in stream) {
-                                    for await (const chunk of stream as AsyncIterable<OpenAI.Chat.ChatCompletionChunk>) {
-                                        const content = chunk.choices[0]?.delta?.content || '';
-                                        const isDone = !!chunk.choices[0]?.finish_reason;
-                                        
-                                        if (content) {
-                                            completeText += content;
-                                        }
-                                        
-                                        // Call the provided callback with the StreamChunk interface
-                                        await callback({
-                                            text: content,
-                                            done: isDone
-                                        });
-                                        
-                                        if (isDone) {
-                                            break;
-                                        }
-                                    }
-                                } else {
-                                    console.warn('Stream is not iterable, falling back to non-streaming response');
+                // Return a response with the stream handler
+                return {
+                    text: '', // Initial empty text, will be populated during streaming
+                    model: params.model,
+                    provider: this.getName(),
+                    stream: async (callback) => {
+                        let completeText = '';
+                        
+                        try {
+                            // Process the stream
+                            if (Symbol.asyncIterator in stream) {
+                                for await (const chunk of stream as AsyncIterable<OpenAI.Chat.ChatCompletionChunk>) {
+                                    const content = chunk.choices[0]?.delta?.content || '';
+                                    const isDone = !!chunk.choices[0]?.finish_reason;
                                     
-                                    // If we get a non-streaming response somehow
-                                    if ('choices' in stream) {
-                                        const content = stream.choices[0]?.message?.content || '';
-                                        completeText = content;
-                                        await callback({
-                                            text: content,
-                                            done: true
-                                        });
+                                    if (content) {
+                                        completeText += content;
+                                    }
+                                    
+                                    // Send the chunk to the caller with raw data
+                                    await callback({
+                                        text: content,
+                                        done: isDone,
+                                        raw: chunk // Include the raw chunk for advanced processing
+                                    });
+                                    
+                                    if (isDone) {
+                                        break;
                                     }
                                 }
-                            } catch (error) {
-                                console.error('Error processing stream:', error);
-                                throw error;
+                            } else {
+                                // Fallback for non-iterable response
+                                console.warn('Stream is not iterable, falling back to non-streaming response');
+                                
+                                if ('choices' in stream) {
+                                    const content = stream.choices[0]?.message?.content || '';
+                                    completeText = content;
+                                    await callback({
+                                        text: content,
+                                        done: true,
+                                        raw: stream
+                                    });
+                                }
                             }
-                            
-                            return completeText;
+                        } catch (error) {
+                            console.error('Error processing stream:', error);
+                            throw error;
                         }
-                    };
-                }
+                        
+                        return completeText;
+                    }
+                };
             } else {
                 // Non-streaming response
                 params.stream = false;

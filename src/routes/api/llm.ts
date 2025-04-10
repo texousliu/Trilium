@@ -791,6 +791,163 @@ async function indexNote(req: Request, res: Response) {
     }
 }
 
+/**
+ * @swagger
+ * /api/llm/sessions/{sessionId}/messages/stream:
+ *   post:
+ *     summary: Start a streaming response session via WebSockets
+ *     operationId: llm-stream-message
+ *     parameters:
+ *       - name: sessionId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The user message to send to the LLM
+ *               useAdvancedContext:
+ *                 type: boolean
+ *                 description: Whether to use advanced context extraction
+ *               showThinking:
+ *                 type: boolean
+ *                 description: Whether to show thinking process in the response
+ *     responses:
+ *       '200':
+ *         description: Streaming started successfully
+ *       '404':
+ *         description: Session not found
+ *       '500':
+ *         description: Error processing request
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function streamMessage(req: Request, res: Response) {
+    log.info("=== Starting streamMessage ===");
+    try {
+        const sessionId = req.params.sessionId;
+        const { content, useAdvancedContext, showThinking } = req.body;
+        
+        if (!content || typeof content !== 'string' || content.trim().length === 0) {
+            throw new Error('Content cannot be empty');
+        }
+        
+        // Check if session exists
+        const session = restChatService.getSessions().get(sessionId);
+        if (!session) {
+            throw new Error('Session not found');
+        }
+        
+        // Update last active timestamp
+        session.lastActive = new Date();
+        
+        // Add user message to the session
+        session.messages.push({
+            role: 'user',
+            content,
+            timestamp: new Date()
+        });
+        
+        // Create request parameters for the pipeline
+        const requestParams = {
+            sessionId,
+            content,
+            useAdvancedContext: useAdvancedContext === true,
+            showThinking: showThinking === true,
+            stream: true // Always stream for this endpoint
+        };
+        
+        // Create a fake request/response pair to pass to the handler
+        const fakeReq = {
+            ...req,
+            method: 'GET', // Set to GET to indicate streaming
+            query: {
+                stream: 'true', // Set stream param - don't use format: 'stream' to avoid confusion
+                useAdvancedContext: String(useAdvancedContext === true),
+                showThinking: String(showThinking === true)
+            },
+            params: {
+                sessionId
+            },
+            // Make sure the original content is available to the handler
+            body: {
+                content,
+                useAdvancedContext: useAdvancedContext === true, 
+                showThinking: showThinking === true
+            }
+        } as unknown as Request;
+        
+        // Log to verify correct parameters
+        log.info(`WebSocket stream settings - useAdvancedContext=${useAdvancedContext === true}, in query=${fakeReq.query.useAdvancedContext}, in body=${fakeReq.body.useAdvancedContext}`);
+        // Extra safety to ensure the parameters are passed correctly
+        if (useAdvancedContext === true) {
+            log.info(`Enhanced context IS enabled for this request`);
+        } else {
+            log.info(`Enhanced context is NOT enabled for this request`);
+        }
+        
+        // Process the request in the background
+        Promise.resolve().then(async () => {
+            try {
+                await restChatService.handleSendMessage(fakeReq, res);
+            } catch (error) {
+                log.error(`Background message processing error: ${error}`);
+                
+                // Import the WebSocket service
+                const wsService = (await import('../../services/ws.js')).default;
+                
+                // Define LLMStreamMessage interface
+                interface LLMStreamMessage {
+                    type: 'llm-stream';
+                    sessionId: string;
+                    content?: string;
+                    thinking?: string;
+                    toolExecution?: any;
+                    done?: boolean;
+                    error?: string;
+                    raw?: unknown;
+                }
+                
+                // Send error to client via WebSocket
+                wsService.sendMessageToAllClients({
+                    type: 'llm-stream',
+                    sessionId,
+                    error: `Error processing message: ${error}`,
+                    done: true
+                } as LLMStreamMessage);
+            }
+        });
+        
+        // Import the WebSocket service
+        const wsService = (await import('../../services/ws.js')).default;
+        
+        // Let the client know streaming has started via WebSocket (helps client confirm connection is working)
+        wsService.sendMessageToAllClients({
+            type: 'llm-stream',
+            sessionId,
+            thinking: 'Initializing streaming LLM response...'
+        });
+        
+        // Let the client know streaming has started via HTTP response
+        return {
+            success: true,
+            message: 'Streaming started',
+            sessionId
+        };
+    } catch (error: any) {
+        log.error(`Error starting message stream: ${error.message}`);
+        throw error;
+    }
+}
+
 export default {
     // Chat session management
     createSession,
@@ -799,6 +956,7 @@ export default {
     listSessions,
     deleteSession,
     sendMessage,
+    streamMessage, // Add new streaming endpoint
 
     // Knowledge base index management
     getIndexStats,

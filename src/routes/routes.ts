@@ -400,6 +400,7 @@ function register(app: express.Application) {
     apiRoute(DEL, "/api/llm/sessions/:sessionId", llmRoute.deleteSession);
     apiRoute(PST, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
     apiRoute(GET, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
+    apiRoute(PST, "/api/llm/sessions/:sessionId/messages/stream", llmRoute.streamMessage);
 
     // LLM index management endpoints - reorganized for REST principles
     apiRoute(GET, "/api/llm/indexes/stats", llmRoute.getIndexStats);

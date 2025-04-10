@@ -127,6 +127,10 @@ export class ChatPipeline {
             // Determine if we should use tools or semantic context
             const useTools = modelSelection.options.enableTools === true;
             const useEnhancedContext = input.options?.useAdvancedContext === true;
+            
+            // Log details about the advanced context parameter
+            log.info(`Enhanced context option check: input.options=${JSON.stringify(input.options || {})}`);
+            log.info(`Enhanced context decision: useEnhancedContext=${useEnhancedContext}, hasQuery=${!!input.query}`);
 
             // Early return if we don't have a query or enhanced context is disabled
             if (!input.query || !useEnhancedContext) {
@@ -431,8 +435,8 @@ export class ChatPipeline {
                                     ...modelSelection.options,
                                     // Ensure tool support is still enabled for follow-up requests
                                     enableTools: true,
-                                    // Disable streaming during tool execution follow-ups
-                                    stream: false,
+                                    // Preserve original streaming setting for tool execution follow-ups
+                                    stream: modelSelection.options.stream,
                                     // Add tool execution status for Ollama provider
                                     ...(currentResponse.provider === 'Ollama' ? { toolExecutionStatus } : {})
                                 }
@@ -498,6 +502,8 @@ export class ChatPipeline {
                             messages: currentMessages,
                             options: {
                                 ...modelSelection.options,
+                                // Preserve streaming for error follow-up
+                                stream: modelSelection.options.stream,
                                 // For Ollama, include tool execution status
                                 ...(currentResponse.provider === 'Ollama' ? { toolExecutionStatus } : {})
                             }
@@ -547,6 +553,8 @@ export class ChatPipeline {
                         options: {
                             ...modelSelection.options,
                             enableTools: false, // Disable tools for the final response
+                            // Preserve streaming setting for max iterations response
+                            stream: modelSelection.options.stream,
                             // For Ollama, include tool execution status
                             ...(currentResponse.provider === 'Ollama' ? { toolExecutionStatus } : {})
                         }

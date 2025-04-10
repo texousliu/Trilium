@@ -1,6 +1,26 @@
 import log from "../log.js";
 import type { Request, Response } from "express";
-import type { Message, ChatCompletionOptions } from "./ai_interface.js";
+import type { Message, ChatCompletionOptions, ChatResponse, StreamChunk } from "./ai_interface.js";
+
+/**
+ * Interface for WebSocket LLM streaming messages
+ */
+interface LLMStreamMessage {
+    type: 'llm-stream';
+    sessionId: string;
+    content?: string;
+    thinking?: string;
+    toolExecution?: {
+        action?: string;
+        tool?: string;
+        result?: string;
+        error?: string;
+        args?: Record<string, unknown>;
+    };
+    done?: boolean;
+    error?: string;
+    raw?: unknown;
+}
 import contextService from "./context/services/context_service.js";
 import { LLM_CONSTANTS } from './constants/provider_constants.js';
 import { ERROR_PROMPTS } from './constants/llm_prompt_constants.js';
@@ -290,22 +310,24 @@ class RestChatService {
                 // Add logging for POST requests
                 log.info(`LLM POST message: sessionId=${req.params.sessionId}, useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, contentLength=${content ? content.length : 0}`);
             } else if (req.method === 'GET') {
-                // For GET (streaming) requests, get format from query params
-                // The content should have been sent in a previous POST request
-                useAdvancedContext = req.query.useAdvancedContext === 'true';
-                showThinking = req.query.showThinking === 'true';
-                content = ''; // We don't need content for GET requests
+                // For GET (streaming) requests, get parameters from query params and body
+                // For streaming requests, we need the content from the body
+                useAdvancedContext = req.query.useAdvancedContext === 'true' || (req.body && req.body.useAdvancedContext === true);
+                showThinking = req.query.showThinking === 'true' || (req.body && req.body.showThinking === true);
+                content = req.body && req.body.content ? req.body.content : '';
 
-                // Add logging for GET requests
+                // Add detailed logging for GET requests
                 log.info(`LLM GET stream: sessionId=${req.params.sessionId}, useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}`);
+                log.info(`Parameters from query: useAdvancedContext=${req.query.useAdvancedContext}, showThinking=${req.query.showThinking}`);
+                log.info(`Parameters from body: useAdvancedContext=${req.body?.useAdvancedContext}, showThinking=${req.body?.showThinking}, content=${content ? `${content.substring(0, 20)}...` : 'none'}`);
             }
 
             // Get sessionId from URL params since it's part of the route
             sessionId = req.params.sessionId;
 
-            // For GET requests, ensure we have the format=stream parameter
-            if (req.method === 'GET' && (!req.query.format || req.query.format !== 'stream')) {
-                throw new Error('Stream format parameter is required for GET requests');
+            // For GET requests, ensure we have the stream parameter
+            if (req.method === 'GET' && req.query.stream !== 'true') {
+                throw new Error('Stream parameter must be set to true for GET/streaming requests');
             }
 
             // For POST requests, validate the content
@@ -443,6 +465,33 @@ class RestChatService {
 
             log.info("Executing chat pipeline...");
 
+            // Create options object for better tracking
+            const pipelineOptions = {
+                // Force useAdvancedContext to be a boolean, no matter what
+                useAdvancedContext: useAdvancedContext === true,
+                systemPrompt: session.messages.find(m => m.role === 'system')?.content,
+                temperature: session.metadata.temperature,
+                maxTokens: session.metadata.maxTokens,
+                model: session.metadata.model,
+                // Set stream based on request type, but ensure it's explicitly a boolean value
+                // GET requests or format=stream parameter indicates streaming should be used
+                stream: !!(req.method === 'GET' || req.query.format === 'stream' || req.query.stream === 'true')
+            };
+
+            // Log the options to verify what's being sent to the pipeline
+            log.info(`Pipeline input options: ${JSON.stringify({
+                useAdvancedContext: pipelineOptions.useAdvancedContext,
+                stream: pipelineOptions.stream
+            })}`);
+
+            // Import the WebSocket service for direct access
+            const wsService = await import('../../services/ws.js');
+
+            // Create a stream callback wrapper
+            // This will ensure we properly handle all streaming messages
+            let messageContent = '';
+            let streamFinished = false;
+
             // Prepare the pipeline input
             const pipelineInput: ChatPipelineInput = {
                 messages: session.messages.map(msg => ({
@@ -452,30 +501,109 @@ class RestChatService {
                 query: content,
                 noteId: session.noteContext ?? undefined,
                 showThinking: showThinking,
-                options: {
-                    useAdvancedContext: useAdvancedContext,
-                    systemPrompt: session.messages.find(m => m.role === 'system')?.content,
-                    temperature: session.metadata.temperature,
-                    maxTokens: session.metadata.maxTokens,
-                    model: session.metadata.model,
-                    // Set stream based on request type, but ensure it's explicitly a boolean value
-                    // GET requests or format=stream parameter indicates streaming should be used
-                    stream: !!(req.method === 'GET' || req.query.format === 'stream')
-                },
+                options: pipelineOptions,
                 streamCallback: req.method === 'GET' ? (data, done, rawChunk) => {
-                    // Prepare response data - include both the content and raw chunk data if available
-                    const responseData: any = { content: data, done };
-                    
-                    // If there's tool execution information, add it to the response
-                    if (rawChunk && rawChunk.toolExecution) {
-                        responseData.toolExecution = rawChunk.toolExecution;
-                    }
-                    
-                    // Send the data as a JSON event
-                    res.write(`data: ${JSON.stringify(responseData)}\n\n`);
-                    
-                    if (done) {
-                        res.end();
+                    try {
+                        // Send a single WebSocket message that contains everything needed
+                        // Only accumulate content that's actually text (not tool execution or thinking info)
+                        if (data) {
+                            messageContent += data;
+                        }
+
+                        // Create a message object with all necessary fields
+                        const message: LLMStreamMessage = {
+                            type: 'llm-stream',
+                            sessionId
+                        };
+
+                        // Add content if available - either the new chunk or full content on completion
+                        if (data) {
+                            message.content = data;
+                        }
+
+                        // Add thinking info if available in the raw chunk
+                        if (rawChunk?.thinking) {
+                            message.thinking = rawChunk.thinking;
+                        }
+
+                        // Add tool execution info if available in the raw chunk
+                        if (rawChunk?.toolExecution) {
+                            message.toolExecution = rawChunk.toolExecution;
+                        }
+
+                        // Set done flag explicitly
+                        message.done = done;
+
+                        // On final message, include the complete content too
+                        if (done) {
+                            streamFinished = true;
+
+                            // Always send the accumulated content with the done=true message
+                            // This ensures the client receives the complete content even if earlier messages were missed
+                            message.content = messageContent;
+
+                            log.info(`Stream complete, sending final message with ${messageContent.length} chars of content`);
+
+                            // Store the response in the session when done
+                            session.messages.push({
+                                role: 'assistant',
+                                content: messageContent,
+                                timestamp: new Date()
+                            });
+                        }
+
+                        // Send message to all clients
+                        wsService.default.sendMessageToAllClients(message);
+
+                        // Log what was sent (first message and completion)
+                        if (message.thinking || done) {
+                            log.info(
+                                `[WS-SERVER] Sending LLM stream message: sessionId=${sessionId}, content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${done}`
+                            );
+                        }
+
+                        // For GET requests, also send as server-sent events
+                        // Prepare response data for JSON event
+                        const responseData: any = {
+                            content: data,
+                            done
+                        };
+
+                        // Add tool execution if available
+                        if (rawChunk?.toolExecution) {
+                            responseData.toolExecution = rawChunk.toolExecution;
+                        }
+
+                        // Send the data as a JSON event
+                        res.write(`data: ${JSON.stringify(responseData)}\n\n`);
+
+                        if (done) {
+                            res.end();
+                        }
+                    } catch (error) {
+                        log.error(`Error in stream callback: ${error}`);
+
+                        // Try to send error message
+                        try {
+                            wsService.default.sendMessageToAllClients({
+                                type: 'llm-stream',
+                                sessionId,
+                                error: `Stream error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                                done: true
+                            });
+                        } catch (e) {
+                            log.error(`Failed to send error message: ${e}`);
+                        }
+
+                        // End the response if not already done
+                        try {
+                            if (!streamFinished) {
+                                res.write(`data: ${JSON.stringify({ error: 'Stream error', done: true })}\n\n`);
+                                res.end();
+                            }
+                        } catch (e) {
+                            log.error(`Failed to end response: ${e}`);
+                        }
                     }
                 } : undefined
             };
@@ -613,7 +741,7 @@ class RestChatService {
 
                         // Make a follow-up request with the tool results
                         log.info(`Making follow-up request with ${toolResults.length} tool results`);
-                        const followUpOptions = {...chatOptions, enableTools: iterationCount < MAX_ITERATIONS}; // Enable tools for follow-up but limit iterations
+                        const followUpOptions = { ...chatOptions, enableTools: iterationCount < MAX_ITERATIONS }; // Enable tools for follow-up but limit iterations
                         const followUpResponse = await service.generateChatCompletion(currentMessages, followUpOptions);
 
                         // Check if the follow-up response has more tool calls
@@ -740,7 +868,10 @@ class RestChatService {
     }
 
     /**
-     * Handle streaming response from LLM
+     * Handle streaming response via WebSocket
+     *
+     * This method processes LLM responses and sends them incrementally via WebSocket
+     * to the client, supporting both text content and tool execution status updates.
      */
     private async handleStreamingResponse(
         res: Response,
@@ -749,133 +880,211 @@ class RestChatService {
         service: any,
         session: ChatSession
     ) {
-        // Set streaming headers once
-        res.setHeader('Content-Type', 'text/event-stream');
-        res.setHeader('Cache-Control', 'no-cache');
-        res.setHeader('Connection', 'keep-alive');
+        // The client receives a success response for their HTTP request,
+        // but the actual content will be streamed via WebSocket
+        res.json({ success: true, message: 'Streaming response started' });
 
-        // Flag to indicate we've handled the response directly
-        // This lets the route handler know not to process the result
-        (res as any).triliumResponseHandled = true;
+        // Import the WebSocket service
+        const wsService = (await import('../../services/ws.js')).default;
 
         let messageContent = '';
+        const sessionId = session.id;
+
+        // Immediately send an initial message to confirm WebSocket connection is working
+        // This helps prevent timeouts on the client side
+        wsService.sendMessageToAllClients({
+            type: 'llm-stream',
+            sessionId,
+            thinking: 'Preparing response...'
+        } as LLMStreamMessage);
 
         try {
-            // Use the correct method name: generateChatCompletion
-            const response = await service.generateChatCompletion(aiMessages, chatOptions);
+            // Generate the LLM completion with streaming enabled
+            const response = await service.generateChatCompletion(aiMessages, {
+                ...chatOptions,
+                stream: true
+            });
 
-            // Check for tool calls in the response
+            // If the model doesn't support streaming via .stream() method or returns tool calls,
+            // we'll handle it specially
             if (response.tool_calls && response.tool_calls.length > 0) {
-                log.info(`========== STREAMING TOOL CALLS DETECTED ==========`);
-                log.info(`Response contains ${response.tool_calls.length} tool calls, executing them...`);
-                log.info(`CRITICAL CHECK: Tool execution is supposed to happen in the pipeline, not directly here.`);
-                log.info(`If tools are being executed here instead of in the pipeline, this may be a flow issue.`);
-                log.info(`Response came from provider: ${response.provider || 'unknown'}, model: ${response.model || 'unknown'}`);
+                // Send thinking state notification via WebSocket
+                wsService.sendMessageToAllClients({
+                    type: 'llm-stream',
+                    sessionId,
+                    thinking: 'Analyzing tools needed for this request...'
+                } as LLMStreamMessage);
 
                 try {
-                    log.info(`========== STREAMING TOOL EXECUTION PATH ==========`);
-                    log.info(`About to execute tools in streaming path (this is separate from pipeline tool execution)`);
-
                     // Execute the tools
                     const toolResults = await this.executeToolCalls(response);
-                    log.info(`Successfully executed ${toolResults.length} tool calls in streaming path`);
 
-                    // Make a follow-up request with the tool results
+                    // For each tool execution, send progress update via WebSocket
+                    for (const toolResult of toolResults) {
+                        wsService.sendMessageToAllClients({
+                            type: 'llm-stream',
+                            sessionId,
+                            toolExecution: {
+                                action: 'complete',
+                                tool: toolResult.name || 'unknown',
+                                result: toolResult.content.substring(0, 100) + (toolResult.content.length > 100 ? '...' : '')
+                            }
+                        } as LLMStreamMessage);
+                    }
+
+                    // Make follow-up request with tool results
                     const toolMessages = [...aiMessages, {
                         role: 'assistant',
                         content: response.text || '',
                         tool_calls: response.tool_calls
                     }, ...toolResults];
 
-                    log.info(`Making follow-up request with ${toolResults.length} tool results`);
-
-                    // Send partial response to let the client know tools are being processed
-                    if (!res.writableEnded) {
-                        res.write(`data: ${JSON.stringify({ content: "Processing tools... " })}\n\n`);
-                    }
-
                     // Use non-streaming for the follow-up to get a complete response
-                    const followUpOptions = {...chatOptions, stream: false, enableTools: false}; // Prevent infinite loops
+                    const followUpOptions = { ...chatOptions, stream: false, enableTools: false };
                     const followUpResponse = await service.generateChatCompletion(toolMessages, followUpOptions);
 
                     messageContent = followUpResponse.text || "";
 
-                    // Send the complete response as a single chunk
-                    if (!res.writableEnded) {
-                        res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
-                        res.write('data: [DONE]\n\n');
-                        res.end();
-                    }
+                    // Send the complete response with done flag in the same message
+                    wsService.sendMessageToAllClients({
+                        type: 'llm-stream',
+                        sessionId,
+                        content: messageContent,
+                        done: true
+                    } as LLMStreamMessage);
 
-                    // Store the full response for the session
+                    // Store the response in the session
                     session.messages.push({
                         role: 'assistant',
                         content: messageContent,
                         timestamp: new Date()
                     });
 
-                    return; // Skip the rest of the processing
+                    return;
                 } catch (toolError) {
                     log.error(`Error executing tools: ${toolError}`);
-                    // Continue with normal streaming response as fallback
+
+                    // Send error via WebSocket with done flag
+                    wsService.sendMessageToAllClients({
+                        type: 'llm-stream',
+                        sessionId,
+                        error: `Error executing tools: ${toolError instanceof Error ? toolError.message : 'Unknown error'}`,
+                        done: true
+                    } as LLMStreamMessage);
+
+                    return;
                 }
             }
 
-            // Handle streaming if the response includes a stream method
+            // Handle standard streaming through the stream() method
             if (response.stream) {
-                await response.stream((chunk: { text: string; done: boolean }) => {
-                    if (chunk.text) {
-                        messageContent += chunk.text;
-                        // Only write if the response hasn't finished
-                        if (!res.writableEnded) {
-                            res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
-                        }
-                    }
+                log.info(`Provider ${service.getName()} supports streaming via stream() method`);
 
-                    if (chunk.done) {
-                        // Signal the end of the stream when done, only if not already ended
-                        if (!res.writableEnded) {
-                            res.write('data: [DONE]\n\n');
-                            res.end();
+                try {
+                    await response.stream(async (chunk: StreamChunk) => {
+                        if (chunk.text) {
+                            messageContent += chunk.text;
+
+                            // Send the chunk content via WebSocket
+                            wsService.sendMessageToAllClients({
+                                type: 'llm-stream',
+                                sessionId,
+                                content: chunk.text,
+                                // Include any raw data from the provider that might contain thinking/tool info
+                                ...(chunk.raw ? { raw: chunk.raw } : {})
+                            } as LLMStreamMessage);
+
+                            // Log the first chunk (useful for debugging)
+                            if (messageContent.length === chunk.text.length) {
+                                log.info(`First stream chunk received from ${service.getName()}`);
+                            }
                         }
-                    }
-                });
-            } else {
-                // If no streaming available, send the response as a single chunk
-                messageContent = response.text;
-                // Only write if the response hasn't finished
-                if (!res.writableEnded) {
-                    res.write(`data: ${JSON.stringify({ content: messageContent })}\n\n`);
-                    res.write('data: [DONE]\n\n');
-                    res.end();
+
+                        // If the provider indicates this is "thinking" state, relay that
+                        if (chunk.raw?.thinking) {
+                            wsService.sendMessageToAllClients({
+                                type: 'llm-stream',
+                                sessionId,
+                                thinking: chunk.raw.thinking
+                            } as LLMStreamMessage);
+                        }
+
+                        // If the provider indicates tool execution, relay that
+                        if (chunk.raw?.toolExecution) {
+                            wsService.sendMessageToAllClients({
+                                type: 'llm-stream',
+                                sessionId,
+                                toolExecution: chunk.raw.toolExecution
+                            } as LLMStreamMessage);
+                        }
+
+                        // Signal completion when done
+                        if (chunk.done) {
+                            log.info(`Stream completed from ${service.getName()}`);
+
+                            // Send the final message with both content and done flag together
+                            wsService.sendMessageToAllClients({
+                                type: 'llm-stream',
+                                sessionId,
+                                content: messageContent, // Send the accumulated content
+                                done: true
+                            } as LLMStreamMessage);
+                        }
+                    });
+
+                    log.info(`Streaming from ${service.getName()} completed successfully`);
+                } catch (streamError) {
+                    log.error(`Error during streaming from ${service.getName()}: ${streamError}`);
+
+                    // Report the error to the client
+                    wsService.sendMessageToAllClients({
+                        type: 'llm-stream',
+                        sessionId,
+                        error: `Error during streaming: ${streamError instanceof Error ? streamError.message : 'Unknown error'}`,
+                        done: true
+                    } as LLMStreamMessage);
+
+                    throw streamError;
                 }
+            } else {
+                log.info(`Provider ${service.getName()} does not support streaming via stream() method, falling back to single response`);
+
+                // If streaming isn't available, send the entire response at once
+                messageContent = response.text || '';
+
+                // Send via WebSocket - include both content and done flag in same message
+                wsService.sendMessageToAllClients({
+                    type: 'llm-stream',
+                    sessionId,
+                    content: messageContent,
+                    done: true
+                } as LLMStreamMessage);
+
+                log.info(`Complete response sent for ${service.getName()}`);
             }
 
-            // Store the full response for the session
-            const aiResponse = messageContent;
-
-            // Store the assistant's response in the session
+            // Store the full response in the session
             session.messages.push({
                 role: 'assistant',
-                content: aiResponse,
+                content: messageContent,
                 timestamp: new Date()
             });
         } catch (streamingError: any) {
-            // If streaming fails and we haven't sent a response yet, throw the error
-            if (!res.headersSent) {
-                throw streamingError;
-            } else {
-                // If headers were already sent, try to send an error event
-                try {
-                    if (!res.writableEnded) {
-                        res.write(`data: ${JSON.stringify({ error: streamingError.message })}\n\n`);
-                        res.write('data: [DONE]\n\n');
-                        res.end();
-                    }
-                } catch (e) {
-                    log.error(`Failed to write streaming error: ${e}`);
-                }
-            }
+            log.error(`Streaming error: ${streamingError.message}`);
+
+            // Send error via WebSocket
+            wsService.sendMessageToAllClients({
+                type: 'llm-stream',
+                sessionId,
+                error: `Error generating response: ${streamingError instanceof Error ? streamingError.message : 'Unknown error'}`
+            } as LLMStreamMessage);
+
+            // Signal completion
+            wsService.sendMessageToAllClients({
+                type: 'llm-stream',
+                sessionId,
+                done: true
+            } as LLMStreamMessage);
         }
     }
 

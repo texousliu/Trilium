@@ -1,12 +1,16 @@
 import type { ToolCall } from './tools/tool_interfaces.js';
 import type { ModelMetadata } from './providers/provider_options.js';
 
+/**
+ * Interface for chat messages between client and LLM models
+ */
 export interface Message {
     role: 'user' | 'assistant' | 'system' | 'tool';
     content: string;
     name?: string;
     tool_call_id?: string;
     tool_calls?: ToolCall[] | any[];
+    sessionId?: string; // Optional session ID for WebSocket communication
 }
 
 /**
@@ -32,6 +36,12 @@ export interface StreamChunk {
         completionTokens?: number;
         totalTokens?: number;
     };
+    
+    /** 
+     * Raw provider-specific data from the original response chunk
+     * This can include thinking state, tool execution info, etc.
+     */
+    raw?: any;
 }
 
 /**

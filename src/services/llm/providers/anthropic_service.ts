@@ -112,6 +112,8 @@ export class AnthropicService extends BaseAIService {
 
     /**
      * Handle streaming response from Anthropic
+     * 
+     * Simplified implementation that leverages the Anthropic SDK's streaming capabilities
      */
     private async handleStreamingResponse(
         client: any,
@@ -119,26 +121,29 @@ export class AnthropicService extends BaseAIService {
         opts: ChatCompletionOptions,
         providerOptions: AnthropicOptions
     ): Promise<ChatResponse> {
-        let completeText = '';
-
-        // Create a function that will return a Promise that resolves with the final text
+        // Create a stream handler function that processes the SDK's stream
         const streamHandler = async (callback: (chunk: StreamChunk) => Promise<void> | void): Promise<string> => {
+            let completeText = '';
+            
             try {
+                // Request a streaming response from Anthropic
                 const streamResponse = await client.messages.create({
                     ...params,
                     stream: true
                 });
 
+                // Process each chunk in the stream
                 for await (const chunk of streamResponse) {
+                    // Only process text content deltas
                     if (chunk.type === 'content_block_delta' && chunk.delta?.type === 'text_delta') {
                         const text = chunk.delta.text || '';
                         completeText += text;
                         
-                        // Call the callback with the chunk
+                        // Send the chunk to the caller
                         await callback({
                             text,
                             done: false,
-                            usage: {} // Usage stats not available in chunks
+                            raw: chunk // Include the raw chunk for advanced processing
                         });
                     }
                 }
@@ -146,11 +151,7 @@ export class AnthropicService extends BaseAIService {
                 // Signal completion
                 await callback({
                     text: '',
-                    done: true,
-                    usage: {
-                        // We don't have token usage information in streaming mode from the chunks
-                        totalTokens: completeText.length / 4 // Rough estimate
-                    }
+                    done: true
                 });
 
                 return completeText;
@@ -160,25 +161,12 @@ export class AnthropicService extends BaseAIService {
             }
         };
 
-        // If a stream callback was provided in the options, set up immediate streaming
-        if (opts.streamCallback) {
-            // Start streaming in the background
-            void streamHandler(async (chunk) => {
-                if (opts.streamCallback) {
-                    await opts.streamCallback(chunk.text, chunk.done);
-                }
-            });
-        }
-
+        // Return a response object with the stream handler
         return {
-            text: completeText, // This will be empty initially until streaming completes
+            text: '', // Initial text is empty, will be populated during streaming
             model: providerOptions.model,
             provider: this.getName(),
-            stream: streamHandler,
-            usage: {
-                // We don't have token counts initially with streaming
-                totalTokens: 0
-            }
+            stream: streamHandler
         };
     }
 
