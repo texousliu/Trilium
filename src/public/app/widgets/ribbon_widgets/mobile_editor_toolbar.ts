@@ -26,6 +26,10 @@ const TPL = /*html*/`\
         user-select: none;
     }
 
+    .classic-toolbar-widget::-webkit-scrollbar {
+        height: 0 !important;
+    }
+
     .classic-toolbar-widget.dropdown-active {
         height: 50vh;
     }
