@@ -1,3 +1,4 @@
+import { isIOS } from "../../services/utils.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
 const TPL = /*html*/`\
@@ -12,6 +13,13 @@ const TPL = /*html*/`\
         position: relative;
         overflow: visible;
         flex-shrink: 0;
+    }
+
+    #root-widget.virtual-keyboard-opened .classic-toolbar-outer-container.ios {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
 
     .classic-toolbar-widget {
@@ -51,13 +59,10 @@ const TPL = /*html*/`\
 `;
 
 /**
- * Handles the editing toolbar when the CKEditor is in decoupled mode.
+ * Handles the editing toolbar for CKEditor in mobile mode. The toolbar acts as a floating bar, with two different mechanism:
  *
- * <p>
- * This toolbar is only enabled if the user has selected the classic CKEditor.
- *
- * <p>
- * The ribbon item is active by default for text notes, as long as they are not in read-only mode.
+ * - On iOS, because it does not respect the viewport meta value `interactive-widget=resizes-content`, we need to listen to window resizes and scroll and reposition the toolbar using absolute positioning.
+ * - On Android, the viewport change makes the keyboard resize the content area, all we have to do is to hide the tab bar and global menu (handled in the global style).
  */
 export default class MobileEditorToolbar extends NoteContextAwareWidget {
 
@@ -84,6 +89,21 @@ export default class MobileEditorToolbar extends NoteContextAwareWidget {
             attributeFilter: ["aria-expanded"],
             subtree: true
         });
+
+        if (isIOS()) {
+            this.#handlePositioningOniOS();
+        }
+    }
+
+    #handlePositioningOniOS() {
+        const adjustPosition = () => {
+            let bottom = window.innerHeight - (window.visualViewport?.height || 0);
+            this.$widget.css("bottom", `${bottom}px`);
+        }
+
+        this.$widget.addClass("ios");
+        window.visualViewport?.addEventListener("resize", adjustPosition);
+        window.addEventListener("scroll", adjustPosition);
     }
 
     #onDropdownStateChanged(e: MutationRecord[]) {
