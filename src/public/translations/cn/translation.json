@@ -588,6 +588,7 @@
     "sat": "六",
     "sun": "日",
     "cannot_find_day_note": "无法找到日记",
+    "cannot_find_week_note": "无法找到周记",
     "january": "一月",
     "febuary": "二月",
     "march": "三月",
@@ -1231,7 +1232,15 @@
     "language": "语言",
     "first-day-of-the-week": "一周的第一天",
     "sunday": "周日",
-    "monday": "周一"
+    "monday": "周一",
+    "first-week-of-the-year": "一年的第一周",
+    "first-week-contains-first-day": "第一周包含一年的第一天",
+    "first-week-contains-first-thursday": "第一周包含一年的第一个周四",
+    "first-week-has-minimum-days": "第一周有最小天数",
+    "min-days-in-first-week": "第一周的最小天数",
+    "first-week-info": "第一周包含一年的第一个周四，基于 <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> 标准。",
+    "first-week-warning": "更改第一周选项可能会导致与现有周笔记重复，已创建的周笔记将不会相应更新。",
+    "formatting-locale": "日期和数字格式"
   },
   "backup": {
     "automatic_backup": "自动备份",

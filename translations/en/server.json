@@ -174,6 +174,7 @@
     "saturday": "Saturday",
     "sunday": "Sunday"
   },
+  "weekdayNumber": "Week {weekNumber}",
   "months": {
     "january": "January",
     "february": "February",
@@ -188,6 +189,7 @@
     "november": "November",
     "december": "December"
   },
+  "quarterNumber": "Quarter {quarterNumber}",
   "special_notes": {
     "search_prefix": "Search:"
   },
