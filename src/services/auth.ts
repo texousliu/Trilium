@@ -39,8 +39,12 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
         res.redirect('login');
         return;
     } else if (!req.session.loggedIn && !noAuthentication) {
-        const redirectToShare = options.getOptionBool("redirectBareDomain");
-        if (redirectToShare) {
+
+        // cannot use options.getOptionBool currently => it will throw an error on new installations
+        // TriliumNextTODO: look into potentially creating an getOptionBoolOrNull instead
+        const hasRedirectBareDomain = options.getOptionOrNull("redirectBareDomain") === "true";
+
+        if (hasRedirectBareDomain) {
             // Check if any note has the #shareRoot label
             const shareRootNotes = attributes.getNotesWithLabel("shareRoot");
             if (shareRootNotes.length === 0) {
@@ -48,11 +52,13 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
                 return;
             }
         }
-        res.redirect(redirectToShare ? "share" : "login");
+        res.redirect(hasRedirectBareDomain ? "share" : "login");
     } else {
         next();
     }
 }
+
+
 
 // for electron things which need network stuff
 //  currently, we're doing that for file upload because handling form data seems to be difficult
