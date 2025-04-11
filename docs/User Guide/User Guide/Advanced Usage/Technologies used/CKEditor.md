@@ -31,3 +31,4 @@ Apart from that, Trilium also has its own set of specific plugins such as:
 *   Mentions, for linking pages.
 *   <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/Import%20%26%20Export/Markdown.md">Markdown</a>
 *   [Reference links](../../Note%20Types/Text/Links.md)
+*   [Admonitions](../../Note%20Types/Text/Block%20quotes%20%26%20admonitions.md), we ended up creating our own plugin but [aarkue/ckeditor5-admonition](https://github.com/aarkue/ckeditor5-admonition) was a good inspiration (including the toolbar icon).
