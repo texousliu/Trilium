@@ -27,16 +27,6 @@ const TPL = `
                 <span class="visually-hidden">Loading...</span>
             </div>
             <span class="ms-2">${t('ai_llm.agent.processing')}</span>
-            <div class="tool-execution-info mt-2" style="display: none;">
-                <!-- Tool execution status will be shown here -->
-                <div class="tool-execution-status small p-2 bg-light rounded" style="max-height: 150px; overflow-y: auto;">
-                    <div class="d-flex align-items-center">
-                        <i class="bx bx-code-block text-primary me-2"></i>
-                        <span class="fw-bold">Tool Execution:</span>
-                    </div>
-                    <div class="tool-execution-steps ps-3 pt-1"></div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -98,8 +88,6 @@ export default class LlmChatPanel extends BasicWidget {
     private noteContextChatSendButton!: HTMLButtonElement;
     private chatContainer!: HTMLElement;
     private loadingIndicator!: HTMLElement;
-    private toolExecutionInfo!: HTMLElement;
-    private toolExecutionSteps!: HTMLElement;
     private sourcesList!: HTMLElement;
     private useAdvancedContextCheckbox!: HTMLInputElement;
     private showThinkingCheckbox!: HTMLInputElement;
@@ -157,8 +145,6 @@ export default class LlmChatPanel extends BasicWidget {
         this.noteContextChatSendButton = element.querySelector('.note-context-chat-send-button') as HTMLButtonElement;
         this.chatContainer = element.querySelector('.note-context-chat-container') as HTMLElement;
         this.loadingIndicator = element.querySelector('.loading-indicator') as HTMLElement;
-        this.toolExecutionInfo = element.querySelector('.tool-execution-info') as HTMLElement;
-        this.toolExecutionSteps = element.querySelector('.tool-execution-steps') as HTMLElement;
         this.sourcesList = element.querySelector('.sources-list') as HTMLElement;
         this.useAdvancedContextCheckbox = element.querySelector('.use-advanced-context-checkbox') as HTMLInputElement;
         this.showThinkingCheckbox = element.querySelector('.show-thinking-checkbox') as HTMLInputElement;
@@ -210,17 +196,76 @@ export default class LlmChatPanel extends BasicWidget {
         }
 
         try {
+            // Extract current tool execution steps if any exist
+            const toolSteps = this.extractInChatToolSteps();
+
             const dataToSave = {
                 messages: this.messages,
-                sessionId: this.sessionId
+                sessionId: this.sessionId,
+                toolSteps: toolSteps // Save tool execution steps alongside messages
             };
 
-            console.log(`Saving chat data with sessionId: ${this.sessionId}`);
+            console.log(`Saving chat data with sessionId: ${this.sessionId} and ${toolSteps.length} tool steps`);
 
             await this.onSaveData(dataToSave);
         } catch (error) {
             console.error('Failed to save chat data', error);
         }
+    }
+
+    /**
+     * Extract tool execution steps from the DOM that are within the chat flow
+     */
+    private extractInChatToolSteps(): Array<{type: string, name?: string, content: string}> {
+        const steps: Array<{type: string, name?: string, content: string}> = [];
+
+        // Look for tool execution in the chat flow
+        const toolExecutionElement = this.noteContextChatMessages.querySelector('.chat-tool-execution');
+
+        if (toolExecutionElement) {
+            // Find all tool step elements
+            const stepElements = toolExecutionElement.querySelectorAll('.tool-step');
+
+            stepElements.forEach(stepEl => {
+                const stepHtml = stepEl.innerHTML;
+
+                // Determine the step type based on icons or classes present
+                let type = 'info';
+                let name: string | undefined;
+                let content = '';
+
+                if (stepHtml.includes('bx-code-block')) {
+                    type = 'executing';
+                    content = 'Executing tools...';
+                } else if (stepHtml.includes('bx-terminal')) {
+                    type = 'result';
+                    // Extract the tool name from the step
+                    const nameMatch = stepHtml.match(/<span[^>]*>Tool: ([^<]+)<\/span>/);
+                    name = nameMatch ? nameMatch[1] : 'unknown';
+
+                    // Extract the content from the div with class mt-1 ps-3
+                    const contentEl = stepEl.querySelector('.mt-1.ps-3');
+                    content = contentEl ? contentEl.innerHTML : '';
+                } else if (stepHtml.includes('bx-error-circle')) {
+                    type = 'error';
+                    const nameMatch = stepHtml.match(/<span[^>]*>Tool: ([^<]+)<\/span>/);
+                    name = nameMatch ? nameMatch[1] : 'unknown';
+
+                    const contentEl = stepEl.querySelector('.mt-1.ps-3.text-danger');
+                    content = contentEl ? contentEl.innerHTML : '';
+                } else if (stepHtml.includes('bx-message-dots')) {
+                    type = 'generating';
+                    content = 'Generating response with tool results...';
+                } else if (stepHtml.includes('bx-loader-alt')) {
+                    // Skip the initializing spinner
+                    return;
+                }
+
+                steps.push({ type, name, content });
+            });
+        }
+
+        return steps;
     }
 
     /**
@@ -246,6 +291,12 @@ export default class LlmChatPanel extends BasicWidget {
                     this.addMessageToChat(role, message.content);
                 });
 
+                // Restore tool execution steps if they exist
+                if (savedData.toolSteps && Array.isArray(savedData.toolSteps) && savedData.toolSteps.length > 0) {
+                    console.log(`Restoring ${savedData.toolSteps.length} saved tool steps`);
+                    this.restoreInChatToolSteps(savedData.toolSteps);
+                }
+
                 // Load session ID if available
                 if (savedData.sessionId) {
                     try {
@@ -261,7 +312,7 @@ export default class LlmChatPanel extends BasicWidget {
                             await this.createChatSession();
                         }
                     } catch (error) {
-                        console.log(`Error checking saved session ${savedData.sessionId}, will create new one`);
+                        console.log(`Error checking saved session ${savedData.sessionId}, creating a new one`);
                         this.sessionId = null;
                         await this.createChatSession();
                     }
@@ -278,6 +329,54 @@ export default class LlmChatPanel extends BasicWidget {
         }
 
         return false;
+    }
+
+    /**
+     * Restore tool execution steps in the chat UI
+     */
+    private restoreInChatToolSteps(steps: Array<{type: string, name?: string, content: string}>) {
+        if (!steps || steps.length === 0) return;
+
+        // Create the tool execution element
+        const toolExecutionElement = document.createElement('div');
+        toolExecutionElement.className = 'chat-tool-execution mb-3';
+
+        // Insert before the assistant message if it exists
+        const assistantMessage = this.noteContextChatMessages.querySelector('.assistant-message:last-child');
+        if (assistantMessage) {
+            this.noteContextChatMessages.insertBefore(toolExecutionElement, assistantMessage);
+        } else {
+            // Otherwise append to the end
+            this.noteContextChatMessages.appendChild(toolExecutionElement);
+        }
+
+        // Fill with tool execution content
+        toolExecutionElement.innerHTML = `
+            <div class="tool-execution-container p-2 rounded mb-2">
+                <div class="tool-execution-header d-flex align-items-center justify-content-between mb-2">
+                    <div>
+                        <i class="bx bx-code-block text-primary me-2"></i>
+                        <span class="fw-bold">Tool Execution</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-link p-0 text-muted tool-execution-chat-clear" title="Clear tool execution history">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <div class="tool-execution-chat-steps">
+                    ${this.renderToolStepsHtml(steps)}
+                </div>
+            </div>
+        `;
+
+        // Add event listener for the clear button
+        const clearButton = toolExecutionElement.querySelector('.tool-execution-chat-clear');
+        if (clearButton) {
+            clearButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toolExecutionElement.remove();
+            });
+        }
     }
 
     async refresh() {
@@ -731,62 +830,135 @@ export default class LlmChatPanel extends BasicWidget {
             return;
         }
 
-        // Check if we already have an assistant message element to update
-        const assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
+        // Extract the tool execution steps and final response
+        const toolSteps = this.extractToolExecutionSteps(assistantResponse);
+        const finalResponseText = this.extractFinalResponse(assistantResponse);
 
-        if (assistantElement) {
-            console.log(`[${logId}] Found existing assistant message element, updating content`);
-            try {
-                // Format markdown and update the element
-                const formattedContent = this.formatMarkdown(assistantResponse);
+        // Find existing assistant message or create one if needed
+        let assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
 
-                // Ensure content is properly formatted
-                if (!formattedContent || formattedContent.trim() === '') {
-                    console.warn(`[${logId}] Formatted content is empty, using original content`);
-                    assistantElement.textContent = assistantResponse;
+        // First, check if we need to add the tool execution steps to the chat flow
+        if (toolSteps.length > 0) {
+            // Look for an existing tool execution element in the chat flow
+            let toolExecutionElement = this.noteContextChatMessages.querySelector('.chat-tool-execution');
+
+            if (!toolExecutionElement) {
+                // Create a new tool execution element in the chat flow
+                // Place it right before the assistant message if it exists, or at the end of chat
+                toolExecutionElement = document.createElement('div');
+                toolExecutionElement.className = 'chat-tool-execution mb-3';
+
+                // If there's an assistant message, insert before it
+                const assistantMessage = this.noteContextChatMessages.querySelector('.assistant-message:last-child');
+                if (assistantMessage) {
+                    this.noteContextChatMessages.insertBefore(toolExecutionElement, assistantMessage);
                 } else {
-                    assistantElement.innerHTML = formattedContent;
-                }
-
-                // Apply syntax highlighting to any code blocks in the updated content
-                applySyntaxHighlight($(assistantElement as HTMLElement));
-
-                console.log(`[${logId}] Successfully updated existing element with ${formattedContent.length} chars of HTML`);
-            } catch (err) {
-                console.error(`[${logId}] Error updating existing element:`, err);
-                // Fallback to text content if HTML update fails
-                try {
-                    assistantElement.textContent = assistantResponse;
-                    console.log(`[${logId}] Fallback to text content successful`);
-                } catch (fallbackErr) {
-                    console.error(`[${logId}] Even fallback update failed:`, fallbackErr);
+                    // Otherwise append to the end
+                    this.noteContextChatMessages.appendChild(toolExecutionElement);
                 }
             }
-        } else {
-            console.log(`[${logId}] No existing assistant message element found, creating new one`);
-            try {
-                this.addMessageToChat('assistant', assistantResponse);
-                console.log(`[${logId}] Successfully added new assistant message`);
-            } catch (err) {
-                console.error(`[${logId}] Error adding new message:`, err);
 
-                // Last resort emergency approach - create element directly
+            // Update the tool execution content
+            toolExecutionElement.innerHTML = `
+                <div class="tool-execution-container p-2 rounded mb-2">
+                    <div class="tool-execution-header d-flex align-items-center justify-content-between mb-2">
+                        <div>
+                            <i class="bx bx-code-block text-primary me-2"></i>
+                            <span class="fw-bold">Tool Execution</span>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-link p-0 text-muted tool-execution-chat-clear" title="Clear tool execution history">
+                            <i class="bx bx-x"></i>
+                        </button>
+                    </div>
+                    <div class="tool-execution-chat-steps">
+                        ${this.renderToolStepsHtml(toolSteps)}
+                    </div>
+                </div>
+            `;
+
+            // Add event listener for the clear button
+            const clearButton = toolExecutionElement.querySelector('.tool-execution-chat-clear');
+            if (clearButton) {
+                clearButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toolExecutionElement?.remove();
+                });
+            }
+        }
+
+        // Now update or create the assistant message with the final response
+        if (finalResponseText) {
+            if (assistantElement) {
+                console.log(`[${logId}] Found existing assistant message element, updating with final response`);
                 try {
-                    console.log(`[${logId}] Attempting emergency DOM update`);
-                    const emergencyElement = document.createElement('div');
-                    emergencyElement.className = 'chat-message assistant-message mb-3 d-flex';
-                    emergencyElement.innerHTML = `
-                        <div class="message-avatar d-flex align-items-center justify-content-center me-2 assistant-avatar">
-                            <i class="bx bx-bot"></i>
-                        </div>
-                        <div class="message-content p-3 rounded flex-grow-1 assistant-content">
-                            ${assistantResponse}
-                        </div>
-                    `;
-                    this.noteContextChatMessages.appendChild(emergencyElement);
-                    console.log(`[${logId}] Emergency DOM update successful`);
-                } catch (emergencyErr) {
-                    console.error(`[${logId}] Emergency DOM update failed:`, emergencyErr);
+                    // Format the final response with markdown
+                    const formattedResponse = this.formatMarkdown(finalResponseText);
+
+                    // Update the content
+                    assistantElement.innerHTML = formattedResponse || '';
+
+                    // Apply syntax highlighting to any code blocks in the updated content
+                    applySyntaxHighlight($(assistantElement as HTMLElement));
+
+                    console.log(`[${logId}] Successfully updated existing element with final response`);
+                } catch (err) {
+                    console.error(`[${logId}] Error updating existing element:`, err);
+                    // Fallback to text content if HTML update fails
+                    try {
+                        assistantElement.textContent = finalResponseText;
+                        console.log(`[${logId}] Fallback to text content successful`);
+                    } catch (fallbackErr) {
+                        console.error(`[${logId}] Even fallback update failed:`, fallbackErr);
+                    }
+                }
+            } else {
+                console.log(`[${logId}] No existing assistant message element found, creating new one`);
+                try {
+                    // Create new message element
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'chat-message assistant-message mb-3 d-flex';
+
+                    const avatarElement = document.createElement('div');
+                    avatarElement.className = 'message-avatar d-flex align-items-center justify-content-center me-2 assistant-avatar';
+                    avatarElement.innerHTML = '<i class="bx bx-bot"></i>';
+
+                    const contentElement = document.createElement('div');
+                    contentElement.className = 'message-content p-3 rounded flex-grow-1 assistant-content';
+
+                    // Only show the final response in the message content
+                    contentElement.innerHTML = this.formatMarkdown(finalResponseText) || '';
+
+                    messageElement.appendChild(avatarElement);
+                    messageElement.appendChild(contentElement);
+
+                    this.noteContextChatMessages.appendChild(messageElement);
+
+                    // Apply syntax highlighting to any code blocks in the message
+                    applySyntaxHighlight($(contentElement));
+
+                    console.log(`[${logId}] Successfully added new assistant message`);
+                } catch (err) {
+                    console.error(`[${logId}] Error adding new message:`, err);
+
+                    // Last resort emergency approach - create element directly
+                    try {
+                        console.log(`[${logId}] Attempting emergency DOM update`);
+                        const emergencyElement = document.createElement('div');
+                        emergencyElement.className = 'chat-message assistant-message mb-3 d-flex';
+                        emergencyElement.innerHTML = `
+                            <div class="message-avatar d-flex align-items-center justify-content-center me-2 assistant-avatar">
+                                <i class="bx bx-bot"></i>
+                            </div>
+                            <div class="message-content p-3 rounded flex-grow-1 assistant-content">
+                                ${finalResponseText}
+                            </div>
+                        `;
+                        this.noteContextChatMessages.appendChild(emergencyElement);
+                        console.log(`[${logId}] Emergency DOM update successful`);
+                    } catch (emergencyErr) {
+                        console.error(`[${logId}] Emergency DOM update failed:`, emergencyErr);
+                    }
                 }
             }
         }
@@ -800,6 +972,131 @@ export default class LlmChatPanel extends BasicWidget {
         } catch (scrollErr) {
             console.error(`[${logId}] Error scrolling to latest content:`, scrollErr);
         }
+    }
+
+    /**
+     * Render tool steps as HTML for display in chat
+     */
+    private renderToolStepsHtml(steps: Array<{type: string, name?: string, content: string}>): string {
+        if (!steps || steps.length === 0) return '';
+
+        let html = '';
+
+        steps.forEach(step => {
+            let icon, labelClass, content;
+
+            switch (step.type) {
+                case 'executing':
+                    icon = 'bx-code-block text-primary';
+                    labelClass = '';
+                    content = `<div class="d-flex align-items-center">
+                        <i class="bx ${icon} me-1"></i>
+                        <span>${step.content}</span>
+                    </div>`;
+                    break;
+
+                case 'result':
+                    icon = 'bx-terminal text-success';
+                    labelClass = 'fw-bold';
+                    content = `<div class="d-flex align-items-center">
+                        <i class="bx ${icon} me-1"></i>
+                        <span class="${labelClass}">Tool: ${step.name || 'unknown'}</span>
+                    </div>
+                    <div class="mt-1 ps-3">${step.content}</div>`;
+                    break;
+
+                case 'error':
+                    icon = 'bx-error-circle text-danger';
+                    labelClass = 'fw-bold text-danger';
+                    content = `<div class="d-flex align-items-center">
+                        <i class="bx ${icon} me-1"></i>
+                        <span class="${labelClass}">Tool: ${step.name || 'unknown'}</span>
+                    </div>
+                    <div class="mt-1 ps-3 text-danger">${step.content}</div>`;
+                    break;
+
+                case 'generating':
+                    icon = 'bx-message-dots text-info';
+                    labelClass = '';
+                    content = `<div class="d-flex align-items-center">
+                        <i class="bx ${icon} me-1"></i>
+                        <span>${step.content}</span>
+                    </div>`;
+                    break;
+
+                default:
+                    icon = 'bx-info-circle text-muted';
+                    labelClass = '';
+                    content = `<div class="d-flex align-items-center">
+                        <i class="bx ${icon} me-1"></i>
+                        <span>${step.content}</span>
+                    </div>`;
+            }
+
+            html += `<div class="tool-step my-1">${content}</div>`;
+        });
+
+        return html;
+    }
+
+    /**
+     * Extract tool execution steps from the response
+     */
+    private extractToolExecutionSteps(content: string): Array<{type: string, name?: string, content: string}> {
+        if (!content) return [];
+
+        const steps = [];
+
+        // Check for executing tools marker
+        if (content.includes('[Executing tools...]')) {
+            steps.push({
+                type: 'executing',
+                content: 'Executing tools...'
+            });
+        }
+
+        // Extract tool results with regex
+        const toolResultRegex = /\[Tool: ([^\]]+)\]([\s\S]*?)(?=\[|$)/g;
+        let match;
+
+        while ((match = toolResultRegex.exec(content)) !== null) {
+            const toolName = match[1];
+            const toolContent = match[2].trim();
+
+            steps.push({
+                type: toolContent.includes('Error:') ? 'error' : 'result',
+                name: toolName,
+                content: toolContent
+            });
+        }
+
+        // Check for generating response marker
+        if (content.includes('[Generating response with tool results...]')) {
+            steps.push({
+                type: 'generating',
+                content: 'Generating response with tool results...'
+            });
+        }
+
+        return steps;
+    }
+
+    /**
+     * Extract the final response without tool execution steps
+     */
+    private extractFinalResponse(content: string): string {
+        if (!content) return '';
+
+        // Remove all tool execution markers and their content
+        let finalResponse = content
+            .replace(/\[Executing tools\.\.\.\]\n*/g, '')
+            .replace(/\[Tool: [^\]]+\][\s\S]*?(?=\[|$)/g, '')
+            .replace(/\[Generating response with tool results\.\.\.\]\n*/g, '');
+
+        // Trim any extra whitespace
+        finalResponse = finalResponse.trim();
+
+        return finalResponse;
     }
 
     /**
@@ -903,40 +1200,22 @@ export default class LlmChatPanel extends BasicWidget {
 
     private showLoadingIndicator() {
         const logId = `ui-${Date.now()}`;
-        console.log(`[${logId}] Showing loading indicator and preparing tool execution display`);
+        console.log(`[${logId}] Showing loading indicator`);
 
-        // Ensure elements exist before trying to modify them
-        if (!this.loadingIndicator || !this.toolExecutionInfo || !this.toolExecutionSteps) {
-            console.error(`[${logId}] UI elements not properly initialized`);
+        // Ensure the loading indicator element exists
+        if (!this.loadingIndicator) {
+            console.error(`[${logId}] Loading indicator element not properly initialized`);
             return;
         }
 
-        // Force display of loading indicator
+        // Show the loading indicator
         try {
             this.loadingIndicator.style.display = 'flex';
 
-            // Make sure tool execution info area is always visible even before we get the first event
-            // This helps avoid the UI getting stuck in "Processing..." state
-            this.toolExecutionInfo.style.display = 'block';
-
-            // Clear previous tool steps but add a placeholder
-            this.toolExecutionSteps.innerHTML = `
-                <div class="tool-step my-1">
-                    <div class="d-flex align-items-center">
-                        <i class="bx bx-loader-alt bx-spin text-primary me-1"></i>
-                        <span>Initializing...</span>
-                    </div>
-                </div>
-            `;
-
-            // Force a UI update by accessing element properties
+            // Force a UI update
             const forceUpdate = this.loadingIndicator.offsetHeight;
 
-            // Verify display states
-            console.log(`[${logId}] Loading indicator display state: ${this.loadingIndicator.style.display}`);
-            console.log(`[${logId}] Tool execution info display state: ${this.toolExecutionInfo.style.display}`);
-
-            console.log(`[${logId}] Loading indicator and tool execution area initialized`);
+            console.log(`[${logId}] Loading indicator initialized`);
         } catch (err) {
             console.error(`[${logId}] Error showing loading indicator:`, err);
         }
@@ -944,47 +1223,24 @@ export default class LlmChatPanel extends BasicWidget {
 
     private hideLoadingIndicator() {
         const logId = `ui-${Date.now()}`;
-        console.log(`[${logId}] Hiding loading indicator and tool execution area`);
+        console.log(`[${logId}] Hiding loading indicator`);
 
         // Ensure elements exist before trying to modify them
-        if (!this.loadingIndicator || !this.toolExecutionInfo) {
-            console.error(`[${logId}] UI elements not properly initialized`);
+        if (!this.loadingIndicator) {
+            console.error(`[${logId}] Loading indicator element not properly initialized`);
             return;
         }
 
         // Properly reset DOM elements
         try {
-            // First hide the tool execution info area
-            this.toolExecutionInfo.style.display = 'none';
-
-            // Force a UI update by accessing element properties
-            const forceUpdate1 = this.toolExecutionInfo.offsetHeight;
-
-            // Then hide the loading indicator
+            // Hide just the loading indicator but NOT the tool execution info
             this.loadingIndicator.style.display = 'none';
 
-            // Force another UI update
-            const forceUpdate2 = this.loadingIndicator.offsetHeight;
+            // Force a UI update by accessing element properties
+            const forceUpdate = this.loadingIndicator.offsetHeight;
 
-            // Verify display states immediately
-            console.log(`[${logId}] Loading indicator display state: ${this.loadingIndicator.style.display}`);
-            console.log(`[${logId}] Tool execution info display state: ${this.toolExecutionInfo.style.display}`);
-
-            // Add a delay to double-check that UI updates are complete
-            setTimeout(() => {
-                console.log(`[${logId}] Verification after hide timeout: loading indicator display=${this.loadingIndicator.style.display}, tool execution info display=${this.toolExecutionInfo.style.display}`);
-
-                // Force display none again in case something changed it
-                if (this.loadingIndicator.style.display !== 'none') {
-                    console.log(`[${logId}] Loading indicator still visible after timeout, forcing hidden`);
-                    this.loadingIndicator.style.display = 'none';
-                }
-
-                if (this.toolExecutionInfo.style.display !== 'none') {
-                    console.log(`[${logId}] Tool execution info still visible after timeout, forcing hidden`);
-                    this.toolExecutionInfo.style.display = 'none';
-                }
-            }, 100);
+            // Tool execution info is now independent and may remain visible
+            console.log(`[${logId}] Loading indicator hidden, tool execution info remains visible if needed`);
         } catch (err) {
             console.error(`[${logId}] Error hiding loading indicator:`, err);
         }
@@ -996,62 +1252,22 @@ export default class LlmChatPanel extends BasicWidget {
     private showToolExecutionInfo(toolExecutionData: any) {
         console.log(`Showing tool execution info: ${JSON.stringify(toolExecutionData)}`);
 
-        // Make sure tool execution info section is visible
-        this.toolExecutionInfo.style.display = 'block';
-        this.loadingIndicator.style.display = 'flex'; // Ensure loading indicator is shown during tool execution
+        // We'll update the in-chat tool execution area in the updateStreamingUI method
+        // This method is now just a legacy hook for the WebSocket handlers
 
-        // Create a new step element to show the tool being executed
-        const stepElement = document.createElement('div');
-        stepElement.className = 'tool-step my-1';
+        // Make sure the loading indicator is shown during tool execution
+        this.loadingIndicator.style.display = 'flex';
+    }
 
-        // Basic styling for the step
-        let stepHtml = '';
+    /**
+     * Show thinking state in the UI
+     */
+    private showThinkingState(thinkingData: string) {
+        // Thinking state is now updated via the in-chat UI in updateStreamingUI
+        // This method is now just a legacy hook for the WebSocket handlers
 
-        if (toolExecutionData.action === 'start') {
-            // Tool execution starting
-            stepHtml = `
-                <div class="d-flex align-items-center">
-                    <i class="bx bx-play-circle text-primary me-1"></i>
-                    <span class="fw-bold">${this.escapeHtml(toolExecutionData.tool || 'Unknown tool')}</span>
-                </div>
-                <div class="tool-args small text-muted ps-3">
-                    ${this.formatToolArgs(toolExecutionData.args || {})}
-                </div>
-            `;
-        } else if (toolExecutionData.action === 'complete') {
-            // Tool execution completed
-            const resultPreview = this.formatToolResult(toolExecutionData.result);
-            stepHtml = `
-                <div class="d-flex align-items-center">
-                    <i class="bx bx-check-circle text-success me-1"></i>
-                    <span>${this.escapeHtml(toolExecutionData.tool || 'Unknown tool')} completed</span>
-                </div>
-                ${resultPreview ? `<div class="tool-result small ps-3 text-muted">${resultPreview}</div>` : ''}
-            `;
-        } else if (toolExecutionData.action === 'error') {
-            // Tool execution error
-            stepHtml = `
-                <div class="d-flex align-items-center">
-                    <i class="bx bx-error-circle text-danger me-1"></i>
-                    <span class="text-danger">${this.escapeHtml(toolExecutionData.tool || 'Unknown tool')} error</span>
-                </div>
-                <div class="tool-error small text-danger ps-3">
-                    ${this.escapeHtml(toolExecutionData.error || 'Unknown error')}
-                </div>
-            `;
-        }
-
-        if (stepHtml) {
-            stepElement.innerHTML = stepHtml;
-            this.toolExecutionSteps.appendChild(stepElement);
-
-            // Scroll to bottom of tool execution steps
-            this.toolExecutionSteps.scrollTop = this.toolExecutionSteps.scrollHeight;
-
-            console.log(`Added new tool execution step to UI`);
-        } else {
-            console.log(`No HTML generated for tool execution data:`, toolExecutionData);
-        }
+        // Show the loading indicator
+        this.loadingIndicator.style.display = 'flex';
     }
 
     /**
@@ -1079,49 +1295,6 @@ export default class LlmChatPanel extends BasicWidget {
                 return `<span class="text-primary">${this.escapeHtml(key)}</span>: ${this.escapeHtml(displayValue)}`;
             })
             .join(', ');
-    }
-
-    /**
-     * Format tool results for display
-     */
-    private formatToolResult(result: any): string {
-        if (result === undefined || result === null) return '';
-
-        // Try to format as JSON if it's an object
-        if (typeof result === 'object') {
-            try {
-                // Get a preview of structured data
-                const entries = Object.entries(result);
-                if (entries.length === 0) return 'Empty result';
-
-                // Just show first 2 key-value pairs if there are many
-                const preview = entries.slice(0, 2).map(([key, val]) => {
-                    let valPreview;
-                    if (typeof val === 'string') {
-                        valPreview = val.length > 30 ? `"${val.substring(0, 27)}..."` : `"${val}"`;
-                    } else if (Array.isArray(val)) {
-                        valPreview = `[${val.length} items]`;
-                    } else if (typeof val === 'object' && val !== null) {
-                        valPreview = '{...}';
-                    } else {
-                        valPreview = String(val);
-                    }
-                    return `${key}: ${valPreview}`;
-                }).join(', ');
-
-                return entries.length > 2 ? `${preview}, ... (${entries.length} properties)` : preview;
-            } catch (e) {
-                return String(result).substring(0, 100) + (String(result).length > 100 ? '...' : '');
-            }
-        }
-
-        // For string results
-        if (typeof result === 'string') {
-            return result.length > 100 ? result.substring(0, 97) + '...' : result;
-        }
-
-        // Default formatting
-        return String(result).substring(0, 100) + (String(result).length > 100 ? '...' : '');
     }
 
     /**
@@ -1198,26 +1371,6 @@ export default class LlmChatPanel extends BasicWidget {
         });
 
         return processedContent;
-    }
-
-    /**
-     * Show thinking state in the UI
-     */
-    private showThinkingState(thinkingData: string) {
-        // Update the UI to show thinking indicator
-        const thinking = typeof thinkingData === 'string' ? thinkingData : 'Thinking...';
-        const toolExecutionStep = document.createElement('div');
-        toolExecutionStep.className = 'tool-step my-1';
-        toolExecutionStep.innerHTML = `
-            <div class="d-flex align-items-center">
-                <i class="bx bx-bulb text-warning me-1"></i>
-                <span>${this.escapeHtml(thinking)}</span>
-            </div>
-        `;
-
-        this.toolExecutionInfo.style.display = 'block';
-        this.toolExecutionSteps.appendChild(toolExecutionStep);
-        this.toolExecutionSteps.scrollTop = this.toolExecutionSteps.scrollHeight;
     }
 
     /**
