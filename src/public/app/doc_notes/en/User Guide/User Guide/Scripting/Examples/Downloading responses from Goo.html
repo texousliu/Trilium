@@ -13,8 +13,8 @@
        <h1 data-trilium-h1>Downloading responses from Google Forms</h1>
 
       <div class="ck-content">
-        <p>This tutorials showcases a basic integration with Google Forms, where
-          we are able to download the responses of a form using the “Link to Sheets"
+        <p>This tutorial showcases a basic integration with Google Forms, where we
+          are able to download the responses of a form using the “Link to Sheets"
           functionality.</p>
         <p>Note that the link will be publicly accessible to everyone (however the
           link is in a hard-to-guess format such as <code>https://docs.google.com/spreadsheets/d/e/2PACX-1vTA8NU2_eZFhc8TFadCZPreBfvP7un8IHd6J0SchrLLw3ueGmntNZjwRmsH2ZRcp1pJYDAzMz1FmFaj/pub?output=csv</code>).
@@ -32,21 +32,13 @@
         <h2>Creating the script</h2>
         <p>Create a “JS Frontend” script:</p><pre><code class="language-text-x-trilium-auto">const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTiwooLV2whjCSVa49dJ99p_G3_qhqHHRqttMjYCJVfLXVdTgUSNJu5K0rpqmaHYF2k7Vofi3o7gW82/pub?output=csv";
 
-
 async function fetchData() {
-
     try {
-
         const response = await fetch(CSV_URL);
-
         return await response.text();
-
     } catch (e) {
-
         api.showError(e.message);
-
     }
-
 }
 
 const data = await fetchData();

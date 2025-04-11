@@ -1,4 +1,4 @@
-import type { Application, Router } from "express";
+import type { Application } from "express";
 import swaggerUi from "swagger-ui-express";
 import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";

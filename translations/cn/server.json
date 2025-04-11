@@ -98,10 +98,12 @@
   "login": {
     "title": "登录",
     "heading": "Trilium 登录",
+    "incorrect-totp": "TOTP 不正确，请重试。",
     "incorrect-password": "密码不正确，请重试。",
     "password": "密码",
     "remember-me": "记住我",
-    "button": "登录"
+    "button": "登录",
+    "sign_in_with_google": "使用 Google 登录"
   },
   "set_password": {
     "title": "设置密码",
@@ -172,6 +174,7 @@
     "saturday": "周六",
     "sunday": "周日"
   },
+  "weekdayNumber": "第 {weekNumber} 周",
   "months": {
     "january": "一月",
     "february": "二月",
@@ -186,6 +189,7 @@
     "november": "十一月",
     "december": "十二月"
   },
+  "quarterNumber": "第 {quarterNumber} 季度",
   "special_notes": {
     "search_prefix": "搜索:"
   },
@@ -238,18 +242,20 @@
     "images-title": "图片",
     "spellcheck-title": "拼写检查",
     "password-title": "密码",
+    "multi-factor-authentication-title": "多因素认证",
     "etapi-title": "ETAPI",
     "backup-title": "备份",
     "sync-title": "同步",
     "other": "其他",
     "advanced-title": "高级",
     "visible-launchers-title": "可见启动器",
-    "user-guide": "用户指南"
+    "user-guide": "用户指南",
+    "localization": "语言和区域"
   },
   "notes": {
     "new-note": "新建笔记",
     "duplicate-note-suffix": "(重复)",
-    "duplicate-note-title": "{{ noteTitle }} {{ duplicateNoteSuffix }}"
+    "duplicate-note-title": "{{- noteTitle }} {{ duplicateNoteSuffix }}"
   },
   "backend_log": {
     "log-does-not-exist": "后端日志文件 '{{ fileName }}' 暂不存在。",
@@ -271,7 +277,8 @@
     "bookmarks": "书签",
     "today": "打开今天的日记笔记",
     "new-note": "新建笔记",
-    "show-windows": "显示窗口"
+    "show-windows": "显示窗口",
+    "open_new_window": "打开新窗口"
   },
   "migration": {
     "old_version": "由您当前版本的直接迁移不被支持。请先升级到最新的 v0.60.4 然后再到这个版本。",

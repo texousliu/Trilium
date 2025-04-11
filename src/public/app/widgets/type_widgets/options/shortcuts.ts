@@ -6,8 +6,8 @@ import { t } from "../../../services/i18n.js";
 import type { KeyboardShortcut } from "../../../../../services/keyboard_actions_interface.js";
 import type { OptionNames } from "../../../../../services/options_interface.js";
 
-const TPL = `
-<div class="options-section shortcuts-options-section">
+const TPL = /*html*/`
+<div class="options-section shortcuts-options-section tn-no-card">
     <style>
         .shortcuts-options-section {
             display: flex;

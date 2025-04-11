@@ -5,11 +5,29 @@ import cls from "../services/cls.js";
 import sql from "../services/sql.js";
 import becca from "../becca/becca.js";
 import type { Request, Response, Router } from "express";
+import { safeExtractMessageAndStackFromError } from "../services/utils.js";
 
 function handleRequest(req: Request, res: Response) {
-    // express puts content after first slash into 0 index element
 
-    const path = req.params.path + req.params[0];
+    // handle path from "*path" route wildcard
+    // in express v4, you could just add
+    // req.params.path + req.params[0], but with v5
+    // we get a split array that we have to join ourselves again
+
+    // @TriliumNextTODO: remove typecasting once express types are fixed
+    // they currently only treat req.params as string, while in reality
+    // it can also be a string[], when using wildcards
+    const splitPath = req.params.path as unknown as string[];
+
+    //const path = splitPath.map(segment => encodeURIComponent(segment)).join("/")
+    // naively join the "decoded" paths using a slash
+    // this is to mimick handleRequest behaviour
+    // as with the previous express v4.
+    // @TriliumNextTODO: using something like =>
+    // splitPath.map(segment => encodeURIComponent(segment)).join("/")
+    // might be safer
+
+    const path = splitPath.join("/")
 
     const attributeIds = sql.getColumn<string>("SELECT attributeId FROM attributes WHERE isDeleted = 0 AND type = 'label' AND name IN ('customRequestHandler', 'customResourceProvider')");
 
@@ -25,8 +43,9 @@ function handleRequest(req: Request, res: Response) {
 
         try {
             match = path.match(regex);
-        } catch (e: any) {
-            log.error(`Testing path for label '${attr.attributeId}', regex '${attr.value}' failed with error: ${e.message}, stack: ${e.stack}`);
+        } catch (e: unknown) {
+            const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
+            log.error(`Testing path for label '${attr.attributeId}', regex '${attr.value}' failed with error: ${errMessage}, stack: ${errStack}`);
             continue;
         }
 
@@ -45,10 +64,10 @@ function handleRequest(req: Request, res: Response) {
                     req,
                     res
                 });
-            } catch (e: any) {
-                log.error(`Custom handler '${note.noteId}' failed with: ${e.message}, ${e.stack}`);
-
-                res.setHeader("Content-Type", "text/plain").status(500).send(e.message);
+            } catch (e: unknown) {
+                const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
+                log.error(`Custom handler '${note.noteId}' failed with: ${errMessage}, ${errStack}`);
+                res.setHeader("Content-Type", "text/plain").status(500).send(errMessage);
             }
         } else if (attr.name === "customResourceProvider") {
             fileService.downloadNoteInt(attr.noteId, res);
@@ -68,7 +87,7 @@ function handleRequest(req: Request, res: Response) {
 function register(router: Router) {
     // explicitly no CSRF middleware since it's meant to allow integration from external services
 
-    router.all("/custom/:path*", (req: Request, res: Response, next) => {
+    router.all("/custom/*path", (req: Request, res: Response, _next) => {
         cls.namespace.bindEmitter(req);
         cls.namespace.bindEmitter(res);
 

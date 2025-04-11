@@ -1,0 +1,88 @@
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../style.css">
+    <base target="_parent">
+    <title data-trilium-title>Text</title>
+  </head>
+  
+  <body>
+    <div class="content">
+       <h1 data-trilium-h1>Text</h1>
+
+      <div class="ck-content">
+        <p>Trilium utilizes the powerful <a href="https://ckeditor.com/ckeditor-5/">CKEditor 5</a> as
+          its text editing component.</p>
+        <h2>Formatting Options</h2>
+        <p>The Trilium text note interface does not display toolbars or formatting
+          options by default. These can be accessed by:</p>
+        <p>
+          <img src="1_Text_text-notes-formatting.png" alt="inline note formatting">
+        </p>
+        <ol>
+          <li>Selecting text to bring up an inline toolbar.</li>
+        </ol>
+        <p>
+          <img src="Text_text-notes-formatting.png" alt="formating note block">2. Clicking on the block toolbar.</p>
+        <h2>Read-Only vs. Editing Mode</h2>
+        <p>Text notes are usually opened in edit mode. However, they may open in
+          read-only mode if the note is too big or the note is explicitly marked
+          as read-only. For more information, see&nbsp;<a href="#root/_help_CoFPLs3dRlXc">Read-Only Notes</a>.</p>
+        <h2>General Formatting</h2>
+        <p>Since Trilium uses CKEditor, all of its formatting options are available
+          here. You may use the graphical toolbar shown above, or enter formatting
+          such as markdown markdown directly in the text. Examples include:</p>
+        <ul>
+          <li><strong>Bold</strong>: Type <code>**text**</code> or <code>__text__</code>
+          </li>
+          <li><em>Italic</em>: Type <code>*text*</code> or <code>_text_</code>
+          </li>
+          <li><del>Strikethrough</del>: Type <code>~~text~~</code>
+          </li>
+        </ul>
+        <h3>Lists</h3>
+        <p>See&nbsp;<a href="#root/_help_S6Xx8QIWTV66">Lists</a>.</p>
+        <h3>Blocks</h3>
+        <ul>
+          <li>Block quote: Start a line with <code>&gt;</code> followed by a space</li>
+        </ul>
+        <h2>Developer-specific formatting</h2>
+        <p>The following features are supported:</p>
+        <ul>
+          <li>Inline code</li>
+          <li><a href="#root/_help_QxEyIjRBizuC">Code blocks</a>
+          </li>
+        </ul>
+        <p>See&nbsp;<a href="#root/_help_UYuUB1ZekNQU">Developer-specific formatting</a>&nbsp;for
+          more information.</p>
+        <h3>Headings</h3>
+        <p>Create headings by starting a line with <code>##</code> for heading 2, <code>###</code> for
+          heading 3, and so on up to heading 6. Note that <code>#</code> is reserved
+          for the title.</p>
+        <h3>Horizontal Line</h3>
+        <p>Insert a horizontal line by starting a line with <code>---</code>.</p>
+        <h2>Markdown &amp; Autoformat</h2>
+        <p>CKEditor supports a markdown-like editing experience, recognising syntax
+          and automatically converting it to rich text.</p>
+        <p>
+          <img src="Text_image.png">
+        </p>
+        <p>Complete documentation for this feature is available in the <a href="https://ckeditor.com/docs/ckeditor5/latest/features/autoformat.html">CKEditor documentation</a>.</p>
+        <p>If autoformatting is not desirable, press <kbd>Ctrl</kbd> + <kbd>Z</kbd> to
+          revert the text to its original form.</p>
+        <p>Note: The use of <code>#</code> for Heading 1 is not supported because it
+          is reserved for the title. Start with <code>##</code> for Heading 2. More
+          information is available <a href="https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#heading-levels">here</a>.</p>
+        <h2>Math Support</h2>
+        <p>Trilium provides math support through <a href="https://katex.org/">KaTeX</a>.</p>
+        <figure
+        class="image image_resized">
+          <img style="aspect-ratio:812/585;" src="Text_math.gif" width="812" height="585">
+          </figure>
+      </div>
+    </div>
+  </body>
+
+</html>

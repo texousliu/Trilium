@@ -1,13 +1,13 @@
 import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
 import libraryLoader from "../../services/library_loader.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
-import { getMermaidConfig } from "../mermaid.js";
 import type FNote from "../../entities/fnote.js";
 import type { CommandListenerData, EventData } from "../../components/app_context.js";
 import { getLocaleById } from "../../services/i18n.js";
 import appContext from "../../components/app_context.js";
+import { getMermaidConfig } from "../../services/mermaid.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-readonly-text note-detail-printable" tabindex="100">
     <style>
     /* h1 should not be used at all since semantically that's a note title */
@@ -115,7 +115,9 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         this.$content.find("section").each((_, el) => {
             const noteId = $(el).attr("data-note-id");
 
-            this.loadIncludedNote(noteId, $(el));
+            if (noteId) {
+                this.loadIncludedNote(noteId, $(el));
+            }
         });
 
         if (this.$content.find("span.math-tex").length > 0) {
@@ -140,8 +142,11 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         });
 
         // Initialize mermaid
-        await libraryLoader.requireLibrary(libraryLoader.MERMAID);
-        mermaid.init(getMermaidConfig(), this.$content.find(".mermaid-diagram"));
+        const mermaid = (await import("mermaid")).default;
+        mermaid.initialize(getMermaidConfig());
+        mermaid.run({
+            nodes: this.$content.find(".mermaid-diagram")
+        });
     }
 
     async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {

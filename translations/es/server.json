@@ -244,12 +244,13 @@
     "other": "Otros",
     "advanced-title": "Avanzado",
     "visible-launchers-title": "Lanzadores visibles",
-    "user-guide": "Guía de Usuario"
+    "user-guide": "Guía de Usuario",
+    "localization": "Idioma y Región"
   },
   "notes": {
     "new-note": "Nueva nota",
     "duplicate-note-suffix": "(dup)",
-    "duplicate-note-title": "{{noteTitle}} {{duplicateNoteSuffix}}"
+    "duplicate-note-title": "{{- noteTitle}} {{duplicateNoteSuffix}}"
   },
   "backend_log": {
     "log-does-not-exist": "El archivo de registro del backend '{{fileName}}' no existe (aún).",

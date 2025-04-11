@@ -57,13 +57,18 @@ export interface ContextMenuCommandData extends CommandData {
 }
 
 export interface NoteCommandData extends CommandData {
-    notePath?: string;
-    hoistedNoteId?: string;
+    notePath?: string | null;
+    hoistedNoteId?: string | null;
     viewScope?: ViewScope;
 }
 
 export interface ExecuteCommandData<T> extends CommandData {
     resolve: (data: T) => void;
+}
+
+export interface NoteSwitchedContext {
+    noteContext: NoteContext;
+    notePath: string | null | undefined;
 }
 
 /**
@@ -122,7 +127,11 @@ export type CommandMappings = {
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
     enterProtectedSession: CommandData;
-
+    noteContextReorder: CommandData & {
+        ntxIdsInOrder: string[];
+        oldMainNtxId?: string | null;
+        newMainNtxId?: string | null;
+    };
     openInTab: ContextMenuCommandData;
     openNoteInSplit: ContextMenuCommandData;
     toggleNoteHoisting: ContextMenuCommandData;
@@ -175,10 +184,10 @@ export type CommandMappings = {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void;
     };
     executeWithTextEditor: CommandData &
-        ExecuteCommandData<TextEditor> & {
-            callback?: GetTextEditorCallback;
-        };
-    executeWithCodeEditor: CommandData & ExecuteCommandData<null>;
+    ExecuteCommandData<TextEditor> & {
+        callback?: GetTextEditorCallback;
+    };
+    executeWithCodeEditor: CommandData & ExecuteCommandData<CodeMirrorInstance>;
     /**
      * Called upon when attempting to retrieve the content element of a {@link NoteContext}.
      * Generally should not be invoked manually, as it is used by {@link NoteContext.getContentElement}.
@@ -195,6 +204,8 @@ export type CommandMappings = {
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     showUploadAttachmentsDialog: CommandData & { noteId: string };
+    showIncludeNoteDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
+    showAddLinkDialog: CommandData & { textTypeWidget: EditableTextTypeWidget, text: string };
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;
@@ -303,19 +314,10 @@ type EventMappings = {
     beforeNoteContextRemove: {
         ntxIds: string[];
     };
-    noteSwitched: {
-        noteContext: NoteContext;
-        notePath?: string | null;
-    };
-    noteSwitchedAndActivatedEvent: {
-        noteContext: NoteContext;
-        notePath: string;
-    };
+    noteSwitched: NoteSwitchedContext;
+    noteSwitchedAndActivated: NoteSwitchedContext;
     setNoteContext: {
         noteContext: NoteContext;
-    };
-    noteTypeMimeChangedEvent: {
-        noteId: string;
     };
     reEvaluateHighlightsListWidgetVisibility: {
         noteId: string | undefined;
@@ -337,14 +339,16 @@ type EventMappings = {
         noteId: string;
         ntxId: string | null;
     };
-    contextsReopenedEvent: {
-        mainNtxId: string;
+    contextsReopened: {
+        ntxId?: string;
+        mainNtxId: string | null;
         tabPosition: number;
+        afterNtxId?: string;
     };
     noteDetailRefreshed: {
         ntxId?: string | null;
     };
-    noteContextReorderEvent: {
+    noteContextReorder: {
         oldMainNtxId: string;
         newMainNtxId: string;
         ntxIdsInOrder: string[];
@@ -352,11 +356,13 @@ type EventMappings = {
     newNoteContextCreated: {
         noteContext: NoteContext;
     };
-    noteContextRemovedEvent: {
+    noteContextRemoved: {
         ntxIds: string[];
     };
-    exportSvg: {
-        ntxId: string | null | undefined;
+    exportSvg: { ntxId: string | null | undefined; };
+    exportPng: { ntxId: string | null | undefined; };
+    geoMapCreateChildNote: {
+        ntxId: string | null | undefined; // TODO: deduplicate ntxId
     };
     tabReorder: {
         ntxIdsInOrder: string[];
@@ -370,12 +376,21 @@ type EventMappings = {
     relationMapResetPanZoom: { ntxId: string | null | undefined };
     relationMapResetZoomIn: { ntxId: string | null | undefined };
     relationMapResetZoomOut: { ntxId: string | null | undefined };
-    activeNoteChangedEvent: {};
+    activeNoteChanged: {};
     showAddLinkDialog: {
         textTypeWidget: EditableTextTypeWidget;
         text: string;
     };
-
+    showIncludeDialog: {
+        textTypeWidget: EditableTextTypeWidget;
+    };
+    openBulkActionsDialog: {
+        selectedOrActiveNoteIds: string[];
+    };
+    cloneNoteIdsTo: {
+        noteIds: string[];
+    };
+    refreshData: { ntxId: string | null | undefined };
 };
 
 export type EventListener<T extends EventNames> = {
@@ -405,7 +420,7 @@ type FilterByValueType<T, ValueType> = { [K in keyof T]: T[K] extends ValueType 
  */
 export type FilteredCommandNames<T extends CommandData> = keyof Pick<CommandMappings, FilterByValueType<CommandMappings, T>>;
 
-class AppContext extends Component {
+export class AppContext extends Component {
     isMainWindow: boolean;
     components: Component[];
     beforeUnloadListeners: WeakRef<BeforeUploadListener>[];

@@ -8,13 +8,15 @@ import dialogService from "../../services/dialog.js";
 import type { CommandListenerData, EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import attributes from "../../services/attributes.js";
-import asset_path from "../../../../services/asset_path.js";
 import openContextMenu from "./geo_map_context_menu.js";
 import link from "../../services/link.js";
 import note_tooltip from "../../services/note_tooltip.js";
 import appContext from "../../components/app_context.js";
 
-const TPL = `\
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
+
+const TPL = /*html*/`\
 <div class="note-detail-geo-map note-detail-printable">
     <style>
         .leaflet-pane {
@@ -123,10 +125,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     doRender() {
+        super.doRender();
+
         this.$widget = $(TPL);
         this.$widget.append(this.geoMapWidget.render());
-
-        super.doRender();
     }
 
     async #onMapInitialized(L: Leaflet) {
@@ -140,6 +142,11 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
         // Restore markers.
         await this.#reloadMarkers();
+
+        // This fixes an issue with the map appearing cut off at the beginning, due to the container not being properly attached
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
 
         const updateFn = () => this.spacedUpdate.scheduleUpdate();
         map.on("moveend", updateFn);
@@ -267,9 +274,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     #buildIcon(bxIconClass: string, colorClass: string, title: string) {
         return this.L.divIcon({
-            html: `\
-                <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
-                <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
+            html: /*html*/`\
+                <img class="icon" src="${markerIcon}" />
+                <img class="icon-shadow" src="${markerIconShadow}" />
                 <span class="bx ${bxIconClass} ${colorClass}"></span>
                 <span class="title-label">${title}</span>`,
             iconSize: [25, 41],

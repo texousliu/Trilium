@@ -180,6 +180,9 @@ export function removeTextFileExtension(filePath: string) {
         case ".markdown":
         case ".html":
         case ".htm":
+        case ".excalidraw":
+        case ".mermaid":
+        case ".mmd":
             return filePath.substring(0, filePath.length - extension.length);
         default:
             return filePath;
@@ -362,6 +365,11 @@ export function processStringOrBuffer(data: string | Buffer | null) {
     }
 }
 
+export function safeExtractMessageAndStackFromError(err: unknown): [errMessage: string, errStack: string | undefined] {
+    return (err instanceof Error) ? [err.message, err.stack] as const : ["Unknown Error", undefined] as const;
+}
+
+
 export default {
     compareVersions,
     crash,
@@ -392,6 +400,7 @@ export default {
     removeDiacritic,
     removeTextFileExtension,
     replaceAll,
+    safeExtractMessageAndStackFromError,
     sanitizeSqlIdentifier,
     stripTags,
     timeLimit,

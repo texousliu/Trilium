@@ -1,5 +1,6 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 export default tseslint.config(
     eslint.configs.recommended,
@@ -17,6 +18,11 @@ export default tseslint.config(
         }
     },
     {
+        plugins: {
+            "simple-import-sort": simpleImportSort
+        }
+    },
+    {
         rules: {
             // add rule overrides here
             "no-undef": "off",
@@ -24,10 +30,12 @@ export default tseslint.config(
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 {
-                    "argsIgnorePattern": "^_",
-                    "varsIgnorePattern": "^_",
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_"
                 }
-            ]
+            ],
+            "simple-import-sort/imports": "error",
+            "simple-import-sort/exports": "error"
         }
     },
     {
@@ -35,6 +43,7 @@ export default tseslint.config(
             "build/*",
             "dist/*",
             "docs/*",
+            "demo/*",
             "libraries/*",
             "src/public/app-dist/*",
             "src/public/app/doc_notes/*"

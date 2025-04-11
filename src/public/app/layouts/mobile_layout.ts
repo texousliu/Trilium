@@ -11,19 +11,17 @@ import ProtectedSessionPasswordDialog from "../widgets/dialogs/protected_session
 import ConfirmDialog from "../widgets/dialogs/confirm.js";
 import FilePropertiesWidget from "../widgets/ribbon_widgets/file_properties.js";
 import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
-import EditButton from "../widgets/buttons/edit_button.js";
+import EditButton from "../widgets/floating_buttons/edit_button.js";
 import RelationMapButtons from "../widgets/floating_buttons/relation_map_buttons.js";
 import SvgExportButton from "../widgets/floating_buttons/svg_export_button.js";
 import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
 import HideFloatingButtonsButton from "../widgets/floating_buttons/hide_floating_buttons_button.js";
-import MermaidWidget from "../widgets/mermaid.js";
 import NoteListWidget from "../widgets/note_list.js";
 import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
-import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 import AboutDialog from "../widgets/dialogs/about.js";
 import HelpDialog from "../widgets/dialogs/help.js";
@@ -32,6 +30,8 @@ import TabRowWidget from "../widgets/tab_row.js";
 import JumpToNoteDialog from "../widgets/dialogs/jump_to_note.js";
 import RecentChangesDialog from "../widgets/dialogs/recent_changes.js";
 import PromptDialog from "../widgets/dialogs/prompt.js";
+import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
+import MobileEditorToolbar from "../widgets/ribbon_widgets/mobile_editor_toolbar.js";
 
 const MOBILE_CSS = `
 <style>
@@ -122,7 +122,6 @@ export default class MobileLayout {
     getRootWidget(appContext: typeof AppContext) {
         return new RootContainer(true)
             .setParent(appContext)
-            .class("horizontal-layout")
             .cssBlock(MOBILE_CSS)
             .child(new FlexContainer("column").id("mobile-sidebar-container"))
             .child(
@@ -131,7 +130,7 @@ export default class MobileLayout {
                     .id("mobile-rest-container")
                     .child(
                         new SidebarContainer("tree", "column")
-                            .class("d-sm-flex d-md-flex d-lg-flex d-xl-flex col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3")
+                            .class("d-md-flex d-lg-flex d-xl-flex col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3")
                             .id("mobile-sidebar-wrapper")
                             .css("max-height", "100%")
                             .css("padding-left", "0")
@@ -143,10 +142,6 @@ export default class MobileLayout {
                         new ScreenContainer("detail", "column")
                             .id("detail-container")
                             .class("d-sm-flex d-md-flex d-lg-flex d-xl-flex col-12 col-sm-7 col-md-8 col-lg-9")
-                            .css("padding-left", "0")
-                            .css("padding-right", "0")
-                            .css("max-height", "100%")
-                            .css("position", "relative")
                             .child(
                                 new FlexContainer("row")
                                     .contentSized()
@@ -159,13 +154,13 @@ export default class MobileLayout {
                             .child(new SharedInfoWidget())
                             .child(
                                 new FloatingButtons()
+                                    .child(new RefreshButton())
                                     .child(new EditButton())
                                     .child(new RelationMapButtons())
                                     .child(new SvgExportButton())
                                     .child(new BacklinksWidget())
                                     .child(new HideFloatingButtonsButton())
                             )
-                            .child(new MermaidWidget())
                             .child(new PromotedAttributesWidget())
                             .child(
                                 new ScrollingContainer()
@@ -175,6 +170,7 @@ export default class MobileLayout {
                                     .child(new NoteListWidget())
                                     .child(new FilePropertiesWidget().css("font-size", "smaller"))
                             )
+                            .child(new MobileEditorToolbar())
                     )
                     .child(new ProtectedSessionPasswordDialog())
                     .child(new ConfirmDialog())
@@ -186,7 +182,6 @@ export default class MobileLayout {
                     .child(new TabRowWidget().css("height", "40px"))
                     .child(new FlexContainer("row").class("horizontal").css("height", "53px").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true)).id("launcher-pane"))
             )
-            .child(new ClassicEditorToolbar())
             .child(new AboutDialog())
             .child(new HelpDialog())
             .child(new RecentChangesDialog())

@@ -2,6 +2,7 @@
 .DS_Store
 node_modules/
 dist/
+upload/
 build/
 coverage/
 src/public/app-dist/
@@ -26,6 +27,7 @@ server-package.json
 .idea/shelf/
 data/
 data-test/
+data-demo/
 tmp/
 .eslintcache
 
@@ -37,3 +39,12 @@ images/app-icons/mac/*.png
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+data-docs/backup
+data-docs/log
+data-docs/session
+data-docs/session_secret.txt
+data-docs/document.*
+
+# Webpack
+webpack-stats.json
