@@ -172,10 +172,10 @@ export class NoteSummarizationTool implements ToolHandler {
         text = text
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>')
-            .replace(/&amp;/g, '&')
             .replace(/&quot;/g, '"')
             .replace(/&#39;/g, "'")
-            .replace(/&nbsp;/g, ' ');
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&amp;/g, '&');
 
         // Normalize whitespace
         text = text.replace(/\s+/g, ' ').trim();
