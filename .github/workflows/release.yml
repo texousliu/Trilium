@@ -106,7 +106,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: false
-          make_latest: false # ! Make sure this is removed before merging.
           body_path: docs/Release Notes/Release Notes/${{ github.ref_name }}.md
           fail_on_unmatched_files: true
           files: upload/*.*
