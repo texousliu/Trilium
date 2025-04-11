@@ -143,6 +143,8 @@ const defaultOptions: DefaultOption[] = [
     { name: "locale", value: "en", isSynced: true },
     { name: "formattingLocale", value: "en", isSynced: true },
     { name: "firstDayOfWeek", value: "1", isSynced: true },
+    { name: "firstWeekOfYear", value: "0", isSynced: true },
+    { name: "minDaysInFirstWeek", value: "4", isSynced: true },
     { name: "languages", value: "[]", isSynced: true },
 
     // Code block configuration

@@ -526,7 +526,6 @@
     "to": "到",
     "target_note": "目標筆記",
     "on_all_matched_notes": "在所有匹配的筆記上",
-    "create_given_relation": "如果筆記還沒有關係，則新增給定關係",
     "change_target_note": "或更改現有關係的目標筆記",
     "update_relation_target": "更新關係目標"
   },

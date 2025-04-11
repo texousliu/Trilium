@@ -65,6 +65,10 @@ body.mobile #root-widget {
     padding-top: env(safe-area-inset-top);
 }
 
+body.mobile #root-widget.virtual-keyboard-opened #mobile-bottom-bar {
+    display: none !important;
+}
+
 #mobile-bottom-bar {
     padding-bottom: var(--mobile-bottom-offset);
 }

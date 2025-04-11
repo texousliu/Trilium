@@ -20,16 +20,7 @@ function checkForRecoveryKeys() {
 }
 
 function generateRecoveryCodes() {
-    const recoveryKeys = [
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64'),
-        randomBytes(16).toString('base64')
-    ];
+    const recoveryKeys = Array.from({ length: 8 }, () => randomBytes(16).toString('base64'));
 
     recovery_codes.setRecoveryCodes(recoveryKeys.join(','));
 
@@ -43,12 +34,10 @@ function getUsedRecoveryCodes() {
 
     const dateRegex = RegExp(/^\d{4}\/\d{2}\/\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/gm);
     const recoveryCodes = recovery_codes.getRecoveryCodes();
-    const usedStatus: string[] = [];
 
-    recoveryCodes.forEach((recoveryKey: string) => {
-        if (dateRegex.test(recoveryKey)) usedStatus.push(recoveryKey);
-        else usedStatus.push(recoveryCodes.indexOf(recoveryKey));
-    });
+    const usedStatus = recoveryCodes.map(recoveryKey => {
+        return (dateRegex.test(recoveryKey)) ? recoveryKey : String(recoveryCodes.indexOf(recoveryKey))
+    })
 
     return {
         success: true,

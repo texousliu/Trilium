@@ -219,6 +219,16 @@ function isMobile() {
     );
 }
 
+/**
+ * Returns true if the client device is an Apple iOS one (iPad, iPhone, iPod).
+ * Does not check if the user requested the mobile or desktop layout, use {@link isMobile} for that.
+ *
+ * @returns `true` if running under iOS.
+ */
+export function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent);
+}
+
 function isDesktop() {
     return (
         window.glob?.device === "desktop" ||

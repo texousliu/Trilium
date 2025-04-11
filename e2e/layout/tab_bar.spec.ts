@@ -117,3 +117,17 @@ test("Search works when dismissing a tab", async ({ page, context }) => {
     await app.openAndClickNoteActionMenu("Search in note");
     await expect(app.findAndReplaceWidget).toBeVisible();
 });
+
+test("New tab displays workspaces", async ({ page, context }) => {
+    const app = new App(page, context);
+    await app.goto();
+
+    const workspaceNotesEl = app.currentNoteSplitContent.locator(".workspace-notes");
+    await expect(workspaceNotesEl).toBeVisible();
+    expect(workspaceNotesEl).toContainText("Personal");
+    expect(workspaceNotesEl).toContainText("Work");
+    await expect(workspaceNotesEl.locator(".bx.bxs-user")).toBeVisible();
+    await expect(workspaceNotesEl.locator(".bx.bx-briefcase-alt")).toBeVisible();
+
+    await app.closeAllTabs();
+});

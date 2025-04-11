@@ -1,13 +1,59 @@
 # Search
-## Local Search
-
-Local search allows you to search within the currently displayed note. To initiate a local search, press <kbd>Ctrl</kbd> + <kbd>F</kbd>. If using a web browser, this will be handled by the browser's native search functionality. In the desktop (electron) version, a separate dialog will apear.
-
-## Note Search
+<figure class="image"><img style="aspect-ratio:987/725;" src="Search_image.png" width="987" height="725"></figure>
 
 Note search enables you to find notes by searching for text in the title, content, or [attributes](../../Advanced%20Usage/Attributes.md) of the notes. You also have the option to save your searches, which will create a special search note which is visible on your navigation tree and contains the search results as sub-items.
 
-To search for notes, click on the magnifying glass icon on the toolbar or press the <kbd>Ctrl</kbd> + <kbd>S</kbd> keyboard [shortcut](../Keyboard%20Shortcuts.md).
+## Accessing the search
+
+*   From the <a class="reference-link" href="../UI%20Elements/Launch%20Bar.md">Launch Bar</a>, look for the dedicated search button.
+*   To limit the search to a note and its children, select _Search from subtree_ from the <a class="reference-link" href="../UI%20Elements/Note%20Tree/Note%20tree%20contextual%20menu.md">Note tree contextual menu</a> or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>.
+
+## Interaction
+
+To search for notes, click on the magnifying glass icon on the toolbar or press the keyboard [shortcut](../Keyboard%20Shortcuts.md).
+
+1.  Set the text to search for in the _Search string_ field.
+    1.  Apart from searching for words ad-literam, there is also the possibility to search for attributes or properties of notes.
+    2.  See the examples below for more information.
+2.  To limit the search to a note and its sub-children, set a note in _Ancestor_.
+    1.  This value is also pre-filled if the search is triggered from a [hoisted note](Note%20Hoisting.md) or a [workspace](Workspaces.md).
+    2.  To search the entire database, keep the value empty.
+3.  To limit the search to only a few levels of hierarchy (e.g. look in sub-children but not in sub-sub-children of a note), set the _depth_ field to one of the provided values.
+4.  In addition to that, the search can be configured via the _Add search options_ buttons, as described in the follow-up section.
+5.  Press _Search_ to trigger the search. The results are displayed below the search configuration pane.
+6.  The _Search & Execute actions_ button is only relevant if at least one action has been added (as described in the section below).
+7.  The _Save to note_ will create a new note with the search configuration. For more information, see <a class="reference-link" href="../../Note%20Types/Saved%20Search.md">Saved Search</a>.
+
+## Search options
+
+Click on which search option to apply from the Add search option section.
+
+*   For each search option selected, the search configuration will update to reveal the entry. Each search option will have its own configuration.
+*   To remove a search option, simply press the X button to the right of it.
+
+The options available are:
+
+1.  Search script
+    1.  This feature allows writing a <a class="reference-link" href="../../Note%20Types/Code.md">Code</a> note that will handle the search on its own.
+2.  Fast search
+    1.  The search will not look into the content of the notes, but it will still look into note titles and attributes, relations (based on the search query).
+    2.  This method can speed up the search considerably for large [databases](../../Advanced%20Usage/Database.md).
+3.  Include archived
+    1.  <a class="reference-link" href="../Notes/Archived%20Notes.md">Archived Notes</a> will also be included in the results, whereas otherwise they would be ignored.
+4.  Order by
+    1.  Allows changing the criteria for ordering the results, for example to order by creation date or alphabetically instead of by relevancy (default).
+    2.  It's also possible to change the order (ascending or descending) of the results.
+5.  Limit
+    1.  Limits the results to a given maximum.
+    2.  This can help if the number of results would otherwise be high, at the cost of not being able to view all the results.
+6.  Debug
+    1.  This will print additional information in the server log (see <a class="reference-link" href="../../Troubleshooting/Error%20logs.md">Error logs</a>), regarding how the search expression was parsed.
+    2.  This function is especially useful after understanding the search functionality in detail, in order to determine why a complex search query is not working as expected.
+7.  Action
+    1.  Apart from just searching, it is also possible to apply actions such as to add a label or a relation to the notes that have been matched by the search.
+    2.  Unlike other search configurations, here it's possible to apply the same action multiple times (i.e. in order to be able to apply multiple labels to notes).
+    3.  The actions given are the same as the ones in <a class="reference-link" href="../../Advanced%20Usage/Bulk%20Actions.md">Bulk Actions</a>, which is an alternative for operating directly with notes within the <a class="reference-link" href="../UI%20Elements/Note%20Tree.md">Note Tree</a>.
+    4.  After defining the actions, first press _Search_ to check the matched notes and then press _Search & Execute actions_ to trigger the actions.
 
 ### Simple Note Search Examples
 

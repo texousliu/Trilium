@@ -62,3 +62,5 @@ This section displays information about the current note:
 ### Edited notes
 
 This section pops automatically when entering a [day note](../../Advanced%20Usage/Advanced%20Showcases/Day%20Notes.md) and shows the notes that were edited that day.
+
+It is possible to disable this behavior from settings, by going to <a class="reference-link" href="#root/_hidden/_options/_optionsAppearance">Appearance</a> settings and looking for the _Ribbon widgets_ section.
