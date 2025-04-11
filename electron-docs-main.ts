@@ -12,6 +12,7 @@ import cls from "./src/services/cls.js";
 import type { AdvancedExportOptions } from "./src/services/export/zip.js";
 import TaskContext from "./src/services/task_context.js";
 import { deferred } from "./src/services/utils.js";
+import { parseNoteMetaFile } from "./src/services/in_app_help.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
 const NOTE_ID_RELEASE_NOTES = "hD3V4hiu2VW4";
@@ -172,8 +173,13 @@ async function cleanUpMeta(outputPath: string, minify: boolean) {
         el.isExpanded = false;
     }
 
-    const json = minify ? JSON.stringify(meta) : JSON.stringify(meta, null, 4);
-    await fs.writeFile(metaPath, json);
+    if (minify) {
+        const subtree = parseNoteMetaFile(meta);
+        await fs.writeFile(metaPath, JSON.stringify(subtree));
+    } else {
+        await fs.writeFile(metaPath, JSON.stringify(meta, null, 4));
+    }
+
 }
 
 async function registerHandlers() {
