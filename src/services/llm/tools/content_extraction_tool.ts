@@ -249,7 +249,7 @@ export class ContentExtractionTool implements ToolHandler {
         const headings = [];
 
         for (let i = 1; i <= 6; i++) {
-            const headingRegex = new RegExp(`<h${i}[^>]*>([\s\S]*?)<\/h${i}>`, 'gi');
+            const headingRegex = new RegExp(`<h${i}[^>]*>([\\s\\S]*?)<\/h${i}>`, 'gi');
             let headingMatch;
 
             while ((headingMatch = headingRegex.exec(content)) !== null) {
