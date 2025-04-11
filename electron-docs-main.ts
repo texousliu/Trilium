@@ -14,11 +14,38 @@ import TaskContext from "./src/services/task_context.js";
 import { deferred } from "./src/services/utils.js";
 import { parseNoteMetaFile } from "./src/services/in_app_help.js";
 
-const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
-const NOTE_ID_RELEASE_NOTES = "hD3V4hiu2VW4";
-const markdownPath = path.join("docs", "User Guide");
-const releaseNotesPath = path.join("docs", "Release Notes");
-const htmlPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
+interface NoteMapping {
+    rootNoteId: string;
+    path: string;
+    format: "markdown" | "html";
+    ignoredFiles?: string[];
+    exportOnly?: boolean;
+}
+
+const NOTE_MAPPINGS: NoteMapping[] = [
+    {
+        rootNoteId: "pOsGYCXsbNQG",
+        path: path.join("docs", "User Guide"),
+        format: "markdown"
+    },
+    {
+        rootNoteId: "pOsGYCXsbNQG",
+        path: path.join("src", "public", "app", "doc_notes", "en", "User Guide"),
+        format: "html",
+        ignoredFiles: ["index.html", "navigation.html", "style.css", "User Guide.html"],
+        exportOnly: true
+    },
+    {
+        rootNoteId: "jdjRLhLV3TtI",
+        path: path.join("docs", "Developer Guide"),
+        format: "markdown"
+    },
+    {
+        rootNoteId: "hD3V4hiu2VW4",
+        path: path.join("docs", "Release Notes"),
+        format: "markdown"
+    }
+];
 
 async function main() {
     await initializeTranslations();
@@ -26,8 +53,11 @@ async function main() {
 
     const initializedPromise = deferred<void>();
     cls.init(async () => {
-        await importData(markdownPath);
-        await importData(releaseNotesPath);
+        for (const mapping of NOTE_MAPPINGS) {
+            if (!mapping.exportOnly) {
+                await importData(mapping.path);
+            }
+        }
         setOptions();
         initializedPromise.resolve();
     });
@@ -187,11 +217,11 @@ async function registerHandlers() {
     const eraseService = (await import("./src/services/erase.js")).default;
     const debouncer = debounce(async () => {
         eraseService.eraseUnusedAttachmentsNow();
-        await exportData(NOTE_ID_USER_GUIDE, "markdown", markdownPath);
-        await exportData(NOTE_ID_RELEASE_NOTES, "markdown", releaseNotesPath);
 
-        const ignoredFiles = new Set(["index.html", "navigation.html", "style.css", "User Guide.html"]);
-        await exportData(NOTE_ID_USER_GUIDE, "html", htmlPath, ignoredFiles);
+        for (const mapping of NOTE_MAPPINGS) {
+            const ignoredFiles = mapping.ignoredFiles ? new Set(mapping.ignoredFiles) : undefined;
+            await exportData(mapping.rootNoteId, mapping.format, mapping.path, ignoredFiles);
+        }
     }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
