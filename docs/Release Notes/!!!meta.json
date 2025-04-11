@@ -402,29 +402,7 @@
                     "attributes": [],
                     "format": "markdown",
                     "dataFileName": "v0.90.10-beta.md",
-                    "attachments": [],
-                    "dirFileName": "v0.90.10-beta",
-                    "children": [
-                        {
-                            "isClone": false,
-                            "noteId": "254wHQ6YdxUY",
-                            "notePath": [
-                                "hD3V4hiu2VW4",
-                                "sq5W9TQxRqMq",
-                                "254wHQ6YdxUY"
-                            ],
-                            "title": "Syntax highlighting & word wrapping for code blocks",
-                            "notePosition": 10,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [],
-                            "format": "markdown",
-                            "dataFileName": "Syntax highlighting & word wra.md",
-                            "attachments": []
-                        }
-                    ]
+                    "attachments": []
                 },
                 {
                     "isClone": false,
