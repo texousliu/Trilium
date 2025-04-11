@@ -46,6 +46,7 @@ function toMarkdown(content: string) {
         instance.addRule("inlineLink", buildInlineLinkFilter());
         instance.addRule("figure", buildFigureFilter());
         instance.addRule("math", buildMathFilter());
+        instance.addRule("li-1", buildListItemFilter());
         instance.use(gfm);
         instance.keep([ "kbd" ]);
     }
@@ -203,6 +204,27 @@ function buildFigureFilter(): Rule {
         },
         replacement(content, node) {
             return (node as HTMLElement).outerHTML;
+        }
+    }
+}
+
+// Keep in line with https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js.
+function buildListItemFilter(): Rule {
+    return {
+        filter: "li",
+        replacement(content, node, options) {
+            content = content
+                .trim()
+                .replace(/\n/gm, '\n    ') // indent
+            let prefix = options.bulletListMarker + '   '
+            const parent = node.parentNode as HTMLElement;
+            if (parent.nodeName === 'OL') {
+                var start = parent.getAttribute('start')
+                var index = Array.prototype.indexOf.call(parent.children, node)
+                prefix = (start ? Number(start) + index : index + 1) + '.  '
+            }
+            const result = prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '');
+            return result;
         }
     }
 }

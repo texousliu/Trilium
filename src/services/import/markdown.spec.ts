@@ -208,4 +208,22 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("does not generate additional spacing when importing lists", () => {
+        const input = trimIndentation`\
+            ### 🐞 Bugfixes
+
+            *   [v0.90.4 docker does not read USER\_UID and USER\_GID from environment](https://github.com/TriliumNext/Notes/issues/331)
+            *   [Invalid CSRF token on Android phone](https://github.com/TriliumNext/Notes/issues/318)
+            *   [Excess spacing in lists](https://github.com/TriliumNext/Notes/issues/341)`;
+        const expected = [
+            /*html*/`<h3>🐞 Bugfixes</h3>`,
+            /*html*/`<ul>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/331">v0.90.4 docker does not read USER_UID and USER_GID from environment</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/318">Invalid CSRF token on Android phone</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/341">Excess spacing in lists</a></li>`,
+            /*html*/`</ul>`
+        ].join("");
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });
