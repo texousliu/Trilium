@@ -152,10 +152,11 @@ async function exportData(noteId: string, format: "html" | "markdown", outputPat
         }
     }
 
-    await cleanUpMeta(outputPath);
+    const minifyMeta = (format === "html");
+    await cleanUpMeta(outputPath, minifyMeta);
 }
 
-async function cleanUpMeta(outputPath: string) {
+async function cleanUpMeta(outputPath: string, minify: boolean) {
     const metaPath = path.join(outputPath, "!!!meta.json");
     const meta = JSON.parse(await fs.readFile(metaPath, "utf-8")) as NoteMetaFile;
     for (const file of meta.files) {
@@ -171,7 +172,8 @@ async function cleanUpMeta(outputPath: string) {
         el.isExpanded = false;
     }
 
-    await fs.writeFile(metaPath, JSON.stringify(meta, null, 4));
+    const json = minify ? JSON.stringify(meta) : JSON.stringify(meta, null, 4);
+    await fs.writeFile(metaPath, json);
 }
 
 async function registerHandlers() {
