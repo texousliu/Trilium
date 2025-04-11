@@ -138,6 +138,7 @@ export type CommandMappings = {
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;
     delete: ContextMenuCommandData;
+    editNoteTitle: {};
     protectSubtree: ContextMenuCommandData;
     unprotectSubtree: ContextMenuCommandData;
     openBulkActionsDialog:
