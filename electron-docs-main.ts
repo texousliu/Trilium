@@ -10,6 +10,7 @@ import debounce from "./src/public/app/services/debounce.js";
 import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
 import cls from "./src/services/cls.js";
 import type { AdvancedExportOptions } from "./src/services/export/zip.js";
+import TaskContext from "./src/services/task_context.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
 const markdownPath = path.join("docs", "User Guide");
@@ -17,11 +18,14 @@ const htmlPath = path.join("src", "public", "app", "doc_notes", "en", "User Guid
 
 async function main() {
     await initializeTranslations();
-    const zipBuffer = await createImportZip();
-    await initializeDatabase(zipBuffer);
+    await initializeDatabase(true);
+
+    cls.init(async () => {
+        await importData(markdownPath);
+        setOptions();
+    });
 
     await startElectron();
-    cls.init(() => setOptions());
 
     // Wait for the import to be finished and the application to be loaded before we listen to changes.
     setTimeout(() => registerHandlers(), 10_000);
@@ -34,13 +38,28 @@ async function setOptions() {
     optionsService.setOption("compressImages", "false");
 }
 
-async function createImportZip() {
+async function importData(path: string) {
+    const buffer = await createImportZip(path);
+    const importService = (await import("./src/services/import/zip.js")).default;
+    const context = new TaskContext("no-progress-reporting", "import", false);
+    const becca = (await import("./src/becca/becca.js")).default;
+
+    const rootNote = becca.getRoot();
+    if (!rootNote) {
+        throw new Error("Missing root note for import.");
+    }
+    await importService.importZip(context, buffer, rootNote, {
+        preserveIds: true
+    });
+}
+
+async function createImportZip(path: string) {
     const inputFile = "input.zip";
     const archive = archiver("zip", {
         zlib: { level: 0 }
     });
 
-    archive.directory(markdownPath, "/");
+    archive.directory(path, "/");
 
     const outputStream = fsExtra.createWriteStream(inputFile);
     archive.pipe(outputStream);
