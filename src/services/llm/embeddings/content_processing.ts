@@ -27,9 +27,9 @@ export async function cleanNoteContent(content: string, type: string, mime: stri
         .replace(/&nbsp;/g, ' ')
         .replace(/&lt;/g, '<')
         .replace(/&gt;/g, '>')
-        .replace(/&amp;/g, '&')
         .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'");
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, '&');
 
     // Normalize whitespace (replace multiple spaces/newlines with single space)
     content = content.replace(/\s+/g, ' ');
