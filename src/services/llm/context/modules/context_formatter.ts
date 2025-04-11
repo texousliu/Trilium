@@ -248,8 +248,8 @@ export class ContextFormatter implements IContextFormatter {
                             .replace(/&nbsp;/g, ' ')
                             .replace(/&lt;/g, '<')
                             .replace(/&gt;/g, '>')
-                            .replace(/&amp;/g, '&')
                             .replace(/&quot;/g, '"')
+                            .replace(/&amp;/g, '&')
                             .replace(/\n\s*\n\s*\n/g, '\n\n'); // Replace multiple blank lines with just one
                     }
                 });
