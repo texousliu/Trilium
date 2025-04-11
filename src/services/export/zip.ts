@@ -27,6 +27,11 @@ type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
 export interface AdvancedExportOptions {
     /**
+     * If `true`, then only the note's content will be kept. If `false` (default), then each page will have its own <html> template.
+     */
+    skipHtmlTemplate?: boolean;
+
+    /**
      * Provides a custom function to rewrite the links found in HTML or Markdown notes. This method is called for every note imported, if it's of the right type.
      *
      * @param originalRewriteLinks the original rewrite links function. Can be used to access the default behaviour without having to reimplement it.
@@ -316,7 +321,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
 
         if (noteMeta.format === "html" && typeof content === "string") {
-            if (!content.substr(0, 100).toLowerCase().includes("<html")) {
+            if (!content.substr(0, 100).toLowerCase().includes("<html") && !zipExportOptions?.skipHtmlTemplate) {
                 if (!noteMeta?.notePath?.length) {
                     throw new Error("Missing note path.");
                 }

@@ -99,6 +99,7 @@ async function exportData(noteId: string, format: "html" | "markdown", outputPat
 
         const exportOpts: AdvancedExportOptions = {};
         if (format === "html") {
+            exportOpts.skipHtmlTemplate = true;
             exportOpts.customRewriteLinks = (originalRewriteLinks, getNoteTargetUrl) => {
                 return (content: string, noteMeta: NoteMeta) => {
                     content = content.replace(/src="[^"]*api\/images\/([a-zA-Z0-9_]+)\/[^"]*"/g, (match, targetNoteId) => {
