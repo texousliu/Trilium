@@ -7,7 +7,7 @@ Note that Electron and Node.js versions need different versions of these binding
 
 During development, `npm install` tries to build or reuse prebuilt natives for the current Node.js version. This makes `npm run start-server` work out of the box. Trying to run `npm run start-electron` with these versions generally causes an error such as this:
 
-```plain
+```
 Uncaught Exception:
 Error: The module '/Users/elian/Projects/Notes/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
 was compiled against a different Node.js version using

@@ -3,7 +3,7 @@ In the past some libraries have been copy-pasted (and adapted if needed) to the 
 
 The first step is to install the desired library. As an example we are going to install `i18next`:
 
-```plain
+```
 npm i i18next
 ```
 
@@ -11,7 +11,7 @@ npm i i18next
 
 After installing the dependency, it's important to know how it's structured. You can do this by looking at the directory structure of the newly imported dependency:
 
-```plain
+```
 $ tree node_modules/i18next
 node_modules/i18next
 ├── dist

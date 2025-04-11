@@ -5,13 +5,13 @@ In the project root:
 
 Under NixOS the following `nix-shell` is needed:
 
-```plain
+```
 nix-shell -p jq
 ```
 
 For Linux builds:
 
-```plain
+```
 nix-shell -p jq fakeroot dpkg
 ```
 

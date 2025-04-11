@@ -1,7 +1,7 @@
 # Running a development build
 As always, install the dependencies for the first time (and re-run whenever there are errors about missing dependencies):
 
-```sh
+```
 npm install
 ```
 
@@ -9,13 +9,13 @@ npm install
 
 Run with default settings:
 
-```sh
+```
 npm run start-server
 ```
 
 Run with custom port:
 
-```sh
+```
 TRILIUM_PORT=8082 npm run start-server
 ```
 
@@ -23,25 +23,25 @@ TRILIUM_PORT=8082 npm run start-server
 
 Rebuild `better-sqlite3` dependency:
 
-```sh
+```
 npm run switch-electron
 ```
 
 Then run Electron:
 
-```sh
+```
 npm run start-electron
 ```
 
 To run Electron using the same data directory as the production version:
 
-```sh
+```
 npm run start-electron-no-dir
 ```
 
 When done, switch back the `better-sqlite3` dependency:
 
-```sh
+```
 npm run switch-server
 ```
 
@@ -49,13 +49,13 @@ npm run switch-server
 
 To start Electron without running `switch-electron` first:
 
-```sh
+```
 npm run qstart-electron
 ```
 
 Similarly, to start the server without running `switch-server` first:
 
-```sh
+```
 npm run qstart-server
 ```
 
@@ -63,7 +63,7 @@ npm run qstart-server
 
 Safe mode is off by default, to enable it temporarily on a Unix shell, prepend the environment variable setting:
 
-```sh
+```
 TRILIUM_SAFE_MODE=1 npm run start-server
 ```
 
@@ -78,12 +78,12 @@ To have the same behaviour on Windows, we would need to alter `package.json`:
 
 When doing development, the Electron binary retrieved from NPM is not going to be compatible with NixOS, resulting in errors when trying to run it. To bypass this, there is a special command to run electron using `nix-shell`:
 
-```sh
+```
 npm run start-electron-nix
 ```
 
 Similarly to the original command, to use the same data directory as the production version:
 
-```sh
+```
 npm run start-electron-no-dir-nix
 ```

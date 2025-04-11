@@ -3,7 +3,7 @@ The data persistence is achieved via the spaced update mechanism which is alread
 
 First, the class must implement `getData`, in order to retrieve the data from the custom widget in a serialized form. As an example from the mind map implementation:
 
-```plain
+```
 async getData() {
     const mind = this.mind;
     if (!mind) {
@@ -20,7 +20,7 @@ Here the content is a string containing a JSON. It is also possible to provide a
 
 Then to trigger an update, register a listener within the custom widget that calls the spaced update, for example:
 
-```plain
+```
 mind.bus.addListener("operation", (operation) => {
     this.spacedUpdate.scheduleUpdate();
 });

@@ -1,13 +1,13 @@
 # Releasing a version
 On NixOS:
 
-```plain
+```
 nix-shell -p dpkg fakeroot jq nodejs_20
 ```
 
 Then simply run from project root:
 
-```plain
+```
 ./bin/release.sh 1.2.3
 ```
 

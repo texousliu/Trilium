@@ -1,7 +1,7 @@
 # CSS
 In `doRender()`:
 
-```plain
+```
 this.cssBlock(`#my-widget {
 	position: absolute;
     bottom: 40px;

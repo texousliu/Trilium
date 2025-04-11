@@ -3,7 +3,7 @@
 
 Before starting Playwright, it has to be installed locally via:
 
-```plain
+```
 npx playwright install
 ```
 
@@ -27,12 +27,12 @@ When asked for a password, the password is `demo1234`.
 
 After starting the integration test server, to run the Playwright UI, run in the terminal:
 
-```plain
+```
 npx playwright test --ui
 ```
 
 It is also possible to run the interactive code generator instead:
 
-```plain
+```
 npx playwright codegen
 ```

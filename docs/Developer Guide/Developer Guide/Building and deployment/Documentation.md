@@ -25,7 +25,7 @@ Generally `ROOT_NOTE_ID` should not be changed since the note ID must match if t
 
 Run:
 
-```plain
+```
 ./bin/docs/prepare.sh
 ```
 

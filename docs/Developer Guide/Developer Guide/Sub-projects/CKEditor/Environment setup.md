@@ -3,7 +3,7 @@
 
 To set up the repository:
 
-```plain
+```
 git clone https://github.com/TriliumNext/trilium-ckeditor5.git
 ```
 

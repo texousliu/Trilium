@@ -1,7 +1,7 @@
 # Loading data
 Data loading can be done in `doRefresh()` since it gets a reference to the note:
 
-```plain
+```
 const blob = await note.getBlob();        
 const content = blob.getJsonContent();
 ```

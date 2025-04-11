@@ -3,7 +3,7 @@ The note type is defined by the `type` column in <a class="reference-link" href
 
 Possible types:
 
-<figure class="table" style="width:100%"><table class="ck-table-resized"><colgroup><col> <col> <col> <col> <col></colgroup><thead><tr><th>Note Type</th><th><code>type</code> value</th><th>Corresponding MIME type</th><th>Content of the note's blob</th><th>Relevant attributes</th></tr></thead><tbody><tr><th>Text</th><td><code>text</code></td><td>&nbsp;</td><td>The HTML of the note.</td><td>&nbsp;</td></tr><tr><th><a href="https://github.com/zadam/trilium/wiki/Relation-map">Relation Map&nbsp;</a></th><td><code>relationMap</code></td><td><code>application/json</code></td><td><p>A JSON describing the note:</p><pre><code class="language-text-plain">{
+<figure class="table" style="width:100%;"><table class="ck-table-resized"><colgroup><col> <col> <col> <col> <col></colgroup><thead><tr><th>Note Type</th><th><code>type</code> value</th><th>Corresponding MIME type</th><th>Content of the note's blob</th><th>Relevant attributes</th></tr></thead><tbody><tr><th>Text</th><td><code>text</code></td><td>&nbsp;</td><td>The HTML of the note.</td><td>&nbsp;</td></tr><tr><th><a href="https://github.com/zadam/trilium/wiki/Relation-map">Relation Map&nbsp;</a></th><td><code>relationMap</code></td><td><code>application/json</code></td><td><p>A JSON describing the note:</p><pre><code class="language-text-plain">{
     "notes": [
         {
             "noteId": "gFQDL11KEm9G",

@@ -3,7 +3,7 @@ First, make sure <a class="reference-link" href="Environment%20setup.md">Enviro
 
 ## Trigger the build
 
-```plain
+```
 cd packages/ckeditor5-build-trilium
 yarn build
 ```
@@ -16,6 +16,6 @@ Go to `packages/ckeditor5-build-balloon-trilium/build` and copy `ckeditor.js` an
 
 An example shell command to copy it:
 
-```plain
+```
 cp build/ckeditor.* ~/Projects/TriliumNext/Notes/libraries/ckeditor/
 ```

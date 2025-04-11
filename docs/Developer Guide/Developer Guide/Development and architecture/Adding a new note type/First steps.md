@@ -49,6 +49,6 @@ Go to `src/becca/entities/rows.ts` and add the new note type to `ALLOWED_NOTE_TY
 
 Type widgets do a check whenever a note is selected to determine whether the widget needs to be displayed or not, based on the note type. Make sure `getType()` is well implemented in the newly added type widget (take great care that the value is returned but also that the note type ID matches the ones registered in the previous steps):
 
-```plain
+```
 static getType() { return "foo"; }
 ```

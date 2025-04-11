@@ -13,7 +13,7 @@ If the returned value is a `Blob`, then the underlying text can be obtained via 
 
 To save the SVG as an attachment alongside the content, simply modify `getData()`:
 
-```plain
+```
 async getData() {
     const mind = this.mind;
     if (!mind) {
@@ -47,7 +47,7 @@ Alter the `returnImageInt` method as follows:
 1.  Add the image type to the guard condition which returns 400 for unsupported note types.
 2.  Add an `if` statement to render the attachment using the correct name:
 
-```plain
+```
 if (image.type === "mindMap") {
 	renderSvgAttachment(image, res, 'mindmap-export.svg');
 }

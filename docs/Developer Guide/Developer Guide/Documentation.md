@@ -5,7 +5,7 @@ Hard-coded links are present throughout the application, either in dialogs or in
 
 You can identify these links by searching for:
 
-```plain
+```
 https://triliumnext.github.io/Docs/Wiki/
 ```
 

@@ -7,14 +7,14 @@ In the screenshot, the icon is around 650px whereas the closest image we have is
 
 Before:
 
-```plain
+```
 File: ../images/app-icons/mac/icon.icns
   ic09: 62069 bytes, png: 512x512
 ```
 
 After:
 
-```plain
+```
 File: ../images/app-icons/mac/icon.icns
   icp4: 1140 bytes, png: 16x16
   icp5: 1868 bytes, png: 32x32

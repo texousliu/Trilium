@@ -1,7 +1,7 @@
 # Check box option
 In the TPL:
 
-```html
+```
 <div class="options-section">
     <h4>Background effects</h4>
 

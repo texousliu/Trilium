@@ -15,7 +15,7 @@ As mentioned previously, the database itself can be edited manually in order to 
 
 In order to do so, run a separate integration test server with:
 
-```plain
+```
 npm run integration-edit-db
 ```
 

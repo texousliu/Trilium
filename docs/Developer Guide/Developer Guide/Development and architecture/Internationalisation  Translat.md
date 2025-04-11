@@ -65,7 +65,7 @@ where `msgid` is the key of the message being translated.
 
 In the translation, enclose the variables with `{{` and `}}`:
 
-```plain
+```
 {
     "key": "{{what}} is {{how}}"
 }
@@ -73,7 +73,7 @@ In the translation, enclose the variables with `{{` and `}}`:
 
 Then pass the arguments when reading the translation:
 
-```plain
+```
 t('key', { what: 'i18next', how: 'great' })
 ```
 

@@ -11,7 +11,7 @@ After making the necessary modifications, simply export the “Trilium Demo” n
 
 ## Testing the changes
 
-```plain
+```
 rm -r data
 npm run start-server
 ```

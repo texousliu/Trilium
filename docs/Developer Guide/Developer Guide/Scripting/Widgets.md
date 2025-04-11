@@ -1,7 +1,7 @@
 # Widgets
 To create a basic widget, simply create a code note with type “JS frontend”. Add the `#widget` label in order for it to be loaded at startup.
 
-```plain
+```
 const template = `<div id="my-widget"><button>Click Me!</button></div>`;
 
 class MyWidget extends api.BasicWidget {
@@ -28,6 +28,6 @@ module.exports = new MyWidget();
 
 Reference:
 
-*   [https://trilium.rocks/X7pxYpiu0lgU](https://trilium.rocks/X7pxYpiu0lgU) 
-*   [https://github.com/zadam/trilium/wiki/Widget-Basics](https://github.com/zadam/trilium/wiki/Widget-Basics) 
+*   [https://trilium.rocks/X7pxYpiu0lgU](https://trilium.rocks/X7pxYpiu0lgU)
+*   [https://github.com/zadam/trilium/wiki/Widget-Basics](https://github.com/zadam/trilium/wiki/Widget-Basics)
 *   [https://github.com/zadam/trilium/wiki/Frontend-Basics](https://github.com/zadam/trilium/wiki/Frontend-Basics)

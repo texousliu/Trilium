@@ -3,7 +3,7 @@
 *   `parentWidget()` must be set to `“rightPane”`.
 *   `widgetTitle()` getter can optionally be overriden, otherwise the widget will be displayed as “Untitled widget”.
 
-```plain
+```
 const template = `<div>Hi</div>`;
 
 class ToDoListWidget extends api.RightPanelWidget {

@@ -11,7 +11,7 @@ However, a core difference is that Electron watches `dist/src/public` instead of
 
 To ameliorate that, a separate watch script has been implemented which automatically copies files from `src/public` to `dist/src/public` whenever a change is detected. To run it:
 
-```plain
+```
 npm run 
 ```
 

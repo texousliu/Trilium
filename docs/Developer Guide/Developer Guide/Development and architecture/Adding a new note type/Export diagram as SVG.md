@@ -11,7 +11,7 @@ The SVG export needs to be handled inside the note type implementation. 
 
 The first goal is to create a method to handle the <a class="reference-link" href="SVG%20rendering.md">SVG rendering</a>. Make sure to deduplicate the code if the SVG rendering is already handled.
 
-```plain
+```
 async renderSvg() {
     return await this.mind.exportSvg().text();
 }
@@ -19,7 +19,7 @@ async renderSvg() {
 
 Then create an event handler to manage the SVG export:
 
-```plain
+```
 async exportSvgEvent({ntxId}) {
     if (!this.isNoteContext(ntxId) || this.note.type !== "mindMap") {
         return;
