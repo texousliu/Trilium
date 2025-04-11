@@ -1,19 +1,17 @@
-import "../../../stylesheets/calendar.css";
-
-import { Dropdown } from "bootstrap";
-import dayjs, { Dayjs } from "dayjs";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
-import utc from "dayjs/plugin/utc.js";
-
-import type BAttribute from "../../../../becca/entities/battribute.js";
-import type { EventData } from "../../components/app_context.js";
-import appContext from "../../components/app_context.js";
-import dateNoteService from "../../services/date_notes.js";
 import { t } from "../../services/i18n.js";
-import options from "../../services/options.js";
+import dateNoteService from "../../services/date_notes.js";
 import server from "../../services/server.js";
-import toastService from "../../services/toast.js";
+import appContext from "../../components/app_context.js";
 import RightDropdownButtonWidget from "./right_dropdown_button.js";
+import toastService from "../../services/toast.js";
+import options from "../../services/options.js";
+import { Dropdown } from "bootstrap";
+import type { EventData } from "../../components/app_context.js";
+import dayjs, { Dayjs } from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
+import type BAttribute from "../../../../becca/entities/battribute.js";
+import "../../../stylesheets/calendar.css";
 
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter);

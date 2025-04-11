@@ -1,11 +1,13 @@
-import appContext from "../components/app_context.js";
-import hoistedNoteService from "../services/hoisted_note.js";
-import froca from "./froca.js";
-import utils from "./utils.js";
 import ws from "./ws.js";
+import utils from "./utils.js";
+import froca from "./froca.js";
+import hoistedNoteService from "../services/hoisted_note.js";
+import appContext from "../components/app_context.js";
 
-
-async function resolveNotePath(notePath: string, hoistedNoteId = "root"): Promise<string | null> {
+/**
+ * @returns {string|null}
+ */
+async function resolveNotePath(notePath: string, hoistedNoteId = "root") {
     const runPath = await resolveNotePathToSegments(notePath, hoistedNoteId);
 
     return runPath ? runPath.join("/") : null;

@@ -1,30 +1,30 @@
-import appContext, { type CommandListenerData, type EventData } from "../components/app_context.js";
-import type { SetNoteOpts } from "../components/note_context.js";
-import type FBranch from "../entities/fbranch.js";
-import type FNote from "../entities/fnote.js";
-import type { NoteType } from "../entities/fnote.js";
-import contextMenu from "../menus/context_menu.js";
-import branchService from "../services/branches.js";
-import clipboard from "../services/clipboard.js";
-import dialogService from "../services/dialog.js";
-import froca from "../services/froca.js";
 import hoistedNoteService from "../services/hoisted_note.js";
-import { t } from "../services/i18n.js";
-import keyboardActionsService from "../services/keyboard_actions.js";
-import linkService from "../services/link.js";
-import type LoadResults from "../services/load_results.js";
-import type { AttributeRow, BranchRow } from "../services/load_results.js";
-import noteCreateService from "../services/note_create.js";
-import options from "../services/options.js";
-import protectedSessionService from "../services/protected_session.js";
-import protectedSessionHolder from "../services/protected_session_holder.js";
-import server from "../services/server.js";
-import shortcutService from "../services/shortcuts.js";
-import toastService from "../services/toast.js";
 import treeService from "../services/tree.js";
 import utils from "../services/utils.js";
+import contextMenu from "../menus/context_menu.js";
+import froca from "../services/froca.js";
+import branchService from "../services/branches.js";
 import ws from "../services/ws.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
+import server from "../services/server.js";
+import noteCreateService from "../services/note_create.js";
+import toastService from "../services/toast.js";
+import appContext, { type CommandListenerData, type EventData } from "../components/app_context.js";
+import keyboardActionsService from "../services/keyboard_actions.js";
+import clipboard from "../services/clipboard.js";
+import protectedSessionService from "../services/protected_session.js";
+import linkService from "../services/link.js";
+import options from "../services/options.js";
+import protectedSessionHolder from "../services/protected_session_holder.js";
+import dialogService from "../services/dialog.js";
+import shortcutService from "../services/shortcuts.js";
+import { t } from "../services/i18n.js";
+import type FBranch from "../entities/fbranch.js";
+import type LoadResults from "../services/load_results.js";
+import type FNote from "../entities/fnote.js";
+import type { NoteType } from "../entities/fnote.js";
+import type { AttributeRow, BranchRow } from "../services/load_results.js";
+import type { SetNoteOpts } from "../components/note_context.js";
 
 const TPL = /*html*/`
 <div class="tree-wrapper">
@@ -241,7 +241,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         this.$autoCollapseNoteTree = this.$treeSettingsPopup.find(".auto-collapse-note-tree");
 
         this.$treeSettingsButton = this.$widget.find(".tree-settings-button");
-        this.$treeSettingsButton.on("click", () => {
+        this.$treeSettingsButton.on("click", (e) => {
             if (this.$treeSettingsPopup.is(":visible")) {
                 this.$treeSettingsPopup.hide();
                 return;
@@ -466,7 +466,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                     data.dataTransfer.setData("text", JSON.stringify(notes));
                     return true; // allow dragging to start
                 },
-                dragEnter: (node) => {
+                dragEnter: (node, data) => {
                     if (node.data.noteType === "search") {
                         return false;
                     } else if (node.data.noteId === "_lbRoot") {
@@ -512,12 +512,8 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
                         try {
                             notes = JSON.parse(jsonStr);
-                        } catch (error: unknown) {
-                            if (error instanceof Error) {
-                                logError(`Cannot parse JSON '${jsonStr}' into notes for drop: ${error.message}`);
-                            } else {
-                                logError(`Cannot parse JSON '${jsonStr}' into notes for drop: Unknown error`);
-                            }
+                        } catch (e) {
+                            logError(`Cannot parse JSON '${jsonStr}' into notes for drop`);
                             return;
                         }
 
@@ -675,16 +671,17 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             let showTimeout: Timeout;
 
             this.$tree.on("touchstart", ".fancytree-node", (e) => {
+                touchStart = new Date().getTime();
                 showTimeout = setTimeout(() => {
                     this.showContextMenu(e);
                 }, 300);
             });
 
-            this.$tree.on("touchmove", ".fancytree-node", () => {
+            this.$tree.on("touchmove", ".fancytree-node", (e) => {
                 clearTimeout(showTimeout);
             });
 
-            this.$tree.on("touchend", ".fancytree-node", () => {
+            this.$tree.on("touchend", ".fancytree-node", (e) => {
                 clearTimeout(showTimeout);
             });
         } else {
@@ -705,6 +702,8 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 }
             });
         }
+
+        let touchStart;
 
         this.tree = $.ui.fancytree.getTree(this.$tree);
     }
@@ -1252,7 +1251,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
         // activeNode is supposed to be moved when we find out activeNode is deleted but not all branches are deleted. save it for fixing activeNodePath after all nodes loaded.
         let movedActiveNode = null;
-        const parentsOfAddedNodes = [];
+        let parentsOfAddedNodes = [];
 
         for (const branchRow of branchRows) {
             if (branchRow.noteId) {
