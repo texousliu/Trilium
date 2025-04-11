@@ -476,29 +476,14 @@ export class OllamaService extends BaseAIService {
                     // Call the callback with the current chunk content
                     if (opts.streamCallback) {
                         try {
-                            // For the final chunk, make sure to send the complete text with done=true
-                            if (chunk.done) {
-                                log.info(`Sending final callback with done=true and complete content (${completeText.length} chars)`);
-                                await opts.streamCallback(
-                                    completeText, // Send the full accumulated content for the final chunk
-                                    true,
-                                    { ...chunk, message: { ...chunk.message, content: completeText } }
-                                );
-                            } else if (chunk.message?.content) {
-                                // For content chunks, send them as they come
-                                await opts.streamCallback(
-                                    chunk.message.content,
-                                    !!chunk.done,
-                                    chunk
-                                );
-                            } else if (chunk.message?.tool_calls && chunk.message.tool_calls.length > 0) {
-                                // For tool call chunks, send an empty content string but include the tool calls
-                                await opts.streamCallback(
-                                    '',
-                                    !!chunk.done,
-                                    chunk
-                                );
-                            }
+                            // Don't send done:true when tool calls are present to avoid premature completion
+                            const shouldMarkAsDone = !!chunk.done && !responseToolCalls.length;
+
+                            await opts.streamCallback(
+                                chunk.message?.content || '',
+                                shouldMarkAsDone,
+                                chunk
+                            );
 
                             if (chunkCount === 1) {
                                 log.info(`Successfully called streamCallback with first chunk`);
