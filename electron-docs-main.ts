@@ -11,6 +11,7 @@ import { extractZip, initializeDatabase, startElectron } from "./electron-utils.
 import cls from "./src/services/cls.js";
 import type { AdvancedExportOptions } from "./src/services/export/zip.js";
 import TaskContext from "./src/services/task_context.js";
+import { deferred } from "./src/services/utils.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
 const NOTE_ID_RELEASE_NOTES = "hD3V4hiu2VW4";
@@ -22,12 +23,15 @@ async function main() {
     await initializeTranslations();
     await initializeDatabase(true);
 
+    const initializedPromise = deferred<void>();
     cls.init(async () => {
         await importData(markdownPath);
         await importData(releaseNotesPath);
         setOptions();
+        initializedPromise.resolve();
     });
 
+    await initializedPromise;
     await startElectron();
 
     // Wait for the import to be finished and the application to be loaded before we listen to changes.
