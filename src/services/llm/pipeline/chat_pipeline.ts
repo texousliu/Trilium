@@ -104,7 +104,8 @@ export class ChatPipeline {
                 // If there are no tools registered, initialize them
                 if (toolCount === 0) {
                     log.info('No tools found in registry, initializing tools...');
-                    await toolInitializer.initializeTools();
+                    // Tools are already initialized in the AIServiceManager constructor
+                    // No need to initialize them again
                     log.info(`Tools initialized, now have ${toolRegistry.getAllTools().length} tools`);
                 } else {
                     log.info(`Found ${toolCount} tools already registered`);

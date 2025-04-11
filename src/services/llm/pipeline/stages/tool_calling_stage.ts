@@ -57,8 +57,8 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             // Try to initialize tools as a recovery step
             try {
                 log.info('Attempting to initialize tools as recovery step');
-                const toolInitializer = await import('../../tools/tool_initializer.js');
-                await toolInitializer.default.initializeTools();
+                // Tools are already initialized in the AIServiceManager constructor
+                // No need to initialize them again
                 log.info(`After recovery initialization: ${toolRegistry.getAllTools().length} tools available`);
             } catch (error: any) {
                 log.error(`Failed to initialize tools in recovery step: ${error.message}`);

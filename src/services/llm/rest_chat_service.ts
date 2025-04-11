@@ -1115,8 +1115,8 @@ class RestChatService {
 
             // Try to initialize tools
             try {
-                const toolInitializer = await import('./tools/tool_initializer.js');
-                await toolInitializer.default.initializeTools();
+                // Tools are already initialized in the AIServiceManager constructor
+                // No need to initialize them again
                 const tools = toolRegistry.getAllTools();
                 log.info(`Successfully registered ${tools.length} LLM tools: ${tools.map(t => t.definition.function.name).join(', ')}`);
             } catch (error: unknown) {
@@ -1427,20 +1427,25 @@ class RestChatService {
      */
     private async ensureToolsInitialized() {
         try {
-            log.info("Initializing LLM tools...");
+            log.info("Checking LLM tool initialization...");
 
-            // Import tool initializer and registry
-            const toolInitializer = (await import('./tools/tool_initializer.js')).default;
+            // Import tool registry
             const toolRegistry = (await import('./tools/tool_registry.js')).default;
 
             // Check if tools are already initialized
             const registeredTools = toolRegistry.getAllTools();
 
             if (registeredTools.length === 0) {
-                // Initialize tools if none are registered
-                await toolInitializer.initializeTools();
+                log.info("No tools found in registry.");
+                log.info("Note: Tools should be initialized in the AIServiceManager constructor.");
+                
+                // Create AI service manager instance to trigger tool initialization
+                const aiServiceManager = (await import('./ai_service_manager.js')).default;
+                aiServiceManager.getInstance();
+                
+                // Check again after AIServiceManager instantiation
                 const tools = toolRegistry.getAllTools();
-                log.info(`Successfully registered ${tools.length} LLM tools: ${tools.map(t => t.definition.function.name).join(', ')}`);
+                log.info(`After AIServiceManager instantiation: ${tools.length} tools available`);
             } else {
                 log.info(`LLM tools already initialized: ${registeredTools.length} tools available`);
             }

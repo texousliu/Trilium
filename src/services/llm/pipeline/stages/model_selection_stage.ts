@@ -69,8 +69,8 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
                     // Try to initialize tools
                     log.info('No tools found in registry, trying to initialize them');
                     try {
-                        const toolInitializer = await import('../../tools/tool_initializer.js');
-                        await toolInitializer.default.initializeTools();
+                        // Tools are already initialized in the AIServiceManager constructor
+                        // No need to initialize them again
 
                         // Try again after initialization
                         const reinitToolDefinitions = toolRegistry.getAllToolDefinitions();

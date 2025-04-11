@@ -129,8 +129,8 @@ export class OllamaService extends BaseAIService {
                     // Handle empty tools array
                     if (tools.length === 0) {
                         log.info('No tools found, attempting to initialize tools...');
-                        const toolInitializer = await import('../tools/tool_initializer.js');
-                        await toolInitializer.default.initializeTools();
+                        // Tools are already initialized in the AIServiceManager constructor
+                        // No need to initialize them again
                         tools = toolRegistry.getAllToolDefinitions();
                         log.info(`After initialization: ${tools.length} tools available`);
                     }

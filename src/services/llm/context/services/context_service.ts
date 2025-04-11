@@ -63,14 +63,8 @@ export class ContextService {
           throw new Error(`No embedding provider available. Could not initialize context service.`);
         }
 
-        // Initialize agent tools to ensure they're ready
-        try {
-          await aiServiceManager.getInstance().initializeAgentTools();
-          log.info("Agent tools initialized for use with ContextService");
-        } catch (toolError) {
-          log.error(`Error initializing agent tools: ${toolError}`);
-          // Continue even if agent tools fail to initialize
-        }
+        // Agent tools are already initialized in the AIServiceManager constructor
+        // No need to initialize them again
 
         this.initialized = true;
         log.info(`Context service initialized with provider: ${provider.name}`);

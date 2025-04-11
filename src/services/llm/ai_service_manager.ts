@@ -29,8 +29,34 @@ export class AIServiceManager implements IAIServiceManager {
     private initialized = false;
 
     constructor() {
-        // Don't call updateProviderOrder here
-        // Wait until a method is called to initialize
+        // Initialize provider order immediately
+        this.updateProviderOrder();
+        
+        // Initialize tools immediately
+        this.initializeTools().catch(error => {
+            log.error(`Error initializing LLM tools during AIServiceManager construction: ${error.message || String(error)}`);
+        });
+    }
+    
+    /**
+     * Initialize all LLM tools in one place
+     */
+    private async initializeTools(): Promise<void> {
+        try {
+            log.info('Initializing LLM tools during AIServiceManager construction...');
+            
+            // Initialize agent tools
+            await agentTools.initialize(true);
+            log.info("Agent tools initialized successfully");
+            
+            // Initialize LLM tools
+            const toolInitializer = await import('./tools/tool_initializer.js');
+            await toolInitializer.default.initializeTools();
+            log.info("LLM tools initialized successfully");
+        } catch (error: any) {
+            log.error(`Error initializing tools: ${error.message || String(error)}`);
+            // Don't throw, just log the error to prevent breaking construction
+        }
     }
 
     /**
@@ -282,15 +308,13 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Initialize agent tools for enhanced LLM features
+     * Ensure agent tools are initialized (no-op as they're initialized in constructor)
+     * Kept for backward compatibility with existing API
      */
     async initializeAgentTools(): Promise<void> {
-        try {
-            await agentTools.initialize(true);
-            log.info("Agent tools initialized successfully");
-        } catch (error: any) {
-            log.error(`Error initializing agent tools: ${error.message}`);
-        }
+        // Agent tools are already initialized in the constructor
+        // This method is kept for backward compatibility
+        log.debug("initializeAgentTools called, but tools are already initialized in constructor");
     }
 
     /**
@@ -403,13 +427,8 @@ export class AIServiceManager implements IAIServiceManager {
             // Initialize index service
             await this.getIndexService().initialize();
 
-            // Initialize agent tools with this service manager instance
-            await agentTools.initialize(true);
-
-            // Initialize LLM tools - this is the single place where tools are initialized
-            const toolInitializer = await import('./tools/tool_initializer.js');
-            await toolInitializer.default.initializeTools();
-            log.info("LLM tools initialized successfully");
+            // Tools are already initialized in the constructor
+            // No need to initialize them again
 
             this.initialized = true;
             log.info("AI service initialized successfully");
@@ -462,9 +481,9 @@ export class AIServiceManager implements IAIServiceManager {
         try {
             // Create agent tools message
             const toolsMessage = await this.getAgentToolsDescription();
-
-            // Initialize and use the agent tools
-            await this.initializeAgentTools();
+            
+            // Agent tools are already initialized in the constructor
+            // No need to initialize them again
 
             // If we have notes that were already found to be relevant, use them directly
             let contextNotes = relevantNotes;
@@ -623,10 +642,7 @@ export default {
         return getInstance().getIndexService();
     },
     // Agent tools related methods
-    async initializeAgentTools(): Promise<void> {
-        const manager = getInstance();
-        return manager.initializeAgentTools();
-    },
+    // Tools are now initialized in the constructor
     getAgentTools() {
         return getInstance().getAgentTools();
     },
