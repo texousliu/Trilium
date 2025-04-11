@@ -110,9 +110,3 @@ jobs:
           body_path: docs/Release Notes/Release Notes/${{ github.ref }}.md
           fail_on_unmatched_files: true
           files: upload/*.*
-
-      - name: Publish to winget
-        uses: ./.github/workflows/release-winget.yml
-        with:
-          release_tag: ${{ github.ref }}
-          token: ${{ secrets.WINGET_PAT }}

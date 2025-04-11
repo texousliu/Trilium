@@ -1,14 +1,7 @@
 name: Release to winget
 on:
-  workflow_call:
-    inputs:
-      release_tag:
-        description: 'Git tag to release from'
-        type: string
-        required: true
-    secrets:
-      token:
-        required: true
+  release:
+    types: [ published ]
   workflow_dispatch:
     inputs:
       release_tag:
@@ -24,4 +17,4 @@ jobs:
         with:
           identifier: TriliumNext.Notes
           token: ${{ secrets.token }}
-          release-tag:  ${{ github.event.inputs.release_tag }}
+          release-tag:  ${{ github.event.inputs.release_tag || github.event.release.tag_name }}
