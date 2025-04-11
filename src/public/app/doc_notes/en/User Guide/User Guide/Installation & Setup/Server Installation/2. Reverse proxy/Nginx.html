@@ -1,31 +1,16 @@
-<html>
-  
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../../../style.css">
-    <base target="_parent">
-    <title data-trilium-title>Nginx</title>
-  </head>
-  
-  <body>
-    <div class="content">
-       <h1 data-trilium-h1>Nginx</h1>
-
-      <div class="ck-content">
-        <p>Configure Nginx proxy and HTTPS. The operating system here is Ubuntu 18.04.</p>
-        <ol>
-          <li>
-            <p>Download Nginx and remove Apache2</p><pre><code class="language-text-x-trilium-auto">sudo apt-get install nginx
+<p>Configure Nginx proxy and HTTPS. The operating system here is Ubuntu 18.04.</p>
+<ol>
+  <li>
+    <p>Download Nginx and remove Apache2</p><pre><code class="language-text-x-trilium-auto">sudo apt-get install nginx
 sudo apt-get remove apache2</code></pre>
-          </li>
-          <li>
-            <p>Create configure file</p><pre><code class="language-text-x-trilium-auto">cd /etc/nginx/conf.d
+  </li>
+  <li>
+    <p>Create configure file</p><pre><code class="language-text-x-trilium-auto">cd /etc/nginx/conf.d
 vim default.conf</code></pre>
-          </li>
-          <li>
-            <p>Fill the file with the context shown below, part of the setting show be
-              changed. Then you can enjoy your web with HTTPS forced and proxy.</p><pre><code class="language-text-x-trilium-auto"># This part is for proxy and HTTPS configure
+  </li>
+  <li>
+    <p>Fill the file with the context shown below, part of the setting show be
+      changed. Then you can enjoy your web with HTTPS forced and proxy.</p><pre><code class="language-text-x-trilium-auto"># This part is for proxy and HTTPS configure
 server {
     listen 443 ssl;
     server_name trilium.example.net; #change trilium.example.net to your domain without HTTPS or HTTP.
@@ -55,10 +40,5 @@ server {
             server_name trilium.example.net; # change to your domain
             return 301 https://$server_name$request_uri;
 }</code></pre>
-          </li>
-        </ol>
-      </div>
-    </div>
-  </body>
-
-</html>
+  </li>
+</ol>
