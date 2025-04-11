@@ -88,7 +88,7 @@ function waitForEnd(archive: Archiver, stream: WriteStream) {
 
 }
 
-async function exportData(noteId: string, format: "html" | "markdown", outputPath: string) {
+async function exportData(noteId: string, format: "html" | "markdown", outputPath: string, ignoredFiles?: Set<string>) {
     const zipFilePath = "output.zip";
 
     try {
@@ -146,7 +146,7 @@ async function exportData(noteId: string, format: "html" | "markdown", outputPat
         }
 
         await exportToZipFile(noteId, format, zipFilePath, exportOpts);
-        await extractZip(zipFilePath, outputPath);
+        await extractZip(zipFilePath, outputPath, ignoredFiles);
     } finally {
         if (await fsExtra.exists(zipFilePath)) {
             await fsExtra.rm(zipFilePath);
@@ -188,8 +188,10 @@ async function registerHandlers() {
     const debouncer = debounce(async () => {
         eraseService.eraseUnusedAttachmentsNow();
         await exportData(NOTE_ID_USER_GUIDE, "markdown", markdownPath);
-        await exportData(NOTE_ID_USER_GUIDE, "html", htmlPath);
         await exportData(NOTE_ID_RELEASE_NOTES, "markdown", releaseNotesPath);
+
+        const ignoredFiles = new Set(["index.html", "navigation.html", "style.css", "User Guide.html"]);
+        await exportData(NOTE_ID_USER_GUIDE, "html", htmlPath, ignoredFiles);
     }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
