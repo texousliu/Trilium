@@ -315,4 +315,10 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
+    it("preserves include note", () => {
+        const html = /*html*/`<section class="include-note" data-note-id="i4A5g9iOg9I0" data-box-size="full"> </section>`;
+        const expected = /*markdown*/`<section class="include-note" data-note-id="i4A5g9iOg9I0" data-box-size="full">&nbsp;</section>`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
 });
