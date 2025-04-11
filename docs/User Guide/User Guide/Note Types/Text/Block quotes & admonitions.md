@@ -1,17 +1,25 @@
-# Admonitions
-![](1_Admonitions_image.png)
+# Block quotes & admonitions
+## Block quotes
+
+As the name suggests, block quotes can be useful to cite one or more paragraphs.
+
+To create a block quote, press <img src="Block quotes &amp; admonitions.png" width="15" height="12"> from the <a class="reference-link" href="Formatting%20toolbar.md">Formatting toolbar</a>. It's also possible to type <kbd>&gt;</kbd>, followed by a space to create one (but only if the cursor is at the beginning of a line).
+
+Inside the quote block, other block items can be inserted such as tables, images, or even other block quotes or admonitions.
+
+## Admonitions
 
 Admonitions are a way to highlight information to the reader. Other names for it include _call-outs_ and _info/warning/alert boxes_.
 
-## Inserting a new admonition
+<figure class="image image-style-align-center"><img style="aspect-ratio:959/547;" src="2_Block quotes &amp; admonitions.png" width="959" height="547"></figure>
 
-### From the UI
+From a functional point of view, admonitions act very similarly to a block quote, just with different styling. This includes the ability to insert other elements in it such as headings, tables, images, etc.
 
-In the Formatting toolbar:
+### Inserting a new admonition
 
-![](Admonitions_image.png)
+In the <a class="reference-link" href="Formatting%20toolbar.md">Formatting toolbar</a>:
 
-### Via the keyboard
+![](1_Block%20quotes%20&%20admonitions.png)
 
 It's possible to insert an admonition simply by typing:
 
@@ -23,7 +31,7 @@ It's possible to insert an admonition simply by typing:
 
 In addition to that, it's also possible to type `!!!`  followed by any text, case in which a default admonition type will appear (note) with the entered text inside it.
 
-## Interaction
+### Interaction
 
 By design, admonitions act very similar to block quotes.
 
@@ -36,13 +44,13 @@ Inside an admonition:
 *   Pressing <kbd>Enter</kbd> will start a new paragraph. Pressing it twice will exit out of the admonition.
 *   Headings and other block content including tables can be inserted inside the admonition.
 
-## Types of admonitions
+### Types of admonitions
 
 There are currently five types of admonitions: _Note_, _Tip_, _Important_, _Caution_, _Warning_.
 
 These types were inspired by GitHub's support for this feature and there are currently no plans for adjusting it or allowing the user to customize them.
 
-## Markdown support
+### Markdown support
 
 The Markdown syntax for admonitions as supported by Trilium is the one that GitHub uses, which is as follows:
 

@@ -30,8 +30,8 @@ In order to configure this new feature, a section has been added in Options → 
 *   Word wrapping is disabled by default, but can be configured from the same section.
 
 > [!NOTE]
-> **Context regarding syntax highlighting**  
->   
+> **Context regarding syntax highlighting**
+> 
 > In order to achieve the syntax highlight, the Highlight.js library is being used. Do note that support for syntax highlighting in code blocks is not a supported feature of the text editor we are using CKEditor), but rather a hack which makes use of the highlights API (used for highlighting search results for example). Nevertheless, we haven't noticed any major issues during the development of the feature, but feel free to report any issues you might have.
 > 
 > Most of the work to achieve the syntax highlight itself was already done by [antoniotejada](https://github.com/antoniotejada) in [https://github.com/antoniotejada/Trilium-SyntaxHighlightWidget](https://github.com/antoniotejada/Trilium-SyntaxHighlightWidget). On our side we added customization but also additional functionality.
