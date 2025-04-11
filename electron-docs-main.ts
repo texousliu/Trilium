@@ -13,7 +13,9 @@ import type { AdvancedExportOptions } from "./src/services/export/zip.js";
 import TaskContext from "./src/services/task_context.js";
 
 const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
+const NOTE_ID_RELEASE_NOTES = "hD3V4hiu2VW4";
 const markdownPath = path.join("docs", "User Guide");
+const releaseNotesPath = path.join("docs", "Release Notes");
 const htmlPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
 
 async function main() {
@@ -22,6 +24,7 @@ async function main() {
 
     cls.init(async () => {
         await importData(markdownPath);
+        await importData(releaseNotesPath);
         setOptions();
     });
 
@@ -80,7 +83,7 @@ function waitForEnd(archive: Archiver, stream: WriteStream) {
 
 }
 
-async function exportData(format: "html" | "markdown", outputPath: string) {
+async function exportData(noteId: string, format: "html" | "markdown", outputPath: string) {
     const zipFilePath = "output.zip";
 
     try {
@@ -136,7 +139,7 @@ async function exportData(format: "html" | "markdown", outputPath: string) {
             };
         }
 
-        await exportToZipFile(NOTE_ID_USER_GUIDE, format, zipFilePath, exportOpts);
+        await exportToZipFile(noteId, format, zipFilePath, exportOpts);
         await extractZip(zipFilePath, outputPath);
     } finally {
         if (await fsExtra.exists(zipFilePath)) {
@@ -171,8 +174,9 @@ async function registerHandlers() {
     const eraseService = (await import("./src/services/erase.js")).default;
     const debouncer = debounce(async () => {
         eraseService.eraseUnusedAttachmentsNow();
-        await exportData("markdown", markdownPath);
-        await exportData("html", htmlPath);
+        await exportData(NOTE_ID_USER_GUIDE, "markdown", markdownPath);
+        await exportData(NOTE_ID_USER_GUIDE, "html", htmlPath);
+        await exportData(NOTE_ID_RELEASE_NOTES, "markdown", releaseNotesPath);
     }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
