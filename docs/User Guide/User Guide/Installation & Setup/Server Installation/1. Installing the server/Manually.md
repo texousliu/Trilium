@@ -1,5 +1,6 @@
-# Manual server installation
-This page describes manually installing Trilium on your server. **Note that this is a not well supported way to install Trilium, problems may appear, information laid out here is quite out of date. It is recommended to use either Docker or packaged build installation.**
+# Manually
+> [!WARNING]
+> This page describes manually installing Trilium on your server. **Note that this is a not well supported way to install Trilium, problems may appear, information laid out here is quite out of date. It is recommended to use either** <a class="reference-link" href="Using%20Docker.md">Docker Server Installation</a> **or** <a class="reference-link" href="Packaged%20version%20for%20Linux.md">Packaged server installation</a>**.**
 
 ## Requirements
 

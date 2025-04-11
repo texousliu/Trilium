@@ -1,4 +1,4 @@
-# Kubernetes server installation
+# Using Kubernetes
 As Trilium can be run in Docker it also can be deployed in Kubernetes. You can either use our Helm chart, a community Helm chart, or roll your own Kubernetes deployment.
 
 The recommended way is to use a Helm chart.

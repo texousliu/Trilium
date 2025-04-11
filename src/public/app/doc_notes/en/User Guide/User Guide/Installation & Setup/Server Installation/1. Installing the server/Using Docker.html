@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../../../../style.css">
     <base target="_parent">
-    <title data-trilium-title>Docker Server Installation</title>
+    <title data-trilium-title>Using Docker</title>
   </head>
   
   <body>
     <div class="content">
-       <h1 data-trilium-h1>Docker Server Installation</h1>
+       <h1 data-trilium-h1>Using Docker</h1>
 
       <div class="ck-content">
         <p>Official docker images are published on docker hub for <strong>AMD64</strong>, <strong>ARMv7</strong> and <strong>ARM64/v8</strong>:
@@ -51,8 +51,8 @@
         <h3>Running the Docker Container</h3>
         <h4>Local Access Only</h4>
         <p>Run the container to make it accessible only from the localhost. This
-          setup is suitable for testing or when using a proxy server like Nginx or
-          Apache.</p><pre><code class="language-text-x-trilium-auto">sudo docker run -t -i -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]</code></pre>
+          setup is suitable for testing or when using a prox ay server like Nginx
+          or Apache.</p><pre><code class="language-text-x-trilium-auto">sudo docker run -t -i -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]</code></pre>
         <ol>
           <li>Verify the container is running using <code>docker ps</code>.</li>
           <li>Access Trilium via a web browser at <code>127.0.0.1:8080</code>.</li>

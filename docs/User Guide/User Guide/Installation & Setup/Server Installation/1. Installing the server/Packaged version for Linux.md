@@ -1,4 +1,4 @@
-# Packaged server installation
+# Packaged version for Linux
 This is essentially Trilium sources + node modules + node.js runtime packaged into one 7z file.
 
 ## Steps

@@ -5,14 +5,14 @@ This guide outlines the steps to install Trilium on your own server. You might c
 
 There are several ways to install Trilium on a server, each with its own advantages:
 
-*   **Recommended**: [Docker Installation](Server%20Installation/1.%20Installing%20the%20server/Docker%20Server%20Installation.md) - Available for **AMD64** and **ARM** architectures.
-*   [Packaged Server Installation](Server%20Installation/1.%20Installing%20the%20server/Packaged%20server%20installation.md)
+*   **Recommended**: [Docker Installation](Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md) - Available for **AMD64** and **ARM** architectures.
+*   [Packaged Server Installation](Server%20Installation/1.%20Installing%20the%20server/Packaged%20version%20for%20Linux.md)
 *   [PikaPods managed hosting](https://www.pikapods.com/pods?run=trilium-next)
-*   [Manual Installation](Server%20Installation/1.%20Installing%20the%20server/Manual%20server%20installation.md)
-*   [Kubernetes](Server%20Installation/1.%20Installing%20the%20server/Kubernetes%20server%20installation.md)
+*   [Manual Installation](Server%20Installation/1.%20Installing%20the%20server/Manually.md)
+*   [Kubernetes](Server%20Installation/1.%20Installing%20the%20server/Using%20Kubernetes.md)
 *   [Cloudron](https://www.cloudron.io/store/com.github.trilium.cloudronapp.html)
 *   [HomelabOS](https://homelabos.com/docs/software/trilium/)
-*   [NixOS Module](Server%20Installation/1.%20Installing%20the%20server/NixOS%20server%20installation.md)
+*   [NixOS Module](Server%20Installation/1.%20Installing%20the%20server/On%20NixOS.md)
 
 The server installation includes both web and [mobile frontends](Mobile%20Frontend.md).
 

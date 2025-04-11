@@ -1,4 +1,4 @@
-# Docker Server Installation
+# Using Docker
 Official docker images are published on docker hub for **AMD64**, **ARMv7** and **ARM64/v8**: [https://hub.docker.com/r/triliumnext/notes/](https://hub.docker.com/r/triliumnext/notes/)
 
 ## Prerequisites
@@ -50,7 +50,7 @@ Trilium requires a directory on the host system to store its data. This director
 
 #### Local Access Only
 
-Run the container to make it accessible only from the localhost. This setup is suitable for testing or when using a proxy server like Nginx or Apache.
+Run the container to make it accessible only from the localhost. This setup is suitable for testing or when using a prox ay server like Nginx or Apache.
 
 ```
 sudo docker run -t -i -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]

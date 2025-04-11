@@ -1,4 +1,4 @@
-# NixOS server installation
+# On NixOS
 This page describes configuring the Trilium module included in NixOS.
 
 ## Requirements

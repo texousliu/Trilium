@@ -236,7 +236,7 @@
                                                 "Dgg7bR3b6K9j",
                                                 "3tW6mORuTHnB"
                                             ],
-                                            "title": "Packaged server installation",
+                                            "title": "Packaged version for Linux",
                                             "notePosition": 10,
                                             "prefix": null,
                                             "isExpanded": false,
@@ -263,10 +263,17 @@
                                                     "value": "packaged-server-installation",
                                                     "isInheritable": false,
                                                     "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bxl-tux",
+                                                    "isInheritable": false,
+                                                    "position": 30
                                                 }
                                             ],
                                             "format": "html",
-                                            "dataFileName": "Packaged server installation.html",
+                                            "dataFileName": "Packaged version for Linux.html",
                                             "attachments": []
                                         },
                                         {
@@ -279,7 +286,7 @@
                                                 "Dgg7bR3b6K9j",
                                                 "rWX5eY045zbE"
                                             ],
-                                            "title": "Docker Server Installation",
+                                            "title": "Using Docker",
                                             "notePosition": 20,
                                             "prefix": null,
                                             "isExpanded": false,
@@ -306,10 +313,17 @@
                                                     "value": "docker-server-installation",
                                                     "isInheritable": false,
                                                     "position": 30
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bxl-docker",
+                                                    "isInheritable": false,
+                                                    "position": 40
                                                 }
                                             ],
                                             "format": "html",
-                                            "dataFileName": "Docker Server Installation.html",
+                                            "dataFileName": "Using Docker.html",
                                             "attachments": []
                                         },
                                         {
@@ -322,7 +336,7 @@
                                                 "Dgg7bR3b6K9j",
                                                 "moVgBcoxE3EK"
                                             ],
-                                            "title": "NixOS server installation",
+                                            "title": "On NixOS",
                                             "notePosition": 30,
                                             "prefix": null,
                                             "isExpanded": false,
@@ -335,10 +349,17 @@
                                                     "value": "nixos-server-installation",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bxl-tux",
+                                                    "isInheritable": false,
+                                                    "position": 20
                                                 }
                                             ],
                                             "format": "html",
-                                            "dataFileName": "NixOS server installation.html",
+                                            "dataFileName": "On NixOS.html",
                                             "attachments": []
                                         },
                                         {
@@ -351,7 +372,7 @@
                                                 "Dgg7bR3b6K9j",
                                                 "J1Bb6lVlwU5T"
                                             ],
-                                            "title": "Manual server installation",
+                                            "title": "Manually",
                                             "notePosition": 40,
                                             "prefix": null,
                                             "isExpanded": false,
@@ -371,10 +392,31 @@
                                                     "value": "manual-server-installation",
                                                     "isInheritable": false,
                                                     "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-code-alt",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "rWX5eY045zbE",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "3tW6mORuTHnB",
+                                                    "isInheritable": false,
+                                                    "position": 50
                                                 }
                                             ],
                                             "format": "html",
-                                            "dataFileName": "Manual server installation.html",
+                                            "dataFileName": "Manually.html",
                                             "attachments": []
                                         },
                                         {
@@ -387,7 +429,7 @@
                                                 "Dgg7bR3b6K9j",
                                                 "DCmT6e7clMoP"
                                             ],
-                                            "title": "Kubernetes server installation",
+                                            "title": "Using Kubernetes",
                                             "notePosition": 50,
                                             "prefix": null,
                                             "isExpanded": false,
@@ -400,10 +442,81 @@
                                                     "value": "kubernetes-server-installation",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bxl-kubernetes",
+                                                    "isInheritable": false,
+                                                    "position": 20
                                                 }
                                             ],
                                             "format": "html",
-                                            "dataFileName": "Kubernetes server installation.html",
+                                            "dataFileName": "Using Kubernetes.html",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "klCWNks3ReaQ",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "Otzi9La2YAUX",
+                                                "WOcw2SLH6tbX",
+                                                "Dgg7bR3b6K9j",
+                                                "klCWNks3ReaQ"
+                                            ],
+                                            "title": "Multiple server instances",
+                                            "notePosition": 60,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "cbkrhQjrkKrh",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "3tW6mORuTHnB",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "rWX5eY045zbE",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "moVgBcoxE3EK",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "J1Bb6lVlwU5T",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bxs-user-account",
+                                                    "isInheritable": false,
+                                                    "position": 60
+                                                }
+                                            ],
+                                            "format": "html",
+                                            "dataFileName": "Multiple server instances.html",
                                             "attachments": []
                                         }
                                     ]
