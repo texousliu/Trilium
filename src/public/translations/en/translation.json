@@ -744,7 +744,8 @@
   "basic_properties": {
     "note_type": "Note type",
     "editable": "Editable",
-    "basic_properties": "Basic Properties"
+    "basic_properties": "Basic Properties",
+    "language": "Language"
   },
   "book_properties": {
     "view_type": "View type",
