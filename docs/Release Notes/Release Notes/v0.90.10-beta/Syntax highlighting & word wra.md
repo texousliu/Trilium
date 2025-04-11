@@ -1,7 +1,7 @@
 # Syntax highlighting & word wrapping for code blocks
 Finally, syntax highlighting was added as a feature for code blocks:
 
-<figure class="image"><img src="api/images/3oQodG5TcShj/1_Syntax highlighting &amp; word.png"></figure>
+<figure class="image"><img src="api/images/qdaLLy7l56qD/1_Syntax highlighting &amp; word.png"></figure>
 
 ## Context
 
@@ -23,19 +23,19 @@ It is also now possible to disable the word wrapping for code blocks, which can 
 
 It is also possible to disable the syntax highlighting by selecting “No syntax highlighting” in the “Color scheme” option.
 
-<figure class="image"><img src="api/images/N6uWE52zBICS/Syntax highlighting &amp; word.png"></figure>
+<figure class="image"><img src="api/images/qwdqc6z3Ed7O/Syntax highlighting &amp; word.png"></figure>
 
 ## Using the syntax highlight in auto mode
 
 Provided the syntax highlighting is enabled in the settings, simply create a code block within a text note and it will try to automatically detect the language (using the Highlight.js library):
 
-<figure class="image"><img src="api/images/MtdkRx65ZpMl/2_Syntax highlighting &amp; word.png"></figure>
+<figure class="image"><img src="api/images/dX20kVT0OyRC/2_Syntax highlighting &amp; word.png"></figure>
 
 ## Adjusting the language manually
 
 Should the automatic syntax highlight not work well enough, it is possible to manually adjust the language of the code block:
 
-<figure class="image"><img src="api/images/v5rGTnSeekYT/3_Syntax highlighting &amp; word.png"></figure>
+<figure class="image"><img src="api/images/gwD6zTFTQKKK/3_Syntax highlighting &amp; word.png"></figure>
 
 ## Adding support for new languages
 

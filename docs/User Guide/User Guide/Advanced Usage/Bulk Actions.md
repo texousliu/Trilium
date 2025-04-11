@@ -79,7 +79,6 @@ These actions operate the <a class="reference-link" href="Attributes/Relations.
             ```javascript
             note.title = note.title + " - suffix";
             ```
-            
         *   To alter attributes of a note based on another attribute, such as setting the `#shareAlias` label to the title of the note:
             
             ```javascript

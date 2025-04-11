@@ -88,5 +88,4 @@ If the file could not be identified as any of the supported file types from abov
     
     <img class="image_resized" style="aspect-ratio:853/315;width:50%;" src="6_File_image.png" width="853" height="315">
 *   Non-image files can be embedded into text notes as read-only widgets via the <a class="reference-link" href="Text/Include%20Note.md">Include Note</a> functionality.
-    
 *   Image files can be embedded into text notes like normal images via <a class="reference-link" href="Text/Images/Image%20references.md">Image references</a>.

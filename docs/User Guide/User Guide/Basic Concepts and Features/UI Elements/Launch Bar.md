@@ -57,9 +57,7 @@ Right click either the _Available launchers_ or _Visible launchers_ sections and
 3.  **Custom Widget**
     
     Allows defining a custom widget to be rendered inside the launcher. See [Widget Basics](../../Scripting/Custom%20Widgets/Widget%20Basics.md) for more information.
-    
 4.  **Spacers**  
     Launchers that create some distance between other launchers for better visual distinction.
-    
 
 Launchers are configured via predefined [Promoted Attributes](../../Advanced%20Usage/Attributes/Promoted%20Attributes.md).
