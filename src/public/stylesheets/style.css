@@ -1404,6 +1404,11 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         overflow-y: auto;
     }
 
+    body.mobile .modal-footer {
+        padding-top: 12px;
+        padding-bottom: env(safe-area-inset-bottom, 12px);
+    }
+
     body.mobile .help-dialog kbd {
         display: inline !important;
     }
