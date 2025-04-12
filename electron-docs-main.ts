@@ -228,7 +228,7 @@ async function registerHandlers() {
             return;
         }
 
-        console.log("Got entity changed ", e);
+        console.log("Got entity changed", e.entityName, e.entity.title);
         debouncer();
     });
 }
