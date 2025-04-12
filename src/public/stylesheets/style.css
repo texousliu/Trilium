@@ -1454,10 +1454,23 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         flex-grow: 1;
         height: 100%;
         overflow: auto;
+        margin: 0;
     }
 
     body.mobile .revisions-dialog .modal-body > .revision-content-wrapper > div:first-of-type {
         flex-direction: column;
+    }
+
+    body.mobile .revisions-dialog .revision-title {
+        font-size: 1rem;
+    }
+
+    body.mobile .revisions-dialog .revision-title-buttons {
+        text-align: center;
+    }
+
+    body.mobile .revisions-dialog .revision-content {
+        padding: 0.5em;
     }
 }
 
