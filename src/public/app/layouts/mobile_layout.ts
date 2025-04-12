@@ -32,6 +32,8 @@ import RecentChangesDialog from "../widgets/dialogs/recent_changes.js";
 import PromptDialog from "../widgets/dialogs/prompt.js";
 import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 import MobileEditorToolbar from "../widgets/ribbon_widgets/mobile_editor_toolbar.js";
+import AddLinkDialog from "../widgets/dialogs/add_link.js";
+import IncludeNoteDialog from "../widgets/dialogs/include_note.js";
 
 const MOBILE_CSS = `
 <style>
@@ -186,6 +188,8 @@ export default class MobileLayout {
             .child(new HelpDialog())
             .child(new RecentChangesDialog())
             .child(new JumpToNoteDialog())
-            .child(new PromptDialog());
+            .child(new PromptDialog())
+            .child(new IncludeNoteDialog())
+            .child(new AddLinkDialog());
     }
 }
