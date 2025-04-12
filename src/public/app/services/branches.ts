@@ -102,16 +102,9 @@ async function deleteNotes(branchIdsToDelete: string[], forceDeleteAllClones = f
         return false;
     }
 
-    let proceed, deleteAllClones, eraseNotes;
-
-    if (utils.isMobile()) {
-        proceed = true;
-        deleteAllClones = false;
-    } else {
-        ({ proceed, deleteAllClones, eraseNotes } = await new Promise<ResolveOptions>((res) =>
-            appContext.triggerCommand("showDeleteNotesDialog", { branchIdsToDelete, callback: res, forceDeleteAllClones })
-        ));
-    }
+    const { proceed, deleteAllClones, eraseNotes } = await new Promise<ResolveOptions>((res) =>
+        appContext.triggerCommand("showDeleteNotesDialog", { branchIdsToDelete, callback: res, forceDeleteAllClones })
+    );
 
     if (!proceed) {
         return false;
