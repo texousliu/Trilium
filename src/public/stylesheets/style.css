@@ -1396,11 +1396,12 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         left: 0;
         right: 0;
         margin: 0 !important;
-        max-height: 85vh;
+        max-height: 85vh;        
+        display: flex;
     }
 
     body.mobile .modal-content {
-        height: 100% !important;
+        overflow-y: auto;
     }
 
     body.mobile .help-dialog kbd {
