@@ -1433,6 +1433,10 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         font-size: 1rem !important;
     }
 
+    body.mobile .modal-dialog.modal-dialog-scrollable {
+        height: unset;
+    }
+
     body.mobile .revisions-dialog .modal-dialog {
         height: 95vh;
     }
