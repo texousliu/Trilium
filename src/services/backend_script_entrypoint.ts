@@ -1,9 +1,9 @@
 /**
- * @module "Backend Script API"
- *
  * The backend script API is accessible to code notes with the "JS (backend)" language.
  *
  * All the variables listed are globally accessible to the script.
+ *
+ * @module Backend Script API
  */
 
 import BNote from "../becca/entities/bnote.js";
