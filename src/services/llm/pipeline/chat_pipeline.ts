@@ -295,7 +295,7 @@ export class ChatPipeline {
                     accumulatedText += processedChunk.text;
 
                     // Forward to callback with original chunk data in case it contains additional information
-                    await streamCallback!(processedChunk.text, processedChunk.done, chunk);
+                    streamCallback(processedChunk.text, processedChunk.done, chunk);
                 });
             }
 
@@ -347,7 +347,7 @@ export class ChatPipeline {
                     streamingPaused = true;
                     // IMPORTANT: Don't send done:true here, as it causes the client to stop processing messages
                     // Instead, send a marker message that indicates tools will be executed
-                    await streamCallback('\n\n[Executing tools...]\n\n', false);
+                    streamCallback('\n\n[Executing tools...]\n\n', false);
                 }
 
                 while (toolCallIterations < maxToolCallIterations) {
@@ -388,8 +388,42 @@ export class ChatPipeline {
                             if (isStreaming && streamCallback) {
                                 // For each tool result, format a readable message for the user
                                 const toolName = this.getToolNameFromToolCallId(currentMessages, msg.tool_call_id || '');
-                                const formattedToolResult = `[Tool: ${toolName || 'unknown'}]\n${msg.content}\n\n`;
-                                streamCallback(formattedToolResult, false);
+
+                                // Create a structured tool result message
+                                // The client will receive this structured data and can display it properly
+                                try {
+                                    // Parse the result content if it's JSON
+                                    let parsedContent = msg.content;
+                                    try {
+                                        // Check if the content is JSON
+                                        if (msg.content.trim().startsWith('{') || msg.content.trim().startsWith('[')) {
+                                            parsedContent = JSON.parse(msg.content);
+                                        }
+                                    } catch (e) {
+                                        // If parsing fails, keep the original content
+                                        log.info(`Could not parse tool result as JSON: ${e}`);
+                                    }
+
+                                    // Send the structured tool result directly so the client has the raw data
+                                    streamCallback('', false, {
+                                        toolExecution: {
+                                            action: 'result',
+                                            tool: toolName,
+                                            toolCallId: msg.tool_call_id,
+                                            result: parsedContent
+                                        }
+                                    });
+
+                                    // Still send the formatted text for backwards compatibility
+                                    // This will be phased out once the client is updated
+                                    const formattedToolResult = `[Tool: ${toolName || 'unknown'}]\n${msg.content}\n\n`;
+                                    streamCallback(formattedToolResult, false);
+                                } catch (err) {
+                                    log.error(`Error sending structured tool result: ${err}`);
+                                    // Fall back to the old format if there's an error
+                                    const formattedToolResult = `[Tool: ${toolName || 'unknown'}]\n${msg.content}\n\n`;
+                                    streamCallback(formattedToolResult, false);
+                                }
                             }
                         });
 
@@ -403,7 +437,7 @@ export class ChatPipeline {
 
                             // If streaming, show progress to the user
                             if (isStreaming && streamCallback) {
-                                await streamCallback('[Generating response with tool results...]\n\n', false);
+                                streamCallback('[Generating response with tool results...]\n\n', false);
                             }
 
                             // Extract tool execution status information for Ollama feedback
@@ -479,7 +513,7 @@ export class ChatPipeline {
 
                         // If streaming, show error to the user
                         if (isStreaming && streamCallback) {
-                            await streamCallback(`[Tool execution error: ${error.message || 'unknown error'}]\n\n`, false);
+                            streamCallback(`[Tool execution error: ${error.message || 'unknown error'}]\n\n`, false);
                         }
 
                         // For Ollama, create tool execution status with the error
@@ -529,7 +563,7 @@ export class ChatPipeline {
 
                     // If streaming, inform the user about iteration limit
                     if (isStreaming && streamCallback) {
-                        await streamCallback(`[Reached maximum of ${maxToolCallIterations} tool calls. Finalizing response...]\n\n`, false);
+                        streamCallback(`[Reached maximum of ${maxToolCallIterations} tool calls. Finalizing response...]\n\n`, false);
                     }
 
                     // For Ollama, create a status about reaching max iterations
@@ -573,7 +607,7 @@ export class ChatPipeline {
 
                     // Resume streaming with the final response text
                     // This is where we send the definitive done:true signal with the complete content
-                    await streamCallback(currentResponse.text, true);
+                    streamCallback(currentResponse.text, true);
 
                     // Log confirmation
                     log.info(`Sent final response with done=true signal`);
@@ -587,7 +621,7 @@ export class ChatPipeline {
                     log.info(`Sending final streaming response without tool calls: ${currentResponse.text.length} chars`);
 
                     // Send the final response with done=true to complete the streaming
-                    await streamCallback(currentResponse.text, true);
+                    streamCallback(currentResponse.text, true);
 
                     log.info(`Sent final non-tool response with done=true signal`);
                 }

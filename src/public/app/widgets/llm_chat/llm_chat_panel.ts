@@ -635,16 +635,117 @@ export default class LlmChatPanel extends BasicWidget {
     }
 
     /**
-     * Show tool execution information in the UI
+     * Handle tool execution updates
      */
     private showToolExecutionInfo(toolExecutionData: any) {
         console.log(`Showing tool execution info: ${JSON.stringify(toolExecutionData)}`);
 
-        // We'll update the in-chat tool execution area in the updateStreamingUI method
-        // This method is now just a hook for the WebSocket handlers
+        // Create or get the tool execution container
+        let toolExecutionElement = this.noteContextChatMessages.querySelector('.chat-tool-execution');
+        if (!toolExecutionElement) {
+            toolExecutionElement = document.createElement('div');
+            toolExecutionElement.className = 'chat-tool-execution mb-3';
+
+            // Create header with title and controls
+            const header = document.createElement('div');
+            header.className = 'tool-execution-header d-flex align-items-center p-2 rounded';
+            header.innerHTML = `
+                <i class="bx bx-terminal me-2"></i>
+                <span class="flex-grow-1">Tool Execution</span>
+                <button type="button" class="btn btn-sm btn-link p-0 text-muted tool-execution-chat-clear" title="Clear tool execution history">
+                    <i class="bx bx-x"></i>
+                </button>
+            `;
+            toolExecutionElement.appendChild(header);
+
+            // Add click handler for clear button
+            const clearButton = toolExecutionElement.querySelector('.tool-execution-chat-clear');
+            if (clearButton) {
+                clearButton.addEventListener('click', () => {
+                    const stepsContainer = toolExecutionElement?.querySelector('.tool-execution-container');
+                    if (stepsContainer) {
+                        stepsContainer.innerHTML = '';
+                    }
+                });
+            }
+
+            // Create container for tool steps
+            const stepsContainer = document.createElement('div');
+            stepsContainer.className = 'tool-execution-container p-2 rounded mb-2';
+            toolExecutionElement.appendChild(stepsContainer);
+
+            // Add to chat messages
+            this.noteContextChatMessages.appendChild(toolExecutionElement);
+        }
+
+        // Get the steps container
+        const stepsContainer = toolExecutionElement.querySelector('.tool-execution-container');
+        if (!stepsContainer) return;
+
+        // Process based on action type
+        if (toolExecutionData.action === 'start') {
+            // Tool execution started
+            const step = document.createElement('div');
+            step.className = 'tool-step executing p-2 mb-2 rounded';
+            step.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bx bx-code-block me-2"></i>
+                    <span>Executing tool: <strong>${toolExecutionData.tool || 'unknown'}</strong></span>
+                </div>
+                <div class="tool-args mt-1 ps-3">
+                    <code>Args: ${JSON.stringify(toolExecutionData.args || {}, null, 2)}</code>
+                </div>
+            `;
+            stepsContainer.appendChild(step);
+        }
+        else if (toolExecutionData.action === 'result') {
+            // Tool execution completed with results
+            const step = document.createElement('div');
+            step.className = 'tool-step result p-2 mb-2 rounded';
+
+            let resultDisplay = '';
+
+            // Format the result based on type
+            if (typeof toolExecutionData.result === 'object') {
+                // For objects, format as pretty JSON
+                resultDisplay = `<pre class="mb-0"><code>${JSON.stringify(toolExecutionData.result, null, 2)}</code></pre>`;
+            } else {
+                // For simple values, display as text
+                resultDisplay = `<div>${String(toolExecutionData.result)}</div>`;
+            }
+
+            step.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bx bx-terminal me-2"></i>
+                    <span>Tool: <strong>${toolExecutionData.tool || 'unknown'}</strong></span>
+                </div>
+                <div class="tool-result mt-1 ps-3">
+                    ${resultDisplay}
+                </div>
+            `;
+            stepsContainer.appendChild(step);
+        }
+        else if (toolExecutionData.action === 'error') {
+            // Tool execution failed
+            const step = document.createElement('div');
+            step.className = 'tool-step error p-2 mb-2 rounded';
+            step.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bx bx-error-circle me-2"></i>
+                    <span>Error in tool: <strong>${toolExecutionData.tool || 'unknown'}</strong></span>
+                </div>
+                <div class="tool-error mt-1 ps-3 text-danger">
+                    ${toolExecutionData.error || 'Unknown error'}
+                </div>
+            `;
+            stepsContainer.appendChild(step);
+        }
 
         // Make sure the loading indicator is shown during tool execution
         this.loadingIndicator.style.display = 'flex';
+
+        // Scroll the chat container to show the tool execution
+        this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
     }
 
     /**

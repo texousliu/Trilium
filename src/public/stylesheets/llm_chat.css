@@ -87,6 +87,80 @@
     margin-bottom: 0;
 }
 
+/* Tool step specific styling */
+.tool-step.executing {
+    background-color: rgba(0, 123, 255, 0.05);
+    border-color: rgba(0, 123, 255, 0.2);
+}
+
+.tool-step.result {
+    background-color: rgba(40, 167, 69, 0.05);
+    border-color: rgba(40, 167, 69, 0.2);
+}
+
+.tool-step.error {
+    background-color: rgba(220, 53, 69, 0.05);
+    border-color: rgba(220, 53, 69, 0.2);
+}
+
+/* Tool result formatting */
+.tool-result pre {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 0.25rem;
+    overflow: auto;
+    max-height: 300px;
+}
+
+.tool-result code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.9em;
+}
+
+.tool-args code {
+    display: block;
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 0.25rem;
+    margin-top: 0.25rem;
+    font-size: 0.85em;
+    color: var(--muted-text-color);
+    white-space: pre-wrap;
+    overflow: auto;
+    max-height: 100px;
+}
+
+/* Tool Execution in Chat Styling */
+.chat-tool-execution {
+    padding: 0 0 0 36px; /* Aligned with message content, accounting for avatar width */
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.tool-execution-container {
+    background-color: var(--accented-background-color, rgba(245, 247, 250, 0.7));
+    border: 1px solid var(--subtle-border-color);
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    max-width: calc(100% - 20px);
+}
+
+.tool-execution-header {
+    background-color: var(--main-background-color);
+    border-bottom: 1px solid var(--subtle-border-color);
+    margin-bottom: 0.5rem;
+    color: var(--muted-text-color);
+    font-weight: 500;
+}
+
+.tool-execution-chat-steps {
+    padding: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
 /* Make error text more visible */
 .text-danger {
     color: #dc3545 !important;
@@ -165,31 +239,4 @@
     justify-content: center;
     padding: 1rem;
     color: var(--muted-text-color);
-}
-
-/* Tool Execution in Chat Styling */
-.chat-tool-execution {
-    padding: 0 0 0 36px; /* Aligned with message content, accounting for avatar width */
-    width: 100%;
-}
-
-.tool-execution-container {
-    background-color: var(--accented-background-color, rgba(245, 247, 250, 0.7));
-    border: 1px solid var(--subtle-border-color);
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    max-width: calc(100% - 20px);
-}
-
-.tool-execution-header {
-    border-bottom: 1px solid var(--subtle-border-color);
-    padding-bottom: 0.5rem;
-    color: var(--muted-text-color);
-}
-
-.tool-execution-chat-steps {
-    padding: 0.5rem;
-    max-height: 300px;
-    overflow-y: auto;
 } 
