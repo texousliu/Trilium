@@ -10,7 +10,7 @@
   "outputs": [
     {
       "name": "html",
-      "path": "./docs/backend_api"
+      "path": "./docs/Script API"
     }
   ]
 }
