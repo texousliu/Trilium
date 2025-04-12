@@ -256,11 +256,9 @@ export default class DesktopLayout {
             .child(new PasswordNoteSetDialog())
 
             .child(new UploadAttachmentsDialog())
-            .child(new ProtectedSessionPasswordDialog())
             .child(new RevisionsDialog())
             .child(new DeleteNotesDialog())
             .child(new InfoDialog())
-            .child(new ConfirmDialog())
 
             .child(new CloseZenButton());
 

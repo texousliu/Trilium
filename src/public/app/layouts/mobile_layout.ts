@@ -168,8 +168,6 @@ export default class MobileLayout {
                             )
                             .child(new MobileEditorToolbar())
                     )
-                    .child(new ProtectedSessionPasswordDialog())
-                    .child(new ConfirmDialog())
             )
             .child(
                 new FlexContainer("column")
