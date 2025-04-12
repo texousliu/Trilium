@@ -254,7 +254,7 @@ export default class DesktopLayout {
             )
             // Remove once modals are all merged
             .child(new PasswordNoteSetDialog())
-            .child(new NoteTypeChooserDialog())
+
             .child(new CloneToDialog())
             .child(new MoveToDialog())
             .child(new ImportDialog())

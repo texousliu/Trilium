@@ -1425,6 +1425,12 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         max-height: unset;
         overflow: auto;
     }
+
+    body.mobile .modal-dialog .dropdown-menu {
+        position: static !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+    }
 }
 
 /* Mobile, tablet mode */
