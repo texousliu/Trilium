@@ -256,7 +256,6 @@ export default class DesktopLayout {
             .child(new PasswordNoteSetDialog())
 
             .child(new UploadAttachmentsDialog())
-            .child(new MarkdownImportDialog())
             .child(new ProtectedSessionPasswordDialog())
             .child(new RevisionsDialog())
             .child(new DeleteNotesDialog())

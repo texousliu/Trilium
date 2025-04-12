@@ -15,6 +15,7 @@ import MoveToDialog from "../widgets/dialogs/move_to.js";
 import CloneToDialog from "../widgets/dialogs/clone_to.js";
 import ImportDialog from "../widgets/dialogs/import.js";
 import ExportDialog from "../widgets/dialogs/export.js";
+import MarkdownImportDialog from "../widgets/dialogs/markdown_import.js";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
@@ -32,8 +33,7 @@ export function applyModals(rootContainer: RootContainer) {
         .child(new MoveToDialog())
         .child(new ImportDialog())
         .child(new ExportDialog())
-    //     .child(new UploadAttachmentsDialog())
-    //     .child(new MarkdownImportDialog())
+        .child(new MarkdownImportDialog())
     //     .child(new ProtectedSessionPasswordDialog())
     //     .child(new RevisionsDialog())
     //     .child(new DeleteNotesDialog())
