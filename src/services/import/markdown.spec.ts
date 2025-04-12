@@ -44,11 +44,18 @@ describe("markdown", () => {
     });
 
     it("parses duplicate title with escape correctly", () => {
-        const result = markdownService.renderToHtml(trimIndentation`\
-            # What's new
-            Hi there
-        `, "What's new")
-        expect(result).toBe(`<p>Hi there</p>`);
+        const titles = [
+            "What's new",
+            "Node.js, Electron and `better-sqlite3`"
+        ];
+
+        for (const title of titles) {
+            const result = markdownService.renderToHtml(trimIndentation`\
+                # ${title}
+                Hi there
+            `, title)
+            expect(result).toBe(`<p>Hi there</p>`);
+        }
     });
 
     it("trims unnecessary whitespace", () => {
