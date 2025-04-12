@@ -6093,11 +6093,26 @@
                                             "value": "bx bx-link-alt",
                                             "isInheritable": false,
                                             "position": 40
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "nRhnJkTT8cPs",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Links.md",
                                     "attachments": [
+                                        {
+                                            "attachmentId": "4LuLbS0gxlkC",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Links_image.png"
+                                        },
                                         {
                                             "attachmentId": "74XnfiCk2y9N",
                                             "title": "create-link-to-note.gif",
@@ -6107,12 +6122,20 @@
                                             "dataFileName": "Links_create-link-to-note.gif"
                                         },
                                         {
-                                            "attachmentId": "TGdayl3Caj0R",
-                                            "title": "create-external-link.gif",
+                                            "attachmentId": "GH0rUFn6UUDY",
+                                            "title": "image.png",
                                             "role": "image",
-                                            "mime": "image/gif",
+                                            "mime": "image/png",
                                             "position": 10,
-                                            "dataFileName": "Links_create-external-link.gif"
+                                            "dataFileName": "1_Links_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "w1jpXjdAuL2B",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "2_Links_image.png"
                                         }
                                     ]
                                 },
