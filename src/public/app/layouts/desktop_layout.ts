@@ -252,13 +252,11 @@ export default class DesktopLayout {
                             )
                     )
             )
-            // Remove once modals are all merged
+            .child(new CloseZenButton())
+
+            // Desktop-specific dialogs.
             .child(new PasswordNoteSetDialog())
-
-            .child(new UploadAttachmentsDialog())
-            .child(new InfoDialog())
-
-            .child(new CloseZenButton());
+            .child(new UploadAttachmentsDialog());
 
         applyModals(rootContainer);
         return rootContainer;

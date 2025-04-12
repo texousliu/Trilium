@@ -20,6 +20,7 @@ import ProtectedSessionPasswordDialog from "../widgets/dialogs/protected_session
 import ConfirmDialog from "../widgets/dialogs/confirm.js";
 import RevisionsDialog from "../widgets/dialogs/revisions.js";
 import DeleteNotesDialog from "../widgets/dialogs/delete_notes.js";
+import InfoDialog from "../widgets/dialogs/info.js";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
@@ -41,7 +42,7 @@ export function applyModals(rootContainer: RootContainer) {
         .child(new ProtectedSessionPasswordDialog())
         .child(new RevisionsDialog())
         .child(new DeleteNotesDialog())
-    //     .child(new InfoDialog())
+        .child(new InfoDialog())
         .child(new ConfirmDialog())
         .child(new PromptDialog())
 }
