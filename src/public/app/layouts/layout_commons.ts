@@ -11,6 +11,8 @@ import BulkActionsDialog from "../widgets/dialogs/bulk_actions.js";
 import BranchPrefixDialog from "../widgets/dialogs/branch_prefix.js";
 import SortChildNotesDialog from "../widgets/dialogs/sort_child_notes.js";
 import NoteTypeChooserDialog from "../widgets/dialogs/note_type_chooser.js";
+import MoveToDialog from "../widgets/dialogs/move_to.js";
+import CloneToDialog from "../widgets/dialogs/clone_to.js";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
@@ -24,8 +26,8 @@ export function applyModals(rootContainer: RootContainer) {
         .child(new NoteTypeChooserDialog())
         .child(new JumpToNoteDialog())
         .child(new AddLinkDialog())
-    //     .child(new CloneToDialog())
-    //     .child(new MoveToDialog())
+        .child(new CloneToDialog())
+        .child(new MoveToDialog())
     //     .child(new ImportDialog())
     //     .child(new ExportDialog())
     //     .child(new UploadAttachmentsDialog())
