@@ -255,8 +255,6 @@ export default class DesktopLayout {
             // Remove once modals are all merged
             .child(new PasswordNoteSetDialog())
 
-            .child(new ImportDialog())
-            .child(new ExportDialog())
             .child(new UploadAttachmentsDialog())
             .child(new MarkdownImportDialog())
             .child(new ProtectedSessionPasswordDialog())

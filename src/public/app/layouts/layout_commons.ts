@@ -13,6 +13,8 @@ import SortChildNotesDialog from "../widgets/dialogs/sort_child_notes.js";
 import NoteTypeChooserDialog from "../widgets/dialogs/note_type_chooser.js";
 import MoveToDialog from "../widgets/dialogs/move_to.js";
 import CloneToDialog from "../widgets/dialogs/clone_to.js";
+import ImportDialog from "../widgets/dialogs/import.js";
+import ExportDialog from "../widgets/dialogs/export.js";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
@@ -28,8 +30,8 @@ export function applyModals(rootContainer: RootContainer) {
         .child(new AddLinkDialog())
         .child(new CloneToDialog())
         .child(new MoveToDialog())
-    //     .child(new ImportDialog())
-    //     .child(new ExportDialog())
+        .child(new ImportDialog())
+        .child(new ExportDialog())
     //     .child(new UploadAttachmentsDialog())
     //     .child(new MarkdownImportDialog())
     //     .child(new ProtectedSessionPasswordDialog())
