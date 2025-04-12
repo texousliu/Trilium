@@ -6,7 +6,7 @@
   "plugin": [
     "typedoc-plugin-missing-exports"
   ],
-  "alwaysCreateEntryPointModule": true,
+  "includeVersion": true,
   "outputs": [
     {
       "name": "html",
