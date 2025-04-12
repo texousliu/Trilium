@@ -1430,6 +1430,34 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         position: static !important;
         border: 0 !important;
         border-radius: 0 !important;
+        font-size: 1rem !important;
+    }
+
+    body.mobile .revisions-dialog .modal-dialog {
+        height: 95vh;
+    }
+
+    body.mobile .revisions-dialog .modal-body {
+        height: 100% !important;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    body.mobile .revisions-dialog .revision-list {
+        height: unset;
+        max-height: 20vh;
+        border-bottom: 1px solid var(--main-border-color) !important;
+        padding: 0 1em;
+    }
+
+    body.mobile .revisions-dialog .modal-body > .revision-content-wrapper {
+        flex-grow: 1;
+        height: 100%;
+        overflow: auto;
+    }
+
+    body.mobile .revisions-dialog .modal-body > .revision-content-wrapper > div:first-of-type {
+        flex-direction: column;
     }
 }
 

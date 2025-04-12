@@ -18,6 +18,7 @@ import ExportDialog from "../widgets/dialogs/export.js";
 import MarkdownImportDialog from "../widgets/dialogs/markdown_import.js";
 import ProtectedSessionPasswordDialog from "../widgets/dialogs/protected_session_password.js";
 import ConfirmDialog from "../widgets/dialogs/confirm.js";
+import RevisionsDialog from "../widgets/dialogs/revisions.js";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
@@ -37,7 +38,7 @@ export function applyModals(rootContainer: RootContainer) {
         .child(new ExportDialog())
         .child(new MarkdownImportDialog())
         .child(new ProtectedSessionPasswordDialog())
-    //     .child(new RevisionsDialog())
+        .child(new RevisionsDialog())
     //     .child(new DeleteNotesDialog())
     //     .child(new InfoDialog())
         .child(new ConfirmDialog())
