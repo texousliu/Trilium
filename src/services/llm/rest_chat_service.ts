@@ -939,19 +939,197 @@ class RestChatService {
                         tool_calls: response.tool_calls
                     }, ...toolResults];
 
-                    // Use non-streaming for the follow-up to get a complete response
-                    const followUpOptions = { ...chatOptions, stream: false, enableTools: false };
+                    // Preserve streaming for follow-up if it was enabled in the original request
+                    const followUpOptions = {
+                        ...chatOptions,
+                        // Only disable streaming if it wasn't explicitly requested
+                        stream: chatOptions.stream === true,
+                        // Allow tools but track iterations to prevent infinite loops
+                        enableTools: true,
+                        maxToolIterations: chatOptions.maxToolIterations || 5,
+                        currentToolIteration: 1 // Start counting tool iterations
+                    };
+
                     const followUpResponse = await service.generateChatCompletion(toolMessages, followUpOptions);
 
-                    messageContent = followUpResponse.text || "";
+                    // Handle streaming follow-up response if streaming is enabled
+                    if (followUpOptions.stream && followUpResponse.stream) {
+                        log.info(`Streaming follow-up response after tool execution`);
+                        let followUpContent = '';
 
-                    // Send the complete response with done flag in the same message
-                    wsService.sendMessageToAllClients({
-                        type: 'llm-stream',
-                        sessionId,
-                        content: messageContent,
-                        done: true
-                    } as LLMStreamMessage);
+                        // Process the streaming response
+                        await followUpResponse.stream(async (chunk: StreamChunk) => {
+                            if (chunk.text) {
+                                followUpContent += chunk.text;
+
+                                // Send each chunk via WebSocket
+                                wsService.sendMessageToAllClients({
+                                    type: 'llm-stream',
+                                    sessionId,
+                                    content: chunk.text
+                                } as LLMStreamMessage);
+                            }
+
+                            // Signal completion when done
+                            if (chunk.done) {
+                                // Check if there are more tool calls to execute
+                                if (followUpResponse.tool_calls && followUpResponse.tool_calls.length > 0 &&
+                                    followUpOptions.currentToolIteration < followUpOptions.maxToolIterations) {
+
+                                    log.info(`Found ${followUpResponse.tool_calls.length} more tool calls in iteration ${followUpOptions.currentToolIteration}`);
+
+                                    // Execute these tool calls in another iteration
+                                    // First, capture the current content for the assistant message
+                                    const assistantMessage = {
+                                        role: 'assistant' as const,
+                                        content: followUpContent,
+                                        tool_calls: followUpResponse.tool_calls
+                                    };
+
+                                    // Execute the tools from this follow-up
+                                    const nextToolResults = await this.executeToolCalls(followUpResponse);
+
+                                    // Create a new messages array with the latest tool results
+                                    const nextToolMessages = [...toolMessages, assistantMessage, ...nextToolResults];
+
+                                    // Increment the tool iteration counter for the next call
+                                    const nextFollowUpOptions = {
+                                        ...followUpOptions,
+                                        currentToolIteration: followUpOptions.currentToolIteration + 1
+                                    };
+
+                                    log.info(`Making another follow-up request with ${nextToolResults.length} tool results (iteration ${nextFollowUpOptions.currentToolIteration}/${nextFollowUpOptions.maxToolIterations})`);
+
+                                    // Make another follow-up request
+                                    const nextResponse = await service.generateChatCompletion(nextToolMessages, nextFollowUpOptions);
+
+                                    // Handle this new response (recursive streaming if needed)
+                                    if (nextFollowUpOptions.stream && nextResponse.stream) {
+                                        let nextContent = followUpContent; // Start with the existing content
+
+                                        await nextResponse.stream(async (nextChunk: StreamChunk) => {
+                                            if (nextChunk.text) {
+                                                nextContent += nextChunk.text;
+
+                                                // Stream this content to the client
+                                                wsService.sendMessageToAllClients({
+                                                    type: 'llm-stream',
+                                                    sessionId,
+                                                    content: nextChunk.text
+                                                } as LLMStreamMessage);
+                                            }
+
+                                            if (nextChunk.done) {
+                                                // Final completion message
+                                                wsService.sendMessageToAllClients({
+                                                    type: 'llm-stream',
+                                                    sessionId,
+                                                    done: true
+                                                } as LLMStreamMessage);
+
+                                                // Update message content with the complete response after all iterations
+                                                messageContent = nextContent;
+
+                                                // Store in session history
+                                                session.messages.push({
+                                                    role: 'assistant',
+                                                    content: messageContent,
+                                                    timestamp: new Date()
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        // For non-streaming next response
+                                        messageContent = nextResponse.text || "";
+
+                                        // Send the final complete message
+                                        wsService.sendMessageToAllClients({
+                                            type: 'llm-stream',
+                                            sessionId,
+                                            content: messageContent,
+                                            done: true
+                                        } as LLMStreamMessage);
+
+                                        // Store in session
+                                        session.messages.push({
+                                            role: 'assistant',
+                                            content: messageContent,
+                                            timestamp: new Date()
+                                        });
+                                    }
+                                } else {
+                                    // No more tool calls or reached iteration limit
+                                    wsService.sendMessageToAllClients({
+                                        type: 'llm-stream',
+                                        sessionId,
+                                        done: true
+                                    } as LLMStreamMessage);
+
+                                    // Update message content for session storage
+                                    messageContent = followUpContent;
+
+                                    // Store the final response in the session
+                                    session.messages.push({
+                                        role: 'assistant',
+                                        content: messageContent,
+                                        timestamp: new Date()
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        // Non-streaming follow-up handling (original behavior)
+                        messageContent = followUpResponse.text || "";
+
+                        // Check if there are more tool calls to execute
+                        if (followUpResponse.tool_calls && followUpResponse.tool_calls.length > 0 &&
+                            followUpOptions.currentToolIteration < (followUpOptions.maxToolIterations || 5)) {
+
+                            log.info(`Found ${followUpResponse.tool_calls.length} more tool calls in non-streaming follow-up (iteration ${followUpOptions.currentToolIteration})`);
+
+                            // Execute these tool calls in another iteration
+                            const assistantMessage = {
+                                role: 'assistant' as const,
+                                content: messageContent,
+                                tool_calls: followUpResponse.tool_calls
+                            };
+
+                            // Execute the next round of tools
+                            const nextToolResults = await this.executeToolCalls(followUpResponse);
+
+                            // Create a new messages array with the latest tool results
+                            const nextToolMessages = [...toolMessages, assistantMessage, ...nextToolResults];
+
+                            // Increment the tool iteration counter for the next call
+                            const nextFollowUpOptions = {
+                                ...followUpOptions,
+                                currentToolIteration: followUpOptions.currentToolIteration + 1
+                            };
+
+                            log.info(`Making another non-streaming follow-up request (iteration ${nextFollowUpOptions.currentToolIteration}/${nextFollowUpOptions.maxToolIterations || 5})`);
+
+                            // Make another follow-up request
+                            const nextResponse = await service.generateChatCompletion(nextToolMessages, nextFollowUpOptions);
+
+                            // Update the message content with the final response
+                            messageContent = nextResponse.text || "";
+                        }
+
+                        // Send the complete response with done flag in the same message
+                        wsService.sendMessageToAllClients({
+                            type: 'llm-stream',
+                            sessionId,
+                            content: messageContent,
+                            done: true
+                        } as LLMStreamMessage);
+
+                        // Store the response in the session
+                        session.messages.push({
+                            role: 'assistant',
+                            content: messageContent,
+                            timestamp: new Date()
+                        });
+                    }
 
                     // Store the response in the session
                     session.messages.push({
@@ -1438,11 +1616,11 @@ class RestChatService {
             if (registeredTools.length === 0) {
                 log.info("No tools found in registry.");
                 log.info("Note: Tools should be initialized in the AIServiceManager constructor.");
-                
+
                 // Create AI service manager instance to trigger tool initialization
                 const aiServiceManager = (await import('./ai_service_manager.js')).default;
                 aiServiceManager.getInstance();
-                
+
                 // Check again after AIServiceManager instantiation
                 const tools = toolRegistry.getAllTools();
                 log.info(`After AIServiceManager instantiation: ${tools.length} tools available`);

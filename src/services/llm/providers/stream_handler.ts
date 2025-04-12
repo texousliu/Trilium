@@ -145,24 +145,20 @@ export class StreamProcessor {
  */
 export function createStreamHandler(
     options: StreamProcessingOptions,
-    streamImplementation: (callback: (chunk: StreamChunk) => Promise<void>) => Promise<string>
-) {
-    // Return a standard stream handler function that providers can use
-    return async (callback: (chunk: BaseStreamChunk) => Promise<void>): Promise<string> => {
-        let completeText = '';
+    processFn: (
+        callback: (chunk: StreamChunk) => Promise<void> | void
+    ) => Promise<string>
+): (callback: (chunk: StreamChunk) => Promise<void> | void) => Promise<string> {
+    return async (callback) => {
         let chunkCount = 0;
 
         try {
-            // Call the provided implementation
-            return await streamImplementation(async (chunk: StreamChunk) => {
+            // Run the processor function with our callback
+            return await processFn(async (chunk) => {
                 chunkCount++;
 
-                // Process the chunk
-                if (chunk.text) {
-                    completeText += chunk.text;
-                }
-
-                // Forward to callback - ensure done is always boolean for BaseStreamChunk
+                // Pass each chunk directly to the callback as it arrives
+                // without modifying or accumulating its content
                 await callback({
                     text: chunk.text || '',
                     done: !!chunk.done, // Ensure done is boolean

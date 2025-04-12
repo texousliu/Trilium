@@ -328,7 +328,7 @@ export class OllamaService extends BaseAIService {
                             responseToolCalls = toolCalls;
                         }
 
-                        // Send to callback
+                        // Send to callback - directly pass the content without accumulating
                         await callback({
                             text: chunk.message?.content || '',
                             done: false,  // Add done property to satisfy StreamChunk
