@@ -34,6 +34,7 @@ import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 import MobileEditorToolbar from "../widgets/ribbon_widgets/mobile_editor_toolbar.js";
 import AddLinkDialog from "../widgets/dialogs/add_link.js";
 import IncludeNoteDialog from "../widgets/dialogs/include_note.js";
+import BulkActionsDialog from "../widgets/dialogs/bulk_actions.js";
 
 const MOBILE_CSS = `
 <style>
@@ -184,6 +185,7 @@ export default class MobileLayout {
                     .child(new TabRowWidget().css("height", "40px"))
                     .child(new FlexContainer("row").class("horizontal").css("height", "53px").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true)).id("launcher-pane"))
             )
+            .child(new BulkActionsDialog())
             .child(new AboutDialog())
             .child(new HelpDialog())
             .child(new RecentChangesDialog())
