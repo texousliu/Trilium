@@ -581,6 +581,16 @@ export class ChatPipeline {
             } else if (toolsEnabled) {
                 log.info(`========== NO TOOL CALLS DETECTED ==========`);
                 log.info(`LLM response did not contain any tool calls, skipping tool execution`);
+
+                // Handle streaming for responses without tool calls
+                if (shouldEnableStream && streamCallback) {
+                    log.info(`Sending final streaming response without tool calls: ${currentResponse.text.length} chars`);
+
+                    // Send the final response with done=true to complete the streaming
+                    await streamCallback(currentResponse.text, true);
+
+                    log.info(`Sent final non-tool response with done=true signal`);
+                }
             }
 
             // Process the final response

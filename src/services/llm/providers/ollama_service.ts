@@ -347,7 +347,7 @@ export class OllamaService extends BaseAIService {
                         // Send the chunk to the caller
                         await callback({
                             text: chunk.message?.content || '',
-                            done: !!chunk.done,
+                            done: false, // Never mark as done during chunk processing
                             raw: chunk // Include the raw chunk for advanced processing
                         });
 
@@ -359,7 +359,7 @@ export class OllamaService extends BaseAIService {
 
                     log.info(`Completed streaming from Ollama: processed ${chunkCount} chunks, total content: ${completeText.length} chars`);
 
-                    // Signal completion
+                    // Signal completion with a separate final callback after all processing is done
                     await callback({
                         text: '',
                         done: true
@@ -476,8 +476,10 @@ export class OllamaService extends BaseAIService {
                     // Call the callback with the current chunk content
                     if (opts.streamCallback) {
                         try {
-                            // Don't send done:true when tool calls are present to avoid premature completion
-                            const shouldMarkAsDone = !!chunk.done && !responseToolCalls.length;
+                            // Only mark as done on the final chunk if we have actual content
+                            // This ensures consistent behavior with and without tool calls
+                            // We'll send a separate final callback after the loop completes
+                            const shouldMarkAsDone = false; // Never mark as done during chunk processing
 
                             await opts.streamCallback(
                                 chunk.message?.content || '',
@@ -496,6 +498,17 @@ export class OllamaService extends BaseAIService {
                     // If this is the done chunk, log it
                     if (chunk.done) {
                         log.info(`Reached final direct chunk (done=true) after ${chunkCount} chunks, total content length: ${completeText.length}`);
+                    }
+                }
+
+                // Send one final callback with done=true after all chunks have been processed
+                // This ensures we get the complete response regardless of tool calls
+                if (opts.streamCallback) {
+                    try {
+                        log.info(`Sending final done=true callback after processing all chunks`);
+                        await opts.streamCallback('', true, { done: true });
+                    } catch (finalCallbackError) {
+                        log.error(`Error in final streamCallback: ${finalCallbackError}`);
                     }
                 }
 
