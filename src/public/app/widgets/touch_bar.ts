@@ -15,7 +15,7 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
     nativeImage: typeof import("electron").nativeImage;
     remote: typeof import("@electron/remote");
     lastFocusedComponent?: Component;
-    private $activeModal: JQuery<HTMLElement>;
+    private $activeModal?: JQuery<HTMLElement>;
 
     constructor() {
         super();
@@ -57,7 +57,7 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
         const parentComponent = this.lastFocusedComponent;
         let touchBar = null;
 
-        if (this.$activeModal.length > 0) {
+        if (this.$activeModal?.length) {
             touchBar = this.#buildModalTouchBar();
         } else if (parentComponent) {
             const items = parentComponent.triggerCommand("buildTouchBar", {
@@ -78,16 +78,16 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
         const items: TouchBarItem[] = [];
 
         // Look for the modal title.
-        const $title = this.$activeModal.find(".modal-title");
-        if ($title.length > 0) {
+        const $title = this.$activeModal?.find(".modal-title");
+        if ($title?.length) {
             items.push(new TouchBarLabel({ label: $title.text() }))
         }
 
         items.push(new TouchBarSpacer({ size: "flexible" }));
 
         // Look for buttons in the modal.
-        const $buttons = this.$activeModal.find(".modal-footer button");
-        for (const button of $buttons) {
+        const $buttons = this.$activeModal?.find(".modal-footer button");
+        for (const button of $buttons ?? []) {
             items.push(new TouchBarButton({
                 label: button.innerText,
                 click: () => button.click(),
