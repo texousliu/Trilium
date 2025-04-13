@@ -23,7 +23,6 @@ export default class EditButton extends OnClickButtonWidget {
                     this.noteContext.viewScope.readOnlyTemporarilyDisabled = true;
                     appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext: this.noteContext });
                 }
-                this.refresh();
             });
     }
 
@@ -66,6 +65,10 @@ export default class EditButton extends OnClickButtonWidget {
             }
             this.refresh();
         }
+    }
+
+    readOnlyTemporarilyDisabledEvent() {
+        this.refresh();
     }
 
     async noteTypeMimeChangedEvent({ noteId }: { noteId: string }): Promise<void> {

@@ -1,7 +1,7 @@
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import NoteListRenderer from "../services/note_list_renderer.js";
 import type FNote from "../entities/fnote.js";
-import type { EventData } from "../components/app_context.js";
+import type { CommandListener, CommandListenerData, EventData } from "../components/app_context.js";
 import type ViewMode from "./view_widgets/view_mode.js";
 
 const TPL = /*html*/`
@@ -127,4 +127,11 @@ export default class NoteListWidget extends NoteContextAwareWidget {
             this.checkRenderStatus();
         }
     }
+
+    buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {
+        if (this.viewMode && "buildTouchBarCommand" in this.viewMode) {
+            return (this.viewMode as CommandListener<"buildTouchBar">).buildTouchBarCommand(data);
+        }
+    }
+
 }
