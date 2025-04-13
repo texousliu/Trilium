@@ -25,8 +25,7 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
         $(window).on("focusin", async (e) => {
             const target = e.target;
             const parentComponentEl = $(target).closest(".component");
-            // TODO: Remove typecast once it's no longer necessary.
-            this.lastFocusedComponent = appContext.getComponentByEl(parentComponentEl[0]) as Component;
+            this.lastFocusedComponent = appContext.getComponentByEl(parentComponentEl[0]);
             this.#refreshTouchBar();
         });
     }
