@@ -124,14 +124,14 @@ function forceFullSync() {
  *               type: object
  *               properties:
  *                 entityChanges:
- *                   type: list
+ *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/EntityChange'
  *                 lastEntityChangeId:
  *                   type: integer
  *                   description: If `outstandingPullCount > 0`, pass this as parameter in your next request to continue.
  *                 outstandingPullCount:
- *                   type: int
+ *                   type: integer
  *                   example: 42
  *                   description: Number of changes not yet returned by the remote.
  *     security:
@@ -247,7 +247,7 @@ const partialRequests: Record<
  *                 type: string
  *                 description: Local instance ID
  *               entities:
- *                 type: list
+ *                 type: array
  *                 items:
  *                   $ref: '#/components/schemas/EntityChange'
  *     responses:

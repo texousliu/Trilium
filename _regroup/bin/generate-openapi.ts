@@ -4,7 +4,8 @@ import swaggerJsdoc from "swagger-jsdoc";
 import fs from "fs";
 
 /*
- * Usage: npm run generate-openapi | tail -n1 > x.json
+ * Usage: npm run chore:generate-openapi
+ * Output: ./src/routes/api/openapi.json
  *
  * Inspect generated file by opening it in https://editor-next.swagger.io/
  *
@@ -33,7 +34,7 @@ const options = {
         "./src/routes/api/setup.ts",
         // all other files
         "./src/routes/api/*.ts",
-        "./bin/generate-openapi.js"
+        "./bin/generate-openapi.ts"
     ]
 };
 
