@@ -1779,6 +1779,16 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
         const items: TouchBarItem[] = [
             new TouchBar.TouchBarButton({
+                icon: buildIcon("NSImageNameTouchBarAddTemplate"),
+                click: () => {
+                    const node = this.getActiveNode();
+                    const notePath = treeService.getNotePath(node);
+                    noteCreateService.createNote(notePath, {
+                        isProtected: node.data.isProtected
+                    });
+                }
+            }),
+            new TouchBar.TouchBarButton({
                 icon: buildIcon("NSImageNameTouchBarDeleteTemplate"),
                 click: () => triggerCommand("deleteNotes")
             })
