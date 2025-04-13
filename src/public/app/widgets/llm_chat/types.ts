@@ -29,4 +29,25 @@ export interface ChatData {
     messages: MessageData[];
     sessionId: string | null;
     toolSteps: ToolExecutionStep[];
+    sources?: Array<{
+        noteId: string;
+        title: string;
+        similarity?: number;
+        content?: string;
+    }>;
+    metadata?: {
+        model?: string;
+        provider?: string;
+        temperature?: number;
+        maxTokens?: number;
+        lastUpdated?: string;
+        toolExecutions?: Array<{
+            id: string;
+            name: string;
+            arguments: any;
+            result: any;
+            error?: string;
+            timestamp: string;
+        }>;
+    };
 }

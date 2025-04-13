@@ -476,7 +476,9 @@ class RestChatService {
                 model: session.metadata.model,
                 // Set stream based on request type, but ensure it's explicitly a boolean value
                 // GET requests or format=stream parameter indicates streaming should be used
-                stream: !!(req.method === 'GET' || req.query.format === 'stream' || req.query.stream === 'true')
+                stream: !!(req.method === 'GET' || req.query.format === 'stream' || req.query.stream === 'true'),
+                // Include sessionId for tracking tool executions
+                sessionId: sessionId
             };
 
             // Log the options to verify what's being sent to the pipeline
@@ -491,6 +493,9 @@ class RestChatService {
             // Create a stream callback wrapper
             // This will ensure we properly handle all streaming messages
             let messageContent = '';
+            
+            // Used to track tool call responses for metadata storage
+            const toolResponseMap = new Map<string, string>();
             let streamFinished = false;
 
             // Prepare the pipeline input
@@ -621,10 +626,27 @@ class RestChatService {
                     timestamp: new Date()
                 });
 
-                // Return the response
+                // Extract sources if they're available
+                const sources = (response as any).sources || [];
+                
+                // Store sources in the session metadata if they're present
+                if (sources.length > 0) {
+                    session.metadata.sources = sources;
+                    log.info(`Stored ${sources.length} sources in session metadata`);
+                }
+                
+                // Return the response with complete metadata
                 return {
                     content: response.text || '',
-                    sources: (response as any).sources || []
+                    sources: sources,
+                    metadata: {
+                        model: response.model || session.metadata.model,
+                        provider: response.provider || session.metadata.provider,
+                        temperature: session.metadata.temperature,
+                        maxTokens: session.metadata.maxTokens,
+                        lastUpdated: new Date().toISOString(),
+                        toolExecutions: session.metadata.toolExecutions || []
+                    }
                 };
             } else {
                 // For streaming requests, we've already sent the response
@@ -1132,12 +1154,19 @@ class RestChatService {
                         });
                     }
 
-                    // Store the response in the session
-                    session.messages.push({
+                    // Store the response in the session with tool_calls if present
+                    const assistantMessage: any = {
                         role: 'assistant',
                         content: messageContent,
                         timestamp: new Date()
-                    });
+                    };
+                    
+                    // If there were tool calls, store them with the message
+                    if (response.tool_calls && response.tool_calls.length > 0) {
+                        assistantMessage.tool_calls = response.tool_calls;
+                    }
+                    
+                    session.messages.push(assistantMessage);
 
                     return;
                 } catch (toolError) {
@@ -1158,6 +1187,18 @@ class RestChatService {
             // Handle standard streaming through the stream() method
             if (response.stream) {
                 log.info(`Provider ${service.getName()} supports streaming via stream() method`);
+                
+                // Store information about the model and provider in session metadata
+                session.metadata.model = response.model || session.metadata.model;
+                session.metadata.provider = response.provider || session.metadata.provider;
+                session.metadata.lastUpdated = new Date().toISOString();
+                
+                // If response has tool_calls, capture those for later storage in metadata
+                if (response.tool_calls && response.tool_calls.length > 0) {
+                    log.info(`Storing ${response.tool_calls.length} initial tool calls in session metadata`);
+                    // We'll complete this information when we get the tool results
+                    session.metadata.pendingToolCalls = response.tool_calls;
+                }
 
                 try {
                     await response.stream(async (chunk: StreamChunk) => {
@@ -1204,6 +1245,41 @@ class RestChatService {
                         // Signal completion when done
                         if (chunk.done) {
                             log.info(`Stream completed from ${service.getName()}, total content: ${messageContent.length} chars`);
+                            
+                            // Store tool executions from the conversation into metadata
+                            if (session.metadata.pendingToolCalls) {
+                                const toolExecutions = session.metadata.toolExecutions || [];
+                                
+                                // We don't have a toolResponseMap available at this scope
+                                // Just record the pending tool calls with minimal information
+                                for (const toolCall of session.metadata.pendingToolCalls) {
+                                    if (!toolCall.id) continue;
+                                    
+                                    // Parse arguments
+                                    let args = toolCall.function.arguments;
+                                    if (typeof args === 'string') {
+                                        try {
+                                            args = JSON.parse(args);
+                                        } catch {
+                                            // Keep as string if not valid JSON
+                                        }
+                                    }
+                                    
+                                    // Add to tool executions with minimal info
+                                    toolExecutions.push({
+                                        id: toolCall.id,
+                                        name: toolCall.function.name,
+                                        arguments: args,
+                                        result: "Result not captured in streaming mode",
+                                        timestamp: new Date().toISOString()
+                                    });
+                                }
+                                
+                                // Update session metadata
+                                session.metadata.toolExecutions = toolExecutions;
+                                delete session.metadata.pendingToolCalls;
+                                log.info(`Stored ${toolExecutions.length} tool executions in session metadata`);
+                            }
 
                             // Only send final done message if it wasn't already sent with content
                             // This ensures we don't duplicate the content but still mark completion
@@ -1397,6 +1473,40 @@ class RestChatService {
     /**
      * Build context from relevant notes
      */
+    /**
+     * Record a tool execution in the session metadata
+     */
+    private recordToolExecution(sessionId: string, tool: any, result: string, error?: string): void {
+        if (!sessionId) return;
+        
+        const session = sessions.get(sessionId);
+        if (!session) return;
+        
+        try {
+            const toolExecutions = session.metadata.toolExecutions || [];
+            
+            // Format tool execution record
+            const execution = {
+                id: tool.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                name: tool.function?.name || 'unknown',
+                arguments: typeof tool.function?.arguments === 'string' 
+                    ? (() => { try { return JSON.parse(tool.function.arguments); } catch { return tool.function.arguments; } })()
+                    : tool.function?.arguments || {},
+                result: result,
+                error: error,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to tool executions
+            toolExecutions.push(execution);
+            session.metadata.toolExecutions = toolExecutions;
+            
+            log.info(`Recorded tool execution for ${execution.name} in session ${sessionId}`);
+        } catch (err) {
+            log.error(`Failed to record tool execution: ${err}`);
+        }
+    }
+    
     buildContextFromNotes(sources: NoteSource[], query: string): string {
         if (!sources || sources.length === 0) {
             return query || '';
@@ -1466,7 +1576,10 @@ class RestChatService {
                     temperature: options.temperature,
                     maxTokens: options.maxTokens,
                     model: options.model,
-                    provider: options.provider
+                    provider: options.provider,
+                    sources: [],
+                    toolExecutions: [],
+                    lastUpdated: now.toISOString()
                 }
             });
 
@@ -1494,14 +1607,25 @@ class RestChatService {
                 throw new Error(`Session with ID ${sessionId} not found`);
             }
 
-            // Return session without internal metadata
+            // Return session with metadata and additional fields
             return {
                 id: session.id,
                 title: session.title,
                 createdAt: session.createdAt,
                 lastActive: session.lastActive,
                 messages: session.messages,
-                noteContext: session.noteContext
+                noteContext: session.noteContext,
+                // Include additional fields for the frontend
+                sources: session.metadata.sources || [],
+                metadata: {
+                    model: session.metadata.model,
+                    provider: session.metadata.provider,
+                    temperature: session.metadata.temperature,
+                    maxTokens: session.metadata.maxTokens,
+                    lastUpdated: session.lastActive.toISOString(),
+                    // Include simplified tool executions if available
+                    toolExecutions: session.metadata.toolExecutions || []
+                }
             };
         } catch (error: any) {
             log.error(`Error getting LLM session: ${error.message || 'Unknown error'}`);
@@ -1532,7 +1656,7 @@ class RestChatService {
                 session.noteContext = updates.noteContext;
             }
 
-            // Update metadata
+            // Update basic metadata
             if (updates.temperature !== undefined) {
                 session.metadata.temperature = updates.temperature;
             }
@@ -1549,13 +1673,39 @@ class RestChatService {
                 session.metadata.provider = updates.provider;
             }
 
+            // Handle new extended metadata from the frontend
+            if (updates.metadata) {
+                // Update various metadata fields but keep existing ones
+                session.metadata = {
+                    ...session.metadata,
+                    ...updates.metadata,
+                    // Make sure timestamp is updated
+                    lastUpdated: new Date().toISOString()
+                };
+            }
+
+            // Handle sources as a top-level field
+            if (updates.sources && Array.isArray(updates.sources)) {
+                session.metadata.sources = updates.sources;
+            }
+
+            // Handle tool executions from frontend
+            if (updates.toolExecutions && Array.isArray(updates.toolExecutions)) {
+                session.metadata.toolExecutions = updates.toolExecutions;
+            } else if (updates.metadata?.toolExecutions && Array.isArray(updates.metadata.toolExecutions)) {
+                session.metadata.toolExecutions = updates.metadata.toolExecutions;
+            }
+
             // Update timestamp
             session.lastActive = new Date();
 
             return {
                 id: session.id,
                 title: session.title,
-                updatedAt: session.lastActive
+                updatedAt: session.lastActive,
+                // Include updated metadata in response
+                metadata: session.metadata,
+                sources: session.metadata.sources || []
             };
         } catch (error: any) {
             log.error(`Error updating LLM session: ${error.message || 'Unknown error'}`);

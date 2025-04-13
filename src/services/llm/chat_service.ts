@@ -139,10 +139,16 @@ export class ChatService {
             // Select pipeline to use
             const pipeline = this.getPipeline();
 
+            // Include sessionId in the options for tool execution tracking
+            const pipelineOptions = {
+                ...(options || session.options || {}),
+                sessionId: session.id
+            };
+            
             // Execute the pipeline
             const response = await pipeline.execute({
                 messages: session.messages,
-                options: options || session.options || {},
+                options: pipelineOptions,
                 query: content,
                 streamCallback
             });
@@ -156,8 +162,21 @@ export class ChatService {
             session.messages.push(assistantMessage);
             session.isStreaming = false;
 
-            // Save the complete conversation
-            await chatStorageService.updateChat(session.id, session.messages);
+            // Save metadata about the response
+            const metadata = {
+                model: response.model,
+                provider: response.provider,
+                usage: response.usage
+            };
+            
+            // If there are tool calls, make sure they're stored in metadata
+            if (response.tool_calls && response.tool_calls.length > 0) {
+                // Let the storage service extract and save tool executions
+                // The tool results are already in the messages
+            }
+            
+            // Save the complete conversation with metadata
+            await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
             // If first message, update the title based on content
             if (session.messages.length <= 2 && (!session.title || session.title === 'New Chat')) {
@@ -228,10 +247,16 @@ export class ChatService {
             const pipelineType = showThinking ? 'agent' : 'default';
             const pipeline = this.getPipeline(pipelineType);
 
+            // Include sessionId in the options for tool execution tracking
+            const pipelineOptions = {
+                ...(options || session.options || {}),
+                sessionId: session.id
+            };
+
             // Execute the pipeline with note context
             const response = await pipeline.execute({
                 messages: session.messages,
-                options: options || session.options || {},
+                options: pipelineOptions,
                 noteId,
                 query: content,
                 showThinking,
@@ -247,8 +272,22 @@ export class ChatService {
             session.messages.push(assistantMessage);
             session.isStreaming = false;
 
-            // Save the complete conversation
-            await chatStorageService.updateChat(session.id, session.messages);
+            // Save metadata about the response
+            const metadata = {
+                model: response.model,
+                provider: response.provider,
+                usage: response.usage,
+                contextNoteId: noteId // Store the note ID used for context
+            };
+            
+            // If there are tool calls, make sure they're stored in metadata
+            if (response.tool_calls && response.tool_calls.length > 0) {
+                // Let the storage service extract and save tool executions
+                // The tool results are already in the messages
+            }
+            
+            // Save the complete conversation with metadata
+            await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
             // If first message, update the title
             if (session.messages.length <= 2 && (!session.title || session.title === 'New Chat')) {
@@ -312,7 +351,29 @@ export class ChatService {
         };
 
         session.messages.push(contextMessage);
-        await chatStorageService.updateChat(session.id, session.messages);
+        
+        // Store the context note id in metadata
+        const metadata = {
+            contextNoteId: noteId
+        };
+        
+        // Check if the context extraction result has sources
+        // Note: We're adding a defensive check since TypeScript doesn't know about this property
+        const contextSources = (contextResult as any).sources || [];
+        if (contextSources && contextSources.length > 0) {
+            // Convert the sources to the format expected by recordSources
+            const sources = contextSources.map((source: any) => ({
+                noteId: source.noteId,
+                title: source.title,
+                similarity: source.similarity,
+                content: source.content
+            }));
+            
+            // Store these sources in metadata
+            await chatStorageService.recordSources(session.id, sources);
+        }
+        
+        await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
         return session;
     }
@@ -343,7 +404,29 @@ export class ChatService {
         };
 
         session.messages.push(contextMessage);
-        await chatStorageService.updateChat(session.id, session.messages);
+        
+        // Store the context note id and query in metadata
+        const metadata = {
+            contextNoteId: noteId
+        };
+        
+        // Check if the semantic context extraction result has sources
+        // Note: We're adding a defensive check since TypeScript doesn't know about this property
+        const contextSources = (contextResult as any).sources || [];
+        if (contextSources && contextSources.length > 0) {
+            // Convert the sources to the format expected by recordSources
+            const sources = contextSources.map((source: any) => ({
+                noteId: source.noteId,
+                title: source.title,
+                similarity: source.similarity,
+                content: source.content
+            }));
+            
+            // Store these sources in metadata
+            await chatStorageService.recordSources(session.id, sources);
+        }
+        
+        await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
         return session;
     }

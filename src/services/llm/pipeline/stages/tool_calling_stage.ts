@@ -3,6 +3,7 @@ import log from '../../../log.js';
 import type { StreamCallback, ToolExecutionInput } from '../interfaces.js';
 import { BasePipelineStage } from '../pipeline_stage.js';
 import toolRegistry from '../../tools/tool_registry.js';
+import chatStorageService from '../../chat_storage_service.js';
 
 /**
  * Pipeline stage for handling LLM tool calling
@@ -172,6 +173,22 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     const executionTime = Date.now() - executionStart;
                     log.info(`================ TOOL EXECUTION COMPLETED in ${executionTime}ms ================`);
                     
+                    // Record this successful tool execution if there's a sessionId available
+                    if (input.options?.sessionId) {
+                        try {
+                            await chatStorageService.recordToolExecution(
+                                input.options.sessionId,
+                                toolCall.function.name,
+                                toolCall.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+                                args,
+                                result,
+                                undefined // No error for successful execution
+                            );
+                        } catch (storageError) {
+                            log.error(`Failed to record tool execution in chat storage: ${storageError}`);
+                        }
+                    }
+                    
                     // Emit tool completion event if streaming is enabled
                     if (streamCallback) {
                         const toolExecutionData = {
@@ -189,6 +206,22 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 } catch (execError: any) {
                     const executionTime = Date.now() - executionStart;
                     log.error(`================ TOOL EXECUTION FAILED in ${executionTime}ms: ${execError.message} ================`);
+                    
+                    // Record this failed tool execution if there's a sessionId available
+                    if (input.options?.sessionId) {
+                        try {
+                            await chatStorageService.recordToolExecution(
+                                input.options.sessionId,
+                                toolCall.function.name,
+                                toolCall.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+                                args,
+                                "", // No result for failed execution
+                                execError.message || String(execError)
+                            );
+                        } catch (storageError) {
+                            log.error(`Failed to record tool execution error in chat storage: ${storageError}`);
+                        }
+                    }
                     
                     // Emit tool error event if streaming is enabled
                     if (streamCallback) {

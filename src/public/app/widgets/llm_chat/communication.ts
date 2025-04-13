@@ -42,7 +42,7 @@ export async function checkSessionExists(sessionId: string): Promise<boolean> {
 export async function setupStreamingResponse(
     sessionId: string,
     messageParams: any,
-    onContentUpdate: (content: string) => void,
+    onContentUpdate: (content: string, isDone?: boolean) => void,
     onThinkingUpdate: (thinking: string) => void,
     onToolExecution: (toolData: any) => void,
     onComplete: () => void,
@@ -131,7 +131,7 @@ export async function setupStreamingResponse(
                 assistantResponse += message.content;
 
                 // Update the UI immediately with each chunk
-                onContentUpdate(assistantResponse);
+                onContentUpdate(assistantResponse, false);
 
                 // Reset timeout since we got content
                 if (timeoutId !== null) {
@@ -197,7 +197,7 @@ export async function setupStreamingResponse(
                         console.log(`[${responseId}] Content in done message is identical to existing response, not appending`);
                     }
 
-                    onContentUpdate(assistantResponse);
+                    onContentUpdate(assistantResponse, true);
                 }
 
                 // Clean up and resolve

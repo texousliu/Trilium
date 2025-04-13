@@ -314,7 +314,7 @@ export class AIServiceManager implements IAIServiceManager {
     async initializeAgentTools(): Promise<void> {
         // Agent tools are already initialized in the constructor
         // This method is kept for backward compatibility
-        log.debug("initializeAgentTools called, but tools are already initialized in constructor");
+        log.info("initializeAgentTools called, but tools are already initialized in constructor");
     }
 
     /**

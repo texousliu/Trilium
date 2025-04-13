@@ -99,6 +99,7 @@ export interface ChatCompletionOptions {
     useAdvancedContext?: boolean; // Whether to use advanced context enrichment
     toolExecutionStatus?: any[]; // Status information about executed tools for feedback
     providerMetadata?: ModelMetadata; // Metadata about the provider and model capabilities
+    sessionId?: string; // Session ID for storing tool execution results
 
     /**
      * Maximum number of tool execution iterations
