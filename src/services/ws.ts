@@ -56,7 +56,7 @@ interface Message {
     originEntityId?: string | null;
     lastModifiedMs?: number;
     filePath?: string;
-    
+
     // LLM streaming specific fields
     sessionId?: string;
     content?: string;
@@ -64,7 +64,8 @@ interface Message {
     toolExecution?: {
         action?: string;
         tool?: string;
-        result?: string;
+        toolCallId?: string;
+        result?: string | Record<string, any>;
         error?: string;
         args?: Record<string, unknown>;
     };
@@ -144,7 +145,7 @@ function sendMessageToAllClients(message: Message) {
                 clientCount++;
             }
         });
-        
+
         // Log WebSocket client count for debugging
         if (message.type === "llm-stream") {
             log.info(`[WS-SERVER] Sent LLM stream message to ${clientCount} clients`);

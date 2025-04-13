@@ -4,66 +4,6 @@
 import type { ToolExecutionStep } from "./types.js";
 
 /**
- * Extract tool execution steps from the response
- */
-export function extractToolExecutionSteps(content: string): ToolExecutionStep[] {
-    if (!content) return [];
-
-    const steps: ToolExecutionStep[] = [];
-
-    // Check for executing tools marker
-    if (content.includes('[Executing tools...]')) {
-        steps.push({
-            type: 'executing',
-            content: 'Executing tools...'
-        });
-    }
-
-    // Extract tool results with regex
-    const toolResultRegex = /\[Tool: ([^\]]+)\]([\s\S]*?)(?=\[|$)/g;
-    let match;
-
-    while ((match = toolResultRegex.exec(content)) !== null) {
-        const toolName = match[1];
-        const toolContent = match[2].trim();
-
-        steps.push({
-            type: toolContent.includes('Error:') ? 'error' : 'result',
-            name: toolName,
-            content: toolContent
-        });
-    }
-
-    // Check for generating response marker
-    if (content.includes('[Generating response with tool results...]')) {
-        steps.push({
-            type: 'generating',
-            content: 'Generating response with tool results...'
-        });
-    }
-
-    return steps;
-}
-
-/**
- * Extract the final response without tool execution steps
- */
-export function extractFinalResponse(content: string): string {
-    if (!content) return '';
-
-    // Remove all tool execution markers and their content
-    let finalResponse = content
-        .replace(/\[Executing tools\.\.\.\]\n*/g, '')
-        .replace(/\[Tool: [^\]]+\][\s\S]*?(?=\[|$)/g, '')
-        .replace(/\[Generating response with tool results\.\.\.\]\n*/g, '');
-
-    // Trim any extra whitespace
-    finalResponse = finalResponse.trim();
-
-    return finalResponse;
-}
-
-/**
  * Extract tool execution steps from the DOM that are within the chat flow
  */
 export function extractInChatToolSteps(chatMessagesElement: HTMLElement): ToolExecutionStep[] {

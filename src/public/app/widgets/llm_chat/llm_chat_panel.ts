@@ -7,10 +7,10 @@ import appContext from "../../components/app_context.js";
 import server from "../../services/server.js";
 import libraryLoader from "../../services/library_loader.js";
 
-import { TPL, addMessageToChat, showSources, hideSources, showLoadingIndicator, hideLoadingIndicator, renderToolStepsHtml } from "./ui.js";
+import { TPL, addMessageToChat, showSources, hideSources, showLoadingIndicator, hideLoadingIndicator } from "./ui.js";
 import { formatMarkdown } from "./utils.js";
 import { createChatSession, checkSessionExists, setupStreamingResponse, getDirectResponse } from "./communication.js";
-import { extractToolExecutionSteps, extractFinalResponse, extractInChatToolSteps } from "./message_processor.js";
+import { extractInChatToolSteps } from "./message_processor.js";
 import { validateEmbeddingProviders } from "./validation.js";
 import type { MessageData, ToolExecutionStep, ChatData } from "./types.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
@@ -245,7 +245,7 @@ export default class LlmChatPanel extends BasicWidget {
                     </button>
                 </div>
                 <div class="tool-execution-chat-steps">
-                    ${renderToolStepsHtml(steps)}
+                    ${this.renderToolStepsHtml(steps)}
                 </div>
             </div>
         `;
@@ -259,6 +259,52 @@ export default class LlmChatPanel extends BasicWidget {
                 toolExecutionElement.remove();
             });
         }
+    }
+
+    /**
+     * Render HTML for tool execution steps
+     */
+    private renderToolStepsHtml(steps: ToolExecutionStep[]): string {
+        if (!steps || steps.length === 0) return '';
+
+        return steps.map(step => {
+            let icon = 'bx-info-circle';
+            let className = 'info';
+            let content = '';
+
+            if (step.type === 'executing') {
+                icon = 'bx-code-block';
+                className = 'executing';
+                content = `<div>${step.content || 'Executing tools...'}</div>`;
+            } else if (step.type === 'result') {
+                icon = 'bx-terminal';
+                className = 'result';
+                content = `
+                    <div>Tool: <strong>${step.name || 'unknown'}</strong></div>
+                    <div class="mt-1 ps-3">${step.content || ''}</div>
+                `;
+            } else if (step.type === 'error') {
+                icon = 'bx-error-circle';
+                className = 'error';
+                content = `
+                    <div>Tool: <strong>${step.name || 'unknown'}</strong></div>
+                    <div class="mt-1 ps-3 text-danger">${step.content || 'Error occurred'}</div>
+                `;
+            } else if (step.type === 'generating') {
+                icon = 'bx-message-dots';
+                className = 'generating';
+                content = `<div>${step.content || 'Generating response...'}</div>`;
+            }
+
+            return `
+                <div class="tool-step ${className} p-2 mb-2 rounded">
+                    <div class="d-flex align-items-center">
+                        <i class="bx ${icon} me-2"></i>
+                        ${content}
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
     async refresh() {
@@ -493,10 +539,10 @@ export default class LlmChatPanel extends BasicWidget {
     }
 
     /**
-     * Update the UI with streaming content as it arrives
+     * Update the UI with streaming content
      */
     private updateStreamingUI(assistantResponse: string) {
-        const logId = `ui-update-${Date.now()}`;
+        const logId = `LlmChatPanel-${Date.now()}`;
         console.log(`[${logId}] Updating UI with response text: ${assistantResponse.length} chars`);
 
         if (!this.noteContextChatMessages) {
@@ -504,70 +550,19 @@ export default class LlmChatPanel extends BasicWidget {
             return;
         }
 
-        // Extract the tool execution steps and final response
-        const toolSteps = extractToolExecutionSteps(assistantResponse);
-        const finalResponseText = extractFinalResponse(assistantResponse);
+        // With our new structured message approach, we don't need to extract tool steps from
+        // the assistantResponse anymore, as tool execution is handled separately via dedicated messages
 
         // Find existing assistant message or create one if needed
         let assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
 
-        // First, check if we need to add the tool execution steps to the chat flow
-        if (toolSteps.length > 0) {
-            // Look for an existing tool execution element in the chat flow
-            let toolExecutionElement = this.noteContextChatMessages.querySelector('.chat-tool-execution');
-
-            if (!toolExecutionElement) {
-                // Create a new tool execution element in the chat flow
-                // Place it right before the assistant message if it exists, or at the end of chat
-                toolExecutionElement = document.createElement('div');
-                toolExecutionElement.className = 'chat-tool-execution mb-3';
-
-                // If there's an assistant message, insert before it
-                const assistantMessage = this.noteContextChatMessages.querySelector('.assistant-message:last-child');
-                if (assistantMessage) {
-                    this.noteContextChatMessages.insertBefore(toolExecutionElement, assistantMessage);
-                } else {
-                    // Otherwise append to the end
-                    this.noteContextChatMessages.appendChild(toolExecutionElement);
-                }
-            }
-
-            // Update the tool execution content
-            toolExecutionElement.innerHTML = `
-                <div class="tool-execution-container p-2 rounded mb-2">
-                    <div class="tool-execution-header d-flex align-items-center justify-content-between mb-2">
-                        <div>
-                            <i class="bx bx-code-block text-primary me-2"></i>
-                            <span class="fw-bold">Tool Execution</span>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-link p-0 text-muted tool-execution-chat-clear" title="Clear tool execution history">
-                            <i class="bx bx-x"></i>
-                        </button>
-                    </div>
-                    <div class="tool-execution-chat-steps">
-                        ${renderToolStepsHtml(toolSteps)}
-                    </div>
-                </div>
-            `;
-
-            // Add event listener for the clear button
-            const clearButton = toolExecutionElement.querySelector('.tool-execution-chat-clear');
-            if (clearButton) {
-                clearButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toolExecutionElement?.remove();
-                });
-            }
-        }
-
-        // Now update or create the assistant message with the final response
-        if (finalResponseText) {
+        // Now update or create the assistant message with the response
+        if (assistantResponse) {
             if (assistantElement) {
-                console.log(`[${logId}] Found existing assistant message element, updating with final response`);
+                console.log(`[${logId}] Found existing assistant message element, updating with response`);
                 try {
-                    // Format the final response with markdown
-                    const formattedResponse = formatMarkdown(finalResponseText);
+                    // Format the response with markdown
+                    const formattedResponse = formatMarkdown(assistantResponse);
 
                     // Update the content
                     assistantElement.innerHTML = formattedResponse || '';
@@ -575,12 +570,12 @@ export default class LlmChatPanel extends BasicWidget {
                     // Apply syntax highlighting to any code blocks in the updated content
                     applySyntaxHighlight($(assistantElement as HTMLElement));
 
-                    console.log(`[${logId}] Successfully updated existing element with final response`);
+                    console.log(`[${logId}] Successfully updated existing element with response`);
                 } catch (err) {
                     console.error(`[${logId}] Error updating existing element:`, err);
                     // Fallback to text content if HTML update fails
                     try {
-                        assistantElement.textContent = finalResponseText;
+                        assistantElement.textContent = assistantResponse;
                         console.log(`[${logId}] Fallback to text content successful`);
                     } catch (fallbackErr) {
                         console.error(`[${logId}] Even fallback update failed:`, fallbackErr);
@@ -589,7 +584,7 @@ export default class LlmChatPanel extends BasicWidget {
             } else {
                 console.log(`[${logId}] No existing assistant message element found, creating new one`);
                 // Create a new message in the chat
-                this.addMessageToChat('assistant', finalResponseText);
+                this.addMessageToChat('assistant', assistantResponse);
                 console.log(`[${logId}] Successfully added new assistant message`);
             }
         }
@@ -683,7 +678,9 @@ export default class LlmChatPanel extends BasicWidget {
         if (!stepsContainer) return;
 
         // Process based on action type
-        if (toolExecutionData.action === 'start') {
+        const action = toolExecutionData.action || '';
+
+        if (action === 'start' || action === 'executing') {
             // Tool execution started
             const step = document.createElement('div');
             step.className = 'tool-step executing p-2 mb-2 rounded';
@@ -692,21 +689,47 @@ export default class LlmChatPanel extends BasicWidget {
                     <i class="bx bx-code-block me-2"></i>
                     <span>Executing tool: <strong>${toolExecutionData.tool || 'unknown'}</strong></span>
                 </div>
+                ${toolExecutionData.args ? `
                 <div class="tool-args mt-1 ps-3">
                     <code>Args: ${JSON.stringify(toolExecutionData.args || {}, null, 2)}</code>
-                </div>
+                </div>` : ''}
             `;
             stepsContainer.appendChild(step);
         }
-        else if (toolExecutionData.action === 'result') {
+        else if (action === 'result' || action === 'complete') {
             // Tool execution completed with results
             const step = document.createElement('div');
             step.className = 'tool-step result p-2 mb-2 rounded';
 
             let resultDisplay = '';
 
-            // Format the result based on type
-            if (typeof toolExecutionData.result === 'object') {
+            // Special handling for search_notes tool which has a specific structure
+            if (toolExecutionData.tool === 'search_notes' &&
+                typeof toolExecutionData.result === 'object' &&
+                toolExecutionData.result.results) {
+
+                const results = toolExecutionData.result.results;
+
+                if (results.length === 0) {
+                    resultDisplay = `<div class="text-muted">No notes found matching the search criteria.</div>`;
+                } else {
+                    resultDisplay = `
+                        <div class="search-results">
+                            <div class="mb-2">Found ${results.length} notes:</div>
+                            <ul class="list-unstyled ps-1">
+                                ${results.map((note: any) => `
+                                    <li class="mb-1">
+                                        <a href="#" class="note-link" data-note-id="${note.noteId}">${note.title}</a>
+                                        ${note.similarity < 1 ? `<span class="text-muted small ms-1">(similarity: ${(note.similarity * 100).toFixed(0)}%)</span>` : ''}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+            }
+            // Format the result based on type for other tools
+            else if (typeof toolExecutionData.result === 'object') {
                 // For objects, format as pretty JSON
                 resultDisplay = `<pre class="mb-0"><code>${JSON.stringify(toolExecutionData.result, null, 2)}</code></pre>`;
             } else {
@@ -724,8 +747,23 @@ export default class LlmChatPanel extends BasicWidget {
                 </div>
             `;
             stepsContainer.appendChild(step);
+
+            // Add event listeners for note links if this is a search_notes result
+            if (toolExecutionData.tool === 'search_notes') {
+                const noteLinks = step.querySelectorAll('.note-link');
+                noteLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const noteId = (e.currentTarget as HTMLElement).getAttribute('data-note-id');
+                        if (noteId) {
+                            // Open the note in a new tab but don't switch to it
+                            appContext.tabManager.openTabWithNoteWithHoisting(noteId, { activate: false });
+                        }
+                    });
+                });
+            }
         }
-        else if (toolExecutionData.action === 'error') {
+        else if (action === 'error') {
             // Tool execution failed
             const step = document.createElement('div');
             step.className = 'tool-step error p-2 mb-2 rounded';
@@ -736,6 +774,18 @@ export default class LlmChatPanel extends BasicWidget {
                 </div>
                 <div class="tool-error mt-1 ps-3 text-danger">
                     ${toolExecutionData.error || 'Unknown error'}
+                </div>
+            `;
+            stepsContainer.appendChild(step);
+        }
+        else if (action === 'generating') {
+            // Generating final response with tool results
+            const step = document.createElement('div');
+            step.className = 'tool-step generating p-2 mb-2 rounded';
+            step.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bx bx-message-dots me-2"></i>
+                    <span>Generating response with tool results...</span>
                 </div>
             `;
             stepsContainer.appendChild(step);

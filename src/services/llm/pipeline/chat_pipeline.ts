@@ -345,9 +345,10 @@ export class ChatPipeline {
                 // If streaming was enabled, send an update to the user
                 if (isStreaming && streamCallback) {
                     streamingPaused = true;
-                    // IMPORTANT: Don't send done:true here, as it causes the client to stop processing messages
-                    // Instead, send a marker message that indicates tools will be executed
-                    streamCallback('\n\n[Executing tools...]\n\n', false);
+                    // Send a dedicated message with a specific type for tool execution
+                    streamCallback('', false, {
+                        type: 'tool_execution_start'
+                    });
                 }
 
                 while (toolCallIterations < maxToolCallIterations) {
@@ -406,6 +407,7 @@ export class ChatPipeline {
 
                                     // Send the structured tool result directly so the client has the raw data
                                     streamCallback('', false, {
+                                        type: 'tool_result',
                                         toolExecution: {
                                             action: 'result',
                                             tool: toolName,
@@ -414,15 +416,21 @@ export class ChatPipeline {
                                         }
                                     });
 
-                                    // Still send the formatted text for backwards compatibility
-                                    // This will be phased out once the client is updated
-                                    const formattedToolResult = `[Tool: ${toolName || 'unknown'}]\n${msg.content}\n\n`;
-                                    streamCallback(formattedToolResult, false);
+                                    // No longer need to send formatted text version
+                                    // The client should use the structured data instead
                                 } catch (err) {
                                     log.error(`Error sending structured tool result: ${err}`);
-                                    // Fall back to the old format if there's an error
-                                    const formattedToolResult = `[Tool: ${toolName || 'unknown'}]\n${msg.content}\n\n`;
-                                    streamCallback(formattedToolResult, false);
+                                    // Use structured format here too instead of falling back to text format
+                                    streamCallback('', false, {
+                                        type: 'tool_result',
+                                        toolExecution: {
+                                            action: 'result',
+                                            tool: toolName || 'unknown',
+                                            toolCallId: msg.tool_call_id,
+                                            result: msg.content,
+                                            error: String(err)
+                                        }
+                                    });
                                 }
                             }
                         });
@@ -437,7 +445,9 @@ export class ChatPipeline {
 
                             // If streaming, show progress to the user
                             if (isStreaming && streamCallback) {
-                                streamCallback('[Generating response with tool results...]\n\n', false);
+                                streamCallback('', false, {
+                                    type: 'tool_completion_processing'
+                                });
                             }
 
                             // Extract tool execution status information for Ollama feedback
@@ -513,7 +523,13 @@ export class ChatPipeline {
 
                         // If streaming, show error to the user
                         if (isStreaming && streamCallback) {
-                            streamCallback(`[Tool execution error: ${error.message || 'unknown error'}]\n\n`, false);
+                            streamCallback('', false, {
+                                type: 'tool_execution_error',
+                                toolExecution: {
+                                    action: 'error',
+                                    error: error.message || 'unknown error'
+                                }
+                            });
                         }
 
                         // For Ollama, create tool execution status with the error

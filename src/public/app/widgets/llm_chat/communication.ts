@@ -70,7 +70,7 @@ export async function setupStreamingResponse(
                 return;
             }
 
-            console.log(`[${responseId}] LLM Stream message received via CustomEvent: session=${sessionId}, content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${!!message.done}`);
+            console.log(`[${responseId}] LLM Stream message received via CustomEvent: session=${sessionId}, content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${!!message.done}, type=${message.type || 'llm-stream'}`);
 
             // Mark first message received
             if (!receivedAnyMessage) {
@@ -84,12 +84,49 @@ export async function setupStreamingResponse(
                 }
             }
 
+            // Handle specific message types
+            if (message.type === 'tool_execution_start') {
+                onThinkingUpdate('Executing tools...');
+                // Also trigger tool execution UI with a specific format
+                onToolExecution({
+                    action: 'start',
+                    tool: 'tools',
+                    result: 'Executing tools...'
+                });
+                return; // Skip accumulating content from this message
+            }
+
+            if (message.type === 'tool_result' && message.toolExecution) {
+                onToolExecution(message.toolExecution);
+                return; // Skip accumulating content from this message
+            }
+
+            if (message.type === 'tool_execution_error' && message.toolExecution) {
+                onToolExecution({
+                    ...message.toolExecution,
+                    action: 'error',
+                    error: message.toolExecution.error || 'Unknown error during tool execution'
+                });
+                return; // Skip accumulating content from this message
+            }
+
+            if (message.type === 'tool_completion_processing') {
+                onThinkingUpdate('Generating response with tool results...');
+                // Also trigger tool execution UI with a specific format
+                onToolExecution({
+                    action: 'generating',
+                    tool: 'tools',
+                    result: 'Generating response with tool results...'
+                });
+                return; // Skip accumulating content from this message
+            }
+
             // Handle content updates
             if (message.content) {
                 receivedAnyContent = true;
-                
+
                 console.log(`[${responseId}] Received content chunk of length ${message.content.length}, preview: "${message.content.substring(0, 50)}${message.content.length > 50 ? '...' : ''}"`);
-                
+
                 // Add to our accumulated response
                 assistantResponse += message.content;
 
@@ -111,10 +148,13 @@ export async function setupStreamingResponse(
                 }, 30000);
             }
 
-            // Handle tool execution updates
+            // Handle tool execution updates (legacy format and standard format with llm-stream type)
             if (message.toolExecution) {
-                console.log(`[${responseId}] Received tool execution update: action=${message.toolExecution.action || 'unknown'}`);
-                onToolExecution(message.toolExecution);
+                // Only process if we haven't already handled this message via specific message types
+                if (message.type === 'llm-stream' || !message.type) {
+                    console.log(`[${responseId}] Received tool execution update: action=${message.toolExecution.action || 'unknown'}`);
+                    onToolExecution(message.toolExecution);
+                }
             }
 
             // Handle thinking state updates

@@ -6,14 +6,15 @@ import type { Message, ChatCompletionOptions, ChatResponse, StreamChunk } from "
  * Interface for WebSocket LLM streaming messages
  */
 interface LLMStreamMessage {
-    type: 'llm-stream';
+    type: 'llm-stream' | 'tool_execution_start' | 'tool_result' | 'tool_execution_error' | 'tool_completion_processing';
     sessionId: string;
     content?: string;
     thinking?: string;
     toolExecution?: {
         action?: string;
         tool?: string;
-        result?: string;
+        toolCallId?: string;
+        result?: string | Record<string, any>;
         error?: string;
         args?: Record<string, unknown>;
     };
@@ -1165,7 +1166,7 @@ class RestChatService {
 
                             // Enhanced logging for each chunk
                             log.info(`Received stream chunk from ${service.getName()} with ${chunk.text.length} chars of text, done=${!!chunk.done}`);
-                            
+
                             // Send each individual chunk via WebSocket as it arrives
                             wsService.sendMessageToAllClients({
                                 type: 'llm-stream',
@@ -1214,7 +1215,7 @@ class RestChatService {
                                     content: messageContent, // Send the accumulated content
                                     done: true
                                 } as LLMStreamMessage);
-                                
+
                                 log.info(`Sent explicit final completion message with accumulated content`);
                             } else {
                                 log.info(`Final done flag was already sent with content chunk, no need for extra message`);
