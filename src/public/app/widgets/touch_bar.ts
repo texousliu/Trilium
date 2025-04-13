@@ -113,7 +113,7 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
                 icon: this.buildIcon("NSTouchBarComposeTemplate"),
                 click: () => this.triggerCommand("createNoteIntoInbox")
             }),
-            new TouchBarSpacer({ size: "large" }),
+            new TouchBarSpacer({ size: "small" }),
             ...componentSpecificItems,
             new TouchBarSpacer({ size: "flexible" }),
             new TouchBarOtherItemsProxy(),
