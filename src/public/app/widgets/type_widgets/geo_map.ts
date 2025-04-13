@@ -15,6 +15,7 @@ import appContext from "../../components/app_context.js";
 
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
+import { hasTouchBar } from "../../services/utils.js";
 
 const TPL = /*html*/`\
 <div class="note-detail-geo-map note-detail-printable">
@@ -152,13 +153,16 @@ export default class GeoMapTypeWidget extends TypeWidget {
         map.on("moveend", updateFn);
         map.on("zoomend", updateFn);
         map.on("click", (e) => this.#onMapClicked(e));
-        map.on("zoom", () => {
-            if (!this.ignoreNextZoomEvent) {
-                this.triggerCommand("refreshTouchBar");
-            }
 
-            this.ignoreNextZoomEvent = false;
-        });
+        if (hasTouchBar) {
+            map.on("zoom", () => {
+                if (!this.ignoreNextZoomEvent) {
+                    this.triggerCommand("refreshTouchBar");
+                }
+
+                this.ignoreNextZoomEvent = false;
+            });
+        }
     }
 
     async #restoreViewportAndZoom() {
@@ -287,7 +291,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
     #changeState(newState: State) {
         this._state = newState;
         this.geoMapWidget.$container.toggleClass("placing-note", newState === State.NewNote);
-        this.triggerCommand("refreshTouchBar");
+        if (hasTouchBar) {
+            this.triggerCommand("refreshTouchBar");
+        }
     }
 
     async #onMapClicked(e: LeafletMouseEvent) {

@@ -83,7 +83,7 @@ import CopyImageReferenceButton from "../widgets/floating_buttons/copy_image_ref
 import ScrollPaddingWidget from "../widgets/scroll_padding.js";
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 import options from "../services/options.js";
-import utils from "../services/utils.js";
+import utils, { hasTouchBar } from "../services/utils.js";
 import GeoMapButtons from "../widgets/floating_buttons/geo_map_button.js";
 import ContextualHelpButton from "../widgets/floating_buttons/help_button.js";
 import CloseZenButton from "../widgets/close_zen_button.js";
@@ -162,7 +162,7 @@ export default class DesktopLayout {
                                             .filling()
                                             .collapsible()
                                             .id("center-pane")
-                                            .child(new TouchBarWidget())
+                                            .optChild(hasTouchBar, new TouchBarWidget())
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()

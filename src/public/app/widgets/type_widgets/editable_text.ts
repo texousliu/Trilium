@@ -2,7 +2,7 @@ import { t } from "../../services/i18n.js";
 import libraryLoader from "../../services/library_loader.js";
 import noteAutocompleteService from "../../services/note_autocomplete.js";
 import mimeTypesService from "../../services/mime_types.js";
-import utils from "../../services/utils.js";
+import utils, { hasTouchBar } from "../../services/utils.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
 import froca from "../../services/froca.js";
 import noteCreateService from "../../services/note_create.js";
@@ -282,8 +282,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
 
             // Touch bar integration
-            for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
-                editor.commands.get(event).on("change", () => this.triggerCommand("refreshTouchBar"));
+            if (hasTouchBar) {
+                for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
+                    editor.commands.get(event).on("change", () => this.triggerCommand("refreshTouchBar"));
+                }
             }
 
             return editor;

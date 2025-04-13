@@ -8,7 +8,7 @@ import options from "../../services/options.js";
 import dialogService from "../../services/dialog.js";
 import attributes from "../../services/attributes.js";
 import type { CommandListenerData, EventData } from "../../components/app_context.js";
-import utils from "../../services/utils.js";
+import utils, { hasTouchBar } from "../../services/utils.js";
 import date_notes from "../../services/date_notes.js";
 import appContext from "../../components/app_context.js";
 import type { EventImpl } from "@fullcalendar/core/internal";
@@ -269,7 +269,9 @@ export default class CalendarView extends ViewMode {
         this.debouncedSaveView();
         this.lastView = currentView;
 
-        appContext.triggerCommand("refreshTouchBar");
+        if (hasTouchBar) {
+            appContext.triggerCommand("refreshTouchBar");
+        }
     }
 
     async #onCalendarSelection(e: DateSelectArg) {

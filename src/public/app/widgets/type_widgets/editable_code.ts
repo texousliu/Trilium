@@ -6,6 +6,7 @@ import options from "../../services/options.js";
 import AbstractCodeTypeWidget from "./abstract_code_type_widget.js";
 import appContext from "../../components/app_context.js";
 import type { TouchBarItem } from "../touch_bar.js";
+import { hasTouchBar } from "../../services/utils.js";
 
 const TPL = /*html*/`
 <div class="note-detail-code note-detail-printable">
@@ -64,7 +65,7 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
         this.show();
 
-        if (this.parent) {
+        if (this.parent && hasTouchBar) {
             this.triggerCommand("refreshTouchBar");
         }
     }
