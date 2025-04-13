@@ -15,6 +15,7 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
     nativeImage: typeof import("electron").nativeImage;
     remote: typeof import("@electron/remote");
     lastFocusedComponent?: Component;
+    private $activeModal: JQuery<HTMLElement>;
 
     constructor() {
         super();
@@ -23,8 +24,10 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
         this.$widget = $("<div>");
 
         $(window).on("focusin", async (e) => {
-            const target = e.target;
-            const parentComponentEl = $(target).closest(".component");
+            const $target = $(e.target);
+
+            this.$activeModal = $target.closest(".modal-dialog");
+            const parentComponentEl = $target.closest(".component");
             this.lastFocusedComponent = appContext.getComponentByEl(parentComponentEl[0]);
             this.#refreshTouchBar();
         });
@@ -52,17 +55,42 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
     #refreshTouchBar() {
         const { TouchBar } = this.remote;
         const parentComponent = this.lastFocusedComponent;
-        if (!parentComponent) {
-            return;
+        let touchBar = null;
+
+        if (this.$activeModal.length > 0) {
+            touchBar = this.#buildModalTouchBar();
+        } else if (parentComponent) {
+            const items = parentComponent.triggerCommand("buildTouchBar", {
+                TouchBar,
+                buildIcon: this.buildIcon.bind(this)
+            }) as unknown as TouchBarItem[];
+            touchBar = this.#buildTouchBar(items);
         }
 
-        let result = parentComponent.triggerCommand("buildTouchBar", {
-            TouchBar,
-            buildIcon: this.buildIcon.bind(this)
-        }) as unknown as TouchBarItem[];
+        if (touchBar) {
+            this.remote.getCurrentWindow().setTouchBar(touchBar);
+        }
+    }
 
-        const touchBar = this.#buildTouchBar(result);
-        this.remote.getCurrentWindow().setTouchBar(touchBar);
+    #buildModalTouchBar() {
+        const { TouchBar } = this.remote;
+        const { TouchBarButton, TouchBarSpacer } = this.remote.TouchBar;
+        const items: TouchBarItem[] = [];
+
+        items.push(new TouchBarSpacer({ size: "flexible" }));
+
+        // Look for buttons in the modal.
+        const $buttons = this.$activeModal.find(".modal-footer button");
+        for (const button of $buttons) {
+            items.push(new TouchBarButton({
+                label: button.innerText,
+                click: () => button.click(),
+                enabled: !button.hasAttribute("disabled")
+            }));
+        }
+
+        items.push(new TouchBarSpacer({ size: "flexible" }));
+        return new TouchBar({ items });
     }
 
     #buildTouchBar(componentSpecificItems?: TouchBarItem[]) {
