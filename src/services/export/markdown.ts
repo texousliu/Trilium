@@ -37,7 +37,15 @@ function toMarkdown(content: string) {
     if (instance === null) {
         instance = new TurndownService({
             headingStyle: "atx",
-            codeBlockStyle: "fenced"
+            codeBlockStyle: "fenced",
+            blankReplacement(content, node, options) {
+                if (node.nodeName === "SECTION" && (node as HTMLElement).classList.contains("include-note")) {
+                    return (node as HTMLElement).outerHTML;
+                }
+
+                // Original implementation as per https://github.com/mixmark-io/turndown/blob/master/src/turndown.js.
+                return ("isBlock" in node && node.isBlock) ? '\n\n' : ''
+            }
         });
         // Filter is heavily based on: https://github.com/mixmark-io/turndown/issues/274#issuecomment-458730974
         instance.addRule("fencedCodeBlock", fencedCodeBlockFilter);
@@ -46,6 +54,7 @@ function toMarkdown(content: string) {
         instance.addRule("inlineLink", buildInlineLinkFilter());
         instance.addRule("figure", buildFigureFilter());
         instance.addRule("math", buildMathFilter());
+        instance.addRule("li", buildListItemFilter());
         instance.use(gfm);
         instance.keep([ "kbd" ]);
     }
@@ -203,6 +212,27 @@ function buildFigureFilter(): Rule {
         },
         replacement(content, node) {
             return (node as HTMLElement).outerHTML;
+        }
+    }
+}
+
+// Keep in line with https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js.
+function buildListItemFilter(): Rule {
+    return {
+        filter: "li",
+        replacement(content, node, options) {
+            content = content
+                .trim()
+                .replace(/\n/gm, '\n    ') // indent
+            let prefix = options.bulletListMarker + '   '
+            const parent = node.parentNode as HTMLElement;
+            if (parent.nodeName === 'OL') {
+                var start = parent.getAttribute('start')
+                var index = Array.prototype.indexOf.call(parent.children, node)
+                prefix = (start ? Number(start) + index : index + 1) + '.  '
+            }
+            const result = prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '');
+            return result;
         }
     }
 }

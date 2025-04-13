@@ -20,13 +20,9 @@ TOTP (Time-Based One-Time Password) is a security feature that generates a uniqu
 ### TOTP
 
 1.  Start Trilium Notes normally.
-    
 2.  Go to "Menu" -> "Options" -> "MFA"
-    
 3.  Click the "Generate TOTP Secret" button
-    
 4.  Copy the generated secret to your authentication app/extension
-    
 5.  Set an environment variable "TOTP\_SECRET" as the generated secret. Environment variables can be set with a .env file in the root directory, by defining them in the command line, or with a docker container.
     
     ```
@@ -45,17 +41,11 @@ TOTP (Time-Based One-Time Password) is a security feature that generates a uniqu
     # Docker
     docker run -p 8080:8080 -v ~/trilium-data:/home/node/trilium-data -e TOTP_ENABLED="true" -e TOTP_SECRET="secret" triliumnext/notes:[VERSION]
     ```
-    
 6.  Restart Trilium
-    
 7.  Go to "Options" -> "MFA"
-    
 8.  Click the "Generate Recovery Codes" button
-    
 9.  Save the recovery codes. Recovery codes can be used once in place of the TOTP if you loose access to your authenticator. After a rerecovery code is used, it will show the unix timestamp when it was used in the MFA options tab.
-    
 10.  Load the secret into an authentication app like google authenticator
-    
 
 ### OpenID
 

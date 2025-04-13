@@ -94,6 +94,7 @@ import SwitchSplitOrientationButton from "../widgets/floating_buttons/switch_lay
 import ToggleReadOnlyButton from "../widgets/floating_buttons/toggle_read_only_button.js";
 import PngExportButton from "../widgets/floating_buttons/png_export_button.js";
 import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
+import { applyModals } from "./layout_commons.js";
 
 export default class DesktopLayout {
 
@@ -120,7 +121,7 @@ export default class DesktopLayout {
         const fullWidthTabBar = launcherPaneIsHorizontal || (isElectron && !hasNativeTitleBar && isMac);
         const customTitleBarButtons = !hasNativeTitleBar && !isMac && !isWindows;
 
-        return new RootContainer(true)
+        const rootContainer = new RootContainer(true)
             .setParent(appContext)
             .optChild(
                 fullWidthTabBar,
@@ -253,30 +254,14 @@ export default class DesktopLayout {
                             )
                     )
             )
-            .child(new BulkActionsDialog())
-            .child(new AboutDialog())
-            .child(new HelpDialog())
-            .child(new RecentChangesDialog())
-            .child(new BranchPrefixDialog())
-            .child(new SortChildNotesDialog())
+            .child(new CloseZenButton())
+
+            // Desktop-specific dialogs.
             .child(new PasswordNoteSetDialog())
-            .child(new IncludeNoteDialog())
-            .child(new NoteTypeChooserDialog())
-            .child(new JumpToNoteDialog())
-            .child(new AddLinkDialog())
-            .child(new CloneToDialog())
-            .child(new MoveToDialog())
-            .child(new ImportDialog())
-            .child(new ExportDialog())
-            .child(new UploadAttachmentsDialog())
-            .child(new MarkdownImportDialog())
-            .child(new ProtectedSessionPasswordDialog())
-            .child(new RevisionsDialog())
-            .child(new DeleteNotesDialog())
-            .child(new InfoDialog())
-            .child(new ConfirmDialog())
-            .child(new PromptDialog())
-            .child(new CloseZenButton());
+            .child(new UploadAttachmentsDialog());
+
+        applyModals(rootContainer);
+        return rootContainer;
     }
 
     #buildLauncherPane(isHorizontal: boolean) {

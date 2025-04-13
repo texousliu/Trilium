@@ -280,11 +280,15 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const ctrlKey = utils.isCtrlKey(evt);
     const isLeftClick = "which" in evt && evt.which === 1;
     const isMiddleClick = "which" in evt && evt.which === 2;
-    const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick;
+    const targetIsBlank = ($link?.attr("target") === "_blank");
+    const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick || targetIsBlank;
 
     if (notePath) {
         if (openInNewTab) {
-            appContext.tabManager.openTabWithNoteWithHoisting(notePath, { viewScope });
+            appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
+                activate: targetIsBlank,
+                viewScope
+            });
         } else if (isLeftClick) {
             const ntxId = $(evt.target as any)
                 .closest("[data-ntx-id]")

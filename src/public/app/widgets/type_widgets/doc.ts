@@ -53,7 +53,7 @@ const TPL = /*html*/`<div class="note-detail-doc note-detail-printable">
         }
     </style>
 
-    <div class="note-detail-doc-content"></div>
+    <div class="note-detail-doc-content ck-content"></div>
 </div>`;
 
 export default class DocTypeWidget extends TypeWidget {

@@ -35,9 +35,6 @@ export default function renderDoc(note: FNote) {
 function processContent(url: string, $content: JQuery<HTMLElement>) {
     const dir = url.substring(0, url.lastIndexOf("/"));
 
-    // Remove top-level heading since it's already handled by the note title
-    $content.find("h1").remove();
-
     // Images are relative to the docnote but that will not work when rendered in the application since the path breaks.
     $content.find("img").each((i, el) => {
         const $img = $(el);
@@ -48,14 +45,8 @@ function processContent(url: string, $content: JQuery<HTMLElement>) {
 }
 
 function getUrl(docNameValue: string, language: string) {
-    // For help notes, we only get the content to avoid loading of styles and meta.
-    let suffix = "";
-    if (docNameValue?.startsWith("User Guide")) {
-        suffix = " .content";
-    }
-
     // Cannot have spaces in the URL due to how JQuery.load works.
     docNameValue = docNameValue.replaceAll(" ", "%20");
 
-    return `${window.glob.appPath}/doc_notes/${language}/${docNameValue}.html${suffix}`;
+    return `${window.glob.appPath}/doc_notes/${language}/${docNameValue}.html`;
 }

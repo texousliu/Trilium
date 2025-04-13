@@ -15,15 +15,14 @@ export function getHelpHiddenSubtreeData() {
     const metaFilePath = path.join(helpDir, "!!!meta.json");
 
     try {
-        const metaFileContent = JSON.parse(fs.readFileSync(metaFilePath).toString("utf-8"));
-        return parseNoteMetaFile(metaFileContent as NoteMetaFile);
+        return JSON.parse(fs.readFileSync(metaFilePath).toString("utf-8"));
     } catch (e) {
         console.warn(e);
         return [];
     }
 }
 
-function parseNoteMetaFile(noteMetaFile: NoteMetaFile): HiddenSubtreeItem[] {
+export function parseNoteMetaFile(noteMetaFile: NoteMetaFile): HiddenSubtreeItem[] {
     if (!noteMetaFile.files) {
         console.log("No meta files");
         return [];
