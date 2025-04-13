@@ -55,7 +55,7 @@ export class StreamProcessor {
                 // Log the first chunk more verbosely for debugging
                 log.info(`First content chunk [${chunk.message.content.length} chars]: "${textToAdd.substring(0, 100)}${textToAdd.length > 100 ? '...' : ''}"`);
             }
-            
+
             // For final chunks with done=true, log more information
             if (chunk.done) {
                 log.info(`Final content chunk received with done=true flag. Length: ${chunk.message.content.length}`);
@@ -85,10 +85,10 @@ export class StreamProcessor {
             if (done || chunkNumber === 1) {
                 log.info(`Sending chunk to callback: chunkNumber=${chunkNumber}, contentLength=${content?.length || 0}, done=${done}`);
             }
-            
+
             // Always make sure we have a string for content
             const safeContent = content || '';
-            
+
             const result = callback(safeContent, done, chunk);
             // Handle both Promise and void return types
             if (result instanceof Promise) {
@@ -98,7 +98,7 @@ export class StreamProcessor {
             if (chunkNumber === 1) {
                 log.info(`Successfully called streamCallback with first chunk`);
             }
-            
+
             if (done) {
                 log.info(`Successfully called streamCallback with done=true flag`);
             }
@@ -116,16 +116,16 @@ export class StreamProcessor {
     ): Promise<void> {
         try {
             log.info(`Sending explicit final done=true callback after processing all chunks. Complete text length: ${completeText?.length || 0}`);
-            
+
             // Pass the complete text instead of empty string for better UX
             // The client will know it's done based on the done=true flag
             const result = callback(completeText || '', true, { done: true, complete: true });
-            
+
             // Handle both Promise and void return types
             if (result instanceof Promise) {
                 await result;
             }
-            
+
             log.info(`Final callback sent successfully with done=true flag`);
         } catch (finalCallbackError) {
             log.error(`Error in final streamCallback: ${finalCallbackError}`);
@@ -209,4 +209,195 @@ export function createStreamHandler(
             }
         }
     };
+}
+
+/**
+ * Interface for provider-specific stream options
+ */
+export interface ProviderStreamOptions {
+    providerName: string;
+    modelName: string;
+    apiConfig?: any;
+}
+
+/**
+ * Interface for streaming response stats
+ */
+export interface StreamStats {
+    promptTokens?: number;
+    completionTokens?: number;
+    totalTokens?: number;
+}
+
+/**
+ * Perform a health check against an API endpoint
+ * @param checkFn Function that performs the actual health check API call
+ * @param providerName Name of the provider for logging
+ * @returns Promise resolving to true if healthy, or throwing an error if not
+ */
+export async function performProviderHealthCheck(
+    checkFn: () => Promise<any>,
+    providerName: string
+): Promise<boolean> {
+    try {
+        log.info(`Performing ${providerName} health check...`);
+        const healthResponse = await checkFn();
+        log.info(`${providerName} health check successful`);
+        return true;
+    } catch (healthError) {
+        log.error(`${providerName} health check failed: ${healthError instanceof Error ? healthError.message : String(healthError)}`);
+        throw new Error(`Unable to connect to ${providerName} server: ${healthError instanceof Error ? healthError.message : String(healthError)}`);
+    }
+}
+
+/**
+ * Process a stream from an LLM provider using a callback-based approach
+ * @param streamIterator Async iterator returned from the provider's API
+ * @param options Provider information and configuration
+ * @param streamCallback Optional callback function for streaming updates
+ * @returns Promise resolving to the complete response including text and tool calls
+ */
+export async function processProviderStream(
+    streamIterator: AsyncIterable<any>,
+    options: ProviderStreamOptions,
+    streamCallback?: (text: string, done: boolean, chunk?: any) => Promise<void> | void
+): Promise<{
+    completeText: string;
+    toolCalls: any[];
+    finalChunk: any | null;
+    chunkCount: number;
+}> {
+    let completeText = '';
+    let responseToolCalls: any[] = [];
+    let finalChunk: any | null = null;
+    let chunkCount = 0;
+
+    try {
+        log.info(`Starting ${options.providerName} stream processing with model ${options.modelName}`);
+
+        // Validate stream iterator
+        if (!streamIterator || typeof streamIterator[Symbol.asyncIterator] !== 'function') {
+            log.error(`Invalid stream iterator returned from ${options.providerName}`);
+            throw new Error(`Invalid stream iterator returned from ${options.providerName}`);
+        }
+
+        // Process each chunk
+        for await (const chunk of streamIterator) {
+            chunkCount++;
+            finalChunk = chunk;
+
+            // Process chunk with StreamProcessor
+            const result = await StreamProcessor.processChunk(
+                chunk,
+                completeText,
+                chunkCount,
+                { providerName: options.providerName, modelName: options.modelName }
+            );
+
+            completeText = result.completeText;
+
+            // Extract tool calls
+            const toolCalls = StreamProcessor.extractToolCalls(chunk);
+            if (toolCalls.length > 0) {
+                responseToolCalls = toolCalls;
+            }
+
+            // Call the callback with the current chunk content if provided
+            if (streamCallback) {
+                // For chunks with content, send the content directly
+                const contentProperty = getChunkContentProperty(chunk);
+                if (contentProperty) {
+                    await StreamProcessor.sendChunkToCallback(
+                        streamCallback,
+                        contentProperty,
+                        !!chunk.done, // Mark as done if done flag is set
+                        chunk,
+                        chunkCount
+                    );
+                } else if (chunk.done) {
+                    // Send empty done message for final chunk with no content
+                    await StreamProcessor.sendChunkToCallback(
+                        streamCallback,
+                        '',
+                        true,
+                        chunk,
+                        chunkCount
+                    );
+                }
+            }
+
+            // Log final chunk
+            if (chunk.done && !result.logged) {
+                log.info(`Reached final chunk (done=true) after ${chunkCount} chunks, total content length: ${completeText.length}`);
+            }
+        }
+
+        // Send one final callback with done=true if the last chunk didn't have done=true
+        if (streamCallback && (!finalChunk || !finalChunk.done)) {
+            log.info(`Sending explicit final callback with done=true flag after all chunks processed`);
+            await StreamProcessor.sendFinalCallback(streamCallback, completeText);
+        }
+
+        log.info(`Completed ${options.providerName} streaming: processed ${chunkCount} chunks, final content: ${completeText.length} chars`);
+
+        return {
+            completeText,
+            toolCalls: responseToolCalls,
+            finalChunk,
+            chunkCount
+        };
+    } catch (error) {
+        log.error(`Error in ${options.providerName} stream processing: ${error instanceof Error ? error.message : String(error)}`);
+        log.error(`Error details: ${error instanceof Error ? error.stack : 'No stack trace available'}`);
+        throw error;
+    }
+}
+
+/**
+ * Helper function to extract content from a chunk based on provider's response format
+ * Different providers may have different chunk structures
+ */
+function getChunkContentProperty(chunk: any): string | null {
+    // Check common content locations in different provider responses
+    if (chunk.message?.content) {
+        return chunk.message.content;
+    }
+    if (chunk.content) {
+        return chunk.content;
+    }
+    if (chunk.choices?.[0]?.delta?.content) {
+        return chunk.choices[0].delta.content;
+    }
+    return null;
+}
+
+/**
+ * Extract usage statistics from the final chunk based on provider format
+ */
+export function extractStreamStats(finalChunk: any | null, providerName: string): StreamStats {
+    // Handle provider-specific response formats
+    if (!finalChunk) {
+        return { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
+    }
+
+    // Ollama format
+    if (finalChunk.prompt_eval_count !== undefined && finalChunk.eval_count !== undefined) {
+        return {
+            promptTokens: finalChunk.prompt_eval_count || 0,
+            completionTokens: finalChunk.eval_count || 0,
+            totalTokens: (finalChunk.prompt_eval_count || 0) + (finalChunk.eval_count || 0)
+        };
+    }
+
+    // OpenAI-like format
+    if (finalChunk.usage) {
+        return {
+            promptTokens: finalChunk.usage.prompt_tokens || 0,
+            completionTokens: finalChunk.usage.completion_tokens || 0,
+            totalTokens: finalChunk.usage.total_tokens || 0
+        };
+    }
+
+    log.info(`No standard token usage found in ${providerName} final chunk`);
+    return { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
 }

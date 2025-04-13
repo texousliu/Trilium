@@ -8,7 +8,13 @@ import type { OllamaOptions } from './provider_options.js';
 import { getOllamaOptions } from './providers.js';
 import { Ollama, type ChatRequest, type ChatResponse as OllamaChatResponse } from 'ollama';
 import options from '../../options.js';
-import { StreamProcessor, createStreamHandler } from './stream_handler.js';
+import {
+    StreamProcessor,
+    createStreamHandler,
+    performProviderHealthCheck,
+    processProviderStream,
+    extractStreamStats
+} from './stream_handler.js';
 
 // Add an interface for tool execution feedback status
 interface ToolExecutionStatus {
@@ -256,7 +262,7 @@ export class OllamaService extends BaseAIService {
     /**
      * Handle streaming response from Ollama
      *
-     * Simplified implementation that leverages the Ollama SDK's streaming capabilities
+     * Uses reusable stream handling utilities for processing
      */
     private async handleStreamingResponse(
         client: Ollama,
@@ -269,237 +275,126 @@ export class OllamaService extends BaseAIService {
         // Log detailed information about the streaming setup
         log.info(`Ollama streaming details: model=${providerOptions.model}, streamCallback=${opts.streamCallback ? 'provided' : 'not provided'}`);
 
-        // Create a stream handler using our reusable StreamProcessor
-        const streamHandler = createStreamHandler(
-            {
-                providerName: this.getName(),
-                modelName: providerOptions.model,
-                streamCallback: opts.streamCallback
-            },
-            async (callback) => {
-                let completeText = '';
-                let responseToolCalls: any[] = [];
-                let chunkCount = 0;
-
-                try {
-                    // Create streaming request
-                    const streamingRequest = {
-                        ...requestOptions,
-                        stream: true as const
-                    };
-
-                    log.info(`Creating Ollama streaming request with options: model=${streamingRequest.model}, stream=${streamingRequest.stream}, tools=${streamingRequest.tools ? streamingRequest.tools.length : 0}`);
-
-                    // Perform health check
-                    try {
-                        log.info(`Performing Ollama health check...`);
-                        const healthCheck = await client.list();
-                        log.info(`Ollama health check successful. Available models: ${healthCheck.models.map(m => m.name).join(', ')}`);
-                    } catch (healthError) {
-                        log.error(`Ollama health check failed: ${healthError instanceof Error ? healthError.message : String(healthError)}`);
-                        throw new Error(`Unable to connect to Ollama server: ${healthError instanceof Error ? healthError.message : String(healthError)}`);
-                    }
-
-                    // Get the stream iterator
-                    log.info(`Getting stream iterator from Ollama`);
-                    const streamIterator = await client.chat(streamingRequest);
-
-                    if (!streamIterator || typeof streamIterator[Symbol.asyncIterator] !== 'function') {
-                        throw new Error('Invalid stream iterator returned');
-                    }
-
-                    // Process each chunk using our stream processor
-                    for await (const chunk of streamIterator) {
-                        chunkCount++;
-
-                        // Process the chunk and update our accumulated text
-                        const result = await StreamProcessor.processChunk(
-                            chunk,
-                            completeText,
-                            chunkCount,
-                            { providerName: this.getName(), modelName: providerOptions.model }
-                        );
-
-                        completeText = result.completeText;
-
-                        // Extract any tool calls
-                        const toolCalls = StreamProcessor.extractToolCalls(chunk);
-                        if (toolCalls.length > 0) {
-                            responseToolCalls = toolCalls;
-                        }
-
-                        // Send to callback - directly pass the content without accumulating
-                        await callback({
-                            text: chunk.message?.content || '',
-                            done: false,  // Add done property to satisfy StreamChunk
-                            raw: chunk
-                        });
-
-                        // Log completion
-                        if (chunk.done && !result.logged) {
-                            log.info(`Reached final chunk after ${chunkCount} chunks, content length: ${completeText.length} chars`);
-                        }
-                    }
-
-                    return completeText;
-                } catch (error) {
-                    log.error(`Error in Ollama streaming: ${error}`);
-                    log.error(`Error details: ${error instanceof Error ? error.stack : 'No stack trace available'}`);
-                    throw error;
-                }
-            }
-        );
+        // Create streaming request
+        const streamingRequest = {
+            ...requestOptions,
+            stream: true as const
+        };
 
         // Handle direct streamCallback if provided
         if (opts.streamCallback) {
-            let completeText = '';
-            let responseToolCalls: any[] = [];
-            let finalChunk: OllamaChatResponse | null = null;
-            let chunkCount = 0;
-
             try {
-                // Create streaming request
-                const streamingRequest = {
-                    ...requestOptions,
-                    stream: true as const
-                };
+                // Perform health check before streaming
+                await performProviderHealthCheck(
+                    async () => await client.list(),
+                    this.getName()
+                );
 
-                log.info(`Starting Ollama direct streamCallback processing with model ${providerOptions.model}`);
+                log.info(`Making Ollama streaming request after successful health check`);
+                // Get the stream iterator
+                const streamIterator = await client.chat(streamingRequest);
 
-                // Get the async iterator
-                log.info(`Calling Ollama chat API for direct streaming`);
-                let streamIterator;
-                try {
-                    log.info(`About to call client.chat with streaming request to ${options.getOption('ollamaBaseUrl')}`);
-                    log.info(`Model: ${streamingRequest.model}, Stream: ${streamingRequest.stream}`);
-                    log.info(`Messages count: ${streamingRequest.messages.length}`);
-                    log.info(`First message: role=${streamingRequest.messages[0].role}, content preview=${streamingRequest.messages[0].content?.substring(0, 50) || 'empty'}`);
-
-                    // Perform health check before streaming
-                    try {
-                        log.info(`Performing Ollama health check before direct streaming...`);
-                        const healthCheck = await client.list();
-                        log.info(`Ollama health check successful. Available models: ${healthCheck.models.map(m => m.name).join(', ')}`);
-                    } catch (healthError) {
-                        log.error(`Ollama health check failed: ${healthError instanceof Error ? healthError.message : String(healthError)}`);
-                        log.error(`This indicates a connection issue to the Ollama server at ${options.getOption('ollamaBaseUrl')}`);
-                        throw new Error(`Unable to connect to Ollama server: ${healthError instanceof Error ? healthError.message : String(healthError)}`);
-                    }
-
-                    // Proceed with streaming after successful health check
-                    log.info(`Making Ollama streaming request after successful health check`);
-                    streamIterator = await client.chat(streamingRequest);
-
-                    log.info(`Successfully obtained Ollama stream iterator for direct callback`);
-
-                    // Check if the stream iterator is valid
-                    if (!streamIterator || typeof streamIterator[Symbol.asyncIterator] !== 'function') {
-                        log.error(`Invalid stream iterator returned from Ollama: ${JSON.stringify(streamIterator)}`);
-                        throw new Error('Invalid stream iterator returned from Ollama');
-                    }
-
-                    log.info(`Stream iterator is valid, beginning processing`);
-                } catch (error) {
-                    log.error(`Error getting stream iterator from Ollama: ${error instanceof Error ? error.message : String(error)}`);
-                    log.error(`Error stack: ${error instanceof Error ? error.stack : 'No stack trace'}`);
-                    throw error;
-                }
-
-                // Process each chunk
-                try {
-                    log.info(`Starting to iterate through stream chunks`);
-                    for await (const chunk of streamIterator) {
-                        chunkCount++;
-                        finalChunk = chunk;
-
-                        // Process chunk with StreamProcessor
-                        const result = await StreamProcessor.processChunk(
-                            chunk,
-                            completeText,
-                            chunkCount,
-                            { providerName: this.getName(), modelName: providerOptions.model }
-                        );
-
-                        completeText = result.completeText;
-
-                        // Extract tool calls
-                        const toolCalls = StreamProcessor.extractToolCalls(chunk);
-                        if (toolCalls.length > 0) {
-                            responseToolCalls = toolCalls;
-                        }
-
-                        // Call the callback with the current chunk content
-                        if (opts.streamCallback) {
-                            // For chunks with content, send the content directly
-                            if (chunk.message?.content) {
-                                log.info(`Sending direct chunk #${chunkCount} with content: "${chunk.message.content.substring(0, 50)}${chunk.message.content.length > 50 ? '...' : ''}"`);
-
-                                await StreamProcessor.sendChunkToCallback(
-                                    opts.streamCallback,
-                                    chunk.message.content,
-                                    !!chunk.done, // Mark as done if done flag is set
-                                    chunk,
-                                    chunkCount
-                                );
-                            } else if (chunk.done) {
-                                // Send empty done message for final chunk with no content
-                                await StreamProcessor.sendChunkToCallback(
-                                    opts.streamCallback,
-                                    '',
-                                    true,
-                                    chunk,
-                                    chunkCount
-                                );
-                            }
-                        }
-
-                        // If this is the done chunk, log it
-                        if (chunk.done && !result.logged) {
-                            log.info(`Reached final direct chunk (done=true) after ${chunkCount} chunks, total content length: ${completeText.length}`);
-                        }
-                    }
-
-                    // Send one final callback with done=true after all chunks have been processed
-                    // Only send this if the last chunk didn't already have done=true
-                    if (opts.streamCallback && (!finalChunk || !finalChunk.done)) {
-                        log.info(`Sending explicit final callback with done=true flag after all chunks processed`);
-                        await StreamProcessor.sendFinalCallback(opts.streamCallback, completeText);
-                    }
-
-                    log.info(`Completed direct streaming from Ollama: processed ${chunkCount} chunks, final content: ${completeText.length} chars`);
-                } catch (iterationError) {
-                    log.error(`Error iterating through Ollama stream chunks: ${iterationError instanceof Error ? iterationError.message : String(iterationError)}`);
-                    log.error(`Iteration error stack: ${iterationError instanceof Error ? iterationError.stack : 'No stack trace'}`);
-                    throw iterationError;
-                }
+                // Process the stream with our reusable utility
+                const streamResult = await processProviderStream(
+                    streamIterator,
+                    {
+                        providerName: this.getName(),
+                        modelName: providerOptions.model
+                    },
+                    opts.streamCallback
+                );
 
                 // Create the final response after streaming is complete
-                return StreamProcessor.createFinalResponse(
-                    completeText,
-                    providerOptions.model,
-                    this.getName(),
-                    this.transformToolCalls(responseToolCalls),
-                    {
-                        promptTokens: finalChunk?.prompt_eval_count || 0,
-                        completionTokens: finalChunk?.eval_count || 0,
-                        totalTokens: (finalChunk?.prompt_eval_count || 0) + (finalChunk?.eval_count || 0)
-                    }
-                );
+                return {
+                    text: streamResult.completeText,
+                    model: providerOptions.model,
+                    provider: this.getName(),
+                    tool_calls: this.transformToolCalls(streamResult.toolCalls),
+                    usage: extractStreamStats(streamResult.finalChunk, this.getName())
+                };
             } catch (error) {
                 log.error(`Error in Ollama streaming with callback: ${error}`);
                 log.error(`Error details: ${error instanceof Error ? error.stack : 'No stack trace available'}`);
                 throw error;
             }
+        } else {
+            // Create a stream handler using our reusable StreamProcessor
+            const streamHandler = createStreamHandler(
+                {
+                    providerName: this.getName(),
+                    modelName: providerOptions.model,
+                    streamCallback: opts.streamCallback
+                },
+                async (callback) => {
+                    let completeText = '';
+                    let responseToolCalls: any[] = [];
+                    let chunkCount = 0;
+
+                    try {
+                        // Perform health check
+                        await performProviderHealthCheck(
+                            async () => await client.list(),
+                            this.getName()
+                        );
+
+                        // Get the stream iterator
+                        log.info(`Getting stream iterator from Ollama`);
+                        const streamIterator = await client.chat(streamingRequest);
+
+                        if (!streamIterator || typeof streamIterator[Symbol.asyncIterator] !== 'function') {
+                            throw new Error('Invalid stream iterator returned');
+                        }
+
+                        // Process each chunk using our stream processor
+                        for await (const chunk of streamIterator) {
+                            chunkCount++;
+
+                            // Process the chunk and update our accumulated text
+                            const result = await StreamProcessor.processChunk(
+                                chunk,
+                                completeText,
+                                chunkCount,
+                                { providerName: this.getName(), modelName: providerOptions.model }
+                            );
+
+                            completeText = result.completeText;
+
+                            // Extract any tool calls
+                            const toolCalls = StreamProcessor.extractToolCalls(chunk);
+                            if (toolCalls.length > 0) {
+                                responseToolCalls = toolCalls;
+                            }
+
+                            // Send to callback - directly pass the content without accumulating
+                            await callback({
+                                text: chunk.message?.content || '',
+                                done: false,  // Add done property to satisfy StreamChunk
+                                raw: chunk
+                            });
+
+                            // Log completion
+                            if (chunk.done && !result.logged) {
+                                log.info(`Reached final chunk after ${chunkCount} chunks, content length: ${completeText.length} chars`);
+                            }
+                        }
+
+                        return completeText;
+                    } catch (error) {
+                        log.error(`Error in Ollama streaming: ${error}`);
+                        log.error(`Error details: ${error instanceof Error ? error.stack : 'No stack trace available'}`);
+                        throw error;
+                    }
+                }
+            );
+
+            // Return a response object with the stream handler
+            return {
+                text: '', // Initial text is empty, will be populated during streaming
+                model: providerOptions.model,
+                provider: this.getName(),
+                stream: streamHandler as (callback: (chunk: StreamChunk) => Promise<void> | void) => Promise<string>
+            };
         }
-
-        // Return a response object with the stream handler
-        return {
-            text: '', // Initial text is empty, will be populated during streaming
-            model: providerOptions.model,
-            provider: this.getName(),
-            stream: streamHandler as (callback: (chunk: StreamChunk) => Promise<void> | void) => Promise<string>
-
-        };
     }
 
     /**
