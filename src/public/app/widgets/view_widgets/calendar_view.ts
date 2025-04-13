@@ -268,6 +268,8 @@ export default class CalendarView extends ViewMode {
 
         this.debouncedSaveView();
         this.lastView = currentView;
+
+        appContext.triggerCommand("refreshTouchBar");
     }
 
     async #onCalendarSelection(e: DateSelectArg) {
@@ -609,9 +611,16 @@ export default class CalendarView extends ViewMode {
             // Button groups.
             if (item.classList.contains("fc-button-group")) {
                 let mode: "single" | "buttons" = "single";
+                let selectedIndex = 0;
                 const segments: SegmentedControlSegment[] = [];
                 const subItems = item.childNodes as NodeListOf<HTMLElement>;
+                let index = 0;
                 for (const subItem of subItems) {
+                    if (subItem.ariaPressed === "true") {
+                        selectedIndex = index;
+                    }
+                    index++;
+
                     // Text button.
                     if (subItem.innerText) {
                         segments.push({ label: subItem.innerText });
@@ -639,9 +648,8 @@ export default class CalendarView extends ViewMode {
                 items.push(new TouchBar.TouchBarSegmentedControl({
                     mode,
                     segments,
-                    change(selectedIndex, isSelected) {
-                        subItems[selectedIndex].click();
-                    }
+                    selectedIndex,
+                    change: (selectedIndex, isSelected) => subItems[selectedIndex].click()
                 }));
                 continue;
             }
