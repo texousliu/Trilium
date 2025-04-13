@@ -1,4 +1,3 @@
-import { app } from "electron";
 import type { CommandListenerData, EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import { t } from "../../services/i18n.js";
