@@ -9639,13 +9639,6 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "habiZ3HU8Kw8",
-                                    "isInheritable": false,
-                                    "position": 20
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
                                     "value": "KC1HB96bqqHX",
                                     "isInheritable": false,
                                     "position": 30
@@ -9656,6 +9649,13 @@
                                     "value": "default-note-title",
                                     "isInheritable": false,
                                     "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "habiZ3HU8Kw8",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -10017,13 +10017,6 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "habiZ3HU8Kw8",
-                                    "isInheritable": false,
-                                    "position": 50
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
                                     "value": "vZWERwf8U3nx",
                                     "isInheritable": false,
                                     "position": 60
@@ -10034,6 +10027,13 @@
                                     "value": "bx bx-list-plus",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "habiZ3HU8Kw8",
+                                    "isInheritable": false,
+                                    "position": 50
                                 }
                             ],
                             "format": "markdown",
@@ -11071,6 +11071,27 @@
                                     "value": "script-api",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "CdNpE2pqjmI6",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Q2z6av6JZVWm",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "MEtfsqa5VwNi",
+                                    "isInheritable": false,
+                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
@@ -11091,10 +11112,17 @@
                                     "notePosition": 10,
                                     "prefix": null,
                                     "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [],
-                                    "format": "markdown",
+                                    "type": "webView",
+                                    "mime": "",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "webViewSrc",
+                                            "value": "https://triliumnext.github.io/Notes/Script%20API/interfaces/Frontend_Script_API.Api.html",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
                                     "attachments": [],
                                     "dirFileName": "Frontend API",
                                     "children": [
@@ -11112,11 +11140,18 @@
                                             "notePosition": 10,
                                             "prefix": null,
                                             "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [],
-                                            "format": "markdown",
-                                            "dataFileName": "FNote.md",
+                                            "type": "webView",
+                                            "mime": "",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "webViewSrc",
+                                                    "value": "https://triliumnext.github.io/Notes/Script%20API/classes/Frontend_Script_API.FNote.html",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                }
+                                            ],
+                                            "dataFileName": "FNote.dat",
                                             "attachments": []
                                         }
                                     ]
@@ -11134,11 +11169,18 @@
                                     "notePosition": 20,
                                     "prefix": null,
                                     "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [],
-                                    "format": "markdown",
-                                    "dataFileName": "Backend API.md",
+                                    "type": "webView",
+                                    "mime": "",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "webViewSrc",
+                                            "value": "https://triliumnext.github.io/Notes/Script%20API/interfaces/Backend_Script_API.Api.html",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
+                                    "dataFileName": "Backend API.dat",
                                     "attachments": []
                                 }
                             ]
