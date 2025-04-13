@@ -6,7 +6,6 @@
   "plugin": [
     "typedoc-plugin-missing-exports"
   ],
-  "includeVersion": true,
   "outputs": [
     {
       "name": "html",
