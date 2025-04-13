@@ -28,9 +28,9 @@ export async function createChatSession(): Promise<string | null> {
  */
 export async function checkSessionExists(sessionId: string): Promise<boolean> {
     try {
-        const sessionCheck = await server.get<any>(`llm/sessions/${sessionId}`);
+        const sessionCheck = await server.getWithSilentNotFound<any>(`llm/sessions/${sessionId}`);
         return !!(sessionCheck && sessionCheck.id);
-    } catch (error) {
+    } catch (error: any) {
         console.log(`Error checking session ${sessionId}:`, error);
         return false;
     }

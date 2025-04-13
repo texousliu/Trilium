@@ -493,7 +493,7 @@ class RestChatService {
             // Create a stream callback wrapper
             // This will ensure we properly handle all streaming messages
             let messageContent = '';
-            
+
             // Used to track tool call responses for metadata storage
             const toolResponseMap = new Map<string, string>();
             let streamFinished = false;
@@ -628,13 +628,13 @@ class RestChatService {
 
                 // Extract sources if they're available
                 const sources = (response as any).sources || [];
-                
+
                 // Store sources in the session metadata if they're present
                 if (sources.length > 0) {
                     session.metadata.sources = sources;
                     log.info(`Stored ${sources.length} sources in session metadata`);
                 }
-                
+
                 // Return the response with complete metadata
                 return {
                     content: response.text || '',
@@ -1160,12 +1160,12 @@ class RestChatService {
                         content: messageContent,
                         timestamp: new Date()
                     };
-                    
+
                     // If there were tool calls, store them with the message
                     if (response.tool_calls && response.tool_calls.length > 0) {
                         assistantMessage.tool_calls = response.tool_calls;
                     }
-                    
+
                     session.messages.push(assistantMessage);
 
                     return;
@@ -1187,12 +1187,12 @@ class RestChatService {
             // Handle standard streaming through the stream() method
             if (response.stream) {
                 log.info(`Provider ${service.getName()} supports streaming via stream() method`);
-                
+
                 // Store information about the model and provider in session metadata
                 session.metadata.model = response.model || session.metadata.model;
                 session.metadata.provider = response.provider || session.metadata.provider;
                 session.metadata.lastUpdated = new Date().toISOString();
-                
+
                 // If response has tool_calls, capture those for later storage in metadata
                 if (response.tool_calls && response.tool_calls.length > 0) {
                     log.info(`Storing ${response.tool_calls.length} initial tool calls in session metadata`);
@@ -1245,16 +1245,16 @@ class RestChatService {
                         // Signal completion when done
                         if (chunk.done) {
                             log.info(`Stream completed from ${service.getName()}, total content: ${messageContent.length} chars`);
-                            
+
                             // Store tool executions from the conversation into metadata
                             if (session.metadata.pendingToolCalls) {
                                 const toolExecutions = session.metadata.toolExecutions || [];
-                                
+
                                 // We don't have a toolResponseMap available at this scope
                                 // Just record the pending tool calls with minimal information
                                 for (const toolCall of session.metadata.pendingToolCalls) {
                                     if (!toolCall.id) continue;
-                                    
+
                                     // Parse arguments
                                     let args = toolCall.function.arguments;
                                     if (typeof args === 'string') {
@@ -1264,7 +1264,7 @@ class RestChatService {
                                             // Keep as string if not valid JSON
                                         }
                                     }
-                                    
+
                                     // Add to tool executions with minimal info
                                     toolExecutions.push({
                                         id: toolCall.id,
@@ -1274,7 +1274,7 @@ class RestChatService {
                                         timestamp: new Date().toISOString()
                                     });
                                 }
-                                
+
                                 // Update session metadata
                                 session.metadata.toolExecutions = toolExecutions;
                                 delete session.metadata.pendingToolCalls;
@@ -1478,35 +1478,35 @@ class RestChatService {
      */
     private recordToolExecution(sessionId: string, tool: any, result: string, error?: string): void {
         if (!sessionId) return;
-        
+
         const session = sessions.get(sessionId);
         if (!session) return;
-        
+
         try {
             const toolExecutions = session.metadata.toolExecutions || [];
-            
+
             // Format tool execution record
             const execution = {
                 id: tool.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
                 name: tool.function?.name || 'unknown',
-                arguments: typeof tool.function?.arguments === 'string' 
+                arguments: typeof tool.function?.arguments === 'string'
                     ? (() => { try { return JSON.parse(tool.function.arguments); } catch { return tool.function.arguments; } })()
                     : tool.function?.arguments || {},
                 result: result,
                 error: error,
                 timestamp: new Date().toISOString()
             };
-            
+
             // Add to tool executions
             toolExecutions.push(execution);
             session.metadata.toolExecutions = toolExecutions;
-            
+
             log.info(`Recorded tool execution for ${execution.name} in session ${sessionId}`);
         } catch (err) {
             log.error(`Failed to record tool execution: ${err}`);
         }
     }
-    
+
     buildContextFromNotes(sources: NoteSource[], query: string): string {
         if (!sources || sources.length === 0) {
             return query || '';
@@ -1604,7 +1604,15 @@ class RestChatService {
             // Check if session exists
             const session = sessions.get(sessionId);
             if (!session) {
-                throw new Error(`Session with ID ${sessionId} not found`);
+                // Instead of throwing an error, return a structured 404 response
+                // that the frontend can handle gracefully
+                res.status(404).json({
+                    error: true,
+                    message: `Session with ID ${sessionId} not found`,
+                    code: 'session_not_found',
+                    sessionId
+                });
+                return null; // Return null to prevent further processing
             }
 
             // Return session with metadata and additional fields

@@ -170,13 +170,13 @@ export default class LlmChatPanel extends BasicWidget {
                 error?: string;
                 timestamp: string;
             }> = [];
-            
+
             // First include any tool executions already in metadata (from streaming events)
             if (this.metadata?.toolExecutions && Array.isArray(this.metadata.toolExecutions)) {
                 toolExecutions = [...this.metadata.toolExecutions];
                 console.log(`Including ${toolExecutions.length} tool executions from metadata`);
             }
-            
+
             // Also extract any visible tool steps from the UI
             const extractedExecutions = toolSteps.map(step => {
                 // Parse tool execution information
@@ -219,7 +219,7 @@ export default class LlmChatPanel extends BasicWidget {
                     timestamp: new Date().toISOString()
                 };
             });
-            
+
             // Merge the tool executions, keeping only unique IDs
             const existingIds = new Set(toolExecutions.map((t: {id: string}) => t.id));
             for (const exec of extractedExecutions) {
@@ -287,7 +287,7 @@ export default class LlmChatPanel extends BasicWidget {
                 if (savedData.sources && Array.isArray(savedData.sources)) {
                     this.sources = savedData.sources;
                     console.log(`Loaded ${this.sources.length} sources from saved data`);
-                    
+
                     // Show sources in the UI if they exist
                     if (this.sources.length > 0) {
                         this.showSources(this.sources);
@@ -300,19 +300,19 @@ export default class LlmChatPanel extends BasicWidget {
                         ...this.metadata,
                         ...savedData.metadata
                     };
-                    
+
                     // Ensure tool executions are loaded
                     if (savedData.metadata.toolExecutions && Array.isArray(savedData.metadata.toolExecutions)) {
                         console.log(`Loaded ${savedData.metadata.toolExecutions.length} tool executions from saved data`);
-                        
+
                         if (!this.metadata.toolExecutions) {
                             this.metadata.toolExecutions = [];
                         }
-                        
+
                         // Make sure we don't lose any tool executions
                         this.metadata.toolExecutions = savedData.metadata.toolExecutions;
                     }
-                    
+
                     console.log(`Loaded metadata from saved data:`, this.metadata);
                 }
 
@@ -325,10 +325,10 @@ export default class LlmChatPanel extends BasicWidget {
                         if (sessionExists) {
                             console.log(`Restored session ${savedData.sessionId}`);
                             this.sessionId = savedData.sessionId;
-                            
+
                             // If we successfully restored a session, also fetch the latest session data
                             try {
-                                const sessionData = await server.get<{
+                                const sessionData = await server.getWithSilentNotFound<{
                                     metadata?: {
                                         model?: string;
                                         provider?: string;
@@ -356,6 +356,7 @@ export default class LlmChatPanel extends BasicWidget {
                                         content?: string;
                                     }>;
                                 }>(`llm/sessions/${savedData.sessionId}`);
+
                                 if (sessionData && sessionData.metadata) {
                                     // Update our metadata with the latest from the server
                                     this.metadata = {
@@ -363,14 +364,23 @@ export default class LlmChatPanel extends BasicWidget {
                                         ...sessionData.metadata
                                     };
                                     console.log(`Updated metadata from server for session ${savedData.sessionId}`);
-                                    
+
                                     // If server has sources, update those too
                                     if (sessionData.sources && sessionData.sources.length > 0) {
                                         this.sources = sessionData.sources;
                                     }
+                                } else {
+                                    // Session data is missing or incomplete, create a new session
+                                    console.log(`Invalid or incomplete session data for ${savedData.sessionId}, creating a new session`);
+                                    this.sessionId = null;
+                                    await this.createChatSession();
                                 }
-                            } catch (fetchError) {
+                            } catch (fetchError: any) {
+                                // Handle fetch errors (this should now only happen for network issues, not 404s)
                                 console.warn(`Could not fetch latest session data: ${fetchError}`);
+                                console.log(`Creating a new session after fetch error`);
+                                this.sessionId = null;
+                                await this.createChatSession();
                             }
                         } else {
                             console.log(`Saved session ${savedData.sessionId} not found, will create new one`);
@@ -658,14 +668,14 @@ export default class LlmChatPanel extends BasicWidget {
                         ...postResponse.metadata
                     };
                 }
-                
+
                 // Store sources from the response
                 if (postResponse.sources && postResponse.sources.length > 0) {
                     console.log(`Received ${postResponse.sources.length} sources from response`);
                     this.sources = postResponse.sources;
                     this.showSources(postResponse.sources);
                 }
-                
+
                 // Process the assistant response
                 this.processAssistantResponse(postResponse.content, postResponse);
 
@@ -693,7 +703,7 @@ export default class LlmChatPanel extends BasicWidget {
             content,
             timestamp: new Date()
         });
-        
+
         // If we received tool execution information, add it to metadata
         if (fullResponse?.metadata?.toolExecutions) {
             console.log(`Storing ${fullResponse.metadata.toolExecutions.length} tool executions from response`);
@@ -701,10 +711,10 @@ export default class LlmChatPanel extends BasicWidget {
             if (!this.metadata.toolExecutions) {
                 this.metadata.toolExecutions = [];
             }
-            
+
             // Add new tool executions
             this.metadata.toolExecutions = [
-                ...this.metadata.toolExecutions, 
+                ...this.metadata.toolExecutions,
                 ...fullResponse.metadata.toolExecutions
             ];
         }
@@ -739,7 +749,7 @@ export default class LlmChatPanel extends BasicWidget {
             // Content update handler
             (content: string, isDone: boolean = false) => {
                 this.updateStreamingUI(content, isDone);
-                
+
                 // Update session data with additional metadata when streaming is complete
                 if (isDone) {
                     // Update our metadata with info from the server
@@ -773,7 +783,7 @@ export default class LlmChatPanel extends BasicWidget {
                     }>(`llm/sessions/${this.sessionId}`)
                         .then((sessionData) => {
                             console.log("Got updated session data:", sessionData);
-                            
+
                             // Store metadata
                             if (sessionData.metadata) {
                                 this.metadata = {
@@ -781,20 +791,20 @@ export default class LlmChatPanel extends BasicWidget {
                                     ...sessionData.metadata
                                 };
                             }
-                            
+
                             // Store sources
                             if (sessionData.sources && sessionData.sources.length > 0) {
                                 this.sources = sessionData.sources;
                                 this.showSources(sessionData.sources);
                             }
-                            
+
                             // Make sure we include the cached tool executions
                             if (toolExecutionsCache.length > 0) {
                                 console.log(`Including ${toolExecutionsCache.length} cached tool executions in metadata`);
                                 if (!this.metadata.toolExecutions) {
                                     this.metadata.toolExecutions = [];
                                 }
-                                
+
                                 // Add any tool executions from our cache that aren't already in metadata
                                 const existingIds = new Set((this.metadata.toolExecutions || []).map((t: {id: string}) => t.id));
                                 for (const toolExec of toolExecutionsCache) {
@@ -804,7 +814,7 @@ export default class LlmChatPanel extends BasicWidget {
                                     }
                                 }
                             }
-                            
+
                             // Save the updated data to the note
                             this.saveCurrentData()
                                 .catch(err => console.error("Failed to save data after streaming completed:", err));
@@ -819,7 +829,7 @@ export default class LlmChatPanel extends BasicWidget {
             // Tool execution handler
             (toolData: any) => {
                 this.showToolExecutionInfo(toolData);
-                
+
                 // Cache tools we see during streaming to include them in the final saved data
                 if (toolData && toolData.action === 'result' && toolData.tool) {
                     // Create a tool execution record
@@ -831,20 +841,20 @@ export default class LlmChatPanel extends BasicWidget {
                         error: toolData.error,
                         timestamp: new Date().toISOString()
                     };
-                    
+
                     // Add to both our local cache for immediate saving and to metadata for later saving
                     toolExecutionsCache.push(toolExec);
-                    
+
                     // Initialize toolExecutions array if it doesn't exist
                     if (!this.metadata.toolExecutions) {
                         this.metadata.toolExecutions = [];
                     }
-                    
+
                     // Add tool execution to our metadata
                     this.metadata.toolExecutions.push(toolExec);
-                    
+
                     console.log(`Cached tool execution for ${toolData.tool} to be saved later`);
-                    
+
                     // Save immediately after receiving a tool execution
                     // This ensures we don't lose tool execution data if streaming fails
                     this.saveCurrentData().catch(err => {
@@ -912,7 +922,7 @@ export default class LlmChatPanel extends BasicWidget {
                 this.addMessageToChat('assistant', assistantResponse);
                 console.log(`[${logId}] Successfully added new assistant message`);
             }
-            
+
             // Update messages array only if this is the first update or the final update
             if (!this.messages.some(m => m.role === 'assistant') || isDone) {
                 // Add or update the assistant message in our local array
@@ -928,7 +938,7 @@ export default class LlmChatPanel extends BasicWidget {
                         timestamp: new Date()
                     });
                 }
-                
+
                 // If this is the final update, save the data
                 if (isDone) {
                     console.log(`[${logId}] Streaming finished, saving data to note`);
