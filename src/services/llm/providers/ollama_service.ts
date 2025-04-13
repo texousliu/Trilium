@@ -430,13 +430,27 @@ export class OllamaService extends BaseAIService {
 
                         // Call the callback with the current chunk content
                         if (opts.streamCallback) {
-                            await StreamProcessor.sendChunkToCallback(
-                                opts.streamCallback,
-                                chunk.message?.content || '',
-                                false, // Never mark as done during processing
-                                chunk,
-                                chunkCount
-                            );
+                            // For chunks with content, send the content directly
+                            if (chunk.message?.content) {
+                                log.info(`Sending direct chunk #${chunkCount} with content: "${chunk.message.content.substring(0, 50)}${chunk.message.content.length > 50 ? '...' : ''}"`);
+
+                                await StreamProcessor.sendChunkToCallback(
+                                    opts.streamCallback,
+                                    chunk.message.content,
+                                    !!chunk.done, // Mark as done if done flag is set
+                                    chunk,
+                                    chunkCount
+                                );
+                            } else if (chunk.done) {
+                                // Send empty done message for final chunk with no content
+                                await StreamProcessor.sendChunkToCallback(
+                                    opts.streamCallback,
+                                    '',
+                                    true,
+                                    chunk,
+                                    chunkCount
+                                );
+                            }
                         }
 
                         // If this is the done chunk, log it
@@ -446,7 +460,9 @@ export class OllamaService extends BaseAIService {
                     }
 
                     // Send one final callback with done=true after all chunks have been processed
-                    if (opts.streamCallback) {
+                    // Only send this if the last chunk didn't already have done=true
+                    if (opts.streamCallback && (!finalChunk || !finalChunk.done)) {
+                        log.info(`Sending explicit final callback with done=true flag after all chunks processed`);
                         await StreamProcessor.sendFinalCallback(opts.streamCallback, completeText);
                     }
 

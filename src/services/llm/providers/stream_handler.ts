@@ -40,9 +40,9 @@ export class StreamProcessor {
         let textToAdd = '';
         let logged = false;
 
-        // Log first chunk and periodic updates
-        if (chunkCount === 1 || chunkCount % 10 === 0) {
-            log.info(`Processing ${options.providerName} stream chunk #${chunkCount}, done=${!!chunk.done}, has content=${!!chunk.message?.content}`);
+        // Enhanced logging for content chunks and completion status
+        if (chunkCount === 1 || chunkCount % 10 === 0 || chunk.done) {
+            log.info(`Processing ${options.providerName} stream chunk #${chunkCount}, done=${!!chunk.done}, has content=${!!chunk.message?.content}, content length=${chunk.message?.content?.length || 0}`);
             logged = true;
         }
 
@@ -52,10 +52,19 @@ export class StreamProcessor {
             const newCompleteText = completeText + textToAdd;
 
             if (chunkCount === 1) {
-                log.info(`First content chunk: "${textToAdd.substring(0, 50)}${textToAdd.length > 50 ? '...' : ''}"`);
+                // Log the first chunk more verbosely for debugging
+                log.info(`First content chunk [${chunk.message.content.length} chars]: "${textToAdd.substring(0, 100)}${textToAdd.length > 100 ? '...' : ''}"`);
+            }
+            
+            // For final chunks with done=true, log more information
+            if (chunk.done) {
+                log.info(`Final content chunk received with done=true flag. Length: ${chunk.message.content.length}`);
             }
 
             return { completeText: newCompleteText, logged };
+        } else if (chunk.done) {
+            // If it's the final chunk with no content, log this case
+            log.info(`Empty final chunk received with done=true flag`);
         }
 
         return { completeText, logged };
@@ -72,7 +81,15 @@ export class StreamProcessor {
         chunkNumber: number
     ): Promise<void> {
         try {
-            const result = callback(content || '', done, chunk);
+            // Log all done=true callbacks and first chunk for debugging
+            if (done || chunkNumber === 1) {
+                log.info(`Sending chunk to callback: chunkNumber=${chunkNumber}, contentLength=${content?.length || 0}, done=${done}`);
+            }
+            
+            // Always make sure we have a string for content
+            const safeContent = content || '';
+            
+            const result = callback(safeContent, done, chunk);
             // Handle both Promise and void return types
             if (result instanceof Promise) {
                 await result;
@@ -80,6 +97,10 @@ export class StreamProcessor {
 
             if (chunkNumber === 1) {
                 log.info(`Successfully called streamCallback with first chunk`);
+            }
+            
+            if (done) {
+                log.info(`Successfully called streamCallback with done=true flag`);
             }
         } catch (callbackError) {
             log.error(`Error in streamCallback: ${callbackError}`);
@@ -94,12 +115,18 @@ export class StreamProcessor {
         completeText: string
     ): Promise<void> {
         try {
-            log.info(`Sending final done=true callback after processing all chunks`);
-            const result = callback('', true, { done: true });
+            log.info(`Sending explicit final done=true callback after processing all chunks. Complete text length: ${completeText?.length || 0}`);
+            
+            // Pass the complete text instead of empty string for better UX
+            // The client will know it's done based on the done=true flag
+            const result = callback(completeText || '', true, { done: true, complete: true });
+            
             // Handle both Promise and void return types
             if (result instanceof Promise) {
                 await result;
             }
+            
+            log.info(`Final callback sent successfully with done=true flag`);
         } catch (finalCallbackError) {
             log.error(`Error in final streamCallback: ${finalCallbackError}`);
         }

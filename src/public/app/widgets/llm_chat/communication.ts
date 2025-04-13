@@ -87,9 +87,13 @@ export async function setupStreamingResponse(
             // Handle content updates
             if (message.content) {
                 receivedAnyContent = true;
+                
+                console.log(`[${responseId}] Received content chunk of length ${message.content.length}, preview: "${message.content.substring(0, 50)}${message.content.length > 50 ? '...' : ''}"`);
+                
+                // Add to our accumulated response
                 assistantResponse += message.content;
 
-                // Update the UI immediately
+                // Update the UI immediately with each chunk
                 onContentUpdate(assistantResponse);
 
                 // Reset timeout since we got content

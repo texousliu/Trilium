@@ -1163,18 +1163,22 @@ class RestChatService {
                         if (chunk.text) {
                             messageContent += chunk.text;
 
-                            // Send the chunk content via WebSocket
+                            // Enhanced logging for each chunk
+                            log.info(`Received stream chunk from ${service.getName()} with ${chunk.text.length} chars of text, done=${!!chunk.done}`);
+                            
+                            // Send each individual chunk via WebSocket as it arrives
                             wsService.sendMessageToAllClients({
                                 type: 'llm-stream',
                                 sessionId,
                                 content: chunk.text,
+                                done: !!chunk.done, // Include done flag with each chunk
                                 // Include any raw data from the provider that might contain thinking/tool info
                                 ...(chunk.raw ? { raw: chunk.raw } : {})
                             } as LLMStreamMessage);
 
                             // Log the first chunk (useful for debugging)
                             if (messageContent.length === chunk.text.length) {
-                                log.info(`First stream chunk received from ${service.getName()}`);
+                                log.info(`First stream chunk received from ${service.getName()}: "${chunk.text.substring(0, 50)}${chunk.text.length > 50 ? '...' : ''}"`);
                             }
                         }
 
@@ -1198,15 +1202,23 @@ class RestChatService {
 
                         // Signal completion when done
                         if (chunk.done) {
-                            log.info(`Stream completed from ${service.getName()}`);
+                            log.info(`Stream completed from ${service.getName()}, total content: ${messageContent.length} chars`);
 
-                            // Send the final message with both content and done flag together
-                            wsService.sendMessageToAllClients({
-                                type: 'llm-stream',
-                                sessionId,
-                                content: messageContent, // Send the accumulated content
-                                done: true
-                            } as LLMStreamMessage);
+                            // Only send final done message if it wasn't already sent with content
+                            // This ensures we don't duplicate the content but still mark completion
+                            if (!chunk.text) {
+                                // Send final message with both content and done flag together
+                                wsService.sendMessageToAllClients({
+                                    type: 'llm-stream',
+                                    sessionId,
+                                    content: messageContent, // Send the accumulated content
+                                    done: true
+                                } as LLMStreamMessage);
+                                
+                                log.info(`Sent explicit final completion message with accumulated content`);
+                            } else {
+                                log.info(`Final done flag was already sent with content chunk, no need for extra message`);
+                            }
                         }
                     });
 
