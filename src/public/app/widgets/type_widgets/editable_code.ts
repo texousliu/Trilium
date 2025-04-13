@@ -65,7 +65,9 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
         this.show();
 
-        this.triggerCommand("refreshTouchBar");
+        if (this.parent) {
+            this.triggerCommand("refreshTouchBar");
+        }
     }
 
     getData() {
