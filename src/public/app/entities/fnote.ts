@@ -952,6 +952,12 @@ class FNote {
         return null;
     }
 
+    /**
+     * Executes this {@link FNote} as a front-end or back-end script.
+     *
+     * @throws an {@link Error} if the note has an incorrect note type or MIME for execution.
+     * @returns a promise that resolves when the script has been run. Additionally, for front-end notes, the promise will contain the value that is returned by the script.
+     */
     async executeScript() {
         if (!this.isJavaScript()) {
             throw new Error(`Note ${this.noteId} is of type ${this.type} and mime ${this.mime} and thus cannot be executed`);
