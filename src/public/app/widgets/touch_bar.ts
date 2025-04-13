@@ -74,8 +74,14 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
 
     #buildModalTouchBar() {
         const { TouchBar } = this.remote;
-        const { TouchBarButton, TouchBarSpacer } = this.remote.TouchBar;
+        const { TouchBarButton, TouchBarLabel, TouchBarSpacer } = this.remote.TouchBar;
         const items: TouchBarItem[] = [];
+
+        // Look for the modal title.
+        const $title = this.$activeModal.find(".modal-title");
+        if ($title.length > 0) {
+            items.push(new TouchBarLabel({ label: $title.text() }))
+        }
 
         items.push(new TouchBarSpacer({ size: "flexible" }));
 
