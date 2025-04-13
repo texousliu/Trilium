@@ -3,7 +3,7 @@ import bundleService from "../services/bundle.js";
 import RootCommandExecutor from "./root_command_executor.js";
 import Entrypoints, { type SqlExecuteResults } from "./entrypoints.js";
 import options from "../services/options.js";
-import utils from "../services/utils.js";
+import utils, { hasTouchBar } from "../services/utils.js";
 import zoomComponent from "./zoom.js";
 import TabManager from "./tab_manager.js";
 import Component from "./component.js";
@@ -25,6 +25,7 @@ import type { default as NoteContext, GetTextEditorCallback } from "./note_conte
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.js";
 import type { NativeImage, TouchBar } from "electron";
+import TouchBarComponent from "./touch_bar.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -477,6 +478,10 @@ export class AppContext extends Component {
 
         if (utils.isElectron()) {
             this.child(zoomComponent);
+        }
+
+        if (hasTouchBar) {
+            this.child(new TouchBarComponent());
         }
     }
 

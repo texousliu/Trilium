@@ -5,7 +5,7 @@ import keyboardActionService from "../../services/keyboard_actions.js";
 import options from "../../services/options.js";
 import AbstractCodeTypeWidget from "./abstract_code_type_widget.js";
 import appContext from "../../components/app_context.js";
-import type { TouchBarItem } from "../touch_bar.js";
+import type { TouchBarItem } from "../../components/touch_bar.js";
 import { hasTouchBar } from "../../services/utils.js";
 
 const TPL = /*html*/`

@@ -1,7 +1,6 @@
 import utils from "../services/utils.js";
-import Component from "../components/component.js";
-import appContext from "../components/app_context.js";
-import NoteContextAwareWidget from "./note_context_aware_widget.js";
+import Component from "./component.js";
+import appContext from "./app_context.js";
 import type { TouchBarButton, TouchBarGroup, TouchBarSegmentedControl, TouchBarSpacer } from "@electron/remote";
 
 export type TouchBarItem = (TouchBarButton | TouchBarSpacer | TouchBarGroup | TouchBarSegmentedControl);
@@ -10,7 +9,7 @@ export function buildSelectedBackgroundColor(isSelected: boolean) {
     return isSelected ? "#757575" : undefined;
 }
 
-export default class TouchBarWidget extends NoteContextAwareWidget {
+export default class TouchBarComponent extends Component {
 
     nativeImage: typeof import("electron").nativeImage;
     remote: typeof import("@electron/remote");

@@ -13,7 +13,7 @@ import date_notes from "../../services/date_notes.js";
 import appContext from "../../components/app_context.js";
 import type { EventImpl } from "@fullcalendar/core/internal";
 import debounce, { type DebouncedFunction } from "debounce";
-import type { TouchBarItem } from "../touch_bar.js";
+import type { TouchBarItem } from "../../components/touch_bar.js";
 import type { SegmentedControlSegment } from "electron";
 
 const TPL = /*html*/`
