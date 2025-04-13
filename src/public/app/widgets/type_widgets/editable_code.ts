@@ -87,11 +87,9 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
     }
 
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
-        const items: TouchBarItem[] = [
-            new TouchBar.TouchBarSpacer({ size: "flexible" }),
-        ];
-
+        const items: TouchBarItem[] = [];
         const note = this.note;
+
         if (note?.mime.startsWith("application/javascript") || note?.mime === "text/x-sqlite;schema=trilium") {
             items.push(new TouchBar.TouchBarButton({
                 icon: buildIcon("NSImageNameTouchBarPlayTemplate"),
