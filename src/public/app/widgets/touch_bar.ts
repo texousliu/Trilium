@@ -81,6 +81,7 @@ export default class TouchBarWidget extends NoteContextAwareWidget {
             }),
             new TouchBarSpacer({ size: "large" }),
             ...componentSpecificItems,
+            new TouchBarSpacer({ size: "flexible" }),
             new TouchBarOtherItemsProxy(),
             new TouchBarButton({
                 icon: this.buildIcon("NSTouchBarAddDetailTemplate"),
