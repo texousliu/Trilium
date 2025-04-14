@@ -1,6 +1,6 @@
 import options from '../../options.js';
 import { BaseAIService } from '../base_ai_service.js';
-import type { ChatCompletionOptions, ChatResponse, Message } from '../ai_interface.js';
+import type { ChatCompletionOptions, ChatResponse, Message, StreamChunk } from '../ai_interface.js';
 import { getOpenAIOptions } from './providers.js';
 import OpenAI from 'openai';
 
@@ -135,12 +135,22 @@ export class OpenAIService extends BaseAIService {
                                     }
 
                                     // Send the chunk to the caller with raw data and any accumulated tool calls
-                                    await callback({
+                                    const streamChunk: StreamChunk & { raw: any } = {
                                         text: content,
                                         done: isDone,
-                                        raw: chunk,
-                                        tool_calls: accumulatedToolCalls.length > 0 ? accumulatedToolCalls.filter(Boolean) : undefined
-                                    });
+                                        raw: chunk
+                                    };
+                                    
+                                    // Add accumulated tool calls to raw data for compatibility with tool execution display
+                                    if (accumulatedToolCalls.length > 0) {
+                                        // Add tool calls to raw data for proper display
+                                        streamChunk.raw = {
+                                            ...streamChunk.raw,
+                                            tool_calls: accumulatedToolCalls.filter(Boolean)
+                                        };
+                                    }
+                                    
+                                    await callback(streamChunk);
 
                                     if (isDone) {
                                         break;

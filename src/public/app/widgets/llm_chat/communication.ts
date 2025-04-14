@@ -97,6 +97,21 @@ export async function setupStreamingResponse(
             }
 
             if (message.type === 'tool_result' && message.toolExecution) {
+                console.log(`[${responseId}] Processing tool result: ${JSON.stringify(message.toolExecution)}`);
+                
+                // If tool execution doesn't have an action, add 'result' as the default
+                if (!message.toolExecution.action) {
+                    message.toolExecution.action = 'result';
+                }
+                
+                // First send a 'start' action to ensure the container is created
+                onToolExecution({
+                    action: 'start',
+                    tool: 'tools',
+                    result: 'Tool execution initialized'
+                });
+                
+                // Then send the actual tool execution data
                 onToolExecution(message.toolExecution);
                 return; // Skip accumulating content from this message
             }
@@ -156,6 +171,41 @@ export async function setupStreamingResponse(
                     onToolExecution(message.toolExecution);
                 }
             }
+            
+            // Handle tool calls from the raw data or direct in message (OpenAI format)
+            const toolCalls = message.tool_calls || (message.raw && message.raw.tool_calls);
+            if (toolCalls && Array.isArray(toolCalls)) {
+                console.log(`[${responseId}] Received tool calls: ${toolCalls.length} tools`);
+                
+                // First send a 'start' action to ensure the container is created
+                onToolExecution({
+                    action: 'start',
+                    tool: 'tools',
+                    result: 'Tool execution initialized'
+                });
+                
+                // Then process each tool call
+                for (const toolCall of toolCalls) {
+                    let args = toolCall.function?.arguments || {};
+                    
+                    // Try to parse arguments if they're a string
+                    if (typeof args === 'string') {
+                        try {
+                            args = JSON.parse(args);
+                        } catch (e) {
+                            console.log(`[${responseId}] Could not parse tool arguments as JSON: ${e}`);
+                            args = { raw: args };
+                        }
+                    }
+                    
+                    onToolExecution({
+                        action: 'executing',
+                        tool: toolCall.function?.name || 'unknown',
+                        toolCallId: toolCall.id,
+                        args: args
+                    });
+                }
+            }
 
             // Handle thinking state updates
             if (message.thinking) {
@@ -200,10 +250,15 @@ export async function setupStreamingResponse(
                     onContentUpdate(assistantResponse, true);
                 }
 
-                // Clean up and resolve
-                cleanupEventListener(eventListener);
-                onComplete();
-                resolve();
+                // Set a short delay before cleanup to allow any immediately following
+                // tool execution messages to be processed
+                setTimeout(() => {
+                    // Clean up and resolve
+                    console.log(`[${responseId}] Cleaning up event listener after delay`);
+                    cleanupEventListener(eventListener);
+                    onComplete();
+                    resolve();
+                }, 1000); // 1 second delay to allow tool execution messages to arrive
             }
         };
 

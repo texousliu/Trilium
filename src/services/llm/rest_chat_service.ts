@@ -1241,6 +1241,80 @@ class RestChatService {
                                 toolExecution: chunk.raw.toolExecution
                             } as LLMStreamMessage);
                         }
+                        
+                        // Handle direct tool_calls in the response (for OpenAI)
+                        if (chunk.tool_calls && chunk.tool_calls.length > 0) {
+                            log.info(`Detected direct tool_calls in stream chunk: ${chunk.tool_calls.length} tools`);
+                            
+                            // Send tool execution notification
+                            wsService.sendMessageToAllClients({
+                                type: 'tool_execution_start',
+                                sessionId
+                            } as LLMStreamMessage);
+                            
+                            // Process each tool call
+                            for (const toolCall of chunk.tool_calls) {
+                                // Process arguments
+                                let args = toolCall.function?.arguments;
+                                if (typeof args === 'string') {
+                                    try {
+                                        args = JSON.parse(args);
+                                    } catch (e) {
+                                        log.info(`Could not parse tool arguments as JSON: ${e}`);
+                                        args = { raw: args };
+                                    }
+                                }
+                                
+                                // Format into a standardized tool execution message
+                                wsService.sendMessageToAllClients({
+                                    type: 'tool_result',
+                                    sessionId,
+                                    toolExecution: {
+                                        action: 'executing',
+                                        tool: toolCall.function?.name || 'unknown',
+                                        toolCallId: toolCall.id,
+                                        args: args
+                                    }
+                                } as LLMStreamMessage);
+                            }
+                        }
+                        
+                        // Also handle tool_calls in raw data if present but not directly in chunk
+                        if (!chunk.tool_calls && chunk.raw?.tool_calls && Array.isArray(chunk.raw.tool_calls)) {
+                            log.info(`Detected tool_calls in raw data: ${chunk.raw.tool_calls.length} tools`);
+                            
+                            // Send tool execution notification if we haven't already
+                            wsService.sendMessageToAllClients({
+                                type: 'tool_execution_start',
+                                sessionId
+                            } as LLMStreamMessage);
+                            
+                            // Process each tool call
+                            for (const toolCall of chunk.raw.tool_calls) {
+                                // Process arguments
+                                let args = toolCall.function?.arguments;
+                                if (typeof args === 'string') {
+                                    try {
+                                        args = JSON.parse(args);
+                                    } catch (e) {
+                                        log.info(`Could not parse tool arguments as JSON: ${e}`);
+                                        args = { raw: args };
+                                    }
+                                }
+                                
+                                // Format into a standardized tool execution message
+                                wsService.sendMessageToAllClients({
+                                    type: 'tool_result',
+                                    sessionId,
+                                    toolExecution: {
+                                        action: 'executing',
+                                        tool: toolCall.function?.name || 'unknown',
+                                        toolCallId: toolCall.id,
+                                        args: args
+                                    }
+                                } as LLMStreamMessage);
+                            }
+                        }
 
                         // Signal completion when done
                         if (chunk.done) {

@@ -996,6 +996,23 @@ export default class LlmChatPanel extends BasicWidget {
      */
     private showToolExecutionInfo(toolExecutionData: any) {
         console.log(`Showing tool execution info: ${JSON.stringify(toolExecutionData)}`);
+        
+        // Enhanced debugging for tool execution
+        if (!toolExecutionData) {
+            console.error('Tool execution data is missing or undefined');
+            return;
+        }
+        
+        // Check for required properties
+        const actionType = toolExecutionData.action || '';
+        const toolName = toolExecutionData.tool || 'unknown';
+        console.log(`Tool execution details: action=${actionType}, tool=${toolName}, hasResult=${!!toolExecutionData.result}`);
+        
+        // Force action to 'result' if missing but result is present
+        if (!actionType && toolExecutionData.result) {
+            console.log('Setting missing action to "result" since result is present');
+            toolExecutionData.action = 'result';
+        }
 
         // Create or get the tool execution container
         let toolExecutionElement = this.noteContextChatMessages.querySelector('.chat-tool-execution');
@@ -1065,8 +1082,8 @@ export default class LlmChatPanel extends BasicWidget {
 
             let resultDisplay = '';
 
-            // Special handling for search_notes tool which has a specific structure
-            if (toolExecutionData.tool === 'search_notes' &&
+            // Special handling for note search tools which have a specific structure
+            if ((toolExecutionData.tool === 'search_notes' || toolExecutionData.tool === 'keyword_search_notes') &&
                 typeof toolExecutionData.result === 'object' &&
                 toolExecutionData.result.results) {
 
@@ -1110,8 +1127,8 @@ export default class LlmChatPanel extends BasicWidget {
             `;
             stepsContainer.appendChild(step);
 
-            // Add event listeners for note links if this is a search_notes result
-            if (toolExecutionData.tool === 'search_notes') {
+            // Add event listeners for note links if this is a note search result
+            if (toolExecutionData.tool === 'search_notes' || toolExecutionData.tool === 'keyword_search_notes') {
                 const noteLinks = step.querySelectorAll('.note-link');
                 noteLinks.forEach(link => {
                     link.addEventListener('click', (e) => {
