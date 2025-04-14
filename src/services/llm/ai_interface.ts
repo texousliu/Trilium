@@ -42,6 +42,12 @@ export interface StreamChunk {
      * This can include thinking state, tool execution info, etc.
      */
     raw?: any;
+
+    /**
+     * Tool calls from the LLM (if any)
+     * These may be accumulated over multiple chunks during streaming
+     */
+    tool_calls?: ToolCall[] | any[];
 }
 
 /**
