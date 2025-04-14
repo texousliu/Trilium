@@ -10,11 +10,9 @@ To use the sharing feature, you must have a <a class="reference-link" href="../
 1.  **Enable Sharing**: To share a note, toggle the `Shared` switch within the note's interface. Once sharing is enabled, an URL will appear, which you can click to access the shared note.
     
     ![Share Note](Sharing_share-single-note.png)
-    
 2.  **Access the Shared Note**: The link provided will open the note in your browser. If your server is not configured with a public IP, the URL will refer to `localhost (127.0.0.1)`.
     
     ![Shared Note Example](Sharing_share-single-note-.png)
-    
 
 ## Sharing a Note Subtree
 

@@ -58,7 +58,7 @@ interface NoteAndBranch {
     branch: BBranch;
 }
 
-interface Api {
+export interface Api {
     /**
      * Note where the script started executing (entrypoint).
      * As an analogy, in C this would be the file which contains the main() function of the current process.

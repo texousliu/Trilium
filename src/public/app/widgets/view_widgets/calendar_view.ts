@@ -7,12 +7,14 @@ import { t } from "../../services/i18n.js";
 import options from "../../services/options.js";
 import dialogService from "../../services/dialog.js";
 import attributes from "../../services/attributes.js";
-import type { EventData } from "../../components/app_context.js";
-import utils from "../../services/utils.js";
+import type { CommandListenerData, EventData } from "../../components/app_context.js";
+import utils, { hasTouchBar } from "../../services/utils.js";
 import date_notes from "../../services/date_notes.js";
 import appContext from "../../components/app_context.js";
 import type { EventImpl } from "@fullcalendar/core/internal";
 import debounce, { type DebouncedFunction } from "debounce";
+import type { TouchBarItem } from "../../components/touch_bar.js";
+import type { SegmentedControlSegment } from "electron";
 
 const TPL = /*html*/`
 <div class="calendar-view">
@@ -69,7 +71,7 @@ const TPL = /*html*/`
     }
     </style>
 
-    <div class="calendar-container">
+    <div class="calendar-container" tabindex="100">
     </div>
 </div>
 `;
@@ -266,6 +268,10 @@ export default class CalendarView extends ViewMode {
 
         this.debouncedSaveView();
         this.lastView = currentView;
+
+        if (hasTouchBar) {
+            appContext.triggerCommand("refreshTouchBar");
+        }
     }
 
     async #onCalendarSelection(e: DateSelectArg) {
@@ -593,6 +599,73 @@ export default class CalendarView extends ViewMode {
         const newDate = new Date(date);
         newDate.setDate(newDate.getDate() + offset);
         return newDate;
+    }
+
+    buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
+        if (!this.calendar) {
+            return;
+        }
+
+        const items: TouchBarItem[] = [];
+        const $toolbarItems = this.$calendarContainer.find(".fc-toolbar-chunk .fc-button-group, .fc-toolbar-chunk > button");
+
+        for (const item of $toolbarItems) {
+            // Button groups.
+            if (item.classList.contains("fc-button-group")) {
+                let mode: "single" | "buttons" = "single";
+                let selectedIndex = 0;
+                const segments: SegmentedControlSegment[] = [];
+                const subItems = item.childNodes as NodeListOf<HTMLElement>;
+                let index = 0;
+                for (const subItem of subItems) {
+                    if (subItem.ariaPressed === "true") {
+                        selectedIndex = index;
+                    }
+                    index++;
+
+                    // Text button.
+                    if (subItem.innerText) {
+                        segments.push({ label: subItem.innerText });
+                        continue;
+                    }
+
+                    // Icon button.
+                    const iconEl = subItem.querySelector("span.fc-icon");
+                    let icon = null;
+                    if (iconEl?.classList.contains("fc-icon-chevron-left")) {
+                        icon = "NSImageNameTouchBarGoBackTemplate";
+                        mode = "buttons";
+                    } else if (iconEl?.classList.contains("fc-icon-chevron-right")) {
+                        icon = "NSImageNameTouchBarGoForwardTemplate";
+                        mode = "buttons";
+                    }
+
+                    if (icon) {
+                        segments.push({
+                            icon: buildIcon(icon)
+                        });
+                    }
+                }
+
+                items.push(new TouchBar.TouchBarSegmentedControl({
+                    mode,
+                    segments,
+                    selectedIndex,
+                    change: (selectedIndex, isSelected) => subItems[selectedIndex].click()
+                }));
+                continue;
+            }
+
+            // Standalone item.
+            if (item.innerText) {
+                items.push(new TouchBar.TouchBarButton({
+                    label: item.innerText,
+                    click: () => item.click()
+                }));
+            }
+        }
+
+        return items;
     }
 
 }

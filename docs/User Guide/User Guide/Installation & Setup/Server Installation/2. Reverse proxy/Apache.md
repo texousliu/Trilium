@@ -7,7 +7,6 @@ I've assumed you have created a DNS A record for `trilium.yourdomain.com` that y
      docker pull triliumnext/notes:[VERSION]
      docker create --name trilium -t -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]
     ```
-    
 2.  Configure Apache proxy and websocket proxy
     
     1.  Enable apache proxy modules
@@ -18,7 +17,6 @@ I've assumed you have created a DNS A record for `trilium.yourdomain.com` that y
          a2enmod proxy_http
          a2enmod proxy_wstunnel
         ```
-        
     2.  Create a new let's encrypt certificate
         
         ```
@@ -26,7 +24,6 @@ I've assumed you have created a DNS A record for `trilium.yourdomain.com` that y
         ```
         
         Choose standalone (2) and note the location of the created certificates (typically /etc/letsencrypt/live/...)
-        
     3.  Create a new virtual host file for apache (you may want to use `apachectl -S` to determine the server root location, mine is /etc/apache2)
         
         ```
@@ -55,11 +52,8 @@ I've assumed you have created a DNS A record for `trilium.yourdomain.com` that y
              Include /etc/letsencrypt/options-ssl-apache.conf
          
         ```
-        
     4.  Enable the virtual host with `sudo a2ensite trilium.yourdomain.com.conf`
-        
     5.  Reload apache2 with `sudo systemctl reload apache2`
-        
 3.  Create and enable a systemd service to start the docker container on boot
     
     1.  Create a new empty file called `/lib/systemd/system/trilium.service` with the contents
@@ -78,7 +72,6 @@ I've assumed you have created a DNS A record for `trilium.yourdomain.com` that y
          [Install]
          WantedBy=local.target
         ```
-        
     2.  Install, enable and start service
         
         ```

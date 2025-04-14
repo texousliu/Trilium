@@ -8,6 +8,11 @@ import { parse, Renderer, type Tokens } from "marked";
 class CustomMarkdownRenderer extends Renderer {
 
     heading(data: Tokens.Heading): string {
+        // Treat h1 as raw text.
+        if (data.depth === 1) {
+            return `<h1>${data.text}</h1>`;
+        }
+
         return super.heading(data).trimEnd();
     }
 

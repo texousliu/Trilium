@@ -6,11 +6,9 @@ In Trilium, attributes are key-value pairs assigned to notes, providing addition
 1.  <a class="reference-link" href="Attributes/Labels.md">Labels</a> can be used for a variety of purposes, such as storing metadata or configuring the behaviour of notes. Labels are also searchable, enhancing note retrieval.
     
     For more information, including predefined labels, see <a class="reference-link" href="Attributes/Labels.md">Labels</a>.
-    
 2.  <a class="reference-link" href="Attributes/Relations.md">Relations</a> define connections between notes, similar to links. These can be used for metadata and scripting purposes.
     
     For more information, including a list of predefined relations, see <a class="reference-link" href="Attributes/Relations.md">Relations</a>.
-    
 
 These attributes play a crucial role in organizing, categorising, and enhancing the functionality of notes.
 

@@ -35,7 +35,7 @@ const TPL = /*html*/`
     <button class="btn btn-outline-secondary search-button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="bx bx-search"></span>
     </button>
-    <div class="dropdown-menu dropdown-menu-left tn-dropdown-list"></div>
+    <div class="dropdown-menu tn-dropdown-list"></div>
   </div>
   <input type="text" class="form-control form-control-sm search-string" placeholder="${t("quick-search.placeholder")}">
 </div>`;
@@ -56,14 +56,16 @@ export default class QuickSearchWidget extends BasicWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0], {
-            popperConfig: {
-                strategy: "fixed"
-            }
-        });
-
         this.$searchString = this.$widget.find(".search-string");
         this.$dropdownMenu = this.$widget.find(".dropdown-menu");
+
+        this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0], {
+            reference: this.$searchString[0],
+            popperConfig: {
+                strategy: "fixed",
+                placement: "bottom"
+            }
+        });
 
         this.$widget.find(".input-group-prepend").on("shown.bs.dropdown", () => this.search());
 
