@@ -19,7 +19,6 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
 
         this.id("root-widget");
         this.css("height", "100dvh");
-        this.class((isHorizontalLayout ? "horizontal" : "vertical") + "-layout");
         this.originalViewportHeight = getViewportHeight();
     }
 
