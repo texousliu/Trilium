@@ -576,15 +576,17 @@ export default class LlmChatPanel extends BasicWidget {
             }
         } else {
             // Verify the session exists on the server
-            try {
-                const sessionExists = await checkSessionExists(this.sessionId);
-                if (!sessionExists) {
-                    console.log(`Session ${this.sessionId} not found, creating a new one`);
-                    await this.createChatSession();
-                }
-            } catch (error) {
-                console.log(`Error checking session ${this.sessionId}, creating a new one`);
+            const sessionExists = await checkSessionExists(this.sessionId);
+            if (!sessionExists) {
+                console.log(`Session ${this.sessionId} not found, creating a new one`);
                 await this.createChatSession();
+
+                if (!this.sessionId) {
+                    // If still no session ID after attempted creation, show error and return
+                    console.error("Failed to create chat session after session not found");
+                    toastService.showError("Failed to create chat session");
+                    return;
+                }
             }
         }
 
