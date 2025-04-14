@@ -48,6 +48,16 @@ export interface StreamChunk {
      * These may be accumulated over multiple chunks during streaming
      */
     tool_calls?: ToolCall[] | any[];
+
+    /**
+     * Tool execution information during streaming
+     * Includes tool name, args, and execution status
+     */
+    toolExecution?: {
+        type: 'start' | 'update' | 'complete' | 'error';
+        tool: any;
+        result?: any;
+    };
 }
 
 /**
@@ -102,6 +112,7 @@ export interface ChatCompletionOptions {
 
     enableTools?: boolean; // Whether to enable tool calling
     tools?: any[]; // Tools to provide to the LLM
+    tool_choice?: any; // Tool choice parameter for the LLM
     useAdvancedContext?: boolean; // Whether to use advanced context enrichment
     toolExecutionStatus?: any[]; // Status information about executed tools for feedback
     providerMetadata?: ModelMetadata; // Metadata about the provider and model capabilities
