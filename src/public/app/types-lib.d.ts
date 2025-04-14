@@ -13,7 +13,7 @@ declare module "draggabilly" {
             containment: HTMLElement
         });
         element: HTMLElement;
-        on(event: "pointerDown" | "dragStart" | "dragEnd" | "dragMove", callback: Callback);
+        on(event: "pointerDown" | "pointerUp" | "dragStart" | "dragEnd" | "dragMove", callback: Callback);
         dragEnd();
         isDragging: boolean;
         positionDrag: () => void;

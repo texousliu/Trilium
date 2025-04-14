@@ -388,13 +388,13 @@ export default class TabRowWidget extends BasicWidget {
 
     setupScrollEvents() {
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-200));
-        this.$scrollButtonRight[0].addEventListener('click', () => this.scrollTabContainer(200));        
+        this.$scrollButtonRight[0].addEventListener('click', () => this.scrollTabContainer(200));
 
         this.$tabScrollingContainer[0].addEventListener('wheel', (event) => {
-            const targetScrollLeft = event.deltaY*1.5;
+            const targetScrollLeft = event.deltaY * 1.5;
             this.scrollTabContainer(targetScrollLeft);
         });
-        
+
         this.$tabScrollingContainer[0].addEventListener('scroll', () => {
             clearTimeout(this.updateScrollTimeout);
             this.updateScrollTimeout = setTimeout(() => {
@@ -458,7 +458,7 @@ export default class TabRowWidget extends BasicWidget {
         // this.$newTab may include margin, and using NEW_TAB_WIDTH could cause tabsContainerWidth to be slightly larger,
         // resulting in misaligned scrollbars/buttons. Therefore, use outerwidth.
         this.updateOuterWidth();
-        let tabsContainerWidth = Math.floor(this.$widget.width() ?? 0); 
+        let tabsContainerWidth = Math.floor(this.$widget.width() ?? 0);
         tabsContainerWidth -= this.newTabOuterWidth + MIN_FILLER_WIDTH;
         // Check whether the scroll buttons need to be displayed.
         if ((TAB_CONTAINER_MIN_WIDTH + MARGIN_WIDTH) * numberOfTabs > tabsContainerWidth) {
@@ -671,8 +671,14 @@ export default class TabRowWidget extends BasicWidget {
 
             this.draggabillies.push(draggabilly);
 
+            let pointerDownTime: number = 0;
             draggabilly.on("pointerDown", () => {
-                appContext.tabManager.activateNoteContext(tabEl.getAttribute("data-ntx-id"));
+                pointerDownTime = Date.now();
+            });
+            draggabilly.on("pointerUp", () => {
+                if (Date.now() - pointerDownTime < 200) {
+                    appContext.tabManager.activateNoteContext(tabEl.getAttribute("data-ntx-id"));
+                }
             });
 
             draggabilly.on("dragStart", () => {
@@ -780,7 +786,7 @@ export default class TabRowWidget extends BasicWidget {
 
     setupContainerAnchor() {
         this.$containerAnchor = $(CONTAINER_ANCHOR_TPL);
-        
+
         this.$tabContainer.append(this.$containerAnchor);
     }
 
