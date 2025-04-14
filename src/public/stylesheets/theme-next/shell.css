@@ -871,7 +871,6 @@ body.mobile .fancytree-node > span {
 
 /* #region Apply a border to the tab bar that avoids the current tab but also allows a transparent active tab. */
 body.layout-horizontal .tab-row-widget,
-body.layout-horizontal .tab-row-widget-container,
 body.layout-horizontal .tab-row-container .note-tab[active] {
     overflow: visible !important;
 }
@@ -905,8 +904,11 @@ body.layout-vertical.electron.platform-darwin .tab-row-container {
 }
 
 .tab-row-widget-container {
-    margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
     height: var(--tab-height) !important;
+}
+
+.tab-row-widget {
+    padding-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
 }
 
 body.layout-horizontal .tab-row-container {
@@ -923,13 +925,14 @@ body.layout-vertical #left-pane .quick-search {
 /* Limit the drag area for the previous elements to include just to the element itself
    and not its descendants also */
 body.layout-horizontal .tab-row-container > *,
-body.layout-vertical .tab-row-widget > *,
+body.layout-vertical .tab-row-widget > *:not(.tab-row-filler),
 body.layout-vertical #left-pane .quick-search > * {
     -webkit-app-region: no-drag;
 }
 
+body.layout-horizontal .tab-row-widget,
 body.layout-horizontal .tab-row-widget-container {
-    margin-top: 0;
+    padding-top: 0;
     position: relative;
     overflow: hidden;
 }
