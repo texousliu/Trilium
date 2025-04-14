@@ -1,7 +1,19 @@
 # Script API
-Trilium offers a "Script API" that enables scripts to perform various useful functions. There are two main APIs available:
+For [script code notes](../Scripting.md), Trilium offers an API that gives them access to various features of the application.
 
-*   [Frontend API](https://triliumnext.github.io/Notes/frontend_api/FrontendScriptApi.html)
-*   [Backend API](https://triliumnext.github.io/Notes/backend_api/BackendScriptApi.html)
+There are two APIs:
 
-Please note that the Script API is currently experimental and may undergo changes in future updates.
+*   One for the front-end scripts: <a class="reference-link" href="Script%20API/Frontend%20API">Frontend API</a>
+*   One for the back-end scripts: <a class="reference-link" href="Script%20API/Backend%20API.dat">Backend API</a>
+
+In both cases, the API resides in a global variable, `api`, that can be used anywhere in the script.
+
+For example, to display a message to the user the following front-end script can be used:
+
+```
+api.showMessage("Hello world.");
+```
+
+> [!NOTE]
+> **Note**  
+> The Script API is currently experimental and may undergo changes in future updates.

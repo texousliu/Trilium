@@ -27,7 +27,7 @@ Configure Nginx proxy and HTTPS. The operating system here is Ubuntu 18.04.
         ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
         ssl_prefer_server_ciphers on;
         access_log /var/log/nginx/access.log; #check the path of access.log, if it doesn't fit your file, change it
-        
+    
         location / {
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
@@ -40,10 +40,31 @@ Configure Nginx proxy and HTTPS. The operating system here is Ubuntu 18.04.
             proxy_redirect http://127.0.0.1:8080 https://trilium.example.net; # change them based on your IP, port and domain
         }
     }
+    
     # This part is for HTTPS forced
     server {
-                listen 80;
-                server_name trilium.example.net; # change to your domain
-                return 301 https://$server_name$request_uri;
+        listen 80;
+        server_name trilium.example.net; # change to your domain
+        return 301 https://$server_name$request_uri;
     }
+    ```
+4.  Alternatively if you want to serve the instance under a different path (useful e.g. if you want to serve multiple instances), update the location block like so:
+    
+    *   update the location with your desired path (make sure to not leave a trailing slash "/", if your `proxy_pass` does not end on a slash as well)
+    *   add the `proxy_cookie_path` directive with the same path: this allows you to stay logged in at multiple instances at the same time.
+    
+    ```
+        location /trilium/instance-one {
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_pass http://127.0.0.1:8080; # change it to a different port if non-default is used
+            proxy_cookie_path / /trilium/instance-one
+            proxy_read_timeout 90;
+            proxy_redirect http://127.0.0.1:8080 https://trilium.example.net; # change them based on your IP, port and domain
+        }
+    
     ```

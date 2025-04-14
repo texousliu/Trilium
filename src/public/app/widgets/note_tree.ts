@@ -25,6 +25,8 @@ import type FNote from "../entities/fnote.js";
 import type { NoteType } from "../entities/fnote.js";
 import type { AttributeRow, BranchRow } from "../services/load_results.js";
 import type { SetNoteOpts } from "../components/note_context.js";
+import type { TouchBarItem } from "../components/touch_bar.js";
+import type { TreeCommandNames } from "../menus/tree_context_menu.js";
 
 const TPL = /*html*/`
 <div class="tree-wrapper">
@@ -1762,5 +1764,39 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         await ws.waitForMaxKnownEntityChangeId();
 
         appContext.tabManager.getActiveContext()?.setNote(resp.note.noteId);
+    }
+
+    buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
+        const triggerCommand = (command: TreeCommandNames) => {
+            const node = this.getActiveNode();
+            const notePath = treeService.getNotePath(node);
+
+            this.triggerCommand<TreeCommandNames>(command, {
+                node,
+                notePath,
+                noteId: node.data.noteId,
+                selectedOrActiveBranchIds: this.getSelectedOrActiveBranchIds(node),
+                selectedOrActiveNoteIds: this.getSelectedOrActiveNoteIds(node)
+            });
+        }
+
+        const items: TouchBarItem[] = [
+            new TouchBar.TouchBarButton({
+                icon: buildIcon("NSImageNameTouchBarAddTemplate"),
+                click: () => {
+                    const node = this.getActiveNode();
+                    const notePath = treeService.getNotePath(node);
+                    noteCreateService.createNote(notePath, {
+                        isProtected: node.data.isProtected
+                    });
+                }
+            }),
+            new TouchBar.TouchBarButton({
+                icon: buildIcon("NSImageNameTouchBarDeleteTemplate"),
+                click: () => triggerCommand("deleteNotes")
+            })
+        ];
+
+        return items;
     }
 }

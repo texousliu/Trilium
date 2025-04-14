@@ -1,10 +1,20 @@
-<p>Trilium offers a "Script API" that enables scripts to perform various
-  useful functions. There are two main APIs available:</p>
+<p>For <a href="#root/pOsGYCXsbNQG/_help_CdNpE2pqjmI6">script code notes</a>,
+  Trilium offers an API that gives them access to various features of the
+  application.</p>
+<p>There are two APIs:</p>
 <ul>
-  <li><a href="https://triliumnext.github.io/Notes/frontend_api/FrontendScriptApi.html">Frontend API</a>
+  <li>One for the front-end scripts:&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/CdNpE2pqjmI6/GLks18SNjxmC/_help_Q2z6av6JZVWm">Frontend API</a>
   </li>
-  <li><a href="https://triliumnext.github.io/Notes/backend_api/BackendScriptApi.html">Backend API</a>
+  <li>One for the back-end scripts:&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/CdNpE2pqjmI6/GLks18SNjxmC/_help_MEtfsqa5VwNi">Backend API</a>
   </li>
 </ul>
-<p>Please note that the Script API is currently experimental and may undergo
-  changes in future updates.</p>
+<p>In both cases, the API resides in a global variable, <code>api</code>,
+  that can be used anywhere in the script.</p>
+<p>For example, to display a message to the user the following front-end
+  script can be used:</p><pre><code class="language-text-x-trilium-auto">api.showMessage("Hello world.");</code></pre>
+<aside
+class="admonition note">
+  <p><strong>Note</strong>
+    <br>The Script API is currently experimental and may undergo changes in future
+    updates.</p>
+  </aside>

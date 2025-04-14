@@ -107,10 +107,11 @@ npm install
 npm run server:start
 ```
 
+For more details, see the [development docs](https://github.com/TriliumNext/Notes/blob/develop/docs/Developer%20Guide/Developer%20Guide/Building%20and%20deployment/Running%20a%20development%20build.md).
+
 ### Documentation
 
-We are currently transitioning to a new documentation mechanism.
-Meanwhile you can still view the [archived Docs repository](https://github.com/TriliumNext/Docs).
+See the [documentation guide](https://github.com/TriliumNext/Notes/blob/develop/docs/Developer%20Guide/Developer%20Guide/Documentation.md) for details.
 
 ## 👏 Shoutouts
 
