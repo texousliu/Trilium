@@ -44,7 +44,21 @@ export const noteCreationToolDefinition: Tool = {
                 },
                 attributes: {
                     type: 'array',
-                    description: 'Array of attributes to set on the note (e.g., [{"name":"#tag"}, {"name":"priority", "value":"high"}])'
+                    description: 'Array of attributes to set on the note (e.g., [{"name":"#tag"}, {"name":"priority", "value":"high"}])',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            name: {
+                                type: 'string',
+                                description: 'Name of the attribute'
+                            },
+                            value: {
+                                type: 'string',
+                                description: 'Value of the attribute (optional)'
+                            }
+                        },
+                        required: ['name']
+                    }
                 }
             },
             required: ['title', 'content']

@@ -1,6 +1,6 @@
 /**
  * Tool Interfaces
- * 
+ *
  * This file defines the interfaces for the LLM tool calling system.
  */
 
@@ -27,6 +27,11 @@ export interface ToolParameter {
     type: string;
     description: string;
     enum?: string[];
+    items?: ToolParameter | {
+        type: string;
+        properties?: Record<string, ToolParameter>;
+        required?: string[];
+    };
 }
 
 /**
@@ -49,7 +54,7 @@ export interface ToolHandler {
      * Tool definition to be sent to the LLM
      */
     definition: Tool;
-    
+
     /**
      * Execute the tool with the given arguments
      */
