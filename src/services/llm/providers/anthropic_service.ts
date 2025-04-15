@@ -91,6 +91,7 @@ export class AnthropicService extends BaseAIService {
 
                 // Convert OpenAI-style function tools to Anthropic format
                 const anthropicTools = this.convertToolsToAnthropicFormat(opts.tools);
+
                 requestParams.tools = anthropicTools;
 
                 // Add tool_choice parameter if specified
@@ -111,12 +112,16 @@ export class AnthropicService extends BaseAIService {
             // Log request summary
             log.info(`Making ${providerOptions.stream ? 'streaming' : 'non-streaming'} request to Anthropic API with model: ${providerOptions.model}`);
 
+
             // Handle streaming responses
             if (providerOptions.stream) {
                 return this.handleStreamingResponse(client, requestParams, opts, providerOptions);
             } else {
                 // Non-streaming request
                 const response = await client.messages.create(requestParams);
+
+                // Log the complete response for debugging
+                log.info(`[DEBUG] Complete Anthropic API response: ${JSON.stringify(response, null, 2)}`);
 
                 // Get the assistant's response text from the content blocks
                 const textContent = response.content
@@ -145,7 +150,7 @@ export class AnthropicService extends BaseAIService {
                                     type: 'function', // Convert back to function type for internal use
                                     function: {
                                         name: block.name,
-                                        arguments: block.input || '{}'
+                                        arguments: JSON.stringify(block.input || {})
                                     }
                                 };
                             }
@@ -178,182 +183,215 @@ export class AnthropicService extends BaseAIService {
     /**
      * Handle streaming response from Anthropic
      *
-     * Simplified implementation that leverages the Anthropic SDK's streaming capabilities
+     * Uses the MessageStream class from the Anthropic SDK
      */
     private async handleStreamingResponse(
-        client: any,
+        client: Anthropic,
         params: any,
         opts: ChatCompletionOptions,
         providerOptions: AnthropicOptions
     ): Promise<ChatResponse> {
-        // Create a list to collect tool calls during streaming
-        const collectedToolCalls: any[] = [];
+        // Create a ChatResponse object that follows our interface requirements
+        const response: ChatResponse = {
+            text: '',
+            model: providerOptions.model,
+            provider: this.getName(),
 
-        // Create a stream handler function that processes the SDK's stream
-        const streamHandler = async (callback: (chunk: StreamChunk) => Promise<void> | void): Promise<string> => {
-            let completeText = '';
-            let currentToolCall: any = null;
+            // Define the stream function that will be used by consumers
+            stream: async (callback) => {
+                // Accumulated response
+                let fullText = '';
+                let toolCalls: any[] = [];
 
-            try {
-                // Request a streaming response from Anthropic
-                log.info(`Starting Anthropic streaming request to: ${providerOptions.baseUrl}/v1/messages`);
+                try {
+                    log.info(`Creating Anthropic streaming request for model: ${providerOptions.model}`);
 
-                const streamResponse = await client.messages.create({
-                    ...params,
-                    stream: true
-                });
+                    // Request options to pass to the Anthropic SDK
+                    const requestOptions = {};
 
-                // Process each chunk in the stream
-                for await (const chunk of streamResponse) {
-                    if (chunk.type === 'content_block_delta' && chunk.delta?.type === 'text_delta') {
-                        const text = chunk.delta.text || '';
-                        completeText += text;
+                    // Create a message stream using the SDK's stream method
+                    // This properly types the streaming response
+                    const stream = client.messages.stream({
+                        ...params,
+                    }, requestOptions);
 
-                        // Send the chunk to the caller
-                        await callback({
-                            text,
+                    // Track active tool calls by ID
+                    const activeToolCalls = new Map<string, any>();
+
+                    // Listen for text deltas
+                    stream.on('text', (textDelta) => {
+                        fullText += textDelta;
+
+                        // Pass the text chunk to the caller
+                        callback({
+                            text: textDelta,
                             done: false,
-                            raw: chunk // Include the raw chunk for advanced processing
+                            raw: { type: 'text', text: textDelta }
                         });
-                    }
-                    // Process tool use events - different format in Anthropic API
-                    else if (chunk.type === 'content_block_start' && chunk.content_block?.type === 'tool_use') {
-                        // Start collecting a new tool call - convert to our internal format (OpenAI-like)
-                        currentToolCall = {
-                            id: chunk.content_block.id,
-                            type: 'function', // Convert to function type for internal consistency
-                            function: {
-                                name: chunk.content_block.name,
-                                arguments: ''
-                            }
-                        };
+                    });
 
-                        // Log the tool use event
-                        log.info(`Streaming: Tool use started: ${chunk.content_block.name}`);
+                    // Listen for content blocks starting - used for tool calls
+                    stream.on('contentBlock', async (block) => {
+                        if (block.type === 'tool_use') {
+                            // Create a structured tool call in our expected format
+                            const toolCall = {
+                                id: block.id,
+                                type: 'function',
+                                function: {
+                                    name: block.name,
+                                    arguments: JSON.stringify(block.input || {})
+                                }
+                            };
 
-                        // Send the tool call event
-                        await callback({
-                            text: '',
-                            done: false,
-                            toolExecution: {
-                                type: 'start',
-                                tool: currentToolCall
-                            },
-                            raw: chunk
-                        });
-                    }
-                    // Process tool input deltas
-                    else if (chunk.type === 'content_block_delta' && chunk.delta?.type === 'tool_use_delta' && currentToolCall) {
-                        // Accumulate tool input
-                        if (chunk.delta.input) {
-                            currentToolCall.function.arguments += chunk.delta.input;
+                            // Store in our active tools map
+                            activeToolCalls.set(block.id, toolCall);
 
-                            // Send the tool input update
+                            // Notify about tool execution start
                             await callback({
                                 text: '',
                                 done: false,
                                 toolExecution: {
-                                    type: 'update',
-                                    tool: currentToolCall
+                                    type: 'start',
+                                    tool: toolCall
                                 },
-                                raw: chunk
+                                raw: block
                             });
                         }
-                    }
-                    // Process tool use completion
-                    else if (chunk.type === 'content_block_stop' && currentToolCall) {
-                        // Add the completed tool call to our list
-                        collectedToolCalls.push({ ...currentToolCall });
+                    });
 
-                        // Log the tool completion
-                        log.info(`Streaming: Tool use completed: ${currentToolCall.function.name}`);
+                    // Listen for input JSON updates (tool arguments)
+                    stream.on('inputJson', async (jsonFragment) => {
+                        // Find the most recent tool call
+                        if (activeToolCalls.size > 0) {
+                            const lastToolId = Array.from(activeToolCalls.keys()).pop();
+                            if (lastToolId) {
+                                const toolCall = activeToolCalls.get(lastToolId);
 
-                        // Send the tool completion event
-                        await callback({
-                            text: '',
-                            done: false,
-                            toolExecution: {
-                                type: 'complete',
-                                tool: currentToolCall
-                            },
-                            tool_calls: collectedToolCalls.length > 0 ? collectedToolCalls : undefined,
-                            raw: chunk
-                        });
+                                // Update the arguments
+                                if (toolCall.function.arguments === '{}') {
+                                    toolCall.function.arguments = jsonFragment;
+                                } else {
+                                    toolCall.function.arguments += jsonFragment;
+                                }
 
-                        // Reset current tool call
-                        currentToolCall = null;
-                    }
-                }
-
-                // Signal completion with all tool calls
-                log.info(`Streaming complete, collected ${collectedToolCalls.length} tool calls`);
-                if (collectedToolCalls.length > 0) {
-                    log.info(`Tool calls detected in final response: ${JSON.stringify(collectedToolCalls)}`);
-                }
-
-                await callback({
-                    text: '',
-                    done: true,
-                    tool_calls: collectedToolCalls.length > 0 ? collectedToolCalls : undefined
-                });
-
-                return completeText;
-            } catch (error) {
-                log.error(`Error in Anthropic streaming: ${error}`);
-
-                // More detailed error logging
-                if (error instanceof Error) {
-                    log.error(`[DEBUG] Error name: ${error.name}`);
-                    log.error(`[DEBUG] Error message: ${error.message}`);
-                    log.error(`[DEBUG] Error stack: ${error.stack}`);
-
-                    // If there's response data in the error, log that too
-                    const anyError = error as any;
-                    if (anyError.response) {
-                        log.error(`Error response status: ${anyError.response.status}`);
-                        log.error(`Error response data: ${JSON.stringify(anyError.response.data)}`);
-                    }
-                }
-
-                throw error;
-            }
-        };
-
-        // Create a custom stream function that captures tool calls
-        const captureToolCallsStream = async (callback: (chunk: StreamChunk) => Promise<void> | void): Promise<string> => {
-            // Use the original stream handler but wrap it to capture tool calls
-            return streamHandler(async (chunk: StreamChunk) => {
-                // If the chunk has tool calls, update our collection
-                if (chunk.tool_calls && chunk.tool_calls.length > 0) {
-                    // Update our collection with new tool calls
-                    chunk.tool_calls.forEach(toolCall => {
-                        // Only add if it's not already in the collection
-                        if (!collectedToolCalls.some(tc => tc.id === toolCall.id)) {
-                            collectedToolCalls.push(toolCall);
+                                // Notify about the update
+                                await callback({
+                                    text: '',
+                                    done: false,
+                                    toolExecution: {
+                                        type: 'update',
+                                        tool: toolCall
+                                    },
+                                    raw: { type: 'json_fragment', data: jsonFragment }
+                                });
+                            }
                         }
                     });
+
+                    // Listen for message completion
+                    stream.on('message', async (message) => {
+                        // Process any tool calls from the message
+                        if (message.content) {
+                            // Find tool use blocks in the content
+                            const toolUseBlocks = message.content.filter(
+                                block => block.type === 'tool_use'
+                            );
+
+                            // Convert tool use blocks to our expected format
+                            if (toolUseBlocks.length > 0) {
+                                toolCalls = toolUseBlocks.map(block => {
+                                    if (block.type === 'tool_use') {
+                                        return {
+                                            id: block.id,
+                                            type: 'function',
+                                            function: {
+                                                name: block.name,
+                                                arguments: JSON.stringify(block.input || {})
+                                            }
+                                        };
+                                    }
+                                    return null;
+                                }).filter(Boolean);
+
+                                // For any active tool calls, mark them as complete
+                                for (const [toolId, toolCall] of activeToolCalls.entries()) {
+                                    await callback({
+                                        text: '',
+                                        done: false,
+                                        toolExecution: {
+                                            type: 'complete',
+                                            tool: toolCall
+                                        },
+                                        raw: { type: 'tool_complete', toolId }
+                                    });
+                                }
+                            }
+
+                            // Extract text from text blocks
+                            const textBlocks = message.content.filter(
+                                block => block.type === 'text'
+                            ) as Array<{ type: 'text', text: string }>;
+
+                            // Update fullText if needed
+                            if (textBlocks.length > 0) {
+                                const allText = textBlocks.map(block => block.text).join('');
+                                // Only update if different from what we've accumulated
+                                if (allText !== fullText) {
+                                    fullText = allText;
+                                }
+                            }
+                        }
+                    });
+
+                    // Listen for the final message
+                    stream.on('finalMessage', async (message) => {
+                        // Set the response text and tool calls
+                        response.text = fullText;
+                        if (toolCalls.length > 0) {
+                            response.tool_calls = toolCalls;
+                        }
+
+                        // Send final completion with full text and all tool calls
+                        await callback({
+                            text: fullText,
+                            done: true,
+                            tool_calls: toolCalls.length > 0 ? toolCalls : undefined,
+                            raw: message
+                        });
+                    });
+
+                    // Listen for errors
+                    stream.on('error', (error) => {
+                        log.error(`Anthropic streaming error: ${error}`);
+                        throw error;
+                    });
+
+                    // Wait for the stream to complete
+                    await stream.done();
+
+                    return fullText;
+                } catch (error) {
+                    log.error(`Anthropic streaming error: ${error}`);
+
+                    // Enhanced error diagnostic for Anthropic SDK errors
+                    if (error instanceof Error) {
+                        log.error(`Error name: ${error.name}`);
+                        log.error(`Error message: ${error.message}`);
+
+                        // Type cast to access potential Anthropic API error properties
+                        const apiError = error as any;
+                        if (apiError.status) {
+                            log.error(`API status: ${apiError.status}`);
+                        }
+                        if (apiError.error) {
+                            log.error(`API error details: ${JSON.stringify(apiError.error)}`);
+                        }
+                    }
+
+                    throw error;
                 }
-
-                // Call the original callback
-                return callback(chunk);
-            });
+            }
         };
-
-        // Return a response object with the stream handler and tool_calls property
-        const response: ChatResponse = {
-            text: '', // Initial text is empty, will be populated during streaming
-            model: providerOptions.model,
-            provider: this.getName(),
-            stream: captureToolCallsStream
-        };
-
-        // Define a getter for tool_calls that will return the collected tool calls
-        Object.defineProperty(response, 'tool_calls', {
-            get: function() {
-                return collectedToolCalls.length > 0 ? collectedToolCalls : undefined;
-            },
-            enumerable: true
-        });
 
         return response;
     }
@@ -369,18 +407,87 @@ export class AnthropicService extends BaseAIService {
             if (msg.role === 'system') {
                 // System messages are handled separately in the API call
                 continue;
-            } else if (msg.role === 'user' || msg.role === 'assistant') {
-                // Convert to Anthropic format
+            } else if (msg.role === 'user') {
+                // Convert user message to Anthropic format
                 anthropicMessages.push({
                     role: msg.role,
                     content: msg.content
                 });
+            } else if (msg.role === 'assistant') {
+                // Assistant messages need special handling for tool_calls
+                if (msg.tool_calls && msg.tool_calls.length > 0) {
+                    // Create content blocks array for tool calls
+                    const content = [];
+
+                    // Add text content if present
+                    if (msg.content) {
+                        content.push({
+                            type: 'text',
+                            text: msg.content
+                        });
+                    }
+
+                    // Add tool_use blocks for each tool call
+                    for (const toolCall of msg.tool_calls) {
+                        if (toolCall.function && toolCall.function.name) {
+                            try {
+                                // Parse arguments if they're a string
+                                let parsedArgs = toolCall.function.arguments;
+                                if (typeof parsedArgs === 'string') {
+                                    try {
+                                        parsedArgs = JSON.parse(parsedArgs);
+                                    } catch (e) {
+                                        // Keep as string if parsing fails
+                                        log.info(`Could not parse tool arguments as JSON: ${e}`);
+                                    }
+                                }
+
+                                // Add tool_use block
+                                content.push({
+                                    type: 'tool_use',
+                                    id: toolCall.id || `tool_${Date.now()}`,
+                                    name: toolCall.function.name,
+                                    input: parsedArgs
+                                });
+                            } catch (e) {
+                                log.error(`Error processing tool call: ${e}`);
+                            }
+                        }
+                    }
+
+                    // Add the assistant message with content blocks
+                    anthropicMessages.push({
+                        role: 'assistant',
+                        content
+                    });
+                } else {
+                    // Regular assistant message without tool calls
+                    anthropicMessages.push({
+                        role: 'assistant',
+                        content: msg.content
+                    });
+                }
             } else if (msg.role === 'tool') {
-                // Tool response messages - typically follow a tool call from the assistant
-                anthropicMessages.push({
-                    role: 'user',
-                    content: msg.content
-                });
+                // Tool response messages need to be properly formatted as tool_result
+                if (msg.tool_call_id) {
+                    // Format as a tool_result message
+                    anthropicMessages.push({
+                        role: 'user',
+                        content: [
+                            {
+                                type: 'tool_result',
+                                tool_use_id: msg.tool_call_id,
+                                content: msg.content
+                            }
+                        ]
+                    });
+                } else {
+                    // Fallback if no tool_call_id is present
+                    anthropicMessages.push({
+                        role: 'user',
+                        content: msg.content
+                    });
+                }
             }
         }
 
@@ -396,6 +503,8 @@ export class AnthropicService extends BaseAIService {
         if (!tools || tools.length === 0) {
             return [];
         }
+
+        log.info(`[TOOL DEBUG] Converting ${tools.length} tools to Anthropic format`);
 
         // Filter out invalid tools
         const validTools = tools.filter(tool => {
@@ -420,9 +529,28 @@ export class AnthropicService extends BaseAIService {
         }
 
         // Convert tools to Anthropic format
-        return validTools.map((tool: any) => {
+        const convertedTools = validTools.map((tool: any) => {
             // Convert from OpenAI format to Anthropic format
             if (tool.type === 'function' && tool.function) {
+                log.info(`[TOOL DEBUG] Converting function tool: ${tool.function.name}`);
+
+                // Check the parameters structure
+                if (tool.function.parameters) {
+                    log.info(`[TOOL DEBUG] Parameters for ${tool.function.name}:`);
+                    log.info(`[TOOL DEBUG] - Type: ${tool.function.parameters.type}`);
+                    log.info(`[TOOL DEBUG] - Properties: ${JSON.stringify(tool.function.parameters.properties || {})}`);
+                    log.info(`[TOOL DEBUG] - Required: ${JSON.stringify(tool.function.parameters.required || [])}`);
+
+                    // Check if the required array is present and properly populated
+                    if (!tool.function.parameters.required || !Array.isArray(tool.function.parameters.required)) {
+                        log.error(`[TOOL DEBUG] WARNING: Tool ${tool.function.name} missing required array in parameters`);
+                    } else if (tool.function.parameters.required.length === 0) {
+                        log.error(`[TOOL DEBUG] WARNING: Tool ${tool.function.name} has empty required array - Anthropic may send empty inputs`);
+                    }
+                } else {
+                    log.error(`[TOOL DEBUG] WARNING: Tool ${tool.function.name} has no parameters defined`);
+                }
+
                 return {
                     name: tool.function.name,
                     description: tool.function.description || '',
@@ -432,6 +560,7 @@ export class AnthropicService extends BaseAIService {
 
             // Handle already converted Anthropic format (from our temporary fix)
             if (tool.type === 'custom' && tool.custom) {
+                log.info(`[TOOL DEBUG] Converting custom tool: ${tool.custom.name}`);
                 return {
                     name: tool.custom.name,
                     description: tool.custom.description || '',
@@ -441,6 +570,7 @@ export class AnthropicService extends BaseAIService {
 
             // If the tool is already in the correct Anthropic format
             if (tool.name && (tool.input_schema || tool.parameters)) {
+                log.info(`[TOOL DEBUG] Tool already in Anthropic format: ${tool.name}`);
                 return {
                     name: tool.name,
                     description: tool.description || '',
@@ -451,5 +581,7 @@ export class AnthropicService extends BaseAIService {
             log.error(`Unhandled tool format encountered`);
             return null;
         }).filter(Boolean); // Filter out any null values
+
+        return convertedTools;
     }
 }

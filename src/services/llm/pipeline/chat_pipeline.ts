@@ -318,6 +318,24 @@ export class ChatPipeline {
             // Enhanced tool_calls detection - check both direct property and getter
             let hasToolCalls = false;
 
+            log.info(`[TOOL CALL DEBUG] Starting tool call detection for provider: ${currentResponse.provider}`);
+            // Check response object structure
+            log.info(`[TOOL CALL DEBUG] Response properties: ${Object.keys(currentResponse).join(', ')}`);
+
+            // Try to access tool_calls as a property
+            if ('tool_calls' in currentResponse) {
+                log.info(`[TOOL CALL DEBUG] tool_calls exists as a direct property`);
+                log.info(`[TOOL CALL DEBUG] tool_calls type: ${typeof currentResponse.tool_calls}`);
+
+                if (currentResponse.tool_calls && Array.isArray(currentResponse.tool_calls)) {
+                    log.info(`[TOOL CALL DEBUG] tool_calls is an array with length: ${currentResponse.tool_calls.length}`);
+                } else {
+                    log.info(`[TOOL CALL DEBUG] tool_calls is not an array or is empty: ${JSON.stringify(currentResponse.tool_calls)}`);
+                }
+            } else {
+                log.info(`[TOOL CALL DEBUG] tool_calls does not exist as a direct property`);
+            }
+
             // First check the direct property
             if (currentResponse.tool_calls && currentResponse.tool_calls.length > 0) {
                 hasToolCalls = true;
@@ -326,24 +344,50 @@ export class ChatPipeline {
             }
             // Check if it might be a getter (for dynamic tool_calls collection)
             else {
+                log.info(`[TOOL CALL DEBUG] Direct property check failed, trying getter approach`);
                 try {
                     const toolCallsDesc = Object.getOwnPropertyDescriptor(currentResponse, 'tool_calls');
+
+                    if (toolCallsDesc) {
+                        log.info(`[TOOL CALL DEBUG] Found property descriptor for tool_calls: ${JSON.stringify({
+                            configurable: toolCallsDesc.configurable,
+                            enumerable: toolCallsDesc.enumerable,
+                            hasGetter: !!toolCallsDesc.get,
+                            hasSetter: !!toolCallsDesc.set
+                        })}`);
+                    } else {
+                        log.info(`[TOOL CALL DEBUG] No property descriptor found for tool_calls`);
+                    }
+
                     if (toolCallsDesc && typeof toolCallsDesc.get === 'function') {
+                        log.info(`[TOOL CALL DEBUG] Attempting to call the tool_calls getter`);
                         const dynamicToolCalls = toolCallsDesc.get.call(currentResponse);
+
+                        log.info(`[TOOL CALL DEBUG] Getter returned: ${JSON.stringify(dynamicToolCalls)}`);
+
                         if (dynamicToolCalls && dynamicToolCalls.length > 0) {
                             hasToolCalls = true;
                             log.info(`Response has dynamic tool_calls with ${dynamicToolCalls.length} tools`);
                             log.info(`Dynamic tool calls details: ${JSON.stringify(dynamicToolCalls)}`);
                             // Ensure property is available for subsequent code
                             currentResponse.tool_calls = dynamicToolCalls;
+                            log.info(`[TOOL CALL DEBUG] Updated currentResponse.tool_calls with dynamic values`);
+                        } else {
+                            log.info(`[TOOL CALL DEBUG] Getter returned no valid tool calls`);
                         }
+                    } else {
+                        log.info(`[TOOL CALL DEBUG] No getter function found for tool_calls`);
                     }
-                } catch (e) {
+                } catch (e: any) {
                     log.error(`Error checking dynamic tool_calls: ${e}`);
+                    log.error(`[TOOL CALL DEBUG] Error details: ${e.stack || 'No stack trace'}`);
                 }
             }
 
             log.info(`Response has tool_calls: ${hasToolCalls ? 'true' : 'false'}`);
+            if (hasToolCalls && currentResponse.tool_calls) {
+                log.info(`[TOOL CALL DEBUG] Final tool_calls that will be used: ${JSON.stringify(currentResponse.tool_calls)}`);
+            }
 
             // Tool execution loop
             if (toolsEnabled && hasToolCalls && currentResponse.tool_calls) {
@@ -638,14 +682,39 @@ export class ChatPipeline {
                 // If streaming was paused for tool execution, resume it now with the final response
                 if (isStreaming && streamCallback && streamingPaused) {
                     // First log for debugging
-                    log.info(`Resuming streaming with final response: ${currentResponse.text.length} chars`);
+                    const responseText = currentResponse.text || "";
+                    log.info(`Resuming streaming with final response: ${responseText.length} chars`);
 
-                    // Resume streaming with the final response text
-                    // This is where we send the definitive done:true signal with the complete content
-                    streamCallback(currentResponse.text, true);
-
-                    // Log confirmation
-                    log.info(`Sent final response with done=true signal`);
+                    if (responseText.length > 0) {
+                        // Resume streaming with the final response text
+                        // This is where we send the definitive done:true signal with the complete content
+                        streamCallback(responseText, true);
+                        log.info(`Sent final response with done=true signal and text content`);
+                    } else {
+                        // For Anthropic, sometimes text is empty but response is in stream
+                        if (currentResponse.provider === 'Anthropic' && currentResponse.stream) {
+                            log.info(`Detected empty response text for Anthropic provider with stream, sending stream content directly`);
+                            // For Anthropic with stream mode, we need to stream the final response
+                            if (currentResponse.stream) {
+                                await currentResponse.stream(async (chunk: StreamChunk) => {
+                                    // Process the chunk
+                                    const processedChunk = await this.processStreamChunk(chunk, input.options);
+                                    
+                                    // Forward to callback
+                                    streamCallback(
+                                        processedChunk.text, 
+                                        processedChunk.done || chunk.done || false,
+                                        chunk
+                                    );
+                                });
+                                log.info(`Completed streaming final Anthropic response after tool execution`);
+                            }
+                        } else {
+                            // Empty response with done=true as fallback
+                            streamCallback('', true);
+                            log.info(`Sent empty final response with done=true signal`);
+                        }
+                    }
                 }
             } else if (toolsEnabled) {
                 log.info(`========== NO TOOL CALLS DETECTED ==========`);
