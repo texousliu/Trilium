@@ -92,11 +92,10 @@ function login(req: Request, res: Response) {
     const rememberMe = req.body.rememberMe;
 
     req.session.regenerate(() => {
-        if (rememberMe) {
-            req.session.cookie.maxAge = 21 * 24 * 3600000;  // 3 weeks
-        } else {
+        if (!rememberMe) {
             // unset default maxAge set by sessionParser
-            // Cookie becomes non-persistent and expires after current browser session (e.g. when browser is closed)
+            // Cookie becomes non-persistent and expires
+            // after current browser session (e.g. when browser is closed)
             req.session.cookie.maxAge = undefined;
         }
 
