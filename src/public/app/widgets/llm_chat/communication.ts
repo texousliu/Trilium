@@ -98,19 +98,19 @@ export async function setupStreamingResponse(
 
             if (message.type === 'tool_result' && message.toolExecution) {
                 console.log(`[${responseId}] Processing tool result: ${JSON.stringify(message.toolExecution)}`);
-                
+
                 // If tool execution doesn't have an action, add 'result' as the default
                 if (!message.toolExecution.action) {
                     message.toolExecution.action = 'result';
                 }
-                
+
                 // First send a 'start' action to ensure the container is created
                 onToolExecution({
                     action: 'start',
                     tool: 'tools',
                     result: 'Tool execution initialized'
                 });
-                
+
                 // Then send the actual tool execution data
                 onToolExecution(message.toolExecution);
                 return; // Skip accumulating content from this message
@@ -142,8 +142,13 @@ export async function setupStreamingResponse(
 
                 console.log(`[${responseId}] Received content chunk of length ${message.content.length}, preview: "${message.content.substring(0, 50)}${message.content.length > 50 ? '...' : ''}"`);
 
-                // Add to our accumulated response
-                assistantResponse += message.content;
+                // Check if this is a duplicated message containing the same content we already have
+                if (message.done && assistantResponse.includes(message.content)) {
+                    console.log(`[${responseId}] Ignoring duplicated content in done message`);
+                } else {
+                    // Add to our accumulated response
+                    assistantResponse += message.content;
+                }
 
                 // Update the UI immediately with each chunk
                 onContentUpdate(assistantResponse, false);
@@ -171,23 +176,23 @@ export async function setupStreamingResponse(
                     onToolExecution(message.toolExecution);
                 }
             }
-            
+
             // Handle tool calls from the raw data or direct in message (OpenAI format)
             const toolCalls = message.tool_calls || (message.raw && message.raw.tool_calls);
             if (toolCalls && Array.isArray(toolCalls)) {
                 console.log(`[${responseId}] Received tool calls: ${toolCalls.length} tools`);
-                
+
                 // First send a 'start' action to ensure the container is created
                 onToolExecution({
                     action: 'start',
                     tool: 'tools',
                     result: 'Tool execution initialized'
                 });
-                
+
                 // Then process each tool call
                 for (const toolCall of toolCalls) {
                     let args = toolCall.function?.arguments || {};
-                    
+
                     // Try to parse arguments if they're a string
                     if (typeof args === 'string') {
                         try {
@@ -197,7 +202,7 @@ export async function setupStreamingResponse(
                             args = { raw: args };
                         }
                     }
-                    
+
                     onToolExecution({
                         action: 'executing',
                         tool: toolCall.function?.name || 'unknown',
@@ -228,25 +233,21 @@ export async function setupStreamingResponse(
                     timeoutId = null;
                 }
 
-                // Check if we have content in the done message
-                if (message.content) {
+                // Check if we have content in the done message - ONLY process if we haven't received any content yet
+                if (message.content && !receivedAnyContent) {
                     console.log(`[${responseId}] Processing content in done message: ${message.content.length} chars`);
                     receivedAnyContent = true;
 
-                    // Replace current response if we didn't have content before or if it's empty
-                    if (assistantResponse.length === 0) {
-                        console.log(`[${responseId}] Using content from done message as full response`);
-                        assistantResponse = message.content;
-                    }
-                    // Otherwise append it if it's different
-                    else if (message.content !== assistantResponse) {
-                        console.log(`[${responseId}] Appending content from done message to existing response`);
-                        assistantResponse += message.content;
-                    }
-                    else {
-                        console.log(`[${responseId}] Content in done message is identical to existing response, not appending`);
-                    }
-
+                    // Use content from done message as full response
+                    console.log(`[${responseId}] Using content from done message as full response`);
+                    assistantResponse = message.content;
+                    onContentUpdate(assistantResponse, true);
+                } else if (message.content) {
+                    // We already have content, signal as done but don't duplicate
+                    console.log(`[${responseId}] Content in done message ignored as we already have streamed content`);
+                    onContentUpdate(assistantResponse, true);
+                } else {
+                    // No content in done message, just mark as done
                     onContentUpdate(assistantResponse, true);
                 }
 

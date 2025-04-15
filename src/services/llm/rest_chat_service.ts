@@ -544,11 +544,8 @@ class RestChatService {
                         if (done) {
                             streamFinished = true;
 
-                            // Always send the accumulated content with the done=true message
-                            // This ensures the client receives the complete content even if earlier messages were missed
-                            message.content = messageContent;
-
-                            log.info(`Stream complete, sending final message with ${messageContent.length} chars of content`);
+                            // Don't send another "done:true" message here - we'll let the streaming handler
+                            // handle the completion notification with its own done:true message
 
                             // Store the response in the session when done
                             session.messages.push({
@@ -1241,17 +1238,17 @@ class RestChatService {
                                 toolExecution: chunk.raw.toolExecution
                             } as LLMStreamMessage);
                         }
-                        
+
                         // Handle direct tool_calls in the response (for OpenAI)
                         if (chunk.tool_calls && chunk.tool_calls.length > 0) {
                             log.info(`Detected direct tool_calls in stream chunk: ${chunk.tool_calls.length} tools`);
-                            
+
                             // Send tool execution notification
                             wsService.sendMessageToAllClients({
                                 type: 'tool_execution_start',
                                 sessionId
                             } as LLMStreamMessage);
-                            
+
                             // Process each tool call
                             for (const toolCall of chunk.tool_calls) {
                                 // Process arguments
@@ -1264,7 +1261,7 @@ class RestChatService {
                                         args = { raw: args };
                                     }
                                 }
-                                
+
                                 // Format into a standardized tool execution message
                                 wsService.sendMessageToAllClients({
                                     type: 'tool_result',
@@ -1278,17 +1275,17 @@ class RestChatService {
                                 } as LLMStreamMessage);
                             }
                         }
-                        
+
                         // Also handle tool_calls in raw data if present but not directly in chunk
                         if (!chunk.tool_calls && chunk.raw?.tool_calls && Array.isArray(chunk.raw.tool_calls)) {
                             log.info(`Detected tool_calls in raw data: ${chunk.raw.tool_calls.length} tools`);
-                            
+
                             // Send tool execution notification if we haven't already
                             wsService.sendMessageToAllClients({
                                 type: 'tool_execution_start',
                                 sessionId
                             } as LLMStreamMessage);
-                            
+
                             // Process each tool call
                             for (const toolCall of chunk.raw.tool_calls) {
                                 // Process arguments
@@ -1301,7 +1298,7 @@ class RestChatService {
                                         args = { raw: args };
                                     }
                                 }
-                                
+
                                 // Format into a standardized tool execution message
                                 wsService.sendMessageToAllClients({
                                     type: 'tool_result',
@@ -1358,15 +1355,15 @@ class RestChatService {
                             // Only send final done message if it wasn't already sent with content
                             // This ensures we don't duplicate the content but still mark completion
                             if (!chunk.text) {
-                                // Send final message with both content and done flag together
+                                log.info(`No content in final chunk, sending explicit completion message`);
+
+                                // Send final message with done flag only (no content)
+                                // This avoids sending the entire messageContent again and causing duplicates
                                 wsService.sendMessageToAllClients({
                                     type: 'llm-stream',
                                     sessionId,
-                                    content: messageContent, // Send the accumulated content
                                     done: true
                                 } as LLMStreamMessage);
-
-                                log.info(`Sent explicit final completion message with accumulated content`);
                             } else {
                                 log.info(`Final done flag was already sent with content chunk, no need for extra message`);
                             }
