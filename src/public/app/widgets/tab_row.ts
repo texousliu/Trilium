@@ -676,14 +676,8 @@ export default class TabRowWidget extends BasicWidget {
 
             this.draggabillies.push(draggabilly);
 
-            let pointerDownTime: number = 0;
-            draggabilly.on("pointerDown", () => {
-                pointerDownTime = Date.now();
-            });
-            draggabilly.on("pointerUp", () => {
-                if (Date.now() - pointerDownTime < 200) {
-                    appContext.tabManager.activateNoteContext(tabEl.getAttribute("data-ntx-id"));
-                }
+            draggabilly.on("staticClick", () => {
+                appContext.tabManager.activateNoteContext(tabEl.getAttribute("data-ntx-id"));
             });
 
             draggabilly.on("dragStart", () => {
