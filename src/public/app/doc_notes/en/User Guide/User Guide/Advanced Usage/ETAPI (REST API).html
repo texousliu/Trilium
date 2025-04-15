@@ -8,12 +8,19 @@
   <li><a href="https://github.com/Nriver/trilium-py">trilium-py</a>, you can
     use Python to communicate with Trilium.</li>
 </ul>
+<h2>Obtaining a token</h2>
+<p>All operations with the REST API have to be authenticated using a token.
+  You can get this token either from Options -&gt; ETAPI or programmatically
+  using the <code>/auth/login</code> REST call (see the <a href="https://github.com/TriliumNext/Notes/blob/master/src/etapi/etapi.openapi.yaml">spec</a>).</p>
 <h2>Authentication</h2>
-<p>All operations have to be authenticated using a token. You can get this
-  token either from Options -&gt; ETAPI or programmatically using the <code>/auth/login</code> REST
-  call (see the <a href="https://github.com/TriliumNext/Notes/blob/master/src/etapi/etapi.openapi.yaml">spec</a>):</p><pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
+<h3>Via the <code>Authorization</code> header</h3><pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
 Authorization: ETAPITOKEN</code></pre>
-<p>Alternatively, since 0.56 you can also use basic auth format:</p><pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
+<p>where <code>ETAPITOKEN</code> is the token obtained in the previous step.</p>
+<p>For compatibility with various tools, it's also possible to specify the
+  value of the <code>Authorization</code> header in the format <code>Bearer ETAPITOKEN</code> (since
+  0.93.0).</p>
+<h3>Basic authentication</h3>
+<p>Since v0.56 you can also use basic auth format:</p><pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
 Authorization: Basic BATOKEN</code></pre>
 <ul>
   <li>Where <code>BATOKEN = BASE64(username + ':' + password)</code> - this is
