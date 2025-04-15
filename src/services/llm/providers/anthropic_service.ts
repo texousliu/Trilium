@@ -186,10 +186,12 @@ export class AnthropicService extends BaseAIService {
         opts: ChatCompletionOptions,
         providerOptions: AnthropicOptions
     ): Promise<ChatResponse> {
+        // Create a list to collect tool calls during streaming
+        const collectedToolCalls: any[] = [];
+
         // Create a stream handler function that processes the SDK's stream
         const streamHandler = async (callback: (chunk: StreamChunk) => Promise<void> | void): Promise<string> => {
             let completeText = '';
-            const toolCalls: any[] = [];
             let currentToolCall: any = null;
 
             try {
@@ -261,7 +263,7 @@ export class AnthropicService extends BaseAIService {
                     // Process tool use completion
                     else if (chunk.type === 'content_block_stop' && currentToolCall) {
                         // Add the completed tool call to our list
-                        toolCalls.push(currentToolCall);
+                        collectedToolCalls.push({ ...currentToolCall });
 
                         // Log the tool completion
                         log.info(`Streaming: Tool use completed: ${currentToolCall.function.name}`);
@@ -274,6 +276,7 @@ export class AnthropicService extends BaseAIService {
                                 type: 'complete',
                                 tool: currentToolCall
                             },
+                            tool_calls: collectedToolCalls.length > 0 ? collectedToolCalls : undefined,
                             raw: chunk
                         });
 
@@ -282,11 +285,16 @@ export class AnthropicService extends BaseAIService {
                     }
                 }
 
-                // Signal completion
+                // Signal completion with all tool calls
+                log.info(`Streaming complete, collected ${collectedToolCalls.length} tool calls`);
+                if (collectedToolCalls.length > 0) {
+                    log.info(`Tool calls detected in final response: ${JSON.stringify(collectedToolCalls)}`);
+                }
+
                 await callback({
                     text: '',
                     done: true,
-                    tool_calls: toolCalls.length > 0 ? toolCalls : undefined
+                    tool_calls: collectedToolCalls.length > 0 ? collectedToolCalls : undefined
                 });
 
                 return completeText;
@@ -311,13 +319,43 @@ export class AnthropicService extends BaseAIService {
             }
         };
 
-        // Return a response object with the stream handler
-        return {
+        // Create a custom stream function that captures tool calls
+        const captureToolCallsStream = async (callback: (chunk: StreamChunk) => Promise<void> | void): Promise<string> => {
+            // Use the original stream handler but wrap it to capture tool calls
+            return streamHandler(async (chunk: StreamChunk) => {
+                // If the chunk has tool calls, update our collection
+                if (chunk.tool_calls && chunk.tool_calls.length > 0) {
+                    // Update our collection with new tool calls
+                    chunk.tool_calls.forEach(toolCall => {
+                        // Only add if it's not already in the collection
+                        if (!collectedToolCalls.some(tc => tc.id === toolCall.id)) {
+                            collectedToolCalls.push(toolCall);
+                        }
+                    });
+                }
+
+                // Call the original callback
+                return callback(chunk);
+            });
+        };
+
+        // Return a response object with the stream handler and tool_calls property
+        const response: ChatResponse = {
             text: '', // Initial text is empty, will be populated during streaming
             model: providerOptions.model,
             provider: this.getName(),
-            stream: streamHandler
+            stream: captureToolCallsStream
         };
+
+        // Define a getter for tool_calls that will return the collected tool calls
+        Object.defineProperty(response, 'tool_calls', {
+            get: function() {
+                return collectedToolCalls.length > 0 ? collectedToolCalls : undefined;
+            },
+            enumerable: true
+        });
+
+        return response;
     }
 
     /**

@@ -314,21 +314,39 @@ export class ChatPipeline {
             log.info(`Tools enabled in options: ${toolsEnabled}`);
             log.info(`Response provider: ${currentResponse.provider || 'unknown'}`);
             log.info(`Response model: ${currentResponse.model || 'unknown'}`);
-            log.info(`Response has tool_calls: ${currentResponse.tool_calls ? 'true' : 'false'}`);
-            if (currentResponse.tool_calls) {
-                log.info(`Number of tool calls: ${currentResponse.tool_calls.length}`);
-                log.info(`Tool calls details: ${JSON.stringify(currentResponse.tool_calls)}`);
 
-                // Check if we have a response from Ollama, which might be handled differently
-                if (currentResponse.provider === 'Ollama') {
-                    log.info(`ATTENTION: Response is from Ollama - checking if tool execution path is correct`);
-                    log.info(`Tool calls type: ${typeof currentResponse.tool_calls}`);
-                    log.info(`First tool call name: ${currentResponse.tool_calls[0]?.function?.name || 'unknown'}`);
+            // Enhanced tool_calls detection - check both direct property and getter
+            let hasToolCalls = false;
+
+            // First check the direct property
+            if (currentResponse.tool_calls && currentResponse.tool_calls.length > 0) {
+                hasToolCalls = true;
+                log.info(`Response has tool_calls property with ${currentResponse.tool_calls.length} tools`);
+                log.info(`Tool calls details: ${JSON.stringify(currentResponse.tool_calls)}`);
+            }
+            // Check if it might be a getter (for dynamic tool_calls collection)
+            else {
+                try {
+                    const toolCallsDesc = Object.getOwnPropertyDescriptor(currentResponse, 'tool_calls');
+                    if (toolCallsDesc && typeof toolCallsDesc.get === 'function') {
+                        const dynamicToolCalls = toolCallsDesc.get.call(currentResponse);
+                        if (dynamicToolCalls && dynamicToolCalls.length > 0) {
+                            hasToolCalls = true;
+                            log.info(`Response has dynamic tool_calls with ${dynamicToolCalls.length} tools`);
+                            log.info(`Dynamic tool calls details: ${JSON.stringify(dynamicToolCalls)}`);
+                            // Ensure property is available for subsequent code
+                            currentResponse.tool_calls = dynamicToolCalls;
+                        }
+                    }
+                } catch (e) {
+                    log.error(`Error checking dynamic tool_calls: ${e}`);
                 }
             }
 
+            log.info(`Response has tool_calls: ${hasToolCalls ? 'true' : 'false'}`);
+
             // Tool execution loop
-            if (toolsEnabled && currentResponse.tool_calls && currentResponse.tool_calls.length > 0) {
+            if (toolsEnabled && hasToolCalls && currentResponse.tool_calls) {
                 log.info(`========== STAGE 6: TOOL EXECUTION ==========`);
                 log.info(`Response contains ${currentResponse.tool_calls.length} tool calls, processing...`);
 
