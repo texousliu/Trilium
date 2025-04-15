@@ -9,6 +9,7 @@ import log from '../../../log.js';
 import vectorSearchService from '../../context/services/vector_search_service.js';
 import type { NoteSearchResult } from '../../interfaces/context_interfaces.js';
 import type { LLMServiceInterface } from '../../interfaces/agent_tool_interfaces.js';
+import { SEARCH_CONSTANTS } from '../../constants/search_constants.js';
 
 export interface VectorSearchInput {
   query: string;
@@ -46,8 +47,8 @@ export class VectorSearchStage {
     } = input;
 
     const {
-      maxResults = 10,
-      threshold = 0.6,
+      maxResults = SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_MAX_RESULTS,
+      threshold = SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_THRESHOLD,
       useEnhancedQueries = false,
       llmService = undefined
     } = options;

@@ -5,6 +5,7 @@ import type { ModelMetadata } from '../../providers/provider_options.js';
 import log from '../../../log.js';
 import options from '../../../options.js';
 import aiServiceManager from '../../ai_service_manager.js';
+import { SEARCH_CONSTANTS, MODEL_CAPABILITIES } from "../../constants/search_constants.js";
 /**
  * Pipeline stage for selecting the appropriate LLM model
  */
@@ -28,7 +29,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
 
         // Start with provided options or create a new object
         const updatedOptions: ChatCompletionOptions = { ...(inputOptions || {}) };
-        
+
         // Preserve the stream option exactly as it was provided, including undefined state
         // This is critical for ensuring the stream option propagates correctly down the pipeline
         log.info(`[ModelSelectionStage] After copy, stream: ${updatedOptions.stream}, type: ${typeof updatedOptions.stream}`);
@@ -154,9 +155,9 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
         }
 
         // Check content length if provided
-        if (contentLength && contentLength > 5000) {
+        if (contentLength && contentLength > SEARCH_CONSTANTS.CONTEXT.CONTENT_LENGTH.MEDIUM_THRESHOLD) {
             // For large content, favor more powerful models
-            queryComplexity = contentLength > 10000 ? 'high' : 'medium';
+            queryComplexity = contentLength > SEARCH_CONSTANTS.CONTEXT.CONTENT_LENGTH.HIGH_THRESHOLD ? 'high' : 'medium';
         }
 
         // Set the model and add provider metadata
@@ -256,7 +257,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
 
         // Get the first available provider and its default model
         const defaultProvider = availableProviders[0] as 'openai' | 'anthropic' | 'ollama' | 'local';
-        let defaultModel = 'gpt-3.5-turbo'; // Default fallback
+        let defaultModel = 'gpt-3.5-turbo'; // Use model from our constants
 
         // Set provider metadata
         if (!input.options.providerMetadata) {
@@ -274,17 +275,22 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
      * Get estimated context window for Ollama models
      */
     private getOllamaContextWindow(model: string): number {
+        // Try to find exact matches in MODEL_CAPABILITIES
+        if (model in MODEL_CAPABILITIES) {
+            return MODEL_CAPABILITIES[model as keyof typeof MODEL_CAPABILITIES].contextWindowTokens;
+        }
+
         // Estimate based on model family
         if (model.includes('llama3')) {
-            return 8192;
+            return MODEL_CAPABILITIES['gpt-4'].contextWindowTokens;
         } else if (model.includes('llama2')) {
-            return 4096;
+            return MODEL_CAPABILITIES['default'].contextWindowTokens;
         } else if (model.includes('mistral') || model.includes('mixtral')) {
-            return 8192;
+            return MODEL_CAPABILITIES['gpt-4'].contextWindowTokens;
         } else if (model.includes('gemma')) {
-            return 8192;
+            return MODEL_CAPABILITIES['gpt-4'].contextWindowTokens;
         } else {
-            return 4096; // Default fallback
+            return MODEL_CAPABILITIES['default'].contextWindowTokens;
         }
     }
 }

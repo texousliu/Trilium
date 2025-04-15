@@ -13,6 +13,7 @@ import toolRegistry from '../tools/tool_registry.js';
 import toolInitializer from '../tools/tool_initializer.js';
 import log from '../../log.js';
 import type { LLMServiceInterface } from '../interfaces/agent_tool_interfaces.js';
+import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 
 /**
  * Pipeline for managing the entire chat flow
@@ -56,7 +57,7 @@ export class ChatPipeline {
         this.config = {
             enableStreaming: true,
             enableMetrics: true,
-            maxToolCallIterations: 5,
+            maxToolCallIterations: SEARCH_CONSTANTS.TOOL_EXECUTION.MAX_TOOL_CALL_ITERATIONS,
             ...config
         };
 
@@ -194,9 +195,9 @@ export class ChatPipeline {
                 query: userQuery,
                 noteId: input.noteId || 'global',
                 options: {
-                    maxResults: 5, // Can be adjusted
+                    maxResults: SEARCH_CONSTANTS.CONTEXT.MAX_SIMILAR_NOTES,
                     useEnhancedQueries: true,
-                    threshold: 0.6,
+                    threshold: SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_THRESHOLD,
                     llmService: llmService || undefined
                 }
             });

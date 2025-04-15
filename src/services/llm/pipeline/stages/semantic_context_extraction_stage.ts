@@ -7,6 +7,7 @@ import contextFormatter from '../../context/modules/context_formatter.js';
 import providerManager from '../../context/modules/provider_manager.js';
 import type { NoteSearchResult } from '../../interfaces/context_interfaces.js';
 import type { Message } from '../../ai_interface.js';
+import { SEARCH_CONSTANTS } from "../../constants/search_constants.js";
 
 /**
  * Pipeline stage for extracting semantic context from notes
@@ -35,7 +36,7 @@ export class SemanticContextExtractionStage extends BasePipelineStage<SemanticCo
                 options: {
                     maxResults,
                     useEnhancedQueries: true,
-                    threshold: 0.6,
+                    threshold: SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_THRESHOLD,
                     llmService: undefined // Let the vectorSearchStage use the default service
                 }
             });
