@@ -692,22 +692,22 @@ export class ChatPipeline {
                         log.info(`Sent final response with done=true signal and text content`);
                     } else {
                         // For Anthropic, sometimes text is empty but response is in stream
-                        if (currentResponse.provider === 'Anthropic' && currentResponse.stream) {
-                            log.info(`Detected empty response text for Anthropic provider with stream, sending stream content directly`);
-                            // For Anthropic with stream mode, we need to stream the final response
+                        if ((currentResponse.provider === 'Anthropic' || currentResponse.provider === 'OpenAI') && currentResponse.stream) {
+                            log.info(`Detected empty response text for ${currentResponse.provider} provider with stream, sending stream content directly`);
+                            // For Anthropic/OpenAI with stream mode, we need to stream the final response
                             if (currentResponse.stream) {
                                 await currentResponse.stream(async (chunk: StreamChunk) => {
                                     // Process the chunk
                                     const processedChunk = await this.processStreamChunk(chunk, input.options);
-                                    
+
                                     // Forward to callback
                                     streamCallback(
-                                        processedChunk.text, 
+                                        processedChunk.text,
                                         processedChunk.done || chunk.done || false,
                                         chunk
                                     );
                                 });
-                                log.info(`Completed streaming final Anthropic response after tool execution`);
+                                log.info(`Completed streaming final ${currentResponse.provider} response after tool execution`);
                             }
                         } else {
                             // Empty response with done=true as fallback
