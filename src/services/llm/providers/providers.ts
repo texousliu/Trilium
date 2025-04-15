@@ -17,6 +17,7 @@ import {
     createOllamaOptions
 } from './provider_options.js';
 import { PROVIDER_CONSTANTS } from '../constants/provider_constants.js';
+import { SEARCH_CONSTANTS, MODEL_CAPABILITIES } from '../constants/search_constants.js';
 
 /**
  * Simple local embedding provider implementation
@@ -402,7 +403,7 @@ export function getOpenAIOptions(
         // Get temperature from options or global setting
         const temperature = opts.temperature !== undefined
             ? opts.temperature
-            : parseFloat(options.getOption('aiTemperature') || '0.7');
+            : parseFloat(options.getOption('aiTemperature') || String(SEARCH_CONSTANTS.TEMPERATURE.DEFAULT));
 
         return {
             // Connection settings
@@ -467,7 +468,7 @@ export function getAnthropicOptions(
         // Get temperature from options or global setting
         const temperature = opts.temperature !== undefined
             ? opts.temperature
-            : parseFloat(options.getOption('aiTemperature') || '0.7');
+            : parseFloat(options.getOption('aiTemperature') || String(SEARCH_CONSTANTS.TEMPERATURE.DEFAULT));
 
         return {
             // Connection settings
@@ -525,7 +526,7 @@ export async function getOllamaOptions(
         // Get temperature from options or global setting
         const temperature = opts.temperature !== undefined
             ? opts.temperature
-            : parseFloat(options.getOption('aiTemperature') || '0.7');
+            : parseFloat(options.getOption('aiTemperature') || String(SEARCH_CONSTANTS.TEMPERATURE.DEFAULT));
 
         // Use provided context window or get from model if not specified
         const modelContextWindow = contextWindow || await getOllamaModelContextWindow(modelName);
@@ -571,11 +572,11 @@ export async function getOllamaOptions(
 async function getOllamaModelContextWindow(modelName: string): Promise<number> {
     try {
         const baseUrl = options.getOption('ollamaBaseUrl');
-        
+
         if (!baseUrl) {
             throw new Error('Ollama base URL is not configured');
         }
-        
+
         // Use the official Ollama client
         const { Ollama } = await import('ollama');
         const client = new Ollama({ host: baseUrl });
@@ -593,19 +594,19 @@ async function getOllamaModelContextWindow(modelName: string): Promise<number> {
 
         // Default context sizes by model family if we couldn't get specific info
         if (modelName.includes('llama3')) {
-            return 8192;
+            return MODEL_CAPABILITIES['gpt-4'].contextWindowTokens;
         } else if (modelName.includes('llama2')) {
-            return 4096;
+            return MODEL_CAPABILITIES['default'].contextWindowTokens;
         } else if (modelName.includes('mistral') || modelName.includes('mixtral')) {
-            return 8192;
+            return MODEL_CAPABILITIES['gpt-4'].contextWindowTokens;
         } else if (modelName.includes('gemma')) {
-            return 8192;
+            return MODEL_CAPABILITIES['gpt-4'].contextWindowTokens;
         }
 
         // Return a reasonable default
-        return 4096;
+        return MODEL_CAPABILITIES['default'].contextWindowTokens;
     } catch (error) {
         log.info(`Error getting context window for model ${modelName}: ${error}`);
-        return 4096; // Default fallback
+        return MODEL_CAPABILITIES['default'].contextWindowTokens; // Default fallback
     }
 }

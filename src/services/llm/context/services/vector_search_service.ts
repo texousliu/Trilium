@@ -17,6 +17,7 @@ import providerManager from '../modules/provider_manager.js';
 import cacheManager from '../modules/cache_manager.js';
 import type { NoteSearchResult } from '../../interfaces/context_interfaces.js';
 import type { LLMServiceInterface } from '../../interfaces/agent_tool_interfaces.js';
+import { SEARCH_CONSTANTS } from '../../constants/search_constants.js';
 
 export interface VectorSearchOptions {
   maxResults?: number;
@@ -50,8 +51,8 @@ export class VectorSearchService {
     options: VectorSearchOptions = {}
   ): Promise<NoteSearchResult[]> {
     const {
-      maxResults = 10,
-      threshold = 0.6,
+      maxResults = SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_MAX_RESULTS,
+      threshold = SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_THRESHOLD,
       useEnhancedQueries = false,
       summarizeContent = false,
       llmService = null
@@ -227,8 +228,8 @@ export class VectorSearchService {
 
       // Request summarization with safeguards to prevent recursion
       const result = await llmService.generateChatCompletion(messages, {
-        temperature: 0.3,
-        maxTokens: 500,
+        temperature: SEARCH_CONSTANTS.TEMPERATURE.VECTOR_SEARCH,
+        maxTokens: SEARCH_CONSTANTS.LIMITS.VECTOR_SEARCH_MAX_TOKENS,
         // Use any to bypass type checking for these special options
         // that are recognized by the LLM service but not in the interface
         ...(({
@@ -262,7 +263,7 @@ export class VectorSearchService {
   private async findNotesInBranch(
     embedding: Float32Array,
     contextNoteId: string,
-    limit = 5
+    limit = SEARCH_CONSTANTS.CONTEXT.MAX_SIMILAR_NOTES
   ): Promise<{noteId: string, similarity: number}[]> {
     try {
       // Get all notes in the subtree
@@ -360,9 +361,9 @@ export class VectorSearchService {
       const parentNotes = note.getParentNotes();
       let currentNote = parentNotes.length > 0 ? parentNotes[0] : null;
 
-      // Build path up to 3 levels
+      // Build path up to the maximum parent depth
       let level = 0;
-      while (currentNote && level < 3) {
+      while (currentNote && level < SEARCH_CONSTANTS.CONTEXT.MAX_PARENT_DEPTH) {
         path.unshift(currentNote.title);
         const grandParents = currentNote.getParentNotes();
         currentNote = grandParents.length > 0 ? grandParents[0] : null;

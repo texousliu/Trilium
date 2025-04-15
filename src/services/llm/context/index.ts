@@ -10,6 +10,7 @@ import { chunkContent, semanticChunking } from './content_chunking.js';
 import type { ContentChunk, ChunkOptions } from './content_chunking.js';
 import { summarizeContent, extractKeyPoints } from './summarization.js';
 import { getParentNotes, getParentContext, getChildContext, getLinkedNotesContext } from './hierarchy.js';
+import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 
 /**
  * Get semantic context
@@ -109,11 +110,11 @@ const DEFAULT_CONTEXT_OPTIONS: Required<ContextOptions> = {
     includeLinks: true,
     includeSimilar: false,
     includeContent: true,
-    maxParentDepth: 3,
-    maxChildren: 10,
-    maxLinks: 10,
-    maxSimilarNotes: 5,
-    maxContentLength: 2000
+    maxParentDepth: SEARCH_CONSTANTS.CONTEXT.MAX_PARENT_DEPTH,
+    maxChildren: SEARCH_CONSTANTS.CONTEXT.MAX_CHILDREN,
+    maxLinks: SEARCH_CONSTANTS.CONTEXT.MAX_LINKS,
+    maxSimilarNotes: SEARCH_CONSTANTS.CONTEXT.MAX_SIMILAR_NOTES,
+    maxContentLength: SEARCH_CONSTANTS.CONTEXT.MAX_CONTENT_LENGTH
 };
 
 /**
@@ -264,7 +265,7 @@ export class ContextExtractor {
      */
     static extractKeyPoints(
         content: string,
-        maxPoints: number = 5
+        maxPoints: number = SEARCH_CONSTANTS.CONTEXT.MAX_POINTS
     ): string[] {
         return extractKeyPoints(content, maxPoints);
     }
@@ -274,7 +275,7 @@ export class ContextExtractor {
      */
     extractKeyPoints(
         content: string,
-        maxPoints: number = 5
+        maxPoints: number = SEARCH_CONSTANTS.CONTEXT.MAX_POINTS
     ): string[] {
         return ContextExtractor.extractKeyPoints(content, maxPoints);
     }
@@ -284,7 +285,7 @@ export class ContextExtractor {
      */
     static async getParentNotes(
         noteId: string,
-        maxParents: number = 5
+        maxParents: number = SEARCH_CONSTANTS.CONTEXT.MAX_POINTS
     ): Promise<{id: string, title: string}[]> {
         return getParentNotes(noteId, maxParents);
     }
@@ -294,7 +295,7 @@ export class ContextExtractor {
      */
     async getParentNotes(
         noteId: string,
-        maxParents: number = 5
+        maxParents: number = SEARCH_CONSTANTS.CONTEXT.MAX_POINTS
     ): Promise<{id: string, title: string}[]> {
         return ContextExtractor.getParentNotes(noteId, maxParents);
     }
@@ -304,8 +305,8 @@ export class ContextExtractor {
      */
     static async getParentContext(
         noteId: string,
-        maxDepth: number = 3,
-        maxParents: number = 3
+        maxDepth: number = SEARCH_CONSTANTS.CONTEXT.MAX_PARENT_DEPTH,
+        maxParents: number = SEARCH_CONSTANTS.CONTEXT.MAX_PARENT_DEPTH
     ): Promise<string> {
         return getParentContext(noteId, maxDepth, maxParents);
     }
@@ -315,8 +316,8 @@ export class ContextExtractor {
      */
     async getParentContext(
         noteId: string,
-        maxDepth: number = 3,
-        maxParents: number = 3
+        maxDepth: number = SEARCH_CONSTANTS.CONTEXT.MAX_PARENT_DEPTH,
+        maxParents: number = SEARCH_CONSTANTS.CONTEXT.MAX_PARENT_DEPTH
     ): Promise<string> {
         return ContextExtractor.getParentContext(noteId, maxDepth, maxParents);
     }
@@ -326,7 +327,7 @@ export class ContextExtractor {
      */
     static async getChildContext(
         noteId: string,
-        maxChildren: number = 10,
+        maxChildren: number = SEARCH_CONSTANTS.CONTEXT.MAX_CHILDREN,
         includeContent: boolean = false
     ): Promise<string> {
         return getChildContext(noteId, maxChildren, includeContent);
@@ -337,7 +338,7 @@ export class ContextExtractor {
      */
     async getChildContext(
         noteId: string,
-        maxChildren: number = 10,
+        maxChildren: number = SEARCH_CONSTANTS.CONTEXT.MAX_CHILDREN,
         includeContent: boolean = false
     ): Promise<string> {
         return ContextExtractor.getChildContext(noteId, maxChildren, includeContent);
@@ -348,7 +349,7 @@ export class ContextExtractor {
      */
     static async getLinkedNotesContext(
         noteId: string,
-        maxRelations: number = 10
+        maxRelations: number = SEARCH_CONSTANTS.CONTEXT.MAX_RELATIONS
     ): Promise<string> {
         return getLinkedNotesContext(noteId, maxRelations);
     }
@@ -358,7 +359,7 @@ export class ContextExtractor {
      */
     async getLinkedNotesContext(
         noteId: string,
-        maxRelations: number = 10
+        maxRelations: number = SEARCH_CONSTANTS.CONTEXT.MAX_RELATIONS
     ): Promise<string> {
         return ContextExtractor.getLinkedNotesContext(noteId, maxRelations);
     }
