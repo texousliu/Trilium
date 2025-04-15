@@ -377,22 +377,28 @@ export default class TabRowWidget extends BasicWidget {
         this.$widget.append(this.$style);
     }
 
-    scrollTabContainer(direction: number) {
-        const currentScrollLeft = this.$tabScrollingContainer?.scrollLeft() ?? 0;
+    scrollTabContainer(direction: number, behavior: ScrollBehavior = "smooth") {
+        const currentScrollLeft = this.$tabScrollingContainer[0]?.scrollLeft;
         this.$tabScrollingContainer[0].scrollTo({
             left: currentScrollLeft + direction,
-            behavior: "smooth"
+            behavior
         });
     };
 
     setupScrollEvents() {
+        let isScrolling = false;
+        this.$tabScrollingContainer[0].addEventListener('wheel', (event) => {
+            if (!isScrolling) {
+                isScrolling = true;
+                requestAnimationFrame(() => {
+                    this.scrollTabContainer(event.deltaY * 1.5, 'instant');
+                    isScrolling = false;
+                });
+            }
+        });
+
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-200));
         this.$scrollButtonRight[0].addEventListener('click', () => this.scrollTabContainer(200));
-
-        this.$tabScrollingContainer[0].addEventListener('wheel', (event) => {
-            const targetScrollLeft = event.deltaY * 1.5;
-            this.scrollTabContainer(targetScrollLeft);
-        });
 
         this.$tabScrollingContainer[0].addEventListener('scroll', () => {
             clearTimeout(this.updateScrollTimeout);
