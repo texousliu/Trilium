@@ -47,7 +47,6 @@ const TAB_ROW_TPL = `
         position: relative;
         width: 100%;
         background: var(--main-background-color);
-        overflow: hidden;
         user-select: none;
     }
 
