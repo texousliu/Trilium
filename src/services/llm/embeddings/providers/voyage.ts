@@ -3,21 +3,15 @@ import { BaseEmbeddingProvider } from "../base_embeddings.js";
 import type { EmbeddingConfig } from "../embeddings_interface.js";
 import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../constants/provider_constants.js";
+import { PROVIDER_EMBEDDING_CAPABILITIES } from "../../constants/search_constants.js";
 import type { EmbeddingModelInfo } from "../../interfaces/embedding_interfaces.js";
 
-// Voyage model context window sizes - as of current API version
-const VOYAGE_MODEL_CONTEXT_WINDOWS: Record<string, number> = {
-    "voyage-large-2": 8192,
-    "voyage-2": 8192,
-    "default": 8192
-};
-
-// Voyage embedding dimensions
-const VOYAGE_MODEL_DIMENSIONS: Record<string, number> = {
-    "voyage-large-2": 1536,
-    "voyage-2": 1024,
-    "default": 1024
-};
+// Use constants from the central constants file
+const VOYAGE_MODEL_CONTEXT_WINDOWS = PROVIDER_EMBEDDING_CAPABILITIES.VOYAGE.MODELS;
+const VOYAGE_MODEL_DIMENSIONS = Object.entries(PROVIDER_EMBEDDING_CAPABILITIES.VOYAGE.MODELS).reduce((acc, [key, value]) => {
+    acc[key] = value.dimension;
+    return acc;
+}, {} as Record<string, number>);
 
 /**
  * Voyage AI embedding provider implementation
@@ -62,10 +56,12 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
                 model => modelName.startsWith(model)
             ) || "default";
 
-            const contextWindow = VOYAGE_MODEL_CONTEXT_WINDOWS[modelBase];
+            const modelInfo = VOYAGE_MODEL_CONTEXT_WINDOWS[modelBase as keyof typeof VOYAGE_MODEL_CONTEXT_WINDOWS];
+            const contextWindow = modelInfo.contextWidth;
 
             // Get dimension from our registry of known models
-            const dimension = VOYAGE_MODEL_DIMENSIONS[modelBase] || VOYAGE_MODEL_DIMENSIONS.default;
+            const dimension = VOYAGE_MODEL_DIMENSIONS[modelBase as keyof typeof VOYAGE_MODEL_DIMENSIONS] ||
+                              VOYAGE_MODEL_DIMENSIONS["default"];
 
             return {
                 dimension,

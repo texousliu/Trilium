@@ -21,6 +21,7 @@ import type { OptionDefinitions } from "../options_interface.js";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
 import { CONTEXT_PROMPTS } from './constants/llm_prompt_constants.js';
+import { SEARCH_CONSTANTS } from './constants/search_constants.js';
 
 class IndexService {
     private initialized = false;
@@ -35,9 +36,9 @@ class IndexService {
     private indexRebuildCurrent = 0;
 
     // Configuration
-    private defaultQueryDepth = 2;
-    private maxNotesPerQuery = 10;
-    private defaultSimilarityThreshold = 0.65;
+    private defaultQueryDepth = SEARCH_CONSTANTS.HIERARCHY.DEFAULT_QUERY_DEPTH;
+    private maxNotesPerQuery = SEARCH_CONSTANTS.HIERARCHY.MAX_NOTES_PER_QUERY;
+    private defaultSimilarityThreshold = SEARCH_CONSTANTS.VECTOR_SEARCH.EXACT_MATCH_THRESHOLD;
     private indexUpdateInterval = 3600000; // 1 hour in milliseconds
 
     /**

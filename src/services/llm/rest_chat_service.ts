@@ -1,6 +1,7 @@
 import log from "../log.js";
 import type { Request, Response } from "express";
 import type { Message, ChatCompletionOptions, ChatResponse, StreamChunk } from "./ai_interface.js";
+import { SEARCH_CONSTANTS } from './constants/search_constants.js';
 
 /**
  * Interface for WebSocket LLM streaming messages
@@ -239,7 +240,7 @@ class RestChatService {
                             noteEmbedding.embedding
                         );
 
-                        if (similarity > 0.65) {
+                        if (similarity > SEARCH_CONSTANTS.VECTOR_SEARCH.EXACT_MATCH_THRESHOLD) {
                             results.push({
                                 noteId,
                                 similarity
@@ -712,7 +713,7 @@ class RestChatService {
 
         // Configure chat options from session metadata
         const chatOptions: ChatCompletionOptions = {
-            temperature: session.metadata.temperature || 0.7,
+            temperature: session.metadata.temperature || SEARCH_CONSTANTS.TEMPERATURE.DEFAULT,
             maxTokens: session.metadata.maxTokens,
             model: session.metadata.model,
             stream: isStreamingRequest ? true : undefined,
@@ -739,7 +740,7 @@ class RestChatService {
                     let currentMessages = [...aiMessages];
                     let hasMoreToolCalls = true;
                     let iterationCount = 0;
-                    const MAX_ITERATIONS = 3; // Prevent infinite loops
+                    const MAX_ITERATIONS = SEARCH_CONSTANTS.TOOL_EXECUTION.MAX_FOLLOW_UP_ITERATIONS; // Prevent infinite loops
 
                     // Add initial assistant response with tool calls
                     currentMessages.push({
@@ -863,7 +864,7 @@ class RestChatService {
 
         // Configure chat options from session metadata
         const chatOptions: ChatCompletionOptions = {
-            temperature: session.metadata.temperature || 0.7,
+            temperature: session.metadata.temperature || SEARCH_CONSTANTS.TEMPERATURE.DEFAULT,
             maxTokens: session.metadata.maxTokens,
             model: session.metadata.model,
             stream: isStreamingRequest ? true : undefined
