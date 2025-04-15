@@ -9,16 +9,26 @@ As an alternative to calling the API directly, there are client libraries to sim
 
 *   [trilium-py](https://github.com/Nriver/trilium-py), you can use Python to communicate with Trilium.
 
+## Obtaining a token
+
+All operations with the REST API have to be authenticated using a token. You can get this token either from Options -> ETAPI or programmatically using the `/auth/login` REST call (see the [spec](https://github.com/TriliumNext/Notes/blob/master/src/etapi/etapi.openapi.yaml)).
+
 ## Authentication
 
-All operations have to be authenticated using a token. You can get this token either from Options -> ETAPI or programmatically using the `/auth/login` REST call (see the [spec](https://github.com/TriliumNext/Notes/blob/master/src/etapi/etapi.openapi.yaml)):
+### Via the `Authorization` header
 
 ```
 GET https://myserver.com/etapi/app-info
 Authorization: ETAPITOKEN
 ```
 
-Alternatively, since 0.56 you can also use basic auth format:
+where `ETAPITOKEN` is the token obtained in the previous step.
+
+For compatibility with various tools, it's also possible to specify the value of the `Authorization` header in the format `Bearer ETAPITOKEN` (since 0.93.0).
+
+### Basic authentication
+
+Since v0.56 you can also use basic auth format:
 
 ```
 GET https://myserver.com/etapi/app-info
