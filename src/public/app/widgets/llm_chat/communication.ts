@@ -50,7 +50,9 @@ export async function setupStreamingResponse(
 ): Promise<void> {
     return new Promise((resolve, reject) => {
         let assistantResponse = '';
+        let postToolResponse = ''; // Separate accumulator for post-tool execution content
         let receivedAnyContent = false;
+        let receivedPostToolContent = false; // Track if we've started receiving post-tool content
         let timeoutId: number | null = null;
         let initialTimeoutId: number | null = null;
         let cleanupTimeoutId: number | null = null;
@@ -206,13 +208,22 @@ export async function setupStreamingResponse(
                 // If tools were executed and completed, and we're now getting new content,
                 // this is likely the final response after tool execution from Anthropic
                 if (toolsExecuted && toolExecutionCompleted && message.content) {
-                    console.log(`[${responseId}] Post-tool execution content detected, resetting previous content`);
+                    console.log(`[${responseId}] Post-tool execution content detected`);
 
-                    // Reset accumulated response for post-tool execution response
-                    assistantResponse = message.content;
+                    // If this is the first post-tool chunk, indicate we're starting a new response
+                    if (!receivedPostToolContent) {
+                        receivedPostToolContent = true;
+                        postToolResponse = ''; // Clear any previous post-tool response
+                        console.log(`[${responseId}] First post-tool content chunk, starting fresh accumulation`);
+                    }
 
-                    // Update the UI with the fresh content
-                    onContentUpdate(assistantResponse, message.done || false);
+                    // Accumulate post-tool execution content
+                    postToolResponse += message.content;
+                    console.log(`[${responseId}] Accumulated post-tool content, now ${postToolResponse.length} chars`);
+
+                    // Update the UI with the accumulated post-tool content
+                    // This replaces the pre-tool content with our accumulated post-tool content
+                    onContentUpdate(postToolResponse, message.done || false);
                 } else {
                     // Standard content handling for non-tool cases or initial tool response
 
@@ -308,7 +319,7 @@ export async function setupStreamingResponse(
 
             // Handle completion
             if (message.done) {
-                console.log(`[${responseId}] Stream completed for session ${sessionId}, has content: ${!!message.content}, content length: ${message.content?.length || 0}, current response: ${assistantResponse.length} chars`);
+                console.log(`[${responseId}] Stream completed for session ${sessionId}, has content: ${!!message.content}, content length: ${message.content?.length || 0}, current response: ${assistantResponse.length} chars, post-tool response: ${postToolResponse.length} chars`);
 
                 // Dump message content to console for debugging
                 if (message.content) {
@@ -322,9 +333,21 @@ export async function setupStreamingResponse(
                 }
 
                 // Make sure the final message is displayed
-                if (message.content && !assistantResponse.includes(message.content)) {
-                    console.log(`[${responseId}] Final message has unique content, using it`);
-                    assistantResponse = message.content;
+                if (message.content) {
+                    // If we've been collecting post-tool content, add this content to it
+                    if (receivedPostToolContent) {
+                        // Only add if it's not already included (avoid duplication)
+                        if (!postToolResponse.includes(message.content)) {
+                            postToolResponse += message.content;
+                            console.log(`[${responseId}] Added final chunk to post-tool response`);
+                        }
+                        // Use the post-tool response as our final response
+                        assistantResponse = postToolResponse;
+                    } else if (!assistantResponse.includes(message.content)) {
+                        // For standard responses, add any new content in the final message
+                        console.log(`[${responseId}] Final message has unique content, using it`);
+                        assistantResponse = message.content;
+                    }
                 }
 
                 // Always mark as done when we receive the done flag
