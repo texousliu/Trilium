@@ -401,6 +401,13 @@ function getWeekFirstDayNote(dateStr: string, rootNote: BNote | null = null) {
     return getDayNote(weekStartDate.format("YYYY-MM-DD"), rootNote);
 }
 
+/**
+ * Returns the {@link BNote} corresponding to the given week. If there is no note associated yet to that week, it will be created and returned instead.
+ *
+ * @param weekStr the week for which to return the corresponding note, in the format `2024-W04`.
+ * @param _rootNote a {@link BNote} representing the calendar root, or {@code null} or not specified to use the default root calendar note.
+ * @returns a Promise that resolves to the {@link BNote} corresponding to the week note.
+ */
 async function getWeekNote(weekStr: string, _rootNote: BNote | null = null): Promise<BNote | null> {
     const rootNote = _rootNote || getRootCalendarNote();
     if (!rootNote.hasLabel("enableWeekNote")) {
