@@ -9,6 +9,7 @@ import log from '../../log.js';
 import becca from '../../../becca/becca.js';
 import attributes from '../../attributes.js';
 import aiServiceManager from '../ai_service_manager.js';
+import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 
 /**
  * Definition of the relationship tool
@@ -347,8 +348,8 @@ Suggest the most appropriate relationship type that would connect the source not
                         },
                         { role: 'user', content: prompt }
                     ], {
-                        temperature: 0.4,
-                        maxTokens: 50
+                        temperature: SEARCH_CONSTANTS.TEMPERATURE.RELATIONSHIP_TOOL,
+                        maxTokens: SEARCH_CONSTANTS.LIMITS.RELATIONSHIP_TOOL_MAX_TOKENS
                     });
 
                     // Extract just the relation name (remove any formatting or explanation)

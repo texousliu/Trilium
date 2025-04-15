@@ -15,6 +15,7 @@ import { CONTEXT_PROMPTS } from '../../constants/llm_prompt_constants.js';
 import { QUERY_DECOMPOSITION_STRINGS } from '../../constants/query_decomposition_constants.js';
 import JsonExtractor from '../../utils/json_extractor.js';
 import type { LLMServiceInterface } from '../../interfaces/agent_tool_interfaces.js';
+import { SEARCH_CONSTANTS } from '../../constants/search_constants.js';
 
 // Interfaces
 export interface SubQuery {
@@ -72,8 +73,8 @@ Format your answer as a valid JSON array without markdown code blocks, like this
       ];
 
       const options = {
-        temperature: 0.3,
-        maxTokens: 300,
+        temperature: SEARCH_CONSTANTS.TEMPERATURE.QUERY_PROCESSOR,
+        maxTokens: SEARCH_CONSTANTS.LIMITS.QUERY_PROCESSOR_MAX_TOKENS,
         bypassFormatter: true,
         expectsJsonResponse: true,
         _bypassContextProcessing: true // Prevent recursive calls

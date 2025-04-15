@@ -15,6 +15,8 @@ import becca from '../../../becca/becca.js';
 import log from '../../log.js';
 import type BNote from '../../../becca/entities/bnote.js';
 import type BAttribute from '../../../becca/entities/battribute.js';
+import sql from "../../sql.js";
+import { SEARCH_CONSTANTS } from "../constants/search_constants.js";
 
 export interface NoteInfo {
   noteId: string;
@@ -51,9 +53,9 @@ interface NoteStructure {
 }
 
 export class NoteNavigatorTool {
-  private maxPathLength: number = 20;
-  private maxBreadth: number = 100;
-  private maxDepth: number = 5;
+  private maxPathLength: number = SEARCH_CONSTANTS.HIERARCHY.MAX_PATH_LENGTH;
+  private maxBreadth: number = SEARCH_CONSTANTS.HIERARCHY.MAX_BREADTH;
+  private maxDepth: number = SEARCH_CONSTANTS.HIERARCHY.MAX_DEPTH;
 
   /**
    * Get detailed information about a note
