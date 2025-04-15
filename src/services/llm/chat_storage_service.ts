@@ -130,9 +130,9 @@ export class ChatStorageService {
      */
     async getAllChats(): Promise<StoredChat[]> {
         const chats = await sql.getRows<{noteId: string, title: string, dateCreated: string, dateModified: string, content: string}>(
-            `SELECT notes.noteId, notes.title, notes.dateCreated, notes.dateModified, note_contents.content
+            `SELECT notes.noteId, notes.title, notes.dateCreated, notes.dateModified, blobs.content
              FROM notes
-             JOIN note_contents ON notes.noteId = note_contents.noteId
+             JOIN blobs ON notes.blobId = blobs.blobId
              JOIN attributes ON notes.noteId = attributes.noteId
              WHERE attributes.name = ? AND attributes.value = ?
              ORDER BY notes.dateModified DESC`,
@@ -144,12 +144,12 @@ export class ChatStorageService {
             let metadata: ChatMetadata = {};
             let createdAt = new Date(chat.dateCreated);
             let updatedAt = new Date(chat.dateModified);
-            
+
             try {
                 const content = JSON.parse(chat.content);
                 messages = content.messages || [];
                 metadata = content.metadata || {};
-                
+
                 // Use stored dates if available
                 if (content.createdAt) {
                     createdAt = new Date(content.createdAt);
@@ -178,9 +178,9 @@ export class ChatStorageService {
      */
     async getChat(chatId: string): Promise<StoredChat | null> {
         const chat = await sql.getRow<{noteId: string, title: string, dateCreated: string, dateModified: string, content: string}>(
-            `SELECT notes.noteId, notes.title, notes.dateCreated, notes.dateModified, note_contents.content
+            `SELECT notes.noteId, notes.title, notes.dateCreated, notes.dateModified, blobs.content
              FROM notes
-             JOIN note_contents ON notes.noteId = note_contents.noteId
+             JOIN blobs ON notes.blobId = blobs.blobId
              WHERE notes.noteId = ?`,
             [chatId]
         );
@@ -193,12 +193,12 @@ export class ChatStorageService {
         let metadata: ChatMetadata = {};
         let createdAt = new Date(chat.dateCreated);
         let updatedAt = new Date(chat.dateModified);
-        
+
         try {
             const content = JSON.parse(chat.content);
             messages = content.messages || [];
             metadata = content.metadata || {};
-            
+
             // Use stored dates if available
             if (content.createdAt) {
                 createdAt = new Date(content.createdAt);
@@ -225,9 +225,9 @@ export class ChatStorageService {
      * Update messages in a chat
      */
     async updateChat(
-        chatId: string, 
-        messages: Message[], 
-        title?: string, 
+        chatId: string,
+        messages: Message[],
+        title?: string,
         metadata?: ChatMetadata
     ): Promise<StoredChat | null> {
         const chat = await this.getChat(chatId);
@@ -247,7 +247,7 @@ export class ChatStorageService {
 
         // Update content directly using SQL since we don't have a method for this in the notes service
         await sql.execute(
-            `UPDATE note_contents SET content = ? WHERE noteId = ?`,
+            `UPDATE blobs SET content = ? WHERE blobId = (SELECT blobId FROM notes WHERE noteId = ?)`,
             [JSON.stringify({
                 messages,
                 metadata: updatedMetadata,
@@ -296,7 +296,7 @@ export class ChatStorageService {
      */
     async recordToolExecution(
         chatId: string,
-        toolName: string, 
+        toolName: string,
         toolId: string,
         args: Record<string, any> | string,
         result: string | Record<string, any>,
@@ -341,7 +341,7 @@ export class ChatStorageService {
      * This helps maintain a record of all tool calls even if messages are truncated
      */
     private extractToolExecutionsFromMessages(
-        messages: Message[], 
+        messages: Message[],
         existingToolExecutions: ToolExecution[] = []
     ): ToolExecution[] {
         const toolExecutions = [...existingToolExecutions];
