@@ -6,6 +6,7 @@ import type { AnthropicOptions } from './provider_options.js';
 import { getAnthropicOptions } from './providers.js';
 import log from '../../log.js';
 import Anthropic from '@anthropic-ai/sdk';
+import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 
 export class AnthropicService extends BaseAIService {
     private client: any = null;
@@ -78,7 +79,7 @@ export class AnthropicService extends BaseAIService {
                 model: providerOptions.model,
                 messages: anthropicMessages,
                 system: systemPrompt,
-                max_tokens: providerOptions.max_tokens || 4096,
+                max_tokens: providerOptions.max_tokens || SEARCH_CONSTANTS.LIMITS.DEFAULT_MAX_TOKENS,
                 temperature: providerOptions.temperature,
                 top_p: providerOptions.top_p,
                 stream: !!providerOptions.stream

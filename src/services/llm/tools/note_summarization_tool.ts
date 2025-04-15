@@ -8,6 +8,7 @@ import type { Tool, ToolHandler } from './tool_interfaces.js';
 import log from '../../log.js';
 import becca from '../../../becca/becca.js';
 import aiServiceManager from '../ai_service_manager.js';
+import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 
 /**
  * Definition of the note summarization tool
@@ -59,7 +60,7 @@ export class NoteSummarizationTool implements ToolHandler {
         focus?: string
     }): Promise<string | object> {
         try {
-            const { noteId, maxLength = 500, format = 'paragraph', focus } = args;
+            const { noteId, maxLength = SEARCH_CONSTANTS.LIMITS.DEFAULT_NOTE_SUMMARY_LENGTH, format = 'paragraph', focus } = args;
 
             log.info(`Executing summarize_note tool - NoteID: "${noteId}", MaxLength: ${maxLength}, Format: ${format}`);
 
@@ -134,8 +135,8 @@ export class NoteSummarizationTool implements ToolHandler {
                 { role: 'system', content: 'You are a skilled summarizer. Create concise, accurate summaries while preserving the key information.' },
                 { role: 'user', content: prompt }
             ], {
-                temperature: 0.3, // Lower temperature for more focused summaries
-                maxTokens: 1000 // Enough tokens for the summary
+                temperature: SEARCH_CONSTANTS.TEMPERATURE.VECTOR_SEARCH, // Lower temperature for more focused summaries
+                maxTokens: SEARCH_CONSTANTS.LIMITS.VECTOR_SEARCH_MAX_TOKENS // Enough tokens for the summary
             });
 
             const summaryDuration = Date.now() - summaryStartTime;

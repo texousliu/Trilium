@@ -289,7 +289,7 @@ export class NoteNavigatorTool {
   /**
    * Search for notes by title
    */
-  searchNotesByTitle(searchTerm: string, limit: number = 10): NoteInfo[] {
+  searchNotesByTitle(searchTerm: string, limit: number = SEARCH_CONSTANTS.HIERARCHY.MAX_NOTES_PER_QUERY): NoteInfo[] {
     try {
       if (!searchTerm || searchTerm.trim().length === 0) {
         return [];
@@ -369,14 +369,14 @@ export class NoteNavigatorTool {
       if (paths.length > 1) {
         result += `This note appears in ${paths.length} different locations:\n`;
 
-        // Show max 3 paths to avoid overwhelming context
-        for (let i = 0; i < Math.min(3, paths.length); i++) {
+        // Show max paths to avoid overwhelming context
+        for (let i = 0; i < Math.min(SEARCH_CONSTANTS.HIERARCHY.MAX_PATHS_TO_SHOW, paths.length); i++) {
           const path = paths[i];
           result += `${i+1}. ${path.notePathTitles.join(' > ')}\n`;
         }
 
-        if (paths.length > 3) {
-          result += `... and ${paths.length - 3} more locations\n`;
+        if (paths.length > SEARCH_CONSTANTS.HIERARCHY.MAX_PATHS_TO_SHOW) {
+          result += `... and ${paths.length - SEARCH_CONSTANTS.HIERARCHY.MAX_PATHS_TO_SHOW} more locations\n`;
         }
       } else {
         // Just one path
@@ -385,7 +385,7 @@ export class NoteNavigatorTool {
       }
 
       // Children info using the async function
-      const children = await this.getChildNotes(noteId, 5);
+      const children = await this.getChildNotes(noteId, SEARCH_CONSTANTS.CONTEXT.MAX_POINTS);
 
       if (children.length > 0) {
         result += `\nContains ${note.children.length} child notes`;
@@ -520,7 +520,7 @@ export class NoteNavigatorTool {
   /**
    * Get child notes of a specified note
    */
-  async getChildNotes(noteId: string, limit: number = 10): Promise<Array<{noteId: string, title: string}>> {
+  async getChildNotes(noteId: string, limit: number = SEARCH_CONSTANTS.CONTEXT.MAX_CHILDREN): Promise<Array<{noteId: string, title: string}>> {
     try {
       const note = becca.notes[noteId];
 
@@ -564,7 +564,7 @@ export class NoteNavigatorTool {
   /**
    * Find notes linked to/from the specified note
    */
-  async getLinkedNotes(noteId: string, limit: number = 10): Promise<Array<{noteId: string, title: string, direction: 'from'|'to'}>> {
+  async getLinkedNotes(noteId: string, limit: number = SEARCH_CONSTANTS.CONTEXT.MAX_LINKS): Promise<Array<{noteId: string, title: string, direction: 'from'|'to'}>> {
     try {
       const note = becca.notes[noteId];
 

@@ -7,6 +7,7 @@ import type { EmbeddingResult } from "./types.js";
 import entityChangesService from "../../../services/entity_changes.js";
 import type { EntityChange } from "../../../services/entity_changes_interface.js";
 import { EMBEDDING_CONSTANTS } from "../constants/embedding_constants.js";
+import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 /**
  * Creates or updates an embedding for a note
  */
@@ -139,14 +140,14 @@ export async function findSimilarNotes(
     embedding: Float32Array,
     providerId: string,
     modelId: string,
-    limit = 10,
+    limit = SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_MAX_RESULTS,
     threshold?: number,  // Made optional to use constants
     useFallback = true   // Whether to try other providers if no embeddings found
 ): Promise<{noteId: string, similarity: number, contentType?: string}[]> {
     // Import constants dynamically to avoid circular dependencies
     const llmModule = await import('../../../routes/api/llm.js');
-    // Use a default threshold of 0.65 if not provided
-    const actualThreshold = threshold || 0.65;
+    // Use default threshold if not provided
+    const actualThreshold = threshold || SEARCH_CONSTANTS.VECTOR_SEARCH.EXACT_MATCH_THRESHOLD;
 
     try {
         log.info(`Finding similar notes with provider: ${providerId}, model: ${modelId}, dimension: ${embedding.length}, threshold: ${actualThreshold}`);

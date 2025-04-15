@@ -355,7 +355,7 @@ class RestChatService {
                     createdAt: now,
                     lastActive: now,
                     metadata: {
-                        temperature: 0.7,
+                        temperature: SEARCH_CONSTANTS.TEMPERATURE.DEFAULT,
                         maxTokens: undefined,
                         model: undefined,
                         provider: undefined
@@ -1645,7 +1645,7 @@ class RestChatService {
                 lastActive: now,
                 noteContext: options.contextNoteId,
                 metadata: {
-                    temperature: options.temperature,
+                    temperature: SEARCH_CONSTANTS.TEMPERATURE.DEFAULT,
                     maxTokens: options.maxTokens,
                     model: options.model,
                     provider: options.provider,

@@ -5,6 +5,7 @@ import { NormalizationStatus } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../constants/provider_constants.js";
 import type { EmbeddingModelInfo } from "../../interfaces/embedding_interfaces.js";
 import OpenAI from "openai";
+import { PROVIDER_EMBEDDING_CAPABILITIES } from '../../constants/search_constants.js';
 
 /**
  * OpenAI embedding provider implementation using the official SDK
@@ -40,7 +41,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             if (!this.client && this.apiKey) {
                 this.initClient();
             }
-            
+
             // Detect model capabilities
             const modelInfo = await this.getModelInfo(modelName);
 
@@ -64,7 +65,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
         try {
             // Get model details using the SDK
             const model = await this.client.models.retrieve(modelName);
-            
+
             if (model) {
                 // Different model families may have different ways of exposing context window
                 let contextWindow = 0;
@@ -72,7 +73,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
 
                 // Extract context window if available from the response
                 const modelData = model as any;
-                
+
                 if (modelData.context_window) {
                     contextWindow = modelData.context_window;
                 } else if (modelData.limits && modelData.limits.context_window) {
@@ -90,15 +91,11 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
 
                 // If we didn't get all the info, use defaults for missing values
                 if (!contextWindow) {
-                    // Set default context window based on model name patterns
-                    if (modelName.includes('ada') || modelName.includes('embedding-ada')) {
-                        contextWindow = LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI;
-                    } else if (modelName.includes('davinci')) {
-                        contextWindow = 8192;
-                    } else if (modelName.includes('embedding-3')) {
-                        contextWindow = 8191;
+                    // Set contextWindow based on model name patterns
+                    if (modelName.includes('embedding-3')) {
+                        contextWindow = PROVIDER_EMBEDDING_CAPABILITIES.OPENAI.MODELS['text-embedding-3-small'].contextWindow;
                     } else {
-                        contextWindow = LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI;
+                        contextWindow = PROVIDER_EMBEDDING_CAPABILITIES.OPENAI.MODELS.default.contextWindow;
                     }
                 }
 
@@ -107,11 +104,11 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
                     if (modelName.includes('ada') || modelName.includes('embedding-ada')) {
                         dimension = LLM_CONSTANTS.EMBEDDING_DIMENSIONS.OPENAI.ADA;
                     } else if (modelName.includes('embedding-3-small')) {
-                        dimension = 1536;
+                        dimension = PROVIDER_EMBEDDING_CAPABILITIES.OPENAI.MODELS['text-embedding-3-small'].dimension;
                     } else if (modelName.includes('embedding-3-large')) {
-                        dimension = 3072;
+                        dimension = PROVIDER_EMBEDDING_CAPABILITIES.OPENAI.MODELS['text-embedding-3-large'].dimension;
                     } else {
-                        dimension = LLM_CONSTANTS.EMBEDDING_DIMENSIONS.OPENAI.DEFAULT;
+                        dimension = PROVIDER_EMBEDDING_CAPABILITIES.OPENAI.MODELS.default.dimension;
                     }
                 }
 
@@ -155,7 +152,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             const dimension = testEmbedding.length;
 
             // Use default context window
-            let contextWindow = LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI;
+            let contextWindow = PROVIDER_EMBEDDING_CAPABILITIES.OPENAI.MODELS.default.contextWindow;
 
             const modelInfo: EmbeddingModelInfo = {
                 name: modelName,
@@ -170,8 +167,8 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             return modelInfo;
         } catch (error: any) {
             // If detection fails, use defaults
-            const dimension = LLM_CONSTANTS.EMBEDDING_DIMENSIONS.OPENAI.DEFAULT;
-            const contextWindow = LLM_CONSTANTS.CONTEXT_WINDOW.OPENAI;
+            const dimension = PROVIDER_EMBEDDING_CAPABILITIES.OPENAI.MODELS.default.dimension;
+            const contextWindow = PROVIDER_EMBEDDING_CAPABILITIES.OPENAI.MODELS.default.contextWindow;
 
             log.info(`Using default parameters for OpenAI model ${modelName}: dimension ${dimension}, context ${contextWindow}`);
 
@@ -209,7 +206,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
                 input: text,
                 encoding_format: "float"
             });
-            
+
             if (response && response.data && response.data[0] && response.data[0].embedding) {
                 return new Float32Array(response.data[0].embedding);
             } else {
@@ -258,7 +255,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
             input: texts,
             encoding_format: "float"
         });
-        
+
         if (response && response.data) {
             // Sort the embeddings by index to ensure they match the input order
             const sortedEmbeddings = response.data

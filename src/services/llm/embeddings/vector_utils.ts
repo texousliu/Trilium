@@ -1,3 +1,5 @@
+import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
+
 /**
  * Computes the cosine similarity between two vectors
  * If dimensions don't match, automatically adapts using the enhanced approach
@@ -549,9 +551,9 @@ export function ensembleSimilarity(
 ): number {
     // Default weights if not provided
     const weights = options.ensembleWeights ?? {
-        [SimilarityMetric.COSINE]: 0.6,
-        [SimilarityMetric.HYBRID]: 0.3,
-        [SimilarityMetric.DIM_AWARE]: 0.1
+        [SimilarityMetric.COSINE]: SEARCH_CONSTANTS.VECTOR_SEARCH.SIMILARITY_THRESHOLD.COSINE,
+        [SimilarityMetric.HYBRID]: SEARCH_CONSTANTS.VECTOR_SEARCH.SIMILARITY_THRESHOLD.HYBRID,
+        [SimilarityMetric.DIM_AWARE]: SEARCH_CONSTANTS.VECTOR_SEARCH.SIMILARITY_THRESHOLD.DIM_AWARE
     };
 
     let totalWeight = 0;

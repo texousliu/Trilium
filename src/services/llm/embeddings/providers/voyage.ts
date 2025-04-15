@@ -51,21 +51,17 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
      */
     private async fetchModelCapabilities(modelName: string): Promise<EmbeddingModelInfo | null> {
         try {
-            // Get context window size from our local registry of known models
-            const modelBase = Object.keys(VOYAGE_MODEL_CONTEXT_WINDOWS).find(
+            // Find the closest matching model
+            const modelMapKey = Object.keys(PROVIDER_EMBEDDING_CAPABILITIES.VOYAGE.MODELS).find(
                 model => modelName.startsWith(model)
             ) || "default";
 
-            const modelInfo = VOYAGE_MODEL_CONTEXT_WINDOWS[modelBase as keyof typeof VOYAGE_MODEL_CONTEXT_WINDOWS];
-            const contextWindow = modelInfo.contextWidth;
-
-            // Get dimension from our registry of known models
-            const dimension = VOYAGE_MODEL_DIMENSIONS[modelBase as keyof typeof VOYAGE_MODEL_DIMENSIONS] ||
-                              VOYAGE_MODEL_DIMENSIONS["default"];
+            // Use as keyof to tell TypeScript this is a valid key
+            const modelInfo = PROVIDER_EMBEDDING_CAPABILITIES.VOYAGE.MODELS[modelMapKey as keyof typeof PROVIDER_EMBEDDING_CAPABILITIES.VOYAGE.MODELS];
 
             return {
-                dimension,
-                contextWidth: contextWindow,
+                dimension: modelInfo.dimension,
+                contextWidth: modelInfo.contextWidth,
                 name: modelName,
                 type: 'float32'
             };
@@ -86,8 +82,9 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
 
         // Try to determine model capabilities
         const capabilities = await this.fetchModelCapabilities(modelName);
-        const contextWindow = capabilities?.contextWidth || 8192; // Default context window for Voyage
-        const knownDimension = capabilities?.dimension || 1024; // Default dimension for Voyage models
+        const defaults = PROVIDER_EMBEDDING_CAPABILITIES.VOYAGE.MODELS.default;
+        const contextWindow = capabilities?.contextWidth || defaults.contextWidth;
+        const knownDimension = capabilities?.dimension || defaults.dimension;
 
         // For Voyage, we can use known dimensions or detect with a test call
         try {
@@ -166,7 +163,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
             const modelInfo = await this.getModelInfo(modelName);
 
             // Trim text if it might exceed context window (rough character estimate)
-            const charLimit = (modelInfo.contextWidth || 8192) * 4; // Rough estimate: avg 4 chars per token
+            const charLimit = (modelInfo.contextWidth || PROVIDER_EMBEDDING_CAPABILITIES.VOYAGE.MODELS.default.contextWidth) * 4; // Rough estimate: avg 4 chars per token
             const trimmedText = text.length > charLimit ? text.substring(0, charLimit) : text;
 
             const response = await fetch(`${this.baseUrl}/embeddings`, {

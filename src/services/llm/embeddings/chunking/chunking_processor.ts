@@ -5,6 +5,7 @@ import becca from "../../../../becca/becca.js";
 import cls from "../../../../services/cls.js";
 import type { NoteEmbeddingContext } from "../types.js";
 import { LLM_CONSTANTS } from "../../../llm/constants/provider_constants.js";
+import { EMBEDDING_PROCESSING } from '../../constants/search_constants.js';
 
 // Define error categories for better handling
 const ERROR_CATEGORIES = {
@@ -27,14 +28,14 @@ const ERROR_CATEGORIES = {
 };
 
 // Maximum time (in milliseconds) allowed for the entire chunking process
-const MAX_TOTAL_PROCESSING_TIME = 5 * 60 * 1000; // 5 minutes
+const MAX_TOTAL_PROCESSING_TIME = EMBEDDING_PROCESSING.MAX_TOTAL_PROCESSING_TIME;
 
 // Maximum number of retry attempts per chunk
-const MAX_CHUNK_RETRY_ATTEMPTS = 2;
+const MAX_CHUNK_RETRY_ATTEMPTS = EMBEDDING_PROCESSING.MAX_CHUNK_RETRY_ATTEMPTS;
 
 // Maximum time per chunk processing (to prevent individual chunks from hanging)
-const DEFAULT_MAX_CHUNK_PROCESSING_TIME = 60 * 1000; // 1 minute
-const OLLAMA_MAX_CHUNK_PROCESSING_TIME = 120 * 1000; // 2 minutes
+const DEFAULT_MAX_CHUNK_PROCESSING_TIME = EMBEDDING_PROCESSING.DEFAULT_MAX_CHUNK_PROCESSING_TIME;
+const OLLAMA_MAX_CHUNK_PROCESSING_TIME = EMBEDDING_PROCESSING.OLLAMA_MAX_CHUNK_PROCESSING_TIME;
 
 /**
  * Categorize an error as temporary or permanent based on its message
