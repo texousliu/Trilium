@@ -996,18 +996,18 @@ export default class LlmChatPanel extends BasicWidget {
      */
     private showToolExecutionInfo(toolExecutionData: any) {
         console.log(`Showing tool execution info: ${JSON.stringify(toolExecutionData)}`);
-        
+
         // Enhanced debugging for tool execution
         if (!toolExecutionData) {
             console.error('Tool execution data is missing or undefined');
             return;
         }
-        
+
         // Check for required properties
         const actionType = toolExecutionData.action || '';
         const toolName = toolExecutionData.tool || 'unknown';
         console.log(`Tool execution details: action=${actionType}, tool=${toolName}, hasResult=${!!toolExecutionData.result}`);
-        
+
         // Force action to 'result' if missing but result is present
         if (!actionType && toolExecutionData.result) {
             console.log('Setting missing action to "result" since result is present');

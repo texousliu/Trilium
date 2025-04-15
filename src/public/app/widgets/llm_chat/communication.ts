@@ -319,35 +319,40 @@ export async function setupStreamingResponse(
 
             // Handle completion
             if (message.done) {
-                console.log(`[${responseId}] Stream completed for session ${sessionId}, has content: ${!!message.content}, content length: ${message.content?.length || 0}, current response: ${assistantResponse.length} chars, post-tool response: ${postToolResponse.length} chars`);
+                console.log(`[${responseId}] Stream completed for session ${sessionId}, has content: ${!!message.content}, content length: ${message.content?.length || 0}, current response: ${assistantResponse.length} chars`);
 
                 // Dump message content to console for debugging
                 if (message.content) {
                     console.log(`[${responseId}] CONTENT IN DONE MESSAGE (first 200 chars): "${message.content.substring(0, 200)}..."`);
+
+                    // Check if the done message contains the exact same content as our accumulated response
+                    // We normalize by removing whitespace to avoid false negatives due to spacing differences
+                    const normalizedMessage = message.content.trim();
+                    const normalizedResponse = assistantResponse.trim();
+
+                    if (normalizedMessage === normalizedResponse) {
+                        console.log(`[${responseId}] Final message is identical to accumulated response, no need to update`);
+                    }
+                    // If the done message is longer but contains our accumulated response, use the done message
+                    else if (normalizedMessage.includes(normalizedResponse) && normalizedMessage.length > normalizedResponse.length) {
+                        console.log(`[${responseId}] Final message is more complete than accumulated response, using it`);
+                        assistantResponse = message.content;
+                    }
+                    // If the done message is different and not already included, append it to avoid duplication
+                    else if (!normalizedResponse.includes(normalizedMessage) && normalizedMessage.length > 0) {
+                        console.log(`[${responseId}] Final message has unique content, using it`);
+                        assistantResponse = message.content;
+                    }
+                    // Otherwise, we already have the content accumulated, so no need to update
+                    else {
+                        console.log(`[${responseId}] Already have this content accumulated, not updating`);
+                    }
                 }
 
                 // Clear timeout if set
                 if (timeoutId !== null) {
                     window.clearTimeout(timeoutId);
                     timeoutId = null;
-                }
-
-                // Make sure the final message is displayed
-                if (message.content) {
-                    // If we've been collecting post-tool content, add this content to it
-                    if (receivedPostToolContent) {
-                        // Only add if it's not already included (avoid duplication)
-                        if (!postToolResponse.includes(message.content)) {
-                            postToolResponse += message.content;
-                            console.log(`[${responseId}] Added final chunk to post-tool response`);
-                        }
-                        // Use the post-tool response as our final response
-                        assistantResponse = postToolResponse;
-                    } else if (!assistantResponse.includes(message.content)) {
-                        // For standard responses, add any new content in the final message
-                        console.log(`[${responseId}] Final message has unique content, using it`);
-                        assistantResponse = message.content;
-                    }
                 }
 
                 // Always mark as done when we receive the done flag
