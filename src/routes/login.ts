@@ -133,7 +133,7 @@ function sendLoginError(req: Request, res: Response, errorType: 'password' | 'to
         log.info(`WARNING: Wrong password from ${req.ip}, rejecting.`);
     }
 
-    res.render('login', {
+    res.status(401).render('login', {
         wrongPassword: errorType === 'password',
         wrongTotp: errorType === 'totp',
         totpEnabled: totp.isTotpEnabled(),
