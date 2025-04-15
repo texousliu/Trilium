@@ -35,13 +35,13 @@ app.set("view engine", "ejs");
 
 app.use((req, res, next) => {
     // set CORS header
-    if (config["Network"]["corsAllowOrigin"].length > 0) {
+    if (config["Network"]["corsAllowOrigin"]) {
         res.header("Access-Control-Allow-Origin", config["Network"]["corsAllowOrigin"]);
     }
-    if (config["Network"]["corsAllowMethods"].length > 0) {
+    if (config["Network"]["corsAllowMethods"]) {
         res.header("Access-Control-Allow-Methods", config["Network"]["corsAllowMethods"]);
     }
-    if (config["Network"]["corsAllowHeaders"].length > 0) {
+    if (config["Network"]["corsAllowHeaders"]) {
         res.header("Access-Control-Allow-Headers", config["Network"]["corsAllowHeaders"]);
     }
 

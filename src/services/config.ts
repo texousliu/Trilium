@@ -85,13 +85,13 @@ const config: TriliumConfig = {
             process.env.TRILIUM_NETWORK_TRUSTEDREVERSEPROXY || iniConfig.Network.trustedReverseProxy || false,
 
         corsAllowOrigin:
-            process.env.TRILIUM_CORS_ALLOW_ORIGIN || iniConfig.Network.corsAllowOrigin || "",
+            process.env.TRILIUM_NETWORK_CORS_ALLOW_ORIGIN || iniConfig.Network.corsAllowOrigin || "",
 
         corsAllowMethods:
-            process.env.TRILIUM_CORS_ALLOW_METHODS || iniConfig.Network.corsAllowMethods || "",
+            process.env.TRILIUM_NETWORK_CORS_ALLOW_METHODS || iniConfig.Network.corsAllowMethods || "",
 
         corsAllowHeaders:
-            process.env.TRILIUM_CORS_ALLOW_HEADERS || iniConfig.Network.corsAllowHeaders || ""
+            process.env.TRILIUM_NETWORK_CORS_ALLOW_HEADERS || iniConfig.Network.corsAllowHeaders || ""
     },
 
     Session: {
