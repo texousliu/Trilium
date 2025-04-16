@@ -6,15 +6,24 @@ import { ChatPipeline } from './pipeline/chat_pipeline.js';
 import type { ChatPipelineConfig, StreamCallback } from './pipeline/interfaces.js';
 import aiServiceManager from './ai_service_manager.js';
 import type { ChatPipelineInput } from './pipeline/interfaces.js';
+import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 
 // Update the ChatCompletionOptions interface to include the missing properties
-// TODO fix
 declare module './ai_interface.js' {
     interface ChatCompletionOptions {
         pipeline?: string;
         noteId?: string;
         useAdvancedContext?: boolean;
+        showThinking?: boolean;
+        enableTools?: boolean;
     }
+}
+
+// Add a type for context extraction result
+interface ContextExtractionResult {
+    context: string;
+    sources?: NoteSearchResult[];
+    thinking?: string;
 }
 
 export interface ChatSession {
@@ -144,7 +153,7 @@ export class ChatService {
                 ...(options || session.options || {}),
                 sessionId: session.id
             };
-            
+
             // Execute the pipeline
             const response = await pipeline.execute({
                 messages: session.messages,
@@ -156,7 +165,8 @@ export class ChatService {
             // Add assistant message
             const assistantMessage: Message = {
                 role: 'assistant',
-                content: response.text
+                content: response.text,
+                tool_calls: response.tool_calls
             };
 
             session.messages.push(assistantMessage);
@@ -168,13 +178,13 @@ export class ChatService {
                 provider: response.provider,
                 usage: response.usage
             };
-            
+
             // If there are tool calls, make sure they're stored in metadata
             if (response.tool_calls && response.tool_calls.length > 0) {
                 // Let the storage service extract and save tool executions
                 // The tool results are already in the messages
             }
-            
+
             // Save the complete conversation with metadata
             await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
@@ -187,9 +197,9 @@ export class ChatService {
 
             return session;
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             session.isStreaming = false;
-            console.error('Error in AI chat:', error);
+            console.error('Error in AI chat:', this.handleError(error));
 
             // Add error message
             const errorMessage: Message = {
@@ -266,7 +276,8 @@ export class ChatService {
             // Add assistant message
             const assistantMessage: Message = {
                 role: 'assistant',
-                content: response.text
+                content: response.text,
+                tool_calls: response.tool_calls
             };
 
             session.messages.push(assistantMessage);
@@ -279,13 +290,13 @@ export class ChatService {
                 usage: response.usage,
                 contextNoteId: noteId // Store the note ID used for context
             };
-            
+
             // If there are tool calls, make sure they're stored in metadata
             if (response.tool_calls && response.tool_calls.length > 0) {
                 // Let the storage service extract and save tool executions
                 // The tool results are already in the messages
             }
-            
+
             // Save the complete conversation with metadata
             await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
@@ -298,9 +309,9 @@ export class ChatService {
 
             return session;
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             session.isStreaming = false;
-            console.error('Error in context-aware chat:', error);
+            console.error('Error in context-aware chat:', this.handleError(error));
 
             // Add error message
             const errorMessage: Message = {
@@ -343,7 +354,7 @@ export class ChatService {
             noteId,
             query: lastUserMessage,
             useSmartContext
-        });
+        }) as ContextExtractionResult;
 
         const contextMessage: Message = {
             role: 'user',
@@ -351,28 +362,27 @@ export class ChatService {
         };
 
         session.messages.push(contextMessage);
-        
+
         // Store the context note id in metadata
         const metadata = {
             contextNoteId: noteId
         };
-        
+
         // Check if the context extraction result has sources
-        // Note: We're adding a defensive check since TypeScript doesn't know about this property
-        const contextSources = (contextResult as any).sources || [];
-        if (contextSources && contextSources.length > 0) {
-            // Convert the sources to the format expected by recordSources
-            const sources = contextSources.map((source: any) => ({
+        if (contextResult.sources && contextResult.sources.length > 0) {
+            // Convert the sources to match expected format (handling null vs undefined)
+            const sources = contextResult.sources.map(source => ({
                 noteId: source.noteId,
                 title: source.title,
                 similarity: source.similarity,
-                content: source.content
+                // Replace null with undefined for content
+                content: source.content === null ? undefined : source.content
             }));
-            
+
             // Store these sources in metadata
             await chatStorageService.recordSources(session.id, sources);
         }
-        
+
         await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
         return session;
@@ -380,11 +390,6 @@ export class ChatService {
 
     /**
      * Add semantically relevant context from a note based on a specific query
-     *
-     * @param sessionId - The ID of the chat session
-     * @param noteId - The ID of the note to add context from
-     * @param query - The specific query to find relevant information for
-     * @returns The updated chat session
      */
     async addSemanticNoteContext(sessionId: string, noteId: string, query: string): Promise<ChatSession> {
         const session = await this.getOrCreateSession(sessionId);
@@ -404,28 +409,27 @@ export class ChatService {
         };
 
         session.messages.push(contextMessage);
-        
+
         // Store the context note id and query in metadata
         const metadata = {
             contextNoteId: noteId
         };
-        
+
         // Check if the semantic context extraction result has sources
-        // Note: We're adding a defensive check since TypeScript doesn't know about this property
-        const contextSources = (contextResult as any).sources || [];
+        const contextSources = (contextResult as ContextExtractionResult).sources || [];
         if (contextSources && contextSources.length > 0) {
             // Convert the sources to the format expected by recordSources
-            const sources = contextSources.map((source: any) => ({
+            const sources = contextSources.map((source) => ({
                 noteId: source.noteId,
                 title: source.title,
                 similarity: source.similarity,
-                content: source.content
+                content: source.content === null ? undefined : source.content
             }));
-            
+
             // Store these sources in metadata
             await chatStorageService.recordSources(session.id, sources);
         }
-        
+
         await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
         return session;
@@ -456,7 +460,7 @@ export class ChatService {
     /**
      * Get pipeline performance metrics
      */
-    getPipelineMetrics(pipelineType: string = 'default'): any {
+    getPipelineMetrics(pipelineType: string = 'default'): unknown {
         const pipeline = this.getPipeline(pipelineType);
         return pipeline.getMetrics();
     }
@@ -542,10 +546,20 @@ export class ChatService {
 
             // If not using advanced context, use direct service call
             return await service.generateChatCompletion(messages, options);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error in generateChatCompletion:', error);
             throw error;
         }
+    }
+
+    /**
+     * Error handler utility
+     */
+    private handleError(error: unknown): string {
+        if (error instanceof Error) {
+            return error.message || String(error);
+        }
+        return String(error);
     }
 }
 

@@ -18,6 +18,17 @@ import type {
 } from './interfaces/ai_service_interfaces.js';
 import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 
+/**
+ * Interface representing relevant note context
+ */
+interface NoteContext {
+    title: string;
+    content?: string;
+    noteId?: string;
+    summary?: string;
+    score?: number;
+}
+
 export class AIServiceManager implements IAIServiceManager {
     private services: Record<ServiceProviders, AIService> = {
         openai: new OpenAIService(),
@@ -31,30 +42,30 @@ export class AIServiceManager implements IAIServiceManager {
     constructor() {
         // Initialize provider order immediately
         this.updateProviderOrder();
-        
+
         // Initialize tools immediately
         this.initializeTools().catch(error => {
             log.error(`Error initializing LLM tools during AIServiceManager construction: ${error.message || String(error)}`);
         });
     }
-    
+
     /**
      * Initialize all LLM tools in one place
      */
     private async initializeTools(): Promise<void> {
         try {
             log.info('Initializing LLM tools during AIServiceManager construction...');
-            
+
             // Initialize agent tools
-            await agentTools.initialize(true);
+            await this.initializeAgentTools();
             log.info("Agent tools initialized successfully");
-            
+
             // Initialize LLM tools
             const toolInitializer = await import('./tools/tool_initializer.js');
             await toolInitializer.default.initializeTools();
             log.info("LLM tools initialized successfully");
-        } catch (error: any) {
-            log.error(`Error initializing tools: ${error.message || String(error)}`);
+        } catch (error: unknown) {
+            log.error(`Error initializing tools: ${this.handleError(error)}`);
             // Don't throw, just log the error to prevent breaking construction
         }
     }
@@ -463,10 +474,8 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Get agent tools context for a specific note
-     * This context enriches LLM prompts with tools that can interact with Trilium
-     *
-     * @param noteId - The note ID
+     * Get enhanced context with available agent tools
+     * @param noteId - The ID of the note
      * @param query - The user's query
      * @param showThinking - Whether to show LLM's thinking process
      * @param relevantNotes - Optional notes already found to be relevant
@@ -476,12 +485,12 @@ export class AIServiceManager implements IAIServiceManager {
         noteId: string,
         query: string,
         showThinking: boolean = false,
-        relevantNotes: Array<any> = []
+        relevantNotes: NoteSearchResult[] = []
     ): Promise<string> {
         try {
             // Create agent tools message
             const toolsMessage = await this.getAgentToolsDescription();
-            
+
             // Agent tools are already initialized in the constructor
             // No need to initialize them again
 
@@ -508,7 +517,7 @@ export class AIServiceManager implements IAIServiceManager {
 
                     log.info(`Found ${contextNotes.length} relevant notes for context`);
                 } catch (error) {
-                    log.error(`Failed to find relevant notes: ${error}`);
+                    log.error(`Failed to find relevant notes: ${this.handleError(error)}`);
                     // Continue without context notes
                     contextNotes = [];
                 }
@@ -526,7 +535,7 @@ export class AIServiceManager implements IAIServiceManager {
             // Combine tool message with context
             return toolsMessage + contextStr;
         } catch (error) {
-            log.error(`Error getting agent tools context: ${error}`);
+            log.error(`Error getting agent tools context: ${this.handleError(error)}`);
             return "";
         }
     }
@@ -600,6 +609,16 @@ export class AIServiceManager implements IAIServiceManager {
             defaultModel: 'default'
         };
     }
+
+    /**
+     * Error handler that properly types the error object
+     */
+    private handleError(error: unknown): string {
+        if (error instanceof Error) {
+            return error.message || String(error);
+        }
+        return String(error);
+    }
 }
 
 // Don't create singleton immediately, use a lazy-loading pattern
@@ -662,7 +681,7 @@ export default {
         noteId: string,
         query: string,
         showThinking: boolean = false,
-        relevantNotes: Array<any> = []
+        relevantNotes: NoteSearchResult[] = []
     ): Promise<string> {
         return getInstance().getAgentToolsContext(
             noteId,

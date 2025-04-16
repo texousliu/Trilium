@@ -58,6 +58,16 @@ export class NoteNavigatorTool {
   private maxDepth: number = SEARCH_CONSTANTS.HIERARCHY.MAX_DEPTH;
 
   /**
+   * Error handler that properly types the error object
+   */
+  private handleError(error: unknown): string {
+    if (error instanceof Error) {
+      return error.message || String(error);
+    }
+    return String(error);
+  }
+
+  /**
    * Get detailed information about a note
    */
   getNoteInfo(noteId: string): NoteInfo | null {
@@ -84,8 +94,8 @@ export class NoteNavigatorTool {
         attributeNames,
         hasChildren: note.children.length > 0
       };
-    } catch (error: any) {
-      log.error(`Error getting note info: ${error.message}`);
+    } catch (error: unknown) {
+      log.error(`Error getting note info: ${this.handleError(error)}`);
       return null;
     }
   }
@@ -118,8 +128,8 @@ export class NoteNavigatorTool {
           notePathTitles: titles
         };
       }).sort((a, b) => a.notePath.length - b.notePath.length); // Sort by path length, shortest first
-    } catch (error: any) {
-      log.error(`Error getting note paths: ${error.message}`);
+    } catch (error: unknown) {
+      log.error(`Error getting note paths: ${this.handleError(error)}`);
       return [];
     }
   }
@@ -154,8 +164,8 @@ export class NoteNavigatorTool {
       }
 
       return result;
-    } catch (error: any) {
-      log.error(`Error getting note hierarchy: ${error.message}`);
+    } catch (error: unknown) {
+      log.error(`Error getting note hierarchy: ${this.handleError(error)}`);
       return null;
     }
   }
@@ -185,7 +195,8 @@ export class NoteNavigatorTool {
       }
 
       return result;
-    } catch (error) {
+    } catch (error: unknown) {
+      log.error(`Error in _getHierarchyLevel: ${this.handleError(error)}`);
       return null;
     }
   }
@@ -201,8 +212,8 @@ export class NoteNavigatorTool {
       }
 
       return note.ownedAttributes;
-    } catch (error: any) {
-      log.error(`Error getting note attributes: ${error.message}`);
+    } catch (error: unknown) {
+      log.error(`Error getting note attributes: ${this.handleError(error)}`);
       return [];
     }
   }
@@ -280,8 +291,8 @@ export class NoteNavigatorTool {
 
       // No path found
       return null;
-    } catch (error: any) {
-      log.error(`Error finding path between notes: ${error.message}`);
+    } catch (error: unknown) {
+      log.error(`Error finding path between notes: ${this.handleError(error)}`);
       return null;
     }
   }
@@ -312,8 +323,8 @@ export class NoteNavigatorTool {
       }
 
       return results;
-    } catch (error: any) {
-      log.error(`Error searching notes by title: ${error.message}`);
+    } catch (error: unknown) {
+      log.error(`Error searching notes by title: ${this.handleError(error)}`);
       return [];
     }
   }
@@ -338,8 +349,8 @@ export class NoteNavigatorTool {
       return parents
         .map(parent => this.getNoteInfo(parent.noteId))
         .filter((info): info is NoteInfo => info !== null);
-    } catch (error: any) {
-      log.error(`Error getting note clones: ${error.message}`);
+    } catch (error: unknown) {
+      log.error(`Error getting note clones: ${this.handleError(error)}`);
       return [];
     }
   }
@@ -429,8 +440,8 @@ export class NoteNavigatorTool {
       }
 
       return result;
-    } catch (error: any) {
-      log.error(`Error getting note context: ${error.message}`);
+    } catch (error: unknown) {
+      log.error(`Error getting note context: ${this.handleError(error)}`);
       return "Error generating note context description.";
     }
   }
@@ -503,8 +514,8 @@ export class NoteNavigatorTool {
         attributes,
         parentPath
       };
-    } catch (error) {
-      log.error(`Error getting note structure: ${error}`);
+    } catch (error: unknown) {
+      log.error(`Error getting note structure: ${this.handleError(error)}`);
       // Return a minimal structure with empty arrays to avoid null errors
       return {
         noteId,
@@ -534,8 +545,8 @@ export class NoteNavigatorTool {
           noteId: child.noteId,
           title: child.title
         }));
-    } catch (error) {
-      log.error(`Error getting child notes: ${error}`);
+    } catch (error: unknown) {
+      log.error(`Error getting child notes: ${this.handleError(error)}`);
       return [];
     }
   }
@@ -555,8 +566,8 @@ export class NoteNavigatorTool {
         noteId: parent.noteId,
         title: parent.title
       }));
-    } catch (error) {
-      log.error(`Error getting parent notes: ${error}`);
+    } catch (error: unknown) {
+      log.error(`Error getting parent notes: ${this.handleError(error)}`);
       return [];
     }
   }
@@ -613,8 +624,8 @@ export class NoteNavigatorTool {
       }
 
       return [...outboundLinks, ...inboundLinks.slice(0, Math.floor(limit / 2))];
-    } catch (error) {
-      log.error(`Error getting linked notes: ${error}`);
+    } catch (error: unknown) {
+      log.error(`Error getting linked notes: ${this.handleError(error)}`);
       return [];
     }
   }
@@ -629,8 +640,8 @@ export class NoteNavigatorTool {
       path.push(structure.title);
 
       return path.join(' > ');
-    } catch (error) {
-      log.error(`Error getting note path: ${error}`);
+    } catch (error: unknown) {
+      log.error(`Error getting note path: ${this.handleError(error)}`);
       return 'Unknown path';
     }
   }

@@ -42,7 +42,7 @@ export interface ToolCall {
     type?: string;
     function: {
         name: string;
-        arguments: Record<string, any> | string;
+        arguments: Record<string, unknown> | string;
     };
 }
 
@@ -58,5 +58,5 @@ export interface ToolHandler {
     /**
      * Execute the tool with the given arguments
      */
-    execute(args: Record<string, any>): Promise<string | object>;
+    execute(args: Record<string, unknown>): Promise<string | object>;
 }
