@@ -1208,6 +1208,7 @@
     "last_attempt": "Last Attempt",
     "actions": "Actions",
     "retry": "Retry",
+    "partial": "{{ percentage }}% completed",
     "retry_queued": "Note queued for retry",
     "retry_failed": "Failed to queue note for retry",
     "embedding_provider_precedence_description": "Comma-separated list of providers in order of precedence for embeddings search (e.g., 'openai,ollama,anthropic')",
