@@ -28,7 +28,7 @@ export interface MessageData {
 
 export interface ChatData {
     messages: MessageData[];
-    sessionId: string | null;
+    chatNoteId: string | null;
     noteId?: string | null;
     toolSteps: ToolExecutionStep[];
     sources?: Array<{

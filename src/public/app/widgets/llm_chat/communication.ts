@@ -7,17 +7,17 @@ import type { SessionResponse } from "./types.js";
 /**
  * Create a new chat session
  */
-export async function createChatSession(): Promise<{sessionId: string | null, noteId: string | null}> {
+export async function createChatSession(): Promise<{chatNoteId: string | null, noteId: string | null}> {
     try {
-        const resp = await server.post<SessionResponse>('llm/sessions', {
+        const resp = await server.post<SessionResponse>('llm/chat', {
             title: 'Note Chat'
         });
 
         if (resp && resp.id) {
-            // The backend might provide the noteId separately from the sessionId
+            // The backend might provide the noteId separately from the chatNoteId
             // If noteId is provided, use it; otherwise, we'll need to query for it separately
             return {
-                sessionId: resp.id,
+                chatNoteId: resp.id,
                 noteId: resp.noteId || null
             };
         }
@@ -26,7 +26,7 @@ export async function createChatSession(): Promise<{sessionId: string | null, no
     }
 
     return {
-        sessionId: null,
+        chatNoteId: null,
         noteId: null
     };
 }
@@ -34,12 +34,12 @@ export async function createChatSession(): Promise<{sessionId: string | null, no
 /**
  * Check if a session exists
  */
-export async function checkSessionExists(sessionId: string): Promise<boolean> {
+export async function checkSessionExists(chatNoteId: string): Promise<boolean> {
     try {
-        const sessionCheck = await server.getWithSilentNotFound<any>(`llm/sessions/${sessionId}`);
+        const sessionCheck = await server.getWithSilentNotFound<any>(`llm/chat/${chatNoteId}`);
         return !!(sessionCheck && sessionCheck.id);
     } catch (error: any) {
-        console.log(`Error checking session ${sessionId}:`, error);
+        console.log(`Error checking chat note ${chatNoteId}:`, error);
         return false;
     }
 }
@@ -48,7 +48,7 @@ export async function checkSessionExists(sessionId: string): Promise<boolean> {
  * Set up streaming response via WebSocket
  */
 export async function setupStreamingResponse(
-    sessionId: string,
+    chatNoteId: string,
     messageParams: any,
     onContentUpdate: (content: string, isDone?: boolean) => void,
     onThinkingUpdate: (thinking: string) => void,
@@ -72,7 +72,7 @@ export async function setupStreamingResponse(
 
         // Create a unique identifier for this response process
         const responseId = `llm-stream-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-        console.log(`[${responseId}] Setting up WebSocket streaming for session ${sessionId}`);
+        console.log(`[${responseId}] Setting up WebSocket streaming for chat note ${chatNoteId}`);
 
         // Function to safely perform cleanup
         const performCleanup = () => {
@@ -115,8 +115,9 @@ export async function setupStreamingResponse(
             const customEvent = event as CustomEvent;
             const message = customEvent.detail;
 
-            // Only process messages for our session
-            if (!message || message.sessionId !== sessionId) {
+            // Only process messages for our chat note
+            // Note: The WebSocket messages still use sessionId property for backward compatibility
+            if (!message || message.sessionId !== chatNoteId) {
                 return;
             }
 
@@ -130,12 +131,12 @@ export async function setupStreamingResponse(
                 cleanupTimeoutId = null;
             }
 
-            console.log(`[${responseId}] LLM Stream message received via CustomEvent: session=${sessionId}, content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${!!message.done}, type=${message.type || 'llm-stream'}`);
+            console.log(`[${responseId}] LLM Stream message received via CustomEvent: chatNoteId=${chatNoteId}, content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${!!message.done}, type=${message.type || 'llm-stream'}`);
 
             // Mark first message received
             if (!receivedAnyMessage) {
                 receivedAnyMessage = true;
-                console.log(`[${responseId}] First message received for session ${sessionId}`);
+                console.log(`[${responseId}] First message received for chat note ${chatNoteId}`);
 
                 // Clear the initial timeout since we've received a message
                 if (initialTimeoutId !== null) {
@@ -256,7 +257,7 @@ export async function setupStreamingResponse(
 
                 // Set new timeout
                 timeoutId = window.setTimeout(() => {
-                    console.warn(`[${responseId}] Stream timeout for session ${sessionId}`);
+                    console.warn(`[${responseId}] Stream timeout for chat note ${chatNoteId}`);
 
                     // Clean up
                     performCleanup();
@@ -327,7 +328,7 @@ export async function setupStreamingResponse(
 
             // Handle completion
             if (message.done) {
-                console.log(`[${responseId}] Stream completed for session ${sessionId}, has content: ${!!message.content}, content length: ${message.content?.length || 0}, current response: ${assistantResponse.length} chars`);
+                console.log(`[${responseId}] Stream completed for chat note ${chatNoteId}, has content: ${!!message.content}, content length: ${message.content?.length || 0}, current response: ${assistantResponse.length} chars`);
 
                 // Dump message content to console for debugging
                 if (message.content) {
@@ -386,9 +387,9 @@ export async function setupStreamingResponse(
 
         // Set initial timeout for receiving any message
         initialTimeoutId = window.setTimeout(() => {
-            console.warn(`[${responseId}] No messages received for initial period in session ${sessionId}`);
+            console.warn(`[${responseId}] No messages received for initial period in chat note ${chatNoteId}`);
             if (!receivedAnyMessage) {
-                console.error(`[${responseId}] WebSocket connection not established for session ${sessionId}`);
+                console.error(`[${responseId}] WebSocket connection not established for chat note ${chatNoteId}`);
 
                 if (timeoutId !== null) {
                     window.clearTimeout(timeoutId);
@@ -403,12 +404,12 @@ export async function setupStreamingResponse(
         }, 10000);
 
         // Send the streaming request to start the process
-        console.log(`[${responseId}] Sending HTTP POST request to initiate streaming: /llm/sessions/${sessionId}/messages/stream`);
-        server.post(`llm/sessions/${sessionId}/messages/stream`, {
+        console.log(`[${responseId}] Sending HTTP POST request to initiate streaming: /llm/chat/${chatNoteId}/messages/stream`);
+        server.post(`llm/chat/${chatNoteId}/messages/stream`, {
             ...messageParams,
             stream: true // Explicitly indicate this is a streaming request
         }).catch(err => {
-            console.error(`[${responseId}] HTTP error sending streaming request for session ${sessionId}:`, err);
+            console.error(`[${responseId}] HTTP error sending streaming request for chat note ${chatNoteId}:`, err);
 
             // Clean up timeouts
             if (initialTimeoutId !== null) {
@@ -444,19 +445,24 @@ function cleanupEventListener(listener: ((event: Event) => void) | null): void {
 }
 
 /**
- * Get a direct response from the server
+ * Get a direct response from the server without streaming
  */
-export async function getDirectResponse(sessionId: string, messageParams: any): Promise<any> {
-    // Create a copy of the params without any streaming flags
-    const postParams = {
-        ...messageParams,
-        stream: false  // Explicitly set to false to ensure we get a direct response
-    };
+export async function getDirectResponse(chatNoteId: string, messageParams: any): Promise<any> {
+    try {
+        const postResponse = await server.post<any>(`llm/chat/${chatNoteId}/messages`, {
+            message: messageParams.content,
+            includeContext: messageParams.useAdvancedContext,
+            options: {
+                temperature: 0.7,
+                maxTokens: 2000
+            }
+        });
 
-    console.log(`Sending direct POST request for session ${sessionId}`);
-
-    // Send the message via POST request with the updated params
-    return server.post<any>(`llm/sessions/${sessionId}/messages`, postParams);
+        return postResponse;
+    } catch (error) {
+        console.error('Error getting direct response:', error);
+        throw error;
+    }
 }
 
 /**
