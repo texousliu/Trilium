@@ -18,6 +18,8 @@ import SessionsStore from "./sessions_store.js";
 import * as MessageFormatter from "./utils/message_formatter.js";
 import type { NoteSource } from "./interfaces/session.js";
 import type { LLMStreamMessage } from "./interfaces/ws_messages.js";
+import type { ChatMessage } from '../chat/interfaces/session.js';
+import type { ChatSession } from '../chat/interfaces/session.js';
 
 /**
  * Service to handle chat API interactions
@@ -124,16 +126,34 @@ class RestChatService {
 
             if (!session) {
                 if (req.method === 'GET') {
-                    // For GET requests, we must have an existing session
-                    throw new Error('Session not found');
-                }
+                    // For GET requests, we should try to restore from Chat Note
+                    log.info(`Session ${sessionId} not found in memory for GET request, attempting to restore from Chat Note`);
 
-                // For POST requests, we can create a new session automatically
-                log.info(`Session ${sessionId} not found, creating a new one automatically`);
-                session = SessionsStore.createSession({
-                    title: 'Auto-created Session'
-                });
-                log.info(`Created new session with ID: ${session.id}`);
+                    const restoredSession = await this.restoreSessionFromChatNote(sessionId);
+
+                    if (!restoredSession) {
+                        // If we still can't find the Chat Note, throw error
+                        throw new Error('Session not found and no corresponding Chat Note exists');
+                    }
+
+                    session = restoredSession;
+                } else {
+                    // For POST requests, we can create a new session, or try to restore from Chat Note
+                    log.info(`Session ${sessionId} not found for POST request, checking if Chat Note exists`);
+
+                    const restoredSession = await this.restoreSessionFromChatNote(sessionId);
+
+                    if (!restoredSession) {
+                        // If we can't find a Chat Note, create a new session
+                        log.info(`No Chat Note found for ${sessionId}, creating a new session`);
+                        session = SessionsStore.createSession({
+                            title: 'Auto-created Session'
+                        });
+                        log.info(`Created new session with ID: ${session.id}`);
+                    } else {
+                        session = restoredSession;
+                    }
+                }
             }
 
             // Update session last active timestamp
@@ -554,6 +574,55 @@ class RestChatService {
      */
     getSessions() {
         return SessionsStore.getAllSessions();
+    }
+
+    /**
+     * Restore a session from a Chat Note
+     * This is used when a session doesn't exist in memory but there's a corresponding Chat Note
+     */
+    async restoreSessionFromChatNote(sessionId: string): Promise<ChatSession | null> {
+        try {
+            log.info(`Attempting to restore session ${sessionId} from Chat Note`);
+
+            // Import chat storage service
+            const chatStorageService = (await import('../../llm/chat_storage_service.js')).default;
+
+            // Try to get the Chat Note data
+            const chatNote = await chatStorageService.getChat(sessionId);
+
+            if (!chatNote) {
+                log.error(`Chat Note ${sessionId} not found, cannot restore session`);
+                return null;
+            }
+
+            log.info(`Found Chat Note ${sessionId}, recreating session from it`);
+
+            // Convert Message[] to ChatMessage[] by ensuring the role is compatible
+            const chatMessages: ChatMessage[] = chatNote.messages.map(msg => ({
+                role: msg.role === 'tool' ? 'assistant' : msg.role, // Map 'tool' role to 'assistant'
+                content: msg.content,
+                timestamp: new Date()
+            }));
+
+            // Create a new session with the same ID as the Chat Note
+            const session: ChatSession = {
+                id: chatNote.id,
+                title: chatNote.title,
+                messages: chatMessages,
+                createdAt: chatNote.createdAt || new Date(),
+                lastActive: new Date(),
+                metadata: chatNote.metadata || {}
+            };
+
+            // Add the session to the in-memory store
+            SessionsStore.getAllSessions().set(sessionId, session);
+
+            log.info(`Successfully restored session ${sessionId} from Chat Note`);
+            return session;
+        } catch (error) {
+            log.error(`Failed to restore session from Chat Note: ${error}`);
+            return null;
+        }
     }
 }
 

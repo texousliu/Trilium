@@ -837,10 +837,22 @@ async function streamMessage(req: Request, res: Response) {
             throw new Error('Content cannot be empty');
         }
 
-        // Check if session exists
-        const session = restChatService.getSessions().get(sessionId);
+        // Check if session exists in memory
+        let session = restChatService.getSessions().get(sessionId);
+
+        // If session doesn't exist in memory, try to recreate it from the Chat Note
         if (!session) {
-            throw new Error('Session not found');
+            log.info(`Session ${sessionId} not found in memory, attempting to restore from Chat Note`);
+
+            const restoredSession = await restChatService.restoreSessionFromChatNote(sessionId);
+
+            if (!restoredSession) {
+                // If we can't find the Chat Note either, then it's truly not found
+                log.error(`Chat Note ${sessionId} not found, cannot restore session`);
+                throw new Error('Session not found and no corresponding Chat Note exists');
+            }
+
+            session = restoredSession;
         }
 
         // Update last active timestamp
