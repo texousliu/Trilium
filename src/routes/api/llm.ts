@@ -43,36 +43,6 @@ interface SessionOptions {
     contextNoteId?: string;
 }
 
-// In-memory storage for sessions
-// In a production app, this should be stored in a database
-const sessions = restChatService.getSessions();
-
-// Flag to track if cleanup timer has been initialized
-let cleanupInitialized = false;
-
-/**
- * Initialize the session cleanup timer to remove old/inactive sessions
- * Only call this after database is initialized
- */
-function initializeCleanupTimer() {
-    restChatService.initializeCleanupTimer();
-    cleanupInitialized = true;
-}
-
-/**
- * Check if the database is initialized
- */
-function isDatabaseInitialized(): boolean {
-    return restChatService.isDatabaseInitialized();
-}
-
-/**
- * Get the AI service manager in a way that doesn't crash at startup
- */
-function safelyUseAIManager(): boolean {
-    return restChatService.safelyUseAIManager();
-}
-
 /**
  * @swagger
  * /api/llm/sessions:
@@ -346,20 +316,6 @@ async function listSessions(req: Request, res: Response) {
  */
 async function deleteSession(req: Request, res: Response) {
     return restChatService.deleteSession(req, res);
-}
-
-/**
- * Find relevant notes based on search query
- */
-async function findRelevantNotes(content: string, contextNoteId: string | null = null, limit = 5): Promise<NoteSource[]> {
-    return restChatService.findRelevantNotes(content, contextNoteId, limit);
-}
-
-/**
- * Build a prompt with context from relevant notes
- */
-function buildContextFromNotes(sources: NoteSource[], query: string): string {
-    return restChatService.buildContextFromNotes(sources, query);
 }
 
 /**
