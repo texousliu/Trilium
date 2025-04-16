@@ -11,13 +11,13 @@ import options from "../../options.js";
 import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 
 // Import our refactored modules
-import { ContextHandler } from "./handlers/context-handler.js";
-import { ToolHandler } from "./handlers/tool-handler.js";
-import { StreamHandler } from "./handlers/stream-handler.js";
-import SessionsStore from "./sessions-store.js";
+import { ContextHandler } from "./handlers/context_handler.js";
+import { ToolHandler } from "./handlers/tool_handler.js";
+import { StreamHandler } from "./handlers/stream_handler.js";
+import SessionsStore from "./sessions_store.js";
 import * as MessageFormatter from "./utils/message-formatter.js";
 import type { NoteSource } from "./interfaces/session.js";
-import type { LLMStreamMessage } from "./interfaces/ws-messages.js";
+import type { LLMStreamMessage } from "./interfaces/ws_messages.js";
 
 /**
  * Service to handle chat API interactions

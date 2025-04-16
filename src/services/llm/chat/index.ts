@@ -1,14 +1,14 @@
 /**
  * Chat module export
  */
-import restChatService from './rest-chat-service.js';
-import sessionsStore from './sessions-store.js';
-import { ContextHandler } from './handlers/context-handler.js';
-import { ToolHandler } from './handlers/tool-handler.js';
-import { StreamHandler } from './handlers/stream-handler.js';
+import restChatService from './rest_chat_service.js';
+import sessionsStore from './sessions_store.js';
+import { ContextHandler } from './handlers/context_handler.js';
+import { ToolHandler } from './handlers/tool_handler.js';
+import { StreamHandler } from './handlers/stream_handler.js';
 import * as messageFormatter from './utils/message-formatter.js';
 import type { ChatSession, ChatMessage, NoteSource } from './interfaces/session.js';
-import type { LLMStreamMessage } from './interfaces/ws-messages.js';
+import type { LLMStreamMessage } from './interfaces/ws_messages.js';
 
 // Export components
 export {

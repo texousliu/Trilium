@@ -3,7 +3,7 @@
  */
 import log from "../../../log.js";
 import type { Message } from "../../ai_interface.js";
-import SessionsStore from "../sessions-store.js";
+import SessionsStore from "../sessions_store.js";
 
 /**
  * Handles the execution of LLM tools

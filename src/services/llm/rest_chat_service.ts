@@ -5,6 +5,6 @@
  * See chat/rest-chat-service.ts for the actual implementation.
  */
 
-import restChatService from './chat/rest-chat-service.js';
+import restChatService from './chat/rest_chat_service.js';
 export * from './chat/interfaces/session.js';
 export default restChatService;

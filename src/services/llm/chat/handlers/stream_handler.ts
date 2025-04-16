@@ -4,7 +4,7 @@
 import log from "../../../log.js";
 import type { Response } from "express";
 import type { StreamChunk } from "../../ai_interface.js";
-import type { LLMStreamMessage } from "../interfaces/ws-messages.js";
+import type { LLMStreamMessage } from "../interfaces/ws_messages.js";
 import type { ChatSession } from "../interfaces/session.js";
 
 /**
@@ -50,7 +50,7 @@ export class StreamHandler {
 
         try {
             // Import the tool handler
-            const { ToolHandler } = await import('./tool-handler.js');
+            const { ToolHandler } = await import('./tool_handler.js');
 
             // Generate the LLM completion with streaming enabled
             const response = await service.generateChatCompletion(aiMessages, {
@@ -198,7 +198,7 @@ export class StreamHandler {
         service?: any
     ): Promise<void> {
         // Import tool handler lazily to avoid circular dependencies
-        const { ToolHandler } = await import('./tool-handler.js');
+        const { ToolHandler } = await import('./tool_handler.js');
 
         let messageContent = '';
 
