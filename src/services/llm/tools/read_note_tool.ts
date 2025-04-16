@@ -8,6 +8,25 @@ import type { Tool, ToolHandler } from './tool_interfaces.js';
 import log from '../../log.js';
 import becca from '../../../becca/becca.js';
 
+// Define type for note response
+interface NoteResponse {
+    noteId: string;
+    title: string;
+    type: string;
+    content: string | Buffer;
+    attributes?: Array<{
+        name: string;
+        value: string;
+        type: string;
+    }>;
+}
+
+// Error type guard
+function isError(error: unknown): error is Error {
+    return error instanceof Error || (typeof error === 'object' &&
+           error !== null && 'message' in error);
+}
+
 /**
  * Definition of the read note tool
  */
@@ -66,7 +85,7 @@ export class ReadNoteTool implements ToolHandler {
             log.info(`Retrieved note content in ${duration}ms, content length: ${content?.length || 0} chars`);
 
             // Prepare the response
-            const response: any = {
+            const response: NoteResponse = {
                 noteId: note.noteId,
                 title: note.title,
                 type: note.type,
@@ -77,13 +96,13 @@ export class ReadNoteTool implements ToolHandler {
             if (includeAttributes) {
                 const attributes = note.getOwnedAttributes();
                 log.info(`Including ${attributes.length} attributes in response`);
-                
+
                 response.attributes = attributes.map(attr => ({
                     name: attr.name,
                     value: attr.value,
                     type: attr.type
                 }));
-                
+
                 if (attributes.length > 0) {
                     // Log some example attributes
                     attributes.slice(0, 3).forEach((attr, index) => {
@@ -93,9 +112,10 @@ export class ReadNoteTool implements ToolHandler {
             }
 
             return response;
-        } catch (error: any) {
-            log.error(`Error executing read_note tool: ${error.message || String(error)}`);
-            return `Error: ${error.message || String(error)}`;
+        } catch (error: unknown) {
+            const errorMessage = isError(error) ? error.message : String(error);
+            log.error(`Error executing read_note tool: ${errorMessage}`);
+            return `Error: ${errorMessage}`;
         }
     }
 }

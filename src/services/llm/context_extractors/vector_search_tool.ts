@@ -41,8 +41,13 @@ export interface VectorSearchOptions {
   summarize?: boolean;
 }
 
+// Define a type for the context service
+export interface IVectorContextService {
+  findRelevantNotes?: (query: string, contextNoteId: string | null, options: Record<string, unknown>) => Promise<unknown[]>;
+}
+
 export class VectorSearchTool {
-  private contextService: any = null;
+  private contextService: IVectorContextService | null = null;
   private maxResults: number = 5;
 
   constructor() {
@@ -52,7 +57,7 @@ export class VectorSearchTool {
   /**
    * Set the context service for performing vector searches
    */
-  setContextService(contextService: any): void {
+  setContextService(contextService: IVectorContextService): void {
     this.contextService = contextService;
     log.info('Context service set in VectorSearchTool');
   }

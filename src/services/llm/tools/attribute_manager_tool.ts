@@ -9,6 +9,12 @@ import log from '../../log.js';
 import becca from '../../../becca/becca.js';
 import attributes from '../../attributes.js';
 
+// Define a custom error type guard
+function isError(error: unknown): error is Error {
+    return error instanceof Error || (typeof error === 'object' &&
+           error !== null && 'message' in error);
+}
+
 /**
  * Definition of the attribute manager tool
  */
@@ -129,9 +135,10 @@ export class AttributeManagerTool implements ToolHandler {
                         attributeValue: value,
                         message: `Added attribute ${attributeName}=${value || ''} to note "${note.title}"`
                     };
-                } catch (error: any) {
-                    log.error(`Error adding attribute: ${error.message || String(error)}`);
-                    return `Error: ${error.message || String(error)}`;
+                } catch (error: unknown) {
+                    const errorMessage = isError(error) ? error.message : String(error);
+                    log.error(`Error adding attribute: ${errorMessage}`);
+                    return `Error: ${errorMessage}`;
                 }
             } else if (action === 'remove') {
                 // Remove an attribute
@@ -179,9 +186,10 @@ export class AttributeManagerTool implements ToolHandler {
                         attributesRemoved: attributesToRemove.length,
                         message: `Removed ${attributesToRemove.length} attribute(s) from note "${note.title}"`
                     };
-                } catch (error: any) {
-                    log.error(`Error removing attribute: ${error.message || String(error)}`);
-                    return `Error: ${error.message || String(error)}`;
+                } catch (error: unknown) {
+                    const errorMessage = isError(error) ? error.message : String(error);
+                    log.error(`Error removing attribute: ${errorMessage}`);
+                    return `Error: ${errorMessage}`;
                 }
             } else if (action === 'update') {
                 // Update an attribute
@@ -233,16 +241,18 @@ export class AttributeManagerTool implements ToolHandler {
                         attributesUpdated: attributesToUpdate.length,
                         message: `Updated ${attributesToUpdate.length} attribute(s) on note "${note.title}"`
                     };
-                } catch (error: any) {
-                    log.error(`Error updating attribute: ${error.message || String(error)}`);
-                    return `Error: ${error.message || String(error)}`;
+                } catch (error: unknown) {
+                    const errorMessage = isError(error) ? error.message : String(error);
+                    log.error(`Error updating attribute: ${errorMessage}`);
+                    return `Error: ${errorMessage}`;
                 }
             } else {
                 return `Error: Unsupported action "${action}". Supported actions are: add, remove, update, list`;
             }
-        } catch (error: any) {
-            log.error(`Error executing manage_attributes tool: ${error.message || String(error)}`);
-            return `Error: ${error.message || String(error)}`;
+        } catch (error: unknown) {
+            const errorMessage = isError(error) ? error.message : String(error);
+            log.error(`Error executing manage_attributes tool: ${errorMessage}`);
+            return `Error: ${errorMessage}`;
         }
     }
 }

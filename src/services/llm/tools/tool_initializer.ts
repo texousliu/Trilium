@@ -19,6 +19,12 @@ import { CalendarIntegrationTool } from './calendar_integration_tool.js';
 import { NoteSummarizationTool } from './note_summarization_tool.js';
 import log from '../../log.js';
 
+// Error type guard
+function isError(error: unknown): error is Error {
+    return error instanceof Error || (typeof error === 'object' &&
+           error !== null && 'message' in error);
+}
+
 /**
  * Initialize all tools for the LLM
  */
@@ -50,8 +56,9 @@ export async function initializeTools(): Promise<void> {
         const toolCount = toolRegistry.getAllTools().length;
         const toolNames = toolRegistry.getAllTools().map(tool => tool.definition.function.name).join(', ');
         log.info(`Successfully registered ${toolCount} LLM tools: ${toolNames}`);
-    } catch (error: any) {
-        log.error(`Error initializing LLM tools: ${error.message || String(error)}`);
+    } catch (error: unknown) {
+        const errorMessage = isError(error) ? error.message : String(error);
+        log.error(`Error initializing LLM tools: ${errorMessage}`);
         // Don't throw, just log the error to prevent breaking the pipeline
     }
 }
