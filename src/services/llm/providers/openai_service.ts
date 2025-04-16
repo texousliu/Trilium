@@ -66,12 +66,25 @@ export class OpenAIService extends BaseAIService {
                 params.tool_choice = providerOptions.tool_choice as OpenAI.Chat.ChatCompletionToolChoiceOption;
             }
 
+            // Log the request parameters
+            console.log('OpenAI API Request:', JSON.stringify({
+                endpoint: 'chat.completions.create',
+                model: params.model,
+                messages: params.messages,
+                temperature: params.temperature,
+                max_tokens: params.max_tokens,
+                stream: params.stream,
+                tools: params.tools,
+                tool_choice: params.tool_choice
+            }, null, 2));
+
             // If streaming is requested
             if (providerOptions.stream) {
                 params.stream = true;
 
                 // Get stream from OpenAI SDK
                 const stream = await client.chat.completions.create(params);
+                console.log('OpenAI API Stream Started');
 
                 // Create a closure to hold accumulated tool calls
                 let accumulatedToolCalls: any[] = [];
@@ -90,6 +103,9 @@ export class OpenAIService extends BaseAIService {
                             // Process the stream
                             if (Symbol.asyncIterator in stream) {
                                 for await (const chunk of stream as AsyncIterable<OpenAI.Chat.ChatCompletionChunk>) {
+                                    // Log each chunk received from OpenAI
+                                    console.log('OpenAI API Stream Chunk:', JSON.stringify(chunk, null, 2));
+
                                     const content = chunk.choices[0]?.delta?.content || '';
                                     const isDone = !!chunk.choices[0]?.finish_reason;
 
@@ -153,12 +169,17 @@ export class OpenAIService extends BaseAIService {
                                     await callback(streamChunk);
 
                                     if (isDone) {
+                                        console.log('OpenAI API Stream Complete. Final text length:', completeText.length);
+                                        if (accumulatedToolCalls.length > 0) {
+                                            console.log('OpenAI API Tool Calls:', JSON.stringify(accumulatedToolCalls, null, 2));
+                                        }
                                         break;
                                     }
                                 }
                             } else {
                                 // Fallback for non-iterable response
                                 console.warn('Stream is not iterable, falling back to non-streaming response');
+                                console.log('OpenAI API Non-iterable Stream Response:', JSON.stringify(stream, null, 2));
 
                                 if ('choices' in stream) {
                                     const content = stream.choices[0]?.message?.content || '';
@@ -168,6 +189,7 @@ export class OpenAIService extends BaseAIService {
                                     const toolCalls = stream.choices[0]?.message?.tool_calls;
                                     if (toolCalls) {
                                         response.tool_calls = toolCalls;
+                                        console.log('OpenAI API Tool Calls in Non-iterable Response:', JSON.stringify(toolCalls, null, 2));
                                     }
 
                                     await callback({
@@ -197,6 +219,9 @@ export class OpenAIService extends BaseAIService {
                 params.stream = false;
 
                 const completion = await client.chat.completions.create(params);
+
+                // Log the full response from OpenAI
+                console.log('OpenAI API Response:', JSON.stringify(completion, null, 2));
 
                 if (!('choices' in completion)) {
                     throw new Error('Unexpected response format from OpenAI API');
