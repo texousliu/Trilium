@@ -53,8 +53,8 @@ export interface ContextMenuCommandData extends CommandData {
     node: Fancytree.FancytreeNode;
     notePath?: string;
     noteId?: string;
-    selectedOrActiveBranchIds?: any; // TODO: Remove any once type is defined
-    selectedOrActiveNoteIds: any; // TODO: Remove  any once type is defined
+    selectedOrActiveBranchIds: string[];
+    selectedOrActiveNoteIds?: string[];
 }
 
 export interface NoteCommandData extends CommandData {
