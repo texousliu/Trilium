@@ -529,13 +529,29 @@ class RestChatService {
                         }
 
                         // Add thinking info if available in the raw chunk
-                        if (rawChunk?.thinking) {
-                            message.thinking = rawChunk.thinking;
+                        if (rawChunk && 'thinking' in rawChunk && rawChunk.thinking) {
+                            message.thinking = rawChunk.thinking as string;
                         }
 
                         // Add tool execution info if available in the raw chunk
-                        if (rawChunk?.toolExecution) {
-                            message.toolExecution = rawChunk.toolExecution;
+                        if (rawChunk && 'toolExecution' in rawChunk && rawChunk.toolExecution) {
+                            // Transform the toolExecution to match the expected format
+                            const toolExec = rawChunk.toolExecution;
+                            message.toolExecution = {
+                                // Use optional chaining for all properties
+                                tool: typeof toolExec.tool === 'string'
+                                    ? toolExec.tool
+                                    : toolExec.tool?.name,
+                                result: toolExec.result,
+                                // Map arguments to args
+                                args: 'arguments' in toolExec ?
+                                    (typeof toolExec.arguments === 'object' ?
+                                        toolExec.arguments as Record<string, unknown> : {}) : {},
+                                // Add additional properties if they exist
+                                action: 'action' in toolExec ? toolExec.action as string : undefined,
+                                toolCallId: 'toolCallId' in toolExec ? toolExec.toolCallId as string : undefined,
+                                error: 'error' in toolExec ? toolExec.error as string : undefined
+                            };
                         }
 
                         // Set done flag explicitly
@@ -1543,9 +1559,6 @@ class RestChatService {
     }
 
     /**
-     * Build context from relevant notes
-     */
-    /**
      * Record a tool execution in the session metadata
      */
     private recordToolExecution(sessionId: string, tool: any, result: string, error?: string): void {
@@ -1710,111 +1723,6 @@ class RestChatService {
         } catch (error: any) {
             log.error(`Error getting LLM session: ${error.message || 'Unknown error'}`);
             throw new Error(`Failed to get session: ${error.message || 'Unknown error'}`);
-        }
-    }
-
-    /**
-     * Update a chat session's settings
-     */
-    async updateSession(req: Request, res: Response) {
-        try {
-            const { sessionId } = req.params;
-            const updates = req.body || {};
-
-            // Check if session exists
-            const session = sessions.get(sessionId);
-            if (!session) {
-                throw new Error(`Session with ID ${sessionId} not found`);
-            }
-
-            // Update allowed fields
-            if (updates.title) {
-                session.title = updates.title;
-            }
-
-            if (updates.noteContext) {
-                session.noteContext = updates.noteContext;
-            }
-
-            // Update basic metadata
-            if (updates.temperature !== undefined) {
-                session.metadata.temperature = updates.temperature;
-            }
-
-            if (updates.maxTokens !== undefined) {
-                session.metadata.maxTokens = updates.maxTokens;
-            }
-
-            if (updates.model) {
-                session.metadata.model = updates.model;
-            }
-
-            if (updates.provider) {
-                session.metadata.provider = updates.provider;
-            }
-
-            // Handle new extended metadata from the frontend
-            if (updates.metadata) {
-                // Update various metadata fields but keep existing ones
-                session.metadata = {
-                    ...session.metadata,
-                    ...updates.metadata,
-                    // Make sure timestamp is updated
-                    lastUpdated: new Date().toISOString()
-                };
-            }
-
-            // Handle sources as a top-level field
-            if (updates.sources && Array.isArray(updates.sources)) {
-                session.metadata.sources = updates.sources;
-            }
-
-            // Handle tool executions from frontend
-            if (updates.toolExecutions && Array.isArray(updates.toolExecutions)) {
-                session.metadata.toolExecutions = updates.toolExecutions;
-            } else if (updates.metadata?.toolExecutions && Array.isArray(updates.metadata.toolExecutions)) {
-                session.metadata.toolExecutions = updates.metadata.toolExecutions;
-            }
-
-            // Update timestamp
-            session.lastActive = new Date();
-
-            return {
-                id: session.id,
-                title: session.title,
-                updatedAt: session.lastActive,
-                // Include updated metadata in response
-                metadata: session.metadata,
-                sources: session.metadata.sources || []
-            };
-        } catch (error: any) {
-            log.error(`Error updating LLM session: ${error.message || 'Unknown error'}`);
-            throw new Error(`Failed to update session: ${error.message || 'Unknown error'}`);
-        }
-    }
-
-    /**
-     * List all chat sessions
-     */
-    async listSessions(req: Request, res: Response) {
-        try {
-            const sessionList = Array.from(sessions.values()).map(session => ({
-                id: session.id,
-                title: session.title,
-                createdAt: session.createdAt,
-                lastActive: session.lastActive,
-                messageCount: session.messages.length
-            }));
-
-            // Sort by last activity (most recent first)
-            sessionList.sort((a, b) => b.lastActive.getTime() - a.lastActive.getTime());
-
-            return {
-                sessions: sessionList
-            };
-        } catch (error: any) {
-            log.error(`Error listing LLM sessions: ${error.message || 'Unknown error'}`);
-            throw new Error(`Failed to list sessions: ${error.message || 'Unknown error'}`);
         }
     }
 

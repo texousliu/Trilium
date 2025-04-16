@@ -7,20 +7,28 @@ import type { SessionResponse } from "./types.js";
 /**
  * Create a new chat session
  */
-export async function createChatSession(): Promise<string | null> {
+export async function createChatSession(): Promise<{sessionId: string | null, noteId: string | null}> {
     try {
         const resp = await server.post<SessionResponse>('llm/sessions', {
             title: 'Note Chat'
         });
 
         if (resp && resp.id) {
-            return resp.id;
+            // The backend might provide the noteId separately from the sessionId
+            // If noteId is provided, use it; otherwise, we'll need to query for it separately
+            return {
+                sessionId: resp.id,
+                noteId: resp.noteId || null
+            };
         }
     } catch (error) {
         console.error('Failed to create chat session:', error);
     }
 
-    return null;
+    return {
+        sessionId: null,
+        noteId: null
+    };
 }
 
 /**

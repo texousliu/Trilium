@@ -57,7 +57,7 @@ const PIPELINE_CONFIGS: Record<string, Partial<ChatPipelineConfig>> = {
  * Service for managing chat interactions and history
  */
 export class ChatService {
-    private activeSessions: Map<string, ChatSession> = new Map();
+    private sessionCache: Map<string, ChatSession> = new Map();
     private pipelines: Map<string, ChatPipeline> = new Map();
 
     constructor() {
@@ -78,6 +78,7 @@ export class ChatService {
      * Create a new chat session
      */
     async createSession(title?: string, initialMessages: Message[] = []): Promise<ChatSession> {
+        // Create a new Chat Note as the source of truth
         const chat = await chatStorageService.createChat(title || 'New Chat', initialMessages);
 
         const session: ChatSession = {
@@ -87,7 +88,8 @@ export class ChatService {
             isStreaming: false
         };
 
-        this.activeSessions.set(chat.id, session);
+        // Session is just a cache now
+        this.sessionCache.set(chat.id, session);
         return session;
     }
 
@@ -96,22 +98,31 @@ export class ChatService {
      */
     async getOrCreateSession(sessionId?: string): Promise<ChatSession> {
         if (sessionId) {
-            const existingSession = this.activeSessions.get(sessionId);
-            if (existingSession) {
-                return existingSession;
-            }
+            // First check the cache
+            const cachedSession = this.sessionCache.get(sessionId);
+            if (cachedSession) {
+                // Refresh the data from the source of truth
+                const chat = await chatStorageService.getChat(sessionId);
+                if (chat) {
+                    // Update the cached session with latest data from the note
+                    cachedSession.title = chat.title;
+                    cachedSession.messages = chat.messages;
+                    return cachedSession;
+                }
+            } else {
+                // Not in cache, load from the chat note
+                const chat = await chatStorageService.getChat(sessionId);
+                if (chat) {
+                    const session: ChatSession = {
+                        id: chat.id,
+                        title: chat.title,
+                        messages: chat.messages,
+                        isStreaming: false
+                    };
 
-            const chat = await chatStorageService.getChat(sessionId);
-            if (chat) {
-                const session: ChatSession = {
-                    id: chat.id,
-                    title: chat.title,
-                    messages: chat.messages,
-                    isStreaming: false
-                };
-
-                this.activeSessions.set(chat.id, session);
-                return session;
+                    this.sessionCache.set(chat.id, session);
+                    return session;
+                }
             }
         }
 
@@ -297,7 +308,7 @@ export class ChatService {
                 // The tool results are already in the messages
             }
 
-            // Save the complete conversation with metadata
+            // Save the complete conversation with metadata to the Chat Note (the single source of truth)
             await chatStorageService.updateChat(session.id, session.messages, undefined, metadata);
 
             // If first message, update the title
@@ -321,7 +332,7 @@ export class ChatService {
 
             session.messages.push(errorMessage);
 
-            // Save the conversation with error
+            // Save the conversation with error to the Chat Note
             await chatStorageService.updateChat(session.id, session.messages);
 
             // Notify streaming error if callback provided
@@ -439,21 +450,37 @@ export class ChatService {
      * Get all user's chat sessions
      */
     async getAllSessions(): Promise<ChatSession[]> {
+        // Always fetch the latest data from notes
         const chats = await chatStorageService.getAllChats();
 
-        return chats.map(chat => ({
-            id: chat.id,
-            title: chat.title,
-            messages: chat.messages,
-            isStreaming: this.activeSessions.get(chat.id)?.isStreaming || false
-        }));
+        // Update the cache with the latest data
+        return chats.map(chat => {
+            const cachedSession = this.sessionCache.get(chat.id);
+
+            const session: ChatSession = {
+                id: chat.id,
+                title: chat.title,
+                messages: chat.messages,
+                isStreaming: cachedSession?.isStreaming || false
+            };
+
+            // Update the cache
+            if (cachedSession) {
+                cachedSession.title = chat.title;
+                cachedSession.messages = chat.messages;
+            } else {
+                this.sessionCache.set(chat.id, session);
+            }
+
+            return session;
+        });
     }
 
     /**
      * Delete a chat session
      */
     async deleteSession(sessionId: string): Promise<boolean> {
-        this.activeSessions.delete(sessionId);
+        this.sessionCache.delete(sessionId);
         return chatStorageService.deleteChat(sessionId);
     }
 

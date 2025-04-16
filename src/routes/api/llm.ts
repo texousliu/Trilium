@@ -5,6 +5,8 @@ import options from "../../services/options.js";
 // Import the index service for knowledge base management
 import indexService from "../../services/llm/index_service.js";
 import restChatService from "../../services/llm/rest_chat_service.js";
+import chatService from '../../services/llm/chat_service.js';
+import chatStorageService from '../../services/llm/chat_storage_service.js';
 
 // Define basic interfaces
 interface ChatMessage {
@@ -184,7 +186,7 @@ async function getSession(req: Request, res: Response) {
 /**
  * @swagger
  * /api/llm/sessions/{sessionId}:
- *   put:
+ *   patch:
  *     summary: Update a chat session's settings
  *     operationId: llm-update-session
  *     parameters:
@@ -243,7 +245,29 @@ async function getSession(req: Request, res: Response) {
  *     tags: ["llm"]
  */
 async function updateSession(req: Request, res: Response) {
-    return restChatService.updateSession(req, res);
+    // Get the session using ChatService
+    const sessionId = req.params.sessionId;
+    const updates = req.body;
+
+    try {
+        // Get the session
+        const session = await chatService.getOrCreateSession(sessionId);
+
+        // Update title if provided
+        if (updates.title) {
+            await chatStorageService.updateChat(sessionId, session.messages, updates.title);
+        }
+
+        // Return the updated session
+        return {
+            id: sessionId,
+            title: updates.title || session.title,
+            updatedAt: new Date()
+        };
+    } catch (error) {
+        log.error(`Error updating session: ${error}`);
+        throw new Error(`Failed to update session: ${error}`);
+    }
 }
 
 /**
@@ -279,7 +303,24 @@ async function updateSession(req: Request, res: Response) {
  *     tags: ["llm"]
  */
 async function listSessions(req: Request, res: Response) {
-    return restChatService.listSessions(req, res);
+    // Get all sessions using ChatService
+    try {
+        const sessions = await chatService.getAllSessions();
+
+        // Format the response
+        return {
+            sessions: sessions.map(session => ({
+                id: session.id,
+                title: session.title,
+                createdAt: new Date(), // Since we don't have this in chat sessions
+                lastActive: new Date(), // Since we don't have this in chat sessions
+                messageCount: session.messages.length
+            }))
+        };
+    } catch (error) {
+        log.error(`Error listing sessions: ${error}`);
+        throw new Error(`Failed to list sessions: ${error}`);
+    }
 }
 
 /**
@@ -835,27 +876,27 @@ async function streamMessage(req: Request, res: Response) {
     try {
         const sessionId = req.params.sessionId;
         const { content, useAdvancedContext, showThinking } = req.body;
-        
+
         if (!content || typeof content !== 'string' || content.trim().length === 0) {
             throw new Error('Content cannot be empty');
         }
-        
+
         // Check if session exists
         const session = restChatService.getSessions().get(sessionId);
         if (!session) {
             throw new Error('Session not found');
         }
-        
+
         // Update last active timestamp
         session.lastActive = new Date();
-        
+
         // Add user message to the session
         session.messages.push({
             role: 'user',
             content,
             timestamp: new Date()
         });
-        
+
         // Create request parameters for the pipeline
         const requestParams = {
             sessionId,
@@ -864,7 +905,7 @@ async function streamMessage(req: Request, res: Response) {
             showThinking: showThinking === true,
             stream: true // Always stream for this endpoint
         };
-        
+
         // Create a fake request/response pair to pass to the handler
         const fakeReq = {
             ...req,
@@ -880,11 +921,11 @@ async function streamMessage(req: Request, res: Response) {
             // Make sure the original content is available to the handler
             body: {
                 content,
-                useAdvancedContext: useAdvancedContext === true, 
+                useAdvancedContext: useAdvancedContext === true,
                 showThinking: showThinking === true
             }
         } as unknown as Request;
-        
+
         // Log to verify correct parameters
         log.info(`WebSocket stream settings - useAdvancedContext=${useAdvancedContext === true}, in query=${fakeReq.query.useAdvancedContext}, in body=${fakeReq.body.useAdvancedContext}`);
         // Extra safety to ensure the parameters are passed correctly
@@ -893,17 +934,17 @@ async function streamMessage(req: Request, res: Response) {
         } else {
             log.info(`Enhanced context is NOT enabled for this request`);
         }
-        
+
         // Process the request in the background
         Promise.resolve().then(async () => {
             try {
                 await restChatService.handleSendMessage(fakeReq, res);
             } catch (error) {
                 log.error(`Background message processing error: ${error}`);
-                
+
                 // Import the WebSocket service
                 const wsService = (await import('../../services/ws.js')).default;
-                
+
                 // Define LLMStreamMessage interface
                 interface LLMStreamMessage {
                     type: 'llm-stream';
@@ -915,7 +956,7 @@ async function streamMessage(req: Request, res: Response) {
                     error?: string;
                     raw?: unknown;
                 }
-                
+
                 // Send error to client via WebSocket
                 wsService.sendMessageToAllClients({
                     type: 'llm-stream',
@@ -925,17 +966,17 @@ async function streamMessage(req: Request, res: Response) {
                 } as LLMStreamMessage);
             }
         });
-        
+
         // Import the WebSocket service
         const wsService = (await import('../../services/ws.js')).default;
-        
+
         // Let the client know streaming has started via WebSocket (helps client confirm connection is working)
         wsService.sendMessageToAllClients({
             type: 'llm-stream',
             sessionId,
             thinking: 'Initializing streaming LLM response...'
         });
-        
+
         // Let the client know streaming has started via HTTP response
         return {
             success: true,
@@ -956,7 +997,7 @@ export default {
     listSessions,
     deleteSession,
     sendMessage,
-    streamMessage, // Add new streaming endpoint
+    streamMessage,
 
     // Knowledge base index management
     getIndexStats,

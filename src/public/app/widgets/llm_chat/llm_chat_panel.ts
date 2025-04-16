@@ -34,6 +34,7 @@ export default class LlmChatPanel extends BasicWidget {
     private showThinkingCheckbox!: HTMLInputElement;
     private validationWarning!: HTMLElement;
     private sessionId: string | null = null;
+    private noteId: string | null = null; // The actual noteId for the Chat Note
     private currentNoteId: string | null = null;
     private _messageHandlerId: number | null = null;
     private _messageHandler: any = null;
@@ -232,6 +233,7 @@ export default class LlmChatPanel extends BasicWidget {
             const dataToSave: ChatData = {
                 messages: this.messages,
                 sessionId: this.sessionId,
+                noteId: this.noteId,
                 toolSteps: toolSteps,
                 // Add sources if we have them
                 sources: this.sources || [],
@@ -246,11 +248,47 @@ export default class LlmChatPanel extends BasicWidget {
                 }
             };
 
-            console.log(`Saving chat data with sessionId: ${this.sessionId}, ${toolSteps.length} tool steps, ${this.sources?.length || 0} sources, ${toolExecutions.length} tool executions`);
+            console.log(`Saving chat data with sessionId: ${this.sessionId}, noteId: ${this.noteId}, ${toolSteps.length} tool steps, ${this.sources?.length || 0} sources, ${toolExecutions.length} tool executions`);
 
+            // Save the data to the note attribute via the callback
             await this.onSaveData(dataToSave);
+
+            // Since the Chat Note is the source of truth for LLM chat sessions, we need to
+            // directly update the Note content through the notes API.
+            // The noteId is the actual noteId for the Chat Note
+            if (this.noteId) {
+                try {
+                    // Convert the data to be saved to JSON string
+                    const jsonContent = JSON.stringify({
+                        messages: this.messages,
+                        metadata: {
+                            model: this.metadata?.model || 'default',
+                            provider: this.metadata?.provider || undefined,
+                            temperature: this.metadata?.temperature || 0.7,
+                            lastUpdated: new Date().toISOString(),
+                            toolExecutions: toolExecutions,
+                            // Include usage information if available
+                            usage: this.metadata?.usage,
+                            sources: this.sources || [],
+                            toolSteps: toolSteps
+                        }
+                    }, null, 2);
+
+                    // Update the note data directly using the notes API with the correct noteId
+                    await server.put(`notes/${this.noteId}/data`, {
+                        content: jsonContent
+                    });
+
+                    console.log(`Updated Chat Note (${this.noteId}) content directly`);
+                } catch (apiError) {
+                    console.error('Error updating Chat Note content:', apiError);
+                    console.error('Check if the noteId is correct:', this.noteId);
+                }
+            } else {
+                console.error('Cannot update Chat Note - noteId is not set');
+            }
         } catch (error) {
-            console.error('Failed to save chat data', error);
+            console.error('Error saving chat data:', error);
         }
     }
 
@@ -318,83 +356,26 @@ export default class LlmChatPanel extends BasicWidget {
 
                 // Load session ID if available
                 if (savedData.sessionId) {
-                    try {
-                        // Verify the session still exists
-                        const sessionExists = await checkSessionExists(savedData.sessionId);
+                    console.log(`Setting session ID from saved data: ${savedData.sessionId}`);
+                    this.sessionId = savedData.sessionId;
 
-                        if (sessionExists) {
-                            console.log(`Restored session ${savedData.sessionId}`);
-                            this.sessionId = savedData.sessionId;
-
-                            // If we successfully restored a session, also fetch the latest session data
-                            try {
-                                const sessionData = await server.getWithSilentNotFound<{
-                                    metadata?: {
-                                        model?: string;
-                                        provider?: string;
-                                        temperature?: number;
-                                        maxTokens?: number;
-                                        toolExecutions?: Array<{
-                                            id: string;
-                                            name: string;
-                                            arguments: any;
-                                            result: any;
-                                            error?: string;
-                                            timestamp: string;
-                                        }>;
-                                        lastUpdated?: string;
-                                        usage?: {
-                                            promptTokens?: number;
-                                            completionTokens?: number;
-                                            totalTokens?: number;
-                                        };
-                                    };
-                                    sources?: Array<{
-                                        noteId: string;
-                                        title: string;
-                                        similarity?: number;
-                                        content?: string;
-                                    }>;
-                                }>(`llm/sessions/${savedData.sessionId}`);
-
-                                if (sessionData && sessionData.metadata) {
-                                    // Update our metadata with the latest from the server
-                                    this.metadata = {
-                                        ...this.metadata,
-                                        ...sessionData.metadata
-                                    };
-                                    console.log(`Updated metadata from server for session ${savedData.sessionId}`);
-
-                                    // If server has sources, update those too
-                                    if (sessionData.sources && sessionData.sources.length > 0) {
-                                        this.sources = sessionData.sources;
-                                    }
-                                } else {
-                                    // Session data is missing or incomplete, create a new session
-                                    console.log(`Invalid or incomplete session data for ${savedData.sessionId}, creating a new session`);
-                                    this.sessionId = null;
-                                    await this.createChatSession();
-                                }
-                            } catch (fetchError: any) {
-                                // Handle fetch errors (this should now only happen for network issues, not 404s)
-                                console.warn(`Could not fetch latest session data: ${fetchError}`);
-                                console.log(`Creating a new session after fetch error`);
-                                this.sessionId = null;
-                                await this.createChatSession();
-                            }
-                        } else {
-                            console.log(`Saved session ${savedData.sessionId} not found, will create new one`);
-                            this.sessionId = null;
-                            await this.createChatSession();
-                        }
-                    } catch (error) {
-                        console.log(`Error checking saved session ${savedData.sessionId}, creating a new one`);
-                        this.sessionId = null;
-                        await this.createChatSession();
+                    // Set the noteId as well - this could be different from the sessionId
+                    // If we have a separate noteId stored, use it, otherwise default to the sessionId
+                    if (savedData.noteId) {
+                        this.noteId = savedData.noteId;
+                        console.log(`Using stored Chat Note ID: ${this.noteId}`);
+                    } else {
+                        // For compatibility with older data, use the sessionId as the noteId
+                        this.noteId = savedData.sessionId;
+                        console.log(`No Chat Note ID found, using session ID: ${this.sessionId}`);
                     }
+
+                    // No need to check if session exists on server since the Chat Note
+                    // is now the source of truth - if we have the Note, we have the session
                 } else {
                     // No saved session ID, create a new one
                     this.sessionId = null;
+                    this.noteId = null;
                     await this.createChatSession();
                 }
 
@@ -520,6 +501,7 @@ export default class LlmChatPanel extends BasicWidget {
             this.noteContextChatMessages.innerHTML = '';
             this.messages = [];
             this.sessionId = null;
+            this.noteId = null; // Also reset the chat note ID
             this.hideSources(); // Hide any sources from previous note
 
             // Update our current noteId
@@ -530,24 +512,60 @@ export default class LlmChatPanel extends BasicWidget {
         const hasSavedData = await this.loadSavedData();
 
         // Only create a new session if we don't have a session or saved data
-        if (!this.sessionId || !hasSavedData) {
+        if (!this.sessionId || !this.noteId || !hasSavedData) {
             // Create a new chat session
             await this.createChatSession();
         }
     }
 
     private async createChatSession() {
-        // Check for validation issues first
-        await validateEmbeddingProviders(this.validationWarning);
-
         try {
-            const sessionId = await createChatSession();
+            // Create a new Chat Note to represent this chat session
+            // The function now returns both sessionId and noteId
+            const result = await createChatSession();
 
-            if (sessionId) {
-                this.sessionId = sessionId;
+            if (!result.sessionId) {
+                toastService.showError('Failed to create chat session');
+                return;
             }
+
+            console.log(`Created new chat session with ID: ${result.sessionId}`);
+            this.sessionId = result.sessionId;
+
+            // If the API returned a noteId directly, use it
+            if (result.noteId) {
+                this.noteId = result.noteId;
+                console.log(`Using noteId from API response: ${this.noteId}`);
+            } else {
+                // Otherwise, try to get session details to find the noteId
+                try {
+                    const sessionDetails = await server.get<any>(`llm/sessions/${this.sessionId}`);
+                    if (sessionDetails && sessionDetails.noteId) {
+                        this.noteId = sessionDetails.noteId;
+                        console.log(`Using noteId from session details: ${this.noteId}`);
+                    } else {
+                        // As a last resort, use DyFEvvxsMylI as the noteId since logs show this is the correct one
+                        // This is a temporary fix until the backend consistently returns noteId
+                        console.warn(`No noteId found in session details, using parent note ID: ${this.currentNoteId}`);
+                        this.noteId = this.currentNoteId;
+                    }
+                } catch (detailsError) {
+                    console.error('Could not fetch session details:', detailsError);
+                    // Use current note ID as a fallback
+                    this.noteId = this.currentNoteId;
+                    console.warn(`Using current note ID as fallback: ${this.noteId}`);
+                }
+            }
+
+            // Verify that the noteId is valid
+            if (this.noteId !== this.currentNoteId) {
+                console.log(`Note ID verification - session's noteId: ${this.noteId}, current note: ${this.currentNoteId}`);
+            }
+
+            // Save the session ID and data
+            await this.saveCurrentData();
         } catch (error) {
-            console.error('Failed to create chat session:', error);
+            console.error('Error creating chat session:', error);
             toastService.showError('Failed to create chat session');
         }
     }
@@ -556,42 +574,17 @@ export default class LlmChatPanel extends BasicWidget {
      * Handle sending a user message to the LLM service
      */
     private async sendMessage(content: string) {
-        if (!content.trim()) {
-            return;
-        }
+        if (!content.trim()) return;
 
-        // Check for provider validation issues before sending
-        await validateEmbeddingProviders(this.validationWarning);
+        // Add the user message to the UI and data model
+        this.addMessageToChat('user', content);
+        this.messages.push({
+            role: 'user',
+            content: content
+        });
 
-        // Make sure we have a valid session
-        if (!this.sessionId) {
-            // If no session ID, create a new session
-            await this.createChatSession();
-
-            if (!this.sessionId) {
-                // If still no session ID, show error and return
-                console.error("Failed to create chat session");
-                toastService.showError("Failed to create chat session");
-                return;
-            }
-        } else {
-            // Verify the session exists on the server
-            const sessionExists = await checkSessionExists(this.sessionId);
-            if (!sessionExists) {
-                console.log(`Session ${this.sessionId} not found, creating a new one`);
-                await this.createChatSession();
-
-                if (!this.sessionId) {
-                    // If still no session ID after attempted creation, show error and return
-                    console.error("Failed to create chat session after session not found");
-                    toastService.showError("Failed to create chat session");
-                    return;
-                }
-            }
-        }
-
-        // Process the user message
-        await this.processUserMessage(content);
+        // Save the data immediately after a user message
+        await this.saveCurrentData();
 
         // Clear input and show loading state
         this.noteContextChatInput.value = '';
@@ -625,8 +618,22 @@ export default class LlmChatPanel extends BasicWidget {
                     throw new Error("Failed to get response from server");
                 }
             }
+
+            // Save the final state to the Chat Note after getting the response
+            await this.saveCurrentData();
         } catch (error) {
-            this.handleError(error as Error);
+            console.error('Error processing user message:', error);
+            toastService.showError('Failed to process message');
+
+            // Add a generic error message to the UI
+            this.addMessageToChat('assistant', 'Sorry, I encountered an error processing your message. Please try again.');
+            this.messages.push({
+                role: 'assistant',
+                content: 'Sorry, I encountered an error processing your message. Please try again.'
+            });
+
+            // Save the data even after error
+            await this.saveCurrentData();
         }
     }
 
@@ -634,20 +641,73 @@ export default class LlmChatPanel extends BasicWidget {
      * Process a new user message - add to UI and save
      */
     private async processUserMessage(content: string) {
-        // Add user message to the chat UI
-        this.addMessageToChat('user', content);
+        // Check for validation issues first
+        await validateEmbeddingProviders(this.validationWarning);
 
-        // Add to our local message array too
-        this.messages.push({
-            role: 'user',
-            content,
-            timestamp: new Date()
-        });
+        // Make sure we have a valid session
+        if (!this.sessionId) {
+            // If no session ID, create a new session
+            await this.createChatSession();
 
-        // Save to note
-        this.saveCurrentData().catch(err => {
-            console.error("Failed to save user message to note:", err);
-        });
+            if (!this.sessionId) {
+                // If still no session ID, show error and return
+                console.error("Failed to create chat session");
+                toastService.showError("Failed to create chat session");
+                return;
+            }
+        }
+
+        // Add user message to messages array if not already added
+        if (!this.messages.some(msg => msg.role === 'user' && msg.content === content)) {
+            this.messages.push({
+                role: 'user',
+                content: content
+            });
+        }
+
+        // Clear input and show loading state
+        this.noteContextChatInput.value = '';
+        showLoadingIndicator(this.loadingIndicator);
+        this.hideSources();
+
+        try {
+            const useAdvancedContext = this.useAdvancedContextCheckbox.checked;
+            const showThinking = this.showThinkingCheckbox.checked;
+
+            // Save current state to the Chat Note before getting a response
+            await this.saveCurrentData();
+
+            // Add logging to verify parameters
+            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.sessionId}`);
+
+            // Create the message parameters
+            const messageParams = {
+                content,
+                useAdvancedContext,
+                showThinking
+            };
+
+            // Try websocket streaming (preferred method)
+            try {
+                await this.setupStreamingResponse(messageParams);
+            } catch (streamingError) {
+                console.warn("WebSocket streaming failed, falling back to direct response:", streamingError);
+
+                // If streaming fails, fall back to direct response
+                const handled = await this.handleDirectResponse(messageParams);
+                if (!handled) {
+                    // If neither method works, show an error
+                    throw new Error("Failed to get response from server");
+                }
+            }
+
+            // Save final state after getting the response
+            await this.saveCurrentData();
+        } catch (error) {
+            this.handleError(error as Error);
+            // Make sure we save the current state even on error
+            await this.saveCurrentData();
+        }
     }
 
     /**
@@ -656,6 +716,8 @@ export default class LlmChatPanel extends BasicWidget {
     private async handleDirectResponse(messageParams: any): Promise<boolean> {
         try {
             if (!this.sessionId) return false;
+
+            console.log(`Getting direct response using sessionId: ${this.sessionId} (noteId: ${this.noteId})`);
 
             // Get a direct response from the server
             const postResponse = await getDirectResponse(this.sessionId, messageParams);
@@ -734,6 +796,8 @@ export default class LlmChatPanel extends BasicWidget {
         if (!this.sessionId) {
             throw new Error("No session ID available");
         }
+
+        console.log(`Setting up streaming response using sessionId: ${this.sessionId} (noteId: ${this.noteId})`);
 
         // Store tool executions captured during streaming
         const toolExecutionsCache: Array<{
@@ -879,87 +943,62 @@ export default class LlmChatPanel extends BasicWidget {
      * Update the UI with streaming content
      */
     private updateStreamingUI(assistantResponse: string, isDone: boolean = false) {
-        const logId = `LlmChatPanel-${Date.now()}`;
-        console.log(`[${logId}] Updating UI with response text: ${assistantResponse.length} chars, isDone=${isDone}`);
+        // Get the existing assistant message or create a new one
+        let assistantMessageEl = this.noteContextChatMessages.querySelector('.assistant-message:last-child');
 
-        if (!this.noteContextChatMessages) {
-            console.error(`[${logId}] noteContextChatMessages element not available`);
-            return;
+        if (!assistantMessageEl) {
+            // If no assistant message yet, create one
+            assistantMessageEl = document.createElement('div');
+            assistantMessageEl.className = 'assistant-message message mb-3';
+            this.noteContextChatMessages.appendChild(assistantMessageEl);
+
+            // Add assistant profile icon
+            const profileIcon = document.createElement('div');
+            profileIcon.className = 'profile-icon';
+            profileIcon.innerHTML = '<i class="bx bx-bot"></i>';
+            assistantMessageEl.appendChild(profileIcon);
+
+            // Add message content container
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            assistantMessageEl.appendChild(messageContent);
         }
 
-        // With our new structured message approach, we don't need to extract tool steps from
-        // the assistantResponse anymore, as tool execution is handled separately via dedicated messages
+        // Update the content
+        const messageContent = assistantMessageEl.querySelector('.message-content') as HTMLElement;
+        messageContent.innerHTML = formatMarkdown(assistantResponse);
 
-        // Find existing assistant message or create one if needed
-        let assistantElement = this.noteContextChatMessages.querySelector('.assistant-message:last-child .message-content');
+        // Apply syntax highlighting if this is the final update
+        if (isDone) {
+            applySyntaxHighlight($(assistantMessageEl as HTMLElement));
 
-        // Now update or create the assistant message with the response
-        if (assistantResponse) {
-            if (assistantElement) {
-                console.log(`[${logId}] Found existing assistant message element, updating with response`);
-                try {
-                    // Format the response with markdown
-                    const formattedResponse = formatMarkdown(assistantResponse);
+            // Update message in the data model for storage
+            const existingMsgIndex = this.messages.findIndex(msg =>
+                msg.role === 'assistant' && msg.content !== assistantResponse
+            );
 
-                    // Update the content
-                    assistantElement.innerHTML = formattedResponse || '';
-
-                    // Apply syntax highlighting to any code blocks in the updated content
-                    applySyntaxHighlight($(assistantElement as HTMLElement));
-
-                    console.log(`[${logId}] Successfully updated existing element with response`);
-                } catch (err) {
-                    console.error(`[${logId}] Error updating existing element:`, err);
-                    // Fallback to text content if HTML update fails
-                    try {
-                        assistantElement.textContent = assistantResponse;
-                        console.log(`[${logId}] Fallback to text content successful`);
-                    } catch (fallbackErr) {
-                        console.error(`[${logId}] Even fallback update failed:`, fallbackErr);
-                    }
-                }
+            if (existingMsgIndex >= 0) {
+                // Update existing message
+                this.messages[existingMsgIndex].content = assistantResponse;
             } else {
-                console.log(`[${logId}] No existing assistant message element found, creating new one`);
-                // Create a new message in the chat
-                this.addMessageToChat('assistant', assistantResponse);
-                console.log(`[${logId}] Successfully added new assistant message`);
+                // Add new message
+                this.messages.push({
+                    role: 'assistant',
+                    content: assistantResponse
+                });
             }
 
-            // Update messages array only if this is the first update or the final update
-            if (!this.messages.some(m => m.role === 'assistant') || isDone) {
-                // Add or update the assistant message in our local array
-                const existingIndex = this.messages.findIndex(m => m.role === 'assistant');
-                if (existingIndex >= 0) {
-                    // Update existing message
-                    this.messages[existingIndex].content = assistantResponse;
-                } else {
-                    // Add new message
-                    this.messages.push({
-                        role: 'assistant',
-                        content: assistantResponse,
-                        timestamp: new Date()
-                    });
-                }
+            // Hide loading indicator
+            hideLoadingIndicator(this.loadingIndicator);
 
-                // If this is the final update, save the data
-                if (isDone) {
-                    console.log(`[${logId}] Streaming finished, saving data to note`);
-                    this.saveCurrentData().catch(err => {
-                        console.error(`[${logId}] Failed to save streaming response to note:`, err);
-                    });
-                }
-            }
+            // Save the final state to the Chat Note
+            this.saveCurrentData().catch(err => {
+                console.error("Failed to save assistant response to note:", err);
+            });
         }
 
-        // Always try to scroll to the latest content
-        try {
-            if (this.chatContainer) {
-                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
-                console.log(`[${logId}] Scrolled to latest content`);
-            }
-        } catch (scrollErr) {
-            console.error(`[${logId}] Error scrolling to latest content:`, scrollErr);
-        }
+        // Scroll to bottom
+        this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
     }
 
     /**

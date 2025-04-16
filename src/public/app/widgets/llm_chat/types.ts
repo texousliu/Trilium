@@ -11,6 +11,7 @@ export interface ChatResponse {
 export interface SessionResponse {
     id: string;
     title: string;
+    noteId?: string;
 }
 
 export interface ToolExecutionStep {
@@ -28,6 +29,7 @@ export interface MessageData {
 export interface ChatData {
     messages: MessageData[];
     sessionId: string | null;
+    noteId?: string | null;
     toolSteps: ToolExecutionStep[];
     sources?: Array<{
         noteId: string;
