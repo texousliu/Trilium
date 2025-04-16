@@ -96,9 +96,9 @@ export class AnthropicService extends BaseAIService {
 
                 // Add tool_choice parameter if specified
                 if (opts.tool_choice) {
-                    if (opts.tool_choice === 'auto') {
+                    if (typeof opts.tool_choice === 'string' && opts.tool_choice === 'auto') {
                         requestParams.tool_choice = 'auto';
-                    } else if (opts.tool_choice === 'none') {
+                    } else if (typeof opts.tool_choice === 'string' && opts.tool_choice === 'none') {
                         requestParams.tool_choice = 'none';
                     } else if (typeof opts.tool_choice === 'object' && opts.tool_choice.function) {
                         // Map from OpenAI format to Anthropic format
@@ -252,9 +252,12 @@ export class AnthropicService extends BaseAIService {
                                 done: false,
                                 toolExecution: {
                                     type: 'start',
-                                    tool: toolCall
+                                    tool: {
+                                        name: toolCall.function.name,
+                                        arguments: JSON.parse(toolCall.function.arguments || '{}')
+                                    }
                                 },
-                                raw: block
+                                raw: { ...block } as unknown as Record<string, unknown>
                             });
                         }
                     });
@@ -282,7 +285,7 @@ export class AnthropicService extends BaseAIService {
                                         type: 'update',
                                         tool: toolCall
                                     },
-                                    raw: { type: 'json_fragment', data: jsonFragment }
+                                    raw: { type: 'json_fragment', data: jsonFragment } as Record<string, unknown>
                                 });
                             }
                         }
@@ -353,10 +356,14 @@ export class AnthropicService extends BaseAIService {
 
                         // Send final completion with full text and all tool calls
                         await callback({
-                            text: fullText,
-                            done: true,
-                            tool_calls: toolCalls.length > 0 ? toolCalls : undefined,
-                            raw: message
+                            text: typeof message.content === 'string' ?
+                                message.content :
+                                message.content
+                                  .filter((block: any) => block.type === 'text')
+                                  .map((block: any) => block.text)
+                                  .join(''),
+                            done: message.role === 'assistant',
+                            raw: { ...message } as unknown as Record<string, unknown>
                         });
                     });
 

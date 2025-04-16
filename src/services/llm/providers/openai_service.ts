@@ -135,21 +135,21 @@ export class OpenAIService extends BaseAIService {
                                     }
 
                                     // Send the chunk to the caller with raw data and any accumulated tool calls
-                                    const streamChunk: StreamChunk & { raw: any } = {
+                                    const streamChunk: StreamChunk = {
                                         text: content,
                                         done: isDone,
-                                        raw: chunk
+                                        raw: chunk as unknown as Record<string, unknown>
                                     };
-                                    
+
                                     // Add accumulated tool calls to raw data for compatibility with tool execution display
                                     if (accumulatedToolCalls.length > 0) {
                                         // Add tool calls to raw data for proper display
                                         streamChunk.raw = {
-                                            ...streamChunk.raw,
+                                            ...streamChunk.raw as object,
                                             tool_calls: accumulatedToolCalls.filter(Boolean)
-                                        };
+                                        } as Record<string, unknown>;
                                     }
-                                    
+
                                     await callback(streamChunk);
 
                                     if (isDone) {
@@ -173,7 +173,7 @@ export class OpenAIService extends BaseAIService {
                                     await callback({
                                         text: content,
                                         done: true,
-                                        raw: stream,
+                                        raw: stream as unknown as Record<string, unknown>,
                                         tool_calls: toolCalls
                                     });
                                 }

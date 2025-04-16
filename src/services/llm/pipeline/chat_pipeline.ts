@@ -410,7 +410,15 @@ export class ChatPipeline {
                     streamingPaused = true;
                     // Send a dedicated message with a specific type for tool execution
                     streamCallback('', false, {
-                        type: 'tool_execution_start'
+                        text: '',
+                        done: false,
+                        toolExecution: {
+                            type: 'start',
+                            tool: {
+                                name: 'tool_execution',
+                                arguments: {}
+                            }
+                        }
                     });
                 }
 
@@ -470,11 +478,14 @@ export class ChatPipeline {
 
                                     // Send the structured tool result directly so the client has the raw data
                                     streamCallback('', false, {
-                                        type: 'tool_result',
+                                        text: '',
+                                        done: false,
                                         toolExecution: {
-                                            action: 'result',
-                                            tool: toolName,
-                                            toolCallId: msg.tool_call_id,
+                                            type: 'complete',
+                                            tool: {
+                                                name: toolName,
+                                                arguments: {}
+                                            },
                                             result: parsedContent
                                         }
                                     });
@@ -485,13 +496,15 @@ export class ChatPipeline {
                                     log.error(`Error sending structured tool result: ${err}`);
                                     // Use structured format here too instead of falling back to text format
                                     streamCallback('', false, {
-                                        type: 'tool_result',
+                                        text: '',
+                                        done: false,
                                         toolExecution: {
-                                            action: 'result',
-                                            tool: toolName || 'unknown',
-                                            toolCallId: msg.tool_call_id,
-                                            result: msg.content,
-                                            error: String(err)
+                                            type: 'complete',
+                                            tool: {
+                                                name: toolName || 'unknown',
+                                                arguments: {}
+                                            },
+                                            result: msg.content
                                         }
                                     });
                                 }
@@ -509,7 +522,15 @@ export class ChatPipeline {
                             // If streaming, show progress to the user
                             if (isStreaming && streamCallback) {
                                 streamCallback('', false, {
-                                    type: 'tool_completion_processing'
+                                    text: '',
+                                    done: false,
+                                    toolExecution: {
+                                        type: 'update',
+                                        tool: {
+                                            name: 'tool_processing',
+                                            arguments: {}
+                                        }
+                                    }
                                 });
                             }
 
@@ -587,10 +608,15 @@ export class ChatPipeline {
                         // If streaming, show error to the user
                         if (isStreaming && streamCallback) {
                             streamCallback('', false, {
-                                type: 'tool_execution_error',
+                                text: '',
+                                done: false,
                                 toolExecution: {
-                                    action: 'error',
-                                    error: error.message || 'unknown error'
+                                    type: 'error',
+                                    tool: {
+                                        name: 'unknown',
+                                        arguments: {}
+                                    },
+                                    result: error.message || 'unknown error'
                                 }
                             });
                         }

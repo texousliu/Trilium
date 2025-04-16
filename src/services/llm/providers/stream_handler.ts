@@ -187,9 +187,12 @@ export function createStreamHandler(
                 // Pass each chunk directly to the callback as it arrives
                 // without modifying or accumulating its content
                 await callback({
-                    text: chunk.text || '',
-                    done: !!chunk.done, // Ensure done is boolean
-                    raw: chunk.raw || chunk // Include raw data
+                    text: chunk.text,
+                    done: true,
+                    tool_calls: chunk.tool_calls,
+                    raw: typeof chunk.raw === 'object' ?
+                        chunk.raw as Record<string, unknown> :
+                        { data: chunk.raw } as Record<string, unknown> // Include raw data
                 });
             });
         } catch (error) {

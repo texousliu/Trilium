@@ -154,12 +154,19 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 if (streamCallback) {
                     const toolExecutionData = {
                         action: 'start',
-                        tool: toolCall.function.name,
-                        args: args
+                        tool: {
+                            name: toolCall.function.name,
+                            arguments: args
+                        },
+                        type: 'start' as const
                     };
-                    
+
                     // Don't wait for this to complete, but log any errors
-                    const callbackResult = streamCallback('', false, { toolExecution: toolExecutionData });
+                    const callbackResult = streamCallback('', false, {
+                        text: '',
+                        done: false,
+                        toolExecution: toolExecutionData
+                    });
                     if (callbackResult instanceof Promise) {
                         callbackResult.catch((e: Error) => log.error(`Error sending tool execution start event: ${e.message}`));
                     }
@@ -172,7 +179,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     result = await tool.execute(args);
                     const executionTime = Date.now() - executionStart;
                     log.info(`================ TOOL EXECUTION COMPLETED in ${executionTime}ms ================`);
-                    
+
                     // Record this successful tool execution if there's a sessionId available
                     if (input.options?.sessionId) {
                         try {
@@ -188,17 +195,25 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                             log.error(`Failed to record tool execution in chat storage: ${storageError}`);
                         }
                     }
-                    
+
                     // Emit tool completion event if streaming is enabled
                     if (streamCallback) {
                         const toolExecutionData = {
                             action: 'complete',
-                            tool: toolCall.function.name,
-                            result: result
+                            tool: {
+                                name: toolCall.function.name,
+                                arguments: {} as Record<string, unknown>
+                            },
+                            result: typeof result === 'string' ? result : result as Record<string, unknown>,
+                            type: 'complete' as const
                         };
-                        
+
                         // Don't wait for this to complete, but log any errors
-                        const callbackResult = streamCallback('', false, { toolExecution: toolExecutionData });
+                        const callbackResult = streamCallback('', false, {
+                            text: '',
+                            done: false,
+                            toolExecution: toolExecutionData
+                        });
                         if (callbackResult instanceof Promise) {
                             callbackResult.catch((e: Error) => log.error(`Error sending tool execution complete event: ${e.message}`));
                         }
@@ -206,7 +221,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 } catch (execError: any) {
                     const executionTime = Date.now() - executionStart;
                     log.error(`================ TOOL EXECUTION FAILED in ${executionTime}ms: ${execError.message} ================`);
-                    
+
                     // Record this failed tool execution if there's a sessionId available
                     if (input.options?.sessionId) {
                         try {
@@ -222,22 +237,30 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                             log.error(`Failed to record tool execution error in chat storage: ${storageError}`);
                         }
                     }
-                    
+
                     // Emit tool error event if streaming is enabled
                     if (streamCallback) {
                         const toolExecutionData = {
                             action: 'error',
-                            tool: toolCall.function.name,
-                            error: execError.message || String(execError)
+                            tool: {
+                                name: toolCall.function.name,
+                                arguments: {} as Record<string, unknown>
+                            },
+                            error: execError.message || String(execError),
+                            type: 'error' as const
                         };
-                        
+
                         // Don't wait for this to complete, but log any errors
-                        const callbackResult = streamCallback('', false, { toolExecution: toolExecutionData });
+                        const callbackResult = streamCallback('', false, {
+                            text: '',
+                            done: false,
+                            toolExecution: toolExecutionData
+                        });
                         if (callbackResult instanceof Promise) {
                             callbackResult.catch((e: Error) => log.error(`Error sending tool execution error event: ${e.message}`));
                         }
                     }
-                    
+
                     throw execError;
                 }
 
@@ -262,12 +285,20 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 if (streamCallback && error.name !== "ExecutionError") {
                     const toolExecutionData = {
                         action: 'error',
-                        tool: toolCall.function.name,
-                        error: error.message || String(error)
+                        tool: {
+                            name: toolCall.function.name,
+                            arguments: {} as Record<string, unknown>
+                        },
+                        error: error.message || String(error),
+                        type: 'error' as const
                     };
-                    
+
                     // Don't wait for this to complete, but log any errors
-                    const callbackResult = streamCallback('', false, { toolExecution: toolExecutionData });
+                    const callbackResult = streamCallback('', false, {
+                        text: '',
+                        done: false,
+                        toolExecution: toolExecutionData
+                    });
                     if (callbackResult instanceof Promise) {
                         callbackResult.catch((e: Error) => log.error(`Error sending tool execution error event: ${e.message}`));
                     }
