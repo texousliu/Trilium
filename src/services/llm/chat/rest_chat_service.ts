@@ -15,7 +15,7 @@ import { ContextHandler } from "./handlers/context_handler.js";
 import { ToolHandler } from "./handlers/tool_handler.js";
 import { StreamHandler } from "./handlers/stream_handler.js";
 import SessionsStore from "./sessions_store.js";
-import * as MessageFormatter from "./utils/message-formatter.js";
+import * as MessageFormatter from "./utils/message_formatter.js";
 import type { NoteSource } from "./interfaces/session.js";
 import type { LLMStreamMessage } from "./interfaces/ws_messages.js";
 
