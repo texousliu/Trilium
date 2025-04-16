@@ -294,7 +294,7 @@ class RestChatService {
                     role: msg.role as 'user' | 'assistant' | 'system',
                     content: msg.content
                 })),
-                query: content,
+                query: content || '',  // Ensure query is always a string, even if content is null/undefined
                 noteId: session.noteContext ?? undefined,
                 showThinking: showThinking,
                 options: pipelineOptions,

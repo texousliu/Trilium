@@ -94,7 +94,8 @@ export async function setupStreamingResponse(
             try {
                 const streamResponse = await server.post<any>(`llm/chat/${chatNoteId}/messages/stream`, {
                     content: messageParams.content,
-                    includeContext: messageParams.useAdvancedContext,
+                    useAdvancedContext: messageParams.useAdvancedContext,
+                    showThinking: messageParams.showThinking,
                     options: {
                         temperature: 0.7,
                         maxTokens: 2000
