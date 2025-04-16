@@ -251,42 +251,8 @@ export default class LlmChatPanel extends BasicWidget {
             console.log(`Saving chat data with sessionId: ${this.sessionId}, noteId: ${this.noteId}, ${toolSteps.length} tool steps, ${this.sources?.length || 0} sources, ${toolExecutions.length} tool executions`);
 
             // Save the data to the note attribute via the callback
+            // This is the ONLY place we should save data, letting the container widget handle persistence
             await this.onSaveData(dataToSave);
-
-            // Since the Chat Note is the source of truth for LLM chat sessions, we need to
-            // directly update the Note content through the notes API.
-            // The noteId is the actual noteId for the Chat Note
-            if (this.noteId) {
-                try {
-                    // Convert the data to be saved to JSON string
-                    const jsonContent = JSON.stringify({
-                        messages: this.messages,
-                        metadata: {
-                            model: this.metadata?.model || 'default',
-                            provider: this.metadata?.provider || undefined,
-                            temperature: this.metadata?.temperature || 0.7,
-                            lastUpdated: new Date().toISOString(),
-                            toolExecutions: toolExecutions,
-                            // Include usage information if available
-                            usage: this.metadata?.usage,
-                            sources: this.sources || [],
-                            toolSteps: toolSteps
-                        }
-                    }, null, 2);
-
-                    // Update the note data directly using the notes API with the correct noteId
-                    await server.put(`notes/${this.noteId}/data`, {
-                        content: jsonContent
-                    });
-
-                    console.log(`Updated Chat Note (${this.noteId}) content directly`);
-                } catch (apiError) {
-                    console.error('Error updating Chat Note content:', apiError);
-                    console.error('Check if the noteId is correct:', this.noteId);
-                }
-            } else {
-                console.error('Cannot update Chat Note - noteId is not set');
-            }
         } catch (error) {
             console.error('Error saving chat data:', error);
         }

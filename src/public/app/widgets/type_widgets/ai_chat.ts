@@ -181,8 +181,24 @@ export default class AiChatTypeWidget extends TypeWidget {
         }
 
         try {
+            console.log(`AiChatTypeWidget: Saving data for note ${this.note.noteId}`);
+
+            // Format the data properly - this is the canonical format of the data
+            const formattedData = {
+                messages: data.messages || [],
+                sessionId: data.sessionId,
+                noteId: data.noteId || this.note.noteId,
+                toolSteps: data.toolSteps || [],
+                sources: data.sources || [],
+                metadata: {
+                    ...(data.metadata || {}),
+                    lastUpdated: new Date().toISOString()
+                }
+            };
+
+            // Save the data to the note
             await server.put(`notes/${this.note.noteId}/data`, {
-                content: JSON.stringify(data, null, 2)
+                content: JSON.stringify(formattedData, null, 2)
             });
         } catch (e) {
             console.error("Error saving AI Chat data:", e);
@@ -197,13 +213,41 @@ export default class AiChatTypeWidget extends TypeWidget {
         }
 
         try {
+            console.log(`AiChatTypeWidget: Getting data for note ${this.note.noteId}`);
             const content = await this.note.getContent();
 
             if (!content) {
+                console.log("Note content is empty");
                 return null;
             }
 
-            return JSON.parse(content as string);
+            // Parse the content as JSON
+            let parsedContent;
+            try {
+                parsedContent = JSON.parse(content as string);
+                console.log("Successfully parsed note content as JSON");
+            } catch (e) {
+                console.error("Error parsing chat content as JSON:", e);
+                return null;
+            }
+
+            // Check if this is a blob response with 'content' property that needs to be parsed again
+            // This happens when the content is returned from the /blob endpoint
+            if (parsedContent.content && typeof parsedContent.content === 'string' &&
+                parsedContent.blobId && parsedContent.contentLength) {
+                try {
+                    // The actual chat data is inside the 'content' property as a string
+                    console.log("Detected blob response structure, parsing inner content");
+                    const innerContent = JSON.parse(parsedContent.content);
+                    console.log("Successfully parsed blob inner content");
+                    return innerContent;
+                } catch (innerError) {
+                    console.error("Error parsing inner blob content:", innerError);
+                    return null;
+                }
+            }
+
+            return parsedContent;
         } catch (e) {
             console.error("Error loading AI Chat data:", e);
             return null;
