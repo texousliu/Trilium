@@ -7,10 +7,11 @@ import type { SessionResponse } from "./types.js";
 /**
  * Create a new chat session
  */
-export async function createChatSession(): Promise<{chatNoteId: string | null, noteId: string | null}> {
+export async function createChatSession(currentNoteId?: string): Promise<{chatNoteId: string | null, noteId: string | null}> {
     try {
         const resp = await server.post<SessionResponse>('llm/chat', {
-            title: 'Note Chat'
+            title: 'Note Chat',
+            currentNoteId: currentNoteId // Pass the current note ID if available
         });
 
         if (resp && resp.id) {
@@ -36,6 +37,13 @@ export async function createChatSession(): Promise<{chatNoteId: string | null, n
  */
 export async function checkSessionExists(chatNoteId: string): Promise<boolean> {
     try {
+        // Validate that we have a proper note ID format, not a session ID
+        // Note IDs in Trilium are typically longer or in a different format
+        if (chatNoteId && chatNoteId.length === 16 && /^[A-Za-z0-9]+$/.test(chatNoteId)) {
+            console.warn(`Invalid note ID format detected: ${chatNoteId} appears to be a legacy session ID`);
+            return false;
+        }
+
         const sessionCheck = await server.getWithSilentNotFound<any>(`llm/chat/${chatNoteId}`);
         return !!(sessionCheck && sessionCheck.id);
     } catch (error: any) {
@@ -56,6 +64,13 @@ export async function setupStreamingResponse(
     onComplete: () => void,
     onError: (error: Error) => void
 ): Promise<void> {
+    // Validate that we have a proper note ID format, not a session ID
+    if (chatNoteId && chatNoteId.length === 16 && /^[A-Za-z0-9]+$/.test(chatNoteId)) {
+        console.error(`Invalid note ID format: ${chatNoteId} appears to be a legacy session ID`);
+        onError(new Error("Invalid note ID format - using a legacy session ID"));
+        return;
+    }
+
     return new Promise((resolve, reject) => {
         let assistantResponse = '';
         let postToolResponse = ''; // Separate accumulator for post-tool execution content
@@ -73,6 +88,32 @@ export async function setupStreamingResponse(
         // Create a unique identifier for this response process
         const responseId = `llm-stream-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
         console.log(`[${responseId}] Setting up WebSocket streaming for chat note ${chatNoteId}`);
+
+        // Send the initial request to initiate streaming
+        (async () => {
+            try {
+                const streamResponse = await server.post<any>(`llm/chat/${chatNoteId}/messages/stream`, {
+                    content: messageParams.content,
+                    includeContext: messageParams.useAdvancedContext,
+                    options: {
+                        temperature: 0.7,
+                        maxTokens: 2000
+                    }
+                });
+
+                if (!streamResponse || !streamResponse.success) {
+                    console.error(`[${responseId}] Failed to initiate streaming`);
+                    reject(new Error('Failed to initiate streaming'));
+                    return;
+                }
+
+                console.log(`[${responseId}] Streaming initiated successfully`);
+            } catch (error) {
+                console.error(`[${responseId}] Error initiating streaming:`, error);
+                reject(error);
+                return;
+            }
+        })();
 
         // Function to safely perform cleanup
         const performCleanup = () => {
@@ -116,8 +157,7 @@ export async function setupStreamingResponse(
             const message = customEvent.detail;
 
             // Only process messages for our chat note
-            // Note: The WebSocket messages still use sessionId property for backward compatibility
-            if (!message || message.sessionId !== chatNoteId) {
+            if (!message || message.chatNoteId !== chatNoteId) {
                 return;
             }
 
@@ -402,31 +442,6 @@ export async function setupStreamingResponse(
                 reject(new Error('WebSocket connection not established'));
             }
         }, 10000);
-
-        // Send the streaming request to start the process
-        console.log(`[${responseId}] Sending HTTP POST request to initiate streaming: /llm/chat/${chatNoteId}/messages/stream`);
-        server.post(`llm/chat/${chatNoteId}/messages/stream`, {
-            ...messageParams,
-            stream: true // Explicitly indicate this is a streaming request
-        }).catch(err => {
-            console.error(`[${responseId}] HTTP error sending streaming request for chat note ${chatNoteId}:`, err);
-
-            // Clean up timeouts
-            if (initialTimeoutId !== null) {
-                window.clearTimeout(initialTimeoutId);
-                initialTimeoutId = null;
-            }
-
-            if (timeoutId !== null) {
-                window.clearTimeout(timeoutId);
-                timeoutId = null;
-            }
-
-            // Clean up event listener
-            cleanupEventListener(eventListener);
-
-            reject(err);
-        });
     });
 }
 
@@ -449,6 +464,12 @@ function cleanupEventListener(listener: ((event: Event) => void) | null): void {
  */
 export async function getDirectResponse(chatNoteId: string, messageParams: any): Promise<any> {
     try {
+        // Validate that we have a proper note ID format, not a session ID
+        if (chatNoteId && chatNoteId.length === 16 && /^[A-Za-z0-9]+$/.test(chatNoteId)) {
+            console.error(`Invalid note ID format: ${chatNoteId} appears to be a legacy session ID`);
+            throw new Error("Invalid note ID format - using a legacy session ID");
+        }
+
         const postResponse = await server.post<any>(`llm/chat/${chatNoteId}/messages`, {
             message: messageParams.content,
             includeContext: messageParams.useAdvancedContext,

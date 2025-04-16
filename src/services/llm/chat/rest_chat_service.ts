@@ -108,8 +108,8 @@ class RestChatService {
                 log.info(`Parameters from body: useAdvancedContext=${req.body?.useAdvancedContext}, showThinking=${req.body?.showThinking}, content=${content ? `${content.substring(0, 20)}...` : 'none'}`);
             }
 
-            // Get chatNoteId from URL params since it's part of the route
-            chatNoteId = req.params.chatNoteId || req.params.sessionId; // Support both names for backward compatibility
+            // Get chatNoteId from URL params
+            chatNoteId = req.params.chatNoteId;
 
             // For GET requests, ensure we have the stream parameter
             if (req.method === 'GET' && req.query.stream !== 'true') {
@@ -134,16 +134,17 @@ class RestChatService {
                 log.info(`No Chat Note found for ${chatNoteId}, creating a new Chat Note and session`);
 
                 // Create a new Chat Note via the storage service
-                const chatStorageService = (await import('../../llm/chat_storage_service.js')).default;
-                const newChat = await chatStorageService.createChat('New Chat');
+                //const chatStorageService = (await import('../../llm/chat_storage_service.js')).default;
+                //const newChat = await chatStorageService.createChat('New Chat');
 
                 // Use the new Chat Note's ID for the session
                 session = SessionsStore.createSession({
-                    title: newChat.title
+                    //title: newChat.title,
+                    chatNoteId: chatNoteId
                 });
 
                 // Update the session ID to match the Chat Note ID
-                session.id = newChat.id;
+                session.id = chatNoteId;
 
                 log.info(`Created new Chat Note and session with ID: ${session.id}`);
 
@@ -271,7 +272,7 @@ class RestChatService {
                 // GET requests or format=stream parameter indicates streaming should be used
                 stream: !!(req.method === 'GET' || req.query.format === 'stream' || req.query.stream === 'true'),
                 // Include chatNoteId for tracking tool executions
-                sessionId: chatNoteId  // Use sessionId property for backward compatibility
+                chatNoteId: chatNoteId
             };
 
             // Log the options to verify what's being sent to the pipeline
@@ -312,7 +313,7 @@ class RestChatService {
                         try {
                             wsService.default.sendMessageToAllClients({
                                 type: 'llm-stream',
-                                sessionId: chatNoteId, // Use sessionId property for backward compatibility
+                                chatNoteId: chatNoteId,
                                 error: `Stream error: ${error instanceof Error ? error.message : 'Unknown error'}`,
                                 done: true
                             });
@@ -394,7 +395,7 @@ class RestChatService {
         // Create a message object with all necessary fields
         const message: LLMStreamMessage = {
             type: 'llm-stream',
-            sessionId: chatNoteId  // Use sessionId property for backward compatibility
+            chatNoteId: chatNoteId
         };
 
         // Add content if available - either the new chunk or full content on completion
@@ -479,8 +480,27 @@ class RestChatService {
             const options: any = req.body || {};
             const title = options.title || 'Chat Session';
 
+            // Use the currentNoteId as the chatNoteId if provided
+            let chatNoteId = options.chatNoteId;
+
+            // If currentNoteId is provided but chatNoteId is not, use currentNoteId
+            if (!chatNoteId && options.currentNoteId) {
+                chatNoteId = options.currentNoteId;
+                log.info(`Using provided currentNoteId ${chatNoteId} as chatNoteId`);
+            }
+
+            // If we still don't have a chatNoteId, create a new Chat Note
+            if (!chatNoteId) {
+                // Create a new Chat Note via the storage service
+                const chatStorageService = (await import('../../llm/chat_storage_service.js')).default;
+                const newChat = await chatStorageService.createChat(title);
+                chatNoteId = newChat.id;
+                log.info(`Created new Chat Note with ID: ${chatNoteId}`);
+            }
+
             // Create a new session through our session store
             const session = SessionsStore.createSession({
+                chatNoteId,
                 title,
                 systemPrompt: options.systemPrompt,
                 contextNoteId: options.contextNoteId,
@@ -493,7 +513,8 @@ class RestChatService {
             return {
                 id: session.id,
                 title: session.title,
-                createdAt: session.createdAt
+                createdAt: session.createdAt,
+                noteId: chatNoteId // Return the note ID explicitly
             };
         } catch (error: any) {
             log.error(`Error creating LLM session: ${error.message || 'Unknown error'}`);

@@ -15,40 +15,14 @@ interface ChatMessage {
     timestamp?: Date;
 }
 
-interface ChatSession {
-    id: string;
-    title: string;
-    messages: ChatMessage[];
-    createdAt: Date;
-    lastActive: Date;
-    noteContext?: string; // Optional noteId that provides context
-    metadata: Record<string, any>;
-}
 
-interface NoteSource {
-    noteId: string;
-    title: string;
-    content?: string;
-    similarity?: number;
-    branchId?: string;
-}
-
-interface SessionOptions {
-    title?: string;
-    systemPrompt?: string;
-    temperature?: number;
-    maxTokens?: number;
-    model?: string;
-    provider?: string;
-    contextNoteId?: string;
-}
 
 /**
  * @swagger
- * /api/llm/chat:
+ * /api/llm/sessions:
  *   post:
- *     summary: Create a new LLM chat
- *     operationId: llm-create-chat
+ *     summary: Create a new LLM chat session
+ *     operationId: llm-create-session
  *     requestBody:
  *       required: true
  *       content:
@@ -58,7 +32,7 @@ interface SessionOptions {
  *             properties:
  *               title:
  *                 type: string
- *                 description: Title for the chat
+ *                 description: Title for the chat session
  *               systemPrompt:
  *                 type: string
  *                 description: System message to set the behavior of the assistant
@@ -76,16 +50,16 @@ interface SessionOptions {
  *                 description: LLM provider to use (e.g., 'openai', 'anthropic', 'ollama')
  *               contextNoteId:
  *                 type: string
- *                 description: Note ID to use as context for the chat
+ *                 description: Note ID to use as context for the session
  *     responses:
  *       '200':
- *         description: Successfully created chat
+ *         description: Successfully created session
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 chatNoteId:
+ *                 sessionId:
  *                   type: string
  *                 title:
  *                   type: string
@@ -96,25 +70,25 @@ interface SessionOptions {
  *       - session: []
  *     tags: ["llm"]
  */
-async function createChat(req: Request, res: Response) {
+async function createSession(req: Request, res: Response) {
     return restChatService.createSession(req, res);
 }
 
 /**
  * @swagger
- * /api/llm/chat/{chatNoteId}:
+ * /api/llm/sessions/{sessionId}:
  *   get:
- *     summary: Retrieve a specific chat by ID
- *     operationId: llm-get-chat
+ *     summary: Retrieve a specific chat session
+ *     operationId: llm-get-session
  *     parameters:
- *       - name: chatNoteId
+ *       - name: sessionId
  *         in: path
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       '200':
- *         description: Chat details
+ *         description: Chat session details
  *         content:
  *           application/json:
  *             schema:
@@ -144,12 +118,12 @@ async function createChat(req: Request, res: Response) {
  *                   type: string
  *                   format: date-time
  *       '404':
- *         description: Chat not found
+ *         description: Session not found
  *     security:
  *       - session: []
  *     tags: ["llm"]
  */
-async function getChat(req: Request, res: Response) {
+async function getSession(req: Request, res: Response) {
     return restChatService.getSession(req, res);
 }
 
@@ -165,6 +139,7 @@ async function getChat(req: Request, res: Response) {
  *         required: true
  *         schema:
  *           type: string
+ *         description: The ID of the chat note (formerly sessionId)
  *     requestBody:
  *       required: true
  *       content:
@@ -174,7 +149,7 @@ async function getChat(req: Request, res: Response) {
  *             properties:
  *               title:
  *                 type: string
- *                 description: Updated title for the chat
+ *                 description: Updated title for the session
  *               systemPrompt:
  *                 type: string
  *                 description: Updated system prompt
@@ -195,7 +170,7 @@ async function getChat(req: Request, res: Response) {
  *                 description: Updated note ID for context
  *     responses:
  *       '200':
- *         description: Chat successfully updated
+ *         description: Session successfully updated
  *         content:
  *           application/json:
  *             schema:
@@ -209,12 +184,12 @@ async function getChat(req: Request, res: Response) {
  *                   type: string
  *                   format: date-time
  *       '404':
- *         description: Chat not found
+ *         description: Session not found
  *     security:
  *       - session: []
  *     tags: ["llm"]
  */
-async function updateChat(req: Request, res: Response) {
+async function updateSession(req: Request, res: Response) {
     // Get the chat using ChatService
     const chatNoteId = req.params.chatNoteId;
     const updates = req.body;
@@ -242,13 +217,13 @@ async function updateChat(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/llm/chat:
+ * /api/llm/sessions:
  *   get:
- *     summary: List all chats
- *     operationId: llm-list-chats
+ *     summary: List all chat sessions
+ *     operationId: llm-list-sessions
  *     responses:
  *       '200':
- *         description: List of chats
+ *         description: List of chat sessions
  *         content:
  *           application/json:
  *             schema:
@@ -272,14 +247,14 @@ async function updateChat(req: Request, res: Response) {
  *       - session: []
  *     tags: ["llm"]
  */
-async function listChats(req: Request, res: Response) {
-    // Get all chats using ChatService
+async function listSessions(req: Request, res: Response) {
+    // Get all sessions using ChatService
     try {
         const sessions = await chatService.getAllSessions();
 
         // Format the response
         return {
-            chats: sessions.map(session => ({
+            sessions: sessions.map(session => ({
                 id: session.id,
                 title: session.title,
                 createdAt: new Date(), // Since we don't have this in chat sessions
@@ -288,33 +263,33 @@ async function listChats(req: Request, res: Response) {
             }))
         };
     } catch (error) {
-        log.error(`Error listing chats: ${error}`);
-        throw new Error(`Failed to list chats: ${error}`);
+        log.error(`Error listing sessions: ${error}`);
+        throw new Error(`Failed to list sessions: ${error}`);
     }
 }
 
 /**
  * @swagger
- * /api/llm/chat/{chatNoteId}:
+ * /api/llm/sessions/{sessionId}:
  *   delete:
- *     summary: Delete a chat
- *     operationId: llm-delete-chat
+ *     summary: Delete a chat session
+ *     operationId: llm-delete-session
  *     parameters:
- *       - name: chatNoteId
+ *       - name: sessionId
  *         in: path
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       '200':
- *         description: Chat successfully deleted
+ *         description: Session successfully deleted
  *       '404':
- *         description: Chat not found
+ *         description: Session not found
  *     security:
  *       - session: []
  *     tags: ["llm"]
  */
-async function deleteChat(req: Request, res: Response) {
+async function deleteSession(req: Request, res: Response) {
     return restChatService.deleteSession(req, res);
 }
 
@@ -330,6 +305,7 @@ async function deleteChat(req: Request, res: Response) {
  *         required: true
  *         schema:
  *           type: string
+ *         description: The ID of the chat note (formerly sessionId)
  *     requestBody:
  *       required: true
  *       content:
@@ -357,7 +333,7 @@ async function deleteChat(req: Request, res: Response) {
  *                 description: Whether to include relevant notes as context
  *               useNoteContext:
  *                 type: boolean
- *                 description: Whether to use the chat's context note
+ *                 description: Whether to use the session's context note
  *     responses:
  *       '200':
  *         description: LLM response
@@ -379,10 +355,10 @@ async function deleteChat(req: Request, res: Response) {
  *                         type: string
  *                       similarity:
  *                         type: number
- *                 chatNoteId:
+ *                 sessionId:
  *                   type: string
  *       '404':
- *         description: Chat not found
+ *         description: Session not found
  *       '500':
  *         description: Error processing request
  *     security:
@@ -391,175 +367,6 @@ async function deleteChat(req: Request, res: Response) {
  */
 async function sendMessage(req: Request, res: Response) {
     return restChatService.handleSendMessage(req, res);
-}
-
-/**
- * @swagger
- * /api/llm/chat/{chatNoteId}/messages/stream:
- *   post:
- *     summary: Start a streaming response via WebSockets
- *     operationId: llm-stream-message
- *     parameters:
- *       - name: chatNoteId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: The user message to send to the LLM
- *               useAdvancedContext:
- *                 type: boolean
- *                 description: Whether to use advanced context extraction
- *               showThinking:
- *                 type: boolean
- *                 description: Whether to show thinking process in the response
- *     responses:
- *       '200':
- *         description: Streaming started successfully
- *       '404':
- *         description: Chat not found
- *       '500':
- *         description: Error processing request
- *     security:
- *       - session: []
- *     tags: ["llm"]
- */
-async function streamMessage(req: Request, res: Response) {
-    log.info("=== Starting streamMessage ===");
-    try {
-        const chatNoteId = req.params.chatNoteId;
-        const { content, useAdvancedContext, showThinking } = req.body;
-
-        if (!content || typeof content !== 'string' || content.trim().length === 0) {
-            throw new Error('Content cannot be empty');
-        }
-
-        // Check if session exists in memory
-        let session = restChatService.getSessions().get(chatNoteId);
-
-        // If session doesn't exist in memory, try to create it from the Chat Note
-        if (!session) {
-            log.info(`Session not found in memory for Chat Note ${chatNoteId}, attempting to create from Chat Note`);
-
-            const restoredSession = await restChatService.createSessionFromChatNote(chatNoteId);
-
-            if (!restoredSession) {
-                // If we can't find the Chat Note, then it's truly not found
-                log.error(`Chat Note ${chatNoteId} not found, cannot create session`);
-                throw new Error('Chat Note not found, cannot create session for streaming');
-            }
-
-            session = restoredSession;
-        }
-
-        // Update last active timestamp
-        session.lastActive = new Date();
-
-        // Add user message to the session
-        session.messages.push({
-            role: 'user',
-            content,
-            timestamp: new Date()
-        });
-
-        // Create request parameters for the pipeline
-        const requestParams = {
-            chatNoteId,
-            content,
-            useAdvancedContext: useAdvancedContext === true,
-            showThinking: showThinking === true,
-            stream: true // Always stream for this endpoint
-        };
-
-        // Create a fake request/response pair to pass to the handler
-        const fakeReq = {
-            ...req,
-            method: 'GET', // Set to GET to indicate streaming
-            query: {
-                stream: 'true', // Set stream param - don't use format: 'stream' to avoid confusion
-                useAdvancedContext: String(useAdvancedContext === true),
-                showThinking: String(showThinking === true)
-            },
-            params: {
-                chatNoteId
-            },
-            // Make sure the original content is available to the handler
-            body: {
-                content,
-                useAdvancedContext: useAdvancedContext === true,
-                showThinking: showThinking === true
-            }
-        } as unknown as Request;
-
-        // Log to verify correct parameters
-        log.info(`WebSocket stream settings - useAdvancedContext=${useAdvancedContext === true}, in query=${fakeReq.query.useAdvancedContext}, in body=${fakeReq.body.useAdvancedContext}`);
-        // Extra safety to ensure the parameters are passed correctly
-        if (useAdvancedContext === true) {
-            log.info(`Enhanced context IS enabled for this request`);
-        } else {
-            log.info(`Enhanced context is NOT enabled for this request`);
-        }
-
-        // Process the request in the background
-        Promise.resolve().then(async () => {
-            try {
-                await restChatService.handleSendMessage(fakeReq, res);
-            } catch (error) {
-                log.error(`Background message processing error: ${error}`);
-
-                // Import the WebSocket service
-                const wsService = (await import('../../services/ws.js')).default;
-
-                // Define LLMStreamMessage interface
-                interface LLMStreamMessage {
-                    type: 'llm-stream';
-                    sessionId: string;  // Keep this as sessionId for WebSocket compatibility
-                    content?: string;
-                    thinking?: string;
-                    toolExecution?: any;
-                    done?: boolean;
-                    error?: string;
-                    raw?: unknown;
-                }
-
-                // Send error to client via WebSocket
-                wsService.sendMessageToAllClients({
-                    type: 'llm-stream',
-                    sessionId: chatNoteId,  // Use sessionId property, but pass the chatNoteId
-                    error: `Error processing message: ${error}`,
-                    done: true
-                } as LLMStreamMessage);
-            }
-        });
-
-        // Import the WebSocket service
-        const wsService = (await import('../../services/ws.js')).default;
-
-        // Let the client know streaming has started via WebSocket (helps client confirm connection is working)
-        wsService.sendMessageToAllClients({
-            type: 'llm-stream',
-            sessionId: chatNoteId,
-            thinking: 'Initializing streaming LLM response...'
-        });
-
-        // Let the client know streaming has started via HTTP response
-        return {
-            success: true,
-            message: 'Streaming started',
-            sessionId: chatNoteId  // Keep using sessionId for API response compatibility
-        };
-    } catch (error: any) {
-        log.error(`Error starting message stream: ${error.message}`);
-        throw error;
-    }
 }
 
 /**
@@ -957,13 +764,171 @@ async function indexNote(req: Request, res: Response) {
     }
 }
 
+/**
+ * @swagger
+ * /api/llm/chat/{chatNoteId}/messages/stream:
+ *   post:
+ *     summary: Stream a message to an LLM via WebSocket
+ *     operationId: llm-stream-message
+ *     parameters:
+ *       - name: chatNoteId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the chat note to stream messages to (formerly sessionId)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The user message to send to the LLM
+ *               useAdvancedContext:
+ *                 type: boolean
+ *                 description: Whether to use advanced context extraction
+ *               showThinking:
+ *                 type: boolean
+ *                 description: Whether to show thinking process in the response
+ *     responses:
+ *       '200':
+ *         description: Streaming started successfully
+ *       '404':
+ *         description: Session not found
+ *       '500':
+ *         description: Error processing request
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function streamMessage(req: Request, res: Response) {
+    log.info("=== Starting streamMessage ===");
+    try {
+        const chatNoteId = req.params.chatNoteId;
+        const { content, useAdvancedContext, showThinking } = req.body;
+
+        if (!content || typeof content !== 'string' || content.trim().length === 0) {
+            throw new Error('Content cannot be empty');
+        }
+
+        // Check if session exists
+        const session = restChatService.getSessions().get(chatNoteId);
+        if (!session) {
+            throw new Error('Chat not found');
+        }
+
+        // Update last active timestamp
+        session.lastActive = new Date();
+
+        // Add user message to the session
+        session.messages.push({
+            role: 'user',
+            content,
+            timestamp: new Date()
+        });
+
+        // Create request parameters for the pipeline
+        const requestParams = {
+            chatNoteId: chatNoteId,
+            content,
+            useAdvancedContext: useAdvancedContext === true,
+            showThinking: showThinking === true,
+            stream: true // Always stream for this endpoint
+        };
+
+        // Create a fake request/response pair to pass to the handler
+        const fakeReq = {
+            ...req,
+            method: 'GET', // Set to GET to indicate streaming
+            query: {
+                stream: 'true', // Set stream param - don't use format: 'stream' to avoid confusion
+                useAdvancedContext: String(useAdvancedContext === true),
+                showThinking: String(showThinking === true)
+            },
+            params: {
+                chatNoteId: chatNoteId
+            },
+            // Make sure the original content is available to the handler
+            body: {
+                content,
+                useAdvancedContext: useAdvancedContext === true,
+                showThinking: showThinking === true
+            }
+        } as unknown as Request;
+
+        // Log to verify correct parameters
+        log.info(`WebSocket stream settings - useAdvancedContext=${useAdvancedContext === true}, in query=${fakeReq.query.useAdvancedContext}, in body=${fakeReq.body.useAdvancedContext}`);
+        // Extra safety to ensure the parameters are passed correctly
+        if (useAdvancedContext === true) {
+            log.info(`Enhanced context IS enabled for this request`);
+        } else {
+            log.info(`Enhanced context is NOT enabled for this request`);
+        }
+
+        // Process the request in the background
+        Promise.resolve().then(async () => {
+            try {
+                await restChatService.handleSendMessage(fakeReq, res);
+            } catch (error) {
+                log.error(`Background message processing error: ${error}`);
+
+                // Import the WebSocket service
+                const wsService = (await import('../../services/ws.js')).default;
+
+                // Define LLMStreamMessage interface
+                interface LLMStreamMessage {
+                    type: 'llm-stream';
+                    chatNoteId: string;
+                    content?: string;
+                    thinking?: string;
+                    toolExecution?: any;
+                    done?: boolean;
+                    error?: string;
+                    raw?: unknown;
+                }
+
+                // Send error to client via WebSocket
+                wsService.sendMessageToAllClients({
+                    type: 'llm-stream',
+                    chatNoteId: chatNoteId,
+                    error: `Error processing message: ${error}`,
+                    done: true
+                } as LLMStreamMessage);
+            }
+        });
+
+        // Import the WebSocket service
+        const wsService = (await import('../../services/ws.js')).default;
+
+        // Let the client know streaming has started via WebSocket (helps client confirm connection is working)
+        wsService.sendMessageToAllClients({
+            type: 'llm-stream',
+            chatNoteId: chatNoteId,
+            thinking: 'Initializing streaming LLM response...'
+        });
+
+        // Let the client know streaming has started via HTTP response
+        return {
+            success: true,
+            message: 'Streaming started',
+            chatNoteId: chatNoteId
+        };
+    } catch (error: any) {
+        log.error(`Error starting message stream: ${error.message}`);
+        throw error;
+    }
+}
+
 export default {
-    // Chat management
-    createChat,
-    getChat,
-    updateChat,
-    listChats,
-    deleteChat,
+    // Chat session management
+    createSession,
+    getSession,
+    updateSession,
+    listSessions,
+    deleteSession,
     sendMessage,
     streamMessage,
 

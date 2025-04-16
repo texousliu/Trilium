@@ -59,6 +59,7 @@ class SessionsStore {
      * Create a new session
      */
     createSession(options: {
+        chatNoteId: string;
         title?: string;
         systemPrompt?: string;
         contextNoteId?: string;
@@ -70,7 +71,7 @@ class SessionsStore {
         this.initializeCleanupTimer();
 
         const title = options.title || 'Chat Session';
-        const sessionId = randomString(16);
+        const sessionId = options.chatNoteId;
         const now = new Date();
 
         // Initial system message if provided
@@ -103,7 +104,7 @@ class SessionsStore {
         };
 
         sessions.set(sessionId, session);
-        log.info(`Created new session with ID: ${sessionId}`);
+        log.info(`Created in-memory session for Chat Note ID: ${sessionId}`);
 
         return session;
     }
@@ -131,10 +132,10 @@ class SessionsStore {
     /**
      * Record a tool execution in the session metadata
      */
-    recordToolExecution(sessionId: string, tool: any, result: string, error?: string): void {
-        if (!sessionId) return;
+    recordToolExecution(chatNoteId: string, tool: any, result: string, error?: string): void {
+        if (!chatNoteId) return;
 
-        const session = sessions.get(sessionId);
+        const session = sessions.get(chatNoteId);
         if (!session) return;
 
         try {
@@ -156,7 +157,7 @@ class SessionsStore {
             toolExecutions.push(execution);
             session.metadata.toolExecutions = toolExecutions;
 
-            log.info(`Recorded tool execution for ${execution.name} in session ${sessionId}`);
+            log.info(`Recorded tool execution for ${execution.name} in session ${chatNoteId}`);
         } catch (err) {
             log.error(`Failed to record tool execution: ${err}`);
         }

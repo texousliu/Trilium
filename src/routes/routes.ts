@@ -392,15 +392,14 @@ function register(app: express.Application) {
     etapiSpecRoute.register(router);
     etapiBackupRoute.register(router);
 
-    // LLM chat session management endpoints
-    apiRoute(PST, "/api/llm/sessions", llmRoute.createSession);
-    apiRoute(GET, "/api/llm/sessions", llmRoute.listSessions);
-    apiRoute(GET, "/api/llm/sessions/:sessionId", llmRoute.getSession);
-    apiRoute(PATCH, "/api/llm/sessions/:sessionId", llmRoute.updateSession);
-    apiRoute(DEL, "/api/llm/sessions/:sessionId", llmRoute.deleteSession);
-    apiRoute(PST, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
-    apiRoute(GET, "/api/llm/sessions/:sessionId/messages", llmRoute.sendMessage);
-    apiRoute(PST, "/api/llm/sessions/:sessionId/messages/stream", llmRoute.streamMessage);
+    // LLM Chat API
+    apiRoute(PST, "/api/llm/chat", llmRoute.createSession);
+    apiRoute(GET, "/api/llm/chat", llmRoute.listSessions);
+    apiRoute(GET, "/api/llm/chat/:sessionId", llmRoute.getSession);
+    apiRoute(PATCH, "/api/llm/chat/:sessionId", llmRoute.updateSession);
+    apiRoute(DEL, "/api/llm/chat/:chatNoteId", llmRoute.deleteSession);
+    apiRoute(PST, "/api/llm/chat/:chatNoteId/messages", llmRoute.sendMessage);
+    apiRoute(PST, "/api/llm/chat/:chatNoteId/messages/stream", llmRoute.streamMessage);
 
     // LLM index management endpoints - reorganized for REST principles
     apiRoute(GET, "/api/llm/indexes/stats", llmRoute.getIndexStats);

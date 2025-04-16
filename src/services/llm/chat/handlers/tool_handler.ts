@@ -12,9 +12,9 @@ export class ToolHandler {
     /**
      * Execute tool calls from the LLM response
      * @param response The LLM response containing tool calls
-     * @param sessionId Optional session ID for tracking
+     * @param chatNoteId Optional chat note ID for tracking
      */
-    static async executeToolCalls(response: any, sessionId?: string): Promise<Message[]> {
+    static async executeToolCalls(response: any, chatNoteId?: string): Promise<Message[]> {
         log.info(`========== TOOL EXECUTION FLOW ==========`);
         if (!response.tool_calls || response.tool_calls.length === 0) {
             log.info(`No tool calls to execute, returning early`);
@@ -101,9 +101,9 @@ export class ToolHandler {
                         : JSON.stringify(result).substring(0, 100) + '...';
                     log.info(`Tool result: ${resultPreview}`);
 
-                    // Record tool execution in session if session ID is provided
-                    if (sessionId) {
-                        SessionsStore.recordToolExecution(sessionId, toolCall, typeof result === 'string' ? result : JSON.stringify(result));
+                    // Record tool execution in session if chatNoteId is provided
+                    if (chatNoteId) {
+                        SessionsStore.recordToolExecution(chatNoteId, toolCall, typeof result === 'string' ? result : JSON.stringify(result));
                     }
 
                     // Format result as a proper message
@@ -116,9 +116,9 @@ export class ToolHandler {
                 } catch (error: any) {
                     log.error(`Error executing tool ${toolCall.function.name}: ${error.message}`);
 
-                    // Record error in session if session ID is provided
-                    if (sessionId) {
-                        SessionsStore.recordToolExecution(sessionId, toolCall, '', error.message);
+                    // Record error in session if chatNoteId is provided
+                    if (chatNoteId) {
+                        SessionsStore.recordToolExecution(chatNoteId, toolCall, '', error.message);
                     }
 
                     // Return error as tool result

@@ -7,7 +7,7 @@
  */
 export interface LLMStreamMessage {
     type: 'llm-stream' | 'tool_execution_start' | 'tool_result' | 'tool_execution_error' | 'tool_completion_processing';
-    sessionId: string;
+    chatNoteId: string;
     content?: string;
     thinking?: string;
     toolExecution?: {

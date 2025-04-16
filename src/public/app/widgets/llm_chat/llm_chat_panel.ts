@@ -321,35 +321,13 @@ export default class LlmChatPanel extends BasicWidget {
                 }
 
                 // Load Chat Note ID if available
-                if (savedData.chatNoteId) {
-                    console.log(`Setting Chat Note ID from saved data: ${savedData.chatNoteId}`);
-                    this.chatNoteId = savedData.chatNoteId;
-
-                    // Set the noteId as well - this could be different from the chatNoteId
-                    // If we have a separate noteId stored, use it, otherwise default to the chatNoteId
-                    if (savedData.noteId) {
-                        this.noteId = savedData.noteId;
-                        console.log(`Using stored Chat Note ID: ${this.noteId}`);
-                    } else {
-                        // For compatibility with older data, use the chatNoteId as the noteId
-                        this.noteId = savedData.chatNoteId;
-                        console.log(`No Chat Note ID found, using Chat Note ID: ${this.chatNoteId}`);
-                    }
-
-                    // No need to check if session exists on server since the Chat Note
-                    // is now the source of truth - if we have the Note, we have the session
+                if (savedData.noteId) {
+                    console.log(`Using noteId as Chat Note ID: ${savedData.noteId}`);
+                    this.chatNoteId = savedData.noteId;
+                    this.noteId = savedData.noteId;
                 } else {
-                    // For backward compatibility, try to get sessionId
-                    if ((savedData as any).sessionId) {
-                        console.log(`Using legacy sessionId as Chat Note ID: ${(savedData as any).sessionId}`);
-                        this.chatNoteId = (savedData as any).sessionId;
-                        this.noteId = savedData.noteId || (savedData as any).sessionId;
-                    } else {
-                        // No saved Chat Note ID, create a new one
-                        this.chatNoteId = null;
-                        this.noteId = null;
-                        await this.createChatSession();
-                    }
+                    console.log(`No noteId found in saved data, cannot load chat session`);
+                    return false;
                 }
 
                 return true;
@@ -491,50 +469,30 @@ export default class LlmChatPanel extends BasicWidget {
         }
     }
 
+    /**
+     * Create a new chat session
+     */
     private async createChatSession() {
         try {
-            // Create a new Chat Note to represent this chat session
-            // The function now returns both chatNoteId and noteId
-            const result = await createChatSession();
+            // Create a new chat session, passing the current note ID if it exists
+            const { chatNoteId, noteId } = await createChatSession(
+                this.currentNoteId ? this.currentNoteId : undefined
+            );
 
-            if (!result.chatNoteId) {
-                toastService.showError('Failed to create chat session');
-                return;
-            }
+            if (chatNoteId) {
+                // If we got back an ID from the API, use it
+                this.chatNoteId = chatNoteId;
 
-            console.log(`Created new chat session with ID: ${result.chatNoteId}`);
-            this.chatNoteId = result.chatNoteId;
+                // For new sessions, the noteId should equal the chatNoteId
+                // This ensures we're using the note ID consistently
+                this.noteId = noteId || chatNoteId;
 
-            // If the API returned a noteId directly, use it
-            if (result.noteId) {
-                this.noteId = result.noteId;
-                console.log(`Using noteId from API response: ${this.noteId}`);
+                console.log(`Created new chat session with noteId: ${this.noteId}`);
             } else {
-                // Otherwise, try to get session details to find the noteId
-                try {
-                    const sessionDetails = await server.get<any>(`llm/chat/${this.chatNoteId}`);
-                    if (sessionDetails && sessionDetails.noteId) {
-                        this.noteId = sessionDetails.noteId;
-                        console.log(`Using noteId from session details: ${this.noteId}`);
-                    } else {
-                        // As a last resort, use the current note ID
-                        console.warn(`No noteId found in session details, using parent note ID: ${this.currentNoteId}`);
-                        this.noteId = this.currentNoteId;
-                    }
-                } catch (detailsError) {
-                    console.error('Could not fetch session details:', detailsError);
-                    // Use current note ID as a fallback
-                    this.noteId = this.currentNoteId;
-                    console.warn(`Using current note ID as fallback: ${this.noteId}`);
-                }
+                throw new Error("Failed to create chat session - no ID returned");
             }
 
-            // Verify that the noteId is valid
-            if (this.noteId !== this.currentNoteId) {
-                console.log(`Note ID verification - session's noteId: ${this.noteId}, current note: ${this.currentNoteId}`);
-            }
-
-            // Save the session ID and data
+            // Save the note ID as the session identifier
             await this.saveCurrentData();
         } catch (error) {
             console.error('Error creating chat session:', error);
@@ -818,7 +776,7 @@ export default class LlmChatPanel extends BasicWidget {
                             similarity?: number;
                             content?: string;
                         }>;
-                    }>(`llm/sessions/${this.chatNoteId}`)
+                    }>(`llm/chat/${this.chatNoteId}`)
                         .then((sessionData) => {
                             console.log("Got updated session data:", sessionData);
 

@@ -58,7 +58,7 @@ interface Message {
     filePath?: string;
 
     // LLM streaming specific fields
-    sessionId?: string;
+    chatNoteId?: string;
     content?: string;
     thinking?: string;
     toolExecution?: {
@@ -133,7 +133,7 @@ function sendMessageToAllClients(message: Message) {
     if (webSocketServer) {
         // Special logging for LLM streaming messages
         if (message.type === "llm-stream") {
-            log.info(`[WS-SERVER] Sending LLM stream message: sessionId=${message.sessionId}, content=${!!message.content}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${!!message.done}`);
+            log.info(`[WS-SERVER] Sending LLM stream message: chatNoteId=${message.chatNoteId}, content=${!!message.content}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${!!message.done}`);
         } else if (message.type !== "sync-failed" && message.type !== "api-log-messages") {
             log.info(`Sending message to all clients: ${jsonStr}`);
         }

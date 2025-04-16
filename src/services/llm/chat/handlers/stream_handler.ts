@@ -38,13 +38,13 @@ export class StreamHandler {
         const wsService = (await import('../../../ws.js')).default;
 
         let messageContent = '';
-        const sessionId = session.id;
+        const chatNoteId = session.id;
 
         // Immediately send an initial message to confirm WebSocket connection is working
         // This helps prevent timeouts on the client side
         wsService.sendMessageToAllClients({
             type: 'llm-stream',
-            sessionId,
+            chatNoteId,
             thinking: 'Preparing response...'
         } as LLMStreamMessage);
 
@@ -64,19 +64,19 @@ export class StreamHandler {
                 // Send thinking state notification via WebSocket
                 wsService.sendMessageToAllClients({
                     type: 'llm-stream',
-                    sessionId,
+                    chatNoteId,
                     thinking: 'Analyzing tools needed for this request...'
                 } as LLMStreamMessage);
 
                 try {
                     // Execute the tools
-                    const toolResults = await ToolHandler.executeToolCalls(response, sessionId);
+                    const toolResults = await ToolHandler.executeToolCalls(response, chatNoteId);
 
                     // For each tool execution, send progress update via WebSocket
                     for (const toolResult of toolResults) {
                         wsService.sendMessageToAllClients({
                             type: 'llm-stream',
-                            sessionId,
+                            chatNoteId,
                             toolExecution: {
                                 action: 'complete',
                                 tool: toolResult.name,
@@ -108,7 +108,7 @@ export class StreamHandler {
                     await this.processStreamedResponse(
                         followUpResponse,
                         wsService,
-                        sessionId,
+                        chatNoteId,
                         session,
                         toolMessages,
                         followUpOptions,
@@ -120,7 +120,7 @@ export class StreamHandler {
                     // Send error via WebSocket with done flag
                     wsService.sendMessageToAllClients({
                         type: 'llm-stream',
-                        sessionId,
+                        chatNoteId,
                         error: `Error executing tools: ${toolError instanceof Error ? toolError.message : 'Unknown error'}`,
                         done: true
                     } as LLMStreamMessage);
@@ -137,7 +137,7 @@ export class StreamHandler {
                 await this.processStreamedResponse(
                     response,
                     wsService,
-                    sessionId,
+                    chatNoteId,
                     session
                 );
             } else {
@@ -149,7 +149,7 @@ export class StreamHandler {
                 // Send via WebSocket - include both content and done flag in same message
                 wsService.sendMessageToAllClients({
                     type: 'llm-stream',
-                    sessionId,
+                    chatNoteId,
                     content: messageContent,
                     done: true
                 } as LLMStreamMessage);
@@ -172,14 +172,14 @@ export class StreamHandler {
             // Send error via WebSocket
             wsService.sendMessageToAllClients({
                 type: 'llm-stream',
-                sessionId,
+                chatNoteId,
                 error: `Error generating response: ${streamingError instanceof Error ? streamingError.message : 'Unknown error'}`
             } as LLMStreamMessage);
 
             // Signal completion
             wsService.sendMessageToAllClients({
                 type: 'llm-stream',
-                sessionId,
+                chatNoteId,
                 done: true
             } as LLMStreamMessage);
         }
@@ -191,7 +191,7 @@ export class StreamHandler {
     private static async processStreamedResponse(
         response: any,
         wsService: any,
-        sessionId: string,
+        chatNoteId: string,
         session: ChatSession,
         toolMessages?: any[],
         followUpOptions?: any,
@@ -213,7 +213,7 @@ export class StreamHandler {
                     // Send each individual chunk via WebSocket as it arrives
                     wsService.sendMessageToAllClients({
                         type: 'llm-stream',
-                        sessionId,
+                        chatNoteId,
                         content: chunk.text,
                         done: !!chunk.done, // Include done flag with each chunk
                         // Include any raw data from the provider that might contain thinking/tool info
@@ -230,7 +230,7 @@ export class StreamHandler {
                 if (chunk.raw?.thinking) {
                     wsService.sendMessageToAllClients({
                         type: 'llm-stream',
-                        sessionId,
+                        chatNoteId,
                         thinking: chunk.raw.thinking
                     } as LLMStreamMessage);
                 }
@@ -239,7 +239,7 @@ export class StreamHandler {
                 if (chunk.raw?.toolExecution) {
                     wsService.sendMessageToAllClients({
                         type: 'llm-stream',
-                        sessionId,
+                        chatNoteId,
                         toolExecution: chunk.raw.toolExecution
                     } as LLMStreamMessage);
                 }
@@ -251,7 +251,7 @@ export class StreamHandler {
                     // Send tool execution notification
                     wsService.sendMessageToAllClients({
                         type: 'tool_execution_start',
-                        sessionId
+                        chatNoteId
                     } as LLMStreamMessage);
 
                     // Process each tool call
@@ -270,7 +270,7 @@ export class StreamHandler {
                         // Format into a standardized tool execution message
                         wsService.sendMessageToAllClients({
                             type: 'tool_result',
-                            sessionId,
+                            chatNoteId,
                             toolExecution: {
                                 action: 'executing',
                                 tool: toolCall.function?.name || 'unknown',
@@ -300,7 +300,7 @@ export class StreamHandler {
                         };
 
                         // Execute the next round of tools
-                        const nextToolResults = await ToolHandler.executeToolCalls(response, sessionId);
+                        const nextToolResults = await ToolHandler.executeToolCalls(response, chatNoteId);
 
                         // Create a new messages array with the latest tool results
                         const nextToolMessages = [...toolMessages, assistantMessage, ...nextToolResults];
@@ -320,7 +320,7 @@ export class StreamHandler {
                         await this.processStreamedResponse(
                             nextResponse,
                             wsService,
-                            sessionId,
+                            chatNoteId,
                             session,
                             nextToolMessages,
                             nextFollowUpOptions,
@@ -335,7 +335,7 @@ export class StreamHandler {
                             // Send final message with done flag only (no content)
                             wsService.sendMessageToAllClients({
                                 type: 'llm-stream',
-                                sessionId,
+                                chatNoteId,
                                 done: true
                             } as LLMStreamMessage);
                         }
@@ -357,7 +357,7 @@ export class StreamHandler {
             // Report the error to the client
             wsService.sendMessageToAllClients({
                 type: 'llm-stream',
-                sessionId,
+                chatNoteId,
                 error: `Error during streaming: ${streamError instanceof Error ? streamError.message : 'Unknown error'}`,
                 done: true
             } as LLMStreamMessage);
