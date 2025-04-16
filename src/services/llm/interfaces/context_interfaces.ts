@@ -56,10 +56,19 @@ export interface IContextFormatter {
 }
 
 /**
+ * Interface for LLM Service
+ */
+export interface ILLMService {
+  sendMessage(message: string, options?: Record<string, unknown>): Promise<string>;
+  generateEmbedding?(text: string): Promise<number[]>;
+  streamMessage?(message: string, callback: (text: string) => void, options?: Record<string, unknown>): Promise<string>;
+}
+
+/**
  * Interface for query enhancer
  */
 export interface IQueryEnhancer {
-  generateSearchQueries(question: string, llmService: any): Promise<string[]>;
+  generateSearchQueries(question: string, llmService: ILLMService): Promise<string[]>;
   estimateQueryComplexity(query: string): number;
 }
 
@@ -91,23 +100,28 @@ export interface IContentChunker {
 }
 
 /**
+ * Options for context service
+ */
+export interface ContextServiceOptions {
+  maxResults?: number;
+  summarize?: boolean;
+  llmService?: ILLMService;
+}
+
+/**
  * Interface for context service
  */
 export interface IContextService {
   initialize(): Promise<void>;
   processQuery(
     userQuestion: string,
-    llmService: any,
+    llmService: ILLMService,
     contextNoteId?: string | null,
     showThinking?: boolean
   ): Promise<{ context: string; sources: NoteSearchResult[]; thinking?: string }>;
   findRelevantNotes(
     query: string,
     contextNoteId?: string | null,
-    options?: {
-      maxResults?: number;
-      summarize?: boolean;
-      llmService?: any;
-    }
+    options?: ContextServiceOptions
   ): Promise<NoteSearchResult[]>;
 }

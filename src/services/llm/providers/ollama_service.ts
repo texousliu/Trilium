@@ -2,7 +2,7 @@ import { BaseAIService } from '../base_ai_service.js';
 import type { Message, ChatCompletionOptions, ChatResponse, StreamChunk } from '../ai_interface.js';
 import { OllamaMessageFormatter } from '../formatters/ollama_formatter.js';
 import log from '../../log.js';
-import type { ToolCall } from '../tools/tool_interfaces.js';
+import type { ToolCall, Tool } from '../tools/tool_interfaces.js';
 import toolRegistry from '../tools/tool_registry.js';
 import type { OllamaOptions } from './provider_options.js';
 import { getOllamaOptions } from './providers.js';
@@ -23,6 +23,35 @@ interface ToolExecutionStatus {
     success: boolean;
     result: string;
     error?: string;
+}
+
+// Interface for Ollama-specific messages
+interface OllamaMessage {
+    role: string;
+    content: string;
+    tool_call_id?: string;
+    tool_calls?: OllamaToolCall[];
+    name?: string;
+}
+
+// Interface for Ollama tool calls
+interface OllamaToolCall {
+    id: string;
+    function: {
+        name: string;
+        arguments: Record<string, unknown>;
+    };
+}
+
+// Interface for Ollama request options
+interface OllamaRequestOptions {
+    model: string;
+    messages: OllamaMessage[];
+    stream?: boolean;
+    options?: Record<string, unknown>;
+    format?: string;
+    tools?: Tool[];
+    [key: string]: unknown;
 }
 
 export class OllamaService extends BaseAIService {
@@ -104,7 +133,7 @@ export class OllamaService extends BaseAIService {
             // Check if we should add tool execution feedback
             if (providerOptions.toolExecutionStatus && Array.isArray(providerOptions.toolExecutionStatus) && providerOptions.toolExecutionStatus.length > 0) {
                 log.info(`Adding tool execution feedback to messages`);
-                messages = this.addToolExecutionFeedback(messages, providerOptions.toolExecutionStatus);
+                messages = this.addToolExecutionFeedback(messages, providerOptions.toolExecutionStatus as ToolExecutionStatus[]);
             }
 
             // Determine whether to use the formatter or send messages directly
@@ -126,11 +155,11 @@ export class OllamaService extends BaseAIService {
             }
 
             // Get tools if enabled
-            let tools = [];
+            let tools: Tool[] = [];
             if (providerOptions.enableTools !== false) {
                 try {
                     tools = providerOptions.tools && providerOptions.tools.length > 0
-                        ? providerOptions.tools
+                        ? providerOptions.tools as Tool[]
                         : toolRegistry.getAllToolDefinitions();
 
                     // Handle empty tools array
@@ -145,15 +174,16 @@ export class OllamaService extends BaseAIService {
                     if (tools.length > 0) {
                         log.info(`Sending ${tools.length} tool definitions to Ollama`);
                     }
-                } catch (error: any) {
-                    log.error(`Error preparing tools: ${error.message || String(error)}`);
+                } catch (error) {
+                    const errorMsg = error instanceof Error ? error.message : String(error);
+                    log.error(`Error preparing tools: ${errorMsg}`);
                     tools = []; // Empty fallback
                 }
             }
 
             // Convert our message format to Ollama's format
             const convertedMessages = messagesToSend.map(msg => {
-                const converted: any = {
+                const converted: OllamaMessage = {
                     role: msg.role,
                     content: msg.content
                 };
@@ -161,21 +191,23 @@ export class OllamaService extends BaseAIService {
                 if (msg.tool_calls) {
                     converted.tool_calls = msg.tool_calls.map(tc => {
                         // For Ollama, arguments must be an object, not a string
-                        let processedArgs = tc.function.arguments;
+                        let processedArgs: Record<string, unknown> = {};
 
                         // If arguments is a string, try to parse it as JSON
-                        if (typeof processedArgs === 'string') {
+                        if (typeof tc.function.arguments === 'string') {
                             try {
-                                processedArgs = JSON.parse(processedArgs);
+                                processedArgs = JSON.parse(tc.function.arguments);
                             } catch (e) {
                                 // If parsing fails, create an object with a single property
                                 log.info(`Could not parse tool arguments as JSON: ${e}`);
-                                processedArgs = { raw: processedArgs };
+                                processedArgs = { raw: tc.function.arguments };
                             }
+                        } else if (typeof tc.function.arguments === 'object') {
+                            processedArgs = tc.function.arguments as Record<string, unknown>;
                         }
 
                         return {
-                            id: tc.id,
+                            id: tc.id ?? '',
                             function: {
                                 name: tc.function.name,
                                 arguments: processedArgs
@@ -196,65 +228,67 @@ export class OllamaService extends BaseAIService {
             });
 
             // Prepare base request options
-            const baseRequestOptions = {
+            const baseRequestOptions: OllamaRequestOptions = {
                 model: providerOptions.model,
                 messages: convertedMessages,
-                options: providerOptions.options,
-                // Add tools if available
-                tools: tools.length > 0 ? tools : undefined
+                stream: opts.stream === true
             };
 
-            // Get client instance
+            // Add tool definitions if available
+            if (tools && tools.length > 0 && providerOptions.enableTools !== false) {
+                baseRequestOptions.tools = tools;
+            }
+
+            // Add any model-specific parameters
+            if (providerOptions.options) {
+                baseRequestOptions.options = providerOptions.options;
+            }
+
+            // If JSON response is expected, set format
+            if (providerOptions.expectsJsonResponse) {
+                baseRequestOptions.format = 'json';
+            }
+
+            log.info(`Sending request to Ollama with model: ${providerOptions.model}`);
+
+            // Handle streaming vs non-streaming responses
             const client = this.getClient();
 
-            // Handle streaming
-            if (opts.stream || opts.streamCallback) {
+            if (opts.stream === true) {
+                // Use streaming API
                 return this.handleStreamingResponse(client, baseRequestOptions, opts, providerOptions);
             } else {
-                // Non-streaming request
-                log.info(`Using non-streaming mode with Ollama client`);
+                // Use non-streaming API
+                try {
+                    log.info(`Sending non-streaming request to Ollama`);
+                    // Create a properly typed request with stream: false
+                    const chatRequest: ChatRequest & { stream?: false } = {
+                        ...baseRequestOptions,
+                        stream: false
+                    };
 
-                // Create non-streaming request
-                const nonStreamingRequest = {
-                    ...baseRequestOptions,
-                    stream: false as const // Use const assertion for type safety
-                };
+                    const response = await client.chat(chatRequest);
 
-                const response = await client.chat(nonStreamingRequest);
+                    log.info(`Received response from Ollama`);
 
-                // Log response details
-                log.info(`========== OLLAMA API RESPONSE ==========`);
-                log.info(`Model: ${response.model}, Content length: ${response.message?.content?.length || 0} chars`);
-                log.info(`Tokens: ${response.prompt_eval_count || 0} prompt, ${response.eval_count || 0} completion, ${(response.prompt_eval_count || 0) + (response.eval_count || 0)} total`);
+                    // Transform tool calls if present
+                    const toolCalls = this.transformToolCalls(response.message.tool_calls);
 
-                // Handle the response and extract tool calls if present
-                const chatResponse: ChatResponse = {
-                    text: response.message?.content || '',
-                    model: response.model || providerOptions.model,
-                    provider: this.getName(),
-                    usage: {
-                        promptTokens: response.prompt_eval_count || 0,
-                        completionTokens: response.eval_count || 0,
-                        totalTokens: (response.prompt_eval_count || 0) + (response.eval_count || 0)
-                    }
-                };
-
-                // Add tool calls if present
-                if (response.message?.tool_calls && response.message.tool_calls.length > 0) {
-                    log.info(`Ollama response includes ${response.message.tool_calls.length} tool calls`);
-                    chatResponse.tool_calls = this.transformToolCalls(response.message.tool_calls);
+                    return {
+                        text: response.message.content,
+                        model: providerOptions.model,
+                        provider: 'ollama',
+                        tool_calls: toolCalls.length > 0 ? toolCalls : undefined
+                    };
+                } catch (error) {
+                    const errorMsg = error instanceof Error ? error.message : String(error);
+                    log.error(`Error in Ollama request: ${errorMsg}`);
+                    throw error;
                 }
-
-                return chatResponse;
             }
-        } catch (error: any) {
-            // Enhanced error handling with detailed diagnostics
-            log.error(`Ollama service error: ${error.message || String(error)}`);
-            if (error.stack) {
-                log.error(`Error stack trace: ${error.stack}`);
-            }
-
-            // Propagate the original error
+        } catch (error) {
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            log.error(`Error in Ollama service: ${errorMsg}`);
             throw error;
         }
     }
@@ -266,7 +300,7 @@ export class OllamaService extends BaseAIService {
      */
     private async handleStreamingResponse(
         client: Ollama,
-        requestOptions: any,
+        requestOptions: OllamaRequestOptions,
         opts: ChatCompletionOptions,
         providerOptions: OllamaOptions
     ): Promise<ChatResponse> {
@@ -369,7 +403,7 @@ export class OllamaService extends BaseAIService {
                             await callback({
                                 text: chunk.message?.content || '',
                                 done: false,  // Add done property to satisfy StreamChunk
-                                raw: chunk
+                                raw: chunk as unknown as Record<string, unknown>
                             });
 
                             // Log completion

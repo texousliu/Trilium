@@ -9,8 +9,34 @@ export interface Message {
     content: string;
     name?: string;
     tool_call_id?: string;
-    tool_calls?: ToolCall[] | any[];
+    tool_calls?: ToolCall[];
     sessionId?: string; // Optional session ID for WebSocket communication
+}
+
+// Define additional interfaces for tool-related types
+export interface ToolChoice {
+    type: 'none' | 'auto' | 'function';
+    function?: {
+        name: string;
+    };
+}
+
+export interface ToolData {
+    type: 'function';
+    function: {
+        name: string;
+        description: string;
+        parameters: Record<string, unknown>;
+    };
+}
+
+export interface ToolExecutionInfo {
+    type: 'start' | 'update' | 'complete' | 'error';
+    tool: {
+        name: string;
+        arguments: Record<string, unknown>;
+    };
+    result?: string | Record<string, unknown>;
 }
 
 /**
@@ -41,23 +67,30 @@ export interface StreamChunk {
      * Raw provider-specific data from the original response chunk
      * This can include thinking state, tool execution info, etc.
      */
-    raw?: any;
+    raw?: Record<string, unknown>;
 
     /**
      * Tool calls from the LLM (if any)
      * These may be accumulated over multiple chunks during streaming
      */
-    tool_calls?: ToolCall[] | any[];
+    tool_calls?: ToolCall[];
 
     /**
      * Tool execution information during streaming
      * Includes tool name, args, and execution status
      */
-    toolExecution?: {
-        type: 'start' | 'update' | 'complete' | 'error';
-        tool: any;
-        result?: any;
-    };
+    toolExecution?: ToolExecutionInfo;
+}
+
+/**
+ * Tool execution status for feedback to models
+ */
+export interface ToolExecutionStatus {
+    toolCallId: string;
+    name: string;
+    success: boolean;
+    result: string;
+    error?: string;
 }
 
 /**
@@ -108,13 +141,13 @@ export interface ChatCompletionOptions {
      * @param isDone Whether this is the final chunk
      * @param originalChunk Optional original provider-specific chunk for advanced usage
      */
-    streamCallback?: (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void;
+    streamCallback?: (text: string, isDone: boolean, originalChunk?: Record<string, unknown>) => Promise<void> | void;
 
     enableTools?: boolean; // Whether to enable tool calling
-    tools?: any[]; // Tools to provide to the LLM
-    tool_choice?: any; // Tool choice parameter for the LLM
+    tools?: ToolData[]; // Tools to provide to the LLM
+    tool_choice?: ToolChoice; // Tool choice parameter for the LLM
     useAdvancedContext?: boolean; // Whether to use advanced context enrichment
-    toolExecutionStatus?: any[]; // Status information about executed tools for feedback
+    toolExecutionStatus?: ToolExecutionStatus[]; // Status information about executed tools for feedback
     providerMetadata?: ModelMetadata; // Metadata about the provider and model capabilities
     sessionId?: string; // Session ID for storing tool execution results
 
@@ -177,7 +210,7 @@ export interface ChatResponse {
     stream?: (callback: (chunk: StreamChunk) => Promise<void> | void) => Promise<string>;
 
     /** Tool calls from the LLM (if tools were used and the model supports them) */
-    tool_calls?: ToolCall[] | any[];
+    tool_calls?: ToolCall[];
 }
 
 export interface AIService {

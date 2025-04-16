@@ -1,6 +1,66 @@
 import sanitizeHtml from 'sanitize-html';
 import becca from '../../../becca/becca.js';
 
+// Define interfaces for JSON structures
+interface CanvasElement {
+    type: string;
+    text?: string;
+
+}
+
+interface CanvasContent {
+    elements?: CanvasElement[];
+
+}
+
+interface MindMapNode {
+    text?: string;
+    children?: MindMapNode[];
+
+}
+
+interface MindMapContent {
+    root?: MindMapNode;
+
+}
+
+interface RelationMapNote {
+    noteId: string;
+    title?: string;
+    name?: string;
+
+}
+
+interface RelationMapRelation {
+    sourceNoteId: string;
+    targetNoteId: string;
+    name?: string;
+
+}
+
+interface RelationMapContent {
+    notes?: RelationMapNote[];
+    relations?: RelationMapRelation[];
+
+}
+
+interface GeoMapMarker {
+    title?: string;
+    lat: number;
+    lng: number;
+    description?: string;
+
+}
+
+interface GeoMapContent {
+    markers?: GeoMapMarker[];
+
+}
+
+interface ErrorWithMessage {
+    message: string;
+}
+
 /**
  * Get the content of a note
  */
@@ -51,21 +111,22 @@ export function formatNoteContent(content: string, type: string, mime: string, t
             if (mime === 'application/json') {
                 try {
                     // Parse JSON content
-                    const jsonContent = JSON.parse(content);
+                    const jsonContent = JSON.parse(content) as CanvasContent;
 
                     // Extract text elements from canvas
                     if (jsonContent.elements && Array.isArray(jsonContent.elements)) {
                         const texts = jsonContent.elements
-                            .filter((element: any) => element.type === 'text' && element.text)
-                            .map((element: any) => element.text);
+                            .filter((element) => element.type === 'text' && element.text)
+                            .map((element) => element.text as string);
 
                         formattedContent += 'Canvas content:\n' + texts.join('\n');
                     } else {
                         formattedContent += '[Empty canvas]';
                     }
                 }
-                catch (e: any) {
-                    formattedContent += `[Error parsing canvas content: ${e.message}]`;
+                catch (e) {
+                    const error = e as ErrorWithMessage;
+                    formattedContent += `[Error parsing canvas content: ${error.message}]`;
                 }
             } else {
                 formattedContent += '[Canvas content]';
@@ -76,10 +137,10 @@ export function formatNoteContent(content: string, type: string, mime: string, t
             if (mime === 'application/json') {
                 try {
                     // Parse JSON content
-                    const jsonContent = JSON.parse(content);
+                    const jsonContent = JSON.parse(content) as MindMapContent;
 
                     // Extract node text from mind map
-                    const extractMindMapNodes = (node: any): string[] => {
+                    const extractMindMapNodes = (node: MindMapNode): string[] => {
                         let texts: string[] = [];
                         if (node.text) {
                             texts.push(node.text);
@@ -98,8 +159,9 @@ export function formatNoteContent(content: string, type: string, mime: string, t
                         formattedContent += '[Empty mind map]';
                     }
                 }
-                catch (e: any) {
-                    formattedContent += `[Error parsing mind map content: ${e.message}]`;
+                catch (e) {
+                    const error = e as ErrorWithMessage;
+                    formattedContent += `[Error parsing mind map content: ${error.message}]`;
                 }
             } else {
                 formattedContent += '[Mind map content]';
@@ -110,23 +172,23 @@ export function formatNoteContent(content: string, type: string, mime: string, t
             if (mime === 'application/json') {
                 try {
                     // Parse JSON content
-                    const jsonContent = JSON.parse(content);
+                    const jsonContent = JSON.parse(content) as RelationMapContent;
 
                     // Extract relation map entities and connections
                     let result = 'Relation map content:\n';
 
                     if (jsonContent.notes && Array.isArray(jsonContent.notes)) {
                         result += 'Notes: ' + jsonContent.notes
-                            .map((note: any) => note.title || note.name)
+                            .map((note) => note.title || note.name)
                             .filter(Boolean)
                             .join(', ') + '\n';
                     }
 
                     if (jsonContent.relations && Array.isArray(jsonContent.relations)) {
                         result += 'Relations: ' + jsonContent.relations
-                            .map((rel: any) => {
-                                const sourceNote = jsonContent.notes.find((n: any) => n.noteId === rel.sourceNoteId);
-                                const targetNote = jsonContent.notes.find((n: any) => n.noteId === rel.targetNoteId);
+                            .map((rel) => {
+                                const sourceNote = jsonContent.notes?.find((n) => n.noteId === rel.sourceNoteId);
+                                const targetNote = jsonContent.notes?.find((n) => n.noteId === rel.targetNoteId);
                                 const source = sourceNote ? (sourceNote.title || sourceNote.name) : 'unknown';
                                 const target = targetNote ? (targetNote.title || targetNote.name) : 'unknown';
                                 return `${source} → ${rel.name || ''} → ${target}`;
@@ -136,8 +198,9 @@ export function formatNoteContent(content: string, type: string, mime: string, t
 
                     formattedContent += result;
                 }
-                catch (e: any) {
-                    formattedContent += `[Error parsing relation map content: ${e.message}]`;
+                catch (e) {
+                    const error = e as ErrorWithMessage;
+                    formattedContent += `[Error parsing relation map content: ${error.message}]`;
                 }
             } else {
                 formattedContent += '[Relation map content]';
@@ -148,14 +211,14 @@ export function formatNoteContent(content: string, type: string, mime: string, t
             if (mime === 'application/json') {
                 try {
                     // Parse JSON content
-                    const jsonContent = JSON.parse(content);
+                    const jsonContent = JSON.parse(content) as GeoMapContent;
 
                     let result = 'Geographic map content:\n';
 
                     if (jsonContent.markers && Array.isArray(jsonContent.markers)) {
                         if (jsonContent.markers.length > 0) {
                             result += jsonContent.markers
-                                .map((marker: any) => {
+                                .map((marker) => {
                                     return `Location: ${marker.title || ''} (${marker.lat}, ${marker.lng})${marker.description ? ' - ' + marker.description : ''}`;
                                 })
                                 .join('\n');
@@ -168,8 +231,9 @@ export function formatNoteContent(content: string, type: string, mime: string, t
 
                     formattedContent += result;
                 }
-                catch (e: any) {
-                    formattedContent += `[Error parsing geographic map content: ${e.message}]`;
+                catch (e) {
+                    const error = e as ErrorWithMessage;
+                    formattedContent += `[Error parsing geographic map content: ${error.message}]`;
                 }
             } else {
                 formattedContent += '[Geographic map content]';
