@@ -6,5 +6,5 @@
  */
 
 import restChatService from './chat/rest_chat_service.js';
-export * from './chat/interfaces/session.js';
+export * from './interfaces/chat_session.js';
 export default restChatService;

@@ -6,7 +6,7 @@ import becca from "../../../../becca/becca.js";
 import vectorStore from "../../embeddings/index.js";
 import providerManager from "../../providers/providers.js";
 import contextService from "../../context/services/context_service.js";
-import type { NoteSource } from "../interfaces/session.js";
+import type { NoteSource } from "../../interfaces/chat_session.js";
 import { SEARCH_CONSTANTS } from '../../constants/search_constants.js';
 
 /**

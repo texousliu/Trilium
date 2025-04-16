@@ -7,8 +7,8 @@ import { ContextHandler } from './handlers/context_handler.js';
 import { ToolHandler } from './handlers/tool_handler.js';
 import { StreamHandler } from './handlers/stream_handler.js';
 import * as messageFormatter from './utils/message_formatter.js';
-import type { ChatSession, ChatMessage, NoteSource } from './interfaces/session.js';
-import type { LLMStreamMessage } from './interfaces/ws_messages.js';
+import type { ChatSession, ChatMessage, NoteSource } from '../interfaces/chat_session.js';
+import type { LLMStreamMessage } from '../interfaces/chat_ws_messages.js';
 
 // Export components
 export {

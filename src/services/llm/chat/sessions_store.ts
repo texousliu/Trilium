@@ -5,7 +5,7 @@ import log from "../../log.js";
 import { LLM_CONSTANTS } from '../constants/provider_constants.js';
 import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 import { randomString } from "../../utils.js";
-import type { ChatSession, ChatMessage } from './interfaces/session.js';
+import type { ChatSession, ChatMessage } from '../interfaces/chat_session.js';
 
 // In-memory storage for sessions
 const sessions = new Map<string, ChatSession>();

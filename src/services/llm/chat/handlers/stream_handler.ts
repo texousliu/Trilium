@@ -4,8 +4,8 @@
 import log from "../../../log.js";
 import type { Response } from "express";
 import type { StreamChunk } from "../../ai_interface.js";
-import type { LLMStreamMessage } from "../interfaces/ws_messages.js";
-import type { ChatSession } from "../interfaces/session.js";
+import type { LLMStreamMessage } from "../../interfaces/chat_ws_messages.js";
+import type { ChatSession } from "../../interfaces/chat_session.js";
 
 /**
  * Handles streaming of LLM responses via WebSocket

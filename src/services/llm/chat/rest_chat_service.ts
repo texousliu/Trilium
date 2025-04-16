@@ -16,10 +16,10 @@ import { ToolHandler } from "./handlers/tool_handler.js";
 import { StreamHandler } from "./handlers/stream_handler.js";
 import SessionsStore from "./sessions_store.js";
 import * as MessageFormatter from "./utils/message_formatter.js";
-import type { NoteSource } from "./interfaces/session.js";
-import type { LLMStreamMessage } from "./interfaces/ws_messages.js";
-import type { ChatMessage } from '../chat/interfaces/session.js';
-import type { ChatSession } from '../chat/interfaces/session.js';
+import type { NoteSource } from "../interfaces/chat_session.js";
+import type { LLMStreamMessage } from "../interfaces/chat_ws_messages.js";
+import type { ChatMessage } from '../interfaces/chat_session.js';
+import type { ChatSession } from '../interfaces/chat_session.js';
 
 /**
  * Service to handle chat API interactions

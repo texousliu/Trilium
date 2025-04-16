@@ -1,7 +1,7 @@
 /**
  * Interfaces for chat sessions and related data
  */
-import type { Message } from "../../ai_interface.js";
+import type { Message } from "../ai_interface.js";
 
 /**
  * Represents a source note from which context is drawn
