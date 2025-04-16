@@ -3,7 +3,7 @@
  */
 
 // Import highlight.js dynamically when needed
-let hljs: any = null;
+let hljs: object | null = null;
 
 /**
  * Attempt to detect the programming language from code content or note attributes
@@ -134,8 +134,9 @@ export function extractCodeStructure(content: string, language: string): string 
                     structure += "First few code lines:\n" + firstCodeLines.join('\n');
                 }
         }
-    } catch (e: any) {
-        return `Error extracting code structure: ${e.message}`;
+    } catch (e: unknown) {
+        const errorMessage = e instanceof Error ? e.message : String(e);
+        return `Error extracting code structure: ${errorMessage}`;
     }
 
     return structure;

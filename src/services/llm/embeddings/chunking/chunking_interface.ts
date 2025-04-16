@@ -1,4 +1,5 @@
 import type { NoteEmbeddingContext } from "../types.js";
+import type { EmbeddingProvider } from "../embeddings_interface.js";
 
 /**
  * Interface for chunking operations
@@ -9,7 +10,7 @@ export interface ChunkingOperations {
      */
     processNoteWithChunking(
         noteId: string,
-        provider: any,
+        provider: EmbeddingProvider,
         context: NoteEmbeddingContext
     ): Promise<void>;
 }

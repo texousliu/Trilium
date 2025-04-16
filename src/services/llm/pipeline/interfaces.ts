@@ -5,7 +5,7 @@ import type { LLMServiceInterface } from '../interfaces/agent_tool_interfaces.js
  * Base interface for pipeline input
  */
 export interface PipelineInput {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**
@@ -51,7 +51,7 @@ export interface StageMetrics {
  * @param isDone Whether this is the final chunk
  * @param originalChunk The original chunk with all metadata for custom handling
  */
-export type StreamCallback = (text: string, isDone: boolean, originalChunk?: any) => Promise<void> | void;
+export type StreamCallback = (text: string, isDone: boolean, originalChunk?: StreamChunk) => Promise<void> | void;
 
 /**
  * Common input for all chat-related pipeline stages
@@ -88,7 +88,7 @@ export interface VectorSearchInput extends PipelineInput {
  * Base interface for pipeline stage output
  */
 export interface PipelineOutput {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**

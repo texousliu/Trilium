@@ -4,6 +4,8 @@ import sql from "../../../sql.js";
 import becca from "../../../../becca/becca.js";
 import cls from "../../../../services/cls.js";
 import type { NoteEmbeddingContext } from "../types.js";
+import type { EmbeddingProvider } from "../embeddings_interface.js";
+import type { EmbeddingConfig } from "../embeddings_interface.js";
 import { LLM_CONSTANTS } from "../../../llm/constants/provider_constants.js";
 import { EMBEDDING_PROCESSING } from '../../constants/search_constants.js';
 
@@ -38,6 +40,15 @@ const DEFAULT_MAX_CHUNK_PROCESSING_TIME = EMBEDDING_PROCESSING.DEFAULT_MAX_CHUNK
 const OLLAMA_MAX_CHUNK_PROCESSING_TIME = EMBEDDING_PROCESSING.OLLAMA_MAX_CHUNK_PROCESSING_TIME;
 
 /**
+ * Interface for chunks from the chunking process
+ */
+interface ContentChunk {
+    content: string;
+    index: number;
+    metadata?: Record<string, unknown>;
+}
+
+/**
  * Categorize an error as temporary or permanent based on its message
  * @param errorMessage - The error message to categorize
  * @returns 'temporary', 'permanent', or 'unknown'
@@ -70,9 +81,13 @@ function categorizeError(errorMessage: string): 'temporary' | 'permanent' | 'unk
  * @param timeoutMs - Timeout in milliseconds
  * @returns The generated embedding
  */
-async function processChunkWithTimeout(provider: any, chunk: any, timeoutMs: number): Promise<any> {
+async function processChunkWithTimeout(
+    provider: EmbeddingProvider,
+    chunk: { content: string },
+    timeoutMs: number
+): Promise<Float32Array> {
     // Create a promise that rejects after the timeout
-    const timeoutPromise = new Promise((_, reject) => {
+    const timeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(() => {
             reject(new Error(`Chunk processing timed out after ${timeoutMs}ms`));
         }, timeoutMs);
@@ -95,7 +110,7 @@ async function processChunkWithTimeout(provider: any, chunk: any, timeoutMs: num
  */
 export async function processNoteWithChunking(
     noteId: string,
-    provider: any,
+    provider: EmbeddingProvider,
     context: NoteEmbeddingContext
 ): Promise<void> {
     // Track the overall start time
@@ -405,5 +420,58 @@ export async function processNoteWithChunking(
     } catch (error: any) {
         log.error(`Error in chunked embedding process for note ${noteId}: ${error.message || 'Unknown error'}`);
         throw error;
+    }
+}
+
+/**
+ * Process a chunk with retry logic to handle errors
+ * @param index - The chunk index for tracking
+ * @param chunk - The content chunk
+ * @param provider - The embedding provider
+ * @param noteId - ID of the note being processed
+ * @param config - Embedding configuration
+ * @param startTime - When the overall process started
+ * @param storage - The storage module
+ * @param maxTimePerChunk - Max time per chunk processing
+ * @param retryAttempt - Current retry attempt number
+ */
+async function processChunkWithRetry(
+    index: number,
+    chunk: ContentChunk,
+    provider: EmbeddingProvider,
+    noteId: string,
+    config: EmbeddingConfig,
+    startTime: number,
+    storage: typeof import('../storage.js'),
+    maxTimePerChunk: number,
+    retryAttempt = 0
+): Promise<boolean> {
+    try {
+        // Try to generate embedding with timeout
+        const embedding = await processChunkWithTimeout(provider, chunk, maxTimePerChunk);
+
+        // Store the embedding with the chunk ID
+        const chunkId = `${noteId}_chunk${index}`;
+        await storage.storeNoteEmbedding(chunkId, provider.name, config.model, embedding);
+
+        return true;
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const category = categorizeError(errorMessage);
+
+        // If we haven't exceeded the retry limit and it's a temporary error, retry
+        if (retryAttempt < MAX_CHUNK_RETRY_ATTEMPTS && (category === 'temporary' || category === 'unknown')) {
+            // Exponential backoff
+            const delayMs = Math.min(1000 * Math.pow(2, retryAttempt), 15000);
+            log.info(`Retrying chunk ${index} after ${delayMs}ms (attempt ${retryAttempt + 1}/${MAX_CHUNK_RETRY_ATTEMPTS})`);
+            await new Promise(resolve => setTimeout(resolve, delayMs));
+
+            return processChunkWithRetry(
+                index, chunk, provider, noteId, config, startTime, storage, maxTimePerChunk, retryAttempt + 1
+            );
+        } else {
+            log.error(`Failed to process chunk ${index} after ${retryAttempt + 1} attempts: ${errorMessage}`);
+            return false;
+        }
     }
 }
