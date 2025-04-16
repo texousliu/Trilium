@@ -230,7 +230,11 @@ function buildListItemFilter(): Rule {
                 var start = parent.getAttribute('start')
                 var index = Array.prototype.indexOf.call(parent.children, node)
                 prefix = (start ? Number(start) + index : index + 1) + '.  '
+            } else if (parent.classList.contains("todo-list")) {
+                const isChecked = node.querySelector("input[type=checkbox]:checked");
+                prefix = (isChecked ? "- [x] " : "- [ ] ");
             }
+
             const result = prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '');
             return result;
         }
