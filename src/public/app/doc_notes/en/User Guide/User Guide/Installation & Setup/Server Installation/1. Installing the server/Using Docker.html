@@ -36,8 +36,8 @@
 <h3>Running the Docker Container</h3>
 <h4>Local Access Only</h4>
 <p>Run the container to make it accessible only from the localhost. This
-  setup is suitable for testing or when using a prox ay server like Nginx
-  or Apache.</p><pre><code class="language-text-x-trilium-auto">sudo docker run -t -i -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]</code></pre>
+  setup is suitable for testing or when using a proxy server like Nginx or
+  Apache.</p><pre><code class="language-text-x-trilium-auto">sudo docker run -t -i -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]</code></pre>
 <ol>
   <li>Verify the container is running using <code>docker ps</code>.</li>
   <li>Access Trilium via a web browser at <code>127.0.0.1:8080</code>.</li>

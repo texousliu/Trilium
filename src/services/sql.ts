@@ -112,12 +112,21 @@ function upsert<T extends {}>(tableName: string, primaryKey: string, rec: T) {
     execute(query, rec);
 }
 
-function stmt(sql: string) {
-    if (!(sql in statementCache)) {
-        statementCache[sql] = dbConnection.prepare(sql);
+/**
+ * For the given SQL query, returns a prepared statement. For the same query (string comparison), the same statement is returned.
+ *
+ * @param sql the SQL query for which to return a prepared statement.
+ * @param isRaw indicates whether `.raw()` is going to be called on the prepared statement in order to return the raw rows (e.g. via {@link getRawRows()}). The reason is that the raw state is preserved in the saved statement and would break non-raw calls for the same query.
+ * @returns the corresponding {@link Statement}.
+ */
+function stmt(sql: string, isRaw?: boolean) {
+    const key = (isRaw ? "raw/" + sql : sql);
+
+    if (!(key in statementCache)) {
+        statementCache[key] = dbConnection.prepare(sql);
     }
 
-    return statementCache[sql];
+    return statementCache[key];
 }
 
 function getRow<T>(query: string, params: Params = []): T {
@@ -172,7 +181,7 @@ function getRows<T>(query: string, params: Params = []): T[] {
 }
 
 function getRawRows<T extends {} | unknown[]>(query: string, params: Params = []): T[] {
-    return (wrap(query, (s) => s.raw().all(params)) as T[]) || [];
+    return (wrap(query, (s) => s.raw().all(params), true) as T[]) || [];
 }
 
 function iterateRows<T>(query: string, params: Params = []): IterableIterator<T> {
@@ -234,7 +243,10 @@ function executeScript(query: string): DatabaseType {
     return dbConnection.exec(query);
 }
 
-function wrap(query: string, func: (statement: Statement) => unknown): unknown {
+/**
+ * @param isRaw indicates whether `.raw()` is going to be called on the prepared statement in order to return the raw rows (e.g. via {@link getRawRows()}). The reason is that the raw state is preserved in the saved statement and would break non-raw calls for the same query.
+ */
+function wrap(query: string, func: (statement: Statement) => unknown, isRaw?: boolean): unknown {
     const startTimestamp = Date.now();
     let result;
 
@@ -243,7 +255,7 @@ function wrap(query: string, func: (statement: Statement) => unknown): unknown {
     }
 
     try {
-        result = func(stmt(query));
+        result = func(stmt(query, isRaw));
     } catch (e: any) {
         if (e.message.includes("The database connection is not open")) {
             // this often happens on killing the app which puts these alerts in front of user

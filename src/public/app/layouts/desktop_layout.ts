@@ -122,6 +122,7 @@ export default class DesktopLayout {
 
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
+            .class((launcherPaneIsHorizontal ? "horizontal" : "vertical") + "-layout")
             .optChild(
                 fullWidthTabBar,
                 new FlexContainer("row")

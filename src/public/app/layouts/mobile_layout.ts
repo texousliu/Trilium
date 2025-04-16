@@ -7,8 +7,6 @@ import ToggleSidebarButtonWidget from "../widgets/mobile_widgets/toggle_sidebar_
 import MobileDetailMenuWidget from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
-import ProtectedSessionPasswordDialog from "../widgets/dialogs/protected_session_password.js";
-import ConfirmDialog from "../widgets/dialogs/confirm.js";
 import FilePropertiesWidget from "../widgets/ribbon_widgets/file_properties.js";
 import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
 import EditButton from "../widgets/floating_buttons/edit_button.js";
@@ -118,6 +116,7 @@ export default class MobileLayout {
     getRootWidget(appContext: typeof AppContext) {
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
+            .class("horizontal-layout")
             .cssBlock(MOBILE_CSS)
             .child(new FlexContainer("column").id("mobile-sidebar-container"))
             .child(
