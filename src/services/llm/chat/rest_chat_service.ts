@@ -84,7 +84,7 @@ class RestChatService {
         log.info("=== Starting handleSendMessage ===");
         try {
             // Extract parameters differently based on the request method
-            let content, useAdvancedContext, showThinking, sessionId;
+            let content, useAdvancedContext, showThinking, chatNoteId;
 
             if (req.method === 'POST') {
                 // For POST requests, get content from the request body
@@ -94,7 +94,7 @@ class RestChatService {
                 showThinking = requestBody.showThinking || false;
 
                 // Add logging for POST requests
-                log.info(`LLM POST message: sessionId=${req.params.sessionId}, useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, contentLength=${content ? content.length : 0}`);
+                log.info(`LLM POST message: chatNoteId=${req.params.chatNoteId}, useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, contentLength=${content ? content.length : 0}`);
             } else if (req.method === 'GET') {
                 // For GET (streaming) requests, get parameters from query params and body
                 // For streaming requests, we need the content from the body
@@ -103,13 +103,13 @@ class RestChatService {
                 content = req.body && req.body.content ? req.body.content : '';
 
                 // Add detailed logging for GET requests
-                log.info(`LLM GET stream: sessionId=${req.params.sessionId}, useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}`);
+                log.info(`LLM GET stream: chatNoteId=${req.params.chatNoteId}, useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}`);
                 log.info(`Parameters from query: useAdvancedContext=${req.query.useAdvancedContext}, showThinking=${req.query.showThinking}`);
                 log.info(`Parameters from body: useAdvancedContext=${req.body?.useAdvancedContext}, showThinking=${req.body?.showThinking}, content=${content ? `${content.substring(0, 20)}...` : 'none'}`);
             }
 
-            // Get sessionId from URL params since it's part of the route
-            sessionId = req.params.sessionId;
+            // Get chatNoteId from URL params since it's part of the route
+            chatNoteId = req.params.chatNoteId || req.params.sessionId; // Support both names for backward compatibility
 
             // For GET requests, ensure we have the stream parameter
             if (req.method === 'GET' && req.query.stream !== 'true') {
@@ -121,46 +121,48 @@ class RestChatService {
                 throw new Error('Content cannot be empty');
             }
 
-            // Check if session exists, create one if not
-            let session = SessionsStore.getSession(sessionId);
+            // Get or create session from Chat Note
+            let session = await this.getOrCreateSessionFromChatNote(chatNoteId, req.method === 'POST');
 
+            // If no session found and we're not allowed to create one (GET request)
+            if (!session && req.method === 'GET') {
+                throw new Error('Chat Note not found, cannot create session for streaming');
+            }
+
+            // For POST requests, if no Chat Note exists, create a new one
+            if (!session && req.method === 'POST') {
+                log.info(`No Chat Note found for ${chatNoteId}, creating a new Chat Note and session`);
+
+                // Create a new Chat Note via the storage service
+                const chatStorageService = (await import('../../llm/chat_storage_service.js')).default;
+                const newChat = await chatStorageService.createChat('New Chat');
+
+                // Use the new Chat Note's ID for the session
+                session = SessionsStore.createSession({
+                    title: newChat.title
+                });
+
+                // Update the session ID to match the Chat Note ID
+                session.id = newChat.id;
+
+                log.info(`Created new Chat Note and session with ID: ${session.id}`);
+
+                // Update the parameter to use the new ID
+                chatNoteId = session.id;
+            }
+
+            // At this point, session should never be null
+            // TypeScript doesn't know this, so we'll add a check
             if (!session) {
-                if (req.method === 'GET') {
-                    // For GET requests, we should try to restore from Chat Note
-                    log.info(`Session ${sessionId} not found in memory for GET request, attempting to restore from Chat Note`);
-
-                    const restoredSession = await this.restoreSessionFromChatNote(sessionId);
-
-                    if (!restoredSession) {
-                        // If we still can't find the Chat Note, throw error
-                        throw new Error('Session not found and no corresponding Chat Note exists');
-                    }
-
-                    session = restoredSession;
-                } else {
-                    // For POST requests, we can create a new session, or try to restore from Chat Note
-                    log.info(`Session ${sessionId} not found for POST request, checking if Chat Note exists`);
-
-                    const restoredSession = await this.restoreSessionFromChatNote(sessionId);
-
-                    if (!restoredSession) {
-                        // If we can't find a Chat Note, create a new session
-                        log.info(`No Chat Note found for ${sessionId}, creating a new session`);
-                        session = SessionsStore.createSession({
-                            title: 'Auto-created Session'
-                        });
-                        log.info(`Created new session with ID: ${session.id}`);
-                    } else {
-                        session = restoredSession;
-                    }
-                }
+                // This should never happen due to our logic above
+                throw new Error('Failed to create or retrieve session');
             }
 
             // Update session last active timestamp
             SessionsStore.touchSession(session.id);
 
             // For POST requests, store the user message
-            if (req.method === 'POST' && content) {
+            if (req.method === 'POST' && content && session) {
                 // Add message to session
                 session.messages.push({
                     role: 'user',
@@ -261,15 +263,15 @@ class RestChatService {
             const pipelineOptions = {
                 // Force useAdvancedContext to be a boolean, no matter what
                 useAdvancedContext: useAdvancedContext === true,
-                systemPrompt: session.messages.find(m => m.role === 'system')?.content,
-                temperature: session.metadata.temperature,
-                maxTokens: session.metadata.maxTokens,
-                model: session.metadata.model,
+                systemPrompt: session?.messages.find(m => m.role === 'system')?.content,
+                temperature: session?.metadata.temperature,
+                maxTokens: session?.metadata.maxTokens,
+                model: session?.metadata.model,
                 // Set stream based on request type, but ensure it's explicitly a boolean value
                 // GET requests or format=stream parameter indicates streaming should be used
                 stream: !!(req.method === 'GET' || req.query.format === 'stream' || req.query.stream === 'true'),
-                // Include sessionId for tracking tool executions
-                sessionId: sessionId
+                // Include chatNoteId for tracking tool executions
+                sessionId: chatNoteId  // Use sessionId property for backward compatibility
             };
 
             // Log the options to verify what's being sent to the pipeline
@@ -300,7 +302,7 @@ class RestChatService {
                         // Use WebSocket service to send messages
                         this.handleStreamCallback(
                             data, done, rawChunk,
-                            wsService.default, sessionId,
+                            wsService.default, chatNoteId,
                             messageContent, session, res
                         );
                     } catch (error) {
@@ -310,7 +312,7 @@ class RestChatService {
                         try {
                             wsService.default.sendMessageToAllClients({
                                 type: 'llm-stream',
-                                sessionId,
+                                sessionId: chatNoteId, // Use sessionId property for backward compatibility
                                 error: `Stream error: ${error instanceof Error ? error.message : 'Unknown error'}`,
                                 done: true
                             });
@@ -379,7 +381,7 @@ class RestChatService {
         done: boolean,
         rawChunk: any,
         wsService: any,
-        sessionId: string,
+        chatNoteId: string,
         messageContent: string,
         session: any,
         res: Response
@@ -392,7 +394,7 @@ class RestChatService {
         // Create a message object with all necessary fields
         const message: LLMStreamMessage = {
             type: 'llm-stream',
-            sessionId
+            sessionId: chatNoteId  // Use sessionId property for backward compatibility
         };
 
         // Add content if available - either the new chunk or full content on completion
@@ -445,7 +447,7 @@ class RestChatService {
         // Log what was sent (first message and completion)
         if (message.thinking || done) {
             log.info(
-                `[WS-SERVER] Sending LLM stream message: sessionId=${sessionId}, content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${done}`
+                `[WS-SERVER] Sending LLM stream message: chatNoteId=${chatNoteId}, content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${done}`
             );
         }
 
@@ -577,25 +579,25 @@ class RestChatService {
     }
 
     /**
-     * Restore a session from a Chat Note
-     * This is used when a session doesn't exist in memory but there's a corresponding Chat Note
+     * Create an in-memory session from a Chat Note
+     * This treats the Chat Note as the source of truth, using its ID as the session ID
      */
-    async restoreSessionFromChatNote(sessionId: string): Promise<ChatSession | null> {
+    async createSessionFromChatNote(noteId: string): Promise<ChatSession | null> {
         try {
-            log.info(`Attempting to restore session ${sessionId} from Chat Note`);
+            log.info(`Creating in-memory session for Chat Note ID ${noteId}`);
 
             // Import chat storage service
             const chatStorageService = (await import('../../llm/chat_storage_service.js')).default;
 
             // Try to get the Chat Note data
-            const chatNote = await chatStorageService.getChat(sessionId);
+            const chatNote = await chatStorageService.getChat(noteId);
 
             if (!chatNote) {
-                log.error(`Chat Note ${sessionId} not found, cannot restore session`);
+                log.error(`Chat Note ${noteId} not found, cannot create session`);
                 return null;
             }
 
-            log.info(`Found Chat Note ${sessionId}, recreating session from it`);
+            log.info(`Found Chat Note ${noteId}, creating in-memory session`);
 
             // Convert Message[] to ChatMessage[] by ensuring the role is compatible
             const chatMessages: ChatMessage[] = chatNote.messages.map(msg => ({
@@ -606,7 +608,7 @@ class RestChatService {
 
             // Create a new session with the same ID as the Chat Note
             const session: ChatSession = {
-                id: chatNote.id,
+                id: chatNote.id,  // Use Chat Note ID as the session ID
                 title: chatNote.title,
                 messages: chatMessages,
                 createdAt: chatNote.createdAt || new Date(),
@@ -615,14 +617,40 @@ class RestChatService {
             };
 
             // Add the session to the in-memory store
-            SessionsStore.getAllSessions().set(sessionId, session);
+            SessionsStore.getAllSessions().set(noteId, session);
 
-            log.info(`Successfully restored session ${sessionId} from Chat Note`);
+            log.info(`Successfully created in-memory session for Chat Note ${noteId}`);
             return session;
         } catch (error) {
-            log.error(`Failed to restore session from Chat Note: ${error}`);
+            log.error(`Failed to create session from Chat Note: ${error}`);
             return null;
         }
+    }
+
+    /**
+     * Get an existing session or create a new one from a Chat Note
+     * This treats the Chat Note as the source of truth, using its ID as the session ID
+     */
+    async getOrCreateSessionFromChatNote(noteId: string, createIfNotFound: boolean = true): Promise<ChatSession | null> {
+        // First check if we already have this session in memory
+        let session = SessionsStore.getSession(noteId);
+
+        if (session) {
+            log.info(`Found existing in-memory session for Chat Note ${noteId}`);
+            return session;
+        }
+
+        // If not in memory, try to create from Chat Note
+        log.info(`Session not found in memory for Chat Note ${noteId}, attempting to create it`);
+
+        // Only try to create if allowed
+        if (!createIfNotFound) {
+            log.info(`Not creating new session for ${noteId} as createIfNotFound=false`);
+            return null;
+        }
+
+        // Create from Chat Note
+        return await this.createSessionFromChatNote(noteId);
     }
 }
 
