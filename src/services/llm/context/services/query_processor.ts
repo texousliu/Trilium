@@ -99,29 +99,56 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`
                     .replace(/[\u201C\u201D]/g, '"')  // Replace smart quotes with straight quotes
                     .trim();
 
-                // Check if the text might contain a JSON array (has square brackets)
-                if (jsonStr.includes('[') && jsonStr.includes(']')) {
-                    // Extract just the array part if there's explanatory text
-                    const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
-                    if (arrayMatch) {
-                        jsonStr = arrayMatch[0];
+                log.info(`Cleaned JSON string: ${jsonStr}`);
+
+                // Check if the text might contain a JSON structure (has curly braces or square brackets)
+                if ((jsonStr.includes('{') && jsonStr.includes('}')) || (jsonStr.includes('[') && jsonStr.includes(']'))) {
+                    // Try to extract the JSON structure
+                    let jsonMatch = jsonStr.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+                    if (jsonMatch) {
+                        jsonStr = jsonMatch[0];
+                        log.info(`Extracted JSON structure: ${jsonStr}`);
                     }
 
                     // Try to parse the JSON
                     try {
-                        const queries = JSON.parse(jsonStr);
-                        if (Array.isArray(queries) && queries.length > 0) {
-                            const result = queries.map(q => typeof q === 'string' ? q : String(q)).filter(Boolean);
+                        const parsed = JSON.parse(jsonStr);
+
+                        // Handle array format: ["query1", "query2"]
+                        if (Array.isArray(parsed)) {
+                            const result = parsed
+                                .map(q => typeof q === 'string' ? q.trim() : String(q).trim())
+                                .filter(Boolean);
                             cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
                             return result;
                         }
-                    } catch (innerError) {
-                        // If parsing fails, log it and continue to the fallback
-                        log.info(`JSON parse error: ${innerError}. Will use fallback parsing for: ${jsonStr}`);
+                        // Handle object format: {"query1": "reason1", "query2": "reason2"} or {"query1" : "query2"}
+                        else if (typeof parsed === 'object' && parsed !== null) {
+                            // Extract both keys and values as potential queries
+                            const keys = Object.keys(parsed);
+                            const values = Object.values(parsed);
+
+                            // Add keys as queries
+                            const keysResult = keys
+                                .filter(key => key && key.length > 3)
+                                .map(key => key.trim());
+
+                            // Add values as queries if they're strings and not already included
+                            const valuesResult = values
+                                .filter((val): val is string => typeof val === 'string' && val.length > 3)
+                                .map(val => val.trim())
+                                .filter(val => !keysResult.includes(val));
+
+                            const result = [...keysResult, ...valuesResult];
+                            cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
+                            return result;
+                        }
+                    } catch (parseError) {
+                        log.info(`JSON parse error: ${parseError}. Will use fallback parsing.`);
                     }
                 }
 
-                // Fallback 1: Try to extract an array manually by splitting on commas between quotes
+                // Fallback: Try to extract an array manually by splitting on commas between quotes
                 if (jsonStr.includes('[') && jsonStr.includes(']')) {
                     const arrayContent = jsonStr.substring(
                         jsonStr.indexOf('[') + 1,
@@ -132,32 +159,43 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`
                     const stringMatches = arrayContent.match(/"((?:\\.|[^"\\])*)"/g);
                     if (stringMatches && stringMatches.length > 0) {
                         const result = stringMatches
-                            .map((m: string) => m.substring(1, m.length - 1)) // Remove surrounding quotes
+                            .map((m: string) => m.substring(1, m.length - 1).trim()) // Remove surrounding quotes
                             .filter((s: string) => s.length > 0);
                         cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
                         return result;
                     }
                 }
 
-                // Fallback 2: Extract queries line by line
-                const lines = responseText.split('\n')
-                    .map((line: string) => line.trim())
-                    .filter((line: string) =>
-                        line.length > 0 &&
-                        !line.startsWith('```') &&
-                        !line.match(/^\d+\.?\s*$/) && // Skip numbered list markers alone
-                        !line.match(/^\[|\]$/) // Skip lines that are just brackets
+                // Fallback: Try to extract key-value pairs from object notation manually
+                if (jsonStr.includes('{') && jsonStr.includes('}')) {
+                    // Extract content between curly braces
+                    const objectContent = jsonStr.substring(
+                        jsonStr.indexOf('{') + 1,
+                        jsonStr.lastIndexOf('}')
                     );
 
-                if (lines.length > 0) {
-                    // Remove numbering, quotes and other list markers from each line
-                    const result = lines.map((line: string) => {
-                        return line
-                            .replace(/^\d+\.?\s*/, '') // Remove numbered list markers (1., 2., etc)
-                            .replace(/^[-*•]\s*/, '')  // Remove bullet list markers
-                            .replace(/^["']|["']$/g, '') // Remove surrounding quotes
-                            .trim();
-                    }).filter((s: string) => s.length > 0);
+                    // Split by commas that aren't inside quotes
+                    const pairs: string[] = objectContent.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+
+                    const result = pairs
+                        .map(pair => {
+                            // Split by colon that isn't inside quotes
+                            const keyValue = pair.split(/:(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+                            if (keyValue.length === 2) {
+                                const key = keyValue[0].replace(/"/g, '').trim();
+                                const value = keyValue[1].replace(/"/g, '').trim();
+
+                                if (key && key.length > 3) {
+                                    return key;
+                                }
+
+                                if (value && value.length > 3) {
+                                    return value;
+                                }
+                            }
+                            return null;
+                        })
+                        .filter((s: string | null) => s !== null);
 
                     cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
                     return result;
@@ -269,40 +307,24 @@ Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`
         context?: string
     ): Promise<SubQuery[]> {
         try {
-            // Create a simple prompt for query decomposition
-            const prompt = `Decompose the following query into 3-5 specific search queries that would be effective for vector search.
-
-Your goal is to help find comprehensive information by breaking down the query into multiple search terms.
-
-IMPORTANT: DO NOT just reword the original query. Create MULTIPLE DISTINCT queries that explore different aspects.
-
-For example, if the query is "What are Docker containers?", good sub-queries would be:
-1. "Docker container architecture and components"
-2. "Docker vs virtual machines differences"
-3. "Docker container use cases and benefits"
-4. "Docker container deployment best practices"
-
-Format your response as a JSON array of objects with 'text' and 'reason' properties.
-Example: [
-  {"text": "Docker container architecture", "reason": "Understanding the technical structure"},
-  {"text": "Docker vs virtual machines", "reason": "Comparing with alternative technologies"},
-  {"text": "Docker container benefits", "reason": "Understanding advantages and use cases"},
-  {"text": "Docker deployment best practices", "reason": "Learning practical implementation"}
-]
-
-${context ? `\nContext: ${context}` : ''}
-
-Query: ${query}`;
+            // Use the proven prompt format that was working before
+            const prompt = `You are an AI assistant that decides what information needs to be retrieved from a user's knowledge base called TriliumNext Notes to answer the user's question.
+Given the user's question, generate 3-5 specific search queries that would help find relevant information.
+Each query should be focused on a different aspect of the question.
+Avoid generating queries that are too broad, vague, or about a user's entire Note database, and make sure they are relevant to the user's question.
+Format your answer as a JSON array of strings, with each string being a search query.
+Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`;
 
             log.info(`Sending decomposition prompt to LLM for query: "${query}"`);
 
             const messages = [
-                { role: "system" as const, content: prompt }
+                { role: "system" as const, content: prompt },
+                { role: "user" as const, content: query }
             ];
 
             const options = {
-                temperature: 0.7,
-                maxTokens: SEARCH_CONSTANTS.LIMITS.QUERY_PROCESSOR_MAX_TOKENS,
+                temperature: 0.3,
+                maxTokens: 300,
                 bypassFormatter: true,
                 expectsJsonResponse: true,
                 _bypassContextProcessing: true,
@@ -315,78 +337,144 @@ Query: ${query}`;
 
             log.info(`Received LLM response for decomposition: ${responseText.substring(0, 200)}...`);
 
-            // Try to parse the response as JSON
-            let subQueries: SubQuery[] = [];
+            // Parse the response to extract the queries
+            let searchQueries: string[] = [];
             try {
-                // Extract the JSON from the response
-                const extractedJson = JsonExtractor.extract(responseText, {
-                    extractArrays: true,
-                    applyFixes: true,
-                    useFallbacks: true
-                });
+                // Remove code blocks, quotes, and clean up the response text
+                let jsonStr = responseText
+                    .replace(/```(?:json)?|```/g, '') // Remove code block markers
+                    .replace(/[\u201C\u201D]/g, '"')  // Replace smart quotes with straight quotes
+                    .trim();
 
-                log.info(`Extracted JSON: ${JSON.stringify(extractedJson).substring(0, 200)}...`);
+                log.info(`Cleaned JSON string: ${jsonStr}`);
 
-                if (Array.isArray(extractedJson) && extractedJson.length > 0) {
-                    // Convert the extracted data to SubQuery objects
-                    subQueries = extractedJson
-                        .filter(item => item && typeof item === 'object' && item.text)
-                        .map(item => ({
-                            id: this.generateSubQueryId(),
-                            text: item.text,
-                            reason: item.reason || "Sub-aspect of the main question",
-                            isAnswered: false
-                        }));
+                // Check if the text might contain a JSON structure (has curly braces or square brackets)
+                if ((jsonStr.includes('{') && jsonStr.includes('}')) || (jsonStr.includes('[') && jsonStr.includes(']'))) {
+                    // Try to extract the JSON structure
+                    let jsonMatch = jsonStr.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+                    if (jsonMatch) {
+                        jsonStr = jsonMatch[0];
+                        log.info(`Extracted JSON structure: ${jsonStr}`);
+                    }
 
-                    log.info(`Successfully created ${subQueries.length} sub-queries from LLM response`);
-                } else {
-                    log.info(`Failed to extract array of sub-queries from LLM response`);
+                    // Try to parse the JSON
+                    try {
+                        const parsed = JSON.parse(jsonStr);
+
+                        // Handle array format: ["query1", "query2"]
+                        if (Array.isArray(parsed)) {
+                            searchQueries = parsed
+                                .map(q => typeof q === 'string' ? q.trim() : String(q).trim())
+                                .filter(Boolean);
+                            log.info(`Extracted ${searchQueries.length} queries from JSON array`);
+                        }
+                        // Handle object format: {"query1": "reason1", "query2": "reason2"} or {"query1" : "query2"}
+                        else if (typeof parsed === 'object' && parsed !== null) {
+                            // Extract both keys and values as potential queries
+                            const keys = Object.keys(parsed);
+                            const values = Object.values(parsed);
+
+                            // Add keys as queries
+                            searchQueries = keys
+                                .filter(key => key && key.length > 3)
+                                .map(key => key.trim());
+
+                            // Add values as queries if they're strings and not already included
+                            values
+                                .filter((val): val is string => typeof val === 'string' && val.length > 3)
+                                .map(val => val.trim())
+                                .forEach((val: string) => {
+                                    if (!searchQueries.includes(val)) {
+                                        searchQueries.push(val);
+                                    }
+                                });
+
+                            log.info(`Extracted ${searchQueries.length} queries from JSON object`);
+                        }
+                    } catch (parseError) {
+                        log.info(`JSON parse error: ${parseError}. Will use fallback parsing.`);
+                    }
                 }
-            } catch (error) {
-                log.error(`Error parsing LLM response: ${error}`);
-            }
 
-            // Always include the original query
-            const hasOriginal = subQueries.some(sq => sq.text.toLowerCase() === query.toLowerCase());
-            if (!hasOriginal) {
-                subQueries.push({
-                    id: this.generateSubQueryId(),
-                    text: query,
-                    reason: "Original query",
-                    isAnswered: false
-                });
-                log.info(`Added original query to sub-queries list`);
-            }
+                // Fallback: Try to extract an array manually by splitting on commas between quotes
+                if (searchQueries.length === 0 && jsonStr.includes('[') && jsonStr.includes(']')) {
+                    const arrayContent = jsonStr.substring(
+                        jsonStr.indexOf('[') + 1,
+                        jsonStr.lastIndexOf(']')
+                    );
 
-            // Ensure we have at least 3 queries for better search coverage
-            if (subQueries.length < 3) {
-                // Create some generic variants of the original query
-                const genericVariants = [
-                    { text: `${query} examples and use cases`, reason: "Practical applications" },
-                    { text: `${query} concepts and definitions`, reason: "Conceptual understanding" },
-                    { text: `${query} best practices`, reason: "Implementation guidance" }
-                ];
+                    // Use regex to match quoted strings, handling escaped quotes
+                    const stringMatches = arrayContent.match(/"((?:\\.|[^"\\])*)"/g);
+                    if (stringMatches && stringMatches.length > 0) {
+                        searchQueries = stringMatches
+                            .map((m: string) => m.substring(1, m.length - 1).trim()) // Remove surrounding quotes
+                            .filter((s: string) => s.length > 0);
+                        log.info(`Extracted ${searchQueries.length} queries using regex`);
+                    }
+                }
 
-                // Add variants until we have at least 3 queries
-                for (let i = 0; i < genericVariants.length && subQueries.length < 3; i++) {
-                    subQueries.push({
+                // Fallback: Try to extract key-value pairs from object notation manually
+                if (searchQueries.length === 0 && jsonStr.includes('{') && jsonStr.includes('}')) {
+                    // Extract content between curly braces
+                    const objectContent = jsonStr.substring(
+                        jsonStr.indexOf('{') + 1,
+                        jsonStr.lastIndexOf('}')
+                    );
+
+                    // Split by commas that aren't inside quotes
+                    const pairs: string[] = objectContent.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+
+                    for (const pair of pairs) {
+                        // Split by colon that isn't inside quotes
+                        const keyValue = pair.split(/:(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+                        if (keyValue.length === 2) {
+                            const key = keyValue[0].replace(/"/g, '').trim();
+                            const value = keyValue[1].replace(/"/g, '').trim();
+
+                            if (key && key.length > 3 && !searchQueries.includes(key)) {
+                                searchQueries.push(key);
+                            }
+
+                            if (value && value.length > 3 && !searchQueries.includes(value)) {
+                                searchQueries.push(value);
+                            }
+                        }
+                    }
+
+                    log.info(`Extracted ${searchQueries.length} queries from manual object parsing`);
+                }
+
+                // Convert search queries to SubQuery objects
+                if (searchQueries.length > 0) {
+                    const subQueries = searchQueries.map((text, index) => ({
                         id: this.generateSubQueryId(),
-                        text: genericVariants[i].text,
-                        reason: genericVariants[i].reason,
+                        text,
+                        reason: `Search query ${index + 1}`,
                         isAnswered: false
-                    });
-                }
+                    }));
 
-                log.info(`Added ${3 - subQueries.length} generic variants to ensure minimum 3 queries`);
+                    // Always include the original query if not already included
+                    const hasOriginal = subQueries.some(sq => sq.text.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(sq.text.toLowerCase()));
+                    if (!hasOriginal) {
+                        subQueries.unshift({
+                            id: this.generateSubQueryId(),
+                            text: query.trim(),
+                            reason: "Original query",
+                            isAnswered: false
+                        });
+                        log.info(`Added original query to sub-queries list`);
+                    }
+
+                    log.info(`Final sub-queries for vector search: ${subQueries.map(sq => `"${sq.text}"`).join(', ')}`);
+                    return subQueries;
+                }
+            } catch (parseError) {
+                log.error(`Error parsing search queries: ${parseError}`);
             }
 
-            log.info(`Final sub-queries for vector search: ${subQueries.map(sq => `"${sq.text}"`).join(', ')}`);
-            return subQueries;
-        } catch (error) {
-            log.error(`Error in simpleQueryDecomposition: ${error}`);
-
-            // Return the original query plus some variants as fallback
-            const fallbackQueries = [
+            // Fallback if all extraction methods fail
+            log.info(`Using fallback queries`);
+            return [
                 {
                     id: this.generateSubQueryId(),
                     text: query,
@@ -395,20 +483,27 @@ Query: ${query}`;
                 },
                 {
                     id: this.generateSubQueryId(),
-                    text: `${query} overview`,
+                    text: `${query.trim()} overview`,
                     reason: "General information",
                     isAnswered: false
                 },
                 {
                     id: this.generateSubQueryId(),
-                    text: `${query} examples`,
+                    text: `${query.trim()} examples`,
                     reason: "Practical examples",
                     isAnswered: false
                 }
             ];
+        } catch (error) {
+            log.error(`Error in simpleQueryDecomposition: ${error}`);
 
-            log.info(`Using fallback queries due to error: ${fallbackQueries.map(sq => `"${sq.text}"`).join(', ')}`);
-            return fallbackQueries;
+            // Return the original query as fallback
+            return [{
+                id: this.generateSubQueryId(),
+                text: query,
+                reason: "Error occurred, using original query",
+                isAnswered: false
+            }];
         }
     }
 
