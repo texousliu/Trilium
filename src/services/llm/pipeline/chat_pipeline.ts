@@ -168,16 +168,28 @@ export class ChatPipeline {
             log.info(`========== STAGE 2: QUERY DECOMPOSITION ==========`);
             log.info('Performing query decomposition to generate effective search queries');
             const llmService = await this.getLLMService();
-            let searchQueries = [userQuery]; // Default to original query
+            let searchQueries = [userQuery];
 
-            if (llmService && llmService.generateSearchQueries) {
+            if (llmService) {
                 try {
-                    const decompositionResult = await llmService.generateSearchQueries(userQuery);
-                    if (decompositionResult && decompositionResult.length > 0) {
-                        searchQueries = decompositionResult;
-                        log.info(`Generated ${searchQueries.length} search queries: ${JSON.stringify(searchQueries)}`);
+                    // Import the query processor and use its decomposeQuery method
+                    const queryProcessor = (await import('../context/services/query_processor.js')).default;
+
+                    // Use the enhanced query processor with the LLM service
+                    const decomposedQuery = await queryProcessor.decomposeQuery(userQuery, undefined, llmService);
+
+                    if (decomposedQuery && decomposedQuery.subQueries && decomposedQuery.subQueries.length > 0) {
+                        // Extract search queries from the decomposed query
+                        searchQueries = decomposedQuery.subQueries.map(sq => sq.text);
+
+                        // Always include the original query if it's not already included
+                        if (!searchQueries.includes(userQuery)) {
+                            searchQueries.unshift(userQuery);
+                        }
+
+                        log.info(`Query decomposed with complexity ${decomposedQuery.complexity}/10 into ${searchQueries.length} search queries`);
                     } else {
-                        log.info('Query decomposition returned no results, using original query');
+                        log.info('Query decomposition returned no sub-queries, using original query');
                     }
                 } catch (error: any) {
                     log.error(`Error in query decomposition: ${error.message || String(error)}`);
