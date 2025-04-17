@@ -359,7 +359,8 @@ function searchNotesForAutocomplete(query: string, fastSearch: boolean = true) {
             notePath: result.notePath,
             noteTitle: title,
             notePathTitle: `${icon} ${result.notePathTitle}`,
-            highlightedNotePathTitle: `<span class="${icon ?? "bx bx-note"}"></span> ${result.highlightedNotePathTitle}`
+            highlightedNotePathTitle: result.highlightedNotePathTitle,
+            icon: icon ?? "bx bx-note"
         };
     });
 }

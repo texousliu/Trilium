@@ -21,6 +21,7 @@ function getSearchDelay(notesCount: number): number {
 }
 let searchDelay = getSearchDelay(notesCount);
 
+// TODO: Deduplicate with server.
 export interface Suggestion {
     noteTitle?: string;
     externalLink?: string;
@@ -29,6 +30,7 @@ export interface Suggestion {
     highlightedNotePathTitle?: string;
     action?: string | "create-note" | "search-notes" | "external-link";
     parentNoteId?: string;
+    icon?: string;
 }
 
 interface Options {
@@ -262,7 +264,7 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
                 },
                 displayKey: "notePathTitle",
                 templates: {
-                    suggestion: (suggestion) => suggestion.highlightedNotePathTitle
+                    suggestion: (suggestion) => `<span class="${suggestion.icon ?? "bx bx-note"}"></span> ${suggestion.highlightedNotePathTitle}`
                 },
                 // we can't cache identical searches because notes can be created / renamed, new recent notes can be added
                 cache: false
