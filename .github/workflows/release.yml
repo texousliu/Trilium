@@ -5,6 +5,7 @@ on:
       - "v*"
 permissions:
   contents: write
+  discussions: write
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -114,3 +115,4 @@ jobs:
           body_path: docs/Release Notes/Release Notes/${{ github.ref_name }}.md
           fail_on_unmatched_files: true
           files: upload/*.*
+          discussion_category_name: Announcements
