@@ -7,12 +7,24 @@
 
 ## 💡 Key highlights
 
+*   \[…\]
+
 ## 🐞 Bugfixes
+
+*   \[…\]
 
 ## ✨ Improvements
 
+*   \[…\]
+
 ## 📖 Documentation
+
+*   \[…\]
 
 ## 🌍 Internationalization
 
+*   \[…\]
+
 ## 🛠️ Technical updates
+
+*   \[…\]
