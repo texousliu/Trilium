@@ -54,82 +54,126 @@ export class QueryProcessor {
             return null;
         }
     }
-
     /**
-     * Generate enhanced search queries for better semantic matching
+     * Generate search queries to find relevant information for the user question
      *
      * @param userQuestion - The user's question
-     * @param llmService - The LLM service to use for generating queries, or null to auto-detect
+     * @param llmService - The LLM service to use for generating queries
      * @returns Array of search queries
      */
-    async generateSearchQueries(
-        userQuestion: string,
-        llmService?: LLMServiceInterface
-    ): Promise<string[]> {
-        if (!userQuestion || userQuestion.trim() === '') {
-            return []; // Return empty array for empty input
-        }
-
+    async generateSearchQueries(userQuestion: string, llmService: any): Promise<string[]> {
         try {
-            // Check cache
-            const cacheKey = `searchQueries:${userQuestion}`;
-            const cached = cacheManager.getQueryResults<string[]>(cacheKey);
-            if (cached && Array.isArray(cached)) {
-                return cached;
+            // Check cache first
+            const cached = cacheManager.getQueryResults(`searchQueries:${userQuestion}`);
+
+            const PROMPT = `You are an AI assistant that decides what information needs to be retrieved from a user's knowledge base called TriliumNext Notes to answer the user's question.
+Given the user's question, generate 3-5 specific search queries that would help find relevant information.
+Each query should be focused on a different aspect of the question.
+Avoid generating queries that are too broad, vague, or about a user's entire Note database, and make sure they are relevant to the user's question.
+Format your answer as a JSON array of strings, with each string being a search query.
+Example: ["exact topic mentioned", "related concept 1", "related concept 2"]`
+
+            interface Message {
+                role: 'user' | 'assistant' | 'system';
+                content: string;
             }
 
-            // Get LLM service if not provided
-            const service = llmService || await this.getLLMService();
-            if (!service) {
-                log.info(`No LLM service available for query enhancement, using original query`);
-                return [userQuestion];
-            }
-
-            // Prepare the prompt with JSON formatting instructions
-            const enhancedPrompt = `${this.enhancerPrompt}
-IMPORTANT: You must respond with valid JSON arrays. Always include commas between array elements.
-Format your answer as a valid JSON array without markdown code blocks, like this: ["item1", "item2", "item3"]`;
-
-            const messages = [
-                { role: "system" as const, content: enhancedPrompt },
-                { role: "user" as const, content: userQuestion }
+            const messages: Message[] = [
+                { role: "system", content: PROMPT },
+                { role: "user", content: userQuestion }
             ];
 
             const options = {
-                temperature: SEARCH_CONSTANTS.TEMPERATURE.QUERY_PROCESSOR,
-                maxTokens: SEARCH_CONSTANTS.LIMITS.QUERY_PROCESSOR_MAX_TOKENS,
-                bypassFormatter: true,
-                expectsJsonResponse: true,
-                _bypassContextProcessing: true, // Prevent recursive calls
-                enableTools: false // Explicitly disable tools for this request
+                temperature: 0.3,
+                maxTokens: 300
             };
 
             // Get the response from the LLM
-            const response = await service.generateChatCompletion(messages, options);
-            const responseText = response.text;
+            const response = await llmService.generateChatCompletion(messages, options);
+            const responseText = response.text; // Extract the text from the response object
 
-            // Use the JsonExtractor to parse the response
-            const queries = JsonExtractor.extract<string[]>(responseText, {
-                extractArrays: true,
-                minStringLength: 3,
-                applyFixes: true,
-                useFallbacks: true
-            });
+            try {
+                // Remove code blocks, quotes, and clean up the response text
+                let jsonStr = responseText
+                    .replace(/```(?:json)?|```/g, '') // Remove code block markers
+                    .replace(/[\u201C\u201D]/g, '"')  // Replace smart quotes with straight quotes
+                    .trim();
 
-            if (queries && queries.length > 0) {
-                log.info(`Extracted ${queries.length} queries using JsonExtractor`);
-                cacheManager.storeQueryResults(cacheKey, queries);
-                return queries;
+                // Check if the text might contain a JSON array (has square brackets)
+                if (jsonStr.includes('[') && jsonStr.includes(']')) {
+                    // Extract just the array part if there's explanatory text
+                    const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
+                    if (arrayMatch) {
+                        jsonStr = arrayMatch[0];
+                    }
+
+                    // Try to parse the JSON
+                    try {
+                        const queries = JSON.parse(jsonStr);
+                        if (Array.isArray(queries) && queries.length > 0) {
+                            const result = queries.map(q => typeof q === 'string' ? q : String(q)).filter(Boolean);
+                            cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
+                            return result;
+                        }
+                    } catch (innerError) {
+                        // If parsing fails, log it and continue to the fallback
+                        log.info(`JSON parse error: ${innerError}. Will use fallback parsing for: ${jsonStr}`);
+                    }
+                }
+
+                // Fallback 1: Try to extract an array manually by splitting on commas between quotes
+                if (jsonStr.includes('[') && jsonStr.includes(']')) {
+                    const arrayContent = jsonStr.substring(
+                        jsonStr.indexOf('[') + 1,
+                        jsonStr.lastIndexOf(']')
+                    );
+
+                    // Use regex to match quoted strings, handling escaped quotes
+                    const stringMatches = arrayContent.match(/"((?:\\.|[^"\\])*)"/g);
+                    if (stringMatches && stringMatches.length > 0) {
+                        const result = stringMatches
+                            .map((m: string) => m.substring(1, m.length - 1)) // Remove surrounding quotes
+                            .filter((s: string) => s.length > 0);
+                        cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
+                        return result;
+                    }
+                }
+
+                // Fallback 2: Extract queries line by line
+                const lines = responseText.split('\n')
+                    .map((line: string) => line.trim())
+                    .filter((line: string) =>
+                        line.length > 0 &&
+                        !line.startsWith('```') &&
+                        !line.match(/^\d+\.?\s*$/) && // Skip numbered list markers alone
+                        !line.match(/^\[|\]$/) // Skip lines that are just brackets
+                    );
+
+                if (lines.length > 0) {
+                    // Remove numbering, quotes and other list markers from each line
+                    const result = lines.map((line: string) => {
+                        return line
+                            .replace(/^\d+\.?\s*/, '') // Remove numbered list markers (1., 2., etc)
+                            .replace(/^[-*•]\s*/, '')  // Remove bullet list markers
+                            .replace(/^["']|["']$/g, '') // Remove surrounding quotes
+                            .trim();
+                    }).filter((s: string) => s.length > 0);
+
+                    cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, result);
+                    return result;
+                }
+            } catch (parseError) {
+                log.error(`Error parsing search queries: ${parseError}`);
             }
 
-            // Fallback to original question
+            // If all else fails, just use the original question
             const fallback = [userQuestion];
-            log.info(`No queries extracted, using fallback: "${userQuestion}"`);
-            cacheManager.storeQueryResults(cacheKey, fallback);
+            cacheManager.storeQueryResults(`searchQueries:${userQuestion}`, fallback);
             return fallback;
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             log.error(`Error generating search queries: ${errorMessage}`);
+            // Fallback to just using the original question
             return [userQuestion];
         }
     }
@@ -161,40 +205,38 @@ Format your answer as a valid JSON array without markdown code blocks, like this
                 };
             }
 
-            // Assess query complexity
-            const complexity = this.assessQueryComplexity(query);
-            log.info(`Query complexity assessment: ${complexity}/10`);
+            // Simple assessment of query complexity
+            const complexity = query.length > 100 ? 5 : 3;
 
-            // Try to get LLM service if not provided
+            // Get LLM service if not provided
             const service = llmService || await this.getLLMService();
 
-            // If no LLM service is available, use basic decomposition
+            // If no LLM service is available, use original query
             if (!service) {
                 log.info(`No LLM service available for query decomposition, using original query`);
-                return this.createBasicDecomposition(query, complexity);
+                return {
+                    originalQuery: query,
+                    subQueries: [{
+                        id: this.generateSubQueryId(),
+                        text: query,
+                        reason: "Original query",
+                        isAnswered: false
+                    }],
+                    status: 'pending',
+                    complexity
+                };
             }
 
-            // With LLM service available, always use advanced decomposition regardless of complexity
-            try {
-                log.info(`Using advanced LLM-based decomposition for query (complexity: ${complexity})`);
-                const enhancedSubQueries = await this.createLLMSubQueries(query, context, service);
+            // Make a simple request to decompose the query
+            const result = await this.simpleQueryDecomposition(query, service, context);
 
-                if (enhancedSubQueries && enhancedSubQueries.length > 0) {
-                    log.info(`LLM decomposed query into ${enhancedSubQueries.length} sub-queries`);
-                    return {
-                        originalQuery: query,
-                        subQueries: enhancedSubQueries,
-                        status: 'pending',
-                        complexity
-                    };
-                }
-            } catch (error: any) {
-                log.error(`Error during LLM-based decomposition: ${error.message}, falling back to basic decomposition`);
-                // Fall through to basic decomposition
-            }
-
-            // Fallback to basic decomposition
-            return this.createBasicDecomposition(query, complexity);
+            // Return the result
+            return {
+                originalQuery: query,
+                subQueries: result,
+                status: 'pending',
+                complexity
+            };
         } catch (error: any) {
             log.error(`Error decomposing query: ${error.message}`);
 
@@ -214,361 +256,160 @@ Format your answer as a valid JSON array without markdown code blocks, like this
     }
 
     /**
-     * Create a basic decomposition of a query without using LLM
+     * Simple LLM-based query decomposition
      *
-     * @param query The original query
-     * @param complexity The assessed complexity
-     * @returns A basic decomposed query
-     */
-    private createBasicDecomposition(query: string, complexity: number): DecomposedQuery {
-        log.info(`Using basic decomposition approach (complexity: ${complexity})`);
-
-        const mainSubQuery = {
-            id: this.generateSubQueryId(),
-            text: query,
-            reason: "Direct question that can be answered without decomposition",
-            isAnswered: false
-        };
-
-        // Add a generic exploration query for context
-        const genericQuery = {
-            id: this.generateSubQueryId(),
-            text: `What information is related to ${query}?`,
-            reason: "General exploration to find related content",
-            isAnswered: false
-        };
-
-        return {
-            originalQuery: query,
-            subQueries: [mainSubQuery, genericQuery],
-            status: 'pending',
-            complexity
-        };
-    }
-
-    /**
-     * Use LLM to create advanced sub-queries from a complex query
-     *
-     * @param query The original complex query
+     * @param query The original query to decompose
+     * @param llmService LLM service to use
      * @param context Optional context to help with decomposition
-     * @param llmService LLM service to use for advanced decomposition
      * @returns Array of sub-queries
      */
-    private async createLLMSubQueries(
+    private async simpleQueryDecomposition(
         query: string,
-        context?: string,
-        llmService?: LLMServiceInterface
+        llmService: LLMServiceInterface,
+        context?: string
     ): Promise<SubQuery[]> {
-        // If no LLM service, use basic decomposition
-        if (!llmService) {
-            return this.createSubQueries(query, context);
-        }
-
         try {
-            // Create a much better prompt for more effective query decomposition
-            const prompt = `Decompose the following query into 3-5 specific search queries that would help find comprehensive information.
+            // Create a simple prompt for query decomposition
+            const prompt = `Decompose the following query into 3-5 specific search queries that would be effective for vector search.
 
-Your task is to identify the main concepts and break them down into specific, targeted search queries.
+Your goal is to help find comprehensive information by breaking down the query into multiple search terms.
 
-DO NOT simply rephrase the original query or create a generic "what's related to X" pattern.
-DO create specific queries that explore different aspects of the topic.
+IMPORTANT: DO NOT just reword the original query. Create MULTIPLE DISTINCT queries that explore different aspects.
 
-For example:
-If the query is "How does Docker compare to Kubernetes?", good sub-queries would be:
-- "Docker container architecture and features"
-- "Kubernetes container orchestration capabilities"
-- "Docker vs Kubernetes performance comparison"
-- "When to use Docker versus Kubernetes"
+For example, if the query is "What are Docker containers?", good sub-queries would be:
+1. "Docker container architecture and components"
+2. "Docker vs virtual machines differences"
+3. "Docker container use cases and benefits"
+4. "Docker container deployment best practices"
 
 Format your response as a JSON array of objects with 'text' and 'reason' properties.
 Example: [
-  {"text": "Docker container architecture", "reason": "Understanding Docker's core technology"},
-  {"text": "Kubernetes orchestration features", "reason": "Exploring Kubernetes' main capabilities"}
+  {"text": "Docker container architecture", "reason": "Understanding the technical structure"},
+  {"text": "Docker vs virtual machines", "reason": "Comparing with alternative technologies"},
+  {"text": "Docker container benefits", "reason": "Understanding advantages and use cases"},
+  {"text": "Docker deployment best practices", "reason": "Learning practical implementation"}
 ]
 
 ${context ? `\nContext: ${context}` : ''}
 
 Query: ${query}`;
 
+            log.info(`Sending decomposition prompt to LLM for query: "${query}"`);
+
             const messages = [
                 { role: "system" as const, content: prompt }
             ];
 
             const options = {
-                temperature: 0.7,  // Higher temperature for more creative decomposition
+                temperature: 0.7,
                 maxTokens: SEARCH_CONSTANTS.LIMITS.QUERY_PROCESSOR_MAX_TOKENS,
                 bypassFormatter: true,
                 expectsJsonResponse: true,
-                _bypassContextProcessing: true, // Prevent recursive calls
-                enableTools: false // Explicitly disable tools for this request
+                _bypassContextProcessing: true,
+                enableTools: false
             };
 
             // Get the response from the LLM
             const response = await llmService.generateChatCompletion(messages, options);
             const responseText = response.text;
 
-            // Try to extract structured sub-queries from the response
+            log.info(`Received LLM response for decomposition: ${responseText.substring(0, 200)}...`);
+
+            // Try to parse the response as JSON
+            let subQueries: SubQuery[] = [];
             try {
-                // Expected format is an array of objects with "text" and "reason" keys
-                interface RawSubQuery {
-                    text: string;
-                    reason?: string;
-                }
-
-                // Log the response for debugging
-                log.info(`Received response from LLM for query decomposition, extracting JSON...`);
-
-                log.info(`Response: ${responseText}`);
-
-                // Extract JSON from the response
-                const extractedData = JsonExtractor.extract<RawSubQuery[]>(responseText, {
+                // Extract the JSON from the response
+                const extractedJson = JsonExtractor.extract(responseText, {
                     extractArrays: true,
                     applyFixes: true,
                     useFallbacks: true
                 });
 
-                // Validate the extracted data
-                if (!Array.isArray(extractedData)) {
-                    log.error(`Failed to extract array from LLM response, got: ${typeof extractedData}`);
-                    return this.createSubQueries(query, context);
+                log.info(`Extracted JSON: ${JSON.stringify(extractedJson).substring(0, 200)}...`);
+
+                if (Array.isArray(extractedJson) && extractedJson.length > 0) {
+                    // Convert the extracted data to SubQuery objects
+                    subQueries = extractedJson
+                        .filter(item => item && typeof item === 'object' && item.text)
+                        .map(item => ({
+                            id: this.generateSubQueryId(),
+                            text: item.text,
+                            reason: item.reason || "Sub-aspect of the main question",
+                            isAnswered: false
+                        }));
+
+                    log.info(`Successfully created ${subQueries.length} sub-queries from LLM response`);
+                } else {
+                    log.info(`Failed to extract array of sub-queries from LLM response`);
                 }
+            } catch (error) {
+                log.error(`Error parsing LLM response: ${error}`);
+            }
 
-                if (extractedData.length === 0) {
-                    log.error(`Extracted array is empty, falling back to basic decomposition`);
-                    return this.createSubQueries(query, context);
-                }
-
-                log.info(`Successfully extracted ${extractedData.length} items using regex pattern`);
-
-                // Validate each sub-query to ensure it has a text property
-                const validSubQueries = extractedData.filter(item => {
-                    if (!item || typeof item !== 'object') {
-                        log.error(`Invalid sub-query item: ${JSON.stringify(item)}`);
-                        return false;
-                    }
-
-                    if (!item.text || typeof item.text !== 'string') {
-                        log.error(`Sub-query missing text property: ${JSON.stringify(item)}`);
-                        return false;
-                    }
-
-                    return true;
-                });
-
-                if (validSubQueries.length === 0) {
-                    log.error(`No valid sub-queries found after validation, falling back to basic decomposition`);
-                    return this.createSubQueries(query, context);
-                }
-
-                if (validSubQueries.length < extractedData.length) {
-                    log.info(`Some invalid sub-queries were filtered out: ${extractedData.length} -> ${validSubQueries.length}`);
-                }
-
-                // Convert the raw data to SubQuery objects
-                let subQueries = validSubQueries.map(item => ({
+            // Always include the original query
+            const hasOriginal = subQueries.some(sq => sq.text.toLowerCase() === query.toLowerCase());
+            if (!hasOriginal) {
+                subQueries.push({
                     id: this.generateSubQueryId(),
-                    text: item.text,
-                    reason: item.reason || "Sub-aspect of the main question",
+                    text: query,
+                    reason: "Original query",
                     isAnswered: false
-                }));
-
-                // Make sure we have at least the original query
-                const hasOriginalQuery = subQueries.some(sq => {
-                    // Check if either sq.text or query is null/undefined before using toLowerCase
-                    if (!sq.text) return false;
-                    const sqText = sq.text.toLowerCase();
-                    const originalQuery = query.toLowerCase();
-
-                    return sqText.includes(originalQuery) || originalQuery.includes(sqText);
                 });
+                log.info(`Added original query to sub-queries list`);
+            }
 
-                if (!hasOriginalQuery) {
-                    subQueries.unshift({
+            // Ensure we have at least 3 queries for better search coverage
+            if (subQueries.length < 3) {
+                // Create some generic variants of the original query
+                const genericVariants = [
+                    { text: `${query} examples and use cases`, reason: "Practical applications" },
+                    { text: `${query} concepts and definitions`, reason: "Conceptual understanding" },
+                    { text: `${query} best practices`, reason: "Implementation guidance" }
+                ];
+
+                // Add variants until we have at least 3 queries
+                for (let i = 0; i < genericVariants.length && subQueries.length < 3; i++) {
+                    subQueries.push({
                         id: this.generateSubQueryId(),
-                        text: query,
-                        reason: "Original query",
+                        text: genericVariants[i].text,
+                        reason: genericVariants[i].reason,
                         isAnswered: false
                     });
                 }
 
-                // Log the extracted sub-queries for debugging
-                log.info(`Successfully extracted ${subQueries.length} sub-queries from LLM response`);
-
-                return subQueries;
-            } catch (error: any) {
-                log.error(`Error extracting sub-queries from LLM response: ${error.message}`);
-                // Fall through to traditional decomposition
+                log.info(`Added ${3 - subQueries.length} generic variants to ensure minimum 3 queries`);
             }
 
-            // Fallback to traditional decomposition
-            return this.createSubQueries(query, context);
-        } catch (error: any) {
-            log.error(`Error in createLLMSubQueries: ${error.message}`);
-            return this.createSubQueries(query, context);
-        }
-    }
+            log.info(`Final sub-queries for vector search: ${subQueries.map(sq => `"${sq.text}"`).join(', ')}`);
+            return subQueries;
+        } catch (error) {
+            log.error(`Error in simpleQueryDecomposition: ${error}`);
 
-    /**
-     * Create sub-queries from a complex query
-     *
-     * @param query The original complex query
-     * @param context Optional context to help with decomposition
-     * @returns Array of sub-queries
-     */
-    private createSubQueries(query: string, context?: string): SubQuery[] {
-        // Analyze the query to identify potential aspects to explore
-        const questionParts = this.identifyQuestionParts(query);
-        const subQueries: SubQuery[] = [];
-
-        // Add the main query as the first sub-query
-        subQueries.push({
-            id: this.generateSubQueryId(),
-            text: query,
-            reason: "Main question (for direct matching)",
-            isAnswered: false
-        });
-
-        // Add sub-queries for each identified question part
-        for (const part of questionParts) {
-            subQueries.push({
-                id: this.generateSubQueryId(),
-                text: part,
-                reason: "Sub-aspect of the main question",
-                isAnswered: false
-            });
-        }
-
-        // Add a generic exploration query to find related information
-        subQueries.push({
-            id: this.generateSubQueryId(),
-            text: `What information is related to ${query}?`,
-            reason: "General exploration to find related content",
-            isAnswered: false
-        });
-
-        // If we have context, add a specific query for that context
-        if (context) {
-            subQueries.push({
-                id: this.generateSubQueryId(),
-                text: `How does "${context}" relate to ${query}?`,
-                reason: "Contextual relationship exploration",
-                isAnswered: false
-            });
-        }
-
-        return subQueries;
-    }
-
-    /**
-     * Identify parts of a complex question that could be individual sub-questions
-     *
-     * @param query The complex query to analyze
-     * @returns Array of potential sub-questions
-     */
-    private identifyQuestionParts(query: string): string[] {
-        const parts: string[] = [];
-
-        // Check for multiple question marks
-        const questionSentences = query.split(/(?<=\?)/).filter(s => s.includes('?'));
-        if (questionSentences.length > 1) {
-            // Multiple explicit questions detected
-            return questionSentences.map(s => s.trim());
-        }
-
-        // Check for conjunctions that might separate multiple questions
-        const conjunctions = ['and', 'or', 'but', 'plus', 'also'];
-        for (const conjunction of conjunctions) {
-            const pattern = new RegExp(`\\b${conjunction}\\b`, 'i');
-            if (pattern.test(query)) {
-                // Split by conjunction and check if each part could be a question
-                const splitParts = query.split(pattern);
-                for (const part of splitParts) {
-                    const trimmed = part.trim();
-                    if (trimmed.length > 10) { // Avoid tiny fragments
-                        parts.push(trimmed);
-                    }
+            // Return the original query plus some variants as fallback
+            const fallbackQueries = [
+                {
+                    id: this.generateSubQueryId(),
+                    text: query,
+                    reason: "Original query",
+                    isAnswered: false
+                },
+                {
+                    id: this.generateSubQueryId(),
+                    text: `${query} overview`,
+                    reason: "General information",
+                    isAnswered: false
+                },
+                {
+                    id: this.generateSubQueryId(),
+                    text: `${query} examples`,
+                    reason: "Practical examples",
+                    isAnswered: false
                 }
-                if (parts.length > 0) {
-                    return parts;
-                }
-            }
+            ];
+
+            log.info(`Using fallback queries due to error: ${fallbackQueries.map(sq => `"${sq.text}"`).join(', ')}`);
+            return fallbackQueries;
         }
-
-        // Check for comparison indicators
-        const comparisonTerms = ['compare', 'difference', 'differences', 'versus', 'vs'];
-        for (const term of comparisonTerms) {
-            if (query.toLowerCase().includes(term)) {
-                // This is likely a comparison question, extract the items being compared
-                const beforeAfter = query.split(new RegExp(`\\b${term}\\b`, 'i'));
-                if (beforeAfter.length === 2) {
-                    // Try to extract compared items
-                    const aspects = this.extractComparisonAspects(beforeAfter[0], beforeAfter[1]);
-                    if (aspects.length > 0) {
-                        for (const aspect of aspects) {
-                            parts.push(`What are the key points about ${aspect}?`);
-                        }
-                        parts.push(`What are the differences between ${aspects.join(' and ')}?`);
-                        return parts;
-                    }
-                }
-            }
-        }
-
-        // Check for "multiple aspects" questions
-        const aspectPatterns = [
-            /what (?:are|is) the (\w+) (?:of|about|for|in) /i,
-            /how (?:to|do|does|can) .+ (\w+)/i
-        ];
-
-        for (const pattern of aspectPatterns) {
-            const match = query.match(pattern);
-            if (match && match[1]) {
-                const aspect = match[1];
-                parts.push(`What is the ${aspect}?`);
-                parts.push(`How does ${aspect} relate to the main topic?`);
-            }
-        }
-
-        return parts;
-    }
-
-    /**
-     * Extract items being compared from a comparison question
-     *
-     * @param before Text before the comparison term
-     * @param after Text after the comparison term
-     * @returns Array of items being compared
-     */
-    private extractComparisonAspects(before: string, after: string): string[] {
-        const aspects: string[] = [];
-
-        // Look for "between A and B" pattern
-        const betweenMatch = after.match(/between (.+?) and (.+?)(?:\?|$)/i);
-        if (betweenMatch) {
-            aspects.push(betweenMatch[1].trim());
-            aspects.push(betweenMatch[2].trim());
-            return aspects;
-        }
-
-        // Look for A vs B pattern
-        const directComparison = after.match(/(.+?) (?:and|vs|versus) (.+?)(?:\?|$)/i);
-        if (directComparison) {
-            aspects.push(directComparison[1].trim());
-            aspects.push(directComparison[2].trim());
-            return aspects;
-        }
-
-        // Fall back to looking for named entities or key terms in both parts
-        const beforeTerms = before.match(/(\w+(?:\s+\w+){0,2})/g) || [];
-        const afterTerms = after.match(/(\w+(?:\s+\w+){0,2})/g) || [];
-
-        // Look for substantial terms (longer than 3 chars)
-        const candidateTerms = [...beforeTerms, ...afterTerms]
-            .filter(term => term.length > 3)
-            .map(term => term.trim());
-
-        // Take up to 2 distinct terms
-        return [...new Set(candidateTerms)].slice(0, 2);
     }
 
     /**
