@@ -7,6 +7,7 @@ import compression from "compression";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sessionParser from "./routes/session_parser.js";
+import config from "./services/config.js";
 import utils from "./services/utils.js";
 import assets from "./routes/assets.js";
 import routes from "./routes/routes.js";
@@ -33,6 +34,17 @@ app.set("views", path.join(scriptDir, "views"));
 app.set("view engine", "ejs");
 
 app.use((req, res, next) => {
+    // set CORS header
+    if (config["Network"]["corsAllowOrigin"]) {
+        res.header("Access-Control-Allow-Origin", config["Network"]["corsAllowOrigin"]);
+    }
+    if (config["Network"]["corsAllowMethods"]) {
+        res.header("Access-Control-Allow-Methods", config["Network"]["corsAllowMethods"]);
+    }
+    if (config["Network"]["corsAllowHeaders"]) {
+        res.header("Access-Control-Allow-Headers", config["Network"]["corsAllowHeaders"]);
+    }
+
     res.locals.t = t;
     return next();
 });
