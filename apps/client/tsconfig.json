@@ -2,6 +2,7 @@
     "compilerOptions": {
         "module": "ESNext",
         "moduleResolution": "bundler",
+        "target": "ES2015",
         "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true
     },
