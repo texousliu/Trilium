@@ -549,8 +549,8 @@ export default class LlmChatPanel extends BasicWidget {
                 }
             }
 
-            // Save the final state to the Chat Note after getting the response
-            await this.saveCurrentData();
+            // Note: We don't need to save here since the streaming completion and direct response methods
+            // both call saveCurrentData() when they're done
         } catch (error) {
             console.error('Error processing user message:', error);
             toastService.showError('Failed to process message');
@@ -903,13 +903,14 @@ export default class LlmChatPanel extends BasicWidget {
             applySyntaxHighlight($(assistantMessageEl as HTMLElement));
 
             // Update message in the data model for storage
-            const existingMsgIndex = this.messages.findIndex(msg =>
-                msg.role === 'assistant' && msg.content !== assistantResponse
-            );
+            // Find the last assistant message to update, or add a new one if none exists
+            const assistantMessages = this.messages.filter(msg => msg.role === 'assistant');
+            const lastAssistantMsgIndex = assistantMessages.length > 0 ?
+                this.messages.lastIndexOf(assistantMessages[assistantMessages.length - 1]) : -1;
 
-            if (existingMsgIndex >= 0) {
+            if (lastAssistantMsgIndex >= 0) {
                 // Update existing message
-                this.messages[existingMsgIndex].content = assistantResponse;
+                this.messages[lastAssistantMsgIndex].content = assistantResponse;
             } else {
                 // Add new message
                 this.messages.push({
