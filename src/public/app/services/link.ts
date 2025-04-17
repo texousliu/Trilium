@@ -286,7 +286,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     if (notePath) {
         if (openInNewTab) {
             appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
-                activate: targetIsBlank,
+                activate: evt.shiftKey ? true : targetIsBlank,
                 viewScope
             });
         } else if (isLeftClick) {
