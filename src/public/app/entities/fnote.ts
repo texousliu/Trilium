@@ -151,7 +151,7 @@ class FNote {
 
         for (const branchId of Object.values(this.childToBranch)) {
             const notePosition = this.froca.getBranch(branchId)?.notePosition;
-            if (notePosition) {
+            if (notePosition !== undefined) {
                 branchIdPos[branchId] = notePosition;
             }
         }
