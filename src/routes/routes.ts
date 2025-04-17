@@ -105,7 +105,8 @@ const uploadMiddlewareWithErrorHandling = function (req: express.Request, res: e
 };
 
 function register(app: express.Application) {
-    app.use(auth.checkCleanUrl);
+    // @pano9000: comment out for now to fix other functionality first
+    //app.use(auth.checkCleanUrl);
 
     route(GET, "/", [auth.checkAuth, csrfMiddleware], indexRoute.index);
     route(GET, "/login", [auth.checkAppInitialized, auth.checkPasswordSet], loginRoute.loginPage);
