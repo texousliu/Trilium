@@ -100,9 +100,13 @@ export class VectorSearchTool {
                 noteId: note.noteId,
                 title: note.title,
                 contentPreview: note.content
-                    ? note.content.length > 200
-                        ? note.content.substring(0, 200) + '...'
-                        : note.content
+                    ? (options.summarizeContent
+                        // Don't truncate already summarized content
+                        ? note.content
+                        // Only truncate non-summarized content
+                        : (note.content.length > 200
+                            ? note.content.substring(0, 200) + '...'
+                            : note.content))
                     : 'No content available',
                 similarity: note.similarity,
                 parentId: note.parentId
@@ -144,10 +148,14 @@ export class VectorSearchTool {
             return results.map(result => ({
                 noteId: result.noteId,
                 title: result.title,
-                contentPreview: result.content ?
-                    (result.content.length > 200 ?
-                        result.content.substring(0, 200) + '...' :
-                        result.content)
+                contentPreview: result.content
+                    ? (summarize
+                        // Don't truncate already summarized content
+                        ? result.content
+                        // Only truncate non-summarized content
+                        : (result.content.length > 200
+                            ? result.content.substring(0, 200) + '...'
+                            : result.content))
                     : 'No content available',
                 similarity: result.similarity,
                 parentId: result.parentId
