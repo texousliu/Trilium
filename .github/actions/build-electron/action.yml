@@ -21,32 +21,39 @@ runs:
     # Certificate setup
     - name: Import Apple certificates
       if: inputs.os == 'macos'
-      uses: apple-actions/import-codesign-certs@v5
+      uses: apple-actions/import-codesign-certs@v3
       with:
         p12-file-base64: ${{ env.APPLE_APP_CERTIFICATE_BASE64 }}
         p12-password: ${{ env.APPLE_APP_CERTIFICATE_PASSWORD }}
-        keychain: build-app
+        keychain: build-app-${{ github.run_id }}
         keychain-password: ${{ github.run_id }}
 
     - name: Install Installer certificate
       if: inputs.os == 'macos'
-      uses: apple-actions/import-codesign-certs@v5
+      uses: apple-actions/import-codesign-certs@v3
       with:
         p12-file-base64: ${{ env.APPLE_INSTALLER_CERTIFICATE_BASE64 }}
         p12-password: ${{ env.APPLE_INSTALLER_CERTIFICATE_PASSWORD }}
-        keychain: build-installer
+        keychain: build-installer-${{ github.run_id }}
         keychain-password: ${{ github.run_id }}
-        # We need to create a separate keychain for the installer certificate
-        create-keychain: true
 
     - name: Verify certificates
       if: inputs.os == 'macos'
       shell: ${{ inputs.shell }}
       run: |
-        echo "Available signing identities in build-app keychain:"
-        security find-identity -v -p codesigning build-app.keychain
-        echo "Available signing identities in build-installer keychain:"
-        security find-identity -v -p codesigning build-installer.keychain
+        echo "Available signing identities in app keychain:"
+        security find-identity -v -p codesigning build-app-${{ github.run_id }}.keychain
+
+        echo "Available signing identities in installer keychain:"
+        security find-identity -v -p codesigning build-installer-${{ github.run_id }}.keychain
+
+        # Make the keychains searchable
+        security list-keychains -d user -s build-app-${{ github.run_id }}.keychain build-installer-${{ github.run_id }}.keychain $(security list-keychains -d user | tr -d '"')
+        security default-keychain -s build-app-${{ github.run_id }}.keychain
+        security unlock-keychain -p ${{ github.run_id }} build-app-${{ github.run_id }}.keychain
+        security unlock-keychain -p ${{ github.run_id }} build-installer-${{ github.run_id }}.keychain
+        security set-keychain-settings -t 3600 -l build-app-${{ github.run_id }}.keychain
+        security set-keychain-settings -t 3600 -l build-installer-${{ github.run_id }}.keychain
 
     - name: Set up Python and other macOS dependencies
       if: ${{ inputs.os == 'macos' }}
@@ -95,25 +102,11 @@ runs:
         dmg_file=$(find ./dist -name "*.dmg" -print -quit)
         if [ -n "$dmg_file" ]; then
           echo "Found DMG: $dmg_file"
-          # Try to get a signing identity from both keychains
-          SIGNING_IDENTITY=$(security find-identity -v -p codesigning build-app.keychain | grep "Developer ID Application" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+          # Get the first valid signing identity from the keychain
+          SIGNING_IDENTITY=$(security find-identity -v -p codesigning build-app-${{ github.run_id }}.keychain | grep "Developer ID Application" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
           if [ -z "$SIGNING_IDENTITY" ]; then
-            echo "No valid Developer ID Application certificate found in build-app keychain, trying build-installer keychain"
-            SIGNING_IDENTITY=$(security find-identity -v -p codesigning build-installer.keychain | grep "Developer ID Application" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
-          fi
-          if [ -z "$SIGNING_IDENTITY" ]; then
-            echo "Error: No valid Developer ID Application certificate found in any keychain"
+            echo "Error: No valid Developer ID Application certificate found in keychain"
             exit 1
-          fi
-          echo "Using signing identity: $SIGNING_IDENTITY"
-          # Sign the DMG
-          codesign --force --sign "$SIGNING_IDENTITY" --options runtime --timestamp "$dmg_file"
-          # Notarize the DMG
-          xcrun notarytool submit "$dmg_file" --apple-id "$APPLE_ID" --password "$APPLE_ID_PASSWORD" --team-id "$APPLE_TEAM_ID" --wait
-          # Staple the notarization ticket
-          xcrun stapler staple "$dmg_file"
-        else
-          echo "No DMG found to sign"
           fi
           echo "Using signing identity: $SIGNING_IDENTITY"
           # Sign the DMG
