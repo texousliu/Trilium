@@ -11,7 +11,6 @@ import remoteMain from "@electron/remote/main/index.js";
 import { BrowserWindow, shell, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
 import { dialog, ipcMain } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
-import tray from "./tray.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -29,14 +28,14 @@ function trackWindowFocus(win: BrowserWindow) {
         allWindows = allWindows.filter(w => !w.isDestroyed() && w !== win);
         allWindows.push(win);
         if (!optionService.getOptionBool("disableTray")) {
-            tray.updateTrayMenu();
+            ipcMain.emit("reload-tray");
         }
     });
 
     win.on("closed", () => {
         allWindows = allWindows.filter(w => !w.isDestroyed());
         if (!optionService.getOptionBool("disableTray")) {
-            tray.updateTrayMenu();
+            ipcMain.emit("reload-tray");
         }
     });
 }
@@ -157,6 +156,8 @@ async function createMainWindow(app: App) {
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
+        minWidth: 500,
+        minHeight: 400,
         title: "TriliumNext Notes",
         webPreferences: {
             nodeIntegration: true,
@@ -186,7 +187,7 @@ async function createMainWindow(app: App) {
             if (lastFocusedWindow.isMinimized()) {
                 lastFocusedWindow.restore();
             }
-            lastFocusedWindow.show(); 
+            lastFocusedWindow.show();
             lastFocusedWindow.focus();
         }
     });
@@ -211,8 +212,15 @@ function getWindowExtraOpts() {
     }
 
     // Window effects (Mica)
-    if (optionService.getOptionBool("backgroundEffects") && isWindows) {
-        extraOpts.backgroundMaterial = "auto";
+    if (optionService.getOptionBool("backgroundEffects")) {
+        if (isMac) {
+            // Vibrancy not yet supported.
+        } else if (isWindows) {
+            extraOpts.backgroundMaterial = "auto";
+        } else {
+            // Linux or other platforms.
+            extraOpts.transparent = true;
+        }
     }
 
     return extraOpts;
@@ -256,9 +264,12 @@ function getIcon() {
 
 async function createSetupWindow() {
     const { BrowserWindow } = await import("electron"); // should not be statically imported
+    const width = 750;
+    const height = 650;
     setupWindow = new BrowserWindow({
-        width: 800,
-        height: 800,
+        width,
+        height,
+        resizable: false,
         title: "TriliumNext Notes Setup",
         icon: getIcon(),
         webPreferences: {
@@ -326,7 +337,7 @@ function getLastFocusedWindow() {
     return allWindows.length > 0 ? allWindows[allWindows.length - 1] : null;
 }
 
-function getAllWindows(){
+function getAllWindows() {
     return allWindows;
 }
 

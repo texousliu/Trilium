@@ -48,6 +48,18 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     encryptedDataKey: string;
     hoistedNoteId: string;
 
+    // Multi-Factor Authentication
+    mfaEnabled: boolean;
+    mfaMethod: string;
+    totpEncryptionSalt: string;
+    totpEncryptedSecret: string;
+    totpVerificationHash: string;
+    encryptedRecoveryCodes: boolean;
+    userSubjectIdentifierSaved: boolean;
+    recoveryCodeInitialVector: string;
+    recoveryCodeSecurityKey: string;
+    recoveryCodesEncrypted: string;
+
     lastSyncedPull: number;
     lastSyncedPush: number;
     revisionSnapshotTimeInterval: number;
@@ -73,6 +85,8 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     eraseUnusedAttachmentsAfterSeconds: number;
     eraseUnusedAttachmentsAfterTimeScale: number;
     firstDayOfWeek: number;
+    firstWeekOfYear: number;
+    minDaysInFirstWeek: number;
     languages: string;
 
     // Appearance
@@ -103,9 +117,44 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
     backgroundEffects: boolean;
+
     // Share settings
     redirectBareDomain: boolean;
     showLoginInShareTheme: boolean;
+
+    // AI/LLM integration options
+    aiEnabled: boolean;
+    aiProvider: string;
+    aiSystemPrompt: string;
+    aiTemperature: string;
+    openaiApiKey: string;
+    openaiDefaultModel: string;
+    openaiEmbeddingModel: string;
+    openaiBaseUrl: string;
+    anthropicApiKey: string;
+    anthropicDefaultModel: string;
+    voyageEmbeddingModel: string;
+    voyageApiKey: string;
+    anthropicBaseUrl: string;
+    ollamaEnabled: boolean;
+    ollamaBaseUrl: string;
+    ollamaDefaultModel: string;
+    ollamaEmbeddingModel: string;
+    codeOpenAiModel: string;
+    aiProviderPrecedence: string;
+
+    // Embedding-related options
+    embeddingAutoUpdateEnabled: boolean;
+    embeddingUpdateInterval: number;
+    embeddingBatchSize: number;
+    embeddingDefaultDimension: number;
+    embeddingsDefaultProvider: string;
+    embeddingProviderPrecedence: string;
+    enableAutomaticIndexing: boolean;
+    embeddingGenerationLocation: string;
+    embeddingDimensionStrategy: string;
+    embeddingSimilarityThreshold: number;
+    maxNotesPerLlmQuery: number;
 }
 
 export type OptionNames = keyof OptionDefinitions;

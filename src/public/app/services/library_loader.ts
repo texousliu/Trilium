@@ -42,21 +42,9 @@ const CODE_MIRROR: Library = {
     css: ["node_modules/codemirror/lib/codemirror.css", "node_modules/codemirror/addon/lint/lint.css"]
 };
 
-const CALENDAR_WIDGET: Library = {
-    css: ["stylesheets/calendar.css"]
-};
-
 const KATEX: Library = {
     js: ["node_modules/katex/dist/katex.min.js", "node_modules/katex/dist/contrib/mhchem.min.js", "node_modules/katex/dist/contrib/auto-render.min.js"],
     css: ["node_modules/katex/dist/katex.min.css"]
-};
-
-const WHEEL_ZOOM: Library = {
-    js: ["node_modules/vanilla-js-wheel-zoom/dist/wheel-zoom.min.js"]
-};
-
-const MARKJS: Library = {
-    js: ["node_modules/mark.js/dist/jquery.mark.es6.min.js"]
 };
 
 const HIGHLIGHT_JS: Library = {
@@ -83,10 +71,6 @@ const HIGHLIGHT_JS: Library = {
 
         return Array.from(scriptsToLoad);
     }
-};
-
-const LEAFLET: Library = {
-    css: ["node_modules/leaflet/dist/leaflet.css"]
 };
 
 async function requireLibrary(library: Library) {
@@ -174,10 +158,6 @@ export default {
     loadHighlightingTheme,
     CKEDITOR,
     CODE_MIRROR,
-    CALENDAR_WIDGET,
     KATEX,
-    WHEEL_ZOOM,
-    MARKJS,
-    HIGHLIGHT_JS,
-    LEAFLET
+    HIGHLIGHT_JS
 };

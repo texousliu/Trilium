@@ -9,7 +9,7 @@ import TemplateSwitchWidget from "../template_switch.js";
 import type FNote from "../../entities/fnote.js";
 import NoteLanguageWidget from "../note_language.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="basic-properties-widget">
     <style>
         .basic-properties-widget {

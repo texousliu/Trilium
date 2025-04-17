@@ -84,10 +84,7 @@ runs:
         APPLE_ID_PASSWORD: ${{ env.APPLE_ID_PASSWORD }}
         WINDOWS_SIGN_EXECUTABLE: ${{ env.WINDOWS_SIGN_EXECUTABLE }}
         TRILIUM_ARTIFACT_NAME_HINT: TriliumNextNotes-${{ github.ref_name }}-${{ inputs.os }}-${{ inputs.arch }}
-      run: |
-        npm run electron-forge:make -- \
-          --arch=${{ inputs.arch }} \
-          --platform=${{ inputs.forge_platform }}
+      run: npm run electron-forge:make -- --arch=${{ inputs.arch }} --platform=${{ inputs.forge_platform }}
 
     # Add DMG signing step
     - name: Sign DMG
@@ -107,6 +104,16 @@ runs:
           if [ -z "$SIGNING_IDENTITY" ]; then
             echo "Error: No valid Developer ID Application certificate found in any keychain"
             exit 1
+          fi
+          echo "Using signing identity: $SIGNING_IDENTITY"
+          # Sign the DMG
+          codesign --force --sign "$SIGNING_IDENTITY" --options runtime --timestamp "$dmg_file"
+          # Notarize the DMG
+          xcrun notarytool submit "$dmg_file" --apple-id "$APPLE_ID" --password "$APPLE_ID_PASSWORD" --team-id "$APPLE_TEAM_ID" --wait
+          # Staple the notarization ticket
+          xcrun stapler staple "$dmg_file"
+        else
+          echo "No DMG found to sign"
           fi
           echo "Using signing identity: $SIGNING_IDENTITY"
           # Sign the DMG

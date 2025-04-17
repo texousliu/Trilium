@@ -7,14 +7,16 @@ import { t } from "../../services/i18n.js";
 import options from "../../services/options.js";
 import dialogService from "../../services/dialog.js";
 import attributes from "../../services/attributes.js";
-import type { EventData } from "../../components/app_context.js";
-import utils from "../../services/utils.js";
+import type { CommandListenerData, EventData } from "../../components/app_context.js";
+import utils, { hasTouchBar } from "../../services/utils.js";
 import date_notes from "../../services/date_notes.js";
 import appContext from "../../components/app_context.js";
 import type { EventImpl } from "@fullcalendar/core/internal";
 import debounce, { type DebouncedFunction } from "debounce";
+import type { TouchBarItem } from "../../components/touch_bar.js";
+import type { SegmentedControlSegment } from "electron";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="calendar-view">
     <style>
     .calendar-view {
@@ -65,10 +67,11 @@ const TPL = `
     .calendar-container .promoted-attribute {
         font-size: 0.85em;
         opacity: 0.85;
+        overflow: hidden;
     }
     </style>
 
-    <div class="calendar-container">
+    <div class="calendar-container" tabindex="100">
     </div>
 </div>
 `;
@@ -155,27 +158,54 @@ export default class CalendarView extends ViewMode {
             locale: await CalendarView.#getLocale(),
             height: "100%",
             nowIndicator: true,
-            eventContent: (e) => {
-                let html = "";
+            eventDidMount: (e) => {
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
 
-                // Title and icon
+                // Prepend the icon to the title, if any.
                 if (iconClass) {
-                    html += `<span class="${iconClass}"></span> `;
-                }
-                html += utils.escapeHtml(e.event.title);
+                    let titleContainer;
+                    switch (e.view.type) {
+                        case "timeGridWeek":
+                        case "dayGridMonth":
+                            titleContainer = e.el.querySelector(".fc-event-title");
+                            break;
+                        case "multiMonthYear":
+                            break;
+                        case "listMonth":
+                            titleContainer = e.el.querySelector(".fc-list-event-title a");
+                            break;
+                    }
 
-                // Promoted attributes
+                    if (titleContainer) {
+                        const icon = /*html*/`<span class="${iconClass}"></span> `;
+                        titleContainer.insertAdjacentHTML("afterbegin", icon);
+                    }
+                }
+
+                // Append promoted attributes to the end of the event container.
                 if (promotedAttributes) {
+                    let promotedAttributesHtml = "";
                     for (const [name, value] of promotedAttributes) {
-                        html += `\
+                        promotedAttributesHtml = /*html*/`\
                         <div class="promoted-attribute">
                             <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
                         </div>`;
                     }
-                }
 
-                return { html };
+                    let mainContainer;
+                    switch (e.view.type) {
+                        case "timeGridWeek":
+                        case "dayGridMonth":
+                            mainContainer = e.el.querySelector(".fc-event-main");
+                            break;
+                        case "multiMonthYear":
+                            break;
+                        case "listMonth":
+                            mainContainer = e.el.querySelector(".fc-list-event-title");
+                            break;
+                    }
+                    $(mainContainer ?? e.el).append($(promotedAttributesHtml));
+                }
             },
             dateClick: async (e) => {
                 if (!this.isCalendarRoot) {
@@ -238,6 +268,10 @@ export default class CalendarView extends ViewMode {
 
         this.debouncedSaveView();
         this.lastView = currentView;
+
+        if (hasTouchBar) {
+            appContext.triggerCommand("refreshTouchBar");
+        }
     }
 
     async #onCalendarSelection(e: DateSelectArg) {
@@ -565,6 +599,73 @@ export default class CalendarView extends ViewMode {
         const newDate = new Date(date);
         newDate.setDate(newDate.getDate() + offset);
         return newDate;
+    }
+
+    buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
+        if (!this.calendar) {
+            return;
+        }
+
+        const items: TouchBarItem[] = [];
+        const $toolbarItems = this.$calendarContainer.find(".fc-toolbar-chunk .fc-button-group, .fc-toolbar-chunk > button");
+
+        for (const item of $toolbarItems) {
+            // Button groups.
+            if (item.classList.contains("fc-button-group")) {
+                let mode: "single" | "buttons" = "single";
+                let selectedIndex = 0;
+                const segments: SegmentedControlSegment[] = [];
+                const subItems = item.childNodes as NodeListOf<HTMLElement>;
+                let index = 0;
+                for (const subItem of subItems) {
+                    if (subItem.ariaPressed === "true") {
+                        selectedIndex = index;
+                    }
+                    index++;
+
+                    // Text button.
+                    if (subItem.innerText) {
+                        segments.push({ label: subItem.innerText });
+                        continue;
+                    }
+
+                    // Icon button.
+                    const iconEl = subItem.querySelector("span.fc-icon");
+                    let icon = null;
+                    if (iconEl?.classList.contains("fc-icon-chevron-left")) {
+                        icon = "NSImageNameTouchBarGoBackTemplate";
+                        mode = "buttons";
+                    } else if (iconEl?.classList.contains("fc-icon-chevron-right")) {
+                        icon = "NSImageNameTouchBarGoForwardTemplate";
+                        mode = "buttons";
+                    }
+
+                    if (icon) {
+                        segments.push({
+                            icon: buildIcon(icon)
+                        });
+                    }
+                }
+
+                items.push(new TouchBar.TouchBarSegmentedControl({
+                    mode,
+                    segments,
+                    selectedIndex,
+                    change: (selectedIndex, isSelected) => subItems[selectedIndex].click()
+                }));
+                continue;
+            }
+
+            // Standalone item.
+            if (item.innerText) {
+                items.push(new TouchBar.TouchBarButton({
+                    label: item.innerText,
+                    click: () => item.click()
+                }));
+            }
+        }
+
+        return items;
     }
 
 }

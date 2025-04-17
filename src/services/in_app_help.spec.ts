@@ -7,7 +7,7 @@ describe("In-app help", () => {
         const meta: NoteMeta = {
             isClone: false,
             noteId: "yoAe4jV2yzbd",
-            notePath: ["OkOZllzB3fqN", "yoAe4jV2yzbd"],
+            notePath: [ "OkOZllzB3fqN", "yoAe4jV2yzbd" ],
             title: "Features",
             notePosition: 40,
             prefix: null,
@@ -38,7 +38,7 @@ describe("In-app help", () => {
         const meta: NoteMeta = {
             isClone: false,
             noteId: "yoAe4jV2yzbd",
-            notePath: ["OkOZllzB3fqN", "yoAe4jV2yzbd"],
+            notePath: [ "OkOZllzB3fqN", "yoAe4jV2yzbd" ],
             title: "Features",
             notePosition: 40,
             prefix: null,

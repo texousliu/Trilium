@@ -32,16 +32,20 @@ import DatabaseAnonymizationOptions from "./options/advanced/database_anonymizat
 import BackendLogWidget from "./content/backend_log.js";
 import AttachmentErasureTimeoutOptions from "./options/other/attachment_erasure_timeout.js";
 import RibbonOptions from "./options/appearance/ribbon.js";
+import MultiFactorAuthenticationOptions from './options/multi_factor_authentication.js';
 import LocalizationOptions from "./options/i18n/i18n.js";
 import CodeBlockOptions from "./options/appearance/code_block.js";
 import EditorOptions from "./options/text_notes/editor.js";
 import ShareSettingsOptions from "./options/other/share_settings.js";
+import AiSettingsOptions from "./options/ai_settings.js";
 import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
 import { t } from "i18next";
 import LanguageOptions from "./options/i18n/language.js";
+import type { EventData, EventNames } from "../../components/app_context.js";
+import type BasicWidget from "../basic_widget.js";
 
-const TPL = `<div class="note-detail-content-widget note-detail-printable">
+const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
         .type-contentWidget .note-detail {
             height: 100%;
@@ -54,6 +58,10 @@ const TPL = `<div class="note-detail-content-widget note-detail-printable">
         .note-detail-content-widget-content {
             padding: 15px;
             height: 100%;
+        }
+
+        .note-detail.full-height .note-detail-content-widget-content {
+            padding: 0;
         }
     </style>
 
@@ -94,6 +102,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
         PasswordOptions,
         ProtectedSessionTimeoutOptions
     ],
+    _optionsMFA: [MultiFactorAuthenticationOptions],
     _optionsEtapi: [
         EtapiOptions
     ],
@@ -103,6 +112,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     _optionsSync: [
         SyncOptions
     ],
+    _optionsAi: [AiSettingsOptions],
     _optionsOther: [
         SearchEngineOptions,
         TrayOptions,
@@ -129,8 +139,15 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     ]
 };
 
+/**
+ * Type widget that displays one or more widgets based on the type of note, generally used for options and other interactive notes such as the backend log.
+ *
+ * One important aspect is that, like its parent {@link TypeWidget}, the content widgets don't receive all events by default and they must be manually added
+ * to the propagation list in {@link TypeWidget.handleEventInChildren}.
+ */
 export default class ContentWidgetTypeWidget extends TypeWidget {
     private $content!: JQuery<HTMLElement>;
+    private widget?: BasicWidget;
 
     static getType() {
         return "contentWidget";
@@ -160,10 +177,12 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
                 this.child(widget);
 
                 this.$content.append(widget.render());
+                this.widget = widget;
                 await widget.refresh();
             }
         } else {
             this.$content.append(t("content_widget.unknown_widget", { id: note.noteId }));
         }
     }
+
 }

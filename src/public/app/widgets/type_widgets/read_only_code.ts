@@ -2,7 +2,7 @@ import type { EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import AbstractCodeTypeWidget from "./abstract_code_type_widget.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-readonly-code note-detail-printable">
     <style>
     .note-detail-readonly-code {
@@ -32,9 +32,9 @@ export default class ReadOnlyCodeTypeWidget extends AbstractCodeTypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note: FNote | null | undefined) {
+    async doRefresh(note: FNote) {
         const blob = await this.note?.getBlob();
-        if (!blob || !note) return false;
+        if (!blob) return;
 
         const isFormattable = note.type === "text" && this.noteContext?.viewScope?.viewMode === "source";
         const content = isFormattable ? this.format(blob.content) : blob.content;
@@ -43,7 +43,7 @@ export default class ReadOnlyCodeTypeWidget extends AbstractCodeTypeWidget {
         this.show();
     }
 
-    getExtraOpts() {
+    getExtraOpts(): Partial<CodeMirrorOpts> {
         return {
             readOnly: true
         };
@@ -100,7 +100,7 @@ export default class ReadOnlyCodeTypeWidget extends AbstractCodeTypeWidget {
                 return ret;
             });
 
-        for (i = pre.length; i--; ) {
+        for (i = pre.length; i--;) {
             html = html.replace("<--TEMPPRE" + i + "/-->", pre[i].tag.replace("<pre>", "<pre>\n").replace("</pre>", pre[i].indent + "</pre>"));
         }
 

@@ -5,7 +5,7 @@ import AttributeEditorWidget from "../attribute_widgets/attribute_editor.js";
 import type { CommandListenerData } from "../../components/app_context.js";
 import type FAttribute from "../../entities/fattribute.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="attribute-list">
     <style>
         .attribute-list {

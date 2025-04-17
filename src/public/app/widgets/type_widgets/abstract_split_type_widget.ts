@@ -9,7 +9,7 @@ import type SwitchSplitOrientationButton from "../floating_buttons/switch_layout
 import type { EventData } from "../../components/app_context.js";
 import type OnClickButtonWidget from "../buttons/onclick_button.js";
 
-const TPL = `\
+const TPL = /*html*/`\
 <div class="note-detail-split note-detail-printable">
     <div class="note-detail-split-editor-col">
         <div class="note-detail-split-editor"></div>
@@ -168,10 +168,10 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         this.#destroyResizer();
     }
 
-    async doRefresh(note: FNote | null | undefined) {
+    async doRefresh(note: FNote) {
         this.#adjustLayoutOrientation();
 
-        if (note && !this.isReadOnly) {
+        if (!this.isReadOnly) {
             await this.editorTypeWidget.initialized;
             this.editorTypeWidget.noteContext = this.noteContext;
             this.editorTypeWidget.spacedUpdate = this.spacedUpdate;

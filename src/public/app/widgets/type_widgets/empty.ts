@@ -5,7 +5,7 @@ import searchService from "../../services/search.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-empty note-detail-printable">
     <style>
         .workspace-notes {
@@ -99,7 +99,7 @@ export default class EmptyTypeWidget extends TypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note: FNote) {
+    async doRefresh() {
         const workspaceNotes = await searchService.searchForNotes("#workspace #!template");
 
         this.$workspaceNotes.empty();

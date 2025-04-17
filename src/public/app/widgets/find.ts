@@ -22,7 +22,7 @@ export interface FindResult {
 // tabIndex=-1 on the checkbox labels is necessary, so when clicking on the label,
 // the focusout handler is called with relatedTarget equal to the label instead
 // of undefined. It's -1 instead of > 0, so they don't tabstop
-const TPL = `
+const TPL = /*html*/`
 <div class='find-replace-widget' style="contain: none; border-top: 1px solid var(--main-border-color);">
     <style>
         .find-widget-box, .replace-widget-box {

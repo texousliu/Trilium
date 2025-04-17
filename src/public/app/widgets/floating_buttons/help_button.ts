@@ -6,7 +6,7 @@ import type { ViewScope } from "../../services/link.js";
 import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
-const TPL = `
+const TPL = /*html*/`
 <button class="open-contextual-help-button" title="${t("help-button.title")}">
     <span class="bx bx-help-circle"></span>
 </button>
@@ -28,7 +28,8 @@ export const byNoteType: Record<Exclude<NoteType, "book">, string | null> = {
     render: null,
     search: null,
     text: null,
-    webView: null
+    webView: null,
+    aiChat: null
 };
 
 export const byBookType: Record<ViewTypeOptions, string | null> = {
@@ -54,6 +55,8 @@ export default class ContextualHelpButton extends NoteContextAwareWidget {
     static #getUrlToOpen(note: FNote | null | undefined) {
         if (note && note.type !== "book" && byNoteType[note.type]) {
             return byNoteType[note.type];
+        } else if (note?.hasLabel("calendarRoot")) {
+            return "l0tKav7yLHGF";
         } else if (note && note.type === "book") {
             return byBookType[note.getAttributeValue("label", "viewType") as ViewTypeOptions ?? ""]
         }

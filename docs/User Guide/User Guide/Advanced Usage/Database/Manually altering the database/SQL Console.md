@@ -1,22 +1,18 @@
 # SQL Console
 The SQL Console is Trilium's built-in database editor.
 
-It can be accessed by going to the [global menu](../../../Basic%20Concepts/UI%20Elements) → Advanced → Open SQL Console.
+It can be accessed by going to the [global menu](../../../Basic%20Concepts%20and%20Features/UI%20Elements) → Advanced → Open SQL Console.
 
 ![](SQL%20Console_image.png)
 
 ### Interaction
 
 *   Hovering the mouse over one of the tables listed at the top of the document will show the columns and their data type.
-    
 *   Only one SQL statement can be run at once.
-    
 *   To run the statement, press the ![](3_SQL%20Console_image.png)icon.
-    
 *   For queries that return a result, the data will displayed in a table.
     
     ![](1_SQL%20Console_image.png)
-    
 
 ### Saved SQL console
 

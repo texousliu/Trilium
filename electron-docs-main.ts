@@ -3,88 +3,101 @@ import fsExtra from "fs-extra";
 import path from "path";
 import type NoteMeta from "./src/services/meta/note_meta.js";
 import type { NoteMetaFile } from "./src/services/meta/note_meta.js";
-import cls from "./src/services/cls.js";
 import { initializeTranslations } from "./src/services/i18n.js";
 import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
 import debounce from "./src/public/app/services/debounce.js";
+import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
+import cls from "./src/services/cls.js";
+import type { AdvancedExportOptions } from "./src/services/export/zip.js";
+import TaskContext from "./src/services/task_context.js";
+import { deferred } from "./src/services/utils.js";
+import { parseNoteMetaFile } from "./src/services/in_app_help.js";
 
-const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
-const markdownPath = path.join("docs", "User Guide");
-const htmlPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
-
-async function startElectron() {
-    await import("./electron-main.js");
+interface NoteMapping {
+    rootNoteId: string;
+    path: string;
+    format: "markdown" | "html";
+    ignoredFiles?: string[];
+    exportOnly?: boolean;
 }
+
+const NOTE_MAPPINGS: NoteMapping[] = [
+    {
+        rootNoteId: "pOsGYCXsbNQG",
+        path: path.join("docs", "User Guide"),
+        format: "markdown"
+    },
+    {
+        rootNoteId: "pOsGYCXsbNQG",
+        path: path.join("src", "public", "app", "doc_notes", "en", "User Guide"),
+        format: "html",
+        ignoredFiles: ["index.html", "navigation.html", "style.css", "User Guide.html"],
+        exportOnly: true
+    },
+    {
+        rootNoteId: "jdjRLhLV3TtI",
+        path: path.join("docs", "Developer Guide"),
+        format: "markdown"
+    },
+    {
+        rootNoteId: "hD3V4hiu2VW4",
+        path: path.join("docs", "Release Notes"),
+        format: "markdown"
+    }
+];
 
 async function main() {
     await initializeTranslations();
-    const zipBuffer = await createImportZip();
-    await initializeDatabase();
-    await importData(zipBuffer);
-    await startElectron();
-    await registerHandlers();
-}
+    await initializeDatabase(true);
 
-async function initializeDatabase() {
-    const sqlInit = (await import("./src/services/sql_init.js")).default;
-
-    cls.init(() => {
-        if (!sqlInit.isDbInitialized()) {
-            sqlInit.createInitialDatabase();
-        }
-    });
-}
-
-function importData(input: Buffer) {
-    return new Promise<void>((resolve, reject) => {
-        cls.init(async () => {
-            const beccaLoader = ((await import("./src/becca/becca_loader.js")).default);
-            const notes = ((await import("./src/services/notes.js")).default);
-            beccaLoader.load();
-            const becca = ((await import("./src/becca/becca.js")).default);
-            const utils = ((await import("./src/services/utils.js")).default);
-            const eraseService = ((await import("./src/services/erase.js")).default);
-            const deleteId = utils.randomString(10);
-
-            const existingNote = becca.getNote(NOTE_ID_USER_GUIDE);
-            if (existingNote) {
-                existingNote.deleteNote(deleteId);
+    const initializedPromise = deferred<void>();
+    cls.init(async () => {
+        for (const mapping of NOTE_MAPPINGS) {
+            if (!mapping.exportOnly) {
+                await importData(mapping.path);
             }
-            eraseService.eraseNotesWithDeleteId(deleteId);
-
-            const { note } = notes.createNewNoteWithTarget("into", "none_root", {
-                parentNoteId: "root",
-                noteId: NOTE_ID_USER_GUIDE,
-                title: "User Guide",
-                content: "The sub-children of this note are automatically synced.",
-                type: "text"
-            });
-
-            const TaskContext = (await import("./src/services/task_context.js")).default;
-            const { importZip } = ((await import("./src/services/import/zip.js")).default);
-            const context = new TaskContext("no-report");
-            await importZip(context, input, note, { preserveIds: true });
-
-            const { runOnDemandChecks } = (await import("./src/services/consistency_checks.js")).default;
-            await runOnDemandChecks(true);
-
-            becca.reset();
-            beccaLoader.load();
-
-            resolve();
-        });
+        }
+        setOptions();
+        initializedPromise.resolve();
     });
 
+    await initializedPromise;
+    await startElectron();
+
+    // Wait for the import to be finished and the application to be loaded before we listen to changes.
+    setTimeout(() => registerHandlers(), 10_000);
 }
 
-async function createImportZip() {
+async function setOptions() {
+    const optionsService = (await import("./src/services/options.js")).default;
+    optionsService.setOption("eraseUnusedAttachmentsAfterSeconds", 10);
+    optionsService.setOption("eraseUnusedAttachmentsAfterTimeScale", 60);
+    optionsService.setOption("compressImages", "false");
+}
+
+async function importData(path: string) {
+    const buffer = await createImportZip(path);
+    const importService = (await import("./src/services/import/zip.js")).default;
+    const context = new TaskContext("no-progress-reporting", "import", false);
+    const becca = (await import("./src/becca/becca.js")).default;
+
+    const rootNote = becca.getRoot();
+    if (!rootNote) {
+        throw new Error("Missing root note for import.");
+    }
+    await importService.importZip(context, buffer, rootNote, {
+        preserveIds: true
+    });
+}
+
+async function createImportZip(path: string) {
     const inputFile = "input.zip";
     const archive = archiver("zip", {
         zlib: { level: 0 }
     });
 
-    archive.directory(markdownPath, "/");
+    archive.directory(path, "/");
 
     const outputStream = fsExtra.createWriteStream(inputFile);
     archive.pipe(outputStream);
@@ -105,10 +118,8 @@ function waitForEnd(archive: Archiver, stream: WriteStream) {
 
 }
 
-async function exportData(format: "html" | "markdown", outputPath: string) {
+async function exportData(noteId: string, format: "html" | "markdown", outputPath: string, ignoredFiles?: Set<string>) {
     const zipFilePath = "output.zip";
-
-    const deferred = (await import("./src/services/utils.js")).deferred;
 
     try {
         await fsExtra.remove(outputPath);
@@ -116,40 +127,71 @@ async function exportData(format: "html" | "markdown", outputPath: string) {
 
         // First export as zip.
         const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
-        await exportToZipFile(NOTE_ID_USER_GUIDE, format, zipFilePath);
 
-        const promise = deferred<void>()
-        setTimeout(async () => {
-            // Then extract the zip.
-            const { readZipFile, readContent } = (await import("./src/services/import/zip.js"));
-            await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
-                // We ignore directories since they can appear out of order anyway.
-                if (!entry.fileName.endsWith("/")) {
-                    const destPath = path.join(outputPath, entry.fileName);
-                    const fileContent = await readContent(zip, entry);
+        const exportOpts: AdvancedExportOptions = {};
+        if (format === "html") {
+            exportOpts.skipHtmlTemplate = true;
+            exportOpts.customRewriteLinks = (originalRewriteLinks, getNoteTargetUrl) => {
+                return (content: string, noteMeta: NoteMeta) => {
+                    content = content.replace(/src="[^"]*api\/images\/([a-zA-Z0-9_]+)\/[^"]*"/g, (match, targetNoteId) => {
+                        const url = getNoteTargetUrl(targetNoteId, noteMeta);
 
-                    await fsExtra.mkdirs(path.dirname(destPath));
-                    await fs.writeFile(destPath, fileContent);
-                }
+                        return url ? `src="${url}"` : match;
+                    });
 
-                zip.readEntry();
-            });
-            promise.resolve();
-        }, 1000);
-        await promise;
+                    content = content.replace(/src="[^"]*api\/attachments\/([a-zA-Z0-9_]+)\/image\/[^"]*"/g, (match, targetAttachmentId) => {
+                        const url = findAttachment(targetAttachmentId);
+
+                        return url ? `src="${url}"` : match;
+                    });
+
+                    content = content.replace(/href="[^"]*#root[^"]*attachmentId=([a-zA-Z0-9_]+)\/?"/g, (match, targetAttachmentId) => {
+                        const url = findAttachment(targetAttachmentId);
+
+                        return url ? `href="${url}"` : match;
+                    });
+
+                    content = content.replace(/href="[^"]*#root[a-zA-Z0-9_\/]*\/([a-zA-Z0-9_]+)[^"]*"/g, (match, targetNoteId) => {
+                        const components = match.split("/");
+                        components[components.length - 1] = `_help_${components[components.length - 1]}`;
+                        return components.join("/");
+                    });
+
+                    return content;
+
+                    function findAttachment(targetAttachmentId: string) {
+                        let url;
+
+                        const attachmentMeta = (noteMeta.attachments || []).find((attMeta) => attMeta.attachmentId === targetAttachmentId);
+                        if (attachmentMeta) {
+                            // easy job here, because attachment will be in the same directory as the note's data file.
+                            url = attachmentMeta.dataFileName;
+                        } else {
+                            console.info(`Could not find attachment meta object for attachmentId '${targetAttachmentId}'`);
+                        }
+                        return url;
+                    }
+                };
+            };
+        }
+
+        await exportToZipFile(noteId, format, zipFilePath, exportOpts);
+        await extractZip(zipFilePath, outputPath, ignoredFiles);
     } finally {
         if (await fsExtra.exists(zipFilePath)) {
             await fsExtra.rm(zipFilePath);
         }
     }
 
-    await cleanUpMeta();
+    const minifyMeta = (format === "html");
+    await cleanUpMeta(outputPath, minifyMeta);
 }
 
-async function cleanUpMeta() {
-    const metaPath = path.join(markdownPath, "!!!meta.json");
+async function cleanUpMeta(outputPath: string, minify: boolean) {
+    const metaPath = path.join(outputPath, "!!!meta.json");
     const meta = JSON.parse(await fs.readFile(metaPath, "utf-8")) as NoteMetaFile;
     for (const file of meta.files) {
+        file.notePosition = 1;
         traverse(file);
     }
 
@@ -161,24 +203,32 @@ async function cleanUpMeta() {
         el.isExpanded = false;
     }
 
-    await fs.writeFile(metaPath, JSON.stringify(meta, null, 4));
+    if (minify) {
+        const subtree = parseNoteMetaFile(meta);
+        await fs.writeFile(metaPath, JSON.stringify(subtree));
+    } else {
+        await fs.writeFile(metaPath, JSON.stringify(meta, null, 4));
+    }
+
 }
 
 async function registerHandlers() {
     const events = (await import("./src/services/events.js")).default;
     const eraseService = (await import("./src/services/erase.js")).default;
     const debouncer = debounce(async () => {
-        console.log("Exporting data");
         eraseService.eraseUnusedAttachmentsNow();
-        await exportData("markdown", markdownPath);
-        await exportData("html", htmlPath);
-    }, 10_000);;
+
+        for (const mapping of NOTE_MAPPINGS) {
+            const ignoredFiles = mapping.ignoredFiles ? new Set(mapping.ignoredFiles) : undefined;
+            await exportData(mapping.rootNoteId, mapping.format, mapping.path, ignoredFiles);
+        }
+    }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
             return;
         }
 
-        console.log("Got entity changed ", e);
+        console.log("Got entity changed", e.entityName, e.entity.title);
         debouncer();
     });
 }

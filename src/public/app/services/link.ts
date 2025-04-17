@@ -238,8 +238,12 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
         }
     }
 
-    if (!notePath.match(/^[_a-z0-9]{4,}(\/[_a-z0-9]{4,})*$/i)) {
+    if (searchString) {
         return { searchString }
+    }
+
+    if (!notePath.match(/^[_a-z0-9]{4,}(\/[_a-z0-9]{4,})*$/i)) {
+        return {};
     }
 
     return {
@@ -274,13 +278,22 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
 
     const ctrlKey = utils.isCtrlKey(evt);
+    const shiftKey = evt.shiftKey;
     const isLeftClick = "which" in evt && evt.which === 1;
     const isMiddleClick = "which" in evt && evt.which === 2;
-    const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick;
+    const targetIsBlank = ($link?.attr("target") === "_blank");
+    const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick || targetIsBlank;
+    const activate = (isLeftClick && ctrlKey && shiftKey) || (isMiddleClick && shiftKey);
+    const openInNewWindow = isLeftClick && evt.shiftKey && !ctrlKey;
 
     if (notePath) {
-        if (openInNewTab) {
-            appContext.tabManager.openTabWithNoteWithHoisting(notePath, { viewScope });
+        if (openInNewWindow) {
+            appContext.triggerCommand("openInWindow", { notePath, viewScope });
+        } else if (openInNewTab) {
+            appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
+                activate: activate ? true : targetIsBlank,
+                viewScope
+            });
         } else if (isLeftClick) {
             const ntxId = $(evt.target as any)
                 .closest("[data-ntx-id]")

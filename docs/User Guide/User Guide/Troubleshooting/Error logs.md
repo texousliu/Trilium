@@ -16,7 +16,7 @@ If that doesn't work, then:
 *   in Trilium desktop app, go to top-left menu button -> Advanced -> Open Dev Tools
 *   In Firefox/Chrome right-click anywhere in the page and click Inspect:
 
-![](../Attachments/error-logs-firefox-context.png)
+![](Error%20logs_error-logs-fire.png)
 
 Once you have Dev Tools open, click on "Console" tab:
 
@@ -36,4 +36,4 @@ Often times, bugs manifest themselves in specific notes and having them would gr
 
 In such case, please export the relevant note subtree by right-clicking it on the left tree, choosing Export - HTML as ZIP:
 
-![](../Attachments/error-logs-export-subtree.png)
+![](Error%20logs_error-logs-expo.png)

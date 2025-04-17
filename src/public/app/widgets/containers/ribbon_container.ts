@@ -7,7 +7,7 @@ import type { NoteType } from "../../entities/fnote.js";
 import type { EventData, EventNames } from "../../components/app_context.js";
 import type NoteActionsWidget from "../buttons/note_actions.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="ribbon-container">
     <style>
     .ribbon-container {

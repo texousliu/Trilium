@@ -10,12 +10,19 @@ import Component from "./component.js";
  * must be at the root of the component tree.
  */
 export default class MainTreeExecutors extends Component {
+    /**
+     * On mobile it will be `undefined`.
+     */
     get tree() {
         return appContext.noteTreeWidget;
     }
 
     async cloneNotesToCommand({ selectedOrActiveNoteIds }: EventData<"cloneNotesTo">) {
-        if (!this.tree) {
+        if (!selectedOrActiveNoteIds && this.tree) {
+            selectedOrActiveNoteIds = this.tree.getSelectedOrActiveNodes().map((node) => node.data.noteId);
+        }
+
+        if (!selectedOrActiveNoteIds) {
             return;
         }
 
@@ -23,7 +30,11 @@ export default class MainTreeExecutors extends Component {
     }
 
     async moveNotesToCommand({ selectedOrActiveBranchIds }: EventData<"moveNotesTo">) {
-        if (!this.tree) {
+        if (!selectedOrActiveBranchIds && this.tree) {
+            selectedOrActiveBranchIds = this.tree.getSelectedOrActiveNodes().map((node) => node.data.branchId);
+        }
+
+        if (!selectedOrActiveBranchIds) {
             return;
         }
 

@@ -25,8 +25,10 @@ import type FNote from "../entities/fnote.js";
 import type { NoteType } from "../entities/fnote.js";
 import type { AttributeRow, BranchRow } from "../services/load_results.js";
 import type { SetNoteOpts } from "../components/note_context.js";
+import type { TouchBarItem } from "../components/touch_bar.js";
+import type { TreeCommandNames } from "../menus/tree_context_menu.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="tree-wrapper">
     <style>
     .tree-wrapper {
@@ -417,6 +419,9 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             activate: async (event, data) => {
                 // click event won't propagate so let's close context menu manually
                 contextMenu.hide();
+
+                // hide all dropdowns, fix calendar widget dropdown doesn't close when click on a note
+                $('.dropdown-menu').parent('.dropdown').find('[data-bs-toggle="dropdown"]').dropdown('hide');
 
                 this.clearSelectedNodes();
 
@@ -1683,7 +1688,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         this.triggerCommand("showImportDialog", { noteId: node.data.noteId });
     }
 
-    editNoteTitleCommand({ node }: CommandListenerData<"editNoteTitle">) {
+    editNoteTitleCommand() {
         appContext.triggerCommand("focusOnTitle");
     }
 
@@ -1759,5 +1764,39 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         await ws.waitForMaxKnownEntityChangeId();
 
         appContext.tabManager.getActiveContext()?.setNote(resp.note.noteId);
+    }
+
+    buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
+        const triggerCommand = (command: TreeCommandNames) => {
+            const node = this.getActiveNode();
+            const notePath = treeService.getNotePath(node);
+
+            this.triggerCommand<TreeCommandNames>(command, {
+                node,
+                notePath,
+                noteId: node.data.noteId,
+                selectedOrActiveBranchIds: this.getSelectedOrActiveBranchIds(node),
+                selectedOrActiveNoteIds: this.getSelectedOrActiveNoteIds(node)
+            });
+        }
+
+        const items: TouchBarItem[] = [
+            new TouchBar.TouchBarButton({
+                icon: buildIcon("NSImageNameTouchBarAddTemplate"),
+                click: () => {
+                    const node = this.getActiveNode();
+                    const notePath = treeService.getNotePath(node);
+                    noteCreateService.createNote(notePath, {
+                        isProtected: node.data.isProtected
+                    });
+                }
+            }),
+            new TouchBar.TouchBarButton({
+                icon: buildIcon("NSImageNameTouchBarDeleteTemplate"),
+                click: () => triggerCommand("deleteNotes")
+            })
+        ];
+
+        return items;
     }
 }

@@ -9,18 +9,18 @@ Note that this is not an Android/iOS app, this is just mobile friendly web page 
 
 ### Mobile phone
 
-![](../Attachments/mobile-smartphone.png)
+![](Mobile%20Frontend_mobile-sma.png)
 
 ### Tablet
 
-![](../Attachments/mobile-tablet.png)
+![](Mobile%20Frontend_mobile-tab.png)
 
 ## Limitations
 
 Mobile frontend provides only some of the features of the full desktop frontend:
 
 *   it is possible to browse the whole note tree, read and edit all types of notes, but you can create only text notes
-*   reading and editing [protected notes](../Basic%20Concepts/Note/Protected%20Notes.md) is possible, but creating them is not supported
+*   reading and editing [protected notes](../Basic%20Concepts%20and%20Features/Notes/Protected%20Notes.md) is possible, but creating them is not supported
 *   editing options is not supported
 *   cloning notes is not supported
 *   uploading file attachments is not supported
@@ -31,4 +31,4 @@ Trilium decides automatically whether to use mobile or desktop frontend. If this
 
 ## Scripting
 
-You can alter the behavior with [scripts](../Note%20Types/Code/Scripts.md) just like for normal frontend. For script notes to be executed, they need to have labeled `#run=mobileStartup`.
+You can alter the behavior with [scripts](../Scripting.md) just like for normal frontend. For script notes to be executed, they need to have labeled `#run=mobileStartup`.

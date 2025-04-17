@@ -5,7 +5,7 @@ import utils from "../../services/utils.js";
 import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="attachment-list note-detail-printable">
     <style>
         .attachment-list {
@@ -45,9 +45,6 @@ export default class AttachmentListTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: Parameters<TypeWidget["doRefresh"]>[0]) {
-        // TriliumNextTODO: do we need to handle an undefined/null note?
-        if (!note) return false;
-
         const $helpButton = $(`
             <button class="attachment-help-button icon-action bx bx-help-circle"
                      type="button" data-help-page="attachments.html"

@@ -10,7 +10,7 @@ import "@mind-elixir/node-menu/dist/style.css";
 
 const NEW_TOPIC_NAME = "";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-mind-map note-detail-printable">
     <div class="mind-map-container">
     </div>

@@ -132,13 +132,6 @@ declare global {
     var renderMathInElement: (element: HTMLElement, options: {
         trust: boolean;
     }) => void;
-    var WZoom = {
-        create(selector: string, opts: {
-            maxScale: number;
-            speed: number;
-            zoomOnClick: boolean
-        })
-    };
     interface CKCodeBlockLanguage {
         language: string;
         label: string;
@@ -303,6 +296,7 @@ declare global {
     }
 
     interface CKNode {
+        _children: CKNode[];
         name: string;
         childCount: number;
         isEmpty: boolean;
@@ -345,6 +339,11 @@ declare global {
             mention: MentionConfig
         });
         enableReadOnlyMode(reason: string);
+        commands: {
+            get(name: string): {
+                value: unknown;
+            };
+        }
         model: {
             document: {
                 on(event: string, cb: () => void);
@@ -363,8 +362,8 @@ declare global {
                     getChanges(): {
                         type: string;
                         name: string;
-                        position: {
-                            nodeAfter: CKNode;
+                        position?: {
+                            nodeAfter?: CKNode;
                             parent: CKNode;
                             toJSON(): Object;
                         }

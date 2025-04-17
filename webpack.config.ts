@@ -4,6 +4,7 @@ import autoprefixer from "autoprefixer";
 import assetPath from "./src/services/asset_path.js";
 import miniCssExtractPlugin from "mini-css-extract-plugin";
 import type { Configuration } from "webpack";
+import CopyPlugin from "copy-webpack-plugin";
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const config: Configuration = {
@@ -26,6 +27,15 @@ const config: Configuration = {
         new miniCssExtractPlugin({
             // TriliumNextTODO: enable this, once webpack build outputs into the "build" folder, instead of "src/public/app-dist" folder => @pano9000
             //filename: "../stylesheets/[name].css"
+        }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    context: "node_modules/@excalidraw/excalidraw/dist/prod/fonts/",
+                    from: "**/*",
+                    to: "excalidraw/fonts/"
+                }
+            ]
         })
     ],
     module: {
@@ -56,7 +66,10 @@ const config: Configuration = {
                         loader: miniCssExtractPlugin.loader
                     },
                     {
-                        loader: "css-loader"
+                        loader: "css-loader",
+                        options: {
+                            esModule: true
+                        }
                     },
                     {
                         loader: "postcss-loader",
@@ -90,6 +103,10 @@ const config: Configuration = {
                         loader: "sass-loader"
                     }
                 ]
+            },
+            {
+                test: /\.(png)$/i,
+                type: 'asset/resource'
             }
         ]
     },
@@ -99,7 +116,15 @@ const config: Configuration = {
             ".js": [".js", ".ts"],
             ".cjs": [".cjs", ".cts"],
             ".mjs": [".mjs", ".mts"]
+        },
+        alias: {
+            stylesheets: path.resolve(rootDir, "src/public/stylesheets")
         }
+    },
+    stats: {
+        all: false,
+        assets: true,
+        groupAssetsByChunk: true
     },
     devtool: "nosources-source-map",
     target: "electron-renderer"

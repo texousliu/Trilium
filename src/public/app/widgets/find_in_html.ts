@@ -1,7 +1,6 @@
 // ck-find-result and ck-find-result_selected are the styles ck-editor
 // uses for highlighting matches, use the same one on CodeMirror
 // for consistency
-import libraryLoader from "../services/library_loader.js";
 import utils from "../services/utils.js";
 import appContext from "../components/app_context.js";
 import type FindWidget from "./find.js";
@@ -23,7 +22,7 @@ export default class FindInHtml {
     }
 
     async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
-        await libraryLoader.requireLibrary(libraryLoader.MARKJS);
+        await import("script-loader!mark.js/dist/jquery.mark.min.js");
 
         const $content = await this.parent?.noteContext?.getContentElement();
 

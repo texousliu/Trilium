@@ -3,7 +3,7 @@ import type FNote from "../../entities/fnote.js";
 import renderDoc from "../../services/doc_renderer.js";
 import TypeWidget from "./type_widget.js";
 
-const TPL = `<div class="note-detail-doc note-detail-printable">
+const TPL = /*html*/`<div class="note-detail-doc note-detail-printable">
     <style>
         .note-detail-doc-content {
             padding: 15px;
@@ -53,7 +53,7 @@ const TPL = `<div class="note-detail-doc note-detail-printable">
         }
     </style>
 
-    <div class="note-detail-doc-content"></div>
+    <div class="note-detail-doc-content ck-content"></div>
 </div>`;
 
 export default class DocTypeWidget extends TypeWidget {

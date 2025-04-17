@@ -1,23 +1,24 @@
-import { Menu, Tray, BrowserWindow } from "electron";
-import path from "path";
-import windowService from "./window.js";
-import optionService from "./options.js";
-import { fileURLToPath } from "url";
-import type { KeyboardActionNames } from "./keyboard_actions_interface.js";
-import date_notes from "./date_notes.js";
-import type BNote from "../becca/entities/bnote.js";
-import becca from "../becca/becca.js";
-import becca_service from "../becca/becca_service.js";
-import type BRecentNote from "../becca/entities/brecent_note.js";
+import { BrowserWindow,Menu, Tray } from "electron";
 import { ipcMain, nativeTheme } from "electron/main";
 import { default as i18next, t } from "i18next";
-import { isDev, isMac } from "./utils.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import becca from "../becca/becca.js";
+import becca_service from "../becca/becca_service.js";
+import type BNote from "../becca/entities/bnote.js";
+import type BRecentNote from "../becca/entities/brecent_note.js";
 import cls from "./cls.js";
+import date_notes from "./date_notes.js";
+import type { KeyboardActionNames } from "./keyboard_actions_interface.js";
+import optionService from "./options.js";
+import { isDev, isMac } from "./utils.js";
+import windowService from "./window.js";
 
 let tray: Tray;
 // `mainWindow.isVisible` doesn't work with `mainWindow.show` and `mainWindow.hide` - it returns `false` when the window
 // is minimized
-let windowVisibilityMap: Record<number, boolean> = {};; // Dictionary for storing window ID and its visibility status
+const windowVisibilityMap: Record<number, boolean> = {};; // Dictionary for storing window ID and its visibility status
 
 function getTrayIconPath() {
     let name: string;
@@ -75,7 +76,7 @@ function updateWindowVisibilityMap(allWindows: BrowserWindow[]) {
     const currentWindowIds: number[] = allWindows.map(window => window.id);
 
     // Deleting closed windows from windowVisibilityMap
-    for (const [id, visibility] of Object.entries(windowVisibilityMap)) {
+    for (const [id, _] of Object.entries(windowVisibilityMap)) {
         const windowId = Number(id);
         if (!currentWindowIds.includes(windowId)) {
             delete windowVisibilityMap[windowId];
@@ -95,6 +96,9 @@ function updateWindowVisibilityMap(allWindows: BrowserWindow[]) {
 
 
 function updateTrayMenu() {
+    if (!tray) {
+        return;
+    }
     const lastFocusedWindow = windowService.getLastFocusedWindow();
     const allWindows = windowService.getAllWindows();
     updateWindowVisibilityMap(allWindows);
@@ -130,7 +134,7 @@ function updateTrayMenu() {
         const parentNote = becca.getNoteOrThrow("_lbBookmarks");
         const menuItems: Electron.MenuItemConstructorOptions[] = [];
 
-        for (const bookmarkNote of parentNote?.children) {
+        for (const bookmarkNote of parentNote?.children ?? []) {
             if (bookmarkNote.isLabelTruthy("bookmarkFolder")) {
                 menuItems.push({
                     label: bookmarkNote.title,
@@ -191,7 +195,7 @@ function updateTrayMenu() {
 
     for (const idStr in windowVisibilityMap) {
         const id = parseInt(idStr, 10); // Get the ID of the window and make sure it is a number
-        const isVisible = windowVisibilityMap[id]; 
+        const isVisible = windowVisibilityMap[id];
         const win = allWindows.find(w => w.id === id);
         if (!win) {
             continue;
@@ -211,10 +215,10 @@ function updateTrayMenu() {
             }
         });
     }
-    
+
 
     const contextMenu = Menu.buildFromTemplate([
-        ...windowVisibilityMenuItems, 
+        ...windowVisibilityMenuItems,
         { type: "separator" },
         {
             label: t("tray.open_new_window"),
@@ -232,7 +236,7 @@ function updateTrayMenu() {
             label: t("tray.today"),
             type: "normal",
             icon: getIconPath("today"),
-            click: cls.wrap(() => openInSameTab(date_notes.getTodayNote()))
+            click: cls.wrap(async () => openInSameTab(await date_notes.getTodayNote()))
         },
         {
             label: t("tray.bookmarks"),
@@ -265,7 +269,7 @@ function updateTrayMenu() {
 
 function changeVisibility() {
     const lastFocusedWindow = windowService.getLastFocusedWindow();
-    
+
     if (!lastFocusedWindow) {
         return;
     }
@@ -299,6 +303,5 @@ function createTray() {
 }
 
 export default {
-    createTray,
-    updateTrayMenu
+    createTray
 };

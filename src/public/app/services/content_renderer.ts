@@ -15,7 +15,7 @@ import { loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
 import renderDoc from "./doc_renderer.js";
 import { t } from "i18next";
-import type { Mermaid } from "mermaid";
+import WheelZoom from 'vanilla-js-wheel-zoom';
 
 let idCounter = 1;
 
@@ -150,13 +150,19 @@ function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLE
     $renderedContent.append($img);
 
     if (options.imageHasZoom) {
-        libraryLoader.requireLibrary(libraryLoader.WHEEL_ZOOM).then(() => {
-            WZoom.create(`#${$img.attr("id")}`, {
-                maxScale: 50,
-                speed: 1.3,
-                zoomOnClick: false
-            });
-        });
+        const initZoom = async () => {
+            const element = document.querySelector(`#${$img.attr("id")}`);
+            if (element) {
+                WheelZoom.create(`#${$img.attr("id")}`, {
+                    maxScale: 50,
+                    speed: 1.3,
+                    zoomOnClick: false
+                });
+            } else {
+                requestAnimationFrame(initZoom);
+            }
+        };
+        initZoom();
     }
 
     imageContextMenuService.setupContextMenu($img);

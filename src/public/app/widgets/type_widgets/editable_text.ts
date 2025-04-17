@@ -2,18 +2,19 @@ import { t } from "../../services/i18n.js";
 import libraryLoader from "../../services/library_loader.js";
 import noteAutocompleteService from "../../services/note_autocomplete.js";
 import mimeTypesService from "../../services/mime_types.js";
-import utils from "../../services/utils.js";
+import utils, { hasTouchBar } from "../../services/utils.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
 import froca from "../../services/froca.js";
 import noteCreateService from "../../services/note_create.js";
 import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
 import link from "../../services/link.js";
-import appContext, { type EventData } from "../../components/app_context.js";
+import appContext, { type CommandListenerData, type EventData } from "../../components/app_context.js";
 import dialogService from "../../services/dialog.js";
 import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
+import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
@@ -37,7 +38,7 @@ const mentionSetup: MentionConfig = {
     ]
 };
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail-editable-text note-detail-printable">
     <style>
     .note-detail-editable-text {
@@ -252,6 +253,23 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
                 if (utils.isMobile()) {
                     $classicToolbarWidget.addClass("visible");
+
+                    // Reposition all dropdowns to point upwards instead of downwards.
+                    // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
+                    const toolbarView = editor.ui.view.toolbar;
+                    for (const item of toolbarView.items) {
+                        if (!("panelView" in item)) {
+                            continue;
+                        }
+
+                        item.on("change:isOpen", () => {
+                            if ( !item.isOpen ) {
+                                return;
+                            }
+
+                            item.panelView.position = item.panelView.position.replace("s", "n");
+                        });
+                    }
                 }
             }
 
@@ -261,6 +279,13 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 //@ts-expect-error TODO: Check if this still works.
                 await import(/* webpackIgnore: true */ "../../../libraries/ckeditor/inspector.js");
                 CKEditorInspector.attach(editor);
+            }
+
+            // Touch bar integration
+            if (hasTouchBar) {
+                for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
+                    editor.commands.get(event).on("change", () => this.triggerCommand("refreshTouchBar"));
+                }
             }
 
             return editor;
@@ -525,6 +550,62 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async onLanguageChanged() {
         const data = this.watchdog.editor.getData();
         await this.reinitialize(data);
+    }
+
+    buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {
+        const { TouchBar, buildIcon } = data;
+        const { TouchBarSegmentedControl, TouchBarGroup, TouchBarButton } = TouchBar;
+        const { editor } = this.watchdog;
+
+        const commandButton = (icon: string, command: string) => new TouchBarButton({
+            icon: buildIcon(icon),
+            click: () => editor.execute(command),
+            backgroundColor: buildSelectedBackgroundColor(editor.commands.get(command).value as boolean)
+        });
+
+        let headingSelectedIndex = undefined;
+        const headingCommand = editor.commands.get("heading");
+        const paragraphCommand = editor.commands.get("paragraph");
+        if (paragraphCommand.value) {
+            headingSelectedIndex = 0;
+        } else if (headingCommand.value === "heading2") {
+            headingSelectedIndex = 1;
+        } else if (headingCommand.value === "heading3") {
+            headingSelectedIndex = 2;
+        }
+
+        return [
+            new TouchBarSegmentedControl({
+                segments: [
+                    { label: "P" },
+                    { label: "H2" },
+                    { label: "H3" }
+                ],
+                change(selectedIndex, isSelected) {
+                    switch (selectedIndex) {
+                        case 0:
+                            editor.execute("paragraph")
+                            break;
+                        case 1:
+                            editor.execute("heading", { value: "heading2" });
+                            break;
+                        case 2:
+                            editor.execute("heading", { value: "heading3" });
+                            break;
+                    }
+                },
+                selectedIndex: headingSelectedIndex
+            }),
+            new TouchBarGroup({
+                items: new TouchBar({
+                    items: [
+                        commandButton("NSTouchBarTextBoldTemplate", "bold"),
+                        commandButton("NSTouchBarTextItalicTemplate", "italic"),
+                        commandButton("NSTouchBarTextUnderlineTemplate", "underline")
+                    ]
+                })
+            })
+        ];
     }
 
 }

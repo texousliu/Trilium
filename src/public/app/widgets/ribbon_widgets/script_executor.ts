@@ -3,7 +3,7 @@ import keyboardActionService from "../../services/keyboard_actions.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="script-runner-widget">
     <style>
         .script-runner-widget {

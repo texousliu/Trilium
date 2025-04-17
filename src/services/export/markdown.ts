@@ -1,6 +1,6 @@
 "use strict";
 
-import TurndownService from "turndown";
+import TurndownService, { type Rule } from "turndown";
 import { gfm } from "../../../packages/turndown-plugin-gfm/src/gfm.js";
 
 let instance: TurndownService | null = null;
@@ -37,12 +37,24 @@ function toMarkdown(content: string) {
     if (instance === null) {
         instance = new TurndownService({
             headingStyle: "atx",
-            codeBlockStyle: "fenced"
+            codeBlockStyle: "fenced",
+            blankReplacement(content, node, options) {
+                if (node.nodeName === "SECTION" && (node as HTMLElement).classList.contains("include-note")) {
+                    return (node as HTMLElement).outerHTML;
+                }
+
+                // Original implementation as per https://github.com/mixmark-io/turndown/blob/master/src/turndown.js.
+                return ("isBlock" in node && node.isBlock) ? '\n\n' : ''
+            }
         });
         // Filter is heavily based on: https://github.com/mixmark-io/turndown/issues/274#issuecomment-458730974
         instance.addRule("fencedCodeBlock", fencedCodeBlockFilter);
         instance.addRule("img", buildImageFilter());
         instance.addRule("admonition", buildAdmonitionFilter());
+        instance.addRule("inlineLink", buildInlineLinkFilter());
+        instance.addRule("figure", buildFigureFilter());
+        instance.addRule("math", buildMathFilter());
+        instance.addRule("li", buildListItemFilter());
         instance.use(gfm);
         instance.keep([ "kbd" ]);
     }
@@ -93,13 +105,17 @@ function buildImageFilter() {
         return title.replace(/"/g, '\\"')
     }
 
-    function cleanAttribute (attribute: string) {
-        return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
-    }
-
     const imageFilter: TurndownService.Rule = {
         filter: "img",
-        replacement(content, node) {
+        replacement(content, _node) {
+            const node = _node as HTMLElement;
+
+            // Preserve image verbatim if it has a width or height attribute.
+            if (node.hasAttribute("width") || node.hasAttribute("height")) {
+                return node.outerHTML;
+            }
+
+            // TODO: Deduplicate with upstream.
             const untypedNode = (node as any);
             const alt = escapeMarkdown(cleanAttribute(untypedNode.getAttribute('alt')))
             const src = escapeLinkDestination(untypedNode.getAttribute('src') || '')
@@ -151,6 +167,115 @@ function buildAdmonitionFilter() {
         }
     }
     return admonitionFilter;
+}
+
+/**
+ * Variation of the original ruleset: https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js.
+ *
+ * Detects if the URL is a Trilium reference link and returns it verbatim if that's the case.
+ *
+ * @returns
+ */
+function buildInlineLinkFilter(): Rule {
+    return {
+        filter: function (node, options) {
+            return (
+                options.linkStyle === 'inlined' &&
+                node.nodeName === 'A' &&
+                !!node.getAttribute('href')
+            )
+        },
+
+        replacement: function (content, _node) {
+            const node = _node as HTMLElement;
+
+            // Return reference links verbatim.
+            if (node.classList.contains("reference-link")) {
+                return node.outerHTML;
+            }
+
+            // Otherwise treat as normal.
+            // TODO: Call super() somehow instead of duplicating the implementation.
+            let href = node.getAttribute('href')
+            if (href) href = href.replace(/([()])/g, '\\$1')
+            let title = cleanAttribute(node.getAttribute('title'))
+            if (title) title = ' "' + title.replace(/"/g, '\\"') + '"'
+            return '[' + content + '](' + href + title + ')'
+        }
+    }
+}
+
+function buildFigureFilter(): Rule {
+    return {
+        filter(node, options) {
+            return node.nodeName === 'FIGURE'
+        },
+        replacement(content, node) {
+            return (node as HTMLElement).outerHTML;
+        }
+    }
+}
+
+// Keep in line with https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js.
+function buildListItemFilter(): Rule {
+    return {
+        filter: "li",
+        replacement(content, node, options) {
+            content = content
+                .trim()
+                .replace(/\n/gm, '\n    ') // indent
+            let prefix = options.bulletListMarker + '   '
+            const parent = node.parentNode as HTMLElement;
+            if (parent.nodeName === 'OL') {
+                var start = parent.getAttribute('start')
+                var index = Array.prototype.indexOf.call(parent.children, node)
+                prefix = (start ? Number(start) + index : index + 1) + '.  '
+            } else if (parent.classList.contains("todo-list")) {
+                const isChecked = node.querySelector("input[type=checkbox]:checked");
+                prefix = (isChecked ? "- [x] " : "- [ ] ");
+            }
+
+            const result = prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '');
+            return result;
+        }
+    }
+}
+
+function buildMathFilter(): Rule {
+    const MATH_INLINE_PREFIX = "\\(";
+    const MATH_INLINE_SUFFIX = "\\)";
+
+    const MATH_DISPLAY_PREFIX = "\\[";
+    const MATH_DISPLAY_SUFFIX = "\\]";
+
+    return {
+        filter(node) {
+            return node.nodeName === "SPAN" && node.classList.contains("math-tex");
+        },
+        replacement(_, node) {
+            // We have to use the raw HTML text, otherwise the content is escaped too much.
+            const content = (node as HTMLElement).innerText;
+
+            // Inline math
+            if (content.startsWith(MATH_INLINE_PREFIX) && content.endsWith(MATH_INLINE_SUFFIX)) {
+                return `$${content.substring(MATH_INLINE_PREFIX.length, content.length - MATH_INLINE_SUFFIX.length)}$`;
+            }
+
+            // Display math
+            if (content.startsWith(MATH_DISPLAY_PREFIX) && content.endsWith(MATH_DISPLAY_SUFFIX)) {
+                return `$$${content.substring(MATH_DISPLAY_PREFIX.length, content.length - MATH_DISPLAY_SUFFIX.length)}$$`;
+            }
+
+            // Unknown.
+            return content;
+        }
+    }
+}
+
+// Taken from upstream since it's not exposed.
+// https://github.com/mixmark-io/turndown/blob/master/src/commonmark-rules.js
+function cleanAttribute(attribute: string | null | undefined) {
+    return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
 }
 
 export default {

@@ -74,7 +74,7 @@ export function buildConfig() {
         heading: {
             options: [
                 { model: "paragraph" as const, title: "Paragraph", class: "ck-heading_paragraph" },
-                // // heading1 is not used since that should be a note's title
+                // heading1 is not used since that should be a note's title
                 { model: "heading2" as const, view: "h2", title: "Heading 2", class: "ck-heading_heading2" },
                 { model: "heading3" as const, view: "h3", title: "Heading 3", class: "ck-heading_heading3" },
                 { model: "heading4" as const, view: "h4", title: "Heading 4", class: "ck-heading_heading4" },
@@ -102,12 +102,37 @@ export function buildConfig() {
 }
 
 export function buildToolbarConfig(isClassicToolbar: boolean) {
-    if (isClassicToolbar) {
+    if (utils.isMobile()) {
+        return buildMobileToolbar();
+    } else if (isClassicToolbar) {
         const multilineToolbar = utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true";
         return buildClassicToolbar(multilineToolbar);
     } else {
         return buildFloatingToolbar();
     }
+}
+
+export function buildMobileToolbar() {
+    const classicConfig = buildClassicToolbar(false);
+    const items = [];
+
+    for (const item of classicConfig.toolbar.items) {
+        if (typeof item === "object" && "items" in item) {
+            for (const subitem of item.items) {
+                items.push(subitem);
+            }
+        } else {
+            items.push(item);
+        }
+    }
+
+    return {
+        ...classicConfig,
+        toolbar: {
+            ...classicConfig.toolbar,
+            items
+        }
+    };
 }
 
 export function buildClassicToolbar(multilineToolbar: boolean) {

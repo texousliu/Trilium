@@ -5,16 +5,19 @@ import TypeWidget from "./type_widget.js";
 import server from "../../services/server.js";
 import toastService from "../../services/toast.js";
 import dialogService from "../../services/dialog.js";
-import type { EventData } from "../../components/app_context.js";
+import type { CommandListenerData, EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import attributes from "../../services/attributes.js";
-import asset_path from "../../../../services/asset_path.js";
 import openContextMenu from "./geo_map_context_menu.js";
 import link from "../../services/link.js";
 import note_tooltip from "../../services/note_tooltip.js";
 import appContext from "../../components/app_context.js";
 
-const TPL = `\
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
+import { hasTouchBar } from "../../services/utils.js";
+
+const TPL = /*html*/`\
 <div class="note-detail-geo-map note-detail-printable">
     <style>
         .leaflet-pane {
@@ -105,6 +108,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     private currentMarkerData: Record<string, Marker>;
     private currentTrackData: Record<string, GPX>;
     private gpxLoaded?: boolean;
+    private ignoreNextZoomEvent?: boolean;
 
     static getType() {
         return "geoMap";
@@ -122,10 +126,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     doRender() {
+        super.doRender();
+
         this.$widget = $(TPL);
         this.$widget.append(this.geoMapWidget.render());
-
-        super.doRender();
     }
 
     async #onMapInitialized(L: Leaflet) {
@@ -140,10 +144,25 @@ export default class GeoMapTypeWidget extends TypeWidget {
         // Restore markers.
         await this.#reloadMarkers();
 
+        // This fixes an issue with the map appearing cut off at the beginning, due to the container not being properly attached
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
+
         const updateFn = () => this.spacedUpdate.scheduleUpdate();
         map.on("moveend", updateFn);
         map.on("zoomend", updateFn);
         map.on("click", (e) => this.#onMapClicked(e));
+
+        if (hasTouchBar) {
+            map.on("zoom", () => {
+                if (!this.ignoreNextZoomEvent) {
+                    this.triggerCommand("refreshTouchBar");
+                }
+
+                this.ignoreNextZoomEvent = false;
+            });
+        }
     }
 
     async #restoreViewportAndZoom() {
@@ -259,9 +278,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     #buildIcon(bxIconClass: string, colorClass: string, title: string) {
         return this.L.divIcon({
-            html: `\
-                <img class="icon" src="${asset_path}/node_modules/leaflet/dist/images/marker-icon.png" />
-                <img class="icon-shadow" src="${asset_path}/node_modules/leaflet/dist/images/marker-shadow.png" />
+            html: /*html*/`\
+                <img class="icon" src="${markerIcon}" />
+                <img class="icon-shadow" src="${markerIconShadow}" />
                 <span class="bx ${bxIconClass} ${colorClass}"></span>
                 <span class="title-label">${title}</span>`,
             iconSize: [25, 41],
@@ -272,6 +291,9 @@ export default class GeoMapTypeWidget extends TypeWidget {
     #changeState(newState: State) {
         this._state = newState;
         this.geoMapWidget.$container.toggleClass("placing-note", newState === State.NewNote);
+        if (hasTouchBar) {
+            this.triggerCommand("refreshTouchBar");
+        }
     }
 
     async #onMapClicked(e: LeafletMouseEvent) {
@@ -379,6 +401,32 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {
         this.moveMarker(noteId, null);
+    }
+
+    buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {
+        const map = this.geoMapWidget.map;
+        const that = this;
+        if (!map) {
+            return;
+        }
+
+        return [
+            new TouchBar.TouchBarSlider({
+                label: "Zoom",
+                value: map.getZoom(),
+                minValue: map.getMinZoom(),
+                maxValue: map.getMaxZoom(),
+                change(newValue) {
+                    that.ignoreNextZoomEvent = true;
+                    map.setZoom(newValue);
+                },
+            }),
+            new TouchBar.TouchBarButton({
+                label: "New geo note",
+                click: () => this.triggerCommand("geoMapCreateChildNote", { ntxId: this.ntxId }),
+                enabled: (this._state === State.Normal)
+            })
+        ];
     }
 
 }

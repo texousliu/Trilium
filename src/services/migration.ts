@@ -52,7 +52,7 @@ async function migrate() {
                 executeMigration(mig);
 
                 sql.execute(
-                    `UPDATE options
+                    /*sql*/`UPDATE options
                             SET value = ?
                             WHERE name = ?`,
                     [mig.dbVersion.toString(), "dbVersion"]
@@ -98,7 +98,9 @@ async function prepareMigrations(currentDbVersion: number): Promise<MigrationInf
             if (type === "js" || type === "ts") {
                 // Due to ESM imports, the migration file needs to be imported asynchronously and thus cannot be loaded at migration time (since migration is not asynchronous).
                 // As such we have to preload the ESM.
-                migration.module = (await import(`file://${resourceDir.MIGRATIONS_DIR}/${file}`)).default;
+                // Going back to the original approach but making it webpack-compatible
+                const importPath = `../../db/migrations/${file}`;
+                migration.module = (await import(importPath)).default;
             }
 
             migrations.push(migration);

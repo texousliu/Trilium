@@ -5,12 +5,13 @@ import UpdateAvailableWidget from "./update_available.js";
 import options from "../../services/options.js";
 import { Tooltip, Dropdown } from "bootstrap";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="dropdown global-menu">
     <style>
     .global-menu {
         width: 53px;
         height: 53px;
+        flex-shrink: 0;
     }
 
     .global-menu .dropdown-menu {
