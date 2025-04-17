@@ -22,7 +22,7 @@ export const noteUpdateToolDefinition: Tool = {
             properties: {
                 noteId: {
                     type: 'string',
-                    description: 'ID of the note to update'
+                    description: 'System ID of the note to update (not the title). This is a unique identifier like "abc123def456" that must be used to identify the specific note.'
                 },
                 title: {
                     type: 'string',

@@ -40,7 +40,7 @@ export const readNoteToolDefinition: Tool = {
             properties: {
                 noteId: {
                     type: 'string',
-                    description: 'The ID of the note to read'
+                    description: 'The system ID of the note to read (not the title). This is a unique identifier like "abc123def456" that must be used to access a specific note.'
                 },
                 includeAttributes: {
                     type: 'boolean',

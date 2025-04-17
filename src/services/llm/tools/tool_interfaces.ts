@@ -2,6 +2,13 @@
  * Tool Interfaces
  *
  * This file defines the interfaces for the LLM tool calling system.
+ *
+ * IMPORTANT NOTE ON NOTE IDs:
+ * When working with notes in Trilium, it's crucial to understand that:
+ * - Each note has a unique system ID (e.g., "abc123def456") which is different from its title
+ * - When tools require a noteId parameter, they need this system ID, not the title
+ * - Search tools return noteIds that should be used in subsequent operations on specific notes
+ * - Using a note's title instead of its ID will cause operations to fail
  */
 
 /**

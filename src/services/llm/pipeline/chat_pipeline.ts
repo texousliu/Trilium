@@ -455,7 +455,7 @@ export class ChatPipeline {
                         log.info(`========== TOOL EXECUTION RESULTS ==========`);
                         log.info(`Received ${toolResultMessages.length} tool results`);
                         toolResultMessages.forEach((msg, idx) => {
-                            log.info(`Tool result ${idx + 1}: tool_call_id=${msg.tool_call_id}, content=${msg.content.substring(0, 100)}${msg.content.length > 100 ? '...' : ''}`);
+                            log.info(`Tool result ${idx + 1}: tool_call_id=${msg.tool_call_id}, content=${msg.content}`);
                             log.info(`Tool result status: ${msg.content.startsWith('Error:') ? 'ERROR' : 'SUCCESS'}`);
                             log.info(`Tool result for: ${this.getToolNameFromToolCallId(currentMessages, msg.tool_call_id || '')}`);
 

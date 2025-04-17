@@ -23,7 +23,7 @@ export const noteSummarizationToolDefinition: Tool = {
             properties: {
                 noteId: {
                     type: 'string',
-                    description: 'ID of the note to summarize'
+                    description: 'System ID of the note to summarize (not the title). This is a unique identifier like "abc123def456".'
                 },
                 maxLength: {
                     type: 'number',

@@ -25,7 +25,7 @@ export const searchNotesToolDefinition: Tool = {
                 },
                 parentNoteId: {
                     type: 'string',
-                    description: 'Optional parent note ID to restrict search to a specific branch'
+                    description: 'Optional system ID of the parent note to restrict search to a specific branch (not the title). This is a unique identifier like "abc123def456".'
                 },
                 maxResults: {
                     type: 'number',
@@ -146,7 +146,8 @@ export class SearchNotesTool implements ToolHandler {
                     preview: result.contentPreview,
                     similarity: Math.round(result.similarity * 100) / 100,
                     parentId: result.parentId
-                }))
+                })),
+                message: "Note: Use the noteId (not the title) when performing operations on specific notes with other tools."
             };
         } catch (error: any) {
             log.error(`Error executing search_notes tool: ${error.message || String(error)}`);

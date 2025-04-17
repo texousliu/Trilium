@@ -29,11 +29,11 @@ export const relationshipToolDefinition: Tool = {
                 },
                 sourceNoteId: {
                     type: 'string',
-                    description: 'ID of the source note for the relationship'
+                    description: 'System ID of the source note for the relationship (not the title). This is a unique identifier like "abc123def456".'
                 },
                 targetNoteId: {
                     type: 'string',
-                    description: 'ID of the target note for the relationship (for create action)'
+                    description: 'System ID of the target note for the relationship (not the title). This is a unique identifier like "abc123def456".'
                 },
                 relationName: {
                     type: 'string',

@@ -23,7 +23,7 @@ export const noteCreationToolDefinition: Tool = {
             properties: {
                 parentNoteId: {
                     type: 'string',
-                    description: 'ID of the parent note under which to create the new note. If not specified, creates under root.'
+                    description: 'System ID of the parent note under which to create the new note (not the title). This is a unique identifier like "abc123def456". If not specified, creates under root.'
                 },
                 title: {
                     type: 'string',

@@ -28,7 +28,7 @@ export const attributeManagerToolDefinition: Tool = {
             properties: {
                 noteId: {
                     type: 'string',
-                    description: 'ID of the note to manage attributes for'
+                    description: 'System ID of the note to manage attributes for (not the title). This is a unique identifier like "abc123def456".'
                 },
                 action: {
                     type: 'string',
