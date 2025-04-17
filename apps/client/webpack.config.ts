@@ -1,7 +1,7 @@
 import { fileURLToPath } from "url";
 import path from "path";
 import autoprefixer from "autoprefixer";
-import assetPath from "./src/services/asset_path.js";
+import assetPath from "./src/asset_path.js";
 import miniCssExtractPlugin from "mini-css-extract-plugin";
 import type { Configuration } from "webpack";
 import CopyPlugin from "copy-webpack-plugin";
@@ -10,17 +10,17 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const config: Configuration = {
     mode: "production",
     entry: {
-        setup: "./src/public/app/setup.js",
-        login: "./src/public/app/login.js",
-        mobile: "./src/public/app/mobile.js",
-        desktop: "./src/public/app/desktop.js",
-        share: "./src/public/app/share.js",
+        setup: "./src/setup.js",
+        login: "./src/login.js",
+        mobile: "./src/mobile.js",
+        desktop: "./src/desktop.js",
+        share: "./src/share.js",
         // TriliumNextTODO: integrate set_password into setup entry point/view
-        set_password: "./src/public/app/set_password.js"
+        set_password: "./src/set_password.js"
     },
     output: {
         publicPath: `${assetPath}/app-dist/`,
-        path: path.resolve(rootDir, "build/src/public/app-dist"),
+        path: path.resolve(rootDir, "build"),
         filename: "[name].js"
     },
     plugins: [
@@ -46,7 +46,7 @@ const config: Configuration = {
                     {
                         loader: "ts-loader",
                         options: {
-                            configFile: path.join(rootDir, "tsconfig.webpack.json")
+                            configFile: path.join(rootDir, "tsconfig.json")
                         }
                     }
                 ],
