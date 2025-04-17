@@ -18,7 +18,7 @@
 }
 
 :root ul.ck.ck-list,
-:root div.ck.ck-balloon-panel {
+:root div.ck.ck-balloon-panel:not(.ck-tooltip) {
     border: none;
     background: transparent;
 }
