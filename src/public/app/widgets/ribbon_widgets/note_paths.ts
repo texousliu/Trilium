@@ -6,7 +6,7 @@ import type FNote from "../../entities/fnote.js";
 import type { NotePathRecord } from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-paths-widget">
     <style>
     .note-paths-widget {
@@ -135,8 +135,7 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.getBranchRows().find((branch) => branch.noteId === this.noteId) ||
-            (this.noteId != null && loadResults.isNoteReloaded(this.noteId))) {
+        if (loadResults.getBranchRows().find((branch) => branch.noteId === this.noteId) || (this.noteId != null && loadResults.isNoteReloaded(this.noteId))) {
             this.refresh();
         }
     }

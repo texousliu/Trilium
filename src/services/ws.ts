@@ -17,7 +17,9 @@ if (isDev) {
     const debounce = (await import("debounce")).default;
     const debouncedReloadFrontend = debounce(() => reloadFrontend("source code change"), 200);
     chokidar
-        .watch("src/public")
+        .watch("src/public", {
+            ignored: "src/public/app/doc_notes/en/User Guide"
+        })
         .on("add", debouncedReloadFrontend)
         .on("change", debouncedReloadFrontend)
         .on("unlink", debouncedReloadFrontend);
@@ -137,19 +139,19 @@ function fillInAdditionalProperties(entityChange: EntityChange) {
         entityChange.entity = becca.getAttribute(entityChange.entityId);
 
         if (!entityChange.entity) {
-            entityChange.entity = sql.getRow(`SELECT * FROM attributes WHERE attributeId = ?`, [entityChange.entityId]);
+            entityChange.entity = sql.getRow(/*sql*/`SELECT * FROM attributes WHERE attributeId = ?`, [entityChange.entityId]);
         }
     } else if (entityChange.entityName === "branches") {
         entityChange.entity = becca.getBranch(entityChange.entityId);
 
         if (!entityChange.entity) {
-            entityChange.entity = sql.getRow(`SELECT * FROM branches WHERE branchId = ?`, [entityChange.entityId]);
+            entityChange.entity = sql.getRow(/*sql*/`SELECT * FROM branches WHERE branchId = ?`, [entityChange.entityId]);
         }
     } else if (entityChange.entityName === "notes") {
         entityChange.entity = becca.getNote(entityChange.entityId);
 
         if (!entityChange.entity) {
-            entityChange.entity = sql.getRow(`SELECT * FROM notes WHERE noteId = ?`, [entityChange.entityId]);
+            entityChange.entity = sql.getRow(/*sql*/`SELECT * FROM notes WHERE noteId = ?`, [entityChange.entityId]);
 
             if (entityChange.entity?.isProtected) {
                 entityChange.entity.title = protectedSessionService.decryptString(entityChange.entity.title || "");
@@ -157,7 +159,7 @@ function fillInAdditionalProperties(entityChange: EntityChange) {
         }
     } else if (entityChange.entityName === "revisions") {
         entityChange.noteId = sql.getValue<string>(
-            `SELECT noteId
+            /*sql*/`SELECT noteId
                                                     FROM revisions
                                                     WHERE revisionId = ?`,
             [entityChange.entityId]
@@ -178,22 +180,16 @@ function fillInAdditionalProperties(entityChange: EntityChange) {
         entityChange.entity = becca.getOption(entityChange.entityId);
 
         if (!entityChange.entity) {
-            entityChange.entity = sql.getRow(`SELECT * FROM options WHERE name = ?`, [entityChange.entityId]);
+            entityChange.entity = sql.getRow(/*sql*/`SELECT * FROM options WHERE name = ?`, [entityChange.entityId]);
         }
     } else if (entityChange.entityName === "attachments") {
         entityChange.entity = sql.getRow(
-            `SELECT attachments.*, LENGTH(blobs.content) AS contentLength
+            /*sql*/`SELECT attachments.*, LENGTH(blobs.content) AS contentLength
                                                 FROM attachments
                                                 JOIN blobs USING (blobId)
                                                 WHERE attachmentId = ?`,
             [entityChange.entityId]
         );
-    } else if (entityChange.entityName === "tasks") {
-        entityChange.entity = becca.getTask(entityChange.entity);
-
-        if (!entityChange.entity) {
-            entityChange.entity = sql.getRow(`SELECT * FROM tasks WHERE taskId = ?`, [entityChange.entityId]);
-        }
     }
 
     if (entityChange.entity instanceof AbstractBeccaEntity) {
@@ -221,7 +217,7 @@ function sendPing(client: WebSocket, entityChangeIds = []) {
         return;
     }
 
-    const entityChanges = sql.getManyRows<EntityChange>(`SELECT * FROM entity_changes WHERE id IN (???)`, entityChangeIds);
+    const entityChanges = sql.getManyRows<EntityChange>(/*sql*/`SELECT * FROM entity_changes WHERE id IN (???)`, entityChangeIds);
     if (!entityChanges) {
         return;
     }

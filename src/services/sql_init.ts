@@ -21,7 +21,7 @@ import backup from "./backup.js";
 const dbReady = deferred<void>();
 
 function schemaExists() {
-    return !!sql.getValue(`SELECT name FROM sqlite_master
+    return !!sql.getValue(/*sql*/`SELECT name FROM sqlite_master
                                 WHERE type = 'table' AND name = 'options'`);
 }
 
@@ -46,16 +46,37 @@ async function initDbConnection() {
 
     sql.execute('CREATE TEMP TABLE "param_list" (`paramId` TEXT NOT NULL PRIMARY KEY)');
 
+    sql.execute(`
+    CREATE TABLE IF NOT EXISTS "user_data"
+    (
+        tmpID INT,
+        username TEXT,
+        email TEXT,
+        userIDEncryptedDataKey TEXT,
+        userIDVerificationHash TEXT,
+        salt TEXT,
+        derivedKey TEXT,
+        isSetup TEXT DEFAULT "false",
+        UNIQUE (tmpID),
+        PRIMARY KEY (tmpID)
+    );`)
+
     dbReady.resolve();
 }
 
-async function createInitialDatabase() {
+/**
+ * Applies the database schema, creating the necessary tables and importing the demo content.
+ *
+ * @param skipDemoDb if set to `true`, then the demo database will not be imported, resulting in an empty root note.
+ * @throws {Error} if the database is already initialized.
+ */
+async function createInitialDatabase(skipDemoDb?: boolean) {
     if (isDbInitialized()) {
         throw new Error("DB is already initialized");
     }
 
     const schema = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/schema.sql`, "utf-8");
-    const demoFile = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/demo.zip`);
+    const demoFile = (!skipDemoDb ? fs.readFileSync(`${resourceDir.DB_INIT_DIR}/demo.zip`) : null);
 
     let rootNote!: BNote;
 
@@ -97,7 +118,9 @@ async function createInitialDatabase() {
 
     const dummyTaskContext = new TaskContext("no-progress-reporting", "import", false);
 
-    await zipImportService.importZip(dummyTaskContext, demoFile, rootNote);
+    if (demoFile) {
+        await zipImportService.importZip(dummyTaskContext, demoFile, rootNote);
+    }
 
     sql.transactional(() => {
         // this needs to happen after ZIP import,

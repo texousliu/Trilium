@@ -35,9 +35,9 @@ import GeoMapTypeWidget from "./type_widgets/geo_map.js";
 import utils from "../services/utils.js";
 import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
-import TaskListWidget from "./type_widgets/task_list.js";
+import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
 
-const TPL = `
+const TPL = /*html*/`
 <div class="note-detail">
     <style>
     .note-detail {
@@ -74,14 +74,25 @@ const typeWidgetClasses = {
     attachmentList: AttachmentListTypeWidget,
     mindMap: MindMapWidget,
     geoMap: GeoMapTypeWidget,
-    taskList: TaskListWidget
+
+    // Split type editors
+    mermaid: MermaidTypeWidget
 };
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
  * for protected session or attachment information.
  */
-type ExtendedNoteType = Exclude<NoteType, "mermaid" | "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" | "protectedSession";
+type ExtendedNoteType =
+    | Exclude<NoteType, "launcher" | "text" | "code">
+    | "empty"
+    | "readOnlyCode"
+    | "readOnlyText"
+    | "editableText"
+    | "editableCode"
+    | "attachmentDetail"
+    | "attachmentList"
+    | "protectedSession";
 
 export default class NoteDetailWidget extends NoteContextAwareWidget {
 
@@ -148,6 +159,9 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             typeWidget.spacedUpdate = this.spacedUpdate;
             typeWidget.setParent(this);
 
+            if (this.noteContext) {
+                typeWidget.setNoteContextEvent({ noteContext: this.noteContext });
+            }
             const $renderedWidget = typeWidget.render();
             keyboardActionsService.updateDisplayedShortcuts($renderedWidget);
 
@@ -183,7 +197,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         // https://github.com/zadam/trilium/issues/2522
         const isBackendNote = this.noteContext?.noteId === "_backendLog";
         const isSqlNote = this.mime === "text/x-sqlite;schema=trilium";
-        const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "geoMap"].includes(this.type ?? "");
+        const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "geoMap", "mermaid"].includes(this.type ?? "");
         const isFullHeight = (!this.noteContext?.hasNoteList() && isFullHeightNoteType && !isSqlNote)
             || this.noteContext?.viewScope?.viewMode === "attachments"
             || isBackendNote;
@@ -220,7 +234,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             resultingType = "readOnlyCode";
         } else if (type === "text") {
             resultingType = "editableText";
-        } else if (type === "code" || type === "mermaid") {
+        } else if (type === "code") {
             resultingType = "editableCode";
         } else if (type === "launcher") {
             resultingType = "doc";
@@ -329,7 +343,9 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
             const label = attrs.find(
                 (attr) =>
-                    attr.type === "label" && ["readOnly", "autoReadOnlyDisabled", "cssClass", "displayRelations", "hideRelations"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note)
+                    attr.type === "label" &&
+                    ["readOnly", "autoReadOnlyDisabled", "cssClass", "displayRelations", "hideRelations"].includes(attr.name ?? "") &&
+                    attributeService.isAffecting(attr, this.note)
             );
 
             const relation = attrs.find((attr) => attr.type === "relation" && ["template", "inherit", "renderNote"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note));
