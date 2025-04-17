@@ -25,7 +25,7 @@ runs:
       with:
         p12-file-base64: ${{ env.APPLE_APP_CERTIFICATE_BASE64 }}
         p12-password: ${{ env.APPLE_APP_CERTIFICATE_PASSWORD }}
-        keychain: build
+        keychain: build-app
         keychain-password: ${{ github.run_id }}
 
     - name: Install Installer certificate
@@ -34,17 +34,19 @@ runs:
       with:
         p12-file-base64: ${{ env.APPLE_INSTALLER_CERTIFICATE_BASE64 }}
         p12-password: ${{ env.APPLE_INSTALLER_CERTIFICATE_PASSWORD }}
-        keychain: build
+        keychain: build-installer
         keychain-password: ${{ github.run_id }}
-        # We don't need to create a keychain here because we're using the build keychain that was created in the previous step
-        create-keychain: false
+        # We need to create a separate keychain for the installer certificate
+        create-keychain: true
 
     - name: Verify certificates
       if: inputs.os == 'macos'
       shell: ${{ inputs.shell }}
       run: |
-        echo "Available signing identities:"
-        security find-identity -v -p codesigning build.keychain
+        echo "Available signing identities in build-app keychain:"
+        security find-identity -v -p codesigning build-app.keychain
+        echo "Available signing identities in build-installer keychain:"
+        security find-identity -v -p codesigning build-installer.keychain
 
     - name: Set up Python and other macOS dependencies
       if: ${{ inputs.os == 'macos' }}
@@ -96,10 +98,14 @@ runs:
         dmg_file=$(find ./dist -name "*.dmg" -print -quit)
         if [ -n "$dmg_file" ]; then
           echo "Found DMG: $dmg_file"
-          # Get the first valid signing identity from the keychain
-          SIGNING_IDENTITY=$(security find-identity -v -p codesigning build.keychain | grep "Developer ID Application" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+          # Try to get a signing identity from both keychains
+          SIGNING_IDENTITY=$(security find-identity -v -p codesigning build-app.keychain | grep "Developer ID Application" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
           if [ -z "$SIGNING_IDENTITY" ]; then
-            echo "Error: No valid Developer ID Application certificate found in keychain"
+            echo "No valid Developer ID Application certificate found in build-app keychain, trying build-installer keychain"
+            SIGNING_IDENTITY=$(security find-identity -v -p codesigning build-installer.keychain | grep "Developer ID Application" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+          fi
+          if [ -z "$SIGNING_IDENTITY" ]; then
+            echo "Error: No valid Developer ID Application certificate found in any keychain"
             exit 1
           fi
           echo "Using signing identity: $SIGNING_IDENTITY"
