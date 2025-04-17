@@ -145,6 +145,11 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     overflow: hidden;
     max-width: calc(100% - 20px);
+    transition: all 0.3s ease;
+}
+
+.tool-execution-container.collapsed {
+    display: none;
 }
 
 .tool-execution-header {
@@ -153,6 +158,34 @@
     margin-bottom: 0.5rem;
     color: var(--muted-text-color);
     font-weight: 500;
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tool-execution-header:hover {
+    background-color: var(--hover-item-background-color, rgba(0, 0, 0, 0.03));
+}
+
+.tool-execution-toggle {
+    color: var(--muted-text-color) !important;
+    background: transparent !important;
+    padding: 0.2rem 0.4rem !important;
+    transition: transform 0.2s ease;
+}
+
+.tool-execution-toggle:hover {
+    color: var(--main-text-color) !important;
+}
+
+.tool-execution-toggle i.bx-chevron-down {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+.tool-execution-toggle i.bx-chevron-right {
+    transform: rotate(-90deg);
+    transition: transform 0.3s ease;
 }
 
 .tool-execution-chat-steps {

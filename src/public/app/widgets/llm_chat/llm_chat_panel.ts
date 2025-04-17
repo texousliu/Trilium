@@ -360,30 +360,59 @@ export default class LlmChatPanel extends BasicWidget {
 
         // Fill with tool execution content
         toolExecutionElement.innerHTML = `
+            <div class="tool-execution-header d-flex align-items-center p-2 rounded">
+                <i class="bx bx-terminal me-2"></i>
+                <span class="flex-grow-1 fw-bold">Tool Execution</span>
+                <button type="button" class="btn btn-sm btn-link p-0 text-muted tool-execution-toggle" title="Toggle tool execution details">
+                    <i class="bx bx-chevron-down"></i>
+                </button>
+            </div>
             <div class="tool-execution-container p-2 rounded mb-2">
-                <div class="tool-execution-header d-flex align-items-center justify-content-between mb-2">
-                    <div>
-                        <i class="bx bx-code-block text-primary me-2"></i>
-                        <span class="fw-bold">Tool Execution</span>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-link p-0 text-muted tool-execution-chat-clear" title="Clear tool execution history">
-                        <i class="bx bx-x"></i>
-                    </button>
-                </div>
                 <div class="tool-execution-chat-steps">
                     ${this.renderToolStepsHtml(steps)}
                 </div>
             </div>
         `;
 
-        // Add event listener for the clear button
-        const clearButton = toolExecutionElement.querySelector('.tool-execution-chat-clear');
-        if (clearButton) {
-            clearButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toolExecutionElement.remove();
+        // Add event listener for the toggle button
+        const toggleButton = toolExecutionElement.querySelector('.tool-execution-toggle');
+        if (toggleButton) {
+            toggleButton.addEventListener('click', () => {
+                const stepsContainer = toolExecutionElement.querySelector('.tool-execution-container');
+                const icon = toggleButton.querySelector('i');
+
+                if (stepsContainer) {
+                    if (stepsContainer.classList.contains('collapsed')) {
+                        // Expand
+                        stepsContainer.classList.remove('collapsed');
+                        (stepsContainer as HTMLElement).style.display = 'block';
+                        if (icon) {
+                            icon.className = 'bx bx-chevron-down';
+                        }
+                    } else {
+                        // Collapse
+                        stepsContainer.classList.add('collapsed');
+                        (stepsContainer as HTMLElement).style.display = 'none';
+                        if (icon) {
+                            icon.className = 'bx bx-chevron-right';
+                        }
+                    }
+                }
             });
+        }
+
+        // Add click handler for the header to toggle expansion as well
+        const header = toolExecutionElement.querySelector('.tool-execution-header');
+        if (header) {
+            header.addEventListener('click', (e) => {
+                // Only toggle if the click isn't on the toggle button itself
+                const target = e.target as HTMLElement;
+                if (target && !target.closest('.tool-execution-toggle')) {
+                    const toggleButton = toolExecutionElement.querySelector('.tool-execution-toggle');
+                    toggleButton?.dispatchEvent(new Event('click'));
+                }
+            });
+            (header as HTMLElement).style.cursor = 'pointer';
         }
     }
 
@@ -990,28 +1019,17 @@ export default class LlmChatPanel extends BasicWidget {
             toolExecutionElement = document.createElement('div');
             toolExecutionElement.className = 'chat-tool-execution mb-3';
 
-            // Create header with title and controls
+            // Create header with title and dropdown toggle
             const header = document.createElement('div');
             header.className = 'tool-execution-header d-flex align-items-center p-2 rounded';
             header.innerHTML = `
                 <i class="bx bx-terminal me-2"></i>
                 <span class="flex-grow-1">Tool Execution</span>
-                <button type="button" class="btn btn-sm btn-link p-0 text-muted tool-execution-chat-clear" title="Clear tool execution history">
-                    <i class="bx bx-x"></i>
+                <button type="button" class="btn btn-sm btn-link p-0 text-muted tool-execution-toggle" title="Toggle tool execution details">
+                    <i class="bx bx-chevron-down"></i>
                 </button>
             `;
             toolExecutionElement.appendChild(header);
-
-            // Add click handler for clear button
-            const clearButton = toolExecutionElement.querySelector('.tool-execution-chat-clear');
-            if (clearButton) {
-                clearButton.addEventListener('click', () => {
-                    const stepsContainer = toolExecutionElement?.querySelector('.tool-execution-container');
-                    if (stepsContainer) {
-                        stepsContainer.innerHTML = '';
-                    }
-                });
-            }
 
             // Create container for tool steps
             const stepsContainer = document.createElement('div');
@@ -1020,6 +1038,44 @@ export default class LlmChatPanel extends BasicWidget {
 
             // Add to chat messages
             this.noteContextChatMessages.appendChild(toolExecutionElement);
+
+            // Add click handler for toggle button
+            const toggleButton = toolExecutionElement.querySelector('.tool-execution-toggle');
+            if (toggleButton) {
+                toggleButton.addEventListener('click', () => {
+                    const stepsContainer = toolExecutionElement?.querySelector('.tool-execution-container');
+                    const icon = toggleButton.querySelector('i');
+
+                    if (stepsContainer) {
+                        if (stepsContainer.classList.contains('collapsed')) {
+                            // Expand
+                            stepsContainer.classList.remove('collapsed');
+                            (stepsContainer as HTMLElement).style.display = 'block';
+                            if (icon) {
+                                icon.className = 'bx bx-chevron-down';
+                            }
+                        } else {
+                            // Collapse
+                            stepsContainer.classList.add('collapsed');
+                            (stepsContainer as HTMLElement).style.display = 'none';
+                            if (icon) {
+                                icon.className = 'bx bx-chevron-right';
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Add click handler for the header to toggle expansion as well
+            header.addEventListener('click', (e) => {
+                // Only toggle if the click isn't on the toggle button itself
+                const target = e.target as HTMLElement;
+                if (target && !target.closest('.tool-execution-toggle')) {
+                    const toggleButton = toolExecutionElement?.querySelector('.tool-execution-toggle');
+                    toggleButton?.dispatchEvent(new Event('click'));
+                }
+            });
+            (header as HTMLElement).style.cursor = 'pointer';
         }
 
         // Get the steps container
