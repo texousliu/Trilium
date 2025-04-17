@@ -118,3 +118,4 @@ jobs:
           discussion_category_name: Announcements
           make_latest: ${{ !contains(github.ref, 'rc') }}
           prerelease: ${{ !contains(github.ref, 'rc') }}
+          token: ${{ secrets.RELEASE_PAT }}
