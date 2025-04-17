@@ -7,6 +7,8 @@
 import type { Tool, ToolHandler } from './tool_interfaces.js';
 import log from '../../log.js';
 import aiServiceManager from '../ai_service_manager.js';
+import becca from '../../../becca/becca.js';
+import { ContextExtractor } from '../context/index.js';
 
 /**
  * Definition of the search notes tool
@@ -30,6 +32,10 @@ export const searchNotesToolDefinition: Tool = {
                 maxResults: {
                     type: 'number',
                     description: 'Maximum number of results to return (default: 5)'
+                },
+                summarize: {
+                    type: 'boolean',
+                    description: 'Whether to provide summarized content previews instead of truncated ones (default: false)'
                 }
             },
             required: ['query']
@@ -92,15 +98,115 @@ async function getOrCreateVectorSearchTool(): Promise<any> {
  */
 export class SearchNotesTool implements ToolHandler {
     public definition: Tool = searchNotesToolDefinition;
+    private contextExtractor: ContextExtractor;
+
+    constructor() {
+        this.contextExtractor = new ContextExtractor();
+    }
+
+    /**
+     * Get rich content preview for a note
+     * This provides a better preview than the simple truncation in VectorSearchTool
+     */
+    private async getRichContentPreview(noteId: string, summarize: boolean): Promise<string> {
+        try {
+            const note = becca.getNote(noteId);
+            if (!note) {
+                return 'Note not found';
+            }
+
+            // Get the full content with proper formatting
+            const formattedContent = await this.contextExtractor.getNoteContent(noteId);
+            if (!formattedContent) {
+                return 'No content available';
+            }
+
+            // If summarization is requested
+            if (summarize) {
+                // Try to get an LLM service for summarization
+                const llmService = aiServiceManager.getService();
+                if (llmService) {
+                    try {
+                        const messages = [
+                            {
+                                role: "system" as const,
+                                content: "Summarize the following note content concisely while preserving key information. Keep your summary to about 3-4 sentences."
+                            },
+                            {
+                                role: "user" as const,
+                                content: `Note title: ${note.title}\n\nContent:\n${formattedContent}`
+                            }
+                        ];
+
+                        // Request summarization with safeguards to prevent recursion
+                        const result = await llmService.generateChatCompletion(messages, {
+                            temperature: 0.3,
+                            maxTokens: 200,
+                            // Use any to bypass the type checking for special parameters
+                            ...(({
+                                bypassFormatter: true,
+                                bypassContextProcessing: true
+                            } as any))
+                        });
+
+                        if (result && result.text) {
+                            return result.text;
+                        }
+                    } catch (error) {
+                        log.error(`Error summarizing content: ${error}`);
+                        // Fall through to smart truncation if summarization fails
+                    }
+                }
+            }
+
+            // Fall back to smart truncation if summarization fails or isn't requested
+            const previewLength = Math.min(formattedContent.length, 600);
+            let preview = formattedContent.substring(0, previewLength);
+
+            // Only add ellipsis if we've truncated the content
+            if (previewLength < formattedContent.length) {
+                // Try to find a natural break point
+                const breakPoints = ['. ', '.\n', '\n\n', '\n', '. '];
+                let breakFound = false;
+
+                for (const breakPoint of breakPoints) {
+                    const lastBreak = preview.lastIndexOf(breakPoint);
+                    if (lastBreak > previewLength * 0.6) { // At least 60% of the way through
+                        preview = preview.substring(0, lastBreak + breakPoint.length);
+                        breakFound = true;
+                        break;
+                    }
+                }
+
+                // Add ellipsis if truncated
+                preview += '...';
+            }
+
+            return preview;
+        } catch (error) {
+            log.error(`Error getting rich content preview: ${error}`);
+            return 'Error retrieving content preview';
+        }
+    }
 
     /**
      * Execute the search notes tool
      */
-    public async execute(args: { query: string, parentNoteId?: string, maxResults?: number }): Promise<string | object> {
+    public async execute(args: {
+        query: string,
+        parentNoteId?: string,
+        maxResults?: number,
+        summarize?: boolean
+    }): Promise<string | object> {
         try {
-            const { query, parentNoteId, maxResults = 5 } = args;
+            const {
+                query,
+                parentNoteId,
+                maxResults = 5,
+                summarize = false
+            } = args;
 
-            log.info(`Executing search_notes tool - Query: "${query}", ParentNoteId: ${parentNoteId || 'not specified'}, MaxResults: ${maxResults}`);
+            log.info(`Executing search_notes tool - Query: "${query}", ParentNoteId: ${parentNoteId || 'not specified'}, MaxResults: ${maxResults}, Summarize: ${summarize}`);
 
             // Get the vector search tool from the AI service manager
             const vectorSearchTool = await getOrCreateVectorSearchTool();
@@ -123,6 +229,7 @@ export class SearchNotesTool implements ToolHandler {
             const results = await vectorSearchTool.searchNotes(query, {
                 parentNoteId,
                 maxResults
+                // Don't pass summarize - we'll handle it ourselves
             });
             const searchDuration = Date.now() - searchStartTime;
 
@@ -137,16 +244,25 @@ export class SearchNotesTool implements ToolHandler {
                 log.info(`No matching notes found for query: "${query}"`);
             }
 
+            // Get enhanced previews for each result
+            const enhancedResults = await Promise.all(
+                results.map(async (result: any) => {
+                    const preview = await this.getRichContentPreview(result.noteId, summarize);
+
+                    return {
+                        noteId: result.noteId,
+                        title: result.title,
+                        preview: preview,
+                        similarity: Math.round(result.similarity * 100) / 100,
+                        parentId: result.parentId
+                    };
+                })
+            );
+
             // Format the results
             return {
-                count: results.length,
-                results: results.map((result: any) => ({
-                    noteId: result.noteId,
-                    title: result.title,
-                    preview: result.contentPreview,
-                    similarity: Math.round(result.similarity * 100) / 100,
-                    parentId: result.parentId
-                })),
+                count: enhancedResults.length,
+                results: enhancedResults,
                 message: "Note: Use the noteId (not the title) when performing operations on specific notes with other tools."
             };
         } catch (error: any) {
