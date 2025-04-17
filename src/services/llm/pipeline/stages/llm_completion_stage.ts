@@ -15,19 +15,43 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
 
     /**
      * Generate LLM completion using the AI service
-     * 
+     *
      * This enhanced version supports better streaming by forwarding raw provider data
      * and ensuring consistent handling of stream options.
      */
     protected async process(input: LLMCompletionInput): Promise<{ response: ChatResponse }> {
-        const { messages, options, provider } = input;
+        const { messages, options } = input;
 
-        // Log input options
-        log.info(`[LLMCompletionStage] Input options: ${JSON.stringify({
-            model: options.model,
-            provider,
+        // Add detailed logging about the input messages, particularly useful for tool follow-ups
+        log.info(`========== LLM COMPLETION STAGE - INPUT MESSAGES ==========`);
+        log.info(`Total input messages: ${messages.length}`);
+
+        // Log if tool messages are present (used for follow-ups)
+        const toolMessages = messages.filter(m => m.role === 'tool');
+        if (toolMessages.length > 0) {
+            log.info(`Contains ${toolMessages.length} tool result messages - likely a tool follow-up request`);
+        }
+
+        // Log the last few messages to understand conversation context
+        const lastMessages = messages.slice(-3);
+        lastMessages.forEach((msg, idx) => {
+            const msgPosition = messages.length - lastMessages.length + idx;
+            log.info(`Message ${msgPosition} (${msg.role}): ${msg.content?.substring(0, 150)}${msg.content?.length > 150 ? '...' : ''}`);
+            if (msg.tool_calls) {
+                log.info(`  Contains ${msg.tool_calls.length} tool calls`);
+            }
+            if (msg.tool_call_id) {
+                log.info(`  Tool call ID: ${msg.tool_call_id}`);
+            }
+        });
+
+        // Log completion options
+        log.info(`LLM completion options: ${JSON.stringify({
+            model: options.model || 'default',
+            temperature: options.temperature,
+            enableTools: options.enableTools,
             stream: options.stream,
-            enableTools: options.enableTools
+            hasToolExecutionStatus: !!options.toolExecutionStatus
         })}`);
 
         // Create a deep copy of options to avoid modifying the original
@@ -39,19 +63,19 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
             log.info(`[LLMCompletionStage] Stream explicitly set to: ${updatedOptions.stream}`);
         }
 
-        // Add capture of raw provider data for streaming 
+        // Add capture of raw provider data for streaming
         if (updatedOptions.stream) {
             // Add a function to capture raw provider data in stream chunks
             const originalStreamCallback = updatedOptions.streamCallback;
             updatedOptions.streamCallback = async (text, done, rawProviderData) => {
                 // Create an enhanced chunk with the raw provider data
                 const enhancedChunk = {
-                    text, 
+                    text,
                     done,
                     // Include raw provider data if available
                     raw: rawProviderData
                 };
-                
+
                 // Call the original callback if provided
                 if (originalStreamCallback) {
                     return originalStreamCallback(text, done, enhancedChunk);
@@ -70,8 +94,8 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
         }
 
         // Determine which provider to use
-        let selectedProvider = provider;
-        if (!selectedProvider && updatedOptions.providerMetadata?.provider) {
+        let selectedProvider = '';
+        if (updatedOptions.providerMetadata?.provider) {
             selectedProvider = updatedOptions.providerMetadata.provider;
             log.info(`Using provider ${selectedProvider} from metadata for model ${updatedOptions.model}`);
         }
@@ -82,14 +106,14 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
         if (selectedProvider && aiServiceManager.isProviderAvailable(selectedProvider)) {
             const service = aiServiceManager.getService(selectedProvider);
             log.info(`[LLMCompletionStage] Using specific service for ${selectedProvider}`);
-            
+
             // Generate completion and wrap with enhanced stream handling
             const response = await service.generateChatCompletion(messages, updatedOptions);
-            
+
             // If streaming is enabled, enhance the stream method
             if (response.stream && typeof response.stream === 'function' && updatedOptions.stream) {
                 const originalStream = response.stream;
-                
+
                 // Replace the stream method with an enhanced version that captures and forwards raw data
                 response.stream = async (callback) => {
                     return originalStream(async (chunk) => {
@@ -107,14 +131,36 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
                     });
                 };
             }
-            
+
+            // Add enhanced logging for debugging tool execution follow-ups
+            if (toolMessages.length > 0) {
+                if (response.tool_calls && response.tool_calls.length > 0) {
+                    log.info(`Response contains ${response.tool_calls.length} tool calls`);
+                    response.tool_calls.forEach((toolCall: any, idx: number) => {
+                        log.info(`Tool call ${idx + 1}: ${toolCall.function?.name || 'unnamed'}`);
+                        const args = typeof toolCall.function?.arguments === 'string'
+                            ? toolCall.function?.arguments
+                            : JSON.stringify(toolCall.function?.arguments);
+                        log.info(`Arguments: ${args?.substring(0, 100) || '{}'}`);
+                    });
+                } else {
+                    log.info(`Response contains no tool calls - plain text response`);
+                }
+
+                if (toolMessages.length > 0 && !response.tool_calls) {
+                    log.info(`This appears to be a final response after tool execution (no new tool calls)`);
+                } else if (toolMessages.length > 0 && response.tool_calls && response.tool_calls.length > 0) {
+                    log.info(`This appears to be a continued tool execution flow (tools followed by more tools)`);
+                }
+            }
+
             return { response };
         }
 
         // Use auto-selection if no specific provider
         log.info(`[LLMCompletionStage] Using auto-selected service`);
         const response = await aiServiceManager.generateChatCompletion(messages, updatedOptions);
-        
+
         // Add similar stream enhancement for auto-selected provider
         if (response.stream && typeof response.stream === 'function' && updatedOptions.stream) {
             const originalStream = response.stream;
@@ -132,7 +178,29 @@ export class LLMCompletionStage extends BasePipelineStage<LLMCompletionInput, { 
                 });
             };
         }
-        
+
+        // Add enhanced logging for debugging tool execution follow-ups
+        if (toolMessages.length > 0) {
+            if (response.tool_calls && response.tool_calls.length > 0) {
+                log.info(`Response contains ${response.tool_calls.length} tool calls`);
+                response.tool_calls.forEach((toolCall: any, idx: number) => {
+                    log.info(`Tool call ${idx + 1}: ${toolCall.function?.name || 'unnamed'}`);
+                    const args = typeof toolCall.function?.arguments === 'string'
+                        ? toolCall.function?.arguments
+                        : JSON.stringify(toolCall.function?.arguments);
+                    log.info(`Arguments: ${args?.substring(0, 100) || '{}'}`);
+                });
+            } else {
+                log.info(`Response contains no tool calls - plain text response`);
+            }
+
+            if (toolMessages.length > 0 && !response.tool_calls) {
+                log.info(`This appears to be a final response after tool execution (no new tool calls)`);
+            } else if (toolMessages.length > 0 && response.tool_calls && response.tool_calls.length > 0) {
+                log.info(`This appears to be a continued tool execution flow (tools followed by more tools)`);
+            }
+        }
+
         return { response };
     }
 }

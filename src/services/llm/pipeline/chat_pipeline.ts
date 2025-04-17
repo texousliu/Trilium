@@ -453,8 +453,11 @@ export class ChatPipeline {
                         );
 
                         log.info(`========== TOOL EXECUTION RESULTS ==========`);
+                        log.info(`Received ${toolResultMessages.length} tool results`);
                         toolResultMessages.forEach((msg, idx) => {
-                            log.info(`Tool result ${idx + 1}: tool_call_id=${msg.tool_call_id}, content=${msg.content.substring(0, 50)}...`);
+                            log.info(`Tool result ${idx + 1}: tool_call_id=${msg.tool_call_id}, content=${msg.content.substring(0, 100)}${msg.content.length > 100 ? '...' : ''}`);
+                            log.info(`Tool result status: ${msg.content.startsWith('Error:') ? 'ERROR' : 'SUCCESS'}`);
+                            log.info(`Tool result for: ${this.getToolNameFromToolCallId(currentMessages, msg.tool_call_id || '')}`);
 
                             // If streaming, show tool executions to the user
                             if (isStreaming && streamCallback) {
@@ -559,6 +562,30 @@ export class ChatPipeline {
 
                             // Generate a new completion with the updated messages
                             const followUpStartTime = Date.now();
+
+                            // Log messages being sent to LLM for tool follow-up
+                            log.info(`========== SENDING TOOL RESULTS TO LLM FOR FOLLOW-UP ==========`);
+                            log.info(`Total messages being sent: ${currentMessages.length}`);
+                            // Log the most recent messages (last 3) for clarity
+                            const recentMessages = currentMessages.slice(-3);
+                            recentMessages.forEach((msg, idx) => {
+                                const position = currentMessages.length - recentMessages.length + idx;
+                                log.info(`Message ${position} (${msg.role}): ${msg.content?.substring(0, 100)}${msg.content?.length > 100 ? '...' : ''}`);
+                                if (msg.tool_calls) {
+                                    log.info(`  Has ${msg.tool_calls.length} tool calls`);
+                                }
+                                if (msg.tool_call_id) {
+                                    log.info(`  Tool call ID: ${msg.tool_call_id}`);
+                                }
+                            });
+
+                            log.info(`LLM follow-up request options: ${JSON.stringify({
+                                model: modelSelection.options.model,
+                                enableTools: true,
+                                stream: modelSelection.options.stream,
+                                provider: currentResponse.provider
+                            })}`);
+
                             const followUpCompletion = await this.stages.llmCompletion.execute({
                                 messages: currentMessages,
                                 options: {
@@ -572,6 +599,15 @@ export class ChatPipeline {
                                 }
                             });
                             this.updateStageMetrics('llmCompletion', followUpStartTime);
+
+                            // Log the follow-up response from the LLM
+                            log.info(`========== LLM FOLLOW-UP RESPONSE RECEIVED ==========`);
+                            log.info(`Follow-up response model: ${followUpCompletion.response.model}, provider: ${followUpCompletion.response.provider}`);
+                            log.info(`Follow-up response text: ${followUpCompletion.response.text?.substring(0, 150)}${followUpCompletion.response.text?.length > 150 ? '...' : ''}`);
+                            log.info(`Follow-up contains tool calls: ${!!followUpCompletion.response.tool_calls && followUpCompletion.response.tool_calls.length > 0}`);
+                            if (followUpCompletion.response.tool_calls && followUpCompletion.response.tool_calls.length > 0) {
+                                log.info(`Follow-up has ${followUpCompletion.response.tool_calls.length} new tool calls`);
+                            }
 
                             // Update current response for the next iteration
                             currentResponse = followUpCompletion.response;
@@ -649,6 +685,12 @@ export class ChatPipeline {
                                 ...(currentResponse.provider === 'Ollama' ? { toolExecutionStatus } : {})
                             }
                         });
+
+                        // Log the error follow-up response from the LLM
+                        log.info(`========== ERROR FOLLOW-UP RESPONSE RECEIVED ==========`);
+                        log.info(`Error follow-up response model: ${errorFollowUpCompletion.response.model}, provider: ${errorFollowUpCompletion.response.provider}`);
+                        log.info(`Error follow-up response text: ${errorFollowUpCompletion.response.text?.substring(0, 150)}${errorFollowUpCompletion.response.text?.length > 150 ? '...' : ''}`);
+                        log.info(`Error follow-up contains tool calls: ${!!errorFollowUpCompletion.response.tool_calls && errorFollowUpCompletion.response.tool_calls.length > 0}`);
 
                         // Update current response and break the tool loop
                         currentResponse = errorFollowUpCompletion.response;

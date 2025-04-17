@@ -362,53 +362,55 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         log.info(`========== TOOL EXECUTION COMPLETE ==========`);
         log.info(`Completed execution of ${toolResults.length} tools in ${totalExecutionTime}ms`);
 
-        // Add tool results as messages
-        toolResults.forEach(result => {
-            // Format the result content based on type
-            let content: string;
+        // Add each tool result to the messages array
+        const toolResultMessages: Message[] = [];
 
-            if (typeof result.result === 'string') {
-                content = result.result;
-                log.info(`Tool returned string result (${content.length} chars)`);
-            } else {
-                // For object results, format as JSON
-                try {
-                    content = JSON.stringify(result.result, null, 2);
-                    log.info(`Tool returned object result with keys: ${Object.keys(result.result).join(', ')}`);
-                } catch (error) {
-                    content = String(result.result);
-                    log.info(`Failed to stringify object result: ${error}`);
-                }
-            }
+        for (const result of toolResults) {
+            const { toolCallId, name, result: toolResult } = result;
 
-            log.info(`Adding tool result message - Tool: ${result.name}, ID: ${result.toolCallId || 'unknown'}, Length: ${content.length}`);
+            // Format result for message
+            const resultContent = typeof toolResult === 'string'
+                ? toolResult
+                : JSON.stringify(toolResult, null, 2);
 
-            // Create a properly formatted tool response message
-            updatedMessages.push({
+            // Add a new message for the tool result
+            const toolMessage: Message = {
                 role: 'tool',
-                content: content,
-                name: result.name,
-                tool_call_id: result.toolCallId
-            });
+                content: resultContent,
+                name: name,
+                tool_call_id: toolCallId
+            };
 
-            // Log a sample of the content for debugging
-            const contentPreview = content.substring(0, 100) + (content.length > 100 ? '...' : '');
-            log.info(`Tool result preview: ${contentPreview}`);
-        });
+            // Log detailed info about each tool result
+            log.info(`-------- Tool Result for ${name} (ID: ${toolCallId}) --------`);
+            log.info(`Result type: ${typeof toolResult}`);
+            log.info(`Result preview: ${resultContent.substring(0, 150)}${resultContent.length > 150 ? '...' : ''}`);
+            log.info(`Tool result status: ${resultContent.startsWith('Error:') ? 'ERROR' : 'SUCCESS'}`);
 
-        log.info(`Added ${toolResults.length} tool results to conversation`);
-
-        // If we have tool results, we need a follow-up call to the LLM
-        const needsFollowUp = toolResults.length > 0;
-
-        if (needsFollowUp) {
-            log.info(`Tool execution complete, LLM follow-up required with ${updatedMessages.length} messages`);
+            updatedMessages.push(toolMessage);
+            toolResultMessages.push(toolMessage);
         }
+
+        // Log the decision about follow-up
+        log.info(`========== FOLLOW-UP DECISION ==========`);
+        const hasToolResults = toolResultMessages.length > 0;
+        const hasErrors = toolResultMessages.some(msg => msg.content.startsWith('Error:'));
+        const needsFollowUp = hasToolResults;
+
+        log.info(`Follow-up needed: ${needsFollowUp}`);
+        log.info(`Reasoning: ${hasToolResults ? 'Has tool results to process' : 'No tool results'} ${hasErrors ? ', contains errors' : ''}`);
+        log.info(`Total messages to return to pipeline: ${updatedMessages.length}`);
+        log.info(`Last 3 messages in conversation:`);
+        const lastMessages = updatedMessages.slice(-3);
+        lastMessages.forEach((msg, idx) => {
+            const position = updatedMessages.length - lastMessages.length + idx;
+            log.info(`Message ${position} (${msg.role}): ${msg.content?.substring(0, 100)}${msg.content?.length > 100 ? '...' : ''}`);
+        });
 
         return {
             response,
-            needsFollowUp,
-            messages: updatedMessages
+            messages: updatedMessages,
+            needsFollowUp
         };
     }
 
