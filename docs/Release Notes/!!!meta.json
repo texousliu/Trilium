@@ -589,6 +589,24 @@
                     "format": "markdown",
                     "dataFileName": "v0.90.0-beta.md",
                     "attachments": []
+                },
+                {
+                    "isClone": false,
+                    "noteId": "wyurrlcDl416",
+                    "notePath": [
+                        "hD3V4hiu2VW4",
+                        "wyurrlcDl416"
+                    ],
+                    "title": "Release Template",
+                    "notePosition": 290,
+                    "prefix": null,
+                    "isExpanded": false,
+                    "type": "text",
+                    "mime": "text/html",
+                    "attributes": [],
+                    "format": "markdown",
+                    "dataFileName": "Release Template.md",
+                    "attachments": []
                 }
             ]
         }
