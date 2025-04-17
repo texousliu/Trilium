@@ -9,7 +9,7 @@ const TPL = /*html*/`
     <h4>${t("share.title")}</h4>
 
     <label class="tn-checkbox">
-        <input class="form-check-input" type="checkbox" name="redirectBareDomain" value="true">
+        <input class="form-check-input redirect-bare-domain" type="checkbox" name="redirectBareDomain" value="true">
         ${t("share.redirect_bare_domain")}
     </label>
     <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
