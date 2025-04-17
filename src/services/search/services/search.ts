@@ -358,7 +358,7 @@ function searchNotesForAutocomplete(query: string, fastSearch: boolean = true) {
         return {
             notePath: result.notePath,
             noteTitle: title,
-            notePathTitle: `${icon} ${result.notePathTitle}`,
+            notePathTitle: result.notePathTitle,
             highlightedNotePathTitle: result.highlightedNotePathTitle,
             icon: icon ?? "bx bx-note"
         };
