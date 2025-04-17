@@ -13,6 +13,7 @@ import { SEARCH_CONSTANTS } from '../../constants/search_constants.js';
 
 export interface VectorSearchInput {
   query: string;
+  queries?: string[];
   noteId?: string;
   options?: {
     maxResults?: number;
@@ -42,6 +43,7 @@ export class VectorSearchStage {
   async execute(input: VectorSearchInput): Promise<VectorSearchOutput> {
     const {
       query,
+      queries = [],
       noteId = 'global',
       options = {}
     } = input;
@@ -53,6 +55,42 @@ export class VectorSearchStage {
       llmService = undefined
     } = options;
 
+    // If queries array is provided, use multi-query search
+    if (queries && queries.length > 0) {
+      log.info(`VectorSearchStage: Searching with ${queries.length} queries`);
+      log.info(`Parameters: noteId=${noteId}, maxResults=${maxResults}, threshold=${threshold}`);
+
+      try {
+        // Use the new multi-query method
+        const searchResults = await vectorSearchService.findRelevantNotesMultiQuery(
+          queries,
+          noteId === 'global' ? null : noteId,
+          {
+            maxResults,
+            threshold,
+            llmService: llmService || null
+          }
+        );
+
+        log.info(`VectorSearchStage: Found ${searchResults.length} relevant notes from multi-query search`);
+
+        return {
+          searchResults,
+          originalQuery: query,
+          noteId
+        };
+      } catch (error) {
+        log.error(`Error in vector search stage multi-query: ${error}`);
+        // Return empty results on error
+        return {
+          searchResults: [],
+          originalQuery: query,
+          noteId
+        };
+      }
+    }
+
+    // Fallback to single query search
     log.info(`VectorSearchStage: Searching for "${query.substring(0, 50)}..."`);
     log.info(`Parameters: noteId=${noteId}, maxResults=${maxResults}, threshold=${threshold}`);
 
@@ -64,7 +102,7 @@ export class VectorSearchStage {
         {
           maxResults,
           threshold,
-          llmService
+          llmService: llmService || null
         }
       );
 

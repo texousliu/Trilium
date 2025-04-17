@@ -202,21 +202,23 @@ export class ChatPipeline {
             const vectorSearchStartTime = Date.now();
             log.info(`========== STAGE 3: VECTOR SEARCH ==========`);
             log.info('Using VectorSearchStage pipeline component to find relevant notes');
+            log.info(`Searching with ${searchQueries.length} queries from decomposition`);
 
+            // Use the vectorSearchStage with multiple queries
             const vectorSearchResult = await this.stages.vectorSearch.execute({
-                query: userQuery,
+                query: userQuery, // Original query as fallback
+                queries: searchQueries, // All decomposed queries
                 noteId: input.noteId || 'global',
                 options: {
                     maxResults: SEARCH_CONSTANTS.CONTEXT.MAX_SIMILAR_NOTES,
-                    useEnhancedQueries: true,
+                    useEnhancedQueries: false, // We're already using enhanced queries from decomposition
                     threshold: SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_THRESHOLD,
                     llmService: llmService || undefined
                 }
             });
 
             this.updateStageMetrics('vectorSearch', vectorSearchStartTime);
-
-            log.info(`Vector search found ${vectorSearchResult.searchResults.length} relevant notes`);
+            log.info(`Vector search found ${vectorSearchResult.searchResults.length} relevant notes across ${searchQueries.length} queries`);
 
             // Extract context from search results
             log.info(`========== SEMANTIC CONTEXT EXTRACTION ==========`);

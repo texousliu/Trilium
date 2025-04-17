@@ -376,6 +376,76 @@ export class VectorSearchService {
       return '';
     }
   }
+
+  /**
+   * Find notes that are semantically relevant to multiple queries
+   * Combines results from multiple queries, deduplicates them, and returns the most relevant ones
+   *
+   * @param queries - Array of search queries
+   * @param contextNoteId - Optional note ID to restrict search to a branch
+   * @param options - Search options including result limit and summarization preference
+   * @returns Array of relevant notes with similarity scores, deduplicated and sorted
+   */
+  async findRelevantNotesMultiQuery(
+    queries: string[],
+    contextNoteId: string | null = null,
+    options: VectorSearchOptions = {}
+  ): Promise<NoteSearchResult[]> {
+    if (!queries || queries.length === 0) {
+      log.info('No queries provided to findRelevantNotesMultiQuery');
+      return [];
+    }
+
+    log.info(`VectorSearchService: Finding relevant notes for ${queries.length} queries`);
+    log.info(`Multi-query parameters: contextNoteId=${contextNoteId || 'global'}, queries=${JSON.stringify(queries.map(q => q.substring(0, 20) + '...'))}`);
+
+    try {
+      // Create a Map to deduplicate results across queries
+      const allResults = new Map<string, NoteSearchResult>();
+
+      // For each query, adjust maxResults to avoid getting too many total results
+      const adjustedMaxResults = options.maxResults ?
+        Math.ceil(options.maxResults / queries.length) :
+        Math.ceil(SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_MAX_RESULTS / queries.length);
+
+      // Search for each query and combine results
+      for (const query of queries) {
+        try {
+          const queryOptions = {
+            ...options,
+            maxResults: adjustedMaxResults,
+            useEnhancedQueries: false // We're already using enhanced queries
+          };
+
+          const results = await this.findRelevantNotes(query, contextNoteId, queryOptions);
+
+          // Merge results, keeping the highest similarity score for duplicates
+          for (const note of results) {
+            if (!allResults.has(note.noteId) ||
+                (allResults.has(note.noteId) && note.similarity > (allResults.get(note.noteId)?.similarity || 0))) {
+              allResults.set(note.noteId, note);
+            }
+          }
+
+          log.info(`Found ${results.length} results for query: "${query.substring(0, 30)}..."`);
+        } catch (error) {
+          log.error(`Error searching for query "${query}": ${error}`);
+        }
+      }
+
+      // Convert map to array and sort by similarity
+      const combinedResults = Array.from(allResults.values())
+        .sort((a, b) => b.similarity - a.similarity)
+        .slice(0, options.maxResults || SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_MAX_RESULTS);
+
+      log.info(`VectorSearchService: Found ${combinedResults.length} total deduplicated results across ${queries.length} queries`);
+
+      return combinedResults;
+    } catch (error) {
+      log.error(`Error in findRelevantNotesMultiQuery: ${error}`);
+      return [];
+    }
+  }
 }
 
 // Export a singleton instance
