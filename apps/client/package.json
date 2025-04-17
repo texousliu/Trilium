@@ -20,8 +20,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build:webpack": "tsx node_modules/webpack/bin/webpack.js -c webpack.config.ts --progress",
-    "build:webpack-stats": "tsx node_modules/webpack/bin/webpack.js -c webpack.config.ts --profile --json=webpack-stats.json"
+    "build:webpack": "tsx node_modules/webpack/bin/webpack.js -c webpack.config.ts"
   },
   "devDependencies": {
     "autoprefixer": "10.4.21",
