@@ -203,7 +203,7 @@ function register(router: Router) {
         }
     }
 
-    const sharePath = options.getOption("sharePath") || '/share';
+    const sharePath = options.getOptionOrNull("sharePath") || '/share';
 
     // Handle root path specially
     if (sharePath === '/') {
