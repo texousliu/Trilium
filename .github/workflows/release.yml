@@ -108,7 +108,7 @@ jobs:
           pattern: release-*
           path: upload
 
-      - name: Publish release
+      - name: Publish stable release
         uses: softprops/action-gh-release@v2
         with:
           draft: false
@@ -116,3 +116,5 @@ jobs:
           fail_on_unmatched_files: true
           files: upload/*.*
           discussion_category_name: Announcements
+          make_latest: ${{ !contains(github.ref, 'rc') }}
+          prerelease: ${{ !contains(github.ref, 'rc') }}
