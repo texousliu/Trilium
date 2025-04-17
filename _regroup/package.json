@@ -1,16 +1,7 @@
 {
-  "name": "trilium",
-  "productName": "TriliumNext Notes",
-  "description": "Build your personal knowledge base with TriliumNext Notes",
-  "version": "0.93.0",
-  "license": "AGPL-3.0-only",
   "main": "./electron-main.js",
   "bin": {
     "trilium": "src/main.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/TriliumNext/Notes.git"
   },
   "type": "module",
   "scripts": {

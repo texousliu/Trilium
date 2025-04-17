@@ -1,5 +1,5 @@
 {
-  "name": "triliumnext.notes.client",
+  "name": "@triliumnext/client",
   "version": "0.0.1",
   "description": "JQuery-based client for TriliumNext, used for both web and desktop (via Electron)",
   "homepage": "https://github.com/TriliumNext/Notes#readme",
