@@ -5,12 +5,6 @@
   "version": "0.93.0",
   "license": "AGPL-3.0-only",
   "main": "./electron-main.js",
-  "author": {
-    "name": "TriliumNext Notes Team",
-    "email": "contact@eliandoran.me",
-    "url": "https://github.com/TriliumNext/Notes"
-  },
-  "copyright": "",
   "bin": {
     "trilium": "src/main.js"
   },
