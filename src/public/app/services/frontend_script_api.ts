@@ -59,7 +59,7 @@ export interface Entity {
 
 type Func = ((...args: unknown[]) => unknown) | string;
 
-interface Api {
+export interface Api {
     /**
      * Container of all the rendered script content
      * */

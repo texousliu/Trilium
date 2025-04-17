@@ -117,12 +117,47 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
     backgroundEffects: boolean;
+
     // Share settings
     redirectBareDomain: boolean;
     showLoginInShareTheme: boolean;
     shareSubtree: boolean;
     useCleanUrls: boolean;
     sharePath: string;
+
+    // AI/LLM integration options
+    aiEnabled: boolean;
+    aiProvider: string;
+    aiSystemPrompt: string;
+    aiTemperature: string;
+    openaiApiKey: string;
+    openaiDefaultModel: string;
+    openaiEmbeddingModel: string;
+    openaiBaseUrl: string;
+    anthropicApiKey: string;
+    anthropicDefaultModel: string;
+    voyageEmbeddingModel: string;
+    voyageApiKey: string;
+    anthropicBaseUrl: string;
+    ollamaEnabled: boolean;
+    ollamaBaseUrl: string;
+    ollamaDefaultModel: string;
+    ollamaEmbeddingModel: string;
+    codeOpenAiModel: string;
+    aiProviderPrecedence: string;
+
+    // Embedding-related options
+    embeddingAutoUpdateEnabled: boolean;
+    embeddingUpdateInterval: number;
+    embeddingBatchSize: number;
+    embeddingDefaultDimension: number;
+    embeddingsDefaultProvider: string;
+    embeddingProviderPrecedence: string;
+    enableAutomaticIndexing: boolean;
+    embeddingGenerationLocation: string;
+    embeddingDimensionStrategy: string;
+    embeddingSimilarityThreshold: number;
+    maxNotesPerLlmQuery: number;
 }
 
 export type OptionNames = keyof OptionDefinitions;

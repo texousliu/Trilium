@@ -44,11 +44,18 @@ describe("markdown", () => {
     });
 
     it("parses duplicate title with escape correctly", () => {
-        const result = markdownService.renderToHtml(trimIndentation`\
-            # What's new
-            Hi there
-        `, "What's new")
-        expect(result).toBe(`<p>Hi there</p>`);
+        const titles = [
+            "What's new",
+            "Node.js, Electron and `better-sqlite3`"
+        ];
+
+        for (const title of titles) {
+            const result = markdownService.renderToHtml(trimIndentation`\
+                # ${title}
+                Hi there
+            `, title)
+            expect(result).toBe(`<p>Hi there</p>`);
+        }
     });
 
     it("trims unnecessary whitespace", () => {
@@ -205,6 +212,32 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
     it("generates strike-through text", () => {
         const input = `~~Hello~~ world.`;
         const expected = /*html*/`<p><del>Hello</del> world.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("does not generate additional spacing when importing lists", () => {
+        const input = trimIndentation`\
+            ### 🐞 Bugfixes
+
+            *   [v0.90.4 docker does not read USER\_UID and USER\_GID from environment](https://github.com/TriliumNext/Notes/issues/331)
+            *   [Invalid CSRF token on Android phone](https://github.com/TriliumNext/Notes/issues/318)
+            *   [Excess spacing in lists](https://github.com/TriliumNext/Notes/issues/341)`;
+        const expected = [
+            /*html*/`<h3>🐞 Bugfixes</h3>`,
+            /*html*/`<ul>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/331">v0.90.4 docker does not read USER_UID and USER_GID from environment</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/318">Invalid CSRF token on Android phone</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/341">Excess spacing in lists</a></li>`,
+            /*html*/`</ul>`
+        ].join("");
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("imports todo lists properly", () => {
+         const input = trimIndentation`\
+            - [x] Hello
+            - [ ] World`;
+        const expected = `<ul class="todo-list"><li><label class="todo-list__label"><input type="checkbox" checked="checked" disabled="disabled"><span class="todo-list__label__description">Hello</span></label></li><li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">World</span></label></li></ul>`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 

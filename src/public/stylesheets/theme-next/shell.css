@@ -869,44 +869,21 @@ body.mobile .fancytree-node > span {
     position: relative;
 }
 
-/* #region Apply a border to the tab bar that avoids the current tab but also allows a transparent active tab. */
-body.layout-horizontal .tab-row-widget,
-body.layout-horizontal .tab-row-widget-container,
-body.layout-horizontal .tab-row-container .note-tab[active] {
-    overflow: visible !important;
-}
-
-body.layout-horizontal .tab-row-container .note-tab[active]:before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: -100vw;
-    top: var(--tab-height);
-    right: calc(100% - 1px);
-    height: 1px;
+/* Apply a border to the tab bar that avoids the current tab but also allows a transparent active tab. */
+body.layout-horizontal .tab-row-container {
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
 }
-
-body.layout-horizontal .tab-row-container .note-tab[active]:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 100%;
-    top: var(--tab-height);
-    right: 0;
-    width: 100vw;
-    height: 1px;
-    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
-}
-/* #endregion */
 
 body.layout-vertical.electron.platform-darwin .tab-row-container {
     border-bottom: 1px solid var(--subtle-border-color);
 }
 
 .tab-row-widget-container {
-    margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
     height: var(--tab-height) !important;
+}
+
+.tab-row-widget > * {
+    margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
 }
 
 body.layout-horizontal .tab-row-container {
@@ -923,11 +900,12 @@ body.layout-vertical #left-pane .quick-search {
 /* Limit the drag area for the previous elements to include just to the element itself
    and not its descendants also */
 body.layout-horizontal .tab-row-container > *,
-body.layout-vertical .tab-row-widget > *,
+body.layout-vertical .tab-row-widget > *:not(.tab-row-filler),
 body.layout-vertical #left-pane .quick-search > * {
     -webkit-app-region: no-drag;
 }
 
+body.layout-horizontal .tab-row-widget,
 body.layout-horizontal .tab-row-widget-container {
     margin-top: 0;
     position: relative;
@@ -991,7 +969,7 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     text-overflow: ellipsis;
 }
 
-body.layout-vertical .tab-row-widget-is-sorting .note-tab[active] .note-tab-wrapper {
+body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .note-tab-wrapper {
     transform: scale(0.85);
     box-shadow: var(--active-tab-dragging-shadow) !important;
 }

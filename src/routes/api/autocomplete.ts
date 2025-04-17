@@ -75,7 +75,8 @@ function getRecentNotes(activeNoteId: string) {
             notePath: rn.notePath,
             noteTitle: title,
             notePathTitle,
-            highlightedNotePathTitle: `<span class="${icon ?? "bx bx-note"}"></span> ${notePathTitle}`
+            highlightedNotePathTitle: utils.escapeHtml(notePathTitle),
+            icon: icon ?? "bx bx-note"
         };
     });
 }

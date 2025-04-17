@@ -10,18 +10,60 @@ import debounce from "./src/public/app/services/debounce.js";
 import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
 import cls from "./src/services/cls.js";
 import type { AdvancedExportOptions } from "./src/services/export/zip.js";
+import TaskContext from "./src/services/task_context.js";
+import { deferred } from "./src/services/utils.js";
+import { parseNoteMetaFile } from "./src/services/in_app_help.js";
 
-const NOTE_ID_USER_GUIDE = "pOsGYCXsbNQG";
-const markdownPath = path.join("docs", "User Guide");
-const htmlPath = path.join("src", "public", "app", "doc_notes", "en", "User Guide");
+interface NoteMapping {
+    rootNoteId: string;
+    path: string;
+    format: "markdown" | "html";
+    ignoredFiles?: string[];
+    exportOnly?: boolean;
+}
+
+const NOTE_MAPPINGS: NoteMapping[] = [
+    {
+        rootNoteId: "pOsGYCXsbNQG",
+        path: path.join("docs", "User Guide"),
+        format: "markdown"
+    },
+    {
+        rootNoteId: "pOsGYCXsbNQG",
+        path: path.join("src", "public", "app", "doc_notes", "en", "User Guide"),
+        format: "html",
+        ignoredFiles: ["index.html", "navigation.html", "style.css", "User Guide.html"],
+        exportOnly: true
+    },
+    {
+        rootNoteId: "jdjRLhLV3TtI",
+        path: path.join("docs", "Developer Guide"),
+        format: "markdown"
+    },
+    {
+        rootNoteId: "hD3V4hiu2VW4",
+        path: path.join("docs", "Release Notes"),
+        format: "markdown"
+    }
+];
 
 async function main() {
     await initializeTranslations();
-    const zipBuffer = await createImportZip();
-    await initializeDatabase(zipBuffer);
+    await initializeDatabase(true);
 
+    const initializedPromise = deferred<void>();
+    cls.init(async () => {
+        for (const mapping of NOTE_MAPPINGS) {
+            if (!mapping.exportOnly) {
+                await importData(mapping.path);
+            }
+        }
+        setOptions();
+        initializedPromise.resolve();
+    });
+
+    await initializedPromise;
     await startElectron();
-    cls.init(() => setOptions());
 
     // Wait for the import to be finished and the application to be loaded before we listen to changes.
     setTimeout(() => registerHandlers(), 10_000);
@@ -34,13 +76,28 @@ async function setOptions() {
     optionsService.setOption("compressImages", "false");
 }
 
-async function createImportZip() {
+async function importData(path: string) {
+    const buffer = await createImportZip(path);
+    const importService = (await import("./src/services/import/zip.js")).default;
+    const context = new TaskContext("no-progress-reporting", "import", false);
+    const becca = (await import("./src/becca/becca.js")).default;
+
+    const rootNote = becca.getRoot();
+    if (!rootNote) {
+        throw new Error("Missing root note for import.");
+    }
+    await importService.importZip(context, buffer, rootNote, {
+        preserveIds: true
+    });
+}
+
+async function createImportZip(path: string) {
     const inputFile = "input.zip";
     const archive = archiver("zip", {
         zlib: { level: 0 }
     });
 
-    archive.directory(markdownPath, "/");
+    archive.directory(path, "/");
 
     const outputStream = fsExtra.createWriteStream(inputFile);
     archive.pipe(outputStream);
@@ -61,7 +118,7 @@ function waitForEnd(archive: Archiver, stream: WriteStream) {
 
 }
 
-async function exportData(format: "html" | "markdown", outputPath: string) {
+async function exportData(noteId: string, format: "html" | "markdown", outputPath: string, ignoredFiles?: Set<string>) {
     const zipFilePath = "output.zip";
 
     try {
@@ -73,6 +130,7 @@ async function exportData(format: "html" | "markdown", outputPath: string) {
 
         const exportOpts: AdvancedExportOptions = {};
         if (format === "html") {
+            exportOpts.skipHtmlTemplate = true;
             exportOpts.customRewriteLinks = (originalRewriteLinks, getNoteTargetUrl) => {
                 return (content: string, noteMeta: NoteMeta) => {
                     content = content.replace(/src="[^"]*api\/images\/([a-zA-Z0-9_]+)\/[^"]*"/g, (match, targetNoteId) => {
@@ -117,18 +175,19 @@ async function exportData(format: "html" | "markdown", outputPath: string) {
             };
         }
 
-        await exportToZipFile(NOTE_ID_USER_GUIDE, format, zipFilePath, exportOpts);
-        await extractZip(zipFilePath, outputPath);
+        await exportToZipFile(noteId, format, zipFilePath, exportOpts);
+        await extractZip(zipFilePath, outputPath, ignoredFiles);
     } finally {
         if (await fsExtra.exists(zipFilePath)) {
             await fsExtra.rm(zipFilePath);
         }
     }
 
-    await cleanUpMeta(outputPath);
+    const minifyMeta = (format === "html");
+    await cleanUpMeta(outputPath, minifyMeta);
 }
 
-async function cleanUpMeta(outputPath: string) {
+async function cleanUpMeta(outputPath: string, minify: boolean) {
     const metaPath = path.join(outputPath, "!!!meta.json");
     const meta = JSON.parse(await fs.readFile(metaPath, "utf-8")) as NoteMetaFile;
     for (const file of meta.files) {
@@ -144,7 +203,13 @@ async function cleanUpMeta(outputPath: string) {
         el.isExpanded = false;
     }
 
-    await fs.writeFile(metaPath, JSON.stringify(meta, null, 4));
+    if (minify) {
+        const subtree = parseNoteMetaFile(meta);
+        await fs.writeFile(metaPath, JSON.stringify(subtree));
+    } else {
+        await fs.writeFile(metaPath, JSON.stringify(meta, null, 4));
+    }
+
 }
 
 async function registerHandlers() {
@@ -152,15 +217,18 @@ async function registerHandlers() {
     const eraseService = (await import("./src/services/erase.js")).default;
     const debouncer = debounce(async () => {
         eraseService.eraseUnusedAttachmentsNow();
-        await exportData("markdown", markdownPath);
-        await exportData("html", htmlPath);
+
+        for (const mapping of NOTE_MAPPINGS) {
+            const ignoredFiles = mapping.ignoredFiles ? new Set(mapping.ignoredFiles) : undefined;
+            await exportData(mapping.rootNoteId, mapping.format, mapping.path, ignoredFiles);
+        }
     }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
             return;
         }
 
-        console.log("Got entity changed ", e);
+        console.log("Got entity changed", e.entityName, e.entity.title);
         debouncer();
     });
 }

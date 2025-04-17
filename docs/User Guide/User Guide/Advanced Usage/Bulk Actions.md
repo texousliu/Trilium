@@ -57,7 +57,7 @@ These actions operate the <a class="reference-link" href="Attributes/Relations.
 
 *   **Rename note**
     *   For each note, it will change the title of the note to the given one.
-    *   As a more advanced use case, the note can be a “template string” which allows for dynamic values with access to the note information via <a class="reference-link" href="../Scripting/Script%20API/Frontend%20API/FNote.md">FNote</a>, for example:
+    *   As a more advanced use case, the note can be a “template string” which allows for dynamic values with access to the note information via <a class="reference-link" href="../Scripting/Script%20API/Frontend%20API/FNote.dat">FNote</a>, for example:
         *   `NEW: ${note.title}` will prefix all notes with `NEW:` .
         *   `${note.dateCreatedObj.format('MM-DD:')}: ${note.title}` will prefix the note titles with each note's creation date (in month-day format).
 *   **Move note**
@@ -79,7 +79,6 @@ These actions operate the <a class="reference-link" href="Attributes/Relations.
             ```javascript
             note.title = note.title + " - suffix";
             ```
-            
         *   To alter attributes of a note based on another attribute, such as setting the `#shareAlias` label to the title of the note:
             
             ```javascript

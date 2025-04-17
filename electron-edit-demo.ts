@@ -7,7 +7,7 @@ const DEMO_ZIP_PATH = "db/demo.zip";
 
 async function main() {
     await initializeTranslations();
-    await initializeDatabase();
+    await initializeDatabase(false);
 
     await startElectron();
     await registerHandlers();

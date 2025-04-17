@@ -45,6 +45,6 @@ If you want to export protected notes, enter a protected session first! This wil
 *   [GitHub-Flavored Markdown](https://github.github.com/gfm/) is the main syntax that Trilium is following.
 *   Images are supported. When exporting, images are usually kept in the basic Markdown syntax but will use the HTML syntax if the image has a custom width. Figures are always embedded as HTML.
 *   Tables are supported with the Markdown syntax. If the table is too complex or contains elements that would render as HTML, the table is also rendered as HTML.
-*   <a class="reference-link" href="../../Note%20Types/Text/Admonitions.md">Admonitions</a> are supported using GitHub's format.
+*   <a class="reference-link" href="../../Note%20Types/Text/Block%20quotes%20%26%20admonitions.md">Admonitions</a> are supported using GitHub's format.
 *   Links are supported. “Reference links” (internal links that mirror a note's title and display its icon) are embedded as HTML in order to preserve the information on import.
 *   Math equations are supported using `$` and `$$` syntaxes.

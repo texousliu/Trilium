@@ -29,9 +29,11 @@ export interface TriliumConfig {
         certPath: string;
         keyPath: string;
         trustedReverseProxy: boolean | string;
+        corsAllowOrigin: string;
+        corsAllowMethods: string;
+        corsAllowHeaders: string;
     };
     Session: {
-        cookiePath: string;
         cookieMaxAge: number;
     };
     Sync: {
@@ -80,13 +82,19 @@ const config: TriliumConfig = {
             process.env.TRILIUM_NETWORK_KEYPATH || iniConfig.Network.keyPath || "",
 
         trustedReverseProxy:
-            process.env.TRILIUM_NETWORK_TRUSTEDREVERSEPROXY || iniConfig.Network.trustedReverseProxy || false
+            process.env.TRILIUM_NETWORK_TRUSTEDREVERSEPROXY || iniConfig.Network.trustedReverseProxy || false,
+
+        corsAllowOrigin:
+            process.env.TRILIUM_NETWORK_CORS_ALLOW_ORIGIN || iniConfig.Network.corsAllowOrigin || "",
+
+        corsAllowMethods:
+            process.env.TRILIUM_NETWORK_CORS_ALLOW_METHODS || iniConfig.Network.corsAllowMethods || "",
+
+        corsAllowHeaders:
+            process.env.TRILIUM_NETWORK_CORS_ALLOW_HEADERS || iniConfig.Network.corsAllowHeaders || ""
     },
 
     Session: {
-        cookiePath:
-            process.env.TRILIUM_SESSION_COOKIEPATH || iniConfig?.Session?.cookiePath || "/",
-
         cookieMaxAge:
             parseInt(String(process.env.TRILIUM_SESSION_COOKIEMAXAGE)) || parseInt(iniConfig?.Session?.cookieMaxAge) || 21 * 24 * 60 * 60 // 21 Days in Seconds
     },

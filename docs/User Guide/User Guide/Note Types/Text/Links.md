@@ -1,30 +1,63 @@
 # Links
 ## External links
 
-External link is general web link targeting some external web resource - e.g. [https://en.wikipedia.org/wiki/South\_China\_Sea](https://en.wikipedia.org/wiki/South_China_Sea) is an external link to one Wikipedia page.
+An external link is a standard web link targeting for example a website. For example, [https://en.wikipedia.org/wiki/South\_China\_Sea](https://en.wikipedia.org/wiki/South_China_Sea) is an external link to a Wikipedia page.
 
-External links are done through CKEditor native links. To create an external link, select text and press <kbd>Ctrl</kbd> + <kbd>K</kbd> or wait for the "balloon" to appear and click link icon there.
+To create a link without a custom text:
 
-![](Links_create-external-link.gif)
+*   Press <img src="2_Links_image.png" width="15" height="16"> in the <a class="reference-link" href="Formatting%20toolbar.md">Formatting toolbar</a>:
+    *   A popup will appear, type or paste the URL in the box.
+    *   Press <kbd>Enter</kbd> or the check mark icon to confirm.
+*   Alternatively, press <kbd>Ctrl</kbd>+<kbd>K</kbd> to trigger the aforementioned popup.
+*   A simpler way is to paste the raw link and press space to turn it automatically into a link.
+
+To create a link with a custom text:
+
+*   First, type and select the text which will be turned into a link.
+*   Follow the previous steps to open the link interface (via the formatting toolbar, or <kbd>Ctrl</kbd>+<kbd>K</kbd>).
+*   Alternatively, simply paste (<kbd>Ctrl</kbd>+<kbd>V</kbd>) over the selected text to turn it into a link.
+
+Once a link is inserted:
+
+*   The text inside the link can be changed if needed but the link itself will remain.
+*   To modify the link, click on the link to display the popup and press the <img src="Links_image.png" width="18" height="18"> _Edit link_ button.
+*   To remove a link, click on it and press the <img src="3_Links_image.png" width="18" height="18"> _Unlink_ button.
 
 You can follow external link by either double clicking (will open new tab/window) it or right clicking on them and choosing "Open in new tab".
 
 ## Internal links to notes
 
-Links to internal notes are created a bit differently. To create link to note at current cursor position, press <kbd>Ctrl</kbd> + <kbd>L</kbd>.
+Unlike external notes, internal links (links to other notes) can be created at the current position by :
 
-In the dialog you can see radio button to choose from different types of linking:
+1.  Pressing <kbd>Ctrl</kbd> + <kbd>L</kbd> or the <img src="1_Links_image.png" width="20" height="17"> button from the <a class="reference-link" href="Formatting%20toolbar.md">Formatting toolbar</a>.
+2.  Filling in the desired note to link. It's also possible to create notes from this dialog by typing a non-existing note title and selecting _Create and link child note_.
 
-*   link title mirrors the note's current title - this is sometimes also called "reference link". Title of such links cannot be changed, instead it is always mirroring the title of linked note. This way the link title is never outdated
-*   link title can be changed arbitrarily - this is the traditional hyperlink - you link to a particular note and can choose the link title
+There are two link types, adjustable when creating the link to the note:
 
-![](Links_create-link-to-note.gif)
+1.  _link title mirrors the note's current title_
+    1.  This is sometimes also called "reference link".
+    2.  Title of such links cannot be changed, instead it is always mirroring the title of linked note.
+    3.  The icon of the note is also displayed.
+    4.  The link title will automatically update if the title of the note is changed.
+2.  _link title can be changed arbitrarily_
+    1.  This is the traditional hyperlink, where the text of the link can be different to the note title.
 
-You can follow the note link by double clicking it.
+Once an internal link is created:
 
-Alternatively if you only wish to quickly preview the content, you can hover over the link and will see read only preview.
+*   You can follow the note link by double clicking it.
+*   Alternatively if you only wish to quickly preview the content, you can hover over the link and will see read only preview.
 
-### In-place linking
+## Pasting links
+
+*   For internal links (links to notes in Trilium), press Ctrl+C in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>:
+    *   Pasting directly in a text note will create a reference link (with an icon to the note and the actual note title).
+    *   Pasting over an existing text will create a traditional link.
+*   For external links:
+    *   Paste the raw URL directly and press space to turn it into a link.
+    *   Select a text and paste the URL over it to turn that text into a link.
+    *   If you are pasting a formatted link (e.g. from the a webpage in a browser), simply paste it and it will keep the original text and URL.
+
+## In-place linking
 
 Trilium also provides "inline" linking - type `@` and you'll see an autocomplete, just type few characters from the desired note title, press enter and you have a link.
 

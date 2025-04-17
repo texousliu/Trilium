@@ -14,9 +14,9 @@ In addition, it's possible to change the number of characters at which the autom
 Via the <a class="reference-link" href="../UI%20Elements/Ribbon.md">Ribbon</a>, by going to the _Basic Properties_ tab and looking for the _Editable_ selection. The following options are possible:
 
 *   **Auto**  
-    This is the default behavior in which the note will be editable by default, unless it becomes large enough to trigger read-only mode.  
+    This is the default behavior in which the note will be editable by default, unless it becomes large enough to trigger read-only mode.
 *   **Read-only**  
-    The note will be always marked as read-only, regardless of its size. Nevertheless, it's still possible to temporarily edit the note if needed. This is generally useful for notes that are not prone to change.  
+    The note will be always marked as read-only, regardless of its size. Nevertheless, it's still possible to temporarily edit the note if needed. This is generally useful for notes that are not prone to change.
 *   **Always Editable**  
     This option will bypass the automatic read-only activation for this particular note. It's useful for large notes that are frequently edited.
 

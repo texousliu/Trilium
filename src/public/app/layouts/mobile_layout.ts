@@ -7,8 +7,6 @@ import ToggleSidebarButtonWidget from "../widgets/mobile_widgets/toggle_sidebar_
 import MobileDetailMenuWidget from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
-import ProtectedSessionPasswordDialog from "../widgets/dialogs/protected_session_password.js";
-import ConfirmDialog from "../widgets/dialogs/confirm.js";
 import FilePropertiesWidget from "../widgets/ribbon_widgets/file_properties.js";
 import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
 import EditButton from "../widgets/floating_buttons/edit_button.js";
@@ -23,15 +21,11 @@ import RootContainer from "../widgets/containers/root_container.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
 import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
-import AboutDialog from "../widgets/dialogs/about.js";
-import HelpDialog from "../widgets/dialogs/help.js";
 import type AppContext from "../components/app_context.js";
 import TabRowWidget from "../widgets/tab_row.js";
-import JumpToNoteDialog from "../widgets/dialogs/jump_to_note.js";
-import RecentChangesDialog from "../widgets/dialogs/recent_changes.js";
-import PromptDialog from "../widgets/dialogs/prompt.js";
 import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 import MobileEditorToolbar from "../widgets/ribbon_widgets/mobile_editor_toolbar.js";
+import { applyModals } from "./layout_commons.js";
 
 const MOBILE_CSS = `
 <style>
@@ -120,8 +114,9 @@ span.fancytree-expander {
 
 export default class MobileLayout {
     getRootWidget(appContext: typeof AppContext) {
-        return new RootContainer(true)
+        const rootContainer = new RootContainer(true)
             .setParent(appContext)
+            .class("horizontal-layout")
             .cssBlock(MOBILE_CSS)
             .child(new FlexContainer("column").id("mobile-sidebar-container"))
             .child(
@@ -172,8 +167,6 @@ export default class MobileLayout {
                             )
                             .child(new MobileEditorToolbar())
                     )
-                    .child(new ProtectedSessionPasswordDialog())
-                    .child(new ConfirmDialog())
             )
             .child(
                 new FlexContainer("column")
@@ -181,11 +174,8 @@ export default class MobileLayout {
                     .id("mobile-bottom-bar")
                     .child(new TabRowWidget().css("height", "40px"))
                     .child(new FlexContainer("row").class("horizontal").css("height", "53px").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true)).id("launcher-pane"))
-            )
-            .child(new AboutDialog())
-            .child(new HelpDialog())
-            .child(new RecentChangesDialog())
-            .child(new JumpToNoteDialog())
-            .child(new PromptDialog());
+            );
+        applyModals(rootContainer);
+        return rootContainer;
     }
 }

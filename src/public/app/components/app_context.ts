@@ -3,7 +3,7 @@ import bundleService from "../services/bundle.js";
 import RootCommandExecutor from "./root_command_executor.js";
 import Entrypoints, { type SqlExecuteResults } from "./entrypoints.js";
 import options from "../services/options.js";
-import utils from "../services/utils.js";
+import utils, { hasTouchBar } from "../services/utils.js";
 import zoomComponent from "./zoom.js";
 import TabManager from "./tab_manager.js";
 import Component from "./component.js";
@@ -24,7 +24,8 @@ import type NoteTreeWidget from "../widgets/note_tree.js";
 import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.js";
-import type FAttribute from "../entities/fattribute.js";
+import type { NativeImage, TouchBar } from "electron";
+import TouchBarComponent from "./touch_bar.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -52,8 +53,8 @@ export interface ContextMenuCommandData extends CommandData {
     node: Fancytree.FancytreeNode;
     notePath?: string;
     noteId?: string;
-    selectedOrActiveBranchIds?: any; // TODO: Remove any once type is defined
-    selectedOrActiveNoteIds: any; // TODO: Remove  any once type is defined
+    selectedOrActiveBranchIds: string[];
+    selectedOrActiveNoteIds?: string[];
 }
 
 export interface NoteCommandData extends CommandData {
@@ -88,6 +89,8 @@ export type CommandMappings = {
     closeHlt: CommandData;
     showLaunchBarSubtree: CommandData;
     showRevisions: CommandData;
+    showLlmChat: CommandData;
+    createAiChat: CommandData;
     showOptions: CommandData & {
         section: string;
     };
@@ -138,7 +141,7 @@ export type CommandMappings = {
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;
     delete: ContextMenuCommandData;
-    editNoteTitle: ContextMenuCommandData;
+    editNoteTitle: {};
     protectSubtree: ContextMenuCommandData;
     unprotectSubtree: ContextMenuCommandData;
     openBulkActionsDialog:
@@ -169,6 +172,8 @@ export type CommandMappings = {
     moveNoteUpInHierarchy: ContextMenuCommandData;
     moveNoteDownInHierarchy: ContextMenuCommandData;
     selectAllNotesInParent: ContextMenuCommandData;
+
+    createNoteIntoInbox: CommandData;
 
     addNoteLauncher: ContextMenuCommandData;
     addScriptLauncher: ContextMenuCommandData;
@@ -249,6 +254,7 @@ export type CommandMappings = {
     scrollToEnd: CommandData;
     closeThisNoteSplit: CommandData;
     moveThisNoteSplit: CommandData & { isMovingLeft: boolean };
+    jumpToNote: CommandData;
 
     // Geomap
     deleteFromMap: { noteId: string };
@@ -263,6 +269,14 @@ export type CommandMappings = {
 
     refreshResults: {};
     refreshSearchDefinition: {};
+
+    geoMapCreateChildNote: CommandData;
+
+    buildTouchBar: CommandData & {
+        TouchBar: typeof TouchBar;
+        buildIcon(name: string): NativeImage;
+    };
+    refreshTouchBar: CommandData;
 };
 
 type EventMappings = {
@@ -466,6 +480,10 @@ export class AppContext extends Component {
 
         if (utils.isElectron()) {
             this.child(zoomComponent);
+        }
+
+        if (hasTouchBar) {
+            this.child(new TouchBarComponent());
         }
     }
 

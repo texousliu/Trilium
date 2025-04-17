@@ -8,6 +8,11 @@ import { parse, Renderer, type Tokens } from "marked";
 class CustomMarkdownRenderer extends Renderer {
 
     heading(data: Tokens.Heading): string {
+        // Treat h1 as raw text.
+        if (data.depth === 1) {
+            return `<h1>${data.text}</h1>`;
+        }
+
         return super.heading(data).trimEnd();
     }
 
@@ -43,12 +48,52 @@ class CustomMarkdownRenderer extends Renderer {
     }
 
     list(token: Tokens.List): string {
-        return super.list(token)
+        let result = super.list(token)
             .replace("\n", "")  // we replace the first one only.
             .trimEnd();
+
+        // Handle todo-list in the CKEditor format.
+        if (token.items.some(item => item.task)) {
+            result = result.replace(/^<ul>/, "<ul class=\"todo-list\">");
+        }
+
+        return result;
+    }
+
+    checkbox({ checked }: Tokens.Checkbox): string {
+        return '<input type="checkbox"'
+            + (checked ? 'checked="checked" ' : '')
+            + 'disabled="disabled">';
     }
 
     listitem(item: Tokens.ListItem): string {
+        // Handle todo-list in the CKEditor format.
+        if (item.task) {
+            let itemBody = '';
+            const checkbox = this.checkbox({ checked: !!item.checked });
+            if (item.loose) {
+                if (item.tokens[0]?.type === 'paragraph') {
+                    item.tokens[0].text = checkbox + item.tokens[0].text;
+                    if (item.tokens[0].tokens && item.tokens[0].tokens.length > 0 && item.tokens[0].tokens[0].type === 'text') {
+                        item.tokens[0].tokens[0].text = checkbox + escape(item.tokens[0].tokens[0].text);
+                        item.tokens[0].tokens[0].escaped = true;
+                    }
+                } else {
+                    item.tokens.unshift({
+                        type: 'text',
+                        raw: checkbox,
+                        text: checkbox,
+                        escaped: true,
+                    });
+                }
+            } else {
+                itemBody += checkbox;
+            }
+
+            itemBody += `<span class="todo-list__label__description">${this.parser.parse(item.tokens, !!item.loose)}</span>`;
+            return `<li><label class="todo-list__label">${itemBody}</label></li>`;
+        }
+
         return super.listitem(item).trimEnd();
     }
 
