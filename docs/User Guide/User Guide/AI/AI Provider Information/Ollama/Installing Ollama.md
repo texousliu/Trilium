@@ -13,7 +13,7 @@ Also, you should have access to the `ollama` CLI via Powershell or CMD:
 
 After Ollama is installed, you can go ahead and `pull` the models you want to use and run. Here's a command to pull my favorite tool-compatible model and embedding model as of April 2025:
 
-```sh
+```
 ollama pull llama3.1:8b
 ollama pull mxbai-embed-large
 ```
