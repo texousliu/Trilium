@@ -18,10 +18,26 @@ export default class MainTreeExecutors extends Component {
     }
 
     async cloneNotesToCommand({ selectedOrActiveNoteIds }: EventData<"cloneNotesTo">) {
+        if (!selectedOrActiveNoteIds && this.tree) {
+            selectedOrActiveNoteIds = this.tree.getSelectedOrActiveNodes().map((node) => node.data.noteId);
+        }
+
+        if (!selectedOrActiveNoteIds) {
+            return;
+        }
+
         this.triggerCommand("cloneNoteIdsTo", { noteIds: selectedOrActiveNoteIds });
     }
 
     async moveNotesToCommand({ selectedOrActiveBranchIds }: EventData<"moveNotesTo">) {
+        if (!selectedOrActiveBranchIds && this.tree) {
+            selectedOrActiveBranchIds = this.tree.getSelectedOrActiveNodes().map((node) => node.data.branchId);
+        }
+
+        if (!selectedOrActiveBranchIds) {
+            return;
+        }
+
         this.triggerCommand("moveBranchIdsTo", { branchIds: selectedOrActiveBranchIds });
     }
 

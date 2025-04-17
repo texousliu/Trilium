@@ -321,4 +321,25 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
+    it("exports todo lists properly", () => {
+        const html = trimIndentation/*html*/`\
+            <ul class="todo-list">
+                <li>
+                    <label class="todo-list__label">
+                        <input type="checkbox" checked="checked" disabled="disabled"><span class="todo-list__label__description">Hello</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="todo-list__label">
+                        <input type="checkbox" disabled="disabled"><span class="todo-list__label__description">World</span>
+                    </label>
+                </li>
+            </ul>
+        `;
+        const expected = trimIndentation`\
+            - [x] Hello
+            - [ ] World`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
 });

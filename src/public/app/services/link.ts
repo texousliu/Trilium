@@ -278,15 +278,20 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
 
     const ctrlKey = utils.isCtrlKey(evt);
+    const shiftKey = evt.shiftKey;
     const isLeftClick = "which" in evt && evt.which === 1;
     const isMiddleClick = "which" in evt && evt.which === 2;
     const targetIsBlank = ($link?.attr("target") === "_blank");
     const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick || targetIsBlank;
+    const activate = (isLeftClick && ctrlKey && shiftKey) || (isMiddleClick && shiftKey);
+    const openInNewWindow = isLeftClick && evt.shiftKey && !ctrlKey;
 
     if (notePath) {
-        if (openInNewTab) {
+        if (openInNewWindow) {
+            appContext.triggerCommand("openInWindow", { notePath, viewScope });
+        } else if (openInNewTab) {
             appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
-                activate: targetIsBlank,
+                activate: activate ? true : targetIsBlank,
                 viewScope
             });
         } else if (isLeftClick) {

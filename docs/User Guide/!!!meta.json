@@ -9968,6 +9968,26 @@
                                     "format": "markdown",
                                     "dataFileName": "Trilium instance.md",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "LWtBjFej3wX3",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "tC7s2alapj8V",
+                                        "Gzjqa934BdH4",
+                                        "LWtBjFej3wX3"
+                                    ],
+                                    "title": "Cross-Origin Resource Sharing (CORS)",
+                                    "notePosition": 20,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [],
+                                    "format": "markdown",
+                                    "dataFileName": "Cross-Origin Resource Sharing .md",
+                                    "attachments": []
                                 }
                             ]
                         },

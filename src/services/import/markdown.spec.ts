@@ -233,4 +233,12 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("imports todo lists properly", () => {
+         const input = trimIndentation`\
+            - [x] Hello
+            - [ ] World`;
+        const expected = `<ul class="todo-list"><li><label class="todo-list__label"><input type="checkbox" checked="checked" disabled="disabled"><span class="todo-list__label__description">Hello</span></label></li><li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">World</span></label></li></ul>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });
