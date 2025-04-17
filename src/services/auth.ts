@@ -80,8 +80,8 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
 function checkCleanUrl(req: Request, res: Response, next: NextFunction) {
     // Only process if not logged in and clean URLs are enabled
     if (!req.session.loggedIn && !isElectron && !noAuthentication &&
-        options.getOptionBool("redirectBareDomain") &&
-        options.getOptionBool("useCleanUrls")) {
+        options.getOptionOrNull("redirectBareDomain") === "true" &&
+        options.getOptionOrNull("useCleanUrls") === "true") {
 
         // Get the configured share path
         const sharePath = options.getOption("sharePath") || '/share';
