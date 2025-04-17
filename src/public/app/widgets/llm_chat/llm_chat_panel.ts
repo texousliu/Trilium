@@ -5,7 +5,6 @@ import BasicWidget from "../basic_widget.js";
 import toastService from "../../services/toast.js";
 import appContext from "../../components/app_context.js";
 import server from "../../services/server.js";
-import libraryLoader from "../../services/library_loader.js";
 
 import { TPL, addMessageToChat, showSources, hideSources, showLoadingIndicator, hideLoadingIndicator } from "./ui.js";
 import { formatMarkdown } from "./utils.js";
@@ -15,10 +14,7 @@ import { validateEmbeddingProviders } from "./validation.js";
 import type { MessageData, ToolExecutionStep, ChatData } from "./types.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 
-// Import the LLM Chat CSS
-(async function() {
-    await libraryLoader.requireCss('stylesheets/llm_chat.css');
-})();
+import "../../../stylesheets/llm_chat.css";
 
 export default class LlmChatPanel extends BasicWidget {
     private noteContextChatMessages!: HTMLElement;
