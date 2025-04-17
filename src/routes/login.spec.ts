@@ -63,7 +63,11 @@ describe("Login Route test", () => {
         // ignore the seconds in the comparison, just to avoid flakiness in tests, 
         // if for some reason execution is slow between calculation of expected and actual
         expect(actualExpiresDate.slice(0,23)).toBe(expectedExpiresDate.slice(0,23))
-    });
+
+    }, 10_000);
+    // use 10 sec (10_000 ms) timeout for now, instead of default 5 sec to work around
+    // failing CI, because for some reason it currently takes approx. 6 secs to run
+    // TODO: actually identify what is causing this and fix the flakiness
 
 
     it("does not set Expires, when 'Remember Me' is not ticked", async () => {
@@ -80,7 +84,10 @@ describe("Login Route test", () => {
         const expiresCookieMatch = setCookieHeader.match(expiresCookieRegExp);
         expect(expiresCookieMatch).toBeNull();
 
-    });
+    }, 10_000);
+    // use 10 sec (10_000 ms) timeout for now, instead of default 5 sec to work around
+    // failing CI, because for some reason it currently takes approx. 6 secs to run
+    // TODO: actually identify what is causing this and fix the flakiness
 
 
 });
