@@ -153,7 +153,7 @@ export async function createEmbeddingProviderConfig(
          dateCreated, utcDateCreated, dateModified, utcDateModified)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [providerId, name, priority, JSON.stringify(config),
-         now, utcNow, now, utcNow]
+            now, utcNow, now, utcNow]
     );
 
     return providerId;
@@ -460,8 +460,8 @@ export function getAnthropicOptions(
                 supportsStreaming: true,
                 // Anthropic models typically have large context windows
                 contextWindow: modelName.includes('claude-3-opus') ? 200000 :
-                               modelName.includes('claude-3-sonnet') ? 180000 :
-                               modelName.includes('claude-3.5-sonnet') ? 200000 : 100000
+                    modelName.includes('claude-3-sonnet') ? 180000 :
+                        modelName.includes('claude-3.5-sonnet') ? 200000 : 100000
             }
         };
 

@@ -100,7 +100,8 @@ Format your answer as a valid JSON array without markdown code blocks, like this
                 maxTokens: SEARCH_CONSTANTS.LIMITS.QUERY_PROCESSOR_MAX_TOKENS,
                 bypassFormatter: true,
                 expectsJsonResponse: true,
-                _bypassContextProcessing: true // Prevent recursive calls
+                _bypassContextProcessing: true, // Prevent recursive calls
+                enableTools: false // Explicitly disable tools for this request
             };
 
             // Get the response from the LLM
@@ -167,69 +168,33 @@ Format your answer as a valid JSON array without markdown code blocks, like this
             // Try to get LLM service if not provided
             const service = llmService || await this.getLLMService();
 
-            // For when no LLM service is available, use the basic approach
+            // If no LLM service is available, use basic decomposition
             if (!service) {
-                if (!service) {
-                    log.info(`No LLM service available for query decomposition, using original query`);
-                }
-
-                log.info(`Using basic decomposition approach (complexity: ${complexity})`);
-
-                const mainSubQuery = {
-                    id: this.generateSubQueryId(),
-                    text: query,
-                    reason: "Direct question that can be answered without decomposition",
-                    isAnswered: false
-                };
-
-                // Add a generic exploration query for context
-                const genericQuery = {
-                    id: this.generateSubQueryId(),
-                    text: `What information is related to ${query}?`,
-                    reason: "General exploration to find related content",
-                    isAnswered: false
-                };
-
-                return {
-                    originalQuery: query,
-                    subQueries: [mainSubQuery, genericQuery],
-                    status: 'pending',
-                    complexity
-                };
+                log.info(`No LLM service available for query decomposition, using original query`);
+                return this.createBasicDecomposition(query, complexity);
             }
 
-            // For when the  LLM available, we can use more advanced decomposition
-            if (service) {
-                try {
-                    // Try to use LLM for advanced decomposition
-                    log.info(`Using advanced LLM-based decomposition for complex query (complexity: ${complexity})`);
-                    const enhancedSubQueries = await this.createLLMSubQueries(query, context, service);
+            // With LLM service available, always use advanced decomposition regardless of complexity
+            try {
+                log.info(`Using advanced LLM-based decomposition for query (complexity: ${complexity})`);
+                const enhancedSubQueries = await this.createLLMSubQueries(query, context, service);
 
-                    if (enhancedSubQueries && enhancedSubQueries.length > 0) {
-                        log.info(`LLM decomposed query into ${enhancedSubQueries.length} sub-queries: ${JSON.stringify(enhancedSubQueries)}`);
-                        return {
-                            originalQuery: query,
-                            subQueries: enhancedSubQueries,
-                            status: 'pending',
-                            complexity
-                        };
-                    }
-                } catch (error: any) {
-                    log.error(`Error during LLM-based decomposition: ${error.message}, falling back to basic decomposition`);
-                    // Continue to fallback with basic decomposition
+                if (enhancedSubQueries && enhancedSubQueries.length > 0) {
+                    log.info(`LLM decomposed query into ${enhancedSubQueries.length} sub-queries`);
+                    return {
+                        originalQuery: query,
+                        subQueries: enhancedSubQueries,
+                        status: 'pending',
+                        complexity
+                    };
                 }
+            } catch (error: any) {
+                log.error(`Error during LLM-based decomposition: ${error.message}, falling back to basic decomposition`);
+                // Fall through to basic decomposition
             }
 
             // Fallback to basic decomposition
-            const subQueries = this.createSubQueries(query, context);
-            log.info(`Decomposed query into ${subQueries.length} sub-queries`);
-
-            return {
-                originalQuery: query,
-                subQueries,
-                status: 'pending',
-                complexity
-            };
+            return this.createBasicDecomposition(query, complexity);
         } catch (error: any) {
             log.error(`Error decomposing query: ${error.message}`);
 
@@ -246,6 +211,39 @@ Format your answer as a valid JSON array without markdown code blocks, like this
                 complexity: 1
             };
         }
+    }
+
+    /**
+     * Create a basic decomposition of a query without using LLM
+     *
+     * @param query The original query
+     * @param complexity The assessed complexity
+     * @returns A basic decomposed query
+     */
+    private createBasicDecomposition(query: string, complexity: number): DecomposedQuery {
+        log.info(`Using basic decomposition approach (complexity: ${complexity})`);
+
+        const mainSubQuery = {
+            id: this.generateSubQueryId(),
+            text: query,
+            reason: "Direct question that can be answered without decomposition",
+            isAnswered: false
+        };
+
+        // Add a generic exploration query for context
+        const genericQuery = {
+            id: this.generateSubQueryId(),
+            text: `What information is related to ${query}?`,
+            reason: "General exploration to find related content",
+            isAnswered: false
+        };
+
+        return {
+            originalQuery: query,
+            subQueries: [mainSubQuery, genericQuery],
+            status: 'pending',
+            complexity
+        };
     }
 
     /**
@@ -267,25 +265,42 @@ Format your answer as a valid JSON array without markdown code blocks, like this
         }
 
         try {
-            // Build a prompt from existing templates in the constants
-            const contextPart = context ? `\nContext: ${context}` : '';
+            // Create a much better prompt for more effective query decomposition
+            const prompt = `Decompose the following query into 3-5 specific search queries that would help find comprehensive information.
 
-            // Use existing templates from QUERY_DECOMPOSITION_STRINGS to build the prompt
-            const prompt = `I need to break down a complex query into sub-queries.
-Query: ${query}${contextPart}
+Your task is to identify the main concepts and break them down into specific, targeted search queries.
 
-Please analyze this query and identify the key aspects that need to be addressed.`;
+DO NOT simply rephrase the original query or create a generic "what's related to X" pattern.
+DO create specific queries that explore different aspects of the topic.
+
+For example:
+If the query is "How does Docker compare to Kubernetes?", good sub-queries would be:
+- "Docker container architecture and features"
+- "Kubernetes container orchestration capabilities"
+- "Docker vs Kubernetes performance comparison"
+- "When to use Docker versus Kubernetes"
+
+Format your response as a JSON array of objects with 'text' and 'reason' properties.
+Example: [
+  {"text": "Docker container architecture", "reason": "Understanding Docker's core technology"},
+  {"text": "Kubernetes orchestration features", "reason": "Exploring Kubernetes' main capabilities"}
+]
+
+${context ? `\nContext: ${context}` : ''}
+
+Query: ${query}`;
 
             const messages = [
                 { role: "system" as const, content: prompt }
             ];
 
             const options = {
-                temperature: SEARCH_CONSTANTS.TEMPERATURE.QUERY_PROCESSOR,
+                temperature: 0.7,  // Higher temperature for more creative decomposition
                 maxTokens: SEARCH_CONSTANTS.LIMITS.QUERY_PROCESSOR_MAX_TOKENS,
                 bypassFormatter: true,
                 expectsJsonResponse: true,
-                _bypassContextProcessing: true // Prevent recursive calls
+                _bypassContextProcessing: true, // Prevent recursive calls
+                enableTools: false // Explicitly disable tools for this request
             };
 
             // Get the response from the LLM
@@ -300,6 +315,11 @@ Please analyze this query and identify the key aspects that need to be addressed
                     reason?: string;
                 }
 
+                // Log the response for debugging
+                log.info(`Received response from LLM for query decomposition, extracting JSON...`);
+
+                log.info(`Response: ${responseText}`);
+
                 // Extract JSON from the response
                 const extractedData = JsonExtractor.extract<RawSubQuery[]>(responseText, {
                     extractArrays: true,
@@ -307,15 +327,74 @@ Please analyze this query and identify the key aspects that need to be addressed
                     useFallbacks: true
                 });
 
-                if (Array.isArray(extractedData) && extractedData.length > 0) {
-                    // Convert the raw data to SubQuery objects
-                    return extractedData.map(item => ({
-                        id: this.generateSubQueryId(),
-                        text: item.text,
-                        reason: item.reason || "Sub-aspect of the main question",
-                        isAnswered: false
-                    }));
+                // Validate the extracted data
+                if (!Array.isArray(extractedData)) {
+                    log.error(`Failed to extract array from LLM response, got: ${typeof extractedData}`);
+                    return this.createSubQueries(query, context);
                 }
+
+                if (extractedData.length === 0) {
+                    log.error(`Extracted array is empty, falling back to basic decomposition`);
+                    return this.createSubQueries(query, context);
+                }
+
+                log.info(`Successfully extracted ${extractedData.length} items using regex pattern`);
+
+                // Validate each sub-query to ensure it has a text property
+                const validSubQueries = extractedData.filter(item => {
+                    if (!item || typeof item !== 'object') {
+                        log.error(`Invalid sub-query item: ${JSON.stringify(item)}`);
+                        return false;
+                    }
+
+                    if (!item.text || typeof item.text !== 'string') {
+                        log.error(`Sub-query missing text property: ${JSON.stringify(item)}`);
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                if (validSubQueries.length === 0) {
+                    log.error(`No valid sub-queries found after validation, falling back to basic decomposition`);
+                    return this.createSubQueries(query, context);
+                }
+
+                if (validSubQueries.length < extractedData.length) {
+                    log.info(`Some invalid sub-queries were filtered out: ${extractedData.length} -> ${validSubQueries.length}`);
+                }
+
+                // Convert the raw data to SubQuery objects
+                let subQueries = validSubQueries.map(item => ({
+                    id: this.generateSubQueryId(),
+                    text: item.text,
+                    reason: item.reason || "Sub-aspect of the main question",
+                    isAnswered: false
+                }));
+
+                // Make sure we have at least the original query
+                const hasOriginalQuery = subQueries.some(sq => {
+                    // Check if either sq.text or query is null/undefined before using toLowerCase
+                    if (!sq.text) return false;
+                    const sqText = sq.text.toLowerCase();
+                    const originalQuery = query.toLowerCase();
+
+                    return sqText.includes(originalQuery) || originalQuery.includes(sqText);
+                });
+
+                if (!hasOriginalQuery) {
+                    subQueries.unshift({
+                        id: this.generateSubQueryId(),
+                        text: query,
+                        reason: "Original query",
+                        isAnswered: false
+                    });
+                }
+
+                // Log the extracted sub-queries for debugging
+                log.info(`Successfully extracted ${subQueries.length} sub-queries from LLM response`);
+
+                return subQueries;
             } catch (error: any) {
                 log.error(`Error extracting sub-queries from LLM response: ${error.message}`);
                 // Fall through to traditional decomposition
