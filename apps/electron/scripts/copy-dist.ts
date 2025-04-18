@@ -12,6 +12,14 @@ function log(...args: any[]) {
 }
 
 try {
+    /**
+     * Copy the server.
+     */
+    fs.copySync("../server/build", DEST_DIR);
+
+    /**
+     * Copy assets.
+     */
     const assetsToCopy = new Set([
         "./forge.config.cjs",   
         "./bin/electron-forge/desktop.ejs",

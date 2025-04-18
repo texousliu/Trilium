@@ -20,7 +20,8 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev electron ./src/electron-main.ts --inspect=5858 .",
-    "postinstall": "electron-rebuild"
+    "postinstall": "electron-rebuild",
+    "build:copy-dist": "tsx ./scripts/copy-dist.ts"
   },
   "dependencies": {
     "better-sqlite3": "^11.9.1",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/electron-squirrel-startup": "1.0.2",
     "electron": "35.1.5",
-    "@electron/rebuild": "3.7.2"
+    "@electron/rebuild": "3.7.2",
+    "tsx": "4.19.3"
   }
 }
