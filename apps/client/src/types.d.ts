@@ -2,13 +2,11 @@ import type FNote from "./entities/fnote";
 import type { Froca } from "./services/froca-interface";
 import { Suggestion } from "./services/note_autocomplete.ts";
 import utils from "./services/utils.ts";
-import appContext from "./components/app_context.ts";
+import appContext, { AppContext } from "./components/app_context.ts";
 import server from "./services/server.ts";
 import library_loader, { Library } from "./services/library_loader.ts";
-import type { init } from "i18next";
 import type { lint } from "./services/eslint.ts";
-import type { RelationType } from "./widgets/type_widgets/relation_map.ts";
-import type { Mermaid } from "mermaid";
+import type { Mermaid, MermaidConfig } from "mermaid";
 
 interface ElectronProcess {
     type: string;
@@ -23,7 +21,7 @@ interface CustomGlobals {
     getHeaders: typeof server.getHeaders;
     getReferenceLinkTitle: (href: string) => Promise<string>;
     getReferenceLinkTitleSync: (href: string) => string;
-    getActiveContextNote: FNote;
+    getActiveContextNote: () => FNote;
     requireLibrary: typeof library_loader.requireLibrary;
     ESLINT: Library;
     appContext: AppContext;
@@ -73,7 +71,7 @@ declare global {
         debug?: boolean;
     }
 
-    type AutoCompleteCallback = (values: AutoCompleteCallbackArg[]) => void;
+    type AutoCompleteCallback = (values: AutoCompleteArg[]) => void;
 
     interface AutoCompleteArg {
         displayKey: "name" | "value" | "notePathTitle";
@@ -85,7 +83,7 @@ declare global {
     };
 
     interface JQuery {
-        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: AutoCompleteArg[] | string) => JQuery<?>;
+        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: AutoCompleteArg[] | string) => JQuery<HTMLElement>;
 
         getSelectedNotePath(): string | undefined;
         getSelectedNoteId(): string | null;
@@ -118,6 +116,7 @@ declare global {
     var logError: (message: string, e?: Error | string) => void;
     var logInfo: (message: string) => void;
     var glob: CustomGlobals;
+    //@ts-ignore
     var require: RequireMethod;
     var __non_webpack_require__: RequireMethod | undefined;
 
@@ -135,6 +134,10 @@ declare global {
     interface CKCodeBlockLanguage {
         language: string;
         label: string;
+    }
+
+    interface CKEditorInstance {
+
     }
 
     interface CKWatchdog {
@@ -172,7 +175,7 @@ declare global {
     var CKEditor: {
         BalloonEditor: CKEditorInstance;
         DecoupledEditor: CKEditorInstance;
-        EditorWatchdog: typeof CKWatchdog;
+        EditorWatchdog: CKWatchdog;
     };
 
     var CKEditorInspector: {
@@ -260,7 +263,7 @@ declare global {
     interface Writer {
         setAttribute(name: string, value: string, el: CKNode);
         createPositionAt(el: CKNode, opt?: "end" | number);
-        setSelection(pos: number, pos?: number);
+        setSelection(pos: number, pos2?: number);
         insertText(text: string, opts: Record<string, unknown> | undefined | TextPosition, position?: TextPosition);
         addMarker(name: string, opts: {
             range: Range;
