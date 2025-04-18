@@ -86,7 +86,17 @@
 
     "ollama": "0.5.14",
     "openai": "4.93.0",
-    "@anthropic-ai/sdk": "0.39.0"
+    "@anthropic-ai/sdk": "0.39.0",
+
+    "jquery-hotkeys": "0.2.2",
+    "jquery.fancytree": "2.38.5",
+    "jquery": "3.7.1",
+    "katex": "0.16.22",
+    "autocomplete.js": "0.38.1",    
+    "boxicons": "2.1.4",
+    "normalize.css": "8.0.1",    
+    "codemirror": "5.65.19",
+    "@highlightjs/cdn-assets": "11.11.1"
   },
   "devDependencies": {    
     "typescript": "5.8.3",
@@ -123,6 +133,8 @@
     "tsx": "4.19.3",
     "@types/express-session": "1.18.1",
     "@types/escape-html": "1.0.4",
-    "@types/ws": "8.18.1"
+    "@types/ws": "8.18.1",
+
+    "@excalidraw/excalidraw": "0.18.0"
   }
 }
