@@ -74,6 +74,8 @@
     "@popperjs/core": "2.11.8",
     "@electron/remote": "2.1.2",
     "@types/react": "18.3.20",
-    "@types/react-dom": "18.3.6"
+    "@types/react-dom": "18.3.6",
+    "css-loader": "7.1.2",
+    "postcss-loader": "8.1.1"
   }
 }
