@@ -18,26 +18,8 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
 async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
     if (isDev) {
-        const webpack = (await import("webpack")).default;
-        const webpackMiddleware = (await import("webpack-dev-middleware")).default;
-        const productionConfig = (await import("../../webpack.config.js")).default;
-
-        const frontendCompiler = webpack({
-            mode: "development",
-            cache: {
-                type: "filesystem",
-                cacheDirectory: path.join(srcRoot, "..", ".cache", isElectron ? "electron" : "server")
-            },
-            plugins: productionConfig.plugins,
-            entry: productionConfig.entry,
-            module: productionConfig.module,
-            resolve: productionConfig.resolve,
-            devtool: productionConfig.devtool,
-            target: productionConfig.target
-        });
-
         app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "public/app/doc_notes")));
-        app.use(`/${assetPath}/app`, webpackMiddleware(frontendCompiler));
+        app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "../client/build")));
     } else {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));
     }
