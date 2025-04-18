@@ -5,7 +5,7 @@ import utils from "../../../services/utils.js";
 import AbstractShacaEntity from "./abstract_shaca_entity.js";
 import type SNote from "./snote.js";
 import type { Blob } from "../../../services/blob-interface.js";
-import type { SAttachmentRow } from "@triliumnext/commons";
+import type { SAttachmentRow } from "./rows.js";
 
 class SAttachment extends AbstractShacaEntity {
     private attachmentId: string;

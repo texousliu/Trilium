@@ -8,7 +8,7 @@ import type { Blob } from "../../../services/blob-interface.js";
 import type SAttachment from "./sattachment.js";
 import type SAttribute from "./sattribute.js";
 import type SBranch from "./sbranch.js";
-import type { SNoteRow } from "@triliumnext/commons";
+import type { SNoteRow } from "./rows.js";
 
 const LABEL = "label";
 const RELATION = "relation";
