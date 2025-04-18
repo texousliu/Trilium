@@ -11,7 +11,7 @@ export interface Froca {
     attachments: Record<string, FAttachment>;
     blobPromises: Record<string, Promise<void | FBlob> | null>;
 
-    getBlob(entityType: string, entityId: string): Promise<void | FBlob | null>;
+    getBlob(entityType: string, entityId: string): Promise<FBlob | null>;
     getNote(noteId: string, silentNotFoundError?: boolean): Promise<FNote | null>;
     getNoteFromCache(noteId: string): FNote;
     getNotesFromCache(noteIds: string[], silentNotFoundError?: boolean): FNote[];

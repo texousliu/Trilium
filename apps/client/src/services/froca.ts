@@ -36,7 +36,7 @@ class FrocaImpl implements Froca {
     branches!: Record<string, FBranch>;
     attributes!: Record<string, FAttribute>;
     attachments!: Record<string, FAttachment>;
-    blobPromises!: Record<string, Promise<void | FBlob> | null>;
+    blobPromises!: Record<string, Promise<FBlob> | null>;
 
     constructor() {
         this.initializedPromise = this.loadInitialTree();
@@ -368,7 +368,7 @@ class FrocaImpl implements Froca {
         });
     }
 
-    async getBlob(entityType: string, entityId: string) {
+    async getBlob(entityType: string, entityId: string): Promise<FBlob | null> {
         // I'm not sure why we're not using blobIds directly, it would save us this composite key ...
         // perhaps one benefit is that we're always requesting the latest blob, not relying on perhaps faulty/slow
         // websocket update?
@@ -378,7 +378,10 @@ class FrocaImpl implements Froca {
             this.blobPromises[key] = server
                 .get<FBlobRow>(`${entityType}/${entityId}/blob`)
                 .then((row) => new FBlob(row))
-                .catch((e) => console.error(`Cannot get blob for ${entityType} '${entityId}'`, e));
+                .catch((e) => {
+                    console.error(`Cannot get blob for ${entityType} '${entityId}'`, e);
+                    return null;
+                });
 
             // we don't want to keep large payloads forever in memory, so we clean that up quite quickly
             // this cache is more meant to share the data between different components within one business transaction (e.g. loading of the note into the tab context and all the components)
