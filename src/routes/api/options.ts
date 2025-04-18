@@ -82,6 +82,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "allowedHtmlTags",
     "redirectBareDomain",
     "showLoginInShareTheme",
+    "splitEditorOrientation",
 
     // AI/LLM integration options
     "aiEnabled",

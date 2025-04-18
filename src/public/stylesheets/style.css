@@ -1992,7 +1992,12 @@ footer.file-footer button {
     background: var(--card-background-color);
     border-radius: 0.5em;
     padding: 1em;
+    margin: 1.25em 0;
+    position: relative;
+    padding-left: 2.5em;
+    overflow: hidden;
 }
+
 .admonition p:last-child {
     margin-bottom: 0;
 }
@@ -2011,11 +2016,11 @@ footer.file-footer button {
 .admonition.caution { --accent-color: #ff2e2e; }
 .admonition.warning { --accent-color: #e2aa03; }
 
-.ck-content .admonition.note::before { content: "\eb21"; }
-.ck-content .admonition.tip::before { content: "\ea0d"; }
-.ck-content .admonition.important::before { content: "\ea7c"; }
-.ck-content .admonition.caution::before { content: "\eac7"; }
-.ck-content .admonition.warning::before { content: "\eac5"; }
+.admonition.note::before { content: "\eb21"; }
+.admonition.tip::before { content: "\ea0d"; }
+.admonition.important::before { content: "\ea7c"; }
+.admonition.caution::before { content: "\eac7"; }
+.admonition.warning::before { content: "\eac5"; }
 
 .chat-options-container {
     display: flex;
@@ -2066,11 +2071,6 @@ footer.file-footer button {
     border-left: 2px solid #e2aa03;
     font-weight: bold;
 }
-.admonition.note::before { content: "\eb21"; }
-.admonition.tip::before { content: "\ea0d"; }
-.admonition.important::before { content: "\ea7c"; }
-.admonition.caution::before { content: "\eac7"; }
-.admonition.warning::before { content: "\eac5"; }
 
 /*
  * In-content floating buttons

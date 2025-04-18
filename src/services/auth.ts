@@ -15,7 +15,7 @@ const noAuthentication = config.General && config.General.noAuthentication === t
 
 function checkAuth(req: Request, res: Response, next: NextFunction) {
     if (!sqlInit.isDbInitialized()) {
-        res.redirect('setup');
+        return res.redirect('setup');
     }
 
     const currentTotpStatus = totp.isTotpEnabled();
