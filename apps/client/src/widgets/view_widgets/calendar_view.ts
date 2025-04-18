@@ -186,7 +186,7 @@ export default class CalendarView extends ViewMode {
                 if (promotedAttributes) {
                     let promotedAttributesHtml = "";
                     for (const [name, value] of promotedAttributes) {
-                        promotedAttributesHtml = /*html*/`\
+                        promotedAttributesHtml = promotedAttributesHtml + /*html*/`\
                         <div class="promoted-attribute">
                             <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
                         </div>`;
