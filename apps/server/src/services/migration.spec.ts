@@ -8,7 +8,7 @@ describe("Migration", () => {
     it("migrates from v214", async () => {
         await new Promise<void>((resolve) => {
             cls.init(async () => {
-                sql.rebuildIntegrationTestDatabase("test/db/document_v214.db");
+                sql.rebuildIntegrationTestDatabase("spec/db/document_v214.db");
                 await migration.migrateIfNecessary();
                 expect(sql.getValue("SELECT count(*) FROM blobs")).toBe(116);
                 resolve();
