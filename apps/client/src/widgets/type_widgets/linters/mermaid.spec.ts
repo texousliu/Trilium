@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
-import { trimIndentation } from "../../../../../../spec/support/utils.js";
+import { describe, expect, it } from "vitest";
+import { trimIndentation } from "@triliumnext/commons";
 import { validateMermaid } from "./mermaid.js";
 
 describe("Mermaid linter", () => {

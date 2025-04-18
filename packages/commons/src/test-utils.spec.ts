@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { trimIndentation } from "./utils.js";
+import { trimIndentation } from "./test-utils.js";
 
 describe("Utils", () => {
     it("trims indentation", () => {

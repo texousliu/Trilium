@@ -1,5 +1,5 @@
 import { lint } from "./eslint.js";
-import { trimIndentation } from "../../../../spec/support/utils.js";
+import { trimIndentation } from "@triliumnext/commons";
 import { describe, expect, it } from "vitest";
 
 describe("Linter", () => {

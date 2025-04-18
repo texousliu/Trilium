@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { postprocessMermaidSvg } from "./mermaid.js";
-import { trimIndentation } from "../../../../spec/support/utils.js";
+import { trimIndentation } from "@triliumnext/commons";
 
 describe("Mermaid", () => {
     it("converts <br> properly", () => {
