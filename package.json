@@ -13,6 +13,8 @@
         "packages/*"
     ],
     "scripts": {
+        "test": "npm --workspace=apps/client --workspace=apps/server test",
+
         "client:test": "npm --workspace=apps/client test",
         "client:build": "npm --workspace=apps/client build:webpack",
 
