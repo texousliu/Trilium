@@ -1,7 +1,7 @@
 import utils from "../../../services/utils.js";
 import OptionsWidget from "./options_widget.js";
 import { t } from "../../../services/i18n.js";
-import type { OptionMap } from "../../../../../services/options_interface.js";
+import type { OptionMap } from "@triliumnext/commons";
 
 const TPL_WEB = `
 <div class="options-section">

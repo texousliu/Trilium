@@ -1,7 +1,7 @@
 import server from "../../../services/server.js";
 import toastService from "../../../services/toast.js";
 import OptionsWidget from "./options_widget.js";
-import type { OptionMap } from "../../../../../services/options_interface.js";
+import type { OptionMap } from "@triliumnext/commons";
 import { t } from "../../../services/i18n.js";
 import utils from "../../../services/utils.js";
 import dialogService from "../../../services/dialog.js";

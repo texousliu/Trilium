@@ -1,7 +1,7 @@
 import { t } from "../../../../services/i18n.js";
 import OptionsWidget from "../options_widget.js";
 import mimeTypesService from "../../../../services/mime_types.js";
-import type { OptionMap } from "../../../../../../services/options_interface.js";
+import type { OptionMap } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="options-section">

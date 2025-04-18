@@ -3,8 +3,7 @@ import utils from "../../../services/utils.js";
 import dialogService from "../../../services/dialog.js";
 import OptionsWidget from "./options_widget.js";
 import { t } from "../../../services/i18n.js";
-import type { KeyboardShortcut } from "../../../../../services/keyboard_actions_interface.js";
-import type { OptionNames } from "../../../../../services/options_interface.js";
+import type { OptionNames, KeyboardShortcut } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="options-section shortcuts-options-section tn-no-card">

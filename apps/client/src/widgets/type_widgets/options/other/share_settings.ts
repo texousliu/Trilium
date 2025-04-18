@@ -1,7 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import options from "../../../../services/options.js";
 import { t } from "../../../../services/i18n.js";
-import type { OptionMap, OptionNames } from "../../../../../../services/options_interface.js";
+import type { OptionMap, OptionNames } from "@triliumnext/commons";
 import searchService from "../../../../services/search.js";
 
 const TPL = /*html*/`

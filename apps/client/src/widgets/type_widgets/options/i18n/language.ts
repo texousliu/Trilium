@@ -1,5 +1,5 @@
 import OptionsWidget from "../options_widget.js";
-import type { OptionMap } from "../../../../../../services/options_interface.js";
+import type { OptionMap } from "@triliumnext/commons";
 import { getAvailableLocales } from "../../../../services/i18n.js";
 import { t } from "i18next";
 

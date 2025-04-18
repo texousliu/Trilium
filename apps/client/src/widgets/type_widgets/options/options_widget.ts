@@ -1,4 +1,4 @@
-import type { FilterOptionsByType, OptionMap, OptionNames } from "../../../../../services/options_interface.js";
+import type { FilterOptionsByType, OptionMap, OptionNames } from "@triliumnext/commons";
 import type { EventData, EventListener } from "../../../components/app_context.js";
 import type FNote from "../../../entities/fnote.js";
 import { t } from "../../../services/i18n.js";

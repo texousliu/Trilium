@@ -1,7 +1,7 @@
 import OptionsWidget from "../options_widget.js";
 import { TPL } from "./template.js";
 import { t } from "../../../../services/i18n.js";
-import type { OptionDefinitions, OptionMap } from "../../../../../../services/options_interface.js";
+import type { OptionDefinitions, OptionMap } from "@triliumnext/commons";
 import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
 import type { EmbeddingStats, FailedEmbeddingNotes } from "./interfaces.js";

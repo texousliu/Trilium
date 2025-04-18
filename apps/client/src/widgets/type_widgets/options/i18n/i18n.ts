@@ -2,8 +2,7 @@ import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import utils from "../../../../services/utils.js";
 import { getAvailableLocales, t } from "../../../../services/i18n.js";
-import type { OptionMap } from "../../../../../../services/options_interface.js";
-import type { Locale } from "../../../../../../services/i18n.js";
+import type { OptionMap, Locale } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="options-section">

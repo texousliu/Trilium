@@ -1,4 +1,4 @@
-import type { OptionMap } from "../../../../../../services/options_interface.js";
+import type { OptionMap } from "@triliumnext/commons";
 import { t } from "../../../../services/i18n.js";
 import library_loader from "../../../../services/library_loader.js";
 import server from "../../../../services/server.js";
