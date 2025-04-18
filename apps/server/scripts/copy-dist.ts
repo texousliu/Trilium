@@ -28,6 +28,29 @@ function copyAssets(baseDir: string, destDir: string, files: string[]) {
     }
 }
 
+/**
+ * Copies the dependencies from the node_modules directory to the build directory.
+ * We cannot copy the node_modules directory directly because we are in a monorepo and all the packages are gathered at root level.
+ * 
+ * @param packageJsonPath 
+ */
+function copyNodeModules(packageJsonPath: string) {
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    const dependencies = packageJson.dependencies || {};
+
+    for (const dependency of Object.keys(dependencies)) {
+        if (dependency.startsWith("@triliumnext/")) {
+            // Skip copying @triliumnext dependencies since they are symlinked in the monorepo.
+            continue;
+        }
+
+        const src = path.join(rootDir, "node_modules", dependency);
+        const dest = path.join(DEST_DIR, "node_modules", dependency);
+        log(`${src} -> ${dest}`);
+        fs.copySync(src, dest);
+    }
+}
+
 try {
     const clientAssets = [
         "./libraries",
@@ -59,6 +82,7 @@ try {
         "README.md"    
     ];
 
+    copyNodeModules(path.join(serverDir, "package.json"));
     copyAssets(clientDir, path.join(DEST_DIR, "src", "public"), clientAssets);
     copyAssets(serverDir, path.join(DEST_DIR), serverAssets);
     copyAssets(rootDir, path.join(DEST_DIR), rootAssets);
