@@ -82,6 +82,7 @@
     "@triliumnext/turndown-plugin-gfm": "1.0.61",
 
     "electron-window-state": "5.0.3",
+    "swagger-ui-express": "5.0.1",
 
     "ollama": "0.5.14",
     "openai": "4.93.0",
