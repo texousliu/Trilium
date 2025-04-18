@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { note } from "../../../spec/support/becca_mocking.js";
+import { note } from "../../test/becca_mocking.js";
 import { renderSvgAttachment } from "./image.js";
 
 describe("Image API", () => {

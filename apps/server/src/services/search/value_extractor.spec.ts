@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import ValueExtractor from "./value_extractor.js";
 import becca from "../../becca/becca.js";
 import SearchContext from "./search_context.js";
-import { note } from "../../../spec/support/becca_mocking.js";
+import { note } from "../../test/becca_mocking.js";
 
 const dsc = new SearchContext();
 

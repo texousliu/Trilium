@@ -1,10 +1,10 @@
-import BNote from "../../src/becca/entities/bnote.js";
-import BBranch from "../../src/becca/entities/bbranch.js";
-import BAttribute from "../../src/becca/entities/battribute.js";
-import becca from "../../src/becca/becca.js";
+import BNote from "../becca/entities/bnote.js";
+import BBranch from "../becca/entities/bbranch.js";
+import BAttribute from "../becca/entities/battribute.js";
+import becca from "../becca/becca.js";
 import randtoken from "rand-token";
-import type SearchResult from "../../src/services/search/search_result.js";
-import type { NoteRow, NoteType } from "../../src/becca/entities/rows.js";
+import type SearchResult from "../services/search/search_result.js";
+import type { NoteRow, NoteType } from "@triliumnext/commons";
 randtoken.generator({ source: "crypto" });
 
 export function findNoteByTitle(searchResults: Array<SearchResult>, title: string): BNote | undefined {

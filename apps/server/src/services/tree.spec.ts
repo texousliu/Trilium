@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { note, NoteBuilder } from "../../spec/support/becca_mocking.js";
+import { note, NoteBuilder } from "../test/becca_mocking.js";
 import becca from "../becca/becca.js";
 import BBranch from "../becca/entities/bbranch.js";
 import BNote from "../becca/entities/bnote.js";
