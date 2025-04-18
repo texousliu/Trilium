@@ -4,8 +4,7 @@
     "trilium": "src/main.js"
   },
   "type": "module",
-  "scripts": {
-    "server:start": "cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev nodemon src/main.ts",
+  "scripts": {    
     "server:start-safe": "cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev nodemon src/main.ts",
     "server:start-no-dir": "cross-env TRILIUM_ENV=dev nodemon src/main.ts",
     "server:start-test": "npm run server:switch && rimraf ./data-test && cross-env TRILIUM_DATA_DIR=./data-test TRILIUM_ENV=dev TRILIUM_PORT=9999 nodemon src/main.ts",
@@ -65,25 +64,22 @@
     "electron-dl": "4.0.0",
     "electron-squirrel-startup": "1.0.1",    
     
-    
-    "html2plaintext": "2.1.4",
+        
     "http-proxy-agent": "7.0.2",
     "https-proxy-agent": "7.0.6",    
         
-    "is-animated": "2.0.2",
+    
     
         
     "katex": "0.16.22",
     
-    
-    "normalize-strings": "1.1.1",
+        
     "normalize.css": "8.0.1",    
     
     "sax": "1.4.1",        
     
     
-    "swagger-ui-express": "5.0.1",    
-    "unescape": "1.0.1",    
+    "swagger-ui-express": "5.0.1",        
     "yauzl": "3.2.0"
   },
   "devDependencies": {
@@ -103,7 +99,7 @@
     "@types/node": "22.14.1",    
     "@types/yargs": "17.0.33",
     "@vitest/coverage-v8": "3.1.1",
-    "cross-env": "7.0.3",
+    
     "electron": "35.1.5",
     "eslint": "9.24.0",
     "eslint-plugin-simple-import-sort": "12.1.1",
@@ -111,11 +107,10 @@
     "globals": "16.0.0",
     "happy-dom": "17.4.4",
     "jsdoc": "4.0.4",
-    "lorem-ipsum": "2.0.8",
-    "nodemon": "3.1.9",
+    "lorem-ipsum": "2.0.8",    
     "rcedit": "4.0.1",
     "rimraf": "6.0.1",    
-    "tslib": "2.8.1",
+    "tslib": "2.8.1",    
     "typedoc": "0.28.2",
     "typedoc-plugin-missing-exports": "4.0.0"
   },

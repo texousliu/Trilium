@@ -19,7 +19,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build:ts": "tsc"
+    "build:ts": "tsc",
+    "server:start": "cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev nodemon src/main.ts"
   },
   "dependencies": {
     "express": "4.21.2",
@@ -74,6 +75,11 @@
     "escape-html": "1.0.3",    
     "ws": "8.18.1",    
     "ini": "5.0.0",
+    "unescape": "1.0.1",    
+    "html2plaintext": "2.1.4",
+    "normalize-strings": "1.1.1",
+    "is-animated": "2.0.2",
+    "@triliumnext/turndown-plugin-gfm": "1.0.61",
 
     "electron-window-state": "5.0.3",
 
@@ -111,6 +117,9 @@
     "@types/mime-types": "2.1.4",       
     "@types/sax": "1.2.7",
     "mime-types": "3.0.1",    
+    "nodemon": "3.1.9",
+    "cross-env": "7.0.3",
+    "tsx": "4.19.3",
     "@types/express-session": "1.18.1",
     "@types/escape-html": "1.0.4",
     "@types/ws": "8.18.1"
