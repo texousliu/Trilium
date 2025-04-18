@@ -20,9 +20,9 @@
   "main": "index.js",
   "scripts": {
     "build:ts": "tsc",
-    "server:start": "cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev nodemon src/main.ts",
-    "server:test": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./spec/data TRILIUM_INTEGRATION_TEST=memory vitest",
-    "server:coverage": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./spec/data TRILIUM_INTEGRATION_TEST=memory vitest --coverage"
+    "start": "cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev nodemon src/main.ts",
+    "test": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./spec/data TRILIUM_INTEGRATION_TEST=memory vitest",
+    "coverage": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./spec/data TRILIUM_INTEGRATION_TEST=memory vitest --coverage"
   },
   "dependencies": {
     "express": "4.21.2",

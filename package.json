@@ -14,7 +14,9 @@
     ],
     "scripts": {
         "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
-        "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
+        "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
+        "server:test": "npm --workspace=apps/server test",
+        "server:coverage": "npm --workspace=apps/server coverage"
     },
     "devDependencies": {
         "tsx": "^4.19.3"
