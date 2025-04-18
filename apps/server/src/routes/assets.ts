@@ -22,6 +22,7 @@ async function register(app: express.Application) {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "../../client/build")));
         app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, "../../client/build")));
         app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(srcRoot, "../../client/stylesheets")));
+        app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "../../client/libraries")));
     } else {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));
         app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, "public/app-dist")));
