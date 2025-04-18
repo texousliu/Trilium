@@ -37,19 +37,20 @@ module.exports = {
             ...(process.platform === "darwin" ? [] : extraResourcesForPlatform),
 
             // These always go in Resources
-            "translations/",
-            "node_modules/@highlightjs/cdn-assets/styles"
+            "../server/translations/",
+            "../../node_modules/@highlightjs/cdn-assets/styles"
         ],
         afterPrune: [
             (buildPath, _electronVersion, _platform, _arch, callback) => {
                 // buildPath is a temporary directory that electron-packager creates - it's in the form of
                 // /tmp/electron-packager/tmp-SjJl0s/resources/app
                 try {
-                    const cleanupNodeModulesScript = path.join(buildPath, "bin", "cleanupNodeModules.ts");
+                    const cleanupNodeModulesScript = path.join(buildPath, "build", "node_modules", "@triliumnext/server", "scripts", "cleanupNodeModules.ts");
                     // we don't have access to any devDeps like 'tsx' here, so use the built-in '--experimental-strip-types' flag instead
                     const command = `node --experimental-strip-types ${cleanupNodeModulesScript} "${buildPath}" --skip-prune-dev-deps`;
                     // execSync throws, if above returns any non-zero exit code
-                    execSync(command);
+                    // TODO: Not working.
+                    // execSync(command);
                     callback()
                 } catch(err) {
                     callback(err)
@@ -187,7 +188,7 @@ function getExtraResourcesForPlatform() {
     const getScriptRessources = () => {
         const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
         const scriptExt = (process.platform === "win32") ? "bat" : "sh";
-        return scripts.map(script => `./tpl/${script}.${scriptExt}`);
+        return scripts.map(script => `../server/tpl/${script}.${scriptExt}`);
     }
 
     switch (process.platform) {

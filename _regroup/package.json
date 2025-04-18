@@ -21,10 +21,7 @@
     "docs:edit": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-docs TRILIUM_ENV=dev TRILIUM_INTEGRATION_TEST=memory-no-store TRILIUM_PORT=37741 electron ./electron-docs-main.ts .",
     "docs:edit-nix": "electron-rebuild --version 33.3.1 && cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-docs TRILIUM_PORT=37741 TRILIUM_ENV=dev TRILIUM_INTEGRATION_TEST=memory-no-store nix-shell -p electron_33 --run \"electron ./electron-docs-main.ts .\"",
     "demo:edit": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-demo TRILIUM_ENV=dev TRILIUM_INTEGRATION_TEST=memory-no-store TRILIUM_PORT=37741 electron ./electron-edit-demo.ts .",
-    "demo:edit-nix": "electron-rebuild --version 33.3.1 && cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-docs TRILIUM_PORT=37741 TRILIUM_ENV=dev TRILIUM_INTEGRATION_TEST=memory-no-store nix-shell -p electron_33 --run \"electron ./electron-edit-demo.ts .\"",
-    "electron-forge:start": "npm run build:prepare-dist && cd ./build && electron-forge start",
-    "electron-forge:make": "npm run build:prepare-dist && cross-env DEBUG=electron-windows-installer:* electron-forge make ./build",
-    "electron-forge:package": "npm run build:prepare-dist && cd ./build && electron-forge package",    
+    "demo:edit-nix": "electron-rebuild --version 33.3.1 && cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data-docs TRILIUM_PORT=37741 TRILIUM_ENV=dev TRILIUM_INTEGRATION_TEST=memory-no-store nix-shell -p electron_33 --run \"electron ./electron-edit-demo.ts .\"",\    
     "docs:build": "typedoc",        
     "test": "npm run client:test && npm run server:test",    
     "client:test": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./integration-tests/db TRILIUM_INTEGRATION_TEST=memory vitest --root src/public/app",
@@ -48,15 +45,7 @@
     "sax": "1.4.1",            
     "yauzl": "3.2.0"
   },
-  "devDependencies": {
-    "@electron-forge/cli": "7.8.0",
-    "@electron-forge/maker-deb": "7.8.0",
-    "@electron-forge/maker-dmg": "7.8.0",
-    "@electron-forge/maker-flatpak": "7.8.0",
-    "@electron-forge/maker-rpm": "7.8.0",
-    "@electron-forge/maker-squirrel": "7.8.0",
-    "@electron-forge/maker-zip": "7.8.0",
-    "@electron-forge/plugin-auto-unpack-natives": "7.8.0",    
+  "devDependencies": {    
     "@playwright/test": "1.51.1",
     "@stylistic/eslint-plugin": "4.2.0",        
     "@types/express": "5.0.1",    
