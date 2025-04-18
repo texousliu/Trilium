@@ -44,10 +44,7 @@
     "chore:generate-openapi": "tsx bin/generate-openapi.js"
   },
   "dependencies": {            
-    "dayjs-plugin-utc": "0.1.2",    
-    "electron-debug": "4.1.0",
-    "electron-dl": "4.0.0",
-    "electron-squirrel-startup": "1.0.1",    
+    "dayjs-plugin-utc": "0.1.2",                
     "http-proxy-agent": "7.0.2",
     "https-proxy-agent": "7.0.6",        
     "sax": "1.4.1",            

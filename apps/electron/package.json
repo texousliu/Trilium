@@ -20,5 +20,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "electron-debug": "4.1.0",
+    "electron-dl": "4.0.0",
+    "electron-squirrel-startup": "1.0.1"
   }
 }
