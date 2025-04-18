@@ -1,4 +1,4 @@
-import type { AttachmentRow } from "../../../becca/entities/rows.js";
+import type { AttachmentRow } from "@triliumnext/commons";
 import type { AttributeType } from "../entities/fattribute.js";
 import type { EntityChange } from "../server_types.js";
 

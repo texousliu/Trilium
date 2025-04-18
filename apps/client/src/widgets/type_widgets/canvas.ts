@@ -2,7 +2,6 @@ import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
 import linkService from "../../services/link.js";
 import server from "../../services/server.js";
-import asset_path from "../../../../services/asset_path.js";
 import type FNote from "../../entities/fnote.js";
 import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
 import type { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
@@ -10,6 +9,7 @@ import type { JSX } from "react";
 import type React from "react";
 import type { Root } from "react-dom/client";
 import "@excalidraw/excalidraw/index.css";
+import asset_path from "../../asset_path.js";
 
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">

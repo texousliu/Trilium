@@ -10,8 +10,8 @@ import type { EventData } from "../../components/app_context.js";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
-import type BAttribute from "../../../../becca/entities/battribute.js";
 import "../../../stylesheets/calendar.css";
+import { AttributeRow } from "@triliumnext/commons";
 
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter);
@@ -217,7 +217,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             this.weekNoteEnable = false;
             return;
         }
-        const noteAttributes = await server.get<BAttribute[]>(`notes/${noteId}/attributes`);
+        const noteAttributes = await server.get<AttributeRow[]>(`notes/${noteId}/attributes`);
 
         for (const attribute of noteAttributes) {
             if (attribute.name === 'enableWeekNote') {

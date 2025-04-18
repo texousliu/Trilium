@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { byBookType, byNoteType } from "./help_button.js";
 import fs from "fs";
-import type { HiddenSubtreeItem } from "../../../../services/hidden_subtree.js";
+import type { HiddenSubtreeItem } from "@triliumnext/commons";
 
 describe("Help button", () => {
     it("All help notes are accessible", () => {
