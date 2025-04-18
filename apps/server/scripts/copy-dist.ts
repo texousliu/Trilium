@@ -71,6 +71,7 @@ try {
         fs.copySync(dir, path.normalize(path.join(PUBLIC_DIR, path.basename(dir))));
     }
 
+    fs.copySync(path.join(serverDir, "build-ts", "apps", "server", "src"), path.join(DEST_DIR, "src"));
     fs.copySync(path.join(rootDir, "packages", "turndown-plugin-gfm", "src"), path.join(DEST_DIR, "src", "public", "app-dist", "turndown-plugin-gfm"));
 
     console.log("Copying complete!")
