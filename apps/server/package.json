@@ -69,6 +69,11 @@
     "marked": "15.0.8",
     "webpack": "5.99.5",
     "webpack-dev-middleware": "7.4.2",
+    "js-yaml": "4.1.0",    
+    "fs-extra": "11.3.0",      
+    "escape-html": "1.0.3",    
+    "ws": "8.18.1",    
+    "ini": "5.0.0",
 
     "electron-window-state": "5.0.3",
 
@@ -92,6 +97,22 @@
     "@types/multer": "1.4.12",
     "@types/archiver": "6.0.3",
     "@types/supertest": "6.0.3",
-    "@types/html": "1.0.4"
+    "@types/serve-favicon": "2.5.7",
+    "@types/compression": "1.7.5",
+    "@types/tmp": "0.2.6",
+    "@types/js-yaml": "4.0.9",    
+    "@types/html": "1.0.4",
+    "@types/session-file-store": "1.2.5",
+    "@types/fs-extra": "11.0.4",   
+    "@types/ini": "4.1.1",     
+    "@types/turndown": "5.0.5",
+    "@types/sanitize-html": "2.15.0",
+    "@types/stream-throttle": "0.1.4", 
+    "@types/mime-types": "2.1.4",       
+    "@types/sax": "1.2.7",
+    "mime-types": "3.0.1",    
+    "@types/express-session": "1.18.1",
+    "@types/escape-html": "1.0.4",
+    "@types/ws": "8.18.1"
   }
 }
