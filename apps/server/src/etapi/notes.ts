@@ -214,7 +214,7 @@ function parseSearchParams(req: Request) {
 
 const SEARCH_PARAM_ERROR = "SEARCH_PARAM_VALIDATION_ERROR";
 
-function parseString(value: string | ParsedQs | string[] | ParsedQs[] | undefined): string | undefined {
+function parseString(value: string | ParsedQs | (string | ParsedQs)[] | undefined): string | undefined {
     if (typeof value === "string") {
         return value;
     }
