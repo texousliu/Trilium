@@ -207,7 +207,7 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
 
     async getIconToCountMap() {
         if (!this.iconToCountCache) {
-            this.iconToCountCache = server.get<typeof this.iconToCountCache>("other/icon-usage");
+            this.iconToCountCache = server.get<IconToCountCache>("other/icon-usage");
             setTimeout(() => (this.iconToCountCache = null), 20000); // invalidate cache after 20 seconds
         }
 

@@ -5,7 +5,7 @@ import { t } from "i18next";
 import type { EventData } from "../components/app_context.js";
 import type FNote from "../entities/fnote.js";
 import attributes from "../services/attributes.js";
-import type { Locale } from "../../../services/i18n.js";
+import type { Locale } from "@triliumnext/commons";
 import options from "../services/options.js";
 import appContext from "../components/app_context.js";
 

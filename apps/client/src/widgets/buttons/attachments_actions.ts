@@ -8,9 +8,9 @@ import appContext from "../../components/app_context.js";
 import openService from "../../services/open.js";
 import utils from "../../services/utils.js";
 import { Dropdown } from "bootstrap";
-import type attachmentsApiRoute from "../../../../routes/api/attachments.js";
 import type FAttachment from "../../entities/fattachment.js";
 import type AttachmentDetailWidget from "../attachment_detail.js";
+import { NoteRow } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="dropdown attachment-actions">
@@ -80,6 +80,11 @@ const TPL = /*html*/`
 
     <input type="file" class="attachment-upload-new-revision-input" style="display: none">
 </div>`;
+
+// TODO: Deduplicate
+interface AttachmentResponse {
+    note: NoteRow;  
+}
 
 export default class AttachmentActionsWidget extends BasicWidget {
     $uploadNewRevisionInput!: JQuery<HTMLInputElement>;
@@ -168,7 +173,7 @@ export default class AttachmentActionsWidget extends BasicWidget {
             return;
         }
 
-        const { note: newNote } = await server.post<ReturnType<typeof attachmentsApiRoute.convertAttachmentToNote>>(`attachments/${this.attachmentId}/convert-to-note`);
+        const { note: newNote } = await server.post<AttachmentResponse>(`attachments/${this.attachmentId}/convert-to-note`);
         toastService.showMessage(t("attachments_actions.convert_success", { title: this.attachment.title }));
         await ws.waitForMaxKnownEntityChangeId();
         await appContext.tabManager.getActiveContext()?.setNote(newNote.noteId);

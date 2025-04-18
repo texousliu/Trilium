@@ -2,7 +2,7 @@ import options from "./options.js";
 import i18next from "i18next";
 import i18nextHttpBackend from "i18next-http-backend";
 import server from "./server.js";
-import type { Locale } from "../../../services/i18n.js";
+import type { Locale } from "@triliumnext/commons";
 
 let locales: Locale[] | null;
 
