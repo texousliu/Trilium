@@ -11,5 +11,11 @@
     "workspaces": [
         "apps/*",
         "packages/*"
-    ]
+    ],
+    "scripts": {
+        "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts"
+    },
+    "devDependencies": {
+        "tsx": "^4.19.3"
+    }
 }
