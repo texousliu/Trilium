@@ -13,13 +13,15 @@
         "packages/*"
     ],
     "scripts": {
-        "test": "npm --workspace=apps/client --workspace=apps/server test",
+        "build": "npm run client:build && npm run server:build",
+        "test": "npm --workspace=apps/client --workspace=apps/server run test",
 
-        "client:test": "npm --workspace=apps/client test",
-        "client:build": "npm --workspace=apps/client build:webpack",
+        "client:test": "npm --workspace=apps/client run test",
+        "client:build": "npm --workspace=apps/client run build:webpack",
 
-        "server:test": "npm --workspace=apps/server test",
-        "server:coverage": "npm --workspace=apps/server coverage",
+        "server:test": "npm --workspace=apps/server run test",
+        "server:coverage": "npm --workspace=apps/server run coverage",
+        "server:build": "npm --workspace=apps/client run build:ts",
 
         "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
         "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
