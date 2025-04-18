@@ -128,7 +128,7 @@
     "multer": "1.4.5-lts.2",
     "normalize-strings": "1.1.1",
     "normalize.css": "8.0.1",
-    "ollama": "0.5.14",
+    "ollama": "0.5.15",
     "openai": "4.93.0",
     "rand-token": "1.0.1",
     "safe-compare": "1.1.4",
