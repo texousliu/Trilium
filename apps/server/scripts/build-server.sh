@@ -27,6 +27,9 @@ BUILD_DIR="./build"
 DIST_DIR="./dist"
 CLEANUP_SCRIPT="./scripts/cleanupNodeModules.ts"
 
+# Build the package dependencies
+npm run build:packages --prefix ../..
+npm run client:build --prefix ../..
 
 # Trigger the build
 echo "Build start"

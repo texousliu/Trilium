@@ -23,7 +23,7 @@
         "server:test": "npm --workspace=apps/server run test",
         "server:coverage": "npm --workspace=apps/server run coverage",
         "server:build": "npm --workspace=apps/server run build:ts",
-        "server:package": "npm run build:packages && npm --workspace=apps/server run package",
+        "server:package": "npm --workspace=apps/server run package",
 
         "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
         "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
