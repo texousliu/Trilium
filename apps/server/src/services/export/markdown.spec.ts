@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import markdownExportService from "./markdown.js";
-import { trimIndentation } from "../../../spec/support/utils.js";
+import { trimIndentation } from "@triliumnext/commons";
 
 describe("Markdown export", () => {
 

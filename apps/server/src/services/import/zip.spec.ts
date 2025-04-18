@@ -10,7 +10,7 @@ import TaskContext from "../task_context.js";
 import cls from "../cls.js";
 import sql_init from "../sql_init.js";
 import { initializeTranslations } from "../i18n.js";
-import { trimIndentation } from "../../../spec/support/utils.js";
+import { trimIndentation } from "@triliumnext/commons";
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 
 async function testImport(fileName: string) {

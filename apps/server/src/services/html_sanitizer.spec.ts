@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import html_sanitizer from "./html_sanitizer.js";
-import { trimIndentation } from "../../spec/support/utils.js";
+import { trimIndentation } from "@triliumnext/commons";
 
 describe("sanitize", () => {
     it("filters out position inline CSS", () => {
