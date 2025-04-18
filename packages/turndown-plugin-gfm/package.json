@@ -1,5 +1,5 @@
 {
-  "name": "@joplin/turndown-plugin-gfm",
+  "name": "@triliumnext/turndown-plugin-gfm",
   "description": "Turndown plugin to add GitHub Flavored Markdown extensions.",
   "publishConfig": {
     "access": "public"
