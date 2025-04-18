@@ -13,10 +13,14 @@
         "packages/*"
     ],
     "scripts": {
-        "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
-        "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
+        "client:test": "npm --workspace=apps/client test",
+        "client:build": "npm --workspace=apps/client build:webpack",
+
         "server:test": "npm --workspace=apps/server test",
-        "server:coverage": "npm --workspace=apps/server coverage"
+        "server:coverage": "npm --workspace=apps/server coverage",
+
+        "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
+        "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
     },
     "devDependencies": {
         "tsx": "^4.19.3"
