@@ -137,10 +137,10 @@ declare global {
     }
 
     interface CKEditorInstance {
-
+        create(elementOrData: any, finalConfig: any): TextEditor;
     }
 
-    interface CKWatchdog {
+    class CKWatchdog {
         constructor(editorClass: CKEditorInstance, opts: {
             minimumNonErrorTimePeriod: number;
             crashNumberLimit: number,
@@ -175,7 +175,7 @@ declare global {
     var CKEditor: {
         BalloonEditor: CKEditorInstance;
         DecoupledEditor: CKEditorInstance;
-        EditorWatchdog: CKWatchdog;
+        EditorWatchdog: typeof CKWatchdog;
     };
 
     var CKEditorInspector: {
@@ -345,6 +345,7 @@ declare global {
         commands: {
             get(name: string): {
                 value: unknown;
+                on(event: string, callback: () => void): void;
             };
         }
         model: {
@@ -407,6 +408,14 @@ declare global {
             };
             toModel(viewFeragment: any);
         },
+        ui: {
+            view: {
+                toolbar: {
+                    items: any[];
+                    element: HTMLElement;
+                }
+            }
+        }
         conversion: {
             for(filter: string): {
                 markerToHighlight(data: {
