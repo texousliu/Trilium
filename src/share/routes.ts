@@ -121,8 +121,8 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
             && possibleSvgContent !== null
             && "svg" in possibleSvgContent
             && typeof possibleSvgContent.svg === "string")
-            ? possibleSvgContent.svg
-            : null;
+                ? possibleSvgContent.svg
+                : null;
 
         if (contentSvg) {
             svgString = contentSvg;
