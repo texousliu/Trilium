@@ -14,7 +14,7 @@ import TaskContext from "../../services/task_context.js";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import eventService from "../../services/events.js";
-import type { AttachmentRow, AttributeType, NoteRow, NoteType, RevisionRow } from "./rows.js";
+import type { AttachmentRow, AttributeType, NoteRow, NoteType, RevisionRow } from "@triliumnext/commons";
 import type BBranch from "./bbranch.js";
 import BAttribute from "./battribute.js";
 import type { NotePojo } from "../becca-interface.js";

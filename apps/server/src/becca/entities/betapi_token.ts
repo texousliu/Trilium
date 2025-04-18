@@ -1,6 +1,6 @@
 "use strict";
 
-import type { EtapiTokenRow } from "./rows.js";
+import type { EtapiTokenRow } from "@triliumnext/commons";
 
 import dateUtils from "../../services/date_utils.js";
 import AbstractBeccaEntity from "./abstract_becca_entity.js";

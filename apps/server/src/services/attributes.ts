@@ -7,7 +7,7 @@ import BAttribute from "../becca/entities/battribute.js";
 import attributeFormatter from "./attribute_formatter.js";
 import BUILTIN_ATTRIBUTES from "./builtin_attributes.js";
 import type BNote from "../becca/entities/bnote.js";
-import type { AttributeRow } from "../becca/entities/rows.js";
+import type { AttributeRow } from "@triliumnext/commons";
 
 const ATTRIBUTE_TYPES = new Set(["label", "relation"]);
 

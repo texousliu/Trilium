@@ -1,6 +1,6 @@
 "use strict";
 
-import type { NoteRow } from "../../../becca/entities/rows.js";
+import type { NoteRow } from "@triliumnext/commons";
 import type SearchContext from "../search_context.js";
 
 import Expression from "./expression.js";

@@ -9,7 +9,7 @@ import SAttribute from "./entities/sattribute.js";
 import SAttachment from "./entities/sattachment.js";
 import shareRoot from "../share_root.js";
 import eventService from "../../services/events.js";
-import type { SAttachmentRow, SAttributeRow, SBranchRow, SNoteRow } from "./entities/rows.js";
+import type { SAttachmentRow, SAttributeRow, SBranchRow, SNoteRow } from "@triliumnext/commons";
 
 function load() {
     const start = Date.now();

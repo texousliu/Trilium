@@ -1,7 +1,7 @@
 "use strict";
 
 import AbstractShacaEntity from "./abstract_shaca_entity.js";
-import type { SBranchRow } from "./rows.js";
+import type { SBranchRow } from "@triliumnext/commons";
 import type SNote from "./snote.js";
 
 class SBranch extends AbstractShacaEntity {

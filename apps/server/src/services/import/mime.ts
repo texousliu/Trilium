@@ -3,7 +3,7 @@
 import mimeTypes from "mime-types";
 import path from "path";
 import type { TaskData } from "../task_context_interface.js";
-import type { NoteType } from "../../becca/entities/rows.js";
+import type { NoteType } from "@triliumnext/commons";
 
 const CODE_MIME_TYPES = new Set([
     "application/json",

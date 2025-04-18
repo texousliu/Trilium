@@ -14,7 +14,7 @@ import { hash as getHash, hashedBlobId, randomString } from "../services/utils.j
 import eraseService from "../services/erase.js";
 import sanitizeAttributeName from "./sanitize_attribute_name.js";
 import noteTypesService from "../services/note_types.js";
-import type { BranchRow } from "../becca/entities/rows.js";
+import type { BranchRow } from "@triliumnext/commons";
 import type { EntityChange } from "./entity_changes_interface.js";
 import becca_loader from "../becca/becca_loader.js";
 const noteTypes = noteTypesService.getNoteTypeNames();

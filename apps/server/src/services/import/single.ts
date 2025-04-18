@@ -12,7 +12,7 @@ import { getNoteTitle, processStringOrBuffer } from "../../services/utils.js";
 import importUtils from "./utils.js";
 import htmlSanitizer from "../html_sanitizer.js";
 import type { File } from "./common.js";
-import type { NoteType } from "../../becca/entities/rows.js";
+import type { NoteType } from "@triliumnext/commons";
 
 function importSingleFile(taskContext: TaskContext, file: File, parentNote: BNote) {
     const mime = mimeService.getMime(file.originalname) || file.mimetype;

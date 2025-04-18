@@ -1,4 +1,4 @@
-import type { OptionRow } from "../becca/entities/rows.js";
+import type { OptionRow } from "@triliumnext/commons";
 
 /**
  * Response for /api/setup/status.

@@ -23,7 +23,7 @@ import noteTypesService from "./note_types.js";
 import fs from "fs";
 import ws from "./ws.js";
 import html2plaintext from "html2plaintext";
-import type { AttachmentRow, AttributeRow, BranchRow, NoteRow } from "../becca/entities/rows.js";
+import type { AttachmentRow, AttributeRow, BranchRow, NoteRow } from "@triliumnext/commons";
 import type TaskContext from "./task_context.js";
 import type { NoteParams } from "./note-interface.js";
 import imageService from "./image.js";

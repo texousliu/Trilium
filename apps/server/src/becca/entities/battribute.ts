@@ -5,7 +5,7 @@ import AbstractBeccaEntity from "./abstract_becca_entity.js";
 import dateUtils from "../../services/date_utils.js";
 import promotedAttributeDefinitionParser from "../../services/promoted_attribute_definition_parser.js";
 import sanitizeAttributeName from "../../services/sanitize_attribute_name.js";
-import type { AttributeRow, AttributeType } from "./rows.js";
+import type { AttributeRow, AttributeType } from "@triliumnext/commons";
 
 interface SavingOpts {
     skipValidation?: boolean;

@@ -1,4 +1,4 @@
-import type { NoteType } from "../becca/entities/rows.js";
+import type { NoteType } from "@triliumnext/commons";
 
 export interface NoteParams {
     /** optionally can force specific noteId */

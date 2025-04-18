@@ -1,6 +1,6 @@
 import AbstractBeccaEntity from "./abstract_becca_entity.js";
 import dateUtils from "../../services/date_utils.js";
-import type { NoteEmbeddingRow } from "./rows.js";
+import type { NoteEmbeddingRow } from "@triliumnext/commons";
 
 /**
  * Entity representing a note's vector embedding for semantic search and AI features

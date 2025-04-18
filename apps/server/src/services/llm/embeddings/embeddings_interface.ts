@@ -1,4 +1,4 @@
-import type { NoteType, AttributeType } from "../../../becca/entities/rows.js";
+import type { NoteType, AttributeType } from "@triliumnext/commons";
 
 /**
  * Represents the context of a note that will be embedded

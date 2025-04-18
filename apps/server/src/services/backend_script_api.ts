@@ -31,7 +31,7 @@ import type BAttachment from "../becca/entities/battachment.js";
 import type BRevision from "../becca/entities/brevision.js";
 import type BEtapiToken from "../becca/entities/betapi_token.js";
 import type BOption from "../becca/entities/boption.js";
-import type { AttributeRow } from "../becca/entities/rows.js";
+import type { AttributeRow } from "@triliumnext/commons";
 import type Becca from "../becca/becca-interface.js";
 import type { NoteParams } from "./note-interface.js";
 import type { ApiParams } from "./backend_script_api_interface.js";

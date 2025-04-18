@@ -1,6 +1,6 @@
 "use strict";
 
-import type { RecentNoteRow } from "./rows.js";
+import type { RecentNoteRow } from "@triliumnext/commons";
 
 import dateUtils from "../../services/date_utils.js";
 import AbstractBeccaEntity from "./abstract_becca_entity.js";

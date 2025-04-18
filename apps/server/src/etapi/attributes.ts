@@ -4,7 +4,7 @@ import mappers from "./mappers.js";
 import attributeService from "../services/attributes.js";
 import v from "./validators.js";
 import type { Router } from "express";
-import type { AttributeRow } from "../becca/entities/rows.js";
+import type { AttributeRow } from "@triliumnext/commons";
 import type { ValidatorMap } from "./etapi-interface.js";
 
 function register(router: Router) {

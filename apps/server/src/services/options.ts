@@ -14,7 +14,7 @@
 
 import becca from "../becca/becca.js";
 import BOption from "../becca/entities/boption.js";
-import type { OptionRow } from "../becca/entities/rows.js";
+import type { OptionRow } from "@triliumnext/commons";
 import type { FilterOptionsByType, OptionDefinitions, OptionMap, OptionNames } from "./options_interface.js";
 import sql from "./sql.js";
 

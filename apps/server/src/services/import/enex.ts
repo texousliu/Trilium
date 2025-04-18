@@ -12,7 +12,7 @@ import sanitizeAttributeName from "../sanitize_attribute_name.js";
 import type TaskContext from "../task_context.js";
 import type BNote from "../../becca/entities/bnote.js";
 import type { File } from "./common.js";
-import type { AttributeType } from "../../becca/entities/rows.js";
+import type { AttributeType } from "@triliumnext/commons";
 
 /**
  * date format is e.g. 20181121T193703Z or 2013-04-14T16:19:00.000Z (Mac evernote, see #3496)

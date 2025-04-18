@@ -1,4 +1,4 @@
-import type { AttributeType } from "../../becca/entities/rows.js";
+import type { AttributeType } from "@triliumnext/commons";
 
 export default interface AttributeMeta {
     noteId?: string;

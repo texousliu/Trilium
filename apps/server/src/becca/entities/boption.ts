@@ -2,7 +2,7 @@
 
 import dateUtils from "../../services/date_utils.js";
 import AbstractBeccaEntity from "./abstract_becca_entity.js";
-import type { OptionRow } from "./rows.js";
+import type { OptionRow } from "@triliumnext/commons";
 
 /**
  * Option represents a name-value pair, either directly configurable by the user or some system property.

@@ -1,4 +1,4 @@
-import type { NoteType } from "../../becca/entities/rows.js";
+import type { NoteType } from "@triliumnext/commons";
 import type AttachmentMeta from "./attachment_meta.js";
 import type AttributeMeta from "./attribute_meta.js";
 

@@ -1,6 +1,6 @@
 "use strict";
 
-import type { AttributeRow } from "../becca/entities/rows.js";
+import type { AttributeRow } from "@triliumnext/commons";
 
 function formatAttrForSearch(attr: AttributeRow, searchWithValue: boolean) {
     let searchStr = "";
