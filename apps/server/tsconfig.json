@@ -11,7 +11,8 @@
         "downlevelIteration": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "verbatimModuleSyntax": true
+        "verbatimModuleSyntax": true,
+        "allowJs": true
     },
     "include": [ "./src/**/*.ts" ],
     "files": [

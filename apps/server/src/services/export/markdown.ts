@@ -1,7 +1,7 @@
 "use strict";
 
 import TurndownService, { type Rule } from "turndown";
-import { gfm } from "@triliumnext/turndown-plugin-gfm";
+import { gfm } from "../../../../../packages/turndown-plugin-gfm/src/gfm.js";
 
 let instance: TurndownService | null = null;
 

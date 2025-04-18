@@ -18,11 +18,6 @@ declare module "normalize-strings" {
     export default normalizeString;
 }
 
-declare module "@triliumnext/turndown-plugin-gfm" {
-    import TurndownService from "turndown";
-    export function gfm(service: TurndownService): void;
-}
-
 declare module "is-animated" {
     function isAnimated(buffer: Buffer): boolean;
     export default isAnimated;
