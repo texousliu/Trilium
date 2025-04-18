@@ -25,7 +25,7 @@ NODE_VERSION=22.14.0
 
 BUILD_DIR="./build"
 DIST_DIR="./dist"
-CLEANUP_SCRIPT="./bin/cleanupNodeModules.ts"
+CLEANUP_SCRIPT="./scripts/cleanupNodeModules.ts"
 
 
 # Trigger the build

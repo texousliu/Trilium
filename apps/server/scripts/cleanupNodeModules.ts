@@ -31,13 +31,6 @@ function main() {
 
 function cleanupNodeModules(basePath: string, pruneDevDeps: boolean = true) {
 
-    // This needs to run for the server and Docker build,
-    // but needs to be skipped for electron-forge: its
-    // built-in pruning takes care of it already
-    if (pruneDevDeps) {
-        execSync(`npm ci --omit=dev --prefix ${basePath}`);
-    }
-
     const nodeModulesDirPath = path.join(basePath, "node_modules");
     const nodeModulesContent = fs.readdirSync(nodeModulesDirPath, { recursive: true, withFileTypes: true });
     //const libDir = fs.readdirSync(path.join(basePath, "./libraries"), { recursive: true, withFileTypes: true });
