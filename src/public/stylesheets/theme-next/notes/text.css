@@ -53,6 +53,19 @@
     background: transparent;
 }
 
+/* Tooltip */
+:root div.ck.ck-balloon-panel.ck-tooltip {
+    --ck-color-panel-background: var(--toast-background); /* Arrow */
+    border-color: transparent !important;
+    border-radius: 6px !important;
+    padding: 0 10px 2px 10px;
+    background-color: var(--toast-background) !important;
+}
+
+:root div.ck.ck-balloon-panel.ck-tooltip * {
+    color: var(--toast-text-color) !important;
+}
+
 /* Dropdown list item */
 :root ul.ck.ck-list button.ck-button {
     padding: 2px 16px;
