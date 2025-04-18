@@ -22,8 +22,8 @@ try {
      */
     const assetsToCopy = new Set([
         "./forge.config.cjs",   
-        "./bin/electron-forge/desktop.ejs",
-        "./bin/electron-forge/sign-windows.cjs",
+        "./scripts/electron-forge/desktop.ejs",
+        "./scripts/electron-forge/sign-windows.cjs",
     ]);
 
     for (const asset of assetsToCopy) {
@@ -34,7 +34,7 @@ try {
     /**
      * Directories to be copied relative to the project root into <resource_dir>/src/public/app-dist.
      */
-    const publicDirsToCopy = ["./src/public/app/doc_notes"];
+    const publicDirsToCopy = ["../server/src/public/app/doc_notes"];
     const PUBLIC_DIR = path.join(DEST_DIR, "src", "public", "app-dist");
     for (const dir of publicDirsToCopy) {
         fs.copySync(dir, path.join(PUBLIC_DIR, path.basename(dir)));
