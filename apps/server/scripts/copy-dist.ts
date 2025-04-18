@@ -11,38 +11,56 @@ function log(...args: any[]) {
     }
 }
 
-const ROOT_DIR = "../..";
-const CLIENT_DIR = "../client";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(scriptDir, "..", "..", "..");
+const clientDir = path.join(rootDir, "apps", "client");
+const serverDir = path.join(rootDir, "apps", "server");
+
+function copyAssets(baseDir: string, destDir: string, files: string[]) {
+    for (const file of files) {
+        const src = path.join(baseDir, file);
+        const dest = path.join(destDir, file);
+        log(`${src} -> ${dest}`);
+        fs.copySync(src, dest);
+    }
+}
 
 try {
-    const assetsToCopy = new Set([
+    const clientAssets = [
+        "./libraries",
+        `./stylesheets`
+    ];
+
+    const serverAssets = [
         // copy node_module, to avoid downloading packages a 2nd time during pruning
         "./node_modules",
-        `${CLIENT_DIR}/libraries`,
         "./translations",
         "./db",
         "./config-sample.ini",
         "./package.json",
-        `${ROOT_DIR}/LICENSE`,
-        `${ROOT_DIR}/README.md`,        
+        "./src/public/icon.png",
+        "./src/public/manifest.webmanifest",
+        "./src/public/robots.txt",
+        "./src/public/fonts",
+        "./src/public/translations",
         `./tpl/`,
         "./scripts/cleanupNodeModules.ts",        
         "./src/views/",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json",
-        "./src/public/icon.png",
-        "./src/public/manifest.webmanifest",
-        "./src/public/robots.txt",
-        "./src/public/fonts",
-        `${CLIENT_DIR}/stylesheets`,
-        "./src/public/translations",
-        `${ROOT_DIR}/packages/turndown-plugin-gfm/src`
-    ]);
+    ];
 
-    for (const asset of assetsToCopy) {
-        log(`Copying ${asset}`);
-        fs.copySync(asset, path.normalize(path.join(DEST_DIR, asset)));
-    }
+    const rootAssets = [
+        "LICENSE",
+        "README.md"    
+    ];
+
+    copyAssets(clientDir, path.join(DEST_DIR, "src", "public"), clientAssets);
+    copyAssets(serverDir, path.join(DEST_DIR), serverAssets);
+    copyAssets(rootDir, path.join(DEST_DIR), rootAssets);
 
     /**
      * Directories to be copied relative to the project root into <resource_dir>/src/public/app-dist.
@@ -52,6 +70,8 @@ try {
     for (const dir of publicDirsToCopy) {
         fs.copySync(dir, path.normalize(path.join(PUBLIC_DIR, path.basename(dir))));
     }
+
+    fs.copySync(path.join(rootDir, "packages", "turndown-plugin-gfm", "src"), path.join(DEST_DIR, "src", "public", "app-dist", "turndown-plugin-gfm"));
 
     console.log("Copying complete!")
 
