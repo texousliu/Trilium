@@ -20,12 +20,13 @@ async function register(app: express.Application) {
     if (isDev) {
         app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "public/app/doc_notes")));
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "../../client/build")));
+        app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, "../../client/build")));
         app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(srcRoot, "../../client/stylesheets")));
     } else {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));
+        app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, "public/app-dist")));
         app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(srcRoot, "public/stylesheets")));
     }
-    app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, "public/app-dist")));
     app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
     app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "..", "images")));
