@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import fs from "fs-extra";
 import path from "path";
 
@@ -15,12 +16,13 @@ try {
     /**
      * Copy the server.
      */
-    fs.copySync("../server/build", DEST_DIR);
+    fs.copySync("../server/build", path.join(DEST_DIR, "node_modules", "@triliumnext/server"));
 
     /**
      * Copy assets.
      */
     const assetsToCopy = new Set([
+        "./package.json",
         "./forge.config.cjs",   
         "./scripts/electron-forge/desktop.ejs",
         "./scripts/electron-forge/sign-windows.cjs",
@@ -39,6 +41,12 @@ try {
     for (const dir of publicDirsToCopy) {
         fs.copySync(dir, path.join(PUBLIC_DIR, path.basename(dir)));
     }
+
+    /*
+     * Extract and rebuild the bettersqlite node module.
+     */
+    fs.moveSync(path.join(DEST_DIR, "node_modules/@triliumnext/server/node_modules/better-sqlite3"), path.join(DEST_DIR, "node_modules/better-sqlite3"));
+    execSync("npm run postinstall", { cwd: DEST_DIR });
 
     console.log("Copying complete!")
 
