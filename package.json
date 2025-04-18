@@ -14,6 +14,7 @@
     ],
     "scripts": {
         "build": "npm run client:build && npm run server:build",
+        "build:packages": "npm --workspace=packages/commons run build",
         "test": "npm --workspace=apps/client --workspace=apps/server run test",
 
         "client:test": "npm --workspace=apps/client run test",
@@ -22,7 +23,7 @@
         "server:test": "npm --workspace=apps/server run test",
         "server:coverage": "npm --workspace=apps/server run coverage",
         "server:build": "npm --workspace=apps/server run build:ts",
-        "server:package": "npm --workspace=apps/server run package",
+        "server:package": "npm run build:packages && npm --workspace=apps/server run package",
 
         "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
         "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
