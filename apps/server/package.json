@@ -20,9 +20,9 @@
   "main": "index.js",
   "scripts": {
     "build:clean": "rimraf ./dist ./build",
-    "build:prepare-dist": "npm run build:clean && npm run build:ts && npm run copy-dist",
+    "build:copy-dist": "tsx ./scripts/copy-dist.ts",
+    "build:prepare-dist": "npm run build:clean && npm run build:ts && npm run build:copy-dist",
     "build:ts": "tsc",
-    "copy-dist": "tsx ./scripts/copy-dist.ts",
     "start": "cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev nodemon src/main.ts",
     "test": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./spec/data TRILIUM_INTEGRATION_TEST=memory vitest",
     "coverage": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./spec/data TRILIUM_INTEGRATION_TEST=memory vitest --coverage",
