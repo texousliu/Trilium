@@ -1,5 +1,5 @@
+import type { HiddenSubtreeItem } from "@triliumnext/commons";
 import { t } from "i18next";
-import type { HiddenSubtreeItem } from "./hidden_subtree.js";
 
 export default function buildLaunchBarConfig() {
     const sharedLaunchers: Record<string, Omit<HiddenSubtreeItem, "id">> = {
