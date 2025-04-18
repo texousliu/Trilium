@@ -114,6 +114,21 @@
     --ck-border-radius: 0;
 }
 
+/* Action buttons */
+
+:root .ck-link-actions button.ck-button,
+:root .ck-link-form button.ck-button {
+    --ck-border-radius: 6px;
+    
+    background: transparent;
+    box-shadow: unset;
+}
+
+:root .ck-link-actions button.ck-button:hover,
+:root .ck-link-form button.ck-button:hover {
+    background: var(--hover-item-background-color);
+}
+
 /*
  * EDITOR'S CONTENT
  */
