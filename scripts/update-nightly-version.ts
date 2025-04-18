@@ -26,10 +26,7 @@ function processVersion(version) {
     return version;
 }
 
-function main() {
-    const scriptDir = dirname(fileURLToPath(import.meta.url));
-    const packageJsonPath = join(scriptDir, "..", "package.json");
-
+function patchPackageJson(packageJsonPath) {
     // Read the version from package.json and process it.
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
     const currentVersion = packageJson.version;
@@ -41,6 +38,18 @@ function main() {
     packageJson.version = adjustedVersion;
     const formattedJson = JSON.stringify(packageJson, null, 4);
     fs.writeFileSync(packageJsonPath, formattedJson);
+}
+
+function main() {
+    const scriptDir = dirname(fileURLToPath(import.meta.url));
+    
+    const rootPackageJson = join(scriptDir, "..", "package.json");
+    patchPackageJson(rootPackageJson);
+    
+    for (const app of ["server", "client"]) {
+        const appPackageJsonPath = join(scriptDir, "..", "apps", app, "package.json");
+        patchPackageJson(appPackageJsonPath);
+    }
 }
 
 main();
