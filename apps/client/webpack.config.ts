@@ -121,7 +121,6 @@ const config: Configuration = {
             stylesheets: path.resolve(rootDir, "src/public/stylesheets")
         }
     },
-    stats: "verbose",
     devtool: "nosources-source-map",
     target: "electron-renderer"
 };
