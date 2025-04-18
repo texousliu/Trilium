@@ -109,7 +109,7 @@ app.use(`/manifest.webmanifest`, express.static(path.join(scriptDir, "public/man
 app.use(`/robots.txt`, express.static(path.join(scriptDir, "public/robots.txt")));
 app.use(`/icon.png`, express.static(path.join(scriptDir, "public/icon.png")));
 app.use(sessionParser);
-app.use(favicon(`${scriptDir}/../images/app-icons/icon.ico`));
+app.use(favicon(`${scriptDir}/../assets/icon.ico`));
 
 if (openID.isOpenIDEnabled())
     app.use(auth(openID.generateOAuthConfig()));
