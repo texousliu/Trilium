@@ -33,7 +33,7 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "..", "images")));
     app.use(`/assets/vX/images`, express.static(path.join(srcRoot, "..", "images")));    
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));
-    app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "..", "libraries")));
+    app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
 
     const nodeModulesDir = isDev ? path.join(srcRoot, "..", "..", "..", "node_modules") : path.join(srcRoot, "..", "node_modules");
