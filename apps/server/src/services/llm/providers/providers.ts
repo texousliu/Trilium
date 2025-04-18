@@ -8,7 +8,7 @@ import { NormalizationStatus } from "../embeddings/embeddings_interface.js";
 import { OpenAIEmbeddingProvider } from "../embeddings/providers/openai.js";
 import { OllamaEmbeddingProvider } from "../embeddings/providers/ollama.js";
 import { VoyageEmbeddingProvider } from "../embeddings/providers/voyage.js";
-import type { OptionDefinitions } from "../../options_interface.js";
+import type { OptionDefinitions } from "@triliumnext/commons";
 import type { ChatCompletionOptions } from '../ai_interface.js';
 import type { OpenAIOptions, AnthropicOptions, OllamaOptions, ModelMetadata } from './provider_options.js';
 import {

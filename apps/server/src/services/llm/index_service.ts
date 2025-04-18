@@ -17,7 +17,7 @@ import providerManager from "./providers/providers.js";
 import { ContextExtractor } from "./context/index.js";
 import eventService from "../events.js";
 import type { NoteEmbeddingContext } from "./embeddings/embeddings_interface.js";
-import type { OptionDefinitions } from "../options_interface.js";
+import type { OptionDefinitions } from "@triliumnext/commons";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
 import { CONTEXT_PROMPTS } from './constants/llm_prompt_constants.js';

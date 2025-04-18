@@ -7,7 +7,7 @@ import ValidationError from "../../errors/validation_error.js";
 import type { Request } from "express";
 import { changeLanguage, getLocales } from "../../services/i18n.js";
 import { listSyntaxHighlightingThemes } from "../../services/code_block_theme.js";
-import type { OptionNames } from "../../services/options_interface.js";
+import type { OptionNames } from "@triliumnext/commons";
 
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set<OptionNames>([

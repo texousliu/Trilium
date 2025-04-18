@@ -2,7 +2,7 @@ import optionService from "../options.js";
 import myScryptService from "./my_scrypt.js";
 import { randomSecureToken, toBase64 } from "../utils.js";
 import dataEncryptionService from "./data_encryption.js";
-import type { OptionNames } from "../options_interface.js";
+import type { OptionNames } from "@triliumnext/commons";
 
 const TOTP_OPTIONS: Record<string, OptionNames> = {
     SALT: "totpEncryptionSalt",

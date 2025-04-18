@@ -15,7 +15,7 @@
 import becca from "../becca/becca.js";
 import BOption from "../becca/entities/boption.js";
 import type { OptionRow } from "@triliumnext/commons";
-import type { FilterOptionsByType, OptionDefinitions, OptionMap, OptionNames } from "./options_interface.js";
+import type { FilterOptionsByType, OptionDefinitions, OptionMap, OptionNames } from "@triliumnext/commons";
 import sql from "./sql.js";
 
 function getOptionOrNull(name: OptionNames): string | null {
