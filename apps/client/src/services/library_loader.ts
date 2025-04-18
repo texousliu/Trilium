@@ -85,7 +85,7 @@ async function requireLibrary(library: Library) {
     }
 }
 
-async function unwrapValue<T>(value: T | (() => T) | Promise<(() => T)>) {
+async function unwrapValue<T>(value: T | (() => T) | Promise<T>) {
     if (value && typeof value === "object" && "then" in value) {
         return (await (value as Promise<() => T>))();
     }
