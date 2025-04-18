@@ -1,12 +1,10 @@
 import BAttribute from "../becca/entities/battribute.js";
-import type { AttributeType } from "../becca/entities/rows.js";
+import type { HiddenSubtreeItem } from "@triliumnext/commons";
 
 import becca from "../becca/becca.js";
 import noteService from "./notes.js";
 import log from "./log.js";
 import migrationService from "./migration.js";
-import options from "./options.js";
-import sql from "./sql.js";
 import { t } from "i18next";
 import { cleanUpHelp, getHelpHiddenSubtreeData } from "./in_app_help.js";
 import buildLaunchBarConfig from "./hidden_subtree_launcherbar.js";
@@ -20,52 +18,6 @@ const LBTPL_COMMAND = "_lbTplLauncherCommand";
 const LBTPL_SCRIPT = "_lbTplLauncherScript";
 const LBTPL_SPACER = "_lbTplSpacer";
 const LBTPL_CUSTOM_WIDGET = "_lbTplCustomWidget";
-
-// Define launcher note types locally
-type LauncherNoteType = "launcher" | "search" | "doc" | "noteMap" | "contentWidget" | "book" | "file" | "image" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "webView" | "code" | "mindMap" | "geoMap";
-
-interface HiddenSubtreeAttribute {
-    type: AttributeType;
-    name: string;
-    isInheritable?: boolean;
-    value?: string;
-}
-
-export interface HiddenSubtreeItem {
-    notePosition?: number;
-    id: string;
-    title: string;
-    type: LauncherNoteType;
-    icon?: string;
-    attributes?: HiddenSubtreeAttribute[];
-    children?: HiddenSubtreeItem[];
-    isExpanded?: boolean;
-    baseSize?: string;
-    growthFactor?: string;
-    targetNoteId?: "_backendLog" | "_globalNoteMap";
-    builtinWidget?:
-        | "todayInJournal"
-        | "bookmarks"
-        | "spacer"
-        | "backInHistoryButton"
-        | "forwardInHistoryButton"
-        | "syncStatus"
-        | "protectedSession"
-        | "calendar"
-        | "quickSearch"
-        | "aiChatLauncher";
-    command?: keyof typeof Command;
-}
-
-// TODO: Move this into a commons project once the client/server architecture is well split.
-enum Command {
-    jumpToNote,
-    searchNotes,
-    createNoteIntoInbox,
-    showRecentChanges,
-    showOptions,
-    createAiChat
-}
 
 /*
  * Hidden subtree is generated as a "predictable structure" which means that it avoids generating random IDs to always

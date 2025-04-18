@@ -1,6 +1,6 @@
 import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
-import type { MindElixirCtor } from "mind-elixir";
+import type { MindElixirCtor, MindElixirInstance } from "mind-elixir";
 import nodeMenu from "@mind-elixir/node-menu";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
@@ -152,7 +152,7 @@ export default class MindMapWidget extends TypeWidget {
 
     private $content!: JQuery<HTMLElement>;
     private triggeredByUserOperation?: boolean;
-    private mind?: ReturnType<MindElixirCtor["new"]>;
+    private mind?: MindElixirInstance;
     private MindElixir: any; // TODO: Fix type
 
     static getType() {
