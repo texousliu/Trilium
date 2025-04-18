@@ -37,6 +37,7 @@ try {
     const serverAssets = [
         // copy node_module, to avoid downloading packages a 2nd time during pruning
         "./node_modules",
+        "./assets",
         "./translations",
         "./db",
         "./config-sample.ini",
