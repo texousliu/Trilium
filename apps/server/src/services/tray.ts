@@ -10,7 +10,7 @@ import type BNote from "../becca/entities/bnote.js";
 import type BRecentNote from "../becca/entities/brecent_note.js";
 import cls from "./cls.js";
 import date_notes from "./date_notes.js";
-import type { KeyboardActionNames } from "./keyboard_actions_interface.js";
+import type { KeyboardActionNames } from "@triliumnext/commons";
 import optionService from "./options.js";
 import { isDev, isMac } from "./utils.js";
 import windowService from "./window.js";

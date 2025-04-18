@@ -1,11 +1,10 @@
 import optionService from "./options.js";
-import type { OptionMap, OptionNames } from "./options_interface.js";
 import appInfo from "./app_info.js";
 import { randomSecureToken, isWindows } from "./utils.js";
 import log from "./log.js";
 import dateUtils from "./date_utils.js";
 import keyboardActions from "./keyboard_actions.js";
-import type { KeyboardShortcutWithRequiredActionName } from "./keyboard_actions_interface.js";
+import type { KeyboardShortcutWithRequiredActionName, OptionMap, OptionNames } from "@triliumnext/commons";
 import { DEFAULT_ALLOWED_TAGS } from "./html_sanitizer.js";
 
 function initDocumentOptions() {
