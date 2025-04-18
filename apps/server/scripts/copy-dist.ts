@@ -11,25 +11,22 @@ function log(...args: any[]) {
     }
 }
 
-try {
+const ROOT_DIR = "../..";
+const CLIENT_DIR = "../client";
 
+try {
     const assetsToCopy = new Set([
         // copy node_module, to avoid downloading packages a 2nd time during pruning
         "./node_modules",
-        "./images",
-        "./libraries",
+        `${CLIENT_DIR}/libraries`,
         "./translations",
         "./db",
         "./config-sample.ini",
-        "./package-lock.json",
         "./package.json",
-        "./LICENSE",
-        "./README.md",
-        "./forge.config.cjs",
-        "./bin/tpl/",
-        "./bin/cleanupNodeModules.ts",
-        "./bin/electron-forge/desktop.ejs",
-        "./bin/electron-forge/sign-windows.cjs",
+        `${ROOT_DIR}/LICENSE`,
+        `${ROOT_DIR}/README.md`,        
+        `./tpl/`,
+        "./scripts/cleanupNodeModules.ts",        
         "./src/views/",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json",
@@ -37,14 +34,14 @@ try {
         "./src/public/manifest.webmanifest",
         "./src/public/robots.txt",
         "./src/public/fonts",
-        "./src/public/stylesheets",
+        `${CLIENT_DIR}/stylesheets`,
         "./src/public/translations",
-        "./packages/turndown-plugin-gfm/src"
+        `${ROOT_DIR}/packages/turndown-plugin-gfm/src`
     ]);
 
     for (const asset of assetsToCopy) {
         log(`Copying ${asset}`);
-        fs.copySync(asset, path.join(DEST_DIR, asset));
+        fs.copySync(asset, path.normalize(path.join(DEST_DIR, asset)));
     }
 
     /**
@@ -53,13 +50,13 @@ try {
     const publicDirsToCopy = ["./src/public/app/doc_notes"];
     const PUBLIC_DIR = path.join(DEST_DIR, "src", "public", "app-dist");
     for (const dir of publicDirsToCopy) {
-        fs.copySync(dir, path.join(PUBLIC_DIR, path.basename(dir)));
+        fs.copySync(dir, path.normalize(path.join(PUBLIC_DIR, path.basename(dir))));
     }
 
     console.log("Copying complete!")
 
 } catch(err) {
-    console.error("Error during copy:", err)
+    console.error("Error during copy:", err.message)
     process.exit(1)
 }
 
