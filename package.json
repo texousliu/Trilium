@@ -18,7 +18,6 @@
         ]
     },
     "scripts": {
-        "build": "npm run client:build && npm run server:build",
         "build:packages": "npm --workspace=packages/commons run build",
         "test": "npm --workspace=apps/client --workspace=apps/server run test",
 
@@ -28,9 +27,9 @@
         "server:test": "npm --workspace=apps/server run test",
         "server:coverage": "npm --workspace=apps/server run coverage",
         "server:build": "npm --workspace=apps/server run build:ts",
-        "server:package": "npm --workspace=apps/server run package",
+        "server:package": "npm run build:packages && npm run client:build && npm --workspace=apps/server run package",
 
-        "electron-forge:make": "npm --workspace=apps/desktop run electron-forge:make",
+        "electron-forge:make": "npm run build:packages && npm run client:build && npm run server:build && npm --workspace=apps/desktop run electron-forge:make",
 
         "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
         "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
