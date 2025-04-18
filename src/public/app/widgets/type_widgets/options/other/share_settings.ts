@@ -82,9 +82,13 @@ export default class ShareSettingsOptions extends OptionsWidget {
             this.save();
         });
 
-        this.$sharePath.on('change', () => {
-            const sharePath = this.$sharePath.val() as string;
-            this.save();
+        this.$sharePath.on('change', async () => {
+            // Ensure sharePath always starts with a slash
+            let sharePath = this.$sharePath.val() as string;
+            if (sharePath && !sharePath.startsWith('/')) {
+                sharePath = '/' + sharePath;
+            }
+            await this.updateOption<"sharePath">("sharePath", sharePath);
         });
 
         // Add click handler for check share root button
