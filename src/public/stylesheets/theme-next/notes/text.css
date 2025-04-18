@@ -35,6 +35,8 @@
 /* Dropdown body */
 :root .ck.ck-dropdown__panel,
 :root .ck-balloon-panel {
+    --ck-editor-popup-padding: 4px;
+    
     --ck-color-panel-background: var(--menu-background-color);
     --ck-color-panel-border: var(--ck-editor-popup-border-color);
 
@@ -44,7 +46,7 @@
     border-radius: var(--dropdown-border-radius) !important;
     background: var(--menu-background-color) !important;
     backdrop-filter: var(--dropdown-backdrop-filter);
-    padding: 4px;
+    padding: var(--ck-editor-popup-padding);
 }
 
 :root ul.ck.ck-list,
@@ -83,6 +85,14 @@
 :root ul.ck.ck-list button.ck-button.ck-on:hover {
     background: var(--hover-item-background-color);
     color: var(--hover-item-color);
+}
+
+/* Separator */
+:root .ck .ck-list__separator {
+    margin: .5em 0;
+    margin-left: calc(0px - var(--ck-editor-popup-padding));
+    width: calc(100% + (var(--ck-editor-popup-padding) * 2));
+    background: var(--menu-item-delimiter-color);
 }
 
 /* Color picker dropdown */
