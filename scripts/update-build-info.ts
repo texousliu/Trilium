@@ -18,4 +18,4 @@ export default {
 };
 `;
 
-fs.writeFileSync("src/services/build.ts", output);
+fs.writeFileSync("apps/server/src/services/build.ts", output);

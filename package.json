@@ -13,7 +13,8 @@
         "packages/*"
     ],
     "scripts": {
-        "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts"
+        "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
+        "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
     },
     "devDependencies": {
         "tsx": "^4.19.3"

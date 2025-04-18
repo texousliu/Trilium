@@ -43,8 +43,7 @@
     "dev:format-check": "eslint -c eslint.format.config.js .",
     "dev:format-fix": "eslint -c eslint.format.config.js . --fix",
     "dev:linter-check": "eslint .",
-    "dev:linter-fix": "eslint . --fix",
-    "chore:update-build-info": "tsx bin/update-build-info.ts",    
+    "dev:linter-fix": "eslint . --fix",    
     "chore:generate-document": "cross-env nodemon ./bin/generate_document.ts 1000",
     "chore:generate-openapi": "tsx bin/generate-openapi.js"
   },
