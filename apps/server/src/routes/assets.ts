@@ -19,7 +19,7 @@ async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
     if (isDev) {
         app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "public/app/doc_notes")));
-        app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "../client/build")));
+        app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "../../client/build")));
     } else {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));
     }
