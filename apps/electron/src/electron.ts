@@ -3,10 +3,10 @@
 import electron from "electron";
 import electronDebug from "electron-debug";
 import electronDl from "electron-dl";
-import sqlInit from "./src/services/sql_init.js";
-import windowService from "./src/services/window.js";
-import tray from "./src/services/tray.js";
-import options from "./src/services/options.js";
+import sqlInit from "@triliumnext/server/src/services/sql_init.js";
+import windowService from "@triliumnext/server/src/services/window.js";
+import tray from "@triliumnext/server/src/services/tray.js";
+import options from "@triliumnext/server/src/services/options.js";
 
 // Prevent Trilium starting twice on first install and on uninstall for the Windows installer.
 if ((await import("electron-squirrel-startup")).default) {
@@ -64,4 +64,4 @@ electron.app.on("will-quit", () => {
 // this is to disable electron warning spam in the dev console (local development only)
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-await import("./src/main.js");
+await import("@triliumnext/server/src/main.js");
