@@ -74,16 +74,16 @@ declare global {
     type AutoCompleteCallback = (values: AutoCompleteArg[]) => void;
 
     interface AutoCompleteArg {
-        displayKey: "name" | "value" | "notePathTitle";
+        displayKey?: "name" | "value" | "notePathTitle";
         cache?: boolean;
-        source: (term: string, cb: AutoCompleteCallback) => void,
+        source?: (term: string, cb: AutoCompleteCallback) => void,
         templates?: {
             suggestion: (suggestion: Suggestion) => string | undefined
         }
-    };
+    }
 
     interface JQuery {
-        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: AutoCompleteArg[] | string) => JQuery<HTMLElement>;
+        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: object[] | string) => JQuery<HTMLElement>;
 
         getSelectedNotePath(): string | undefined;
         getSelectedNoteId(): string | null;
