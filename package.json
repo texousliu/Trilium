@@ -30,6 +30,8 @@
         "server:build": "npm --workspace=apps/server run build:ts",
         "server:package": "npm --workspace=apps/server run package",
 
+        "electron-forge:make": "npm --workspace=apps/desktop run electron-forge:make",
+
         "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
         "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
     },
