@@ -5,7 +5,8 @@ export default defineConfig({
         setupFiles: ["./test/setup.ts"],
         environment: "happy-dom",
         coverage: {
-            reporter: [ "text", "html" ]
+            reporter: [ "text", "html" ],
+            provider: "v8"
         }
     }
 });
