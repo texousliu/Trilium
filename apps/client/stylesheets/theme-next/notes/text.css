@@ -36,20 +36,34 @@
 :root .ck.ck-dropdown__panel,
 :root .ck-balloon-panel {
     --ck-color-panel-background: var(--menu-background-color);
-    --ck-color-panel-border: var(--modal-border-color);
+    --ck-color-panel-border: var(--ck-editor-popup-border-color);
 
     box-shadow: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
-    border: 1px solid var(--modal-border-color) !important;
+    outline: transparent !important;
+    border: 1px solid var(--ck-editor-popup-border-color) !important;
     border-radius: var(--dropdown-border-radius) !important;
     background: var(--menu-background-color) !important;
     backdrop-filter: var(--dropdown-backdrop-filter);
-    padding: var(--menu-padding-size);    
+    padding: 4px;
 }
 
 :root ul.ck.ck-list,
 :root div.ck.ck-balloon-panel:not(.ck-tooltip) {
     border: none;
     background: transparent;
+}
+
+/* Tooltip */
+:root div.ck.ck-balloon-panel.ck-tooltip {
+    --ck-color-panel-background: var(--toast-background); /* Arrow */
+    border-color: transparent !important;
+    border-radius: 6px !important;
+    padding: 0 10px 2px 10px;
+    background-color: var(--toast-background) !important;
+}
+
+:root div.ck.ck-balloon-panel.ck-tooltip * {
+    color: var(--toast-text-color) !important;
 }
 
 /* Dropdown list item */
