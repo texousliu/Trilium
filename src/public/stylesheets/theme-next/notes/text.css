@@ -2,6 +2,10 @@
  * CKEDITOR
  */
 
+ :root {
+    --ck-font-face: var(--main-font-family);
+ }
+
 /*
  * Toolbar
  */
