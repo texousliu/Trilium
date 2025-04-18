@@ -8,10 +8,15 @@
         "type": "git",
         "url": "https://github.com/TriliumNext/Notes.git"
     },
-    "workspaces": [
-        "apps/*",
-        "packages/*"
-    ],
+    "workspaces": {
+        "packages": [
+            "apps/*",
+            "packages/*"
+        ],
+        "nohoist": [
+            "better-sqlite3"
+        ]
+    },
     "scripts": {
         "build": "npm run client:build && npm run server:build",
         "build:packages": "npm --workspace=packages/commons run build",
