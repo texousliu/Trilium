@@ -72,11 +72,6 @@ runs:
       FLATPAK_VERSION='24.08'
       flatpak install --user --no-deps --arch $FLATPAK_ARCH --assumeyes runtime/org.freedesktop.Platform/$FLATPAK_ARCH/$FLATPAK_VERSION runtime/org.freedesktop.Sdk/$FLATPAK_ARCH/$FLATPAK_VERSION org.electronjs.Electron2.BaseApp/$FLATPAK_ARCH/$FLATPAK_VERSION
 
-  # Build setup
-  - name: Install dependencies
-    shell: ${{ inputs.shell }}
-    run: npm i
-
   - name: Update build info
     shell: ${{ inputs.shell }}
     run: npm run chore:update-build-info
