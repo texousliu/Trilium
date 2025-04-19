@@ -1,6 +1,6 @@
 # TriliumNext Notes
 
-[English](./README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
+[English](../README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
 
 TriliumNext Notes è un'applicazione per appunti ad organizzazione gerarchica, studiata per la costruzione di archivi di conoscenza personali di grandi dimensioni.
 
