@@ -126,6 +126,8 @@ module.exports = {
         {
             name: "@electron-forge/maker-squirrel",
             config: {
+                name: "trilium",
+                productName: APP_NAME,
                 iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
                 setupIcon: "./assets/setup-icon/setup.ico",
                 loadingGif: "./assets/setup-icon/setup-banner.gif",
