@@ -13,6 +13,7 @@ function log(...args: any[]) {
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { execSync } from "child_process";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(scriptDir, "..", "..", "..");
@@ -29,34 +30,26 @@ function copyAssets(baseDir: string, destDir: string, files: string[]) {
 }
 
 /**
- * Copies the dependencies from the node_modules directory to the build directory.
  * We cannot copy the node_modules directory directly because we are in a monorepo and all the packages are gathered at root level.
+ * We cannot copy the files manually because we'd have to implement all the npm lookup logic, especially since there are issues with the same library having multiple versions across dependencies.
  *
  * @param packageJsonPath
  */
 function copyNodeModules(packageJsonPath: string) {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-    const dependencies = packageJson.dependencies || {};
 
-    for (const dependency of Object.keys(dependencies)) {
-        if (dependency.startsWith("@triliumnext/")) {
-            // Skip copying @triliumnext dependencies since they are symlinked in the monorepo.
-            continue;
-        }
+    // Skip monorepo packages
+    packageJson.dependencies = Object.fromEntries(
+        Object.entries(packageJson.dependencies).filter(([key]) => {
+            return !key.startsWith("@triliumnext");
+        }));
 
-        const src = path.join(rootDir, "node_modules", dependency);
-        if (!fs.existsSync(src)) {
-            console.warn(`Dependency ${dependency} not found in node_modules. Skipping.`);
-            continue;
-        }
-
-        const dest = path.join(DEST_DIR, "node_modules", dependency);
-        log(`${src} -> ${dest}`);
-        fs.copySync(src, dest);
-
-        // Copy sub-dependencies as well.
-        copyNodeModules(path.join(src, "package.json"));
-    }
+    // Trigger an npm install to obtain the dependencies.
+    fs.writeFileSync(path.join(DEST_DIR, "package.json"), JSON.stringify(packageJson));
+    execSync(`npm install --omit=dev --omit=optional --omit=peer`, {
+        cwd: DEST_DIR,
+        stdio: "inherit",
+    });
 }
 
 try {
@@ -90,6 +83,7 @@ try {
         "README.md"
     ];
 
+    fs.mkdirpSync(DEST_DIR);
     copyNodeModules(path.join(serverDir, "package.json"));
     copyAssets(clientDir, path.join(DEST_DIR, "src", "public"), clientAssets);
     copyAssets(serverDir, path.join(DEST_DIR), serverAssets);
