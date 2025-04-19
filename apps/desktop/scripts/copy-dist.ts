@@ -18,12 +18,13 @@ try {
      */
     fs.copySync("../server/build", path.join(DEST_DIR, "node_modules", "@triliumnext/server"));
 
+    copyPackageJson();
+
     /**
      * Copy assets.
      */
     const assetsToCopy = new Set([
-        "./package.json",
-        "./forge.config.cjs",   
+        "./forge.config.cjs",
         "./scripts/electron-forge/desktop.ejs",
         "./scripts/electron-forge/sign-windows.cjs",
     ]);
@@ -51,7 +52,17 @@ try {
     console.log("Copying complete!")
 
 } catch(err) {
-    console.error("Error during copy:", err.message)
+    console.error("Error during copy:", err)
     process.exit(1)
 }
 
+/**
+ * Rewrite the name field of `package.json` since electron-forge does not support forward slashes in the name.
+ * Other attempts to rewrite the name field in the forge config have failed.
+ */
+function copyPackageJson() {
+    const packageJsonPath = path.join("package.json");
+    const packageJson = fs.readJSONSync(packageJsonPath);
+    packageJson.name = "trilium";
+    fs.writeJSONSync(path.join(DEST_DIR, "package.json"), packageJson, { spaces: 2 });
+}
