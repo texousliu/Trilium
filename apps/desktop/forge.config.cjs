@@ -3,7 +3,7 @@ const fs = require("fs-extra");
 const { execSync } = require("child_process");
 
 const APP_NAME = "TriliumNext Notes";
-const BIN_PATH = path.normalize("./bin/electron-forge");
+const BIN_PATH = path.normalize("./scripts/electron-forge");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
