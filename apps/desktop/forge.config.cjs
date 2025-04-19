@@ -1,8 +1,8 @@
 const path = require("path");
 const fs = require("fs-extra");
-const { execSync } = require("child_process");
 
-const APP_NAME = "TriliumNext Notes";
+const EXECUTABLE_NAME = "trilium";
+const PRODUCT_NAME = "TriliumNext Notes";
 const BIN_PATH = path.normalize("./scripts/electron-forge");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
@@ -20,8 +20,8 @@ module.exports = {
     // to have it output to ./dist, we need to go up a directory first
     outDir: "../dist",
     packagerConfig: {
-        executableName: "trilium",
-        name: APP_NAME,
+        executableName: EXECUTABLE_NAME,
+        name: PRODUCT_NAME,
         overwrite: true,
         asar: true,
         icon: "./assets/app-icon/icon",
@@ -88,7 +88,9 @@ module.exports = {
             name: "@electron-forge/maker-deb",
             config: {
                 options: {
-                  ...baseLinuxMakerConfigOptions
+                    ...baseLinuxMakerConfigOptions,
+                    name: EXECUTABLE_NAME,
+                    productName: PRODUCT_NAME
                 }
             }
         },
@@ -126,8 +128,8 @@ module.exports = {
         {
             name: "@electron-forge/maker-squirrel",
             config: {
-                name: "trilium",
-                productName: APP_NAME,
+                name: EXECUTABLE_NAME,
+                productName: PRODUCT_NAME,
                 iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
                 setupIcon: "./assets/setup-icon/setup.ico",
                 loadingGif: "./assets/setup-icon/setup-banner.gif",
