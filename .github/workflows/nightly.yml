@@ -73,7 +73,7 @@ jobs:
           prerelease: true
           draft: false
           fail_on_unmatched_files: true
-          files: upload/*.*
+          files: apps/desktop/upload/*.*
           tag_name: nightly
           name: Nightly Build
 
