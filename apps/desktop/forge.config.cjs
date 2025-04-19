@@ -7,7 +7,7 @@ const BIN_PATH = path.normalize("./bin/electron-forge");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
-  icon: "./images/app-icons/png/128x128.png",
+  icon: "./assets/app-icon/png/128x128.png",
   desktopTemplate: path.resolve(path.join(BIN_PATH, "desktop.ejs")),
   categories: ["Office", "Utility"]
 };
@@ -24,7 +24,7 @@ module.exports = {
         name: APP_NAME,
         overwrite: true,
         asar: true,
-        icon: "./images/app-icons/icon",
+        icon: "./assets/app-icon/icon",
         osxSign: {},
         osxNotarize: {
             appleId: process.env.APPLE_ID,
@@ -127,15 +127,15 @@ module.exports = {
             name: "@electron-forge/maker-squirrel",
             config: {
                 iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
-                setupIcon: "./images/app-icons/win/setup.ico",
-                loadingGif: "./images/app-icons/win/setup-banner.gif",
+                setupIcon: "./assets/setup-icon/setup.ico",
+                loadingGif: "./assets/setup-icon/setup-banner.gif",
                 windowsSign: windowsSignConfiguration
             }
         },
         {
             name: "@electron-forge/maker-dmg",
             config: {
-                icon: "./images/app-icons/icon.icns"
+                icon: "./assets/app-icon/icon.icns"
             }
         },
         {
@@ -143,7 +143,7 @@ module.exports = {
             config: {
                 options: {
                     iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
-                    icon: "./images/app-icons/icon.ico"
+                    icon: "./assets/app-icon/icon.ico"
                 }
             }
         }
@@ -196,7 +196,7 @@ function getExtraResourcesForPlatform() {
             resources.push(...getScriptRessources())
             break;
         case "linux":
-            resources.push(...getScriptRessources(), "images/app-icons/png/256x256.png");
+            resources.push(...getScriptRessources(), "assets/app-icon/png/256x256.png");
             break;
         default:
             break;
