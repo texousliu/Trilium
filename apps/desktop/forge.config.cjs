@@ -7,6 +7,8 @@ const BIN_PATH = path.normalize("./scripts/electron-forge");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
+  name: EXECUTABLE_NAME,
+  productName: PRODUCT_NAME,
   icon: "./assets/app-icon/png/128x128.png",
   desktopTemplate: path.resolve(path.join(BIN_PATH, "desktop.ejs")),
   categories: ["Office", "Utility"]
