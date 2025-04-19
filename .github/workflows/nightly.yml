@@ -82,7 +82,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         with:
           name: TriliumNextNotes ${{ matrix.os.name }} ${{ matrix.arch }}
-          path: upload
+          path: apps/desktop/upload
 
   nightly-server:
     name: Deploy server nightly
