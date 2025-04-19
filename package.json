@@ -20,21 +20,19 @@
     "scripts": {
         "build:packages": "npm --workspace=packages/commons run build",
         "test": "npm --workspace=apps/client --workspace=apps/server run test",
-
+        "clean": "rimraf --glob {apps,packages}/*/{build,dist}",
         "client:test": "npm --workspace=apps/client run test",
         "client:build": "npm --workspace=apps/client run build:webpack",
-
         "server:test": "npm --workspace=apps/server run test",
         "server:coverage": "npm --workspace=apps/server run coverage",
         "server:build": "npm --workspace=apps/server run build:ts",
         "server:package": "npm run build:packages && npm run client:build && npm --workspace=apps/server run package",
-
         "electron-forge:make": "npm run build:packages && npm run client:build && npm --workspace=apps/server run build:prepare-dist && npm --workspace=apps/desktop run electron-forge:make",
-
         "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
         "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
     },
     "devDependencies": {
+        "rimraf": "^6.0.1",
         "tsx": "^4.19.3"
     }
 }
