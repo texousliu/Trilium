@@ -45,7 +45,7 @@ jobs:
         with:
           node-version: 22
       - name: Install dependencies
-        run: npm ci
+        run: npm i
       - name: Update nightly version
         run: npm run chore:ci-update-nightly-version
       - name: Run the build
