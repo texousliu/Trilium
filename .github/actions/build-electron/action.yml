@@ -75,7 +75,7 @@ runs:
   # Build setup
   - name: Install dependencies
     shell: ${{ inputs.shell }}
-    run: npm ci
+    run: npm ci --workspaces
 
   - name: Update build info
     shell: ${{ inputs.shell }}
