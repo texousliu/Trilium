@@ -31,8 +31,8 @@ function copyAssets(baseDir: string, destDir: string, files: string[]) {
 /**
  * Copies the dependencies from the node_modules directory to the build directory.
  * We cannot copy the node_modules directory directly because we are in a monorepo and all the packages are gathered at root level.
- * 
- * @param packageJsonPath 
+ *
+ * @param packageJsonPath
  */
 function copyNodeModules(packageJsonPath: string) {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
@@ -45,9 +45,17 @@ function copyNodeModules(packageJsonPath: string) {
         }
 
         const src = path.join(rootDir, "node_modules", dependency);
+        if (!fs.existsSync(src)) {
+            console.warn(`Dependency ${dependency} not found in node_modules. Skipping.`);
+            continue;
+        }
+
         const dest = path.join(DEST_DIR, "node_modules", dependency);
         log(`${src} -> ${dest}`);
         fs.copySync(src, dest);
+
+        // Copy sub-dependencies as well.
+        copyNodeModules(path.join(src, "package.json"));
     }
 }
 
@@ -71,7 +79,7 @@ try {
         "./src/public/fonts",
         "./src/public/translations",
         `./tpl/`,
-        "./scripts/cleanupNodeModules.ts",        
+        "./scripts/cleanupNodeModules.ts",
         "./src/views/",
         "./src/etapi/etapi.openapi.yaml",
         "./src/routes/api/openapi.json",
@@ -79,7 +87,7 @@ try {
 
     const rootAssets = [
         "LICENSE",
-        "README.md"    
+        "README.md"
     ];
 
     copyNodeModules(path.join(serverDir, "package.json"));
