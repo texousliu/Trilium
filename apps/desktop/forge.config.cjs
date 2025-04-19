@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs-extra");
 
-const EXECUTABLE_NAME = "trilium";
+const EXECUTABLE_NAME = "trilium"; // keep in sync with server's package.json -> packagerConfig.executableName
 const PRODUCT_NAME = "TriliumNext Notes";
 const BIN_PATH = path.normalize("./scripts/electron-forge");
 
@@ -88,9 +88,7 @@ module.exports = {
             name: "@electron-forge/maker-deb",
             config: {
                 options: {
-                    ...baseLinuxMakerConfigOptions,
-                    name: EXECUTABLE_NAME,
-                    productName: PRODUCT_NAME
+                    ...baseLinuxMakerConfigOptions
                 }
             }
         },
