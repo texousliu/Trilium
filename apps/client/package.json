@@ -60,7 +60,7 @@
     "tsx": "4.19.3",
     "vanilla-js-wheel-zoom": "9.0.4",
     "webpack-cli": "6.0.1",    
-    "webpack": "5.99.5",
+    "webpack": "5.99.6",
     "sass": "1.86.3",
     "sass-loader": "16.0.5",
     "script-loader": "0.7.2",
@@ -77,8 +77,8 @@
     "@types/react-dom": "18.3.6",
     "css-loader": "7.1.2",
     "postcss-loader": "8.1.1",  
-    "eslint-linter-browserify": "9.24.0",    
-    "@eslint/js": "9.24.0",
+    "eslint-linter-browserify": "9.25.0",    
+    "@eslint/js": "9.25.0",
     "happy-dom": "17.4.4"
   }
 }
