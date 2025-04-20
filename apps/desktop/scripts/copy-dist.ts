@@ -14,11 +14,6 @@ function log(...args: any[]) {
 
 try {
     /**
-     * Copy the commons.
-     */
-    fs.copySync("../../packages/commons/build", path.join(DEST_DIR, "node_modules", "@triliumnext/commons"));
-
-    /**
      * Copy the server.
      */
     fs.copySync("../server/build", path.join(DEST_DIR, "node_modules", "@triliumnext/server"));

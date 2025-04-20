@@ -85,6 +85,11 @@ try {
 
     fs.mkdirpSync(DEST_DIR);
     copyNodeModules(path.join(serverDir, "package.json"));
+
+    // Copy monorepo assets.
+    fs.copySync("../../packages/commons/build", path.join(DEST_DIR, "node_modules", "@triliumnext/commons"));
+    fs.copySync("../../packages/turndown-plugin-gfm", path.join(DEST_DIR, "node_modules", "@triliumnext/turndown-plugin-gfm"));
+
     copyAssets(clientDir, path.join(DEST_DIR, "src", "public"), clientAssets);
     copyAssets(serverDir, path.join(DEST_DIR), serverAssets);
     copyAssets(rootDir, path.join(DEST_DIR), rootAssets);
