@@ -218,17 +218,8 @@ function register(router: Router) {
             renderNote(shaca.shareRootNote, req, res);
         });
     } else {
-        // @pano9000: comment out for now -> this is what causes the redirect loop
-        // router.get(`${sharePath}`, (req, res, next) => {
-        //     // Redirect to the path with trailing slash for consistency
-        //     res.redirect(`${sharePath}/`);
-        // });
 
         router.get(`${sharePath}/`, (req, res, next) => {
-            if (req.path !== `${sharePath}/`) {
-                res.redirect(`${sharePath}/`);
-                return;
-            }
 
             shacaLoader.ensureLoad();
 
@@ -239,6 +230,7 @@ function register(router: Router) {
 
             renderNote(shaca.shareRootNote, req, res);
         });
+
     }
 
     if (sharePath === '/' && options.getOptionBool("useCleanUrls") && options.getOptionBool("redirectBareDomain")) {
