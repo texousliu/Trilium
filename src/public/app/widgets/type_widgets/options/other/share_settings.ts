@@ -112,8 +112,7 @@ export default class ShareSettingsOptions extends OptionsWidget {
     }
 
     async checkShareRoot() {
-        const $button = this.$widget.find(".check-share-root");
-        $button.prop("disabled", true);
+        this.$shareRootCheck.prop("disabled", true);
 
         try {
             const shareRootNotes = await searchService.searchForNotes("#shareRoot");
@@ -131,7 +130,7 @@ export default class ShareSettingsOptions extends OptionsWidget {
                     .text(shareRootNotes.length > 0 ? t("share.share_root_not_shared", { noteTitle: shareRootNotes[0].title }) : t("share.share_root_not_found"));
             }
         } finally {
-            $button.prop("disabled", false);
+            this.$shareRootCheck.prop("disabled", false);
         }
     }
 }
