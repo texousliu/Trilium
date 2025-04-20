@@ -8,22 +8,26 @@ const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("share.title")}</h4>
 
-    <label class="tn-checkbox">
-        <input class="form-check-input redirect-bare-domain" type="checkbox" name="redirectBareDomain" value="true">
-        ${t("share.redirect_bare_domain")}
-    </label>
-    <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
+    <div class="form-group">
+        <label class="tn-checkbox">
+            <input class="form-check-input redirect-bare-domain" type="checkbox" name="redirectBareDomain" value="true">
+            ${t("share.redirect_bare_domain")}
+        </label>
+        <p class="form-text">${t("share.redirect_bare_domain_description")}</p>
 
-    <div class="share-root-check mt-2 mb-2" style="display: none;">
-        <button class="btn btn-sm btn-secondary check-share-root">${t("share.check_share_root")}</button>
-        <div class="share-root-status form-text mt-2"></div>
+        <div class="share-root-check mt-2 mb-2">
+            <button class="btn btn-sm btn-secondary check-share-root">${t("share.check_share_root")}</button>
+            <div class="share-root-status form-text mt-2"></div>
+        </div>
     </div>
 
-    <label class="tn-checkbox">
-        <input class="form-check-input use-clean-urls" type="checkbox" name="useCleanUrls" value="true">
-        ${t("share.use_clean_urls")}
-    </label>
-    <p class="form-text">${t("share.use_clean_urls_description")}</p>
+    <div class="form-group">
+        <label class="tn-checkbox">
+        <input class="form-check-input show-login-in-share-theme" type="checkbox" name="showLoginInShareTheme" value="true">
+            ${t("share.show_login_link")}
+        </label>
+        <p class="form-text">${t("share.show_login_link_description")}</p>
+    </div>
 
     <div class="form-group">
         <label>${t("share.share_path")}</label>
@@ -35,11 +39,14 @@ const TPL = /*html*/`
         </div>
     </div>
 
-    <label class="tn-checkbox">
-        <input class="form-check-input show-login-in-share-theme" type="checkbox" name="showLoginInShareTheme" value="true">
-        ${t("share.show_login_link")}
-    </label>
-    <p class="form-text">${t("share.show_login_link_description")}</p>
+    <div class="form-group">
+        <label class="tn-checkbox">
+            <input class="form-check-input use-clean-urls" type="checkbox" name="useCleanUrls" value="true">
+            ${t("share.use_clean_urls")}
+        </label>
+        <p class="form-text">${t("share.use_clean_urls_description")}</p>
+    </div>
+
 </div>`;
 
 export default class ShareSettingsOptions extends OptionsWidget {
@@ -60,6 +67,7 @@ export default class ShareSettingsOptions extends OptionsWidget {
         this.$sharePath = this.$widget.find(".share-path");
         this.$shareRootCheck = this.$widget.find(".share-root-check");
         this.$shareRootStatus = this.$widget.find(".share-root-status");
+        this.$shareRootCheck.hide();
 
         this.$redirectBareDomain.on('change', async () => {
 
