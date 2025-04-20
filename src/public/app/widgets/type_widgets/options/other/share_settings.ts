@@ -68,9 +68,6 @@ export default class ShareSettingsOptions extends OptionsWidget {
 
             // Show/hide share root status section based on redirectBareDomain checkbox
             this.$shareRootCheck.toggle(redirectBareDomain);
-            if (redirectBareDomain) {
-                this.checkShareRoot();
-            }
         });
 
         this.$showLoginInShareTheme.on('change', async () => {
@@ -100,9 +97,6 @@ export default class ShareSettingsOptions extends OptionsWidget {
         const redirectBareDomain = options.redirectBareDomain === "true";
         this.$redirectBareDomain.prop("checked", redirectBareDomain);
         this.$shareRootCheck.toggle(redirectBareDomain);
-        if (redirectBareDomain) {
-            await this.checkShareRoot();
-        }
 
         this.$showLoginInShareTheme.prop("checked", options.showLoginInShareTheme === "true");
         this.$useCleanUrls.prop("checked", options.useCleanUrls === "true");
