@@ -13,17 +13,20 @@ function log(...args: any[]) {
 }
 
 try {
+    fs.mkdirpSync(DEST_DIR);
+    copyNodeModules("./package.json");
+    copyPackageJson();
+
     /**
      * Copy the server.
      */
     fs.copySync("../server/build", path.join(DEST_DIR, "node_modules", "@triliumnext/server"));
 
-    copyPackageJson();
-
     /**
      * Copy assets.
      */
     const assetsToCopy = new Set([
+        "./tsconfig.json",
         "./forge.config.cjs",
         "./scripts/electron-forge/desktop.ejs",
         "./scripts/electron-forge/sign-windows.cjs",
@@ -48,6 +51,29 @@ try {
 } catch(err) {
     console.error("Error during copy:", err)
     process.exit(1)
+}
+
+/**
+ * We cannot copy the node_modules directory directly because we are in a monorepo and all the packages are gathered at root level.
+ * We cannot copy the files manually because we'd have to implement all the npm lookup logic, especially since there are issues with the same library having multiple versions across dependencies.
+ *
+ * @param packageJsonPath
+ */
+function copyNodeModules(packageJsonPath: string) {
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+
+    // Skip monorepo packages
+    packageJson.dependencies = Object.fromEntries(
+        Object.entries(packageJson.dependencies).filter(([key]) => {
+            return !key.startsWith("@triliumnext");
+        }));
+
+    // Trigger an npm install to obtain the dependencies.
+    fs.writeFileSync(path.join(DEST_DIR, "package.json"), JSON.stringify(packageJson));
+    execSync(`npm install --omit=dev`, {
+        cwd: DEST_DIR,
+        stdio: "inherit",
+    });
 }
 
 /**
