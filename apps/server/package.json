@@ -89,7 +89,9 @@
     "@triliumnext/turndown-plugin-gfm": "1.0.61",
     "yauzl": "3.2.0",
 
+    "electron-debug": "4.1.0",
     "electron-window-state": "5.0.3",
+    
     "swagger-ui-express": "5.0.1",
 
     "ollama": "0.5.14",
