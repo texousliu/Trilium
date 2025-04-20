@@ -37,6 +37,7 @@
     "electron-debug": "4.1.0",
     "electron-dl": "4.0.0",
     "electron-squirrel-startup": "1.0.1",
+    "@electron/remote": "2.1.2",
     "@triliumnext/server": "0.0.1"
   },
   "devDependencies": {
