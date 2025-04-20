@@ -43,12 +43,6 @@ try {
         fs.copySync(dir, path.join(PUBLIC_DIR, path.basename(dir)));
     }
 
-    /*
-     * Extract and rebuild the bettersqlite node module.
-     */
-    fs.moveSync(path.join(DEST_DIR, "node_modules/@triliumnext/server/node_modules/better-sqlite3"), path.join(DEST_DIR, "node_modules/better-sqlite3"));
-    execSync("npm run postinstall", { cwd: DEST_DIR });
-
     console.log("Copying complete!")
 
 } catch(err) {

@@ -46,7 +46,7 @@ function copyNodeModules(packageJsonPath: string) {
 
     // Trigger an npm install to obtain the dependencies.
     fs.writeFileSync(path.join(DEST_DIR, "package.json"), JSON.stringify(packageJson));
-    execSync(`npm install --omit=dev --omit=optional --omit=peer`, {
+    execSync(`npm install --omit=dev`, {
         cwd: DEST_DIR,
         stdio: "inherit",
     });
