@@ -85,6 +85,7 @@
     "html2plaintext": "2.1.4",
     "normalize-strings": "1.1.1",
     "is-animated": "2.0.2",
+    "mime-types": "3.0.1",
     "@triliumnext/turndown-plugin-gfm": "1.0.61",
 
     "electron-window-state": "5.0.3",
@@ -132,8 +133,7 @@
     "@types/sanitize-html": "2.15.0",
     "@types/stream-throttle": "0.1.4", 
     "@types/mime-types": "2.1.4",       
-    "@types/sax": "1.2.7",
-    "mime-types": "3.0.1",    
+    "@types/sax": "1.2.7",    
     "nodemon": "3.1.9",
     "cross-env": "7.0.3",
     "tsx": "4.19.3",
