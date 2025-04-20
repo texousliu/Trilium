@@ -87,6 +87,7 @@
     "is-animated": "2.0.2",
     "mime-types": "3.0.1",
     "@triliumnext/turndown-plugin-gfm": "1.0.61",
+    "yauzl": "3.2.0",
 
     "electron-window-state": "5.0.3",
     "swagger-ui-express": "5.0.1",
