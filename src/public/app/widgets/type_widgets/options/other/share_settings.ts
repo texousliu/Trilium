@@ -103,9 +103,8 @@ export default class ShareSettingsOptions extends OptionsWidget {
     // Ensure sharePath always starts with a single slash and does not end with (one or multiple) trailing slashes
     normalizeSharePathInput(sharePathInput: string) {
 
-        //TriliumNextTODO: -> this also disallows using single "/" as share path -> but do we need it?
         const REGEXP_STARTING_SLASH = /^\/+/g;
-        const REGEXP_TRAILING_SLASH = /\/+$/g;
+        const REGEXP_TRAILING_SLASH = /\b\/+$/g;
 
         const normalizedSharePath = (!sharePathInput.startsWith("/")
             ? `/${sharePathInput}`

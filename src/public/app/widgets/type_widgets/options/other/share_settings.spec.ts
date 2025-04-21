@@ -53,6 +53,11 @@ describe("ShareSettingsOptions", () => {
                 ["testpath"],
                 "/testpath"
             ],
+            [
+                "should not change anything, if the string is a single '/'",
+                ["/"],
+                "/"
+            ],
         ];
 
         testCases.forEach((testCase) => {
