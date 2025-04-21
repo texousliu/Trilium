@@ -89,16 +89,34 @@ export default class ShareSettingsOptions extends OptionsWidget {
         });
 
         this.$sharePath.on('change', async () => {
-            // Ensure sharePath always starts with a slash
-            let sharePath = this.$sharePath.val() as string;
-            if (sharePath && !sharePath.startsWith('/')) {
-                sharePath = '/' + sharePath;
-            }
-            await this.updateOption<"sharePath">("sharePath", sharePath);
+            const DEFAULT_SHAREPATH = "/share";
+            const sharePathInput = this.$sharePath.val()?.trim() || "";
+
+            const normalizedSharePath = this.normalizeSharePathInput(sharePathInput);
+            const optionValue = (!sharePathInput || !normalizedSharePath) ? DEFAULT_SHAREPATH : normalizedSharePath;
+
+            await this.updateOption<"sharePath">("sharePath", optionValue);
         });
 
         // Add click handler for check share root button
         this.$widget.find(".check-share-root").on("click", () => this.checkShareRoot());
+    }
+
+    // Ensure sharePath always starts with a single slash and does not end with (one or multiple) trailing slashes
+    normalizeSharePathInput(sharePathInput: string) {
+
+        //TriliumNextTODO: -> this also disallows using single "/" as share path -> but do we need it?
+        const REGEXP_STARTING_SLASH = /^\/+/g;
+        const REGEXP_TRAILING_SLASH = /\/+$/g;
+
+        const normalizedSharePath = (!sharePathInput.startsWith("/")
+            ? `/${sharePathInput}`
+            : sharePathInput)
+            .replaceAll(REGEXP_TRAILING_SLASH, "")
+            .replaceAll(REGEXP_STARTING_SLASH, "/");
+
+        return normalizedSharePath;
+
     }
 
     async optionsLoaded(options: OptionMap) {
