@@ -114,23 +114,58 @@ export default class ShareSettingsOptions extends OptionsWidget {
     async checkShareRoot() {
         this.$shareRootCheck.prop("disabled", true);
 
+        const setCheckShareRootStyle = (removeClassName: string, addClassName: string, text: string) => {
+            this.$shareRootStatus
+            .removeClass(removeClassName)
+            .addClass(addClassName)
+            .text(text);
+
+            this.$shareRootCheck.prop("disabled", false);
+        };
+
         try {
             const shareRootNotes = await searchService.searchForNotes("#shareRoot");
-            const sharedShareRootNote = shareRootNotes.find((note) => note.isShared());
+            const sharedShareRootNotes = shareRootNotes.filter((note) => note.isShared());
 
-            if (sharedShareRootNote) {
-                this.$shareRootStatus
-                    .removeClass("text-danger")
-                    .addClass("text-success")
-                    .text(t("share.share_root_found", { noteTitle: sharedShareRootNote.title }));
-            } else {
-                this.$shareRootStatus
-                    .removeClass("text-success")
-                    .addClass("text-danger")
-                    .text(shareRootNotes.length > 0 ? t("share.share_root_not_shared", { noteTitle: shareRootNotes[0].title }) : t("share.share_root_not_found"));
+            // No Note found that has the sharedRoot label AND is currently shared
+            if (sharedShareRootNotes.length < 1) {
+                const textMessage = (shareRootNotes.length > 0)
+                    ? t("share.share_root_not_shared", { noteTitle: shareRootNotes[0].title })
+                    : t("share.share_root_not_found");
+
+                return setCheckShareRootStyle("text-success", "text-danger", textMessage);
             }
-        } finally {
-            this.$shareRootCheck.prop("disabled", false);
+
+            // more than one currently shared Note found with the sharedRoot label
+            // → use the first found, but warn user about it
+            if (sharedShareRootNotes.length > 1) {
+
+                const foundNoteTitles = shareRootNotes.map(note => t("share.share_note_title", {
+                    noteTitle: note.title,
+                    interpolation: {
+                        escapeValue: false
+                    }
+                }));
+                const activeNoteTitle = foundNoteTitles[0];
+
+                return setCheckShareRootStyle("text-danger", "text-success",
+                    t("share.share_root_multiple_found", {
+                        activeNoteTitle,
+                        foundNoteTitles: foundNoteTitles.join(", ")
+                    })
+                );
+            }
+
+            // exactly one note that has the sharedRoot label AND is currently shared
+            return setCheckShareRootStyle("text-danger", "text-success",
+                t("share.share_root_found", { noteTitle: sharedShareRootNotes[0].title })
+            );
+
+        } catch(err) {
+            console.error(err);
+            return setCheckShareRootStyle("text-success", "text-danger",
+                t("share.check_share_root_error",)
+            );
         }
     }
 }
