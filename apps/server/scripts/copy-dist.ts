@@ -41,7 +41,7 @@ function copyNodeModules(packageJsonPath: string) {
     // Skip monorepo packages
     packageJson.dependencies = Object.fromEntries(
         Object.entries(packageJson.dependencies).filter(([key]) => {
-            return !key.startsWith("@triliumnext");
+            return (key === "@triliumnext/express-partial-content" || !key.startsWith("@triliumnext"));
         }));
 
     // Trigger an npm install to obtain the dependencies.
