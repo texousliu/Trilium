@@ -1,0 +1,24 @@
+{
+  "name": "@triliumnext/edit-demo",
+  "version": "1.0.0",
+  "description": "Desktop version of Trilium which imports the demo database (presented to new users at start-up) or the user guide and other documentation and saves the modifications for committing.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TriliumNext/Notes.git"
+  },
+  "author": "",
+  "license": "AGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/TriliumNext/Notes/issues"
+  },
+  "homepage": "https://github.com/TriliumNext/Notes#readme",
+  "dependencies": {
+    "@triliumnext/client": "0.0.1",
+    "@triliumnext/electron": "0.0.1",
+    "@triliumnext/server": "0.0.1"
+  }
+}

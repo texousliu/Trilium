@@ -1,18 +1,18 @@
 import fs from "fs/promises";
 import fsExtra from "fs-extra";
 import path from "path";
-import type NoteMeta from "./src/services/meta/note_meta.js";
-import type { NoteMetaFile } from "./src/services/meta/note_meta.js";
-import { initializeTranslations } from "./src/services/i18n.js";
+import type NoteMeta from "@triliumnext/server/src/services/meta/note_meta.js";
+import type { NoteMetaFile } from "@triliumnext/server/src/services/meta/note_meta.js";
+import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js";
 import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
-import debounce from "./src/public/app/services/debounce.js";
+import debounce from "@triliumnext/client/src/services/debounce.js";
 import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
-import cls from "./src/services/cls.js";
-import type { AdvancedExportOptions } from "./src/services/export/zip.js";
-import TaskContext from "./src/services/task_context.js";
-import { deferred } from "./src/services/utils.js";
-import { parseNoteMetaFile } from "./src/services/in_app_help.js";
+import cls from "@triliumnext/server/src/services/cls.js";
+import type { AdvancedExportOptions } from "@triliumnext/server/src/services/export/zip.js";
+import TaskContext from "@triliumnext/server/src/services/task_context.js";
+import { deferred } from "@triliumnext/server/src/services/utils.js";
+import { parseNoteMetaFile } from "@triliumnext/server/src/services/in_app_help.js";
 
 interface NoteMapping {
     rootNoteId: string;
@@ -70,7 +70,7 @@ async function main() {
 }
 
 async function setOptions() {
-    const optionsService = (await import("./src/services/options.js")).default;
+    const optionsService = (await import("@triliumnext/server/src/services/options.js")).default;
     optionsService.setOption("eraseUnusedAttachmentsAfterSeconds", 10);
     optionsService.setOption("eraseUnusedAttachmentsAfterTimeScale", 60);
     optionsService.setOption("compressImages", "false");
@@ -78,9 +78,9 @@ async function setOptions() {
 
 async function importData(path: string) {
     const buffer = await createImportZip(path);
-    const importService = (await import("./src/services/import/zip.js")).default;
+    const importService = (await import("@triliumnext/server/src/services/import/zip.js")).default;
     const context = new TaskContext("no-progress-reporting", "import", false);
-    const becca = (await import("./src/becca/becca.js")).default;
+    const becca = (await import("@triliumnext/server/src/becca/becca.js")).default;
 
     const rootNote = becca.getRoot();
     if (!rootNote) {
@@ -126,7 +126,7 @@ async function exportData(noteId: string, format: "html" | "markdown", outputPat
         await fsExtra.mkdir(outputPath);
 
         // First export as zip.
-        const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
+        const { exportToZipFile } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
 
         const exportOpts: AdvancedExportOptions = {};
         if (format === "html") {
@@ -213,8 +213,8 @@ async function cleanUpMeta(outputPath: string, minify: boolean) {
 }
 
 async function registerHandlers() {
-    const events = (await import("./src/services/events.js")).default;
-    const eraseService = (await import("./src/services/erase.js")).default;
+    const events = (await import("@triliumnext/server/src/services/events.js")).default;
+    const eraseService = (await import("@triliumnext/server/src/services/erase.js")).default;
     const debouncer = debounce(async () => {
         eraseService.eraseUnusedAttachmentsNow();
 

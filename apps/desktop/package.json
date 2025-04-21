@@ -21,7 +21,6 @@
   "scripts": {
     "start": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_DATA_DIR=./data TRILIUM_ENV=dev electron ./src/electron-main.ts --inspect=5858 .",
     "start-prod": "npm run build:prepare-dist && npx electron-rebuild -m build && cross-env TRILIUM_DATA_DIR=./data TRILIUM_ENV=prod electron ./build/src/electron-main.js --inspect=5858 .",
-    "postinstall": "electron-rebuild",
 
     "build:clean": "rimraf ./dist ./build",
     "build:copy-dist": "tsx ./scripts/copy-dist.ts",

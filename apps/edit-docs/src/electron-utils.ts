@@ -1,11 +1,11 @@
-import cls from "./src/services/cls.js";
+import cls from "@triliumnext/server/src/services/cls.js";
 import fs from "fs/promises";
 import fsExtra from "fs-extra";
 import path from "path";
 
 export function initializeDatabase(skipDemoDb: boolean) {
     return new Promise<void>(async (resolve) => {
-        const sqlInit = (await import("./src/services/sql_init.js")).default;
+        const sqlInit = (await import("@triliumnext/server/src/services/sql_init.js")).default;
         cls.init(async () => {
             if (!sqlInit.isDbInitialized()) {
                 await sqlInit.createInitialDatabase(skipDemoDb);
@@ -16,16 +16,16 @@ export function initializeDatabase(skipDemoDb: boolean) {
 }
 
 export async function startElectron() {
-    await import("./electron-main.js");
+    await import("@triliumnext/electron/src/electron-main.js");
 }
 
 export async function extractZip(zipFilePath: string, outputPath: string, ignoredFiles?: Set<string>) {
-    const deferred = (await import("./src/services/utils.js")).deferred;
+    const deferred = (await import("@triliumnext/server/src/services/utils.js")).deferred;
 
     const promise = deferred<void>()
     setTimeout(async () => {
         // Then extract the zip.
-        const { readZipFile, readContent } = (await import("./src/services/import/zip.js"));
+        const { readZipFile, readContent } = (await import("@triliumnext/server/src/services/import/zip.js"));
         await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
             // We ignore directories since they can appear out of order anyway.
             if (!entry.fileName.endsWith("/") && !ignoredFiles?.has(entry.fileName)) {

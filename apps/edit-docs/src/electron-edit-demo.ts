@@ -1,6 +1,6 @@
 import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
-import { initializeTranslations } from "./src/services/i18n.js";
-import debounce from "./src/public/app/services/debounce.js";
+import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js";
+import debounce from "@triliumnext/client/src/services/debounce.js";
 import fs from "fs/promises";
 
 const DEMO_ZIP_PATH = "db/demo.zip";
@@ -14,8 +14,8 @@ async function main() {
 }
 
 async function registerHandlers() {
-    const events = (await import("./src/services/events.js")).default;
-    const eraseService = (await import("./src/services/erase.js")).default;
+    const events = (await import("@triliumnext/server/src/services/events.js")).default;
+    const eraseService = (await import("@triliumnext/server/src/services/erase.js")).default;
     const debouncer = debounce(async () => {
         console.log("Exporting data");
         eraseService.eraseUnusedAttachmentsNow();
@@ -36,7 +36,7 @@ async function registerHandlers() {
 }
 
 async function exportData() {
-    const { exportToZipFile } = (await import("./src/services/export/zip.js")).default;
+    const { exportToZipFile } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
     await exportToZipFile("root", "html", DEMO_ZIP_PATH);
 }
 
