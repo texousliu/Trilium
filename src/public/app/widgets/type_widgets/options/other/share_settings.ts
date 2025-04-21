@@ -70,7 +70,6 @@ export default class ShareSettingsOptions extends OptionsWidget {
         this.$shareRootCheck.hide();
 
         this.$redirectBareDomain.on('change', async () => {
-
             const redirectBareDomain = this.$redirectBareDomain.is(":checked");
             await this.updateOption<"redirectBareDomain">("redirectBareDomain", redirectBareDomain.toString());
 
@@ -98,7 +97,6 @@ export default class ShareSettingsOptions extends OptionsWidget {
             await this.updateOption<"sharePath">("sharePath", optionValue);
         });
 
-        // Add click handler for check share root button
         this.$widget.find(".check-share-root").on("click", () => this.checkShareRoot());
     }
 
