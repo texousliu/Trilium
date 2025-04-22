@@ -1,11 +1,11 @@
 import type FNote from "./entities/fnote";
 import type { Froca } from "./services/froca-interface";
-import { Suggestion } from "./services/note_autocomplete.ts";
-import utils from "./services/utils.ts";
-import appContext, { AppContext } from "./components/app_context.ts";
-import server from "./services/server.ts";
-import library_loader, { Library } from "./services/library_loader.ts";
-import type { lint } from "./services/eslint.ts";
+import { Suggestion } from "./services/note_autocomplete";
+import utils from "./services/utils";
+import appContext, { AppContext } from "./components/app_context";
+import server from "./services/server";
+import library_loader, { Library } from "./services/library_loader";
+import type { lint } from "./services/eslint";
 import type { Mermaid, MermaidConfig } from "mermaid";
 
 interface ElectronProcess {

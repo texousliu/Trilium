@@ -131,21 +131,21 @@ async function handleMessage(event: MessageEvent<any>) {
         // ENHANCED LOGGING FOR DEBUGGING
         console.log(`[WS-CLIENT] >>> RECEIVED LLM STREAM MESSAGE <<<`);
         console.log(`[WS-CLIENT] Message details: sessionId=${message.sessionId}, hasContent=${!!message.content}, contentLength=${message.content ? message.content.length : 0}, hasThinking=${!!message.thinking}, hasToolExecution=${!!message.toolExecution}, isDone=${!!message.done}`);
-        
+
         if (message.content) {
             console.log(`[WS-CLIENT] CONTENT PREVIEW: "${message.content.substring(0, 50)}..."`);
         }
-        
+
         // Create the event with detailed logging
         console.log(`[WS-CLIENT] Creating CustomEvent 'llm-stream-message'`);
         const llmStreamEvent = new CustomEvent('llm-stream-message', { detail: message });
-        
+
         // Dispatch to multiple targets to ensure delivery
         try {
             console.log(`[WS-CLIENT] Dispatching event to window`);
             window.dispatchEvent(llmStreamEvent);
             console.log(`[WS-CLIENT] Event dispatched to window`);
-            
+
             // Also try document for completeness
             console.log(`[WS-CLIENT] Dispatching event to document`);
             document.dispatchEvent(new CustomEvent('llm-stream-message', { detail: message }));
@@ -153,10 +153,10 @@ async function handleMessage(event: MessageEvent<any>) {
         } catch (err) {
             console.error(`[WS-CLIENT] Error dispatching event:`, err);
         }
-        
+
         // Debug current listeners (though we can't directly check for specific event listeners)
         console.log(`[WS-CLIENT] Active event listeners should receive this message now`);
-        
+
         // Detailed logging based on message type
         if (message.content) {
             console.log(`[WS-CLIENT] Content message: ${message.content.length} chars`);
@@ -173,10 +173,10 @@ async function handleMessage(event: MessageEvent<any>) {
     } else if (message.type === "execute-script") {
         // TODO: Remove after porting the file
         // @ts-ignore
-        const bundleService = (await import("../services/bundle.js")).default as any;
+        const bundleService = (await import("./bundle.js")).default as any;
         // TODO: Remove after porting the file
         // @ts-ignore
-        const froca = (await import("../services/froca.js")).default as any;
+        const froca = (await import("./froca.js")).default as any;
         const originEntity = message.originEntityId ? await froca.getNote(message.originEntityId) : null;
 
         bundleService.getAndExecuteBundle(message.currentNoteId, originEntity, message.script, message.params);
