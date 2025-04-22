@@ -6,8 +6,8 @@
 import { initializeTranslations } from "./services/i18n.js";
 
 async function startApplication() {
+    await initializeTranslations();
     await import("./www.js");
 }
 
-await initializeTranslations();
-await startApplication();
+startApplication();

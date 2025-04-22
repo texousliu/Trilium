@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import app from "./app.js";
 import sessionParser from "./routes/session_parser.js";
 import fs from "fs";
 import http from "http";
@@ -13,6 +12,8 @@ import ws from "./services/ws.js";
 import utils from "./services/utils.js";
 import port from "./services/port.js";
 import host from "./services/host.js";
+import buildApp from "./app.js";
+import type { Express } from "express";
 
 const MINIMUM_NODE_VERSION = "20.0.0";
 
@@ -47,6 +48,8 @@ tmp.setGracefulCleanup();
 startTrilium();
 
 async function startTrilium() {
+    const app = await buildApp();
+
     /**
      * The intended behavior is to detect when a second instance is running, in that case open the old instance
      * instead of the new one. This is complicated by the fact that it is possible to run multiple instances of Trilium
@@ -74,7 +77,7 @@ async function startTrilium() {
         log.info(`CPU model: ${cpuModel}, logical cores: ${cpuInfos.length}, freq: ${cpuInfos[0].speed} Mhz`);
     }
 
-    const httpServer = startHttpServer();
+    const httpServer = startHttpServer(app);
 
     ws.init(httpServer, sessionParser as any); // TODO: Not sure why session parser is incompatible.
 
@@ -84,7 +87,7 @@ async function startTrilium() {
     }
 }
 
-function startHttpServer() {
+function startHttpServer(app: Express) {
     app.set("port", port);
     app.set("host", host);
 

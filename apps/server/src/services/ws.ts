@@ -12,19 +12,6 @@ import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 import type { IncomingMessage, Server as HttpServer } from "http";
 import type { EntityChange } from "./entity_changes_interface.js";
 
-if (isDev) {
-    const chokidar = (await import("chokidar")).default;
-    const debounce = (await import("debounce")).default;
-    const debouncedReloadFrontend = debounce(() => reloadFrontend("source code change"), 200);
-    chokidar
-        .watch("src/public", {
-            ignored: "src/public/app/doc_notes/en/User Guide"
-        })
-        .on("add", debouncedReloadFrontend)
-        .on("change", debouncedReloadFrontend)
-        .on("unlink", debouncedReloadFrontend);
-}
-
 let webSocketServer!: WebSocketServer;
 let lastSyncedPush: number | null = null;
 

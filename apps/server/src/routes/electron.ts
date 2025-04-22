@@ -1,5 +1,4 @@
 import { ipcMain } from "electron";
-import type { Application } from "express";
 
 interface Response {
     statusCode: number;
@@ -10,7 +9,7 @@ interface Response {
     send: (obj: {}) => void; // eslint-disable-line @typescript-eslint/no-empty-object-type
 }
 
-function init(app: Application) {
+function init(app: Express.Application) {
     ipcMain.on("server-request", (event, arg) => {
         const req = {
             url: arg.url,
