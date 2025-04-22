@@ -431,7 +431,7 @@ function register(app: express.Application) {
     apiRoute(GET, "/api/llm/providers/anthropic/models", anthropicRoute.listModels);
 
     // API Documentation
-    apiDocsRoute.register(app);
+    apiDocsRoute(app);
 
     app.use("", router);
 }
