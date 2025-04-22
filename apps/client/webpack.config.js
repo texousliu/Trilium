@@ -13,8 +13,7 @@ module.exports = {
     new NxAppWebpackPlugin({
       tsConfig: './tsconfig.app.json',
       compiler: 'swc',
-      main: './src/main.ts',
-      index: './src/index.html',
+      main: './src/desktop.ts',
       baseHref: '/',
       assets: ["./src/assets"],
       styles: ["./src/styles.css"],
