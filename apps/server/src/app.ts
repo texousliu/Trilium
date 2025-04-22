@@ -109,7 +109,7 @@ export default async function buildApp() {
     app.use(`/robots.txt`, express.static(path.join(scriptDir, "public/robots.txt")));
     app.use(`/icon.png`, express.static(path.join(scriptDir, "public/icon.png")));
     app.use(sessionParser);
-    app.use(favicon(`${scriptDir}/../assets/icon.ico`));
+    app.use(favicon(`${scriptDir}/assets/icon.ico`));
 
     if (openID.isOpenIDEnabled())
         app.use(auth(openID.generateOAuthConfig()));
