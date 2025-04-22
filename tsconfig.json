@@ -8,6 +8,12 @@
     },
     {
       "path": "./packages/turndown-plugin-gfm"
+    },
+    {
+      "path": "./apps/server-e2e"
+    },
+    {
+      "path": "./apps/server"
     }
   ]
 }
