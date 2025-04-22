@@ -422,7 +422,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
      * @returns The requested dependency or null if it couldn't be created
      */
     private async getOrCreateDependency(dependencyType: string, toolName: string): Promise<any> {
-        const aiServiceManager = require('../../../ai_service_manager.js').default;
+        const aiServiceManager = (await import('../../ai_service_manager.js')).default;
 
         try {
             log.info(`Getting dependency '${dependencyType}' for tool '${toolName}'`);

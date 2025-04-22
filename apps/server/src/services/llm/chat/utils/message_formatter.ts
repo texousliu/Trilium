@@ -2,6 +2,7 @@
  * Message formatting utilities for different LLM providers
  */
 import type { Message } from "../../ai_interface.js";
+import { CONTEXT_PROMPTS } from "../../constants/llm_prompt_constants.js";
 
 /**
  * Interface for message formatters
@@ -110,9 +111,6 @@ export function buildContextFromNotes(sources: any[], query: string): string {
     if (!noteContexts) {
         return query || '';
     }
-
-    // Import the CONTEXT_PROMPTS constant
-    const { CONTEXT_PROMPTS } = require('../../constants/llm_prompt_constants.js');
 
     // Use the template from the constants file, replacing placeholders
     return CONTEXT_PROMPTS.CONTEXT_NOTES_WRAPPER
