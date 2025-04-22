@@ -1,5 +1,5 @@
-import "../stylesheets/bootstrap.scss";
-import "../stylesheets/auth.css";
+import "./stylesheets/bootstrap.scss";
+import "./stylesheets/auth.css";
 
 // @TriliumNextTODO: is this even needed anymore?
 // @ts-ignore - module = undefined

@@ -11,7 +11,7 @@ import dialogService from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 import type { ConnectionMadeEventInfo, jsPlumbInstance, OverlaySpec } from "jsplumb";
-import "../../../stylesheets/relation_map.css";
+import "../../stylesheets/relation_map.css";
 
 declare module "jsplumb" {
 

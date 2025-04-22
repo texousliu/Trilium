@@ -16,7 +16,7 @@ module.exports = {
       main: './src/desktop.ts',
       baseHref: '/',
       assets: ["./src/assets"],
-      styles: ["./src/styles.css"],
+      styles: [],
       outputHashing: process.env['NODE_ENV'] === 'production' ? 'all' : 'none',
       optimization: process.env['NODE_ENV'] === 'production',
     })

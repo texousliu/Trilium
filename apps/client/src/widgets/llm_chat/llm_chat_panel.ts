@@ -14,7 +14,7 @@ import { validateEmbeddingProviders } from "./validation.js";
 import type { MessageData, ToolExecutionStep, ChatData } from "./types.js";
 import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
 
-import "../../../stylesheets/llm_chat.css";
+import "../../stylesheets/llm_chat.css";
 
 export default class LlmChatPanel extends BasicWidget {
     private noteContextChatMessages!: HTMLElement;
