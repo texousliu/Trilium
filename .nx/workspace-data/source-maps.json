@@ -1,1 +1,328 @@
-{}
+{
+  "packages/commons": {
+    "root": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "projectType": [
+      "packages/commons/tsconfig.spec.json",
+      "@nx/js/typescript"
+    ],
+    "targets": [
+      "packages/commons/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.dependsOn": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.options": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.cache": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.inputs": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.outputs": [
+      "packages/commons/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.syncGenerators": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.executor": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.options.cwd": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.options.command": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.technologies": [
+      "packages/commons/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.technologies.0": [
+      "packages/commons/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.description": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.help": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.help.command": [
+      "packages/commons/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.help.example": [
+      "packages/commons/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.watch-deps": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.dependsOn": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.executor": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.options": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.options.command": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.lint": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.cache": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.inputs": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.outputs": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.executor": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options.cwd": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options.command": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.technologies": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.technologies.0": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.description": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help.command": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help.example": [
+      "packages/commons/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.test": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.options": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.cache": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.inputs": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.outputs": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.metadata": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.executor": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.options.cwd": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.options.command": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.metadata.technologies": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.metadata.technologies.0": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.metadata.description": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.metadata.help": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.metadata.help.command": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.test.metadata.help.example": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.technologies.1": [
+      "packages/commons/vite.config.ts",
+      "@nx/vite/plugin"
+    ],
+    "name": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "sourceRoot": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "tags": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "tags.npm:private": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageName": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageExports": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageMain": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.isInPackageManagerWorkspaces": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.executor": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.outputs": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.outputPath": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.main": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.tsConfig": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.skipTypeCheck": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.stripLeadingPaths": [
+      "packages/commons/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.build.dependsOn": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.build.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.build.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.dependsOn": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
+  }
+}
