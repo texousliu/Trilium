@@ -1,0 +1,31 @@
+{
+  "name": "triliumnext",
+  "version": "0.0.1",
+  "description": "Build your personal knowledge base with TriliumNext Notes",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TriliumNext/Notes.git"
+  },
+  "author": {
+    "name": "TriliumNext Notes Team",
+    "email": "contact@eliandoran.me",
+    "url": "https://github.com/TriliumNext/Notes"
+  },
+  "license": "AGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/TriliumNext/Notes/issues"
+  },
+  "homepage": "https://github.com/TriliumNext/Notes#readme"
+}
