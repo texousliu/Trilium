@@ -324,5 +324,259 @@
       "nx.json",
       "nx/target-defaults"
     ]
+  },
+  "packages/turndown-plugin-gfm": {
+    "root": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "projectType": [
+      "packages/turndown-plugin-gfm/tsconfig.lib.json",
+      "@nx/js/typescript"
+    ],
+    "targets": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.dependsOn": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.options": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.cache": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.inputs": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.outputs": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.syncGenerators": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.executor": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.options.cwd": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.options.command": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.technologies": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.technologies.0": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.description": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.help": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.help.command": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.help.example": [
+      "packages/turndown-plugin-gfm/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.watch-deps": [
+      "packages/turndown-plugin-gfm/tsconfig.lib.json",
+      "@nx/js/typescript"
+    ],
+    "targets.watch-deps.dependsOn": [
+      "packages/turndown-plugin-gfm/tsconfig.lib.json",
+      "@nx/js/typescript"
+    ],
+    "targets.watch-deps.executor": [
+      "packages/turndown-plugin-gfm/tsconfig.lib.json",
+      "@nx/js/typescript"
+    ],
+    "targets.watch-deps.options": [
+      "packages/turndown-plugin-gfm/tsconfig.lib.json",
+      "@nx/js/typescript"
+    ],
+    "targets.watch-deps.options.command": [
+      "packages/turndown-plugin-gfm/tsconfig.lib.json",
+      "@nx/js/typescript"
+    ],
+    "targets.lint": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.cache": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.inputs": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.outputs": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.executor": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options.cwd": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options.command": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.technologies": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.technologies.0": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.description": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help.command": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help.example": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "name": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "sourceRoot": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "tags": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "tags.npm:private": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageName": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageExports": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageMain": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.isInPackageManagerWorkspaces": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.executor": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.outputs": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.outputPath": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.main": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.tsConfig": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.skipTypeCheck": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.options.stripLeadingPaths": [
+      "packages/turndown-plugin-gfm/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.build.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.build.dependsOn": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.build.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.build.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
   }
 }

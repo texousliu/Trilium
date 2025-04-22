@@ -1,5 +1,176 @@
 {
   "nodes": {
+    "@triliumnext/turndown-plugin-gfm": {
+      "name": "@triliumnext/turndown-plugin-gfm",
+      "type": "lib",
+      "data": {
+        "root": "packages/turndown-plugin-gfm",
+        "projectType": "library",
+        "targets": {
+          "typecheck": {
+            "dependsOn": [
+              "build",
+              "^typecheck"
+            ],
+            "options": {
+              "cwd": "packages/turndown-plugin-gfm",
+              "command": "tsc --build --emitDeclarationOnly"
+            },
+            "cache": true,
+            "inputs": [
+              "production",
+              "^production",
+              {
+                "externalDependencies": [
+                  "typescript"
+                ]
+              }
+            ],
+            "outputs": [
+              "{projectRoot}/**/*.js",
+              "{projectRoot}/**/*.cjs",
+              "{projectRoot}/**/*.mjs",
+              "{projectRoot}/**/*.jsx",
+              "{projectRoot}/**/*.js.map",
+              "{projectRoot}/**/*.jsx.map",
+              "{projectRoot}/**/*.d.ts",
+              "{projectRoot}/**/*.d.cts",
+              "{projectRoot}/**/*.d.mts",
+              "{projectRoot}/**/*.d.ts.map",
+              "{projectRoot}/**/*.d.cts.map",
+              "{projectRoot}/**/*.d.mts.map",
+              "{projectRoot}/tsconfig.tsbuildinfo",
+              "{projectRoot}/dist/**/*.d.ts",
+              "{projectRoot}/dist/tsconfig.lib.tsbuildinfo"
+            ],
+            "syncGenerators": [
+              "@nx/js:typescript-sync"
+            ],
+            "metadata": {
+              "technologies": [
+                "typescript"
+              ],
+              "description": "Runs type-checking for the project.",
+              "help": {
+                "command": "npx tsc --build --help",
+                "example": {
+                  "args": [
+                    "--force"
+                  ]
+                }
+              }
+            },
+            "executor": "nx:run-commands",
+            "configurations": {},
+            "parallelism": true
+          },
+          "build": {
+            "executor": "@nx/js:swc",
+            "outputs": [
+              "{options.outputPath}"
+            ],
+            "options": {
+              "outputPath": "packages/turndown-plugin-gfm/dist",
+              "main": "packages/turndown-plugin-gfm/src/index.js",
+              "tsConfig": "packages/turndown-plugin-gfm/tsconfig.lib.json",
+              "skipTypeCheck": true,
+              "stripLeadingPaths": true
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": [
+              "^build"
+            ],
+            "inputs": [
+              "production",
+              "^production"
+            ]
+          },
+          "build-deps": {
+            "dependsOn": [
+              "^build"
+            ],
+            "configurations": {},
+            "options": {},
+            "parallelism": true,
+            "executor": "nx:noop"
+          },
+          "watch-deps": {
+            "dependsOn": [
+              "build-deps"
+            ],
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "npx nx watch --projects @triliumnext/turndown-plugin-gfm --includeDependentProjects -- npx nx build-deps @triliumnext/turndown-plugin-gfm"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "cache": true,
+            "options": {
+              "cwd": "packages/turndown-plugin-gfm",
+              "command": "eslint ."
+            },
+            "inputs": [
+              "default",
+              "^default",
+              "{workspaceRoot}/eslint.config.mjs",
+              "{workspaceRoot}/tools/eslint-rules/**/*",
+              {
+                "externalDependencies": [
+                  "eslint"
+                ]
+              }
+            ],
+            "outputs": [
+              "{options.outputFile}"
+            ],
+            "metadata": {
+              "technologies": [
+                "eslint"
+              ],
+              "description": "Runs ESLint on project",
+              "help": {
+                "command": "npx eslint --help",
+                "example": {
+                  "options": {
+                    "max-warnings": 0
+                  }
+                }
+              }
+            },
+            "executor": "nx:run-commands",
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "name": "@triliumnext/turndown-plugin-gfm",
+        "sourceRoot": "packages/turndown-plugin-gfm/src",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {},
+          "js": {
+            "packageName": "@triliumnext/turndown-plugin-gfm",
+            "packageExports": {
+              "./package.json": "./package.json",
+              ".": {
+                "development": "./src/index.ts",
+                "types": "./dist/index.d.ts",
+                "import": "./dist/index.js",
+                "default": "./dist/index.js"
+              }
+            },
+            "packageMain": "./dist/index.js",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
     "@triliumnext/commons": {
       "name": "@triliumnext/commons",
       "type": "lib",
@@ -22,11 +193,22 @@
               }
             ],
             "outputs": [
+              "{projectRoot}/**/*.js",
+              "{projectRoot}/**/*.cjs",
+              "{projectRoot}/**/*.mjs",
+              "{projectRoot}/**/*.jsx",
+              "{projectRoot}/**/*.js.map",
+              "{projectRoot}/**/*.jsx.map",
+              "{projectRoot}/**/*.d.ts",
+              "{projectRoot}/**/*.d.cts",
+              "{projectRoot}/**/*.d.mts",
+              "{projectRoot}/**/*.d.ts.map",
+              "{projectRoot}/**/*.d.cts.map",
+              "{projectRoot}/**/*.d.mts.map",
+              "{projectRoot}/tsconfig.tsbuildinfo",
               "{projectRoot}/dist/**/*.d.ts",
-              "{projectRoot}/dist/**/*.d.ts.map",
               "{projectRoot}/dist/tsconfig.lib.tsbuildinfo",
               "{projectRoot}/out-tsc/vitest/**/*.d.ts",
-              "{projectRoot}/out-tsc/vitest/**/*.d.ts.map",
               "{projectRoot}/out-tsc/vitest/tsconfig.tsbuildinfo"
             ],
             "syncGenerators": [
@@ -6321,6 +6503,13 @@
     }
   },
   "dependencies": {
+    "@triliumnext/turndown-plugin-gfm": [
+      {
+        "source": "@triliumnext/turndown-plugin-gfm",
+        "target": "npm:@swc/helpers",
+        "type": "static"
+      }
+    ],
     "@triliumnext/commons": [
       {
         "source": "@triliumnext/commons",
@@ -13277,5 +13466,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1745323545907
+  "computedAt": 1745324463111
 }

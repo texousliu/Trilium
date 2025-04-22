@@ -5,6 +5,9 @@
   "references": [
     {
       "path": "./packages/commons"
+    },
+    {
+      "path": "./packages/turndown-plugin-gfm"
     }
   ]
 }

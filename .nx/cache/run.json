@@ -1,18 +1,18 @@
 {
   "run": {
-    "command": "nx test commons",
-    "startTime": "2025-04-22T12:06:29.829Z",
-    "endTime": "2025-04-22T12:06:30.546Z",
+    "command": "nx build turndown-plugin-gfm",
+    "startTime": "2025-04-22T12:21:01.774Z",
+    "endTime": "2025-04-22T12:21:03.047Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "@triliumnext/commons:test",
-      "target": "test",
-      "projectName": "@triliumnext/commons",
-      "hash": "304969377575151971",
-      "startTime": "2025-04-22T12:06:29.839Z",
-      "endTime": "2025-04-22T12:06:30.537Z",
+      "taskId": "@triliumnext/turndown-plugin-gfm:build",
+      "target": "build",
+      "projectName": "@triliumnext/turndown-plugin-gfm",
+      "hash": "6308689797653528488",
+      "startTime": "2025-04-22T12:21:01.785Z",
+      "endTime": "2025-04-22T12:21:03.023Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0
