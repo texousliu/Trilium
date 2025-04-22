@@ -83,6 +83,7 @@
     "@highlightjs/cdn-assets": "11.11.1",
     "@excalidraw/excalidraw": "0.18.0",
 
+    "electron": "35.1.5",
     "@electron/remote": "2.1.2",
 
     "@types/cookie-parser": "1.4.8",
