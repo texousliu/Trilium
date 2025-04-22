@@ -4,6 +4,12 @@
   "include": [],
   "references": [
     {
+      "path": "../../packages/turndown-plugin-gfm"
+    },
+    {
+      "path": "../../packages/commons"
+    },
+    {
       "path": "./tsconfig.app.json"
     }
   ]

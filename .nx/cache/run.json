@@ -1,21 +1,43 @@
 {
   "run": {
-    "command": "nx build turndown-plugin-gfm",
-    "startTime": "2025-04-22T12:21:01.774Z",
-    "endTime": "2025-04-22T12:21:03.047Z",
+    "command": "nx build server",
+    "startTime": "2025-04-22T14:20:38.688Z",
+    "endTime": "2025-04-22T14:20:40.576Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "@triliumnext/turndown-plugin-gfm:build",
+      "taskId": "@triliumnext/commons:build",
       "target": "build",
-      "projectName": "@triliumnext/turndown-plugin-gfm",
-      "hash": "6308689797653528488",
-      "startTime": "2025-04-22T12:21:01.785Z",
-      "endTime": "2025-04-22T12:21:03.023Z",
+      "projectName": "@triliumnext/commons",
+      "hash": "7031649633627448769",
+      "startTime": "2025-04-22T14:20:38.699Z",
+      "endTime": "2025-04-22T14:20:39.906Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0
+    },
+    {
+      "taskId": "@triliumnext/turndown-plugin-gfm:build",
+      "target": "build",
+      "projectName": "@triliumnext/turndown-plugin-gfm",
+      "hash": "11282923462096060321",
+      "startTime": "2025-04-22T14:20:38.699Z",
+      "endTime": "2025-04-22T14:20:39.952Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@triliumnext/server:build",
+      "target": "build",
+      "projectName": "@triliumnext/server",
+      "hash": "4392501429971405707",
+      "startTime": "2025-04-22T14:20:39.964Z",
+      "endTime": "2025-04-22T14:20:40.575Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
     }
   ]
 }

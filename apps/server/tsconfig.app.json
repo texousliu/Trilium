@@ -16,5 +16,13 @@
     "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs"
+  ],
+  "references": [
+    {
+      "path": "../../packages/turndown-plugin-gfm/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/commons/tsconfig.lib.json"
+    }
   ]
 }

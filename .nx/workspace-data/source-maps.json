@@ -1,4 +1,378 @@
 {
+  "apps/server": {
+    "root": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "projectType": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets": [
+      "apps/server/tsconfig.app.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.dependsOn": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.options": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.cache": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.inputs": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.outputs": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.syncGenerators": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.executor": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.options.cwd": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.options.command": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.technologies": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.technologies.0": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.description": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.help": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.help.command": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.typecheck.metadata.help.example": [
+      "apps/server/tsconfig.json",
+      "@nx/js/typescript"
+    ],
+    "targets.lint": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.cache": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.inputs": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.outputs": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.executor": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options.cwd": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.options.command": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.technologies": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.technologies.0": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.description": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help.command": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.lint.metadata.help.example": [
+      "apps/server/eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "targets.build": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.options": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.cache": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.dependsOn": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.inputs": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.outputs": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.metadata": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.syncGenerators": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.executor": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.options.cwd": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.options.args": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.options.command": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.metadata.technologies": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.metadata.technologies.0": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.metadata.description": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.metadata.help": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.metadata.help.command": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build.metadata.help.example": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.options": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.metadata": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.syncGenerators": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.executor": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.options.cwd": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.options.args": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.options.command": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.metadata.technologies": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.metadata.technologies.0": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.metadata.description": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.metadata.help": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.metadata.help.command": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.preview.metadata.help.example": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build-deps": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.build-deps.dependsOn": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.watch-deps": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.watch-deps.dependsOn": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.watch-deps.executor": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.watch-deps.options": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "targets.watch-deps.options.command": [
+      "apps/server/webpack.config.cjs",
+      "@nx/webpack/plugin"
+    ],
+    "name": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "tags": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "tags.npm:private": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.targetGroups": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.packageName": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "metadata.js.isInPackageManagerWorkspaces": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.executor": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.defaultConfiguration": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.dependsOn": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.options": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.configurations": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.options.buildTarget": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.options.runBuildTargetDependencies": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.configurations.development": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.configurations.development.buildTarget": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.configurations.production": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ],
+    "targets.serve.configurations.production.buildTarget": [
+      "apps/server/package.json",
+      "nx/core/package-json"
+    ]
+  },
   "packages/commons": {
     "root": [
       "packages/commons/package.json",
