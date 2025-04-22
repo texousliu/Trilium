@@ -38,6 +38,7 @@
     "bootstrap": "5.3.5"
   },
   "devDependencies": {
+    "script-loader": "0.7.2",
     "@types/jquery": "3.5.32",
     "@types/leaflet-gpx": "1.3.7",
     "@types/leaflet": "1.9.17",
