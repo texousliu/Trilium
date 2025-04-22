@@ -6,7 +6,7 @@ TriliumNext Notes es una aplicación de toma de notas jerárquicas multi-platafo
 
 Vea estas [capturas de pantalla](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) para un vistazo rápido:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="https://github.com/TriliumNext/Docs/blob/main/Wiki/images/screenshot.png?raw=true" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="https://github.com/TriliumNext/Notes/blob/develop/images/screenshots/app.png?raw=true" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⚠️ ¿Por qué usar TriliumNext?
 
