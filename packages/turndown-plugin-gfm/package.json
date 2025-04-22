@@ -19,7 +19,7 @@
     "sourceRoot": "packages/turndown-plugin-gfm/src",
     "targets": {
       "build": {
-        "executor": "@nx/js:swc",
+        "executor": "@nx/esbuild:esbuild",
         "outputs": [
           "{options.outputPath}"
         ],
@@ -27,8 +27,10 @@
           "outputPath": "packages/turndown-plugin-gfm/dist",
           "main": "packages/turndown-plugin-gfm/src/index.js",
           "tsConfig": "packages/turndown-plugin-gfm/tsconfig.lib.json",
-          "skipTypeCheck": true,
-          "stripLeadingPaths": true
+          "format": [
+            "esm"
+          ],
+          "declarationRootDir": "packages/turndown-plugin-gfm/src"
         }
       }
     }
