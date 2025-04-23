@@ -21,5 +21,11 @@ module.exports = {
       optimization: process.env['NODE_ENV'] === 'production',
     })
   ],
+  resolve: {
+    fallback: {
+        path: false,
+        fs: false
+    }
+  }
 };
 
