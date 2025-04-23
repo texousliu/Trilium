@@ -31,16 +31,10 @@
     "electron-forge:make": "npm run build:prepare-dist && cross-env DEBUG=electron-windows-installer:* electron-forge make ./build",
     "electron-forge:package": "npm run build:prepare-dist && cd ./build && electron-forge package"
   },
-  "dependencies": {
-    "better-sqlite3": "^11.9.1",
-    "electron-debug": "4.1.0",
-    "electron-dl": "4.0.0",
-    "electron-squirrel-startup": "1.0.1",
-    "@electron/remote": "2.1.2",
+  "dependencies": {    
     "@triliumnext/server": "0.0.1"
   },
-  "devDependencies": {
-    "@types/electron-squirrel-startup": "1.0.2",
+  "devDependencies": {    
     "electron": "35.1.5",
     "@electron/rebuild": "3.7.2",
     "tsx": "4.19.3",
