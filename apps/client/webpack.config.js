@@ -48,6 +48,11 @@ module.exports = {
         "./src/libraries",
       ],
       styles: [],
+      stylePreprocessorOptions: {
+        sassOptions: {
+            quietDeps: true
+        }
+      },
       outputHashing: process.env['NODE_ENV'] === 'production' ? 'all' : 'none',
       optimization: process.env['NODE_ENV'] === 'production',
     })
