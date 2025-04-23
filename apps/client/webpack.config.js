@@ -13,7 +13,34 @@ module.exports = {
     new NxAppWebpackPlugin({
       tsConfig: './tsconfig.app.json',
       compiler: 'swc',
-      main: './src/desktop.ts',
+      main: "./src/index.ts",
+      additionalEntryPoints: [
+        {
+            entryName: "desktop",
+            entryPath: "./src/desktop.ts"
+        },
+        {
+            entryName: "mobile",
+            entryPath: "./src/mobile.ts"
+        },
+        {
+            entryName: "login",
+            entryPath: "./src/login.ts"
+        },
+        {
+            entryName: "setup",
+            entryPath: "./src/setup.ts"
+        },
+        {
+            entryName: "share",
+            entryPath: "./src/share.ts"
+        },
+        {
+            // TriliumNextTODO: integrate set_password into setup entry point/view
+            entryName: "set_password",
+            entryPath: "./src/set_password.ts"
+        }
+      ],
       baseHref: '/',
       assets: ["./src/assets"],
       styles: [],

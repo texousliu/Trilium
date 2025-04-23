@@ -9,15 +9,7 @@ import CopyPlugin from "copy-webpack-plugin";
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const config: Configuration = {
     mode: "production",
-    entry: {
-        setup: "./src/setup.js",
-        login: "./src/login.js",
-        mobile: "./src/mobile.js",
-        desktop: "./src/desktop.js",
-        share: "./src/share.js",
-        // TriliumNextTODO: integrate set_password into setup entry point/view
-        set_password: "./src/set_password.js"
-    },
+    entry: {},
     output: {
         publicPath: `${assetPath}/app-dist/`,
         path: path.resolve(rootDir, "build"),
