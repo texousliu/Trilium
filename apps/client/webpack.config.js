@@ -7,7 +7,14 @@ module.exports = {
     path: join(__dirname, 'dist'),
   },
   devServer: {
-    port: 4200
+    port: 4200,
+    client: {
+        overlay: {
+            errors: true,
+            warnings: false,
+            runtimeErrors: true
+        }
+    }
   },
   plugins: [
     new NxAppWebpackPlugin({
