@@ -12,6 +12,7 @@ export async function initLocale() {
     locales = await server.get<Locale[]>("options/locales");
 
     await i18next.use(i18nextHttpBackend).init({
+        debug: true,
         lng: locale,
         fallbackLng: "en",
         backend: {
