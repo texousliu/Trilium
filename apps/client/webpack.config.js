@@ -42,7 +42,7 @@ module.exports = {
         }
       ],
       baseHref: '/',
-      assets: ["./src/assets"],
+      assets: ["./src/assets", "./src/stylesheets"],
       styles: [],
       outputHashing: process.env['NODE_ENV'] === 'production' ? 'all' : 'none',
       optimization: process.env['NODE_ENV'] === 'production',

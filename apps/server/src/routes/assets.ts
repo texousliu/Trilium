@@ -19,11 +19,18 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
 async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
     if (isDev) {
-        const clientProxy = proxy(process.env.TRILIUM_PUBLIC_SERVER);
+        const publicUrl = process.env.TRILIUM_PUBLIC_SERVER;
+        if (!publicUrl) {
+            throw new Error("Missing TRILIUM_PUBLIC_SERVER");
+        }
+
+        const clientProxy = proxy(publicUrl);
         app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "public/app/doc_notes")));
         app.use(`/${assetPath}/app`, clientProxy);
         app.use(`/${assetPath}/app-dist`, clientProxy);
-        app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(srcRoot, "../../client/stylesheets")));
+        app.use(`/${assetPath}/stylesheets`, proxy(publicUrl, {
+            proxyReqPathResolver: (req) => "/stylesheets" + req.url
+        }));
         app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "../../client/libraries")));
     } else {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));
