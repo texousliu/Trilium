@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import express from "express";
 import { isDev, isElectron } from "../services/utils.js";
 import type serveStatic from "serve-static";
+import proxy from "express-http-proxy";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<unknown, Record<string, unknown>>>) => {
     if (!isDev) {
@@ -19,8 +20,8 @@ async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
     if (isDev) {
         app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "public/app/doc_notes")));
-        app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "../../client/build")));
-        app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, "../../client/build")));
+        app.use(`/${assetPath}/app`, proxy("localhost:4200"));
+        app.use(`/${assetPath}/app-dist`, proxy("localhost:4200"));
         app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(srcRoot, "../../client/stylesheets")));
         app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "../../client/libraries")));
     } else {
@@ -31,7 +32,7 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
     app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "..", "images")));
-    app.use(`/assets/vX/images`, express.static(path.join(srcRoot, "..", "images")));    
+    app.use(`/assets/vX/images`, express.static(path.join(srcRoot, "..", "images")));
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));
     app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
