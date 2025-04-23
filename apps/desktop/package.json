@@ -3,15 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@electron/remote": "2.1.2",
+    "@triliumnext/server": "0.0.1",
     "better-sqlite3": "^11.9.1",
     "electron-debug": "4.1.0",
     "electron-dl": "4.0.0",
-    "electron-squirrel-startup": "1.0.1",
-    "@electron/remote": "2.1.2",
-    "@triliumnext/server": "0.0.1"
+    "electron-squirrel-startup": "1.0.1"
   },
   "devDependencies": {
-    "@types/electron-squirrel-startup": "1.0.2"
+    "@types/electron-squirrel-startup": "1.0.2",
+    "copy-webpack-plugin": "13.0.0"
   },
   "nx": {
     "targets": {

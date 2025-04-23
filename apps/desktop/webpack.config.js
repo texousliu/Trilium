@@ -1,9 +1,12 @@
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const { join } = require('path');
+
+const outputDir = join(__dirname, 'dist');
 
 module.exports = {
   output: {
-    path: join(__dirname, 'dist'),
+    path: outputDir,
   },
   plugins: [
     new NxAppWebpackPlugin({
@@ -17,7 +20,18 @@ module.exports = {
       generatePackageJson: true,
       externalDependencies: [
         "electron/main"
+      ],
+      assets: [
+
       ]
+    }),
+    new CopyPlugin({
+        patterns: [
+            {
+                from: "../../node_modules/better-sqlite3/build/Release",
+                to: join(outputDir, "Release")
+            }
+        ]
     })
   ],
 };
