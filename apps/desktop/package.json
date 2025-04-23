@@ -1,0 +1,65 @@
+{
+  "name": "@triliumnext/desktop",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "defaultConfiguration": "production",
+        "options": {
+          "platform": "node",
+          "outputPath": "apps/desktop/dist",
+          "format": [
+            "cjs"
+          ],
+          "bundle": false,
+          "main": "apps/desktop/src/main.ts",
+          "tsConfig": "apps/desktop/tsconfig.app.json",
+          "assets": [
+            "apps/desktop/src/assets"
+          ],
+          "esbuildOptions": {
+            "sourcemap": true,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        },
+        "configurations": {
+          "development": {},
+          "production": {
+            "esbuildOptions": {
+              "sourcemap": false,
+              "outExtension": {
+                ".js": ".js"
+              }
+            }
+          }
+        }
+      },
+      "serve": {
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "@triliumnext/desktop:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "@triliumnext/desktop:build:development"
+          },
+          "production": {
+            "buildTarget": "@triliumnext/desktop:build:production"
+          }
+        }
+      }
+    }
+  }
+}
