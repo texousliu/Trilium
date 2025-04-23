@@ -1,5 +1,4 @@
 import i18next from "i18next";
-import Backend from "i18next-fs-backend";
 import options from "./options.js";
 import sql_init from "./sql_init.js";
 import { join } from "path";
@@ -77,6 +76,7 @@ const LOCALES: Locale[] = [
 
 export async function initializeTranslations() {
     const resourceDir = getResourceDir();
+    const Backend = (await import("i18next-fs-backend")).default;
 
     // Initialize translations
     await i18next.use(Backend).init({
