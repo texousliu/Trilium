@@ -5,7 +5,7 @@
   "dependencies": {
     "electron": "35.1.5",
     "@electron/remote": "2.1.2",
-    "@triliumnext/server": "0.0.1",
+    "@triliumnext/server": "workspace:*",
     "better-sqlite3": "^11.9.1",
     "electron-debug": "4.1.0",
     "electron-dl": "4.0.0",

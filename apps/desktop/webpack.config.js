@@ -28,7 +28,7 @@ module.exports = {
     new CopyPlugin({
         patterns: [
             {
-                from: "../../node_modules/better-sqlite3/build/Release",
+                from: "node_modules/better-sqlite3/build/Release",
                 to: join(outputDir, "Release")
             }
         ]

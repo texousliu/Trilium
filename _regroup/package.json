@@ -35,10 +35,7 @@
     "chore:generate-openapi": "tsx bin/generate-openapi.js"
   },
   "dependencies": {            
-    "dayjs-plugin-utc": "0.1.2",                
-    "http-proxy-agent": "7.0.2",
-    "https-proxy-agent": "7.0.6",        
-    "sax": "1.4.1"
+    "dayjs-plugin-utc": "0.1.2"
   },
   "devDependencies": {    
     "@playwright/test": "1.51.1",

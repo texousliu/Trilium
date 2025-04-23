@@ -1,5 +1,4 @@
-import { BrowserWindow,Menu, Tray } from "electron";
-import { ipcMain, nativeTheme } from "electron/main";
+import { BrowserWindow, Menu, Tray, ipcMain, nativeTheme } from "electron";
 import { default as i18next, t } from "i18next";
 import path from "path";
 import { fileURLToPath } from "url";
