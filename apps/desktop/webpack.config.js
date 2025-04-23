@@ -19,7 +19,9 @@ module.exports = {
       outputHashing: 'none',
       generatePackageJson: true,
       externalDependencies: [
-        "electron/main"
+        "electron/main",
+        "electron",
+        "@electron/remote"
       ],
       assets: [
 
