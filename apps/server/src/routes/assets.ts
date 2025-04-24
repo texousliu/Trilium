@@ -36,6 +36,9 @@ async function register(app: express.Application) {
         app.use(`/${assetPath}/libraries`, proxy(publicUrl, {
             proxyReqPathResolver: (req) => "/libraries" + req.url
         }));
+        app.use(`/${assetPath}/fonts`, proxy(publicUrl, {
+            proxyReqPathResolver: (req) => "/fonts" + req.url
+        }));
         app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "assets", "images")));
     } else {
         const clientStaticCache = persistentCacheStatic(path.join(resourceDir, "public"));
@@ -43,9 +46,9 @@ async function register(app: express.Application) {
         app.use(`/${assetPath}/app-dist`, clientStaticCache);
         app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(resourceDir, "public", "stylesheets")));
         app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(resourceDir, "public", "libraries")));
+        app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(resourceDir, "public", "fonts")));
         app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
     }
-    app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/images`, express.static(path.join(srcRoot, "..", "images")));
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));

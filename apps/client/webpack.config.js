@@ -56,6 +56,7 @@ module.exports = {
         "./src/assets",
         "./src/stylesheets",
         "./src/libraries",
+        "./src/fonts"
       ],
       styles: [],
       stylePreprocessorOptions: {
