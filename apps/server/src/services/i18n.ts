@@ -80,7 +80,6 @@ export async function initializeTranslations() {
 
     // Initialize translations
     await i18next.use(Backend).init({
-        debug: true,
         lng: getCurrentLanguage(),
         fallbackLng: "en",
         ns: "server",
