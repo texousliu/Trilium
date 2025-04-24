@@ -29,8 +29,7 @@ function buildFilesToCopy() {
     "codemirror/addon",
     "codemirror/mode",
     "codemirror/keymap",
-    "@highlightjs/cdn-assets",
-    "ejs"
+    "@highlightjs/cdn-assets"
   ];
 
   for (const nodePath of nodePaths) {
@@ -54,9 +53,6 @@ module.exports = {
       main: './src/main.ts',
       tsConfig: './tsconfig.app.json',
       assets: ["./src/assets"],
-      externalDependencies: [
-        "ejs"
-      ],
       optimization: false,
       outputHashing: 'none',
       generatePackageJson: true,

@@ -69,6 +69,7 @@ export default async function buildApp() {
 
     // view engine setup
     app.set("views", path.join(scriptDir, "views"));
+    app.engine("ejs", (await import("ejs")).renderFile);
     app.set("view engine", "ejs");
 
     app.use((req, res, next) => {
