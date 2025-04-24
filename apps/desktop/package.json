@@ -17,6 +17,7 @@
     "@electron/rebuild": "3.7.2"
   },
   "scripts": {
+    "start-prod": "electron dist/main.js",
     "rebuild": "electron-rebuild"
   },
   "nx": {
@@ -39,6 +40,16 @@
             "buildTarget": "@triliumnext/desktop:build:production"
           }
         }
+      },
+      "build": {
+        "dependsOn": [
+          {
+            "target": "build",
+            "projects": [
+              "client"
+            ]
+          }
+        ]
       }
     }
   }
