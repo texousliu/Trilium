@@ -58,6 +58,13 @@ module.exports = {
       optimization: false,
       outputHashing: 'none',
       generatePackageJson: true,
+      externalDependencies: [
+        "electron/main",
+        "@electron/remote/main",
+        "electron",
+        "@electron/remote",        
+        "better-sqlite3"
+      ]
     }),
     new CopyPlugin({
       patterns: buildFilesToCopy()
