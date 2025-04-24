@@ -7,7 +7,7 @@ import log from "./log.js";
 import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
-import remoteMain from "@electron/remote/main/index.js";
+import * as remoteMain from "@electron/remote/main";
 import { BrowserWindow, shell, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
 import { dialog, ipcMain } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";

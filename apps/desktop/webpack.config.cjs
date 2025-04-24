@@ -6,7 +6,7 @@ const outputDir = join(__dirname, 'dist');
 
 module.exports = {
   output: {
-    path: outputDir
+    path: outputDir,
   },
   target: [ "node" ],
   plugins: [
@@ -21,13 +21,12 @@ module.exports = {
       generatePackageJson: true,
       externalDependencies: [
         "electron/main",
+        "@electron/remote/main",
         "electron",
         "@electron/remote",        
         "better-sqlite3"
       ],
-      assets: [
-
-      ]
+      assets: []
     }),
     new CopyPlugin({
         patterns: [            
@@ -42,6 +41,10 @@ module.exports = {
             {
                 from: "../server/dist/assets",
                 to: join(outputDir, "assets")
+            },
+            {
+              from: "node_modules/@electron/remote",
+              to: join(outputDir, "node_modules/@electron/remote")
             }
         ]
     })
