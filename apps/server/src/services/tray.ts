@@ -11,7 +11,7 @@ import cls from "./cls.js";
 import date_notes from "./date_notes.js";
 import type { KeyboardActionNames } from "@triliumnext/commons";
 import optionService from "./options.js";
-import { isDev, isMac } from "./utils.js";
+import { getResourceDir, isDev, isMac } from "./utils.js";
 import windowService from "./window.js";
 
 let tray: Tray;
@@ -29,12 +29,12 @@ function getTrayIconPath() {
         name = "icon-color";
     }
 
-    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}.png`);
+    return path.resolve(path.join(getResourceDir(), "assets", "images", "tray", `${name}.png`));
 }
 
 function getIconPath(name: string) {
     const suffix = !isMac && nativeTheme.shouldUseDarkColors ? "-inverted" : "";
-    return path.join(path.dirname(fileURLToPath(import.meta.url)), "../..", "images", "app-icons", "tray", `${name}Template${suffix}.png`);
+    return path.resolve(path.join(getResourceDir(), "assets", "images", "tray", `${name}Template${suffix}.png`));
 }
 
 function registerVisibilityListener(window: BrowserWindow) {

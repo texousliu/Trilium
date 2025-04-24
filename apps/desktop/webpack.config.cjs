@@ -25,8 +25,7 @@ module.exports = {
         "electron",
         "@electron/remote",        
         "better-sqlite3"
-      ],
-      assets: []
+      ]
     }),
     new CopyPlugin({
         patterns: [            
