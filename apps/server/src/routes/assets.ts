@@ -34,14 +34,15 @@ async function register(app: express.Application) {
         app.use(`/${assetPath}/libraries`, proxy(publicUrl, {
             proxyReqPathResolver: (req) => "/libraries" + req.url
         }));
+        app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "assets", "images")));
     } else {
         app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));
         app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, "public/app-dist")));
         app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(srcRoot, "public/stylesheets")));
+        app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "..", "images")));
     }
     app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
-    app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "..", "images")));
     app.use(`/assets/vX/images`, express.static(path.join(srcRoot, "..", "images")));
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));
     app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
