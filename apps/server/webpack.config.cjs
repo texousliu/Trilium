@@ -24,6 +24,10 @@ module.exports = {
         {
           from: "node_modules/better-sqlite3/build/Release",
           to: join(outputDir, "Release")
+        },        
+        {
+          from: "../client/dist",
+          to: join(outputDir, "app")
         }
       ]
     })
