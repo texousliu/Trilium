@@ -35,7 +35,13 @@
     "@popperjs/core": "2.11.8",
     "eslint-linter-browserify": "9.25.0",    
     "@eslint/js": "9.25.0",
-    "bootstrap": "5.3.5"
+    "bootstrap": "5.3.5",
+    "dayjs": "1.11.13",
+    "dayjs-plugin-utc": "0.1.2",
+    "debounce": "2.2.0",
+    "marked": "15.0.8",
+    "globals": "16.0.0",
+    "@triliumnext/commons": "workspace:*"
   },
   "devDependencies": {
     "script-loader": "0.7.2",

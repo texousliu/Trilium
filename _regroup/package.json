@@ -34,9 +34,6 @@
     "chore:generate-document": "cross-env nodemon ./bin/generate_document.ts 1000",
     "chore:generate-openapi": "tsx bin/generate-openapi.js"
   },
-  "dependencies": {            
-    "dayjs-plugin-utc": "0.1.2"
-  },
   "devDependencies": {    
     "@playwright/test": "1.51.1",
     "@stylistic/eslint-plugin": "4.2.0",        
@@ -47,7 +44,6 @@
     "eslint": "9.24.0",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "esm": "3.2.25",
-    "globals": "16.0.0",    
     "jsdoc": "4.0.4",
     "lorem-ipsum": "2.0.8",    
     "rcedit": "4.0.1",

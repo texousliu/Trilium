@@ -48,6 +48,9 @@ module.exports = {
             entryPath: "./src/set_password.ts"
         }
       ],
+      externalDependencies: [
+        "electron"
+      ],
       baseHref: '/',
       assets: [
         "./src/assets",

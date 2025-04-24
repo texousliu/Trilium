@@ -168,9 +168,21 @@ importers:
       '@popperjs/core':
         specifier: 2.11.8
         version: 2.11.8
+      '@triliumnext/commons':
+        specifier: workspace:*
+        version: link:../../packages/commons
       bootstrap:
         specifier: 5.3.5
         version: 5.3.5(@popperjs/core@2.11.8)
+      dayjs:
+        specifier: 1.11.13
+        version: 1.11.13
+      dayjs-plugin-utc:
+        specifier: 0.1.2
+        version: 0.1.2
+      debounce:
+        specifier: 2.2.0
+        version: 2.2.0
       draggabilly:
         specifier: 3.0.0
         version: 3.0.0
@@ -180,6 +192,9 @@ importers:
       force-graph:
         specifier: 1.49.5
         version: 1.49.5
+      globals:
+        specifier: 16.0.0
+        version: 16.0.0
       i18next:
         specifier: 25.0.0
         version: 25.0.0(typescript@5.7.3)
@@ -210,6 +225,9 @@ importers:
       mark.js:
         specifier: 8.11.1
         version: 8.11.1
+      marked:
+        specifier: 15.0.8
+        version: 15.0.8
       mermaid:
         specifier: 11.6.0
         version: 11.6.0
@@ -4774,6 +4792,9 @@ packages:
     resolution: {integrity: sha512-ZYP5VBHshaDAiVZxjbRVcFJpc+4xGgT0bK3vzy1HLN8jTO975HEbuYzZJcHoQEY5K1a0z8YayJkyVETa08eNTg==}
     engines: {node: '>=18'}
 
+  dayjs-plugin-utc@0.1.2:
+    resolution: {integrity: sha512-ExERH5o3oo6jFOdkvMP3gytTCQ9Ksi5PtylclJWghr7k7m3o2U5QrwtdiJkOxLOH4ghr0EKhpqGefzGz1VvVJg==}
+
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
@@ -5701,6 +5722,10 @@ packages:
 
   globals@15.15.0:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
+    engines: {node: '>=18'}
+
+  globals@16.0.0:
+    resolution: {integrity: sha512-iInW14XItCXET01CQFqudPOWP2jYMl7T+QRQT+UNcR/iQncN/F0UNpgd76iFkBPgNQb4+X3LV9tLJYzwh+Gl3A==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -14587,6 +14612,8 @@ snapshots:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.2.0
 
+  dayjs-plugin-utc@0.1.2: {}
+
   dayjs@1.11.13: {}
 
   debounce@2.2.0: {}
@@ -15615,6 +15642,8 @@ snapshots:
   globals@14.0.0: {}
 
   globals@15.15.0: {}
+
+  globals@16.0.0: {}
 
   globalthis@1.0.4:
     dependencies:
