@@ -1,17 +1,17 @@
 packages:
-  - packages/*
-  - apps/*
+- packages/*
+- apps/*
 
 ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - '@scarf/scarf'
-  - '@swc/core'
-  - better-sqlite3
-  - bufferutil
-  - core-js-pure
-  - esbuild
-  - nx
-  - utf-8-validate
+- '@parcel/watcher'
+- '@scarf/scarf'
+- '@swc/core'
+- bufferutil
+- core-js-pure
+- esbuild
+- nx
+- utf-8-validate
 
 onlyBuiltDependencies:
-  - electron
+- electron
+- better-sqlite3
