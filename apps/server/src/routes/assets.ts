@@ -47,7 +47,7 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
 
-    const nodeModulesDir = isDev ? path.join(srcRoot, "..", "..", "..", "node_modules") : path.join(srcRoot, "..", "node_modules");
+    const nodeModulesDir = path.join(srcRoot, "..", "node_modules");
 
     app.use(`/node_modules/@excalidraw/excalidraw/dist/fonts/`, express.static(path.join(nodeModulesDir, "@excalidraw/excalidraw/dist/prod/fonts/")));
     app.use(`/${assetPath}/node_modules/@excalidraw/excalidraw/dist/fonts/`, persistentCacheStatic(path.join(nodeModulesDir, "@excalidraw/excalidraw/dist/prod/fonts/")));
