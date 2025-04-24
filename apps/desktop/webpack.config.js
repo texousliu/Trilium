@@ -36,6 +36,14 @@ module.exports = {
             {
                 from: "../client/dist",
                 to: join(outputDir, "public")
+            },
+            {
+                from: "../server/dist/node_modules",
+                to: join(outputDir, "node_modules")
+            },
+            {
+                from: "../server/dist/assets",
+                to: join(outputDir, "assets")
             }
         ]
     })
