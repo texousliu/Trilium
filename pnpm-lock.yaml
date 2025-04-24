@@ -610,6 +610,9 @@ importers:
       '@types/serve-favicon':
         specifier: 2.5.7
         version: 2.5.7
+      '@types/serve-static':
+        specifier: 1.15.7
+        version: 1.15.7
       '@types/session-file-store':
         specifier: 1.2.5
         version: 1.2.5
