@@ -290,6 +290,10 @@ export function envToBoolean(val: string | undefined) {
  * @returns the resource dir.
  */
 export function getResourceDir() {
+    if (process.env.TRILIUM_RESOURCE_DIR) {
+        return process.env.TRILIUM_RESOURCE_DIR;
+    }
+
     if (isElectron && !isDev) return process.resourcesPath;
     if (!isDev) {
         return path.dirname(process.argv[1]);
