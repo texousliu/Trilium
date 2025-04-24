@@ -6,8 +6,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "server:build": "nx affected:build server",
-    "server:start-dist": "pnpm server:build && node apps/server/dist/main.js"
+    "client:build": "nx build client",
+    "server:build": "nx build server",
+    "server:start-prod": "pnpm server:build && node apps/server/dist/main.js"
   },
   "private": true,
   "devDependencies": {
