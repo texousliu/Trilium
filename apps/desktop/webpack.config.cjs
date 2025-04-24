@@ -42,11 +42,7 @@ module.exports = {
             {
                 from: "../server/dist/assets",
                 to: join(outputDir, "assets")
-            },
-            {
-              from: "node_modules/better-sqlite3",
-              to: join(outputDir, "node_modules/better-sqlite3")
-            },
+            }
         ]
     })
   ]

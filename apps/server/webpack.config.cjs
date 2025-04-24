@@ -5,10 +5,7 @@ const { join, default: path } = require('path');
 const outputDir = join(__dirname, 'dist');
 
 function buildFilesToCopy() {
-  const files = [{
-    from: "node_modules/better-sqlite3/build/Release",
-    to: join(outputDir, "Release")
-  }];
+  const files = [];
 
   files.push({
     from: "../client/dist",
@@ -29,7 +26,12 @@ function buildFilesToCopy() {
     "codemirror/addon",
     "codemirror/mode",
     "codemirror/keymap",
-    "@highlightjs/cdn-assets"
+    "@highlightjs/cdn-assets",
+
+    // Required as they are native dependencies and cannot be well bundled.
+    "better-sqlite3",
+    "bindings",
+    "file-uri-to-path"
   ];
 
   for (const nodePath of nodePaths) {
