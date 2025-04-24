@@ -10,7 +10,7 @@ importers:
     dependencies:
       axios:
         specifier: ^1.6.0
-        version: 1.8.4
+        version: 1.8.4(debug@4.4.0)
       express:
         specifier: ^4.21.2
         version: 4.21.2
@@ -338,7 +338,7 @@ importers:
         version: 0.5.0
       axios:
         specifier: 1.8.4
-        version: 1.8.4
+        version: 1.8.4(debug@4.4.0)
       better-sqlite3:
         specifier: 11.9.1
         version: 11.9.1
@@ -372,6 +372,9 @@ importers:
       debounce:
         specifier: 2.2.0
         version: 2.2.0
+      debug:
+        specifier: 4.4.0
+        version: 4.4.0
       ejs:
         specifier: 3.1.10
         version: 3.1.10
@@ -13583,9 +13586,9 @@ snapshots:
 
   await-to-js@3.0.0: {}
 
-  axios@1.8.4:
+  axios@1.8.4(debug@4.4.0):
     dependencies:
-      follow-redirects: 1.15.9
+      follow-redirects: 1.15.9(debug@4.4.0)
       form-data: 4.0.2
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -15416,7 +15419,9 @@ snapshots:
       kapsule: 1.16.3
       preact: 10.26.5
 
-  follow-redirects@1.15.9: {}
+  follow-redirects@1.15.9(debug@4.4.0):
+    optionalDependencies:
+      debug: 4.4.0
 
   force-graph@1.49.5:
     dependencies:
@@ -15847,7 +15852,7 @@ snapshots:
   http-proxy@1.18.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.9
+      follow-redirects: 1.15.9(debug@4.4.0)
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -17314,7 +17319,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.8.4
+      axios: 1.8.4(debug@4.4.0)
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1

@@ -22,6 +22,7 @@
     "csrf-csrf": "3.1.0",
     "dayjs": "1.11.13",
     "debounce": "2.2.0",
+    "debug": "4.4.0",
     "ejs": "3.1.10",
     "electron": "35.1.5",
     "electron-debug": "4.1.0",
@@ -145,7 +146,9 @@
         "dependsOn": [
           {
             "target": "build",
-            "projects": [ "client" ]
+            "projects": [
+              "client"
+            ]
           }
         ]
       }
