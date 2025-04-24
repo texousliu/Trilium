@@ -18,6 +18,7 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
 
 async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+    const distDir = path.dirname(process.argv[1]);
     if (isDev) {
         const publicUrl = process.env.TRILIUM_PUBLIC_SERVER;
         if (!publicUrl) {
@@ -36,10 +37,11 @@ async function register(app: express.Application) {
         }));
         app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "assets", "images")));
     } else {
-        app.use(`/${assetPath}/app`, persistentCacheStatic(path.join(srcRoot, "public/app")));
-        app.use(`/${assetPath}/app-dist`, persistentCacheStatic(path.join(srcRoot, "public/app-dist")));
-        app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(srcRoot, "public/stylesheets")));
-        app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "..", "images")));
+        const clientStaticCache = persistentCacheStatic(path.join(distDir, "public"));
+        app.use(`/${assetPath}/app`, clientStaticCache);
+        app.use(`/${assetPath}/app-dist`, clientStaticCache);
+        app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(distDir, "public", "stylesheets")));
+        app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(distDir, "public", "images")));
     }
     app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
@@ -48,7 +50,7 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
 
-    const nodeModulesDir = path.join(srcRoot, "..", "node_modules");
+    const nodeModulesDir = isDev ? path.join(srcRoot, "..", "node_modules") : path.join(distDir, "node_modules");
 
     app.use(`/node_modules/@excalidraw/excalidraw/dist/fonts/`, express.static(path.join(nodeModulesDir, "@excalidraw/excalidraw/dist/prod/fonts/")));
     app.use(`/${assetPath}/node_modules/@excalidraw/excalidraw/dist/fonts/`, persistentCacheStatic(path.join(nodeModulesDir, "@excalidraw/excalidraw/dist/prod/fonts/")));
@@ -70,8 +72,6 @@ async function register(app: express.Application) {
 
     // i18n
     app.use(`/${assetPath}/translations/`, persistentCacheStatic(path.join(srcRoot, "public", "translations/")));
-
-    app.use(`/${assetPath}/node_modules/eslint/bin/`, persistentCacheStatic(path.join(nodeModulesDir, "eslint/bin/")));
 
     // Deprecated, https://www.npmjs.com/package/autocomplete.js?activeTab=readme
     app.use(`/${assetPath}/node_modules/autocomplete.js/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "autocomplete.js/dist/")));
