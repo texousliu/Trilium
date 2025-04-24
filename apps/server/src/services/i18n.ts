@@ -80,11 +80,12 @@ export async function initializeTranslations() {
 
     // Initialize translations
     await i18next.use(Backend).init({
+        debug: true,
         lng: getCurrentLanguage(),
         fallbackLng: "en",
         ns: "server",
         backend: {
-            loadPath: join(resourceDir, "translations/{{lng}}/{{ns}}.json")
+            loadPath: join(resourceDir, "assets/translations/{{lng}}/{{ns}}.json")
         }
     });
 }

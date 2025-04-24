@@ -285,13 +285,13 @@ export function envToBoolean(val: string | undefined) {
 
 /**
  * Returns the directory for resources. On Electron builds this corresponds to the `resources` subdirectory inside the distributable package.
- * On development builds, this simply refers to the root directory of the application.
+ * On development builds, this simply refers to the src directory of the application.
  *
  * @returns the resource dir.
  */
 export function getResourceDir() {
     if (isElectron && !isDev) return process.resourcesPath;
-    return join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+    return join(dirname(fileURLToPath(import.meta.url)), "..");
 }
 
 // TODO: Deduplicate with src/public/app/services/utils.ts
