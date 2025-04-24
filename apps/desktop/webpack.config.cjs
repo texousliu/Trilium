@@ -6,8 +6,9 @@ const outputDir = join(__dirname, 'dist');
 
 module.exports = {
   output: {
-    path: outputDir,
+    path: outputDir
   },
+  target: [ "node" ],
   plugins: [
     new NxAppWebpackPlugin({
       target: 'node',
@@ -21,18 +22,15 @@ module.exports = {
       externalDependencies: [
         "electron/main",
         "electron",
-        "@electron/remote"
+        "@electron/remote",        
+        "better-sqlite3"
       ],
       assets: [
 
       ]
     }),
     new CopyPlugin({
-        patterns: [
-            {
-                from: "node_modules/better-sqlite3/build/Release",
-                to: join(outputDir, "Release")
-            },
+        patterns: [            
             {
                 from: "../client/dist",
                 to: join(outputDir, "public")
@@ -44,8 +42,12 @@ module.exports = {
             {
                 from: "../server/dist/assets",
                 to: join(outputDir, "assets")
-            }
+            },
+            {
+              from: "node_modules/better-sqlite3",
+              to: join(outputDir, "node_modules/better-sqlite3")
+            },
         ]
     })
-  ],
+  ]
 };
