@@ -291,6 +291,10 @@ export function envToBoolean(val: string | undefined) {
  */
 export function getResourceDir() {
     if (isElectron && !isDev) return process.resourcesPath;
+    if (!isDev) {
+        return path.dirname(process.argv[1]);
+    }
+
     return join(dirname(fileURLToPath(import.meta.url)), "..");
 }
 

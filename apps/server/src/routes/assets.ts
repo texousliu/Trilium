@@ -2,7 +2,7 @@ import assetPath from "../services/asset_path.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
-import { isDev, isElectron } from "../services/utils.js";
+import { getResourceDir, isDev } from "../services/utils.js";
 import type serveStatic from "serve-static";
 import proxy from "express-http-proxy";
 
@@ -18,7 +18,8 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
 
 async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-    const distDir = path.dirname(process.argv[1]);
+    const resourceDir = getResourceDir();
+
     if (isDev) {
         const publicUrl = process.env.TRILIUM_PUBLIC_SERVER;
         if (!publicUrl) {
@@ -37,12 +38,12 @@ async function register(app: express.Application) {
         }));
         app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "assets", "images")));
     } else {
-        const clientStaticCache = persistentCacheStatic(path.join(distDir, "public"));
+        const clientStaticCache = persistentCacheStatic(path.join(resourceDir, "public"));
         app.use(`/${assetPath}/app`, clientStaticCache);
         app.use(`/${assetPath}/app-dist`, clientStaticCache);
-        app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(distDir, "public", "stylesheets")));
-        app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(distDir, "public", "libraries")));
-        app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(distDir, "assets", "images")));
+        app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(resourceDir, "public", "stylesheets")));
+        app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(resourceDir, "public", "libraries")));
+        app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
     }
     app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
@@ -51,7 +52,7 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
 
-    const nodeModulesDir = isDev ? path.join(srcRoot, "..", "node_modules") : path.join(distDir, "node_modules");
+    const nodeModulesDir = isDev ? path.join(srcRoot, "..", "node_modules") : path.join(resourceDir, "node_modules");
 
     app.use(`/node_modules/@excalidraw/excalidraw/dist/fonts/`, express.static(path.join(nodeModulesDir, "@excalidraw/excalidraw/dist/prod/fonts/")));
     app.use(`/${assetPath}/node_modules/@excalidraw/excalidraw/dist/fonts/`, persistentCacheStatic(path.join(nodeModulesDir, "@excalidraw/excalidraw/dist/prod/fonts/")));
