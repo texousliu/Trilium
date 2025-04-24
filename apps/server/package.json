@@ -140,6 +140,14 @@
             "buildTarget": "@triliumnext/server:build:production"
           }
         }
+      },
+      "build": {
+        "dependsOn": [
+          {
+            "target": "build",
+            "projects": [ "client" ]
+          }
+        ]
       }
     }
   }
