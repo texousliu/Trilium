@@ -63,7 +63,7 @@ module.exports = {
             quietDeps: true
         }
       },
-      outputHashing: process.env['NODE_ENV'] === 'production' ? 'all' : 'none',
+      outputHashing: false,
       optimization: process.env['NODE_ENV'] === 'production',
     })
   ],
