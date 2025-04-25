@@ -190,7 +190,7 @@ function getExtraResourcesForPlatform() {
     const getScriptRessources = () => {
         const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
         const scriptExt = (process.platform === "win32") ? "bat" : "sh";
-        return scripts.map(script => `../server/tpl/${script}.${scriptExt}`);
+        return scripts.map(script => `apps/desktop/electron-forge/${script}.${scriptExt}`);
     }
 
     switch (process.platform) {
