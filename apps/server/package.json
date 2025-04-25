@@ -162,7 +162,7 @@
         "dependsOn": [
           "docker-build"
         ],
-        "command": "docker run triliumnext"
+        "command": "docker run -p 8081:8080 triliumnext"
       }
     }
   }
