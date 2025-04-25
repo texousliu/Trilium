@@ -47,3 +47,4 @@ test-output
 
 apps/*/data
 apps/*/out
+upload
