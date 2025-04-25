@@ -1,16 +1,14 @@
 import type { Application } from "express";
 import swaggerUi from "swagger-ui-express";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import { join } from "path";
 import yaml from "js-yaml";
 import type { JsonObject } from "swagger-ui-express";
 import { readFileSync } from "fs";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { RESOURCE_DIR } from "../services/resource_dir";
 
 export default function register(app: Application) {
-    const etapiDocument = yaml.load(readFileSync(join(__dirname, "../etapi/etapi.openapi.yaml"), "utf8")) as JsonObject;
-    const apiDocument = JSON.parse(readFileSync(join(__dirname, "api", "openapi.json"), "utf-8"));
+    const etapiDocument = yaml.load(readFileSync(join(RESOURCE_DIR, "etapi.openapi.yaml"), "utf8")) as JsonObject;
+    const apiDocument = JSON.parse(readFileSync(join(RESOURCE_DIR, "openapi.json"), "utf-8"));
 
     app.use(
         "/etapi/docs/",

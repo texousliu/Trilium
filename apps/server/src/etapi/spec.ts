@@ -2,13 +2,13 @@ import type { Router } from "express";
 
 import fs from "fs";
 import path from "path";
+import { RESOURCE_DIR } from "../services/resource_dir";
 
-import { fileURLToPath } from "url";
-const specPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "etapi.openapi.yaml");
+const specPath = path.join(RESOURCE_DIR, "etapi.openapi.yaml");
 let spec: string | null = null;
 
 function register(router: Router) {
-    router.get("/etapi/etapi.openapi.yaml", (req, res, next) => {
+    router.get("/etapi/etapi.openapi.yaml", (_, res) => {
         if (!spec) {
             spec = fs.readFileSync(specPath, "utf8");
         }
