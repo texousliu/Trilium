@@ -67,9 +67,13 @@
           }
         ]
       },
-      "make": {
+      "electron-forge:make": {
         "dependsOn": [ "build" ],
         "command": "pnpm exec electron-forge make apps/desktop"
+      },
+      "electron-forge:package": {
+        "dependsOn": [ "build" ],
+        "command": "pnpm exec electron-forge package apps/desktop"
       }
     }
   }
