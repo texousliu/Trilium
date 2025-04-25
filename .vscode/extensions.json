@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "ms-playwright.playwright",
-    "nrwl.angular-console"
+    "nrwl.angular-console",
+    "ms-azuretools.vscode-docker"
   ]
 }
