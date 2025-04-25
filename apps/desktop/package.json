@@ -13,8 +13,16 @@
   },
   "devDependencies": {
     "@types/electron-squirrel-startup": "1.0.2",
-    "copy-webpack-plugin": "13.0.0",
-    "@electron/rebuild": "3.7.2"
+    "copy-webpack-plugin": "13.0.0",    
+    "@electron/rebuild": "3.7.2",
+    "@electron-forge/cli": "7.8.0",
+    "@electron-forge/maker-deb": "7.8.0",
+    "@electron-forge/maker-dmg": "7.8.0",
+    "@electron-forge/maker-flatpak": "7.8.0",
+    "@electron-forge/maker-rpm": "7.8.0",
+    "@electron-forge/maker-squirrel": "7.8.0",
+    "@electron-forge/maker-zip": "7.8.0",
+    "@electron-forge/plugin-auto-unpack-natives": "7.8.0"
   },
   "scripts": {
     "start-prod": "nx build desktop && cross-env TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=dist TRILIUM_PORT=37841 electron dist/main.js",
@@ -51,6 +59,10 @@
             ]
           }
         ]
+      },
+      "make": {
+        "dependsOn": [ "build" ],
+        "command": "pnpm --filter @triliumnext/desktop exec electron-forge make apps/desktop/dist"
       }
     }
   }

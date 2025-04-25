@@ -1,15 +1,16 @@
 packages:
-- packages/*
-- apps/*
+  - packages/*
+  - apps/*
 
 ignoredBuiltDependencies:
-- '@parcel/watcher'
-- '@scarf/scarf'
-- '@swc/core'
-- core-js-pure
-- esbuild
-- nx
+  - '@parcel/watcher'
+  - '@scarf/scarf'
+  - '@swc/core'
+  - core-js-pure
+  - esbuild
+  - nx
 
 onlyBuiltDependencies:
-- electron
-- better-sqlite3
+  - better-sqlite3
+  - electron
+  - electron-winstaller
