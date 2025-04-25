@@ -1,14 +1,12 @@
 import express from "express";
-import path from "path";
+import path, { join } from "path";
 import favicon from "serve-favicon";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import compression from "compression";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import sessionParser from "./routes/session_parser.js";
 import config from "./services/config.js";
-import utils from "./services/utils.js";
+import utils, { getResourceDir } from "./services/utils.js";
 import assets from "./routes/assets.js";
 import routes from "./routes/routes.js";
 import custom from "./routes/custom.js";
@@ -25,8 +23,6 @@ import "./becca/becca_loader.js";
 
 export default async function buildApp() {
     const app = express();
-
-    const scriptDir = dirname(fileURLToPath(import.meta.url));
 
     // Initialize DB
     sql_init.initializeDb();
@@ -67,8 +63,10 @@ export default async function buildApp() {
         console.log("Database not initialized yet. LLM features will be initialized after setup.");
     }
 
+    const assetsDir = getResourceDir();
+
     // view engine setup
-    app.set("views", path.join(scriptDir, "views"));
+    app.set("views", path.join(assetsDir, "views"));
     app.engine("ejs", (await import("ejs")).renderFile);
     app.set("view engine", "ejs");
 
@@ -105,12 +103,13 @@ export default async function buildApp() {
     app.use(express.raw({ limit: "500mb" }));
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
-    app.use(express.static(path.join(scriptDir, "public/root")));
-    app.use(`/manifest.webmanifest`, express.static(path.join(scriptDir, "public/manifest.webmanifest")));
-    app.use(`/robots.txt`, express.static(path.join(scriptDir, "public/robots.txt")));
-    app.use(`/icon.png`, express.static(path.join(scriptDir, "public/icon.png")));
+
+    app.use(express.static(path.join(assetsDir, "public/root")));
+    app.use(`/manifest.webmanifest`, express.static(path.join(assetsDir, "public/manifest.webmanifest")));
+    app.use(`/robots.txt`, express.static(path.join(assetsDir, "public/robots.txt")));
+    app.use(`/icon.png`, express.static(path.join(assetsDir, "public/icon.png")));
     app.use(sessionParser);
-    app.use(favicon(`${scriptDir}/assets/icon.ico`));
+    app.use(favicon(`${assetsDir}/assets/icon.ico`));
 
     if (openID.isOpenIDEnabled())
         app.use(auth(openID.generateOAuthConfig()));
