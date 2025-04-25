@@ -84,7 +84,9 @@ export default class ShareSettingsOptions extends OptionsWidget {
             // http://localhost:8080/sharePath/test/assets/v0.93.0/node_modules/normalize.css/normalize.css
             // alternatively/better approach: fix this behaviour :-)
             const normalizedSharePath = this.normalizeSharePathInput(sharePathInput);
-            const optionValue = (!sharePathInput || !normalizedSharePath) ? DEFAULT_SHAREPATH : normalizedSharePath;
+            const optionValue = (!sharePathInput || !normalizedSharePath || normalizedSharePath === "/")
+                ? DEFAULT_SHAREPATH
+                : normalizedSharePath;
 
             await this.updateOption<"sharePath">("sharePath", optionValue);
         });
