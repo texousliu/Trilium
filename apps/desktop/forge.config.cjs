@@ -18,9 +18,7 @@ const windowsSignConfiguration = process.env.WINDOWS_SIGN_EXECUTABLE ? {
 } : undefined;
 
 module.exports = {
-    // we run electron-forge inside the ./build folder,
-    // to have it output to ./dist, we need to go up a directory first
-    outDir: "../dist",
+    outDir: "out",
     packagerConfig: {
         executableName: EXECUTABLE_NAME,
         name: PRODUCT_NAME,

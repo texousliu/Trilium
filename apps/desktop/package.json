@@ -2,8 +2,8 @@
   "name": "@triliumnext/desktop",
   "version": "0.0.1",
   "private": true,
-  "dependencies": {
-    "electron": "35.1.5",
+  "main": "dist/main.js",
+  "dependencies": {    
     "@electron/remote": "2.1.2",
     "@triliumnext/server": "workspace:*",
     "better-sqlite3": "^11.9.1",
@@ -13,7 +13,8 @@
   },
   "devDependencies": {
     "@types/electron-squirrel-startup": "1.0.2",
-    "copy-webpack-plugin": "13.0.0",    
+    "copy-webpack-plugin": "13.0.0",
+    "electron": "35.1.5",
     "@electron/rebuild": "3.7.2",
     "@electron-forge/cli": "7.8.0",
     "@electron-forge/maker-deb": "7.8.0",
@@ -62,7 +63,7 @@
       },
       "make": {
         "dependsOn": [ "build" ],
-        "command": "pnpm --filter @triliumnext/desktop exec electron-forge make apps/desktop/dist"
+        "command": "pnpm --filter @triliumnext/desktop exec electron-forge make ."
       }
     }
   }
