@@ -158,6 +158,12 @@
           "build"
         ],
         "command": "docker build -f apps/server/Dockerfile . -t triliumnext"
+      },
+      "docker-start": {
+        "dependsOn": [
+          "docker-build"
+        ],
+        "command": "docker run triliumnext"
       }
     }
   }
