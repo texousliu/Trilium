@@ -291,9 +291,6 @@ importers:
       better-sqlite3:
         specifier: ^11.9.1
         version: 11.9.1
-      electron:
-        specifier: 35.1.5
-        version: 35.1.5
       electron-debug:
         specifier: 4.1.0
         version: 4.1.0
@@ -337,6 +334,9 @@ importers:
       copy-webpack-plugin:
         specifier: 13.0.0
         version: 13.0.0(webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4))
+      electron:
+        specifier: 35.1.5
+        version: 35.1.5
 
   apps/desktop-e2e: {}
 

@@ -42,7 +42,7 @@ module.exports = {
                 to: join(outputDir, "assets")
             },
             {
-              from: "node_modules/@electron/remote",
+              from: "../../node_modules/@electron/remote",
               to: join(outputDir, "node_modules/@electron/remote")
             }
         ]

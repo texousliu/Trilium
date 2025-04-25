@@ -63,7 +63,7 @@
       },
       "make": {
         "dependsOn": [ "build" ],
-        "command": "pnpm --filter @triliumnext/desktop exec electron-forge make ."
+        "command": "pnpm exec electron-forge make apps/desktop"
       }
     }
   }
