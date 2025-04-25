@@ -8,6 +8,7 @@
   "scripts": {
     "client:build": "nx build client",
     "server:build": "nx build server",
+    "server:start": "nx run-many --target=serve --projects=client,server --parallel",
     "server:start-prod": "pnpm server:build && cross-env TRILIUM_DATA_DIR=apps/server/data node apps/server/dist/main.js",
     "electron:build": "nx build desktop"
   },
