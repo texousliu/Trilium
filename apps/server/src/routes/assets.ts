@@ -39,6 +39,9 @@ async function register(app: express.Application) {
         app.use(`/${assetPath}/fonts`, proxy(publicUrl, {
             proxyReqPathResolver: (req) => "/fonts" + req.url
         }));
+        app.use(`/${assetPath}/translations`, proxy(publicUrl, {
+            proxyReqPathResolver: (req) => "/translations" + req.url
+        }));
         app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "assets", "images")));
     } else {
         const clientStaticCache = persistentCacheStatic(path.join(resourceDir, "public"));
@@ -47,6 +50,7 @@ async function register(app: express.Application) {
         app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(resourceDir, "public", "stylesheets")));
         app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(resourceDir, "public", "libraries")));
         app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(resourceDir, "public", "fonts")));
+        app.use(`/${assetPath}/translations/`, persistentCacheStatic(path.join(resourceDir, "public", "translations")));
         app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
     }
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
@@ -74,9 +78,6 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/node_modules/jquery/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery/dist/")));
 
     app.use(`/${assetPath}/node_modules/jquery-hotkeys/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery-hotkeys/")));
-
-    // i18n
-    app.use(`/${assetPath}/translations/`, persistentCacheStatic(path.join(srcRoot, "public", "translations/")));
 
     // Deprecated, https://www.npmjs.com/package/autocomplete.js?activeTab=readme
     app.use(`/${assetPath}/node_modules/autocomplete.js/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "autocomplete.js/dist/")));
