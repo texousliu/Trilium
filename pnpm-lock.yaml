@@ -72,6 +72,9 @@ importers:
       '@swc/helpers':
         specifier: ~0.5.11
         version: 0.5.17
+      '@triliumnext/server':
+        specifier: workspace:*
+        version: link:apps/server
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
@@ -285,9 +288,6 @@ importers:
       '@electron/remote':
         specifier: 2.1.2
         version: 2.1.2(electron@35.1.5)
-      '@triliumnext/server':
-        specifier: workspace:*
-        version: link:../server
       better-sqlite3:
         specifier: ^11.9.1
         version: 11.9.1
@@ -328,6 +328,9 @@ importers:
       '@electron/rebuild':
         specifier: 3.7.2
         version: 3.7.2
+      '@triliumnext/server':
+        specifier: workspace:*
+        version: link:../server
       '@types/electron-squirrel-startup':
         specifier: 1.0.2
         version: 1.0.2

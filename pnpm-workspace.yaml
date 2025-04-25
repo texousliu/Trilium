@@ -16,4 +16,4 @@ onlyBuiltDependencies:
 - electron-winstaller
 
 nodeLinker: hoisted
-linkWorkspacePackages: true
+symlink: false

@@ -4,8 +4,7 @@
   "private": true,
   "main": "dist/main.js",
   "dependencies": {    
-    "@electron/remote": "2.1.2",
-    "@triliumnext/server": "workspace:*",
+    "@electron/remote": "2.1.2",    
     "better-sqlite3": "^11.9.1",
     "electron-debug": "4.1.0",
     "electron-dl": "4.0.0",
@@ -13,6 +12,7 @@
   },
   "devDependencies": {
     "@types/electron-squirrel-startup": "1.0.2",
+    "@triliumnext/server": "workspace:*",
     "copy-webpack-plugin": "13.0.0",
     "electron": "35.1.5",
     "@electron/rebuild": "3.7.2",
