@@ -6,7 +6,7 @@ import helmet from "helmet";
 import compression from "compression";
 import sessionParser from "./routes/session_parser.js";
 import config from "./services/config.js";
-import utils from "./services/utils.js";
+import utils, { getResourceDir } from "./services/utils.js";
 import assets from "./routes/assets.js";
 import routes from "./routes/routes.js";
 import custom from "./routes/custom.js";
@@ -64,6 +64,8 @@ export default async function buildApp() {
         console.log("Database not initialized yet. LLM features will be initialized after setup.");
     }
 
+    const publicDir = path.join(getResourceDir(), "public");
+    const publicAssetsDir = path.join(publicDir, "assets");
     const assetsDir = RESOURCE_DIR;
 
     // view engine setup
@@ -105,12 +107,12 @@ export default async function buildApp() {
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
 
-    app.use(express.static(path.join(assetsDir, "public/root")));
-    app.use(`/manifest.webmanifest`, express.static(path.join(assetsDir, "public/manifest.webmanifest")));
-    app.use(`/robots.txt`, express.static(path.join(assetsDir, "public/robots.txt")));
-    app.use(`/icon.png`, express.static(path.join(assetsDir, "public/icon.png")));
+    app.use(express.static(path.join(publicDir, "root")));
+    app.use(`/manifest.webmanifest`, express.static(path.join(publicAssetsDir, "manifest.webmanifest")));
+    app.use(`/robots.txt`, express.static(path.join(publicAssetsDir, "robots.txt")));
+    app.use(`/icon.png`, express.static(path.join(publicAssetsDir, "icon.png")));
     app.use(sessionParser);
-    app.use(favicon(`${assetsDir}/icon.ico`));
+    app.use(favicon(path.join(assetsDir, "icon.ico")));
 
     if (openID.isOpenIDEnabled())
         app.use(auth(openID.generateOAuthConfig()));
