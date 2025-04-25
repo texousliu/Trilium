@@ -1,0 +1,3 @@
+nodeLinker: isolated
+onlyBuiltDependencies:
+  - better-sqlite3
