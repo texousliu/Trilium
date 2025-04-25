@@ -76,6 +76,13 @@ export default class ShareSettingsOptions extends OptionsWidget {
             const DEFAULT_SHAREPATH = "/share";
             const sharePathInput = this.$sharePath.val()?.trim() || "";
 
+            // TODO: inform user if they try to add more than a single path prefix (i.e. /sharePath/test)
+            // → this currently is not properly working, as for some reason the assets URL is not correctly rewritten
+            // and it only includes the first path in the URL, e.g.
+            // http://localhost:8080/sharePath/assets/v0.93.0/node_modules/normalize.css/normalize.css
+            // instead of
+            // http://localhost:8080/sharePath/test/assets/v0.93.0/node_modules/normalize.css/normalize.css
+            // alternatively/better approach: fix this behaviour :-)
             const normalizedSharePath = this.normalizeSharePathInput(sharePathInput);
             const optionValue = (!sharePathInput || !normalizedSharePath) ? DEFAULT_SHAREPATH : normalizedSharePath;
 
