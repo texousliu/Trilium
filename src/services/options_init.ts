@@ -175,15 +175,7 @@ const defaultOptions: DefaultOption[] = [
     },
 
     // Share settings
-    {
-        name: "sharePath",
-        // ensure always starts with slash
-        value: (optionsMap) => {
-            const sharePath = optionsMap.sharePath || "/share";
-            return sharePath.startsWith("/") ? sharePath : "/" + sharePath;
-        },
-        isSynced: true
-    },
+    { name: "sharePath", value: "/share", isSynced: true },
     { name: "redirectBareDomain", value: "false", isSynced: true },
     { name: "showLoginInShareTheme", value: "false", isSynced: true },
     { name: "shareSubtree", value: "false", isSynced: true },
