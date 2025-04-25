@@ -21,6 +21,7 @@ const windowsSignConfiguration = process.env.WINDOWS_SIGN_EXECUTABLE ? {
 
 module.exports = {
     outDir: "out",
+    // Documentation of `packagerConfig` options: https://electron.github.io/packager/main/interfaces/Options.html
     packagerConfig: {
         executableName: EXECUTABLE_NAME,
         name: PRODUCT_NAME,
@@ -38,6 +39,18 @@ module.exports = {
             // All resources should stay in Resources directory for macOS
             ...(process.platform === "darwin" ? [] : extraResourcesForPlatform)
         ],
+        ignore(copyPath) {
+            if (copyPath.startsWith("/dist")) {
+                return false;
+            }
+
+            if (copyPath.startsWith("/src")) {
+                return true;
+            }
+
+            console.log("[FORGE] ASAR: ", copyPath);
+            return false;
+        },
         afterPrune: [
             (buildPath, _electronVersion, _platform, _arch, callback) => {
                 // buildPath is a temporary directory that electron-packager creates - it's in the form of
