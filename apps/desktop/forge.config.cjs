@@ -1,6 +1,8 @@
 const path = require("path");
 const fs = require("fs-extra");
 
+const ELECTRON_FORGE_DIR = "apps/desktop/electron-forge";
+
 const EXECUTABLE_NAME = "trilium"; // keep in sync with server's package.json -> packagerConfig.executableName
 const PRODUCT_NAME = "TriliumNext Notes";
 const BIN_PATH = path.normalize("./scripts/electron-forge");
@@ -34,11 +36,7 @@ module.exports = {
         windowsSign: windowsSignConfiguration,
         extraResource: [
             // All resources should stay in Resources directory for macOS
-            ...(process.platform === "darwin" ? [] : extraResourcesForPlatform),
-
-            // These always go in Resources
-            "../server/translations/",
-            "../../node_modules/@highlightjs/cdn-assets/styles"
+            ...(process.platform === "darwin" ? [] : extraResourcesForPlatform)
         ],
         afterPrune: [
             (buildPath, _electronVersion, _platform, _arch, callback) => {
@@ -129,8 +127,8 @@ module.exports = {
                 name: EXECUTABLE_NAME,
                 productName: PRODUCT_NAME,
                 iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
-                setupIcon: "./assets/setup-icon/setup.ico",
-                loadingGif: "./assets/setup-icon/setup-banner.gif",
+                setupIcon: path.join(ELECTRON_FORGE_DIR, "setup-icon/setup.ico"),
+                loadingGif: path.join(ELECTRON_FORGE_DIR, "setup-icon/setup-banner.gif"),
                 windowsSign: windowsSignConfiguration
             }
         },
