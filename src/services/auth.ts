@@ -74,47 +74,6 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-/**
- * Checks if a URL path might be a shared note ID when clean URLs are enabled
- */
-function checkCleanUrl(req: Request, res: Response, next: NextFunction) {
-    // Only process if not logged in and clean URLs are enabled
-    if (!req.session.loggedIn && !isElectron && !noAuthentication &&
-        options.getOptionOrNull("redirectBareDomain") === "true" &&
-        options.getOptionOrNull("useCleanUrls") === "true") {
-
-        // Get the configured share path
-        const sharePath = options.getOption("sharePath") || '/share';
-
-        // Get path without leading slash
-        const path = req.path.substring(1);
-
-        // Skip processing for known routes, empty paths, and paths that already start with sharePath
-        if (!path ||
-            path === 'login' ||
-            path === 'setup' ||
-            path.startsWith('api/') ||
-            req.path === sharePath ||
-            req.path.startsWith(`${sharePath}/`)) {
-            log.info(`checkCleanUrl: Skipping redirect. Path: ${req.path}, SharePath: ${sharePath}`);
-            next();
-            return;
-        }
-
-        // If sharePath is just '/', we don't need to redirect
-        if (sharePath === '/') {
-            log.info(`checkCleanUrl: SharePath is root, skipping redirect. Path: ${req.path}`);
-            next();
-            return;
-        }
-
-        // Redirect to the share URL with this ID
-        log.info(`checkCleanUrl: Redirecting to share path. From: ${req.path}, To: ${sharePath}/${path}`);
-        res.redirect(`${sharePath}/${path}`);
-    } else {
-        next();
-    }
-}
 
 /**
  * Middleware for API authentication - works for both sync and normal API
@@ -216,7 +175,6 @@ function checkCredentials(req: Request, res: Response, next: NextFunction) {
 
 export default {
     checkAuth,
-    checkCleanUrl,
     checkApiAuth,
     checkAppInitialized,
     checkPasswordSet,

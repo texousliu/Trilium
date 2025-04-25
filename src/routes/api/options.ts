@@ -83,7 +83,6 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "redirectBareDomain",
     "showLoginInShareTheme",
     "shareSubtree",
-    "useCleanUrls",
     "sharePath",
     "splitEditorOrientation",
 

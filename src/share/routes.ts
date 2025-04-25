@@ -203,53 +203,20 @@ function register(router: Router) {
         }
     }
 
-    const sharePath = options.getOptionOrNull("sharePath") || '/share';
+    const sharePath = options.getOptionOrNull("sharePath") || "/share";
 
-    // Handle root path specially
-    if (sharePath === '/') {
-        router.get('/', (req, res, next) => {
-            shacaLoader.ensureLoad();
+    router.get(`${sharePath}/`, (req, res, next) => {
 
-            if (!shaca.shareRootNote) {
-                res.status(404).json({ message: "Share root not found" });
-                return;
-            }
+        shacaLoader.ensureLoad();
 
-            renderNote(shaca.shareRootNote, req, res);
-        });
-    } else {
+        if (!shaca.shareRootNote) {
+            res.status(404).json({ message: "Share root not found" });
+            return;
+        }
 
-        router.get(`${sharePath}/`, (req, res, next) => {
+        renderNote(shaca.shareRootNote, req, res);
+    });
 
-            shacaLoader.ensureLoad();
-
-            if (!shaca.shareRootNote) {
-                res.status(404).json({ message: "Share root not found" });
-                return;
-            }
-
-            renderNote(shaca.shareRootNote, req, res);
-        });
-
-    }
-
-    if (sharePath === '/' && options.getOptionBool("useCleanUrls") && options.getOptionBool("redirectBareDomain")) {
-        router.get("/:shareId", (req, res, next) => {
-            shacaLoader.ensureLoad();
-
-            const { shareId } = req.params;
-
-            // Skip processing for known routes
-            if (shareId === 'login' || shareId === 'setup' || shareId.startsWith('api/')) {
-                next();
-                return;
-            }
-
-            const note = shaca.aliasToNote[shareId] || shaca.notes[shareId];
-
-            renderNote(note, req, res);
-        });
-    }
 
     router.get(`${sharePath}/:shareId`, (req, res, next) => {
         shacaLoader.ensureLoad();

@@ -39,20 +39,11 @@ const TPL = /*html*/`
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="tn-checkbox">
-            <input class="form-check-input use-clean-urls" type="checkbox" name="useCleanUrls" value="true">
-            ${t("share.use_clean_urls")}
-        </label>
-        <p class="form-text">${t("share.use_clean_urls_description")}</p>
-    </div>
-
 </div>`;
 
 export default class ShareSettingsOptions extends OptionsWidget {
     private $redirectBareDomain!: JQuery<HTMLInputElement>;
     private $showLoginInShareTheme!: JQuery<HTMLInputElement>;
-    private $useCleanUrls!: JQuery<HTMLInputElement>;
     private $sharePath!: JQuery<HTMLInputElement>;
     private $shareRootCheck!: JQuery<HTMLElement>;
     private $shareRootStatus!: JQuery<HTMLElement>;
@@ -63,7 +54,6 @@ export default class ShareSettingsOptions extends OptionsWidget {
 
         this.$redirectBareDomain = this.$widget.find(".redirect-bare-domain");
         this.$showLoginInShareTheme = this.$widget.find(".show-login-in-share-theme");
-        this.$useCleanUrls = this.$widget.find(".use-clean-urls");
         this.$sharePath = this.$widget.find(".share-path");
         this.$shareRootCheck = this.$widget.find(".share-root-check");
         this.$shareRootStatus = this.$widget.find(".share-root-status");
@@ -80,11 +70,6 @@ export default class ShareSettingsOptions extends OptionsWidget {
         this.$showLoginInShareTheme.on('change', async () => {
             const showLoginInShareTheme = this.$showLoginInShareTheme.is(":checked");
             await this.updateOption<"showLoginInShareTheme">("showLoginInShareTheme", showLoginInShareTheme.toString());
-        });
-
-        this.$useCleanUrls.on('change', async () => {
-            const useCleanUrls = this.$useCleanUrls.is(":checked");
-            await this.updateOption<"useCleanUrls">("useCleanUrls", useCleanUrls.toString());
         });
 
         this.$sharePath.on('change', async () => {
@@ -122,7 +107,6 @@ export default class ShareSettingsOptions extends OptionsWidget {
         this.$shareRootCheck.toggle(redirectBareDomain);
 
         this.$showLoginInShareTheme.prop("checked", options.showLoginInShareTheme === "true");
-        this.$useCleanUrls.prop("checked", options.useCleanUrls === "true");
         this.$sharePath.val(options.sharePath);
     }
 

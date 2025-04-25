@@ -122,7 +122,6 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     redirectBareDomain: boolean;
     showLoginInShareTheme: boolean;
     shareSubtree: boolean;
-    useCleanUrls: boolean;
     sharePath: string;
 
     // AI/LLM integration options
