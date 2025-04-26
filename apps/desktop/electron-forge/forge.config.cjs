@@ -203,7 +203,7 @@ module.exports = {
 function getExtraResourcesForPlatform() {
     const resources = [];
 
-    const getScriptRessources = () => {
+    const getScriptResources = () => {
         const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
         const scriptExt = (process.platform === "win32") ? "bat" : "sh";
         return scripts.map(script => `apps/desktop/electron-forge/${script}.${scriptExt}`);
@@ -211,10 +211,10 @@ function getExtraResourcesForPlatform() {
 
     switch (process.platform) {
         case "win32":
-            resources.push(...getScriptRessources())
+            resources.push(...getScriptResources())
             break;
         case "linux":
-            resources.push(...getScriptRessources(), path.join(APP_ICON_PATH, "png/256x256.png"));
+            resources.push(...getScriptResources(), path.join(APP_ICON_PATH, "png/256x256.png"));
             break;
         default:
             break;
