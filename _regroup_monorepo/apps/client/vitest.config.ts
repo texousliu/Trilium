@@ -7,8 +7,7 @@ export default defineConfig({
             ...configDefaults.exclude,
             "build/**",
         ],
-        setupFiles: ["./spec/setup.ts"],
-        environment: "happy-dom",
+
         coverage: {
             reporter: [ "text", "html" ],
         }
