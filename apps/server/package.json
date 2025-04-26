@@ -5,12 +5,12 @@
   "dependencies": {    
     "better-sqlite3": "11.9.1",
     "jquery.fancytree": "2.38.5",
-    "jquery-hotkeys": "0.2.2" 
+    "jquery-hotkeys": "0.2.2",
+    "@highlightjs/cdn-assets": "11.11.1"
   },
   "devDependencies": {
     "@electron/remote": "2.1.2",
-    "@excalidraw/excalidraw": "0.18.0",
-    "@highlightjs/cdn-assets": "11.11.1",
+    "@excalidraw/excalidraw": "0.18.0",    
     "@types/archiver": "6.0.3",
     "@types/better-sqlite3": "7.6.13",
     "@types/cheerio": "0.22.35",
