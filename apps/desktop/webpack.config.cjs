@@ -18,7 +18,7 @@ module.exports = {
       assets: ["./src/assets"],
       optimization: false,
       outputHashing: 'none',
-      generatePackageJson: true,
+      generatePackageJson: false,
       externalDependencies: [
         "electron/main",
         "@electron/remote/main",
@@ -44,6 +44,14 @@ module.exports = {
             {
               from: "../../node_modules/@electron/remote",
               to: join(outputDir, "node_modules/@electron/remote")
+            },
+            {
+              from: "../../node_modules/prebuild-install",
+              to: join(outputDir, "node_modules/better-sqlite3/node_modules/prebuild-install")
+            },
+            {
+              from: "package.json",
+              to: join(outputDir, "package.json")
             }
         ]
     })

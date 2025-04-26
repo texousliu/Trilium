@@ -2,7 +2,7 @@
   "name": "@triliumnext/desktop",
   "version": "0.0.1",
   "private": true,
-  "main": "dist/main.js",
+  "main": "main.js",
   "dependencies": {    
     "@electron/remote": "2.1.2",    
     "better-sqlite3": "^11.9.1",
@@ -23,8 +23,13 @@
     "@electron-forge/maker-rpm": "7.8.0",
     "@electron-forge/maker-squirrel": "7.8.0",
     "@electron-forge/maker-zip": "7.8.0",
-    "@electron-forge/plugin-auto-unpack-natives": "7.8.0"
+    "@electron-forge/plugin-auto-unpack-natives": "7.8.0",
+    "prebuild-install": "^7.1.1"
   },
+  "config": {
+    "forge": "../electron-forge/forge.config.cjs"
+  },
+  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
   "scripts": {
     "start-prod": "nx build desktop && cross-env TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=dist TRILIUM_PORT=37841 electron dist/main.js",
     "rebuild": "electron-rebuild"
@@ -73,7 +78,7 @@
       },
       "electron-forge:package": {
         "dependsOn": [ "build" ],
-        "command": "pnpm exec electron-forge package apps/desktop"
+        "command": "pnpm exec cross-env DEBUG=electron-rebuild electron-forge package apps/desktop/dist"
       }
     }
   }
