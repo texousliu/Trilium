@@ -1,17 +1,18 @@
 const path = require("path");
 const fs = require("fs-extra");
 
-const ELECTRON_FORGE_DIR = "apps/desktop/electron-forge";
+const ELECTRON_FORGE_DIR = __dirname;
 
 const EXECUTABLE_NAME = "trilium"; // keep in sync with server's package.json -> packagerConfig.executableName
 const PRODUCT_NAME = "TriliumNext Notes";
 const BIN_PATH = path.normalize("./scripts/electron-forge");
+const APP_ICON_PATH = path.join(ELECTRON_FORGE_DIR, "app-icon");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
   name: EXECUTABLE_NAME,
   productName: PRODUCT_NAME,
-  icon: "./assets/app-icon/png/128x128.png",
+  icon: path.join(APP_ICON_PATH, "png/128x128.png"),
   desktopTemplate: path.resolve(path.join(BIN_PATH, "desktop.ejs")),
   categories: ["Office", "Utility"]
 };
@@ -27,10 +28,9 @@ module.exports = {
         name: PRODUCT_NAME,
         overwrite: true,
         asar: true,
-        icon: "./assets/app-icon/icon",
+        icon: path.join(APP_ICON_PATH, "icon"),
         osxSign: {},
         osxNotarize: {
-            appleId: process.env.APPLE_ID,
             appleIdPassword: process.env.APPLE_ID_PASSWORD,
             teamId: process.env.APPLE_TEAM_ID
         },
@@ -154,7 +154,7 @@ module.exports = {
         {
             name: "@electron-forge/maker-dmg",
             config: {
-                icon: "./assets/app-icon/icon.icns"
+                icon: path.join(APP_ICON_PATH, "icon.icns")
             }
         },
         {
@@ -162,7 +162,7 @@ module.exports = {
             config: {
                 options: {
                     iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
-                    icon: "./assets/app-icon/icon.ico"
+                    icon: path.join(APP_ICON_PATH, "icon.ico")
                 }
             }
         }
@@ -215,7 +215,7 @@ function getExtraResourcesForPlatform() {
             resources.push(...getScriptRessources())
             break;
         case "linux":
-            resources.push(...getScriptRessources(), "assets/app-icon/png/256x256.png");
+            resources.push(...getScriptRessources(), path.join(APP_ICON_PATH, "png/256x256.png"));
             break;
         default:
             break;
