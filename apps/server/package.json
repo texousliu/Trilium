@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {    
-    "better-sqlite3": "11.9.1"    
+    "better-sqlite3": "11.9.1",
+    "jquery.fancytree": "2.38.5",
+    "jquery-hotkeys": "0.2.2" 
   },
   "devDependencies": {
     "@electron/remote": "2.1.2",
@@ -44,9 +46,7 @@
     "boxicons": "2.1.4",
     "codemirror": "5.65.19",
     "express-http-proxy": "2.1.1",
-    "jquery": "3.7.1",
-    "jquery-hotkeys": "0.2.2",
-    "jquery.fancytree": "2.38.5",
+    "jquery": "3.7.1",    
     "katex": "0.16.22",
     "normalize.css": "8.0.1",
     "@anthropic-ai/sdk": "0.39.0",
