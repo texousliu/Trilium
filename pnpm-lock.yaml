@@ -288,6 +288,9 @@ importers:
       '@electron/remote':
         specifier: 2.1.2
         version: 2.1.2(electron@35.1.5)
+      '@highlightjs/cdn-assets':
+        specifier: 11.11.1
+        version: 11.11.1
       better-sqlite3:
         specifier: ^11.9.1
         version: 11.9.1
@@ -300,6 +303,12 @@ importers:
       electron-squirrel-startup:
         specifier: 1.0.1
         version: 1.0.1
+      jquery-hotkeys:
+        specifier: 0.2.2
+        version: 0.2.2
+      jquery.fancytree:
+        specifier: 2.38.5
+        version: 2.38.5(jquery@3.7.1)
     devDependencies:
       '@electron-forge/cli':
         specifier: 7.8.0
@@ -348,9 +357,18 @@ importers:
 
   apps/server:
     dependencies:
+      '@highlightjs/cdn-assets':
+        specifier: 11.11.1
+        version: 11.11.1
       better-sqlite3:
         specifier: 11.9.1
         version: 11.9.1
+      jquery-hotkeys:
+        specifier: 0.2.2
+        version: 0.2.2
+      jquery.fancytree:
+        specifier: 2.38.5
+        version: 2.38.5(jquery@3.7.1)
     devDependencies:
       '@anthropic-ai/sdk':
         specifier: 0.39.0
@@ -364,9 +382,6 @@ importers:
       '@excalidraw/excalidraw':
         specifier: 0.18.0
         version: 0.18.0(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@16.14.0))(react@16.14.0)
-      '@highlightjs/cdn-assets':
-        specifier: 11.11.1
-        version: 11.11.1
       '@triliumnext/commons':
         specifier: workspace:*
         version: link:../../packages/commons
@@ -598,12 +613,6 @@ importers:
       jquery:
         specifier: 3.7.1
         version: 3.7.1
-      jquery-hotkeys:
-        specifier: 0.2.2
-        version: 0.2.2
-      jquery.fancytree:
-        specifier: 2.38.5
-        version: 2.38.5(jquery@3.7.1)
       js-yaml:
         specifier: 4.1.0
         version: 4.1.0
