@@ -40,15 +40,21 @@ module.exports = {
             ...(process.platform === "darwin" ? [] : extraResourcesForPlatform)
         ],
         ignore(copyPath) {
-            if (copyPath.startsWith("/dist")) {
+            // Known files that will not be ignored and not logged.
+            if (copyPath.startsWith("/assets") || copyPath.startsWith("/public")) {
                 return false;
             }
 
-            if (copyPath.startsWith("/src")) {
-                return true;
+            // Keep only the prebuild, source code and package index.
+            if (copyPath.startsWith("/node_modules/better-sqlite3")) {
+                if (!copyPath.startsWith("/node_modules/better-sqlite3/build")
+                    && copyPath !== "/node_modules/better-sqlite3/package.json"
+                    && !copyPath.startsWith("/node_modules/better-sqlite3/lib")) {
+                    return true;
+                }
             }
 
-            console.log("[FORGE] ASAR: ", copyPath);
+            // console.log("[FORGE] ASAR: ", copyPath);
             return false;
         },
         afterPrune: [
