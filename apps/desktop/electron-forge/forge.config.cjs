@@ -5,7 +5,6 @@ const ELECTRON_FORGE_DIR = __dirname;
 
 const EXECUTABLE_NAME = "trilium"; // keep in sync with server's package.json -> packagerConfig.executableName
 const PRODUCT_NAME = "TriliumNext Notes";
-const BIN_PATH = path.normalize("./scripts/electron-forge");
 const APP_ICON_PATH = path.join(ELECTRON_FORGE_DIR, "app-icon");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
@@ -13,11 +12,11 @@ const baseLinuxMakerConfigOptions = {
   name: EXECUTABLE_NAME,
   productName: PRODUCT_NAME,
   icon: path.join(APP_ICON_PATH, "png/128x128.png"),
-  desktopTemplate: path.resolve(path.join(BIN_PATH, "desktop.ejs")),
+  desktopTemplate: path.resolve(path.join(ELECTRON_FORGE_DIR, "desktop.ejs")),
   categories: ["Office", "Utility"]
 };
 const windowsSignConfiguration = process.env.WINDOWS_SIGN_EXECUTABLE ? {
-    hookModulePath: path.join(BIN_PATH, "sign-windows.cjs")
+    hookModulePath: path.join(ELECTRON_FORGE_DIR, "sign-windows.cjs")
 } : undefined;
 
 module.exports = {
