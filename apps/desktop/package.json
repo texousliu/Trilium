@@ -78,7 +78,7 @@
       },
       "electron-forge:package": {
         "dependsOn": [ "build" ],
-        "command": "pnpm exec cross-env DEBUG=electron-rebuild electron-forge package apps/desktop/dist"
+        "command": "pnpm exec electron-forge package apps/desktop/dist"
       }
     }
   }
