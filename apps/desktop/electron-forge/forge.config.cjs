@@ -102,7 +102,7 @@ module.exports = {
         ]
     },
     rebuildConfig: {
-        force: false
+        force: true
     },
     makers: [
         {
