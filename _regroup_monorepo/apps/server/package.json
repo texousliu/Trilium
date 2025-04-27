@@ -27,7 +27,6 @@
     "start": "cross-env nodemon src/main.ts",
     "test": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./spec/data TRILIUM_INTEGRATION_TEST=memory vitest",
     "coverage": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=./spec/data TRILIUM_INTEGRATION_TEST=memory vitest --coverage",
-    "package": "bash ./scripts/build-server.sh"
   },
   "dependencies": {
     

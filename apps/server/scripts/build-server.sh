@@ -23,17 +23,9 @@ echo "Selected Arch: $ARCH"
 # Set Node.js version and architecture-specific filename
 NODE_VERSION=22.14.0
 
-BUILD_DIR="./build"
-DIST_DIR="./dist"
-CLEANUP_SCRIPT="./scripts/cleanupNodeModules.ts"
-
-# Trigger the build
-echo "Build start"
-npm run build:prepare-dist
-echo "Build finished"
-
-# pruning of unnecessary files and devDeps in node_modules
-node --experimental-strip-types $CLEANUP_SCRIPT $BUILD_DIR
+script_dir=$(realpath $(dirname $0))
+BUILD_DIR="$script_dir/../dist"
+DIST_DIR="$script_dir/../out"
 
 NODE_FILENAME=node-v${NODE_VERSION}-linux-${ARCH}
 
@@ -54,11 +46,7 @@ rm -rf $BUILD_DIR/node/lib/node_modules/{npm,corepack} \
 printf "#!/bin/sh\n./node/bin/node src/main\n" > $BUILD_DIR/trilium.sh
 chmod 755 $BUILD_DIR/trilium.sh
 
-# TriliumNextTODO: is this still required? If yes → move to copy-dist/copy-trilium
-cp tpl/anonymize-database.sql $BUILD_DIR/
-
 VERSION=`jq -r ".version" package.json`
-
 
 ARCHIVE_NAME="TriliumNextNotes-Server-${VERSION}-linux-${ARCH}"
 echo "Creating Archive $ARCHIVE_NAME..."

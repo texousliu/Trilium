@@ -22,8 +22,8 @@ runs:
       MATRIX_ARCH: ${{ inputs.arch }}
     shell: bash
     run: |
-      npm run chore:update-build-info
-      npm run server:package
+      pnpm run chore:update-build-info
+      pnpm nx --project=@triliumnext/server package
   - name: Prepare artifacts
     shell: bash
     run: |
