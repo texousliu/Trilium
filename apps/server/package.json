@@ -143,16 +143,6 @@
           }
         }
       },
-      "build": {
-        "dependsOn": [
-          {
-            "target": "build",
-            "projects": [
-              "client"
-            ]
-          }
-        ]
-      },
       "docker-build": {
         "dependsOn": [
           "build"

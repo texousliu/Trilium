@@ -64,17 +64,6 @@
           }
         }
       },
-      "build": {
-        "dependsOn": [
-          {
-            "target": "build",
-            "projects": [
-              "client",
-              "server"
-            ]
-          }
-        ]
-      },
       "electron-forge:make": {
         "dependsOn": [ "build" ],
         "command": "pnpm exec electron-forge make apps/desktop/dist"
