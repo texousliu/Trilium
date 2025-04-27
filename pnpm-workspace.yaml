@@ -14,3 +14,5 @@ onlyBuiltDependencies:
 - better-sqlite3
 - electron
 - electron-winstaller
+
+nodeLinker: hoisted
