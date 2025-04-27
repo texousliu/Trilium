@@ -28,8 +28,6 @@ const macosSignConfiguration = process.env.APPLE_ID ? {
     }
 } : undefined;
 
-console.log("Got env ", process.env);
-
 module.exports = {
     outDir: "out",
     // Documentation of `packagerConfig` options: https://electron.github.io/packager/main/interfaces/Options.html
