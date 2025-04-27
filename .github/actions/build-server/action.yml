@@ -16,7 +16,7 @@ runs:
       cache: "npm"
   - name: Install dependencies
     shell: bash
-    run: npm ci
+    run: pnpm install --frozen-lockfile
   - name: Run Linux server build
     env:
       MATRIX_ARCH: ${{ inputs.arch }}
