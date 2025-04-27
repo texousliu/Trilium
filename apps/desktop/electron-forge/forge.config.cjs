@@ -43,24 +43,6 @@ module.exports = {
             // All resources should stay in Resources directory for macOS
             ...(process.platform === "darwin" ? [] : extraResourcesForPlatform)
         ],
-        ignore(copyPath) {
-            // Known files that will not be ignored and not logged.
-            if (copyPath.startsWith("/assets") || copyPath.startsWith("/public")) {
-                return false;
-            }
-
-            // Keep only the prebuild, source code and package index.
-            if (copyPath.startsWith("/node_modules/better-sqlite3")) {
-                if (!copyPath.startsWith("/node_modules/better-sqlite3/build")
-                    && copyPath !== "/node_modules/better-sqlite3/package.json"
-                    && !copyPath.startsWith("/node_modules/better-sqlite3/lib")) {
-                    return true;
-                }
-            }
-
-            // console.log("[FORGE] ASAR: ", copyPath);
-            return false;
-        },
         afterPrune: [
             (buildPath, _electronVersion, _platform, _arch, callback) => {
                 // buildPath is a temporary directory that electron-packager creates - it's in the form of
@@ -102,7 +84,8 @@ module.exports = {
         ]
     },
     rebuildConfig: {
-        force: true
+        force: true,
+        extraModules: [ "better-sqlite3" ]
     },
     makers: [
         {
