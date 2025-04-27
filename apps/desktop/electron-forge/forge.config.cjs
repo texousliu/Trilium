@@ -10,6 +10,7 @@ const APP_ICON_PATH = path.join(ELECTRON_FORGE_DIR, "app-icon");
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
 const baseLinuxMakerConfigOptions = {
   name: EXECUTABLE_NAME,
+  bin: EXECUTABLE_NAME,
   productName: PRODUCT_NAME,
   icon: path.join(APP_ICON_PATH, "png/128x128.png"),
   desktopTemplate: path.resolve(path.join(ELECTRON_FORGE_DIR, "desktop.ejs")),
@@ -103,11 +104,7 @@ module.exports = {
         {
             name: "@electron-forge/maker-deb",
             config: {
-                options: {
-                    name: EXECUTABLE_NAME,
-                    bin: EXECUTABLE_NAME,
-                    ...baseLinuxMakerConfigOptions
-                }
+                options: baseLinuxMakerConfigOptions
             }
         },
         {
@@ -136,9 +133,7 @@ module.exports = {
         {
             name: "@electron-forge/maker-rpm",
             config: {
-                options: {
-                  ...baseLinuxMakerConfigOptions
-                }
+                options: baseLinuxMakerConfigOptions
             }
         },
         {
