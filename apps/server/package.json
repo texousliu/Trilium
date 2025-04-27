@@ -147,7 +147,7 @@
         }
       },
       "package": {
-        "dependsOn": [ "^build" ],
+        "dependsOn": [ "build" ],
         "command": "bash apps/server/scripts/build-server.sh"
       },
       "docker-build": {
