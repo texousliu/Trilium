@@ -28,6 +28,6 @@ runs:
     shell: bash
     run: |
       mkdir -p upload
-      file=$(find ./apps/server/dist -name '*.tar.xz' -print -quit)
+      file=$(find ./apps/server/out -name '*.tar.xz' -print -quit)
       name=${{ github.ref_name }}
       cp "$file" "upload/TriliumNextNotes-Server-${name//\//-}-${{ inputs.os }}-${{ inputs.arch }}.tar.xz"
