@@ -67,11 +67,11 @@
       },
       "electron-forge:make": {
         "dependsOn": [ "build" ],
-        "command": "pnpm exec electron-forge make apps/desktop/dist"
+        "command": "pnpm -C apps/desktop exec cross-env DEBUG=* NODE_INSTALLER=npm electron-forge make dist"
       },
       "electron-forge:package": {
         "dependsOn": [ "build" ],
-        "command": "pnpm exec cross-env DEBUG=* electron-forge package apps/desktop/dist"
+        "command": "pnpm -C apps/desktop exec cross-env DEBUG=* NODE_INSTALLER=npm electron-forge package dist"
       }
     }
   }

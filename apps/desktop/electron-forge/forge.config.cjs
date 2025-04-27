@@ -43,23 +43,7 @@ module.exports = {
             // All resources should stay in Resources directory for macOS
             ...(process.platform === "darwin" ? [] : extraResourcesForPlatform)
         ],
-        afterPrune: [
-            (buildPath, _electronVersion, _platform, _arch, callback) => {
-                // buildPath is a temporary directory that electron-packager creates - it's in the form of
-                // /tmp/electron-packager/tmp-SjJl0s/resources/app
-                try {
-                    const cleanupNodeModulesScript = path.join(buildPath, "build", "node_modules", "@triliumnext/server", "scripts", "cleanupNodeModules.ts");
-                    // we don't have access to any devDeps like 'tsx' here, so use the built-in '--experimental-strip-types' flag instead
-                    const command = `node --experimental-strip-types ${cleanupNodeModulesScript} "${buildPath}" --skip-prune-dev-deps`;
-                    // execSync throws, if above returns any non-zero exit code
-                    // TODO: Not working.
-                    // execSync(command);
-                    callback()
-                } catch(err) {
-                    callback(err)
-                }
-            }
-        ],
+        prune: false,
         afterComplete: [
             (buildPath, _electronVersion, platform, _arch, callback) => {
                 // Only move resources on non-macOS platforms
@@ -190,7 +174,7 @@ function getExtraResourcesForPlatform() {
     const getScriptResources = () => {
         const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];
         const scriptExt = (process.platform === "win32") ? "bat" : "sh";
-        return scripts.map(script => `apps/desktop/electron-forge/${script}.${scriptExt}`);
+        return scripts.map(script => `electron-forge/${script}.${scriptExt}`);
     }
 
     switch (process.platform) {
