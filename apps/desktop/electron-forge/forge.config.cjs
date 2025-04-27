@@ -105,6 +105,7 @@ module.exports = {
             config: {
                 options: {
                     name: EXECUTABLE_NAME,
+                    bin: EXECUTABLE_NAME,
                     ...baseLinuxMakerConfigOptions
                 }
             }
