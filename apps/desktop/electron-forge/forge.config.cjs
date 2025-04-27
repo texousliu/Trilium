@@ -19,6 +19,14 @@ const baseLinuxMakerConfigOptions = {
 const windowsSignConfiguration = process.env.WINDOWS_SIGN_EXECUTABLE ? {
     hookModulePath: path.join(ELECTRON_FORGE_DIR, "sign-windows.cjs")
 } : undefined;
+const macosSignConfiguration = process.env.APPLE_ID ? {
+    osxSign: {},
+    osxNotarize: {
+        appleId: process.env.APPLE_ID,
+        appleIdPassword: process.env.APPLE_ID_PASSWORD,
+        teamId: process.env.APPLE_TEAM_ID
+    }
+} : undefined;
 
 console.log("Got env ", process.env);
 
@@ -31,12 +39,7 @@ module.exports = {
         overwrite: true,
         asar: true,
         icon: path.join(APP_ICON_PATH, "icon"),
-        osxSign: {},
-        osxNotarize: {
-            appleId: process.env.APPLE_ID,
-            appleIdPassword: process.env.APPLE_ID_PASSWORD,
-            teamId: process.env.APPLE_TEAM_ID
-        },
+        ...macosSignConfiguration,
         windowsSign: windowsSignConfiguration,
         extraResource: [
             // All resources should stay in Resources directory for macOS
