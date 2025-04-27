@@ -20,6 +20,8 @@ const windowsSignConfiguration = process.env.WINDOWS_SIGN_EXECUTABLE ? {
     hookModulePath: path.join(ELECTRON_FORGE_DIR, "sign-windows.cjs")
 } : undefined;
 
+console.log("Got env ", process.env);
+
 module.exports = {
     outDir: "out",
     // Documentation of `packagerConfig` options: https://electron.github.io/packager/main/interfaces/Options.html

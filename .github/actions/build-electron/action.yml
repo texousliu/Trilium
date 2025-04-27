@@ -86,7 +86,7 @@ runs:
       APPLE_ID_PASSWORD: ${{ env.APPLE_ID_PASSWORD }}
       WINDOWS_SIGN_EXECUTABLE: ${{ env.WINDOWS_SIGN_EXECUTABLE }}
       TRILIUM_ARTIFACT_NAME_HINT: TriliumNextNotes-${{ github.ref_name }}-${{ inputs.os }}-${{ inputs.arch }}
-    run: pnpm nx --project=@triliumnext/desktop electron-forge:make -- --arch=${{ inputs.arch }} --platform=${{ inputs.forge_platform }}
+    run: echo $APPLE_ID && pnpm nx --project=@triliumnext/desktop electron-forge:make -- --arch=${{ inputs.arch }} --platform=${{ inputs.forge_platform }}
 
   # Add DMG signing step
   - name: Sign DMG
