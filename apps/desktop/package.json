@@ -37,6 +37,7 @@
     "start-prod": "nx build desktop && cross-env TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=dist TRILIUM_PORT=37841 electron dist/main.js",
     "rebuild": "electron-rebuild"
   },
+  "license": "AGPL-3.0-only",
   "author": {
     "name": "TriliumNext Notes Team",
     "email": "contact@eliandoran.me",
