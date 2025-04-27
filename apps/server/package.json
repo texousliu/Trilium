@@ -123,6 +123,9 @@
     "copy-webpack-plugin": "13.0.0"
   },
   "nx": {
+    "implicitDependencies": [
+      "@triliumnext/client"
+    ],
     "targets": {
       "serve": {
         "executor": "@nx/js:node",
