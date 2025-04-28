@@ -7,6 +7,7 @@ import resourceDir from "./resource_dir.js";
 import appInfo from "./app_info.js";
 import cls from "./cls.js";
 import { t } from "i18next";
+import { join } from "path";
 
 interface MigrationInfo {
     dbVersion: number;
@@ -99,7 +100,7 @@ async function prepareMigrations(currentDbVersion: number): Promise<MigrationInf
                 // Due to ESM imports, the migration file needs to be imported asynchronously and thus cannot be loaded at migration time (since migration is not asynchronous).
                 // As such we have to preload the ESM.
                 // Going back to the original approach but making it webpack-compatible
-                const importPath = `../../db/migrations/${file}`;
+                const importPath = join(resourceDir.MIGRATIONS_DIR, file);
                 migration.module = (await import(importPath)).default;
             }
 
