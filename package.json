@@ -12,7 +12,8 @@
     "server:start-prod": "pnpm server:build && cross-env TRILIUM_DATA_DIR=apps/server/data node apps/server/dist/main.js",
     "electron:build": "nx build desktop",
     "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
-    "chore:update-build-info": "tsx ./scripts/update-build-info.ts"
+    "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
+    "test": "pnpm nx run-many -t test"
   },
   "private": true,
   "devDependencies": {
