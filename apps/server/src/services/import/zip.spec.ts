@@ -9,7 +9,6 @@ import BNote from "../../becca/entities/bnote.js";
 import TaskContext from "../task_context.js";
 import cls from "../cls.js";
 import sql_init from "../sql_init.js";
-import { initializeTranslations } from "../i18n.js";
 import { trimIndentation } from "@triliumnext/commons";
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 
@@ -45,7 +44,6 @@ describe("processNoteContent", () => {
             };
         });
 
-        initializeTranslations();
         sql_init.initializeDb();
         await sql_init.dbReady;
     });

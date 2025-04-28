@@ -1,6 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import supertest from "supertest";
-import { initializeTranslations } from "../services/i18n.js";
 import type { Application } from "express";
 import dayjs from "dayjs";
 
@@ -9,7 +8,6 @@ let app: Application;
 describe("Login Route test", () => {
 
     beforeAll(async () => {
-        initializeTranslations();
         const buildApp = (await import("../app.js")).default;
         app = await buildApp();
     });
