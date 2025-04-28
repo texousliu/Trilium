@@ -15,6 +15,9 @@ module.exports = function (filePath) {
     const command = `${WINDOWS_SIGN_EXECUTABLE} --executable "${filePath}"`;
     console.log(`[Sign] ${command}`);
 
-    const output = child_process.execSync(command);
-    console.log(`[Sign] ${output}`);
+    try {
+        child_process.execSync(command);
+    } catch (e) {
+        console.error("[Sign]", e.output.toString("utf-8"));
+    }
 }
