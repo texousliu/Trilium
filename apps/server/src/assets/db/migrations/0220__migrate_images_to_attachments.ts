@@ -1,8 +1,8 @@
-import becca from "../../src/becca/becca";
-import becca_loader from "../../src/becca/becca_loader";
-import cls from "../../src/services/cls";
-import log from "../../src/services/log";
-import sql from "../../src/services/sql";
+import becca from "../../../becca/becca.js";
+import becca_loader from "../../../becca/becca_loader.js";
+import cls from "../../../services/cls.js";
+import log from "../../../services/log.js";
+import sql from "../../../services/sql.js";
 
 export default () => {
     cls.init(() => {
@@ -18,7 +18,7 @@ export default () => {
                 if (attachment) {
                     log.info(`Auto-converted note '${note.noteId}' into attachment '${attachment.attachmentId}'.`);
                 }
-            } catch (e) {
+            } catch (e: any) {
                 log.error(`Cannot convert note '${note.noteId}' to attachment: ${e.message} ${e.stack}`);
             }
         }
