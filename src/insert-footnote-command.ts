@@ -76,7 +76,7 @@ export default class InsertFootnoteCommand extends Command {
 	public override refresh(): void {
 		const model = this.editor.model;
 		const lastPosition = model.document.selection.getLastPosition();
-		const allowedIn = lastPosition && model.schema.findAllowedParent( lastPosition, ELEMENTS.footnoteSection );
+		const allowedIn = lastPosition && model.schema.findAllowedParent( lastPosition, ELEMENTS.footnoteReference );
 		this.isEnabled = allowedIn !== null;
 	}
 
