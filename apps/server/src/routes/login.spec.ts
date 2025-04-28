@@ -1,8 +1,9 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import supertest from "supertest";
 import { initializeTranslations } from "../services/i18n.js";
-import type { Application, Request, Response, NextFunction } from "express";
+import type { Application } from "express";
 import dayjs from "dayjs";
+import buildApp from "../app.js";
 
 let app: Application;
 
@@ -10,7 +11,7 @@ describe("Login Route test", () => {
 
     beforeAll(async () => {
         initializeTranslations();
-        app = (await import("../app.js")).default;
+        app = await buildApp();
     });
 
     it("should return the login page, when using a GET request", async () => {
@@ -60,7 +61,7 @@ describe("Login Route test", () => {
 
         expect(actualExpiresDate).to.not.eql("Invalid Date");
 
-        // ignore the seconds in the comparison, just to avoid flakiness in tests, 
+        // ignore the seconds in the comparison, just to avoid flakiness in tests,
         // if for some reason execution is slow between calculation of expected and actual
         expect(actualExpiresDate.slice(0,23)).toBe(expectedExpiresDate.slice(0,23))
 
