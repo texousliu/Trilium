@@ -46,24 +46,13 @@
   "description": "Build your personal knowledge base with TriliumNext Notes",
   "nx": {
     "targets": {
+      "postbuild": {
+        "dependsOn": [ "build" ],
+        "command": "electron-rebuild apps/desktop/dist/main.js -m apps/desktop/dist"
+      },
       "serve": {
-        "executor": "@nx/js:node",
-        "defaultConfiguration": "development",
-        "dependsOn": [
-          "build"
-        ],
-        "options": {
-          "buildTarget": "@triliumnext/desktop:build",
-          "runBuildTargetDependencies": false
-        },
-        "configurations": {
-          "development": {
-            "buildTarget": "@triliumnext/desktop:build:development"
-          },
-          "production": {
-            "buildTarget": "@triliumnext/desktop:build:production"
-          }
-        }
+        "dependsOn": [ "postbuild" ],
+        "command": "electron apps/desktop/dist/main.js"
       },
       "electron-forge:make": {
         "dependsOn": [ "build" ],
