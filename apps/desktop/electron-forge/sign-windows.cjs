@@ -18,6 +18,7 @@ module.exports = function (filePath) {
     try {
         child_process.execSync(command);
     } catch (e) {
-        console.error("[Sign]", e.output.toString("utf-8"));
+        console.error("[Sign] Got error while signing " + e.output.toString("utf-8"));
+        process.exit(1);
     }
 }
