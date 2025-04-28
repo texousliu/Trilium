@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import becca from "../becca/becca.js";
 import sql from "./sql.js";
 import migration from "./migration.js";
 import cls from "./cls.js";

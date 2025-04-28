@@ -3,7 +3,6 @@ import supertest from "supertest";
 import { initializeTranslations } from "../services/i18n.js";
 import type { Application, Request, Response, NextFunction } from "express";
 import { safeExtractMessageAndStackFromError } from "../services/utils.js";
-import buildApp from "../app.js";
 
 let app: Application;
 
@@ -12,6 +11,7 @@ describe("Share API test", () => {
 
     beforeAll(async () => {
         initializeTranslations();
+        const buildApp = (await import("../app.js")).default;
         app = await buildApp();
         app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
             const [ errMessage ] = safeExtractMessageAndStackFromError(err);

@@ -3,7 +3,6 @@ import supertest from "supertest";
 import { initializeTranslations } from "../services/i18n.js";
 import type { Application } from "express";
 import dayjs from "dayjs";
-import buildApp from "../app.js";
 
 let app: Application;
 
@@ -11,6 +10,7 @@ describe("Login Route test", () => {
 
     beforeAll(async () => {
         initializeTranslations();
+        const buildApp = (await import("../app.js")).default;
         app = await buildApp();
     });
 
