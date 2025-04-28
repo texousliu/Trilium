@@ -54,7 +54,7 @@ class IndexService {
                 return;
             }
 
-            const aiEnabled = await options.getOptionBool('aiEnabled');
+            const aiEnabled = options.getOptionOrNull('aiEnabled') === "true";
             if (!aiEnabled) {
                 log.info("Index service: AI features disabled, skipping initialization");
                 return;

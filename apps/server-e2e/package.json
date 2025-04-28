@@ -1,10 +1,11 @@
 {
-  "name": "@triliumnext/client-e2e",
+  "name": "@triliumnext/server-e2e",
   "version": "0.0.1",
   "private": true,
   "nx": {
     "implicitDependencies": [
-      "@triliumnext/client"
+      "@triliumnext/client",
+      "@triliumnext/server"
     ]
   }
 }

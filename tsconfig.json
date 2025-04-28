@@ -16,16 +16,13 @@
       "path": "./packages/turndown-plugin-gfm"
     },
     {
-      "path": "./apps/client-e2e"
+      "path": "./apps/server-e2e"
     },
     {
       "path": "./apps/client"
     },
     {
       "path": "./apps/desktop"
-    },
-    {
-      "path": "./apps/desktop-e2e"
     }
   ]
 }

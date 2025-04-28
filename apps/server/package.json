@@ -150,6 +150,10 @@
         "dependsOn": [ "build" ],
         "command": "bash apps/server/scripts/build-server.sh"
       },
+      "start-prod": {
+        "dependsOn": [ "build" ],
+        "command": "node apps/server/dist/main.js"
+      },
       "docker-build": {
         "dependsOn": [
           "build"

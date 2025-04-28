@@ -3,7 +3,8 @@ import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
 
 // For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
+const port = process.env['TRILIUM_PORT'];
+const baseURL = process.env['BASE_URL'] || `http://localhost:${port}`;
 
 /**
  * Read environment variables from file.
@@ -24,8 +25,8 @@ export default defineConfig({
   },
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npx nx run @triliumnext/client:serve-static',
-    url: 'http://localhost:4200',
+    command: 'pnpm server:start-prod',
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot
   },
@@ -35,16 +36,16 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
 
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
+    // {
+    //   name: "firefox",
+    //   use: { ...devices["Desktop Firefox"] },
+    // },
 
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
-    
+    // {
+    //   name: "webkit",
+    //   use: { ...devices["Desktop Safari"] },
+    // },
+
     // Uncomment for mobile browsers support
     /* {
       name: 'Mobile Chrome',
