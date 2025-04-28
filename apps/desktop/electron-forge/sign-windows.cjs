@@ -3,17 +3,14 @@ const { default: e } = require("express");
 const fs = require("fs");
 const path = require("path");
 
+const LOG_LOCATION = "c:\\ev_signer_trilium\\ev_signer_trilium.err.log";
+
 module.exports = function (sourcePath) {
     const { WINDOWS_SIGN_EXECUTABLE } = process.env;
     if (!WINDOWS_SIGN_EXECUTABLE) {
         console.warn("[Sign] Skip signing due to missing environment variable.");
         return;
-    }    
-
-    const buffer = fs.readFileSync(sourcePath);
-    console.log("Platform: ", process.platform);
-    console.log("CPU archi:", process.arch);
-    console.log("DLL archi: ", getDllArchitectureFromBuffer(buffer));
+    }
 
     try {
         const command = `${WINDOWS_SIGN_EXECUTABLE} --executable "${sourcePath}"`;
@@ -22,8 +19,24 @@ module.exports = function (sourcePath) {
         child_process.execSync(command);
     } catch (e) {
         console.error("[Sign] Got error while signing " + e.output.toString("utf-8"));
+        printSigningErrorLogs(sourcePath);
         process.exit(2); 
     }
+}
+
+function printSigningErrorLogs(sourcePath) {
+  const buffer = fs.readFileSync(sourcePath);
+  console.log("Platform: ", process.platform);
+  console.log("CPU archi:", process.arch);
+  console.log("DLL archi: ", getDllArchitectureFromBuffer(buffer));
+
+  if (!fs.existsSync(LOG_LOCATION)) {
+    console.warn("[Sign] No debug log file found.");
+    return;
+  }
+
+  const logContent = fs.readFileSync(LOG_LOCATION, "utf-8");
+  console.error("[Sign] Debug log content:\n" + logContent);
 }
 
 function getDllArchitectureFromBuffer(buffer) {
