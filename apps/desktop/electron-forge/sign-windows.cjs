@@ -13,6 +13,8 @@ module.exports = function (filePath) {
     console.log(filePath, fs.realpathSync(filePath));
     filePath = fs.realpathSync(filePath);
 
+    console.log(fs.readFileSync(filePath).subarray(0, 100));
+
     const command = `${WINDOWS_SIGN_EXECUTABLE} --executable "${filePath}"`;
     console.log(`[Sign] ${command}`);
 
