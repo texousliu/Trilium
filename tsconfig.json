@@ -23,6 +23,9 @@
     },
     {
       "path": "./apps/desktop"
+    },
+    {
+      "path": "./apps/dump-db"
     }
   ]
 }
