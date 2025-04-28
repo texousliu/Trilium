@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
-import i18next from "i18next";
-import { beforeAll,describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type BNote from "../becca/entities/bnote.js";
 import dateNotesService from "./date_notes.js";
@@ -37,20 +36,6 @@ const mockRootNote = {
 } as unknown as BNote;
 
 describe("date_notes", () => {
-    beforeAll(async () => {
-        await i18next.init({
-            lng: "en",
-            resources: {
-                en: {
-                    translation: {
-                        "months.march": "March",
-                        "weekdays.saturday": "Saturday"
-                    }
-                }
-            }
-        });
-    });
-
     describe("getJournalNoteTitle", () => {
         const testDate = dayjs("2025-03-15"); // Saturday
 
