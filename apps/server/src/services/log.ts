@@ -2,9 +2,9 @@
 
 import type { Request, Response } from "express";
 import fs from "fs";
+import { EOL } from "os";
 import dataDir from "./data_dir.js";
 import cls from "./cls.js";
-import { isWindows } from "./utils.js";
 
 if (!fs.existsSync(dataDir.LOG_DIR)) {
     fs.mkdirSync(dataDir.LOG_DIR, 0o700);
@@ -16,8 +16,6 @@ const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
-
-const NEW_LINE = isWindows ? "\r\n" : "\n";
 
 let todaysMidnight!: Date;
 
@@ -62,7 +60,7 @@ function log(str: string | Error) {
 
     millisSinceMidnight = checkDate(millisSinceMidnight);
 
-    logFile.write(`${formatTime(millisSinceMidnight)} ${str}${NEW_LINE}`);
+    logFile.write(`${formatTime(millisSinceMidnight)} ${str}${EOL}`);
 
     console.log(str);
 }
