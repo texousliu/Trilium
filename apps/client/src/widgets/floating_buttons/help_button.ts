@@ -1,8 +1,7 @@
-import appContext, { type EventData } from "../../components/app_context.js";
+import { type EventData } from "../../components/app_context.js";
 import type FNote from "../../entities/fnote.js";
 import type { NoteType } from "../../entities/fnote.js";
 import { t } from "../../services/i18n.js";
-import type { ViewScope } from "../../services/link.js";
 import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
 
