@@ -1,8 +1,0 @@
-{
-    "compilerOptions": {
-        "module": "NodeNext",
-        "declaration": true,
-        "outDir": "build",
-    },
-    "include": [ "./src/**/*.ts" ]
-}

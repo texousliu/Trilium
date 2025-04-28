@@ -1,7 +1,14 @@
 {
   "name": "@triliumnext/client",
   "version": "0.0.1",
+  "description": "JQuery-based client for TriliumNext, used for both web and desktop (via Electron)",
   "private": true,
+  "license": "AGPL-3.0-only",
+  "author": {
+    "name": "TriliumNext Notes Team",
+    "email": "contact@eliandoran.me",
+    "url": "https://github.com/TriliumNext/Notes"
+  },
   "dependencies": {
     "@eslint/js": "9.25.0",
     "@excalidraw/excalidraw": "0.18.0",

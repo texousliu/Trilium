@@ -1,6 +1,7 @@
 {
   "name": "@triliumnext/server",
   "version": "0.0.1",
+  "description": "Desktop client for TriliumNext, embedding both the client and the server.",
   "private": true,
   "dependencies": {    
     "better-sqlite3": "11.9.1",
