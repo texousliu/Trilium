@@ -3,7 +3,7 @@ FROM node:22.14.0-alpine AS builder
 
     # Install native dependencies since we might be building cross-platform.
     WORKDIR /usr/src/app
-    COPY /apps/server/dist/package.json /apps/server/dist/pnpm-lock.yaml /usr/src/app/
+    COPY ./dist/package.json ./dist/pnpm-lock.yaml /usr/src/app/
     RUN pnpm install --frozen-lockfile --prod && pnpm rebuild
 
 FROM node:22.14.0-alpine
@@ -11,10 +11,10 @@ FROM node:22.14.0-alpine
     RUN apk add --no-cache su-exec shadow
 
     WORKDIR /usr/src/app
-    COPY /apps/server/dist /usr/src/app
+    COPY ./dist /usr/src/app
     RUN rm -rf /usr/src/app/node_modules/better-sqlite3
     COPY --from=builder /usr/src/app/node_modules/better-sqlite3 /usr/src/app/node_modules/better-sqlite3
-    COPY /apps/server/start-docker.sh /usr/src/app
+    COPY ./start-docker.sh /usr/src/app
 
     # Add application user
     RUN adduser -s /bin/false node; exit 0
