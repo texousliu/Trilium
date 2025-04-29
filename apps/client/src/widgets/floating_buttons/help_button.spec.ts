@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { byBookType, byNoteType } from "./help_button.js";
 import fs from "fs";
 import type { HiddenSubtreeItem } from "@triliumnext/commons";
+import path from "path";
 
 describe("Help button", () => {
     it("All help notes are accessible", () => {
@@ -24,7 +25,8 @@ describe("Help button", () => {
             ...Object.values(byBookType)
         ].filter((noteId) => noteId) as string[];
 
-        const meta: HiddenSubtreeItem[] = JSON.parse(fs.readFileSync("src/public/app/doc_notes/en/User Guide/!!!meta.json", "utf-8"));
+        const metaPath = path.resolve(path.join(__dirname, "../../../../server/src/public/app/doc_notes/en/User Guide/!!!meta.json"));
+        const meta: HiddenSubtreeItem[] = JSON.parse(fs.readFileSync(metaPath, "utf-8"));
         const allNoteIds = new Set(getNoteIds(meta));
 
         for (const helpNote of allHelpNotes) {
