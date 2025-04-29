@@ -47,12 +47,31 @@
   "nx": {
     "targets": {
       "postbuild": {
+        "executor": "nx:run-commands",
         "dependsOn": [ "build" ],
-        "command": "electron-rebuild apps/desktop/dist/main.js -m apps/desktop/dist"
+        "defaultConfiguration": "default",
+        "cache": true,
+        "configurations": {
+          "default": {
+            "command": "electron-rebuild apps/desktop/dist/main.js -m apps/desktop/dist"
+          },
+          "nixos": {
+            "command": "electron-rebuild -v $(nix-shell -p electron_35 --run \"electron --version\") apps/desktop/dist/main.js -m apps/desktop/dist"
+          }
+        }        
       },
       "serve": {
         "dependsOn": [ "postbuild" ],
-        "command": "electron apps/desktop/dist/main.js"
+        "configurations": {
+          "default": {
+            "command": "electron apps/desktop/dist/main.js"
+          },
+          "nixos": {
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.js\"",
+            "cwd": ".",
+            "forwardAllArgs": false
+          }
+        }
       },
       "electron-forge:make": {
         "dependsOn": [ "build" ],
