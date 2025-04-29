@@ -3,7 +3,7 @@ FROM node:22.14.0-alpine AS builder
 
     # Install native dependencies since we might be building cross-platform.
     WORKDIR /usr/src/app
-    COPY /apps/server/dist/package.json /apps/server/dist/pnpm-lock.yaml /apps/server/pnpm-workspace.yaml /usr/src/app/
+    COPY /apps/server/dist/package.json /apps/server/dist/pnpm-lock.yaml /usr/src/app/
     RUN pnpm install --frozen-lockfile --prod && pnpm rebuild
 
 FROM node:22.14.0-alpine
