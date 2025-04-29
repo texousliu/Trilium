@@ -1,7 +1,6 @@
 # Build stage
-FROM node:22.14.0-bullseye-slim AS builder
 
-WORKDIR /usr/src/app/build
+
 
 # Copy only necessary files for build
 COPY . .

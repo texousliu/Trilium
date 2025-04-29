@@ -159,9 +159,18 @@
         "dependsOn": [
           "build"
         ],
-        "command": "docker build . -t triliumnext",
         "options": {
           "cwd": "{projectRoot}"
+        },
+        "executor": "nx:run-commands",
+        "defaultConfiguration": "alpine",
+        "configurations": {
+          "debian": {
+            "command": "docker build . -t triliumnext -f Dockerfile"
+          },
+          "alpine": {
+            "command": "docker build . -t triliumnext -f Dockerfile.alpine"
+          }
         }
       },
       "docker-start": {
