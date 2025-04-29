@@ -12,11 +12,18 @@ on:
     paths:
       - .github/actions/build-electron/*
       - forge.config.cjs
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   GITHUB_UPLOAD_URL: https://uploads.github.com/repos/TriliumNext/Notes/releases/179589950/assets{?name,label}
   GITHUB_RELEASE_ID: 179589950
+
 permissions:
   contents: write
+
 jobs:
   nightly-electron:
     name: Deploy nightly
