@@ -142,6 +142,8 @@ jobs:
 
       - name: Update build info
         run: pnpm run chore:update-build-info
+      - name: Trigger build
+        run: pnpm nx run @triliumnext/server:build
 
       - name: Set IMAGE_NAME to lowercase
         run: echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
@@ -154,7 +156,7 @@ jobs:
       - name: Build and export to Docker
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: apps/server
           file: ${{ matrix.dockerfile }}
           load: true
           tags: ${{ env.TEST_TAG }}
