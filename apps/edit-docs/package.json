@@ -1,0 +1,36 @@
+{
+  "name": "@triliumnext/edit-docs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@triliumnext/client": "workspace:*",
+    "@triliumnext/desktop": "workspace:*",
+    "@types/fs-extra": "11.0.4",
+    "fs-extra": "11.3.0"
+  },
+  "nx": {
+    "name": "edit-docs",
+    "targets": {
+      "serve": {
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "edit-docs:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "edit-docs:build:development"
+          },
+          "production": {
+            "buildTarget": "edit-docs:build:production"
+          }
+        }
+      }
+    }
+  }
+}

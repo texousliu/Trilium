@@ -1,7 +1,6 @@
 import fs from "fs/promises";
 import fsExtra from "fs-extra";
 import path from "path";
-import type NoteMeta from "@triliumnext/server/src/services/meta/note_meta.js";
 import type { NoteMetaFile } from "@triliumnext/server/src/services/meta/note_meta.js";
 import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js";
 import archiver, { type Archiver } from "archiver";
@@ -233,4 +232,4 @@ async function registerHandlers() {
     });
 }
 
-await main();
+main();

@@ -16,7 +16,7 @@ export function initializeDatabase(skipDemoDb: boolean) {
 }
 
 export async function startElectron() {
-    await import("@triliumnext/electron/src/electron-main.js");
+    await import("@triliumnext/desktop/src/electron-main.js");
 }
 
 export async function extractZip(zipFilePath: string, outputPath: string, ignoredFiles?: Set<string>) {

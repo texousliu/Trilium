@@ -26,6 +26,9 @@
     },
     {
       "path": "./apps/dump-db"
+    },
+    {
+      "path": "./apps/edit-docs"
     }
   ]
 }
