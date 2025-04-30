@@ -3,10 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
+    "@electron/rebuild": "3.7.2",
     "@triliumnext/client": "workspace:*",
     "@triliumnext/desktop": "workspace:*",
     "@types/fs-extra": "11.0.4",
     "copy-webpack-plugin": "13.0.0",
+    "electron": "35.1.5",
     "fs-extra": "11.3.0"
   },
   "nx": {
@@ -21,10 +23,12 @@
         "cache": true,
         "configurations": {
           "default": {
-            "command": "electron-rebuild -f {projectRoot}/dist/main.js -m {projectRoot}/dist"
+            "command": "electron-rebuild",
+            "cwd": "{projectRoot}/dist"
           },
           "nixos": {
-            "command": "electron-rebuild -f -v $(nix-shell -p electron_35 --run \"electron --version\") ${projectRoot}/dist/main.js -m ${projectRoot}/dist"
+            "command": "electron-rebuild -v $(nix-shell -p electron_35 --run \"electron --version\")",
+            "cwd": "{projectRoot}/dist"
           }
         }
       },
@@ -37,15 +41,18 @@
         "configurations": {
           "default": {
             "command": "electron .",
-            "cwd": "{projectRoot}/dist"
+            "cwd": "./apps/edit-docs/dist"
           },
           "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.js\"",
-            "cwd": ".",
-            "forwardAllArgs": false
+            "command": "nix-shell -p electron_35 --run \"electron .\"",
+            "forwardAllArgs": false,
+            "cwd": "./apps/edit-docs/dist"
           }
         }
       }
     }
+  },
+  "dependencies": {
+    "archiver": "7.0.1"
   }
 }

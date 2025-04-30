@@ -12,6 +12,7 @@ import type { AdvancedExportOptions } from "@triliumnext/server/src/services/exp
 import TaskContext from "@triliumnext/server/src/services/task_context.js";
 import { deferred } from "@triliumnext/server/src/services/utils.js";
 import { parseNoteMetaFile } from "@triliumnext/server/src/services/in_app_help.js";
+import { resolve } from "path";
 
 interface NoteMapping {
     rootNoteId: string;
@@ -21,27 +22,32 @@ interface NoteMapping {
     exportOnly?: boolean;
 }
 
+const { DOCS_ROOT, USER_GUIDE_ROOT } = process.env;
+if (!DOCS_ROOT || !USER_GUIDE_ROOT) {
+    throw new Error("Missing DOCS_ROOT or USER_GUIDE_ROOT environment variable.");
+}
+
 const NOTE_MAPPINGS: NoteMapping[] = [
     {
         rootNoteId: "pOsGYCXsbNQG",
-        path: path.join("docs", "User Guide"),
+        path: path.join(DOCS_ROOT, "User Guide"),
         format: "markdown"
     },
     {
         rootNoteId: "pOsGYCXsbNQG",
-        path: path.join("src", "public", "app", "doc_notes", "en", "User Guide"),
+        path: USER_GUIDE_ROOT,
         format: "html",
         ignoredFiles: ["index.html", "navigation.html", "style.css", "User Guide.html"],
         exportOnly: true
     },
     {
         rootNoteId: "jdjRLhLV3TtI",
-        path: path.join("docs", "Developer Guide"),
+        path: path.join(DOCS_ROOT, "Developer Guide"),
         format: "markdown"
     },
     {
         rootNoteId: "hD3V4hiu2VW4",
-        path: path.join("docs", "Release Notes"),
+        path: path.join(DOCS_ROOT, "Release Notes"),
         format: "markdown"
     }
 ];
@@ -96,6 +102,7 @@ async function createImportZip(path: string) {
         zlib: { level: 0 }
     });
 
+    console.log("Archive path is ", resolve(path))
     archive.directory(path, "/");
 
     const outputStream = fsExtra.createWriteStream(inputFile);

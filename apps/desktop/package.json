@@ -53,10 +53,10 @@
         "cache": true,
         "configurations": {
           "default": {
-            "command": "electron-rebuild {projectRoot}/dist/main.js -m {projectRoot}/dist"
+            "command": "electron-rebuild -f {projectRoot}/dist/main.js -m {projectRoot}/dist"
           },
           "nixos": {
-            "command": "electron-rebuild -v $(nix-shell -p electron_35 --run \"electron --version\") ${projectRoot}/dist/main.js -m ${projectRoot}/dist"
+            "command": "electron-rebuild -f -v $(nix-shell -p electron_35 --run \"electron --version\") ${projectRoot}/dist/main.js -m ${projectRoot}/dist"
           }
         }        
       },
