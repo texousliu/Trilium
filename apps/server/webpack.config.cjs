@@ -58,6 +58,9 @@ module.exports = {
       optimization: false,
       outputHashing: 'none',
       generatePackageJson: true,
+      additionalEntryPoints: [
+        "./src/docker_healthcheck.ts"
+      ],
       externalDependencies: [
         "electron/main",
         "@electron/remote/main",

@@ -1,5 +1,5 @@
 import http from "http";
-import config from "./src/services/config.js";
+import config from "./services/config.js";
 
 if (config.Network.https) {
     // built-in TLS (terminated by trilium) is not supported yet, PRs are welcome
@@ -7,8 +7,8 @@ if (config.Network.https) {
     process.exit(0);
 }
 
-import port from "./src/services/port.js";
-import host from "./src/services/host.js";
+import port from "./services/port.js";
+import host from "./services/host.js";
 
 const options: http.RequestOptions = { timeout: 2000 };
 
