@@ -124,8 +124,9 @@
     "copy-webpack-plugin": "13.0.0"
   },
   "nx": {
+    "name": "server",
     "implicitDependencies": [
-      "@triliumnext/client"
+      "client"
     ],
     "targets": {
       "serve": {
@@ -135,15 +136,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@triliumnext/server:build",
+          "buildTarget": "server:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@triliumnext/server:build:development"
+            "buildTarget": "server:build:development"
           },
           "production": {
-            "buildTarget": "@triliumnext/server:build:production"
+            "buildTarget": "server:build:production"
           }
         }
       },

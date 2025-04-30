@@ -9,7 +9,7 @@
     "client:build": "nx build client",
     "server:build": "nx build server",
     "server:start": "nx run-many --target=serve --projects=client,server --parallel",
-    "server:start-prod": "nx run @triliumnext/server:start-prod",
+    "server:start-prod": "nx run server:start-prod",
     "electron:build": "nx build desktop",
     "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
     "chore:update-build-info": "tsx ./scripts/update-build-info.ts",

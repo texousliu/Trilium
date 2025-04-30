@@ -59,5 +59,8 @@
     "@types/react-dom": "18.3.6",
     "happy-dom": "17.4.4",
     "script-loader": "0.7.2"
+  },
+  "nx": {
+    "name": "client"
   }
 }

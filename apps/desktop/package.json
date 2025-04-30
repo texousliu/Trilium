@@ -45,6 +45,7 @@
   },
   "description": "Build your personal knowledge base with TriliumNext Notes",
   "nx": {
+    "name": "desktop",
     "targets": {
       "postbuild": {
         "executor": "nx:run-commands",

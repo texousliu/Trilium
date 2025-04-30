@@ -33,6 +33,7 @@
     "gfm"
   ],
   "nx": {
+    "name": "turndown-plugin-gfm",
     "sourceRoot": "packages/turndown-plugin-gfm/src",
     "targets": {
       "build": {

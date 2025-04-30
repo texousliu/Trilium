@@ -23,6 +23,7 @@
     "url": "https://github.com/TriliumNext/Notes"
   },
   "nx": {
+    "name": "commons",
     "sourceRoot": "packages/commons/src",
     "targets": {
       "build": {
