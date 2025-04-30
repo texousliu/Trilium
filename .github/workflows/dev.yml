@@ -157,7 +157,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: apps/server
-          file: ${{ matrix.dockerfile }}
+          file: apps/server/${{ matrix.dockerfile }}
           load: true
           tags: ${{ env.TEST_TAG }}
           cache-from: type=gha
