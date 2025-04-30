@@ -1,5 +1,8 @@
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const { join } = require('path');
+
+const outputDir = join(__dirname, 'dist');
 
 module.exports = {
   output: {
@@ -14,6 +17,17 @@ module.exports = {
       optimization: false,
       outputHashing: 'none',
       generatePackageJson: true,
+      externalDependencies: [
+        "better-sqlite3"
+      ]
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: "../desktop/dist/node_modules",
+          to: join(outputDir, "node_modules")
+        },
+      ]
     })
   ],
 };

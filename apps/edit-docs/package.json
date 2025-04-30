@@ -6,14 +6,45 @@
     "@triliumnext/client": "workspace:*",
     "@triliumnext/desktop": "workspace:*",
     "@types/fs-extra": "11.0.4",
+    "copy-webpack-plugin": "13.0.0",
     "fs-extra": "11.3.0"
   },
   "nx": {
     "name": "edit-docs",
     "targets": {
+      "postbuild": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "build"
+        ],
+        "defaultConfiguration": "default",
+        "cache": true,
+        "configurations": {
+          "default": {
+            "command": "electron-rebuild -f {projectRoot}/dist/main.js -m {projectRoot}/dist"
+          },
+          "nixos": {
+            "command": "electron-rebuild -f -v $(nix-shell -p electron_35 --run \"electron --version\") ${projectRoot}/dist/main.js -m ${projectRoot}/dist"
+          }
+        }
+      },
       "serve": {
-        "dependsOn": [ "build" ],
-        "command": "electron {projectRoot}/dist/main"
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "postbuild"
+        ],
+        "defaultConfiguration": "default",
+        "configurations": {
+          "default": {
+            "command": "electron .",
+            "cwd": "{projectRoot}/dist"
+          },
+          "nixos": {
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.js\"",
+            "cwd": ".",
+            "forwardAllArgs": false
+          }
+        }
       }
     }
   }

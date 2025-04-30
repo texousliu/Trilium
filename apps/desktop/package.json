@@ -53,18 +53,21 @@
         "cache": true,
         "configurations": {
           "default": {
-            "command": "electron-rebuild apps/desktop/dist/main.js -m apps/desktop/dist"
+            "command": "electron-rebuild {projectRoot}/dist/main.js -m {projectRoot}/dist"
           },
           "nixos": {
-            "command": "electron-rebuild -v $(nix-shell -p electron_35 --run \"electron --version\") apps/desktop/dist/main.js -m apps/desktop/dist"
+            "command": "electron-rebuild -v $(nix-shell -p electron_35 --run \"electron --version\") ${projectRoot}/dist/main.js -m ${projectRoot}/dist"
           }
         }        
       },
       "serve": {
+        "executor": "nx:run-commands",
         "dependsOn": [ "postbuild" ],
+        "defaultConfiguration": "default",
         "configurations": {
           "default": {
-            "command": "electron apps/desktop/dist/main.js"
+            "command": "electron .",
+            "cwd": "{projectRoot}/dist"
           },
           "nixos": {
             "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.js\"",
