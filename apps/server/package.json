@@ -166,10 +166,10 @@
         "defaultConfiguration": "alpine",
         "configurations": {
           "debian": {
-            "command": "docker build . -t triliumnext -f Dockerfile"
+            "command": "docker build . -t triliumnext-debian -f Dockerfile"
           },
           "alpine": {
-            "command": "docker build . -t triliumnext -f Dockerfile.alpine"
+            "command": "docker build . -t triliumnext-alpine -f Dockerfile.alpine"
           }
         }
       },
@@ -177,7 +177,16 @@
         "dependsOn": [
           "docker-build"
         ],
-        "command": "docker run -p 8081:8080 triliumnext"
+        "executor": "nx:run-commands",
+        "defaultConfiguration": "alpine",
+        "configurations": {
+          "debian": {
+            "command": "docker run -p 8081:8080 triliumnext-debian"
+          },
+          "alpine": {
+            "command": "docker run -p 8081:8080 triliumnext-alpine"
+          }
+        }
       }
     }
   }

@@ -3,7 +3,7 @@ FROM node:22.14.0-bullseye-slim AS builder
 
     # Install native dependencies since we might be building cross-platform.
     WORKDIR /usr/src/app/build
-    COPY ./dist/package.json ./dist/pnpm-lock.yaml /usr/src/app/
+    COPY ./dist/package.json ./dist/pnpm-lock.yaml ./docker/pnpm-workspace.yaml /usr/src/app/
     RUN pnpm install --frozen-lockfile --prod && pnpm rebuild
 
 FROM node:22.14.0-bullseye-slim
