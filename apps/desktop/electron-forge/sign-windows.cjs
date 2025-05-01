@@ -1,38 +1,29 @@
 const child_process = require("child_process");
-const path = require("path");
-const { WINDOWS_SIGN_EXECUTABLE } = process.env;
+const fs = require("fs");
+const { default: path } = require("path");
 
-function sign(sourcePath) {
+module.exports = function (filePath) {
+    const { WINDOWS_SIGN_EXECUTABLE } = process.env;
+
+    const stats = fs.lstatSync(filePath);
+    console.log(filePath, stats);
+
     if (!WINDOWS_SIGN_EXECUTABLE) {
         console.warn("[Sign] Skip signing due to missing environment variable.");
         return;
     }
 
-    if (path.extname(sourcePath) !== ".exe") {
-        console.warn("[Sign] Unsupported extension for signing: ", sourcePath);
-        return;
+    const outputDir = path.join(__dirname, "sign");
+    console.log("Output dir is ", path.resolve(outputDir));
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir);
     }
 
-    try {
-        const command = `${WINDOWS_SIGN_EXECUTABLE} --executable "${sourcePath}"`;
-        child_process.execSync(command);        
-        console.log(`[Sign] ${command}: SUCCESS`);
-    } catch (e) {
-        console.error(`[Sign] ${command}: FAILED: `, e.output.toString("utf-8"));
-        printSigningErrorLogs();
-    }
+    fs.copyFileSync(sourcePath, destPath);
+
+    const command = `${WINDOWS_SIGN_EXECUTABLE} --executable "${filePath}"`;
+    console.log(`[Sign] ${command}`);
+
+    const output = child_process.execSync(command);
+    console.log(`[Sign] ${output}`);
 }
-
-function printSigningErrorLogs() {
-    const logLocation = path.join(path.dirname(WINDOWS_SIGN_EXECUTABLE), "ev_signer_trilium.err.log");
-
-    if (!fs.existsSync(logLocation)) {
-        console.warn("[Sign] No debug log file found.");
-        return;
-    }
-
-    const logContent = fs.readFileSync(logLocation, "utf-8");
-    console.error("[Sign] Debug log content:\n" + logContent);
-}
-
-module.exports = sign;
