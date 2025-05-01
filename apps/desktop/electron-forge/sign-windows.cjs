@@ -1,75 +1,35 @@
 const child_process = require("child_process");
-const { default: e } = require("express");
 const fs = require("fs");
 const path = require("path");
 
-const LOG_LOCATION = "c:\\ev_signer_trilium\\ev_signer_trilium.err.log";
-
-module.exports = function (sourcePath) {
+function sign(sourcePath) {
     const { WINDOWS_SIGN_EXECUTABLE } = process.env;
     if (!WINDOWS_SIGN_EXECUTABLE) {
         console.warn("[Sign] Skip signing due to missing environment variable.");
         return;
     }
 
-    const outputDir = path.join(__dirname, "sign");
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir);
-    }
-
     try {
-        const destPath = path.join(outputDir, path.basename(sourcePath));
-        fs.copyFileSync(sourcePath, destPath);
         const command = `${WINDOWS_SIGN_EXECUTABLE} --executable "${sourcePath}"`;
         console.log(`[Sign] ${command}`);
-
         child_process.execSync(command);
     } catch (e) {
         console.error("[Sign] Got error while signing " + e.output.toString("utf-8"));
-        printSigningErrorLogs(sourcePath);
+        printSigningErrorLogs();
         process.exit(2); 
     }
 }
 
-function printSigningErrorLogs(sourcePath) {
-  const buffer = fs.readFileSync(sourcePath);
-  console.log("Platform: ", process.platform);
-  console.log("CPU archi:", process.arch);
-  console.log("DLL archi: ", getDllArchitectureFromBuffer(buffer));
+function printSigningErrorLogs() {
+  const logLocation = path.join(path.dirname(WINDOWS_SIGN_EXECUTABLE), "ev_signer_trilium.err.log");
 
-  if (!fs.existsSync(LOG_LOCATION)) {
+  if (!fs.existsSync(logLocation)) {
     console.warn("[Sign] No debug log file found.");
     return;
   }
 
-  const logContent = fs.readFileSync(LOG_LOCATION, "utf-8");
+  const logContent = fs.readFileSync(logLocation, "utf-8");
   console.error("[Sign] Debug log content:\n" + logContent);
 }
 
-function getDllArchitectureFromBuffer(buffer) {
-    // Check for MZ header
-    if (buffer[0] !== 0x4D || buffer[1] !== 0x5A) {
-      return 'Not a PE file (missing MZ header)';
-    }
-  
-    // Offset to PE header
-    const peHeaderOffset = buffer.readUInt32LE(0x3C);
-  
-    // Confirm PE signature
-    const peSig = buffer.toString('utf8', peHeaderOffset, peHeaderOffset + 4);
-    if (peSig !== 'PE\u0000\u0000') {
-      return 'Invalid PE header';
-    }
-  
-    // Machine field is 2 bytes at PE header + 4
-    const machine = buffer.readUInt16LE(peHeaderOffset + 4);
-  
-    const archMap = {
-      0x014c: 'x86 (32-bit)',
-      0x8664: 'x64 (64-bit)',
-      0x01c4: 'ARM (32-bit)',
-      0xaa64: 'ARM64',
-    };
-  
-    return archMap[machine] || `Unknown (0x${machine.toString(16)})`;
-  }
+module.exports = sign;
