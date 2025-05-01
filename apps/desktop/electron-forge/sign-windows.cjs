@@ -1,9 +1,8 @@
 const child_process = require("child_process");
-const fs = require("fs");
-const path = require("path");
+const { default: path } = require("path");
+const { WINDOWS_SIGN_EXECUTABLE } = process.env;
 
 function sign(sourcePath) {
-    const { WINDOWS_SIGN_EXECUTABLE } = process.env;
     if (!WINDOWS_SIGN_EXECUTABLE) {
         console.warn("[Sign] Skip signing due to missing environment variable.");
         return;
