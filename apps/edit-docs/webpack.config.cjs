@@ -31,6 +31,10 @@ module.exports = {
           from: "../desktop/dist/node_modules",
           to: join(outputDir, "node_modules")
         },
+        {
+          from: "../desktop/dist/assets",
+          to: join(outputDir, "assets")
+        },
       ]
     })
   ],
