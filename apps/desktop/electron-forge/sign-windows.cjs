@@ -15,10 +15,10 @@ function sign(sourcePath) {
 
     try {
         const command = `${WINDOWS_SIGN_EXECUTABLE} --executable "${sourcePath}"`;
-        console.log(`[Sign] ${command}`);
-        child_process.execSync(command);
+        child_process.execSync(command);        
+        console.log(`[Sign] ${command}: SUCCESS`);
     } catch (e) {
-        console.error("[Sign] Got error while signing " + e.output.toString("utf-8"));
+        console.error(`[Sign] ${command}: FAILED: `, e.output.toString("utf-8"));
         printSigningErrorLogs();
     }
 }
