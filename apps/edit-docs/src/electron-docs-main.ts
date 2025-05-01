@@ -13,6 +13,8 @@ import TaskContext from "@triliumnext/server/src/services/task_context.js";
 import { deferred } from "@triliumnext/server/src/services/utils.js";
 import { parseNoteMetaFile } from "@triliumnext/server/src/services/in_app_help.js";
 import { resolve } from "path";
+import electron from "electron";
+import { onReady } from "@triliumnext/desktop/src/electron-main.js";
 
 interface NoteMapping {
     rootNoteId: string;
@@ -53,6 +55,8 @@ const NOTE_MAPPINGS: NoteMapping[] = [
 ];
 
 async function main() {
+    electron.app.on("ready", onReady);
+
     await initializeTranslations();
     await initializeDatabase(true);
 
@@ -68,7 +72,6 @@ async function main() {
     });
 
     await initializedPromise;
-    await startElectron();
 
     // Wait for the import to be finished and the application to be loaded before we listen to changes.
     setTimeout(() => registerHandlers(), 10_000);

@@ -31,31 +31,7 @@ async function main() {
         }
     });
 
-    electron.app.on("ready", async () => {
-        //    electron.app.setAppUserModelId('com.github.zadam.trilium');
-
-        // if db is not initialized -> setup process
-        // if db is initialized, then we need to wait until the migration process is finished
-        if (sqlInit.isDbInitialized()) {
-            await sqlInit.dbReady;
-
-            await windowService.createMainWindow(electron.app);
-
-            if (process.platform === "darwin") {
-                electron.app.on("activate", async () => {
-                    if (electron.BrowserWindow.getAllWindows().length === 0) {
-                        await windowService.createMainWindow(electron.app);
-                    }
-                });
-            }
-
-            tray.createTray();
-        } else {
-            await windowService.createSetupWindow();
-        }
-
-        await windowService.registerGlobalShortcuts();
-    });
+    electron.app.on("ready", onReady);
 
     electron.app.on("will-quit", () => {
         electron.globalShortcut.unregisterAll();
@@ -66,6 +42,32 @@ async function main() {
 
     await initializeTranslations();
     await import("@triliumnext/server/src/main.js");
+}
+
+export async function onReady() {
+    //    electron.app.setAppUserModelId('com.github.zadam.trilium');
+
+    // if db is not initialized -> setup process
+    // if db is initialized, then we need to wait until the migration process is finished
+    if (sqlInit.isDbInitialized()) {
+        await sqlInit.dbReady;
+
+        await windowService.createMainWindow(electron.app);
+
+        if (process.platform === "darwin") {
+            electron.app.on("activate", async () => {
+                if (electron.BrowserWindow.getAllWindows().length === 0) {
+                    await windowService.createMainWindow(electron.app);
+                }
+            });
+        }
+
+        tray.createTray();
+    } else {
+        await windowService.createSetupWindow();
+    }
+
+    await windowService.registerGlobalShortcuts();
 }
 
 main();

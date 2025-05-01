@@ -35,6 +35,10 @@ module.exports = {
           from: "../desktop/dist/assets",
           to: join(outputDir, "assets")
         },
+        {
+          from: "../desktop/dist/public",
+          to: join(outputDir, "public")
+        },
       ]
     })
   ],
