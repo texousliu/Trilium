@@ -25,7 +25,7 @@ describe("Help button", () => {
             ...Object.values(byBookType)
         ].filter((noteId) => noteId) as string[];
 
-        const metaPath = path.resolve(path.join(__dirname, "../../../../server/src/public/app/doc_notes/en/User Guide/!!!meta.json"));
+        const metaPath = path.resolve(path.join(__dirname, "../../../../server/src/assets/doc_notes/en/User Guide/!!!meta.json"));
         const meta: HiddenSubtreeItem[] = JSON.parse(fs.readFileSync(metaPath, "utf-8"));
         const allNoteIds = new Set(getNoteIds(meta));
 
