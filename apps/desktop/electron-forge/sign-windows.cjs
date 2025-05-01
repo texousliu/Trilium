@@ -1,5 +1,5 @@
 const child_process = require("child_process");
-const { default: path } = require("path");
+const path = require("path");
 const { WINDOWS_SIGN_EXECUTABLE } = process.env;
 
 function sign(sourcePath) {
