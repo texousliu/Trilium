@@ -9,7 +9,7 @@ require('dotenv').config({
 
 // For CI, you may want to set BASE_URL to the deployed application.
 const port = process.env['TRILIUM_PORT'];
-const baseURL = process.env['BASE_URL'] || `http://localhost:${port}`;
+const baseURL = process.env['BASE_URL'] || `http://127.0.0.1:${port}`;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
