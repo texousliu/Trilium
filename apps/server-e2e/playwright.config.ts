@@ -1,16 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
+import path from 'path';
+
+require('dotenv').config({
+    path: path.resolve(__dirname, ".env")
+});
 
 // For CI, you may want to set BASE_URL to the deployed application.
 const port = process.env['TRILIUM_PORT'];
 const baseURL = process.env['BASE_URL'] || `http://localhost:${port}`;
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
 
 /**
  * See https://playwright.dev/docs/test-configuration.

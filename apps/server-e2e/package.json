@@ -8,5 +8,8 @@
       "client",
       "server"
     ]
+  },
+  "devDependencies": {
+    "dotenv": "16.5.0"
   }
 }
