@@ -26,7 +26,6 @@ module.exports = function (sourcePath) {
     } catch (e) {
         console.error("[Sign] Got error while signing " + e.output.toString("utf-8"));
         printSigningErrorLogs(sourcePath);
-        process.exit(2); 
     }
 }
 
