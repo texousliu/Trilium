@@ -18,6 +18,10 @@ module.exports = {
       outputHashing: 'none',
       generatePackageJson: true,
       externalDependencies: [
+        "electron/main",
+        "@electron/remote/main",
+        "electron",
+        "@electron/remote",        
         "better-sqlite3"
       ]
     }),
