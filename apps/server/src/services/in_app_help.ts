@@ -2,16 +2,13 @@ import path from "path";
 import fs from "fs";
 import type NoteMeta from "./meta/note_meta.js";
 import type { NoteMetaFile } from "./meta/note_meta.js";
-import { fileURLToPath } from "url";
-import { isDev } from "./utils.js";
 import type BNote from "../becca/entities/bnote.js";
 import becca from "../becca/becca.js";
 import type { HiddenSubtreeItem } from "@triliumnext/commons";
+import { RESOURCE_DIR } from "./resource_dir.js";
 
 export function getHelpHiddenSubtreeData() {
-    const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-    const appDir = path.join(srcRoot, "public", isDev ? "app" : "app-dist");
-    const helpDir = path.join(appDir, "doc_notes", "en", "User Guide");
+    const helpDir = path.join(RESOURCE_DIR, "doc_notes", "en", "User Guide");
     const metaFilePath = path.join(helpDir, "!!!meta.json");
 
     try {
