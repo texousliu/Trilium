@@ -1,0 +1,6 @@
+{
+    "i18n-ally.localesPaths": [
+        "apps/server/src/assets/translations",
+        "apps/client/src/translations"
+    ]
+}
