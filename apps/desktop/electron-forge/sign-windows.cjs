@@ -1,12 +1,11 @@
 const child_process = require("child_process");
-const { default: e } = require("express");
 const fs = require("fs");
 const path = require("path");
 
 const LOG_LOCATION = "c:\\ev_signer_trilium\\ev_signer_trilium.err.log";
+const { WINDOWS_SIGN_EXECUTABLE } = process.env;
 
 module.exports = function (sourcePath) {
-    const { WINDOWS_SIGN_EXECUTABLE } = process.env;
     if (!WINDOWS_SIGN_EXECUTABLE) {
         console.warn("[Sign] Skip signing due to missing environment variable.");
         return;
@@ -32,10 +31,10 @@ module.exports = function (sourcePath) {
 }
 
 function printSigningErrorLogs(sourcePath) {
-  const buffer = fs.readFileSync(sourcePath);
   console.log("Platform: ", process.platform);
   console.log("CPU archi:", process.arch);
-  console.log("DLL archi: ", getDllArchitectureFromBuffer(buffer));
+  console.log("DLL archi: ", getDllArchitectureFromFile(sourcePath));
+  console.log("Signer archi: ", getDllArchitectureFromFile(WINDOWS_SIGN_EXECUTABLE));
 
   if (!fs.existsSync(LOG_LOCATION)) {
     console.warn("[Sign] No debug log file found.");
@@ -46,7 +45,9 @@ function printSigningErrorLogs(sourcePath) {
   console.error("[Sign] Debug log content:\n" + logContent);
 }
 
-function getDllArchitectureFromBuffer(buffer) {
+function getDllArchitectureFromFile(filePath) {
+    const buffer = fs.readFileSync(filePath);
+
     // Check for MZ header
     if (buffer[0] !== 0x4D || buffer[1] !== 0x5A) {
       return 'Not a PE file (missing MZ header)';
