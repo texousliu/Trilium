@@ -34,8 +34,7 @@
   },
   "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
   "scripts": {
-    "start-prod": "nx build desktop && cross-env TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=dist TRILIUM_PORT=37841 electron dist/main.js",
-    "rebuild": "electron-rebuild"
+    "start-prod": "nx build desktop && cross-env TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=dist TRILIUM_PORT=37841 electron dist/main.js"
   },
   "license": "AGPL-3.0-only",
   "author": {
@@ -47,7 +46,7 @@
   "nx": {
     "name": "desktop",
     "targets": {
-      "postbuild": {
+      "rebuild-deps": {
         "executor": "nx:run-commands",
         "dependsOn": [ "build" ],
         "defaultConfiguration": "default",
@@ -63,7 +62,7 @@
       },
       "serve": {
         "executor": "nx:run-commands",
-        "dependsOn": [ "postbuild" ],
+        "dependsOn": [ "rebuild-deps" ],
         "defaultConfiguration": "default",
         "configurations": {
           "default": {
