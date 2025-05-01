@@ -14,7 +14,7 @@ module.exports = function (filePath) {
     }
 
     const outputDir = path.join(__dirname, "sign");
-    console.log(path.resolve("Output dir is ", outputDir));
+    console.log("Output dir is ", path.resolve(outputDir));
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir);
     }
