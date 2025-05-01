@@ -1,10 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
-import path from 'path';
+import { resolve } from 'path';
 
 require('dotenv').config({
-    path: path.resolve(__dirname, ".env")
+    path: resolve(__dirname, ".env")
 });
 
 // For CI, you may want to set BASE_URL to the deployed application.
