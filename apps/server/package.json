@@ -53,7 +53,7 @@
     "@anthropic-ai/sdk": "0.40.1",
     "@braintree/sanitize-url": "7.1.1",
     "@triliumnext/commons": "workspace:*",
-    "@triliumnext/express-partial-content": "1.0.1",
+    "@triliumnext/express-partial-content": "workspace:*",
     "@triliumnext/turndown-plugin-gfm": "workspace:*",
     "archiver": "7.0.1",
     "async-mutex": "0.5.0",
