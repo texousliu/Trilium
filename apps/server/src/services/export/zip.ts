@@ -6,7 +6,7 @@ import path from "path";
 import mimeTypes from "mime-types";
 import mdService from "./markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
-import { getContentDisposition, escapeHtml } from "../utils.js";
+import { getContentDisposition, escapeHtml, getResourceDir } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
 import sanitize from "sanitize-filename";
 import fs from "fs";
@@ -20,7 +20,6 @@ import type AttachmentMeta from "../meta/attachment_meta.js";
 import type AttributeMeta from "../meta/attribute_meta.js";
 import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
-import { RESOURCE_DIR } from "../resource_dir.js";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
@@ -512,7 +511,7 @@ ${markdownContent}`;
             return;
         }
 
-        const cssContent = fs.readFileSync(`${RESOURCE_DIR}/libraries/ckeditor/ckeditor-content.css`);
+        const cssContent = fs.readFileSync(`${getResourceDir()}/public/libraries/ckeditor/ckeditor-content.css`);
 
         archive.append(cssContent, { name: cssMeta.dataFileName });
     }
