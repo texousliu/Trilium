@@ -10,7 +10,7 @@
 
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import rebuild from "@electron/rebuild"
+import { rebuild } from "@electron/rebuild"
 import { readFileSync } from "fs";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
