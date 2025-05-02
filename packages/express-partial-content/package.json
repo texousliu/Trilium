@@ -1,6 +1,7 @@
 {
   "name": "@triliumnext/express-partial-content",
   "version": "0.0.1",
+  "type": "module",
   "private": true,
   "main": "./dist/index.js",
   "module": "./dist/index.js",
