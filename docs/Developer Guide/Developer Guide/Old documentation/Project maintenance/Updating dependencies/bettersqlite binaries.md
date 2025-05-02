@@ -20,7 +20,7 @@ the module (for instance, using `npm rebuild` or `npm install`).
 
 Locally, this can be fixed by rebuilding the binaries, which is what `npm run switch-electron` does, which uses `electron-rebuild` under the hood.
 
-When the deliveries are built (see <a class="reference-link" href="../../Building%20and%20deployment/Build%20deliveries%20locally.md">Build deliveries locally</a>), it is not feasible to rebuild the dependencies since we are building for multiple platforms. Luckily, `better-sqlite3` provides these prebuilt binaries from us, available as artifacts on [their GitHub releases page](https://github.com/WiseLibs/better-sqlite3/releases/). 
+When the deliveries are built (see <a class="reference-link" href="../../Build%20deliveries%20locally.md">Build deliveries locally</a>), it is not feasible to rebuild the dependencies since we are building for multiple platforms. Luckily, `better-sqlite3` provides these prebuilt binaries from us, available as artifacts on [their GitHub releases page](https://github.com/WiseLibs/better-sqlite3/releases/). 
 
 The build script manages the natives for `better-sqlite3` by keeping a copy of the `.node` file for every platform in `bin/better-sqlite3`.
 
@@ -35,7 +35,7 @@ If you get errors during download, check on the [releases page](https://github.c
 To determine the `NODE_MODULE_VERSION` that is required, look for `This version of Node.js requires`  
 `NODE_MODULE_VERSION` in the error when starting Trilium via:
 
-*   `npm run start-electron` (or run any Electron [delivery](../../Building%20and%20deployment/Build%20deliveries%20locally.md)), case in which the `ELECTRON_VERSION` variable needs to be changed.
+*   `npm run start-electron` (or run any Electron [delivery](../../Build%20deliveries%20locally.md)), case in which the `ELECTRON_VERSION` variable needs to be changed.
 *   `npm run start-server` (or run the Linux server delivery), case in which the `NODE_VERSION` variable needs to be changed.
 
-Check which files got changed after running the update script and for each platform that got changed, test it locally via <a class="reference-link" href="../../Building%20and%20deployment/Build%20deliveries%20locally.md">Build deliveries locally</a> or via the CI.
+Check which files got changed after running the update script and for each platform that got changed, test it locally via <a class="reference-link" href="../../Build%20deliveries%20locally.md">Build deliveries locally</a> or via the CI.

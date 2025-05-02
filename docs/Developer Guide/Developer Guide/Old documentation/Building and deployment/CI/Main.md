@@ -2,7 +2,7 @@
 The main workflow of the CI:
 
 *   Builds the Docker image and publishes in the GitHub Docker registry.
-*   Builds using a portion of the [delivery script](../Build%20deliveries%20locally.md) artifacts for the following platforms:
+*   Builds using a portion of the [delivery script](../../Build%20deliveries%20locally.md) artifacts for the following platforms:
     *   Windows `x86_64` as .zip file
     *   Windows `x86_64` installer (using Squirrel)
     *   macOS `x86_64` and `aarch64`.
