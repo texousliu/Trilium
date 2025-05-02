@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check affected
+        run: pnpm nx affected -t=rebuild-deps
+
       - name: Run the build
         uses: ./.github/actions/build-electron
         with:
