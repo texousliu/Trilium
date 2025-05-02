@@ -42,11 +42,11 @@ module.exports = {
                 to: join(outputDir, "assets")
             },
             {
-              from: "../../node_modules/@electron/remote",
+              from: "node_modules/@electron/remote",
               to: join(outputDir, "node_modules/@electron/remote")
             },
             {
-              from: "../../node_modules/prebuild-install",
+              from: "node_modules/prebuild-install",
               to: join(outputDir, "node_modules/better-sqlite3/node_modules/prebuild-install")
             },
             {

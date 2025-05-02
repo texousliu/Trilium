@@ -36,7 +36,7 @@ function buildFilesToCopy() {
 
   for (const nodePath of nodePaths) {
     files.push({
-      from: join("..", "..", "node_modules", nodePath),
+      from: join("node_modules", nodePath),
       to: join(outputDir, "node_modules", nodePath)
     })
   }
