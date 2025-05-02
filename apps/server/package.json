@@ -1,9 +1,9 @@
 {
   "name": "@triliumnext/server",
-  "version": "0.0.1",
+  "version": "0.94.0",
   "description": "Desktop client for TriliumNext, embedding both the client and the server.",
   "private": true,
-  "dependencies": {    
+  "dependencies": {
     "better-sqlite3": "11.9.1",
     "jquery.fancytree": "2.38.5",
     "jquery-hotkeys": "0.2.2",
@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@electron/remote": "2.1.2",
-    "@excalidraw/excalidraw": "0.18.0",    
+    "@excalidraw/excalidraw": "0.18.0",
     "@types/archiver": "6.0.3",
     "@types/better-sqlite3": "7.6.13",
     "@types/cheerio": "0.22.35",
@@ -47,7 +47,7 @@
     "boxicons": "2.1.4",
     "codemirror": "5.65.19",
     "express-http-proxy": "2.1.1",
-    "jquery": "3.7.1",    
+    "jquery": "3.7.1",
     "katex": "0.16.22",
     "normalize.css": "8.0.1",
     "@anthropic-ai/sdk": "0.39.0",
@@ -57,7 +57,7 @@
     "@triliumnext/turndown-plugin-gfm": "workspace:*",
     "archiver": "7.0.1",
     "async-mutex": "0.5.0",
-    "axios": "1.8.4",
+    "axios": "1.9.0",
     "bindings": "1.5.0",
     "chardet": "2.1.0",
     "cheerio": "1.0.0",
@@ -65,7 +65,7 @@
     "cls-hooked": "4.2.2",
     "compression": "1.8.0",
     "cookie-parser": "1.4.7",
-    "csrf-csrf": "3.1.0",
+    "csrf-csrf": "3.2.2",
     "dayjs": "1.11.13",
     "debounce": "2.2.0",
     "debug": "4.4.0",
@@ -85,16 +85,16 @@
     "html2plaintext": "2.1.4",
     "http-proxy-agent": "7.0.2",
     "https-proxy-agent": "7.0.6",
-    "i18next": "25.0.0",
+    "i18next": "25.0.2",
     "i18next-fs-backend": "2.6.0",
     "image-type": "5.2.0",
     "ini": "5.0.0",
     "is-animated": "2.0.2",
-    "is-svg": "5.1.0",
+    "is-svg": "6.0.0",
     "jimp": "1.6.0",
     "js-yaml": "4.1.0",
     "jsdom": "26.1.0",
-    "marked": "15.0.8",
+    "marked": "15.0.11",
     "mime-types": "3.0.1",
     "multer": "1.4.5-lts.2",
     "normalize-strings": "1.1.1",
@@ -117,7 +117,7 @@
     "tmp": "0.2.3",
     "turndown": "7.2.0",
     "unescape": "1.0.1",
-    "webpack": "5.99.6",
+    "webpack": "5.99.7",
     "ws": "8.18.1",
     "xml2js": "0.6.2",
     "yauzl": "3.2.0",
@@ -149,11 +149,15 @@
         }
       },
       "package": {
-        "dependsOn": [ "build" ],
+        "dependsOn": [
+          "build"
+        ],
         "command": "bash apps/server/scripts/build-server.sh"
       },
       "start-prod": {
-        "dependsOn": [ "build" ],
+        "dependsOn": [
+          "build"
+        ],
         "command": "node apps/server/dist/main.js"
       },
       "docker-build": {

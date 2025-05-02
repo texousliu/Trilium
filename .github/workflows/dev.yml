@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed for https://github.com/marketplace/actions/nx-set-shas
 
       - uses: pnpm/action-setup@v4
       - name: Set up node & dependencies

@@ -10,7 +10,7 @@ importers:
     dependencies:
       axios:
         specifier: ^1.6.0
-        version: 1.8.4(debug@4.4.0)
+        version: 1.9.0(debug@4.4.0)
       express:
         specifier: ^4.21.2
         version: 4.21.2
@@ -23,7 +23,7 @@ importers:
         version: 20.8.0(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
       '@nx/esbuild':
         specifier: 20.8.0
-        version: 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
+        version: 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
       '@nx/eslint':
         specifier: 20.8.0
         version: 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(@zkochan/js-yaml@0.0.7)(eslint@9.25.1(jiti@2.4.2))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
@@ -44,13 +44,13 @@ importers:
         version: 20.8.0(@babel/traverse@7.27.0)(@playwright/test@1.52.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(@zkochan/js-yaml@0.0.7)(eslint@9.25.1(jiti@2.4.2))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)
       '@nx/vite':
         specifier: 20.8.0
-        version: 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)(vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vitest@3.1.2)
+        version: 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)(vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))(vitest@3.1.2)
       '@nx/web':
         specifier: 20.8.0
         version: 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
       '@nx/webpack':
         specifier: 20.8.0
-        version: 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(bufferutil@4.0.9)(esbuild@0.19.12)(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)
+        version: 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(bufferutil@4.0.9)(esbuild@0.25.3)(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)
       '@playwright/test':
         specifier: ^1.36.0
         version: 1.52.0
@@ -91,8 +91,8 @@ importers:
         specifier: 7.0.3
         version: 7.0.3
       esbuild:
-        specifier: ^0.19.2
-        version: 0.19.12
+        specifier: ^0.25.0
+        version: 0.25.3
       eslint:
         specifier: ^9.8.0
         version: 9.25.1(jiti@2.4.2)
@@ -124,8 +124,8 @@ importers:
         specifier: ^2.3.0
         version: 2.8.1
       tsx:
-        specifier: 4.19.3
-        version: 4.19.3
+        specifier: 4.19.4
+        version: 4.19.4
       typescript:
         specifier: ~5.7.2
         version: 5.7.3
@@ -134,10 +134,10 @@ importers:
         version: 8.31.0(eslint@9.25.1(jiti@2.4.2))(typescript@5.7.3)
       vite:
         specifier: ^6.0.0
-        version: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
+        version: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
       vitest:
         specifier: ^3.0.0
-        version: 3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
+        version: 3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
       webpack-cli:
         specifier: ^5.1.4
         version: 5.1.4(webpack-dev-server@5.2.1)(webpack@5.98.0)
@@ -173,7 +173,7 @@ importers:
         version: 0.1.7(mermaid@11.6.0)
       '@mind-elixir/node-menu':
         specifier: 1.0.5
-        version: 1.0.5(mind-elixir@4.5.1)
+        version: 1.0.5(mind-elixir@4.5.2)
       '@popperjs/core':
         specifier: 2.11.8
         version: 2.11.8
@@ -196,8 +196,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       eslint-linter-browserify:
-        specifier: 9.25.0
-        version: 9.25.0
+        specifier: 9.25.1
+        version: 9.25.1
       force-graph:
         specifier: 1.49.5
         version: 1.49.5
@@ -205,8 +205,8 @@ importers:
         specifier: 16.0.0
         version: 16.0.0
       i18next:
-        specifier: 25.0.0
-        version: 25.0.0(typescript@5.7.3)
+        specifier: 25.0.2
+        version: 25.0.2(typescript@5.7.3)
       i18next-http-backend:
         specifier: 3.0.2
         version: 3.0.2(encoding@0.1.13)
@@ -229,20 +229,20 @@ importers:
         specifier: 1.9.4
         version: 1.9.4
       leaflet-gpx:
-        specifier: 2.1.2
-        version: 2.1.2
+        specifier: 2.2.0
+        version: 2.2.0
       mark.js:
         specifier: 8.11.1
         version: 8.11.1
       marked:
-        specifier: 15.0.8
-        version: 15.0.8
+        specifier: 15.0.11
+        version: 15.0.11
       mermaid:
         specifier: 11.6.0
         version: 11.6.0
       mind-elixir:
-        specifier: 4.5.1
-        version: 4.5.1
+        specifier: 4.5.2
+        version: 4.5.2
       panzoom:
         specifier: 9.4.3
         version: 9.4.3
@@ -281,8 +281,8 @@ importers:
         specifier: 18.3.6
         version: 18.3.6(@types/react@18.3.20)
       happy-dom:
-        specifier: 17.4.4
-        version: 17.4.4
+        specifier: 17.4.6
+        version: 17.4.6
       script-loader:
         specifier: 0.7.2
         version: 0.7.2
@@ -349,7 +349,7 @@ importers:
         version: 1.0.2
       copy-webpack-plugin:
         specifier: 13.0.0
-        version: 13.0.0(webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4))
+        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
       electron:
         specifier: 35.1.5
         version: 35.1.5
@@ -370,7 +370,7 @@ importers:
         version: 1.6.3
       tsx:
         specifier: ^4.19.3
-        version: 4.19.3
+        version: 4.19.4
       yargs:
         specifier: ^17.3.1
         version: 17.7.2
@@ -405,7 +405,7 @@ importers:
         version: 11.0.4
       copy-webpack-plugin:
         specifier: 13.0.0
-        version: 13.0.0(webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4))
+        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
       electron:
         specifier: 35.1.5
         version: 35.1.5
@@ -552,8 +552,8 @@ importers:
         specifier: 0.38.1
         version: 0.38.1
       axios:
-        specifier: 1.8.4
-        version: 1.8.4(debug@4.4.0)
+        specifier: 1.9.0
+        version: 1.9.0(debug@4.4.0)
       bindings:
         specifier: 1.5.0
         version: 1.5.0
@@ -583,10 +583,10 @@ importers:
         version: 1.4.7
       copy-webpack-plugin:
         specifier: 13.0.0
-        version: 13.0.0(webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4))
+        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
       csrf-csrf:
-        specifier: 3.1.0
-        version: 3.1.0
+        specifier: 3.2.2
+        version: 3.2.2
       dayjs:
         specifier: 1.11.13
         version: 1.11.13
@@ -648,8 +648,8 @@ importers:
         specifier: 7.0.6
         version: 7.0.6
       i18next:
-        specifier: 25.0.0
-        version: 25.0.0(typescript@5.7.3)
+        specifier: 25.0.2
+        version: 25.0.2(typescript@5.7.3)
       i18next-fs-backend:
         specifier: 2.6.0
         version: 2.6.0
@@ -663,8 +663,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       is-svg:
-        specifier: 5.1.0
-        version: 5.1.0
+        specifier: 6.0.0
+        version: 6.0.0
       jimp:
         specifier: 1.6.0
         version: 1.6.0
@@ -681,8 +681,8 @@ importers:
         specifier: 0.16.22
         version: 0.16.22
       marked:
-        specifier: 15.0.8
-        version: 15.0.8
+        specifier: 15.0.11
+        version: 15.0.11
       mime-types:
         specifier: 3.0.1
         version: 3.0.1
@@ -753,8 +753,8 @@ importers:
         specifier: 1.0.1
         version: 1.0.1
       webpack:
-        specifier: 5.99.6
-        version: 5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+        specifier: 5.99.7
+        version: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
       ws:
         specifier: 8.18.1
         version: 8.18.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -1672,34 +1672,16 @@ packages:
   '@emnapi/wasi-threads@1.0.2':
     resolution: {integrity: sha512-5n3nTJblwRi8LlXkJ9eBzu+kZR8Yxcc7ubakyQTFzPMtIhFpUBRbsnc2Dv88IZDIbCDlBiWrknhB4Lsz7mg6BA==}
 
-  '@esbuild/aix-ppc64@0.19.12':
-    resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
-    engines: {node: '>=12'}
-    cpu: [ppc64]
-    os: [aix]
-
   '@esbuild/aix-ppc64@0.25.3':
     resolution: {integrity: sha512-W8bFfPA8DowP8l//sxjJLSLkD8iEjMc7cBVyP+u4cEv9sM7mdUCkgsj+t0n/BWPFtv7WWCN5Yzj0N6FJNUUqBQ==}
     engines: {node: '>=18'}
     cpu: [ppc64]
     os: [aix]
 
-  '@esbuild/android-arm64@0.19.12':
-    resolution: {integrity: sha512-P0UVNGIienjZv3f5zq0DP3Nt2IE/3plFzuaS96vihvD0Hd6H/q4WXUGpCxD/E8YrSXfNyRPbpTq+T8ZQioSuPA==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [android]
-
   '@esbuild/android-arm64@0.25.3':
     resolution: {integrity: sha512-XelR6MzjlZuBM4f5z2IQHK6LkK34Cvv6Rj2EntER3lwCBFdg6h2lKbtRjpTTsdEjD/WSe1q8UyPBXP1x3i/wYQ==}
     engines: {node: '>=18'}
     cpu: [arm64]
-    os: [android]
-
-  '@esbuild/android-arm@0.19.12':
-    resolution: {integrity: sha512-qg/Lj1mu3CdQlDEEiWrlC4eaPZ1KztwGJ9B6J+/6G+/4ewxJg7gqj8eVYWvao1bXrqGiW2rsBZFSX3q2lcW05w==}
-    engines: {node: '>=12'}
-    cpu: [arm]
     os: [android]
 
   '@esbuild/android-arm@0.25.3':
@@ -1708,34 +1690,16 @@ packages:
     cpu: [arm]
     os: [android]
 
-  '@esbuild/android-x64@0.19.12':
-    resolution: {integrity: sha512-3k7ZoUW6Q6YqhdhIaq/WZ7HwBpnFBlW905Fa4s4qWJyiNOgT1dOqDiVAQFwBH7gBRZr17gLrlFCRzF6jFh7Kew==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [android]
-
   '@esbuild/android-x64@0.25.3':
     resolution: {integrity: sha512-ogtTpYHT/g1GWS/zKM0cc/tIebFjm1F9Aw1boQ2Y0eUQ+J89d0jFY//s9ei9jVIlkYi8AfOjiixcLJSGNSOAdQ==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [android]
 
-  '@esbuild/darwin-arm64@0.19.12':
-    resolution: {integrity: sha512-B6IeSgZgtEzGC42jsI+YYu9Z3HKRxp8ZT3cqhvliEHovq8HSX2YX8lNocDn79gCKJXOSaEot9MVYky7AKjCs8g==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [darwin]
-
   '@esbuild/darwin-arm64@0.25.3':
     resolution: {integrity: sha512-eESK5yfPNTqpAmDfFWNsOhmIOaQA59tAcF/EfYvo5/QWQCzXn5iUSOnqt3ra3UdzBv073ykTtmeLJZGt3HhA+w==}
     engines: {node: '>=18'}
     cpu: [arm64]
-    os: [darwin]
-
-  '@esbuild/darwin-x64@0.19.12':
-    resolution: {integrity: sha512-hKoVkKzFiToTgn+41qGhsUJXFlIjxI/jSYeZf3ugemDYZldIXIxhvwN6erJGlX4t5h417iFuheZ7l+YVn05N3A==}
-    engines: {node: '>=12'}
-    cpu: [x64]
     os: [darwin]
 
   '@esbuild/darwin-x64@0.25.3':
@@ -1744,22 +1708,10 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@esbuild/freebsd-arm64@0.19.12':
-    resolution: {integrity: sha512-4aRvFIXmwAcDBw9AueDQ2YnGmz5L6obe5kmPT8Vd+/+x/JMVKCgdcRwH6APrbpNXsPz+K653Qg8HB/oXvXVukA==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [freebsd]
-
   '@esbuild/freebsd-arm64@0.25.3':
     resolution: {integrity: sha512-EJiyS70BYybOBpJth3M0KLOus0n+RRMKTYzhYhFeMwp7e/RaajXvP+BWlmEXNk6uk+KAu46j/kaQzr6au+JcIw==}
     engines: {node: '>=18'}
     cpu: [arm64]
-    os: [freebsd]
-
-  '@esbuild/freebsd-x64@0.19.12':
-    resolution: {integrity: sha512-EYoXZ4d8xtBoVN7CEwWY2IN4ho76xjYXqSXMNccFSx2lgqOG/1TBPW0yPx1bJZk94qu3tX0fycJeeQsKovA8gg==}
-    engines: {node: '>=12'}
-    cpu: [x64]
     os: [freebsd]
 
   '@esbuild/freebsd-x64@0.25.3':
@@ -1768,22 +1720,10 @@ packages:
     cpu: [x64]
     os: [freebsd]
 
-  '@esbuild/linux-arm64@0.19.12':
-    resolution: {integrity: sha512-EoTjyYyLuVPfdPLsGVVVC8a0p1BFFvtpQDB/YLEhaXyf/5bczaGeN15QkR+O4S5LeJ92Tqotve7i1jn35qwvdA==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [linux]
-
   '@esbuild/linux-arm64@0.25.3':
     resolution: {integrity: sha512-xCUgnNYhRD5bb1C1nqrDV1PfkwgbswTTBRbAd8aH5PhYzikdf/ddtsYyMXFfGSsb/6t6QaPSzxtbfAZr9uox4A==}
     engines: {node: '>=18'}
     cpu: [arm64]
-    os: [linux]
-
-  '@esbuild/linux-arm@0.19.12':
-    resolution: {integrity: sha512-J5jPms//KhSNv+LO1S1TX1UWp1ucM6N6XuL6ITdKWElCu8wXP72l9MM0zDTzzeikVyqFE6U8YAV9/tFyj0ti+w==}
-    engines: {node: '>=12'}
-    cpu: [arm]
     os: [linux]
 
   '@esbuild/linux-arm@0.25.3':
@@ -1792,22 +1732,10 @@ packages:
     cpu: [arm]
     os: [linux]
 
-  '@esbuild/linux-ia32@0.19.12':
-    resolution: {integrity: sha512-Thsa42rrP1+UIGaWz47uydHSBOgTUnwBwNq59khgIwktK6x60Hivfbux9iNR0eHCHzOLjLMLfUMLCypBkZXMHA==}
-    engines: {node: '>=12'}
-    cpu: [ia32]
-    os: [linux]
-
   '@esbuild/linux-ia32@0.25.3':
     resolution: {integrity: sha512-yplPOpczHOO4jTYKmuYuANI3WhvIPSVANGcNUeMlxH4twz/TeXuzEP41tGKNGWJjuMhotpGabeFYGAOU2ummBw==}
     engines: {node: '>=18'}
     cpu: [ia32]
-    os: [linux]
-
-  '@esbuild/linux-loong64@0.19.12':
-    resolution: {integrity: sha512-LiXdXA0s3IqRRjm6rV6XaWATScKAXjI4R4LoDlvO7+yQqFdlr1Bax62sRwkVvRIrwXxvtYEHHI4dm50jAXkuAA==}
-    engines: {node: '>=12'}
-    cpu: [loong64]
     os: [linux]
 
   '@esbuild/linux-loong64@0.25.3':
@@ -1816,22 +1744,10 @@ packages:
     cpu: [loong64]
     os: [linux]
 
-  '@esbuild/linux-mips64el@0.19.12':
-    resolution: {integrity: sha512-fEnAuj5VGTanfJ07ff0gOA6IPsvrVHLVb6Lyd1g2/ed67oU1eFzL0r9WL7ZzscD+/N6i3dWumGE1Un4f7Amf+w==}
-    engines: {node: '>=12'}
-    cpu: [mips64el]
-    os: [linux]
-
   '@esbuild/linux-mips64el@0.25.3':
     resolution: {integrity: sha512-eRAOV2ODpu6P5divMEMa26RRqb2yUoYsuQQOuFUexUoQndm4MdpXXDBbUoKIc0iPa4aCO7gIhtnYomkn2x+bag==}
     engines: {node: '>=18'}
     cpu: [mips64el]
-    os: [linux]
-
-  '@esbuild/linux-ppc64@0.19.12':
-    resolution: {integrity: sha512-nYJA2/QPimDQOh1rKWedNOe3Gfc8PabU7HT3iXWtNUbRzXS9+vgB0Fjaqr//XNbd82mCxHzik2qotuI89cfixg==}
-    engines: {node: '>=12'}
-    cpu: [ppc64]
     os: [linux]
 
   '@esbuild/linux-ppc64@0.25.3':
@@ -1840,34 +1756,16 @@ packages:
     cpu: [ppc64]
     os: [linux]
 
-  '@esbuild/linux-riscv64@0.19.12':
-    resolution: {integrity: sha512-2MueBrlPQCw5dVJJpQdUYgeqIzDQgw3QtiAHUC4RBz9FXPrskyyU3VI1hw7C0BSKB9OduwSJ79FTCqtGMWqJHg==}
-    engines: {node: '>=12'}
-    cpu: [riscv64]
-    os: [linux]
-
   '@esbuild/linux-riscv64@0.25.3':
     resolution: {integrity: sha512-LDDODcFzNtECTrUUbVCs6j9/bDVqy7DDRsuIXJg6so+mFksgwG7ZVnTruYi5V+z3eE5y+BJZw7VvUadkbfg7QA==}
     engines: {node: '>=18'}
     cpu: [riscv64]
     os: [linux]
 
-  '@esbuild/linux-s390x@0.19.12':
-    resolution: {integrity: sha512-+Pil1Nv3Umes4m3AZKqA2anfhJiVmNCYkPchwFJNEJN5QxmTs1uzyy4TvmDrCRNT2ApwSari7ZIgrPeUx4UZDg==}
-    engines: {node: '>=12'}
-    cpu: [s390x]
-    os: [linux]
-
   '@esbuild/linux-s390x@0.25.3':
     resolution: {integrity: sha512-s+w/NOY2k0yC2p9SLen+ymflgcpRkvwwa02fqmAwhBRI3SC12uiS10edHHXlVWwfAagYSY5UpmT/zISXPMW3tQ==}
     engines: {node: '>=18'}
     cpu: [s390x]
-    os: [linux]
-
-  '@esbuild/linux-x64@0.19.12':
-    resolution: {integrity: sha512-B71g1QpxfwBvNrfyJdVDexenDIt1CiDN1TIXLbhOw0KhJzE78KIFGX6OJ9MrtC0oOqMWf+0xop4qEU8JrJTwCg==}
-    engines: {node: '>=12'}
-    cpu: [x64]
     os: [linux]
 
   '@esbuild/linux-x64@0.25.3':
@@ -1882,12 +1780,6 @@ packages:
     cpu: [arm64]
     os: [netbsd]
 
-  '@esbuild/netbsd-x64@0.19.12':
-    resolution: {integrity: sha512-3ltjQ7n1owJgFbuC61Oj++XhtzmymoCihNFgT84UAmJnxJfm4sYCiSLTXZtE00VWYpPMYc+ZQmB6xbSdVh0JWA==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [netbsd]
-
   '@esbuild/netbsd-x64@0.25.3':
     resolution: {integrity: sha512-i5Hm68HXHdgv8wkrt+10Bc50zM0/eonPb/a/OFVfB6Qvpiirco5gBA5bz7S2SHuU+Y4LWn/zehzNX14Sp4r27g==}
     engines: {node: '>=18'}
@@ -1900,23 +1792,11 @@ packages:
     cpu: [arm64]
     os: [openbsd]
 
-  '@esbuild/openbsd-x64@0.19.12':
-    resolution: {integrity: sha512-RbrfTB9SWsr0kWmb9srfF+L933uMDdu9BIzdA7os2t0TXhCRjrQyCeOt6wVxr79CKD4c+p+YhCj31HBkYcXebw==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [openbsd]
-
   '@esbuild/openbsd-x64@0.25.3':
     resolution: {integrity: sha512-fpqctI45NnCIDKBH5AXQBsD0NDPbEFczK98hk/aa6HJxbl+UtLkJV2+Bvy5hLSLk3LHmqt0NTkKNso1A9y1a4w==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [openbsd]
-
-  '@esbuild/sunos-x64@0.19.12':
-    resolution: {integrity: sha512-HKjJwRrW8uWtCQnQOz9qcU3mUZhTUQvi56Q8DPTLLB+DawoiQdjsYq+j+D3s9I8VFtDr+F9CjgXKKC4ss89IeA==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [sunos]
 
   '@esbuild/sunos-x64@0.25.3':
     resolution: {integrity: sha512-ROJhm7d8bk9dMCUZjkS8fgzsPAZEjtRJqCAmVgB0gMrvG7hfmPmz9k1rwO4jSiblFjYmNvbECL9uhaPzONMfgA==}
@@ -1924,34 +1804,16 @@ packages:
     cpu: [x64]
     os: [sunos]
 
-  '@esbuild/win32-arm64@0.19.12':
-    resolution: {integrity: sha512-URgtR1dJnmGvX864pn1B2YUYNzjmXkuJOIqG2HdU62MVS4EHpU2946OZoTMnRUHklGtJdJZ33QfzdjGACXhn1A==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [win32]
-
   '@esbuild/win32-arm64@0.25.3':
     resolution: {integrity: sha512-YWcow8peiHpNBiIXHwaswPnAXLsLVygFwCB3A7Bh5jRkIBFWHGmNQ48AlX4xDvQNoMZlPYzjVOQDYEzWCqufMQ==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [win32]
 
-  '@esbuild/win32-ia32@0.19.12':
-    resolution: {integrity: sha512-+ZOE6pUkMOJfmxmBZElNOx72NKpIa/HFOMGzu8fqzQJ5kgf6aTGrcJaFsNiVMH4JKpMipyK+7k0n2UXN7a8YKQ==}
-    engines: {node: '>=12'}
-    cpu: [ia32]
-    os: [win32]
-
   '@esbuild/win32-ia32@0.25.3':
     resolution: {integrity: sha512-qspTZOIGoXVS4DpNqUYUs9UxVb04khS1Degaw/MnfMe7goQ3lTfQ13Vw4qY/Nj0979BGvMRpAYbs/BAxEvU8ew==}
     engines: {node: '>=18'}
     cpu: [ia32]
-    os: [win32]
-
-  '@esbuild/win32-x64@0.19.12':
-    resolution: {integrity: sha512-T1QyPSDCyMXaO3pzBkF96E8xMkiRYbUEZADd29SyPGabqxMViNoii+NcK7eWJAEoU6RZyEm5lVSIjTmcdoB9HA==}
-    engines: {node: '>=12'}
-    cpu: [x64]
     os: [win32]
 
   '@esbuild/win32-x64@0.25.3':
@@ -2020,6 +1882,9 @@ packages:
   '@excalidraw/random-username@1.1.0':
     resolution: {integrity: sha512-nULYsQxkWHnbmHvcs+efMkJ4/9TtvNyFeLyHdeGxW0zHs6P+jYVqcRff9A6Vq9w9JXeDRnRh2VKvTtS19GW2qA==}
     engines: {node: '>=10'}
+
+  '@file-type/xml@0.4.3':
+    resolution: {integrity: sha512-pGRmkHf+NofNy/52r06HOTsEwdNnBsFEhN6U95s33P+ezuoxZEyBTV9lOB1/Zr0So6/9vDVfWZXLpgd0fy8cOQ==}
 
   '@floating-ui/core@1.6.9':
     resolution: {integrity: sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==}
@@ -4261,8 +4126,8 @@ packages:
     resolution: {integrity: sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g==}
     engines: {node: '>=6.0.0'}
 
-  axios@1.8.4:
-    resolution: {integrity: sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==}
+  axios@1.9.0:
+    resolution: {integrity: sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==}
 
   b4a@1.6.7:
     resolution: {integrity: sha512-OnAYlL5b7LEkALw87fUVafQw5rVR9RjwGd4KUwNQ6DrrNmaVaUCgLipfVlzrPQ4tWOR9P0IXGNOx50jYCCdSJg==}
@@ -4915,8 +4780,8 @@ packages:
     resolution: {integrity: sha512-n63i0lZ0rvQ6FXiGQ+/JFCKAUyPFhLQYJIqKaa+tSJtfKeULF/IDNDAbdnSIxgS4NTuw2b0+lj8LzfITuq+ZxQ==}
     engines: {node: '>=12.10'}
 
-  csrf-csrf@3.1.0:
-    resolution: {integrity: sha512-kZacFfFbdYFxNnFdigRHCzVAq019vJyUUtgPLjCtzh6jMXcWmf8bGUx/hsqtSEMXaNcPm8iXpjC+hW5aeOsRMg==}
+  csrf-csrf@3.2.2:
+    resolution: {integrity: sha512-E3TgLWX1e+jqigDva+nFItfqa59UZ+gLR56DVNyL/xawBGwQr8o3U4/o1gP9FZmIWLnWCiIl5ni85MghMCNRfg==}
 
   css-declaration-sorter@7.2.0:
     resolution: {integrity: sha512-h70rUM+3PNFuaBDTLe8wF/cdWu+dOZmb7pJt8Z2sedYbAcQVQV/tEchueg3GWxwqS0cxtbxmaHEdkNACqcvsow==}
@@ -5673,11 +5538,6 @@ packages:
   es6-promise@4.2.8:
     resolution: {integrity: sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==}
 
-  esbuild@0.19.12:
-    resolution: {integrity: sha512-aARqgq8roFBj054KvQr5f1sFu0D65G+miZRCuJyJ0G13Zwx7vRar5Zhn2tkQNzIXcBrNVsv/8stehpj+GAjgbg==}
-    engines: {node: '>=12'}
-    hasBin: true
-
   esbuild@0.25.3:
     resolution: {integrity: sha512-qKA6Pvai73+M2FtftpNKRxJ78GIjmFXFxd/1DVBqGo/qNhLSfv+G12n9pNoWdytJC8U00TrViOwpjT0zgqQS8Q==}
     engines: {node: '>=18'}
@@ -5721,8 +5581,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-linter-browserify@9.25.0:
-    resolution: {integrity: sha512-BGMyqN+rr1fCF7F37kSAxrjy6Ysd788xH1rEaIpq89jQrs5tMs/FbP/Vns3JJQ4xxvx/mjobasngG9chxR3+/A==}
+  eslint-linter-browserify@9.25.1:
+    resolution: {integrity: sha512-gBOB5/W59xaupXI2/2O0qAk7XxYRLnKzx4TRbbplb5NjmOLZv6QAmVowD3TjnMQvIlnU4SbiQk+RncmNtsn+QQ==}
 
   eslint-plugin-playwright@1.8.3:
     resolution: {integrity: sha512-h87JPFHkz8a6oPhn8GRGGhSQoAJjx0AkOv1jME6NoMk2FpEsfvfJJNaQDxLSqSALkCr0IJXPGTnp6SIRVu5Nqg==}
@@ -5912,10 +5772,6 @@ packages:
 
   fast-uri@3.0.6:
     resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
-
-  fast-xml-parser@4.5.3:
-    resolution: {integrity: sha512-RKihhV+SHsIUGXObeVy9AXiBbFwkVk7Syp8XgwN5U3JV416+Gwp/GO9i0JYKmikykgz/UHRrrV4ROuZEo/T0ig==}
-    hasBin: true
 
   fastest-levenshtein@1.0.16:
     resolution: {integrity: sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==}
@@ -6360,8 +6216,8 @@ packages:
   handle-thing@2.0.1:
     resolution: {integrity: sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg==}
 
-  happy-dom@17.4.4:
-    resolution: {integrity: sha512-/Pb0ctk3HTZ5xEL3BZ0hK1AqDSAUuRQitOmROPHhfUYEWpmTImwfD8vFDGADmMAX0JYgbcgxWoLFKtsWhcpuVA==}
+  happy-dom@17.4.6:
+    resolution: {integrity: sha512-OEV1hDe9i2rFr66+WZNiwy1S8rAJy6bRXmXql68YJDjdfHBRbN76om+qVh68vQACf6y5Bcr90e/oK53RQxsDdg==}
     engines: {node: '>=18.0.0'}
 
   harmony-reflect@1.6.2:
@@ -6540,8 +6396,8 @@ packages:
   i18next-http-backend@3.0.2:
     resolution: {integrity: sha512-PdlvPnvIp4E1sYi46Ik4tBYh/v/NbYfFFgTjkwFl0is8A18s7/bx9aXqsrOax9WUbeNS6mD2oix7Z0yGGf6m5g==}
 
-  i18next@25.0.0:
-    resolution: {integrity: sha512-POPvwjOPR1GQvRnbikTMPEhQD+ekd186MHE6NtVxl3Lby+gPp0iq60eCqGrY6wfRnp1lejjFNu0EKs1afA322w==}
+  i18next@25.0.2:
+    resolution: {integrity: sha512-xWxgK8GAaPYkV9ia2tdgbtdM+qiC+ysVTBPvXhpCORU/+QkeQe3BSI7Crr+c4ZXULN1PfnXG/HY2n7HGx4KKBg==}
     peerDependencies:
       typescript: ^5
     peerDependenciesMeta:
@@ -6860,9 +6716,9 @@ packages:
     resolution: {integrity: sha512-BtEeSsoaQjlSPBemMQIrY1MY0uM6vnS1g5fmufYOtnxLGUZM2178PKbhsk7Ffv58IX+ZtcvoGwccYsh0PglkAA==}
     engines: {node: '>= 0.4'}
 
-  is-svg@5.1.0:
-    resolution: {integrity: sha512-uVg5yifaTxHoefNf5Jcx+i9RZe2OBYd/UStp1umx+EERa4xGRa3LLGXjoEph43qUORC0qkafUgrXZ6zzK89yGA==}
-    engines: {node: '>=14.16'}
+  is-svg@6.0.0:
+    resolution: {integrity: sha512-dGyV+26JXUyoWF8Su3LfFS9tcmrR/uYYSyABE66iv4zJnS77y8T3PZB0nWRKOJJiU1lelGMGuYMylqrFu8D7yQ==}
+    engines: {node: '>=20'}
 
   is-symbol@1.1.1:
     resolution: {integrity: sha512-9gGx6GTtCQM73BgmHQXfDmLtfjjTUDSyoxTCbp5WtoixAhfgsDirWIcVQ/IHpvI5Vgd5i/J5F7B9cN/WlVbC/w==}
@@ -7271,8 +7127,8 @@ packages:
     resolution: {integrity: sha512-b94GiNHQNy6JNTrt5w6zNyffMrNkXZb3KTkCZJb2V1xaEGCk093vkZ2jk3tpaeP33/OiXC+WvK9AxUebnf5nbw==}
     engines: {node: '>= 0.6.3'}
 
-  leaflet-gpx@2.1.2:
-    resolution: {integrity: sha512-lKoEPlAWel9KXn9keg6Dmyt7gmj5IYyD8CKuxivN+77GpZr2bpKliwFvZJxLUHmNu4fICmCySyxhm5qjZuvvQg==}
+  leaflet-gpx@2.2.0:
+    resolution: {integrity: sha512-iVUx6o0ydLn2ikYSVLuWnr0k/CDAOIUtmvQ91AI24/PXuIFIb+iEIJMHTQfvGhMCKcFrwd9ZaFYH7P/46tgGhw==}
 
   leaflet@1.9.4:
     resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
@@ -7466,8 +7322,8 @@ packages:
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
 
-  marked@15.0.8:
-    resolution: {integrity: sha512-rli4l2LyZqpQuRve5C0rkn6pj3hT8EWPC+zkAxFTAJLxRbENfTAhEQq9itrmf1Y81QtAX5D/MYlGlIomNgj9lA==}
+  marked@15.0.11:
+    resolution: {integrity: sha512-1BEXAU2euRCG3xwgLVT1y0xbJEld1XOrmRJpUwRCcy7rxhSCwMrmEu9LXoPhHSCJG41V7YcQ2mjKRr5BA3ITIA==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -7641,8 +7497,8 @@ packages:
     resolution: {integrity: sha512-e5ISH9xMYU0DzrT+jl8q2ze9D6eWBto+I8CNpe+VI+K2J/F/k3PdkdTdz4wvGVH4NTpo+NRYTVIuMQEMMcsLqg==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  mind-elixir@4.5.1:
-    resolution: {integrity: sha512-R4KUaoqpe7u6/wi74nU/5Pk0KATbCXAuryQUy+7lTbBcKorVuY2d08CHGS+RoozXULAqDXIg+duxAUKRQ0XvYg==}
+  mind-elixir@4.5.2:
+    resolution: {integrity: sha512-PWPxspV56kdnR4PZ90QdCIPn4ckfHx/o6LTvtlHtlZNVhod5nCjFFFTp+28+wclmf2fg0+gOWU+bCGjrD6vv2Q==}
 
   mini-css-extract-plugin@2.4.7:
     resolution: {integrity: sha512-euWmddf0sk9Nv1O0gfeeUAvAkoSlWncNLF77C0TP2+WoPvy8mAHKOzMajcCz2dzvyt3CNgxb1obIEVFIRxaipg==}
@@ -8263,6 +8119,10 @@ packages:
   peek-readable@5.4.2:
     resolution: {integrity: sha512-peBp3qZyuS6cNIJ2akRNG1uo1WJ1d0wTxg/fxMdZ0BqCVhx242bSFHM9eNqflfJVS9SsgkzgT/1UgnsurBOTMg==}
     engines: {node: '>=14.16'}
+
+  peek-readable@7.0.0:
+    resolution: {integrity: sha512-nri2TO5JE3/mRryik9LlHFT53cgHfRK0Lt0BAZQXku/AW3E6XLt2GaY8siWi7dvW/m1z0ecn+J+bpDa9ZN3IsQ==}
+    engines: {node: '>=18'}
 
   pend@1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
@@ -9595,8 +9455,9 @@ packages:
   striptags@3.2.0:
     resolution: {integrity: sha512-g45ZOGzHDMe2bdYMdIvdAfCQkCTDMGBazSw1ypMowwGIee7ZQ5dU0rBJ8Jqgl+jAKIv4dbeE1jscZq9wid1Tkw==}
 
-  strnum@1.1.2:
-    resolution: {integrity: sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==}
+  strtok3@10.2.2:
+    resolution: {integrity: sha512-Xt18+h4s7Z8xyZ0tmBoRmzxcop97R4BAh+dXouUDCYn+Em+1P3qpkUfI5ueWLT8ynC5hZ+q4iPEmGG1urvQGBg==}
+    engines: {node: '>=18'}
 
   strtok3@6.3.0:
     resolution: {integrity: sha512-fZtbhtvI9I48xDSywd/somNqgUHl2L2cstmXCCif0itOf96jeW18MBSyrLuNicYQVkvpOxkZtkzujiTJ9LW5Jw==}
@@ -9934,8 +9795,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  tsx@4.19.3:
-    resolution: {integrity: sha512-4H8vUNGNjQ4V2EOoGw005+c+dGuPSnhpPBPHBtsZdGZBk/iJb4kguGlPWaZTZ3q5nMtFOEsY0nRDlh9PJyd6SQ==}
+  tsx@4.19.4:
+    resolution: {integrity: sha512-gK5GVzDkJK1SI1zwHf32Mqxf2tSJkNx+eYcNly5+nHvWqXUJYUkWBQtKauoESz3ymezAI++ZwT855x5p5eop+Q==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -10435,8 +10296,8 @@ packages:
       webpack-cli:
         optional: true
 
-  webpack@5.99.6:
-    resolution: {integrity: sha512-TJOLrJ6oeccsGWPl7ujCYuc0pIq2cNsuD6GZDma8i5o5Npvcco/z+NKvZSFsP0/x6SShVb0+X2JK/JHUjKY9dQ==}
+  webpack@5.99.7:
+    resolution: {integrity: sha512-CNqKBRMQjwcmKR0idID5va1qlhrqVUKpovi+Ec79ksW8ux7iS1+A6VqzfZXgVYCFRKl7XL5ap3ZoMpwBJxcg0w==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     peerDependencies:
@@ -12025,103 +11886,52 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@esbuild/aix-ppc64@0.19.12':
-    optional: true
-
   '@esbuild/aix-ppc64@0.25.3':
-    optional: true
-
-  '@esbuild/android-arm64@0.19.12':
     optional: true
 
   '@esbuild/android-arm64@0.25.3':
     optional: true
 
-  '@esbuild/android-arm@0.19.12':
-    optional: true
-
   '@esbuild/android-arm@0.25.3':
-    optional: true
-
-  '@esbuild/android-x64@0.19.12':
     optional: true
 
   '@esbuild/android-x64@0.25.3':
     optional: true
 
-  '@esbuild/darwin-arm64@0.19.12':
-    optional: true
-
   '@esbuild/darwin-arm64@0.25.3':
-    optional: true
-
-  '@esbuild/darwin-x64@0.19.12':
     optional: true
 
   '@esbuild/darwin-x64@0.25.3':
     optional: true
 
-  '@esbuild/freebsd-arm64@0.19.12':
-    optional: true
-
   '@esbuild/freebsd-arm64@0.25.3':
-    optional: true
-
-  '@esbuild/freebsd-x64@0.19.12':
     optional: true
 
   '@esbuild/freebsd-x64@0.25.3':
     optional: true
 
-  '@esbuild/linux-arm64@0.19.12':
-    optional: true
-
   '@esbuild/linux-arm64@0.25.3':
-    optional: true
-
-  '@esbuild/linux-arm@0.19.12':
     optional: true
 
   '@esbuild/linux-arm@0.25.3':
     optional: true
 
-  '@esbuild/linux-ia32@0.19.12':
-    optional: true
-
   '@esbuild/linux-ia32@0.25.3':
-    optional: true
-
-  '@esbuild/linux-loong64@0.19.12':
     optional: true
 
   '@esbuild/linux-loong64@0.25.3':
     optional: true
 
-  '@esbuild/linux-mips64el@0.19.12':
-    optional: true
-
   '@esbuild/linux-mips64el@0.25.3':
-    optional: true
-
-  '@esbuild/linux-ppc64@0.19.12':
     optional: true
 
   '@esbuild/linux-ppc64@0.25.3':
     optional: true
 
-  '@esbuild/linux-riscv64@0.19.12':
-    optional: true
-
   '@esbuild/linux-riscv64@0.25.3':
     optional: true
 
-  '@esbuild/linux-s390x@0.19.12':
-    optional: true
-
   '@esbuild/linux-s390x@0.25.3':
-    optional: true
-
-  '@esbuild/linux-x64@0.19.12':
     optional: true
 
   '@esbuild/linux-x64@0.25.3':
@@ -12130,40 +11940,22 @@ snapshots:
   '@esbuild/netbsd-arm64@0.25.3':
     optional: true
 
-  '@esbuild/netbsd-x64@0.19.12':
-    optional: true
-
   '@esbuild/netbsd-x64@0.25.3':
     optional: true
 
   '@esbuild/openbsd-arm64@0.25.3':
     optional: true
 
-  '@esbuild/openbsd-x64@0.19.12':
-    optional: true
-
   '@esbuild/openbsd-x64@0.25.3':
-    optional: true
-
-  '@esbuild/sunos-x64@0.19.12':
     optional: true
 
   '@esbuild/sunos-x64@0.25.3':
     optional: true
 
-  '@esbuild/win32-arm64@0.19.12':
-    optional: true
-
   '@esbuild/win32-arm64@0.25.3':
     optional: true
 
-  '@esbuild/win32-ia32@0.19.12':
-    optional: true
-
   '@esbuild/win32-ia32@0.25.3':
-    optional: true
-
-  '@esbuild/win32-x64@0.19.12':
     optional: true
 
   '@esbuild/win32-x64@0.25.3':
@@ -12310,6 +12102,11 @@ snapshots:
       - supports-color
 
   '@excalidraw/random-username@1.1.0': {}
+
+  '@file-type/xml@0.4.3':
+    dependencies:
+      sax: 1.4.1
+      strtok3: 10.2.2
 
   '@floating-ui/core@1.6.9':
     dependencies:
@@ -12828,9 +12625,9 @@ snapshots:
     dependencies:
       langium: 3.3.1
 
-  '@mind-elixir/node-menu@1.0.5(mind-elixir@4.5.1)':
+  '@mind-elixir/node-menu@1.0.5(mind-elixir@4.5.2)':
     dependencies:
-      mind-elixir: 4.5.1
+      mind-elixir: 4.5.2
 
   '@mixmark-io/domino@2.2.0': {}
 
@@ -12958,7 +12755,7 @@ snapshots:
       tslib: 2.8.1
       yargs-parser: 21.1.1
 
-  '@nx/esbuild@20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))':
+  '@nx/esbuild@20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))':
     dependencies:
       '@nx/devkit': 20.8.0(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
       '@nx/js': 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
@@ -12967,7 +12764,7 @@ snapshots:
       tsconfig-paths: 4.2.0
       tslib: 2.8.1
     optionalDependencies:
-      esbuild: 0.19.12
+      esbuild: 0.25.3
     transitivePeerDependencies:
       - '@babel/traverse'
       - '@swc-node/register'
@@ -13191,7 +12988,7 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nx/vite@20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)(vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vitest@3.1.2)':
+  '@nx/vite@20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)(vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))(vitest@3.1.2)':
     dependencies:
       '@nx/devkit': 20.8.0(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
       '@nx/js': 20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
@@ -13201,8 +12998,8 @@ snapshots:
       minimatch: 9.0.3
       semver: 7.7.1
       tsconfig-paths: 4.2.0
-      vite: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
-      vitest: 3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
+      vite: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
+      vitest: 3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
     transitivePeerDependencies:
       - '@babel/traverse'
       - '@swc-node/register'
@@ -13230,7 +13027,7 @@ snapshots:
       - supports-color
       - verdaccio
 
-  '@nx/webpack@20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(bufferutil@4.0.9)(esbuild@0.19.12)(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)':
+  '@nx/webpack@20.8.0(@babel/traverse@7.27.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(bufferutil@4.0.9)(esbuild@0.25.3)(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))(typescript@5.7.3)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)':
     dependencies:
       '@babel/core': 7.26.10
       '@nx/devkit': 20.8.0(nx@20.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.17)))
@@ -13242,7 +13039,7 @@ snapshots:
       browserslist: 4.24.4
       copy-webpack-plugin: 10.2.4(webpack@5.98.0)
       css-loader: 6.11.0(webpack@5.98.0)
-      css-minimizer-webpack-plugin: 5.0.1(esbuild@0.19.12)(webpack@5.98.0)
+      css-minimizer-webpack-plugin: 5.0.1(esbuild@0.25.3)(webpack@5.98.0)
       fork-ts-checker-webpack-plugin: 7.2.13(typescript@5.7.3)(webpack@5.98.0)
       less: 4.1.3
       less-loader: 11.1.0(less@4.1.3)(webpack@5.98.0)
@@ -13262,11 +13059,11 @@ snapshots:
       style-loader: 3.3.4(webpack@5.98.0)
       stylus: 0.64.0
       stylus-loader: 7.1.3(stylus@0.64.0)(webpack@5.98.0)
-      terser-webpack-plugin: 5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack@5.98.0)
+      terser-webpack-plugin: 5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.98.0)
       ts-loader: 9.5.2(typescript@5.7.3)(webpack@5.98.0)
       tsconfig-paths-webpack-plugin: 4.0.0
       tslib: 2.8.1
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
       webpack-dev-server: 5.2.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)(webpack@5.98.0)
       webpack-node-externals: 3.0.0
       webpack-subresource-integrity: 5.1.0(webpack@5.98.0)
@@ -13398,7 +13195,7 @@ snapshots:
       react-refresh: 0.10.0
       schema-utils: 4.3.2
       source-map: 0.7.4
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
     optionalDependencies:
       type-fest: 1.4.0
       webpack-dev-server: 5.2.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)(webpack@5.98.0)
@@ -14816,7 +14613,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
+      vitest: 3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -14827,13 +14624,13 @@ snapshots:
       chai: 5.2.0
       tinyrainbow: 2.0.0
 
-  '@vitest/mocker@3.1.2(vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))':
+  '@vitest/mocker@3.1.2(vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))':
     dependencies:
       '@vitest/spy': 3.1.2
       estree-walker: 3.0.3
       magic-string: 0.30.17
     optionalDependencies:
-      vite: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
+      vite: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
 
   '@vitest/pretty-format@3.1.2':
     dependencies:
@@ -14863,7 +14660,7 @@ snapshots:
       sirv: 3.0.1
       tinyglobby: 0.2.13
       tinyrainbow: 2.0.0
-      vitest: 3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
+      vitest: 3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
 
   '@vitest/utils@3.1.2':
     dependencies:
@@ -14951,17 +14748,17 @@ snapshots:
 
   '@webpack-cli/configtest@2.1.1(webpack-cli@5.1.4)(webpack@5.98.0)':
     dependencies:
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.2.1)(webpack@5.98.0)
 
   '@webpack-cli/info@2.0.2(webpack-cli@5.1.4)(webpack@5.98.0)':
     dependencies:
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.2.1)(webpack@5.98.0)
 
   '@webpack-cli/serve@2.0.5(webpack-cli@5.1.4)(webpack-dev-server@5.2.1)(webpack@5.98.0)':
     dependencies:
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.2.1)(webpack@5.98.0)
     optionalDependencies:
       webpack-dev-server: 5.2.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)(webpack@5.98.0)
@@ -15286,7 +15083,7 @@ snapshots:
 
   await-to-js@3.0.0: {}
 
-  axios@1.8.4(debug@4.4.0):
+  axios@1.9.0(debug@4.4.0):
     dependencies:
       follow-redirects: 1.15.9(debug@4.4.0)
       form-data: 4.0.2
@@ -15314,7 +15111,7 @@ snapshots:
       '@babel/core': 7.26.10
       find-cache-dir: 4.0.0
       schema-utils: 4.3.2
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   babel-plugin-const-enum@1.2.0(@babel/core@7.26.10):
     dependencies:
@@ -15973,16 +15770,16 @@ snapshots:
       normalize-path: 3.0.0
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
-  copy-webpack-plugin@13.0.0(webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)):
+  copy-webpack-plugin@13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)):
     dependencies:
       glob-parent: 6.0.2
       normalize-path: 3.0.0
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
       tinyglobby: 0.2.13
-      webpack: 5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   core-js-compat@3.41.0:
     dependencies:
@@ -16056,7 +15853,7 @@ snapshots:
 
   cross-zip@4.0.1: {}
 
-  csrf-csrf@3.1.0:
+  csrf-csrf@3.2.2:
     dependencies:
       http-errors: 2.0.0
 
@@ -16075,9 +15872,9 @@ snapshots:
       postcss-value-parser: 4.2.0
       semver: 7.7.1
     optionalDependencies:
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
-  css-minimizer-webpack-plugin@5.0.1(esbuild@0.19.12)(webpack@5.98.0):
+  css-minimizer-webpack-plugin@5.0.1(esbuild@0.25.3)(webpack@5.98.0):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       cssnano: 6.1.2(postcss@8.5.3)
@@ -16085,9 +15882,9 @@ snapshots:
       postcss: 8.5.3
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
     optionalDependencies:
-      esbuild: 0.19.12
+      esbuild: 0.25.3
 
   css-select@4.3.0:
     dependencies:
@@ -16936,32 +16733,6 @@ snapshots:
 
   es6-promise@4.2.8: {}
 
-  esbuild@0.19.12:
-    optionalDependencies:
-      '@esbuild/aix-ppc64': 0.19.12
-      '@esbuild/android-arm': 0.19.12
-      '@esbuild/android-arm64': 0.19.12
-      '@esbuild/android-x64': 0.19.12
-      '@esbuild/darwin-arm64': 0.19.12
-      '@esbuild/darwin-x64': 0.19.12
-      '@esbuild/freebsd-arm64': 0.19.12
-      '@esbuild/freebsd-x64': 0.19.12
-      '@esbuild/linux-arm': 0.19.12
-      '@esbuild/linux-arm64': 0.19.12
-      '@esbuild/linux-ia32': 0.19.12
-      '@esbuild/linux-loong64': 0.19.12
-      '@esbuild/linux-mips64el': 0.19.12
-      '@esbuild/linux-ppc64': 0.19.12
-      '@esbuild/linux-riscv64': 0.19.12
-      '@esbuild/linux-s390x': 0.19.12
-      '@esbuild/linux-x64': 0.19.12
-      '@esbuild/netbsd-x64': 0.19.12
-      '@esbuild/openbsd-x64': 0.19.12
-      '@esbuild/sunos-x64': 0.19.12
-      '@esbuild/win32-arm64': 0.19.12
-      '@esbuild/win32-ia32': 0.19.12
-      '@esbuild/win32-x64': 0.19.12
-
   esbuild@0.25.3:
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.25.3
@@ -17016,7 +16787,7 @@ snapshots:
     dependencies:
       eslint: 9.25.1(jiti@2.4.2)
 
-  eslint-linter-browserify@9.25.0: {}
+  eslint-linter-browserify@9.25.1: {}
 
   eslint-plugin-playwright@1.8.3(eslint@9.25.1(jiti@2.4.2)):
     dependencies:
@@ -17286,10 +17057,6 @@ snapshots:
 
   fast-uri@3.0.6: {}
 
-  fast-xml-parser@4.5.3:
-    dependencies:
-      strnum: 1.1.2
-
   fastest-levenshtein@1.0.16: {}
 
   fastq@1.19.1:
@@ -17480,7 +17247,7 @@ snapshots:
       semver: 7.7.1
       tapable: 2.2.1
       typescript: 5.7.3
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   form-data-encoder@1.7.2: {}
 
@@ -17821,7 +17588,7 @@ snapshots:
 
   handle-thing@2.0.1: {}
 
-  happy-dom@17.4.4:
+  happy-dom@17.4.6:
     dependencies:
       webidl-conversions: 7.0.0
       whatwg-mimetype: 3.0.0
@@ -18058,7 +17825,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  i18next@25.0.0(typescript@5.7.3):
+  i18next@25.0.2(typescript@5.7.3):
     dependencies:
       '@babel/runtime': 7.27.0
     optionalDependencies:
@@ -18330,9 +18097,9 @@ snapshots:
       call-bound: 1.0.4
       has-tostringtag: 1.0.2
 
-  is-svg@5.1.0:
+  is-svg@6.0.0:
     dependencies:
-      fast-xml-parser: 4.5.3
+      '@file-type/xml': 0.4.3
 
   is-symbol@1.1.1:
     dependencies:
@@ -18991,7 +18758,7 @@ snapshots:
     dependencies:
       readable-stream: 2.3.8
 
-  leaflet-gpx@2.1.2: {}
+  leaflet-gpx@2.2.0: {}
 
   leaflet@1.9.4: {}
 
@@ -18999,7 +18766,7 @@ snapshots:
     dependencies:
       klona: 2.0.6
       less: 4.1.3
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   less@4.1.3:
     dependencies:
@@ -19026,7 +18793,7 @@ snapshots:
     dependencies:
       webpack-sources: 3.2.3
     optionalDependencies:
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   lilconfig@3.1.3: {}
 
@@ -19217,7 +18984,7 @@ snapshots:
 
   mark.js@8.11.1: {}
 
-  marked@15.0.8: {}
+  marked@15.0.11: {}
 
   matcher@3.0.0:
     dependencies:
@@ -19318,7 +19085,7 @@ snapshots:
       katex: 0.16.22
       khroma: 2.1.0
       lodash-es: 4.17.21
-      marked: 15.0.8
+      marked: 15.0.11
       roughjs: 4.6.6
       stylis: 4.3.6
       ts-dedent: 2.2.0
@@ -19492,12 +19259,12 @@ snapshots:
 
   mimic-response@4.0.0: {}
 
-  mind-elixir@4.5.1: {}
+  mind-elixir@4.5.2: {}
 
   mini-css-extract-plugin@2.4.7(webpack@5.98.0):
     dependencies:
       schema-utils: 4.3.2
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   minimalistic-assert@1.0.1: {}
 
@@ -19778,7 +19545,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.8.4(debug@4.4.0)
+      axios: 1.9.0(debug@4.4.0)
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
@@ -20131,6 +19898,8 @@ snapshots:
 
   peek-readable@5.4.2: {}
 
+  peek-readable@7.0.0: {}
+
   pend@1.2.0: {}
 
   perfect-freehand@1.2.0: {}
@@ -20282,7 +20051,7 @@ snapshots:
       klona: 2.0.6
       postcss: 8.5.3
       semver: 7.7.1
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   postcss-merge-longhand@6.0.5(postcss@8.5.3):
     dependencies:
@@ -21079,7 +20848,7 @@ snapshots:
     optionalDependencies:
       sass: 1.87.0
       sass-embedded: 1.87.0
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   sass@1.51.0:
     dependencies:
@@ -21379,7 +21148,7 @@ snapshots:
     dependencies:
       iconv-lite: 0.6.3
       source-map-js: 1.2.1
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   source-map-support@0.5.13:
     dependencies:
@@ -21563,7 +21332,10 @@ snapshots:
 
   striptags@3.2.0: {}
 
-  strnum@1.1.2: {}
+  strtok3@10.2.2:
+    dependencies:
+      '@tokenizer/token': 0.3.0
+      peek-readable: 7.0.0
 
   strtok3@6.3.0:
     dependencies:
@@ -21582,7 +21354,7 @@ snapshots:
 
   style-loader@3.3.4(webpack@5.98.0):
     dependencies:
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   stylehacks@6.1.1(postcss@8.5.3):
     dependencies:
@@ -21597,7 +21369,7 @@ snapshots:
       fast-glob: 3.3.3
       normalize-path: 3.0.0
       stylus: 0.64.0
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   stylus@0.64.0:
     dependencies:
@@ -21692,7 +21464,7 @@ snapshots:
     dependencies:
       '@swc/core': 1.5.29(@swc/helpers@0.5.17)
       loader-utils: 2.0.4
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   symbol-tree@3.2.4: {}
 
@@ -21768,29 +21540,29 @@ snapshots:
       rimraf: 2.6.3
     optional: true
 
-  terser-webpack-plugin@5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack@5.98.0):
+  terser-webpack-plugin@5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.98.0):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
       terser: 5.39.0
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
     optionalDependencies:
       '@swc/core': 1.5.29(@swc/helpers@0.5.17)
-      esbuild: 0.19.12
+      esbuild: 0.25.3
 
-  terser-webpack-plugin@5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)):
+  terser-webpack-plugin@5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
       terser: 5.39.0
-      webpack: 5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
     optionalDependencies:
       '@swc/core': 1.5.29(@swc/helpers@0.5.17)
-      esbuild: 0.19.12
+      esbuild: 0.25.3
 
   terser@5.39.0:
     dependencies:
@@ -21946,7 +21718,7 @@ snapshots:
       semver: 7.7.1
       source-map: 0.7.4
       typescript: 5.7.3
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   tsconfig-paths-webpack-plugin@4.0.0:
     dependencies:
@@ -21962,7 +21734,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  tsx@4.19.3:
+  tsx@4.19.4:
     dependencies:
       esbuild: 0.25.3
       get-tsconfig: 4.10.0
@@ -22270,13 +22042,13 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite-node@3.1.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1):
+  vite-node@3.1.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1):
     dependencies:
       cac: 6.7.14
       debug: 4.4.0
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
+      vite: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -22291,7 +22063,7 @@ snapshots:
       - tsx
       - yaml
 
-  vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1):
+  vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1):
     dependencies:
       esbuild: 0.25.3
       fdir: 6.4.4(picomatch@4.0.2)
@@ -22308,13 +22080,13 @@ snapshots:
       sass-embedded: 1.87.0
       stylus: 0.64.0
       terser: 5.39.0
-      tsx: 4.19.3
+      tsx: 4.19.4
       yaml: 2.7.1
 
-  vitest@3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.4)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1):
+  vitest@3.1.2(@types/debug@4.1.12)(@types/node@18.16.9)(@vitest/ui@3.1.2)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1):
     dependencies:
       '@vitest/expect': 3.1.2
-      '@vitest/mocker': 3.1.2(vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
+      '@vitest/mocker': 3.1.2(vite@6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
       '@vitest/pretty-format': 3.1.2
       '@vitest/runner': 3.1.2
       '@vitest/snapshot': 3.1.2
@@ -22331,14 +22103,14 @@ snapshots:
       tinyglobby: 0.2.13
       tinypool: 1.0.2
       tinyrainbow: 2.0.0
-      vite: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
-      vite-node: 3.1.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
+      vite: 6.3.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
+      vite-node: 3.1.2(@types/node@18.16.9)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/debug': 4.1.12
       '@types/node': 18.16.9
       '@vitest/ui': 3.1.2(vitest@3.1.2)
-      happy-dom: 17.4.4
+      happy-dom: 17.4.6
       jsdom: 22.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     transitivePeerDependencies:
       - jiti
@@ -22434,7 +22206,7 @@ snapshots:
       import-local: 3.2.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
       webpack-merge: 5.10.0
     optionalDependencies:
       webpack-dev-server: 5.2.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)(webpack@5.98.0)
@@ -22448,7 +22220,7 @@ snapshots:
       range-parser: 1.2.1
       schema-utils: 4.3.2
     optionalDependencies:
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
   webpack-dev-server@5.2.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)(webpack-cli@5.1.4)(webpack@5.98.0):
     dependencies:
@@ -22481,7 +22253,7 @@ snapshots:
       webpack-dev-middleware: 7.4.2(webpack@5.98.0)
       ws: 8.18.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     optionalDependencies:
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.2.1)(webpack@5.98.0)
     transitivePeerDependencies:
       - bufferutil
@@ -22502,9 +22274,9 @@ snapshots:
   webpack-subresource-integrity@5.1.0(webpack@5.98.0):
     dependencies:
       typed-assert: 1.0.9
-      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4)
+      webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
-  webpack@5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4):
+  webpack@5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4):
     dependencies:
       '@types/eslint-scope': 3.7.7
       '@types/estree': 1.0.7
@@ -22526,7 +22298,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.2
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack@5.98.0)
+      terser-webpack-plugin: 5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.98.0)
       watchpack: 2.4.2
       webpack-sources: 3.2.3
     optionalDependencies:
@@ -22536,10 +22308,11 @@ snapshots:
       - esbuild
       - uglify-js
 
-  webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4):
+  webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4):
     dependencies:
       '@types/eslint-scope': 3.7.7
       '@types/estree': 1.0.7
+      '@types/json-schema': 7.0.15
       '@webassemblyjs/ast': 1.14.1
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
@@ -22558,7 +22331,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.2
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4))
+      terser-webpack-plugin: 5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
       watchpack: 2.4.2
       webpack-sources: 3.2.3
     optionalDependencies:
