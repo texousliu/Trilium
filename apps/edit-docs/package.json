@@ -14,28 +14,26 @@
   "nx": {
     "name": "edit-docs",
     "targets": {
-      "postbuild": {
+      "rebuild-deps": {
         "executor": "nx:run-commands",
-        "dependsOn": [
-          "build"
-        ],
+        "dependsOn": [ "build" ],
         "defaultConfiguration": "default",
         "cache": true,
         "configurations": {
           "default": {
-            "command": "electron-rebuild",
-            "cwd": "{projectRoot}/dist"
+            "command": "cross-env DEBUG=* tsx scripts/rebuild.ts",
+            "cwd": "{projectRoot}"
           },
           "nixos": {
-            "command": "electron-rebuild -v $(nix-shell -p electron_35 --run \"electron --version\")",
-            "cwd": "{projectRoot}/dist"
+            "command": "electron-rebuild -f -v $(nix-shell -p electron_35 --run \"electron --version\") dist/main.js -m dist",
+            "cwd": "{projectRoot}"
           }
-        }
+        }        
       },
       "serve": {
         "executor": "nx:run-commands",
         "dependsOn": [
-          "postbuild"
+          "rebuild-deps"
         ],
         "defaultConfiguration": "default",
         "configurations": {
