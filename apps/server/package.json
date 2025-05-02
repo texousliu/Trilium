@@ -50,7 +50,7 @@
     "jquery": "3.7.1",
     "katex": "0.16.22",
     "normalize.css": "8.0.1",
-    "@anthropic-ai/sdk": "0.39.0",
+    "@anthropic-ai/sdk": "0.40.1",
     "@braintree/sanitize-url": "7.1.1",
     "@triliumnext/commons": "workspace:*",
     "@triliumnext/express-partial-content": "1.0.1",
