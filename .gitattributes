@@ -1,8 +1,11 @@
 package-lock.json linguist-generated=true
 **/package-lock.json linguist-generated=true
-apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/** linguist-generated=true
+
+apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/** linguist-generated=true 
+apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/**/*.html eol=lf
 
 docs/**/*.md eol=lf
+docs/**/*.json eol=lf
 
 demo/**/*.html eol=lf
 demo/**/*.json eol=lf
