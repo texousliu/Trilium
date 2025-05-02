@@ -585,8 +585,8 @@ importers:
         specifier: 13.0.0
         version: 13.0.0(webpack@5.99.6(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.19.12)(webpack-cli@5.1.4))
       csrf-csrf:
-        specifier: 3.1.0
-        version: 3.1.0
+        specifier: 3.2.2
+        version: 3.2.2
       dayjs:
         specifier: 1.11.13
         version: 1.11.13
@@ -4886,8 +4886,8 @@ packages:
     resolution: {integrity: sha512-n63i0lZ0rvQ6FXiGQ+/JFCKAUyPFhLQYJIqKaa+tSJtfKeULF/IDNDAbdnSIxgS4NTuw2b0+lj8LzfITuq+ZxQ==}
     engines: {node: '>=12.10'}
 
-  csrf-csrf@3.1.0:
-    resolution: {integrity: sha512-kZacFfFbdYFxNnFdigRHCzVAq019vJyUUtgPLjCtzh6jMXcWmf8bGUx/hsqtSEMXaNcPm8iXpjC+hW5aeOsRMg==}
+  csrf-csrf@3.2.2:
+    resolution: {integrity: sha512-E3TgLWX1e+jqigDva+nFItfqa59UZ+gLR56DVNyL/xawBGwQr8o3U4/o1gP9FZmIWLnWCiIl5ni85MghMCNRfg==}
 
   css-declaration-sorter@7.2.0:
     resolution: {integrity: sha512-h70rUM+3PNFuaBDTLe8wF/cdWu+dOZmb7pJt8Z2sedYbAcQVQV/tEchueg3GWxwqS0cxtbxmaHEdkNACqcvsow==}
@@ -15887,7 +15887,7 @@ snapshots:
 
   cross-zip@4.0.1: {}
 
-  csrf-csrf@3.1.0:
+  csrf-csrf@3.2.2:
     dependencies:
       http-errors: 2.0.0
 
