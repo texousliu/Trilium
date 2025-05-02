@@ -1,6 +1,8 @@
 {
   "name": "@triliumnext/express-partial-content",
-  "version": "0.0.1",
+  "description": "A partial content handler implementation for any readable stream with Express. Based on this blog post: https://www.codeproject.com/Articles/813480/HTTP-Partial-Content-In-Node-js.",
+  "license": "MIT",
+  "version": "1.1.0",
   "type": "module",
   "private": true,
   "main": "./dist/index.js",
@@ -15,6 +17,12 @@
       "default": "./dist/index.js"
     }
   },
+  "keywords": [
+    "partial-content",
+    "206",
+    "stream",
+    "typescript"
+  ],
   "nx": {
     "name": "express-partial-content",
     "targets": {

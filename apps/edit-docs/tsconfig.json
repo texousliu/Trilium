@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../server"
+    },
+    {
       "path": "../desktop"
     },
     {
