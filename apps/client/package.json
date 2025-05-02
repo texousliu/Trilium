@@ -30,7 +30,7 @@
     "eslint-linter-browserify": "9.25.1",
     "force-graph": "1.49.5",
     "globals": "16.0.0",
-    "i18next": "25.0.0",
+    "i18next": "25.0.2",
     "i18next-http-backend": "3.0.2",
     "jquery": "3.7.1",
     "jquery-hotkeys": "0.2.2",
