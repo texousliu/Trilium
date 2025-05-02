@@ -777,6 +777,12 @@ importers:
         specifier: ~0.5.11
         version: 0.5.17
 
+  packages/express-partial-content:
+    dependencies:
+      tslib:
+        specifier: ^2.3.0
+        version: 2.8.1
+
   packages/turndown-plugin-gfm:
     dependencies:
       '@swc/helpers':
