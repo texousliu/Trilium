@@ -53,7 +53,7 @@
         "cache": true,
         "configurations": {
           "default": {
-            "command": "cross-env DEBUG=* tsx scripts/rebuild.ts",
+            "command": "cross-env DEBUG=* tsx scripts/rebuild.mts",
             "cwd": "{projectRoot}"
           },
           "nixos": {
