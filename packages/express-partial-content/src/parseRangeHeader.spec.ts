@@ -1,20 +1,16 @@
-import { parseRangeHeader } from "../src/parseRangeHeader";
-import { SinonSandbox, createSandbox } from "sinon";
-import { Logger } from "../src/Logger";
-import { expect } from "chai";
-import { RangeParserError } from "../src/RangeParserError";
+import { parseRangeHeader } from "./parseRangeHeader.js";
+import type { Logger } from "./Logger.js";
+import { RangeParserError } from "./RangeParserError.js";
 
 describe("parseRangeHeader tests", () => {
-  let sandbox: SinonSandbox;
   let logger: Logger;
   beforeEach(() => {
-    sandbox = createSandbox();
     logger = {
-      debug: sandbox.stub() as (message: string, extra?: any) => void
+      debug: vi.fn() as (message: string, extra?: any) => void
     };
   });
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
   it("returns null if range is not specified", () => {
     let value = parseRangeHeader("", 10, logger);

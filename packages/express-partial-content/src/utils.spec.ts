@@ -1,6 +1,5 @@
-import { Request, Response } from "express";
-import { expect } from "chai";
-import sinon, { SinonStub, SinonSpy } from "sinon";
+import type { Request, Response } from "express";
+import { expect, type Mock } from "vitest";
 
 import {
   getHeader,
@@ -12,7 +11,7 @@ import {
   setContentDispositionHeader,
   setContentRangeHeader,
   setCacheControlHeaderNoCache
-} from "../src/utils";
+} from "./utils.js";
 
 describe("utils tests", () => {
   let req: Request;
@@ -25,7 +24,7 @@ describe("utils tests", () => {
       }
     } as Request;
     res = {
-      setHeader: sinon.stub() as (name: string, value: string) => void
+      setHeader: vi.fn() as (name: string, value: string) => void
     } as Response;
   });
   describe("getHeader tests", () => {
@@ -43,7 +42,7 @@ describe("utils tests", () => {
       const name = "Content-Type";
       const value = "application/octet-stream";
       setHeader(name, value, res);
-      expect((res.setHeader as SinonStub).calledOnceWith(name, value));
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith(name, value);
     });
   });
   describe("getRangeHeader tests", () => {
@@ -56,34 +55,36 @@ describe("utils tests", () => {
     it("sets Content-Type header with specified value", () => {
       const value = "application/octet-stream";
       setContentTypeHeader(value, res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Content-Type", value));
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith("Content-Type", value);
     });
   });
   describe("setContentLengthHeader tests", () => {
     it("sets Content-Length header with specified value", () => {
-      const value = 100;
+      const value = "100";
       setContentLengthHeader(value, res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Content-Length", value));
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith("Content-Length", value);
     });
   });
   describe("setAcceptRangesHeader tests", () => {
     it("sets Accept-Ranges header with specified value", () => {
       const value = "bytes";
       setAcceptRangesHeader(res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Accept-Ranges", value));
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith("Accept-Ranges", value);
     });
   });
   describe("setContentRangeHeader tests", () => {
     it("sets Content-Range header with specified value", () => {
-      let range = { start: 10, end: 100 };
+      let range: { start: number, end: number } | null = { start: 10, end: 100 };
       const size = 1000;
       let value = `bytes ${range.start}-${range.end}/${size}`;
       setContentRangeHeader(range, size, res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Content-Range", value));
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith("Content-Range", value);
+      (res.setHeader as Mock).mockReset();
+
       range = null;
       value = `bytes */${size}`;
       setContentRangeHeader(range, size, res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Content-Range", value));
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith("Content-Range", value);
     });
   });
   describe("setContentDispositionHeader tests", () => {
@@ -91,20 +92,20 @@ describe("utils tests", () => {
       const fileName = "file.txt";
       const value = `attachment; filename*=utf-8''${fileName}`;
       setContentDispositionHeader(fileName, res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Content-Disposition", value)).to.be.true;
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith("Content-Disposition", value);
     });
     it("sets Content-Disposition header with specified unicode", () => {
       const fileName = "file.txt";
       const value = `attachment; filename*=utf-8''${encodeURIComponent(fileName)}`;
       setContentDispositionHeader(fileName, res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Content-Disposition", value)).to.be.true;
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith("Content-Disposition", value);
     });
   });
   describe("setCacheControlHeaderNoCache tests", () => {
     it("sets Cache-Control header with specified value", () => {
       const value = "no-cache";
       setCacheControlHeaderNoCache(res);
-      expect((res.setHeader as SinonStub).calledOnceWith("Cache-Control", value));
+      expect(res.setHeader).toHaveBeenCalledExactlyOnceWith("Cache-Control", value);
     });
   });
 });
