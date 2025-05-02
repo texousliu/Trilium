@@ -22,7 +22,7 @@ RUN npm ci && \
 #      as we install necessary dependencies in runtime buildstage anyways
 
 # Runtime stage
-FROM node:22.14.0-bullseye-slim
+FROM node:22.15.0-bullseye-slim
 
 WORKDIR /usr/src/app
 
