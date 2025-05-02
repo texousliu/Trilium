@@ -46,6 +46,11 @@ describe("#getMime", () => {
         ],
 
         [
+            "MP4 videos are supported",
+            ["video.mp4"], "video/mp4"
+        ],
+
+        [
             "unknown MIME type not recognized by mimeTypes.lookup",
             ["test.fake"], false
         ],
