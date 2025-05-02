@@ -1,4 +1,4 @@
-FROM node:22.14.0-alpine AS builder
+FROM node:22.15.0-alpine AS builder
     RUN corepack enable
 
     # Install native dependencies since we might be building cross-platform.
@@ -6,7 +6,7 @@ FROM node:22.14.0-alpine AS builder
     COPY ./dist/package.json ./dist/pnpm-lock.yaml ./docker/pnpm-workspace.yaml /usr/src/app/
     RUN pnpm install --frozen-lockfile --prod && pnpm rebuild
 
-FROM node:22.14.0-alpine
+FROM node:22.15.0-alpine
     # Install runtime dependencies
     RUN apk add --no-cache su-exec shadow
 
