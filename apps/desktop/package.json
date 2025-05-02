@@ -1,0 +1,91 @@
+{
+  "name": "@triliumnext/desktop",
+  "version": "0.0.1",
+  "private": true,
+  "main": "main.js",
+  "dependencies": {    
+    "@electron/remote": "2.1.2",    
+    "better-sqlite3": "^11.9.1",
+    "electron-debug": "4.1.0",
+    "electron-dl": "4.0.0",
+    "electron-squirrel-startup": "1.0.1",
+    "jquery.fancytree": "2.38.5",
+    "jquery-hotkeys": "0.2.2",
+    "@highlightjs/cdn-assets": "11.11.1"
+  },
+  "devDependencies": {
+    "@types/electron-squirrel-startup": "1.0.2",
+    "@triliumnext/server": "workspace:*",
+    "copy-webpack-plugin": "13.0.0",
+    "electron": "35.1.5",
+    "@electron/rebuild": "3.7.2",
+    "@electron-forge/cli": "7.8.0",
+    "@electron-forge/maker-deb": "7.8.0",
+    "@electron-forge/maker-dmg": "7.8.0",
+    "@electron-forge/maker-flatpak": "7.8.0",
+    "@electron-forge/maker-rpm": "7.8.0",
+    "@electron-forge/maker-squirrel": "7.8.0",
+    "@electron-forge/maker-zip": "7.8.0",
+    "@electron-forge/plugin-auto-unpack-natives": "7.8.0",
+    "prebuild-install": "^7.1.1"
+  },
+  "config": {
+    "forge": "../electron-forge/forge.config.cjs"
+  },
+  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
+  "scripts": {
+    "start-prod": "nx build desktop && cross-env TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=dist TRILIUM_PORT=37841 electron dist/main.js"
+  },
+  "license": "AGPL-3.0-only",
+  "author": {
+    "name": "TriliumNext Notes Team",
+    "email": "contact@eliandoran.me",
+    "url": "https://github.com/TriliumNext/Notes"
+  },
+  "description": "Build your personal knowledge base with TriliumNext Notes",
+  "nx": {
+    "name": "desktop",
+    "targets": {
+      "rebuild-deps": {
+        "executor": "nx:run-commands",
+        "dependsOn": [ "build" ],
+        "defaultConfiguration": "default",
+        "cache": true,
+        "configurations": {
+          "default": {
+            "command": "cross-env DEBUG=* tsx scripts/rebuild.ts",
+            "cwd": "{projectRoot}"
+          },
+          "nixos": {
+            "command": "electron-rebuild -f -v $(nix-shell -p electron_35 --run \"electron --version\") dist/main.js -m dist",
+            "cwd": "{projectRoot}"
+          }
+        }        
+      },
+      "serve": {
+        "executor": "nx:run-commands",
+        "dependsOn": [ "rebuild-deps" ],
+        "defaultConfiguration": "default",
+        "configurations": {
+          "default": {
+            "command": "electron .",
+            "cwd": "{projectRoot}/dist"
+          },
+          "nixos": {
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.js\"",
+            "cwd": ".",
+            "forwardAllArgs": false
+          }
+        }
+      },
+      "electron-forge:make": {
+        "dependsOn": [ "build" ],
+        "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm electron-forge make dist"
+      },
+      "electron-forge:package": {
+        "dependsOn": [ "build" ],
+        "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm electron-forge package dist"
+      }
+    }
+  }
+}

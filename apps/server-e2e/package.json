@@ -1,0 +1,15 @@
+{
+  "name": "@triliumnext/server-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "server-e2e",
+    "implicitDependencies": [
+      "client",
+      "server"
+    ]
+  },
+  "devDependencies": {
+    "dotenv": "16.5.0"
+  }
+}

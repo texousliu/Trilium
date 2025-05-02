@@ -42,25 +42,26 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - uses: pnpm/action-setup@v4
       - name: Set up node & dependencies
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "npm"
+          cache: "pnpm"
 
       - name: Install npm dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
       - name: Run the TypeScript build
-        run: npx tsc
+        run: npm nx run server:build
 
       - name: Build and export to Docker
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: apps/server
           file: ${{ matrix.dockerfile }}
           load: true
           tags: ${{ env.TEST_TAG }}
@@ -133,7 +134,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Update build info
         run: npm run chore:update-build-info
