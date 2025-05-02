@@ -19,9 +19,31 @@ permissions:
   pull-requests: write  # for PR comments
 
 jobs:
+  check-affected:
+    name: Check affected jobs (NX)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+      - name: Set up node & dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - uses: nrwl/nx-set-shas@v4
+      - name: Check affected
+        run: pnpm nx affected -t rebuild-deps
+
   report-electron-size:
     name: Report Electron size
     runs-on: ubuntu-latest
+    needs:
+      - check-affected
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -55,6 +77,8 @@ jobs:
   report-server-size:
     name: Report server size
     runs-on: ubuntu-latest
+    needs:
+      - check-affected
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -87,6 +111,8 @@ jobs:
   test_dev:
     name: Test development
     runs-on: ubuntu-latest
+    needs:
+      - check-affected
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -107,6 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - test_dev
+      - check-affected
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -127,6 +154,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build_docker
+      - check-affected
     strategy:
       matrix:
         include:
