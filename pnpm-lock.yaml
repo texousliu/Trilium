@@ -291,7 +291,7 @@ importers:
     dependencies:
       '@electron/remote':
         specifier: 2.1.2
-        version: 2.1.2(electron@35.1.5)
+        version: 2.1.2(electron@35.2.2)
       '@highlightjs/cdn-assets':
         specifier: 11.11.1
         version: 11.11.1
@@ -351,8 +351,8 @@ importers:
         specifier: 13.0.0
         version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
       electron:
-        specifier: 35.1.5
-        version: 35.1.5
+        specifier: 35.2.2
+        version: 35.2.2
       prebuild-install:
         specifier: ^7.1.1
         version: 7.1.3
@@ -407,8 +407,8 @@ importers:
         specifier: 13.0.0
         version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
       electron:
-        specifier: 35.1.5
-        version: 35.1.5
+        specifier: 35.2.2
+        version: 35.2.2
       fs-extra:
         specifier: 11.3.0
         version: 11.3.0
@@ -436,7 +436,7 @@ importers:
         version: 7.1.1
       '@electron/remote':
         specifier: 2.1.2
-        version: 2.1.2(electron@35.1.5)
+        version: 2.1.2(electron@35.2.2)
       '@excalidraw/excalidraw':
         specifier: 0.18.0
         version: 0.18.0(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@16.14.0))(react@16.14.0)
@@ -600,8 +600,8 @@ importers:
         specifier: 3.1.10
         version: 3.1.10
       electron:
-        specifier: 35.1.5
-        version: 35.1.5
+        specifier: 35.2.2
+        version: 35.2.2
       electron-debug:
         specifier: 4.1.0
         version: 4.1.0
@@ -5415,8 +5415,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@35.1.5:
-    resolution: {integrity: sha512-LolvbKKQUSCGvEwbEQNt1cxD1t+YYClDNwBIjn4d28KM8FSqUn9zJuf6AbqNA7tVs9OFl/EQpmg/m4lZV1hH8g==}
+  electron@35.2.2:
+    resolution: {integrity: sha512-jZnCOtIgrt28esWP5z/PKndj/vPQ/Zt+cvNRlb/qOGnK/AjW1mASwPMtQ099NlSodf69RR3JrhnZCYbTWeDR4g==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -11847,9 +11847,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/remote@2.1.2(electron@35.1.5)':
+  '@electron/remote@2.1.2(electron@35.2.2)':
     dependencies:
-      electron: 35.1.5
+      electron: 35.2.2
 
   '@electron/universal@2.0.2':
     dependencies:
@@ -16572,7 +16572,7 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@35.1.5:
+  electron@35.2.2:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 22.14.1
