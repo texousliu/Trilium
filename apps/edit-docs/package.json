@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "@electron/rebuild": "3.7.2",
+    "@electron/rebuild": "4.0.1",
     "@triliumnext/client": "workspace:*",
     "@triliumnext/desktop": "workspace:*",
     "@types/fs-extra": "11.0.4",
@@ -21,7 +21,7 @@
         "cache": true,
         "configurations": {
           "default": {
-            "command": "cross-env DEBUG=* tsx scripts/rebuild.ts",
+            "command": "cross-env DEBUG=* tsx scripts/rebuild.mts",
             "cwd": "{projectRoot}"
           },
           "nixos": {
