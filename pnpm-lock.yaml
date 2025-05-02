@@ -444,8 +444,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/commons
       '@triliumnext/express-partial-content':
-        specifier: 1.0.1
-        version: 1.0.1(express@4.21.2)
+        specifier: workspace:*
+        version: link:../../packages/express-partial-content
       '@triliumnext/turndown-plugin-gfm':
         specifier: workspace:*
         version: link:../../packages/turndown-plugin-gfm
@@ -3268,11 +3268,6 @@ packages:
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
-
-  '@triliumnext/express-partial-content@1.0.1':
-    resolution: {integrity: sha512-WQipyCd3AHnKRhkMGUjgvi75L8kRjCyvCituvtdkNt5GLUQeHRyMwEokYJ8uoBgPoJNPLPCjXV1Ig0WE37N7KA==}
-    peerDependencies:
-      express: ^4.16.4
 
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -14053,10 +14048,6 @@ snapshots:
   '@tootallnate/once@1.1.2': {}
 
   '@tootallnate/once@2.0.0': {}
-
-  '@triliumnext/express-partial-content@1.0.1(express@4.21.2)':
-    dependencies:
-      express: 4.21.2
 
   '@trysound/sax@0.2.0': {}
 
