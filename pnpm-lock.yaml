@@ -196,8 +196,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       eslint-linter-browserify:
-        specifier: 9.25.0
-        version: 9.25.0
+        specifier: 9.25.1
+        version: 9.25.1
       force-graph:
         specifier: 1.49.5
         version: 1.49.5
@@ -5692,8 +5692,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-linter-browserify@9.25.0:
-    resolution: {integrity: sha512-BGMyqN+rr1fCF7F37kSAxrjy6Ysd788xH1rEaIpq89jQrs5tMs/FbP/Vns3JJQ4xxvx/mjobasngG9chxR3+/A==}
+  eslint-linter-browserify@9.25.1:
+    resolution: {integrity: sha512-gBOB5/W59xaupXI2/2O0qAk7XxYRLnKzx4TRbbplb5NjmOLZv6QAmVowD3TjnMQvIlnU4SbiQk+RncmNtsn+QQ==}
 
   eslint-plugin-playwright@1.8.3:
     resolution: {integrity: sha512-h87JPFHkz8a6oPhn8GRGGhSQoAJjx0AkOv1jME6NoMk2FpEsfvfJJNaQDxLSqSALkCr0IJXPGTnp6SIRVu5Nqg==}
@@ -16847,7 +16847,7 @@ snapshots:
     dependencies:
       eslint: 9.25.1(jiti@2.4.2)
 
-  eslint-linter-browserify@9.25.0: {}
+  eslint-linter-browserify@9.25.1: {}
 
   eslint-plugin-playwright@1.8.3(eslint@9.25.1(jiti@2.4.2)):
     dependencies:
