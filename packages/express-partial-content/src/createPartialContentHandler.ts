@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { parseRangeHeader } from "./parseRangeHeader";
-import { RangeParserError } from "./RangeParserError";
-import { Logger } from "./Logger";
-import { ContentProvider } from "./ContentProvider";
-import { ContentDoesNotExistError } from "./ContentDoesNotExistError";
+import type { Request, Response } from "express";
+import { parseRangeHeader } from "./parseRangeHeader.js";
+import { RangeParserError } from "./RangeParserError.js";
+import type { Logger } from "./Logger.js";
+import type { ContentProvider } from "./ContentProvider.js";
+import { ContentDoesNotExistError } from "./ContentDoesNotExistError.js";
 import {
   getRangeHeader,
   setContentRangeHeader,
@@ -12,7 +12,7 @@ import {
   setAcceptRangesHeader,
   setContentLengthHeader,
   setCacheControlHeaderNoCache
-} from "./utils";
+} from "./utils.js";
 export function createPartialContentHandler(contentProvider: ContentProvider, logger: Logger) {
   return async function handler(req: Request, res: Response) {
     let content;

@@ -1,4 +1,4 @@
-import { Range } from "./Range";
+import type { Range } from "./Range.js";
 import { Stream } from "stream";
 export interface Content {
   /**

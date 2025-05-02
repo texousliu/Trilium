@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { Range } from "./Range";
+import type { Request, Response } from "express";
+import type { Range } from "./Range.js";
 export const getHeader = (name: string, req: Request) => req.headers[name];
 export const getRangeHeader = getHeader.bind(null, "range");
 export const setHeader = (name: string, value: string, res: Response) => res.setHeader(name, value);

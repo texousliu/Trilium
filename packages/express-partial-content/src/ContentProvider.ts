@@ -1,5 +1,5 @@
-import { Request } from "express";
-import { Content } from "./Content";
+import type { Request } from "express";
+import type { Content } from "./Content.js";
 /**
  * @type {function (Request): Promise<Content>}
  */

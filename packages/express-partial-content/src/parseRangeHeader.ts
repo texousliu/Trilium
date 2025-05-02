@@ -1,6 +1,6 @@
-import { Logger } from "./Logger";
-import { RangeParserError } from "./RangeParserError";
-import { Range } from "./Range";
+import type { Logger } from "./Logger.js";
+import { RangeParserError } from "./RangeParserError.js";
+import type { Range } from "./Range.js";
 
 const rangeRegEx = /bytes=([0-9]*)-([0-9]*)/;
 
