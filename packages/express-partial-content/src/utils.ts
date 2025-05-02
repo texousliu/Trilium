@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import type { Range } from "./Range.js";
 export const getHeader = (name: string, req: Request) => req.headers[name];
-export const getRangeHeader = getHeader.bind(null, "range");
+export const getRangeHeader: (req: Request) => string | string[] | undefined = getHeader.bind(null, "range");
 export const setHeader = (name: string, value: string, res: Response) => res.setHeader(name, value);
 export const setContentTypeHeader = setHeader.bind(null, "Content-Type");
 export const setContentLengthHeader = setHeader.bind(null, "Content-Length");

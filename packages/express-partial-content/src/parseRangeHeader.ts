@@ -4,8 +4,16 @@ import type { Range } from "./Range.js";
 
 const rangeRegEx = /bytes=([0-9]*)-([0-9]*)/;
 
-export function parseRangeHeader(range: string, totalSize: number, logger: Logger): Range | null {
-  logger.debug("Un-parsed range is: ", range);
+export function parseRangeHeader(_range: string | string[] | null | undefined, totalSize: number, logger: Logger): Range | null {
+  logger.debug("Un-parsed range is: ", _range);
+
+  if (!_range?.length) {
+    return null;
+  }
+
+  // TODO: Maybe we need to support multiple ranges.
+  const range = Array.isArray(_range) ? _range[0] : _range;
+
   // 1. If range is not specified or the file is empty, return null.
   if (!range || range === null || range.length === 0 || totalSize === 0) {
     return null;

@@ -44,12 +44,12 @@ export function createPartialContentHandler(contentProvider: ContentProvider, lo
     // If range is not specified, or the file is empty, return the full stream
     if (range === null) {
       logger.debug("createPartialContentHandler: No range found, returning full content.");
-      setContentLengthHeader(totalSize, res);
+      setContentLengthHeader(String(totalSize), res);
       return getStream().pipe(res);
     }
     setContentRangeHeader(range, totalSize, res);
     let { start, end } = range;
-    setContentLengthHeader(start === end ? 0 : end - start + 1, res);
+    setContentLengthHeader(String(start === end ? 0 : end - start + 1), res);
     setCacheControlHeaderNoCache(res);
     // Return 206 Partial Content status
     logger.debug("createPartialContentHandler: Returning partial content for range: ", JSON.stringify(range));
