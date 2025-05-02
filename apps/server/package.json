@@ -1,9 +1,9 @@
 {
   "name": "@triliumnext/server",
-  "version": "0.0.1",
+  "version": "0.94.0",
   "description": "Desktop client for TriliumNext, embedding both the client and the server.",
   "private": true,
-  "dependencies": {    
+  "dependencies": {
     "better-sqlite3": "11.9.1",
     "jquery.fancytree": "2.38.5",
     "jquery-hotkeys": "0.2.2",
@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@electron/remote": "2.1.2",
-    "@excalidraw/excalidraw": "0.18.0",    
+    "@excalidraw/excalidraw": "0.18.0",
     "@types/archiver": "6.0.3",
     "@types/better-sqlite3": "7.6.13",
     "@types/cheerio": "0.22.35",
@@ -47,7 +47,7 @@
     "boxicons": "2.1.4",
     "codemirror": "5.65.19",
     "express-http-proxy": "2.1.1",
-    "jquery": "3.7.1",    
+    "jquery": "3.7.1",
     "katex": "0.16.22",
     "normalize.css": "8.0.1",
     "@anthropic-ai/sdk": "0.39.0",
@@ -149,11 +149,15 @@
         }
       },
       "package": {
-        "dependsOn": [ "build" ],
+        "dependsOn": [
+          "build"
+        ],
         "command": "bash apps/server/scripts/build-server.sh"
       },
       "start-prod": {
-        "dependsOn": [ "build" ],
+        "dependsOn": [
+          "build"
+        ],
         "command": "node apps/server/dist/main.js"
       },
       "docker-build": {

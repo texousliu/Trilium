@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/source",
-  "version": "0.0.0",
+  "version": "0.94.0",
   "description": "Build your personal knowledge base with TriliumNext Notes",
   "directories": {
     "doc": "docs"
@@ -13,6 +13,7 @@
     "electron:build": "nx build desktop",
     "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
     "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
+    "chore:update-version": "tsx ./scripts/update-version.ts",
     "test": "pnpm nx run-many -t test"
   },
   "private": true,
