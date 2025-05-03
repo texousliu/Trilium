@@ -7,6 +7,7 @@ import StrikethroughAsDel from "./plugins/strikethrough_as_del.js";
 import InternalLinkPlugin from "./plugins/internallink.js";
 import ReferenceLink from "./plugins/referencelink.js";
 import RemoveFormatLinksPlugin from "./plugins/remove_format_links.js";
+import SpecialCharactersEmojiPlugin from "./plugins/special_characters_emoji.js";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
@@ -15,10 +16,13 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     ReferenceLink,
     UploadimagePlugin,
     InternalLinkPlugin,
-    RemoveFormatLinksPlugin
+    RemoveFormatLinksPlugin,
+    SpecialCharactersEmojiPlugin
 ];
 
 export const COMMON_PLUGINS: typeof Plugin[] = [
+    ...TRILIUM_PLUGINS,
+
 	// essentials package expanded to allow selectively disable Enter and ShiftEnter
 	Clipboard, Enter, SelectAll, ShiftEnter, Typing, Undo,
 	CKFinderUploadAdapter,
@@ -69,7 +73,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	RemoveFormat,
 	SpecialCharacters,
 	SpecialCharactersEssentials,
-	// SpecialCharactersEmoji,
 	FindAndReplace,
 	Mention,
 	// MarkdownImportPlugin,
@@ -88,8 +91,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	// Mermaid,
 	// Kbd,
 	// Admonition
-
-    ...TRILIUM_PLUGINS
 ];
 
 export const COMMON_SETTINGS = { };
