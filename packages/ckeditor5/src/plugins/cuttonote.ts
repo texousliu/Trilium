@@ -12,7 +12,6 @@ export default class CutToNotePlugin extends Plugin {
 		this.editor.ui.componentFactory.add( 'cutToNote', locale => {
 			const view = new ButtonView( locale );
 
-            console.log("Got ", scissorsIcon);
 			view.set( {
 				label: 'Cut & paste selection to sub-note',
 				icon: scissorsIcon,

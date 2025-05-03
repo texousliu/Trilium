@@ -9,8 +9,8 @@
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": true,
     "forceConsistentCasingInFileNames": true,
+    "lib": ["DOM", "ES2015"],
     "types": [
-      "node",
       "vite/client"
     ]
   },

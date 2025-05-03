@@ -1,10 +1,6 @@
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import FileRepository from '@ckeditor/ckeditor5-upload/src/filerepository';
+import { FileRepository, Plugin, type FileLoader, type UploadAdapter } from "ckeditor5";
 
 export default class UploadimagePlugin extends Plugin {
-	/**
-	 * @inheritDoc
-	 */
 	static get requires() {
 		return [ FileRepository ];
 	}
@@ -18,17 +14,16 @@ export default class UploadimagePlugin extends Plugin {
 	}
 }
 
-class Adapter {
+class Adapter implements UploadAdapter {
+    private loader: FileLoader;
+    private xhr?: XMLHttpRequest;
+
 	/**
 	 * Creates a new adapter instance.
-	 *
-	 * @param {module:upload/filerepository~FileLoader} loader
 	 */
-	constructor(loader) {
+	constructor(loader: FileLoader) {
 		/**
 		 * FileLoader instance to use during the upload.
-		 *
-		 * @member {module:upload/filerepository~FileLoader} #loader
 		 */
 		this.loader = loader;
 	}
@@ -37,16 +32,15 @@ class Adapter {
 	 * Starts the upload process.
 	 *
 	 * @see module:upload/filerepository~Adapter#upload
-	 * @returns {Promise}
 	 */
 	upload() {
 		return this.loader.file
-			.then( file => new Promise( ( resolve, reject ) => {
+			.then( file => new Promise<File | null>( ( resolve, reject ) => {
 				this._initRequest().then(() => {
-					this._initListeners( resolve, reject, file );
-					this._sendRequest( file );
+					this._initListeners(resolve, reject);
+					this._sendRequest();
 				});
-			} ) );
+			} ) ) as Promise<any>;
 	}
 
 	/**
@@ -88,13 +82,23 @@ class Adapter {
 	 * Initializes XMLHttpRequest listeners.
 	 *
 	 * @private
-	 * @param {Function} resolve Callback function to be called when the request is successful.
-	 * @param {Function} reject Callback function to be called when the request cannot be completed.
+	 * @param resolve Callback function to be called when the request is successful.
+	 * @param reject Callback function to be called when the request cannot be completed.
 	 */
-	async _initListeners(resolve, reject) {
+	async _initListeners(resolve: (value: File | PromiseLike<File | null> | null) => void, reject: (reason?: any) => void) {
 		const xhr = this.xhr;
+        if (!xhr) {
+            reject("Missing XHR");
+            return;
+        }
+
 		const loader = this.loader;
 		const file = await loader.file;
+        if (!file) {
+            reject("Missing file");
+            return;
+        }
+
 		const genericError = 'Cannot upload file:' + ` ${file.name}.`;
 
 		xhr.addEventListener('error', () => reject(genericError));
@@ -108,7 +112,7 @@ class Adapter {
 
 			resolve({
 				default: response.url
-			});
+			} as unknown as File);
 		});
 
 		// Upload progress when it's supported.
@@ -131,9 +135,13 @@ class Adapter {
 	async _sendRequest() {
 		// Prepare form data.
 		const data = new FormData();
-		data.append('upload', await this.loader.file);
 
-		// Send request.
-		this.xhr.send(data);
+        const file = await this.loader.file;
+        if (file) {
+            data.append('upload', file);
+
+            // Send request.
+            this.xhr?.send(data);
+        }
 	}
 }
