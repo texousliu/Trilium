@@ -7,7 +7,7 @@
     "colors": "1.4.0",
     "diff": "5.0.0",
     "sqlite": "4.0.23",
-    "sqlite3": "5.0.2"
+    "sqlite3": "5.1.5"
   },
   "nx": {
     "name": "db-compare",
