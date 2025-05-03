@@ -1,6 +1,6 @@
 "use strict";
 
-import jsDiff from "diff";
+import * as jsDiff from "diff";
 import * as sqlite from "sqlite";
 import * as sqlite3 from "sqlite3";
 import sql from "./sql.js";
@@ -101,7 +101,7 @@ async function main() {
     }
 
     await compare("branches", "branchId",
-        "SELECT branchId, noteId, parentNoteId, notePosition, utcDateCreated, isDeleted, prefix FROM branches");
+        "SELECT branchId, noteId, parentNoteId, notePosition, utcDateModified, isDeleted, prefix FROM branches");
 
     await compare("notes", "noteId",
         "SELECT noteId, title, dateCreated, utcDateCreated, isProtected, isDeleted FROM notes WHERE isDeleted = 0");
@@ -116,13 +116,13 @@ async function main() {
         "SELECT noteRevisionId, content FROM note_revision_contents");
 
     await compare("options", "name",
-            `SELECT name, value, utcDateCreated FROM options WHERE isSynced = 1`);
+            `SELECT name, value, utcDateModified FROM options WHERE isSynced = 1`);
 
     await compare("attributes", "attributeId",
         "SELECT attributeId, noteId, type, name, value FROM attributes");
 
-    await compare("api_tokens", "apiTokenId",
-        "SELECT apiTokenId, token, utcDateCreated, isDeleted FROM api_tokens");
+    await compare("etapi_tokens", "etapiTokenId",
+        "SELECT etapiTokenId, name, tokenHash, utcDateCreated, utcDateModified, isDeleted FROM etapi_tokens");
 
     await compare("entity_changes", "uniqueId",
         "SELECT entityName || '-' || entityId AS uniqueId, hash, isErased, utcDateChanged FROM entity_changes WHERE isSynced = 1");
