@@ -1,6 +1,5 @@
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import markdownIcon from './icons/markdown-mark.svg';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import { ButtonView, Plugin } from 'ckeditor5';
+import markdownIcon from '../icons/markdown-mark.svg?raw';
 
 export default class MarkdownImportPlugin extends Plugin {
 	init() {
