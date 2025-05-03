@@ -9,7 +9,6 @@
     "client:test": "nx test client",
     "client:build": "nx build client",
     "client:coverage": "nx test client --coverage",
-    
     "server:test": "nx test server",
     "server:build": "nx build server",
     "server:coverage": "nx test server --coverage",
@@ -19,7 +18,6 @@
     "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
     "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
     "chore:update-version": "tsx ./scripts/update-version.ts",
-    
     "test": "pnpm nx run-many -t test",
     "coverage": "pnpm nx run-many -t coverage"
   },
@@ -85,5 +83,5 @@
     "axios": "^1.6.0",
     "express": "^4.21.2"
   },
-  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f"
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }
