@@ -1,12 +1,13 @@
 "use strict";
 
-require('colors');
-const jsDiff = require('diff');
-const sqlite = require('sqlite');
-const sqlite3 = require('sqlite3');
-const sql = require('./sql');
+import jsDiff from "diff";
+import * as sqlite from "sqlite";
+import * as sqlite3 from "sqlite3";
+import sql from "./sql.js";
 
-function printDiff(one, two) {
+import "colors";
+
+function printDiff(one: string, two: string) {
     const diff = jsDiff.diffChars(one, two);
 
     diff.forEach(function(part){
@@ -20,7 +21,7 @@ function printDiff(one, two) {
     console.log("");
 }
 
-function checkMissing(table, name, ids1, ids2) {
+function checkMissing(table: string, name: string, ids1: string[], ids2: string[]) {
     const missing = ids1.filter(item => ids2.indexOf(item) < 0);
 
     if (missing.length > 0) {
@@ -28,7 +29,7 @@ function checkMissing(table, name, ids1, ids2) {
     }
 }
 
-function handleBuffer(obj) {
+function handleBuffer(obj: { content: Buffer | string }) {
     if (obj && Buffer.isBuffer(obj.content)) {
         obj.content = obj.content.toString();
     }
@@ -36,7 +37,7 @@ function handleBuffer(obj) {
     return obj;
 }
 
-function compareRows(table, rsLeft, rsRight, column) {
+function compareRows(table: string, rsLeft: Record<string, any>, rsRight: Record<string, any>, column: string) {
     const leftIds = Object.keys(rsLeft);
     const rightIds = Object.keys(rsRight);
 
@@ -72,7 +73,7 @@ async function main() {
     const dbLeft = await sqlite.open({filename: dbLeftPath, driver: sqlite3.Database});
     const dbRight = await sqlite.open({filename: dbRightPath, driver: sqlite3.Database});
 
-    async function compare(table, column, query) {
+    async function compare(table: string, column: string, query: string) {
         const rsLeft = await sql.getIndexed(dbLeft, column, query);
         const rsRight = await sql.getIndexed(dbRight, column, query);
 

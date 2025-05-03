@@ -1,16 +1,18 @@
 "use strict";
 
-async function getSingleResult(db, query, params = []) {
+import type { Database } from "sqlite";
+
+async function getSingleResult(db: Database, query: string, params: any[] = []) {
     return await wrap(db, async db => db.get(query, ...params));
 }
 
-async function getSingleResultOrNull(db, query, params = []) {
+async function getSingleResultOrNull(db: Database, query: string, params: any[] = []) {
     const all = await wrap(db, async db => db.all(query, ...params));
 
     return all.length > 0 ? all[0] : null;
 }
 
-async function getSingleValue(db, query, params = []) {
+async function getSingleValue(db: Database, query: string, params: any[] = []) {
     const row = await getSingleResultOrNull(db, query, params);
 
     if (!row) {
@@ -20,14 +22,14 @@ async function getSingleValue(db, query, params = []) {
     return row[Object.keys(row)[0]];
 }
 
-async function getResults(db, query, params = []) {
+async function getResults(db: Database, query: string, params: any[] = []) {
     return await wrap(db, async db => db.all(query, ...params));
 }
 
-async function getIndexed(db, column, query, params = []) {
+async function getIndexed(db: Database, column: string, query: string, params: any[] = []) {
     const results = await getResults(db, query, params);
 
-    const map = {};
+    const map: Record<string, any> = {};
 
     for (const row of results) {
         map[row[column]] = row;
@@ -36,8 +38,8 @@ async function getIndexed(db, column, query, params = []) {
     return map;
 }
 
-async function getMap(db, query, params = []) {
-    const map = {};
+async function getMap(db: Database, query: string, params: any[] = []) {
+    const map: Record<string, any> = {};
     const results = await getResults(db, query, params);
 
     for (const row of results) {
@@ -49,7 +51,7 @@ async function getMap(db, query, params = []) {
     return map;
 }
 
-async function getFlattenedResults(db, key, query, params = []) {
+async function getFlattenedResults(db: Database, key: string, query: string, params: any[] = []) {
     const list = [];
     const result = await getResults(db, query, params);
 
@@ -60,24 +62,23 @@ async function getFlattenedResults(db, key, query, params = []) {
     return list;
 }
 
-async function execute(db, query, params = []) {
+async function execute(db: Database, query: string, params: any[] = []) {
     return await wrap(db, async db => db.run(query, ...params));
 }
 
-async function wrap(db, func) {
+async function wrap<T>(db: Database, func: (db: Database) => Promise<T>) {
     const thisError = new Error();
 
     try {
         return await func(db);
-    }
-    catch (e) {
+    } catch (e: any) {
         console.error("Error executing query. Inner exception: " + e.stack + thisError.stack);
 
         throw thisError;
     }
 }
 
-module.exports = {
+export default {
     getSingleValue,
     getSingleResult,
     getSingleResultOrNull,

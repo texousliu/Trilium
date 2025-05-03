@@ -67,5 +67,9 @@
         }
       }
     }
+  },
+  "devDependencies": {
+    "@types/colors": "1.2.4",
+    "@types/diff": "^7.0.2"
   }
 }

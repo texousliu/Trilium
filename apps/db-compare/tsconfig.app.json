@@ -6,7 +6,8 @@
       "node"
     ],
     "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
+    "verbatimModuleSyntax": false
   },
   "include": [
     "src/**/*.ts"

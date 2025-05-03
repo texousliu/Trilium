@@ -298,6 +298,13 @@ importers:
       sqlite3:
         specifier: 5.0.2
         version: 5.0.2
+    devDependencies:
+      '@types/colors':
+        specifier: 1.2.4
+        version: 1.2.4
+      '@types/diff':
+        specifier: ^7.0.2
+        version: 7.0.2
 
   apps/desktop:
     dependencies:
@@ -361,7 +368,7 @@ importers:
         version: 1.0.2
       copy-webpack-plugin:
         specifier: 13.0.0
-        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
+        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0)))
       electron:
         specifier: 35.2.2
         version: 35.2.2
@@ -417,7 +424,7 @@ importers:
         version: 11.0.4
       copy-webpack-plugin:
         specifier: 13.0.0
-        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
+        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0)))
       electron:
         specifier: 35.2.2
         version: 35.2.2
@@ -595,7 +602,7 @@ importers:
         version: 1.4.7
       copy-webpack-plugin:
         specifier: 13.0.0
-        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
+        version: 13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0)))
       csrf-csrf:
         specifier: 3.2.2
         version: 3.2.2
@@ -766,7 +773,7 @@ importers:
         version: 1.0.1
       webpack:
         specifier: 5.99.7
-        version: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
+        version: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0))
       ws:
         specifier: 8.18.1
         version: 8.18.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -3304,6 +3311,10 @@ packages:
   '@types/cls-hooked@4.3.9':
     resolution: {integrity: sha512-CMtHMz6Q/dkfcHarq9nioXH8BDPP+v5xvd+N90lBQ2bdmu06UvnLDqxTKoOJzz4SzIwb/x9i4UXGAAcnUDuIvg==}
 
+  '@types/colors@1.2.4':
+    resolution: {integrity: sha512-oSQxEVIDcYisAzWLa+wr50GSIPu8ml4PsKNJzgrDX3SmEHVBBqbaUurqsUceFauNlCRxNtENKkQm3yOe3m3nfg==}
+    deprecated: This is a stub types definition. colors provides its own type definitions, so you do not need this installed.
+
   '@types/compression@1.7.5':
     resolution: {integrity: sha512-AAQvK5pxMpaT+nDvhHrsBhLSYG5yQdtkaJE1WYieSNY2mVFKAgmU4ks65rkZD5oqnGCFLyQpUr1CqI4DmUMyDg==}
 
@@ -3419,6 +3430,9 @@ packages:
 
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
+
+  '@types/diff@7.0.2':
+    resolution: {integrity: sha512-JSWRMozjFKsGlEjiiKajUjIJVKuKdE3oVy2DNtK+fUo8q82nhFZ2CPQwicAIkXrofahDXrWJ7mjelvZphMS98Q==}
 
   '@types/ejs@3.1.5':
     resolution: {integrity: sha512-nv+GSx77ZtXiJzwKdsASqi+YQ5Z7vwHsTP0JY2SiQgjGckkBRKZnk8nIM+7oUZ1VCtuTz0+By4qVR7fqzp/Dfg==}
@@ -14325,6 +14339,10 @@ snapshots:
     dependencies:
       '@types/node': 18.16.9
 
+  '@types/colors@1.2.4':
+    dependencies:
+      colors: 1.4.0
+
   '@types/compression@1.7.5':
     dependencies:
       '@types/express': 4.17.21
@@ -14466,6 +14484,8 @@ snapshots:
   '@types/debug@4.1.12':
     dependencies:
       '@types/ms': 2.1.0
+
+  '@types/diff@7.0.2': {}
 
   '@types/ejs@3.1.5': {}
 
@@ -16020,14 +16040,14 @@ snapshots:
       serialize-javascript: 6.0.2
       webpack: 5.98.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
 
-  copy-webpack-plugin@13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)):
+  copy-webpack-plugin@13.0.0(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0))):
     dependencies:
       glob-parent: 6.0.2
       normalize-path: 3.0.0
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
       tinyglobby: 0.2.13
-      webpack: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
+      webpack: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0))
 
   core-js-compat@3.41.0:
     dependencies:
@@ -22070,14 +22090,14 @@ snapshots:
       '@swc/core': 1.5.29(@swc/helpers@0.5.17)
       esbuild: 0.25.3
 
-  terser-webpack-plugin@5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)):
+  terser-webpack-plugin@5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0))):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
       terser: 5.39.0
-      webpack: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4)
+      webpack: 5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0))
     optionalDependencies:
       '@swc/core': 1.5.29(@swc/helpers@0.5.17)
       esbuild: 0.25.3
@@ -22843,7 +22863,7 @@ snapshots:
       - esbuild
       - uglify-js
 
-  webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4):
+  webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0)):
     dependencies:
       '@types/eslint-scope': 3.7.7
       '@types/estree': 1.0.7
@@ -22866,7 +22886,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.2
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4))
+      terser-webpack-plugin: 5.3.14(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack@5.99.7(@swc/core@1.5.29(@swc/helpers@0.5.17))(esbuild@0.25.3)(webpack-cli@5.1.4(webpack@5.98.0)))
       watchpack: 2.4.2
       webpack-sources: 3.2.3
     optionalDependencies:
