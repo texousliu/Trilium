@@ -1,7 +1,7 @@
 {
   "name": "@triliumnext/server",
   "version": "0.94.0",
-  "description": "Desktop client for TriliumNext, embedding both the client and the server.",
+  "description": "The server-side component of TriliumNext, which exposes the client via the web, allows for sync and provides a REST API for both internal and external use.",
   "private": true,
   "dependencies": {
     "better-sqlite3": "11.9.1",

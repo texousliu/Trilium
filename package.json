@@ -6,15 +6,22 @@
     "doc": "docs"
   },
   "scripts": {
+    "client:test": "nx test client",
     "client:build": "nx build client",
+    "client:coverage": "nx test client --coverage",
+    
+    "server:test": "nx test server",
     "server:build": "nx build server",
+    "server:coverage": "nx test server --coverage",
     "server:start": "nx run-many --target=serve --projects=client,server --parallel",
     "server:start-prod": "nx run server:start-prod",
     "electron:build": "nx build desktop",
     "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
     "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
     "chore:update-version": "tsx ./scripts/update-version.ts",
-    "test": "pnpm nx run-many -t test"
+    
+    "test": "pnpm nx run-many -t test",
+    "coverage": "pnpm nx run-many -t coverage"
   },
   "private": true,
   "devDependencies": {
