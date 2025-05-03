@@ -35,6 +35,9 @@
     },
     {
       "path": "./apps/db-compare"
+    },
+    {
+      "path": "./packages/ckeditor5"
     }
   ]
 }
