@@ -4,12 +4,11 @@
  */
 
 // The editor creator to use.
-import { BalloonEditor as BalloonEditorBase } from '@ckeditor/ckeditor5-editor-balloon';
-import { BlockToolbar } from '@ckeditor/ckeditor5-ui';
-import '../theme/theme.css';
-import { COMMON_PLUGINS, COMMON_SETTINGS } from './config';
+import { BalloonEditor as BalloonEditorBase } from "ckeditor5";
+import { BlockToolbar } from "ckeditor5";
+import './theme/theme.css';
+import { COMMON_PLUGINS } from './config.js';
 
-//@ts-ignore
 export default class BalloonEditor extends BalloonEditorBase {
 	public static override builtinPlugins = [
 		...COMMON_PLUGINS,

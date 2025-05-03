@@ -4,11 +4,10 @@
  */
 
 // The editor creator to use.
-import { DecoupledEditor as DecoupledEditorBase } from '@ckeditor/ckeditor5-editor-decoupled';
-import '../theme/theme.css';
-import { COMMON_PLUGINS, COMMON_SETTINGS } from './config';
+import { DecoupledEditor as DecoupledEditorBase } from "ckeditor5";
+import './theme/theme.css';
+import { COMMON_PLUGINS } from './config.js';
 
-//@ts-ignore
 export default class DecoupledEditor extends DecoupledEditorBase {
 	public static override builtinPlugins = [
 		...COMMON_PLUGINS,
