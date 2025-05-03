@@ -18,5 +18,7 @@
   "nx": {
     "name": "ckeditor5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ckeditor5": "43.2.0"
+  }
 }
