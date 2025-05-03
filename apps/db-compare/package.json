@@ -1,0 +1,66 @@
+{
+  "name": "@triliumnext/db-compare",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "db-compare",
+    "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "defaultConfiguration": "production",
+        "options": {
+          "platform": "node",
+          "outputPath": "apps/db-compare/dist",
+          "format": [
+            "cjs"
+          ],
+          "bundle": false,
+          "main": "apps/db-compare/src/main.ts",
+          "tsConfig": "apps/db-compare/tsconfig.app.json",
+          "assets": [
+            "apps/db-compare/src/assets"
+          ],
+          "esbuildOptions": {
+            "sourcemap": true,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        },
+        "configurations": {
+          "development": {},
+          "production": {
+            "esbuildOptions": {
+              "sourcemap": false,
+              "outExtension": {
+                ".js": ".js"
+              }
+            }
+          }
+        }
+      },
+      "serve": {
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "db-compare:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "db-compare:build:development"
+          },
+          "production": {
+            "buildTarget": "db-compare:build:production"
+          }
+        }
+      }
+    }
+  }
+}
