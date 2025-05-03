@@ -2,9 +2,13 @@ import { Autoformat, AutoLink, BlockQuote, Bold, CKFinderUploadAdapter, Clipboar
 import type { Plugin } from "ckeditor5";
 import CutToNotePlugin from "./plugins/cuttonote.js";
 import UploadimagePlugin from "./plugins/uploadimage.js";
+import ItalicAsEmPlugin from "./plugins/italic_as_em.js";
+import StrikethroughAsDel from "./plugins/strikethrough_as_del.js";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
+    ItalicAsEmPlugin,
+	StrikethroughAsDel,
     UploadimagePlugin
 ];
 
@@ -63,8 +67,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	FindAndReplace,
 	Mention,
 	// InternalLinkPlugin,
-	// ItalicAsEmPlugin,
-	// StrikethroughAsDel,
 	// MarkdownImportPlugin,
 	// MentionCustomization,
 	// IncludeNote,
