@@ -6,6 +6,7 @@ import * as sqlite3 from "sqlite3";
 import sql from "./sql.js";
 
 import "colors";
+import path from "path";
 
 function printDiff(one: string, two: string) {
     const diff = jsDiff.diffChars(one, two);
@@ -67,11 +68,25 @@ function compareRows(table: string, rsLeft: Record<string, any>, rsRight: Record
 }
 
 async function main() {
-    const dbLeftPath = process.argv[2];
-    const dbRightPath = process.argv[3];
+    const dbLeftPath = path.resolve(process.argv[2]);
+    const dbRightPath = path.resolve(process.argv[3]);
 
-    const dbLeft = await sqlite.open({filename: dbLeftPath, driver: sqlite3.Database});
-    const dbRight = await sqlite.open({filename: dbRightPath, driver: sqlite3.Database});
+    let dbLeft: sqlite.Database;
+    let dbRight: sqlite.Database;
+
+    try {
+        dbLeft = await sqlite.open({filename: dbLeftPath, driver: sqlite3.Database});
+    } catch (e: any) {
+        console.error(`Could not load first database at ${dbRightPath} due to: ${e.message}`);
+        process.exit(1);
+    }
+
+    try {
+        dbRight = await sqlite.open({filename: dbRightPath, driver: sqlite3.Database});
+    } catch (e: any) {
+        console.error(`Could not load second database at ${dbRightPath} due to: ${e.message}`);
+        process.exit(2);
+    }
 
     async function compare(table: string, column: string, query: string) {
         const rsLeft = await sql.getIndexed(dbLeft, column, query);
