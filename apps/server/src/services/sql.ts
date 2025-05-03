@@ -13,18 +13,20 @@ import Database from "better-sqlite3";
 import ws from "./ws.js";
 import becca_loader from "../becca/becca_loader.js";
 import entity_changes from "./entity_changes.js";
+import config from "./config.js";
 
 let dbConnection: DatabaseType = buildDatabase();
 let statementCache: Record<string, Statement> = {};
 
 function buildDatabase() {
+    // for integration tests, ignore the config's readOnly setting
     if (process.env.TRILIUM_INTEGRATION_TEST === "memory") {
         return buildIntegrationTestDatabase();
     } else if (process.env.TRILIUM_INTEGRATION_TEST === "memory-no-store") {
         return new Database(":memory:");
     }
 
-    return new Database(dataDir.DOCUMENT_PATH);
+    return new Database(dataDir.DOCUMENT_PATH, { readonly: config.General.readOnly });
 }
 
 function buildIntegrationTestDatabase(dbPath?: string) {
