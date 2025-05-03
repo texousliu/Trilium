@@ -68,8 +68,13 @@ function compareRows(table: string, rsLeft: Record<string, any>, rsRight: Record
 }
 
 async function main() {
-    const dbLeftPath = path.resolve(process.argv[2]);
-    const dbRightPath = path.resolve(process.argv[3]);
+    const dbLeftPath = process.argv.at(-2);
+    const dbRightPath = process.argv.at(-1);
+
+    if (process.argv.length < 4 || !dbLeftPath || !dbRightPath) {
+        console.log(`Usage: ${process.argv[0]} ${process.argv[1]} path/to/first.db path/to/second.db`);
+        process.exit(1);
+    }
 
     let dbLeft: sqlite.Database;
     let dbRight: sqlite.Database;
@@ -77,15 +82,15 @@ async function main() {
     try {
         dbLeft = await sqlite.open({filename: dbLeftPath, driver: sqlite3.Database});
     } catch (e: any) {
-        console.error(`Could not load first database at ${dbRightPath} due to: ${e.message}`);
-        process.exit(1);
+        console.error(`Could not load first database at ${path.resolve(dbRightPath)} due to: ${e.message}`);
+        process.exit(2);
     }
 
     try {
         dbRight = await sqlite.open({filename: dbRightPath, driver: sqlite3.Database});
     } catch (e: any) {
-        console.error(`Could not load second database at ${dbRightPath} due to: ${e.message}`);
-        process.exit(2);
+        console.error(`Could not load second database at ${path.resolve(dbRightPath)} due to: ${e.message}`);
+        process.exit(3);
     }
 
     async function compare(table: string, column: string, query: string) {
