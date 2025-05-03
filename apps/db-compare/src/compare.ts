@@ -1,11 +1,12 @@
 "use strict";
 
-import jsDiff from "diff";
+import * as jsDiff from "diff";
 import * as sqlite from "sqlite";
 import * as sqlite3 from "sqlite3";
 import sql from "./sql.js";
 
 import "colors";
+import path from "path";
 
 function printDiff(one: string, two: string) {
     const diff = jsDiff.diffChars(one, two);
@@ -67,11 +68,30 @@ function compareRows(table: string, rsLeft: Record<string, any>, rsRight: Record
 }
 
 async function main() {
-    const dbLeftPath = process.argv[2];
-    const dbRightPath = process.argv[3];
+    const dbLeftPath = process.argv.at(-2);
+    const dbRightPath = process.argv.at(-1);
 
-    const dbLeft = await sqlite.open({filename: dbLeftPath, driver: sqlite3.Database});
-    const dbRight = await sqlite.open({filename: dbRightPath, driver: sqlite3.Database});
+    if (process.argv.length < 4 || !dbLeftPath || !dbRightPath) {
+        console.log(`Usage: ${process.argv[0]} ${process.argv[1]} path/to/first.db path/to/second.db`);
+        process.exit(1);
+    }
+
+    let dbLeft: sqlite.Database;
+    let dbRight: sqlite.Database;
+
+    try {
+        dbLeft = await sqlite.open({filename: dbLeftPath, driver: sqlite3.Database});
+    } catch (e: any) {
+        console.error(`Could not load first database at ${path.resolve(dbRightPath)} due to: ${e.message}`);
+        process.exit(2);
+    }
+
+    try {
+        dbRight = await sqlite.open({filename: dbRightPath, driver: sqlite3.Database});
+    } catch (e: any) {
+        console.error(`Could not load second database at ${path.resolve(dbRightPath)} due to: ${e.message}`);
+        process.exit(3);
+    }
 
     async function compare(table: string, column: string, query: string) {
         const rsLeft = await sql.getIndexed(dbLeft, column, query);
@@ -81,7 +101,7 @@ async function main() {
     }
 
     await compare("branches", "branchId",
-        "SELECT branchId, noteId, parentNoteId, notePosition, utcDateCreated, isDeleted, prefix FROM branches");
+        "SELECT branchId, noteId, parentNoteId, notePosition, utcDateModified, isDeleted, prefix FROM branches");
 
     await compare("notes", "noteId",
         "SELECT noteId, title, dateCreated, utcDateCreated, isProtected, isDeleted FROM notes WHERE isDeleted = 0");
@@ -96,13 +116,13 @@ async function main() {
         "SELECT noteRevisionId, content FROM note_revision_contents");
 
     await compare("options", "name",
-            `SELECT name, value, utcDateCreated FROM options WHERE isSynced = 1`);
+            `SELECT name, value, utcDateModified FROM options WHERE isSynced = 1`);
 
     await compare("attributes", "attributeId",
         "SELECT attributeId, noteId, type, name, value FROM attributes");
 
-    await compare("api_tokens", "apiTokenId",
-        "SELECT apiTokenId, token, utcDateCreated, isDeleted FROM api_tokens");
+    await compare("etapi_tokens", "etapiTokenId",
+        "SELECT etapiTokenId, name, tokenHash, utcDateCreated, utcDateModified, isDeleted FROM etapi_tokens");
 
     await compare("entity_changes", "uniqueId",
         "SELECT entityName || '-' || entityId AS uniqueId, hash, isErased, utcDateChanged FROM entity_changes WHERE isSynced = 1");
