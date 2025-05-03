@@ -6,7 +6,7 @@ TriliumNext Notes è un'applicazione per appunti ad organizzazione gerarchica, s
 
 Vedi [fotografie](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) per una panoramica veloce:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="https://github.com/TriliumNext/Notes/blob/develop/images/screenshots/app.png?raw=true" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⚠️ Perchè TriliumNext?
 [Il progetto originale Trilium è in modalità di manutenzione](https://github.com/zadam/trilium/issues/4620)
