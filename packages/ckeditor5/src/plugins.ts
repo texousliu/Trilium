@@ -8,6 +8,7 @@ import InternalLinkPlugin from "./plugins/internallink.js";
 import ReferenceLink from "./plugins/referencelink.js";
 import RemoveFormatLinksPlugin from "./plugins/remove_format_links.js";
 import SpecialCharactersEmojiPlugin from "./plugins/special_characters_emoji.js";
+import IndentBlockShortcutPlugin from "./plugins/indent_block_shortcut.js";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
@@ -17,7 +18,8 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     UploadimagePlugin,
     InternalLinkPlugin,
     RemoveFormatLinksPlugin,
-    SpecialCharactersEmojiPlugin
+    SpecialCharactersEmojiPlugin,
+    IndentBlockShortcutPlugin
 ];
 
 export const COMMON_PLUGINS: typeof Plugin[] = [
@@ -78,7 +80,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	// MarkdownImportPlugin,
 	// MentionCustomization,
 	// IncludeNote,
-	// indentBlockShortcutPlugin,
 	PageBreak,
 	GeneralHtmlSupport,
 	TextPartLanguage,
