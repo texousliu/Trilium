@@ -1,13 +1,14 @@
-import View from "@ckeditor/ckeditor5-ui/src/view";
-import toUnit from '@ckeditor/ckeditor5-utils/src/dom/tounit';
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-
 import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
+import { ButtonView, Locale, toUnit, View } from 'ckeditor5';
 
 const toPx = toUnit('%');
 
 export default class ProgressBarView extends View {
-	constructor(locale) {
+    private cancelButton: ButtonView;
+    width!: number;
+    customWidth!: number;
+
+	constructor(locale: Locale) {
 		super(locale);
 
 		const bind = this.bindTemplate;
@@ -40,6 +41,7 @@ export default class ProgressBarView extends View {
 					'ck-progress-bar',
 
 					// Observable attributes control the state of the view in DOM.
+                    //@ts-expect-error Type 'ListenerBinding' is not assignable to type 'TemplateSimpleValueSchema'
 					bind.to('elementClass')
 				],
 				style: {
@@ -49,12 +51,13 @@ export default class ProgressBarView extends View {
 		});
 	}
 
-	_createCancelButton(locale) {
+	_createCancelButton(locale: Locale) {
 		const view = new ButtonView(locale);
 		view.set({
 			icon: cancelIcon,
 			tooltip: true,
 			label: 'Cancel',
+            //@ts-expect-error Object literal may only specify known properties, and 'attributes' does not exist in type
 			attributes: {
 				class: ['ck', 'ck-button', 'ck-off', 'ck-button-cancel', 'ck-uploading-cancel']
 			}

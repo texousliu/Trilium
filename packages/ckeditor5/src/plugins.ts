@@ -12,6 +12,7 @@ import IndentBlockShortcutPlugin from "./plugins/indent_block_shortcut.js";
 import MarkdownImportPlugin from "./plugins/markdownimport.js";
 import MentionCustomization from "./plugins/mention_customization.js";
 import IncludeNote from "./plugins/includenote.js";
+import Uploadfileplugin from "./plugins/file_upload/uploadfileplugin.js";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
@@ -25,7 +26,8 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     IndentBlockShortcutPlugin,
     MarkdownImportPlugin,
     MentionCustomization,
-    IncludeNote
+    IncludeNote,
+    Uploadfileplugin
 ];
 
 export const COMMON_PLUGINS: typeof Plugin[] = [
@@ -70,7 +72,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	IndentBlock,
 	ParagraphButtonUI,
 	HeadingButtonsUI,
-	//Uploadfileplugin
 	TextTransformation,
 	Font,
 	FontColor,
@@ -83,7 +84,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	SpecialCharactersEssentials,
 	FindAndReplace,
 	Mention,
-	// IncludeNote,
 	PageBreak,
 	GeneralHtmlSupport,
 	TextPartLanguage,

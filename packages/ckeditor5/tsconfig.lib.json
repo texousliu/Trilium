@@ -9,7 +9,7 @@
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["DOM", "ES2015"],
+    "lib": ["DOM", "ES2020"],
     "types": [
       "vite/client",
       "jquery"

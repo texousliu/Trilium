@@ -1,5 +1,8 @@
-import { FileRepository } from 'ckeditor5/src/upload';
-import { Command } from 'ckeditor5/src/core';
+import { Command, FileRepository, Model, type NodeAttributes, type Writer } from "ckeditor5";
+
+interface FileUploadOpts {
+    file: File[];
+}
 
 export default class FileUploadCommand extends Command {
 	refresh() {
@@ -13,7 +16,7 @@ export default class FileUploadCommand extends Command {
 	 * @param {Object} options Options for the executed command.
 	 * @param {File|Array.<File>} options.file The file or an array of files to upload.
 	 */
-	execute( options ) {
+	execute( options: FileUploadOpts ) {
 		const editor = this.editor;
 		const model = editor.model;
 
@@ -30,12 +33,8 @@ export default class FileUploadCommand extends Command {
 
 /**
  * 	Handles uploading single file.
- *
- *	@param {module:engine/model/writer~writer} writer
- *	@param {module:engine/model/model~Model} model
- *	@param {File} file
  */
-function uploadFile( writer, model, fileRepository, file ) {
+function uploadFile( writer: Writer, model: Model, fileRepository: FileRepository, file: File ) {
 	const loader = fileRepository.createLoader( file );
 
 	// Do not throw when upload adapter is not set. FileRepository will log an error anyway.
@@ -46,7 +45,7 @@ function uploadFile( writer, model, fileRepository, file ) {
 	insertFileLink( writer, model, { href: '', uploadId: loader.id }, file );
 }
 
-function insertFileLink( writer, model, attributes = {}, file ) {
+function insertFileLink( writer: Writer, model: Model, attributes: NodeAttributes = {}, file: File ) {
 	const placeholder = writer.createElement( 'reference', attributes );
 	model.insertContent( placeholder, model.document.selection );
 	writer.insertText( ' ', placeholder, 'after' );

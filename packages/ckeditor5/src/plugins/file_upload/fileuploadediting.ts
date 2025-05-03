@@ -1,12 +1,8 @@
-import { Plugin } from 'ckeditor5/src/core';
-import { FileRepository } from 'ckeditor5/src/upload';
-import { Notification } from 'ckeditor5/src/ui';
-import { Clipboard } from 'ckeditor5/src/clipboard';
-import { UpcastWriter } from 'ckeditor5/src/engine';
-
+import { Clipboard, FileRepository, Notification, Plugin, UpcastWriter, ViewElement, type Editor, type FileLoader, type Item, type Node, type ViewItem, type ViewRange } from 'ckeditor5';
 import FileUploadCommand from './fileuploadcommand';
 
 export default class FileUploadEditing extends Plugin {
+
 	static get requires() {
 		return [ FileRepository, Notification, Clipboard ];
 	}
@@ -46,14 +42,14 @@ export default class FileUploadEditing extends Plugin {
 			editor.model.change( writer => {
 				// Set selection to paste target.
 				if ( data.targetRanges ) {
-					writer.setSelection( data.targetRanges.map( viewRange => editor.editing.mapper.toModelRange( viewRange ) ) );
+					writer.setSelection( data.targetRanges.map( (viewRange: ViewRange) => editor.editing.mapper.toModelRange( viewRange ) ) );
 				}
 
 				if ( files.length ) {
 					evt.stop();
 
 					// Upload files after the selection has changed in order to ensure the command's state is refreshed.
-					editor.model.enqueueChange( 'default', () => {
+					editor.model.enqueueChange(() => {
 						editor.execute( 'fileUpload', { file: files } );
 					} );
 				}
@@ -62,15 +58,16 @@ export default class FileUploadEditing extends Plugin {
 
 		this.listenTo( editor.plugins.get( Clipboard ), 'inputTransformation', ( evt, data ) => {
 			const fetchableFiles = Array.from( editor.editing.view.createRangeIn( data.content ) )
-				.filter( value => isLocalFile( value.item ) && !value.item.getAttribute( 'uploadProcessed' ) )
+				.filter( value => isLocalFile( value.item ) && !(value.item as unknown as Node).getAttribute( 'uploadProcessed' ) )
 				.map( value => {
-					return { promise: fetchLocalFile( value.item ), fileElement: value.item };
+					return { promise: fetchLocalFile( value.item ), fileElement: value as unknown as ViewElement };
 				} );
 
 			if ( !fetchableFiles.length ) {
 				return;
 			}
 
+            //@ts-expect-error Missing document.
 			const writer = new UpcastWriter();
 
 			for ( const fetchableFile of fetchableFiles ) {
@@ -101,7 +98,7 @@ export default class FileUploadEditing extends Plugin {
 						const isInGraveyard = entry.position.root.rootName == '$graveyard';
 						for ( const file of getFileLinksFromChangeItem( editor, item ) ) {
 							// Check if the file element still has upload id.
-							const uploadId = file.getAttribute( 'uploadId' );
+							const uploadId = file.getAttribute( 'uploadId' ) as string | number;
 							if ( !uploadId ) {
 								continue;
 							}
@@ -127,14 +124,14 @@ export default class FileUploadEditing extends Plugin {
 		} );
 	}
 
-	_readAndUpload( loader, fileElement ) {
+	_readAndUpload( loader: FileLoader, fileElement: Item ) {
 		const editor = this.editor;
 		const model = editor.model;
 		const t = editor.locale.t;
 		const fileRepository = editor.plugins.get( FileRepository );
 		const notification = editor.plugins.get( Notification );
 
-		model.enqueueChange( 'transparent', writer => {
+		model.enqueueChange(writer => {
 			writer.setAttribute( 'uploadStatus', 'reading', fileElement );
 		} );
 
@@ -142,14 +139,14 @@ export default class FileUploadEditing extends Plugin {
 			.then( () => {
 				const promise = loader.upload();
 
-				model.enqueueChange( 'transparent', writer => {
+				model.enqueueChange(writer => {
 					writer.setAttribute( 'uploadStatus', 'uploading', fileElement );
 				} );
 
 				return promise;
 			} )
 			.then( data => {
-				model.enqueueChange( 'transparent', writer => {
+				model.enqueueChange(writer => {
 					writer.setAttributes( { uploadStatus: 'complete', href: data.default }, fileElement );
 				} );
 
@@ -181,13 +178,13 @@ export default class FileUploadEditing extends Plugin {
 				clean();
 
 				// Permanently remove file from insertion batch.
-				model.enqueueChange( 'transparent', writer => {
+				model.enqueueChange(writer => {
 					writer.remove( fileElement );
 				} );
 			} );
 
 		function clean() {
-			model.enqueueChange( 'transparent', writer => {
+			model.enqueueChange(writer => {
 				writer.removeAttribute( 'uploadId', fileElement );
 				writer.removeAttribute( 'uploadStatus', fileElement );
 			} );
@@ -197,16 +194,16 @@ export default class FileUploadEditing extends Plugin {
 	}
 }
 
-function fetchLocalFile( link ) {
-	return new Promise( ( resolve, reject ) => {
-		const href = link.getAttribute( 'href' );
+function fetchLocalFile( link: ViewItem ) {
+	return new Promise<File>( ( resolve, reject ) => {
+		const href = (link as unknown as Node).getAttribute( 'href' ) as string;
 
 		// Fetch works asynchronously and so does not block the browser UI when processing data.
 		fetch( href )
 			.then( resource => resource.blob() )
 			.then( blob => {
-				const mimeType = getFileMimeType( blob, href );
-				const ext = mimeType.replace( 'file/', '' );
+				const mimeType = getFileMimeType( blob, href ) ?? "";
+				const ext = mimeType?.replace( 'file/', '' );
 				const filename = `file.${ ext }`;
 				const file = createFileFromBlob( blob, filename, mimeType );
 
@@ -216,7 +213,7 @@ function fetchLocalFile( link ) {
 	} );
 }
 
-function isLocalFile( node ) {
+function isLocalFile( node: ViewItem ) {
 	if ( !node.is( 'element', 'a' ) || !node.getAttribute( 'href' ) ) {
 		return false;
 	}
@@ -224,17 +221,17 @@ function isLocalFile( node ) {
 	return node.getAttribute( 'href' );
 }
 
-function getFileMimeType( blob, src ) {
+function getFileMimeType( blob: Blob, src: string ) {
 	if ( blob.type ) {
 		return blob.type;
 	} else if ( src.match( /data:(image\/\w+);base64/ ) ) {
-		return src.match( /data:(image\/\w+);base64/ )[ 1 ].toLowerCase();
+		return src.match( /data:(image\/\w+);base64/ )?.[ 1 ].toLowerCase();
 	} else {
 		throw new Error( 'Could not retrieve mime type for file.' );
 	}
 }
 
-function createFileFromBlob( blob, filename, mimeType ) {
+function createFileFromBlob( blob: BlobPart, filename: string, mimeType: string ) {
 	try {
 		return new File( [ blob ], filename, { type: mimeType } );
 	} catch ( err ) {
@@ -250,11 +247,11 @@ function createFileFromBlob( blob, filename, mimeType ) {
 //
 // @param {module:clipboard/datatransfer~DataTransfer} dataTransfer
 // @returns {Boolean}
-export function isHtmlIncluded( dataTransfer ) {
+export function isHtmlIncluded( dataTransfer: DataTransfer ) {
 	return Array.from( dataTransfer.types ).includes( 'text/html' ) && dataTransfer.getData( 'text/html' ) !== '';
 }
 
-function getFileLinksFromChangeItem( editor, item ) {
+function getFileLinksFromChangeItem( editor: Editor, item: Item ) {
 	return Array.from( editor.model.createRangeOn( item ) )
 		.filter( value => value.item.hasAttribute( 'href' ) )
 		.map( value => value.item );

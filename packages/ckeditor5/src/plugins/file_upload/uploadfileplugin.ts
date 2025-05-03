@@ -1,5 +1,5 @@
-import { Plugin } from 'ckeditor5/src/core';
-import FileUploadEditing from './src/fileuploadediting';
+import { Plugin } from "ckeditor5";
+import FileUploadEditing from "./fileuploadediting";
 
 export default class Uploadfileplugin extends Plugin {
 	static get requires() {
