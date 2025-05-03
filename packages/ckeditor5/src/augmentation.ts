@@ -8,6 +8,7 @@ declare global {
     interface EditorComponent extends Component {
         loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string): Promise<void>;
         createNoteForReferenceLink(title: string): Promise<string>;
+        loadIncludedNote(noteId: string, $el: JQuery<HTMLElement>): void;
     }
 
     var glob: {

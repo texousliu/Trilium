@@ -1,9 +1,5 @@
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import {toWidget} from '@ckeditor/ckeditor5-widget/src/utils';
-import Widget from '@ckeditor/ckeditor5-widget/src/widget';
-import Command from '@ckeditor/ckeditor5-core/src/command';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import noteIcon from './icons/note.svg';
+import { ButtonView, Command, Plugin, toWidget, Widget, type Editor, type Observable } from 'ckeditor5';
+import noteIcon from '../icons/note.svg?raw';
 
 export default class IncludeNote extends Plugin {
 	static get requires() {
@@ -34,7 +30,9 @@ class IncludeNoteUI extends Plugin {
 			} );
 
 			// Bind the state of the button to the command.
-			buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
+            if (command) {
+                buttonView.bind( 'isOn', 'isEnabled' ).to( command as Observable & { value: boolean; } & { isEnabled: boolean; }, 'value', 'isEnabled' );
+            }
 
 			// Execute the command when the button is clicked (executed).
 			this.listenTo( buttonView, 'execute', () => editor.execute( 'insertIncludeNote' ) );
@@ -103,7 +101,7 @@ class IncludeNoteEditing extends Plugin {
 			model: 'includeNote',
 			view: ( modelElement, { writer: viewWriter } ) => {
 
-				const noteId = modelElement.getAttribute( 'noteId' );
+				const noteId = modelElement.getAttribute( 'noteId' ) as string;
 				const boxSize = modelElement.getAttribute( 'boxSize' );
 
 				const section = viewWriter.createContainerElement( 'section', {
@@ -119,7 +117,7 @@ class IncludeNoteEditing extends Plugin {
 					const domElement = this.toDomElement( domDocument );
 
 					const editorEl = editor.editing.view.getDomRoot();
-					const component = glob.getComponentByEl( editorEl );
+					const component = glob.getComponentByEl<EditorComponent>( editorEl );
 
 					component.loadIncludedNote( noteId, $( domElement ) );
 
@@ -147,7 +145,8 @@ class InsertIncludeNoteCommand extends Command {
 	refresh() {
 		const model = this.editor.model;
 		const selection = model.document.selection;
-		const allowedIn = model.schema.findAllowedParent( selection.getFirstPosition(), 'includeNote' );
+        const firstPosition = selection.getFirstPosition();
+		const allowedIn = firstPosition && model.schema.findAllowedParent( firstPosition, 'includeNote' );
 
 		this.isEnabled = allowedIn !== null;
 	}
@@ -157,7 +156,7 @@ class InsertIncludeNoteCommand extends Command {
  * Hack coming from https://github.com/ckeditor/ckeditor5/issues/4465
  * Source issue: https://github.com/zadam/trilium/issues/1117
  */
-function preventCKEditorHandling( domElement, editor ) {
+function preventCKEditorHandling( domElement: HTMLElement, editor: Editor ) {
 	// Prevent the editor from listening on below events in order to stop rendering selection.
 
 	// commenting out click events to allow link click handler to still work
@@ -168,9 +167,10 @@ function preventCKEditorHandling( domElement, editor ) {
 	// Prevents TAB handling or other editor keys listeners which might be executed on editors selection.
 	domElement.addEventListener( 'keydown', stopEventPropagationAndHackRendererFocus, { capture: true } );
 
-	function stopEventPropagationAndHackRendererFocus( evt ) {
+	function stopEventPropagationAndHackRendererFocus( evt: Event ) {
 		evt.stopPropagation();
 		// This prevents rendering changed view selection thus preventing to changing DOM selection while inside a widget.
+        //@ts-expect-error: We are accessing a private field.
 		editor.editing.view._renderer.isFocused = false;
 	}
 }

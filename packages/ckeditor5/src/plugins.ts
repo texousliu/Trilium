@@ -11,6 +11,7 @@ import SpecialCharactersEmojiPlugin from "./plugins/special_characters_emoji.js"
 import IndentBlockShortcutPlugin from "./plugins/indent_block_shortcut.js";
 import MarkdownImportPlugin from "./plugins/markdownimport.js";
 import MentionCustomization from "./plugins/mention_customization.js";
+import IncludeNote from "./plugins/includenote.js";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
@@ -23,7 +24,8 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     SpecialCharactersEmojiPlugin,
     IndentBlockShortcutPlugin,
     MarkdownImportPlugin,
-    MentionCustomization
+    MentionCustomization,
+    IncludeNote
 ];
 
 export const COMMON_PLUGINS: typeof Plugin[] = [
