@@ -18,7 +18,7 @@ import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
-import { BalloonEditor, DecoupledEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
+import { BalloonEditor, COMMON_PLUGINS, DecoupledEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
 
 const ENABLE_INSPECTOR = false;
 
@@ -317,7 +317,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             mermaid: {
                 lazyLoad: async () => (await import("mermaid")).default, // FIXME
                 config: getMermaidConfig()
-            }
+            },
+            plugins: COMMON_PLUGINS
         });
     }
 

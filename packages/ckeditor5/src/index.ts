@@ -1,3 +1,2 @@
-export { EditorWatchdog } from "ckeditor5";
-export { default as BalloonEditor } from "./ckeditor_balloon.js";
-export { default as DecoupledEditor } from "./ckeditor_decoupled.js";
+export { EditorWatchdog, BalloonEditor, DecoupledEditor } from "ckeditor5";
+export * from "./plugins.js";
