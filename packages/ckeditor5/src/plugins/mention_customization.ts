@@ -1,7 +1,18 @@
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import Command from '@ckeditor/ckeditor5-core/src/command';
+import { Command, Mention, Plugin, Range, type Selectable } from "ckeditor5";
 
+/**
+ * Overrides the actions taken by the Mentions plugin (triggered by `@` in the text editor, or `~` & `#` in the attribute editor):
+ *
+ * - Auto-completes attributes and relations in the attribute editor.
+ * - Triggers the modal to create notes.
+ * - Inserts a reference link when a mention is selected.
+ */
 export default class MentionCustomization extends Plugin {
+
+    static get requires() {
+		return [ Mention ];
+	}
+
 	afterInit() {
 		const editor = this.editor;
 		// override standard mention command (see https://github.com/ckeditor/ckeditor5/issues/6470)
@@ -9,14 +20,31 @@ export default class MentionCustomization extends Plugin {
 	}
 }
 
+interface MentionOpts {
+    mention: string | {
+        id: string;
+        [key: string]: unknown;
+    };
+    marker: string;
+    text?: string;
+    range?: Range;
+}
+
+interface MentionAttribute {
+    id: string;
+    action?: "create-note";
+    noteTitle: string;
+    notePath: string;
+}
+
 class CustomMentionCommand extends Command {
-	execute(options) {
+
+	override execute(options: MentionOpts) {
 		const {model} = this.editor;
 		const {document} = model;
 		const {selection} = document;
-		const {mention} = options;
-
-		const range = options.range || selection.getFirstRange();
+		const mention = options.mention as unknown as MentionAttribute;
+		const range = (options.range || selection.getFirstRange()) as Selectable;
 
 		if (mention.id.startsWith('#') || mention.id.startsWith('~')) {
 			model.change(writer => {
@@ -26,18 +54,18 @@ class CustomMentionCommand extends Command {
 		}
 		else if (mention.action === 'create-note') {
 			const editorEl = this.editor.editing.view.getDomRoot();
-			const component = glob.getComponentByEl(editorEl);
+			const component = glob.getComponentByEl<EditorComponent>(editorEl);
 
 			component.createNoteForReferenceLink(mention.noteTitle).then(notePath => {
 				this.insertReference(range, notePath);
 			});
 		}
 		else {
-			this.insertReference(range, options.mention.notePath);
+			this.insertReference(range, mention.notePath);
 		}
 	}
 
-	insertReference(range, notePath) {
+	insertReference(range: Selectable, notePath: string) {
 		const {model} = this.editor;
 
 		model.change(writer => {
