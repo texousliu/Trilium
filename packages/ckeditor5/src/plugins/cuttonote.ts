@@ -1,18 +1,21 @@
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import scissorsIcon from './icons/scissors.svg';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
+import scissorsIcon from '../icons/scissors.svg?raw';
+import { ButtonView, HtmlDataProcessor, Plugin } from 'ckeditor5';
 
 export default class CutToNotePlugin extends Plugin {
+
+    private htmlDataProcessor!: HtmlDataProcessor;
+
 	init() {
+        // @ts-ignore Not sure why we need to pass a document.
 		this.htmlDataProcessor = new HtmlDataProcessor();
 
 		this.editor.ui.componentFactory.add( 'cutToNote', locale => {
 			const view = new ButtonView( locale );
 
+            console.log("Got ", scissorsIcon);
 			view.set( {
 				label: 'Cut & paste selection to sub-note',
-				icon: scissorsIcon,
+				// icon: scissorsIcon,
 				tooltip: true
 			} );
 

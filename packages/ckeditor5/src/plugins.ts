@@ -1,6 +1,12 @@
 import { Autoformat, AutoLink, BlockQuote, Bold, CKFinderUploadAdapter, Clipboard, Code, CodeBlock, Enter, FindAndReplace, Font, FontBackgroundColor, FontColor, GeneralHtmlSupport, Heading, HeadingButtonsUI, HorizontalLine, Image, ImageCaption, ImageInline, ImageResize, ImageStyle, ImageToolbar, ImageUpload, Indent, IndentBlock, Italic, Link, List, ListProperties, Mention, PageBreak, Paragraph, ParagraphButtonUI, PasteFromOffice, PictureEditing, RemoveFormat, SelectAll, ShiftEnter, SpecialCharacters, SpecialCharactersEssentials, Strikethrough, Style, Subscript, Superscript, Table, TableCaption, TableCellProperties, TableColumnResize, TableProperties, TableSelection, TableToolbar, TextPartLanguage, TextTransformation, TodoList, Typing, Underline, Undo } from "ckeditor5";
+import type { Plugin } from "ckeditor5";
+import CutToNotePlugin from "./plugins/cuttonote.js";
 
-export const COMMON_PLUGINS = [
+const TRILIUM_PLUGINS: typeof Plugin[] = [
+    CutToNotePlugin
+];
+
+export const COMMON_PLUGINS: typeof Plugin[] = [
 	// essentials package expanded to allow selectively disable Enter and ShiftEnter
 	Clipboard, Enter, SelectAll, ShiftEnter, Typing, Undo,
 	CKFinderUploadAdapter,
@@ -59,7 +65,6 @@ export const COMMON_PLUGINS = [
 	// ItalicAsEmPlugin,
 	// StrikethroughAsDel,
 	// MarkdownImportPlugin,
-	// CuttonotePlugin,
 	// MentionCustomization,
 	// IncludeNote,
 	// ReferenceLink,
@@ -77,6 +82,8 @@ export const COMMON_PLUGINS = [
 	// Mermaid,
 	// Kbd,
 	// Admonition
+
+    ...TRILIUM_PLUGINS
 ];
 
 export const COMMON_SETTINGS = { };
