@@ -5,11 +5,13 @@ import UploadimagePlugin from "./plugins/uploadimage.js";
 import ItalicAsEmPlugin from "./plugins/italic_as_em.js";
 import StrikethroughAsDel from "./plugins/strikethrough_as_del.js";
 import InternalLinkPlugin from "./plugins/internallink.js";
+import ReferenceLink from "./plugins/referencelink.js";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
     ItalicAsEmPlugin,
 	StrikethroughAsDel,
+    ReferenceLink,
     UploadimagePlugin,
     InternalLinkPlugin
 ];
@@ -71,7 +73,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	// MarkdownImportPlugin,
 	// MentionCustomization,
 	// IncludeNote,
-	// ReferenceLink,
 	// indentBlockShortcutPlugin,
 	// removeFormatLinksPlugin,
 	PageBreak,

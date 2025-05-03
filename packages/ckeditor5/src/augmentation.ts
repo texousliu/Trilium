@@ -1,14 +1,22 @@
 import "ckeditor5";
 
 declare global {
+    interface Component {
+        triggerCommand(command: string): void;
+    }
+
+    interface EditorComponent extends Component {
+        loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string): Promise<void>;
+    }
+
     var glob: {
-        getComponentByEl(el: unknown): {
-            triggerCommand(command: string): void;
-        };
+        getComponentByEl<T extends Component>(el: unknown): T;
         getActiveContextNote(): {
             noteId: string;
         };
         getHeaders(): Promise<Record<string, string>>;
+        getReferenceLinkTitle(href: string): Promise<string>;
+        getReferenceLinkTitleSync(href: string): string;
     }
 }
 

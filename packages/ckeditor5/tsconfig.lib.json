@@ -11,7 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "lib": ["DOM", "ES2015"],
     "types": [
-      "vite/client"
+      "vite/client",
+      "jquery"
     ]
   },
   "include": [

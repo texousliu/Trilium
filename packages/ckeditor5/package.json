@@ -20,5 +20,8 @@
   },
   "dependencies": {
     "ckeditor5": "43.2.0"
+  },
+  "devDependencies": {
+    "@types/jquery": "3.5.32"
   }
 }

@@ -1,7 +1,4 @@
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { toWidget, viewToModelPositionOutsideModelElement } from '@ckeditor/ckeditor5-widget/src/utils';
-import Widget from '@ckeditor/ckeditor5-widget/src/widget';
-import Command from '@ckeditor/ckeditor5-core/src/command';
+import { Command, Element, Plugin, toWidget, viewToModelPositionOutsideModelElement, Widget } from "ckeditor5";
 
 export default class ReferenceLink extends Plugin {
 	static get requires() {
@@ -10,7 +7,8 @@ export default class ReferenceLink extends Plugin {
 }
 
 class ReferenceLinkCommand extends Command {
-	execute( { href } ) {
+
+	execute({ href }: { href: string }) {
 		if (!href?.trim()) {
 			return;
 		}
@@ -34,8 +32,7 @@ class ReferenceLinkCommand extends Command {
 	refresh() {
 		const model = this.editor.model;
 		const selection = model.document.selection;
-
-		this.isEnabled = model.schema.checkChild(selection.focus.parent, 'reference');
+        this.isEnabled = selection.focus !== null && model.schema.checkChild(selection.focus.parent as Element, 'reference');
 	}
 }
 
@@ -92,7 +89,7 @@ class ReferenceLinkEditing extends Plugin {
 		conversion.for( 'editingDowncast' ).elementToElement( {
 			model: 'reference',
 			view: ( modelItem, { writer: viewWriter } ) => {
-				const href = modelItem.getAttribute( 'href' );
+				const href = modelItem.getAttribute('href') as string;
 
 				const referenceLinkView = viewWriter.createContainerElement( 'a', {
 						href,
@@ -106,7 +103,7 @@ class ReferenceLinkEditing extends Plugin {
 					const domElement = this.toDomElement( domDocument );
 
 					const editorEl = editor.editing.view.getDomRoot();
-					const component = glob.getComponentByEl(editorEl);
+					const component = glob.getComponentByEl<EditorComponent>(editorEl);
 
 					component.loadReferenceLinkTitle($(domElement), href);
 
@@ -123,7 +120,7 @@ class ReferenceLinkEditing extends Plugin {
 		conversion.for( 'dataDowncast' ).elementToElement( {
 			model: 'reference',
 			view: ( modelItem, { writer: viewWriter } ) => {
-				const href = modelItem.getAttribute( 'href' );
+				const href = modelItem.getAttribute('href') as string;
 
 				const referenceLinkView = viewWriter.createContainerElement( 'a', {
 					href: href,
