@@ -1,12 +1,11 @@
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import internalLinkIcon from './icons/trilium.svg';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import { ButtonView, Plugin } from 'ckeditor5';
+import internalLinkIcon from '../icons/trilium.svg?raw';
 
 export default class InternalLinkPlugin extends Plugin {
 	init() {
 		const editor = this.editor;
 
-		editor.ui.componentFactory.add( 'internalLink', locale => {
+		editor.ui.componentFactory.add('internalLink', locale => {
 			const view = new ButtonView( locale );
 
 			view.set( {
@@ -18,7 +17,7 @@ export default class InternalLinkPlugin extends Plugin {
             // enable internal link only if the editor is not read only
 			view.bind('isEnabled').to(editor, 'isReadOnly', isReadOnly => !isReadOnly);
 
-			view.on( 'execute', () => {
+			view.on('execute', () => {
 				const editorEl = editor.editing.view.getDomRoot();
 				const component = glob.getComponentByEl(editorEl);
 
@@ -26,6 +25,6 @@ export default class InternalLinkPlugin extends Plugin {
 			} );
 
 			return view;
-		} );
+		});
 	}
 }

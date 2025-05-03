@@ -4,12 +4,14 @@ import CutToNotePlugin from "./plugins/cuttonote.js";
 import UploadimagePlugin from "./plugins/uploadimage.js";
 import ItalicAsEmPlugin from "./plugins/italic_as_em.js";
 import StrikethroughAsDel from "./plugins/strikethrough_as_del.js";
+import InternalLinkPlugin from "./plugins/internallink.js";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
     ItalicAsEmPlugin,
 	StrikethroughAsDel,
-    UploadimagePlugin
+    UploadimagePlugin,
+    InternalLinkPlugin
 ];
 
 export const COMMON_PLUGINS: typeof Plugin[] = [
@@ -66,7 +68,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	// SpecialCharactersEmoji,
 	FindAndReplace,
 	Mention,
-	// InternalLinkPlugin,
 	// MarkdownImportPlugin,
 	// MentionCustomization,
 	// IncludeNote,
