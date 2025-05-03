@@ -4,7 +4,7 @@
 
 Trilium Notes は、大規模な個人知識ベースの構築に焦点を当てた、階層型ノートアプリケーションです。概要は[スクリーンショット](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)をご覧ください：
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="https://github.com/TriliumNext/Notes/blob/develop/images/screenshots/app.png?raw=true" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## 🎁 特徴
 

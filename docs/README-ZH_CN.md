@@ -4,7 +4,7 @@
 
 TriliumNext Notes 是一个层次化的笔记应用程序，专注于建立大型个人知识库。请参阅[屏幕截图](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)以快速了解：
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="https://github.com/TriliumNext/Notes/blob/develop/images/screenshots/app.png?raw=true" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⚠️ 为什么选择TriliumNext？
 

@@ -8,7 +8,7 @@ TriliumNext Notes is an open-source, cross-platform hierarchical note taking app
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for quick overview:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="https://github.com/TriliumNext/Notes/blob/develop/images/screenshots/app.png?raw=true" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⚠️ Why TriliumNext?
 
