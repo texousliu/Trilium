@@ -199,7 +199,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
     private $saveAttributesButton!: JQuery<HTMLElement>;
     private $errors!: JQuery<HTMLElement>;
 
-    private textEditor!: TextEditor;
+    private textEditor!: BalloonEditor;
     private lastUpdatedNoteId!: string | undefined;
     private lastSavedContent!: string;
 
@@ -213,7 +213,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.$widget = $(TPL);
         this.$editor = this.$widget.find(".attribute-list-editor");
 
-        this.initialized = this.initEditor();
+        // this.initialized = this.initEditor();
 
         this.$editor.on("keydown", async (e) => {
             if (e.which === 13) {
@@ -373,7 +373,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
 
         this.$editor.on("click", (e) => this.handleEditorClick(e));
 
-        this.textEditor = BalloonEditor.create(this.$editor[0], editorConfig);
+        this.textEditor = await BalloonEditor.create(this.$editor[0], editorConfig);
         this.textEditor.model.document.on("change:data", () => this.dataChanged());
         this.textEditor.editing.view.document.on(
             "enter",

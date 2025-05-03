@@ -1,6 +1,7 @@
 
 const { composePlugins, withNx, withWeb } = require('@nx/webpack');
 const { join } = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = composePlugins(
   withNx({
@@ -38,13 +39,6 @@ module.exports = composePlugins(
       "electron"
     ],
     baseHref: '/',
-    assets: [
-      join(__dirname, "./src/assets"),
-      join(__dirname, "./src/stylesheets"),
-      join(__dirname, "./src/libraries"),
-      join(__dirname, "./src/fonts"),
-      join(__dirname, "./src/translations")
-    ],
     outputHashing: false,
     optimization: process.env['NODE_ENV'] === 'production'
   }),
@@ -78,6 +72,32 @@ module.exports = composePlugins(
       util: false
     };
 
+    const assets = [ "assets", "stylesheets", "libraries", "fonts", "translations" ]      
+    config.plugins.push(new CopyPlugin({
+      patterns: assets.map((asset) => ({
+        from: join(__dirname, "src", asset),
+        to: asset
+      }))
+    }));
+
+    inlineSvg(config);
+
     return config;
   }
 );
+
+function inlineSvg(config) {
+  if (!config.module?.rules) {
+    return;
+  }
+
+  // Alter Nx's asset rule to avoid inlining SVG if they have ?raw prepended.
+  const existingRule = config.module.rules.find((r) => r.test.toString() === /\.svg$/.toString());
+  existingRule.resourceQuery = { not: [/raw/] };
+  
+  // Add a rule for prepending ?raw SVGs.
+  config.module.rules.push({
+    resourceQuery: /raw/,
+    type: 'asset/source',
+  });
+}
