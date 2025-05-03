@@ -6,6 +6,7 @@ import ItalicAsEmPlugin from "./plugins/italic_as_em.js";
 import StrikethroughAsDel from "./plugins/strikethrough_as_del.js";
 import InternalLinkPlugin from "./plugins/internallink.js";
 import ReferenceLink from "./plugins/referencelink.js";
+import RemoveFormatLinksPlugin from "./plugins/remove_format_links.js";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
@@ -13,7 +14,8 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
 	StrikethroughAsDel,
     ReferenceLink,
     UploadimagePlugin,
-    InternalLinkPlugin
+    InternalLinkPlugin,
+    RemoveFormatLinksPlugin
 ];
 
 export const COMMON_PLUGINS: typeof Plugin[] = [
@@ -74,7 +76,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	// MentionCustomization,
 	// IncludeNote,
 	// indentBlockShortcutPlugin,
-	// removeFormatLinksPlugin,
 	PageBreak,
 	GeneralHtmlSupport,
 	TextPartLanguage,
