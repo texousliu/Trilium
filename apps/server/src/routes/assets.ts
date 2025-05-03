@@ -53,6 +53,7 @@ async function register(app: express.Application) {
         app.use(`/${assetPath}/translations/`, persistentCacheStatic(path.join(resourceDir, "public", "translations")));
         app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
         app.use(`/${assetPath}/app-dist/doc_notes`, persistentCacheStatic(path.join(resourceDir, "assets", "doc_notes")));
+        app.use(`/${assetPath}/app-dist/excalidraw/fonts`, persistentCacheStatic(path.join(resourceDir, "node_modules/@excalidraw/excalidraw/dist/prod/fonts")));
     }
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/images`, express.static(path.join(srcRoot, "..", "images")));
