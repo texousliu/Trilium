@@ -2,6 +2,13 @@
   "name": "@triliumnext/db-compare",
   "version": "0.0.1",
   "private": true,
+  "description": "Tool to compare content of Trilium databases. Useful for debugging sync problems.",
+  "dependencies": {
+    "colors": "1.4.0",
+    "diff": "5.0.0",
+    "sqlite": "4.0.23",
+    "sqlite3": "5.0.2"
+  },
   "nx": {
     "name": "db-compare",
     "targets": {
@@ -18,11 +25,9 @@
             "cjs"
           ],
           "bundle": false,
-          "main": "apps/db-compare/src/main.ts",
+          "main": "apps/db-compare/src/compare.ts",
           "tsConfig": "apps/db-compare/tsconfig.app.json",
-          "assets": [
-            "apps/db-compare/src/assets"
-          ],
+          "assets": [],
           "esbuildOptions": {
             "sourcemap": true,
             "outExtension": {
