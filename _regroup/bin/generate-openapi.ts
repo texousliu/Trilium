@@ -34,6 +34,7 @@ const options = {
         "./src/routes/api/setup.ts",
         // all other files
         "./src/routes/api/*.ts",
+        "./src/routes/*.ts",
         "./bin/generate-openapi.ts"
     ]
 };
@@ -68,7 +69,7 @@ console.log("Saved to ", outputPath);
  *           $ref: "#/components/schemas/NoteId"
  *         type:
  *           type: string
- *           enum: ["attribute", "relation"]
+ *           enum: ["label", "relation"]
  *         name:
  *           type: string
  *           example: "internalLink"
@@ -100,6 +101,7 @@ console.log("Saved to ", outputPath);
  *           $ref: "#/components/schemas/UtcDateTime"
  *     Branch:
  *       type: object
+ *       required: ["branchId", "noteId", "parentNoteId", "notePosition"]
  *       properties:
  *         branchId:
  *           $ref: "#/components/schemas/BranchId"
@@ -142,6 +144,7 @@ console.log("Saved to ", outputPath);
  *           description: Encoded entity data. Object has one property for each database column.
  *     Note:
  *       type: object
+ *       required: ["noteId", "title", "isProtected", "type", "mime", "blobId"]
  *       properties:
  *         noteId:
  *           $ref: "#/components/schemas/NoteId"
