@@ -4,7 +4,7 @@ import noteAutocompleteService from "../../services/note_autocomplete.js";
 import server from "../../services/server.js";
 import contextMenuService from "../../menus/context_menu.js";
 import attributeParser, { type Attribute } from "../../services/attribute_parser.js";
-import libraryLoader from "../../services/library_loader.js";
+import { BalloonEditor } from "@triliumnext/ckeditor5";
 import froca from "../../services/froca.js";
 import attributeRenderer from "../../services/attribute_renderer.js";
 import noteCreateService from "../../services/note_create.js";
@@ -369,13 +369,11 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
     }
 
     async initEditor() {
-        await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
-
         this.$widget.show();
 
         this.$editor.on("click", (e) => this.handleEditorClick(e));
 
-        this.textEditor = await CKEditor.BalloonEditor.create(this.$editor[0], editorConfig);
+        this.textEditor = BalloonEditor.create(this.$editor[0], editorConfig);
         this.textEditor.model.document.on("change:data", () => this.dataChanged());
         this.textEditor.editing.view.document.on(
             "enter",

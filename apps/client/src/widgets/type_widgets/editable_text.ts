@@ -18,6 +18,7 @@ import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
+import { BalloonEditor, DecoupledEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
 
 const ENABLE_INSPECTOR = false;
 
@@ -127,7 +128,7 @@ function buildListOfLanguages() {
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     private contentLanguage?: string | null;
-    private watchdog!: CKWatchdog;
+    private watchdog!: EditorWatchdog<DecoupledEditor | BalloonEditor>;
 
     private $editor!: JQuery<HTMLElement>;
 
@@ -149,16 +150,15 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     async initEditor() {
-        await libraryLoader.requireLibrary(libraryLoader.CKEDITOR);
         const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
-        const editorClass = isClassicEditor ? CKEditor.DecoupledEditor : CKEditor.BalloonEditor;
+        const editorClass = isClassicEditor ? DecoupledEditor : BalloonEditor;
 
         // CKEditor since version 12 needs the element to be visible before initialization. At the same time,
         // we want to avoid flicker - i.e., show editor only once everything is ready. That's why we have separate
         // display of $widget in both branches.
         this.$widget.show();
 
-        this.watchdog = new CKEditor.EditorWatchdog(editorClass, {
+        this.watchdog = new EditorWatchdog<DecoupledEditor | BalloonEditor>(editorClass, {
             // An average number of milliseconds between the last editor errors (defaults to 5000).
             // When the period of time between errors is lower than that and the crashNumberLimit
             // is also reached, the watchdog changes its state to crashedPermanently, and it stops
@@ -189,7 +189,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             if (currentState === "crashedPermanently") {
                 dialogService.info(`Editing component keeps crashing. Please try restarting Trilium. If problem persists, consider creating a bug report.`);
 
-                this.watchdog.editor.enableReadOnlyMode("crashed-editor");
+                this.watchdog.editor?.enableReadOnlyMode("crashed-editor");
             }
         });
 
@@ -210,6 +210,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             const contentLanguage = this.note?.getLabelValue("language");
             if (contentLanguage) {
+                // TODO: Wrong type?
+                //@ts-ignore
                 finalConfig.language = {
                     ui: (typeof finalConfig.language === "string" ? finalConfig.language : "en"),
                     content: contentLanguage
@@ -219,6 +221,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 this.contentLanguage = null;
             }
 
+            //@ts-ignore
             const editor = await editorClass.create(elementOrData, finalConfig);
 
             const notificationsPlugin = editor.plugins.get("Notification");
@@ -235,6 +238,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 evt.stop();
             });
 
+            //@ts-ignore
             await initSyntaxHighlighting(editor);
 
             if (isClassicEditor) {
@@ -256,17 +260,18 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
                     // Reposition all dropdowns to point upwards instead of downwards.
                     // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
-                    const toolbarView = editor.ui.view.toolbar;
+                    const toolbarView = (editor as DecoupledEditor).ui.view.toolbar;
                     for (const item of toolbarView.items) {
                         if (!("panelView" in item)) {
                             continue;
                         }
 
                         item.on("change:isOpen", () => {
-                            if ( !item.isOpen ) {
+                            if (!("isOpen" in item) || !item.isOpen ) {
                                 return;
                             }
 
+                            // @ts-ignore
                             item.panelView.position = item.panelView.position.replace("s", "n");
                         });
                     }
@@ -277,14 +282,14 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             if (glob.isDev && ENABLE_INSPECTOR) {
                 // TODO: Check if this still works.
-                await import(/* webpackIgnore: true */ "../../../libraries/ckeditor/inspector.js");
-                CKEditorInspector.attach(editor);
+                // await import(/* webpackIgnore: true */ "../../../libraries/ckeditor/inspector.js");
+                // CKEditorInspector.attach(editor);
             }
 
             // Touch bar integration
             if (hasTouchBar) {
                 for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
-                    editor.commands.get(event).on("change", () => this.triggerCommand("refreshTouchBar"));
+                    editor.commands.get(event)?.on("change", () => this.triggerCommand("refreshTouchBar"));
                 }
             }
 
@@ -297,6 +302,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async createEditor() {
         await this.watchdog.create(this.$editor[0], {
             placeholder: t("editable_text.placeholder"),
+            //@ts-ignore TODO: FIX TYPES
             mention: mentionSetup,
             codeBlock: {
                 languages: buildListOfLanguages()
@@ -324,13 +330,13 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             if (this.contentLanguage !== newContentLanguage) {
                 await this.reinitialize(data);
             } else {
-                this.watchdog.editor.setData(data);
+                this.watchdog.editor?.setData(data);
             }
         });
     }
 
     getData() {
-        const content = this.watchdog.editor.getData();
+        const content = this.watchdog.editor?.getData() ?? "";
 
         // if content is only tags/whitespace (typically <p>&nbsp;</p>), then just make it empty,
         // this is important when setting a new note to code
@@ -344,11 +350,14 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     scrollToEnd() {
-        this.watchdog?.editor.model.change((writer) => {
-            writer.setSelection(writer.createPositionAt(this.watchdog?.editor.model.document.getRoot(), "end"));
+        this.watchdog?.editor?.model.change((writer) => {
+            const rootItem = this.watchdog?.editor?.model.document.getRoot();
+            if (rootItem) {
+                writer.setSelection(writer.createPositionAt(rootItem, "end"));
+            }
         });
 
-        this.watchdog?.editor.editing.view.focus();
+        this.watchdog?.editor?.editing.view.focus();
     }
 
     show() { }
@@ -360,7 +369,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     cleanup() {
         if (this.watchdog?.editor) {
             this.spacedUpdate.allowUpdateWithoutChange(() => {
-                this.watchdog.editor.setData("");
+                this.watchdog.editor?.setData("");
             });
         }
     }
@@ -375,18 +384,22 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async addLinkToEditor(linkHref: string, linkTitle: string) {
         await this.initialized;
 
-        this.watchdog.editor.model.change((writer) => {
-            const insertPosition = this.watchdog.editor.model.document.selection.getFirstPosition();
-            writer.insertText(linkTitle, { linkHref: linkHref }, insertPosition);
+        this.watchdog.editor?.model.change((writer) => {
+            const insertPosition = this.watchdog.editor?.model.document.selection.getFirstPosition();
+            if (insertPosition) {
+                writer.insertText(linkTitle, { linkHref: linkHref }, insertPosition);
+            }
         });
     }
 
     async addTextToEditor(text: string) {
         await this.initialized;
 
-        this.watchdog.editor.model.change((writer) => {
-            const insertPosition = this.watchdog.editor.model.document.selection.getLastPosition();
-            writer.insertText(text, insertPosition);
+        this.watchdog.editor?.model.change((writer) => {
+            const insertPosition = this.watchdog.editor?.model.document.selection.getLastPosition();
+            if (insertPosition) {
+                writer.insertText(text, insertPosition);
+            }
         });
     }
 
@@ -403,23 +416,23 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         if (linkTitle) {
             if (this.hasSelection()) {
-                this.watchdog.editor.execute("link", externalLink ? `${notePath}` : `#${notePath}`);
+                this.watchdog.editor?.execute("link", externalLink ? `${notePath}` : `#${notePath}`);
             } else {
                 await this.addLinkToEditor(externalLink ? `${notePath}` : `#${notePath}`, linkTitle);
             }
         } else {
-            this.watchdog.editor.execute("referenceLink", { href: "#" + notePath });
+            this.watchdog.editor?.execute("referenceLink", { href: "#" + notePath });
         }
 
-        this.watchdog.editor.editing.view.focus();
+        this.watchdog.editor?.editing.view.focus();
     }
 
     // returns true if user selected some text, false if there's no selection
     hasSelection() {
-        const model = this.watchdog.editor.model;
-        const selection = model.document.selection;
+        const model = this.watchdog.editor?.model;
+        const selection = model?.document.selection;
 
-        return !selection.isCollapsed;
+        return !selection?.isCollapsed;
     }
 
     async executeWithTextEditorEvent({ callback, resolve, ntxId }: EventData<"executeWithTextEditor">) {
@@ -443,11 +456,15 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     getSelectedText() {
-        const range = this.watchdog.editor.model.document.selection.getFirstRange();
+        const range = this.watchdog.editor?.model.document.selection.getFirstRange();
         let text = "";
 
+        if (!range) {
+            return text;
+        }
+
         for (const item of range.getItems()) {
-            if (item.data) {
+            if ("data" in item && item.data) {
                 text += item.data;
             }
         }
@@ -458,12 +475,12 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async followLinkUnderCursorCommand() {
         await this.initialized;
 
-        const selection = this.watchdog.editor.model.document.selection;
-        const selectedElement = selection.getSelectedElement();
+        const selection = this.watchdog.editor?.model.document.selection;
+        const selectedElement = selection?.getSelectedElement();
 
         if (selectedElement?.name === "reference") {
             // reference link
-            const notePath = selectedElement.getAttribute("notePath");
+            const notePath = selectedElement.getAttribute("notePath") as string | undefined;
 
             if (notePath) {
                 await appContext.tabManager.getActiveContext()?.setNote(notePath);
@@ -475,7 +492,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             return;
         }
 
-        const selectedLinkUrl = selection.getAttribute("linkHref");
+        const selectedLinkUrl = selection.getAttribute("linkHref") as string;
         const notePath = link.getNotePathFromUrl(selectedLinkUrl);
 
         if (notePath) {
@@ -490,10 +507,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     addIncludeNote(noteId: string, boxSize?: string) {
-        this.watchdog.editor.model.change((writer) => {
+        this.watchdog.editor?.model.change((writer) => {
             // Insert <includeNote>*</includeNote> at the current selection position
             // in a way that will result in creating a valid model structure
-            this.watchdog.editor.model.insertContent(
+            this.watchdog.editor?.model.insertContent(
                 writer.createElement("includeNote", {
                     noteId: noteId,
                     boxSize: boxSize
@@ -504,7 +521,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async addImage(noteId: string) {
         const note = await froca.getNote(noteId);
-        if (!note) {
+        if (!note || !this.watchdog.editor) {
             return;
         }
 
@@ -512,7 +529,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const encodedTitle = encodeURIComponent(note.title);
             const src = `api/images/${note.noteId}/${encodedTitle}`;
 
-            this.watchdog.editor.execute("insertImage", { source: src });
+            this.watchdog.editor?.execute("insertImage", { source: src });
         });
     }
 
@@ -544,12 +561,12 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         this.watchdog.destroy();
         await this.createEditor();
-        this.watchdog.editor.setData(data);
+        this.watchdog.editor?.setData(data);
     }
 
     async onLanguageChanged() {
-        const data = this.watchdog.editor.getData();
-        await this.reinitialize(data);
+        const data = this.watchdog.editor?.getData();
+        await this.reinitialize(data ?? "");
     }
 
     buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {
@@ -557,20 +574,24 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         const { TouchBarSegmentedControl, TouchBarGroup, TouchBarButton } = TouchBar;
         const { editor } = this.watchdog;
 
+        if (!editor) {
+            return;
+        }
+
         const commandButton = (icon: string, command: string) => new TouchBarButton({
             icon: buildIcon(icon),
             click: () => editor.execute(command),
-            backgroundColor: buildSelectedBackgroundColor(editor.commands.get(command).value as boolean)
+            backgroundColor: buildSelectedBackgroundColor(editor.commands.get(command)?.value as boolean)
         });
 
         let headingSelectedIndex = undefined;
         const headingCommand = editor.commands.get("heading");
         const paragraphCommand = editor.commands.get("paragraph");
-        if (paragraphCommand.value) {
+        if (paragraphCommand?.value) {
             headingSelectedIndex = 0;
-        } else if (headingCommand.value === "heading2") {
+        } else if (headingCommand?.value === "heading2") {
             headingSelectedIndex = 1;
-        } else if (headingCommand.value === "heading3") {
+        } else if (headingCommand?.value === "heading3") {
             headingSelectedIndex = 2;
         }
 
@@ -581,7 +602,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     { label: "H2" },
                     { label: "H3" }
                 ],
-                change(selectedIndex, isSelected) {
+                change(selectedIndex: number, isSelected: boolean) {
                     switch (selectedIndex) {
                         case 0:
                             editor.execute("paragraph")
