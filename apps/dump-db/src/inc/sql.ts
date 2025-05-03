@@ -1,4 +1,4 @@
-import Database, { Database as DatabaseType } from "better-sqlite3";
+import Database, { type Database as DatabaseType } from "better-sqlite3";
 
 let dbConnection: DatabaseType;
 

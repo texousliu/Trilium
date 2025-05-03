@@ -4,8 +4,8 @@
   "description": "Build your personal knowledge base with TriliumNext Notes",
   "private": true,
   "main": "main.js",
-  "dependencies": {    
-    "@electron/remote": "2.1.2",    
+  "dependencies": {
+    "@electron/remote": "2.1.2",
     "better-sqlite3": "^11.9.1",
     "electron-debug": "4.1.0",
     "electron-dl": "4.0.0",
@@ -33,7 +33,7 @@
   "config": {
     "forge": "../electron-forge/forge.config.cjs"
   },
-  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
   "scripts": {
     "start-prod": "nx build desktop && cross-env TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=dist TRILIUM_PORT=37841 electron dist/main.js"
   },
@@ -42,13 +42,15 @@
     "name": "TriliumNext Notes Team",
     "email": "contact@eliandoran.me",
     "url": "https://github.com/TriliumNext/Notes"
-  },  
+  },
   "nx": {
     "name": "desktop",
     "targets": {
       "rebuild-deps": {
         "executor": "nx:run-commands",
-        "dependsOn": [ "build" ],
+        "dependsOn": [
+          "build"
+        ],
         "defaultConfiguration": "default",
         "cache": true,
         "configurations": {
@@ -60,11 +62,13 @@
             "command": "electron-rebuild -f -v $(nix-shell -p electron_35 --run \"electron --version\") dist/main.js -m dist",
             "cwd": "{projectRoot}"
           }
-        }        
+        }
       },
       "serve": {
         "executor": "nx:run-commands",
-        "dependsOn": [ "rebuild-deps" ],
+        "dependsOn": [
+          "rebuild-deps"
+        ],
         "defaultConfiguration": "default",
         "configurations": {
           "default": {
@@ -79,11 +83,15 @@
         }
       },
       "electron-forge:make": {
-        "dependsOn": [ "build" ],
+        "dependsOn": [
+          "build"
+        ],
         "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm electron-forge make dist"
       },
       "electron-forge:package": {
-        "dependsOn": [ "build" ],
+        "dependsOn": [
+          "build"
+        ],
         "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm electron-forge package dist"
       }
     }
