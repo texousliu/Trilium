@@ -1,4 +1,4 @@
-import ckeditor from './../theme/icons/ckeditor.svg';
+import admonitionIcon from '../theme/icons/admonition.svg';
 import './augmentation.js';
 import "../theme/blockquote.css";
 
@@ -9,5 +9,5 @@ export { default as AdmonitionAutoformat } from './admonitionautoformat.js';
 export type { default as AdmonitionCommand } from './admonitioncommand.js';
 
 export const icons = {
-	ckeditor
+	admonitionIcon
 };

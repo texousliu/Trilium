@@ -41,6 +41,9 @@
     },
     {
       "path": "./packages/ckeditor5-mermaid"
+    },
+    {
+      "path": "./packages/ckeditor5-admonition"
     }
   ]
 }

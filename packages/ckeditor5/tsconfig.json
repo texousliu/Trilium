@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../ckeditor5-admonition"
+    },
+    {
       "path": "../ckeditor5-mermaid"
     },
     {
