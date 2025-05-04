@@ -31,7 +31,7 @@ import {
 
 import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 
-import KeyboardMarker from '../src/keyboardmarker.js';
+import Kbd from '../src/keyboardmarker.js';
 
 import 'ckeditor5/ckeditor5.css';
 
@@ -39,7 +39,7 @@ ClassicEditor
 	.create( document.getElementById( 'editor' )!, {
 		licenseKey: 'GPL',
 		plugins: [
-			KeyboardMarker,
+			Kbd,
 			Essentials,
 			Autoformat,
 			BlockQuote,

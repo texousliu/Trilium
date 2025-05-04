@@ -1,17 +1,17 @@
-
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-
-import kbdIcon from '../icons/kbd.svg';
+import { AttributeCommand, ButtonView, Plugin } from 'ckeditor5';
+import kbdIcon from '../theme/icons/kbd.svg';
 
 const KBD = 'kbd';
 
 /**
  * The keyboard shortcut UI feature. It brings a proper button.
- *
- * @extends module:core/plugin~Plugin
  */
 export default class KbdUI extends Plugin {
+
+	public static get pluginName() {
+		return 'KbdUI' as const;
+	}
+
 	/**
 	 * @inheritDoc
 	 */
@@ -20,7 +20,7 @@ export default class KbdUI extends Plugin {
 		const t = editor.t;
 
 		editor.ui.componentFactory.add( KBD, locale => {
-			const command = editor.commands.get( KBD );
+			const command = editor.commands.get( KBD ) as AttributeCommand;
 			const view = new ButtonView( locale );
 
 			view.set( {

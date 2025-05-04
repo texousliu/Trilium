@@ -1,6 +1,4 @@
-
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import AttributeCommand from '@ckeditor/ckeditor5-basic-styles/src/attributecommand';
+import { AttributeCommand, Plugin } from "ckeditor5";
 
 const KBD = 'kbd';
 
@@ -9,15 +7,11 @@ const KBD = 'kbd';
  *
  * It registers the `'kbd'` command, associated keystroke and introduces the
  * `kbd` attribute in the model which renders to the view as a `<kbd>` element.
- *
- * @extends module:core/plugin~Plugin
  */
 export default class KbdEditing extends Plugin {
-	/**
-	 * @inheritDoc
-	 */
-	static get pluginName() {
-		return 'KbdEditing';
+
+	public static get pluginName() {
+		return 'KbdEditing' as const;
 	}
 
 	/**

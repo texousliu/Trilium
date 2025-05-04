@@ -1,7 +1,9 @@
-import type { KeyboardMarker } from './index.js';
+import type { Kbd, KbdEditing, KbdUI } from './index.js';
 
 declare module 'ckeditor5' {
 	interface PluginsMap {
-		[ KeyboardMarker.pluginName ]: KeyboardMarker;
+		[ Kbd.pluginName ]: Kbd;
+		[ KbdUI.pluginName ]: KbdUI;
+		[ KbdEditing.pluginName ]: KbdEditing;
 	}
 }
