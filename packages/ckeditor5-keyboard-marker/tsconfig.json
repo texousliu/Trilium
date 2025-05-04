@@ -18,6 +18,7 @@
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "strict": true,
+	"composite": true,
     "target": "es2019",
     "sourceMap": true,
     "allowJs": true,
