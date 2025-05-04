@@ -19,7 +19,8 @@
     "name": "ckeditor5"
   },
   "dependencies": {
-    "ckeditor5": "43.2.0"
+    "ckeditor5": "43.2.0",
+    "@triliumnext/ckeditor5-keyboard-marker": "workspace:*"
   },
   "devDependencies": {
     "@types/jquery": "3.5.32"

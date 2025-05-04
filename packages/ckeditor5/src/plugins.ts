@@ -13,6 +13,7 @@ import MarkdownImportPlugin from "./plugins/markdownimport.js";
 import MentionCustomization from "./plugins/mention_customization.js";
 import IncludeNote from "./plugins/includenote.js";
 import Uploadfileplugin from "./plugins/file_upload/uploadfileplugin.js";
+import { Kbd } from "@triliumnext/ckeditor5-keyboard-marker";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
@@ -30,8 +31,13 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     Uploadfileplugin
 ];
 
+const EXTERNAL_PLUGINS: typeof Plugin[] = [
+    Kbd
+];
+
 export const COMMON_PLUGINS: typeof Plugin[] = [
     ...TRILIUM_PLUGINS,
+    ...EXTERNAL_PLUGINS,
 
 	// essentials package expanded to allow selectively disable Enter and ShiftEnter
 	Clipboard, Enter, SelectAll, ShiftEnter, Typing, Undo,
@@ -94,7 +100,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	// AutoformatMath,
 	// Footnotes,
 	// Mermaid,
-	// Kbd,
 	// Admonition
 ];
 
