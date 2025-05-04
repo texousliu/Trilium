@@ -7,13 +7,12 @@
  * @module admonition/admonitionui
  */
 
-import { Plugin, } from 'ckeditor5/src/core.js';
-import { addListToDropdown, createDropdown, ListDropdownButtonDefinition, SplitButtonView, ViewModel } from 'ckeditor5/src/ui.js';
+import { Plugin, addListToDropdown, createDropdown, ListDropdownItemDefinition, SplitButtonView, ViewModel } from 'ckeditor5';
 
 import '../theme/blockquote.css';
 import admonitionIcon from '../theme/icons/admonition.svg';
-import { Collection } from '@ckeditor/ckeditor5-utils';
-import AdmonitionCommand, { AdmonitionType } from './admonitioncommand';
+import { AdmonitionType } from './admonitioncommand.js';
+import { Collection } from 'ckeditor5';
 
 interface AdmonitionDefinition {
 	title: string;
@@ -102,11 +101,14 @@ export default class AdmonitionUI extends Plugin {
 	}
 
 	private _getDropdownItems() {
-		const itemDefinitions = new Collection<ListDropdownButtonDefinition>();
-		const command = this.editor.commands.get("admonition") as AdmonitionCommand
+		const itemDefinitions = new Collection<ListDropdownItemDefinition>();
+		const command = this.editor.commands.get("admonition");
+		if (!command) {
+			return itemDefinitions;
+		}
 
 		for (const [ type, admonition ] of Object.entries(ADMONITION_TYPES)) {
-			const definition: ListDropdownButtonDefinition = {
+			const definition: ListDropdownItemDefinition = {
 				type: "button",
 				model: new ViewModel({
 					commandParam: type,

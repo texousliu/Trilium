@@ -1,8 +1,16 @@
 import { Plugin, ButtonView } from 'ckeditor5';
 
-import ckeditor5Icon from '../theme/icons/ckeditor.svg';
+import admonitionIcon from '../theme/icons/admonition.svg';
+import AdmonitionEditing from './admonitionediting.js';
+import AdmonitionUI from './admonitionui.js';
+import AdmonitionAutoformat from './admonitionautoformat.js';
 
 export default class Admonition extends Plugin {
+
+	public static get requires() {
+		return [ AdmonitionEditing, AdmonitionUI, AdmonitionAutoformat ] as const;
+	}
+
 	public static get pluginName() {
 		return 'Admonition' as const;
 	}
@@ -18,7 +26,7 @@ export default class Admonition extends Plugin {
 
 			view.set( {
 				label: t( 'Admonition' ),
-				icon: ckeditor5Icon,
+				icon: admonitionIcon,
 				tooltip: true
 			} );
 

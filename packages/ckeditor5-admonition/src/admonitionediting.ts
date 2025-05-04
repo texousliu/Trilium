@@ -7,10 +7,7 @@
  * @module admonition/admonitionediting
  */
 
-import { Plugin } from 'ckeditor5/src/core.js';
-import { Enter, type ViewDocumentEnterEvent } from 'ckeditor5/src/enter.js';
-import { Delete, type ViewDocumentDeleteEvent } from 'ckeditor5/src/typing.js';
-
+import { Delete, Enter, Plugin, ViewDocumentDeleteEvent, ViewDocumentEnterEvent } from 'ckeditor5';
 import AdmonitionCommand, { AdmonitionType, ADMONITION_TYPES, DEFAULT_ADMONITION_TYPE, ADMONITION_TYPE_ATTRIBUTE } from './admonitioncommand.js';
 
 /**
@@ -136,7 +133,10 @@ export default class AdmonitionEditing extends Plugin {
 
 		const viewDocument = this.editor.editing.view.document;
 		const selection = editor.model.document.selection;
-		const admonitionCommand: AdmonitionCommand = editor.commands.get( 'admonition' )!;
+		const admonitionCommand = editor.commands.get( 'admonition' );
+		if (!admonitionCommand) {
+			return;
+		}
 
 		// Overwrite default Enter key behavior.
 		// If Enter key is pressed with selection collapsed in empty block inside a quote, break the quote.

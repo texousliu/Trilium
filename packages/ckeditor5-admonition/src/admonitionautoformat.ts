@@ -1,7 +1,5 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
-import blockAutoformatEditing from "@ckeditor/ckeditor5-autoformat/src/blockautoformatediting";
-import { AdmonitionType, ADMONITION_TYPES } from "./admonitioncommand";
+import { Autoformat, blockAutoformatEditing, Plugin } from "ckeditor5";
+import { AdmonitionType, ADMONITION_TYPES } from "./admonitioncommand.js";
 
 function tryParseAdmonitionType(match: RegExpMatchArray) {
 	if (match.length !== 2) {
@@ -14,6 +12,7 @@ function tryParseAdmonitionType(match: RegExpMatchArray) {
 }
 
 export default class AdmonitionAutoformat extends Plugin {
+
 	static get requires() {
 		return [ Autoformat ];
 	}

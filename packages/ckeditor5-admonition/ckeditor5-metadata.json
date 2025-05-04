@@ -3,7 +3,7 @@
     {
       "name": "Admonition",
       "className": "Admonition",
-      "description": "Adds text to the editor.",
+      "description": "Implements admonitions (warning, info boxes) in a similar fashion to blockquotes",
       "path": "src/admonition.ts",
       "uiComponents": [
         {
@@ -11,7 +11,12 @@
           "type": "Button",
           "iconPath": "theme/icons/ckeditor.svg"
         }
-      ]
+      ],
+	  "htmlOutput": [
+			{
+				"elements": "aside"
+			}
+		]
     }
   ]
 }

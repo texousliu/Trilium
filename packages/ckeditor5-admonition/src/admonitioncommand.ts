@@ -7,9 +7,8 @@
  * @module admonition/admonitioncommand
  */
 
-import { Command } from 'ckeditor5/src/core.js';
-import { first } from 'ckeditor5/src/utils.js';
-import type { DocumentFragment, Element, Position, Range, Schema, Writer } from 'ckeditor5/src/engine.js';
+import { Command, first } from 'ckeditor5';
+import type { DocumentFragment, Element, Position, Range, Schema, Writer } from 'ckeditor5';
 
 /**
  * The block quote command plugin.
