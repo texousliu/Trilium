@@ -10,6 +10,11 @@ import insertFootnoteIcon from '../theme/icons/insert-footnote.svg';
 import { modelQueryElement, modelQueryElementsAll } from './utils.js';
 
 export default class FootnoteUI extends Plugin {
+
+	public static get pluginName() {
+		return 'FootnoteUI' as const;
+	}
+
 	public init(): void {
 		const editor = this.editor;
 		const translate = editor.t;

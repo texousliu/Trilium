@@ -14,6 +14,11 @@ import { modelQueryElement, modelQueryElementsAll } from '../utils.js';
 import { Autoformat, Batch, Element, Plugin, RootElement, viewToModelPositionOutsideModelElement, Widget, Writer } from 'ckeditor5';
 
 export default class FootnoteEditing extends Plugin {
+
+	public static get pluginName() {
+		return 'FootnotesEditing' as const;
+	}
+
 	public static get requires() {
 		return [ Widget, Autoformat ] as const;
 	}
