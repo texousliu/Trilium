@@ -16,6 +16,8 @@ import Uploadfileplugin from "./plugins/file_upload/uploadfileplugin.js";
 import { Kbd } from "@triliumnext/ckeditor5-keyboard-marker";
 import { Mermaid } from "@triliumnext/ckeditor5-mermaid";
 
+import "@triliumnext/ckeditor5-mermaid/index.css";
+
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
     ItalicAsEmPlugin,
