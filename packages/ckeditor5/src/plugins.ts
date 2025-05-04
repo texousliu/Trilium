@@ -14,6 +14,7 @@ import MentionCustomization from "./plugins/mention_customization.js";
 import IncludeNote from "./plugins/includenote.js";
 import Uploadfileplugin from "./plugins/file_upload/uploadfileplugin.js";
 import { Kbd } from "@triliumnext/ckeditor5-keyboard-marker";
+import { Mermaid } from "@triliumnext/ckeditor5-mermaid";
 
 const TRILIUM_PLUGINS: typeof Plugin[] = [
     CutToNotePlugin,
@@ -32,7 +33,8 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
 ];
 
 const EXTERNAL_PLUGINS: typeof Plugin[] = [
-    Kbd
+    Kbd,
+    Mermaid
 ];
 
 export const COMMON_PLUGINS: typeof Plugin[] = [
@@ -99,7 +101,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	// Math,
 	// AutoformatMath,
 	// Footnotes,
-	// Mermaid,
 	// Admonition
 ];
 

@@ -1,4 +1,4 @@
-import { Plugin, ButtonView } from 'ckeditor5';
+import { Plugin } from 'ckeditor5';
 
 import MermaidEditing from './mermaidediting.js';
 import MermaidToolbar from './mermaidtoolbar.js';

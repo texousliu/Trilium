@@ -20,6 +20,9 @@
   ],
   "references": [
     {
+      "path": "../ckeditor5-mermaid"
+    },
+    {
       "path": "../ckeditor5-keyboard-marker"
     }
   ]

@@ -1,7 +1,5 @@
-import { Command } from 'ckeditor5/src/core.js';
-
 import { checkIsOn } from '../utils.js';
-import { Element } from 'ckeditor5';
+import { Command, Element } from 'ckeditor5';
 
 /**
  * The mermaid source view command.

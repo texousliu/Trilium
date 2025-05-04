@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../ckeditor5-keyboard-marker"
+    },
+    {
       "path": "./tsconfig.lib.json"
     }
   ]
