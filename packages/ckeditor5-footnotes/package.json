@@ -1,7 +1,7 @@
 {
   "name": "@triliumnext/ckeditor5-footnotes",
-  "version": "0.0.1",
-  "description": "A plugin for CKEditor 5.",
+  "version": "0.0.4",
+  "description": "A plugin for CKEditor 5 to allow footnotes.",
   "keywords": [
     "ckeditor",
     "ckeditor5",
@@ -23,7 +23,7 @@
     "./browser/*": null,
     "./package.json": "./package.json"
   },
-  "license": "MIT",
+  "license": "ISC",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=5.7.1"
