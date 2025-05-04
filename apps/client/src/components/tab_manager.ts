@@ -277,10 +277,18 @@ export default class TabManager extends Component {
         return noteContext;
     }
 
-    async openInNewTab(targetNoteId: string, hoistedNoteId: string | null = null) {
+    async openInNewTab(targetNoteId: string, hoistedNoteId: string | null = null, activate: boolean = false) {
         const noteContext = await this.openEmptyTab(null, hoistedNoteId || this.getActiveContext()?.hoistedNoteId);
 
         await noteContext.setNote(targetNoteId);
+
+        if (activate && noteContext.notePath) {
+            this.activateNoteContext(noteContext.ntxId, false);
+            await this.triggerEvent("noteSwitchedAndActivated", {
+                noteContext,
+                notePath: noteContext.notePath
+            });
+        }
     }
 
     async openInSameTab(targetNoteId: string, hoistedNoteId: string | null = null) {
