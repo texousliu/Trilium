@@ -1,21 +1,26 @@
 @triliumnext/ckeditor5-mermaid
 ==============================
 
-This package was created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package.
+Warning: This is an experimental plugin that comes with no support, use it at your own risk.
+
+This package contains a Mermaid feature for CKEditor 5.
 
 ## Table of contents
 
-* [Developing the package](#developing-the-package)
-* [Available scripts](#available-scripts)
-  * [`start`](#start)
-  * [`test`](#test)
-  * [`lint`](#lint)
-  * [`stylelint`](#stylelint)
-  * [`build:dist`](#builddist)
-  * [`translations:synchronize`](#translationssynchronize)
-  * [`translations:validate`](#translationsvalidate)
-  * [`ts:build` and `ts:clear`](#tsbuild-and-tsclear)
-* [License](#license)
+- [@triliumnext/ckeditor5-mermaid](#triliumnextckeditor5-mermaid)
+	- [Table of contents](#table-of-contents)
+	- [Developing the package](#developing-the-package)
+	- [Available scripts](#available-scripts)
+		- [`start`](#start)
+		- [`test`](#test)
+		- [`lint`](#lint)
+		- [`stylelint`](#stylelint)
+		- [`build:dist`](#builddist)
+		- [`translations:synchronize`](#translationssynchronize)
+		- [`translations:validate`](#translationsvalidate)
+		- [`ts:build` and `ts:clear`](#tsbuild-and-tsclear)
+	- [License](#license)
+		- [Trademarks](#trademarks)
 
 ## Developing the package
 
@@ -136,6 +141,8 @@ These scripts compile TypeScript and remove the compiled files. They are used in
 
 ## License
 
-The `@triliumnext/ckeditor5-mermaid` package is available under [MIT license](https://opensource.org/licenses/MIT).
+See [LICENSE.md](LICENSE.md) file.
 
-However, it is the default license of packages created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package and can be changed.
+### Trademarks
+
+**CKEditor** is a trademark of [CKSource](https://cksource.com) Holding sp. z o.o. All other brand and product names are trademarks, registered trademarks or service marks of their respective holders.
