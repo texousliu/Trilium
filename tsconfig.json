@@ -47,6 +47,9 @@
     },
     {
       "path": "./packages/ckeditor5-footnotes"
+    },
+    {
+      "path": "./packages/ckeditor5-math"
     }
   ]
 }
