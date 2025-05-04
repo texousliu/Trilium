@@ -1,7 +1,6 @@
-import { View } from 'ckeditor5/src/ui';
-import type { KatexOptions } from '../typings-external';
-import { renderEquation } from '../utils';
-import type { Locale } from 'ckeditor5/src/utils';
+import { View, type Locale } from 'ckeditor5';
+import type { KatexOptions } from '../typings-external.js';
+import { renderEquation } from '../utils.js';
 
 export default class MathView extends View {
 	public declare value: string;

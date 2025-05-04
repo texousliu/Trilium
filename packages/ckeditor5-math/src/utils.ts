@@ -1,11 +1,6 @@
-import type { Editor } from 'ckeditor5/src/core';
-import type {
-	Element as CKElement,
-	DocumentSelection
-} from 'ckeditor5/src/engine';
-import { BalloonPanelView } from 'ckeditor5/src/ui';
-import { CKEditorError, type PositioningFunction } from 'ckeditor5/src/utils';
-import type { KatexOptions, MathJax2, MathJax3 } from './typings-external';
+import type { Editor, Element as CKElement, DocumentSelection, PositioningFunction } from 'ckeditor5';
+import { BalloonPanelView, CKEditorError } from 'ckeditor5';
+import type { KatexOptions, MathJax2, MathJax3 } from './typings-external.js';
 
 export function getSelectedMathModelWidget(
 	selection: DocumentSelection

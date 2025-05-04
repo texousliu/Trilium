@@ -1,22 +1,8 @@
-import { icons } from 'ckeditor5/src/core';
-import {
-	ButtonView,
-	createLabeledInputText,
-	FocusCycler,
-	LabelView,
-	LabeledFieldView,
-	submitHandler,
-	SwitchButtonView,
-	View,
-	ViewCollection,
-	type InputTextView,
-	type FocusableView
-} from 'ckeditor5/src/ui';
-import { Locale, FocusTracker, KeystrokeHandler } from 'ckeditor5/src/utils';
-import { extractDelimiters, hasDelimiters } from '../utils';
-import MathView from './mathview';
+import { icons, ButtonView, createLabeledInputText, FocusCycler, LabelView, LabeledFieldView, submitHandler, SwitchButtonView, View, ViewCollection, type InputTextView, type FocusableView, Locale, FocusTracker, KeystrokeHandler } from 'ckeditor5';
+import { extractDelimiters, hasDelimiters } from '../utils.js';
+import MathView from './mathview.js';
 import '../../theme/mathform.css';
-import type { KatexOptions } from '../typings-external';
+import type { KatexOptions } from '../typings-external.js';
 
 const { check: checkIcon, cancel: cancelIcon } = icons;
 
