@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    {
+      "name": "Admonition",
+      "className": "Admonition",
+      "description": "Adds text to the editor.",
+      "path": "src/admonition.ts",
+      "uiComponents": [
+        {
+          "name": "admonition",
+          "type": "Button",
+          "iconPath": "theme/icons/ckeditor.svg"
+        }
+      ]
+    }
+  ]
+}
