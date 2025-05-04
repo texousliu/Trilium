@@ -23,7 +23,9 @@
     "./browser/*": null,
     "./package.json": "./package.json"
   },
-  "license": "MIT",
+  "author": "Marek Lewandowski",
+  "license": "GPL-3.0",
+  "homepage": "https://github.com/mlewand/ckeditor5-keyboard-marker",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=5.7.1"
