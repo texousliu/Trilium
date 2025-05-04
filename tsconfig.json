@@ -44,6 +44,9 @@
     },
     {
       "path": "./packages/ckeditor5-admonition"
+    },
+    {
+      "path": "./packages/ckeditor5-footnotes"
     }
   ]
 }

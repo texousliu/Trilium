@@ -17,6 +17,7 @@
     ],
     "noImplicitAny": true,
     "noImplicitOverride": true,
+	"composite": true,
     "strict": true,
     "target": "es2019",
     "sourceMap": true,
