@@ -1,56 +1,54 @@
-import { describe, expect, it, beforeEach, afterEach } from 'vitest';
-import { ClassicEditor, Essentials, Paragraph, Heading } from 'ckeditor5';
-import Math from '../src/math.js';
+import { ClassicEditor, Widget } from 'ckeditor5';
+import Mathematics from '../src/math.js';
+import MathEditing from '../src/mathediting.js';
+import MathUI from '../src/mathui.js';
+import AutoMath from '../src/automath.js';
+import { expect } from 'chai';
+import { describe, beforeEach, it, afterEach } from "vitest";
 
 describe( 'Math', () => {
-	it( 'should be named', () => {
-		expect( Math.pluginName ).to.equal( 'Math' );
+	let editorElement: HTMLDivElement, editor: ClassicEditor;
+
+	beforeEach( async () => {
+		editorElement = document.createElement( 'div' );
+		document.body.appendChild( editorElement );
+
+		return ClassicEditor
+			.create( editorElement, {
+				plugins: [ Mathematics ]
+			} )
+			.then( newEditor => {
+				editor = newEditor;
+			} );
 	} );
 
-	describe( 'init()', () => {
-		let domElement: HTMLElement, editor: ClassicEditor;
+	afterEach( () => {
+		editorElement.remove();
 
-		beforeEach( async () => {
-			domElement = document.createElement( 'div' );
-			document.body.appendChild( domElement );
+		return editor.destroy();
+	} );
 
-			editor = await ClassicEditor.create( domElement, {
-				licenseKey: 'GPL',
-				plugins: [
-					Paragraph,
-					Heading,
-					Essentials,
-					Math
-				],
-				toolbar: [
-					'math'
-				]
-			} );
-		} );
+	it( 'should be loaded', () => {
+		expect( editor.plugins.get( Mathematics ) ).to.instanceOf( Mathematics );
+	} );
 
-		afterEach( () => {
-			domElement.remove();
-			return editor.destroy();
-		} );
+	it( 'should load MathEditing plugin', () => {
+		expect( editor.plugins.get( MathEditing ) ).to.instanceOf( MathEditing );
+	} );
 
-		it( 'should load Math', () => {
-			const myPlugin = editor.plugins.get( 'Math' );
+	it( 'should load Widget plugin', () => {
+		expect( editor.plugins.get( Widget ) ).to.instanceOf( Widget );
+	} );
 
-			expect( myPlugin ).to.be.an.instanceof( Math );
-		} );
+	it( 'should load MathUI plugin', () => {
+		expect( editor.plugins.get( MathUI ) ).to.instanceOf( MathUI );
+	} );
 
-		it( 'should add an icon to the toolbar', () => {
-			expect( editor.ui.componentFactory.has( 'math' ) ).to.equal( true );
-		} );
+	it( 'should load AutoMath plugin', () => {
+		expect( editor.plugins.get( AutoMath ) ).to.instanceOf( AutoMath );
+	} );
 
-		it( 'should add a text into the editor after clicking the icon', () => {
-			const icon = editor.ui.componentFactory.create( 'math' );
-
-			expect( editor.getData() ).to.equal( '' );
-
-			icon.fire( 'execute' );
-
-			expect( editor.getData() ).to.equal( '<p>Hello CKEditor 5!</p>' );
-		} );
+	it( 'has proper name', () => {
+		expect( Mathematics.pluginName ).to.equal( 'Math' );
 	} );
 } );

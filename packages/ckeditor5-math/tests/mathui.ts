@@ -1,20 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* globals document, Event  */
 
-import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor.js';
-import { keyCodes } from '@ckeditor/ckeditor5-utils/src/keyboard.js';
 import { setData as setModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model.js';
 
 import MathUI from '../src/mathui';
 import MainFormView from '../src/ui/mainformview';
-import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon.js';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview.js';
-import View from '@ckeditor/ckeditor5-ui/src/view.js';
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
+import { ClassicEditor, ContextualBalloon, ButtonView, View, Paragraph, ClickObserver, keyCodes } from 'ckeditor5';
 
-import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver.js';
 import { expect } from 'chai';
 import type { SinonSpy } from 'sinon';
+import { describe, beforeEach, it, afterEach } from "vitest";
 
 describe( 'MathUI', () => {
 	let editorElement: HTMLDivElement;

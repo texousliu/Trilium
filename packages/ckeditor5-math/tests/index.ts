@@ -1,17 +1,14 @@
-import { describe, expect, it } from 'vitest';
-import { Math as MathDll, icons } from '../src/index.js';
-import Math from '../src/math.js';
-
-import ckeditor from './../theme/icons/ckeditor.svg';
+import { Math as MathDll, AutoformatMath as AutoformatMathDll } from '../src';
+import Math from '../src/math';
+import AutoformatMath from '../src/autoformatmath';
+import { expect } from 'chai';
 
 describe( 'CKEditor5 Math DLL', () => {
 	it( 'exports Math', () => {
 		expect( MathDll ).to.equal( Math );
 	} );
 
-	describe( 'icons', () => {
-		it( 'exports the "ckeditor" icon', () => {
-			expect( icons.ckeditor ).to.equal( ckeditor );
-		} );
+	it( 'exports AutoformatMath', () => {
+		expect( AutoformatMathDll ).to.equal( AutoformatMath );
 	} );
 } );

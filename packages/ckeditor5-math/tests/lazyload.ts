@@ -1,7 +1,7 @@
-import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import { ClassicEditor, type EditorConfig } from 'ckeditor5';
 import MathUI from '../src/mathui';
-import type { EditorConfig } from '@ckeditor/ckeditor5-core/src/editor/editorconfig';
 import { expect } from 'chai';
+import { describe, beforeEach, it, afterEach } from "vitest";
 
 describe( 'Lazy load', () => {
 	let editorElement: HTMLDivElement;
