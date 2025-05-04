@@ -299,9 +299,6 @@ importers:
         specifier: 5.1.5
         version: 5.1.5(encoding@0.1.13)
     devDependencies:
-      '@types/colors':
-        specifier: 1.2.4
-        version: 1.2.4
       '@types/diff':
         specifier: ^7.0.2
         version: 7.0.2
@@ -3390,10 +3387,6 @@ packages:
 
   '@types/cls-hooked@4.3.9':
     resolution: {integrity: sha512-CMtHMz6Q/dkfcHarq9nioXH8BDPP+v5xvd+N90lBQ2bdmu06UvnLDqxTKoOJzz4SzIwb/x9i4UXGAAcnUDuIvg==}
-
-  '@types/colors@1.2.4':
-    resolution: {integrity: sha512-oSQxEVIDcYisAzWLa+wr50GSIPu8ml4PsKNJzgrDX3SmEHVBBqbaUurqsUceFauNlCRxNtENKkQm3yOe3m3nfg==}
-    deprecated: This is a stub types definition. colors provides its own type definitions, so you do not need this installed.
 
   '@types/compression@1.7.5':
     resolution: {integrity: sha512-AAQvK5pxMpaT+nDvhHrsBhLSYG5yQdtkaJE1WYieSNY2mVFKAgmU4ks65rkZD5oqnGCFLyQpUr1CqI4DmUMyDg==}
@@ -14310,10 +14303,6 @@ snapshots:
   '@types/cls-hooked@4.3.9':
     dependencies:
       '@types/node': 18.16.9
-
-  '@types/colors@1.2.4':
-    dependencies:
-      colors: 1.4.0
 
   '@types/compression@1.7.5':
     dependencies:
