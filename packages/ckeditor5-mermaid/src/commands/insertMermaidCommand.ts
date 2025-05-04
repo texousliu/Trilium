@@ -1,8 +1,4 @@
-/**
- * @module mermaid/insertmermaidcommand
- */
-
-import { Command } from 'ckeditor5/src/core.js';
+import { Command } from "ckeditor5";
 
 const MOCK_MERMAID_MARKUP = `flowchart TB
 A --> B
@@ -12,14 +8,10 @@ B --> C`;
  * The insert mermaid command.
  *
  * Allows to insert mermaid.
- *
- * @extends module:core/command~Command
  */
 export default class InsertMermaidCommand extends Command {
-	/**
-	 * @inheritDoc
-	 */
-	refresh() {
+
+	override refresh() {
 		const documentSelection = this.editor.model.document.selection;
 		const selectedElement = documentSelection.getSelectedElement();
 
@@ -30,10 +22,7 @@ export default class InsertMermaidCommand extends Command {
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	execute() {
+	override execute() {
 		const editor = this.editor;
 		const model = editor.model;
 		let mermaidItem;

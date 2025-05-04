@@ -5,25 +5,22 @@
 import { Command } from 'ckeditor5/src/core.js';
 
 import { checkIsOn } from '../utils.js';
+import { Element } from 'ckeditor5';
 
 /**
  * The mermaid split view command.
  *
  * Allows to switch to a split view mode.
- *
- * @extends module:core/command~Command
  */
 export default class MermaidSplitViewCommand extends Command {
-	/**
-	 * @inheritDoc
-	 */
-	refresh() {
+
+	override refresh() {
 		const editor = this.editor;
 		const documentSelection = editor.model.document.selection;
 		const selectedElement = documentSelection.getSelectedElement();
 		const isSelectedElementMermaid = selectedElement && selectedElement.name === 'mermaid';
 
-		if ( isSelectedElementMermaid || documentSelection.getLastPosition().findAncestor( 'mermaid' ) ) {
+		if ( isSelectedElementMermaid || documentSelection.getLastPosition()?.findAncestor( 'mermaid' ) ) {
 			this.isEnabled = !!selectedElement;
 		} else {
 			this.isEnabled = false;
@@ -32,14 +29,11 @@ export default class MermaidSplitViewCommand extends Command {
 		this.value = checkIsOn( editor, 'split' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	execute() {
+	override execute() {
 		const editor = this.editor;
 		const model = editor.model;
 		const documentSelection = this.editor.model.document.selection;
-		const mermaidItem = documentSelection.getSelectedElement() || documentSelection.getLastPosition().parent;
+		const mermaidItem = (documentSelection.getSelectedElement() || documentSelection.getLastPosition()?.parent) as Element;
 
 		model.change( writer => {
 			if ( mermaidItem.getAttribute( 'displayMode' ) !== 'split' ) {

@@ -30,8 +30,7 @@
     "ckeditor5-metadata.json"
   ],
   "dependencies": {
-    "ckeditor5": "43.2.0",
-    "lodash-es": "^4.17.15"
+    "ckeditor5": "43.2.0"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-build-tools": "^42.0.0",

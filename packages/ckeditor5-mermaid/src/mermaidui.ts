@@ -2,14 +2,13 @@
  * @module mermaid/mermaidui
  */
 
-import { Plugin } from 'ckeditor5/src/core.js';
-import { ButtonView } from 'ckeditor5/src/ui.js';
-
 import insertMermaidIcon from '../theme/icons/insert.svg';
 import previewModeIcon from '../theme/icons/preview-mode.svg';
 import splitModeIcon from '../theme/icons/split-mode.svg';
 import sourceModeIcon from '../theme/icons/source-mode.svg';
 import infoIcon from '../theme/icons/info.svg';
+import { ButtonView, Editor, Element, Locale, Observable, Plugin } from 'ckeditor5';
+import InsertMermaidCommand from './commands/insertMermaidCommand.js';
 
 /* global window, document */
 
@@ -18,7 +17,7 @@ export default class MermaidUI extends Plugin {
 	 * @inheritDoc
 	 */
 	static get pluginName() {
-		return 'MermaidUI';
+		return 'MermaidUI' as const;
 	}
 
 	/**
@@ -53,9 +52,12 @@ export default class MermaidUI extends Plugin {
 		const t = editor.t;
 		const view = editor.editing.view;
 
-		editor.ui.componentFactory.add( 'mermaid', locale => {
+		editor.ui.componentFactory.add( 'mermaid', (locale: Locale) => {
 			const buttonView = new ButtonView( locale );
-			const command = editor.commands.get( 'insertMermaidCommand' );
+			const command = editor.commands.get( 'insertMermaidCommand' ) as InsertMermaidCommand;
+			if (!command) {
+				throw new Error("Missing command.");
+			}
 
 			buttonView.set( {
 				label: t( 'Insert Mermaid diagram' ),
@@ -63,21 +65,21 @@ export default class MermaidUI extends Plugin {
 				tooltip: true
 			} );
 
-			buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
+			buttonView.bind( 'isOn', 'isEnabled' ).to( command as (Observable & { value: boolean; } & { isEnabled: boolean; }), 'value', 'isEnabled' );
 
 			// Execute the command when the button is clicked.
 			command.listenTo( buttonView, 'execute', () => {
-				const mermaidItem = editor.execute( 'insertMermaidCommand' );
+				const mermaidItem = editor.execute( 'insertMermaidCommand' ) as Element;
 				const mermaidItemViewElement = editor.editing.mapper.toViewElement( mermaidItem );
 
 				view.scrollToTheSelection();
 				view.focus();
 
 				if ( mermaidItemViewElement ) {
-					const mermaidItemDomElement = view.domConverter.viewToDom( mermaidItemViewElement, document );
+					const mermaidItemDomElement = view.domConverter.viewToDom( mermaidItemViewElement );
 
 					if ( mermaidItemDomElement ) {
-						mermaidItemDomElement.querySelector( '.ck-mermaid__editing-view' ).focus();
+						(mermaidItemDomElement.querySelector( '.ck-mermaid__editing-view' ) as HTMLElement)?.focus();
 					}
 				}
 			} );
@@ -117,17 +119,16 @@ export default class MermaidUI extends Plugin {
 	 * Adds the mermaid balloon toolbar button.
 	 *
 	 * @private
-	 * @param {module:core/editor/editor~Editor} editor
-	 * @param {String} name Name of the button.
-	 * @param {String} label Label for the button.
-	 * @param {String} icon The button icon.
 	 */
-	_createToolbarButton( editor, name, label, icon ) {
+	_createToolbarButton( editor: Editor, name: string, label: string, icon: string ) {
 		const t = editor.t;
 
 		editor.ui.componentFactory.add( name, locale => {
 			const buttonView = new ButtonView( locale );
 			const command = editor.commands.get( `${ name }Command` );
+			if (!command) {
+				throw new Error("Missing command.");
+			}
 
 			buttonView.set( {
 				label: t( label ),
@@ -135,7 +136,7 @@ export default class MermaidUI extends Plugin {
 				tooltip: true
 			} );
 
-			buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
+			buttonView.bind( 'isOn', 'isEnabled' ).to( command as (Observable & { value: boolean; } & { isEnabled: boolean; }), 'value', 'isEnabled' );
 
 			// Execute the command when the button is clicked.
 			command.listenTo( buttonView, 'execute', () => {

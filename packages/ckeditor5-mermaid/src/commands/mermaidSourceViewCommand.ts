@@ -1,10 +1,7 @@
-/**
- * @module mermaid/mermaidsourceviewcommand
- */
-
 import { Command } from 'ckeditor5/src/core.js';
 
 import { checkIsOn } from '../utils.js';
+import { Element } from 'ckeditor5';
 
 /**
  * The mermaid source view command.
@@ -14,16 +11,14 @@ import { checkIsOn } from '../utils.js';
  * @extends module:core/command~Command
  */
 export default class MermaidSourceViewCommand extends Command {
-	/**
-	 * @inheritDoc
-	 */
-	refresh() {
+
+	override refresh() {
 		const editor = this.editor;
 		const documentSelection = editor.model.document.selection;
 		const selectedElement = documentSelection.getSelectedElement();
 		const isSelectedElementMermaid = selectedElement && selectedElement.name === 'mermaid';
 
-		if ( isSelectedElementMermaid || documentSelection.getLastPosition().findAncestor( 'mermaid' ) ) {
+		if ( isSelectedElementMermaid || documentSelection.getLastPosition()?.findAncestor( 'mermaid' ) ) {
 			this.isEnabled = !!selectedElement;
 		} else {
 			this.isEnabled = false;
@@ -32,14 +27,11 @@ export default class MermaidSourceViewCommand extends Command {
 		this.value = checkIsOn( editor, 'source' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	execute() {
+	override execute() {
 		const editor = this.editor;
 		const model = editor.model;
 		const documentSelection = this.editor.model.document.selection;
-		const mermaidItem = documentSelection.getSelectedElement() || documentSelection.getLastPosition().parent;
+		const mermaidItem = (documentSelection.getSelectedElement() || documentSelection.getLastPosition()?.parent) as Element;
 
 		model.change( writer => {
 			if ( mermaidItem.getAttribute( 'displayMode' ) !== 'source' ) {

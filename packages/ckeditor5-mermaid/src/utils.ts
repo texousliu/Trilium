@@ -3,21 +3,17 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-/**
- * @module mermaid/utils
- */
+import { Editor } from "ckeditor5";
 
 /**
  * Helper function for setting the `isOn` state of buttons.
  *
  * @private
- * @param {module:core/editor/editor~Editor} editor
- * @param {String} commandName Short name of the command.
- * @returns {Boolean}
+ * @param commandName Short name of the command.
  */
-export function checkIsOn( editor, commandName ) {
+export function checkIsOn( editor: Editor, commandName: string ) {
 	const selection = editor.model.document.selection;
-	const mermaidItem = selection.getSelectedElement() || selection.getLastPosition().parent;
+	const mermaidItem = selection.getSelectedElement() || selection.getLastPosition()?.parent;
 
 	if ( mermaidItem && mermaidItem.is( 'element', 'mermaid' ) && mermaidItem.getAttribute( 'displayMode' ) === commandName ) {
 		return true;

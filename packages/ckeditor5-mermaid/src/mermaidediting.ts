@@ -11,18 +11,30 @@ import MermaidPreviewCommand from './commands/mermaidPreviewCommand.js';
 import MermaidSourceViewCommand from './commands/mermaidSourceViewCommand.js';
 import MermaidSplitViewCommand from './commands/mermaidSplitViewCommand.js';
 import InsertMermaidCommand from './commands/insertMermaidCommand.js';
+import { DowncastAttributeEvent, DowncastConversionApi, Element, EventInfo, Item, Node, UpcastConversionApi, UpcastConversionData, ViewElement, ViewNode, ViewText, ViewUIElement } from 'ckeditor5';
 
 // Time in milliseconds.
 const DEBOUNCE_TIME = 300;
 
 /* global window */
 
+interface MermaidConfig {
+	lazyLoad?: () => Promise<Mermaid> | Mermaid;
+	config: MermaidConfig;
+}
+
+type DowncastConversionData = DowncastAttributeEvent["args"][0];
+
 export default class MermaidEditing extends Plugin {
+
+	private _config!: MermaidConfig;
+	private mermaid?: Mermaid;
+
 	/**
 	 * @inheritDoc
 	 */
 	static get pluginName() {
-		return 'MermaidEditing';
+		return 'MermaidEditing' as const;
 	}
 
 	/**
@@ -31,7 +43,7 @@ export default class MermaidEditing extends Plugin {
 	init() {
 		this._registerCommands();
 		this._defineConverters();
-		this._config = this.editor.config.get("mermaid");
+		this._config = this.editor.config.get("mermaid") as MermaidConfig;
 	}
 
 	/**
@@ -83,14 +95,7 @@ export default class MermaidEditing extends Plugin {
 		} );
 	}
 
-	/**
-	 *
-	 * @private
-	 * @param {*} evt
-	 * @param {*} data
-	 * @param {*} conversionApi
-	 */
-	_mermaidDataDowncast( evt, data, conversionApi ) {
+	_mermaidDataDowncast( evt: EventInfo, data: DowncastConversionData, conversionApi: DowncastConversionApi ) {
 		const model = this.editor.model;
 		const { writer, mapper } = conversionApi;
 
@@ -98,31 +103,24 @@ export default class MermaidEditing extends Plugin {
 			return;
 		}
 
-		const targetViewPosition = mapper.toViewPosition( model.createPositionBefore( data.item ) );
+		const targetViewPosition = mapper.toViewPosition( model.createPositionBefore( data.item as Item ) );
 		// For downcast we're using only language-mermaid class. We don't set class to `mermaid language-mermaid` as
 		// multiple markdown converters that we have seen are using only `language-mermaid` class and not `mermaid` alone.
 		const code = writer.createContainerElement( 'code', {
 			class: 'language-mermaid'
-		} );
+		} ) as unknown as ViewNode;
 		const pre = writer.createContainerElement( 'pre', {
 			spellcheck: 'false'
-		} );
-		const sourceTextNode = writer.createText( data.item.getAttribute( 'source' ) );
+		} ) as unknown as ViewNode;
+		const sourceTextNode = writer.createText( data.item.getAttribute( 'source' ) as string);
 
-		writer.insert( model.createPositionAt( code, 'end' ), sourceTextNode );
-		writer.insert( model.createPositionAt( pre, 'end' ), code );
+		writer.insert( mapper.toViewPosition(model.createPositionAt( code as unknown as Node, 'end' )), sourceTextNode );
+		writer.insert( mapper.toViewPosition(model.createPositionAt( pre as unknown as Node, 'end' )), code );
 		writer.insert( targetViewPosition, pre );
-		mapper.bindElements( data.item, code );
+		mapper.bindElements( data.item as Element, code as ViewElement );
 	}
 
-	/**
-	 *
-	 * @private
-	 * @param {*} evt
-	 * @param {*} data
-	 * @param {*} conversionApi
-	 */
-	_mermaidDowncast( evt, data, conversionApi ) {
+	_mermaidDowncast( evt: EventInfo, data: DowncastConversionData, conversionApi: DowncastConversionApi ) {
 		const { writer, mapper, consumable } = conversionApi;
 		const { editor } = this;
 		const { model, t } = editor;
@@ -132,7 +130,7 @@ export default class MermaidEditing extends Plugin {
 			return;
 		}
 
-		const targetViewPosition = mapper.toViewPosition( model.createPositionBefore( data.item ) );
+		const targetViewPosition = mapper.toViewPosition( model.createPositionBefore( data.item as Item ) );
 
 		const wrapperAttributes = {
 			class: [ 'ck-mermaid__wrapper' ]
@@ -147,26 +145,26 @@ export default class MermaidEditing extends Plugin {
 		const editingContainer = writer.createUIElement( 'textarea', textareaAttributes, createEditingTextarea );
 		const previewContainer = writer.createUIElement( 'div', { class: [ 'ck-mermaid__preview' ] }, createMermaidPreview );
 
-		writer.insert( writer.createPositionAt( wrapper, 'start' ), previewContainer );
-		writer.insert( writer.createPositionAt( wrapper, 'start' ), editingContainer );
+		writer.insert( writer.createPositionAt( wrapper, 'before' ), previewContainer );
+		writer.insert( writer.createPositionAt( wrapper, 'before' ), editingContainer );
 
 		writer.insert( targetViewPosition, wrapper );
 
-		mapper.bindElements( data.item, wrapper );
+		mapper.bindElements( data.item as Element, wrapper );
 
 		return toWidget( wrapper, writer, {
-			widgetLabel: t( 'Mermaid widget' ),
+			label: t( 'Mermaid widget' ),
 			hasSelectionHandle: true
 		} );
 
-		function createEditingTextarea( domDocument ) {
-			const domElement = this.toDomElement( domDocument );
+		function createEditingTextarea(this: ViewUIElement, domDocument: Document ) {
+			const domElement = this.toDomElement( domDocument ) as HTMLElement as HTMLInputElement;
 
-			domElement.value = data.item.getAttribute( 'source' );
+			domElement.value = data.item.getAttribute( 'source' ) as string;
 
 			const debouncedListener = debounce( event => {
 				editor.model.change( writer => {
-					writer.setAttribute( 'source', event.target.value, data.item );
+					writer.setAttribute( 'source', event.target.value, data.item as Node );
 				} );
 			}, DEBOUNCE_TIME );
 
@@ -179,16 +177,16 @@ export default class MermaidEditing extends Plugin {
 
 				// Move the selection onto the mermaid widget if it's currently not selected.
 				if ( selectedElement !== data.item ) {
-					model.change( writer => writer.setSelection( data.item, 'on' ) );
+					model.change( writer => writer.setSelection( data.item as Node, 'on' ) );
 				}
 			}, true );
 
 			return domElement;
 		}
 
-		function createMermaidPreview( domDocument ) {
+		function createMermaidPreview(this: ViewUIElement,  domDocument: Document ) {
 			// Taking the text from the wrapper container element for now
-			const mermaidSource = data.item.getAttribute( 'source' );
+			const mermaidSource = data.item.getAttribute( 'source' ) as string;
 			const domElement = this.toDomElement( domDocument );
 
 			domElement.innerHTML = mermaidSource;
@@ -202,31 +200,29 @@ export default class MermaidEditing extends Plugin {
 		}
 	}
 
-	/**
-	 *
-	 * @param {*} evt
-	 * @param {*} data
-	 * @param {*} conversionApi
-	 * @returns
-	 */
-	_sourceAttributeDowncast( evt, data, conversionApi ) {
+	_sourceAttributeDowncast( evt: EventInfo, data: DowncastConversionData, conversionApi: DowncastConversionApi ) {
 		// @todo: test whether the attribute was consumed.
-		const newSource = data.attributeNewValue;
+		const newSource = data.attributeNewValue as string;
 		const domConverter = this.editor.editing.view.domConverter;
 
 		if ( newSource ) {
-			const mermaidView = conversionApi.mapper.toViewElement( data.item );
+			const mermaidView = conversionApi.mapper.toViewElement( data.item as Element );
+			if (!mermaidView) {
+				return;
+			}
 
-			for ( const child of mermaidView.getChildren() ) {
+			for ( const _child of mermaidView.getChildren() ) {
+				const child = _child as ViewElement;
 				if ( child.name === 'textarea' && child.hasClass( 'ck-mermaid__editing-view' ) ) {
-					const domEditingTextarea = domConverter.viewToDom( child, window.document );
+					// Text & HTMLElement & Node & DocumentFragment
+					const domEditingTextarea = domConverter.viewToDom(child) as HTMLElement as HTMLInputElement;
 
 					if ( domEditingTextarea.value != newSource ) {
 						domEditingTextarea.value = newSource;
 					}
 				} else if ( child.name === 'div' && child.hasClass( 'ck-mermaid__preview' ) ) {
 					// @todo: we could optimize this and not refresh mermaid if widget is in source mode.
-					const domPreviewWrapper = domConverter.viewToDom( child, window.document );
+					const domPreviewWrapper = domConverter.viewToDom(child);
 
 					if ( domPreviewWrapper ) {
 						domPreviewWrapper.innerHTML = newSource;
@@ -239,15 +235,8 @@ export default class MermaidEditing extends Plugin {
 		}
 	}
 
-	/**
-	 *
-	 * @private
-	 * @param {*} evt
-	 * @param {*} data
-	 * @param {*} conversionApi
-	 */
-	_mermaidUpcast( evt, data, conversionApi ) {
-		const viewCodeElement = data.viewItem;
+	_mermaidUpcast( evt: EventInfo, data: UpcastConversionData, conversionApi: UpcastConversionApi ) {
+		const viewCodeElement = data.viewItem as ViewElement;
 		const hasPreElementParent = !viewCodeElement.parent || !viewCodeElement.parent.is( 'element', 'pre' );
 		const hasCodeAncestors = data.modelCursor.findAncestor( 'code' );
 		const { consumable, writer } = conversionApi;
@@ -261,7 +250,7 @@ export default class MermaidEditing extends Plugin {
 		}
 		const mermaidSource = Array.from( viewCodeElement.getChildren() )
 			.filter( item => item.is( '$text' ) )
-			.map( item => item.data )
+			.map( item => (item as ViewText).data )
 			.join( '' );
 
 		const mermaidElement = writer.createElement( 'mermaid', {
@@ -282,14 +271,12 @@ export default class MermaidEditing extends Plugin {
 	/**
 	 * Renders Mermaid in a given `domElement`. Expect this domElement to have mermaid
 	 * source set as text content.
-	 *
-	 * @param {HTMLElement} domElement
 	 */
-	async _renderMermaid( domElement ) {
+	async _renderMermaid( domElement: HTMLElement ) {
 		if (!window.mermaid && typeof this._config?.lazyLoad === "function") {
 			this.mermaid = await this._config.lazyLoad();
 		}
 
-		this.mermaid.init( this._config.config, domElement );
+		this.mermaid?.init( this._config.config, domElement );
 	}
 }

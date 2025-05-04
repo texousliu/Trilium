@@ -2,27 +2,19 @@
  * @module mermaid/mermaidtoolbar
  */
 
-import { Plugin } from 'ckeditor5/src/core.js';
-import { WidgetToolbarRepository } from 'ckeditor5/src/widget.js';
+import { Plugin, ViewDocumentSelection, ViewElement, WidgetToolbarRepository } from "ckeditor5";
+
 
 export default class MermaidToolbar extends Plugin {
-	/**
-	 * @inheritDoc
-	 */
+
 	static get requires() {
 		return [ WidgetToolbarRepository ];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	static get pluginName() {
-		return 'MermaidToolbar';
+		return 'MermaidToolbar' as const;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	afterInit() {
 		const editor = this.editor;
 		const t = editor.t;
@@ -40,8 +32,8 @@ export default class MermaidToolbar extends Plugin {
 	}
 }
 
-function getSelectedElement( selection ) {
-	const viewElement = selection.getSelectedElement();
+function getSelectedElement( selection: ViewDocumentSelection ) {
+	const viewElement = selection.getSelectedElement() as unknown as ViewElement;
 
 	if ( viewElement && viewElement.hasClass( 'ck-mermaid__wrapper' ) ) {
 		return viewElement;
