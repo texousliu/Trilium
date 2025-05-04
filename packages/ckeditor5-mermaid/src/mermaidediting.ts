@@ -8,7 +8,7 @@ import MermaidPreviewCommand from './commands/mermaidPreviewCommand.js';
 import MermaidSourceViewCommand from './commands/mermaidSourceViewCommand.js';
 import MermaidSplitViewCommand from './commands/mermaidSplitViewCommand.js';
 import InsertMermaidCommand from './commands/insertMermaidCommand.js';
-import { DowncastAttributeEvent, DowncastConversionApi, Element, EventInfo, Item, Node, Plugin, toWidget, UpcastConversionApi, UpcastConversionData, ViewElement, ViewNode, ViewText, ViewUIElement } from 'ckeditor5';
+import { DowncastAttributeEvent, DowncastConversionApi, Element, EventInfo, Item, Node, Plugin, toWidget, UpcastConversionApi, UpcastConversionData, ViewElement, ViewText, ViewUIElement } from 'ckeditor5';
 
 // Time in milliseconds.
 const DEBOUNCE_TIME = 300;
@@ -105,14 +105,14 @@ export default class MermaidEditing extends Plugin {
 		// multiple markdown converters that we have seen are using only `language-mermaid` class and not `mermaid` alone.
 		const code = writer.createContainerElement( 'code', {
 			class: 'language-mermaid'
-		} ) as unknown as ViewNode;
+		} ) as any;
 		const pre = writer.createContainerElement( 'pre', {
 			spellcheck: 'false'
-		} ) as unknown as ViewNode;
+		} ) as any;
 		const sourceTextNode = writer.createText( data.item.getAttribute( 'source' ) as string);
 
-		writer.insert( mapper.toViewPosition(model.createPositionAt( code as unknown as Node, 'end' )), sourceTextNode );
-		writer.insert( mapper.toViewPosition(model.createPositionAt( pre as unknown as Node, 'end' )), code );
+		writer.insert( model.createPositionAt( code, 'end' ) as any, sourceTextNode );
+		writer.insert( model.createPositionAt( pre, 'end' ) as any, code );
 		writer.insert( targetViewPosition, pre );
 		mapper.bindElements( data.item as Element, code as ViewElement );
 	}
@@ -142,8 +142,10 @@ export default class MermaidEditing extends Plugin {
 		const editingContainer = writer.createUIElement( 'textarea', textareaAttributes, createEditingTextarea );
 		const previewContainer = writer.createUIElement( 'div', { class: [ 'ck-mermaid__preview' ] }, createMermaidPreview );
 
-		writer.insert( writer.createPositionAt( wrapper, 'before' ), previewContainer );
-		writer.insert( writer.createPositionAt( wrapper, 'before' ), editingContainer );
+		//@ts-expect-error
+		writer.insert( writer.createPositionAt( wrapper, 'start' ), previewContainer );
+		//@ts-expect-error
+		writer.insert( writer.createPositionAt( wrapper, 'start' ), editingContainer );
 
 		writer.insert( targetViewPosition, wrapper );
 

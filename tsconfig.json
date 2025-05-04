@@ -38,6 +38,9 @@
     },
     {
       "path": "./packages/ckeditor5-keyboard-marker"
+    },
+    {
+      "path": "./packages/ckeditor5-mermaid"
     }
   ]
 }
