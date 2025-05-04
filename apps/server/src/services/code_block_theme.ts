@@ -50,7 +50,7 @@ export function getStylesDirectory() {
     } else if (!isDev) {
         return "node_modules/@highlightjs/cdn-assets/styles";
     } else {
-        return "../node_modules/@highlightjs/cdn-assets/styles";
+        return join(__dirname, "../../node_modules/@highlightjs/cdn-assets/styles");
     }
 }
 
