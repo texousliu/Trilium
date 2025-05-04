@@ -1,6 +1,5 @@
-import type { Schema } from 'ckeditor5/src/engine.js';
-
 // eslint-disable-next-line no-restricted-imports
+import { Schema } from 'ckeditor5';
 import { ATTRIBUTES, ELEMENTS } from '../constants.js';
 
 /**

@@ -1,6 +1,4 @@
-import { type Editor } from 'ckeditor5/src/core.js';
-import { Text, TextProxy, type Element, type Range } from 'ckeditor5/src/engine.js';
-import { type Autoformat, inlineAutoformatEditing } from "@ckeditor/ckeditor5-autoformat";
+import { type Editor, Text, TextProxy, type Element, type Range, type Autoformat, inlineAutoformatEditing } from 'ckeditor5';
 
 import { COMMANDS, ELEMENTS } from '../constants.js';
 import { modelQueryElement, modelQueryElementsAll } from '../utils.js';

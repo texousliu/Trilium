@@ -1,5 +1,4 @@
-import { Command } from 'ckeditor5/src/core.js';
-import { type Element, type RootElement, type Writer } from "ckeditor5/src/engine.js";
+import { Command, type Element, type RootElement, type Writer } from "ckeditor5";
 
 import { ATTRIBUTES, ELEMENTS } from './constants.js';
 import { modelQueryElement } from './utils.js';

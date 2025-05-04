@@ -1,6 +1,4 @@
-import { Plugin } from 'ckeditor5/src/core.js';
-import { addListToDropdown, createDropdown, SplitButtonView, ViewModel, type ListDropdownItemDefinition } from '@ckeditor/ckeditor5-ui';
-import { Collection } from '@ckeditor/ckeditor5-utils';
+import { Plugin, addListToDropdown, createDropdown, SplitButtonView, ViewModel, type ListDropdownItemDefinition, Collection } from 'ckeditor5';
 
 import {
 	ATTRIBUTES,
