@@ -1,21 +1,25 @@
-@triliumnext/ckeditor5-math
-===========================
+# CKEditor 5 mathematical feature &middot; [![GitHub license](https://img.shields.io/badge/license-ISC-blue.svg)](https://github.com/isaul32/ckeditor5-math/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/@isaul32/ckeditor5-math.svg?style=flat)](https://www.npmjs.com/package/@isaul32/ckeditor5-math)
 
-This package was created by the [ckeditor5-package-generator](https://www.npmjs.com/package/ckeditor5-package-generator) package.
+ckeditor5-math is a TeX-based mathematical plugin for CKEditor 5. You can use it to insert, edit, and view mathematical equations and formulas. This plugin supports [MathJax], [KaTeX] and custom typesetting engines.
+
+[mathjax]: https://www.mathjax.org/
+[katex]: https://katex.org/
 
 ## Table of contents
 
-* [Developing the package](#developing-the-package)
-* [Available scripts](#available-scripts)
-  * [`start`](#start)
-  * [`test`](#test)
-  * [`lint`](#lint)
-  * [`stylelint`](#stylelint)
-  * [`build:dist`](#builddist)
-  * [`translations:synchronize`](#translationssynchronize)
-  * [`translations:validate`](#translationsvalidate)
-  * [`ts:build` and `ts:clear`](#tsbuild-and-tsclear)
-* [License](#license)
+- [CKEditor 5 mathematical feature ·  ](#ckeditor-5-mathematical-feature---)
+	- [Table of contents](#table-of-contents)
+	- [Developing the package](#developing-the-package)
+	- [Available scripts](#available-scripts)
+		- [`start`](#start)
+		- [`test`](#test)
+		- [`lint`](#lint)
+		- [`stylelint`](#stylelint)
+		- [`build:dist`](#builddist)
+		- [`translations:synchronize`](#translationssynchronize)
+		- [`translations:validate`](#translationsvalidate)
+		- [`ts:build` and `ts:clear`](#tsbuild-and-tsclear)
+	- [License](#license)
 
 ## Developing the package
 
