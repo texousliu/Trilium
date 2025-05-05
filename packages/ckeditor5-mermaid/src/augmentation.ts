@@ -3,17 +3,8 @@ import MermaidEditing from './mermaidediting.js';
 import MermaidToolbar from './mermaidtoolbar.js';
 import MermaidUI from './mermaidui.js';
 
-declare module 'ckeditor5' {
-	interface PluginsMap {
-		[ Mermaid.pluginName ]: Mermaid;
-		[ MermaidEditing.pluginName ]: MermaidEditing;
-		[ MermaidToolbar.pluginName ]: MermaidToolbar;
-		[ MermaidUI.pluginName]: MermaidUI;
-	}
-}
-
 declare global {
-	interface Mermaid {
+	interface MermaidInstance {
 		init(config: MermaidConfig, element: HTMLElement): void;
 	}
 
@@ -23,3 +14,21 @@ declare global {
 
 	var mermaid: Mermaid | null | undefined;
 }
+
+declare module 'ckeditor5' {
+	interface PluginsMap {
+		[ Mermaid.pluginName ]: Mermaid;
+		[ MermaidEditing.pluginName ]: MermaidEditing;
+		[ MermaidToolbar.pluginName ]: MermaidToolbar;
+		[ MermaidUI.pluginName]: MermaidUI;
+	}
+
+	interface EditorConfig {
+		"mermaid"?: {
+			lazyLoad?: () => Promise<MermaidInstance> | MermaidInstance;
+			config: MermaidConfig;
+		}
+	}
+
+}
+

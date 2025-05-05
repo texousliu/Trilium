@@ -8,24 +8,19 @@ import MermaidPreviewCommand from './commands/mermaidPreviewCommand.js';
 import MermaidSourceViewCommand from './commands/mermaidSourceViewCommand.js';
 import MermaidSplitViewCommand from './commands/mermaidSplitViewCommand.js';
 import InsertMermaidCommand from './commands/insertMermaidCommand.js';
-import { DowncastAttributeEvent, DowncastConversionApi, Element, EventInfo, Item, Node, Plugin, toWidget, UpcastConversionApi, UpcastConversionData, ViewElement, ViewText, ViewUIElement } from 'ckeditor5';
+import { DowncastAttributeEvent, DowncastConversionApi, EditorConfig, Element, EventInfo, Item, Node, Plugin, toWidget, UpcastConversionApi, UpcastConversionData, ViewElement, ViewText, ViewUIElement } from 'ckeditor5';
 
 // Time in milliseconds.
 const DEBOUNCE_TIME = 300;
 
 /* global window */
 
-interface MermaidConfig {
-	lazyLoad?: () => Promise<Mermaid> | Mermaid;
-	config: MermaidConfig;
-}
-
 type DowncastConversionData = DowncastAttributeEvent["args"][0];
 
 export default class MermaidEditing extends Plugin {
 
-	private _config!: MermaidConfig;
-	private mermaid?: Mermaid;
+	private _config!: EditorConfig["mermaid"];
+	private mermaid?: MermaidInstance;
 
 	/**
 	 * @inheritDoc
@@ -40,7 +35,7 @@ export default class MermaidEditing extends Plugin {
 	init() {
 		this._registerCommands();
 		this._defineConverters();
-		this._config = this.editor.config.get("mermaid") as MermaidConfig;
+		this._config = this.editor.config.get("mermaid");
 	}
 
 	/**
@@ -276,6 +271,6 @@ export default class MermaidEditing extends Plugin {
 			this.mermaid = await this._config.lazyLoad();
 		}
 
-		this.mermaid?.init( this._config.config, domElement );
+		this.mermaid?.init( this._config?.config ?? {}, domElement );
 	}
 }
