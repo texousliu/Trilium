@@ -16,7 +16,12 @@
     }
   },
   "nx": {
-    "name": "ckeditor5"
+    "name": "ckeditor5",
+    "targets": {
+      "typecheck": {
+        "dependsOn": [ "^build" ]
+      }
+    }
   },
   "dependencies": {
     "ckeditor5": "43.2.0",
