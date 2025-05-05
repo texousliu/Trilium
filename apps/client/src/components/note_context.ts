@@ -10,14 +10,14 @@ import options from "../services/options.js";
 import type { ViewScope } from "../services/link.js";
 import type FNote from "../entities/fnote.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
-import type { ClassicEditor, PopupEditor } from "@triliumnext/ckeditor5";
+import type { CKTextEditor } from "@triliumnext/ckeditor5";
 
 export interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
     viewScope?: ViewScope;
 }
 
-export type GetTextEditorCallback = (editor: ClassicEditor | PopupEditor) => void;
+export type GetTextEditorCallback = (editor: CKTextEditor) => void;
 
 class NoteContext extends Component implements EventListener<"entitiesReloaded"> {
     ntxId: string | null;
@@ -299,7 +299,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     }
 
     async getTextEditor(callback?: GetTextEditorCallback) {
-        return this.timeout<ClassicEditor | PopupEditor>(
+        return this.timeout<CKTextEditor>(
             new Promise((resolve) =>
                 appContext.triggerCommand("executeWithTextEditor", {
                     callback,

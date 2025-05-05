@@ -18,7 +18,7 @@ import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
-import { PopupEditor, ClassicEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
+import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor } from "@triliumnext/ckeditor5";
 
 const ENABLE_INSPECTOR = false;
 
@@ -128,7 +128,7 @@ function buildListOfLanguages() {
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     private contentLanguage?: string | null;
-    private watchdog!: EditorWatchdog<ClassicEditor | PopupEditor>;
+    private watchdog!: EditorWatchdog<CKTextEditor>;
 
     private $editor!: JQuery<HTMLElement>;
 
@@ -158,7 +158,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         // display of $widget in both branches.
         this.$widget.show();
 
-        this.watchdog = new EditorWatchdog<ClassicEditor | PopupEditor>(editorClass, {
+        this.watchdog = new EditorWatchdog<CKTextEditor>(editorClass, {
             // An average number of milliseconds between the last editor errors (defaults to 5000).
             // When the period of time between errors is lower than that and the crashNumberLimit
             // is also reached, the watchdog changes its state to crashedPermanently, and it stops
