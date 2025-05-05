@@ -3,13 +3,13 @@
     {
       "name": "Mermaid",
       "className": "Mermaid",
-      "description": "Adds text to the editor.",
+      "description": "Mermaid widget for CKEditor 5.",
       "path": "src/mermaid.ts",
       "uiComponents": [
         {
           "name": "mermaid",
           "type": "Button",
-          "iconPath": "theme/icons/ckeditor.svg"
+          "iconPath": "theme/icons/insert.svg"
         }
       ]
     }

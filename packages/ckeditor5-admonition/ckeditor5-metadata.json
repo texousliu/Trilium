@@ -9,7 +9,7 @@
         {
           "name": "admonition",
           "type": "Button",
-          "iconPath": "theme/icons/ckeditor.svg"
+          "iconPath": "theme/icons/admonition.svg"
         }
       ],
 	  "htmlOutput": [
