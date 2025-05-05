@@ -87,5 +87,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "nx": {
+    "name": "ckeditor5-keyboard-marker"
   }
 }
