@@ -1,5 +1,5 @@
 import "ckeditor5/ckeditor5.css";
-import { COMMON_PLUGINS, POPUP_EDITOR_PLUGINS } from "./plugins";
+import { COMMON_PLUGINS, CORE_PLUGINS, POPUP_EDITOR_PLUGINS } from "./plugins";
 import { BalloonEditor, DecoupledEditor } from "ckeditor5";
 export { EditorWatchdog } from "ckeditor5";
 
@@ -14,7 +14,7 @@ export type CKTextEditor = ClassicEditor | PopupEditor;
  */
 export class AttributeEditor extends BalloonEditor {
     static override get builtinPlugins() {
-        return [];
+        return CORE_PLUGINS;
     }
 }
 

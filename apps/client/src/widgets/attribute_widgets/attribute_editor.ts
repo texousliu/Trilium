@@ -131,58 +131,6 @@ const mentionSetup: MentionConfig = {
 };
 
 const editorConfig = {
-    ...buildConfig(),
-    removePlugins: [
-        "Heading",
-        "Link",
-        "Autoformat",
-        "Bold",
-        "Italic",
-        "Underline",
-        "Strikethrough",
-        "Code",
-        "Superscript",
-        "Subscript",
-        "BlockQuote",
-        "Image",
-        "ImageCaption",
-        "ImageStyle",
-        "ImageToolbar",
-        "ImageUpload",
-        "ImageResize",
-        "List",
-        "TodoList",
-        "PasteFromOffice",
-        "Table",
-        "TableToolbar",
-        "TableProperties",
-        "TableCellProperties",
-        "Indent",
-        "IndentBlock",
-        "BlockToolbar",
-        "ParagraphButtonUI",
-        "HeadingButtonsUI",
-        "UploadimagePlugin",
-        "InternalLinkPlugin",
-        "MarkdownImportPlugin",
-        "CuttonotePlugin",
-        "TextTransformation",
-        "Font",
-        "FontColor",
-        "FontBackgroundColor",
-        "CodeBlock",
-        "SelectAll",
-        "IncludeNote",
-        "CutToNote",
-        "Math",
-        "AutoformatMath",
-        "indentBlockShortcutPlugin",
-        "removeFormatLinksPlugin",
-        "Footnotes",
-        "Mermaid",
-        "Kbd",
-        "Admonition"
-    ],
     toolbar: {
         items: []
     },
@@ -213,7 +161,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.$widget = $(TPL);
         this.$editor = this.$widget.find(".attribute-list-editor");
 
-        // this.initialized = this.initEditor();
+        this.initialized = this.initEditor();
 
         this.$editor.on("keydown", async (e) => {
             if (e.which === 13) {

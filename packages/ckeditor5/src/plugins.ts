@@ -49,12 +49,17 @@ const EXTERNAL_PLUGINS: typeof Plugin[] = [
 	AutoformatMath
 ];
 
+export const CORE_PLUGINS: typeof Plugin[] = [
+    Clipboard, Enter, SelectAll,
+    ShiftEnter, Typing, Undo,
+	Paragraph
+];
+
 export const COMMON_PLUGINS: typeof Plugin[] = [
+    ...CORE_PLUGINS,
     ...TRILIUM_PLUGINS,
     ...EXTERNAL_PLUGINS,
 
-	// essentials package expanded to allow selectively disable Enter and ShiftEnter
-	Clipboard, Enter, SelectAll, ShiftEnter, Typing, Undo,
 	CKFinderUploadAdapter,
 	Autoformat,
 	Bold,
@@ -78,7 +83,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	List,
 	ListProperties,
 	TodoList,
-	Paragraph,
 	PasteFromOffice,
 	PictureEditing,
 	Table,
@@ -107,7 +111,7 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	PageBreak,
 	GeneralHtmlSupport,
 	TextPartLanguage,
-	Style
+    Style
 ];
 
 export const POPUP_EDITOR_PLUGINS: typeof Plugin[] = [
