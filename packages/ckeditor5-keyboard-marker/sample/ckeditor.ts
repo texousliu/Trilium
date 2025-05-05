@@ -31,7 +31,7 @@ import {
 
 import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 
-import Kbd from '../src/keyboardmarker.js';
+import Kbd from '../src/kbd.js';
 
 import 'ckeditor5/ckeditor5.css';
 
