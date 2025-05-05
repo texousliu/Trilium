@@ -61,7 +61,7 @@
   "author": "Elian Doran <contact@eliandoran.me>",
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "build:dist": "node ./scripts/build-dist.mjs",
+    "build": "node ./scripts/build-dist.mjs",
     "ts:build": "tsc -p ./tsconfig.release.json",
     "ts:clear": "npx rimraf --glob \"src/**/*.@(js|d.ts)\"",
     "lint": "eslint \"**/*.{js,ts}\" --quiet",
