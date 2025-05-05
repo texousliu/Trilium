@@ -15,6 +15,10 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(scriptDir, "..");
 
 function getElectronVersion() {
+    if (process.argv[2]) {
+        return process.argv[2];
+    }
+
     const packageJsonPath = join(rootDir, "package.json");
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
     return packageJson.devDependencies.electron;
@@ -22,13 +26,16 @@ function getElectronVersion() {
 
 function main() {
     const distDir = join(rootDir, "dist");
+    const electronVersion = getElectronVersion();
+
+    console.log(`Rebuilding with version ${electronVersion}...`);
 
     rebuild({
         // We force the project root path to avoid electron-rebuild from rebuilding the monorepo-level dependency and breaking the server.
         projectRootPath: distDir,
         buildPath: distDir,
         force: true,
-        electronVersion: getElectronVersion(),
+        electronVersion,
     });
 }
 

@@ -59,7 +59,7 @@
             "cwd": "{projectRoot}"
           },
           "nixos": {
-            "command": "electron-rebuild -f -v $(nix-shell -p electron_35 --run \"electron --version\") dist/main.js -m dist",
+            "command": "cross-env DEBUG=* tsx scripts/rebuild.mts $(nix-shell -p electron_33 --run \"electron --version\")",
             "cwd": "{projectRoot}"
           }
         }
@@ -76,7 +76,7 @@
             "cwd": "{projectRoot}/dist"
           },
           "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.js\"",
+            "command": "nix-shell -p electron_33 --run \"electron {projectRoot}/dist/main.js\"",
             "cwd": ".",
             "forwardAllArgs": false
           }
