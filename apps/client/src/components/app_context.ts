@@ -26,6 +26,7 @@ import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.js";
 import type { NativeImage, TouchBar } from "electron";
 import TouchBarComponent from "./touch_bar.js";
+import type { ClassicEditor, PopupEditor } from "@triliumnext/ckeditor5";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -187,7 +188,7 @@ export type CommandMappings = {
         callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void;
     };
     executeWithTextEditor: CommandData &
-    ExecuteCommandData<TextEditor> & {
+    ExecuteCommandData<ClassicEditor | PopupEditor> & {
         callback?: GetTextEditorCallback;
     };
     executeWithCodeEditor: CommandData & ExecuteCommandData<CodeMirrorInstance>;

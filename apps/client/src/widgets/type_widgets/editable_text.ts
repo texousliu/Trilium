@@ -18,7 +18,7 @@ import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
-import { BalloonEditor, COMMON_PLUGINS, DecoupledEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
+import { PopupEditor, ClassicEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
 
 const ENABLE_INSPECTOR = false;
 
@@ -128,7 +128,7 @@ function buildListOfLanguages() {
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     private contentLanguage?: string | null;
-    private watchdog!: EditorWatchdog<DecoupledEditor | BalloonEditor>;
+    private watchdog!: EditorWatchdog<ClassicEditor | PopupEditor>;
 
     private $editor!: JQuery<HTMLElement>;
 
@@ -151,14 +151,14 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
-        const editorClass = isClassicEditor ? DecoupledEditor : BalloonEditor;
+        const editorClass = isClassicEditor ? ClassicEditor : PopupEditor;
 
         // CKEditor since version 12 needs the element to be visible before initialization. At the same time,
         // we want to avoid flicker - i.e., show editor only once everything is ready. That's why we have separate
         // display of $widget in both branches.
         this.$widget.show();
 
-        this.watchdog = new EditorWatchdog<DecoupledEditor | BalloonEditor>(editorClass, {
+        this.watchdog = new EditorWatchdog<ClassicEditor | PopupEditor>(editorClass, {
             // An average number of milliseconds between the last editor errors (defaults to 5000).
             // When the period of time between errors is lower than that and the crashNumberLimit
             // is also reached, the watchdog changes its state to crashedPermanently, and it stops
@@ -252,7 +252,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
                 $classicToolbarWidget.empty();
                 if ($classicToolbarWidget.length) {
-                    $classicToolbarWidget[0].appendChild(editor.ui.view.toolbar.element);
+                    const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
+                    if (toolbarView.element) {
+                        $classicToolbarWidget[0].appendChild(toolbarView.element);
+                    }
                 }
 
                 if (utils.isMobile()) {
@@ -260,7 +263,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
                     // Reposition all dropdowns to point upwards instead of downwards.
                     // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
-                    const toolbarView = (editor as DecoupledEditor).ui.view.toolbar;
+                    const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
                     for (const item of toolbarView.items) {
                         if (!("panelView" in item)) {
                             continue;
@@ -317,8 +320,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             mermaid: {
                 lazyLoad: async () => (await import("mermaid")).default, // FIXME
                 config: getMermaidConfig()
-            },
-            plugins: COMMON_PLUGINS
+            }
         });
     }
 
@@ -443,6 +445,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         await this.initialized;
 
+        if (!this.watchdog.editor) {
+            return;
+        }
+
         if (callback) {
             callback(this.watchdog.editor);
         }
@@ -489,7 +495,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
         }
 
-        if (!selection.hasAttribute("linkHref")) {
+        if (!selection?.hasAttribute("linkHref")) {
             return;
         }
 
