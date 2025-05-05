@@ -131,56 +131,6 @@ declare global {
     var renderMathInElement: (element: HTMLElement, options: {
         trust: boolean;
     }) => void;
-    interface CKCodeBlockLanguage {
-        language: string;
-        label: string;
-    }
-
-    interface CKEditorInstance {
-        create(elementOrData: any, finalConfig: any): TextEditor;
-    }
-
-    class CKWatchdog {
-        constructor(editorClass: CKEditorInstance, opts: {
-            minimumNonErrorTimePeriod: number;
-            crashNumberLimit: number,
-            saveInterval: number
-        });
-        on(event: string, callback: () => void);
-        state: string;
-        crashes: unknown[];
-        editor: TextEditor;
-        setCreator(callback: (elementOrData, editorConfig) => void);
-        create(el: HTMLElement, opts: {
-            placeholder: string,
-            mention: MentionConfig,
-            codeBlock: {
-                languages: CKCodeBlockLanguage[]
-            },
-            math: {
-                engine: string,
-                outputType: string,
-                lazyLoad: () => Promise<void>,
-                forceOutputType: boolean,
-                enablePreview: boolean
-            },
-            mermaid: {
-                lazyLoad: () => Promise<Mermaid>,
-                config: MermaidConfig
-            }
-        });
-        destroy();
-    }
-
-    var CKEditor: {
-        BalloonEditor: CKEditorInstance;
-        DecoupledEditor: CKEditorInstance;
-        EditorWatchdog: typeof CKWatchdog;
-    };
-
-    var CKEditorInspector: {
-        attach(editor: TextEditor);
-    };
 
     interface CodeMirrorOpts {
         value: string;
