@@ -82,6 +82,24 @@
           }
         }
       },
+      "serve-nodir": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "rebuild-deps"
+        ],
+        "defaultConfiguration": "default",
+        "configurations": {
+          "default": {
+            "command": "electron .",
+            "cwd": "{projectRoot}/dist"
+          },
+          "nixos": {
+            "command": "nix-shell -p electron_33 --run \"electron {projectRoot}/dist/main.js\"",
+            "cwd": ".",
+            "forwardAllArgs": false
+          }
+        }
+      },
       "electron-forge:make": {
         "dependsOn": [
           "build"
