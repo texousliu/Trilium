@@ -44,22 +44,4 @@ function dist( path ) {
 		declarations: true,
 		translations: '**/*.po'
 	} );
-
-	/**
-	 * Step 2
-	 */
-	console.log( chalk.cyan( '2/2: Generating browser build...' ) );
-
-	await build( {
-		output: dist( 'browser/index.js' ),
-		tsconfig,
-		sourceMap: true,
-		minify: true,
-		browser: true,
-		name: 'CKMermaid',
-		external: [
-			'ckeditor5',
-			'ckeditor5-premium-features'
-		]
-	} );
 } )();
