@@ -1,0 +1,21 @@
+diff --git a/src/mentionui.js b/src/mentionui.js
+index 96df6deedcebf00ad089835301383022337ace1c..a45f6ddc9c195a40faf6a034266402e2a7993ccd 100644
+--- a/src/mentionui.js
++++ b/src/mentionui.js
+@@ -529,7 +529,6 @@ export function createRegExp(marker, minimumCharacters) {
+     // When "u" flag is used, the regexp has "strict" escaping rules, i.e. if you try to escape a character that does not need
+     // to be escaped, RegExp() will throw. It made it difficult to write a generic util, because different characters are
+     // allowed in different context. For example, escaping "-" sometimes was correct, but sometimes it threw an error.
+-    marker = marker.replace(/[.*+?^${}()\-|[\]\\]/g, '\\$&');
+     // The pattern consists of 3 groups:
+     //
+     // - 0 (non-capturing): Opening sequence - start of the line, space or an opening punctuation character like "(" or "\"",
+@@ -538,7 +537,7 @@ export function createRegExp(marker, minimumCharacters) {
+     //
+     // The pattern matches up to the caret (end of string switch - $).
+     //               (0:      opening sequence       )(1:   marker  )(2:                typed mention              )$
+-    const pattern = `(?:^|[ ${openAfterCharacters}])([${marker}])(${mentionCharacters}${numberOfCharacters})$`;
++    const pattern = `(?:^|[= ${ openAfterCharacters }])([${ marker }])([${ mentionCharacters }]${ numberOfCharacters })$`;
+     return new RegExp(pattern, 'u');
+ }
+ /**
