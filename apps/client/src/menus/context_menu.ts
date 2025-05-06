@@ -183,8 +183,6 @@ class ContextMenu {
                             return false;
                         }
 
-                        this.hide();
-
                         if ("handler" in item && item.handler) {
                             item.handler(item, e);
                         }
@@ -218,20 +216,11 @@ class ContextMenu {
 
     async hide() {
         this.options?.onHide?.();
-        // seems like if we hide the menu immediately, some clicks can get propagated to the underlying component
-        // see https://github.com/zadam/trilium/pull/3805 for details
-        await timeout(100);
         this.$widget.removeClass("show");
         this.$cover.removeClass("show");
         $("body").removeClass("context-menu-shown");
         this.$widget.hide();
     }
-}
-
-function timeout(ms: number) {
-    return new Promise((accept, reject) => {
-        setTimeout(accept, ms);
-    });
 }
 
 const contextMenu = new ContextMenu();
