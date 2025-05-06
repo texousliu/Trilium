@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@ckeditor/ckeditor5-mention':
-    hash: ykir47wdhuap7iioe7mudxpk74
+    hash: ea634450951529f434461216c50e9197d59e5cf9992c25ef1d38c602268d1313
     path: patches/@ckeditor__ckeditor5-mention.patch
 
 importers:
@@ -15396,7 +15396,7 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 43.2.0
       ckeditor5: 43.2.0
 
-  '@ckeditor/ckeditor5-mention@43.2.0(patch_hash=ykir47wdhuap7iioe7mudxpk74)':
+  '@ckeditor/ckeditor5-mention@43.2.0(patch_hash=ea634450951529f434461216c50e9197d59e5cf9992c25ef1d38c602268d1313)':
     dependencies:
       '@ckeditor/ckeditor5-core': 43.2.0
       '@ckeditor/ckeditor5-typing': 43.2.0
@@ -20849,7 +20849,7 @@ snapshots:
       '@ckeditor/ckeditor5-list': 43.2.0
       '@ckeditor/ckeditor5-markdown-gfm': 43.2.0
       '@ckeditor/ckeditor5-media-embed': 43.2.0
-      '@ckeditor/ckeditor5-mention': 43.2.0(patch_hash=ykir47wdhuap7iioe7mudxpk74)
+      '@ckeditor/ckeditor5-mention': 43.2.0(patch_hash=ea634450951529f434461216c50e9197d59e5cf9992c25ef1d38c602268d1313)
       '@ckeditor/ckeditor5-minimap': 43.2.0
       '@ckeditor/ckeditor5-page-break': 43.2.0
       '@ckeditor/ckeditor5-paragraph': 43.2.0

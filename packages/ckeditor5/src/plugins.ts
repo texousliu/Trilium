@@ -52,7 +52,8 @@ const EXTERNAL_PLUGINS: typeof Plugin[] = [
 export const CORE_PLUGINS: typeof Plugin[] = [
     Clipboard, Enter, SelectAll,
     ShiftEnter, Typing, Undo,
-	Paragraph
+	Paragraph,
+    Mention
 ];
 
 export const COMMON_PLUGINS: typeof Plugin[] = [
@@ -107,7 +108,6 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	SpecialCharacters,
 	SpecialCharactersEssentials,
 	FindAndReplace,
-	Mention,
 	PageBreak,
 	GeneralHtmlSupport,
 	TextPartLanguage,
