@@ -20,12 +20,9 @@ onlyBuiltDependencies:
   - macos-alias
   - sqlite3
 
-publicHoistPattern:
+hoistPattern:
   # Used by packages/ckeditor-* eslint script
   - eslint-plugin-*
   - eslint-plugin-ckeditor5-rules
-  # Used by packages/ckeditor-* build script
-  - upath
-  - chalk
 
 nodeLinker: isolated
