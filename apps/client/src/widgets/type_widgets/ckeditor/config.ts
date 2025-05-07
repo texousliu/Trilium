@@ -1,6 +1,7 @@
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import options from "../../../services/options.js";
 import utils from "../../../services/utils.js";
+import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?external";
 
 const TEXT_FORMATTING_GROUP = {
     label: "Text formatting",
@@ -96,6 +97,9 @@ export function buildConfig() {
             defaultProtocol: "https://",
             allowedProtocols: ALLOWED_PROTOCOLS
         },
+        emoji: {
+            definitionsUrl: emojiDefinitionsUrl
+        },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"
     };
@@ -169,7 +173,7 @@ export function buildClassicToolbar(multilineToolbar: boolean) {
                 {
                     label: "Insert",
                     icon: "plus",
-                    items: ["imageUpload", "|", "link", "bookmark", "internallink", "includeNote", "|", "specialCharacters", "math", "mermaid", "horizontalLine", "pageBreak"]
+                    items: ["imageUpload", "|", "link", "bookmark", "internallink", "includeNote", "|", "specialCharacters", "emoji", "math", "mermaid", "horizontalLine", "pageBreak"]
                 },
                 "|",
                 "outdent",
@@ -233,6 +237,7 @@ export function buildFloatingToolbar() {
             "imageUpload",
             "markdownImport",
             "specialCharacters",
+            "emoji",
             "findAndReplace"
         ]
     };

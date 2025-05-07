@@ -81,6 +81,7 @@ module.exports = composePlugins(
     }));
 
     inlineSvg(config);
+    externalJson(config);
 
     return config;
   }
@@ -99,5 +100,17 @@ function inlineSvg(config) {
   config.module.rules.push({
     resourceQuery: /raw/,
     type: 'asset/source',
+  });
+}
+
+function externalJson(config) {
+  if (!config.module?.rules) {
+    return;
+  }
+  
+  // Add a rule for prepending ?external.
+  config.module.rules.push({
+    resourceQuery: /external/,
+    type: 'asset/resource',
   });
 }
