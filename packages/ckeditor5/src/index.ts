@@ -7,7 +7,10 @@ export { EditorWatchdog } from "ckeditor5";
  * Short-hand for the CKEditor classes supported by Trilium for text editing.
  * Specialized editors such as the {@link AttributeEditor} are not included.
  */
-export type CKTextEditor = ClassicEditor | PopupEditor;
+export type CKTextEditor = (ClassicEditor | PopupEditor) & {
+    getSelectedHtml(): string;
+    removeSelection(): Promise<void>;
+};
 
 /**
  * The text editor that can be used for editing attributes and relations.

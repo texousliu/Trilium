@@ -8,11 +8,12 @@
  * TODO: Generally this class can be done directly in the CKEditor repository.
  */
 
+import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import library_loader from "../../../services/library_loader.js";
 import mime_types from "../../../services/mime_types.js";
 import { isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 
-export async function initSyntaxHighlighting(editor: TextEditor) {
+export async function initSyntaxHighlighting(editor: CKTextEditor) {
     if (!isSyntaxHighlightEnabled) {
         return;
     }
@@ -54,7 +55,7 @@ function assert(e: boolean, msg?: string) {
 // TODO: Should this be scoped to note?
 let markerCounter = 0;
 
-function initTextEditor(textEditor: TextEditor) {
+function initTextEditor(textEditor: CKTextEditor) {
     log("initTextEditor");
 
     const document = textEditor.model.document;
