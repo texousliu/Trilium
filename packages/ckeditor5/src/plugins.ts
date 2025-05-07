@@ -7,7 +7,6 @@ import StrikethroughAsDel from "./plugins/strikethrough_as_del.js";
 import InternalLinkPlugin from "./plugins/internallink.js";
 import ReferenceLink from "./plugins/referencelink.js";
 import RemoveFormatLinksPlugin from "./plugins/remove_format_links.js";
-import SpecialCharactersEmojiPlugin from "./plugins/special_characters_emoji.js";
 import IndentBlockShortcutPlugin from "./plugins/indent_block_shortcut.js";
 import MarkdownImportPlugin from "./plugins/markdownimport.js";
 import MentionCustomization from "./plugins/mention_customization.js";
@@ -32,7 +31,6 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     UploadimagePlugin,
     InternalLinkPlugin,
     RemoveFormatLinksPlugin,
-    SpecialCharactersEmojiPlugin,
     IndentBlockShortcutPlugin,
     MarkdownImportPlugin,
     MentionCustomization,
