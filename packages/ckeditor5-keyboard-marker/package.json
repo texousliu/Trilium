@@ -87,6 +87,11 @@
     }
   },
   "nx": {
-    "name": "ckeditor5-keyboard-marker"
+    "name": "ckeditor5-keyboard-marker",
+    "targets": {
+      "build": {
+        "cache": "true"
+      }
+    }
   }
 }

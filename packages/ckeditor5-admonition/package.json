@@ -86,6 +86,11 @@
     }
   },
   "nx": {
-    "name": "ckeditor5-admonition"
+    "name": "ckeditor5-admonition",
+    "targets": {
+      "build": {
+        "cache": "true"
+      }
+    }
   }
 }

@@ -67,8 +67,7 @@ export default class FileUploadEditing extends Plugin {
 				return;
 			}
 
-            //@ts-expect-error Missing document.
-			const writer = new UpcastWriter();
+			const writer = new UpcastWriter(this.editor.editing.view.document);
 
 			for ( const fetchableFile of fetchableFiles ) {
 				// Set attribute marking that the file was processed already.

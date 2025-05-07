@@ -85,6 +85,11 @@
     }
   },
   "nx": {
-    "name": "ckeditor5-footnotes"
+    "name": "ckeditor5-footnotes",
+    "targets": {
+      "build": {
+        "cache": "true"
+      }
+    }
   }
 }
