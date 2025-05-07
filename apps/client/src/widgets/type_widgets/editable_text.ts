@@ -205,7 +205,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     styles: true,
                     classes: true,
                     attributes: true
-                }
+                },
+                licenseKey: "GPL"
             };
 
             const contentLanguage = this.note?.getLabelValue("language");

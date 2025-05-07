@@ -134,7 +134,8 @@ const editorConfig = {
         items: []
     },
     placeholder: t("attribute_editor.placeholder"),
-    mention: mentionSetup
+    mention: mentionSetup,
+    licenseKey: "GPL"
 };
 
 type AttributeCommandNames = FilteredCommandNames<CommandData>;
