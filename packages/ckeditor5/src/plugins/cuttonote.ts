@@ -6,8 +6,7 @@ export default class CutToNotePlugin extends Plugin {
     private htmlDataProcessor!: HtmlDataProcessor;
 
 	init() {
-        // @ts-ignore Not sure why we need to pass a document.
-		this.htmlDataProcessor = new HtmlDataProcessor();
+		this.htmlDataProcessor = new HtmlDataProcessor(this.editor.editing.view.document);
 
 		this.editor.ui.componentFactory.add( 'cutToNote', locale => {
 			const view = new ButtonView( locale );
