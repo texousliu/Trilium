@@ -169,7 +169,7 @@ export function buildClassicToolbar(multilineToolbar: boolean) {
                 {
                     label: "Insert",
                     icon: "plus",
-                    items: ["imageUpload", "|", "link", "internallink", "includeNote", "|", "specialCharacters", "math", "mermaid", "horizontalLine", "pageBreak"]
+                    items: ["imageUpload", "|", "link", "bookmark", "internallink", "includeNote", "|", "specialCharacters", "math", "mermaid", "horizontalLine", "pageBreak"]
                 },
                 "|",
                 "outdent",
@@ -202,6 +202,7 @@ export function buildFloatingToolbar() {
                 "|",
                 "code",
                 "link",
+                "bookmark",
                 "removeFormat",
                 "internallink",
                 "cuttonote"
