@@ -6,7 +6,7 @@
  * the server build (and it doesn't expose a CLI option to override this).
  */
 
-import path, { join } from "path";
+import { join, resolve } from "path";
 import { rebuild } from "@electron/rebuild"
 import { readFileSync } from "fs";
 
@@ -18,13 +18,17 @@ function getElectronVersion(distDir: string) {
     const packageJsonPath = join(distDir, "package.json");
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
 
-    const electronVersion = packageJson.devDependencies.electron || packageJson.dependencies.electron;
+    const electronVersion = packageJson?.devDependencies?.electron ?? packageJson?.dependencies?.electron;
+    if (!electronVersion) {
+        console.error(`Unable to retrieve Electron version in '${resolve(packageJsonPath)}'.`);
+        process.exit(3);
+    }
 
     return electronVersion;
 }
 
 function main() {
-    const distDir = path.resolve(process.argv[2]);
+    const distDir = resolve(process.argv[2]);
     if (!distDir) {
         console.error("Missing root dir as argument.");
         process.exit(1);
