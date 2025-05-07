@@ -89,6 +89,11 @@
     }
   },
   "nx": {
-    "name": "ckeditor5-math"
+    "name": "ckeditor5-math",
+    "targets": {
+      "build": {
+        "cache": "true"
+      }
+    }
   }
 }
