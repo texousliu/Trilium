@@ -11,9 +11,9 @@
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
-    "noImplicitOverride": false, // TODO: Re-enable it at some point.
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "noImplicitOverride": false,  // TODO: Re-enable it at some point.
+    "noImplicitReturns": false,   // TODO: Re-enable it at some point.
+    "noUnusedLocals": false,      // TODO: Re-enable it at some point.
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",

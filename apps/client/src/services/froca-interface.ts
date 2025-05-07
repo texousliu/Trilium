@@ -9,7 +9,7 @@ export interface Froca {
     branches: Record<string, FBranch>;
     attributes: Record<string, FAttribute>;
     attachments: Record<string, FAttachment>;
-    blobPromises: Record<string, Promise<void | FBlob> | null>;
+    blobPromises: Record<string, Promise<void | FBlob | null> | null>;
 
     getBlob(entityType: string, entityId: string): Promise<FBlob | null>;
     getNote(noteId: string, silentNotFoundError?: boolean): Promise<FNote | null>;

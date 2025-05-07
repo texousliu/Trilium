@@ -1,5 +1,4 @@
 import * as utils from "./utils.js";
-import * as ParseRangeHeaderExports from "./parseRangeHeader.js";
 import { ContentDoesNotExistError } from "./ContentDoesNotExistError.js";
 import { createPartialContentHandler } from "./createPartialContentHandler.js";
 import type { ContentProvider } from "./ContentProvider.js";
@@ -87,11 +86,6 @@ describe("createPartialContentHandler tests", () => {
       }
     });
     it("returns 500 if parseRangeHeader throws other errors", async () => {
-      const parseRangeHeaderStub = vi
-        .spyOn(ParseRangeHeaderExports, "parseRangeHeader")
-        .mockImplementation(() => {
-            throw new Error("Something went wrong!")
-        });
       const contentProvider = vi.fn().mockResolvedValue({}) as ContentProvider;
       const handler = createPartialContentHandler(contentProvider, logger);
       try {

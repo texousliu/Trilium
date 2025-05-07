@@ -36,7 +36,7 @@ class FrocaImpl implements Froca {
     branches!: Record<string, FBranch>;
     attributes!: Record<string, FAttribute>;
     attachments!: Record<string, FAttachment>;
-    blobPromises!: Record<string, Promise<FBlob> | null>;
+    blobPromises!: Record<string, Promise<FBlob | null> | null>;
 
     constructor() {
         this.initializedPromise = this.loadInitialTree();

@@ -14,7 +14,7 @@
     "@excalidraw/excalidraw": "0.18.0",
     "@types/archiver": "6.0.3",
     "@types/better-sqlite3": "7.6.13",
-    "@types/cheerio": "0.22.35",
+    "@types/cheerio": "1.0.0",
     "@types/cls-hooked": "4.3.9",
     "@types/compression": "1.7.5",
     "@types/cookie-parser": "1.4.8",
