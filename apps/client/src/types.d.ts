@@ -21,7 +21,7 @@ interface CustomGlobals {
     getHeaders: typeof server.getHeaders;
     getReferenceLinkTitle: (href: string) => Promise<string>;
     getReferenceLinkTitleSync: (href: string) => string;
-    getActiveContextNote: () => FNote;
+    getActiveContextNote: () => FNote | null;
     requireLibrary: typeof library_loader.requireLibrary;
     ESLINT: Library;
     appContext: AppContext;
@@ -74,6 +74,9 @@ declare global {
     type AutoCompleteCallback = (values: AutoCompleteArg[]) => void;
 
     interface AutoCompleteArg {
+        name?: string;
+        value?: string;
+        notePathTitle?: string;
         displayKey?: "name" | "value" | "notePathTitle";
         cache?: boolean;
         source?: (term: string, cb: AutoCompleteCallback) => void,
@@ -83,7 +86,7 @@ declare global {
     }
 
     interface JQuery {
-        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: object[] | string) => JQuery<HTMLElement>;
+        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: AutoCompleteArg[] | string) => JQuery<HTMLElement>;
 
         getSelectedNotePath(): string | undefined;
         getSelectedNoteId(): string | null;
