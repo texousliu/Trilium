@@ -1,6 +1,7 @@
 {
   "name": "@triliumnext/ckeditor5",
-  "version": "0.0.1",
+  "description": "The document editor build of CKEditor 5 – the best browser-based rich text editor.",
+  "version": "43.2.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
