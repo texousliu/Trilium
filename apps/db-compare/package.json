@@ -5,9 +5,9 @@
   "description": "Tool to compare content of Trilium databases. Useful for debugging sync problems.",
   "dependencies": {
     "colors": "1.4.0",
-    "diff": "5.0.0",
+    "diff": "7.0.0",
     "sqlite": "5.1.1",
-    "sqlite3": "5.1.5"
+    "sqlite3": "5.1.7"
   },
   "nx": {
     "name": "db-compare",
@@ -69,7 +69,6 @@
     }
   },
   "devDependencies": {
-    "@types/colors": "1.2.4",
     "@types/diff": "^7.0.2"
   }
 }

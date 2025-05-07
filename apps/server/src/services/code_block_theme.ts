@@ -47,9 +47,11 @@ export function listSyntaxHighlightingThemes() {
 export function getStylesDirectory() {
     if (isElectron && !isDev) {
         return "styles";
+    } else if (!isDev) {
+        return "node_modules/@highlightjs/cdn-assets/styles";
+    } else {
+        return join(__dirname, "../../node_modules/@highlightjs/cdn-assets/styles");
     }
-
-    return "node_modules/@highlightjs/cdn-assets/styles";
 }
 
 /**

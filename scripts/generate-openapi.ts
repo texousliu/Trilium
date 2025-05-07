@@ -4,18 +4,24 @@ import swaggerJsdoc from "swagger-jsdoc";
 import fs from "fs";
 
 /*
- * Usage: npm run generate-openapi | tail -n1 > x.json
+ * Usage: npm run chore:generate-openapi
+ * Output: ./apps/server/src/assets/openapi.json
  *
  * Inspect generated file by opening it in https://editor-next.swagger.io/
  *
  */
+
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const outputPath = join(scriptDir, "..", "apps", "server", "src", "assets", "openapi.json");
+
+const packageJson = JSON.parse(fs.readFileSync(join(scriptDir, "..", "package.json"), 'utf8'));
 
 const options = {
     definition: {
         openapi: "3.1.1",
         info: {
             title: "Trilium Notes - Sync server API",
-            version: "0.96.6",
+            version: packageJson["version"],
             description:
                 "This is the internal sync server API used by Trilium Notes / TriliumNext Notes.\n\n_If you're looking for the officially supported External Trilium API, see [here](https://triliumnext.github.io/Docs/Wiki/etapi.html)._\n\nThis page does not yet list all routes. For a full list, see the [route controller](https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/routes.ts).",
             contact: {
@@ -30,18 +36,17 @@ const options = {
     },
     apis: [
         // Put individual files here to have them ordered first.
-        "./src/routes/api/setup.ts",
+        "./apps/server/src/routes/api/setup.ts",
         // all other files
-        "./src/routes/api/*.ts",
-        "./bin/generate-openapi.js"
+        "./apps/server/src/routes/api/*.ts",
+        "./apps/server/src/routes/*.ts",
+        "./scripts/generate-openapi.ts"
     ]
 };
 
 const openapiSpecification = swaggerJsdoc(options);
-const scriptDir = dirname(fileURLToPath(import.meta.url));
-const outputPath = join(scriptDir, "..", "src", "routes", "api", "openapi.json");
 fs.writeFileSync(outputPath, JSON.stringify(openapiSpecification));
-console.log("Saved to ", outputPath);
+console.log("Saved to", outputPath);
 
 /**
  * @swagger
@@ -67,7 +72,7 @@ console.log("Saved to ", outputPath);
  *           $ref: "#/components/schemas/NoteId"
  *         type:
  *           type: string
- *           enum: ["attribute", "relation"]
+ *           enum: ["label", "relation"]
  *         name:
  *           type: string
  *           example: "internalLink"
@@ -99,6 +104,7 @@ console.log("Saved to ", outputPath);
  *           $ref: "#/components/schemas/UtcDateTime"
  *     Branch:
  *       type: object
+ *       required: ["branchId", "noteId", "parentNoteId", "notePosition"]
  *       properties:
  *         branchId:
  *           $ref: "#/components/schemas/BranchId"
@@ -141,6 +147,7 @@ console.log("Saved to ", outputPath);
  *           description: Encoded entity data. Object has one property for each database column.
  *     Note:
  *       type: object
+ *       required: ["noteId", "title", "isProtected", "type", "mime", "blobId"]
  *       properties:
  *         noteId:
  *           $ref: "#/components/schemas/NoteId"

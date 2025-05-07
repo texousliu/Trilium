@@ -152,15 +152,15 @@ function getNotesAndBranchesAndAttributes(_noteIds: string[] | Set<string>) {
  *               type: object
  *               properties:
  *                 branches:
- *                   type: list
+ *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Branch'
  *                 notes:
- *                   type: list
+ *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Note'
  *                 attributes:
- *                   type: list
+ *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Attribute'
  *     security:
