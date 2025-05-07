@@ -19,7 +19,6 @@ export function buildConfig() {
                     "alignBlockRight",
                     "alignLeft",
                     "alignRight",
-                    "full", // full and side are for BC since the old images have been created with these styles
                     "side"
                 ]
             },
