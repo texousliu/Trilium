@@ -1,7 +1,7 @@
 {
   "name": "@triliumnext/ckeditor5",
   "description": "The document editor build of CKEditor 5 – the best browser-based rich text editor.",
-  "version": "44.0.0",
+  "version": "44.1.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -25,7 +25,7 @@
     }
   },
   "dependencies": {
-    "ckeditor5": "44.0.0",
+    "ckeditor5": "44.1.0",
     "@triliumnext/ckeditor5-keyboard-marker": "workspace:*",
     "@triliumnext/ckeditor5-mermaid": "workspace:*",
     "@triliumnext/ckeditor5-admonition": "workspace:*",
