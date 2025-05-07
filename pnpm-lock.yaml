@@ -469,8 +469,8 @@ importers:
         specifier: 7.6.13
         version: 7.6.13
       '@types/cheerio':
-        specifier: 0.22.35
-        version: 0.22.35
+        specifier: 1.0.0
+        version: 1.0.0
       '@types/cls-hooked':
         specifier: 4.3.9
         version: 4.3.9
@@ -3365,8 +3365,9 @@ packages:
   '@types/cacheable-request@6.0.3':
     resolution: {integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==}
 
-  '@types/cheerio@0.22.35':
-    resolution: {integrity: sha512-yD57BchKRvTV+JD53UZ6PD8KWY5g5rvvMLRnZR3EQBCZXiDT/HR+pKpMzFGlWNhFrXlo7VPZXtKvIEwZkAWOIA==}
+  '@types/cheerio@1.0.0':
+    resolution: {integrity: sha512-zAaImHWoh5RY2CLgU2mvg3bl2k3F65B0N5yphuII3ythFLPmJhL7sj1RDu6gSxcgqHlETbr/lhA2OBY+WF1fXQ==}
+    deprecated: This is a stub types definition. cheerio provides its own type definitions, so you do not need this installed.
 
   '@types/cls-hooked@4.3.9':
     resolution: {integrity: sha512-CMtHMz6Q/dkfcHarq9nioXH8BDPP+v5xvd+N90lBQ2bdmu06UvnLDqxTKoOJzz4SzIwb/x9i4UXGAAcnUDuIvg==}
@@ -14286,9 +14287,9 @@ snapshots:
       '@types/node': 22.15.14
       '@types/responselike': 1.0.3
 
-  '@types/cheerio@0.22.35':
+  '@types/cheerio@1.0.0':
     dependencies:
-      '@types/node': 18.16.9
+      cheerio: 1.0.0
 
   '@types/cls-hooked@4.3.9':
     dependencies:
