@@ -1,28 +1,30 @@
 packages:
-  - packages/*
-  - apps/*
+- packages/*
+- apps/*
 
 ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - '@scarf/scarf'
-  - '@swc/core'
-  - bufferutil
-  - core-js-pure
-  - esbuild
-  - nx
-  - utf-8-validate
+- '@parcel/watcher'
+- '@scarf/scarf'
+- '@swc/core'
+- bufferutil
+- core-js-pure
+- esbuild
+- nx
+- utf-8-validate
 
 onlyBuiltDependencies:
-  - better-sqlite3
-  - electron
-  - electron-winstaller
-  - fs-xattr
-  - macos-alias
-  - sqlite3
+- better-sqlite3
+- electron
+- electron-winstaller
+- fs-xattr
+- macos-alias
+- sqlite3
 
 hoistPattern:
-  # Used by packages/ckeditor-* eslint script
-  - eslint-plugin-*
-  - eslint-plugin-ckeditor5-rules
+# Used by packages/ckeditor-* eslint script
+- eslint-plugin-*
+- eslint-plugin-ckeditor5-rules
+- ckeditor5
+- "@ckeditor/*"
 
 nodeLinker: isolated
