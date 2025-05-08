@@ -17,6 +17,7 @@ export default defineConfig(() => ({
     outDir: './dist',
     emptyOutDir: true,
     reportCompressedSize: true,
+    cssCodeSplit: true,
     commonjsOptions: {
       transformMixedEsModules: true,
     },
@@ -31,7 +32,11 @@ export default defineConfig(() => ({
     },
     rollupOptions: {
       // External packages that should not be bundled into your library.
-      external: []
+      external: [],
+      input: {
+        index: "src/index.ts",
+        content: "src/theme/ck-content.css"
+      }
     },
   },
 }));
