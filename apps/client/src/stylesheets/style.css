@@ -438,6 +438,14 @@ body .CodeMirror {
     background-color: #eeeeee;
 }
 
+.cm-matchhighlight.ck-find-result{
+    background: var(--ck-color-highlight-background);
+}
+
+.cm-matchhighlight.ck-find-result_selected {
+    background-color: #ff9633;
+}
+
 .CodeMirror pre.CodeMirror-placeholder {
     color: #999 !important;
 }
