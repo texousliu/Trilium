@@ -3,6 +3,9 @@ packages:
 - apps/*
 
 ignoredBuiltDependencies:
+- sqlite3
+
+onlyBuiltDependencies:
 - '@parcel/watcher'
 - '@scarf/scarf'
 - '@swc/core'
@@ -11,19 +14,11 @@ ignoredBuiltDependencies:
 - esbuild
 - nx
 - utf-8-validate
-
-onlyBuiltDependencies:
 - better-sqlite3
 - electron
 - electron-winstaller
 - fs-xattr
 - macos-alias
 
-hoistPattern:
-# Used by packages/ckeditor-* eslint script
-- eslint-plugin-*
-- eslint-plugin-ckeditor5-rules
-- ckeditor5
-- "@ckeditor/*"
-
+shamefullyHoist: true
 nodeLinker: isolated
