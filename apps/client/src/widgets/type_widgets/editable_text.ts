@@ -10,7 +10,6 @@ import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
 import link from "../../services/link.js";
 import appContext, { type CommandListenerData, type EventData } from "../../components/app_context.js";
 import dialogService from "../../services/dialog.js";
-import { initSyntaxHighlighting } from "./ckeditor/syntax_highlight.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
 import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
@@ -238,9 +237,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
                 evt.stop();
             });
-
-            //@ts-ignore
-            await initSyntaxHighlighting(editor);
 
             if (isClassicEditor) {
                 let $classicToolbarWidget;

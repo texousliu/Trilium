@@ -1,5 +1,9 @@
+import library_loader from "../../../services/library_loader.js";
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
+import { MIME_TYPE_AUTO } from "../../../services/mime_type_definitions.js";
+import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
+import { isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 import utils from "../../../services/utils.js";
 import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?external";
 
@@ -98,6 +102,15 @@ export function buildConfig() {
         },
         emoji: {
             definitionsUrl: emojiDefinitionsUrl
+        },
+        syntaxHighlighting: {
+            async loadHighlightJs() {
+                await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
+                return hljs;
+            },
+            mapLanguageName: getHighlightJsNameForMime,
+            defaultMimeType: MIME_TYPE_AUTO,
+            enabled: isSyntaxHighlightEnabled
         },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"

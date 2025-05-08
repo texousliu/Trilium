@@ -12,6 +12,7 @@ import MarkdownImportPlugin from "./plugins/markdownimport.js";
 import MentionCustomization from "./plugins/mention_customization.js";
 import IncludeNote from "./plugins/includenote.js";
 import Uploadfileplugin from "./plugins/file_upload/uploadfileplugin.js";
+import SyntaxHighlighting from "./plugins/syntax_highlighting/index.js";
 import { Kbd } from "@triliumnext/ckeditor5-keyboard-marker";
 import { Mermaid } from "@triliumnext/ckeditor5-mermaid";
 import { Admonition } from "@triliumnext/ckeditor5-admonition";
@@ -35,7 +36,8 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     MarkdownImportPlugin,
     MentionCustomization,
     IncludeNote,
-    Uploadfileplugin
+    Uploadfileplugin,
+    SyntaxHighlighting
 ];
 
 const EXTERNAL_PLUGINS: typeof Plugin[] = [
