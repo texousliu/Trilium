@@ -14,6 +14,6 @@ interface HighlightJs {
 };
 
 interface HighlightJsResult {
-
+    value: string;
 }
 

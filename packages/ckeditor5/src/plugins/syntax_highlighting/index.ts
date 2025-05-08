@@ -1,4 +1,4 @@
-import type { Element } from "ckeditor5";
+import type { Element, Writer } from "ckeditor5";
 import type { Node, Editor } from "ckeditor5";
 import { Plugin } from "ckeditor5";
 
@@ -72,7 +72,7 @@ export default class SyntaxHighlighting extends Plugin {
             // See
             // https://github.com/ckeditor/ckeditor5/blob/b53d2a4b49679b072f4ae781ac094e7e831cfb14/packages/ckeditor5-block-quote/src/blockquoteediting.js#L54
             const changes = document.differ.getChanges();
-            let dirtyCodeBlocks = new Set<Node>();
+            let dirtyCodeBlocks = new Set<Element>();
 
             function lookForCodeBlocks(node: Element | Node) {
                 if (!("getChildren" in node)) {
@@ -86,7 +86,7 @@ export default class SyntaxHighlighting extends Plugin {
 
                     if (child.is("element", "codeBlock")) {
                         dirtyCodeBlocks.add(child);
-                    } else if (child.childCount > 0) {
+                    } else if ((child as Element).childCount > 0) {
                         lookForCodeBlocks(child);
                     }
                 }
@@ -95,7 +95,7 @@ export default class SyntaxHighlighting extends Plugin {
             for (const change of changes) {
                 dbg("change " + JSON.stringify(change));
 
-                if (change.name !== "paragraph" && change.name !== "codeBlock" && change?.position?.nodeAfter && change.position.nodeAfter.childCount > 0) {
+                if ("name" in change && change.name !== "paragraph" && change.name !== "codeBlock" && change?.position?.nodeAfter && (change.position.nodeAfter as Element).childCount > 0) {
                     /*
                      * We need to look for code blocks recursively, as they can be placed within a <div> due to
                      * general HTML support or normally underneath other elements such as tables, blockquotes, etc.
@@ -110,7 +110,7 @@ export default class SyntaxHighlighting extends Plugin {
                     // etc (the postfixer won't get later changes for those).
                     if (codeBlock) {
                         log("dirtying inserted codeBlock " + JSON.stringify(codeBlock.toJSON()));
-                        dirtyCodeBlocks.add(codeBlock);
+                        dirtyCodeBlocks.add(codeBlock as Element);
                     }
                 } else if (change.type == "remove" && change.name == "codeBlock" && change.position) {
                     // An existing codeblock was removed, do nothing. Note the
@@ -144,9 +144,12 @@ export default class SyntaxHighlighting extends Plugin {
      *     the formatting would be stored with the note and it would need a
      *     way to remove that formatting when editing back the note.
      */
-    highlightCodeBlock(codeBlock: Node, writer: Writer) {
+    highlightCodeBlock(codeBlock: Element, writer: Writer) {
         log("highlighting codeblock " + JSON.stringify(codeBlock.toJSON()));
-        const model = codeBlock.root.document.model;
+        const model = codeBlock.root.document?.model;
+        if (!model) {
+            return;
+        }
 
         // Can't invoke addMarker with an already existing marker name,
         // clear all highlight markers first. Marker names follow the
@@ -160,7 +163,7 @@ export default class SyntaxHighlighting extends Plugin {
         // Don't highlight if plaintext (note this needs to remove the markers
         // above first, in case this was a switch from non plaintext to
         // plaintext)
-        const mimeType = codeBlock.getAttribute("language");
+        const mimeType = codeBlock.getAttribute("language") as string;
         if (mimeType == "text-plain") {
             // XXX There's actually a plaintext language that could be used
             //     if you wanted the non-highlight formatting of
@@ -207,6 +210,9 @@ export default class SyntaxHighlighting extends Plugin {
         let text = "";
         for (let i = 0; i < codeBlock.childCount; ++i) {
             let child = codeBlock.getChild(i);
+            if (!child) {
+                continue;
+            }
 
             // We only expect text and br elements here
             if (child.is("$text")) {
@@ -244,6 +250,10 @@ export default class SyntaxHighlighting extends Plugin {
                 if (iChild < codeBlock.childCount) {
                     dbg("Fetching child " + iChild);
                     child = codeBlock.getChild(iChild);
+                    if (!child) {
+                        continue;
+                    }
+
                     if (child.is("$text")) {
                         dbg("child text " + child.data);
                         childText = child.data;
@@ -294,19 +304,21 @@ export default class SyntaxHighlighting extends Plugin {
                 let posStart = stackTop?.posStart;
                 let className = stackTop?.className;
                 let posEnd = writer.createPositionAt(codeBlock, (child?.startOffset ?? 0) + iChildText);
-                let range = writer.createRange(posStart, posEnd);
-                let markerName = "hljs:" + className + ":" + markerCounter;
-                // Use an incrementing number for the uniqueId, random of
-                // 10000000 is known to cause collisions with a few
-                // codeblocks of 10s of lines on real notes (each line is
-                // one or more marker).
-                // Wrap-around for good measure so all numbers are positive
-                // XXX Another option is to catch the exception and retry or
-                //     go through the markers and get the largest + 1
-                markerCounter = (markerCounter + 1) & 0xffffff;
-                dbg("Found span end " + className);
-                dbg("Adding marker " + markerName + ": " + JSON.stringify(range.toJSON()));
-                writer.addMarker(markerName, { range: range, usingOperation: false });
+                if (posStart) {
+                    let range = writer.createRange(posStart, posEnd);
+                    let markerName = "hljs:" + className + ":" + markerCounter;
+                    // Use an incrementing number for the uniqueId, random of
+                    // 10000000 is known to cause collisions with a few
+                    // codeblocks of 10s of lines on real notes (each line is
+                    // one or more marker).
+                    // Wrap-around for good measure so all numbers are positive
+                    // XXX Another option is to catch the exception and retry or
+                    //     go through the markers and get the largest + 1
+                    markerCounter = (markerCounter + 1) & 0xffffff;
+                    dbg("Found span end " + className);
+                    dbg("Adding marker " + markerName + ": " + JSON.stringify(range.toJSON()));
+                    writer.addMarker(markerName, { range: range, usingOperation: false });
+                }
             } else {
                 // Text, we should also have text in the children
                 assert(iChild < codeBlock.childCount && iChildText < childText.length, "Found text in html with no corresponding child text!!!!");
