@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.0.1",
+    "appVersion": "0.94.0",
     "files": [
         {
             "isClone": false,
@@ -5075,6 +5075,65 @@
                                 },
                                 {
                                     "isClone": false,
+                                    "noteId": "oSuaNgyyKnhu",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "KSZ04uQ2D1St",
+                                        "iPIMuisry3hd",
+                                        "oSuaNgyyKnhu"
+                                    ],
+                                    "title": "Bookmarks",
+                                    "notePosition": 20,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-bookmark",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "QEAPj01N5f7w",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "nRhnJkTT8cPs",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Bookmarks.md",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "2cn9iY3Qgyjs",
+                                            "title": "plus.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Bookmarks_plus.png"
+                                        },
+                                        {
+                                            "attachmentId": "JaiAT3dHDIyy",
+                                            "title": "plus.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "1_Bookmarks_plus.png"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "isClone": false,
                                     "noteId": "veGu4faJErEM",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
@@ -5083,7 +5142,7 @@
                                         "veGu4faJErEM"
                                     ],
                                     "title": "Content language & Right-to-left support",
-                                    "notePosition": 20,
+                                    "notePosition": 30,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5120,7 +5179,7 @@
                                         "2x0ZAX9ePtzV"
                                     ],
                                     "title": "Cut to subnote",
-                                    "notePosition": 30,
+                                    "notePosition": 40,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5157,7 +5216,7 @@
                                         "UYuUB1ZekNQU"
                                     ],
                                     "title": "Developer-specific formatting",
-                                    "notePosition": 40,
+                                    "notePosition": 50,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5355,7 +5414,7 @@
                                         "AgjCISero73a"
                                     ],
                                     "title": "Footnotes",
-                                    "notePosition": 50,
+                                    "notePosition": 60,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5400,7 +5459,7 @@
                                         "nRhnJkTT8cPs"
                                     ],
                                     "title": "Formatting toolbar",
-                                    "notePosition": 60,
+                                    "notePosition": 70,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5482,7 +5541,7 @@
                                         "Gr6xFaF6ioJ5"
                                     ],
                                     "title": "General formatting",
-                                    "notePosition": 70,
+                                    "notePosition": 80,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5579,7 +5638,7 @@
                                         "AxshuNRegLAv"
                                     ],
                                     "title": "Highlights list",
-                                    "notePosition": 80,
+                                    "notePosition": 90,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5651,7 +5710,7 @@
                                         "mT0HEkOsz6i1"
                                     ],
                                     "title": "Images",
-                                    "notePosition": 90,
+                                    "notePosition": 100,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5901,7 +5960,7 @@
                                         "nBAXQFj20hS1"
                                     ],
                                     "title": "Include Note",
-                                    "notePosition": 100,
+                                    "notePosition": 110,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5938,7 +5997,7 @@
                                         "CohkqWQC1iBv"
                                     ],
                                     "title": "Insert buttons",
-                                    "notePosition": 110,
+                                    "notePosition": 120,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -5985,6 +6044,13 @@
                                             "value": "bx bx-plus",
                                             "isInheritable": false,
                                             "position": 60
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "oSuaNgyyKnhu",
+                                            "isInheritable": false,
+                                            "position": 70
                                         }
                                     ],
                                     "format": "markdown",
@@ -6013,6 +6079,14 @@
                                             "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "2_Insert buttons_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "Mj8uDOt36GM8",
+                                            "title": "plus.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Insert buttons_plus.png"
                                         },
                                         {
                                             "attachmentId": "N1WMDAlCsrdy",
@@ -6061,6 +6135,14 @@
                                             "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "8_Insert buttons_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "wTs0nELuclAk",
+                                            "title": "plus.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "1_Insert buttons_plus.png"
                                         }
                                     ]
                                 },
@@ -6074,7 +6156,7 @@
                                         "oiVPnW8QfnvS"
                                     ],
                                     "title": "Keyboard shortcuts",
-                                    "notePosition": 120,
+                                    "notePosition": 130,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -6109,7 +6191,7 @@
                                         "QEAPj01N5f7w"
                                     ],
                                     "title": "Links",
-                                    "notePosition": 130,
+                                    "notePosition": 140,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -6198,7 +6280,7 @@
                                         "S6Xx8QIWTV66"
                                     ],
                                     "title": "Lists",
-                                    "notePosition": 140,
+                                    "notePosition": 150,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -6322,7 +6404,7 @@
                                         "QrtTYPmdd1qq"
                                     ],
                                     "title": "Markdown-like formatting",
-                                    "notePosition": 150,
+                                    "notePosition": 160,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -6383,6 +6465,13 @@
                                             "value": "bx bxl-markdown",
                                             "isInheritable": false,
                                             "position": 70
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "CohkqWQC1iBv",
+                                            "isInheritable": false,
+                                            "position": 80
                                         }
                                     ],
                                     "format": "markdown",
@@ -6399,7 +6488,7 @@
                                         "YfYAtQBcfo5V"
                                     ],
                                     "title": "Math Equations",
-                                    "notePosition": 160,
+                                    "notePosition": 170,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -6465,7 +6554,7 @@
                                         "dEHYtoWWi8ct"
                                     ],
                                     "title": "Other features",
-                                    "notePosition": 170,
+                                    "notePosition": 180,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -6578,7 +6667,7 @@
                                         "BFvAtE74rbP6"
                                     ],
                                     "title": "Table of contents",
-                                    "notePosition": 180,
+                                    "notePosition": 190,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -6643,7 +6732,7 @@
                                         "NdowYOC1GFKS"
                                     ],
                                     "title": "Tables",
-                                    "notePosition": 190,
+                                    "notePosition": 200,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
