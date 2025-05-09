@@ -18,6 +18,7 @@ import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor } from "@triliumnext/ckeditor5";
+import "@triliumnext/ckeditor5/index.css";
 
 const ENABLE_INSPECTOR = false;
 
