@@ -11,6 +11,7 @@ import Mermaid from '../../src/mermaid.js';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
+		licenseKey: "GPL",
 		plugins: [
 			Markdown,
 			Typing,

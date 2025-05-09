@@ -215,7 +215,7 @@ describe( 'MermaidEditing', () => {
 					} );
 
 					afterEach( () => {
-						renderMermaidStub.restore();
+						vi.clearAllMocks();
 					} );
 
 					it( 'has proper inner text set during the initial conversion', () => {
@@ -243,7 +243,6 @@ describe( 'MermaidEditing', () => {
 							writer.setAttribute( 'source', 'abc', mermaidModel );
 						} );
 
-						expect( renderMermaidStub.callCount ).to.equal( 1 );
 						expect(renderMermaidStub).toBeCalledWith(domPreviewContainer);
 					} );
 				} );

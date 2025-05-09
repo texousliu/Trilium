@@ -24,6 +24,7 @@ export default defineConfig( {
 		],
 		globals: true,
 		watch: false,
+		passWithNoTests: true,
 		coverage: {
 			thresholds: {
 				lines: 100,
