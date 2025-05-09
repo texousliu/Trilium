@@ -1,8 +1,7 @@
 import Mathematics from '../src/math.js';
 import AutoMath from '../src/automath.js';
 import { ClassicEditor, Clipboard, Paragraph, Undo, Typing, _getModelData as getData, _setModelData as setData } from 'ckeditor5';
-import { expect } from 'chai';
-import { describe, beforeEach, it, afterEach, vi, VitestUtils } from "vitest";
+import { describe, beforeEach, it, afterEach, vi, expect } from "vitest";
 
 describe( 'AutoMath - integration', () => {
 	let editorElement: HTMLDivElement, editor: ClassicEditor;

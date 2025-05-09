@@ -3,8 +3,7 @@ import Mathematics from '../src/math.js';
 import MathEditing from '../src/mathediting.js';
 import MathUI from '../src/mathui.js';
 import AutoMath from '../src/automath.js';
-import { expect } from 'chai';
-import { describe, beforeEach, it, afterEach } from "vitest";
+import { describe, beforeEach, it, afterEach, expect } from "vitest";
 
 describe( 'Math', () => {
 	let editorElement: HTMLDivElement, editor: ClassicEditor;
