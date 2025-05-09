@@ -15,7 +15,8 @@ describe( 'Math', () => {
 
 		return ClassicEditor
 			.create( editorElement, {
-				plugins: [ Mathematics ]
+				plugins: [ Mathematics ],
+				licenseKey: "GPL"
 			} )
 			.then( newEditor => {
 				editor = newEditor;

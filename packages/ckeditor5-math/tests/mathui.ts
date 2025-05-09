@@ -33,8 +33,9 @@ describe( 'MathUI', () => {
 						} else {
 							element.innerHTML = '\\(' + equation + '\\)';
 						}
-					}
-				}
+					},
+				},
+				licenseKey: "GPL"
 			} )
 			.then( newEditor => {
 				editor = newEditor;

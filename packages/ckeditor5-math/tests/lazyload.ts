@@ -13,6 +13,7 @@ describe( 'Lazy load', () => {
 		return ClassicEditor
 			.create( editorElement, {
 				...config,
+				licenseKey: "GPL",
 				plugins: [ MathUI ]
 			} )
 			.then( newEditor => {

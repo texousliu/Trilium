@@ -15,6 +15,7 @@ describe( 'AutoMath - integration', () => {
 		return ClassicEditor
 			.create( editorElement, {
 				plugins: [ Mathematics, AutoMath, Typing, Paragraph ],
+				licenseKey: "GPL",
 				math: {
 					engine: ( equation, element, display ) => {
 						if ( display ) {
