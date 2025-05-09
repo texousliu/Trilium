@@ -9,7 +9,7 @@
       "server"
     ],
     "targets": {
-      "e2e-**": {
+      "e2e": {
         "dependsOn": [
           "server:build"
         ]
