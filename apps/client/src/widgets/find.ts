@@ -240,6 +240,12 @@ export default class FindWidget extends NoteContextAwareWidget {
         }
     }
 
+    async readOnlyTemporarilyDisabledEvent({ noteContext }: EventData<"readOnlyTemporarilyDisabled">) {
+        if (this.isNoteContext(noteContext.ntxId)) {
+            await this.closeSearch();
+        }
+    }
+
     async getHandler() {
         if (this.note?.type === "render") {
             return this.htmlHandler;
