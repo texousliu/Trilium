@@ -127,6 +127,7 @@
     "targets": {
       "build": {
         "dependsOn": [
+          "^build",
           "client:build"
         ]
       },
