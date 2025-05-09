@@ -1,5 +1,8 @@
 import { ClassicEditor, Essentials, Paragraph, Heading, CodeBlockEditing, _setModelData as setModelData, _getModelData as getModelData, _getViewData as getViewData } from 'ckeditor5';
 import MermaidEditing from '../src/mermaidediting.js';
+import { afterEach, beforeEach, describe, it } from 'vitest';
+import { expect } from 'vitest';
+import { vi } from 'vitest';
 
 /* global document */
 
@@ -240,7 +243,7 @@ describe( 'MermaidEditing', () => {
 						} );
 
 						expect( renderMermaidStub.callCount ).to.equal( 1 );
-						sinon.assert.calledWithExactly( renderMermaidStub, domPreviewContainer );
+						expect(renderMermaidStub).toBeCalledWith(domPreviewContainer);
 					} );
 				} );
 			} );

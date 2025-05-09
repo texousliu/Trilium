@@ -1,6 +1,8 @@
 import { ClassicEditor, Essentials, Paragraph, Heading, _setModelData as setModelData } from 'ckeditor5';
 
 import Mermaid from '../src/mermaid.js';
+import { afterEach, beforeEach, describe, it } from 'vitest';
+import { expect } from 'vitest';
 
 /* global document */
 

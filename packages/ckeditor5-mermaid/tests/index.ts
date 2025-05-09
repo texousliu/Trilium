@@ -6,6 +6,8 @@ import insertMermaidIcon from './../theme/icons/insert.svg';
 import previewModeIcon from './../theme/icons/preview-mode.svg';
 import splitModeIcon from './../theme/icons/split-mode.svg';
 import sourceModeIcon from './../theme/icons/source-mode.svg';
+import { describe, it } from 'vitest';
+import { expect } from 'vitest';
 
 describe( 'CKEditor5 Mermaid DLL', () => {
 	it( 'exports MermaidWidget', () => {

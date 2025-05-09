@@ -2,6 +2,8 @@ import { ClassicEditor, Paragraph, _setModelData as setModelData, _getModelData 
 
 import MermaidSplitViewCommand from '../../src/commands/mermaidSplitViewCommand.js';
 import MermaidEditing from '../../src/mermaidediting.js';
+import { afterEach, beforeEach, describe, it } from 'vitest';
+import { expect } from 'vitest';
 
 /* global document */
 

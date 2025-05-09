@@ -1,4 +1,8 @@
 import { ClassicEditor, Paragraph, _setModelData as setModelData, _getModelData as getModelData } from 'ckeditor5';
+import { afterEach, beforeEach, describe, it } from 'vitest';
+import MermaidEditing from '../../dist/mermaidediting';
+import InsertMermaidCommand from '../../dist/commands/insertMermaidCommand';
+import { expect } from 'vitest';
 
 /* global document */
 
