@@ -166,9 +166,8 @@ describe( 'AutoMath - integration', () => {
 	function pasteHtml( editor: ClassicEditor, html: string ) {
 		editor.editing.view.document.fire( 'paste', {
 			dataTransfer: createDataTransfer( { 'text/html': html } ),
-			preventDefault() {
-				return undefined;
-			}
+			preventDefault() {},
+			stopPropagation() {}
 		} );
 	}
 
