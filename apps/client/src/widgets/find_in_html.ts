@@ -38,25 +38,16 @@ export default class FindInHtml {
                         caseSensitive: matchCase,
                         done: async () => {
                             this.$results = $content.find(`.${FIND_RESULT_CSS_CLASSNAME}`);
-                            let closestIndex = 0;
-                            let minTop = Infinity;
-
-                            this.$results.each((i, el) => {
-                                const rect = el.getBoundingClientRect();
-                                const top = rect.top;
-
-                                if (top >= 0 && top < minTop) {
-                                    minTop = top;
-                                    closestIndex = i;
-                                }
-                            });
-
-                            this.currentIndex = closestIndex;
+                            const scrollingContainer = $content[0].closest('.scrolling-container');
+                            const containerTop = scrollingContainer?.getBoundingClientRect().top ?? 0;
+                            const closestIndex = this.$results.toArray().findIndex(el => el.getBoundingClientRect().top >= containerTop);
+                            this.currentIndex = closestIndex >= 0 ? closestIndex : 0;
+                            
                             await this.jumpTo();
 
                             res({
                                 totalFound: this.$results.length,
-                                currentFound: this.$results.length > 0 ? closestIndex + 1 : 0
+                                currentFound: this.$results.length > 0 ? this.currentIndex + 1 : 0
                             });
                         }
                     });

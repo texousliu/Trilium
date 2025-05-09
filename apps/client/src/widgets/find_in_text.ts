@@ -54,15 +54,26 @@ export default class FindInText {
             const options = { matchCase: matchCase, wholeWords: wholeWord };
             findResult = textEditor.execute<CKFindResult>("find", searchTerm, options);
             totalFound = findResult.results.length;
-            // Find the result beyond the cursor
-            const cursorPos = model.document.selection.getLastPosition();
-            for (let i = 0; i < findResult.results.length; ++i) {
-                const marker = findResult.results.get(i).marker;
-                const fromPos = marker.getStart();
-                if (cursorPos && fromPos.compareWith(cursorPos) !== "before") {
-                    currentFound = i;
-                    break;
+            const selection = model.document.selection;
+            // If text is selected, highlight the corresponding result;
+            // otherwise, highlight the first visible result in the scrolling container.
+            if (!selection.isCollapsed) {
+                const cursorPos = selection.getFirstPosition();
+                for (let i = 0; i < findResult.results.length; ++i) {
+                    const marker = findResult.results.get(i).marker;
+                    const fromPos = marker.getStart();
+                    if (cursorPos && fromPos.compareWith(cursorPos) !== "before") {
+                        currentFound = i;
+                        break;
+                    }
                 }
+            } else {
+                const editorEl = textEditor?.sourceElement;
+                const findResultElement = editorEl.querySelectorAll(".ck-find-result");
+                const scrollingContainer = editorEl.closest('.scrolling-container');
+                const containerTop = scrollingContainer?.getBoundingClientRect().top ?? 0;
+                const closestIndex = Array.from(findResultElement ?? []).findIndex((el) => el.getBoundingClientRect().top >= containerTop);
+                currentFound = closestIndex >= 0 ? closestIndex : 0;
             }
         }
 
