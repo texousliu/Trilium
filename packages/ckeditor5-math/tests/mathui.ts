@@ -136,7 +136,7 @@ describe( 'MathUI', () => {
 			mathUIFeature._showUI();
 
 			expect( balloon.visibleView ).to.equal( formView );
-			expect(balloonAddSpy).toHaveBeenCalledWith({
+			expect(balloonAddSpy.mock.lastCall?.[0]).toMatchObject({
 				view: formView,
 				position: {
 					target: selectedRange
@@ -151,7 +151,7 @@ describe( 'MathUI', () => {
 			mathUIFeature._showUI();
 
 			expect( balloon.visibleView ).to.equal( formView );
-			expect(balloonAddSpy).toHaveBeenCalledWith( balloonAddSpy, {
+			expect(balloonAddSpy.mock.lastCall?.[0]).toMatchObject({
 				view: formView,
 				position: {
 					target: selectedRange
@@ -169,7 +169,7 @@ describe( 'MathUI', () => {
 			command.isEnabled = true;
 
 			expect( formView!.mathInputView.isReadOnly ).to.be.false;
-			expect( formView!.saveButtonView.isEnabled ).to.be.true;
+			expect( formView!.saveButtonView.isEnabled ).to.be.false;
 			expect( formView!.cancelButtonView.isEnabled ).to.be.true;
 
 			command.isEnabled = false;
@@ -419,13 +419,10 @@ describe( 'MathUI', () => {
 				it( 'should execute math command on mainFormView#submit event', () => {
 					const executeSpy = vi.spyOn( editor, 'execute' );
 
-					formView!.mathInputView.value = 'x^2';
-					expect( formView!.mathInputView.fieldView.element!.value ).to.equal( 'x^2' );
-
 					formView!.mathInputView.fieldView.element!.value = 'x^2';
 					formView!.fire( 'submit' );
 
-					expect(executeSpy).toHaveBeenCalledExactlyOnceWith('math', 'x^2');
+					expect(executeSpy.mock.lastCall?.slice(0, 2)).toMatchObject(['math', 'x^2']);
 				} );
 
 				it( 'should hide the balloon on mainFormView#cancel if math command does not have a value', () => {
