@@ -281,9 +281,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             editor.model.document.on("change:data", () => this.spacedUpdate.scheduleUpdate());
 
             if (glob.isDev && ENABLE_INSPECTOR) {
-                // TODO: Check if this still works.
-                // await import(/* webpackIgnore: true */ "../../../libraries/ckeditor/inspector.js");
-                // CKEditorInspector.attach(editor);
+                const CKEditorInspector = (await import("@ckeditor/ckeditor5-inspector")).default;
+                CKEditorInspector.attach(editor);
             }
 
             // Touch bar integration
