@@ -5,16 +5,7 @@
 
 /* globals console, window, document */
 
-import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
-import { Typing } from '@ckeditor/ckeditor5-typing';
-import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
-import { Undo } from '@ckeditor/ckeditor5-undo';
-import { Enter } from '@ckeditor/ckeditor5-enter';
-import { Clipboard } from '@ckeditor/ckeditor5-clipboard';
-import { Link } from '@ckeditor/ckeditor5-link';
-import { Bold, Italic } from '@ckeditor/ckeditor5-basic-styles';
-import { Markdown } from '@ckeditor/ckeditor5-markdown-gfm';
-import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
+import { ClassicEditor, Typing, Paragraph, Undo, Enter, Clipboard, Link, Bold, Italic, Markdown, CodeBlock } from 'ckeditor5';
 
 import Mermaid from '../../src/mermaid.js';
 

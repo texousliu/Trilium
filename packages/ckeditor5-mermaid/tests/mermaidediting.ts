@@ -1,13 +1,4 @@
-import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
-import { Essentials } from '@ckeditor/ckeditor5-essentials';
-import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
-import { Heading } from '@ckeditor/ckeditor5-heading';
-import { CodeBlockEditing } from '@ckeditor/ckeditor5-code-block';
-import {
-	_setModelData as setModelData,
-	_getModelData as getModelData,
-	_getViewData as getViewData
-} from '@ckeditor/ckeditor5-engine';
+import { ClassicEditor, Essentials, Paragraph, Heading, CodeBlockEditing, _setModelData as setModelData, _getModelData as getModelData, _getViewData as getViewData } from 'ckeditor5';
 import MermaidEditing from '../src/mermaidediting.js';
 
 /* global document */
