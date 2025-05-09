@@ -19,6 +19,7 @@ describe( 'MermaidEditing', () => {
 			document.body.appendChild( domElement );
 
 			editor = await ClassicEditor.create( domElement, {
+				licenseKey: "GPL",
 				plugins: [
 					Paragraph,
 					Heading,
