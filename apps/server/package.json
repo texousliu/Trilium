@@ -4,7 +4,7 @@
   "description": "The server-side component of TriliumNext, which exposes the client via the web, allows for sync and provides a REST API for both internal and external use.",
   "private": true,
   "dependencies": {
-    "better-sqlite3": "11.9.1",
+    "better-sqlite3": "11.10.0",
     "jquery.fancytree": "2.38.5",
     "jquery-hotkeys": "0.2.2",
     "@highlightjs/cdn-assets": "11.11.1"
