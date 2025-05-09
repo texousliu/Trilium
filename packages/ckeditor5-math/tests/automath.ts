@@ -1,6 +1,6 @@
 import Mathematics from '../src/math.js';
 import AutoMath from '../src/automath.js';
-import { ClassicEditor, Clipboard, Paragraph, Undo, Typing, getData, setData } from 'ckeditor5';
+import { ClassicEditor, Clipboard, Paragraph, Undo, Typing, _getModelData as getData, _setModelData as setData } from 'ckeditor5';
 import { expect } from 'chai';
 import type { SinonFakeTimers } from 'sinon';
 import { describe, beforeEach, it, afterEach } from "vitest";
