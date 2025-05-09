@@ -2,8 +2,7 @@ import Mathematics from '../src/math.js';
 import AutoMath from '../src/automath.js';
 import { ClassicEditor, Clipboard, Paragraph, Undo, Typing, _getModelData as getData, _setModelData as setData } from 'ckeditor5';
 import { expect } from 'chai';
-import type { SinonFakeTimers } from 'sinon';
-import { describe, beforeEach, it, afterEach } from "vitest";
+import { describe, beforeEach, it, afterEach, vi, VitestUtils } from "vitest";
 
 describe( 'AutoMath - integration', () => {
 	let editorElement: HTMLDivElement, editor: ClassicEditor;
@@ -50,14 +49,12 @@ describe( 'AutoMath - integration', () => {
 	} );
 
 	describe( 'use fake timers', () => {
-		let clock: SinonFakeTimers;
-
 		beforeEach( () => {
-			clock = sinon.useFakeTimers();
+			vi.useFakeTimers();
 		} );
 
 		afterEach( () => {
-			clock.restore();
+			vi.useRealTimers();
 		} );
 
 		it( 'replaces pasted text with mathtex element after 100ms', () => {
@@ -68,7 +65,7 @@ describe( 'AutoMath - integration', () => {
 				'<paragraph>\\[x^2\\][]</paragraph>'
 			);
 
-			clock.tick( 100 );
+			vi.advanceTimersByTime( 100 );
 
 			expect( getData( editor.model ) ).to.equal(
 				'<paragraph>[<mathtex display="true" equation="x^2" type="script"></mathtex>]</paragraph>'
@@ -83,7 +80,7 @@ describe( 'AutoMath - integration', () => {
 				'<paragraph>\\(x^2\\)[]</paragraph>'
 			);
 
-			clock.tick( 100 );
+			vi.advanceTimersByTime( 100 );
 
 			expect( getData( editor.model ) ).to.equal(
 				'<paragraph>[<mathtex display="false" equation="x^2" type="script"></mathtex>]</paragraph>'
@@ -98,7 +95,7 @@ describe( 'AutoMath - integration', () => {
 				'<paragraph>\\[x^2\\][]</paragraph>'
 			);
 
-			clock.tick( 100 );
+			vi.advanceTimersByTime( 100 );
 
 			editor.commands.execute( 'undo' );
 
@@ -111,7 +108,7 @@ describe( 'AutoMath - integration', () => {
 			setData( editor.model, '<paragraph>[Foo]</paragraph>' );
 			pasteHtml( editor, '\\[x^2\\]' );
 
-			clock.tick( 100 );
+			vi.advanceTimersByTime( 100 );
 
 			expect( getData( editor.model ) ).to.equal(
 				'<paragraph>[<mathtex display="true" equation="x^2" type="script"></mathtex>]</paragraph>'
@@ -122,7 +119,7 @@ describe( 'AutoMath - integration', () => {
 			setData( editor.model, '<paragraph>Fo[o</paragraph><paragraph>Ba]r</paragraph>' );
 			pasteHtml( editor, '\\[x^2\\]' );
 
-			clock.tick( 100 );
+			vi.advanceTimersByTime( 100 );
 
 			expect( getData( editor.model ) ).to.equal(
 				'<paragraph>Fo[<mathtex display="true" equation="x^2" type="script"></mathtex>]r</paragraph>'
@@ -133,7 +130,7 @@ describe( 'AutoMath - integration', () => {
 			setData( editor.model, '<paragraph>Foo []Bar</paragraph>' );
 			pasteHtml( editor, '\\[x^2\\]' );
 
-			clock.tick( 100 );
+			vi.advanceTimersByTime( 100 );
 
 			expect( getData( editor.model ) ).to.equal(
 				'<paragraph>Foo ' +
@@ -146,7 +143,7 @@ describe( 'AutoMath - integration', () => {
 			setData( editor.model, '<paragraph>Foo [Bar] Baz</paragraph>' );
 			pasteHtml( editor, '\\[x^2\\]' );
 
-			clock.tick( 100 );
+			vi.advanceTimersByTime( 100 );
 
 			expect( getData( editor.model ) ).to.equal(
 				'<paragraph>Foo ' +
@@ -159,7 +156,7 @@ describe( 'AutoMath - integration', () => {
 			setData( editor.model, '<paragraph>[]</paragraph>' );
 			pasteHtml( editor, '\\[x^2\\] \\[\\sqrt{x}2\\]' );
 
-			clock.tick( 100 );
+			vi.advanceTimersByTime( 100 );
 
 			expect( getData( editor.model ) ).to.equal(
 				'<paragraph>\\[x^2\\] \\[\\sqrt{x}2\\][]</paragraph>'

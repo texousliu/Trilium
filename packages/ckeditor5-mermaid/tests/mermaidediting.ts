@@ -207,7 +207,7 @@ describe( 'MermaidEditing', () => {
 						const previewContainerView = editor.editing.view.document.getRoot().getChild( 0 ).getChild( 2 );
 						domPreviewContainer = editor.editing.view.domConverter.viewToDom( previewContainerView );
 
-						renderMermaidStub = sinon.stub( editor.plugins.get( 'MermaidEditing' ), '_renderMermaid' );
+						renderMermaidStub = vi.spyOn( editor.plugins.get( 'MermaidEditing' ), '_renderMermaid' );
 					} );
 
 					afterEach( () => {
