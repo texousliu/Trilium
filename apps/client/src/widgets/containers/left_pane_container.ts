@@ -17,7 +17,7 @@ export default class LeftPaneContainer extends FlexContainer<Component> {
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isOptionReloaded("leftPaneVisible")) {
+        if (loadResults.isOptionReloaded("leftPaneVisible") && document.hasFocus()) {
             const visible = this.isEnabled();
             this.toggleInt(visible);
 
