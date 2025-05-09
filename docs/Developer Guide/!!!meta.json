@@ -69,7 +69,67 @@
                     ],
                     "format": "markdown",
                     "dataFileName": "Project Structure.md",
-                    "attachments": []
+                    "attachments": [],
+                    "dirFileName": "Project Structure",
+                    "children": [
+                        {
+                            "isClone": false,
+                            "noteId": "Jg7clqogFOyD",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "cxfTSHIUQtt2",
+                                "Jg7clqogFOyD"
+                            ],
+                            "title": "CKEditor",
+                            "notePosition": 10,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-package",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "BRhQZHgwaGyw",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "CKEditor.md",
+                            "attachments": [],
+                            "dirFileName": "CKEditor",
+                            "children": [
+                                {
+                                    "isClone": false,
+                                    "noteId": "BRhQZHgwaGyw",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "cxfTSHIUQtt2",
+                                        "Jg7clqogFOyD",
+                                        "BRhQZHgwaGyw"
+                                    ],
+                                    "title": "Plugin migration guide",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [],
+                                    "format": "markdown",
+                                    "dataFileName": "Plugin migration guide.md",
+                                    "attachments": []
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
                     "isClone": false,
@@ -169,15 +229,7 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "IxkDdjTogO18",
-                                    "isInheritable": false,
-                                    "position": 10
-                                }
-                            ],
+                            "attributes": [],
                             "format": "markdown",
                             "dataFileName": "Releasing a version.md",
                             "attachments": []
@@ -221,6 +273,22 @@
                             "dirFileName": "Building and deployment",
                             "children": [
                                 {
+                                    "isClone": true,
+                                    "noteId": "PXzm2t3sCdsP",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "ibAPHul7Efvr",
+                                        "sUqOpnrQyEC7",
+                                        "PXzm2t3sCdsP"
+                                    ],
+                                    "title": "Build deliveries locally",
+                                    "prefix": null,
+                                    "dataFileName": "Build deliveries locally.clone.md",
+                                    "type": "text",
+                                    "format": "markdown",
+                                    "isExpanded": false
+                                },
+                                {
                                     "isClone": false,
                                     "noteId": "zdQzavvHDl1k",
                                     "notePath": [
@@ -239,54 +307,6 @@
                                     "format": "markdown",
                                     "dataFileName": "Documentation.md",
                                     "attachments": []
-                                },
-                                {
-                                    "isClone": true,
-                                    "noteId": "czgXkoEYwclZ",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "sUqOpnrQyEC7",
-                                        "czgXkoEYwclZ"
-                                    ],
-                                    "title": "Running a development build",
-                                    "prefix": null,
-                                    "dataFileName": "Running a development build.clone.md",
-                                    "type": "text",
-                                    "format": "markdown",
-                                    "isExpanded": false
-                                },
-                                {
-                                    "isClone": true,
-                                    "noteId": "PXzm2t3sCdsP",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "sUqOpnrQyEC7",
-                                        "PXzm2t3sCdsP"
-                                    ],
-                                    "title": "Build deliveries locally",
-                                    "prefix": null,
-                                    "dataFileName": "Build deliveries locally.clone.md",
-                                    "type": "text",
-                                    "format": "markdown",
-                                    "isExpanded": false
-                                },
-                                {
-                                    "isClone": true,
-                                    "noteId": "rLWcPPQi7Eso",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "sUqOpnrQyEC7",
-                                        "rLWcPPQi7Eso"
-                                    ],
-                                    "title": "Releasing a version",
-                                    "prefix": null,
-                                    "dataFileName": "Releasing a version.clone.md",
-                                    "type": "text",
-                                    "format": "markdown",
-                                    "isExpanded": false
                                 },
                                 {
                                     "isClone": false,
@@ -355,6 +375,38 @@
                                             ]
                                         }
                                     ]
+                                },
+                                {
+                                    "isClone": true,
+                                    "noteId": "rLWcPPQi7Eso",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "ibAPHul7Efvr",
+                                        "sUqOpnrQyEC7",
+                                        "rLWcPPQi7Eso"
+                                    ],
+                                    "title": "Releasing a version",
+                                    "prefix": null,
+                                    "dataFileName": "Releasing a version.clone.md",
+                                    "type": "text",
+                                    "format": "markdown",
+                                    "isExpanded": false
+                                },
+                                {
+                                    "isClone": true,
+                                    "noteId": "czgXkoEYwclZ",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "ibAPHul7Efvr",
+                                        "sUqOpnrQyEC7",
+                                        "czgXkoEYwclZ"
+                                    ],
+                                    "title": "Running a development build",
+                                    "prefix": null,
+                                    "dataFileName": "Running a development build.clone.md",
+                                    "type": "text",
+                                    "format": "markdown",
+                                    "isExpanded": false
                                 }
                             ]
                         },
