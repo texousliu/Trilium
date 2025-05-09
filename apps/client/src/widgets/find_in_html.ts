@@ -83,7 +83,7 @@ export default class FindInHtml {
 
     async findBoxClosed(totalFound: number, currentFound: number) {
         const $content = await this.parent?.noteContext?.getContentElement();
-        if ($content) {
+        if (typeof $content?.unmark === 'function') {
             $content.unmark();
         }
     }
