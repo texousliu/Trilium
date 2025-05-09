@@ -22,3 +22,8 @@ declare module "is-animated" {
     function isAnimated(buffer: Buffer): boolean;
     export default isAnimated;
 }
+
+declare module "@triliumnext/ckeditor5/content.css" {
+    const content: string;
+    export default content;
+}

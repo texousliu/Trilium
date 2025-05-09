@@ -10,6 +10,7 @@
   "exports": {
     "./package.json": "./package.json",
     "./emoji_definitions/": "./src/emoji_definitions/",
+    "./content.css": "./dist/content.css",
     ".": {
       "development": "./src/index.ts",
       "types": "./dist/index.d.ts",
