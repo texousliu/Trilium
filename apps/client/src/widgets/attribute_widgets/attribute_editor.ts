@@ -1,10 +1,10 @@
 import { t } from "../../services/i18n.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
-import noteAutocompleteService from "../../services/note_autocomplete.js";
+import noteAutocompleteService, { type Suggestion } from "../../services/note_autocomplete.js";
 import server from "../../services/server.js";
 import contextMenuService from "../../menus/context_menu.js";
 import attributeParser, { type Attribute } from "../../services/attribute_parser.js";
-import { AttributeEditor } from "@triliumnext/ckeditor5";
+import { AttributeEditor, type EditorConfig, type Element, type MentionFeed, type Node, type Position } from "@triliumnext/ckeditor5";
 import froca from "../../services/froca.js";
 import attributeRenderer from "../../services/attribute_renderer.js";
 import noteCreateService from "../../services/note_create.js";
@@ -84,57 +84,58 @@ const TPL = /*html*/`
 </div>
 `;
 
-const mentionSetup: MentionConfig = {
-    feeds: [
-        {
-            marker: "@",
-            feed: (queryText) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
-            itemRenderer: (item) => {
-                const itemElement = document.createElement("button");
+const mentionSetup: MentionFeed[] = [
+    {
+        marker: "@",
+        feed: (queryText) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+        itemRenderer: (_item) => {
+            const item = _item as Suggestion;
+            const itemElement = document.createElement("button");
 
-                itemElement.innerHTML = `${item.highlightedNotePathTitle} `;
+            itemElement.innerHTML = `${item.highlightedNotePathTitle} `;
 
-                return itemElement;
-            },
-            minimumCharacters: 0
+            return itemElement;
         },
-        {
-            marker: "#",
-            feed: async (queryText) => {
-                const names = await server.get<string[]>(`attribute-names/?type=label&query=${encodeURIComponent(queryText)}`);
+        minimumCharacters: 0
+    },
+    {
+        marker: "#",
+        feed: async (queryText) => {
+            const names = await server.get<string[]>(`attribute-names/?type=label&query=${encodeURIComponent(queryText)}`);
 
-                return names.map((name) => {
-                    return {
-                        id: `#${name}`,
-                        name: name
-                    };
-                });
-            },
-            minimumCharacters: 0
+            return names.map((name) => {
+                return {
+                    id: `#${name}`,
+                    name: name
+                };
+            });
         },
-        {
-            marker: "~",
-            feed: async (queryText) => {
-                const names = await server.get<string[]>(`attribute-names/?type=relation&query=${encodeURIComponent(queryText)}`);
+        minimumCharacters: 0
+    },
+    {
+        marker: "~",
+        feed: async (queryText) => {
+            const names = await server.get<string[]>(`attribute-names/?type=relation&query=${encodeURIComponent(queryText)}`);
 
-                return names.map((name) => {
-                    return {
-                        id: `~${name}`,
-                        name: name
-                    };
-                });
-            },
-            minimumCharacters: 0
-        }
-    ]
-};
+            return names.map((name) => {
+                return {
+                    id: `~${name}`,
+                    name: name
+                };
+            });
+        },
+        minimumCharacters: 0
+    }
+];
 
-const editorConfig = {
+const editorConfig: EditorConfig = {
     toolbar: {
         items: []
     },
     placeholder: t("attribute_editor.placeholder"),
-    mention: mentionSetup,
+    mention: {
+        feeds: mentionSetup
+    },
     licenseKey: "GPL"
 };
 
@@ -334,7 +335,10 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         );
 
         // disable spellcheck for attribute editor
-        this.textEditor.editing.view.change((writer) => writer.setAttribute("spellcheck", "false", this.textEditor.editing.view.document.getRoot()));
+        const documentRoot = this.textEditor.editing.view.document.getRoot();
+        if (documentRoot) {
+            this.textEditor.editing.view.change((writer) => writer.setAttribute("spellcheck", "false", documentRoot));
+        }
     }
 
     dataChanged() {
@@ -411,18 +415,18 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.$editor.tooltip("show");
     }
 
-    getClickIndex(pos: TextPosition) {
-        let clickIndex = pos.offset - pos.textNode.startOffset;
+    getClickIndex(pos: Position) {
+        let clickIndex = pos.offset - (pos.textNode?.startOffset ?? 0);
 
-        let curNode = pos.textNode;
+        let curNode: Node | Text | Element | null = pos.textNode;
 
-        while (curNode.previousSibling) {
+        while (curNode?.previousSibling) {
             curNode = curNode.previousSibling;
 
-            if (curNode.name === "reference") {
-                clickIndex += curNode._attrs.get("notePath").length + 1;
-            } else {
-                clickIndex += curNode.data.length;
+            if ((curNode as Element).name === "reference") {
+                clickIndex += (curNode.getAttribute("notePath") as string).length + 1;
+            } else if ("data" in curNode) {
+                clickIndex += (curNode.data as string).length;
             }
         }
 
@@ -480,8 +484,12 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.$editor.trigger("focus");
 
         this.textEditor.model.change((writer) => {
-            const positionAt = writer.createPositionAt(this.textEditor.model.document.getRoot(), "end");
+            const documentRoot = this.textEditor.editing.model.document.getRoot();
+            if (!documentRoot) {
+                return;
+            }
 
+            const positionAt = writer.createPositionAt(documentRoot, "end");
             writer.setSelection(positionAt);
         });
     }

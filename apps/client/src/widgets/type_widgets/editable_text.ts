@@ -1,6 +1,6 @@
 import { t } from "../../services/i18n.js";
 import libraryLoader from "../../services/library_loader.js";
-import noteAutocompleteService from "../../services/note_autocomplete.js";
+import noteAutocompleteService, { type Suggestion } from "../../services/note_autocomplete.js";
 import mimeTypesService from "../../services/mime_types.js";
 import utils, { hasTouchBar } from "../../services/utils.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
@@ -17,27 +17,25 @@ import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
-import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor } from "@triliumnext/ckeditor5";
+import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig } from "@triliumnext/ckeditor5";
 import "@triliumnext/ckeditor5/index.css";
 
 const ENABLE_INSPECTOR = false;
 
-const mentionSetup: MentionConfig = {
-    feeds: [
-        {
-            marker: "@",
-            feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
-            itemRenderer: (item) => {
-                const itemElement = document.createElement("button");
+const mentionSetup: MentionFeed[] = [
+    {
+        marker: "@",
+        feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+        itemRenderer: (item) => {
+            const itemElement = document.createElement("button");
 
-                itemElement.innerHTML = `${item.highlightedNotePathTitle} `;
+            itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
 
-                return itemElement;
-            },
-            minimumCharacters: 0
-        }
-    ]
-};
+            return itemElement;
+        },
+        minimumCharacters: 0
+    }
+];
 
 const TPL = /*html*/`
 <div class="note-detail-editable-text note-detail-printable">
@@ -128,7 +126,7 @@ function buildListOfLanguages() {
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     private contentLanguage?: string | null;
-    private watchdog!: EditorWatchdog<CKTextEditor>;
+    private watchdog!: EditorWatchdog<ClassicEditor | PopupEditor>;
 
     private $editor!: JQuery<HTMLElement>;
 
@@ -158,7 +156,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         // display of $widget in both branches.
         this.$widget.show();
 
-        this.watchdog = new EditorWatchdog<CKTextEditor>(editorClass, {
+        const config: WatchdogConfig = {
             // An average number of milliseconds between the last editor errors (defaults to 5000).
             // When the period of time between errors is lower than that and the crashNumberLimit
             // is also reached, the watchdog changes its state to crashedPermanently, and it stops
@@ -173,7 +171,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             // A minimum number of milliseconds between saving the editor data internally (defaults to 5000).
             // Note that for large documents, this might impact the editor performance.
             saveInterval: 5000
-        });
+        };
+        this.watchdog = isClassicEditor ? new EditorWatchdog(ClassicEditor, config) : new EditorWatchdog(PopupEditor, config);
 
         this.watchdog.on("stateChange", () => {
             const currentState = this.watchdog.state;
@@ -226,7 +225,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const editor = await editorClass.create(elementOrData, finalConfig);
 
             const notificationsPlugin = editor.plugins.get("Notification");
-            notificationsPlugin.on("show:warning", (evt: CKEvent, data: PluginEventData) => {
+            notificationsPlugin.on("show:warning", (evt, data) => {
                 const title = data.title;
                 const message = data.message.message;
 
@@ -447,10 +446,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
 
         if (callback) {
-            callback(this.watchdog.editor);
+            callback(this.watchdog.editor as CKTextEditor);
         }
 
-        resolve(this.watchdog.editor);
+        resolve(this.watchdog.editor as CKTextEditor);
     }
 
     addLinkToTextCommand() {
