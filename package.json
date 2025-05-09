@@ -57,7 +57,7 @@
     "jsdom": "~26.1.0",
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "21.0.3",
-    "react-refresh": "^0.10.0",
+    "react-refresh": "^0.17.0",
     "swc-loader": "0.2.6",
     "tslib": "^2.3.0",
     "tsx": "4.19.4",
