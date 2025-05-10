@@ -1149,6 +1149,8 @@ importers:
         specifier: ^9.0.7
         version: 9.12.7(bufferutil@4.0.9)(utf-8-validate@6.0.5)
 
+  packages/codemirror: {}
+
   packages/commons:
     dependencies:
       '@swc/helpers':
