@@ -41,3 +41,6 @@ test-output
 apps/*/data
 apps/*/out
 upload
+
+.rollup.cache
+*.tsbuildinfo

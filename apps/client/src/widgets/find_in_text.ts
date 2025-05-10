@@ -1,3 +1,4 @@
+import type { FindAndReplaceState, FindCommandResult } from "@triliumnext/ckeditor5";
 import type { FindResult } from "./find.js";
 import type FindWidget from "./find.js";
 
@@ -14,8 +15,8 @@ interface Match {
 export default class FindInText {
 
     private parent: FindWidget;
-    private findResult?: CKFindResult | null;
-    private editingState?: EditingState;
+    private findResult?: FindCommandResult | null;
+    private editingState?: FindAndReplaceState;
 
     constructor(parent: FindWidget) {
         this.parent = parent;
@@ -40,7 +41,7 @@ export default class FindInText {
 
         // Clear
         const findAndReplaceEditing = textEditor.plugins.get("FindAndReplaceEditing");
-        findAndReplaceEditing.state.clear(model);
+        findAndReplaceEditing.state?.clear(model);
         findAndReplaceEditing.stop();
         this.editingState = findAndReplaceEditing.state;
         if (searchTerm !== "") {
@@ -52,7 +53,7 @@ export default class FindInText {
             // let m = text.match(re);
             // totalFound = m ? m.length : 0;
             const options = { matchCase: matchCase, wholeWords: wholeWord };
-            findResult = textEditor.execute<CKFindResult>("find", searchTerm, options);
+            findResult = textEditor.execute("find", searchTerm, options);
             totalFound = findResult.results.length;
             const selection = model.document.selection;
             // If text is selected, highlight the corresponding result;
@@ -60,17 +61,17 @@ export default class FindInText {
             if (!selection.isCollapsed) {
                 const cursorPos = selection.getFirstPosition();
                 for (let i = 0; i < findResult.results.length; ++i) {
-                    const marker = findResult.results.get(i).marker;
-                    const fromPos = marker.getStart();
-                    if (cursorPos && fromPos.compareWith(cursorPos) !== "before") {
+                    const marker = findResult.results.get(i)?.marker;
+                    const fromPos = marker?.getStart();
+                    if (cursorPos && fromPos?.compareWith(cursorPos) !== "before") {
                         currentFound = i;
                         break;
                     }
                 }
             } else {
                 const editorEl = textEditor?.sourceElement;
-                const findResultElement = editorEl.querySelectorAll(".ck-find-result");
-                const scrollingContainer = editorEl.closest('.scrolling-container');
+                const findResultElement = editorEl?.querySelectorAll(".ck-find-result");
+                const scrollingContainer = editorEl?.closest('.scrolling-container');
                 const containerTop = scrollingContainer?.getBoundingClientRect().top ?? 0;
                 const closestIndex = Array.from(findResultElement ?? []).findIndex((el) => el.getBoundingClientRect().top >= containerTop);
                 currentFound = closestIndex >= 0 ? closestIndex : 0;
@@ -86,7 +87,7 @@ export default class FindInText {
             // XXX Do this accessing the private data?
             // See https://github.com/ckeditor/ckeditor5/blob/b95e2faf817262ac0e1e21993d9c0bde3f1be594/packages/ckeditor5-find-and-replace/src/findnextcommand.js
             for (let i = 0; i < currentFound; ++i) {
-                textEditor?.execute("findNext", searchTerm);
+                textEditor?.execute("findNext");
             }
         }
 
@@ -120,17 +121,17 @@ export default class FindInText {
             // Clear the markers and set the caret to the
             // current occurrence
             const model = textEditor.model;
-            const range = this.findResult?.results?.get(currentFound).marker.getRange();
+            const range = this.findResult?.results?.get(currentFound)?.marker?.getRange();
             // From
             // https://github.com/ckeditor/ckeditor5/blob/b95e2faf817262ac0e1e21993d9c0bde3f1be594/packages/ckeditor5-find-and-replace/src/findandreplace.js#L92
             // XXX Roll our own since already done for codeEditor and
             //     will probably allow more refactoring?
             let findAndReplaceEditing = textEditor.plugins.get("FindAndReplaceEditing");
-            findAndReplaceEditing.state.clear(model);
+            findAndReplaceEditing.state?.clear(model);
             findAndReplaceEditing.stop();
             if (range) {
                 model.change((writer) => {
-                    writer.setSelection(range, 0);
+                    writer.setSelection(range);
                 });
             }
             textEditor.editing.view.scrollToTheSelection();

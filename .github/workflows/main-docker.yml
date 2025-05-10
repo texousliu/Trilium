@@ -56,7 +56,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run the TypeScript build
-        run: npm nx run server:build
+        run: pnpm run server:build
 
       - name: Build and export to Docker
         uses: docker/build-push-action@v6
@@ -183,7 +183,7 @@ jobs:
         id: build
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: apps/server
           file: ${{ matrix.dockerfile }}
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}

@@ -3,6 +3,7 @@ import appContext from "../components/app_context.js";
 import noteCreateService from "./note_create.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
+import type { MentionFeedObjectItem } from "@triliumnext/ckeditor5";
 
 // this key needs to have this value, so it's hit by the tooltip
 const SELECTED_NOTE_PATH_KEY = "data-note-path";
@@ -43,7 +44,7 @@ interface Options {
 }
 
 async function autocompleteSourceForCKEditor(queryText: string) {
-    return await new Promise<MentionItem[]>((res, rej) => {
+    return await new Promise<MentionFeedObjectItem[]>((res, rej) => {
         autocompleteSource(
             queryText,
             (rows) => {
