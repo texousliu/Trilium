@@ -1,5 +1,6 @@
 import { defaultKeymap, indentWithTab } from "@codemirror/commands";
 import { EditorView, keymap, lineNumbers, ViewUpdate, type EditorViewConfig, type KeyBinding } from "@codemirror/view";
+import { defaultHighlightStyle, syntaxHighlighting } from "@codemirror/language";
 
 type ContentChangedListener = () => void;
 
@@ -17,6 +18,7 @@ export default class CodeMirror extends EditorView {
                 ...defaultKeymap,
                 indentWithTab
             ]),
+            syntaxHighlighting(defaultHighlightStyle),
             lineNumbers()
         ];
 
