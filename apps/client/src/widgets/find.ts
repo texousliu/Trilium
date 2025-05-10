@@ -143,9 +143,9 @@ export default class FindWidget extends NoteContextAwareWidget {
         this.$currentFound = this.$widget.find(".find-widget-current-found");
         this.$totalFound = this.$widget.find(".find-widget-total-found");
         this.$caseSensitiveCheckbox = this.$widget.find(".find-widget-case-sensitive-checkbox");
-        this.$caseSensitiveCheckbox.change(() => this.performFind());
+        this.$caseSensitiveCheckbox.on("change", () => this.performFind());
         this.$matchWordsCheckbox = this.$widget.find(".find-widget-match-words-checkbox");
-        this.$matchWordsCheckbox.change(() => this.performFind());
+        this.$matchWordsCheckbox.on("change", () => this.performFind());
         this.$previousButton = this.$widget.find(".find-widget-previous-button");
         this.$previousButton.on("click", () => this.findNext(-1));
         this.$nextButton = this.$widget.find(".find-widget-next-button");
@@ -160,7 +160,7 @@ export default class FindWidget extends NoteContextAwareWidget {
         this.$replaceButton = this.$widget.find(".replace-widget-replace-button");
         this.$replaceButton.on("click", () => this.replace());
 
-        this.$input.keydown(async (e) => {
+        this.$input.on("keydown", async (e) => {
             if ((e.metaKey || e.ctrlKey) && (e.key === "F" || e.key === "f")) {
                 // If ctrl+f is pressed when the findbox is shown, select the
                 // whole input to find
@@ -172,7 +172,7 @@ export default class FindWidget extends NoteContextAwareWidget {
             }
         });
 
-        this.$widget.keydown(async (e) => {
+        this.$widget.on("keydown", async (e) => {
             if (e.key === "Escape") {
                 await this.closeSearch();
             }
@@ -197,9 +197,14 @@ export default class FindWidget extends NoteContextAwareWidget {
         const isReadOnly = await this.noteContext?.isReadOnly();
 
         let selectedText = "";
-        if (this.note?.type === "code" && !isReadOnly && this.noteContext) {
-            const codeEditor = await this.noteContext.getCodeEditor();
-            selectedText = codeEditor.getSelection();
+        if (this.note?.type === "code" && this.noteContext) {
+            if (isReadOnly){
+                const $content = await this.noteContext.getContentElement();
+                selectedText = $content.find('.cm-matchhighlight').first().text();
+            } else {
+                const codeEditor = await this.noteContext.getCodeEditor();
+                selectedText = codeEditor.getSelection();
+            }
         } else {
             selectedText = window.getSelection()?.toString() || "";
         }
@@ -232,6 +237,12 @@ export default class FindWidget extends NoteContextAwareWidget {
                 this.$input.select();
                 await this.performFind();
             }
+        }
+    }
+
+    async readOnlyTemporarilyDisabledEvent({ noteContext }: EventData<"readOnlyTemporarilyDisabled">) {
+        if (this.isNoteContext(noteContext.ntxId)) {
+            await this.closeSearch();
         }
     }
 
