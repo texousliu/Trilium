@@ -19,6 +19,8 @@ interface ConvertToAttachmentResponse {
     attachment?: FAttachment;
 }
 
+let lastTargetNode: HTMLElement | null = null;
+
 // This will include all commands that implement ContextMenuCommandData, but it will not work if it additional options are added via the `|` operator,
 // so they need to be added manually.
 export type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData> | "openBulkActionsDialog";
@@ -33,12 +35,19 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
     }
 
     async show(e: PointerEvent | JQuery.TouchStartEvent | JQuery.ContextMenuEvent) {
-        contextMenu.show({
+        await contextMenu.show({
             x: e.pageX ?? 0,
             y: e.pageY ?? 0,
             items: await this.getMenuItems(),
-            selectMenuItemHandler: (item, e) => this.selectMenuItemHandler(item)
+            selectMenuItemHandler: (item, e) => this.selectMenuItemHandler(item),
+            onHide: () => {
+                lastTargetNode?.classList.remove('fancytree-menu-target');
+            }
         });
+        // It's placed after show to ensure the old target is cleared before showing the context menu again on repeated right-clicks.
+        lastTargetNode?.classList.remove('fancytree-menu-target');
+        lastTargetNode = this.node.span;
+        lastTargetNode.classList.add('fancytree-menu-target');
     }
 
     async getMenuItems(): Promise<MenuItem<TreeCommandNames>[]> {

@@ -10,6 +10,7 @@ interface ContextMenuOptions<T> {
     items: MenuItem<T>[];
     /** On mobile, if set to `true` then the context menu is shown near the element. If `false` (default), then the context menu is shown at the bottom of the screen. */
     forcePositionOnMobile?: boolean;
+    onHide?: () => void;
 }
 
 interface MenuSeparatorItem {
@@ -36,7 +37,6 @@ export type ContextMenuEvent = PointerEvent | MouseEvent | JQuery.ContextMenuEve
 class ContextMenu {
     private $widget: JQuery<HTMLElement>;
     private $cover: JQuery<HTMLElement>;
-    private dateContextMenuOpenedMs: number;
     private options?: ContextMenuOptions<any>;
     private isMobile: boolean;
 
@@ -44,7 +44,6 @@ class ContextMenu {
         this.$widget = $("#context-menu-container");
         this.$cover = $("#context-menu-cover");
         this.$widget.addClass("dropend");
-        this.dateContextMenuOpenedMs = 0;
         this.isMobile = utils.isMobile();
 
         if (this.isMobile) {
@@ -76,8 +75,6 @@ class ContextMenu {
         keyboardActionService.updateDisplayedShortcuts(this.$widget);
 
         this.positionMenu();
-
-        this.dateContextMenuOpenedMs = Date.now();
     }
 
     positionMenu() {
@@ -186,8 +183,6 @@ class ContextMenu {
                             return false;
                         }
 
-                        this.hide();
-
                         if ("handler" in item && item.handler) {
                             item.handler(item, e);
                         }
@@ -196,6 +191,12 @@ class ContextMenu {
 
                         // it's important to stop the propagation especially for sub-menus, otherwise the event
                         // might be handled again by top-level menu
+                        return false;
+                    })
+                    .on("mouseup", (e) =>{
+                        e.stopPropagation();
+                        // Hide the content menu on mouse up to prevent the mouse event from propagating to the elements below.
+                        this.hide();
                         return false;
                     });
 
@@ -220,25 +221,12 @@ class ContextMenu {
     }
 
     async hide() {
-        // this date checking comes from change in FF66 - https://github.com/zadam/trilium/issues/468
-        // "contextmenu" event also triggers "click" event which depending on the timing can close the just opened context menu
-        // we might filter out right clicks, but then it's better if even right clicks close the context menu
-        if (Date.now() - this.dateContextMenuOpenedMs > 300) {
-            // seems like if we hide the menu immediately, some clicks can get propagated to the underlying component
-            // see https://github.com/zadam/trilium/pull/3805 for details
-            await timeout(100);
-            this.$widget.removeClass("show");
-            this.$cover.removeClass("show");
-            $("body").removeClass("context-menu-shown");
-            this.$widget.hide();
-        }
+        this.options?.onHide?.();
+        this.$widget.removeClass("show");
+        this.$cover.removeClass("show");
+        $("body").removeClass("context-menu-shown");
+        this.$widget.hide();
     }
-}
-
-function timeout(ms: number) {
-    return new Promise((accept, reject) => {
-        setTimeout(accept, ms);
-    });
 }
 
 const contextMenu = new ContextMenu();
