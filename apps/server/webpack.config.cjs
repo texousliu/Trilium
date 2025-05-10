@@ -1,6 +1,6 @@
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const { join, default: path } = require('path');
+const { join } = require('path');
 
 const outputDir = join(__dirname, 'dist');
 
@@ -47,6 +47,14 @@ function buildFilesToCopy() {
 module.exports = {
   output: {
     path: outputDir
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        type: "asset/source"
+      }
+    ]
   },
   plugins: [
     new NxAppWebpackPlugin({

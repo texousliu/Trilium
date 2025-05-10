@@ -8,6 +8,14 @@ module.exports = {
   output: {
     path: outputDir,
   },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        type: "asset/source"
+      }
+    ]
+  },
   target: [ "node" ],
   plugins: [
     new NxAppWebpackPlugin({

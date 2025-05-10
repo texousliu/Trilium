@@ -55,6 +55,8 @@ test("Displays math popup", async ({ page, context }) => {
     await app.goto();
     await app.goToNoteInNewTab("Empty text");
     const noteContent = app.currentNoteSplit.locator(".note-detail-editable-text-editor");
+    await expect(noteContent.locator("p")).toBeVisible();
+    await noteContent.focus();
     await noteContent.fill("Hello world");
     await noteContent.press("ControlOrMeta+M");
 

@@ -35,6 +35,9 @@
   ],
   "references": [
     {
+      "path": "../../packages/ckeditor5/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/commons/tsconfig.lib.json"
     }
   ]

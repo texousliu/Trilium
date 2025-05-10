@@ -124,10 +124,13 @@
   },
   "nx": {
     "name": "server",
-    "implicitDependencies": [
-      "client"
-    ],
     "targets": {
+      "build": {
+        "dependsOn": [
+          "^build",
+          "client:build"
+        ]
+      },
       "serve": {
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",

@@ -9,6 +9,7 @@ import { t } from "./i18n.js";
 import type FNote from "../entities/fnote.js";
 import type FBranch from "../entities/fbranch.js";
 import type { ChooseNoteTypeResponse } from "../widgets/dialogs/note_type_chooser.js";
+import type { CKTextEditor } from "@triliumnext/ckeditor5";
 
 interface CreateNoteOpts {
     isProtected?: boolean;
@@ -22,7 +23,7 @@ interface CreateNoteOpts {
     focus?: "title" | "content";
     target?: string;
     targetBranchId?: string;
-    textEditor?: TextEditor;
+    textEditor?: CKTextEditor;
 }
 
 interface Response {
