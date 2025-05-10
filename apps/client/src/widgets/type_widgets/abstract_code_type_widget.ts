@@ -56,13 +56,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
      * @param {*} content the new content of the note.
      */
     _update(note: { mime: string }, content: string) {
-        this.codeEditor.dispatch({
-            changes: {
-                from: 0,
-                to: this.codeEditor.state.doc.length,
-                insert: content || "",
-            }
-        })
+        this.codeEditor.setText(content);
         // this.codeEditor.clearHistory();
 
         // let info = CodeMirror.findModeByMIME(note.mime);

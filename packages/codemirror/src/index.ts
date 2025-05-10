@@ -11,4 +11,14 @@ export default class CodeMirror extends EditorView {
             ]
         });
     }
+
+    setText(content: string) {
+        this.dispatch({
+            changes: {
+                from: 0,
+                to: this.state.doc.length,
+                insert: content || "",
+            }
+        })
+    }
 }
