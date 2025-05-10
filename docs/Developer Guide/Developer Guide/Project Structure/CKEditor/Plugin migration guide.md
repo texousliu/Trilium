@@ -35,6 +35,7 @@ In the newly copied package, go to `package.json` and edit:
 3.  Similarly, update `vitest` dependencies to match the monorepo one.
 4.  Remove the `prepare` entry from the `scripts` section.
 5.  Change `build:dist` to simply `build` in order to integrate it with NX.
+6.  In `tsconfig.dist.json`, change `typings/types` to `../typings/types.d.ts` to be compatible with the latest TypeScript version.
 
 ## Step 4. Install missing dependencies and build errors
 
