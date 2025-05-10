@@ -20,5 +20,8 @@ onlyBuiltDependencies:
 - fs-xattr
 - macos-alias
 
+overrides:
+  "node-abi": 4.8.0
+
 shamefullyHoist: true
 nodeLinker: isolated
