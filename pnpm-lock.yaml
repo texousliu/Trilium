@@ -442,8 +442,8 @@ importers:
         version: 2.38.5(jquery@3.7.1)
     devDependencies:
       '@anthropic-ai/sdk':
-        specifier: 0.41.0
-        version: 0.41.0(encoding@0.1.13)
+        specifier: 0.50.3
+        version: 0.50.3
       '@braintree/sanitize-url':
         specifier: 7.1.1
         version: 7.1.1
@@ -821,8 +821,10 @@ packages:
   '@antfu/utils@8.1.1':
     resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
 
-  '@anthropic-ai/sdk@0.41.0':
-    resolution: {integrity: sha512-A4sfU0ss3BhhfMrm1RNl4YRt8B9CMIkheCRfow0vV3h0rYI9GBT/9lVsQPKGMwStnJSdowqUnVdSxLLrnutcHg==}
+  '@anthropic-ai/sdk@0.50.3':
+    resolution: {integrity: sha512-DrCym4bNTwC60Y+cYVUmHKsXva3xhYAnOOFYi7/CwDHwAyBtqrUIic3xkvOpPveEHhe4s/ELAflssrlipk5tOg==}
+    engines: {node: '>= 20'}
+    hasBin: true
 
   '@apidevtools/json-schema-ref-parser@9.1.2':
     resolution: {integrity: sha512-r1w81DpR+KyRWd3f+rk6TNqMgedmAxZP5v5KWlXQWlgMUUtyEJch0DKEci1SorPMiSeM8XPl7MZ3miJ60JIpQg==}
@@ -10794,17 +10796,7 @@ snapshots:
 
   '@antfu/utils@8.1.1': {}
 
-  '@anthropic-ai/sdk@0.41.0(encoding@0.1.13)':
-    dependencies:
-      '@types/node': 18.16.9
-      '@types/node-fetch': 2.6.12
-      abort-controller: 3.0.0
-      agentkeepalive: 4.6.0
-      form-data-encoder: 1.7.2
-      formdata-node: 4.4.1
-      node-fetch: 2.7.0(encoding@0.1.13)
-    transitivePeerDependencies:
-      - encoding
+  '@anthropic-ai/sdk@0.50.3': {}
 
   '@apidevtools/json-schema-ref-parser@9.1.2':
     dependencies:
