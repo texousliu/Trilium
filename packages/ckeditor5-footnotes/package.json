@@ -41,7 +41,7 @@
     "@vitest/browser": "^3.0.5",
     "@vitest/coverage-istanbul": "^3.0.5",
     "ckeditor5": "45.0.0",
-    "eslint": "^7.32.0",
+    "eslint": "^9.0.0",
     "eslint-config-ckeditor5": ">=9.1.0",
     "http-server": "^14.1.0",
     "husky": "^4.2.5",
