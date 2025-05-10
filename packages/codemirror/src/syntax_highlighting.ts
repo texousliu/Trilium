@@ -1,6 +1,6 @@
 import { type StreamParser } from "@codemirror/language"
 
-const mappings: Record<string, (() => Promise<StreamParser<unknown>>) | null> = {
+const byMimeType: Record<string, (() => Promise<StreamParser<unknown>>) | null> = {
     "text/plain": null,
     "text/apl": async () => (await import('@codemirror/legacy-modes/mode/apl')).apl,
     "text/x-ttcn-asn": async () => (await import('@codemirror/legacy-modes/mode/ttcn')).ttcn,
@@ -162,4 +162,4 @@ const mappings: Record<string, (() => Promise<StreamParser<unknown>>) | null> = 
     "text/x-z80": async () => (await import('@codemirror/legacy-modes/mode/z80')).z80
 }
 
-export default mappings;
+export default byMimeType;

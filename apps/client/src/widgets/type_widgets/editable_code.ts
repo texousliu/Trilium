@@ -66,6 +66,7 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
             this._update(note, blob?.content ?? "");
         });
 
+        this.codeEditor.setMimeType(note.mime);
         this.show();
 
         if (this.parent && hasTouchBar) {

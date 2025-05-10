@@ -1,6 +1,8 @@
 import { defaultKeymap, indentWithTab } from "@codemirror/commands";
 import { EditorView, keymap, lineNumbers, ViewUpdate, type EditorViewConfig, type KeyBinding } from "@codemirror/view";
-import { defaultHighlightStyle, syntaxHighlighting } from "@codemirror/language";
+import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting } from "@codemirror/language";
+import { Compartment } from "@codemirror/state";
+import byMimeType from "./syntax_highlighting.js";
 
 type ContentChangedListener = () => void;
 
@@ -11,13 +13,16 @@ export interface EditorConfig extends EditorViewConfig {
 export default class CodeMirror extends EditorView {
 
     private config: EditorConfig;
+    private languageCompartment: Compartment;
 
     constructor(config: EditorConfig) {
+        const languageCompartment = new Compartment();
         let extensions = [
             keymap.of([
                 ...defaultKeymap,
                 indentWithTab
             ]),
+            languageCompartment.of([]),
             syntaxHighlighting(defaultHighlightStyle),
             lineNumbers()
         ];
@@ -35,6 +40,7 @@ export default class CodeMirror extends EditorView {
             extensions
         });
         this.config = config;
+        this.languageCompartment = languageCompartment;
     }
 
     #onDocumentUpdated(v: ViewUpdate) {
@@ -55,5 +61,19 @@ export default class CodeMirror extends EditorView {
                 insert: content || "",
             }
         })
+    }
+
+    async setMimeType(mime: string) {
+        const newExtension = [];
+
+        const correspondingSyntax = byMimeType[mime];
+        if (correspondingSyntax) {
+            const extension = StreamLanguage.define(await correspondingSyntax());
+            newExtension.push(extension);
+        }
+
+        this.dispatch({
+            effects: this.languageCompartment.reconfigure(newExtension)
+        });
     }
 }
