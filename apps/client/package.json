@@ -23,6 +23,7 @@
     "@popperjs/core": "2.11.8",
     "@triliumnext/ckeditor5": "workspace:*",
     "@triliumnext/commons": "workspace:*",
+    "@triliumnext/codemirror": "workspace:*",
     "bootstrap": "5.3.6",
     "dayjs": "1.11.13",
     "dayjs-plugin-utc": "0.1.2",

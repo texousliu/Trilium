@@ -41,19 +41,19 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         super.doRender();
     }
 
-    getExtraOpts(): Partial<CodeMirrorOpts> {
-        return {
-            keyMap: options.is("vimKeymapEnabled") ? "vim" : "default",
-            lint: true,
-            gutters: ["CodeMirror-lint-markers"],
-            tabindex: 300,
-            dragDrop: false, // with true the editor inlines dropped files which is not what we expect
-            placeholder: t("editable_code.placeholder")
-        };
-    }
+    // getExtraOpts(): Partial<CodeMirrorOpts> {
+    //     return {
+    //         keyMap: options.is("vimKeymapEnabled") ? "vim" : "default",
+    //         lint: true,
+    //         gutters: ["CodeMirror-lint-markers"],
+    //         tabindex: 300,
+    //         dragDrop: false, // with true the editor inlines dropped files which is not what we expect
+    //         placeholder: t("editable_code.placeholder")
+    //     };
+    // }
 
     onEditorInitialized() {
-        this.codeEditor.on("change", () => this.spacedUpdate.scheduleUpdate());
+        // this.codeEditor.on("change", () => this.spacedUpdate.scheduleUpdate());
     }
 
     async doRefresh(note: FNote) {
@@ -72,7 +72,8 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
     getData() {
         return {
-            content: this.codeEditor.getValue()
+            // content: this.codeEditor.getValue()
+            content: ""
         };
     }
 
