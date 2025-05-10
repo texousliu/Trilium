@@ -10,7 +10,7 @@ import utils from "../../services/utils.js";
 import { Dropdown } from "bootstrap";
 import type FAttachment from "../../entities/fattachment.js";
 import type AttachmentDetailWidget from "../attachment_detail.js";
-import { NoteRow } from "@triliumnext/commons";
+import type { NoteRow } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="dropdown attachment-actions">
@@ -83,7 +83,7 @@ const TPL = /*html*/`
 
 // TODO: Deduplicate
 interface AttachmentResponse {
-    note: NoteRow;  
+    note: NoteRow;
 }
 
 export default class AttachmentActionsWidget extends BasicWidget {

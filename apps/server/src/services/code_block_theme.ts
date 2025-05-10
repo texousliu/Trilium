@@ -30,7 +30,7 @@ interface ColorTheme {
  * @returns the supported themes, grouped.
  */
 export function listSyntaxHighlightingThemes() {
-    const path = join(getResourceDir(), getStylesDirectory());
+    const path = getStylesDirectory();
     const systemThemes = readThemesFromFileSystem(path);
 
     return {
@@ -46,11 +46,11 @@ export function listSyntaxHighlightingThemes() {
 
 export function getStylesDirectory() {
     if (isElectron && !isDev) {
-        return "styles";
+        return join(getResourceDir(), "styles");
     } else if (!isDev) {
-        return "node_modules/@highlightjs/cdn-assets/styles";
+        return join(getResourceDir(), "node_modules/@highlightjs/cdn-assets/styles");
     } else {
-        return join(__dirname, "../../node_modules/@highlightjs/cdn-assets/styles");
+        return join(__dirname, "../node_modules/@highlightjs/cdn-assets/styles");
     }
 }
 

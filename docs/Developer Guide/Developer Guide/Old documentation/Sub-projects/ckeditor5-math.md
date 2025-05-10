@@ -7,7 +7,6 @@ A fork of [isaul32/ckeditor5-math](https://github.com/isaul32/ckeditor5-math), w
 
 *   Tested on Node.js 20.
 *   The package manager is yarn 1 (v1.22.22 is known to be working fine for it at the time of writing).
-*   Committing is protected by `husky` which runs `eslint` to ensure that the code is clean.
 
 Important commands:
 
