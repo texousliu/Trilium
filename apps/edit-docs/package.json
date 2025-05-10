@@ -13,6 +13,9 @@
   },
   "nx": {
     "name": "edit-docs",
+    "implicitDependencies": [
+      "server"
+    ],
     "targets": {
       "rebuild-deps": {
         "executor": "nx:run-commands",
