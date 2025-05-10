@@ -1,5 +1,5 @@
-import { defaultKeymap } from "@codemirror/commands";
-import { EditorView, keymap, lineNumbers, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
+import { defaultKeymap, indentWithTab } from "@codemirror/commands";
+import { EditorView, keymap, lineNumbers, ViewUpdate, type EditorViewConfig, type KeyBinding } from "@codemirror/view";
 
 type ContentChangedListener = () => void;
 
@@ -13,7 +13,10 @@ export default class CodeMirror extends EditorView {
 
     constructor(config: EditorConfig) {
         let extensions = [
-            keymap.of(defaultKeymap),
+            keymap.of([
+                ...defaultKeymap,
+                indentWithTab
+            ]),
             lineNumbers()
         ];
 
