@@ -8,7 +8,7 @@
     "@triliumnext/desktop": "workspace:*",
     "@types/fs-extra": "11.0.4",
     "copy-webpack-plugin": "13.0.0",
-    "electron": "35.3.0",
+    "electron": "36.2.0",
     "fs-extra": "11.3.0"
   },
   "nx": {
