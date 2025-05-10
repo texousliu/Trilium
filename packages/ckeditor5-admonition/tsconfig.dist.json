@@ -6,7 +6,7 @@
     "rootDir": "./src",
 	"composite": false,
     "types": [
-      "./typings/types"
+      "../typings/types.d.ts"
     ]
   }
 }
