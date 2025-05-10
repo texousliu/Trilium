@@ -21,7 +21,7 @@ interface CustomGlobals {
     getHeaders: typeof server.getHeaders;
     getReferenceLinkTitle: (href: string) => Promise<string>;
     getReferenceLinkTitleSync: (href: string) => string;
-    getActiveContextNote: () => FNote;
+    getActiveContextNote: () => FNote | null;
     requireLibrary: typeof library_loader.requireLibrary;
     ESLINT: Library;
     appContext: AppContext;
@@ -74,6 +74,9 @@ declare global {
     type AutoCompleteCallback = (values: AutoCompleteArg[]) => void;
 
     interface AutoCompleteArg {
+        name?: string;
+        value?: string;
+        notePathTitle?: string;
         displayKey?: "name" | "value" | "notePathTitle";
         cache?: boolean;
         source?: (term: string, cb: AutoCompleteCallback) => void,
@@ -83,7 +86,7 @@ declare global {
     }
 
     interface JQuery {
-        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: object[] | string) => JQuery<HTMLElement>;
+        autocomplete: (action?: "close" | "open" | "destroy" | "val" | AutoCompleteConfig, args?: AutoCompleteArg[] | string) => JQuery<HTMLElement>;
 
         getSelectedNotePath(): string | undefined;
         getSelectedNoteId(): string | null;
@@ -131,56 +134,6 @@ declare global {
     var renderMathInElement: (element: HTMLElement, options: {
         trust: boolean;
     }) => void;
-    interface CKCodeBlockLanguage {
-        language: string;
-        label: string;
-    }
-
-    interface CKEditorInstance {
-        create(elementOrData: any, finalConfig: any): TextEditor;
-    }
-
-    class CKWatchdog {
-        constructor(editorClass: CKEditorInstance, opts: {
-            minimumNonErrorTimePeriod: number;
-            crashNumberLimit: number,
-            saveInterval: number
-        });
-        on(event: string, callback: () => void);
-        state: string;
-        crashes: unknown[];
-        editor: TextEditor;
-        setCreator(callback: (elementOrData, editorConfig) => void);
-        create(el: HTMLElement, opts: {
-            placeholder: string,
-            mention: MentionConfig,
-            codeBlock: {
-                languages: CKCodeBlockLanguage[]
-            },
-            math: {
-                engine: string,
-                outputType: string,
-                lazyLoad: () => Promise<void>,
-                forceOutputType: boolean,
-                enablePreview: boolean
-            },
-            mermaid: {
-                lazyLoad: () => Promise<Mermaid>,
-                config: MermaidConfig
-            }
-        });
-        destroy();
-    }
-
-    var CKEditor: {
-        BalloonEditor: CKEditorInstance;
-        DecoupledEditor: CKEditorInstance;
-        EditorWatchdog: typeof CKWatchdog;
-    };
-
-    var CKEditorInspector: {
-        attach(editor: TextEditor);
-    };
 
     interface CodeMirrorOpts {
         value: string;
@@ -254,222 +207,6 @@ declare global {
         renderToString(text: string, opts: {
             throwOnError: boolean
         });
-    }
-
-    interface Range {
-        toJSON(): object;
-        getItems(): TextNode[];
-    }
-    interface Writer {
-        setAttribute(name: string, value: string, el: CKNode);
-        createPositionAt(el: CKNode, opt?: "end" | number);
-        setSelection(pos: number, pos2?: number);
-        insertText(text: string, opts: Record<string, unknown> | undefined | TextPosition, position?: TextPosition);
-        addMarker(name: string, opts: {
-            range: Range;
-            usingOperation: boolean;
-        });
-        removeMarker(name: string);
-        createRange(start: number, end: number): Range;
-        createElement(type: string, opts: Record<string, string | null | undefined>);
-    }
-    interface TextNode {
-        previousSibling?: TextNode;
-        name: string;
-        data: string;
-        startOffset: number;
-        _attrs: {
-            get(key: string): {
-                length: number
-            }
-        }
-    }
-    interface TextPosition {
-        textNode: TextNode;
-        offset: number;
-        compareWith(pos: TextPosition): string;
-    }
-
-    interface TextRange {
-
-    }
-
-    interface Marker {
-        name: string;
-    }
-
-    interface CKNode {
-        _children: CKNode[];
-        name: string;
-        childCount: number;
-        isEmpty: boolean;
-        toJSON(): object;
-        is(type: string, name?: string);
-        getAttribute(name: string): string;
-        getChild(index: number): CKNode;
-        data: string;
-        startOffset: number;
-        root: {
-            document: {
-                model: {
-                    createRangeIn(el: CKNode): TextRange;
-                    markers: {
-                        getMarkersIntersectingRange(range: TextRange): Marker[];
-                    }
-                }
-            }
-        };
-    }
-
-    interface CKEvent {
-        stop(): void;
-    }
-
-    interface PluginEventData {
-        title: string;
-        message: {
-            message: string;
-        };
-    }
-
-    interface TextEditor {
-        create(el: HTMLElement, config: {
-            removePlugins?: string[];
-            toolbar: {
-                items: any[];
-            },
-            placeholder: string;
-            mention: MentionConfig
-        });
-        enableReadOnlyMode(reason: string);
-        commands: {
-            get(name: string): {
-                value: unknown;
-                on(event: string, callback: () => void): void;
-            };
-        }
-        model: {
-            document: {
-                on(event: string, cb: () => void);
-                getRoot(): CKNode;
-                registerPostFixer(callback: (writer: Writer) => boolean);
-                selection: {
-                    getFirstPosition(): undefined | TextPosition;
-                    getLastPosition(): undefined | TextPosition;
-                    getSelectedElement(): CKNode;
-                    hasAttribute(attribute: string): boolean;
-                    getAttribute(attribute: string): string;
-                    getFirstRange(): Range;
-                    isCollapsed: boolean;
-                };
-                differ: {
-                    getChanges(): {
-                        type: string;
-                        name: string;
-                        position?: {
-                            nodeAfter?: CKNode;
-                            parent: CKNode;
-                            toJSON(): Object;
-                        }
-                    }[];
-                }
-            },
-            insertContent(modelFragment: any, selection?: any);
-            change(cb: (writer: Writer) => void)
-        },
-        editing: {
-            view: {
-                document: {
-                    on(event: string, cb: (event: CKEvent, data: {
-                        preventDefault();
-                    }) => void, opts?: {
-                        priority: "high"
-                    });
-                    getRoot(): CKNode
-                },
-                domRoots: {
-                    values: () => {
-                        next: () => {
-                            value: string;
-                        }
-                    };
-                }
-                change(cb: (writer: Writer) => void);
-                scrollToTheSelection(): void;
-                focus(): void;
-            }
-        },
-        plugins: {
-            get(command: string)
-        },
-        data: {
-            processor: {
-                toView(html: string);
-            };
-            toModel(viewFeragment: any);
-        },
-        ui: {
-            view: {
-                toolbar: {
-                    items: any[];
-                    element: HTMLElement;
-                }
-            }
-        }
-        conversion: {
-            for(filter: string): {
-                markerToHighlight(data: {
-                    model: string;
-                    view: (data: {
-                        markerName: string;
-                    }) => void;
-                })
-            }
-        }
-        getData(): string;
-        setData(data: string): void;
-        getSelectedHtml(): string;
-        removeSelection(): void;
-        execute<T>(action: string, ...args: unknown[]): T;
-        focus(): void;
-        sourceElement: HTMLElement;
-    }
-
-    interface EditingState {
-        highlightedResult: string;
-        results: unknown[];
-    }
-
-    interface CKFindResult {
-        results: {
-            get(number): {
-                marker: {
-                    getStart(): TextPosition;
-                    getRange(): number;
-                };
-            }
-        } & [];
-    }
-
-    interface MentionItem {
-        action?: string;
-        noteTitle?: string;
-        id: string;
-        name: string;
-        link?: string;
-        notePath?: string;
-        highlightedNotePathTitle?: string;
-    }
-
-    interface MentionConfig {
-        feeds: {
-            marker: string;
-            feed: (queryText: string) => MentionItem[] | Promise<MentionItem[]>;
-            itemRenderer?: (item: {
-                highlightedNotePathTitle: string
-            }) => void;
-            minimumCharacters: number;
-        }[];
     }
 
     /*

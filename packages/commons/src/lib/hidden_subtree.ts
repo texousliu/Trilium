@@ -1,4 +1,4 @@
-import { AttributeType } from "./rows.js";
+import type { AttributeType } from "./rows.js";
 
 type LauncherNoteType = "launcher" | "search" | "doc" | "noteMap" | "contentWidget" | "book" | "file" | "image" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "webView" | "code" | "mindMap" | "geoMap";
 

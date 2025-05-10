@@ -11,7 +11,7 @@ import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
 import "../../stylesheets/calendar.css";
-import { AttributeRow } from "@triliumnext/commons";
+import type { AttributeRow } from "@triliumnext/commons";
 
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter);

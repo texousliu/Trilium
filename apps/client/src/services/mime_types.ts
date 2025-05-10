@@ -38,7 +38,7 @@ let mimeToHighlightJsMapping: Record<string, string> | null = null;
  * @param mimeType The MIME type of the code block, in the CKEditor-normalized format (e.g. `text-c-src` instead of `text/c-src`).
  * @returns the corresponding highlight.js tag, for example `c` for `text-c-src`.
  */
-function getHighlightJsNameForMime(mimeType: string) {
+export function getHighlightJsNameForMime(mimeType: string) {
     if (!mimeToHighlightJsMapping) {
         const mimeTypes = getMimeTypes();
         mimeToHighlightJsMapping = {};

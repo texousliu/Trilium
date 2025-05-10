@@ -5,6 +5,7 @@ import express from "express";
 import { getResourceDir, isDev } from "../services/utils.js";
 import type serveStatic from "serve-static";
 import proxy from "express-http-proxy";
+import contentCss from "@triliumnext/ckeditor5/content.css";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<unknown, Record<string, unknown>>>) => {
     if (!isDev) {
@@ -19,6 +20,8 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
 async function register(app: express.Application) {
     const srcRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
     const resourceDir = getResourceDir();
+
+    app.use(`/${assetPath}/libraries/ckeditor/ckeditor-content.css`, (req, res) => res.contentType("text/css").send(contentCss));
 
     if (isDev) {
         const publicUrl = process.env.TRILIUM_PUBLIC_SERVER;

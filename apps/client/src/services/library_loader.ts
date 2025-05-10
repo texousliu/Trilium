@@ -7,10 +7,6 @@ export interface Library {
     css?: string[];
 }
 
-const CKEDITOR: Library = {
-    js: ["libraries/ckeditor/ckeditor.js"]
-};
-
 const CODE_MIRROR: Library = {
     js: () => {
         const scriptsToLoad = [
@@ -156,7 +152,6 @@ export default {
     requireCss,
     requireLibrary,
     loadHighlightingTheme,
-    CKEDITOR,
     CODE_MIRROR,
     KATEX,
     HIGHLIGHT_JS
