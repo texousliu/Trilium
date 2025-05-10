@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  node-abi: 4.8.0
+
 patchedDependencies:
   '@ckeditor/ckeditor5-code-block':
     hash: 2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95
@@ -10125,12 +10128,8 @@ packages:
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
 
-  node-abi@3.74.0:
-    resolution: {integrity: sha512-c5XK0MjkGBrQPGYG24GBADZud0NCbznxNx0ZkS+ebUTrmV1qTDxPxSL8zEAPURXSbLRWVexxmP4986BziahL5w==}
-    engines: {node: '>=10'}
-
-  node-abi@4.6.0:
-    resolution: {integrity: sha512-AActsRaxKmWuE/0u28/1u4PlvEcY/mh83HC0j+p3/4nQHgcHTgGR8tkDeDiyVboR+4J6YVl+er/C7NmQBhMP6A==}
+  node-abi@4.8.0:
+    resolution: {integrity: sha512-+P1Mf1XNURT+wN9UK8cjtHSwmmG02iAsX0JaYDDdXgMUe5eybde3AKpGGxOrkDmPkuonYJ6WjIRrNVQe0kjmFg==}
     engines: {node: '>=22.12.0'}
 
   node-abort-controller@3.1.1:
@@ -14939,12 +14938,6 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-adapter-ckfinder@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-upload': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-
   '@ckeditor/ckeditor5-adapter-ckfinder@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -14966,15 +14959,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@ckeditor/ckeditor5-autoformat@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-autoformat@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15000,15 +14984,6 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-basic-styles@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-icons': 45.0.0
-      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-
   '@ckeditor/ckeditor5-basic-styles@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15021,16 +14996,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@ckeditor/ckeditor5-block-quote@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-icons': 45.0.0
-      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-block-quote@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15104,12 +15069,6 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-cloud-services@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-
   '@ckeditor/ckeditor5-cloud-services@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15119,17 +15078,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@ckeditor/ckeditor5-code-block@45.0.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)':
-    dependencies:
-      '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-icons': 45.0.0
-      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-code-block@45.0.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15146,27 +15094,23 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-collaboration-core@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
+  '@ckeditor/ckeditor5-collaboration-core@45.0.0':
     dependencies:
       '@ckeditor/ckeditor5-comments': 45.0.0
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-icons': 45.0.0
       '@ckeditor/ckeditor5-theme-lark': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-track-changes': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-track-changes': 45.0.0
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@types/luxon': 3.4.2
       ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       luxon: 3.5.0
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
 
   '@ckeditor/ckeditor5-comments@45.0.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-collaboration-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-collaboration-core': 45.0.0
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15187,7 +15131,7 @@ snapshots:
   '@ckeditor/ckeditor5-comments@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-collaboration-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-collaboration-core': 45.0.0
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15352,7 +15296,7 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-heading': 45.0.0
       '@ckeditor/ckeditor5-icons': 45.0.0
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15364,7 +15308,7 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-heading': 45.0.0
       '@ckeditor/ckeditor5-icons': 45.0.0
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15375,14 +15319,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@ckeditor/ckeditor5-easy-image@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-cloud-services': 45.0.0
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-upload': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-easy-image@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15395,15 +15331,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@ckeditor/ckeditor5-editor-balloon@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-      es-toolkit: 1.32.0
 
   '@ckeditor/ckeditor5-editor-balloon@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15418,15 +15345,6 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-editor-classic@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-      es-toolkit: 1.32.0
-
   '@ckeditor/ckeditor5-editor-classic@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15440,15 +15358,6 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-editor-decoupled@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-      es-toolkit: 1.32.0
-
   '@ckeditor/ckeditor5-editor-decoupled@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15461,15 +15370,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@ckeditor/ckeditor5-editor-inline@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-      es-toolkit: 1.32.0
 
   '@ckeditor/ckeditor5-editor-inline@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15496,6 +15396,18 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  '@ckeditor/ckeditor5-emoji@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-mention': 45.0.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)
+      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+      es-toolkit: 1.32.0
+      fuzzysort: 3.1.0
 
   '@ckeditor/ckeditor5-emoji@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15531,17 +15443,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@ckeditor/ckeditor5-essentials@45.0.0':
-    dependencies:
-      '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-select-all': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-undo': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-essentials@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15580,6 +15481,15 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@ckeditor/ckeditor5-font@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+
   '@ckeditor/ckeditor5-font@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15598,8 +15508,8 @@ snapshots:
       '@ckeditor/ckeditor5-comments': 45.0.0
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-document-outline': 45.0.0
-      '@ckeditor/ckeditor5-editor-classic': 45.0.0
-      '@ckeditor/ckeditor5-editor-decoupled': 45.0.0
+      '@ckeditor/ckeditor5-editor-classic': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-editor-decoupled': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-icons': 45.0.0
       '@ckeditor/ckeditor5-pagination': 45.0.0
       '@ckeditor/ckeditor5-real-time-collaboration': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15611,6 +15521,16 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  '@ckeditor/ckeditor5-heading@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-paragraph': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-heading@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15695,10 +15615,10 @@ snapshots:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-image': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-list': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-table': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-heading': 45.0.0
+      '@ckeditor/ckeditor5-image': 45.0.0
+      '@ckeditor/ckeditor5-list': 45.0.0
+      '@ckeditor/ckeditor5-table': 45.0.0
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-widget': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
@@ -15724,6 +15644,21 @@ snapshots:
 
   '@ckeditor/ckeditor5-icons@45.0.0': {}
 
+  '@ckeditor/ckeditor5-image@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-undo': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-upload': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-widget': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+      es-toolkit: 1.32.0
+
   '@ckeditor/ckeditor5-image@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15743,6 +15678,17 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@ckeditor/ckeditor5-indent@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-heading': 45.0.0
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-list': 45.0.0
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+
   '@ckeditor/ckeditor5-indent@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15760,6 +15706,13 @@ snapshots:
 
   '@ckeditor/ckeditor5-inspector@4.1.0': {}
 
+  '@ckeditor/ckeditor5-language@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+
   '@ckeditor/ckeditor5-language@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15770,6 +15723,20 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  '@ckeditor/ckeditor5-link@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-image': 45.0.0
+      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-widget': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+      es-toolkit: 1.32.0
 
   '@ckeditor/ckeditor5-link@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15788,6 +15755,18 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  '@ckeditor/ckeditor5-list@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-list@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15863,6 +15842,15 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@ckeditor/ckeditor5-mention@45.0.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+      es-toolkit: 1.32.0
+
   '@ckeditor/ckeditor5-mention@45.0.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15876,21 +15864,25 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-merge-fields@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
+  '@ckeditor/ckeditor5-merge-fields@45.0.0':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-icons': 45.0.0
-      '@ckeditor/ckeditor5-image': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-mention': 45.0.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-image': 45.0.0
+      '@ckeditor/ckeditor5-mention': 45.0.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-widget': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.32.0
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
+
+  '@ckeditor/ckeditor5-minimap@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-minimap@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -16012,7 +16004,7 @@ snapshots:
   '@ckeditor/ckeditor5-real-time-collaboration@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor-cloud-services-collaboration': 52.7.0(@ckeditor/ckeditor5-utils@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(bufferutil@4.0.9)(ckeditor5@45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)(bufferutil@4.0.9)(utf-8-validate@6.0.5))(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-cloud-services': 45.0.0
+      '@ckeditor/ckeditor5-cloud-services': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-comments': 45.0.0
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-editor-multi-root': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -16020,7 +16012,7 @@ snapshots:
       '@ckeditor/ckeditor5-operations-compressor': 45.0.0
       '@ckeditor/ckeditor5-revision-history': 45.0.0
       '@ckeditor/ckeditor5-theme-lark': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-track-changes': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-track-changes': 45.0.0
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
@@ -16078,7 +16070,7 @@ snapshots:
       '@ckeditor/ckeditor5-autosave': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-comments': 45.0.0
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-editor-classic': 45.0.0
+      '@ckeditor/ckeditor5-editor-classic': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-icons': 45.0.0
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -16173,12 +16165,12 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-html-support': 45.0.0
-      '@ckeditor/ckeditor5-list': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-table': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-list': 45.0.0
+      '@ckeditor/ckeditor5-table': 45.0.0
       '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.32.0
 
   '@ckeditor/ckeditor5-style@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
@@ -16196,6 +16188,18 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  '@ckeditor/ckeditor5-table@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-widget': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+      es-toolkit: 1.32.0
 
   '@ckeditor/ckeditor5-table@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -16221,28 +16225,28 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-track-changes@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
+  '@ckeditor/ckeditor5-track-changes@45.0.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-code-block': 45.0.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)
+      '@ckeditor/ckeditor5-code-block': 45.0.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-comments': 45.0.0
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-editor-multi-root': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-find-and-replace': 45.0.0
-      '@ckeditor/ckeditor5-font': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-font': 45.0.0
+      '@ckeditor/ckeditor5-heading': 45.0.0
       '@ckeditor/ckeditor5-highlight': 45.0.0
       '@ckeditor/ckeditor5-icons': 45.0.0
-      '@ckeditor/ckeditor5-image': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-link': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-list': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-image': 45.0.0
+      '@ckeditor/ckeditor5-link': 45.0.0
+      '@ckeditor/ckeditor5-list': 45.0.0
       '@ckeditor/ckeditor5-media-embed': 45.0.0
-      '@ckeditor/ckeditor5-merge-fields': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-merge-fields': 45.0.0
       '@ckeditor/ckeditor5-restricted-editing': 45.0.0
       '@ckeditor/ckeditor5-style': 45.0.0
-      '@ckeditor/ckeditor5-table': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-table': 45.0.0
       '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -16250,10 +16254,6 @@ snapshots:
       ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       ckeditor5-collaboration: 45.0.0
       es-toolkit: 1.32.0
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
 
   '@ckeditor/ckeditor5-typing@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -16734,7 +16734,7 @@ snapshots:
       detect-libc: 2.0.4
       fs-extra: 10.1.0
       got: 11.8.6
-      node-abi: 3.74.0
+      node-abi: 4.8.0
       node-api-version: 0.2.1
       ora: 5.4.1
       read-binary-file-arch: 1.0.6
@@ -16753,7 +16753,7 @@ snapshots:
       detect-libc: 2.0.4
       got: 11.8.6
       graceful-fs: 4.2.11
-      node-abi: 4.6.0
+      node-abi: 4.8.0
       node-api-version: 0.2.1
       node-gyp: 11.2.0
       ora: 5.4.1
@@ -21600,51 +21600,51 @@ snapshots:
 
   ckeditor5-collaboration@45.0.0:
     dependencies:
-      '@ckeditor/ckeditor5-collaboration-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-collaboration-core': 45.0.0
 
   ckeditor5@45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41):
     dependencies:
-      '@ckeditor/ckeditor5-adapter-ckfinder': 45.0.0
+      '@ckeditor/ckeditor5-adapter-ckfinder': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-alignment': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-autoformat': 45.0.0
+      '@ckeditor/ckeditor5-autoformat': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-autosave': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-basic-styles': 45.0.0
-      '@ckeditor/ckeditor5-block-quote': 45.0.0
+      '@ckeditor/ckeditor5-basic-styles': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-block-quote': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-bookmark': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-ckbox': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-ckfinder': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-cloud-services': 45.0.0
-      '@ckeditor/ckeditor5-code-block': 45.0.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)
+      '@ckeditor/ckeditor5-cloud-services': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-code-block': 45.0.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-easy-image': 45.0.0
-      '@ckeditor/ckeditor5-editor-balloon': 45.0.0
-      '@ckeditor/ckeditor5-editor-classic': 45.0.0
-      '@ckeditor/ckeditor5-editor-decoupled': 45.0.0
-      '@ckeditor/ckeditor5-editor-inline': 45.0.0
+      '@ckeditor/ckeditor5-easy-image': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-editor-balloon': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-editor-classic': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-editor-decoupled': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-editor-inline': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-editor-multi-root': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-emoji': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-emoji': 45.0.0
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-essentials': 45.0.0
+      '@ckeditor/ckeditor5-essentials': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-find-and-replace': 45.0.0
-      '@ckeditor/ckeditor5-font': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-font': 45.0.0
       '@ckeditor/ckeditor5-fullscreen': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-heading': 45.0.0
       '@ckeditor/ckeditor5-highlight': 45.0.0
       '@ckeditor/ckeditor5-horizontal-line': 45.0.0
       '@ckeditor/ckeditor5-html-embed': 45.0.0
       '@ckeditor/ckeditor5-html-support': 45.0.0
       '@ckeditor/ckeditor5-icons': 45.0.0
-      '@ckeditor/ckeditor5-image': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-indent': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-language': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-link': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-list': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-image': 45.0.0
+      '@ckeditor/ckeditor5-indent': 45.0.0
+      '@ckeditor/ckeditor5-language': 45.0.0
+      '@ckeditor/ckeditor5-link': 45.0.0
+      '@ckeditor/ckeditor5-list': 45.0.0
       '@ckeditor/ckeditor5-markdown-gfm': 45.0.0
       '@ckeditor/ckeditor5-media-embed': 45.0.0
-      '@ckeditor/ckeditor5-mention': 45.0.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-minimap': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-mention': 45.0.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)
+      '@ckeditor/ckeditor5-minimap': 45.0.0
       '@ckeditor/ckeditor5-page-break': 45.0.0
       '@ckeditor/ckeditor5-paragraph': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-paste-from-office': 45.0.0
@@ -21654,8 +21654,8 @@ snapshots:
       '@ckeditor/ckeditor5-show-blocks': 45.0.0
       '@ckeditor/ckeditor5-source-editing': 45.0.0
       '@ckeditor/ckeditor5-special-characters': 45.0.0
-      '@ckeditor/ckeditor5-style': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-table': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-style': 45.0.0
+      '@ckeditor/ckeditor5-table': 45.0.0
       '@ckeditor/ckeditor5-theme-lark': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -26557,11 +26557,7 @@ snapshots:
       lower-case: 2.0.2
       tslib: 2.8.1
 
-  node-abi@3.74.0:
-    dependencies:
-      semver: 7.7.1
-
-  node-abi@4.6.0:
+  node-abi@4.8.0:
     dependencies:
       semver: 7.7.1
 
@@ -27842,7 +27838,7 @@ snapshots:
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
       napi-build-utils: 2.0.0
-      node-abi: 3.74.0
+      node-abi: 4.8.0
       pump: 3.0.2
       rc: 1.2.8
       simple-get: 4.0.1
