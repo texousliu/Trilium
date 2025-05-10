@@ -883,8 +883,8 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
       vite-plugin-svgo:
-        specifier: ~1.6.0
-        version: 1.6.2(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
+        specifier: ~2.0.0
+        version: 2.0.0(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
       vitest:
         specifier: ^3.0.5
         version: 3.1.3(@types/debug@4.1.12)(@types/node@22.15.17)(@vitest/browser@3.1.3)(@vitest/ui@3.1.3)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.17)(typescript@5.0.4))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
@@ -943,8 +943,8 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
       vite-plugin-svgo:
-        specifier: ~1.6.0
-        version: 1.6.2(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
+        specifier: ~2.0.0
+        version: 2.0.0(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
       vitest:
         specifier: ^3.0.5
         version: 3.1.3(@types/debug@4.1.12)(@types/node@22.15.17)(@vitest/browser@3.1.3)(@vitest/ui@3.1.3)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.17)(typescript@5.0.4))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
@@ -1003,8 +1003,8 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
       vite-plugin-svgo:
-        specifier: ~1.6.0
-        version: 1.6.2(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
+        specifier: ~2.0.0
+        version: 2.0.0(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
       vitest:
         specifier: ^3.0.5
         version: 3.1.3(@types/debug@4.1.12)(@types/node@22.15.17)(@vitest/browser@3.1.3)(@vitest/ui@3.1.3)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.17)(typescript@5.0.4))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
@@ -1070,8 +1070,8 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
       vite-plugin-svgo:
-        specifier: ~1.6.0
-        version: 1.6.2(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
+        specifier: ~2.0.0
+        version: 2.0.0(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
       vitest:
         specifier: ^3.0.5
         version: 3.1.3(@types/debug@4.1.12)(@types/node@22.15.17)(@vitest/browser@3.1.3)(@vitest/ui@3.1.3)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.17)(typescript@5.0.4))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
@@ -1137,8 +1137,8 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
       vite-plugin-svgo:
-        specifier: ~1.6.0
-        version: 1.6.2(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
+        specifier: ~2.0.0
+        version: 2.0.0(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1))
       vitest:
         specifier: ^3.0.5
         version: 3.1.3(@types/debug@4.1.12)(@types/node@22.15.17)(@vitest/browser@3.1.3)(@vitest/ui@3.1.3)(happy-dom@17.4.6)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.17)(typescript@5.0.4))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
@@ -12719,11 +12719,6 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  svgo@3.0.4:
-    resolution: {integrity: sha512-T+Xul3JwuJ6VGXKo/p2ndqx1ibxNKnLTvRc1ZTWKCfyKS/GgNjRZcYsK84fxTsy/izr91g/Rwx6fGnVgaFSI5g==}
-    engines: {node: '>=14.0.0'}
-    hasBin: true
-
   svgo@3.3.2:
     resolution: {integrity: sha512-OoohrmuUlBs8B8o6MB2Aevn+pRIH9zDALSR+6hhqVfa6fRwG/Qw9VUMSMW9VNg2CFc/MTIfabtdOVl9ODIJjpw==}
     engines: {node: '>=14.0.0'}
@@ -13394,8 +13389,8 @@ packages:
       vite:
         optional: true
 
-  vite-plugin-svgo@1.6.2:
-    resolution: {integrity: sha512-y2XehQvQBe/lqA8m9T6xsgiYUSST21VJFAJKDEd5jZmX5ZJqfCA9pIJmayjYwkirCO9fPQsAyRJmR0bLZXOJ7g==}
+  vite-plugin-svgo@2.0.0:
+    resolution: {integrity: sha512-WaiOUlmt1fKw1w/WWJnx9gVk42D1BASKZmGCPpy6iTLE5iIemN2lim3MwI7Rffyt3aQnPrLfLSLnI8ZUJ9s49g==}
     peerDependencies:
       typescript: '>=4.9.4'
       vite: '>=4.0.2'
@@ -29382,16 +29377,6 @@ snapshots:
       picocolors: 1.1.1
       stable: 0.1.8
 
-  svgo@3.0.4:
-    dependencies:
-      '@trysound/sax': 0.2.0
-      commander: 7.2.0
-      css-select: 5.1.0
-      css-tree: 2.3.1
-      css-what: 6.1.0
-      csso: 5.0.5
-      picocolors: 1.1.1
-
   svgo@3.3.2:
     dependencies:
       '@trysound/sax': 0.2.0
@@ -30199,9 +30184,9 @@ snapshots:
       - rollup
       - supports-color
 
-  vite-plugin-svgo@1.6.2(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)):
+  vite-plugin-svgo@2.0.0(typescript@5.0.4)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)):
     dependencies:
-      svgo: 3.0.4
+      svgo: 3.3.2
       typescript: 5.0.4
       vite: 6.3.5(@types/node@22.15.17)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
 
