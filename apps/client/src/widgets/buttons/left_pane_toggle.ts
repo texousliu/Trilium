@@ -5,9 +5,12 @@ import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
 
 export default class LeftPaneToggleWidget extends CommandButtonWidget {
+    private currentLeftPaneVisible: boolean;
 
     constructor(isHorizontalLayout: boolean) {
         super();
+
+        this.currentLeftPaneVisible = options.is("leftPaneVisible");
 
         this.class(isHorizontalLayout ? "toggle-button" : "launcher-button");
 
@@ -21,7 +24,7 @@ export default class LeftPaneToggleWidget extends CommandButtonWidget {
 
         this.settings.title = () => (options.is("leftPaneVisible") ? t("left_pane_toggle.hide_panel") : t("left_pane_toggle.show_panel"));
 
-        this.settings.command = () => (options.is("leftPaneVisible") ? "hideLeftPane" : "showLeftPane");
+        this.settings.command = () => (this.currentLeftPaneVisible ? "hideLeftPane" : "showLeftPane");
 
         if (isHorizontalLayout) {
             this.settings.titlePlacement = "bottom";
@@ -29,13 +32,15 @@ export default class LeftPaneToggleWidget extends CommandButtonWidget {
     }
 
     refreshIcon() {
-        super.refreshIcon();
-
-        splitService.setupLeftPaneResizer(options.is("leftPaneVisible"));
+        if (document.hasFocus() || this.currentLeftPaneVisible === true) {
+            super.refreshIcon();
+            splitService.setupLeftPaneResizer(this.currentLeftPaneVisible);
+        }
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isOptionReloaded("leftPaneVisible")) {
+        if (loadResults.isOptionReloaded("leftPaneVisible") && document.hasFocus()) {
+            this.currentLeftPaneVisible = options.is("leftPaneVisible");
             this.refreshIcon();
         }
     }
