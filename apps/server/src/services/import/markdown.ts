@@ -25,7 +25,7 @@ class CustomMarkdownRenderer extends Renderer {
                 `<span class="math-tex">\\\[$1\\\]</span>`);
 
             // Inline math
-            text = text.replaceAll(/(?<!\\)\$(.+)\$/g,
+            text = text.replaceAll(/(?<!\\)\$(.+?)\$/g,
                 `<span class="math-tex">\\\($1\\\)</span>`);
         }
 
