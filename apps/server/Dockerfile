@@ -4,7 +4,8 @@ FROM node:22.15.0-bullseye-slim AS builder
     # Install native dependencies since we might be building cross-platform.
     WORKDIR /usr/src/app/build
     COPY ./dist/package.json ./dist/pnpm-lock.yaml ./docker/pnpm-workspace.yaml /usr/src/app/
-    RUN pnpm install --frozen-lockfile --prod && pnpm rebuild
+    # We have to use --no-frozen-lockfile due to CKEditor patches
+    RUN pnpm install --no-frozen-lockfile --prod && pnpm rebuild
 
 FROM node:22.15.0-bullseye-slim
     # Install only runtime dependencies

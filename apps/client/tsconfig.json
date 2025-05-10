@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../packages/ckeditor5"
+    },
+    {
       "path": "../../packages/commons"
     },
     {

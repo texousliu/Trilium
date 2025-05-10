@@ -49,7 +49,7 @@
     "jquery": "3.7.1",
     "katex": "0.16.22",
     "normalize.css": "8.0.1",
-    "@anthropic-ai/sdk": "0.41.0",
+    "@anthropic-ai/sdk": "0.50.3",
     "@braintree/sanitize-url": "7.1.1",
     "@triliumnext/commons": "workspace:*",
     "@triliumnext/express-partial-content": "workspace:*",
@@ -69,7 +69,7 @@
     "debounce": "2.2.0",
     "debug": "4.4.0",
     "ejs": "3.1.10",
-    "electron": "35.3.0",
+    "electron": "36.2.0",
     "electron-debug": "4.1.0",
     "electron-window-state": "5.0.3",
     "escape-html": "1.0.3",
@@ -124,10 +124,13 @@
   },
   "nx": {
     "name": "server",
-    "implicitDependencies": [
-      "client"
-    ],
     "targets": {
+      "build": {
+        "dependsOn": [
+          "^build",
+          "client:build"
+        ]
+      },
       "serve": {
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",
