@@ -7,6 +7,7 @@ import AbstractCodeTypeWidget from "./abstract_code_type_widget.js";
 import appContext from "../../components/app_context.js";
 import type { TouchBarItem } from "../../components/touch_bar.js";
 import { hasTouchBar } from "../../services/utils.js";
+import type { EditorConfig } from "@triliumnext/codemirror";
 
 const TPL = /*html*/`
 <div class="note-detail-code note-detail-printable">
@@ -41,6 +42,12 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         super.doRender();
     }
 
+    getExtraOpts(): Partial<EditorConfig> {
+        return {
+            onContentChanged: () => this.spacedUpdate.scheduleUpdate()
+        }
+    }
+
     // getExtraOpts(): Partial<CodeMirrorOpts> {
     //     return {
     //         keyMap: options.is("vimKeymapEnabled") ? "vim" : "default",
@@ -51,10 +58,6 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
     //         placeholder: t("editable_code.placeholder")
     //     };
     // }
-
-    onEditorInitialized() {
-        // this.codeEditor.on("change", () => this.spacedUpdate.scheduleUpdate());
-    }
 
     async doRefresh(note: FNote) {
         const blob = await this.note?.getBlob();
@@ -72,8 +75,7 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
     getData() {
         return {
-            // content: this.codeEditor.getValue()
-            content: ""
+            content: this.codeEditor.getText()
         };
     }
 

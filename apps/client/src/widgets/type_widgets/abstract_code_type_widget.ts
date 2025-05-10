@@ -1,5 +1,5 @@
 import TypeWidget from "./type_widget.js";
-import CodeMirror from "@triliumnext/codemirror";
+import CodeMirror, { type EditorConfig } from "@triliumnext/codemirror";
 
 /**
  * An abstract {@link TypeWidget} which implements the CodeMirror editor, meant to be used as a parent for
@@ -26,18 +26,19 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
     async #initEditor() {
         this.codeEditor = new CodeMirror({
             parent: this.$editor[0],
+            ...this.getExtraOpts()
         });
     }
 
-    // /**
-    //  * Can be extended in derived classes to add extra options to the CodeMirror constructor. The options are appended
-    //  * at the end, so it is possible to override the default values introduced by the abstract editor as well.
-    //  *
-    //  * @returns the extra options to be passed to the CodeMirror constructor.
-    //  */
-    // getExtraOpts(): Partial<CodeMirror> {
-    //     return {};
-    // }
+    /**
+     * Can be extended in derived classes to add extra options to the CodeMirror constructor. The options are appended
+     * at the end, so it is possible to override the default values introduced by the abstract editor as well.
+     *
+     * @returns the extra options to be passed to the CodeMirror constructor.
+     */
+    getExtraOpts(): Partial<EditorConfig> {
+        return {};
+    }
 
     /**
      * Called as soon as the CodeMirror library has been loaded and the editor was constructed. Can be extended in
