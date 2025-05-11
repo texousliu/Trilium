@@ -37,7 +37,6 @@ export default class CodeMirror extends EditorView {
         extensions = [
             ...extensions,
             languageCompartment.of([]),
-            historyCompartment.of(history()),
             syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
             highlightActiveLine(),
             highlightSelectionMatches(),
@@ -52,20 +51,24 @@ export default class CodeMirror extends EditorView {
             ])
         ]
 
-        if (config.readOnly) {
-            extensions.push(EditorState.readOnly.of(true));
-        }
+        if (!config.readOnly) {
+            // Logic specific to editable notes
+            if (config.placeholder) {
+                extensions.push(placeholder(config.placeholder));
+            }
 
-        if (config.placeholder) {
-            extensions.push(placeholder(config.placeholder));
+            if (config.onContentChanged) {
+                extensions.push(EditorView.updateListener.of((v) => this.#onDocumentUpdated(v)));
+            }
+
+            extensions.push(historyCompartment.of(history()));
+        } else {
+            // Logic specific to read-only notes
+            extensions.push(EditorState.readOnly.of(true));
         }
 
         if (config.lineWrapping) {
             extensions.push(EditorView.lineWrapping);
-        }
-
-        if (config.onContentChanged) {
-            extensions.push(EditorView.updateListener.of((v) => this.#onDocumentUpdated(v)));
         }
 
         super({
@@ -101,6 +104,10 @@ export default class CodeMirror extends EditorView {
      * Clears the history of undo/redo. Generally useful when changing to a new document.
      */
     clearHistory() {
+        if (this.config.readOnly) {
+            return;
+        }
+
         this.dispatch({
             effects: [ this.historyCompartment.reconfigure([]) ]
         });
