@@ -44,6 +44,7 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
     getExtraOpts(): Partial<EditorConfig> {
         return {
+            placeholder: t("editable_code.placeholder"),
             onContentChanged: () => this.spacedUpdate.scheduleUpdate()
         }
     }
@@ -55,7 +56,6 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
     //         gutters: ["CodeMirror-lint-markers"],
     //         tabindex: 300,
     //         dragDrop: false, // with true the editor inlines dropped files which is not what we expect
-    //         placeholder: t("editable_code.placeholder")
     //     };
     // }
 

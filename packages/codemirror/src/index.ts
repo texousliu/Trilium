@@ -1,5 +1,5 @@
 import { defaultKeymap, indentWithTab } from "@codemirror/commands";
-import { EditorView, keymap, lineNumbers, ViewUpdate, type EditorViewConfig, type KeyBinding } from "@codemirror/view";
+import { EditorView, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig, type KeyBinding } from "@codemirror/view";
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting } from "@codemirror/language";
 import { Compartment } from "@codemirror/state";
 import byMimeType from "./syntax_highlighting.js";
@@ -7,6 +7,7 @@ import byMimeType from "./syntax_highlighting.js";
 type ContentChangedListener = () => void;
 
 export interface EditorConfig extends EditorViewConfig {
+    placeholder?: string;
     onContentChanged?: ContentChangedListener;
 }
 
@@ -29,6 +30,10 @@ export default class CodeMirror extends EditorView {
 
         if (Array.isArray(config.extensions)) {
             extensions = [...extensions, ...config.extensions];
+        }
+
+        if (config.placeholder) {
+            extensions.push(placeholder(config.placeholder));
         }
 
         if (config.onContentChanged) {
