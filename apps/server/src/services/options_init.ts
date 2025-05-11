@@ -142,9 +142,12 @@ const defaultOptions: DefaultOption[] = [
         value: (optionsMap) => {
             switch (optionsMap.theme) {
                 case "light":
+                case "next-light":
+                    return "default:vs-code-light";
                 case "dark":
+                case "next-dark":
                 default:
-                    return "default:abyss";
+                    return "default:vs-code-dark";
             }
         },
         isSynced: false
