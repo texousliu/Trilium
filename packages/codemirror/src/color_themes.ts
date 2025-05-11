@@ -18,7 +18,7 @@ const themes: ThemeDefinition[] = [
         load: async () => (await import("@fsegurai/codemirror-theme-abcdef")).abcdef
     },
     {
-        id: "androidStudio",
+        id: "android-studio",
         name: "Android Studio",
         load: async () => (await import("@fsegurai/codemirror-theme-android-studio")).androidStudio
     },
@@ -28,12 +28,12 @@ const themes: ThemeDefinition[] = [
         load: async () => (await import("@fsegurai/codemirror-theme-andromeda")).andromeda
     },
     {
-        id: "basicDark",
+        id: "basic-dark",
         name: "Basic Dark",
         load: async () => (await import("@fsegurai/codemirror-theme-basic-dark")).basicDark
     },
     {
-        id: "basicLight",
+        id: "basic-light",
         name: "Basic Light",
         load: async () => (await import("@fsegurai/codemirror-theme-basic-light")).basicLight
     },
@@ -43,32 +43,32 @@ const themes: ThemeDefinition[] = [
         load: async () => (await import("@fsegurai/codemirror-theme-forest")).forest
     },
     {
-        id: "githubDark",
+        id: "github-dark",
         name: "GitHub Dark",
         load: async () => (await import("@fsegurai/codemirror-theme-github-dark")).githubDark
     },
     {
-        id: "githubLight",
+        id: "github-light",
         name: "GitHub Light",
         load: async () => (await import("@fsegurai/codemirror-theme-github-light")).githubLight
     },
     {
-        id: "gruvboxDark",
+        id: "gruvbox-dark",
         name: "Gruvbox Dark",
         load: async () => (await import("@fsegurai/codemirror-theme-gruvbox-dark")).gruvboxDark
     },
     {
-        id: "gruvboxLight",
+        id: "gruvbox-light",
         name: "Gruvbox Light",
         load: async () => (await import("@fsegurai/codemirror-theme-gruvbox-light")).gruvboxLight
     },
     {
-        id: "materialDark",
+        id: "material-mark",
         name: "Material Dark",
         load: async () => (await import("@fsegurai/codemirror-theme-material-dark")).materialDark
     },
     {
-        id: "materialLight",
+        id: "material-light",
         name: "Material Light",
         load: async () => (await import("@fsegurai/codemirror-theme-material-light")).materialLight
     },
@@ -88,22 +88,22 @@ const themes: ThemeDefinition[] = [
         load: async () => (await import("@fsegurai/codemirror-theme-palenight")).palenight
     },
     {
-        id: "solarizedDark",
+        id: "solarized-dark",
         name: "Solarized Dark",
         load: async () => (await import("@fsegurai/codemirror-theme-solarized-dark")).solarizedDark
     },
     {
-        id: "solarizedLight",
+        id: "solarized-light",
         name: "Solarized Light",
         load: async () => (await import("@fsegurai/codemirror-theme-solarized-light")).solarizedLight
     },
     {
-        id: "tokyoNightDay",
+        id: "tokyo-night-day",
         name: "Tokyo Night Day",
         load: async () => (await import("@fsegurai/codemirror-theme-tokyo-night-day")).tokyoNightDay
     },
     {
-        id: "tokyoNightStorm",
+        id: "tokyo-night-storm",
         name: "Tokyo Night Storm",
         load: async () => (await import("@fsegurai/codemirror-theme-tokyo-night-storm")).tokyoNightStorm
     },
@@ -113,12 +113,12 @@ const themes: ThemeDefinition[] = [
         load: async () => (await import("@fsegurai/codemirror-theme-volcano")).volcano
     },
     {
-        id: "vsCodeDark",
+        id: "vs-code-dark",
         name: "VS Code Dark",
         load: async () => (await import("@fsegurai/codemirror-theme-vscode-dark")).vsCodeDark
     },
     {
-        id: "vsCodeLight",
+        id: "vs-code-light",
         name: "VS Code Light",
         load: async () => (await import("@fsegurai/codemirror-theme-vscode-light")).vsCodeLight
     },
