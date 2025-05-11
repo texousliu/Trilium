@@ -22,8 +22,7 @@ const CODE_MIRROR: Library = {
             "node_modules/codemirror/addon/mode/simple.js",
             "node_modules/codemirror/addon/search/match-highlighter.js",
             "node_modules/codemirror/mode/meta.js",
-            "node_modules/codemirror/keymap/vim.js",
-            "libraries/codemirror/eslint.js"
+            "node_modules/codemirror/keymap/vim.js"
         ];
 
         const mimeTypes = mimeTypesService.getMimeTypes();

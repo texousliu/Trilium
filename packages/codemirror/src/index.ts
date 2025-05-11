@@ -1,7 +1,7 @@
 import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching } from "@codemirror/language";
-import { Compartment } from "@codemirror/state";
+import { Compartment, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
 import byMimeType from "./syntax_highlighting.js";
 
@@ -97,7 +97,7 @@ export default class CodeMirror extends EditorView {
     }
 
     async setMimeType(mime: string) {
-        const newExtension = [];
+        let newExtension: Extension[] = [];
 
         const correspondingSyntax = byMimeType[mime];
         if (correspondingSyntax) {
@@ -106,6 +106,8 @@ export default class CodeMirror extends EditorView {
             if ("token" in resolvedSyntax) {
                 const extension = StreamLanguage.define(resolvedSyntax);
                 newExtension.push(extension);
+            } else if (Array.isArray(resolvedSyntax)) {
+                newExtension = [ ...newExtension, ...resolvedSyntax ];
             } else {
                 newExtension.push(resolvedSyntax);
             }

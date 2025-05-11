@@ -1,17 +1,29 @@
-import { LanguageSupport, type StreamParser } from "@codemirror/language"
+import { LanguageSupport, type StreamParser } from "@codemirror/language";
+import {linter as linterExtension, lintGutter } from "@codemirror/lint";
+import type { Extension } from "@codemirror/state";
 
-async function buildJavaScript() {
-    const { javascript } = await import('@codemirror/lang-javascript');
-    return javascript();
+async function buildJavaScript(mimeType: string) {
+    const { javascript, esLint } = await import('@codemirror/lang-javascript');
+    const lint = (await import("./eslint.js")).lint;
+    const extensions: Extension[] = [ javascript() ];
+
+    const result = await lint(mimeType);
+    if ("linter" in result) {
+        const { linter, config } = result;
+        extensions.push(linterExtension(esLint(linter, config)));
+        extensions.push(lintGutter())
+    }
+
+    return extensions;
 }
 
-const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | LanguageSupport>) | null> = {
+const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | LanguageSupport | Extension[]>) | null> = {
     "text/plain": null,
 
     "application/dart": async () => (await import('@codemirror/legacy-modes/mode/clike')).dart,
     "application/edn": async () => (await import('@codemirror/legacy-modes/mode/clojure')).clojure,
-    "application/javascript;env=backend": buildJavaScript,
-    "application/javascript;env=frontend": buildJavaScript,
+    "application/javascript;env=backend": async () => buildJavaScript("application/javascript;env=backend"),
+    "application/javascript;env=frontend": async () => buildJavaScript("application/javascript;env=frontend"),
     "application/json": async () => (await import('@codemirror/legacy-modes/mode/javascript')).json,
     "application/ld+json": async () => (await import('@codemirror/legacy-modes/mode/javascript')).jsonld,
     "application/mbox": async () => (await import('@codemirror/legacy-modes/mode/mbox')).mbox,
