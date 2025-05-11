@@ -3,6 +3,7 @@ import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
 import TypeWidget from "./type_widget.js";
 import CodeMirror, { type EditorConfig } from "@triliumnext/codemirror";
+import type { EventData } from "../../components/app_context.js";
 
 export const DEFAULT_PREFIX = "default:";
 
@@ -103,4 +104,17 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
             // });
         }
     }
+
+    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.isOptionReloaded("codeNoteTheme")) {
+            const themeId = options.get("codeNoteTheme");
+            if (themeId?.startsWith(DEFAULT_PREFIX)) {
+                const theme = getThemeById(themeId.substring(DEFAULT_PREFIX.length));
+                if (theme) {
+                    await this.codeEditor.setTheme(theme);
+                }
+            }
+        }
+    }
+
 }
