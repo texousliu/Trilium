@@ -1,7 +1,8 @@
 import { defaultKeymap, indentWithTab } from "@codemirror/commands";
-import { EditorView, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
+import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit } from "@codemirror/language";
 import { Compartment } from "@codemirror/state";
+import { highlightSelectionMatches } from "@codemirror/search";
 import byMimeType from "./syntax_highlighting.js";
 
 type ContentChangedListener = () => void;
@@ -26,6 +27,8 @@ export default class CodeMirror extends EditorView {
             ]),
             languageCompartment.of([]),
             syntaxHighlighting(defaultHighlightStyle),
+            highlightActiveLine(),
+            highlightSelectionMatches(),
             lineNumbers(),
             indentUnit.of(" ".repeat(4))
         ];

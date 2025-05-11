@@ -1160,6 +1160,9 @@ importers:
       '@codemirror/legacy-modes':
         specifier: 6.5.1
         version: 6.5.1
+      '@codemirror/search':
+        specifier: 6.5.10
+        version: 6.5.10
       '@codemirror/view':
         specifier: 6.36.7
         version: 6.36.7
@@ -2159,6 +2162,9 @@ packages:
 
   '@codemirror/legacy-modes@6.5.1':
     resolution: {integrity: sha512-DJYQQ00N1/KdESpZV7jg9hafof/iBNp9h7TYo1SLMk86TWl9uDsVdho2dzd81K+v4retmK6mdC7WpuOQDytQqw==}
+
+  '@codemirror/search@6.5.10':
+    resolution: {integrity: sha512-RMdPdmsrUf53pb2VwflKGHEe1XVM07hI7vV2ntgw1dmqhimpatSJKva4VA9h4TLUDOD4EIF02201oZurpnEFsg==}
 
   '@codemirror/state@6.5.2':
     resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
@@ -6592,6 +6598,9 @@ packages:
 
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+
+  crelt@1.0.6:
+    resolution: {integrity: sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g==}
 
   cross-dirname@0.1.0:
     resolution: {integrity: sha512-+R08/oI0nl3vfPcqftZRpytksBXDzOUveBq/NBVx0sUp1axwzPQrKinNx5yd5sxPu8j1wIy8AfnVQ+5eFdha6Q==}
@@ -15020,6 +15029,15 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@ckeditor/ckeditor5-autoformat@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+
   '@ckeditor/ckeditor5-autoformat@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15666,6 +15684,14 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@ckeditor/ckeditor5-highlight@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-icons': 45.0.0
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+
   '@ckeditor/ckeditor5-highlight@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -16261,7 +16287,7 @@ snapshots:
       '@ckeditor/ckeditor5-find-and-replace': 45.0.0
       '@ckeditor/ckeditor5-font': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-highlight': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-highlight': 45.0.0
       '@ckeditor/ckeditor5-icons': 45.0.0
       '@ckeditor/ckeditor5-image': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-link': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -16403,6 +16429,12 @@ snapshots:
   '@codemirror/legacy-modes@6.5.1':
     dependencies:
       '@codemirror/language': 6.11.0
+
+  '@codemirror/search@6.5.10':
+    dependencies:
+      '@codemirror/state': 6.5.2
+      '@codemirror/view': 6.36.7
+      crelt: 1.0.6
 
   '@codemirror/state@6.5.2':
     dependencies:
@@ -21577,7 +21609,7 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-adapter-ckfinder': 45.0.0
       '@ckeditor/ckeditor5-alignment': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-autoformat': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-autoformat': 45.0.0
       '@ckeditor/ckeditor5-autosave': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-basic-styles': 45.0.0
       '@ckeditor/ckeditor5-block-quote': 45.0.0
@@ -21602,7 +21634,7 @@ snapshots:
       '@ckeditor/ckeditor5-font': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-fullscreen': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-highlight': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-highlight': 45.0.0
       '@ckeditor/ckeditor5-horizontal-line': 45.0.0
       '@ckeditor/ckeditor5-html-embed': 45.0.0
       '@ckeditor/ckeditor5-html-support': 45.0.0
@@ -22023,6 +22055,8 @@ snapshots:
       readable-stream: 4.7.0
 
   create-require@1.1.1: {}
+
+  crelt@1.0.6: {}
 
   cross-dirname@0.1.0: {}
 
