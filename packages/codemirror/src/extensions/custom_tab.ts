@@ -1,5 +1,5 @@
 import { indentLess, indentMore } from "@codemirror/commands";
-import { EditorSelection, type ChangeSpec } from "@codemirror/state";
+import { EditorSelection, EditorState, type ChangeSpec } from "@codemirror/state";
 import type { KeyBinding } from "@codemirror/view";
 
 /**
@@ -14,6 +14,10 @@ const smartIndentWithTab: KeyBinding[] = [
     {
         key: "Tab",
         run({ state, dispatch }) {
+            if (state.facet(EditorState.readOnly)) {
+                return false;
+            }
+
             const { selection } = state;
             const changes = [];
             const newSelections = [];
