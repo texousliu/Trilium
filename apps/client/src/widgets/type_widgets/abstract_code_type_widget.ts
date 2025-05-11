@@ -1,3 +1,4 @@
+import options from "../../services/options.js";
 import TypeWidget from "./type_widget.js";
 import CodeMirror, { type EditorConfig } from "@triliumnext/codemirror";
 
@@ -26,6 +27,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
     async #initEditor() {
         this.codeEditor = new CodeMirror({
             parent: this.$editor[0],
+            lineWrapping: options.is("codeLineWrapEnabled"),
             ...this.getExtraOpts()
         });
     }

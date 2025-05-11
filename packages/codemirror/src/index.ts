@@ -8,6 +8,7 @@ type ContentChangedListener = () => void;
 
 export interface EditorConfig extends EditorViewConfig {
     placeholder?: string;
+    lineWrapping?: boolean;
     onContentChanged?: ContentChangedListener;
 }
 
@@ -35,6 +36,10 @@ export default class CodeMirror extends EditorView {
 
         if (config.placeholder) {
             extensions.push(placeholder(config.placeholder));
+        }
+
+        if (config.lineWrapping) {
+            extensions.push(EditorView.lineWrapping);
         }
 
         if (config.onContentChanged) {
