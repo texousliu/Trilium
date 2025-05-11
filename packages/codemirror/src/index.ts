@@ -1,4 +1,4 @@
-import { defaultKeymap, indentWithTab } from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching } from "@codemirror/language";
 import { Compartment } from "@codemirror/state";
@@ -21,17 +21,19 @@ export default class CodeMirror extends EditorView {
     constructor(config: EditorConfig) {
         const languageCompartment = new Compartment();
         let extensions = [
-            keymap.of([
-                ...defaultKeymap,
-                indentWithTab
-            ]),
             languageCompartment.of([]),
             syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
             highlightActiveLine(),
             highlightSelectionMatches(),
             bracketMatching(),
             lineNumbers(),
-            indentUnit.of(" ".repeat(4))
+            indentUnit.of(" ".repeat(4)),
+            history(),
+            keymap.of([
+                ...defaultKeymap,
+                ...historyKeymap,
+                indentWithTab
+            ]),
         ];
 
         if (Array.isArray(config.extensions)) {
