@@ -1,38 +1,45 @@
 import { indentLess, indentMore } from "@codemirror/commands";
+import { EditorSelection, type ChangeSpec } from "@codemirror/state";
 import type { KeyBinding } from "@codemirror/view";
 
 const smartIndentWithTab: KeyBinding[] = [
     {
         key: "Tab",
-        run({ state, dispatch}) {
+        run({ state, dispatch }) {
             const { selection } = state;
 
-            for (const range of selection.ranges) {
-                if (!range.empty) {
-                    // Allow default behaviour.
-                    return false;
-                }
+            // Handle selection indenting normally
+            if (selection.ranges.some(range => !range.empty)) {
+                return indentMore({ state, dispatch });
+            }
 
+            const changes = [];
+            const newSelections = [];
+
+            for (let range of selection.ranges) {
                 const line = state.doc.lineAt(range.head);
                 const beforeCursor = state.doc.sliceString(line.from, range.head);
 
                 if (/^\s*$/.test(beforeCursor)) {
-                    // Only whitespace before cursor: indent line
-                    return indentMore({state, dispatch});
+                    // Only whitespace before cursor → indent line
+                    return indentMore({ state, dispatch });
                 } else {
-                    // Insert a tab character
-                    const cursor = range.head;
-                    dispatch(state.update({
-                        changes: {
-                            from: cursor,
-                            insert: "\t"
-                        },
-                        selection: { anchor: cursor + 1 },
+                    // Insert a tab character at cursor
+                    changes.push({ from: range.head, to: range.head, insert: "\t" });
+                    newSelections.push(EditorSelection.cursor(range.head + 1));
+                }
+            }
+
+            if (changes.length) {
+                dispatch(
+                    state.update({
+                        changes,
+                        selection: EditorSelection.create(newSelections),
                         scrollIntoView: true,
                         userEvent: "input"
-                    }));
-                    return true;
-                }
+                    })
+                );
+                return true;
             }
 
             return false;
