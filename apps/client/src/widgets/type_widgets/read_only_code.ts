@@ -39,7 +39,7 @@ export default class ReadOnlyCodeTypeWidget extends AbstractCodeTypeWidget {
         this.show();
     }
 
-    getExtraOpts(): Partial<CodeMirrorOpts> {
+    getExtraOpts() {
         return {
             readOnly: true
         };

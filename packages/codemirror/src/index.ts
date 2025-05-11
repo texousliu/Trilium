@@ -1,7 +1,7 @@
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching, foldGutter } from "@codemirror/language";
-import { Compartment, type Extension } from "@codemirror/state";
+import { Compartment, EditorState, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
 import { vim } from "@replit/codemirror-vim";
 import byMimeType from "./syntax_highlighting.js";
@@ -14,6 +14,7 @@ export interface EditorConfig {
     placeholder?: string;
     lineWrapping?: boolean;
     vimKeybindings?: boolean;
+    readOnly?: boolean;
     onContentChanged?: ContentChangedListener;
 }
 
@@ -50,6 +51,10 @@ export default class CodeMirror extends EditorView {
                 ...smartIndentWithTab
             ])
         ]
+
+        if (config.readOnly) {
+            extensions.push(EditorState.readOnly.of(true));
+        }
 
         if (config.placeholder) {
             extensions.push(placeholder(config.placeholder));
