@@ -16,4 +16,14 @@ const themes: ThemeDefinition[] = [
     }
 ]
 
+export function getThemeById(id: string) {
+    for (const theme of themes) {
+        if (theme.id === id) {
+            return theme;
+        }
+    }
+
+    return null;
+}
+
 export default themes;

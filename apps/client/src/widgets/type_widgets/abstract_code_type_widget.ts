@@ -1,3 +1,4 @@
+import { getThemeById } from "@triliumnext/codemirror";
 import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
 import TypeWidget from "./type_widget.js";
@@ -31,6 +32,12 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
             lineWrapping: options.is("codeLineWrapEnabled"),
             ...this.getExtraOpts()
         });
+
+        // Load the theme.
+        const theme = getThemeById(options.get("codeNoteTheme"));
+        if (theme) {
+            await this.codeEditor.setTheme(theme);
+        }
     }
 
     /**

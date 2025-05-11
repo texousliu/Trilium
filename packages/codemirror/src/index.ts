@@ -8,7 +8,7 @@ import byMimeType from "./syntax_highlighting.js";
 import smartIndentWithTab from "./extensions/custom_tab.js";
 import type { ThemeDefinition } from "./color_themes.js";
 
-export { default as ColorThemes, type ThemeDefinition } from "./color_themes.js";
+export { default as ColorThemes, type ThemeDefinition, getThemeById } from "./color_themes.js";
 
 type ContentChangedListener = () => void;
 
@@ -42,8 +42,9 @@ export default class CodeMirror extends EditorView {
         extensions = [
             ...extensions,
             languageCompartment.of([]),
-            syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-            themeCompartment.of([]),
+            themeCompartment.of([
+                syntaxHighlighting(defaultHighlightStyle, { fallback: true })
+            ]),
             highlightActiveLine(),
             highlightSelectionMatches(),
             bracketMatching(),
@@ -108,7 +109,10 @@ export default class CodeMirror extends EditorView {
     }
 
     async setTheme(theme: ThemeDefinition) {
-        this.themeCompartment.reconfigure(await theme.load());
+        const extension = await theme.load();
+        this.dispatch({
+            effects: [ this.themeCompartment.reconfigure([ extension ]) ]
+        });
     }
 
     /**
