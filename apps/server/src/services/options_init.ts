@@ -137,6 +137,18 @@ const defaultOptions: DefaultOption[] = [
 
     // Appearance
     { name: "splitEditorOrientation", value: "horizontal", isSynced: true },
+    {
+        name: "codeNoteTheme",
+        value: (optionsMap) => {
+            switch (optionsMap.theme) {
+                case "light":
+                case "dark":
+                default:
+                    return "default:abyss";
+            }
+        },
+        isSynced: false
+    },
 
     // Internationalization
     { name: "locale", value: "en", isSynced: true },

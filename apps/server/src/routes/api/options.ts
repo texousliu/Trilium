@@ -23,6 +23,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "theme",
     "codeBlockTheme",
     "codeBlockWordWrap",
+    "codeNoteTheme",
     "syncServerHost",
     "syncServerTimeout",
     "syncProxy",
