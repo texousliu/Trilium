@@ -141,6 +141,7 @@ export default class CodeTheme extends OptionsWidget {
         }
         this.editor.setText(SAMPLE_CODE);
         this.editor.setMimeType(SAMPLE_MIME);
+        this.editor.setLineWrapping(options.codeLineWrapEnabled === "true");
 
         // Load the theme.
         const themeId = options.codeNoteTheme;

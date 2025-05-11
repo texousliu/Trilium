@@ -27,11 +27,13 @@ export default class CodeMirror extends EditorView {
     private languageCompartment: Compartment;
     private historyCompartment: Compartment;
     private themeCompartment: Compartment;
+    private lineWrappingCompartment: Compartment;
 
     constructor(config: EditorConfig) {
         const languageCompartment = new Compartment();
         const historyCompartment = new Compartment();
         const themeCompartment = new Compartment();
+        const lineWrappingCompartment = new Compartment();
 
         let extensions: Extension[] = [];
 
@@ -42,6 +44,7 @@ export default class CodeMirror extends EditorView {
         extensions = [
             ...extensions,
             languageCompartment.of([]),
+            lineWrappingCompartment.of(config.lineWrapping ? EditorView.lineWrapping : []),
             themeCompartment.of([
                 syntaxHighlighting(defaultHighlightStyle, { fallback: true })
             ]),
@@ -74,10 +77,6 @@ export default class CodeMirror extends EditorView {
             extensions.push(EditorState.readOnly.of(true));
         }
 
-        if (config.lineWrapping) {
-            extensions.push(EditorView.lineWrapping);
-        }
-
         super({
             parent: config.parent,
             extensions
@@ -86,6 +85,7 @@ export default class CodeMirror extends EditorView {
         this.languageCompartment = languageCompartment;
         this.historyCompartment = historyCompartment;
         this.themeCompartment = themeCompartment;
+        this.lineWrappingCompartment = lineWrappingCompartment;
     }
 
     #onDocumentUpdated(v: ViewUpdate) {
@@ -112,6 +112,12 @@ export default class CodeMirror extends EditorView {
         const extension = await theme.load();
         this.dispatch({
             effects: [ this.themeCompartment.reconfigure([ extension ]) ]
+        });
+    }
+
+    setLineWrapping(wrapping: boolean) {
+        this.dispatch({
+            effects: [ this.lineWrappingCompartment.reconfigure(wrapping ? EditorView.lineWrapping : []) ]
         });
     }
 
