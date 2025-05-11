@@ -134,7 +134,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/x-scss": async () => (await import('@codemirror/legacy-modes/mode/css')).sCSS,
     "text/x-sh": async () => (await import('@codemirror/legacy-modes/mode/shell')).shell,
     "text/x-slim": null,
-    "text/x-smarty": null,
+    "text/x-smarty": async () => ((await import('@ssddanbrown/codemirror-lang-smarty')).smarty),
     "text/x-sml": async () => (await import('@codemirror/legacy-modes/mode/mllike')).sml,
     "text/x-solr": async () => (await import('@codemirror/legacy-modes/mode/solr')).solr,
     "text/x-soy": null,
