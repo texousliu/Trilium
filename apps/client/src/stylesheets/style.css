@@ -435,6 +435,10 @@ body .cm-editor .cm-gutters {
     border-right: none;
 }
 
+body .cm-editor .cm-placeholder {
+    color: #999 !important;
+}
+
 #sql-console-query {
     height: 150px;
     width: 100%;
