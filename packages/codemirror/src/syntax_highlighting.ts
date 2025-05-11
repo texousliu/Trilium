@@ -127,6 +127,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/x-mssql": async () => (await import('@codemirror/legacy-modes/mode/sql')).msSQL,
     "text/x-mumps": async () => (await import('@codemirror/legacy-modes/mode/mumps')).mumps,
     "text/x-mysql": async () => (await import('@codemirror/legacy-modes/mode/sql')).mySQL,
+    "text/x-nix": async () => (await import('@replit/codemirror-lang-nix')).nix(),
     "text/x-nginx-conf": async () => (await import('@codemirror/legacy-modes/mode/nginx')).nginx,
     "text/x-nsis": async () => (await import('@codemirror/legacy-modes/mode/nsis')).nsis,
     "text/x-objectivec": async () => (await import('@codemirror/legacy-modes/mode/clike')).objectiveC,
