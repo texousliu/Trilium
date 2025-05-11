@@ -132,7 +132,14 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         super();
         this.editorTypeWidget = new EditableCodeTypeWidget();
         this.editorTypeWidget.isEnabled = () => true;
-        this.editorTypeWidget.getExtraOpts = this.buildEditorExtraOptions;
+
+        const defaultOptions = this.editorTypeWidget.getExtraOpts();
+        this.editorTypeWidget.getExtraOpts = () => {
+            return {
+                ...defaultOptions,
+                ...this.buildEditorExtraOptions()
+            };
+        };
     }
 
     doRender(): void {
