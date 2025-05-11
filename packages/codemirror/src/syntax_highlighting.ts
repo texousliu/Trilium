@@ -160,7 +160,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/x-vb": async () => (await import('@codemirror/legacy-modes/mode/vb')).vb,
     "text/x-verilog": async () => (await import('@codemirror/legacy-modes/mode/verilog')).verilog,
     "text/x-vhdl": async () => (await import('@codemirror/legacy-modes/mode/vhdl')).vhdl,
-    "text/x-vue": null,
+    "text/x-vue": async () => ((await import('@codemirror/lang-vue')).vue()),
     "text/x-webidl": async () => (await import('@codemirror/legacy-modes/mode/webidl')).webIDL,
     "text/x-xu": async () => (await import('@codemirror/legacy-modes/mode/mscgen')).xu,
     "text/x-yacas": async () => (await import('@codemirror/legacy-modes/mode/yacas')).yacas,
