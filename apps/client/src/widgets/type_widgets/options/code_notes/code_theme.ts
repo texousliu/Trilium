@@ -92,13 +92,15 @@ const TPL = /*html*/`\
         </div>
     </div>
 
-    <div class="form-group row">
-        <pre class="note-detail-readonly-code-content">
-        </pre>
+    <div class="note-detail-readonly-code-content">
     </div>
 
     <style>
-        .note-detail-readonly-code-content .cm-editor {
+        .options-section .note-detail-readonly-code-content {
+            margin: 0;
+        }
+
+        .options-section .note-detail-readonly-code-content .cm-editor {
             height: 200px;
         }
     </style>
