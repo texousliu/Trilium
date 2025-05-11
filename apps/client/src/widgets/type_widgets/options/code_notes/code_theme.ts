@@ -1,6 +1,8 @@
 import type { OptionMap } from "@triliumnext/commons";
 import OptionsWidget from "../options_widget";
 import server from "../../../../services/server";
+import CodeMirror, { getThemeById } from "@triliumnext/codemirror";
+import { DEFAULT_PREFIX } from "../../abstract_code_type_widget";
 
 // TODO: Deduplicate
 interface Theme {
@@ -9,6 +11,75 @@ interface Theme {
 }
 
 type Response = Theme[];
+
+const SAMPLE_MIME = "text/typescript";
+const SAMPLE_CODE = `\
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
+import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching, foldGutter } from "@codemirror/language";
+import { Compartment, EditorState, type Extension } from "@codemirror/state";
+import { highlightSelectionMatches } from "@codemirror/search";
+import { vim } from "@replit/codemirror-vim";
+import byMimeType from "./syntax_highlighting.js";
+import smartIndentWithTab from "./extensions/custom_tab.js";
+import type { ThemeDefinition } from "./color_themes.js";
+
+export { default as ColorThemes, type ThemeDefinition, getThemeById } from "./color_themes.js";
+
+type ContentChangedListener = () => void;
+
+export interface EditorConfig {
+    parent: HTMLElement;
+    placeholder?: string;
+    lineWrapping?: boolean;
+    vimKeybindings?: boolean;
+    readOnly?: boolean;
+    onContentChanged?: ContentChangedListener;
+}
+
+export default class CodeMirror extends EditorView {
+
+    private config: EditorConfig;
+    private languageCompartment: Compartment;
+    private historyCompartment: Compartment;
+    private themeCompartment: Compartment;
+
+    constructor(config: EditorConfig) {
+        const languageCompartment = new Compartment();
+        const historyCompartment = new Compartment();
+        const themeCompartment = new Compartment();
+
+        let extensions: Extension[] = [];
+
+        if (config.vimKeybindings) {
+            extensions.push(vim());
+        }
+
+        extensions = [
+            ...extensions,
+            languageCompartment.of([]),
+            themeCompartment.of([
+                syntaxHighlighting(defaultHighlightStyle, { fallback: true })
+            ]),
+            highlightActiveLine(),
+            highlightSelectionMatches(),
+            bracketMatching(),
+            lineNumbers(),
+            foldGutter(),
+            indentUnit.of(" ".repeat(4)),
+            keymap.of([
+                ...defaultKeymap,
+                ...historyKeymap,
+                ...smartIndentWithTab
+            ])
+        ]
+
+        super({
+            parent: config.parent,
+            extensions
+        });
+    }
+}`;
 
 const TPL = /*html*/`\
 <div class="options-section">
@@ -20,12 +91,25 @@ const TPL = /*html*/`\
             <select id="color-theme" class="theme-select form-select"></select>
         </div>
     </div>
+
+    <div class="form-group row">
+        <pre class="note-detail-readonly-code-content">
+        </pre>
+    </div>
+
+    <style>
+        .note-detail-readonly-code-content .cm-editor {
+            height: 200px;
+        }
+    </style>
 </div>
 `;
 
 export default class CodeTheme extends OptionsWidget {
 
     private $themeSelect!: JQuery<HTMLElement>;
+    private $sampleEl!: JQuery<HTMLElement>;
+    private editor?: CodeMirror;
 
     doRender() {
         this.$widget = $(TPL);
@@ -34,6 +118,26 @@ export default class CodeTheme extends OptionsWidget {
             const newTheme = String(this.$themeSelect.val());
             await server.put(`options/codeNoteTheme/${newTheme}`);
         });
+        this.$sampleEl = this.$widget.find(".note-detail-readonly-code-content");
+    }
+
+    async #setupPreview(options: OptionMap) {
+        if (!this.editor) {
+            this.editor = new CodeMirror({
+                parent: this.$sampleEl[0],
+            });
+        }
+        this.editor.setMimeType(SAMPLE_MIME);
+        this.editor.setText(SAMPLE_CODE);
+
+        // Load the theme.
+        const themeId = options.codeNoteTheme;
+        if (themeId?.startsWith(DEFAULT_PREFIX)) {
+            const theme = getThemeById(themeId.substring(DEFAULT_PREFIX.length));
+            if (theme) {
+                await this.editor.setTheme(theme);
+            }
+        }
     }
 
     async optionsLoaded(options: OptionMap) {
@@ -46,6 +150,7 @@ export default class CodeTheme extends OptionsWidget {
         }
 
         this.$themeSelect.val(options.codeNoteTheme);
+        this.#setupPreview(options);
     }
 
 }
