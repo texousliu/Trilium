@@ -44,6 +44,7 @@ import { t } from "i18next";
 import LanguageOptions from "./options/i18n/language.js";
 import type { EventData, EventNames } from "../../components/app_context.js";
 import type BasicWidget from "../basic_widget.js";
+import CodeTheme from "./options/code_notes/code_theme.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -89,6 +90,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     ],
     _optionsCodeNotes: [
         CodeEditorOptions,
+        CodeTheme,
         CodeMimeTypesOptions,
         CodeAutoReadOnlySizeOptions
     ],
