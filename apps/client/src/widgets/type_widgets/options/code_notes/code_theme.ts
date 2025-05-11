@@ -90,6 +90,13 @@ const TPL = /*html*/`\
             <label for="color-theme">Color scheme</label>
             <select id="color-theme" class="theme-select form-select"></select>
         </div>
+
+        <div class="col-md-6 side-checkbox">
+            <label class="form-check tn-checkbox">
+                <input type="checkbox" class="word-wrap form-check-input" />
+                Word Wrapping
+            </label>
+        </div>
     </div>
 
     <div class="note-detail-readonly-code-content">
@@ -111,6 +118,7 @@ export default class CodeTheme extends OptionsWidget {
 
     private $themeSelect!: JQuery<HTMLElement>;
     private $sampleEl!: JQuery<HTMLElement>;
+    private $lineWrapEnabled!: JQuery<HTMLElement>;
     private editor?: CodeMirror;
 
     doRender() {
@@ -121,6 +129,8 @@ export default class CodeTheme extends OptionsWidget {
             await server.put(`options/codeNoteTheme/${newTheme}`);
         });
         this.$sampleEl = this.$widget.find(".note-detail-readonly-code-content");
+        this.$lineWrapEnabled = this.$widget.find(".word-wrap");
+        this.$lineWrapEnabled.on("change", () => this.updateCheckboxOption("codeLineWrapEnabled", this.$lineWrapEnabled));
     }
 
     async #setupPreview(options: OptionMap) {
@@ -153,6 +163,7 @@ export default class CodeTheme extends OptionsWidget {
 
         this.$themeSelect.val(options.codeNoteTheme);
         this.#setupPreview(options);
+        this.setCheckboxState(this.$lineWrapEnabled, options.codeLineWrapEnabled);
     }
 
 }
