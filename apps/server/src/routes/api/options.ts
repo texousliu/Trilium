@@ -198,7 +198,7 @@ function getSyntaxHighlightingThemes() {
 function getCodeNoteThemes() {
     return ColorThemes.map((theme) => ({
         val: `default:${theme.id}`,
-        title: theme.id
+        title: theme.name
     }));
 }
 
