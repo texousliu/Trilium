@@ -1,12 +1,17 @@
 import { LanguageSupport, type StreamParser } from "@codemirror/language"
 
+async function buildJavaScript() {
+    const { javascript } = await import('@codemirror/lang-javascript');
+    return javascript();
+}
+
 const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | LanguageSupport>) | null> = {
     "text/plain": null,
 
     "application/dart": async () => (await import('@codemirror/legacy-modes/mode/clike')).dart,
     "application/edn": async () => (await import('@codemirror/legacy-modes/mode/clojure')).clojure,
-    "application/javascript;env=backend": async () => (await import('@codemirror/legacy-modes/mode/javascript')).javascript,
-    "application/javascript;env=frontend": async () => (await import('@codemirror/legacy-modes/mode/javascript')).javascript,
+    "application/javascript;env=backend": buildJavaScript,
+    "application/javascript;env=frontend": buildJavaScript,
     "application/json": async () => (await import('@codemirror/legacy-modes/mode/javascript')).json,
     "application/ld+json": async () => (await import('@codemirror/legacy-modes/mode/javascript')).jsonld,
     "application/mbox": async () => (await import('@codemirror/legacy-modes/mode/mbox')).mbox,
