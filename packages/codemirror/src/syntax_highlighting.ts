@@ -27,7 +27,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "message/http": async () => (await import('@codemirror/legacy-modes/mode/http')).http,
     "text/apl": async () => (await import('@codemirror/legacy-modes/mode/apl')).apl,
     "text/coffeescript": async () => (await import('@codemirror/legacy-modes/mode/coffeescript')).coffeeScript,
-    "text/css": async () => (await import('@codemirror/legacy-modes/mode/css')).css,
+    "text/css": async () => (await import('@codemirror/lang-css')).css(),
     "text/html": async () => (await import('@codemirror/lang-html')).html(),
     "text/jinja2": async () => (await import('@codemirror/legacy-modes/mode/jinja2')).jinja2,
     "text/jsx": null,
