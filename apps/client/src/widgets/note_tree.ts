@@ -230,7 +230,9 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 const notePath = treeService.getNotePath(node);
 
                 if (notePath) {
-                    appContext.tabManager.openTabWithNoteWithHoisting(notePath);
+                    appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
+                        activate: e.shiftKey ? true : false
+                    });
                 }
 
                 e.stopPropagation();
@@ -343,11 +345,12 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             },
             scrollParent: this.$tree,
             minExpandLevel: 2, // root can't be collapsed
-            click: (event, data): boolean => {
+            click: (event: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement>, data): boolean => {
                 this.activityDetected();
 
                 const targetType = data.targetType;
                 const node = data.node;
+                const ctrlKey = utils.isCtrlKey(event);
 
                 if (node.isSelected() && targetType === "icon") {
                     this.triggerCommand("openBulkActionsDialog", {
@@ -356,7 +359,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
                     return false;
                 } else if (targetType === "title" || targetType === "icon") {
-                    if (event.shiftKey) {
+                    if (event.shiftKey && !ctrlKey) {
                         const activeNode = this.getActiveNode();
 
                         if (activeNode.getParent() !== node.getParent()) {
@@ -381,9 +384,11 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                         }
 
                         node.setFocus(true);
-                    } else if ((!utils.isMac() && event.ctrlKey) || (utils.isMac() && event.metaKey)) {
+                    } else if (ctrlKey) {
                         const notePath = treeService.getNotePath(node);
-                        appContext.tabManager.openTabWithNoteWithHoisting(notePath);
+                        appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
+                            activate: event.shiftKey ? true : false
+                        });
                     } else if (event.altKey) {
                         node.setSelected(!node.isSelected());
                         node.setFocus(true);
