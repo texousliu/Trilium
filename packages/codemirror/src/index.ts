@@ -68,8 +68,14 @@ export default class CodeMirror extends EditorView {
 
         const correspondingSyntax = byMimeType[mime];
         if (correspondingSyntax) {
-            const extension = StreamLanguage.define(await correspondingSyntax());
-            newExtension.push(extension);
+            const resolvedSyntax = await correspondingSyntax();
+
+            if ("token" in resolvedSyntax) {
+                const extension = StreamLanguage.define(resolvedSyntax);
+                newExtension.push(extension);
+            } else {
+                newExtension.push(resolvedSyntax());
+            }
         }
 
         this.dispatch({

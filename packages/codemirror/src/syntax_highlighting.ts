@@ -1,6 +1,6 @@
-import { type StreamParser } from "@codemirror/language"
+import { LanguageSupport, type StreamParser } from "@codemirror/language"
 
-const byMimeType: Record<string, (() => Promise<StreamParser<unknown>>) | null> = {
+const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | (() => LanguageSupport)>) | null> = {
     "text/plain": null,
     "text/apl": async () => (await import('@codemirror/legacy-modes/mode/apl')).apl,
     "text/x-ttcn-asn": async () => (await import('@codemirror/legacy-modes/mode/ttcn')).ttcn,
@@ -134,7 +134,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown>>) | null> 
     "text/x-swift": async () => (await import('@codemirror/legacy-modes/mode/swift')).swift,
     "text/x-systemverilog": null,
     "text/x-tcl": async () => (await import('@codemirror/legacy-modes/mode/tcl')).tcl,
-    "text/x-hcl": null,
+    "text/x-hcl": async () => (await import('codemirror-lang-hcl')).hcl,
     "text/x-textile": async () => (await import('@codemirror/legacy-modes/mode/textile')).textile,
     "text/x-tiddlywiki": async () => (await import('@codemirror/legacy-modes/mode/tiddlywiki')).tiddlyWiki,
     "text/tiki": async () => (await import('@codemirror/legacy-modes/mode/tiki')).tiki,
