@@ -70,6 +70,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | (() => L
     "text/x-fortran": async () => (await import('@codemirror/legacy-modes/mode/fortran')).fortran,
     "text/x-fsharp": async () => (await import('@codemirror/legacy-modes/mode/mllike')).fSharp,
     "text/x-gas": async () => (await import('@codemirror/legacy-modes/mode/gas')).gas,
+    "text/x-gdscript": async () => (await import('./languages/gdscript.js')).gdscript,
     "text/x-gfm": null,
     "text/x-go": async () => (await import('@codemirror/legacy-modes/mode/go')).go,
     "text/x-groovy": async () => (await import('@codemirror/legacy-modes/mode/groovy')).groovy,
@@ -159,8 +160,8 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | (() => L
     "text/x-xu": async () => (await import('@codemirror/legacy-modes/mode/mscgen')).xu,
     "text/x-yacas": async () => (await import('@codemirror/legacy-modes/mode/yacas')).yacas,
     "text/x-yaml": async () => (await import('@codemirror/legacy-modes/mode/yaml')).yaml,
-    "text/x-z80": async () => (await import('@codemirror/legacy-modes/mode/z80')).z80
-    "text/xml": async () => (await import('@codemirror/legacy-modes/mode/xml')).xml,
+    "text/x-z80": async () => (await import('@codemirror/legacy-modes/mode/z80')).z80,
+    "text/xml": async () => (await import('@codemirror/legacy-modes/mode/xml')).xml
 }
 
 export default byMimeType;

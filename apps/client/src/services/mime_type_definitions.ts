@@ -68,6 +68,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "Forth", mime: "text/x-forth" },
     { title: "Fortran", mime: "text/x-fortran", highlightJs: "fortran" },
     { title: "Gas", mime: "text/x-gas" },
+    { title: "GDScript (Godot)", mime: "text/x-gdscript" },
     { title: "Gherkin", mime: "text/x-feature", highlightJs: "gherkin" },
     { title: "GitHub Flavored Markdown", mime: "text/x-gfm", highlightJs: "markdown" },
     { title: "Go", mime: "text/x-go", highlightJs: "go", default: true },
