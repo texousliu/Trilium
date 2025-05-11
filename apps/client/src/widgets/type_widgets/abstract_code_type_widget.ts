@@ -115,6 +115,10 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
                 }
             }
         }
+
+        if (loadResults.isOptionReloaded("codeLineWrapEnabled")) {
+            this.codeEditor.setLineWrapping(options.is("codeLineWrapEnabled"));
+        }
     }
 
 }
