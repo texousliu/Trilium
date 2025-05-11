@@ -156,7 +156,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/x-ttcn-asn": async () => (await import('@codemirror/legacy-modes/mode/ttcn')).ttcn,
     "text/x-ttcn-cfg": async () => (await import('@codemirror/legacy-modes/mode/ttcn-cfg')).ttcnCfg,
     "text/x-ttcn": async () => (await import('@codemirror/legacy-modes/mode/ttcn')).ttcn,
-    "text/x-twig": null,
+    "text/x-twig": async () => ((await import('@ssddanbrown/codemirror-lang-twig')).twig()),
     "text/x-vb": async () => (await import('@codemirror/legacy-modes/mode/vb')).vb,
     "text/x-verilog": async () => (await import('@codemirror/legacy-modes/mode/verilog')).verilog,
     "text/x-vhdl": async () => (await import('@codemirror/legacy-modes/mode/vhdl')).vhdl,
