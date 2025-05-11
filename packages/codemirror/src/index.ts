@@ -26,7 +26,7 @@ export default class CodeMirror extends EditorView {
                 indentWithTab
             ]),
             languageCompartment.of([]),
-            syntaxHighlighting(defaultHighlightStyle),
+            syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
             highlightActiveLine(),
             highlightSelectionMatches(),
             bracketMatching(),
