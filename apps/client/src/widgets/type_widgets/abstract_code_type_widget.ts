@@ -1,3 +1,4 @@
+import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
 import TypeWidget from "./type_widget.js";
 import CodeMirror, { type EditorConfig } from "@triliumnext/codemirror";
@@ -55,22 +56,12 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
     /**
      * Must be called by the derived classes in `#doRefresh(note)` in order to react to changes.
      *
-     * @param {*} note the note that was changed.
-     * @param {*} content the new content of the note.
+     * @param the note that was changed.
+     * @param new content of the note.
      */
-    _update(note: { mime: string }, content: string) {
+    _update(note: FNote, content: string) {
         this.codeEditor.setText(content);
-        // this.codeEditor.clearHistory();
-
-        // let info = CodeMirror.findModeByMIME(note.mime);
-        // if (!info) {
-        //     // Switch back to plain text if CodeMirror does not have a mode for whatever MIME type we're editing.
-        //     // To avoid inheriting a mode from a previously open code note.
-        //     info = CodeMirror.findModeByMIME("text/plain");
-        // }
-
-        // this.codeEditor.setOption("mode", info.mime);
-        // CodeMirror.autoLoadMode(this.codeEditor, info.mode);
+        this.codeEditor.clearHistory();
     }
 
     show() {

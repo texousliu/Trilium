@@ -17,18 +17,21 @@ export default class CodeMirror extends EditorView {
 
     private config: EditorConfig;
     private languageCompartment: Compartment;
+    private historyCompartment: Compartment;
 
     constructor(config: EditorConfig) {
         const languageCompartment = new Compartment();
+        const historyCompartment = new Compartment();
+
         let extensions = [
             languageCompartment.of([]),
+            historyCompartment.of(history()),
             syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
             highlightActiveLine(),
             highlightSelectionMatches(),
             bracketMatching(),
             lineNumbers(),
             indentUnit.of(" ".repeat(4)),
-            history(),
             keymap.of([
                 ...defaultKeymap,
                 ...historyKeymap,
@@ -58,6 +61,7 @@ export default class CodeMirror extends EditorView {
         });
         this.config = config;
         this.languageCompartment = languageCompartment;
+        this.historyCompartment = historyCompartment;
     }
 
     #onDocumentUpdated(v: ViewUpdate) {
@@ -78,6 +82,18 @@ export default class CodeMirror extends EditorView {
                 insert: content || "",
             }
         })
+    }
+
+    /**
+     * Clears the history of undo/redo. Generally useful when changing to a new document.
+     */
+    clearHistory() {
+        this.dispatch({
+            effects: [ this.historyCompartment.reconfigure([]) ]
+        });
+        this.dispatch({
+            effects: [ this.historyCompartment.reconfigure(history())]
+        });
     }
 
     async setMimeType(mime: string) {
