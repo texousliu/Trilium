@@ -6,6 +6,9 @@ import { highlightSelectionMatches } from "@codemirror/search";
 import { vim } from "@replit/codemirror-vim";
 import byMimeType from "./syntax_highlighting.js";
 import smartIndentWithTab from "./extensions/custom_tab.js";
+import type { ThemeDefinition } from "./color_themes.js";
+
+export * from "./color_themes.js";
 
 type ContentChangedListener = () => void;
 
@@ -23,10 +26,12 @@ export default class CodeMirror extends EditorView {
     private config: EditorConfig;
     private languageCompartment: Compartment;
     private historyCompartment: Compartment;
+    private themeCompartment: Compartment;
 
     constructor(config: EditorConfig) {
         const languageCompartment = new Compartment();
         const historyCompartment = new Compartment();
+        const themeCompartment = new Compartment();
 
         let extensions: Extension[] = [];
 
@@ -38,6 +43,7 @@ export default class CodeMirror extends EditorView {
             ...extensions,
             languageCompartment.of([]),
             syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+            themeCompartment.of([]),
             highlightActiveLine(),
             highlightSelectionMatches(),
             bracketMatching(),
@@ -78,6 +84,7 @@ export default class CodeMirror extends EditorView {
         this.config = config;
         this.languageCompartment = languageCompartment;
         this.historyCompartment = historyCompartment;
+        this.themeCompartment = themeCompartment;
     }
 
     #onDocumentUpdated(v: ViewUpdate) {
@@ -98,6 +105,10 @@ export default class CodeMirror extends EditorView {
                 insert: content || "",
             }
         })
+    }
+
+    async setTheme(theme: ThemeDefinition) {
+        this.themeCompartment.reconfigure(await theme.load());
     }
 
     /**
