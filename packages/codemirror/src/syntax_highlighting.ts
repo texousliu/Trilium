@@ -52,7 +52,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/tiki": async () => (await import('@codemirror/legacy-modes/mode/tiki')).tiki,
     "text/troff": async () => (await import('@codemirror/legacy-modes/mode/troff')).troff,
     "text/turtle": async () => (await import('@codemirror/legacy-modes/mode/turtle')).turtle,
-    "text/typescript-jsx": null,
+    "text/typescript-jsx": async () => (await import('@codemirror/lang-javascript')).javascript({ typescript: true, jsx: true }),
     "text/vbscript": async () => (await import('@codemirror/legacy-modes/mode/vbscript')).vbScript,
     "text/velocity": async () => (await import('@codemirror/legacy-modes/mode/velocity')).velocity,
     "text/x-asm-mips": null,
