@@ -4,7 +4,7 @@ import type { Extension } from "@codemirror/state";
 
 async function buildJavaScript(mimeType: string) {
     const { javascript, esLint } = await import('@codemirror/lang-javascript');
-    const lint = (await import("./eslint.js")).lint;
+    const lint = (await import("./extensions/eslint.js")).lint;
     const extensions: Extension[] = [ javascript() ];
 
     const result = await lint(mimeType);

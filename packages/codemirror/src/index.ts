@@ -5,6 +5,7 @@ import { Compartment, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
 import { vim } from "@replit/codemirror-vim";
 import byMimeType from "./syntax_highlighting.js";
+import smartIndentWithTab from "./extensions/custom_tab.js";
 
 type ContentChangedListener = () => void;
 
@@ -45,7 +46,7 @@ export default class CodeMirror extends EditorView {
             keymap.of([
                 ...defaultKeymap,
                 ...historyKeymap,
-                indentWithTab
+                ...smartIndentWithTab
             ])
         ]
 
