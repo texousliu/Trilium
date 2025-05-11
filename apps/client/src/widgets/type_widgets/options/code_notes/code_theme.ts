@@ -12,7 +12,7 @@ interface Theme {
 
 type Response = Theme[];
 
-const SAMPLE_MIME = "text/typescript";
+const SAMPLE_MIME = "application/typescript";
 const SAMPLE_CODE = `\
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
@@ -127,8 +127,8 @@ export default class CodeTheme extends OptionsWidget {
                 parent: this.$sampleEl[0],
             });
         }
-        this.editor.setMimeType(SAMPLE_MIME);
         this.editor.setText(SAMPLE_CODE);
+        this.editor.setMimeType(SAMPLE_MIME);
 
         // Load the theme.
         const themeId = options.codeNoteTheme;
