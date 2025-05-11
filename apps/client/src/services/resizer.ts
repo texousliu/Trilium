@@ -26,10 +26,16 @@ function setupLeftPaneResizer(leftPaneVisible: boolean) {
     }
 
     if (leftPaneVisible) {
-        leftInstance = Split(["#left-pane", "#rest-pane"], {
-            sizes: [leftPaneWidth, 100 - leftPaneWidth],
-            gutterSize: DEFAULT_GUTTER_SIZE,
-            onDragEnd: (sizes) => options.save("leftPaneWidth", Math.round(sizes[0]))
+        // Delayed initialization ensures that all DOM elements are fully rendered and part of the layout,
+        // preventing Split.js from retrieving incorrect dimensions due to #left-pane not being rendered yet,
+        // which would cause the minSize setting to have no effect.
+        requestAnimationFrame(() => {
+            leftInstance = Split(["#left-pane", "#rest-pane"], {
+                sizes: [leftPaneWidth, 100 - leftPaneWidth],
+                gutterSize: DEFAULT_GUTTER_SIZE,
+                minSize: [150, 300],
+                onDragEnd: (sizes) => options.save("leftPaneWidth", Math.round(sizes[0]))
+            });
         });
     }
 }

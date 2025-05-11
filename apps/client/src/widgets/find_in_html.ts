@@ -2,7 +2,6 @@
 // uses for highlighting matches, use the same one on CodeMirror
 // for consistency
 import utils from "../services/utils.js";
-import appContext from "../components/app_context.js";
 import type FindWidget from "./find.js";
 import type { FindResult } from "./find.js";
 
@@ -39,12 +38,16 @@ export default class FindInHtml {
                         caseSensitive: matchCase,
                         done: async () => {
                             this.$results = $content.find(`.${FIND_RESULT_CSS_CLASSNAME}`);
-                            this.currentIndex = 0;
+                            const scrollingContainer = $content[0].closest('.scrolling-container');
+                            const containerTop = scrollingContainer?.getBoundingClientRect().top ?? 0;
+                            const closestIndex = this.$results.toArray().findIndex(el => el.getBoundingClientRect().top >= containerTop);
+                            this.currentIndex = closestIndex >= 0 ? closestIndex : 0;
+                            
                             await this.jumpTo();
 
                             res({
                                 totalFound: this.$results.length,
-                                currentFound: Math.min(1, this.$results.length)
+                                currentFound: this.$results.length > 0 ? this.currentIndex + 1 : 0
                             });
                         }
                     });
@@ -71,27 +74,17 @@ export default class FindInHtml {
 
     async findBoxClosed(totalFound: number, currentFound: number) {
         const $content = await this.parent?.noteContext?.getContentElement();
-        if ($content) {
+        if (typeof $content?.unmark === 'function') {
             $content.unmark();
         }
     }
 
     async jumpTo() {
         if (this.$results?.length) {
-            const offsetTop = 100;
             const $current = this.$results.eq(this.currentIndex);
             this.$results.removeClass(FIND_RESULT_SELECTED_CSS_CLASSNAME);
-
-            if ($current.length) {
-                $current.addClass(FIND_RESULT_SELECTED_CSS_CLASSNAME);
-                const position = $current.position().top - offsetTop;
-
-                const $content = await this.parent.noteContext?.getContentElement();
-                if ($content) {
-                    const $contentWidget = appContext.getComponentByEl($content[0]);
-                    $contentWidget.triggerCommand("scrollContainerTo", { position });
-                }
-            }
+            $current[0].scrollIntoView();
+            $current.addClass(FIND_RESULT_SELECTED_CSS_CLASSNAME);
         }
     }
 }
