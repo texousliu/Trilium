@@ -7,15 +7,14 @@ test("Opens and activate a note from launcher Bar", async ({ page, context }) =>
     const app = new App(page, context);
     await app.goto();
     await app.closeAllTabs();
-    await app.goToNoteInNewTab(NOTE_TITLE);
 
-    const calendarButton = app.launcherBar.locator(".launcher-button.bx-calendar-star.visible");
-    await expect(calendarButton).toBeVisible();
+    const mapButton = app.launcherBar.locator(".launcher-button.bx-search.visible");
+    await expect(mapButton).toBeVisible();
 
     await page.keyboard.down('Control');  
     await page.keyboard.down('Shift'); 
 
-    await calendarButton.click();
+    await mapButton.click();
 
     await page.keyboard.up('Control');
     await page.keyboard.up('Shift');
@@ -31,12 +30,11 @@ test("Opens and activate a note from note tree", async ({ page, context }) => {
     const app = new App(page, context);
     await app.goto();
     await app.closeAllTabs();
-    await app.goToNoteInNewTab(NOTE_TITLE);
 
     await page.keyboard.down('Control');  
     await page.keyboard.down('Shift'); 
 
-    await app.noteTreeActiveNote.click();
+    await app.clickNoteOnNoteTreeByTitle(NOTE_TITLE);
 
     await page.keyboard.up('Control');
     await page.keyboard.up('Shift');
