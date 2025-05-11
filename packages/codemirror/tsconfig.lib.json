@@ -9,6 +9,9 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "lib": [
+      "DOM"
+    ],
     "types": [
       "node",
       "vite/client"

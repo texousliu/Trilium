@@ -1,4 +1,4 @@
-import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching, foldGutter } from "@codemirror/language";
 import { Compartment, type Extension } from "@codemirror/state";
@@ -9,7 +9,8 @@ import smartIndentWithTab from "./extensions/custom_tab.js";
 
 type ContentChangedListener = () => void;
 
-export interface EditorConfig extends EditorViewConfig {
+export interface EditorConfig {
+    parent: HTMLElement;
     placeholder?: string;
     lineWrapping?: boolean;
     vimKeybindings?: boolean;
@@ -50,10 +51,6 @@ export default class CodeMirror extends EditorView {
             ])
         ]
 
-        if (Array.isArray(config.extensions)) {
-            extensions = [...extensions, ...config.extensions];
-        }
-
         if (config.placeholder) {
             extensions.push(placeholder(config.placeholder));
         }
@@ -67,7 +64,7 @@ export default class CodeMirror extends EditorView {
         }
 
         super({
-            ...config,
+            parent: config.parent,
             extensions
         });
         this.config = config;
