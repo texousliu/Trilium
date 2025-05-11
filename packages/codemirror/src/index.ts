@@ -107,7 +107,7 @@ export default class CodeMirror extends EditorView {
                 const extension = StreamLanguage.define(resolvedSyntax);
                 newExtension.push(extension);
             } else {
-                newExtension.push(resolvedSyntax());
+                newExtension.push(resolvedSyntax);
             }
         }
 

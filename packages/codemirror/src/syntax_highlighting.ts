@@ -1,6 +1,6 @@
 import { LanguageSupport, type StreamParser } from "@codemirror/language"
 
-const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | (() => LanguageSupport)>) | null> = {
+const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | LanguageSupport>) | null> = {
     "text/plain": null,
 
     "application/dart": async () => (await import('@codemirror/legacy-modes/mode/clike')).dart,
@@ -71,14 +71,19 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | (() => L
     "text/x-fsharp": async () => (await import('@codemirror/legacy-modes/mode/mllike')).fSharp,
     "text/x-gas": async () => (await import('@codemirror/legacy-modes/mode/gas')).gas,
     "text/x-gdscript": async () => (await import('./languages/gdscript.js')).gdscript,
-    "text/x-gfm": null,
+    "text/x-gfm": async () => {
+        const { markdown, markdownLanguage } = (await import('@codemirror/lang-markdown'));
+        return markdown({
+            base: markdownLanguage
+        });
+    },
     "text/x-go": async () => (await import('@codemirror/legacy-modes/mode/go')).go,
     "text/x-groovy": async () => (await import('@codemirror/legacy-modes/mode/groovy')).groovy,
     "text/x-gss": async () => (await import('@codemirror/legacy-modes/mode/css')).gss,
     "text/x-haml": null,
     "text/x-haskell": async () => (await import('@codemirror/legacy-modes/mode/haskell')).haskell,
     "text/x-haxe": async () => (await import('@codemirror/legacy-modes/mode/haxe')).haxe,
-    "text/x-hcl": async () => (await import('codemirror-lang-hcl')).hcl,
+    "text/x-hcl": async () => (await import('codemirror-lang-hcl')).hcl(),
     "text/x-hxml": async () => (await import('@codemirror/legacy-modes/mode/haxe')).hxml,
     "text/x-idl": async () => (await import('@codemirror/legacy-modes/mode/idl')).idl,
     "text/x-java": async () => (await import('@codemirror/legacy-modes/mode/clike')).java,
@@ -90,7 +95,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | (() => L
     "text/x-livescript": async () => (await import('@codemirror/legacy-modes/mode/livescript')).liveScript,
     "text/x-lua": async () => (await import('@codemirror/legacy-modes/mode/lua')).lua,
     "text/x-mariadb": async () => (await import('@codemirror/legacy-modes/mode/sql')).sqlite,
-    "text/x-markdown": null,
+    "text/x-markdown": async () => ((await import('@codemirror/lang-markdown')).markdown()),
     "text/x-mathematica": async () => (await import('@codemirror/legacy-modes/mode/mathematica')).mathematica,
     "text/x-modelica": async () => (await import('@codemirror/legacy-modes/mode/modelica')).modelica,
     "text/x-mscgen": async () => (await import('@codemirror/legacy-modes/mode/mscgen')).mscgen,
