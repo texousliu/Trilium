@@ -81,7 +81,7 @@ body ::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
 
-body .CodeMirror {
+body .cm-editor {
     filter: invert(90%) hue-rotate(180deg);
 }
 

@@ -420,34 +420,19 @@ body.desktop #context-menu-container .dropdown-item > span {
     width: 100%;
 }
 
-.CodeMirror {
+.cm-editor {
     height: 100%;
     background: inherit;
+    outline: none !important;
 }
 
-body .CodeMirror {
+body .cm-editor {
     font-size: var(--monospace-font-size);
 }
 
-.CodeMirror-gutters {
+body .cm-editor .cm-gutters {
     background-color: inherit !important;
     border-right: none;
-}
-
-.cm-matchhighlight {
-    background-color: #eeeeee;
-}
-
-.cm-matchhighlight.ck-find-result{
-    background: var(--ck-color-highlight-background);
-}
-
-.cm-matchhighlight.ck-find-result_selected {
-    background-color: #ff9633;
-}
-
-.CodeMirror pre.CodeMirror-placeholder {
-    color: #999 !important;
 }
 
 #sql-console-query {
@@ -457,11 +442,11 @@ body .CodeMirror {
     margin-bottom: 10px;
 }
 
-#sql-console-query .CodeMirror {
+#sql-console-query .cm-editor {
     height: 150px;
 }
 
-#sql-console-query .CodeMirror-scroll {
+#sql-console-query .cm-editor .cm-scroller {
     min-height: inherit !important;
 }
 
@@ -524,7 +509,7 @@ button.btn-sm {
     padding: 0;
 }
 
-pre:not(.CodeMirror-line):not(.hljs) {
+pre:not(.hljs) {
     color: var(--main-text-color) !important;
     white-space: pre-wrap;
     font-size: 100%;
