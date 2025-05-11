@@ -3,6 +3,7 @@ import OptionsWidget from "../options_widget";
 import server from "../../../../services/server";
 import CodeMirror, { getThemeById } from "@triliumnext/codemirror";
 import { DEFAULT_PREFIX } from "../../abstract_code_type_widget";
+import { t } from "../../../../services/i18n";
 
 // TODO: Deduplicate
 interface Theme {
@@ -83,18 +84,18 @@ export default class CodeMirror extends EditorView {
 
 const TPL = /*html*/`\
 <div class="options-section">
-    <h4>Color theme</h4>
+    <h4>${t("code_theme.title")}</h4>
 
     <div class="form-group row">
         <div class="col-md-6">
-            <label for="color-theme">Color scheme</label>
+            <label for="color-theme">${t("code_theme.color-scheme")}</label>
             <select id="color-theme" class="theme-select form-select"></select>
         </div>
 
         <div class="col-md-6 side-checkbox">
             <label class="form-check tn-checkbox">
                 <input type="checkbox" class="word-wrap form-check-input" />
-                Word Wrapping
+                ${t("code_theme.word_wrapping")}
             </label>
         </div>
     </div>
