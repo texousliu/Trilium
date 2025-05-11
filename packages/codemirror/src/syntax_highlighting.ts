@@ -6,7 +6,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown>>) | null> 
     "text/x-ttcn-asn": async () => (await import('@codemirror/legacy-modes/mode/ttcn')).ttcn,
     "application/x-aspx": null,
     "text/x-asterisk": async () => (await import('@codemirror/legacy-modes/mode/asterisk')).asterisk,
-    "application/x-bat": null,
+    "application/x-bat": async () => (await import("./languages/batch.js")).batch,
     "text/x-brainfuck": async () => (await import('@codemirror/legacy-modes/mode/brainfuck')).brainfuck,
     "text/x-csrc": async () => (await import('@codemirror/legacy-modes/mode/clike')).c,
     "text/x-csharp": async () => (await import('@codemirror/legacy-modes/mode/clike')).csharp,
