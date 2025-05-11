@@ -1,6 +1,6 @@
 import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
-import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching } from "@codemirror/language";
+import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching, foldGutter } from "@codemirror/language";
 import { Compartment, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
 import { vim } from "@replit/codemirror-vim";
@@ -40,6 +40,7 @@ export default class CodeMirror extends EditorView {
             highlightSelectionMatches(),
             bracketMatching(),
             lineNumbers(),
+            foldGutter(),
             indentUnit.of(" ".repeat(4)),
             keymap.of([
                 ...defaultKeymap,
