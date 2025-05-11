@@ -166,7 +166,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/x-yacas": async () => (await import('@codemirror/legacy-modes/mode/yacas')).yacas,
     "text/x-yaml": async () => (await import('@codemirror/legacy-modes/mode/yaml')).yaml,
     "text/x-z80": async () => (await import('@codemirror/legacy-modes/mode/z80')).z80,
-    "text/xml": async () => (await import('@codemirror/legacy-modes/mode/xml')).xml
+    "text/xml": async () => (await import('@codemirror/lang-xml')).xml()
 }
 
 export default byMimeType;
