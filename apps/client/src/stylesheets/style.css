@@ -423,6 +423,9 @@ body.desktop #context-menu-container .dropdown-item > span {
 .cm-editor {
     height: 100%;
     outline: none !important;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 4px;
 }
 
 body .cm-editor {
