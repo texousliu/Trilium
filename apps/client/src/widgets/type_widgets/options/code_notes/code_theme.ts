@@ -30,6 +30,10 @@ export default class CodeTheme extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$themeSelect = this.$widget.find(".theme-select");
+        this.$themeSelect.on("change", async () => {
+            const newTheme = String(this.$themeSelect.val());
+            await server.put(`options/codeNoteTheme/${newTheme}`);
+        });
     }
 
     async optionsLoaded(options: OptionMap) {
@@ -40,6 +44,8 @@ export default class CodeTheme extends OptionsWidget {
             const option = $("<option>").attr("value", theme.val).text(theme.title);
             this.$themeSelect.append(option);
         }
+
+        this.$themeSelect.val(options.codeNoteTheme);
     }
 
 }
