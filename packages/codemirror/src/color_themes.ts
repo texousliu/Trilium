@@ -1,17 +1,17 @@
 import type { Extension } from '@codemirror/state';
 
 export interface ThemeDefinition {
-    name: string;
+    id: string;
     load(): Promise<Extension>;
 }
 
 const themes: ThemeDefinition[] = [
     {
-        name: "abyss",
+        id: "abyss",
         load: async () => (await import("@fsegurai/codemirror-theme-abyss")).abyss
     },
     {
-        name: "abcdef",
+        id: "abcdef",
         load: async () => (await import("@fsegurai/codemirror-theme-abcdef")).abcdef
     }
 ]

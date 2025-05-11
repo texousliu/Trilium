@@ -8,6 +8,7 @@ import type { Request } from "express";
 import { changeLanguage, getLocales } from "../../services/i18n.js";
 import { listSyntaxHighlightingThemes } from "../../services/code_block_theme.js";
 import type { OptionNames } from "@triliumnext/commons";
+import { ColorThemes } from "@triliumnext/codemirror";
 
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set<OptionNames>([
@@ -193,6 +194,13 @@ function getSyntaxHighlightingThemes() {
     return listSyntaxHighlightingThemes();
 }
 
+function getCodeNoteThemes() {
+    return ColorThemes.map((theme) => ({
+        val: theme.id,
+        title: theme.id
+    }));
+}
+
 function getSupportedLocales() {
     return getLocales();
 }
@@ -210,5 +218,6 @@ export default {
     updateOptions,
     getUserThemes,
     getSyntaxHighlightingThemes,
+    getCodeNoteThemes,
     getSupportedLocales
 };

@@ -245,6 +245,7 @@ function register(app: express.Application) {
     apiRoute(PUT, "/api/options", optionsApiRoute.updateOptions);
     apiRoute(GET, "/api/options/user-themes", optionsApiRoute.getUserThemes);
     apiRoute(GET, "/api/options/codeblock-themes", optionsApiRoute.getSyntaxHighlightingThemes);
+    apiRoute(GET, "/api/options/codenote-themes", optionsApiRoute.getCodeNoteThemes)
     apiRoute(GET, "/api/options/locales", optionsApiRoute.getSupportedLocales);
 
     apiRoute(PST, "/api/password/change", passwordApiRoute.changePassword);

@@ -8,7 +8,7 @@ import byMimeType from "./syntax_highlighting.js";
 import smartIndentWithTab from "./extensions/custom_tab.js";
 import type { ThemeDefinition } from "./color_themes.js";
 
-export * from "./color_themes.js";
+export { default as ColorThemes, type ThemeDefinition } from "./color_themes.js";
 
 type ContentChangedListener = () => void;
 
