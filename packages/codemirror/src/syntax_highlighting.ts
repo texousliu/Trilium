@@ -24,7 +24,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "application/edn": async () => (await import('@codemirror/legacy-modes/mode/clojure')).clojure,
     "application/javascript;env=backend": async () => buildJavaScript("application/javascript;env=backend"),
     "application/javascript;env=frontend": async () => buildJavaScript("application/javascript;env=frontend"),
-    "application/json": async () => (await import('@codemirror/legacy-modes/mode/javascript')).json,
+    "application/json": async () => ((await import('@codemirror/lang-json')).json()),
     "application/ld+json": async () => (await import('@codemirror/legacy-modes/mode/javascript')).jsonld,
     "application/mbox": async () => (await import('@codemirror/legacy-modes/mode/mbox')).mbox,
     "application/n-triples": async () => (await import('@codemirror/legacy-modes/mode/ntriples')).ntriples,
