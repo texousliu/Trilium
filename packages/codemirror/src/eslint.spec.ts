@@ -4,7 +4,6 @@ import { describe, expect, it } from "vitest";
 
 async function lint(code: string, mimeType: string) {
     const linterData = await _lint(mimeType);
-    console.log("Got linter data", linterData);
     if (!("linter" in linterData)) {
         return [];
     }

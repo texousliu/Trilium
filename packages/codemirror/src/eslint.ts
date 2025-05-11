@@ -1,3 +1,5 @@
+import type { Linter } from "eslint-linter-browserify";
+
 export async function lint(mimeType: string) {
 
     const Linter = (await import("eslint-linter-browserify")).Linter;
@@ -22,9 +24,7 @@ export async function lint(mimeType: string) {
 
     }
 
-    return {
-        linter: new Linter(),
-        config: [
+    const config: (Linter.LegacyConfig | Linter.Config | Linter.Config[]) = [
         js.configs.recommended,
         {
             languageOptions: {
@@ -37,6 +37,10 @@ export async function lint(mimeType: string) {
                 "no-unused-vars": [ "warn", { vars: "local", args: "after-used" }]
             }
         }
-    ]
+    ];
+
+    return {
+        linter: new Linter(),
+        config
     }
 }
