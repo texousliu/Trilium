@@ -7,36 +7,6 @@ export interface Library {
     css?: string[];
 }
 
-const CODE_MIRROR: Library = {
-    js: () => {
-        const scriptsToLoad = [
-            "node_modules/codemirror/lib/codemirror.js",
-            "node_modules/codemirror/addon/display/placeholder.js",
-            "node_modules/codemirror/addon/edit/matchbrackets.js",
-            "node_modules/codemirror/addon/edit/matchtags.js",
-            "node_modules/codemirror/addon/fold/xml-fold.js",
-            "node_modules/codemirror/addon/lint/lint.js",
-            "node_modules/codemirror/addon/mode/loadmode.js",
-            "node_modules/codemirror/addon/mode/multiplex.js",
-            "node_modules/codemirror/addon/mode/overlay.js",
-            "node_modules/codemirror/addon/mode/simple.js",
-            "node_modules/codemirror/addon/search/match-highlighter.js",
-            "node_modules/codemirror/mode/meta.js",
-            "node_modules/codemirror/keymap/vim.js"
-        ];
-
-        const mimeTypes = mimeTypesService.getMimeTypes();
-        for (const mimeType of mimeTypes) {
-            if (mimeType.enabled && mimeType.codeMirrorSource) {
-                scriptsToLoad.push(mimeType.codeMirrorSource);
-            }
-        }
-
-        return scriptsToLoad;
-    },
-    css: ["node_modules/codemirror/lib/codemirror.css", "node_modules/codemirror/addon/lint/lint.css"]
-};
-
 const KATEX: Library = {
     js: ["node_modules/katex/dist/katex.min.js", "node_modules/katex/dist/contrib/mhchem.min.js", "node_modules/katex/dist/contrib/auto-render.min.js"],
     css: ["node_modules/katex/dist/katex.min.css"]
@@ -151,7 +121,6 @@ export default {
     requireCss,
     requireLibrary,
     loadHighlightingTheme,
-    CODE_MIRROR,
     KATEX,
     HIGHLIGHT_JS
 };
