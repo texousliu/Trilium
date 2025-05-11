@@ -4,6 +4,8 @@ import options from "../../services/options.js";
 import TypeWidget from "./type_widget.js";
 import CodeMirror, { type EditorConfig } from "@triliumnext/codemirror";
 
+export const DEFAULT_PREFIX = "default:";
+
 /**
  * An abstract {@link TypeWidget} which implements the CodeMirror editor, meant to be used as a parent for
  * widgets requiring the editor.
@@ -34,9 +36,12 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
         });
 
         // Load the theme.
-        const theme = getThemeById(options.get("codeNoteTheme"));
-        if (theme) {
-            await this.codeEditor.setTheme(theme);
+        const themeId = options.get("codeNoteTheme");
+        if (themeId?.startsWith(DEFAULT_PREFIX)) {
+            const theme = getThemeById(themeId.substring(DEFAULT_PREFIX.length));
+            if (theme) {
+                await this.codeEditor.setTheme(theme);
+            }
         }
     }
 
