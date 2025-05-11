@@ -112,7 +112,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/x-pascal": async () => (await import('@codemirror/legacy-modes/mode/pascal')).pascal,
     "text/x-perl": async () => (await import('@codemirror/legacy-modes/mode/perl')).perl,
     "text/x-pgsql": async () => (await import('@codemirror/legacy-modes/mode/sql')).pgSQL,
-    "text/x-php": null,
+    "text/x-php": async () => ((await import('@codemirror/lang-php')).php()),
     "text/x-pig": async () => (await import('@codemirror/legacy-modes/mode/pig')).pig,
     "text/x-plsql": async () => (await import('@codemirror/legacy-modes/mode/sql')).plSQL,
     "text/x-properties": async () => (await import('@codemirror/legacy-modes/mode/properties')).properties,
