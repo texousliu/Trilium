@@ -55,6 +55,7 @@ const TPL = /*html*/`
 </div>
 `;
 
+// TODO: Deduplicate
 interface Theme {
     title: string;
     val: string;
