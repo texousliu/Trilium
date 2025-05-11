@@ -61,6 +61,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
      */
     _update(note: FNote, content: string) {
         this.codeEditor.setText(content);
+        this.codeEditor.setMimeType(note.mime);
         this.codeEditor.clearHistory();
     }
 
