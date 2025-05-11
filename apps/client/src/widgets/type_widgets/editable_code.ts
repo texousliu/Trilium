@@ -45,13 +45,13 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
     getExtraOpts(): Partial<EditorConfig> {
         return {
             placeholder: t("editable_code.placeholder"),
+            vimKeybindings: options.is("vimKeymapEnabled"),
             onContentChanged: () => this.spacedUpdate.scheduleUpdate()
         }
     }
 
     // getExtraOpts(): Partial<CodeMirrorOpts> {
     //     return {
-    //         keyMap: options.is("vimKeymapEnabled") ? "vim" : "default",
     //         lint: true,
     //         gutters: ["CodeMirror-lint-markers"],
     //         tabindex: 300,

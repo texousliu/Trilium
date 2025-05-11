@@ -3,6 +3,7 @@ import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, View
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching } from "@codemirror/language";
 import { Compartment, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
+import { vim } from "@replit/codemirror-vim";
 import byMimeType from "./syntax_highlighting.js";
 
 type ContentChangedListener = () => void;
@@ -10,6 +11,7 @@ type ContentChangedListener = () => void;
 export interface EditorConfig extends EditorViewConfig {
     placeholder?: string;
     lineWrapping?: boolean;
+    vimKeybindings?: boolean;
     onContentChanged?: ContentChangedListener;
 }
 
@@ -23,7 +25,14 @@ export default class CodeMirror extends EditorView {
         const languageCompartment = new Compartment();
         const historyCompartment = new Compartment();
 
-        let extensions = [
+        let extensions: Extension[] = [];
+
+        if (config.vimKeybindings) {
+            extensions.push(vim());
+        }
+
+        extensions = [
+            ...extensions,
             languageCompartment.of([]),
             historyCompartment.of(history()),
             syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
@@ -36,8 +45,8 @@ export default class CodeMirror extends EditorView {
                 ...defaultKeymap,
                 ...historyKeymap,
                 indentWithTab
-            ]),
-        ];
+            ])
+        ]
 
         if (Array.isArray(config.extensions)) {
             extensions = [...extensions, ...config.extensions];
