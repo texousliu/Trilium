@@ -9,10 +9,6 @@ const TPL = /*html*/`
         min-height: 50px;
         position: relative;
     }
-
-    .note-detail-readonly-code-content {
-        padding: 10px;
-    }
     </style>
 
     <pre class="note-detail-readonly-code-content"></pre>
