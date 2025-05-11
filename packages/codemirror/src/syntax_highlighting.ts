@@ -17,6 +17,11 @@ async function buildJavaScript(mimeType: string) {
     return extensions;
 }
 
+async function buildMermaid() {
+    const { mermaid, foldByIndent } = (await import('codemirror-lang-mermaid'));
+    return [ mermaid(), foldByIndent() ];
+}
+
 const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | LanguageSupport | Extension[]>) | null> = {
     "text/plain": null,
 
@@ -55,6 +60,8 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/typescript-jsx": async () => (await import('@codemirror/lang-javascript')).javascript({ typescript: true, jsx: true }),
     "text/vbscript": async () => (await import('@codemirror/legacy-modes/mode/vbscript')).vbScript,
     "text/velocity": async () => (await import('@codemirror/legacy-modes/mode/velocity')).velocity,
+    "text/vnd.mermaid": async () => buildMermaid(),
+    "text/mermaid": async () => buildMermaid(),
     "text/x-asm-mips": null,
     "text/x-asterisk": async () => (await import('@codemirror/legacy-modes/mode/asterisk')).asterisk,
     "text/x-brainfuck": async () => (await import('@codemirror/legacy-modes/mode/brainfuck')).brainfuck,
