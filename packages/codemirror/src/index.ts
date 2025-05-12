@@ -18,6 +18,7 @@ export interface EditorConfig {
     lineWrapping?: boolean;
     vimKeybindings?: boolean;
     readOnly?: boolean;
+    tabIndex?: number;
     onContentChanged?: ContentChangedListener;
 }
 
@@ -81,6 +82,11 @@ export default class CodeMirror extends EditorView {
             parent: config.parent,
             extensions
         });
+
+        if (config.tabIndex) {
+            this.dom.tabIndex = config.tabIndex;
+        }
+
         this.config = config;
         this.languageCompartment = languageCompartment;
         this.historyCompartment = historyCompartment;

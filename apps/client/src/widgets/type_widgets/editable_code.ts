@@ -46,18 +46,10 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         return {
             placeholder: t("editable_code.placeholder"),
             vimKeybindings: options.is("vimKeymapEnabled"),
-            onContentChanged: () => this.spacedUpdate.scheduleUpdate()
+            onContentChanged: () => this.spacedUpdate.scheduleUpdate(),
+            tabIndex: 300
         }
     }
-
-    // getExtraOpts(): Partial<CodeMirrorOpts> {
-    //     return {
-    //         lint: true,
-    //         gutters: ["CodeMirror-lint-markers"],
-    //         tabindex: 300,
-    //         dragDrop: false, // with true the editor inlines dropped files which is not what we expect
-    //     };
-    // }
 
     async doRefresh(note: FNote) {
         const blob = await this.note?.getBlob();
