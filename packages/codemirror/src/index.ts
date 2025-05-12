@@ -181,7 +181,7 @@ export default class CodeMirror extends EditorView {
         await new Promise(requestAnimationFrame);
         const instance = this.plugin(plugin);
         if (instance) {
-            instance.scrollToMatch(0);
+            instance.scrollToMatchNearestSelection();
         }
 
         return {

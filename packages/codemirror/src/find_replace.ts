@@ -57,9 +57,22 @@ export function createSearchHighlighter(view: EditorView, searchTerm: string, ma
                 return;
             }
 
-            const pos = this.parsedMatches[matchIndex];
+            this.scrollTo(this.parsedMatches[matchIndex]);
+        }
+
+        scrollToMatchNearestSelection() {
+            const cursorPos = this.view.state.selection.main.head;
+            for (const match of this.parsedMatches) {
+                if (match.from >= cursorPos) {
+                    this.scrollTo(match);
+                    return;
+                }
+            }
+        }
+
+        private scrollTo(match: Match) {
             this.view.dispatch({
-                effects: EditorView.scrollIntoView(pos.from, { y: "center" }),
+                effects: EditorView.scrollIntoView(match.from, { y: "center" }),
                 scrollIntoView: true
             });
         }
