@@ -19,10 +19,15 @@ export class SearchHighlighter {
         this.parsedMatches = [];
         this.currentFound = 0;
         this.totalFound = 0;
-        this.matches = (new RangeSetBuilder<Decoration>()).finish();
+        this.matches = RangeSet.empty;
     }
 
     searchFor(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
+        if (!searchTerm) {
+            this.matches = RangeSet.empty;
+            return;
+        }
+
         // Escape the search term for use in RegExp
         const escapedTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const wordBoundary = wholeWord ? "\\b" : "";
