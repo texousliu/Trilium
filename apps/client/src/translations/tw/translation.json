@@ -1514,7 +1514,7 @@
     "auto-detect-language": "自動檢測"
   },
   "highlighting": {
-    "title": "文字筆記的程式碼語法高亮",
+    "title": "",
     "description": "控制文字筆記中程式碼塊的語法高亮，程式碼筆記不會受到影響。",
     "color-scheme": "顏色方案"
   },

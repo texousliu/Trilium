@@ -1616,7 +1616,7 @@
     "auto-detect-language": "自动检测"
   },
   "highlighting": {
-    "title": "文本笔记的代码语法高亮",
+    "title": "",
     "description": "控制文本笔记中代码块的语法高亮，代码笔记不会受到影响。",
     "color-scheme": "颜色方案"
   },

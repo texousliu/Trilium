@@ -1822,7 +1822,7 @@
     "auto-detect-language": "Auto-detected"
   },
   "highlighting": {
-    "title": "Code Syntax Highlighting for Text Notes",
+    "title": "Code Blocks",
     "description": "Controls the syntax highlighting for code blocks inside text notes, code notes will not be affected.",
     "color-scheme": "Color Scheme"
   },

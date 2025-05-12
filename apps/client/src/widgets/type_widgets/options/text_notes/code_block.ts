@@ -25,8 +25,6 @@ const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("highlighting.title")}</h4>
 
-    <p class="form-text">${t("highlighting.description")}</p>
-
     <div class="form-group row">
         <div class="col-md-6">
             <label for="highlighting-color-scheme-select">${t("highlighting.color-scheme")}</label>
