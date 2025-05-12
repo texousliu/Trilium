@@ -69,8 +69,4 @@ export default class RelatedSettings extends OptionsWidget {
         return (!!this.noteId && this.noteId in RELATED_SETTINGS);
     }
 
-    async refreshWithNote(note: FNote | null | undefined) {
-        console.log("Got note ", note);
-    }
-
 }
