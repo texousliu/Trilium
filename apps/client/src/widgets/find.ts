@@ -203,7 +203,7 @@ export default class FindWidget extends NoteContextAwareWidget {
                 selectedText = $content.find('.cm-matchhighlight').first().text();
             } else {
                 const codeEditor = await this.noteContext.getCodeEditor();
-                selectedText = codeEditor.getSelection();
+                selectedText = codeEditor.getSelectedText();
             }
         } else {
             selectedText = window.getSelection()?.toString() || "";

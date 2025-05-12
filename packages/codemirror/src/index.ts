@@ -104,6 +104,17 @@ export default class CodeMirror extends EditorView {
         return this.state.doc.toString();
     }
 
+    /**
+     * Returns the currently selected text.
+     *
+     * If there are multiple selections, all of them will be concatenated.
+     */
+    getSelectedText() {
+        return this.state.selection.ranges
+            .map((range) => this.state.sliceDoc(range.from, range.to))
+            .join("");
+    }
+
     setText(content: string) {
         this.dispatch({
             changes: {
