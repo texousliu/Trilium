@@ -34,7 +34,7 @@ import AttachmentErasureTimeoutOptions from "./options/other/attachment_erasure_
 import RibbonOptions from "./options/appearance/ribbon.js";
 import MultiFactorAuthenticationOptions from './options/multi_factor_authentication.js';
 import LocalizationOptions from "./options/i18n/i18n.js";
-import CodeBlockOptions from "./options/appearance/code_block.js";
+import CodeBlockOptions from "./options/text_notes/code_block.js";
 import EditorOptions from "./options/text_notes/editor.js";
 import ShareSettingsOptions from "./options/other/share_settings.js";
 import AiSettingsOptions from "./options/ai_settings.js";
@@ -42,7 +42,6 @@ import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
 import { t } from "i18next";
 import LanguageOptions from "./options/i18n/language.js";
-import type { EventData, EventNames } from "../../components/app_context.js";
 import type BasicWidget from "../basic_widget.js";
 import CodeTheme from "./options/code_notes/code_theme.js";
 
@@ -73,7 +72,6 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     _optionsAppearance: [
         ThemeOptions,
         FontsOptions,
-        CodeBlockOptions,
         ElectronIntegrationOptions,
         MaxContentWidthOptions,
         RibbonOptions
@@ -84,6 +82,7 @@ const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
     _optionsTextNotes: [
         EditorOptions,
         HeadingStyleOptions,
+        CodeBlockOptions,
         TableOfContentsOptions,
         HighlightsListOptions,
         TextAutoReadOnlySizeOptions
