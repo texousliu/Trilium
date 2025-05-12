@@ -31,7 +31,7 @@ export default class FindInCode {
     }
 
     async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
-        const totalFound = 0;
+        let totalFound = 0;
         const currentFound = 0;
 
         const codeEditor = await this.getCodeEditor();
@@ -39,7 +39,8 @@ export default class FindInCode {
             return { totalFound, currentFound };
         }
 
-        await codeEditor.performFind(searchTerm, matchCase, wholeWord);
+        const result = await codeEditor.performFind(searchTerm, matchCase, wholeWord);
+        totalFound = result.totalFound;
 
         return { totalFound, currentFound };
     }

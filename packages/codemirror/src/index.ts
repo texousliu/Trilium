@@ -176,6 +176,13 @@ export default class CodeMirror extends EditorView {
         this.dispatch({
             effects: this.searchHighlightCompartment.reconfigure(plugin)
         });
+        // Wait for the plugin to activate in the next render cycle
+        await new Promise(requestAnimationFrame);
+        const instance = this.plugin(plugin); // TS workaround
+
+        return {
+            totalFound: instance?.totalFound ?? 0
+        }
     }
 
     async setMimeType(mime: string) {

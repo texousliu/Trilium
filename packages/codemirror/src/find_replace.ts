@@ -17,6 +17,7 @@ export function createSearchHighlighter(view: EditorView, searchTerm: string, ma
 
     return ViewPlugin.fromClass(class SearchHighlighter {
         matches = matcher.createDeco(view);
+        totalFound = this.matches.size;
 
         constructor(public view: EditorView) { }
 
@@ -32,7 +33,8 @@ export function createSearchHighlighter(view: EditorView, searchTerm: string, ma
 
         static deco = (v: SearchHighlighter) => v.matches;
     }, {
-        decorations: v => v.matches
+        decorations: v => v.matches,
+        provide: (plugin) => plugin
     });
 }
 
