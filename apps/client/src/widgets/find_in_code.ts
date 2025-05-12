@@ -54,43 +54,12 @@ export default class FindInCode {
         codeEditor?.cleanSearch();
         codeEditor?.focus();
     }
-    async replace(replaceText: string) {
-        // this.findResult may be undefined and null
-        if (!this.findResult || this.findResult.length === 0) {
-            return;
-        }
-        let currentFound = -1;
-        this.findResult.forEach((marker, index) => {
-            const pos = marker.find();
-            if (pos) {
-                if (marker.className === FIND_RESULT_SELECTED_CSS_CLASSNAME) {
-                    currentFound = index;
-                    return;
-                }
-            }
-        });
-        if (currentFound >= 0) {
-            let marker = this.findResult[currentFound];
-            let pos = marker.find();
-            const codeEditor = await this.getCodeEditor();
-            const doc = codeEditor?.doc;
-            if (doc) {
-                doc.replaceRange(replaceText, pos.from, pos.to);
-            }
-            marker.clear();
 
-            let nextFound;
-            if (currentFound === this.findResult.length - 1) {
-                nextFound = 0;
-            } else {
-                nextFound = currentFound;
-            }
-            this.findResult.splice(currentFound, 1);
-            if (this.findResult.length > 0) {
-                this.findNext(0, nextFound, nextFound);
-            }
-        }
+    async replace(replaceText: string) {
+        const codeEditor = await this.getCodeEditor();
+        codeEditor?.replace(replaceText);
     }
+
     async replaceAll(replaceText: string) {
         if (!this.findResult || this.findResult.length === 0) {
             return;

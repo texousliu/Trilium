@@ -46,6 +46,17 @@ export class SearchHighlighter {
         this.#scrollToMatchNearestSelection();
     }
 
+    replaceActiveMatch(replacementText: string) {
+        if (!this.parsedMatches.length || this.currentFound === 0) return;
+
+        const matchIndex = this.currentFound - 1;
+        const match = this.parsedMatches[matchIndex];
+
+        this.view.dispatch({
+            changes: { from: match.from, to: match.to, insert: replacementText }
+        });
+    }
+
     scrollToMatch(matchIndex: number) {
         if (this.parsedMatches.length <= matchIndex) {
             return;
