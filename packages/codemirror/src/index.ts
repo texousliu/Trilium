@@ -176,9 +176,13 @@ export default class CodeMirror extends EditorView {
         this.dispatch({
             effects: this.searchHighlightCompartment.reconfigure(plugin)
         });
+
         // Wait for the plugin to activate in the next render cycle
         await new Promise(requestAnimationFrame);
-        const instance = this.plugin(plugin); // TS workaround
+        const instance = this.plugin(plugin);
+        if (instance) {
+            instance.scrollToMatch(0);
+        }
 
         return {
             totalFound: instance?.totalFound ?? 0
