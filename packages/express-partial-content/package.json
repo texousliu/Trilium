@@ -1,0 +1,47 @@
+{
+  "name": "@triliumnext/express-partial-content",
+  "description": "A partial content handler implementation for any readable stream with Express. Based on this blog post: https://www.codeproject.com/Articles/813480/HTTP-Partial-Content-In-Node-js.",
+  "license": "MIT",
+  "version": "1.1.0",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "keywords": [
+    "partial-content",
+    "206",
+    "stream",
+    "typescript"
+  ],
+  "nx": {
+    "name": "express-partial-content",
+    "targets": {
+      "build": {
+        "executor": "@nx/js:swc",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "outputPath": "packages/express-partial-content/dist",
+          "tsConfig": "packages/express-partial-content/tsconfig.lib.json",
+          "packageJson": "packages/express-partial-content/package.json",
+          "main": "packages/express-partial-content/src/index.ts",
+          "stripLeadingPaths": true
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
