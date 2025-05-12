@@ -44,6 +44,7 @@ import { t } from "i18next";
 import LanguageOptions from "./options/i18n/language.js";
 import type BasicWidget from "../basic_widget.js";
 import CodeTheme from "./options/code_notes/code_theme.js";
+import RelatedSettings from "./options/related_settings.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -68,7 +69,9 @@ const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printabl
     <div class="note-detail-content-widget-content"></div>
 </div>`;
 
-const CONTENT_WIDGETS: Record<string, (typeof NoteContextAwareWidget)[]> = {
+export type OptionPages = "_optionsAppearance" | "_optionsShortcuts" | "_optionsTextNotes" | "_optionsCodeNotes" | "_optionsImages" | "_optionsSpellcheck" | "_optionsPassword" | "_optionsMFA" | "_optionsEtapi" | "_optionsBackup" | "_optionsSync" | "_optionsAi" | "_optionsOther" | "_optionsLocalization" | "_optionsAdvanced";
+
+const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", (typeof NoteContextAwareWidget)[]> = {
     _optionsAppearance: [
         ThemeOptions,
         FontsOptions,
@@ -165,7 +168,10 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
         this.$content.empty();
         this.children = [];
 
-        const contentWidgets = CONTENT_WIDGETS[note.noteId];
+        const contentWidgets = [
+            ...((CONTENT_WIDGETS as Record<string, typeof NoteContextAwareWidget[]>)[note.noteId]),
+            RelatedSettings
+        ];
         this.$content.toggleClass("options", note.noteId.startsWith("_options"));
 
         if (contentWidgets) {
