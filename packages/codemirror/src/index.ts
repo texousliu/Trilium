@@ -194,6 +194,15 @@ export default class CodeMirror extends EditorView {
         this.searchPlugin?.scrollToMatch(nextFound);
     }
 
+    cleanSearch() {
+        if (this.searchPlugin) {
+            this.dispatch({
+                effects: this.searchHighlightCompartment.reconfigure([])
+            });
+            this.searchPlugin = null;
+        }
+    }
+
     async setMimeType(mime: string) {
         let newExtension: Extension[] = [];
 

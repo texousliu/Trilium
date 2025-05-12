@@ -51,29 +51,7 @@ export default class FindInCode {
 
     async findBoxClosed(totalFound: number, currentFound: number) {
         const codeEditor = await this.getCodeEditor();
-
-        if (codeEditor && totalFound > 0) {
-            const doc = codeEditor.doc;
-            const pos = this.findResult?.[currentFound].find();
-            // Note setting the selection sets the cursor to
-            // the end of the selection and scrolls it into
-            // view
-            if (pos) {
-                doc.setSelection(pos.from, pos.to);
-            }
-            // Clear all markers
-            codeEditor.operation(() => {
-                if (!this.findResult) {
-                    return;
-                }
-                for (let i = 0; i < this.findResult.length; ++i) {
-                    let marker = this.findResult[i];
-                    marker.clear();
-                }
-            });
-        }
-        this.findResult = null;
-
+        codeEditor?.cleanSearch();
         codeEditor?.focus();
     }
     async replace(replaceText: string) {
