@@ -7,6 +7,7 @@ import { vim } from "@replit/codemirror-vim";
 import byMimeType from "./syntax_highlighting.js";
 import smartIndentWithTab from "./extensions/custom_tab.js";
 import type { ThemeDefinition } from "./color_themes.js";
+import { createSearchHighlighter, searchMatchHighlightTheme } from "./find_replace.js";
 
 export { default as ColorThemes, type ThemeDefinition, getThemeById } from "./color_themes.js";
 
@@ -29,12 +30,14 @@ export default class CodeMirror extends EditorView {
     private historyCompartment: Compartment;
     private themeCompartment: Compartment;
     private lineWrappingCompartment: Compartment;
+    private searchHighlightCompartment: Compartment;
 
     constructor(config: EditorConfig) {
         const languageCompartment = new Compartment();
         const historyCompartment = new Compartment();
         const themeCompartment = new Compartment();
         const lineWrappingCompartment = new Compartment();
+        const searchHighlightCompartment = new Compartment();
 
         let extensions: Extension[] = [];
 
@@ -49,6 +52,10 @@ export default class CodeMirror extends EditorView {
             themeCompartment.of([
                 syntaxHighlighting(defaultHighlightStyle, { fallback: true })
             ]),
+
+            searchMatchHighlightTheme,
+            searchHighlightCompartment.of([]),
+
             highlightActiveLine(),
             highlightSelectionMatches(),
             bracketMatching(),
@@ -92,6 +99,7 @@ export default class CodeMirror extends EditorView {
         this.historyCompartment = historyCompartment;
         this.themeCompartment = themeCompartment;
         this.lineWrappingCompartment = lineWrappingCompartment;
+        this.searchHighlightCompartment = searchHighlightCompartment;
     }
 
     #onDocumentUpdated(v: ViewUpdate) {
@@ -160,6 +168,13 @@ export default class CodeMirror extends EditorView {
             selection: EditorSelection.cursor(endPos),
             effects: EditorView.scrollIntoView(endPos, { y: "end" }),
             scrollIntoView: true
+        });
+    }
+
+    async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
+        const plugin = createSearchHighlighter(this, searchTerm, matchCase, wholeWord);
+        this.dispatch({
+            effects: this.searchHighlightCompartment.reconfigure(plugin)
         });
     }
 
