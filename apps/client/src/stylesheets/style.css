@@ -1222,10 +1222,6 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     background-color: inherit;
 }
 
-::selection {
-    background-color: #3399FF70;
-}
-
 [data-bs-toggle="tooltip"]:not(.button-widget) span {
     padding-bottom: 0;
     border-bottom: 1px dotted;
