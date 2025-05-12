@@ -34,6 +34,7 @@ export class SearchHighlighter {
             decoration: searchMatchDecoration,
         });
         this.updateSearchData(this.view);
+        this.scrollToMatchNearestSelection();
     }
 
     updateSearchData(view: EditorView) {

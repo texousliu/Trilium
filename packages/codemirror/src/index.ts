@@ -181,9 +181,6 @@ export default class CodeMirror extends EditorView {
         await new Promise(requestAnimationFrame);
         const instance = this.plugin(plugin);
         instance?.searchFor(searchTerm, matchCase, wholeWord);
-        if (instance) {
-            instance.scrollToMatchNearestSelection();
-        }
 
         return {
             totalFound: instance?.totalFound ?? 0,
