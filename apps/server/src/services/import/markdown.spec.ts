@@ -188,6 +188,12 @@ second line 2</code></pre><ul><li>Hello</li><li>world</li></ul><ol><li>Hello</li
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("converts multiple inline math expressions into Mathtex format", () => {
+        const input = `Energy: $e=mc^{2}$, Force: $F=ma$.`;
+        const expected = /*html*/`<p>Energy: <span class="math-tex">\\(e=mc^{2}\\)</span>, Force: <span class="math-tex">\\(F=ma\\)</span>.</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
     it("converts display math expressions into Mathtex format", () => {
         const input = `$$\sqrt{x^{2}+1}$$`;
         const expected = /*html*/`<p><span class="math-tex">\\[\sqrt{x^{2}+1}\\]</span></p>`;
