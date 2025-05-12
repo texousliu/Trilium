@@ -1,5 +1,5 @@
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
-import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
+import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewPlugin, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching, foldGutter } from "@codemirror/language";
 import { Compartment, EditorSelection, EditorState, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
@@ -7,7 +7,7 @@ import { vim } from "@replit/codemirror-vim";
 import byMimeType from "./syntax_highlighting.js";
 import smartIndentWithTab from "./extensions/custom_tab.js";
 import type { ThemeDefinition } from "./color_themes.js";
-import { createSearchHighlighter, searchMatchHighlightTheme } from "./find_replace.js";
+import { createSearchHighlighter, SearchHighlighter, searchMatchHighlightTheme } from "./find_replace.js";
 
 export { default as ColorThemes, type ThemeDefinition, getThemeById } from "./color_themes.js";
 
@@ -31,6 +31,7 @@ export default class CodeMirror extends EditorView {
     private themeCompartment: Compartment;
     private lineWrappingCompartment: Compartment;
     private searchHighlightCompartment: Compartment;
+    private searchPlugin?: SearchHighlighter | null;
 
     constructor(config: EditorConfig) {
         const languageCompartment = new Compartment();
@@ -181,11 +182,16 @@ export default class CodeMirror extends EditorView {
         await new Promise(requestAnimationFrame);
         const instance = this.plugin(plugin);
         instance?.searchFor(searchTerm, matchCase, wholeWord);
+        this.searchPlugin = instance;
 
         return {
             totalFound: instance?.totalFound ?? 0,
             currentFound: instance?.currentFound ?? 0
         }
+    }
+
+    async findNext(direction: number, currentFound: number, nextFound: number) {
+        this.searchPlugin?.scrollToMatch(nextFound);
     }
 
     async setMimeType(mime: string) {

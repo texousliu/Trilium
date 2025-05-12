@@ -42,29 +42,11 @@ export default class FindInCode {
 
     async findNext(direction: number, currentFound: number, nextFound: number) {
         const codeEditor = await this.getCodeEditor();
-        if (!codeEditor || !this.findResult) {
+        if (!codeEditor) {
             return;
         }
 
-        const doc = codeEditor.doc;
-
-        //
-        // Dehighlight current, highlight & scrollIntoView next
-        //
-
-        let marker = this.findResult[currentFound];
-        let pos = marker.find();
-        marker.clear();
-        marker = doc.markText(pos.from, pos.to, { className: FIND_RESULT_CSS_CLASSNAME });
-        this.findResult[currentFound] = marker;
-
-        marker = this.findResult[nextFound];
-        pos = marker.find();
-        marker.clear();
-        marker = doc.markText(pos.from, pos.to, { className: FIND_RESULT_SELECTED_CSS_CLASSNAME });
-        this.findResult[nextFound] = marker;
-
-        codeEditor.scrollIntoView(pos.from);
+        codeEditor.findNext(direction, currentFound, nextFound);
     }
 
     async findBoxClosed(totalFound: number, currentFound: number) {

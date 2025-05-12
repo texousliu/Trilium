@@ -33,11 +33,34 @@ export class SearchHighlighter {
             regexp: regex,
             decoration: searchMatchDecoration,
         });
-        this.updateSearchData(this.view);
-        this.scrollToMatchNearestSelection();
+        this.#updateSearchData(this.view);
+        this.#scrollToMatchNearestSelection();
     }
 
-    updateSearchData(view: EditorView) {
+    scrollToMatch(matchIndex: number) {
+        if (this.parsedMatches.length <= matchIndex) {
+            return;
+        }
+
+        const match = this.parsedMatches[matchIndex];
+        this.currentFound = matchIndex + 1;
+        this.view.dispatch({
+            effects: EditorView.scrollIntoView(match.from, { y: "center" }),
+            scrollIntoView: true
+        });
+    }
+
+    update(update: ViewUpdate) {
+        if (update.docChanged || update.viewportChanged) {
+            this.#updateSearchData(update.view);
+        }
+    }
+
+    destroy() {
+        // Do nothing.
+    }
+
+    #updateSearchData(view: EditorView) {
         if (!this.matcher) {
             return;
         }
@@ -56,26 +79,7 @@ export class SearchHighlighter {
         this.totalFound = this.parsedMatches.length;
     }
 
-    update(update: ViewUpdate) {
-        if (update.docChanged || update.viewportChanged) {
-            this.updateSearchData(update.view);
-        }
-    }
-
-    scrollToMatch(matchIndex: number) {
-        if (this.parsedMatches.length <= matchIndex) {
-            return;
-        }
-
-        const match = this.parsedMatches[matchIndex];
-        this.currentFound = matchIndex + 1;
-        this.view.dispatch({
-            effects: EditorView.scrollIntoView(match.from, { y: "center" }),
-            scrollIntoView: true
-        });
-    }
-
-    scrollToMatchNearestSelection() {
+    #scrollToMatchNearestSelection() {
         const cursorPos = this.view.state.selection.main.head;
         let index = 0;
         for (const match of this.parsedMatches) {
@@ -86,10 +90,6 @@ export class SearchHighlighter {
 
             index++;
         }
-    }
-
-    destroy() {
-        // Do nothing.
     }
 
     static deco = (v: SearchHighlighter) => v.matches;
