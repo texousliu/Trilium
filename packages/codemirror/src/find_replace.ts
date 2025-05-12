@@ -1,7 +1,8 @@
 import { EditorView, Decoration, MatchDecorator, ViewPlugin, ViewUpdate } from "@codemirror/view";
-import { RangeSet, RangeSetBuilder } from "@codemirror/state";
+import { Range, RangeSet } from "@codemirror/state";
 
 const searchMatchDecoration = Decoration.mark({ class: "cm-searchMatch" });
+const activeMatchDecoration = Decoration.mark({ class: "cm-activeMatch" });
 
 interface Match {
     from: number;
@@ -10,6 +11,8 @@ interface Match {
 
 export class SearchHighlighter {
     matches: RangeSet<Decoration>;
+    activeMatch?: Range<Decoration>;
+
     currentFound: number;
     totalFound: number;
     matcher?: MatchDecorator;
@@ -19,6 +22,7 @@ export class SearchHighlighter {
         this.parsedMatches = [];
         this.currentFound = 0;
         this.totalFound = 0;
+
         this.matches = RangeSet.empty;
     }
 
@@ -49,6 +53,7 @@ export class SearchHighlighter {
 
         const match = this.parsedMatches[matchIndex];
         this.currentFound = matchIndex + 1;
+        this.activeMatch = activeMatchDecoration.range(match.from, match.to);
         this.view.dispatch({
             effects: EditorView.scrollIntoView(match.from, { y: "center" }),
             scrollIntoView: true
@@ -102,7 +107,13 @@ export class SearchHighlighter {
 
 export function createSearchHighlighter() {
     return ViewPlugin.fromClass(SearchHighlighter, {
-        decorations: v => v.matches,
+        decorations: v => {
+            if (v.activeMatch) {
+                return v.matches.update({ add: [v.activeMatch] });
+            } else {
+                return v.matches;
+            }
+        },
         provide: (plugin) => plugin
     });
 }
@@ -111,5 +122,10 @@ export const searchMatchHighlightTheme = EditorView.baseTheme({
     ".cm-searchMatch": {
         backgroundColor: "rgba(255, 255, 0, 0.4)",
         borderRadius: "2px"
+    },
+    ".cm-activeMatch": {
+        backgroundColor: "rgba(255, 165, 0, 0.6)",
+        borderRadius: "2px",
+        outline: "2px solid orange"
     }
 });
