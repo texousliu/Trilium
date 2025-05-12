@@ -31,17 +31,12 @@ export default class FindInCode {
     }
 
     async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
-        let totalFound = 0;
-        const currentFound = 0;
-
         const codeEditor = await this.getCodeEditor();
         if (!codeEditor) {
-            return { totalFound, currentFound };
+            return { totalFound: 0, currentFound: 0 };
         }
 
-        const result = await codeEditor.performFind(searchTerm, matchCase, wholeWord);
-        totalFound = result.totalFound;
-
+        const { totalFound, currentFound } = await codeEditor.performFind(searchTerm, matchCase, wholeWord);
         return { totalFound, currentFound };
     }
 

@@ -22,11 +22,13 @@ export function createSearchHighlighter(view: EditorView, searchTerm: string, ma
 
     return ViewPlugin.fromClass(class SearchHighlighter {
         matches!: RangeSet<Decoration>;
+        currentFound: number;
         totalFound: number;
         private parsedMatches: Match[];
 
         constructor(public view: EditorView) {
             this.parsedMatches = [];
+            this.currentFound = 0;
             this.totalFound = 0;
             this.updateSearchData(view);
         }
@@ -57,24 +59,25 @@ export function createSearchHighlighter(view: EditorView, searchTerm: string, ma
                 return;
             }
 
-            this.scrollTo(this.parsedMatches[matchIndex]);
-        }
-
-        scrollToMatchNearestSelection() {
-            const cursorPos = this.view.state.selection.main.head;
-            for (const match of this.parsedMatches) {
-                if (match.from >= cursorPos) {
-                    this.scrollTo(match);
-                    return;
-                }
-            }
-        }
-
-        private scrollTo(match: Match) {
+            const match = this.parsedMatches[matchIndex];
+            this.currentFound = matchIndex + 1;
             this.view.dispatch({
                 effects: EditorView.scrollIntoView(match.from, { y: "center" }),
                 scrollIntoView: true
             });
+        }
+
+        scrollToMatchNearestSelection() {
+            const cursorPos = this.view.state.selection.main.head;
+            let index = 0;
+            for (const match of this.parsedMatches) {
+                if (match.from >= cursorPos) {
+                    this.scrollToMatch(index);
+                    return;
+                }
+
+                index++;
+            }
         }
 
         destroy() {

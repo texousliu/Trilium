@@ -185,7 +185,8 @@ export default class CodeMirror extends EditorView {
         }
 
         return {
-            totalFound: instance?.totalFound ?? 0
+            totalFound: instance?.totalFound ?? 0,
+            currentFound: instance?.currentFound ?? 0
         }
     }
 
