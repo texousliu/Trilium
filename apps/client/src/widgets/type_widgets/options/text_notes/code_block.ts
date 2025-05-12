@@ -39,15 +39,17 @@ const TPL = /*html*/`
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="note-detail-readonly-text-content ck-content code-sample-wrapper">
-            <pre class="hljs"><code class="code-sample">${SAMPLE_CODE}</code></pre>
-        </div>
+    <div class="note-detail-readonly-text-content ck-content code-sample-wrapper">
+        <pre class="hljs"><code class="code-sample">${SAMPLE_CODE}</code></pre>
     </div>
 
     <style>
         .code-sample-wrapper {
             margin-top: 1em;
+        }
+
+        .code-sample-wrapper pre {
+            margin-bottom: 0;
         }
     </style>
 </div>
