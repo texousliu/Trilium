@@ -172,7 +172,7 @@ export default class CodeMirror extends EditorView {
     }
 
     async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
-        const plugin = createSearchHighlighter(this, searchTerm, matchCase, wholeWord);
+        const plugin = createSearchHighlighter();
         this.dispatch({
             effects: this.searchHighlightCompartment.reconfigure(plugin)
         });
@@ -180,6 +180,7 @@ export default class CodeMirror extends EditorView {
         // Wait for the plugin to activate in the next render cycle
         await new Promise(requestAnimationFrame);
         const instance = this.plugin(plugin);
+        instance?.searchFor(searchTerm, matchCase, wholeWord);
         if (instance) {
             instance.scrollToMatchNearestSelection();
         }

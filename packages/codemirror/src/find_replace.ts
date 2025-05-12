@@ -1,5 +1,5 @@
 import { EditorView, Decoration, MatchDecorator, ViewPlugin, ViewUpdate } from "@codemirror/view";
-import { StateEffect, Compartment, EditorSelection, RangeSet } from "@codemirror/state";
+import { RangeSet, RangeSetBuilder } from "@codemirror/state";
 
 const searchMatchDecoration = Decoration.mark({ class: "cm-searchMatch" });
 
@@ -8,89 +8,98 @@ interface Match {
     to: number;
 }
 
-export function createSearchHighlighter(view: EditorView, searchTerm: string, matchCase: boolean, wholeWord: boolean) {
-    // Escape the search term for use in RegExp
-    const escapedTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const wordBoundary = wholeWord ? "\\b" : "";
-    const flags = matchCase ? "g" : "gi";
-    const regex = new RegExp(`${wordBoundary}${escapedTerm}${wordBoundary}`, flags);
+export class SearchHighlighter {
+    matches: RangeSet<Decoration>;
+    currentFound: number;
+    totalFound: number;
+    matcher?: MatchDecorator;
+    private parsedMatches: Match[];
 
-    const matcher = new MatchDecorator({
-        regexp: regex,
-        decoration: searchMatchDecoration,
-    });
+    constructor(public view: EditorView) {
+        this.parsedMatches = [];
+        this.currentFound = 0;
+        this.totalFound = 0;
+        this.matches = (new RangeSetBuilder<Decoration>()).finish();
+    }
 
-    return ViewPlugin.fromClass(class SearchHighlighter {
-        matches!: RangeSet<Decoration>;
-        currentFound: number;
-        totalFound: number;
-        private parsedMatches: Match[];
+    searchFor(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
+        // Escape the search term for use in RegExp
+        const escapedTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const wordBoundary = wholeWord ? "\\b" : "";
+        const flags = matchCase ? "g" : "gi";
+        const regex = new RegExp(`${wordBoundary}${escapedTerm}${wordBoundary}`, flags);
 
-        constructor(public view: EditorView) {
-            this.parsedMatches = [];
-            this.currentFound = 0;
-            this.totalFound = 0;
-            this.updateSearchData(view);
+        this.matcher = new MatchDecorator({
+            regexp: regex,
+            decoration: searchMatchDecoration,
+        });
+        this.updateSearchData(this.view);
+    }
+
+    updateSearchData(view: EditorView) {
+        if (!this.matcher) {
+            return;
         }
 
-        updateSearchData(view: EditorView) {
-            const matches = matcher.createDeco(view);
-            const cursor = matches.iter();
-            while (cursor.value) {
-                this.parsedMatches.push({
-                    from: cursor.from,
-                    to: cursor.to
-                });
-                cursor.next();
-            }
-
-            this.matches = matches;
-            this.totalFound = this.parsedMatches.length;
+        const matches = this.matcher.createDeco(view);
+        const cursor = matches.iter();
+        while (cursor.value) {
+            this.parsedMatches.push({
+                from: cursor.from,
+                to: cursor.to
+            });
+            cursor.next();
         }
 
-        update(update: ViewUpdate) {
-            if (update.docChanged || update.viewportChanged) {
-                this.updateSearchData(update.view);
-            }
+        this.matches = matches;
+        this.totalFound = this.parsedMatches.length;
+    }
+
+    update(update: ViewUpdate) {
+        if (update.docChanged || update.viewportChanged) {
+            this.updateSearchData(update.view);
+        }
+    }
+
+    scrollToMatch(matchIndex: number) {
+        if (this.parsedMatches.length <= matchIndex) {
+            return;
         }
 
-        scrollToMatch(matchIndex: number) {
-            if (this.parsedMatches.length <= matchIndex) {
+        const match = this.parsedMatches[matchIndex];
+        this.currentFound = matchIndex + 1;
+        this.view.dispatch({
+            effects: EditorView.scrollIntoView(match.from, { y: "center" }),
+            scrollIntoView: true
+        });
+    }
+
+    scrollToMatchNearestSelection() {
+        const cursorPos = this.view.state.selection.main.head;
+        let index = 0;
+        for (const match of this.parsedMatches) {
+            if (match.from >= cursorPos) {
+                this.scrollToMatch(index);
                 return;
             }
 
-            const match = this.parsedMatches[matchIndex];
-            this.currentFound = matchIndex + 1;
-            this.view.dispatch({
-                effects: EditorView.scrollIntoView(match.from, { y: "center" }),
-                scrollIntoView: true
-            });
+            index++;
         }
+    }
 
-        scrollToMatchNearestSelection() {
-            const cursorPos = this.view.state.selection.main.head;
-            let index = 0;
-            for (const match of this.parsedMatches) {
-                if (match.from >= cursorPos) {
-                    this.scrollToMatch(index);
-                    return;
-                }
+    destroy() {
+        // Do nothing.
+    }
 
-                index++;
-            }
-        }
+    static deco = (v: SearchHighlighter) => v.matches;
+}
 
-        destroy() {
-            // Do nothing.
-        }
-
-        static deco = (v: SearchHighlighter) => v.matches;
-    }, {
+export function createSearchHighlighter() {
+    return ViewPlugin.fromClass(SearchHighlighter, {
         decorations: v => v.matches,
         provide: (plugin) => plugin
     });
 }
-
 
 export const searchMatchHighlightTheme = EditorView.baseTheme({
     ".cm-searchMatch": {
