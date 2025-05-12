@@ -4,6 +4,7 @@ import server from "../../../../services/server";
 import CodeMirror, { getThemeById } from "@triliumnext/codemirror";
 import { DEFAULT_PREFIX } from "../../abstract_code_type_widget";
 import { t } from "../../../../services/i18n";
+import { ColorThemes } from "@triliumnext/codemirror";
 
 // TODO: Deduplicate
 interface Theme {
@@ -129,6 +130,15 @@ export default class CodeTheme extends OptionsWidget {
             const newTheme = String(this.$themeSelect.val());
             await server.put(`options/codeNoteTheme/${newTheme}`);
         });
+
+        // Populate the list of themes.
+        for (const theme of ColorThemes) {
+            const option = $("<option>")
+                .attr("value", `default:${theme.id}`)
+                .text(theme.name);
+            this.$themeSelect.append(option);
+        }
+
         this.$sampleEl = this.$widget.find(".note-detail-readonly-code-content");
         this.$lineWrapEnabled = this.$widget.find(".word-wrap");
         this.$lineWrapEnabled.on("change", () => this.updateCheckboxOption("codeLineWrapEnabled", this.$lineWrapEnabled));
@@ -155,14 +165,6 @@ export default class CodeTheme extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        const themes = await server.get<Response>("options/codenote-themes");
-        this.$themeSelect.empty();
-
-        for (const theme of themes) {
-            const option = $("<option>").attr("value", theme.val).text(theme.title);
-            this.$themeSelect.append(option);
-        }
-
         this.$themeSelect.val(options.codeNoteTheme);
         this.#setupPreview(options);
         this.setCheckboxState(this.$lineWrapEnabled, options.codeLineWrapEnabled);
