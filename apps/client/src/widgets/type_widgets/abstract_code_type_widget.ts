@@ -80,28 +80,22 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
 
     show() {
         this.$widget.show();
-
-        // if (this.codeEditor) {
-        //     // show can be called before render
-        //     this.codeEditor.refresh();
-        // }
     }
 
     focus() {
-        this.$editor.focus();
         this.codeEditor.focus();
     }
 
     scrollToEnd() {
-        // this.codeEditor.setCursor(this.codeEditor.lineCount(), 0);
-        // this.codeEditor.focus();
+        this.codeEditor.scrollToEnd();
+        this.codeEditor.focus();
     }
 
     cleanup() {
         if (this.codeEditor) {
-            // this.spacedUpdate.allowUpdateWithoutChange(() => {
-            //     this.codeEditor.setValue("");
-            // });
+            this.spacedUpdate.allowUpdateWithoutChange(() => {
+                this.codeEditor.setText("");
+            });
         }
     }
 

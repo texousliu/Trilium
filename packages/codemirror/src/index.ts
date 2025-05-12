@@ -1,7 +1,7 @@
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching, foldGutter } from "@codemirror/language";
-import { Compartment, EditorState, type Extension } from "@codemirror/state";
+import { Compartment, EditorSelection, EditorState, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
 import { vim } from "@replit/codemirror-vim";
 import byMimeType from "./syntax_highlighting.js";
@@ -134,6 +134,15 @@ export default class CodeMirror extends EditorView {
         });
         this.dispatch({
             effects: [ this.historyCompartment.reconfigure(history())]
+        });
+    }
+
+    scrollToEnd() {
+        const endPos = this.state.doc.length;
+        this.dispatch({
+            selection: EditorSelection.cursor(endPos),
+            effects: EditorView.scrollIntoView(endPos, { y: "end" }),
+            scrollIntoView: true
         });
     }
 
