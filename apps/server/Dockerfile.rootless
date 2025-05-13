@@ -1,0 +1,66 @@
+FROM node:22.15.0-bullseye-slim AS builder
+RUN corepack enable
+
+# Install native dependencies since we might be building cross-platform.
+WORKDIR /usr/src/app/build
+COPY ./dist/package.json ./dist/pnpm-lock.yaml ./docker/pnpm-workspace.yaml /usr/src/app/
+# We have to use --no-frozen-lockfile due to CKEditor patches
+RUN pnpm install --no-frozen-lockfile --prod && pnpm rebuild
+
+FROM node:22.15.0-bullseye-slim
+# Create a non-root user with configurable UID/GID
+ARG USER=trilium
+ARG UID=1001
+ARG GID=1001
+ENV USER=${USER}
+ENV UID=${UID}
+ENV GID=${GID}
+
+# Install only runtime dependencies
+RUN rm -rf \
+    /var/lib/apt/lists/* \
+    /var/cache/apt/* && \
+    # Create the user/group with the default UID/GID
+    groupadd -g ${GID} ${USER} && \
+    useradd -u ${UID} -g ${USER} -s /bin/sh -m ${USER}
+
+WORKDIR /home/${USER}/app
+COPY ./dist /home/${USER}/app
+RUN rm -rf /home/${USER}/app/node_modules/better-sqlite3
+COPY --from=builder /usr/src/app/node_modules/better-sqlite3 /home/${USER}/app/node_modules/better-sqlite3
+RUN chown -R ${USER}:${USER} /home/${USER}
+
+# Configure container
+USER ${USER}
+EXPOSE 8080
+
+# By default, use UID/GID that was set during build
+# These can be overridden at runtime
+ENV TRILIUM_UID=${UID}
+ENV TRILIUM_GID=${GID}
+ENV TRILIUM_DATA_DIR=/home/${USER}/trilium-data
+
+# This script will handle UID/GID remapping if needed and then start the app
+CMD [ "sh", "-c", "\
+if [ \"${TRILIUM_UID}\" != \"$(id -u)\" ] || [ \"${TRILIUM_GID}\" != \"$(id -g)\" ]; then \
+  echo \"Remapping user ${USER} to UID:GID ${TRILIUM_UID}:${TRILIUM_GID}\"; \
+  # Use 'id -u' and 'id -g' to get current UID and GID \
+  if [ \"${TRILIUM_GID}\" != \"$(id -g)\" ]; then \
+    # Need root to modify user/group, but we can't use sudo, so we need to exit \
+    echo \"ERROR: Cannot change GID at runtime in rootless mode.\"; \
+    echo \"       Please use docker run with --user ${TRILIUM_UID}:${TRILIUM_GID} instead.\"; \
+    exit 1; \
+  fi; \
+  if [ \"${TRILIUM_UID}\" != \"$(id -u)\" ]; then \
+    echo \"ERROR: Cannot change UID at runtime in rootless mode.\"; \
+    echo \"       Please use docker run with --user ${TRILIUM_UID}:${TRILIUM_GID} instead.\"; \
+    exit 1; \
+  fi; \
+fi; \
+# Make sure data directory has correct permissions \
+mkdir -p \"${TRILIUM_DATA_DIR}\"; \
+# Start the app \
+exec node ./main \
+" ]
+
+HEALTHCHECK --start-period=10s CMD node /home/${USER}/app/docker_healthcheck.js
