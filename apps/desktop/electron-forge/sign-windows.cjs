@@ -5,9 +5,6 @@ const { default: path } = require("path");
 module.exports = function (filePath) {
     const { WINDOWS_SIGN_EXECUTABLE } = process.env;
 
-    const stats = fs.lstatSync(filePath);
-    console.log(filePath, stats);
-
     if (!WINDOWS_SIGN_EXECUTABLE) {
         console.warn("[Sign] Skip signing due to missing environment variable.");
         return;
