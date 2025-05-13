@@ -4,6 +4,7 @@ import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, 
 import { Compartment, EditorSelection, EditorState, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
 import { vim } from "@replit/codemirror-vim";
+import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 import byMimeType from "./syntax_highlighting.js";
 import smartIndentWithTab from "./extensions/custom_tab.js";
 import type { ThemeDefinition } from "./color_themes.js";
@@ -62,6 +63,7 @@ export default class CodeMirror extends EditorView {
             bracketMatching(),
             lineNumbers(),
             foldGutter(),
+            indentationMarkers(),
             indentUnit.of(" ".repeat(4)),
             keymap.of([
                 ...defaultKeymap,
