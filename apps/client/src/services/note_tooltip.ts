@@ -8,6 +8,9 @@ import appContext from "../components/app_context.js";
 import type FNote from "../entities/fnote.js";
 import { t } from "./i18n.js";
 
+// Track all elements that open tooltips
+let openTooltipElements: JQuery<HTMLElement>[] = [];
+
 function setupGlobalTooltip() {
     $(document).on("mouseenter", "a", mouseEnterHandler);
 
@@ -23,7 +26,11 @@ function setupGlobalTooltip() {
 }
 
 function dismissAllTooltips() {
-    $(".note-tooltip").remove();
+    openTooltipElements.forEach($el => {
+        $el.tooltip("dispose");
+        $el.removeAttr("aria-describedby");
+    });
+    openTooltipElements = [];
 }
 
 function setupElementTooltip($el: JQuery<HTMLElement>) {
@@ -86,8 +93,8 @@ async function mouseEnterHandler(this: HTMLElement) {
     // we need to check if we're still hovering over the element
     // since the operation to get tooltip content was async, it is possible that
     // we now create tooltip which won't close because it won't receive mouseleave event
-    if ($(this).filter(":hover").length > 0) {
-        $(this).tooltip({
+    if ($link.filter(":hover").length > 0) {
+        $link.tooltip({
             container: "body",
             // https://github.com/zadam/trilium/issues/2794 https://github.com/zadam/trilium/issues/2988
             // with bottom this flickering happens a bit less
@@ -103,7 +110,9 @@ async function mouseEnterHandler(this: HTMLElement) {
         });
 
         dismissAllTooltips();
-        $(this).tooltip("show");
+        $link.tooltip("show");
+
+        openTooltipElements.push($link);
 
         // Dismiss the tooltip immediately if a link was clicked inside the tooltip.
         $(`.${tooltipClass} a`).on("click", (e) => {
@@ -115,7 +124,8 @@ async function mouseEnterHandler(this: HTMLElement) {
         //   click on links within tooltip etc. without tooltip disappearing
         // - once the user moves the cursor away from both link and the tooltip, hide the tooltip
         const checkTooltip = () => {
-            if (!$(this).filter(":hover").length && !$(`.${linkId}:hover`).length) {
+
+            if (!$link.filter(":hover").length && !$(`.${linkId}:hover`).length) {
                 // cursor is neither over the link nor over the tooltip, user likely is not interested
                 dismissAllTooltips();
             } else {
