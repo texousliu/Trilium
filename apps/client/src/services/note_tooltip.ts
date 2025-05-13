@@ -10,6 +10,7 @@ import { t } from "./i18n.js";
 
 // Track all elements that open tooltips
 let openTooltipElements: JQuery<HTMLElement>[] = [];
+let dismissTimer: ReturnType<typeof setTimeout>;
 
 function setupGlobalTooltip() {
     $(document).on("mouseenter", "a", mouseEnterHandler);
@@ -26,6 +27,7 @@ function setupGlobalTooltip() {
 }
 
 function dismissAllTooltips() {
+    clearTimeout(dismissTimer);
     openTooltipElements.forEach($el => {
         $el.tooltip("dispose");
         $el.removeAttr("aria-describedby");
@@ -129,11 +131,11 @@ async function mouseEnterHandler(this: HTMLElement) {
                 // cursor is neither over the link nor over the tooltip, user likely is not interested
                 dismissAllTooltips();
             } else {
-                setTimeout(checkTooltip, 1000);
+                dismissTimer = setTimeout(checkTooltip, 1000);
             }
         };
 
-        setTimeout(checkTooltip, 1000);
+        dismissTimer = setTimeout(checkTooltip, 1000);
     }
 }
 
