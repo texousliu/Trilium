@@ -176,7 +176,25 @@ function renderFootnote($link: JQuery<HTMLElement>, url: string) {
         .closest(".footnote-item") // find the parent container of the footnote
         .find(".footnote-content"); // find the actual text content of the footnote
 
-    return $footnoteContent.html() || "";
+    const isEditable = $link.closest(".ck-content").hasClass("note-detail-editable-text-editor");
+    if (isEditable) {
+        /* Remove widget buttons for tables, formulas, and images in editable notes. */
+        $footnoteContent.find('.ck-widget__selection-handle').remove();
+        $footnoteContent.find('.ck-widget__type-around').remove();
+        $footnoteContent.find('.ck-widget__resizer').remove();
+
+        /* Handling in-line math formulas */
+        $footnoteContent.find('.ck-math-tex.ck-math-tex-inline.ck-widget').each(function () {
+            const $katex = $(this).find('.katex, .katex-display').first();
+            if ($katex.length) {
+                $(this).replaceWith($('<span class="math-tex"></span>').append($('<span></span>').append($katex.clone())));
+            }
+        });
+    }
+    
+    let footnoteContent = $footnoteContent.html();
+    footnoteContent = `<div class="ck-content">${footnoteContent}</div>`
+    return footnoteContent || "";
 }
 
 export default {
