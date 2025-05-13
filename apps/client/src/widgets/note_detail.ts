@@ -127,51 +127,12 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             if (data === undefined) {
                 return;
             }
-            
-            // Check if note is read-only before attempting to save
-            const isReadOnlyBefore = await this.noteContext.isReadOnly();
-            
-            // If the note is read-only due to size but user is still editing,
-            // we need to temporarily disable read-only mode
-            if (isReadOnlyBefore && !this.noteContext.viewScope?.readOnlyTemporarilyDisabled) {
-                // Auto-enable temporary edit mode (same as "Edit this note" button)
-                if (this.noteContext.viewScope) {
-                    this.noteContext.viewScope.readOnlyTemporarilyDisabled = true;
-                    appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext: this.noteContext });
-                }
-            }
 
             protectedSessionHolder.touchProtectedSessionIfNecessary(note);
 
-            try {
-                await server.put(`notes/${noteId}/data`, data, this.componentId);
-                this.getTypeWidget().dataSaved();
-                
-                // Check if this save operation made the note cross the threshold
-                if (!isReadOnlyBefore && (await this.noteContext.isReadOnly())) {
-                    // Note just became read-only after this save - enable temporary edit mode
-                    if (this.noteContext.viewScope) {
-                        this.noteContext.viewScope.readOnlyTemporarilyDisabled = true;
-                        appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext: this.noteContext });
-                    }
-                }
-            } catch (err) {
-                // If save failed because the note just became read-only,
-                // enable temporary edit mode and try again
-                if (!isReadOnlyBefore && (await this.noteContext.isReadOnly())) {
-                    if (this.noteContext.viewScope) {
-                        this.noteContext.viewScope.readOnlyTemporarilyDisabled = true;
-                        appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext: this.noteContext });
-                        
-                        // Try saving again with temporary edit mode enabled
-                        await server.put(`notes/${noteId}/data`, data, this.componentId);
-                        this.getTypeWidget().dataSaved();
-                    }
-                } else {
-                    // For other errors, just rethrow
-                    throw err;
-                }
-            }
+            await server.put(`notes/${noteId}/data`, data, this.componentId);
+
+            this.getTypeWidget().dataSaved();
         });
 
         appContext.addBeforeUnloadListener(this);
@@ -403,73 +364,9 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         return this.spacedUpdate.isAllSavedAndTriggerUpdate();
     }
 
-    async readOnlyTemporarilyDisabledEvent({ noteContext }: EventData<"readOnlyTemporarilyDisabled">) {
+    readOnlyTemporarilyDisabledEvent({ noteContext }: EventData<"readOnlyTemporarilyDisabled">) {
         if (this.isNoteContext(noteContext.ntxId)) {
-            // Check if we're dealing with a text note/editor type
-            const isTextNote = this.type === "editableText" || this.type === "readOnlyText";
-            
-            if (isTextNote) {
-                // Get current editor and selection before refresh
-                const currentEditor = await this.noteContext?.getTextEditor();
-                let cursorInfo = null;
-                
-                if (currentEditor) {
-                    try {
-                        const selection = currentEditor.model.document.selection;
-                        if (selection) {
-                            const cursorPos = selection.getFirstPosition();
-                            if (cursorPos) {
-                                // Store minimal info about cursor position to restore later
-                                cursorInfo = {
-                                    // Store paragraph index and character offset
-                                    paraIndex: cursorPos.path[0] || 0,
-                                    offset: cursorPos.offset
-                                };
-                            }
-                        }
-                    } catch (e) {
-                        // Ignore errors in getting selection
-                    }
-                }
-                
-                // Perform refresh to transition editor
-                await this.refresh();
-                
-                // Immediately attempt to restore cursor position without delay
-                if (cursorInfo) {
-                    const newEditor = await this.noteContext?.getTextEditor();
-                    if (newEditor) {
-                        try {
-                            newEditor.model.change(writer => {
-                                const root = newEditor.model.document.getRoot();
-                                if (!root) return;
-                                
-                                // Find the paragraph at the same index or closest available
-                                const targetParaIndex = Math.min(cursorInfo.paraIndex, root.childCount - 1);
-                                const paragraph = root.getChild(targetParaIndex);
-                                
-                                if (paragraph) {
-                                    // Use an explicit cast to access maxOffset
-                                    const maxOffset = (paragraph as any).maxOffset || 0;
-                                    const safeOffset = Math.min(cursorInfo.offset, maxOffset);
-                                    
-                                    // Set cursor at the preserved position
-                                    const position = writer.createPositionAt(paragraph, safeOffset);
-                                    writer.setSelection(position);
-                                }
-                            });
-                            
-                            // Focus editor to make cursor visible immediately
-                            newEditor.editing.view.focus();
-                        } catch (e) {
-                            // Silently fail if we can't restore cursor
-                        }
-                    }
-                }
-            } else {
-                // Not a text editor, just do a regular refresh
-                await this.refresh();
-            }
+            this.refresh();
         }
     }
 
