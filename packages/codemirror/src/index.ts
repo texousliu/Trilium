@@ -198,6 +198,10 @@ export default class CodeMirror extends EditorView {
         this.searchPlugin?.replaceActiveMatch(replaceText);
     }
 
+    async replaceAll(replaceText: string) {
+        this.searchPlugin?.replaceAll(replaceText);
+    }
+
     cleanSearch() {
         if (this.searchPlugin) {
             this.dispatch({

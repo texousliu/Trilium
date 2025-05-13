@@ -57,6 +57,18 @@ export class SearchHighlighter {
         });
     }
 
+    replaceAll(replacementText: string) {
+        if (!this.parsedMatches.length) return;
+
+        this.view.dispatch({
+            changes: this.parsedMatches.map(change => ({
+                from: change.from,
+                to: change.to,
+                insert: replacementText
+            }))
+        });
+    }
+
     scrollToMatch(matchIndex: number) {
         if (this.parsedMatches.length <= matchIndex) {
             return;

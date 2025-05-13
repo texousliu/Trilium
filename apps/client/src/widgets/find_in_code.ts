@@ -61,23 +61,7 @@ export default class FindInCode {
     }
 
     async replaceAll(replaceText: string) {
-        if (!this.findResult || this.findResult.length === 0) {
-            return;
-        }
         const codeEditor = await this.getCodeEditor();
-        const doc = codeEditor?.doc;
-        codeEditor?.operation(() => {
-            if (!this.findResult) {
-                return;
-            }
-
-            for (let currentFound = 0; currentFound < this.findResult.length; currentFound++) {
-                let marker = this.findResult[currentFound];
-                let pos = marker.find();
-                doc?.replaceRange(replaceText, pos.from, pos.to);
-                marker.clear();
-            }
-        });
-        this.findResult = [];
+        codeEditor?.replaceAll(replaceText);
     }
 }
