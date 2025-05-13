@@ -1,6 +1,16 @@
-import { lint } from "./eslint.js";
+import { lint as _lint } from "./eslint.js";
 import { trimIndentation } from "@triliumnext/commons";
 import { describe, expect, it } from "vitest";
+
+async function lint(code: string, mimeType: string) {
+    const linterData = await _lint(mimeType);
+    if (!("linter" in linterData)) {
+        return [];
+    }
+    const { linter, config } = linterData;
+    const result = linter.verify(code, config);
+    return result;
+}
 
 describe("Linter", () => {
     it("reports some basic errors", async () => {

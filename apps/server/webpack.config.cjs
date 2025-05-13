@@ -22,10 +22,6 @@ function buildFilesToCopy() {
     "autocomplete.js/dist",
     "normalize.css/normalize.css",
     "jquery.fancytree/dist",
-    "codemirror/lib",
-    "codemirror/addon",
-    "codemirror/mode",
-    "codemirror/keymap",
     "@highlightjs/cdn-assets",
 
     // Required as they are native dependencies and cannot be well bundled.

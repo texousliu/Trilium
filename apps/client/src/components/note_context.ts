@@ -11,6 +11,7 @@ import type { ViewScope } from "../services/link.js";
 import type FNote from "../entities/fnote.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
+import type CodeMirror from "@triliumnext/codemirror";
 
 export interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
@@ -312,7 +313,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
     async getCodeEditor() {
         return this.timeout(
-            new Promise<CodeMirrorInstance>((resolve) =>
+            new Promise<CodeMirror>((resolve) =>
                 appContext.triggerCommand("executeWithCodeEditor", {
                     resolve,
                     ntxId: this.ntxId

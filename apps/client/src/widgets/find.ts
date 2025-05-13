@@ -203,7 +203,7 @@ export default class FindWidget extends NoteContextAwareWidget {
                 selectedText = $content.find('.cm-matchhighlight').first().text();
             } else {
                 const codeEditor = await this.noteContext.getCodeEditor();
-                selectedText = codeEditor.getSelection();
+                selectedText = codeEditor.getSelectedText();
             }
         } else {
             selectedText = window.getSelection()?.toString() || "";
@@ -247,16 +247,16 @@ export default class FindWidget extends NoteContextAwareWidget {
     }
 
     async getHandler() {
-        if (this.note?.type === "render") {
-            return this.htmlHandler;
-        }
-
-        const readOnly = await this.noteContext?.isReadOnly();
-
-        if (readOnly) {
-            return this.htmlHandler;
-        } else {
-            return this.note?.type === "code" ? this.codeHandler : this.textHandler;
+        switch (this.note?.type) {
+            case "render":
+                return this.htmlHandler;
+            case "code":
+                return this.codeHandler;
+            case "text":
+                return this.textHandler;
+            default:
+                const readOnly = await this.noteContext?.isReadOnly();
+                return readOnly ? this.htmlHandler : this.textHandler;
         }
     }
 

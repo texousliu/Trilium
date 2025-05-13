@@ -5,7 +5,6 @@ import libraryLoader from "./library_loader.js";
 import ws from "./ws.js";
 import froca from "./froca.js";
 import linkService from "./link.js";
-import { lint } from "./eslint.js";
 
 function setupGlobs() {
     window.glob.isDesktop = utils.isDesktop;
@@ -19,7 +18,6 @@ function setupGlobs() {
     // required for ESLint plugin and CKEditor
     window.glob.getActiveContextNote = () => appContext.tabManager.getActiveContextNote();
     window.glob.requireLibrary = libraryLoader.requireLibrary;
-    window.glob.linter = lint;
     window.glob.appContext = appContext; // for debugging
     window.glob.froca = froca;
     window.glob.treeCache = froca; // compatibility for CKEditor builds for a while

@@ -1568,7 +1568,7 @@
     "auto-detect-language": "Automatisch erkannt"
   },
   "highlighting": {
-    "title": "Code-Syntax-Hervorhebung für Textnotizen",
+    "title": "",
     "description": "Steuert die Syntaxhervorhebung für Codeblöcke in Textnotizen, Code-Notizen sind nicht betroffen.",
     "color-scheme": "Farbschema"
   },
