@@ -17,10 +17,16 @@ interface Match {
     };
 }
 
+interface SearchParameters {
+    searchTerm: string;
+    matchCase: boolean;
+    wholeWord: boolean;
+}
+
 export default class FindInCode {
 
     private parent: FindWidget;
-    private findResult?: Match[] | null;
+    private searchParameters: SearchParameters | null = null;
 
     constructor(parent: FindWidget) {
         this.parent = parent;
@@ -36,6 +42,11 @@ export default class FindInCode {
             return { totalFound: 0, currentFound: 0 };
         }
 
+        this.searchParameters = {
+            searchTerm,
+            matchCase,
+            wholeWord,
+        };
         const { totalFound, currentFound } = await codeEditor.performFind(searchTerm, matchCase, wholeWord);
         return { totalFound, currentFound };
     }
@@ -57,11 +68,23 @@ export default class FindInCode {
 
     async replace(replaceText: string) {
         const codeEditor = await this.getCodeEditor();
-        codeEditor?.replace(replaceText);
+        await codeEditor?.replace(replaceText);
+        this.rerunSearch();
     }
 
     async replaceAll(replaceText: string) {
         const codeEditor = await this.getCodeEditor();
-        codeEditor?.replaceAll(replaceText);
+        await codeEditor?.replaceAll(replaceText);
+        this.rerunSearch();
     }
+
+    private rerunSearch() {
+        if (this.searchParameters) {
+            this.performFind(
+                this.searchParameters.searchTerm,
+                this.searchParameters.matchCase,
+                this.searchParameters.wholeWord);
+        }
+    }
+
 }
