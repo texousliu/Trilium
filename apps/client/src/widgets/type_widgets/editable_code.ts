@@ -71,16 +71,6 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         };
     }
 
-    async executeWithCodeEditorEvent({ resolve, ntxId }: EventData<"executeWithCodeEditor">) {
-        if (!this.isNoteContext(ntxId)) {
-            return;
-        }
-
-        await this.initialized;
-
-        resolve(this.codeEditor);
-    }
-
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
         const items: TouchBarItem[] = [];
         const note = this.note;
