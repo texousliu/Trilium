@@ -185,7 +185,7 @@ function renderFootnote($link: JQuery<HTMLElement>, url: string) {
 
         /* Handling in-line math formulas */
         $footnoteContent.find('.ck-math-tex.ck-math-tex-inline.ck-widget').each(function () {
-            const $katex = $(this).find('.katex, .katex-display').first();
+            const $katex = $(this).find('.katex').first();
             if ($katex.length) {
                 $(this).replaceWith($('<span class="math-tex"></span>').append($('<span></span>').append($katex.clone())));
             }
