@@ -25,8 +25,6 @@ const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("highlighting.title")}</h4>
 
-    <p class="form-text">${t("highlighting.description")}</p>
-
     <div class="form-group row">
         <div class="col-md-6">
             <label for="highlighting-color-scheme-select">${t("highlighting.color-scheme")}</label>
@@ -41,20 +39,23 @@ const TPL = /*html*/`
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="note-detail-readonly-text-content ck-content code-sample-wrapper">
-            <pre class="hljs"><code class="code-sample">${SAMPLE_CODE}</code></pre>
-        </div>
+    <div class="note-detail-readonly-text-content ck-content code-sample-wrapper">
+        <pre class="hljs"><code class="code-sample">${SAMPLE_CODE}</code></pre>
     </div>
 
     <style>
         .code-sample-wrapper {
             margin-top: 1em;
         }
+
+        .code-sample-wrapper pre {
+            margin-bottom: 0;
+        }
     </style>
 </div>
 `;
 
+// TODO: Deduplicate
 interface Theme {
     title: string;
     val: string;

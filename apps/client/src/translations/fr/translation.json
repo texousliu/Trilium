@@ -1574,7 +1574,7 @@
     "auto-detect-language": "Détecté automatiquement"
   },
   "highlighting": {
-    "title": "Coloration syntaxique du code pour les notes texte",
+    "title": "",
     "description": "Contrôle la coloration syntaxique des blocs de code à l'intérieur des notes texte, les notes de code ne seront pas affectées.",
     "color-scheme": "Jeu de couleurs"
   },

@@ -91,12 +91,6 @@ async function register(app: express.Application) {
 
     app.use(`/${assetPath}/node_modules/jquery.fancytree/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery.fancytree/dist/")));
 
-    // CodeMirror
-    app.use(`/${assetPath}/node_modules/codemirror/lib/`, persistentCacheStatic(path.join(nodeModulesDir, "codemirror/lib/")));
-    app.use(`/${assetPath}/node_modules/codemirror/addon/`, persistentCacheStatic(path.join(nodeModulesDir, "codemirror/addon/")));
-    app.use(`/${assetPath}/node_modules/codemirror/mode/`, persistentCacheStatic(path.join(nodeModulesDir, "codemirror/mode/")));
-    app.use(`/${assetPath}/node_modules/codemirror/keymap/`, persistentCacheStatic(path.join(nodeModulesDir, "codemirror/keymap/")));
-
     app.use(`/${assetPath}/node_modules/@highlightjs/cdn-assets/`, persistentCacheStatic(path.join(nodeModulesDir, "@highlightjs/cdn-assets/")));
 }
 

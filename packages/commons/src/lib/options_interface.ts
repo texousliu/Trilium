@@ -91,6 +91,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
 
     // Appearance
     splitEditorOrientation: "horziontal" | "vertical";
+    codeNoteTheme: string;
 
     initialized: boolean;
     isPasswordSet: boolean;

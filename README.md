@@ -20,6 +20,17 @@ There are no special migration steps to migrate from a zadam/Trilium instance to
 
 Versions up to and including [v0.90.4](https://github.com/TriliumNext/Notes/releases/tag/v0.90.4) are compatible with the latest zadam/trilium version of [v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Any later versions of TriliumNext have their sync versions incremented.
 
+## Documentation
+
+We're currently in the progress of moving the documentation to in-app (hit the `F1` key within Trilium). As a result, there may be some missing parts until we've completed the migration. If you'd prefer to navigate through the documentation within GitHub, you can navigate the [User Guide](./docs/User%20Guide/User%20Guide/) documentation. 
+
+Below are some quick links for your convenience to navigate the documentation:
+- [Server installation](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  - [Docker installation](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Upgrading TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [Concepts and Features - Note](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+
+
 ## 💬 Discuss with us
 
 Feel free to join our official conversations. We would love to hear what features, suggestions, or issues you may have!
@@ -63,7 +74,7 @@ Feel free to join our official conversations. We would love to hear what feature
 
 To use TriliumNext on your desktop machine (Linux, MacOS, and Windows) you have a few options:
 
-* Download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Notes/releases/latest), unzip the package and run the ```trilium``` executable.
+* Download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Notes/releases/latest), unzip the package and run the `trilium` executable.
 * Access TriliumNext via the web interface of a server installation (see below)
     * Currently only the latest versions of Chrome & Firefox are supported (and tested).
 * TriliumNext is also provided as a Flatpak, but not yet published on FlatHub.
@@ -90,18 +101,38 @@ You can also read [Patterns of personal knowledge base](https://triliumnext.gith
 
 ### Code
 
+Download the repository, install dependencies using `pnpm` and then run the server (available at http://localhost:8080):
 ```shell
 git clone https://github.com/TriliumNext/Notes.git
 cd Notes
-npm install
-npm run server:start
+pnpm install
+pnpm run server:start
+```
+
+### Documentation
+
+Download the repository, install dependencies using `pnpm` and then run the environment required to edit the documentation:
+```shell
+git clone https://github.com/TriliumNext/Notes.git
+cd Notes
+pnpm install
+pnpm nx run edit-docs:serve
+```
+
+### Building the Executable
+Download the repository, install dependencies using `pnpm` and then build the desktop app for Windows:
+```shell
+git clone https://github.com/TriliumNext/Notes.git
+cd Notes
+pnpm install
+pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
 ```
 
 For more details, see the [development docs](https://github.com/TriliumNext/Notes/blob/develop/docs/Developer%20Guide/Developer%20Guide/Building%20and%20deployment/Running%20a%20development%20build.md).
 
-### Documentation
+### Developer Documentation
 
-See the [documentation guide](https://github.com/TriliumNext/Notes/blob/develop/docs/Developer%20Guide/Developer%20Guide/Documentation.md) for details.
+Please view the [documentation guide](./docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md) for details. If you have more questions, feel free to reach out via the links described in the "Discuss with us" section above.
 
 ## 👏 Shoutouts
 
