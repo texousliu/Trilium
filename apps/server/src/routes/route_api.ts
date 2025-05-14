@@ -18,7 +18,10 @@ export const router = express.Router();
 type HttpMethod = "all" | "get" | "post" | "put" | "delete" | "patch" | "options" | "head";
 
 export type ApiResultHandler = (req: express.Request, res: express.Response, result: unknown) => number;
+
+type NotAPromise<T> = T & { then?: void };
 export type ApiRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => unknown;
+export type SyncRouteRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => NotAPromise<object> | number | string | void | null;
 
 /** Handling common patterns. If entity is not caught, serialization to JSON will fail */
 function convertEntitiesToPojo(result: unknown) {
@@ -88,11 +91,15 @@ function send(res: express.Response, statusCode: number, response: unknown) {
     }
 }
 
-export function apiRoute(method: HttpMethod, path: string, routeHandler: ApiRequestHandler) {
+export function apiRoute(method: HttpMethod, path: string, routeHandler: SyncRouteRequestHandler) {
     route(method, path, [auth.checkApiAuth, csrfMiddleware], routeHandler, apiResultHandler);
 }
 
-export function route(method: HttpMethod, path: string, middleware: express.Handler[], routeHandler: ApiRequestHandler, resultHandler: ApiResultHandler | null = null) {
+export function asyncApiRoute(method: HttpMethod, path: string, routeHandler: ApiRequestHandler) {
+    asyncRoute(method, path, [auth.checkApiAuth, csrfMiddleware], routeHandler, apiResultHandler);
+}
+
+export function route(method: HttpMethod, path: string, middleware: express.Handler[], routeHandler: SyncRouteRequestHandler, resultHandler: ApiResultHandler | null = null) {
     internalRoute(method, path, middleware, routeHandler, resultHandler, true);
 }
 
