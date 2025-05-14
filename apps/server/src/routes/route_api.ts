@@ -92,7 +92,15 @@ export function apiRoute(method: HttpMethod, path: string, routeHandler: ApiRequ
     route(method, path, [auth.checkApiAuth, csrfMiddleware], routeHandler, apiResultHandler);
 }
 
-export function route(method: HttpMethod, path: string, middleware: express.Handler[], routeHandler: ApiRequestHandler, resultHandler: ApiResultHandler | null = null, transactional = true) {
+export function route(method: HttpMethod, path: string, middleware: express.Handler[], routeHandler: ApiRequestHandler, resultHandler: ApiResultHandler | null = null) {
+    internalRoute(method, path, middleware, routeHandler, resultHandler, true);
+}
+
+export function asyncRoute(method: HttpMethod, path: string, middleware: express.Handler[], routeHandler: ApiRequestHandler, resultHandler: ApiResultHandler | null = null) {
+    internalRoute(method, path, middleware, routeHandler, resultHandler, false);
+}
+
+function internalRoute(method: HttpMethod, path: string, middleware: express.Handler[], routeHandler: ApiRequestHandler, resultHandler: ApiResultHandler | null = null, transactional: boolean) {
     router[method](path, ...(middleware as express.Handler[]), (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const start = Date.now();
 

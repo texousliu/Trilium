@@ -69,7 +69,7 @@ import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 import apiDocsRoute from "./api_docs.js";
-import { apiResultHandler, apiRoute, route, router, uploadMiddlewareWithErrorHandling } from "./route_api.js";
+import { apiResultHandler, apiRoute, asyncRoute, route, router, uploadMiddlewareWithErrorHandling } from "./route_api.js";
 
 const GET = "get",
     PST = "post",
@@ -243,10 +243,10 @@ function register(app: express.Application) {
 
     // group of the services below are meant to be executed from the outside
     route(GET, "/api/setup/status", [], setupApiRoute.getStatus, apiResultHandler);
-    route(PST, "/api/setup/new-document", [auth.checkAppNotInitialized], setupApiRoute.setupNewDocument, apiResultHandler, false);
-    route(PST, "/api/setup/sync-from-server", [auth.checkAppNotInitialized], setupApiRoute.setupSyncFromServer, apiResultHandler, false);
+    asyncRoute(PST, "/api/setup/new-document", [auth.checkAppNotInitialized], setupApiRoute.setupNewDocument, apiResultHandler);
+    asyncRoute(PST, "/api/setup/sync-from-server", [auth.checkAppNotInitialized], setupApiRoute.setupSyncFromServer, apiResultHandler);
     route(GET, "/api/setup/sync-seed", [auth.checkCredentials], setupApiRoute.getSyncSeed, apiResultHandler);
-    route(PST, "/api/setup/sync-seed", [auth.checkAppNotInitialized], setupApiRoute.saveSyncSeed, apiResultHandler, false);
+    asyncRoute(PST, "/api/setup/sync-seed", [auth.checkAppNotInitialized], setupApiRoute.saveSyncSeed, apiResultHandler);
 
     apiRoute(GET, "/api/autocomplete", autocompleteApiRoute.getAutocomplete);
     apiRoute(GET, "/api/autocomplete/notesCount", autocompleteApiRoute.getNotesCount);
@@ -300,25 +300,25 @@ function register(app: express.Application) {
 
     apiRoute(GET, "/api/sql/schema", sqlRoute.getSchema);
     apiRoute(PST, "/api/sql/execute/:noteId", sqlRoute.execute);
-    route(PST, "/api/database/anonymize/:type", [auth.checkApiAuthOrElectron, csrfMiddleware], databaseRoute.anonymize, apiResultHandler, false);
+    asyncRoute(PST, "/api/database/anonymize/:type", [auth.checkApiAuthOrElectron, csrfMiddleware], databaseRoute.anonymize, apiResultHandler);
     apiRoute(GET, "/api/database/anonymized-databases", databaseRoute.getExistingAnonymizedDatabases);
 
     if (process.env.TRILIUM_INTEGRATION_TEST === "memory") {
-        route(PST, "/api/database/rebuild/", [auth.checkApiAuthOrElectron], databaseRoute.rebuildIntegrationTestDatabase, apiResultHandler, false);
+        asyncRoute(PST, "/api/database/rebuild/", [auth.checkApiAuthOrElectron], databaseRoute.rebuildIntegrationTestDatabase, apiResultHandler);
     }
 
     // backup requires execution outside of transaction
-    route(PST, "/api/database/backup-database", [auth.checkApiAuthOrElectron, csrfMiddleware], databaseRoute.backupDatabase, apiResultHandler, false);
+    asyncRoute(PST, "/api/database/backup-database", [auth.checkApiAuthOrElectron, csrfMiddleware], databaseRoute.backupDatabase, apiResultHandler);
     apiRoute(GET, "/api/database/backups", databaseRoute.getExistingBackups);
 
     // VACUUM requires execution outside of transaction
-    route(PST, "/api/database/vacuum-database", [auth.checkApiAuthOrElectron, csrfMiddleware], databaseRoute.vacuumDatabase, apiResultHandler, false);
+    asyncRoute(PST, "/api/database/vacuum-database", [auth.checkApiAuthOrElectron, csrfMiddleware], databaseRoute.vacuumDatabase, apiResultHandler);
 
-    route(PST, "/api/database/find-and-fix-consistency-issues", [auth.checkApiAuthOrElectron, csrfMiddleware], databaseRoute.findAndFixConsistencyIssues, apiResultHandler, false);
+    asyncRoute(PST, "/api/database/find-and-fix-consistency-issues", [auth.checkApiAuthOrElectron, csrfMiddleware], databaseRoute.findAndFixConsistencyIssues, apiResultHandler);
 
     apiRoute(GET, "/api/database/check-integrity", databaseRoute.checkIntegrity);
 
-    route(PST, "/api/script/exec", [auth.checkApiAuth, csrfMiddleware], scriptRoute.exec, apiResultHandler, false);
+    asyncRoute(PST, "/api/script/exec", [auth.checkApiAuth, csrfMiddleware], scriptRoute.exec, apiResultHandler);
 
     apiRoute(PST, "/api/script/run/:noteId", scriptRoute.run);
     apiRoute(GET, "/api/script/startup", scriptRoute.getStartupBundles);
