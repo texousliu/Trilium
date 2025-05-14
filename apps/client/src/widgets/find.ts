@@ -197,7 +197,7 @@ export default class FindWidget extends NoteContextAwareWidget {
         const isReadOnly = await this.noteContext?.isReadOnly();
 
         let selectedText = "";
-        if (this.note?.type === "code" && this.noteContext && !isReadOnly) {
+        if (this.note?.type === "code" && this.noteContext) {
             const codeEditor = await this.noteContext.getCodeEditor();
             selectedText = codeEditor.getSelectedText();
         } else {
