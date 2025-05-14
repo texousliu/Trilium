@@ -80,6 +80,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
 
     show() {
         this.$widget.show();
+        this.#updateBackgroundColor();
     }
 
     focus() {
@@ -97,6 +98,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
                 this.codeEditor.setText("");
             });
         }
+        this.#updateBackgroundColor("unset");
     }
 
     async executeWithCodeEditorEvent({ resolve, ntxId }: EventData<"executeWithCodeEditor">) {
@@ -117,12 +119,18 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
                 if (theme) {
                     await this.codeEditor.setTheme(theme);
                 }
+                this.#updateBackgroundColor();
             }
         }
 
         if (loadResults.isOptionReloaded("codeLineWrapEnabled")) {
             this.codeEditor.setLineWrapping(options.is("codeLineWrapEnabled"));
         }
+    }
+
+    #updateBackgroundColor(color?: string) {
+        const $editorEl = $(this.codeEditor.dom);
+        this.$widget.closest(".scrolling-container").css("background-color", color ?? $editorEl.css("background-color"));
     }
 
 }
