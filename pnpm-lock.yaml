@@ -471,8 +471,8 @@ importers:
         version: 2.38.5(jquery@3.7.1)
     devDependencies:
       '@anthropic-ai/sdk':
-        specifier: 0.50.3
-        version: 0.50.3
+        specifier: 0.50.4
+        version: 0.50.4
       '@braintree/sanitize-url':
         specifier: 7.1.1
         version: 7.1.1
@@ -1318,8 +1318,8 @@ packages:
   '@antfu/utils@8.1.1':
     resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
 
-  '@anthropic-ai/sdk@0.50.3':
-    resolution: {integrity: sha512-DrCym4bNTwC60Y+cYVUmHKsXva3xhYAnOOFYi7/CwDHwAyBtqrUIic3xkvOpPveEHhe4s/ELAflssrlipk5tOg==}
+  '@anthropic-ai/sdk@0.50.4':
+    resolution: {integrity: sha512-zZOWyIuznx2uqiRcCNuidkAsLC8IBHgS9lTwSVEB29sUCwEcqL95MWpWP1nccHSKfiZga+hbZaI0btR2zjuMmw==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -14462,7 +14462,7 @@ snapshots:
 
   '@antfu/utils@8.1.1': {}
 
-  '@anthropic-ai/sdk@0.50.3': {}
+  '@anthropic-ai/sdk@0.50.4': {}
 
   '@apidevtools/json-schema-ref-parser@9.1.2':
     dependencies:
@@ -15391,6 +15391,15 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@ckeditor/ckeditor5-autoformat@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-heading': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-typing': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+
   '@ckeditor/ckeditor5-autoformat@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15561,23 +15570,27 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-collaboration-core@45.0.0':
+  '@ckeditor/ckeditor5-collaboration-core@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-comments': 45.0.0
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-icons': 45.0.0
       '@ckeditor/ckeditor5-theme-lark': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-track-changes': 45.0.0
+      '@ckeditor/ckeditor5-track-changes': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@types/luxon': 3.4.2
       ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       luxon: 3.5.0
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
 
   '@ckeditor/ckeditor5-comments@45.0.0':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-collaboration-core': 45.0.0
+      '@ckeditor/ckeditor5-collaboration-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -15598,7 +15611,7 @@ snapshots:
   '@ckeditor/ckeditor5-comments@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-collaboration-core': 45.0.0
+      '@ckeditor/ckeditor5-collaboration-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-engine': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-enter': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -16163,6 +16176,13 @@ snapshots:
 
   '@ckeditor/ckeditor5-inspector@4.1.0': {}
 
+  '@ckeditor/ckeditor5-language@45.0.0':
+    dependencies:
+      '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+
   '@ckeditor/ckeditor5-language@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -16419,7 +16439,7 @@ snapshots:
       '@ckeditor/ckeditor5-operations-compressor': 45.0.0
       '@ckeditor/ckeditor5-revision-history': 45.0.0
       '@ckeditor/ckeditor5-theme-lark': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-track-changes': 45.0.0
+      '@ckeditor/ckeditor5-track-changes': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-ui': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-utils': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
@@ -16620,7 +16640,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@ckeditor/ckeditor5-track-changes@45.0.0':
+  '@ckeditor/ckeditor5-track-changes@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-clipboard': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-code-block': 45.0.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)
@@ -16649,6 +16669,10 @@ snapshots:
       ckeditor5: 45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       ckeditor5-collaboration: 45.0.0
       es-toolkit: 1.32.0
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
 
   '@ckeditor/ckeditor5-typing@45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -17190,7 +17214,7 @@ snapshots:
       make-fetch-happen: 10.2.1
       nopt: 6.0.0
       proc-log: 2.0.1
-      semver: 7.7.1
+      semver: 7.7.2
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -18703,7 +18727,7 @@ snapshots:
   '@npmcli/fs@2.1.2':
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.7.1
+      semver: 7.7.2
 
   '@npmcli/fs@4.0.0':
     dependencies:
@@ -22289,13 +22313,13 @@ snapshots:
 
   ckeditor5-collaboration@45.0.0:
     dependencies:
-      '@ckeditor/ckeditor5-collaboration-core': 45.0.0
+      '@ckeditor/ckeditor5-collaboration-core': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
 
   ckeditor5@45.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41):
     dependencies:
       '@ckeditor/ckeditor5-adapter-ckfinder': 45.0.0
       '@ckeditor/ckeditor5-alignment': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-autoformat': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-autoformat': 45.0.0
       '@ckeditor/ckeditor5-autosave': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-basic-styles': 45.0.0
       '@ckeditor/ckeditor5-block-quote': 45.0.0
@@ -22327,7 +22351,7 @@ snapshots:
       '@ckeditor/ckeditor5-icons': 45.0.0
       '@ckeditor/ckeditor5-image': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-indent': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      '@ckeditor/ckeditor5-language': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      '@ckeditor/ckeditor5-language': 45.0.0
       '@ckeditor/ckeditor5-link': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-list': 45.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       '@ckeditor/ckeditor5-markdown-gfm': 45.0.0
@@ -25988,7 +26012,7 @@ snapshots:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.7.1
+      semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
 
