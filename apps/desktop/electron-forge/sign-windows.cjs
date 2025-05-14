@@ -1,6 +1,6 @@
 const child_process = require("child_process");
 const fs = require("fs");
-const { default: path } = require("path");
+const path = require("path");
 
 module.exports = function (filePath) {
     const { WINDOWS_SIGN_EXECUTABLE } = process.env;
