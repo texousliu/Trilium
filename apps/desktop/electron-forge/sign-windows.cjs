@@ -16,8 +16,6 @@ module.exports = function (filePath) {
       fs.mkdirSync(outputDir);
     }
 
-    fs.copyFileSync(sourcePath, destPath);
-
     const command = `${WINDOWS_SIGN_EXECUTABLE} --executable "${filePath}"`;
     console.log(`[Sign] ${command}`);
 
