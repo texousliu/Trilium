@@ -10,7 +10,8 @@ const doubleCsrfUtilities = doubleCsrf({
         sameSite: "strict",
         httpOnly: !isElectron // set to false for Electron, see https://github.com/TriliumNext/Notes/pull/966
     },
-    cookieName: "_csrf"
+    cookieName: "_csrf",
+    getSessionIdentifier: (req) => req.session.id
 });
 
-export const { generateToken, doubleCsrfProtection } = doubleCsrfUtilities;
+export const { generateCsrfToken, doubleCsrfProtection } = doubleCsrfUtilities;
