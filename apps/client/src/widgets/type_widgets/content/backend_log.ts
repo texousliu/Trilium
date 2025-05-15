@@ -21,9 +21,9 @@ export default class BackendLogWidget extends AbstractCodeTypeWidget {
     private $refreshBackendLog!: JQuery<HTMLElement>;
 
     doRender() {
-        super.doRender();
         this.$widget = $(TPL);
         this.$editor = this.$widget.find(".backend-log-editor");
+        super.doRender();
     }
 
     async refresh() {
