@@ -301,8 +301,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async createEditor() {
         await this.watchdog.create(this.$editor[0], {
             placeholder: t("editable_text.placeholder"),
-            //@ts-ignore TODO: FIX TYPES
-            mention: mentionSetup,
+            mention: {
+                feeds: mentionSetup,
+            },
             codeBlock: {
                 languages: buildListOfLanguages()
             },
