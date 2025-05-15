@@ -28,10 +28,10 @@ import "@triliumnext/ckeditor5-math/index.css";
  * Plugins that are specific to Trilium and not part of the CKEditor 5 core, included in both text editors but not in the attribute editor.
  */
 const TRILIUM_PLUGINS: typeof Plugin[] = [
+    UploadimagePlugin,
     CutToNotePlugin,
     ItalicAsEmPlugin,
 	StrikethroughAsDel,
-    UploadimagePlugin,
     InternalLinkPlugin,
     RemoveFormatLinksPlugin,
     IndentBlockShortcutPlugin,
@@ -72,8 +72,6 @@ export const CORE_PLUGINS: typeof Plugin[] = [
  */
 export const COMMON_PLUGINS: typeof Plugin[] = [
     ...CORE_PLUGINS,
-    ...TRILIUM_PLUGINS,
-    ...EXTERNAL_PLUGINS,
 
 	CKFinderUploadAdapter,
 	Autoformat,
@@ -127,7 +125,10 @@ export const COMMON_PLUGINS: typeof Plugin[] = [
 	TextPartLanguage,
     Style,
     Bookmark,
-    Emoji
+    Emoji,
+
+    ...TRILIUM_PLUGINS,
+    ...EXTERNAL_PLUGINS
 ];
 
 /**
