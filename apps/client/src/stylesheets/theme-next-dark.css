@@ -195,6 +195,8 @@
     --scrollbar-background-color: transparent;
     --scrollbar-border-color: unset; /* Deprecated */
 
+    --selection-background-color: #3399FF70;
+    
     --link-color: lightskyblue;
 
     --mermaid-theme: dark;

@@ -1213,6 +1213,10 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     background-color: inherit;
 }
 
+::selection {
+    background-color: var(--selection-background-color);
+}
+
 [data-bs-toggle="tooltip"]:not(.button-widget) span {
     padding-bottom: 0;
     border-bottom: 1px dotted;
@@ -1769,7 +1773,7 @@ body.zen .title-row {
     height: unset !important;
     -webkit-app-region: drag;
     padding-left: env(titlebar-area-x);
-    padding-right: 2.5em;
+    padding-right: calc(100vw - env(titlebar-area-width, 100vw) + 2.5em);
 }
 
 body.zen .floating-buttons {
