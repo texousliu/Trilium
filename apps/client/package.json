@@ -25,6 +25,7 @@
     "@triliumnext/codemirror": "workspace:*",
     "@triliumnext/commons": "workspace:*",
     "bootstrap": "5.3.6",
+    "boxicons": "2.1.4",
     "dayjs": "1.11.13",
     "dayjs-plugin-utc": "0.1.2",
     "debounce": "2.2.0",

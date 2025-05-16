@@ -2,6 +2,7 @@ import appContext from "./components/app_context.js";
 import noteAutocompleteService from "./services/note_autocomplete.js";
 import glob from "./services/glob.js";
 import "./stylesheets/bootstrap.scss";
+import "boxicons";
 
 glob.setupGlobs();
 

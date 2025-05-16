@@ -15,8 +15,6 @@ function buildFilesToCopy() {
   const nodePaths = [
     "@excalidraw/excalidraw/dist/prod/fonts/",
     "katex/dist",
-    "boxicons/css",
-    "boxicons/fonts",
     "jquery/dist",
     "jquery-hotkeys",
     "autocomplete.js/dist",
