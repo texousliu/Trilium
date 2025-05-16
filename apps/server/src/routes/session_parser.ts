@@ -1,10 +1,32 @@
-import session from "express-session";
-import sessionFileStore from "session-file-store";
+import sql from "../services/sql.js";
+import session, { Store } from "express-session";
 import sessionSecret from "../services/session_secret.js";
-import dataDir from "../services/data_dir.js";
 import config from "../services/config.js";
 
-const FileStore = sessionFileStore(session);
+class SQLiteSessionStore extends Store {
+
+    get(sid: string, callback: (err: any, session?: session.SessionData | null) => void): void {
+        return callback(null);
+    }
+
+    set(id: string, session: session.SessionData, callback?: (err?: any) => void): void {
+        const expires = Date.now() + 3600000; // Session expiration time (1 hour from now)
+        const data = JSON.stringify(session);
+
+        sql.upsert("sessions", "id", {
+            id,
+            expires,
+            data
+        });
+        callback?.();
+    }
+
+    destroy(sid: string, callback?: (err?: any) => void): void {
+        console.log("Destroy ", sid);
+        callback?.();
+    }
+
+}
 
 const sessionParser = session({
     secret: sessionSecret,
@@ -16,10 +38,7 @@ const sessionParser = session({
         maxAge: config.Session.cookieMaxAge * 1000 // needs value in milliseconds
     },
     name: "trilium.sid",
-    store: new FileStore({
-        ttl: config.Session.cookieMaxAge,
-        path: `${dataDir.TRILIUM_DATA_DIR}/sessions`
-    })
+    store: new SQLiteSessionStore()
 });
 
 export default sessionParser;
