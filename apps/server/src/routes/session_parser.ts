@@ -22,7 +22,9 @@ class SQLiteSessionStore extends Store {
 
     set(id: string, session: session.SessionData, callback?: (err?: any) => void): void {
         try {
-            const expires = Date.now() + 3600000; // Session expiration time (1 hour from now)
+            const expires = session.cookie?.expires
+                ? new Date(session.cookie.expires).getTime()
+                : Date.now() + 3600000; // fallback to 1 hour
             const data = JSON.stringify(session);
 
             sql.upsert("sessions", "id", {
