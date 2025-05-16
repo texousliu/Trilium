@@ -33,7 +33,10 @@ async function register(app: express.Application) {
             proxyReqPathResolver: (req) => {
                 let url = req.url;
                 url = url.replace(/^\/src/, "");
-                url = `/${assetPath}/app/src${url}`;
+                if (!url.startsWith("/@")) {
+                    url = "/src" + url;
+                }
+                url = `/${assetPath}/app${url}`;
                 url = url.replace(/.js$/, ".ts");
                 console.log(`${req.url} => ${publicUrl}${url}`);
                 return url;
