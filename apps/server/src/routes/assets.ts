@@ -32,8 +32,8 @@ async function register(app: express.Application) {
         const clientProxy = proxy(publicUrl, {
             proxyReqPathResolver: (req) => {
                 let url = req.url;
-                url = url.replace(/^\/src/, "/");
-                url = "/assets/v0.94.0/app/src" + url;
+                url = url.replace(/^\/src/, "");
+                url = `/${assetPath}/app/src${url}`;
                 url = url.replace(/.js$/, ".ts");
                 console.log(`${req.url} => ${publicUrl}${url}`);
                 return url;
