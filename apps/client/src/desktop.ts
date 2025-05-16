@@ -12,6 +12,7 @@ import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
 import "./stylesheets/bootstrap.scss";
 import "boxicons";
+import "autocomplete.js/index_jquery.js";
 
 await appContext.earlyInit();
 

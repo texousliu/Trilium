@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 import express from "express";
 import { getResourceDir, isDev } from "../services/utils.js";
 import type serveStatic from "serve-static";
-import proxy from "express-http-proxy";
 import contentCss from "@triliumnext/ckeditor5/content.css";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<unknown, Record<string, unknown>>>) => {
@@ -59,15 +58,9 @@ async function register(app: express.Application) {
     app.use(`/node_modules/katex/dist/`, express.static(path.join(nodeModulesDir, "katex/dist/")));
     app.use(`/${assetPath}/node_modules/katex/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "katex/dist/")));
 
-    app.use(`/${assetPath}/node_modules/boxicons/css/`, persistentCacheStatic(path.join(nodeModulesDir, "boxicons/css/")));
-    app.use(`/${assetPath}/node_modules/boxicons/fonts/`, persistentCacheStatic(path.join(nodeModulesDir, "boxicons/fonts/")));
-
     app.use(`/${assetPath}/node_modules/jquery/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery/dist/")));
 
     app.use(`/${assetPath}/node_modules/jquery-hotkeys/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery-hotkeys/")));
-
-    // Deprecated, https://www.npmjs.com/package/autocomplete.js?activeTab=readme
-    app.use(`/${assetPath}/node_modules/autocomplete.js/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "autocomplete.js/dist/")));
 
     app.use(`/${assetPath}/node_modules/normalize.css/`, persistentCacheStatic(path.join(nodeModulesDir, "normalize.css/")));
 

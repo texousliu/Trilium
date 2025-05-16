@@ -209,6 +209,9 @@ importers:
       '@triliumnext/commons':
         specifier: workspace:*
         version: link:../../packages/commons
+      autocomplete.js:
+        specifier: 0.38.1
+        version: 0.38.1
       bootstrap:
         specifier: 5.3.6
         version: 5.3.6(@popperjs/core@2.11.8)
@@ -599,9 +602,6 @@ importers:
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0
-      autocomplete.js:
-        specifier: 0.38.1
-        version: 0.38.1
       axios:
         specifier: 1.9.0
         version: 1.9.0(debug@4.4.1)

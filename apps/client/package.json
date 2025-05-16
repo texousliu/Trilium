@@ -24,6 +24,7 @@
     "@triliumnext/ckeditor5": "workspace:*",
     "@triliumnext/codemirror": "workspace:*",
     "@triliumnext/commons": "workspace:*",
+    "autocomplete.js": "0.38.1",
     "bootstrap": "5.3.6",
     "boxicons": "2.1.4",
     "dayjs": "1.11.13",

@@ -17,7 +17,6 @@ function buildFilesToCopy() {
     "katex/dist",
     "jquery/dist",
     "jquery-hotkeys",
-    "autocomplete.js/dist",
     "normalize.css/normalize.css",
     "jquery.fancytree/dist",
     "@highlightjs/cdn-assets",
