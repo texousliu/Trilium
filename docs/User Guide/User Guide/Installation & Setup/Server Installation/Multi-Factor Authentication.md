@@ -34,8 +34,8 @@ _Currently only compatible with Google. Other services like Authentik and Auth0 
 
 In order to setup OpenID, you will need to setup a authentication provider. This requires a bit of extra setup. Follow [these instructions](https://developers.google.com/identity/openid-connect/openid-connect) to setup an OpenID service through google.
 
-1.  Set the `oauthBaseUrl`, `oauthClientId` and `oauthClientSecret` in the `config.ini` file, which located under the Trilium data folder.
-    1.  You can also setup through environment variables (`TRILIUM_OAUTH_BASE_URL`, `TRILIUM_OAUTH_CLIENT_ID` and `TRILIUM_OAUTH_CLIENT_SECRET`), but the recommanded way is setup through `config.ini` file.
+1.  Set the `oauthBaseUrl`, `oauthClientId` and `oauthClientSecret` in the `config.ini` file (check <a class="reference-link" href="../../Advanced%20Usage/Configuration%20(config.ini%20or%20e.md">Configuration (config.ini or environment variables)</a> for more information).
+    1.  You can also setup through environment variables (`TRILIUM_OAUTH_BASE_URL`, `TRILIUM_OAUTH_CLIENT_ID` and `TRILIUM_OAUTH_CLIENT_SECRET`).
 2.  Restart the server
 3.  Go to "Menu" -> "Options" -> "MFA"
 4.  Click the “Enable Multi-Factor Authentication” checkbox if not checked
