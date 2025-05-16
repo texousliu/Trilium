@@ -31,6 +31,11 @@ export default defineConfig(() => ({
                 setup: join(__dirname, "src", "setup.ts"),
                 share: join(__dirname, "src", "share.ts"),
                 set_password: join(__dirname, "src", "set_password.ts"),
+            },
+            output: {
+                entryFileNames: "[name].js",
+                chunkFileNames: "[name].js",
+                assetFileNames: "[name].js"
             }
         }
     },
