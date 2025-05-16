@@ -14,7 +14,7 @@ import { applySingleBlockSyntaxHighlight, applySyntaxHighlight } from "./syntax_
 import { loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
 import { normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
 import renderDoc from "./doc_renderer.js";
-import { t } from "i18next";
+import { t } from "../services/i18n.js";
 import WheelZoom from 'vanilla-js-wheel-zoom';
 
 let idCounter = 1;

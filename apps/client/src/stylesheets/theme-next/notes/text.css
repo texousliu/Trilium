@@ -81,9 +81,6 @@
 }
 
 /* Checked list item */
-:root ul.ck.ck-list button.ck-button.ck-on:not(:hover) {
-    background: transparent !important;
-}
 
 :root ul.ck.ck-list button.ck-button:hover,
 :root ul.ck.ck-list button.ck-button.ck-on:hover {

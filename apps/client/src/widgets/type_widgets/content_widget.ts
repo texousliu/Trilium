@@ -40,7 +40,7 @@ import ShareSettingsOptions from "./options/other/share_settings.js";
 import AiSettingsOptions from "./options/ai_settings.js";
 import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
-import { t } from "i18next";
+import { t } from "../../services/i18n.js";
 import LanguageOptions from "./options/i18n/language.js";
 import type BasicWidget from "../basic_widget.js";
 import CodeTheme from "./options/code_notes/code_theme.js";
