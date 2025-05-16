@@ -2,34 +2,49 @@ import sql from "../services/sql.js";
 import session, { Store } from "express-session";
 import sessionSecret from "../services/session_secret.js";
 import config from "../services/config.js";
+import log from "../services/log.js";
 
 class SQLiteSessionStore extends Store {
 
     get(sid: string, callback: (err: any, session?: session.SessionData | null) => void): void {
-        const data = sql.getValue<string>(/*sql*/`SELECT data FROM sessions WHERE id = ?`, sid);
-        let session = null;
-        if (data) {
-            session = JSON.parse(data);
+        try {
+            const data = sql.getValue<string>(/*sql*/`SELECT data FROM sessions WHERE id = ?`, sid);
+            let session = null;
+            if (data) {
+                session = JSON.parse(data);
+            }
+            return callback(null, session);
+        } catch (e: unknown) {
+            log.error(e);
+            return callback(e);
         }
-        return callback(null, session);
     }
 
     set(id: string, session: session.SessionData, callback?: (err?: any) => void): void {
-        const expires = Date.now() + 3600000; // Session expiration time (1 hour from now)
-        const data = JSON.stringify(session);
+        try {
+            const expires = Date.now() + 3600000; // Session expiration time (1 hour from now)
+            const data = JSON.stringify(session);
 
-        sql.upsert("sessions", "id", {
-            id,
-            expires,
-            data
-        });
-        callback?.();
+            sql.upsert("sessions", "id", {
+                id,
+                expires,
+                data
+            });
+            callback?.();
+        } catch (e) {
+            log.error(e);
+            return callback?.(e);
+        }
     }
 
     destroy(sid: string, callback?: (err?: any) => void): void {
-        console.log("Destroy ", sid);
-        sql.execute(/*sql*/`DELETE FROM sessions WHERE id = ?`, sid);
-        callback?.();
+        try {
+            sql.execute(/*sql*/`DELETE FROM sessions WHERE id = ?`, sid);
+            callback?.();
+        } catch (e) {
+            log.error(e);
+            callback?.(e);
+        }
     }
 
 }
