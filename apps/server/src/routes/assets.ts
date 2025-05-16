@@ -43,7 +43,7 @@ async function register(app: express.Application) {
         app.use(`/${assetPath}/app`, clientProxy);
         app.use(`/${assetPath}/app-dist`, clientProxy);
         app.use(`/${assetPath}/stylesheets`, proxy(publicUrl, {
-            proxyReqPathResolver: (req) => "/stylesheets" + req.url
+            proxyReqPathResolver: (req) => `/${assetPath}/app/src/stylesheets/${req.url}`
         }));
         app.use(`/${assetPath}/libraries`, proxy(publicUrl, {
             proxyReqPathResolver: (req) => "/libraries" + req.url
