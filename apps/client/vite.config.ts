@@ -19,6 +19,7 @@ export default defineConfig(() => ({
     //  plugins: [ nxViteTsPaths() ],
     // },
     build: {
+        target: "esnext",
         outDir: './dist',
         emptyOutDir: true,
         reportCompressedSize: true,
