@@ -35,9 +35,9 @@ async function register(app: express.Application) {
                 url = url.replace(/^\/src/, "");
                 if (!url.startsWith("/@")) {
                     url = "/src" + url;
+                    url = url.replace(/\.js$/, ".ts");
                 }
                 url = `/${assetPath}/app${url}`;
-                url = url.replace(/\.js$/, ".ts");
                 console.log(`${req.url} => ${publicUrl}${url}`);
                 return url;
             }
