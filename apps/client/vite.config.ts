@@ -1,6 +1,9 @@
 /// <reference types='vitest' />
 import { join } from 'path';
 import { defineConfig } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy'
+
+const assets = [ "assets", "stylesheets", "libraries", "fonts", "translations" ];
 
 export default defineConfig(() => ({
     root: __dirname,
@@ -13,7 +16,14 @@ export default defineConfig(() => ({
         port: 4300,
         host: 'localhost',
     },
-    plugins: [],
+    plugins: [
+        viteStaticCopy({
+            targets: assets.map((asset) => ({
+                src: `src/${asset}/**/*`,
+                dest: asset
+            }))
+        })
+    ],
     // Uncomment this if you are using workers.
     // worker: {
     //  plugins: [ nxViteTsPaths() ],

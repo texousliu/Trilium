@@ -62,7 +62,8 @@
     "@types/react-dom": "19.1.5",
     "copy-webpack-plugin": "13.0.0",
     "happy-dom": "17.4.7",
-    "script-loader": "0.7.2"
+    "script-loader": "0.7.2",
+    "vite-plugin-static-copy": "3.0.0"
   },
   "nx": {
     "name": "client"
