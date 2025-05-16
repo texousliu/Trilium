@@ -42,21 +42,20 @@ async function register(app: express.Application) {
                 return url;
             }
         });
+
+        function buildAssetProxy(name: string) {
+            return proxy(publicUrl!, {
+                proxyReqPathResolver: (req) => `/${assetPath}/app/src/${name}/${req.url}`
+            });
+        }
+
         app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "assets", "doc_notes")));
         app.use(`/${assetPath}/app`, clientProxy);
         app.use(`/${assetPath}/app-dist`, clientProxy);
-        app.use(`/${assetPath}/stylesheets`, proxy(publicUrl, {
-            proxyReqPathResolver: (req) => `/${assetPath}/app/src/stylesheets/${req.url}`
-        }));
-        app.use(`/${assetPath}/libraries`, proxy(publicUrl, {
-            proxyReqPathResolver: (req) => "/libraries" + req.url
-        }));
-        app.use(`/${assetPath}/fonts`, proxy(publicUrl, {
-            proxyReqPathResolver: (req) => "/fonts" + req.url
-        }));
-        app.use(`/${assetPath}/translations`, proxy(publicUrl, {
-            proxyReqPathResolver: (req) => "/translations" + req.url
-        }));
+        app.use(`/${assetPath}/stylesheets`, buildAssetProxy("stylesheets"));
+        app.use(`/${assetPath}/libraries`, buildAssetProxy("libraries"));
+        app.use(`/${assetPath}/fonts`, buildAssetProxy("fonts"));
+        app.use(`/${assetPath}/translations`, buildAssetProxy("translations"));
         app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(srcRoot, "assets", "images")));
     } else {
         const clientStaticCache = persistentCacheStatic(path.join(resourceDir, "public"));
