@@ -62,4 +62,11 @@ const sessionParser = session({
     store: new SQLiteSessionStore()
 });
 
+setInterval(() => {
+    // Clean up expired sesions.
+    const now = Date.now();
+    const result = sql.execute(/*sql*/`DELETE FROM sessions WHERE expires < ?`, now);
+    console.log("Cleaning up expired sessions: ", result.changes);
+}, 60 * 60 * 1000);
+
 export default sessionParser;
