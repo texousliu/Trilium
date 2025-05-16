@@ -29,7 +29,16 @@ async function register(app: express.Application) {
             throw new Error("Missing TRILIUM_PUBLIC_SERVER");
         }
 
-        const clientProxy = proxy(publicUrl);
+        const clientProxy = proxy(publicUrl, {
+            proxyReqPathResolver: (req) => {
+                let url = req.url;
+                url = url.replace(/^\/src/, "/");
+                url = "/assets/v0.94.0/app/src" + url;
+                url = url.replace(/.js$/, ".ts");
+                console.log(`${req.url} => ${publicUrl}${url}`);
+                return url;
+            }
+        });
         app.use(`/${assetPath}/app/doc_notes`, persistentCacheStatic(path.join(srcRoot, "assets", "doc_notes")));
         app.use(`/${assetPath}/app`, clientProxy);
         app.use(`/${assetPath}/app-dist`, clientProxy);

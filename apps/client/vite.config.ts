@@ -7,6 +7,7 @@ const assets = [ "assets", "stylesheets", "libraries", "fonts", "translations" ]
 
 export default defineConfig(() => ({
     root: __dirname,
+    base: "/assets/v0.94.0/app/",
     cacheDir: '../../node_modules/.vite/apps/client',
     server: {
         port: 4200,
