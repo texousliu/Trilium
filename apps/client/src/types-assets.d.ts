@@ -3,7 +3,7 @@ declare module "*.png" {
     export default path;
 }
 
-declare module "*.json?external" {
+declare module "@triliumnext/ckeditor5/emoji_definitions/en.json?url" {
     var path: string;
     export default path;
 }
