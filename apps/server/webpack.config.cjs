@@ -19,7 +19,6 @@ function buildFilesToCopy() {
     "jquery-hotkeys",
     "normalize.css/normalize.css",
     "jquery.fancytree/dist",
-    "@highlightjs/cdn-assets",
 
     // Required as they are native dependencies and cannot be well bundled.
     "better-sqlite3",
