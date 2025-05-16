@@ -471,8 +471,8 @@ importers:
         version: 2.38.5(jquery@3.7.1)
     devDependencies:
       '@anthropic-ai/sdk':
-        specifier: 0.50.4
-        version: 0.50.4
+        specifier: 0.51.0
+        version: 0.51.0
       '@braintree/sanitize-url':
         specifier: 7.1.1
         version: 7.1.1
@@ -1318,9 +1318,8 @@ packages:
   '@antfu/utils@8.1.1':
     resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
 
-  '@anthropic-ai/sdk@0.50.4':
-    resolution: {integrity: sha512-zZOWyIuznx2uqiRcCNuidkAsLC8IBHgS9lTwSVEB29sUCwEcqL95MWpWP1nccHSKfiZga+hbZaI0btR2zjuMmw==}
-    engines: {node: '>= 20'}
+  '@anthropic-ai/sdk@0.51.0':
+    resolution: {integrity: sha512-fAFC/uHhyzfw7rs65EPVV+scXDytGNm5BjttxHf6rP/YGvaBRKEvp2lwyuMigTwMI95neeG4bzrZigz7KCikjw==}
     hasBin: true
 
   '@apidevtools/json-schema-ref-parser@9.1.2':
@@ -14333,7 +14332,7 @@ snapshots:
 
   '@antfu/utils@8.1.1': {}
 
-  '@anthropic-ai/sdk@0.50.4': {}
+  '@anthropic-ai/sdk@0.51.0': {}
 
   '@apidevtools/json-schema-ref-parser@9.1.2':
     dependencies:
