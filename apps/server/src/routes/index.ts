@@ -20,7 +20,7 @@ function index(req: Request, res: Response) {
     const view = getView(req);
 
     const csrfToken = generateCsrfToken(req, res, {
-        overwrite: true,
+        overwrite: false,
         validateOnReuse: false      // if validation fails, generate a new token instead of throwing an error
     });
     log.info(`CSRF token generation: ${csrfToken ? "Successful" : "Failed"}`);
