@@ -6,7 +6,12 @@ import config from "../services/config.js";
 class SQLiteSessionStore extends Store {
 
     get(sid: string, callback: (err: any, session?: session.SessionData | null) => void): void {
-        return callback(null);
+        const data = sql.getValue<string>(/*sql*/`SELECT data FROM sessions WHERE id = ?`, sid);
+        let session = null;
+        if (data) {
+            session = JSON.parse(data);
+        }
+        return callback(null, session);
     }
 
     set(id: string, session: session.SessionData, callback?: (err?: any) => void): void {
