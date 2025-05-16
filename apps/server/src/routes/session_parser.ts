@@ -23,6 +23,7 @@ class SQLiteSessionStore extends Store {
 
     destroy(sid: string, callback?: (err?: any) => void): void {
         console.log("Destroy ", sid);
+        sql.execute(/*sql*/`DELETE FROM sessions WHERE id = ?`, sid);
         callback?.();
     }
 
