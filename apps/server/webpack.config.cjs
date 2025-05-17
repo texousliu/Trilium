@@ -13,8 +13,6 @@ function buildFilesToCopy() {
   });
 
   const nodePaths = [
-    "jquery/dist",
-
     // Required as they are native dependencies and cannot be well bundled.
     "better-sqlite3",
     "bindings",

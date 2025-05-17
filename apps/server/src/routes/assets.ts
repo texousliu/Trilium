@@ -44,10 +44,6 @@ async function register(app: express.Application) {
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));
     app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
-
-    const nodeModulesDir = isDev ? path.join(srcRoot, "..", "node_modules") : path.join(resourceDir, "node_modules");
-
-    app.use(`/${assetPath}/node_modules/jquery/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery/dist/")));
 }
 
 export default {

@@ -34,9 +34,6 @@
 <!-- Required for correct loading of scripts in Electron -->
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
-<script src="<%= assetPath %>/node_modules/jquery/dist/jquery.min.js"></script>
-
-
 <!-- Include Fancytree library and skip -->
 <link href="<%= assetPath %>/stylesheets/tree.css" rel="stylesheet">
 
@@ -58,10 +55,6 @@
 
 <link href="<%= assetPath %>/stylesheets/style.css" rel="stylesheet">
 <link href="<%= assetPath %>/stylesheets/print.css" rel="stylesheet" media="print">
-
-<script>
-    $("body").show();
-</script>
 
 <script src="<%= appPath %>/desktop.js" crossorigin type="module"></script>
 
