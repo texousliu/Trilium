@@ -15,7 +15,7 @@ TOTP (Time-Based One-Time Password) is a security feature that generates a uniqu
 
 ## Setup
 
-MFA can only setup on server instance.
+MFA can only be set up on a server instance.
 
 ### TOTP
 

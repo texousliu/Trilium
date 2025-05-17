@@ -667,6 +667,13 @@
                                     "mime": "text/markdown",
                                     "attributes": [
                                         {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "Gzjqa934BdH4",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
                                             "type": "label",
                                             "name": "shareAlias",
                                             "value": "multi-factor-authentication",
