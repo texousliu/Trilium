@@ -48,8 +48,6 @@ async function register(app: express.Application) {
     const nodeModulesDir = isDev ? path.join(srcRoot, "..", "node_modules") : path.join(resourceDir, "node_modules");
 
     app.use(`/${assetPath}/node_modules/jquery/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery/dist/")));
-
-    app.use(`/${assetPath}/node_modules/jquery.fancytree/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery.fancytree/dist/")));
 }
 
 export default {

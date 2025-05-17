@@ -27,6 +27,7 @@ import type { AttributeRow, BranchRow } from "../services/load_results.js";
 import type { SetNoteOpts } from "../components/note_context.js";
 import type { TouchBarItem } from "../components/touch_bar.js";
 import type { TreeCommandNames } from "../menus/tree_context_menu.js";
+import "jquery.fancytree";
 
 const TPL = /*html*/`
 <div class="tree-wrapper">
