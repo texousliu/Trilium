@@ -18,6 +18,9 @@ TOTP (Time-Based One-Time Password) is a security feature that generates a uniqu
 
 MFA can only be set up on a server instance.
 
+> [!NOTE]
+> When Multi-Factor Authentication (MFA) is enabled on a server instance, a new desktop instance may fail to sync with it. As a temporary workaround, you can disable MFA to complete the initial sync, then re-enable MFA afterward. This issue will be addressed in a future release.
+
 ### TOTP
 
 1.  Go to "Menu" -> "Options" -> "MFA"
