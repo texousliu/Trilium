@@ -1,9 +1,8 @@
-import OptionsWidget from "../options_widget.js"; // Path might need adjustment
-import { t } from "../../../../services/i18n.js"; // For internationalization, if you want to use it
-import type { OptionMap } from "@triliumnext/commons"; // For typing the options object
+import OptionsWidget from "../options_widget.js"; 
+import { t } from "../../../../services/i18n.js";
+import type { OptionMap } from "@triliumnext/commons"; 
 
-// Using t() for translatable strings is good practice if the project uses it.
-// If not, you can use plain strings.
+
 const TPL = /*html*/`
 <div class="options-section">
     <h4>${t("options.customDateTimeFormatTitle", "Custom Date/Time Format (Alt+T)")}</h4>
@@ -36,38 +35,38 @@ const TPL = /*html*/`
 `;
 
 export default class DateTimeFormatOptions extends OptionsWidget {
-    // Declare class properties with types if needed (jQuery objects are often typed as JQuery<HTMLElement>)
-    private $formatInput!: JQuery<HTMLInputElement>; // The "!" is a non-null assertion operator
+    
+    private $formatInput!: JQuery<HTMLInputElement>;
 
     doRender() {
-        this.$widget = $(TPL); // $ is jQuery, ensure it's available (likely is if OptionsWidget uses it)
+        this.$widget = $(TPL); 
         this.$formatInput = this.$widget.find(
             "input.custom-datetime-format-input"
-        ) as JQuery<HTMLInputElement>; // Type assertion for jQuery result
+        ) as JQuery<HTMLInputElement>; 
 
         this.$formatInput.on("input", () => {
-            const formatString = this.$formatInput.val() as string; // Get value, assert as string
+            const formatString = this.$formatInput.val() as string; 
             this.updateOption("customDateTimeFormatString", formatString);
         });
 
         return this.$widget;
     }
 
-    async optionsLoaded(options: OptionMap) { // Use the imported OptionMap type
+    async optionsLoaded(options: OptionMap) {
         const currentFormat = options.customDateTimeFormatString || "";
 
         if (this.$formatInput) {
             this.$formatInput.val(currentFormat);
         } else {
-            // Fallback logic as before, ensure $widget is available if $formatInput isn't yet
+
             console.warn(
                 "TriliumNext DateTimeFormatOptions: $formatInput not initialized when optionsLoaded was called. Attempting to find again."
             );
-            const inputField = this.$widget?.find( // Optional chaining for $widget
+            const inputField = this.$widget?.find( 
                 "input.custom-datetime-format-input"
-            ) as JQuery<HTMLInputElement> | undefined; // Result could be undefined
+            ) as JQuery<HTMLInputElement> | undefined; 
 
-            if (inputField?.length) { // Optional chaining and check length
+            if (inputField?.length) { 
                 this.$formatInput = inputField;
                 this.$formatInput.val(currentFormat);
             } else {
