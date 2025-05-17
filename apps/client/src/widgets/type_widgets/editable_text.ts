@@ -267,7 +267,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                         }
 
                         item.on("change:isOpen", () => {
-                            if (!("isOpen" in item) || !item.isOpen ) {
+                            if (!("isOpen" in item) || !item.isOpen) {
                                 return;
                             }
 
@@ -287,7 +287,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             // Touch bar integration
             if (hasTouchBar) {
-                for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
+                for (const event of ["bold", "italic", "underline", "paragraph", "heading"]) {
                     editor.commands.get(event)?.on("change", () => this.triggerCommand("refreshTouchBar"));
                 }
             }
@@ -373,10 +373,33 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             });
         }
     }
+    // old version
+    // insertDateTimeToTextCommand() {
+    //     const date = new Date();
+    //     const dateString = utils.formatDateTime(date);
 
-    insertDateTimeToTextCommand() {
+    //     this.addTextToEditor(dateString);
+    // }
+
+    // new version
+    async insertDateTimeToTextCommand() { 
         const date = new Date();
-        const dateString = utils.formatDateTime(date);
+        let userPreferredFormat = "";
+
+        try {
+
+            await options.initializedPromise;
+
+            const customFormatFromSettings = options.get("customDateTimeFormatString");
+
+            if (typeof customFormatFromSettings === 'string') { 
+                userPreferredFormat = customFormatFromSettings;
+            }
+        } catch (e: any) {
+            console.error("TriliumNext: Error during options initialization or getting custom date/time format. Using default.", e);
+        }
+
+        const dateString = utils.formatDateTime(date, userPreferredFormat);
 
         this.addTextToEditor(dateString);
     }

@@ -84,6 +84,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "redirectBareDomain",
     "showLoginInShareTheme",
     "splitEditorOrientation",
+    "customDateTimeFormatString",
 
     // AI/LLM integration options
     "aiEnabled",
