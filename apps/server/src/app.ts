@@ -4,7 +4,6 @@ import favicon from "serve-favicon";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import compression from "compression";
-import sessionParser from "./routes/session_parser.js";
 import config from "./services/config.js";
 import utils, { getResourceDir } from "./services/utils.js";
 import assets from "./routes/assets.js";
@@ -111,6 +110,8 @@ export default async function buildApp() {
     app.use(`/manifest.webmanifest`, express.static(path.join(publicAssetsDir, "manifest.webmanifest")));
     app.use(`/robots.txt`, express.static(path.join(publicAssetsDir, "robots.txt")));
     app.use(`/icon.png`, express.static(path.join(publicAssetsDir, "icon.png")));
+
+    const sessionParser = (await import("./routes/session_parser.js")).default;
     app.use(sessionParser);
     app.use(favicon(path.join(assetsDir, "icon.ico")));
 
