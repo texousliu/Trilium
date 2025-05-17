@@ -31,6 +31,7 @@ import "jquery.fancytree";
 import "jquery.fancytree/dist/modules/jquery.fancytree.dnd5.js";
 import "jquery.fancytree/dist/modules/jquery.fancytree.clones.js";
 import "jquery.fancytree/dist/modules/jquery.fancytree.filter.js";
+import "../stylesheets/tree.css";
 
 const TPL = /*html*/`
 <div class="tree-wrapper">
