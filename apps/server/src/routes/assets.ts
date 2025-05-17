@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import express from "express";
 import { getResourceDir, isDev } from "../services/utils.js";
 import type serveStatic from "serve-static";
+import proxy from "express-http-proxy";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<unknown, Record<string, unknown>>>) => {
     if (!isDev) {
@@ -24,6 +25,9 @@ async function register(app: express.Application) {
         if (!publicUrl) {
             throw new Error("Missing TRILIUM_PUBLIC_SERVER");
         }
+        app.use(`/@fs`, proxy(publicUrl, {
+            proxyReqPathResolver: (req) => `/@fs` + req.url
+        }))
     } else {
         const clientStaticCache = persistentCacheStatic(path.join(resourceDir, "public"));
         app.use(`/${assetPath}/app`, clientStaticCache);
@@ -46,14 +50,6 @@ async function register(app: express.Application) {
 
     app.use(`/node_modules/@excalidraw/excalidraw/dist/fonts/`, express.static(path.join(nodeModulesDir, "@excalidraw/excalidraw/dist/prod/fonts/")));
     app.use(`/${assetPath}/node_modules/@excalidraw/excalidraw/dist/fonts/`, persistentCacheStatic(path.join(nodeModulesDir, "@excalidraw/excalidraw/dist/prod/fonts/")));
-
-    // KaTeX
-    app.use(`/${assetPath}/node_modules/katex/dist/katex.min.js`, persistentCacheStatic(path.join(nodeModulesDir, "katex/dist/katex.min.js")));
-    app.use(`/${assetPath}/node_modules/katex/dist/contrib/mhchem.min.js`, persistentCacheStatic(path.join(nodeModulesDir, "katex/dist/contrib/mhchem.min.js")));
-    app.use(`/${assetPath}/node_modules/katex/dist/contrib/auto-render.min.js`, persistentCacheStatic(path.join(nodeModulesDir, "katex/dist/contrib/auto-render.min.js")));
-    // expose the whole dist folder
-    app.use(`/node_modules/katex/dist/`, express.static(path.join(nodeModulesDir, "katex/dist/")));
-    app.use(`/${assetPath}/node_modules/katex/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "katex/dist/")));
 
     app.use(`/${assetPath}/node_modules/jquery/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery/dist/")));
 

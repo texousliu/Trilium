@@ -14,7 +14,6 @@ function buildFilesToCopy() {
 
   const nodePaths = [
     "@excalidraw/excalidraw/dist/prod/fonts/",
-    "katex/dist",
     "jquery/dist",
     "jquery-hotkeys",
     "jquery.fancytree/dist",
