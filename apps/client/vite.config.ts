@@ -22,6 +22,15 @@ export default defineConfig(() => ({
                 src: `src/${asset}/**/*`,
                 dest: asset
             }))
+        }),
+        viteStaticCopy({
+            structured: true,
+            targets: [
+                {
+                    src: "node_modules/@excalidraw/excalidraw/dist/prod/fonts/*",
+                    dest: "",
+                }
+            ]
         })
     ],
     // Uncomment this if you are using workers.

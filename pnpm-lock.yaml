@@ -500,9 +500,6 @@ importers:
       '@electron/remote':
         specifier: 2.1.2
         version: 2.1.2(electron@36.2.1)
-      '@excalidraw/excalidraw':
-        specifier: 0.18.0
-        version: 0.18.0(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@triliumnext/commons':
         specifier: workspace:*
         version: link:../../packages/commons
