@@ -3,7 +3,8 @@ Multi-factor authentication (MFA) is a security process that requires users to p
 
 By requiring more than one verification method, MFA helps reduce the risk of unauthorized access, even if someone has obtained your password. It’s highly recommended for securing sensitive information stored in your notes.
 
-**Warning**: OpenID and TOTP cannot be both used at the same time!
+> [!WARNING]
+> OpenID and TOTP cannot be both used at the same time!
 
 ## Log in with your Google Account with OpenID!
 
@@ -30,7 +31,8 @@ MFA can only be set up on a server instance.
 
 ### OpenID
 
-_Currently only compatible with Google. Other services like Authentik and Auth0 are planned on being added._
+> [!NOTE]
+> Currently only compatible with Google. Other services like Authentik and Auth0 are planned on being added.
 
 In order to setup OpenID, you will need to setup a authentication provider. This requires a bit of extra setup. Follow [these instructions](https://developers.google.com/identity/openid-connect/openid-connect) to setup an OpenID service through google.
 
