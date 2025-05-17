@@ -12,7 +12,7 @@
     <% } else { %>
     <link rel="shortcut icon" href="../favicon.ico">
     <% } %>
-    <script src="<%= appPath %>/share.js"></script>
+    <script src="<%= appPath %>/share.js" type="module"></script>
     <% if (!note.isLabelTruthy("shareOmitDefaultCss")) { %>
         <link href="<%= assetPath %>/stylesheets/share.css" rel="stylesheet">
     <% } %>
