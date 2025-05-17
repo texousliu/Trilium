@@ -6,8 +6,7 @@
   "dependencies": {
     "better-sqlite3": "11.10.0",
     "jquery.fancytree": "2.38.5",
-    "jquery-hotkeys": "0.2.2",
-    "@highlightjs/cdn-assets": "11.11.1"
+    "jquery-hotkeys": "0.2.2"
   },
   "devDependencies": {
     "@electron/remote": "2.1.2",

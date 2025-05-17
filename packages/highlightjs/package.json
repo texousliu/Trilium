@@ -18,5 +18,7 @@
   "nx": {
     "name": "highlightjs"
   },
-  "dependencies": {}
+  "dependencies": {
+    "highlight.js": "11.11.1"
+  }
 }
