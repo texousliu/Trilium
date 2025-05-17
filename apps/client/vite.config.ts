@@ -50,6 +50,7 @@ export default defineConfig(() => ({
                 setup: join(__dirname, "src", "setup.ts"),
                 share: join(__dirname, "src", "share.ts"),
                 set_password: join(__dirname, "src", "set_password.ts"),
+                runtime: join(__dirname, "src", "runtime.ts")
             },
             output: {
                 entryFileNames: "[name].js",
