@@ -103,7 +103,7 @@ const TPL = /*html*/`<div class="toc-widget">
         }
 
         .toc li .item-content {
-            margin-left: 24px;
+            margin-left: 25px;
             flex: 1;
         }
 
