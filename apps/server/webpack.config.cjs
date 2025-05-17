@@ -14,7 +14,6 @@ function buildFilesToCopy() {
 
   const nodePaths = [
     "jquery/dist",
-    "jquery-hotkeys",
     "jquery.fancytree/dist",
 
     // Required as they are native dependencies and cannot be well bundled.

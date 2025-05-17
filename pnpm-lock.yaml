@@ -484,9 +484,6 @@ importers:
       better-sqlite3:
         specifier: 11.10.0
         version: 11.10.0
-      jquery-hotkeys:
-        specifier: 0.2.2
-        version: 0.2.2
       jquery.fancytree:
         specifier: 2.38.5
         version: 2.38.5(jquery@3.7.1)
