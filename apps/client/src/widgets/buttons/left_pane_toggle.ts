@@ -32,10 +32,8 @@ export default class LeftPaneToggleWidget extends CommandButtonWidget {
     }
 
     refreshIcon() {
-        if (document.hasFocus() || this.currentLeftPaneVisible === true) {
-            super.refreshIcon();
-            splitService.setupLeftPaneResizer(this.currentLeftPaneVisible);
-        }
+        super.refreshIcon();
+        splitService.setupLeftPaneResizer(this.currentLeftPaneVisible);
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
