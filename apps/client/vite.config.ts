@@ -54,7 +54,13 @@ export default defineConfig(() => ({
             output: {
                 entryFileNames: "[name].js",
                 chunkFileNames: "[name].js",
-                assetFileNames: "[name].js"
+                assetFileNames: "[name,].js"
+            },
+            onwarn(warning, rollupWarn) {
+                if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
+                    return;
+                }
+                rollupWarn(warning);
             }
         }
     },
