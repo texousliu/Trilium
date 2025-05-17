@@ -16,9 +16,6 @@
     <% if (!note.isLabelTruthy("shareOmitDefaultCss")) { %>
         <link href="<%= assetPath %>/stylesheets/share.css" rel="stylesheet">
     <% } %>
-    <% if (note.type === 'text' || note.type === 'book') { %>
-        <link href="<%= assetPath %>/libraries/ckeditor/ckeditor-content.css" rel="stylesheet">
-    <% } %>
     <% for (const cssRelation of note.getRelations("shareCss")) { %>
         <link href="api/notes/<%= cssRelation.value %>/download" rel="stylesheet">
     <% } %>
