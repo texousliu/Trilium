@@ -17,7 +17,6 @@ function buildFilesToCopy() {
     "katex/dist",
     "jquery/dist",
     "jquery-hotkeys",
-    "normalize.css/normalize.css",
     "jquery.fancytree/dist",
 
     // Required as they are native dependencies and cannot be well bundled.

@@ -278,6 +278,9 @@ importers:
       mind-elixir:
         specifier: 4.5.2
         version: 4.5.2
+      normalize.css:
+        specifier: 8.0.1
+        version: 8.0.1
       panzoom:
         specifier: 9.4.3
         version: 9.4.3
@@ -737,9 +740,6 @@ importers:
       normalize-strings:
         specifier: 1.1.1
         version: 1.1.1
-      normalize.css:
-        specifier: 8.0.1
-        version: 8.0.1
       ollama:
         specifier: 0.5.15
         version: 0.5.15

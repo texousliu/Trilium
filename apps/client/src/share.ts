@@ -1,4 +1,5 @@
 import "./stylesheets/bootstrap.scss";
+import "normalize.css";
 
 /**
  * Fetch note with given ID from backend
