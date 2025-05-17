@@ -131,15 +131,6 @@ declare global {
             language: string
         });
     };
-    var renderMathInElement: (element: HTMLElement, options: {
-        trust: boolean;
-    }) => void;
-
-    var katex: {
-        renderToString(text: string, opts: {
-            throwOnError: boolean
-        });
-    }
 
     /*
      * Panzoom

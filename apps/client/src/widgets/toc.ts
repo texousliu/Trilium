@@ -19,7 +19,7 @@ import RightPanelWidget from "./right_panel_widget.js";
 import options from "../services/options.js";
 import OnClickButtonWidget from "./buttons/onclick_button.js";
 import appContext, { type EventData } from "../components/app_context.js";
-import libraryLoader from "../services/library_loader.js";
+import katex from "../services/math.js";
 import type FNote from "../entities/fnote.js";
 
 const TPL = /*html*/`<div class="toc-widget">
@@ -59,7 +59,7 @@ const TPL = /*html*/`<div class="toc-widget">
             display: flex;
             position: relative;
             list-style: none;
-            align-items: center; 
+            align-items: center;
             padding-left: 7px;
             cursor: pointer;
             text-align: justify;
@@ -234,7 +234,6 @@ export default class TocWidget extends RightPanelWidget {
                 } catch (e) {
                     if (e instanceof ReferenceError && e.message.includes("katex is not defined")) {
                         // Load KaTeX if it is not already loaded
-                        await libraryLoader.requireLibrary(libraryLoader.KATEX);
                         try {
                             rendered = katex.renderToString(latexCode, {
                                 throwOnError: false
@@ -277,13 +276,13 @@ export default class TocWidget extends RightPanelWidget {
         let curLevel = 2;
         const $ols = [$toc];
         let $previousLi: JQuery<HTMLElement> | undefined;
-        
+
         if (!(this.noteContext?.viewScope?.tocCollapsedHeadings instanceof Set)) {
             this.noteContext!.viewScope!.tocCollapsedHeadings = new Set<string>();
         }
         const tocCollapsedHeadings = this.noteContext!.viewScope!.tocCollapsedHeadings as Set<string>;
         const validHeadingKeys = new Set<string>(); // Used to clean up obsolete entries in tocCollapsedHeadings
-        
+
         let headingCount = 0;
         for (let m = null, headingIndex = 0; (m = headingTagsRegex.exec(html)) !== null; headingIndex++) {
             //
@@ -301,7 +300,7 @@ export default class TocWidget extends RightPanelWidget {
                     if ($previousLi) {
                         const headingKey = `h${newLevel}_${headingIndex}_${$previousLi?.text().trim()}`;
                         this.setupCollapsibleHeading($ol, $previousLi, headingKey, tocCollapsedHeadings, validHeadingKeys);
-                    }                    
+                    }
                 }
             } else if (levelDelta < 0) {
                 // Close as many lists as curLevel - newLevel
@@ -406,7 +405,7 @@ export default class TocWidget extends RightPanelWidget {
                 const willCollapse  = !$previousLi.hasClass("collapsed");
                 $previousLi.addClass("animating");
 
-                if (willCollapse) { // Collapse 
+                if (willCollapse) { // Collapse
                     $ol.css("maxHeight", `${$ol.prop("scrollHeight")}px`);
                     requestAnimationFrame(() => {
                         requestAnimationFrame(() => {

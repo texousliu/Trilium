@@ -310,7 +310,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             math: {
                 engine: "katex",
                 outputType: "span", // or script
-                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.KATEX),
+                lazyLoad: async () => {
+                    (window as any).katex = (await import("../../services/math.js")).default
+                },
                 forceOutputType: false, // forces output to use outputType
                 enablePreview: true // Enable preview view
             },

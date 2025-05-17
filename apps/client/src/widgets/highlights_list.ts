@@ -11,8 +11,8 @@ import RightPanelWidget from "./right_panel_widget.js";
 import options from "../services/options.js";
 import OnClickButtonWidget from "./buttons/onclick_button.js";
 import appContext, { type EventData } from "../components/app_context.js";
-import libraryLoader from "../services/library_loader.js";
 import type FNote from "../entities/fnote.js";
+import katex from "../services/math.js";
 
 const TPL = /*html*/`<div class="highlights-list-widget">
     <style>
@@ -175,7 +175,6 @@ export default class HighlightsListWidget extends RightPanelWidget {
                 } catch (e) {
                     if (e instanceof ReferenceError && e.message.includes("katex is not defined")) {
                         // Load KaTeX if it is not already loaded
-                        await libraryLoader.requireLibrary(libraryLoader.KATEX);
                         try {
                             rendered = katex.renderToString(latexCode, {
                                 throwOnError: false

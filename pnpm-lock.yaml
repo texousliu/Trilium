@@ -257,6 +257,9 @@ importers:
       jsplumb:
         specifier: 2.15.6
         version: 2.15.6
+      katex:
+        specifier: 0.16.22
+        version: 0.16.22
       knockout:
         specifier: 3.5.1
         version: 3.5.1
@@ -725,9 +728,6 @@ importers:
       jsdom:
         specifier: 26.1.0
         version: 26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-      katex:
-        specifier: 0.16.22
-        version: 0.16.22
       marked:
         specifier: 15.0.11
         version: 15.0.11
