@@ -36,11 +36,11 @@ export async function initializeTranslations() {
     } catch (err) {
         console.warn(`Could not load locale ${dayjsLocale}`, err);
     }
+    dayjs.locale(dayjsLocale);
 }
 
 export function ordinal(date: Dayjs) {
     return dayjs(date)
-        .locale(dayjsLocale)
         .format("Do");
 }
 

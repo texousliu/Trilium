@@ -1,6 +1,7 @@
 import { beforeAll } from "vitest";
 import i18next from "i18next";
 import { join } from "path";
+import dayjs from "dayjs";
 
 beforeAll(async () => {
     // Initialize the translations manually to avoid any side effects.
@@ -15,4 +16,8 @@ beforeAll(async () => {
             loadPath: join(__dirname, "../src/assets/translations/{{lng}}/{{ns}}.json")
         }
     });
+
+    // Initialize dayjs
+    await import("dayjs/locale/en.js");
+    dayjs.locale("en");
 });
