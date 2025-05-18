@@ -147,7 +147,7 @@ const byMimeType: MimeRecord = {
     "text/x-stsrc": () => import("highlight.js/lib/languages/smalltalk"),
     "text/x-styl": () => import("highlight.js/lib/languages/stylus"),
     "text/x-swift": () => import("highlight.js/lib/languages/swift"),
-    "text/x-systemverilog": null,
+    "text/x-systemverilog": () => import("highlight.js/lib/languages/verilog"),
     "text/x-tcl": () => import("highlight.js/lib/languages/tcl"),
     "text/x-textile": null,
     "text/x-tiddlywiki": null,
