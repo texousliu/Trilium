@@ -3,7 +3,7 @@ import { t } from "../../../../services/i18n.js";
 import server from "../../../../services/server.js";
 import OptionsWidget from "../options_widget.js";
 import { ensureMimeTypesForHighlighting, loadHighlightingTheme } from "../../../../services/syntax_highlight.js";
-import { Themes } from "@triliumnext/highlightjs";
+import { Themes, type Theme } from "@triliumnext/highlightjs";
 
 const SAMPLE_LANGUAGE = normalizeMimeTypeForCKEditor("application/javascript;env=frontend");
 const SAMPLE_CODE = `\
@@ -68,13 +68,28 @@ export default class CodeBlockOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$themeSelect = this.$widget.find(".theme-select");
+
         // Populate the list of themes.
-        for (const [ id, theme ] of Object.entries(Themes)) {
-            const option = $("<option>")
-                .attr("value", `default:${id}`)
-                .text(theme.name);
-            this.$themeSelect.append(option);
+        const themeGroups = groupThemesByLightOrDark();
+        for (const [key, themes] of Object.entries(themeGroups)) {
+            const $group = key ? $("<optgroup>").attr("label", key) : null;
+
+            for (const [id, theme] of Object.entries(themes)) {
+                const option = $("<option>")
+                    .attr("value", "default:" + id)
+                    .text(theme.name);
+
+                if ($group) {
+                    $group.append(option);
+                } else {
+                    this.$themeSelect.append(option);
+                }
+            }
+            if ($group) {
+                this.$themeSelect.append($group);
+            }
         }
+
         this.$themeSelect.on("change", async () => {
             const newTheme = String(this.$themeSelect.val());
             loadHighlightingTheme(newTheme);
@@ -112,4 +127,22 @@ export default class CodeBlockOptions extends OptionsWidget {
 
         this.#setupPreview(options.codeBlockTheme !== "none");
     }
+}
+
+function groupThemesByLightOrDark() {
+    const darkThemes: Record<string, Theme> = {};
+    const lightThemes: Record<string, Theme> = {};
+
+    for (const [ id, theme ] of Object.entries(Themes)) {
+        if (theme.name.includes("Dark")) {
+            darkThemes[id] = theme;
+        } else {
+            lightThemes[id] = theme;
+        }
+    }
+
+    const output: Record<string, Record<string, Theme>> = {};
+    output[t("code_block.theme_group_light")] = lightThemes;
+    output[t("code_block.theme_group_dark")] = darkThemes;
+    return output;
 }

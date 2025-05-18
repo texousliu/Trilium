@@ -4,7 +4,7 @@ import syntaxDefinitions from "./syntax_highlighting.js";
 import { type Theme } from "./themes.js";
 import { type HighlightOptions } from "highlight.js";
 
-export { default as Themes } from "./themes.js";
+export { default as Themes, type Theme } from "./themes.js";
 
 const registeredMimeTypes = new Set<string>();
 const unsupportedMimeTypes = new Set<string>();
