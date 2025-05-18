@@ -19,10 +19,10 @@ export default class LeftPaneToggleWidget extends CommandButtonWidget {
                 return "bx-sidebar";
             }
 
-            return options.is("leftPaneVisible") ? "bx-chevrons-left" : "bx-chevrons-right";
+            return this.currentLeftPaneVisible ? "bx-chevrons-left" : "bx-chevrons-right";
         };
 
-        this.settings.title = () => (options.is("leftPaneVisible") ? t("left_pane_toggle.hide_panel") : t("left_pane_toggle.show_panel"));
+        this.settings.title = () => (this.currentLeftPaneVisible ? t("left_pane_toggle.hide_panel") : t("left_pane_toggle.show_panel"));
 
         this.settings.command = () => (this.currentLeftPaneVisible ? "hideLeftPane" : "showLeftPane");
 
@@ -38,7 +38,9 @@ export default class LeftPaneToggleWidget extends CommandButtonWidget {
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isOptionReloaded("leftPaneVisible") && document.hasFocus()) {
-            this.currentLeftPaneVisible = options.is("leftPaneVisible");
+            // options.is("leftPaneVisible") changed — it may or may not be the same as currentLeftPaneVisible, but as long as the window is focused, the left pane visibility should be toggled.
+            // See PR description for detailed explanation of multi-window edge cases: https://github.com/TriliumNext/Notes/pull/1962
+            this.currentLeftPaneVisible = !this.currentLeftPaneVisible;        
             this.refreshIcon();
         }
     }
