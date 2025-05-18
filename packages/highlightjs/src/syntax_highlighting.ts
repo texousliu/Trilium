@@ -50,7 +50,7 @@ const byMimeType: MimeRecord = {
     "text/x-clojure": () => import("highlight.js/lib/languages/clojure"),
     "text/x-clojurescript": () => import("highlight.js/lib/languages/clojure"),
     "text/x-cmake": () => import("highlight.js/lib/languages/cmake"),
-    "text/x-cobol": null,
+    "text/x-cobol": () => import("highlightjs-cobol"),
     "text/x-common-lisp": () => import("highlight.js/lib/languages/lisp"),
     "text/x-crystal": () => import("highlight.js/lib/languages/crystal"),
     "text/x-csharp": () => import("highlight.js/lib/languages/csharp"),
